@@ -134,6 +134,39 @@ data class MarketViewItem(
     fun areContentsTheSame(other: MarketViewItem): Boolean {
         return this == other
     }
+
+    companion object {
+        fun create(marketItem: MarketItem, currencySymbol: String, marketField: MarketField): MarketViewItem {
+            val formattedRate = App.numberFormatter.formatFiat(marketItem.rate, currencySymbol, 2, 2)
+
+            val marketDataValue = when (marketField) {
+                MarketField.MarketCap -> {
+                    val marketCapFormatted = marketItem.marketCap?.let { marketCap ->
+                        val (shortenValue, suffix) = App.numberFormatter.shortenValue(marketCap)
+                        App.numberFormatter.formatFiat(shortenValue, currencySymbol, 0, 2) + suffix
+                    }
+
+                    MarketDataValue.MarketCap(marketCapFormatted ?: App.instance.getString(R.string.NotAvailable))
+                }
+                MarketField.Volume -> {
+                    val (shortenValue, suffix) = App.numberFormatter.shortenValue(marketItem.volume)
+                    val volumeFormatted = App.numberFormatter.formatFiat(shortenValue, currencySymbol, 0, 2) + suffix
+
+                    MarketDataValue.Volume(volumeFormatted)
+                }
+                MarketField.PriceDiff -> MarketDataValue.Diff(marketItem.diff)
+            }
+
+            return MarketViewItem(
+                    marketItem.score,
+                    marketItem.coinCode,
+                    marketItem.coinName,
+                    formattedRate,
+                    marketItem.diff,
+                    marketDataValue
+            )
+        }
+    }
 }
 
 inline fun <T, R : Comparable<R>> Iterable<T>.sortedByDescendingNullLast(crossinline selector: (T) -> R?): List<T> {

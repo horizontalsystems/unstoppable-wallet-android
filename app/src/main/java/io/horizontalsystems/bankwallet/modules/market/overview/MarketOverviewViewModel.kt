@@ -2,15 +2,8 @@ package io.horizontalsystems.bankwallet.modules.market.overview
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.Clearable
-import io.horizontalsystems.bankwallet.modules.market.MarketField
-import io.horizontalsystems.bankwallet.modules.market.MarketItem
-import io.horizontalsystems.bankwallet.modules.market.SortingField
-import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
-import io.horizontalsystems.bankwallet.modules.market.sortedByDescendingNullLast
-import io.horizontalsystems.bankwallet.modules.market.sortedByNullLast
+import io.horizontalsystems.bankwallet.modules.market.*
 import io.reactivex.disposables.CompositeDisposable
 
 class MarketOverviewViewModel(
@@ -50,33 +43,9 @@ class MarketOverviewViewModel(
     }
 
     private fun syncViewItemsBySortingField() {
-        topGainersViewItemsLiveData.postValue(sort(service.marketItems, SortingField.TopGainers).subList(0, 3).map { this.convertItemToViewItem(it, MarketField.PriceDiff) })
-        topLosersViewItemsLiveData.postValue(sort(service.marketItems, SortingField.TopLosers).subList(0, 3).map { this.convertItemToViewItem(it, MarketField.PriceDiff) })
-        topByVolumeViewItemsLiveData.postValue(sort(service.marketItems, SortingField.HighestVolume).subList(0, 3).map { this.convertItemToViewItem(it, MarketField.Volume) })
-    }
-
-    private fun convertItemToViewItem(it: MarketItem, marketField: MarketField): MarketViewItem {
-        val formattedRate = App.numberFormatter.formatFiat(it.rate, service.currency.symbol, 2, 2)
-        val marketDataValue = when (marketField) {
-            MarketField.MarketCap -> {
-                val marketCapFormatted = it.marketCap?.let { marketCap ->
-                    val (shortenValue, suffix) = App.numberFormatter.shortenValue(marketCap)
-                    App.numberFormatter.formatFiat(shortenValue, service.currency.symbol, 0, 2) + suffix
-                }
-
-                MarketViewItem.MarketDataValue.MarketCap(marketCapFormatted ?: App.instance.getString(R.string.NotAvailable))
-            }
-            MarketField.Volume -> {
-                val (shortenValue, suffix) = App.numberFormatter.shortenValue(it.volume)
-                val volumeFormatted = App.numberFormatter.formatFiat(shortenValue, service.currency.symbol, 0, 2) + suffix
-
-                MarketViewItem.MarketDataValue.Volume(volumeFormatted)
-            }
-            MarketField.PriceDiff -> MarketViewItem.MarketDataValue.Diff(it.diff)
-        }
-
-
-        return MarketViewItem(it.score, it.coinCode, it.coinName, formattedRate, it.diff, marketDataValue)
+        topGainersViewItemsLiveData.postValue(sort(service.marketItems, SortingField.TopGainers).subList(0, 3).map { MarketViewItem.create(it, this.service.currency.symbol, MarketField.PriceDiff) })
+        topLosersViewItemsLiveData.postValue(sort(service.marketItems, SortingField.TopLosers).subList(0, 3).map { MarketViewItem.create(it, this.service.currency.symbol, MarketField.PriceDiff) })
+        topByVolumeViewItemsLiveData.postValue(sort(service.marketItems, SortingField.HighestVolume).subList(0, 3).map { MarketViewItem.create(it, this.service.currency.symbol, MarketField.Volume) })
     }
 
     private fun convertErrorMessage(it: Throwable): String {
