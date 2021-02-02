@@ -2,10 +2,8 @@ package io.horizontalsystems.bankwallet.modules.market.overview
 
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.IRateManager
-import io.horizontalsystems.bankwallet.modules.market.top.IMarketListDataSource
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.bankwallet.modules.market.Score
-import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.xrateskit.entities.CoinMarket
 import io.reactivex.disposables.CompositeDisposable
@@ -15,11 +13,8 @@ import io.reactivex.subjects.BehaviorSubject
 
 class MarketOverviewService(
         private val currencyManager: ICurrencyManager,
-        private val marketListDataSource: IMarketListDataSource,
         private val rateManager: IRateManager
 ) : Clearable {
-
-    val sortingFields: Array<SortingField> = marketListDataSource.sortingFields
 
     sealed class State {
         object Loading : State()
@@ -37,16 +32,6 @@ class MarketOverviewService(
 
     init {
         fetch()
-
-        marketListDataSource.dataUpdatedAsync
-                .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.io())
-                .subscribe {
-                    fetch()
-                }
-                .let {
-                    disposable.add(it)
-                }
     }
 
     fun refresh() {
@@ -58,7 +43,7 @@ class MarketOverviewService(
 
         stateObservable.onNext(State.Loading)
 
-        topItemsDisposable = marketListDataSource.getListAsync(currencyManager.baseCurrency.code)
+        topItemsDisposable = rateManager.getTopMarketList(currencyManager.baseCurrency.code)
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .subscribe({

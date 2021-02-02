@@ -2,10 +2,9 @@ package io.horizontalsystems.bankwallet.modules.market.favorites
 
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.IRateManager
-import io.horizontalsystems.bankwallet.modules.market.top.IMarketListDataSource
+import io.horizontalsystems.bankwallet.core.managers.MarketFavoritesManager
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.bankwallet.modules.market.Score
-import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.xrateskit.entities.CoinMarket
 import io.reactivex.disposables.CompositeDisposable
@@ -15,11 +14,9 @@ import io.reactivex.subjects.BehaviorSubject
 
 class MarketFavoritesService(
         private val currencyManager: ICurrencyManager,
-        private val marketListDataSource: IMarketListDataSource,
-        private val rateManager: IRateManager
+        private val rateManager: IRateManager,
+        private val marketFavoritesManager: MarketFavoritesManager
 ) : Clearable {
-
-    val sortingFields: Array<SortingField> = marketListDataSource.sortingFields
 
     sealed class State {
         object Loading : State()
@@ -38,7 +35,7 @@ class MarketFavoritesService(
     init {
         fetch()
 
-        marketListDataSource.dataUpdatedAsync
+        marketFavoritesManager.dataUpdatedAsync
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .subscribe {
@@ -58,7 +55,9 @@ class MarketFavoritesService(
 
         stateObservable.onNext(State.Loading)
 
-        topItemsDisposable = marketListDataSource.getListAsync(currencyManager.baseCurrency.code)
+        val coinCodes = marketFavoritesManager.getAll().map { it.code }
+
+        topItemsDisposable = rateManager.getCoinMarketList(coinCodes, currencyManager.baseCurrency.code)
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .subscribe({

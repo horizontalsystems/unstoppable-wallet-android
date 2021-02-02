@@ -17,7 +17,7 @@ class MarketFavoritesViewModel(
         private val clearables: List<Clearable>
 ) : ViewModel() {
 
-    val sortingFields: Array<SortingField> by service::sortingFields
+    val sortingFields: Array<SortingField> = SortingField.values()
 
     var sortingField: SortingField = sortingFields.first()
         private set

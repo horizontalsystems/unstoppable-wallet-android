@@ -24,7 +24,6 @@ class MarketDiscoveryService(
         data class Error(val error: Throwable) : State()
     }
 
-    val sortingFields: Array<SortingField> = SortingField.values()
     val currency by currencyManager::baseCurrency
     val stateObservable: BehaviorSubject<State> = BehaviorSubject.createDefault(State.Loading)
 
