@@ -6,7 +6,7 @@
     android:layout_height="44dp"
     android:layout_marginTop="12dp"
     android:layout_marginBottom="12dp"
-    android:background="@drawable/transparent_section_header_clickable_background">
+    android:background="@drawable/clear_clickable_background">
 
     <View
         android:id="@+id/topShade"

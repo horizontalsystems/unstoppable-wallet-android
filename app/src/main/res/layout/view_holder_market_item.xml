@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="60dp"
-    android:background="@drawable/lockscreen_clickable_background">
+    android:background="@drawable/clear_clickable_background">
 
     <View
         android:layout_width="0dp"
