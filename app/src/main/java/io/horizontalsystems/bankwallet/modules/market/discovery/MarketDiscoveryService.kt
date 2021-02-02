@@ -80,7 +80,7 @@ class MarketDiscoveryService(
     }
 
     private fun getAllMarketItemsAsync(): Single<List<MarketItem>> {
-        return xRateManager.getTopMarketList(currency.code)
+        return xRateManager.getTopMarketList(currency.code, 250)
                 .map { coinMarkets ->
                     coinMarkets.mapIndexed { index, coinMarket ->
                         MarketItem.createFromCoinMarket(coinMarket, Score.Rank(index + 1))
