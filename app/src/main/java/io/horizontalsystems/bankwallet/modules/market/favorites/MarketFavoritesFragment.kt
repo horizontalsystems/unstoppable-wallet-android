@@ -23,7 +23,7 @@ class MarketFavoritesFragment : BaseFragment(), MarketListHeaderView.Listener, V
     private lateinit var marketTopItemsAdapter: MarketTopItemsAdapter
     private lateinit var marketLoadingAdapter: MarketLoadingAdapter
 
-    private val marketTopViewModel by viewModels<MarketTopViewModel> { MarketFavoritesModule.Factory() }
+    private val marketFavoritesViewModel by viewModels<MarketFavoritesViewModel> { MarketFavoritesModule.Factory() }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_market_favorites, container, false)
@@ -33,53 +33,53 @@ class MarketFavoritesFragment : BaseFragment(), MarketListHeaderView.Listener, V
         super.onViewCreated(view, savedInstanceState)
 
         marketListHeader.listener = this
-        marketListHeader.setSortingField(marketTopViewModel.sortingField)
-        marketListHeader.setMarketField(marketTopViewModel.marketField)
+        marketListHeader.setSortingField(marketFavoritesViewModel.sortingField)
+        marketListHeader.setMarketField(marketFavoritesViewModel.marketField)
         marketListHeader.isVisible = false
-        marketTopViewModel.marketTopViewItemsLiveData.observe(viewLifecycleOwner, {
+        marketFavoritesViewModel.marketTopViewItemsLiveData.observe(viewLifecycleOwner, {
             marketListHeader.isVisible = it.isNotEmpty()
         })
 
         marketTopItemsAdapter = MarketTopItemsAdapter(
                 this,
-                marketTopViewModel.marketTopViewItemsLiveData,
-                marketTopViewModel.loadingLiveData,
-                marketTopViewModel.errorLiveData,
+                marketFavoritesViewModel.marketTopViewItemsLiveData,
+                marketFavoritesViewModel.loadingLiveData,
+                marketFavoritesViewModel.errorLiveData,
                 viewLifecycleOwner
         )
-        marketLoadingAdapter = MarketLoadingAdapter(marketTopViewModel.loadingLiveData, marketTopViewModel.errorLiveData, marketTopViewModel::onErrorClick, viewLifecycleOwner)
+        marketLoadingAdapter = MarketLoadingAdapter(marketFavoritesViewModel.loadingLiveData, marketFavoritesViewModel.errorLiveData, marketFavoritesViewModel::onErrorClick, viewLifecycleOwner)
 
         coinRatesRecyclerView.adapter = ConcatAdapter(marketLoadingAdapter, marketTopItemsAdapter)
         coinRatesRecyclerView.itemAnimator = null
 
         pullToRefresh.setOnRefreshListener {
-            marketTopViewModel.refresh()
+            marketFavoritesViewModel.refresh()
 
             pullToRefresh.isRefreshing = false
         }
 
-        marketTopViewModel.networkNotAvailable.observe(viewLifecycleOwner, {
+        marketFavoritesViewModel.networkNotAvailable.observe(viewLifecycleOwner, {
             HudHelper.showErrorMessage(requireView(), R.string.Hud_Text_NoInternet)
         })
     }
 
     override fun onClickSortingField() {
-        val items = marketTopViewModel.sortingFields.map {
-            SelectorItem(getString(it.titleResId), it == marketTopViewModel.sortingField)
+        val items = marketFavoritesViewModel.sortingFields.map {
+            SelectorItem(getString(it.titleResId), it == marketFavoritesViewModel.sortingField)
         }
 
         SelectorDialog
                 .newInstance(items, getString(R.string.Market_Sort_PopupTitle)) { position ->
-                    val selectedSortingField = marketTopViewModel.sortingFields[position]
+                    val selectedSortingField = marketFavoritesViewModel.sortingFields[position]
 
                     marketListHeader.setSortingField(selectedSortingField)
-                    marketTopViewModel.update(sortingField = selectedSortingField)
+                    marketFavoritesViewModel.update(sortingField = selectedSortingField)
                 }
                 .show(childFragmentManager, "sorting_field_selector")
     }
 
     override fun onSelectMarketField(marketField: MarketField) {
-        marketTopViewModel.update(marketField = marketField)
+        marketFavoritesViewModel.update(marketField = marketField)
     }
 
     override fun onItemClick(marketTopViewItem: MarketTopViewItem) {

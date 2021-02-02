@@ -14,7 +14,7 @@ import io.horizontalsystems.bankwallet.modules.market.discovery.PoweredByAdapter
 import io.horizontalsystems.bankwallet.modules.market.metrics.MarketMetricsAdapter
 import io.horizontalsystems.bankwallet.modules.market.metrics.MarketMetricsModule
 import io.horizontalsystems.bankwallet.modules.market.metrics.MarketMetricsViewModel
-import io.horizontalsystems.bankwallet.modules.market.top.MarketTopViewItem
+import io.horizontalsystems.bankwallet.modules.market.favorites.MarketTopViewItem
 import io.horizontalsystems.bankwallet.modules.ratechart.RateChartFragment
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.navGraphViewModels

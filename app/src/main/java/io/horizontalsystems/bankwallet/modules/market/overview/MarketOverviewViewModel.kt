@@ -5,11 +5,14 @@ import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.Clearable
+import io.horizontalsystems.bankwallet.modules.market.favorites.MarketTopViewItem
+import io.horizontalsystems.bankwallet.modules.market.favorites.sortedByDescendingNullLast
+import io.horizontalsystems.bankwallet.modules.market.favorites.sortedByNullLast
 import io.horizontalsystems.bankwallet.modules.market.top.*
 import io.reactivex.disposables.CompositeDisposable
 
 class MarketOverviewViewModel(
-        private val service: MarketTopService,
+        private val service: MarketOverviewService,
         private val clearables: List<Clearable>
 ) : ViewModel() {
 
@@ -33,11 +36,11 @@ class MarketOverviewViewModel(
                 }
     }
 
-    private fun syncState(state: MarketTopService.State) {
-        loadingLiveData.postValue(state is MarketTopService.State.Loading)
-        errorLiveData.postValue((state as? MarketTopService.State.Error)?.error?.let { convertErrorMessage(it) })
+    private fun syncState(state: MarketOverviewService.State) {
+        loadingLiveData.postValue(state is MarketOverviewService.State.Loading)
+        errorLiveData.postValue((state as? MarketOverviewService.State.Error)?.error?.let { convertErrorMessage(it) })
 
-        if (state is MarketTopService.State.Loaded) {
+        if (state is MarketOverviewService.State.Loaded) {
             syncViewItemsBySortingField()
         }
 

@@ -1,7 +1,11 @@
-package io.horizontalsystems.bankwallet.modules.market.top
+package io.horizontalsystems.bankwallet.modules.market.overview
 
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.IRateManager
+import io.horizontalsystems.bankwallet.modules.market.top.IMarketListDataSource
+import io.horizontalsystems.bankwallet.modules.market.top.MarketTopItem
+import io.horizontalsystems.bankwallet.modules.market.top.Score
+import io.horizontalsystems.bankwallet.modules.market.top.SortingField
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.xrateskit.entities.CoinMarket
 import io.reactivex.disposables.CompositeDisposable
@@ -9,7 +13,7 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 
-class MarketTopService(
+class MarketOverviewService(
         private val currencyManager: ICurrencyManager,
         private val marketListDataSource: IMarketListDataSource,
         private val rateManager: IRateManager
