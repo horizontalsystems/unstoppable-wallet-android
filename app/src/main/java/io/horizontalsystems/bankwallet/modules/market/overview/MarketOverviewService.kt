@@ -4,14 +4,14 @@ import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.IRateManager
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.bankwallet.modules.market.Score
-import io.horizontalsystems.core.ICurrencyManager
+import io.horizontalsystems.core.entities.Currency
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 
 class MarketOverviewService(
-        private val currencyManager: ICurrencyManager,
+        val currency: Currency,
         private val rateManager: IRateManager
 ) : Clearable {
 
@@ -22,7 +22,6 @@ class MarketOverviewService(
     }
 
     val stateObservable: BehaviorSubject<State> = BehaviorSubject.createDefault(State.Loading)
-    val currency by currencyManager::baseCurrency
 
     var marketItems: List<MarketItem> = listOf()
 
@@ -42,7 +41,7 @@ class MarketOverviewService(
 
         stateObservable.onNext(State.Loading)
 
-        topItemsDisposable = rateManager.getTopMarketList(currencyManager.baseCurrency.code)
+        topItemsDisposable = rateManager.getTopMarketList(currency.code)
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .subscribe({
