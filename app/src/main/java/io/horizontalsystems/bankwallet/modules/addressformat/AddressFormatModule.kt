@@ -6,6 +6,7 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.providers.StringProvider
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.entities.AccountType.Derivation
+import io.horizontalsystems.views.ListPosition
 import io.reactivex.Observable
 
 object AddressFormatModule {
@@ -34,5 +35,5 @@ object AddressFormatModule {
     }
 
     data class SectionItem(val coinTypeName: String, val viewItems: List<ViewItem>)
-    data class ViewItem(val title: String, val subtitle: String, val selected: Boolean)
+    data class ViewItem(val title: String, val subtitle: String, val selected: Boolean, val listPosition: ListPosition)
 }

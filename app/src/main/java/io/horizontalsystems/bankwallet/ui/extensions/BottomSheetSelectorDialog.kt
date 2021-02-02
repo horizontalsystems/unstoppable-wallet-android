@@ -87,7 +87,7 @@ class SelectorItemsAdapter(private val items: List<BottomSheetSelectorViewItem>,
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int, payloads: MutableList<Any>) {
         if (payloads.isEmpty()) {
-            holder.bind(items[position].title, items[position].subtitle, position == selected, position == itemCount - 1)
+            holder.bind(items[position].title, items[position].subtitle, position == selected)
         } else {
             holder.bindSelected(position == selected)
         }
@@ -104,15 +104,12 @@ class ItemViewHolder(override val containerView: View, val onItemClick: (Int) ->
         }
     }
 
-    fun bind(title: String, subtitle: String, selected: Boolean, showBottomBorder: Boolean) {
-        settingWithCheckmark.setTitle(title)
-        settingWithCheckmark.setSubtitle(subtitle)
-        settingWithCheckmark.setChecked(selected)
-        settingWithCheckmark.toggleBottomBorder(showBottomBorder)
+    fun bind(title: String, subtitle: String, selected: Boolean) {
+        itemWithCheckmark.bind(title, subtitle, selected)
     }
 
     fun bindSelected(selected: Boolean) {
-        settingWithCheckmark.setChecked(selected)
+        itemWithCheckmark.setChecked(selected)
     }
 }
 
