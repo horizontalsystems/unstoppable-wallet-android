@@ -9,10 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.ConcatAdapter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.modules.market.MarketField
-import io.horizontalsystems.bankwallet.modules.market.MarketItemsAdapter
-import io.horizontalsystems.bankwallet.modules.market.MarketLoadingAdapter
-import io.horizontalsystems.bankwallet.modules.market.ViewHolderMarketTopItem
+import io.horizontalsystems.bankwallet.modules.market.*
 import io.horizontalsystems.bankwallet.modules.ratechart.RateChartFragment
 import io.horizontalsystems.bankwallet.ui.extensions.MarketListHeaderView
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorDialog
@@ -21,7 +18,7 @@ import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.android.synthetic.main.fragment_market_favorites.*
 
-class MarketFavoritesFragment : BaseFragment(), MarketListHeaderView.Listener, ViewHolderMarketTopItem.Listener {
+class MarketFavoritesFragment : BaseFragment(), MarketListHeaderView.Listener, ViewHolderMarketItem.Listener {
 
     private lateinit var marketItemsAdapter: MarketItemsAdapter
     private lateinit var marketLoadingAdapter: MarketLoadingAdapter
@@ -39,13 +36,13 @@ class MarketFavoritesFragment : BaseFragment(), MarketListHeaderView.Listener, V
         marketListHeader.setSortingField(marketFavoritesViewModel.sortingField)
         marketListHeader.setMarketField(marketFavoritesViewModel.marketField)
         marketListHeader.isVisible = false
-        marketFavoritesViewModel.marketTopViewItemsLiveData.observe(viewLifecycleOwner, {
+        marketFavoritesViewModel.marketViewItemsLiveData.observe(viewLifecycleOwner, {
             marketListHeader.isVisible = it.isNotEmpty()
         })
 
         marketItemsAdapter = MarketItemsAdapter(
                 this,
-                marketFavoritesViewModel.marketTopViewItemsLiveData,
+                marketFavoritesViewModel.marketViewItemsLiveData,
                 marketFavoritesViewModel.loadingLiveData,
                 marketFavoritesViewModel.errorLiveData,
                 viewLifecycleOwner
@@ -85,8 +82,8 @@ class MarketFavoritesFragment : BaseFragment(), MarketListHeaderView.Listener, V
         marketFavoritesViewModel.update(marketField = marketField)
     }
 
-    override fun onItemClick(marketTopViewItem: MarketTopViewItem) {
-        val arguments = RateChartFragment.prepareParams(marketTopViewItem.coinCode, marketTopViewItem.coinName, null)
+    override fun onItemClick(marketViewItem: MarketViewItem) {
+        val arguments = RateChartFragment.prepareParams(marketViewItem.coinCode, marketViewItem.coinName, null)
 
         findNavController().navigate(R.id.rateChartFragment, arguments, navOptions())
     }

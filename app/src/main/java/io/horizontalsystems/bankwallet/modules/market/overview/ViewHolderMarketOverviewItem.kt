@@ -8,7 +8,7 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.modules.market.favorites.MarketTopViewItem
+import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
 import io.horizontalsystems.bankwallet.modules.market.getBackgroundTintColor
 import io.horizontalsystems.bankwallet.modules.market.getText
 import io.horizontalsystems.bankwallet.modules.market.getTextColor
@@ -22,10 +22,10 @@ import java.math.BigDecimal
 class ViewHolderMarketOverviewItem(override val containerView: View, private val listener: Listener)
     : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
-    private var item: MarketTopViewItem? = null
+    private var item: MarketViewItem? = null
 
     interface Listener {
-        fun onItemClick(marketTopViewItem: MarketTopViewItem)
+        fun onItemClick(marketViewItem: MarketViewItem)
     }
 
     init {
@@ -36,7 +36,7 @@ class ViewHolderMarketOverviewItem(override val containerView: View, private val
         }
     }
 
-    fun bind(item: MarketTopViewItem, prev: MarketTopViewItem?, listPosition: ListPosition) {
+    fun bind(item: MarketViewItem, prev: MarketViewItem?, listPosition: ListPosition) {
         this.item = item
 
         if (item.coinCode != prev?.coinCode) {
@@ -74,21 +74,21 @@ class ViewHolderMarketOverviewItem(override val containerView: View, private val
             val marketField = item.marketDataValue
 
             marketFieldCaption.text = when (marketField) {
-                is MarketTopViewItem.MarketDataValue.MarketCap -> "MCap"
-                is MarketTopViewItem.MarketDataValue.Volume -> "Vol"
-                is MarketTopViewItem.MarketDataValue.Diff -> ""
+                is MarketViewItem.MarketDataValue.MarketCap -> "MCap"
+                is MarketViewItem.MarketDataValue.Volume -> "Vol"
+                is MarketViewItem.MarketDataValue.Diff -> ""
             }
 
             when (marketField) {
-                is MarketTopViewItem.MarketDataValue.MarketCap -> {
+                is MarketViewItem.MarketDataValue.MarketCap -> {
                     marketFieldValue.text = marketField.value
                     marketFieldValue.setTextColor(containerView.resources.getColor(R.color.grey, containerView.context.theme))
                 }
-                is MarketTopViewItem.MarketDataValue.Volume -> {
+                is MarketViewItem.MarketDataValue.Volume -> {
                     marketFieldValue.text = marketField.value
                     marketFieldValue.setTextColor(containerView.resources.getColor(R.color.grey, containerView.context.theme))
                 }
-                is MarketTopViewItem.MarketDataValue.Diff -> {
+                is MarketViewItem.MarketDataValue.Diff -> {
                     val v = marketField.value
                     val sign = if (v >= BigDecimal.ZERO) "+" else "-"
                     marketFieldValue.text = App.numberFormatter.format(v.abs(), 0, 2, sign, "%")

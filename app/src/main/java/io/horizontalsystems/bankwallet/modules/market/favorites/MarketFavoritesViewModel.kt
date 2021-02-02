@@ -6,15 +6,10 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
-import io.horizontalsystems.bankwallet.modules.market.MarketField
-import io.horizontalsystems.bankwallet.modules.market.MarketItem
-import io.horizontalsystems.bankwallet.modules.market.Score
-import io.horizontalsystems.bankwallet.modules.market.SortingField
+import io.horizontalsystems.bankwallet.modules.market.*
 import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import java.math.BigDecimal
-import java.util.*
 
 class MarketFavoritesViewModel(
         private val service: MarketFavoritesService,
@@ -40,7 +35,7 @@ class MarketFavoritesViewModel(
         syncViewItemsBySortingField()
     }
 
-    val marketTopViewItemsLiveData = MutableLiveData<List<MarketTopViewItem>>()
+    val marketViewItemsLiveData = MutableLiveData<List<MarketViewItem>>()
     val loadingLiveData = MutableLiveData(false)
     val errorLiveData = MutableLiveData<String?>(null)
     val networkNotAvailable = SingleLiveEvent<Unit>()
@@ -83,20 +78,20 @@ class MarketFavoritesViewModel(
                         App.numberFormatter.formatFiat(shortenValue, service.currency.symbol, 0, 2) + suffix
                     }
 
-                    MarketTopViewItem.MarketDataValue.MarketCap(marketCapFormatted ?: App.instance.getString(R.string.NotAvailable))
+                    MarketViewItem.MarketDataValue.MarketCap(marketCapFormatted ?: App.instance.getString(R.string.NotAvailable))
                 }
                 MarketField.Volume -> {
                     val (shortenValue, suffix) = App.numberFormatter.shortenValue(it.volume)
                     val volumeFormatted = App.numberFormatter.formatFiat(shortenValue, service.currency.symbol, 0, 2) + suffix
 
-                    MarketTopViewItem.MarketDataValue.Volume(volumeFormatted)
+                    MarketViewItem.MarketDataValue.Volume(volumeFormatted)
                 }
-                MarketField.PriceDiff -> MarketTopViewItem.MarketDataValue.Diff(it.diff)
+                MarketField.PriceDiff -> MarketViewItem.MarketDataValue.Diff(it.diff)
             }
-            MarketTopViewItem(it.score, it.coinCode, it.coinName, formattedRate, it.diff, marketDataValue)
+            MarketViewItem(it.score, it.coinCode, it.coinName, formattedRate, it.diff, marketDataValue)
         }
 
-        marketTopViewItemsLiveData.postValue(viewItems)
+        marketViewItemsLiveData.postValue(viewItems)
     }
 
     private fun convertErrorMessage(it: Throwable): String {
@@ -129,35 +124,4 @@ class MarketFavoritesViewModel(
         SortingField.TopLosers -> items.sortedByNullLast { it.diff }
     }
 
-}
-
-data class MarketTopViewItem(
-        val score: Score?,
-        val coinCode: String,
-        val coinName: String,
-        val rate: String,
-        val diff: BigDecimal,
-        val marketDataValue: MarketDataValue
-) {
-    sealed class MarketDataValue {
-        class MarketCap(val value: String) : MarketDataValue()
-        class Volume(val value: String) : MarketDataValue()
-        class Diff(val value: BigDecimal) : MarketDataValue()
-    }
-
-    fun areItemsTheSame(other: MarketTopViewItem): Boolean {
-        return coinCode == other.coinCode && coinName == other.coinName
-    }
-
-    fun areContentsTheSame(other: MarketTopViewItem): Boolean {
-        return this == other
-    }
-}
-
-inline fun <T, R : Comparable<R>> Iterable<T>.sortedByDescendingNullLast(crossinline selector: (T) -> R?): List<T> {
-    return sortedWith(Comparator.nullsLast(compareByDescending(selector)))
-}
-
-inline fun <T, R : Comparable<R>> Iterable<T>.sortedByNullLast(crossinline selector: (T) -> R?): List<T> {
-    return sortedWith(Comparator.nullsLast(compareBy(selector)))
 }

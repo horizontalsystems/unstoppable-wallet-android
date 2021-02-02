@@ -8,7 +8,7 @@ import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
 import io.horizontalsystems.bankwallet.modules.market.MarketField
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.bankwallet.modules.market.SortingField
-import io.horizontalsystems.bankwallet.modules.market.favorites.MarketTopViewItem
+import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
 import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -28,7 +28,7 @@ class MarketDiscoveryViewModel(
     var marketField: MarketField = MarketField.PriceDiff
         private set
 
-    val marketTopViewItemsLiveData = MutableLiveData<List<MarketTopViewItem>>()
+    val marketViewItemsLiveData = MutableLiveData<List<MarketViewItem>>()
 
     val loadingLiveData = MutableLiveData(false)
     val errorLiveData = MutableLiveData<String?>(null)
@@ -87,20 +87,20 @@ class MarketDiscoveryViewModel(
                         App.numberFormatter.formatFiat(shortenValue, service.currency.symbol, 0, 2) + suffix
                     }
 
-                    MarketTopViewItem.MarketDataValue.MarketCap(marketCapFormatted ?: App.instance.getString(R.string.NotAvailable))
+                    MarketViewItem.MarketDataValue.MarketCap(marketCapFormatted ?: App.instance.getString(R.string.NotAvailable))
                 }
                 MarketField.Volume -> {
                     val (shortenValue, suffix) = App.numberFormatter.shortenValue(it.volume)
                     val volumeFormatted = App.numberFormatter.formatFiat(shortenValue, service.currency.symbol, 0, 2) + suffix
 
-                    MarketTopViewItem.MarketDataValue.Volume(volumeFormatted)
+                    MarketViewItem.MarketDataValue.Volume(volumeFormatted)
                 }
-                MarketField.PriceDiff -> MarketTopViewItem.MarketDataValue.Diff(it.diff)
+                MarketField.PriceDiff -> MarketViewItem.MarketDataValue.Diff(it.diff)
             }
-            MarketTopViewItem(it.score, it.coinCode, it.coinName, formattedRate, it.diff, marketDataValue)
+            MarketViewItem(it.score, it.coinCode, it.coinName, formattedRate, it.diff, marketDataValue)
         }
 
-        marketTopViewItemsLiveData.postValue(viewItems)
+        marketViewItemsLiveData.postValue(viewItems)
     }
 
     private fun sort(items: List<MarketItem>, sortingField: SortingField) = when (sortingField) {

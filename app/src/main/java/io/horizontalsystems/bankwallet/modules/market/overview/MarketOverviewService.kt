@@ -63,7 +63,7 @@ class MarketOverviewService(
                 .observeOn(Schedulers.io())
                 .subscribe({
                     marketItems = it.mapIndexed { index, topMarket ->
-                        convertToMarketTopItem(index + 1, topMarket)
+                        convertToMarketItem(index + 1, topMarket)
                     }
 
                     stateObservable.onNext(State.Loaded)
@@ -80,7 +80,7 @@ class MarketOverviewService(
         disposable.clear()
     }
 
-    private fun convertToMarketTopItem(rank: Int, topMarket: CoinMarket) =
+    private fun convertToMarketItem(rank: Int, topMarket: CoinMarket) =
             MarketItem(
                     Score.Rank(rank),
                     topMarket.coin.code,
