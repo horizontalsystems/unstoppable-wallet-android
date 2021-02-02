@@ -3,6 +3,7 @@ package io.horizontalsystems.languageswitcher
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.core.CoreApp
+import io.horizontalsystems.views.ListPosition
 
 object LanguageSwitcherModule {
 
@@ -40,4 +41,4 @@ object LanguageSwitcherModule {
     }
 }
 
-data class LanguageViewItem(val language: String, val name: String, val nativeName: String, var current: Boolean)
+data class LanguageViewItem(val language: String, val name: String, val nativeName: String, var current: Boolean, val listPosition: ListPosition)
