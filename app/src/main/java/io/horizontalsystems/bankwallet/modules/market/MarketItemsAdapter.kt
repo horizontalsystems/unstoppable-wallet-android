@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.modules.market.favorites.MarketTopViewItem
 import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
 import io.horizontalsystems.views.helpers.LayoutHelper
 import kotlinx.android.extensions.LayoutContainer
@@ -20,12 +19,12 @@ import kotlinx.android.synthetic.main.view_holder_market_item.*
 import java.math.BigDecimal
 
 class MarketItemsAdapter(
-        private val listener: ViewHolderMarketTopItem.Listener,
-        itemsLiveData: LiveData<List<MarketTopViewItem>>,
+        private val listener: ViewHolderMarketItem.Listener,
+        itemsLiveData: LiveData<List<MarketViewItem>>,
         loadingLiveData: LiveData<Boolean>,
         errorLiveData: LiveData<String?>,
         viewLifecycleOwner: LifecycleOwner
-) : ListAdapter<MarketTopViewItem, ViewHolderMarketTopItem>(coinRateDiff) {
+) : ListAdapter<MarketViewItem, ViewHolderMarketItem>(coinRateDiff) {
 
     init {
         itemsLiveData.observe(viewLifecycleOwner, {
@@ -43,38 +42,38 @@ class MarketItemsAdapter(
         })
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderMarketTopItem {
-        return ViewHolderMarketTopItem.create(parent, listener)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderMarketItem {
+        return ViewHolderMarketItem.create(parent, listener)
     }
 
-    override fun onBindViewHolder(holder: ViewHolderMarketTopItem, position: Int, payloads: MutableList<Any>) {
-        holder.bind(getItem(position), payloads.firstOrNull { it is MarketTopViewItem } as? MarketTopViewItem)
+    override fun onBindViewHolder(holder: ViewHolderMarketItem, position: Int, payloads: MutableList<Any>) {
+        holder.bind(getItem(position), payloads.firstOrNull { it is MarketViewItem } as? MarketViewItem)
     }
 
-    override fun onBindViewHolder(holder: ViewHolderMarketTopItem, position: Int) = Unit
+    override fun onBindViewHolder(holder: ViewHolderMarketItem, position: Int) = Unit
 
     companion object {
-        private val coinRateDiff = object : DiffUtil.ItemCallback<MarketTopViewItem>() {
-            override fun areItemsTheSame(oldItem: MarketTopViewItem, newItem: MarketTopViewItem): Boolean {
+        private val coinRateDiff = object : DiffUtil.ItemCallback<MarketViewItem>() {
+            override fun areItemsTheSame(oldItem: MarketViewItem, newItem: MarketViewItem): Boolean {
                 return oldItem.areItemsTheSame(newItem)
             }
 
-            override fun areContentsTheSame(oldItem: MarketTopViewItem, newItem: MarketTopViewItem): Boolean {
+            override fun areContentsTheSame(oldItem: MarketViewItem, newItem: MarketViewItem): Boolean {
                 return oldItem.areContentsTheSame(newItem)
             }
 
-            override fun getChangePayload(oldItem: MarketTopViewItem, newItem: MarketTopViewItem): Any? {
+            override fun getChangePayload(oldItem: MarketViewItem, newItem: MarketViewItem): Any? {
                 return oldItem
             }
         }
     }
 }
 
-class ViewHolderMarketTopItem(override val containerView: View, private val listener: Listener) : RecyclerView.ViewHolder(containerView), LayoutContainer {
-    private var item: MarketTopViewItem? = null
+class ViewHolderMarketItem(override val containerView: View, private val listener: Listener) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+    private var item: MarketViewItem? = null
 
     interface Listener {
-        fun onItemClick(marketTopViewItem: MarketTopViewItem)
+        fun onItemClick(marketViewItem: MarketViewItem)
     }
 
     init {
@@ -85,7 +84,7 @@ class ViewHolderMarketTopItem(override val containerView: View, private val list
         }
     }
 
-    fun bind(item: MarketTopViewItem, prev: MarketTopViewItem?) {
+    fun bind(item: MarketViewItem, prev: MarketViewItem?) {
         this.item = item
 
         if (item.coinCode != prev?.coinCode) {
@@ -123,21 +122,21 @@ class ViewHolderMarketTopItem(override val containerView: View, private val list
             val marketField = item.marketDataValue
 
             marketFieldCaption.text = when (marketField) {
-                is MarketTopViewItem.MarketDataValue.MarketCap -> "MCap"
-                is MarketTopViewItem.MarketDataValue.Volume -> "Vol"
-                is MarketTopViewItem.MarketDataValue.Diff -> ""
+                is MarketViewItem.MarketDataValue.MarketCap -> "MCap"
+                is MarketViewItem.MarketDataValue.Volume -> "Vol"
+                is MarketViewItem.MarketDataValue.Diff -> ""
             }
 
             when (marketField) {
-                is MarketTopViewItem.MarketDataValue.MarketCap -> {
+                is MarketViewItem.MarketDataValue.MarketCap -> {
                     marketFieldValue.text = marketField.value
                     marketFieldValue.setTextColor(containerView.resources.getColor(R.color.grey, containerView.context.theme))
                 }
-                is MarketTopViewItem.MarketDataValue.Volume -> {
+                is MarketViewItem.MarketDataValue.Volume -> {
                     marketFieldValue.text = marketField.value
                     marketFieldValue.setTextColor(containerView.resources.getColor(R.color.grey, containerView.context.theme))
                 }
-                is MarketTopViewItem.MarketDataValue.Diff -> {
+                is MarketViewItem.MarketDataValue.Diff -> {
                     val v = marketField.value
                     val sign = if (v >= BigDecimal.ZERO) "+" else "-"
                     marketFieldValue.text = App.numberFormatter.format(v.abs(), 0, 2, sign, "%")
@@ -153,8 +152,8 @@ class ViewHolderMarketTopItem(override val containerView: View, private val list
     }
 
     companion object {
-        fun create(parent: ViewGroup, listener: Listener): ViewHolderMarketTopItem {
-            return ViewHolderMarketTopItem(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_market_item, parent, false), listener)
+        fun create(parent: ViewGroup, listener: Listener): ViewHolderMarketItem {
+            return ViewHolderMarketItem(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_market_item, parent, false), listener)
         }
     }
 }

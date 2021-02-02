@@ -97,3 +97,34 @@ fun Score.getBackgroundTintColor(context: Context): Int {
         }
     }
 }
+
+data class MarketViewItem(
+        val score: Score?,
+        val coinCode: String,
+        val coinName: String,
+        val rate: String,
+        val diff: BigDecimal,
+        val marketDataValue: MarketDataValue
+) {
+    sealed class MarketDataValue {
+        class MarketCap(val value: String) : MarketDataValue()
+        class Volume(val value: String) : MarketDataValue()
+        class Diff(val value: BigDecimal) : MarketDataValue()
+    }
+
+    fun areItemsTheSame(other: MarketViewItem): Boolean {
+        return coinCode == other.coinCode && coinName == other.coinName
+    }
+
+    fun areContentsTheSame(other: MarketViewItem): Boolean {
+        return this == other
+    }
+}
+
+inline fun <T, R : Comparable<R>> Iterable<T>.sortedByDescendingNullLast(crossinline selector: (T) -> R?): List<T> {
+    return sortedWith(Comparator.nullsLast(compareByDescending(selector)))
+}
+
+inline fun <T, R : Comparable<R>> Iterable<T>.sortedByNullLast(crossinline selector: (T) -> R?): List<T> {
+    return sortedWith(Comparator.nullsLast(compareBy(selector)))
+}

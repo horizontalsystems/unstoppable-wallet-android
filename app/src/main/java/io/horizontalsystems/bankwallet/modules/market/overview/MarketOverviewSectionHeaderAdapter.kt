@@ -12,11 +12,11 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.modules.market.favorites.MarketTopViewItem
+import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
 import kotlinx.android.extensions.LayoutContainer
 
 class MarketOverviewSectionHeaderAdapter(
-        viewItemsLiveData: LiveData<List<MarketTopViewItem>>,
+        viewItemsLiveData: LiveData<List<MarketViewItem>>,
         viewLifecycleOwner: LifecycleOwner,
         private val settingsHeaderItem: SectionHeaderItem
 ) : ListAdapter<MarketOverviewSectionHeaderAdapter.SectionHeaderItem, MarketOverviewSectionHeaderAdapter.SectionHeaderViewHolder>(diffCallback) {

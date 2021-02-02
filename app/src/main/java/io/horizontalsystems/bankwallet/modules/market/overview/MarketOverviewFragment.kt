@@ -14,7 +14,7 @@ import io.horizontalsystems.bankwallet.modules.market.discovery.PoweredByAdapter
 import io.horizontalsystems.bankwallet.modules.market.metrics.MarketMetricsAdapter
 import io.horizontalsystems.bankwallet.modules.market.metrics.MarketMetricsModule
 import io.horizontalsystems.bankwallet.modules.market.metrics.MarketMetricsViewModel
-import io.horizontalsystems.bankwallet.modules.market.favorites.MarketTopViewItem
+import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
 import io.horizontalsystems.bankwallet.modules.ratechart.RateChartFragment
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.navGraphViewModels
@@ -83,8 +83,8 @@ class MarketOverviewFragment : BaseFragment(), ViewHolderMarketOverviewItem.List
         }
     }
 
-    override fun onItemClick(marketTopViewItem: MarketTopViewItem) {
-        val arguments = RateChartFragment.prepareParams(marketTopViewItem.coinCode, marketTopViewItem.coinName, null)
+    override fun onItemClick(marketViewItem: MarketViewItem) {
+        val arguments = RateChartFragment.prepareParams(marketViewItem.coinCode, marketViewItem.coinName, null)
 
         findNavController().navigate(R.id.rateChartFragment, arguments, navOptions())
     }

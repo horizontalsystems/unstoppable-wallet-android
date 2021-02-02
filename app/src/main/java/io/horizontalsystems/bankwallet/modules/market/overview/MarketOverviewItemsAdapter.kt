@@ -5,14 +5,14 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import io.horizontalsystems.bankwallet.modules.market.favorites.MarketTopViewItem
+import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
 import io.horizontalsystems.views.ListPosition
 
 class MarketOverviewItemsAdapter(
         private val listener: ViewHolderMarketOverviewItem.Listener,
-        private val itemsLiveData: LiveData<List<MarketTopViewItem>>,
+        private val itemsLiveData: LiveData<List<MarketViewItem>>,
         viewLifecycleOwner: LifecycleOwner
-) : ListAdapter<MarketTopViewItem, ViewHolderMarketOverviewItem>(coinRateDiff) {
+) : ListAdapter<MarketViewItem, ViewHolderMarketOverviewItem>(coinRateDiff) {
 
     init {
         itemsLiveData.observe(viewLifecycleOwner, {
@@ -27,7 +27,7 @@ class MarketOverviewItemsAdapter(
     override fun onBindViewHolder(holder: ViewHolderMarketOverviewItem, position: Int, payloads: MutableList<Any>) {
         holder.bind(
                 getItem(position),
-                payloads.firstOrNull { it is MarketTopViewItem } as? MarketTopViewItem,
+                payloads.firstOrNull { it is MarketViewItem } as? MarketViewItem,
                 getListPosition(position)
         )
     }
@@ -42,16 +42,16 @@ class MarketOverviewItemsAdapter(
     }
 
     companion object {
-        private val coinRateDiff = object : DiffUtil.ItemCallback<MarketTopViewItem>() {
-            override fun areItemsTheSame(oldItem: MarketTopViewItem, newItem: MarketTopViewItem): Boolean {
+        private val coinRateDiff = object : DiffUtil.ItemCallback<MarketViewItem>() {
+            override fun areItemsTheSame(oldItem: MarketViewItem, newItem: MarketViewItem): Boolean {
                 return oldItem.areItemsTheSame(newItem)
             }
 
-            override fun areContentsTheSame(oldItem: MarketTopViewItem, newItem: MarketTopViewItem): Boolean {
+            override fun areContentsTheSame(oldItem: MarketViewItem, newItem: MarketViewItem): Boolean {
                 return oldItem.areContentsTheSame(newItem)
             }
 
-            override fun getChangePayload(oldItem: MarketTopViewItem, newItem: MarketTopViewItem): Any? {
+            override fun getChangePayload(oldItem: MarketViewItem, newItem: MarketViewItem): Any? {
                 return oldItem
             }
         }

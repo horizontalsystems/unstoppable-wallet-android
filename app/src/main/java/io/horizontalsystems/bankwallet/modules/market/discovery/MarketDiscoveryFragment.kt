@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.ConcatAdapter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.market.*
-import io.horizontalsystems.bankwallet.modules.market.favorites.MarketTopViewItem
+import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
 import io.horizontalsystems.bankwallet.modules.ratechart.RateChartFragment
 import io.horizontalsystems.bankwallet.ui.extensions.MarketListHeaderView
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorDialog
@@ -20,7 +20,7 @@ import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.core.navGraphViewModels
 import kotlinx.android.synthetic.main.fragment_market_discovery.*
 
-class MarketDiscoveryFragment : BaseFragment(), MarketListHeaderView.Listener, ViewHolderMarketTopItem.Listener, MarketCategoriesAdapter.Listener {
+class MarketDiscoveryFragment : BaseFragment(), MarketListHeaderView.Listener, ViewHolderMarketItem.Listener, MarketCategoriesAdapter.Listener {
 
     private lateinit var marketItemsAdapter: MarketItemsAdapter
     private lateinit var marketLoadingAdapter: MarketLoadingAdapter
@@ -40,13 +40,13 @@ class MarketDiscoveryFragment : BaseFragment(), MarketListHeaderView.Listener, V
         marketListHeader.setSortingField(marketDiscoveryViewModel.sortingField)
         marketListHeader.setMarketField(marketDiscoveryViewModel.marketField)
         marketListHeader.isVisible = false
-        marketDiscoveryViewModel.marketTopViewItemsLiveData.observe(viewLifecycleOwner, {
+        marketDiscoveryViewModel.marketViewItemsLiveData.observe(viewLifecycleOwner, {
             marketListHeader.isVisible = it.isNotEmpty()
         })
 
         marketItemsAdapter = MarketItemsAdapter(
                 this,
-                marketDiscoveryViewModel.marketTopViewItemsLiveData,
+                marketDiscoveryViewModel.marketViewItemsLiveData,
                 marketDiscoveryViewModel.loadingLiveData,
                 marketDiscoveryViewModel.errorLiveData,
                 viewLifecycleOwner
@@ -97,8 +97,8 @@ class MarketDiscoveryFragment : BaseFragment(), MarketListHeaderView.Listener, V
         marketDiscoveryViewModel.update(marketField = marketField)
     }
 
-    override fun onItemClick(marketTopViewItem: MarketTopViewItem) {
-        val arguments = RateChartFragment.prepareParams(marketTopViewItem.coinCode, marketTopViewItem.coinName, null)
+    override fun onItemClick(marketViewItem: MarketViewItem) {
+        val arguments = RateChartFragment.prepareParams(marketViewItem.coinCode, marketViewItem.coinName, null)
 
         findNavController().navigate(R.id.rateChartFragment, arguments, navOptions())
     }
