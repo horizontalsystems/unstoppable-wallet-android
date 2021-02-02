@@ -5,7 +5,6 @@ import io.horizontalsystems.bankwallet.core.IRateManager
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.bankwallet.modules.market.Score
 import io.horizontalsystems.core.ICurrencyManager
-import io.horizontalsystems.xrateskit.entities.CoinMarket
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -48,7 +47,7 @@ class MarketOverviewService(
                 .observeOn(Schedulers.io())
                 .subscribe({
                     marketItems = it.mapIndexed { index, topMarket ->
-                        convertToMarketItem(index + 1, topMarket)
+                        MarketItem.createFromCoinMarket(topMarket, Score.Rank(index + 1))
                     }
 
                     stateObservable.onNext(State.Loaded)
@@ -65,14 +64,4 @@ class MarketOverviewService(
         disposable.clear()
     }
 
-    private fun convertToMarketItem(rank: Int, topMarket: CoinMarket) =
-            MarketItem(
-                    Score.Rank(rank),
-                    topMarket.coin.code,
-                    topMarket.coin.title,
-                    topMarket.marketInfo.volume,
-                    topMarket.marketInfo.rate,
-                    topMarket.marketInfo.rateDiffPeriod,
-                    topMarket.marketInfo.marketCap
-            )
 }

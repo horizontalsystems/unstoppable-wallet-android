@@ -4,9 +4,7 @@ import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.IRateManager
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.bankwallet.modules.market.Score
-import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.core.ICurrencyManager
-import io.horizontalsystems.xrateskit.entities.CoinMarket
 import io.reactivex.Single
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -86,7 +84,7 @@ class MarketDiscoveryService(
         return xRateManager.getTopMarketList(currency.code)
                 .map { coinMarkets ->
                     coinMarkets.mapIndexed { index, coinMarket ->
-                        convertToMarketItem(Score.Rank(index + 1), coinMarket)
+                        MarketItem.createFromCoinMarket(coinMarket, Score.Rank(index + 1))
                     }
                 }
     }
@@ -99,7 +97,7 @@ class MarketDiscoveryService(
                             .map { coinMarkets ->
                                 coinMarkets.mapNotNull { coinMarket ->
                                     coinRatingsMap[coinMarket.coin.code]?.let { rating ->
-                                        convertToMarketItem(Score.Rating(rating), coinMarket)
+                                        MarketItem.createFromCoinMarket(coinMarket, Score.Rating(rating))
                                     }
                                 }
                             }
@@ -112,21 +110,10 @@ class MarketDiscoveryService(
                     xRateManager.getCoinMarketList(coinCodes, currency.code)
                             .map { coinMarkets ->
                                 coinMarkets.map { coinMarket ->
-                                    convertToMarketItem(null, coinMarket)
+                                    MarketItem.createFromCoinMarket(coinMarket, null)
                                 }
                             }
                 }
     }
-
-    private fun convertToMarketItem(score: Score?, coinMarket: CoinMarket) =
-            MarketItem(
-                    score,
-                    coinMarket.coin.code,
-                    coinMarket.coin.title,
-                    coinMarket.marketInfo.volume,
-                    coinMarket.marketInfo.rate,
-                    coinMarket.marketInfo.rateDiffPeriod,
-                    coinMarket.marketInfo.marketCap
-            )
 
 }
