@@ -19,7 +19,7 @@ class MarketDiscoveryViewModel(
         private val connectivityManager: ConnectivityManager
 ) : ViewModel() {
 
-    val sortingFields: Array<SortingField> by service::sortingFields
+    val sortingFields: Array<SortingField> = SortingField.values()
     val marketCategories: List<MarketCategory> by service::marketCategories
 
     var sortingField: SortingField = sortingFields.first()
