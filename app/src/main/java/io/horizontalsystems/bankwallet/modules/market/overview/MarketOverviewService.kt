@@ -41,7 +41,7 @@ class MarketOverviewService(
 
         stateObservable.onNext(State.Loading)
 
-        topItemsDisposable = rateManager.getTopMarketList(currency.code)
+        topItemsDisposable = rateManager.getTopMarketList(currency.code, 250)
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .subscribe({

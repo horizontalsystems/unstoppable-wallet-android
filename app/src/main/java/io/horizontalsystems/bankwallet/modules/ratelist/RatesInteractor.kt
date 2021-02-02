@@ -45,7 +45,7 @@ class RatesInteractor(
     }
 
     override fun getTopList() {
-        xRateManager.getTopMarketList(currency.code)
+        xRateManager.getTopMarketList(currency.code, 100)
                 .subscribeOn(Schedulers.io())
                 .subscribe({
                     val topMarketItems = it.mapIndexed { index, coinMarket ->
