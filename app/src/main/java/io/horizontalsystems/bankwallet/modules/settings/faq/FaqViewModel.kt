@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.settings.faq
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.entities.Faq
+import io.horizontalsystems.views.ListPosition
 import io.reactivex.disposables.CompositeDisposable
 
 class FaqViewModel(private val repository: FaqRepository): ViewModel() {
@@ -36,7 +37,9 @@ class FaqViewModel(private val repository: FaqRepository): ViewModel() {
     }
 
     private fun didFetchFaqList(faqArray: Array<Faq>) {
-        val faqItems = faqArray.mapIndexed { index, faq ->  FaqItem(faq, (index == faqArray.size - 1)) }
+        val faqItems = faqArray.mapIndexed { index, faq ->
+            FaqItem(faq, ListPosition.getListPosition(faqArray.size, index))
+        }
         faqItemList.postValue(faqItems)
     }
 }
