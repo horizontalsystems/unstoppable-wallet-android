@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.market.discovery
+package io.horizontalsystems.bankwallet.modules.market.overview
 
 import android.view.LayoutInflater
 import android.view.View
