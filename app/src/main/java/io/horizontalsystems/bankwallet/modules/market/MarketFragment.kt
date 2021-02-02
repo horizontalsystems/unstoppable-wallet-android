@@ -30,14 +30,16 @@ class MarketFragment : BaseWithSearchFragment(), FilterAdapter.Listener {
             val currentItem = when (tab) {
                 MarketModule.Tab.Overview -> 0
                 MarketModule.Tab.Discovery -> 1
-                MarketModule.Tab.Favorites -> 2
+                MarketModule.Tab.Watchlist -> 2
             }
 
             viewPager.setCurrentItem(currentItem, false)
 
-            filterAdapter.setFilters(marketViewModel.tabs.map { FilterAdapter.FilterItem(it.name) }, FilterAdapter.FilterItem(tab.name))
+            filterAdapter.setFilters(marketViewModel.tabs.map { it.filterItem() }, tab.filterItem())
         }
     }
+
+    private fun MarketModule.Tab.filterItem() = FilterAdapter.FilterItem(getString(titleResId))
 
     override fun updateFilter(query: String) {
 

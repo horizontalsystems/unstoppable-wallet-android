@@ -26,8 +26,10 @@ object MarketModule {
 
     }
 
-    enum class Tab {
-        Overview, Discovery, Favorites;
+    enum class Tab(@StringRes val titleResId: Int) {
+        Overview(R.string.Market_Tab_Overview),
+        Discovery(R.string.Market_Tab_Discovery),
+        Watchlist(R.string.Market_Tab_Watchlist);
 
         companion object {
             private val map = values().associateBy(Tab::name)
