@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.views.helpers.LayoutHelper
+import io.horizontalsystems.xrateskit.entities.CoinMarket
 import java.math.BigDecimal
 import java.util.*
 
@@ -48,7 +49,21 @@ data class MarketItem(
         val rate: BigDecimal,
         val diff: BigDecimal,
         val marketCap: BigDecimal?
-)
+) {
+    companion object {
+        fun createFromCoinMarket(coinMarket: CoinMarket, score: Score?): MarketItem {
+            return MarketItem(
+                    score,
+                    coinMarket.coin.code,
+                    coinMarket.coin.title,
+                    coinMarket.marketInfo.volume,
+                    coinMarket.marketInfo.rate,
+                    coinMarket.marketInfo.rateDiffPeriod,
+                    coinMarket.marketInfo.marketCap
+            )
+        }
+    }
+}
 
 enum class SortingField(@StringRes val titleResId: Int) {
     HighestCap(R.string.Market_Field_HighestCap), LowestCap(R.string.Market_Field_LowestCap),
