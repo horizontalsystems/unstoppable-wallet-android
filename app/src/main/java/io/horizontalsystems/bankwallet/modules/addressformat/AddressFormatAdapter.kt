@@ -46,7 +46,7 @@ class AddressFormatAdapter(private val listener: Listener) : RecyclerView.Adapte
                             item.subtitle,
                             item.selected,
                             { listener.onSettingClick(bindingAdapterPosition, index) },
-                            index == viewItem.viewItems.size - 1
+                            item.listPosition
                     )
                 }
             }

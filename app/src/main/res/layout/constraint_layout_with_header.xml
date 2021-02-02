@@ -74,7 +74,7 @@
         android:id="@+id/border1"
         android:layout_width="0dp"
         android:layout_height="0.5dp"
-        android:background="@color/steel_20"
+        android:background="@color/steel_10"
         android:layout_marginTop="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

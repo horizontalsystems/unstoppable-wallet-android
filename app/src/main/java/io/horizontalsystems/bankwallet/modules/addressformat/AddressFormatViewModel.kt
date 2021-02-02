@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.providers.StringProvider
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.core.SingleLiveEvent
+import io.horizontalsystems.views.ListPosition
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
@@ -81,16 +82,26 @@ class AddressFormatViewModel(
     private fun viewItems(itemType: AddressFormatModule.ItemType, coinType: CoinType): List<AddressFormatModule.ViewItem> {
         return when (itemType) {
             is AddressFormatModule.ItemType.Derivation -> {
-                itemType.derivations.map { derivation ->
+                itemType.derivations.mapIndexed { index, derivation ->
                     val title = "${derivation.addressType()} - ${derivation.title()}"
                     val subtitle = stringProvider.string(derivation.description(), (derivation.addressPrefix(coinType)
                             ?: ""))
-                    AddressFormatModule.ViewItem(title, subtitle, derivation == itemType.current)
+                    AddressFormatModule.ViewItem(
+                            title,
+                            subtitle,
+                            derivation == itemType.current,
+                            listPosition = ListPosition.getListPosition(itemType.derivations.size, index)
+                    )
                 }
             }
             is AddressFormatModule.ItemType.BitcoinCashType -> {
-                itemType.types.map { type ->
-                    AddressFormatModule.ViewItem(stringProvider.string(type.title), stringProvider.string(type.description), type == itemType.current)
+                itemType.types.mapIndexed { index, type ->
+                    AddressFormatModule.ViewItem(
+                            stringProvider.string(type.title),
+                            stringProvider.string(type.description),
+                            type == itemType.current,
+                            listPosition = ListPosition.getListPosition(itemType.types.size, index)
+                    )
                 }
             }
         }
