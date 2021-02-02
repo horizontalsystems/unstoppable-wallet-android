@@ -2,8 +2,6 @@ package io.horizontalsystems.bankwallet.modules.market.favorites
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
 import io.horizontalsystems.bankwallet.modules.market.*
@@ -70,25 +68,7 @@ class MarketFavoritesViewModel(
 
     private fun syncViewItemsBySortingField() {
         val viewItems = sort(service.marketItems, sortingField).map {
-            val formattedRate = App.numberFormatter.formatFiat(it.rate, service.currency.symbol, 2, 2)
-            val marketDataValue = when (marketField) {
-                MarketField.MarketCap -> {
-                    val marketCapFormatted = it.marketCap?.let { marketCap ->
-                        val (shortenValue, suffix) = App.numberFormatter.shortenValue(marketCap)
-                        App.numberFormatter.formatFiat(shortenValue, service.currency.symbol, 0, 2) + suffix
-                    }
-
-                    MarketViewItem.MarketDataValue.MarketCap(marketCapFormatted ?: App.instance.getString(R.string.NotAvailable))
-                }
-                MarketField.Volume -> {
-                    val (shortenValue, suffix) = App.numberFormatter.shortenValue(it.volume)
-                    val volumeFormatted = App.numberFormatter.formatFiat(shortenValue, service.currency.symbol, 0, 2) + suffix
-
-                    MarketViewItem.MarketDataValue.Volume(volumeFormatted)
-                }
-                MarketField.PriceDiff -> MarketViewItem.MarketDataValue.Diff(it.diff)
-            }
-            MarketViewItem(it.score, it.coinCode, it.coinName, formattedRate, it.diff, marketDataValue)
+            MarketViewItem.create(it, service.currency.symbol, marketField)
         }
 
         marketViewItemsLiveData.postValue(viewItems)
