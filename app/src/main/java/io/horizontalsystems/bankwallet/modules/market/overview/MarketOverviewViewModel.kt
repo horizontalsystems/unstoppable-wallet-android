@@ -3,7 +3,10 @@ package io.horizontalsystems.bankwallet.modules.market.overview
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.Clearable
-import io.horizontalsystems.bankwallet.modules.market.*
+import io.horizontalsystems.bankwallet.modules.market.MarketField
+import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
+import io.horizontalsystems.bankwallet.modules.market.SortingField
+import io.horizontalsystems.bankwallet.modules.market.sort
 import io.reactivex.disposables.CompositeDisposable
 
 class MarketOverviewViewModel(
@@ -43,9 +46,9 @@ class MarketOverviewViewModel(
     }
 
     private fun syncViewItemsBySortingField() {
-        topGainersViewItemsLiveData.postValue(sort(service.marketItems, SortingField.TopGainers).subList(0, 3).map { MarketViewItem.create(it, this.service.currency.symbol, MarketField.PriceDiff) })
-        topLosersViewItemsLiveData.postValue(sort(service.marketItems, SortingField.TopLosers).subList(0, 3).map { MarketViewItem.create(it, this.service.currency.symbol, MarketField.PriceDiff) })
-        topByVolumeViewItemsLiveData.postValue(sort(service.marketItems, SortingField.HighestVolume).subList(0, 3).map { MarketViewItem.create(it, this.service.currency.symbol, MarketField.Volume) })
+        topGainersViewItemsLiveData.postValue(service.marketItems.sort(SortingField.TopGainers).subList(0, 3).map { MarketViewItem.create(it, this.service.currency.symbol, MarketField.PriceDiff) })
+        topLosersViewItemsLiveData.postValue(service.marketItems.sort(SortingField.TopLosers).subList(0, 3).map { MarketViewItem.create(it, this.service.currency.symbol, MarketField.PriceDiff) })
+        topByVolumeViewItemsLiveData.postValue(service.marketItems.sort(SortingField.HighestVolume).subList(0, 3).map { MarketViewItem.create(it, this.service.currency.symbol, MarketField.Volume) })
     }
 
     private fun convertErrorMessage(it: Throwable): String {
@@ -61,17 +64,6 @@ class MarketOverviewViewModel(
 
     fun refresh() {
         service.refresh()
-    }
-
-    private fun sort(items: List<MarketItem>, sortingField: SortingField) = when (sortingField) {
-        SortingField.HighestCap -> items.sortedByDescendingNullLast { it.marketCap }
-        SortingField.LowestCap -> items.sortedByNullLast { it.marketCap }
-        SortingField.HighestVolume -> items.sortedByDescendingNullLast { it.volume }
-        SortingField.LowestVolume -> items.sortedByNullLast { it.volume }
-        SortingField.HighestPrice -> items.sortedByDescendingNullLast { it.rate }
-        SortingField.LowestPrice -> items.sortedByNullLast { it.rate }
-        SortingField.TopGainers -> items.sortedByDescendingNullLast { it.diff }
-        SortingField.TopLosers -> items.sortedByNullLast { it.diff }
     }
 
 }

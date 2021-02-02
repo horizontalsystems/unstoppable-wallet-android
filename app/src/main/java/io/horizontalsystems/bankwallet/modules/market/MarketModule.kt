@@ -65,6 +65,17 @@ data class MarketItem(
     }
 }
 
+fun List<MarketItem>.sort(sortingField: SortingField) = when (sortingField) {
+    SortingField.HighestCap -> sortedByDescendingNullLast { it.marketCap }
+    SortingField.LowestCap -> sortedByNullLast { it.marketCap }
+    SortingField.HighestVolume -> sortedByDescendingNullLast { it.volume }
+    SortingField.LowestVolume -> sortedByNullLast { it.volume }
+    SortingField.HighestPrice -> sortedByDescendingNullLast { it.rate }
+    SortingField.LowestPrice -> sortedByNullLast { it.rate }
+    SortingField.TopGainers -> sortedByDescendingNullLast { it.diff }
+    SortingField.TopLosers -> sortedByNullLast { it.diff }
+}
+
 enum class SortingField(@StringRes val titleResId: Int) {
     HighestCap(R.string.Market_Field_HighestCap), LowestCap(R.string.Market_Field_LowestCap),
     HighestVolume(R.string.Market_Field_HighestVolume), LowestVolume(R.string.Market_Field_LowestVolume),

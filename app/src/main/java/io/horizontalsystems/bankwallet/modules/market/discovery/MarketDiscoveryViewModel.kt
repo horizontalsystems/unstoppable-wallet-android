@@ -4,13 +4,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
 import io.horizontalsystems.bankwallet.modules.market.MarketField
-import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
 import io.horizontalsystems.bankwallet.modules.market.SortingField
+import io.horizontalsystems.bankwallet.modules.market.sort
 import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import java.util.*
 
 class MarketDiscoveryViewModel(
         private val service: MarketDiscoveryService,
@@ -76,22 +75,13 @@ class MarketDiscoveryViewModel(
     }
 
     private fun syncViewItemsBySortingField() {
-        val viewItems = sort(service.marketItems, sortingField).map {
-            MarketViewItem.create(it, service.currency.symbol, marketField)
-        }
+        val viewItems = service.marketItems
+                .sort(sortingField)
+                .map {
+                    MarketViewItem.create(it, service.currency.symbol, marketField)
+                }
 
         marketViewItemsLiveData.postValue(viewItems)
-    }
-
-    private fun sort(items: List<MarketItem>, sortingField: SortingField) = when (sortingField) {
-        SortingField.HighestCap -> items.sortedByDescendingNullLast { it.marketCap }
-        SortingField.LowestCap -> items.sortedByNullLast { it.marketCap }
-        SortingField.HighestVolume -> items.sortedByDescendingNullLast { it.volume }
-        SortingField.LowestVolume -> items.sortedByNullLast { it.volume }
-        SortingField.HighestPrice -> items.sortedByDescendingNullLast { it.rate }
-        SortingField.LowestPrice -> items.sortedByNullLast { it.rate }
-        SortingField.TopGainers -> items.sortedByDescendingNullLast { it.diff }
-        SortingField.TopLosers -> items.sortedByNullLast { it.diff }
     }
 
     fun refresh() {
@@ -106,12 +96,4 @@ class MarketDiscoveryViewModel(
         service.marketCategory = marketCategory
     }
 
-}
-
-inline fun <T, R : Comparable<R>> Iterable<T>.sortedByDescendingNullLast(crossinline selector: (T) -> R?): List<T> {
-    return sortedWith(Comparator.nullsLast(compareByDescending(selector)))
-}
-
-inline fun <T, R : Comparable<R>> Iterable<T>.sortedByNullLast(crossinline selector: (T) -> R?): List<T> {
-    return sortedWith(Comparator.nullsLast(compareBy(selector)))
 }
