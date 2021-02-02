@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.market.top
 
+import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.xrateskit.entities.CoinMarket
 import io.reactivex.Observable
 import io.reactivex.Single

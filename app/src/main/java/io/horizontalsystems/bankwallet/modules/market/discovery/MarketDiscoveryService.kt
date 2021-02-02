@@ -2,9 +2,9 @@ package io.horizontalsystems.bankwallet.modules.market.discovery
 
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.IRateManager
-import io.horizontalsystems.bankwallet.modules.market.top.MarketTopItem
-import io.horizontalsystems.bankwallet.modules.market.top.Score
-import io.horizontalsystems.bankwallet.modules.market.top.SortingField
+import io.horizontalsystems.bankwallet.modules.market.MarketItem
+import io.horizontalsystems.bankwallet.modules.market.Score
+import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.xrateskit.entities.CoinMarket
 import io.reactivex.Single
@@ -28,7 +28,7 @@ class MarketDiscoveryService(
     val currency by currencyManager::baseCurrency
     val stateObservable: BehaviorSubject<State> = BehaviorSubject.createDefault(State.Loading)
 
-    var marketItems: List<MarketTopItem> = listOf()
+    var marketItems: List<MarketItem> = listOf()
 
     var marketCategory: MarketCategory? = null
         set(value) {
@@ -83,7 +83,7 @@ class MarketDiscoveryService(
                 })
     }
 
-    private fun getAllMarketItemsAsync(): Single<List<MarketTopItem>> {
+    private fun getAllMarketItemsAsync(): Single<List<MarketItem>> {
         return xRateManager.getTopMarketList(currency.code)
                 .map { coinMarkets ->
                     coinMarkets.mapIndexed { index, coinMarket ->
@@ -92,7 +92,7 @@ class MarketDiscoveryService(
                 }
     }
 
-    private fun getRatedMarketItemsAsync(): Single<List<MarketTopItem>> {
+    private fun getRatedMarketItemsAsync(): Single<List<MarketItem>> {
         return marketCategoryProvider.getCoinRatingsAsync()
                 .flatMap { coinRatingsMap ->
                     val coinCodes = coinRatingsMap.keys.map { it }
@@ -107,7 +107,7 @@ class MarketDiscoveryService(
                 }
     }
 
-    private fun getMarketItemsByCategoryAsync(category: MarketCategory): Single<List<MarketTopItem>> {
+    private fun getMarketItemsByCategoryAsync(category: MarketCategory): Single<List<MarketItem>> {
         return marketCategoryProvider.getCoinCodesByCategoryAsync(category.id)
                 .flatMap { coinCodes ->
                     xRateManager.getCoinMarketList(coinCodes, currency.code)
@@ -120,7 +120,7 @@ class MarketDiscoveryService(
     }
 
     private fun convertToMarketItem(score: Score?, coinMarket: CoinMarket) =
-            MarketTopItem(
+            MarketItem(
                     score,
                     coinMarket.coin.code,
                     coinMarket.coin.title,

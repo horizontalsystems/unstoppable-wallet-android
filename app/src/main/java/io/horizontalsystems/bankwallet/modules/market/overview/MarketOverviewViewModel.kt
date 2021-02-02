@@ -5,10 +5,12 @@ import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.Clearable
+import io.horizontalsystems.bankwallet.modules.market.MarketField
+import io.horizontalsystems.bankwallet.modules.market.MarketItem
+import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.market.favorites.MarketTopViewItem
 import io.horizontalsystems.bankwallet.modules.market.favorites.sortedByDescendingNullLast
 import io.horizontalsystems.bankwallet.modules.market.favorites.sortedByNullLast
-import io.horizontalsystems.bankwallet.modules.market.top.*
 import io.reactivex.disposables.CompositeDisposable
 
 class MarketOverviewViewModel(
@@ -44,16 +46,16 @@ class MarketOverviewViewModel(
             syncViewItemsBySortingField()
         }
 
-        showPoweredByLiveData.postValue(service.marketTopItems.isNotEmpty())
+        showPoweredByLiveData.postValue(service.marketItems.isNotEmpty())
     }
 
     private fun syncViewItemsBySortingField() {
-        topGainersViewItemsLiveData.postValue(sort(service.marketTopItems, SortingField.TopGainers).subList(0, 3).map { this.convertItemToViewItem(it, MarketField.PriceDiff) })
-        topLosersViewItemsLiveData.postValue(sort(service.marketTopItems, SortingField.TopLosers).subList(0, 3).map { this.convertItemToViewItem(it, MarketField.PriceDiff) })
-        topByVolumeViewItemsLiveData.postValue(sort(service.marketTopItems, SortingField.HighestVolume).subList(0, 3).map { this.convertItemToViewItem(it, MarketField.Volume) })
+        topGainersViewItemsLiveData.postValue(sort(service.marketItems, SortingField.TopGainers).subList(0, 3).map { this.convertItemToViewItem(it, MarketField.PriceDiff) })
+        topLosersViewItemsLiveData.postValue(sort(service.marketItems, SortingField.TopLosers).subList(0, 3).map { this.convertItemToViewItem(it, MarketField.PriceDiff) })
+        topByVolumeViewItemsLiveData.postValue(sort(service.marketItems, SortingField.HighestVolume).subList(0, 3).map { this.convertItemToViewItem(it, MarketField.Volume) })
     }
 
-    private fun convertItemToViewItem(it: MarketTopItem, marketField: MarketField): MarketTopViewItem {
+    private fun convertItemToViewItem(it: MarketItem, marketField: MarketField): MarketTopViewItem {
         val formattedRate = App.numberFormatter.formatFiat(it.rate, service.currency.symbol, 2, 2)
         val marketDataValue = when (marketField) {
             MarketField.MarketCap -> {
@@ -92,7 +94,7 @@ class MarketOverviewViewModel(
         service.refresh()
     }
 
-    private fun sort(items: List<MarketTopItem>, sortingField: SortingField) = when (sortingField) {
+    private fun sort(items: List<MarketItem>, sortingField: SortingField) = when (sortingField) {
         SortingField.HighestCap -> items.sortedByDescendingNullLast { it.marketCap }
         SortingField.LowestCap -> items.sortedByNullLast { it.marketCap }
         SortingField.HighestVolume -> items.sortedByDescendingNullLast { it.volume }
