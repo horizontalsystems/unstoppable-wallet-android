@@ -6,12 +6,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.views.helpers.LayoutHelper
 import io.horizontalsystems.xrateskit.entities.CoinMarket
 import java.math.BigDecimal
 import java.util.*
 
 object MarketModule {
+
+    val currencyUSD = Currency(code = "USD", symbol = "\u0024", decimal = 2)
 
     class Factory : ViewModelProvider.Factory {
 
