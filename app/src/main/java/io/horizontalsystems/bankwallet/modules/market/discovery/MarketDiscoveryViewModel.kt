@@ -5,8 +5,10 @@ import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
+import io.horizontalsystems.bankwallet.modules.market.MarketField
+import io.horizontalsystems.bankwallet.modules.market.MarketItem
+import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.market.favorites.MarketTopViewItem
-import io.horizontalsystems.bankwallet.modules.market.top.*
 import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -101,7 +103,7 @@ class MarketDiscoveryViewModel(
         marketTopViewItemsLiveData.postValue(viewItems)
     }
 
-    private fun sort(items: List<MarketTopItem>, sortingField: SortingField) = when (sortingField) {
+    private fun sort(items: List<MarketItem>, sortingField: SortingField) = when (sortingField) {
         SortingField.HighestCap -> items.sortedByDescendingNullLast { it.marketCap }
         SortingField.LowestCap -> items.sortedByNullLast { it.marketCap }
         SortingField.HighestVolume -> items.sortedByDescendingNullLast { it.volume }

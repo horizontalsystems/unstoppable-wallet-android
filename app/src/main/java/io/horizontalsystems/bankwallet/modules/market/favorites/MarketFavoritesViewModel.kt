@@ -6,10 +6,10 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
-import io.horizontalsystems.bankwallet.modules.market.top.MarketField
-import io.horizontalsystems.bankwallet.modules.market.top.MarketTopItem
-import io.horizontalsystems.bankwallet.modules.market.top.Score
-import io.horizontalsystems.bankwallet.modules.market.top.SortingField
+import io.horizontalsystems.bankwallet.modules.market.MarketField
+import io.horizontalsystems.bankwallet.modules.market.MarketItem
+import io.horizontalsystems.bankwallet.modules.market.Score
+import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -74,7 +74,7 @@ class MarketFavoritesViewModel(
     }
 
     private fun syncViewItemsBySortingField() {
-        val viewItems = sort(service.marketTopItems, sortingField).map {
+        val viewItems = sort(service.marketItems, sortingField).map {
             val formattedRate = App.numberFormatter.formatFiat(it.rate, service.currency.symbol, 2, 2)
             val marketDataValue = when (marketField) {
                 MarketField.MarketCap -> {
@@ -118,7 +118,7 @@ class MarketFavoritesViewModel(
         service.refresh()
     }
 
-    private fun sort(items: List<MarketTopItem>, sortingField: SortingField) = when (sortingField) {
+    private fun sort(items: List<MarketItem>, sortingField: SortingField) = when (sortingField) {
         SortingField.HighestCap -> items.sortedByDescendingNullLast { it.marketCap }
         SortingField.LowestCap -> items.sortedByNullLast { it.marketCap }
         SortingField.HighestVolume -> items.sortedByDescendingNullLast { it.volume }

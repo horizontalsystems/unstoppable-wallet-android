@@ -3,9 +3,9 @@ package io.horizontalsystems.bankwallet.modules.market.favorites
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.IRateManager
 import io.horizontalsystems.bankwallet.modules.market.top.IMarketListDataSource
-import io.horizontalsystems.bankwallet.modules.market.top.MarketTopItem
-import io.horizontalsystems.bankwallet.modules.market.top.Score
-import io.horizontalsystems.bankwallet.modules.market.top.SortingField
+import io.horizontalsystems.bankwallet.modules.market.MarketItem
+import io.horizontalsystems.bankwallet.modules.market.Score
+import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.xrateskit.entities.CoinMarket
 import io.reactivex.disposables.CompositeDisposable
@@ -30,7 +30,7 @@ class MarketFavoritesService(
     val stateObservable: BehaviorSubject<State> = BehaviorSubject.createDefault(State.Loading)
     val currency by currencyManager::baseCurrency
 
-    var marketTopItems: List<MarketTopItem> = listOf()
+    var marketItems: List<MarketItem> = listOf()
 
     private var topItemsDisposable: Disposable? = null
     private val disposable = CompositeDisposable()
@@ -62,7 +62,7 @@ class MarketFavoritesService(
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .subscribe({
-                    marketTopItems = it.mapIndexed { index, topMarket ->
+                    marketItems = it.mapIndexed { index, topMarket ->
                         convertToMarketTopItem(index + 1, topMarket)
                     }
 
@@ -81,7 +81,7 @@ class MarketFavoritesService(
     }
 
     private fun convertToMarketTopItem(rank: Int, topMarket: CoinMarket) =
-            MarketTopItem(
+            MarketItem(
                     Score.Rank(rank),
                     topMarket.coin.code,
                     topMarket.coin.title,

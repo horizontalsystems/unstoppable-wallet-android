@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.market.top
+package io.horizontalsystems.bankwallet.modules.market
 
 import android.content.res.ColorStateList
 import android.view.LayoutInflater
@@ -19,7 +19,7 @@ import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_market_item.*
 import java.math.BigDecimal
 
-class MarketTopItemsAdapter(
+class MarketItemsAdapter(
         private val listener: ViewHolderMarketTopItem.Listener,
         itemsLiveData: LiveData<List<MarketTopViewItem>>,
         loadingLiveData: LiveData<Boolean>,

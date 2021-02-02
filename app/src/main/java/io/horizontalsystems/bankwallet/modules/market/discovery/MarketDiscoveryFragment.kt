@@ -9,9 +9,8 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.ConcatAdapter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.modules.market.MarketViewModel
+import io.horizontalsystems.bankwallet.modules.market.*
 import io.horizontalsystems.bankwallet.modules.market.favorites.MarketTopViewItem
-import io.horizontalsystems.bankwallet.modules.market.top.*
 import io.horizontalsystems.bankwallet.modules.ratechart.RateChartFragment
 import io.horizontalsystems.bankwallet.ui.extensions.MarketListHeaderView
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorDialog
@@ -23,7 +22,7 @@ import kotlinx.android.synthetic.main.fragment_market_discovery.*
 
 class MarketDiscoveryFragment : BaseFragment(), MarketListHeaderView.Listener, ViewHolderMarketTopItem.Listener, MarketCategoriesAdapter.Listener {
 
-    private lateinit var marketTopItemsAdapter: MarketTopItemsAdapter
+    private lateinit var marketItemsAdapter: MarketItemsAdapter
     private lateinit var marketLoadingAdapter: MarketLoadingAdapter
     private lateinit var marketCategoriesAdapter: MarketCategoriesAdapter
 
@@ -45,7 +44,7 @@ class MarketDiscoveryFragment : BaseFragment(), MarketListHeaderView.Listener, V
             marketListHeader.isVisible = it.isNotEmpty()
         })
 
-        marketTopItemsAdapter = MarketTopItemsAdapter(
+        marketItemsAdapter = MarketItemsAdapter(
                 this,
                 marketDiscoveryViewModel.marketTopViewItemsLiveData,
                 marketDiscoveryViewModel.loadingLiveData,
@@ -54,7 +53,7 @@ class MarketDiscoveryFragment : BaseFragment(), MarketListHeaderView.Listener, V
         )
         marketLoadingAdapter = MarketLoadingAdapter(marketDiscoveryViewModel.loadingLiveData, marketDiscoveryViewModel.errorLiveData, marketDiscoveryViewModel::onErrorClick, viewLifecycleOwner)
 
-        coinRatesRecyclerView.adapter = ConcatAdapter(marketLoadingAdapter, marketTopItemsAdapter)
+        coinRatesRecyclerView.adapter = ConcatAdapter(marketLoadingAdapter, marketItemsAdapter)
         coinRatesRecyclerView.itemAnimator = null
 
         pullToRefresh.setOnRefreshListener {
