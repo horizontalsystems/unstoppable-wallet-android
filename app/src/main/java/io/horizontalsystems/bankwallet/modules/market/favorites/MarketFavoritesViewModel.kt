@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.market.top
+package io.horizontalsystems.bankwallet.modules.market.favorites
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -6,14 +6,18 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
+import io.horizontalsystems.bankwallet.modules.market.top.MarketField
+import io.horizontalsystems.bankwallet.modules.market.top.MarketTopItem
+import io.horizontalsystems.bankwallet.modules.market.top.Score
+import io.horizontalsystems.bankwallet.modules.market.top.SortingField
 import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import java.math.BigDecimal
 import java.util.*
 
-class MarketTopViewModel(
-        private val service: MarketTopService,
+class MarketFavoritesViewModel(
+        private val service: MarketFavoritesService,
         private val connectivityManager: ConnectivityManager,
         private val clearables: List<Clearable>
 ) : ViewModel() {
@@ -55,16 +59,16 @@ class MarketTopViewModel(
                 }
     }
 
-    private fun syncState(state: MarketTopService.State) {
-        loadingLiveData.postValue(state is MarketTopService.State.Loading)
+    private fun syncState(state: MarketFavoritesService.State) {
+        loadingLiveData.postValue(state is MarketFavoritesService.State.Loading)
 
-        if (state is MarketTopService.State.Error && !connectivityManager.isConnected) {
+        if (state is MarketFavoritesService.State.Error && !connectivityManager.isConnected) {
             networkNotAvailable.postValue(Unit)
         }
 
-        errorLiveData.postValue((state as? MarketTopService.State.Error)?.error?.let { convertErrorMessage(it) })
+        errorLiveData.postValue((state as? MarketFavoritesService.State.Error)?.error?.let { convertErrorMessage(it) })
 
-        if (state is MarketTopService.State.Loaded) {
+        if (state is MarketFavoritesService.State.Loaded) {
             syncViewItemsBySortingField()
         }
     }

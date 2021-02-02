@@ -8,7 +8,7 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.modules.market.top.MarketTopViewItem
+import io.horizontalsystems.bankwallet.modules.market.favorites.MarketTopViewItem
 import io.horizontalsystems.bankwallet.modules.market.top.getBackgroundTintColor
 import io.horizontalsystems.bankwallet.modules.market.top.getText
 import io.horizontalsystems.bankwallet.modules.market.top.getTextColor

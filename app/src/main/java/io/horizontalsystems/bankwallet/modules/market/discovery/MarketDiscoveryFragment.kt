@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.ConcatAdapter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.market.MarketViewModel
+import io.horizontalsystems.bankwallet.modules.market.favorites.MarketTopViewItem
 import io.horizontalsystems.bankwallet.modules.market.top.*
 import io.horizontalsystems.bankwallet.modules.ratechart.RateChartFragment
 import io.horizontalsystems.bankwallet.ui.extensions.MarketListHeaderView
