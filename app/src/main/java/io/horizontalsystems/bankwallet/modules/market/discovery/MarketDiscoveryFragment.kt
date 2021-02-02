@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.ConcatAdapter
 import io.horizontalsystems.bankwallet.R
@@ -38,6 +39,10 @@ class MarketDiscoveryFragment : BaseFragment(), MarketListHeaderView.Listener, V
         marketListHeader.listener = this
         marketListHeader.setSortingField(marketDiscoveryViewModel.sortingField)
         marketListHeader.setMarketField(marketDiscoveryViewModel.marketField)
+        marketListHeader.isVisible = false
+        marketDiscoveryViewModel.marketTopViewItemsLiveData.observe(viewLifecycleOwner, {
+            marketListHeader.isVisible = it.isNotEmpty()
+        })
 
         marketTopItemsAdapter = MarketTopItemsAdapter(
                 this,
