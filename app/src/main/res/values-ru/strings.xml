@@ -202,12 +202,12 @@
     <!--Fee Info -->
     <string name="FeeInfo_Title">Скорость Транзакции</string>
     <string name="FeeInfo_Description">При использования блокчейнов Bitcoin и Ethereum пользователи должны платить комиссию при отправке транзакций.\n\nUnstoppable использует общественные сервисы оценки сумм комиссионных сборов, чтобы помогать пользователю определять размеры соответствующих комиссий на данный момент. Размеры комиссий возрастают при совершении большого количества транзакций и понижаются при меньшей занятости блокчейна.</string>
-    <string name="FeeInfo_Slow">Slow</string>
+    <string name="FeeInfo_Slow">Медленно</string>
     <string name="FeeInfo_SlowDescription">Выбор значения из данного диапазона может привести к откладыванию транзакции на некоторое время или ее полному отклонению. Чем меньше размер транзакции, тем дольше займет процесс ее подтверждения.</string>
-    <string name="FeeInfo_Average">Average</string>
+    <string name="FeeInfo_Average">Cреднее</string>
     <string name="FeeInfo_AverageDescription">Обычно для этого диапазона комиссий характерна обработка транзакций в течение нескольких минут/часа для Bitcoin и в течение нескольких минут для Ethereum.</string>
-    <string name="FeeInfo_Fast">Fast</string>
-    <string name="FeeInfo_FastDescription">For transactions where priority is important we recommend using high fee setting. It\'s expected that selecting high fee setting will be sufficient for transaction to be completed within 10 minutes for Bitcoin and within a few minutes for Ethereum.\n\nThe Unstoppable wallet makes an educated guess based on the network activity and can\'t not guarantee that the suggested fee values will always result in expected behavior.</string>
+    <string name="FeeInfo_Fast">Быстро</string>
+    <string name="FeeInfo_FastDescription">Для приоритетных транзакций мы рекомендуем использовать настройку высокой комиссии. Предполагается, что выбор высокой комиссии приведет к завершению транзакций Bitcoin и Ethereum в течение 10 и нескольких минут, соответственно.\n\nКошелек Unstoppable делает обоснованное предположение на основе сетевой активности и не может гарантировать, что предлагаемые значения комиссии всегда будут изменяться должным образом.</string>
     <!--Wallet Connect-->
     <string name="WalletConnect_Title">Wallet Connect</string>
     <string name="WalletConnect_Request">Запрос</string>
@@ -260,12 +260,12 @@
     <string name="SwapSettings_DeadlineMinute">%s мин</string>
     <string name="SwapSettings_RecipientPlaceholder">Адрес или домен</string>
     <string name="SwapSettings_Error_DeadlineZero">Нулевой Срок</string>
-    <string name="SwapSettings_Error_SlippageZero">Zero Slippage</string>
+    <string name="SwapSettings_Error_SlippageZero">Нулевое проскальзывание</string>
     <string name="SwapSettings_Error_SlippageTooLow">Ваша транзакция, скорее всего, не удастся.</string>
     <string name="SwapSettings_Error_SlippageTooHigh">Макс. допустимое значение %s%%</string>
     <string name="SwapSettings_Error_InvalidAddress">Неверный Адрес</string>
-    <string name="SwapSettings_Error_InvalidSlippage">Invalid Slippage</string>
-    <string name="SwapSettings_Error_InvalidDeadline">Invalid Deadline</string>
+    <string name="SwapSettings_Error_InvalidSlippage">Неверное проскальзывание</string>
+    <string name="SwapSettings_Error_InvalidDeadline">Недопустимый срок</string>
     <!-- Swap Confirmation -->
     <string name="Swap_Confirmation">Подтверждение</string>
     <!--Swap Coin Select-->
@@ -324,7 +324,7 @@
     <string name="TransactionInfo_SentToSelfNote">Данная транзакция отправлена на собственный адрес</string>
     <string name="TransactionInfo_DoubleSpendNote">Риск Двойной Траты!</string>
     <string name="TransactionInfo_Input">Ввод</string>
-    <string name="TransactionInfo_ButtonViewOnExplorerName">View on %s</string>
+    <string name="TransactionInfo_ButtonViewOnExplorerName">Посмотреть на %s</string>
     <string name="StatusInfo_Pending">В обработке</string>
     <string name="StatusInfo_Confirmed">Подтверждено</string>
     <string name="StatusInfo_Failed">Не удалось</string>
@@ -376,9 +376,7 @@
       \n\n1. Перемешивание: Рандомизируется порядок выхода каждой транзакции. Иногда сдача может отправляться первой, а иногда второй. Если вы доверяете разработчику приложения, то воспользуйтесь рекомендуемым вариантом.
       \n\n2. Детерминистский подход: существует общепринятый стандарт заказа выходов транзакций (именуемый BIP69). Используя стандартные кошельки с открытым исходным кодом, пользователи не должны волноваться о том, как разработчики приложения реализуют выходы. Так как это новый стандарт, он еще не реализован во многих кошельках. В результате, пока что в блокчейн можно увидеть, была ли отправлена транзакция из кошелька, который использует этот стандарт или нет.</string>
     <string name="SettingsPrivacy_Info_BlockchainConnection_Title">Синхронизация Блокчейна</string>
-    <string name="SettingsPrivacy_Info_BlockchainConnection_Description">Этот параметр актуален только при восстановлении существующего кошелька. Это процесс получения истории транзакций для данной монеты, чтобы приложение кошелька могло отображать предыдущие транзакции и определять последний баланс. Это должно произойти только один раз при восстановлении пользователем ранее созданного кошелька. На данный момент у такого мобильного кошелька, как Unstoppable, есть два возможных способа для реализации этого вопроса:
-      \n\n1. С сервера API: существует предопределенный сторонний сервер, на котором размещается вся цепочка блоков, происходит обработка всех данных и их подготовка к быстрому предоставлению. Это быстрый метод, однако он предполагает потенциальное отслеживание IP-адресов и запрашиваемых данных. Этот вариант рекомендуется использовать из-за скорости получения данных (5-10 минут). Он сопряжен с минимальными рисками. Если пользователь восстанавливает данные со своего собственного сервера, то нет никакой угрозы конфиденциальности.
-      \n\n2. Из блокчейна: в этом случае приложение пытается восстановить данные напрямую из p2p-сети узлов блокчейна. Приложение пингует многие из этих узлов и запрашивает у них данные. Потенциально эти узлы могут отслеживать IP-адрес пользователя и сделанные запросы, однако во время восстановления данных приложение может переключаться между узлами. В любое время в сети находится около 10 000 биткойн-узлов. Это медленный вариант обработки данных, она может занять 2-3 часа и приложение должно быть открыто во время их восстановления...</string>
+    <string name="SettingsPrivacy_Info_BlockchainConnection_Description">Эта настройка регулирует взаимодействие приложения с блокчейнами (в отношении отправки/получения транзакций). В том, что касается Bitcoin, Bitcoin Cash, Litecoin и Dash, она полностью одноранговая. Приложение пингует многие узлы и связывается с ними. Потенциально эти узлы могут регистрировать IP-адрес и запрашиваемые данные. Однако поскольку они выбираются случайным образом, каждый раз приложение подключается к новому узлу. \n\nВ случае с Ethereum, мобильные кошельки не располагают альтернативным вариантом для взаимодействия с блокчейном, кроме как через сторонних поставщиков (например, Infura.io) или личные узлы Ethereum. Сторонние сервисы потенциально могут регистрировать IP-адреса и сделанные запросы. Эта информация может отображать местоположение, баланс, транзакции и т.д. Более того, кошелек должен быть уверен в достоверности возвращаемой информации. Существует альтернативный вариант, известный под именем Incubed, который, по сути, представляет собой сеть специальных узлов Ethereum. Эти узлы также могут регистрировать IP-адреса и сделанные запросы, но каждый раз они выбираются случайным образом. Хотя Incubed работает немного медленнее, чем Infura, он гарантирует достоверность возвращаемой информации (предотвращая фальсификацию данных). \n\nДругие блокчейны наподобие EOSIO и Binance Chain на данный момент являются исключительно централизованными средствами подключения, без эффективных альтернатив. Потенциально они могут регистрировать IP-адреса и сделанные запросы.</string>
     <string name="SettingsPrivacy_Info_BlockchainRestore_Title">Восстановить Блокчейн</string>
     <string name="SettingsPrivacy_Info_BlockchainRestore_Description">Этот параметр актуален только при восстановлении существующего кошелька. Это процесс получения истории транзакций для данной монеты, чтобы приложение кошелька могло отображать предыдущие транзакции и определять последний баланс. Это должно произойти только один раз при восстановлении пользователем ранее созданного кошелька. На данный момент у такого мобильного кошелька, как Unstoppable, есть два возможных способа для реализации этого вопроса: 
       \n\n1. С сервера API: существует предопределенный сторонний сервер, на котором размещается вся цепочка блоков, происходит обработка всех данных и их подготовка к быстрому предоставлению. Это быстрый метод, однако он предполагает потенциальное отслеживание IP-адресов и запрашиваемых данных. Этот вариант рекомендуется использовать из-за скорости получения данных (5-10 минут). Он сопряжен с минимальными рисками. Если пользователь восстанавливает данные со своего собственного сервера, то нет никакой угрозы конфиденциальности.
@@ -416,7 +414,7 @@
     <string name="SettingsTerms_TermPhone">Я понимаю, что передача моего телефона ненадежным лицам или оставление кошелька без безопасной блокировки с помощью PIN-кода может поставить под угрозу безопасность моих средств.</string>
     <string name="SettingsTerms_TermRoot">Я понимаю, что джейлбрейк (или рутинг) моего телефона, установка приложений из неизвестных источников и устаревшая операционная система могут поставить под угрозу безопасность моих средств.</string>
     <string name="SettingsTerms_TermBugs">Я понимаю, что в коде этого кошелька могут быть необнаруженные проблемы с программным обеспечением, что может привести к неожиданному поведению или сбоям в работе приложения.</string>
-    <string name="Settings_TermsPin">I understand that disabling the phone unlock PIN (or its equivalent) in Settings of Android OS will erase wallet private keys from my device.I will need my private keys to regain access to my wallet.</string>
+    <string name="Settings_TermsPin">Я понимаю, что отключение секретного кода разблокировки телефона (или его эквивалента) в настройках iOS удалит приватные ключи кошелька с моего устройства. Мне понадобятся приватные ключи для восстановления доступа к моему кошельку.</string>
     <string name="SettingsTerms_BottomThankYou">Благодарим вас \nза выбор \nэтого кошелька!</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Поделиться</string>
@@ -438,9 +436,9 @@
     <string name="NotificationBottomMenu_Change24h">Изменение Цены 24 ч</string>
     <string name="NotificationBottomMenu_PriceTrendChange">Изменение Тренда</string>
     <string name="NotificationBottomMenu_ShortTerm">Краткосрочный 7Д</string>
-    <string name="NotificationBottomMenu_Short">Short</string>
+    <string name="NotificationBottomMenu_Short">Короткая позиция</string>
     <string name="NotificationBottomMenu_LongTerm">Долгосрочный 6М</string>
-    <string name="NotificationBottomMenu_Long">Long</string>
+    <string name="NotificationBottomMenu_Long">Длинная позиция</string>
     <!--Errors-->
     <string name="Binance_Backend_Error_MemoRequired">При отправке транзакции получателю необходимо заполнить поле мемо</string>
     <string name="Binance_Backend_Error_RequiresDigits">Поле мемо должно содержать только цифры</string>
@@ -491,10 +489,10 @@
     <string name="AddTokenDialog_BinanceTokens">Токен BEP2</string>
     <!-- Enable Token -->
     <string name="EnalbeToken_Title">Активировать Токен</string>
-    <string name="EnalbeToken_Description">Enable all %s coins that have any balance</string>
+    <string name="EnalbeToken_Description">Активировать все %s монеты с любым балансом</string>
     <string name="EnalbeToken_Enabling">Идет активация</string>
     <string name="EnalbeToken_EnabledCoins">Активировано %d монет</string>
-    <string name="EnalbeToken_NoCoins">No coins found with balance</string>
+    <string name="EnalbeToken_NoCoins">На балансе нет монет</string>
     <string name="EnalbeToken_EnableKey">Активировать</string>
     <!-- Add Token -->
     <string name="AddToken_CoinName">Название Токена</string>
@@ -572,7 +570,7 @@
     <string name="RateList_Rank">Месту</string>
     <string name="RateList_TopWinners">Топ Победителей</string>
     <string name="RateList_TopLosers">Топ Проигравших</string>
-    <string name="RateList_TopByVolume">Top by Volume</string>
+    <string name="RateList_TopByVolume">Увеличить объем</string>
     <!-- Balance Sync Error -->
     <string name="BalanceSyncError_Title">Ошибка Синхронизации</string>
     <string name="BalanceSyncError_ButtonRetry">Повторить</string>
