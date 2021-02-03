@@ -56,7 +56,7 @@ class MarketDiscoveryViewModel(
         errorLiveData.postValue((state as? MarketDiscoveryService.State.Error)?.error?.let { convertErrorMessage(it) })
 
         if (state is MarketDiscoveryService.State.Loaded) {
-            syncViewItemsBySortingField()
+            syncViewItemsBySortingField(false)
         }
     }
 
@@ -67,16 +67,14 @@ class MarketDiscoveryViewModel(
     fun update(sortingField: SortingField? = null, marketField: MarketField? = null) {
         sortingField?.let {
             this.sortingField = it
-            syncViewItemsBySortingField()
         }
         marketField?.let {
             this.marketField = it
-            syncViewItemsBySortingField(false)
         }
-
+        syncViewItemsBySortingField(sortingField != null)
     }
 
-    private fun syncViewItemsBySortingField(scrollToTop: Boolean = true) {
+    private fun syncViewItemsBySortingField(scrollToTop: Boolean) {
         val viewItems = service.marketItems
                 .sort(sortingField)
                 .map {
