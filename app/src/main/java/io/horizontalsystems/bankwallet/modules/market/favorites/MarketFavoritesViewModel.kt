@@ -29,12 +29,11 @@ class MarketFavoritesViewModel(
     fun update(sortingField: SortingField? = null, marketField: MarketField? = null) {
         sortingField?.let {
             this.sortingField = it
-            syncViewItemsBySortingField()
         }
         marketField?.let {
             this.marketField = it
-            syncViewItemsBySortingField(false)
         }
+        syncViewItemsBySortingField(sortingField != null)
     }
 
     val marketViewItemsLiveData = MutableLiveData<Pair<List<MarketViewItem>,Boolean>>()
@@ -67,11 +66,11 @@ class MarketFavoritesViewModel(
         errorLiveData.postValue((state as? MarketFavoritesService.State.Error)?.error?.let { convertErrorMessage(it) })
 
         if (state is MarketFavoritesService.State.Loaded) {
-            syncViewItemsBySortingField()
+            syncViewItemsBySortingField(false)
         }
     }
 
-    private fun syncViewItemsBySortingField(scrollToTop: Boolean = true) {
+    private fun syncViewItemsBySortingField(scrollToTop: Boolean) {
         val viewItems = service.marketItems
                 .sort(sortingField)
                 .map {
