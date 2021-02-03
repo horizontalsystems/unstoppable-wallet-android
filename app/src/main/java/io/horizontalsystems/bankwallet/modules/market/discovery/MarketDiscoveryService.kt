@@ -30,6 +30,8 @@ class MarketDiscoveryService(
         set(value) {
             if (field != value) {
                 field = value
+
+                marketItems = listOf()
                 fetch()
             }
         }
