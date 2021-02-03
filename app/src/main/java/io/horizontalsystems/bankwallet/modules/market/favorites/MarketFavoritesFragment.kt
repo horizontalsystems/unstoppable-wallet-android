@@ -49,7 +49,9 @@ class MarketFavoritesFragment : BaseFragment(), MarketListHeaderView.Listener, V
         )
         marketLoadingAdapter = MarketLoadingAdapter(marketFavoritesViewModel.loadingLiveData, marketFavoritesViewModel.errorLiveData, marketFavoritesViewModel::onErrorClick, viewLifecycleOwner)
 
-        coinRatesRecyclerView.adapter = ConcatAdapter(marketLoadingAdapter, marketItemsAdapter)
+        val emptyListAdapter = EmptyListAdapter(marketFavoritesViewModel.showEmptyListTextLiveData, viewLifecycleOwner)
+
+        coinRatesRecyclerView.adapter = ConcatAdapter(marketLoadingAdapter, marketItemsAdapter, emptyListAdapter)
         coinRatesRecyclerView.itemAnimator = null
 
         pullToRefresh.setOnRefreshListener {

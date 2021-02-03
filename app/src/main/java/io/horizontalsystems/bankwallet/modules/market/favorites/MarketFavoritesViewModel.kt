@@ -40,6 +40,7 @@ class MarketFavoritesViewModel(
     val loadingLiveData = MutableLiveData(false)
     val errorLiveData = MutableLiveData<String?>(null)
     val networkNotAvailable = SingleLiveEvent<Unit>()
+    val showEmptyListTextLiveData = MutableLiveData(false)
 
     private val disposable = CompositeDisposable()
 
@@ -75,6 +76,8 @@ class MarketFavoritesViewModel(
                 .map {
                     MarketViewItem.create(it, service.currency.symbol, marketField)
                 }
+
+        showEmptyListTextLiveData.postValue(viewItems.isEmpty())
 
         marketViewItemsLiveData.postValue(viewItems)
     }
