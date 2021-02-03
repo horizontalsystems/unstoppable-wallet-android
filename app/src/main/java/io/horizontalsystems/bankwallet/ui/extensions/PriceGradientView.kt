@@ -120,6 +120,10 @@ class PriceGradientView @JvmOverloads constructor(context: Context, attrs: Attri
         gradientImage.setImageDrawable(drawable)
     }
 
+    fun notAvailable() {
+        // todo: set the whole view background to ColorJeremy
+    }
+
     class MatrixImage(private val imageView: ImageView) {
         private val matrix = Matrix(imageView.imageMatrix)
 
