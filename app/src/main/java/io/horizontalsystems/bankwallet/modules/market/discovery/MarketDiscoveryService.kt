@@ -35,12 +35,13 @@ class MarketDiscoveryService(
         }
 
     val marketCategories = listOf(
-            /*MarketCategory.Rated, */MarketCategory.Blockchains, MarketCategory.Privacy, MarketCategory.Scaling,
-            MarketCategory.Infrastructure, MarketCategory.RiskManagement, MarketCategory.Oracles, MarketCategory.PredictionMarkets,
-            MarketCategory.DefiAggregators, MarketCategory.Dexes, MarketCategory.Synthetics, MarketCategory.Metals,
-            MarketCategory.Lending, MarketCategory.GamingAndVr, MarketCategory.FundRaising, MarketCategory.InternetOfThings,
-            MarketCategory.B2B, MarketCategory.NFT, MarketCategory.Wallets, MarketCategory.Staking,
-            MarketCategory.FiatStablecoins, MarketCategory.TokenizedBitcoin, MarketCategory.AlgoStablecoins, MarketCategory.ExchangeTokens
+            MarketCategory.Blockchains, MarketCategory.Dexes, MarketCategory.Lending, MarketCategory.Privacy,
+            MarketCategory.Scaling, MarketCategory.Oracles, MarketCategory.Prediction, MarketCategory.YieldAggregators,
+            MarketCategory.FiatStablecoins, MarketCategory.AlgoStablecoins, MarketCategory.TokenizedBitcoin, MarketCategory.StablecoinIssuers,
+            MarketCategory.ExchangeTokens, MarketCategory.Metals, MarketCategory.RiskManagement, MarketCategory.Wallets,
+            MarketCategory.Synthetics, MarketCategory.IndexFunds, MarketCategory.NFT, MarketCategory.FundRaising,
+            MarketCategory.Gaming, MarketCategory.B2B, MarketCategory.Infrastructure, MarketCategory.Staking,
+            MarketCategory.Governance, MarketCategory.CrossChain, MarketCategory.Computing
     )
 
     private var itemsDisposable: Disposable? = null
