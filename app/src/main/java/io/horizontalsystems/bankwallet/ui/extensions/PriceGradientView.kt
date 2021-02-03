@@ -63,6 +63,12 @@ class PriceGradientView @JvmOverloads constructor(context: Context, attrs: Attri
         }
     }
 
+    fun setBackground(color: Int) {
+        gradientImage.setImageDrawable(null)
+        setBackgroundColor(color)
+        animateAlpha(1f)
+    }
+
     fun animateVertical(diff: Float?) {
         if (diff == null) {
             diffPrev = null
@@ -118,10 +124,6 @@ class PriceGradientView @JvmOverloads constructor(context: Context, attrs: Attri
 
     private fun setGradient(drawable: Drawable?) {
         gradientImage.setImageDrawable(drawable)
-    }
-
-    fun notAvailable() {
-        // todo: set the whole view background to ColorJeremy
     }
 
     class MatrixImage(private val imageView: ImageView) {

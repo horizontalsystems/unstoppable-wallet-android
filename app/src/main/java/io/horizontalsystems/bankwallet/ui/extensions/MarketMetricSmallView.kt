@@ -66,7 +66,7 @@ class MarketMetricSmallView @JvmOverloads constructor(context: Context, attrs: A
                 }
             }
             modeNotAvailable -> {
-                diffCircle.notAvailable()
+                diffCircle.setBackground(LayoutHelper.getAttr(R.attr.ColorJeremy, context.theme, R.color.grey))
                 diffPercentage.text = "----"
                 diffPercentage.setTextColor(context.getColor(R.color.grey_50))
             }
