@@ -53,4 +53,4 @@ class MarketMetricLargeView @JvmOverloads constructor(context: Context, attrs: A
     }
 }
 
-data class MetricData(val value: String, val diff: BigDecimal)
+data class MetricData(val value: String?, val diff: BigDecimal?)
