@@ -25,7 +25,7 @@ class MarketDiscoveryViewModel(
     var marketField: MarketField = MarketField.MarketCap
         private set
 
-    val marketViewItemsLiveData = MutableLiveData<List<MarketViewItem>>()
+    val marketViewItemsLiveData = MutableLiveData<Pair<List<MarketViewItem>, Boolean>>()
 
     val loadingLiveData = MutableLiveData(false)
     val errorLiveData = MutableLiveData<String?>(null)
@@ -67,21 +67,23 @@ class MarketDiscoveryViewModel(
     fun update(sortingField: SortingField? = null, marketField: MarketField? = null) {
         sortingField?.let {
             this.sortingField = it
+            syncViewItemsBySortingField()
         }
         marketField?.let {
             this.marketField = it
+            syncViewItemsBySortingField(false)
         }
-        syncViewItemsBySortingField()
+
     }
 
-    private fun syncViewItemsBySortingField() {
+    private fun syncViewItemsBySortingField(scrollToTop: Boolean = true) {
         val viewItems = service.marketItems
                 .sort(sortingField)
                 .map {
                     MarketViewItem.create(it, service.currency.symbol, marketField)
                 }
 
-        marketViewItemsLiveData.postValue(viewItems)
+        marketViewItemsLiveData.postValue(Pair(viewItems, scrollToTop))
     }
 
     fun refresh() {

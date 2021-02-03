@@ -20,15 +20,18 @@ import java.math.BigDecimal
 
 class MarketItemsAdapter(
         private val listener: ViewHolderMarketItem.Listener,
-        itemsLiveData: LiveData<List<MarketViewItem>>,
+        itemsLiveData: LiveData<Pair<List<MarketViewItem>, Boolean>>,
         loadingLiveData: LiveData<Boolean>,
         errorLiveData: LiveData<String?>,
         viewLifecycleOwner: LifecycleOwner
 ) : ListAdapter<MarketViewItem, ViewHolderMarketItem>(coinRateDiff) {
 
     init {
-        itemsLiveData.observe(viewLifecycleOwner, {
-            submitList(it)
+        itemsLiveData.observe(viewLifecycleOwner, { (list, scrollToTop) ->
+            submitList(list) {
+                if (scrollToTop)
+                    recyclerView.scrollToPosition(0)
+            }
         })
         errorLiveData.observe(viewLifecycleOwner, { error ->
             if (error != null) {
@@ -40,6 +43,13 @@ class MarketItemsAdapter(
                 submitList(listOf())
             }
         })
+    }
+
+    private lateinit var recyclerView: RecyclerView
+
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        super.onAttachedToRecyclerView(recyclerView)
+        this.recyclerView = recyclerView
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderMarketItem {
