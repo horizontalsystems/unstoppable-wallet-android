@@ -64,11 +64,11 @@
     <string name="Backup_Button_Backup">Резервная копия</string>
     <string name="Backup_Button_ShowKey">Показать Ключ</string>
     <!--Market-->
-    <string name="Market_Field_MarketCap">MCap</string>
-    <string name="Market_Field_Volume">Volume</string>
-    <string name="Market_Field_PriceDiff">Price</string>
-    <string name="Market_Title">Market</string>
-    <string name="Market_Search">Search</string>
+    <string name="Market_Field_MarketCap">Рын. Кап.</string>
+    <string name="Market_Field_Volume">Объём</string>
+    <string name="Market_Field_PriceDiff">Цена</string>
+    <string name="Market_Title">Рынок</string>
+    <string name="Market_Search">Поиск</string>
     <string name="Market_Field_HighestCap">Highest Cap</string>
     <string name="Market_Field_LowestCap">Lowest Cap</string>
     <string name="Market_Field_HighestVolume">Highest Volume</string>
@@ -78,11 +78,11 @@
     <string name="Market_Sort_PopupTitle">Сортировать по</string>
     <string name="Market_TotalMarketCap">Total\nMarket Cap</string>
     <string name="Market_BtcDominance">BTC Dominance</string>
-    <string name="Market_Volume24h">24h Volume</string>
-    <string name="Market_TvlDeFi">TVL in DeFi</string>
-    <string name="Market_DeFiCap">DeFi Cap</string>
-    <string name="Market_SeeAll">See All</string>
-    <string name="Market_Tab_Overview">Overview</string>
+    <string name="Market_Volume24h">Объем за 24 ч.</string>
+    <string name="Market_TvlDeFi">TVL в DeFi</string>
+    <string name="Market_DeFiCap">Рын. стоимость DeFi</string>
+    <string name="Market_SeeAll">Показать все</string>
+    <string name="Market_Tab_Overview">Обзор</string>
     <string name="Market_Tab_Discovery">Discovery</string>
     <string name="Market_Tab_Watchlist">Watchlist</string>
     <string name="Market_Tab_Watchlist_EmptyList">You don\’t have any favorite assets.\nYou can add the favourites by click to star icon in the asset page</string>
@@ -94,7 +94,7 @@
     <string name="Market_Category_Dexes_Description">Decentralized cryptocurrency exchanges.</string>
     <string name="Market_Category_Lending">Lending</string>
     <string name="Market_Category_Lending_Description">Protocols for lending and borrowing.</string>
-    <string name="Market_Category_Privacy">Privacy</string>
+    <string name="Market_Category_Privacy">Приватность</string>
     <string name="Market_Category_Privacy_Description">Projects working on privacy solutions.</string>
     <string name="Market_Category_Scaling">Scaling</string>
     <string name="Market_Category_Scaling_Description">Solutions for faster blockchain transactions.</string>
@@ -110,7 +110,7 @@
     <string name="Market_Category_AlgoStablecoins_Description">Stablecoins with algorithmic 1–1 price peg to fiat.</string>
     <string name="Market_Category_TokenizedBitcoin">Tokenized Bitcoin</string>
     <string name="Market_Category_TokenizedBitcoin_Description">Crypto tokens pegged 1–1 to Bitcoin price.</string>
-    <string name="Market_Category_StablecoinIssuers">Stablecoin Issuers</string>
+    <string name="Market_Category_StablecoinIssuers">Stablecoins Issuers</string>
     <string name="Market_Category_StablecoinIssuers_Description">Decentralized issuers of fiat pegged stablecoin tokens.</string>
     <string name="Market_Category_ExchangeTokens">Exchange Tokens</string>
     <string name="Market_Category_ExchangeTokens_Description">Tokens issued by centralized exchanges.</string>
@@ -131,14 +131,14 @@
     <string name="Market_Category_Gaming">Gaming</string>
     <string name="Market_Category_Gaming_Description">Crypto projects in gaming and VR sector.</string>
     <string name="Market_Category_B2B">B2B</string>
-    <string name="Market_Category_B2B_Description">B2B service providers.</string>
+    <string name="Market_Category_B2B_Description">B2b service provides.</string>
     <string name="Market_Category_Infrastructure">Infrastructure</string>
     <string name="Market_Category_Infrastructure_Description">Projects building infrastructure solutions.</string>
     <string name="Market_Category_Staking">Staking ETH 2.0</string>
     <string name="Market_Category_Staking_Description">Protocols that reward liquidity providers.</string>
     <string name="Market_Category_Governance">Governance</string>
     <string name="Market_Category_Governance_Description">Decentralized governance protocols for DAOs.</string>
-    <string name="Market_Category_CrossChain">Cross Chain</string>
+    <string name="Market_Category_CrossChain">Cross chain</string>
     <string name="Market_Category_CrossChain_Description">Cross-chain protocols.</string>
     <string name="Market_Category_Computing">Computing</string>
     <string name="Market_Category_Computing_Description">Decentralized on-demand computing solutions.</string>
@@ -160,14 +160,14 @@
     <string name="Balance_Backup_Alert">Вам нужно сделать резервную копию %s Кошелька, прежде чем вы сможете получать %s.</string>
     <!--Send-->
     <string name="Send_Title">Отправить %s</string>
-    <string name="Send_Hint_Address">Address or Domain</string>
+    <string name="Send_Hint_Address">Адрес или домен</string>
     <string name="Send_Hint_Amount">Сумма</string>
     <string name="Send_Fee">Комиссия</string>
     <string name="Send_Button_Paste">Вставить</string>
     <string name="Send_Button_Max">Макс.</string>
     <string name="Send_Confirmation_Title">Подтвердить</string>
-    <string name="Send_Confirmation_Domain">Domain</string>
-    <string name="Send_Confirmation_Receiver">Receiver</string>
+    <string name="Send_Confirmation_Domain">Домен</string>
+    <string name="Send_Confirmation_Receiver">Получатель</string>
     <string name="Send_Confirmation_EstimateTime">Приблизительное Время:</string>
     <string name="Send_Confirmation_Send_Button">Отправить</string>
     <string name="Send_Success">\u2713 Отправлено</string>
@@ -200,12 +200,12 @@
     <string name="Send_Sending">Отправка</string>
     <string name="Send_Token_InsufficientFeeAlert">Комиссии за транзакцию %s (%s) взимаются в %s. Вам нужно %s.</string>
     <!--Fee Info -->
-    <string name="FeeInfo_Title">Transaction Speed</string>
-    <string name="FeeInfo_Description">Both Bitcoin and Ethereum blockchains require users to pay usage fees while sending transactions on the blockchain.\n\nUnstoppable uses public fee estimate services to help user determine appropriate transaction fees for the moment. The fees are higher when there are a lot of transactions taking place and lower when the blockchain is less busy.</string>
+    <string name="FeeInfo_Title">Скорость Транзакции</string>
+    <string name="FeeInfo_Description">При использования блокчейнов Bitcoin и Ethereum пользователи должны платить комиссию при отправке транзакций.\n\nUnstoppable использует общественные сервисы оценки сумм комиссионных сборов, чтобы помогать пользователю определять размеры соответствующих комиссий на данный момент. Размеры комиссий возрастают при совершении большого количества транзакций и понижаются при меньшей занятости блокчейна.</string>
     <string name="FeeInfo_Slow">Slow</string>
-    <string name="FeeInfo_SlowDescription">Selecting a value from this range may result in transaction being pending for hours or being rejected entirely. The lower the value the longer it will take for the transaction to confirm.</string>
+    <string name="FeeInfo_SlowDescription">Выбор значения из данного диапазона может привести к откладыванию транзакции на некоторое время или ее полному отклонению. Чем меньше размер транзакции, тем дольше займет процесс ее подтверждения.</string>
     <string name="FeeInfo_Average">Average</string>
-    <string name="FeeInfo_AverageDescription">Typically, this fee range should be sufficient for transaction to be processed within minutes/hour for Bitcoin and within minutes for Ethereum.</string>
+    <string name="FeeInfo_AverageDescription">Обычно для этого диапазона комиссий характерна обработка транзакций в течение нескольких минут/часа для Bitcoin и в течение нескольких минут для Ethereum.</string>
     <string name="FeeInfo_Fast">Fast</string>
     <string name="FeeInfo_FastDescription">For transactions where priority is important we recommend using high fee setting. It\'s expected that selecting high fee setting will be sufficient for transaction to be completed within 10 minutes for Bitcoin and within a few minutes for Ethereum.\n\nThe Unstoppable wallet makes an educated guess based on the network activity and can\'t not guarantee that the suggested fee values will always result in expected behavior.</string>
     <!--Wallet Connect-->
@@ -224,7 +224,7 @@
     <string name="WalletConnect_Status_Connecting">Подключение…</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Error_InsufficientBalance">Для отправки транзакции требуется %s</string>
-    <string name="EthereumTransaction_Error_InsufficientBalanceForFee">Current ETH balance is below amount required to process this transaction including transaction fee.</string>
+    <string name="EthereumTransaction_Error_InsufficientBalanceForFee">Текущий баланс ETH ниже суммы, необходимой для обработки этой транзакции, включая комиссию за транзакцию.</string>
     <!--Swap-->
     <string name="Swap">Обменять</string>
     <string name="Swap_FromAmountTitle">Вы платите</string>
@@ -258,8 +258,8 @@
     <string name="SwapSettings_RecipientAddressDescription">После операции обмена сумма будет переведена на указанный адрес</string>
     <string name="SwapSettings_Apply">Применить</string>
     <string name="SwapSettings_DeadlineMinute">%s мин</string>
-    <string name="SwapSettings_RecipientPlaceholder">Address or domain</string>
-    <string name="SwapSettings_Error_DeadlineZero">Zero Deadline</string>
+    <string name="SwapSettings_RecipientPlaceholder">Адрес или домен</string>
+    <string name="SwapSettings_Error_DeadlineZero">Нулевой Срок</string>
     <string name="SwapSettings_Error_SlippageZero">Zero Slippage</string>
     <string name="SwapSettings_Error_SlippageTooLow">Ваша транзакция, скорее всего, не удастся.</string>
     <string name="SwapSettings_Error_SlippageTooHigh">Макс. допустимое значение %s%%</string>
@@ -301,7 +301,7 @@
     <string name="Transactions_Title">Транзакции</string>
     <string name="Transactions_FilterAll">ВСЕ</string>
     <string name="Transactions_EmptyList">У вас ещё нет незавершенных или прошлых транзакций</string>
-    <string name="Transactions_Pending">Pending</string>
+    <string name="Transactions_Pending">В обработке</string>
     <string name="Transactions_Receiving">Получение</string>
     <string name="Transactions_Sending">Отправка</string>
     <string name="Transactions_Approving">Подтверждение обмена</string>
@@ -368,21 +368,23 @@
     <string name="SettingsPrivacy_Transactions">Блокчейн Tранзакции</string>
     <string name="SettingsPrivacy_TransactionsSettingText">Входы/Выходы</string>
     <string name="SettingsPrivacy_TransactionsDescription">Поменяйте способ структурирования транзакций, чтобы затруднить отслеживание ваших операций с BTC, LTC, BCH.</string>
-    <string name="SettingsPrivacy_Info_Details">Below you will find detailed explanation of the privacy settings that are available in the app. It\'s safe to consider them as settings for those that require extensive privacy.</string>
+    <string name="SettingsPrivacy_Info_Details">Ниже вы найдете подробное описание доступных в приложении настроек конфиденциальности. Эти настройки предназначены для тех, кому нужна полная конфиденциальность.</string>
     <string name="SettingsPrivacy_Info_BlockchainTx_Title">Блокчейн Tранзакции</string>
-    <string name="SettingsPrivacy_Info_BlockchainTx_Description">This setting controls the privacy level of user\'s transactions on Bitcoin, Bitcoin Cash and Litecoin blockchains.
-        \n\nMost Bitcoin transactions generate two outputs. One output is the amount that goes to the receiver and the other is the change output that is returned to the sender. The way most wallets construct transactions makes it easy for a third party monitoring Bitcoin blockchain to understand which of the outputs went to the receiving party and which one was the change amount returned to the sender. The output returned to the sender can then be used in future transactions and further reveal the details to the monitoring party.
-        \n\nUnstoppable wallet implements measures to makes it significantly harder to figure out which output goes where. There are two options available to Unstoppable users:
-        \n\n1. Shuffle : The order of transaction outputs are randomized on every transaction. Sometimes change can be the first output, sometimes it can be the second. If a user trusts the developer of the app, than consider this a recommended option.
-        \n\n2. Deterministic : There is a commonly agreed standard for ordering transaction outputs (known as BIP69). In open source wallets that standard ensures that wallet users do not need to trust how developers of the app implement the ordering of the outputs. As this standard is new, not many wallets have implemented it yet. As a result, it\'s somewhat possible to see on the blockchain whether transaction was sent from the wallet that uses that standard or not.</string>
-    <string name="SettingsPrivacy_Info_BlockchainConnection_Title">Blockchain Sync</string>
-    <string name="SettingsPrivacy_Info_BlockchainConnection_Description">This setting controls how this app interacts with blockchains (sending/receiving transactions). In case of Bitcoin, Bitcoin Cash, Litecoin and Dash it is fully peer to peer. The app pings many nodes and communicates with them. Potentially these nodes can record IP address and data requested but since they are chosen randomly, each time the app connects to a different node.
-        \n\nIn case of Ethereum, there is no alternative for mobile wallets to interact with blockchain other than via third party providers (i.e. Infura.io) or personal Ethereum nodes. Third party services can potentially record IP addresses and the requests made. That info can reveal location, balance, transactions etc. Moreover, the wallet has to trust that information returned is correct. There is a an alternative known as Incubed which in essence is a network of special Ethereum nodes. These nodes can also record IP addresses and requests made, but they are chosen randomly each time. While being slightly slower than Infura, the way Incubed works pretty much guarantees that the information returned is correct (not fake).
-        \n\nWhen it comes to other blockchains like EOSIO and Binance Chain, at this point they only provide centralized means of connecting, without viable alternatives. Potentially they can be recording IP addresses and requests made.</string>
-    <string name="SettingsPrivacy_Info_BlockchainRestore_Title">Blockchain Restore</string>
-    <string name="SettingsPrivacy_Info_BlockchainRestore_Description">This setting is only relevant when restoring an existing wallet. It is a process of getting transactions history for a given coin so that the wallet app is able to display past transactions and calculate user\'s balance. This needs to happen only once, when user restores previously created wallet. At this point there are two potential ways for a mobile wallet like Unstoppable to do this:
-        \n\n1. from API Server : There is a third-party predefined server which hosts the entire blockchain and has all the data processed and ready to provide it in a fast manner. This method is fast but can potentially keep track of the IP addresses and the data requested. This option is recommended due to its speed of getting data (5-10 minutes). The risks are minimal. If the user restoring from his own server then no privacy risks at all.
-        \n\n2. from Blockchain : In this case the app tries to restore directly from a p2p network of the blockchain nodes. The app pings many of those nodes and requests data from them. Potentially these nodes can keep track of user\'s IP address and requests made however during restore the app can switch between nodes. There are close to 10,000 Bitcoin nodes on the network at any given time. This option is slow and can easily take 2-3 hours, app needs to be open while restore is happening...</string>
+    <string name="SettingsPrivacy_Info_BlockchainTx_Description">Этот параметр контролирует уровень конфиденциальности пользовательских транзакций в блокчейнах Bitcoin, Bitcoin Cash и Litecoin.
+      \n\nБольшинство транзакций с биткойнами генерируют два выхода. Один - сумма для отправки получателю, а другой - сдача для возврата отправителю. Особенности создания транзакций большинством кошельков позволяют третьей стороне отслеживать блокчейн Bitcoin на предмет того, какая из этих двух сумм была отправлена принимающей стороне, и какая сумма была возвращена отправителю. Возвращенная отправителю сумма может быть позже использована в будущих сделках и для дальнейшего раскрытия сведений контролирующей стороне.
+      \n\nКошелек Unstoppable принимает меры для затруднения идентификации направлений отправки этих двух сумм. Для пользователей Unstoppable доступны две опции:
+      \n\n1. Перемешивание: Рандомизируется порядок выхода каждой транзакции. Иногда сдача может отправляться первой, а иногда второй. Если вы доверяете разработчику приложения, то воспользуйтесь рекомендуемым вариантом.
+      \n\n2. Детерминистский подход: существует общепринятый стандарт заказа выходов транзакций (именуемый BIP69). Используя стандартные кошельки с открытым исходным кодом, пользователи не должны волноваться о том, как разработчики приложения реализуют выходы. Так как это новый стандарт, он еще не реализован во многих кошельках. В результате, пока что в блокчейн можно увидеть, была ли отправлена транзакция из кошелька, который использует этот стандарт или нет.</string>
+    <string name="SettingsPrivacy_Info_BlockchainConnection_Title">Синхронизация Блокчейна</string>
+    <string name="SettingsPrivacy_Info_BlockchainConnection_Description">Этот параметр актуален только при восстановлении существующего кошелька. Это процесс получения истории транзакций для данной монеты, чтобы приложение кошелька могло отображать предыдущие транзакции и определять последний баланс. Это должно произойти только один раз при восстановлении пользователем ранее созданного кошелька. На данный момент у такого мобильного кошелька, как Unstoppable, есть два возможных способа для реализации этого вопроса:
+      \n\n1. С сервера API: существует предопределенный сторонний сервер, на котором размещается вся цепочка блоков, происходит обработка всех данных и их подготовка к быстрому предоставлению. Это быстрый метод, однако он предполагает потенциальное отслеживание IP-адресов и запрашиваемых данных. Этот вариант рекомендуется использовать из-за скорости получения данных (5-10 минут). Он сопряжен с минимальными рисками. Если пользователь восстанавливает данные со своего собственного сервера, то нет никакой угрозы конфиденциальности.
+      \n\n2. Из блокчейна: в этом случае приложение пытается восстановить данные напрямую из p2p-сети узлов блокчейна. Приложение пингует многие из этих узлов и запрашивает у них данные. Потенциально эти узлы могут отслеживать IP-адрес пользователя и сделанные запросы, однако во время восстановления данных приложение может переключаться между узлами. В любое время в сети находится около 10 000 биткойн-узлов. Это медленный вариант обработки данных, она может занять 2-3 часа и приложение должно быть открыто во время их восстановления...</string>
+    <string name="SettingsPrivacy_Info_BlockchainRestore_Title">Восстановить Блокчейн</string>
+    <string name="SettingsPrivacy_Info_BlockchainRestore_Description">Этот параметр актуален только при восстановлении существующего кошелька. Это процесс получения истории транзакций для данной монеты, чтобы приложение кошелька могло отображать предыдущие транзакции и определять последний баланс. Это должно произойти только один раз при восстановлении пользователем ранее созданного кошелька. На данный момент у такого мобильного кошелька, как Unstoppable, есть два возможных способа для реализации этого вопроса: 
+      \n\n1. С сервера API: существует предопределенный сторонний сервер, на котором размещается вся цепочка блоков, происходит обработка всех данных и их подготовка к быстрому предоставлению. Это быстрый метод, однако он предполагает потенциальное отслеживание IP-адресов и запрашиваемых данных. Этот вариант рекомендуется использовать из-за скорости получения данных (5-10 минут). Он сопряжен с минимальными рисками. Если пользователь восстанавливает данные со своего собственного сервера, то нет никакой угрозы конфиденциальности.
+      \n\n2. Из блокчейна: в этом случае приложение пытается восстановить данные напрямую из p2p-сети узлов блокчейна. Приложение пингует многие из этих узлов и запрашивает у них данные. Потенциально эти узлы могут отслеживать IP-адрес пользователя и сделанные запросы, однако во время восстановления данных приложение может переключаться между узлами. В любое время в сети находится около 10 000 биткойн-узлов. Это медленный вариант обработки данных, она может занять 2-3 часа и приложение должно быть открыто во время их восстановления...Этот параметр актуален только при восстановлении существующего кошелька. Это процесс получения истории транзакций для данной монеты, чтобы приложение кошелька могло отображать предыдущие транзакции и определять последний баланс. Это должно произойти только один раз при восстановлении пользователем ранее созданного кошелька. На данный момент у такого мобильного кошелька, как Unstoppable, есть два возможных способа для реализации этого вопроса: 
+      \n\n1. С сервера API: существует предопределенный сторонний сервер, на котором размещается вся цепочка блоков, происходит обработка всех данных и их подготовка к быстрому предоставлению. Это быстрый метод, однако он предполагает потенциальное отслеживание IP-адресов и запрашиваемых данных. Этот вариант рекомендуется использовать из-за скорости получения данных (5-10 минут). Он сопряжен с минимальными рисками. Если пользователь восстанавливает данные со своего собственного сервера, то нет никакой угрозы конфиденциальности.
+      \n\n2. Из блокчейна: в этом случае приложение пытается восстановить данные напрямую из p2p-сети узлов блокчейна. Приложение пингует многие из этих узлов и запрашивает у них данные. Потенциально эти узлы могут отслеживать IP-адрес пользователя и сделанные запросы, однако во время восстановления данных приложение может переключаться между узлами. В любое время в сети находится около 10 000 биткойн-узлов. Это медленный вариант обработки данных, она может занять 2-3 часа и приложение должно быть открыто во время их восстановления...</string>
     <!--Settings-->
     <!--Setting_Security-->
     <string name="SettingsSecurity_Privacy">Приватность</string>
@@ -488,12 +490,12 @@
     <string name="AddTokenDialog_Erc20Tokens">Токен ERC20</string>
     <string name="AddTokenDialog_BinanceTokens">Токен BEP2</string>
     <!-- Enable Token -->
-    <string name="EnalbeToken_Title">Enable Token</string>
+    <string name="EnalbeToken_Title">Активировать Токен</string>
     <string name="EnalbeToken_Description">Enable all %s coins that have any balance</string>
-    <string name="EnalbeToken_Enabling">Enabling</string>
-    <string name="EnalbeToken_EnabledCoins">Enabled %d coins</string>
+    <string name="EnalbeToken_Enabling">Идет активация</string>
+    <string name="EnalbeToken_EnabledCoins">Активировано %d монет</string>
     <string name="EnalbeToken_NoCoins">No coins found with balance</string>
-    <string name="EnalbeToken_EnableKey">Enable</string>
+    <string name="EnalbeToken_EnableKey">Активировать</string>
     <!-- Add Token -->
     <string name="AddToken_CoinName">Название Токена</string>
     <string name="AddToken_Symbol">Символ</string>
@@ -520,9 +522,9 @@
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">После вступления данного изменения в силу кошелек должен будет повторно синхронизироваться с блокчейном %s.</string>
     <string name="BlockchainSettings_CommunicationModeChangeAlert_Title">Связь</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type0_Title">Legacy</string>
-    <string name="CoinSettings_BitcoinCashCoinType_Type145_Title">New</string>
-    <string name="CoinSettings_BitcoinCashCoinType_Type0_Description">Older wallets (before Aug 2017)</string>
-    <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">Newer wallets</string>
+    <string name="CoinSettings_BitcoinCashCoinType_Type145_Title">Новый</string>
+    <string name="CoinSettings_BitcoinCashCoinType_Type0_Description">Старые кошельки (до августа 2017 г.)</string>
+    <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">Новые кошельки</string>
     <!-- Tor -->
     <string name="Tor_Title">Tor</string>
     <string name="Tor_Connection_Title">Соединение</string>
