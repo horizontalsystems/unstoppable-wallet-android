@@ -23,7 +23,7 @@ class MarketFavoritesViewModel(
     var sortingField: SortingField = sortingFields.first()
         private set
 
-    var marketField: MarketField = MarketField.PriceDiff
+    var marketField: MarketField = MarketField.MarketCap
         private set
 
     fun update(sortingField: SortingField? = null, marketField: MarketField? = null) {

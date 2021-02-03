@@ -22,7 +22,7 @@ class MarketDiscoveryViewModel(
     var sortingField: SortingField = sortingFields.first()
         private set
 
-    var marketField: MarketField = MarketField.PriceDiff
+    var marketField: MarketField = MarketField.MarketCap
         private set
 
     val marketViewItemsLiveData = MutableLiveData<List<MarketViewItem>>()
