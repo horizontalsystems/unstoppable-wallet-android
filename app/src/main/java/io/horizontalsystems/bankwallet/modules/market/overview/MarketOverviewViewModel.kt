@@ -36,12 +36,9 @@ class MarketOverviewViewModel(
     }
 
     private fun syncState(state: MarketOverviewService.State) {
-        val isLoading = state is MarketOverviewService.State.Loading
-        val hasError = state as? MarketOverviewService.State.Error
-
         if (service.marketItems.isEmpty()) {
-            loadingLiveData.postValue(isLoading)
-            errorLiveData.postValue(hasError?.error?.let { convertErrorMessage(it) })
+            loadingLiveData.postValue(state is MarketOverviewService.State.Loading)
+            errorLiveData.postValue((state as? MarketOverviewService.State.Error)?.let { convertErrorMessage(it.error) })
 
             if (state is MarketOverviewService.State.Loaded) {
                 syncViewItemsBySortingField()

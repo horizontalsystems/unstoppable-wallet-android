@@ -44,13 +44,14 @@ class MarketMetricsViewModel(
 
     private fun syncMarketMetrics(dataState: DataState<GlobalCoinMarket>) {
         var loading = false
-        if (metricsWrapper?.marketMetrics == null) {
+        val metricsNotSet = metricsWrapper?.marketMetrics == null
+        if (metricsNotSet) {
             loading = dataState.loading
         }
 
         var error: String? = null
         if (dataState is DataState.Error) {
-            if (metricsWrapper?.marketMetrics == null) {
+            if (metricsNotSet) {
                 error = convertErrorMessage(dataState.error)
             } else {
                 toastLiveData.postValue(convertErrorMessage(dataState.error))
