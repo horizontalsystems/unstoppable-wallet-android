@@ -15,9 +15,15 @@ class MarketMetricsViewModel(
         private val service: MarketMetricsService,
         private val clearables: List<Clearable>
 ) : ViewModel() {
-    val marketMetricsLiveData = MutableLiveData<MarketMetrics?>(null)
-    val loadingLiveData = MutableLiveData(false)
-    val errorLiveData = MutableLiveData<String?>(null)
+
+    val marketMetricsLiveData = MutableLiveData<MarketMetricsWrapper?>(null)
+    val toastLiveData = MutableLiveData<String>()
+
+    private var metricsWrapper: MarketMetricsWrapper? = null
+        set(value) {
+            field = value
+            marketMetricsLiveData.postValue(value)
+        }
 
     private val disposables = CompositeDisposable()
 
@@ -37,8 +43,22 @@ class MarketMetricsViewModel(
     }
 
     private fun syncMarketMetrics(dataState: DataState<GlobalCoinMarket>) {
-        loadingLiveData.postValue(dataState.loading)
-        errorLiveData.postValue(dataState.errorOrNull?.let { convertErrorMessage(it) })
+        var loading = false
+        if (metricsWrapper?.marketMetrics == null) {
+            loading = dataState.loading
+        }
+
+        var error: String? = null
+        if (dataState is DataState.Error) {
+            if (metricsWrapper?.marketMetrics == null) {
+                error = convertErrorMessage(dataState.error)
+            } else {
+                toastLiveData.postValue(convertErrorMessage(dataState.error))
+            }
+        }
+
+        var metrics = metricsWrapper?.marketMetrics
+
         if (dataState is DataState.Success) {
             val globalMarketInfo = dataState.data
 
@@ -52,8 +72,10 @@ class MarketMetricsViewModel(
                     defiTvl = MetricData(formatFiatShortened(globalMarketInfo.defiTvl, symbol), globalMarketInfo.defiTvlDiff24h),
             )
 
-            marketMetricsLiveData.postValue(marketMetrics)
+            metrics = marketMetrics
         }
+
+        metricsWrapper = MarketMetricsWrapper(metrics, loading, error)
     }
 
     private fun formatFiatShortened(value: BigDecimal, symbol: String): String {
