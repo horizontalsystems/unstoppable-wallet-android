@@ -49,6 +49,8 @@ class MarketCategoriesAdapter(
     }
 
     override fun onTabSelected(tab: TabLayout.Tab) {
+        tab.customView?.isActivated = true
+
         listener.onSelect(marketCategories.getOrNull(tab.position))
 
         //hide icon
@@ -122,7 +124,7 @@ class MarketCategoriesAdapter(
                 LinearLayout.LayoutParams.WRAP_CONTENT
         )
 
-        tab.view.isActivated = false
+        tab.customView?.isActivated = false
     }
 
     override fun onTabReselected(tab: TabLayout.Tab) {
