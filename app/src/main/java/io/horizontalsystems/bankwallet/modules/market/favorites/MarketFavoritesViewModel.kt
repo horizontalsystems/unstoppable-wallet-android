@@ -29,14 +29,15 @@ class MarketFavoritesViewModel(
     fun update(sortingField: SortingField? = null, marketField: MarketField? = null) {
         sortingField?.let {
             this.sortingField = it
+            syncViewItemsBySortingField()
         }
         marketField?.let {
             this.marketField = it
+            syncViewItemsBySortingField(false)
         }
-        syncViewItemsBySortingField()
     }
 
-    val marketViewItemsLiveData = MutableLiveData<List<MarketViewItem>>()
+    val marketViewItemsLiveData = MutableLiveData<Pair<List<MarketViewItem>,Boolean>>()
     val loadingLiveData = MutableLiveData(false)
     val errorLiveData = MutableLiveData<String?>(null)
     val networkNotAvailable = SingleLiveEvent<Unit>()
@@ -70,7 +71,7 @@ class MarketFavoritesViewModel(
         }
     }
 
-    private fun syncViewItemsBySortingField() {
+    private fun syncViewItemsBySortingField(scrollToTop: Boolean = true) {
         val viewItems = service.marketItems
                 .sort(sortingField)
                 .map {
@@ -79,7 +80,7 @@ class MarketFavoritesViewModel(
 
         showEmptyListTextLiveData.postValue(viewItems.isEmpty())
 
-        marketViewItemsLiveData.postValue(viewItems)
+        marketViewItemsLiveData.postValue(Pair(viewItems, scrollToTop))
     }
 
     private fun convertErrorMessage(it: Throwable): String {

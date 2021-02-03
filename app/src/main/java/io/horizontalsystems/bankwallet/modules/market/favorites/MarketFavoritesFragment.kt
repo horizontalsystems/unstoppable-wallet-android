@@ -36,8 +36,8 @@ class MarketFavoritesFragment : BaseFragment(), MarketListHeaderView.Listener, V
         marketListHeader.setSortingField(marketFavoritesViewModel.sortingField)
         marketListHeader.setMarketField(marketFavoritesViewModel.marketField)
         marketListHeader.isVisible = false
-        marketFavoritesViewModel.marketViewItemsLiveData.observe(viewLifecycleOwner, {
-            marketListHeader.isVisible = it.isNotEmpty()
+        marketFavoritesViewModel.marketViewItemsLiveData.observe(viewLifecycleOwner, { (list, _) ->
+            marketListHeader.isVisible = list.isNotEmpty()
         })
 
         marketItemsAdapter = MarketItemsAdapter(
