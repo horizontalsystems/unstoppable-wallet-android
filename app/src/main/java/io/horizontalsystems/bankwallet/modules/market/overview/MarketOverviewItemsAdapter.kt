@@ -10,13 +10,27 @@ import io.horizontalsystems.views.ListPosition
 
 class MarketOverviewItemsAdapter(
         private val listener: ViewHolderMarketOverviewItem.Listener,
-        private val itemsLiveData: LiveData<List<MarketViewItem>>,
+        itemsLiveData: LiveData<List<MarketViewItem>>,
+        loadingLiveData: LiveData<Boolean>,
+        errorLiveData: LiveData<String?>,
         viewLifecycleOwner: LifecycleOwner
 ) : ListAdapter<MarketViewItem, ViewHolderMarketOverviewItem>(coinRateDiff) {
 
     init {
         itemsLiveData.observe(viewLifecycleOwner, {
             submitList(it)
+        })
+
+        errorLiveData.observe(viewLifecycleOwner, { error ->
+            if (error != null) {
+                submitList(listOf())
+            }
+        })
+
+        loadingLiveData.observe(viewLifecycleOwner, { loading ->
+            if (loading) {
+                submitList(listOf())
+            }
         })
     }
 
@@ -34,7 +48,7 @@ class MarketOverviewItemsAdapter(
 
     override fun onBindViewHolder(holder: ViewHolderMarketOverviewItem, position: Int) = Unit
 
-    private fun getListPosition(position: Int): ListPosition = when(position){
+    private fun getListPosition(position: Int): ListPosition = when (position) {
         0 -> ListPosition.First
         1 -> ListPosition.Middle
         2 -> ListPosition.Last

@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.market.metrics
 
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -11,23 +12,12 @@ import io.horizontalsystems.views.inflate
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_market_totals.*
 
-class MarketMetricsAdapter(
-        private val viewModel: MarketMetricsViewModel,
-        private val viewLifecycleOwner: LifecycleOwner
-) : ListAdapter<MarketMetricsWrapper, MarketMetricsViewHolder>(diff) {
-
-    private var loading = false
+class MarketMetricsAdapter(private val viewModel: MarketMetricsViewModel, viewLifecycleOwner: LifecycleOwner)
+    : ListAdapter<MarketMetricsWrapper, MarketMetricsViewHolder>(diff) {
 
     init {
         viewModel.marketMetricsLiveData.observe(viewLifecycleOwner) {
-            submitList(listOf(MarketMetricsWrapper(it)))
-        }
-
-        viewModel.loadingLiveData.observe(viewLifecycleOwner) {
-//            TODO()
-//            loading = it
-//
-//            if (loading) notifyItemChanged(0)
+            submitList(listOf(it))
         }
     }
 
@@ -38,7 +28,9 @@ class MarketMetricsAdapter(
     override fun onBindViewHolder(holder: MarketMetricsViewHolder, position: Int) = Unit
 
     override fun onBindViewHolder(holder: MarketMetricsViewHolder, position: Int, payloads: MutableList<Any>) {
-        holder.bind(getItem(position).marketMetrics, (payloads.firstOrNull() as? MarketMetricsWrapper)?.marketMetrics)
+        holder.bind(getItem(position)) {
+            viewModel.refresh()
+        }
     }
 
     fun refresh() {
@@ -54,16 +46,26 @@ class MarketMetricsAdapter(
     }
 }
 
-data class MarketMetricsWrapper(val marketMetrics: MarketMetrics?)
+data class MarketMetricsWrapper(val marketMetrics: MarketMetrics?, val loading: Boolean, val error: String? = null)
 
 class MarketMetricsViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
-    fun bind(current: MarketMetrics?, prev: MarketMetrics?) {
-        totalMarketCap.setMetricData(current?.totalMarketCap)
-        btcDominance.setMetricData(current?.btcDominance)
-        volume24h.setMetricData(current?.volume24h)
-        defiCap.setMetricData(current?.defiCap)
-        defiTvl.setMetricData(current?.defiTvl)
-    }
 
+    fun bind(data: MarketMetricsWrapper?, onErrorClick: (() -> Unit)) {
+        val metrics = data?.marketMetrics
+
+        totalMarketCap.setMetricData(metrics?.totalMarketCap)
+        btcDominance.setMetricData(metrics?.btcDominance)
+        volume24h.setMetricData(metrics?.volume24h)
+        defiCap.setMetricData(metrics?.defiCap)
+        defiTvl.setMetricData(metrics?.defiTvl)
+
+        progressBar.isVisible = data?.loading == true
+
+        error.isVisible = data?.error != null
+        error.text = data?.error
+        error.setOnClickListener {
+            onErrorClick()
+        }
+    }
 }
 

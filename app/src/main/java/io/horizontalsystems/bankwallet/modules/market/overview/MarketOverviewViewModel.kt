@@ -21,6 +21,7 @@ class MarketOverviewViewModel(
 
     val loadingLiveData = MutableLiveData(false)
     val errorLiveData = MutableLiveData<String?>(null)
+    val toastLiveData = MutableLiveData<String>()
 
     private val disposable = CompositeDisposable()
 
@@ -35,14 +36,24 @@ class MarketOverviewViewModel(
     }
 
     private fun syncState(state: MarketOverviewService.State) {
-        loadingLiveData.postValue(state is MarketOverviewService.State.Loading)
-        errorLiveData.postValue((state as? MarketOverviewService.State.Error)?.error?.let { convertErrorMessage(it) })
+        val isLoading = state is MarketOverviewService.State.Loading
+        val hasError = state as? MarketOverviewService.State.Error
 
-        if (state is MarketOverviewService.State.Loaded) {
+        if (service.marketItems.isEmpty()) {
+            loadingLiveData.postValue(isLoading)
+            errorLiveData.postValue(hasError?.error?.let { convertErrorMessage(it) })
+
+            if (state is MarketOverviewService.State.Loaded) {
+                syncViewItemsBySortingField()
+            }
+        } else if (state is MarketOverviewService.State.Loaded) {
             syncViewItemsBySortingField()
-        }
 
-        showPoweredByLiveData.postValue(service.marketItems.isNotEmpty())
+            loadingLiveData.postValue(false)
+            errorLiveData.postValue(null)
+        } else if (state is MarketOverviewService.State.Error) {
+            toastLiveData.postValue(convertErrorMessage(state.error))
+        }
     }
 
     private fun syncViewItemsBySortingField() {
@@ -55,6 +66,9 @@ class MarketOverviewViewModel(
         return it.message ?: it.javaClass.simpleName
     }
 
+    fun onErrorClick() {
+        service.refresh()
+    }
 
     override fun onCleared() {
         clearables.forEach(Clearable::clear)
@@ -65,5 +79,4 @@ class MarketOverviewViewModel(
     fun refresh() {
         service.refresh()
     }
-
 }
