@@ -65,9 +65,9 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="Backup_Button_Backup">Sauvegarde</string>
     <string name="Backup_Button_ShowKey">Voir la clé</string>
     <!--Market-->
-    <string name="Market_Field_MarketCap">MCap</string>
+    <string name="Market_Field_MarketCap">Cap. marché</string>
     <string name="Market_Field_Volume">Volume</string>
-    <string name="Market_Field_PriceDiff">Price</string>
+    <string name="Market_Field_PriceDiff">Prix</string>
     <string name="Market_Title">Market</string>
     <string name="Market_Search">Search</string>
     <string name="Market_Field_HighestCap">Highest Cap</string>
