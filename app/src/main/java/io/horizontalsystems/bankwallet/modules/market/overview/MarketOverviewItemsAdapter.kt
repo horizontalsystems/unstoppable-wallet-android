@@ -11,26 +11,12 @@ import io.horizontalsystems.views.ListPosition
 class MarketOverviewItemsAdapter(
         private val listener: ViewHolderMarketOverviewItem.Listener,
         itemsLiveData: LiveData<List<MarketViewItem>>,
-        loadingLiveData: LiveData<Boolean>,
-        errorLiveData: LiveData<String?>,
         viewLifecycleOwner: LifecycleOwner
 ) : ListAdapter<MarketViewItem, ViewHolderMarketOverviewItem>(coinRateDiff) {
 
     init {
         itemsLiveData.observe(viewLifecycleOwner, {
             submitList(it)
-        })
-
-        errorLiveData.observe(viewLifecycleOwner, { error ->
-            if (error != null) {
-                submitList(listOf())
-            }
-        })
-
-        loadingLiveData.observe(viewLifecycleOwner, { loading ->
-            if (loading) {
-                submitList(listOf())
-            }
         })
     }
 

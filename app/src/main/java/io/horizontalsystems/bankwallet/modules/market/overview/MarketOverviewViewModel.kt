@@ -37,18 +37,29 @@ class MarketOverviewViewModel(
     }
 
     private fun syncState(state: MarketOverviewService.State) {
-        if (service.marketItems.isNotEmpty() && state is MarketOverviewService.State.Error) {
-            toastLiveData.postValue(convertErrorMessage(state.error))
-        } else {
-            loadingLiveData.postValue(state is MarketOverviewService.State.Loading)
-            errorLiveData.postValue((state as? MarketOverviewService.State.Error)?.let { convertErrorMessage(it.error) })
+        val itemsEmpty = service.marketItems.isEmpty()
 
-            if (state is MarketOverviewService.State.Loaded) {
+        when (state) {
+            MarketOverviewService.State.Loading -> {
+                loadingLiveData.postValue(itemsEmpty)
+                errorLiveData.postValue(null)
+            }
+            MarketOverviewService.State.Loaded -> {
+                loadingLiveData.postValue(false)
+                errorLiveData.postValue(null)
                 syncViewItemsBySortingField()
+            }
+            is MarketOverviewService.State.Error -> {
+                loadingLiveData.postValue(false)
+                if (itemsEmpty) {
+                    errorLiveData.postValue(convertErrorMessage(state.error))
+                } else {
+                    toastLiveData.postValue(convertErrorMessage(state.error))
+                }
             }
         }
 
-        showPoweredByLiveData.postValue(service.marketItems.isNotEmpty())
+        showPoweredByLiveData.postValue(!itemsEmpty)
     }
 
     private fun syncViewItemsBySortingField() {
