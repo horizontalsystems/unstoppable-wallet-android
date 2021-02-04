@@ -80,7 +80,7 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="Market_TotalMarketCap">Total\nMarket Cap</string>
     <string name="Market_BtcDominance">BTC Dominance</string>
     <string name="Market_Volume24h">24h Volume</string>
-    <string name="Market_TvlDeFi">TVL in DeFi</string>
+    <string name="Market_TvlDeFi">TVL en DeFi</string>
     <string name="Market_DeFiCap">DeFi Cap</string>
     <string name="Market_SeeAll">See All</string>
     <string name="Market_Tab_Overview">Overview</string>
