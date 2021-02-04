@@ -9,7 +9,7 @@
     android:backgroundTint="?ColorLawrence"
     android:maxWidth="212dp"
     android:maxHeight="94dp"
-    android:minWidth="100dp"
+    android:minWidth="98dp"
     android:paddingStart="12dp"
     android:paddingEnd="12dp"
     android:paddingBottom="12dp"
