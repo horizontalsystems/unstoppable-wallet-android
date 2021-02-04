@@ -39,8 +39,6 @@ class MarketOverviewFragment : BaseFragment(), ViewHolderMarketOverviewItem.List
         val topLoadingAdapter = MarketLoadingAdapter(marketOverviewViewModel.loadingLiveData, marketOverviewViewModel.errorLiveData, marketOverviewViewModel::onErrorClick, viewLifecycleOwner)
         val topGainersHeaderAdapter = MarketOverviewSectionHeaderAdapter(
                 marketOverviewViewModel.topGainersViewItemsLiveData,
-                marketOverviewViewModel.loadingLiveData,
-                marketOverviewViewModel.errorLiveData,
                 viewLifecycleOwner,
                 MarketOverviewSectionHeaderAdapter.SectionHeaderItem(R.string.RateList_TopWinners, R.drawable.ic_circle_up_20, getString(R.string.Market_SeeAll)) {
                     marketViewModel.onClickSeeAll(MarketModule.ListType.TopGainers)
@@ -50,14 +48,10 @@ class MarketOverviewFragment : BaseFragment(), ViewHolderMarketOverviewItem.List
         val topGainersAdapter = MarketOverviewItemsAdapter(
                 this,
                 marketOverviewViewModel.topGainersViewItemsLiveData,
-                marketOverviewViewModel.loadingLiveData,
-                marketOverviewViewModel.errorLiveData,
                 viewLifecycleOwner)
 
         val topLosersHeaderAdapter = MarketOverviewSectionHeaderAdapter(
                 marketOverviewViewModel.topGainersViewItemsLiveData,
-                marketOverviewViewModel.loadingLiveData,
-                marketOverviewViewModel.errorLiveData,
                 viewLifecycleOwner,
                 MarketOverviewSectionHeaderAdapter.SectionHeaderItem(R.string.RateList_TopLosers, R.drawable.ic_circle_down_20, getString(R.string.Market_SeeAll)) {
                     marketViewModel.onClickSeeAll(MarketModule.ListType.TopLosers)
@@ -67,14 +61,10 @@ class MarketOverviewFragment : BaseFragment(), ViewHolderMarketOverviewItem.List
         val topLosersAdapter = MarketOverviewItemsAdapter(
                 this,
                 marketOverviewViewModel.topLosersViewItemsLiveData,
-                marketOverviewViewModel.loadingLiveData,
-                marketOverviewViewModel.errorLiveData,
                 viewLifecycleOwner)
 
         val topByVolumeHeaderAdapter = MarketOverviewSectionHeaderAdapter(
                 marketOverviewViewModel.topGainersViewItemsLiveData,
-                marketOverviewViewModel.loadingLiveData,
-                marketOverviewViewModel.errorLiveData,
                 viewLifecycleOwner,
                 MarketOverviewSectionHeaderAdapter.SectionHeaderItem(R.string.RateList_TopByVolume, R.drawable.ic_chart_20, getString(R.string.Market_SeeAll)) {
                     marketViewModel.onClickSeeAll(MarketModule.ListType.TopByVolume)
@@ -83,8 +73,6 @@ class MarketOverviewFragment : BaseFragment(), ViewHolderMarketOverviewItem.List
         val topByVolumeAdapter = MarketOverviewItemsAdapter(
                 this,
                 marketOverviewViewModel.topByVolumeViewItemsLiveData,
-                marketOverviewViewModel.loadingLiveData,
-                marketOverviewViewModel.errorLiveData,
                 viewLifecycleOwner)
 
         val poweredByAdapter = PoweredByAdapter(marketOverviewViewModel.showPoweredByLiveData, viewLifecycleOwner)

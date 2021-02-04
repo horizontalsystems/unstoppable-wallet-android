@@ -17,8 +17,6 @@ import kotlinx.android.extensions.LayoutContainer
 
 class MarketOverviewSectionHeaderAdapter(
         viewItemsLiveData: LiveData<List<MarketViewItem>>,
-        loadingLiveData: LiveData<Boolean>,
-        errorLiveData: LiveData<String?>,
         viewLifecycleOwner: LifecycleOwner,
         private val settingsHeaderItem: SectionHeaderItem
 ) : ListAdapter<MarketOverviewSectionHeaderAdapter.SectionHeaderItem, MarketOverviewSectionHeaderAdapter.SectionHeaderViewHolder>(diffCallback) {
@@ -34,18 +32,6 @@ class MarketOverviewSectionHeaderAdapter(
                     }
                     submitList(items)
                 }
-
-        errorLiveData.observe(viewLifecycleOwner, { error ->
-            if (error != null) {
-                submitList(listOf())
-            }
-        })
-
-        loadingLiveData.observe(viewLifecycleOwner, { loading ->
-            if (loading) {
-                submitList(listOf())
-            }
-        })
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SectionHeaderViewHolder {
