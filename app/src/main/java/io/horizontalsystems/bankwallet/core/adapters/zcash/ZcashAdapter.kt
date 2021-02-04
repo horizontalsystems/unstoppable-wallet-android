@@ -26,7 +26,7 @@ class ZcashAdapter(
 ) : IAdapter, IBalanceAdapter, IReceiveAdapter, ITransactionsAdapter, ISendZcashAdapter {
 
     private val confirmationsThreshold = 10
-    private val feeInZatoshi = 10_000L //0.0001 ZEC
+    private val feeChangeHeight: Long = if (testMode) 1_028_500 else 1_077_550
     private val lightWalletDHost = if (testMode) "lightwalletd.testnet.electriccoin.co" else "zcash.horizontalsystems.xyz"
     private val lightWalletDPort = 9067
 
@@ -63,6 +63,10 @@ class ZcashAdapter(
 
         synchronizer.onProcessorErrorHandler = ::onProcessorError
         synchronizer.onChainErrorHandler = ::onChainError
+    }
+
+    private fun defaultFee(height: Long? = null): Long {
+        return if (height == null || height > feeChangeHeight) 1_000 else 10_000
     }
 
     private var syncState: AdapterState = AdapterState.Syncing(0, null)
@@ -159,9 +163,10 @@ class ZcashAdapter(
 
     //region ISendZcashAdapter
     override val availableBalance: BigDecimal
-        get() = (synchronizer.latestBalance.availableZatoshi - feeInZatoshi).coerceAtLeast(0).convertZatoshiToZec()
+        get() = (synchronizer.latestBalance.availableZatoshi - defaultFee()).coerceAtLeast(0).convertZatoshiToZec()
 
-    override val fee: BigDecimal = feeInZatoshi.convertZatoshiToZec()
+    override val fee: BigDecimal
+        get() = defaultFee().convertZatoshiToZec()
 
     override fun validate(address: String) {
         runBlocking {
@@ -251,7 +256,7 @@ class ZcashAdapter(
                         blockHeight = if (it.minedHeight > 0) it.minedHeight.toLong() else null,
                         confirmationsThreshold = confirmationsThreshold,
                         amount = it.value.convertZatoshiToZec(),
-                        fee = fee,
+                        fee = defaultFee(it.minedHeight.toLong()).convertZatoshiToZec(),
                         timestamp = it.timestamp,
                         failed = it.failed,
                         from = null,
