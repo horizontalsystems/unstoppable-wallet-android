@@ -2,18 +2,20 @@ package io.horizontalsystems.bankwallet.modules.market.discovery
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
+import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.modules.market.MarketField
 import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
 import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.market.sort
 import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 
 class MarketDiscoveryViewModel(
         private val service: MarketDiscoveryService,
-        private val connectivityManager: ConnectivityManager
+        private val connectivityManager: ConnectivityManager,
+        private val clearables: List<Clearable>
 ) : ViewModel() {
 
     val sortingFields: Array<SortingField> = SortingField.values()
@@ -32,17 +34,15 @@ class MarketDiscoveryViewModel(
 
     val networkNotAvailable = SingleLiveEvent<Unit>()
 
-    private val disposables = CompositeDisposable()
+    private val disposable = CompositeDisposable()
 
     init {
         service.stateObservable
-                .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.io())
-                .subscribe {
+                .subscribeIO {
                     syncState(it)
                 }
                 .let {
-                    disposables.add(it)
+                    disposable.add(it)
                 }
     }
 
@@ -96,4 +96,8 @@ class MarketDiscoveryViewModel(
         service.marketCategory = marketCategory
     }
 
+    override fun onCleared() {
+        clearables.forEach(Clearable::clear)
+        disposable.clear()
+    }
 }

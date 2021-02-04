@@ -4,11 +4,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.Clearable
+import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.ui.extensions.MetricData
 import io.horizontalsystems.xrateskit.entities.GlobalCoinMarket
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 import java.math.BigDecimal
 
 class MarketMetricsViewModel(
@@ -29,8 +29,7 @@ class MarketMetricsViewModel(
 
     init {
         service.marketMetricsObservable
-                .subscribeOn(Schedulers.io())
-                .subscribe {
+                .subscribeIO {
                     syncMarketMetrics(it)
                 }
                 .let {

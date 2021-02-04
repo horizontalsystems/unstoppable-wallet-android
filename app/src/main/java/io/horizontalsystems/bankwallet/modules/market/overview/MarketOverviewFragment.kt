@@ -10,11 +10,11 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.market.MarketLoadingAdapter
 import io.horizontalsystems.bankwallet.modules.market.MarketModule
+import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
 import io.horizontalsystems.bankwallet.modules.market.MarketViewModel
 import io.horizontalsystems.bankwallet.modules.market.metrics.MarketMetricsAdapter
 import io.horizontalsystems.bankwallet.modules.market.metrics.MarketMetricsModule
 import io.horizontalsystems.bankwallet.modules.market.metrics.MarketMetricsViewModel
-import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
 import io.horizontalsystems.bankwallet.modules.ratechart.RateChartFragment
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper

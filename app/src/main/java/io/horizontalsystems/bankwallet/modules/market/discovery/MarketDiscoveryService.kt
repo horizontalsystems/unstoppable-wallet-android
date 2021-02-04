@@ -2,12 +2,12 @@ package io.horizontalsystems.bankwallet.modules.market.discovery
 
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.IRateManager
+import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.bankwallet.modules.market.Score
 import io.horizontalsystems.core.entities.Currency
 import io.reactivex.Single
 import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 
 class MarketDiscoveryService(
@@ -73,8 +73,7 @@ class MarketDiscoveryService(
         }
 
         itemsDisposable = marketItemsSingle
-                .subscribeOn(Schedulers.io())
-                .subscribe({
+                .subscribeIO({
                     marketItems = it
                     stateObservable.onNext(State.Loaded)
                 }, {

@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.market.overview
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.Clearable
+import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.modules.market.MarketField
 import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
 import io.horizontalsystems.bankwallet.modules.market.SortingField
@@ -27,7 +28,7 @@ class MarketOverviewViewModel(
 
     init {
         service.stateObservable
-                .subscribe {
+                .subscribeIO {
                     syncState(it)
                 }
                 .let {
@@ -67,7 +68,6 @@ class MarketOverviewViewModel(
     override fun onCleared() {
         clearables.forEach(Clearable::clear)
         disposable.clear()
-        super.onCleared()
     }
 
     fun refresh() {

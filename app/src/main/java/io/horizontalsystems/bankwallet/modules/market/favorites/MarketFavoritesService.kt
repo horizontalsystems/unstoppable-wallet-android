@@ -3,11 +3,12 @@ package io.horizontalsystems.bankwallet.modules.market.favorites
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.IRateManager
 import io.horizontalsystems.bankwallet.core.managers.MarketFavoritesManager
+import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.core.entities.Currency
+import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 
 class MarketFavoritesService(
@@ -33,9 +34,7 @@ class MarketFavoritesService(
         fetch()
 
         marketFavoritesManager.dataUpdatedAsync
-                .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.io())
-                .subscribe {
+                .subscribeIO {
                     fetch()
                 }
                 .let {
@@ -52,12 +51,14 @@ class MarketFavoritesService(
 
         stateObservable.onNext(State.Loading)
 
-        val coinCodes = marketFavoritesManager.getAll().map { it.code }
-
-        topItemsDisposable = rateManager.getCoinMarketList(coinCodes, currency.code)
-                .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.io())
-                .subscribe({
+        topItemsDisposable = Single
+                .fromCallable {
+                    marketFavoritesManager.getAll().map { it.code }
+                }
+                .flatMap { coinCodes ->
+                    rateManager.getCoinMarketList(coinCodes, currency.code)
+                }
+                .subscribeIO({
                     marketItems = it.mapIndexed { index, topMarket ->
                         MarketItem.createFromCoinMarket(topMarket, null)
                     }

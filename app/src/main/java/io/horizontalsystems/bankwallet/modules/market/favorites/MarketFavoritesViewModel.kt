@@ -4,13 +4,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
+import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.modules.market.MarketField
 import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
 import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.market.sort
 import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 
 class MarketFavoritesViewModel(
         private val service: MarketFavoritesService,
@@ -46,9 +46,7 @@ class MarketFavoritesViewModel(
 
     init {
         service.stateObservable
-                .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.io())
-                .subscribe {
+                .subscribeIO {
                     syncState(it)
                 }
                 .let {
@@ -90,7 +88,6 @@ class MarketFavoritesViewModel(
     override fun onCleared() {
         clearables.forEach(Clearable::clear)
         disposable.clear()
-        super.onCleared()
     }
 
     fun refresh() {
