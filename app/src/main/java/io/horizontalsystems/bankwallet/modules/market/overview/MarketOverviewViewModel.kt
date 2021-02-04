@@ -36,20 +36,15 @@ class MarketOverviewViewModel(
     }
 
     private fun syncState(state: MarketOverviewService.State) {
-        if (service.marketItems.isEmpty()) {
+        if (service.marketItems.isNotEmpty() && state is MarketOverviewService.State.Error) {
+            toastLiveData.postValue(convertErrorMessage(state.error))
+        } else {
             loadingLiveData.postValue(state is MarketOverviewService.State.Loading)
             errorLiveData.postValue((state as? MarketOverviewService.State.Error)?.let { convertErrorMessage(it.error) })
 
             if (state is MarketOverviewService.State.Loaded) {
                 syncViewItemsBySortingField()
             }
-        } else if (state is MarketOverviewService.State.Loaded) {
-            syncViewItemsBySortingField()
-
-            loadingLiveData.postValue(false)
-            errorLiveData.postValue(null)
-        } else if (state is MarketOverviewService.State.Error) {
-            toastLiveData.postValue(convertErrorMessage(state.error))
         }
 
         showPoweredByLiveData.postValue(service.marketItems.isNotEmpty())
