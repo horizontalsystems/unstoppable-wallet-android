@@ -459,7 +459,7 @@
     <string name="RateList_portfolio">Portföy</string>
     <string name="RateList_top100">En Beğenilen 100</string>
     <string name="RateList_Rank">Derece</string>
-    <string name="RateList_TopWinners">Çok Kazananlar</string>
+    <string name="RateList_TopGainers">Çok Kazananlar</string>
     <string name="RateList_TopLosers">Çok Kaybedenler</string>
     <!-- Balance Sync Error -->
     <string name="BalanceSyncError_Title">Senk. hatası</string>

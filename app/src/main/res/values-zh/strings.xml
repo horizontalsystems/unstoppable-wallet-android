@@ -460,7 +460,7 @@
     <string name="RateList_portfolio">投资组合</string>
     <string name="RateList_top100">前100名</string>
     <string name="RateList_Rank">排名</string>
-    <string name="RateList_TopWinners">顶级赢家</string>
+    <string name="RateList_TopGainers">顶级赢家</string>
     <string name="RateList_TopLosers">顶级输家</string>
     <!-- Balance Sync Error -->
     <string name="BalanceSyncError_Title">同步出错</string>

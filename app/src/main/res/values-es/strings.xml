@@ -460,7 +460,7 @@ poner en peligro la seguridad de mis fondos.</string>
     <string name="RateList_portfolio">Cartera</string>
     <string name="RateList_top100">Top 100</string>
     <string name="RateList_Rank">Puesto</string>
-    <string name="RateList_TopWinners">Mejores ganadores</string>
+    <string name="RateList_TopGainers">Mejores ganadores</string>
     <string name="RateList_TopLosers">Peores perdedores</string>
     <!-- Balance Sync Error -->
     <string name="BalanceSyncError_Title">Error de sincronización</string>

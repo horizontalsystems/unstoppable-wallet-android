@@ -459,7 +459,7 @@
     <string name="RateList_portfolio">نمونه کار</string>
     <string name="RateList_top100">۱۰۰ برتر</string>
     <string name="RateList_Rank">رتبه</string>
-    <string name="RateList_TopWinners">برندگان برتر</string>
+    <string name="RateList_TopGainers">برندگان برتر</string>
     <string name="RateList_TopLosers">بازندگان برتر</string>
     <!-- Balance Sync Error -->
     <string name="BalanceSyncError_Title">خطا ی همگام سازی</string>

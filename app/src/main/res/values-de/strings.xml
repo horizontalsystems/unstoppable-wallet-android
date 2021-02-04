@@ -459,7 +459,7 @@
     <string name="RateList_portfolio">Portfolio</string>
     <string name="RateList_top100">Top 100</string>
     <string name="RateList_Rank">Position</string>
-    <string name="RateList_TopWinners">Top Gewinner</string>
+    <string name="RateList_TopGainers">Top Gewinner</string>
     <string name="RateList_TopLosers">Top Verlierer</string>
     <!-- Balance Sync Error -->
     <string name="BalanceSyncError_Title">Sync-Fehler</string>

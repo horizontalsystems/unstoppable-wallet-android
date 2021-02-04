@@ -459,7 +459,7 @@
     <string name="RateList_portfolio">Портфель</string>
     <string name="RateList_top100">Топ-100</string>
     <string name="RateList_Rank">Месту</string>
-    <string name="RateList_TopWinners">Топ Победителей</string>
+    <string name="RateList_TopGainers">Топ Победителей</string>
     <string name="RateList_TopLosers">Топ Проигравших</string>
     <!-- Balance Sync Error -->
     <string name="BalanceSyncError_Title">Ошибка Синхронизации</string>
