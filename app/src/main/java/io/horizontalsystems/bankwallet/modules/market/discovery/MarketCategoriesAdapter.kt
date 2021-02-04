@@ -22,7 +22,6 @@ class MarketCategoriesAdapter(
 ) : TabLayout.OnTabSelectedListener {
 
     private val itemViewMaxLength = LayoutHelper.dp(212f, context)
-    private val itemViewMinLength = LayoutHelper.dp(100f, context)
 
     init {
         marketCategories.forEach { category ->
@@ -118,10 +117,10 @@ class MarketCategoriesAdapter(
 
         //shrink layout
         val containerView = tab.view as ViewGroup
-        val shrinkWidth = max(titleTextView.width + LayoutHelper.dp(24f, context), itemViewMinLength)
-        val params = containerView.layoutParams
-        params.width = LayoutHelper.dp(shrinkWidth.toFloat(), context)
-        containerView.layoutParams = params
+        containerView.layoutParams = ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+        )
 
         tab.view.isActivated = false
     }
