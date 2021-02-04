@@ -14,6 +14,10 @@ import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
 import io.horizontalsystems.ethereumkit.core.toRawHexString
 import io.horizontalsystems.hodler.LockTimeInterval
 import io.horizontalsystems.views.SingleClickListener
+import io.reactivex.Observable
+import io.reactivex.Single
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 
 //View
 
@@ -83,4 +87,18 @@ fun LockTimeInterval?.stringResId(): Int {
         LockTimeInterval.year -> R.string.Send_LockTime_Year
         null -> R.string.Send_LockTime_Off
     }
+}
+
+fun <T> Observable<T>.subscribeIO(onNext: (t: T) -> Unit): Disposable {
+    return this
+            .subscribeOn(Schedulers.io())
+            .observeOn(Schedulers.io())
+            .subscribe(onNext)
+}
+
+fun <T> Single<T>.subscribeIO(onSuccess: (t: T) -> Unit, onError: (e: Throwable) -> Unit): Disposable {
+    return this
+            .subscribeOn(Schedulers.io())
+            .observeOn(Schedulers.io())
+            .subscribe(onSuccess, onError)
 }

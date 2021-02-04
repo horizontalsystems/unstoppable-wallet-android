@@ -12,7 +12,7 @@ object MarketDiscoveryModule {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             val provider = MarketCategoryProvider(App.instance)
             val service = MarketDiscoveryService(provider, MarketModule.currencyUSD, App.xRateManager)
-            return MarketDiscoveryViewModel(service, App.connectivityManager) as T
+            return MarketDiscoveryViewModel(service, App.connectivityManager, listOf(service)) as T
         }
     }
 
