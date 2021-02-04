@@ -40,7 +40,7 @@ class MarketOverviewFragment : BaseFragment(), ViewHolderMarketOverviewItem.List
         val topGainersHeaderAdapter = MarketOverviewSectionHeaderAdapter(
                 marketOverviewViewModel.topGainersViewItemsLiveData,
                 viewLifecycleOwner,
-                MarketOverviewSectionHeaderAdapter.SectionHeaderItem(R.string.RateList_TopWinners, R.drawable.ic_circle_up_20, getString(R.string.Market_SeeAll)) {
+                MarketOverviewSectionHeaderAdapter.SectionHeaderItem(R.string.RateList_TopGainers, R.drawable.ic_circle_up_20, getString(R.string.Market_SeeAll)) {
                     marketViewModel.onClickSeeAll(MarketModule.ListType.TopGainers)
                 }
         )
