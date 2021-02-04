@@ -51,6 +51,8 @@ class MarketOverviewViewModel(
         } else if (state is MarketOverviewService.State.Error) {
             toastLiveData.postValue(convertErrorMessage(state.error))
         }
+
+        showPoweredByLiveData.postValue(service.marketItems.isNotEmpty())
     }
 
     private fun syncViewItemsBySortingField() {
