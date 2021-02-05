@@ -358,7 +358,7 @@
     <string name="Settings_WalletConnect">Wallet Connect</string>
     <string name="Settings_RateUs">评价我们</string>
     <string name="SettingsAboutApp_Title">关于应用</string>
-    <string name="SettingsAboutApp_Site">网站</string>
+    <string name="SettingsAboutApp_Site">Website</string>
     <string name="SettingsPrivacy_Info">虽然此APP不会将您的个人数据提供给任何第三方，但您的某些个人数据（例如IP地址）在与区块链通信时可能会泄漏。单击右上角的“信息”按钮以获取更多详细信息。</string>
     <string name="SettingsPrivacy_ConnectionSettingsTitle">互联网</string>
     <string name="SettingsPrivacy_CommunicationSettingsTitle">同步区块链</string>
