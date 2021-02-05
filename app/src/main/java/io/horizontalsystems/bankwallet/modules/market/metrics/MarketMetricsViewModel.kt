@@ -7,15 +7,12 @@ import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.ui.extensions.MetricData
-import io.horizontalsystems.core.entities.Currency
-import io.horizontalsystems.xrateskit.entities.GlobalCoinMarket
 import io.reactivex.disposables.CompositeDisposable
 import java.math.BigDecimal
 
 class MarketMetricsViewModel(
         private val service: MarketMetricsService,
-        private val clearables: List<Clearable>,
-        private val currency: Currency
+        private val clearables: List<Clearable>
 ) : ViewModel() {
 
     val marketMetricsLiveData = MutableLiveData<MarketMetricsWrapper?>(null)
@@ -43,7 +40,7 @@ class MarketMetricsViewModel(
         service.refresh()
     }
 
-    private fun syncMarketMetrics(dataState: DataState<GlobalCoinMarket>) {
+    private fun syncMarketMetrics(dataState: DataState<MarketMetricsItem>) {
         var loading = false
         val metricsNotSet = metricsWrapper?.marketMetrics == null
         if (metricsNotSet) {
@@ -62,15 +59,14 @@ class MarketMetricsViewModel(
         var metrics = metricsWrapper?.marketMetrics
 
         if (dataState is DataState.Success) {
-            val globalMarketInfo = dataState.data
+            val marketMetricsItem = dataState.data
 
-            val symbol = currency.symbol
-            val btcDominanceFormatted = App.numberFormatter.format(globalMarketInfo.btcDominance, 0, 2, suffix = "%")
+            val btcDominanceFormatted = App.numberFormatter.format(marketMetricsItem.btcDominance, 0, 2, suffix = "%")
             val marketMetrics = MarketMetrics(
-                    totalMarketCap = MetricData(formatFiatShortened(globalMarketInfo.marketCap, symbol), globalMarketInfo.marketCapDiff24h),
-                    btcDominance = MetricData(btcDominanceFormatted, globalMarketInfo.btcDominanceDiff24h),
-                    volume24h = MetricData(formatFiatShortened(globalMarketInfo.volume24h, symbol), globalMarketInfo.volume24hDiff24h),
-                    defiCap = MetricData(formatFiatShortened(globalMarketInfo.defiMarketCap, symbol), null),
+                    totalMarketCap = MetricData(formatFiatShortened(marketMetricsItem.marketCap.value, marketMetricsItem.marketCap.currency.symbol), marketMetricsItem.marketCapDiff24h),
+                    btcDominance = MetricData(btcDominanceFormatted, marketMetricsItem.btcDominanceDiff24h),
+                    volume24h = MetricData(formatFiatShortened(marketMetricsItem.volume24h.value, marketMetricsItem.volume24h.currency.symbol), marketMetricsItem.volume24hDiff24h),
+                    defiCap = MetricData(formatFiatShortened(marketMetricsItem.defiMarketCap.value, marketMetricsItem.defiMarketCap.currency.symbol), null),
                     defiTvl = MetricData(null, null),
             )
 

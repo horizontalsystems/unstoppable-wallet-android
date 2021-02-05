@@ -5,7 +5,6 @@ import io.horizontalsystems.bankwallet.core.IRateManager
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.core.entities.Currency
-import io.horizontalsystems.xrateskit.entities.GlobalCoinMarket
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
 
@@ -14,7 +13,7 @@ class MarketMetricsService(
         private val currency: Currency
 ) : Clearable {
 
-    val marketMetricsObservable: BehaviorSubject<DataState<GlobalCoinMarket>> = BehaviorSubject.createDefault(DataState.Loading)
+    val marketMetricsObservable: BehaviorSubject<DataState<MarketMetricsItem>> = BehaviorSubject.createDefault(DataState.Loading)
 
     private val disposables = CompositeDisposable()
 
@@ -31,7 +30,8 @@ class MarketMetricsService(
 
         xRateManager.getGlobalMarketInfoAsync(currency.code)
                 .subscribeIO({
-                    marketMetricsObservable.onNext(DataState.Success(it))
+                    val marketMetricsItem = MarketMetricsItem.createFromGlobalCoinMarket(it, currency)
+                    marketMetricsObservable.onNext(DataState.Success(marketMetricsItem))
                 }, {
                     marketMetricsObservable.onNext(DataState.Error(it))
                 })
