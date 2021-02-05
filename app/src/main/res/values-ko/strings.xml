@@ -358,7 +358,7 @@
     <string name="Settings_WalletConnect">Wallet Connect</string>
     <string name="Settings_RateUs">앱 평가</string>
     <string name="SettingsAboutApp_Title">앱 정보</string>
-    <string name="SettingsAboutApp_Site">사이트</string>
+    <string name="SettingsAboutApp_Site">Website</string>
     <string name="SettingsPrivacy_Info">이 앱은 귀하의 데이터를 공유하지 않습니다. 하지만 앱이 블록체인과 통신할 때 IP 주소와 같은 일부 공개 데이터가 유출 될 수도 있습니다. 각 섹션에 대한 자세한 정보를 확인하려면 오른쪽 상단의 정보 버튼을 누르십시오.</string>
     <string name="SettingsPrivacy_ConnectionSettingsTitle">인터넷</string>
     <string name="SettingsPrivacy_CommunicationSettingsTitle">블록체인 동기화</string>
