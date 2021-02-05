@@ -15,7 +15,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.BuildConfig
-import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.modules.settings.main.MainSettingsAdapter
 import io.horizontalsystems.bankwallet.modules.settings.main.SettingsMenuItem
 import io.horizontalsystems.core.helpers.HudHelper
@@ -25,7 +24,7 @@ import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_about.*
 import kotlinx.android.synthetic.main.view_holder_about_app_header.*
 
-class AboutFragment : BaseFragment(), AboutAppHeaderAdapter.Listener {
+class AboutFragment : BaseFragment() {
 
     val viewModel by viewModels<AboutViewModel> { AboutModule.Factory() }
 
@@ -40,31 +39,47 @@ class AboutFragment : BaseFragment(), AboutAppHeaderAdapter.Listener {
             findNavController().popBackStack()
         }
 
-        val contactItem = SettingsMenuItem(R.string.SettingsContact_Title, R.drawable.ic_email, listPosition = ListPosition.First) {
-            sendEmail(viewModel.reportEmail)
-        }
-        val appStatusItem = SettingsMenuItem(R.string.Settings_AppStatus, R.drawable.ic_app_status, listPosition = ListPosition.Middle) {
+        val appStatusItem = SettingsMenuItem(R.string.Settings_AppStatus, R.drawable.ic_app_status, listPosition = ListPosition.First) {
             findNavController().navigate(R.id.aboutAppFragment_to_appStatusFragment, null, navOptions())
         }
-        val termsItem = SettingsMenuItem(R.string.Settings_Terms, R.drawable.ic_terms_20, listPosition = ListPosition.Middle) {
+        val termsItem = SettingsMenuItem(R.string.Settings_Terms, R.drawable.ic_terms_20, listPosition = ListPosition.Last) {
             findNavController().navigate(R.id.aboutAppFragment_to_termsFragment, null, navOptions())
         }
-        val rateUsItem = SettingsMenuItem(R.string.Settings_RateUs, R.drawable.ic_star_20, listPosition = ListPosition.Middle) {
+
+        val githubItem = SettingsMenuItem(R.string.SettingsAboutApp_Github, R.drawable.ic_github, listPosition = ListPosition.First) {
+            viewModel.onGithubLinkTap()
+        }
+
+        val websiteItem = SettingsMenuItem(R.string.SettingsAboutApp_Site, R.drawable.ic_globe, listPosition = ListPosition.Last) {
+            viewModel.onSiteLinkTap()
+        }
+
+        val rateUsItem = SettingsMenuItem(R.string.Settings_RateUs, R.drawable.ic_star_20, listPosition = ListPosition.First) {
             viewModel.onRateUsClicked()
         }
+
         val shareAppItem = SettingsMenuItem(R.string.Settings_ShareThisWallet, R.drawable.ic_share_20, listPosition = ListPosition.Last) {
             viewModel.onTellFriendsTap()
         }
 
+        val contactItem = SettingsMenuItem(R.string.SettingsContact_Title, R.drawable.ic_email, listPosition = ListPosition.Single) {
+            sendEmail(viewModel.reportEmail)
+        }
+
         val menuItemsAdapter = MainSettingsAdapter(listOf(
-                contactItem,
                 appStatusItem,
                 termsItem,
+                null,
+                githubItem,
+                websiteItem,
+                null,
                 rateUsItem,
-                shareAppItem
+                shareAppItem,
+                null,
+                contactItem,
         ))
 
-        val headerAdapter = AboutAppHeaderAdapter(this)
+        val headerAdapter = AboutAppHeaderAdapter(getAppVersion())
 
         aboutRecyclerview.adapter = ConcatAdapter(headerAdapter, menuItemsAdapter)
 
@@ -95,17 +110,6 @@ class AboutFragment : BaseFragment(), AboutAppHeaderAdapter.Listener {
             }
         })
 
-        headerAdapter.setVersionText(getAppVersion())
-    }
-
-    //AboutAppHeaderAdapter.Listener
-
-    override fun onGithubLinkClick() {
-        viewModel.onGithubLinkTap()
-    }
-
-    override fun onSiteLinkClick() {
-        viewModel.onSiteLinkTap()
     }
 
     private fun getAppVersion(): String {
@@ -132,36 +136,19 @@ class AboutFragment : BaseFragment(), AboutAppHeaderAdapter.Listener {
 }
 
 
-class AboutAppHeaderAdapter(private val listener: Listener) : RecyclerView.Adapter<AboutAppHeaderAdapter.HeaderViewHolder>() {
-
-    interface Listener {
-        fun onGithubLinkClick()
-        fun onSiteLinkClick()
-    }
-
-    private var versionText = ""
+class AboutAppHeaderAdapter(private val appVersion: String) : RecyclerView.Adapter<AboutAppHeaderAdapter.HeaderViewHolder>() {
 
     override fun getItemCount() = 1
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HeaderViewHolder {
-        return HeaderViewHolder.create(parent, listener)
+        return HeaderViewHolder.create(parent)
     }
 
     override fun onBindViewHolder(holder: HeaderViewHolder, position: Int) {
-        holder.bind(versionText)
+        holder.bind(appVersion)
     }
 
-    fun setVersionText(appVersion: String) {
-        versionText = appVersion
-        notifyDataSetChanged()
-    }
-
-    class HeaderViewHolder(override val containerView: View, private val listener: Listener) : RecyclerView.ViewHolder(containerView), LayoutContainer {
-
-        init {
-            githubButton.setOnSingleClickListener { listener.onGithubLinkClick() }
-            siteButton.setOnSingleClickListener { listener.onSiteLinkClick() }
-        }
+    class HeaderViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
         fun bind(version: String) {
             versionNameText.text = version
@@ -170,7 +157,7 @@ class AboutAppHeaderAdapter(private val listener: Listener) : RecyclerView.Adapt
         companion object {
             const val layout = R.layout.view_holder_about_app_header
 
-            fun create(parent: ViewGroup, listener: Listener) = HeaderViewHolder(inflate(parent, layout, false), listener)
+            fun create(parent: ViewGroup) = HeaderViewHolder(inflate(parent, layout, false))
         }
 
     }

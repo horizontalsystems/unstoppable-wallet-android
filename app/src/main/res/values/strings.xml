@@ -438,7 +438,7 @@
 
     <string name="SettingsAboutApp_Title">About App</string>
     <string name="SettingsAboutApp_Github" translatable="false">Github</string>
-    <string name="SettingsAboutApp_Site">Site</string>
+    <string name="SettingsAboutApp_Site">Website</string>
 
     <string name="SettingsPrivacy_Info">This app doesn’t share any of your data. However, as it communicates with blockchains some public data like IP address can potentially be leaked. Use the info button on the top right to get detailed information about each section.</string>
     <string name="SettingsPrivacy_ConnectionSettingsTitle">Internet</string>
