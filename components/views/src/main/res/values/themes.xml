@@ -9,7 +9,7 @@
         <item name="colorAccent">@color/yellow_l</item>
         <item name="buttonStyle">@style/Button</item>
         <item name="android:windowBackground">@drawable/light_gradient_background</item>
-        <item name="android:navigationBarColor">@color/black</item>
+        <item name="android:navigationBarColor">@color/transparent</item>
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:actionMenuTextAppearance">@style/Headline2</item>
