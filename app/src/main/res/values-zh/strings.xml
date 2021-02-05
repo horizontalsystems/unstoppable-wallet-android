@@ -569,7 +569,7 @@
     <string name="RateList_portfolio">投资组合</string>
     <string name="RateList_top100">前100名</string>
     <string name="RateList_Rank">排名</string>
-    <string name="RateList_TopWinners">顶级赢家</string>
+    <string name="RateList_TopGainers">Top Gainers</string>
     <string name="RateList_TopLosers">顶级输家</string>
     <string name="RateList_TopByVolume">Top by Volume</string>
     <!-- Balance Sync Error -->
