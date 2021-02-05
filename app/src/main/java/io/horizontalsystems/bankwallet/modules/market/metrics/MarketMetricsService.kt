@@ -11,7 +11,7 @@ import io.reactivex.subjects.BehaviorSubject
 
 class MarketMetricsService(
         private val xRateManager: IRateManager,
-        val currency: Currency
+        private val currency: Currency
 ) : Clearable {
 
     val marketMetricsObservable: BehaviorSubject<DataState<GlobalCoinMarket>> = BehaviorSubject.createDefault(DataState.Loading)

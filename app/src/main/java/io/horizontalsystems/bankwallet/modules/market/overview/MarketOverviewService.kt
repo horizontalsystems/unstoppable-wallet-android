@@ -10,7 +10,7 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.BehaviorSubject
 
 class MarketOverviewService(
-        val currency: Currency,
+        private val currency: Currency,
         private val rateManager: IRateManager
 ) : Clearable {
 
@@ -42,7 +42,7 @@ class MarketOverviewService(
         topItemsDisposable = rateManager.getTopMarketList(currency.code, 250)
                 .subscribeIO({
                     marketItems = it.mapIndexed { index, topMarket ->
-                        MarketItem.createFromCoinMarket(topMarket, Score.Rank(index + 1))
+                        MarketItem.createFromCoinMarket(topMarket, currency, Score.Rank(index + 1))
                     }
 
                     stateObservable.onNext(State.Loaded)

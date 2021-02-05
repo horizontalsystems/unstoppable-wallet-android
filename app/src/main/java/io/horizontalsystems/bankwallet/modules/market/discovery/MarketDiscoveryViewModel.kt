@@ -78,7 +78,7 @@ class MarketDiscoveryViewModel(
         val viewItems = service.marketItems
                 .sort(sortingField)
                 .map {
-                    MarketViewItem.create(it, service.currency.symbol, marketField)
+                    MarketViewItem.create(it, marketField)
                 }
 
         marketViewItemsLiveData.postValue(Pair(viewItems, scrollToTop))
