@@ -1,6 +1,6 @@
 {
     "categories": [
-        { "id": "blockchain", "name": "Blockhain" },
+        { "id": "blockchain", "name": "Blockchain" },
         { "id": "dexes", "name": "DEXes" },
         { "id": "lending", "name": "Lending" },
         { "id": "privacy", "name": "Privacy" },
@@ -821,6 +821,25 @@
             "rating": ""
         },
         {
+            "code": "CC10",
+            "name": "Cryptocurrency Top 10 Tokens Index",
+            "categories": ["index_funds"],
+            "active": true,
+            "platform": {
+                "name": "ethereum",
+                "address": "0x17ac188e09a7890a1844e5e65471fe8b0ccfadf3",
+                "type": "ERC20"
+            },
+            "description": "",
+            "details": {
+                "website": "https://indexed.finance/",
+                "whitepaper": "",
+                "twitter": "https://twitter.com/ndxfi",
+                "reddit": "",
+                "telegram": ""
+            }
+        },
+        {
             "code": "CEL",
             "name": "Celsius Network",
             "categories": ["lending"],
@@ -1162,6 +1181,25 @@
                 "telegram": ""
             },
             "rating": ""
+        },
+        {
+            "code": "DEFI5",
+            "name": "DEFI Top 5 Tokens Index",
+            "categories": ["index_funds"],
+            "active": true,
+            "platform": {
+                "name": "ethereum",
+                "address": "0xfa6de2697d59e88ed7fc4dfe5a33dac43565ea41",
+                "type": "ERC20"
+            },
+            "description": "",
+            "details": {
+                "website": "https://indexed.finance/index/defi5",
+                "whitepaper": "",
+                "twitter": "https://twitter.com/ndxfi",
+                "reddit": "",
+                "telegram": "https://t.me/ndxfi"
+            }
         },
         {
             "code": "DEFO",
@@ -3531,6 +3569,26 @@
                 "twitter": "",
                 "reddit": "",
                 "telegram": ""
+            },
+            "rating": ""
+        },
+        {
+            "code": "RGT",
+            "name": "Rari Governance Token",
+            "categories": ["yield_aggregators"],
+            "active": true,
+            "platform": {
+                "name": "ethereum",
+                "address": "0xd291e7a03283640fdc51b121ac401383a46cc623",
+                "type": "ERC20"
+            },
+            "description": "",
+            "details": {
+                "website": "http://rari.capital",
+                "whitepaper": "",
+                "twitter": "https://twitter.com/RariCapital",
+                "reddit": "",
+                "telegram": "https://t.me/RariCapitalChat"
             },
             "rating": ""
         },
