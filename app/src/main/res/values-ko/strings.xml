@@ -570,7 +570,7 @@
     <string name="RateList_portfolio">포트폴리오</string>
     <string name="RateList_top100">상위 100</string>
     <string name="RateList_Rank">순위</string>
-    <string name="RateList_TopWinners">탑 위너</string>
+    <string name="RateList_TopGainers">Top Gainers</string>
     <string name="RateList_TopLosers">탑 루저</string>
     <string name="RateList_TopByVolume">Top by Volume</string>
     <!-- Balance Sync Error -->
