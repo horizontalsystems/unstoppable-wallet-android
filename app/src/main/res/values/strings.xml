@@ -31,7 +31,7 @@
     <string name="NotAvailable">N/A</string>
 
     <string name="Wallet">%s Wallet</string>
-    <string name="FooterText" translatable="false">© Horizontal Systems 2020</string>
+    <string name="FooterText" translatable="false">© Horizontal Systems 2021</string>
 
     <!--Intro-->
     <string name="Intro_Wallet_Description">Store and Trade crypto. Have full control over assets. Remain anonymous.</string>
