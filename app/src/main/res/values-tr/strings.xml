@@ -358,7 +358,7 @@
     <string name="Settings_WalletConnect">Wallet Connect</string>
     <string name="Settings_RateUs">Bizi Değerlendirin</string>
     <string name="SettingsAboutApp_Title">Uygulama Hakkında</string>
-    <string name="SettingsAboutApp_Site">Web Sitesi</string>
+    <string name="SettingsAboutApp_Site">Website</string>
     <string name="SettingsPrivacy_Info">Bu uygulama sizin hiçbir veriyi paylaşmıyor. Bununla birlikte, blok zincirlerle iletişim kurduğundan, IP adresi gibi bazı genel veriler potansiyel olarak sızdırılabilir. Her bölüm hakkında ayrıntılı bilgi almak için sağ üstteki bilgi düğmesini kullanın.</string>
     <string name="SettingsPrivacy_ConnectionSettingsTitle">İnternet</string>
     <string name="SettingsPrivacy_CommunicationSettingsTitle">Blockchain Senk.</string>
