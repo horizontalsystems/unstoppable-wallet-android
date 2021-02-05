@@ -112,6 +112,7 @@ class AppConfigProvider : IAppConfigProvider, ILanguageConfigProvider, IBuildCon
                 Coin("CREAM",       "Cream",                "CREAM",    18, CoinType.Erc20("0x2ba592f78db6436527729929aaf6c908497cb200")),
                 Coin("CRPT",        "Crypterium",           "CRPT",     8,  CoinType.Binance("CRPT-8C9")),
                 Coin("CRO",         "Crypto.com Coin",      "CRO",      8,  CoinType.Erc20("0xA0b73E1Ff0B80914AB6fe0444E65848C4C34450b")),
+                Coin("CC10",        "Cryptocurrency Top 10 Tokens Index",  "CC10",      18, CoinType.Erc20("0x17ac188e09a7890a1844e5e65471fe8b0ccfadf3")),
                 Coin("CRV",         "Curve DAO Token",      "CRV",      18, CoinType.Erc20("0xD533a949740bb3306d119CC777fa900bA034cd52")),
                 Coin("CORE",        "cVault.finance",       "CORE",     18, CoinType.Erc20("0x62359ed7505efc61ff1d56fef82158ccaffa23d7")),
                 Coin("DAI",         "Dai",                  "DAI",      18, CoinType.Erc20("0x6b175474e89094c44da98b954eedeac495271d0f")),
@@ -121,6 +122,7 @@ class AppConfigProvider : IAppConfigProvider, ILanguageConfigProvider, IBuildCon
                 Coin("DPI",         "DefiPulse Index",      "DPI",      18, CoinType.Erc20("0x1494ca1f11d487c2bbe4543e90080aeba4ba3c2b")),
                 Coin("DYP",         "DeFiYieldProtocol",    "DYP",      18, CoinType.Erc20("0x961C8c0B1aaD0c0b10a51FeF6a867E3091BCef17")),
                 Coin("DEFO",        "DefHold",              "DEFO",     18, CoinType.Erc20("0xe481f2311C774564D517d015e678c2736A25Ddd3")),
+                Coin("DEFI5",       "DEFI Top 5 Tokens Index",  "DEFI5",      18, CoinType.Erc20("0xfa6de2697d59e88ed7fc4dfe5a33dac43565ea41")),
                 Coin("DEGO",        "dego.finance",         "DEGO",     18, CoinType.Erc20("0x88ef27e69108b2633f8e1c184cc37940a075cc02")),
                 Coin("DEUS",        "DEUS",                 "DEUS",     18, CoinType.Erc20("0x3b62F3820e0B035cc4aD602dECe6d796BC325325")),
                 Coin("USDx",        "dForce",               "USDx",     18, CoinType.Erc20("0xeb269732ab75A6fD61Ea60b06fE994cD32a83549")),
@@ -149,6 +151,7 @@ class AppConfigProvider : IAppConfigProvider, ILanguageConfigProvider, IBuildCon
                 Coin("FOAM",        "FOAM Token",           "FOAM",     18, CoinType.Erc20("0x4946fcea7c692606e8908002e55a582af44ac121")),
                 Coin("FRAX",        "Frax",                 "FRAX",     18, CoinType.Erc20("0x853d955acef822db058eb8505911ed77f175b99e")),
                 Coin("FUN",         "FunFair",              "FUN",      8,  CoinType.Erc20("0x419d0d8bdd9af5e606ae2232ed285aff190e711b")),
+                Coin("COMBO",       "Furucombo",            "COMBO",    18, CoinType.Erc20("0xffffffff2ba8f66d4e51811c5190992176930278")),
                 Coin("FYZ",         "FYOOZ",                "FYZ",      18, CoinType.Erc20("0x6BFf2fE249601ed0Db3a87424a2E923118BB0312")),
                 Coin("GST2",        "Gas Token Two",        "GST2",     2,  CoinType.Erc20("0x0000000000b3f879cb30fe243b4dfee438691c04")),
                 Coin("GUSD",        "Gemini Dollar",        "GUSD",     2,  CoinType.Erc20("0x056Fd409E1d7A124BD7017459dFEa2F387b6d5Cd")),
@@ -228,6 +231,7 @@ class AppConfigProvider : IAppConfigProvider, ILanguageConfigProvider, IBuildCon
                 Coin("QNT",         "Quant",                "QNT",      18, CoinType.Erc20("0x4a220e6096b25eadb88358cb44068a3248254675")),
                 Coin("QSP",         "Quantstamp",           "QSP",      18, CoinType.Erc20("0x99ea4db9ee77acd40b119bd1dc4e33e1c070b80d")),
                 Coin("RDN",         "Raiden Network Token", "RDN",      18, CoinType.Erc20("0x255aa6df07540cb5d3d297f0d0d4d84cb52bc8e6")),
+                Coin("RGT",         "Rari Governance Token","RGT",      18, CoinType.Erc20("0xD291E7a03283640FDc51b121aC401383A46cC623")),
                 Coin("RENBTC",      "renBTC",               "renBTC",   8,  CoinType.Erc20("0xeb4c2781e4eba804ce9a9803c67d0893436bb27d")),
                 Coin("RENBCH",      "renBCH",               "renBCH",   8,  CoinType.Erc20("0x459086f2376525bdceba5bdda135e4e9d3fef5bf")),
                 Coin("RENZEC",      "renZEC",               "renZEC",   8,  CoinType.Erc20("0x1c5db575e2ff833e46a2e9864c22f4b22e0b37c2")),
@@ -314,7 +318,9 @@ class AppConfigProvider : IAppConfigProvider, ILanguageConfigProvider, IBuildCon
                 Coin("YFII",        "YFII.finance",         "YFII",     18, CoinType.Erc20("0xa1d0E215a23d7030842FC67cE582a6aFa3CCaB83")),
                 Coin("YFIM",        "yfi.mobi",             "YFIM",     18, CoinType.Erc20("0x2e2f3246b6c65ccc4239c9ee556ec143a7e5de2c")),
                 Coin("ZAI",         "Zero Collateral Dai",  "ZAI",      18, CoinType.Erc20("0x9d1233cc46795E94029fDA81aAaDc1455D510f15")),
-        )
+
+
+                )
     }
 
 

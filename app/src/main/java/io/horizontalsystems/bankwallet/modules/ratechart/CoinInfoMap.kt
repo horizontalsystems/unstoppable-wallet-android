@@ -265,6 +265,11 @@ object CoinInfoMap {
             "sETH" to CoinInfo(BigDecimal(29_935), null, "https://www.synthetix.io"),
             "sXAU" to CoinInfo(BigDecimal(225.36884553), null, "https://www.synthetix.io"),
             "wANATHA" to CoinInfo(null, null, "https://anatha.io"),
+            "RGT" to CoinInfo(null, null, "http://rari.capital"),
+            "COMBO" to CoinInfo(null, null, "https://anatha.io"),
+            "DEFI5" to CoinInfo(null, null, "https://anatha.io"),
+            "CC10" to CoinInfo(null, null, "https://indexed.finance"),
+
 
             )
 
