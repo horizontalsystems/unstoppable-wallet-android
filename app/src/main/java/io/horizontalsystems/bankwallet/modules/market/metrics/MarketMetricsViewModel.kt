@@ -7,13 +7,15 @@ import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.ui.extensions.MetricData
+import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.xrateskit.entities.GlobalCoinMarket
 import io.reactivex.disposables.CompositeDisposable
 import java.math.BigDecimal
 
 class MarketMetricsViewModel(
         private val service: MarketMetricsService,
-        private val clearables: List<Clearable>
+        private val clearables: List<Clearable>,
+        private val currency: Currency
 ) : ViewModel() {
 
     val marketMetricsLiveData = MutableLiveData<MarketMetricsWrapper?>(null)
@@ -62,7 +64,7 @@ class MarketMetricsViewModel(
         if (dataState is DataState.Success) {
             val globalMarketInfo = dataState.data
 
-            val symbol = service.currency.symbol
+            val symbol = currency.symbol
             val btcDominanceFormatted = App.numberFormatter.format(globalMarketInfo.btcDominance, 0, 2, suffix = "%")
             val marketMetrics = MarketMetrics(
                     totalMarketCap = MetricData(formatFiatShortened(globalMarketInfo.marketCap, symbol), globalMarketInfo.marketCapDiff24h),

@@ -11,7 +11,7 @@ object MarketMetricsModule {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             val service = MarketMetricsService(App.xRateManager, MarketModule.currencyUSD)
-            return MarketMetricsViewModel(service, listOf(service)) as T
+            return MarketMetricsViewModel(service, listOf(service), MarketModule.currencyUSD) as T
         }
 
     }

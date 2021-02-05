@@ -12,7 +12,7 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.BehaviorSubject
 
 class MarketFavoritesService(
-        val currency: Currency,
+        private val currency: Currency,
         private val rateManager: IRateManager,
         private val marketFavoritesManager: MarketFavoritesManager
 ) : Clearable {
@@ -60,7 +60,7 @@ class MarketFavoritesService(
                 }
                 .subscribeIO({
                     marketItems = it.mapIndexed { index, topMarket ->
-                        MarketItem.createFromCoinMarket(topMarket, null)
+                        MarketItem.createFromCoinMarket(topMarket, currency, null)
                     }
 
                     stateObservable.onNext(State.Loaded)

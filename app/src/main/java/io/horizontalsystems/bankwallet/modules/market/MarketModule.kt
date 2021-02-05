@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.views.helpers.LayoutHelper
 import io.horizontalsystems.xrateskit.entities.CoinMarket
@@ -50,33 +51,33 @@ data class MarketItem(
         val score: Score?,
         val coinCode: String,
         val coinName: String,
-        val volume: BigDecimal,
-        val rate: BigDecimal,
+        val volume: CurrencyValue,
+        val rate: CurrencyValue,
         val diff: BigDecimal,
-        val marketCap: BigDecimal?
+        val marketCap: CurrencyValue?
 ) {
     companion object {
-        fun createFromCoinMarket(coinMarket: CoinMarket, score: Score?): MarketItem {
+        fun createFromCoinMarket(coinMarket: CoinMarket, currency: Currency, score: Score?): MarketItem {
             return MarketItem(
                     score,
                     coinMarket.coin.code,
                     coinMarket.coin.title,
-                    coinMarket.marketInfo.volume,
-                    coinMarket.marketInfo.rate,
+                    CurrencyValue(currency, coinMarket.marketInfo.volume),
+                    CurrencyValue(currency, coinMarket.marketInfo.rate),
                     coinMarket.marketInfo.rateDiffPeriod,
-                    coinMarket.marketInfo.marketCap
+                    coinMarket.marketInfo.marketCap?.let { CurrencyValue(currency, it) }
             )
         }
     }
 }
 
 fun List<MarketItem>.sort(sortingField: SortingField) = when (sortingField) {
-    SortingField.HighestCap -> sortedByDescendingNullLast { it.marketCap }
-    SortingField.LowestCap -> sortedByNullLast { it.marketCap }
-    SortingField.HighestVolume -> sortedByDescendingNullLast { it.volume }
-    SortingField.LowestVolume -> sortedByNullLast { it.volume }
-    SortingField.HighestPrice -> sortedByDescendingNullLast { it.rate }
-    SortingField.LowestPrice -> sortedByNullLast { it.rate }
+    SortingField.HighestCap -> sortedByDescendingNullLast { it.marketCap?.value }
+    SortingField.LowestCap -> sortedByNullLast { it.marketCap?.value }
+    SortingField.HighestVolume -> sortedByDescendingNullLast { it.volume.value }
+    SortingField.LowestVolume -> sortedByNullLast { it.volume.value }
+    SortingField.HighestPrice -> sortedByDescendingNullLast { it.rate.value }
+    SortingField.LowestPrice -> sortedByNullLast { it.rate.value }
     SortingField.TopGainers -> sortedByDescendingNullLast { it.diff }
     SortingField.TopLosers -> sortedByNullLast { it.diff }
 }
@@ -152,21 +153,21 @@ data class MarketViewItem(
     }
 
     companion object {
-        fun create(marketItem: MarketItem, currencySymbol: String, marketField: MarketField): MarketViewItem {
-            val formattedRate = App.numberFormatter.formatFiat(marketItem.rate, currencySymbol, 2, 2)
+        fun create(marketItem: MarketItem, marketField: MarketField): MarketViewItem {
+            val formattedRate = App.numberFormatter.formatFiat(marketItem.rate.value, marketItem.rate.currency.symbol, 2, 2)
 
             val marketDataValue = when (marketField) {
                 MarketField.MarketCap -> {
                     val marketCapFormatted = marketItem.marketCap?.let { marketCap ->
-                        val (shortenValue, suffix) = App.numberFormatter.shortenValue(marketCap)
-                        App.numberFormatter.formatFiat(shortenValue, currencySymbol, 0, 2) + suffix
+                        val (shortenValue, suffix) = App.numberFormatter.shortenValue(marketCap.value)
+                        App.numberFormatter.formatFiat(shortenValue, marketCap.currency.symbol, 0, 2) + suffix
                     }
 
                     MarketDataValue.MarketCap(marketCapFormatted ?: App.instance.getString(R.string.NotAvailable))
                 }
                 MarketField.Volume -> {
-                    val (shortenValue, suffix) = App.numberFormatter.shortenValue(marketItem.volume)
-                    val volumeFormatted = App.numberFormatter.formatFiat(shortenValue, currencySymbol, 0, 2) + suffix
+                    val (shortenValue, suffix) = App.numberFormatter.shortenValue(marketItem.volume.value)
+                    val volumeFormatted = App.numberFormatter.formatFiat(shortenValue, marketItem.volume.currency.symbol, 0, 2) + suffix
 
                     MarketDataValue.Volume(volumeFormatted)
                 }

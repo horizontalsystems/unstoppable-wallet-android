@@ -12,7 +12,7 @@ import io.reactivex.subjects.BehaviorSubject
 
 class MarketDiscoveryService(
         private val marketCategoryProvider: MarketCategoryProvider,
-        val currency: Currency,
+        private val currency: Currency,
         private val xRateManager: IRateManager
 ) : Clearable {
 
@@ -85,7 +85,7 @@ class MarketDiscoveryService(
         return xRateManager.getTopMarketList(currency.code, 250)
                 .map { coinMarkets ->
                     coinMarkets.mapIndexed { index, coinMarket ->
-                        MarketItem.createFromCoinMarket(coinMarket, Score.Rank(index + 1))
+                        MarketItem.createFromCoinMarket(coinMarket, currency, Score.Rank(index + 1))
                     }
                 }
     }
@@ -98,7 +98,7 @@ class MarketDiscoveryService(
                             .map { coinMarkets ->
                                 coinMarkets.mapNotNull { coinMarket ->
                                     coinRatingsMap[coinMarket.coin.code]?.let { rating ->
-                                        MarketItem.createFromCoinMarket(coinMarket, Score.Rating(rating))
+                                        MarketItem.createFromCoinMarket(coinMarket, currency, Score.Rating(rating))
                                     }
                                 }
                             }
@@ -111,7 +111,7 @@ class MarketDiscoveryService(
                     xRateManager.getCoinMarketList(coinCodes, currency.code)
                             .map { coinMarkets ->
                                 coinMarkets.map { coinMarket ->
-                                    MarketItem.createFromCoinMarket(coinMarket, null)
+                                    MarketItem.createFromCoinMarket(coinMarket, currency, null)
                                 }
                             }
                 }
