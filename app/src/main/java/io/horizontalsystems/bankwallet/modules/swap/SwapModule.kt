@@ -54,7 +54,7 @@ object SwapModule {
         private val uniswapKit by lazy { UniswapKit.getInstance(ethereumKit) }
         private val transactionService by lazy {
             val feeRateProvider = FeeRateProviderFactory.provider(App.appConfigProvider.ethereumCoin) as EthereumFeeRateProvider
-            EthereumTransactionService(ethereumKit, feeRateProvider)
+            EthereumTransactionService(ethereumKit, feeRateProvider, 20)
         }
         private val ethCoinService by lazy { CoinService(App.appConfigProvider.ethereumCoin, App.currencyManager, App.xRateManager) }
         private val uniswapProvider by lazy { UniswapProvider(uniswapKit) }

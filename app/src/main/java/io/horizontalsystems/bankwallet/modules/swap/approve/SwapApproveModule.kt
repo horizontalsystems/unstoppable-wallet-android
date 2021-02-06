@@ -21,7 +21,7 @@ object SwapApproveModule {
         private val ethereumKit by lazy { App.ethereumKitManager.ethereumKit!! }
         private val transactionService by lazy {
             val feeRateProvider = FeeRateProviderFactory.provider(App.appConfigProvider.ethereumCoin) as EthereumFeeRateProvider
-            EthereumTransactionService(ethereumKit, feeRateProvider)
+            EthereumTransactionService(ethereumKit, feeRateProvider, 0)
         }
         private val coinService by lazy { CoinService(approveData.coin, App.currencyManager, App.xRateManager) }
         private val ethCoinService by lazy { CoinService(App.appConfigProvider.ethereumCoin, App.currencyManager, App.xRateManager) }

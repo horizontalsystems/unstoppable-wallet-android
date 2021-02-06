@@ -14,7 +14,8 @@ import java.math.BigInteger
 
 class EthereumTransactionService(
         private val ethereumKit: EthereumKit,
-        private val feeRateProvider: EthereumFeeRateProvider
+        private val feeRateProvider: EthereumFeeRateProvider,
+        private val gasLimitSurchargePercent: Int
 ) {
 
     var transactionData: TransactionData? = null
@@ -65,8 +66,9 @@ class EthereumTransactionService(
         gasPriceSingle(gasPriceType)
                 .flatMap { gasPrice ->
                     gasLimitSingle(gasPrice, transactionData)
-                            .map { gasLimit ->
-                                Transaction(transactionData, GasData(gasLimit, gasPrice.toLong()))
+                            .map { estimatedGasLimit ->
+                                val gasLimit = estimatedGasLimit + (estimatedGasLimit * gasLimitSurchargePercent / 100.0).toLong()
+                                Transaction(transactionData, GasData(estimatedGasLimit, gasLimit, gasPrice.toLong()))
                             }
                 }
                 .subscribeOn(Schedulers.io())
@@ -99,9 +101,13 @@ class EthereumTransactionService(
     // types
 
     data class GasData(
+            val estimatedGasLimit: Long,
             val gasLimit: Long,
             val gasPrice: Long
     ) {
+        val estimatedFee: BigInteger
+            get() = estimatedGasLimit.toBigInteger() * gasPrice.toBigInteger()
+
         val fee: BigInteger
             get() = gasLimit.toBigInteger() * gasPrice.toBigInteger()
     }
