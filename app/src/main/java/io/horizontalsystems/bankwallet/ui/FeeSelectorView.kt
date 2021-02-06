@@ -16,7 +16,7 @@ import io.horizontalsystems.bankwallet.core.ethereum.SendPriorityViewItem
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorDialog
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorItem
 import io.horizontalsystems.seekbar.FeeSeekBar
-import kotlinx.android.synthetic.main.view_send_fee.view.*
+import kotlinx.android.synthetic.main.view_fee_selector.view.*
 
 class FeeSelectorView@JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
     : ConstraintLayout(context, attrs, defStyleAttr) {
@@ -26,9 +26,9 @@ class FeeSelectorView@JvmOverloads constructor(context: Context, attrs: Attribut
     var customFeeSeekBarListener: (value: Int) -> Unit = { }
 
     init {
-        inflate(context, R.layout.view_send_fee, this)
+        inflate(context, R.layout.view_fee_selector, this)
 
-        speedViews.setOnClickListener {
+        txSpeedMenuClickArea.setOnClickListener {
             onTxSpeedClickListener(it)
         }
 
@@ -41,9 +41,12 @@ class FeeSelectorView@JvmOverloads constructor(context: Context, attrs: Attribut
         clipChildren = false
     }
 
+    fun setEstimatedFeeText(value: String) {
+        txEstimatedFeeValue.text = value
+    }
+
     fun setFeeText(value: String) {
-        txFeePrimary.text = value
-        invalidate()
+        txFeeValue.text = value
     }
 
     fun setPriorityText(value: String) {
@@ -77,6 +80,10 @@ class FeeSelectorView@JvmOverloads constructor(context: Context, attrs: Attribut
     }
 
     fun setFeeSelectorViewInteractions(sendFeeViewModel: ISendFeeViewModel, sendFeePriorityViewModel: ISendFeePriorityViewModel, viewLifecycleOwner: LifecycleOwner, fragmentManager: FragmentManager) {
+        sendFeeViewModel.estimatedFeeLiveData.observe(viewLifecycleOwner, Observer {
+            setEstimatedFeeText(it)
+        })
+
         sendFeeViewModel.feeLiveData.observe(viewLifecycleOwner, Observer {
             setFeeText(it)
         })

@@ -19,7 +19,7 @@ object WalletConnectRequestModule {
         val ethereumKit by lazy { App.ethereumKitManager.ethereumKit!! }
         val transactionService by lazy {
             val feeRateProvider = FeeRateProviderFactory.provider(App.appConfigProvider.ethereumCoin) as EthereumFeeRateProvider
-            EthereumTransactionService(ethereumKit, feeRateProvider)
+            EthereumTransactionService(ethereumKit, feeRateProvider, 10)
         }
         val coinService by lazy { CoinService(App.appConfigProvider.ethereumCoin, App.currencyManager, App.xRateManager) }
 

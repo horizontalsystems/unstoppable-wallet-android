@@ -26,6 +26,7 @@ class EthereumFeeViewModel(
         abstract val description: String
     }
 
+    override val estimatedFeeLiveData = MutableLiveData<String>("")
     override val feeLiveData = MutableLiveData<String>("")
 
     override val priorityLiveData = MutableLiveData<String>("")
@@ -91,6 +92,7 @@ class EthereumFeeViewModel(
     }
 
     private fun syncTransactionStatus(transactionStatus: DataState<EthereumTransactionService.Transaction>) {
+        estimatedFeeLiveData.postValue(estimatedFeeStatus(transactionStatus))
         feeLiveData.postValue(feeStatus(transactionStatus))
     }
 
@@ -125,6 +127,20 @@ class EthereumFeeViewModel(
         }
     }
 
+    private fun estimatedFeeStatus(transactionStatus: DataState<EthereumTransactionService.Transaction>): String {
+        return when (transactionStatus) {
+            DataState.Loading -> {
+                App.instance.getString(R.string.Alert_Loading)
+            }
+            is DataState.Error -> {
+                App.instance.getString(R.string.NotAvailable)
+            }
+            is DataState.Success -> {
+                coinService.amountData(transactionStatus.data.gasData.estimatedFee).getFormatted()
+            }
+        }
+    }
+
     private fun feeStatus(transactionStatus: DataState<EthereumTransactionService.Transaction>): String {
         return when (transactionStatus) {
             DataState.Loading -> {
@@ -145,6 +161,7 @@ data class SendFeeSliderViewItem(val initialValue: Long, val range: Range<Long>,
 data class SendPriorityViewItem(val title: String, val selected: Boolean)
 
 interface ISendFeeViewModel {
+    val estimatedFeeLiveData: MutableLiveData<String>
     val feeLiveData: LiveData<String>
 }
 

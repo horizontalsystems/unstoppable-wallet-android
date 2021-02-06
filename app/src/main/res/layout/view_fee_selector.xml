@@ -1,12 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
     tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout">
 
     <!--Fee START-->
+
+    <TextView
+        android:id="@+id/txEstimatedFeeTitle"
+        style="@style/Subhead2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:includeFontPadding="false"
+        android:text="@string/Swap_EstimatedFee"
+        android:textColor="@color/grey"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/txEstimatedFeeValue"
+        style="@style/Subhead2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:includeFontPadding="false"
+        android:textColor="@color/grey"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/txEstimatedFeeTitle"
+        tools:text="0.0005 BTC" />
+
 
     <TextView
         android:id="@+id/txFeeTitle"
@@ -15,47 +37,13 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:includeFontPadding="false"
-        android:text="@string/Send_DialogFee"
+        android:text="@string/Swap_MaxFee"
         android:textColor="@color/grey"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/txEstimatedFeeTitle" />
 
     <TextView
-        android:id="@+id/txError"
-        style="@style/Subhead2"
-        android:layout_width="217dp"
-        android:layout_height="wrap_content"
-        android:includeFontPadding="false"
-        android:textColor="@color/red_d"
-        android:visibility="gone"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/txFeeTitle"
-        tools:text="Error while fetching fee" />
-
-    <TextView
-        android:id="@+id/txFeeLoading"
-        style="@style/Subhead2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:includeFontPadding="false"
-        android:textColor="@color/grey"
-        app:layout_constraintEnd_toStartOf="@+id/txFeePrimary"
-        app:layout_constraintTop_toTopOf="@+id/txFeeTitle"
-        tools:text="Loading..." />
-
-    <TextView
-        android:id="@+id/txFeePrimary"
-        style="@style/Subhead2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:includeFontPadding="false"
-        android:textColor="@color/grey"
-        app:layout_constraintEnd_toStartOf="@+id/txFeeSecondary"
-        app:layout_constraintTop_toTopOf="@+id/txFeeTitle"
-        tools:text="0.0005 BTC" />
-
-    <TextView
-        android:id="@+id/txFeeSecondary"
+        android:id="@+id/txFeeValue"
         style="@style/Subhead2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -63,7 +51,8 @@
         android:textColor="@color/grey"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/txFeeTitle"
-        tools:text=" | $0.40" />
+        tools:text="0.0005 BTC" />
+
 
     <!--Fee END-->
     <!--Speed START-->
@@ -72,7 +61,6 @@
         android:id="@+id/speedViews"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="gone"
         app:constraint_referenced_ids="speedLayoutFrame,border1,feeInfoImageClickArea,feeInfoButton,txSpeedMenuTitle,txSpeedMenuClickArea,txSpeedMenu,txSpeedMenuArrow" />
 
     <View
@@ -157,7 +145,7 @@
         app:layout_constraintTop_toTopOf="@+id/txSpeedMenu"
         app:tint="@color/grey" />
 
-    <!--Speen END-->
+        <!--Speen END-->
 
     <io.horizontalsystems.seekbar.FeeSeekBar
         android:id="@+id/customFeeSeekBar"
@@ -170,6 +158,7 @@
         android:progressDrawable="@null"
         android:progressTint="@color/transparent"
         android:thumb="@drawable/seekbar_thumb"
+        android:visibility="gone"
         app:bubbleBackground="?ColorClaude"
         app:bubbleHint="@string/Send_TxSpeed_CustomFeeHint"
         app:layout_constraintEnd_toEndOf="parent"
@@ -177,19 +166,4 @@
         app:layout_constraintTop_toBottomOf="@+id/speedLayoutFrame"
         app:textColor="?ColorLeah" />
 
-    <TextView
-        android:id="@+id/feeError"
-        style="@style/Caption"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="8dp"
-        android:textColor="?ColorLucian"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/customFeeSeekBar"
-        tools:text="Transaction fees for USDT (ERC20) paid in Ethereum. You don&apos;t have 0,00028 ETH." />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</merge>

@@ -286,6 +286,8 @@
     <string name="Swap_PriceImpact">Price Impact</string>
     <string name="Swap_MinimumReceived">Guaranteed Amount</string>
     <string name="Swap_SwapFee">Swap Fee</string>
+    <string name="Swap_EstimatedFee">Estimated Fee</string>
+    <string name="Swap_MaxFee">Max Fee</string>
     <string name="Swap_ErrorInsufficientBalance">Insufficient balance</string>
     <string name="Swap_ErrorInsufficientEthBalance">Current ETH balance is below amount required to process this transaction including transaction fee.</string>
     <string name="Swap_ErrorNoLiquidity">Can\'t swap these tokens</string>
