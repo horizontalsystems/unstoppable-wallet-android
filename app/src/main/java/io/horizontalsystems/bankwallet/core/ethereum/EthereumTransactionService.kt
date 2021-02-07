@@ -18,6 +18,8 @@ class EthereumTransactionService(
         private val gasLimitSurchargePercent: Int
 ) {
 
+    val hasEstimatedFee: Boolean = gasLimitSurchargePercent != 0
+
     var transactionData: TransactionData? = null
         set(value) {
             field = value

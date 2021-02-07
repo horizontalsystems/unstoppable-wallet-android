@@ -80,9 +80,17 @@ class FeeSelectorView@JvmOverloads constructor(context: Context, attrs: Attribut
     }
 
     fun setFeeSelectorViewInteractions(sendFeeViewModel: ISendFeeViewModel, sendFeePriorityViewModel: ISendFeePriorityViewModel, viewLifecycleOwner: LifecycleOwner, fragmentManager: FragmentManager) {
-        sendFeeViewModel.estimatedFeeLiveData.observe(viewLifecycleOwner, Observer {
-            setEstimatedFeeText(it)
-        })
+        if (sendFeeViewModel.hasEstimatedFee) {
+            sendFeeViewModel.estimatedFeeLiveData.observe(viewLifecycleOwner, Observer {
+                setEstimatedFeeText(it)
+            })
+        } else {
+            // hideEstimatedFeeBlock
+            txEstimatedFeeTitle.isVisible = false
+            txEstimatedFeeValue.isVisible = false
+            txFeeTitle.text = context.getString(R.string.Swap_Fee)
+        }
+
 
         sendFeeViewModel.feeLiveData.observe(viewLifecycleOwner, Observer {
             setFeeText(it)
