@@ -15,6 +15,8 @@ class EthereumFeeViewModel(
         private val coinService: CoinService
 ) : ViewModel(), ISendFeeViewModel, ISendFeePriorityViewModel {
 
+    override val hasEstimatedFee: Boolean = transactionService.hasEstimatedFee
+
     enum class Priority {
         Recommended {
             override val description by lazy { App.instance.getString(R.string.Send_TxSpeed_Recommended) }
@@ -161,6 +163,7 @@ data class SendFeeSliderViewItem(val initialValue: Long, val range: Range<Long>,
 data class SendPriorityViewItem(val title: String, val selected: Boolean)
 
 interface ISendFeeViewModel {
+    val hasEstimatedFee: Boolean
     val estimatedFeeLiveData: MutableLiveData<String>
     val feeLiveData: LiveData<String>
 }
