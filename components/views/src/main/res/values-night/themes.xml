@@ -55,8 +55,6 @@
         <item name="SecondaryButtonEndGradient">#00ffffff</item>
         <item name="MarketCircleGradient">@drawable/market_circle_dark</item>
 
-        <!-- New colors: for backgrounds -->
-        <item name="ColorGwen">@color/dark</item>
         <!--  Gradient colors-->
         <item name="ColorGradientWhite">@color/white_20</item>
         <item name="ColorWindowBackground">@color/dark</item>
