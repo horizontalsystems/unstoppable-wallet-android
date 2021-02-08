@@ -238,6 +238,9 @@
     <string name="Swap_PriceImpact">Preisauswirkungen</string>
     <string name="Swap_MinimumReceived">Garantierter Betrag</string>
     <string name="Swap_SwapFee">Tauschgebühr</string>
+    <string name="Swap_EstimatedFee">Estimated Fee</string>
+    <string name="Swap_MaxFee">Max Fee</string>
+    <string name="Swap_Fee">Fee</string>
     <string name="Swap_ErrorInsufficientBalance">Ungenügendes Guthaben</string>
     <string name="Swap_ErrorInsufficientEthBalance">Das aktuelle ETH-Guthaben liegt unter dem für die Abwicklung dieser Transaktion erforderlichen Betrag einschließlich der Transaktionsgebühr.</string>
     <string name="Swap_ErrorNoLiquidity">Diese Token sind nicht tauschbar</string>
