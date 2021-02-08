@@ -238,6 +238,9 @@
     <string name="Swap_PriceImpact">Impacto en el precio</string>
     <string name="Swap_MinimumReceived">Cantidad Garantizada</string>
     <string name="Swap_SwapFee">Tarifa por permutar</string>
+    <string name="Swap_EstimatedFee">Estimated Fee</string>
+    <string name="Swap_MaxFee">Max Fee</string>
+    <string name="Swap_Fee">Fee</string>
     <string name="Swap_ErrorInsufficientBalance">Saldo insuficiente</string>
     <string name="Swap_ErrorInsufficientEthBalance">El saldo actual de ETH es inferior al monto requerido para procesar esta transacción, incluida la tarifa de transacción.</string>
     <string name="Swap_ErrorNoLiquidity">No se pueden permutar estos tokens</string>
