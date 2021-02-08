@@ -75,9 +75,6 @@
     <attr name="SecondaryButtonEndGradient" format="reference|color" />
     <attr name="MarketCircleGradient" format="reference" />
 
-    <!--  New themed colors for backgrounds -->
-    <attr name="ColorGwen" format="reference" />
-
     <!--  New themed gradient colors -->
     <attr name="ColorGradientWhite" format="reference" />
     <attr name="ColorWindowBackground" format="reference" />
