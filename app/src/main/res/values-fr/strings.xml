@@ -239,6 +239,9 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="Swap_PriceImpact">Impact prix</string>
     <string name="Swap_MinimumReceived">Montant garanti</string>
     <string name="Swap_SwapFee">Frais d\'échange</string>
+    <string name="Swap_EstimatedFee">Estimated Fee</string>
+    <string name="Swap_MaxFee">Max Fee</string>
+    <string name="Swap_Fee">Fee</string>
     <string name="Swap_ErrorInsufficientBalance">Solde insuffisant</string>
     <string name="Swap_ErrorInsufficientEthBalance">Le solde actuel des ETH est inférieur au montant requis pour traiter cette transaction, frais de transaction compris.</string>
     <string name="Swap_ErrorNoLiquidity">Impossible d\'échanger ces tokens</string>
