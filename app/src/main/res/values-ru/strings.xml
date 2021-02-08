@@ -238,6 +238,9 @@
     <string name="Swap_PriceImpact">Колебание Цен</string>
     <string name="Swap_MinimumReceived">Гарантированная Сумма</string>
     <string name="Swap_SwapFee">Комиссия за обмен</string>
+    <string name="Swap_EstimatedFee">Estimated Fee</string>
+    <string name="Swap_MaxFee">Max Fee</string>
+    <string name="Swap_Fee">Fee</string>
     <string name="Swap_ErrorInsufficientBalance">Недостаточный баланс</string>
     <string name="Swap_ErrorInsufficientEthBalance">Текущий баланс ETH ниже суммы, необходимой для обработки этой транзакции, включая комиссию за транзакцию.</string>
     <string name="Swap_ErrorNoLiquidity">Невозможно обменять эти токены</string>
