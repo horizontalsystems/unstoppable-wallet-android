@@ -238,6 +238,9 @@
     <string name="Swap_PriceImpact">Fiyat Etkisi</string>
     <string name="Swap_MinimumReceived">Garantili Tutar</string>
     <string name="Swap_SwapFee">Takas Ücreti</string>
+    <string name="Swap_EstimatedFee">Estimated Fee</string>
+    <string name="Swap_MaxFee">Max Fee</string>
+    <string name="Swap_Fee">Fee</string>
     <string name="Swap_ErrorInsufficientBalance">Yetersiz bakiye</string>
     <string name="Swap_ErrorInsufficientEthBalance">Mevcut ETH bakiyesi, işlem ücreti dahil bu işlemi gerçekleştirmek için gereken miktarın altında.</string>
     <string name="Swap_ErrorNoLiquidity">Bu token swap edilemez</string>
