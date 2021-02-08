@@ -238,6 +238,9 @@
     <string name="Swap_PriceImpact">价格影响</string>
     <string name="Swap_MinimumReceived">保证金额</string>
     <string name="Swap_SwapFee">掉期交易费用</string>
+    <string name="Swap_EstimatedFee">Estimated Fee</string>
+    <string name="Swap_MaxFee">Max Fee</string>
+    <string name="Swap_Fee">Fee</string>
     <string name="Swap_ErrorInsufficientBalance">余额不足</string>
     <string name="Swap_ErrorInsufficientEthBalance">當前ETH餘額低於處理此交易所需的金額，包括交易費用。</string>
     <string name="Swap_ErrorNoLiquidity">无法交换代币</string>
