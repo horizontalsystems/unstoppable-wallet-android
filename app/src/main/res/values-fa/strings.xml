@@ -238,6 +238,9 @@
     <string name="Swap_PriceImpact">تأثیر قیمت</string>
     <string name="Swap_MinimumReceived">مقدار تضمین شده</string>
     <string name="Swap_SwapFee">هزینه جابجایی</string>
+    <string name="Swap_EstimatedFee">Estimated Fee</string>
+    <string name="Swap_MaxFee">Max Fee</string>
+    <string name="Swap_Fee">Fee</string>
     <string name="Swap_ErrorInsufficientBalance">موجودی ناکافی</string>
     <string name="Swap_ErrorInsufficientEthBalance">當前ETH餘額低於處理此交易所需的金額，包括交易費用。</string>
     <string name="Swap_ErrorNoLiquidity">نمی توان این نشانه ها را عوض کر</string>
