@@ -68,7 +68,8 @@ class MarketCategoriesAdapter(
         animateTitle(tab.view, 150L)
 
         //expand layout
-        animateTabWidth(tab.view, itemViewMaxLength, 300L)
+        val lastTabPosition = if (tab.position == tabLayout.tabCount-1) tab.position else null
+        animateTabWidth(tab.view, itemViewMaxLength, 300L, lastTabPosition)
 
         //show description
         animateDescription(tab, 0f, 1f, 250L)
@@ -130,12 +131,16 @@ class MarketCategoriesAdapter(
         }
     }
 
-    private fun animateTabWidth(tabView: TabLayout.TabView, toWidth: Int, animDuration: Long) {
+    private fun animateTabWidth(tabView: TabLayout.TabView, toWidth: Int, animDuration: Long, lastTabPosition: Int? = null) {
         ValueAnimator.ofInt(tabView.width, toWidth).apply {
             addUpdateListener { valueAnimator ->
                 val params = tabView.layoutParams
                 params.width = valueAnimator.animatedValue as Int
                 tabView.layoutParams = params
+                lastTabPosition?.let { position ->
+                    //fixes expanding animation of last item
+                    tabLayout.setScrollPosition(position, 0f, false)
+                }
             }
             interpolator = DecelerateInterpolator()
             duration = animDuration
