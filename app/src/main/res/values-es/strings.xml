@@ -63,7 +63,85 @@
     <string name="Backup_Confirmation_CheckTitle">Comprobar…</string>
     <string name="Backup_Button_Backup">Copia de seguridad</string>
     <string name="Backup_Button_ShowKey">Mostrar clave</string>
-    <!--Backup Eos-->
+    <!--Market-->
+    <string name="Market_Field_MarketCap">MCap</string>
+    <string name="Market_Field_Volume">Volume</string>
+    <string name="Market_Field_PriceDiff">Price</string>
+    <string name="Market_Title">Market</string>
+    <string name="Market_Search">Search</string>
+    <string name="Market_Field_HighestCap">Highest Cap</string>
+    <string name="Market_Field_LowestCap">Lowest Cap</string>
+    <string name="Market_Field_HighestVolume">Highest Volume</string>
+    <string name="Market_Field_LowestVolume">Lowest Volume</string>
+    <string name="Market_Field_HighestPrice">Highest Price</string>
+    <string name="Market_Field_LowestPrice">Lowest Price</string>
+    <string name="Market_Sort_PopupTitle">Sort by</string>
+    <string name="Market_TotalMarketCap">Total\nMarket Cap</string>
+    <string name="Market_BtcDominance">BTC Dominance</string>
+    <string name="Market_Volume24h">24h Volume</string>
+    <string name="Market_TvlDeFi">TVL in DeFi</string>
+    <string name="Market_DeFiCap">DeFi Cap</string>
+    <string name="Market_SeeAll">See All</string>
+    <string name="Market_Tab_Overview">Overview</string>
+    <string name="Market_Tab_Discovery">Discovery</string>
+    <string name="Market_Tab_Watchlist">Watchlist</string>
+    <string name="Market_Tab_Watchlist_EmptyList">You don\’t have any favorite assets.\nYou can add the favorites by clicking on star icon in the asset page</string>
+    <string name="Market_Category_Rated">Rated</string>
+    <string name="Market_Category_Rated_Description">Token ratings based on project security and market liquidity.</string>
+    <string name="Market_Category_Blockchains">Blockchains</string>
+    <string name="Market_Category_Blockchains_Description">Native cryptocurrencies on major blockchains. </string>
+    <string name="Market_Category_Dexes">DEXes</string>
+    <string name="Market_Category_Dexes_Description">Decentralized cryptocurrency exchanges.</string>
+    <string name="Market_Category_Lending">Lending</string>
+    <string name="Market_Category_Lending_Description">Protocols for lending and borrowing.</string>
+    <string name="Market_Category_Privacy">Privacy</string>
+    <string name="Market_Category_Privacy_Description">Projects working on privacy solutions.</string>
+    <string name="Market_Category_Scaling">Scaling</string>
+    <string name="Market_Category_Scaling_Description">Solutions for faster blockchain transactions.</string>
+    <string name="Market_Category_Oracles">Oracles</string>
+    <string name="Market_Category_Oracles_Description">Connecting real world data to smart contracts.</string>
+    <string name="Market_Category_Prediction">Prediction</string>
+    <string name="Market_Category_Prediction_Description">Markets to bet on events in the future.</string>
+    <string name="Market_Category_YieldAggregators">Yield Aggregators</string>
+    <string name="Market_Category_YieldAggregators_Description">Solutions for earning from idle crypto assets.</string>
+    <string name="Market_Category_FiatStableCoins">Fiat Stablecoins</string>
+    <string name="Market_Category_FiatStableCoins_Description">Crypto tokens pegged 1–1 to fiat currency.</string>
+    <string name="Market_Category_AlgoStablecoins">Algo Stablecoins</string>
+    <string name="Market_Category_AlgoStablecoins_Description">Stablecoins with algorithmic 1–1 price peg to fiat.</string>
+    <string name="Market_Category_TokenizedBitcoin">Tokenized Bitcoin</string>
+    <string name="Market_Category_TokenizedBitcoin_Description">Crypto tokens pegged 1–1 to Bitcoin price.</string>
+    <string name="Market_Category_StablecoinIssuers">Stablecoin Issuers</string>
+    <string name="Market_Category_StablecoinIssuers_Description">Decentralized issuers of fiat pegged stablecoin tokens.</string>
+    <string name="Market_Category_ExchangeTokens">Exchange Tokens</string>
+    <string name="Market_Category_ExchangeTokens_Description">Tokens issued by centralized exchanges.</string>
+    <string name="Market_Category_Metals">Metals</string>
+    <string name="Market_Category_Metals_Description">Tokens pegged to metal prices.</string>
+    <string name="Market_Category_RiskManagement">Risk Management</string>
+    <string name="Market_Category_RiskManagement_Description">Risk assessment, insurance and hedging.</string>
+    <string name="Market_Category_Wallets">Wallets</string>
+    <string name="Market_Category_Wallets_Description">Tokens issued by cryptocurrency wallets.</string>
+    <string name="Market_Category_Synthetics">Synthetics</string>
+    <string name="Market_Category_Synthetics_Description">Platforms for creating decentralized synthetic assets.</string>
+    <string name="Market_Category_IndexFunds">Index Funds</string>
+    <string name="Market_Category_IndexFunds_Description">Assets that pegged in price to a set of tokens.</string>
+    <string name="Market_Category_NFT">NFT</string>
+    <string name="Market_Category_NFT_Description">Marketplaces for trading NFT tokens.</string>
+    <string name="Market_Category_Fundraising">Fundraising</string>
+    <string name="Market_Category_Fundraising_Description">Fundraising and token sale platforms.</string>
+    <string name="Market_Category_Gaming">Gaming</string>
+    <string name="Market_Category_Gaming_Description">Fundraising and token sale platforms.</string>
+    <string name="Market_Category_B2B">B2B</string>
+    <string name="Market_Category_B2B_Description">B2B service providers.</string>
+    <string name="Market_Category_Infrastructure">Infrastructure</string>
+    <string name="Market_Category_Infrastructure_Description">Projects building infrastructure solutions.</string>
+    <string name="Market_Category_Staking">Staking ETH 2.0</string>
+    <string name="Market_Category_Staking_Description">Protocols that reward liquidity providers.</string>
+    <string name="Market_Category_Governance">Governance</string>
+    <string name="Market_Category_Governance_Description">Decentralized governance protocols for DAOs.</string>
+    <string name="Market_Category_CrossChain">Cross Chain</string>
+    <string name="Market_Category_CrossChain_Description">Cross-chain protocols.</string>
+    <string name="Market_Category_Computing">Computing</string>
+    <string name="Market_Category_Computing_Description">Decentralized on-demand computing solutions.</string>
     <!--Balance-->
     <string name="Balance_Title">Saldo</string>
     <string name="Balance_Deposit">Recibir</string>
@@ -82,12 +160,14 @@
     <string name="Balance_Backup_Alert">Necesita respaldar el monedero %s antes de poder recibir %s.</string>
     <!--Send-->
     <string name="Send_Title">Enviar %s</string>
-    <string name="Send_Hint_Address">Dirección</string>
+    <string name="Send_Hint_Address">Dominio o dirección</string>
     <string name="Send_Hint_Amount">Importe</string>
     <string name="Send_Fee">Comisión</string>
     <string name="Send_Button_Paste">Pegar</string>
     <string name="Send_Button_Max">Máx.</string>
     <string name="Send_Confirmation_Title">Confirmar</string>
+    <string name="Send_Confirmation_Domain">Dominio</string>
+    <string name="Send_Confirmation_Receiver">Receptor</string>
     <string name="Send_Confirmation_EstimateTime">Tiempo estimado:</string>
     <string name="Send_Confirmation_Send_Button">Enviar</string>
     <string name="Send_Success">\u2713 Enviado</string>
@@ -119,6 +199,15 @@
     <string name="Send_LockTime_Year">1 año</string>
     <string name="Send_Sending">Enviando</string>
     <string name="Send_Token_InsufficientFeeAlert">Las comisiones de transacción para %s (%s) pagado en %s. Es necesario %s.</string>
+    <!--Fee Info -->
+    <string name="FeeInfo_Title">Velocidad de transacción</string>
+    <string name="FeeInfo_Description">Las blockchains de Ethereum y Bitcoin requieren que los usuarios paguen tarifas de uso mientras envian transaciones en la blockchain \n\n Unstoppable utiliza tarifas de servicios publicos estimados para ayudar al usuario a determinar tarifas de transación apropiadas para el momento. Las tarifas son altas cuando hay muchas transacciones ocurriendo al mismo tiempo y menos cuando la blockchain se encuentra menos ocupada. </string>
+    <string name="FeeInfo_Slow">Lento</string>
+    <string name="FeeInfo_SlowDescription">Seleccionar un valor de este rango puede resultar en que la transacción esté pendiente por horas o sea rechazada por completo. Cuanto más bajo sea el valor, más tardará en confirmar la transacción.</string>
+    <string name="FeeInfo_Average">Promedio</string>
+    <string name="FeeInfo_AverageDescription">Por lo general, este rango de honorarios debería ser suficiente para que la transacción sea procesada entre un minuto/hora para Bitcoin y dentro de minutos para Ethereum.</string>
+    <string name="FeeInfo_Fast">Rápido</string>
+    <string name="FeeInfo_FastDescription">Para las transacciones en las que la prioridad es importante, recomendamos utilizar la configuración de alta tarifa. Se espera que la selección de un ajuste de alta tarifa sea suficiente para que la transacción se complete dentro de 10 minutos para Bitcoin y dentro de unos minutos para Ethereum.\n\nEl monedero imparable hace una conjetura educada basada en la actividad de la red y no puede garantizar que los valores de las comisiones sugeridas siempre resulten en un comportamiento esperado.</string>
     <!--Wallet Connect-->
     <string name="WalletConnect_Title">Wallet Connect</string>
     <string name="WalletConnect_Request">Pedido</string>
@@ -135,6 +224,7 @@
     <string name="WalletConnect_Status_Connecting">Conectando…</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Error_InsufficientBalance">La transacción requiere %s para enviar</string>
+    <string name="EthereumTransaction_Error_InsufficientBalanceForFee">El saldo actual de ETH es inferior al monto requerido para procesar esta transacción, incluida la tarifa de transacción.</string>
     <!--Swap-->
     <string name="Swap">Permutar</string>
     <string name="Swap_FromAmountTitle">Usted paga</string>
@@ -148,6 +238,9 @@
     <string name="Swap_PriceImpact">Impacto en el precio</string>
     <string name="Swap_MinimumReceived">Cantidad Garantizada</string>
     <string name="Swap_SwapFee">Tarifa por permutar</string>
+    <string name="Swap_EstimatedFee">Tasa Estimada</string>
+    <string name="Swap_MaxFee">Comisión Máx.</string>
+    <string name="Swap_Fee">Comisión</string>
     <string name="Swap_ErrorInsufficientBalance">Saldo insuficiente</string>
     <string name="Swap_ErrorInsufficientEthBalance">El saldo actual de ETH es inferior al monto requerido para procesar esta transacción, incluida la tarifa de transacción.</string>
     <string name="Swap_ErrorNoLiquidity">No se pueden permutar estos tokens</string>
@@ -157,7 +250,7 @@
     <string name="Swap_Approving">Aprobando...</string>
     <string name="Swap_Swapping">Swapping</string>
     <string name="Swap_MaximumPaid">Máximo Pagado</string>
-    <string name="Swap_MinimumGot">Mínimo Obtenido</string>
+    <string name="Swap_MinimumGot">Cantidad Garantizada</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">Configuración avanzada</string>
     <string name="SwapSettings_SlippageTitle">Tolerancia de deslizamiento</string>
@@ -168,10 +261,14 @@
     <string name="SwapSettings_RecipientAddressDescription">Después de la operación de cambio, el monto se transferirá a la dirección especificada</string>
     <string name="SwapSettings_Apply">Aplicar</string>
     <string name="SwapSettings_DeadlineMinute">%s min</string>
-    <string name="SwapSettings_RecipientPlaceholder">Dirección</string>
+    <string name="SwapSettings_RecipientPlaceholder">Dominio o dirección</string>
+    <string name="SwapSettings_Error_DeadlineZero">Cero límite</string>
+    <string name="SwapSettings_Error_SlippageZero">Cero deslizamiento</string>
     <string name="SwapSettings_Error_SlippageTooLow">Es probable que su transacción falle.</string>
     <string name="SwapSettings_Error_SlippageTooHigh">Valor máximo permitido %s%%</string>
     <string name="SwapSettings_Error_InvalidAddress">Dirección invalida</string>
+    <string name="SwapSettings_Error_InvalidSlippage">Deslizamiento no válido</string>
+    <string name="SwapSettings_Error_InvalidDeadline">Fecha límite no válida</string>
     <!-- Swap Confirmation -->
     <string name="Swap_Confirmation">Confirmaciones</string>
     <!--Swap Coin Select-->
@@ -207,6 +304,7 @@
     <string name="Transactions_Title">Transacciones</string>
     <string name="Transactions_FilterAll">TODO</string>
     <string name="Transactions_EmptyList">Todavía no tienes transacciones pendientes o pasadas</string>
+    <string name="Transactions_Pending">Pendiente</string>
     <string name="Transactions_Receiving">Recibiendo</string>
     <string name="Transactions_Sending">Enviando</string>
     <string name="Transactions_Approving">Aprobación de Swap</string>
@@ -228,6 +326,7 @@
     <string name="TransactionInfo_SentToSelfNote">Esta transacción fue enviada a su propia dirección</string>
     <string name="TransactionInfo_DoubleSpendNote">¡Riesgo de doble gasto!</string>
     <string name="TransactionInfo_Input">Entrada</string>
+    <string name="TransactionInfo_ButtonViewOnExplorerName">Ver en %s</string>
     <string name="StatusInfo_Pending">Pendiente</string>
     <string name="StatusInfo_Confirmed">Confirmado</string>
     <string name="StatusInfo_Failed">Falló</string>
@@ -242,8 +341,6 @@
     <string name="Info_DoubleSpend_Description">¡Riesgo de doble gasto! Hay otra transacción en blockchain que intenta gastar entradas usadas en esta transacción. Solo una transacción será aceptada por la red.</string>
     <string name="Info_DoubleSpend_ThisTx">Esta Tx</string>
     <string name="Info_DoubleSpend_ConflictingTx">Tx en conlicto</string>
-    <!--Full Info-->
-    <!--no used-->
     <!--Guides-->
     <string name="Guides_Title">Academia</string>
     <!--Markdown-->
@@ -263,7 +360,7 @@
     <string name="Settings_WalletConnect">Wallet Connect</string>
     <string name="Settings_RateUs">Califícanos</string>
     <string name="SettingsAboutApp_Title">Sobre la aplicacion</string>
-    <string name="SettingsAboutApp_Site">Sitio</string>
+    <string name="SettingsAboutApp_Site">Sitio Web</string>
     <string name="SettingsPrivacy_Info">Esta aplicación no comparte ninguno de tus datos. Sin embargo, ya que se comunica con blockchains, algunos datos públicos como la dirección IP pueden ser filtrados. Utilice el botón Info de la parte superior derecha para obtener información detallada sobre cada sección.</string>
     <string name="SettingsPrivacy_ConnectionSettingsTitle">Internet</string>
     <string name="SettingsPrivacy_CommunicationSettingsTitle">Sincronización de Blockchain</string>
@@ -320,6 +417,7 @@
     <string name="SettingsTerms_TermRoot">Entiendo que rootear mi teléfono (rooting), instalando aplicaciones de terceros de fuentes desconocidas o mantener el sistema operativo desactualizado puede, potencialmente,
 poner en peligro la seguridad de mis fondos.</string>
     <string name="SettingsTerms_TermBugs">Entiendo que puede haber problemas de software sin descubrir en el código que hace funcionar esta aplicación, lo que puede llevar a un comportamiento inesperado o al mal funcionamiento de la aplicación.</string>
+    <string name="Settings_TermsPin">Entiendo que deshabilitar el teléfono desbloqueará el código de acceso en la Configuración del Android y esto borrará las claves privadas de mi dispositivo. Necesitaré mis claves privadas para recuperar el acceso a mi monedero.</string>
     <string name="SettingsTerms_BottomThankYou">¡Gracias \npor elegir \neste monedero!</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Compartir</string>
@@ -392,6 +490,13 @@ poner en peligro la seguridad de mis fondos.</string>
     <string name="AddTokenDialog_Subtitle">Añadiendo Token</string>
     <string name="AddTokenDialog_Erc20Tokens">ERC20 Token</string>
     <string name="AddTokenDialog_BinanceTokens">BEP2 Token</string>
+    <!-- Enable Token -->
+    <string name="EnalbeToken_Title">Activar token</string>
+    <string name="EnalbeToken_Description">Habilitar todas las %s monedas que tengan saldo</string>
+    <string name="EnalbeToken_Enabling">Activando</string>
+    <string name="EnalbeToken_EnabledCoins">%d créditos habilitados</string>
+    <string name="EnalbeToken_NoCoins">No hay monedas con saldo</string>
+    <string name="EnalbeToken_EnableKey">Habilitar</string>
     <!-- Add Token -->
     <string name="AddToken_CoinName">Nombre de moneda</string>
     <string name="AddToken_Symbol">Símbolo</string>
@@ -417,6 +522,10 @@ poner en peligro la seguridad de mis fondos.</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">Restaurar Fuente</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">Después de este cambio, el monedero tendrá que resincronizarse con el blockchain %s.</string>
     <string name="BlockchainSettings_CommunicationModeChangeAlert_Title">Comunicación</string>
+    <string name="CoinSettings_BitcoinCashCoinType_Type0_Title">Legacy</string>
+    <string name="CoinSettings_BitcoinCashCoinType_Type145_Title">Nuevo</string>
+    <string name="CoinSettings_BitcoinCashCoinType_Type0_Description">Monederos antiguos (antes de Agosto 2017)</string>
+    <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">Monederos más nuevos</string>
     <!-- Tor -->
     <string name="Tor_Title">Tor</string>
     <string name="Tor_Connection_Title">Conexión</string>
@@ -456,12 +565,15 @@ poner en peligro la seguridad de mis fondos.</string>
     <string name="Charts_Volume">Volumen</string>
     <string name="Charts_Error_NotAvailable">Gráfico no disponible</string>
     <string name="Charts_LatestNews">Últimas noticias</string>
+    <string name="Charts_Favorite">Favorite</string>
+    <string name="Charts_Unfavorite">Unfavorite</string>
     <!--Rate list-->
     <string name="RateList_portfolio">Cartera</string>
     <string name="RateList_top100">Top 100</string>
     <string name="RateList_Rank">Puesto</string>
-    <string name="RateList_TopGainers">Mejores ganadores</string>
+    <string name="RateList_TopGainers">Top Gainers</string>
     <string name="RateList_TopLosers">Peores perdedores</string>
+    <string name="RateList_TopByVolume">Top by Volume</string>
     <!-- Balance Sync Error -->
     <string name="BalanceSyncError_Title">Error de sincronización</string>
     <string name="BalanceSyncError_ButtonRetry">Reintentar</string>

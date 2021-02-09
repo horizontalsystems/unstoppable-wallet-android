@@ -63,7 +63,85 @@
     <string name="Backup_Confirmation_CheckTitle">检查...</string>
     <string name="Backup_Button_Backup">备份</string>
     <string name="Backup_Button_ShowKey">显示密钥</string>
-    <!--Backup Eos-->
+    <!--Market-->
+    <string name="Market_Field_MarketCap">MCap</string>
+    <string name="Market_Field_Volume">量</string>
+    <string name="Market_Field_PriceDiff">价格</string>
+    <string name="Market_Title">Market</string>
+    <string name="Market_Search">Search</string>
+    <string name="Market_Field_HighestCap">Highest Cap</string>
+    <string name="Market_Field_LowestCap">Lowest Cap</string>
+    <string name="Market_Field_HighestVolume">Highest Volume</string>
+    <string name="Market_Field_LowestVolume">Lowest Volume</string>
+    <string name="Market_Field_HighestPrice">Highest Price</string>
+    <string name="Market_Field_LowestPrice">Lowest Price</string>
+    <string name="Market_Sort_PopupTitle">Sort by</string>
+    <string name="Market_TotalMarketCap">Total\nMarket Cap</string>
+    <string name="Market_BtcDominance">BTC Dominance</string>
+    <string name="Market_Volume24h">24h Volume</string>
+    <string name="Market_TvlDeFi">TVL in DeFi</string>
+    <string name="Market_DeFiCap">DeFi Cap</string>
+    <string name="Market_SeeAll">See All</string>
+    <string name="Market_Tab_Overview">Overview</string>
+    <string name="Market_Tab_Discovery">Discovery</string>
+    <string name="Market_Tab_Watchlist">Watchlist</string>
+    <string name="Market_Tab_Watchlist_EmptyList">You don\’t have any favorite assets.\nYou can add the favorites by clicking on star icon in the asset page</string>
+    <string name="Market_Category_Rated">Rated</string>
+    <string name="Market_Category_Rated_Description">Token ratings based on project security and market liquidity.</string>
+    <string name="Market_Category_Blockchains">Blockchains</string>
+    <string name="Market_Category_Blockchains_Description">Native cryptocurrencies on major blockchains.</string>
+    <string name="Market_Category_Dexes">DEXes</string>
+    <string name="Market_Category_Dexes_Description">Decentralized cryptocurrency exchanges.</string>
+    <string name="Market_Category_Lending">Lending</string>
+    <string name="Market_Category_Lending_Description">Protocols for lending and borrowing.</string>
+    <string name="Market_Category_Privacy">Privacy</string>
+    <string name="Market_Category_Privacy_Description">Projects working on privacy solutions.</string>
+    <string name="Market_Category_Scaling">Scaling</string>
+    <string name="Market_Category_Scaling_Description">Solutions for faster blockchain transactions.</string>
+    <string name="Market_Category_Oracles">Oracles</string>
+    <string name="Market_Category_Oracles_Description">Connecting real world data to smart contracts.</string>
+    <string name="Market_Category_Prediction">Prediction</string>
+    <string name="Market_Category_Prediction_Description">Markets to bet on events in the future.</string>
+    <string name="Market_Category_YieldAggregators">Yield Aggregators</string>
+    <string name="Market_Category_YieldAggregators_Description">Solutions for earning from idle crypto assets.</string>
+    <string name="Market_Category_FiatStableCoins">Fiat Stablecoins</string>
+    <string name="Market_Category_FiatStableCoins_Description">Crypto tokens pegged 1–1 to fiat currency.</string>
+    <string name="Market_Category_AlgoStablecoins">Algo Stablecoins</string>
+    <string name="Market_Category_AlgoStablecoins_Description">Stablecoins with algorithmic 1–1 price peg to fiat.</string>
+    <string name="Market_Category_TokenizedBitcoin">Tokenized Bitcoin</string>
+    <string name="Market_Category_TokenizedBitcoin_Description">Crypto tokens pegged 1–1 to Bitcoin price.</string>
+    <string name="Market_Category_StablecoinIssuers">Stablecoin Issuers</string>
+    <string name="Market_Category_StablecoinIssuers_Description">Decentralized issuers of fiat pegged stablecoin tokens.</string>
+    <string name="Market_Category_ExchangeTokens">Exchange Tokens</string>
+    <string name="Market_Category_ExchangeTokens_Description">Tokens issued by centralized exchanges.</string>
+    <string name="Market_Category_Metals">Metals</string>
+    <string name="Market_Category_Metals_Description">Tokens pegged to metal prices.</string>
+    <string name="Market_Category_RiskManagement">Risk Management</string>
+    <string name="Market_Category_RiskManagement_Description">Risk assessment, insurance and hedging.</string>
+    <string name="Market_Category_Wallets">Wallets</string>
+    <string name="Market_Category_Wallets_Description">Tokens issued by cryptocurrency wallets.</string>
+    <string name="Market_Category_Synthetics">Synthetics</string>
+    <string name="Market_Category_Synthetics_Description">Platforms for creating decentralized synthetic assets.</string>
+    <string name="Market_Category_IndexFunds">Index Funds</string>
+    <string name="Market_Category_IndexFunds_Description">Assets that pegged in price to a set of tokens.</string>
+    <string name="Market_Category_NFT">NFT</string>
+    <string name="Market_Category_NFT_Description">Marketplaces for trading NFT tokens.</string>
+    <string name="Market_Category_Fundraising">Fundraising</string>
+    <string name="Market_Category_Fundraising_Description">Fundraising and token sale platforms.</string>
+    <string name="Market_Category_Gaming">Gaming</string>
+    <string name="Market_Category_Gaming_Description">Crypto projects in gaming and VR sector.</string>
+    <string name="Market_Category_B2B">B2B</string>
+    <string name="Market_Category_B2B_Description">B2B service providers.</string>
+    <string name="Market_Category_Infrastructure">Infrastructure</string>
+    <string name="Market_Category_Infrastructure_Description">Projects building infrastructure solutions.</string>
+    <string name="Market_Category_Staking">Staking ETH 2.0</string>
+    <string name="Market_Category_Staking_Description">Protocols that reward liquidity providers.</string>
+    <string name="Market_Category_Governance">Governance</string>
+    <string name="Market_Category_Governance_Description">Decentralized governance protocols for DAOs.</string>
+    <string name="Market_Category_CrossChain">Cross Chain</string>
+    <string name="Market_Category_CrossChain_Description">Cross-chain protocols.</string>
+    <string name="Market_Category_Computing">Computing</string>
+    <string name="Market_Category_Computing_Description">Decentralized on-demand computing solutions.</string>
     <!--Balance-->
     <string name="Balance_Title">余额</string>
     <string name="Balance_Deposit">接收</string>
@@ -82,12 +160,14 @@
     <string name="Balance_Backup_Alert">您必须在接收%s之前先备份%s钱包。</string>
     <!--Send-->
     <string name="Send_Title">发送%s</string>
-    <string name="Send_Hint_Address">地址</string>
+    <string name="Send_Hint_Address">地址或域名</string>
     <string name="Send_Hint_Amount">金额</string>
     <string name="Send_Fee">费用</string>
     <string name="Send_Button_Paste">粘帖</string>
     <string name="Send_Button_Max">最多</string>
     <string name="Send_Confirmation_Title">确认</string>
+    <string name="Send_Confirmation_Domain">域名</string>
+    <string name="Send_Confirmation_Receiver">接收器</string>
     <string name="Send_Confirmation_EstimateTime">预计时间：</string>
     <string name="Send_Confirmation_Send_Button">发送​​</string>
     <string name="Send_Success">\u2713已发送</string>
@@ -119,6 +199,15 @@
     <string name="Send_LockTime_Year">1 年</string>
     <string name="Send_Sending">正在发送</string>
     <string name="Send_Token_InsufficientFeeAlert">%s（%s）的交易费用以%s支付。您需要%s。</string>
+    <!--Fee Info -->
+    <string name="FeeInfo_Title">交易速度</string>
+    <string name="FeeInfo_Description">比特币（Bitcoin）和 以太币（Etherum）区块链都要求用户在区块链上发送交易时支付使用费。\n\nUnstoppable使用公共费用估算服务来帮助用户确定当前合适的交易费用。 当大量交易正在进行时，费用较高，而当区块链不那么繁忙时，费用较低。</string>
+    <string name="FeeInfo_Slow">慢</string>
+    <string name="FeeInfo_SlowDescription">选择此范围中的值可能导致交易需等待数小时或被完全拒绝。值越低，确认交易的所需时间越长。</string>
+    <string name="FeeInfo_Average">平均</string>
+    <string name="FeeInfo_AverageDescription">通常，此费用范围应足以使比特币（Bitcoin）交易在数分钟/小时、以太币（Ethereum）在数分钟内得到处理。</string>
+    <string name="FeeInfo_Fast">快</string>
+    <string name="FeeInfo_FastDescription">对于优先级具有重要性的交易，我们建议使用高费用设置。预计选择高费用设置将足以让比特币（Bitcoin）交易在10分钟内完成，以太币（Ethereum）在数分钟内完成。\n\nUnstoppable钱包根据网络活动作出有效的估计，但不保证建议的费用值总是能实现预期行为。</string>
     <!--Wallet Connect-->
     <string name="WalletConnect_Title">Wallet Connect</string>
     <string name="WalletConnect_Request">请求</string>
@@ -135,6 +224,7 @@
     <string name="WalletConnect_Status_Connecting">正在连接...</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Error_InsufficientBalance">交易要求%s用于发送。</string>
+    <string name="EthereumTransaction_Error_InsufficientBalanceForFee">當前ETH餘額低於處理此交易所需的金額，包括交易費用。</string>
     <!--Swap-->
     <string name="Swap">掉期交易</string>
     <string name="Swap_FromAmountTitle">您支付</string>
@@ -148,6 +238,9 @@
     <string name="Swap_PriceImpact">价格影响</string>
     <string name="Swap_MinimumReceived">保证金额</string>
     <string name="Swap_SwapFee">掉期交易费用</string>
+    <string name="Swap_EstimatedFee">预估费用</string>
+    <string name="Swap_MaxFee">最大手续费</string>
+    <string name="Swap_Fee">费用</string>
     <string name="Swap_ErrorInsufficientBalance">余额不足</string>
     <string name="Swap_ErrorInsufficientEthBalance">當前ETH餘額低於處理此交易所需的金額，包括交易費用。</string>
     <string name="Swap_ErrorNoLiquidity">无法交换代币</string>
@@ -157,7 +250,7 @@
     <string name="Swap_Approving">审批中...</string>
     <string name="Swap_Swapping">交换文件</string>
     <string name="Swap_MaximumPaid">最大支付金额</string>
-    <string name="Swap_MinimumGot">最小获取金额</string>
+    <string name="Swap_MinimumGot">保证金额</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">高级设置</string>
     <string name="SwapSettings_SlippageTitle">下跌容忍度</string>
@@ -168,10 +261,14 @@
     <string name="SwapSettings_RecipientAddressDescription">在兑换操作之后，金额将转移至指定地址</string>
     <string name="SwapSettings_Apply">应用</string>
     <string name="SwapSettings_DeadlineMinute">%s分钟。</string>
-    <string name="SwapSettings_RecipientPlaceholder">地址</string>
+    <string name="SwapSettings_RecipientPlaceholder">地址或域名</string>
+    <string name="SwapSettings_Error_DeadlineZero">没有截止日期</string>
+    <string name="SwapSettings_Error_SlippageZero">没有延误</string>
     <string name="SwapSettings_Error_SlippageTooLow">您的交易可能失败。</string>
     <string name="SwapSettings_Error_SlippageTooHigh">最大允许值是 %s%%</string>
     <string name="SwapSettings_Error_InvalidAddress">Adresse invalide</string>
+    <string name="SwapSettings_Error_InvalidSlippage">无效延误</string>
+    <string name="SwapSettings_Error_InvalidDeadline">无效截止日期</string>
     <!-- Swap Confirmation -->
     <string name="Swap_Confirmation">确认</string>
     <!--Swap Coin Select-->
@@ -207,6 +304,7 @@
     <string name="Transactions_Title">交易</string>
     <string name="Transactions_FilterAll">全部</string>
     <string name="Transactions_EmptyList">您还没有任何待定或成功的交易</string>
+    <string name="Transactions_Pending">待处理</string>
     <string name="Transactions_Receiving">正在接收</string>
     <string name="Transactions_Sending">正在发送</string>
     <string name="Transactions_Approving">互兑批准</string>
@@ -228,6 +326,7 @@
     <string name="TransactionInfo_SentToSelfNote">交易已发送至自有地址</string>
     <string name="TransactionInfo_DoubleSpendNote">双重支付风险！</string>
     <string name="TransactionInfo_Input">输入</string>
+    <string name="TransactionInfo_ButtonViewOnExplorerName">View on %s</string>
     <string name="StatusInfo_Pending">待处理</string>
     <string name="StatusInfo_Confirmed">已确认</string>
     <string name="StatusInfo_Failed">失败</string>
@@ -242,8 +341,6 @@
     <string name="Info_DoubleSpend_Description">双重支付风险！区块链上还有另一笔交易试图支付这笔交易所使用的投入。 网络只接受一笔交易。</string>
     <string name="Info_DoubleSpend_ThisTx">此Tx</string>
     <string name="Info_DoubleSpend_ConflictingTx">冲突Tx</string>
-    <!--Full Info-->
-    <!--no used-->
     <!--Guides-->
     <string name="Guides_Title">学院</string>
     <!--Markdown-->
@@ -319,6 +416,7 @@
     <string name="SettingsTerms_TermPhone">我理解，将我的手机交给不可信的实体或者在未设置安全PIN码锁定的情况下离开钱包应用可能会危害我的资金安全。</string>
     <string name="SettingsTerms_TermRoot">我理解对我的手机进行越狱（root）、安装来源不明的第三方应用、未及时更新操作系统可能会危害我的资金安全。</string>
     <string name="SettingsTerms_TermBugs">我理解，在实现此钱包应用的代码中可能存在未发现的软件问题，这可能会导致意外行为或应用故障的发生。</string>
+    <string name="Settings_TermsPin">我知道在Android系统的设置中禁用手机解锁密码（或类似代码）将从我的设备中擦除钱包私钥。我需要我的私钥才能重新访问我的钱包。</string>
     <string name="SettingsTerms_BottomThankYou">感谢您选择我们的钱包！</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">分享</string>
@@ -391,6 +489,13 @@
     <string name="AddTokenDialog_Subtitle">正在添加代币</string>
     <string name="AddTokenDialog_Erc20Tokens">ERC20 代币</string>
     <string name="AddTokenDialog_BinanceTokens">BEP2 代币</string>
+    <!-- Enable Token -->
+    <string name="EnalbeToken_Title">启用代币</string>
+    <string name="EnalbeToken_Description">启用有余额的所有%s代币</string>
+    <string name="EnalbeToken_Enabling">正在启用</string>
+    <string name="EnalbeToken_EnabledCoins">已启用%d代币</string>
+    <string name="EnalbeToken_NoCoins">找不到有余额的代币</string>
+    <string name="EnalbeToken_EnableKey">启用</string>
     <!-- Add Token -->
     <string name="AddToken_CoinName">代币图片</string>
     <string name="AddToken_Symbol">标志</string>
@@ -417,6 +522,10 @@
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">恢复参数</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">此更改后，钱包将必须与 %s 区块链重新同步。</string>
     <string name="BlockchainSettings_CommunicationModeChangeAlert_Title">通信</string>
+    <string name="CoinSettings_BitcoinCashCoinType_Type0_Title">Legacy</string>
+    <string name="CoinSettings_BitcoinCashCoinType_Type145_Title">新</string>
+    <string name="CoinSettings_BitcoinCashCoinType_Type0_Description">旧钱包（2017年之前）</string>
+    <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">较新的钱包</string>
     <!-- Tor -->
     <string name="Tor_Title">Tor</string>
     <string name="Tor_Connection_Title">连接</string>
@@ -456,12 +565,15 @@
     <string name="Charts_Volume">量</string>
     <string name="Charts_Error_NotAvailable">无可用图表</string>
     <string name="Charts_LatestNews">最新消息</string>
+    <string name="Charts_Favorite">Favorite</string>
+    <string name="Charts_Unfavorite">Unfavorite</string>
     <!--Rate list-->
     <string name="RateList_portfolio">投资组合</string>
     <string name="RateList_top100">前100名</string>
     <string name="RateList_Rank">排名</string>
-    <string name="RateList_TopGainers">顶级赢家</string>
+    <string name="RateList_TopGainers">Top Gainers</string>
     <string name="RateList_TopLosers">顶级输家</string>
+    <string name="RateList_TopByVolume">Top by Volume</string>
     <!-- Balance Sync Error -->
     <string name="BalanceSyncError_Title">同步出错</string>
     <string name="BalanceSyncError_ButtonRetry">重试</string>
