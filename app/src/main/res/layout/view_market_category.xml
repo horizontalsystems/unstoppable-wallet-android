@@ -57,7 +57,7 @@
         android:id="@+id/description"
         style="@style/Caption"
         android:layout_width="170dp"
-        android:layout_height="42dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="27dp"
         android:ellipsize="end"
         android:gravity="bottom"
@@ -67,6 +67,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/topBorder"
+        app:layout_constraintVertical_bias="1"
         tools:text="@string/Market_Category_Blockchains_Description" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
