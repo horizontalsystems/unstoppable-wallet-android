@@ -238,9 +238,9 @@
     <string name="Swap_PriceImpact">Колебание Цен</string>
     <string name="Swap_MinimumReceived">Гарантированная Сумма</string>
     <string name="Swap_SwapFee">Комиссия за обмен</string>
-    <string name="Swap_EstimatedFee">Estimated Fee</string>
-    <string name="Swap_MaxFee">Max Fee</string>
-    <string name="Swap_Fee">Fee</string>
+    <string name="Swap_EstimatedFee">Предполагаемая Комиссия</string>
+    <string name="Swap_MaxFee">Макс. Комиссия</string>
+    <string name="Swap_Fee">Комиссия</string>
     <string name="Swap_ErrorInsufficientBalance">Недостаточный баланс</string>
     <string name="Swap_ErrorInsufficientEthBalance">Текущий баланс ETH ниже суммы, необходимой для обработки этой транзакции, включая комиссию за транзакцию.</string>
     <string name="Swap_ErrorNoLiquidity">Невозможно обменять эти токены</string>
@@ -263,12 +263,12 @@
     <string name="SwapSettings_DeadlineMinute">%s мин</string>
     <string name="SwapSettings_RecipientPlaceholder">Адрес или домен</string>
     <string name="SwapSettings_Error_DeadlineZero">Нулевой Срок</string>
-    <string name="SwapSettings_Error_SlippageZero">Zero Slippage</string>
+    <string name="SwapSettings_Error_SlippageZero">Нулевое Отклонение</string>
     <string name="SwapSettings_Error_SlippageTooLow">Ваша транзакция, скорее всего, не удастся.</string>
     <string name="SwapSettings_Error_SlippageTooHigh">Макс. допустимое значение %s%%</string>
     <string name="SwapSettings_Error_InvalidAddress">Неверный Адрес</string>
-    <string name="SwapSettings_Error_InvalidSlippage">Invalid Slippage</string>
-    <string name="SwapSettings_Error_InvalidDeadline">Invalid Deadline</string>
+    <string name="SwapSettings_Error_InvalidSlippage">Неверное Отклонение</string>
+    <string name="SwapSettings_Error_InvalidDeadline">Недопустимый Срок</string>
     <!-- Swap Confirmation -->
     <string name="Swap_Confirmation">Подтверждение</string>
     <!--Swap Coin Select-->
@@ -361,7 +361,7 @@
     <string name="Settings_WalletConnect">Wallet Connect</string>
     <string name="Settings_RateUs">Оцените наше приложение</string>
     <string name="SettingsAboutApp_Title">О приложении</string>
-    <string name="SettingsAboutApp_Site">Website</string>
+    <string name="SettingsAboutApp_Site">Веб-сайт</string>
     <string name="SettingsPrivacy_Info">Это приложение не передает ваши данные, но, поскольку оно связывается с блокчейнами, возможна потенциальная утечка некоторых общедоступных данных, таких как IP-адрес. Используйте кнопку \"Информация\" в правом верхнем углу для получения более подробной информации о каждом разделе.</string>
     <string name="SettingsPrivacy_ConnectionSettingsTitle">Доступ в Интернет</string>
     <string name="SettingsPrivacy_CommunicationSettingsTitle">Синхронизация Блокчейна</string>
