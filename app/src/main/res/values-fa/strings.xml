@@ -88,7 +88,7 @@
     <string name="Market_Tab_Watchlist_EmptyList">You don\’t have any favorite assets.\nYou can add the favorites by clicking on star icon in the asset page</string>
     <string name="Market_Category_Rated">Rated</string>
     <string name="Market_Category_Rated_Description">Token ratings based on project security and market liquidity.</string>
-    <string name="Market_Category_Blockchains">Blockchains</string>
+    <string name="Market_Category_Blockchains">Token ratings based on project security and market liquidity.</string>
     <string name="Market_Category_Blockchains_Description">Native cryptocurrencies on major blockchains. </string>
     <string name="Market_Category_Dexes">DEXes</string>
     <string name="Market_Category_Dexes_Description">Decentralized cryptocurrency exchanges.</string>
