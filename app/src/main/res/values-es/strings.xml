@@ -129,7 +129,7 @@
     <string name="Market_Category_Fundraising">Fundraising</string>
     <string name="Market_Category_Fundraising_Description">Fundraising and token sale platforms.</string>
     <string name="Market_Category_Gaming">Gaming</string>
-    <string name="Market_Category_Gaming_Description">Crypto projects in gaming and VR sector.</string>
+    <string name="Market_Category_Gaming_Description">Fundraising and token sale platforms.</string>
     <string name="Market_Category_B2B">B2B</string>
     <string name="Market_Category_B2B_Description">B2B service providers.</string>
     <string name="Market_Category_Infrastructure">Infrastructure</string>
@@ -160,14 +160,14 @@
     <string name="Balance_Backup_Alert">Necesita respaldar el monedero %s antes de poder recibir %s.</string>
     <!--Send-->
     <string name="Send_Title">Enviar %s</string>
-    <string name="Send_Hint_Address">Address or Domain</string>
+    <string name="Send_Hint_Address">Dominio o dirección</string>
     <string name="Send_Hint_Amount">Importe</string>
     <string name="Send_Fee">Comisión</string>
     <string name="Send_Button_Paste">Pegar</string>
     <string name="Send_Button_Max">Máx.</string>
     <string name="Send_Confirmation_Title">Confirmar</string>
-    <string name="Send_Confirmation_Domain">Domain</string>
-    <string name="Send_Confirmation_Receiver">Receiver</string>
+    <string name="Send_Confirmation_Domain">Dominio</string>
+    <string name="Send_Confirmation_Receiver">Receptor</string>
     <string name="Send_Confirmation_EstimateTime">Tiempo estimado:</string>
     <string name="Send_Confirmation_Send_Button">Enviar</string>
     <string name="Send_Success">\u2713 Enviado</string>
@@ -200,14 +200,14 @@
     <string name="Send_Sending">Enviando</string>
     <string name="Send_Token_InsufficientFeeAlert">Las comisiones de transacción para %s (%s) pagado en %s. Es necesario %s.</string>
     <!--Fee Info -->
-    <string name="FeeInfo_Title">Transaction Speed</string>
-    <string name="FeeInfo_Description">Both Bitcoin and Ethereum blockchains require users to pay usage fees while sending transactions on the blockchain.\n\nUnstoppable uses public fee estimate services to help user determine appropriate transaction fees for the moment. The fees are higher when there are a lot of transactions taking place and lower when the blockchain is less busy.</string>
-    <string name="FeeInfo_Slow">Slow</string>
-    <string name="FeeInfo_SlowDescription">Selecting a value from this range may result in transaction being pending for hours or being rejected entirely. The lower the value the longer it will take for the transaction to confirm.</string>
-    <string name="FeeInfo_Average">Average</string>
-    <string name="FeeInfo_AverageDescription">Typically, this fee range should be sufficient for transaction to be processed within minutes/hour for Bitcoin and within minutes for Ethereum.</string>
-    <string name="FeeInfo_Fast">Fast</string>
-    <string name="FeeInfo_FastDescription">For transactions where priority is important we recommend using high fee setting. It\'s expected that selecting high fee setting will be sufficient for transaction to be completed within 10 minutes for Bitcoin and within a few minutes for Ethereum.\n\nThe Unstoppable wallet makes an educated guess based on the network activity and can\'t not guarantee that the suggested fee values will always result in expected behavior.</string>
+    <string name="FeeInfo_Title">Velocidad de transacción</string>
+    <string name="FeeInfo_Description">Las blockchains de Ethereum y Bitcoin requieren que los usuarios paguen tarifas de uso mientras envian transaciones en la blockchain \n\n Unstoppable utiliza tarifas de servicios publicos estimados para ayudar al usuario a determinar tarifas de transación apropiadas para el momento. Las tarifas son altas cuando hay muchas transacciones ocurriendo al mismo tiempo y menos cuando la blockchain se encuentra menos ocupada. </string>
+    <string name="FeeInfo_Slow">Lento</string>
+    <string name="FeeInfo_SlowDescription">Seleccionar un valor de este rango puede resultar en que la transacción esté pendiente por horas o sea rechazada por completo. Cuanto más bajo sea el valor, más tardará en confirmar la transacción.</string>
+    <string name="FeeInfo_Average">Promedio</string>
+    <string name="FeeInfo_AverageDescription">Por lo general, este rango de honorarios debería ser suficiente para que la transacción sea procesada entre un minuto/hora para Bitcoin y dentro de minutos para Ethereum.</string>
+    <string name="FeeInfo_Fast">Rápido</string>
+    <string name="FeeInfo_FastDescription">Para las transacciones en las que la prioridad es importante, recomendamos utilizar la configuración de alta tarifa. Se espera que la selección de un ajuste de alta tarifa sea suficiente para que la transacción se complete dentro de 10 minutos para Bitcoin y dentro de unos minutos para Ethereum.\n\nEl monedero imparable hace una conjetura educada basada en la actividad de la red y no puede garantizar que los valores de las comisiones sugeridas siempre resulten en un comportamiento esperado.</string>
     <!--Wallet Connect-->
     <string name="WalletConnect_Title">Wallet Connect</string>
     <string name="WalletConnect_Request">Pedido</string>
@@ -224,7 +224,7 @@
     <string name="WalletConnect_Status_Connecting">Conectando…</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Error_InsufficientBalance">La transacción requiere %s para enviar</string>
-    <string name="EthereumTransaction_Error_InsufficientBalanceForFee">Current ETH balance is below amount required to process this transaction including transaction fee.</string>
+    <string name="EthereumTransaction_Error_InsufficientBalanceForFee">El saldo actual de ETH es inferior al monto requerido para procesar esta transacción, incluida la tarifa de transacción.</string>
     <!--Swap-->
     <string name="Swap">Permutar</string>
     <string name="Swap_FromAmountTitle">Usted paga</string>
@@ -238,9 +238,9 @@
     <string name="Swap_PriceImpact">Impacto en el precio</string>
     <string name="Swap_MinimumReceived">Cantidad Garantizada</string>
     <string name="Swap_SwapFee">Tarifa por permutar</string>
-    <string name="Swap_EstimatedFee">Estimated Fee</string>
-    <string name="Swap_MaxFee">Max Fee</string>
-    <string name="Swap_Fee">Fee</string>
+    <string name="Swap_EstimatedFee">Tasa Estimada</string>
+    <string name="Swap_MaxFee">Comisión Máx.</string>
+    <string name="Swap_Fee">Comisión</string>
     <string name="Swap_ErrorInsufficientBalance">Saldo insuficiente</string>
     <string name="Swap_ErrorInsufficientEthBalance">El saldo actual de ETH es inferior al monto requerido para procesar esta transacción, incluida la tarifa de transacción.</string>
     <string name="Swap_ErrorNoLiquidity">No se pueden permutar estos tokens</string>
@@ -249,8 +249,8 @@
     <string name="Swap_Approve">Aprobar</string>
     <string name="Swap_Approving">Aprobando...</string>
     <string name="Swap_Swapping">Swapping</string>
-    <string name="Swap_MaximumPaid">Maximum Amount</string>
-    <string name="Swap_MinimumGot">Guaranteed Amount</string>
+    <string name="Swap_MaximumPaid">Máximo Pagado</string>
+    <string name="Swap_MinimumGot">Cantidad Garantizada</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">Configuración avanzada</string>
     <string name="SwapSettings_SlippageTitle">Tolerancia de deslizamiento</string>
@@ -261,14 +261,14 @@
     <string name="SwapSettings_RecipientAddressDescription">Después de la operación de cambio, el monto se transferirá a la dirección especificada</string>
     <string name="SwapSettings_Apply">Aplicar</string>
     <string name="SwapSettings_DeadlineMinute">%s min</string>
-    <string name="SwapSettings_RecipientPlaceholder">Address or domain</string>
-    <string name="SwapSettings_Error_DeadlineZero">Zero Deadline</string>
-    <string name="SwapSettings_Error_SlippageZero">Zero Slippage</string>
+    <string name="SwapSettings_RecipientPlaceholder">Dominio o dirección</string>
+    <string name="SwapSettings_Error_DeadlineZero">Cero límite</string>
+    <string name="SwapSettings_Error_SlippageZero">Cero deslizamiento</string>
     <string name="SwapSettings_Error_SlippageTooLow">Es probable que su transacción falle.</string>
     <string name="SwapSettings_Error_SlippageTooHigh">Valor máximo permitido %s%%</string>
     <string name="SwapSettings_Error_InvalidAddress">Dirección invalida</string>
-    <string name="SwapSettings_Error_InvalidSlippage">Invalid Slippage</string>
-    <string name="SwapSettings_Error_InvalidDeadline">Invalid Deadline</string>
+    <string name="SwapSettings_Error_InvalidSlippage">Deslizamiento no válido</string>
+    <string name="SwapSettings_Error_InvalidDeadline">Fecha límite no válida</string>
     <!-- Swap Confirmation -->
     <string name="Swap_Confirmation">Confirmaciones</string>
     <!--Swap Coin Select-->
@@ -304,7 +304,7 @@
     <string name="Transactions_Title">Transacciones</string>
     <string name="Transactions_FilterAll">TODO</string>
     <string name="Transactions_EmptyList">Todavía no tienes transacciones pendientes o pasadas</string>
-    <string name="Transactions_Pending">Pending</string>
+    <string name="Transactions_Pending">Pendiente</string>
     <string name="Transactions_Receiving">Recibiendo</string>
     <string name="Transactions_Sending">Enviando</string>
     <string name="Transactions_Approving">Aprobación de Swap</string>
@@ -327,7 +327,7 @@
     <string name="TransactionInfo_SentToSelfNote">Esta transacción fue enviada a su propia dirección</string>
     <string name="TransactionInfo_DoubleSpendNote">¡Riesgo de doble gasto!</string>
     <string name="TransactionInfo_Input">Entrada</string>
-    <string name="TransactionInfo_ButtonViewOnExplorerName">View on %s</string>
+    <string name="TransactionInfo_ButtonViewOnExplorerName">Ver en %s</string>
     <string name="StatusInfo_Pending">Pendiente</string>
     <string name="StatusInfo_Confirmed">Confirmado</string>
     <string name="StatusInfo_Failed">Falló</string>
@@ -361,7 +361,7 @@
     <string name="Settings_WalletConnect">Wallet Connect</string>
     <string name="Settings_RateUs">Califícanos</string>
     <string name="SettingsAboutApp_Title">Sobre la aplicacion</string>
-    <string name="SettingsAboutApp_Site">Website</string>
+    <string name="SettingsAboutApp_Site">Sitio Web</string>
     <string name="SettingsPrivacy_Info">Esta aplicación no comparte ninguno de tus datos. Sin embargo, ya que se comunica con blockchains, algunos datos públicos como la dirección IP pueden ser filtrados. Utilice el botón Info de la parte superior derecha para obtener información detallada sobre cada sección.</string>
     <string name="SettingsPrivacy_ConnectionSettingsTitle">Internet</string>
     <string name="SettingsPrivacy_CommunicationSettingsTitle">Sincronización de Blockchain</string>
@@ -418,7 +418,7 @@
     <string name="SettingsTerms_TermRoot">Entiendo que rootear mi teléfono (rooting), instalando aplicaciones de terceros de fuentes desconocidas o mantener el sistema operativo desactualizado puede, potencialmente,
 poner en peligro la seguridad de mis fondos.</string>
     <string name="SettingsTerms_TermBugs">Entiendo que puede haber problemas de software sin descubrir en el código que hace funcionar esta aplicación, lo que puede llevar a un comportamiento inesperado o al mal funcionamiento de la aplicación.</string>
-    <string name="Settings_TermsPin">I understand that disabling the phone unlock PIN (or its equivalent) in Settings of Android OS will erase wallet private keys from my device.I will need my private keys to regain access to my wallet.</string>
+    <string name="Settings_TermsPin">Entiendo que deshabilitar el teléfono desbloqueará el código de acceso en la Configuración del Android y esto borrará las claves privadas de mi dispositivo. Necesitaré mis claves privadas para recuperar el acceso a mi monedero.</string>
     <string name="SettingsTerms_BottomThankYou">¡Gracias \npor elegir \neste monedero!</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Compartir</string>
@@ -492,12 +492,12 @@ poner en peligro la seguridad de mis fondos.</string>
     <string name="AddTokenDialog_Erc20Tokens">ERC20 Token</string>
     <string name="AddTokenDialog_BinanceTokens">BEP2 Token</string>
     <!-- Enable Token -->
-    <string name="EnalbeToken_Title">Enable Token</string>
-    <string name="EnalbeToken_Description">Enable all %s coins that have any balance</string>
-    <string name="EnalbeToken_Enabling">Enabling</string>
-    <string name="EnalbeToken_EnabledCoins">Enabled %d coins</string>
-    <string name="EnalbeToken_NoCoins">No coins found with balance</string>
-    <string name="EnalbeToken_EnableKey">Enable</string>
+    <string name="EnalbeToken_Title">Activar token</string>
+    <string name="EnalbeToken_Description">Habilitar todas las %s monedas que tengan saldo</string>
+    <string name="EnalbeToken_Enabling">Activando</string>
+    <string name="EnalbeToken_EnabledCoins">%d créditos habilitados</string>
+    <string name="EnalbeToken_NoCoins">No hay monedas con saldo</string>
+    <string name="EnalbeToken_EnableKey">Habilitar</string>
     <!-- Add Token -->
     <string name="AddToken_CoinName">Nombre de moneda</string>
     <string name="AddToken_Symbol">Símbolo</string>
@@ -524,9 +524,9 @@ poner en peligro la seguridad de mis fondos.</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">Después de este cambio, el monedero tendrá que resincronizarse con el blockchain %s.</string>
     <string name="BlockchainSettings_CommunicationModeChangeAlert_Title">Comunicación</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type0_Title">Legacy</string>
-    <string name="CoinSettings_BitcoinCashCoinType_Type145_Title">New</string>
-    <string name="CoinSettings_BitcoinCashCoinType_Type0_Description">Older wallets (before Aug 2017)</string>
-    <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">Newer wallets</string>
+    <string name="CoinSettings_BitcoinCashCoinType_Type145_Title">Nuevo</string>
+    <string name="CoinSettings_BitcoinCashCoinType_Type0_Description">Monederos antiguos (antes de Agosto 2017)</string>
+    <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">Monederos más nuevos</string>
     <!-- Tor -->
     <string name="Tor_Title">Tor</string>
     <string name="Tor_Connection_Title">Conexión</string>
