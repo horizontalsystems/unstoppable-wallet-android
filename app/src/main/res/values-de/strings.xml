@@ -89,7 +89,7 @@
     <string name="Market_Category_Rated">Rated</string>
     <string name="Market_Category_Rated_Description">Token ratings based on project security and market liquidity.</string>
     <string name="Market_Category_Blockchains">Blockchains</string>
-    <string name="Market_Category_Blockchains_Description">Native cryptocurrencies on major blockchains. </string>
+    <string name="Market_Category_Blockchains_Description">Native cryptocurrencies on major blockchains.</string>
     <string name="Market_Category_Dexes">DEXes</string>
     <string name="Market_Category_Dexes_Description">Decentralized cryptocurrency exchanges.</string>
     <string name="Market_Category_Lending">Lending</string>
@@ -361,7 +361,7 @@
     <string name="Settings_WalletConnect">Wallet Connect</string>
     <string name="Settings_RateUs">Bewerten Sie uns</string>
     <string name="SettingsAboutApp_Title">Über die App</string>
-    <string name="SettingsAboutApp_Site">Website</string>
+    <string name="SettingsAboutApp_Site">Webseite</string>
     <string name="SettingsPrivacy_Info">Diese App gibt keine Ihrer Daten weiter. Da sie jedoch mit Blockchains kommuniziert, können einige öffentliche Daten wie z. B. die IP-Adresse möglicherweise durchsickern. Benutzen Sie den Info-Knopf oben rechts, um detaillierte Informationen über jeden Abschnitt zu erhalten.</string>
     <string name="SettingsPrivacy_ConnectionSettingsTitle">Internet</string>
     <string name="SettingsPrivacy_CommunicationSettingsTitle">Blockchain Sync</string>
@@ -493,7 +493,7 @@
     <!-- Enable Token -->
     <string name="EnalbeToken_Title">Enable Token</string>
     <string name="EnalbeToken_Description">Enable all %s coins that have any balance</string>
-    <string name="EnalbeToken_Enabling">Enabling</string>
+    <string name="EnalbeToken_Enabling">Aktivieren</string>
     <string name="EnalbeToken_EnabledCoins">Enabled %d coins</string>
     <string name="EnalbeToken_NoCoins">No coins found with balance</string>
     <string name="EnalbeToken_EnableKey">Enable</string>
