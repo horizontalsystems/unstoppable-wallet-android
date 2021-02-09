@@ -262,8 +262,8 @@
     <string name="SwapSettings_Apply">적용</string>
     <string name="SwapSettings_DeadlineMinute">최소 %s</string>
     <string name="SwapSettings_RecipientPlaceholder">Memo</string>
-    <string name="SwapSettings_Error_DeadlineZero">Zero Deadline</string>
-    <string name="SwapSettings_Error_SlippageZero">Zero Slippage</string>
+    <string name="SwapSettings_Error_DeadlineZero">올바르지 않은 마감 시간</string>
+    <string name="SwapSettings_Error_SlippageZero">올바르지 않은 슬립</string>
     <string name="SwapSettings_Error_SlippageTooLow">귀하의 거래가 실패할 것 같습니다.</string>
     <string name="SwapSettings_Error_SlippageTooHigh">최대 허용치 %s%%</string>
     <string name="SwapSettings_Error_InvalidAddress">잘못된 주소</string>
@@ -492,7 +492,7 @@
     <string name="AddTokenDialog_Erc20Tokens">ERC20 토큰</string>
     <string name="AddTokenDialog_BinanceTokens">BEP2 토큰</string>
     <!-- Enable Token -->
-    <string name="EnalbeToken_Title">Enable Token</string>
+    <string name="EnalbeToken_Title">코인 활성</string>
     <string name="EnalbeToken_Description">잔액이 있는 모든 %s의 코인 사용</string>
     <string name="EnalbeToken_Enabling">활성화 중</string>
     <string name="EnalbeToken_EnabledCoins">%d 코인 활성화됨</string>
