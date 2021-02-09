@@ -491,12 +491,12 @@
     <string name="AddTokenDialog_Erc20Tokens">ERC20-Token</string>
     <string name="AddTokenDialog_BinanceTokens">BEP2-Token</string>
     <!-- Enable Token -->
-    <string name="EnalbeToken_Title">Enable Token</string>
-    <string name="EnalbeToken_Description">Enable all %s coins that have any balance</string>
+    <string name="EnalbeToken_Title">Coins aktivieren</string>
+    <string name="EnalbeToken_Description">Alle %s Coins aktivieren, die ein Guthaben haben</string>
     <string name="EnalbeToken_Enabling">Aktivieren</string>
-    <string name="EnalbeToken_EnabledCoins">Enabled %d coins</string>
-    <string name="EnalbeToken_NoCoins">No coins found with balance</string>
-    <string name="EnalbeToken_EnableKey">Enable</string>
+    <string name="EnalbeToken_EnabledCoins">Aktivierte %d Coins</string>
+    <string name="EnalbeToken_NoCoins">Keine Coins mit Guthaben gefunden</string>
+    <string name="EnalbeToken_EnableKey">Aktivieren</string>
     <!-- Add Token -->
     <string name="AddToken_CoinName">Coin Name</string>
     <string name="AddToken_Symbol">Symbol</string>
@@ -523,9 +523,9 @@
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">Nach dieser Änderung muss sich das Wallet mit der %s Blockchain neu synchronisieren.</string>
     <string name="BlockchainSettings_CommunicationModeChangeAlert_Title">Kommunikation</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type0_Title">Legacy</string>
-    <string name="CoinSettings_BitcoinCashCoinType_Type145_Title">New</string>
-    <string name="CoinSettings_BitcoinCashCoinType_Type0_Description">Older wallets (before Aug 2017)</string>
-    <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">Newer wallets</string>
+    <string name="CoinSettings_BitcoinCashCoinType_Type145_Title">Neu</string>
+    <string name="CoinSettings_BitcoinCashCoinType_Type0_Description">Ältere Wallets (vor August 2017)</string>
+    <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">Neuere Wallets</string>
     <!-- Tor -->
     <string name="Tor_Title">Tor</string>
     <string name="Tor_Connection_Title">Verbinde</string>
@@ -545,7 +545,7 @@
     <!--Charts-->
     <string name="Charts_TimeDuration_Today">Heute</string>
     <string name="Charts_TimeDuration_Day">24Std</string>
-    <string name="Charts_TimeDuration_Week">7D</string>
+    <string name="Charts_TimeDuration_Week">7T</string>
     <string name="Charts_TimeDuration_Month">1M</string>
     <string name="Charts_TimeDuration_TwoWeeks">2W</string>
     <string name="Charts_TimeDuration_Month3">3M</string>
