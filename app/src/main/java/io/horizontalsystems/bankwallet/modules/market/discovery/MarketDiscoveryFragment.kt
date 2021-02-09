@@ -38,10 +38,6 @@ class MarketDiscoveryFragment : BaseFragment(), MarketListHeaderView.Listener, V
         marketListHeader.listener = this
         marketListHeader.setSortingField(marketDiscoveryViewModel.sortingField)
         marketListHeader.setMarketField(marketDiscoveryViewModel.marketField)
-        marketListHeader.isVisible = false
-        marketDiscoveryViewModel.marketViewItemsLiveData.observe(viewLifecycleOwner, { (list, _) ->
-            marketListHeader.isVisible = list.isNotEmpty()
-        })
 
         marketItemsAdapter = MarketItemsAdapter(
                 this,
