@@ -89,7 +89,7 @@
     <string name="Market_Category_Rated">Rated</string>
     <string name="Market_Category_Rated_Description">Token ratings based on project security and market liquidity.</string>
     <string name="Market_Category_Blockchains">Blockchains</string>
-    <string name="Market_Category_Blockchains_Description">Native cryptocurrencies on major blockchains. </string>
+    <string name="Market_Category_Blockchains_Description">Native cryptocurrencies on major blockchains.</string>
     <string name="Market_Category_Dexes">DEXes</string>
     <string name="Market_Category_Dexes_Description">Decentralized cryptocurrency exchanges.</string>
     <string name="Market_Category_Lending">Lending</string>
@@ -160,14 +160,14 @@
     <string name="Balance_Backup_Alert">您必须在接收%s之前先备份%s钱包。</string>
     <!--Send-->
     <string name="Send_Title">发送%s</string>
-    <string name="Send_Hint_Address">Address or Domain</string>
+    <string name="Send_Hint_Address">地址或域名</string>
     <string name="Send_Hint_Amount">金额</string>
     <string name="Send_Fee">费用</string>
     <string name="Send_Button_Paste">粘帖</string>
     <string name="Send_Button_Max">最多</string>
     <string name="Send_Confirmation_Title">确认</string>
-    <string name="Send_Confirmation_Domain">Domain</string>
-    <string name="Send_Confirmation_Receiver">Receiver</string>
+    <string name="Send_Confirmation_Domain">域名</string>
+    <string name="Send_Confirmation_Receiver">接收器</string>
     <string name="Send_Confirmation_EstimateTime">预计时间：</string>
     <string name="Send_Confirmation_Send_Button">发送​​</string>
     <string name="Send_Success">\u2713已发送</string>
@@ -200,13 +200,13 @@
     <string name="Send_Sending">正在发送</string>
     <string name="Send_Token_InsufficientFeeAlert">%s（%s）的交易费用以%s支付。您需要%s。</string>
     <!--Fee Info -->
-    <string name="FeeInfo_Title">Transaction Speed</string>
-    <string name="FeeInfo_Description">Both Bitcoin and Ethereum blockchains require users to pay usage fees while sending transactions on the blockchain.\n\nUnstoppable uses public fee estimate services to help user determine appropriate transaction fees for the moment. The fees are higher when there are a lot of transactions taking place and lower when the blockchain is less busy.</string>
-    <string name="FeeInfo_Slow">Slow</string>
-    <string name="FeeInfo_SlowDescription">Selecting a value from this range may result in transaction being pending for hours or being rejected entirely. The lower the value the longer it will take for the transaction to confirm.</string>
-    <string name="FeeInfo_Average">Average</string>
-    <string name="FeeInfo_AverageDescription">Typically, this fee range should be sufficient for transaction to be processed within minutes/hour for Bitcoin and within minutes for Ethereum.</string>
-    <string name="FeeInfo_Fast">Fast</string>
+    <string name="FeeInfo_Title">交易速度</string>
+    <string name="FeeInfo_Description">比特币（Bitcoin）和 以太币（Etherum）区块链都要求用户在区块链上发送交易时支付使用费。\n\nUnstoppable使用公共费用估算服务来帮助用户确定当前合适的交易费用。 当大量交易正在进行时，费用较高，而当区块链不那么繁忙时，费用较低。</string>
+    <string name="FeeInfo_Slow">慢</string>
+    <string name="FeeInfo_SlowDescription">选择此范围中的值可能导致交易需等待数小时或被完全拒绝。值越低，确认交易的所需时间越长。</string>
+    <string name="FeeInfo_Average">平均</string>
+    <string name="FeeInfo_AverageDescription">通常，此费用范围应足以使比特币（Bitcoin）交易在数分钟/小时、以太币（Ethereum）在数分钟内得到处理。</string>
+    <string name="FeeInfo_Fast">快</string>
     <string name="FeeInfo_FastDescription">For transactions where priority is important we recommend using high fee setting. It\'s expected that selecting high fee setting will be sufficient for transaction to be completed within 10 minutes for Bitcoin and within a few minutes for Ethereum.\n\nThe Unstoppable wallet makes an educated guess based on the network activity and can\'t not guarantee that the suggested fee values will always result in expected behavior.</string>
     <!--Wallet Connect-->
     <string name="WalletConnect_Title">Wallet Connect</string>
@@ -224,7 +224,7 @@
     <string name="WalletConnect_Status_Connecting">正在连接...</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Error_InsufficientBalance">交易要求%s用于发送。</string>
-    <string name="EthereumTransaction_Error_InsufficientBalanceForFee">Current ETH balance is below amount required to process this transaction including transaction fee.</string>
+    <string name="EthereumTransaction_Error_InsufficientBalanceForFee">當前ETH餘額低於處理此交易所需的金額，包括交易費用。</string>
     <!--Swap-->
     <string name="Swap">掉期交易</string>
     <string name="Swap_FromAmountTitle">您支付</string>
@@ -238,9 +238,9 @@
     <string name="Swap_PriceImpact">价格影响</string>
     <string name="Swap_MinimumReceived">保证金额</string>
     <string name="Swap_SwapFee">掉期交易费用</string>
-    <string name="Swap_EstimatedFee">Estimated Fee</string>
-    <string name="Swap_MaxFee">Max Fee</string>
-    <string name="Swap_Fee">Fee</string>
+    <string name="Swap_EstimatedFee">预估费用</string>
+    <string name="Swap_MaxFee">最大手续费</string>
+    <string name="Swap_Fee">费用</string>
     <string name="Swap_ErrorInsufficientBalance">余额不足</string>
     <string name="Swap_ErrorInsufficientEthBalance">當前ETH餘額低於處理此交易所需的金額，包括交易費用。</string>
     <string name="Swap_ErrorNoLiquidity">无法交换代币</string>
@@ -261,14 +261,14 @@
     <string name="SwapSettings_RecipientAddressDescription">在兑换操作之后，金额将转移至指定地址</string>
     <string name="SwapSettings_Apply">应用</string>
     <string name="SwapSettings_DeadlineMinute">%s分钟。</string>
-    <string name="SwapSettings_RecipientPlaceholder">Address or domain</string>
+    <string name="SwapSettings_RecipientPlaceholder">地址或域名</string>
     <string name="SwapSettings_Error_DeadlineZero">Zero Deadline</string>
     <string name="SwapSettings_Error_SlippageZero">Zero Slippage</string>
     <string name="SwapSettings_Error_SlippageTooLow">您的交易可能失败。</string>
     <string name="SwapSettings_Error_SlippageTooHigh">最大允许值是 %s%%</string>
     <string name="SwapSettings_Error_InvalidAddress">Adresse invalide</string>
-    <string name="SwapSettings_Error_InvalidSlippage">Invalid Slippage</string>
-    <string name="SwapSettings_Error_InvalidDeadline">Invalid Deadline</string>
+    <string name="SwapSettings_Error_InvalidSlippage">无效延误</string>
+    <string name="SwapSettings_Error_InvalidDeadline">无效截止日期</string>
     <!-- Swap Confirmation -->
     <string name="Swap_Confirmation">确认</string>
     <!--Swap Coin Select-->
@@ -304,7 +304,7 @@
     <string name="Transactions_Title">交易</string>
     <string name="Transactions_FilterAll">全部</string>
     <string name="Transactions_EmptyList">您还没有任何待定或成功的交易</string>
-    <string name="Transactions_Pending">Pending</string>
+    <string name="Transactions_Pending">待处理</string>
     <string name="Transactions_Receiving">正在接收</string>
     <string name="Transactions_Sending">正在发送</string>
     <string name="Transactions_Approving">互兑批准</string>
@@ -361,7 +361,7 @@
     <string name="Settings_WalletConnect">Wallet Connect</string>
     <string name="Settings_RateUs">评价我们</string>
     <string name="SettingsAboutApp_Title">关于应用</string>
-    <string name="SettingsAboutApp_Site">Website</string>
+    <string name="SettingsAboutApp_Site">网站</string>
     <string name="SettingsPrivacy_Info">虽然此APP不会将您的个人数据提供给任何第三方，但您的某些个人数据（例如IP地址）在与区块链通信时可能会泄漏。单击右上角的“信息”按钮以获取更多详细信息。</string>
     <string name="SettingsPrivacy_ConnectionSettingsTitle">互联网</string>
     <string name="SettingsPrivacy_CommunicationSettingsTitle">同步区块链</string>
@@ -491,12 +491,12 @@
     <string name="AddTokenDialog_Erc20Tokens">ERC20 代币</string>
     <string name="AddTokenDialog_BinanceTokens">BEP2 代币</string>
     <!-- Enable Token -->
-    <string name="EnalbeToken_Title">Enable Token</string>
-    <string name="EnalbeToken_Description">Enable all %s coins that have any balance</string>
-    <string name="EnalbeToken_Enabling">Enabling</string>
-    <string name="EnalbeToken_EnabledCoins">Enabled %d coins</string>
-    <string name="EnalbeToken_NoCoins">No coins found with balance</string>
-    <string name="EnalbeToken_EnableKey">Enable</string>
+    <string name="EnalbeToken_Title">启用代币</string>
+    <string name="EnalbeToken_Description">启用有余额的所有%s代币</string>
+    <string name="EnalbeToken_Enabling">正在启用</string>
+    <string name="EnalbeToken_EnabledCoins">已启用%d代币</string>
+    <string name="EnalbeToken_NoCoins">找不到有余额的代币</string>
+    <string name="EnalbeToken_EnableKey">启用</string>
     <!-- Add Token -->
     <string name="AddToken_CoinName">代币图片</string>
     <string name="AddToken_Symbol">标志</string>
@@ -524,9 +524,9 @@
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">此更改后，钱包将必须与 %s 区块链重新同步。</string>
     <string name="BlockchainSettings_CommunicationModeChangeAlert_Title">通信</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type0_Title">Legacy</string>
-    <string name="CoinSettings_BitcoinCashCoinType_Type145_Title">New</string>
-    <string name="CoinSettings_BitcoinCashCoinType_Type0_Description">Older wallets (before Aug 2017)</string>
-    <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">Newer wallets</string>
+    <string name="CoinSettings_BitcoinCashCoinType_Type145_Title">新</string>
+    <string name="CoinSettings_BitcoinCashCoinType_Type0_Description">旧钱包（2017年之前）</string>
+    <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">较新的钱包</string>
     <!-- Tor -->
     <string name="Tor_Title">Tor</string>
     <string name="Tor_Connection_Title">连接</string>
