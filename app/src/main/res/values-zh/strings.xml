@@ -207,7 +207,7 @@
     <string name="FeeInfo_Average">平均</string>
     <string name="FeeInfo_AverageDescription">通常，此费用范围应足以使比特币（Bitcoin）交易在数分钟/小时、以太币（Ethereum）在数分钟内得到处理。</string>
     <string name="FeeInfo_Fast">快</string>
-    <string name="FeeInfo_FastDescription">For transactions where priority is important we recommend using high fee setting. It\'s expected that selecting high fee setting will be sufficient for transaction to be completed within 10 minutes for Bitcoin and within a few minutes for Ethereum.\n\nThe Unstoppable wallet makes an educated guess based on the network activity and can\'t not guarantee that the suggested fee values will always result in expected behavior.</string>
+    <string name="FeeInfo_FastDescription">对于优先级具有重要性的交易，我们建议使用高费用设置。预计选择高费用设置将足以让比特币（Bitcoin）交易在10分钟内完成，以太币（Ethereum）在数分钟内完成。\n\nUnstoppable钱包根据网络活动作出有效的估计，但不保证建议的费用值总是能实现预期行为。</string>
     <!--Wallet Connect-->
     <string name="WalletConnect_Title">Wallet Connect</string>
     <string name="WalletConnect_Request">请求</string>
@@ -262,8 +262,8 @@
     <string name="SwapSettings_Apply">应用</string>
     <string name="SwapSettings_DeadlineMinute">%s分钟。</string>
     <string name="SwapSettings_RecipientPlaceholder">地址或域名</string>
-    <string name="SwapSettings_Error_DeadlineZero">Zero Deadline</string>
-    <string name="SwapSettings_Error_SlippageZero">Zero Slippage</string>
+    <string name="SwapSettings_Error_DeadlineZero">没有截止日期</string>
+    <string name="SwapSettings_Error_SlippageZero">没有延误</string>
     <string name="SwapSettings_Error_SlippageTooLow">您的交易可能失败。</string>
     <string name="SwapSettings_Error_SlippageTooHigh">最大允许值是 %s%%</string>
     <string name="SwapSettings_Error_InvalidAddress">Adresse invalide</string>
@@ -417,7 +417,7 @@
     <string name="SettingsTerms_TermPhone">我理解，将我的手机交给不可信的实体或者在未设置安全PIN码锁定的情况下离开钱包应用可能会危害我的资金安全。</string>
     <string name="SettingsTerms_TermRoot">我理解对我的手机进行越狱（root）、安装来源不明的第三方应用、未及时更新操作系统可能会危害我的资金安全。</string>
     <string name="SettingsTerms_TermBugs">我理解，在实现此钱包应用的代码中可能存在未发现的软件问题，这可能会导致意外行为或应用故障的发生。</string>
-    <string name="Settings_TermsPin">I understand that disabling the phone unlock PIN (or its equivalent) in Settings of Android OS will erase wallet private keys from my device.I will need my private keys to regain access to my wallet.</string>
+    <string name="Settings_TermsPin">我知道在Android系统的设置中禁用手机解锁密码（或类似代码）将从我的设备中擦除钱包私钥。我需要我的私钥才能重新访问我的钱包。</string>
     <string name="SettingsTerms_BottomThankYou">感谢您选择我们的钱包！</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">分享</string>
