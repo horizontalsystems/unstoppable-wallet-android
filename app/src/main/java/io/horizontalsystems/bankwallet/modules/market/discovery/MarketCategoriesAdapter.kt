@@ -94,7 +94,7 @@ class MarketCategoriesAdapter(
         //collapse layout
         val titleTextView = tab.view.findViewById<TextView>(android.R.id.text1)
         val toWidth = max(titleTextView.width + LayoutHelper.dp(40f, context), itemViewMinLength)
-        animateTabWidth(tab.view, toWidth, 200L)
+        animateTabWidth(tab.view, toWidth, 300L)
 
         //color animation
         tab.customView?.let { animateTabColor(it, activeColor, inactiveColor, 200L) }
