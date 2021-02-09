@@ -3806,7 +3806,7 @@
         {
             "code": "SNX",
             "name": "Synthetix Network Token",
-            "categories": ["synthetics", "dexes", "stablecoins_issuers"],
+            "categories": ["synthetics", "dexes", "stablecoin_issuers"],
             "active": true,
             "platform": {
                 "name": "ethereum",
