@@ -7,17 +7,15 @@ class SendAmountView : SendAmountModule.IView {
 
     val amount = MutableLiveData<String>()
     val availableBalance = MutableLiveData<String>()
-    val hint = MutableLiveData<String?>()
-    val amountInputPrefix = MutableLiveData<String?>()
+    val hint = MutableLiveData<String>()
+    val hintStateEnabled = MutableLiveData<Boolean>()
+    val amountInputPrefix = MutableLiveData<String>()
     val maxButtonVisibleValue = MutableLiveData<Boolean>()
-    val addTextChangeListener = SingleLiveEvent<Unit>()
-    val removeTextChangeListener = SingleLiveEvent<Unit>()
     val revertAmount = SingleLiveEvent<String>()
     val validationError = MutableLiveData<SendAmountModule.ValidationError?>()
-    val switchButtonEnabled = MutableLiveData<Boolean>()
     val setLoading = MutableLiveData<Boolean>()
 
-    override fun setAmountType(prefix: String?) {
+    override fun setAmountType(prefix: String) {
         amountInputPrefix.value = prefix
     }
 
@@ -29,20 +27,16 @@ class SendAmountView : SendAmountModule.IView {
         this.availableBalance.postValue(availableBalance)
     }
 
-    override fun setHint(hint: String?) {
+    override fun setHint(hint: String) {
         this.hint.postValue(hint)
+    }
+
+    override fun setHintStateEnabled(enabled: Boolean) {
+        hintStateEnabled.postValue(enabled)
     }
 
     override fun setMaxButtonVisible(visible: Boolean) {
         maxButtonVisibleValue.postValue(visible)
-    }
-
-    override fun addTextChangeListener() {
-        addTextChangeListener.call()
-    }
-
-    override fun removeTextChangeListener() {
-        removeTextChangeListener.call()
     }
 
     override fun revertAmount(amount: String) {
@@ -51,10 +45,6 @@ class SendAmountView : SendAmountModule.IView {
 
     override fun setValidationError(error: SendAmountModule.ValidationError?) {
         this.validationError.postValue(error)
-    }
-
-    override fun setSwitchButtonEnabled(enabled: Boolean) {
-        switchButtonEnabled.postValue(enabled)
     }
 
     override fun setLoading(loading: Boolean) {

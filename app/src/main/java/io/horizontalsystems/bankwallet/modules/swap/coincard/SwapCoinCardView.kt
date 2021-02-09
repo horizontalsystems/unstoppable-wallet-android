@@ -1,11 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.swap.coincard
 
 import android.content.Context
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.AttributeSet
 import android.view.ViewGroup
-import android.view.animation.AnimationUtils
 import androidx.cardview.widget.CardView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -24,21 +21,6 @@ class SwapCoinCardView @JvmOverloads constructor(context: Context, attrs: Attrib
     : CardView(context, attrs, defStyleAttr) {
 
     private var viewModel: SwapCoinCardViewModel? = null
-
-    private var onAmountChangeCallback: ((old: String?, new: String?) -> Unit)? = null
-
-    private val textWatcher = object : TextWatcher {
-        private var prevValue: String? = null
-
-        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            onAmountChangeCallback?.invoke(prevValue, s?.toString())
-        }
-
-        override fun afterTextChanged(s: Editable?) {}
-        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            prevValue = s?.toString()
-        }
-    }
 
     init {
         radius = LayoutHelper.dpToPx(16f, context)
@@ -59,16 +41,13 @@ class SwapCoinCardView @JvmOverloads constructor(context: Context, attrs: Attrib
             fragment.findNavController().navigate(R.id.swapFragment_to_selectSwapCoinFragment, params, null)
         }
 
-        amountSwitchButton.setOnSingleClickListener {
-            viewModel.onSwitch()
-        }
+        amountInput.onTapSecondaryCallback = { viewModel.onSwitch() }
 
-        amount.addTextChangedListener(textWatcher)
-        onAmountChangeCallback = { old, new ->
+        amountInput.onTextChangeCallback = { old, new ->
             if (viewModel.isValid(new)) {
                 viewModel.onChangeAmount(new)
             } else {
-                setAmount(old, true)
+                amountInput.revertAmount(old)
             }
         }
 
@@ -90,31 +69,24 @@ class SwapCoinCardView @JvmOverloads constructor(context: Context, attrs: Attrib
 
         viewModel.isEstimatedLiveData().observe(lifecycleOwner, { setEstimated(it) })
 
-        viewModel.amountLiveData().observe(lifecycleOwner, { setAmount(it) })
-
-        viewModel.switchEnabledLiveData().observe(lifecycleOwner, { amountSwitchButton.isEnabled = it })
-
-        viewModel.secondaryInfoLiveData().observe(lifecycleOwner, { setSecondaryAmountInfo(it) })
-
-        viewModel.prefixLiveData().observe(lifecycleOwner, { setAmountPrefix(it) })
-    }
-
-    private fun setAmount(amountText: String?, shakeAnimate: Boolean = false) {
-        this.amount.apply {
-            if (amountsEqual(text?.toString()?.toBigDecimalOrNull(), amountText?.toBigDecimalOrNull())) return
-
-            removeTextChangedListener(textWatcher)
-            setText(amountText)
-            addTextChangedListener(textWatcher)
-
-            amountText?.let {
-                setSelection(it.length)
+        viewModel.amountLiveData().observe(lifecycleOwner, { amount ->
+            if (!amountsEqual(amount?.toBigDecimalOrNull(), amountInput.getAmount()?.toBigDecimalOrNull())) {
+                amountInput.setAmount(amount)
             }
+        })
 
-            if (shakeAnimate) {
-                startAnimation(AnimationUtils.loadAnimation(context, R.anim.shake_edittext))
+        viewModel.secondaryInfoLiveData().observe(lifecycleOwner, { amountInput.setSecondaryText(it) })
+
+        viewModel.prefixLiveData().observe(lifecycleOwner, { amountInput.setPrefix(it) })
+
+        viewModel.switchEnabledLiveData().observe(lifecycleOwner, { amountInput.setSecondaryEnabled(it) })
+
+        viewModel.maxEnabledLiveData().observe(lifecycleOwner, { enabled ->
+            amountInput.maxButtonVisible = enabled
+            if (enabled){
+                amountInput.onTapMaxCallback = { viewModel.onTapMax() }
             }
-        }
+        })
     }
 
     private fun amountsEqual(amount1: BigDecimal?, amount2: BigDecimal?): Boolean {
@@ -151,20 +123,6 @@ class SwapCoinCardView @JvmOverloads constructor(context: Context, attrs: Attrib
 
     private fun setEstimated(show: Boolean) {
         estimatedLabel.isVisible = show
-    }
-
-    private fun setSecondaryAmountInfo(secondaryInfo: SwapCoinCardViewModel.SecondaryInfoViewItem?) {
-        secondaryAmount.text = secondaryInfo?.text
-        val textColor = if (secondaryInfo?.type == SwapCoinCardViewModel.SecondaryInfoType.Value)
-            LayoutHelper.getAttr(R.attr.ColorLeah, context.theme, context.getColor(R.color.steel_light))
-        else
-            context.getColor(R.color.grey_50)
-        secondaryAmount.setTextColor(textColor)
-    }
-
-    private fun setAmountPrefix(prefix: String?) {
-        amountPrefix.isVisible = prefix != null
-        amountPrefix.text = prefix
     }
 
 }

@@ -1,12 +1,15 @@
 package io.horizontalsystems.bankwallet.core.adapters
 
-import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.core.AdapterState
+import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.AppLogger
+import io.horizontalsystems.bankwallet.core.toHexString
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.bankwallet.entities.TransactionType
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.core.hexStringToByteArray
 import io.horizontalsystems.ethereumkit.models.Address
-import io.horizontalsystems.ethereumkit.models.TransactionWithInternal
+import io.horizontalsystems.ethereumkit.models.FullTransaction
 import io.reactivex.Flowable
 import io.reactivex.Single
 import java.math.BigDecimal
@@ -30,30 +33,26 @@ class EthereumAdapter(kit: EthereumKit) : EthereumBaseAdapter(kit, decimal) {
 
     // IBalanceAdapter
 
-    override val state: AdapterState
-        get() = when (val kitSyncState = ethereumKit.syncState) {
-            is EthereumKit.SyncState.Synced -> AdapterState.Synced
-            is EthereumKit.SyncState.NotSynced -> AdapterState.NotSynced(kitSyncState.error)
-            is EthereumKit.SyncState.Syncing -> AdapterState.Syncing(50, null)
-        }
+    override val balanceState: AdapterState
+        get() = convertToAdapterState(ethereumKit.syncState)
+
+    override val balanceStateUpdatedFlowable: Flowable<Unit>
+        get() = ethereumKit.syncStateFlowable.map {}
 
     override fun sendInternal(address: Address, amount: BigInteger, gasPrice: Long, gasLimit: Long, logger: AppLogger): Single<Unit> {
-        return ethereumKit.send(address, amount, byteArrayOf(),gasPrice, gasLimit)
+        return ethereumKit.send(address, amount, byteArrayOf(), gasPrice, gasLimit)
                 .doOnSubscribe {
                     logger.info("call ethereumKit.send")
                 }
-                .map { Unit }
+                .map { }
     }
 
     override fun estimateGasLimitInternal(toAddress: Address?, value: BigInteger, gasPrice: Long?): Single<Long> {
         return ethereumKit.estimateGas(toAddress, value, gasPrice)
     }
 
-    override val stateUpdatedFlowable: Flowable<Unit>
-        get() = ethereumKit.syncStateFlowable.map { Unit }
-
     override val balance: BigDecimal
-        get() = balanceInBigDecimal(ethereumKit.balance, decimal)
+        get() = balanceInBigDecimal(ethereumKit.accountState?.balance, decimal)
 
     override val minimumRequiredBalance: BigDecimal
         get() = BigDecimal.ZERO
@@ -62,31 +61,44 @@ class EthereumAdapter(kit: EthereumKit) : EthereumBaseAdapter(kit, decimal) {
         get() = BigDecimal.ZERO
 
     override val balanceUpdatedFlowable: Flowable<Unit>
-        get() = ethereumKit.balanceFlowable.map { Unit }
+        get() = ethereumKit.accountStateFlowable.map { }
 
     // ITransactionsAdapter
 
+    override val transactionsState: AdapterState
+        get() = convertToAdapterState(ethereumKit.transactionsSyncState)
+
+    override val transactionsStateUpdatedFlowable: Flowable<Unit>
+        get() = ethereumKit.transactionsSyncStateFlowable.map {}
+
     override fun getTransactions(from: TransactionRecord?, limit: Int): Single<List<TransactionRecord>> {
-        return ethereumKit.transactions(from?.transactionHash?.hexStringToByteArray(), limit).map {
+        return ethereumKit.etherTransactions(from?.transactionHash?.hexStringToByteArray(), limit).map {
             it.map { tx -> transactionRecord(tx) }
         }
     }
 
     override val transactionRecordsFlowable: Flowable<List<TransactionRecord>>
-        get() = ethereumKit.transactionsFlowable.map { it.map { tx -> transactionRecord(tx) } }
+        get() = ethereumKit.etherTransactionsFlowable.map { it.map { tx -> transactionRecord(tx) } }
 
+    private fun convertToAdapterState(syncState: EthereumKit.SyncState): AdapterState = when (syncState) {
+        is EthereumKit.SyncState.Synced -> AdapterState.Synced
+        is EthereumKit.SyncState.NotSynced -> AdapterState.NotSynced(syncState.error)
+        is EthereumKit.SyncState.Syncing -> AdapterState.Syncing(50, null)
+    }
 
-    private fun transactionRecord(transactionWithInternal: TransactionWithInternal): TransactionRecord {
-        val transaction = transactionWithInternal.transaction
+    private fun transactionRecord(fullTransaction: FullTransaction): TransactionRecord {
+        val transaction = fullTransaction.transaction
+        val receipt = fullTransaction.receiptWithLogs?.receipt
+
         var fromAddress = transaction.from
         var toAddress = transaction.to
         val myAddress = ethereumKit.receiveAddress
         val fromMine = fromAddress == myAddress
         val toMine = toAddress == myAddress
-        val fee = transaction.gasUsed?.toBigDecimal()?.multiply(transaction.gasPrice.toBigDecimal())?.let { scaleDown(it) }
+        val fee = receipt?.gasUsed?.toBigDecimal()?.multiply(transaction.gasPrice.toBigDecimal())?.let { scaleDown(it) }
 
         var amount = if (fromMine) transaction.value.negate() else transaction.value
-        transactionWithInternal.internalTransactions.forEach { internalTransaction ->
+        fullTransaction.internalTransactions.forEach { internalTransaction ->
             var internalAmount = internalTransaction.value
             internalAmount = if (internalTransaction.from == myAddress) internalAmount.negate() else internalAmount
             amount += internalAmount
@@ -103,17 +115,18 @@ class EthereumAdapter(kit: EthereumKit) : EthereumBaseAdapter(kit, decimal) {
         return TransactionRecord(
                 uid = txHashHex,
                 transactionHash = txHashHex,
-                transactionIndex = transaction.transactionIndex ?: 0,
+                transactionIndex = receipt?.transactionIndex ?: 0,
                 interTransactionIndex = 0,
-                blockHeight = transaction.blockNumber,
+                blockHeight = receipt?.blockNumber,
                 amount = scaleDown(amount.abs().toBigDecimal()),
                 confirmationsThreshold = confirmationsThreshold,
                 fee = fee,
                 timestamp = transaction.timestamp,
                 from = fromAddress.hex,
-                to = toAddress.hex,
+                memo = null,
+                to = toAddress?.hex,
                 type = type,
-                failed = transaction.isError?.let { it != 0 } ?: false
+                failed = fullTransaction.isFailed()
         )
     }
 

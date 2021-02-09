@@ -95,7 +95,6 @@ class SwapApproveFragment : BaseFragment() {
             error.text = it
         })
 
-        feeSelectorView.setDurationVisible(false)
         feeSelectorView.setFeeSelectorViewInteractions(feeViewModel, feeViewModel, viewLifecycleOwner, parentFragmentManager)
     }
 

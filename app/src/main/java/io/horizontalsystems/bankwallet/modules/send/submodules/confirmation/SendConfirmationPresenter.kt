@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.modules.send.submodules.confirmation
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.SendModule.SendConfirmationAmountViewItem
-import io.horizontalsystems.bankwallet.modules.send.SendModule.SendConfirmationDurationViewItem
 import io.horizontalsystems.bankwallet.modules.send.SendModule.SendConfirmationFeeViewItem
 import io.horizontalsystems.bankwallet.modules.send.SendModule.SendConfirmationMemoViewItem
 import io.horizontalsystems.hodler.LockTimeInterval
@@ -23,6 +22,7 @@ class SendConfirmationPresenter(
         var secondaryAmount: String? = null
         var primaryFeeAmount: String? = null
         var secondaryFeeAmount: String? = null
+        var domain: String? = null
         var memo: String? = null
         var duration: Long? = null
         var lockTimeInterval: LockTimeInterval? = null
@@ -31,10 +31,11 @@ class SendConfirmationPresenter(
             when (item) {
                 is SendConfirmationAmountViewItem -> {
                     primaryName = item.primaryInfo.getAmountName()
-                    primaryAmount = item.primaryInfo.getFormatted() ?: ""
+                    primaryAmount = item.primaryInfo.getFormatted()
                     secondaryName = item.secondaryInfo?.getAmountName()
                     secondaryAmount = item.secondaryInfo?.getFormatted()
-                    receiver = item.receiver
+                    domain = item.receiver.domain
+                    receiver = item.receiver.hex
                 }
                 is SendConfirmationFeeViewItem -> {
                     primaryFeeAmount = item.primaryInfo.getFormatted()
@@ -42,9 +43,6 @@ class SendConfirmationPresenter(
                 }
                 is SendConfirmationMemoViewItem -> {
                     memo = item.memo
-                }
-                is SendConfirmationDurationViewItem -> {
-                    duration = item.duration
                 }
                 is SendModule.SendConfirmationLockTimeViewItem -> {
                     lockTimeInterval = item.lockTimeInterval
@@ -57,6 +55,7 @@ class SendConfirmationPresenter(
                 primaryAmount = primaryAmount,
                 secondaryName = secondaryName,
                 secondaryAmount = secondaryAmount,
+                domain = domain,
                 receiver = receiver,
                 memo = memo,
                 locked = lockTimeInterval != null

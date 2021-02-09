@@ -1,6 +1,7 @@
 package io.horizontalsystems.languageswitcher
 
 import androidx.lifecycle.ViewModel
+import io.horizontalsystems.views.ListPosition
 
 class LanguageSwitcherPresenter(
         val view: LanguageSwitcherModule.IView,
@@ -12,8 +13,12 @@ class LanguageSwitcherPresenter(
 
     override fun viewDidLoad() {
         val currentLanguage = interactor.currentLanguage
-        val items = languages.map { language ->
-            LanguageViewItem(language, interactor.getName(language), interactor.getNativeName(language), currentLanguage == language)
+        val items = languages.mapIndexed { index, language ->
+            LanguageViewItem(
+                    language,
+                    interactor.getName(language), interactor.getNativeName(language),
+                    currentLanguage == language,
+                    listPosition = ListPosition.getListPosition(languages.size, index))
         }
 
         view.show(items)

@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.send.submodules.fee
 
+import io.horizontalsystems.bankwallet.core.FeeRatePriority
 import io.horizontalsystems.bankwallet.core.IFeeRateProvider
 import io.horizontalsystems.bankwallet.core.IRateManager
 import io.horizontalsystems.bankwallet.entities.Coin
@@ -30,28 +31,29 @@ class SendFeeInteractor(
                 }
     }
 
+    override val feeRatePriorityList: List<FeeRatePriority> = feeRateProvider?.feeRatePriorityList ?: listOf()
+
+    override val defaultFeeRatePriority: FeeRatePriority? = feeRateProvider?.defaultFeeRatePriority
+
     override fun getRate(coinCode: String): BigDecimal? {
         return rateManager.getLatestRate(coinCode, baseCurrency.code)
     }
 
-    override fun syncFeeRate() {
+    override fun syncFeeRate(feeRatePriority: FeeRatePriority) {
         if (feeRateProvider == null)
             return
 
-        feeRateProvider.feeRates()
-                    .subscribeOn(Schedulers.io())
-                    .subscribe({
-                                   delegate?.didUpdate(it)
-                               },
-                               {
-                                   delegate?.didReceiveError(it as Exception)
-                               })
-                    .let { disposables.add(it) }
+        feeRateProvider.feeRate(feeRatePriority)
+                .subscribeOn(Schedulers.io())
+                .subscribe({
+                    delegate?.didUpdate(it)
+                }, {
+                    delegate?.didReceiveError(it as Exception)
+                })
+                .let { disposables.add(it) }
     }
 
     override fun onClear() {
         disposables.dispose()
     }
 }
-
-

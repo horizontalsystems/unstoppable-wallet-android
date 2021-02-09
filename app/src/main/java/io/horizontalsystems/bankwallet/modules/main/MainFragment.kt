@@ -18,6 +18,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.managers.RateAppManager
 import io.horizontalsystems.bankwallet.modules.balance.BalanceFragment
 import io.horizontalsystems.bankwallet.modules.main.MainActivity.Companion.ACTIVE_TAB_KEY
+import io.horizontalsystems.bankwallet.modules.market.MarketFragment
 import io.horizontalsystems.bankwallet.modules.rateapp.RateAppDialogFragment
 import io.horizontalsystems.bankwallet.modules.settings.main.MainSettingsFragment
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionsFragment
@@ -35,11 +36,13 @@ class MainFragment : Fragment(), RateAppDialogFragment.Listener {
 
         view.viewPager.offscreenPageLimit = 1
         view.viewPager.adapter = MainViewPagerAdapter(listOf(
+                MarketFragment(),
                 BalanceFragment(),
                 TransactionsFragment(),
                 MainSettingsFragment()
         ), childFragmentManager, viewLifecycleOwner.lifecycle)
 
+        view.viewPager.isUserInputEnabled = false
         view.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
@@ -49,9 +52,10 @@ class MainFragment : Fragment(), RateAppDialogFragment.Listener {
 
         view.bottomNavigation.setOnNavigationItemSelectedListener {
             when (it.itemId) {
-                R.id.navigation_balance -> view.viewPager.setCurrentItem(0, false)
-                R.id.navigation_transactions -> view.viewPager.setCurrentItem(1, false)
-                R.id.navigation_settings -> view.viewPager.setCurrentItem(2, false)
+                R.id.navigation_market -> view.viewPager.setCurrentItem(0, false)
+                R.id.navigation_balance -> view.viewPager.setCurrentItem(1, false)
+                R.id.navigation_transactions -> view.viewPager.setCurrentItem(2, false)
+                R.id.navigation_settings -> view.viewPager.setCurrentItem(3, false)
             }
             true
         }
@@ -84,7 +88,7 @@ class MainFragment : Fragment(), RateAppDialogFragment.Listener {
 
         viewModel.setBadgeVisibleLiveData.observe(viewLifecycleOwner, Observer { visible ->
             val bottomMenu = bottomNavigation.getChildAt(0) as? BottomNavigationMenuView
-            val settingsNavigationViewItem = bottomMenu?.getChildAt(2) as? BottomNavigationItemView
+            val settingsNavigationViewItem = bottomMenu?.getChildAt(3) as? BottomNavigationItemView
 
             if (visible) {
                 if (bottomBadgeView?.parent == null) {

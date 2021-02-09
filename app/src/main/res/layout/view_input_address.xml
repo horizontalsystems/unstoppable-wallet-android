@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout">
 
     <TextView
         android:id="@+id/title"
@@ -11,101 +10,62 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/grey"
+        android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Recipient Address" />
 
-    <androidx.constraintlayout.widget.Barrier
-        android:id="@+id/barrierTop"
-        android:layout_width="1dp"
-        android:layout_height="wrap_content"
-        app:barrierDirection="bottom"
-        app:barrierMargin="7dp"
-        app:constraint_referenced_ids="title"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <androidx.constraintlayout.widget.Barrier
-        android:id="@+id/barrierBottom"
-        android:layout_width="1dp"
-        android:layout_height="wrap_content"
-        app:barrierDirection="bottom"
-        app:barrierMargin="12dp"
-        app:constraint_referenced_ids="input, error" />
-
-    <View
-        android:id="@+id/background"
+    <io.horizontalsystems.views.ViewState
+        android:id="@+id/inputBackground"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:background="@drawable/input_background_themed"
-        app:layout_constraintBottom_toTopOf="@+id/barrierBottom"
+        android:layout_marginTop="7dp"
+        android:background="@drawable/input_background_stateful"
+        app:layout_constraintBottom_toBottomOf="@id/input"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/barrierTop" />
+        app:layout_constraintTop_toBottomOf="@id/title"
+        app:layout_goneMarginTop="12dp" />
 
     <EditText
         android:id="@+id/input"
         style="@style/Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="6dp"
         android:background="@color/transparent"
+        android:hint="@string/Send_Hint_Address"
         android:includeFontPadding="false"
-        android:inputType="numberDecimal"
+        android:inputType="textMultiLine"
+        android:padding="12dp"
         android:textColor="?attr/TextColorBarsToDark"
         android:textColorHint="@color/grey_50"
-        app:layout_constraintEnd_toStartOf="@+id/buttonQrScan"
+        app:layout_constraintEnd_toStartOf="@+id/actionsLayout"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/barrierTop" />
+        app:layout_constraintTop_toTopOf="@id/inputBackground" />
 
-    <ImageButton
-        android:id="@+id/buttonQrScan"
-        style="@style/ImageButtonSecondary"
-        android:layout_width="28dp"
-        android:layout_height="28dp"
-        android:layout_marginEnd="8dp"
-        android:src="@drawable/ic_qr_scan_20"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@id/input"
-        app:layout_constraintEnd_toStartOf="@+id/buttonPaste"
-        app:layout_constraintTop_toTopOf="@id/input" />
-
-    <Button
-        android:id="@+id/buttonPaste"
-        style="@style/ButtonSecondary"
+    <LinearLayout
+        android:id="@+id/actionsLayout"
         android:layout_width="wrap_content"
         android:layout_height="28dp"
-        android:layout_marginEnd="8dp"
-        android:text="@string/Send_Button_Paste"
-        app:layout_constraintBottom_toBottomOf="@+id/input"
-        app:layout_constraintEnd_toStartOf="@id/deleteButton"
-        app:layout_constraintTop_toTopOf="@id/input" />
-
-    <ImageButton
-        android:id="@+id/deleteButton"
-        style="@style/ImageButtonSecondary"
-        android:layout_width="28dp"
-        android:layout_height="28dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:src="@drawable/ic_delete_20"
-        android:visibility="gone"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="@id/inputBackground"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/background" />
+        app:layout_constraintTop_toTopOf="@id/inputBackground" />
 
     <TextView
         android:id="@+id/error"
         style="@style/Caption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:includeFontPadding="false"
         android:textColor="?ColorLucian"
         android:visibility="gone"
-        app:layout_constraintStart_toStartOf="@+id/input"
-        app:layout_constraintTop_toBottomOf="@+id/input"
-        tools:text="Invalid range" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/inputBackground"
+        tools:text="Invalid address or unstoppable domain" />
 
     <TextView
         android:id="@+id/description"
@@ -114,11 +74,11 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="12dp"
-        android:layout_marginEnd="8dp"
         android:textColor="@color/grey"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/barrierBottom"
+        app:layout_constraintTop_toBottomOf="@id/error"
         tools:text="After the exchange operation, the amount will be transferred to the specified address" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</merge>

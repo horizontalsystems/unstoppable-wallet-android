@@ -3,21 +3,34 @@ package io.horizontalsystems.bankwallet.modules.managewallets
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.providers.StringProvider
+import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.DerivationSetting
-import io.horizontalsystems.bankwallet.modules.managewallets.view.ManageWalletsViewModel
+import io.horizontalsystems.bankwallet.modules.blockchainsettings.BlockchainSettingsService
+import io.horizontalsystems.bankwallet.modules.blockchainsettings.BlockchainSettingsViewModel
+import io.horizontalsystems.bankwallet.modules.enablecoins.EnableCoinsBep2Provider
+import io.horizontalsystems.bankwallet.modules.enablecoins.EnableCoinsErc20Provider
+import io.horizontalsystems.bankwallet.modules.enablecoins.EnableCoinsService
+import io.horizontalsystems.bankwallet.modules.enablecoins.EnableCoinsViewModel
 import io.reactivex.Observable
 
 object ManageWalletsModule {
 
     interface IManageWalletsService {
         val state: State
-        val stateObservable: Observable<State>
+        val stateAsync: Observable<State>
         fun enable(coin: Coin, derivationSetting: DerivationSetting? = null)
         fun disable(coin: Coin)
+        fun storeCoinToEnable(coin: Coin)
+        fun account(coin: Coin): Account?
     }
 
     data class State(val featuredItems: List<Item>, val items: List<Item>) {
+        fun item(coin: Coin): Item? {
+            val allItems = featuredItems + items
+            return allItems.find { it.coin == coin }
+        }
 
         companion object {
             fun empty(): State {
@@ -30,16 +43,37 @@ object ManageWalletsModule {
 
     sealed class ItemState {
         object NoAccount : ItemState()
-        class HasAccount(val hasWallet: Boolean) : ItemState()
+        class HasAccount(val account: Account, val hasWallet: Boolean) : ItemState()
     }
 
+    class Factory : ViewModelProvider.Factory {
 
-    class Factory() : ViewModelProvider.Factory {
+        private val enableCoinsService by lazy {
+            EnableCoinsService(App.buildConfigProvider, EnableCoinsErc20Provider(App.networkManager), EnableCoinsBep2Provider(App.buildConfigProvider), App.coinManager)
+        }
+
+        private val blockchainSettingsService by lazy {
+            BlockchainSettingsService(App.derivationSettingsManager, App.bitcoinCashCoinTypeManager)
+        }
+
+        private val manageWalletsService by lazy {
+            ManageWalletsService(App.coinManager, App.walletManager, App.accountManager, enableCoinsService, blockchainSettingsService)
+        }
+
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val service = ManageWalletsService(App.coinManager, App.walletManager, App.accountManager, App.derivationSettingsManager)
-
-            return ManageWalletsViewModel(service, listOf(service)) as T
+            return when (modelClass) {
+                ManageWalletsViewModel::class.java -> {
+                    ManageWalletsViewModel(manageWalletsService, blockchainSettingsService, listOf(manageWalletsService)) as T
+                }
+                BlockchainSettingsViewModel::class.java -> {
+                    BlockchainSettingsViewModel(blockchainSettingsService, StringProvider(App.instance)) as T
+                }
+                EnableCoinsViewModel::class.java -> {
+                    EnableCoinsViewModel(enableCoinsService) as T
+                }
+                else -> throw IllegalArgumentException()
+            }
         }
     }
 }

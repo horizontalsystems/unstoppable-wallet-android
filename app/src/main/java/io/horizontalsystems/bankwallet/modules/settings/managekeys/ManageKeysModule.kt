@@ -4,9 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Account
-import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
-import io.horizontalsystems.bankwallet.entities.Wallet
 
 object ManageKeysModule {
 
@@ -25,14 +23,13 @@ object ManageKeysModule {
 
         fun onConfirmBackup()
         fun onConfirmUnlink(account: Account)
-        fun onClickAdvancedSettings(item: ManageAccountItem)
+        fun onClickAddressFormat(item: ManageAccountItem)
     }
 
     interface Interactor {
         val predefinedAccountTypes: List<PredefinedAccountType>
         fun account(predefinedAccountType: PredefinedAccountType): Account?
 
-        fun getWallets(): List<Wallet>
         fun loadAccounts()
         fun deleteAccount(account: Account)
         fun clear()
@@ -47,7 +44,7 @@ object ManageKeysModule {
         fun showCreateWallet(predefinedAccountType: PredefinedAccountType)
         fun showBackup(account: Account, predefinedAccountType: PredefinedAccountType)
         fun showRestore(predefinedAccountType: PredefinedAccountType)
-        fun showBlockchainSettings(enabledCoinTypes: List<CoinType>)
+        fun showAddressFormat()
     }
 
     class Factory : ViewModelProvider.Factory {
@@ -55,7 +52,7 @@ object ManageKeysModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val view = ManageKeysView()
             val router = ManageKeysRouter()
-            val interactor = ManageKeysInteractor(App.accountManager, App.walletManager, App.blockchainSettingsManager, App.predefinedAccountTypeManager, App.priceAlertManager)
+            val interactor = ManageKeysInteractor(App.accountManager, App.derivationSettingsManager, App.predefinedAccountTypeManager, App.bitcoinCashCoinTypeManager, App.priceAlertManager)
             val presenter = ManageKeysPresenter(view, router, interactor)
 
             interactor.delegate = presenter

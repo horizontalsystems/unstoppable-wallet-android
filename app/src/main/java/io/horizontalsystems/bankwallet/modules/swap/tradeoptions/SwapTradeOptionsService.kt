@@ -1,31 +1,31 @@
 package io.horizontalsystems.bankwallet.modules.swap.tradeoptions
 
 import android.util.Range
-import io.horizontalsystems.bankwallet.modules.swap.SwapService
-import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.ISwapTradeOptionsService.TradeOptionsError
-import io.horizontalsystems.ethereumkit.core.AddressValidator
-import io.horizontalsystems.ethereumkit.models.Address
-import io.horizontalsystems.uniswapkit.models.TradeOptions
+import io.horizontalsystems.bankwallet.entities.Address
+import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.ISwapTradeOptionsService.*
+import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import java.math.BigDecimal
+import io.horizontalsystems.ethereumkit.models.Address as EthAddress
 
-class SwapTradeOptionsService(tradeOptions: TradeOptions) : ISwapTradeOptionsService {
+class SwapTradeOptionsService(tradeOptions: SwapTradeOptions) : IRecipientAddressService {
 
-    override var state: ISwapTradeOptionsService.State = ISwapTradeOptionsService.State.Valid(tradeOptions)
+    var state: State = State.Valid(tradeOptions)
         private set(value) {
             field = value
             stateObservable.onNext(value)
         }
 
-    override val stateObservable = BehaviorSubject.createDefault<ISwapTradeOptionsService.State>(ISwapTradeOptionsService.State.Invalid)
-    override val errorsObservable = BehaviorSubject.createDefault<List<TradeOptionsError>>(listOf())
+    val stateObservable = BehaviorSubject.createDefault<State>(State.Invalid)
+    val errorsObservable = BehaviorSubject.createDefault<List<Throwable>>(listOf())
 
-    val recommendedSlippageBounds = Range<BigDecimal>(BigDecimal("0.1"), BigDecimal("1"))
-    private val limitSlippageBounds = Range<BigDecimal>(BigDecimal("0.01"), BigDecimal("20"))
+    var errors: List<Throwable> = listOf()
+        private set(value) {
+            field = value
+            errorsObservable.onNext(value)
+        }
 
-    val recommendedDeadlineBounds = Range(600L, 1800L)
-
-    var slippage: BigDecimal = tradeOptions.allowedSlippagePercent
+    var slippage: BigDecimal = tradeOptions.allowedSlippage
         set(value) {
             field = value
             sync()
@@ -37,7 +37,7 @@ class SwapTradeOptionsService(tradeOptions: TradeOptions) : ISwapTradeOptionsSer
             sync()
         }
 
-    var recipient: String? = tradeOptions.recipient?.hex
+    var recipient: Address? = tradeOptions.recipient
         set(value) {
             field = value
             sync()
@@ -48,47 +48,73 @@ class SwapTradeOptionsService(tradeOptions: TradeOptions) : ISwapTradeOptionsSer
     }
 
     private fun sync() {
-        val errors = mutableListOf<TradeOptionsError>()
+        val tradeOptions = SwapTradeOptions()
 
-        var allowedSlippagePercent = SwapService.defaultSlippage
+        val errs = mutableListOf<Exception>()
 
-        if (slippage.compareTo(BigDecimal.ZERO) == 0) {
-            errors.add(TradeOptionsError.ZeroSlippage)
-        } else if (slippage > limitSlippageBounds.upper) {
-            errors.add(TradeOptionsError.InvalidSlippage(ISwapTradeOptionsService.InvalidSlippageType.Higher(limitSlippageBounds.upper)))
-        } else if (slippage < limitSlippageBounds.lower) {
-            errors.add(TradeOptionsError.InvalidSlippage(ISwapTradeOptionsService.InvalidSlippageType.Lower(limitSlippageBounds.lower)))
-        } else {
-            allowedSlippagePercent = slippage
-        }
-
-        val tradeOptions = TradeOptions(allowedSlippagePercent)
-
-        if (deadline != 0L) {
-            tradeOptions.ttl = deadline
-        } else {
-            errors.add(TradeOptionsError.ZeroDeadline)
-        }
-
-        recipient?.trim()?.let { recipient ->
-            if (recipient.isNotEmpty()) {
+        recipient?.let {
+            if (it.hex.isNotEmpty()) {
                 try {
-                    tradeOptions.recipient = Address(recipient)
-                } catch (e: NumberFormatException) {
-                    errors.add(TradeOptionsError.InvalidAddress)
-                } catch (e: AddressValidator.AddressValidationException) {
-                    errors.add(TradeOptionsError.InvalidAddress)
+                    EthAddress(it.hex)
+                    tradeOptions.recipient = it
+                } catch (err: Exception) {
+                    errs.add(TradeOptionsError.InvalidAddress)
                 }
             }
         }
 
-        errorsObservable.onNext(errors)
-
-        state = if (errors.isEmpty()) {
-            ISwapTradeOptionsService.State.Valid(tradeOptions)
+        if (slippage.compareTo(BigDecimal.ZERO) == 0) {
+            errs.add(TradeOptionsError.ZeroSlippage)
+        } else if (slippage > limitSlippageBounds.upper) {
+            errs.add(TradeOptionsError.InvalidSlippage(InvalidSlippageType.Higher(limitSlippageBounds.upper)))
+        } else if (slippage < limitSlippageBounds.lower) {
+            errs.add(TradeOptionsError.InvalidSlippage(InvalidSlippageType.Lower(limitSlippageBounds.lower)))
         } else {
-            ISwapTradeOptionsService.State.Invalid
+            tradeOptions.allowedSlippage = slippage
+        }
+
+        if (deadline != 0L) {
+            tradeOptions.ttl = deadline
+        } else {
+            errs.add(TradeOptionsError.ZeroDeadline)
+        }
+
+        errors = errs
+
+        state = if (errs.isEmpty()) {
+            State.Valid(tradeOptions)
+        } else {
+            State.Invalid
         }
     }
 
+    override val initialAddress: Address?
+        get() {
+            val state = state
+            if (state is State.Valid) {
+                return state.tradeOptions.recipient
+            }
+
+            return null
+        }
+
+    override var error: Throwable? = null
+        get() = errors.find { it is TradeOptionsError.InvalidAddress }
+
+    override val errorObservable: Observable<Unit> = errorsObservable.map { errors ->
+        errors.find { it is TradeOptionsError.InvalidAddress }
+    }
+
+    override fun set(address: Address?) {
+        recipient = address
+    }
+
+    override fun set(amount: BigDecimal) {
+    }
+
+    companion object {
+        val recommendedSlippageBounds = Range(BigDecimal("0.1"), BigDecimal("1"))
+        val recommendedDeadlineBounds = Range(600L, 1800L)
+        val limitSlippageBounds = Range(BigDecimal("0.01"), BigDecimal("20"))
+    }
 }

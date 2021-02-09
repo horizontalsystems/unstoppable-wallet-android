@@ -6,6 +6,14 @@
     android:layout_width="match_parent"
     android:layout_height="60dp">
 
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0.5dp"
+        android:background="@color/steel_20"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ImageView
         android:id="@+id/coinIcon"
         android:layout_width="24dp"
@@ -91,11 +99,5 @@
         app:layout_constraintBottom_toBottomOf="@+id/subtitleText"
         app:layout_constraintEnd_toEndOf="parent"
         tools:text="$400" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="@color/steel_20"
-        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

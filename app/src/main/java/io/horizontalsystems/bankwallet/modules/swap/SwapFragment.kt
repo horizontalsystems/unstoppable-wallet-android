@@ -65,7 +65,6 @@ class SwapFragment : BaseFragment() {
 
         observeViewModel()
 
-        feeSelectorView.setDurationVisible(false)
         feeSelectorView.setFeeSelectorViewInteractions(feeViewModel, feeViewModel, viewLifecycleOwner, parentFragmentManager)
 
         getNavigationLiveData(SwapApproveFragment.requestKey)?.observe(viewLifecycleOwner, {

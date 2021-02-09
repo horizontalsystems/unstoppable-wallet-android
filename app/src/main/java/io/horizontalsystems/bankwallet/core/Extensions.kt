@@ -5,7 +5,6 @@ import android.content.res.ColorStateList
 import android.os.Parcelable
 import android.view.View
 import android.widget.ImageView
-import androidx.core.content.ContextCompat
 import androidx.core.graphics.Insets
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -15,15 +14,17 @@ import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
 import io.horizontalsystems.ethereumkit.core.toRawHexString
 import io.horizontalsystems.hodler.LockTimeInterval
 import io.horizontalsystems.views.SingleClickListener
+import io.reactivex.Observable
+import io.reactivex.Single
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 
 //View
 
 fun ImageView.setCoinImage(coinCode: String, coinType: CoinType? = null) {
     setImageDrawable(AppLayoutHelper.getCoinDrawable(context, coinCode, coinType))
 
-    val greyColor = ContextCompat.getColor(context, io.horizontalsystems.views.R.color.grey)
-    val tintColorStateList = ColorStateList.valueOf(greyColor)
-    imageTintList = tintColorStateList
+    imageTintList = ColorStateList.valueOf(context.getColor(R.color.grey))
 }
 
 fun View.setOnSingleClickListener(l: ((v: View) -> Unit)) {
@@ -86,4 +87,18 @@ fun LockTimeInterval?.stringResId(): Int {
         LockTimeInterval.year -> R.string.Send_LockTime_Year
         null -> R.string.Send_LockTime_Off
     }
+}
+
+fun <T> Observable<T>.subscribeIO(onNext: (t: T) -> Unit): Disposable {
+    return this
+            .subscribeOn(Schedulers.io())
+            .observeOn(Schedulers.io())
+            .subscribe(onNext)
+}
+
+fun <T> Single<T>.subscribeIO(onSuccess: (t: T) -> Unit, onError: (e: Throwable) -> Unit): Disposable {
+    return this
+            .subscribeOn(Schedulers.io())
+            .observeOn(Schedulers.io())
+            .subscribe(onSuccess, onError)
 }

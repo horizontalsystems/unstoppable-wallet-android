@@ -265,9 +265,9 @@ class FilterAdapter(private var listener: Listener) : Adapter<ViewHolder>(), Vie
     private var selectedFilterItem: FilterItem? = null
     private var filters: List<FilterItem?> = listOf()
 
-    fun setFilters(filters: List<FilterItem?>) {
+    fun setFilters(filters: List<FilterItem?>, selectedFieldItem: FilterItem? = null) {
         this.filters = filters
-        selectedFilterItem = filters.firstOrNull()
+        this.selectedFilterItem = selectedFieldItem ?: filters.firstOrNull()
         notifyDataSetChanged()
     }
 
@@ -279,7 +279,7 @@ class FilterAdapter(private var listener: Listener) : Adapter<ViewHolder>(), Vie
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         when (holder) {
             is ViewHolderFilter -> {
-                holder.bind(filters[position]?.filterId, selectedFilterItem == filters[position])
+                holder.bind(filters[position]?.filterId, selectedFilterItem?.filterId == filters[position]?.filterId)
             }
         }
     }

@@ -25,6 +25,7 @@ object RateChartModule {
         fun setRsiEnabled(enabled: Boolean)
         fun notificationIconUpdated()
         fun openNotificationMenu(coinId: String, coinName: String)
+        fun setIsFavorite(value: Boolean)
     }
 
     interface ViewDelegate {
@@ -35,6 +36,8 @@ object RateChartModule {
         fun toggleMacd()
         fun toggleRsi()
         fun onNotificationClick()
+        fun onFavoriteClick()
+        fun onUnfavoriteClick()
     }
 
     interface Interactor {
@@ -48,6 +51,9 @@ object RateChartModule {
         fun clear()
         fun observeAlertNotification(coinCode: String)
         fun getPriceAlert(coinCode: String): PriceAlert
+        fun isCoinFavorite(coinCode: String): Boolean
+        fun favorite(coinCode: String)
+        fun unfavorite(coinCode: String)
     }
 
     interface InteractorDelegate {
@@ -55,6 +61,7 @@ object RateChartModule {
         fun onUpdate(marketInfo: MarketInfo)
         fun onError(ex: Throwable)
         fun updateAlertNotificationIconState()
+        fun updateFavoriteNotificationItemState()
     }
 
     interface Router
@@ -66,7 +73,7 @@ object RateChartModule {
             val rateFormatter = RateFormatter(currency)
 
             val view = RateChartView()
-            val interactor = RateChartInteractor(App.xRateManager, App.chartTypeStorage, App.priceAlertManager, App.notificationManager, App.localStorage)
+            val interactor = RateChartInteractor(App.xRateManager, App.chartTypeStorage, App.priceAlertManager, App.notificationManager, App.localStorage, App.marketFavoritesManager)
             val presenter = RateChartPresenter(view, rateFormatter, interactor, coinCode, coinTitle, coinId, currency, RateChartViewFactory())
 
             interactor.delegate = presenter

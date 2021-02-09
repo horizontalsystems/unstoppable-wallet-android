@@ -5,46 +5,50 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.core.SingleLiveEvent
 import kotlin.math.floor
 
 class SwapDeadlineViewModel(private val service: SwapTradeOptionsService) : ViewModel(), IVerifiedInputViewModel {
 
     override val inputFieldButtonItems: List<InputFieldButtonItem>
         get() {
-            val bounds = service.recommendedDeadlineBounds
+            val bounds = SwapTradeOptionsService.recommendedDeadlineBounds
             val lowerMinutes = toMinutes(bounds.lower)
             val upperMinutes = toMinutes(bounds.upper)
+
             return listOf(
                     InputFieldButtonItem(App.instance.getString(R.string.SwapSettings_DeadlineMinute, lowerMinutes)) {
-                        inputFieldValueLiveData.postValue(lowerMinutes)
-                        setInputFieldValue(lowerMinutes)
+                        setTextLiveData.postValue(lowerMinutes)
+                        onChangeText(lowerMinutes)
                     },
                     InputFieldButtonItem(App.instance.getString(R.string.SwapSettings_DeadlineMinute, upperMinutes)) {
-                        inputFieldValueLiveData.postValue(upperMinutes)
-                        setInputFieldValue(upperMinutes)
+                        setTextLiveData.postValue(upperMinutes)
+                        onChangeText(upperMinutes)
                     },
             )
         }
 
     override val inputFieldPlaceholder = toMinutes(defaultTtl)
-    override val inputFieldValueLiveData = MutableLiveData<String?>(null)
-    override val inputFieldCautionLiveData = MutableLiveData<Caution?>(null)
+    override val setTextLiveData = MutableLiveData<String?>(null)
+    override val cautionLiveData = MutableLiveData<Caution?>(null)
+    override val initialValue: String?
+        get() {
+            val state = service.state
 
-    init {
-        val state = service.state
-
-        if (state is ISwapTradeOptionsService.State.Valid) {
-            if (state.tradeOptions.ttl != defaultTtl) {
-                inputFieldValueLiveData.postValue(toMinutes(state.tradeOptions.ttl))
+            if (state is ISwapTradeOptionsService.State.Valid) {
+                if (state.tradeOptions.ttl != defaultTtl) {
+                    return toMinutes(state.tradeOptions.ttl)
+                }
             }
-        }
-    }
 
-    override fun setInputFieldValue(text: String?) {
+            return null
+        }
+
+    override fun onChangeText(text: String?) {
         service.deadline = text?.toLongOrNull()?.times(60) ?: defaultTtl
     }
 
-    override fun inputFieldIsValid(text: String?): Boolean {
+    override fun isValid(text: String?): Boolean {
         return text.isNullOrBlank() || text.toLongOrNull() != null
     }
 
@@ -63,14 +67,15 @@ interface IVerifiedInputViewModel {
     val inputFieldCanEdit: Boolean get() = true
 
     val inputFieldButtonItems: List<InputFieldButtonItem> get() = listOf()
-    val inputFieldInitialValue: String? get() = null
+    val initialValue: String? get() = null
     val inputFieldPlaceholder: String? get() = null
 
-    val inputFieldValueLiveData: LiveData<String?>
-    val inputFieldCautionLiveData: LiveData<Caution?>
+    val setTextLiveData: LiveData<String?>
+    val cautionLiveData: LiveData<Caution?>
+    val isLoadingLiveData: LiveData<Boolean> get() = SingleLiveEvent<Boolean>()
 
-    fun setInputFieldValue(text: String?) = Unit
-    fun inputFieldIsValid(text: String?): Boolean = true
+    fun onChangeText(text: String?) = Unit
+    fun isValid(text: String?): Boolean = true
 }
 
 data class InputFieldButtonItem(val title: String, val onClick: () -> Unit)

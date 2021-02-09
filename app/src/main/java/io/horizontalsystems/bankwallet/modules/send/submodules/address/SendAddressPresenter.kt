@@ -1,97 +1,116 @@
 package io.horizontalsystems.bankwallet.modules.send.submodules.address
 
 import androidx.lifecycle.ViewModel
+import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
+import io.horizontalsystems.bankwallet.entities.Address
+import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.IRecipientAddressService
+import io.horizontalsystems.ethereumkit.core.AddressValidator
+import io.horizontalsystems.hodler.HodlerPlugin
+import io.reactivex.Observable
+import io.reactivex.subjects.BehaviorSubject
+import java.math.BigDecimal
+import java.util.*
 
-class SendAddressPresenter(
-        val view: SendAddressModule.IView,
-        val editable: Boolean,
-        private val interactor: SendAddressModule.IInteractor
-) : ViewModel(), SendAddressModule.IAddressModule, SendAddressModule.IInteractorDelegate, SendAddressModule.IViewDelegate {
+class SendAddressPresenter(val moduleDelegate: SendAddressModule.IAddressModuleDelegate)
+    : ViewModel(), IRecipientAddressService, SendAddressModule.IAddressModule, SendAddressModule.IInteractorDelegate, SendAddressModule.IViewDelegate {
 
-    var moduleDelegate: SendAddressModule.IAddressModuleDelegate? = null
+    val errorsObservable = BehaviorSubject.createDefault<Optional<Throwable>>(Optional.empty())
 
-    private var enteredAddress: String? = null
+    //  IRecipientAddressService
+
+    override val initialAddress: Address? = null
+
+    override var error: Throwable? = null
         set(value) {
+            errorsObservable.onNext(Optional.ofNullable(value))
             field = value
-            view.setAddress(field)
         }
 
-    override val currentAddress: String?
-        get() = try {
-            validAddress()
-        } catch (e: Exception) {
-            null
-        }
-
-    override fun validAddress(): String {
-        val address = enteredAddress ?: throw SendAddressModule.ValidationError.InvalidAddress()
-
-        try {
-            moduleDelegate?.validate(address)
-
-            view.setAddressError(null)
-        } catch (e: Exception) {
-            view.setAddressError(e)
-            throw e
-        }
-
-        return address
+    override val errorObservable: Observable<Unit> = errorsObservable.map {
+        Unit
     }
 
-    override fun didScanQrCode(address: String) {
+    override fun set(address: Address?) {
+        onSetAddress(address)
+    }
+
+    override fun set(amount: BigDecimal) {
+        moduleDelegate.onUpdateAmount(amount)
+    }
+
+    private fun onSetAddress(address: Address?) {
+        if (address == null || address.hex.isEmpty()) {
+            error = null
+            currentAddress = null
+            enteredAddress = null
+            moduleDelegate.onUpdateAddress()
+
+            return
+        }
+
         onAddressEnter(address)
+    }
+
+    //  IAddressModule
+
+    private var enteredAddress: Address? = null
+
+    override var currentAddress: Address? = null
+
+    override fun validAddress(): Address {
+        return currentAddress ?: throw SendAddressModule.ValidationError.EmptyValue()
+    }
+
+    override fun validateAddress() {
+        val address = enteredAddress
+        if (address == null) {
+            currentAddress = null
+            throw SendAddressModule.ValidationError.EmptyValue()
+        }
+
+        try {
+            moduleDelegate.validate(address.hex)
+            currentAddress = address
+            error = null
+        } catch (err: Exception) {
+            currentAddress = null
+            error = getError(err)
+            throw err
+        }
+    }
+
+    private fun getError(error: Throwable): Throwable {
+        val message = when (error) {
+            is HodlerPlugin.UnsupportedAddressType -> App.instance.getString(R.string.Send_Error_UnsupportedAddress)
+            is AddressValidator.AddressValidationException -> App.instance.getString(R.string.Send_Error_IncorrectAddress)
+            is ZcashAdapter.ZcashError.TransparentAddressNotAllowed -> App.instance.getString(R.string.Send_Error_TransparentAddress)
+            is ZcashAdapter.ZcashError.SendToSelfNotAllowed -> App.instance.getString(R.string.Send_Error_SendToSelf)
+            else -> error.message ?: error.javaClass.simpleName
+        }
+
+        return Throwable(message)
     }
 
     // SendAddressModule.IViewDelegate
 
     override fun onViewDidLoad() {
-        view.setAddressInputAsEditable(editable)
-    }
-
-    override fun onAddressScanClicked() {
-        moduleDelegate?.scanQrCode()
-    }
-
-    override fun onAddressPasteClicked() {
-        interactor.addressFromClipboard?.let {
-            onAddressEnter(it)
-        }
     }
 
     override fun onAddressDeleteClicked() {
-        view.setAddress(null)
-        view.setAddressError(null)
-
         enteredAddress = null
-        moduleDelegate?.onUpdateAddress()
+        moduleDelegate.onUpdateAddress()
     }
 
-    private fun onAddressEnter(address: String) {
-        val (parsedAddress, amount) = interactor.parseAddress(address)
-
-        enteredAddress = parsedAddress
+    private fun onAddressEnter(address: Address) {
+        enteredAddress = address
 
         try {
-            validAddress()
+            validateAddress()
         } catch (e: Exception) {
         }
 
-        moduleDelegate?.onUpdateAddress()
-
-        amount?.let { parsedAmount ->
-            moduleDelegate?.onUpdateAmount(parsedAmount)
-        }
+        moduleDelegate.onUpdateAddress()
     }
-
-    override fun onManualAddressEnter(addressText: String) {
-        enteredAddress = addressText
-
-        try {
-            validAddress()
-        } catch (e: Exception) {
-        }
-
-        moduleDelegate?.onUpdateAddress()
-    }
-
 }

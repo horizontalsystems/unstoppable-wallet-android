@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.core.utils
 
 import io.horizontalsystems.bankwallet.core.IAddressParser
 import io.horizontalsystems.bankwallet.entities.AddressData
+import java.math.BigDecimal
 
 
 class AddressParser(private val validScheme: String, private val removeScheme: Boolean) : IAddressParser {
@@ -15,7 +16,7 @@ class AddressParser(private val validScheme: String, private val removeScheme: B
         val address: String
 
         var version: String? = null
-        var amount: Double? = null
+        var amount: BigDecimal? = null
         var label: String? = null
         var message: String? = null
 
@@ -49,7 +50,7 @@ class AddressParser(private val validScheme: String, private val removeScheme: B
                     parameterVersion -> version = parts[1]
                     parameterAmount -> {
                         try {
-                            amount = parts[1].toDouble()
+                            amount = parts[1].toBigDecimal()
                         } catch (e: NumberFormatException) {
                             //invalid data
                         }

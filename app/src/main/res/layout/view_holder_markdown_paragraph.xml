@@ -26,20 +26,22 @@
 
     <androidx.constraintlayout.widget.Group
         android:id="@+id/quoted"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         app:constraint_referenced_ids="quotedBg,quotedBorder" />
 
     <TextView
         android:id="@+id/listItemMarker"
         style="@style/Body"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="12dp"
         android:textColor="?ColorBran"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBaseline_toBaselineOf="@id/paragraph"
         tools:text="•" />
 
@@ -47,7 +49,7 @@
         android:id="@+id/paragraph"
         style="@style/Body"
         android:textColorLink="@color/stateful_button_yellow_color"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
@@ -56,6 +58,8 @@
         android:paddingBottom="12dp"
         android:textColor="?ColorBran"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="@tools:sample/lorem" />
 

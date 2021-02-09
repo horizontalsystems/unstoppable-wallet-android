@@ -83,8 +83,8 @@
         android:name="io.horizontalsystems.bankwallet.modules.settings.managekeys.views.ManageKeysFragment"
         tools:layout="@layout/fragment_manage_keys">
         <action
-            android:id="@+id/manageKeysFragment_to_addressFormatSettingsFragment"
-            app:destination="@id/addressFormatSettingsFragment" />
+            android:id="@+id/manageKeysFragment_to_addressFormatFragment"
+            app:destination="@id/addressFormatFragment" />
         <action
             android:id="@+id/manageKeysFragment_to_createWalletFragment"
             app:destination="@id/createWalletFragment" />
@@ -165,8 +165,8 @@
             app:destination="@id/bitcoinHodlingFragment" />
     </fragment>
     <fragment
-        android:id="@+id/addressFormatSettingsFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.addressformat.AddressFormatSettingsFragment"
+        android:id="@+id/addressFormatFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.addressformat.AddressFormatFragment"
         tools:layout="@layout/fragment_address_format_settings" />
     <fragment
         android:id="@+id/createWalletFragment"
@@ -180,9 +180,6 @@
             android:id="@+id/backupFragment_to_backupWordsFragment"
             app:destination="@id/backupWordsFragment" />
         <action
-            android:id="@+id/backupFragment_to_backupEosFragment"
-            app:destination="@id/backupEosFragment" />
-        <action
             android:id="@+id/backupFragment_to_pinFragment"
             app:destination="@id/pinFragment" />
     </fragment>
@@ -190,10 +187,6 @@
         android:id="@+id/backupWordsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.backup.words.BackupWordsFragment"
         tools:layout="@layout/fragment_backup_words" />
-    <fragment
-        android:id="@+id/backupEosFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.backup.eos.BackupEosFragment"
-        tools:layout="@layout/fragment_backup_eos" />
     <fragment
         android:id="@+id/rateChartFragment"
         android:name="io.horizontalsystems.bankwallet.modules.ratechart.RateChartFragment"
@@ -300,14 +293,6 @@
         android:id="@+id/transactionInfoDialog"
         android:name="io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoFragment"
         tools:layout="@layout/fragment_transaction_info" />
-    <dialog
-        android:id="@+id/fullTransactionInfoDialog"
-        android:name="io.horizontalsystems.bankwallet.modules.fulltransactioninfo.views.FullTransactionInfoFragment"
-        tools:layout="@layout/fragment_full_transaction_info" />
-    <dialog
-        android:id="@+id/fullTransactionDataProvider"
-        android:name="io.horizontalsystems.bankwallet.modules.fulltransactioninfo.dataprovider.DataProviderSettingsFragment"
-        tools:layout="@layout/fragment_explorer_switcher" />
     <dialog
         android:id="@+id/infoFragment"
         android:name="io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.InfoFragment"

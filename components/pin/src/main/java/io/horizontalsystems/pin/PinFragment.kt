@@ -44,7 +44,11 @@ import java.util.concurrent.Executor
 
 class PinFragment : Fragment(), NumPadItemsAdapter.Listener, PinPagesAdapter.Listener {
 
-    var attachedToLockScreen = false
+    companion object{
+        const val ATTACHED_TO_LOCKSCREEN = "attached_to_lock_screen"
+    }
+
+    private var attachedToLockScreen = false
 
     private val interactionType: PinInteractionType by lazy {
         arguments?.getParcelable(PinModule.keyInteractionType) ?: PinInteractionType.UNLOCK
@@ -67,6 +71,8 @@ class PinFragment : Fragment(), NumPadItemsAdapter.Listener, PinPagesAdapter.Lis
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        attachedToLockScreen = arguments?.getBoolean(ATTACHED_TO_LOCKSCREEN, false) ?: false
 
         pinPagesAdapter = PinPagesAdapter(this)
 

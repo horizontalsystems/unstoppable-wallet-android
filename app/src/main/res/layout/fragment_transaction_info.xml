@@ -53,7 +53,7 @@
         android:layout_marginTop="2dp"
         android:includeFontPadding="false"
         android:textColor="@color/grey"
-        app:layout_constraintLeft_toLeftOf="@id/txtTitle"
+        app:layout_constraintStart_toStartOf="@id/txtTitle"
         app:layout_constraintTop_toBottomOf="@id/txtTitle"
         tools:text="Subtitle" />
 
@@ -81,10 +81,12 @@
         app:layout_constraintTop_toBottomOf="@+id/txtSubtitle" />
 
     <View
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="?ColorLawrence"
         app:layout_constraintBottom_toTopOf="@+id/border2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/borderTop" />
 
     <TextView
@@ -124,7 +126,7 @@
     <TextView
         android:id="@+id/primaryValue"
         style="@style/Headline1"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="4dp"
@@ -134,12 +136,13 @@
         android:lines="1"
         android:textColor="?ColorJacob"
         app:layout_constrainedWidth="true"
+        app:layout_constraintHorizontal_bias="1"
         app:layout_constraintEnd_toStartOf="@+id/sentToSelfIcon"
-        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintStart_toEndOf="@+id/secondaryName"
         app:layout_constraintTop_toTopOf="@+id/secondaryName"
         app:layout_goneMarginEnd="16dp"
         tools:drawableEnd="@drawable/ic_lock_20"
-        tools:text="$992" />
+        tools:text="0.0023223 BTC" />
 
     <ImageView
         android:id="@+id/sentToSelfIcon"
@@ -186,19 +189,23 @@
         tools:listitem="@layout/view_transaction_info_item" />
 
     <TextView
-        android:id="@+id/txtFullInfo"
+        android:id="@+id/txtViewOnExplorer"
         style="@style/Headline2"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@drawable/transaction_info_more_button_background"
+        android:ellipsize="end"
         android:paddingTop="12dp"
         android:paddingBottom="13dp"
-        android:text="@string/TransactionInfo_ButtonVerify"
+        android:paddingStart="5dp"
+        android:paddingEnd="5dp"
+        android:singleLine="true"
         android:textAlignment="center"
         android:textColor="?ColorOz"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rvDetails" />
+        app:layout_constraintTop_toBottomOf="@+id/rvDetails"
+        tools:text="View on btc.com" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -13,10 +13,12 @@ import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerActivity
+import io.horizontalsystems.bankwallet.modules.send.SendPresenter.*
 import io.horizontalsystems.bankwallet.modules.send.submodules.SendSubmoduleFragment
 import io.horizontalsystems.bankwallet.modules.send.submodules.address.SendAddressFragment
 import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmountFragment
 import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.ConfirmationFragment
+import io.horizontalsystems.bankwallet.modules.send.submodules.fee.FeeInfoFragment
 import io.horizontalsystems.bankwallet.modules.send.submodules.fee.SendFeeFragment
 import io.horizontalsystems.bankwallet.modules.send.submodules.hodler.SendHodlerFragment
 import io.horizontalsystems.bankwallet.modules.send.submodules.memo.SendMemoFragment
@@ -25,7 +27,6 @@ import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.snackbar.SnackbarDuration
 import kotlinx.android.synthetic.main.activity_send.*
-import kotlinx.android.synthetic.main.activity_send.toolbar
 
 class SendActivity : BaseActivity() {
 
@@ -34,7 +35,8 @@ class SendActivity : BaseActivity() {
     private var proceedButtonView: ProceedButtonView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+        // prevent fragment recreations by passing null to onCreate
+        super.onCreate(null)
         setContentView(R.layout.activity_send)
 
         val wallet: Wallet = intent.getParcelableExtra(WALLET) ?: run { finish(); return }
@@ -88,10 +90,20 @@ class SendActivity : BaseActivity() {
             }
         })
 
-        presenterView.sendButtonEnabled.observe(this, Observer { enabled ->
-            proceedButtonView?.updateState(enabled)
-        })
+        presenterView.sendButtonEnabled.observe(this, Observer { actionState ->
+            val defaultTitle = getString(R.string.Send_DialogProceed)
 
+            when (actionState) {
+                is ActionState.Enabled -> {
+                    proceedButtonView?.updateState(true)
+                    proceedButtonView?.setTitle(defaultTitle)
+                }
+                is ActionState.Disabled -> {
+                    proceedButtonView?.updateState(false)
+                    proceedButtonView?.setTitle(actionState.title ?: defaultTitle)
+                }
+            }
+        })
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -100,6 +112,16 @@ class SendActivity : BaseActivity() {
             data?.getStringExtra(ModuleField.SCAN_ADDRESS)?.let {
                 mainPresenter.onAddressScan(it)
             }
+        }
+    }
+
+    fun showFeeInfo() {
+        hideSoftKeyboard()
+
+        supportFragmentManager.commit {
+            setCustomAnimations(R.anim.slide_from_right, R.anim.slide_to_left, R.anim.slide_from_left, R.anim.slide_to_right)
+            add(R.id.rootView, FeeInfoFragment())
+            addToBackStack(null)
         }
     }
 
@@ -119,7 +141,7 @@ class SendActivity : BaseActivity() {
                 is SendModule.Input.Address -> {
                     //add address view
                     mainPresenter.addressModuleDelegate?.let {
-                        val sendAddressFragment = SendAddressFragment(wallet.coin, input.editable, it, mainPresenter.handler)
+                        val sendAddressFragment = SendAddressFragment(wallet.coin, it, mainPresenter.handler)
                         fragments.add(sendAddressFragment)
                         supportFragmentManager.beginTransaction().add(R.id.sendLinearLayout, sendAddressFragment)
                                 .commitNow()
@@ -136,7 +158,7 @@ class SendActivity : BaseActivity() {
                 is SendModule.Input.Fee -> {
                     //add fee view
                     mainPresenter.feeModuleDelegate?.let {
-                        val sendFeeFragment = SendFeeFragment(input.isAdjustable, wallet.coin, it, mainPresenter.handler, mainPresenter.customPriorityUnit)
+                        val sendFeeFragment = SendFeeFragment(wallet.coin, it, mainPresenter.handler, mainPresenter.customPriorityUnit)
                         fragments.add(sendFeeFragment)
                         supportFragmentManager.beginTransaction().add(R.id.sendLinearLayout, sendFeeFragment)
                                 .commitNow()

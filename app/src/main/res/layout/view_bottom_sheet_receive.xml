@@ -35,6 +35,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
+        android:gravity="center"
+        android:maxLines="2"
         app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toEndOf="@+id/btnShare"
         app:layout_constraintStart_toStartOf="@+id/btnShare"

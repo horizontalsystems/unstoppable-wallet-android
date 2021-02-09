@@ -45,7 +45,7 @@ class NumPadItemsAdapter(private val listener: Listener, bottomLeftButtonType: N
             notifyDataSetChanged()
         }
 
-    var numpadEnabled = false
+    var numpadEnabled = true
         set(value) {
             field = value
             notifyDataSetChanged()

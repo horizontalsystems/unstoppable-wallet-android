@@ -6,7 +6,7 @@
 
     <me.relex.circleindicator.CircleIndicator
         android:id="@+id/circleIndicator"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="24dp"
         app:ci_animator="@anim/pager_indicator_animation"
         app:ci_drawable="@drawable/pin_pager_circle_selected"
@@ -20,7 +20,7 @@
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/viewPager"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="24dp"
         app:layout_constraintBottom_toBottomOf="parent"

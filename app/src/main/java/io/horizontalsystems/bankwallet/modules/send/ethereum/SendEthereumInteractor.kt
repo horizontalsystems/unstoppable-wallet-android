@@ -8,6 +8,8 @@ import java.math.BigDecimal
 
 class SendEthereumInteractor(private val adapter: ISendEthereumAdapter) : SendModule.ISendEthereumInteractor {
 
+    override val balance: BigDecimal = adapter.balance
+
     override val ethereumBalance: BigDecimal
         get() = adapter.ethereumBalance
 

@@ -14,6 +14,7 @@
     <color name="green_l">#04AD5F</color>
     <color name="red_d">#ff4820</color>
     <color name="red_l">#ed402e</color>
+    <color name="red_50">#80ff4820</color>
     <color name="issyk_blue">#1a60ff</color>
     <color name="grey">#808085</color>
     <color name="grey_50">#80808085</color>
@@ -34,4 +35,5 @@
     <color name="steel_10">#1a6E7899</color>
     <color name="steel_20">#336E7899</color>
     <color name="steel_dark_pressed">#353842</color>
+    <color name="issykBlue">#3372FF</color>
 </resources>

@@ -45,13 +45,16 @@ class RatesInteractor(
     }
 
     override fun getTopList() {
-        xRateManager.getTopMarketList(currency.code)
+        xRateManager.getTopMarketList(currency.code, 100)
                 .subscribeOn(Schedulers.io())
                 .subscribe({
-                    delegate?.didFetchedTopMarketList(it)
+                    val topMarketItems = it.mapIndexed { index, coinMarket ->
+                        TopMarketRanked(coinMarket.coin.code, coinMarket.coin.title, coinMarket.marketInfo, index + 1)
+                    }
+                    delegate?.didFetchedTopMarketList(topMarketItems)
                 }, {
                     delegate?.didFailToFetchTopList()
-                } )
+                })
                 .let { disposables.add(it) }
     }
 

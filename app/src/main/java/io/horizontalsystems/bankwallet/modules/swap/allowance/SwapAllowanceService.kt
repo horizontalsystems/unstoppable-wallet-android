@@ -20,7 +20,7 @@ import java.util.*
 class SwapAllowanceService(
         private val spenderAddress: Address,
         private val adapterManager: IAdapterManager,
-        private val ethereumKit: EthereumKit
+        ethereumKit: EthereumKit
 ) {
 
     private var coin: Coin? = null
@@ -61,6 +61,11 @@ class SwapAllowanceService(
             }
         }
 
+    }
+
+    fun onCleared() {
+        disposables.clear()
+        allowanceDisposable?.dispose()
     }
 
     private fun sync() {

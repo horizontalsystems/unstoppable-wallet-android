@@ -5,8 +5,12 @@ sealed class DataState<out T> {
     data class Error(val error: Throwable) : DataState<Nothing>()
     object Loading : DataState<Nothing>()
 
+    val loading: Boolean
+        get() = this is Loading
+
     val dataOrNull: T?
-        get() {
-            return (this as? Success)?.data
-        }
+        get() = (this as? Success)?.data
+
+    val errorOrNull: Throwable?
+        get() = (this as? Error)?.error
 }

@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.ratechart
 
 import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.core.managers.MarketFavoritesManager
 import io.horizontalsystems.bankwallet.entities.PriceAlert
 import io.horizontalsystems.xrateskit.entities.ChartInfo
 import io.horizontalsystems.xrateskit.entities.ChartType
@@ -15,7 +16,8 @@ class RateChartInteractor(
         private val chartTypeStorage: IChartTypeStorage,
         private val priceAlertManager: IPriceAlertManager,
         private val notificationManager: INotificationManager,
-        private val localStorage: ILocalStorage)
+        private val localStorage: ILocalStorage,
+        private val marketFavoritesManager: MarketFavoritesManager)
     : RateChartModule.Interactor {
 
     var delegate: RateChartModule.InteractorDelegate? = null
@@ -76,6 +78,22 @@ class RateChartInteractor(
 
     override fun getPriceAlert(coinCode: String): PriceAlert {
         return priceAlertManager.getPriceAlert(coinCode)
+    }
+
+    override fun isCoinFavorite(coinCode: String): Boolean {
+        return marketFavoritesManager.isCoinInFavorites(coinCode)
+    }
+
+    override fun favorite(coinCode: String) {
+        marketFavoritesManager.add(coinCode)
+
+        delegate?.updateFavoriteNotificationItemState()
+    }
+
+    override fun unfavorite(coinCode: String) {
+        marketFavoritesManager.remove(coinCode)
+
+        delegate?.updateFavoriteNotificationItemState()
     }
 
     override fun clear() {

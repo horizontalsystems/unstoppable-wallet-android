@@ -15,6 +15,8 @@ class EthereumFeeViewModel(
         private val coinService: CoinService
 ) : ViewModel(), ISendFeeViewModel, ISendFeePriorityViewModel {
 
+    override val hasEstimatedFee: Boolean = transactionService.hasEstimatedFee
+
     enum class Priority {
         Recommended {
             override val description by lazy { App.instance.getString(R.string.Send_TxSpeed_Recommended) }
@@ -26,6 +28,7 @@ class EthereumFeeViewModel(
         abstract val description: String
     }
 
+    override val estimatedFeeLiveData = MutableLiveData<String>("")
     override val feeLiveData = MutableLiveData<String>("")
 
     override val priorityLiveData = MutableLiveData<String>("")
@@ -91,6 +94,7 @@ class EthereumFeeViewModel(
     }
 
     private fun syncTransactionStatus(transactionStatus: DataState<EthereumTransactionService.Transaction>) {
+        estimatedFeeLiveData.postValue(estimatedFeeStatus(transactionStatus))
         feeLiveData.postValue(feeStatus(transactionStatus))
     }
 
@@ -125,6 +129,20 @@ class EthereumFeeViewModel(
         }
     }
 
+    private fun estimatedFeeStatus(transactionStatus: DataState<EthereumTransactionService.Transaction>): String {
+        return when (transactionStatus) {
+            DataState.Loading -> {
+                App.instance.getString(R.string.Alert_Loading)
+            }
+            is DataState.Error -> {
+                App.instance.getString(R.string.NotAvailable)
+            }
+            is DataState.Success -> {
+                coinService.amountData(transactionStatus.data.gasData.estimatedFee).getFormatted()
+            }
+        }
+    }
+
     private fun feeStatus(transactionStatus: DataState<EthereumTransactionService.Transaction>): String {
         return when (transactionStatus) {
             DataState.Loading -> {
@@ -145,6 +163,8 @@ data class SendFeeSliderViewItem(val initialValue: Long, val range: Range<Long>,
 data class SendPriorityViewItem(val title: String, val selected: Boolean)
 
 interface ISendFeeViewModel {
+    val hasEstimatedFee: Boolean
+    val estimatedFeeLiveData: MutableLiveData<String>
     val feeLiveData: LiveData<String>
 }
 

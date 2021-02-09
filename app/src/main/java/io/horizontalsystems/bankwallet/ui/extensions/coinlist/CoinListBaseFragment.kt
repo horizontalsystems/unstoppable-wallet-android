@@ -9,12 +9,13 @@ import androidx.recyclerview.widget.ConcatAdapter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseWithSearchFragment
 import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.bankwallet.modules.blockchainsettings.BlockchainSettingsModule
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorDialog
 import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
 import io.horizontalsystems.core.findNavController
 import kotlinx.android.synthetic.main.fragment_manage_wallets.*
 
-abstract class CoinListBaseFragment: BaseWithSearchFragment(), CoinListAdapter.Listener {
+abstract class CoinListBaseFragment : BaseWithSearchFragment(), CoinListAdapter.Listener {
 
     private lateinit var featuredItemsAdapter: CoinListAdapter
     private lateinit var itemsAdapter: CoinListAdapter
@@ -50,36 +51,31 @@ abstract class CoinListBaseFragment: BaseWithSearchFragment(), CoinListAdapter.L
 
     // CoinListBaseFragment
 
-    protected fun setViewState(viewState: CoinViewState){
+    protected fun setViewState(viewState: CoinViewState) {
         featuredItemsAdapter.submitList(viewState.featuredViewItems)
         itemsAdapter.submitList(viewState.viewItems)
 
         progressLoading.isVisible = false
     }
 
-    open fun onCancelAddressFormatSelection() {}
+    open fun onCancelSelection() {}
 
-    open fun onSelectAddressFormat(coin: Coin, derivationSetting: DerivationSetting) {}
+    open fun onSelect(index: Int) {}
 
-    protected fun showAddressFormatSelectionDialog(coin: Coin, currentDerivation: AccountType.Derivation) {
-        val items = AccountType.Derivation.values().toList()
-        val coinDrawable = context?.let { AppLayoutHelper.getCoinDrawable(it, coin.code, coin.type) }
+    protected fun showBottomSelectorDialog(config: BlockchainSettingsModule.Config) {
+        val coinDrawable = context?.let { AppLayoutHelper.getCoinDrawable(it, config.coin.code, config.coin.type) }
                 ?: return
 
         BottomSheetSelectorDialog.show(
-                childFragmentManager,
-                getString(R.string.AddressFormatSettings_Title),
-                coin.title,
-                coinDrawable,
-                items.map { derivation -> Pair(derivation.longTitle(), getString(derivation.description(), derivation.addressPrefix(coin.type))) },
-                items.indexOf(currentDerivation),
+                fragmentManager = childFragmentManager,
+                title = config.title,
+                subtitle = config.subtitle,
+                icon = coinDrawable,
+                items = config.viewItems,
+                selected = config.selectedIndex,
                 notifyUnchanged = true,
-                onItemSelected = { position ->
-                    onSelectAddressFormat(coin, DerivationSetting(coin.type, items[position]))
-                },
-                onCancelled = {
-                    onCancelAddressFormatSelection()
-                }
+                onItemSelected = { onSelect(it) },
+                onCancelled = { onCancelSelection() }
         )
     }
 

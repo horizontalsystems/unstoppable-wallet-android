@@ -3,61 +3,68 @@ package io.horizontalsystems.bankwallet.modules.swap.tradeoptions
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.modules.swap.SwapService
+import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.ISwapTradeOptionsService.*
 import io.reactivex.disposables.CompositeDisposable
 
 class SwapSlippageViewModel(private val service: SwapTradeOptionsService) : ViewModel(), IVerifiedInputViewModel {
 
+    private val disposable = CompositeDisposable()
+
     override val inputFieldButtonItems: List<InputFieldButtonItem>
         get() {
-            val bounds = service.recommendedSlippageBounds
+            val bounds = SwapTradeOptionsService.recommendedSlippageBounds
             val lowerBoundTitle = bounds.lower.toPlainString()
             val upperBoundTitle = bounds.upper.toPlainString()
+
             return listOf(
                     InputFieldButtonItem("$lowerBoundTitle%") {
-                        inputFieldValueLiveData.postValue(lowerBoundTitle)
-                        setInputFieldValue(lowerBoundTitle)
+                        setTextLiveData.postValue(lowerBoundTitle)
+                        onChangeText(lowerBoundTitle)
                     },
                     InputFieldButtonItem("$upperBoundTitle%") {
-                        inputFieldValueLiveData.postValue(upperBoundTitle)
-                        setInputFieldValue(upperBoundTitle)
+                        setTextLiveData.postValue(upperBoundTitle)
+                        onChangeText(upperBoundTitle)
                     }
             )
         }
 
     override val inputFieldPlaceholder = SwapService.defaultSlippage.stripTrailingZeros().toPlainString()
-    override val inputFieldValueLiveData = MutableLiveData<String?>()
-    override val inputFieldCautionLiveData = MutableLiveData<Caution?>()
+    override val setTextLiveData = MutableLiveData<String?>()
+    override val cautionLiveData = MutableLiveData<Caution?>()
+    override val initialValue: String?
+        get() {
+            val state = service.state
+            if (state is State.Valid && state.tradeOptions.allowedSlippage.compareTo(SwapService.defaultSlippage) != 0) {
+                return state.tradeOptions.allowedSlippage.stripTrailingZeros().toPlainString()
+            }
 
-    private val disposable = CompositeDisposable()
-
-    init {
-        val state = service.state
-        if (state is ISwapTradeOptionsService.State.Valid && state.tradeOptions.allowedSlippagePercent.compareTo(SwapService.defaultSlippage) != 0) {
-            inputFieldValueLiveData.postValue(state.tradeOptions.allowedSlippagePercent.stripTrailingZeros().toPlainString())
+            return null
         }
 
+    init {
         service.errorsObservable
                 .subscribe { errors ->
                     val caution = errors.firstOrNull {
-                        it is ISwapTradeOptionsService.TradeOptionsError.InvalidSlippage
+                        it is TradeOptionsError.InvalidSlippage
                     }?.localizedMessage?.let { localizedMessage ->
                         Caution(localizedMessage, Caution.Type.Error)
                     }
 
-                    inputFieldCautionLiveData.postValue(caution)
-                }
-                .let {
+                    cautionLiveData.postValue(caution)
+                }.let {
                     disposable.add(it)
                 }
-
-
     }
 
-    override fun setInputFieldValue(text: String?) {
+    override fun onCleared() {
+        disposable.clear()
+    }
+
+    override fun onChangeText(text: String?) {
         service.slippage = text?.toBigDecimalOrNull() ?: SwapService.defaultSlippage
     }
 
-    override fun inputFieldIsValid(text: String?): Boolean {
+    override fun isValid(text: String?): Boolean {
         if (text.isNullOrBlank()) return true
 
         val parsed = text.toBigDecimalOrNull()

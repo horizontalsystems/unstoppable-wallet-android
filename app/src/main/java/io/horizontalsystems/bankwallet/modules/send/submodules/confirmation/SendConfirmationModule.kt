@@ -40,6 +40,7 @@ object SendConfirmationModule {
             val primaryAmount: String,
             val secondaryName: String?,
             val secondaryAmount: String?,
+            val domain: String?,
             val receiver: String,
             val memo: String?,
             val locked: Boolean)

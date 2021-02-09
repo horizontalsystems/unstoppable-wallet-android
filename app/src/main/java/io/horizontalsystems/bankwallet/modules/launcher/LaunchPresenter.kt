@@ -28,6 +28,7 @@ class LaunchPresenter(private val interactor: LaunchModule.IInteractor,
         }
 
         when {
+            !interactor.skipRootCheck && interactor.isDeviceRooted -> router.openDeviceIsRootedWarning()
             interactor.isAccountsEmpty -> router.openWelcomeModule()
             interactor.isPinNotSet -> router.openMainModule()
             else -> router.openUnlockModule()

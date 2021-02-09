@@ -14,7 +14,6 @@ class PrivacySettingsViewModel : ViewModel(), PrivacySettingsModule.IPrivacySett
 
     val showPrivacySettingsInfo = SingleLiveEvent<Unit>()
     val torEnabledLiveData = MutableLiveData<Boolean>()
-    val blockchainSettingsVisibilityLiveData = MutableLiveData<Boolean>()
     val transactionOrderingLiveData = MutableLiveData<TransactionDataSortingType>()
     val showAppRestartAlertForTor = SingleLiveEvent<Boolean>()
     val showNotificationsNotEnabledAlert = SingleLiveEvent<Unit>()
@@ -49,10 +48,6 @@ class PrivacySettingsViewModel : ViewModel(), PrivacySettingsModule.IPrivacySett
 
     override fun toggleTorEnabled(torEnabled: Boolean) {
         torEnabledLiveData.postValue(torEnabled)
-    }
-
-    override fun setBlockchainSettingsVisibility(isVisibile: Boolean) {
-        blockchainSettingsVisibilityLiveData.postValue(isVisibile)
     }
 
     override fun showTransactionsSortingOptions(items: List<TransactionDataSortingType>, selectedItem: TransactionDataSortingType) {

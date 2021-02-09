@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.ratelist
 
+import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.core.SingleLiveEvent
 
 class RateListRouter : RateListModule.IRouter {

@@ -57,85 +57,22 @@
     <View
         android:id="@+id/background"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="84dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="8dp"
         android:background="@drawable/swap_input_background"
-        app:layout_constraintBottom_toBottomOf="@+id/secondaryAmount"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/titleTextView" />
 
-    <TextView
-        android:id="@+id/amountPrefix"
-        style="@style/Body"
+    <io.horizontalsystems.bankwallet.ui.extensions.AmountInputView
+        android:id="@+id/amountInput"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:textColor="?ColorLeah"
-        app:layout_constraintBottom_toBottomOf="@id/amount"
-        app:layout_constraintStart_toStartOf="@id/background"
-        app:layout_constraintTop_toTopOf="@id/amount"
-        tools:text="$" />
-
-    <EditText
-        android:id="@+id/amount"
-        style="@style/Body"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="1dp"
-        android:autofillHints="number,numberDecimal"
-        android:background="?ColorLawrence"
-        android:hint="@string/Swap_AmountHint"
-        android:inputType="number|numberDecimal"
-        android:maxLines="1"
-        android:textColor="?ColorLeah"
-        android:textColorHint="@color/grey_50"
-        app:layout_constraintEnd_toStartOf="@id/amountSwitchButton"
-        app:layout_constraintStart_toEndOf="@id/amountPrefix"
-        app:layout_constraintTop_toTopOf="@+id/background"
-        app:layout_goneMarginStart="12dp"
-        tools:text="0.123" />
-
-    <ImageButton
-        android:id="@+id/amountSwitchButton"
-        style="@style/ImageButtonSecondary"
-        android:layout_width="28dp"
-        android:layout_height="28dp"
-        android:layout_marginEnd="10dp"
-        android:src="@drawable/stateful_switch_icon"
-        app:layout_constraintBottom_toBottomOf="@id/amount"
-        app:layout_constraintEnd_toEndOf="@id/background"
-        app:layout_constraintTop_toTopOf="@id/amount" />
-
-    <View
-        android:id="@+id/dividerLine"
-        android:layout_width="0dp"
-        android:layout_height="0.5dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:background="@color/steel_20"
-        app:layout_constraintEnd_toEndOf="@id/background"
-        app:layout_constraintStart_toStartOf="@id/background"
-        app:layout_constraintTop_toBottomOf="@id/amountSwitchButton" />
-
-    <TextView
-        android:id="@+id/secondaryAmount"
-        style="@style/Caption"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="8dp"
-        android:includeFontPadding="false"
-        android:paddingBottom="8dp"
-        app:layout_constraintEnd_toEndOf="@id/background"
-        app:layout_constraintStart_toStartOf="@id/background"
-        app:layout_constraintTop_toBottomOf="@id/dividerLine"
-        tools:text="$ 1234" />
+        app:layout_constraintStart_toStartOf="@+id/background"
+        app:layout_constraintEnd_toEndOf="@+id/background"
+        app:layout_constraintTop_toTopOf="@+id/background" />
 
     <TextView
         android:id="@+id/balanceTitle"
@@ -149,7 +86,7 @@
         android:textColor="@color/grey"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/secondaryAmount" />
+        app:layout_constraintTop_toBottomOf="@+id/background" />
 
     <TextView
         android:id="@+id/balanceValue"

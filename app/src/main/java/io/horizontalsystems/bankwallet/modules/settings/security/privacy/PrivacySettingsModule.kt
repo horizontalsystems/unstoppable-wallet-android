@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.settings.security.privacy
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.managers.TorStatus
 import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.views.ListPosition
 
 object PrivacySettingsModule {
 
@@ -13,7 +14,6 @@ object PrivacySettingsModule {
         fun showTorPrerequisitesAlert()
         fun showRestartAlert(checked: Boolean)
         fun toggleTorEnabled(torEnabled: Boolean)
-        fun setBlockchainSettingsVisibility(isVisibile: Boolean)
         fun setCommunicationSettingsViewItems(items: List<PrivacySettingsViewItem>)
         fun setRestoreWalletSettingsViewItems(items: List<PrivacySettingsViewItem>)
         fun showCommunicationSelectorDialog(communicationModeOptions: List<CommunicationMode>, selected: CommunicationMode, coin: Coin)
@@ -30,7 +30,7 @@ object PrivacySettingsModule {
         fun onApplyTorPrerequisites(checked: Boolean)
         fun updateTorState(checked: Boolean)
         fun setTorEnabled(checked: Boolean)
-        fun didTapItem(settingType: PrivacySettingsType, position: Int)
+        fun onItemTap(settingType: PrivacySettingsType, position: Int)
         fun onSelectSetting(position: Int)
         fun proceedWithCommunicationModeChange(coin: Coin, communicationMode: CommunicationMode)
         fun onTransactionOrderSettingTap()
@@ -40,31 +40,24 @@ object PrivacySettingsModule {
     }
 
     interface IPrivacySettingsInteractor {
-        val walletsCount: Int
+        val wallets: List<Wallet>
         var transactionsSortingType: TransactionDataSortingType
         var isTorEnabled: Boolean
         val isTorNotificationEnabled: Boolean
+        val ethereumCommunicationModes: List<CommunicationMode>
         fun stopTor()
         fun enableTor()
         fun disableTor()
         fun subscribeToTorStatus()
 
-        fun communicationSetting(coinType: CoinType): CommunicationSetting?
-        fun saveCommunicationSetting(communicationSetting: CommunicationSetting)
-        fun syncModeSetting(coinType: CoinType): SyncModeSetting?
-        fun saveSyncModeSetting(syncModeSetting: SyncModeSetting)
-        fun ether(): Coin
-        fun eos(): Coin
-        fun binance(): Coin
-        fun bitcoin(): Coin
-        fun litecoin(): Coin
-        fun bitcoinCash(): Coin
-        fun dash(): Coin
-        fun getWalletsForUpdate(coinType: CoinType): List<Wallet>
-        fun reSyncWallets(wallets: List<Wallet>)
+        fun syncSettings(): List<Triple<InitialSyncSetting, Coin, Boolean>>
+        fun ethereumConnection(): EthereumRpcMode
+        fun saveEthereumRpcModeSetting(rpcModeSetting: EthereumRpcMode)
+        fun saveSyncModeSetting(syncModeSetting: InitialSyncSetting)
+        val ether: Coin
+        val binance: Coin
 
         fun clear()
-        fun isAccountOriginCreated(): Boolean
     }
 
     interface IPrivacySettingsInteractorDelegate {
@@ -80,12 +73,11 @@ object PrivacySettingsModule {
         val interactor = PrivacySettingsInteractor(
                 App.pinComponent,
                 App.torKitManager,
-                App.blockchainSettingsManager,
+                App.initialSyncModeSettingsManager,
+                App.ethereumRpcModeSettingsManager,
                 App.coinManager,
                 App.walletManager,
-                App.localStorage,
-                App.adapterManager,
-                App.accountManager)
+                App.localStorage)
 
         val presenter = PrivacySettingsPresenter(interactor, router)
         interactor.delegate = presenter
@@ -93,3 +85,24 @@ object PrivacySettingsModule {
         presenter.view = view
     }
 }
+
+sealed class PrivacySettingsType {
+    open val selectedTitle: String = ""
+
+    class CommunicationModeSettingType(var selected: CommunicationMode) : PrivacySettingsType() {
+        override val selectedTitle: String
+            get() = selected.title
+    }
+
+    class RestoreModeSettingType(var selected: SyncMode) : PrivacySettingsType() {
+        override val selectedTitle: String
+            get() = selected.title
+    }
+}
+
+data class PrivacySettingsViewItem(
+        val coin: Coin,
+        val settingType: PrivacySettingsType,
+        var enabled: Boolean = true,
+        val listPosition: ListPosition
+)

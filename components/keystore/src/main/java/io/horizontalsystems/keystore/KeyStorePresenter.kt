@@ -23,6 +23,9 @@ class KeyStorePresenter(
             ModeType.UserAuthentication -> {
                 view?.promptUserAuthentication()
             }
+            ModeType.DeviceIsRooted -> {
+                view?.showDeviceIsRootedWarning()
+            }
         }
     }
 

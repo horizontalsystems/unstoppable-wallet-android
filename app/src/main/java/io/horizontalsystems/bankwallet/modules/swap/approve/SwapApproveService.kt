@@ -1,11 +1,11 @@
 package io.horizontalsystems.bankwallet.modules.swap.approve
 
-import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.ethereum.EthereumTransactionService
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.erc20kit.core.Erc20Kit
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.models.Address
+import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
@@ -18,7 +18,7 @@ class SwapApproveService(
         amount: BigInteger,
         private val spenderAddress: Address,
         private val allowance: BigInteger,
-) : ISwapApproveService, Clearable {
+) : ISwapApproveService {
 
     override val stateObservable = BehaviorSubject.createDefault<State>(State.ApproveNotAllowed(listOf()))
     override var amount: BigInteger? = amount
@@ -39,7 +39,7 @@ class SwapApproveService(
         }
 
     private val ethereumBalance: BigInteger
-        get() = ethereumKit.balance ?: BigInteger.ZERO
+        get() = ethereumKit.accountState?.balance ?: BigInteger.ZERO
 
     private val disposables = CompositeDisposable()
 
@@ -57,9 +57,9 @@ class SwapApproveService(
     }
 
     private fun syncTransactionData(amount: BigInteger) {
-        val erc20KitTransactionData = erc20Kit.approveTransactionData(spenderAddress, amount)
+        val erc20KitTransactionData = erc20Kit.buildApproveTransactionData(spenderAddress, amount)
 
-        transactionService.transactionData = EthereumTransactionService.TransactionData(
+        transactionService.transactionData = TransactionData(
                 erc20KitTransactionData.to,
                 erc20KitTransactionData.value,
                 erc20KitTransactionData.input,
@@ -114,7 +114,8 @@ class SwapApproveService(
         amount?.let { amount ->
             state = State.Loading
 
-            erc20Kit.approve(spenderAddress, amount, transaction.gasData.gasPrice, transaction.gasData.gasLimit)
+            val transactionData = erc20Kit.buildApproveTransactionData(spenderAddress, amount)
+            ethereumKit.send(transactionData, transaction.gasData.gasPrice, transaction.gasData.gasLimit)
                     .subscribeOn(Schedulers.io())
                     .subscribe({
                         state = State.Success
@@ -127,7 +128,7 @@ class SwapApproveService(
         }
     }
 
-    override fun clear() {
+    override fun onCleared() {
         disposables.clear()
     }
 

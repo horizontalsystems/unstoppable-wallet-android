@@ -14,6 +14,7 @@ import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.modules.settings.notifications.bottommenu.BottomNotificationMenu
 import io.horizontalsystems.core.findNavController
+import io.horizontalsystems.views.ListPosition
 import io.horizontalsystems.views.SettingsViewDropdown
 import io.horizontalsystems.views.helpers.LayoutHelper
 import io.horizontalsystems.views.inflate
@@ -143,14 +144,8 @@ class NotificationItemsAdapter(private val listener: Listener) : RecyclerView.Ad
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
-            notificationOption -> {
-                val settingsView = SettingsViewDropdown(parent.context).apply {
-                    layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-                }
-                NotificationItemViewHolder(settingsView, onClick = { index -> listener.onItemClick(items[index]) })
-            }
-            coinName -> NotificationCoinNameViewHolder(inflate(parent, R.layout.view_holder_notification_coin_name, false)
-            )
+            notificationOption -> NotificationItemViewHolder(inflate(parent, R.layout.view_holder_setting_with_dropdown, false), onClick = { index -> listener.onItemClick(items[index]) })
+            coinName -> NotificationCoinNameViewHolder(inflate(parent, R.layout.view_holder_notification_coin_name, false))
             else -> throw Exception("Invalid view type")
         }
 
@@ -176,17 +171,26 @@ class NotificationCoinNameViewHolder(override val containerView: View)
     }
 }
 
-class NotificationItemViewHolder(override val containerView: SettingsViewDropdown, val onClick: (position: Int) -> Unit) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+class NotificationItemViewHolder(override val containerView: View, val onClick: (position: Int) -> Unit) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+
+    private val dropdownView = containerView.findViewById<SettingsViewDropdown>(R.id.dropdownView)
 
     fun bind(item: NotificationViewItem) {
-        item.titleRes?.let {
-            containerView.showTitle(itemView.context.getString(it))
+        dropdownView.apply {
+            showTitle(item.titleRes?.let { containerView.context.getString(it) })
+            showDropdownValue(itemView.context.getString(item.dropdownValue))
+            setListPosition(getListPosition(item.type))
         }
-        containerView.showDropdownValue(itemView.context.getString(item.dropdownValue))
-        containerView.showBottomBorder(item.type == NotificationViewItemType.TrendOption)
 
         containerView.setOnClickListener {
             onClick(bindingAdapterPosition)
+        }
+    }
+
+    private fun getListPosition(type: NotificationViewItemType): ListPosition {
+        return when (type) {
+            NotificationViewItemType.ChangeOption -> ListPosition.First
+            else -> ListPosition.Last
         }
     }
 }

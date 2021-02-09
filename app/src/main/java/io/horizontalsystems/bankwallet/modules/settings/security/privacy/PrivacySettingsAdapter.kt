@@ -5,34 +5,11 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.bankwallet.entities.CommunicationMode
-import io.horizontalsystems.bankwallet.entities.SyncMode
 import io.horizontalsystems.bankwallet.modules.settings.security.privacy.PrivacySettingsModule.IPrivacySettingsViewDelegate
 import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
 import io.horizontalsystems.views.SettingsViewDropdown
 import io.horizontalsystems.views.inflate
 import kotlinx.android.extensions.LayoutContainer
-
-sealed class PrivacySettingsType {
-    open val selectedTitle: String = ""
-
-    class Communication(var selected: CommunicationMode) : PrivacySettingsType() {
-        override val selectedTitle: String
-            get() = selected.title
-    }
-
-    class WalletRestore(var selected: SyncMode) : PrivacySettingsType() {
-        override val selectedTitle: String
-            get() = selected.title
-    }
-}
-
-data class PrivacySettingsViewItem(
-        val coin: Coin,
-        val settingType: PrivacySettingsType,
-        var enabled: Boolean = true
-)
 
 class PrivacySettingsAdapter(
         private val delegate: IPrivacySettingsViewDelegate,
@@ -56,16 +33,7 @@ class PrivacySettingsAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
-            VIEW_TYPE_ITEM -> {
-                val settingsView = SettingsViewDropdown(parent.context).apply {
-                    layoutParams = ViewGroup.LayoutParams(
-                            ViewGroup.LayoutParams.MATCH_PARENT,
-                            ViewGroup.LayoutParams.WRAP_CONTENT
-                    )
-                }
-
-                PrivacySettingsItemViewHolder(settingsView, delegate)
-            }
+            VIEW_TYPE_ITEM -> PrivacySettingsItemViewHolder(inflate(parent, R.layout.view_holder_setting_with_dropdown, false), delegate)
             VIEW_TYPE_TITLE -> TitleViewHolder.create(parent)
             VIEW_TYPE_DESCRIPTION -> DescriptionViewHolder.create(parent)
             else -> throw IllegalStateException("No such view type")
@@ -83,7 +51,7 @@ class PrivacySettingsAdapter(
         when (holder) {
             is TitleViewHolder -> holder.bind(title)
             is DescriptionViewHolder -> holder.bind(description)
-            is PrivacySettingsItemViewHolder -> holder.bind(items[position - 1], position == items.size)
+            is PrivacySettingsItemViewHolder -> holder.bind(items[position - 1])
         }
     }
 
@@ -115,21 +83,24 @@ class PrivacySettingsAdapter(
 
     }
 
-    class PrivacySettingsItemViewHolder(override val containerView: SettingsViewDropdown, private val viewDelegate: IPrivacySettingsViewDelegate)
+    class PrivacySettingsItemViewHolder(override val containerView: View, private val viewDelegate: IPrivacySettingsViewDelegate)
         : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
-        fun bind(viewItem: PrivacySettingsViewItem, lastElement: Boolean) {
-            containerView.showIcon(AppLayoutHelper.getCoinDrawable(containerView.context, viewItem.coin.code, viewItem.coin.type))
-            containerView.showTitle(viewItem.coin.title)
-            containerView.showBottomBorder(lastElement)
+        private val dropdownView = containerView.findViewById<SettingsViewDropdown>(R.id.dropdownView)
 
-            containerView.showDropdownValue(viewItem.settingType.selectedTitle)
-            containerView.showDropdownIcon(viewItem.enabled)
+        fun bind(viewItem: PrivacySettingsViewItem) {
+            dropdownView.apply {
+                showIcon(AppLayoutHelper.getCoinDrawable(containerView.context, viewItem.coin.code, viewItem.coin.type))
+                showTitle(viewItem.coin.title)
+                showDropdownValue(viewItem.settingType.selectedTitle)
+                showDropdownIcon(viewItem.enabled)
+                setListPosition(viewItem.listPosition)
+            }
 
             containerView.isEnabled = viewItem.enabled
 
             containerView.setOnClickListener {
-                viewDelegate.didTapItem(viewItem.settingType, bindingAdapterPosition - 1)
+                viewDelegate.onItemTap(viewItem.settingType, bindingAdapterPosition - 1)
             }
         }
     }

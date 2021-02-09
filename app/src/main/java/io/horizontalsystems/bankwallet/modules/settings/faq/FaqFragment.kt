@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
@@ -19,6 +18,7 @@ import io.horizontalsystems.bankwallet.entities.Faq
 import io.horizontalsystems.bankwallet.modules.settings.guides.ErrorAdapter
 import io.horizontalsystems.bankwallet.modules.markdown.MarkdownFragment
 import io.horizontalsystems.core.findNavController
+import io.horizontalsystems.views.ListPosition
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_faq_list.*
 import kotlinx.android.synthetic.main.view_holder_faq_item.*
@@ -71,7 +71,7 @@ class FaqListFragment: BaseFragment(), FaqListAdapter.Listener {
     }
 }
 
-data class FaqItem(val faq: Faq, var last: Boolean)
+data class FaqItem(val faq: Faq, var listPosition: ListPosition)
 
 class FaqListAdapter(private val listener: Listener) : ListAdapter<FaqItem, ViewHolderFaq>(faqDiff) {
 
@@ -114,6 +114,7 @@ class ViewHolderFaq(override val containerView: View, listener: FaqListAdapter.L
     fun bind(item: FaqItem) {
         this.faqItem = item
         faqTitleText.text = item.faq.title
-        bottomBorder.isVisible = item.last
+        containerView.setBackgroundResource(item.listPosition.getBackground())
+        bottomBorder.isVisible = item.listPosition == ListPosition.First || item.listPosition == ListPosition.Middle
     }
 }

@@ -2,23 +2,23 @@ package io.horizontalsystems.bankwallet.modules.swap.tradeoptions
 
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.uniswapkit.models.TradeOptions
-import io.reactivex.Observable
 import java.math.BigDecimal
 
 interface ISwapTradeOptionsService {
-    val state: State
-    val stateObservable: Observable<State>
-    val errorsObservable: Observable<List<TradeOptionsError>>
 
     sealed class InvalidSlippageType {
         class Lower(val min: BigDecimal) : InvalidSlippageType()
         class Higher(val max: BigDecimal) : InvalidSlippageType()
     }
 
-    sealed class TradeOptionsError : Throwable() {
-        object ZeroSlippage : TradeOptionsError()
-        object ZeroDeadline : TradeOptionsError()
+    sealed class TradeOptionsError : Exception() {
+        object ZeroSlippage : TradeOptionsError() {
+            override fun getLocalizedMessage() = App.instance.getString(R.string.SwapSettings_Error_SlippageZero)
+        }
+
+        object ZeroDeadline : TradeOptionsError() {
+            override fun getLocalizedMessage() = App.instance.getString(R.string.SwapSettings_Error_DeadlineZero)
+        }
 
         class InvalidSlippage(val invalidSlippageType: InvalidSlippageType) : TradeOptionsError() {
             override fun getLocalizedMessage(): String {
@@ -37,8 +37,7 @@ interface ISwapTradeOptionsService {
     }
 
     sealed class State {
-        class Valid(val tradeOptions: TradeOptions) : State()
+        class Valid(val tradeOptions: SwapTradeOptions) : State()
         object Invalid : State()
     }
-
 }

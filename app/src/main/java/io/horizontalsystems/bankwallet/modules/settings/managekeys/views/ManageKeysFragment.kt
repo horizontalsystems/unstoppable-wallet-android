@@ -108,12 +108,8 @@ class ManageKeysFragment : BaseFragment(), ManageKeysDialog.Listener, ManageKeys
             findNavController().navigate(R.id.manageKeysFragment_to_backupFragment, arguments, navOptions())
         })
 
-        router.showBlockchainSettings.observe(this, Observer { enabledCoinTypes ->
-            val arguments = Bundle(1).apply {
-                putParcelableArrayList(ModuleField.COIN_TYPES, ArrayList(enabledCoinTypes))
-            }
-
-            findNavController().navigate(R.id.manageKeysFragment_to_addressFormatSettingsFragment, arguments, navOptions())
+        router.showAddressFormat.observe(this, Observer {
+            findNavController().navigate(R.id.manageKeysFragment_to_addressFormatFragment, null, navOptions())
         })
 
         router.closeEvent.observe(this, Observer {
@@ -123,8 +119,8 @@ class ManageKeysFragment : BaseFragment(), ManageKeysDialog.Listener, ManageKeys
 
     //  ManageKeysAdapter Listener
 
-    override fun onClickAdvancedSettings(item: ManageAccountItem) {
-        presenter.onClickAdvancedSettings(item)
+    override fun onClickAddressFormat(item: ManageAccountItem) {
+        presenter.onClickAddressFormat(item)
     }
 
     override fun onClickCreate(item: ManageAccountItem) {

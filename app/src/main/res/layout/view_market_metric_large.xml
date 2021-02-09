@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:layout_height="wrap_content"
+    tools:layout_width="wrap_content"
+    tools:parentTag="io.horizontalsystems.bankwallet.ui.extensions.MarketMetricLargeView">
+
+    <TextView
+        android:id="@+id/title"
+        style="@style/Micro"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/grey"
+        android:visibility="invisible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/Market_TotalMarketCap" />
+
+    <TextView
+        android:id="@+id/value"
+        style="@style/Headline1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:textColor="?ColorBran"
+        app:layout_constraintStart_toStartOf="@id/title"
+        app:layout_constraintTop_toBottomOf="@+id/title"
+        tools:text="$498.61B" />
+
+    <io.horizontalsystems.bankwallet.ui.extensions.PriceGradientView
+        android:id="@+id/diffCircle"
+        android:layout_width="52dp"
+        android:layout_height="52dp"
+        android:layout_marginTop="13dp"
+        android:alpha="0"
+        app:cardBackgroundColor="@color/transparent"
+        app:cardCornerRadius="26dp"
+        app:cardElevation="0dp"
+        app:gradient="@drawable/gradient_price"
+        app:layout_constraintStart_toStartOf="@id/title"
+        app:layout_constraintTop_toBottomOf="@+id/value" />
+
+    <TextView
+        android:id="@+id/diffPercentage"
+        style="@style/Body"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="26dp"
+        android:textColor="?ColorRemus"
+        app:layout_constraintBottom_toBottomOf="@id/diffCircle"
+        app:layout_constraintStart_toStartOf="@id/diffCircle"
+        app:layout_constraintTop_toTopOf="@id/diffCircle"
+        tools:text="+24.53%" />
+
+</merge>

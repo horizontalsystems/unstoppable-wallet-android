@@ -17,6 +17,7 @@ class RateChartView : RateChartModule.View {
     val showRsi = SingleLiveEvent<Boolean>()
     val alertNotificationUpdated = SingleLiveEvent<Unit>()
     val showNotificationMenu = SingleLiveEvent<Pair<String, String>>()
+    val isFavorite = MutableLiveData<Boolean>()
 
     override fun showSpinner() {
         showSpinner.call()
@@ -64,5 +65,9 @@ class RateChartView : RateChartModule.View {
 
     override fun openNotificationMenu(coinId: String, coinName: String) {
         showNotificationMenu.postValue(Pair(coinId, coinName))
+    }
+
+    override fun setIsFavorite(value: Boolean) {
+        isFavorite.postValue(value)
     }
 }

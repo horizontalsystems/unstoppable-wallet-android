@@ -10,7 +10,7 @@ interface ILockoutManager {
 }
 
 interface ILockoutUntilDateFactory {
-    fun lockoutUntilDate(failedAttempts: Int, lockoutTimestamp: Long, uptime: Long): Date?
+    fun lockoutUntilDate(failedAttempts: Int, lockoutUptime: Long, uptime: Long): Date?
 }
 
 interface OneTimerDelegate {

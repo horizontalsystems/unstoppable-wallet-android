@@ -12,7 +12,7 @@ class RateListFactory(private val numberFormatter: IAppNumberFormatter) : RateLi
         return coins.map { coin ->
             val marketInfo = marketInfos[coin.code]
             val rateCurrencyValue = marketInfo?.rate?.let { CurrencyValue(currency, it) }
-            val diff = if (marketInfo?.isExpired() == true) null else marketInfo?.diff
+            val diff = if (marketInfo?.isExpired() == true) null else marketInfo?.rateDiff
             val dimRate = (marketInfo?.rate != null && marketInfo.isExpired())
             val timestamp = marketInfo?.timestamp ?: 0L
 
@@ -26,7 +26,7 @@ class RateListFactory(private val numberFormatter: IAppNumberFormatter) : RateLi
                     topMarket.coinCode,
                     topMarket.coinName,
                     rate(CurrencyValue(currency, topMarket.marketInfo.rate)),
-                    topMarket.marketInfo.diff,
+                    topMarket.marketInfo.rateDiff,
                     timestamp = topMarket.marketInfo.timestamp,
                     rateDimmed = topMarket.marketInfo.isExpired(),
                     rank = topMarket.rank

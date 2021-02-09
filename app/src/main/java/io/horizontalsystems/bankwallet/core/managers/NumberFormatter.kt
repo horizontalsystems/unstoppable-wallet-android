@@ -1,5 +1,7 @@
 package io.horizontalsystems.bankwallet.core.managers
 
+import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.core.ILanguageManager
 import java.math.BigDecimal
@@ -7,6 +9,8 @@ import java.math.BigInteger
 import java.math.RoundingMode
 import java.text.NumberFormat
 import java.util.*
+import kotlin.math.floor
+import kotlin.math.log10
 
 class NumberFormatter(private val languageManager: ILanguageManager) : IAppNumberFormatter {
 
@@ -14,7 +18,7 @@ class NumberFormatter(private val languageManager: ILanguageManager) : IAppNumbe
 
     override fun format(value: Number, minimumFractionDigits: Int, maximumFractionDigits: Int, prefix: String, suffix: String): String {
         val bigDecimalValue = when (value) {
-            is Double -> BigDecimal(value)
+            is Double -> value.toBigDecimal()
             is Float -> value.toBigDecimal()
             is BigDecimal -> value
             else -> throw UnsupportedOperationException()
@@ -70,7 +74,7 @@ class NumberFormatter(private val languageManager: ILanguageManager) : IAppNumbe
         val valueAfterDot = absValue - valueBeforeDot
 
         return when {
-            valueBeforeDot < BigDecimal("10") && valueAfterDot < BigDecimal("0.0001") ->  8
+            valueBeforeDot < BigDecimal("10") && valueAfterDot < BigDecimal("0.0001") -> 8
             valueBeforeDot < BigDecimal("100") -> 4
             else -> 2
         }
@@ -90,4 +94,33 @@ class NumberFormatter(private val languageManager: ILanguageManager) : IAppNumbe
 
         return formatters[formatterId] ?: throw Exception("No formatter")
     }
+
+    override fun shortenValue(number: Number): Pair<BigDecimal, String> {
+        val suffix = arrayOf(
+                " ",
+                App.instance.getString(R.string.Charts_MarketCap_Thousand),
+                App.instance.getString(R.string.Charts_MarketCap_Million),
+                App.instance.getString(R.string.Charts_MarketCap_Billion),
+                App.instance.getString(R.string.Charts_MarketCap_Trillion))
+
+        val valueLong = number.toLong()
+        val value = floor(log10(valueLong.toDouble())).toInt()
+        val base = value / 3
+
+        var returnSuffix = ""
+        var valueDecimal = valueLong.toBigDecimal()
+        if (value >= 3 && base < suffix.size) {
+            valueDecimal = (valueLong / Math.pow(10.0, (base * 3).toDouble())).toBigDecimal()
+            returnSuffix = suffix[base]
+        }
+
+        val roundedDecimalValue = if (valueDecimal < BigDecimal.TEN) {
+            valueDecimal.setScale(2, RoundingMode.HALF_EVEN)
+        } else {
+            valueDecimal.setScale(1, RoundingMode.HALF_EVEN)
+        }
+
+        return Pair(roundedDecimalValue, returnSuffix)
+    }
+
 }

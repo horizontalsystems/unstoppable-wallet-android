@@ -3,7 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/clickable_background_color_lawrence">
+    android:layout_marginStart="16dp"
+    android:layout_marginEnd="16dp"
+    android:background="@drawable/rounded_lawrence_background_single">
 
     <TextView
         android:id="@+id/faqTitleText"
@@ -19,18 +21,11 @@
         tools:text="What is the Unstoppable Wallet? And what should I do about that?" />
 
     <View
-        android:id="@+id/topBorder"
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:layout_gravity="top"
-        android:background="@color/steel_20" />
-
-    <View
         android:id="@+id/bottomBorder"
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:visibility="gone"
         android:layout_gravity="bottom"
-        android:background="@color/steel_20" />
+        android:background="@color/steel_10" />
 
 </FrameLayout>

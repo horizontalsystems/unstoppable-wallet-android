@@ -16,6 +16,7 @@ data class TransactionRecord(
         val fee: BigDecimal? = null,
         val timestamp: Long,
         val from: String?,
+        val memo: String?,
         val to: String?,
         val type: TransactionType,
         val lockInfo: TransactionLockInfo? = null,

@@ -5,7 +5,6 @@
         <attr name="title" />
         <attr name="subtitle" />
         <attr name="value" format="string" />
-        <attr name="bottomBorder" format="boolean" />
         <attr name="showArrow" format="boolean" />
     </declare-styleable>
     <declare-styleable name="SettingsViewDropdown">
@@ -13,13 +12,11 @@
         <attr name="title" />
         <attr name="subtitle" />
         <attr name="value" />
-        <attr name="bottomBorder" />
     </declare-styleable>
     <declare-styleable name="SettingsViewSwitch">
         <attr name="icon" />
         <attr name="title" />
         <attr name="subtitle" />
-        <attr name="bottomBorder" />
     </declare-styleable>
     <declare-styleable name="ManageAccountView">
         <attr name="title" />
@@ -36,6 +33,10 @@
     </declare-styleable>
     <declare-styleable name="ChartIndicatorView">
         <attr name="title" />
+    </declare-styleable>
+    <declare-styleable name="ViewState">
+        <attr name="state_error" format="boolean" />
+        <attr name="state_warning" format="boolean" />
     </declare-styleable>
 
     <!--  Custom view themes/styles -->
@@ -72,6 +73,7 @@
     <attr name="ShadingBottomGradient" format="reference" />
     <attr name="SecondaryButtonStartGradient" format="reference|color" />
     <attr name="SecondaryButtonEndGradient" format="reference|color" />
+    <attr name="MarketCircleGradient" format="reference" />
 
     <!--  New themed colors for text and icons -->
     <attr name="ColorJacob" format="reference|color" />
@@ -93,6 +95,7 @@
     <attr name="ColorNina" format="reference" />
     <attr name="ColorTyler" format="reference" />
     <attr name="ColorRaina" format="reference" />
+    <attr name="ColorAndy" format="reference" />
 
     <!--  New themed gradient colors -->
     <attr name="ColorGradientWhite" format="reference" />

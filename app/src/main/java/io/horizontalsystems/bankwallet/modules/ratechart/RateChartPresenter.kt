@@ -55,6 +55,8 @@ class RateChartPresenter(
 
         fetchChartInfo()
         updateAlertNotificationIconState()
+
+        updateFavoriteNotificationItemState()
     }
 
     override fun onSelect(type: ChartType) {
@@ -86,6 +88,14 @@ class RateChartPresenter(
         }
     }
 
+    override fun onFavoriteClick() {
+        interactor.favorite(coinCode)
+    }
+
+    override fun onUnfavoriteClick() {
+        interactor.unfavorite(coinCode)
+    }
+
     override fun toggleEma() {
         emaIsEnabled = !emaIsEnabled
         view.setEmaEnabled(emaIsEnabled)
@@ -114,6 +124,10 @@ class RateChartPresenter(
         val priceAlert = interactor.getPriceAlert(coinId)
         notificationIconActive = priceAlert.changeState != PriceAlert.ChangeState.OFF || priceAlert.trendState != PriceAlert.TrendState.OFF
         view.notificationIconUpdated()
+    }
+
+    override fun updateFavoriteNotificationItemState() {
+        view.setIsFavorite(interactor.isCoinFavorite(coinCode))
     }
 
     private fun fetchChartInfo() {

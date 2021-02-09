@@ -35,7 +35,7 @@ class TermsManager(private val localStorage: ILocalStorage) : ITermsManager {
     }
 
     companion object{
-        val termIds = listOf("academy", "backup", "owner", "recover", "phone", "root", "bugs")
+        val termIds = listOf("academy", "backup", "owner", "recover", "phone", "root", "bugs", "pin")
     }
 }
 

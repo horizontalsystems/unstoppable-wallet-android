@@ -7,16 +7,11 @@
 
     <View
         android:id="@+id/backgroundView"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="60dp"
-        android:background="@drawable/clickable_background_color_lawrence"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <View
-        android:id="@+id/topShade"
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="@color/steel_20"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/rounded_lawrence_background_single"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -26,15 +21,13 @@
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="18dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="18dp"
         android:src="@drawable/coin_btc"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="@+id/backgroundView"
         app:layout_constraintEnd_toStartOf="@id/coinTitle"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/topShade" />
+        app:layout_constraintStart_toStartOf="@+id/backgroundView"
+        app:layout_constraintTop_toTopOf="@+id/backgroundView" />
 
     <TextView
         android:id="@+id/coinTitle"
@@ -48,7 +41,7 @@
         app:layout_constraintBottom_toTopOf="@+id/coinSubtitle"
         app:layout_constraintEnd_toStartOf="@+id/toggleSwitch"
         app:layout_constraintStart_toEndOf="@+id/coinIcon"
-        app:layout_constraintTop_toBottomOf="@+id/topShade"
+        app:layout_constraintTop_toTopOf="@+id/backgroundView"
         app:layout_constraintVertical_chainStyle="packed"
         tools:text="BTC" />
 
@@ -89,8 +82,8 @@
         android:theme="@style/SwitchTheme"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/backgroundView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/topShade"
+        app:layout_constraintEnd_toEndOf="@+id/backgroundView"
+        app:layout_constraintTop_toTopOf="@+id/backgroundView"
         tools:visibility="visible" />
 
     <ImageView
@@ -101,24 +94,27 @@
         android:src="@drawable/ic_add"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/backgroundView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/topShade" />
+        app:layout_constraintEnd_toEndOf="@+id/backgroundView"
+        app:layout_constraintTop_toTopOf="@+id/backgroundView" />
 
     <View
-        android:id="@+id/bottomShade"
-        android:layout_width="match_parent"
+        android:id="@+id/bottomBorder"
+        android:layout_width="0dp"
         android:layout_height="0.5dp"
-        android:background="@color/steel_20"
-        app:layout_constraintBottom_toBottomOf="@+id/backgroundView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:background="@color/steel_10"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="@+id/backgroundView"
+        app:layout_constraintStart_toStartOf="@+id/backgroundView"
+        app:layout_constraintBottom_toBottomOf="@+id/backgroundView" />
 
     <View
         android:id="@+id/dividerView"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="32dp"
         android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@+id/backgroundView"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/backgroundView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

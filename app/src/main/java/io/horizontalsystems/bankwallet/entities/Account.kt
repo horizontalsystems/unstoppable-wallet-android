@@ -10,11 +10,12 @@ class Account(val id: String,
               val name: String,
               val type: AccountType,
               val origin: AccountOrigin,
-              var isBackedUp: Boolean = false) : Parcelable {
+              var isBackedUp: Boolean = false
+) : Parcelable {
 
     override fun equals(other: Any?): Boolean {
         if (other is Account) {
-            return id == other.id && type == other.type
+            return id == other.id
         }
 
         return false
@@ -46,17 +47,6 @@ open class AccountType : Parcelable {
 
         override fun hashCode(): Int {
             return key.contentHashCode()
-        }
-    }
-
-    @Parcelize
-    data class Eos(val account: String, val activePrivateKey: String) : AccountType() {
-        override fun equals(other: Any?): Boolean {
-            return other is Eos && account == other.account && activePrivateKey == other.activePrivateKey
-        }
-
-        override fun hashCode(): Int {
-            return Objects.hash(account, activePrivateKey)
         }
     }
 

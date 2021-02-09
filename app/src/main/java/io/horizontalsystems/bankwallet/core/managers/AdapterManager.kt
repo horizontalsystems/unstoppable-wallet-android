@@ -4,7 +4,6 @@ import android.os.Handler
 import android.os.HandlerThread
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.adapters.BinanceAdapter
-import io.horizontalsystems.bankwallet.core.adapters.EosAdapter
 import io.horizontalsystems.bankwallet.core.adapters.Erc20Adapter
 import io.horizontalsystems.bankwallet.core.adapters.EthereumAdapter
 import io.horizontalsystems.bankwallet.core.factories.AdapterFactory
@@ -21,7 +20,6 @@ class AdapterManager(
         private val walletManager: IWalletManager,
         private val adapterFactory: AdapterFactory,
         private val ethereumKitManager: IEthereumKitManager,
-        private val eosKitManager: IEosKitManager,
         private val binanceKitManager: BinanceKitManager)
     : IAdapterManager, HandlerThread("A") {
 
@@ -57,7 +55,6 @@ class AdapterManager(
         }
 
         ethereumKitManager.ethereumKit?.refresh()
-        eosKitManager.eosKit?.refresh()
         binanceKitManager.binanceKit?.refresh()
     }
 
@@ -124,7 +121,6 @@ class AdapterManager(
         when (adapter) {
             is BinanceAdapter -> binanceKitManager.binanceKit?.refresh()
             is EthereumAdapter, is Erc20Adapter -> ethereumKitManager.ethereumKit?.refresh()
-            is EosAdapter -> eosKitManager.eosKit?.refresh()
             else -> adapter.refresh()
         }
 

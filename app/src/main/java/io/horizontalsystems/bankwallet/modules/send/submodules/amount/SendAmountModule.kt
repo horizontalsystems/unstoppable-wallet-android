@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.send.submodules.amount
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.providers.StringProvider
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.Wallet
@@ -16,19 +17,14 @@ object SendAmountModule {
     interface IView {
 
         fun setLoading(loading: Boolean)
-        fun setAmountType(prefix: String?)
+        fun setAmountType(prefix: String)
         fun setAmount(amount: String)
         fun setAvailableBalance(availableBalance: String)
-        fun setHint(hint: String?)
+        fun setHint(hint: String)
+        fun setHintStateEnabled(enabled: Boolean)
         fun setValidationError(error: ValidationError?)
-
-        fun setSwitchButtonEnabled(enabled: Boolean)
-        fun setMaxButtonVisible(visible: Boolean)
-
-        fun addTextChangeListener()
-        fun removeTextChangeListener()
-
         fun revertAmount(amount: String)
+        fun setMaxButtonVisible(visible: Boolean)
     }
 
     interface IViewDelegate {
@@ -51,6 +47,8 @@ object SendAmountModule {
 
     interface IAmountModule {
 
+        val xRate: BigDecimal?
+        val sendAmountInfo: SendAmountInfo
         val currentAmount: BigDecimal
         val inputType: SendModule.InputType
         val coinAmount: CoinValue
@@ -76,6 +74,7 @@ object SendAmountModule {
     interface IAmountModuleDelegate {
         fun onChangeAmount()
         fun onChangeInputType(inputType: SendModule.InputType)
+        fun onRateUpdated(rate: BigDecimal?) {}
     }
 
     open class ValidationError : Exception() {
@@ -100,7 +99,7 @@ object SendAmountModule {
             val sendAmountPresenterHelper =
                     SendAmountPresenterHelper(App.numberFormatter, wallet.coin, baseCurrency, coinDecimal,
                             currencyDecimal)
-            val presenter = SendAmountPresenter(view, interactor, sendAmountPresenterHelper, wallet.coin, baseCurrency)
+            val presenter = SendAmountPresenter(view, interactor, sendAmountPresenterHelper, wallet.coin, baseCurrency, StringProvider(App.instance))
 
             sendHandler.amountModule = presenter
             interactor.delegate = presenter
@@ -109,4 +108,10 @@ object SendAmountModule {
         }
     }
 
+}
+
+sealed class SendAmountInfo {
+    object Max : SendAmountInfo()
+    class Entered(val amount: BigDecimal) : SendAmountInfo()
+    object NotEntered : SendAmountInfo()
 }

@@ -6,13 +6,13 @@ import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
 import io.horizontalsystems.core.SingleLiveEvent
-import java.lang.Exception
 
 class RestoreViewModel(
         private val service: RestoreModule.IRestoreService,
         private val selectCoins: Boolean,
-        private val clearables: List<Clearable>
-) : ViewModel() {
+        private val coinToEnable: Coin?,
+        private val clearables: List<Clearable>)
+    : ViewModel() {
 
     var openScreenLiveEvent = SingleLiveEvent<Screen>()
     var finishLiveEvent = SingleLiveEvent<Unit>()
@@ -36,10 +36,10 @@ class RestoreViewModel(
 
         if (selectCoins) {
             service.predefinedAccountType?.let {
-                openScreenLiveEvent.postValue(Screen.SelectCoins(it))
+                openScreenLiveEvent.postValue(Screen.SelectCoins(it, accountType))
             }
         } else {
-            restore()
+            restore(coinToEnable?.let { listOf(it) } ?: listOf())
         }
     }
 
@@ -66,6 +66,6 @@ class RestoreViewModel(
     sealed class Screen {
         object SelectPredefinedAccountType : Screen()
         class RestoreAccountType(val predefinedAccountType: PredefinedAccountType) : Screen()
-        class SelectCoins(val predefinedAccountType: PredefinedAccountType) : Screen()
+        class SelectCoins(val predefinedAccountType: PredefinedAccountType, val accountType: AccountType) : Screen()
     }
 }

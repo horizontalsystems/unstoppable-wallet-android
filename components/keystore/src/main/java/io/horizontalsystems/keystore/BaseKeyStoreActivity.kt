@@ -17,7 +17,13 @@ abstract class BaseKeyStoreActivity : AppCompatActivity() {
 
     fun observeEvents() {
         viewModel.showNoSystemLockWarning.observe(this, Observer {
-            noSystemLockWarning.isVisible = true
+            warningView.isVisible = true
+            warningText.setText(R.string.OSPin_Confirm_Desciption)
+        })
+
+        viewModel.showDeviceIsRootedWarning.observe(this, Observer {
+            warningView.isVisible = true
+            warningText.setText(R.string.Alert_DeviceIsRootedWarning)
         })
 
         viewModel.showInvalidKeyWarning.observe(this, Observer {
@@ -52,7 +58,7 @@ abstract class BaseKeyStoreActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        if (noSystemLockWarning.isVisible) {
+        if (warningView.isVisible) {
             finishAffinity()
         }
     }

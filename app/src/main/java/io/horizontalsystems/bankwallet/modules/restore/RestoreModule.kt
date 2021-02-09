@@ -14,12 +14,17 @@ object RestoreModule {
         fun restoreAccount(coins: List<Coin> = listOf())
     }
 
-    class Factory(private val selectCoins: Boolean, private val predefinedAccountType: PredefinedAccountType? = null) : ViewModelProvider.Factory {
+    class Factory(
+            private val selectCoins: Boolean,
+            private val predefinedAccountType: PredefinedAccountType? = null,
+            private val coinToEnable: Coin? = null)
+        : ViewModelProvider.Factory {
+
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val service = RestoreService(predefinedAccountType, App.walletManager, App.accountCreator, App.accountManager)
 
-            return RestoreViewModel(service, selectCoins, listOf(service)) as T
+            return RestoreViewModel(service, selectCoins, coinToEnable, listOf(service)) as T
         }
     }
 }

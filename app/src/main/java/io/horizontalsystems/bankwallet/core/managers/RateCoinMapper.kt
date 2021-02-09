@@ -3,8 +3,8 @@ package io.horizontalsystems.bankwallet.core.managers
 import io.horizontalsystems.bankwallet.core.IRateCoinMapper
 
 class RateCoinMapper : IRateCoinMapper {
-    private val disabledCoins = setOf("SAI", "PGL", "PPT", "EOSDT", "WBTC", "WETH", "SWAP")
-    private val convertedCoins = mapOf("HOT" to "HOLO")
+    private val disabledCoins = setOf<String>()
+    private val convertedCoins = emptyMap<String, String>()
 
     override fun convert(coinCode: String): String? {
         return if (disabledCoins.contains(coinCode)) {
@@ -22,5 +22,4 @@ class RateCoinMapper : IRateCoinMapper {
         }
         return coinCode
     }
-
 }

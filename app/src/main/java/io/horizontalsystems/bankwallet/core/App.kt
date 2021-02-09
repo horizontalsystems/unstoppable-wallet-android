@@ -14,7 +14,6 @@ import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.bankwallet.core.providers.FeeCoinProvider
 import io.horizontalsystems.bankwallet.core.providers.FeeRateProvider
 import io.horizontalsystems.bankwallet.core.storage.*
-import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoFactory
 import io.horizontalsystems.bankwallet.modules.keystore.KeyStoreActivity
 import io.horizontalsystems.bankwallet.modules.launcher.LauncherActivity
 import io.horizontalsystems.bankwallet.modules.lockscreen.LockScreenActivity
@@ -23,7 +22,6 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectSessio
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.CoreApp
 import io.horizontalsystems.core.ICoreApp
-import io.horizontalsystems.core.IThirdKeyboard
 import io.horizontalsystems.core.security.EncryptionManager
 import io.horizontalsystems.core.security.KeyStoreManager
 import io.horizontalsystems.pin.PinComponent
@@ -38,6 +36,7 @@ class App : CoreApp() {
 
         lateinit var feeRateProvider: FeeRateProvider
         lateinit var localStorage: ILocalStorage
+        lateinit var marketStorage: IMarketStorage
         lateinit var torKitManager: ITorManager
         lateinit var chartTypeStorage: IChartTypeStorage
 
@@ -59,10 +58,8 @@ class App : CoreApp() {
         lateinit var accountsStorage: IAccountsStorage
         lateinit var priceAlertManager: IPriceAlertManager
         lateinit var enabledWalletsStorage: IEnabledWalletStorage
-        lateinit var transactionInfoFactory: FullTransactionInfoFactory
-        lateinit var transactionDataProviderManager: TransactionDataProviderManager
+        lateinit var blockchainSettingsStorage: IBlockchainSettingsStorage
         lateinit var ethereumKitManager: IEthereumKitManager
-        lateinit var eosKitManager: IEosKitManager
         lateinit var binanceKitManager: BinanceKitManager
         lateinit var numberFormatter: IAppNumberFormatter
         lateinit var addressParserFactory: AddressParserFactory
@@ -70,11 +67,13 @@ class App : CoreApp() {
         lateinit var notificationManager: INotificationManager
         lateinit var appStatusManager: IAppStatusManager
         lateinit var appVersionManager: AppVersionManager
-        lateinit var blockchainSettingsManager: IBlockchainSettingsManager
+        lateinit var ethereumRpcModeSettingsManager: IEthereumRpcModeSettingsManager
+        lateinit var initialSyncModeSettingsManager: IInitialSyncModeSettingsManager
+        lateinit var derivationSettingsManager: IDerivationSettingsManager
+        lateinit var bitcoinCashCoinTypeManager: BitcoinCashCoinTypeManager
         lateinit var accountCleaner: IAccountCleaner
         lateinit var rateCoinMapper: RateCoinMapper
         lateinit var rateAppManager: IRateAppManager
-        lateinit var derivationSettingsManager: IDerivationSettingsManager
         lateinit var coinRecordStorage: ICoinRecordStorage
         lateinit var coinManager: ICoinManager
         lateinit var erc20ContractInfoProvider: IErc20ContractInfoProvider
@@ -82,6 +81,7 @@ class App : CoreApp() {
         lateinit var notificationSubscriptionManager: INotificationSubscriptionManager
         lateinit var termsManager: ITermsManager
         lateinit var zcashBirthdayProvider: ZcashBirthdayProvider
+        lateinit var marketFavoritesManager: MarketFavoritesManager
     }
 
     override fun onCreate() {
@@ -101,15 +101,14 @@ class App : CoreApp() {
 
         val appConfig = AppConfigProvider()
         appConfigProvider = appConfig
-        appConfigTestMode = appConfig
+        buildConfigProvider = appConfig
         languageConfigProvider = appConfig
 
         feeRateProvider = FeeRateProvider(appConfigProvider)
         backgroundManager = BackgroundManager(this)
 
         ethereumKitManager = EthereumKitManager(appConfig.infuraProjectId, appConfig.infuraProjectSecret, appConfig.etherscanApiKey, appConfig.testMode, backgroundManager)
-        eosKitManager = EosKitManager(appConfigTestMode.testMode)
-        binanceKitManager = BinanceKitManager(appConfigTestMode.testMode)
+        binanceKitManager = BinanceKitManager(buildConfigProvider.testMode)
 
         appDatabase = AppDatabase.getInstance(this)
         accountsStorage = AccountsStorage(appDatabase)
@@ -120,6 +119,7 @@ class App : CoreApp() {
         coinManager = CoinManager(appConfigProvider, coinRecordStorage)
 
         enabledWalletsStorage = EnabledWalletsStorage(appDatabase)
+        blockchainSettingsStorage = BlockchainSettingsStorage(appDatabase)
         walletStorage = WalletStorage(coinManager, enabledWalletsStorage)
 
         LocalStorageManager(preferences).apply {
@@ -128,18 +128,14 @@ class App : CoreApp() {
             pinStorage = this
             thirdKeyboardStorage = this
             themeStorage = this
+            marketStorage = this
         }
 
         torKitManager = TorManager(instance, localStorage)
 
-        val communicationSettingsManager = CommunicationSettingsManager(appConfigProvider, appDatabase)
-        derivationSettingsManager = DerivationSettingsManager(appConfigProvider, appDatabase)
-        val syncModeSettingsManager = SyncModeSettingsManager(appConfigProvider, appDatabase)
-        blockchainSettingsManager = BlockchainSettingsManager(derivationSettingsManager, syncModeSettingsManager, communicationSettingsManager)
-
         wordsManager = WordsManager()
         networkManager = NetworkManager()
-        accountCleaner = AccountCleaner(appConfigTestMode.testMode)
+        accountCleaner = AccountCleaner(buildConfigProvider.testMode)
         accountManager = AccountManager(accountsStorage, accountCleaner)
         backupManager = BackupManager(accountManager)
         walletManager = WalletManager(accountManager, walletStorage)
@@ -162,15 +158,22 @@ class App : CoreApp() {
 
         connectivityManager = ConnectivityManager(backgroundManager)
 
-        val adapterFactory = AdapterFactory(instance, appConfigTestMode.testMode, ethereumKitManager, eosKitManager, binanceKitManager, blockchainSettingsManager, backgroundManager)
-        adapterManager = AdapterManager(walletManager, adapterFactory, ethereumKitManager, eosKitManager, binanceKitManager)
+        val adapterFactory = AdapterFactory(instance, buildConfigProvider.testMode, ethereumKitManager, binanceKitManager, backgroundManager)
+        adapterManager = AdapterManager(walletManager, adapterFactory, ethereumKitManager, binanceKitManager)
+
+        initialSyncModeSettingsManager = InitialSyncSettingsManager(appConfigProvider, blockchainSettingsStorage, adapterManager, walletManager)
+        derivationSettingsManager = DerivationSettingsManager(blockchainSettingsStorage, adapterManager, walletManager)
+        ethereumRpcModeSettingsManager = EthereumRpcModeSettingsManager(blockchainSettingsStorage, adapterManager, walletManager)
+        bitcoinCashCoinTypeManager = BitcoinCashCoinTypeManager(walletManager, adapterManager, blockchainSettingsStorage)
+
+        adapterFactory.initialSyncModeSettingsManager = initialSyncModeSettingsManager
+        adapterFactory.derivationSettingsManager = derivationSettingsManager
+        adapterFactory.ethereumRpcModeSettingsManager = ethereumRpcModeSettingsManager
+        adapterFactory.bitcoinCashCoinTypeManager = bitcoinCashCoinTypeManager
 
         rateCoinMapper = RateCoinMapper()
         feeCoinProvider = FeeCoinProvider(appConfigProvider)
         xRateManager = RateManager(this, walletManager, currencyManager, rateCoinMapper, feeCoinProvider, appConfigProvider)
-
-        transactionDataProviderManager = TransactionDataProviderManager(appConfigTestMode.testMode, appConfigProvider.etherscanApiKey, localStorage)
-        transactionInfoFactory = FullTransactionInfoFactory(networkManager, transactionDataProviderManager)
 
         addressParserFactory = AddressParserFactory()
 
@@ -180,7 +183,7 @@ class App : CoreApp() {
         notificationSubscriptionManager = NotificationSubscriptionManager(appDatabase, notificationManager)
         priceAlertManager = PriceAlertManager(appDatabase, notificationSubscriptionManager, coinManager)
 
-        appStatusManager = AppStatusManager(systemInfoManager, localStorage, predefinedAccountTypeManager, walletManager, adapterManager, coinManager, ethereumKitManager, eosKitManager, binanceKitManager)
+        appStatusManager = AppStatusManager(systemInfoManager, localStorage, predefinedAccountTypeManager, walletManager, adapterManager, coinManager, ethereumKitManager, binanceKitManager)
         appVersionManager = AppVersionManager(systemInfoManager, localStorage).apply {
             backgroundManager.registerListener(this)
         }
@@ -203,6 +206,8 @@ class App : CoreApp() {
         walletConnectSessionStore = WalletConnectSessionStore(accountManager, predefinedAccountTypeManager)
 
         termsManager = TermsManager(localStorage)
+
+        marketFavoritesManager = MarketFavoritesManager(appDatabase)
 
         val nightMode = if (CoreApp.themeStorage.isLightModeOn)
             AppCompatDelegate.MODE_NIGHT_NO else

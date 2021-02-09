@@ -1,8 +1,11 @@
 package io.horizontalsystems.bankwallet.modules.swap
 
 import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.bankwallet.modules.swap.repositories.UniswapRepository
+import io.horizontalsystems.bankwallet.modules.swap.providers.UniswapProvider
+import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.SwapTradeOptions
+import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.models.TransactionData
+import io.horizontalsystems.uniswapkit.models.SwapData
 import io.horizontalsystems.uniswapkit.models.TradeData
 import io.horizontalsystems.uniswapkit.models.TradeOptions
 import io.horizontalsystems.uniswapkit.models.TradeType
@@ -15,11 +18,14 @@ import java.util.*
 
 
 class SwapTradeService(
-        private val uniswapRepository: UniswapRepository,
+        ethereumKit: EthereumKit,
+        private val uniswapProvider: UniswapProvider,
         coinFrom: Coin?
 ) {
 
-    private var tradeDataDisposable: Disposable? = null
+    private var swapDataDisposable: Disposable? = null
+    private var lastBlockDisposable: Disposable? = null
+    private var swapData: SwapData? = null
 
     //region internal subjects
     private val tradeTypeSubject = PublishSubject.create<TradeType>()
@@ -28,8 +34,16 @@ class SwapTradeService(
     private val amountFromSubject = PublishSubject.create<Optional<BigDecimal>>()
     private val amountToSubject = PublishSubject.create<Optional<BigDecimal>>()
     private val stateSubject = PublishSubject.create<State>()
-    private val tradeOptionsSubject = PublishSubject.create<TradeOptions>()
+    private val tradeOptionsSubject = PublishSubject.create<SwapTradeOptions>()
     //endregion
+
+    init {
+        lastBlockDisposable = ethereumKit.lastBlockHeightFlowable
+                .subscribeOn(Schedulers.io())
+                .subscribe {
+                    syncSwapData()
+                }
+    }
 
     //region outputs
     var coinFrom: Coin? = coinFrom
@@ -74,39 +88,55 @@ class SwapTradeService(
         }
     val stateObservable: Observable<State> = stateSubject
 
-    var tradeOptions: TradeOptions = TradeOptions()
+    var tradeOptions: SwapTradeOptions = SwapTradeOptions()
         set(value) {
             field = value
             tradeOptionsSubject.onNext(value)
-            syncState()
+            syncTradeData()
         }
-    val tradeOptionsObservable: Observable<TradeOptions> = tradeOptionsSubject
+
+    val tradeOptionsObservable: Observable<SwapTradeOptions> = tradeOptionsSubject
+    var tradeRecipientDomain: String? = null
 
     @Throws
     fun transactionData(tradeData: TradeData): TransactionData {
-        return uniswapRepository.transactionData(tradeData)
+        return uniswapProvider.transactionData(tradeData)
     }
 
     fun enterCoinFrom(coin: Coin?) {
         if (coinFrom == coin) return
 
         coinFrom = coin
+
+        if (tradeType == TradeType.ExactOut){
+            amountFrom = null
+        }
+
         if (coinTo == coinFrom) {
             coinTo = null
             amountTo = null
         }
-        syncState()
+
+        swapData = null
+        syncSwapData()
     }
 
     fun enterCoinTo(coin: Coin?) {
         if (coinTo == coin) return
 
         coinTo = coin
+
+        if (tradeType == TradeType.ExactIn){
+            amountTo = null
+        }
+
         if (coinFrom == coinTo) {
             coinFrom = null
             amountFrom = null
         }
-        syncState()
+
+        swapData = null
+        syncSwapData()
     }
 
     fun enterAmountFrom(amount: BigDecimal?) {
@@ -116,8 +146,7 @@ class SwapTradeService(
 
         amountFrom = amount
         amountTo = null
-        syncState()
-
+        syncTradeData()
     }
 
     fun enterAmountTo(amount: BigDecimal?) {
@@ -127,7 +156,7 @@ class SwapTradeService(
 
         amountTo = amount
         amountFrom = null
-        syncState()
+        syncTradeData()
     }
 
     fun switchCoins() {
@@ -136,28 +165,54 @@ class SwapTradeService(
 
         enterCoinFrom(swapCoin)
     }
+
+    fun onCleared() {
+        lastBlockDisposable?.dispose()
+        swapDataDisposable?.dispose()
+    }
     //endregion
 
-    private fun syncState() {
+    private fun syncSwapData() {
         val coinFrom = coinFrom
         val coinTo = coinTo
+
+        if (coinFrom == null || coinTo == null) {
+            state = State.NotReady()
+            return
+        }
+
+        if (swapData == null) {
+            state = State.Loading
+        }
+
+        swapDataDisposable?.dispose()
+        swapDataDisposable = null
+
+        swapDataDisposable = uniswapProvider.swapDataSingle(coinFrom, coinTo)
+                .subscribeOn(Schedulers.io())
+                .subscribe({
+                    swapData = it
+                    syncTradeData()
+                }, { error ->
+                    state = State.NotReady(listOf(error))
+                })
+    }
+
+    private fun syncTradeData() {
+        val swapData = swapData ?: return
+
         val amount = if (tradeType == TradeType.ExactIn) amountFrom else amountTo
 
-        if (coinFrom == null || coinTo == null || amount == null || amount.compareTo(BigDecimal.ZERO) == 0) {
+        if (amount == null || amount.compareTo(BigDecimal.ZERO) == 0) {
             state = State.NotReady()
-        } else {
-            state = State.Loading
+            return
+        }
 
-            tradeDataDisposable?.dispose()
-            tradeDataDisposable = null
-
-            tradeDataDisposable = uniswapRepository.getTradeData(coinFrom, coinTo, amount, tradeType, tradeOptions)
-                    .subscribeOn(Schedulers.io())
-                    .subscribe({ tradeData ->
-                        handle(tradeData)
-                    }, { error ->
-                        state = State.NotReady(listOf(error))
-                    })
+        try {
+            val tradeData = uniswapProvider.tradeData(swapData, amount, tradeType, tradeOptions.tradeOptions)
+            handle(tradeData)
+        } catch (e: Throwable) {
+            state = State.NotReady(listOf(e))
         }
     }
 

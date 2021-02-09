@@ -108,7 +108,7 @@ class Pool(val state: State) {
             } else {
                 return HandleResult.IGNORED
             }
-        } else if (state.allLoaded && unusedRecords.isEmpty()) {
+        } else if (state.allLoaded) {
             state.add(listOf(record))
             return HandleResult.NEW_DATA
         } else {

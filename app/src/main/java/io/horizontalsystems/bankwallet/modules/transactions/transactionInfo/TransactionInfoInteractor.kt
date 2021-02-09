@@ -7,6 +7,7 @@ import io.horizontalsystems.bankwallet.core.providers.FeeCoinProvider
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.LastBlockInfo
+import io.horizontalsystems.core.IBuildConfigProvider
 import io.horizontalsystems.core.ICurrencyManager
 
 class TransactionInfoInteractor(
@@ -14,12 +15,15 @@ class TransactionInfoInteractor(
         private val adapter: ITransactionsAdapter,
         private val xRateManager: IRateManager,
         private val currencyManager: ICurrencyManager,
-        private val feeCoinProvider: FeeCoinProvider
+        private val feeCoinProvider: FeeCoinProvider,
+        buildConfigProvider: IBuildConfigProvider
 ) : TransactionInfoModule.Interactor {
     var delegate: TransactionInfoModule.InteractorDelegate? = null
 
     override val lastBlockInfo: LastBlockInfo?
         get() = adapter.lastBlockInfo
+
+    override val testMode = buildConfigProvider.testMode
 
     override fun getRate(code: String, timestamp: Long): CurrencyValue? {
         val baseCurrency = currencyManager.baseCurrency

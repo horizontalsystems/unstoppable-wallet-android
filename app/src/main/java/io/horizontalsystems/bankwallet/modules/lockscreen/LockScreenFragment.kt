@@ -4,9 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentOnAttachListener
 import androidx.fragment.app.FragmentResultListener
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
@@ -17,7 +14,7 @@ import io.horizontalsystems.pin.PinInteractionType
 import io.horizontalsystems.pin.PinModule
 import kotlinx.android.synthetic.main.fragment_lockscreen.*
 
-class LockScreenFragment : BaseFragment(), FragmentResultListener, FragmentOnAttachListener {
+class LockScreenFragment : BaseFragment(), FragmentResultListener {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_lockscreen, container, false)
@@ -27,7 +24,11 @@ class LockScreenFragment : BaseFragment(), FragmentResultListener, FragmentOnAtt
         super.onViewCreated(view, savedInstanceState)
 
         val fragments = listOf(
-                PinFragment(),
+                PinFragment().apply {
+                    arguments = Bundle(1).apply {
+                        putBoolean(PinFragment.ATTACHED_TO_LOCKSCREEN, true)
+                    }
+                },
                 RatesListFragment(),
                 RatesTopListFragment()
         )
@@ -38,15 +39,6 @@ class LockScreenFragment : BaseFragment(), FragmentResultListener, FragmentOnAtt
         circleIndicator.setViewPager(viewPager)
 
         childFragmentManager.setFragmentResultListener(PinModule.requestKey, this, this)
-        childFragmentManager.addFragmentOnAttachListener(this)
-    }
-
-    //  FragmentOnAttachListener
-
-    override fun onAttachFragment(fragmentManager: FragmentManager, fragment: Fragment) {
-        if (fragment is PinFragment) {
-            fragment.attachedToLockScreen = true
-        }
     }
 
     //  FragmentResultListener

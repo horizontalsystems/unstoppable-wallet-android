@@ -7,7 +7,7 @@
     <TextView
         android:id="@+id/transactionsSettingsTitle"
         style="@style/Subhead1"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="38dp"
@@ -21,10 +21,10 @@
 
     <io.horizontalsystems.views.SettingsViewDropdown
         android:id="@+id/transactionsOrderSetting"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        app:bottomBorder="true"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/transactionsSettingsTitle"
         app:title="@string/SettingsPrivacy_TransactionsSettingText" />
@@ -32,7 +32,7 @@
     <TextView
         android:id="@+id/transactionsSettingsDescription"
         style="@style/Subhead2"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="12dp"

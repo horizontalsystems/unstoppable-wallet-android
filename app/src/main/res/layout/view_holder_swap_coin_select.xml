@@ -8,7 +8,7 @@
 
     <View
         android:id="@+id/topShade"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0.5dp"
         android:background="@color/steel_20"
         app:layout_constraintEnd_toEndOf="parent"
@@ -74,7 +74,7 @@
 
     <View
         android:id="@+id/bottomShade"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0.5dp"
         android:background="@color/steel_20"
         android:visibility="gone"

@@ -20,6 +20,13 @@ class BinanceAdapter(
 
     private val asset = binanceKit.register(symbol)
 
+    private val syncState: AdapterState
+        get() = when (val kitSyncState = binanceKit.syncState) {
+            BinanceChainKit.SyncState.Synced -> AdapterState.Synced
+            BinanceChainKit.SyncState.Syncing -> AdapterState.Syncing(50, null)
+            is BinanceChainKit.SyncState.NotSynced -> AdapterState.NotSynced(kitSyncState.error)
+        }
+
     // IAdapter
 
     override fun start() {
@@ -41,29 +48,31 @@ class BinanceAdapter(
 
     // IBalanceAdapter
 
-    override val state: AdapterState
-        get() = when (val kitSyncState = binanceKit.syncState) {
-            BinanceChainKit.SyncState.Synced -> AdapterState.Synced
-            BinanceChainKit.SyncState.Syncing -> AdapterState.Syncing(50, null)
-            is BinanceChainKit.SyncState.NotSynced -> AdapterState.NotSynced(kitSyncState.error)
-        }
+    override val balanceState: AdapterState
+        get() = syncState
 
-    override val stateUpdatedFlowable: Flowable<Unit>
-        get() = binanceKit.syncStateFlowable.map { Unit }
+    override val balanceStateUpdatedFlowable: Flowable<Unit>
+        get() = binanceKit.syncStateFlowable.map { }
 
     override val balance: BigDecimal
         get() = asset.balance
 
     override val balanceUpdatedFlowable: Flowable<Unit>
-        get() = asset.balanceFlowable.map { Unit }
+        get() = asset.balanceFlowable.map { }
 
     // ITransactionsAdapter
+
+    override val transactionsState: AdapterState
+        get() = syncState
+
+    override val transactionsStateUpdatedFlowable: Flowable<Unit>
+        get() = binanceKit.syncStateFlowable.map { }
 
     override val lastBlockInfo: LastBlockInfo?
         get() = binanceKit.latestBlock?.height?.let { LastBlockInfo(it) }
 
     override val lastBlockUpdatedFlowable: Flowable<Unit>
-        get() = binanceKit.latestBlockFlowable.map { Unit }
+        get() = binanceKit.latestBlockFlowable.map { }
 
     override val transactionRecordsFlowable: Flowable<List<TransactionRecord>>
         get() = asset.transactionsFlowable.map { it.map { tx -> transactionRecord(tx) } }
@@ -96,6 +105,7 @@ class BinanceAdapter(
                 fee = transferFee,
                 timestamp = transaction.date.time / 1000,
                 from = transaction.from,
+                memo = transaction.memo,
                 to = transaction.to,
                 type = type
         )

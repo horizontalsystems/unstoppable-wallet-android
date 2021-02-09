@@ -22,12 +22,12 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/pinPagesRecyclerView"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="0dp"
             android:overScrollMode="never"
             app:layout_constraintBottom_toTopOf="@+id/numPadItemsRecyclerView"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:itemCount="1"
             tools:listitem="@layout/view_pin_page" />
@@ -40,8 +40,8 @@
             android:overScrollMode="never"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:spanCount="3"
             tools:itemCount="9"
             tools:listitem="@layout/view_numpad_button" />

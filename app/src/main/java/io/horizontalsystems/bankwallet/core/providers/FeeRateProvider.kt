@@ -3,86 +3,93 @@ package io.horizontalsystems.bankwallet.core.providers
 import io.horizontalsystems.bankwallet.core.FeeRatePriority
 import io.horizontalsystems.bankwallet.core.IAppConfigProvider
 import io.horizontalsystems.bankwallet.core.IFeeRateProvider
-import io.horizontalsystems.bankwallet.entities.FeeRateInfo
 import io.horizontalsystems.feeratekit.FeeRateKit
 import io.horizontalsystems.feeratekit.model.FeeProviderConfig
-import io.horizontalsystems.feeratekit.model.FeeRate
 import io.reactivex.Single
+import java.math.BigInteger
 
 class FeeRateProvider(appConfig: IAppConfigProvider) {
 
     private val feeRateKit: FeeRateKit by lazy {
-        FeeRateKit(FeeProviderConfig(infuraProjectId = appConfig.infuraProjectId,
-                        infuraProjectSecret = appConfig.infuraProjectSecret))
+        FeeRateKit(FeeProviderConfig(
+                infuraProjectId = appConfig.infuraProjectId,
+                infuraProjectSecret = appConfig.infuraProjectSecret,
+                btcCoreRpcUrl = appConfig.btcCoreRpcUrl
+            )
+        )
     }
 
-    fun bitcoinFeeRates(): Single<List<FeeRateInfo>> {
-        return feeRateKit.bitcoin().map { feeRates(it, addCustom = true) }
+    fun bitcoinFeeRate(blockCount: Int): Single<BigInteger> {
+        return feeRateKit.bitcoin(blockCount)
     }
 
-    fun litecoinFeeRates(): Single<List<FeeRateInfo>> {
-        return feeRateKit.litecoin().map { feeRates(it) }
+    fun litecoinFeeRate(): Single<BigInteger> {
+        return feeRateKit.litecoin()
     }
 
-    fun bitcoinCashFeeRates(): Single<List<FeeRateInfo>> {
-        return feeRateKit.bitcoinCash().map { feeRates(it) }
+    fun bitcoinCashFeeRate(): Single<BigInteger> {
+        return feeRateKit.bitcoinCash()
     }
 
-    fun ethereumGasPrice(): Single<List<FeeRateInfo>> {
-         return feeRateKit.ethereum().map {
-             mutableListOf<FeeRateInfo>().apply {
-                 add(FeeRateInfo(FeeRatePriority.RECOMMENDED, it.mediumPriority, it.mediumPriorityDuration))
-                 add(FeeRateInfo(FeeRatePriority.Custom(1, IntRange(1, 400)), 1))
-             }
-         }
+    fun ethereumGasPrice(): Single<BigInteger> {
+        return feeRateKit.ethereum()
     }
 
-    fun dashFeeRates(): Single<List<FeeRateInfo>> {
-        return feeRateKit.dash().map { feeRates(it) }
+    fun dashFeeRate(): Single<BigInteger> {
+        return feeRateKit.dash()
     }
 
-    private fun feeRates(feeRate: FeeRate, addLowPriority: Boolean = true, addCustom: Boolean = false): List<FeeRateInfo> {
-        return mutableListOf<FeeRateInfo>().apply {
-            if (addLowPriority) {
-                add(FeeRateInfo(FeeRatePriority.LOW, feeRate.lowPriority, feeRate.lowPriorityDuration))
-            }
-            add(FeeRateInfo(FeeRatePriority.MEDIUM, feeRate.mediumPriority, feeRate.mediumPriorityDuration))
-            add(FeeRateInfo(FeeRatePriority.HIGH, feeRate.highPriority, feeRate.highPriorityDuration))
+}
 
-            if (addCustom) {
-                add(FeeRateInfo(FeeRatePriority.Custom(1, IntRange(1, 200)), 1))
-            }
+class BitcoinFeeRateProvider(private val feeRateProvider: FeeRateProvider) : IFeeRateProvider {
+
+    private val lowPriorityBlockCount = 40
+    private val mediumPriorityBlockCount = 8
+    private val highPriorityBlockCount = 2
+
+    override val feeRatePriorityList: List<FeeRatePriority> = listOf(
+            FeeRatePriority.LOW,
+            FeeRatePriority.MEDIUM,
+            FeeRatePriority.HIGH,
+            FeeRatePriority.Custom(1, IntRange(1, 200))
+    )
+
+    override val recommendedFeeRate: Single<BigInteger> = feeRateProvider.bitcoinFeeRate(mediumPriorityBlockCount)
+
+    override var defaultFeeRatePriority: FeeRatePriority = FeeRatePriority.MEDIUM
+
+    override fun feeRate(feeRatePriority: FeeRatePriority): Single<BigInteger> {
+        return when (feeRatePriority) {
+            FeeRatePriority.LOW -> feeRateProvider.bitcoinFeeRate(lowPriorityBlockCount)
+            FeeRatePriority.MEDIUM -> feeRateProvider.bitcoinFeeRate(mediumPriorityBlockCount)
+            FeeRatePriority.HIGH -> feeRateProvider.bitcoinFeeRate(highPriorityBlockCount)
+            FeeRatePriority.RECOMMENDED -> feeRateProvider.bitcoinFeeRate(mediumPriorityBlockCount)
+            is FeeRatePriority.Custom -> Single.just(feeRatePriority.value.toBigInteger())
         }
     }
 }
 
-class BitcoinFeeRateProvider(private val feeRateProvider: FeeRateProvider) : IFeeRateProvider {
-    override fun feeRates(): Single<List<FeeRateInfo>> {
-        return feeRateProvider.bitcoinFeeRates()
-    }
+class LitecoinFeeRateProvider(feeRateProvider: FeeRateProvider) : IFeeRateProvider {
+    override val feeRatePriorityList: List<FeeRatePriority> = listOf()
+    override val recommendedFeeRate: Single<BigInteger> = feeRateProvider.litecoinFeeRate()
 }
 
-class LitecoinFeeRateProvider(private val feeRateProvider: FeeRateProvider) : IFeeRateProvider {
-    override fun feeRates(): Single<List<FeeRateInfo>> {
-        return feeRateProvider.litecoinFeeRates()
-    }
+class BitcoinCashFeeRateProvider(feeRateProvider: FeeRateProvider) : IFeeRateProvider {
+    override val feeRatePriorityList: List<FeeRatePriority> = listOf()
+    override val recommendedFeeRate: Single<BigInteger> = feeRateProvider.bitcoinCashFeeRate()
 }
 
-class BitcoinCashFeeRateProvider(private val feeRateProvider: FeeRateProvider) : IFeeRateProvider {
-    override fun feeRates(): Single<List<FeeRateInfo>> {
-        return feeRateProvider.bitcoinCashFeeRates()
-    }
+class EthereumFeeRateProvider(feeRateProvider: FeeRateProvider) : IFeeRateProvider {
+
+    override val feeRatePriorityList: List<FeeRatePriority> = listOf(
+            FeeRatePriority.RECOMMENDED,
+            FeeRatePriority.Custom(1, IntRange(1, 400))
+    )
+
+    override val recommendedFeeRate: Single<BigInteger> = feeRateProvider.ethereumGasPrice()
 }
 
-class EthereumFeeRateProvider(private val feeRateProvider: FeeRateProvider) : IFeeRateProvider {
-    override fun feeRates(): Single<List<FeeRateInfo>> {
-        return feeRateProvider.ethereumGasPrice()
-    }
-}
-
-class DashFeeRateProvider(private val feeRateProvider: FeeRateProvider) : IFeeRateProvider {
-    override fun feeRates(): Single<List<FeeRateInfo>> {
-        return feeRateProvider.dashFeeRates()
-    }
-
+class DashFeeRateProvider(feeRateProvider: FeeRateProvider) : IFeeRateProvider {
+    override val feeRatePriorityList: List<FeeRatePriority> = listOf()
+    override val recommendedFeeRate: Single<BigInteger> = feeRateProvider.dashFeeRate()
 }

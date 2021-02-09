@@ -4,10 +4,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.widget.SwitchCompat
-import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.views.ListPosition
+import io.horizontalsystems.views.SettingsView
+import io.horizontalsystems.views.SettingsViewSwitch
+import io.horizontalsystems.views.helpers.LayoutHelper
 import io.horizontalsystems.views.inflate
 import kotlinx.android.extensions.LayoutContainer
 
@@ -28,7 +30,7 @@ class MainSettingsAdapter(private val items: List<SettingsViewItem?>)
         return when (viewType) {
             viewTypeSpace -> SettingsViewHolderSpace(inflate(parent, R.layout.view_settings_item_space))
             viewTypeBottom -> SettingsViewHolderBottom(inflate(parent, R.layout.view_settings_item_bottom))
-            viewTypeSwitch -> SettingsViewHolderSwitch(inflate(parent, R.layout.view_settings_item_switch))
+            viewTypeSwitch -> SettingsViewHolderSwitch(inflate(parent, R.layout.view_holder_setting_item_with_switch))
             else -> SettingsViewHolderArrow(inflate(parent, R.layout.view_settings_item_arrow))
         }
     }
@@ -80,57 +82,37 @@ class MainSettingsAdapter(private val items: List<SettingsViewItem?>)
 
     class SettingsViewHolderSwitch(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
-        private val settingsTitle = containerView.findViewById<TextView>(R.id.settingsTitle)
-        private val settingsIcon = containerView.findViewById<ImageView>(R.id.settingsIcon)
-        private val switchSettings = containerView.findViewById<SwitchCompat>(R.id.switchSettings)
-        private var isTouched = false
+        private val switchSettingView = containerView.findViewById<SettingsViewSwitch>(R.id.switchSettingView)
 
         fun bind(item: SettingsMenuSwitch) {
-            settingsIcon.setImageResource(item.icon)
-            settingsTitle.setText(item.title)
+            switchSettingView.apply {
+                showTitle(containerView.context.getString(item.title))
+                setListPosition(item.listPosition)
+                setChecked(item.isChecked)
+                showIcon(LayoutHelper.d(item.icon, containerView.context))
 
-            switchSettings.isChecked = item.isChecked
-            switchSettings.setOnTouchListener { _, _ ->
-                isTouched = true
-                false
-            }
-
-            switchSettings.setOnCheckedChangeListener { _, isChecked ->
-                if (isTouched) {
-                    isTouched = false
-                    item.onClick(isChecked)
+                setOnCheckedChangeListenerSingle { checked ->
+                    item.onClick(checked)
                 }
-            }
-
-            containerView.setOnClickListener {
-                switchSettings.toggle()
-                item.onClick(switchSettings.isChecked)
             }
         }
     }
 
     class SettingsViewHolderArrow(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
-        private val settingsTitle = containerView.findViewById<TextView>(R.id.settingsTitle)
-        private val settingsValue = containerView.findViewById<TextView>(R.id.settingsValueRight)
-        private val settingsIcon = containerView.findViewById<ImageView>(R.id.settingsIcon)
-        private val bottomBorder = containerView.findViewById<View>(R.id.bottomBorder)
-        private val arrowIcon = containerView.findViewById<ImageView>(R.id.arrowIcon)
-        private val attentionIcon = containerView.findViewById<ImageView>(R.id.attentionIcon)
+        private val settingView = containerView.findViewById<SettingsView>(R.id.settingView)
 
         fun bind(item: SettingsMenuItem) {
-            settingsTitle.setText(item.title)
+            settingView.apply {
+                showTitle(containerView.context.getString(item.title))
+                setListPosition(item.listPosition)
+                showAttention(item.attention)
+                showValue(item.value)
+                showIcon(LayoutHelper.d(item.icon, containerView.context))
 
-            bottomBorder.isVisible = item.isLast
-            arrowIcon.isVisible = true
-            attentionIcon.isVisible = item.attention
-
-            settingsValue.text = item.value
-            settingsValue.isVisible = item.value != null
-
-            settingsIcon.setImageResource(item.icon)
-            containerView.setOnClickListener {
-                item.onClick()
+                setOnClickListener {
+                    item.onClick()
+                }
             }
         }
     }
@@ -141,15 +123,16 @@ open class SettingsViewItem
 class SettingsMenuItem(
         val title: Int,
         val icon: Int,
-        val isLast: Boolean = false,
         var value: String? = null,
         var attention: Boolean = false,
+        val listPosition: ListPosition,
         val onClick: () -> Unit) : SettingsViewItem()
 
 class SettingsMenuSwitch(
         val title: Int,
         val icon: Int,
         var isChecked: Boolean = false,
+        val listPosition: ListPosition,
         val onClick: (isChecked: Boolean) -> Unit) : SettingsViewItem()
 
 class SettingsMenuBottom(

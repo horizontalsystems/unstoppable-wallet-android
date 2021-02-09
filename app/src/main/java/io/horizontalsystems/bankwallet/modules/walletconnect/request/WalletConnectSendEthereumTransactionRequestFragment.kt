@@ -26,7 +26,6 @@ import io.horizontalsystems.views.inflate
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_wallet_connect_request.*
-import kotlinx.android.synthetic.main.fragment_wallet_connect_request.toolbar
 import kotlinx.android.synthetic.main.partial_transaction_info.*
 import kotlinx.android.synthetic.main.view_transaction_info_item.*
 
@@ -94,7 +93,6 @@ class WalletConnectSendEthereumTransactionRequestFragment : BaseFragment() {
             error.text = it
         })
 
-        feeSelectorView.setDurationVisible(false)
         feeSelectorView.setFeeSelectorViewInteractions(feeViewModel, feeViewModel, viewLifecycleOwner, parentFragmentManager)
     }
 
@@ -119,7 +117,7 @@ class TransactionDetailsAdapter(items: List<WalletConnectRequestViewItem>) : Lis
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WalletConnectRequestViewItemViewHolder {
-        return WalletConnectRequestViewItemViewHolder(inflate(parent, R.layout.view_transaction_info_item))
+        return WalletConnectRequestViewItemViewHolder(inflate(parent, R.layout.view_holder_transaction_info))
     }
 
     override fun onBindViewHolder(holder: WalletConnectRequestViewItemViewHolder, position: Int) {

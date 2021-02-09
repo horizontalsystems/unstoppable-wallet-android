@@ -1,6 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.send.submodules.amount
 
 import androidx.lifecycle.ViewModel
+import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.providers.StringProvider
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
@@ -18,7 +20,8 @@ class SendAmountPresenter(
         private val interactor: SendAmountModule.IInteractor,
         private val presenterHelper: SendAmountPresenterHelper,
         private val coin: Coin,
-        private val baseCurrency: Currency)
+        private val baseCurrency: Currency,
+        private val stringProvider: StringProvider)
     : ViewModel(), SendAmountModule.IViewDelegate, SendAmountModule.IInteractorDelegate, SendAmountModule.IAmountModule {
 
     var moduleDelegate: SendAmountModule.IAmountModuleDelegate? = null
@@ -28,7 +31,9 @@ class SendAmountPresenter(
     private var minimumAmount: BigDecimal? = null
     private var maximumAmount: BigDecimal? = null
     private var minimumRequiredBalance: BigDecimal = BigDecimal.ZERO
-    private var xRate: BigDecimal? = null
+
+    override var xRate: BigDecimal? = null
+    override var sendAmountInfo: SendAmountInfo = SendAmountInfo.NotEntered
 
     override var inputType = SendModule.InputType.COIN
         private set
@@ -88,10 +93,10 @@ class SendAmountPresenter(
 
     override fun setAmount(amount: BigDecimal) {
         this.amount = amount
+        sendAmountInfo = SendAmountInfo.Entered(amount)
 
         syncAmount()
         syncHint()
-        syncMaxButton()
         syncError()
 
         moduleDelegate?.onChangeAmount()
@@ -128,18 +133,14 @@ class SendAmountPresenter(
         }
 
         moduleDelegate?.onChangeInputType(inputType)
+        moduleDelegate?.onRateUpdated(xRate)
 
         syncAmountType()
-        syncSwitchButton()
         syncAmount()
         syncHint()
-
-        view.addTextChangeListener()
     }
 
     override fun onSwitchClick() {
-        view.removeTextChangeListener()
-
         inputType = when (inputType) {
             SendModule.InputType.CURRENCY -> SendModule.InputType.COIN
             else -> SendModule.InputType.CURRENCY
@@ -152,8 +153,6 @@ class SendAmountPresenter(
         syncHint()
         syncError()
         syncAvailableBalance()
-
-        view.addTextChangeListener()
     }
 
     override fun onAmountChange(amountString: String) {
@@ -167,8 +166,9 @@ class SendAmountPresenter(
         } else {
             this.amount = presenterHelper.getCoinAmount(amount, inputType, xRate)
 
+            sendAmountInfo = this.amount?.let { SendAmountInfo.Entered(it) } ?: SendAmountInfo.NotEntered
+
             syncHint()
-            syncMaxButton()
             syncError()
 
             moduleDelegate?.onChangeAmount()
@@ -177,16 +177,13 @@ class SendAmountPresenter(
 
     override fun onMaxClick() {
         amount = availableBalance?.subtract(minimumRequiredBalance)
-
-        view.removeTextChangeListener()
+        sendAmountInfo = SendAmountInfo.Max
 
         syncAmount()
         syncHint()
-        syncMaxButton()
         syncError()
 
         moduleDelegate?.onChangeAmount()
-        view.addTextChangeListener()
     }
 
     // IInteractorDelegate
@@ -219,11 +216,12 @@ class SendAmountPresenter(
             else -> interactor.defaultInputType
         }
 
+        moduleDelegate?.onRateUpdated(rate)
+
         syncAmount()
         syncAvailableBalance()
         syncAmountType()
         syncHint()
-        syncSwitchButton()
     }
 
     private fun syncAmount() {
@@ -238,12 +236,14 @@ class SendAmountPresenter(
     }
 
     private fun syncAmountType() {
-        val prefix = presenterHelper.getAmountPrefix(inputType, xRate)
+        val prefix = presenterHelper.getAmountPrefix(inputType, xRate) ?: ""
         view.setAmountType(prefix)
     }
 
     private fun syncHint() {
-        val hint = presenterHelper.getHint(this.amount, inputType, xRate)
+        var hint = presenterHelper.getHint(this.amount, inputType, xRate)
+        view.setHintStateEnabled(hint != null)
+        hint = hint ?: stringProvider.string(R.string.NotAvailable)
         view.setHint(hint)
     }
 
@@ -262,10 +262,6 @@ class SendAmountPresenter(
 
         val hasSpendableBalance = noneNullAvailableBalance - minimumRequiredBalance > BigDecimal.ZERO
         view.setMaxButtonVisible(hasSpendableBalance)
-    }
-
-    private fun syncSwitchButton() {
-        view.setSwitchButtonEnabled(xRate != null)
     }
 
     private fun validate() {

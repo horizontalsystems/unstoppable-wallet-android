@@ -31,7 +31,6 @@ class SettingsView @JvmOverloads constructor(context: Context, attrs: AttributeS
             showSubtitle(attributes.getString(R.styleable.SettingsView_subtitle))
             showIcon(attributes.getDrawable(R.styleable.SettingsView_icon))
             showValue(attributes.getString(R.styleable.SettingsView_value))
-            showBottomBorder(attributes.getBoolean(R.styleable.SettingsView_bottomBorder, false))
             showArrow(attributes.getBoolean(R.styleable.SettingsView_showArrow, true))
         } finally {
             attributes.recycle()

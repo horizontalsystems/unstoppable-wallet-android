@@ -20,7 +20,7 @@ else
 fi
 
 ####################################
-DOCKER_IMAGE="walletscrutiny/android:4"
+DOCKER_IMAGE="walletscrutiny/android:5"
 GIT_REPO="https://github.com/horizontalsystems/unstoppable-wallet-android"
 WORK_DIR="$PWD/app"
 TAG=$1

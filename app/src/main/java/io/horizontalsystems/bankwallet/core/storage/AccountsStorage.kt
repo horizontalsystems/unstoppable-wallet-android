@@ -18,7 +18,6 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
         // account type codes stored in db
         private const val MNEMONIC = "mnemonic"
         private const val PRIVATE_KEY = "private_key"
-        private const val EOS = "eos"
         private const val ZCASH = "zcash"
     }
 
@@ -32,7 +31,6 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
                         val accountType = when (record.type) {
                             MNEMONIC -> AccountType.Mnemonic(record.words!!.list, record.salt?.value)
                             PRIVATE_KEY -> AccountType.PrivateKey(record.key!!.value.hexToByteArray())
-                            EOS -> AccountType.Eos(record.eosAccount!!, record.key!!.value)
                             ZCASH -> AccountType.Zcash(record.words!!.list, record.birthdayHeight)
                             else -> null
                         }
@@ -75,7 +73,6 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
         return when (account.type) {
             is AccountType.Mnemonic,
             is AccountType.PrivateKey,
-            is AccountType.Eos,
             is AccountType.Zcash -> {
                 AccountRecord(
                         id = account.id,
@@ -90,7 +87,6 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
                         },
                         salt = (account.type as? AccountType.Mnemonic)?.salt?.let { SecretString(it) },
                         key = getKey(account.type)?.let { SecretString(it) },
-                        eosAccount = (account.type as? AccountType.Eos)?.account,
                         birthdayHeight = (account.type as? AccountType.Zcash)?.birthdayHeight
                 )
             }
@@ -101,7 +97,6 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
     private fun getKey(accountType: AccountType): String? {
         return when (accountType) {
             is AccountType.PrivateKey -> accountType.key.toRawHexString()
-            is AccountType.Eos -> accountType.activePrivateKey
             else -> null
         }
     }
@@ -109,7 +104,6 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
     private fun getAccountTypeCode(accountType: AccountType): String {
         return when (accountType) {
             is AccountType.PrivateKey -> PRIVATE_KEY
-            is AccountType.Eos -> EOS
             is AccountType.Zcash -> ZCASH
             else -> MNEMONIC
         }

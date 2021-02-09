@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.core.managers
 
-import io.horizontalsystems.bankwallet.core.EosUnsupportedException
 import io.horizontalsystems.bankwallet.core.IAccountCreator
 import io.horizontalsystems.bankwallet.core.IAccountFactory
 import io.horizontalsystems.bankwallet.core.IWordsManager
@@ -29,7 +28,6 @@ class AccountCreator(
             is PredefinedAccountType.Standard -> AccountType.Mnemonic(wordsManager.generateWords(12))
             is PredefinedAccountType.Binance -> AccountType.Mnemonic(wordsManager.generateWords(24))
             is PredefinedAccountType.Zcash -> AccountType.Zcash(wordsManager.generateWords(24), zcashBirthdayProvider.getNearestBirthdayHeight())
-            is PredefinedAccountType.Eos -> throw EosUnsupportedException()
         }
     }
 

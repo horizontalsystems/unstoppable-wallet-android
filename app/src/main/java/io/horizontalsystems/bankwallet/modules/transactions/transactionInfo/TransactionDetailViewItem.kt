@@ -9,6 +9,7 @@ sealed class TransactionDetailViewItem {
     class Rate(val currencyValue: CurrencyValue, val coinCode: String) : TransactionDetailViewItem()
     class Fee(val coinValue: CoinValue, val currencyValue: CurrencyValue?) : TransactionDetailViewItem()
     class From(val from: String) : TransactionDetailViewItem()
+    class Memo(val memo: String) : TransactionDetailViewItem()
     class To(val to: String) : TransactionDetailViewItem()
     class Recipient(val recipient: String) : TransactionDetailViewItem()
     class Id(val id: String) : TransactionDetailViewItem()

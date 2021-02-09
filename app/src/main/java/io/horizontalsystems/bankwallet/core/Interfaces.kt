@@ -6,28 +6,25 @@ import io.horizontalsystems.bankwallet.core.managers.Term
 import io.horizontalsystems.bankwallet.core.managers.TorManager
 import io.horizontalsystems.bankwallet.core.managers.TorStatus
 import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.modules.addtoken.bep2.Bep2Token
 import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
-import io.horizontalsystems.bankwallet.modules.fulltransactioninfo.FullTransactionInfoModule
+import io.horizontalsystems.bankwallet.modules.market.MarketModule
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.binancechainkit.BinanceChainKit
 import io.horizontalsystems.bitcoincore.core.IPluginData
 import io.horizontalsystems.core.entities.AppVersion
 import io.horizontalsystems.core.entities.Currency
-import io.horizontalsystems.eoskit.EosKit
 import io.horizontalsystems.ethereumkit.core.EthereumKit
-import io.horizontalsystems.xrateskit.entities.ChartInfo
-import io.horizontalsystems.xrateskit.entities.ChartType
-import io.horizontalsystems.xrateskit.entities.CryptoNews
-import io.horizontalsystems.xrateskit.entities.TopMarket
-import io.horizontalsystems.xrateskit.entities.MarketInfo
+import io.horizontalsystems.xrateskit.entities.*
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.subjects.Subject
 import java.math.BigDecimal
+import java.math.BigInteger
 import java.util.*
-import kotlin.jvm.Throws
 
 interface IAdapterManager {
     val adaptersReadyObservable: Flowable<Unit>
@@ -52,7 +49,6 @@ interface ILocalStorage {
     var baseEthereumProvider: String?
     var baseDashProvider: String?
     var baseBinanceProvider: String?
-    var baseEosProvider: String?
     var baseZcashProvider: String?
     var syncMode: SyncMode?
     var sortType: BalanceSortType
@@ -73,6 +69,10 @@ interface ILocalStorage {
 
 interface IChartTypeStorage {
     var chartType: ChartType?
+}
+
+interface IMarketStorage {
+    var currentTab: MarketModule.Tab?
 }
 
 interface IAccountManager {
@@ -138,23 +138,6 @@ interface IClipboardManager {
     val hasPrimaryClip: Boolean
 }
 
-interface ITransactionDataProviderManager {
-    val baseProviderUpdatedSignal: Observable<Unit>
-
-    fun providers(coin: Coin): List<FullTransactionInfoModule.Provider>
-    fun baseProvider(coin: Coin): FullTransactionInfoModule.Provider
-    fun setBaseProvider(name: String, coin: Coin)
-
-    fun bitcoin(name: String): FullTransactionInfoModule.BitcoinForksProvider
-    fun litecoin(name: String): FullTransactionInfoModule.BitcoinForksProvider
-    fun dash(name: String): FullTransactionInfoModule.BitcoinForksProvider
-    fun bitcoinCash(name: String): FullTransactionInfoModule.BitcoinForksProvider
-    fun ethereum(name: String): FullTransactionInfoModule.EthereumForksProvider
-    fun binance(name: String): FullTransactionInfoModule.BinanceProvider
-    fun eos(name: String): FullTransactionInfoModule.EosProvider
-    fun zcash(name: String): FullTransactionInfoModule.BitcoinForksProvider
-}
-
 interface IWordsManager {
     fun validateChecksum(words: List<String>)
     fun isWordValid(word: String): Boolean
@@ -177,14 +160,6 @@ interface IEthereumKitManager {
     fun unlink()
 }
 
-interface IEosKitManager {
-    val eosKit: EosKit?
-    val statusInfo: Map<String, Any>?
-
-    fun eosKit(wallet: Wallet): EosKit
-    fun unlink()
-}
-
 interface IBinanceKitManager {
     val binanceKit: BinanceChainKit?
     val statusInfo: Map<String, Any>?
@@ -194,8 +169,8 @@ interface IBinanceKitManager {
 }
 
 interface ITransactionsAdapter {
-    val state: AdapterState
-    val stateUpdatedFlowable: Flowable<Unit>
+    val transactionsState: AdapterState
+    val transactionsStateUpdatedFlowable: Flowable<Unit>
 
     val lastBlockInfo: LastBlockInfo?
     val lastBlockUpdatedFlowable: Flowable<Unit>
@@ -207,8 +182,8 @@ interface ITransactionsAdapter {
 }
 
 interface IBalanceAdapter {
-    val state: AdapterState
-    val stateUpdatedFlowable: Flowable<Unit>
+    val balanceState: AdapterState
+    val balanceStateUpdatedFlowable: Flowable<Unit>
 
     val balance: BigDecimal
     val balanceLocked: BigDecimal? get() = null
@@ -222,6 +197,7 @@ interface IReceiveAdapter {
 }
 
 interface ISendBitcoinAdapter {
+    val balance: BigDecimal
     fun availableBalance(feeRate: Long, address: String?, pluginData: Map<Byte, IPluginData>?): BigDecimal
     fun minimumSendAmount(address: String?): BigDecimal
     fun maximumSendAmount(pluginData: Map<Byte, IPluginData>): BigDecimal?
@@ -239,6 +215,7 @@ interface ISendDashAdapter {
 }
 
 interface ISendEthereumAdapter {
+    val balance: BigDecimal
     val ethereumBalance: BigDecimal
     val minimumRequiredBalance: BigDecimal
     val minimumSendAmount: BigDecimal
@@ -258,13 +235,6 @@ interface ISendBinanceAdapter {
 
     fun validate(address: String)
     fun send(amount: BigDecimal, address: String, memo: String?, logger: AppLogger): Single<Unit>
-}
-
-interface ISendEosAdapter {
-    val availableBalance: BigDecimal
-
-    fun validate(account: String)
-    fun send(amount: BigDecimal, account: String, memo: String?, logger: AppLogger): Single<Unit>
 }
 
 interface ISendZcashAdapter {
@@ -296,25 +266,21 @@ interface IAppConfigProvider {
     val companyRedditLink: String
     val reportEmail: String
     val walletHelpTelegramGroup: String
-    val ipfsId: String
-    val ipfsMainGateway: String
-    val ipfsFallbackGateway: String
     val cryptoCompareApiKey: String
-    val uniswapGraphUrl: String
     val infuraProjectId: String
     val infuraProjectSecret: String
+    val btcCoreRpcUrl: String
     val etherscanApiKey: String
     val guidesUrl: String
     val faqUrl: String
     val fiatDecimal: Int
     val maxDecimal: Int
+    val feeRateAdjustForCurrencies: List<String>
     val currencies: List<Currency>
     val featuredCoins: List<Coin>
-    val defaultCoins: List<Coin>
+    val otherCoins: List<Coin>
     val ethereumCoin: Coin
-    val derivationSettings: List<DerivationSetting>
-    val syncModeSettings: List<SyncModeSetting>
-    val communicationSettings: List<CommunicationSetting>
+    val binanceCoin: Coin
 }
 
 interface ICoinRecordStorage{
@@ -335,7 +301,9 @@ interface IRateManager {
     fun chartInfo(coinCode: String, currencyCode: String, chartType: ChartType): ChartInfo?
     fun chartInfoObservable(coinCode: String, currencyCode: String, chartType: ChartType): Observable<ChartInfo>
     fun getCryptoNews(coinCode: String): Single<List<CryptoNews>>
-    fun getTopMarketList(currency: String): Single<List<TopMarket>>
+    fun getTopMarketList(currency: String, itemsCount: Int): Single<List<CoinMarket>>
+    fun getCoinMarketList(coinCodes: List<String>, currency: String): Single<List<CoinMarket>>
+    fun getGlobalMarketInfoAsync(currency: String): Single<GlobalCoinMarket>
     fun refresh()
 }
 
@@ -365,6 +333,17 @@ interface IEnabledWalletStorage {
     fun deleteAll()
 }
 
+interface IBlockchainSettingsStorage {
+    var bitcoinCashCoinType: BitcoinCashCoinType?
+    fun derivationSetting(coinType: CoinType) : DerivationSetting?
+    fun saveDerivationSetting(derivationSetting: DerivationSetting)
+    fun deleteDerivationSettings()
+    fun initialSyncSetting(coinType: CoinType) : InitialSyncSetting?
+    fun saveInitialSyncSetting(initialSyncSetting: InitialSyncSetting)
+    fun ethereumRpcModeSetting(coinType: CoinType) : EthereumRpcMode?
+    fun saveEthereumRpcModeSetting(ethereumRpcModeSetting: EthereumRpcMode)
+}
+
 interface IWalletManager {
     val wallets: List<Wallet>
     val walletsUpdatedObservable: Observable<List<Wallet>>
@@ -383,46 +362,45 @@ interface IAppNumberFormatter {
     fun formatFiat(value: Number, symbol: String, minimumFractionDigits: Int, maximumFractionDigits: Int): String
     fun getSignificantDecimalFiat(value: BigDecimal): Int
     fun getSignificantDecimalCoin(value: BigDecimal): Int
+    fun shortenValue(number: Number): Pair<BigDecimal, String>
 }
 
 interface IFeeRateProvider {
-    fun feeRates(): Single<List<FeeRateInfo>>
+    val feeRatePriorityList: List<FeeRatePriority>
+    val recommendedFeeRate: Single<BigInteger>
+    val defaultFeeRatePriority: FeeRatePriority
+        get() = FeeRatePriority.RECOMMENDED
+
+    fun feeRate(feeRatePriority: FeeRatePriority): Single<BigInteger> {
+        if (feeRatePriority is FeeRatePriority.Custom){
+            return Single.just(feeRatePriority.value.toBigInteger())
+        }
+        return recommendedFeeRate
+    }
 }
 
 interface IAddressParser {
     fun parse(paymentAddress: String): AddressData
 }
 
-interface IBlockchainSettingsManager {
-    fun derivationSetting(coinType: CoinType): DerivationSetting?
-    fun syncModeSetting(coinType: CoinType): SyncModeSetting?
-    fun communicationSetting(coinType: CoinType): CommunicationSetting?
-
-    fun saveSetting(derivationSetting: DerivationSetting)
-    fun saveSetting(syncModeSetting: SyncModeSetting)
-    fun saveSetting(communicationSetting: CommunicationSetting)
-
-    fun initializeSettingsWithDefault(coinType: CoinType)
-    fun initializeSettings(coinType: CoinType)
-}
-
 interface IDerivationSettingsManager {
-    fun defaultDerivationSetting(coinType: CoinType): DerivationSetting?
-    fun derivationSetting(coinType: CoinType): DerivationSetting?
-    fun updateSetting(derivationSetting: DerivationSetting)
-    fun reset()
+    fun allActiveSettings(): List<Pair<DerivationSetting, CoinType>>
+    fun defaultSetting(coinType: CoinType): DerivationSetting?
+    fun setting(coinType: CoinType): DerivationSetting?
+    fun save(setting: DerivationSetting)
+    fun resetStandardSettings()
 }
 
-interface ISyncModeSettingsManager {
-    fun defaultSyncModeSetting(coinType: CoinType): SyncModeSetting?
-    fun syncModeSetting(coinType: CoinType): SyncModeSetting?
-    fun updateSetting(syncModeSetting: SyncModeSetting)
+interface IInitialSyncModeSettingsManager {
+    fun allSettings(): List<Triple<InitialSyncSetting, Coin, Boolean>>
+    fun setting(coinType: CoinType, origin: AccountOrigin? = null): InitialSyncSetting?
+    fun save(setting: InitialSyncSetting)
 }
 
-interface ICommunicationSettingsManager {
-    fun defaultCommunicationSetting(coinType: CoinType): CommunicationSetting?
-    fun communicationSetting(coinType: CoinType): CommunicationSetting?
-    fun updateSetting(communicationSetting: CommunicationSetting)
+interface IEthereumRpcModeSettingsManager {
+    val communicationModes: List<CommunicationMode>
+    fun rpcMode(): EthereumRpcMode
+    fun save(setting: EthereumRpcMode)
 }
 
 interface IAccountCleaner {

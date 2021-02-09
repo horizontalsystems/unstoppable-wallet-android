@@ -46,7 +46,6 @@ class SwapConfirmationViewModel(
 
     override fun onCleared() {
         disposables.clear()
-        super.onCleared()
     }
 
     fun swap() {
@@ -75,7 +74,7 @@ class SwapConfirmationViewModel(
 
         val additionalData = mutableListOf<SwapModule.ConfirmationAdditionalViewItem>()
 
-        formatter.slippage(tradeService.tradeOptions.allowedSlippagePercent)?.let {
+        formatter.slippage(tradeService.tradeOptions.allowedSlippage)?.let {
             additionalData.add(SwapModule.ConfirmationAdditionalViewItem(stringProvider.string(R.string.SwapSettings_SlippageTitle), it))
         }
 
@@ -83,8 +82,13 @@ class SwapConfirmationViewModel(
             additionalData.add(SwapModule.ConfirmationAdditionalViewItem(stringProvider.string(R.string.SwapSettings_DeadlineTitle), it))
         }
 
-        tradeService.tradeOptions.recipient?.hex?.let {
-            additionalData.add(SwapModule.ConfirmationAdditionalViewItem(stringProvider.string(R.string.SwapSettings_RecipientAddressTitle), it))
+        tradeService.tradeOptions.recipient?.hex?.let { recipient ->
+            var address = recipient
+            tradeService.tradeRecipientDomain?.let {
+                address = "$it ($address)"
+            }
+
+            additionalData.add(SwapModule.ConfirmationAdditionalViewItem(stringProvider.string(R.string.SwapSettings_RecipientAddressTitle), address))
         }
 
         val trade = (tradeService.state as? SwapTradeService.State.Ready)?.trade ?: return
@@ -102,8 +106,11 @@ class SwapConfirmationViewModel(
         }
 
         transactionService.transactionStatus.dataOrNull?.let { transaction ->
-            val fee = ethereumCoinService.amountData(transaction.gasData.fee).getFormatted()
-            additionalData.add(SwapModule.ConfirmationAdditionalViewItem(stringProvider.string(R.string.Swap_SwapFee), fee))
+            val estimatedFee = ethereumCoinService.amountData(transaction.gasData.estimatedFee).getFormatted()
+            additionalData.add(SwapModule.ConfirmationAdditionalViewItem(stringProvider.string(R.string.Swap_EstimatedFee), estimatedFee))
+
+            val maxFee = ethereumCoinService.amountData(transaction.gasData.fee).getFormatted()
+            additionalData.add(SwapModule.ConfirmationAdditionalViewItem(stringProvider.string(R.string.Swap_MaxFee), maxFee))
         }
 
         additionalLiveData.postValue(additionalData)

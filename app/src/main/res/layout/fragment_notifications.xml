@@ -25,10 +25,9 @@
 
             <io.horizontalsystems.views.SettingsViewSwitch
                 android:id="@+id/switchNotification"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                app:bottomBorder="true"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -37,7 +36,7 @@
             <TextView
                 android:id="@+id/textWarning"
                 style="@style/Subhead2"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="12dp"
@@ -56,14 +55,14 @@
                 android:layout_marginTop="32dp"
                 android:text="@string/SettingsNotifications_TurnOn"
                 android:visibility="invisible"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/textWarning" />
 
             <TextView
                 android:id="@+id/textDescription"
                 style="@style/Subhead2"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="8dp"
@@ -88,36 +87,27 @@
 
             <FrameLayout
                 android:id="@+id/deactivateAll"
-                android:layout_width="match_parent"
-                android:layout_height="44dp"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
                 android:layout_marginTop="32dp"
                 android:layout_marginBottom="32dp"
-                android:background="@drawable/clickable_background_color_lawrence"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/rounded_lawrence_background_single"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/notifications">
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.5dp"
-                    android:layout_gravity="top"
-                    android:background="@color/steel_20"
-                    app:layout_constraintBottom_toBottomOf="parent" />
 
                 <TextView
                     android:id="@+id/deactivateAllText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
+                    android:layout_gravity="center_vertical"
                     android:layout_marginStart="16dp"
                     android:text="@string/SettingsNotifications_DeactivateAll"
                     android:textColor="@color/red_d" />
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.5dp"
-                    android:layout_gravity="bottom"
-                    android:background="@color/steel_20"
-                    app:layout_constraintBottom_toBottomOf="parent" />
             </FrameLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

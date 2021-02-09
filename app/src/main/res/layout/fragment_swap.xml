@@ -43,7 +43,7 @@
             <io.horizontalsystems.bankwallet.modules.swap.coincard.SwapCoinCardView
                 android:id="@+id/fromCoinCard"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 app:layout_constraintEnd_toEndOf="@+id/endBorder"
                 app:layout_constraintStart_toStartOf="@+id/startBorder"
@@ -90,7 +90,7 @@
             <io.horizontalsystems.bankwallet.modules.swap.coincard.SwapCoinCardView
                 android:id="@+id/toCoinCard"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 app:layout_constraintEnd_toEndOf="@+id/endBorder"
                 app:layout_constraintStart_toStartOf="@+id/startBorder"

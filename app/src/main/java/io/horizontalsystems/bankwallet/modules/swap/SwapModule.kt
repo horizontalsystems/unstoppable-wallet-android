@@ -16,10 +16,10 @@ import io.horizontalsystems.bankwallet.core.providers.EthereumFeeRateProvider
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.core.providers.StringProvider
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceService
-import io.horizontalsystems.bankwallet.modules.swap.repositories.UniswapRepository
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceViewModel
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapPendingAllowanceService
 import io.horizontalsystems.bankwallet.modules.swap.coincard.*
+import io.horizontalsystems.bankwallet.modules.swap.providers.UniswapProvider
 import io.horizontalsystems.uniswapkit.UniswapKit
 import kotlinx.android.parcel.Parcelize
 import java.math.BigDecimal
@@ -54,17 +54,17 @@ object SwapModule {
         private val uniswapKit by lazy { UniswapKit.getInstance(ethereumKit) }
         private val transactionService by lazy {
             val feeRateProvider = FeeRateProviderFactory.provider(App.appConfigProvider.ethereumCoin) as EthereumFeeRateProvider
-            EthereumTransactionService(ethereumKit, feeRateProvider)
+            EthereumTransactionService(ethereumKit, feeRateProvider, 20)
         }
         private val ethCoinService by lazy { CoinService(App.appConfigProvider.ethereumCoin, App.currencyManager, App.xRateManager) }
-        private val uniswapRepository by lazy { UniswapRepository(uniswapKit) }
-        private val allowanceService by lazy { SwapAllowanceService(uniswapRepository.routerAddress, App.adapterManager, ethereumKit) }
+        private val uniswapProvider by lazy { UniswapProvider(uniswapKit) }
+        private val allowanceService by lazy { SwapAllowanceService(uniswapProvider.routerAddress, App.adapterManager, ethereumKit) }
         private val pendingAllowanceService by lazy { SwapPendingAllowanceService(App.adapterManager, allowanceService) }
         private val service by lazy {
             SwapService(ethereumKit, tradeService, allowanceService, pendingAllowanceService, transactionService, App.adapterManager)
         }
         private val tradeService by lazy {
-            SwapTradeService(uniswapRepository, fromCoin)
+            SwapTradeService(ethereumKit, uniswapProvider, fromCoin)
         }
         private val stringProvider by lazy {
             StringProvider(App.instance)
@@ -95,15 +95,17 @@ object SwapModule {
                 SwapCoinCardViewModel::class.java -> {
                     val fiatService = FiatService(switchService, App.currencyManager, App.xRateManager)
                     val coinCardService: ISwapCoinCardService
+                    var maxButtonEnabled = false
 
                     if (key == coinCardTypeFrom) {
                         coinCardService = fromCoinCardService
                         switchService.fromListener = fiatService
+                        maxButtonEnabled = true
                     } else {
                         coinCardService = toCoinCardService
                         switchService.toListener = fiatService
                     }
-                    SwapCoinCardViewModel(coinCardService, fiatService, switchService, formatter, stringProvider) as T
+                    SwapCoinCardViewModel(coinCardService, fiatService, switchService, maxButtonEnabled, formatter, stringProvider) as T
                 }
                 SwapAllowanceViewModel::class.java -> {
                     SwapAllowanceViewModel(service, allowanceService, pendingAllowanceService, formatter, stringProvider) as T

@@ -238,11 +238,7 @@ class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener, ReceiveFra
         })
 
         viewModel.openChartModule.observe(viewLifecycleOwner, Observer { coin ->
-            val arguments = Bundle(3).apply {
-                putString(RateChartFragment.COIN_CODE_KEY, coin.code)
-                putString(RateChartFragment.COIN_TITLE_KEY, coin.title)
-                putString(RateChartFragment.COIN_ID_KEY, coin.coinId)
-            }
+            val arguments = RateChartFragment.prepareParams(coin.code, coin.title, coin.coinId)
 
             findNavController().navigate(R.id.mainFragment_to_rateChartFragment, arguments, navOptions())
         })

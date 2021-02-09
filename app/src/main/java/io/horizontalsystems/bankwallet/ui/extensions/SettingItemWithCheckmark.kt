@@ -5,46 +5,23 @@ import android.util.AttributeSet
 import android.widget.FrameLayout
 import androidx.core.view.isVisible
 import io.horizontalsystems.bankwallet.R
-import kotlinx.android.synthetic.main.view_setting_item_with_checkmark.view.*
+import io.horizontalsystems.views.ListPosition
+import kotlinx.android.synthetic.main.view_settings_item_with_checkmark.view.*
 
-class SettingItemWithCheckmark: FrameLayout {
+class SettingItemWithCheckmark @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
+    : FrameLayout(context, attrs, defStyleAttr) {
 
     init {
-        inflate(context, R.layout.view_setting_item_with_checkmark, this)
+        inflate(context, R.layout.view_settings_item_with_checkmark, this)
     }
 
-    constructor(context: Context) : super(context)
-
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {}
-
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {}
-
-    fun bind(title: String, subtitle: String, onClick: () -> Unit, showBottomBorder: Boolean = false){
-        setTitle(title)
-        setSubtitle(subtitle)
-        toggleBottomBorder(showBottomBorder)
-        itemWrapper.setOnClickListener { onClick.invoke() }
-    }
-
-    fun setEnabledState(enabled: Boolean) {
-        itemWrapper.isEnabled = enabled
-        itemWrapper.alpha = if (enabled) 1f else 0.5f
-    }
-
-    fun setChecked(checked: Boolean){
+    fun bind(title: String, subtitle: String, checked: Boolean, onClick: () -> Unit, listPosition: ListPosition) {
+        itemTitle.text = title
+        itemSubtitle.text = subtitle
         checkMark.isVisible = checked
-    }
-
-    fun setTitle(v: CharSequence) {
-        itemTitle.text = v
-    }
-
-    fun setSubtitle(v: CharSequence) {
-        itemSubtitle.text = v
-    }
-
-    fun toggleBottomBorder(visible: Boolean) {
-        bottomBorderView.isVisible = visible
+        setOnClickListener { onClick.invoke() }
+        backgroundView.setBackgroundResource(listPosition.getBackground())
+        bottomBorderView.isVisible = listPosition == ListPosition.Middle || listPosition == ListPosition.First
     }
 
 }

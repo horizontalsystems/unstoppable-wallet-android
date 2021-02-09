@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.core.managers
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IBinanceKitManager
 import io.horizontalsystems.bankwallet.core.UnsupportedAccountException
+import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.binancechainkit.BinanceChainKit
@@ -12,6 +13,7 @@ class BinanceKitManager(
 ) : IBinanceKitManager {
     private var kit: BinanceChainKit? = null
     private var useCount = 0
+    private var currentAccount: Account? = null
 
     override val binanceKit: BinanceChainKit?
         get() = kit
@@ -21,21 +23,37 @@ class BinanceKitManager(
 
     override fun binanceKit(wallet: Wallet): BinanceChainKit {
         val account = wallet.account
-        if (account.type is AccountType.Mnemonic && account.type.words.size == 24) {
-            useCount += 1
+        val accountType = account.type
 
-            kit?.let { return it }
-            val networkType = if (testMode)
-                BinanceChainKit.NetworkType.TestNet else
-                BinanceChainKit.NetworkType.MainNet
-
-            kit = BinanceChainKit.instance(App.instance, account.type.words, account.id, networkType)
-            kit?.refresh()
-
-            return kit!!
+        if (kit != null && currentAccount != account) {
+            kit?.stop()
+            kit = null
+            currentAccount = null
         }
 
-        throw UnsupportedAccountException()
+        if (kit == null) {
+            if (accountType !is AccountType.Mnemonic || accountType.words.size != 24)
+                throw UnsupportedAccountException()
+
+            useCount = 0
+
+            kit = createKitInstance( accountType, account)
+            currentAccount = account
+        }
+
+        useCount++
+        return kit!!
+    }
+
+    private fun createKitInstance(accountType: AccountType.Mnemonic, account: Account): BinanceChainKit {
+        val networkType = if (testMode)
+            BinanceChainKit.NetworkType.TestNet else
+            BinanceChainKit.NetworkType.MainNet
+
+        val kit = BinanceChainKit.instance(App.instance, accountType.words, account.id, networkType)
+        kit.refresh()
+
+        return kit
     }
 
     override fun unlink() {
@@ -44,6 +62,8 @@ class BinanceKitManager(
         if (useCount < 1) {
             kit?.stop()
             kit = null
+            currentAccount = null
         }
     }
+
 }

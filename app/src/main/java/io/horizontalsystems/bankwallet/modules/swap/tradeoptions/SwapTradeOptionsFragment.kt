@@ -15,6 +15,7 @@ import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerActivity
 import io.horizontalsystems.bankwallet.modules.swap.SwapViewModel
+import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.SwapTradeOptionsViewModel.*
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.android.synthetic.main.fragment_swap_settings.*
@@ -34,6 +35,7 @@ class SwapTradeOptionsFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.menuCancel -> {
@@ -44,9 +46,18 @@ class SwapTradeOptionsFragment : BaseFragment() {
             }
         }
 
-        viewModel.validStateLiveData.observe(viewLifecycleOwner, {
-            applyButton.isEnabled = it
-        })
+        viewModel.actionStateLiveData.observe(viewLifecycleOwner) { actionState ->
+            when (actionState) {
+                is ActionState.Enabled -> {
+                    applyButton.isEnabled = true
+                    applyButton.text = getString(R.string.SwapSettings_Apply)
+                }
+                is ActionState.Disabled -> {
+                    applyButton.isEnabled = false
+                    applyButton.text = actionState.title
+                }
+            }
+        }
 
         applyButton.setOnSingleClickListener {
             if (viewModel.onDoneClick()) {
@@ -71,7 +82,7 @@ class SwapTradeOptionsFragment : BaseFragment() {
             when (resultCode) {
                 Activity.RESULT_OK -> {
                     data?.getStringExtra(ModuleField.SCAN_ADDRESS)?.let {
-                        recipientAddressInputView.setText(it, false)
+                        recipientAddressViewModel.onFetch(it)
                     }
                 }
                 Activity.RESULT_CANCELED -> {

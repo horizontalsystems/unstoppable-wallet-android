@@ -4,9 +4,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.ethereum.CoinService
 import io.horizontalsystems.core.SingleLiveEvent
+import io.horizontalsystems.ethereumkit.api.jsonrpc.JsonRpc
 import io.reactivex.disposables.CompositeDisposable
 import java.math.BigDecimal
 import kotlin.math.min
@@ -14,8 +14,7 @@ import kotlin.math.min
 class SwapApproveViewModel(
         private val service: ISwapApproveService,
         private val coinService: CoinService,
-        private val ethCoinService: CoinService,
-        private val clearables: List<Clearable>
+        private val ethCoinService: CoinService
 ) : ViewModel() {
 
     private val maxCoinDecimal = 8
@@ -96,6 +95,12 @@ class SwapApproveViewModel(
             is SwapApproveService.TransactionEthereumAmountError.InsufficientBalance -> {
                 App.instance.getString(R.string.EthereumTransaction_Error_InsufficientBalance, ethCoinService.coinValue(throwable.requiredBalance))
             }
+            is JsonRpc.ResponseError.InsufficientBalance -> {
+                App.instance.getString(R.string.EthereumTransaction_Error_InsufficientBalanceForFee)
+            }
+            is JsonRpc.ResponseError.RpcError -> {
+                throwable.error.message
+            }
             else -> throwable.message ?: throwable.javaClass.simpleName
         }
     }
@@ -106,9 +111,6 @@ class SwapApproveViewModel(
 
     override fun onCleared() {
         disposables.dispose()
-
-        clearables.forEach {
-            it.clear()
-        }
+        service.onCleared()
     }
 }

@@ -19,7 +19,7 @@ import kotlinx.android.synthetic.main.fragment_bottom_manage_wallets.*
 class NoAccountDialog: BaseBottomSheetDialogFragment() {
 
     interface Listener {
-        fun onClickRestoreKey(predefinedAccountType: PredefinedAccountType) {}
+        fun onClickRestoreKey(predefinedAccountType: PredefinedAccountType, coin: Coin) {}
         fun onCancel() {}
     }
 
@@ -41,26 +41,21 @@ class NoAccountDialog: BaseBottomSheetDialogFragment() {
         setSubtitle(getString(R.string.AddCoin_Subtitle, getString(predefinedAccountType.title)))
         context?.let { setHeaderIconDrawable(AppLayoutHelper.getCoinDrawable(it, coin.code, coin.type)) }
 
-        createBtn.isVisible = predefinedAccountType.isCreationSupported()
-
         val walletName = getString(predefinedAccountType.title)
-        val descriptionText = if (predefinedAccountType.isCreationSupported()) R.string.AddCoin_Description else R.string.AddCoin_CreationNotSupportedDescription
         addKeyInfo.text = getString(
-                descriptionText,
+                R.string.AddCoin_Description,
                 walletName,
                 coin.title,
                 walletName,
                 getString(predefinedAccountType.coinCodes)
         )
 
-        if (predefinedAccountType.isCreationSupported()) {
-            createBtn.setOnClickListener {
-                viewModel.onClickCreateKey()
-            }
+        createBtn.setOnClickListener {
+            viewModel.onClickCreateKey()
         }
 
         restoreBtn.setOnClickListener {
-            listener?.onClickRestoreKey(coin.type.predefinedAccountType)
+            listener?.onClickRestoreKey(coin.type.predefinedAccountType, coin)
             dismiss()
         }
 

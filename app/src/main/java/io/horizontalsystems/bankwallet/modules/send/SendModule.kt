@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.send
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.Wallet
@@ -12,8 +13,6 @@ import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinHandler
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinInteractor
 import io.horizontalsystems.bankwallet.modules.send.dash.SendDashHandler
 import io.horizontalsystems.bankwallet.modules.send.dash.SendDashInteractor
-import io.horizontalsystems.bankwallet.modules.send.eos.SendEosHandler
-import io.horizontalsystems.bankwallet.modules.send.eos.SendEosInteractor
 import io.horizontalsystems.bankwallet.modules.send.ethereum.SendEthereumHandler
 import io.horizontalsystems.bankwallet.modules.send.ethereum.SendEthereumInteractor
 import io.horizontalsystems.bankwallet.modules.send.submodules.address.SendAddressModule
@@ -36,7 +35,7 @@ object SendModule {
         var delegate: IViewDelegate
 
         fun loadInputItems(inputs: List<Input>)
-        fun setSendButtonEnabled(enabled: Boolean)
+        fun setSendButtonEnabled(actionState: SendPresenter.ActionState)
         fun showConfirmation(confirmationViewItems: List<SendConfirmationViewItem>)
         fun showErrorInToast(error: Throwable)
     }
@@ -54,6 +53,7 @@ object SendModule {
     }
 
     interface ISendBitcoinInteractor {
+        val balance: BigDecimal
         val isLockTimeEnabled: Boolean
 
         fun fetchAvailableBalance(feeRate: Long, address: String?, pluginData: Map<Byte, IPluginData>?)
@@ -85,6 +85,7 @@ object SendModule {
     }
 
     interface ISendEthereumInteractor {
+        val balance: BigDecimal
         val ethereumBalance: BigDecimal
         val minimumRequiredBalance: BigDecimal
         val minimumAmount: BigDecimal
@@ -104,13 +105,6 @@ object SendModule {
 
         fun validate(address: String)
         fun send(amount: BigDecimal, address: String, memo: String?, logger: AppLogger): Single<Unit>
-    }
-
-    interface ISendEosInteractor {
-        val availableBalance: BigDecimal
-
-        fun validate(account: String)
-        fun send(amount: BigDecimal, account: String, memo: String?, logger: AppLogger): Single<Unit>
     }
 
     interface ISendZcashInteractor {
@@ -160,25 +154,29 @@ object SendModule {
     }
 
     interface ISendHandlerDelegate {
-        fun onChange(isValid: Boolean)
+        fun onChange(isValid: Boolean, amountError: Throwable?, addressError: Throwable?)
     }
 
     abstract class SendConfirmationViewItem
 
-    data class SendConfirmationAmountViewItem(val primaryInfo: AmountInfo,
-                                              val secondaryInfo: AmountInfo?,
-                                              val receiver: String,
-                                              val locked: Boolean = false) : SendConfirmationViewItem()
+    data class SendConfirmationAmountViewItem(
+            val primaryInfo: AmountInfo,
+            val secondaryInfo: AmountInfo?,
+            val receiver: Address,
+            val locked: Boolean = false
+    ) : SendConfirmationViewItem()
 
-    data class SendConfirmationFeeViewItem(val primaryInfo: AmountInfo,
-                                           val secondaryInfo: AmountInfo?) : SendConfirmationViewItem()
+    data class SendConfirmationFeeViewItem(
+            val primaryInfo: AmountInfo,
+            val secondaryInfo: AmountInfo?
+    ) : SendConfirmationViewItem()
 
-    data class SendConfirmationTotalViewItem(val primaryInfo: AmountInfo,
-                                             val secondaryInfo: AmountInfo?) : SendConfirmationViewItem()
+    data class SendConfirmationTotalViewItem(
+            val primaryInfo: AmountInfo,
+            val secondaryInfo: AmountInfo?
+    ) : SendConfirmationViewItem()
 
     data class SendConfirmationMemoViewItem(val memo: String?) : SendConfirmationViewItem()
-
-    data class SendConfirmationDurationViewItem(val duration: Long?) : SendConfirmationViewItem()
 
     data class SendConfirmationLockTimeViewItem(val lockTimeInterval: LockTimeInterval) : SendConfirmationViewItem()
 
@@ -239,15 +237,6 @@ object SendModule {
 
                     handler
                 }
-                is ISendEosAdapter -> {
-                    val eosInteractor = SendEosInteractor(adapter)
-                    val handler = SendEosHandler(eosInteractor, router)
-
-                    presenter.amountModuleDelegate = handler
-                    presenter.addressModuleDelegate = handler
-
-                    handler
-                }
                 is ISendZcashAdapter -> {
                     val zcashInteractor = SendZcashInteractor(adapter)
                     val handler = SendZcashHandler(zcashInteractor, router)
@@ -285,7 +274,7 @@ object SendModule {
     sealed class Input {
         object Amount : Input()
         class Address(val editable: Boolean = false) : Input()
-        class Fee(val isAdjustable: Boolean) : Input()
+        object Fee : Input()
         class Memo(val maxLength: Int) : Input()
         object ProceedButton : Input()
         object Hodler : Input()

@@ -48,9 +48,6 @@ class BackupPresenter(
             is AccountType.Zcash -> {
                 startBackupWords(accountType, accountType.words, accountType.birthdayHeight?.toString())
             }
-            is AccountType.Eos -> {
-                router.startBackupEosModule(accountType.account, accountType.activePrivateKey)
-            }
         }
     }
 

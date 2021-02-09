@@ -25,11 +25,11 @@
 
             <io.horizontalsystems.views.SettingsView
                 android:id="@+id/privacy"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                app:bottomBorder="true"
                 app:icon="@drawable/ic_settings_privacy"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:title="@string/SettingsSecurity_Privacy" />
@@ -47,9 +47,8 @@
 
             <io.horizontalsystems.views.SettingsView
                 android:id="@+id/changePin"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                app:bottomBorder="true"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/enablePin"
@@ -60,7 +59,6 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
-                app:bottomBorder="true"
                 app:icon="@drawable/ic_fingerprint"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -70,7 +68,7 @@
             <TextView
                 android:id="@+id/txtBiometricAuthInfo"
                 style="@style/Subhead2"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="12dp"

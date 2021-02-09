@@ -3,13 +3,13 @@ package io.horizontalsystems.bankwallet.modules.transactions
 import android.content.Context
 import android.graphics.drawable.AnimationDrawable
 import android.util.AttributeSet
-import androidx.constraintlayout.widget.ConstraintLayout
+import android.widget.FrameLayout
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.TransactionType
 import kotlinx.android.synthetic.main.view_transaction_progress.view.*
 
 
-class TransactionProgressView : ConstraintLayout {
+class TransactionProgressView : FrameLayout {
 
     constructor(context: Context) : super(context) {
         initializeViews()

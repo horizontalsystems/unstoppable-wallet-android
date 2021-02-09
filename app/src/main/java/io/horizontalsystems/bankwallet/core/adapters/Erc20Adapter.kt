@@ -8,11 +8,11 @@ import io.horizontalsystems.bankwallet.core.toHexString
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.bankwallet.entities.TransactionType
 import io.horizontalsystems.erc20kit.core.Erc20Kit
-import io.horizontalsystems.erc20kit.core.Erc20Kit.SyncState
 import io.horizontalsystems.erc20kit.core.TransactionKey
 import io.horizontalsystems.erc20kit.models.Transaction
-import io.horizontalsystems.erc20kit.models.Transaction.TransactionType.APPROVE
+import io.horizontalsystems.erc20kit.models.TransactionType.APPROVE
 import io.horizontalsystems.ethereumkit.core.EthereumKit
+import io.horizontalsystems.ethereumkit.core.EthereumKit.SyncState
 import io.horizontalsystems.ethereumkit.core.hexStringToByteArray
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.DefaultBlockParameter
@@ -35,12 +35,12 @@ class Erc20Adapter(
     val erc20Kit: Erc20Kit = Erc20Kit.getInstance(context, ethereumKit, this.contractAddress)
 
     val pendingTransactions: List<TransactionRecord>
-        get() = erc20Kit.pendingTransactions().map { transactionRecord(it) }
+        get() = erc20Kit.getPendingTransactions().map { transactionRecord(it) }
 
     // IAdapter
 
     override fun start() {
-        erc20Kit.refresh()
+        erc20Kit.start()
     }
 
     override fun stop() {
@@ -53,15 +53,11 @@ class Erc20Adapter(
 
     // IBalanceAdapter
 
-    override val state: AdapterState
-        get() = when (val kitSyncState = erc20Kit.syncState) {
-            is SyncState.Synced -> AdapterState.Synced
-            is SyncState.NotSynced -> AdapterState.NotSynced(kitSyncState.error)
-            is SyncState.Syncing -> AdapterState.Syncing(50, null)
-        }
+    override val balanceState: AdapterState
+        get() = convertToAdapterState(erc20Kit.syncState)
 
-    override val stateUpdatedFlowable: Flowable<Unit>
-        get() = erc20Kit.syncStateFlowable.map { Unit }
+    override val balanceStateUpdatedFlowable: Flowable<Unit>
+        get() = erc20Kit.syncStateFlowable.map { }
 
     override val balance: BigDecimal
         get() = balanceInBigDecimal(erc20Kit.balance, decimal)
@@ -71,8 +67,14 @@ class Erc20Adapter(
 
     // ITransactionsAdapter
 
+    override val transactionsState: AdapterState
+        get() = convertToAdapterState(erc20Kit.transactionsSyncState)
+
+    override val transactionsStateUpdatedFlowable: Flowable<Unit>
+        get() = erc20Kit.transactionsSyncStateFlowable.map { }
+
     override fun getTransactions(from: TransactionRecord?, limit: Int): Single<List<TransactionRecord>> {
-        return erc20Kit.transactions(from?.let { TransactionKey(it.transactionHash.hexStringToByteArray(), it.interTransactionIndex) }, limit).map {
+        return erc20Kit.getTransactionsAsync(from?.let { TransactionKey(it.transactionHash.hexStringToByteArray(), it.interTransactionIndex) }, limit).map {
             it.map { tx -> transactionRecord(tx) }
         }
     }
@@ -83,15 +85,23 @@ class Erc20Adapter(
     // ISendEthereumAdapter
 
     override fun sendInternal(address: Address, amount: BigInteger, gasPrice: Long, gasLimit: Long, logger: AppLogger): Single<Unit> {
-        return erc20Kit.send(address, amount, gasPrice, gasLimit)
+        logger.info("call erc20Kit.buildTransferTransactionData")
+        val transactionData = erc20Kit.buildTransferTransactionData(address, amount)
+
+        return ethereumKit.send(transactionData, gasPrice, gasLimit)
                 .doOnSubscribe {
-                    logger.info("call erc20Kit.send")
+                    logger.info("call ethereumKit.send")
                 }
-                .map { Unit }
+                .map {}
     }
 
     override fun estimateGasLimitInternal(toAddress: Address?, value: BigInteger, gasPrice: Long?): Single<Long> {
-        return erc20Kit.estimateGas(toAddress, contractAddress, value, gasPrice)
+        if (toAddress == null) {
+            return Single.just(ethereumKit.defaultGasLimit)
+        }
+        val transactionData = erc20Kit.buildTransferTransactionData(toAddress, value)
+
+        return ethereumKit.estimateGas(transactionData, gasPrice)
     }
 
     override fun availableBalance(gasPrice: Long, gasLimit: Long): BigDecimal {
@@ -99,7 +109,13 @@ class Erc20Adapter(
     }
 
     override val ethereumBalance: BigDecimal
-        get() = balanceInBigDecimal(ethereumKit.balance, EthereumAdapter.decimal)
+        get() = balanceInBigDecimal(ethereumKit.accountState?.balance, EthereumAdapter.decimal)
+
+    private fun convertToAdapterState(syncState: SyncState): AdapterState = when (syncState) {
+        is SyncState.Synced -> AdapterState.Synced
+        is SyncState.NotSynced -> AdapterState.NotSynced(syncState.error)
+        is SyncState.Syncing -> AdapterState.Syncing(50, null)
+    }
 
     private fun transactionRecord(transaction: Transaction): TransactionRecord {
         val myAddress = ethereumKit.receiveAddress
@@ -118,16 +134,19 @@ class Erc20Adapter(
         }
 
         val txHashHex = transaction.transactionHash.toHexString()
+        val receipt = transaction.fullTransaction.receiptWithLogs?.receipt
+
         return TransactionRecord(
                 uid = "$txHashHex${transaction.interTransactionIndex}${contractAddress.hex}",
                 transactionHash = txHashHex,
                 transactionIndex = transaction.transactionIndex ?: 0,
                 interTransactionIndex = transaction.interTransactionIndex,
-                blockHeight = transaction.blockNumber,
+                blockHeight = receipt?.blockNumber,
                 amount = scaleDown(transaction.value.toBigDecimal()),
                 confirmationsThreshold = confirmationsThreshold,
                 timestamp = transaction.timestamp,
                 from = transaction.from.hex,
+                memo = null,
                 to = transaction.to.hex,
                 type = type,
                 failed = transaction.isError
@@ -135,7 +154,7 @@ class Erc20Adapter(
     }
 
     fun allowance(spenderAddress: Address, defaultBlockParameter: DefaultBlockParameter): Single<BigDecimal> {
-        return erc20Kit.allowance(spenderAddress, defaultBlockParameter)
+        return erc20Kit.getAllowanceAsync(spenderAddress, defaultBlockParameter)
                 .map {
                     scaleDown(it.toBigDecimal())
                 }

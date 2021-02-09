@@ -6,13 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
-import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.entities.ApiError
-import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.ethereumkit.core.AddressValidator
@@ -39,23 +37,21 @@ class AddTokenFragment : BaseFragment() {
         val model: AddTokenViewModel by viewModels { AddTokenModule.Factory(tokenType) }
 
         toolbar.title = getString(model.titleTextRes)
-        txtAddressInput.hint = getString(model.hintTextRes)
 
-        btnPaste.setOnClickListener {
-            val text = TextHelper.getCopiedText()
-            txtAddressInput.setText(text)
-        }
-
-        btnDeleteAddress.setOnClickListener {
-            txtAddressInput.setText("")
-        }
+        addressInputView.setEditable(false)
+        addressInputView.setHint(getString(model.hintTextRes))
 
         btnAddToken.setOnClickListener {
             model.onAddClick()
         }
 
-        txtAddressInput.doOnTextChanged { text, _, _, _ ->
-            model.onTextChange(text)
+        addressInputView.onTextChange {
+            model.onTextChange(it)
+        }
+
+        addressInputView.onPasteText {
+            model.onTextChange(it)
+            addressInputView.setText(it)
         }
 
         observeViewModel(model)
@@ -64,14 +60,6 @@ class AddTokenFragment : BaseFragment() {
     private fun observeViewModel(model: AddTokenViewModel) {
         model.loadingLiveData.observe(viewLifecycleOwner, Observer { visible ->
             progressLoading.isVisible = visible
-        })
-
-        model.showTrashButton.observe(viewLifecycleOwner, Observer { visible ->
-            btnDeleteAddress.isVisible = visible
-        })
-
-        model.showPasteButton.observe(viewLifecycleOwner, Observer { visible ->
-            btnPaste.isVisible = visible
         })
 
         model.showSuccess.observe(viewLifecycleOwner, Observer {
@@ -85,33 +73,13 @@ class AddTokenFragment : BaseFragment() {
             setCoinDetails(it)
         })
 
-        model.showErrorLiveData.observe(viewLifecycleOwner, Observer { error ->
-            error?.let {
-                txtAddressError.text = getString(getErrorText(it))
-            }
-            txtAddressError.isVisible = error != null
-        })
-
-        model.showWarningLiveData.observe(viewLifecycleOwner, Observer { visible ->
-            warningText.isVisible = visible
+        model.cautionLiveData.observe(viewLifecycleOwner, Observer { caution ->
+            addressInputView.setError(caution)
         })
 
         model.showAddButton.observe(viewLifecycleOwner, Observer { visible ->
             btnAddToken.isVisible = visible
         })
-
-    }
-
-    private fun getErrorText(error: Throwable): Int {
-        return when (error) {
-            is AddressValidator.InvalidAddressLength,
-            is AddressValidator.InvalidAddressHex,
-            is AddressValidator.InvalidAddressChecksum -> R.string.AddToken_InvalidAddressError
-            is ApiError.ContractNotFound -> R.string.AddErc20Token_ContractNotFound
-            is ApiError.TokenNotFound -> R.string.AddBep2Token_TokenNotFound
-            is ApiError.ApiLimitExceeded -> R.string.AddToken_ApiLimitExceeded
-            else -> R.string.Error
-        }
     }
 
     private fun setCoinDetails(viewItem: AddTokenModule.ViewItem?) {

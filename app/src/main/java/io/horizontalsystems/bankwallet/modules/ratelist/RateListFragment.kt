@@ -64,11 +64,7 @@ class RatesListFragment : BaseFragment(), CoinRatesAdapter.Listener {
 
     private fun observeRouter(router: RateListRouter) {
         router.openChartLiveEvent.observe(viewLifecycleOwner, Observer { (coinCode, coinTitle) ->
-            val arguments = Bundle(3).apply {
-                putString(RateChartFragment.COIN_CODE_KEY, coinCode)
-                putString(RateChartFragment.COIN_TITLE_KEY, coinTitle)
-                putString(RateChartFragment.COIN_ID_KEY, null)
-            }
+            val arguments = RateChartFragment.prepareParams(coinCode, coinTitle, null)
 
             findNavController().navigate(R.id.lockScreenFragment_to_rateChartFragment, arguments, navOptions())
         })

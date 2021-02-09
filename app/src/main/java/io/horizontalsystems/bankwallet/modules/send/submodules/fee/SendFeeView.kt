@@ -7,9 +7,9 @@ import io.horizontalsystems.bankwallet.modules.send.SendModule
 
 class SendFeeView : SendFeeModule.IView {
 
+    val showAdjustableFeeMenu = MutableLiveData<Boolean>()
     val primaryFee = MutableLiveData<String?>()
     val secondaryFee = MutableLiveData<String?>()
-    val duration = MutableLiveData<Long?>()
     val feePriority = MutableLiveData<FeeRatePriority>()
     val showFeePriorityOptions = MutableLiveData<List<SendFeeModule.FeeRateInfoViewItem>>()
     val showCustomFeePriority = SingleLiveEvent<Boolean>()
@@ -17,6 +17,10 @@ class SendFeeView : SendFeeModule.IView {
     val insufficientFeeBalanceError = SingleLiveEvent<SendFeeModule.InsufficientFeeBalance?>()
     val setLoading = MutableLiveData<Boolean>()
     val setError = MutableLiveData<Exception>()
+
+    override fun setAdjustableFeeVisible(visible: Boolean) {
+        showAdjustableFeeMenu.postValue(visible)
+    }
 
     override fun setPrimaryFee(feeAmount: String?) {
         primaryFee.postValue(feeAmount)
@@ -28,10 +32,6 @@ class SendFeeView : SendFeeModule.IView {
 
     override fun setFeePriority(priority: FeeRatePriority) {
         feePriority.postValue(priority)
-    }
-
-    override fun setDuration(duration: Long?) {
-        this.duration.postValue(duration)
     }
 
     override fun showFeeRatePrioritySelector(feeRates: List<SendFeeModule.FeeRateInfoViewItem>) {

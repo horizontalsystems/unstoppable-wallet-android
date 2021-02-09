@@ -49,6 +49,20 @@ abstract class BitcoinBaseAdapter(
     // Adapter implementation
     //
 
+    private var syncState: AdapterState = AdapterState.Syncing(0, null)
+        set(value) {
+            if (value != field) {
+                field = value
+                adapterStateUpdatedSubject.onNext(Unit)
+            }
+        }
+
+    override val transactionsState
+        get() = syncState
+
+    override val balanceState
+        get() = syncState
+
     override val lastBlockInfo: LastBlockInfo?
         get() = kit.lastBlockInfo?.let { LastBlockInfo(it.height, it.timestamp) }
 
@@ -68,7 +82,10 @@ abstract class BitcoinBaseAdapter(
     override val lastBlockUpdatedFlowable: Flowable<Unit>
         get() = lastBlockUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
 
-    override val stateUpdatedFlowable: Flowable<Unit>
+    override val transactionsStateUpdatedFlowable: Flowable<Unit>
+        get() = adapterStateUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
+
+    override val balanceStateUpdatedFlowable: Flowable<Unit>
         get() = adapterStateUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
 
     override val transactionRecordsFlowable: Flowable<List<TransactionRecord>>
@@ -81,14 +98,6 @@ abstract class BitcoinBaseAdapter(
 
     override val balanceLocked: BigDecimal?
         get() = if (kit.balance.unspendable > 0L) satoshiToBTC(kit.balance.unspendable) else null
-
-    override var state: AdapterState = AdapterState.Syncing(0, null)
-        set(value) {
-            if (value != field) {
-                field = value
-                adapterStateUpdatedSubject.onNext(Unit)
-            }
-        }
 
     override fun start() {
         kit.start()
@@ -111,7 +120,7 @@ abstract class BitcoinBaseAdapter(
     }
 
     protected fun setState(kitState: BitcoinCore.KitState) {
-        state = when (kitState) {
+        syncState = when (kitState) {
             is BitcoinCore.KitState.Synced -> {
                 AdapterState.Synced
             }
@@ -245,6 +254,7 @@ abstract class BitcoinBaseAdapter(
                 fee = satoshiToBTC(transaction.fee),
                 timestamp = transaction.timestamp,
                 from = from,
+                memo = null,
                 to = to,
                 type = type,
                 failed = transaction.status == TransactionStatus.INVALID,

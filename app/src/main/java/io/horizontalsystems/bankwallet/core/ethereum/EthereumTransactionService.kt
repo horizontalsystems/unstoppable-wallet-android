@@ -4,7 +4,7 @@ import io.horizontalsystems.bankwallet.core.FeeRatePriority
 import io.horizontalsystems.bankwallet.core.providers.EthereumFeeRateProvider
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.ethereumkit.core.EthereumKit
-import io.horizontalsystems.ethereumkit.models.Address
+import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
@@ -14,8 +14,11 @@ import java.math.BigInteger
 
 class EthereumTransactionService(
         private val ethereumKit: EthereumKit,
-        private val feeRateProvider: EthereumFeeRateProvider
+        private val feeRateProvider: EthereumFeeRateProvider,
+        private val gasLimitSurchargePercent: Int
 ) {
+
+    val hasEstimatedFee: Boolean = gasLimitSurchargePercent != 0
 
     var transactionData: TransactionData? = null
         set(value) {
@@ -47,6 +50,10 @@ class EthereumTransactionService(
         sync()
     }
 
+    fun onCleared() {
+        disposable.clear()
+    }
+
     private fun sync() {
         disposable.clear()
 
@@ -61,8 +68,9 @@ class EthereumTransactionService(
         gasPriceSingle(gasPriceType)
                 .flatMap { gasPrice ->
                     gasLimitSingle(gasPrice, transactionData)
-                            .map { gasLimit ->
-                                Transaction(transactionData, GasData(gasLimit, gasPrice))
+                            .map { estimatedGasLimit ->
+                                val gasLimit = estimatedGasLimit + (estimatedGasLimit * gasLimitSurchargePercent / 100.0).toLong()
+                                Transaction(transactionData, GasData(estimatedGasLimit, gasLimit, gasPrice.toLong()))
                             }
                 }
                 .subscribeOn(Schedulers.io())
@@ -77,38 +85,31 @@ class EthereumTransactionService(
                 }
     }
 
-    private fun gasPriceSingle(gasPriceType: GasPriceType): Single<Long> {
+    private fun gasPriceSingle(gasPriceType: GasPriceType): Single<BigInteger> {
         return when (gasPriceType) {
             is GasPriceType.Recommended -> {
-                feeRateProvider.feeRates()
-                        .map {
-                            val feeRateInfo = it.first { it.priority == FeeRatePriority.RECOMMENDED }
-
-                            feeRateInfo.feeRate
-                        }
+                feeRateProvider.feeRate(FeeRatePriority.RECOMMENDED)
             }
             is GasPriceType.Custom -> {
-                Single.just(gasPriceType.gasPrice)
+                Single.just(gasPriceType.gasPrice.toBigInteger())
             }
         }
     }
 
-    private fun gasLimitSingle(gasPrice: Long, transactionData: TransactionData): Single<Long> {
-        return ethereumKit.estimateGas(transactionData.to, transactionData.value, gasPrice, transactionData.input)
+    private fun gasLimitSingle(gasPrice: BigInteger, transactionData: TransactionData): Single<Long> {
+        return ethereumKit.estimateGas(transactionData, gasPrice.toLong())
     }
 
     // types
 
-    data class TransactionData(
-            var to: Address,
-            var value: BigInteger,
-            var input: ByteArray
-    )
-
     data class GasData(
+            val estimatedGasLimit: Long,
             val gasLimit: Long,
             val gasPrice: Long
     ) {
+        val estimatedFee: BigInteger
+            get() = estimatedGasLimit.toBigInteger() * gasPrice.toBigInteger()
+
         val fee: BigInteger
             get() = gasLimit.toBigInteger() * gasPrice.toBigInteger()
     }

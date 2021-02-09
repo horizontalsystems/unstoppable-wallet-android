@@ -39,107 +39,43 @@
         android:indeterminateTint="@color/grey"
         android:indeterminateTintMode="src_atop"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <View
+    <io.horizontalsystems.views.ViewState
         android:id="@+id/background"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_width="0dp"
+        android:layout_height="84dp"
         android:layout_marginTop="12dp"
-        android:background="@drawable/input_background_themed"
+        android:background="@drawable/input_background_stateful"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/availableBalanceTitle" />
-
-    <ImageButton
-        android:id="@+id/btnSwitch"
-        style="@style/ImageButtonSecondary"
-        android:layout_width="28dp"
-        android:layout_height="28dp"
-        android:layout_marginTop="6dp"
-        android:layout_marginEnd="6dp"
-        android:src="@drawable/stateful_switch_icon"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/background" />
-
-    <Button
-        android:id="@+id/btnMax"
-        style="@style/ButtonSecondary"
-        android:layout_width="wrap_content"
-        android:layout_height="28dp"
-        android:layout_marginEnd="8dp"
-        android:text="@string/Send_Button_Max"
-        app:layout_constraintEnd_toStartOf="@+id/btnSwitch"
-        app:layout_constraintTop_toTopOf="@+id/btnSwitch" />
-
-    <TextView
-        android:id="@+id/topAmountPrefix"
-        style="@style/Body"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:includeFontPadding="true"
-        android:textColor="?attr/TextColorBarsToDark"
-        app:layout_constraintBottom_toBottomOf="@id/btnMax"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/btnMax"
-        tools:text="BTC" />
-
-    <EditText
-        android:id="@+id/editTxtAmount"
-        style="@style/Body"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="9dp"
-        android:layout_marginEnd="8dp"
-        android:background="@android:color/transparent"
-        android:hint="@string/Send_Hint_Amount"
-        android:inputType="number|numberDecimal"
-        android:maxLines="1"
-        android:textColor="?attr/TextColorBarsToDark"
-        android:textColorHint="@color/grey_50"
-        app:layout_constraintBottom_toBottomOf="@+id/topAmountPrefix"
-        app:layout_constraintEnd_toStartOf="@+id/btnMax"
-        app:layout_constraintStart_toEndOf="@+id/topAmountPrefix"
-        tools:text="0.0021" />
-
-    <View
-        android:id="@+id/amountDivider"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:layout_marginHorizontal="8dp"
-        android:layout_marginTop="6dp"
-        android:background="@color/steel_20"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnMax" />
+        app:layout_constraintTop_toBottomOf="@+id/availableBalanceTitle"
+        app:layout_constraintVertical_bias="0.0" />
 
-    <TextView
-        android:id="@+id/txtHintInfo"
-        style="@style/Caption"
-        android:layout_width="wrap_content"
+    <io.horizontalsystems.bankwallet.ui.extensions.AmountInputView
+        android:id="@+id/amountInput"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
-        android:layout_marginBottom="8dp"
-        android:textColor="?attr/TextColorBarsToDark"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/topAmountPrefix"
-        app:layout_constraintTop_toBottomOf="@+id/amountDivider"
-        tools:text="$ 210" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/background" />
 
     <TextView
         android:id="@+id/txtHintError"
         style="@style/Caption"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
         android:textColor="?ColorLucian"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/topAmountPrefix"
-        app:layout_constraintTop_toBottomOf="@+id/amountDivider"
-        tools:text="$ 210" />
-
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/background"
+        tools:text="Error text"
+        tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,10 +2,10 @@ package io.horizontalsystems.views
 
 import android.content.Context
 import android.util.AttributeSet
-import androidx.constraintlayout.widget.ConstraintLayout
+import android.widget.FrameLayout
 import kotlinx.android.synthetic.main.view_backup_word_text.view.*
 
-class BackupWordView : ConstraintLayout {
+class BackupWordView : FrameLayout {
 
     init {
         inflate(context, R.layout.view_backup_word_text, this)

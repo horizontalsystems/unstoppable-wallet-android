@@ -38,81 +38,14 @@
                 android:orientation="vertical"
                 app:layout_constraintGuide_end="16dp" />
 
-            <View
-                android:id="@+id/background"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:background="@drawable/input_background_themed"
-                android:paddingTop="6dp"
-                android:paddingBottom="6dp"
-                app:layout_constraintBottom_toBottomOf="@+id/inputTextWrapper"
-                app:layout_constraintEnd_toEndOf="@+id/guidelineRight"
-                app:layout_constraintStart_toStartOf="@+id/guidelineLeft"
-                app:layout_constraintTop_toTopOf="@+id/inputTextWrapper" />
-
-            <LinearLayout
-                android:id="@+id/inputTextWrapper"
+            <io.horizontalsystems.bankwallet.ui.extensions.AddressInputView
+                android:id="@+id/addressInputView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingStart="12dp"
-                android:paddingTop="6dp"
-                android:paddingEnd="14dp"
-                android:paddingBottom="6dp"
-                app:layout_constraintEnd_toStartOf="@+id/btnPaste"
+                app:layout_constraintEnd_toStartOf="@id/guidelineRight"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="@+id/guidelineLeft"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <EditText
-                    android:id="@+id/txtAddressInput"
-                    style="@style/Body"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/transparent"
-                    android:inputType="textMultiLine"
-                    android:paddingTop="4dp"
-                    android:paddingBottom="4dp"
-                    android:singleLine="false"
-                    android:textColor="?attr/TextColorBarsToDark"
-                    android:textColorHint="@color/grey_50"
-                    tools:hint="@string/AddErc20Token_ContractAddressHint" />
-
-                <TextView
-                    android:id="@+id/txtAddressError"
-                    style="@style/Caption"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/AddToken_InvalidAddressError"
-                    android:textColor="?ColorLucian"
-                    android:visibility="gone" />
-
-            </LinearLayout>
-
-            <Button
-                android:id="@+id/btnPaste"
-                style="@style/ButtonSecondary"
-                android:layout_width="wrap_content"
-                android:layout_height="28dp"
-                android:layout_marginEnd="6dp"
-                android:text="@string/Send_Button_Paste"
-                app:layout_constraintBottom_toBottomOf="@+id/inputTextWrapper"
-                app:layout_constraintEnd_toStartOf="@+id/btnDeleteAddress"
-                app:layout_constraintStart_toEndOf="@+id/inputTextWrapper"
-                app:layout_constraintTop_toTopOf="@id/inputTextWrapper" />
-
-            <ImageButton
-                android:id="@+id/btnDeleteAddress"
-                style="@style/ImageButtonSecondary"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
-                android:layout_marginEnd="6dp"
-                android:src="@drawable/ic_delete_20"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="@+id/inputTextWrapper"
-                app:layout_constraintEnd_toEndOf="@+id/guidelineRight"
-                app:layout_constraintStart_toEndOf="@+id/btnPaste"
-                app:layout_constraintTop_toTopOf="@id/inputTextWrapper" />
+                app:layout_constraintStart_toStartOf="@id/guidelineLeft"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <ProgressBar
                 android:id="@+id/progressLoading"
@@ -128,7 +61,7 @@
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="@id/guidelineRight"
                 app:layout_constraintStart_toStartOf="@id/guidelineLeft"
-                app:layout_constraintTop_toBottomOf="@+id/inputTextWrapper" />
+                app:layout_constraintTop_toBottomOf="@id/addressInputView" />
 
             <TextView
                 android:id="@+id/coinNameTitle"
@@ -140,7 +73,7 @@
                 android:textColor="@color/grey"
                 android:visibility="gone"
                 app:layout_constraintStart_toStartOf="@id/guidelineLeft"
-                app:layout_constraintTop_toBottomOf="@+id/inputTextWrapper"
+                app:layout_constraintTop_toBottomOf="@id/addressInputView"
                 tools:visibility="visible" />
 
             <TextView
@@ -211,23 +144,10 @@
                 app:layout_constraintTop_toTopOf="@+id/decimalTitle"
                 tools:visibility="visible" />
 
-            <TextView
-                android:id="@+id/warningText"
-                style="@style/ImportantText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:text="@string/AddToken_CoinAlreadyInListWarning"
-                android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="@id/guidelineRight"
-                app:layout_constraintStart_toStartOf="@id/guidelineLeft"
-                app:layout_constraintTop_toBottomOf="@+id/decimalTitle"
-                tools:visibility="visible" />
-
             <Button
                 android:id="@+id/btnAddToken"
                 style="@style/ButtonPrimaryYellow"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="28dp"
@@ -237,11 +157,10 @@
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="@id/guidelineRight"
                 app:layout_constraintStart_toStartOf="@id/guidelineLeft"
-                app:layout_constraintTop_toBottomOf="@+id/warningText"
+                app:layout_constraintTop_toBottomOf="@+id/decimalTitle"
                 tools:visibility="visible" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
     </androidx.core.widget.NestedScrollView>
 
 </FrameLayout>

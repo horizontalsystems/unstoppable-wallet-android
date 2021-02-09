@@ -72,7 +72,32 @@ class SendPresenter(
 
     // SendModule.ISendHandlerDelegate
 
-    override fun onChange(isValid: Boolean) {
-        view.setSendButtonEnabled(isValid)
+    override fun onChange(isValid: Boolean, amountError: Throwable?, addressError: Throwable?) {
+        val actionState: ActionState
+
+        if (isValid) {
+            actionState = ActionState.Enabled()
+        } else if (amountError != null && !isEmptyAmountError(amountError)) {
+            actionState = ActionState.Disabled("Invalid Amount")
+        } else if (addressError != null && !isEmptyAddressError(addressError)) {
+            actionState = ActionState.Disabled("Invalid Address")
+        } else {
+            actionState = ActionState.Disabled(null)
+        }
+
+        view.setSendButtonEnabled(actionState)
+    }
+
+    private fun isEmptyAmountError(error: Throwable): Boolean {
+        return error is SendAmountModule.ValidationError.EmptyValue
+    }
+
+    private fun isEmptyAddressError(error: Throwable): Boolean {
+        return error is SendAddressModule.ValidationError.EmptyValue
+    }
+
+    sealed class ActionState {
+        class Enabled : ActionState()
+        class Disabled(val title: String?) : ActionState()
     }
 }

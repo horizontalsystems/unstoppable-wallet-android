@@ -1,6 +1,7 @@
 package io.horizontalsystems.currencyswitcher
 
 import androidx.lifecycle.ViewModel
+import io.horizontalsystems.views.ListPosition
 
 class CurrencySwitcherPresenter(
         var view: CurrencySwitcherModule.IView,
@@ -12,7 +13,14 @@ class CurrencySwitcherPresenter(
 
     override fun viewDidLoad() {
         val baseCurrency = interactor.baseCurrency
-        val items = currencies.map { CurrencyViewItem(it.code, it.symbol, it == baseCurrency) }
+        val items = currencies.mapIndexed { index, currency ->
+            CurrencyViewItem(
+                    currency.code,
+                    currency.symbol,
+                    currency == baseCurrency,
+                    listPosition = ListPosition.getListPosition(currencies.size, index)
+            )
+        }
         view.show(items)
     }
 

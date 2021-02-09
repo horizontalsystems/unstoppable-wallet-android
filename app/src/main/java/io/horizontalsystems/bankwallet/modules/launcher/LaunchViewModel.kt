@@ -13,6 +13,7 @@ class LaunchViewModel : ViewModel(), LaunchModule.IView, LaunchModule.IRouter {
     val openNoSystemLockModule = SingleLiveEvent<Void>()
     val openKeyInvalidatedModule = SingleLiveEvent<Void>()
     val openUserAuthenticationModule = SingleLiveEvent<Void>()
+    val openDeviceIsRootedWarning = SingleLiveEvent<Void>()
     val closeApplication = SingleLiveEvent<Void>()
 
     fun init() {
@@ -44,6 +45,10 @@ class LaunchViewModel : ViewModel(), LaunchModule.IView, LaunchModule.IRouter {
 
     override fun openUserAuthenticationModule() {
         openUserAuthenticationModule.call()
+    }
+
+    override fun openDeviceIsRootedWarning() {
+        openDeviceIsRootedWarning.call()
     }
 
     override fun closeApplication() {

@@ -11,7 +11,7 @@ class PredefinedAccountTypeManager(private val accountManager: IAccountManager, 
     : IPredefinedAccountTypeManager {
 
     override val allTypes: List<PredefinedAccountType>
-        get() = listOf(PredefinedAccountType.Standard, PredefinedAccountType.Binance, PredefinedAccountType.Zcash, PredefinedAccountType.Eos)
+        get() = listOf(PredefinedAccountType.Standard, PredefinedAccountType.Binance, PredefinedAccountType.Zcash)
 
     override fun account(predefinedAccountType: PredefinedAccountType): Account? {
         return accountManager.accounts.find { predefinedAccountType.supports(it.type) }

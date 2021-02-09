@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:layout_height="wrap_content"
+    tools:layout_width="wrap_content"
+    tools:parentTag="io.horizontalsystems.bankwallet.ui.extensions.MarketMetricSmallView">
+
+    <io.horizontalsystems.bankwallet.ui.extensions.PriceGradientView
+        android:id="@+id/diffCircle"
+        android:layout_width="3dp"
+        android:layout_height="36dp"
+        android:layout_marginTop="6dp"
+        android:alpha="0"
+        app:cardBackgroundColor="@color/transparent"
+        app:cardCornerRadius="3dp"
+        app:cardElevation="0dp"
+        app:gradient="@drawable/gradient_price_up"
+        app:gradientSecond="@drawable/gradient_price_down"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title" />
+
+    <TextView
+        android:id="@+id/title"
+        style="@style/Micro"
+        android:layout_width="79dp"
+        android:layout_height="wrap_content"
+        android:textColor="@color/grey"
+        android:visibility="invisible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="BTC Dominance" />
+
+    <TextView
+        android:id="@+id/value"
+        style="@style/Subhead2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="14dp"
+        android:includeFontPadding="false"
+        android:textColor="?ColorBran"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/diffCircle"
+        tools:text="64.09%" />
+
+    <TextView
+        android:id="@+id/diffPercentage"
+        style="@style/Caption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:includeFontPadding="false"
+        android:textColor="?ColorRemus"
+        app:layout_constraintBottom_toBottomOf="@id/diffCircle"
+        app:layout_constraintStart_toStartOf="@+id/value"
+        tools:text="+6.91%" />
+
+</merge>

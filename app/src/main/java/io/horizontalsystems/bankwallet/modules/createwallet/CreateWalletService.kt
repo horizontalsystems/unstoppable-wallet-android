@@ -6,6 +6,7 @@ import io.reactivex.subjects.BehaviorSubject
 
 class CreateWalletService(
         private val predefinedAccountType: PredefinedAccountType?,
+        private val predefinedAccountTypeManager: IPredefinedAccountTypeManager,
         private val coinManager: ICoinManager,
         private val accountCreator: IAccountCreator,
         private val accountManager: IAccountManager,
@@ -13,12 +14,12 @@ class CreateWalletService(
         private val derivationSettingsManager: IDerivationSettingsManager
 ) : CreateWalletModule.IService, Clearable {
 
-    override val stateObservable = BehaviorSubject.create<State>()
-    override val canCreate = BehaviorSubject.create<Boolean>()
+    override val stateAsync = BehaviorSubject.create<State>()
+    override val canCreateAsync = BehaviorSubject.create<Boolean>()
     override var state: State = State()
         set(value) {
             field = value
-            stateObservable.onNext(value)
+            stateAsync.onNext(value)
         }
 
     private val accounts = mutableMapOf<PredefinedAccountType, Account>()
@@ -53,7 +54,12 @@ class CreateWalletService(
             accountManager.save(it)
         }
 
-        derivationSettingsManager.reset()
+        for (account in accounts) {
+            if(predefinedAccountTypeManager.predefinedAccountType(account.type) == PredefinedAccountType.Standard){
+                derivationSettingsManager.resetStandardSettings()
+                break
+            }
+        }
 
         walletManager.save(wallets.map { it.value })
     }
@@ -67,23 +73,19 @@ class CreateWalletService(
         } ?: coins
     }
 
-    private fun item(coin: Coin): Item? {
-        return if (coin.type.predefinedAccountType.isCreationSupported()) {
-            Item(coin, wallets.containsKey(coin))
-        } else {
-            null
-        }
+    private fun item(coin: Coin): Item {
+        return Item(coin, wallets.containsKey(coin))
     }
 
     private fun syncState() {
         val featuredCoins = filteredCoins(coinManager.featuredCoins)
         val coins = filteredCoins(coinManager.coins).filter { !featuredCoins.contains(it) }
 
-        state = State(featuredCoins.mapNotNull { item(it) }, coins.mapNotNull { item(it) })
+        state = State(featuredCoins.map { item(it) }, coins.map { item(it) })
     }
 
     private fun syncCanCreate() {
-        canCreate.onNext(wallets.isNotEmpty())
+        canCreateAsync.onNext(wallets.isNotEmpty())
     }
 
     private fun resolveAccount(predefinedAccountType: PredefinedAccountType) : Account {

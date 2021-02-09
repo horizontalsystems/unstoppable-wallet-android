@@ -16,10 +16,10 @@ interface BlockchainSettingDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(item: BlockchainSetting)
 
-    @Query("DELETE FROM BlockchainSetting")
-    fun deleteAll()
-
     @Query("SELECT * FROM BlockchainSetting WHERE coinType = :coinType AND `key` == :key")
     fun getSetting(coinType: CoinType, key: String): BlockchainSetting?
+
+    @Query("DELETE FROM BlockchainSetting WHERE `key` = :key")
+    fun deleteDerivationSettings(key: String)
 
 }

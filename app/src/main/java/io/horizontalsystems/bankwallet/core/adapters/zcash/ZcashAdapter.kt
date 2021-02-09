@@ -26,7 +26,7 @@ class ZcashAdapter(
 ) : IAdapter, IBalanceAdapter, IReceiveAdapter, ITransactionsAdapter, ISendZcashAdapter {
 
     private val confirmationsThreshold = 10
-    private val feeInZatoshi = 10_000L //0.0001 ZEC
+    private val feeChangeHeight: Long = if (testMode) 1_028_500 else 1_077_550
     private val lightWalletDHost = if (testMode) "lightwalletd.testnet.electriccoin.co" else "zcash.horizontalsystems.xyz"
     private val lightWalletDPort = 9067
 
@@ -65,6 +65,18 @@ class ZcashAdapter(
         synchronizer.onChainErrorHandler = ::onChainError
     }
 
+    private fun defaultFee(height: Long? = null): Long {
+        return if (height == null || height > feeChangeHeight) 1_000 else 10_000
+    }
+
+    private var syncState: AdapterState = AdapterState.Syncing(0, null)
+        set(value) {
+            if (value != field) {
+                field = value
+                adapterStateUpdatedSubject.onNext(Unit)
+            }
+        }
+
     //region IAdapter
     override fun start() {
         synchronizer.start()
@@ -82,15 +94,10 @@ class ZcashAdapter(
     //endregion
 
     //region IBalanceAdapter
-    override var state: AdapterState = AdapterState.Syncing(0, null)
-        set(value) {
-            if (value != field) {
-                field = value
-                adapterStateUpdatedSubject.onNext(Unit)
-            }
-        }
+    override val balanceState: AdapterState
+        get() = syncState
 
-    override val stateUpdatedFlowable: Flowable<Unit>
+    override val balanceStateUpdatedFlowable: Flowable<Unit>
         get() = adapterStateUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
 
     override val balance: BigDecimal
@@ -123,6 +130,13 @@ class ZcashAdapter(
     //endregion
 
     //region ITransactionsAdapter
+
+    override val transactionsState: AdapterState
+        get() = syncState
+
+    override val transactionsStateUpdatedFlowable: Flowable<Unit>
+        get() = adapterStateUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
+
     override val lastBlockInfo: LastBlockInfo?
         get() = LastBlockInfo(synchronizer.latestHeight)
 
@@ -149,9 +163,10 @@ class ZcashAdapter(
 
     //region ISendZcashAdapter
     override val availableBalance: BigDecimal
-        get() = (synchronizer.latestBalance.availableZatoshi - feeInZatoshi).coerceAtLeast(0).convertZatoshiToZec()
+        get() = (synchronizer.latestBalance.availableZatoshi - defaultFee()).coerceAtLeast(0).convertZatoshiToZec()
 
-    override val fee: BigDecimal = feeInZatoshi.convertZatoshiToZec()
+    override val fee: BigDecimal
+        get() = defaultFee().convertZatoshiToZec()
 
     override fun validate(address: String) {
         runBlocking {
@@ -191,11 +206,11 @@ class ZcashAdapter(
     }
 
     private fun onStatus(status: Synchronizer.Status) {
-        state = when (status) {
+        syncState = when (status) {
             Synchronizer.Status.STOPPED -> AdapterState.NotSynced(Exception("stopped"))
             Synchronizer.Status.DISCONNECTED -> AdapterState.NotSynced(Exception("disconnected"))
             Synchronizer.Status.SYNCED -> AdapterState.Synced
-            else -> state
+            else -> syncState
         }
     }
 
@@ -219,7 +234,7 @@ class ZcashAdapter(
         val totalProgress = (downloadProgress + scanProgress) / 2
 
         if (totalProgress < 100) {
-            state = AdapterState.Syncing(totalProgress, null)
+            syncState = AdapterState.Syncing(totalProgress, null)
         }
     }
 
@@ -241,10 +256,11 @@ class ZcashAdapter(
                         blockHeight = if (it.minedHeight > 0) it.minedHeight.toLong() else null,
                         confirmationsThreshold = confirmationsThreshold,
                         amount = it.value.convertZatoshiToZec(),
-                        fee = fee,
+                        fee = defaultFee(it.minedHeight.toLong()).convertZatoshiToZec(),
                         timestamp = it.timestamp,
                         failed = it.failed,
                         from = null,
+                        memo = it.memo,
                         to = it.toAddress,
                         lockInfo = null,
                         conflictingTxHash = null,

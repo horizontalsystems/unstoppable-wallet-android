@@ -85,7 +85,40 @@
         <item name="android:textColor">@color/button_secondary_text_color_selector</item>
         <item name="android:textSize">14sp</item>
         <item name="android:ellipsize">middle</item>
-        <item name="android:singleLine">true</item>
+        <item name="android:maxLines">1</item>
+    </style>
+
+    <style name="ButtonSecondaryTransparent" parent="Subhead1">
+        <item name="android:background">@color/transparent</item>
+        <item name="android:textColor">@color/button_secondary_transparent</item>
+        <item name="android:minWidth">0dp</item>
+        <item name="android:minHeight">0dp</item>
+        <item name="android:paddingTop">6dp</item>
+        <item name="android:paddingBottom">6dp</item>
+        <item name="android:paddingStart">16dp</item>
+        <item name="android:paddingEnd">16dp</item>
+    </style>
+
+    <style name="ButtonSecondaryTransparentEndIcon" parent="ButtonSecondaryTransparent">
+        <item name="android:drawableTint">@color/button_secondary_transparent</item>
+        <item name="android:drawablePadding">4dp</item>
+        <item name="android:paddingEnd">8dp</item>
+    </style>
+
+    <style name="ButtonThird" parent="CaptionSB">
+        <item name="android:background">@drawable/rounded_14</item>
+        <item name="android:backgroundTint">@color/button_third_bg</item>
+        <item name="android:textColor">@color/button_third_text</item>
+        <item name="android:minWidth">0dp</item>
+        <item name="android:minHeight">0dp</item>
+        <item name="android:paddingTop">5dp</item>
+        <item name="android:paddingBottom">5dp</item>
+        <item name="android:paddingStart">10dp</item>
+        <item name="android:paddingEnd">10dp</item>
+    </style>
+
+    <style name="RadioButtonThird" parent="ButtonThird">
+        <item name="android:button">@color/transparent</item>
     </style>
 
     <style name="ButtonTransparent" parent="ButtonSecondary">
