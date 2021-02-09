@@ -154,7 +154,7 @@ data class MarketViewItem(
 
     companion object {
         fun create(marketItem: MarketItem, marketField: MarketField): MarketViewItem {
-            val formattedRate = App.numberFormatter.formatFiat(marketItem.rate.value, marketItem.rate.currency.symbol, 2, 2)
+            val formattedRate = App.numberFormatter.formatFiat(marketItem.rate.value, marketItem.rate.currency.symbol, 0, 6)
 
             val marketDataValue = when (marketField) {
                 MarketField.MarketCap -> {
