@@ -64,25 +64,25 @@
     <string name="Backup_Button_Backup">Резервная копия</string>
     <string name="Backup_Button_ShowKey">Показать Ключ</string>
     <!--Market-->
-    <string name="Market_Field_MarketCap">Рын. Кап.</string>
-    <string name="Market_Field_Volume">Объём</string>
-    <string name="Market_Field_PriceDiff">Цена</string>
-    <string name="Market_Title">Рынок</string>
-    <string name="Market_Search">Поиск</string>
+    <string name="Market_Field_MarketCap">MCap</string>
+    <string name="Market_Field_Volume">Volume</string>
+    <string name="Market_Field_PriceDiff">Price</string>
+    <string name="Market_Title">Market</string>
+    <string name="Market_Search">Search</string>
     <string name="Market_Field_HighestCap">Highest Cap</string>
     <string name="Market_Field_LowestCap">Lowest Cap</string>
     <string name="Market_Field_HighestVolume">Highest Volume</string>
     <string name="Market_Field_LowestVolume">Lowest Volume</string>
     <string name="Market_Field_HighestPrice">Highest Price</string>
     <string name="Market_Field_LowestPrice">Lowest Price</string>
-    <string name="Market_Sort_PopupTitle">Сортировать по</string>
+    <string name="Market_Sort_PopupTitle">Sort by</string>
     <string name="Market_TotalMarketCap">Total\nMarket Cap</string>
     <string name="Market_BtcDominance">BTC Dominance</string>
-    <string name="Market_Volume24h">Объем за 24 ч.</string>
+    <string name="Market_Volume24h">24h Volume</string>
     <string name="Market_TvlDeFi">TVL в DeFi</string>
-    <string name="Market_DeFiCap">Рын. стоимость DeFi</string>
-    <string name="Market_SeeAll">Показать все</string>
-    <string name="Market_Tab_Overview">Обзор</string>
+    <string name="Market_DeFiCap">DeFi Cap</string>
+    <string name="Market_SeeAll">See All</string>
+    <string name="Market_Tab_Overview">Overview</string>
     <string name="Market_Tab_Discovery">Discovery</string>
     <string name="Market_Tab_Watchlist">Watchlist</string>
     <string name="Market_Tab_Watchlist_EmptyList">You don\’t have any favorite assets.\nYou can add the favorites by clicking on star icon in the asset page</string>
@@ -94,7 +94,7 @@
     <string name="Market_Category_Dexes_Description">Decentralized cryptocurrency exchanges.</string>
     <string name="Market_Category_Lending">Lending</string>
     <string name="Market_Category_Lending_Description">Protocols for lending and borrowing.</string>
-    <string name="Market_Category_Privacy">Приватность</string>
+    <string name="Market_Category_Privacy">Privacy</string>
     <string name="Market_Category_Privacy_Description">Projects working on privacy solutions.</string>
     <string name="Market_Category_Scaling">Scaling</string>
     <string name="Market_Category_Scaling_Description">Solutions for faster blockchain transactions.</string>
@@ -457,7 +457,7 @@
     <string name="Hud_UnknownError">%s</string>
     <!--Manage Coins-->
     <string name="ManageCoins_title">Выберите Токены</string>
-    <string name="ManageCoins_Search">Поиск</string>
+    <string name="ManageCoins_Search">Search</string>
     <string name="ManageCoins_AddToken">Добавить Токен</string>
     <!-- Experimental Feature -->
     <string name="ExperimentalFeatures_Title">Функции</string>
@@ -555,7 +555,7 @@
     <string name="Charts_TimeDuration_HalfYear">6М</string>
     <string name="Charts_TimeDuration_Year">1Г</string>
     <string name="Charts_TimeDuration_Year2">2Г</string>
-    <string name="Charts_MarketCap">Рын. Кап.</string>
+    <string name="Charts_MarketCap">Market Cap</string>
     <string name="Charts_Volume24">Объем (24 ч)</string>
     <string name="Charts_inCirculation">В обороте</string>
     <string name="Charts_TotalSupply">Макс.выпуск</string>
