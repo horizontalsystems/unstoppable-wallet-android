@@ -318,6 +318,7 @@
     <string name="TransactionInfo_RawTransaction">로우 트랜잭션</string>
     <string name="TransactionInfo_To">에게</string>
     <string name="TransactionInfo_From">로 부터</string>
+    <string name="TransactionInfo_Memo">Memo</string>
     <string name="TransactionInfo_LockedUntil">까지 잠그기 %s</string>
     <string name="TransactionInfo_UnlockedAt">%s에서 잠금 해제됨</string>
     <string name="TransactionInfo_RecipientHash">수령인</string>
