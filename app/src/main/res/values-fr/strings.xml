@@ -319,6 +319,7 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="TransactionInfo_RawTransaction">Transaction brute</string>
     <string name="TransactionInfo_To">À</string>
     <string name="TransactionInfo_From">De</string>
+    <string name="TransactionInfo_Memo">Memo</string>
     <string name="TransactionInfo_LockedUntil">Verrouillé jusqu\'au %s</string>
     <string name="TransactionInfo_UnlockedAt">Déverrouillé à %s</string>
     <string name="TransactionInfo_RecipientHash">Destinataire</string>
