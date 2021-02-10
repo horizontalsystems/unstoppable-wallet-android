@@ -572,8 +572,8 @@
     <string name="RateList_top100">En Beğenilen 100</string>
     <string name="RateList_Rank">Derece</string>
     <string name="RateList_TopGainers">Top Gainers</string>
-    <string name="RateList_TopLosers">Çok Kaybedenler</string>
-    <string name="RateList_TopByVolume">Top Loosers</string>
+    <string name="RateList_TopLosers">Top Losers</string>
+    <string name="RateList_TopByVolume">Top by Volume</string>
     <!-- Balance Sync Error -->
     <string name="BalanceSyncError_Title">Senk. hatası</string>
     <string name="BalanceSyncError_ButtonRetry">Yeniden Dene</string>
