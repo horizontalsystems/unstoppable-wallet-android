@@ -65,8 +65,8 @@
     <string name="Backup_Button_ShowKey">Schlüssel anzeigen</string>
     <!--Market-->
     <string name="Market_Field_MarketCap">MCap</string>
-    <string name="Market_Field_Volume">Lautstärke</string>
-    <string name="Market_Field_PriceDiff">Preis</string>
+    <string name="Market_Field_Volume">Volume</string>
+    <string name="Market_Field_PriceDiff">Price</string>
     <string name="Market_Title">Market</string>
     <string name="Market_Search">Search</string>
     <string name="Market_Field_HighestCap">Highest Cap</string>
