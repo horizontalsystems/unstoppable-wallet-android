@@ -318,6 +318,7 @@
     <string name="TransactionInfo_RawTransaction">Transacción sin procesar</string>
     <string name="TransactionInfo_To">Para</string>
     <string name="TransactionInfo_From">Desde </string>
+    <string name="TransactionInfo_Memo">Memo</string>
     <string name="TransactionInfo_LockedUntil">Bloqueado hasta %s</string>
     <string name="TransactionInfo_UnlockedAt">Desbloqueado en %s</string>
     <string name="TransactionInfo_RecipientHash">Destinatario</string>
