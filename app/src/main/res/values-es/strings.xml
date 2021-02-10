@@ -573,7 +573,7 @@ poner en peligro la seguridad de mis fondos.</string>
     <string name="RateList_top100">Top 100</string>
     <string name="RateList_Rank">Puesto</string>
     <string name="RateList_TopGainers">Top Gainers</string>
-    <string name="RateList_TopLosers">Peores perdedores</string>
+    <string name="RateList_TopLosers">Top Losers</string>
     <string name="RateList_TopByVolume">Top by Volume</string>
     <!-- Balance Sync Error -->
     <string name="BalanceSyncError_Title">Error de sincronización</string>
