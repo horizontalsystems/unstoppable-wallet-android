@@ -318,6 +318,7 @@
     <string name="TransactionInfo_RawTransaction">Ham işlem</string>
     <string name="TransactionInfo_To">Alan</string>
     <string name="TransactionInfo_From">Gönderen</string>
+    <string name="TransactionInfo_Memo">Memo</string>
     <string name="TransactionInfo_LockedUntil">Şu zamana kadar kitlendi %s</string>
     <string name="TransactionInfo_UnlockedAt">Kilid açıldı %s</string>
     <string name="TransactionInfo_RecipientHash">Alıcı</string>
