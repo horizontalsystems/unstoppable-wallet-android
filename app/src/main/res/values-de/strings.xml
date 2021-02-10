@@ -17,7 +17,7 @@
     <string name="Button_Retry">Wiederholen</string>
     <string name="Button_Change">Ändern</string>
     <string name="Button_Add">Hinzufügen</string>
-    <string name="Button_Approve">Bestätigen</string>
+    <string name="Button_Approve">Genehmigen</string>
     <string name="Button_Connect">Verbinden</string>
     <string name="Button_Reject">Verwerfen</string>
     <string name="Button_Disconnect">Verbindung trennen</string>
@@ -246,7 +246,7 @@
     <string name="Swap_ErrorNoLiquidity">Diese Token sind nicht tauschbar</string>
     <string name="Swap_ErrorHighPriceImpact">Hohe Preisauswirkung</string>
     <string name="Swap_Proceed">Weiter</string>
-    <string name="Swap_Approve">Bestätigen</string>
+    <string name="Swap_Approve">Genehmigen</string>
     <string name="Swap_Approving">Wird bestätigt...</string>
     <string name="Swap_Swapping">Swapping</string>
     <string name="Swap_MaximumPaid">Maximal bezahlt</string>
@@ -318,6 +318,7 @@
     <string name="TransactionInfo_RawTransaction">Rohdaten der Transaktion</string>
     <string name="TransactionInfo_To">An</string>
     <string name="TransactionInfo_From">Von</string>
+    <string name="TransactionInfo_Memo">Memo</string>
     <string name="TransactionInfo_LockedUntil">Gesperrt bis %s</string>
     <string name="TransactionInfo_UnlockedAt">Freigegeben am %s</string>
     <string name="TransactionInfo_RecipientHash">Empfänger</string>
