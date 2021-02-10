@@ -318,6 +318,7 @@
     <string name="TransactionInfo_RawTransaction">تراکنش خام</string>
     <string name="TransactionInfo_To">به</string>
     <string name="TransactionInfo_From">از</string>
+    <string name="TransactionInfo_Memo">Memo</string>
     <string name="TransactionInfo_LockedUntil">قفل شده تا %s</string>
     <string name="TransactionInfo_UnlockedAt">باز شده در %s</string>
     <string name="TransactionInfo_RecipientHash">گیرنده</string>

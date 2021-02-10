@@ -318,6 +318,7 @@
     <string name="TransactionInfo_RawTransaction">Transacción sin procesar</string>
     <string name="TransactionInfo_To">Para</string>
     <string name="TransactionInfo_From">Desde </string>
+    <string name="TransactionInfo_Memo">Memo</string>
     <string name="TransactionInfo_LockedUntil">Bloqueado hasta %s</string>
     <string name="TransactionInfo_UnlockedAt">Desbloqueado en %s</string>
     <string name="TransactionInfo_RecipientHash">Destinatario</string>
@@ -572,7 +573,7 @@ poner en peligro la seguridad de mis fondos.</string>
     <string name="RateList_top100">Top 100</string>
     <string name="RateList_Rank">Puesto</string>
     <string name="RateList_TopGainers">Top Gainers</string>
-    <string name="RateList_TopLosers">Peores perdedores</string>
+    <string name="RateList_TopLosers">Top Losers</string>
     <string name="RateList_TopByVolume">Top by Volume</string>
     <!-- Balance Sync Error -->
     <string name="BalanceSyncError_Title">Error de sincronización</string>

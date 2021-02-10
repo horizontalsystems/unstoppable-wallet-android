@@ -66,7 +66,7 @@
     <!--Market-->
     <string name="Market_Field_MarketCap">MCap</string>
     <string name="Market_Field_Volume">Volume</string>
-    <string name="Market_Field_PriceDiff">금액</string>
+    <string name="Market_Field_PriceDiff">Price</string>
     <string name="Market_Title">Market</string>
     <string name="Market_Search">Search</string>
     <string name="Market_Field_HighestCap">Highest Cap</string>
@@ -118,7 +118,7 @@
     <string name="Market_Category_Metals_Description">Tokens pegged to metal prices.</string>
     <string name="Market_Category_RiskManagement">Risk Management</string>
     <string name="Market_Category_RiskManagement_Description">Risk assessment, insurance and hedging.</string>
-    <string name="Market_Category_Wallets">지갑</string>
+    <string name="Market_Category_Wallets">Wallets</string>
     <string name="Market_Category_Wallets_Description">Tokens issued by cryptocurrency wallets.</string>
     <string name="Market_Category_Synthetics">Synthetics</string>
     <string name="Market_Category_Synthetics_Description">Platforms for creating decentralized synthetic assets.</string>
@@ -318,6 +318,7 @@
     <string name="TransactionInfo_RawTransaction">로우 트랜잭션</string>
     <string name="TransactionInfo_To">에게</string>
     <string name="TransactionInfo_From">로 부터</string>
+    <string name="TransactionInfo_Memo">Memo</string>
     <string name="TransactionInfo_LockedUntil">까지 잠그기 %s</string>
     <string name="TransactionInfo_UnlockedAt">%s에서 잠금 해제됨</string>
     <string name="TransactionInfo_RecipientHash">수령인</string>
@@ -573,7 +574,7 @@
     <string name="RateList_top100">상위 100</string>
     <string name="RateList_Rank">순위</string>
     <string name="RateList_TopGainers">Top Gainers</string>
-    <string name="RateList_TopLosers">탑 루저</string>
+    <string name="RateList_TopLosers">Top Losers</string>
     <string name="RateList_TopByVolume">Top by Volume</string>
     <!-- Balance Sync Error -->
     <string name="BalanceSyncError_Title">동기화 오류</string>

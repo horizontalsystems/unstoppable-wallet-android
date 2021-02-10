@@ -17,7 +17,7 @@
     <string name="Button_Retry">Повторить</string>
     <string name="Button_Change">Изменить</string>
     <string name="Button_Add">Добавить</string>
-    <string name="Button_Approve">Подтвердить</string>
+    <string name="Button_Approve">Разрешить</string>
     <string name="Button_Connect">Подключиться</string>
     <string name="Button_Reject">Отклонить</string>
     <string name="Button_Disconnect">Отсоединить</string>
@@ -246,7 +246,7 @@
     <string name="Swap_ErrorNoLiquidity">Невозможно обменять эти токены</string>
     <string name="Swap_ErrorHighPriceImpact">Высокое отклонение цены</string>
     <string name="Swap_Proceed">Далее</string>
-    <string name="Swap_Approve">Подтвердить</string>
+    <string name="Swap_Approve">Разрешить</string>
     <string name="Swap_Approving">Подтверждение...</string>
     <string name="Swap_Swapping">Обмен</string>
     <string name="Swap_MaximumPaid">Максимальная Выплата</string>
@@ -273,7 +273,7 @@
     <string name="Swap_Confirmation">Подтверждение</string>
     <!--Swap Coin Select-->
     <!--Approve-->
-    <string name="Approve_Title">Подтверждение Обмена</string>
+    <string name="Approve_Title">Разрешить Обмен</string>
     <string name="Approve_Info">Вы должны предоставить разрешение на смарт-контракт для того, чтобы обменивать указанный токен от вашего имени. Это разрешение определяет сумму, которая может быть использована по смарт-контракту. Это не повлияет на ваш баланс, но для подтверждения транзакции будет взята небольшая комиссия за ее выполнение.\n\nРазрешение можно запрашивать перед каждой сделкой, но дешевле заранее утвердить более высокую сумму для будущих операций.</string>
     <string name="Approve_Error_AlreadyApproved">У вас уже есть разрешение на эту сумму</string>
     <!--Uniswap Info -->
@@ -318,6 +318,7 @@
     <string name="TransactionInfo_RawTransaction">Неподтвержденная Транзакция</string>
     <string name="TransactionInfo_To">Кому</string>
     <string name="TransactionInfo_From">От</string>
+    <string name="TransactionInfo_Memo">Memo</string>
     <string name="TransactionInfo_LockedUntil">Заблокировано до %s</string>
     <string name="TransactionInfo_UnlockedAt">Разблокировано %s</string>
     <string name="TransactionInfo_RecipientHash">Получатель</string>
@@ -574,8 +575,8 @@
     <string name="RateList_top100">Топ-100</string>
     <string name="RateList_Rank">Месту</string>
     <string name="RateList_TopGainers">Top Gainers</string>
-    <string name="RateList_TopLosers">Топ Проигравших</string>
-    <string name="RateList_TopByVolume">Увеличить объем</string>
+    <string name="RateList_TopLosers">Top Losers</string>
+    <string name="RateList_TopByVolume">Top by Volume</string>
     <!-- Balance Sync Error -->
     <string name="BalanceSyncError_Title">Ошибка Синхронизации</string>
     <string name="BalanceSyncError_ButtonRetry">Повторить</string>
