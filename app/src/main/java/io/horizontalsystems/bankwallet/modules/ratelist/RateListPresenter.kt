@@ -129,7 +129,7 @@ class RateListPresenter(
 
     private fun lastUpdateTimestamp(marketInfos: Map<String, MarketInfo?>): Long? {
         val allTimestamps = marketInfos.map { it.value?.timestamp }.filterNotNull()
-        return allTimestamps.max()
+        return allTimestamps.maxOrNull()
     }
 
 }

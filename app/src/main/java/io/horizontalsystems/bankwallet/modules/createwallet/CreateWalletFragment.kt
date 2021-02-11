@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.createwallet
 
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.view.MenuItem
 import android.view.View
 import androidx.lifecycle.Observer
@@ -32,7 +33,7 @@ class CreateWalletFragment : CoinListBaseFragment() {
             when (item.itemId) {
                 R.id.menuDone -> {
                     hideKeyboard()
-                    Handler().postDelayed({
+                    Handler(Looper.getMainLooper()).postDelayed({
                         viewModel.onCreate()
                     }, 100)
                     true

@@ -23,8 +23,8 @@ class MarketFavoritesService(
                 .flatMap { coinCodes ->
                     rateManager.getCoinMarketList(coinCodes, currency.code)
                 }
-                .map {
-                    it.mapIndexed { index, topMarket ->
+                .subscribeIO({
+                    marketItems = it.map { topMarket ->
                         MarketItem.createFromCoinMarket(topMarket, currency, null)
                     }
                 }

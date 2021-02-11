@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.restore
 
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -42,7 +43,7 @@ class RestoreFragment : BaseFragment() {
         viewModel = ViewModelProvider(this, RestoreModule.Factory(selectCoins, predefinedAccountType, coinToEnable))
                 .get(RestoreViewModel::class.java)
 
-        Handler().postDelayed({
+        Handler(Looper.getMainLooper()).postDelayed({
             //without delay fragment is opened without slide animation
             openScreen(viewModel.initialScreen, addToStack = false)
         }, 10)
@@ -117,21 +118,21 @@ class RestoreFragment : BaseFragment() {
     }
 
     private fun setPredefinedAccountTypeListener() {
-        childFragmentManager.setFragmentResultListener(selectPredefinedAccountTypeRequestKey, viewLifecycleOwner, FragmentResultListener { requestKey, result ->
+        childFragmentManager.setFragmentResultListener(selectPredefinedAccountTypeRequestKey, viewLifecycleOwner, FragmentResultListener { _, result ->
             val predefinedAccountType = result.getParcelable<PredefinedAccountType>(predefinedAccountTypeBundleKey) ?: return@FragmentResultListener
             viewModel.onSelect(predefinedAccountType)
         })
     }
 
     private fun setAccountTypeListener() {
-        childFragmentManager.setFragmentResultListener(accountTypeRequestKey, viewLifecycleOwner, FragmentResultListener { requestKey, result ->
+        childFragmentManager.setFragmentResultListener(accountTypeRequestKey, viewLifecycleOwner, FragmentResultListener { _, result ->
             val accountType = result.getParcelable<AccountType>(accountTypeBundleKey) ?: return@FragmentResultListener
             viewModel.onEnter(accountType)
         })
     }
 
     private fun setSelectCoinsListener() {
-        childFragmentManager.setFragmentResultListener(selectCoinsRequestKey, viewLifecycleOwner, FragmentResultListener { requestKey, result ->
+        childFragmentManager.setFragmentResultListener(selectCoinsRequestKey, viewLifecycleOwner, FragmentResultListener { _, result ->
             val selectedCoins = result.getParcelableArrayList<Coin>(selectCoinsBundleKey) ?: return@FragmentResultListener
             viewModel.onSelect(selectedCoins)
         })

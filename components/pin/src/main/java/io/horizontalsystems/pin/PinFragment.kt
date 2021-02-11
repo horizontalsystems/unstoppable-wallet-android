@@ -2,6 +2,7 @@ package io.horizontalsystems.pin
 
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -181,7 +182,7 @@ class PinFragment : Fragment(), NumPadItemsAdapter.Listener, PinPagesAdapter.Lis
         })
 
         pinView.showPageAtIndex.observe(viewLifecycleOwner, Observer {
-            Handler().postDelayed({
+            Handler(Looper.getMainLooper()).postDelayed({
                 pinPagesRecyclerView.smoothScrollToPosition(it)
                 viewDelegate.resetPin()
                 pinPagesAdapter.setEnteredPinLength(layoutManager.findFirstVisibleItemPosition(), 0)
@@ -211,7 +212,7 @@ class PinFragment : Fragment(), NumPadItemsAdapter.Listener, PinPagesAdapter.Lis
         pinView.resetCirclesWithShakeAndDelayForPage.observe(viewLifecycleOwner, Observer { pageIndex ->
             pinPagesAdapter.shakePageIndex = pageIndex
             pinPagesAdapter.notifyDataSetChanged()
-            Handler().postDelayed({
+            Handler(Looper.getMainLooper()).postDelayed({
                 pinPagesAdapter.shakePageIndex = null
                 viewDelegate.resetPin()
                 pinPagesAdapter.setEnteredPinLength(pageIndex, 0)

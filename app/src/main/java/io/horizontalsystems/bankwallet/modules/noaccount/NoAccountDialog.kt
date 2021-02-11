@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.noaccount
 import android.content.DialogInterface
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
@@ -70,7 +71,7 @@ class NoAccountDialog: BaseBottomSheetDialogFragment() {
 
         viewModel.accountCreateSuccessLiveEvent.observe(viewLifecycleOwner, Observer {
             HudHelper.showSuccessMessage(this.requireView(), R.string.Hud_Text_Done)
-            Handler().postDelayed({
+            Handler(Looper.getMainLooper()).postDelayed({
                 dismiss()
             }, 1500)
         })

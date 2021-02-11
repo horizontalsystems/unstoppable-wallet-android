@@ -65,7 +65,7 @@ class ConfirmationFragment(private var sendPresenter: SendPresenter?) : BaseFrag
         })
 
         presenterView?.showCopied?.observe(viewLifecycleOwner, Observer {
-            context?.let { context -> HudHelper.showSuccessMessage(this.requireView(), R.string.Hud_Text_Copied) }
+            HudHelper.showSuccessMessage(this.requireView(), R.string.Hud_Text_Copied)
         })
 
         presenterView?.addSecondaryDataViewItem?.observe(viewLifecycleOwner, Observer { secondaryData ->

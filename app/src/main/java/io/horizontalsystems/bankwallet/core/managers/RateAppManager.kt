@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.core.managers
 import android.content.Intent
 import android.net.Uri
 import android.os.Handler
+import android.os.Looper
 import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.IRateAppManager
@@ -95,13 +96,10 @@ class RateAppManager(
     }
 
     private fun startCountdownChecker() {
-        val handler = Handler()
-        handler.postDelayed(
-                {
-                    isCountdownPassed = true
-                    onCountdownPass()
-                },
-                COUNTDOWN_TIME_INTERVAL)
+        Handler(Looper.getMainLooper()).postDelayed({
+            isCountdownPassed = true
+            onCountdownPass()
+        }, COUNTDOWN_TIME_INTERVAL)
     }
 
     companion object {

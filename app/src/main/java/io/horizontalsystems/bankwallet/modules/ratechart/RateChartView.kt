@@ -47,16 +47,16 @@ class RateChartView : RateChartModule.View {
         showError.postValue(ex)
     }
 
-    override fun setEmaEnabled(visible: Boolean) {
-        showEma.postValue(visible)
+    override fun setEmaEnabled(enabled: Boolean) {
+        showEma.postValue(enabled)
     }
 
-    override fun setMacdEnabled(visible: Boolean) {
-        showMacd.postValue(visible)
+    override fun setMacdEnabled(enabled: Boolean) {
+        showMacd.postValue(enabled)
     }
 
-    override fun setRsiEnabled(visible: Boolean) {
-        showRsi.postValue(visible)
+    override fun setRsiEnabled(enabled: Boolean) {
+        showRsi.postValue(enabled)
     }
 
     override fun notificationIconUpdated() {

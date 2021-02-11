@@ -50,11 +50,11 @@ object AppLog {
     private fun getStackTraceString(error: Throwable): String {
         val sb = StringBuilder()
 
-        sb.appendln(error)
+        sb.appendLine(error)
 
         error.stackTrace.forEachIndexed { index, stackTraceElement ->
             if (index < 5) {
-                sb.appendln(stackTraceElement)
+                sb.appendLine(stackTraceElement)
             }
         }
 

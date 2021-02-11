@@ -23,7 +23,7 @@ class SettingsViewSwitch @JvmOverloads constructor(context: Context, attrs: Attr
     }
 
     fun setOnCheckedChangeListener(listener: (Boolean) -> Unit) {
-        onCheckedChangeListener = CompoundButton.OnCheckedChangeListener { buttonView, isChecked ->
+        onCheckedChangeListener = CompoundButton.OnCheckedChangeListener { _, isChecked ->
             listener(isChecked)
         }
     }

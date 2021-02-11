@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.createwallet
 
 import android.os.Handler
+import android.os.Looper
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.Clearable
@@ -27,7 +28,7 @@ class CreateWalletViewModel(
     private var filter: String? = null
 
     init {
-        Handler().postDelayed({
+        Handler(Looper.getMainLooper()).postDelayed({
             syncViewState()
 
             service.stateAsync

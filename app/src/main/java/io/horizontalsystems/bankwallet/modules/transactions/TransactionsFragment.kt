@@ -187,7 +187,7 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
         sentToSelfIcon.isVisible = transactionRecord.type == TransactionType.SentToSelf
         doubleSpendIcon.isVisible = transactionRecord.doubleSpend
         setLockIcon(transactionRecord.lockState)
-        setBottomIcon(transactionRecord.status, transactionRecord.type, transactionRecord.doubleSpend)
+        setBottomIcon(transactionRecord.status, transactionRecord.type)
     }
 
     fun bindUpdate(current: TransactionViewItem, prev: TransactionViewItem) {
@@ -211,7 +211,7 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
             txDate.text = current.date?.let { DateHelper.shortDate(it) }
             val time = current.date?.let { DateHelper.getOnlyTime(it) }
             txStatusWithTimeView.bind(current.status, current.type, time)
-            setBottomIcon(current.status, current.type, current.doubleSpend)
+            setBottomIcon(current.status, current.type)
         }
 
         if (current.doubleSpend != prev.doubleSpend) {
@@ -219,7 +219,7 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
         }
     }
 
-    private fun setBottomIcon(status: TransactionStatus, type: TransactionType, doubleSpend: Boolean) {
+    private fun setBottomIcon(status: TransactionStatus, type: TransactionType) {
         when (status) {
             is TransactionStatus.Processing -> {
                 bottomIcon.isVisible = false

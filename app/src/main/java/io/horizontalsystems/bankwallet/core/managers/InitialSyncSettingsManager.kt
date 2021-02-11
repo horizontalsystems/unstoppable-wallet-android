@@ -54,9 +54,7 @@ class InitialSyncSettingsManager(
     }
 
     private fun defaultSetting(supportedCoinType: CoinType): InitialSyncSetting {
-        return supportedCoinTypes.first{ it.coinType == supportedCoinType }?.let {
-            InitialSyncSetting(supportedCoinType, it.defaultSyncMode)
-        }
+        return InitialSyncSetting(supportedCoinType, supportedCoinTypes.first{ it.coinType == supportedCoinType }.defaultSyncMode)
     }
 
     private data class SupportedCoinType (

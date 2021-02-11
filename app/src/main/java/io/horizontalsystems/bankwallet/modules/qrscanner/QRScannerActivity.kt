@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -27,7 +28,7 @@ class QRScannerActivity : AppCompatActivity() {
     private val callback = BarcodeCallback {
         barcodeView.pause()
         //slow down fast transition to new window
-        Handler().postDelayed({
+        Handler(Looper.getMainLooper()).postDelayed({
             onScan(it.text)
         }, 1000)
     }

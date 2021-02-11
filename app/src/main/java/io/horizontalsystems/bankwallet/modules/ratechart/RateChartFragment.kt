@@ -256,7 +256,7 @@ class RateChartFragment : BaseFragment(), Chart.Listener {
             rsiChartIndicator.setStateEnabled(enabled)
         })
 
-        presenterView.alertNotificationUpdated.observe(viewLifecycleOwner, Observer { visible ->
+        presenterView.alertNotificationUpdated.observe(viewLifecycleOwner, Observer {
             updateNotificationMenuItem()
         })
 

@@ -27,7 +27,7 @@ class MarketListHeaderView @JvmOverloads constructor(context: Context, attrs: At
         sortingField.setOnSingleClickListener {
             listener?.onClickSortingField()
         }
-        marketFieldSelector.setOnCheckedChangeListener { group, checkedId ->
+        marketFieldSelector.setOnCheckedChangeListener { _, checkedId ->
             if (!triggerMarketFieldChangeListener) return@setOnCheckedChangeListener
 
             val marketField = when (checkedId) {

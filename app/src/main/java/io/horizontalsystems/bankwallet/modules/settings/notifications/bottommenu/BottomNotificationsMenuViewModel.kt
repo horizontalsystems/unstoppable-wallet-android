@@ -18,12 +18,8 @@ class BottomNotificationsMenuViewModel(
 
     init {
         val priceAlert = priceAlertManager.getPriceAlert(coinId)
-        priceAlert.changeState?.let {
-            changeState = it
-        }
-        priceAlert.trendState?.let {
-            trendState = it
-        }
+        changeState = priceAlert.changeState
+        trendState = priceAlert.trendState
         setItems()
     }
 

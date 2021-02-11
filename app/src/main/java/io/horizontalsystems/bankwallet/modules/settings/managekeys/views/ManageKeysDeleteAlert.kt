@@ -95,7 +95,7 @@ class ViewHolderConfirmation(override val containerView: View, private val liste
 
     init {
         confirmationCheckBox.setOnCheckedChangeListener { _, isChecked ->
-            listener.onItemCheckMarkClick(adapterPosition, isChecked)
+            listener.onItemCheckMarkClick(bindingAdapterPosition, isChecked)
         }
     }
 

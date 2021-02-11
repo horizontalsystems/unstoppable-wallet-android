@@ -18,7 +18,7 @@ interface WalletConnectRequest {
 
 class WalletConnectSendEthereumTransactionRequest(override val id: Long, val transaction: WalletConnectTransaction) : WalletConnectRequest {
 
-    constructor(id: Long, transaction: WCEthereumTransaction, x: Boolean = false) : this(id, convertTx(transaction))
+    constructor(id: Long, transaction: WCEthereumTransaction) : this(id, convertTx(transaction))
 
     override fun convertResult(result: Any): String? {
         return (result as? ByteArray)?.toHexString()
@@ -36,7 +36,7 @@ fun convertTx(transaction: WCEthereumTransaction): WalletConnectTransaction {
         throw WalletConnectSendEthereumTransactionRequest.TransactionError.NoRecipient()
     }
 
-    val walletConnectTransaction = WalletConnectTransaction(
+    return WalletConnectTransaction(
             from = Address(transaction.from),
             to = Address(to),
             nonce = transaction.nonce?.hexStringToByteArray()?.toLong(),
@@ -45,6 +45,4 @@ fun convertTx(transaction: WCEthereumTransaction): WalletConnectTransaction {
             value = transaction.value?.hexStringToByteArray()?.toBigInteger() ?: BigInteger.ZERO,
             data = transaction.data.hexStringToByteArray()
     )
-
-    return walletConnectTransaction
 }

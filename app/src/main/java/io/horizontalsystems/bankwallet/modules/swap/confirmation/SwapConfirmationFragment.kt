@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.swap.confirmation
 
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -81,7 +82,7 @@ class SwapConfirmationFragment : BaseFragment(), SwapConfirmationButtonAdapter.L
 
         viewModel.completedLiveData().observe(viewLifecycleOwner, Observer {
             HudHelper.showSuccessMessage(requireActivity().findViewById(android.R.id.content), R.string.Hud_Text_Success)
-            Handler().postDelayed({
+            Handler(Looper.getMainLooper()).postDelayed({
                 findNavController().popBackStack(R.id.swapFragment, true)
             }, 1200)
         })

@@ -83,7 +83,7 @@ class SelectorAdapter(private val list: List<SelectorItem>,
 class SelectorOptionViewHolder(override val containerView: View, private val listener: SelectorAdapter.Listener) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
     init {
-        containerView.setOnClickListener { listener.onClick(adapterPosition) }
+        containerView.setOnClickListener { listener.onClick(bindingAdapterPosition) }
     }
 
     fun bind(item: SelectorItem, showTopDivider: Boolean) {
