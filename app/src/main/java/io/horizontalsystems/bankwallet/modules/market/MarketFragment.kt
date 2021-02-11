@@ -4,10 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseWithSearchFragment
 import io.horizontalsystems.bankwallet.modules.transactions.FilterAdapter
-import io.horizontalsystems.core.navGraphViewModels
 import kotlinx.android.synthetic.main.fragment_market.*
 
 class MarketFragment : BaseWithSearchFragment(), FilterAdapter.Listener {

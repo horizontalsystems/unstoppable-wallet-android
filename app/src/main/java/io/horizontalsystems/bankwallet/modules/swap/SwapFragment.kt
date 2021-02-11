@@ -18,7 +18,7 @@ import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceViewM
 import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveFragment
 import io.horizontalsystems.bankwallet.modules.swap.coincard.SwapCoinCardViewModel
 import io.horizontalsystems.core.findNavController
-import io.horizontalsystems.core.getNavigationLiveData
+import io.horizontalsystems.core.getNavigationResult
 import io.horizontalsystems.core.setOnSingleClickListener
 import kotlinx.android.synthetic.main.fragment_swap.*
 
@@ -66,11 +66,11 @@ class SwapFragment : BaseFragment() {
 
         feeSelectorView.setFeeSelectorViewInteractions(feeViewModel, feeViewModel, viewLifecycleOwner, parentFragmentManager)
 
-        getNavigationLiveData(SwapApproveFragment.requestKey)?.observe(viewLifecycleOwner, {
+        getNavigationResult(SwapApproveFragment.requestKey)?.let {
             if (it.getBoolean(SwapApproveFragment.resultKey)) {
                 viewModel.didApprove()
             }
-        })
+        }
 
         switchButton.setOnClickListener {
             viewModel.onTapSwitch()

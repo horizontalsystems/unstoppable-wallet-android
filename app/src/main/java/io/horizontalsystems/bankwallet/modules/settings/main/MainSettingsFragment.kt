@@ -17,7 +17,7 @@ import io.horizontalsystems.bankwallet.modules.main.MainActivity
 import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectModule
 import io.horizontalsystems.core.CoreApp
-import io.horizontalsystems.core.getNavigationLiveData
+import io.horizontalsystems.core.getNavigationResult
 import io.horizontalsystems.languageswitcher.LanguageSettingsFragment
 import io.horizontalsystems.views.ListPosition
 import kotlinx.android.synthetic.main.fragment_settings.*
@@ -224,8 +224,8 @@ class MainSettingsFragment : BaseFragment() {
     }
 
     private fun subscribeFragmentResult() {
-        getNavigationLiveData(LanguageSettingsFragment.LANGUAGE_CHANGE)?.observe(viewLifecycleOwner, Observer {
+        getNavigationResult(LanguageSettingsFragment.LANGUAGE_CHANGE)?.let {
             activity?.let { MainModule.startAsNewTask(it, MainActivity.SETTINGS_TAB_POSITION) }
-        })
+        }
     }
 }
