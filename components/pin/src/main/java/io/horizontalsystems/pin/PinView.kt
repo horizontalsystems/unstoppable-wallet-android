@@ -1,6 +1,5 @@
 package io.horizontalsystems.pin
 
-import androidx.biometric.BiometricPrompt
 import androidx.lifecycle.MutableLiveData
 import io.horizontalsystems.core.SingleLiveEvent
 import java.util.*
@@ -15,7 +14,7 @@ class PinView : PinModule.IView {
     val fillPinCircles = MutableLiveData<Pair<Int, Int>>()
     val showCancelButton = MutableLiveData<Boolean>()
     val showBiometricAuthButton = SingleLiveEvent<Unit>()
-    val showBiometricAuthInput = SingleLiveEvent<BiometricPrompt.CryptoObject>()
+    val showBiometricAuthInput = SingleLiveEvent<Unit>()
     val resetCirclesWithShakeAndDelayForPage = SingleLiveEvent<Int>()
     val showLockedView = SingleLiveEvent<Date>()
     val enablePinInput = SingleLiveEvent<Unit>()
@@ -49,8 +48,8 @@ class PinView : PinModule.IView {
         showBiometricAuthButton.call()
     }
 
-    override fun showBiometricAuthDialog(cryptoObject: BiometricPrompt.CryptoObject) {
-        showBiometricAuthInput.postValue(cryptoObject)
+    override fun showBiometricAuthDialog() {
+        showBiometricAuthInput.call()
     }
 
     override fun showCancelButton() {

@@ -27,7 +27,7 @@ object PinModule {
         fun showPinWrong(pageIndex: Int)
         fun showCancelButton()
         fun fillCircles(length: Int, pageIndex: Int)
-        fun showBiometricAuthDialog(cryptoObject: BiometricPrompt.CryptoObject)
+        fun showBiometricAuthDialog()
         fun showLockView(until: Date)
         fun enablePinInput()
         fun showBiometricAuthButton()
