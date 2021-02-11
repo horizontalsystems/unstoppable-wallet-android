@@ -98,7 +98,7 @@ class ChartData(val items: MutableList<Item>, val startTimestamp: Long, val endT
         val max = listOf(histogram?.lower, histogram?.upper)
                 .mapNotNull { it }
                 .map { abs(it) }
-                .max() ?: 1f
+                .maxOrNull() ?: 1f
 
         Range(-max, max)
     }
@@ -111,7 +111,7 @@ class ChartData(val items: MutableList<Item>, val startTimestamp: Long, val endT
         val max = listOf(macd?.lower, macd?.upper, signal?.lower, signal?.upper, histogram?.lower, histogram?.upper)
                 .mapNotNull { it }
                 .map { abs(it) }
-                .max() ?: 1f
+                .maxOrNull() ?: 1f
 
         Range(-max, max)
     }

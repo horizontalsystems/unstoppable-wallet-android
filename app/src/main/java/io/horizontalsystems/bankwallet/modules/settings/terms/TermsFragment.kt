@@ -46,7 +46,7 @@ class TermsFragment : BaseFragment() {
             throw Exception("No such item in terms")
         }
         chechkbox.isChecked = terms[index].checked
-        chechkbox.setOnCheckedChangeListener { buttonView, isChecked ->
+        chechkbox.setOnCheckedChangeListener { _, _ ->
             viewModel.onTapTerm(index)
         }
     }

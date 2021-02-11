@@ -83,7 +83,7 @@ class PrivacySettingsFragment :
 
 
         // IView
-        viewModel.showPrivacySettingsInfo.observe(viewLifecycleOwner, Observer { enabled ->
+        viewModel.showPrivacySettingsInfo.observe(viewLifecycleOwner, Observer {
             findNavController().navigate(R.id.privacySettingsFragment_to_privacySettingsInfoFragment, null, navOptions())
         })
 

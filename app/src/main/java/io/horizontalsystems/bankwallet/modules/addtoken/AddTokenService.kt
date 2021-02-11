@@ -31,7 +31,7 @@ class AddTokenService(
     fun set(reference: String?) {
         disposable?.dispose()
 
-        val reference = if (reference.isNullOrEmpty()) {
+        val referenceNonNull = if (reference.isNullOrEmpty()) {
             state = AddTokenModule.State.Idle
             return
         } else {
@@ -39,20 +39,20 @@ class AddTokenService(
         }
 
         try {
-            blockchainService.validate(reference)
+            blockchainService.validate(referenceNonNull)
         } catch (e: Exception) {
             state = AddTokenModule.State.Failed(e)
             return
         }
 
-        blockchainService.existingCoin(reference, coinManager.coins)?.let {
+        blockchainService.existingCoin(referenceNonNull, coinManager.coins)?.let {
             state = AddTokenModule.State.AlreadyExists(it)
             return
         }
 
         state = AddTokenModule.State.Loading
 
-        disposable = blockchainService.coinSingle(reference)
+        disposable = blockchainService.coinSingle(referenceNonNull)
                 .subscribeOn(Schedulers.io())
                 .subscribe({ coin ->
                     state = AddTokenModule.State.Fetched(coin)

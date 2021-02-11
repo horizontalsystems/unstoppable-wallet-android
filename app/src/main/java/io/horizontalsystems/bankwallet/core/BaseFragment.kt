@@ -1,10 +1,12 @@
 package io.horizontalsystems.bankwallet.core
 
 import android.content.Context
-import android.graphics.PorterDuff
 import android.os.Handler
+import android.os.Looper
 import android.view.MenuItem
 import android.view.inputmethod.InputMethodManager
+import androidx.core.graphics.BlendModeColorFilterCompat
+import androidx.core.graphics.BlendModeCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavOptions
 import io.horizontalsystems.bankwallet.R
@@ -19,8 +21,8 @@ abstract class BaseFragment : Fragment() {
     protected fun setMenuItemEnabled(menuItem: MenuItem, enabled: Boolean) {
         menuItem.isEnabled = enabled
         context?.let { ctx ->
-            val color = if (enabled) R.color.jacob else R.color.grey
-            menuItem.icon.setColorFilter(ctx.getColor(color), PorterDuff.Mode.SRC_ATOP)
+            val color = ctx.getColor(if (enabled) R.color.jacob else R.color.grey)
+            menuItem.icon.colorFilter = BlendModeColorFilterCompat.createBlendModeColorFilterCompat(color, BlendModeCompat.SRC_ATOP)
         }
     }
 
@@ -53,7 +55,7 @@ abstract class BaseFragment : Fragment() {
                         val imeManager = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                         imeManager.showInputMethodPicker()
                         hideKeyboard()
-                        Handler().postDelayed({
+                        Handler(Looper.getMainLooper()).postDelayed({
                             try {
                                 requireActivity().onBackPressed()
                             } catch (e: NullPointerException) {

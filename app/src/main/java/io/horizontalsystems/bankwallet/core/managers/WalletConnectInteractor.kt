@@ -12,7 +12,7 @@ import okhttp3.WebSocket
 import okhttp3.WebSocketListener
 import java.util.*
 
-class WalletConnectInteractor(val session: WCSession, val peerId: String = UUID.randomUUID().toString(), val remotePeerId: String? = null) {
+class WalletConnectInteractor(val session: WCSession, val peerId: String = UUID.randomUUID().toString(), private val remotePeerId: String? = null) {
 
     interface Delegate {
         fun didUpdateState(state: State)
@@ -37,7 +37,7 @@ class WalletConnectInteractor(val session: WCSession, val peerId: String = UUID.
     private val clientMeta = WCPeerMeta("Unstoppable Wallet", "https://unstoppable.money")
     var delegate: Delegate? = null
 
-    val client = WCClient(GsonBuilder(), OkHttpClient.Builder().build())
+    private val client = WCClient(GsonBuilder(), OkHttpClient.Builder().build())
 
     init {
         client.addSocketListener(object : WebSocketListener() {
@@ -50,19 +50,19 @@ class WalletConnectInteractor(val session: WCSession, val peerId: String = UUID.
             }
         })
 
-        client.onSessionRequest = { id: Long, peer: WCPeerMeta ->
+        client.onSessionRequest = { _: Long, peer: WCPeerMeta ->
             client.remotePeerId?.let { delegate?.didRequestSession(it, peer) }
         }
 
-        client.onSessionUpdate = { id: Long, update: WCSessionUpdate ->
+        client.onSessionUpdate = { _: Long, update: WCSessionUpdate ->
             if (!update.approved) {
                 delegate?.didKillSession()
             }
         }
 
-        client.onFailure = { Unit }
+        client.onFailure = { }
 
-        client.onDisconnect = { code: Int, reason: String ->
+        client.onDisconnect = { _: Int, _: String ->
             state = State.Disconnected
         }
 

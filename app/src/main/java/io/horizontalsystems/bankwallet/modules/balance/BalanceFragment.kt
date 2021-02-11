@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -179,7 +180,7 @@ class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener, ReceiveFra
         })
 
         viewModel.didRefreshLiveEvent.observe(viewLifecycleOwner, Observer {
-            Handler().postDelayed({
+            Handler(Looper.getMainLooper()).postDelayed({
                 if (view != null) {
                     pullToRefresh.isRefreshing = false
                 }

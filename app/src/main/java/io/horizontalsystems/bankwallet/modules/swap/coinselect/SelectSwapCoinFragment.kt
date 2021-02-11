@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.swap.coinselect
 
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
@@ -60,7 +61,7 @@ class SelectSwapCoinFragment : BaseWithSearchFragment() {
                 requestIdKey to requestId,
                 coinBalanceItemResultKey to coinBalanceItem
         ))
-        Handler().postDelayed({
+        Handler(Looper.getMainLooper()).postDelayed({
             findNavController().popBackStack()
         }, 100)
     }

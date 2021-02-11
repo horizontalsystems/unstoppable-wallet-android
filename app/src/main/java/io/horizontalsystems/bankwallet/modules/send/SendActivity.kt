@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import androidx.fragment.app.commit
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -66,7 +67,7 @@ class SendActivity : BaseActivity() {
             HudHelper.showSuccessMessage(findViewById(android.R.id.content), R.string.Send_Success, SnackbarDuration.LONG)
 
             //Delay 1200 millis to properly show message
-            Handler().postDelayed({ finish() }, 1200)
+            Handler(Looper.getMainLooper()).postDelayed({ finish() }, 1200)
         })
 
         router.scanQrCode.observe(this, Observer {

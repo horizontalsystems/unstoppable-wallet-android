@@ -65,14 +65,14 @@ class AppStatusFragment : BaseFragment() {
             when (value) {
                 is Date -> {
                     val date = DateHelper.formatDate(value, "MMM d, yyyy, HH:mm")
-                    sb.appendln("$title: $date")
+                    sb.appendLine("$title: $date")
                 }
                 is Map<*, *> -> {
                     val formattedValue = formatMapToString(value as? Map<String, Any>, "\t\t$indentation", " - ", level + 1)
                     sb.append("$title:\n$formattedValue${if (level < 2) "\n" else ""}")
                 }
                 else -> {
-                    sb.appendln("$title: $value")
+                    sb.appendLine("$title: $value")
                 }
             }
         }

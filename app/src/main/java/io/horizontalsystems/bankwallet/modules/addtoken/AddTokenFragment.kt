@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.addtoken
 
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,10 +11,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.entities.ApiError
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
-import io.horizontalsystems.ethereumkit.core.AddressValidator
 import io.horizontalsystems.snackbar.SnackbarDuration
 import kotlinx.android.synthetic.main.fragment_add_token.*
 
@@ -64,7 +63,7 @@ class AddTokenFragment : BaseFragment() {
 
         model.showSuccess.observe(viewLifecycleOwner, Observer {
             HudHelper.showSuccessMessage(requireView(), R.string.Hud_Text_Success, SnackbarDuration.LONG)
-            Handler().postDelayed({
+            Handler(Looper.getMainLooper()).postDelayed({
                 findNavController().popBackStack()
             }, 1500)
         })

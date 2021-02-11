@@ -46,7 +46,7 @@ object IndicatorHelper {
 
         var maUp = 0f
         var maDown = 0f
-        var rStrength = 0f
+        var rStrength: Float
 
         for (i in 0 until upMove.size) {
             val up = upMove[i]
