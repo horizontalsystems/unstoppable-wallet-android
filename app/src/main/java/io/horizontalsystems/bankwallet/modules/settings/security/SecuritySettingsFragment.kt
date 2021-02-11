@@ -11,7 +11,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.core.findNavController
-import io.horizontalsystems.core.getNavigationLiveData
+import io.horizontalsystems.core.getNavigationResult
 import io.horizontalsystems.pin.PinInteractionType
 import io.horizontalsystems.pin.PinModule
 import io.horizontalsystems.views.ListPosition
@@ -103,7 +103,7 @@ class SecuritySettingsFragment : BaseFragment() {
     }
 
     private fun subscribeFragmentResult() {
-        getNavigationLiveData(PinModule.requestKey)?.observe(viewLifecycleOwner, Observer { bundle ->
+        getNavigationResult(PinModule.requestKey)?.let { bundle ->
             val resultType = bundle.getParcelable<PinInteractionType>(PinModule.requestType)
             val resultCode = bundle.getInt(PinModule.requestResult)
 
@@ -120,6 +120,6 @@ class SecuritySettingsFragment : BaseFragment() {
                     PinModule.RESULT_CANCELLED -> viewModel.delegate.didCancelUnlockPinToDisablePin()
                 }
             }
-        })
+        }
     }
 }

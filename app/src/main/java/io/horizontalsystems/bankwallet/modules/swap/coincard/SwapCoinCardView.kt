@@ -11,7 +11,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.swap.SwapModule
 import io.horizontalsystems.bankwallet.modules.swap.coinselect.SelectSwapCoinFragment
 import io.horizontalsystems.core.findNavController
-import io.horizontalsystems.core.getNavigationLiveData
+import io.horizontalsystems.core.getNavigationResult
 import io.horizontalsystems.core.setOnSingleClickListener
 import io.horizontalsystems.views.helpers.LayoutHelper
 import kotlinx.android.synthetic.main.view_card_swap.view.*
@@ -51,13 +51,13 @@ class SwapCoinCardView @JvmOverloads constructor(context: Context, attrs: Attrib
             }
         }
 
-        fragment.getNavigationLiveData(SelectSwapCoinFragment.resultBundleKey)?.observe(lifecycleOwner, { bundle ->
+        fragment.getNavigationResult(SelectSwapCoinFragment.resultBundleKey)?.let { bundle ->
             val requestId = bundle.getInt(SelectSwapCoinFragment.requestIdKey)
             val coinBalanceItem = bundle.getParcelable<SwapModule.CoinBalanceItem>(SelectSwapCoinFragment.coinBalanceItemResultKey)
             if (requestId == id && coinBalanceItem != null) {
                 viewModel.onSelectCoin(coinBalanceItem.coin)
             }
-        })
+        }
     }
 
     private fun observe(viewModel: SwapCoinCardViewModel, lifecycleOwner: LifecycleOwner) {

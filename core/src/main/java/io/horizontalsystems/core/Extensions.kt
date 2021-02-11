@@ -13,16 +13,9 @@ import android.util.TypedValue
 import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import androidx.annotation.IdRes
-import androidx.annotation.MainThread
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.createViewModelLazy
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelStore
 import androidx.navigation.NavController
-import io.horizontalsystems.core.fragment.KeptNavHostFragment
+import androidx.navigation.fragment.NavHostFragment
 import io.horizontalsystems.core.helpers.SingleClickListener
 
 //  View
@@ -43,15 +36,11 @@ fun View.hideKeyboard(context: Context) {
 //  Fragment
 
 fun Fragment.findNavController(): NavController {
-    return KeptNavHostFragment.findNavController(this)
+    return NavHostFragment.findNavController(this)
 }
 
 fun Fragment.getNavigationResult(key: String = "result"): Bundle? {
     return findNavController().currentBackStackEntry?.savedStateHandle?.remove<Bundle>(key)
-}
-
-fun Fragment.getNavigationLiveData(key: String = "result"): LiveData<Bundle>? {
-    return findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData(key)
 }
 
 fun Fragment.setNavigationResult(key: String = "result", bundle: Bundle) {
@@ -69,19 +58,6 @@ fun Dialog.dismissOnBackPressed(onDismiss: () -> Unit) {
             false
         }
     }
-}
-
-@MainThread
-inline fun <reified VM : ViewModel> Fragment.navGraphViewModels(@IdRes navGraphId: Int, noinline factoryProducer: (() -> ViewModelProvider.Factory)? = null): Lazy<VM> {
-    val backStackEntry by lazy {
-        findNavController().getBackStackEntry(navGraphId)
-    }
-    val storeProducer: () -> ViewModelStore = {
-        backStackEntry.viewModelStore
-    }
-    return createViewModelLazy(VM::class, storeProducer, {
-        factoryProducer?.invoke() ?: backStackEntry.defaultViewModelProviderFactory
-    })
 }
 
 //  String

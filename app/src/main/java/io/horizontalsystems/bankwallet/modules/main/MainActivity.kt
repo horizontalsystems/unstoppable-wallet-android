@@ -2,7 +2,7 @@ package io.horizontalsystems.bankwallet.modules.main
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.AppLogger
@@ -18,10 +18,10 @@ class MainActivity : BaseActivity() {
         setContentView(R.layout.activity_main)
         setTransparentStatusBar()
 
-        val navController = findNavController(R.id.fragmentContainerView)
+        val navHost = supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
 
-        navController.setGraph(R.navigation.main_graph, intent.extras)
-        navController.addOnDestinationChangedListener(this)
+        navHost.navController.setGraph(R.navigation.main_graph, intent.extras)
+        navHost.navController.addOnDestinationChangedListener(this)
     }
 
     override fun onTrimMemory(level: Int) {

@@ -15,7 +15,7 @@ import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.backup.words.BackupWordsFragment
 import io.horizontalsystems.bankwallet.modules.backup.words.BackupWordsModule
 import io.horizontalsystems.core.findNavController
-import io.horizontalsystems.core.getNavigationLiveData
+import io.horizontalsystems.core.getNavigationResult
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.pin.PinInteractionType
 import io.horizontalsystems.pin.PinModule
@@ -79,7 +79,7 @@ class BackupFragment : BaseFragment() {
     }
 
     private fun subscribeFragmentResult() {
-        getNavigationLiveData(PinModule.requestKey)?.observe(viewLifecycleOwner, Observer { bundle ->
+        getNavigationResult(PinModule.requestKey)?.let { bundle ->
             val resultType = bundle.getParcelable<PinInteractionType>(PinModule.requestType)
             val resultCode = bundle.getInt(PinModule.requestResult)
 
@@ -89,9 +89,9 @@ class BackupFragment : BaseFragment() {
                     PinModule.RESULT_CANCELLED -> viewModel.delegate.didCancelUnlock()
                 }
             }
-        })
+        }
 
-        getNavigationLiveData(BackupWordsModule.requestKey)?.observe(viewLifecycleOwner, Observer { bundle ->
+        getNavigationResult(BackupWordsModule.requestKey)?.let { bundle ->
             when (bundle.getInt(BackupWordsModule.requestResult)) {
                 BackupWordsModule.RESULT_BACKUP -> viewModel.delegate.didBackup()
                 BackupWordsModule.RESULT_SHOW -> {
@@ -100,7 +100,6 @@ class BackupFragment : BaseFragment() {
                 else -> {
                 }
             }
-        })
-
+        }
     }
 }
