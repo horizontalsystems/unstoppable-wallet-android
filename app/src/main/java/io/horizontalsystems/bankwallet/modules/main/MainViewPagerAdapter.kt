@@ -4,17 +4,23 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import io.horizontalsystems.bankwallet.modules.balance.BalanceFragment
+import io.horizontalsystems.bankwallet.modules.market.MarketFragment
+import io.horizontalsystems.bankwallet.modules.settings.main.MainSettingsFragment
+import io.horizontalsystems.bankwallet.modules.transactions.TransactionsFragment
 
-class MainViewPagerAdapter(items: List<Fragment>, fm: FragmentManager, lifecycle: Lifecycle)
+class MainViewPagerAdapter(fm: FragmentManager, lifecycle: Lifecycle)
     : FragmentStateAdapter(fm, lifecycle) {
 
-    private val fragmentList = items
-
-    override fun getItemCount(): Int {
-        return fragmentList.size
-    }
+    override fun getItemCount() = 4
 
     override fun createFragment(position: Int): Fragment {
-        return fragmentList[position]
+        return when (position) {
+            0 -> MarketFragment()
+            1 -> BalanceFragment()
+            2 -> TransactionsFragment()
+            3 -> MainSettingsFragment()
+            else -> throw IllegalStateException()
+        }
     }
 }

@@ -11,7 +11,6 @@ import io.horizontalsystems.bankwallet.modules.transactions.FilterAdapter
 import kotlinx.android.synthetic.main.fragment_market.*
 
 class MarketFragment : BaseWithSearchFragment(), FilterAdapter.Listener {
-    private val filterAdapter = FilterAdapter(this)
     private val marketViewModel by navGraphViewModels<MarketViewModel>(R.id.mainFragment) { MarketModule.Factory() }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -21,6 +20,7 @@ class MarketFragment : BaseWithSearchFragment(), FilterAdapter.Listener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val filterAdapter = FilterAdapter(this)
         recyclerTags.adapter = filterAdapter
 
         viewPager.adapter = MarketTabsAdapter(childFragmentManager, viewLifecycleOwner.lifecycle)

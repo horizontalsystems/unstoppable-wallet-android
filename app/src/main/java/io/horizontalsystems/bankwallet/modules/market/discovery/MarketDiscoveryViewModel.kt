@@ -27,6 +27,9 @@ class MarketDiscoveryViewModel(
     var marketField: MarketField = MarketField.MarketCap
         private set
 
+    var marketCategoryField = service.marketCategory
+        private set
+
     val marketViewItemsLiveData = MutableLiveData<Pair<List<MarketViewItem>, Boolean>>()
 
     val loadingLiveData = MutableLiveData(false)
@@ -94,6 +97,7 @@ class MarketDiscoveryViewModel(
 
     fun onSelectMarketCategory(marketCategory: MarketCategory?) {
         service.marketCategory = marketCategory
+        marketCategoryField = marketCategory
     }
 
     override fun onCleared() {
