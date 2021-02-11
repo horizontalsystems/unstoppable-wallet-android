@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.market.favorites
+package io.horizontalsystems.bankwallet.modules.market.list
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,8 +12,8 @@ import io.horizontalsystems.bankwallet.modules.market.sort
 import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
 
-class MarketFavoritesViewModel(
-        private val service: MarketFavoritesService,
+class MarketListViewModel(
+        private val service: MarketListService,
         private val connectivityManager: ConnectivityManager,
         private val clearables: List<Clearable>
 ) : ViewModel() {
@@ -54,16 +54,16 @@ class MarketFavoritesViewModel(
                 }
     }
 
-    private fun syncState(state: MarketFavoritesService.State) {
-        loadingLiveData.postValue(state is MarketFavoritesService.State.Loading)
+    private fun syncState(state: MarketListService.State) {
+        loadingLiveData.postValue(state is MarketListService.State.Loading)
 
-        if (state is MarketFavoritesService.State.Error && !connectivityManager.isConnected) {
+        if (state is MarketListService.State.Error && !connectivityManager.isConnected) {
             networkNotAvailable.postValue(Unit)
         }
 
-        errorLiveData.postValue((state as? MarketFavoritesService.State.Error)?.error?.let { convertErrorMessage(it) })
+        errorLiveData.postValue((state as? MarketListService.State.Error)?.error?.let { convertErrorMessage(it) })
 
-        if (state is MarketFavoritesService.State.Loaded) {
+        if (state is MarketListService.State.Loaded) {
             syncViewItemsBySortingField(false)
         }
     }

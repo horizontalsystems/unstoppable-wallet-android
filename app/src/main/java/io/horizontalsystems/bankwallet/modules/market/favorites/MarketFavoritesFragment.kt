@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.ConcatAdapter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.market.*
+import io.horizontalsystems.bankwallet.modules.market.list.MarketListViewModel
 import io.horizontalsystems.bankwallet.modules.ratechart.RateChartFragment
 import io.horizontalsystems.bankwallet.ui.extensions.MarketListHeaderView
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorDialog
@@ -23,7 +24,7 @@ class MarketFavoritesFragment : BaseFragment(), MarketListHeaderView.Listener, V
     private lateinit var marketItemsAdapter: MarketItemsAdapter
     private lateinit var marketLoadingAdapter: MarketLoadingAdapter
 
-    private val marketFavoritesViewModel by viewModels<MarketFavoritesViewModel> { MarketFavoritesModule.Factory() }
+    private val marketListViewModel by viewModels<MarketListViewModel> { MarketFavoritesModule.Factory() }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_market_favorites, container, false)
@@ -33,55 +34,55 @@ class MarketFavoritesFragment : BaseFragment(), MarketListHeaderView.Listener, V
         super.onViewCreated(view, savedInstanceState)
 
         marketListHeader.listener = this
-        marketListHeader.setSortingField(marketFavoritesViewModel.sortingField)
-        marketListHeader.setMarketField(marketFavoritesViewModel.marketField)
+        marketListHeader.setSortingField(marketListViewModel.sortingField)
+        marketListHeader.setMarketField(marketListViewModel.marketField)
         marketListHeader.isVisible = false
-        marketFavoritesViewModel.marketViewItemsLiveData.observe(viewLifecycleOwner, { (list, _) ->
+        marketListViewModel.marketViewItemsLiveData.observe(viewLifecycleOwner, { (list, _) ->
             marketListHeader.isVisible = list.isNotEmpty()
         })
 
         marketItemsAdapter = MarketItemsAdapter(
                 this,
-                marketFavoritesViewModel.marketViewItemsLiveData,
-                marketFavoritesViewModel.loadingLiveData,
-                marketFavoritesViewModel.errorLiveData,
+                marketListViewModel.marketViewItemsLiveData,
+                marketListViewModel.loadingLiveData,
+                marketListViewModel.errorLiveData,
                 viewLifecycleOwner
         )
-        marketLoadingAdapter = MarketLoadingAdapter(marketFavoritesViewModel.loadingLiveData, marketFavoritesViewModel.errorLiveData, marketFavoritesViewModel::onErrorClick, viewLifecycleOwner)
+        marketLoadingAdapter = MarketLoadingAdapter(marketListViewModel.loadingLiveData, marketListViewModel.errorLiveData, marketListViewModel::onErrorClick, viewLifecycleOwner)
 
-        val emptyListAdapter = EmptyListAdapter(marketFavoritesViewModel.showEmptyListTextLiveData, viewLifecycleOwner)
+        val emptyListAdapter = EmptyListAdapter(marketListViewModel.showEmptyListTextLiveData, viewLifecycleOwner)
 
         coinRatesRecyclerView.adapter = ConcatAdapter(marketLoadingAdapter, marketItemsAdapter, emptyListAdapter)
         coinRatesRecyclerView.itemAnimator = null
 
         pullToRefresh.setOnRefreshListener {
-            marketFavoritesViewModel.refresh()
+            marketListViewModel.refresh()
 
             pullToRefresh.isRefreshing = false
         }
 
-        marketFavoritesViewModel.networkNotAvailable.observe(viewLifecycleOwner, {
+        marketListViewModel.networkNotAvailable.observe(viewLifecycleOwner, {
             HudHelper.showErrorMessage(requireView(), R.string.Hud_Text_NoInternet)
         })
     }
 
     override fun onClickSortingField() {
-        val items = marketFavoritesViewModel.sortingFields.map {
-            SelectorItem(getString(it.titleResId), it == marketFavoritesViewModel.sortingField)
+        val items = marketListViewModel.sortingFields.map {
+            SelectorItem(getString(it.titleResId), it == marketListViewModel.sortingField)
         }
 
         SelectorDialog
                 .newInstance(items, getString(R.string.Market_Sort_PopupTitle)) { position ->
-                    val selectedSortingField = marketFavoritesViewModel.sortingFields[position]
+                    val selectedSortingField = marketListViewModel.sortingFields[position]
 
                     marketListHeader.setSortingField(selectedSortingField)
-                    marketFavoritesViewModel.update(sortingField = selectedSortingField)
+                    marketListViewModel.update(sortingField = selectedSortingField)
                 }
                 .show(childFragmentManager, "sorting_field_selector")
     }
 
     override fun onSelectMarketField(marketField: MarketField) {
-        marketFavoritesViewModel.update(marketField = marketField)
+        marketListViewModel.update(marketField = marketField)
     }
 
     override fun onItemClick(marketViewItem: MarketViewItem) {
