@@ -16,12 +16,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.managers.RateAppManager
-import io.horizontalsystems.bankwallet.modules.balance.BalanceFragment
 import io.horizontalsystems.bankwallet.modules.main.MainActivity.Companion.ACTIVE_TAB_KEY
-import io.horizontalsystems.bankwallet.modules.market.MarketFragment
 import io.horizontalsystems.bankwallet.modules.rateapp.RateAppDialogFragment
-import io.horizontalsystems.bankwallet.modules.settings.main.MainSettingsFragment
-import io.horizontalsystems.bankwallet.modules.transactions.TransactionsFragment
 import io.horizontalsystems.core.findNavController
 import kotlinx.android.synthetic.main.fragment_main.*
 import kotlinx.android.synthetic.main.fragment_main.view.*
@@ -35,12 +31,7 @@ class MainFragment : Fragment(), RateAppDialogFragment.Listener {
         val view = inflater.inflate(R.layout.fragment_main, container, false)
 
         view.viewPager.offscreenPageLimit = 1
-        view.viewPager.adapter = MainViewPagerAdapter(listOf(
-                MarketFragment(),
-                BalanceFragment(),
-                TransactionsFragment(),
-                MainSettingsFragment()
-        ), childFragmentManager, viewLifecycleOwner.lifecycle)
+        view.viewPager.adapter = MainViewPagerAdapter(childFragmentManager, viewLifecycleOwner.lifecycle)
 
         view.viewPager.isUserInputEnabled = false
         view.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
@@ -114,10 +105,10 @@ class MainFragment : Fragment(), RateAppDialogFragment.Listener {
     }
 
     override fun onDestroyView() {
-        super.onDestroyView()
-
         viewPager.adapter = null
         bottomBadgeView = null
+
+        super.onDestroyView()
     }
 
     //  RateAppDialogFragment.Listener

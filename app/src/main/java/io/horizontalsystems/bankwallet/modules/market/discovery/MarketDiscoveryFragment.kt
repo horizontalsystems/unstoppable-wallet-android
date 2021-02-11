@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.ConcatAdapter
@@ -21,10 +20,6 @@ import kotlinx.android.synthetic.main.fragment_market_discovery.*
 
 class MarketDiscoveryFragment : BaseFragment(), MarketListHeaderView.Listener, ViewHolderMarketItem.Listener, MarketCategoriesAdapter.Listener {
 
-    private lateinit var marketItemsAdapter: MarketItemsAdapter
-    private lateinit var marketLoadingAdapter: MarketLoadingAdapter
-    private lateinit var marketCategoriesAdapter: MarketCategoriesAdapter
-
     private val marketDiscoveryViewModel by viewModels<MarketDiscoveryViewModel> { MarketDiscoveryModule.Factory() }
     private val marketViewModel by navGraphViewModels<MarketViewModel>(R.id.mainFragment)
 
@@ -39,14 +34,19 @@ class MarketDiscoveryFragment : BaseFragment(), MarketListHeaderView.Listener, V
         marketListHeader.setSortingField(marketDiscoveryViewModel.sortingField)
         marketListHeader.setMarketField(marketDiscoveryViewModel.marketField)
 
-        marketItemsAdapter = MarketItemsAdapter(
+        val marketItemsAdapter = MarketItemsAdapter(
                 this,
                 marketDiscoveryViewModel.marketViewItemsLiveData,
                 marketDiscoveryViewModel.loadingLiveData,
                 marketDiscoveryViewModel.errorLiveData,
                 viewLifecycleOwner
         )
-        marketLoadingAdapter = MarketLoadingAdapter(marketDiscoveryViewModel.loadingLiveData, marketDiscoveryViewModel.errorLiveData, marketDiscoveryViewModel::onErrorClick, viewLifecycleOwner)
+        val marketLoadingAdapter = MarketLoadingAdapter(
+                marketDiscoveryViewModel.loadingLiveData,
+                marketDiscoveryViewModel.errorLiveData,
+                marketDiscoveryViewModel::onErrorClick,
+                viewLifecycleOwner
+        )
 
         coinRatesRecyclerView.adapter = ConcatAdapter(marketLoadingAdapter, marketItemsAdapter)
         coinRatesRecyclerView.itemAnimator = null
@@ -61,6 +61,9 @@ class MarketDiscoveryFragment : BaseFragment(), MarketListHeaderView.Listener, V
             HudHelper.showErrorMessage(requireView(), R.string.Hud_Text_NoInternet)
         })
 
+        val marketCategoriesAdapter = MarketCategoriesAdapter(requireContext(), tabLayout, marketDiscoveryViewModel.marketCategories, this)
+        marketCategoriesAdapter.selectCategory(marketDiscoveryViewModel.marketCategoryField)
+
         marketViewModel.discoveryListTypeLiveEvent.observe(viewLifecycleOwner) {
             marketListHeader.setSortingField(it.sortingField)
             marketListHeader.setMarketField(it.marketField)
@@ -69,8 +72,6 @@ class MarketDiscoveryFragment : BaseFragment(), MarketListHeaderView.Listener, V
 
             marketCategoriesAdapter.selectCategory(null)
         }
-
-        marketCategoriesAdapter = MarketCategoriesAdapter(requireContext(), tabLayout, marketDiscoveryViewModel.marketCategories, this)
     }
 
     override fun onClickSortingField() {
