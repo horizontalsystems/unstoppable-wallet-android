@@ -13,6 +13,7 @@ import android.widget.TextView
 import androidx.annotation.StringRes
 import androidx.core.animation.doOnEnd
 import androidx.core.animation.doOnStart
+import androidx.core.view.isInvisible
 import com.google.android.material.tabs.TabLayout
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.views.helpers.LayoutHelper
@@ -46,16 +47,17 @@ class MarketCategoriesAdapter(
         tabLayout.addOnTabSelectedListener(this)
     }
 
-    fun selectCategory(category: MarketCategory?) {
-        listener.onSelect(category)
+    fun selectCategory(category: MarketCategory?, isInitial: Boolean = false) {
+        val tabIndex = marketCategories.indexOf(category)
+        val tabToBeSelected = tabLayout.getTabAt(tabIndex)
+        tabLayout.selectTab(tabToBeSelected)
 
-        val index = marketCategories.indexOf(category)
-        tabLayout.apply {
-            selectTab(getTabAt(index))
+        if (isInitial) {
+            tabToBeSelected?.let { onTabSelected(it, isInitial = true) }
         }
     }
 
-    override fun onTabSelected(tab: TabLayout.Tab) {
+    private fun onTabSelected(tab: TabLayout.Tab, isInitial: Boolean) {
         tab.customView?.isActivated = true
 
         listener.onSelect(marketCategories.getOrNull(tab.position))
@@ -65,10 +67,10 @@ class MarketCategoriesAdapter(
         animateIcon(iconView, 1f, 0f, 100L)
 
         //translate title to top
-        animateTitle(tab.view, 150L)
+        animateTitle(tab.view, 150L, isInitial)
 
         //expand layout
-        val lastTabPosition = if (tab.position == tabLayout.tabCount-1) tab.position else null
+        val lastTabPosition = if (tab.position == tabLayout.tabCount - 1) tab.position else null
         animateTabWidth(tab.view, itemViewMaxLength, 300L, lastTabPosition)
 
         //show description
@@ -76,6 +78,10 @@ class MarketCategoriesAdapter(
 
         //color animation
         tab.customView?.let { animateTabColor(it, inactiveColor, activeColor, 300L) }
+    }
+
+    override fun onTabSelected(tab: TabLayout.Tab) {
+        onTabSelected(tab, isInitial = false)
     }
 
     override fun onTabUnselected(tab: TabLayout.Tab) {
@@ -121,10 +127,21 @@ class MarketCategoriesAdapter(
         }
     }
 
-    private fun animateTitle(tabView: TabLayout.TabView, animDuration: Long) {
-        val topBorderYPosition = tabView.findViewById<View>(R.id.topBorder).y
+    private fun animateTitle(tabView: TabLayout.TabView, animDuration: Long, isInitial: Boolean = false) {
         val titleTextView = tabView.findViewById<TextView>(android.R.id.text1)
-        ObjectAnimator.ofFloat(titleTextView, View.TRANSLATION_Y, topBorderYPosition - titleTextView.y).apply {
+        val topBorder = tabView.findViewById<View>(R.id.topBorder)
+
+        if (isInitial) {
+            // This trick needed to avoid initial animation when restoring fragment
+            titleTextView.isInvisible = true
+            titleTextView.post {
+                titleTextView.translationY = topBorder.y - titleTextView.y
+                titleTextView.isInvisible = false
+            }
+            return
+        }
+
+        ObjectAnimator.ofFloat(titleTextView, View.TRANSLATION_Y, topBorder.y - titleTextView.y).apply {
             duration = animDuration
             interpolator = DecelerateInterpolator()
             start()
