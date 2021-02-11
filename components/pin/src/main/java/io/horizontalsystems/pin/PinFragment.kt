@@ -206,7 +206,7 @@ class PinFragment : Fragment(), NumPadItemsAdapter.Listener, PinPagesAdapter.Lis
         })
 
         pinView.showBiometricAuthInput.observe(viewLifecycleOwner, Observer {
-            showBiometricAuthDialog(it)
+            showBiometricAuthDialog()
         })
 
         pinView.resetCirclesWithShakeAndDelayForPage.observe(viewLifecycleOwner, Observer { pageIndex ->
@@ -240,7 +240,7 @@ class PinFragment : Fragment(), NumPadItemsAdapter.Listener, PinPagesAdapter.Lis
         }
     }
 
-    private fun showBiometricAuthDialog(cryptoObject: BiometricPrompt.CryptoObject) {
+    private fun showBiometricAuthDialog() {
         val promptInfo = BiometricPrompt.PromptInfo.Builder()
                 .setTitle(getString(R.string.BiometricAuth_DialogTitle))
                 .setNegativeButtonText(getString(R.string.Button_Cancel))
