@@ -7,6 +7,7 @@ import android.view.ViewGroup.LayoutParams
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.annotation.DrawableRes
 import androidx.annotation.StyleRes
 import androidx.appcompat.view.ContextThemeWrapper
@@ -31,3 +32,6 @@ fun createProgressBar(context: Context) =
         ProgressBar(context).apply {
             indeterminateTintList = ColorStateList.valueOf(context.getColor(R.color.grey))
         }
+
+fun createTextView(context: Context, @StyleRes resId: Int) =
+        TextView(ContextThemeWrapper(context, resId))

@@ -12,11 +12,13 @@ import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.tabs.TabLayout
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.settings.notifications.bottommenu.BottomNotificationMenu
 import io.horizontalsystems.bankwallet.modules.settings.notifications.bottommenu.NotificationMenuMode
+import io.horizontalsystems.bankwallet.ui.extensions.createTextView
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.chartview.Chart
 import io.horizontalsystems.chartview.models.PointInfo
@@ -32,8 +34,18 @@ class RateChartFragment : BaseFragment(), Chart.Listener {
     private lateinit var presenterView: RateChartView
 
     private val formatter = App.numberFormatter
-    private var actions = mapOf<ChartType, View>()
     private var notificationMenuItem: MenuItem? = null
+    private val actions = listOf(
+            Pair(ChartType.TODAY, R.string.Charts_TimeDuration_Today),
+            Pair(ChartType.DAILY, R.string.Charts_TimeDuration_Day),
+            Pair(ChartType.WEEKLY, R.string.Charts_TimeDuration_Week),
+            Pair(ChartType.WEEKLY2, R.string.Charts_TimeDuration_TwoWeeks),
+            Pair(ChartType.MONTHLY, R.string.Charts_TimeDuration_Month),
+            Pair(ChartType.MONTHLY3, R.string.Charts_TimeDuration_Month3),
+            Pair(ChartType.MONTHLY6, R.string.Charts_TimeDuration_HalfYear),
+            Pair(ChartType.MONTHLY12, R.string.Charts_TimeDuration_Year),
+            Pair(ChartType.MONTHLY24, R.string.Charts_TimeDuration_Year2)
+    )
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.fragment_rate_chart, container, false)
@@ -107,14 +119,14 @@ class RateChartFragment : BaseFragment(), Chart.Listener {
         scroller.setScrollingEnabled(false)
 
         setViewVisibility(chartPointsInfo, isVisible = true)
-        setViewVisibility(chartActions, isVisible = false)
+        setViewVisibility(tabLayout, isVisible = false)
     }
 
     override fun onTouchUp() {
         scroller.setScrollingEnabled(true)
 
         setViewVisibility(chartPointsInfo, isVisible = false)
-        setViewVisibility(chartActions, isVisible = true)
+        setViewVisibility(tabLayout, isVisible = false)
     }
 
     override fun onTouchSelect(point: PointInfo) {
@@ -133,7 +145,10 @@ class RateChartFragment : BaseFragment(), Chart.Listener {
         })
 
         presenterView.setDefaultMode.observe(viewLifecycleOwner, Observer { type ->
-            actions[type]?.let { resetActions(it, setDefault = true) }
+            val indexOf = actions.indexOfFirst { it.first == type }
+            if (indexOf > -1) {
+                tabLayout.selectTab(tabLayout.getTabAt(indexOf))
+            }
         })
 
         presenterView.showChartInfo.observe(viewLifecycleOwner, Observer { item ->
@@ -282,24 +297,30 @@ class RateChartFragment : BaseFragment(), Chart.Listener {
     }
 
     private fun bindActions() {
-        actions = mapOf(
-                Pair(ChartType.TODAY, buttonToday),
-                Pair(ChartType.DAILY, button24),
-                Pair(ChartType.WEEKLY, button1W),
-                Pair(ChartType.WEEKLY2, button2W),
-                Pair(ChartType.MONTHLY, button1M),
-                Pair(ChartType.MONTHLY3, button3M),
-                Pair(ChartType.MONTHLY6, button6M),
-                Pair(ChartType.MONTHLY12, button1Y),
-                Pair(ChartType.MONTHLY24, button2Y)
-        )
-
-        actions.forEach { (type, action) ->
-            action.setOnClickListener { view ->
-                presenter.onSelect(type)
-                resetActions(view)
-            }
+        actions.forEach { (_, textId) ->
+            tabLayout.newTab()
+                    .setCustomView(createTextView(requireContext(), R.style.TabComponent).apply {
+                        id = android.R.id.text1
+                    })
+                    .setText(getString(textId))
+                    .let {
+                        tabLayout.addTab(it, false)
+                    }
         }
+
+        tabLayout.tabRippleColor = null
+        tabLayout.setSelectedTabIndicator(null)
+        tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab) {
+                presenter.onSelect(actions[tab.position].first)
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab) {
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab) {
+            }
+        })
 
         emaChartIndicator.setOnClickListener {
             presenter.toggleEma()
@@ -312,26 +333,6 @@ class RateChartFragment : BaseFragment(), Chart.Listener {
         rsiChartIndicator.setOnClickListener {
             presenter.toggleRsi()
         }
-
-    }
-
-    private fun resetActions(current: View, setDefault: Boolean = false) {
-        actions.values.forEach { it.isActivated = false }
-        current.isActivated = true
-
-        val inLeftSide = chartActions.width / 2 < current.left
-        if (setDefault) {
-            chartActionsWrap.scrollTo(if (inLeftSide) chartActions.width else 0, 0)
-            return
-        }
-
-        val by = if (inLeftSide) {
-            chartActions.scrollX + current.width
-        } else {
-            chartActions.scrollX - current.width
-        }
-
-        chartActionsWrap.smoothScrollBy(by, 0)
     }
 
     private fun setViewVisibility(vararg views: View, isVisible: Boolean) {
@@ -343,7 +344,7 @@ class RateChartFragment : BaseFragment(), Chart.Listener {
         private const val COIN_TITLE_KEY = "coin_title_key"
         private const val COIN_ID_KEY = "coin_id_key"
 
-        fun prepareParams(coinCode: String, coinTitle: String, coinId: String?) : Bundle {
+        fun prepareParams(coinCode: String, coinTitle: String, coinId: String?): Bundle {
             return bundleOf(
                     COIN_CODE_KEY to coinCode,
                     COIN_TITLE_KEY to coinTitle,
