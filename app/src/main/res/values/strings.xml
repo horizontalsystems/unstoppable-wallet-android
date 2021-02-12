@@ -26,6 +26,7 @@
     <string name="Button_Connect">Connect</string>
     <string name="Button_Reject">Reject</string>
     <string name="Button_Disconnect">Disconnect</string>
+    <string name="Button_GetStarted">Get Started</string>
 
     <string name="Error">Error</string>
     <string name="NotAvailable">N/A</string>

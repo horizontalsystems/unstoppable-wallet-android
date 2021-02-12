@@ -14,16 +14,14 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-    </androidx.viewpager.widget.ViewPager>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/verticalCenter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.6" />
+        app:layout_constraintGuide_percent="0.5" />
 
     <ImageSwitcher
         android:id="@+id/imageSwitcher"
@@ -38,21 +36,11 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline"
+        android:id="@+id/navigationStartGuideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_end="50dp" />
-
-
-    <View
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@color/dark"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/guideline" />
+        app:layout_constraintGuide_percent="0.82" />
 
     <me.relex.circleindicator.CircleIndicator
         android:id="@+id/circleIndicator"
@@ -64,34 +52,22 @@
         app:ci_height="4dp"
         app:ci_margin="4dp"
         app:ci_width="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline" />
+        app:layout_constraintTop_toTopOf="@+id/navigationStartGuideline" />
 
-    <TextView
-        android:id="@+id/btnSkip"
-        style="@style/Subhead1"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:background="?selectableItemBackground"
-        android:gravity="center"
-        android:paddingHorizontal="24dp"
-        android:text="@string/Button_Skip"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline" />
-
-    <TextView
+    <Button
         android:id="@+id/btnNext"
-        style="@style/Subhead1"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:background="?selectableItemBackground"
-        android:gravity="center"
-        android:paddingHorizontal="24dp"
+        style="@style/ButtonPrimarySteel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
         android:text="@string/Button_Next"
+        app:layout_constraintVertical_bias="0.27"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/circleIndicator" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
