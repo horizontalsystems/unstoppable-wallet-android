@@ -8,7 +8,4 @@ class IntroPresenter(val router: IntroModule.IRouter) : ViewModel() {
         router.navigateToWelcome()
     }
 
-    fun skip() {
-        router.navigateToWelcome()
-    }
 }
