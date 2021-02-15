@@ -1,6 +1,3 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="Charts_Trend_Up">上升</string>
-    <string name="Charts_Trend_Down">下降</string>
-    <string name="Charts_Trend_Neutral">中性</string>
 </resources>

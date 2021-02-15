@@ -1,6 +1,3 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="Charts_Trend_Up">Artış Eğilim</string>
-    <string name="Charts_Trend_Down">Aşağı Eğilim</string>
-    <string name="Charts_Trend_Neutral">Nötr</string>
 </resources>

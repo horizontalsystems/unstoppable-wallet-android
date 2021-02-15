@@ -1,6 +1,3 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="Charts_Trend_Up">روند صعودی</string>
-    <string name="Charts_Trend_Down">روند نزولی</string>
-    <string name="Charts_Trend_Neutral">خنثی</string>
 </resources>

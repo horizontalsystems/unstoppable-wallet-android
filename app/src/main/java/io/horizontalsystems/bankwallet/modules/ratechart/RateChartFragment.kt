@@ -29,7 +29,7 @@ import kotlinx.android.synthetic.main.fragment_rate_chart.*
 import java.math.BigDecimal
 import java.util.*
 
-class RateChartFragment : BaseFragment(), Chart.Listener {
+class RateChartFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedListener {
     private lateinit var presenter: RateChartPresenter
     private lateinit var presenterView: RateChartView
 
@@ -133,6 +133,18 @@ class RateChartFragment : BaseFragment(), Chart.Listener {
         presenter.onTouchSelect(point)
     }
 
+    //  TabLayout.OnTabSelectedListener
+
+    override fun onTabSelected(tab: TabLayout.Tab) {
+        presenter.onSelect(actions[tab.position].first)
+    }
+
+    override fun onTabUnselected(tab: TabLayout.Tab) {
+    }
+
+    override fun onTabReselected(tab: TabLayout.Tab) {
+    }
+
     //  Private
 
     private fun observeData() {
@@ -147,7 +159,9 @@ class RateChartFragment : BaseFragment(), Chart.Listener {
         presenterView.setDefaultMode.observe(viewLifecycleOwner, Observer { type ->
             val indexOf = actions.indexOfFirst { it.first == type }
             if (indexOf > -1) {
+                tabLayout.removeOnTabSelectedListener(this)
                 tabLayout.selectTab(tabLayout.getTabAt(indexOf))
+                tabLayout.addOnTabSelectedListener(this)
             }
         })
 
@@ -157,10 +171,6 @@ class RateChartFragment : BaseFragment(), Chart.Listener {
             rootView.post {
                 chart.setData(item.chartData, item.chartType)
             }
-
-            emaChartIndicator.bind(item.emaTrend)
-            macdChartIndicator.bind(item.macdTrend)
-            rsiChartIndicator.bind(item.rsiTrend)
 
             coinRateDiff.diff = item.diffValue
         })
@@ -255,12 +265,12 @@ class RateChartFragment : BaseFragment(), Chart.Listener {
 
         presenterView.showEma.observe(viewLifecycleOwner, Observer { enabled ->
             chart.showEma(enabled)
-            emaChartIndicator.setStateEnabled(enabled)
+            indicatorEMA.isChecked = enabled
         })
 
         presenterView.showMacd.observe(viewLifecycleOwner, Observer { enabled ->
             chart.showMacd(enabled)
-            macdChartIndicator.setStateEnabled(enabled)
+            indicatorMACD.isChecked = enabled
 
             setViewVisibility(pointInfoVolume, pointInfoVolumeTitle, isVisible = !enabled)
             setViewVisibility(macdSignal, macdHistogram, macdValue, isVisible = enabled)
@@ -268,7 +278,7 @@ class RateChartFragment : BaseFragment(), Chart.Listener {
 
         presenterView.showRsi.observe(viewLifecycleOwner, Observer { enabled ->
             chart.showRsi(enabled)
-            rsiChartIndicator.setStateEnabled(enabled)
+            indicatorRSI.isChecked = enabled
         })
 
         presenterView.alertNotificationUpdated.observe(viewLifecycleOwner, Observer {
@@ -283,7 +293,6 @@ class RateChartFragment : BaseFragment(), Chart.Listener {
             toolbar.menu.findItem(R.id.menuFavorite).isVisible = !it
             toolbar.menu.findItem(R.id.menuUnfavorite).isVisible = it
         })
-
     }
 
     private fun formatFiatShortened(value: BigDecimal, symbol: String): String {
@@ -310,27 +319,17 @@ class RateChartFragment : BaseFragment(), Chart.Listener {
 
         tabLayout.tabRippleColor = null
         tabLayout.setSelectedTabIndicator(null)
-        tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabSelected(tab: TabLayout.Tab) {
-                presenter.onSelect(actions[tab.position].first)
-            }
+        tabLayout.addOnTabSelectedListener(this)
 
-            override fun onTabUnselected(tab: TabLayout.Tab) {
-            }
-
-            override fun onTabReselected(tab: TabLayout.Tab) {
-            }
-        })
-
-        emaChartIndicator.setOnClickListener {
+        indicatorEMA.setOnClickListener {
             presenter.toggleEma()
         }
 
-        macdChartIndicator.setOnClickListener {
+        indicatorMACD.setOnClickListener {
             presenter.toggleMacd()
         }
 
-        rsiChartIndicator.setOnClickListener {
+        indicatorRSI.setOnClickListener {
             presenter.toggleRsi()
         }
     }
