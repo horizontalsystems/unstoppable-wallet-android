@@ -52,6 +52,7 @@ class LocalStorageManager(private val preferences: SharedPreferences)
     private val APP_LAST_VISIT_TIME = "app_last_visit_time"
     private val BIOMETRIC_ENABLED = "biometric_auth_enabled"
     private val PIN = "lock_pin"
+    private val MAIN_SHOWED_ONCE = "main_showed_once"
 
     val gson by lazy { Gson() }
 
@@ -309,5 +310,11 @@ class LocalStorageManager(private val preferences: SharedPreferences)
         }
         set(value) {
             preferences.edit().putString(MARKET_CURRENT_CATEGORY, value?.name).apply()
+        }
+
+    override var mainShowedOnce: Boolean
+        get() = preferences.getBoolean(MAIN_SHOWED_ONCE, false)
+        set(value) {
+            preferences.edit().putBoolean(MAIN_SHOWED_ONCE, value).apply()
         }
 }

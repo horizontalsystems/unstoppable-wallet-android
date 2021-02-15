@@ -63,6 +63,7 @@ interface ILocalStorage {
     var transactionSortingType: TransactionDataSortingType
     var balanceHidden: Boolean
     var checkedTerms: List<Term>
+    var mainShowedOnce: Boolean
 
     fun clear()
 }
