@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.modules.intro.IntroModule
+import io.horizontalsystems.bankwallet.modules.intro.IntroActivity
 import io.horizontalsystems.bankwallet.modules.keystore.KeyStoreActivity
 import io.horizontalsystems.bankwallet.modules.lockscreen.LockScreenModule
 import io.horizontalsystems.bankwallet.modules.main.MainModule
@@ -24,7 +24,7 @@ class LauncherActivity : AppCompatActivity() {
         viewModel.init()
 
         viewModel.openWelcomeModule.observe(this, Observer {
-            IntroModule.start(this)
+            IntroActivity.start(this)
             finish()
         })
 

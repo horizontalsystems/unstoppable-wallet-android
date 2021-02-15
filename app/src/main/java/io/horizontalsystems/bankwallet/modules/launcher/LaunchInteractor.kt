@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.launcher
 
 import io.horizontalsystems.bankwallet.core.IAccountManager
+import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.utils.RootUtil
 import io.horizontalsystems.core.IBuildConfigProvider
 import io.horizontalsystems.core.IKeyStoreManager
@@ -14,7 +15,8 @@ class LaunchInteractor(
         private val systemInfoManager: ISystemInfoManager,
         private val keyStoreManager: IKeyStoreManager,
         private val rootUtil: RootUtil,
-        private val buildConfigProvider: IBuildConfigProvider)
+        private val buildConfigProvider: IBuildConfigProvider,
+        localStorage: ILocalStorage)
     : LaunchModule.IInteractor {
 
     var delegate: LaunchModule.IInteractorDelegate? = null
@@ -37,4 +39,6 @@ class LaunchInteractor(
     override fun validateKeyStore(): KeyStoreValidationResult {
         return keyStoreManager.validateKeyStore()
     }
+
+    override val mainShowedOnce: Boolean = localStorage.mainShowedOnce
 }
