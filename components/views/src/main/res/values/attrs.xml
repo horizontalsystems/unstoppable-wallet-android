@@ -31,9 +31,6 @@
         <attr name="inputHint" format="string" />
         <attr name="inputMaxLines" format="integer" />
     </declare-styleable>
-    <declare-styleable name="ChartIndicatorView">
-        <attr name="title" />
-    </declare-styleable>
     <declare-styleable name="ViewState">
         <attr name="state_error" format="boolean" />
         <attr name="state_warning" format="boolean" />

@@ -1,6 +1,3 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="Charts_Trend_Up">Tendance à la hausse</string>
-    <string name="Charts_Trend_Down">Tendance à la baisse</string>
-    <string name="Charts_Trend_Neutral">Neutre</string>
 </resources>

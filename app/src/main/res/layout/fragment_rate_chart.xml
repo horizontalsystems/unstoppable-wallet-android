@@ -198,43 +198,46 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/chart" />
 
-            <io.horizontalsystems.chartview.extensions.ChartIndicatorView
-                android:id="@+id/emaChartIndicator"
-                android:layout_width="0dp"
+            <RadioButton
+                android:id="@+id/indicatorEMA"
+                style="@style/RadioButtonThird"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/border3"
-                app:title="@string/Charts_IndicatorEMA" />
+                android:layout_marginTop="8dp"
+                android:text="@string/Charts_IndicatorEMA"
+                app:layout_constraintStart_toStartOf="@id/startGuideline"
+                app:layout_constraintTop_toBottomOf="@+id/border3" />
 
-            <io.horizontalsystems.chartview.extensions.ChartIndicatorView
-                android:id="@+id/macdChartIndicator"
-                android:layout_width="0dp"
+            <RadioButton
+                android:id="@+id/indicatorMACD"
+                style="@style/RadioButtonThird"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/emaChartIndicator"
-                app:title="@string/Charts_IndicatorMACD" />
+                android:layout_marginStart="8dp"
+                android:text="@string/Charts_IndicatorMACD"
+                app:layout_constraintStart_toEndOf="@id/indicatorEMA"
+                app:layout_constraintTop_toTopOf="@+id/indicatorEMA" />
 
-            <io.horizontalsystems.chartview.extensions.ChartIndicatorView
-                android:id="@+id/rsiChartIndicator"
-                android:layout_width="0dp"
+            <RadioButton
+                android:id="@+id/indicatorRSI"
+                style="@style/RadioButtonThird"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/macdChartIndicator"
-                app:title="@string/Charts_IndicatorRSI" />
+                android:layout_marginStart="8dp"
+                android:text="@string/Charts_IndicatorRSI"
+                app:layout_constraintStart_toEndOf="@id/indicatorMACD"
+                app:layout_constraintTop_toTopOf="@+id/indicatorEMA" />
 
             <TextView
                 android:id="@+id/volumeTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="20dp"
                 android:text="@string/Charts_Volume24"
                 android:textColor="@color/grey"
                 android:textSize="14sp"
                 app:layout_constraintStart_toStartOf="@id/startGuideline"
-                app:layout_constraintTop_toBottomOf="@+id/rsiChartIndicator" />
+                app:layout_constraintTop_toBottomOf="@+id/indicatorEMA" />
 
             <TextView
                 android:id="@+id/volumeValue"
