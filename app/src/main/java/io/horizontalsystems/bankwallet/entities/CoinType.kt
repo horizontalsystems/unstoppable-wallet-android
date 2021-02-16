@@ -37,6 +37,20 @@ sealed class CoinType : Parcelable {
     }
 
     @Parcelize
+    object BinanceSmartChain : CoinType()
+
+    @Parcelize
+    class Bep20(val address: String) : CoinType() {
+        override fun equals(other: Any?): Boolean {
+            return other is Bep20 && other.address.equals(address, ignoreCase = true)
+        }
+
+        override fun hashCode(): Int {
+            return address.toLowerCase(Locale.ENGLISH).hashCode()
+        }
+    }
+
+    @Parcelize
     class Binance(val symbol: String) : CoinType() {
         override fun equals(other: Any?): Boolean {
             if (other is Binance) {
@@ -65,14 +79,15 @@ sealed class CoinType : Parcelable {
     val label: String?
         get() = when (this) {
             is Erc20 -> "ERC20"
-            is Binance -> if (symbol != "BNB") "BEP2" else null
+            is Bep20 -> "BEP20"
+            is Binance -> "BEP2"
             else -> null
         }
 
     val predefinedAccountType: PredefinedAccountType
         get() = when (this) {
             Bitcoin, Litecoin, BitcoinCash, Dash, Ethereum, is Erc20 -> PredefinedAccountType.Standard
-            is Binance -> PredefinedAccountType.Binance
+            BinanceSmartChain, is Bep20, is Binance -> PredefinedAccountType.Binance
             Zcash -> PredefinedAccountType.Zcash
         }
 
@@ -83,7 +98,7 @@ sealed class CoinType : Parcelable {
         Bitcoin, Litecoin, BitcoinCash, Dash, Ethereum, is Erc20 -> {
             accountType is AccountType.Mnemonic && accountType.words.size == 12 && accountType.salt == null
         }
-        is Binance -> {
+        BinanceSmartChain, is Bep20, is Binance -> {
             accountType is AccountType.Mnemonic && accountType.words.size == 24 && accountType.salt == null
         }
         Zcash -> {
@@ -100,6 +115,8 @@ sealed class CoinType : Parcelable {
             Ethereum -> ethereum
             is Erc20 -> arrayOf(erc20, address).joinToString(separator)
             is Binance -> arrayOf(binance, symbol).joinToString(separator)
+            BinanceSmartChain -> binanceSmartChain
+            is Bep20 -> arrayOf(bep20, address).joinToString(separator)
             Zcash -> zcash
         }
     }
@@ -112,6 +129,8 @@ sealed class CoinType : Parcelable {
         const val ethereum = "ethereum"
         const val erc20 = "erc20"
         const val binance = "binance"
+        const val binanceSmartChain = "binanceSmartChain"
+        const val bep20 = "bep20"
         const val zcash = "zcash"
 
         private const val separator = ":"
@@ -127,6 +146,8 @@ sealed class CoinType : Parcelable {
                 ethereum -> Ethereum
                 erc20 -> Erc20(parts[1])
                 binance -> Binance(parts[1])
+                binanceSmartChain -> BinanceSmartChain
+                bep20 -> Bep20(parts[1])
                 zcash -> Zcash
                 else -> null
             }

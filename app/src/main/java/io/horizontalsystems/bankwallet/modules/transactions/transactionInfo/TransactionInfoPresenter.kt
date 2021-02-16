@@ -158,14 +158,15 @@ class TransactionInfoPresenter(
 
     private fun getExplorerData(hash: String, testMode: Boolean, coinType: CoinType): TransactionInfoModule.ExplorerData {
         return when (coinType) {
-            is CoinType.Bitcoin -> TransactionInfoModule.ExplorerData( "blockchair.com", if (testMode) null else "https://blockchair.com/bitcoin/transaction/$hash")
-            is CoinType.BitcoinCash -> TransactionInfoModule.ExplorerData( "btc.com", if (testMode) null else "https://bch.btc.com/$hash")
-            is CoinType.Litecoin -> TransactionInfoModule.ExplorerData( "blockchair.com", if (testMode) null else "https://blockchair.com/litecoin/transaction/$hash")
-            is CoinType.Dash -> TransactionInfoModule.ExplorerData( "dash.org", if (testMode) null else "https://insight.dash.org/insight/tx/$hash")
+            is CoinType.Bitcoin -> TransactionInfoModule.ExplorerData("blockchair.com", if (testMode) null else "https://blockchair.com/bitcoin/transaction/$hash")
+            is CoinType.BitcoinCash -> TransactionInfoModule.ExplorerData("btc.com", if (testMode) null else "https://bch.btc.com/$hash")
+            is CoinType.Litecoin -> TransactionInfoModule.ExplorerData("blockchair.com", if (testMode) null else "https://blockchair.com/litecoin/transaction/$hash")
+            is CoinType.Dash -> TransactionInfoModule.ExplorerData("dash.org", if (testMode) null else "https://insight.dash.org/insight/tx/$hash")
             is CoinType.Ethereum,
-            is CoinType.Erc20 -> TransactionInfoModule.ExplorerData( "etherscan.io", if (testMode) "https://ropsten.etherscan.io/tx/$hash" else "https://etherscan.io/tx/$hash")
-            is CoinType.Binance -> TransactionInfoModule.ExplorerData( "binance.org", if (testMode) "https://testnet-explorer.binance.org/tx/$hash" else "https://explorer.binance.org/tx/$hash")
-            is CoinType.Zcash -> TransactionInfoModule.ExplorerData( "zcha.in", if (testMode) null else "https://explorer.zcha.in/transactions/$hash")
+            is CoinType.Erc20 -> TransactionInfoModule.ExplorerData("etherscan.io", if (testMode) "https://ropsten.etherscan.io/tx/$hash" else "https://etherscan.io/tx/$hash")
+            is CoinType.Binance -> TransactionInfoModule.ExplorerData("binance.org", if (testMode) "https://testnet-explorer.binance.org/tx/$hash" else "https://explorer.binance.org/tx/$hash")
+            CoinType.BinanceSmartChain, is CoinType.Bep20 -> TransactionInfoModule.ExplorerData("bscscan.com", if (testMode) null else "https://bscscan.com/tx/$hash")
+            is CoinType.Zcash -> TransactionInfoModule.ExplorerData("zcha.in", if (testMode) null else "https://explorer.zcha.in/transactions/$hash")
         }
     }
 

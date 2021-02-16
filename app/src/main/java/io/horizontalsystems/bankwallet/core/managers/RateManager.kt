@@ -142,7 +142,7 @@ class RateManager(
         }
     }
 
-    private fun convertCoinTypeToXRateKitCoinType(coinType: io.horizontalsystems.bankwallet.entities.CoinType): CoinType {
+    private fun convertCoinTypeToXRateKitCoinType(coinType: io.horizontalsystems.bankwallet.entities.CoinType): CoinType? {
         return when (coinType) {
             is Bitcoin -> CoinType.Bitcoin
             is BitcoinCash -> CoinType.BitcoinCash
@@ -152,6 +152,7 @@ class RateManager(
             is Zcash -> CoinType.Zcash
             is Binance -> CoinType.Binance
             is Erc20 -> CoinType.Erc20(coinType.address)
+            else -> null
         }
     }
 

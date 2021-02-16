@@ -679,7 +679,7 @@
     <string name="AccountType_Unstoppable">Standard</string>
     <string name="AccountType_Unstoppable_Text" translatable="false">BTC, LTC, BCH, DASH, ETH, ERC20 tokens</string>
     <string name="AccountType_Binance" translatable="false">Binance</string>
-    <string name="AccountType_Binance_Text" translatable="false">BNB, BEP2 tokens</string>
+    <string name="AccountType_Binance_Text" translatable="false">BNB, BEP20, BEP2 tokens</string>
     <string name="AccountType_Zcash" translatable="false">Zcash</string>
     <string name="AccountType_Zcash_Text" translatable="false">ZEC</string>
 
