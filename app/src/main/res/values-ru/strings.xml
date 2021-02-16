@@ -510,8 +510,8 @@
     <string name="AddToken_ApiLimitExceeded">Превышен лимит Api. Повторите попытку позже.</string>
     <!-- Add Erc20 Token -->
     <string name="AddErc20Token_Title">Добавить ERC20</string>
-    <string name="AddErc20Token_ContractAddressHint">Адрес Контракта</string>
-    <string name="AddErc20Token_ContractNotFound">Контракт не найден</string>
+    <string name="AddEvmToken_ContractAddressHint">Адрес Контракта</string>
+    <string name="AddEvmToken_ContractNotFound">Контракт не найден</string>
     <!-- Add Bep2 Token -->
     <string name="AddBep2Token_Title">Добавить BEP2</string>
     <string name="AddBep2Token_TokenSymbolHint">Символ Токена</string>

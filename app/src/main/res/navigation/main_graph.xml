@@ -83,7 +83,7 @@
             android:id="@+id/manageWalletsFragment_to_restoreFragment"
             app:destination="@id/restore_graph" />
         <action
-            android:id="@+id/manageWalletsFragment_to_addErc20Token"
+            android:id="@+id/manageWalletsFragment_to_addToken"
             app:destination="@id/addTokenFragment" />
     </fragment>
 

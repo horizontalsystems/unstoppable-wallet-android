@@ -613,6 +613,7 @@
     <string name="AddTokenDialog_Title">Choose Blockchain</string>
     <string name="AddTokenDialog_Subtitle">Adding Token</string>
     <string name="AddTokenDialog_Erc20Tokens">ERC20 Tokens</string>
+    <string name="AddTokenDialog_Bep20Tokens">BEP20 Tokens</string>
     <string name="AddTokenDialog_BinanceTokens">BEP2 Tokens</string>
 
     <!-- Enable Token -->
@@ -633,10 +634,11 @@
     <string name="AddToken_InvalidAddressError">Invalid Address</string>
     <string name="AddToken_ApiLimitExceeded">Api limit exceeded. Try again later.</string>
 
-    <!-- Add Erc20 Token -->
+    <string name="AddEvmToken_ContractNotFound">Contract not found</string>
+    <string name="AddEvmToken_ContractAddressHint">Contract Address</string>
+
     <string name="AddErc20Token_Title">Add ERC20</string>
-    <string name="AddErc20Token_ContractAddressHint">Contract Address</string>
-    <string name="AddErc20Token_ContractNotFound">Contract not found</string>
+    <string name="AddBep20Token_Title">Add BEP20</string>
 
     <!-- Add Bep2 Token -->
     <string name="AddBep2Token_Title">Add BEP2</string>

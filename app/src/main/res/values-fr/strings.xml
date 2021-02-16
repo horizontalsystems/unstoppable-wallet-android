@@ -508,8 +508,8 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="AddToken_ApiLimitExceeded">Limite d\'Api dépassée. Réessayez plus tard.</string>
     <!-- Add Erc20 Token -->
     <string name="AddErc20Token_Title">Ajouter ERC20</string>
-    <string name="AddErc20Token_ContractAddressHint">Adresse du contrat</string>
-    <string name="AddErc20Token_ContractNotFound">Contrat non trouvé</string>
+    <string name="AddEvmToken_ContractAddressHint">Adresse du contrat</string>
+    <string name="AddEvmToken_ContractNotFound">Contrat non trouvé</string>
     <!-- Add Bep2 Token -->
     <string name="AddBep2Token_Title">Ajouter BEP2</string>
     <string name="AddBep2Token_TokenSymbolHint">Symbole du token</string>

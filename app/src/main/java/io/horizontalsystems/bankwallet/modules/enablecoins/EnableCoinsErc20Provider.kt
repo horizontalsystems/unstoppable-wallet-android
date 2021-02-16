@@ -8,7 +8,7 @@ class EnableCoinsErc20Provider(private val networkManager: INetworkManager) {
         val url = "https://api.ethplorer.io/getAddressInfo/$address/"
         val resource = "?apiKey=freekey"
 
-        return networkManager.getErc20CoinInfo(url, resource)
+        return networkManager.getEvmTokenInfo(url, resource)
                 .map {
                     it.get("tokens").asJsonArray.map { tokens ->
                         val token = tokens.asJsonObject
