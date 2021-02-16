@@ -171,6 +171,9 @@
     <string name="Market_Category_Computing">Computing</string>
     <string name="Market_Category_Computing_Description">Decentralized on-demand computing solutions.</string>
 
+    <!--Market Search-->
+    <string name="Market_Search_Filter">Filter</string>
+
     <!--Balance-->
 
     <string name="Balance_Title">Balance</string>
