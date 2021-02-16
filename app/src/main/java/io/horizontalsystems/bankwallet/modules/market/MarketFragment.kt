@@ -8,6 +8,7 @@ import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseWithSearchFragment
 import io.horizontalsystems.bankwallet.modules.transactions.FilterAdapter
+import io.horizontalsystems.core.findNavController
 import kotlinx.android.synthetic.main.fragment_market.*
 
 class MarketFragment : BaseWithSearchFragment(), FilterAdapter.Listener {
@@ -36,6 +37,16 @@ class MarketFragment : BaseWithSearchFragment(), FilterAdapter.Listener {
             viewPager.setCurrentItem(currentItem, false)
 
             filterAdapter.setFilters(marketViewModel.tabs.map { it.filterItem() }, tab.filterItem())
+        }
+
+        toolbar.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.search -> {
+                    findNavController().navigate(R.id.mainFragment_to_marketSearchFragment)
+                    true
+                }
+                else -> false
+            }
         }
     }
 

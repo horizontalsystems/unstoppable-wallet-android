@@ -70,6 +70,9 @@
         <action
             android:id="@+id/mainFragment_to_createWalletFragment"
             app:destination="@id/createWalletFragment" />
+        <action
+            android:id="@+id/mainFragment_to_marketSearchFragment"
+            app:destination="@id/marketSearchFragment" />
     </fragment>
 
     <fragment
@@ -293,6 +296,10 @@
         app:popEnterAnim="@android:anim/fade_in"
         app:popExitAnim="@anim/slide_to_bottom"
         android:label="SwapTradeOptionsFragment" />
+    <fragment
+        android:id="@+id/marketSearchFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.market.search.MarketSearchFragment"
+        tools:layout="@layout/fragment_market_search" />
 
     <!--  Dialogs/BottomSheets  -->
     <dialog
