@@ -32,7 +32,7 @@ data class MarketMetricsItem (
         var btcDominanceDiff24h: BigDecimal = BigDecimal.ZERO,
         var defiMarketCap: CurrencyValue,
         var defiMarketCapDiff24h: BigDecimal = BigDecimal.ZERO,
-        var defiTvl: BigDecimal = BigDecimal.ZERO,
+        var defiTvl: CurrencyValue,
         var defiTvlDiff24h: BigDecimal = BigDecimal.ZERO
 ){
     companion object{
@@ -47,7 +47,7 @@ data class MarketMetricsItem (
                     globalCoinMarket.btcDominanceDiff24h,
                     CurrencyValue(currency, globalCoinMarket.defiMarketCap),
                     globalCoinMarket.defiMarketCapDiff24h,
-                    globalCoinMarket.defiTvl,
+                    CurrencyValue(currency, globalCoinMarket.defiTvl),
                     globalCoinMarket.defiTvlDiff24h
             )
         }

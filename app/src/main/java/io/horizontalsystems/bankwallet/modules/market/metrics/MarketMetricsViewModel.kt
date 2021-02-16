@@ -66,8 +66,8 @@ class MarketMetricsViewModel(
                     totalMarketCap = MetricData(formatFiatShortened(marketMetricsItem.marketCap.value, marketMetricsItem.marketCap.currency.symbol), marketMetricsItem.marketCapDiff24h),
                     btcDominance = MetricData(btcDominanceFormatted, marketMetricsItem.btcDominanceDiff24h),
                     volume24h = MetricData(formatFiatShortened(marketMetricsItem.volume24h.value, marketMetricsItem.volume24h.currency.symbol), marketMetricsItem.volume24hDiff24h),
-                    defiCap = MetricData(formatFiatShortened(marketMetricsItem.defiMarketCap.value, marketMetricsItem.defiMarketCap.currency.symbol), null),
-                    defiTvl = MetricData(null, null),
+                    defiCap = MetricData(formatFiatShortened(marketMetricsItem.defiMarketCap.value, marketMetricsItem.defiMarketCap.currency.symbol), marketMetricsItem.defiMarketCapDiff24h),
+                    defiTvl = MetricData(formatFiatShortened(marketMetricsItem.defiTvl.value, marketMetricsItem.defiTvl.currency.symbol), marketMetricsItem.defiTvlDiff24h),
             )
 
             metrics = marketMetrics
