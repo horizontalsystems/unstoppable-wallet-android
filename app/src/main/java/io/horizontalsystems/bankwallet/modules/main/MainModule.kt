@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.managers.RateUsType
+import io.horizontalsystems.bankwallet.entities.Account
 
 object MainModule {
 
@@ -13,6 +14,7 @@ object MainModule {
         fun openPlayMarket()
         fun hideContent(hide: Boolean)
         fun toggleBagdeVisibility(visible: Boolean)
+        fun setTransactionTabEnabled(enabled: Boolean)
     }
 
     interface IViewDelegate {
@@ -32,10 +34,11 @@ object MainModule {
     interface IInteractorDelegate {
         fun updateBadgeVisibility()
         fun showRateApp(showRateUs: RateUsType)
+        fun sync(accounts: List<Account>)
     }
 
     fun init(view: MainViewModel) {
-        val interactor = MainInteractor(App.rateAppManager, App.backupManager, App.termsManager, App.pinComponent)
+        val interactor = MainInteractor(App.rateAppManager, App.backupManager, App.termsManager, App.pinComponent, App.accountManager)
         val presenter = MainPresenter(App.pinComponent, interactor)
 
         view.delegate = presenter
