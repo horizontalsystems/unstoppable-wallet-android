@@ -126,7 +126,7 @@ class RateChartFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelecte
         scroller.setScrollingEnabled(true)
 
         setViewVisibility(chartPointsInfo, isVisible = false)
-        setViewVisibility(tabLayout, isVisible = false)
+        setViewVisibility(tabLayout, isVisible = true)
     }
 
     override fun onTouchSelect(point: PointInfo) {
@@ -222,7 +222,6 @@ class RateChartFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelecte
                     text = getString(R.string.NotAvailable)
                 }
             }
-
         })
 
         presenterView.setSelectedPoint.observe(viewLifecycleOwner, Observer { item ->

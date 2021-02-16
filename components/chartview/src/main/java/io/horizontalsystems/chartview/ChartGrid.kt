@@ -41,9 +41,9 @@ class ChartGrid(private val config: ChartConfig, override var isVisible: Boolean
         // top
         drawLine(shape.left, shape.top, shape.right, shape.top, linePaint)
         // left
-        drawLine(shape.left, shape.top, shape.left, shape.bottom, linePaint)
+        // drawLine(shape.left, shape.top, shape.left, shape.bottom, linePaint)
         // right
-        drawLine(shape.right, shape.top, shape.right, shape.bottom, linePaint)
+        // drawLine(shape.right, shape.top, shape.right, shape.bottom, linePaint)
         // bottom
         drawLine(shape.left, shape.bottom, shape.right, shape.bottom, linePaint)
     }
