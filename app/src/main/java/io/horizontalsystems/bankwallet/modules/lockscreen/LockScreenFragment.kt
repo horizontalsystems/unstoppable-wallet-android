@@ -5,14 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentResultListener
+import androidx.fragment.app.commit
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.modules.ratelist.RatesListFragment
-import io.horizontalsystems.bankwallet.modules.ratelist.RatesTopListFragment
 import io.horizontalsystems.pin.PinFragment
 import io.horizontalsystems.pin.PinInteractionType
 import io.horizontalsystems.pin.PinModule
-import kotlinx.android.synthetic.main.fragment_lockscreen.*
 
 class LockScreenFragment : BaseFragment(), FragmentResultListener {
 
@@ -23,20 +21,15 @@ class LockScreenFragment : BaseFragment(), FragmentResultListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val fragments = listOf(
-                PinFragment().apply {
+        val pinFragment = PinFragment().apply {
                     arguments = Bundle(1).apply {
                         putBoolean(PinFragment.ATTACHED_TO_LOCKSCREEN, true)
                     }
-                },
-                RatesListFragment(),
-                RatesTopListFragment()
-        )
+                }
 
-        viewPager.offscreenPageLimit = 1
-        viewPager.adapter = LockScreenViewPagerAdapter(fragments, childFragmentManager)
-
-        circleIndicator.setViewPager(viewPager)
+        childFragmentManager.commit {
+            replace(R.id.fragmentContainerView, pinFragment)
+        }
 
         childFragmentManager.setFragmentResultListener(PinModule.requestKey, this, this)
     }
