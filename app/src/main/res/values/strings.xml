@@ -26,7 +26,9 @@
     <string name="Button_Connect">Connect</string>
     <string name="Button_Reject">Reject</string>
     <string name="Button_Disconnect">Disconnect</string>
-    <string name="Button_GetStarted">Get Started</string>
+    <string name="Button_Start">Start</string>
+    <string name="Button_Create">Create</string>
+    <string name="Button_Restore">Restore</string>
 
     <string name="Error">Error</string>
     <string name="NotAvailable">N/A</string>
@@ -37,11 +39,11 @@
     <!--Intro-->
     <string name="Intro_Wallet_Description">Store and Trade crypto. Have full control over assets. Remain anonymous.</string>
     <string name="Intro_Invest_Title">Invest Wisely</string>
-    <string name="Intro_Invest_Description">Unstoppable integrates unmatched trading, monitoring and analytical instruments.</string>
-    <string name="Intro_Independence_Title">Be Independent</string>
-    <string name="Intro_Independence_Description">Unstoppable is built to ensure users are able to access funds at any time from anywhere.</string>
-    <string name="Intro_Privacy_Title">Stay Private</string>
-    <string name="Intro_Privacy_Description">Use this wallet to remain incognito and be able to keep your information private.</string>
+    <string name="Intro_Invest_Description">Unmatched trading, monitoring and analytical instruments.</string>
+    <string name="Intro_Independence_Title">Make finances independent</string>
+    <string name="Intro_Independence_Description">The funds are under your exclusive control and no other entity.</string>
+    <string name="Intro_Privacy_Title">Keep your privacy safe</string>
+    <string name="Intro_Privacy_Description">Remain incognito and be able to keep your information private.</string>
 
     <!--Welcome-->
 
@@ -186,6 +188,7 @@
     <string name="Balance_Sort_Az">Name</string>
     <string name="Balance_Sort_24hPriceChange">24h Price (%)</string>
     <string name="Balance_Backup_Alert">You need to backup the %1$s Wallet before you may receive %2$s.</string>
+    <string name="Balance_NoWalletAlert">You don\’t have an installed wallet yet. Create or restore an existing wallet </string>
 
     <!--Send-->
 

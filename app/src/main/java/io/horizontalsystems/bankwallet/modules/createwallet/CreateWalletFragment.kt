@@ -10,7 +10,6 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
-import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.ui.extensions.coinlist.CoinListBaseFragment
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
@@ -23,7 +22,6 @@ class CreateWalletFragment : CoinListBaseFragment() {
 
     private lateinit var viewModel: CreateWalletViewModel
     private var doneMenuButton: MenuItem? = null
-    private var inApp = true
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -45,7 +43,6 @@ class CreateWalletFragment : CoinListBaseFragment() {
         doneMenuButton = toolbar.menu.findItem(R.id.menuDone)
 
         val predefinedAccountType = arguments?.getParcelable<PredefinedAccountType>("predefinedAccountType")
-        inApp = arguments?.getBoolean("inApp") ?: true
 
         viewModel = ViewModelProvider(this, CreateWalletModule.Factory(predefinedAccountType))
                 .get(CreateWalletViewModel::class.java)
@@ -85,7 +82,7 @@ class CreateWalletFragment : CoinListBaseFragment() {
         })
 
         viewModel.finishLiveEvent.observe(viewLifecycleOwner, Observer {
-            closeWithSuccess()
+            findNavController().popBackStack()
         })
 
         viewModel.errorLiveData.observe(viewLifecycleOwner, Observer {
@@ -93,15 +90,4 @@ class CreateWalletFragment : CoinListBaseFragment() {
         })
     }
 
-    private fun closeWithSuccess() {
-        if (inApp) {
-            hideKeyboard()
-            findNavController().popBackStack()
-        } else {
-            activity?.let {
-                MainModule.start(it)
-                it.finishAffinity()
-            }
-        }
-    }
 }
