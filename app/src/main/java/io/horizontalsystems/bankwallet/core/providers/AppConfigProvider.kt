@@ -46,6 +46,7 @@ class AppConfigProvider : IAppConfigProvider, ILanguageConfigProvider, IBuildCon
                 Coin("ETH", "Ethereum", "ETH", 18, CoinType.Ethereum),
                 Coin("BCH", "Bitcoin Cash", "BCH", 8, CoinType.BitcoinCash),
                 Coin("DASH", "Dash", "DASH", 8, CoinType.Dash),
+                Coin("BNB-BSC", "Binance Smart Chain", "BNB", 18, CoinType.BinanceSmartChain),
                 Coin("BNB", "Binance Chain", "BNB", 8, CoinType.Binance("BNB")),
                 Coin("ZEC", "Zcash", "ZEC", 8, CoinType.Zcash)
         )

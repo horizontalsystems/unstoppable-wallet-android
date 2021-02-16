@@ -36,6 +36,8 @@ class AdapterFactory(
             is CoinType.Binance -> BinanceAdapter(binanceKitManager.binanceKit(wallet), coinType.symbol)
             is CoinType.Ethereum -> EthereumAdapter(ethereumKitManager.ethereumKit(wallet, communicationMode))
             is CoinType.Erc20 -> Erc20Adapter(context, ethereumKitManager.ethereumKit(wallet, communicationMode), wallet.coin.decimal, coinType.address, coinType.fee, coinType.minimumRequiredBalance, coinType.minimumSendAmount)
+            is CoinType.BinanceSmartChain -> null
+            is CoinType.Bep20 -> null
         }
     }
 
