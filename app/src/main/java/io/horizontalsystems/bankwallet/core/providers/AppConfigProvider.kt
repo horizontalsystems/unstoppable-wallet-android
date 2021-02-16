@@ -26,6 +26,7 @@ class AppConfigProvider : IAppConfigProvider, ILanguageConfigProvider, IBuildCon
     override val infuraProjectId = App.instance.getString(R.string.infuraProjectId)
     override val infuraProjectSecret = App.instance.getString(R.string.infuraSecretKey)
     override val etherscanApiKey = App.instance.getString(R.string.etherscanKey)
+    override val bscscanApiKey = App.instance.getString(R.string.bscscanKey)
     override val guidesUrl = App.instance.getString(R.string.guidesUrl)
     override val faqUrl = App.instance.getString(R.string.faqUrl)
     override val fiatDecimal: Int = 2

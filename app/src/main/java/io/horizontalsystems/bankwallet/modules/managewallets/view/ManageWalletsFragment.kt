@@ -161,6 +161,10 @@ class ManageWalletsFragment : CoinListBaseFragment(), NoAccountDialog.Listener {
                     openAddToken(TokenType.Erc20)
                 }
 
+                override fun onClickAddBep20Token() {
+                    openAddToken(TokenType.Bep20)
+                }
+
                 override fun onClickAddBep2Token() {
                     openAddToken(TokenType.Bep2)
                 }
@@ -172,6 +176,6 @@ class ManageWalletsFragment : CoinListBaseFragment(), NoAccountDialog.Listener {
         val arguments = Bundle(1).apply {
             putParcelable(AddTokenFragment.TOKEN_TYPE_KEY, tokenType)
         }
-        findNavController().navigate(R.id.manageWalletsFragment_to_addErc20Token, arguments, navOptions())
+        findNavController().navigate(R.id.manageWalletsFragment_to_addToken, arguments, navOptions())
     }
 }

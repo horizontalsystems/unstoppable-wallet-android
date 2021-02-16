@@ -12,6 +12,7 @@ class AddTokenDialog(private val listener: Listener)
 
     interface Listener {
         fun onClickAddErc20Token()
+        fun onClickAddBep20Token()
         fun onClickAddBep2Token()
     }
 
@@ -29,6 +30,10 @@ class AddTokenDialog(private val listener: Listener)
     private fun bindActions() {
         erc20TokensBtn.setOnClickListener {
             listener.onClickAddErc20Token()
+            dismiss()
+        }
+        bep20TokensBtn.setOnClickListener {
+            listener.onClickAddBep20Token()
             dismiss()
         }
         bep2TokensBtn.setOnClickListener {

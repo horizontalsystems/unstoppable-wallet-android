@@ -507,8 +507,8 @@
     <string name="AddToken_ApiLimitExceeded">Api limit exceeded. Try again later.</string>
     <!-- Add Erc20 Token -->
     <string name="AddErc20Token_Title">ERC20 Ekle</string>
-    <string name="AddErc20Token_ContractAddressHint">Sözleşme Adresi</string>
-    <string name="AddErc20Token_ContractNotFound">Sözleşme bulunamadı</string>
+    <string name="AddEvmToken_ContractAddressHint">Sözleşme Adresi</string>
+    <string name="AddEvmToken_ContractNotFound">Sözleşme bulunamadı</string>
     <!-- Add Bep2 Token -->
     <string name="AddBep2Token_Title">BEP2 Ekle</string>
     <string name="AddBep2Token_TokenSymbolHint">Token Sembolü</string>

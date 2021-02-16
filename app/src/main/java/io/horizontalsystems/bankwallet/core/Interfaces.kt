@@ -129,7 +129,7 @@ interface INetworkManager {
     fun getTransaction(host: String, path: String, isSafeCall: Boolean): Flowable<JsonObject>
     fun getTransactionWithPost(host: String, path: String, body: Map<String, Any>): Flowable<JsonObject>
     fun ping(host: String, url: String, isSafeCall: Boolean): Flowable<Any>
-    fun getErc20CoinInfo(host: String, path: String): Flowable<JsonObject>
+    fun getEvmTokenInfo(host: String, path: String): Flowable<JsonObject>
     fun getBep2Tokens(host: String, path: String): Flowable<List<Bep2Token>>
 }
 
@@ -272,6 +272,7 @@ interface IAppConfigProvider {
     val infuraProjectSecret: String
     val btcCoreRpcUrl: String
     val etherscanApiKey: String
+    val bscscanApiKey: String
     val guidesUrl: String
     val faqUrl: String
     val fiatDecimal: Int

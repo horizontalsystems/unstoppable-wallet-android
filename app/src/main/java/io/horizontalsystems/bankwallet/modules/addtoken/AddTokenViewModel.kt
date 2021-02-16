@@ -86,7 +86,7 @@ class AddTokenViewModel(private val addTokenService: AddTokenService, val titleT
             is AddressValidator.InvalidAddressLength,
             is AddressValidator.InvalidAddressHex,
             is AddressValidator.InvalidAddressChecksum -> R.string.AddToken_InvalidAddressError
-            is ApiError.ContractNotFound -> R.string.AddErc20Token_ContractNotFound
+            is ApiError.ContractNotFound -> R.string.AddEvmToken_ContractNotFound
             is ApiError.TokenNotFound -> R.string.AddBep2Token_TokenNotFound
             is ApiError.ApiLimitExceeded -> R.string.AddToken_ApiLimitExceeded
             else -> R.string.Error

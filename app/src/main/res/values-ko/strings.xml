@@ -508,8 +508,8 @@
     <string name="AddToken_ApiLimitExceeded">Api limit exceeded. Try again later.</string>
     <!-- Add Erc20 Token -->
     <string name="AddErc20Token_Title">ERC20 추가</string>
-    <string name="AddErc20Token_ContractAddressHint">계약 주소</string>
-    <string name="AddErc20Token_ContractNotFound">거래 발견되지 않음</string>
+    <string name="AddEvmToken_ContractAddressHint">계약 주소</string>
+    <string name="AddEvmToken_ContractNotFound">거래 발견되지 않음</string>
     <!-- Add Bep2 Token -->
     <string name="AddBep2Token_Title">BEP2 추가</string>
     <string name="AddBep2Token_TokenSymbolHint">토큰 심볼</string>

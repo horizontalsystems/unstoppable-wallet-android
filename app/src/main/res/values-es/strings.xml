@@ -508,8 +508,8 @@ poner en peligro la seguridad de mis fondos.</string>
     <string name="AddToken_ApiLimitExceeded">Límite de Api superado. Inténtalo de nuevo más tarde.</string>
     <!-- Add Erc20 Token -->
     <string name="AddErc20Token_Title">Añadir ERC20</string>
-    <string name="AddErc20Token_ContractAddressHint">Dirección del contrato</string>
-    <string name="AddErc20Token_ContractNotFound">Contrato no encontrado</string>
+    <string name="AddEvmToken_ContractAddressHint">Dirección del contrato</string>
+    <string name="AddEvmToken_ContractNotFound">Contrato no encontrado</string>
     <!-- Add Bep2 Token -->
     <string name="AddBep2Token_Title">Añadir BEP2</string>
     <string name="AddBep2Token_TokenSymbolHint">Símbolo del token</string>

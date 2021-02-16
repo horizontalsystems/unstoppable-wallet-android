@@ -507,8 +507,8 @@
     <string name="AddToken_ApiLimitExceeded">از محدوده اپی فراتر رفت. بعدا دوباره تلاش کنید.</string>
     <!-- Add Erc20 Token -->
     <string name="AddErc20Token_Title">اضافه کردن ERC20</string>
-    <string name="AddErc20Token_ContractAddressHint">آدرس قرارداد</string>
-    <string name="AddErc20Token_ContractNotFound">قرارداد یافت نشد</string>
+    <string name="AddEvmToken_ContractAddressHint">آدرس قرارداد</string>
+    <string name="AddEvmToken_ContractNotFound">قرارداد یافت نشد</string>
     <!-- Add Bep2 Token -->
     <string name="AddBep2Token_Title">اضافه کردن بیپ۲</string>
     <string name="AddBep2Token_TokenSymbolHint">نماد رمز</string>
