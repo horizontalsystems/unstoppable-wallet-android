@@ -84,16 +84,14 @@ class ManageKeysFragment : BaseFragment(), ManageKeysDialog.Listener, ManageKeys
             val arguments = Bundle(3).apply {
                 putParcelable(RestoreFragment.PREDEFINED_ACCOUNT_TYPE_KEY, predefinedAccountType)
                 putBoolean(RestoreFragment.SELECT_COINS_KEY, true)
-                putBoolean(RestoreFragment.IN_APP_KEY, true)
             }
 
             findNavController().navigate(R.id.manageKeysFragment_to_restoreFragment, arguments, navOptions())
         })
 
         router.showCreateWalletLiveEvent.observe(this, Observer { predefinedAccountType ->
-            val arguments = Bundle(2).apply {
+            val arguments = Bundle(1).apply {
                 putParcelable("predefinedAccountType", predefinedAccountType)
-                putBoolean("inApp", true)
             }
 
             findNavController().navigate(R.id.manageKeysFragment_to_createWalletFragment, arguments, navOptions())

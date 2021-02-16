@@ -15,7 +15,6 @@ import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
-import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.restore.restoreselectcoins.RestoreSelectCoinsFragment
 import io.horizontalsystems.bankwallet.modules.restore.restoreselectpredefinedaccounttype.RestoreSelectPredefinedAccountTypeFragment
 import io.horizontalsystems.bankwallet.modules.restore.words.RestoreWordsFragment
@@ -26,7 +25,6 @@ import kotlinx.android.synthetic.main.fragment_manage_keys.*
 class RestoreFragment : BaseFragment() {
 
     private lateinit var viewModel: RestoreViewModel
-    private var inApp = true
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_restore, container, false)
@@ -38,7 +36,6 @@ class RestoreFragment : BaseFragment() {
         val selectCoins = arguments?.getBoolean(SELECT_COINS_KEY)!!
         val coinToEnable = arguments?.getParcelable<Coin>(COIN_TO_ENABLE)
         val predefinedAccountType = arguments?.getParcelable<PredefinedAccountType>(PREDEFINED_ACCOUNT_TYPE_KEY)
-        inApp = arguments?.getBoolean(IN_APP_KEY) ?: true
 
         viewModel = ViewModelProvider(this, RestoreModule.Factory(selectCoins, predefinedAccountType, coinToEnable))
                 .get(RestoreViewModel::class.java)
@@ -57,19 +54,8 @@ class RestoreFragment : BaseFragment() {
         })
 
         viewModel.finishLiveEvent.observe(viewLifecycleOwner, Observer {
-            closeWithSuccess()
-        })
-    }
-
-    private fun closeWithSuccess() {
-        if (inApp) {
             findNavController().popBackStack()
-        } else {
-            activity?.let {
-                MainModule.start(it)
-                it.finishAffinity()
-            }
-        }
+        })
     }
 
     private fun openScreen(screen: RestoreViewModel.Screen, addToStack: Boolean) {
@@ -150,6 +136,5 @@ class RestoreFragment : BaseFragment() {
         const val PREDEFINED_ACCOUNT_TYPE_KEY = "predefined_account_type_key"
         const val SELECT_COINS_KEY = "select_coins_key"
         const val COIN_TO_ENABLE = "coin_to_enable"
-        const val IN_APP_KEY = "in_app_key"
     }
 }

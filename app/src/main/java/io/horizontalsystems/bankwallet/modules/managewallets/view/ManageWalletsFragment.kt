@@ -107,7 +107,6 @@ class ManageWalletsFragment : CoinListBaseFragment(), NoAccountDialog.Listener {
             putParcelable(RestoreFragment.PREDEFINED_ACCOUNT_TYPE_KEY, predefinedAccountType)
             putParcelable(RestoreFragment.COIN_TO_ENABLE, coin)
             putBoolean(RestoreFragment.SELECT_COINS_KEY, false)
-            putBoolean(RestoreFragment.IN_APP_KEY, true)
         }
 
         findNavController().navigate(R.id.manageWalletsFragment_to_restoreFragment, arguments, navOptions())

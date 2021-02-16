@@ -4,7 +4,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import io.horizontalsystems.bankwallet.modules.balance.BalanceFragment
+import io.horizontalsystems.bankwallet.modules.balanceonboarding.BalanceOnboardingContainerFragment
 import io.horizontalsystems.bankwallet.modules.market.MarketFragment
 import io.horizontalsystems.bankwallet.modules.settings.main.MainSettingsFragment
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionsFragment
@@ -17,7 +17,7 @@ class MainViewPagerAdapter(fm: FragmentManager, lifecycle: Lifecycle)
     override fun createFragment(position: Int): Fragment {
         return when (position) {
             0 -> MarketFragment()
-            1 -> BalanceFragment()
+            1 -> BalanceOnboardingContainerFragment()
             2 -> TransactionsFragment()
             3 -> MainSettingsFragment()
             else -> throw IllegalStateException()

@@ -64,6 +64,12 @@
         <action
             android:id="@+id/mainFragment_to_transactionInfoDialog"
             app:destination="@id/transactionInfoDialog" />
+        <action
+            android:id="@+id/mainFragment_to_restoreFragment"
+            app:destination="@id/restore_graph" />
+        <action
+            android:id="@+id/mainFragment_to_createWalletFragment"
+            app:destination="@id/createWalletFragment" />
     </fragment>
 
     <fragment

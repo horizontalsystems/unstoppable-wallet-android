@@ -34,7 +34,7 @@ class IntroActivity : BaseActivity() {
         } catch (e: Exception) {
         }
 
-        val images = arrayOf(R.drawable.ic_onboarding_logo, R.drawable.ic_knowledge, R.drawable.ic_independence, R.drawable.ic_privacy)
+        val images = arrayOf(R.drawable.ic_onboarding_logo, R.drawable.ic_independence, R.drawable.ic_privacy, R.drawable.ic_knowledge)
         viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrollStateChanged(state: Int) = Unit
 
@@ -80,7 +80,7 @@ class IntroActivity : BaseActivity() {
 
     private fun updateButton(lastSlide: Boolean) {
         btnNext.setBackgroundResource(if (lastSlide) R.drawable.button_yellow_background else R.drawable.button_steel_background)
-        btnNext.setText(if (lastSlide) R.string.Button_GetStarted else R.string.Button_Next)
+        btnNext.setText(if (lastSlide) R.string.Button_Start else R.string.Button_Next)
     }
 
     private fun canHandleOnBackPress(): Boolean {
