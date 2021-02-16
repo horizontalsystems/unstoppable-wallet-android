@@ -28,6 +28,7 @@ class UnlockPinPresenter(
         interactor.updateLockoutState()
 
         showBiometricAuthButton()
+        showBiometricAuthInput()
     }
 
     override fun onEnter(pin: String, pageIndex: Int) {
