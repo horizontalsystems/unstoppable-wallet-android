@@ -1,19 +1,13 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/titleText"
+    style="@style/Subhead1"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-
-    <TextView
-        android:id="@+id/titleText"
-        style="@style/Subhead1"
-        tools:text="@string/SettingsPrivacy_CommunicationSettingsTitle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="38dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="12dp"
-        android:textAllCaps="true"
-        android:textColor="@color/grey" />
-
-</FrameLayout>
+    android:layout_height="wrap_content"
+    android:paddingStart="16dp"
+    android:paddingTop="38dp"
+    android:paddingEnd="32dp"
+    android:paddingBottom="12dp"
+    android:textAllCaps="true"
+    android:textColor="@color/grey"
+    tools:text="@string/SettingsPrivacy_CommunicationSettingsTitle" />
