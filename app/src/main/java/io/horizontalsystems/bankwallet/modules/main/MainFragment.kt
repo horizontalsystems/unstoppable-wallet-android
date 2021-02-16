@@ -11,7 +11,6 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView
 import io.horizontalsystems.bankwallet.R
@@ -34,12 +33,6 @@ class MainFragment : Fragment(), RateAppDialogFragment.Listener {
         view.viewPager.adapter = MainViewPagerAdapter(childFragmentManager, viewLifecycleOwner.lifecycle)
 
         view.viewPager.isUserInputEnabled = false
-        view.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-            override fun onPageSelected(position: Int) {
-                super.onPageSelected(position)
-                view.bottomNavigation.menu.getItem(position).isChecked = true
-            }
-        })
 
         view.bottomNavigation.setOnNavigationItemSelectedListener {
             when (it.itemId) {
@@ -88,6 +81,10 @@ class MainFragment : Fragment(), RateAppDialogFragment.Listener {
             } else {
                 settingsNavigationViewItem?.removeView(bottomBadgeView)
             }
+        })
+
+        viewModel.transactionTabEnabledLiveData.observe(viewLifecycleOwner, { enabled ->
+            bottomNavigation.menu.getItem(2).isEnabled = enabled
         })
 
         activity?.onBackPressedDispatcher?.addCallback(this) {

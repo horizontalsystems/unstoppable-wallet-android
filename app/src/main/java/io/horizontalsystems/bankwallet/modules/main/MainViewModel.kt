@@ -11,6 +11,7 @@ class MainViewModel : ViewModel(), MainModule.IView {
     val openPlayMarketLiveEvent = SingleLiveEvent<Unit>()
     val hideContentLiveData = MutableLiveData<Boolean>()
     val setBadgeVisibleLiveData = MutableLiveData<Boolean>()
+    val transactionTabEnabledLiveData = MutableLiveData<Boolean>()
 
     fun init() {
         MainModule.init(this)
@@ -31,6 +32,10 @@ class MainViewModel : ViewModel(), MainModule.IView {
 
     override fun toggleBagdeVisibility(visible: Boolean) {
         setBadgeVisibleLiveData.postValue(visible)
+    }
+
+    override fun setTransactionTabEnabled(enabled: Boolean) {
+        transactionTabEnabledLiveData.postValue(enabled)
     }
 
     override fun onCleared() {

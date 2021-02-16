@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.main
 
+import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.IBackupManager
 import io.horizontalsystems.bankwallet.core.IRateAppManager
 import io.horizontalsystems.bankwallet.core.ITermsManager
@@ -10,7 +11,8 @@ class MainInteractor(
         private val rateAppManager: IRateAppManager,
         private val backupManager: IBackupManager,
         private val termsManager: ITermsManager,
-        private val pinComponent: IPinComponent)
+        private val pinComponent: IPinComponent,
+        private val accountManager: IAccountManager)
     : MainModule.IInteractor {
 
     var delegate: MainModule.IInteractorDelegate? = null
@@ -36,6 +38,12 @@ class MainInteractor(
         disposables.add(pinComponent.pinSetFlowable.subscribe {
             delegate?.updateBadgeVisibility()
         })
+
+        disposables.add(accountManager.accountsFlowable.subscribe {
+            delegate?.sync(it)
+        })
+
+        delegate?.sync(accountManager.accounts)
     }
 
     override val allBackedUp: Boolean

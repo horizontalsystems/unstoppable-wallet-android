@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.main
 
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.managers.RateUsType
+import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.core.IPinComponent
 
 class MainPresenter(private val pinComponent: IPinComponent,
@@ -32,6 +33,10 @@ class MainPresenter(private val pinComponent: IPinComponent,
     override fun updateBadgeVisibility() {
         val visible = !(interactor.allBackedUp && interactor.termsAccepted && interactor.isPinSet)
         view?.toggleBagdeVisibility(visible)
+    }
+
+    override fun sync(accounts: List<Account>) {
+        view?.setTransactionTabEnabled(accounts.isNotEmpty())
     }
 
     override fun onClear() {
