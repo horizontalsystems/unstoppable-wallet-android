@@ -2,7 +2,7 @@ package io.horizontalsystems.bankwallet.modules.swap
 
 import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.IBalanceAdapter
-import io.horizontalsystems.bankwallet.core.ethereum.EthereumTransactionService
+import io.horizontalsystems.bankwallet.core.ethereum.EvmTransactionService
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.swap.SwapTradeService.PriceImpactLevel
@@ -22,7 +22,7 @@ class SwapService(
         private val tradeService: SwapTradeService,
         private val allowanceService: SwapAllowanceService,
         private val pendingAllowanceService: SwapPendingAllowanceService,
-        private val transactionService: EthereumTransactionService,
+        private val transactionService: EvmTransactionService,
         private val adapterManager: IAdapterManager
 ) {
 

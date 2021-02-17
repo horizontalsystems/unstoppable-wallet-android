@@ -1,6 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.swap.approve
 
-import io.horizontalsystems.bankwallet.core.ethereum.EthereumTransactionService
+import io.horizontalsystems.bankwallet.core.ethereum.EvmTransactionService
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.erc20kit.core.Erc20Kit
 import io.horizontalsystems.ethereumkit.core.EthereumKit
@@ -12,7 +12,7 @@ import io.reactivex.subjects.BehaviorSubject
 import java.math.BigInteger
 
 class SwapApproveService(
-        private val transactionService: EthereumTransactionService,
+        private val transactionService: EvmTransactionService,
         private val erc20Kit: Erc20Kit,
         private val ethereumKit: EthereumKit,
         amount: BigInteger,

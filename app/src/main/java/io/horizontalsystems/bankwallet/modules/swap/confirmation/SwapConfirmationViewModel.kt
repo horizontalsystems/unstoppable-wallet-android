@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.core.ethereum.CoinService
-import io.horizontalsystems.bankwallet.core.ethereum.EthereumTransactionService
+import io.horizontalsystems.bankwallet.core.ethereum.EvmTransactionService
 import io.horizontalsystems.bankwallet.core.providers.StringProvider
 import io.horizontalsystems.bankwallet.modules.swap.SwapViewItemHelper
 import io.horizontalsystems.bankwallet.modules.swap.SwapModule
@@ -18,7 +18,7 @@ import io.reactivex.disposables.CompositeDisposable
 class SwapConfirmationViewModel(
         private val service: SwapService,
         private val tradeService: SwapTradeService,
-        private val transactionService: EthereumTransactionService,
+        private val transactionService: EvmTransactionService,
         private val ethereumCoinService: CoinService,
         private val numberFormatter: IAppNumberFormatter,
         private val formatter: SwapViewItemHelper,

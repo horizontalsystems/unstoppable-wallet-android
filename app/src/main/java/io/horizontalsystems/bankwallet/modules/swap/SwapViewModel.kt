@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.ethereum.CoinService
-import io.horizontalsystems.bankwallet.core.ethereum.EthereumTransactionService
+import io.horizontalsystems.bankwallet.core.ethereum.EvmTransactionService
 import io.horizontalsystems.bankwallet.core.providers.StringProvider
 import io.horizontalsystems.bankwallet.modules.swap.SwapService.SwapError
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceService
@@ -133,7 +133,7 @@ class SwapViewModel(
     }
 
     private fun sync(errors: List<Throwable>) {
-        val filtered = errors.filter { it !is EthereumTransactionService.GasDataError && it !is SwapError }
+        val filtered = errors.filter { it !is EvmTransactionService.GasDataError && it !is SwapError }
         swapErrorLiveData.postValue(filtered.firstOrNull()?.let { convert(it) })
 
         syncProceedAction()

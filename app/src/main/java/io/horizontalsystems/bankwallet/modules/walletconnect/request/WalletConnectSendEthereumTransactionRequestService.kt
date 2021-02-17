@@ -1,6 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect.request
 
-import io.horizontalsystems.bankwallet.core.ethereum.EthereumTransactionService
+import io.horizontalsystems.bankwallet.core.ethereum.EvmTransactionService
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.models.TransactionData
@@ -12,7 +12,7 @@ import java.math.BigInteger
 
 class WalletConnectSendEthereumTransactionRequestService(
         private val transaction: WalletConnectTransaction,
-        private val transactionService: EthereumTransactionService,
+        private val transactionService: EvmTransactionService,
         private val ethereumKit: EthereumKit
 ) {
     val transactionData = TransactionData(transaction.to, transaction.value, transaction.data)
@@ -30,7 +30,7 @@ class WalletConnectSendEthereumTransactionRequestService(
 
     init {
         transaction.gasPrice?.let {
-            transactionService.gasPriceType = EthereumTransactionService.GasPriceType.Custom(it)
+            transactionService.gasPriceType = EvmTransactionService.GasPriceType.Custom(it)
         }
 
         transactionService.transactionStatusObservable

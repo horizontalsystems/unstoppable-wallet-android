@@ -4,9 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ethereum.CoinService
-import io.horizontalsystems.bankwallet.core.ethereum.EthereumTransactionService
-import io.horizontalsystems.bankwallet.core.factories.FeeRateProviderFactory
-import io.horizontalsystems.bankwallet.core.providers.EthereumFeeRateProvider
+import io.horizontalsystems.bankwallet.core.ethereum.EvmTransactionService
 import io.horizontalsystems.bankwallet.core.providers.StringProvider
 import io.horizontalsystems.bankwallet.modules.swap.SwapViewItemHelper
 import io.horizontalsystems.bankwallet.modules.swap.SwapService
@@ -17,7 +15,7 @@ object SwapConfirmationModule {
     class Factory(
             private val service: SwapService,
             private val tradeService: SwapTradeService,
-            private val transactionService: EthereumTransactionService
+            private val transactionService: EvmTransactionService
     ) : ViewModelProvider.Factory {
 
         private val ethereumCoinService by lazy { CoinService(App.appConfigProvider.ethereumCoin, App.currencyManager, App.xRateManager) }

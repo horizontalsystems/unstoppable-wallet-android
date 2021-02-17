@@ -8,7 +8,7 @@ import androidx.savedstate.SavedStateRegistryOwner
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ethereum.CoinService
 import io.horizontalsystems.bankwallet.core.ethereum.EthereumFeeViewModel
-import io.horizontalsystems.bankwallet.core.ethereum.EthereumTransactionService
+import io.horizontalsystems.bankwallet.core.ethereum.EvmTransactionService
 import io.horizontalsystems.bankwallet.core.factories.FeeRateProviderFactory
 import io.horizontalsystems.bankwallet.core.fiat.AmountTypeSwitchService
 import io.horizontalsystems.bankwallet.core.fiat.FiatService
@@ -54,7 +54,7 @@ object SwapModule {
         private val uniswapKit by lazy { UniswapKit.getInstance(ethereumKit) }
         private val transactionService by lazy {
             val feeRateProvider = FeeRateProviderFactory.provider(App.appConfigProvider.ethereumCoin) as EthereumFeeRateProvider
-            EthereumTransactionService(ethereumKit, feeRateProvider, 20)
+            EvmTransactionService(ethereumKit, feeRateProvider, 20)
         }
         private val ethCoinService by lazy { CoinService(App.appConfigProvider.ethereumCoin, App.currencyManager, App.xRateManager) }
         private val uniswapProvider by lazy { UniswapProvider(uniswapKit) }

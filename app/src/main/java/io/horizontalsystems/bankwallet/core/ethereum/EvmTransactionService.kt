@@ -12,8 +12,8 @@ import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import java.math.BigInteger
 
-class EthereumTransactionService(
-        private val ethereumKit: EthereumKit,
+class EvmTransactionService(
+        private val evmKit: EthereumKit,
         private val feeRateProvider: EthereumFeeRateProvider,
         private val gasLimitSurchargePercent: Int
 ) {
@@ -97,7 +97,7 @@ class EthereumTransactionService(
     }
 
     private fun gasLimitSingle(gasPrice: BigInteger, transactionData: TransactionData): Single<Long> {
-        return ethereumKit.estimateGas(transactionData, gasPrice.toLong())
+        return evmKit.estimateGas(transactionData, gasPrice.toLong())
     }
 
     // types
