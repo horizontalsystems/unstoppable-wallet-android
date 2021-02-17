@@ -11,7 +11,7 @@ import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
 
 class EthereumFeeViewModel(
-        val transactionService: EthereumTransactionService,
+        val transactionService: EvmTransactionService,
         private val coinService: CoinService
 ) : ViewModel(), ISendFeeViewModel, ISendFeePriorityViewModel {
 
@@ -78,34 +78,34 @@ class EthereumFeeViewModel(
 
         transactionService.gasPriceType = when (selectedPriority) {
             Priority.Recommended -> {
-                EthereumTransactionService.GasPriceType.Recommended
+                EvmTransactionService.GasPriceType.Recommended
             }
             Priority.Custom -> {
                 val transaction = transactionService.transactionStatus.dataOrNull
                 val gasPrice = transaction?.gasData?.gasPrice ?: wei(customFeeRange.lower)
 
-                EthereumTransactionService.GasPriceType.Custom(gasPrice)
+                EvmTransactionService.GasPriceType.Custom(gasPrice)
             }
         }
     }
 
     override fun changeCustomPriority(value: Long) {
-        transactionService.gasPriceType = EthereumTransactionService.GasPriceType.Custom(wei(value))
+        transactionService.gasPriceType = EvmTransactionService.GasPriceType.Custom(wei(value))
     }
 
-    private fun syncTransactionStatus(transactionStatus: DataState<EthereumTransactionService.Transaction>) {
+    private fun syncTransactionStatus(transactionStatus: DataState<EvmTransactionService.Transaction>) {
         estimatedFeeLiveData.postValue(estimatedFeeStatus(transactionStatus))
         feeLiveData.postValue(feeStatus(transactionStatus))
     }
 
-    private fun syncGasPriceType(gasPriceType: EthereumTransactionService.GasPriceType) {
+    private fun syncGasPriceType(gasPriceType: EvmTransactionService.GasPriceType) {
         priorityLiveData.postValue(getPriority(gasPriceType).description)
 
         when (gasPriceType) {
-            EthereumTransactionService.GasPriceType.Recommended -> {
+            EvmTransactionService.GasPriceType.Recommended -> {
                 feeSliderLiveData.postValue(null)
             }
-            is EthereumTransactionService.GasPriceType.Custom -> {
+            is EvmTransactionService.GasPriceType.Custom -> {
                 if (feeSliderLiveData.value == null) {
                     val gasPrice = gasPriceType.gasPrice
                     feeSliderLiveData.postValue(SendFeeSliderViewItem(initialValue = gwei(wei = gasPrice), range = customFeeRange, unit = customFeeUnit))
@@ -122,14 +122,14 @@ class EthereumFeeViewModel(
         return gwei * 1_000_000_000
     }
 
-    private fun getPriority(gasPriceType: EthereumTransactionService.GasPriceType): Priority {
+    private fun getPriority(gasPriceType: EvmTransactionService.GasPriceType): Priority {
         return when (gasPriceType) {
-            EthereumTransactionService.GasPriceType.Recommended -> Priority.Recommended
-            is EthereumTransactionService.GasPriceType.Custom -> Priority.Custom
+            EvmTransactionService.GasPriceType.Recommended -> Priority.Recommended
+            is EvmTransactionService.GasPriceType.Custom -> Priority.Custom
         }
     }
 
-    private fun estimatedFeeStatus(transactionStatus: DataState<EthereumTransactionService.Transaction>): String {
+    private fun estimatedFeeStatus(transactionStatus: DataState<EvmTransactionService.Transaction>): String {
         return when (transactionStatus) {
             DataState.Loading -> {
                 App.instance.getString(R.string.Alert_Loading)
@@ -143,7 +143,7 @@ class EthereumFeeViewModel(
         }
     }
 
-    private fun feeStatus(transactionStatus: DataState<EthereumTransactionService.Transaction>): String {
+    private fun feeStatus(transactionStatus: DataState<EvmTransactionService.Transaction>): String {
         return when (transactionStatus) {
             DataState.Loading -> {
                 App.instance.getString(R.string.Alert_Loading)
