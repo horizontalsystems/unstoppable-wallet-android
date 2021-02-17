@@ -6,17 +6,25 @@
         <attr name="subtitle" />
         <attr name="value" format="string" />
         <attr name="showArrow" format="boolean" />
+        <attr name="position">
+            <enum name="single" value="0" />
+            <enum name="first" value="1" />
+            <enum name="middle" value="2" />
+            <enum name="last" value="3" />
+        </attr>
     </declare-styleable>
     <declare-styleable name="SettingsViewDropdown">
         <attr name="icon" />
         <attr name="title" />
         <attr name="subtitle" />
         <attr name="value" />
+        <attr name="position" />
     </declare-styleable>
     <declare-styleable name="SettingsViewSwitch">
         <attr name="icon" />
         <attr name="title" />
         <attr name="subtitle" />
+        <attr name="position" />
     </declare-styleable>
     <declare-styleable name="ManageAccountView">
         <attr name="title" />

@@ -32,6 +32,7 @@ class SettingsView @JvmOverloads constructor(context: Context, attrs: AttributeS
             showIcon(attributes.getDrawable(R.styleable.SettingsView_icon))
             showValue(attributes.getString(R.styleable.SettingsView_value))
             showArrow(attributes.getBoolean(R.styleable.SettingsView_showArrow, true))
+            setListPosition(attributes.getInt(R.styleable.SettingsView_position, 0))
         } finally {
             attributes.recycle()
         }

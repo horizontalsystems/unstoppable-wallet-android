@@ -27,6 +27,7 @@ class SettingsViewDropdown @JvmOverloads constructor(context: Context, attrs: At
             showSubtitle(attributes.getString(R.styleable.SettingsViewDropdown_subtitle))
             showIcon(attributes.getDrawable(R.styleable.SettingsViewDropdown_icon))
             showDropdownValue(attributes.getString(R.styleable.SettingsViewDropdown_value))
+            setListPosition(attributes.getInt(R.styleable.SettingsViewDropdown_value, 0))
         } finally {
             attributes.recycle()
         }
