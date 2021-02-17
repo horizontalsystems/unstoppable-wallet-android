@@ -13,8 +13,8 @@ import io.horizontalsystems.bankwallet.core.factories.FeeRateProviderFactory
 import io.horizontalsystems.bankwallet.core.fiat.AmountTypeSwitchService
 import io.horizontalsystems.bankwallet.core.fiat.FiatService
 import io.horizontalsystems.bankwallet.core.providers.EthereumFeeRateProvider
-import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.core.providers.StringProvider
+import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceService
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceViewModel
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapPendingAllowanceService
@@ -50,7 +50,7 @@ object SwapModule {
             owner: SavedStateRegistryOwner,
             private val fromCoin: Coin?
     ) : AbstractSavedStateViewModelFactory(owner, null) {
-        private val ethereumKit by lazy { App.ethereumKitManager.ethereumKit!! }
+        private val ethereumKit by lazy { App.ethereumKitManager.evmKit!! }
         private val uniswapKit by lazy { UniswapKit.getInstance(ethereumKit) }
         private val transactionService by lazy {
             val feeRateProvider = FeeRateProviderFactory.provider(App.appConfigProvider.ethereumCoin) as EthereumFeeRateProvider

@@ -16,7 +16,6 @@ import io.horizontalsystems.binancechainkit.BinanceChainKit
 import io.horizontalsystems.bitcoincore.core.IPluginData
 import io.horizontalsystems.core.entities.AppVersion
 import io.horizontalsystems.core.entities.Currency
-import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.xrateskit.entities.*
 import io.reactivex.Flowable
 import io.reactivex.Observable
@@ -153,14 +152,6 @@ sealed class AdapterState {
     data class NotSynced(val error: Throwable) : AdapterState()
 }
 
-interface IEthereumKitManager {
-    val ethereumKit: EthereumKit?
-    val statusInfo: Map<String, Any>?
-
-    fun ethereumKit(wallet: Wallet, communicationMode: CommunicationMode?): EthereumKit
-    fun unlink()
-}
-
 interface IBinanceKitManager {
     val binanceKit: BinanceChainKit?
     val statusInfo: Map<String, Any>?
@@ -285,7 +276,7 @@ interface IAppConfigProvider {
     val binanceCoin: Coin
 }
 
-interface ICoinRecordStorage{
+interface ICoinRecordStorage {
     val coins: List<Coin>
     fun save(coin: Coin): Boolean
     fun delete(coin: Coin)
@@ -337,12 +328,12 @@ interface IEnabledWalletStorage {
 
 interface IBlockchainSettingsStorage {
     var bitcoinCashCoinType: BitcoinCashCoinType?
-    fun derivationSetting(coinType: CoinType) : DerivationSetting?
+    fun derivationSetting(coinType: CoinType): DerivationSetting?
     fun saveDerivationSetting(derivationSetting: DerivationSetting)
     fun deleteDerivationSettings()
-    fun initialSyncSetting(coinType: CoinType) : InitialSyncSetting?
+    fun initialSyncSetting(coinType: CoinType): InitialSyncSetting?
     fun saveInitialSyncSetting(initialSyncSetting: InitialSyncSetting)
-    fun ethereumRpcModeSetting(coinType: CoinType) : EthereumRpcMode?
+    fun ethereumRpcModeSetting(coinType: CoinType): EthereumRpcMode?
     fun saveEthereumRpcModeSetting(ethereumRpcModeSetting: EthereumRpcMode)
 }
 
@@ -374,7 +365,7 @@ interface IFeeRateProvider {
         get() = FeeRatePriority.RECOMMENDED
 
     fun feeRate(feeRatePriority: FeeRatePriority): Single<BigInteger> {
-        if (feeRatePriority is FeeRatePriority.Custom){
+        if (feeRatePriority is FeeRatePriority.Custom) {
             return Single.just(feeRatePriority.value.toBigInteger())
         }
         return recommendedFeeRate
@@ -407,7 +398,6 @@ interface IEthereumRpcModeSettingsManager {
 
 interface IAccountCleaner {
     fun clearAccounts(accountIds: List<String>)
-    fun clearAccount(coinType: CoinType, accountId: String)
 }
 
 interface IRateCoinMapper {
@@ -436,7 +426,7 @@ interface IRateAppManager {
     fun forceShow()
 }
 
-interface ICoinManager{
+interface ICoinManager {
     val coinAddedObservable: Flowable<Coin>
     val coins: List<Coin>
     val featuredCoins: List<Coin>
@@ -444,16 +434,13 @@ interface ICoinManager{
 }
 
 interface IAddTokenBlockchainService {
-    @Throws fun validate(reference: String)
-    fun existingCoin(reference: String, coins: List<Coin>) : Coin?
+    @Throws
+    fun validate(reference: String)
+    fun existingCoin(reference: String, coins: List<Coin>): Coin?
     fun coinSingle(reference: String): Single<Coin>
 }
 
-interface IErc20ContractInfoProvider{
-    fun getCoin(address: String): Single<Coin>
-}
-
-interface IPriceAlertManager{
+interface IPriceAlertManager {
     val notificationChangedFlowable: Flowable<Unit>
     fun getPriceAlerts(): List<PriceAlert>
     fun savePriceAlert(priceAlert: PriceAlert)
@@ -464,12 +451,12 @@ interface IPriceAlertManager{
     fun deleteAlertsByAccountType(accountType: AccountType)
 }
 
-interface INotificationSubscriptionManager{
+interface INotificationSubscriptionManager {
     fun addNewJobs(jobs: List<SubscriptionJob>)
     fun processJobs()
 }
 
-interface ITermsManager{
+interface ITermsManager {
     val termsAcceptedSignal: Subject<Boolean>
     val terms: List<Term>
     val termsAccepted: Boolean

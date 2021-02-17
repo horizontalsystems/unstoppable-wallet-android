@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.entities
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
-import java.math.BigDecimal
 import java.util.*
 
 sealed class CoinType : Parcelable {
@@ -22,7 +21,7 @@ sealed class CoinType : Parcelable {
     object Ethereum : CoinType()
 
     @Parcelize
-    class Erc20(val address: String, val fee: BigDecimal = BigDecimal.ZERO, val minimumRequiredBalance: BigDecimal = BigDecimal.ZERO, val minimumSendAmount: BigDecimal = BigDecimal.ZERO) : CoinType() {
+    class Erc20(val address: String) : CoinType() {
         override fun equals(other: Any?): Boolean {
             if (other is Erc20) {
                 return other.address.equals(address, ignoreCase = true)

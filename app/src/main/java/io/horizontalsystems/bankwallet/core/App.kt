@@ -8,7 +8,9 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.preference.PreferenceManager
 import com.google.firebase.FirebaseApp
 import io.horizontalsystems.bankwallet.BuildConfig
-import io.horizontalsystems.bankwallet.core.factories.*
+import io.horizontalsystems.bankwallet.core.factories.AccountFactory
+import io.horizontalsystems.bankwallet.core.factories.AdapterFactory
+import io.horizontalsystems.bankwallet.core.factories.AddressParserFactory
 import io.horizontalsystems.bankwallet.core.managers.*
 import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.bankwallet.core.providers.FeeCoinProvider
@@ -59,7 +61,8 @@ class App : CoreApp() {
         lateinit var priceAlertManager: IPriceAlertManager
         lateinit var enabledWalletsStorage: IEnabledWalletStorage
         lateinit var blockchainSettingsStorage: IBlockchainSettingsStorage
-        lateinit var ethereumKitManager: IEthereumKitManager
+        lateinit var ethereumKitManager: EthereumKitManager
+        lateinit var binanceSmartChainKitManager: BinanceSmartChainKitManager
         lateinit var binanceKitManager: BinanceKitManager
         lateinit var numberFormatter: IAppNumberFormatter
         lateinit var addressParserFactory: AddressParserFactory
@@ -76,7 +79,6 @@ class App : CoreApp() {
         lateinit var rateAppManager: IRateAppManager
         lateinit var coinRecordStorage: ICoinRecordStorage
         lateinit var coinManager: ICoinManager
-        lateinit var erc20ContractInfoProvider: IErc20ContractInfoProvider
         lateinit var walletConnectSessionStore: WalletConnectSessionStore
         lateinit var notificationSubscriptionManager: INotificationSubscriptionManager
         lateinit var termsManager: ITermsManager
@@ -108,6 +110,7 @@ class App : CoreApp() {
         backgroundManager = BackgroundManager(this)
 
         ethereumKitManager = EthereumKitManager(appConfig.infuraProjectId, appConfig.infuraProjectSecret, appConfig.etherscanApiKey, appConfig.testMode, backgroundManager)
+        binanceSmartChainKitManager = BinanceSmartChainKitManager(appConfig.bscscanApiKey, appConfig.testMode, backgroundManager)
         binanceKitManager = BinanceKitManager(buildConfigProvider.testMode)
 
         appDatabase = AppDatabase.getInstance(this)
@@ -158,8 +161,8 @@ class App : CoreApp() {
 
         connectivityManager = ConnectivityManager(backgroundManager)
 
-        val adapterFactory = AdapterFactory(instance, buildConfigProvider.testMode, ethereumKitManager, binanceKitManager, backgroundManager)
-        adapterManager = AdapterManager(walletManager, adapterFactory, ethereumKitManager, binanceKitManager)
+        val adapterFactory = AdapterFactory(instance, buildConfigProvider.testMode, ethereumKitManager, binanceSmartChainKitManager, binanceKitManager, backgroundManager)
+        adapterManager = AdapterManager(walletManager, adapterFactory, ethereumKitManager, binanceSmartChainKitManager, binanceKitManager)
 
         initialSyncModeSettingsManager = InitialSyncSettingsManager(appConfigProvider, blockchainSettingsStorage, adapterManager, walletManager)
         derivationSettingsManager = DerivationSettingsManager(blockchainSettingsStorage, adapterManager, walletManager)
@@ -183,7 +186,7 @@ class App : CoreApp() {
         notificationSubscriptionManager = NotificationSubscriptionManager(appDatabase, notificationManager)
         priceAlertManager = PriceAlertManager(appDatabase, notificationSubscriptionManager, coinManager)
 
-        appStatusManager = AppStatusManager(systemInfoManager, localStorage, predefinedAccountTypeManager, walletManager, adapterManager, coinManager, ethereumKitManager, binanceKitManager)
+        appStatusManager = AppStatusManager(systemInfoManager, localStorage, predefinedAccountTypeManager, walletManager, adapterManager, coinManager, ethereumKitManager, binanceSmartChainKitManager, binanceKitManager)
         appVersionManager = AppVersionManager(systemInfoManager, localStorage).apply {
             backgroundManager.registerListener(this)
         }
@@ -225,7 +228,7 @@ class App : CoreApp() {
     }
 
     override fun onTrimMemory(level: Int) {
-        when (level){
+        when (level) {
             TRIM_MEMORY_BACKGROUND,
             TRIM_MEMORY_MODERATE,
             TRIM_MEMORY_COMPLETE -> {
@@ -243,7 +246,8 @@ class App : CoreApp() {
                     exitProcess(0)
                 }
             }
-            else -> {  /*do nothing*/ }
+            else -> {  /*do nothing*/
+            }
         }
         super.onTrimMemory(level)
     }

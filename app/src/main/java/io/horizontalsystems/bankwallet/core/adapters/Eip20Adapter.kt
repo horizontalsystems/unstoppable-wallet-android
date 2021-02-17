@@ -21,26 +21,26 @@ import io.reactivex.Single
 import java.math.BigDecimal
 import java.math.BigInteger
 
-class Erc20Adapter(
+class Eip20Adapter(
         context: Context,
-        kit: EthereumKit,
+        evmKit: EthereumKit,
         decimal: Int,
         contractAddress: String,
-        private val fee: BigDecimal,
-        override val minimumRequiredBalance: BigDecimal,
-        override val minimumSendAmount: BigDecimal
-) : EthereumBaseAdapter(kit, decimal) {
+        private val fee: BigDecimal = BigDecimal.ZERO,
+        override val minimumRequiredBalance: BigDecimal = BigDecimal.ZERO,
+        override val minimumSendAmount: BigDecimal = BigDecimal.ZERO
+) : BaseEvmAdapter(evmKit, decimal) {
 
     private val contractAddress: Address = Address(contractAddress)
-    val erc20Kit: Erc20Kit = Erc20Kit.getInstance(context, ethereumKit, this.contractAddress)
+    val eip20Kit: Erc20Kit = Erc20Kit.getInstance(context, this.evmKit, this.contractAddress)
 
     val pendingTransactions: List<TransactionRecord>
-        get() = erc20Kit.getPendingTransactions().map { transactionRecord(it) }
+        get() = eip20Kit.getPendingTransactions().map { transactionRecord(it) }
 
     // IAdapter
 
     override fun start() {
-        erc20Kit.start()
+        eip20Kit.start()
     }
 
     override fun stop() {
@@ -48,47 +48,47 @@ class Erc20Adapter(
     }
 
     override fun refresh() {
-        erc20Kit.refresh()
+        eip20Kit.refresh()
     }
 
     // IBalanceAdapter
 
     override val balanceState: AdapterState
-        get() = convertToAdapterState(erc20Kit.syncState)
+        get() = convertToAdapterState(eip20Kit.syncState)
 
     override val balanceStateUpdatedFlowable: Flowable<Unit>
-        get() = erc20Kit.syncStateFlowable.map { }
+        get() = eip20Kit.syncStateFlowable.map { }
 
     override val balance: BigDecimal
-        get() = balanceInBigDecimal(erc20Kit.balance, decimal)
+        get() = balanceInBigDecimal(eip20Kit.balance, decimal)
 
     override val balanceUpdatedFlowable: Flowable<Unit>
-        get() = erc20Kit.balanceFlowable.map { Unit }
+        get() = eip20Kit.balanceFlowable.map { Unit }
 
     // ITransactionsAdapter
 
     override val transactionsState: AdapterState
-        get() = convertToAdapterState(erc20Kit.transactionsSyncState)
+        get() = convertToAdapterState(eip20Kit.transactionsSyncState)
 
     override val transactionsStateUpdatedFlowable: Flowable<Unit>
-        get() = erc20Kit.transactionsSyncStateFlowable.map { }
+        get() = eip20Kit.transactionsSyncStateFlowable.map { }
 
     override fun getTransactions(from: TransactionRecord?, limit: Int): Single<List<TransactionRecord>> {
-        return erc20Kit.getTransactionsAsync(from?.let { TransactionKey(it.transactionHash.hexStringToByteArray(), it.interTransactionIndex) }, limit).map {
+        return eip20Kit.getTransactionsAsync(from?.let { TransactionKey(it.transactionHash.hexStringToByteArray(), it.interTransactionIndex) }, limit).map {
             it.map { tx -> transactionRecord(tx) }
         }
     }
 
     override val transactionRecordsFlowable: Flowable<List<TransactionRecord>>
-        get() = erc20Kit.transactionsFlowable.map { it.map { tx -> transactionRecord(tx) } }
+        get() = eip20Kit.transactionsFlowable.map { it.map { tx -> transactionRecord(tx) } }
 
     // ISendEthereumAdapter
 
     override fun sendInternal(address: Address, amount: BigInteger, gasPrice: Long, gasLimit: Long, logger: AppLogger): Single<Unit> {
         logger.info("call erc20Kit.buildTransferTransactionData")
-        val transactionData = erc20Kit.buildTransferTransactionData(address, amount)
+        val transactionData = eip20Kit.buildTransferTransactionData(address, amount)
 
-        return ethereumKit.send(transactionData, gasPrice, gasLimit)
+        return evmKit.send(transactionData, gasPrice, gasLimit)
                 .doOnSubscribe {
                     logger.info("call ethereumKit.send")
                 }
@@ -97,11 +97,11 @@ class Erc20Adapter(
 
     override fun estimateGasLimitInternal(toAddress: Address?, value: BigInteger, gasPrice: Long?): Single<Long> {
         if (toAddress == null) {
-            return Single.just(ethereumKit.defaultGasLimit)
+            return Single.just(evmKit.defaultGasLimit)
         }
-        val transactionData = erc20Kit.buildTransferTransactionData(toAddress, value)
+        val transactionData = eip20Kit.buildTransferTransactionData(toAddress, value)
 
-        return ethereumKit.estimateGas(transactionData, gasPrice)
+        return evmKit.estimateGas(transactionData, gasPrice)
     }
 
     override fun availableBalance(gasPrice: Long, gasLimit: Long): BigDecimal {
@@ -109,7 +109,7 @@ class Erc20Adapter(
     }
 
     override val ethereumBalance: BigDecimal
-        get() = balanceInBigDecimal(ethereumKit.accountState?.balance, EthereumAdapter.decimal)
+        get() = balanceInBigDecimal(evmKit.accountState?.balance, EvmAdapter.decimal)
 
     private fun convertToAdapterState(syncState: SyncState): AdapterState = when (syncState) {
         is SyncState.Synced -> AdapterState.Synced
@@ -118,7 +118,7 @@ class Erc20Adapter(
     }
 
     private fun transactionRecord(transaction: Transaction): TransactionRecord {
-        val myAddress = ethereumKit.receiveAddress
+        val myAddress = evmKit.receiveAddress
         val fromMine = transaction.from == myAddress
         val toMine = transaction.to == myAddress
         var confirmationsThreshold: Int = confirmationsThreshold
@@ -154,7 +154,7 @@ class Erc20Adapter(
     }
 
     fun allowance(spenderAddress: Address, defaultBlockParameter: DefaultBlockParameter): Single<BigDecimal> {
-        return erc20Kit.getAllowanceAsync(spenderAddress, defaultBlockParameter)
+        return eip20Kit.getAllowanceAsync(spenderAddress, defaultBlockParameter)
                 .map {
                     scaleDown(it.toBigDecimal())
                 }
@@ -164,8 +164,14 @@ class Erc20Adapter(
         private const val approveConfirmationsThreshold = 1
 
         fun clear(walletId: String, testMode: Boolean) {
-            val networkType = if (testMode) EthereumKit.NetworkType.Ropsten else EthereumKit.NetworkType.MainNet
-            Erc20Kit.clear(App.instance, networkType, walletId)
+            val networkTypes = when {
+                testMode -> listOf(EthereumKit.NetworkType.EthRopsten)
+                else -> listOf(EthereumKit.NetworkType.EthMainNet, EthereumKit.NetworkType.BscMainNet)
+            }
+
+            networkTypes.forEach {
+                Erc20Kit.clear(App.instance, it, walletId)
+            }
         }
     }
 

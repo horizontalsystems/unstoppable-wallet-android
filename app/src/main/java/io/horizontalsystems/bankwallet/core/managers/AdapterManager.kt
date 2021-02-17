@@ -3,11 +3,11 @@ package io.horizontalsystems.bankwallet.core.managers
 import android.os.Handler
 import android.os.HandlerThread
 import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.core.adapters.BaseEvmAdapter
 import io.horizontalsystems.bankwallet.core.adapters.BinanceAdapter
-import io.horizontalsystems.bankwallet.core.adapters.Erc20Adapter
-import io.horizontalsystems.bankwallet.core.adapters.EthereumAdapter
 import io.horizontalsystems.bankwallet.core.factories.AdapterFactory
 import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
@@ -19,9 +19,10 @@ import java.util.concurrent.ConcurrentHashMap
 class AdapterManager(
         private val walletManager: IWalletManager,
         private val adapterFactory: AdapterFactory,
-        private val ethereumKitManager: IEthereumKitManager,
-        private val binanceKitManager: BinanceKitManager)
-    : IAdapterManager, HandlerThread("A") {
+        private val ethereumKitManager: EthereumKitManager,
+        private val binanceSmartChainKitManager: BinanceSmartChainKitManager,
+        private val binanceKitManager: BinanceKitManager
+) : IAdapterManager, HandlerThread("A") {
 
     private val handler: Handler
     private val disposables = CompositeDisposable()
@@ -54,7 +55,8 @@ class AdapterManager(
             adaptersMap.values.forEach { it.refresh() }
         }
 
-        ethereumKitManager.ethereumKit?.refresh()
+        ethereumKitManager.evmKit?.refresh()
+        binanceSmartChainKitManager.evmKit?.refresh()
         binanceKitManager.binanceKit?.refresh()
     }
 
@@ -77,7 +79,7 @@ class AdapterManager(
         disabledWallets.forEach { wallet ->
             adaptersMap.remove(wallet)?.let { disabledAdapter ->
                 disabledAdapter.stop()
-                adapterFactory.unlinkAdapter(disabledAdapter)
+                adapterFactory.unlinkAdapter(wallet.coin.type)
             }
         }
 
@@ -99,7 +101,7 @@ class AdapterManager(
             walletsToRefresh.forEach { wallet ->
                 adaptersMap.remove(wallet)?.let { previousAdapter ->
                     previousAdapter.stop()
-                    adapterFactory.unlinkAdapter(previousAdapter)
+                    adapterFactory.unlinkAdapter(wallet.coin.type)
                 }
             }
 
@@ -120,7 +122,12 @@ class AdapterManager(
 
         when (adapter) {
             is BinanceAdapter -> binanceKitManager.binanceKit?.refresh()
-            is EthereumAdapter, is Erc20Adapter -> ethereumKitManager.ethereumKit?.refresh()
+            is BaseEvmAdapter -> {
+                when (wallet.coin.type) {
+                    CoinType.Ethereum, is CoinType.Erc20 -> ethereumKitManager.evmKit?.refresh()
+                    CoinType.BinanceSmartChain, is CoinType.Bep20 -> binanceSmartChainKitManager.evmKit?.refresh()
+                }
+            }
             else -> adapter.refresh()
         }
 
@@ -128,9 +135,9 @@ class AdapterManager(
 
     override fun stopKits() {
         handler.post {
-            adaptersMap.values.forEach {
-                it.stop()
-                adapterFactory.unlinkAdapter(it)
+            adaptersMap.forEach { (wallet, adapter) ->
+                adapter.stop()
+                adapterFactory.unlinkAdapter(wallet.coin.type)
             }
             adaptersMap.clear()
         }

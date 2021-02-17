@@ -1,11 +1,16 @@
 package io.horizontalsystems.bankwallet.core.factories
 
 import android.content.Context
-import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.core.IAdapter
+import io.horizontalsystems.bankwallet.core.IDerivationSettingsManager
+import io.horizontalsystems.bankwallet.core.IEthereumRpcModeSettingsManager
+import io.horizontalsystems.bankwallet.core.IInitialSyncModeSettingsManager
 import io.horizontalsystems.bankwallet.core.adapters.*
 import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
 import io.horizontalsystems.bankwallet.core.managers.BinanceKitManager
+import io.horizontalsystems.bankwallet.core.managers.BinanceSmartChainKitManager
 import io.horizontalsystems.bankwallet.core.managers.BitcoinCashCoinTypeManager
+import io.horizontalsystems.bankwallet.core.managers.EthereumKitManager
 import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.core.BackgroundManager
@@ -13,7 +18,8 @@ import io.horizontalsystems.core.BackgroundManager
 class AdapterFactory(
         private val context: Context,
         private val testMode: Boolean,
-        private val ethereumKitManager: IEthereumKitManager,
+        private val ethereumKitManager: EthereumKitManager,
+        private val binanceSmartChainKitManager: BinanceSmartChainKitManager,
         private val binanceKitManager: BinanceKitManager,
         private val backgroundManager: BackgroundManager) {
 
@@ -34,19 +40,22 @@ class AdapterFactory(
             is CoinType.BitcoinCash -> BitcoinCashAdapter(wallet, syncMode, bitcoinCashCoinTypeManager?.bitcoinCashCoinType, testMode, backgroundManager)
             is CoinType.Dash -> DashAdapter(wallet, syncMode, testMode, backgroundManager)
             is CoinType.Binance -> BinanceAdapter(binanceKitManager.binanceKit(wallet), coinType.symbol)
-            is CoinType.Ethereum -> EthereumAdapter(ethereumKitManager.ethereumKit(wallet, communicationMode))
-            is CoinType.Erc20 -> Erc20Adapter(context, ethereumKitManager.ethereumKit(wallet, communicationMode), wallet.coin.decimal, coinType.address, coinType.fee, coinType.minimumRequiredBalance, coinType.minimumSendAmount)
-            is CoinType.BinanceSmartChain -> null
-            is CoinType.Bep20 -> null
+            is CoinType.Ethereum -> EvmAdapter(ethereumKitManager.evmKit(wallet, communicationMode))
+            is CoinType.Erc20 -> Eip20Adapter(context, ethereumKitManager.evmKit(wallet, communicationMode), wallet.coin.decimal, coinType.address)
+            is CoinType.BinanceSmartChain -> EvmAdapter(binanceSmartChainKitManager.evmKit(wallet, communicationMode))
+            is CoinType.Bep20 -> Eip20Adapter(context, binanceSmartChainKitManager.evmKit(wallet, communicationMode), wallet.coin.decimal, coinType.address)
         }
     }
 
-    fun unlinkAdapter(adapter: IAdapter) {
-        when (adapter) {
-            is EthereumBaseAdapter -> {
+    fun unlinkAdapter(coinType: CoinType) {
+        when (coinType) {
+            CoinType.Ethereum, is CoinType.Erc20 -> {
                 ethereumKitManager.unlink()
             }
-            is BinanceAdapter -> {
+            CoinType.BinanceSmartChain, is CoinType.Bep20 -> {
+                binanceSmartChainKitManager.unlink()
+            }
+            is CoinType.Binance -> {
                 binanceKitManager.unlink()
             }
         }

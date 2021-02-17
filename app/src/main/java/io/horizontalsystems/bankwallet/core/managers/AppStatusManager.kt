@@ -16,7 +16,8 @@ class AppStatusManager(
         private val walletManager: IWalletManager,
         private val adapterManager: IAdapterManager,
         private val coinManager: ICoinManager,
-        private val ethereumKitManager: IEthereumKitManager,
+        private val ethereumKitManager: EthereumKitManager,
+        private val binanceSmartChainKitManager: BinanceSmartChainKitManager,
         private val binanceKitManager: IBinanceKitManager
 ) : IAppStatusManager {
 
@@ -80,6 +81,7 @@ class AppStatusManager(
 
         blockchainStatus.putAll(getBitcoinForkStatuses())
         ethereumKitManager.statusInfo?.let { blockchainStatus["Ethereum"] = it }
+        binanceSmartChainKitManager.statusInfo?.let { blockchainStatus["Binance Smart Chain"] = it }
         binanceKitManager.statusInfo?.let { blockchainStatus["Binance DEX"] = it }
 
         return blockchainStatus

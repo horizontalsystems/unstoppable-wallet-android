@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.swap.approve
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.adapters.Erc20Adapter
+import io.horizontalsystems.bankwallet.core.adapters.Eip20Adapter
 import io.horizontalsystems.bankwallet.core.ethereum.CoinService
 import io.horizontalsystems.bankwallet.core.ethereum.EthereumFeeViewModel
 import io.horizontalsystems.bankwallet.core.ethereum.EthereumTransactionService
@@ -18,7 +18,7 @@ import java.math.BigInteger
 object SwapApproveModule {
 
     class Factory(private val approveData: SwapAllowanceService.ApproveData) : ViewModelProvider.Factory {
-        private val ethereumKit by lazy { App.ethereumKitManager.ethereumKit!! }
+        private val ethereumKit by lazy { App.ethereumKitManager.evmKit!! }
         private val transactionService by lazy {
             val feeRateProvider = FeeRateProviderFactory.provider(App.appConfigProvider.ethereumCoin) as EthereumFeeRateProvider
             EthereumTransactionService(ethereumKit, feeRateProvider, 0)
@@ -31,10 +31,10 @@ object SwapApproveModule {
             return when (modelClass) {
                 SwapApproveViewModel::class.java -> {
                     val wallet = checkNotNull(App.walletManager.wallet(approveData.coin))
-                    val erc20Adapter = App.adapterManager.getAdapterForWallet(wallet) as Erc20Adapter
+                    val erc20Adapter = App.adapterManager.getAdapterForWallet(wallet) as Eip20Adapter
                     val approveAmountBigInteger = approveData.amount.movePointRight(approveData.coin.decimal).toBigInteger()
                     val allowanceAmountBigInteger = approveData.allowance.movePointRight(approveData.coin.decimal).toBigInteger()
-                    val swapApproveService = SwapApproveService(transactionService, erc20Adapter.erc20Kit, ethereumKit, approveAmountBigInteger, Address(approveData.spenderAddress), allowanceAmountBigInteger)
+                    val swapApproveService = SwapApproveService(transactionService, erc20Adapter.eip20Kit, ethereumKit, approveAmountBigInteger, Address(approveData.spenderAddress), allowanceAmountBigInteger)
                     SwapApproveViewModel(swapApproveService, coinService, ethCoinService) as T
                 }
                 EthereumFeeViewModel::class.java -> {

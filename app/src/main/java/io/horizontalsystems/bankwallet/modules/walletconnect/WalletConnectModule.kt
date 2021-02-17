@@ -21,7 +21,7 @@ object WalletConnectModule {
     }
 
     fun start(fragment: Fragment, navigateTo: Int, navOptions: NavOptions) {
-        if (App.ethereumKitManager.ethereumKit != null) {
+        if (App.ethereumKitManager.evmKit != null) {
             fragment.findNavController().navigate(navigateTo, null, navOptions)
         } else {
             ConfirmationDialog.show(

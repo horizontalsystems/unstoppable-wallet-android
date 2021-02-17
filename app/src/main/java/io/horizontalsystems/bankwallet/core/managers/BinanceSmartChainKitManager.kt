@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.core.managers
 
-import io.horizontalsystems.bankwallet.core.AdapterErrorWrongParameters
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.UnsupportedAccountException
 import io.horizontalsystems.bankwallet.entities.Account
@@ -12,10 +11,8 @@ import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.core.EthereumKit.Companion
 import io.horizontalsystems.ethereumkit.core.EthereumKit.NetworkType
 
-class EthereumKitManager(
-        private val infuraProjectId: String,
-        private val infuraSecret: String,
-        private val etherscanApiKey: String,
+class BinanceSmartChainKitManager(
+        private val bscscanApiKey: String,
         private val testMode: Boolean,
         private val backgroundManager: BackgroundManager
 ) : BackgroundManager.Listener {
@@ -26,8 +23,10 @@ class EthereumKitManager(
 
     var evmKit: EthereumKit? = null
         private set
+
     private var useCount = 0
     private var currentAccount: Account? = null
+
 
     val statusInfo: Map<String, Any>?
         get() = evmKit?.statusInfo()
@@ -43,7 +42,7 @@ class EthereumKitManager(
         }
 
         if (this.evmKit == null) {
-            if (accountType !is AccountType.Mnemonic || accountType.words.size != 12)
+            if (accountType !is AccountType.Mnemonic || accountType.words.size != 24)
                 throw UnsupportedAccountException()
 
             useCount = 0
@@ -57,10 +56,8 @@ class EthereumKitManager(
     }
 
     private fun createKitInstance(communicationMode: CommunicationMode?, accountType: AccountType.Mnemonic, account: Account): EthereumKit {
-        val networkType = if (testMode) NetworkType.EthRopsten else NetworkType.EthMainNet
-        val syncSource = EthereumKit.infuraWebSocketSyncSource(networkType, infuraProjectId, infuraSecret)
-                ?: throw AdapterErrorWrongParameters("Could get syncSource!")
-        val kit = EthereumKit.getInstance(App.instance, accountType.words, networkType, syncSource, etherscanApiKey, account.id)
+        val syncSource = EthereumKit.defaultBscWebSocketSyncSource()
+        val kit = EthereumKit.getInstance(App.instance, accountType.words, NetworkType.BscMainNet, syncSource, bscscanApiKey, account.id)
 
         kit.start()
 
@@ -90,5 +87,4 @@ class EthereumKitManager(
         super.didEnterBackground()
         this.evmKit?.onEnterBackground()
     }
-
 }
