@@ -3,47 +3,17 @@ package io.horizontalsystems.bankwallet.modules.main
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.managers.RateUsType
-import io.horizontalsystems.bankwallet.entities.Account
 
 object MainModule {
 
-    interface IView {
-        fun showRateApp()
-        fun openPlayMarket()
-        fun hideContent(hide: Boolean)
-        fun toggleBagdeVisibility(visible: Boolean)
-        fun setTransactionTabEnabled(enabled: Boolean)
-    }
-
-    interface IViewDelegate {
-        fun viewDidLoad()
-        fun onClear()
-        fun onResume()
-    }
-
-    interface IInteractor {
-        fun onStart()
-        val allBackedUp: Boolean
-        val termsAccepted: Boolean
-        val isPinSet: Boolean
-        fun clear()
-    }
-
-    interface IInteractorDelegate {
-        fun updateBadgeVisibility()
-        fun showRateApp(showRateUs: RateUsType)
-        fun sync(accounts: List<Account>)
-    }
-
-    fun init(view: MainViewModel) {
-        val interactor = MainInteractor(App.rateAppManager, App.backupManager, App.termsManager, App.pinComponent, App.accountManager)
-        val presenter = MainPresenter(App.pinComponent, interactor)
-
-        view.delegate = presenter
-        presenter.view = view
-        interactor.delegate = presenter
+    class Factory : ViewModelProvider.Factory {
+        @Suppress("UNCHECKED_CAST")
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            return MainViewModel(App.pinComponent, App.rateAppManager, App.backupManager, App.termsManager, App.accountManager) as T
+        }
     }
 
     fun start(context: Context) {
