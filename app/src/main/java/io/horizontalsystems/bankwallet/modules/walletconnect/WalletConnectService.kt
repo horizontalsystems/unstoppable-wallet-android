@@ -4,8 +4,8 @@ import com.trustwallet.walletconnect.WCSessionStoreItem
 import com.trustwallet.walletconnect.models.WCPeerMeta
 import com.trustwallet.walletconnect.models.ethereum.WCEthereumTransaction
 import io.horizontalsystems.bankwallet.core.Clearable
-import io.horizontalsystems.bankwallet.core.IEthereumKitManager
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
+import io.horizontalsystems.bankwallet.core.managers.EthereumKitManager
 import io.horizontalsystems.bankwallet.core.managers.WalletConnectInteractor
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.reactivex.disposables.CompositeDisposable
@@ -13,7 +13,7 @@ import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 
 class WalletConnectService(
-        ethKitManager: IEthereumKitManager,
+        ethKitManager: EthereumKitManager,
         private val sessionStore: WalletConnectSessionStore,
         private val connectivityManager: ConnectivityManager
 ) : WalletConnectInteractor.Delegate, Clearable {
@@ -27,7 +27,7 @@ class WalletConnectService(
 
     data class PeerData(val peerId: String, val peerMeta: WCPeerMeta)
 
-    private val ethereumKit: EthereumKit? = ethKitManager.ethereumKit
+    private val ethereumKit: EthereumKit? = ethKitManager.evmKit
     private var interactor: WalletConnectInteractor? = null
     private var remotePeerData: PeerData? = null
     val remotePeerMeta: WCPeerMeta?

@@ -15,7 +15,7 @@ import io.reactivex.Single
 import java.math.BigDecimal
 import java.math.BigInteger
 
-class EthereumAdapter(kit: EthereumKit) : EthereumBaseAdapter(kit, decimal) {
+class EvmAdapter(kit: EthereumKit) : BaseEvmAdapter(kit, decimal) {
 
     // IAdapter
 
@@ -34,13 +34,13 @@ class EthereumAdapter(kit: EthereumKit) : EthereumBaseAdapter(kit, decimal) {
     // IBalanceAdapter
 
     override val balanceState: AdapterState
-        get() = convertToAdapterState(ethereumKit.syncState)
+        get() = convertToAdapterState(evmKit.syncState)
 
     override val balanceStateUpdatedFlowable: Flowable<Unit>
-        get() = ethereumKit.syncStateFlowable.map {}
+        get() = evmKit.syncStateFlowable.map {}
 
     override fun sendInternal(address: Address, amount: BigInteger, gasPrice: Long, gasLimit: Long, logger: AppLogger): Single<Unit> {
-        return ethereumKit.send(address, amount, byteArrayOf(), gasPrice, gasLimit)
+        return evmKit.send(address, amount, byteArrayOf(), gasPrice, gasLimit)
                 .doOnSubscribe {
                     logger.info("call ethereumKit.send")
                 }
@@ -48,11 +48,11 @@ class EthereumAdapter(kit: EthereumKit) : EthereumBaseAdapter(kit, decimal) {
     }
 
     override fun estimateGasLimitInternal(toAddress: Address?, value: BigInteger, gasPrice: Long?): Single<Long> {
-        return ethereumKit.estimateGas(toAddress, value, gasPrice)
+        return evmKit.estimateGas(toAddress, value, gasPrice)
     }
 
     override val balance: BigDecimal
-        get() = balanceInBigDecimal(ethereumKit.accountState?.balance, decimal)
+        get() = balanceInBigDecimal(evmKit.accountState?.balance, decimal)
 
     override val minimumRequiredBalance: BigDecimal
         get() = BigDecimal.ZERO
@@ -61,24 +61,24 @@ class EthereumAdapter(kit: EthereumKit) : EthereumBaseAdapter(kit, decimal) {
         get() = BigDecimal.ZERO
 
     override val balanceUpdatedFlowable: Flowable<Unit>
-        get() = ethereumKit.accountStateFlowable.map { }
+        get() = evmKit.accountStateFlowable.map { }
 
     // ITransactionsAdapter
 
     override val transactionsState: AdapterState
-        get() = convertToAdapterState(ethereumKit.transactionsSyncState)
+        get() = convertToAdapterState(evmKit.transactionsSyncState)
 
     override val transactionsStateUpdatedFlowable: Flowable<Unit>
-        get() = ethereumKit.transactionsSyncStateFlowable.map {}
+        get() = evmKit.transactionsSyncStateFlowable.map {}
 
     override fun getTransactions(from: TransactionRecord?, limit: Int): Single<List<TransactionRecord>> {
-        return ethereumKit.etherTransactions(from?.transactionHash?.hexStringToByteArray(), limit).map {
+        return evmKit.etherTransactions(from?.transactionHash?.hexStringToByteArray(), limit).map {
             it.map { tx -> transactionRecord(tx) }
         }
     }
 
     override val transactionRecordsFlowable: Flowable<List<TransactionRecord>>
-        get() = ethereumKit.etherTransactionsFlowable.map { it.map { tx -> transactionRecord(tx) } }
+        get() = evmKit.etherTransactionsFlowable.map { it.map { tx -> transactionRecord(tx) } }
 
     private fun convertToAdapterState(syncState: EthereumKit.SyncState): AdapterState = when (syncState) {
         is EthereumKit.SyncState.Synced -> AdapterState.Synced
@@ -92,7 +92,7 @@ class EthereumAdapter(kit: EthereumKit) : EthereumBaseAdapter(kit, decimal) {
 
         var fromAddress = transaction.from
         var toAddress = transaction.to
-        val myAddress = ethereumKit.receiveAddress
+        val myAddress = evmKit.receiveAddress
         val fromMine = fromAddress == myAddress
         val toMine = toAddress == myAddress
         val fee = receipt?.gasUsed?.toBigDecimal()?.multiply(transaction.gasPrice.toBigDecimal())?.let { scaleDown(it) }
@@ -144,8 +144,13 @@ class EthereumAdapter(kit: EthereumKit) : EthereumBaseAdapter(kit, decimal) {
         const val decimal = 18
 
         fun clear(walletId: String, testMode: Boolean) {
-            val networkType = if (testMode) EthereumKit.NetworkType.Ropsten else EthereumKit.NetworkType.MainNet
-            EthereumKit.clear(App.instance, networkType, walletId)
+            val networkTypes = when {
+                testMode -> listOf(EthereumKit.NetworkType.EthRopsten)
+                else -> listOf(EthereumKit.NetworkType.EthMainNet, EthereumKit.NetworkType.BscMainNet)
+            }
+            networkTypes.forEach {
+                EthereumKit.clear(App.instance, it, walletId)
+            }
         }
     }
 

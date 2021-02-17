@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.swap.allowance
 
 import io.horizontalsystems.bankwallet.core.IAdapterManager
-import io.horizontalsystems.bankwallet.core.adapters.Erc20Adapter
+import io.horizontalsystems.bankwallet.core.adapters.Eip20Adapter
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.TransactionType
 import io.reactivex.Observable
@@ -47,7 +47,7 @@ class SwapPendingAllowanceService(
 
     fun syncAllowance() {
         val coin = coin ?: return
-        val adapter = adapterManager.getAdapterForCoin(coin) as? Erc20Adapter ?: return
+        val adapter = adapterManager.getAdapterForCoin(coin) as? Eip20Adapter ?: return
 
         adapter.pendingTransactions.forEach { transaction ->
             if (transaction.type == TransactionType.Approve) {

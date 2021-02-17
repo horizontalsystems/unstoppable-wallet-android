@@ -68,9 +68,9 @@ class EnableCoinsService(
     private fun fetchErc20Tokens(words: List<String>) {
         try {
             val networkType = if (appConfigProvider.testMode) {
-                EthereumKit.NetworkType.Ropsten
+                EthereumKit.NetworkType.EthRopsten
             } else {
-                EthereumKit.NetworkType.MainNet
+                EthereumKit.NetworkType.EthMainNet
             }
 
             val address = EthereumKit.address(words, networkType)

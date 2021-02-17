@@ -2,7 +2,7 @@ package io.horizontalsystems.bankwallet.modules.swap.allowance
 
 import android.os.Parcelable
 import io.horizontalsystems.bankwallet.core.IAdapterManager
-import io.horizontalsystems.bankwallet.core.adapters.Erc20Adapter
+import io.horizontalsystems.bankwallet.core.adapters.Eip20Adapter
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.ethereumkit.core.EthereumKit
@@ -73,7 +73,7 @@ class SwapAllowanceService(
         allowanceDisposable = null
 
         val coin = coin
-        val adapter = coin?.let { adapterManager.getAdapterForCoin(it) } as? Erc20Adapter
+        val adapter = coin?.let { adapterManager.getAdapterForCoin(it) } as? Eip20Adapter
 
         if (coin == null || adapter == null) {
             state = null

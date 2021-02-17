@@ -10,13 +10,12 @@ import io.horizontalsystems.bankwallet.core.factories.FeeRateProviderFactory
 import io.horizontalsystems.bankwallet.core.providers.EthereumFeeRateProvider
 import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectSendEthereumTransactionRequest
 import io.horizontalsystems.ethereumkit.models.Address
-import java.lang.IllegalArgumentException
 import java.math.BigInteger
 
 object WalletConnectRequestModule {
 
     class Factory(val request: WalletConnectSendEthereumTransactionRequest) : ViewModelProvider.Factory {
-        val ethereumKit by lazy { App.ethereumKitManager.ethereumKit!! }
+        val ethereumKit by lazy { App.ethereumKitManager.evmKit!! }
         val transactionService by lazy {
             val feeRateProvider = FeeRateProviderFactory.provider(App.appConfigProvider.ethereumCoin) as EthereumFeeRateProvider
             EthereumTransactionService(ethereumKit, feeRateProvider, 10)
