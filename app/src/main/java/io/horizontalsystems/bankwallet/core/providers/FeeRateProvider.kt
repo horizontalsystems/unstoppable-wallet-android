@@ -12,8 +12,9 @@ class FeeRateProvider(appConfig: IAppConfigProvider) {
 
     private val feeRateKit: FeeRateKit by lazy {
         FeeRateKit(FeeProviderConfig(
-                infuraProjectId = appConfig.infuraProjectId,
-                infuraProjectSecret = appConfig.infuraProjectSecret,
+                ethEvmUrl = FeeProviderConfig.infuraUrl(appConfig.infuraProjectId),
+                ethEvmAuth = appConfig.infuraProjectSecret,
+                bscEvmUrl = FeeProviderConfig.defaultBscEvmUrl(),
                 btcCoreRpcUrl = appConfig.btcCoreRpcUrl
             )
         )
@@ -21,6 +22,10 @@ class FeeRateProvider(appConfig: IAppConfigProvider) {
 
     fun bitcoinFeeRate(blockCount: Int): Single<BigInteger> {
         return feeRateKit.bitcoin(blockCount)
+    }
+
+    fun binanceSmartChainGasPrice(): Single<BigInteger> {
+        return feeRateKit.binanceSmartChain()
     }
 
     fun litecoinFeeRate(): Single<BigInteger> {
@@ -87,6 +92,16 @@ class EthereumFeeRateProvider(feeRateProvider: FeeRateProvider) : IFeeRateProvid
     )
 
     override val recommendedFeeRate: Single<BigInteger> = feeRateProvider.ethereumGasPrice()
+}
+
+class BinanceSmartChainFeeRateProvider(feeRateProvider: FeeRateProvider) : IFeeRateProvider {
+
+    override val feeRatePriorityList: List<FeeRatePriority> = listOf(
+            FeeRatePriority.RECOMMENDED,
+            FeeRatePriority.Custom(1, IntRange(1, 400))
+    )
+
+    override val recommendedFeeRate: Single<BigInteger> = feeRateProvider.binanceSmartChainGasPrice()
 }
 
 class DashFeeRateProvider(feeRateProvider: FeeRateProvider) : IFeeRateProvider {

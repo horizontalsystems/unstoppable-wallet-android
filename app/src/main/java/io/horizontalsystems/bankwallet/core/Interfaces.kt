@@ -273,6 +273,7 @@ interface IAppConfigProvider {
     val featuredCoins: List<Coin>
     val otherCoins: List<Coin>
     val ethereumCoin: Coin
+    val binanceSmartChainCoin: Coin
     val binanceCoin: Coin
 }
 

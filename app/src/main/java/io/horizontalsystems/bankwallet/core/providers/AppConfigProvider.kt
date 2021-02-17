@@ -56,8 +56,11 @@ class AppConfigProvider : IAppConfigProvider, ILanguageConfigProvider, IBuildCon
     override val ethereumCoin: Coin
         get() = featuredCoins[2]
 
-    override val binanceCoin: Coin
+    override val binanceSmartChainCoin: Coin
         get() = featuredCoins[5]
+
+    override val binanceCoin: Coin
+        get() = featuredCoins[6]
 
     override val otherCoins: List<Coin> by lazy {
         listOf(
