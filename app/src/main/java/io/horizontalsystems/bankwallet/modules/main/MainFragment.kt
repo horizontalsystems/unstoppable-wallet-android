@@ -23,7 +23,7 @@ import kotlinx.android.synthetic.main.fragment_main.view.*
 
 class MainFragment : Fragment(), RateAppDialogFragment.Listener {
 
-    private val viewModel by viewModels<MainViewModel>()
+    private val viewModel by viewModels<MainViewModel>{ MainModule.Factory() }
     private var bottomBadgeView: View? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -55,7 +55,6 @@ class MainFragment : Fragment(), RateAppDialogFragment.Listener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.init()
         viewModel.showRateAppLiveEvent.observe(viewLifecycleOwner, Observer {
             activity?.let {
                 RateAppDialogFragment.show(it, this)
@@ -98,7 +97,7 @@ class MainFragment : Fragment(), RateAppDialogFragment.Listener {
 
     override fun onResume() {
         super.onResume()
-        viewModel.delegate.onResume()
+        viewModel.onResume()
     }
 
     override fun onDestroyView() {

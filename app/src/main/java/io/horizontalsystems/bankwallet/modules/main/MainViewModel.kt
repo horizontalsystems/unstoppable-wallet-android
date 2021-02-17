@@ -2,43 +2,84 @@ package io.horizontalsystems.bankwallet.modules.main
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.core.managers.RateUsType
+import io.horizontalsystems.bankwallet.entities.Account
+import io.horizontalsystems.core.IPinComponent
 import io.horizontalsystems.core.SingleLiveEvent
+import io.reactivex.disposables.CompositeDisposable
 
-class MainViewModel : ViewModel(), MainModule.IView {
+class MainViewModel(
+        private val pinComponent: IPinComponent,
+        rateAppManager: IRateAppManager,
+        private val backupManager: IBackupManager,
+        private val termsManager: ITermsManager,
+        accountManager: IAccountManager
+) : ViewModel() {
 
-    lateinit var delegate: MainModule.IViewDelegate
     val showRateAppLiveEvent = SingleLiveEvent<Unit>()
     val openPlayMarketLiveEvent = SingleLiveEvent<Unit>()
     val hideContentLiveData = MutableLiveData<Boolean>()
     val setBadgeVisibleLiveData = MutableLiveData<Boolean>()
     val transactionTabEnabledLiveData = MutableLiveData<Boolean>()
 
-    fun init() {
-        MainModule.init(this)
-        delegate.viewDidLoad()
-    }
+    private val disposables = CompositeDisposable()
+    private var contentHidden = pinComponent.isLocked
 
-    override fun showRateApp() {
-        showRateAppLiveEvent.postValue(Unit)
-    }
+    init {
+        updateBadgeVisibility()
+        sync(accountManager.accounts)
 
-    override fun openPlayMarket() {
-        openPlayMarketLiveEvent.postValue(Unit)
-    }
+        disposables.add(backupManager.allBackedUpFlowable.subscribe {
+            updateBadgeVisibility()
+        })
 
-    override fun hideContent(hide: Boolean) {
-        hideContentLiveData.postValue(hide)
-    }
+        disposables.add(termsManager.termsAcceptedSignal.subscribe {
+            updateBadgeVisibility()
+        })
 
-    override fun toggleBagdeVisibility(visible: Boolean) {
-        setBadgeVisibleLiveData.postValue(visible)
-    }
+        disposables.add(pinComponent.pinSetFlowable.subscribe {
+            updateBadgeVisibility()
+        })
 
-    override fun setTransactionTabEnabled(enabled: Boolean) {
-        transactionTabEnabledLiveData.postValue(enabled)
+        disposables.add(accountManager.accountsFlowable.subscribe {
+            sync(it)
+        })
+
+        rateAppManager.showRateAppObservable
+                .subscribe {
+                    showRateApp(it)
+                }
+                .let {
+                    disposables.add(it)
+                }
     }
 
     override fun onCleared() {
-        delegate.onClear()
+        disposables.clear()
     }
+
+    fun onResume() {
+        if (contentHidden != pinComponent.isLocked) {
+            hideContentLiveData.postValue(pinComponent.isLocked)
+        }
+        contentHidden = pinComponent.isLocked
+    }
+
+    fun sync(accounts: List<Account>) {
+        transactionTabEnabledLiveData.postValue(accounts.isNotEmpty())
+    }
+
+    private fun showRateApp(showRateUs: RateUsType) {
+        when (showRateUs) {
+            RateUsType.OpenPlayMarket -> openPlayMarketLiveEvent.postValue(Unit)
+            RateUsType.ShowDialog -> showRateAppLiveEvent.postValue(Unit)
+        }
+    }
+
+    private fun updateBadgeVisibility() {
+        val visible = !(backupManager.allBackedUp && termsManager.termsAccepted && pinComponent.isPinSet)
+        setBadgeVisibleLiveData.postValue(visible)
+    }
+
 }
