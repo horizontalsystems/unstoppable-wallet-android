@@ -276,7 +276,7 @@
 
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Error_InsufficientBalance">Transaction requires %s for sending</string>
-    <string name="EthereumTransaction_Error_InsufficientBalanceForFee">Current ETH balance is below amount required to process this transaction including transaction fee.</string>
+    <string name="EthereumTransaction_Error_InsufficientBalanceForFee">Current %s balance is below amount required to process this transaction including transaction fee.</string>
 
     <!--Swap-->
 
@@ -297,7 +297,6 @@
     <string name="Swap_MaxFee">Max Fee</string>
     <string name="Swap_Fee">Fee</string>
     <string name="Swap_ErrorInsufficientBalance">Insufficient balance</string>
-    <string name="Swap_ErrorInsufficientEthBalance">Current ETH balance is below amount required to process this transaction including transaction fee.</string>
     <string name="Swap_ErrorNoLiquidity">Can\'t swap these tokens</string>
     <string name="Swap_ErrorHighPriceImpact">High price impact</string>
     <string name="Swap_Proceed">Next</string>

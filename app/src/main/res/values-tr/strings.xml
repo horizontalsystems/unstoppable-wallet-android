@@ -224,7 +224,7 @@
     <string name="WalletConnect_Status_Connecting">Bağlanıyor…</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Error_InsufficientBalance">İşlem, göndermek için %s gerektirir</string>
-    <string name="EthereumTransaction_Error_InsufficientBalanceForFee">Mevcut ETH bakiyesi, işlem ücreti dahil bu işlemi gerçekleştirmek için gereken miktarın altında.</string>
+    <string name="EthereumTransaction_Error_InsufficientBalanceForFee">Mevcut %s bakiyesi, işlem ücreti dahil bu işlemi gerçekleştirmek için gereken miktarın altında.</string>
     <!--Swap-->
     <string name="Swap">Takas</string>
     <string name="Swap_FromAmountTitle">Ödediğiniz</string>
@@ -242,7 +242,6 @@
     <string name="Swap_MaxFee">Maksimum Ücret</string>
     <string name="Swap_Fee">Masraf</string>
     <string name="Swap_ErrorInsufficientBalance">Yetersiz bakiye</string>
-    <string name="Swap_ErrorInsufficientEthBalance">Mevcut ETH bakiyesi, işlem ücreti dahil bu işlemi gerçekleştirmek için gereken miktarın altında.</string>
     <string name="Swap_ErrorNoLiquidity">Bu token swap edilemez</string>
     <string name="Swap_ErrorHighPriceImpact">Yüksek fiyat etkisi</string>
     <string name="Swap_Proceed">İleri</string>

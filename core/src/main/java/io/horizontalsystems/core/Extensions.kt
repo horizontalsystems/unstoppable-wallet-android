@@ -14,6 +14,7 @@ import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LiveData
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import io.horizontalsystems.core.helpers.SingleClickListener
@@ -41,6 +42,10 @@ fun Fragment.findNavController(): NavController {
 
 fun Fragment.getNavigationResult(key: String = "result"): Bundle? {
     return findNavController().currentBackStackEntry?.savedStateHandle?.remove<Bundle>(key)
+}
+
+fun Fragment.getNavigationLiveData(key: String = "result"): LiveData<Bundle>? {
+    return findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData(key)
 }
 
 fun Fragment.setNavigationResult(key: String = "result", bundle: Bundle) {

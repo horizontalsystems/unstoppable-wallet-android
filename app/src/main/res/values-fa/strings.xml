@@ -224,7 +224,7 @@
     <string name="WalletConnect_Status_Connecting">در حال اتصال…</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Error_InsufficientBalance">تراکنش برای ارسال به %s نیاز دارد</string>
-    <string name="EthereumTransaction_Error_InsufficientBalanceForFee">Current ETH balance is below amount required to process this transaction including transaction fee.</string>
+    <string name="EthereumTransaction_Error_InsufficientBalanceForFee">Current %s balance is below amount required to process this transaction including transaction fee.</string>
     <!--Swap-->
     <string name="Swap">جایگزینی</string>
     <string name="Swap_FromAmountTitle">شما می پردازید</string>
@@ -242,7 +242,6 @@
     <string name="Swap_MaxFee">Max Fee</string>
     <string name="Swap_Fee">Fee</string>
     <string name="Swap_ErrorInsufficientBalance">موجودی ناکافی</string>
-    <string name="Swap_ErrorInsufficientEthBalance">當前ETH餘額低於處理此交易所需的金額，包括交易費用。</string>
     <string name="Swap_ErrorNoLiquidity">نمی توان این نشانه ها را عوض کر</string>
     <string name="Swap_ErrorHighPriceImpact">تأثیر بالای قیمت</string>
     <string name="Swap_Proceed">بعدي</string>

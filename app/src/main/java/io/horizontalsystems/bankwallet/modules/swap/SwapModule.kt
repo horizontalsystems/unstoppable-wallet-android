@@ -12,14 +12,15 @@ import io.horizontalsystems.bankwallet.core.ethereum.EvmTransactionService
 import io.horizontalsystems.bankwallet.core.factories.FeeRateProviderFactory
 import io.horizontalsystems.bankwallet.core.fiat.AmountTypeSwitchService
 import io.horizontalsystems.bankwallet.core.fiat.FiatService
-import io.horizontalsystems.bankwallet.core.providers.EthereumFeeRateProvider
 import io.horizontalsystems.bankwallet.core.providers.StringProvider
 import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceService
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceViewModel
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapPendingAllowanceService
 import io.horizontalsystems.bankwallet.modules.swap.coincard.*
 import io.horizontalsystems.bankwallet.modules.swap.providers.UniswapProvider
+import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.uniswapkit.UniswapKit
 import kotlinx.android.parcel.Parcelize
 import java.math.BigDecimal
@@ -46,25 +47,48 @@ object SwapModule {
 
     data class PriceImpactViewItem(val level: SwapTradeService.PriceImpactLevel, val value: String)
 
+    enum class Dex {
+        Uniswap, PancakeSwap;
+
+        val evmKit: EthereumKit?
+            get() = when (this) {
+                Uniswap -> App.ethereumKitManager.evmKit
+                PancakeSwap -> App.binanceSmartChainKitManager.evmKit
+            }
+
+        val coin: Coin
+            get() = when (this) {
+                Uniswap -> App.appConfigProvider.ethereumCoin
+                PancakeSwap -> App.appConfigProvider.binanceSmartChainCoin
+            }
+    }
+
     class Factory(
             owner: SavedStateRegistryOwner,
-            private val fromCoin: Coin?
+            private val fromCoin: Coin
     ) : AbstractSavedStateViewModelFactory(owner, null) {
-        private val ethereumKit by lazy { App.ethereumKitManager.evmKit!! }
-        private val uniswapKit by lazy { UniswapKit.getInstance(ethereumKit) }
-        private val transactionService by lazy {
-            val feeRateProvider = FeeRateProviderFactory.provider(App.appConfigProvider.ethereumCoin) as EthereumFeeRateProvider
-            EvmTransactionService(ethereumKit, feeRateProvider, 20)
+
+        private val dex: Dex by lazy {
+            when (fromCoin.type) {
+                CoinType.Ethereum, is CoinType.Erc20 -> Dex.Uniswap
+                CoinType.BinanceSmartChain, is CoinType.Bep20 -> Dex.PancakeSwap
+                else -> throw IllegalArgumentException()
+            }
         }
-        private val ethCoinService by lazy { CoinService(App.appConfigProvider.ethereumCoin, App.currencyManager, App.xRateManager) }
+
+        private val evmKit: EthereumKit by lazy { dex.evmKit!! }
+        private val uniswapKit by lazy { UniswapKit.getInstance(evmKit) }
+        private val feeRateProvider by lazy { FeeRateProviderFactory.provider(dex.coin)!! }
+        private val transactionService by lazy { EvmTransactionService(evmKit, feeRateProvider, 20) }
+        private val coinService by lazy { CoinService(dex.coin, App.currencyManager, App.xRateManager) }
         private val uniswapProvider by lazy { UniswapProvider(uniswapKit) }
-        private val allowanceService by lazy { SwapAllowanceService(uniswapProvider.routerAddress, App.adapterManager, ethereumKit) }
+        private val allowanceService by lazy { SwapAllowanceService(uniswapProvider.routerAddress, App.adapterManager, evmKit) }
         private val pendingAllowanceService by lazy { SwapPendingAllowanceService(App.adapterManager, allowanceService) }
         private val service by lazy {
-            SwapService(ethereumKit, tradeService, allowanceService, pendingAllowanceService, transactionService, App.adapterManager)
+            SwapService(dex, evmKit, tradeService, allowanceService, pendingAllowanceService, transactionService, App.adapterManager)
         }
         private val tradeService by lazy {
-            SwapTradeService(ethereumKit, uniswapProvider, fromCoin)
+            SwapTradeService(evmKit, uniswapProvider, fromCoin)
         }
         private val stringProvider by lazy {
             StringProvider(App.instance)
@@ -73,7 +97,7 @@ object SwapModule {
             SwapViewItemHelper(stringProvider, App.numberFormatter)
         }
         private val coinProvider by lazy {
-            SwapCoinProvider(App.coinManager, App.walletManager, App.adapterManager)
+            SwapCoinProvider(dex, App.coinManager, App.walletManager, App.adapterManager)
         }
         private val fromCoinCardService by lazy {
             SwapFromCoinCardService(service, tradeService, coinProvider)
@@ -90,7 +114,7 @@ object SwapModule {
 
             return when (modelClass) {
                 SwapViewModel::class.java -> {
-                    SwapViewModel(service, tradeService, allowanceService, pendingAllowanceService, ethCoinService, formatter, stringProvider) as T
+                    SwapViewModel(service, tradeService, allowanceService, pendingAllowanceService, coinService, formatter, stringProvider) as T
                 }
                 SwapCoinCardViewModel::class.java -> {
                     val fiatService = FiatService(switchService, App.currencyManager, App.xRateManager)
@@ -111,7 +135,7 @@ object SwapModule {
                     SwapAllowanceViewModel(service, allowanceService, pendingAllowanceService, formatter, stringProvider) as T
                 }
                 EthereumFeeViewModel::class.java -> {
-                    EthereumFeeViewModel(transactionService, ethCoinService) as T
+                    EthereumFeeViewModel(transactionService, coinService) as T
                 }
                 else -> throw IllegalArgumentException()
             }

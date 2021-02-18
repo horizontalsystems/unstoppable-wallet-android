@@ -91,7 +91,7 @@ sealed class CoinType : Parcelable {
         }
 
     val swappable: Boolean
-        get() = this is Ethereum || this is Erc20
+        get() = this is Ethereum || this is Erc20 || this is BinanceSmartChain || this is Bep20
 
     fun canSupport(accountType: AccountType) = when (this) {
         Bitcoin, Litecoin, BitcoinCash, Dash, Ethereum, is Erc20 -> {

@@ -15,7 +15,7 @@ object FeeRateProviderFactory {
             is CoinType.Litecoin -> LitecoinFeeRateProvider(feeRateProvider)
             is CoinType.BitcoinCash -> BitcoinCashFeeRateProvider(feeRateProvider)
             is CoinType.Dash -> DashFeeRateProvider(feeRateProvider)
-            is CoinType.BinanceSmartChain -> BinanceSmartChainFeeRateProvider(feeRateProvider)
+            is CoinType.BinanceSmartChain, is CoinType.Bep20 -> BinanceSmartChainFeeRateProvider(feeRateProvider)
             is CoinType.Ethereum, is CoinType.Erc20 -> EthereumFeeRateProvider(feeRateProvider)
             else -> null
         }

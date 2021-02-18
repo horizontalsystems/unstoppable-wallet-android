@@ -11,7 +11,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.swap.SwapModule
 import io.horizontalsystems.bankwallet.modules.swap.coinselect.SelectSwapCoinFragment
 import io.horizontalsystems.core.findNavController
-import io.horizontalsystems.core.getNavigationResult
+import io.horizontalsystems.core.getNavigationLiveData
 import io.horizontalsystems.core.setOnSingleClickListener
 import io.horizontalsystems.views.helpers.LayoutHelper
 import kotlinx.android.synthetic.main.view_card_swap.view.*
@@ -19,8 +19,6 @@ import java.math.BigDecimal
 
 class SwapCoinCardView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
     : CardView(context, attrs, defStyleAttr) {
-
-    private var viewModel: SwapCoinCardViewModel? = null
 
     init {
         radius = LayoutHelper.dpToPx(16f, context)
@@ -30,8 +28,6 @@ class SwapCoinCardView @JvmOverloads constructor(context: Context, attrs: Attrib
     }
 
     fun initialize(title: String, viewModel: SwapCoinCardViewModel, fragment: Fragment, lifecycleOwner: LifecycleOwner) {
-        this.viewModel = viewModel
-
         titleTextView.text = title
 
         observe(viewModel, lifecycleOwner)
@@ -51,13 +47,13 @@ class SwapCoinCardView @JvmOverloads constructor(context: Context, attrs: Attrib
             }
         }
 
-        fragment.getNavigationResult(SelectSwapCoinFragment.resultBundleKey)?.let { bundle ->
+        fragment.getNavigationLiveData(SelectSwapCoinFragment.resultBundleKey)?.observe(lifecycleOwner, { bundle ->
             val requestId = bundle.getInt(SelectSwapCoinFragment.requestIdKey)
             val coinBalanceItem = bundle.getParcelable<SwapModule.CoinBalanceItem>(SelectSwapCoinFragment.coinBalanceItemResultKey)
             if (requestId == id && coinBalanceItem != null) {
                 viewModel.onSelectCoin(coinBalanceItem.coin)
             }
-        }
+        })
     }
 
     private fun observe(viewModel: SwapCoinCardViewModel, lifecycleOwner: LifecycleOwner) {
@@ -83,7 +79,7 @@ class SwapCoinCardView @JvmOverloads constructor(context: Context, attrs: Attrib
 
         viewModel.maxEnabledLiveData().observe(lifecycleOwner, { enabled ->
             amountInput.maxButtonVisible = enabled
-            if (enabled){
+            if (enabled) {
                 amountInput.onTapMaxCallback = { viewModel.onTapMax() }
             }
         })

@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.core.ethereum
 
 import io.horizontalsystems.bankwallet.core.FeeRatePriority
-import io.horizontalsystems.bankwallet.core.providers.EthereumFeeRateProvider
+import io.horizontalsystems.bankwallet.core.IFeeRateProvider
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.models.TransactionData
@@ -14,7 +14,7 @@ import java.math.BigInteger
 
 class EvmTransactionService(
         private val evmKit: EthereumKit,
-        private val feeRateProvider: EthereumFeeRateProvider,
+        private val feeRateProvider: IFeeRateProvider,
         private val gasLimitSurchargePercent: Int
 ) {
 
