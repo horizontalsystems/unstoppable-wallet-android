@@ -46,7 +46,6 @@ object SendModule {
 
         fun onViewDidLoad()
         fun onModulesDidLoad()
-        fun onAddressScan(address: String)
         fun onProceedClicked()
         fun onSendConfirmed(logger: AppLogger)
         fun onClear()
@@ -116,7 +115,6 @@ object SendModule {
     }
 
     interface IRouter {
-        fun scanQrCode()
         fun closeWithSuccess()
     }
 
@@ -145,7 +143,6 @@ object SendModule {
 
         fun sync()
         fun onModulesDidLoad()
-        fun onAddressScan(address: String)
         fun onClear() {}
 
         @Throws
@@ -192,7 +189,7 @@ object SendModule {
             val handler: ISendHandler = when (val adapter = App.adapterManager.getAdapterForWallet(wallet)) {
                 is ISendBitcoinAdapter -> {
                     val bitcoinInteractor = SendBitcoinInteractor(adapter, App.localStorage)
-                    val handler = SendBitcoinHandler(bitcoinInteractor, router, wallet.coin.type)
+                    val handler = SendBitcoinHandler(bitcoinInteractor, wallet.coin.type)
 
                     bitcoinInteractor.delegate = handler
 
@@ -206,7 +203,7 @@ object SendModule {
                 }
                 is ISendDashAdapter -> {
                     val dashInteractor = SendDashInteractor(adapter)
-                    val handler = SendDashHandler(dashInteractor, router)
+                    val handler = SendDashHandler(dashInteractor)
 
                     dashInteractor.delegate = handler
 
@@ -218,7 +215,7 @@ object SendModule {
                 }
                 is ISendEthereumAdapter -> {
                     val ethereumInteractor = SendEthereumInteractor(adapter)
-                    val handler = SendEthereumHandler(ethereumInteractor, router)
+                    val handler = SendEthereumHandler(ethereumInteractor)
 
                     presenter.amountModuleDelegate = handler
                     presenter.addressModuleDelegate = handler
@@ -229,7 +226,7 @@ object SendModule {
                 }
                 is ISendBinanceAdapter -> {
                     val binanceInteractor = SendBinanceInteractor(adapter)
-                    val handler = SendBinanceHandler(binanceInteractor, router)
+                    val handler = SendBinanceHandler(binanceInteractor)
 
                     presenter.amountModuleDelegate = handler
                     presenter.addressModuleDelegate = handler
@@ -239,7 +236,7 @@ object SendModule {
                 }
                 is ISendZcashAdapter -> {
                     val zcashInteractor = SendZcashInteractor(adapter)
-                    val handler = SendZcashHandler(zcashInteractor, router)
+                    val handler = SendZcashHandler(zcashInteractor)
 
                     presenter.amountModuleDelegate = handler
                     presenter.addressModuleDelegate = handler

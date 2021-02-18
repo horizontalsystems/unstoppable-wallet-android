@@ -32,10 +32,6 @@ class SendPresenter(
         handler.onModulesDidLoad()
     }
 
-    override fun onAddressScan(address: String) {
-        handler.onAddressScan(address)
-    }
-
     override fun onProceedClicked() {
         view.showConfirmation(handler.confirmationViewItems())
     }

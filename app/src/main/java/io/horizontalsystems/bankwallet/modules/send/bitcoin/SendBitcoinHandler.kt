@@ -18,7 +18,6 @@ import java.math.BigDecimal
 
 class SendBitcoinHandler(
         private val interactor: SendModule.ISendBitcoinInteractor,
-        private val router: SendModule.IRouter,
         private val coinType: CoinType)
     : SendModule.ISendHandler, SendModule.ISendBitcoinInteractorDelegate, SendAmountModule.IAmountModuleDelegate,
       SendAddressModule.IAddressModuleDelegate, SendFeeModule.IFeeModuleDelegate,
@@ -121,9 +120,6 @@ class SendBitcoinHandler(
         syncMaximumAmount()
     }
 
-    override fun onAddressScan(address: String) {
-    }
-
     override fun confirmationViewItems(): List<SendModule.SendConfirmationViewItem> {
         val hodlerData = hodlerModule?.pluginData()?.get(HodlerPlugin.id) as? HodlerData
         val lockTimeInterval = hodlerData?.lockTimeInterval
@@ -191,10 +187,6 @@ class SendBitcoinHandler(
 
     override fun onUpdateAmount(amount: BigDecimal) {
         amountModule.setAmount(amount)
-    }
-
-    override fun scanQrCode() {
-        router.scanQrCode()
     }
 
     // SendFeeModule.IFeeModuleDelegate

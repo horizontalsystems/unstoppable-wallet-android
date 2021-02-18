@@ -11,8 +11,7 @@ import io.reactivex.Single
 import java.math.BigDecimal
 
 class SendDashHandler(
-        private val interactor: SendModule.ISendDashInteractor,
-        private val router: SendModule.IRouter)
+        private val interactor: SendModule.ISendDashInteractor)
     : SendModule.ISendHandler, SendModule.ISendDashInteractorDelegate, SendAmountModule.IAmountModuleDelegate,
       SendAddressModule.IAddressModuleDelegate, SendFeeModule.IFeeModuleDelegate {
 
@@ -70,9 +69,6 @@ class SendDashHandler(
         syncMinimumAmount()
     }
 
-    override fun onAddressScan(address: String) {
-    }
-
     override fun confirmationViewItems(): List<SendModule.SendConfirmationViewItem> {
         return listOf(
                 SendModule.SendConfirmationAmountViewItem(amountModule.primaryAmountInfo(),
@@ -121,10 +117,6 @@ class SendDashHandler(
 
     override fun onUpdateAmount(amount: BigDecimal) {
         amountModule.setAmount(amount)
-    }
-
-    override fun scanQrCode() {
-        router.scanQrCode()
     }
 
     // SendFeeModule.IFeeModuleDelegate

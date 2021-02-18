@@ -2,13 +2,14 @@ package io.horizontalsystems.bankwallet.modules.launcher
 
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.intro.IntroActivity
 import io.horizontalsystems.bankwallet.modules.keystore.KeyStoreActivity
-import io.horizontalsystems.bankwallet.modules.lockscreen.LockScreenModule
+import io.horizontalsystems.bankwallet.modules.lockscreen.LockScreenActivity
 import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.tor.TorConnectionActivity
 import io.horizontalsystems.pin.PinModule
@@ -16,6 +17,13 @@ import io.horizontalsystems.pin.PinModule
 class LauncherActivity : AppCompatActivity() {
 
     private lateinit var viewModel: LaunchViewModel
+
+    private val unlockResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        when (result.resultCode) {
+            PinModule.RESULT_OK -> viewModel.delegate.didUnlock()
+            PinModule.RESULT_CANCELLED -> viewModel.delegate.didCancelUnlock()
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,7 +46,8 @@ class LauncherActivity : AppCompatActivity() {
         })
 
         viewModel.openUnlockModule.observe(this, Observer {
-            LockScreenModule.startForUnlock(this, REQUEST_CODE_UNLOCK_PIN)
+            val intent = Intent(this, LockScreenActivity::class.java)
+            unlockResultLauncher.launch(intent)
         })
 
         viewModel.openNoSystemLockModule.observe(this, Observer {
@@ -62,17 +71,4 @@ class LauncherActivity : AppCompatActivity() {
         })
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_CODE_UNLOCK_PIN) {
-            when (resultCode) {
-                PinModule.RESULT_OK -> viewModel.delegate.didUnlock()
-                PinModule.RESULT_CANCELLED -> viewModel.delegate.didCancelUnlock()
-            }
-        }
-    }
-
-    companion object {
-        const val REQUEST_CODE_UNLOCK_PIN = 1
-    }
 }
