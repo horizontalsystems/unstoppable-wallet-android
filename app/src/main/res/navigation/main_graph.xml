@@ -226,14 +226,6 @@
         tools:layout="@layout/fragment_swap"
         android:label="@string/Swap">
         <action
-            android:id="@+id/swapFragment_to_selectSwapCoinFragment"
-            app:destination="@id/selectSwapCoinFragment"
-            app:enterAnim="@anim/slide_from_right"
-            app:exitAnim="@anim/slide_to_left"
-            app:popEnterAnim="@anim/slide_from_left"
-            app:popExitAnim="@anim/slide_to_right"
-            />
-        <action
             android:id="@+id/swapFragment_to_swapApproveFragment"
             app:destination="@id/swapApproveFragment" />
         <action
@@ -250,10 +242,6 @@
             app:popEnterAnim="@android:anim/fade_in"
             app:popExitAnim="@anim/slide_to_bottom_long" />
     </fragment>
-    <fragment
-        android:id="@+id/selectSwapCoinFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.swap.coinselect.SelectSwapCoinFragment"
-        tools:layout="@layout/fragment_swap_select_token" />
     <fragment
         android:id="@+id/swapApproveFragment"
         android:name="io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveFragment"
@@ -314,5 +302,10 @@
         android:id="@+id/statusInfoDialog"
         android:name="io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.StatusInfoFragment"
         tools:layout="@layout/fragment_status_info" />
+
+    <dialog
+        android:id="@+id/selectSwapCoinDialog"
+        android:name="io.horizontalsystems.bankwallet.modules.swap.coinselect.SelectSwapCoinDialogFragment"
+        tools:layout="@layout/fragment_swap_select_token" />
 
 </navigation>

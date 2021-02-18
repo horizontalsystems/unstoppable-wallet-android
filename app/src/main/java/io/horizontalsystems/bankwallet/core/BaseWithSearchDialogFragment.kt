@@ -1,11 +1,11 @@
 package io.horizontalsystems.bankwallet.core
 
 import android.view.Menu
+import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.widget.SearchView
 import io.horizontalsystems.bankwallet.R
 
-
-abstract class BaseWithSearchFragment : BaseFragment(), SearchViewHelper.Listener {
+abstract class BaseWithSearchDialogFragment : BaseDialogFragment(), SearchViewHelper.Listener {
 
     abstract override fun updateFilter(query: String)
     override fun searchExpanded(menu: Menu) {}
@@ -21,7 +21,11 @@ abstract class BaseWithSearchFragment : BaseFragment(), SearchViewHelper.Listene
 
     override fun onDetach() {
         super.onDetach()
-
+        hideKeyboard()
         searchView?.setOnQueryTextListener(null)
+    }
+
+    private fun hideKeyboard() {
+        activity?.getSystemService(InputMethodManager::class.java)?.hideSoftInputFromWindow(activity?.currentFocus?.windowToken, 0)
     }
 }
