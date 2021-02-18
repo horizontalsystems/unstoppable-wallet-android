@@ -1,16 +1,20 @@
 package io.horizontalsystems.bankwallet.modules.addtoken
 
+import android.app.Activity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.utils.ModuleField
+import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerActivity
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.snackbar.SnackbarDuration
@@ -51,6 +55,20 @@ class AddTokenFragment : BaseFragment() {
         addressInputView.onPasteText {
             model.onTextChange(it)
             addressInputView.setText(it)
+        }
+
+        val qrScannerResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                result.data?.getStringExtra(ModuleField.SCAN_ADDRESS)?.let {
+                    model.onTextChange(it)
+                    addressInputView.setText(it)
+                }
+            }
+        }
+
+        addressInputView.onButtonQrScanClick {
+            val intent = QRScannerActivity.getIntentForFragment(this)
+            qrScannerResultLauncher.launch(intent)
         }
 
         observeViewModel(model)

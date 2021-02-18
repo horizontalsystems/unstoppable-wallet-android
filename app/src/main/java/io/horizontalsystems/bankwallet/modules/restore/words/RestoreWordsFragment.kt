@@ -20,7 +20,9 @@ import io.horizontalsystems.core.CoreApp
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.core.helpers.KeyboardHelper
+import kotlinx.android.synthetic.main.fragment_add_token.*
 import kotlinx.android.synthetic.main.fragment_restore_words.*
+import kotlinx.android.synthetic.main.fragment_restore_words.toolbar
 import kotlinx.android.synthetic.main.view_input_address.view.*
 
 class RestoreWordsFragment : BaseFragment() {
@@ -69,6 +71,9 @@ class RestoreWordsFragment : BaseFragment() {
 
         description.text = getString(R.string.Restore_Enter_Key_Description_Mnemonic, getString(accountTypeTitleRes), viewModel.wordCount.toString())
         additionalInfo.isVisible = viewModel.birthdayHeightEnabled
+        additionalInfo.onPasteText {
+            additionalInfo.setText(it)
+        }
 
         bindListeners()
         observeEvents()
