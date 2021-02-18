@@ -116,21 +116,14 @@ class QRScannerActivity : AppCompatActivity() {
     companion object {
         private const val REQUEST_CAMERA_PERMISSION = 1
 
-        fun start(context: Activity) {
-            start(IntentIntegrator(context))
-        }
-
-        fun start(fragment: Fragment) {
-            start(IntentIntegrator.forSupportFragment(fragment))
-        }
-
-        private fun start(intentIntegrator: IntentIntegrator) {
+        fun getIntentForFragment(fragment: Fragment): Intent {
+            val intentIntegrator = IntentIntegrator.forSupportFragment(fragment)
             intentIntegrator.captureActivity = QRScannerActivity::class.java
             intentIntegrator.setOrientationLocked(true)
             intentIntegrator.setPrompt("")
             intentIntegrator.setBeepEnabled(false)
             intentIntegrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE)
-            intentIntegrator.initiateScan()
+            return intentIntegrator.createScanIntent()
         }
     }
 

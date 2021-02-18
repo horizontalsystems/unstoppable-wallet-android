@@ -44,8 +44,6 @@ object SendAddressModule {
 
         fun onUpdateAddress()
         fun onUpdateAmount(amount: BigDecimal)
-
-        fun scanQrCode()
     }
 
     open class ValidationError : Exception() {

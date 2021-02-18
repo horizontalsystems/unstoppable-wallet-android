@@ -11,8 +11,7 @@ import io.reactivex.Single
 import java.math.BigDecimal
 
 class SendZcashHandler(
-        private val interactor: SendModule.ISendZcashInteractor,
-        private val router: SendModule.IRouter
+        private val interactor: SendModule.ISendZcashInteractor
 ) : SendModule.ISendHandler, SendAmountModule.IAmountModuleDelegate, SendAddressModule.IAddressModuleDelegate, SendFeeModule.IFeeModuleDelegate {
 
     private fun syncValidation() {
@@ -77,8 +76,6 @@ class SendZcashHandler(
         feeModule.setFee(interactor.fee)
     }
 
-    override fun onAddressScan(address: String) {
-    }
     //endregion
 
     //region SendAmountModule.IAmountModuleDelegate
@@ -104,9 +101,6 @@ class SendZcashHandler(
         amountModule.setAvailableBalance(amount)
     }
 
-    override fun scanQrCode() {
-        router.scanQrCode()
-    }
     //endregion
 
     //region SendFeeModule.IFeeModuleDelegate

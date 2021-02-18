@@ -24,9 +24,9 @@ class LockScreenActivity : BaseActivity() {
     }
 
     companion object {
-        fun startForResult(context: Activity, requestCode: Int = 0) {
+        fun start(context: Activity) {
             val intent = Intent(context, LockScreenActivity::class.java)
-            context.startActivityForResult(intent, requestCode)
+            context.startActivity(intent)
         }
     }
 }

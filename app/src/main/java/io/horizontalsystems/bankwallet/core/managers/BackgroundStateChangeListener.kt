@@ -2,7 +2,7 @@ package io.horizontalsystems.bankwallet.core.managers
 
 import android.app.Activity
 import io.horizontalsystems.bankwallet.modules.keystore.KeyStoreActivity
-import io.horizontalsystems.bankwallet.modules.lockscreen.LockScreenModule
+import io.horizontalsystems.bankwallet.modules.lockscreen.LockScreenActivity
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.IKeyStoreManager
 import io.horizontalsystems.core.IPinComponent
@@ -36,7 +36,7 @@ class BackgroundStateChangeListener(
         pinComponent.willEnterForeground(activity)
 
         if (pinComponent.shouldShowPin(activity)){
-            LockScreenModule.startForUnlock(activity, 1)
+            LockScreenActivity.start(activity)
         }
     }
 

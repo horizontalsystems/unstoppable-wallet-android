@@ -16,8 +16,7 @@ import java.math.BigDecimal
 
 
 class SendEthereumHandler(
-        private val interactor: SendModule.ISendEthereumInteractor,
-        private val router: SendModule.IRouter)
+        private val interactor: SendModule.ISendEthereumInteractor)
     : SendModule.ISendHandler, SendAmountModule.IAmountModuleDelegate, SendAddressModule.IAddressModuleDelegate, SendFeeModule.IFeeModuleDelegate {
 
     private var estimateGasLimitState: FeeRateState = FeeRateState.Value(0)
@@ -158,9 +157,6 @@ class SendEthereumHandler(
         syncEstimateGasLimit()
     }
 
-    override fun onAddressScan(address: String) {
-    }
-
     override fun onClear() {
         disposable?.dispose()
     }
@@ -196,10 +192,6 @@ class SendEthereumHandler(
 
     override fun onUpdateAmount(amount: BigDecimal) {
         amountModule.setAmount(amount)
-    }
-
-    override fun scanQrCode() {
-        router.scanQrCode()
     }
 
     private fun onReceiveGasLimit(gasLimit: Long) {

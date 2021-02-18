@@ -1,20 +1,18 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect.main
 
 import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
-import com.google.zxing.integration.android.IntentIntegrator
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.managers.WalletConnectInteractor
@@ -37,6 +35,19 @@ class WalletConnectMainFragment : BaseFragment() {
     private val viewModelScan by viewModels<WalletConnectScanQrViewModel> { WalletConnectScanQrModule.Factory(baseViewModel.service) }
     private val viewModel by viewModels<WalletConnectMainViewModel> { WalletConnectMainModule.Factory(baseViewModel.service) }
     private var closeMenuItem: MenuItem? = null
+
+    private val qrScannerResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        when (result.resultCode) {
+            Activity.RESULT_OK -> {
+                result.data?.getStringExtra(ModuleField.SCAN_ADDRESS)?.let {
+                    viewModelScan.handleScanned(it)
+                }
+            }
+            Activity.RESULT_CANCELED -> {
+                findNavController().popBackStack()
+            }
+        }
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_wallet_connect_main, container, false)
@@ -62,7 +73,8 @@ class WalletConnectMainFragment : BaseFragment() {
         when (baseViewModel.initialScreen) {
             WalletConnectViewModel.InitialScreen.NoEthereumKit -> { }
             WalletConnectViewModel.InitialScreen.ScanQrCode -> {
-                QRScannerActivity.start(this)
+                val intent = QRScannerActivity.getIntentForFragment(this)
+                qrScannerResultLauncher.launch(intent)
             }
             WalletConnectViewModel.InitialScreen.Main -> {
                 view.isVisible = true
@@ -185,24 +197,6 @@ class WalletConnectMainFragment : BaseFragment() {
 
         cancelButton.setOnSingleClickListener {
             viewModel.cancel()
-        }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (requestCode == IntentIntegrator.REQUEST_CODE) {
-            when (resultCode) {
-                Activity.RESULT_OK -> {
-                    data?.getStringExtra(ModuleField.SCAN_ADDRESS)?.let {
-                        Log.e("AAA", "Scanned string: $it")
-                        viewModelScan.handleScanned(it)
-                    }
-                }
-                Activity.RESULT_CANCELED -> {
-                    findNavController().popBackStack()
-                }
-            }
         }
     }
 
