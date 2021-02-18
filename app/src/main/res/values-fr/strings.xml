@@ -68,7 +68,7 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="Market_Field_MarketCap">Cap. marché</string>
     <string name="Market_Field_Volume">Volume</string>
     <string name="Market_Field_PriceDiff">Prix</string>
-    <string name="Market_Title">Market</string>
+    <string name="Market_Title">Markets</string>
     <string name="Market_Search">Search</string>
     <string name="Market_Field_HighestCap">Highest Cap</string>
     <string name="Market_Field_LowestCap">Lowest Cap</string>

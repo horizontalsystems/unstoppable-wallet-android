@@ -269,6 +269,9 @@ object CoinInfoMap {
             "COMBO" to CoinInfo(null, null, "https://anatha.io"),
             "DEFI5" to CoinInfo(null, null, "https://anatha.io"),
             "CC10" to CoinInfo(null, null, "https://indexed.finance"),
+            "MX" to CoinInfo(null, null, "https://www.mxc.ceo"),
+            "GT" to CoinInfo(null, null, "https://gatechain.io"),
+            "FTT" to CoinInfo(null, null, "https://indexed.finance"),
 
 
             )
