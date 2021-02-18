@@ -12,7 +12,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.*
 
-@Database(version = 25, exportSchema = false, entities = [
+@Database(version = 26, exportSchema = false, entities = [
     EnabledWallet::class,
     PriceAlert::class,
     AccountRecord::class,
@@ -67,7 +67,8 @@ abstract class AppDatabase : RoomDatabase() {
                             updateEthereumCommunicationMode,
                             addBirthdayHeightToAccount,
                             addBep2SymbolToRecord,
-                            MIGRATION_24_25
+                            MIGRATION_24_25,
+                            MIGRATION_25_26
                     )
                     .build()
         }
@@ -448,8 +449,12 @@ abstract class AppDatabase : RoomDatabase() {
                                         """.trimIndent())
                     return
                 }
+            }
+        }
 
-                // deleteEosColumnFromAccountRecord 26, 27
+        private val MIGRATION_25_26: Migration = object : Migration(25, 26) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                // deleteEosColumnFromAccountRecord
                 database.execSQL("ALTER TABLE AccountRecord RENAME TO TempAccountRecord")
                 database.execSQL("""
                 CREATE TABLE AccountRecord (

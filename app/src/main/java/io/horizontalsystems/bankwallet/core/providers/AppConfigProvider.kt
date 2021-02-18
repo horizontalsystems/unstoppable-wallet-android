@@ -155,10 +155,12 @@ class AppConfigProvider : IAppConfigProvider, ILanguageConfigProvider, IBuildCon
                 Coin("FLUX",        "FLUX",                 "FLUX",     18, CoinType.Erc20("0x469eDA64aEd3A3Ad6f868c44564291aA415cB1d9")),
                 Coin("FOAM",        "FOAM Token",           "FOAM",     18, CoinType.Erc20("0x4946fcea7c692606e8908002e55a582af44ac121")),
                 Coin("FRAX",        "Frax",                 "FRAX",     18, CoinType.Erc20("0x853d955acef822db058eb8505911ed77f175b99e")),
+                Coin("FTT",         "FTX Token",            "FTT",      18, CoinType.Erc20("0x50d1c9771902476076ecfc8b2a83ad6b9355a4c9")),
                 Coin("FUN",         "FunFair",              "FUN",      8,  CoinType.Erc20("0x419d0d8bdd9af5e606ae2232ed285aff190e711b")),
                 Coin("COMBO",       "Furucombo",            "COMBO",    18, CoinType.Erc20("0xffffffff2ba8f66d4e51811c5190992176930278")),
                 Coin("FYZ",         "FYOOZ",                "FYZ",      18, CoinType.Erc20("0x6BFf2fE249601ed0Db3a87424a2E923118BB0312")),
                 Coin("GST2",        "Gas Token Two",        "GST2",     2,  CoinType.Erc20("0x0000000000b3f879cb30fe243b4dfee438691c04")),
+                Coin("GT",          "GateChainToken",       "GT",       18, CoinType.Erc20("0xe66747a101bff2dba3697199dcce5b743b454759")),
                 Coin("GUSD",        "Gemini Dollar",        "GUSD",     2,  CoinType.Erc20("0x056Fd409E1d7A124BD7017459dFEa2F387b6d5Cd")),
                 Coin("GTO",         "Gifto",                "GTO",      8,  CoinType.Binance("GTO-908")),
                 Coin("GNO",         "Gnosis",               "GNO",      18, CoinType.Erc20("0x6810e776880c02933d47db1b9fc05908e5386b96")),
@@ -182,7 +184,7 @@ class AppConfigProvider : IAppConfigProvider, ILanguageConfigProvider, IBuildCon
                 Coin("KEEP",        "KEEP Token",           "KEEP",     18, CoinType.Erc20("0x85eee30c52b0b379b046fb0f85f4f3dc3009afec")),
                 Coin("KP3R",        "Keep3rV1",             "KP3R",     18, CoinType.Erc20("0x1ceb5cb57c4d4e2b2433641b95dd330a33185a44")),
                 Coin("PNK",         "Kleros",               "PNK",      18, CoinType.Erc20("0x93ed3fbe21207ec2e8f2d3c3de6e058cb73bc04d")),
-                Coin("KCS",         "KuCoin Shares",        "KCS",      6,  CoinType.Erc20("0x039B5649A59967e3e936D7471f9c3700100Ee1ab")),
+                Coin("KCS",         "KuCoin Token",         "KCS",      6,  CoinType.Erc20("0x039B5649A59967e3e936D7471f9c3700100Ee1ab")),
                 Coin("KNC",         "Kyber Network Crystal","KNC",      18, CoinType.Erc20("0xdd974D5C2e2928deA5F71b9825b8b646686BD200")),
                 Coin("LGCY",        "LGCY Network",         "LGCY",     18, CoinType.Erc20("0xaE697F994Fc5eBC000F8e22EbFfeE04612f98A0d")),
                 Coin("LDO",         "Lido DAO Token",       "LDO",      18, CoinType.Erc20("0x5a98fcbea516cf06857215779fd812ca3bef1b32")),
@@ -192,6 +194,7 @@ class AppConfigProvider : IAppConfigProvider, ILanguageConfigProvider, IBuildCon
                 Coin("LON",         "LON Token",            "LON",      18, CoinType.Erc20("0x0000000000095413afc295d19edeb1ad7b71c952")),
                 Coin("LOOM",        "Loom Network",         "LOOM",     18, CoinType.Erc20("0xA4e8C3Ec456107eA67d3075bF9e3DF3A75823DB0")),
                 Coin("LRC",         "Loopring",             "LRC",      18, CoinType.Erc20("0xEF68e7C694F40c8202821eDF525dE3782458639f")),
+                Coin("LRC",         "LoopringCoin V2",      "LRC",      18, CoinType.Erc20("0xbbbbca6a901c926f240b89eacb641d8aec7aeafd")),
                 Coin("LTO",         "LTO Network",          "LTO",      8,  CoinType.Binance("LTO-BDF")),
                 Coin("MFT",         "Mainframe Token",      "MFT",      18, CoinType.Erc20("0xdf2c7238198ad8b389666574f2d8bc411a4b7428")),
                 Coin("MATIC",       "Matic Token",          "MATIC",    18, CoinType.Erc20("0x7d1afa7b718fb893db30a3abc0cfc608aacfebb0")),
@@ -205,6 +208,7 @@ class AppConfigProvider : IAppConfigProvider, ILanguageConfigProvider, IBuildCon
                 Coin("MTA",         "Meta",                 "MTA",      18, CoinType.Erc20("0xa3BeD4E1c75D00fa6f4E5E6922DB7261B5E9AcD2")),
                 Coin("MUSD",        "mStable USD",          "MUSD",     18, CoinType.Erc20("0xe2f2a5c287993345a840db3b0845fbc70f5935a5")),
                 Coin("TKN",         "Monolith",             "TKN",      8,  CoinType.Erc20("0xaaaf91d9b90df800df4f55c205fd6989c977e73a")),
+                Coin("MX",          "MX Token",             "MX",       18, CoinType.Erc20("0x11eef04c884e24d9b7b4760e7476d06ddf797f36")),
                 Coin("USDN",        "Neatrino USD",         "USDN",     18, CoinType.Erc20("0x674C6Ad92Fd080e4004b2312b45f796a192D27a0")),
                 Coin("NEST",        "NEST",                 "NEST",     18, CoinType.Erc20("0x04abeda201850ac0124161f037efd70c74ddc74c")),
                 Coin("NEXO",        "Nexo",                 "NEXO",     18, CoinType.Erc20("0xB62132e35a6c13ee1EE0f84dC5d40bad8d815206")),
@@ -323,9 +327,7 @@ class AppConfigProvider : IAppConfigProvider, ILanguageConfigProvider, IBuildCon
                 Coin("YFII",        "YFII.finance",         "YFII",     18, CoinType.Erc20("0xa1d0E215a23d7030842FC67cE582a6aFa3CCaB83")),
                 Coin("YFIM",        "yfi.mobi",             "YFIM",     18, CoinType.Erc20("0x2e2f3246b6c65ccc4239c9ee556ec143a7e5de2c")),
                 Coin("ZAI",         "Zero Collateral Dai",  "ZAI",      18, CoinType.Erc20("0x9d1233cc46795E94029fDA81aAaDc1455D510f15")),
-
-
-                )
+   )
     }
 
 
