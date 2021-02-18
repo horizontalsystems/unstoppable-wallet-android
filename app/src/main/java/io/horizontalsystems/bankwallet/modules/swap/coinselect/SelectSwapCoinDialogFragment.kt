@@ -3,22 +3,24 @@ package io.horizontalsystems.bankwallet.modules.swap.coinselect
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.view.*
-import androidx.appcompat.app.AppCompatActivity
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.BaseWithSearchFragment
+import io.horizontalsystems.bankwallet.core.BaseWithSearchDialogFragment
 import io.horizontalsystems.bankwallet.modules.swap.SwapModule.CoinBalanceItem
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.setNavigationResult
 import kotlinx.android.synthetic.main.fragment_swap_select_token.*
 
-class SelectSwapCoinFragment : BaseWithSearchFragment() {
+class SelectSwapCoinDialogFragment : BaseWithSearchDialogFragment() {
 
     private var viewModel: SelectSwapCoinViewModel? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        dialog?.window?.setWindowAnimations(R.style.RightDialogAnimations)
         return inflater.inflate(R.layout.fragment_swap_select_token, container, false)
     }
 
@@ -28,7 +30,7 @@ class SelectSwapCoinFragment : BaseWithSearchFragment() {
         toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }
-        configureSearchMenu(toolbar.menu, R.string.ManageCoins_Search)
+        configureSearchMenu(toolbar.menu)
 
         val coinBalanceItems = arguments?.getParcelableArrayList<CoinBalanceItem>(coinBalanceItemsListKey)
         val requestId = arguments?.getInt(requestIdKey)
@@ -56,7 +58,6 @@ class SelectSwapCoinFragment : BaseWithSearchFragment() {
     }
 
     private fun closeWithResult(coinBalanceItem: CoinBalanceItem, requestId: Int) {
-        hideKeyboard()
         setNavigationResult(resultBundleKey, bundleOf(
                 requestIdKey to requestId,
                 coinBalanceItemResultKey to coinBalanceItem

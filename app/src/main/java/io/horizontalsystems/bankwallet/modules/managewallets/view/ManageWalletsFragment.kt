@@ -48,7 +48,7 @@ class ManageWalletsFragment : CoinListBaseFragment(), NoAccountDialog.Listener {
                 else -> false
             }
         }
-        configureSearchMenu(toolbar.menu, R.string.ManageCoins_Search)
+        configureSearchMenu(toolbar.menu)
 
         activity?.onBackPressedDispatcher?.addCallback(this) {
             findNavController().popBackStack()

@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.swap.SwapModule
-import io.horizontalsystems.bankwallet.modules.swap.coinselect.SelectSwapCoinFragment
+import io.horizontalsystems.bankwallet.modules.swap.coinselect.SelectSwapCoinDialogFragment
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.getNavigationLiveData
 import io.horizontalsystems.core.setOnSingleClickListener
@@ -33,8 +33,8 @@ class SwapCoinCardView @JvmOverloads constructor(context: Context, attrs: Attrib
         observe(viewModel, lifecycleOwner)
 
         selectedToken.setOnSingleClickListener {
-            val params = SelectSwapCoinFragment.params(id, ArrayList(viewModel.tokensForSelection))
-            fragment.findNavController().navigate(R.id.swapFragment_to_selectSwapCoinFragment, params, null)
+            val params = SelectSwapCoinDialogFragment.params(id, ArrayList(viewModel.tokensForSelection))
+            fragment.findNavController().navigate(R.id.selectSwapCoinDialog, params)
         }
 
         amountInput.onTapSecondaryCallback = { viewModel.onSwitch() }
@@ -47,9 +47,9 @@ class SwapCoinCardView @JvmOverloads constructor(context: Context, attrs: Attrib
             }
         }
 
-        fragment.getNavigationLiveData(SelectSwapCoinFragment.resultBundleKey)?.observe(lifecycleOwner, { bundle ->
-            val requestId = bundle.getInt(SelectSwapCoinFragment.requestIdKey)
-            val coinBalanceItem = bundle.getParcelable<SwapModule.CoinBalanceItem>(SelectSwapCoinFragment.coinBalanceItemResultKey)
+        fragment.getNavigationLiveData(SelectSwapCoinDialogFragment.resultBundleKey)?.observe(lifecycleOwner, { bundle ->
+            val requestId = bundle.getInt(SelectSwapCoinDialogFragment.requestIdKey)
+            val coinBalanceItem = bundle.getParcelable<SwapModule.CoinBalanceItem>(SelectSwapCoinDialogFragment.coinBalanceItemResultKey)
             if (requestId == id && coinBalanceItem != null) {
                 viewModel.onSelectCoin(coinBalanceItem.coin)
             }

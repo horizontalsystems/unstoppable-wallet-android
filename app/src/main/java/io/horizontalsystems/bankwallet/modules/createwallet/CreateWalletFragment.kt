@@ -39,7 +39,7 @@ class CreateWalletFragment : CoinListBaseFragment() {
                 else -> false
             }
         }
-        configureSearchMenu(toolbar.menu, R.string.ManageCoins_Search)
+        configureSearchMenu(toolbar.menu)
         doneMenuButton = toolbar.menu.findItem(R.id.menuDone)
 
         val predefinedAccountType = arguments?.getParcelable<PredefinedAccountType>("predefinedAccountType")
