@@ -743,12 +743,28 @@
     <string name="Charts_TimeDuration_Year">1Y</string>
     <string name="Charts_TimeDuration_Year2">2Y</string>
 
+    <string name="Charts_RatingDetails">Rating Details</string>
+    <string name="Charts_Price">Price</string>
+    <string name="Charts_Market">Market</string>
+    <string name="Charts_MarketBTC">BTC Markets</string>
+    <string name="Charts_Range24">24h Range</string>
+    <string name="Charts_Performance">Performance</string>
+    <string name="Charts_About">About</string>
+    <string name="Charts_Category">Category</string>
+    <string name="Charts_Guide">Guide</string>
+    <string name="Charts_Website">Website</string>
+    <string name="Charts_Whitepaper">Whitepaper</string>
+    <string name="Charts_Reddit">Reddit</string>
+    <string name="Charts_Twitter">Twitter</string>
+    <string name="Charts_Telegram">Telegram</string>
+    <string name="Charts_Github">Github</string>
+    <string name="Charts_Changes1W">Changes (1W)</string>
+    <string name="Charts_Changes1M">Changes (1M)</string>
     <string name="Charts_MarketCap">Market Cap</string>
     <string name="Charts_Volume24">Volume (24h)</string>
     <string name="Charts_inCirculation">In Circulation</string>
     <string name="Charts_TotalSupply">Total Supply</string>
     <string name="Charts_StartDate">Launch Date</string>
-    <string name="Charts_Website">Project Website</string>
     <string name="Charts_CryptoCompare" translatable="false">\@CryptoCompare.com</string>
     <string name="Charts_IndicatorEMA" translatable="false">EMA</string>
     <string name="Charts_IndicatorMACD" translatable="false">MACD</string>

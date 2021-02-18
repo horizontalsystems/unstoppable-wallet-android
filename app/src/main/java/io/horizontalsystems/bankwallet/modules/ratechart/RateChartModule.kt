@@ -5,16 +5,15 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.PriceAlert
 import io.horizontalsystems.chartview.models.PointInfo
-import io.horizontalsystems.xrateskit.entities.ChartInfo
-import io.horizontalsystems.xrateskit.entities.ChartType
-import io.horizontalsystems.xrateskit.entities.MarketInfo
+import io.horizontalsystems.xrateskit.entities.*
+import io.reactivex.Single
 import java.math.BigDecimal
 
 object RateChartModule {
 
     interface View {
-        fun showSpinner()
-        fun hideSpinner()
+        fun chartSpinner(isLoading: Boolean)
+        fun marketSpinner(isLoading: Boolean)
         fun setChartType(type: ChartType)
         fun showChartInfo(viewItem: ChartInfoViewItem)
         fun showMarketInfo(viewItem: MarketInfoViewItem)
@@ -46,6 +45,7 @@ object RateChartModule {
 
         fun getMarketInfo(coinCode: String, currencyCode: String): MarketInfo?
         fun getChartInfo(coinCode: String, currencyCode: String, chartType: ChartType): ChartInfo?
+        fun getCoinDetails(coinCode: String, currencyCode: String, rateDiffCoinCodes: List<String>, rateDiffPeriods: List<TimePeriod>)
         fun observeChartInfo(coinCode: String, currencyCode: String, chartType: ChartType)
         fun observeMarketInfo(coinCode: String, currencyCode: String)
         fun clear()
@@ -59,7 +59,9 @@ object RateChartModule {
     interface InteractorDelegate {
         fun onUpdate(chartInfo: ChartInfo)
         fun onUpdate(marketInfo: MarketInfo)
-        fun onError(ex: Throwable)
+        fun onUpdate(coinMarketDetails: CoinMarketDetails)
+        fun onChartError(ex: Throwable)
+        fun onMarketError(ex: Throwable)
         fun updateAlertNotificationIconState()
         fun updateFavoriteNotificationItemState()
     }

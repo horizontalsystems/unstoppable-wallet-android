@@ -5,8 +5,8 @@ import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.xrateskit.entities.ChartType
 
 class RateChartView : RateChartModule.View {
-    val showSpinner = SingleLiveEvent<Unit>()
-    val hideSpinner = SingleLiveEvent<Unit>()
+    val chartSpinner = SingleLiveEvent<Boolean>()
+    val marketSpinner = SingleLiveEvent<Boolean>()
     val setDefaultMode = SingleLiveEvent<ChartType>()
     val setSelectedPoint = SingleLiveEvent<ChartPointViewItem>()
     val showChartInfo = SingleLiveEvent<ChartInfoViewItem>()
@@ -19,12 +19,12 @@ class RateChartView : RateChartModule.View {
     val showNotificationMenu = SingleLiveEvent<Pair<String, String>>()
     val isFavorite = MutableLiveData<Boolean>()
 
-    override fun showSpinner() {
-        showSpinner.call()
+    override fun chartSpinner(isLoading: Boolean) {
+        chartSpinner.value = isLoading
     }
 
-    override fun hideSpinner() {
-        hideSpinner.call()
+    override fun marketSpinner(isLoading: Boolean) {
+        marketSpinner.value = isLoading
     }
 
     override fun setChartType(type: ChartType) {

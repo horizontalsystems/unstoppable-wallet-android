@@ -5,6 +5,7 @@
     tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout">
 
     <View
+        android:id="@+id/txViewBackground"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@drawable/transaction_info_detail_background"

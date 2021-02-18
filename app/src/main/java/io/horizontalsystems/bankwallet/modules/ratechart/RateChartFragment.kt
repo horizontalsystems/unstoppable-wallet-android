@@ -1,11 +1,17 @@
 package io.horizontalsystems.bankwallet.modules.ratechart
 
+import android.content.Intent
+import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
+import android.text.Html
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.activity.addCallback
+import androidx.constraintlayout.widget.ConstraintLayout.LayoutParams
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.isInvisible
@@ -18,14 +24,24 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.settings.notifications.bottommenu.BottomNotificationMenu
 import io.horizontalsystems.bankwallet.modules.settings.notifications.bottommenu.NotificationMenuMode
+import io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoItemView
 import io.horizontalsystems.bankwallet.ui.extensions.createTextView
-import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.chartview.Chart
 import io.horizontalsystems.chartview.models.PointInfo
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.DateHelper
+import io.horizontalsystems.views.ListPosition
+import io.horizontalsystems.views.SettingsView
+import io.horizontalsystems.views.helpers.LayoutHelper
 import io.horizontalsystems.xrateskit.entities.ChartType
+import io.horizontalsystems.xrateskit.entities.LinkType
+import io.horizontalsystems.xrateskit.entities.TimePeriod
+import kotlinx.android.synthetic.main.coin_market.*
+import kotlinx.android.synthetic.main.coin_market_details.*
+import kotlinx.android.synthetic.main.coin_performance.*
+import kotlinx.android.synthetic.main.coin_price_change.*
 import kotlinx.android.synthetic.main.fragment_rate_chart.*
+import kotlinx.android.synthetic.main.view_transaction_info_item.view.*
 import java.math.BigDecimal
 import java.util.*
 
@@ -148,12 +164,16 @@ class RateChartFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelecte
     //  Private
 
     private fun observeData() {
-        presenterView.showSpinner.observe(viewLifecycleOwner, Observer {
-            chart.showSinner()
+        presenterView.chartSpinner.observe(viewLifecycleOwner, Observer { isLoading ->
+            if (isLoading) {
+                chart.showSinner()
+            } else {
+                chart.hideSinner()
+            }
         })
 
-        presenterView.hideSpinner.observe(viewLifecycleOwner, Observer {
-            chart.hideSinner()
+        presenterView.marketSpinner.observe(viewLifecycleOwner, Observer { isLoading ->
+            marketSpinner.isVisible = isLoading
         })
 
         presenterView.setDefaultMode.observe(viewLifecycleOwner, Observer { type ->
@@ -167,6 +187,7 @@ class RateChartFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelecte
 
         presenterView.showChartInfo.observe(viewLifecycleOwner, Observer { item ->
             chart.showChart()
+            setViewVisibility(indicatorEMA, indicatorMACD, indicatorRSI, isVisible = true)
 
             rootView.post {
                 chart.setData(item.chartData, item.chartType)
@@ -176,24 +197,26 @@ class RateChartFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelecte
         })
 
         presenterView.showMarketInfo.observe(viewLifecycleOwner, Observer { item ->
-            coinRateLast.text = formatter.formatFiat(item.rateValue.value, item.rateValue.currency.symbol, 2, 4)
+            marketDetails.isVisible = true
 
-            coinMarketCap.apply {
-                if (item.marketCap.value > BigDecimal.ZERO) {
-                    text = formatFiatShortened(item.marketCap.value, item.marketCap.currency.symbol)
+            coinRateLast.text = formatter.formatFiat(item.rateValue, item.currency.symbol, 2, 4)
+
+            marketCapValue.apply {
+                if (item.marketCap > BigDecimal.ZERO) {
+                    text = formatFiatShortened(item.marketCap, item.currency.symbol)
                 } else {
                     isEnabled = false
                     text = getString(R.string.NotAvailable)
                 }
             }
 
-            volumeValue.apply {
-                text = formatFiatShortened(item.volume.value, item.volume.currency.symbol)
+            volume24Value.apply {
+                text = formatFiatShortened(item.volume24h, item.currency.symbol)
             }
 
             circulationValue.apply {
-                if (item.supply.value > BigDecimal.ZERO) {
-                    text = formatter.formatCoin(item.supply.value, item.supply.coinCode, 0, 2)
+                if (item.circulatingSupply.value > BigDecimal.ZERO) {
+                    text = formatter.formatCoin(item.circulatingSupply.value, item.circulatingSupply.coinCode, 0, 2)
                 } else {
                     isEnabled = false
                     text = getString(R.string.NotAvailable)
@@ -201,25 +224,140 @@ class RateChartFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelecte
             }
 
             totalSupplyValue.apply {
-                item.maxSupply?.let {
-                    text = formatter.formatCoin(it.value, it.coinCode, 0, 2)
-                } ?: run {
+                if (item.totalSupply.value > BigDecimal.ZERO) {
+                    text = formatter.formatCoin(item.totalSupply.value, item.totalSupply.coinCode, 0, 2)
+                } else {
                     isEnabled = false
                     text = getString(R.string.NotAvailable)
                 }
             }
 
-            startDateValue.apply {
-                text = item.startDate ?: getString(R.string.NotAvailable)
-                isEnabled = !item.startDate.isNullOrEmpty()
+            // Price
+            priceRangeMin.text = formatter.formatFiat(item.rateLow24h, item.currency.symbol, 2, 4)
+            priceRangeMax.text = formatter.formatFiat(item.rateHigh24h, item.currency.symbol, 2, 4)
+
+            moveMarker(marker24h, item.rateValue.toFloat(), item.rateLow24h.toFloat(), item.rateHigh24h.toFloat())
+
+            // Market
+
+            marketCapPercent.text = formatter.format(item.marketCapDiff24h.abs(), 0, 2, suffix = "%")
+
+            // Performance
+
+            item.rateDiffs.forEach { (period, values) ->
+                val bigValue = values["USD"] ?: BigDecimal.ZERO
+                val ethValue = values["ETH"] ?: BigDecimal.ZERO
+                val btcValue = values["BTC"] ?: BigDecimal.ZERO
+
+                when (period) {
+                    TimePeriod.DAY_7 -> {
+                        usd1WPercent.text = formatter.format(bigValue, 0, 2, suffix = "%")
+                        eth1WPercent.text = formatter.format(ethValue, 0, 2, suffix = "%")
+                        btc1WPercent.text = formatter.format(btcValue, 0, 2, suffix = "%")
+                    }
+                    TimePeriod.DAY_30 -> {
+                        usd1MPercent.text = formatter.format(bigValue, 0, 2, suffix = "%")
+                        eth1MPercent.text = formatter.format(ethValue, 0, 2, suffix = "%")
+                        btc1MPercent.text = formatter.format(btcValue, 0, 2, suffix = "%")
+                    }
+                }
             }
 
-            websiteValue.apply {
-                item.website?.let {
-                    text = TextHelper.getUrl(it)
-                } ?: run {
-                    isEnabled = false
-                    text = getString(R.string.NotAvailable)
+            // About
+
+            aboutText.text = Html.fromHtml(item.coinInfo.description.replace("\n", "<br />"), Html.FROM_HTML_MODE_COMPACT)
+
+            // Categories/Links
+
+            context?.let { context ->
+                linksLayout.removeAllViews()
+
+                item.coinInfo.categories?.let { categories ->
+                    val category = TransactionInfoItemView(context).apply {
+                        layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutHelper.dp(48f, context))
+
+                        txViewBackground.setBackgroundColor(Color.TRANSPARENT)
+                        txtTitle.text = getString(R.string.Charts_Category)
+                        valueText.text = categories.map { it.name }.joinToString(", ")
+                        valueText.isVisible = true
+                        btnAction.isVisible = false
+                        decoratedText.isVisible = false
+                    }
+
+                    linksLayout.addView(category)
+                }
+
+                item.coinInfo.platforms?.forEach { (platform, value) ->
+                    val contract = TransactionInfoItemView(context).apply {
+                        txViewBackground.setBackgroundColor(Color.TRANSPARENT)
+                        bindHashId(platform.name, value)
+                    }
+
+                    linksLayout.addView(contract)
+                }
+
+                item.coinInfo.links[LinkType.GUIDE]?.let {
+                    val link = SettingsView(context).apply {
+                        showTitle(context.getString(R.string.Charts_Guide))
+                        showIcon(ContextCompat.getDrawable(context, R.drawable.ic_academy_20))
+
+                        layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT).apply {
+                            topMargin = LayoutHelper.dp(32f, context)
+                            bottomMargin = LayoutHelper.dp(32f, context)
+                        }
+                    }
+
+                    linksLayout.addView(link)
+                }
+
+                val allLinks = item.coinInfo.links.filter { it.key != LinkType.GUIDE }
+
+                allLinks.onEachIndexed { index, entry ->
+                    val link = SettingsView(context)
+
+                    when (entry.key) {
+                        LinkType.GUIDE -> {
+                            link.showTitle(getString(R.string.Charts_Guide))
+                            link.showIcon(ContextCompat.getDrawable(context, R.drawable.ic_academy_20))
+                        }
+                        LinkType.WEBSITE -> {
+                            link.showTitle(getString(R.string.Charts_Website))
+                            link.showIcon(ContextCompat.getDrawable(context, R.drawable.ic_globe))
+                        }
+                        LinkType.WHITEPAPER -> {
+                            link.showTitle(getString(R.string.Charts_Whitepaper))
+                            link.showIcon(ContextCompat.getDrawable(context, R.drawable.ic_clipboard))
+                        }
+                        LinkType.TWITTER -> {
+                            link.showTitle(getString(R.string.Charts_Twitter))
+                            link.showIcon(ContextCompat.getDrawable(context, R.drawable.ic_twitter))
+                        }
+                        LinkType.TELEGRAM -> {
+                            link.showTitle(getString(R.string.Charts_Telegram))
+                            link.showIcon(ContextCompat.getDrawable(context, R.drawable.ic_telegram))
+                        }
+                        LinkType.REDDIT -> {
+                            link.showTitle(getString(R.string.Charts_Reddit))
+                            link.showIcon(ContextCompat.getDrawable(context, R.drawable.ic_reddit))
+                        }
+                        LinkType.GITHUB -> {
+                            link.showTitle(getString(R.string.Charts_Github))
+                            link.showIcon(ContextCompat.getDrawable(context, R.drawable.ic_github))
+                        }
+                    }
+
+                    if (index == 0) {
+                        link.layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT).apply {
+                            topMargin = LayoutHelper.dp(32f, context)
+                        }
+                    }
+
+                    link.setListPosition(ListPosition.Companion.getListPosition(allLinks.size, index))
+                    link.setOnClickListener {
+                        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(entry.value)));
+                    }
+
+                    linksLayout.addView(link)
                 }
             }
         })
@@ -292,6 +430,17 @@ class RateChartFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelecte
             toolbar.menu.findItem(R.id.menuFavorite).isVisible = !it
             toolbar.menu.findItem(R.id.menuUnfavorite).isVisible = it
         })
+    }
+
+    private fun moveMarker(markerView: ImageView, price: Float, low: Float, high: Float) {
+        val priceMax = Math.max(high - low, 1f)
+        val priceActual = Math.max(price - low, 1f)
+
+        val markerWrapWidth = LayoutHelper.dp(32 * 2f, context)
+        val percent = Math.min(100 * priceActual / priceMax, 98f)
+        val coordinate = percent / 100 * (chart.width - markerWrapWidth)
+
+        markerView.animate().translationX(coordinate)
     }
 
     private fun formatFiatShortened(value: BigDecimal, symbol: String): String {

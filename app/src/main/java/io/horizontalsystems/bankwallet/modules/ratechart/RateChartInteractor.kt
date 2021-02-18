@@ -3,10 +3,10 @@ package io.horizontalsystems.bankwallet.modules.ratechart
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.managers.MarketFavoritesManager
 import io.horizontalsystems.bankwallet.entities.PriceAlert
-import io.horizontalsystems.xrateskit.entities.ChartInfo
-import io.horizontalsystems.xrateskit.entities.ChartType
-import io.horizontalsystems.xrateskit.entities.MarketInfo
+import io.horizontalsystems.xrateskit.entities.*
+import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
@@ -22,8 +22,7 @@ class RateChartInteractor(
 
     var delegate: RateChartModule.InteractorDelegate? = null
 
-    private var mInfoDisposable: Disposable? = null
-    private var cInfoDisposable: Disposable? = null
+    private val disposables = CompositeDisposable()
     private var alertNotificationDisposable: Disposable? = null
 
     override val notificationsAreEnabled: Boolean
@@ -43,29 +42,44 @@ class RateChartInteractor(
         return xRateManager.chartInfo(coinCode, currencyCode, chartType)
     }
 
+    override fun getCoinDetails(coinCode: String, currencyCode: String, rateDiffCoinCodes: List<String>, rateDiffPeriods: List<TimePeriod>) {
+        xRateManager.coinMarketDetailsAsync(coinCode, currencyCode, rateDiffCoinCodes, rateDiffPeriods)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ coinMarketDetails ->
+                    delegate?.onUpdate(coinMarketDetails)
+                }, {
+                    delegate?.onChartError(it)
+                }).let {
+                    disposables.add(it)
+                }
+    }
+
     override fun observeChartInfo(coinCode: String, currencyCode: String, chartType: ChartType) {
-        cInfoDisposable?.dispose()
-        cInfoDisposable = xRateManager.chartInfoObservable(coinCode, currencyCode, chartType)
+        xRateManager.chartInfoObservable(coinCode, currencyCode, chartType)
                 .delay(600, TimeUnit.MILLISECONDS)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ chartInfo ->
                     delegate?.onUpdate(chartInfo)
                 }, {
-                    delegate?.onError(it)
-                })
+                    delegate?.onMarketError(it)
+                }).let {
+                    disposables.add(it)
+                }
     }
 
     override fun observeMarketInfo(coinCode: String, currencyCode: String) {
-        mInfoDisposable?.dispose()
-        mInfoDisposable = xRateManager.marketInfoObservable(coinCode, currencyCode)
+        xRateManager.marketInfoObservable(coinCode, currencyCode)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ marketInfo ->
                     delegate?.onUpdate(marketInfo)
                 }, {
-                    delegate?.onError(it)
-                })
+                    delegate?.onMarketError(it)
+                }).let {
+                    disposables.add(it)
+                }
     }
 
     override fun observeAlertNotification(coinCode: String) {
@@ -97,8 +111,7 @@ class RateChartInteractor(
     }
 
     override fun clear() {
-        mInfoDisposable?.dispose()
-        cInfoDisposable?.dispose()
+        disposables.clear()
         alertNotificationDisposable?.dispose()
     }
 }

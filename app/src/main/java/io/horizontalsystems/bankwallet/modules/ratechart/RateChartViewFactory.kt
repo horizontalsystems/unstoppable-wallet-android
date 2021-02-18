@@ -5,9 +5,7 @@ import io.horizontalsystems.chartview.*
 import io.horizontalsystems.chartview.models.ChartPoint
 import io.horizontalsystems.chartview.models.MacdInfo
 import io.horizontalsystems.core.entities.Currency
-import io.horizontalsystems.xrateskit.entities.ChartInfo
-import io.horizontalsystems.xrateskit.entities.ChartType
-import io.horizontalsystems.xrateskit.entities.MarketInfo
+import io.horizontalsystems.xrateskit.entities.*
 import java.lang.Long.max
 import java.math.BigDecimal
 
@@ -25,14 +23,18 @@ data class ChartPointViewItem(
 )
 
 data class MarketInfoViewItem(
-        val rateValue: CurrencyValue,
-        val marketCap: CurrencyValue,
-        val volume: CurrencyValue,
-        val supply: RateChartModule.CoinCodeWithValue,
-        val maxSupply: RateChartModule.CoinCodeWithValue?,
-        val startDate: String?,
-        val website: String?,
-        val timestamp: Long
+    val currency: Currency,
+    val rateValue: BigDecimal,
+    val marketCap: BigDecimal,
+    val circulatingSupply: RateChartModule.CoinCodeWithValue,
+    val totalSupply: RateChartModule.CoinCodeWithValue,
+    val timestamp: Long,
+    val rateHigh24h: BigDecimal,
+    val rateLow24h: BigDecimal,
+    val volume24h: BigDecimal,
+    val marketCapDiff24h: BigDecimal,
+    val coinInfo: CoinInfo,
+    val rateDiffs: Map<TimePeriod, Map<String, BigDecimal>>
 )
 
 class RateChartViewFactory {
@@ -53,16 +55,32 @@ class RateChartViewFactory {
         return ChartInfoViewItem(chartData, chartType, chartData.diff())
     }
 
-    fun createMarketInfo(marketInfo: MarketInfo, currency: Currency, coinCode: String): MarketInfoViewItem {
+    fun createMarketInfo(marketInfo: MarketInfo, coinMarket: CoinMarketDetails, currency: Currency, coinCode: String): MarketInfoViewItem {
+        val rateHigh24h = if (marketInfo.rate > coinMarket.rateHigh24h) {
+            marketInfo.rate
+        } else {
+            coinMarket.rateHigh24h
+        }
+
+        val rateLow24h = if (marketInfo.rate < coinMarket.rateLow24h) {
+            marketInfo.rate
+        } else {
+            coinMarket.rateLow24h
+        }
+
         return MarketInfoViewItem(
-                CurrencyValue(currency, marketInfo.rate),
-                CurrencyValue(currency, marketInfo.marketCap ?: BigDecimal.ZERO),
-                CurrencyValue(currency, marketInfo.volume),
-                RateChartModule.CoinCodeWithValue(coinCode, marketInfo.supply),
-                CoinInfoMap.data[coinCode]?.supply?.let { RateChartModule.CoinCodeWithValue(coinCode, it) },
-                CoinInfoMap.data[coinCode]?.startDate,
-                CoinInfoMap.data[coinCode]?.website,
-                marketInfo.timestamp
+            currency = currency,
+            rateValue = marketInfo.rate,
+            marketCap = coinMarket.marketCap,
+            circulatingSupply = RateChartModule.CoinCodeWithValue(coinCode, coinMarket.circulatingSupply),
+            totalSupply = RateChartModule.CoinCodeWithValue(coinCode, coinMarket.totalSupply),
+            timestamp = marketInfo.timestamp,
+            rateHigh24h = rateHigh24h,
+            rateLow24h = rateLow24h,
+            volume24h = coinMarket.volume24h,
+            marketCapDiff24h = coinMarket.marketCapDiff24h,
+            coinInfo = coinMarket.coinInfo,
+            rateDiffs = coinMarket.rateDiffs
         )
     }
 
