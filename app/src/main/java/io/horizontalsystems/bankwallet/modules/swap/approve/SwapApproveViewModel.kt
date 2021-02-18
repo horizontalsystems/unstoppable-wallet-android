@@ -96,7 +96,7 @@ class SwapApproveViewModel(
                 App.instance.getString(R.string.EthereumTransaction_Error_InsufficientBalance, ethCoinService.coinValue(throwable.requiredBalance))
             }
             is JsonRpc.ResponseError.InsufficientBalance -> {
-                App.instance.getString(R.string.EthereumTransaction_Error_InsufficientBalanceForFee)
+                App.instance.getString(R.string.EthereumTransaction_Error_InsufficientBalanceForFee, ethCoinService.coin.code)
             }
             is JsonRpc.ResponseError.RpcError -> {
                 throwable.error.message

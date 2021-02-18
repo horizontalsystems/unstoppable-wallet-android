@@ -8,7 +8,6 @@ import io.horizontalsystems.uniswapkit.UniswapKit
 import io.horizontalsystems.uniswapkit.models.*
 import io.reactivex.Single
 import java.math.BigDecimal
-import kotlin.jvm.Throws
 
 class UniswapProvider(private val uniswapKit: UniswapKit) {
 
@@ -44,9 +43,14 @@ class UniswapProvider(private val uniswapKit: UniswapKit) {
     @Throws
     private fun uniswapToken(coin: Coin): Token {
         return when (val coinType = coin.type) {
-            is CoinType.Ethereum -> uniswapKit.etherToken()
             is CoinType.Erc20 -> {
                 uniswapKit.token(Address(coinType.address), coin.decimal)
+            }
+            is CoinType.Bep20 -> {
+                uniswapKit.token(Address(coinType.address), coin.decimal)
+            }
+            CoinType.Ethereum, CoinType.BinanceSmartChain -> {
+                uniswapKit.etherToken()
             }
             else -> throw Exception("Invalid coin for swap: $coin")
         }

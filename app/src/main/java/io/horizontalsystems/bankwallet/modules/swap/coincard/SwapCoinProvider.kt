@@ -4,10 +4,13 @@ import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.ICoinManager
 import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.modules.swap.SwapModule.CoinBalanceItem
+import io.horizontalsystems.bankwallet.modules.swap.SwapModule.Dex
 import java.math.BigDecimal
 
 class SwapCoinProvider(
+        private val dex: Dex,
         private val coinManager: ICoinManager,
         private val walletManager: IWalletManager,
         private val adapterManager: IAdapterManager
@@ -16,19 +19,25 @@ class SwapCoinProvider(
     fun coins(enabledCoins: Boolean, exclude: List<Coin> = listOf()): List<CoinBalanceItem> {
         val enabledCoinItems = walletItems.filter { item ->
             val zeroBalance = item.balance == BigDecimal.ZERO
-            item.coin.type.swappable && !exclude.contains(item.coin) && !zeroBalance
+            dexSupportsCoin(item.coin) && !exclude.contains(item.coin) && !zeroBalance
         }.sortedBy { it.balance }
 
         return if (enabledCoins) {
             enabledCoinItems
         } else {
             val disabledCoinItems = coinManager.coins.filter { coin ->
-                coin.type.swappable && !exclude.contains(coin) && !enabledCoinItems.any { it.coin == coin }
+                dexSupportsCoin(coin) && !exclude.contains(coin) && !enabledCoinItems.any { it.coin == coin }
             }.map { coin ->
                 CoinBalanceItem(coin, balance(coin), coin.type.label)
             }
             enabledCoinItems + disabledCoinItems
         }
+    }
+
+    private fun dexSupportsCoin(coin: Coin) = when (coin.type) {
+        CoinType.Ethereum, is CoinType.Erc20 -> dex == Dex.Uniswap
+        CoinType.BinanceSmartChain, is CoinType.Bep20 -> dex == Dex.PancakeSwap
+        else -> false
     }
 
     private val walletItems: List<CoinBalanceItem>

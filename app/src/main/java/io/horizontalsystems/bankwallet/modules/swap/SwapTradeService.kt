@@ -7,7 +7,6 @@ import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.uniswapkit.models.SwapData
 import io.horizontalsystems.uniswapkit.models.TradeData
-import io.horizontalsystems.uniswapkit.models.TradeOptions
 import io.horizontalsystems.uniswapkit.models.TradeType
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
@@ -18,7 +17,7 @@ import java.util.*
 
 
 class SwapTradeService(
-        ethereumKit: EthereumKit,
+        evmKit: EthereumKit,
         private val uniswapProvider: UniswapProvider,
         coinFrom: Coin?
 ) {
@@ -38,7 +37,7 @@ class SwapTradeService(
     //endregion
 
     init {
-        lastBlockDisposable = ethereumKit.lastBlockHeightFlowable
+        lastBlockDisposable = evmKit.lastBlockHeightFlowable
                 .subscribeOn(Schedulers.io())
                 .subscribe {
                     syncSwapData()

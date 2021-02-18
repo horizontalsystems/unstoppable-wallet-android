@@ -19,7 +19,7 @@ class SwapConfirmationViewModel(
         private val service: SwapService,
         private val tradeService: SwapTradeService,
         private val transactionService: EvmTransactionService,
-        private val ethereumCoinService: CoinService,
+        private val coinService: CoinService,
         private val numberFormatter: IAppNumberFormatter,
         private val formatter: SwapViewItemHelper,
         private val stringProvider: StringProvider
@@ -106,10 +106,10 @@ class SwapConfirmationViewModel(
         }
 
         transactionService.transactionStatus.dataOrNull?.let { transaction ->
-            val estimatedFee = ethereumCoinService.amountData(transaction.gasData.estimatedFee).getFormatted()
+            val estimatedFee = coinService.amountData(transaction.gasData.estimatedFee).getFormatted()
             additionalData.add(SwapModule.ConfirmationAdditionalViewItem(stringProvider.string(R.string.Swap_EstimatedFee), estimatedFee))
 
-            val maxFee = ethereumCoinService.amountData(transaction.gasData.fee).getFormatted()
+            val maxFee = coinService.amountData(transaction.gasData.fee).getFormatted()
             additionalData.add(SwapModule.ConfirmationAdditionalViewItem(stringProvider.string(R.string.Swap_MaxFee), maxFee))
         }
 

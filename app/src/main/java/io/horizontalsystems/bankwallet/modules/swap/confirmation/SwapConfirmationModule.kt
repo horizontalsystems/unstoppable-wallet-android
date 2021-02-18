@@ -6,9 +6,9 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ethereum.CoinService
 import io.horizontalsystems.bankwallet.core.ethereum.EvmTransactionService
 import io.horizontalsystems.bankwallet.core.providers.StringProvider
-import io.horizontalsystems.bankwallet.modules.swap.SwapViewItemHelper
 import io.horizontalsystems.bankwallet.modules.swap.SwapService
 import io.horizontalsystems.bankwallet.modules.swap.SwapTradeService
+import io.horizontalsystems.bankwallet.modules.swap.SwapViewItemHelper
 
 object SwapConfirmationModule {
 
@@ -18,14 +18,14 @@ object SwapConfirmationModule {
             private val transactionService: EvmTransactionService
     ) : ViewModelProvider.Factory {
 
-        private val ethereumCoinService by lazy { CoinService(App.appConfigProvider.ethereumCoin, App.currencyManager, App.xRateManager) }
+        private val coinService by lazy { CoinService(service.dex.coin, App.currencyManager, App.xRateManager) }
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             val stringProvider = StringProvider(App.instance)
             val formatter = SwapViewItemHelper(stringProvider, App.numberFormatter)
 
-            return SwapConfirmationViewModel(service, tradeService, transactionService, ethereumCoinService, App.numberFormatter, formatter, stringProvider) as T
+            return SwapConfirmationViewModel(service, tradeService, transactionService, coinService, App.numberFormatter, formatter, stringProvider) as T
         }
     }
 

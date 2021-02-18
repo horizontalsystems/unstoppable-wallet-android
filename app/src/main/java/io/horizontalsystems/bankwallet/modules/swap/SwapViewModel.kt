@@ -119,7 +119,7 @@ class SwapViewModel(
             stringProvider.string(R.string.EthereumTransaction_Error_InsufficientBalance, ethCoinService.coinValue(error.requiredBalance))
         }
         is JsonRpc.ResponseError.InsufficientBalance -> {
-            stringProvider.string(R.string.Swap_ErrorInsufficientEthBalance)
+            stringProvider.string(R.string.EthereumTransaction_Error_InsufficientBalanceForFee, ethCoinService.coin.code)
         }
         is JsonRpc.ResponseError.RpcError -> {
             error.error.message

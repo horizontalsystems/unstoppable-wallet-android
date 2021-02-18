@@ -18,6 +18,7 @@ import java.math.BigInteger
 import java.util.*
 
 class SwapService(
+        val dex: SwapModule.Dex,
         private val ethereumKit: EthereumKit,
         private val tradeService: SwapTradeService,
         private val allowanceService: SwapAllowanceService,
@@ -71,7 +72,7 @@ class SwapService(
 
     val approveData: SwapAllowanceService.ApproveData?
         get() = balanceFrom?.let { amount ->
-            allowanceService.approveData(amount)
+            allowanceService.approveData(dex, amount)
         }
     //endregion
 

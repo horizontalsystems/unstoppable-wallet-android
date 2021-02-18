@@ -76,7 +76,7 @@ class WalletConnectSendEthereumTransactionRequestViewModel(
 
             App.instance.getString(R.string.EthereumTransaction_Error_InsufficientBalance, amountData.getFormatted())
         }
-        is JsonRpc.ResponseError.InsufficientBalance -> App.instance.getString(R.string.EthereumTransaction_Error_InsufficientBalanceForFee)
+        is JsonRpc.ResponseError.InsufficientBalance -> App.instance.getString(R.string.EthereumTransaction_Error_InsufficientBalanceForFee, coinService.coin.code)
         is JsonRpc.ResponseError.RpcError -> error.error.message
         else -> error?.message ?: error?.javaClass?.simpleName
     }

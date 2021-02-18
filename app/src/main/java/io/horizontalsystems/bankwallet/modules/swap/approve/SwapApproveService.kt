@@ -14,7 +14,7 @@ import java.math.BigInteger
 class SwapApproveService(
         private val transactionService: EvmTransactionService,
         private val erc20Kit: Erc20Kit,
-        private val ethereumKit: EthereumKit,
+        private val evmKit: EthereumKit,
         amount: BigInteger,
         private val spenderAddress: Address,
         private val allowance: BigInteger,
@@ -39,7 +39,7 @@ class SwapApproveService(
         }
 
     private val ethereumBalance: BigInteger
-        get() = ethereumKit.accountState?.balance ?: BigInteger.ZERO
+        get() = evmKit.accountState?.balance ?: BigInteger.ZERO
 
     private val disposables = CompositeDisposable()
 
@@ -115,7 +115,7 @@ class SwapApproveService(
             state = State.Loading
 
             val transactionData = erc20Kit.buildApproveTransactionData(spenderAddress, amount)
-            ethereumKit.send(transactionData, transaction.gasData.gasPrice, transaction.gasData.gasLimit)
+            evmKit.send(transactionData, transaction.gasData.gasPrice, transaction.gasData.gasLimit)
                     .subscribeOn(Schedulers.io())
                     .subscribe({
                         state = State.Success
