@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.ui.extensions
 import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
-import android.text.method.KeyListener
 import android.util.AttributeSet
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
