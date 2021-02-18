@@ -22,6 +22,14 @@ class SettingsView @JvmOverloads constructor(context: Context, attrs: AttributeS
         arrowIcon.isVisible = visible
     }
 
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
+
+        if (!settingsSubtitle.text.isNullOrBlank()) {
+            setAsDoubleLine()
+        }
+    }
+
     init {
         inflate(context, R.layout.view_settings_item, this)
 

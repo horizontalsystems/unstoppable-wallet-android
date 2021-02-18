@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import androidx.core.view.isVisible
 import kotlinx.android.synthetic.main.view_settings_dropdown.view.*
+import kotlinx.android.synthetic.main.view_settings_dropdown.view.settingsSubtitle
 import kotlinx.android.synthetic.main.view_settings_dropdown_text.view.*
 
 class SettingsViewDropdown @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
@@ -16,6 +17,14 @@ class SettingsViewDropdown @JvmOverloads constructor(context: Context, attrs: At
 
     fun showDropdownIcon(show: Boolean) {
         dropdownIcon.isVisible = show
+    }
+
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
+
+        if (!settingsSubtitle.text.isNullOrBlank()) {
+            setAsDoubleLine()
+        }
     }
 
     init {

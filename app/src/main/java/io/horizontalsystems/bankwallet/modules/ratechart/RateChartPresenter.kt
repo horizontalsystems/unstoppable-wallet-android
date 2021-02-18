@@ -9,9 +9,7 @@ import io.horizontalsystems.bankwallet.modules.ratechart.RateChartModule.View
 import io.horizontalsystems.bankwallet.modules.ratechart.RateChartModule.ViewDelegate
 import io.horizontalsystems.chartview.models.PointInfo
 import io.horizontalsystems.core.entities.Currency
-import io.horizontalsystems.xrateskit.entities.ChartInfo
-import io.horizontalsystems.xrateskit.entities.ChartType
-import io.horizontalsystems.xrateskit.entities.MarketInfo
+import io.horizontalsystems.xrateskit.entities.*
 
 class RateChartPresenter(
         val view: View,
@@ -39,6 +37,12 @@ class RateChartPresenter(
         }
 
     private var marketInfo: MarketInfo? = null
+        set(value) {
+            field = value
+            updateMarketInfo()
+        }
+
+    private var coinMarketDetails: CoinMarketDetails? = null
         set(value) {
             field = value
             updateMarketInfo()
@@ -72,7 +76,7 @@ class RateChartPresenter(
     override fun onTouchSelect(point: PointInfo) {
         val price = CurrencyValue(currency, point.value.toBigDecimal())
 
-        if (macdIsEnabled){
+        if (macdIsEnabled) {
             view.showSelectedPointInfo(ChartPointViewItem(point.timestamp, price, null, point.macdInfo))
         } else {
             val volume = point.volume?.let { volume ->
@@ -83,7 +87,7 @@ class RateChartPresenter(
     }
 
     override fun onNotificationClick() {
-        coinId?.let{
+        coinId?.let {
             view.openNotificationMenu(it, coinTitle)
         }
     }
@@ -102,7 +106,7 @@ class RateChartPresenter(
     }
 
     override fun toggleMacd() {
-        if (rsiIsEnabled){
+        if (rsiIsEnabled) {
             toggleRsi()
         }
 
@@ -111,7 +115,7 @@ class RateChartPresenter(
     }
 
     override fun toggleRsi() {
-        if (macdIsEnabled){
+        if (macdIsEnabled) {
             toggleMacd()
         }
 
@@ -131,29 +135,33 @@ class RateChartPresenter(
     }
 
     private fun fetchChartInfo() {
-        view.showSpinner()
+        view.chartSpinner(isLoading = true)
 
         chartInfo = interactor.getChartInfo(coinCode, currency.code, chartType)
+
         interactor.observeChartInfo(coinCode, currency.code, chartType)
+        interactor.getCoinDetails(coinCode, currency.code, listOf("USD", "BTC", "ETH"), listOf(TimePeriod.DAY_7, TimePeriod.DAY_30))
     }
 
     private fun updateMarketInfo() {
-        val market = marketInfo ?: return
+        val marketInfo = marketInfo ?: return
+        val marketDetails = coinMarketDetails ?: return
 
-        view.showMarketInfo(factory.createMarketInfo(market, currency, coinCode))
+        view.marketSpinner(isLoading = false)
+        view.showMarketInfo(factory.createMarketInfo(marketInfo, marketDetails, currency, coinCode))
 
-        val info = chartInfo ?: return
-        try {
-            view.showChartInfo(factory.createChartInfo(chartType, info, market))
-        } catch (e: Exception) {
-            view.showError(e)
-        }
+//        val info = chartInfo ?: return
+//        try {
+//            view.showChartInfo(factory.createChartInfo(chartType, info, market))
+//        } catch (e: Exception) {
+//            view.showError(e)
+//        }
     }
 
     private fun updateChartInfo() {
         val info = chartInfo ?: return
 
-        view.hideSpinner()
+        view.chartSpinner(isLoading = false)
 
         try {
             view.showChartInfo(factory.createChartInfo(chartType, info, marketInfo))
@@ -172,9 +180,17 @@ class RateChartPresenter(
         this.chartInfo = chartInfo
     }
 
-    override fun onError(ex: Throwable) {
-        view.hideSpinner()
+    override fun onUpdate(coinMarketDetails: CoinMarketDetails) {
+        this.coinMarketDetails = coinMarketDetails
+    }
+
+    override fun onChartError(ex: Throwable) {
+        view.chartSpinner(isLoading = false)
         view.showError(ex)
+    }
+
+    override fun onMarketError(ex: Throwable) {
+        view.marketSpinner(isLoading = false)
     }
 
     //  ViewModel

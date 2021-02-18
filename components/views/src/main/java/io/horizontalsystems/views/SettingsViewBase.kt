@@ -40,12 +40,8 @@ abstract class SettingsViewBase @JvmOverloads constructor(context: Context, attr
         setListPosition(ListPosition.getListPosition(position))
     }
 
-    override fun onAttachedToWindow() {
-        super.onAttachedToWindow()
-
-        if (!settingsSubtitle.text.isNullOrBlank()) {
-            layoutParams.height = LayoutHelper.dp(doubleLineHeight, context)
-        }
+    fun setAsDoubleLine() {
+        layoutParams.height = LayoutHelper.dp(doubleLineHeight, context)
     }
 }
 

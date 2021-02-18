@@ -25,7 +25,8 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_marginBottom="32dp">
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/startGuideline"
@@ -163,8 +164,8 @@
                 android:id="@+id/tabLayout"
                 android:layout_width="0dp"
                 android:layout_height="40dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/coinRateLast"
@@ -205,6 +206,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:text="@string/Charts_IndicatorEMA"
+                android:visibility="invisible"
                 app:layout_constraintStart_toStartOf="@id/startGuideline"
                 app:layout_constraintTop_toBottomOf="@+id/border3" />
 
@@ -215,6 +217,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:text="@string/Charts_IndicatorMACD"
+                android:visibility="invisible"
                 app:layout_constraintStart_toEndOf="@id/indicatorEMA"
                 app:layout_constraintTop_toTopOf="@+id/indicatorEMA" />
 
@@ -225,158 +228,33 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:text="@string/Charts_IndicatorRSI"
+                android:visibility="invisible"
                 app:layout_constraintStart_toEndOf="@id/indicatorMACD"
                 app:layout_constraintTop_toTopOf="@+id/indicatorEMA" />
 
-            <TextView
-                android:id="@+id/volumeTitle"
+            <include
+                layout="@layout/coin_market_details"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/indicatorRSI" />
+
+            <ProgressBar
+                android:id="@+id/marketSpinner"
+                style="?android:attr/progressBarStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="@string/Charts_Volume24"
-                android:textColor="@color/grey"
-                android:textSize="14sp"
-                app:layout_constraintStart_toStartOf="@id/startGuideline"
-                app:layout_constraintTop_toBottomOf="@+id/indicatorEMA" />
-
-            <TextView
-                android:id="@+id/volumeValue"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:textAlignment="textEnd"
-                android:textColor="@color/stateful_chart_value_text_color"
-                android:textSize="14sp"
-                app:layout_constraintEnd_toEndOf="@id/endGuideline"
-                app:layout_constraintStart_toEndOf="@id/volumeTitle"
-                app:layout_constraintTop_toTopOf="@+id/volumeTitle"
-                tools:text="$ 1.92 B" />
-
-            <TextView
-                android:id="@+id/coinMarketCapTitle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:text="@string/Charts_MarketCap"
-                android:textColor="@color/grey"
-                android:textSize="14sp"
-                app:layout_constraintStart_toStartOf="@id/startGuideline"
-                app:layout_constraintTop_toBottomOf="@+id/volumeTitle" />
-
-            <TextView
-                android:id="@+id/coinMarketCap"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:textAlignment="textEnd"
-                android:textColor="@color/stateful_chart_value_text_color"
-                android:textSize="14sp"
-                app:layout_constraintEnd_toEndOf="@id/endGuideline"
-                app:layout_constraintStart_toEndOf="@id/coinMarketCapTitle"
-                app:layout_constraintTop_toTopOf="@+id/coinMarketCapTitle"
-                tools:text="$ 100.92 B" />
-
-            <TextView
-                android:id="@+id/circulationTitle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:text="@string/Charts_inCirculation"
-                android:textColor="@color/grey"
-                android:textSize="14sp"
-                app:layout_constraintStart_toStartOf="@id/startGuideline"
-                app:layout_constraintTop_toBottomOf="@+id/coinMarketCapTitle" />
-
-            <TextView
-                android:id="@+id/circulationValue"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:textAlignment="textEnd"
-                android:textColor="@color/stateful_chart_value_text_color"
-                android:textSize="14sp"
-                app:layout_constraintEnd_toEndOf="@id/endGuideline"
-                app:layout_constraintStart_toEndOf="@id/circulationTitle"
-                app:layout_constraintTop_toTopOf="@+id/circulationTitle"
-                tools:text="100.92B BTC" />
-
-            <TextView
-                android:id="@+id/totalSupplyTitle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:layout_marginBottom="12dp"
-                android:text="@string/Charts_TotalSupply"
-                android:textColor="@color/grey"
-                android:textSize="14sp"
+                android:backgroundTint="@color/grey"
+                android:indeterminate="true"
+                android:indeterminateTint="@color/grey"
+                android:indeterminateTintMode="src_atop"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="@id/startGuideline"
-                app:layout_constraintTop_toBottomOf="@+id/circulationTitle"
-                app:layout_constraintVertical_bias="0" />
-
-            <TextView
-                android:id="@+id/totalSupplyValue"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:textAlignment="textEnd"
-                android:textColor="@color/stateful_chart_value_text_color"
-                android:textSize="14sp"
-                app:layout_constraintEnd_toEndOf="@id/endGuideline"
-                app:layout_constraintStart_toEndOf="@id/totalSupplyTitle"
-                app:layout_constraintTop_toTopOf="@+id/totalSupplyTitle"
-                tools:text="100M BTC" />
-
-            <TextView
-                android:id="@+id/startDateTitle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:layout_marginBottom="12dp"
-                android:text="@string/Charts_StartDate"
-                android:textColor="@color/grey"
-                android:textSize="14sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="@id/startGuideline"
-                app:layout_constraintTop_toBottomOf="@+id/totalSupplyTitle"
-                app:layout_constraintVertical_bias="0" />
-
-            <TextView
-                android:id="@+id/startDateValue"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:textAlignment="textEnd"
-                android:textColor="@color/stateful_chart_value_text_color"
-                android:textSize="14sp"
-                app:layout_constraintEnd_toEndOf="@id/endGuideline"
-                app:layout_constraintStart_toEndOf="@id/startDateTitle"
-                app:layout_constraintTop_toTopOf="@+id/startDateTitle"
-                tools:text="31/01/2009" />
-
-            <TextView
-                android:id="@+id/websiteTitle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:layout_marginBottom="32dp"
-                android:text="@string/Charts_Website"
-                android:textColor="@color/grey"
-                android:textSize="14sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="@id/startGuideline"
-                app:layout_constraintTop_toBottomOf="@+id/startDateTitle"
-                app:layout_constraintVertical_bias="0" />
-
-            <TextView
-                android:id="@+id/websiteValue"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:autoLink="web"
-                android:textAlignment="textEnd"
-                android:textColor="@color/stateful_chart_value_text_color"
-                android:textSize="14sp"
-                app:layout_constraintEnd_toEndOf="@id/endGuideline"
-                app:layout_constraintStart_toEndOf="@id/websiteTitle"
-                app:layout_constraintTop_toTopOf="@+id/websiteTitle"
-                tools:text="bitcoin.org" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/indicatorRSI" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </io.horizontalsystems.bankwallet.ui.extensions.LockableNestedScrollView>
-
 </FrameLayout>

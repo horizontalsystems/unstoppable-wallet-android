@@ -290,6 +290,7 @@ interface IRateManager {
     fun historicalRate(coinCode: String, currencyCode: String, timestamp: Long): Single<BigDecimal>
     fun chartInfo(coinCode: String, currencyCode: String, chartType: ChartType): ChartInfo?
     fun chartInfoObservable(coinCode: String, currencyCode: String, chartType: ChartType): Observable<ChartInfo>
+    fun coinMarketDetailsAsync(coinCode: String, currencyCode: String, rateDiffCoinCodes: List<String>, rateDiffPeriods: List<TimePeriod>): Single<CoinMarketDetails>
     fun getCryptoNews(coinCode: String): Single<List<CryptoNews>>
     fun getTopMarketList(currency: String, itemsCount: Int): Single<List<CoinMarket>>
     fun getCoinMarketList(coinCodes: List<String>, currency: String): Single<List<CoinMarket>>

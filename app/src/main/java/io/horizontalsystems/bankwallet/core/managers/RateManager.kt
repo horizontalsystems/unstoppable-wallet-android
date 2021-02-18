@@ -106,6 +106,10 @@ class RateManager(
                 ?: Observable.error(RateError.DisabledCoin())
     }
 
+    override fun coinMarketDetailsAsync(coinCode: String, currencyCode: String, rateDiffCoinCodes: List<String>, rateDiffPeriods: List<TimePeriod>): Single<CoinMarketDetails> {
+        return kit.getCoinMarketDetailsAsync(coinCode, currencyCode, rateDiffCoinCodes, rateDiffPeriods)
+    }
+
     override fun getCryptoNews(coinCode: String): Single<List<CryptoNews>> {
         return kit.cryptoNews(coinCode)
     }
