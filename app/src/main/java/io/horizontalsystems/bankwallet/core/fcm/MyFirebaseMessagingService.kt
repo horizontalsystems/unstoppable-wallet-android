@@ -43,13 +43,13 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             NotificationType.Trend -> {
                 val isDown = topic.contains("down")
                 val stringRes = if (isDown) R.string.Notification_TrendDown else R.string.Notification_TrendUp
-                App.instance.getString(stringRes, coinCode)
+                App.instance.localizedContext().getString(stringRes, coinCode)
             }
             NotificationType.Change -> {
                 val changeValue = args[1]
                 val isUp = changeValue.toFloat() > 0
                 val stringRes = if (isUp) R.string.Notification_PriceUp else R.string.Notification_PriceDown
-                App.instance.getString(stringRes, coinCode, changeValue)
+                App.instance.localizedContext().getString(stringRes, coinCode, changeValue)
             }
         }
     }

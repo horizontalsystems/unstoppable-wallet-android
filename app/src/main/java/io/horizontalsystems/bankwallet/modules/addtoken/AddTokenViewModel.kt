@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.addtoken
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.providers.StringProvider
 import io.horizontalsystems.bankwallet.entities.ApiError
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.Caution
@@ -11,7 +11,12 @@ import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.ethereumkit.core.AddressValidator
 import io.reactivex.disposables.CompositeDisposable
 
-class AddTokenViewModel(private val addTokenService: AddTokenService, val titleTextRes: Int, val hintTextRes: Int) : ViewModel() {
+class AddTokenViewModel(
+        private val addTokenService: AddTokenService,
+        private val stringProvider: StringProvider,
+        val titleTextRes: Int,
+        val hintTextRes: Int
+        ) : ViewModel() {
 
     val loadingLiveData = MutableLiveData<Boolean>()
     val cautionLiveData = MutableLiveData<Caution?>()
@@ -62,7 +67,7 @@ class AddTokenViewModel(private val addTokenService: AddTokenService, val titleT
                 Caution(getErrorText(state.error), Caution.Type.Error)
             }
             is AddTokenModule.State.AlreadyExists -> {
-                Caution(App.instance.getString(R.string.AddToken_CoinAlreadyInListWarning), Caution.Type.Warning)
+                Caution(stringProvider.string(R.string.AddToken_CoinAlreadyInListWarning), Caution.Type.Warning)
             }
             else -> null
         }
@@ -92,6 +97,6 @@ class AddTokenViewModel(private val addTokenService: AddTokenService, val titleT
             else -> R.string.Error
         }
 
-        return App.instance.getString(errorKey)
+        return stringProvider.string(errorKey)
     }
 }

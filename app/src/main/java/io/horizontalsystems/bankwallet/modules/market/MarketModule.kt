@@ -165,7 +165,7 @@ data class MarketViewItem(
                         App.numberFormatter.formatFiat(shortenValue, marketCap.currency.symbol, 0, 2) + suffix
                     }
 
-                    MarketDataValue.MarketCap(marketCapFormatted ?: App.instance.getString(R.string.NotAvailable))
+                    MarketDataValue.MarketCap(marketCapFormatted ?: App.instance.localizedContext().getString(R.string.NotAvailable))
                 }
                 MarketField.Volume -> {
                     val (shortenValue, suffix) = App.numberFormatter.shortenValue(marketItem.volume.value)

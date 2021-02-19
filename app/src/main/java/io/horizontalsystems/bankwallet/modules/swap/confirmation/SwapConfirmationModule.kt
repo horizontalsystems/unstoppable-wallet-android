@@ -22,7 +22,7 @@ object SwapConfirmationModule {
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            val stringProvider = StringProvider(App.instance)
+            val stringProvider = StringProvider()
             val formatter = SwapViewItemHelper(stringProvider, App.numberFormatter)
 
             return SwapConfirmationViewModel(service, tradeService, transactionService, coinService, App.numberFormatter, formatter, stringProvider) as T

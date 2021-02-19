@@ -99,7 +99,7 @@ object SendAmountModule {
             val sendAmountPresenterHelper =
                     SendAmountPresenterHelper(App.numberFormatter, wallet.coin, baseCurrency, coinDecimal,
                             currencyDecimal)
-            val presenter = SendAmountPresenter(view, interactor, sendAmountPresenterHelper, wallet.coin, baseCurrency, StringProvider(App.instance))
+            val presenter = SendAmountPresenter(view, interactor, sendAmountPresenterHelper, wallet.coin, baseCurrency, StringProvider())
 
             sendHandler.amountModule = presenter
             interactor.delegate = presenter

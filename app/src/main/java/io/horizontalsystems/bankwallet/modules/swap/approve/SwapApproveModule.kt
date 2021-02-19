@@ -8,6 +8,7 @@ import io.horizontalsystems.bankwallet.core.ethereum.CoinService
 import io.horizontalsystems.bankwallet.core.ethereum.EthereumFeeViewModel
 import io.horizontalsystems.bankwallet.core.ethereum.EvmTransactionService
 import io.horizontalsystems.bankwallet.core.factories.FeeRateProviderFactory
+import io.horizontalsystems.bankwallet.core.providers.StringProvider
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceService
 import io.horizontalsystems.ethereumkit.models.Address
 import io.reactivex.Observable
@@ -20,6 +21,7 @@ object SwapApproveModule {
         private val transactionService by lazy { EvmTransactionService(evmKit, FeeRateProviderFactory.provider(approveData.dex.coin)!!, 0) }
         private val coinService by lazy { CoinService(approveData.coin, App.currencyManager, App.xRateManager) }
         private val ethCoinService by lazy { CoinService(approveData.dex.coin, App.currencyManager, App.xRateManager) }
+        private val stringProvider by lazy { StringProvider() }
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -30,10 +32,10 @@ object SwapApproveModule {
                     val approveAmountBigInteger = approveData.amount.movePointRight(approveData.coin.decimal).toBigInteger()
                     val allowanceAmountBigInteger = approveData.allowance.movePointRight(approveData.coin.decimal).toBigInteger()
                     val swapApproveService = SwapApproveService(transactionService, erc20Adapter.eip20Kit, evmKit, approveAmountBigInteger, Address(approveData.spenderAddress), allowanceAmountBigInteger)
-                    SwapApproveViewModel(swapApproveService, coinService, ethCoinService) as T
+                    SwapApproveViewModel(swapApproveService, coinService, ethCoinService, stringProvider) as T
                 }
                 EthereumFeeViewModel::class.java -> {
-                    EthereumFeeViewModel(transactionService, ethCoinService) as T
+                    EthereumFeeViewModel(transactionService, ethCoinService, stringProvider) as T
                 }
                 else -> throw IllegalArgumentException()
             }

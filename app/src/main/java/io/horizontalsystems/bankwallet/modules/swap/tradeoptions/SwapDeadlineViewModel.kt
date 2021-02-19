@@ -4,11 +4,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.providers.StringProvider
 import io.horizontalsystems.core.SingleLiveEvent
 import kotlin.math.floor
 
-class SwapDeadlineViewModel(private val service: SwapTradeOptionsService) : ViewModel(), IVerifiedInputViewModel {
+class SwapDeadlineViewModel(
+        private val service: SwapTradeOptionsService,
+        private val stringProvider: StringProvider
+) : ViewModel(), IVerifiedInputViewModel {
 
     override val inputFieldButtonItems: List<InputFieldButtonItem>
         get() {
@@ -17,11 +20,11 @@ class SwapDeadlineViewModel(private val service: SwapTradeOptionsService) : View
             val upperMinutes = toMinutes(bounds.upper)
 
             return listOf(
-                    InputFieldButtonItem(App.instance.getString(R.string.SwapSettings_DeadlineMinute, lowerMinutes)) {
+                    InputFieldButtonItem(stringProvider.string(R.string.SwapSettings_DeadlineMinute, lowerMinutes)) {
                         setTextLiveData.postValue(lowerMinutes)
                         onChangeText(lowerMinutes)
                     },
-                    InputFieldButtonItem(App.instance.getString(R.string.SwapSettings_DeadlineMinute, upperMinutes)) {
+                    InputFieldButtonItem(stringProvider.string(R.string.SwapSettings_DeadlineMinute, upperMinutes)) {
                         setTextLiveData.postValue(upperMinutes)
                         onChangeText(upperMinutes)
                     },

@@ -58,7 +58,7 @@ class AppStatusManager(
 
         for (predefinedAccountType in predefinedAccountTypeManager.allTypes) {
             val account = predefinedAccountTypeManager.account(predefinedAccountType) ?: continue
-            val title = App.instance.getString(predefinedAccountType.title)
+            val title = App.instance.localizedContext().getString(predefinedAccountType.title)
 
             wallets[title] = getAccountDetails(account)
         }

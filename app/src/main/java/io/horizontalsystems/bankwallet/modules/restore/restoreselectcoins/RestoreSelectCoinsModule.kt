@@ -49,7 +49,7 @@ object RestoreSelectCoinsModule {
                     RestoreSelectCoinsViewModel(restoreSelectCoinsService, listOf(restoreSelectCoinsService)) as T
                 }
                 BlockchainSettingsViewModel::class.java -> {
-                    BlockchainSettingsViewModel(blockchainSettingsService, StringProvider(App.instance)) as T
+                    BlockchainSettingsViewModel(blockchainSettingsService, StringProvider()) as T
                 }
                 EnableCoinsViewModel::class.java -> {
                     EnableCoinsViewModel(enableCoinsService) as T

@@ -23,7 +23,7 @@ object AddressFormatModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val service = AddressFormatService(App.derivationSettingsManager, App.bitcoinCashCoinTypeManager)
 
-            return AddressFormatViewModel(service, StringProvider((App.instance))) as T
+            return AddressFormatViewModel(service, StringProvider()) as T
         }
     }
 
