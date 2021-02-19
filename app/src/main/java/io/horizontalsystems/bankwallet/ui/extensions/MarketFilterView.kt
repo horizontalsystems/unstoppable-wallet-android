@@ -20,18 +20,15 @@ class MarketFilterView @JvmOverloads constructor(context: Context, attrs: Attrib
         val ta = context.obtainStyledAttributes(attrs, R.styleable.MarketFilterView)
         try {
             title.text = ta.getString(R.styleable.MarketFilterView_title)
-            setValue(ta.getString(R.styleable.MarketFilterView_value))
+            setValueColored(ta.getString(R.styleable.MarketFilterView_value))
         } finally {
             ta.recycle()
         }
 
     }
 
-    fun setValue(v: String?) {
+    fun setValueColored(v: String?, @ColorRes color: Int? = null) {
         value.text = v
-    }
-
-    fun setValueColor(@ColorRes color: Int) {
-        value.setTextColor(context.getColor(color))
+        color?.let { value.setTextColor(context.getColor(it)) }
     }
 }

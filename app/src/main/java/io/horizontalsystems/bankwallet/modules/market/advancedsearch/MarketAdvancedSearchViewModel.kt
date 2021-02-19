@@ -17,13 +17,24 @@ class MarketAdvancedSearchViewModel(private val service: MarketAdvancedSearchSer
             service.coinList = value.item
         }
 
-    val marketCaps = listOf(ViewItemWrapper<MarketCap?>(App.instance.getString(R.string.None), null, R.color.grey)) +
-            MarketCap.values().map {
-                ViewItemWrapper<MarketCap?>(App.instance.getString(it.titleResId), it, R.color.leah)
-            }
+    val marketCaps = ranges
+    var marketCap = rangeEmpty
 
-    var marketCap = ViewItemWrapper<MarketCap?>(App.instance.getString(R.string.None), null, R.color.grey)
+    val volumes = ranges
+    var volume = rangeEmpty
+
+    val liquidities = ranges
+    var liquidity = rangeEmpty
+
+    val periods = listOf(ViewItemWrapper<TimePeriod?>(App.instance.getString(R.string.None), null, R.color.grey)) + TimePeriod.values().map {
+        ViewItemWrapper<TimePeriod?>(App.instance.getString(it.titleResId), it, R.color.leah)
+    }
+    var period = ViewItemWrapper<TimePeriod?>(App.instance.getString(R.string.None), null, R.color.grey)
 
     fun showResults() = Unit
+}
 
+val rangeEmpty = ViewItemWrapper<Range?>(App.instance.getString(R.string.None), null, R.color.grey)
+val ranges = listOf(rangeEmpty) + Range.values().map {
+    ViewItemWrapper<Range?>(App.instance.getString(it.titleResId), it, R.color.leah)
 }
