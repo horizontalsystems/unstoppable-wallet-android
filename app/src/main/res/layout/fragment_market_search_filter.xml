@@ -34,9 +34,67 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="16dp"
-        android:background="@drawable/rounded_lawrence_background_single"
+        android:background="@drawable/rounded_lawrence_background_top"
         app:title="@string/Market_Filter_MarketCap"
-        tools:value="@string/Market_Filter_MarketCap_0_1M" />
+        app:value="@string/None" />
+
+    <io.horizontalsystems.bankwallet.ui.extensions.MarketFilterView
+        android:id="@+id/filterVolume"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/rounded_lawrence_background_middle"
+        app:title="@string/Market_Filter_Volume"
+        app:value="@string/None" />
+
+    <io.horizontalsystems.bankwallet.ui.extensions.MarketFilterView
+        android:id="@+id/filterLiquidity"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/rounded_lawrence_background_bottom"
+        app:title="@string/Market_Filter_Liquidity"
+        app:value="@string/None" />
+
+    <io.horizontalsystems.bankwallet.ui.extensions.MarketFilterView
+        android:id="@+id/filterPeriod"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/rounded_lawrence_background_top"
+        app:title="@string/Market_Filter_Period"
+        app:value="@string/None" />
+
+    <io.horizontalsystems.bankwallet.ui.extensions.MarketFilterView
+        android:id="@+id/filterPriceChange"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/rounded_lawrence_background_bottom"
+        app:title="@string/Market_Filter_PriceChange"
+        app:value="@string/None" />
+
+    <Button
+        android:id="@+id/reset"
+        style="@style/Body"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/rounded_lawrence_background_bottom"
+        android:drawableEnd="@drawable/ic_delete_20"
+        android:drawableTint="@color/grey"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:text="@string/Market_Filter_ResetAll"
+        android:textAlignment="textStart"
+        android:textColor="@color/lucian" />
 
     <Button
         android:id="@+id/submit"
