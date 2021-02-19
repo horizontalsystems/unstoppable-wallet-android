@@ -189,12 +189,19 @@
     <string name="Market_Filter_Top_2500">Top 2500</string>
     <string name="Market_Filter_ShowResults">Show Results</string>
 
-    <string name="Market_Filter_MarketCap_0_1M">&lt; 1M</string>
-    <string name="Market_Filter_MarketCap_1M_10M">1M - 10M</string>
-    <string name="Market_Filter_MarketCap_10M_100M">10M - 100M</string>
-    <string name="Market_Filter_MarketCap_100M_1B">100M - 1BN</string>
-    <string name="Market_Filter_MarketCap_1B_10B">1BN - 10BN</string>
-    <string name="Market_Filter_MarketCap_10B_More">&gt; 10M</string>
+    <string name="Market_Filter_Range_0_1M">&lt; 1M</string>
+    <string name="Market_Filter_Range_1M_10M">1M - 10M</string>
+    <string name="Market_Filter_Range_10M_100M">10M - 100M</string>
+    <string name="Market_Filter_Range_100M_1B">100M - 1BN</string>
+    <string name="Market_Filter_Range_1B_10B">1BN - 10BN</string>
+    <string name="Market_Filter_Range_10B_More">&gt; 10M</string>
+
+    <string name="Market_Filter_TimePeriod_1D">1 Day</string>
+    <string name="Market_Filter_TimePeriod_1W">1 Week</string>
+    <string name="Market_Filter_TimePeriod_1M">1 Month</string>
+    <string name="Market_Filter_TimePeriod_3M">3 Months</string>
+    <string name="Market_Filter_TimePeriod_6M">6 Months</string>
+    <string name="Market_Filter_TimePeriod_1Y">1 Year</string>
 
     <!--Balance-->
 

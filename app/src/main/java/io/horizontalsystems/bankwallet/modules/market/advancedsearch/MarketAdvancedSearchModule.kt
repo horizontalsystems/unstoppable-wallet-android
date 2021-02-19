@@ -24,11 +24,21 @@ enum class CoinList(val itemsCount: Int, @StringRes val titleResId: Int) {
     Top2500(2500, R.string.Market_Filter_Top_2500),;
 }
 
-enum class MarketCap(@StringRes val titleResId: Int) {
-    MarketCap_0_1M(R.string.Market_Filter_MarketCap_0_1M),
-    MarketCap_1M_10M(R.string.Market_Filter_MarketCap_1M_10M),
-    MarketCap_10M_100M(R.string.Market_Filter_MarketCap_10M_100M),
-    MarketCap_100M_1B(R.string.Market_Filter_MarketCap_100M_1B),
-    MarketCap_1B_10B(R.string.Market_Filter_MarketCap_1B_10B),
-    MarketCap_10B_More(R.string.Market_Filter_MarketCap_10B_More),
+enum class Range(@StringRes val titleResId: Int) {
+    Range_0_1M(R.string.Market_Filter_Range_0_1M),
+    Range_1M_10M(R.string.Market_Filter_Range_1M_10M),
+    Range_10M_100M(R.string.Market_Filter_Range_10M_100M),
+    Range_100M_1B(R.string.Market_Filter_Range_100M_1B),
+    Range_1B_10B(R.string.Market_Filter_Range_1B_10B),
+    Range_10B_More(R.string.Market_Filter_Range_10B_More),
 }
+
+enum class TimePeriod(@StringRes val titleResId: Int) {
+    Value_1D(R.string.Market_Filter_TimePeriod_1D),
+    Value_1W(R.string.Market_Filter_TimePeriod_1W),
+    Value_1M(R.string.Market_Filter_TimePeriod_1M),
+    Value_3M(R.string.Market_Filter_TimePeriod_3M),
+    Value_6M(R.string.Market_Filter_TimePeriod_6M),
+    Value_1Y(R.string.Market_Filter_TimePeriod_1Y),
+}
+

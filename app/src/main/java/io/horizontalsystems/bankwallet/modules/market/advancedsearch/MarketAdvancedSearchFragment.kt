@@ -31,8 +31,7 @@ class MarketAdvancedSearchFragment : BaseFragment() {
             }
         }
 
-        filterCoinList.setValue(marketSearchFilterViewModel.coinList.title)
-        filterCoinList.setValueColor(marketSearchFilterViewModel.coinList.color)
+        filterCoinList.setValueColored(marketSearchFilterViewModel.coinList.title, marketSearchFilterViewModel.coinList.color)
         filterCoinList.setOnSingleClickListener {
             showSelectorDialog(
                     title = R.string.Market_Filter_CoinList,
@@ -43,13 +42,11 @@ class MarketAdvancedSearchFragment : BaseFragment() {
                     itemViewHolderFactory = SelectorItemViewHolderFactory()
             ) {
                 marketSearchFilterViewModel.coinList = it
-                filterCoinList.setValue(it.title)
-                filterCoinList.setValueColor(it.color)
+                filterCoinList.setValueColored(it.title, it.color)
             }
         }
 
-        filterMarketCap.setValue(marketSearchFilterViewModel.marketCap.title)
-        filterMarketCap.setValueColor(marketSearchFilterViewModel.marketCap.color)
+        filterMarketCap.setValueColored(marketSearchFilterViewModel.marketCap.title, marketSearchFilterViewModel.marketCap.color)
         filterMarketCap.setOnSingleClickListener {
             showSelectorDialog(
                     title = R.string.Market_Filter_MarketCap,
@@ -60,8 +57,52 @@ class MarketAdvancedSearchFragment : BaseFragment() {
                     itemViewHolderFactory = SelectorItemViewHolderFactory()
             ) {
                 marketSearchFilterViewModel.marketCap = it
-                filterMarketCap.setValue(it.title)
-                filterMarketCap.setValueColor(it.color)
+                filterMarketCap.setValueColored(it.title, it.color)
+            }
+        }
+
+        filterVolume.setValueColored(marketSearchFilterViewModel.volume.title, marketSearchFilterViewModel.volume.color)
+        filterVolume.setOnSingleClickListener {
+            showSelectorDialog(
+                    title = R.string.Market_Filter_Volume,
+                    subtitleText = "Range",
+                    headerIcon = R.drawable.ic_chart_24,
+                    items = marketSearchFilterViewModel.volumes,
+                    selectedItem = marketSearchFilterViewModel.volume,
+                    itemViewHolderFactory = SelectorItemViewHolderFactory()
+            ) {
+                marketSearchFilterViewModel.volume = it
+                filterVolume.setValueColored(it.title, it.color)
+            }
+        }
+
+        filterLiquidity.setValueColored(marketSearchFilterViewModel.liquidity.title, marketSearchFilterViewModel.liquidity.color)
+        filterLiquidity.setOnSingleClickListener {
+            showSelectorDialog(
+                    title = R.string.Market_Filter_Liquidity,
+                    subtitleText = "Range",
+                    headerIcon = R.drawable.ic_circle_check_24,
+                    items = marketSearchFilterViewModel.liquidities,
+                    selectedItem = marketSearchFilterViewModel.liquidity,
+                    itemViewHolderFactory = SelectorItemViewHolderFactory()
+            ) {
+                marketSearchFilterViewModel.liquidity = it
+                filterLiquidity.setValueColored(it.title, it.color)
+            }
+        }
+
+        filterPeriod.setValueColored(marketSearchFilterViewModel.period.title, marketSearchFilterViewModel.period.color)
+        filterPeriod.setOnSingleClickListener {
+            showSelectorDialog(
+                    title = R.string.Market_Filter_Period,
+                    subtitleText = "Range",
+                    headerIcon = R.drawable.ic_circle_clock_24,
+                    items = marketSearchFilterViewModel.periods,
+                    selectedItem = marketSearchFilterViewModel.period,
+                    itemViewHolderFactory = SelectorItemViewHolderFactory()
+            ) {
+                marketSearchFilterViewModel.period = it
+                filterPeriod.setValueColored(it.title, it.color)
             }
         }
 
