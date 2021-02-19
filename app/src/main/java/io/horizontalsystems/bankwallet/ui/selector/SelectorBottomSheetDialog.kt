@@ -11,7 +11,7 @@ class SelectorBottomSheetDialog<ItemClass> : BaseBottomSheetDialogFragment() {
 
     var items: List<ItemClass>? = null
     var selectedItem: ItemClass? = null
-    var onSelectListener: ((ItemClass?) -> Unit)? = null
+    var onSelectListener: ((ItemClass) -> Unit)? = null
 
     var titleText: String = ""
     var subtitleText: String = ""
