@@ -245,10 +245,6 @@ interface IAdapter {
     val debugInfo: String
 }
 
-interface IAppStatusManager {
-    val status: Map<String, Any>
-}
-
 interface IAppConfigProvider {
     val companyWebPageLink: String
     val appWebPageLink: String

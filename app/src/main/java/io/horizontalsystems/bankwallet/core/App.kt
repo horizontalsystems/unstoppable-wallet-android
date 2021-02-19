@@ -68,7 +68,6 @@ class App : CoreApp() {
         lateinit var addressParserFactory: AddressParserFactory
         lateinit var feeCoinProvider: FeeCoinProvider
         lateinit var notificationManager: INotificationManager
-        lateinit var appStatusManager: IAppStatusManager
         lateinit var appVersionManager: AppVersionManager
         lateinit var ethereumRpcModeSettingsManager: IEthereumRpcModeSettingsManager
         lateinit var initialSyncModeSettingsManager: IInitialSyncModeSettingsManager
@@ -186,7 +185,6 @@ class App : CoreApp() {
         notificationSubscriptionManager = NotificationSubscriptionManager(appDatabase, notificationManager)
         priceAlertManager = PriceAlertManager(appDatabase, notificationSubscriptionManager, coinManager)
 
-        appStatusManager = AppStatusManager(systemInfoManager, localStorage, predefinedAccountTypeManager, walletManager, adapterManager, coinManager, ethereumKitManager, binanceSmartChainKitManager, binanceKitManager)
         appVersionManager = AppVersionManager(systemInfoManager, localStorage).apply {
             backgroundManager.registerListener(this)
         }
