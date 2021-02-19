@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:gravity="center_vertical"
+    tools:parentTag="io.horizontalsystems.bankwallet.ui.extensions.MarketFilterView">
+
+    <TextView
+        android:id="@+id/title"
+        style="@style/Body"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_weight="1"
+        android:textColor="@color/oz"
+        tools:text="Coin List" />
+
+    <TextView
+        android:id="@+id/value"
+        style="@style/Subhead1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/oz"
+        tools:text="Top 250" />
+
+    <ImageView
+        android:id="@+id/arrowIcon"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginEnd="16dp"
+        android:src="@drawable/ic_down_arrow_20"
+        app:tint="@color/grey" />
+
+</merge>

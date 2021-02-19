@@ -172,7 +172,19 @@
     <string name="Market_Category_Computing_Description">Decentralized on-demand computing solutions.</string>
 
     <!--Market Search-->
-    <string name="Market_Search_Filter">Filter</string>
+    <string name="Market_AdvancedSearch">Advanced Search</string>
+    <string name="Market_Filter_CoinList">Coin List</string>
+    <string name="Market_Filter_MarketCap">Market Cap</string>
+
+    <string name="Market_Filter_Top_100">Top 100</string>
+    <string name="Market_Filter_Top_250">Top 250</string>
+    <string name="Market_Filter_Top_500">Top 500</string>
+    <string name="Market_Filter_Top_1000">Top 1000</string>
+    <string name="Market_Filter_Top_2500">Top 2500</string>
+    <string name="Market_Filter_ShowResults">Show Results</string>
+
+    <string name="Market_Filter_MarketCap_0_1M">&lt; 1M</string>
+    <string name="Market_Filter_MarketCap_1M_10M">1M - 10M</string>
 
     <!--Balance-->
 

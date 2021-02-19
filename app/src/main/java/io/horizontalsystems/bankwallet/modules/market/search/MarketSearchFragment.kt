@@ -11,6 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.ConcatAdapter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.modules.market.*
 import io.horizontalsystems.bankwallet.modules.market.list.MarketListViewModel
 import io.horizontalsystems.bankwallet.modules.ratechart.RateChartFragment
@@ -35,6 +36,10 @@ class MarketSearchFragment : BaseFragment(), ViewHolderMarketItem.Listener, Mark
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
+        }
+
+        advancedSearch.setOnSingleClickListener {
+            findNavController().navigate(R.id.marketSearchFragment_to_marketAdvancedSearchFragment, null, navOptions())
         }
 
         searchView.findViewById<View>(androidx.appcompat.R.id.search_plate)?.setBackgroundColor(Color.TRANSPARENT)
