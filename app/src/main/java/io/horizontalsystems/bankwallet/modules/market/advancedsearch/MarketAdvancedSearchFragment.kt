@@ -32,6 +32,7 @@ class MarketAdvancedSearchFragment : BaseFragment() {
         }
 
         filterCoinList.setValue(marketSearchFilterViewModel.coinList.title)
+        filterCoinList.setValueColor(marketSearchFilterViewModel.coinList.color)
         filterCoinList.setOnSingleClickListener {
             showSelectorDialog(
                     title = R.string.Market_Filter_CoinList,
@@ -43,10 +44,12 @@ class MarketAdvancedSearchFragment : BaseFragment() {
             ) {
                 marketSearchFilterViewModel.coinList = it
                 filterCoinList.setValue(it.title)
+                filterCoinList.setValueColor(it.color)
             }
         }
 
         filterMarketCap.setValue(marketSearchFilterViewModel.marketCap.title)
+        filterMarketCap.setValueColor(marketSearchFilterViewModel.marketCap.color)
         filterMarketCap.setOnSingleClickListener {
             showSelectorDialog(
                     title = R.string.Market_Filter_MarketCap,
@@ -58,6 +61,7 @@ class MarketAdvancedSearchFragment : BaseFragment() {
             ) {
                 marketSearchFilterViewModel.marketCap = it
                 filterMarketCap.setValue(it.title)
+                filterMarketCap.setValueColor(it.color)
             }
         }
 
