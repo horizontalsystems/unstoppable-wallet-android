@@ -9,7 +9,7 @@ class SelectorAdapter<ItemClass>(
         private val items: List<ItemClass>,
         private var selectedItem: ItemClass?,
         private val itemViewHolderFactory: ItemViewHolderFactory<ItemViewHolder<ItemClass>>,
-        private val onSelectListener: ((ItemClass?) -> Unit))
+        private val onSelectListener: ((ItemClass) -> Unit))
     : RecyclerView.Adapter<ItemViewHolder<ItemClass>>() {
 
     override fun getItemCount() = items.size
@@ -21,7 +21,7 @@ class SelectorAdapter<ItemClass>(
                 selectedItem = it
                 notifyDataSetChanged()
 
-                onSelectListener(selectedItem)
+                onSelectListener(it)
             }
         }
 

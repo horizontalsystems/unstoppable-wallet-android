@@ -41,10 +41,8 @@ class MarketAdvancedSearchFragment : BaseFragment() {
                     selectedItem = marketSearchFilterViewModel.coinList,
                     itemViewHolderFactory = SelectorItemViewHolderFactory()
             ) {
-                it?.let {
-                    marketSearchFilterViewModel.coinList = it
-                    filterCoinList.setValue(getString(it.item.titleResId))
-                }
+                marketSearchFilterViewModel.coinList = it
+                filterCoinList.setValue(it.title)
             }
         }
 
@@ -58,10 +56,8 @@ class MarketAdvancedSearchFragment : BaseFragment() {
                     selectedItem = marketSearchFilterViewModel.marketCap,
                     itemViewHolderFactory = SelectorItemViewHolderFactory()
             ) {
-                it?.let {
-                    marketSearchFilterViewModel.marketCap = it
-                    filterMarketCap.setValue(it.title)
-                }
+                marketSearchFilterViewModel.marketCap = it
+                filterMarketCap.setValue(it.title)
             }
         }
 
@@ -71,7 +67,7 @@ class MarketAdvancedSearchFragment : BaseFragment() {
 
     }
 
-    private fun <ItemClass> showSelectorDialog(title: Int, subtitleText: String, headerIcon: Int, items: List<ItemClass>, selectedItem: ItemClass, itemViewHolderFactory: ItemViewHolderFactory<ItemViewHolder<ItemClass>>, onSelectListener: (ItemClass?) -> Unit) {
+    private fun <ItemClass> showSelectorDialog(title: Int, subtitleText: String, headerIcon: Int, items: List<ItemClass>, selectedItem: ItemClass, itemViewHolderFactory: ItemViewHolderFactory<ItemViewHolder<ItemClass>>, onSelectListener: (ItemClass) -> Unit) {
         val dialog = SelectorBottomSheetDialog<ItemClass>()
         dialog.titleText = getString(title)
         dialog.subtitleText = subtitleText
