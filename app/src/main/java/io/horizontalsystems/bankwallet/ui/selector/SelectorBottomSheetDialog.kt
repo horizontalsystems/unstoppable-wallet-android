@@ -28,6 +28,7 @@ class SelectorBottomSheetDialog<ItemClass> : BaseBottomSheetDialogFragment() {
         setTitle(titleText)
         setSubtitle(subtitleText)
         setHeaderIcon(headerIconResourceId)
+        setHeaderIconTint(R.color.jacob)
 
         items?.let {
             val itemsAdapter = SelectorAdapter(it, selectedItem, itemViewHolderFactory, {
