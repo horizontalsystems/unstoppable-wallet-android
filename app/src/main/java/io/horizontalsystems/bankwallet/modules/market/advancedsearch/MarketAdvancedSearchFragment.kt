@@ -54,7 +54,7 @@ class MarketAdvancedSearchFragment : BaseFragment() {
             showSelectorDialog(
                     title = R.string.Market_Filter_MarketCap,
                     subtitleText = "Range",
-                    headerIcon = R.drawable.ic_circle_coin_24,
+                    headerIcon = R.drawable.ic_usd_24,
                     items = marketSearchFilterViewModel.marketCaps,
                     selectedItem = marketSearchFilterViewModel.marketCap,
                     itemViewHolderFactory = SelectorItemViewHolderFactory()
