@@ -252,6 +252,10 @@ class App : CoreApp() {
         super.onTrimMemory(level)
     }
 
+    override fun localizedContext(): Context {
+        return localeAwareContext(this)
+    }
+
     override fun attachBaseContext(base: Context) {
         super.attachBaseContext(localeAwareContext(base))
     }

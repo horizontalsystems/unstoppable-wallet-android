@@ -98,10 +98,10 @@ class NumberFormatter(private val languageManager: ILanguageManager) : IAppNumbe
     override fun shortenValue(number: Number): Pair<BigDecimal, String> {
         val suffix = arrayOf(
                 " ",
-                App.instance.getString(R.string.Charts_MarketCap_Thousand),
-                App.instance.getString(R.string.Charts_MarketCap_Million),
-                App.instance.getString(R.string.Charts_MarketCap_Billion),
-                App.instance.getString(R.string.Charts_MarketCap_Trillion))
+                App.instance.localizedContext().getString(R.string.Charts_MarketCap_Thousand),
+                App.instance.localizedContext().getString(R.string.Charts_MarketCap_Million),
+                App.instance.localizedContext().getString(R.string.Charts_MarketCap_Billion),
+                App.instance.localizedContext().getString(R.string.Charts_MarketCap_Trillion))
 
         val valueLong = number.toLong()
         val value = floor(log10(valueLong.toDouble())).toInt()

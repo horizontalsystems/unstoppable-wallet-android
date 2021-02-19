@@ -2,8 +2,8 @@ package io.horizontalsystems.bankwallet.modules.send.submodules.address
 
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
+import io.horizontalsystems.bankwallet.core.providers.StringProvider
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.IRecipientAddressService
 import io.horizontalsystems.ethereumkit.core.AddressValidator
@@ -13,10 +13,13 @@ import io.reactivex.subjects.BehaviorSubject
 import java.math.BigDecimal
 import java.util.*
 
-class SendAddressPresenter(val moduleDelegate: SendAddressModule.IAddressModuleDelegate)
+class SendAddressPresenter(
+        private val moduleDelegate: SendAddressModule.IAddressModuleDelegate,
+        private val stringProvider: StringProvider
+)
     : ViewModel(), IRecipientAddressService, SendAddressModule.IAddressModule, SendAddressModule.IInteractorDelegate, SendAddressModule.IViewDelegate {
 
-    val errorsObservable = BehaviorSubject.createDefault<Optional<Throwable>>(Optional.empty())
+    private val errorsObservable = BehaviorSubject.createDefault<Optional<Throwable>>(Optional.empty())
 
     //  IRecipientAddressService
 
@@ -83,10 +86,10 @@ class SendAddressPresenter(val moduleDelegate: SendAddressModule.IAddressModuleD
 
     private fun getError(error: Throwable): Throwable {
         val message = when (error) {
-            is HodlerPlugin.UnsupportedAddressType -> App.instance.getString(R.string.Send_Error_UnsupportedAddress)
-            is AddressValidator.AddressValidationException -> App.instance.getString(R.string.Send_Error_IncorrectAddress)
-            is ZcashAdapter.ZcashError.TransparentAddressNotAllowed -> App.instance.getString(R.string.Send_Error_TransparentAddress)
-            is ZcashAdapter.ZcashError.SendToSelfNotAllowed -> App.instance.getString(R.string.Send_Error_SendToSelf)
+            is HodlerPlugin.UnsupportedAddressType -> stringProvider.string(R.string.Send_Error_UnsupportedAddress)
+            is AddressValidator.AddressValidationException -> stringProvider.string(R.string.Send_Error_IncorrectAddress)
+            is ZcashAdapter.ZcashError.TransparentAddressNotAllowed -> stringProvider.string(R.string.Send_Error_TransparentAddress)
+            is ZcashAdapter.ZcashError.SendToSelfNotAllowed -> stringProvider.string(R.string.Send_Error_SendToSelf)
             else -> error.message ?: error.javaClass.simpleName
         }
 

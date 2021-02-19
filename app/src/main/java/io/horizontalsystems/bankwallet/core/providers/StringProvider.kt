@@ -1,11 +1,11 @@
 package io.horizontalsystems.bankwallet.core.providers
 
-import android.content.Context
 import androidx.annotation.StringRes
+import io.horizontalsystems.bankwallet.core.App
 
-class StringProvider(
-        private val context: Context
-) {
+class StringProvider {
+
+    private val context = App.instance.localizedContext()
 
     fun string(@StringRes id: Int): String {
         return context.getString(id)

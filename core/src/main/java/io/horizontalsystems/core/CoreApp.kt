@@ -27,6 +27,8 @@ abstract class CoreApp : Application() {
         override lateinit var instance: CoreApp
     }
 
+    abstract fun localizedContext(): Context
+
     fun localeAwareContext(base: Context): Context {
         return LocaleHelper.onAttach(base)
     }

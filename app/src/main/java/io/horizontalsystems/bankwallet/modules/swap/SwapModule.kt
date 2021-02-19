@@ -91,7 +91,7 @@ object SwapModule {
             SwapTradeService(evmKit, uniswapProvider, fromCoin)
         }
         private val stringProvider by lazy {
-            StringProvider(App.instance)
+            StringProvider()
         }
         private val formatter by lazy {
             SwapViewItemHelper(stringProvider, App.numberFormatter)
@@ -135,7 +135,7 @@ object SwapModule {
                     SwapAllowanceViewModel(service, allowanceService, pendingAllowanceService, formatter, stringProvider) as T
                 }
                 EthereumFeeViewModel::class.java -> {
-                    EthereumFeeViewModel(transactionService, coinService) as T
+                    EthereumFeeViewModel(transactionService, coinService, stringProvider) as T
                 }
                 else -> throw IllegalArgumentException()
             }

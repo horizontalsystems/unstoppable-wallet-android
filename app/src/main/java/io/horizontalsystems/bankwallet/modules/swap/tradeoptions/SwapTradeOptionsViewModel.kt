@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.swap.tradeoptions
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.providers.StringProvider
 import io.horizontalsystems.bankwallet.modules.swap.SwapTradeService
 import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.ISwapTradeOptionsService.*
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -11,8 +11,9 @@ import io.reactivex.disposables.CompositeDisposable
 
 class SwapTradeOptionsViewModel(
         private val service: SwapTradeOptionsService,
-        private val tradeService: SwapTradeService)
-    : ViewModel() {
+        private val tradeService: SwapTradeService,
+        private val stringProvider: StringProvider
+        ) : ViewModel() {
 
     val actionStateLiveData = MutableLiveData<ActionState>(ActionState.Enabled())
 
@@ -39,13 +40,13 @@ class SwapTradeOptionsViewModel(
 
                 when (error) {
                     is TradeOptionsError.InvalidAddress -> {
-                        errorText = App.instance.getString(R.string.SwapSettings_Error_InvalidAddress)
+                        errorText = stringProvider.string(R.string.SwapSettings_Error_InvalidAddress)
                     }
                     is TradeOptionsError.InvalidSlippage -> {
-                        errorText = App.instance.getString(R.string.SwapSettings_Error_InvalidSlippage)
+                        errorText = stringProvider.string(R.string.SwapSettings_Error_InvalidSlippage)
                     }
                     is TradeOptionsError.ZeroDeadline -> {
-                        errorText = App.instance.getString(R.string.SwapSettings_Error_InvalidDeadline)
+                        errorText = stringProvider.string(R.string.SwapSettings_Error_InvalidDeadline)
                     }
                 }
 

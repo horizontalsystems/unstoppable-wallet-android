@@ -3,8 +3,8 @@ package io.horizontalsystems.bankwallet.modules.walletconnect.request
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ethereum.CoinService
+import io.horizontalsystems.bankwallet.core.providers.StringProvider
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.core.toHexString
@@ -13,7 +13,8 @@ import io.reactivex.disposables.CompositeDisposable
 
 class WalletConnectSendEthereumTransactionRequestViewModel(
         private val service: WalletConnectSendEthereumTransactionRequestService,
-        private val coinService: CoinService
+        private val coinService: CoinService,
+        private val stringProvider: StringProvider
 ) : ViewModel() {
 
     val amountData: SendModule.AmountData
@@ -74,9 +75,9 @@ class WalletConnectSendEthereumTransactionRequestViewModel(
         is WalletConnectSendEthereumTransactionRequestService.TransactionError.InsufficientBalance -> {
             val amountData = coinService.amountData(error.requiredBalance)
 
-            App.instance.getString(R.string.EthereumTransaction_Error_InsufficientBalance, amountData.getFormatted())
+            stringProvider.string(R.string.EthereumTransaction_Error_InsufficientBalance, amountData.getFormatted())
         }
-        is JsonRpc.ResponseError.InsufficientBalance -> App.instance.getString(R.string.EthereumTransaction_Error_InsufficientBalanceForFee, coinService.coin.code)
+        is JsonRpc.ResponseError.InsufficientBalance -> stringProvider.string(R.string.EthereumTransaction_Error_InsufficientBalanceForFee, coinService.coin.code)
         is JsonRpc.ResponseError.RpcError -> error.error.message
         else -> error?.message ?: error?.javaClass?.simpleName
     }

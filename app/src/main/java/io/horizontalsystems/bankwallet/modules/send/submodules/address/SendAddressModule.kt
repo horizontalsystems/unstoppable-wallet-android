@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.send.submodules.address
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.providers.StringProvider
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.modules.send.SendModule
@@ -63,7 +64,7 @@ object SendAddressModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
 
             val addressParser = App.addressParserFactory.parser(coin)
-            val presenter = SendAddressPresenter(addressModuleDelete)
+            val presenter = SendAddressPresenter(addressModuleDelete, StringProvider())
 
             val resolutionService = AddressResolutionService(coin.code, isResolutionEnabled)
             val viewModel = RecipientAddressViewModel(presenter, resolutionService, addressParser, placeholder)

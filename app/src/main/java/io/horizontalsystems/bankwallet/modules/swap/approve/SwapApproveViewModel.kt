@@ -3,8 +3,8 @@ package io.horizontalsystems.bankwallet.modules.swap.approve
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ethereum.CoinService
+import io.horizontalsystems.bankwallet.core.providers.StringProvider
 import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.ethereumkit.api.jsonrpc.JsonRpc
 import io.reactivex.disposables.CompositeDisposable
@@ -14,7 +14,8 @@ import kotlin.math.min
 class SwapApproveViewModel(
         private val service: ISwapApproveService,
         private val coinService: CoinService,
-        private val ethCoinService: CoinService
+        private val ethCoinService: CoinService,
+        private val stringProvider: StringProvider
 ) : ViewModel() {
 
     private val maxCoinDecimal = 8
@@ -90,13 +91,13 @@ class SwapApproveViewModel(
     private fun convertError(throwable: Throwable): String {
         return when (throwable) {
             is SwapApproveService.TransactionAmountError.AlreadyApproved -> {
-                App.instance.getString(R.string.Approve_Error_AlreadyApproved)
+                stringProvider.string(R.string.Approve_Error_AlreadyApproved)
             }
             is SwapApproveService.TransactionEthereumAmountError.InsufficientBalance -> {
-                App.instance.getString(R.string.EthereumTransaction_Error_InsufficientBalance, ethCoinService.coinValue(throwable.requiredBalance))
+                stringProvider.string(R.string.EthereumTransaction_Error_InsufficientBalance, ethCoinService.coinValue(throwable.requiredBalance))
             }
             is JsonRpc.ResponseError.InsufficientBalance -> {
-                App.instance.getString(R.string.EthereumTransaction_Error_InsufficientBalanceForFee, ethCoinService.coin.code)
+                stringProvider.string(R.string.EthereumTransaction_Error_InsufficientBalanceForFee, ethCoinService.coin.code)
             }
             is JsonRpc.ResponseError.RpcError -> {
                 throwable.error.message
