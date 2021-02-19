@@ -27,7 +27,18 @@ object AppStatusModule {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val view = AppStatusView()
-            val interactor = AppStatusInteractor(App.appStatusManager, TextHelper)
+            val appStatusService = AppStatusService(
+                    App.systemInfoManager,
+                    App.localStorage,
+                    App.predefinedAccountTypeManager,
+                    App.walletManager,
+                    App.adapterManager,
+                    App.coinManager,
+                    App.ethereumKitManager,
+                    App.binanceSmartChainKitManager,
+                    App.binanceKitManager
+            )
+            val interactor = AppStatusInteractor(appStatusService, TextHelper)
             val presenter = AppStatusPresenter(view, interactor)
 
             return presenter as T

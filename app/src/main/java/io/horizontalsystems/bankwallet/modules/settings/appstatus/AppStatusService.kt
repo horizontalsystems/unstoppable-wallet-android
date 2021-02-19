@@ -1,7 +1,9 @@
-package io.horizontalsystems.bankwallet.core.managers
+package io.horizontalsystems.bankwallet.modules.settings.appstatus
 
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.adapters.BitcoinBaseAdapter
+import io.horizontalsystems.bankwallet.core.managers.BinanceSmartChainKitManager
+import io.horizontalsystems.bankwallet.core.managers.EthereumKitManager
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.Coin
@@ -9,7 +11,7 @@ import io.horizontalsystems.core.ISystemInfoManager
 import java.util.*
 import kotlin.collections.LinkedHashMap
 
-class AppStatusManager(
+class AppStatusService(
         private val systemInfoManager: ISystemInfoManager,
         private val localStorage: ILocalStorage,
         private val predefinedAccountTypeManager: IPredefinedAccountTypeManager,
@@ -19,9 +21,9 @@ class AppStatusManager(
         private val ethereumKitManager: EthereumKitManager,
         private val binanceSmartChainKitManager: BinanceSmartChainKitManager,
         private val binanceKitManager: IBinanceKitManager
-) : IAppStatusManager {
+) {
 
-    override val status: LinkedHashMap<String, Any>
+    val status: LinkedHashMap<String, Any>
         get() {
             val status = LinkedHashMap<String, Any>()
 
