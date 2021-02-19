@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.Gravity
 import android.widget.LinearLayout
+import androidx.annotation.ColorRes
 import io.horizontalsystems.bankwallet.R
 import kotlinx.android.synthetic.main.view_market_filter.view.*
 
@@ -28,5 +29,9 @@ class MarketFilterView @JvmOverloads constructor(context: Context, attrs: Attrib
 
     fun setValue(v: String?) {
         value.text = v
+    }
+
+    fun setValueColor(@ColorRes color: Int) {
+        value.setTextColor(context.getColor(color))
     }
 }
