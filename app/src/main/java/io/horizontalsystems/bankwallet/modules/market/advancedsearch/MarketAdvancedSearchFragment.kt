@@ -8,10 +8,7 @@ import androidx.fragment.app.viewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
-import io.horizontalsystems.bankwallet.ui.selector.SelectorBottomSheetDialog
-import io.horizontalsystems.bankwallet.ui.selector.ItemViewHolder
-import io.horizontalsystems.bankwallet.ui.selector.ItemViewHolderFactory
-import io.horizontalsystems.bankwallet.ui.selector.SelectorItemViewHolderFactory
+import io.horizontalsystems.bankwallet.ui.selector.*
 import io.horizontalsystems.core.findNavController
 import kotlinx.android.synthetic.main.fragment_market_search_filter.*
 

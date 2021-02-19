@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.market.advancedsearch
 
 import androidx.lifecycle.ViewModel
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.ui.selector.ViewItemWrapper
 
@@ -16,11 +17,12 @@ class MarketAdvancedSearchViewModel(private val service: MarketAdvancedSearchSer
             service.coinList = value.item
         }
 
-    val marketCaps = MarketCap.values().map {
-        ViewItemWrapper(App.instance.getString(it.titleResId), it)
-    }
+    val marketCaps = listOf(ViewItemWrapper<MarketCap?>(App.instance.getString(R.string.None), null)) +
+            MarketCap.values().map {
+                ViewItemWrapper<MarketCap?>(App.instance.getString(it.titleResId), it)
+            }
 
-    var marketCap = ViewItemWrapper(App.instance.getString(MarketCap.MarketCap_1M_10M.titleResId), MarketCap.MarketCap_1M_10M)
+    var marketCap = ViewItemWrapper<MarketCap?>(App.instance.getString(R.string.None), null)
 
     fun showResults() = Unit
 

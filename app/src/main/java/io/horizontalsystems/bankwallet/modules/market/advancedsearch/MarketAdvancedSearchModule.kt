@@ -27,4 +27,8 @@ enum class CoinList(val itemsCount: Int, @StringRes val titleResId: Int) {
 enum class MarketCap(@StringRes val titleResId: Int) {
     MarketCap_0_1M(R.string.Market_Filter_MarketCap_0_1M),
     MarketCap_1M_10M(R.string.Market_Filter_MarketCap_1M_10M),
+    MarketCap_10M_100M(R.string.Market_Filter_MarketCap_10M_100M),
+    MarketCap_100M_1B(R.string.Market_Filter_MarketCap_100M_1B),
+    MarketCap_1B_10B(R.string.Market_Filter_MarketCap_1B_10B),
+    MarketCap_10B_More(R.string.Market_Filter_MarketCap_10B_More),
 }

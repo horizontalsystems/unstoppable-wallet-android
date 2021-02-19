@@ -32,6 +32,7 @@
 
     <string name="Error">Error</string>
     <string name="NotAvailable">N/A</string>
+    <string name="None">None</string>
 
     <string name="Wallet">%s Wallet</string>
     <string name="FooterText" translatable="false">© Horizontal Systems 2021</string>
@@ -185,6 +186,10 @@
 
     <string name="Market_Filter_MarketCap_0_1M">&lt; 1M</string>
     <string name="Market_Filter_MarketCap_1M_10M">1M - 10M</string>
+    <string name="Market_Filter_MarketCap_10M_100M">10M - 100M</string>
+    <string name="Market_Filter_MarketCap_100M_1B">100M - 1BN</string>
+    <string name="Market_Filter_MarketCap_1B_10B">1BN - 10BN</string>
+    <string name="Market_Filter_MarketCap_10B_More">&gt; 10M</string>
 
     <!--Balance-->
 
