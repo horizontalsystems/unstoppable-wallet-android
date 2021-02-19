@@ -31,6 +31,7 @@
         </androidx.appcompat.widget.Toolbar>
 
         <LinearLayout
+            android:id="@+id/advancedSearch"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_marginStart="16dp"
@@ -53,7 +54,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_weight="1"
-                android:text="@string/Market_Search_Filter"
+                android:text="@string/Market_AdvancedSearch"
                 android:textColor="@color/oz" />
 
             <ImageView

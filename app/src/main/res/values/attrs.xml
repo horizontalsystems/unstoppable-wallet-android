@@ -10,6 +10,10 @@
         <attr name="infoValue" format="string" />
         <attr name="infoValueIcon" format="integer" />
     </declare-styleable>
+    <declare-styleable name="MarketFilterView">
+        <attr name="title" />
+        <attr name="value" />
+    </declare-styleable>
     <declare-styleable name="MarketMetricLargeView">
         <attr name="title" />
         <attr name="value" />
