@@ -46,5 +46,5 @@ dependencies {
     implementation project(':components:views')
     implementation project(':components:snackbar')
 
-    testImplementation 'junit:junit:4.13'
+    testImplementation "junit:junit:$junit_version"
 }

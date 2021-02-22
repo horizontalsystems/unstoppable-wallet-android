@@ -39,7 +39,6 @@ dependencies {
     implementation "androidx.core:core-ktx:$core_ktx_version"
     implementation "androidx.constraintlayout:constraintlayout:$constraint_version"
 
-    def lifecycle_version = '2.3.0-alpha05'
     // alternatively - just ViewModel
     implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycle_version"
     // use -ktx for Kotlin
@@ -56,5 +55,5 @@ dependencies {
     implementation project(':core')
     implementation project(':components:views')
 
-    testImplementation 'junit:junit:4.13'
+    testImplementation "junit:junit:$junit_version"
 }
