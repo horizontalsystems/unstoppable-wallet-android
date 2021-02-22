@@ -39,5 +39,5 @@ dependencies {
 
     implementation project(':components:views')
 
-    testImplementation 'junit:junit:4.13'
+    testImplementation "junit:junit:$junit_version"
 }

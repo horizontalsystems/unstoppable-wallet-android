@@ -11,7 +11,6 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.addCallback
-import androidx.biometric.BiometricConstants
 import androidx.biometric.BiometricPrompt
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
@@ -19,6 +18,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.biometric.BiometricPrompt.*
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
@@ -45,7 +45,7 @@ import java.util.concurrent.Executor
 
 class PinFragment : Fragment(), NumPadItemsAdapter.Listener, PinPagesAdapter.Listener {
 
-    companion object{
+    companion object {
         const val ATTACHED_TO_LOCKSCREEN = "attached_to_lock_screen"
     }
 
@@ -257,7 +257,7 @@ class PinFragment : Fragment(), NumPadItemsAdapter.Listener, PinPagesAdapter.Lis
 
             override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
                 super.onAuthenticationError(errorCode, errString)
-                if (errorCode == BiometricConstants.ERROR_LOCKOUT || errorCode == BiometricConstants.ERROR_LOCKOUT_PERMANENT) {
+                if (errorCode == ERROR_LOCKOUT || errorCode == ERROR_LOCKOUT_PERMANENT) {
                     BiometricScannerDisabledDialogFragment.newInstance()
                             .show(childFragmentManager, "alert_dialog")
                 }

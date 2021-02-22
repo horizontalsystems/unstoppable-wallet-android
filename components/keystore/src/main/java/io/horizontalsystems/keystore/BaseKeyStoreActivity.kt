@@ -1,8 +1,8 @@
 package io.horizontalsystems.keystore
 
 import androidx.appcompat.app.AppCompatActivity
-import androidx.biometric.BiometricConstants
 import androidx.biometric.BiometricPrompt
+import androidx.biometric.BiometricPrompt.*
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
@@ -81,9 +81,9 @@ abstract class BaseKeyStoreActivity : AppCompatActivity() {
             override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
                 super.onAuthenticationError(errorCode, errString)
 
-                if (errorCode == BiometricConstants.ERROR_USER_CANCELED
-                        || errorCode == BiometricConstants.ERROR_NEGATIVE_BUTTON
-                        || errorCode == BiometricConstants.ERROR_CANCELED) {
+                if (errorCode == ERROR_USER_CANCELED
+                        || errorCode == ERROR_NEGATIVE_BUTTON
+                        || errorCode == ERROR_CANCELED) {
                     viewModel.delegate.onAuthenticationCanceled()
                 }
             }

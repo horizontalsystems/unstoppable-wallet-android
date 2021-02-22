@@ -45,7 +45,6 @@ dependencies {
     implementation "androidx.navigation:navigation-fragment-ktx:$navigation_ktx_version"
     implementation "androidx.navigation:navigation-ui-ktx:$navigation_ktx_version"
 
-    def lifecycle_version = '2.3.0-alpha05'
     // alternatively - just ViewModel
     implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycle_version"
     // use -ktx for Kotlin
@@ -66,7 +65,7 @@ dependencies {
     implementation project(':components:views')
     implementation project(':components:snackbar')
 
-    testImplementation 'junit:junit:4.13'
+    testImplementation "junit:junit:$junit_version"
     testImplementation "androidx.arch.core:core-testing:2.1.0"
     testImplementation 'org.mockito:mockito-core:3.3.3'
     testImplementation 'com.nhaarman:mockito-kotlin-kt1.1:1.6.0'
