@@ -235,6 +235,9 @@
             android:id="@+id/swapFragment_to_uniswapInfoFragment"
             app:destination="@id/uniswapInfoFragment" />
         <action
+            android:id="@+id/swapFragment_to_feeSpeedInfo"
+            app:destination="@id/feeSpeedInfoFragment" />
+        <action
             android:id="@+id/swapFragment_to_swapTradeOptionsFragment"
             app:destination="@id/swapTradeOptionsFragment"
             app:enterAnim="@anim/slide_from_bottom_long"
@@ -245,7 +248,11 @@
     <fragment
         android:id="@+id/swapApproveFragment"
         android:name="io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveFragment"
-        tools:layout="@layout/fragment_swap_approve" />
+        tools:layout="@layout/fragment_swap_approve">
+        <action
+            android:id="@+id/swapApproveFragment_to_feeSpeedInfo"
+            app:destination="@id/feeSpeedInfoFragment" />
+    </fragment>
     <fragment
         android:id="@+id/swapConfirmationFragment"
         android:name="io.horizontalsystems.bankwallet.modules.swap.confirmation.SwapConfirmationFragment"
@@ -275,7 +282,11 @@
     <fragment
         android:id="@+id/walletConnectSendEthereumTransactionRequestFragment"
         android:name="io.horizontalsystems.bankwallet.modules.walletconnect.request.WalletConnectSendEthereumTransactionRequestFragment"
-        tools:layout="@layout/fragment_wallet_connect_request" />
+        tools:layout="@layout/fragment_wallet_connect_request" >
+        <action
+            android:id="@+id/walletConnectErrorFragment_to_feeSpeedInfo"
+            app:destination="@id/feeSpeedInfoFragment" />
+    </fragment>
     <fragment
         android:id="@+id/swapTradeOptionsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.swap.tradeoptions.SwapTradeOptionsFragment"
@@ -288,6 +299,10 @@
         android:id="@+id/marketSearchFragment"
         android:name="io.horizontalsystems.bankwallet.modules.market.search.MarketSearchFragment"
         tools:layout="@layout/fragment_market_search" />
+    <fragment
+        android:id="@+id/feeSpeedInfoFragment"
+        android:name="io.horizontalsystems.bankwallet.ui.FeeInfoFragment"
+        tools:layout="@layout/fragment_fee_info" />
 
     <!--  Dialogs/BottomSheets  -->
     <dialog

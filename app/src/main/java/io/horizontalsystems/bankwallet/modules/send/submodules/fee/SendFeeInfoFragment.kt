@@ -8,7 +8,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import kotlinx.android.synthetic.main.fragment_fee_info.*
 
-class FeeInfoFragment : BaseFragment() {
+class SendFeeInfoFragment : BaseFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.fragment_fee_info, container, false)
