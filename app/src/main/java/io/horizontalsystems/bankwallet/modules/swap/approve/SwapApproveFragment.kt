@@ -95,7 +95,15 @@ class SwapApproveFragment : BaseFragment() {
             error.text = it
         })
 
-        feeSelectorView.setFeeSelectorViewInteractions(feeViewModel, feeViewModel, viewLifecycleOwner, parentFragmentManager)
+        feeSelectorView.setFeeSelectorViewInteractions(
+                feeViewModel,
+                feeViewModel,
+                viewLifecycleOwner,
+                parentFragmentManager,
+                showSpeedInfoListener = {
+                    findNavController().navigate(R.id.swapApproveFragment_to_feeSpeedInfo, null, navOptions())
+                }
+        )
     }
 
     companion object {

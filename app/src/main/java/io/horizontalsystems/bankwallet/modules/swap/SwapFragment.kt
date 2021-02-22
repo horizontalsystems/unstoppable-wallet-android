@@ -64,7 +64,15 @@ class SwapFragment : BaseFragment() {
 
         observeViewModel()
 
-        feeSelectorView.setFeeSelectorViewInteractions(feeViewModel, feeViewModel, viewLifecycleOwner, parentFragmentManager)
+        feeSelectorView.setFeeSelectorViewInteractions(
+                feeViewModel,
+                feeViewModel,
+                viewLifecycleOwner,
+                parentFragmentManager,
+                showSpeedInfoListener = {
+                    findNavController().navigate(R.id.swapFragment_to_feeSpeedInfo, null, navOptions())
+                }
+        )
 
         getNavigationResult(SwapApproveFragment.requestKey)?.let {
             if (it.getBoolean(SwapApproveFragment.resultKey)) {

@@ -18,7 +18,7 @@ import io.horizontalsystems.bankwallet.ui.extensions.SelectorItem
 import io.horizontalsystems.seekbar.FeeSeekBar
 import kotlinx.android.synthetic.main.view_fee_selector.view.*
 
-class FeeSelectorView@JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
+class FeeSelectorView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
     : ConstraintLayout(context, attrs, defStyleAttr) {
 
     var onTxSpeedClickListener: (view: View) -> Unit = { }
@@ -79,7 +79,18 @@ class FeeSelectorView@JvmOverloads constructor(context: Context, attrs: Attribut
                 .show(fragmentManager, "fee_rate_priority_selector")
     }
 
-    fun setFeeSelectorViewInteractions(sendFeeViewModel: ISendFeeViewModel, sendFeePriorityViewModel: ISendFeePriorityViewModel, viewLifecycleOwner: LifecycleOwner, fragmentManager: FragmentManager) {
+    fun setFeeSelectorViewInteractions(
+            sendFeeViewModel: ISendFeeViewModel,
+            sendFeePriorityViewModel: ISendFeePriorityViewModel,
+            viewLifecycleOwner: LifecycleOwner,
+            fragmentManager: FragmentManager,
+            showSpeedInfoListener:() -> Unit
+    ) {
+
+        feeInfoImageClickArea.setOnClickListener {
+            showSpeedInfoListener.invoke()
+        }
+
         if (sendFeeViewModel.hasEstimatedFee) {
             sendFeeViewModel.estimatedFeeLiveData.observe(viewLifecycleOwner, Observer {
                 setEstimatedFeeText(it)

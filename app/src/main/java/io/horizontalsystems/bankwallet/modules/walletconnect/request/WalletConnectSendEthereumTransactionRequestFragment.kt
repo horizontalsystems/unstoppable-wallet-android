@@ -91,7 +91,15 @@ class WalletConnectSendEthereumTransactionRequestFragment : BaseFragment() {
             error.text = it
         })
 
-        feeSelectorView.setFeeSelectorViewInteractions(feeViewModel, feeViewModel, viewLifecycleOwner, parentFragmentManager)
+        feeSelectorView.setFeeSelectorViewInteractions(
+                feeViewModel,
+                feeViewModel,
+                viewLifecycleOwner,
+                parentFragmentManager,
+                showSpeedInfoListener = {
+                    findNavController().navigate(R.id.walletConnectErrorFragment_to_feeSpeedInfo, null, navOptions())
+                }
+        )
     }
 
     private fun popBackStackWithResult(approveResult: ApproveResult) {
