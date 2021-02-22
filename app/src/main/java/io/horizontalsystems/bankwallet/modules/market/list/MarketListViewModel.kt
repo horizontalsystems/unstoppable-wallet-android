@@ -23,7 +23,7 @@ class MarketListViewModel(
     var sortingField: SortingField = sortingFields.first()
         private set
 
-    var marketField: MarketField = MarketField.MarketCap
+    var marketField: MarketField = MarketField.PriceDiff
         private set
 
     fun update(sortingField: SortingField? = null, marketField: MarketField? = null) {
