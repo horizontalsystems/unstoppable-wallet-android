@@ -1,36 +1,30 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect
 
-import com.trustwallet.walletconnect.WCSessionStoreItem
-import com.trustwallet.walletconnect.WCSessionStoreType
 import com.trustwallet.walletconnect.models.WCPeerMeta
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.IPredefinedAccountTypeManager
+import io.horizontalsystems.bankwallet.core.storage.WalletConnectSessionStorage
 import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
+import io.horizontalsystems.bankwallet.entities.WalletConnectSession
 import io.reactivex.BackpressureStrategy
+import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 
-class WalletConnectSessionStore(
+class WalletConnectSessionManager(
+        private val storage: WalletConnectSessionStorage,
         private val accountManager: IAccountManager,
         private val predefinedAccountTypeManager: IPredefinedAccountTypeManager
 ) {
-    private val wcSessionStoreType = WCSessionStoreType(App.preferences)
-
-    var storedItem: WCSessionStoreItem?
-        get() = wcSessionStoreType.session
-        set(value) {
-            wcSessionStoreType.session = value
-
-            storePeerMetaSubject.onNext(Unit)
-        }
+    val storedSession: WalletConnectSession?
+        get() = storage.getSessions().firstOrNull()
 
     val storedPeerMeta: WCPeerMeta?
-        get() = storedItem?.remotePeerMeta
+        get() = storedSession?.remotePeerMeta
 
     private val storePeerMetaSubject = PublishSubject.create<Unit>()
-    val storePeerMetaSignal = storePeerMetaSubject.toFlowable(BackpressureStrategy.LATEST)
+    val storePeerMetaSignal: Flowable<Unit> = storePeerMetaSubject.toFlowable(BackpressureStrategy.LATEST)
 
     private val disposable = CompositeDisposable()
 
@@ -39,13 +33,25 @@ class WalletConnectSessionStore(
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .subscribe {
-                    if (storedItem != null && !accountStandardIsPresent()) {
-                        storedItem = null
+                    if (storedSession != null && !accountStandardIsPresent()) {
+                        clear()
                     }
                 }
                 .let {
                     disposable.add(it)
                 }
+    }
+
+    fun store(session: WalletConnectSession) {
+        storage.save(session)
+
+        storePeerMetaSubject.onNext(Unit)
+    }
+
+    fun clear() {
+        storage.deleteAll()
+
+        storePeerMetaSubject.onNext(Unit)
     }
 
     private fun accountStandardIsPresent(): Boolean {

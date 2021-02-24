@@ -1,12 +1,12 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect
 
-import com.trustwallet.walletconnect.WCSessionStoreItem
 import com.trustwallet.walletconnect.models.WCPeerMeta
 import com.trustwallet.walletconnect.models.ethereum.WCEthereumTransaction
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
 import io.horizontalsystems.bankwallet.core.managers.EthereumKitManager
 import io.horizontalsystems.bankwallet.core.managers.WalletConnectInteractor
+import io.horizontalsystems.bankwallet.entities.WalletConnectSession
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -14,7 +14,7 @@ import io.reactivex.subjects.PublishSubject
 
 class WalletConnectService(
         ethKitManager: EthereumKitManager,
-        private val sessionStore: WalletConnectSessionStore,
+        private val sessionManager: WalletConnectSessionManager,
         private val connectivityManager: ConnectivityManager
 ) : WalletConnectInteractor.Delegate, Clearable {
 
@@ -54,7 +54,7 @@ class WalletConnectService(
     private var requestIsProcessing = false
 
     init {
-        val sessionStoreItem = sessionStore.storedItem
+        val sessionStoreItem = sessionManager.storedSession
 
         if (sessionStoreItem != null) {
             remotePeerData = PeerData(sessionStoreItem.remotePeerId, sessionStoreItem.remotePeerMeta)
@@ -100,7 +100,7 @@ class WalletConnectService(
                 interactor.approveSession(ethereumKit.receiveAddress.eip55, chainId)
 
                 remotePeerData?.let { peerData ->
-                    sessionStore.storedItem = WCSessionStoreItem(interactor.session, chainId, interactor.peerId, peerData.peerId, peerData.peerMeta)
+                    sessionManager.store(WalletConnectSession(chainId, "", interactor.session, interactor.peerId, peerData.peerId, peerData.peerMeta))
                 }
 
                 state = State.Ready
@@ -145,7 +145,7 @@ class WalletConnectService(
     }
 
     override fun didKillSession() {
-        sessionStore.storedItem = null
+        sessionManager.clear()
 
         state = State.Killed
     }

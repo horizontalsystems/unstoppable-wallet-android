@@ -93,7 +93,7 @@ object MainSettingsModule {
                     appConfigProvider = App.appConfigProvider,
                     termsManager = App.termsManager,
                     pinComponent = App.pinComponent,
-                    walletConnectSessionStore = App.walletConnectSessionStore
+                    walletConnectSessionManager = App.walletConnectSessionManager
             )
             val presenter = MainSettingsPresenter(view, router, interactor)
             interactor.delegate = presenter

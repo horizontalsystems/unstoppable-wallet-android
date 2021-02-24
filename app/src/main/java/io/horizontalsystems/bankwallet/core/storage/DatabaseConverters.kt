@@ -1,13 +1,19 @@
 package io.horizontalsystems.bankwallet.core.storage
 
 import androidx.room.TypeConverter
+import com.google.gson.Gson
+import com.trustwallet.walletconnect.models.WCPeerMeta
+import com.trustwallet.walletconnect.models.session.WCSession
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.entities.PriceAlert
 import io.horizontalsystems.bankwallet.entities.SubscriptionJob
 import java.math.BigDecimal
+import java.util.*
 
 class DatabaseConverters {
+
+    private val gson by lazy { Gson() }
 
     // BigDecimal
 
@@ -70,43 +76,73 @@ class DatabaseConverters {
     }
 
     @TypeConverter
-    fun fromChangeState(state: PriceAlert.ChangeState): String{
+    fun fromChangeState(state: PriceAlert.ChangeState): String {
         return state.value
     }
 
     @TypeConverter
-    fun toChangeState(value: String?): PriceAlert.ChangeState?{
+    fun toChangeState(value: String?): PriceAlert.ChangeState? {
         return PriceAlert.ChangeState.valueOf(value)
     }
 
     @TypeConverter
-    fun fromTrendState(state: PriceAlert.TrendState): String{
+    fun fromTrendState(state: PriceAlert.TrendState): String {
         return state.value
     }
 
     @TypeConverter
-    fun toTrendState(value: String?): PriceAlert.TrendState?{
+    fun toTrendState(value: String?): PriceAlert.TrendState? {
         return PriceAlert.TrendState.valueOf(value)
     }
 
     @TypeConverter
-    fun fromStateType(state: SubscriptionJob.StateType): String{
+    fun fromStateType(state: SubscriptionJob.StateType): String {
         return state.value
     }
 
     @TypeConverter
-    fun toStateType(value: String?): SubscriptionJob.StateType?{
+    fun toStateType(value: String?): SubscriptionJob.StateType? {
         return SubscriptionJob.StateType.valueOf(value)
     }
 
     @TypeConverter
-    fun fromJobType(state: SubscriptionJob.JobType): String{
+    fun fromJobType(state: SubscriptionJob.JobType): String {
         return state.value
     }
 
     @TypeConverter
-    fun toJobType(value: String?): SubscriptionJob.JobType?{
+    fun toJobType(value: String?): SubscriptionJob.JobType? {
         return SubscriptionJob.JobType.valueOf(value)
+    }
+
+    @TypeConverter
+    fun fromWCPeerMeta(peerMeta: WCPeerMeta): String {
+        return gson.toJson(peerMeta)
+    }
+
+    @TypeConverter
+    fun toWCPeerMeta(json: String): WCPeerMeta {
+        return gson.fromJson(json, WCPeerMeta::class.java)
+    }
+
+    @TypeConverter
+    fun fromWCSession(session: WCSession): String {
+        return gson.toJson(session)
+    }
+
+    @TypeConverter
+    fun toWCSession(json: String): WCSession {
+        return gson.fromJson(json, WCSession::class.java)
+    }
+
+    @TypeConverter
+    fun fromDate(date: Date): Long {
+        return date.time
+    }
+
+    @TypeConverter
+    fun toDate(timestamp: Long): Date {
+        return Date(timestamp)
     }
 
 }

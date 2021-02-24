@@ -12,7 +12,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.*
 
-@Database(version = 26, exportSchema = false, entities = [
+@Database(version = 27, exportSchema = false, entities = [
     EnabledWallet::class,
     PriceAlert::class,
     AccountRecord::class,
@@ -21,6 +21,7 @@ import io.horizontalsystems.bankwallet.entities.*
     SubscriptionJob::class,
     LogEntry::class,
     FavoriteCoin::class,
+    WalletConnectSession::class,
 ])
 
 @TypeConverters(DatabaseConverters::class)
@@ -34,6 +35,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun subscriptionJobDao(): SubscriptionJobDao
     abstract fun logsDao(): LogsDao
     abstract fun marketFavoritesDao(): MarketFavoritesDao
+    abstract fun walletConnectSessionDao(): WalletConnectSessionDao
 
     companion object {
 
@@ -68,7 +70,8 @@ abstract class AppDatabase : RoomDatabase() {
                             addBirthdayHeightToAccount,
                             addBep2SymbolToRecord,
                             MIGRATION_24_25,
-                            MIGRATION_25_26
+                            MIGRATION_25_26,
+                            MIGRATION_26_27
                     )
                     .build()
         }
@@ -477,6 +480,12 @@ abstract class AppDatabase : RoomDatabase() {
                     WHERE `type` != 'eos'
                 """.trimIndent())
                 database.execSQL("DROP TABLE TempAccountRecord")
+            }
+        }
+
+        private val MIGRATION_26_27: Migration = object : Migration(26, 27) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL( "CREATE TABLE IF NOT EXISTS `WalletConnectSession` (`chainId` INTEGER NOT NULL, `accountId` TEXT NOT NULL, `session` TEXT NOT NULL, `peerId` TEXT NOT NULL, `remotePeerId` TEXT NOT NULL, `remotePeerMeta` TEXT NOT NULL, `isAutoSign` INTEGER NOT NULL, `date` INTEGER NOT NULL, PRIMARY KEY(`remotePeerId`))")
             }
         }
     }
