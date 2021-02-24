@@ -162,14 +162,14 @@ data class MarketViewItem(
                 MarketField.MarketCap -> {
                     val marketCapFormatted = marketItem.marketCap?.let { marketCap ->
                         val (shortenValue, suffix) = App.numberFormatter.shortenValue(marketCap.value)
-                        App.numberFormatter.formatFiat(shortenValue, marketCap.currency.symbol, 0, 2) + suffix
+                        App.numberFormatter.formatFiat(shortenValue, marketCap.currency.symbol, 0, 2) + " $suffix"
                     }
 
                     MarketDataValue.MarketCap(marketCapFormatted ?: App.instance.localizedContext().getString(R.string.NotAvailable))
                 }
                 MarketField.Volume -> {
                     val (shortenValue, suffix) = App.numberFormatter.shortenValue(marketItem.volume.value)
-                    val volumeFormatted = App.numberFormatter.formatFiat(shortenValue, marketItem.volume.currency.symbol, 0, 2) + suffix
+                    val volumeFormatted = App.numberFormatter.formatFiat(shortenValue, marketItem.volume.currency.symbol, 0, 2) + " $suffix"
 
                     MarketDataValue.Volume(volumeFormatted)
                 }

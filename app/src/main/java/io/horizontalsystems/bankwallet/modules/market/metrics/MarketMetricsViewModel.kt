@@ -78,7 +78,7 @@ class MarketMetricsViewModel(
 
     private fun formatFiatShortened(value: BigDecimal, symbol: String): String {
         val (shortenValue, suffix) = App.numberFormatter.shortenValue(value)
-        return App.numberFormatter.formatFiat(shortenValue, symbol, 0, 2) + suffix
+        return App.numberFormatter.formatFiat(shortenValue, symbol, 0, 2) + " $suffix"
     }
 
     private fun convertErrorMessage(it: Throwable): String {
