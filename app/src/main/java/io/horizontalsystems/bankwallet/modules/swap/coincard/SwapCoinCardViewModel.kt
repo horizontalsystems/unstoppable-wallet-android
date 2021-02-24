@@ -7,12 +7,12 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.fiat.AmountTypeSwitchService
 import io.horizontalsystems.bankwallet.core.fiat.AmountTypeSwitchService.AmountType
 import io.horizontalsystems.bankwallet.core.fiat.FiatService
+import io.horizontalsystems.bankwallet.core.providers.StringProvider
 import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.send.SendModule.AmountInfo
-import io.horizontalsystems.bankwallet.core.providers.StringProvider
-import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.modules.swap.SwapModule
 import io.horizontalsystems.bankwallet.modules.swap.SwapViewItemHelper
 import io.reactivex.disposables.CompositeDisposable
@@ -171,7 +171,7 @@ class SwapCoinCardViewModel(
         }
         balanceLiveData.postValue(formattedBalance)
         val balanceNonNull = balance ?: BigDecimal.ZERO
-        maxEnabledLiveData.postValue(balanceNonNull > BigDecimal.ZERO && coin?.type is CoinType.Erc20 && maxButtonSupported)
+        maxEnabledLiveData.postValue(balanceNonNull > BigDecimal.ZERO && coin?.type != CoinType.Ethereum && coin?.type != CoinType.BinanceSmartChain && maxButtonSupported)
     }
 
     private fun syncError(error: Throwable?) {
