@@ -20,7 +20,7 @@ import io.horizontalsystems.bankwallet.modules.keystore.KeyStoreActivity
 import io.horizontalsystems.bankwallet.modules.launcher.LauncherActivity
 import io.horizontalsystems.bankwallet.modules.lockscreen.LockScreenActivity
 import io.horizontalsystems.bankwallet.modules.tor.TorConnectionActivity
-import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectSessionStore
+import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectSessionManager
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.CoreApp
 import io.horizontalsystems.core.ICoreApp
@@ -78,7 +78,8 @@ class App : CoreApp() {
         lateinit var rateAppManager: IRateAppManager
         lateinit var coinRecordStorage: ICoinRecordStorage
         lateinit var coinManager: ICoinManager
-        lateinit var walletConnectSessionStore: WalletConnectSessionStore
+        lateinit var walletConnectSessionStorage: WalletConnectSessionStorage
+        lateinit var walletConnectSessionManager: WalletConnectSessionManager
         lateinit var notificationSubscriptionManager: INotificationSubscriptionManager
         lateinit var termsManager: ITermsManager
         lateinit var zcashBirthdayProvider: ZcashBirthdayProvider
@@ -204,7 +205,8 @@ class App : CoreApp() {
         }
 
         rateAppManager = RateAppManager(walletManager, adapterManager, localStorage)
-        walletConnectSessionStore = WalletConnectSessionStore(accountManager, predefinedAccountTypeManager)
+        walletConnectSessionStorage = WalletConnectSessionStorage(appDatabase)
+        walletConnectSessionManager = WalletConnectSessionManager(walletConnectSessionStorage, accountManager, predefinedAccountTypeManager)
 
         termsManager = TermsManager(localStorage)
 
