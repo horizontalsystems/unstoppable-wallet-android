@@ -438,10 +438,11 @@
     <string name="TransactionInfo_ButtonViewOnExplorerName">View on %s</string>
 
     <string name="StatusInfo_Pending">Pending</string>
+    <string name="StatusInfo_SendingReceiving">Sending/Receiving</string>
     <string name="StatusInfo_Confirmed">Confirmed</string>
     <string name="StatusInfo_Failed">Failed</string>
     <string name="StatusInfo_PendingDescription">Transaction has not been confirmed on the blockchain yet. This step can take anywhere from a few minutes to a few hours depending on the transaction fee. Transactions sent with a very low fee usually get processed within a few days or can be rejected by network i.e. no transaction took place.</string>
-    <string name="StatusInfo_ReceivingDescription">The sender has sent you a transaction but it\'s not final yet. For larger payments it\'s suggested to wait until the transaction status changes to \'completed\'. Usually this should happen within an hour but can take longer sometimes if the sender sent the transaction with a low fee.</string>
+    <string name="StatusInfo_SendingReceivingDescription">Transaction has been included in the blockchain but has not reached finality yet. At this point, it\'s safe to consider transaction completed for smaller payments. For larger payments it\'s recommended to wait until the status changes to completed.</string>
     <string name="StatusInfo_ConfirmedDescription">Transaction is final and irreversible.</string>
     <string name="StatusInfo_FailedDescription">Transaction did not get processed as intended and no token value transfer took place. On Ethereum blockchain failed transactions do consume transaction fees.</string>
 
