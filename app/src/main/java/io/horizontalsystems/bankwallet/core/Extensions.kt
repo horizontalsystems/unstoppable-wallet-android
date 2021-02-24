@@ -36,23 +36,6 @@ fun View.setOnSingleClickListener(l: ((v: View) -> Unit)) {
             })
 }
 
-fun View.fitSystemWindowsAndAdjustResize() =
-        ViewCompat.setOnApplyWindowInsetsListener(this) { v, insets ->
-            this.fitsSystemWindows = true
-            val bottom = insets.getInsets(WindowInsetsCompat.Type.ime()).bottom
-
-            WindowInsetsCompat
-                    .Builder()
-                    .setInsets(
-                            WindowInsetsCompat.Type.systemBars(),
-                            Insets.of(0, 0, 0, bottom)
-                    )
-                    .build()
-                    .apply {
-                        ViewCompat.onApplyWindowInsets(v, this)
-                    }
-        }
-
 // String
 
 fun String.hexToByteArray(): ByteArray {

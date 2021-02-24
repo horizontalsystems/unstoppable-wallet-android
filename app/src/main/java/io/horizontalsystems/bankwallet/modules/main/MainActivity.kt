@@ -16,7 +16,6 @@ class MainActivity : BaseActivity() {
         super.onCreate(null) // null prevents fragments restoration on theme switch
 
         setContentView(R.layout.activity_main)
-        setTransparentStatusBar()
 
         val navHost = supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
 
