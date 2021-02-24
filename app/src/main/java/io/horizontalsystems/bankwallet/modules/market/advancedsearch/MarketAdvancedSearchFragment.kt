@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
+import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
@@ -14,7 +14,9 @@ import kotlinx.android.synthetic.main.fragment_market_search_filter.*
 
 class MarketAdvancedSearchFragment : BaseFragment() {
 
-    private val marketSearchFilterViewModel by viewModels<MarketAdvancedSearchViewModel> { MarketAdvancedSearchModule.Factory() }
+    private val marketAdvancedSearchViewModel by navGraphViewModels<MarketAdvancedSearchViewModel>(R.id.marketAdvancedSearchFragment) {
+        MarketAdvancedSearchModule.Factory()
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_market_search_filter, container, false)
@@ -31,83 +33,116 @@ class MarketAdvancedSearchFragment : BaseFragment() {
             }
         }
 
-        filterCoinList.setValueColored(marketSearchFilterViewModel.coinList.title, marketSearchFilterViewModel.coinList.color)
+        marketAdvancedSearchViewModel.coinListViewItemLiveData.observe(viewLifecycleOwner) {
+            filterCoinList.setValueColored(it.title, it.color)
+        }
         filterCoinList.setOnSingleClickListener {
             showSelectorDialog(
                     title = R.string.Market_Filter_CoinList,
                     subtitleText = "Range",
                     headerIcon = R.drawable.ic_circle_coin_24,
-                    items = marketSearchFilterViewModel.coinLists,
-                    selectedItem = marketSearchFilterViewModel.coinList,
+                    items = marketAdvancedSearchViewModel.coinListsViewItemOptions,
+                    selectedItem = marketAdvancedSearchViewModel.coinListViewItem,
                     itemViewHolderFactory = SelectorItemViewHolderFactory()
             ) {
-                marketSearchFilterViewModel.coinList = it
-                filterCoinList.setValueColored(it.title, it.color)
+                marketAdvancedSearchViewModel.coinListViewItem = it
             }
         }
 
-        filterMarketCap.setValueColored(marketSearchFilterViewModel.marketCap.title, marketSearchFilterViewModel.marketCap.color)
+        marketAdvancedSearchViewModel.marketCapViewItemLiveData.observe(viewLifecycleOwner) {
+            filterMarketCap.setValueColored(it.title, it.color)
+        }
         filterMarketCap.setOnSingleClickListener {
             showSelectorDialog(
                     title = R.string.Market_Filter_MarketCap,
                     subtitleText = "Range",
                     headerIcon = R.drawable.ic_usd_24,
-                    items = marketSearchFilterViewModel.marketCaps,
-                    selectedItem = marketSearchFilterViewModel.marketCap,
+                    items = marketAdvancedSearchViewModel.marketCapViewItemOptions,
+                    selectedItem = marketAdvancedSearchViewModel.marketCapViewItem,
                     itemViewHolderFactory = SelectorItemViewHolderFactory()
             ) {
-                marketSearchFilterViewModel.marketCap = it
-                filterMarketCap.setValueColored(it.title, it.color)
+                marketAdvancedSearchViewModel.marketCapViewItem = it
             }
         }
 
-        filterVolume.setValueColored(marketSearchFilterViewModel.volume.title, marketSearchFilterViewModel.volume.color)
+        marketAdvancedSearchViewModel.volumeViewItemLiveData.observe(viewLifecycleOwner) {
+            filterVolume.setValueColored(it.title, it.color)
+        }
         filterVolume.setOnSingleClickListener {
             showSelectorDialog(
                     title = R.string.Market_Filter_Volume,
                     subtitleText = "Range",
                     headerIcon = R.drawable.ic_chart_24,
-                    items = marketSearchFilterViewModel.volumes,
-                    selectedItem = marketSearchFilterViewModel.volume,
+                    items = marketAdvancedSearchViewModel.volumeViewItemOptions,
+                    selectedItem = marketAdvancedSearchViewModel.volumeViewItem,
                     itemViewHolderFactory = SelectorItemViewHolderFactory()
             ) {
-                marketSearchFilterViewModel.volume = it
-                filterVolume.setValueColored(it.title, it.color)
+                marketAdvancedSearchViewModel.volumeViewItem = it
             }
         }
 
-        filterLiquidity.setValueColored(marketSearchFilterViewModel.liquidity.title, marketSearchFilterViewModel.liquidity.color)
+        marketAdvancedSearchViewModel.liquidityViewItemLiveData.observe(viewLifecycleOwner) {
+            filterLiquidity.setValueColored(it.title, it.color)
+        }
         filterLiquidity.setOnSingleClickListener {
             showSelectorDialog(
                     title = R.string.Market_Filter_Liquidity,
                     subtitleText = "Range",
                     headerIcon = R.drawable.ic_circle_check_24,
-                    items = marketSearchFilterViewModel.liquidities,
-                    selectedItem = marketSearchFilterViewModel.liquidity,
+                    items = marketAdvancedSearchViewModel.liquidityViewItemOptions,
+                    selectedItem = marketAdvancedSearchViewModel.liquidityViewItem,
                     itemViewHolderFactory = SelectorItemViewHolderFactory()
             ) {
-                marketSearchFilterViewModel.liquidity = it
-                filterLiquidity.setValueColored(it.title, it.color)
+                marketAdvancedSearchViewModel.liquidityViewItem = it
             }
         }
 
-        filterPeriod.setValueColored(marketSearchFilterViewModel.period.title, marketSearchFilterViewModel.period.color)
+        marketAdvancedSearchViewModel.periodViewItemLiveData.observe(viewLifecycleOwner) {
+            filterPeriod.setValueColored(it.title, it.color)
+        }
         filterPeriod.setOnSingleClickListener {
             showSelectorDialog(
                     title = R.string.Market_Filter_Period,
                     subtitleText = "Range",
                     headerIcon = R.drawable.ic_circle_clock_24,
-                    items = marketSearchFilterViewModel.periods,
-                    selectedItem = marketSearchFilterViewModel.period,
+                    items = marketAdvancedSearchViewModel.periodViewItemOptions,
+                    selectedItem = marketAdvancedSearchViewModel.periodViewItem,
                     itemViewHolderFactory = SelectorItemViewHolderFactory()
             ) {
-                marketSearchFilterViewModel.period = it
-                filterPeriod.setValueColored(it.title, it.color)
+                marketAdvancedSearchViewModel.periodViewItem = it
             }
         }
 
+        marketAdvancedSearchViewModel.priceChangeViewItemLiveData.observe(viewLifecycleOwner) {
+            filterPriceChange.setValueColored(it.title, it.color)
+        }
+        filterPriceChange.setOnSingleClickListener {
+            showSelectorDialog(
+                    title = R.string.Market_Filter_PriceChange,
+                    subtitleText = "Range",
+                    headerIcon = R.drawable.ic_market_24,
+                    items = marketAdvancedSearchViewModel.priceChangeViewItemOptions,
+                    selectedItem = marketAdvancedSearchViewModel.priceChangeViewItem,
+                    itemViewHolderFactory = SelectorItemViewHolderFactory()
+            ) {
+                marketAdvancedSearchViewModel.priceChangeViewItem = it
+            }
+        }
+
+        reset.setOnSingleClickListener {
+            marketAdvancedSearchViewModel.reset()
+        }
+
         submit.setOnSingleClickListener {
-            marketSearchFilterViewModel.showResults()
+            findNavController().navigate(R.id.marketAdvancedSearchFragment_to_marketAdvancedSearchFragmentResults, null, navOptions())
+        }
+
+        marketAdvancedSearchViewModel.numberOfItemsLiveData.observe(viewLifecycleOwner) {
+            submit.text = getString(R.string.Market_Filter_ShowResults_Counter, it)
+        }
+
+        marketAdvancedSearchViewModel.showResultsEnabledLiveData.observe(viewLifecycleOwner) {
+            submit.isEnabled = it
         }
 
     }

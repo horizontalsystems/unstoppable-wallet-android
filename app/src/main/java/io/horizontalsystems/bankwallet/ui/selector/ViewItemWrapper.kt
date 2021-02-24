@@ -1,5 +1,8 @@
 package io.horizontalsystems.bankwallet.ui.selector
 
+import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.App
+
 class ViewItemWrapper<T>(val title: String, val item: T, val color: Int) {
     override fun equals(other: Any?) = when {
         other !is ViewItemWrapper<*> -> false
@@ -10,5 +13,11 @@ class ViewItemWrapper<T>(val title: String, val item: T, val color: Int) {
         var result = title.hashCode()
         result = 31 * result + (item?.hashCode() ?: 0)
         return result
+    }
+
+    companion object {
+        fun <T>getNone(): ViewItemWrapper<T?> {
+            return ViewItemWrapper(App.instance.getString(R.string.None), null, R.color.grey)
+        }
     }
 }
