@@ -18,7 +18,11 @@ import io.horizontalsystems.bankwallet.ui.extensions.SelectorDialog
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorItem
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
+import kotlinx.android.synthetic.main.fragment_market_advanced_search_results.*
 import kotlinx.android.synthetic.main.fragment_market_favorites.*
+import kotlinx.android.synthetic.main.fragment_market_favorites.coinRatesRecyclerView
+import kotlinx.android.synthetic.main.fragment_market_favorites.marketListHeader
+import kotlinx.android.synthetic.main.fragment_market_favorites.pullToRefresh
 
 class MarketAdvancedSearchResultsFragment : BaseFragment(), MarketListHeaderView.Listener, ViewHolderMarketItem.Listener {
 
@@ -34,6 +38,10 @@ class MarketAdvancedSearchResultsFragment : BaseFragment(), MarketListHeaderView
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        toolbar.setNavigationOnClickListener {
+            findNavController().popBackStack()
+        }
 
         marketListHeader.listener = this
         marketListHeader.setSortingField(marketListViewModel.sortingField)
