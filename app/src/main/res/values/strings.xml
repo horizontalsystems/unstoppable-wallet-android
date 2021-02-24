@@ -174,6 +174,7 @@
 
     <!--Market Search-->
     <string name="Market_AdvancedSearch">Advanced Search</string>
+    <string name="Market_AdvancedSearch_Results">Results</string>
     <string name="Market_Filter_CoinList">Coin List</string>
     <string name="Market_Filter_MarketCap">Market Cap</string>
     <string name="Market_Filter_Volume">Volume</string>
@@ -188,13 +189,14 @@
     <string name="Market_Filter_Top_1000">Top 1000</string>
     <string name="Market_Filter_Top_2500">Top 2500</string>
     <string name="Market_Filter_ShowResults">Show Results</string>
+    <string name="Market_Filter_ShowResults_Counter">Show Results: %d</string>
 
     <string name="Market_Filter_Range_0_1M">&lt; 1M</string>
     <string name="Market_Filter_Range_1M_10M">1M - 10M</string>
     <string name="Market_Filter_Range_10M_100M">10M - 100M</string>
     <string name="Market_Filter_Range_100M_1B">100M - 1BN</string>
     <string name="Market_Filter_Range_1B_10B">1BN - 10BN</string>
-    <string name="Market_Filter_Range_10B_More">&gt; 10M</string>
+    <string name="Market_Filter_Range_10B_More">&gt; 10BN</string>
 
     <string name="Market_Filter_TimePeriod_1D">1 Day</string>
     <string name="Market_Filter_TimePeriod_1W">1 Week</string>
@@ -202,6 +204,15 @@
     <string name="Market_Filter_TimePeriod_3M">3 Months</string>
     <string name="Market_Filter_TimePeriod_6M">6 Months</string>
     <string name="Market_Filter_TimePeriod_1Y">1 Year</string>
+
+    <string name="Market_Filter_PriceChange_Positive_10_plus">&gt; +10%</string>
+    <string name="Market_Filter_PriceChange_Positive_25_plus">&gt; +25%</string>
+    <string name="Market_Filter_PriceChange_Positive_50_plus">&gt; +50%</string>
+    <string name="Market_Filter_PriceChange_Positive_100_plus">&gt; +100%</string>
+    <string name="Market_Filter_PriceChange_Negative_10_minus">&lt; -10%</string>
+    <string name="Market_Filter_PriceChange_Negative_25_minus">&lt; -25%</string>
+    <string name="Market_Filter_PriceChange_Negative_50_minus">&lt; -50%</string>
+    <string name="Market_Filter_PriceChange_Negative_100_minus">&lt; -100%</string>
 
     <!--Balance-->
 

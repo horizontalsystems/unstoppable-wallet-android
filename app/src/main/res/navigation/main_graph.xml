@@ -298,7 +298,23 @@
     <fragment
         android:id="@+id/marketSearchFragment"
         android:name="io.horizontalsystems.bankwallet.modules.market.search.MarketSearchFragment"
-        tools:layout="@layout/fragment_market_search" />
+        tools:layout="@layout/fragment_market_search">
+        <action
+            android:id="@+id/marketSearchFragment_to_marketAdvancedSearchFragment"
+            app:destination="@id/marketAdvancedSearchFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/marketAdvancedSearchFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.market.advancedsearch.MarketAdvancedSearchFragment"
+        tools:layout="@layout/fragment_market_search_filter">
+        <action
+            android:id="@+id/marketAdvancedSearchFragment_to_marketAdvancedSearchFragmentResults"
+            app:destination="@id/marketAdvancedSearchResultsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/marketAdvancedSearchResultsFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.market.advancedsearch.MarketAdvancedSearchResultsFragment"
+        tools:layout="@layout/fragment_market_advanced_search_results" />
     <fragment
         android:id="@+id/feeSpeedInfoFragment"
         android:name="io.horizontalsystems.bankwallet.ui.FeeInfoFragment"
