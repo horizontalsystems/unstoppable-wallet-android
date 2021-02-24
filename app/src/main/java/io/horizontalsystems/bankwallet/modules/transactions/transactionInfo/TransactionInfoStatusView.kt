@@ -39,17 +39,24 @@ open class TransactionInfoStatusView : ConstraintLayout {
             is TransactionStatus.Failed -> {
                 failedText.isVisible = true
             }
+            is TransactionStatus.Pending -> {
+                fillProgress(incoming = incoming)
+                setText(R.string.Transactions_Pending)
+            }
             is TransactionStatus.Completed -> {
                 confirmedText.isVisible = true
             }
             is TransactionStatus.Processing -> {
                 fillProgress(transactionStatus.progress, incoming)
-            }
-            else -> {
-                fillProgress(incoming = incoming)
+                setText(if (incoming) R.string.Transactions_Receiving else R.string.Transactions_Sending)
             }
         }
         invalidate()
+    }
+
+    private fun setText(textRes: Int) {
+        progressText.setText(textRes)
+        progressText.isVisible = true
     }
 
     private fun fillProgress(progress: Double = 0.0, incoming: Boolean) {
@@ -61,8 +68,6 @@ open class TransactionInfoStatusView : ConstraintLayout {
 
         progressBar.isVisible = true
         (progressBar.background as? AnimationDrawable)?.start()
-        progressText.setText(if (incoming) R.string.Transactions_Receiving else R.string.Transactions_Sending)
-        progressText.isVisible = true
     }
 
 }
