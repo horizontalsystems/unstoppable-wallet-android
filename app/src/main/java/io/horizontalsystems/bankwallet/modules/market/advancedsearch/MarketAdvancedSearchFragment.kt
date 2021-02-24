@@ -39,7 +39,7 @@ class MarketAdvancedSearchFragment : BaseFragment() {
         filterCoinList.setOnSingleClickListener {
             showSelectorDialog(
                     title = R.string.Market_Filter_CoinList,
-                    subtitleText = "Range",
+                    subtitleText = "---------",
                     headerIcon = R.drawable.ic_circle_coin_24,
                     items = marketAdvancedSearchViewModel.coinListsViewItemOptions,
                     selectedItem = marketAdvancedSearchViewModel.coinListViewItem,
@@ -55,7 +55,7 @@ class MarketAdvancedSearchFragment : BaseFragment() {
         filterMarketCap.setOnSingleClickListener {
             showSelectorDialog(
                     title = R.string.Market_Filter_MarketCap,
-                    subtitleText = "Range",
+                    subtitleText = "---------",
                     headerIcon = R.drawable.ic_usd_24,
                     items = marketAdvancedSearchViewModel.marketCapViewItemOptions,
                     selectedItem = marketAdvancedSearchViewModel.marketCapViewItem,
@@ -71,7 +71,7 @@ class MarketAdvancedSearchFragment : BaseFragment() {
         filterVolume.setOnSingleClickListener {
             showSelectorDialog(
                     title = R.string.Market_Filter_Volume,
-                    subtitleText = "Range",
+                    subtitleText = "---------",
                     headerIcon = R.drawable.ic_chart_24,
                     items = marketAdvancedSearchViewModel.volumeViewItemOptions,
                     selectedItem = marketAdvancedSearchViewModel.volumeViewItem,
@@ -87,7 +87,7 @@ class MarketAdvancedSearchFragment : BaseFragment() {
         filterLiquidity.setOnSingleClickListener {
             showSelectorDialog(
                     title = R.string.Market_Filter_Liquidity,
-                    subtitleText = "Range",
+                    subtitleText = "---------",
                     headerIcon = R.drawable.ic_circle_check_24,
                     items = marketAdvancedSearchViewModel.liquidityViewItemOptions,
                     selectedItem = marketAdvancedSearchViewModel.liquidityViewItem,
@@ -103,7 +103,7 @@ class MarketAdvancedSearchFragment : BaseFragment() {
         filterPeriod.setOnSingleClickListener {
             showSelectorDialog(
                     title = R.string.Market_Filter_Period,
-                    subtitleText = "Range",
+                    subtitleText = "---------",
                     headerIcon = R.drawable.ic_circle_clock_24,
                     items = marketAdvancedSearchViewModel.periodViewItemOptions,
                     selectedItem = marketAdvancedSearchViewModel.periodViewItem,
@@ -119,7 +119,7 @@ class MarketAdvancedSearchFragment : BaseFragment() {
         filterPriceChange.setOnSingleClickListener {
             showSelectorDialog(
                     title = R.string.Market_Filter_PriceChange,
-                    subtitleText = "Range",
+                    subtitleText = "---------",
                     headerIcon = R.drawable.ic_market_24,
                     items = marketAdvancedSearchViewModel.priceChangeViewItemOptions,
                     selectedItem = marketAdvancedSearchViewModel.priceChangeViewItem,
