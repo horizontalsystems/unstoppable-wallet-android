@@ -34,9 +34,6 @@ abstract class SettingsViewBase @JvmOverloads constructor(context: Context, attr
         findViewById<View>(R.id.frame)?.let {
             it.setBackgroundResource(listPosition.getBackground())
         }
-        findViewById<View>(R.id.bottomBorder)?.let {
-            it.isVisible = listPosition == ListPosition.First || listPosition == ListPosition.Middle
-        }
     }
 
     override fun onAttachedToWindow() {

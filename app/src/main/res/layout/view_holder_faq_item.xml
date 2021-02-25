@@ -20,12 +20,4 @@
         android:textColor="@color/leah"
         tools:text="What is the Unstoppable Wallet? And what should I do about that?" />
 
-    <View
-        android:id="@+id/bottomBorder"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_gravity="bottom"
-        android:background="@color/steel_10"
-        android:visibility="gone" />
-
 </FrameLayout>

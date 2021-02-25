@@ -115,6 +115,5 @@ class ViewHolderFaq(override val containerView: View, listener: FaqListAdapter.L
         this.faqItem = item
         faqTitleText.text = item.faq.title
         containerView.setBackgroundResource(item.listPosition.getBackground())
-        bottomBorder.isVisible = item.listPosition == ListPosition.First || item.listPosition == ListPosition.Middle
     }
 }

@@ -105,14 +105,12 @@ class ViewHolderCurrency(override val containerView: View) : RecyclerView.ViewHo
         val title = containerView.findViewById<TextView>(R.id.title)
         val subtitle = containerView.findViewById<TextView>(R.id.subtitle)
         val checkmarkIcon = containerView.findViewById<ImageView>(R.id.checkmarkIcon)
-        val bottomBorder = containerView.findViewById<View>(R.id.bottomBorder)
 
         containerView.setOnSingleClickListener { onClick.invoke() }
         image.setImageResource(LayoutHelper.getCurrencyDrawableResource(containerView.context, item.code.toLowerCase()))
         title.text = item.code
         subtitle.text = item.symbol
         checkmarkIcon.isVisible = item.selected
-        bottomBorder.isVisible = item.listPosition == ListPosition.First || item.listPosition == ListPosition.Middle
         containerView.setBackgroundResource(item.listPosition.getBackground())
     }
 

@@ -98,16 +98,6 @@
         app:layout_constraintTop_toTopOf="@+id/backgroundView" />
 
     <View
-        android:id="@+id/bottomBorder"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:visibility="invisible"
-        android:background="@color/steel_10"
-        app:layout_constraintEnd_toEndOf="@+id/backgroundView"
-        app:layout_constraintStart_toStartOf="@+id/backgroundView"
-        app:layout_constraintBottom_toBottomOf="@+id/backgroundView" />
-
-    <View
         android:id="@+id/dividerView"
         android:layout_width="0dp"
         android:layout_height="32dp"
