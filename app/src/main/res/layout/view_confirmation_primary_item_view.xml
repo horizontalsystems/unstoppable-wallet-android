@@ -19,8 +19,8 @@
     <View
         android:id="@+id/border1"
         android:layout_width="0dp"
-        android:layout_height="0.5dp"
-        android:background="@color/steel_20"
+        android:layout_height="1dp"
+        android:background="@color/steel_10"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -75,9 +75,9 @@
     <View
         android:id="@+id/border2"
         android:layout_width="0dp"
-        android:layout_height="0.5dp"
+        android:layout_height="1dp"
         android:layout_marginTop="12dp"
-        android:background="@color/steel_20"
+        android:background="@color/steel_10"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/secondaryAmount" />
@@ -114,10 +114,10 @@
     <View
         android:id="@+id/borderDomain"
         android:layout_width="0dp"
-        android:layout_height="0.5dp"
+        android:layout_height="1dp"
         android:layout_marginTop="8dp"
-        android:background="@color/steel_20"
         android:visibility="gone"
+        android:background="@color/steel_10"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/domainValue" />
@@ -154,10 +154,10 @@
     <View
         android:id="@+id/borderMemo"
         android:layout_width="0dp"
-        android:layout_height="0.5dp"
+        android:layout_height="1dp"
         android:layout_marginTop="8dp"
-        android:background="@color/steel_20"
         android:visibility="invisible"
+        android:background="@color/steel_10"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/receiverValue" />
@@ -211,8 +211,8 @@
     <View
         android:id="@+id/border4"
         android:layout_width="0dp"
-        android:layout_height="0.5dp"
-        android:background="@color/steel_20"
+        android:layout_height="1dp"
+        android:background="@color/steel_10"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/memoLayout" />

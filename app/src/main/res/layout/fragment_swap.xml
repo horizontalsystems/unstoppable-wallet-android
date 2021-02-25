@@ -98,8 +98,8 @@
             <View
                 android:id="@+id/settingsLineTop"
                 android:layout_width="0dp"
-                android:layout_height="0.5dp"
-                android:background="@color/steel_20"
+                android:layout_height="1dp"
+                android:background="@color/steel_10"
                 app:layout_constraintBottom_toTopOf="@+id/advancedSettings"
                 app:layout_constraintEnd_toEndOf="@+id/endBorder"
                 app:layout_constraintStart_toStartOf="@+id/startBorder" />
@@ -126,9 +126,9 @@
             <View
                 android:id="@+id/settingsLineBottom"
                 android:layout_width="0dp"
-                android:layout_height="0.5dp"
+                android:layout_height="1dp"
                 android:layout_marginTop="12dp"
-                android:background="@color/steel_20"
+                android:background="@color/steel_10"
                 app:layout_constraintBottom_toBottomOf="@+id/advancedSettings"
                 app:layout_constraintEnd_toEndOf="@+id/endBorder"
                 app:layout_constraintStart_toStartOf="@+id/startBorder" />

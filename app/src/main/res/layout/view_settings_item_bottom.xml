@@ -22,9 +22,9 @@
     <View
         android:id="@+id/lineView"
         android:layout_width="0dp"
-        android:layout_height="0.5dp"
+        android:layout_height="1dp"
         android:layout_marginTop="4dp"
-        android:background="@color/steel_20"
+        android:background="@color/steel_10"
         app:layout_constraintEnd_toEndOf="@+id/appName"
         app:layout_constraintStart_toStartOf="@+id/appName"
         app:layout_constraintTop_toBottomOf="@+id/appName" />
