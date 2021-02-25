@@ -15,7 +15,10 @@ interface WalletConnectSessionDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(session: WalletConnectSession)
 
-    @Query("DELETE FROM WalletConnectSession")
-    fun deleteAll()
+    @Query("DELETE FROM WalletConnectSession WHERE accountId NOT IN (:accountIds)")
+    fun deleteAllExcept(accountIds: List<String>)
+
+    @Query("DELETE FROM WalletConnectSession WHERE remotePeerId = :peerId")
+    fun deleteByPeerId(peerId: String)
 
 }

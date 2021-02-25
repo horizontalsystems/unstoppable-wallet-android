@@ -13,9 +13,9 @@ class WalletConnectViewModel(
 
     val initialScreen: InitialScreen
         get() = when {
-            !service.isEthereumKitReady -> {
-                InitialScreen.NoEthereumKit
-            }
+//            !service.isEthereumKitReady -> {
+//                InitialScreen.NoEthereumKit
+//            }
             service.state == WalletConnectService.State.Idle -> {
                 InitialScreen.ScanQrCode
             }

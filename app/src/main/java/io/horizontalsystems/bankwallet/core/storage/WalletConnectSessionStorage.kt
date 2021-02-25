@@ -16,8 +16,12 @@ class WalletConnectSessionStorage(appDatabase: AppDatabase) {
         dao.insert(session)
     }
 
-    fun deleteAll() {
-        dao.deleteAll()
+    fun deleteSessionsByPeerId(peerId: String) {
+        dao.deleteByPeerId(peerId)
+    }
+
+    fun deleteSessionsExcept(accountIds: List<String> = listOf()) {
+        dao.deleteAllExcept(accountIds)
     }
 
 }

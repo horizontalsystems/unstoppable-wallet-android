@@ -16,7 +16,7 @@ object MainSettingsModule {
         fun setAppVersion(appVersion: String)
         fun setTermsAccepted(termsAccepted: Boolean)
         fun setPinIsSet(pinSet: Boolean)
-        fun setCurrentWalletConnectPeer(peer: String?)
+        fun setWalletConnectSessionCount(count: String?)
     }
 
     interface IMainSettingsViewDelegate {
@@ -45,7 +45,7 @@ object MainSettingsModule {
         val companyTelegramLink: String
         val companyRedditLink: String
         val allBackedUp: Boolean
-        val walletConnectPeerMeta: WCPeerMeta?
+        val walletConnectSessionCount: Int
         val currentLanguageDisplayName: String
         val baseCurrency: Currency
         val appVersion: String
@@ -61,7 +61,7 @@ object MainSettingsModule {
         fun didUpdateBaseCurrency()
         fun didUpdateTermsAccepted(allAccepted: Boolean)
         fun didUpdatePinSet()
-        fun didUpdateWalletConnect(peerMeta: WCPeerMeta?)
+        fun didUpdateWalletConnectSessionCount(count: Int)
     }
 
     interface IMainSettingsRouter {

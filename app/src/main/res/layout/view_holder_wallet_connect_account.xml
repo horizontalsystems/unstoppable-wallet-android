@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="19dp"
+    android:layout_marginTop="32dp"
+    android:orientation="vertical">
+
+    <View
+        android:id="@+id/settingsLineTop"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/steel_10" />
+
+    <TextView
+        android:id="@+id/accountTextView"
+        style="@style/Body"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="9dp"
+        android:layout_weight="1"
+        android:textColor="@color/oz"
+        tools:text="Standard" />
+
+    <TextView
+        android:id="@+id/addressTextView"
+        style="@style/Subhead2"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="4dp"
+        android:layout_weight="1"
+        android:textColor="@color/grey"
+        tools:text="0x1f9840a85d5af5bf1d1762f925bdaddc4201f984" />
+
+</LinearLayout>

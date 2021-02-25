@@ -309,10 +309,11 @@
     <string name="WalletConnect_Ready_Hint">You can go to the browser. Do not close this page while interacting in the browser.</string>
     <string name="WalletConnect_Error_InvalidUrl">Invalid URL Address</string>
     <string name="WalletConnect_Requirement">Requirement</string>
-    <string name="WalletConnect_RequirementDescription">You need to add Ethereum or some ERC20 coin to balance tab in order to use WalletConnet.</string>
+    <string name="WalletConnect_RequirementDescription">You need to add Ethereum or some ERC20 coin to balance tab in order to use WalletConnect.</string>
     <string name="WalletConnect_Status_Offline">Offline</string>
     <string name="WalletConnect_Status_Online">Online</string>
     <string name="WalletConnect_Status_Connecting">Connecting…</string>
+    <string name="WalletConnect_NewConnect">New Connect</string>
 
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Error_InsufficientBalance">Transaction requires %s for sending</string>

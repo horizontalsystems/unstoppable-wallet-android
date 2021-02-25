@@ -9,11 +9,22 @@ import android.view.View
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.views.helpers.LayoutHelper
-import java.lang.Exception
 
 class PicassoRoundedImageView(context: Context, attributeSet: AttributeSet?) : View(context, attributeSet), Target {
     constructor(context: Context) : this(context, null)
+
+    private val radius: Int
+
+    init {
+        val attributes = context.obtainStyledAttributes(attributeSet, R.styleable.PicassoRoundedImageView)
+        try {
+            radius = attributes.getInt(R.styleable.PicassoRoundedImageView_radius, DEFAULT_RADIUS)
+        } finally {
+            attributes.recycle()
+        }
+    }
 
     private var drawable: Drawable? = null
         set(value) {
@@ -46,7 +57,7 @@ class PicassoRoundedImageView(context: Context, attributeSet: AttributeSet?) : V
 
     override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
         val roundedDrawable = RoundedBitmapDrawableFactory.create(resources, bitmap)
-        roundedDrawable.cornerRadius = LayoutHelper.dp(DEFAULT_RADIUS.toFloat(), context).toFloat()
+        roundedDrawable.cornerRadius = LayoutHelper.dp(radius.toFloat(), context).toFloat()
         drawable = roundedDrawable
     }
 

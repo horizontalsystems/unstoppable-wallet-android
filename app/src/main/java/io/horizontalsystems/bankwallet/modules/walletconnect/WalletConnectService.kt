@@ -4,34 +4,59 @@ import com.trustwallet.walletconnect.models.WCPeerMeta
 import com.trustwallet.walletconnect.models.ethereum.WCEthereumTransaction
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
-import io.horizontalsystems.bankwallet.core.managers.EthereumKitManager
 import io.horizontalsystems.bankwallet.core.managers.WalletConnectInteractor
+import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.WalletConnectSession
 import io.horizontalsystems.ethereumkit.core.EthereumKit
+import io.reactivex.BackpressureStrategy
+import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 
 class WalletConnectService(
-        ethKitManager: EthereumKitManager,
+        remotePeerId: String?,
+        private val manager: WalletConnectManager,
         private val sessionManager: WalletConnectSessionManager,
         private val connectivityManager: ConnectivityManager
 ) : WalletConnectInteractor.Delegate, Clearable {
 
     sealed class State {
         object Idle : State()
+        class Invalid(val error: Throwable) : State()
         object WaitingForApproveSession : State()
         object Ready : State()
         object Killed : State()
     }
 
-    data class PeerData(val peerId: String, val peerMeta: WCPeerMeta)
+    data class SessionData(
+            val peerId: String,
+            val peerMeta: WCPeerMeta,
+            val account: Account,
+            val evmKit: EthereumKit
+    )
 
-    private val ethereumKit: EthereumKit? = ethKitManager.evmKit
+    open class SessionError : Throwable() {
+        object InvalidUrl : SessionError()
+        object UnsupportedChainId : SessionError()
+        object NoSuitableAccount : SessionError()
+    }
+
     private var interactor: WalletConnectInteractor? = null
-    private var remotePeerData: PeerData? = null
+    private val pendingRequests = linkedMapOf<Long, WalletConnectRequest>()
+    private val disposable = CompositeDisposable()
+    private var requestIsProcessing = false
+
+    private var sessionData: SessionData? = null
     val remotePeerMeta: WCPeerMeta?
-        get() = remotePeerData?.peerMeta
+        get() = sessionData?.peerMeta
+
+    val evmKit: EthereumKit?
+        get() = sessionData?.evmKit
+
+    private val stateSubject = PublishSubject.create<State>()
+    val stateObservable: Flowable<State>
+        get() = stateSubject.toFlowable(BackpressureStrategy.BUFFER)
 
     var state: State = State.Idle
         private set(value) {
@@ -39,33 +64,23 @@ class WalletConnectService(
             stateSubject.onNext(value)
         }
 
+    private val connectionStateSubject = PublishSubject.create<WalletConnectInteractor.State>()
+    val connectionStateObservable: Flowable<WalletConnectInteractor.State>
+        get() = connectionStateSubject.toFlowable(BackpressureStrategy.BUFFER)
+
     val connectionState: WalletConnectInteractor.State
         get() = interactor?.state ?: WalletConnectInteractor.State.Disconnected
 
-    val stateSubject = PublishSubject.create<State>()
-    val connectionStateSubject = PublishSubject.create<WalletConnectInteractor.State>()
-    val requestSubject = PublishSubject.create<WalletConnectRequest>()
-
-    val isEthereumKitReady: Boolean
-        get() = ethereumKit != null
-
-    private val pendingRequests = linkedMapOf<Long, WalletConnectRequest>()
-    private val disposable = CompositeDisposable()
-    private var requestIsProcessing = false
+    private val requestSubject = PublishSubject.create<WalletConnectRequest>()
+    val requestObservable: Flowable<WalletConnectRequest>
+        get() = requestSubject.toFlowable(BackpressureStrategy.BUFFER)
 
     init {
-        val sessionStoreItem = sessionManager.storedSession
-
-        if (sessionStoreItem != null) {
-            remotePeerData = PeerData(sessionStoreItem.remotePeerId, sessionStoreItem.remotePeerMeta)
-
-            interactor = WalletConnectInteractor(sessionStoreItem.session, sessionStoreItem.peerId, sessionStoreItem.remotePeerId)
-            interactor?.delegate = this
-            interactor?.connect()
-
-            state = State.Ready
-        } else {
-            state = State.Idle
+        remotePeerId?.let {
+            val session = sessionManager.sessions.firstOrNull { session -> session.remotePeerId == remotePeerId }
+            if (session != null) {
+                restoreSession(session)
+            }
         }
 
         connectivityManager.networkAvailabilitySignal
@@ -81,6 +96,26 @@ class WalletConnectService(
                 }
     }
 
+    private fun restoreSession(session: WalletConnectSession) {
+        try {
+            initSession(session.remotePeerId, session.remotePeerMeta, session.chainId)
+
+            interactor = WalletConnectInteractor(session.session, session.peerId, session.remotePeerId)
+            interactor?.delegate = this
+            interactor?.connect()
+
+            state = State.Ready
+        } catch (error: Throwable) {
+            state = State.Invalid(error)
+        }
+    }
+
+    private fun initSession(peerId: String, peerMeta: WCPeerMeta, chainId: Int) {
+        val account = manager.currentAccount(chainId) ?: throw SessionError.NoSuitableAccount
+        val evmKit = manager.evmKit(chainId, account) ?: throw SessionError.UnsupportedChainId
+
+        sessionData = SessionData(peerId, peerMeta, account, evmKit)
+    }
 
     fun connect(uri: String) {
         interactor = WalletConnectInteractor(uri)
@@ -94,14 +129,22 @@ class WalletConnectService(
     }
 
     fun approveSession() {
-        ethereumKit?.let { ethereumKit ->
+        sessionData?.let { sessionData ->
             interactor?.let { interactor ->
-                val chainId = ethereumKit.networkType.getNetwork().id
-                interactor.approveSession(ethereumKit.receiveAddress.eip55, chainId)
+                val evmKit = sessionData.evmKit
+                val chainId = evmKit.networkType.getNetwork().id
+                interactor.approveSession(evmKit.receiveAddress.eip55, chainId)
 
-                remotePeerData?.let { peerData ->
-                    sessionManager.store(WalletConnectSession(chainId, "", interactor.session, interactor.peerId, peerData.peerId, peerData.peerMeta))
-                }
+                val session = WalletConnectSession(
+                        chainId = chainId,
+                        accountId = sessionData.account.id,
+                        session = interactor.session,
+                        peerId = interactor.peerId,
+                        remotePeerId = sessionData.peerId,
+                        remotePeerMeta = sessionData.peerMeta
+                )
+
+                sessionManager.save(session)
 
                 state = State.Ready
             }
@@ -110,7 +153,7 @@ class WalletConnectService(
 
     fun rejectSession() {
         interactor?.let {
-            it.rejectSession()
+            it.rejectSession("Session Rejected by User")
 
             state = State.Killed
         }
@@ -145,15 +188,25 @@ class WalletConnectService(
     }
 
     override fun didKillSession() {
-        sessionManager.clear()
+        sessionData?.let {
+            sessionManager.deleteSession(it.peerId)
+        }
 
         state = State.Killed
     }
 
-    override fun didRequestSession(remotePeerId: String, remotePeerMeta: WCPeerMeta) {
-        this.remotePeerData = PeerData(remotePeerId, remotePeerMeta)
+    override fun didRequestSession(remotePeerId: String, remotePeerMeta: WCPeerMeta, chainId: Int?) {
+        state = try {
+            if (chainId == null) throw SessionError.UnsupportedChainId
 
-        state = State.WaitingForApproveSession
+            initSession(remotePeerId, remotePeerMeta, chainId)
+
+            State.WaitingForApproveSession
+        } catch (error: Throwable) {
+            interactor?.rejectSession("Session rejected: ${error.message}")
+
+            State.Invalid(error)
+        }
     }
 
     override fun didRequestSendEthTransaction(id: Long, transaction: WCEthereumTransaction) {

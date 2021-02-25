@@ -59,8 +59,8 @@
             app:popEnterAnim="@android:anim/fade_in"
             app:popExitAnim="@anim/slide_to_bottom_long" />
         <action
-            android:id="@+id/mainFragment_to_walletConnectMainFragment"
-            app:destination="@id/walletConnectMainFragment" />
+            android:id="@+id/mainFragment_to_walletConnectListFragment"
+            app:destination="@id/walletConnectListFragment" />
         <action
             android:id="@+id/mainFragment_to_transactionInfoDialog"
             app:destination="@id/transactionInfoDialog" />
@@ -261,6 +261,14 @@
         android:id="@+id/uniswapInfoFragment"
         android:name="io.horizontalsystems.bankwallet.modules.swap.UniswapInfoFragment"
         tools:layout="@layout/fragment_swap_info" />
+    <fragment
+        android:id="@+id/walletConnectListFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListFragment"
+        tools:layout="@layout/fragment_wallet_connect_list" >
+        <action
+            android:id="@+id/walletConnectListFragment_to_walletConnectMainFragment"
+            app:destination="@id/walletConnectMainFragment" />
+    </fragment>
     <fragment
         android:id="@+id/walletConnectMainFragment"
         android:name="io.horizontalsystems.bankwallet.modules.walletconnect.main.WalletConnectMainFragment"

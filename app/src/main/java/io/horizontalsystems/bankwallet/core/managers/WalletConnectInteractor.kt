@@ -12,11 +12,15 @@ import okhttp3.WebSocket
 import okhttp3.WebSocketListener
 import java.util.*
 
-class WalletConnectInteractor(val session: WCSession, val peerId: String = UUID.randomUUID().toString(), private val remotePeerId: String? = null) {
+class WalletConnectInteractor(
+        val session: WCSession,
+        val peerId: String = UUID.randomUUID().toString(),
+        private val remotePeerId: String? = null
+) {
 
     interface Delegate {
         fun didUpdateState(state: State)
-        fun didRequestSession(remotePeerId: String, remotePeerMeta: WCPeerMeta)
+        fun didRequestSession(remotePeerId: String, remotePeerMeta: WCPeerMeta, chainId: Int?)
         fun didKillSession()
         fun didRequestSendEthTransaction(id: Long, transaction: WCEthereumTransaction)
     }
@@ -50,8 +54,8 @@ class WalletConnectInteractor(val session: WCSession, val peerId: String = UUID.
             }
         })
 
-        client.onSessionRequest = { _: Long, peer: WCPeerMeta ->
-            client.remotePeerId?.let { delegate?.didRequestSession(it, peer) }
+        client.onSessionRequest = { _: Long, peerMeta: WCPeerMeta ->
+            client.remotePeerId?.let { delegate?.didRequestSession(it, peerMeta, client.chainId?.toIntOrNull()) }
         }
 
         client.onSessionUpdate = { _: Long, update: WCSessionUpdate ->
@@ -94,8 +98,8 @@ class WalletConnectInteractor(val session: WCSession, val peerId: String = UUID.
         client.approveSession(listOf(address), chainId)
     }
 
-    fun rejectSession() {
-        client.rejectSession()
+    fun rejectSession(message: String) {
+        client.rejectSession(message)
     }
 
     fun killSession() {
