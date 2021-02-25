@@ -39,6 +39,7 @@ class BottomSheetSelectorDialog(
 
         textWarning.text = warning
         textWarning.isVisible = warning != null
+        divider.isVisible = warning != null
 
         rvItems.adapter = itemsAdapter
 
