@@ -14,6 +14,7 @@ object AppLayoutHelper {
             coinDrawableResId != null -> coinDrawableResId
             coinType is CoinType.Erc20 -> R.drawable.ic_erc20
             coinType is CoinType.Binance -> R.drawable.ic_bep2
+            coinType is CoinType.Bep20 -> R.drawable.ic_bep20
             else -> null
         }
 
