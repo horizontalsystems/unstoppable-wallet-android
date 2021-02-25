@@ -21,7 +21,6 @@ class SettingItemWithCheckmark @JvmOverloads constructor(context: Context, attrs
         checkMark.isVisible = checked
         setOnClickListener { onClick.invoke() }
         backgroundView.setBackgroundResource(listPosition.getBackground())
-        bottomBorderView.isVisible = listPosition == ListPosition.Middle || listPosition == ListPosition.First
     }
 
 }

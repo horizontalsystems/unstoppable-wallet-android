@@ -121,7 +121,6 @@ class CoinWithSwitchViewHolder(
         coinSubtitle.text = coin.code
         coinTypeLabel.text = coin.type.label
         coinTypeLabel.isVisible = coin.type.label != null
-        bottomBorder.isVisible = listPosition == ListPosition.First || listPosition == ListPosition.Middle
         dividerView.isVisible = listPosition == ListPosition.Last || listPosition == ListPosition.Single
     }
 }

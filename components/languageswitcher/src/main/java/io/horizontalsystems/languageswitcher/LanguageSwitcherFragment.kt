@@ -115,7 +115,6 @@ class ViewHolderLanguageItem(override val containerView: View) : RecyclerView.Vi
         val title = containerView.findViewById<TextView>(R.id.title)
         val subtitle = containerView.findViewById<TextView>(R.id.subtitle)
         val checkmarkIcon = containerView.findViewById<ImageView>(R.id.checkmarkIcon)
-        val bottomBorder = containerView.findViewById<View>(R.id.bottomBorder)
 
         containerView.setOnSingleClickListener { onClick.invoke() }
         image.setImageResource(getLangDrawableResource(containerView.context, item.language))
@@ -123,7 +122,6 @@ class ViewHolderLanguageItem(override val containerView: View) : RecyclerView.Vi
         title.text = item.name
         subtitle.text = item.nativeName
         checkmarkIcon.isVisible = item.current
-        bottomBorder.isVisible = item.listPosition == ListPosition.First || item.listPosition == ListPosition.Middle
         containerView.setBackgroundResource(item.listPosition.getBackground())
     }
 
