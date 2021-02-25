@@ -30,8 +30,8 @@ class MainSettingsInteractor(
             delegate?.didUpdateAllBackedUp(it)
         })
 
-        disposables.add(walletConnectSessionManager.storePeerMetaSignal.subscribe {
-            delegate?.didUpdateWalletConnect(walletConnectSessionManager.storedPeerMeta)
+        disposables.add(walletConnectSessionManager.sessionsObservable.subscribe {
+            delegate?.didUpdateWalletConnectSessionCount(it.count())
         })
 
         disposables.add(currencyManager.baseCurrencyUpdatedSignal.subscribe {
@@ -65,8 +65,8 @@ class MainSettingsInteractor(
     override val allBackedUp: Boolean
         get() = backupManager.allBackedUp
 
-    override val walletConnectPeerMeta: WCPeerMeta?
-        get() = walletConnectSessionManager.storedPeerMeta
+    override val walletConnectSessionCount: Int
+        get() = walletConnectSessionManager.sessions.count()
 
     override val currentLanguageDisplayName: String
         get() = languageManager.currentLanguageName

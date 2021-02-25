@@ -24,7 +24,11 @@ class MainSettingsPresenter(
         view.setAppVersion(interactor.appVersion)
         view.setTermsAccepted(interactor.termsAccepted)
         view.setPinIsSet(interactor.isPinSet)
-        view.setCurrentWalletConnectPeer(interactor.walletConnectPeerMeta?.name)
+        setWalletConnectSessionCount(interactor.walletConnectSessionCount)
+    }
+
+    private fun setWalletConnectSessionCount(count: Int) {
+        view.setWalletConnectSessionCount(if (count > 0) "$count" else null)
     }
 
     override fun didTapManageKeys() {
@@ -106,8 +110,8 @@ class MainSettingsPresenter(
         view.setPinIsSet(interactor.isPinSet)
     }
 
-    override fun didUpdateWalletConnect(peerMeta: WCPeerMeta?) {
-        view.setCurrentWalletConnectPeer(peerMeta?.name)
+    override fun didUpdateWalletConnectSessionCount(count: Int) {
+        setWalletConnectSessionCount(count)
     }
 
     // ViewModel

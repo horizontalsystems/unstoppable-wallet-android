@@ -31,7 +31,9 @@ import kotlinx.android.synthetic.main.fragment_wallet_connect_main.*
 
 class WalletConnectMainFragment : BaseFragment() {
 
-    private val baseViewModel by navGraphViewModels<WalletConnectViewModel>(R.id.walletConnectMainFragment) { WalletConnectModule.Factory() }
+    private val baseViewModel by navGraphViewModels<WalletConnectViewModel>(R.id.walletConnectMainFragment) {
+        WalletConnectModule.Factory(arguments?.getString(WalletConnectModule.REMOTE_PEER_ID_KEY))
+    }
     private val viewModelScan by viewModels<WalletConnectScanQrViewModel> { WalletConnectScanQrModule.Factory(baseViewModel.service) }
     private val viewModel by viewModels<WalletConnectMainViewModel> { WalletConnectMainModule.Factory(baseViewModel.service) }
     private var closeMenuItem: MenuItem? = null
@@ -71,7 +73,8 @@ class WalletConnectMainFragment : BaseFragment() {
         view.isVisible = false
 
         when (baseViewModel.initialScreen) {
-            WalletConnectViewModel.InitialScreen.NoEthereumKit -> { }
+            WalletConnectViewModel.InitialScreen.NoEthereumKit -> {
+            }
             WalletConnectViewModel.InitialScreen.ScanQrCode -> {
                 val intent = QRScannerActivity.getIntentForFragment(this)
                 qrScannerResultLauncher.launch(intent)

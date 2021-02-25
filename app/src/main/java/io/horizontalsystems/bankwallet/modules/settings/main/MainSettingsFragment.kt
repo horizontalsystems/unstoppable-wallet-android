@@ -8,14 +8,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.main.MainActivity
 import io.horizontalsystems.bankwallet.modules.main.MainModule
-import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectModule
+import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListModule
 import io.horizontalsystems.core.CoreApp
 import io.horizontalsystems.core.getNavigationResult
 import io.horizontalsystems.languageswitcher.LanguageSettingsFragment
@@ -109,32 +108,32 @@ class MainSettingsFragment : BaseFragment() {
         settingsRecyclerView.setHasFixedSize(true)
         settingsRecyclerView.setItemAnimator(null)
 
-        presenterView.baseCurrency.observe(viewLifecycleOwner, Observer { currency ->
+        presenterView.baseCurrency.observe(viewLifecycleOwner, { currency ->
             baseCurrency.value = currency
             mainSettingsAdapter.notifyChanged(baseCurrency)
         })
 
-        presenterView.backedUp.observe(viewLifecycleOwner, Observer { wordListBackedUp ->
+        presenterView.backedUp.observe(viewLifecycleOwner, { wordListBackedUp ->
             manageKeys.attention = !wordListBackedUp
             mainSettingsAdapter.notifyChanged(manageKeys)
         })
 
-        presenterView.pinSet.observe(viewLifecycleOwner, Observer { pinSet ->
+        presenterView.pinSet.observe(viewLifecycleOwner, { pinSet ->
             privacySettings.attention = !pinSet
             mainSettingsAdapter.notifyChanged(privacySettings)
         })
 
-        presenterView.language.observe(viewLifecycleOwner, Observer { languageCode ->
+        presenterView.language.observe(viewLifecycleOwner, { languageCode ->
             language.value = languageCode
             mainSettingsAdapter.notifyChanged(language)
         })
 
-        presenterView.lightMode.observe(viewLifecycleOwner, Observer { isChecked ->
+        presenterView.lightMode.observe(viewLifecycleOwner, { isChecked ->
             lightMode.isChecked = isChecked
             mainSettingsAdapter.notifyChanged(lightMode)
         })
 
-        presenterView.appVersion.observe(viewLifecycleOwner, Observer { version ->
+        presenterView.appVersion.observe(viewLifecycleOwner, { version ->
             var appVersion = getString(R.string.Settings_InfoTitleWithVersion, version)
             if (getString(R.string.is_release) == "false") {
                 appVersion = "$appVersion (${BuildConfig.VERSION_CODE})"
@@ -144,12 +143,12 @@ class MainSettingsFragment : BaseFragment() {
             mainSettingsAdapter.notifyChanged(settingsBottom)
         })
 
-        presenterView.termsAccepted.observe(viewLifecycleOwner, Observer { termsAccepted ->
+        presenterView.termsAccepted.observe(viewLifecycleOwner, { termsAccepted ->
             aboutApp.attention = !termsAccepted
             mainSettingsAdapter.notifyChanged(aboutApp)
         })
 
-        presenterView.walletConnectPeer.observe(viewLifecycleOwner, Observer { currency ->
+        presenterView.walletConnectSessionCount.observe(viewLifecycleOwner, { currency ->
             walletConnect.value = currency
             mainSettingsAdapter.notifyChanged(walletConnect)
         })
@@ -168,49 +167,49 @@ class MainSettingsFragment : BaseFragment() {
     }
 
     private fun subscribeToRouterEvents(router: MainSettingsRouter) {
-        router.showManageKeysLiveEvent.observe(this, Observer {
+        router.showManageKeysLiveEvent.observe(this, {
             findNavController().navigate(R.id.mainFragment_to_manageKeysFragment, null, navOptions())
         })
 
-        router.showBaseCurrencySettingsLiveEvent.observe(viewLifecycleOwner, Observer {
+        router.showBaseCurrencySettingsLiveEvent.observe(viewLifecycleOwner, {
             findNavController().navigate(R.id.mainFragment_to_currencySwitcherFragment, null, navOptions())
         })
 
-        router.showLanguageSettingsLiveEvent.observe(viewLifecycleOwner, Observer {
+        router.showLanguageSettingsLiveEvent.observe(viewLifecycleOwner, {
             findNavController().navigate(R.id.mainFragment_to_languageSettingsFragment, null, navOptions())
         })
 
-        router.showAboutLiveEvent.observe(viewLifecycleOwner, Observer {
+        router.showAboutLiveEvent.observe(viewLifecycleOwner, {
             findNavController().navigate(R.id.mainFragment_to_aboutAppFragment, null, navOptions())
         })
 
-        router.showNotificationsLiveEvent.observe(viewLifecycleOwner, Observer {
+        router.showNotificationsLiveEvent.observe(viewLifecycleOwner, {
             findNavController().navigate(R.id.mainFragment_to_notificationsFragment, null, navOptions())
         })
 
-        router.openFaqLiveEvent.observe(viewLifecycleOwner, Observer {
+        router.openFaqLiveEvent.observe(viewLifecycleOwner, {
             findNavController().navigate(R.id.mainFragment_to_faqListFragment, null, navOptions())
         })
 
-        router.openAcademyLiveEvent.observe(viewLifecycleOwner, Observer {
+        router.openAcademyLiveEvent.observe(viewLifecycleOwner, {
             findNavController().navigate(R.id.mainFragment_to_academyFragment, null, navOptions())
         })
 
-        router.showSecuritySettingsLiveEvent.observe(viewLifecycleOwner, Observer {
+        router.showSecuritySettingsLiveEvent.observe(viewLifecycleOwner, {
             findNavController().navigate(R.id.mainFragment_to_securitySettingsFragment, null, navOptions())
         })
 
-        router.showExperimentalFeaturesLiveEvent.observe(viewLifecycleOwner, Observer {
+        router.showExperimentalFeaturesLiveEvent.observe(viewLifecycleOwner, {
             findNavController().navigate(R.id.mainFragment_to_experimentalFeaturesFragment, null, navOptions())
         })
 
-        router.openLinkLiveEvent.observe(viewLifecycleOwner, Observer { link ->
+        router.openLinkLiveEvent.observe(viewLifecycleOwner, { link ->
             val uri = Uri.parse(link)
             val intent = Intent(Intent.ACTION_VIEW, uri)
             activity?.startActivity(intent)
         })
 
-        router.reloadAppLiveEvent.observe(viewLifecycleOwner, Observer {
+        router.reloadAppLiveEvent.observe(viewLifecycleOwner, {
             val nightMode = if (CoreApp.themeStorage.isLightModeOn)
                 AppCompatDelegate.MODE_NIGHT_NO else
                 AppCompatDelegate.MODE_NIGHT_YES
@@ -218,8 +217,9 @@ class MainSettingsFragment : BaseFragment() {
             AppCompatDelegate.setDefaultNightMode(nightMode)
         })
 
-        router.openWalletConnectLiveEvent.observe(viewLifecycleOwner, Observer {
-            WalletConnectModule.start(this, R.id.mainFragment_to_walletConnectMainFragment, navOptions())
+        router.openWalletConnectLiveEvent.observe(viewLifecycleOwner, {
+//            WalletConnectModule.start(null, this, R.id.mainFragment_to_walletConnectMainFragment, navOptions())
+            WalletConnectListModule.start(this, navOptions())
         })
     }
 

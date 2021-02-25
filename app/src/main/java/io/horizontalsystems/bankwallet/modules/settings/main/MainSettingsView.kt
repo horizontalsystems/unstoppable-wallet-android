@@ -7,7 +7,7 @@ class MainSettingsView : MainSettingsModule.IMainSettingsView {
     val backedUp = MutableLiveData<Boolean>()
     val pinSet = MutableLiveData<Boolean>()
     val baseCurrency = MutableLiveData<String>()
-    val walletConnectPeer = MutableLiveData<String?>()
+    val walletConnectSessionCount = MutableLiveData<String?>()
     val language = MutableLiveData<String>()
     val lightMode = MutableLiveData<Boolean>()
     val appVersion = MutableLiveData<String>()
@@ -25,8 +25,8 @@ class MainSettingsView : MainSettingsModule.IMainSettingsView {
         this.baseCurrency.postValue(currency)
     }
 
-    override fun setCurrentWalletConnectPeer(peer: String?) {
-        this.walletConnectPeer.postValue(peer)
+    override fun setWalletConnectSessionCount(count: String?) {
+        this.walletConnectSessionCount.postValue(count)
     }
 
     override fun setLanguage(language: String) {

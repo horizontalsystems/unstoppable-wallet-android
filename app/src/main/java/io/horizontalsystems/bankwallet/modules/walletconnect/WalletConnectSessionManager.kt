@@ -1,63 +1,52 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect
 
-import com.trustwallet.walletconnect.models.WCPeerMeta
 import io.horizontalsystems.bankwallet.core.IAccountManager
-import io.horizontalsystems.bankwallet.core.IPredefinedAccountTypeManager
 import io.horizontalsystems.bankwallet.core.storage.WalletConnectSessionStorage
-import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
+import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.WalletConnectSession
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 
 class WalletConnectSessionManager(
         private val storage: WalletConnectSessionStorage,
-        private val accountManager: IAccountManager,
-        private val predefinedAccountTypeManager: IPredefinedAccountTypeManager
+        private val accountManager: IAccountManager
 ) {
-    val storedSession: WalletConnectSession?
-        get() = storage.getSessions().firstOrNull()
-
-    val storedPeerMeta: WCPeerMeta?
-        get() = storedSession?.remotePeerMeta
-
-    private val storePeerMetaSubject = PublishSubject.create<Unit>()
-    val storePeerMetaSignal: Flowable<Unit> = storePeerMetaSubject.toFlowable(BackpressureStrategy.LATEST)
-
     private val disposable = CompositeDisposable()
+
+    private val sessionsSubject = PublishSubject.create<List<WalletConnectSession>>()
+    val sessionsObservable: Flowable<List<WalletConnectSession>>
+        get() = sessionsSubject.toFlowable(BackpressureStrategy.BUFFER)
+
+    val sessions: List<WalletConnectSession>
+        get() = storage.getSessions()
 
     init {
         accountManager.accountsDeletedFlowable
-                .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.io())
-                .subscribe {
-                    if (storedSession != null && !accountStandardIsPresent()) {
-                        clear()
-                    }
+                .subscribeIO {
+                    handleDeletedAccounts()
                 }
                 .let {
                     disposable.add(it)
                 }
     }
 
-    fun store(session: WalletConnectSession) {
+    fun save(session: WalletConnectSession) {
         storage.save(session)
-
-        storePeerMetaSubject.onNext(Unit)
+        sessionsSubject.onNext(sessions)
     }
 
-    fun clear() {
-        storage.deleteAll()
-
-        storePeerMetaSubject.onNext(Unit)
+    fun deleteSession(peerId: String) {
+        storage.deleteSessionsByPeerId(peerId)
+        sessionsSubject.onNext(sessions)
     }
 
-    private fun accountStandardIsPresent(): Boolean {
-        return accountManager.accounts.any {
-            predefinedAccountTypeManager.predefinedAccountType(it.type) == PredefinedAccountType.Standard
-        }
+    private fun handleDeletedAccounts() {
+        val existingAccountIds = accountManager.accounts.map { it.id }
+        storage.deleteSessionsExcept(accountIds = existingAccountIds)
+
+        sessionsSubject.onNext(sessions)
     }
 
 }

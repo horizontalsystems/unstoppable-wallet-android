@@ -36,7 +36,7 @@ class WalletConnectMainViewModel(private val service: WalletConnectService) : Vi
     init {
         sync(service.state, service.connectionState)
 
-        service.stateSubject
+        service.stateObservable
                 .subscribe {
                     sync(it, service.connectionState)
                 }
@@ -44,7 +44,7 @@ class WalletConnectMainViewModel(private val service: WalletConnectService) : Vi
                     disposables.add(it)
                 }
 
-        service.connectionStateSubject
+        service.connectionStateObservable
                 .subscribe {
                     sync(service.state, it)
                 }
@@ -53,7 +53,7 @@ class WalletConnectMainViewModel(private val service: WalletConnectService) : Vi
                 }
 
 
-        service.requestSubject
+        service.requestObservable
                 .subscribe {
                     openRequestLiveEvent.postValue(it)
                 }
