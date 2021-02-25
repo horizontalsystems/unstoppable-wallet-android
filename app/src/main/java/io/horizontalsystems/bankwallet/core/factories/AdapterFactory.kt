@@ -31,7 +31,6 @@ class AdapterFactory(
     fun adapter(wallet: Wallet): IAdapter? {
         val derivation = derivationSettingsManager?.setting(wallet.coin.type)?.derivation
         val syncMode = initialSyncModeSettingsManager?.setting(wallet.coin.type, wallet.account.origin)?.syncMode
-        val communicationMode = ethereumRpcModeSettingsManager?.rpcMode()?.communicationMode
 
         return when (val coinType = wallet.coin.type) {
             is CoinType.Zcash -> ZcashAdapter(context, wallet, testMode)
@@ -40,10 +39,10 @@ class AdapterFactory(
             is CoinType.BitcoinCash -> BitcoinCashAdapter(wallet, syncMode, bitcoinCashCoinTypeManager?.bitcoinCashCoinType, testMode, backgroundManager)
             is CoinType.Dash -> DashAdapter(wallet, syncMode, testMode, backgroundManager)
             is CoinType.Binance -> BinanceAdapter(binanceKitManager.binanceKit(wallet), coinType.symbol)
-            is CoinType.Ethereum -> EvmAdapter(ethereumKitManager.evmKit(wallet, communicationMode))
-            is CoinType.Erc20 -> Eip20Adapter(context, ethereumKitManager.evmKit(wallet, communicationMode), wallet.coin.decimal, coinType.address)
-            is CoinType.BinanceSmartChain -> EvmAdapter(binanceSmartChainKitManager.evmKit(wallet, communicationMode))
-            is CoinType.Bep20 -> Eip20Adapter(context, binanceSmartChainKitManager.evmKit(wallet, communicationMode), wallet.coin.decimal, coinType.address)
+            is CoinType.Ethereum -> EvmAdapter(ethereumKitManager.evmKit(wallet.account))
+            is CoinType.Erc20 -> Eip20Adapter(context, ethereumKitManager.evmKit(wallet.account), wallet.coin.decimal, coinType.address)
+            is CoinType.BinanceSmartChain -> EvmAdapter(binanceSmartChainKitManager.evmKit(wallet.account))
+            is CoinType.Bep20 -> Eip20Adapter(context, binanceSmartChainKitManager.evmKit(wallet.account), wallet.coin.decimal, coinType.address)
         }
     }
 
