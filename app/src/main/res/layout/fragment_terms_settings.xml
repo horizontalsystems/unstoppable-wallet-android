@@ -52,9 +52,9 @@
             <View
                 android:id="@+id/divider"
                 android:layout_width="0dp"
-                android:layout_height="0.5dp"
+                android:layout_height="1dp"
                 android:layout_marginTop="36dp"
-                android:background="@color/steel_20"
+                android:background="@color/steel_10"
                 app:layout_constraintEnd_toEndOf="@+id/guideEnd"
                 app:layout_constraintStart_toStartOf="@+id/guideStart"
                 app:layout_constraintTop_toBottomOf="@+id/termsText" />
@@ -162,10 +162,10 @@
 
             <View
                 android:id="@+id/dividerBottom"
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
                 android:layout_marginTop="32dp"
-                android:background="@color/steel_20"
+                android:background="@color/steel_10"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/bottomThankYou" />

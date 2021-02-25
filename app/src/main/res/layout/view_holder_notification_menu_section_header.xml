@@ -3,17 +3,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
-    
+
     <View
         android:id="@+id/bigSectionHeader"
         android:layout_width="match_parent"
-        android:visibility="gone"
-        android:layout_height="52dp"/>
+        android:layout_height="52dp"
+        android:visibility="gone" />
 
     <View
         android:id="@+id/smallSectionHeader"
         android:layout_width="match_parent"
-        android:layout_height="44dp"/>
+        android:layout_height="44dp" />
 
     <TextView
         android:id="@+id/sectionTitle"
@@ -29,7 +29,7 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="0.5dp"
+        android:layout_height="1dp"
         android:layout_gravity="bottom"
-        android:background="@color/steel_20" />
+        android:background="@color/steel_10" />
 </FrameLayout>

@@ -7,9 +7,9 @@
     <View
         android:id="@+id/headingBottomBorder"
         android:layout_width="match_parent"
-        android:layout_height="0.5dp"
+        android:layout_height="1dp"
         android:layout_marginTop="12dp"
-        android:background="@color/steel_20" />
+        android:background="@color/steel_10" />
 
     <TextView
         android:id="@+id/h1"

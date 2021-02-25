@@ -263,9 +263,9 @@
             <View
                 android:id="@+id/border3"
                 android:layout_width="0dp"
-                android:layout_height="0.5dp"
+                android:layout_height="1dp"
                 android:layout_marginTop="8dp"
-                android:background="@color/steel_20"
+                android:background="@color/steel_10"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/chart" />
