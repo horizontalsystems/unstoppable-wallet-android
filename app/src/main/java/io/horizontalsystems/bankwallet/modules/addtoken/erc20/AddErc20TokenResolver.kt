@@ -9,7 +9,7 @@ class AddErc20TokenResolver(
         etherscanApiKey: String
 ) : IAddEvmTokenResolver {
 
-    override val apiUrl = if (testMode) "https://api-ropsten.bscscan.io/" else "https://api.etherscan.io/"
+    override val apiUrl = if (testMode) "https://api-ropsten.etherscan.io/" else "https://api.etherscan.io/"
 
     override val explorerKey = etherscanApiKey
 
