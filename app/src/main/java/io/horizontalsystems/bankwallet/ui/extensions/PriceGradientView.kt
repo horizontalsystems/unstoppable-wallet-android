@@ -29,15 +29,17 @@ class PriceGradientView @JvmOverloads constructor(context: Context, attrs: Attri
 
     init {
         inflate(context, R.layout.view_price_gradient, this)
-        matrixImage = MatrixImage(gradientImage)
 
         val ta = context.obtainStyledAttributes(attrs, R.styleable.PriceGradientView)
         try {
             gradient = ta.getDrawable(R.styleable.PriceGradientView_gradient)
             gradientRed = ta.getDrawable(R.styleable.PriceGradientView_gradientSecond)
+            setGradient(gradient)
         } finally {
             ta.recycle()
         }
+
+        matrixImage = MatrixImage(gradientImage)
     }
 
     fun animateHorizontal(diff: Float?) {
