@@ -10,8 +10,7 @@ import io.horizontalsystems.bankwallet.modules.market.list.MarketListViewModel
 object MarketDiscoveryModule {
 
     class Factory : ViewModelProvider.Factory {
-        val provider by lazy { MarketCategoryProvider(App.instance) }
-        val service by lazy { MarketDiscoveryService(provider, App.xRateManager) }
+        val service by lazy { MarketDiscoveryService(App.xRateManager) }
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel?> create(modelClass: Class<T>) = when (modelClass) {
@@ -25,5 +24,4 @@ object MarketDiscoveryModule {
             else -> throw IllegalArgumentException()
         }
     }
-
 }
