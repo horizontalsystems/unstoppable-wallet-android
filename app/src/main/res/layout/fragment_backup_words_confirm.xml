@@ -13,7 +13,8 @@
         app:layout_constraintTop_toTopOf="parent"
         app:menu="@menu/backup_words_menu"
         app:navigationIcon="@drawable/ic_back"
-        app:title="@string/Backup_Confirmation_CheckTitle" />
+        app:title="@string/Backup_Confirmation_CheckTitle"
+        app:titleTextAppearance="@style/Title3" />
 
     <io.horizontalsystems.views.InputTextView
         android:id="@+id/wordOne"

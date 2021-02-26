@@ -13,7 +13,8 @@
         android:layout_height="?attr/actionBarSize"
         app:menu="@menu/app_status_menu"
         app:navigationIcon="@drawable/ic_back"
-        app:title="@string/Settings_AppStatus" />
+        app:title="@string/Settings_AppStatus"
+        app:titleTextAppearance="@style/Title3" />
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"

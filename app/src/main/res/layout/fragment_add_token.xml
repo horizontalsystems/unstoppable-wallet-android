@@ -12,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         app:navigationIcon="@drawable/ic_back"
+        app:titleTextAppearance="@style/Title3"
         tools:title="@string/AddErc20Token_Title" />
 
     <androidx.core.widget.NestedScrollView

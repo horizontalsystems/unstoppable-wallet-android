@@ -18,10 +18,11 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:navigationIcon="@drawable/ic_back"
             app:layout_collapseMode="pin"
             app:layout_scrollFlags="scroll|enterAlways|snap"
-            app:title="@string/Guides_Title">
+            app:navigationIcon="@drawable/ic_back"
+            app:title="@string/Guides_Title"
+            app:titleTextAppearance="@style/Title3">
 
             <ProgressBar
                 android:id="@+id/toolbarSpinner"

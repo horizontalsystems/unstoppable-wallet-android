@@ -11,7 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         app:menu="@menu/settings_privacy_info_menu"
-        app:title="@string/Welcome_PrivacySettings" />
+        app:title="@string/Welcome_PrivacySettings"
+        app:titleTextAppearance="@style/Title3" />
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/scrollView"

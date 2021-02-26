@@ -20,7 +20,8 @@
             android:layout_height="?attr/actionBarSize"
             app:layout_collapseMode="pin"
             app:layout_scrollFlags="scroll|enterAlways|snap"
-            app:title="@string/Transactions_Title">
+            app:title="@string/Transactions_Title"
+            app:titleTextAppearance="@style/Title3">
 
             <ProgressBar
                 android:id="@+id/toolbarSpinner"

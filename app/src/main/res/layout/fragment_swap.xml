@@ -13,7 +13,8 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         app:menu="@menu/swap_menu"
-        app:title="@string/Swap" />
+        app:title="@string/Swap"
+        app:titleTextAppearance="@style/Title3" />
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"

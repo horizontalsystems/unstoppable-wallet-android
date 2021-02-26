@@ -12,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         app:title="@string/TransactionInfo_Status"
+        app:titleTextAppearance="@style/Title3"
         app:titleTextColor="?TitleColor" />
 
     <androidx.core.widget.NestedScrollView

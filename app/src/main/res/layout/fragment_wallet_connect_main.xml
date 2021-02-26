@@ -13,7 +13,8 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         app:menu="@menu/wallet_connect_menu"
-        app:title="@string/WalletConnect_Title" />
+        app:title="@string/WalletConnect_Title"
+        app:titleTextAppearance="@style/Title3" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

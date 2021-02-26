@@ -10,10 +10,11 @@
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
-        app:navigationIcon="@drawable/ic_back"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        app:title="@string/Market_AdvancedSearch_Results" />
+        app:navigationIcon="@drawable/ic_back"
+        app:title="@string/Market_AdvancedSearch_Results"
+        app:titleTextAppearance="@style/Title3" />
 
     <io.horizontalsystems.bankwallet.ui.extensions.MarketListHeaderView
         android:id="@+id/marketListHeader"
