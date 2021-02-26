@@ -87,6 +87,7 @@ class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener, ReceiveFra
     override fun onDestroyView() {
         super.onDestroyView()
 
+        showBalanceMenuItem = null
         recyclerCoins.adapter = null
         recyclerCoins.layoutManager = null
     }
