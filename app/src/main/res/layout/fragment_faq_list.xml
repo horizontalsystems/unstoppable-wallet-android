@@ -12,7 +12,9 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         app:navigationIcon="@drawable/ic_back"
-        app:title="@string/Settings_Faq">
+        app:title="@string/Settings_Faq"
+        app:titleTextAppearance="@style/Title3">
+
         <ProgressBar
             android:id="@+id/toolbarSpinner"
             android:layout_width="24dp"

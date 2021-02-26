@@ -13,7 +13,8 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         app:menu="@menu/swap_approve_menu"
-        app:title="@string/Market_AdvancedSearch" />
+        app:title="@string/Market_AdvancedSearch"
+        app:titleTextAppearance="@style/Title3" />
 
     <io.horizontalsystems.bankwallet.ui.extensions.MarketFilterView
         android:id="@+id/filterCoinList"

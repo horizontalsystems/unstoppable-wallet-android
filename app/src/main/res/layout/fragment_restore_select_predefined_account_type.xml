@@ -12,7 +12,8 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         app:navigationIcon="@drawable/ic_back"
-        app:title="@string/Restore_ChooseWallet" />
+        app:title="@string/Restore_ChooseWallet"
+        app:titleTextAppearance="@style/Title3" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"

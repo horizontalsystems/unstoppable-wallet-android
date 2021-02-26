@@ -11,7 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         app:navigationIcon="@drawable/ic_back"
-        app:title="@string/SettingsLanguage_Title" />
+        app:title="@string/SettingsLanguage_Title"
+        app:titleTextAppearance="@style/Title3" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"

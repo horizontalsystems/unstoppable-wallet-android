@@ -13,7 +13,8 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:visibility="gone"
-        app:navigationIcon="@drawable/ic_back" />
+        app:navigationIcon="@drawable/ic_back"
+        app:titleTextAppearance="@style/Title3" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/pinUnlock"

@@ -23,7 +23,8 @@
             app:layout_collapseMode="pin"
             app:layout_scrollFlags="scroll|enterAlways|snap"
             app:menu="@menu/balance_menu"
-            app:title="@string/Balance_Title" />
+            app:title="@string/Balance_Title"
+            app:titleTextAppearance="@style/Title3" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/balanceTabWrapper"
