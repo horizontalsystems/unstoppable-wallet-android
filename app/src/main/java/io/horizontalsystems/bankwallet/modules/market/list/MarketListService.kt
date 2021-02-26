@@ -27,8 +27,6 @@ class MarketListService(
     private val disposable = CompositeDisposable()
 
     init {
-        fetch()
-
         fetcher.dataUpdatedAsync
                 .subscribeIO {
                     marketItems = listOf()
