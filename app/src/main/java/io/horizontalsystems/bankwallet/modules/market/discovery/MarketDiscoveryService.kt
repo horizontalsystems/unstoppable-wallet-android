@@ -9,10 +9,7 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.subjects.PublishSubject
 
-class MarketDiscoveryService(
-        private val marketCategoryProvider: MarketCategoryProvider,
-        private val xRateManager: IRateManager
-) : IMarketListFetcher {
+class MarketDiscoveryService(private val xRateManager: IRateManager) : IMarketListFetcher {
 
     private val dataUpdatedSubject = PublishSubject.create<Unit>()
 
@@ -54,7 +51,7 @@ class MarketDiscoveryService(
     }
 
     private fun getRatedMarketItemsAsync(currency: Currency): Single<List<MarketItem>> {
-        return marketCategoryProvider.getCoinRatingsAsync()
+        return xRateManager.getCoinRatingsAsync()
                 .flatMap { coinRatingsMap ->
                     val coinCodes = coinRatingsMap.keys.map { it }
                     xRateManager.getCoinMarketList(coinCodes, currency.code)
@@ -69,14 +66,11 @@ class MarketDiscoveryService(
     }
 
     private fun getMarketItemsByCategoryAsync(category: MarketCategory, currency: Currency): Single<List<MarketItem>> {
-        return marketCategoryProvider.getCoinCodesByCategoryAsync(category.id)
-                .flatMap { coinCodes ->
-                    xRateManager.getCoinMarketList(coinCodes, currency.code)
-                            .map { coinMarkets ->
-                                coinMarkets.map { coinMarket ->
-                                    MarketItem.createFromCoinMarket(coinMarket, currency, null)
-                                }
-                            }
+        return xRateManager.getCoinMarketListByCategory(category.id, currency.code)
+                .map { coinMarkets ->
+                    coinMarkets.map { coinMarket ->
+                        MarketItem.createFromCoinMarket(coinMarket, currency, null)
+                    }
                 }
     }
 

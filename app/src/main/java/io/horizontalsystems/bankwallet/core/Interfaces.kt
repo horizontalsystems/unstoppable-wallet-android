@@ -293,6 +293,8 @@ interface IRateManager {
     fun getCryptoNews(coinCode: String): Single<List<CryptoNews>>
     fun getTopMarketList(currency: String, itemsCount: Int): Single<List<CoinMarket>>
     fun getCoinMarketList(coinCodes: List<String>, currency: String): Single<List<CoinMarket>>
+    fun getCoinMarketListByCategory(categoryId: String, currency: String): Single<List<CoinMarket>>
+    fun getCoinRatingsAsync():Single<Map<String, String>>
     fun getGlobalMarketInfoAsync(currency: String): Single<GlobalCoinMarket>
     fun refresh()
 }
