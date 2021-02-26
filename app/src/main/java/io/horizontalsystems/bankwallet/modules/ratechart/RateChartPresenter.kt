@@ -150,12 +150,12 @@ class RateChartPresenter(
         view.marketSpinner(isLoading = false)
         view.showMarketInfo(factory.createMarketInfo(marketInfo, marketDetails, currency, coinCode))
 
-//        val info = chartInfo ?: return
-//        try {
-//            view.showChartInfo(factory.createChartInfo(chartType, info, market))
-//        } catch (e: Exception) {
-//            view.showError(e)
-//        }
+        val info = chartInfo ?: return
+        try {
+            view.showChartInfo(factory.createChartInfo(chartType, info, marketInfo))
+        } catch (e: Exception) {
+            view.showError(e)
+        }
     }
 
     private fun updateChartInfo() {
