@@ -22,7 +22,7 @@ object WalletConnectListModule {
         }
     }
 
-    fun start(fragment: Fragment, navOptions: NavOptions) {
-        fragment.findNavController().navigate(R.id.mainFragment_to_walletConnectListFragment, null, navOptions)
+    fun start(fragment: Fragment, navigateTo: Int, navOptions: NavOptions) {
+        fragment.findNavController().navigate(navigateTo, null, navOptions)
     }
 }

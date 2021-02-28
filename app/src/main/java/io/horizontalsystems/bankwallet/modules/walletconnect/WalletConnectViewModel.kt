@@ -12,11 +12,8 @@ class WalletConnectViewModel(
     var sharedSendEthereumTransactionRequest: WalletConnectSendEthereumTransactionRequest? = null
 
     val initialScreen: InitialScreen
-        get() = when {
-//            !service.isEthereumKitReady -> {
-//                InitialScreen.NoEthereumKit
-//            }
-            service.state == WalletConnectService.State.Idle -> {
+        get() = when (service.state) {
+            WalletConnectService.State.Idle -> {
                 InitialScreen.ScanQrCode
             }
             else -> {
@@ -32,6 +29,6 @@ class WalletConnectViewModel(
     }
 
     enum class InitialScreen {
-        NoEthereumKit, ScanQrCode, Main
+        ScanQrCode, Main
     }
 }

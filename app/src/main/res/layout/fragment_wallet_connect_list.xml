@@ -35,5 +35,4 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/newConnect" />
 
-
 </androidx.constraintlayout.widget.ConstraintLayout>

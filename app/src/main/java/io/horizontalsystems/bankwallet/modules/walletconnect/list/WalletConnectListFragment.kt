@@ -9,8 +9,8 @@ import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
-import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectModule
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListViewModel.WalletConnectViewItem
+import io.horizontalsystems.bankwallet.modules.walletconnect.main.WalletConnectMainModule
 import io.horizontalsystems.core.findNavController
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_notifications.toolbar
@@ -33,7 +33,7 @@ class WalletConnectListFragment : BaseFragment(), SessionViewHolder.Listener {
         }
 
         newConnect.setOnSingleClickListener {
-            WalletConnectModule.start(null, this, R.id.walletConnectListFragment_to_walletConnectMainFragment, navOptions())
+            WalletConnectMainModule.start(this, R.id.walletConnectListFragment_to_walletConnectMainFragment, navOptions())
         }
 
         val walletConnectListAdapter = WalletConnectListAdapter(this)
@@ -46,7 +46,7 @@ class WalletConnectListFragment : BaseFragment(), SessionViewHolder.Listener {
     }
 
     override fun onSessionClick(session: WalletConnectViewItem.Session) {
-        WalletConnectModule.start(session.session.remotePeerId, this, R.id.walletConnectListFragment_to_walletConnectMainFragment, navOptions())
+        WalletConnectMainModule.start(this, R.id.walletConnectListFragment_to_walletConnectMainFragment, navOptions(), session.session.remotePeerId)
     }
 }
 

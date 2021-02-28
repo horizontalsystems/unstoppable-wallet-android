@@ -2,6 +2,8 @@ package io.horizontalsystems.bankwallet.modules.walletconnect.request
 
 import io.horizontalsystems.bankwallet.core.ethereum.EvmTransactionService
 import io.horizontalsystems.bankwallet.entities.DataState
+import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectSendEthereumTransactionRequest
+import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectService
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.reactivex.Observable
@@ -11,22 +13,24 @@ import io.reactivex.subjects.PublishSubject
 import java.math.BigInteger
 
 class WalletConnectSendEthereumTransactionRequestService(
-        private val transaction: WalletConnectTransaction,
+        private val request: WalletConnectSendEthereumTransactionRequest,
+        private val baseService: WalletConnectService,
         private val transactionService: EvmTransactionService,
-        private val ethereumKit: EthereumKit
+        private val evmKit: EthereumKit
 ) {
+    private val disposable = CompositeDisposable()
+    private val transaction = request.transaction
+
     val transactionData = TransactionData(transaction.to, transaction.value, transaction.data)
 
+    private val stateSubject = PublishSubject.create<State>()
     var state: State = State.NotReady(null)
         set(value) {
             field = value
 
             stateSubject.onNext(value)
         }
-    private val stateSubject = PublishSubject.create<State>()
     val stateObservable: Observable<State> = stateSubject
-
-    private val disposable = CompositeDisposable()
 
     init {
         transaction.gasPrice?.let {
@@ -46,13 +50,13 @@ class WalletConnectSendEthereumTransactionRequestService(
         transactionService.transactionData = transactionData
     }
 
-    fun send() {
+    fun approve() {
         if (state != State.Ready) return
         val transaction = transactionService.transactionStatus.dataOrNull ?: return
 
         state = State.Sending
 
-        ethereumKit.send(
+        evmKit.send(
                 transaction.data.to,
                 transaction.data.value,
                 transaction.data.input,
@@ -61,12 +65,21 @@ class WalletConnectSendEthereumTransactionRequestService(
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .subscribe({ fullTransaction ->
-                    state = State.Sent(fullTransaction.transaction.hash)
+                    handleSent(fullTransaction.transaction.hash)
                 }, {
                     state = State.NotReady(it)
                 }).let {
                     disposable.add(it)
                 }
+    }
+
+    fun reject() {
+        baseService.rejectRequest(request.id)
+    }
+
+    private fun handleSent(transactionHash: ByteArray) {
+        baseService.approveRequest(request.id, transactionHash)
+        state = State.Sent
     }
 
     private fun syncState() {
@@ -76,7 +89,7 @@ class WalletConnectSendEthereumTransactionRequestService(
             }
             is DataState.Success -> {
                 val transaction = transactionStatus.data
-                val balance = ethereumKit.accountState?.balance ?: BigInteger.ZERO
+                val balance = evmKit.accountState?.balance ?: BigInteger.ZERO
 
                 if (transaction.totalAmount > balance) {
                     State.NotReady(TransactionError.InsufficientBalance(transaction.totalAmount))
@@ -94,7 +107,7 @@ class WalletConnectSendEthereumTransactionRequestService(
         object Ready : State()
         class NotReady(val error: Throwable?) : State()
         object Sending : State()
-        class Sent(val transactionHash: ByteArray) : State()
+        object Sent : State()
     }
 
     sealed class TransactionError : Error() {

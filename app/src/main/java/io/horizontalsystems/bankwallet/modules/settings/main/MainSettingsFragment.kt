@@ -218,8 +218,7 @@ class MainSettingsFragment : BaseFragment() {
         })
 
         router.openWalletConnectLiveEvent.observe(viewLifecycleOwner, {
-//            WalletConnectModule.start(null, this, R.id.mainFragment_to_walletConnectMainFragment, navOptions())
-            WalletConnectListModule.start(this, navOptions())
+            WalletConnectListModule.start(this, R.id.mainFragment_to_walletConnectListFragment, navOptions())
         })
     }
 

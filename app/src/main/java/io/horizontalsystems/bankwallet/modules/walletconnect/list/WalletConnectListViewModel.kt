@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.walletconnect.list
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.providers.StringProvider
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.WalletConnectSession
@@ -49,7 +50,7 @@ class WalletConnectListViewModel(
 
     //TODO improve this method
     private fun getSuitableIcon(imageUrls: List<String>): String? {
-        return imageUrls.lastOrNull { it.endsWith("png") }
+        return imageUrls.lastOrNull { it.endsWith("png", ignoreCase = true) }
     }
 
     sealed class WalletConnectViewItem {
