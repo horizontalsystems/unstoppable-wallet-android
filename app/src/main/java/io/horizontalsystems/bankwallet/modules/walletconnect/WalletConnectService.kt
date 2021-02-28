@@ -37,7 +37,6 @@ class WalletConnectService(
     )
 
     open class SessionError : Throwable() {
-        object InvalidUrl : SessionError()
         object UnsupportedChainId : SessionError()
         object NoSuitableAccount : SessionError()
     }

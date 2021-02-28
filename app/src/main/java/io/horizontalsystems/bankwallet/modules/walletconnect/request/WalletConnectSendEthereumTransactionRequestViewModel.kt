@@ -6,6 +6,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.ethereum.CoinService
 import io.horizontalsystems.bankwallet.core.providers.StringProvider
 import io.horizontalsystems.bankwallet.modules.send.SendModule
+import io.horizontalsystems.bankwallet.modules.walletconnect.request.WalletConnectSendEthereumTransactionRequestService.State
 import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.core.toHexString
 import io.horizontalsystems.ethereumkit.api.jsonrpc.JsonRpc
@@ -19,7 +20,7 @@ class WalletConnectSendEthereumTransactionRequestViewModel(
 
     val amountData: SendModule.AmountData
     val viewItems: List<WalletConnectRequestViewItem>
-    val approveLiveEvent = SingleLiveEvent<ByteArray>()
+    val finishedLiveEvent = SingleLiveEvent<Boolean>()
     val approveEnabledLiveData = MutableLiveData<Boolean>()
     val rejectEnabledLiveData = MutableLiveData<Boolean>()
     val errorLiveData = MutableLiveData<String?>()
@@ -52,19 +53,24 @@ class WalletConnectSendEthereumTransactionRequestViewModel(
     }
 
     fun approve() {
-        service.send()
+        service.approve()
     }
 
-    private fun sync(state: WalletConnectSendEthereumTransactionRequestService.State) {
-        if (state is WalletConnectSendEthereumTransactionRequestService.State.Sent) {
-            approveLiveEvent.postValue(state.transactionHash)
+    fun reject() {
+        service.reject()
+        finishedLiveEvent.postValue(false)
+    }
+
+    private fun sync(state: State) {
+        if (state == State.Sent) {
+            finishedLiveEvent.postValue(true)
             return
         }
 
-        approveEnabledLiveData.postValue(state is WalletConnectSendEthereumTransactionRequestService.State.Ready)
-        rejectEnabledLiveData.postValue(state !is WalletConnectSendEthereumTransactionRequestService.State.Sending)
+        approveEnabledLiveData.postValue(state is State.Ready)
+        rejectEnabledLiveData.postValue(state !is State.Sending)
 
-        if (state is WalletConnectSendEthereumTransactionRequestService.State.NotReady) {
+        if (state is State.NotReady) {
             errorLiveData.postValue(convert(state.error))
         } else {
             errorLiveData.postValue(null)

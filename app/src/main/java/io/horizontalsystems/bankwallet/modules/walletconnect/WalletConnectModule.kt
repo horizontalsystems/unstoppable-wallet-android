@@ -19,28 +19,4 @@ object WalletConnectModule {
         }
     }
 
-    fun start(remotePeerId: String? = null, fragment: Fragment, navigateTo: Int, navOptions: NavOptions) {
-//        if (App.ethereumKitManager.evmKit != null) {
-
-        fragment.findNavController().navigate(navigateTo, bundleOf(REMOTE_PEER_ID_KEY to remotePeerId), navOptions)
-//        } else {
-//            ConfirmationDialog.show(
-//                    icon = R.drawable.ic_wallet_connect_24,
-//                    title = fragment.getString(R.string.WalletConnect_Title),
-//                    subtitle = fragment.getString(R.string.WalletConnect_Requirement),
-//                    contentText = fragment.getString(R.string.WalletConnect_RequirementDescription),
-//                    actionButtonTitle = fragment.getString(R.string.Button_Add),
-//                    cancelButtonTitle = null,
-//                    activity = fragment.requireActivity(),
-//                    listener = object : ConfirmationDialog.Listener {
-//                        override fun onActionButtonClick() {
-//                            fragment.findNavController().navigate(R.id.manageWalletsFragment, null, navOptions)
-//                        }
-//                    }
-//            )
-//        }
-    }
-
-    const val REMOTE_PEER_ID_KEY = "remote_peer_id"
-
 }

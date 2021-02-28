@@ -10,7 +10,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
@@ -23,7 +22,6 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectErrorF
 import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectModule
 import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectSendEthereumTransactionRequest
 import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectViewModel
-import io.horizontalsystems.bankwallet.modules.walletconnect.request.WalletConnectSendEthereumTransactionRequestFragment
 import io.horizontalsystems.bankwallet.modules.walletconnect.scanqr.WalletConnectScanQrModule
 import io.horizontalsystems.bankwallet.modules.walletconnect.scanqr.WalletConnectScanQrViewModel
 import io.horizontalsystems.bankwallet.ui.extensions.ConfirmationDialog
@@ -32,7 +30,7 @@ import kotlinx.android.synthetic.main.fragment_wallet_connect_main.*
 class WalletConnectMainFragment : BaseFragment() {
 
     private val baseViewModel by navGraphViewModels<WalletConnectViewModel>(R.id.walletConnectMainFragment) {
-        WalletConnectModule.Factory(arguments?.getString(WalletConnectModule.REMOTE_PEER_ID_KEY))
+        WalletConnectModule.Factory(arguments?.getString(WalletConnectMainModule.REMOTE_PEER_ID_KEY))
     }
     private val viewModelScan by viewModels<WalletConnectScanQrViewModel> { WalletConnectScanQrModule.Factory(baseViewModel.service) }
     private val viewModel by viewModels<WalletConnectMainViewModel> { WalletConnectMainModule.Factory(baseViewModel.service) }
@@ -73,8 +71,6 @@ class WalletConnectMainFragment : BaseFragment() {
         view.isVisible = false
 
         when (baseViewModel.initialScreen) {
-            WalletConnectViewModel.InitialScreen.NoEthereumKit -> {
-            }
             WalletConnectViewModel.InitialScreen.ScanQrCode -> {
                 val intent = QRScannerActivity.getIntentForFragment(this)
                 qrScannerResultLauncher.launch(intent)
@@ -84,7 +80,7 @@ class WalletConnectMainFragment : BaseFragment() {
             }
         }
 
-        viewModelScan.openErrorLiveEvent.observe(this, Observer {
+        viewModelScan.openErrorLiveEvent.observe(this, {
             val message = when (it) {
                 is WalletConnectInteractor.SessionError.InvalidUri -> getString(R.string.WalletConnect_Error_InvalidUrl)
                 else -> it.message ?: getString(R.string.default_error_msg)
@@ -93,7 +89,7 @@ class WalletConnectMainFragment : BaseFragment() {
             findNavController().navigate(R.id.walletConnectMainFragment_to_walletConnectErrorFragment, bundleOf(WalletConnectErrorFragment.MESSAGE_KEY to message))
         })
 
-        viewModelScan.openMainLiveEvent.observe(this, Observer {
+        viewModelScan.openMainLiveEvent.observe(this, {
             view.isVisible = true
         })
 
@@ -101,11 +97,11 @@ class WalletConnectMainFragment : BaseFragment() {
         val dappInfoAdapter = DappInfoAdapter()
         dappInfo.adapter = dappInfoAdapter
 
-        viewModel.connectingLiveData.observe(viewLifecycleOwner, Observer {
+        viewModel.connectingLiveData.observe(viewLifecycleOwner, {
             connecting.isVisible = it
         })
 
-        viewModel.peerMetaLiveData.observe(viewLifecycleOwner, Observer { peerMetaViewItem ->
+        viewModel.peerMetaLiveData.observe(viewLifecycleOwner, { peerMetaViewItem ->
             dappGroup.isVisible = peerMetaViewItem != null
 
             peerMetaViewItem?.let {
@@ -115,66 +111,47 @@ class WalletConnectMainFragment : BaseFragment() {
             }
         })
 
-        viewModel.cancelVisibleLiveData.observe(viewLifecycleOwner, Observer {
+        viewModel.cancelVisibleLiveData.observe(viewLifecycleOwner, {
             cancelButton.isVisible = it
         })
 
-        viewModel.connectButtonLiveData.observe(viewLifecycleOwner, Observer {
+        viewModel.connectButtonLiveData.observe(viewLifecycleOwner, {
             connectButton.isVisible = it.visible
             connectButton.isEnabled = it.enabled
         })
 
-        viewModel.disconnectButtonLiveData.observe(viewLifecycleOwner, Observer {
+        viewModel.disconnectButtonLiveData.observe(viewLifecycleOwner, {
             disconnectButton.isVisible = it.visible
             disconnectButton.isEnabled = it.enabled
         })
 
-        viewModel.closeVisibleLiveData.observe(viewLifecycleOwner, Observer {
+        viewModel.closeVisibleLiveData.observe(viewLifecycleOwner, {
             closeMenuItem?.isVisible = it
         })
 
-        viewModel.signedTransactionsVisibleLiveData.observe(viewLifecycleOwner, Observer {
+        viewModel.signedTransactionsVisibleLiveData.observe(viewLifecycleOwner, {
             dappInfoAdapter.signedTransactionsVisible = it
         })
 
-        viewModel.hintLiveData.observe(viewLifecycleOwner, Observer { hint ->
+        viewModel.hintLiveData.observe(viewLifecycleOwner, { hint ->
             dappHint.text = hint?.let { getString(it) }
         })
 
-        viewModel.statusLiveData.observe(viewLifecycleOwner, Observer { status ->
+        viewModel.statusLiveData.observe(viewLifecycleOwner, { status ->
             dappInfoAdapter.status = status
         })
 
-        viewModel.closeLiveEvent.observe(viewLifecycleOwner, Observer {
+        viewModel.closeLiveEvent.observe(viewLifecycleOwner, {
             findNavController().popBackStack()
         })
 
-        viewModel.openRequestLiveEvent.observe(viewLifecycleOwner, Observer {
+        viewModel.openRequestLiveEvent.observe(viewLifecycleOwner, {
             if (it is WalletConnectSendEthereumTransactionRequest) {
                 baseViewModel.sharedSendEthereumTransactionRequest = it
 
                 findNavController().navigate(R.id.walletConnectMainFragment_to_walletConnectSendEthereumTransactionRequestFragment, null, navOptionsFromBottom())
             }
         })
-
-        findNavController().currentBackStackEntry?.savedStateHandle?.let { savedStateHandle ->
-            savedStateHandle
-                    .getLiveData<WalletConnectSendEthereumTransactionRequestFragment.ApproveResult>("ApproveResult")
-                    .observe(viewLifecycleOwner, Observer { approveResult ->
-                        baseViewModel.sharedSendEthereumTransactionRequest?.let { sendEthereumTransactionRequest ->
-                            when (approveResult) {
-                                is WalletConnectSendEthereumTransactionRequestFragment.ApproveResult.Approved -> {
-                                    viewModel.approveRequest(sendEthereumTransactionRequest.id, approveResult.txHash)
-                                }
-                                WalletConnectSendEthereumTransactionRequestFragment.ApproveResult.Rejected -> {
-                                    viewModel.rejectRequest(sendEthereumTransactionRequest.id)
-                                }
-                            }
-
-                            baseViewModel.sharedSendEthereumTransactionRequest = null
-                        }
-                    })
-        }
 
         connectButton.setOnSingleClickListener {
             viewModel.connect()

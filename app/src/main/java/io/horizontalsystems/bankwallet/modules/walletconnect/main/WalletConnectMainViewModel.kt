@@ -79,7 +79,7 @@ class WalletConnectMainViewModel(private val service: WalletConnectService) : Vi
     }
 
     private fun sync(state: WalletConnectService.State, connectionState: WalletConnectInteractor.State) {
-        if (state == WalletConnectService.State.Killed) {
+        if (state == WalletConnectService.State.Killed || state is WalletConnectService.State.Invalid) {
             closeLiveEvent.postValue(Unit)
             return
         }
@@ -135,13 +135,6 @@ class WalletConnectMainViewModel(private val service: WalletConnectService) : Vi
         }
     }
 
-    fun approveRequest(requestId: Long, result: Any) {
-        service.approveRequest(requestId, result)
-    }
-
-    fun rejectRequest(requestId: Long) {
-        service.rejectRequest(requestId)
-    }
 }
 
 data class PeerMetaViewItem(val name: String, val url: String, val description: String?, val icon: String?)

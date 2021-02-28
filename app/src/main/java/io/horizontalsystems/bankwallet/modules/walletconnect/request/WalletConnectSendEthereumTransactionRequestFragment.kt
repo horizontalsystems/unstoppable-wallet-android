@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.activity.addCallback
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.DiffUtil
@@ -42,7 +41,7 @@ class WalletConnectSendEthereumTransactionRequestFragment : BaseFragment() {
         sentToSelfIcon.isVisible = false
         primaryValue.setTextColor(requireContext().getColor(R.color.jacob))
 
-        val vmFactory = WalletConnectRequestModule.Factory(baseViewModel.sharedSendEthereumTransactionRequest!!)
+        val vmFactory = WalletConnectRequestModule.Factory(baseViewModel.sharedSendEthereumTransactionRequest!!, baseViewModel.service)
 
         val viewModel by viewModels<WalletConnectSendEthereumTransactionRequestViewModel> { vmFactory }
         val feeViewModel by viewModels<EthereumFeeViewModel> { vmFactory }
@@ -52,11 +51,11 @@ class WalletConnectSendEthereumTransactionRequestFragment : BaseFragment() {
         }
 
         btnReject.setOnSingleClickListener {
-            popBackStackWithResult(ApproveResult.Rejected)
+            viewModel.reject()
         }
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
-            popBackStackWithResult(ApproveResult.Rejected)
+            viewModel.reject()
         }
 
         viewModel.amountData.let {
@@ -75,19 +74,23 @@ class WalletConnectSendEthereumTransactionRequestFragment : BaseFragment() {
 
         rvDetails.adapter = detailsAdapter
 
-        viewModel.approveLiveEvent.observe(viewLifecycleOwner, Observer { transactionHash ->
-            popBackStackWithResult(ApproveResult.Approved(transactionHash))
+        viewModel.finishedLiveEvent.observe(viewLifecycleOwner, { success ->
+            if (success) {
+                HudHelper.showSuccessMessage(requireActivity().findViewById(android.R.id.content), R.string.Hud_Text_Success)
+            }
+            baseViewModel.sharedSendEthereumTransactionRequest = null
+            findNavController().popBackStack()
         })
 
-        viewModel.approveEnabledLiveData.observe(viewLifecycleOwner, Observer {
+        viewModel.approveEnabledLiveData.observe(viewLifecycleOwner, {
             btnApprove.isEnabled = it
         })
 
-        viewModel.rejectEnabledLiveData.observe(viewLifecycleOwner, Observer {
+        viewModel.rejectEnabledLiveData.observe(viewLifecycleOwner, {
             btnReject.isEnabled = it
         })
 
-        viewModel.errorLiveData.observe(viewLifecycleOwner, Observer {
+        viewModel.errorLiveData.observe(viewLifecycleOwner, {
             error.text = it
         })
 
@@ -100,19 +103,6 @@ class WalletConnectSendEthereumTransactionRequestFragment : BaseFragment() {
                     findNavController().navigate(R.id.walletConnectErrorFragment_to_feeSpeedInfo, null, navOptions())
                 }
         )
-    }
-
-    private fun popBackStackWithResult(approveResult: ApproveResult) {
-        findNavController().previousBackStackEntry?.savedStateHandle?.set("ApproveResult", approveResult)
-        findNavController().popBackStack()
-    }
-
-    sealed class ApproveResult {
-        @Parcelize
-        class Approved(val txHash: ByteArray) : ApproveResult(), Parcelable
-
-        @Parcelize
-        object Rejected : ApproveResult(), Parcelable
     }
 }
 
