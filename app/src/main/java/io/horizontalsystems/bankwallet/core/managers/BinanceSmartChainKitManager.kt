@@ -8,7 +8,6 @@ import io.horizontalsystems.bankwallet.entities.CommunicationMode
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.ethereumkit.core.EthereumKit
-import io.horizontalsystems.ethereumkit.core.EthereumKit.Companion
 import io.horizontalsystems.ethereumkit.core.EthereumKit.NetworkType
 
 class BinanceSmartChainKitManager(
