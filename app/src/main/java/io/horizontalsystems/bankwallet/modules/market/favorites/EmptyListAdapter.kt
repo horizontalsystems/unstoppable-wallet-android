@@ -12,8 +12,9 @@ import io.horizontalsystems.bankwallet.R
 
 class EmptyListAdapter(
         showEmptyListText: LiveData<Boolean>,
-        viewLifecycleOwner: LifecycleOwner
-) : ListAdapter<Boolean, EmptyListAdapter.ViewHolder>(diffCallback) {
+        viewLifecycleOwner: LifecycleOwner,
+        private val viewHolderFactoryMethod: (parent: ViewGroup, viewType: Int) -> RecyclerView.ViewHolder
+) : ListAdapter<Boolean, RecyclerView.ViewHolder>(diffCallback) {
 
     init {
         showEmptyListText.observe(viewLifecycleOwner, { show ->
@@ -21,10 +22,10 @@ class EmptyListAdapter(
         })
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) = Unit
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) = Unit
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder.create(parent)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return viewHolderFactoryMethod(parent, viewType)
     }
 
     companion object{
@@ -35,14 +36,6 @@ class EmptyListAdapter(
 
             override fun areContentsTheSame(oldItem: Boolean, newItem: Boolean): Boolean {
                 return oldItem == newItem
-            }
-        }
-    }
-
-    class ViewHolder(containerView: View) : RecyclerView.ViewHolder(containerView) {
-        companion object {
-            fun create(parent: ViewGroup): ViewHolder {
-                return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_empty_favorites_list, parent, false))
             }
         }
     }

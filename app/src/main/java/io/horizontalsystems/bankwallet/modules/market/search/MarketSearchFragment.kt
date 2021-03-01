@@ -7,27 +7,22 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import androidx.appcompat.widget.SearchView
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.ConcatAdapter
+import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
-import io.horizontalsystems.bankwallet.modules.market.*
-import io.horizontalsystems.bankwallet.modules.market.list.MarketListViewModel
+import io.horizontalsystems.bankwallet.modules.market.favorites.EmptyListAdapter
 import io.horizontalsystems.bankwallet.modules.ratechart.RateChartFragment
-import io.horizontalsystems.bankwallet.ui.extensions.MarketListHeaderView
-import io.horizontalsystems.bankwallet.ui.extensions.SelectorDialog
-import io.horizontalsystems.bankwallet.ui.extensions.SelectorItem
 import io.horizontalsystems.core.findNavController
-import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.views.inflate
 import kotlinx.android.synthetic.main.fragment_market_search.*
 
-class MarketSearchFragment : BaseFragment(), ViewHolderMarketItem.Listener, MarketListHeaderView.Listener {
+class MarketSearchFragment : BaseFragment() {
 
-    private val factory by lazy { MarketSearchModule.Factory() }
-
-    private val marketSearchViewModel by viewModels<MarketSearchViewModel> { factory }
-    private val marketListViewModel by viewModels<MarketListViewModel> { factory }
+    private val marketSearchViewModel by viewModels<MarketSearchViewModel> { MarketSearchModule.Factory() }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_market_search, container, false)
@@ -56,55 +51,34 @@ class MarketSearchFragment : BaseFragment(), ViewHolderMarketItem.Listener, Mark
             override fun onQueryTextSubmit(query: String): Boolean = false
         })
 
+        val itemsAdapter = CoinDataItemsAdapter(::onItemClick)
+        val emptyListAdapter = EmptyListAdapter(marketSearchViewModel.emptyResultsLiveData, viewLifecycleOwner) {  parent, viewType ->
+            EmptyResultsViewHolder.create(parent, viewType)
+        }
 
-        marketListHeader.listener = this
-        marketListHeader.setSortingField(marketListViewModel.sortingField)
-        marketListHeader.setMarketField(marketListViewModel.marketField)
+        rvItems.adapter = ConcatAdapter(itemsAdapter, emptyListAdapter)
+        rvItems.itemAnimator = null
 
-        val marketItemsAdapter = MarketItemsAdapter(
-                this,
-                marketListViewModel.marketViewItemsLiveData,
-                marketListViewModel.loadingLiveData,
-                marketListViewModel.errorLiveData,
-                viewLifecycleOwner
-        )
-        val marketLoadingAdapter = MarketLoadingAdapter(
-                marketListViewModel.loadingLiveData,
-                marketListViewModel.errorLiveData,
-                marketListViewModel::onErrorClick,
-                viewLifecycleOwner
-        )
+        marketSearchViewModel.itemsLiveData.observe(viewLifecycleOwner) {
+            itemsAdapter.submitList(it)
+        }
 
-        coinRatesRecyclerView.adapter = ConcatAdapter(marketLoadingAdapter, marketItemsAdapter)
-        coinRatesRecyclerView.itemAnimator = null
-
-        marketListViewModel.networkNotAvailable.observe(viewLifecycleOwner, {
-            HudHelper.showErrorMessage(requireView(), R.string.Hud_Text_NoInternet)
-        })
+        marketSearchViewModel.advancedSearchButtonVisibleLiveDataViewItem.observe(viewLifecycleOwner) {
+            advancedSearch.isVisible = it
+        }
     }
 
-    override fun onItemClick(marketViewItem: MarketViewItem) {
-        val arguments = RateChartFragment.prepareParams(marketViewItem.coinCode, marketViewItem.coinName, null)
+    fun onItemClick(coinDataViewItem: CoinDataViewItem) {
+        val arguments = RateChartFragment.prepareParams(coinDataViewItem.code, coinDataViewItem.name, null)
 
         findNavController().navigate(R.id.rateChartFragment, arguments, navOptions())
     }
 
-    override fun onClickSortingField() {
-        val items = marketListViewModel.sortingFields.map {
-            SelectorItem(getString(it.titleResId), it == marketListViewModel.sortingField)
+    class EmptyResultsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        companion object {
+            fun create(parent: ViewGroup, viewType: Int): EmptyResultsViewHolder {
+                return EmptyResultsViewHolder(inflate(parent, R.layout.view_holder_empty_results))
+            }
         }
-
-        SelectorDialog
-                .newInstance(items, getString(R.string.Market_Sort_PopupTitle)) { position ->
-                    val selectedSortingField = marketListViewModel.sortingFields[position]
-
-                    marketListHeader.setSortingField(selectedSortingField)
-                    marketListViewModel.update(sortingField = selectedSortingField)
-                }
-                .show(childFragmentManager, "sorting_field_selector")
-    }
-
-    override fun onSelectMarketField(marketField: MarketField) {
-        marketListViewModel.update(marketField = marketField)
     }
 }

@@ -173,6 +173,7 @@
     <string name="Market_Category_Computing_Description">Decentralized on-demand computing solutions.</string>
 
     <!--Market Search-->
+    <string name="EmptyResults">No results found</string>
     <string name="Market_AdvancedSearch">Advanced Search</string>
     <string name="Market_AdvancedSearch_Results">Results</string>
     <string name="Market_Filter_CoinList">Coin List</string>

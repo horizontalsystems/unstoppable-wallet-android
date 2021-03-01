@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.ConcatAdapter
+import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.market.*
@@ -50,7 +51,9 @@ class MarketFavoritesFragment : BaseFragment(), MarketListHeaderView.Listener, V
         )
         marketLoadingAdapter = MarketLoadingAdapter(marketListViewModel.loadingLiveData, marketListViewModel.errorLiveData, marketListViewModel::onErrorClick, viewLifecycleOwner)
 
-        val emptyListAdapter = EmptyListAdapter(marketListViewModel.showEmptyListTextLiveData, viewLifecycleOwner)
+        val emptyListAdapter = EmptyListAdapter(marketListViewModel.showEmptyListTextLiveData, viewLifecycleOwner) { parent, viewType ->
+            EmptyFavoritesViewHolder.create(parent, viewType)
+        }
 
         coinRatesRecyclerView.adapter = ConcatAdapter(marketLoadingAdapter, marketItemsAdapter, emptyListAdapter)
         coinRatesRecyclerView.itemAnimator = null
@@ -89,5 +92,13 @@ class MarketFavoritesFragment : BaseFragment(), MarketListHeaderView.Listener, V
         val arguments = RateChartFragment.prepareParams(marketViewItem.coinCode, marketViewItem.coinName, null)
 
         findNavController().navigate(R.id.rateChartFragment, arguments, navOptions())
+    }
+
+    class EmptyFavoritesViewHolder(containerView: View) : RecyclerView.ViewHolder(containerView) {
+        companion object {
+            fun create(parent: ViewGroup, viewType: Int): EmptyFavoritesViewHolder {
+                return EmptyFavoritesViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_empty_favorites_list, parent, false))
+            }
+        }
     }
 }

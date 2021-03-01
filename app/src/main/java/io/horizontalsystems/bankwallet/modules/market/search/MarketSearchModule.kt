@@ -10,21 +10,13 @@ import io.horizontalsystems.bankwallet.modules.market.list.MarketListViewModel
 object MarketSearchModule {
 
     class Factory : ViewModelProvider.Factory {
-
-        val service by lazy { MarketSearchService(App.xRateManager) }
-
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel?> create(modelClass: Class<T>) = when (modelClass) {
-            MarketSearchViewModel::class.java -> {
-                MarketSearchViewModel(service, listOf(service)) as T
-            }
-            MarketListViewModel::class.java -> {
-                val listService = MarketListService(MarketModule.currencyUSD, service)
-                MarketListViewModel(listService, App.connectivityManager, listOf(listService)) as T
-            }
-            else -> throw IllegalArgumentException(modelClass.simpleName)
+        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+            val service = MarketSearchService(App.xRateManager)
+            return MarketSearchViewModel(service, listOf(service)) as T
         }
-
     }
 
 }
+
+data class CoinDataViewItem(val code: String, val name: String)
