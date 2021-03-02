@@ -19,15 +19,8 @@ import io.horizontalsystems.bankwallet.ui.extensions.SelectorItem
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.android.synthetic.main.fragment_market_advanced_search_results.*
-import kotlinx.android.synthetic.main.fragment_market_favorites.*
-import kotlinx.android.synthetic.main.fragment_market_favorites.coinRatesRecyclerView
-import kotlinx.android.synthetic.main.fragment_market_favorites.marketListHeader
-import kotlinx.android.synthetic.main.fragment_market_favorites.pullToRefresh
 
 class MarketAdvancedSearchResultsFragment : BaseFragment(), MarketListHeaderView.Listener, ViewHolderMarketItem.Listener {
-
-    private lateinit var marketItemsAdapter: MarketItemsAdapter
-    private lateinit var marketLoadingAdapter: MarketLoadingAdapter
 
     private val marketSearchFilterViewModel by navGraphViewModels<MarketAdvancedSearchViewModel>(R.id.marketAdvancedSearchFragment)
     private val marketListViewModel by viewModels<MarketListViewModel> { MarketAdvancedSearchResultsModule.Factory(marketSearchFilterViewModel.service) }
@@ -51,14 +44,14 @@ class MarketAdvancedSearchResultsFragment : BaseFragment(), MarketListHeaderView
             marketListHeader.isVisible = list.isNotEmpty()
         })
 
-        marketItemsAdapter = MarketItemsAdapter(
+        val marketItemsAdapter = MarketItemsAdapter(
                 this,
                 marketListViewModel.marketViewItemsLiveData,
                 marketListViewModel.loadingLiveData,
                 marketListViewModel.errorLiveData,
                 viewLifecycleOwner
         )
-        marketLoadingAdapter = MarketLoadingAdapter(marketListViewModel.loadingLiveData, marketListViewModel.errorLiveData, marketListViewModel::onErrorClick, viewLifecycleOwner)
+        val marketLoadingAdapter = MarketLoadingAdapter(marketListViewModel.loadingLiveData, marketListViewModel.errorLiveData, marketListViewModel::onErrorClick, viewLifecycleOwner)
 
         coinRatesRecyclerView.adapter = ConcatAdapter(marketLoadingAdapter, marketItemsAdapter)
         coinRatesRecyclerView.itemAnimator = null
