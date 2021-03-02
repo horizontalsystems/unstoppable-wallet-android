@@ -26,6 +26,10 @@ class MarketOverviewService(
 
     private var topItemsDisposable: Disposable? = null
 
+    init {
+        fetch()
+    }
+
     fun refresh() {
         fetch()
     }

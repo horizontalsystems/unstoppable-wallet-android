@@ -78,11 +78,6 @@ class MarketDiscoveryFragment : BaseFragment(), MarketListHeaderView.Listener, V
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        marketListViewModel.refresh()
-    }
-
     override fun onClickSortingField() {
         val items = marketListViewModel.sortingFields.map {
             SelectorItem(getString(it.titleResId), it == marketListViewModel.sortingField)
