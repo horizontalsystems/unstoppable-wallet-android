@@ -22,9 +22,6 @@ import kotlinx.android.synthetic.main.fragment_market_favorites.*
 
 class MarketFavoritesFragment : BaseFragment(), MarketListHeaderView.Listener, ViewHolderMarketItem.Listener {
 
-    private lateinit var marketItemsAdapter: MarketItemsAdapter
-    private lateinit var marketLoadingAdapter: MarketLoadingAdapter
-
     private val marketListViewModel by viewModels<MarketListViewModel> { MarketFavoritesModule.Factory() }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -42,14 +39,14 @@ class MarketFavoritesFragment : BaseFragment(), MarketListHeaderView.Listener, V
             marketListHeader.isVisible = list.isNotEmpty()
         })
 
-        marketItemsAdapter = MarketItemsAdapter(
+        val marketItemsAdapter = MarketItemsAdapter(
                 this,
                 marketListViewModel.marketViewItemsLiveData,
                 marketListViewModel.loadingLiveData,
                 marketListViewModel.errorLiveData,
                 viewLifecycleOwner
         )
-        marketLoadingAdapter = MarketLoadingAdapter(marketListViewModel.loadingLiveData, marketListViewModel.errorLiveData, marketListViewModel::onErrorClick, viewLifecycleOwner)
+        val marketLoadingAdapter = MarketLoadingAdapter(marketListViewModel.loadingLiveData, marketListViewModel.errorLiveData, marketListViewModel::onErrorClick, viewLifecycleOwner)
 
         val emptyListAdapter = EmptyListAdapter(marketListViewModel.showEmptyListTextLiveData, viewLifecycleOwner) { parent, viewType ->
             EmptyFavoritesViewHolder.create(parent, viewType)
