@@ -106,11 +106,6 @@ class MarketOverviewFragment : BaseFragment(), ViewHolderMarketOverviewItem.List
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        marketOverviewViewModel.refresh()
-    }
-
     override fun onItemClick(marketViewItem: MarketViewItem) {
         val arguments = RateChartFragment.prepareParams(marketViewItem.coinCode, marketViewItem.coinName, null)
 
