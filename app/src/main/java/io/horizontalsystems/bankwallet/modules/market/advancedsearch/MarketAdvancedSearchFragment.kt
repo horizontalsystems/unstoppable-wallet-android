@@ -71,7 +71,7 @@ class MarketAdvancedSearchFragment : BaseFragment() {
         filterVolume.setOnSingleClickListener {
             showSelectorDialog(
                     title = R.string.Market_Filter_Volume,
-                    subtitleText = "---------",
+                    subtitleText = getString(R.string.TimePeriod_24h),
                     headerIcon = R.drawable.ic_chart_24,
                     items = marketAdvancedSearchViewModel.volumeViewItemOptions,
                     selectedItem = marketAdvancedSearchViewModel.volumeViewItem,
@@ -87,7 +87,7 @@ class MarketAdvancedSearchFragment : BaseFragment() {
         filterLiquidity.setOnSingleClickListener {
             showSelectorDialog(
                     title = R.string.Market_Filter_Liquidity,
-                    subtitleText = "---------",
+                    subtitleText = getString(R.string.TimePeriod_24h),
                     headerIcon = R.drawable.ic_circle_check_24,
                     items = marketAdvancedSearchViewModel.liquidityViewItemOptions,
                     selectedItem = marketAdvancedSearchViewModel.liquidityViewItem,
