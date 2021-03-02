@@ -57,6 +57,10 @@ class MarketAdvancedSearchService(private val currency: Currency, private val xR
     var numberOfItemsAsync = PublishSubject.create<DataState<Int>>()
     private var topItemsDisposable: Disposable? = null
 
+    init {
+        refreshCounter()
+    }
+
     private fun refreshCounter() {
         topItemsDisposable?.dispose()
 
