@@ -1,15 +1,20 @@
 package io.horizontalsystems.bankwallet.modules.market.discovery
 
+import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.IRateManager
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.bankwallet.modules.market.Score
 import io.horizontalsystems.bankwallet.modules.market.list.IMarketListFetcher
+import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.entities.Currency
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.subjects.PublishSubject
 
-class MarketDiscoveryService(private val xRateManager: IRateManager) : IMarketListFetcher {
+class MarketDiscoveryService(
+        private val xRateManager: IRateManager,
+        private val backgroundManager: BackgroundManager
+) : IMarketListFetcher, BackgroundManager.Listener, Clearable {
 
     private val dataUpdatedSubject = PublishSubject.create<Unit>()
 
@@ -40,6 +45,18 @@ class MarketDiscoveryService(private val xRateManager: IRateManager) : IMarketLi
             MarketCategory.Gaming, MarketCategory.B2B, MarketCategory.Infrastructure, MarketCategory.Staking,
             MarketCategory.Governance, MarketCategory.CrossChain, MarketCategory.Computing
     )
+
+    init {
+        backgroundManager.registerListener(this)
+    }
+
+    override fun willEnterForeground() {
+        dataUpdatedSubject.onNext(Unit)
+    }
+
+    override fun clear() {
+        backgroundManager.unregisterListener(this)
+    }
 
     private fun getAllMarketItemsAsync(currency: Currency): Single<List<MarketItem>> {
         return xRateManager.getTopMarketList(currency.code, 250)

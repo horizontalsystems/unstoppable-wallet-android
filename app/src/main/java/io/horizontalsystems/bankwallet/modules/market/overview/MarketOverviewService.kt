@@ -5,14 +5,16 @@ import io.horizontalsystems.bankwallet.core.IRateManager
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.bankwallet.modules.market.Score
+import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.entities.Currency
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.BehaviorSubject
 
 class MarketOverviewService(
         private val currency: Currency,
-        private val rateManager: IRateManager
-) : Clearable {
+        private val rateManager: IRateManager,
+        private val backgroundManager: BackgroundManager
+) : Clearable, BackgroundManager.Listener {
 
     sealed class State {
         object Loading : State()
@@ -27,6 +29,11 @@ class MarketOverviewService(
     private var topItemsDisposable: Disposable? = null
 
     init {
+        fetch()
+        backgroundManager.registerListener(this)
+    }
+
+    override fun willEnterForeground() {
         fetch()
     }
 
@@ -53,6 +60,7 @@ class MarketOverviewService(
 
     override fun clear() {
         topItemsDisposable?.dispose()
+        backgroundManager.unregisterListener(this)
     }
 
 }

@@ -10,12 +10,12 @@ import io.horizontalsystems.bankwallet.modules.market.list.MarketListViewModel
 object MarketDiscoveryModule {
 
     class Factory : ViewModelProvider.Factory {
-        val service by lazy { MarketDiscoveryService(App.xRateManager) }
+        val service by lazy { MarketDiscoveryService(App.xRateManager, App.backgroundManager) }
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel?> create(modelClass: Class<T>) = when (modelClass) {
             MarketDiscoveryViewModel::class.java -> {
-                MarketDiscoveryViewModel(service) as T
+                MarketDiscoveryViewModel(service, listOf(service)) as T
             }
             MarketListViewModel::class.java -> {
                 val listService = MarketListService(MarketModule.currencyUSD, service)
