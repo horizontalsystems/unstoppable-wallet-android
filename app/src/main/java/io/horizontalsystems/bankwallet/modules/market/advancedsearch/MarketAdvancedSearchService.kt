@@ -8,6 +8,7 @@ import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.bankwallet.modules.market.Score
 import io.horizontalsystems.bankwallet.modules.market.list.IMarketListFetcher
 import io.horizontalsystems.core.entities.Currency
+import io.horizontalsystems.xrateskit.entities.CoinMarket
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.disposables.Disposable
@@ -18,6 +19,7 @@ class MarketAdvancedSearchService(private val currency: Currency, private val xR
     var coinCount: Int = CoinList.Top250.itemsCount
         set(value) {
             field = value
+            cache = null
 
             refreshCounter()
         }
@@ -55,7 +57,9 @@ class MarketAdvancedSearchService(private val currency: Currency, private val xR
     override val dataUpdatedAsync: Observable<Unit> = Observable.empty()
 
     var numberOfItemsAsync = PublishSubject.create<DataState<Int>>()
+
     private var topItemsDisposable: Disposable? = null
+    private var cache: List<CoinMarket>? = null
 
     init {
         refreshCounter()
@@ -65,7 +69,7 @@ class MarketAdvancedSearchService(private val currency: Currency, private val xR
         topItemsDisposable?.dispose()
 
         numberOfItemsAsync.onNext(DataState.Loading)
-        topItemsDisposable = fetchAsync(currency)
+        topItemsDisposable = getTopMarketList(currency)
                 .map { it.size }
                 .subscribeIO({
                     numberOfItemsAsync.onNext(DataState.Success(it))
@@ -76,18 +80,31 @@ class MarketAdvancedSearchService(private val currency: Currency, private val xR
     }
 
     override fun fetchAsync(currency: Currency): Single<List<MarketItem>> {
-        return xRateManager.getTopMarketList(currency.code, coinCount)
+        return getTopMarketList(currency)
+                .map { coinMarkets ->
+                    coinMarkets.mapIndexed { index, coinMarket ->
+                        MarketItem.createFromCoinMarket(coinMarket, currency, Score.Rank(index + 1))
+                    }
+                }
+    }
+
+    private fun getTopMarketList(currency: Currency): Single<List<CoinMarket>> {
+        val topMarketListAsync = if (cache != null) {
+            Single.just(cache)
+        } else {
+            xRateManager.getTopMarketList(currency.code, coinCount)
+                    .doOnSuccess {
+                        cache = it
+                    }
+        }
+
+        return topMarketListAsync
                 .map {
                     it.filter {
                         filterByRange(filterMarketCap, it.marketInfo.marketCap?.toLong())
                                 && filterByRange(filterVolume, it.marketInfo.volume.toLong())
                                 && filterByRange(filterLiquidity, it.marketInfo.liquidity?.toLong())
                                 && filterByRange(filterPriceChange, it.marketInfo.rateDiffPeriod.toLong())
-                    }
-                }
-                .map { coinMarkets ->
-                    coinMarkets.mapIndexed { index, coinMarket ->
-                        MarketItem.createFromCoinMarket(coinMarket, currency, Score.Rank(index + 1))
                     }
                 }
     }
