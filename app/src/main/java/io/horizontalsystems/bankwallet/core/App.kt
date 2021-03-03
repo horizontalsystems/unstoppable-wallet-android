@@ -76,7 +76,6 @@ class App : CoreApp() {
         lateinit var derivationSettingsManager: IDerivationSettingsManager
         lateinit var bitcoinCashCoinTypeManager: BitcoinCashCoinTypeManager
         lateinit var accountCleaner: IAccountCleaner
-        lateinit var rateCoinMapper: RateCoinMapper
         lateinit var rateAppManager: IRateAppManager
         lateinit var coinManager: ICoinManager
         lateinit var walletConnectSessionStorage: WalletConnectSessionStorage
@@ -178,9 +177,8 @@ class App : CoreApp() {
         adapterFactory.ethereumRpcModeSettingsManager = ethereumRpcModeSettingsManager
         adapterFactory.bitcoinCashCoinTypeManager = bitcoinCashCoinTypeManager
 
-        rateCoinMapper = RateCoinMapper()
         feeCoinProvider = FeeCoinProvider(coinKit)
-        xRateManager = RateManager(this, walletManager, currencyManager, rateCoinMapper, feeCoinProvider, appConfigProvider)
+        xRateManager = RateManager(this, walletManager, currencyManager, feeCoinProvider, appConfigProvider)
 
         addressParserFactory = AddressParserFactory()
 

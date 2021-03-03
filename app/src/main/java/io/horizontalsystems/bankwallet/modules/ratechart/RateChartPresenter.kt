@@ -8,6 +8,7 @@ import io.horizontalsystems.bankwallet.modules.ratechart.RateChartModule.Interac
 import io.horizontalsystems.bankwallet.modules.ratechart.RateChartModule.View
 import io.horizontalsystems.bankwallet.modules.ratechart.RateChartModule.ViewDelegate
 import io.horizontalsystems.chartview.models.PointInfo
+import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.xrateskit.entities.*
 
@@ -15,6 +16,7 @@ class RateChartPresenter(
         val view: View,
         val rateFormatter: RateFormatter,
         private val interactor: Interactor,
+        private val coinType: CoinType,
         private val coinCode: String,
         private val coinTitle: String,
         private val coinId: String?,
@@ -53,9 +55,9 @@ class RateChartPresenter(
     override fun viewDidLoad() {
         view.setChartType(chartType)
 
-        marketInfo = interactor.getMarketInfo(coinCode, currency.code)
-        interactor.observeMarketInfo(coinCode, currency.code)
-        interactor.observeAlertNotification(coinCode)
+        marketInfo = interactor.getMarketInfo(coinType, currency.code)
+        interactor.observeMarketInfo(coinType, currency.code)
+        interactor.observeAlertNotification()
 
         fetchChartInfo()
         updateAlertNotificationIconState()
@@ -93,11 +95,11 @@ class RateChartPresenter(
     }
 
     override fun onFavoriteClick() {
-        interactor.favorite(coinCode)
+        interactor.favorite(coinType)
     }
 
     override fun onUnfavoriteClick() {
-        interactor.unfavorite(coinCode)
+        interactor.unfavorite(coinType)
     }
 
     override fun toggleEma() {
@@ -131,16 +133,16 @@ class RateChartPresenter(
     }
 
     override fun updateFavoriteNotificationItemState() {
-        view.setIsFavorite(interactor.isCoinFavorite(coinCode))
+        view.setIsFavorite(interactor.isCoinFavorite(coinType))
     }
 
     private fun fetchChartInfo() {
         view.chartSpinner(isLoading = true)
 
-        chartInfo = interactor.getChartInfo(coinCode, currency.code, chartType)
+        chartInfo = interactor.getChartInfo(coinType, currency.code, chartType)
 
-        interactor.observeChartInfo(coinCode, currency.code, chartType)
-        interactor.getCoinDetails(coinCode, currency.code, listOf("USD", "BTC", "ETH"), listOf(TimePeriod.DAY_7, TimePeriod.DAY_30))
+        interactor.observeChartInfo(coinType, currency.code, chartType)
+        interactor.getCoinDetails(coinType, currency.code, listOf("USD", "BTC", "ETH"), listOf(TimePeriod.DAY_7, TimePeriod.DAY_30))
     }
 
     private fun updateMarketInfo() {

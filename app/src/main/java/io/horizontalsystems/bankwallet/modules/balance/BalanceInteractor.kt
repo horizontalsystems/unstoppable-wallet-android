@@ -4,6 +4,7 @@ import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
 import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.xrateskit.entities.ChartInfo
@@ -50,12 +51,12 @@ class BalanceInteractor(
     override val networkAvailable: Boolean
         get() = connectivityManager.isConnected
 
-    override fun marketInfo(coinCode: String, currencyCode: String): MarketInfo? {
-        return rateManager.marketInfo(coinCode, currencyCode)
+    override fun marketInfo(coinType: CoinType, currencyCode: String): MarketInfo? {
+        return rateManager.marketInfo(coinType, currencyCode)
     }
 
-    override fun chartInfo(coinCode: String, currencyCode: String): ChartInfo? {
-        return rateManager.chartInfo(coinCode, currencyCode, ChartType.DAILY)
+    override fun chartInfo(coinType: CoinType, currencyCode: String): ChartInfo? {
+        return rateManager.chartInfo(coinType, currencyCode, ChartType.DAILY)
     }
 
     override fun balance(wallet: Wallet): BigDecimal? {

@@ -270,20 +270,20 @@ interface IAppConfigProvider {
 
 interface IRateManager {
     fun set(coins: List<Coin>)
-    fun marketInfo(coinCode: String, currencyCode: String): MarketInfo?
-    fun getLatestRate(coinCode: String, currencyCode: String): BigDecimal?
-    fun marketInfoObservable(coinCode: String, currencyCode: String): Observable<MarketInfo>
-    fun marketInfoObservable(currencyCode: String): Observable<Map<String, MarketInfo>>
-    fun historicalRateCached(coinCode: String, currencyCode: String, timestamp: Long): BigDecimal?
-    fun historicalRate(coinCode: String, currencyCode: String, timestamp: Long): Single<BigDecimal>
-    fun chartInfo(coinCode: String, currencyCode: String, chartType: ChartType): ChartInfo?
-    fun chartInfoObservable(coinCode: String, currencyCode: String, chartType: ChartType): Observable<ChartInfo>
-    fun coinMarketDetailsAsync(coinCode: String, currencyCode: String, rateDiffCoinCodes: List<String>, rateDiffPeriods: List<TimePeriod>): Single<CoinMarketDetails>
+    fun marketInfo(coinType: CoinType, currencyCode: String): MarketInfo?
+    fun getLatestRate(coinType: CoinType, currencyCode: String): BigDecimal?
+    fun marketInfoObservable(coinType: CoinType, currencyCode: String): Observable<MarketInfo>
+    fun marketInfoObservable(currencyCode: String): Observable<Map<CoinType, MarketInfo>>
+    fun historicalRateCached(coinType: CoinType, currencyCode: String, timestamp: Long): BigDecimal?
+    fun historicalRate(coinType: CoinType, currencyCode: String, timestamp: Long): Single<BigDecimal>
+    fun chartInfo(coinType: CoinType, currencyCode: String, chartType: ChartType): ChartInfo?
+    fun chartInfoObservable(coinType: CoinType, currencyCode: String, chartType: ChartType): Observable<ChartInfo>
+    fun coinMarketDetailsAsync(coinType: CoinType, currencyCode: String, rateDiffCoinCodes: List<String>, rateDiffPeriods: List<TimePeriod>): Single<CoinMarketDetails>
     fun getCryptoNews(coinCode: String): Single<List<CryptoNews>>
     fun getTopMarketList(currency: String, itemsCount: Int): Single<List<CoinMarket>>
-    fun getCoinMarketList(coinCodes: List<String>, currency: String): Single<List<CoinMarket>>
+    fun getCoinMarketList(coinTypes: List<CoinType>, currency: String): Single<List<CoinMarket>>
     fun getCoinMarketListByCategory(categoryId: String, currency: String): Single<List<CoinMarket>>
-    fun getCoinRatingsAsync():Single<Map<String, String>>
+    fun getCoinRatingsAsync(): Single<Map<CoinType, String>>
     fun getGlobalMarketInfoAsync(currency: String): Single<GlobalCoinMarket>
     fun refresh()
 }
@@ -386,11 +386,6 @@ interface IEthereumRpcModeSettingsManager {
 
 interface IAccountCleaner {
     fun clearAccounts(accountIds: List<String>)
-}
-
-interface IRateCoinMapper {
-    fun convert(coinCode: String): String?
-    fun unconvert(coinCode: String): String
 }
 
 interface ITorManager {

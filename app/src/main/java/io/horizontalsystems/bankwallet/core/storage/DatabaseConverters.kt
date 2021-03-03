@@ -67,24 +67,12 @@ class DatabaseConverters {
 
     @TypeConverter
     fun fromCoinType(coinType: CoinType?): String {
-        return when (coinType) {
-            CoinType.Bitcoin -> "bitcoin"
-            CoinType.Litecoin -> "litecoin"
-            CoinType.BitcoinCash -> "bitcoinCash"
-            CoinType.Dash -> "dash"
-            else -> ""
-        }
+        return coinType?.getCoinId() ?: ""
     }
 
     @TypeConverter
-    fun toCoinType(value: String): CoinType? {
-        return when (value) {
-            "bitcoin" -> CoinType.Bitcoin
-            "litecoin" -> CoinType.Litecoin
-            "bitcoinCash" -> CoinType.BitcoinCash
-            "dash" -> CoinType.Dash
-            else -> null
-        }
+    fun toCoinType(value: String): CoinType {
+        return CoinType.fromString(value)
     }
 
     @TypeConverter

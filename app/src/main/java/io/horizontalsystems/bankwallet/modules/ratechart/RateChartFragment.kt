@@ -28,6 +28,7 @@ import io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.Tran
 import io.horizontalsystems.bankwallet.ui.extensions.createTextView
 import io.horizontalsystems.chartview.Chart
 import io.horizontalsystems.chartview.models.PointInfo
+import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.views.ListPosition
@@ -72,6 +73,11 @@ class RateChartFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelecte
 
         val coinId = arguments?.getString(COIN_ID_KEY)
 
+        val coinType = arguments?.getParcelable<CoinType>(COIN_TYPE_KEY) ?: run {
+            findNavController().popBackStack()
+            return
+        }
+
         val coinCode = arguments?.getString(COIN_CODE_KEY) ?: run {
             findNavController().popBackStack()
             return
@@ -79,7 +85,7 @@ class RateChartFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelecte
 
         val coinTitle = arguments?.getString(COIN_TITLE_KEY) ?: ""
 
-        presenter = ViewModelProvider(this, RateChartModule.Factory(coinTitle, coinCode, coinId)).get(RateChartPresenter::class.java)
+        presenter = ViewModelProvider(this, RateChartModule.Factory(coinTitle, coinType, coinCode, coinId)).get(RateChartPresenter::class.java)
         presenterView = presenter.view as RateChartView
 
         toolbar.title = coinTitle
@@ -265,14 +271,14 @@ class RateChartFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelecte
 
             // About
 
-            aboutText.text = Html.fromHtml(item.coinInfo.description.replace("\n", "<br />"), Html.FROM_HTML_MODE_COMPACT)
+            aboutText.text = Html.fromHtml(item.coinMeta.description.replace("\n", "<br />"), Html.FROM_HTML_MODE_COMPACT)
 
             // Categories/Links
 
             context?.let { context ->
                 linksLayout.removeAllViews()
 
-                item.coinInfo.categories?.let { categories ->
+                item.coinMeta.categories?.let { categories ->
                     val category = TransactionInfoItemView(context).apply {
                         layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutHelper.dp(48f, context))
 
@@ -287,7 +293,7 @@ class RateChartFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelecte
                     linksLayout.addView(category)
                 }
 
-                item.coinInfo.platforms?.forEach { (platform, value) ->
+                item.coinMeta.platforms?.forEach { (platform, value) ->
                     val contract = TransactionInfoItemView(context).apply {
                         txViewBackground.setBackgroundColor(Color.TRANSPARENT)
                         bindHashId(platform.name, value)
@@ -296,7 +302,7 @@ class RateChartFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelecte
                     linksLayout.addView(contract)
                 }
 
-                item.coinInfo.links[LinkType.GUIDE]?.let {
+                item.coinMeta.links[LinkType.GUIDE]?.let {
                     val link = SettingsView(context).apply {
                         showTitle(context.getString(R.string.Charts_Guide))
                         showIcon(ContextCompat.getDrawable(context, R.drawable.ic_academy_20))
@@ -310,7 +316,7 @@ class RateChartFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelecte
                     linksLayout.addView(link)
                 }
 
-                val allLinks = item.coinInfo.links.filter { it.key != LinkType.GUIDE }
+                val allLinks = item.coinMeta.links.filter { it.key != LinkType.GUIDE }
 
                 allLinks.onEachIndexed { index, entry ->
                     val link = SettingsView(context)
@@ -487,12 +493,14 @@ class RateChartFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelecte
     }
 
     companion object {
+        private const val COIN_TYPE_KEY = "coin_type_key"
         private const val COIN_CODE_KEY = "coin_code_key"
         private const val COIN_TITLE_KEY = "coin_title_key"
         private const val COIN_ID_KEY = "coin_id_key"
 
-        fun prepareParams(coinCode: String, coinTitle: String, coinId: String?): Bundle {
+        fun prepareParams(coinType: CoinType, coinCode: String, coinTitle: String, coinId: String?): Bundle {
             return bundleOf(
+                    COIN_TYPE_KEY to coinType,
                     COIN_CODE_KEY to coinCode,
                     COIN_TITLE_KEY to coinTitle,
                     COIN_ID_KEY to coinId

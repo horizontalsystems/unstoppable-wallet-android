@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.core.managers
 import io.horizontalsystems.bankwallet.core.storage.AppDatabase
 import io.horizontalsystems.bankwallet.core.storage.FavoriteCoin
 import io.horizontalsystems.bankwallet.core.storage.MarketFavoritesDao
+import io.horizontalsystems.coinkit.models.CoinType
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 
@@ -17,13 +18,13 @@ class MarketFavoritesManager(appDatabase: AppDatabase) {
         appDatabase.marketFavoritesDao()
     }
 
-    fun add(coinCode: String) {
-        dao.insert(FavoriteCoin(coinCode))
+    fun add(coinType: CoinType) {
+        dao.insert(FavoriteCoin(coinType))
         dataUpdatedSubject.onNext(Unit)
     }
 
-    fun remove(coinCode: String) {
-        dao.delete(coinCode)
+    fun remove(coinType: CoinType) {
+        dao.delete(coinType)
         dataUpdatedSubject.onNext(Unit)
     }
 
@@ -31,8 +32,8 @@ class MarketFavoritesManager(appDatabase: AppDatabase) {
         return dao.getAll()
     }
 
-    fun isCoinInFavorites(coinCode: String): Boolean {
-        return dao.getCount(coinCode) > 0
+    fun isCoinInFavorites(coinType: CoinType): Boolean {
+        return dao.getCount(coinType) > 0
     }
 
 

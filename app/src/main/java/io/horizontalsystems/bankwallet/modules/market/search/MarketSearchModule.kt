@@ -3,9 +3,7 @@ package io.horizontalsystems.bankwallet.modules.market.search
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.modules.market.MarketModule
-import io.horizontalsystems.bankwallet.modules.market.list.MarketListService
-import io.horizontalsystems.bankwallet.modules.market.list.MarketListViewModel
+import io.horizontalsystems.coinkit.models.CoinType
 
 object MarketSearchModule {
 
@@ -19,4 +17,4 @@ object MarketSearchModule {
 
 }
 
-data class CoinDataViewItem(val code: String, val name: String)
+data class CoinDataViewItem(val code: String, val name: String, val type: CoinType)

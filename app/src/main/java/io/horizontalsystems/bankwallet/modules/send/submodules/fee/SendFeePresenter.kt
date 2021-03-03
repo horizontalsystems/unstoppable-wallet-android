@@ -195,7 +195,7 @@ class SendFeePresenter(
     // SendFeeModule.IViewDelegate
 
     override fun onViewDidLoad() {
-        xRate = interactor.getRate(coin.code)
+        xRate = interactor.getRate(coin.type)
 
         syncFeeRateLabels()
         syncFees()

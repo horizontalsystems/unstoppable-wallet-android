@@ -36,10 +36,10 @@ class MarketFavoritesService(
 
     override fun fetchAsync(currency: Currency): Single<List<MarketItem>> {
         return Single.fromCallable {
-            marketFavoritesManager.getAll().map { it.code }
+            marketFavoritesManager.getAll().map { it.coinType }
         }
-                .flatMap { coinCodes ->
-                    rateManager.getCoinMarketList(coinCodes, currency.code)
+                .flatMap { coinTypes ->
+                    rateManager.getCoinMarketList(coinTypes, currency.code)
                 }
                 .map {
                     it.map{ topMarket ->

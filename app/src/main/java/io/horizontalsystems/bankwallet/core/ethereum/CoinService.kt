@@ -19,7 +19,7 @@ class CoinService(
         get() {
             val baseCurrency = currencyManager.baseCurrency
 
-            return xRateManager.marketInfo(coin.code, baseCurrency.code)?.let {
+            return xRateManager.marketInfo(coin.type, baseCurrency.code)?.let {
                 CurrencyValue(baseCurrency, it.rate)
             }
         }

@@ -24,7 +24,7 @@ class SendAmountInteractor(
     init {
         backgroundManager.registerListener(this)
 
-        rateManager.marketInfoObservable(coin.code, baseCurrency.code)
+        rateManager.marketInfoObservable(coin.type, baseCurrency.code)
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .subscribe { marketInfo ->
@@ -40,7 +40,7 @@ class SendAmountInteractor(
         set(value) { localStorage.sendInputType = value }
 
     override fun getRate(): BigDecimal? {
-        return rateManager.getLatestRate(coin.code, baseCurrency.code)
+        return rateManager.getLatestRate(coin.type, baseCurrency.code)
     }
 
     override fun willEnterForeground() {
