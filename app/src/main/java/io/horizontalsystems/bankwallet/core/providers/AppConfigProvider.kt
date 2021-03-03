@@ -4,13 +4,11 @@ import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAppConfigProvider
-import io.horizontalsystems.coinkit.CoinKit
-import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.core.IBuildConfigProvider
 import io.horizontalsystems.core.ILanguageConfigProvider
 import io.horizontalsystems.core.entities.Currency
 
-class AppConfigProvider(private val coinKit: CoinKit) : IAppConfigProvider, ILanguageConfigProvider, IBuildConfigProvider {
+class AppConfigProvider : IAppConfigProvider, ILanguageConfigProvider, IBuildConfigProvider {
 
     override val companyWebPageLink: String = "https://horizontalsystems.io"
     override val appWebPageLink: String = "https://unstoppable.money"
@@ -39,11 +37,6 @@ class AppConfigProvider(private val coinKit: CoinKit) : IAppConfigProvider, ILan
             Currency(code = "GBP", symbol = "\u00A3", decimal = 2),
             Currency(code = "JPY", symbol = "\u00A5", decimal = 2)
     )
-
-    override val featuredCoins: List<Coin>
-        get() {
-            return coinKit.getDefaultCoins().take(8)
-        }
 
     //  ILanguageConfigProvider
 

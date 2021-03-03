@@ -58,8 +58,8 @@ object SwapModule {
 
         val coin: Coin
             get() = when (this) {
-                Uniswap -> App.coinKit.getCoin(CoinType.Ethereum) ?: throw IllegalArgumentException()
-                PancakeSwap -> App.coinKit.getCoin(CoinType.BinanceSmartChain) ?: throw IllegalArgumentException()
+                Uniswap -> App.coinManager.getCoin(CoinType.Ethereum) ?: throw IllegalArgumentException()
+                PancakeSwap -> App.coinManager.getCoin(CoinType.BinanceSmartChain) ?: throw IllegalArgumentException()
             }
     }
 

@@ -28,12 +28,12 @@ object WalletConnectRequestModule {
                 NetworkType.EthMainNet,
                 NetworkType.EthRopsten,
                 NetworkType.EthKovan,
-                NetworkType.EthRinkeby -> App.coinKit.getCoin(CoinType.Ethereum) ?: throw IllegalArgumentException()
-                NetworkType.BscMainNet -> App.coinKit.getCoin(CoinType.BinanceSmartChain) ?: throw IllegalArgumentException()
+                NetworkType.EthRinkeby -> App.coinManager.getCoin(CoinType.Ethereum) ?: throw IllegalArgumentException()
+                NetworkType.BscMainNet -> App.coinManager.getCoin(CoinType.BinanceSmartChain) ?: throw IllegalArgumentException()
             }
         }
         private val transactionService by lazy {
-            val ethereumCoin = App.coinKit.getCoin(CoinType.Ethereum) ?: throw IllegalArgumentException()
+            val ethereumCoin = App.coinManager.getCoin(CoinType.Ethereum) ?: throw IllegalArgumentException()
             val feeRateProvider = FeeRateProviderFactory.provider(ethereumCoin) as EthereumFeeRateProvider
             EvmTransactionService(evmKit, feeRateProvider, 10)
         }

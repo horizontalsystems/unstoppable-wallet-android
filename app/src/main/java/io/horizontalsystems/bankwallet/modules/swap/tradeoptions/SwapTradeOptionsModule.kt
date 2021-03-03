@@ -17,7 +17,7 @@ object SwapTradeOptionsModule {
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            val ethereumCoin = App.coinKit.getCoin(CoinType.Ethereum) ?: throw IllegalArgumentException()
+            val ethereumCoin = App.coinManager.getCoin(CoinType.Ethereum) ?: throw IllegalArgumentException()
 
             return when (modelClass) {
                 SwapTradeOptionsViewModel::class.java -> SwapTradeOptionsViewModel(service, tradeService, stringProvider) as T

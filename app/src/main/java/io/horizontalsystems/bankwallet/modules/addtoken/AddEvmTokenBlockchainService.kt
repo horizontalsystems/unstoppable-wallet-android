@@ -4,6 +4,7 @@ import io.horizontalsystems.bankwallet.core.IAddTokenBlockchainService
 import io.horizontalsystems.bankwallet.core.INetworkManager
 import io.horizontalsystems.bankwallet.entities.ApiError
 import io.horizontalsystems.coinkit.models.Coin
+import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.ethereumkit.core.AddressValidator
 import io.reactivex.Single
 import java.util.*
@@ -17,10 +18,8 @@ class AddEvmTokenBlockchainService(
         AddressValidator.validate(reference)
     }
 
-    override fun existingCoin(reference: String, coins: List<Coin>): Coin? {
-        return coins.firstOrNull { coin ->
-            resolver.doesCoinMatchReference(coin, reference)
-        }
+    override fun coinType(reference: String): CoinType {
+        return resolver.coinType(reference)
     }
 
     override fun coinSingle(reference: String): Single<Coin> {
