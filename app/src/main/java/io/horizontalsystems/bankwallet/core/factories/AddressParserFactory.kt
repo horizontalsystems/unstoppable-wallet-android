@@ -2,8 +2,8 @@ package io.horizontalsystems.bankwallet.core.factories
 
 import io.horizontalsystems.bankwallet.core.IAddressParser
 import io.horizontalsystems.bankwallet.core.utils.AddressParser
-import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.bankwallet.entities.CoinType
+import io.horizontalsystems.coinkit.models.Coin
+import io.horizontalsystems.coinkit.models.CoinType
 
 class AddressParserFactory {
     fun parser(coin: Coin): IAddressParser {
@@ -16,8 +16,9 @@ class AddressParserFactory {
             is CoinType.Erc20 -> AddressParser("", true)
             is CoinType.BinanceSmartChain -> AddressParser("", true)
             is CoinType.Bep20 -> AddressParser("", true)
-            is CoinType.Binance -> AddressParser("binance", true)
-            CoinType.Zcash -> AddressParser("zcash", true)
+            is CoinType.Bep2 -> AddressParser("binance", true)
+            is CoinType.Zcash -> AddressParser("zcash", true)
+            is CoinType.Unsupported -> AddressParser("", false)
         }
     }
 

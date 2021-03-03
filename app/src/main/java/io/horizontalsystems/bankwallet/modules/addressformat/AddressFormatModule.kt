@@ -6,6 +6,7 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.providers.StringProvider
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.entities.AccountType.Derivation
+import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.views.ListPosition
 import io.reactivex.Observable
 

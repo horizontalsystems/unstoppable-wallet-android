@@ -1,8 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.addtoken.bep20
 
-import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.modules.addtoken.IAddEvmTokenResolver
+import io.horizontalsystems.coinkit.models.Coin
+import io.horizontalsystems.coinkit.models.CoinType
 
 class AddBep20TokenResolver(
         testMode: Boolean,
@@ -14,7 +14,7 @@ class AddBep20TokenResolver(
     override val explorerKey = bscscanApiKey
 
     override fun doesCoinMatchReference(coin: Coin, reference: String): Boolean {
-        return coin.type is CoinType.Bep20 && coin.type.address.equals(reference, ignoreCase = true)
+        return (coin.type as? CoinType.Bep20)?.address.equals(reference, ignoreCase = true)
     }
 
     override fun coinType(address: String): CoinType {

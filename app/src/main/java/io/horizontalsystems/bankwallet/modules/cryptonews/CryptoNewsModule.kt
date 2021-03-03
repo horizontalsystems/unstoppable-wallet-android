@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.modules.cryptonews
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.xrateskit.entities.CryptoNews
 
 object CryptoNewsModule {

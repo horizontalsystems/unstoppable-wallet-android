@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.core.managers
 import android.content.Context
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.providers.FeeCoinProvider
-import io.horizontalsystems.bankwallet.entities.CoinType.*
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.xrateskit.XRatesKit
@@ -13,6 +12,8 @@ import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import java.math.BigDecimal
+import io.horizontalsystems.coinkit.models.CoinType as CoinKitCoinType
+import io.horizontalsystems.coinkit.models.Coin as CoinKitCoin
 
 class RateManager(
         context: Context,
@@ -52,7 +53,7 @@ class RateManager(
                 }
     }
 
-    override fun set(coins: List<io.horizontalsystems.bankwallet.entities.Coin>) {
+    override fun set(coins: List<CoinKitCoin>) {
         kit.set(mapCoinForXRates(coins))
     }
 
@@ -145,7 +146,7 @@ class RateManager(
         kit.set(mapCoinForXRates(uniqueCoins))
     }
 
-    private fun mapCoinForXRates(coins: List<io.horizontalsystems.bankwallet.entities.Coin>): List<Coin> {
+    private fun mapCoinForXRates(coins: List<CoinKitCoin>): List<Coin> {
         return coins.mapNotNull { coin ->
             val coinType = coin.type
             rateCoinMapper.convert(coin.code)?.let {
@@ -154,16 +155,16 @@ class RateManager(
         }
     }
 
-    private fun convertCoinTypeToXRateKitCoinType(coinType: io.horizontalsystems.bankwallet.entities.CoinType): CoinType? {
+    private fun convertCoinTypeToXRateKitCoinType(coinType: CoinKitCoinType): CoinType? {
         return when (coinType) {
-            is Bitcoin -> CoinType.Bitcoin
-            is BitcoinCash -> CoinType.BitcoinCash
-            is Dash -> CoinType.Dash
-            is Ethereum -> CoinType.Ethereum
-            is Litecoin -> CoinType.Litecoin
-            is Zcash -> CoinType.Zcash
-            is Binance -> CoinType.Binance
-            is Erc20 -> CoinType.Erc20(coinType.address)
+            is CoinKitCoinType.Bitcoin -> CoinType.Bitcoin
+            is CoinKitCoinType.BitcoinCash -> CoinType.BitcoinCash
+            is CoinKitCoinType.Dash -> CoinType.Dash
+            is CoinKitCoinType.Ethereum -> CoinType.Ethereum
+            is CoinKitCoinType.Litecoin -> CoinType.Litecoin
+            is CoinKitCoinType.Zcash -> CoinType.Zcash
+            is CoinKitCoinType.Bep2 -> CoinType.Binance
+            is CoinKitCoinType.Erc20 -> CoinType.Erc20(coinType.address)
             else -> null
         }
     }

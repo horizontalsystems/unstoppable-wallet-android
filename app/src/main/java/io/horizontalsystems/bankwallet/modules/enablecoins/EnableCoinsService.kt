@@ -2,8 +2,8 @@ package io.horizontalsystems.bankwallet.modules.enablecoins
 
 import io.horizontalsystems.bankwallet.core.ICoinManager
 import io.horizontalsystems.bankwallet.entities.AccountType
-import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.bankwallet.entities.CoinType
+import io.horizontalsystems.coinkit.models.Coin
+import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.IBuildConfigProvider
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.reactivex.disposables.CompositeDisposable
@@ -56,7 +56,7 @@ class EnableCoinsService(
             }
         }
 
-        if (coinType is CoinType.Binance && accountType is AccountType.Mnemonic) {
+        if (coinType is CoinType.Bep2 && accountType is AccountType.Mnemonic) {
             if (coinType.symbol == "BNB" && accountType.words.size == 24) {
                 return TokenType.Bep2(accountType.words)
             }
@@ -125,7 +125,7 @@ class EnableCoinsService(
                 null
             } else {
                 coinManager.coins.find {
-                    it.type == CoinType.Binance(symbol)
+                    it.type == CoinType.Bep2(symbol)
                 }
             }
         }

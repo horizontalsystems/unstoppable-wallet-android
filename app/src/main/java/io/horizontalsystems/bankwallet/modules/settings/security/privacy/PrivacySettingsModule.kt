@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.settings.security.privacy
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.managers.TorStatus
 import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.views.ListPosition
 
 object PrivacySettingsModule {

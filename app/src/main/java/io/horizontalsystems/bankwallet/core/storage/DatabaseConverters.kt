@@ -5,9 +5,9 @@ import com.google.gson.Gson
 import com.trustwallet.walletconnect.models.WCPeerMeta
 import com.trustwallet.walletconnect.models.session.WCSession
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.entities.PriceAlert
 import io.horizontalsystems.bankwallet.entities.SubscriptionJob
+import io.horizontalsystems.coinkit.models.CoinType
 import java.math.BigDecimal
 import java.util.*
 
@@ -67,12 +67,24 @@ class DatabaseConverters {
 
     @TypeConverter
     fun fromCoinType(coinType: CoinType?): String {
-        return coinType?.serialize() ?: ""
+        return when (coinType) {
+            CoinType.Bitcoin -> "bitcoin"
+            CoinType.Litecoin -> "litecoin"
+            CoinType.BitcoinCash -> "bitcoinCash"
+            CoinType.Dash -> "dash"
+            else -> ""
+        }
     }
 
     @TypeConverter
     fun toCoinType(value: String): CoinType? {
-        return CoinType.deserialize(value)
+        return when (value) {
+            "bitcoin" -> CoinType.Bitcoin
+            "litecoin" -> CoinType.Litecoin
+            "bitcoinCash" -> CoinType.BitcoinCash
+            "dash" -> CoinType.Dash
+            else -> null
+        }
     }
 
     @TypeConverter

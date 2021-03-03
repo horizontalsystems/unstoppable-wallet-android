@@ -22,6 +22,7 @@ import io.horizontalsystems.bankwallet.modules.lockscreen.LockScreenActivity
 import io.horizontalsystems.bankwallet.modules.tor.TorConnectionActivity
 import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectSessionManager
+import io.horizontalsystems.coinkit.CoinKit
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.CoreApp
 import io.horizontalsystems.core.ICoreApp
@@ -77,7 +78,6 @@ class App : CoreApp() {
         lateinit var accountCleaner: IAccountCleaner
         lateinit var rateCoinMapper: RateCoinMapper
         lateinit var rateAppManager: IRateAppManager
-        lateinit var coinRecordStorage: ICoinRecordStorage
         lateinit var coinManager: ICoinManager
         lateinit var walletConnectSessionStorage: WalletConnectSessionStorage
         lateinit var walletConnectSessionManager: WalletConnectSessionManager
@@ -86,6 +86,7 @@ class App : CoreApp() {
         lateinit var termsManager: ITermsManager
         lateinit var zcashBirthdayProvider: ZcashBirthdayProvider
         lateinit var marketFavoritesManager: MarketFavoritesManager
+        lateinit var coinKit: CoinKit
     }
 
     override fun onCreate() {
@@ -103,7 +104,9 @@ class App : CoreApp() {
         instance = this
         preferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
 
-        val appConfig = AppConfigProvider()
+        coinKit = CoinKit.create(this, BuildConfig.testMode)
+
+        val appConfig = AppConfigProvider(coinKit)
         appConfigProvider = appConfig
         buildConfigProvider = appConfig
         languageConfigProvider = appConfig
@@ -120,8 +123,7 @@ class App : CoreApp() {
 
         AppLog.logsDao = appDatabase.logsDao()
 
-        coinRecordStorage = CoinRecordStorage(appDatabase)
-        coinManager = CoinManager(appConfigProvider, coinRecordStorage)
+        coinManager = CoinManager(appConfigProvider, coinKit)
 
         enabledWalletsStorage = EnabledWalletsStorage(appDatabase)
         blockchainSettingsStorage = BlockchainSettingsStorage(appDatabase)
@@ -177,7 +179,7 @@ class App : CoreApp() {
         adapterFactory.bitcoinCashCoinTypeManager = bitcoinCashCoinTypeManager
 
         rateCoinMapper = RateCoinMapper()
-        feeCoinProvider = FeeCoinProvider(appConfigProvider)
+        feeCoinProvider = FeeCoinProvider(coinKit)
         xRateManager = RateManager(this, walletManager, currencyManager, rateCoinMapper, feeCoinProvider, appConfigProvider)
 
         addressParserFactory = AddressParserFactory()

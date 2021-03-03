@@ -4,6 +4,7 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
+import io.horizontalsystems.coinkit.models.Coin
 import java.util.*
 
 object TransactionInfoModule {

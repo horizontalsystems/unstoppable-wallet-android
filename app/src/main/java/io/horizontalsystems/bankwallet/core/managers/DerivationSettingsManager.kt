@@ -5,6 +5,7 @@ import io.horizontalsystems.bankwallet.core.IBlockchainSettingsStorage
 import io.horizontalsystems.bankwallet.core.IDerivationSettingsManager
 import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.coinkit.models.CoinType
 
 class DerivationSettingsManager(
         private val blockchainSettingsStorage: IBlockchainSettingsStorage,

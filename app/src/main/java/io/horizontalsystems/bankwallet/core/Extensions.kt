@@ -5,12 +5,9 @@ import android.content.res.ColorStateList
 import android.os.Parcelable
 import android.view.View
 import android.widget.ImageView
-import androidx.core.graphics.Insets
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
+import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.ethereumkit.core.toRawHexString
 import io.horizontalsystems.hodler.LockTimeInterval
 import io.horizontalsystems.views.SingleClickListener

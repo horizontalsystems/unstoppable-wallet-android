@@ -8,10 +8,10 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.ConcatAdapter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseWithSearchFragment
-import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.modules.blockchainsettings.BlockchainSettingsModule
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorDialog
 import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
+import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.core.findNavController
 import kotlinx.android.synthetic.main.fragment_manage_wallets.*
 

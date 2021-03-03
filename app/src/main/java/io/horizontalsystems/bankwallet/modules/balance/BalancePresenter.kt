@@ -3,10 +3,10 @@ package io.horizontalsystems.bankwallet.modules.balance
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.IPredefinedAccountTypeManager
 import io.horizontalsystems.bankwallet.entities.Account
-import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.balance.BalanceModule.BalanceItem
+import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.xrateskit.entities.MarketInfo
 import java.math.BigDecimal
 import java.util.concurrent.Executors
@@ -260,7 +260,7 @@ class BalancePresenter(
 
     private fun sourceChangeable(coinType: CoinType): Boolean {
         return when(coinType) {
-            is CoinType.Binance,
+            is CoinType.Bep2,
             is CoinType.Ethereum,
             is CoinType.Erc20 -> false
             else -> true

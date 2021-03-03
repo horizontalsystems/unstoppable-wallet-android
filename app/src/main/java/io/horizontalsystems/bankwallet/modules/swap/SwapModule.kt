@@ -13,13 +13,13 @@ import io.horizontalsystems.bankwallet.core.factories.FeeRateProviderFactory
 import io.horizontalsystems.bankwallet.core.fiat.AmountTypeSwitchService
 import io.horizontalsystems.bankwallet.core.fiat.FiatService
 import io.horizontalsystems.bankwallet.core.providers.StringProvider
-import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceService
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceViewModel
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapPendingAllowanceService
 import io.horizontalsystems.bankwallet.modules.swap.coincard.*
 import io.horizontalsystems.bankwallet.modules.swap.providers.UniswapProvider
+import io.horizontalsystems.coinkit.models.Coin
+import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.uniswapkit.UniswapKit
 import kotlinx.android.parcel.Parcelize
@@ -58,8 +58,8 @@ object SwapModule {
 
         val coin: Coin
             get() = when (this) {
-                Uniswap -> App.appConfigProvider.ethereumCoin
-                PancakeSwap -> App.appConfigProvider.binanceSmartChainCoin
+                Uniswap -> App.coinKit.getCoin(CoinType.Ethereum) ?: throw IllegalArgumentException()
+                PancakeSwap -> App.coinKit.getCoin(CoinType.BinanceSmartChain) ?: throw IllegalArgumentException()
             }
     }
 

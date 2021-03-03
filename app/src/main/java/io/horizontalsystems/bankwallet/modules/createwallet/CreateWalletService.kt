@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.createwallet
 
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.coinkit.models.Coin
 import io.reactivex.subjects.BehaviorSubject
 
 class CreateWalletService(
@@ -79,7 +80,7 @@ class CreateWalletService(
 
     private fun syncState() {
         val featuredCoins = filteredCoins(coinManager.featuredCoins)
-        val coins = filteredCoins(coinManager.coins).filter { !featuredCoins.contains(it) }
+        val coins = filteredCoins(coinManager.coins).filterNot { featuredCoins.contains(it) }
 
         state = State(featuredCoins.map { item(it) }, coins.map { item(it) })
     }

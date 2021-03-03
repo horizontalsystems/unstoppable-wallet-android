@@ -1,8 +1,9 @@
 package io.horizontalsystems.bankwallet.entities
 
 import android.os.Parcelable
+import io.horizontalsystems.coinkit.models.CoinType
 import kotlinx.android.parcel.Parcelize
-//todo make migration
+
 @Parcelize
 enum class CommunicationMode(val value: String) : Parcelable {
     Infura("Infura"),

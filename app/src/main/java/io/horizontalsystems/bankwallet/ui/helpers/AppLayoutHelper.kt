@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.ui.helpers
 import android.content.Context
 import android.graphics.drawable.Drawable
 import androidx.core.content.ContextCompat
-import io.horizontalsystems.bankwallet.entities.CoinType
+import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.views.R
 
 object AppLayoutHelper {
@@ -13,7 +13,7 @@ object AppLayoutHelper {
         val resId = when {
             coinDrawableResId != null -> coinDrawableResId
             coinType is CoinType.Erc20 -> R.drawable.ic_erc20
-            coinType is CoinType.Binance -> R.drawable.ic_bep2
+            coinType is CoinType.Bep2 -> R.drawable.ic_bep2
             coinType is CoinType.Bep20 -> R.drawable.ic_bep20
             else -> null
         }

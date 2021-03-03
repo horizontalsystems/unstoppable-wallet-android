@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.transactions.transactionInfo
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoModule.TitleViewItem
+import io.horizontalsystems.coinkit.models.CoinType
 import java.util.*
 
 class TransactionInfoPresenter(
@@ -164,9 +165,10 @@ class TransactionInfoPresenter(
             is CoinType.Dash -> TransactionInfoModule.ExplorerData("dash.org", if (testMode) null else "https://insight.dash.org/insight/tx/$hash")
             is CoinType.Ethereum,
             is CoinType.Erc20 -> TransactionInfoModule.ExplorerData("etherscan.io", if (testMode) "https://ropsten.etherscan.io/tx/$hash" else "https://etherscan.io/tx/$hash")
-            is CoinType.Binance -> TransactionInfoModule.ExplorerData("binance.org", if (testMode) "https://testnet-explorer.binance.org/tx/$hash" else "https://explorer.binance.org/tx/$hash")
+            is CoinType.Bep2 -> TransactionInfoModule.ExplorerData("binance.org", if (testMode) "https://testnet-explorer.binance.org/tx/$hash" else "https://explorer.binance.org/tx/$hash")
             CoinType.BinanceSmartChain, is CoinType.Bep20 -> TransactionInfoModule.ExplorerData("bscscan.com", if (testMode) null else "https://bscscan.com/tx/$hash")
             is CoinType.Zcash -> TransactionInfoModule.ExplorerData("blockchair.com", if (testMode) null else "https://blockchair.com/zcash/transaction/$hash")
+            is CoinType.Unsupported ->  throw IllegalArgumentException()
         }
     }
 

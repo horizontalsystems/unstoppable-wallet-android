@@ -1,8 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.addtoken.erc20
 
-import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.modules.addtoken.IAddEvmTokenResolver
+import io.horizontalsystems.coinkit.models.Coin
+import io.horizontalsystems.coinkit.models.CoinType
 
 class AddErc20TokenResolver(
         testMode: Boolean,
@@ -14,7 +14,7 @@ class AddErc20TokenResolver(
     override val explorerKey = etherscanApiKey
 
     override fun doesCoinMatchReference(coin: Coin, reference: String): Boolean {
-        return coin.type is CoinType.Erc20 && coin.type.address.equals(reference, ignoreCase = true)
+        return (coin.type as? CoinType.Erc20)?.address.equals(reference, ignoreCase = true)
     }
 
     override fun coinType(address: String): CoinType {

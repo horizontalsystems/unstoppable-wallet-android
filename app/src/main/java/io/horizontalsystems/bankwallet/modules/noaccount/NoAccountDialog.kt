@@ -5,19 +5,19 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.View
-import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
+import io.horizontalsystems.bankwallet.entities.predefinedAccountType
 import io.horizontalsystems.bankwallet.ui.extensions.BaseBottomSheetDialogFragment
 import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
+import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.android.synthetic.main.fragment_bottom_manage_wallets.*
 
-class NoAccountDialog: BaseBottomSheetDialogFragment() {
+class NoAccountDialog : BaseBottomSheetDialogFragment() {
 
     interface Listener {
         fun onClickRestoreKey(predefinedAccountType: PredefinedAccountType, coin: Coin) {}
@@ -39,7 +39,7 @@ class NoAccountDialog: BaseBottomSheetDialogFragment() {
         val predefinedAccountType = coin.type.predefinedAccountType
 
         setTitle(activity?.getString(R.string.AddCoin_Title, coin.code))
-        setSubtitle(getString(R.string.AddCoin_Subtitle, getString(predefinedAccountType.title)))
+        setSubtitle(getString(R.string.AddCoin_Subtitle, getString(predefinedAccountType?.title)))
         context?.let { setHeaderIconDrawable(AppLayoutHelper.getCoinDrawable(it, coin.code, coin.type)) }
 
         val walletName = getString(predefinedAccountType.title)

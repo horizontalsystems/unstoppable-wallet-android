@@ -4,9 +4,9 @@ import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.IBlockchainSettingsStorage
 import io.horizontalsystems.bankwallet.core.IEthereumRpcModeSettingsManager
 import io.horizontalsystems.bankwallet.core.IWalletManager
-import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.entities.CommunicationMode
 import io.horizontalsystems.bankwallet.entities.EthereumRpcMode
+import io.horizontalsystems.coinkit.models.CoinType
 
 class EthereumRpcModeSettingsManager(
         private val blockchainSettingsStorage: IBlockchainSettingsStorage,

@@ -6,14 +6,14 @@ import io.horizontalsystems.bankwallet.core.managers.Term
 import io.horizontalsystems.bankwallet.core.managers.TorManager
 import io.horizontalsystems.bankwallet.core.managers.TorStatus
 import io.horizontalsystems.bankwallet.entities.*
-import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.modules.addtoken.bep2.Bep2Token
 import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
 import io.horizontalsystems.bankwallet.modules.market.MarketModule
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.binancechainkit.BinanceChainKit
 import io.horizontalsystems.bitcoincore.core.IPluginData
+import io.horizontalsystems.coinkit.models.Coin
+import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.entities.AppVersion
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.xrateskit.entities.*
@@ -267,10 +267,6 @@ interface IAppConfigProvider {
     val feeRateAdjustForCurrencies: List<String>
     val currencies: List<Currency>
     val featuredCoins: List<Coin>
-    val otherCoins: List<Coin>
-    val ethereumCoin: Coin
-    val binanceSmartChainCoin: Coin
-    val binanceCoin: Coin
 }
 
 interface ICoinRecordStorage {
