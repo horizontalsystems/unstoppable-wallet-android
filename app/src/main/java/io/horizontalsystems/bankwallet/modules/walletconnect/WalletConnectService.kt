@@ -196,9 +196,9 @@ class WalletConnectService(
 
     override fun didRequestSession(remotePeerId: String, remotePeerMeta: WCPeerMeta, chainId: Int?) {
         state = try {
-            if (chainId == null) throw SessionError.UnsupportedChainId
+            // if (chainId == null) throw SessionError.UnsupportedChainId
 
-            initSession(remotePeerId, remotePeerMeta, chainId)
+            initSession(remotePeerId, remotePeerMeta, chainId ?: 1) //fall back to Ethereum MainNet
 
             State.WaitingForApproveSession
         } catch (error: Throwable) {
