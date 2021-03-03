@@ -231,7 +231,7 @@
     <string name="Balance_Sort_Az">Name</string>
     <string name="Balance_Sort_24hPriceChange">24h Price (%)</string>
     <string name="Balance_Backup_Alert">You need to backup the %1$s Wallet before you may receive %2$s.</string>
-    <string name="Balance_NoWalletAlert">You don\’t have an installed wallet yet. Create or restore an existing wallet </string>
+    <string name="Balance_NoWalletAlert">You don\’t have any wallets yet. Create new or restore existing </string>
 
     <!--Send-->
 
@@ -269,7 +269,6 @@
     <string name="Send_DialogAvailableBalance">Available Balance</string>
     <string name="Send_DialogSpeed">Transaction Speed</string>
     <string name="Send_TxSpeed_Low">Low</string>
-    <string name="Send_TxSpeed_Medium">Medium</string>
     <string name="Send_TxSpeed_High">High</string>
     <string name="Send_TxSpeed_Recommended">Recommended</string>
     <string name="Send_TxSpeed_Custom">Custom</string>
@@ -292,11 +291,11 @@
 
     <string name="FeeInfo_Title">Transaction Speed</string>
     <string name="FeeInfo_Description">Both Bitcoin and Ethereum blockchains require users to pay usage fees while sending transactions on the blockchain.\n\nUnstoppable uses public fee estimate services to help user determine appropriate transaction fees for the moment. The fees are higher when there are a lot of transactions taking place and lower when the blockchain is less busy.</string>
-    <string name="FeeInfo_Slow">Slow</string>
+    <string name="FeeInfo_Slow">Low</string>
     <string name="FeeInfo_SlowDescription">Selecting a value from this range may result in transaction being pending for hours or being rejected entirely. The lower the value the longer it will take for the transaction to confirm.</string>
-    <string name="FeeInfo_Average">Average</string>
+    <string name="FeeInfo_Average">Recommended</string>
     <string name="FeeInfo_AverageDescription">Typically, this fee range should be sufficient for transaction to be processed within minutes/hour for Bitcoin and within minutes for Ethereum.</string>
-    <string name="FeeInfo_Fast">Fast</string>
+    <string name="FeeInfo_Fast">High</string>
     <string name="FeeInfo_FastDescription">For transactions where priority is important we recommend using high fee setting. It\'s expected that selecting high fee setting will be sufficient for transaction to be completed within 10 minutes for Bitcoin and within a few minutes for Ethereum.\n\nThe Unstoppable wallet makes an educated guess based on the network activity and can\'t not guarantee that the suggested fee values will always result in expected behavior.</string>
 
     <!--Wallet Connect-->
