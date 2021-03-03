@@ -285,6 +285,7 @@ interface IRateManager {
     fun getCoinMarketListByCategory(categoryId: String, currency: String): Single<List<CoinMarket>>
     fun getCoinRatingsAsync(): Single<Map<CoinType, String>>
     fun getGlobalMarketInfoAsync(currency: String): Single<GlobalCoinMarket>
+    fun searchCoins(searchText: String): List<CoinData>
     fun refresh()
 }
 
