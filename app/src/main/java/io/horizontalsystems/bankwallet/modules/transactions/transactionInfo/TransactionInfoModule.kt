@@ -5,6 +5,7 @@ import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.coinkit.models.Coin
+import io.horizontalsystems.coinkit.models.CoinType
 import java.util.*
 
 object TransactionInfoModule {
@@ -35,7 +36,7 @@ object TransactionInfoModule {
         val testMode: Boolean
 
         fun copyToClipboard(value: String)
-        fun getRate(code: String, timestamp: Long): CurrencyValue?
+        fun getRate(coinType: CoinType, timestamp: Long): CurrencyValue?
         fun feeCoin(coin: Coin): Coin?
         fun getRaw(transactionHash: String): String?
     }

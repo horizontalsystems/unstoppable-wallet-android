@@ -11,6 +11,7 @@ import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.SendModule.AmountInfo
 import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmountInfo
 import io.horizontalsystems.coinkit.models.Coin
+import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.entities.Currency
 import java.math.BigDecimal
 import java.math.BigInteger
@@ -47,7 +48,7 @@ object SendFeeModule {
     interface IInteractor {
         val feeRatePriorityList: List<FeeRatePriority>
         val defaultFeeRatePriority: FeeRatePriority?
-        fun getRate(coinCode: String): BigDecimal?
+        fun getRate(coinType: CoinType): BigDecimal?
         fun syncFeeRate(feeRatePriority: FeeRatePriority)
         fun onClear()
     }

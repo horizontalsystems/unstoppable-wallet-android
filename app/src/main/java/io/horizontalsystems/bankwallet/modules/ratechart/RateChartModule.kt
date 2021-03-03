@@ -5,8 +5,8 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.PriceAlert
 import io.horizontalsystems.chartview.models.PointInfo
+import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.xrateskit.entities.*
-import io.reactivex.Single
 import java.math.BigDecimal
 
 object RateChartModule {
@@ -43,17 +43,17 @@ object RateChartModule {
         var defaultChartType: ChartType?
         val notificationsAreEnabled: Boolean
 
-        fun getMarketInfo(coinCode: String, currencyCode: String): MarketInfo?
-        fun getChartInfo(coinCode: String, currencyCode: String, chartType: ChartType): ChartInfo?
-        fun getCoinDetails(coinCode: String, currencyCode: String, rateDiffCoinCodes: List<String>, rateDiffPeriods: List<TimePeriod>)
-        fun observeChartInfo(coinCode: String, currencyCode: String, chartType: ChartType)
-        fun observeMarketInfo(coinCode: String, currencyCode: String)
+        fun getMarketInfo(coinType: CoinType, currencyCode: String): MarketInfo?
+        fun getChartInfo(coinType: CoinType, currencyCode: String, chartType: ChartType): ChartInfo?
+        fun getCoinDetails(coinType: CoinType, currencyCode: String, rateDiffCoinCodes: List<String>, rateDiffPeriods: List<TimePeriod>)
+        fun observeChartInfo(coinType: CoinType, currencyCode: String, chartType: ChartType)
+        fun observeMarketInfo(coinType: CoinType, currencyCode: String)
         fun clear()
-        fun observeAlertNotification(coinCode: String)
+        fun observeAlertNotification()
         fun getPriceAlert(coinCode: String): PriceAlert
-        fun isCoinFavorite(coinCode: String): Boolean
-        fun favorite(coinCode: String)
-        fun unfavorite(coinCode: String)
+        fun isCoinFavorite(coinType: CoinType): Boolean
+        fun favorite(coinType: CoinType)
+        fun unfavorite(coinType: CoinType)
     }
 
     interface InteractorDelegate {
@@ -68,7 +68,7 @@ object RateChartModule {
 
     interface Router
 
-    class Factory(private val coinTitle: String, private val coinCode: String, private val coinId: String?) : ViewModelProvider.Factory {
+    class Factory(private val coinTitle: String, private val coinType: CoinType, private val coinCode: String, private val coinId: String?) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val currency = App.currencyManager.baseCurrency
@@ -76,7 +76,7 @@ object RateChartModule {
 
             val view = RateChartView()
             val interactor = RateChartInteractor(App.xRateManager, App.chartTypeStorage, App.priceAlertManager, App.notificationManager, App.localStorage, App.marketFavoritesManager)
-            val presenter = RateChartPresenter(view, rateFormatter, interactor, coinCode, coinTitle, coinId, currency, RateChartViewFactory())
+            val presenter = RateChartPresenter(view, rateFormatter, interactor, coinType, coinCode, coinTitle, coinId, currency, RateChartViewFactory())
 
             interactor.delegate = presenter
 

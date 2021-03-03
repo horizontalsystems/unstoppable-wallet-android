@@ -66,8 +66,8 @@ class FiatService(
 
         val coin = coin ?: return
 
-        syncMarketInfo(rateManager.marketInfo(coin.code, currency.code))
-        marketInfoDisposable = rateManager.marketInfoObservable(coin.code, currency.code)
+        syncMarketInfo(rateManager.marketInfo(coin.type, currency.code))
+        marketInfoDisposable = rateManager.marketInfoObservable(coin.type, currency.code)
                 .subscribeOn(Schedulers.io())
                 .subscribe {
                     syncMarketInfo(it)

@@ -1,9 +1,13 @@
 package io.horizontalsystems.bankwallet.core.managers
 
 import android.content.Context
-import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.core.IAppConfigProvider
+import io.horizontalsystems.bankwallet.core.IRateManager
+import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.bankwallet.core.providers.FeeCoinProvider
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.coinkit.models.Coin
+import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.xrateskit.XRatesKit
 import io.horizontalsystems.xrateskit.entities.*
@@ -12,14 +16,11 @@ import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import java.math.BigDecimal
-import io.horizontalsystems.coinkit.models.CoinType as CoinKitCoinType
-import io.horizontalsystems.coinkit.models.Coin as CoinKitCoin
 
 class RateManager(
         context: Context,
         walletManager: IWalletManager,
         private val currencyManager: ICurrencyManager,
-        private val rateCoinMapper: IRateCoinMapper,
         private val feeCoinProvider: FeeCoinProvider,
         private val appConfigProvider: IAppConfigProvider) : IRateManager {
 
@@ -53,16 +54,16 @@ class RateManager(
                 }
     }
 
-    override fun set(coins: List<CoinKitCoin>) {
-        kit.set(mapCoinForXRates(coins))
+    override fun set(coins: List<Coin>) {
+        kit.set(coins.map { it.type })
     }
 
-    override fun marketInfo(coinCode: String, currencyCode: String): MarketInfo? {
-        return rateCoinMapper.convert(coinCode)?.let { kit.getMarketInfo(it, currencyCode) }
+    override fun marketInfo(coinType: CoinType, currencyCode: String): MarketInfo? {
+        return kit.getMarketInfo(coinType, currencyCode)
     }
 
-    override fun getLatestRate(coinCode: String, currencyCode: String): BigDecimal? {
-        val marketInfo = marketInfo(coinCode, currencyCode)
+    override fun getLatestRate(coinType: CoinType, currencyCode: String): BigDecimal? {
+        val marketInfo = marketInfo(coinType, currencyCode)
 
         return when {
             marketInfo == null -> null
@@ -72,43 +73,33 @@ class RateManager(
 
     }
 
-    override fun marketInfoObservable(coinCode: String, currencyCode: String): Observable<MarketInfo> {
-        return rateCoinMapper.convert(coinCode)?.let { kit.marketInfoObservable(it, currencyCode) }
-                ?: Observable.error(RateError.DisabledCoin())
+    override fun marketInfoObservable(coinType: CoinType, currencyCode: String): Observable<MarketInfo> {
+        return kit.marketInfoObservable(coinType, currencyCode)
     }
 
-    override fun marketInfoObservable(currencyCode: String): Observable<Map<String, MarketInfo>> {
+    override fun marketInfoObservable(currencyCode: String): Observable<Map<CoinType, MarketInfo>> {
         return kit.marketInfoMapObservable(currencyCode)
-                .map { marketInfo ->
-                    marketInfo.map { rateCoinMapper.unconvert(it.key) to it.value }.toMap()
-                }
     }
 
-    override fun historicalRateCached(coinCode: String, currencyCode: String, timestamp: Long): BigDecimal? {
-        val convertedCoinCode = rateCoinMapper.convert(coinCode) ?: return null
-
-        return kit.historicalRate(convertedCoinCode, currencyCode, timestamp)
+    override fun historicalRateCached(coinType: CoinType, currencyCode: String, timestamp: Long): BigDecimal? {
+        return kit.historicalRate(coinType, currencyCode, timestamp)
     }
 
-    override fun historicalRate(coinCode: String, currencyCode: String, timestamp: Long): Single<BigDecimal> {
-        val convertedCoinCode = rateCoinMapper.convert(coinCode)
-                ?: return Single.error(RateError.DisabledCoin())
-
-        return kit.historicalRate(convertedCoinCode, currencyCode, timestamp)?.let { Single.just(it) }
-                ?: kit.historicalRateFromApi(convertedCoinCode, currencyCode, timestamp)
+    override fun historicalRate(coinType: CoinType, currencyCode: String, timestamp: Long): Single<BigDecimal> {
+        return kit.historicalRate(coinType, currencyCode, timestamp)?.let { Single.just(it) }
+                ?: kit.historicalRateFromApi(coinType, currencyCode, timestamp)
     }
 
-    override fun chartInfo(coinCode: String, currencyCode: String, chartType: ChartType): ChartInfo? {
-        return rateCoinMapper.convert(coinCode)?.let { kit.getChartInfo(it, currencyCode, chartType) }
+    override fun chartInfo(coinType: CoinType, currencyCode: String, chartType: ChartType): ChartInfo? {
+        return kit.getChartInfo(coinType, currencyCode, chartType)
     }
 
-    override fun chartInfoObservable(coinCode: String, currencyCode: String, chartType: ChartType): Observable<ChartInfo> {
-        return rateCoinMapper.convert(coinCode)?.let { kit.chartInfoObservable(it, currencyCode, chartType) }
-                ?: Observable.error(RateError.DisabledCoin())
+    override fun chartInfoObservable(coinType: CoinType, currencyCode: String, chartType: ChartType): Observable<ChartInfo> {
+        return kit.chartInfoObservable(coinType, currencyCode, chartType)
     }
 
-    override fun coinMarketDetailsAsync(coinCode: String, currencyCode: String, rateDiffCoinCodes: List<String>, rateDiffPeriods: List<TimePeriod>): Single<CoinMarketDetails> {
-        return kit.getCoinMarketDetailsAsync(coinCode, currencyCode, rateDiffCoinCodes, rateDiffPeriods)
+    override fun coinMarketDetailsAsync(coinType: CoinType, currencyCode: String, rateDiffCoinCodes: List<String>, rateDiffPeriods: List<TimePeriod>): Single<CoinMarketDetails> {
+        return kit.getCoinMarketDetailsAsync(coinType, currencyCode, rateDiffCoinCodes, rateDiffPeriods)
     }
 
     override fun getCryptoNews(coinCode: String): Single<List<CryptoNews>> {
@@ -119,15 +110,15 @@ class RateManager(
         return kit.getTopCoinMarketsAsync(currency, itemsCount = itemsCount)
     }
 
-    override fun getCoinMarketList(coinCodes: List<String>, currency: String): Single<List<CoinMarket>> {
-        return kit.getCoinMarketsAsync(coinCodes, currency)
+    override fun getCoinMarketList(coinTypes: List<CoinType>, currency: String): Single<List<CoinMarket>> {
+        return kit.getCoinMarketsAsync(coinTypes, currency)
     }
 
     override fun getCoinMarketListByCategory(categoryId: String, currency: String): Single<List<CoinMarket>>{
         return kit.getCoinMarketsByCategoryAsync(categoryId, currency)
     }
 
-    override fun getCoinRatingsAsync(): Single<Map<String, String>> {
+    override fun getCoinRatingsAsync(): Single<Map<CoinType, String>> {
         return kit.getCoinRatingsAsync()
     }
 
@@ -143,37 +134,11 @@ class RateManager(
         val feeCoins = wallets.mapNotNull { feeCoinProvider.feeCoinData(it.coin)?.first }
         val coins = wallets.map { it.coin }
         val uniqueCoins = (feeCoins + coins).distinct()
-        kit.set(mapCoinForXRates(uniqueCoins))
-    }
-
-    private fun mapCoinForXRates(coins: List<CoinKitCoin>): List<Coin> {
-        return coins.mapNotNull { coin ->
-            val coinType = coin.type
-            rateCoinMapper.convert(coin.code)?.let {
-                Coin(coin.code, coin.title, convertCoinTypeToXRateKitCoinType(coinType))
-            }
-        }
-    }
-
-    private fun convertCoinTypeToXRateKitCoinType(coinType: CoinKitCoinType): CoinType? {
-        return when (coinType) {
-            is CoinKitCoinType.Bitcoin -> CoinType.Bitcoin
-            is CoinKitCoinType.BitcoinCash -> CoinType.BitcoinCash
-            is CoinKitCoinType.Dash -> CoinType.Dash
-            is CoinKitCoinType.Ethereum -> CoinType.Ethereum
-            is CoinKitCoinType.Litecoin -> CoinType.Litecoin
-            is CoinKitCoinType.Zcash -> CoinType.Zcash
-            is CoinKitCoinType.Bep2 -> CoinType.Binance
-            is CoinKitCoinType.Erc20 -> CoinType.Erc20(coinType.address)
-            else -> null
-        }
+        kit.set(uniqueCoins.map { it.type })
     }
 
     private fun onBaseCurrencyUpdated() {
         kit.set(currencyManager.baseCurrency.code)
     }
 
-    sealed class RateError : Exception() {
-        class DisabledCoin : RateError()
-    }
 }

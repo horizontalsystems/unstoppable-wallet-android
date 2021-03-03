@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.subscribeIO
+import io.horizontalsystems.coinkit.models.CoinType
 
 class MarketSearchViewModel(private val service: MarketSearchService, private val clearables: List<Clearable>) : ViewModel() {
 
@@ -25,8 +26,8 @@ class MarketSearchViewModel(private val service: MarketSearchService, private va
                         // todo: replace stub data
                         if ("bitcoin".contains(service.query)) {
                             itemsLiveData.postValue(listOf(
-                                    CoinDataViewItem("BTC", "Bitcoin"),
-                                    CoinDataViewItem("BCH", "Bitcoin Cash"),
+                                    CoinDataViewItem("BTC", "Bitcoin", CoinType.Bitcoin),
+                                    CoinDataViewItem("BCH", "Bitcoin Cash", CoinType.BitcoinCash),
                             ))
                         } else {
                             itemsLiveData.postValue(listOf())

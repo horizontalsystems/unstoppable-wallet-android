@@ -7,8 +7,8 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.entities.Currency
-import io.horizontalsystems.views.helpers.LayoutHelper
 import io.horizontalsystems.xrateskit.entities.CoinMarket
 import java.math.BigDecimal
 import java.util.*
@@ -49,6 +49,7 @@ object MarketModule {
 
 data class MarketItem(
         val score: Score?,
+        val coinType: CoinType,
         val coinCode: String,
         val coinName: String,
         val volume: CurrencyValue,
@@ -60,8 +61,9 @@ data class MarketItem(
         fun createFromCoinMarket(coinMarket: CoinMarket, currency: Currency, score: Score?): MarketItem {
             return MarketItem(
                     score,
-                    coinMarket.coin.code,
-                    coinMarket.coin.title,
+                    coinMarket.data.type,
+                    coinMarket.data.code,
+                    coinMarket.data.title,
                     CurrencyValue(currency, coinMarket.marketInfo.volume),
                     CurrencyValue(currency, coinMarket.marketInfo.rate),
                     coinMarket.marketInfo.rateDiffPeriod,
@@ -134,6 +136,7 @@ fun Score.getBackgroundTintColor(context: Context): Int {
 
 data class MarketViewItem(
         val score: Score?,
+        val coinType: CoinType,
         val coinCode: String,
         val coinName: String,
         val rate: String,
@@ -178,6 +181,7 @@ data class MarketViewItem(
 
             return MarketViewItem(
                     marketItem.score,
+                    marketItem.coinType,
                     marketItem.coinCode,
                     marketItem.coinName,
                     formattedRate,

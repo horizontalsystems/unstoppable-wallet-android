@@ -6,6 +6,7 @@ import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.coinkit.models.Coin
+import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.xrateskit.entities.ChartInfo
 import io.horizontalsystems.xrateskit.entities.MarketInfo
@@ -59,8 +60,8 @@ object BalanceModule {
         var balanceHidden: Boolean
         val networkAvailable: Boolean
 
-        fun marketInfo(coinCode: String, currencyCode: String): MarketInfo?
-        fun chartInfo(coinCode: String, currencyCode: String): ChartInfo?
+        fun marketInfo(coinType: CoinType, currencyCode: String): MarketInfo?
+        fun chartInfo(coinType: CoinType, currencyCode: String): ChartInfo?
         fun balance(wallet: Wallet): BigDecimal?
         fun balanceLocked(wallet: Wallet): BigDecimal?
         fun state(wallet: Wallet): AdapterState?
@@ -90,7 +91,7 @@ object BalanceModule {
         fun didUpdateState(wallet: Wallet, state: AdapterState)
 
         fun didUpdateCurrency(currency: Currency)
-        fun didUpdateMarketInfo(marketInfo: Map<String, MarketInfo>)
+        fun didUpdateMarketInfo(marketInfo: Map<CoinType, MarketInfo>)
 
         fun didRefresh()
     }

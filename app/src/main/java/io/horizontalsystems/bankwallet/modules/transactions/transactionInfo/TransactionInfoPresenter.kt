@@ -26,7 +26,7 @@ class TransactionInfoPresenter(
         val status = transaction.status(lastBlockInfo?.height)
         val lockState = transaction.lockState(lastBlockInfo?.timestamp)
 
-        val rate = interactor.getRate(wallet.coin.code, transaction.timestamp)
+        val rate = interactor.getRate(wallet.coin.type, transaction.timestamp)
 
         val primaryAmountInfo: SendModule.AmountInfo
         val secondaryAmountInfo: SendModule.AmountInfo?

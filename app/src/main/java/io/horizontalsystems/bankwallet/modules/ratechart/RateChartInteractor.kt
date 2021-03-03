@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.ratechart
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.managers.MarketFavoritesManager
 import io.horizontalsystems.bankwallet.entities.PriceAlert
+import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.xrateskit.entities.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -33,16 +34,16 @@ class RateChartInteractor(
             chartTypeStorage.chartType = value
         }
 
-    override fun getMarketInfo(coinCode: String, currencyCode: String): MarketInfo? {
-        return xRateManager.marketInfo(coinCode, currencyCode)
+    override fun getMarketInfo(coinType: CoinType, currencyCode: String): MarketInfo? {
+        return xRateManager.marketInfo(coinType, currencyCode)
     }
 
-    override fun getChartInfo(coinCode: String, currencyCode: String, chartType: ChartType): ChartInfo? {
-        return xRateManager.chartInfo(coinCode, currencyCode, chartType)
+    override fun getChartInfo(coinType: CoinType, currencyCode: String, chartType: ChartType): ChartInfo? {
+        return xRateManager.chartInfo(coinType, currencyCode, chartType)
     }
 
-    override fun getCoinDetails(coinCode: String, currencyCode: String, rateDiffCoinCodes: List<String>, rateDiffPeriods: List<TimePeriod>) {
-        xRateManager.coinMarketDetailsAsync(coinCode, currencyCode, rateDiffCoinCodes, rateDiffPeriods)
+    override fun getCoinDetails(coinType: CoinType, currencyCode: String, rateDiffCoinCodes: List<String>, rateDiffPeriods: List<TimePeriod>) {
+        xRateManager.coinMarketDetailsAsync(coinType, currencyCode, rateDiffCoinCodes, rateDiffPeriods)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ coinMarketDetails ->
@@ -54,8 +55,8 @@ class RateChartInteractor(
                 }
     }
 
-    override fun observeChartInfo(coinCode: String, currencyCode: String, chartType: ChartType) {
-        xRateManager.chartInfoObservable(coinCode, currencyCode, chartType)
+    override fun observeChartInfo(coinType: CoinType, currencyCode: String, chartType: ChartType) {
+        xRateManager.chartInfoObservable(coinType, currencyCode, chartType)
                 .delay(600, TimeUnit.MILLISECONDS)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -68,8 +69,8 @@ class RateChartInteractor(
                 }
     }
 
-    override fun observeMarketInfo(coinCode: String, currencyCode: String) {
-        xRateManager.marketInfoObservable(coinCode, currencyCode)
+    override fun observeMarketInfo(coinType: CoinType, currencyCode: String) {
+        xRateManager.marketInfoObservable(coinType, currencyCode)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ marketInfo ->
@@ -81,7 +82,7 @@ class RateChartInteractor(
                 }
     }
 
-    override fun observeAlertNotification(coinCode: String) {
+    override fun observeAlertNotification() {
         alertNotificationDisposable = priceAlertManager.notificationChangedFlowable
                 .subscribeOn(Schedulers.io())
                 .subscribe {
@@ -93,18 +94,18 @@ class RateChartInteractor(
         return priceAlertManager.getPriceAlert(coinCode)
     }
 
-    override fun isCoinFavorite(coinCode: String): Boolean {
-        return marketFavoritesManager.isCoinInFavorites(coinCode)
+    override fun isCoinFavorite(coinType: CoinType): Boolean {
+        return marketFavoritesManager.isCoinInFavorites(coinType)
     }
 
-    override fun favorite(coinCode: String) {
-        marketFavoritesManager.add(coinCode)
+    override fun favorite(coinType: CoinType) {
+        marketFavoritesManager.add(coinType)
 
         delegate?.updateFavoriteNotificationItemState()
     }
 
-    override fun unfavorite(coinCode: String) {
-        marketFavoritesManager.remove(coinCode)
+    override fun unfavorite(coinType: CoinType) {
+        marketFavoritesManager.remove(coinType)
 
         delegate?.updateFavoriteNotificationItemState()
     }

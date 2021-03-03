@@ -69,7 +69,7 @@ class MarketSearchFragment : BaseFragment() {
     }
 
     fun onItemClick(coinDataViewItem: CoinDataViewItem) {
-        val arguments = RateChartFragment.prepareParams(coinDataViewItem.code, coinDataViewItem.name, null)
+        val arguments = RateChartFragment.prepareParams(coinDataViewItem.type, coinDataViewItem.code, coinDataViewItem.name, null)
 
         findNavController().navigate(R.id.rateChartFragment, arguments, navOptions())
     }

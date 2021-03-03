@@ -124,7 +124,7 @@ class TransactionsInteractor(
 
         requestedTimestamps[composedKey] = timestamp
 
-        rateManager.historicalRate(coin.code, currencyCode, timestamp)
+        rateManager.historicalRate(coin.type, currencyCode, timestamp)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({

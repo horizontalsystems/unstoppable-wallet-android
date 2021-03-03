@@ -33,7 +33,7 @@ data class MarketInfoViewItem(
     val rateLow24h: BigDecimal,
     val volume24h: BigDecimal,
     val marketCapDiff24h: BigDecimal,
-    val coinInfo: CoinInfo,
+    val coinMeta: CoinMeta,
     val rateDiffs: Map<TimePeriod, Map<String, BigDecimal>>
 )
 
@@ -79,7 +79,7 @@ class RateChartViewFactory {
             rateLow24h = rateLow24h,
             volume24h = coinMarket.volume24h,
             marketCapDiff24h = coinMarket.marketCapDiff24h,
-            coinInfo = coinMarket.coinInfo,
+            coinMeta = coinMarket.meta,
             rateDiffs = coinMarket.rateDiffs
         )
     }

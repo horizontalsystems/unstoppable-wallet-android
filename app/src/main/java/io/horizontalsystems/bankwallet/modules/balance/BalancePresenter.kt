@@ -241,10 +241,10 @@ class BalancePresenter(
         }
     }
 
-    override fun didUpdateMarketInfo(marketInfo: Map<String, MarketInfo>) {
+    override fun didUpdateMarketInfo(marketInfo: Map<CoinType, MarketInfo>) {
         executor.submit {
             items.forEachIndexed { index, item ->
-                marketInfo[item.wallet.coin.code]?.let {
+                marketInfo[item.wallet.coin.type]?.let {
                     item.marketInfo = it
                     viewItems[index] = factory.viewItem(item, currency, viewItems[index].expanded, hideBalance)
                 }
@@ -290,7 +290,7 @@ class BalancePresenter(
         interactor.subscribeToMarketInfo(currency.code)
 
         items.forEach { item ->
-            item.marketInfo = interactor.marketInfo(item.wallet.coin.code, currency.code)
+            item.marketInfo = interactor.marketInfo(item.wallet.coin.type, currency.code)
         }
     }
 

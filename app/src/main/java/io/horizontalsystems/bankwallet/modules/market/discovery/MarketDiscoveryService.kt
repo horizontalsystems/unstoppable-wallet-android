@@ -70,11 +70,11 @@ class MarketDiscoveryService(
     private fun getRatedMarketItemsAsync(currency: Currency): Single<List<MarketItem>> {
         return xRateManager.getCoinRatingsAsync()
                 .flatMap { coinRatingsMap ->
-                    val coinCodes = coinRatingsMap.keys.map { it }
-                    xRateManager.getCoinMarketList(coinCodes, currency.code)
+                    val coinTypes = coinRatingsMap.keys.map { it }
+                    xRateManager.getCoinMarketList(coinTypes, currency.code)
                             .map { coinMarkets ->
                                 coinMarkets.mapNotNull { coinMarket ->
-                                    coinRatingsMap[coinMarket.coin.code]?.let { rating ->
+                                    coinRatingsMap[coinMarket.data.type]?.let { rating ->
                                         MarketItem.createFromCoinMarket(coinMarket, currency, Score.Rating(rating))
                                     }
                                 }

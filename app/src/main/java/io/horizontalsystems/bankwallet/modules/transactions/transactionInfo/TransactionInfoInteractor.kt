@@ -7,6 +7,7 @@ import io.horizontalsystems.bankwallet.core.providers.FeeCoinProvider
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.LastBlockInfo
 import io.horizontalsystems.coinkit.models.Coin
+import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.IBuildConfigProvider
 import io.horizontalsystems.core.ICurrencyManager
 
@@ -25,10 +26,10 @@ class TransactionInfoInteractor(
 
     override val testMode = buildConfigProvider.testMode
 
-    override fun getRate(code: String, timestamp: Long): CurrencyValue? {
+    override fun getRate(coinType: CoinType, timestamp: Long): CurrencyValue? {
         val baseCurrency = currencyManager.baseCurrency
 
-        return xRateManager.historicalRateCached(code, baseCurrency.code, timestamp)?.let {
+        return xRateManager.historicalRateCached(coinType, baseCurrency.code, timestamp)?.let {
             CurrencyValue(baseCurrency, it)
         }
     }
