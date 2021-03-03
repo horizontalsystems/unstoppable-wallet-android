@@ -126,6 +126,10 @@ class RateManager(
         return kit.getGlobalCoinMarketsAsync(currency)
     }
 
+    override fun searchCoins(searchText: String): List<CoinData> {
+        return kit.searchCoins(searchText)
+    }
+
     override fun refresh() {
         kit.refresh()
     }

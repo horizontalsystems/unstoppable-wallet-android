@@ -23,15 +23,7 @@ class MarketSearchViewModel(private val service: MarketSearchService, private va
                     advancedSearchButtonVisibleLiveDataViewItem.postValue(service.query.isBlank())
 
                     if (it is MarketSearchService.State.Success) {
-                        // todo: replace stub data
-                        if ("bitcoin".contains(service.query)) {
-                            itemsLiveData.postValue(listOf(
-                                    CoinDataViewItem("BTC", "Bitcoin", CoinType.Bitcoin),
-                                    CoinDataViewItem("BCH", "Bitcoin Cash", CoinType.BitcoinCash),
-                            ))
-                        } else {
-                            itemsLiveData.postValue(listOf())
-                        }
+                        itemsLiveData.postValue(it.items.map { CoinDataViewItem(it.code, it.title, it.type) })
                     } else {
                         itemsLiveData.postValue(listOf())
                     }
