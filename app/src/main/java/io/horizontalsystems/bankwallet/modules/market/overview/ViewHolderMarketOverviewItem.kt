@@ -99,7 +99,6 @@ class ViewHolderMarketOverviewItem(override val containerView: View, private val
         }
 
         rootView.setBackgroundResource(getBackground(listPosition))
-        topBorder.isVisible = listPosition != ListPosition.First
     }
 
     private fun getBackground(listPosition: ListPosition): Int {
