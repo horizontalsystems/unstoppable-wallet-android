@@ -54,19 +54,18 @@ class BitcoinFeeRateProvider(private val feeRateProvider: FeeRateProvider) : IFe
 
     override val feeRatePriorityList: List<FeeRatePriority> = listOf(
             FeeRatePriority.LOW,
-            FeeRatePriority.MEDIUM,
+            FeeRatePriority.RECOMMENDED,
             FeeRatePriority.HIGH,
             FeeRatePriority.Custom(1, IntRange(1, 200))
     )
 
     override val recommendedFeeRate: Single<BigInteger> = feeRateProvider.bitcoinFeeRate(mediumPriorityBlockCount)
 
-    override var defaultFeeRatePriority: FeeRatePriority = FeeRatePriority.MEDIUM
+    override var defaultFeeRatePriority: FeeRatePriority = FeeRatePriority.RECOMMENDED
 
     override fun feeRate(feeRatePriority: FeeRatePriority): Single<BigInteger> {
         return when (feeRatePriority) {
             FeeRatePriority.LOW -> feeRateProvider.bitcoinFeeRate(lowPriorityBlockCount)
-            FeeRatePriority.MEDIUM -> feeRateProvider.bitcoinFeeRate(mediumPriorityBlockCount)
             FeeRatePriority.HIGH -> feeRateProvider.bitcoinFeeRate(highPriorityBlockCount)
             FeeRatePriority.RECOMMENDED -> feeRateProvider.bitcoinFeeRate(mediumPriorityBlockCount)
             is FeeRatePriority.Custom -> Single.just(feeRatePriority.value.toBigInteger())
