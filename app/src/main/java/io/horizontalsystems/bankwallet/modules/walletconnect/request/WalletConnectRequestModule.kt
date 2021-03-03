@@ -11,6 +11,7 @@ import io.horizontalsystems.bankwallet.core.providers.EthereumFeeRateProvider
 import io.horizontalsystems.bankwallet.core.providers.StringProvider
 import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectSendEthereumTransactionRequest
 import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectService
+import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.ethereumkit.core.EthereumKit.NetworkType
 import io.horizontalsystems.ethereumkit.models.Address
 import java.math.BigInteger
@@ -27,12 +28,13 @@ object WalletConnectRequestModule {
                 NetworkType.EthMainNet,
                 NetworkType.EthRopsten,
                 NetworkType.EthKovan,
-                NetworkType.EthRinkeby -> App.appConfigProvider.ethereumCoin
-                NetworkType.BscMainNet -> App.appConfigProvider.binanceSmartChainCoin
+                NetworkType.EthRinkeby -> App.coinKit.getCoin(CoinType.Ethereum) ?: throw IllegalArgumentException()
+                NetworkType.BscMainNet -> App.coinKit.getCoin(CoinType.BinanceSmartChain) ?: throw IllegalArgumentException()
             }
         }
         private val transactionService by lazy {
-            val feeRateProvider = FeeRateProviderFactory.provider(App.appConfigProvider.ethereumCoin) as EthereumFeeRateProvider
+            val ethereumCoin = App.coinKit.getCoin(CoinType.Ethereum) ?: throw IllegalArgumentException()
+            val feeRateProvider = FeeRateProviderFactory.provider(ethereumCoin) as EthereumFeeRateProvider
             EvmTransactionService(evmKit, feeRateProvider, 10)
         }
         private val coinService by lazy { CoinService(coin, App.currencyManager, App.xRateManager) }

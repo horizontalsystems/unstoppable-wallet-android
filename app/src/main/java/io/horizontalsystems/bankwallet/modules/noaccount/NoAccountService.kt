@@ -6,6 +6,7 @@ import io.horizontalsystems.bankwallet.core.IDerivationSettingsManager
 import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.bankwallet.core.managers.BitcoinCashCoinTypeManager
 import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.coinkit.models.Coin
 
 class NoAccountService(
         private val accountManager: IAccountManager,

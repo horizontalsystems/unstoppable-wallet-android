@@ -2,6 +2,8 @@ package io.horizontalsystems.bankwallet.core.managers
 
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.coinkit.models.Coin
+import io.horizontalsystems.coinkit.models.CoinType
 
 class InitialSyncSettingsManager(
         private val appConfigProvider: IAppConfigProvider,

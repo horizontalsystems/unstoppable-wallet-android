@@ -1,10 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.send.submodules.fee
 
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
-import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.bankwallet.entities.CoinValue
-import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.send.SendModule
+import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.core.entities.Currency
 import java.math.BigDecimal
 

@@ -1,10 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
 import io.horizontalsystems.bankwallet.core.AdapterState
-import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.LastBlockInfo
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.core.entities.Currency
 import java.math.BigDecimal
 

@@ -10,13 +10,13 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.AccountType
-import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
 import io.horizontalsystems.bankwallet.modules.blockchainsettings.BlockchainSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.enablecoins.EnableCoinsDialog
 import io.horizontalsystems.bankwallet.modules.enablecoins.EnableCoinsViewModel
 import io.horizontalsystems.bankwallet.modules.restore.RestoreFragment
 import io.horizontalsystems.bankwallet.ui.extensions.coinlist.CoinListBaseFragment
+import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.snackbar.SnackbarDuration
 import kotlinx.android.synthetic.main.fragment_manage_wallets.*

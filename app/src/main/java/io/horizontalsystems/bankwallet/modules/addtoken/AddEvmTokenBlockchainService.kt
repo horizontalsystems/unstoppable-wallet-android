@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.addtoken
 import io.horizontalsystems.bankwallet.core.IAddTokenBlockchainService
 import io.horizontalsystems.bankwallet.core.INetworkManager
 import io.horizontalsystems.bankwallet.entities.ApiError
-import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.ethereumkit.core.AddressValidator
 import io.reactivex.Single
 import java.util.*
@@ -51,7 +51,7 @@ class AddEvmTokenBlockchainService(
                     val tokenDecimal = result.get("tokenDecimal")?.asString?.toInt()
                             ?: throw ApiError.InvalidResponse
 
-                    return@map Coin(tokenSymbol, tokenName, tokenSymbol, tokenDecimal, resolver.coinType(reference))
+                    return@map Coin(title = tokenName, code = tokenSymbol, decimal = tokenDecimal, type = resolver.coinType(reference))
                 }
                 .firstOrError()
     }

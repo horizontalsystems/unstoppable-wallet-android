@@ -5,7 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import io.horizontalsystems.bankwallet.entities.BlockchainSetting
-import io.horizontalsystems.bankwallet.entities.CoinType
+import io.horizontalsystems.coinkit.models.CoinType
 
 @Dao
 interface BlockchainSettingDao {

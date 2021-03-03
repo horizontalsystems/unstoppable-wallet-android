@@ -2,8 +2,8 @@ package io.horizontalsystems.bankwallet.modules.swap
 
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
-import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.core.providers.StringProvider
+import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.uniswapkit.models.TradeData
 import io.horizontalsystems.uniswapkit.models.TradeOptions
 import io.horizontalsystems.uniswapkit.models.TradeType

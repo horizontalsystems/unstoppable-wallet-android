@@ -5,9 +5,9 @@ import android.os.Looper
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.Clearable
-import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.ui.extensions.coinlist.CoinViewItem
 import io.horizontalsystems.bankwallet.ui.extensions.coinlist.CoinViewState
+import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.views.ListPosition
 import io.reactivex.disposables.CompositeDisposable

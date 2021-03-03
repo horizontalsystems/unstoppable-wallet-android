@@ -4,6 +4,8 @@ import io.horizontalsystems.bankwallet.core.IDerivationSettingsManager
 import io.horizontalsystems.bankwallet.core.managers.BitcoinCashCoinTypeManager
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.entities.AccountType.Derivation
+import io.horizontalsystems.coinkit.models.Coin
+import io.horizontalsystems.coinkit.models.CoinType
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 

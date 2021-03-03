@@ -11,13 +11,14 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.coinkit.models.Coin
+import io.horizontalsystems.coinkit.models.CoinType
 
-@Database(version = 27, exportSchema = false, entities = [
+@Database(version = 28, exportSchema = false, entities = [
     EnabledWallet::class,
     PriceAlert::class,
     AccountRecord::class,
     BlockchainSetting::class,
-    CoinRecord::class,
     SubscriptionJob::class,
     LogEntry::class,
     FavoriteCoin::class,
@@ -31,7 +32,6 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun accountsDao(): AccountsDao
     abstract fun priceAlertsDao(): PriceAlertsDao
     abstract fun blockchainSettingDao(): BlockchainSettingDao
-    abstract fun coinRecordDao(): CoinRecordDao
     abstract fun subscriptionJobDao(): SubscriptionJobDao
     abstract fun logsDao(): LogsDao
     abstract fun marketFavoritesDao(): MarketFavoritesDao
@@ -71,7 +71,8 @@ abstract class AppDatabase : RoomDatabase() {
                             addBep2SymbolToRecord,
                             MIGRATION_24_25,
                             MIGRATION_25_26,
-                            MIGRATION_26_27
+                            MIGRATION_26_27,
+                            MIGRATION_27_28
                     )
                     .build()
         }
@@ -488,5 +489,129 @@ abstract class AppDatabase : RoomDatabase() {
                 database.execSQL( "CREATE TABLE IF NOT EXISTS `WalletConnectSession` (`chainId` INTEGER NOT NULL, `accountId` TEXT NOT NULL, `session` TEXT NOT NULL, `peerId` TEXT NOT NULL, `remotePeerId` TEXT NOT NULL, `remotePeerMeta` TEXT NOT NULL, `isAutoSign` INTEGER NOT NULL, `date` INTEGER NOT NULL, PRIMARY KEY(`remotePeerId`))")
             }
         }
+
+        private val MIGRATION_27_28: Migration = object : Migration(27, 28) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                // extract custom coins
+                val customCoins = extractCustomCoins(database)
+                customCoins.forEach {
+                    App.coinKit.saveCoin(it)
+                }
+
+                // change coinIds in enabled wallets
+                updateCoinIdInEnabledWallets(customCoins, database)
+
+                //drop CoinRecord table and clean PriceAlert table
+                database.execSQL("DROP TABLE CoinRecord")
+                database.execSQL("DELETE FROM PriceAlert")
+            }
+        }
+
+        private fun extractCustomCoins(database: SupportSQLiteDatabase): List<Coin> {
+            val coins = mutableListOf<Coin>()
+            val coinRecordCursor = database.query("SELECT * FROM CoinRecord")
+            while (coinRecordCursor.moveToNext()) {
+                var title = ""
+                var code = ""
+                var decimal = 0
+
+                val titleColumn = coinRecordCursor.getColumnIndex("title")
+                if (titleColumn >= 0) {
+                    title = coinRecordCursor.getString(titleColumn)
+                }
+                val codeColumn = coinRecordCursor.getColumnIndex("code")
+                if (codeColumn >= 0) {
+                    code = coinRecordCursor.getString(codeColumn)
+                }
+                val decimalColumn = coinRecordCursor.getColumnIndex("decimal")
+                if (decimalColumn >= 0) {
+                    decimal = coinRecordCursor.getInt(decimalColumn)
+                }
+
+                val erc20AddressColumn = coinRecordCursor.getColumnIndex("erc20Address")
+                if (erc20AddressColumn >= 0) {
+                    val erc20Address = coinRecordCursor.getString(erc20AddressColumn)
+                    if (erc20Address.isNotBlank()) {
+                        val coin = Coin(CoinType.Erc20(erc20Address), code, title, decimal)
+                        coins.add(coin)
+                        continue
+                    }
+                }
+                val bep2SymbolColumn = coinRecordCursor.getColumnIndex("bep2Symbol")
+                if (bep2SymbolColumn >= 0) {
+                    val bep2Symbol = coinRecordCursor.getString(bep2SymbolColumn)
+                    if (bep2Symbol.isNotBlank()) {
+                        val coin = Coin(CoinType.Bep2(bep2Symbol), code, title, decimal)
+                        coins.add(coin)
+                    }
+                }
+            }
+            return coins
+        }
+
+        private fun updateCoinIdInEnabledWallets(customCoins: List<Coin>, database: SupportSQLiteDatabase) {
+            val allCoins = App.coinKit.getDefaultCoins() + customCoins
+            val walletsCursor = database.query("SELECT * FROM EnabledWallet")
+            while (walletsCursor.moveToNext()) {
+                val coinIdColumnIndex = walletsCursor.getColumnIndex("coinId")
+                var oldCoinId = ""
+                if (coinIdColumnIndex >= 0) {
+                    oldCoinId = walletsCursor.getString(coinIdColumnIndex)
+                }
+                var accountId = ""
+                val accountIdColumnIndex = walletsCursor.getColumnIndex("accountId")
+                if (accountIdColumnIndex >= 0) {
+                    accountId = walletsCursor.getString(accountIdColumnIndex)
+                }
+
+                if (oldCoinId.isEmpty() || accountId.isEmpty()){
+                    continue
+                }
+
+                newCoinId(oldCoinId, allCoins)?.let { newCoinId ->
+                    database.execSQL("""
+                        UPDATE EnabledWallet 
+                        SET coinId = '$newCoinId' 
+                        WHERE coinId = '$oldCoinId' AND accountId = '$accountId';
+                    """.trimIndent())
+                }
+            }
+        }
+
+        private fun newCoinId(old: String, coins: List<Coin>): String? {
+            oldTypeIds[old]?.let {
+                return it.ID
+            }
+
+            coins.firstOrNull { it.code == old }?.let {
+                return it.id
+            }
+
+            coins.firstOrNull { coin ->
+                (coin.type as? CoinType.Bep2)?.symbol == old
+            }?.let {
+                return it.id
+            }
+
+            return null
+        }
+
+        private val oldTypeIds: Map<String, CoinType> = mapOf(
+                "BNB-ERC20" to CoinType.Erc20("0xb8c77482e45f1f44de1745f52c74426c631bdd52"),
+                "BNB" to CoinType.Bep2("BNB"),
+                "BNB-BSC" to CoinType.BinanceSmartChain,
+                "DOS" to CoinType.Bep2("DOS-120"),
+                "DOS-ERC20" to CoinType.Erc20("0x0a913bead80f321e7ac35285ee10d9d922659cb7"),
+                "ETH" to CoinType.Ethereum,
+                "ETH-BEP2" to CoinType.Bep2("ETH-1c9"),
+                "MATIC" to CoinType.Erc20("0x7d1afa7b718fb893db30a3abc0cfc608aacfebb0"),
+                "MATIC-BEP2" to CoinType.Bep2("MATIC-84a"),
+                "AAVEDAI" to CoinType.Erc20("0xfc1e690f61efd961294b3e1ce3313fbd8aa4f85d"),
+                "AMON" to CoinType.Erc20("0x737f98ac8ca59f2c68ad658e3c3d8c8963e40a4c"),
+                "RENBTC" to CoinType.Erc20("0xeb4c2781e4eba804ce9a9803c67d0893436bb27d"),
+                "RENBCH" to CoinType.Erc20("0x459086f2376525bdceba5bdda135e4e9d3fef5bf"),
+                "RENZEC" to CoinType.Erc20("0x1c5db575e2ff833e46a2e9864c22f4b22e0b37c2"),
+        )
+
     }
 }

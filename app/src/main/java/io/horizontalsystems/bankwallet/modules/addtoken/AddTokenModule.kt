@@ -6,11 +6,11 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.providers.StringProvider
-import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.modules.addtoken.bep2.AddBep2TokenBlockchainService
 import io.horizontalsystems.bankwallet.modules.addtoken.bep20.AddBep20TokenResolver
 import io.horizontalsystems.bankwallet.modules.addtoken.erc20.AddErc20TokenResolver
+import io.horizontalsystems.coinkit.models.Coin
+import io.horizontalsystems.coinkit.models.CoinType
 import kotlinx.android.parcel.Parcelize
 
 object AddTokenModule {

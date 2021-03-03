@@ -1,10 +1,10 @@
 package io.horizontalsystems.bankwallet.core.ethereum
 
 import io.horizontalsystems.bankwallet.core.IRateManager
-import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.send.SendModule
+import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.core.ICurrencyManager
 import java.math.BigDecimal
 import java.math.BigInteger

@@ -8,7 +8,8 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.setCoinImage
-import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.bankwallet.entities.label
+import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.views.ListPosition
 import io.horizontalsystems.views.inflate
 import kotlinx.android.extensions.LayoutContainer
@@ -54,8 +55,8 @@ class CoinListAdapter(private val listener: Listener) : ListAdapter<CoinViewItem
     companion object {
         private val diffCallback = object : DiffUtil.ItemCallback<CoinViewItem>() {
             override fun areItemsTheSame(oldItem: CoinViewItem, newItem: CoinViewItem): Boolean {
-                if ((oldItem as? CoinViewItem.ToggleHidden)?.coin?.coinId == (newItem as? CoinViewItem.ToggleHidden)?.coin?.coinId
-                        || (oldItem as? CoinViewItem.ToggleVisible)?.coin?.coinId == (newItem as? CoinViewItem.ToggleVisible)?.coin?.coinId) {
+                if ((oldItem as? CoinViewItem.ToggleHidden)?.coin?.id == (newItem as? CoinViewItem.ToggleHidden)?.coin?.id
+                        || (oldItem as? CoinViewItem.ToggleVisible)?.coin?.id == (newItem as? CoinViewItem.ToggleVisible)?.coin?.id) {
                     return true
                 }
                 return false
@@ -63,9 +64,9 @@ class CoinListAdapter(private val listener: Listener) : ListAdapter<CoinViewItem
 
             override fun areContentsTheSame(oldItem: CoinViewItem, newItem: CoinViewItem): Boolean {
                 if (oldItem is CoinViewItem.ToggleHidden && newItem is CoinViewItem.ToggleHidden) {
-                    return oldItem.coin.coinId == newItem.coin.coinId && oldItem.listPosition == newItem.listPosition
+                    return oldItem.coin.id == newItem.coin.id && oldItem.listPosition == newItem.listPosition
                 } else if (oldItem is CoinViewItem.ToggleVisible && newItem is CoinViewItem.ToggleVisible) {
-                    return oldItem.coin.coinId == newItem.coin.coinId && oldItem.enabled == newItem.enabled && oldItem.listPosition == newItem.listPosition
+                    return oldItem.coin.id == newItem.coin.id && oldItem.enabled == newItem.enabled && oldItem.listPosition == newItem.listPosition
                 } else return false
             }
         }

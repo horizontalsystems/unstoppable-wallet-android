@@ -6,9 +6,9 @@ import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.adapters.BaseEvmAdapter
 import io.horizontalsystems.bankwallet.core.adapters.BinanceAdapter
 import io.horizontalsystems.bankwallet.core.factories.AdapterFactory
-import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.coinkit.models.Coin
+import io.horizontalsystems.coinkit.models.CoinType
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable

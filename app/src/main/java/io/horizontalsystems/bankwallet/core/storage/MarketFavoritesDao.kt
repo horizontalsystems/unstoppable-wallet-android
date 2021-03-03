@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.core.storage
 
 import androidx.room.*
-import io.horizontalsystems.bankwallet.entities.CoinType
 
 @Dao
 interface MarketFavoritesDao {

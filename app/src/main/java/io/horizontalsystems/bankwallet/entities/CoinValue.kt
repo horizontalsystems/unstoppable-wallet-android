@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.entities
 
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.coinkit.models.Coin
 import java.math.BigDecimal
 
 data class CoinValue(val coin: Coin, val value: BigDecimal) {

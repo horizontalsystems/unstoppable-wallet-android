@@ -6,6 +6,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.providers.StringProvider
 import io.horizontalsystems.bankwallet.modules.swap.SwapTradeService
+import io.horizontalsystems.coinkit.models.CoinType
 
 object SwapTradeOptionsModule {
 
@@ -16,7 +17,7 @@ object SwapTradeOptionsModule {
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            val ethereumCoin = App.appConfigProvider.ethereumCoin
+            val ethereumCoin = App.coinKit.getCoin(CoinType.Ethereum) ?: throw IllegalArgumentException()
 
             return when (modelClass) {
                 SwapTradeOptionsViewModel::class.java -> SwapTradeOptionsViewModel(service, tradeService, stringProvider) as T

@@ -8,7 +8,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
 import io.horizontalsystems.bankwallet.modules.addtoken.AddTokenFragment
 import io.horizontalsystems.bankwallet.modules.addtoken.TokenType
@@ -20,6 +19,7 @@ import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsViewMo
 import io.horizontalsystems.bankwallet.modules.noaccount.NoAccountDialog
 import io.horizontalsystems.bankwallet.modules.restore.RestoreFragment
 import io.horizontalsystems.bankwallet.ui.extensions.coinlist.CoinListBaseFragment
+import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.android.synthetic.main.fragment_manage_wallets.*

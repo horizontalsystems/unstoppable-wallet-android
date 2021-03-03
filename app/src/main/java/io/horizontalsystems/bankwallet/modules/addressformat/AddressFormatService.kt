@@ -4,8 +4,8 @@ import io.horizontalsystems.bankwallet.core.IDerivationSettingsManager
 import io.horizontalsystems.bankwallet.core.managers.BitcoinCashCoinTypeManager
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.BitcoinCashCoinType
-import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.entities.DerivationSetting
+import io.horizontalsystems.coinkit.models.CoinType
 import io.reactivex.subjects.BehaviorSubject
 
 class AddressFormatService(

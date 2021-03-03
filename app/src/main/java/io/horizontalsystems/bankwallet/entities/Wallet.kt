@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.entities
 
 import android.os.Parcelable
 import io.horizontalsystems.bankwallet.modules.transactions.FilterAdapter
+import io.horizontalsystems.coinkit.models.Coin
 import kotlinx.android.parcel.Parcelize
 import java.util.*
 

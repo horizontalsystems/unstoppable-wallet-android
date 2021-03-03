@@ -6,7 +6,7 @@ import io.horizontalsystems.bankwallet.core.managers.BinanceSmartChainKitManager
 import io.horizontalsystems.bankwallet.core.managers.EthereumKitManager
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
-import io.horizontalsystems.bankwallet.entities.Coin
+import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.core.ISystemInfoManager
 import java.util.*
 import kotlin.collections.LinkedHashMap
@@ -104,7 +104,7 @@ class AppStatusService(
     }
 
     private fun getCoin(coinId: String): Coin {
-        return coinManager.coins.first { it.coinId == coinId }
+        return coinManager.coins.first { it.id == coinId }
     }
 
 }

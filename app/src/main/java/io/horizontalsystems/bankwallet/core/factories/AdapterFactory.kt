@@ -11,8 +11,8 @@ import io.horizontalsystems.bankwallet.core.managers.BinanceKitManager
 import io.horizontalsystems.bankwallet.core.managers.BinanceSmartChainKitManager
 import io.horizontalsystems.bankwallet.core.managers.BitcoinCashCoinTypeManager
 import io.horizontalsystems.bankwallet.core.managers.EthereumKitManager
-import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.BackgroundManager
 
 class AdapterFactory(
@@ -38,11 +38,12 @@ class AdapterFactory(
             is CoinType.Litecoin -> LitecoinAdapter(wallet, derivation, syncMode, testMode, backgroundManager)
             is CoinType.BitcoinCash -> BitcoinCashAdapter(wallet, syncMode, bitcoinCashCoinTypeManager?.bitcoinCashCoinType, testMode, backgroundManager)
             is CoinType.Dash -> DashAdapter(wallet, syncMode, testMode, backgroundManager)
-            is CoinType.Binance -> BinanceAdapter(binanceKitManager.binanceKit(wallet), coinType.symbol)
+            is CoinType.Bep2 -> BinanceAdapter(binanceKitManager.binanceKit(wallet), coinType.symbol)
             is CoinType.Ethereum -> EvmAdapter(ethereumKitManager.evmKit(wallet.account))
             is CoinType.Erc20 -> Eip20Adapter(context, ethereumKitManager.evmKit(wallet.account), wallet.coin.decimal, coinType.address)
             is CoinType.BinanceSmartChain -> EvmAdapter(binanceSmartChainKitManager.evmKit(wallet.account))
             is CoinType.Bep20 -> Eip20Adapter(context, binanceSmartChainKitManager.evmKit(wallet.account), wallet.coin.decimal, coinType.address)
+            is CoinType.Unsupported -> null
         }
     }
 
@@ -54,7 +55,7 @@ class AdapterFactory(
             CoinType.BinanceSmartChain, is CoinType.Bep20 -> {
                 binanceSmartChainKitManager.unlink()
             }
-            is CoinType.Binance -> {
+            is CoinType.Bep2 -> {
                 binanceKitManager.unlink()
             }
         }

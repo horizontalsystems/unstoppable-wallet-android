@@ -20,7 +20,8 @@ object SwapApproveModule {
         private val evmKit by lazy { approveData.dex.evmKit!! }
         private val transactionService by lazy { EvmTransactionService(evmKit, FeeRateProviderFactory.provider(approveData.dex.coin)!!, 0) }
         private val coinService by lazy { CoinService(approveData.coin, App.currencyManager, App.xRateManager) }
-        private val ethCoinService by lazy { CoinService(approveData.dex.coin, App.currencyManager, App.xRateManager) }
+        private val coin by lazy { approveData.dex.coin }
+        private val ethCoinService by lazy { CoinService(coin, App.currencyManager, App.xRateManager) }
         private val stringProvider by lazy { StringProvider() }
 
         @Suppress("UNCHECKED_CAST")

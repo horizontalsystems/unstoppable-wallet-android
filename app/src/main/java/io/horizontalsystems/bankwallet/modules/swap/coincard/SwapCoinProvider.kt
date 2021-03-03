@@ -3,10 +3,11 @@ package io.horizontalsystems.bankwallet.modules.swap.coincard
 import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.ICoinManager
 import io.horizontalsystems.bankwallet.core.IWalletManager
-import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.bankwallet.entities.CoinType
+import io.horizontalsystems.bankwallet.entities.label
 import io.horizontalsystems.bankwallet.modules.swap.SwapModule.CoinBalanceItem
 import io.horizontalsystems.bankwallet.modules.swap.SwapModule.Dex
+import io.horizontalsystems.coinkit.models.Coin
+import io.horizontalsystems.coinkit.models.CoinType
 import java.math.BigDecimal
 
 class SwapCoinProvider(

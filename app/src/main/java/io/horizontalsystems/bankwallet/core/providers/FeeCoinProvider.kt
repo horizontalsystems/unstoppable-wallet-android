@@ -1,37 +1,37 @@
 package io.horizontalsystems.bankwallet.core.providers
 
-import io.horizontalsystems.bankwallet.core.IAppConfigProvider
-import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.bankwallet.entities.CoinType
+import io.horizontalsystems.coinkit.CoinKit
+import io.horizontalsystems.coinkit.models.Coin
+import io.horizontalsystems.coinkit.models.CoinType
 
-class FeeCoinProvider(private val appConfigProvider: IAppConfigProvider) {
+class FeeCoinProvider(private val coinKit: CoinKit) {
 
-    fun feeCoinData(coin: Coin): Pair<Coin, String>? = when (coin.type) {
+    fun feeCoinData(coin: Coin): Pair<Coin, String>? = when (val type = coin.type) {
         is CoinType.Erc20 -> erc20()
         is CoinType.Bep20 -> bep20()
-        is CoinType.Binance -> binance(coin.type.symbol)
+        is CoinType.Bep2 -> binance(type.symbol)
         else -> null
     }
 
-    private fun erc20(): Pair<Coin, String> {
-        val coin = appConfigProvider.ethereumCoin
-
-        return Pair(coin, "ERC20")
+    private fun erc20(): Pair<Coin, String>? {
+        return coinKit.getCoin(CoinType.Ethereum)?.let {
+            Pair(it, "ERC20")
+        }
     }
 
-    private fun bep20(): Pair<Coin, String> {
-        val coin = appConfigProvider.binanceSmartChainCoin
-
-        return Pair(coin, "BEP20")
+    private fun bep20(): Pair<Coin, String>? {
+        return coinKit.getCoin(CoinType.BinanceSmartChain)?.let {
+            Pair(it, "BEP20")
+        }
     }
 
     private fun binance(symbol: String): Pair<Coin, String>? {
         if (symbol == "BNB") {
             return null
         }
-        val coin = appConfigProvider.binanceCoin
-
-        return Pair(coin, "BEP2")
+        return coinKit.getCoin(CoinType.Bep2(symbol))?.let {
+            Pair(it, "BEP2")
+        }
     }
 
 }

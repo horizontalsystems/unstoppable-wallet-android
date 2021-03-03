@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.providers.StringProvider
 import io.horizontalsystems.bankwallet.entities.AccountType
-import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.DerivationSetting
 import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
 import io.horizontalsystems.bankwallet.modules.blockchainsettings.BlockchainSettingsService
@@ -14,6 +13,7 @@ import io.horizontalsystems.bankwallet.modules.enablecoins.EnableCoinsBep2Provid
 import io.horizontalsystems.bankwallet.modules.enablecoins.EnableCoinsErc20Provider
 import io.horizontalsystems.bankwallet.modules.enablecoins.EnableCoinsService
 import io.horizontalsystems.bankwallet.modules.enablecoins.EnableCoinsViewModel
+import io.horizontalsystems.coinkit.models.Coin
 import io.reactivex.Observable
 
 object RestoreSelectCoinsModule {

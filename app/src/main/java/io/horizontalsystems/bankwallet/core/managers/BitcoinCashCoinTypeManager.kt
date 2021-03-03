@@ -4,7 +4,7 @@ import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.IBlockchainSettingsStorage
 import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.bankwallet.entities.BitcoinCashCoinType
-import io.horizontalsystems.bankwallet.entities.CoinType
+import io.horizontalsystems.coinkit.models.CoinType
 
 class BitcoinCashCoinTypeManager(
         private val walletManager: IWalletManager,

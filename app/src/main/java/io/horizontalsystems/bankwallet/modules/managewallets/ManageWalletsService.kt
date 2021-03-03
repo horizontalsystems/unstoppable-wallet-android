@@ -4,6 +4,7 @@ import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.modules.blockchainsettings.BlockchainSettingsService
 import io.horizontalsystems.bankwallet.modules.enablecoins.EnableCoinsService
+import io.horizontalsystems.coinkit.models.Coin
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers

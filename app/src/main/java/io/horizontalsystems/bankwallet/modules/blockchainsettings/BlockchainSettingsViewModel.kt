@@ -5,6 +5,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.providers.StringProvider
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorViewItem
+import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers

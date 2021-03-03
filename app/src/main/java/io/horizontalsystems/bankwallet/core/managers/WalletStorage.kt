@@ -4,6 +4,7 @@ import io.horizontalsystems.bankwallet.core.ICoinManager
 import io.horizontalsystems.bankwallet.core.IEnabledWalletStorage
 import io.horizontalsystems.bankwallet.core.IWalletStorage
 import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.coinkit.models.Coin
 
 class WalletStorage(
         private val coinManager: ICoinManager,
@@ -15,7 +16,7 @@ class WalletStorage(
 
         val enabledWallets = storage.enabledWallets
         return enabledWallets.map { enabledWallet ->
-            val coin = coins.find { it.coinId == enabledWallet.coinId } ?: return@map null
+            val coin = coins.find { it.id == enabledWallet.coinId } ?: return@map null
             val account = accounts.find { it.id == enabledWallet.accountId } ?: return@map null
             Wallet(coin, account)
         }.mapNotNull { it }
@@ -23,7 +24,7 @@ class WalletStorage(
 
     override fun wallet(account: Account, coin: Coin): Wallet? {
         val enabledWallets = storage.enabledWallets
-        enabledWallets.firstOrNull { it.coinId == coin.coinId && it.accountId == account.id }?.let { _ ->
+        enabledWallets.firstOrNull { it.coinId == coin.id && it.accountId == account.id }?.let { _ ->
             return Wallet(coin, account)
         }
         return null
@@ -33,7 +34,7 @@ class WalletStorage(
         val coins = coinManager.coins
 
         return storage.enabledWallets.map { enabledWallet ->
-            val coin = coins.find { it.coinId == enabledWallet.coinId }
+            val coin = coins.find { it.id == enabledWallet.coinId }
             coin
         }.mapNotNull { it }
     }
@@ -45,7 +46,7 @@ class WalletStorage(
 
             enabledWallets.add(
                     EnabledWallet(
-                            wallet.coin.coinId,
+                            wallet.coin.id,
                             wallet.account.id,
                             index
                     )
@@ -56,7 +57,7 @@ class WalletStorage(
     }
 
     override fun delete(wallets: List<Wallet>) {
-        val enabledWallets = wallets.map { EnabledWallet(it.coin.coinId, it.account.id) }
+        val enabledWallets = wallets.map { EnabledWallet(it.coin.id, it.account.id) }
         storage.delete(enabledWallets)
     }
 }

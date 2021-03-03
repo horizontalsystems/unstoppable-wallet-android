@@ -4,11 +4,10 @@ import com.google.gson.annotations.SerializedName
 import io.horizontalsystems.bankwallet.core.IAddTokenBlockchainService
 import io.horizontalsystems.bankwallet.core.INetworkManager
 import io.horizontalsystems.bankwallet.entities.ApiError
-import io.horizontalsystems.bankwallet.entities.Coin
-import io.horizontalsystems.bankwallet.entities.CoinType
+import io.horizontalsystems.coinkit.models.Coin
+import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.IBuildConfigProvider
 import io.reactivex.Single
-import java.util.*
 
 class AddBep2TokenBlockchainService(
         private val appConfigTestModer: IBuildConfigProvider,
@@ -20,7 +19,7 @@ class AddBep2TokenBlockchainService(
     }
 
     override fun existingCoin(reference: String, coins: List<Coin>): Coin? {
-        return coins.firstOrNull{ it.type is CoinType.Binance && it.type.symbol.equals(reference, true) }
+        return coins.firstOrNull{ (it.type as? CoinType.Bep2)?.symbol.equals(reference, true) }
     }
 
     override fun coinSingle(reference: String): Single<Coin> {
@@ -30,14 +29,13 @@ class AddBep2TokenBlockchainService(
         return networkManager.getBep2Tokens(host, request)
                 .firstOrError()
                 .flatMap {tokens ->
-                    val token = tokens.firstOrNull { it.symbol.toLowerCase(Locale.ENGLISH) == reference.toLowerCase(Locale.ENGLISH) }
+                    val token = tokens.firstOrNull { it.symbol.equals(reference, ignoreCase = true) }
                     if (token != null){
                         val coin = Coin(
-                                coinId = token.symbol,
                                 title = token.name,
                                 code = token.originalSymbol,
                                 decimal = 8,
-                                type = CoinType.Binance(token.symbol)
+                                type = CoinType.Bep2(token.symbol)
                         )
                         Single.just(coin)
                     } else {

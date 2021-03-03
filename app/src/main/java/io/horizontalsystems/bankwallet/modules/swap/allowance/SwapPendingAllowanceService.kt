@@ -2,8 +2,8 @@ package io.horizontalsystems.bankwallet.modules.swap.allowance
 
 import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.adapters.Eip20Adapter
-import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.TransactionType
+import io.horizontalsystems.coinkit.models.Coin
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers

@@ -2,8 +2,8 @@ package io.horizontalsystems.bankwallet.modules.blockchainsettings
 
 import io.horizontalsystems.bankwallet.entities.AccountType.Derivation
 import io.horizontalsystems.bankwallet.entities.BitcoinCashCoinType
-import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorViewItem
+import io.horizontalsystems.coinkit.models.Coin
 
 object BlockchainSettingsModule {
 

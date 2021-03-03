@@ -1,8 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.noaccount
 
 import androidx.lifecycle.ViewModel
-import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
+import io.horizontalsystems.bankwallet.entities.predefinedAccountType
+import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.core.SingleLiveEvent
 import java.lang.Exception
 

@@ -7,6 +7,7 @@ import io.horizontalsystems.bankwallet.core.storage.AppDatabase
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.PriceAlert
 import io.horizontalsystems.bankwallet.entities.SubscriptionJob
+import io.horizontalsystems.bankwallet.entities.canSupport
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.subjects.PublishSubject
@@ -62,7 +63,7 @@ class PriceAlertManager(
         val alerts = dao.all()
         val coins = coinManager.coins
         val selectedAlerts = alerts.filter { alert ->
-            coins.firstOrNull { it.coinId == alert.coinId }?.type?.canSupport(accountType) == true
+            coins.firstOrNull { it.id == alert.coinId }?.type?.canSupport(accountType) == true
         }
 
         updateSubscription(selectedAlerts, SubscriptionJob.JobType.Unsubscribe)

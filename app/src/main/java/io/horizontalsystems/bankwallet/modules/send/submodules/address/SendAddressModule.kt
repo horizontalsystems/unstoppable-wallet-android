@@ -5,10 +5,10 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.providers.StringProvider
 import io.horizontalsystems.bankwallet.entities.Address
-import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.AddressResolutionService
 import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.RecipientAddressViewModel
+import io.horizontalsystems.coinkit.models.Coin
 import java.math.BigDecimal
 
 object SendAddressModule {

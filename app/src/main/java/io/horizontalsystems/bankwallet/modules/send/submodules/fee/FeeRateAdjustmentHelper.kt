@@ -1,8 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.send.submodules.fee
 
 import io.horizontalsystems.bankwallet.core.IAppConfigProvider
-import io.horizontalsystems.bankwallet.entities.CoinType
 import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmountInfo
+import io.horizontalsystems.coinkit.models.CoinType
 import java.math.BigDecimal
 
 class FeeRateAdjustmentHelper(private val appConfigProvider: IAppConfigProvider) {

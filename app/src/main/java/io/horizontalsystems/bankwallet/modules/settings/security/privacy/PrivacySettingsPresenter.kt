@@ -4,6 +4,8 @@ import io.horizontalsystems.bankwallet.core.managers.TorStatus
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.modules.settings.security.privacy.PrivacySettingsType.CommunicationModeSettingType
 import io.horizontalsystems.bankwallet.modules.settings.security.privacy.PrivacySettingsType.RestoreModeSettingType
+import io.horizontalsystems.coinkit.models.Coin
+import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.views.ListPosition
 
 class PrivacySettingsPresenter(

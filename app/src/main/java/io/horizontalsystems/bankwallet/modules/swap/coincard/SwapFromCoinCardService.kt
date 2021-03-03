@@ -1,9 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.swap.coincard
 
-import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.modules.swap.SwapModule
 import io.horizontalsystems.bankwallet.modules.swap.SwapService
 import io.horizontalsystems.bankwallet.modules.swap.SwapTradeService
+import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.uniswapkit.models.TradeType
 import io.reactivex.Observable
 import java.math.BigDecimal

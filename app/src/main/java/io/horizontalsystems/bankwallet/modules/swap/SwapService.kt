@@ -3,11 +3,11 @@ package io.horizontalsystems.bankwallet.modules.swap
 import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.IBalanceAdapter
 import io.horizontalsystems.bankwallet.core.ethereum.EvmTransactionService
-import io.horizontalsystems.bankwallet.entities.Coin
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.swap.SwapTradeService.PriceImpactLevel
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceService
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapPendingAllowanceService
+import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable

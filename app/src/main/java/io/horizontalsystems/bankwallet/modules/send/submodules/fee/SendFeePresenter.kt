@@ -8,6 +8,7 @@ import io.horizontalsystems.bankwallet.modules.send.SendModule.AmountInfo
 import io.horizontalsystems.bankwallet.modules.send.SendModule.AmountInfo.CoinValueInfo
 import io.horizontalsystems.bankwallet.modules.send.SendModule.AmountInfo.CurrencyValueInfo
 import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmountInfo
+import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.core.entities.Currency
 import java.math.BigDecimal
 import java.math.BigInteger
