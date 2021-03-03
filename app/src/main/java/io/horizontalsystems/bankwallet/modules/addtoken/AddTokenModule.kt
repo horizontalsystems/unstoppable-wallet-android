@@ -63,6 +63,5 @@ enum class TokenType(val value: String) : Parcelable {
 interface IAddEvmTokenResolver {
     val apiUrl: String
     val explorerKey: String
-    fun doesCoinMatchReference(coin: Coin, reference: String): Boolean
     fun coinType(address: String): CoinType
 }

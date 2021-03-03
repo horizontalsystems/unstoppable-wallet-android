@@ -1,15 +1,14 @@
 package io.horizontalsystems.bankwallet.core.managers
 
-import io.horizontalsystems.bankwallet.core.IAppConfigProvider
 import io.horizontalsystems.bankwallet.core.ICoinManager
 import io.horizontalsystems.coinkit.CoinKit
 import io.horizontalsystems.coinkit.models.Coin
+import io.horizontalsystems.coinkit.models.CoinType
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.subjects.PublishSubject
 
 class CoinManager(
-        private val appConfigProvider: IAppConfigProvider,
         private val coinKit: CoinKit
 ) : ICoinManager {
 
@@ -22,7 +21,11 @@ class CoinManager(
         get() = coinKit.getCoins()
 
     override val featuredCoins: List<Coin>
-        get() = appConfigProvider.featuredCoins
+        get() = coinKit.getDefaultCoins().take(8)
+
+    override fun getCoin(coinType: CoinType): Coin?{
+        return coinKit.getCoin(coinType)
+    }
 
     override fun save(coin: Coin) {
         coinKit.saveCoin(coin)

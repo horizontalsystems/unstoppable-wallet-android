@@ -18,8 +18,8 @@ class AddBep2TokenBlockchainService(
         //Not yet implemented
     }
 
-    override fun existingCoin(reference: String, coins: List<Coin>): Coin? {
-        return coins.firstOrNull{ (it.type as? CoinType.Bep2)?.symbol.equals(reference, true) }
+    override fun coinType(reference: String): CoinType {
+        return CoinType.Bep2(reference)
     }
 
     override fun coinSingle(reference: String): Single<Coin> {

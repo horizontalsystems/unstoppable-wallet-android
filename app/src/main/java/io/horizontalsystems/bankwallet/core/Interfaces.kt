@@ -266,14 +266,6 @@ interface IAppConfigProvider {
     val maxDecimal: Int
     val feeRateAdjustForCurrencies: List<String>
     val currencies: List<Currency>
-    val featuredCoins: List<Coin>
-}
-
-interface ICoinRecordStorage {
-    val coins: List<Coin>
-    fun save(coin: Coin): Boolean
-    fun delete(coin: Coin)
-    fun deleteAll()
 }
 
 interface IRateManager {
@@ -426,13 +418,14 @@ interface ICoinManager {
     val coinAddedObservable: Flowable<Coin>
     val coins: List<Coin>
     val featuredCoins: List<Coin>
+    fun getCoin(coinType: CoinType): Coin?
     fun save(coin: Coin)
 }
 
 interface IAddTokenBlockchainService {
     @Throws
     fun validate(reference: String)
-    fun existingCoin(reference: String, coins: List<Coin>): Coin?
+    fun coinType(reference: String): CoinType
     fun coinSingle(reference: String): Single<Coin>
 }
 

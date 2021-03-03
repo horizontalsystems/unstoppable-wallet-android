@@ -6,7 +6,7 @@ import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.coinkit.models.CoinType
 
 class InitialSyncSettingsManager(
-        private val appConfigProvider: IAppConfigProvider,
+        private val coinManager: ICoinManager,
         private val blockchainSettingsStorage: IBlockchainSettingsStorage,
         private val adapterManager: IAdapterManager,
         private val walletManager: IWalletManager
@@ -20,12 +20,11 @@ class InitialSyncSettingsManager(
     )
 
     override fun allSettings(): List<Triple<InitialSyncSetting, Coin, Boolean>> {
-        val coins = appConfigProvider.featuredCoins
         return supportedCoinTypes.mapNotNull { supportedCoinType ->
-            val coinTypeCoin = coins.firstOrNull { it.type == supportedCoinType.coinType } ?: return@mapNotNull null
+            val coin = coinManager.featuredCoins.firstOrNull { it.type == supportedCoinType.coinType } ?: return@mapNotNull null
             val setting = setting(supportedCoinType.coinType) ?: return@mapNotNull null
 
-            Triple(setting, coinTypeCoin, supportedCoinType.changeable)
+            Triple(setting, coin, supportedCoinType.changeable)
         }
     }
 

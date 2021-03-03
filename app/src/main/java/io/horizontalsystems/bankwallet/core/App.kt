@@ -104,12 +104,12 @@ class App : CoreApp() {
         instance = this
         preferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
 
-        coinKit = CoinKit.create(this, BuildConfig.testMode)
-
-        val appConfig = AppConfigProvider(coinKit)
+        val appConfig = AppConfigProvider()
         appConfigProvider = appConfig
         buildConfigProvider = appConfig
         languageConfigProvider = appConfig
+
+        coinKit = CoinKit.create(this, buildConfigProvider.testMode)
 
         feeRateProvider = FeeRateProvider(appConfigProvider)
         backgroundManager = BackgroundManager(this)
@@ -123,7 +123,7 @@ class App : CoreApp() {
 
         AppLog.logsDao = appDatabase.logsDao()
 
-        coinManager = CoinManager(appConfigProvider, coinKit)
+        coinManager = CoinManager(coinKit)
 
         enabledWalletsStorage = EnabledWalletsStorage(appDatabase)
         blockchainSettingsStorage = BlockchainSettingsStorage(appDatabase)
@@ -168,7 +168,7 @@ class App : CoreApp() {
         val adapterFactory = AdapterFactory(instance, buildConfigProvider.testMode, ethereumKitManager, binanceSmartChainKitManager, binanceKitManager, backgroundManager)
         adapterManager = AdapterManager(walletManager, adapterFactory, ethereumKitManager, binanceSmartChainKitManager, binanceKitManager)
 
-        initialSyncModeSettingsManager = InitialSyncSettingsManager(appConfigProvider, blockchainSettingsStorage, adapterManager, walletManager)
+        initialSyncModeSettingsManager = InitialSyncSettingsManager(coinManager, blockchainSettingsStorage, adapterManager, walletManager)
         derivationSettingsManager = DerivationSettingsManager(blockchainSettingsStorage, adapterManager, walletManager)
         ethereumRpcModeSettingsManager = EthereumRpcModeSettingsManager(blockchainSettingsStorage, adapterManager, walletManager)
         bitcoinCashCoinTypeManager = BitcoinCashCoinTypeManager(walletManager, adapterManager, blockchainSettingsStorage)

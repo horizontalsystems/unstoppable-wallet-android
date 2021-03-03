@@ -45,7 +45,7 @@ class AddTokenService(
             return
         }
 
-        blockchainService.existingCoin(referenceNonNull, coinManager.coins)?.let {
+        coinManager.getCoin(blockchainService.coinType(referenceNonNull))?.let {
             state = AddTokenModule.State.AlreadyExists(it)
             return
         }
