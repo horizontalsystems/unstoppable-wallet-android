@@ -50,7 +50,6 @@ object TextHelper : IClipboardManager {
 
     fun getFeeRatePriorityString(context: Context, priority: FeeRatePriority): String = when (priority) {
         FeeRatePriority.LOW -> context.getString(R.string.Send_TxSpeed_Low)
-        FeeRatePriority.MEDIUM -> context.getString(R.string.Send_TxSpeed_Recommended)
         FeeRatePriority.RECOMMENDED -> context.getString(R.string.Send_TxSpeed_Recommended)
         FeeRatePriority.HIGH -> context.getString(R.string.Send_TxSpeed_High)
         is FeeRatePriority.Custom -> context.getString(R.string.Send_TxSpeed_Custom)

@@ -26,6 +26,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="Medium (2 h.)" />
+        tools:text="Recommended (2 h.)" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -133,7 +133,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/speedLayoutFrame"
         app:layout_constraintEnd_toStartOf="@+id/txSpeedMenuArrow"
         app:layout_constraintTop_toTopOf="@+id/speedLayoutFrame"
-        tools:text="Medium" />
+        tools:text="Recommended" />
 
     <ImageView
         android:id="@+id/txSpeedMenuArrow"
