@@ -16,94 +16,120 @@
         app:title="@string/Market_AdvancedSearch"
         app:titleTextAppearance="@style/Title3" />
 
-    <io.horizontalsystems.bankwallet.ui.extensions.MarketFilterView
-        android:id="@+id/filterCoinList"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="16dp"
-        android:background="@drawable/rounded_lawrence_background_single"
-        app:title="@string/Market_Filter_CoinList"
-        tools:value="@string/Market_Filter_Top_100" />
+        android:layout_height="match_parent">
 
-    <io.horizontalsystems.bankwallet.ui.extensions.MarketFilterView
-        android:id="@+id/filterMarketCap"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="16dp"
-        android:background="@drawable/rounded_lawrence_background_top"
-        app:title="@string/Market_Filter_MarketCap"
-        app:value="@string/None" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-    <io.horizontalsystems.bankwallet.ui.extensions.MarketFilterView
-        android:id="@+id/filterVolume"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:background="@drawable/rounded_lawrence_background_middle"
-        app:title="@string/Market_Filter_Volume"
-        app:value="@string/None" />
+            <io.horizontalsystems.bankwallet.ui.extensions.MarketFilterView
+                android:id="@+id/filterCoinList"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/rounded_lawrence_background_single"
+                app:title="@string/Market_Filter_ChooseSet"
+                tools:value="@string/Market_Filter_Top_100" />
 
-    <io.horizontalsystems.bankwallet.ui.extensions.MarketFilterView
-        android:id="@+id/filterLiquidity"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:background="@drawable/rounded_lawrence_background_bottom"
-        app:title="@string/Market_Filter_Liquidity"
-        app:value="@string/None" />
+            <io.horizontalsystems.bankwallet.ui.extensions.MarketFilterView
+                android:id="@+id/filterMarketCap"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/rounded_lawrence_background_top"
+                app:title="@string/Market_Filter_MarketCap"
+                app:value="@string/None" />
 
-    <io.horizontalsystems.bankwallet.ui.extensions.MarketFilterView
-        android:id="@+id/filterPeriod"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="16dp"
-        android:background="@drawable/rounded_lawrence_background_top"
-        app:title="@string/Market_Filter_Period"
-        app:value="@string/None" />
+            <io.horizontalsystems.bankwallet.ui.extensions.MarketFilterView
+                android:id="@+id/filterVolume"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/rounded_lawrence_background_bottom"
+                app:title="@string/Market_Filter_Volume"
+                app:value="@string/None" />
 
-    <io.horizontalsystems.bankwallet.ui.extensions.MarketFilterView
-        android:id="@+id/filterPriceChange"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:background="@drawable/rounded_lawrence_background_bottom"
-        app:title="@string/Market_Filter_PriceChange"
-        app:value="@string/None" />
+            <io.horizontalsystems.bankwallet.ui.extensions.MarketFilterView
+                android:id="@+id/filterLiquidity"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/rounded_lawrence_background_single"
+                app:title="@string/Market_Filter_Liquidity"
+                app:value="@string/None" />
 
-    <Button
-        android:id="@+id/reset"
-        style="@style/Body"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="16dp"
-        android:background="@drawable/rounded_lawrence_background_single"
-        android:drawableEnd="@drawable/ic_delete_20"
-        android:drawableTint="@color/grey"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:text="@string/Market_Filter_ResetAll"
-        android:textAlignment="textStart"
-        android:textColor="@color/lucian" />
+            <TextView
+                style="@style/Subhead2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginEnd="24dp"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                android:text="@string/Market_Filter_LiquidityHint"
+                android:textColor="@color/grey" />
 
-    <Button
-        android:id="@+id/submit"
-        style="@style/ButtonPrimaryYellow"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="16dp"
-        android:text="@string/Market_Filter_ShowResults" />
+            <io.horizontalsystems.bankwallet.ui.extensions.MarketFilterView
+                android:id="@+id/filterPriceChange"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/rounded_lawrence_background_top"
+                app:title="@string/Market_Filter_PriceChange"
+                app:value="@string/None" />
+
+            <io.horizontalsystems.bankwallet.ui.extensions.MarketFilterView
+                android:id="@+id/filterPeriod"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/rounded_lawrence_background_bottom"
+                app:title="@string/Market_Filter_PricePeriod"
+                app:value="@string/None" />
+
+            <Button
+                android:id="@+id/reset"
+                style="@style/Body"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/rounded_lawrence_background_single"
+                android:drawableEnd="@drawable/ic_delete_20"
+                android:drawableTint="@color/grey"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:text="@string/Market_Filter_ResetAll"
+                android:textAlignment="textStart"
+                android:textColor="@color/lucian" />
+
+            <Button
+                android:id="@+id/submit"
+                style="@style/ButtonPrimaryYellow"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="32dp"
+                android:text="@string/Market_Filter_ShowResults" />
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
 
 </LinearLayout>

@@ -176,11 +176,12 @@
     <string name="EmptyResults">No results found</string>
     <string name="Market_AdvancedSearch">Advanced Search</string>
     <string name="Market_AdvancedSearch_Results">Results</string>
-    <string name="Market_Filter_CoinList">Coin List</string>
+    <string name="Market_Filter_ChooseSet">Choose Set</string>
     <string name="Market_Filter_MarketCap">Market Cap</string>
-    <string name="Market_Filter_Volume">Volume</string>
-    <string name="Market_Filter_Liquidity">Liquidity</string>
-    <string name="Market_Filter_Period">Period</string>
+    <string name="Market_Filter_Volume">Trading Volume</string>
+    <string name="Market_Filter_Liquidity">DEX Liquidity</string>
+    <string name="Market_Filter_LiquidityHint">This setting applies to tokens traded on Ethereum (Uniswap DEX) and Binance Smart Chain (Pancake DEX).</string>
+    <string name="Market_Filter_PricePeriod">Price Period</string>
     <string name="Market_Filter_PriceChange">Price Change</string>
     <string name="Market_Filter_ResetAll">Reset All</string>
 

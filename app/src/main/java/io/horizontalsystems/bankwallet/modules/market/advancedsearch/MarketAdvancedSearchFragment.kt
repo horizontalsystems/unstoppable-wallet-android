@@ -42,7 +42,7 @@ class MarketAdvancedSearchFragment : BaseFragment() {
         }
         filterCoinList.setOnSingleClickListener {
             showSelectorDialog(
-                    title = R.string.Market_Filter_CoinList,
+                    title = R.string.Market_Filter_ChooseSet,
                     subtitleText = "---------",
                     headerIcon = R.drawable.ic_circle_coin_24,
                     items = marketAdvancedSearchViewModel.coinListsViewItemOptions,
@@ -106,7 +106,7 @@ class MarketAdvancedSearchFragment : BaseFragment() {
         }
         filterPeriod.setOnSingleClickListener {
             showSelectorDialog(
-                    title = R.string.Market_Filter_Period,
+                    title = R.string.Market_Filter_PricePeriod,
                     subtitleText = "---------",
                     headerIcon = R.drawable.ic_circle_clock_24,
                     items = marketAdvancedSearchViewModel.periodViewItemOptions,
