@@ -188,7 +188,7 @@
     <string name="Market_Filter_Top_250">Top 250</string>
     <string name="Market_Filter_Top_500">Top 500</string>
     <string name="Market_Filter_Top_1000">Top 1000</string>
-    <string name="Market_Filter_Top_2500">Top 2500</string>
+    <string name="Market_Filter_Top_1500">Top 1500</string>
     <string name="Market_Filter_ShowResults">Show Results</string>
     <string name="Market_Filter_ShowResults_Counter">Show Results: %d</string>
 
