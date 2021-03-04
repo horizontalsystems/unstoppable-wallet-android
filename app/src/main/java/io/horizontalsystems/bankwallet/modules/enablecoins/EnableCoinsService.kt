@@ -77,11 +77,11 @@ class EnableCoinsService(
 
             state = State.Loading()
             disposables.clear()
-            disposables.add(ethereumProvider.contractAddressesSingle(address.hex)
+            disposables.add(ethereumProvider.tokens(address.hex)
                     .subscribeOn(Schedulers.io())
                     .observeOn(Schedulers.io())
-                    .subscribe({ addresses ->
-                        handleFetchErc20(addresses)
+                    .subscribe({ coins ->
+                        handleFetchErc20(coins)
                     }, {
                         state = State.Failure(it)
                     })
@@ -110,13 +110,24 @@ class EnableCoinsService(
         }
     }
 
-    private fun handleFetchErc20(addresses: List<String>) {
-        val coins = addresses.mapNotNull { address ->
-            coinManager.coins.find { it.type == CoinType.Erc20(address) }
+    private fun handleFetchErc20(fetchedCoins: List<Coin>) {
+        val listedTokens = mutableListOf<Coin>()
+        val nonListedTokens = mutableListOf<Coin>()
+
+        fetchedCoins.forEach { coin ->
+            coinManager.getCoin(coin.type)?.let { listedCoin ->
+                listedTokens.add(listedCoin)
+            } ?: kotlin.run {
+                nonListedTokens.add(coin)
+            }
         }
 
-        state = State.Success(coins)
-        enableCoinsAsync.onNext(coins)
+        nonListedTokens.forEach {
+           coinManager.save(it)
+        }
+
+        state = State.Success(listedTokens + nonListedTokens)
+        enableCoinsAsync.onNext(listedTokens + nonListedTokens)
     }
 
     private fun handleFetchBep2(symbols: List<String>) {
