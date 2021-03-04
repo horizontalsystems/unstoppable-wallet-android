@@ -8,8 +8,12 @@ import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
-import io.horizontalsystems.bankwallet.ui.selector.*
+import io.horizontalsystems.bankwallet.ui.selector.ItemViewHolder
+import io.horizontalsystems.bankwallet.ui.selector.ItemViewHolderFactory
+import io.horizontalsystems.bankwallet.ui.selector.SelectorBottomSheetDialog
+import io.horizontalsystems.bankwallet.ui.selector.SelectorItemViewHolderFactory
 import io.horizontalsystems.core.findNavController
+import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.android.synthetic.main.fragment_market_search_filter.*
 
 class MarketAdvancedSearchFragment : BaseFragment() {
@@ -145,6 +149,9 @@ class MarketAdvancedSearchFragment : BaseFragment() {
             submit.isEnabled = it
         }
 
+        marketAdvancedSearchViewModel.errorLiveEvent.observe(viewLifecycleOwner) {
+            HudHelper.showErrorMessage(requireView(), it)
+        }
     }
 
     private fun <ItemClass> showSelectorDialog(title: Int, subtitleText: String, headerIcon: Int, items: List<ItemClass>, selectedItem: ItemClass, itemViewHolderFactory: ItemViewHolderFactory<ItemViewHolder<ItemClass>>, onSelectListener: (ItemClass) -> Unit) {

@@ -12,7 +12,7 @@ import io.horizontalsystems.xrateskit.entities.CoinMarket
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.disposables.Disposable
-import io.reactivex.subjects.PublishSubject
+import io.reactivex.subjects.BehaviorSubject
 import io.horizontalsystems.xrateskit.entities.TimePeriod as XRatesKitTimePeriod
 
 class MarketAdvancedSearchService(private val currency: Currency, private val xRateManager: IRateManager) : Clearable, IMarketListFetcher {
@@ -58,7 +58,7 @@ class MarketAdvancedSearchService(private val currency: Currency, private val xR
 
     override val dataUpdatedAsync: Observable<Unit> = Observable.empty()
 
-    var numberOfItemsAsync = PublishSubject.create<DataState<Int>>()
+    var numberOfItemsAsync = BehaviorSubject.create<DataState<Int>>()
 
     private var topItemsDisposable: Disposable? = null
     private var cache: List<CoinMarket>? = null
