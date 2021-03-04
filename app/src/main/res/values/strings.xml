@@ -192,12 +192,12 @@
     <string name="Market_Filter_ShowResults">Show Results</string>
     <string name="Market_Filter_ShowResults_Counter">Show Results: %d</string>
 
-    <string name="Market_Filter_Range_0_1M">&lt; 1M</string>
-    <string name="Market_Filter_Range_1M_10M">1M - 10M</string>
-    <string name="Market_Filter_Range_10M_100M">10M - 100M</string>
-    <string name="Market_Filter_Range_100M_1B">100M - 1BN</string>
-    <string name="Market_Filter_Range_1B_10B">1BN - 10BN</string>
-    <string name="Market_Filter_Range_10B_More">&gt; 10BN</string>
+    <string name="Market_Filter_Range_0_5M">&lt; 5M</string>
+    <string name="Market_Filter_Range_5M_20M">5M - 20M</string>
+    <string name="Market_Filter_Range_20M_100M">20M - 100M</string>
+    <string name="Market_Filter_Range_100M_1B">100M - 1B</string>
+    <string name="Market_Filter_Range_1B_5B">1B - 5B</string>
+    <string name="Market_Filter_Range_5B_More">&gt; 5BN</string>
 
     <string name="Market_Filter_TimePeriod_1D">1 Day</string>
     <string name="Market_Filter_TimePeriod_1W">1 Week</string>
