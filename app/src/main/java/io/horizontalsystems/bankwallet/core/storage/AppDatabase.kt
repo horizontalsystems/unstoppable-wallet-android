@@ -14,7 +14,7 @@ import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.coinkit.models.CoinType
 
-@Database(version = 28, exportSchema = false, entities = [
+@Database(version = 29, exportSchema = false, entities = [
     EnabledWallet::class,
     PriceAlert::class,
     AccountRecord::class,
@@ -72,7 +72,8 @@ abstract class AppDatabase : RoomDatabase() {
                             MIGRATION_24_25,
                             MIGRATION_25_26,
                             MIGRATION_26_27,
-                            MIGRATION_27_28
+                            MIGRATION_27_28,
+                            MIGRATION_28_29,
                     )
                     .build()
         }
@@ -504,6 +505,13 @@ abstract class AppDatabase : RoomDatabase() {
                 //drop CoinRecord table and clean PriceAlert table
                 database.execSQL("DROP TABLE CoinRecord")
                 database.execSQL("DELETE FROM PriceAlert")
+            }
+        }
+
+        private val MIGRATION_28_29: Migration = object : Migration(28, 29) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("DROP TABLE FavoriteCoin")
+                database.execSQL("CREATE TABLE IF NOT EXISTS `FavoriteCoin` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `coinType` TEXT NOT NULL)")
             }
         }
 
