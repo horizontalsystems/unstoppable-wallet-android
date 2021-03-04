@@ -106,8 +106,8 @@ class RateManager(
         return kit.cryptoNews(coinCode)
     }
 
-    override fun getTopMarketList(currency: String, itemsCount: Int): Single<List<CoinMarket>> {
-        return kit.getTopCoinMarketsAsync(currency, itemsCount = itemsCount)
+    override fun getTopMarketList(currency: String, itemsCount: Int, diffPeriod: TimePeriod): Single<List<CoinMarket>> {
+        return kit.getTopCoinMarketsAsync(currency, itemsCount = itemsCount, fetchDiffPeriod = diffPeriod)
     }
 
     override fun getCoinMarketList(coinTypes: List<CoinType>, currency: String): Single<List<CoinMarket>> {

@@ -280,7 +280,7 @@ interface IRateManager {
     fun chartInfoObservable(coinType: CoinType, currencyCode: String, chartType: ChartType): Observable<ChartInfo>
     fun coinMarketDetailsAsync(coinType: CoinType, currencyCode: String, rateDiffCoinCodes: List<String>, rateDiffPeriods: List<TimePeriod>): Single<CoinMarketDetails>
     fun getCryptoNews(coinCode: String): Single<List<CryptoNews>>
-    fun getTopMarketList(currency: String, itemsCount: Int): Single<List<CoinMarket>>
+    fun getTopMarketList(currency: String, itemsCount: Int, diffPeriod: TimePeriod): Single<List<CoinMarket>>
     fun getCoinMarketList(coinTypes: List<CoinType>, currency: String): Single<List<CoinMarket>>
     fun getCoinMarketListByCategory(categoryId: String, currency: String): Single<List<CoinMarket>>
     fun getCoinRatingsAsync(): Single<Map<CoinType, String>>
