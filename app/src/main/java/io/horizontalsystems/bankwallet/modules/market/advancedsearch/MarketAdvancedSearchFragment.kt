@@ -142,7 +142,10 @@ class MarketAdvancedSearchFragment : BaseFragment() {
         }
 
         marketAdvancedSearchViewModel.numberOfItemsLiveData.observe(viewLifecycleOwner) {
-            submit.text = getString(R.string.Market_Filter_ShowResults_Counter, it)
+            submit.text = when (it) {
+                null -> getString(R.string.Market_Filter_ShowResults)
+                else -> getString(R.string.Market_Filter_ShowResults_Counter, it)
+            }
         }
 
         marketAdvancedSearchViewModel.showResultsEnabledLiveData.observe(viewLifecycleOwner) {

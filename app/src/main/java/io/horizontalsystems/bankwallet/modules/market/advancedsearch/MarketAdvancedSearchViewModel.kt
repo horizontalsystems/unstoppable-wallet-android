@@ -81,7 +81,7 @@ class MarketAdvancedSearchViewModel(
     val liquidityViewItemLiveData = MutableLiveData(liquidityViewItem)
     val periodViewItemLiveData = MutableLiveData(periodViewItem)
     val priceChangeViewItemLiveData = MutableLiveData(priceChangeViewItem)
-    val numberOfItemsLiveData = MutableLiveData<Int>()
+    val numberOfItemsLiveData = MutableLiveData<Int?>()
     val showResultsEnabledLiveData = MutableLiveData(false)
     val errorLiveEvent = SingleLiveEvent<String>()
 
@@ -91,10 +91,7 @@ class MarketAdvancedSearchViewModel(
         service.numberOfItemsAsync
                 .subscribe {
                     showResultsEnabledLiveData.postValue(it is DataState.Success && it.data > 0)
-
-                    it.dataOrNull?.let {
-                        numberOfItemsLiveData.postValue(it)
-                    }
+                    numberOfItemsLiveData.postValue(it.dataOrNull)
 
                     it.errorOrNull?.let {
                         errorLiveEvent.postValue(convertErrorMessage(it))
