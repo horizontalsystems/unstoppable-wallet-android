@@ -26,7 +26,7 @@ enum class CoinList(val itemsCount: Int, @StringRes val titleResId: Int) {
     Top250(250, R.string.Market_Filter_Top_250),
     Top500(500, R.string.Market_Filter_Top_500),
     Top1000(1000, R.string.Market_Filter_Top_1000),
-    Top2500(1500, R.string.Market_Filter_Top_1500),
+    Top1500(1500, R.string.Market_Filter_Top_1500),
 }
 
 enum class Range(@StringRes val titleResId: Int, val values: Pair<Long?, Long?>) {
