@@ -201,6 +201,7 @@
 
     <string name="Market_Filter_TimePeriod_1D">1 Day</string>
     <string name="Market_Filter_TimePeriod_1W">1 Week</string>
+    <string name="Market_Filter_TimePeriod_2W">2 Weeks</string>
     <string name="Market_Filter_TimePeriod_1M">1 Month</string>
     <string name="Market_Filter_TimePeriod_6M">6 Months</string>
     <string name="Market_Filter_TimePeriod_1Y">1 Year</string>
