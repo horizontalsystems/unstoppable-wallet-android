@@ -84,13 +84,16 @@ class MarketAdvancedSearchService(private val currency: Currency, private val xR
     override fun fetchAsync(currency: Currency): Single<List<MarketItem>> {
         return getTopMarketList(currency)
                 .map { coinMarkets ->
-                    coinMarkets.mapIndexed { index, coinMarket ->
+                    coinMarkets.map {
+                        val index = it.key
+                        val coinMarket = it.value
+
                         MarketItem.createFromCoinMarket(coinMarket, currency, Score.Rank(index + 1))
                     }
                 }
     }
 
-    private fun getTopMarketList(currency: Currency): Single<List<CoinMarket>> {
+    private fun getTopMarketList(currency: Currency): Single<Map<Int, CoinMarket>> {
         val topMarketListAsync = if (cache != null) {
             Single.just(cache)
         } else {
@@ -102,13 +105,19 @@ class MarketAdvancedSearchService(private val currency: Currency, private val xR
 
         return topMarketListAsync
                 .map {
-                    it.filter {
-                        filterByRange(filterMarketCap, it.marketInfo.marketCap?.toLong())
-                                && filterByRange(filterVolume, it.marketInfo.volume.toLong())
-                                && filterByRange(filterLiquidity, it.marketInfo.liquidity?.toLong())
-                                && filterByRange(filterPriceChange, it.marketInfo.rateDiffPeriod.toLong())
-                    }
+                    it.mapIndexed { index, coinMarket ->
+                        index to coinMarket
+                    }.filter {
+                        filterCoinMarket(it.second)
+                    }.toMap()
                 }
+    }
+
+    private fun filterCoinMarket(coinMarket: CoinMarket): Boolean {
+        return filterByRange(filterMarketCap, coinMarket.marketInfo.marketCap?.toLong())
+                && filterByRange(filterVolume, coinMarket.marketInfo.volume.toLong())
+                && filterByRange(filterLiquidity, coinMarket.marketInfo.liquidity?.toLong())
+                && filterByRange(filterPriceChange, coinMarket.marketInfo.rateDiffPeriod.toLong())
     }
 
     private fun filterByRange(filter: Pair<Long?, Long?>?, value: Long?): Boolean {
