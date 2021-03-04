@@ -52,7 +52,6 @@ class AddEvmTokenBlockchainService(
 
                     return@map Coin(title = tokenName, code = tokenSymbol, decimal = tokenDecimal, type = resolver.coinType(reference))
                 }
-                .firstOrError()
     }
 
 }

@@ -10,13 +10,16 @@ class EnableCoinsErc20Provider(private val networkManager: INetworkManager) {
 
         return networkManager.getEvmTokenInfo(url, resource)
                 .map {
-                    it.get("tokens").asJsonArray.map { tokens ->
-                        val token = tokens.asJsonObject
-                        val tokenInfo = token.get("tokenInfo").asJsonObject
+                    if (it.has("tokens")) {
+                        it.get("tokens").asJsonArray.map { tokens ->
+                            val token = tokens.asJsonObject
+                            val tokenInfo = token.get("tokenInfo").asJsonObject
 
-                        tokenInfo.get("address").asString
+                            tokenInfo.get("address").asString
+                        }
+                    } else {
+                        listOf()
                     }
                 }
-                .firstOrError()
     }
 }
