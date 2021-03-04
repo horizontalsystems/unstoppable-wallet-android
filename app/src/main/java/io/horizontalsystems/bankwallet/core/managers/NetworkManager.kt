@@ -42,7 +42,7 @@ class NetworkManager : INetworkManager {
         return ServicePing.service(host, isSafeCall).ping(url)
     }
 
-    override fun getEvmTokenInfo(host: String, path: String): Flowable<JsonObject> {
+    override fun getEvmTokenInfo(host: String, path: String): Single<JsonObject> {
         return ServiceEvmContractInfo.service(host).getTokenInfo(path)
     }
 
@@ -89,7 +89,7 @@ object ServiceEvmContractInfo {
     interface EvmContractInfoAPI {
         @GET
         @Headers("Content-Type: application/json")
-        fun getTokenInfo(@Url path: String): Flowable<JsonObject>
+        fun getTokenInfo(@Url path: String): Single<JsonObject>
     }
 
 }
