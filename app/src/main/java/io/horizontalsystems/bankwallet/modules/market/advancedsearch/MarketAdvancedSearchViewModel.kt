@@ -21,8 +21,8 @@ class MarketAdvancedSearchViewModel(
     val marketCapViewItemOptions = ranges
     val volumeViewItemOptions = ranges
     val liquidityViewItemOptions = ranges
-    val periodViewItemOptions = listOf(ViewItemWrapper.getNone<TimePeriod>()) + TimePeriod.values().map {
-        ViewItemWrapper<TimePeriod?>(App.instance.getString(it.titleResId), it, R.color.leah)
+    val periodViewItemOptions = TimePeriod.values().map {
+        ViewItemWrapper(App.instance.getString(it.titleResId), it, R.color.leah)
     }
     val priceChangeViewItemOptions = listOf(ViewItemWrapper.getNone<PriceChange>()) + PriceChange.values().map {
         ViewItemWrapper<PriceChange?>(App.instance.getString(it.titleResId), it, it.colorResId)
@@ -57,12 +57,12 @@ class MarketAdvancedSearchViewModel(
 
             service.filterLiquidity = value.item?.values
         }
-    var periodViewItem = ViewItemWrapper.getNone<TimePeriod>()
+    var periodViewItem = ViewItemWrapper(App.instance.getString(TimePeriod.TimePeriod_1D.titleResId), TimePeriod.TimePeriod_1D, R.color.leah)
         set(value) {
             field = value
             periodViewItemLiveData.postValue(value)
 
-            service.filterPeriod = value.item
+            service.filterPeriod = value.item.xRatesKitTimePeriod
         }
     var priceChangeViewItem: ViewItemWrapper<PriceChange?> = ViewItemWrapper.getNone()
         set(value) {
@@ -104,7 +104,7 @@ class MarketAdvancedSearchViewModel(
         marketCapViewItem = ViewItemWrapper.getNone()
         volumeViewItem = ViewItemWrapper.getNone()
         liquidityViewItem = ViewItemWrapper.getNone()
-        periodViewItem = ViewItemWrapper.getNone()
+        periodViewItem = ViewItemWrapper(App.instance.getString(TimePeriod.TimePeriod_1D.titleResId), TimePeriod.TimePeriod_1D, R.color.leah)
         priceChangeViewItem = ViewItemWrapper.getNone()
     }
 

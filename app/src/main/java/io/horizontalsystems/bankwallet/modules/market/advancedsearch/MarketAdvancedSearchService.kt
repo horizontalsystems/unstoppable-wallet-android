@@ -13,6 +13,7 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.PublishSubject
+import io.horizontalsystems.xrateskit.entities.TimePeriod as XRatesKitTimePeriod
 
 class MarketAdvancedSearchService(private val currency: Currency, private val xRateManager: IRateManager) : Clearable, IMarketListFetcher {
 
@@ -41,9 +42,10 @@ class MarketAdvancedSearchService(private val currency: Currency, private val xR
 
             refreshCounter()
         }
-    var filterPeriod: TimePeriod? = null
+    var filterPeriod: XRatesKitTimePeriod = XRatesKitTimePeriod.HOUR_24
         set(value) {
             field = value
+            cache = null
 
             refreshCounter()
         }
@@ -92,7 +94,7 @@ class MarketAdvancedSearchService(private val currency: Currency, private val xR
         val topMarketListAsync = if (cache != null) {
             Single.just(cache)
         } else {
-            xRateManager.getTopMarketList(currency.code, coinCount)
+            xRateManager.getTopMarketList(currency.code, coinCount, filterPeriod)
                     .doOnSuccess {
                         cache = it
                     }

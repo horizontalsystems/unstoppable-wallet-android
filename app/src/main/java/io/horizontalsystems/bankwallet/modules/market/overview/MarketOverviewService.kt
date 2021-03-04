@@ -7,6 +7,7 @@ import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.bankwallet.modules.market.Score
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.entities.Currency
+import io.horizontalsystems.xrateskit.entities.TimePeriod
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.BehaviorSubject
 
@@ -46,7 +47,7 @@ class MarketOverviewService(
 
         stateObservable.onNext(State.Loading)
 
-        topItemsDisposable = rateManager.getTopMarketList(currency.code, 250)
+        topItemsDisposable = rateManager.getTopMarketList(currency.code, 250, TimePeriod.HOUR_24)
                 .subscribeIO({
                     marketItems = it.mapIndexed { index, topMarket ->
                         MarketItem.createFromCoinMarket(topMarket, currency, Score.Rank(index + 1))

@@ -7,6 +7,7 @@ import io.horizontalsystems.bankwallet.modules.market.Score
 import io.horizontalsystems.bankwallet.modules.market.list.IMarketListFetcher
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.entities.Currency
+import io.horizontalsystems.xrateskit.entities.TimePeriod
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.subjects.PublishSubject
@@ -59,7 +60,7 @@ class MarketDiscoveryService(
     }
 
     private fun getAllMarketItemsAsync(currency: Currency): Single<List<MarketItem>> {
-        return xRateManager.getTopMarketList(currency.code, 250)
+        return xRateManager.getTopMarketList(currency.code, 250, TimePeriod.HOUR_24)
                 .map { coinMarkets ->
                     coinMarkets.mapIndexed { index, coinMarket ->
                         MarketItem.createFromCoinMarket(coinMarket, currency, Score.Rank(index + 1))
