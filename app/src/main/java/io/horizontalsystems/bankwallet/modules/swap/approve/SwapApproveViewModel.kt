@@ -3,6 +3,8 @@ package io.horizontalsystems.bankwallet.modules.swap.approve
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.EvmError
+import io.horizontalsystems.bankwallet.core.convertedError
 import io.horizontalsystems.bankwallet.core.ethereum.CoinService
 import io.horizontalsystems.bankwallet.core.providers.StringProvider
 import io.horizontalsystems.core.SingleLiveEvent
@@ -88,21 +90,22 @@ class SwapApproveViewModel(
         }
     }
 
-    private fun convertError(throwable: Throwable): String {
-        return when (throwable) {
+    private fun convertError(error: Throwable): String {
+        return when (val convertedError = error.convertedError) {
             is SwapApproveService.TransactionAmountError.AlreadyApproved -> {
                 stringProvider.string(R.string.Approve_Error_AlreadyApproved)
             }
             is SwapApproveService.TransactionEthereumAmountError.InsufficientBalance -> {
-                stringProvider.string(R.string.EthereumTransaction_Error_InsufficientBalance, ethCoinService.coinValue(throwable.requiredBalance))
+                stringProvider.string(R.string.EthereumTransaction_Error_InsufficientBalance, ethCoinService.coinValue(convertedError.requiredBalance))
             }
-            is JsonRpc.ResponseError.InsufficientBalance -> {
+            is EvmError.InsufficientBalanceWithFee,
+            is EvmError.ExecutionReverted -> {
                 stringProvider.string(R.string.EthereumTransaction_Error_InsufficientBalanceForFee, ethCoinService.coin.code)
             }
             is JsonRpc.ResponseError.RpcError -> {
-                throwable.error.message
+                convertedError.error.message
             }
-            else -> throwable.message ?: throwable.javaClass.simpleName
+            else -> convertedError.message ?: convertedError.javaClass.simpleName
         }
     }
 

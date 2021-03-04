@@ -4,6 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.EvmError
+import io.horizontalsystems.bankwallet.core.convertedError
 import io.horizontalsystems.bankwallet.core.ethereum.CoinService
 import io.horizontalsystems.bankwallet.core.ethereum.EvmTransactionService
 import io.horizontalsystems.bankwallet.core.providers.StringProvider
@@ -114,21 +116,22 @@ class SwapViewModel(
         syncProceedAction()
     }
 
-    private fun convert(error: Throwable): String = when (error) {
+    private fun convert(error: Throwable): String = when (val convertedError = error.convertedError) {
         is SwapService.TransactionError.InsufficientBalance -> {
-            stringProvider.string(R.string.EthereumTransaction_Error_InsufficientBalance, ethCoinService.coinValue(error.requiredBalance))
+            stringProvider.string(R.string.EthereumTransaction_Error_InsufficientBalance, ethCoinService.coinValue(convertedError.requiredBalance))
         }
-        is JsonRpc.ResponseError.InsufficientBalance -> {
+        is EvmError.InsufficientBalanceWithFee,
+        is EvmError.ExecutionReverted -> {
             stringProvider.string(R.string.EthereumTransaction_Error_InsufficientBalanceForFee, ethCoinService.coin.code)
         }
         is JsonRpc.ResponseError.RpcError -> {
-            error.error.message
+            convertedError.error.message
         }
         is TradeError.TradeNotFound -> {
             stringProvider.string(R.string.Swap_ErrorNoLiquidity)
         }
         else -> {
-            error.message ?: error.javaClass.simpleName
+            convertedError.message ?: convertedError.javaClass.simpleName
         }
     }
 
