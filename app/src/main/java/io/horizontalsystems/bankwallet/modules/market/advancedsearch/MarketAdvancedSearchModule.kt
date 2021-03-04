@@ -30,12 +30,12 @@ enum class CoinList(val itemsCount: Int, @StringRes val titleResId: Int) {
 }
 
 enum class Range(@StringRes val titleResId: Int, val values: Pair<Long?, Long?>) {
-    Range_0_1M(R.string.Market_Filter_Range_0_1M, Pair(null, 1_000_000)),
-    Range_1M_10M(R.string.Market_Filter_Range_1M_10M, Pair(1_000_000, 10_000_000)),
-    Range_10M_100M(R.string.Market_Filter_Range_10M_100M, Pair(10_000_000, 100_000_000)),
+    Range_0_5M(R.string.Market_Filter_Range_0_5M, Pair(null, 5_000_000)),
+    Range_5M_20M(R.string.Market_Filter_Range_5M_20M, Pair(5_000_000, 20_000_000)),
+    Range_20M_100M(R.string.Market_Filter_Range_20M_100M, Pair(20_000_000, 100_000_000)),
     Range_100M_1B(R.string.Market_Filter_Range_100M_1B, Pair(100_000_000, 1_000_000_000)),
-    Range_1B_10B(R.string.Market_Filter_Range_1B_10B, Pair(1_000_000_000, 10_000_000_000)),
-    Range_10B_More(R.string.Market_Filter_Range_10B_More, Pair(10_000_000_000, null)),
+    Range_1B_5B(R.string.Market_Filter_Range_1B_5B, Pair(1_000_000_000, 5_000_000_000)),
+    Range_5B_More(R.string.Market_Filter_Range_5B_More, Pair(5_000_000_000, null)),
 }
 
 enum class TimePeriod(@StringRes val titleResId: Int, val xRatesKitTimePeriod: XRatesKitTimePeriod) {
