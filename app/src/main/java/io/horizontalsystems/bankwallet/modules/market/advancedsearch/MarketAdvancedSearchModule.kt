@@ -39,7 +39,7 @@ enum class Range(@StringRes val titleResId: Int, val values: Pair<Long?, Long?>)
 }
 
 enum class TimePeriod(@StringRes val titleResId: Int, val xRatesKitTimePeriod: XRatesKitTimePeriod) {
-    TimePeriod_1D(R.string.Market_Filter_TimePeriod_1D, XRatesKitTimePeriod.HOUR_1),
+    TimePeriod_1D(R.string.Market_Filter_TimePeriod_1D, XRatesKitTimePeriod.HOUR_24),
     TimePeriod_1W(R.string.Market_Filter_TimePeriod_1W, XRatesKitTimePeriod.DAY_7),
     TimePeriod_2W(R.string.Market_Filter_TimePeriod_2W, XRatesKitTimePeriod.DAY_14),
     TimePeriod_1M(R.string.Market_Filter_TimePeriod_1M, XRatesKitTimePeriod.DAY_30),
