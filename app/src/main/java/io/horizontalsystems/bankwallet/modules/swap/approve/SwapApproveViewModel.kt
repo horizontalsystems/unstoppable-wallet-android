@@ -102,9 +102,6 @@ class SwapApproveViewModel(
             is EvmError.ExecutionReverted -> {
                 stringProvider.string(R.string.EthereumTransaction_Error_InsufficientBalanceForFee, ethCoinService.coin.code)
             }
-            is JsonRpc.ResponseError.RpcError -> {
-                convertedError.error.message
-            }
             else -> convertedError.message ?: convertedError.javaClass.simpleName
         }
     }

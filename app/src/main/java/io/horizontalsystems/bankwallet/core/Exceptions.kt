@@ -12,6 +12,7 @@ class NoFeeSendTransactionError() : Exception()
 sealed class EvmError(message: String? = null) : Throwable(message) {
     object InsufficientBalanceWithFee : EvmError()
     class ExecutionReverted(message: String?) : EvmError(message)
+    class RpcError(message: String?) : EvmError(message)
 }
 
 val Throwable.convertedError: Throwable
@@ -21,8 +22,9 @@ val Throwable.convertedError: Throwable
                 EvmError.InsufficientBalanceWithFee
             } else if (error.message.contains("execution reverted")) {
                 EvmError.ExecutionReverted(error.message)
-            } else
-                this
+            } else {
+                EvmError.RpcError(error.message)
+            }
         }
         else -> this
     }

@@ -87,7 +87,6 @@ class WalletConnectSendEthereumTransactionRequestViewModel(
         }
         is EvmError.InsufficientBalanceWithFee,
         is EvmError.ExecutionReverted -> stringProvider.string(R.string.EthereumTransaction_Error_InsufficientBalanceForFee, coinService.coin.code)
-        is JsonRpc.ResponseError.RpcError -> convertedError.error.message
         else -> convertedError?.message ?: convertedError?.javaClass?.simpleName
     }
 
