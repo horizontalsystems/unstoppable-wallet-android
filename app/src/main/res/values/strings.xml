@@ -664,7 +664,7 @@
     <string name="EnalbeToken_Description">Enable all %s coins that have any balance</string>
     <string name="EnalbeToken_Enabling">Enabling</string>
     <string name="EnalbeToken_EnabledCoins">Enabled %d coins</string>
-    <string name="EnalbeToken_NoCoins">No coins found with balance</string>
+    <string name="EnalbeToken_NoCoins">Did not find any new tokens with balance</string>
     <string name="EnalbeToken_EnableKey">Enable</string>
 
     <!-- Add Token -->
