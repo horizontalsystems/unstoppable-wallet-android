@@ -4,6 +4,7 @@ import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.IRateManager
 import io.horizontalsystems.xrateskit.entities.CoinData
 import io.reactivex.subjects.BehaviorSubject
+import java.util.*
 
 class MarketSearchService(private val xRateManager: IRateManager) : Clearable {
 
@@ -14,23 +15,15 @@ class MarketSearchService(private val xRateManager: IRateManager) : Clearable {
             fetch()
         }
 
-    sealed class State {
-        object Idle: State()
-        object Loading: State()
-        object Error: State()
-        class Success(val items: List<CoinData>): State()
-    }
-
-    val stateAsync: BehaviorSubject<State> = BehaviorSubject.createDefault(State.Idle)
+    val itemsAsync = BehaviorSubject.createDefault(Optional.empty<List<CoinData>>())
 
     private fun fetch() {
         val queryTrimmed = query.trim()
 
         if (queryTrimmed.count() < 2) {
-            stateAsync.onNext(State.Idle)
+            itemsAsync.onNext(Optional.empty())
         } else {
-            stateAsync.onNext(State.Loading)
-            stateAsync.onNext(State.Success(xRateManager.searchCoins(queryTrimmed)))
+            itemsAsync.onNext(Optional.of(xRateManager.searchCoins(queryTrimmed)))
         }
     }
 
