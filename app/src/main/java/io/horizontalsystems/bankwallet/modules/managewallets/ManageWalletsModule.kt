@@ -8,10 +8,7 @@ import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.DerivationSetting
 import io.horizontalsystems.bankwallet.modules.blockchainsettings.BlockchainSettingsService
 import io.horizontalsystems.bankwallet.modules.blockchainsettings.BlockchainSettingsViewModel
-import io.horizontalsystems.bankwallet.modules.enablecoins.EnableCoinsBep2Provider
-import io.horizontalsystems.bankwallet.modules.enablecoins.EnableCoinsErc20Provider
-import io.horizontalsystems.bankwallet.modules.enablecoins.EnableCoinsService
-import io.horizontalsystems.bankwallet.modules.enablecoins.EnableCoinsViewModel
+import io.horizontalsystems.bankwallet.modules.enablecoins.*
 import io.horizontalsystems.coinkit.models.Coin
 import io.reactivex.Observable
 
@@ -49,7 +46,13 @@ object ManageWalletsModule {
     class Factory : ViewModelProvider.Factory {
 
         private val enableCoinsService by lazy {
-            EnableCoinsService(App.buildConfigProvider, EnableCoinsErc20Provider(App.networkManager), EnableCoinsBep2Provider(App.buildConfigProvider), App.coinManager)
+            EnableCoinsService(
+                    App.buildConfigProvider,
+                    EnableCoinsErc20Provider(App.networkManager),
+                    EnableCoinsBep2Provider(App.buildConfigProvider),
+                    EnableCoinsBep20Provider(App.networkManager,App.appConfigProvider.bscscanApiKey),
+                    App.coinManager
+            )
         }
 
         private val blockchainSettingsService by lazy {

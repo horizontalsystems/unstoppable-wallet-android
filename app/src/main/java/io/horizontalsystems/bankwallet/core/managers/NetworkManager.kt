@@ -42,7 +42,7 @@ class NetworkManager : INetworkManager {
         return ServicePing.service(host, isSafeCall).ping(url)
     }
 
-    override fun getEvmTokenInfo(host: String, path: String): Single<JsonObject> {
+    override fun getEvmInfo(host: String, path: String): Single<JsonObject> {
         return ServiceEvmContractInfo.service(host).getTokenInfo(path)
     }
 
