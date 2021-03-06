@@ -14,13 +14,14 @@ import io.reactivex.subjects.PublishSubject
 class EnableCoinsService(
         private val appConfigProvider: IBuildConfigProvider,
         private val ethereumProvider: EnableCoinsErc20Provider,
-        private val binanceProvider: EnableCoinsBep2Provider,
+        private val bep2Provider: EnableCoinsBep2Provider,
+        private val bep20Provider: EnableCoinsBep20Provider,
         private val coinManager: ICoinManager) {
 
     val enableCoinsAsync = PublishSubject.create<List<Coin>>()
-    val stateAsync = BehaviorSubject.createDefault<State>(State.Idle())
+    val stateAsync = BehaviorSubject.createDefault<State>(State.Idle)
 
-    var state: State = State.Idle()
+    var state: State = State.Idle
         private set(value) {
             field = value
             stateAsync.onNext(value)
@@ -40,63 +41,72 @@ class EnableCoinsService(
         }
 
         when (state.tokenType) {
-            is TokenType.Erc20 -> {
-                fetchErc20Tokens(state.tokenType.words)
-            }
-            is TokenType.Bep2 -> {
-                fetchBep2Tokens(state.tokenType.words)
-            }
+            is TokenType.Erc20 -> fetchErc20Tokens(state.tokenType.words)
+            is TokenType.Bep2 -> fetchBep2Tokens(state.tokenType.words)
+            is TokenType.Bep20 -> fetchBep20Tokens(state.tokenType.words)
         }
     }
 
     private fun resolveTokenType(coinType: CoinType, accountType: AccountType): TokenType? {
-        if (coinType is CoinType.Ethereum && accountType is AccountType.Mnemonic) {
-            if (accountType.words.size == 12) {
-                return TokenType.Erc20(accountType.words)
-            }
+        return when {
+            accountType !is AccountType.Mnemonic -> null
+            coinType is CoinType.Ethereum && accountType.words.size == 12 -> TokenType.Erc20(accountType.words)
+            coinType is CoinType.BinanceSmartChain && accountType.words.size == 24 -> TokenType.Bep20(accountType.words)
+            coinType is CoinType.Bep2 && coinType.symbol == "BNB" && accountType.words.size == 24 -> TokenType.Bep2(accountType.words)
+            else -> null
         }
+    }
 
-        if (coinType is CoinType.Bep2 && accountType is AccountType.Mnemonic) {
-            if (coinType.symbol == "BNB" && accountType.words.size == 24) {
-                return TokenType.Bep2(accountType.words)
-            }
+    private fun fetchBep20Tokens(words: List<String>) {
+        try {
+            val address = EthereumKit.address(words, EthereumKit.NetworkType.BscMainNet)
+
+            state = State.Loading
+            disposables.clear()
+
+            bep20Provider.tokens(address.hex)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(Schedulers.io())
+                    .subscribe({ coins ->
+                        handleReceivedCoins(coins)
+                    }, {
+                        state = State.Failure(it)
+                    })
+                    .let { disposables.add(it) }
+
+        } catch (err: Throwable) {
+            state = State.Failure(err)
         }
-
-        return null
     }
 
     private fun fetchErc20Tokens(words: List<String>) {
         try {
-            val networkType = if (appConfigProvider.testMode) {
-                EthereumKit.NetworkType.EthRopsten
-            } else {
-                EthereumKit.NetworkType.EthMainNet
-            }
+            val networkType = if (appConfigProvider.testMode) EthereumKit.NetworkType.EthRopsten else EthereumKit.NetworkType.EthMainNet
 
             val address = EthereumKit.address(words, networkType)
 
-            state = State.Loading()
+            state = State.Loading
             disposables.clear()
-            disposables.add(ethereumProvider.tokens(address.hex)
+            ethereumProvider.tokens(address.hex)
                     .subscribeOn(Schedulers.io())
                     .observeOn(Schedulers.io())
                     .subscribe({ coins ->
-                        handleFetchErc20(coins)
+                        handleReceivedCoins(coins)
                     }, {
                         state = State.Failure(it)
                     })
-            )
+                    .let { disposables.add(it) }
         } catch (err: Throwable) {
             state = State.Failure(err)
         }
     }
 
     private fun fetchBep2Tokens(words: List<String>) {
-        state = State.Loading()
+        state = State.Loading
 
         try {
             disposables.clear()
-            disposables.add(binanceProvider.getTokenSymbolsAsync(words)
+            bep2Provider.getTokenSymbolsAsync(words)
                     .subscribeOn(Schedulers.io())
                     .observeOn(Schedulers.io())
                     .subscribe({ symbols ->
@@ -104,13 +114,13 @@ class EnableCoinsService(
                     }, {
                         state = State.Failure(it)
                     })
-            )
+                    .let { disposables.add(it) }
         } catch (err: Throwable) {
             state = State.Failure(err)
         }
     }
 
-    private fun handleFetchErc20(fetchedCoins: List<Coin>) {
+    private fun handleReceivedCoins(fetchedCoins: List<Coin>) {
         val listedTokens = mutableListOf<Coin>()
         val nonListedTokens = mutableListOf<Coin>()
 
@@ -123,7 +133,7 @@ class EnableCoinsService(
         }
 
         nonListedTokens.forEach {
-           coinManager.save(it)
+            coinManager.save(it)
         }
 
         state = State.Success(listedTokens + nonListedTokens)
@@ -146,9 +156,9 @@ class EnableCoinsService(
     }
 
     sealed class State {
-        class Idle : State()
+        object Idle : State()
         class WaitingForApprove(val tokenType: TokenType) : State()
-        class Loading : State()
+        object Loading : State()
         class Success(val coins: List<Coin>) : State()
         class Failure(val error: Throwable) : State()
     }
@@ -156,11 +166,13 @@ class EnableCoinsService(
     sealed class TokenType {
         class Erc20(val words: List<String>) : TokenType()
         class Bep2(val words: List<String>) : TokenType()
+        class Bep20(val words: List<String>) : TokenType()
 
         val title: String
             get() = when (this) {
                 is Erc20 -> "ERC20"
                 is Bep2 -> "BEP2"
+                is Bep20 -> "BEP20"
             }
     }
 }
