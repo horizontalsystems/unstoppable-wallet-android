@@ -33,7 +33,7 @@ object AddTokenModule {
                     AddTokenViewModel(service, stringProvider, R.string.AddBep20Token_Title, R.string.AddEvmToken_ContractAddressHint)
                 }
                 TokenType.Bep2 -> {
-                    val blockchainService = AddBep2TokenBlockchainService(App.buildConfigProvider, App.networkManager)
+                    val blockchainService = AddBep2TokenBlockchainService(App.buildConfigProvider)
                     val service = AddTokenService(App.coinManager, blockchainService, App.walletManager, App.accountManager)
                     AddTokenViewModel(service, stringProvider, R.string.AddBep2Token_Title, R.string.AddBep2Token_TokenSymbolHint)
                 }

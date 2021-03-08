@@ -49,7 +49,7 @@ object ManageWalletsModule {
             EnableCoinsService(
                     App.buildConfigProvider,
                     EnableCoinsErc20Provider(App.networkManager),
-                    EnableCoinsBep2Provider(App.buildConfigProvider),
+                    EnableCoinsBep2Provider(App.buildConfigProvider, App.coinManager),
                     EnableCoinsBep20Provider(App.networkManager,App.appConfigProvider.bscscanApiKey),
                     App.coinManager
             )

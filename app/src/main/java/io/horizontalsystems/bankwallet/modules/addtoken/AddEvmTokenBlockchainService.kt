@@ -22,7 +22,7 @@ class AddEvmTokenBlockchainService(
         return resolver.coinType(reference)
     }
 
-    override fun coinSingle(reference: String): Single<Coin> {
+    override fun coinAsync(reference: String): Single<Coin> {
         val request = "api?module=account&action=tokentx&contractaddress=$reference&page=1&offset=1&sort=asc&apikey=${resolver.explorerKey}"
 
         return networkManager.getEvmInfo(resolver.apiUrl, request)

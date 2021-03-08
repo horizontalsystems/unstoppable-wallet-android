@@ -1,18 +1,23 @@
 package io.horizontalsystems.bankwallet.modules.addtoken.bep2
 
-import com.google.gson.annotations.SerializedName
 import io.horizontalsystems.bankwallet.core.IAddTokenBlockchainService
-import io.horizontalsystems.bankwallet.core.INetworkManager
 import io.horizontalsystems.bankwallet.entities.ApiError
+import io.horizontalsystems.binancechainkit.BinanceChainKit
+import io.horizontalsystems.binancechainkit.core.api.BinanceChainApi
 import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.IBuildConfigProvider
 import io.reactivex.Single
 
 class AddBep2TokenBlockchainService(
-        private val appConfigTestModer: IBuildConfigProvider,
-        private val networkManager: INetworkManager
+        appConfigProvider: IBuildConfigProvider
 ): IAddTokenBlockchainService {
+
+    private val networkType = if (appConfigProvider.testMode)
+        BinanceChainKit.NetworkType.TestNet else
+        BinanceChainKit.NetworkType.MainNet
+
+    private val binanceApi = BinanceChainApi(networkType)
 
     override fun validate(reference: String) {
         //Not yet implemented
@@ -22,18 +27,14 @@ class AddBep2TokenBlockchainService(
         return CoinType.Bep2(reference)
     }
 
-    override fun coinSingle(reference: String): Single<Coin> {
-        val host = if (appConfigTestModer.testMode) "https://testnet-dex-atlantic.binance.org/api/v1/tokens/" else "https://dex.binance.org/api/v1/tokens/"
-        val request = "?limit=10000"
-
-        return networkManager.getBep2Tokens(host, request)
-                .firstOrError()
+    override fun coinAsync(reference: String) : Single<Coin>{
+        return binanceApi.getTokens()
                 .flatMap {tokens ->
                     val token = tokens.firstOrNull { it.symbol.equals(reference, ignoreCase = true) }
                     if (token != null){
                         val coin = Coin(
                                 title = token.name,
-                                code = token.originalSymbol,
+                                code = token.code,
                                 decimal = 8,
                                 type = CoinType.Bep2(token.symbol)
                         )
@@ -45,9 +46,3 @@ class AddBep2TokenBlockchainService(
     }
 
 }
-
-class Bep2Token(
-        val name: String,
-        @SerializedName("original_symbol")val originalSymbol: String,
-        val symbol: String
-)

@@ -6,7 +6,6 @@ import io.horizontalsystems.bankwallet.core.managers.Term
 import io.horizontalsystems.bankwallet.core.managers.TorManager
 import io.horizontalsystems.bankwallet.core.managers.TorStatus
 import io.horizontalsystems.bankwallet.entities.*
-import io.horizontalsystems.bankwallet.modules.addtoken.bep2.Bep2Token
 import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
 import io.horizontalsystems.bankwallet.modules.market.MarketModule
 import io.horizontalsystems.bankwallet.modules.send.SendModule
@@ -129,7 +128,6 @@ interface INetworkManager {
     fun getTransactionWithPost(host: String, path: String, body: Map<String, Any>): Flowable<JsonObject>
     fun ping(host: String, url: String, isSafeCall: Boolean): Flowable<Any>
     fun getEvmInfo(host: String, path: String): Single<JsonObject>
-    fun getBep2Tokens(host: String, path: String): Flowable<List<Bep2Token>>
 }
 
 interface IClipboardManager {
@@ -422,7 +420,7 @@ interface IAddTokenBlockchainService {
     @Throws
     fun validate(reference: String)
     fun coinType(reference: String): CoinType
-    fun coinSingle(reference: String): Single<Coin>
+    fun coinAsync(reference: String): Single<Coin>
 }
 
 interface IPriceAlertManager {
