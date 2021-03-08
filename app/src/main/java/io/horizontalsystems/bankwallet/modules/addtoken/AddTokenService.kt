@@ -52,7 +52,7 @@ class AddTokenService(
 
         state = AddTokenModule.State.Loading
 
-        disposable = blockchainService.coinSingle(referenceNonNull)
+        disposable = blockchainService.coinAsync(referenceNonNull)
                 .subscribeOn(Schedulers.io())
                 .subscribe({ coin ->
                     state = AddTokenModule.State.Fetched(coin)

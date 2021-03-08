@@ -12,12 +12,13 @@ import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 
 class EnableCoinsService(
-        private val appConfigProvider: IBuildConfigProvider,
+        appConfigProvider: IBuildConfigProvider,
         private val ethereumProvider: EnableCoinsErc20Provider,
         private val bep2Provider: EnableCoinsBep2Provider,
         private val bep20Provider: EnableCoinsBep20Provider,
         private val coinManager: ICoinManager) {
 
+    val testMode = appConfigProvider.testMode
     val enableCoinsAsync = PublishSubject.create<List<Coin>>()
     val stateAsync = BehaviorSubject.createDefault<State>(State.Idle)
 
@@ -40,10 +41,17 @@ class EnableCoinsService(
             return
         }
 
-        when (state.tokenType) {
-            is TokenType.Erc20 -> fetchErc20Tokens(state.tokenType.words)
-            is TokenType.Bep2 -> fetchBep2Tokens(state.tokenType.words)
-            is TokenType.Bep20 -> fetchBep20Tokens(state.tokenType.words)
+        this.state = State.Loading
+        disposables.clear()
+
+        try {
+            when (state.tokenType) {
+                is TokenType.Erc20 -> fetchErc20Tokens(state.tokenType.words)
+                is TokenType.Bep2 -> fetchBep2Tokens(state.tokenType.words)
+                is TokenType.Bep20 -> fetchBep20Tokens(state.tokenType.words)
+            }
+        } catch (err: Throwable) {
+            this.state = State.Failure(err)
         }
     }
 
@@ -58,66 +66,45 @@ class EnableCoinsService(
     }
 
     private fun fetchBep20Tokens(words: List<String>) {
-        try {
-            val address = EthereumKit.address(words, EthereumKit.NetworkType.BscMainNet)
+        val address = EthereumKit.address(words, EthereumKit.NetworkType.BscMainNet)
 
-            state = State.Loading
-            disposables.clear()
+        bep20Provider.tokens(address.hex)
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.io())
+                .subscribe({ coins ->
+                    handleReceivedCoins(coins)
+                }, {
+                    state = State.Failure(it)
+                })
+                .let { disposables.add(it) }
 
-            bep20Provider.tokens(address.hex)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(Schedulers.io())
-                    .subscribe({ coins ->
-                        handleReceivedCoins(coins)
-                    }, {
-                        state = State.Failure(it)
-                    })
-                    .let { disposables.add(it) }
-
-        } catch (err: Throwable) {
-            state = State.Failure(err)
-        }
     }
 
     private fun fetchErc20Tokens(words: List<String>) {
-        try {
-            val networkType = if (appConfigProvider.testMode) EthereumKit.NetworkType.EthRopsten else EthereumKit.NetworkType.EthMainNet
+        val networkType = if (testMode) EthereumKit.NetworkType.EthRopsten else EthereumKit.NetworkType.EthMainNet
+        val address = EthereumKit.address(words, networkType)
 
-            val address = EthereumKit.address(words, networkType)
-
-            state = State.Loading
-            disposables.clear()
-            ethereumProvider.tokens(address.hex)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(Schedulers.io())
-                    .subscribe({ coins ->
-                        handleReceivedCoins(coins)
-                    }, {
-                        state = State.Failure(it)
-                    })
-                    .let { disposables.add(it) }
-        } catch (err: Throwable) {
-            state = State.Failure(err)
-        }
+        ethereumProvider.tokens(address.hex)
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.io())
+                .subscribe({ coins ->
+                    handleReceivedCoins(coins)
+                }, {
+                    state = State.Failure(it)
+                })
+                .let { disposables.add(it) }
     }
 
     private fun fetchBep2Tokens(words: List<String>) {
-        state = State.Loading
-
-        try {
-            disposables.clear()
-            bep2Provider.getTokenSymbolsAsync(words)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(Schedulers.io())
-                    .subscribe({ symbols ->
-                        handleFetchBep2(symbols)
-                    }, {
-                        state = State.Failure(it)
-                    })
-                    .let { disposables.add(it) }
-        } catch (err: Throwable) {
-            state = State.Failure(err)
-        }
+        bep2Provider.getCoinsAsync(words)
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.io())
+                .subscribe({ coins ->
+                    handleReceivedCoins(coins)
+                }, {
+                    state = State.Failure(it)
+                })
+                .let { disposables.add(it) }
     }
 
     private fun handleReceivedCoins(fetchedCoins: List<Coin>) {
@@ -138,21 +125,6 @@ class EnableCoinsService(
 
         state = State.Success(listedTokens + nonListedTokens)
         enableCoinsAsync.onNext(listedTokens + nonListedTokens)
-    }
-
-    private fun handleFetchBep2(symbols: List<String>) {
-        val coins = symbols.mapNotNull { symbol ->
-            if (symbol == "BNB") {
-                null
-            } else {
-                coinManager.coins.find {
-                    it.type == CoinType.Bep2(symbol)
-                }
-            }
-        }
-
-        state = State.Success(coins)
-        enableCoinsAsync.onNext(coins)
     }
 
     sealed class State {
