@@ -1,9 +1,12 @@
 package io.horizontalsystems.bankwallet.modules.swap
 
+import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.IBalanceAdapter
+import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.bankwallet.core.ethereum.EvmTransactionService
 import io.horizontalsystems.bankwallet.entities.DataState
+import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.swap.SwapTradeService.PriceImpactLevel
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceService
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapPendingAllowanceService
@@ -24,7 +27,9 @@ class SwapService(
         private val allowanceService: SwapAllowanceService,
         private val pendingAllowanceService: SwapPendingAllowanceService,
         private val transactionService: EvmTransactionService,
-        private val adapterManager: IAdapterManager
+        private val adapterManager: IAdapterManager,
+        private val walletManager: IWalletManager,
+        private val accountManager: IAccountManager
 ) {
 
     private val disposables = CompositeDisposable()
@@ -146,6 +151,10 @@ class SwapService(
                 transaction.gasData.gasLimit
         )
                 .subscribeOn(Schedulers.io())
+                .doOnSuccess {
+                    enableCoinIfNotEnabled(tradeService.coinFrom)
+                    enableCoinIfNotEnabled(tradeService.coinTo)
+                }
                 .subscribe({
                     swapEventSubject.onNext(SwapEvent.Completed)
                 }, {
@@ -160,6 +169,16 @@ class SwapService(
         allowanceService.onCleared()
         pendingAllowanceService.onCleared()
         transactionService.onCleared()
+    }
+
+    private fun enableCoinIfNotEnabled(coin: Coin?) {
+        if (coin == null) return
+
+        val wallet = walletManager.wallet(coin)
+        if (wallet != null) return
+
+        val account = accountManager.account(coin.type) ?: return
+        walletManager.save(listOf(Wallet(coin, account)))
     }
 
     private fun onUpdateTrade(state: SwapTradeService.State) {
