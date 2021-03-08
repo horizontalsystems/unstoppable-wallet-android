@@ -85,7 +85,17 @@ object SwapModule {
         private val allowanceService by lazy { SwapAllowanceService(uniswapProvider.routerAddress, App.adapterManager, evmKit) }
         private val pendingAllowanceService by lazy { SwapPendingAllowanceService(App.adapterManager, allowanceService) }
         private val service by lazy {
-            SwapService(dex, evmKit, tradeService, allowanceService, pendingAllowanceService, transactionService, App.adapterManager)
+            SwapService(
+                    dex,
+                    evmKit,
+                    tradeService,
+                    allowanceService,
+                    pendingAllowanceService,
+                    transactionService,
+                    App.adapterManager,
+                    App.walletManager,
+                    App.accountManager,
+            )
         }
         private val tradeService by lazy {
             SwapTradeService(evmKit, uniswapProvider, fromCoin)
