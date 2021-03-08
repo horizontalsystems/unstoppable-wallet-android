@@ -3,8 +3,8 @@ package io.horizontalsystems.bankwallet.modules.enablecoins
 import io.horizontalsystems.bankwallet.core.ICoinManager
 import io.horizontalsystems.binancechainkit.BinanceChainKit
 import io.horizontalsystems.binancechainkit.core.api.BinanceChainApi
-import io.horizontalsystems.binancechainkit.core.api.BinanceError
 import io.horizontalsystems.binancechainkit.models.Balance
+import io.horizontalsystems.binancechainkit.models.Bep2Token
 import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.IBuildConfigProvider
@@ -22,50 +22,46 @@ class EnableCoinsBep2Provider(appConfigProvider: IBuildConfigProvider, private v
     fun getCoinsAsync(words: List<String>): Single<List<Coin>> {
         val address = BinanceChainKit.wallet(words, networkType).address
 
-        return Single.zip(
-                binanceApi.getBalances(address),
-                binanceApi.getTokens(),
-                { symbols, bep2Tokens -> Pair(symbols, bep2Tokens) })
-
-                .onErrorResumeNext {
-                    if ((it as? BinanceError)?.code == 404) {
-                        Single.just(Pair(listOf(), listOf())) // New Account
-                    } else {
-                        Single.error(it.fillInStackTrace())
-                    }
-                }
-                .flatMap { (balances, bep2Tokens) ->
+        return binanceApi.getBalances(address)
+                .flatMap { balances ->
                     val nonZeroBalanceTokenSymbols = getSymbolsWithNonZeroBalance(balances)
-                    val listedTokens = mutableListOf<Coin>()
-                    val nonListedTokenSymbols = mutableListOf<String>()
+
+                    val listedCoins = mutableListOf<Coin>()
+                    val nonListedCoinSymbols = mutableListOf<String>()
 
                     nonZeroBalanceTokenSymbols.forEach {
                         if (it != "BNB") {
                             coinManager.getCoin(CoinType.Bep2(it))?.let { listedCoin ->
-                                listedTokens.add(listedCoin)
+                                listedCoins.add(listedCoin)
                             } ?: kotlin.run {
-                                nonListedTokenSymbols.add(it)
+                                nonListedCoinSymbols.add(it)
                             }
                         }
                     }
 
-                    if (nonListedTokenSymbols.isEmpty()){
-                        return@flatMap Single.just(listedTokens)
+                    if (nonListedCoinSymbols.isEmpty()) {
+                        return@flatMap Single.just(listedCoins)
                     }
 
-                    val nonListedCoins = nonListedTokenSymbols.mapNotNull { symbol ->
-                        bep2Tokens.firstOrNull { it.symbol.equals(symbol, ignoreCase = true) }?.let { token ->
-                            Coin(
-                                    title = token.name,
-                                    code = token.code,
-                                    decimal = 8,
-                                    type = CoinType.Bep2(token.symbol)
-                            )
-                        }
-                    }
-
-                    return@flatMap Single.just(listedTokens + nonListedCoins)
+                    binanceApi.getTokens()
+                            .flatMap { bep2Tokens ->
+                                val nonListedCoins = getCoins(nonListedCoinSymbols, bep2Tokens)
+                                Single.just(listedCoins + nonListedCoins)
+                            }
                 }
+    }
+
+    private fun getCoins(nonListedCoinSymbols: MutableList<String>, bep2Tokens: List<Bep2Token>) : List<Coin> {
+        return nonListedCoinSymbols.mapNotNull { symbol ->
+            bep2Tokens.firstOrNull { it.symbol.equals(symbol, ignoreCase = true) }?.let { tokenInfo ->
+                Coin(
+                        title = tokenInfo.name,
+                        code = tokenInfo.code,
+                        decimal = 8,
+                        type = CoinType.Bep2(tokenInfo.symbol)
+                )
+            }
+        }
     }
 
     private fun getSymbolsWithNonZeroBalance(balances: List<Balance>): List<String> {
