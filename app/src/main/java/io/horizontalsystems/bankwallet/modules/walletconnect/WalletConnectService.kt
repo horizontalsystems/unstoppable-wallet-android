@@ -176,7 +176,7 @@ class WalletConnectService(
     fun rejectRequest(requestId: Long) {
         pendingRequests.remove(requestId)
 
-        interactor?.rejectRequest(requestId, "Rejected by user")
+        interactor?.rejectRequest(requestId, "Rejected by User")
 
         requestIsProcessing = false
         processNextRequest()
