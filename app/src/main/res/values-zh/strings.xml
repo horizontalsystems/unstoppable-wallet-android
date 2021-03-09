@@ -21,8 +21,12 @@
     <string name="Button_Connect">连接</string>
     <string name="Button_Reject">拒绝</string>
     <string name="Button_Disconnect">断开连接</string>
+    <string name="Button_Start">Start</string>
+    <string name="Button_Create">Create</string>
+    <string name="Button_Restore">Restore</string>
     <string name="Error">出错</string>
     <string name="NotAvailable">不可用</string>
+    <string name="None">None</string>
     <string name="Wallet">%s钱包</string>
     <!--Intro-->
     <string name="Intro_Wallet_Description">存储和交易加密货币。完全控制资产。保持匿名。</string>
@@ -142,6 +146,46 @@
     <string name="Market_Category_CrossChain_Description">Cross-chain protocols.</string>
     <string name="Market_Category_Computing">Computing</string>
     <string name="Market_Category_Computing_Description">Decentralized on-demand computing solutions.</string>
+    <!--Market Search-->
+    <string name="EmptyResults">No results found</string>
+    <string name="Market_AdvancedSearch">Advanced Search</string>
+    <string name="Market_AdvancedSearch_Results">Results</string>
+    <string name="Market_Filter_ChooseSet">Choose Set</string>
+    <string name="Market_Filter_MarketCap">Market Cap</string>
+    <string name="Market_Filter_Volume">Trading Volume</string>
+    <string name="Market_Filter_Liquidity">DEX Liquidity</string>
+    <string name="Market_Filter_LiquidityHint">This setting applies to tokens traded on Ethereum (Uniswap DEX) and Binance Smart Chain (Pancake DEX).</string>
+    <string name="Market_Filter_PricePeriod">Price Period</string>
+    <string name="Market_Filter_PriceChange">Price Change</string>
+    <string name="Market_Filter_ResetAll">Reset All</string>
+    <string name="Market_Filter_Top_100">Top 100</string>
+    <string name="Market_Filter_Top_250">Top 250</string>
+    <string name="Market_Filter_Top_500">Top 500</string>
+    <string name="Market_Filter_Top_1000">Top 1000</string>
+    <string name="Market_Filter_Top_1500">Top 1500</string>
+    <string name="Market_Filter_ShowResults">Show Results</string>
+    <string name="Market_Filter_ShowResults_Counter">Show Results: %d</string>
+    <string name="Market_Filter_Range_0_5M">&lt; 5M</string>
+    <string name="Market_Filter_Range_5M_20M">5M - 20M</string>
+    <string name="Market_Filter_Range_20M_100M">20M - 100M</string>
+    <string name="Market_Filter_Range_100M_1B">100M - 1B</string>
+    <string name="Market_Filter_Range_1B_5B">1B - 5B</string>
+    <string name="Market_Filter_Range_5B_More">&gt; 5BN</string>
+    <string name="Market_Filter_TimePeriod_1D">1 Day</string>
+    <string name="Market_Filter_TimePeriod_1W">1 Week</string>
+    <string name="Market_Filter_TimePeriod_2W">2 Weeks</string>
+    <string name="Market_Filter_TimePeriod_1M">1 Month</string>
+    <string name="Market_Filter_TimePeriod_6M">6 Months</string>
+    <string name="Market_Filter_TimePeriod_1Y">1 Year</string>
+    <string name="Market_Filter_PriceChange_Positive_10_plus">&gt; +10%</string>
+    <string name="Market_Filter_PriceChange_Positive_25_plus">&gt; +25%</string>
+    <string name="Market_Filter_PriceChange_Positive_50_plus">&gt; +50%</string>
+    <string name="Market_Filter_PriceChange_Positive_100_plus">&gt; +100%</string>
+    <string name="Market_Filter_PriceChange_Negative_10_minus">&lt; -10%</string>
+    <string name="Market_Filter_PriceChange_Negative_25_minus">&lt; -25%</string>
+    <string name="Market_Filter_PriceChange_Negative_50_minus">&lt; -50%</string>
+    <string name="Market_Filter_PriceChange_Negative_100_minus">&lt; -100%</string>
+    <string name="TimePeriod_24h">24h</string>
     <!--Balance-->
     <string name="Balance_Title">余额</string>
     <string name="Balance_Deposit">接收</string>
@@ -158,6 +202,7 @@
     <string name="Balance_Sort_Az">名称</string>
     <string name="Balance_Sort_24hPriceChange">24小时变更 (%)</string>
     <string name="Balance_Backup_Alert">您必须在接收%s之前先备份%s钱包。</string>
+    <string name="Balance_NoWalletAlert">You don\’t have any wallets yet. Create new or restore existing </string>
     <!--Send-->
     <string name="Send_Title">发送%s</string>
     <string name="Send_Hint_Address">地址或域名</string>
@@ -184,7 +229,6 @@
     <string name="Send_DialogAvailableBalance">可用余额</string>
     <string name="Send_DialogSpeed">交易速度</string>
     <string name="Send_TxSpeed_Low">低</string>
-    <string name="Send_TxSpeed_Medium">中</string>
     <string name="Send_TxSpeed_High">高</string>
     <string name="Send_TxSpeed_Recommended">推荐</string>
     <string name="Send_TxSpeed_Custom">自定义</string>
@@ -222,6 +266,7 @@
     <string name="WalletConnect_Status_Offline">离线</string>
     <string name="WalletConnect_Status_Online">在线</string>
     <string name="WalletConnect_Status_Connecting">正在连接...</string>
+    <string name="WalletConnect_NewConnect">New Connect</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Error_InsufficientBalance">交易要求%s用于发送。</string>
     <string name="EthereumTransaction_Error_InsufficientBalanceForFee">當前%s餘額低於處理此交易所需的金額，包括交易費用。</string>
@@ -328,10 +373,11 @@
     <string name="TransactionInfo_Input">输入</string>
     <string name="TransactionInfo_ButtonViewOnExplorerName">View on %s</string>
     <string name="StatusInfo_Pending">待处理</string>
+    <string name="StatusInfo_SendingReceiving">Sending/Receiving</string>
     <string name="StatusInfo_Confirmed">已确认</string>
     <string name="StatusInfo_Failed">失败</string>
     <string name="StatusInfo_PendingDescription">交易尚未在区块链上确认。 根据交易费用的不同，此步骤可能需要几分钟到几个小时。通过极低费用发送的交易通常会在几天内得到处理或被网络拒绝，即没有进行交易。</string>
-    <string name="StatusInfo_ReceivingDescription">发送者已向您发送交易，但交易尚未完成。对于较大笔的付款，建议等到交易状态更改为“已完成”。这通常应在一个小时内发生，但如果发送人以较低的费用发送交易，则可能需要更长时间。</string>
+    <string name="StatusInfo_SendingReceivingDescription">Transaction has been included in the blockchain but has not reached finality yet. At this point, it\'s safe to consider transaction completed for smaller payments. For larger payments it\'s recommended to wait until the status changes to completed.</string>
     <string name="StatusInfo_ConfirmedDescription">交易是最终且不可逆的。</string>
     <string name="StatusInfo_FailedDescription">交易没有按预定方式处理，也没有进行代币价值转移。在Etherum区块链中，失败的交易会消耗交易费用。</string>
     <!-- Info -->
@@ -488,6 +534,7 @@
     <string name="AddTokenDialog_Title">选择区块链</string>
     <string name="AddTokenDialog_Subtitle">正在添加代币</string>
     <string name="AddTokenDialog_Erc20Tokens">ERC20 代币</string>
+    <string name="AddTokenDialog_Bep20Tokens">BEP20 Tokens</string>
     <string name="AddTokenDialog_BinanceTokens">BEP2 代币</string>
     <!-- Enable Token -->
     <string name="EnalbeToken_Title">启用代币</string>
@@ -504,10 +551,10 @@
     <string name="AddToken_CoinAlreadyInListWarning">该代币已在代币管理列表中</string>
     <string name="AddToken_InvalidAddressError">错误地址</string>
     <string name="AddToken_ApiLimitExceeded">超过Api限制。请稍后再试。</string>
-    <!-- Add Erc20 Token -->
-    <string name="AddErc20Token_Title">添加ERC20</string>
-    <string name="AddEvmToken_ContractAddressHint">智能合约地址</string>
     <string name="AddEvmToken_ContractNotFound">没找到合同</string>
+    <string name="AddEvmToken_ContractAddressHint">智能合约地址</string>
+    <string name="AddErc20Token_Title">添加ERC20</string>
+    <string name="AddBep20Token_Title">Add BEP20</string>
     <!-- Add Bep2 Token -->
     <string name="AddBep2Token_Title">添加BEP2</string>
     <string name="AddBep2Token_TokenSymbolHint">代币符号</string>
@@ -552,12 +599,28 @@
     <string name="Charts_TimeDuration_HalfYear">6个月</string>
     <string name="Charts_TimeDuration_Year">1年</string>
     <string name="Charts_TimeDuration_Year2">2年</string>
+    <string name="Charts_RatingDetails">Rating Details</string>
+    <string name="Charts_Price">Price</string>
+    <string name="Charts_Market">Market</string>
+    <string name="Charts_MarketBTC">BTC Markets</string>
+    <string name="Charts_Range24">24h Range</string>
+    <string name="Charts_Performance">Performance</string>
+    <string name="Charts_About">About</string>
+    <string name="Charts_Category">Category</string>
+    <string name="Charts_Guide">Guide</string>
+    <string name="Charts_Website">网站项目</string>
+    <string name="Charts_Whitepaper">Whitepaper</string>
+    <string name="Charts_Reddit">Reddit</string>
+    <string name="Charts_Twitter">Twitter</string>
+    <string name="Charts_Telegram">Telegram</string>
+    <string name="Charts_Github">Github</string>
+    <string name="Charts_Changes1W">Changes (1W)</string>
+    <string name="Charts_Changes1M">Changes (1M)</string>
     <string name="Charts_MarketCap">市场价值</string>
     <string name="Charts_Volume24">量(24小时)</string>
     <string name="Charts_inCirculation">流通中</string>
     <string name="Charts_TotalSupply">供应总额</string>
     <string name="Charts_StartDate">上市日期</string>
-    <string name="Charts_Website">网站项目</string>
     <string name="Charts_MarketCap_Thousand">千</string>
     <string name="Charts_MarketCap_Million">百万</string>
     <string name="Charts_MarketCap_Billion">十亿</string>
