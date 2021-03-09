@@ -15,7 +15,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.modules.market.favorites.EmptyListAdapter
-import io.horizontalsystems.bankwallet.modules.ratechart.RateChartFragment
+import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.views.inflate
 import kotlinx.android.synthetic.main.fragment_market_search.*
@@ -69,7 +69,7 @@ class MarketSearchFragment : BaseFragment() {
     }
 
     fun onItemClick(coinDataViewItem: CoinDataViewItem) {
-        val arguments = RateChartFragment.prepareParams(coinDataViewItem.type, coinDataViewItem.code, coinDataViewItem.name, null)
+        val arguments = CoinFragment.prepareParams(coinDataViewItem.type, coinDataViewItem.code, coinDataViewItem.name, null)
 
         findNavController().navigate(R.id.rateChartFragment, arguments, navOptions())
     }

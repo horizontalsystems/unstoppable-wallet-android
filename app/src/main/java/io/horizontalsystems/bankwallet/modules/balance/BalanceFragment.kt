@@ -23,7 +23,7 @@ import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.modules.balance.views.SyncErrorDialog
 import io.horizontalsystems.bankwallet.modules.main.MainActivity
-import io.horizontalsystems.bankwallet.modules.ratechart.RateChartFragment
+import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.receive.ReceiveFragment
 import io.horizontalsystems.bankwallet.modules.settings.managekeys.views.ManageKeysDialog
 import io.horizontalsystems.bankwallet.modules.swap.SwapFragment
@@ -238,7 +238,7 @@ class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener, ReceiveFra
         })
 
         viewModel.openChartModule.observe(viewLifecycleOwner, Observer { coin ->
-            val arguments = RateChartFragment.prepareParams(coin.type, coin.code, coin.title, coin.id)
+            val arguments = CoinFragment.prepareParams(coin.type, coin.code, coin.title, coin.id)
 
             findNavController().navigate(R.id.mainFragment_to_rateChartFragment, arguments, navOptions())
         })

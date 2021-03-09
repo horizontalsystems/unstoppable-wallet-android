@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.ratechart
+package io.horizontalsystems.bankwallet.modules.coin
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -9,7 +9,7 @@ import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.xrateskit.entities.*
 import java.math.BigDecimal
 
-object RateChartModule {
+object CoinModule {
 
     interface View {
         fun chartSpinner(isLoading: Boolean)
@@ -74,9 +74,9 @@ object RateChartModule {
             val currency = App.currencyManager.baseCurrency
             val rateFormatter = RateFormatter(currency)
 
-            val view = RateChartView()
-            val interactor = RateChartInteractor(App.xRateManager, App.chartTypeStorage, App.priceAlertManager, App.notificationManager, App.localStorage, App.marketFavoritesManager)
-            val presenter = RateChartPresenter(view, rateFormatter, interactor, coinType, coinCode, coinTitle, coinId, currency, RateChartViewFactory())
+            val view = CoinView()
+            val interactor = CoinInteractor(App.xRateManager, App.chartTypeStorage, App.priceAlertManager, App.notificationManager, App.localStorage, App.marketFavoritesManager)
+            val presenter = CoinPresenter(view, rateFormatter, interactor, coinType, coinCode, coinTitle, coinId, currency, RateChartViewFactory())
 
             interactor.delegate = presenter
 

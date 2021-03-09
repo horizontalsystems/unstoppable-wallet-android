@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.ratechart
+package io.horizontalsystems.bankwallet.modules.coin
 
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.managers.MarketFavoritesManager
@@ -11,16 +11,16 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
-class RateChartInteractor(
+class CoinInteractor(
         private val xRateManager: IRateManager,
         private val chartTypeStorage: IChartTypeStorage,
         private val priceAlertManager: IPriceAlertManager,
         private val notificationManager: INotificationManager,
         private val localStorage: ILocalStorage,
         private val marketFavoritesManager: MarketFavoritesManager)
-    : RateChartModule.Interactor {
+    : CoinModule.Interactor {
 
-    var delegate: RateChartModule.InteractorDelegate? = null
+    var delegate: CoinModule.InteractorDelegate? = null
 
     private val disposables = CompositeDisposable()
     private var alertNotificationDisposable: Disposable? = null

@@ -1,7 +1,6 @@
-package io.horizontalsystems.bankwallet.modules.ratechart
+package io.horizontalsystems.bankwallet.modules.coin
 
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.chartview.Chart
 import io.horizontalsystems.core.entities.Currency
 import java.math.BigDecimal

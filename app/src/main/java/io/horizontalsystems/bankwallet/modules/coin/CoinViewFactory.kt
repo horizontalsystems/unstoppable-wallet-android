@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.ratechart
+package io.horizontalsystems.bankwallet.modules.coin
 
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.chartview.*
@@ -23,18 +23,18 @@ data class ChartPointViewItem(
 )
 
 data class MarketInfoViewItem(
-    val currency: Currency,
-    val rateValue: BigDecimal,
-    val marketCap: BigDecimal,
-    val circulatingSupply: RateChartModule.CoinCodeWithValue,
-    val totalSupply: RateChartModule.CoinCodeWithValue,
-    val timestamp: Long,
-    val rateHigh24h: BigDecimal,
-    val rateLow24h: BigDecimal,
-    val volume24h: BigDecimal,
-    val marketCapDiff24h: BigDecimal,
-    val coinMeta: CoinMeta,
-    val rateDiffs: Map<TimePeriod, Map<String, BigDecimal>>
+        val currency: Currency,
+        val rateValue: BigDecimal,
+        val marketCap: BigDecimal,
+        val circulatingSupply: CoinModule.CoinCodeWithValue,
+        val totalSupply: CoinModule.CoinCodeWithValue,
+        val timestamp: Long,
+        val rateHigh24h: BigDecimal,
+        val rateLow24h: BigDecimal,
+        val volume24h: BigDecimal,
+        val marketCapDiff24h: BigDecimal,
+        val coinMeta: CoinMeta,
+        val rateDiffs: Map<TimePeriod, Map<String, BigDecimal>>
 )
 
 class RateChartViewFactory {
@@ -72,8 +72,8 @@ class RateChartViewFactory {
             currency = currency,
             rateValue = marketInfo.rate,
             marketCap = coinMarket.marketCap,
-            circulatingSupply = RateChartModule.CoinCodeWithValue(coinCode, coinMarket.circulatingSupply),
-            totalSupply = RateChartModule.CoinCodeWithValue(coinCode, coinMarket.totalSupply),
+            circulatingSupply = CoinModule.CoinCodeWithValue(coinCode, coinMarket.circulatingSupply),
+            totalSupply = CoinModule.CoinCodeWithValue(coinCode, coinMarket.totalSupply),
             timestamp = marketInfo.timestamp,
             rateHigh24h = rateHigh24h,
             rateLow24h = rateLow24h,

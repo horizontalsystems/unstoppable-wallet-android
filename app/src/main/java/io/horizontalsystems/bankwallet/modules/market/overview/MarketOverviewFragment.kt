@@ -16,7 +16,7 @@ import io.horizontalsystems.bankwallet.modules.market.MarketViewModel
 import io.horizontalsystems.bankwallet.modules.market.metrics.MarketMetricsAdapter
 import io.horizontalsystems.bankwallet.modules.market.metrics.MarketMetricsModule
 import io.horizontalsystems.bankwallet.modules.market.metrics.MarketMetricsViewModel
-import io.horizontalsystems.bankwallet.modules.ratechart.RateChartFragment
+import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.android.synthetic.main.fragment_overview.*
@@ -107,7 +107,7 @@ class MarketOverviewFragment : BaseFragment(), ViewHolderMarketOverviewItem.List
     }
 
     override fun onItemClick(marketViewItem: MarketViewItem) {
-        val arguments = RateChartFragment.prepareParams(marketViewItem.coinType, marketViewItem.coinCode, marketViewItem.coinName, null)
+        val arguments = CoinFragment.prepareParams(marketViewItem.coinType, marketViewItem.coinCode, marketViewItem.coinName, null)
 
         findNavController().navigate(R.id.rateChartFragment, arguments, navOptions())
     }
