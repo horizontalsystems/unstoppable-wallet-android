@@ -49,7 +49,7 @@ class RateChartInteractor(
                 .subscribe({ coinMarketDetails ->
                     delegate?.onUpdate(coinMarketDetails)
                 }, {
-                    delegate?.onChartError(it)
+                    delegate?.onMarketError(it)
                 }).let {
                     disposables.add(it)
                 }
@@ -63,7 +63,7 @@ class RateChartInteractor(
                 .subscribe({ chartInfo ->
                     delegate?.onUpdate(chartInfo)
                 }, {
-                    delegate?.onMarketError(it)
+                    delegate?.onChartError(it)
                 }).let {
                     disposables.add(it)
                 }
