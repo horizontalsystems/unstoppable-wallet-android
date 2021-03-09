@@ -21,8 +21,12 @@
     <string name="Button_Connect">وصل شدن</string>
     <string name="Button_Reject">رد کردن</string>
     <string name="Button_Disconnect">قطع ارتباط</string>
+    <string name="Button_Start">Start</string>
+    <string name="Button_Create">Create</string>
+    <string name="Button_Restore">Restore</string>
     <string name="Error">خطا</string>
     <string name="NotAvailable">مربوط نیست</string>
+    <string name="None">None</string>
     <string name="Wallet">%s کیف پول</string>
     <!--Intro-->
     <string name="Intro_Wallet_Description">پس انداز و معامله ارز رمزنگاری شده. کنترل کامل بر دارایی ها داشته باشید. ناشناس بمانید.</string>
@@ -142,6 +146,46 @@
     <string name="Market_Category_CrossChain_Description">Cross-chain protocols.</string>
     <string name="Market_Category_Computing">Computing</string>
     <string name="Market_Category_Computing_Description">Decentralized on-demand computing solutions.</string>
+    <!--Market Search-->
+    <string name="EmptyResults">No results found</string>
+    <string name="Market_AdvancedSearch">Advanced Search</string>
+    <string name="Market_AdvancedSearch_Results">Results</string>
+    <string name="Market_Filter_ChooseSet">Choose Set</string>
+    <string name="Market_Filter_MarketCap">Market Cap</string>
+    <string name="Market_Filter_Volume">Trading Volume</string>
+    <string name="Market_Filter_Liquidity">DEX Liquidity</string>
+    <string name="Market_Filter_LiquidityHint">This setting applies to tokens traded on Ethereum (Uniswap DEX) and Binance Smart Chain (Pancake DEX).</string>
+    <string name="Market_Filter_PricePeriod">Price Period</string>
+    <string name="Market_Filter_PriceChange">Price Change</string>
+    <string name="Market_Filter_ResetAll">Reset All</string>
+    <string name="Market_Filter_Top_100">Top 100</string>
+    <string name="Market_Filter_Top_250">Top 250</string>
+    <string name="Market_Filter_Top_500">Top 500</string>
+    <string name="Market_Filter_Top_1000">Top 1000</string>
+    <string name="Market_Filter_Top_1500">Top 1500</string>
+    <string name="Market_Filter_ShowResults">Show Results</string>
+    <string name="Market_Filter_ShowResults_Counter">Show Results: %d</string>
+    <string name="Market_Filter_Range_0_5M">&lt; 5M</string>
+    <string name="Market_Filter_Range_5M_20M">5M - 20M</string>
+    <string name="Market_Filter_Range_20M_100M">20M - 100M</string>
+    <string name="Market_Filter_Range_100M_1B">100M - 1B</string>
+    <string name="Market_Filter_Range_1B_5B">1B - 5B</string>
+    <string name="Market_Filter_Range_5B_More">&gt; 5BN</string>
+    <string name="Market_Filter_TimePeriod_1D">1 Day</string>
+    <string name="Market_Filter_TimePeriod_1W">1 Week</string>
+    <string name="Market_Filter_TimePeriod_2W">2 Weeks</string>
+    <string name="Market_Filter_TimePeriod_1M">1 Month</string>
+    <string name="Market_Filter_TimePeriod_6M">6 Months</string>
+    <string name="Market_Filter_TimePeriod_1Y">1 Year</string>
+    <string name="Market_Filter_PriceChange_Positive_10_plus">&gt; +10%</string>
+    <string name="Market_Filter_PriceChange_Positive_25_plus">&gt; +25%</string>
+    <string name="Market_Filter_PriceChange_Positive_50_plus">&gt; +50%</string>
+    <string name="Market_Filter_PriceChange_Positive_100_plus">&gt; +100%</string>
+    <string name="Market_Filter_PriceChange_Negative_10_minus">&lt; -10%</string>
+    <string name="Market_Filter_PriceChange_Negative_25_minus">&lt; -25%</string>
+    <string name="Market_Filter_PriceChange_Negative_50_minus">&lt; -50%</string>
+    <string name="Market_Filter_PriceChange_Negative_100_minus">&lt; -100%</string>
+    <string name="TimePeriod_24h">24h</string>
     <!--Balance-->
     <string name="Balance_Title">بالانس</string>
     <string name="Balance_Deposit">دريافت</string>
@@ -158,6 +202,7 @@
     <string name="Balance_Sort_Az">نام</string>
     <string name="Balance_Sort_24hPriceChange">قیمت ۲۴ ساعت (%)</string>
     <string name="Balance_Backup_Alert">قبل از اینکه %s را دریافت کنید به نسخه پشتیبان از کیف پول %s نیاز دارید.</string>
+    <string name="Balance_NoWalletAlert">You don\’t have any wallets yet. Create new or restore existing </string>
     <!--Send-->
     <string name="Send_Title">ارسال %s</string>
     <string name="Send_Hint_Address">Address or Domain</string>
@@ -184,7 +229,6 @@
     <string name="Send_DialogAvailableBalance">موجودی در دسترس</string>
     <string name="Send_DialogSpeed">سرعت تراکنش</string>
     <string name="Send_TxSpeed_Low">پایین</string>
-    <string name="Send_TxSpeed_Medium">متوسط</string>
     <string name="Send_TxSpeed_High">بالا</string>
     <string name="Send_TxSpeed_Recommended">توصیه شده</string>
     <string name="Send_TxSpeed_Custom">شخصی سازی</string>
@@ -222,6 +266,7 @@
     <string name="WalletConnect_Status_Offline">آفلاین</string>
     <string name="WalletConnect_Status_Online">آنلاین</string>
     <string name="WalletConnect_Status_Connecting">در حال اتصال…</string>
+    <string name="WalletConnect_NewConnect">New Connect</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Error_InsufficientBalance">تراکنش برای ارسال به %s نیاز دارد</string>
     <string name="EthereumTransaction_Error_InsufficientBalanceForFee">Current %s balance is below amount required to process this transaction including transaction fee.</string>
@@ -328,10 +373,11 @@
     <string name="TransactionInfo_Input">ورودی</string>
     <string name="TransactionInfo_ButtonViewOnExplorerName">View on %s</string>
     <string name="StatusInfo_Pending">در حالت انتظار</string>
+    <string name="StatusInfo_SendingReceiving">Sending/Receiving</string>
     <string name="StatusInfo_Confirmed">تاييد شد</string>
     <string name="StatusInfo_Failed">ناموفق</string>
     <string name="StatusInfo_PendingDescription">معامله هنوز در بلاکچین تأیید نشده است. این مرحله بسته به هزینه معامله ممکن است از چند دقیقه تا چند ساعت طول بکشد. معاملات ارسال شده با هزینه بسیار کم معمولاً طی چند روز انجام می شوند یا توسط شبکه رد می شوند ، یعنی هیچ معامله ای انجام نشده است.</string>
-    <string name="StatusInfo_ReceivingDescription">فرستنده معامله ای را برای شما ارسال کرده است اما هنوز نهایی نشده است. برای پرداخت های بیشتر پیشنهاد می شود صبر کنید تا وضعیت معامله به \"کامل\" تغییر کند. معمولاً این باید در عرض یک ساعت اتفاق بیفتد اما اگر فرستنده تراکنش را با هزینه کم ارسال کند ، ممکن است گاهی بیشتر طول بکشد.</string>
+    <string name="StatusInfo_SendingReceivingDescription">Transaction has been included in the blockchain but has not reached finality yet. At this point, it\'s safe to consider transaction completed for smaller payments. For larger payments it\'s recommended to wait until the status changes to completed.</string>
     <string name="StatusInfo_ConfirmedDescription">معامله نهایی و برگشت ناپذیر است.</string>
     <string name="StatusInfo_FailedDescription">معامله همانطور که در نظر گرفته شده بود پردازش نشد و هیچ انتقال ارزش رمز انجام نشد. در بلاکچین اتریوم معاملات ناموفق هزینه های معامله را مصرف می کنند.</string>
     <!-- Info -->
@@ -488,6 +534,7 @@
     <string name="AddTokenDialog_Title">انتخاب زنجیره بلوکی</string>
     <string name="AddTokenDialog_Subtitle">در حال اضافه کردن نشان</string>
     <string name="AddTokenDialog_Erc20Tokens">نشان های ERC 20</string>
+    <string name="AddTokenDialog_Bep20Tokens">BEP20 Tokens</string>
     <string name="AddTokenDialog_BinanceTokens">نشان های BEP2</string>
     <!-- Enable Token -->
     <string name="EnalbeToken_Title">Enable Token</string>
@@ -504,10 +551,10 @@
     <string name="AddToken_CoinAlreadyInListWarning">این نشان در حال حاضر در لیست مدیریت سکه قرار دارد</string>
     <string name="AddToken_InvalidAddressError">آدرس نامعتبر است</string>
     <string name="AddToken_ApiLimitExceeded">از محدوده اپی فراتر رفت. بعدا دوباره تلاش کنید.</string>
-    <!-- Add Erc20 Token -->
-    <string name="AddErc20Token_Title">اضافه کردن ERC20</string>
-    <string name="AddEvmToken_ContractAddressHint">آدرس قرارداد</string>
     <string name="AddEvmToken_ContractNotFound">قرارداد یافت نشد</string>
+    <string name="AddEvmToken_ContractAddressHint">آدرس قرارداد</string>
+    <string name="AddErc20Token_Title">اضافه کردن ERC20</string>
+    <string name="AddBep20Token_Title">Add BEP20</string>
     <!-- Add Bep2 Token -->
     <string name="AddBep2Token_Title">اضافه کردن بیپ۲</string>
     <string name="AddBep2Token_TokenSymbolHint">نماد رمز</string>
@@ -551,12 +598,28 @@
     <string name="Charts_TimeDuration_HalfYear">۶دقیقه</string>
     <string name="Charts_TimeDuration_Year">۱سال</string>
     <string name="Charts_TimeDuration_Year2">2 سال</string>
+    <string name="Charts_RatingDetails">Rating Details</string>
+    <string name="Charts_Price">Price</string>
+    <string name="Charts_Market">Market</string>
+    <string name="Charts_MarketBTC">BTC Markets</string>
+    <string name="Charts_Range24">24h Range</string>
+    <string name="Charts_Performance">Performance</string>
+    <string name="Charts_About">About</string>
+    <string name="Charts_Category">Category</string>
+    <string name="Charts_Guide">Guide</string>
+    <string name="Charts_Website">وب سایت پروژه</string>
+    <string name="Charts_Whitepaper">Whitepaper</string>
+    <string name="Charts_Reddit">Reddit</string>
+    <string name="Charts_Twitter">Twitter</string>
+    <string name="Charts_Telegram">Telegram</string>
+    <string name="Charts_Github">Github</string>
+    <string name="Charts_Changes1W">Changes (1W)</string>
+    <string name="Charts_Changes1M">Changes (1M)</string>
     <string name="Charts_MarketCap">سقف بازار</string>
     <string name="Charts_Volume24">حجم (24 ساعت)</string>
     <string name="Charts_inCirculation">در گردش</string>
     <string name="Charts_TotalSupply">کل موجودی</string>
     <string name="Charts_StartDate">تاریخ شروع</string>
-    <string name="Charts_Website">وب سایت پروژه</string>
     <string name="Charts_MarketCap_Thousand">هزار</string>
     <string name="Charts_MarketCap_Million">میلیون</string>
     <string name="Charts_MarketCap_Billion">بیلیون</string>
