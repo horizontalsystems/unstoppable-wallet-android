@@ -239,6 +239,9 @@ class RateChartFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelecte
                 }
             }
 
+            // Rating
+            ratingDetails.isVisible = !item.coinMeta.rating.isNullOrBlank()
+
             // Price
             priceRangeMin.text = formatter.formatFiat(item.rateLow24h, item.currency.symbol, 2, 4)
             priceRangeMax.text = formatter.formatFiat(item.rateHigh24h, item.currency.symbol, 2, 4)
