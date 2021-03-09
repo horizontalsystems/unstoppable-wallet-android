@@ -198,8 +198,8 @@
         tools:layout="@layout/fragment_backup_words" />
     <fragment
         android:id="@+id/rateChartFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.ratechart.RateChartFragment"
-        tools:layout="@layout/fragment_rate_chart" />
+        android:name="io.horizontalsystems.bankwallet.modules.coin.CoinFragment"
+        tools:layout="@layout/fragment_coin" />
     <fragment
         android:id="@+id/pinFragment"
         android:name="io.horizontalsystems.pin.PinFragment"

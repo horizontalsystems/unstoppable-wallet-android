@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.ratechart
+package io.horizontalsystems.bankwallet.modules.coin
 
 import java.math.BigDecimal
 

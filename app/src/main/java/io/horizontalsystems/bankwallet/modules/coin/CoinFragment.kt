@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.ratechart
+package io.horizontalsystems.bankwallet.modules.coin
 
 import android.content.Intent
 import android.graphics.Color
@@ -42,14 +42,14 @@ import kotlinx.android.synthetic.main.coin_market.*
 import kotlinx.android.synthetic.main.coin_market_details.*
 import kotlinx.android.synthetic.main.coin_performance.*
 import kotlinx.android.synthetic.main.coin_price_change.*
-import kotlinx.android.synthetic.main.fragment_rate_chart.*
+import kotlinx.android.synthetic.main.fragment_coin.*
 import kotlinx.android.synthetic.main.view_transaction_info_item.view.*
 import java.math.BigDecimal
 import java.util.*
 
-class RateChartFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedListener {
-    private lateinit var presenter: RateChartPresenter
-    private lateinit var presenterView: RateChartView
+class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedListener {
+    private lateinit var presenter: CoinPresenter
+    private lateinit var presenterView: CoinView
 
     private val formatter = App.numberFormatter
     private var notificationMenuItem: MenuItem? = null
@@ -66,7 +66,7 @@ class RateChartFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelecte
     )
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.fragment_rate_chart, container, false)
+        return inflater.inflate(R.layout.fragment_coin, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -86,8 +86,8 @@ class RateChartFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelecte
 
         val coinTitle = arguments?.getString(COIN_TITLE_KEY) ?: ""
 
-        presenter = ViewModelProvider(this, RateChartModule.Factory(coinTitle, coinType, coinCode, coinId)).get(RateChartPresenter::class.java)
-        presenterView = presenter.view as RateChartView
+        presenter = ViewModelProvider(this, CoinModule.Factory(coinTitle, coinType, coinCode, coinId)).get(CoinPresenter::class.java)
+        presenterView = presenter.view as CoinView
 
         toolbar.title = coinTitle
         toolbar.setNavigationOnClickListener {

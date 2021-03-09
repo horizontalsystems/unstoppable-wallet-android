@@ -1,10 +1,10 @@
-package io.horizontalsystems.bankwallet.modules.ratechart
+package io.horizontalsystems.bankwallet.modules.coin
 
 import androidx.lifecycle.MutableLiveData
 import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.xrateskit.entities.ChartType
 
-class RateChartView : RateChartModule.View {
+class CoinView : CoinModule.View {
     val chartSpinner = SingleLiveEvent<Boolean>()
     val marketSpinner = SingleLiveEvent<Boolean>()
     val setDefaultMode = SingleLiveEvent<ChartType>()

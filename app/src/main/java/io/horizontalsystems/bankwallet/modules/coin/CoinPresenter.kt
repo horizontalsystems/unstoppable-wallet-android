@@ -1,18 +1,18 @@
-package io.horizontalsystems.bankwallet.modules.ratechart
+package io.horizontalsystems.bankwallet.modules.coin
 
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.PriceAlert
-import io.horizontalsystems.bankwallet.modules.ratechart.RateChartModule.Interactor
-import io.horizontalsystems.bankwallet.modules.ratechart.RateChartModule.InteractorDelegate
-import io.horizontalsystems.bankwallet.modules.ratechart.RateChartModule.View
-import io.horizontalsystems.bankwallet.modules.ratechart.RateChartModule.ViewDelegate
+import io.horizontalsystems.bankwallet.modules.coin.CoinModule.Interactor
+import io.horizontalsystems.bankwallet.modules.coin.CoinModule.InteractorDelegate
+import io.horizontalsystems.bankwallet.modules.coin.CoinModule.View
+import io.horizontalsystems.bankwallet.modules.coin.CoinModule.ViewDelegate
 import io.horizontalsystems.chartview.models.PointInfo
 import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.xrateskit.entities.*
 
-class RateChartPresenter(
+class CoinPresenter(
         val view: View,
         val rateFormatter: RateFormatter,
         private val interactor: Interactor,

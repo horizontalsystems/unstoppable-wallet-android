@@ -16,6 +16,6 @@
 
     <fragment
         android:id="@+id/lockScreenRateChartFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.ratechart.RateChartFragment"
-        tools:layout="@layout/fragment_rate_chart" />
+        android:name="io.horizontalsystems.bankwallet.modules.coin.CoinFragment"
+        tools:layout="@layout/fragment_coin" />
 </navigation>

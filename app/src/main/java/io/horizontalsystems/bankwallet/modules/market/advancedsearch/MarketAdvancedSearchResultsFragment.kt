@@ -12,7 +12,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.market.*
 import io.horizontalsystems.bankwallet.modules.market.list.MarketListViewModel
-import io.horizontalsystems.bankwallet.modules.ratechart.RateChartFragment
+import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.ui.extensions.MarketListHeaderView
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorDialog
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorItem
@@ -87,7 +87,7 @@ class MarketAdvancedSearchResultsFragment : BaseFragment(), MarketListHeaderView
     }
 
     override fun onItemClick(marketViewItem: MarketViewItem) {
-        val arguments = RateChartFragment.prepareParams(marketViewItem.coinType, marketViewItem.coinCode, marketViewItem.coinName, null)
+        val arguments = CoinFragment.prepareParams(marketViewItem.coinType, marketViewItem.coinCode, marketViewItem.coinName, null)
 
         findNavController().navigate(R.id.rateChartFragment, arguments, navOptions())
     }}
