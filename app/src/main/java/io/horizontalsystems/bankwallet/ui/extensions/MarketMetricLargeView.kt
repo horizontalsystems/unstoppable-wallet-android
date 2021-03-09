@@ -38,7 +38,9 @@ class MarketMetricLargeView @JvmOverloads constructor(context: Context, attrs: A
     }
 
     fun setDiff(v: BigDecimal?) {
-        diffCircle.animateHorizontal(v?.let { it.toFloat() * 3 })
+        diffCircle.post {
+            diffCircle.animateHorizontal(v?.let { it.toFloat() * 3 })
+        }
         if (v == null) return
         title.isVisible = true
 
