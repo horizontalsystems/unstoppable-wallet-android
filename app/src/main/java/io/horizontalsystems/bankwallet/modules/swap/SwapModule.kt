@@ -34,15 +34,6 @@ object SwapModule {
             val blockchainType: String?
     ) : Parcelable
 
-    data class ConfirmationAmountViewItem(
-            val payTitle: String,
-            val payValue: String?,
-            val getTitle: String,
-            val getValue: String?
-    )
-
-    data class ConfirmationAdditionalViewItem(val title: String, val value: String?)
-
     data class GuaranteedAmountViewItem(val title: String, val value: String)
 
     data class PriceImpactViewItem(val level: SwapTradeService.PriceImpactLevel, val value: String)
@@ -87,14 +78,10 @@ object SwapModule {
         private val service by lazy {
             SwapService(
                     dex,
-                    evmKit,
                     tradeService,
                     allowanceService,
                     pendingAllowanceService,
-                    transactionService,
-                    App.adapterManager,
-                    App.walletManager,
-                    App.accountManager,
+                    App.adapterManager
             )
         }
         private val tradeService by lazy {
@@ -124,7 +111,7 @@ object SwapModule {
 
             return when (modelClass) {
                 SwapViewModel::class.java -> {
-                    SwapViewModel(service, tradeService, allowanceService, pendingAllowanceService, coinService, formatter, stringProvider) as T
+                    SwapViewModel(service, tradeService, pendingAllowanceService, formatter, stringProvider) as T
                 }
                 SwapCoinCardViewModel::class.java -> {
                     val fiatService = FiatService(switchService, App.currencyManager, App.xRateManager)

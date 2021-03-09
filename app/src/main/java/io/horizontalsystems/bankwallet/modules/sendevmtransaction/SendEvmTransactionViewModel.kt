@@ -21,7 +21,7 @@ class SendEvmTransactionViewModel(
     val sendEnabledLiveData = MutableLiveData<Boolean>()
     val errorLiveData = MutableLiveData<String?>()
 
-    val sendingLiveData = MutableLiveData<Boolean>()
+    val sendingLiveData = MutableLiveData<Unit>()
     val sendSuccessLiveData = MutableLiveData<ByteArray>()
     val sendFailedLiveData = MutableLiveData<String>()
 
@@ -58,7 +58,10 @@ class SendEvmTransactionViewModel(
     private fun sync(sendState: SendEvmTransactionService.SendState) =
             when (sendState) {
                 SendEvmTransactionService.SendState.Idle -> Unit
-                SendEvmTransactionService.SendState.Sending -> sendingLiveData.postValue(true)
+                SendEvmTransactionService.SendState.Sending -> {
+                    sendEnabledLiveData.postValue(false)
+                    sendingLiveData.postValue(Unit)
+                }
                 is SendEvmTransactionService.SendState.Sent -> sendSuccessLiveData.postValue(sendState.transactionHash)
                 is SendEvmTransactionService.SendState.Failed -> sendFailedLiveData.postValue(convertError(sendState.error))
             }
