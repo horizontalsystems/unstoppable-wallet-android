@@ -51,8 +51,8 @@ class WalletConnectSendEthereumTransactionRequestFragment : BaseFragment() {
             btnApprove.isEnabled = enabled
         })
 
-        sendViewModel.sendingLiveData.observe(viewLifecycleOwner, { sending ->
-            btnReject.isEnabled = !sending
+        sendViewModel.sendingLiveData.observe(viewLifecycleOwner, {
+            btnReject.isEnabled = false
         })
 
         sendViewModel.sendSuccessLiveData.observe(viewLifecycleOwner, { transactionHash ->

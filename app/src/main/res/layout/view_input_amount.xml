@@ -49,6 +49,7 @@
         android:hint="@string/Send_Hint_Amount"
         android:inputType="number|numberDecimal"
         android:maxLines="1"
+        android:saveEnabled="false"
         android:textColor="?attr/TextColorBarsToDark"
         android:textColorHint="@color/grey_50"
         app:layout_constraintBottom_toTopOf="@+id/amountDivider"
