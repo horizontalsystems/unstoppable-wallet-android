@@ -6,10 +6,6 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.savedstate.SavedStateRegistryOwner
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.ethereum.CoinService
-import io.horizontalsystems.bankwallet.core.ethereum.EthereumFeeViewModel
-import io.horizontalsystems.bankwallet.core.ethereum.EvmTransactionService
-import io.horizontalsystems.bankwallet.core.factories.FeeRateProviderFactory
 import io.horizontalsystems.bankwallet.core.fiat.AmountTypeSwitchService
 import io.horizontalsystems.bankwallet.core.fiat.FiatService
 import io.horizontalsystems.bankwallet.core.providers.StringProvider
@@ -21,11 +17,24 @@ import io.horizontalsystems.bankwallet.modules.swap.providers.UniswapProvider
 import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.ethereumkit.core.EthereumKit
+import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.uniswapkit.UniswapKit
 import kotlinx.android.parcel.Parcelize
 import java.math.BigDecimal
+import java.math.BigInteger
 
 object SwapModule {
+
+    const val transactionDataKey = "transactionData"
+
+    @Parcelize
+    data class TransactionDataParcelable(
+            val toAddress: String,
+            val value: BigInteger,
+            val input: ByteArray
+    ) : Parcelable {
+        constructor(transactionData: TransactionData) : this(transactionData.to.hex, transactionData.value, transactionData.input)
+    }
 
     @Parcelize
     data class CoinBalanceItem(
@@ -69,9 +78,6 @@ object SwapModule {
 
         private val evmKit: EthereumKit by lazy { dex.evmKit!! }
         private val uniswapKit by lazy { UniswapKit.getInstance(evmKit) }
-        private val feeRateProvider by lazy { FeeRateProviderFactory.provider(dex.coin)!! }
-        private val transactionService by lazy { EvmTransactionService(evmKit, feeRateProvider, 20) }
-        private val coinService by lazy { CoinService(dex.coin, App.currencyManager, App.xRateManager) }
         private val uniswapProvider by lazy { UniswapProvider(uniswapKit) }
         private val allowanceService by lazy { SwapAllowanceService(uniswapProvider.routerAddress, App.adapterManager, evmKit) }
         private val pendingAllowanceService by lazy { SwapPendingAllowanceService(App.adapterManager, allowanceService) }
@@ -130,9 +136,6 @@ object SwapModule {
                 }
                 SwapAllowanceViewModel::class.java -> {
                     SwapAllowanceViewModel(service, allowanceService, pendingAllowanceService, formatter, stringProvider) as T
-                }
-                EthereumFeeViewModel::class.java -> {
-                    EthereumFeeViewModel(transactionService, coinService, stringProvider) as T
                 }
                 else -> throw IllegalArgumentException()
             }

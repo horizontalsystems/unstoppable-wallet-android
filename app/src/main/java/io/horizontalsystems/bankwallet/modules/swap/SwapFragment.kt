@@ -13,10 +13,10 @@ import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.ethereum.EthereumFeeViewModel
+import io.horizontalsystems.bankwallet.modules.swap.SwapModule.transactionDataKey
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceViewModel
 import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveFragment
 import io.horizontalsystems.bankwallet.modules.swap.coincard.SwapCoinCardViewModel
-import io.horizontalsystems.bankwallet.modules.swap.confirmation.SwapConfirmationModule
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.getNavigationResult
 import io.horizontalsystems.core.setOnSingleClickListener
@@ -27,7 +27,6 @@ class SwapFragment : BaseFragment() {
     private val vmFactory by lazy { SwapModule.Factory(this, requireArguments().getParcelable(fromCoinKey)!!) }
     private val viewModel by navGraphViewModels<SwapViewModel>(R.id.swapFragment) { vmFactory }
     private val allowanceViewModel by navGraphViewModels<SwapAllowanceViewModel>(R.id.swapFragment) { vmFactory }
-    private val feeViewModel by navGraphViewModels<EthereumFeeViewModel>(R.id.swapFragment) { vmFactory }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.fragment_swap, container, false)
@@ -116,8 +115,8 @@ class SwapFragment : BaseFragment() {
         })
 
         viewModel.openConfirmationLiveEvent().observe(viewLifecycleOwner, { transactionData ->
-            val transactionDataParcelable = SwapConfirmationModule.TransactionDataParcelable(transactionData)
-            val arguments = bundleOf(SwapConfirmationModule.transactionDataKey to transactionDataParcelable)
+            val transactionDataParcelable = SwapModule.TransactionDataParcelable(transactionData)
+            val arguments = bundleOf(transactionDataKey to transactionDataParcelable)
             findNavController().navigate(R.id.swapFragment_to_swapConfirmationFragment, arguments, navOptions())
         })
     }
