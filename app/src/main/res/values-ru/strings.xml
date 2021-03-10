@@ -24,9 +24,11 @@
     <string name="Button_Start">Start</string>
     <string name="Button_Create">Create</string>
     <string name="Button_Restore">Restore</string>
+    <string name="Button_Reset">Reset</string>
     <string name="Error">Ошибка</string>
     <string name="NotAvailable">Нет данных</string>
     <string name="None">None</string>
+    <string name="Any">Any</string>
     <string name="Wallet">%s Кошелек</string>
     <!--Intro-->
     <string name="Intro_Wallet_Description">Храните и торгуйте криптовалютой. Полностью контролируйте свои активы. Оставайтесь анонимными.</string>
@@ -73,6 +75,8 @@
     <string name="Market_Field_PriceDiff">Price</string>
     <string name="Market_Title">Markets</string>
     <string name="Market_Search">Search</string>
+    <string name="Market_FilterSection_MarketParameters">MARKET PARAMETERS</string>
+    <string name="Market_FilterSection_PriceParameters">PRICE PARAMETERS</string>
     <string name="Market_Field_HighestCap">Highest Cap</string>
     <string name="Market_Field_LowestCap">Lowest Cap</string>
     <string name="Market_Field_HighestVolume">Highest Volume</string>
