@@ -22,13 +22,12 @@ data class ChartPointViewItem(
         val macdInfo: MacdInfo?
 )
 
-data class MarketInfoViewItem(
+data class CoinDetailsViewItem(
         val currency: Currency,
         val rateValue: BigDecimal,
         val marketCap: BigDecimal,
         val circulatingSupply: CoinModule.CoinCodeWithValue,
         val totalSupply: CoinModule.CoinCodeWithValue,
-        val timestamp: Long,
         val rateHigh24h: BigDecimal,
         val rateLow24h: BigDecimal,
         val volume24h: BigDecimal,
@@ -37,9 +36,14 @@ data class MarketInfoViewItem(
         val rateDiffs: Map<TimePeriod, Map<String, BigDecimal>>
 )
 
+data class LastPoint(
+        val rate: BigDecimal,
+        val timestamp: Long
+)
+
 class RateChartViewFactory {
-    fun createChartInfo(type: ChartType, chartInfo: ChartInfo, marketInfo: MarketInfo?): ChartInfoViewItem {
-        val chartData = createChartData(chartInfo, marketInfo)
+    fun createChartInfo(type: ChartType, chartInfo: ChartInfo, lastPoint: LastPoint?): ChartInfoViewItem {
+        val chartData = createChartData(chartInfo, lastPoint)
         val chartType = when (type) {
             ChartType.TODAY -> ChartView.ChartType.TODAY
             ChartType.DAILY -> ChartView.ChartType.DAILY
@@ -55,28 +59,15 @@ class RateChartViewFactory {
         return ChartInfoViewItem(chartData, chartType, chartData.diff())
     }
 
-    fun createMarketInfo(marketInfo: MarketInfo, coinMarket: CoinMarketDetails, currency: Currency, coinCode: String): MarketInfoViewItem {
-        val rateHigh24h = if (marketInfo.rate > coinMarket.rateHigh24h) {
-            marketInfo.rate
-        } else {
-            coinMarket.rateHigh24h
-        }
-
-        val rateLow24h = if (marketInfo.rate < coinMarket.rateLow24h) {
-            marketInfo.rate
-        } else {
-            coinMarket.rateLow24h
-        }
-
-        return MarketInfoViewItem(
+    fun createCoinDetailsViewItem(coinMarket: CoinMarketDetails, currency: Currency, coinCode: String): CoinDetailsViewItem {
+        return CoinDetailsViewItem(
             currency = currency,
-            rateValue = marketInfo.rate,
+            rateValue = coinMarket.rate,
             marketCap = coinMarket.marketCap,
             circulatingSupply = CoinModule.CoinCodeWithValue(coinCode, coinMarket.circulatingSupply),
             totalSupply = CoinModule.CoinCodeWithValue(coinCode, coinMarket.totalSupply),
-            timestamp = marketInfo.timestamp,
-            rateHigh24h = rateHigh24h,
-            rateLow24h = rateLow24h,
+            rateHigh24h = coinMarket.rateHigh24h,
+            rateLow24h = coinMarket.rateLow24h,
             volume24h = coinMarket.volume24h,
             marketCapDiff24h = coinMarket.marketCapDiff24h,
             coinMeta = coinMarket.meta,
@@ -84,16 +75,14 @@ class RateChartViewFactory {
         )
     }
 
-    private fun createChartData(chartInfo: ChartInfo, marketInfo: MarketInfo?): ChartData {
+    private fun createChartData(chartInfo: ChartInfo, lastPoint: LastPoint?): ChartData {
         val points = chartInfo.points.map { ChartPoint(it.value.toFloat(), it.volume?.toFloat(), it.timestamp) }.toMutableList()
-        val lastPoint = chartInfo.points.lastOrNull()
-
+        val chartInfoLastPoint = chartInfo.points.lastOrNull()
         var endTimestamp = chartInfo.endTimestamp
-        val lastPointTimestamp = lastPoint?.timestamp
 
-        if (marketInfo != null && lastPointTimestamp != null && marketInfo.timestamp > lastPointTimestamp) {
-            endTimestamp = max(marketInfo.timestamp, endTimestamp)
-            points.add(ChartPoint(marketInfo.rate.toFloat(), null, marketInfo.timestamp))
+        if (lastPoint != null && chartInfoLastPoint?.timestamp != null && lastPoint.timestamp > chartInfoLastPoint.timestamp) {
+            endTimestamp = max(lastPoint.timestamp, endTimestamp)
+            points.add(ChartPoint(lastPoint.rate.toFloat(), null, lastPoint.timestamp))
         }
 
         return ChartDataFactory.build(points, chartInfo.startTimestamp, endTimestamp, chartInfo.isExpired)
