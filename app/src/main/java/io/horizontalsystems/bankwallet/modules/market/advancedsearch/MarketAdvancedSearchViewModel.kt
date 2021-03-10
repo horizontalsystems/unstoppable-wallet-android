@@ -26,7 +26,7 @@ class MarketAdvancedSearchViewModel(
     val periodViewItemOptions = TimePeriod.values().map {
         ViewItemWrapper(App.instance.getString(it.titleResId), it, R.color.leah)
     }
-    val priceChangeViewItemOptions = listOf(ViewItemWrapper.getNone<PriceChange>()) + PriceChange.values().map {
+    val priceChangeViewItemOptions = listOf(ViewItemWrapper.getAny<PriceChange>()) + PriceChange.values().map {
         ViewItemWrapper<PriceChange?>(App.instance.getString(it.titleResId), it, it.colorResId)
     }
 
@@ -66,7 +66,7 @@ class MarketAdvancedSearchViewModel(
 
             service.filterPeriod = value.item.xRatesKitTimePeriod
         }
-    var priceChangeViewItem: ViewItemWrapper<PriceChange?> = ViewItemWrapper.getNone()
+    var priceChangeViewItem: ViewItemWrapper<PriceChange?> = ViewItemWrapper.getAny()
         set(value) {
             field = value
             priceChangeViewItemLiveData.postValue(value)
@@ -104,11 +104,11 @@ class MarketAdvancedSearchViewModel(
 
     fun reset() {
         coinListViewItem = ViewItemWrapper(App.instance.getString(CoinList.Top250.titleResId), CoinList.Top250, R.color.leah)
-        marketCapViewItem = ViewItemWrapper.getNone()
-        volumeViewItem = ViewItemWrapper.getNone()
-        liquidityViewItem = ViewItemWrapper.getNone()
+        marketCapViewItem = ViewItemWrapper.getAny()
+        volumeViewItem = ViewItemWrapper.getAny()
+        liquidityViewItem = ViewItemWrapper.getAny()
         periodViewItem = ViewItemWrapper(App.instance.getString(TimePeriod.TimePeriod_1D.titleResId), TimePeriod.TimePeriod_1D, R.color.leah)
-        priceChangeViewItem = ViewItemWrapper.getNone()
+        priceChangeViewItem = ViewItemWrapper.getAny()
     }
 
     override fun onCleared() {
@@ -122,7 +122,7 @@ class MarketAdvancedSearchViewModel(
     }
 }
 
-val rangeEmpty = ViewItemWrapper.getNone<Range>()
+val rangeEmpty = ViewItemWrapper.getAny<Range>()
 val ranges = listOf(rangeEmpty) + Range.values().map {
     ViewItemWrapper<Range?>(App.instance.getString(it.titleResId), it, R.color.leah)
 }

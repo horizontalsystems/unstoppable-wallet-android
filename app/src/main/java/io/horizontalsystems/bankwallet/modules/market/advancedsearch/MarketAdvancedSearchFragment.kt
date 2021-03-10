@@ -27,10 +27,13 @@ class MarketAdvancedSearchFragment : BaseFragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        toolbar.setNavigationOnClickListener {
+            findNavController().popBackStack()
+        }
         toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
-                R.id.menuClose -> {
-                    findNavController().popBackStack()
+                R.id.menuReset -> {
+                    marketAdvancedSearchViewModel.reset()
                     true
                 }
                 else -> false
@@ -85,22 +88,6 @@ class MarketAdvancedSearchFragment : BaseFragment() {
             }
         }
 
-        marketAdvancedSearchViewModel.liquidityViewItemLiveData.observe(viewLifecycleOwner) {
-            filterLiquidity.setValueColored(it.title, it.color)
-        }
-        filterLiquidity.setOnSingleClickListener {
-            showSelectorDialog(
-                    title = R.string.Market_Filter_Liquidity,
-                    subtitleText = getString(R.string.TimePeriod_24h),
-                    headerIcon = R.drawable.ic_circle_check_24,
-                    items = marketAdvancedSearchViewModel.liquidityViewItemOptions,
-                    selectedItem = marketAdvancedSearchViewModel.liquidityViewItem,
-                    itemViewHolderFactory = SelectorItemViewHolderFactory()
-            ) {
-                marketAdvancedSearchViewModel.liquidityViewItem = it
-            }
-        }
-
         marketAdvancedSearchViewModel.periodViewItemLiveData.observe(viewLifecycleOwner) {
             filterPeriod.setValueColored(it.title, it.color)
         }
@@ -131,10 +118,6 @@ class MarketAdvancedSearchFragment : BaseFragment() {
             ) {
                 marketAdvancedSearchViewModel.priceChangeViewItem = it
             }
-        }
-
-        reset.setOnSingleClickListener {
-            marketAdvancedSearchViewModel.reset()
         }
 
         submit.setOnSingleClickListener {
