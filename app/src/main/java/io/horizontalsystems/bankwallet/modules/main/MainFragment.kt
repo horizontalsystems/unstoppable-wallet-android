@@ -87,10 +87,11 @@ class MainFragment : Fragment(), RateAppDialogFragment.Listener {
         })
 
         activity?.onBackPressedDispatcher?.addCallback(this) {
-            when  {
-                findNavController().currentDestination?.id == R.id.mainFragment && viewPager.currentItem == 0 -> activity?.finish()
-                findNavController().currentDestination?.id == R.id.mainFragment  -> viewPager.setCurrentItem(0, false)
-                else -> findNavController().popBackStack()
+            if (findNavController().currentDestination?.id == R.id.mainFragment) {
+                when (bottomNavigation.selectedItemId) {
+                    R.id.navigation_market -> activity?.finish()
+                    else -> bottomNavigation.selectedItemId = R.id.navigation_market
+                }
             }
         }
     }
