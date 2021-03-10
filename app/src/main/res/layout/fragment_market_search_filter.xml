@@ -12,13 +12,15 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        app:menu="@menu/swap_approve_menu"
+        app:menu="@menu/market_advanced_search_menu"
+        app:navigationIcon="@drawable/ic_back"
         app:title="@string/Market_AdvancedSearch"
         app:titleTextAppearance="@style/Title3" />
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -36,16 +38,26 @@
                 app:title="@string/Market_Filter_ChooseSet"
                 tools:value="@string/Market_Filter_Top_100" />
 
+            <TextView
+                style="@style/Subhead1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="38dp"
+                android:layout_marginEnd="16dp"
+                android:text="@string/Market_FilterSection_MarketParameters"
+                android:textColor="@color/grey" />
+
             <io.horizontalsystems.bankwallet.ui.extensions.MarketFilterView
                 android:id="@+id/filterMarketCap"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="7dp"
                 android:layout_marginEnd="16dp"
                 android:background="@drawable/rounded_lawrence_background_top"
                 app:title="@string/Market_Filter_MarketCap"
-                app:value="@string/None" />
+                app:value="@string/Any" />
 
             <io.horizontalsystems.bankwallet.ui.extensions.MarketFilterView
                 android:id="@+id/filterVolume"
@@ -55,28 +67,16 @@
                 android:layout_marginEnd="16dp"
                 android:background="@drawable/rounded_lawrence_background_bottom"
                 app:title="@string/Market_Filter_Volume"
-                app:value="@string/None" />
-
-            <io.horizontalsystems.bankwallet.ui.extensions.MarketFilterView
-                android:id="@+id/filterLiquidity"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="32dp"
-                android:layout_marginEnd="16dp"
-                android:background="@drawable/rounded_lawrence_background_single"
-                app:title="@string/Market_Filter_Liquidity"
-                app:value="@string/None" />
+                app:value="@string/Any" />
 
             <TextView
-                style="@style/Subhead2"
+                style="@style/Subhead1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:layout_marginEnd="24dp"
-                android:paddingTop="12dp"
-                android:paddingBottom="12dp"
-                android:text="@string/Market_Filter_LiquidityHint"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="38dp"
+                android:layout_marginEnd="16dp"
+                android:text="@string/Market_FilterSection_PriceParameters"
                 android:textColor="@color/grey" />
 
             <io.horizontalsystems.bankwallet.ui.extensions.MarketFilterView
@@ -84,11 +84,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="7dp"
                 android:layout_marginEnd="16dp"
                 android:background="@drawable/rounded_lawrence_background_top"
                 app:title="@string/Market_Filter_PriceChange"
-                app:value="@string/None" />
+                app:value="@string/Any" />
 
             <io.horizontalsystems.bankwallet.ui.extensions.MarketFilterView
                 android:id="@+id/filterPeriod"
@@ -98,38 +98,20 @@
                 android:layout_marginEnd="16dp"
                 android:background="@drawable/rounded_lawrence_background_bottom"
                 app:title="@string/Market_Filter_PricePeriod"
-                app:value="@string/None" />
-
-            <Button
-                android:id="@+id/reset"
-                style="@style/Body"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="32dp"
-                android:layout_marginEnd="16dp"
-                android:background="@drawable/rounded_lawrence_background_single"
-                android:drawableEnd="@drawable/ic_delete_20"
-                android:drawableTint="@color/grey"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:text="@string/Market_Filter_ResetAll"
-                android:textAlignment="textStart"
-                android:textColor="@color/lucian" />
-
-            <Button
-                android:id="@+id/submit"
-                style="@style/ButtonPrimaryYellow"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="32dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="32dp"
-                android:text="@string/Market_Filter_ShowResults" />
+                app:value="@string/Any" />
 
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
+
+    <Button
+        android:id="@+id/submit"
+        style="@style/ButtonPrimaryYellow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="32dp"
+        android:text="@string/Market_Filter_ShowResults" />
 
 </LinearLayout>
