@@ -9,7 +9,7 @@ import io.horizontalsystems.core.ICurrencyManager
 import java.math.BigDecimal
 import java.math.BigInteger
 
-class CoinService(
+class EvmCoinService(
         val coin: Coin,
         private val currencyManager: ICurrencyManager,
         private val xRateManager: IRateManager
