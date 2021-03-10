@@ -81,17 +81,25 @@ class MarketAdvancedSearchViewModel(
     val liquidityViewItemLiveData = MutableLiveData(liquidityViewItem)
     val periodViewItemLiveData = MutableLiveData(periodViewItem)
     val priceChangeViewItemLiveData = MutableLiveData(priceChangeViewItem)
-    val numberOfItemsLiveData = MutableLiveData<Int?>()
+    val showResultsTitleLiveData = MutableLiveData<String>()
     val showResultsEnabledLiveData = MutableLiveData(false)
     val errorLiveEvent = SingleLiveEvent<String>()
+    val loadingLiveData = MutableLiveData(false)
 
     val disposable = CompositeDisposable()
 
     init {
         service.numberOfItemsAsync
                 .subscribe {
+                    val title = when (it) {
+                        is DataState.Success -> App.instance.localizedContext().getString(R.string.Market_Filter_ShowResults_Counter, it.data)
+                        is DataState.Error -> App.instance.localizedContext().getString(R.string.Market_Filter_ShowResults)
+                        is DataState.Loading -> ""
+                    }
+                    showResultsTitleLiveData.postValue(title)
+
                     showResultsEnabledLiveData.postValue(it is DataState.Success && it.data > 0)
-                    numberOfItemsLiveData.postValue(it.dataOrNull)
+                    loadingLiveData.postValue(it is DataState.Loading)
 
                     it.errorOrNull?.let {
                         errorLiveEvent.postValue(convertErrorMessage(it))
