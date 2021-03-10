@@ -78,32 +78,8 @@
                     tools:text="You already have an allowance for this amount" />
             </LinearLayout>
 
-            <io.horizontalsystems.bankwallet.ui.FeeSelectorView
-                android:id="@+id/feeSelectorView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/amountWrapper" />
-
-            <TextView
-                android:id="@+id/error"
-                style="@style/Subhead2"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginEnd="16dp"
-                android:textColor="@color/lucian"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/feeSelectorView"
-                tools:text="Transaction requires 0.05830928 ETH | $30.83 for sending" />
-
             <Button
-                android:id="@+id/btnApprove"
+                android:id="@+id/btnProceed"
                 style="@style/ButtonPrimaryYellow"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -111,10 +87,10 @@
                 android:layout_marginTop="28dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
-                android:text="@string/Button_Approve"
+                android:text="@string/Swap_Proceed"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/error" />
+                app:layout_constraintTop_toBottomOf="@+id/amountWrapper" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
