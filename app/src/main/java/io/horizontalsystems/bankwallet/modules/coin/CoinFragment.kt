@@ -10,15 +10,14 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.activity.addCallback
 import androidx.constraintlayout.widget.ConstraintLayout.LayoutParams
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.tabs.TabLayout
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
@@ -48,8 +47,20 @@ import java.math.BigDecimal
 import java.util.*
 
 class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedListener {
-    private lateinit var presenter: CoinPresenter
-    private lateinit var presenterView: CoinView
+
+    private val title by lazy {
+        requireArguments().getString(COIN_TITLE_KEY) ?: ""
+    }
+    private val vmFactory by lazy {
+        CoinModule.Factory(
+                title,
+                requireArguments().getParcelable(COIN_TYPE_KEY)!!,
+                requireArguments().getString(COIN_CODE_KEY)!!,
+                requireArguments().getString(COIN_ID_KEY)
+        )
+    }
+
+    private val viewModel by viewModels<CoinViewModel> { vmFactory }
 
     private val formatter = App.numberFormatter
     private var notificationMenuItem: MenuItem? = null
@@ -72,39 +83,22 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val coinId = arguments?.getString(COIN_ID_KEY)
-
-        val coinType = arguments?.getParcelable<CoinType>(COIN_TYPE_KEY) ?: run {
-            findNavController().popBackStack()
-            return
-        }
-
-        val coinCode = arguments?.getString(COIN_CODE_KEY) ?: run {
-            findNavController().popBackStack()
-            return
-        }
-
-        val coinTitle = arguments?.getString(COIN_TITLE_KEY) ?: ""
-
-        presenter = ViewModelProvider(this, CoinModule.Factory(coinTitle, coinType, coinCode, coinId)).get(CoinPresenter::class.java)
-        presenterView = presenter.view as CoinView
-
-        toolbar.title = coinTitle
+        toolbar.title = title
         toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }
         toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.menuFavorite -> {
-                    presenter.onFavoriteClick()
+                    viewModel.onFavoriteClick()
                     true
                 }
                 R.id.menuUnfavorite -> {
-                    presenter.onUnfavoriteClick()
+                    viewModel.onUnfavoriteClick()
                     true
                 }
                 R.id.menuNotification -> {
-                    presenter.onNotificationClick()
+                    viewModel.onNotificationClick()
                     true
                 }
                 else -> false
@@ -114,7 +108,7 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
         updateNotificationMenuItem()
 
         chart.setListener(this)
-        chart.rateFormatter = presenter.rateFormatter
+        chart.rateFormatter = viewModel.rateFormatter
 
         observeData()
         bindActions()
@@ -123,24 +117,13 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
             findNavController().popBackStack()
         }
 
-        aboutTextToggle.setOnClickListener {
-            if (aboutText.maxLines == Integer.MAX_VALUE) {
-                aboutText.maxLines = 8
-                aboutTextToggle.text = "Read More"
-            } else {
-                aboutText.maxLines = Integer.MAX_VALUE
-                aboutTextToggle.text = "Read Less"
-            }
-        }
-
-        presenter.viewDidLoad()
     }
 
     private fun updateNotificationMenuItem() {
         notificationMenuItem?.apply {
-            isVisible = presenter.notificationIconVisible
+            isVisible = viewModel.notificationIconVisible
             icon = context?.let {
-                val iconRes = if (presenter.notificationIconActive) R.drawable.ic_notification_24 else R.drawable.ic_notification_disabled
+                val iconRes = if (viewModel.notificationIconActive) R.drawable.ic_notification_24 else R.drawable.ic_notification_disabled
                 ContextCompat.getDrawable(it, iconRes)
             }
         }
@@ -163,13 +146,13 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
     }
 
     override fun onTouchSelect(point: PointInfo) {
-        presenter.onTouchSelect(point)
+        viewModel.onTouchSelect(point)
     }
 
     //  TabLayout.OnTabSelectedListener
 
     override fun onTabSelected(tab: TabLayout.Tab) {
-        presenter.onSelect(actions[tab.position].first)
+        viewModel.onSelect(actions[tab.position].first)
     }
 
     override fun onTabUnselected(tab: TabLayout.Tab) {
@@ -181,7 +164,7 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
     //  Private
 
     private fun observeData() {
-        presenterView.chartSpinner.observe(viewLifecycleOwner, Observer { isLoading ->
+        viewModel.chartSpinner.observe(viewLifecycleOwner, Observer { isLoading ->
             if (isLoading) {
                 chart.showSinner()
             } else {
@@ -189,11 +172,11 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
             }
         })
 
-        presenterView.marketSpinner.observe(viewLifecycleOwner, Observer { isLoading ->
+        viewModel.marketSpinner.observe(viewLifecycleOwner, Observer { isLoading ->
             marketSpinner.isVisible = isLoading
         })
 
-        presenterView.setDefaultMode.observe(viewLifecycleOwner, Observer { type ->
+        viewModel.setDefaultMode.observe(viewLifecycleOwner, Observer { type ->
             val indexOf = actions.indexOfFirst { it.first == type }
             if (indexOf > -1) {
                 tabLayout.removeOnTabSelectedListener(this)
@@ -202,7 +185,7 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
             }
         })
 
-        presenterView.showChartInfo.observe(viewLifecycleOwner, Observer { item ->
+        viewModel.showChartInfo.observe(viewLifecycleOwner, Observer { item ->
             chart.showChart()
             setViewVisibility(indicatorEMA, indicatorMACD, indicatorRSI, isVisible = true)
 
@@ -213,7 +196,7 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
             coinRateDiff.diff = item.diffValue
         })
 
-        presenterView.showMarketInfo.observe(viewLifecycleOwner, Observer { item ->
+        viewModel.coinDetailsLiveData.observe(viewLifecycleOwner, Observer { item ->
             marketDetails.isVisible = true
 
             coinRateLast.text = formatter.formatFiat(item.rateValue, item.currency.symbol, 2, 4)
@@ -249,9 +232,6 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
                 }
             }
 
-            // Rating
-            ratingDetails.isVisible = !item.coinMeta.rating.isNullOrBlank()
-
             // Price
             priceRangeMin.text = formatter.formatFiat(item.rateLow24h, item.currency.symbol, 2, 4)
             priceRangeMax.text = formatter.formatFiat(item.rateHigh24h, item.currency.symbol, 2, 4)
@@ -265,20 +245,20 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
             // Performance
 
             item.rateDiffs.forEach { (period, values) ->
-                val usdValue = values["USD"] ?: BigDecimal.ZERO
+                val bigValue = values["USD"] ?: BigDecimal.ZERO
                 val ethValue = values["ETH"] ?: BigDecimal.ZERO
                 val btcValue = values["BTC"] ?: BigDecimal.ZERO
 
                 when (period) {
                     TimePeriod.DAY_7 -> {
-                        setColoredPercentageValue(usd1WPercent, usdValue)
-                        setColoredPercentageValue(eth1WPercent, ethValue)
-                        setColoredPercentageValue(btc1WPercent, btcValue)
+                        usd1WPercent.text = formatter.format(bigValue, 0, 2, suffix = "%")
+                        eth1WPercent.text = formatter.format(ethValue, 0, 2, suffix = "%")
+                        btc1WPercent.text = formatter.format(btcValue, 0, 2, suffix = "%")
                     }
                     TimePeriod.DAY_30 -> {
-                        setColoredPercentageValue(usd1MPercent, usdValue)
-                        setColoredPercentageValue(eth1MPercent, ethValue)
-                        setColoredPercentageValue(btc1MPercent, btcValue)
+                        usd1MPercent.text = formatter.format(bigValue, 0, 2, suffix = "%")
+                        eth1MPercent.text = formatter.format(ethValue, 0, 2, suffix = "%")
+                        btc1MPercent.text = formatter.format(btcValue, 0, 2, suffix = "%")
                     }
                 }
             }
@@ -382,7 +362,7 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
             }
         })
 
-        presenterView.setSelectedPoint.observe(viewLifecycleOwner, Observer { item ->
+        viewModel.setSelectedPoint.observe(viewLifecycleOwner, Observer { item ->
             pointInfoVolume.isInvisible = true
             pointInfoVolumeTitle.isInvisible = true
 
@@ -416,16 +396,16 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
             }
         })
 
-        presenterView.showError.observe(viewLifecycleOwner, Observer {
+        viewModel.showChartError.observe(viewLifecycleOwner, Observer {
             chart.showError(getString(R.string.Charts_Error_NotAvailable))
         })
 
-        presenterView.showEma.observe(viewLifecycleOwner, Observer { enabled ->
+        viewModel.showEma.observe(viewLifecycleOwner, Observer { enabled ->
             chart.showEma(enabled)
             indicatorEMA.isChecked = enabled
         })
 
-        presenterView.showMacd.observe(viewLifecycleOwner, Observer { enabled ->
+        viewModel.showMacd.observe(viewLifecycleOwner, Observer { enabled ->
             chart.showMacd(enabled)
             indicatorMACD.isChecked = enabled
 
@@ -433,31 +413,23 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
             setViewVisibility(macdSignal, macdHistogram, macdValue, isVisible = enabled)
         })
 
-        presenterView.showRsi.observe(viewLifecycleOwner, Observer { enabled ->
+        viewModel.showRsi.observe(viewLifecycleOwner, Observer { enabled ->
             chart.showRsi(enabled)
             indicatorRSI.isChecked = enabled
         })
 
-        presenterView.alertNotificationUpdated.observe(viewLifecycleOwner, Observer {
+        viewModel.alertNotificationUpdated.observe(viewLifecycleOwner, Observer {
             updateNotificationMenuItem()
         })
 
-        presenterView.showNotificationMenu.observe(viewLifecycleOwner, Observer { (coinId, coinName) ->
+        viewModel.showNotificationMenu.observe(viewLifecycleOwner, Observer { (coinId, coinName) ->
             BottomNotificationMenu.show(childFragmentManager, NotificationMenuMode.All, coinName, coinId)
         })
 
-        presenterView.isFavorite.observe(viewLifecycleOwner, Observer {
+        viewModel.isFavorite.observe(viewLifecycleOwner, Observer {
             toolbar.menu.findItem(R.id.menuFavorite).isVisible = !it
             toolbar.menu.findItem(R.id.menuUnfavorite).isVisible = it
         })
-    }
-
-    private fun setColoredPercentageValue(textView: TextView, percentage: BigDecimal) {
-        val color = if (percentage >= BigDecimal.ZERO) R.color.remus else R.color.lucian
-        val sign = if (percentage >= BigDecimal.ZERO) "+" else "-"
-
-        textView.setTextColor(requireContext().getColor(color))
-        textView.text = formatter.format(percentage.abs(), 0, 2, prefix = sign, suffix = "%")
     }
 
     private fun moveMarker(markerView: ImageView, price: Float, low: Float, high: Float) {
@@ -498,15 +470,15 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
         tabLayout.addOnTabSelectedListener(this)
 
         indicatorEMA.setOnClickListener {
-            presenter.toggleEma()
+            viewModel.toggleEma()
         }
 
         indicatorMACD.setOnClickListener {
-            presenter.toggleMacd()
+            viewModel.toggleMacd()
         }
 
         indicatorRSI.setOnClickListener {
-            presenter.toggleRsi()
+            viewModel.toggleRsi()
         }
     }
 
