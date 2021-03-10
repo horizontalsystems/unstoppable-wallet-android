@@ -8,14 +8,5 @@
     <fragment
         android:id="@+id/lockScreenFragment"
         android:name="io.horizontalsystems.bankwallet.modules.lockscreen.LockScreenFragment"
-        tools:layout="@layout/fragment_lockscreen">
-        <action
-            android:id="@+id/lockScreenFragment_to_rateChartFragment"
-            app:destination="@id/lockScreenRateChartFragment" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/lockScreenRateChartFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.coin.CoinFragment"
-        tools:layout="@layout/fragment_coin" />
+        tools:layout="@layout/fragment_lockscreen"/>
 </navigation>
