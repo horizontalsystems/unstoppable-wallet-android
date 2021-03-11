@@ -453,6 +453,10 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
             toolbar.menu.findItem(R.id.menuFavorite).isVisible = !it
             toolbar.menu.findItem(R.id.menuUnfavorite).isVisible = it
         })
+
+        viewModel.coinMarkets.observe(viewLifecycleOwner, { items ->
+            coinMarketsButton.isVisible = items.isNotEmpty()
+        })
     }
 
     private fun setColoredPercentageValue(textView: TextView, percentage: BigDecimal) {
