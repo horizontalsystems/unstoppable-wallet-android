@@ -28,13 +28,13 @@
         android:layout_marginEnd="10dp"
         android:ellipsize="end"
         android:singleLine="true"
-        android:text="Bitcoin layout constraint Bottom to TopOf"
         android:textColor="@color/oz"
         app:layout_constraintBottom_toTopOf="@id/subtitle"
         app:layout_constraintEnd_toStartOf="@+id/rate"
         app:layout_constraintStart_toEndOf="@+id/icon"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="packed" />
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:text="Bitcoin" />
 
     <TextView
         android:id="@+id/subtitle"
