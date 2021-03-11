@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.coin
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.PriceAlert
@@ -15,7 +16,9 @@ class CoinViewModel(
         val coinCode: String,
         private val coinTitle: String,
         private val coinId: String?,
-        private val factory: RateChartViewFactory)
+        private val factory: RateChartViewFactory,
+        private val clearables: List<Clearable>
+        )
     : ViewModel() {
 
     val chartSpinner = MutableLiveData<Boolean>()
@@ -192,7 +195,7 @@ class CoinViewModel(
     //  ViewModel
 
     override fun onCleared() {
-        service.clear()
         disposable.clear()
+        clearables.forEach(Clearable::clear)
     }
 }

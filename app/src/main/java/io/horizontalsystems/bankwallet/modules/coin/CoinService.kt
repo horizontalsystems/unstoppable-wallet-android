@@ -6,7 +6,6 @@ import io.horizontalsystems.bankwallet.entities.PriceAlert
 import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.xrateskit.entities.*
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -22,7 +21,7 @@ class CoinService(
         private val notificationManager: INotificationManager,
         private val localStorage: ILocalStorage,
         private val marketFavoritesManager: MarketFavoritesManager
-) {
+) : Clearable {
 
     sealed class CoinDetailsState {
         object Loading : CoinDetailsState()
@@ -37,7 +36,7 @@ class CoinService(
 
     var coinMarketDetails: CoinMarketDetails? = null
 
-    var lastPoint: LastPoint? = xRateManager.marketInfo(coinType, currency.code)?.let{ LastPoint(it.rate, it.timestamp) }
+    var lastPoint: LastPoint? = xRateManager.marketInfo(coinType, currency.code)?.let { LastPoint(it.rate, it.timestamp) }
         set(value) {
             field = value
             chartInfoUpdatedObservable.onNext(Unit)
@@ -72,12 +71,11 @@ class CoinService(
             chartTypeStorage.chartType = value
         }
 
+
     fun getCoinDetails(rateDiffCoinCodes: List<String>, rateDiffPeriods: List<TimePeriod>) {
         coinDetailsStateObservable.onNext(CoinDetailsState.Loading)
         xRateManager.coinMarketDetailsAsync(coinType, currency.code, rateDiffCoinCodes, rateDiffPeriods)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ coinMarketDetails ->
+                .subscribeIO({ coinMarketDetails ->
                     this.coinMarketDetails = coinMarketDetails
                     coinDetailsStateObservable.onNext(CoinDetailsState.Loaded)
                 }, {
@@ -91,9 +89,7 @@ class CoinService(
         chartInfo = xRateManager.chartInfo(coinType, currency.code, chartType)
         xRateManager.chartInfoObservable(coinType, currency.code, chartType)
                 .delay(600, TimeUnit.MILLISECONDS)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ chartInfo ->
+                .subscribeIO({ chartInfo ->
                     this.chartInfo = chartInfo
                 }, {
                     chartInfoErrorObservable.onNext(it)
@@ -104,9 +100,7 @@ class CoinService(
 
     fun observeLastPointData() {
         xRateManager.marketInfoObservable(coinType, currency.code)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ marketInfo ->
+                .subscribeIO({ marketInfo ->
                     lastPoint = LastPoint(marketInfo.rate, marketInfo.timestamp)
                 }, {
                     //ignore
@@ -131,7 +125,7 @@ class CoinService(
         marketFavoritesManager.remove(coinType)
     }
 
-    fun clear() {
+    override fun clear() {
         disposables.clear()
         alertNotificationDisposable?.dispose()
     }
