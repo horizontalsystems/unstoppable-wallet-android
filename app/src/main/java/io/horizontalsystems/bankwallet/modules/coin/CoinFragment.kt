@@ -10,6 +10,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.activity.addCallback
 import androidx.constraintlayout.widget.ConstraintLayout.LayoutParams
 import androidx.core.content.ContextCompat
@@ -119,6 +120,17 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
         activity?.onBackPressedDispatcher?.addCallback(this) {
             findNavController().popBackStack()
         }
+
+        aboutTextToggle.setOnClickListener {
+            if (aboutText.maxLines == Integer.MAX_VALUE) {
+                aboutText.maxLines = 8
+                aboutTextToggle.text = "Read More"
+            } else {
+                aboutText.maxLines = Integer.MAX_VALUE
+                aboutTextToggle.text = "Read Less"
+            }
+        }
+
 
     }
 
@@ -235,6 +247,9 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
                 }
             }
 
+            // Rating
+            ratingDetails.isVisible = !item.coinMeta.rating.isNullOrBlank()
+
             // Price
             priceRangeMin.text = formatter.formatFiat(item.rateLow24h, item.currency.symbol, 2, 4)
             priceRangeMax.text = formatter.formatFiat(item.rateHigh24h, item.currency.symbol, 2, 4)
@@ -253,20 +268,20 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
             // Performance
 
             item.rateDiffs.forEach { (period, values) ->
-                val bigValue = values["USD"] ?: BigDecimal.ZERO
+                val usdValue = values["USD"] ?: BigDecimal.ZERO
                 val ethValue = values["ETH"] ?: BigDecimal.ZERO
                 val btcValue = values["BTC"] ?: BigDecimal.ZERO
 
                 when (period) {
                     TimePeriod.DAY_7 -> {
-                        usd1WPercent.text = formatter.format(bigValue, 0, 2, suffix = "%")
-                        eth1WPercent.text = formatter.format(ethValue, 0, 2, suffix = "%")
-                        btc1WPercent.text = formatter.format(btcValue, 0, 2, suffix = "%")
+                        setColoredPercentageValue(usd1WPercent, usdValue)
+                        setColoredPercentageValue(eth1WPercent, ethValue)
+                        setColoredPercentageValue(btc1WPercent, btcValue)
                     }
                     TimePeriod.DAY_30 -> {
-                        usd1MPercent.text = formatter.format(bigValue, 0, 2, suffix = "%")
-                        eth1MPercent.text = formatter.format(ethValue, 0, 2, suffix = "%")
-                        btc1MPercent.text = formatter.format(btcValue, 0, 2, suffix = "%")
+                        setColoredPercentageValue(usd1MPercent, usdValue)
+                        setColoredPercentageValue(eth1MPercent, ethValue)
+                        setColoredPercentageValue(btc1MPercent, btcValue)
                     }
                 }
             }
@@ -438,6 +453,14 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
             toolbar.menu.findItem(R.id.menuFavorite).isVisible = !it
             toolbar.menu.findItem(R.id.menuUnfavorite).isVisible = it
         })
+    }
+
+    private fun setColoredPercentageValue(textView: TextView, percentage: BigDecimal) {
+        val color = if (percentage >= BigDecimal.ZERO) R.color.remus else R.color.lucian
+        val sign = if (percentage >= BigDecimal.ZERO) "+" else "-"
+
+        textView.setTextColor(requireContext().getColor(color))
+        textView.text = formatter.format(percentage.abs(), 0, 2, prefix = sign, suffix = "%")
     }
 
     private fun moveMarker(markerView: ImageView, price: Float, low: Float, high: Float) {
