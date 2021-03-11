@@ -93,13 +93,13 @@
         app:layout_constraintTop_toBottomOf="@id/marketTitle" />
 
     <io.horizontalsystems.views.SettingsView
-        android:id="@+id/btcDetails"
+        android:id="@+id/coinMarketsButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         app:layout_constraintTop_toBottomOf="@id/marketData"
         app:position="single"
-        app:title="@string/Charts_MarketBTC" />
+        app:title="@string/Charts_CoinMarket" />
 
     <View
         android:id="@+id/border6"
@@ -109,7 +109,7 @@
         android:background="@color/steel_20"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btcDetails" />
+        app:layout_constraintTop_toBottomOf="@id/coinMarketsButton" />
 
     <TextView
         android:id="@+id/performanceTitle"

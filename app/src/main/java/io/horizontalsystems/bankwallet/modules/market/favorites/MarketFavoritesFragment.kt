@@ -88,7 +88,7 @@ class MarketFavoritesFragment : BaseFragment(), MarketListHeaderView.Listener, V
     override fun onItemClick(marketViewItem: MarketViewItem) {
         val arguments = CoinFragment.prepareParams(marketViewItem.coinType, marketViewItem.coinCode, marketViewItem.coinName, null)
 
-        findNavController().navigate(R.id.rateChartFragment, arguments, navOptions())
+        findNavController().navigate(R.id.coinFragment, arguments, navOptions())
     }
 
     class EmptyFavoritesViewHolder(containerView: View) : RecyclerView.ViewHolder(containerView) {

@@ -71,7 +71,7 @@ class MarketSearchFragment : BaseFragment() {
     fun onItemClick(coinDataViewItem: CoinDataViewItem) {
         val arguments = CoinFragment.prepareParams(coinDataViewItem.type, coinDataViewItem.code, coinDataViewItem.name, null)
 
-        findNavController().navigate(R.id.rateChartFragment, arguments, navOptions())
+        findNavController().navigate(R.id.coinFragment, arguments, navOptions())
     }
 
     class EmptyResultsViewHolder(view: View) : RecyclerView.ViewHolder(view) {

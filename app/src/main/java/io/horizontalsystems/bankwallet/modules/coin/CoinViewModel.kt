@@ -6,32 +6,32 @@ import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.PriceAlert
 import io.horizontalsystems.chartview.models.PointInfo
-import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.xrateskit.entities.*
 import io.reactivex.disposables.CompositeDisposable
 
 class CoinViewModel(
         val rateFormatter: RateFormatter,
         private val service: CoinService,
-        private val coinCode: String,
+        val coinCode: String,
         private val coinTitle: String,
         private val coinId: String?,
         private val factory: RateChartViewFactory)
     : ViewModel() {
 
-    val chartSpinner = SingleLiveEvent<Boolean>()
-    val marketSpinner = SingleLiveEvent<Boolean>()
-    val setDefaultMode = SingleLiveEvent<ChartType>()
-    val setSelectedPoint = SingleLiveEvent<ChartPointViewItem>()
-    val showChartInfo = SingleLiveEvent<ChartInfoViewItem>()
+    val chartSpinner = MutableLiveData<Boolean>()
+    val marketSpinner = MutableLiveData<Boolean>()
+    val setDefaultMode = MutableLiveData<ChartType>()
+    val setSelectedPoint = MutableLiveData<ChartPointViewItem>()
+    val showChartInfo = MutableLiveData<ChartInfoViewItem>()
     val coinDetailsLiveData = MutableLiveData<CoinDetailsViewItem>()
-    val showChartError = SingleLiveEvent<Unit>()
-    val showEma = SingleLiveEvent<Boolean>()
-    val showMacd = SingleLiveEvent<Boolean>()
-    val showRsi = SingleLiveEvent<Boolean>()
-    val alertNotificationUpdated = SingleLiveEvent<Unit>()
-    val showNotificationMenu = SingleLiveEvent<Pair<String, String>>()
+    val showChartError = MutableLiveData<Unit>()
+    val showEma = MutableLiveData<Boolean>()
+    val showMacd = MutableLiveData<Boolean>()
+    val showRsi = MutableLiveData<Boolean>()
+    val alertNotificationUpdated = MutableLiveData<Unit>()
+    val showNotificationMenu = MutableLiveData<Pair<String, String>>()
     val isFavorite = MutableLiveData<Boolean>()
+    val coinMarkets = MutableLiveData<List<MarketTickerViewItem>>()
 
     var notificationIconVisible = coinId != null && service.notificationsAreEnabled
     var notificationIconActive = false
@@ -86,10 +86,6 @@ class CoinViewModel(
                 .let {
                     disposable.add(it)
                 }
-    }
-
-    private fun onChartError(error: Throwable?) {
-        showChartError.call()
     }
 
     fun onSelect(type: ChartType) {
@@ -153,6 +149,10 @@ class CoinViewModel(
         showRsi.postValue(rsiIsEnabled)
     }
 
+    private fun onChartError(error: Throwable?) {
+        showChartError.postValue(Unit)
+    }
+
     private fun fetchChartInfo() {
         chartSpinner.postValue(true)
         service.observeLastPointData()
@@ -162,7 +162,7 @@ class CoinViewModel(
     private fun syncCoinDetailsState(state: CoinService.CoinDetailsState) {
         marketSpinner.postValue(state is CoinService.CoinDetailsState.Loading)
         if (state is CoinService.CoinDetailsState.Loaded) {
-            updateCoinDetails(state.coinDetails)
+            updateCoinDetails()
         }
     }
 
@@ -170,15 +170,17 @@ class CoinViewModel(
         val coinId = coinId ?: return
         val priceAlert = service.getPriceAlert(coinId)
         notificationIconActive = priceAlert.changeState != PriceAlert.ChangeState.OFF || priceAlert.trendState != PriceAlert.TrendState.OFF
-        alertNotificationUpdated.call()
+        alertNotificationUpdated.postValue(Unit)
     }
 
     private fun updateFavoriteNotificationItemState() {
         isFavorite.postValue(service.isCoinFavorite())
     }
 
-    private fun updateCoinDetails(coinDetails: CoinMarketDetails) {
+    private fun updateCoinDetails() {
+        val coinDetails = service.coinMarketDetails ?: return
         coinDetailsLiveData.postValue(factory.createCoinDetailsViewItem(coinDetails, service.currency, coinCode))
+        coinMarkets.postValue(factory.createCoinMarketItems(coinDetails))
     }
 
     private fun updateChartInfo() {

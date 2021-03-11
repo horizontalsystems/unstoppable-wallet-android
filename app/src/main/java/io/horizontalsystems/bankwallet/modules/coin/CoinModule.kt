@@ -15,10 +15,25 @@ object CoinModule {
             val currency = App.currencyManager.baseCurrency
             val rateFormatter = RateFormatter(currency)
             val coinService = CoinService(coinType, currency, App.xRateManager, App.chartTypeStorage, App.priceAlertManager, App.notificationManager, App.localStorage, App.marketFavoritesManager)
-            return CoinViewModel(rateFormatter, coinService, coinCode, coinTitle, coinId, RateChartViewFactory()) as T
+            return CoinViewModel(rateFormatter, coinService, coinCode, coinTitle, coinId, RateChartViewFactory(currency, App.numberFormatter)) as T
         }
 
     }
 
     data class CoinCodeWithValue(val coinCode: String, val value: BigDecimal)
+}
+
+data class MarketTickerViewItem(
+        val title: String,
+        val subtitle: String,
+        val value: String,
+        val subvalue: String,
+){
+    fun areItemsTheSame(other: MarketTickerViewItem): Boolean {
+        return title == other.title && subtitle == other.subvalue
+    }
+
+    fun areContentsTheSame(other: MarketTickerViewItem): Boolean {
+        return this == other
+    }
 }
