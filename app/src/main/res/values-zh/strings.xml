@@ -190,6 +190,8 @@
     <string name="Market_Filter_PriceChange_Negative_50_minus">&lt; -50%</string>
     <string name="Market_Filter_PriceChange_Negative_100_minus">&lt; -100%</string>
     <string name="TimePeriod_24h">24h</string>
+    <!--Coin Markets-->
+    <string name="CoinMarket_Title">%s Markets</string>
     <!--Balance-->
     <string name="Balance_Title">余额</string>
     <string name="Balance_Deposit">接收</string>
@@ -606,7 +608,7 @@
     <string name="Charts_RatingDetails">Rating Details</string>
     <string name="Charts_Price">Price</string>
     <string name="Charts_Market">Market</string>
-    <string name="Charts_MarketBTC">BTC Markets</string>
+    <string name="Charts_CoinMarket">%s Markets</string>
     <string name="Charts_Range24">24h Range</string>
     <string name="Charts_Performance">Performance</string>
     <string name="Charts_About">About</string>
