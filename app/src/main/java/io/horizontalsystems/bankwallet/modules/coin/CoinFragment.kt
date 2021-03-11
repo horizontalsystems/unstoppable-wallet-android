@@ -4,7 +4,8 @@ import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
-import android.text.Html
+import android.text.*
+import android.text.style.URLSpan
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -64,7 +65,7 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
         )
     }
 
-    private val viewModel by navGraphViewModels<CoinViewModel>(R.id.coinFragment){ vmFactory }
+    private val viewModel by navGraphViewModels<CoinViewModel>(R.id.coinFragment) { vmFactory }
 
     private val formatter = App.numberFormatter
     private var notificationMenuItem: MenuItem? = null
@@ -288,7 +289,8 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
 
             // About
 
-            aboutText.text = Html.fromHtml(item.coinMeta.description.replace("\n", "<br />"), Html.FROM_HTML_MODE_COMPACT)
+            val aboutTextSpanned = Html.fromHtml(item.coinMeta.description.replace("\n", "<br />"), Html.FROM_HTML_MODE_COMPACT)
+            aboutText.text = removeLinkSpans(aboutTextSpanned)
 
             // Categories/Links
 
@@ -457,6 +459,14 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
         viewModel.coinMarkets.observe(viewLifecycleOwner, { items ->
             coinMarketsButton.isVisible = items.isNotEmpty()
         })
+    }
+
+    private fun removeLinkSpans(spanned: Spanned): Spannable {
+        val spannable = SpannableString(spanned)
+        for (u in spannable.getSpans(0, spannable.length, URLSpan::class.java)) {
+            spannable.removeSpan(u)
+        }
+        return spannable
     }
 
     private fun setColoredPercentageValue(textView: TextView, percentage: BigDecimal) {
