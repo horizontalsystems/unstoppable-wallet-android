@@ -123,6 +123,16 @@ class RateChartFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelecte
             findNavController().popBackStack()
         }
 
+        aboutTextToggle.setOnClickListener {
+            if (aboutText.maxLines == Integer.MAX_VALUE) {
+                aboutText.maxLines = 8
+                aboutTextToggle.text = "Read More"
+            } else {
+                aboutText.maxLines = Integer.MAX_VALUE
+                aboutTextToggle.text = "Read Less"
+            }
+        }
+
         presenter.viewDidLoad()
     }
 
