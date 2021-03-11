@@ -1,5 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.coin
 
+import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.chartview.*
 import io.horizontalsystems.chartview.models.ChartPoint
@@ -41,7 +43,7 @@ data class LastPoint(
         val timestamp: Long
 )
 
-class RateChartViewFactory {
+class RateChartViewFactory(private val currency: Currency, private val numberFormatter: IAppNumberFormatter) {
     fun createChartInfo(type: ChartType, chartInfo: ChartInfo, lastPoint: LastPoint?): ChartInfoViewItem {
         val chartData = createChartData(chartInfo, lastPoint)
         val chartType = when (type) {
@@ -86,5 +88,17 @@ class RateChartViewFactory {
         }
 
         return ChartDataFactory.build(points, chartInfo.startTimestamp, endTimestamp, chartInfo.isExpired)
+    }
+
+    fun createCoinMarketItems(coinDetails: CoinMarketDetails): List<MarketTickerViewItem> {
+        return coinDetails.tickers.map {
+            val (shortenValue, suffix) = App.numberFormatter.shortenValue(it.volume)
+            MarketTickerViewItem(
+                    it.marketName,
+                    "${it.base}/${it.target}",
+                    numberFormatter.formatFiat(it.rate, currency.symbol, 0, 6),
+                    numberFormatter.formatFiat(shortenValue, currency.symbol, 0, 2) + " $suffix ${it.target}"
+            )
+        }
     }
 }

@@ -16,8 +16,8 @@ import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.navGraphViewModels
 import com.google.android.material.tabs.TabLayout
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
@@ -48,19 +48,22 @@ import java.util.*
 
 class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedListener {
 
-    private val title by lazy {
+    private val coinTitle by lazy {
         requireArguments().getString(COIN_TITLE_KEY) ?: ""
+    }
+    private val coinCode by lazy {
+        requireArguments().getString(COIN_CODE_KEY) ?: ""
     }
     private val vmFactory by lazy {
         CoinModule.Factory(
-                title,
+                coinTitle,
                 requireArguments().getParcelable(COIN_TYPE_KEY)!!,
-                requireArguments().getString(COIN_CODE_KEY)!!,
+                coinCode,
                 requireArguments().getString(COIN_ID_KEY)
         )
     }
 
-    private val viewModel by viewModels<CoinViewModel> { vmFactory }
+    private val viewModel by navGraphViewModels<CoinViewModel>(R.id.coinFragment){ vmFactory }
 
     private val formatter = App.numberFormatter
     private var notificationMenuItem: MenuItem? = null
@@ -83,7 +86,7 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        toolbar.title = title
+        toolbar.title = coinTitle
         toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }
@@ -239,6 +242,11 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
             moveMarker(marker24h, item.rateValue.toFloat(), item.rateLow24h.toFloat(), item.rateHigh24h.toFloat())
 
             // Market
+
+            coinMarketsButton.showTitle(getString(R.string.Charts_CoinMarket, coinCode))
+            coinMarketsButton.setOnClickListener {
+                findNavController().navigate(R.id.coinFragment_to_coinMarketsFragment, null, navOptions())
+            }
 
             marketCapPercent.text = formatter.format(item.marketCapDiff24h.abs(), 0, 2, suffix = "%")
 

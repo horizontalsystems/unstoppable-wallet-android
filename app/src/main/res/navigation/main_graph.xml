@@ -49,8 +49,8 @@
             android:id="@+id/mainFragment_to_backupFragment"
             app:destination="@id/backupFragment" />
         <action
-            android:id="@+id/mainFragment_to_rateChartFragment"
-            app:destination="@id/rateChartFragment" />
+            android:id="@+id/mainFragment_to_coinFragment"
+            app:destination="@id/coinFragment" />
         <action
             android:id="@+id/mainFragment_to_swapFragment"
             app:destination="@id/swapFragment"
@@ -197,9 +197,17 @@
         android:name="io.horizontalsystems.bankwallet.modules.backup.words.BackupWordsFragment"
         tools:layout="@layout/fragment_backup_words" />
     <fragment
-        android:id="@+id/rateChartFragment"
+        android:id="@+id/coinFragment"
         android:name="io.horizontalsystems.bankwallet.modules.coin.CoinFragment"
-        tools:layout="@layout/fragment_coin" />
+        tools:layout="@layout/fragment_coin" >
+        <action
+            android:id="@+id/coinFragment_to_coinMarketsFragment"
+            app:destination="@id/coinMarketsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/coinMarketsFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.coin.coinmarkets.CoinMarketsFragment"
+        tools:layout="@layout/fragment_coin_markets" />
     <fragment
         android:id="@+id/pinFragment"
         android:name="io.horizontalsystems.pin.PinFragment"

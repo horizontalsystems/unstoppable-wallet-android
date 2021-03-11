@@ -26,7 +26,7 @@ class CoinService(
 
     sealed class CoinDetailsState {
         object Loading : CoinDetailsState()
-        data class Loaded(val coinDetails: CoinMarketDetails) : CoinDetailsState()
+        object Loaded : CoinDetailsState()
         data class Error(val error: Throwable) : CoinDetailsState()
     }
 
@@ -34,6 +34,8 @@ class CoinService(
     val chartInfoErrorObservable: BehaviorSubject<Throwable> = BehaviorSubject.create()
     val coinDetailsStateObservable: BehaviorSubject<CoinDetailsState> = BehaviorSubject.createDefault(CoinDetailsState.Loading)
     val alertNotificationUpdatedObservable: BehaviorSubject<Unit> = BehaviorSubject.createDefault(Unit)
+
+    var coinMarketDetails: CoinMarketDetails? = null
 
     var lastPoint: LastPoint? = xRateManager.marketInfo(coinType, currency.code)?.let{ LastPoint(it.rate, it.timestamp) }
         set(value) {
@@ -76,7 +78,8 @@ class CoinService(
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ coinMarketDetails ->
-                    coinDetailsStateObservable.onNext(CoinDetailsState.Loaded(coinMarketDetails))
+                    this.coinMarketDetails = coinMarketDetails
+                    coinDetailsStateObservable.onNext(CoinDetailsState.Loaded)
                 }, {
                     coinDetailsStateObservable.onNext(CoinDetailsState.Error(it))
                 }).let {

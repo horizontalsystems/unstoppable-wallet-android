@@ -240,7 +240,7 @@ class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener, ReceiveFra
         viewModel.openChartModule.observe(viewLifecycleOwner, Observer { coin ->
             val arguments = CoinFragment.prepareParams(coin.type, coin.code, coin.title, null)
 
-            findNavController().navigate(R.id.mainFragment_to_rateChartFragment, arguments, navOptions())
+            findNavController().navigate(R.id.mainFragment_to_coinFragment, arguments, navOptions())
         })
 
         viewModel.openEmail.observe(viewLifecycleOwner, Observer { (email, report) ->
