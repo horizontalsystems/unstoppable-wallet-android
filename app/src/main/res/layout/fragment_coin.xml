@@ -107,7 +107,7 @@
                     style="@style/Caption"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/Charts_Volume"
+                    android:text="@string/CoinPage_Volume"
                     android:textColor="@color/grey"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/pointInfoPrice" />
@@ -117,7 +117,7 @@
                     style="@style/Caption"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/Charts_Volume"
+                    android:text="@string/CoinPage_Volume"
                     android:textColor="@color/grey"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -205,7 +205,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="@string/Charts_IndicatorEMA"
+                android:text="@string/CoinPage_IndicatorEMA"
                 android:visibility="invisible"
                 app:layout_constraintStart_toStartOf="@id/startGuideline"
                 app:layout_constraintTop_toBottomOf="@+id/border3" />
@@ -216,7 +216,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="@string/Charts_IndicatorMACD"
+                android:text="@string/CoinPage_IndicatorMACD"
                 android:visibility="invisible"
                 app:layout_constraintStart_toEndOf="@id/indicatorEMA"
                 app:layout_constraintTop_toTopOf="@+id/indicatorEMA" />
@@ -227,7 +227,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="@string/Charts_IndicatorRSI"
+                android:text="@string/CoinPage_IndicatorRSI"
                 android:visibility="invisible"
                 app:layout_constraintStart_toEndOf="@id/indicatorMACD"
                 app:layout_constraintTop_toTopOf="@+id/indicatorEMA" />

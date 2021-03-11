@@ -20,7 +20,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:position="single"
-        app:value="@string/Charts_RatingDetails" />
+        app:value="@string/CoinPage_RatingDetails" />
 
     <View
         android:id="@+id/border4"
@@ -39,7 +39,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="16dp"
-        android:text="@string/Charts_Price"
+        android:text="@string/CoinPage_Price"
         android:textColor="@color/oz"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -74,7 +74,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="16dp"
-        android:text="@string/Charts_Market"
+        android:text="@string/CoinPage_Market"
         android:textColor="@color/oz"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -99,7 +99,7 @@
         android:layout_marginTop="12dp"
         app:layout_constraintTop_toBottomOf="@id/marketData"
         app:position="single"
-        app:title="@string/Charts_CoinMarket" />
+        app:title="@string/CoinPage_CoinMarket" />
 
     <View
         android:id="@+id/border6"
@@ -118,7 +118,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="16dp"
-        android:text="@string/Charts_Performance"
+        android:text="@string/CoinPage_Performance"
         android:textColor="@color/oz"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -153,7 +153,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="16dp"
-        android:text="@string/Charts_About"
+        android:text="@string/CoinPage_About"
         android:textColor="@color/oz"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"

@@ -69,15 +69,15 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
     private val formatter = App.numberFormatter
     private var notificationMenuItem: MenuItem? = null
     private val actions = listOf(
-            Pair(ChartType.TODAY, R.string.Charts_TimeDuration_Today),
-            Pair(ChartType.DAILY, R.string.Charts_TimeDuration_Day),
-            Pair(ChartType.WEEKLY, R.string.Charts_TimeDuration_Week),
-            Pair(ChartType.WEEKLY2, R.string.Charts_TimeDuration_TwoWeeks),
-            Pair(ChartType.MONTHLY, R.string.Charts_TimeDuration_Month),
-            Pair(ChartType.MONTHLY3, R.string.Charts_TimeDuration_Month3),
-            Pair(ChartType.MONTHLY6, R.string.Charts_TimeDuration_HalfYear),
-            Pair(ChartType.MONTHLY12, R.string.Charts_TimeDuration_Year),
-            Pair(ChartType.MONTHLY24, R.string.Charts_TimeDuration_Year2)
+            Pair(ChartType.TODAY, R.string.CoinPage_TimeDuration_Today),
+            Pair(ChartType.DAILY, R.string.CoinPage_TimeDuration_Day),
+            Pair(ChartType.WEEKLY, R.string.CoinPage_TimeDuration_Week),
+            Pair(ChartType.WEEKLY2, R.string.CoinPage_TimeDuration_TwoWeeks),
+            Pair(ChartType.MONTHLY, R.string.CoinPage_TimeDuration_Month),
+            Pair(ChartType.MONTHLY3, R.string.CoinPage_TimeDuration_Month3),
+            Pair(ChartType.MONTHLY6, R.string.CoinPage_TimeDuration_HalfYear),
+            Pair(ChartType.MONTHLY12, R.string.CoinPage_TimeDuration_Year),
+            Pair(ChartType.MONTHLY24, R.string.CoinPage_TimeDuration_Year2)
     )
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -258,7 +258,7 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
 
             // Market
 
-            coinMarketsButton.showTitle(getString(R.string.Charts_CoinMarket, coinCode))
+            coinMarketsButton.showTitle(getString(R.string.CoinPage_CoinMarket, coinCode))
             coinMarketsButton.setOnClickListener {
                 findNavController().navigate(R.id.coinFragment_to_coinMarketsFragment, null, navOptions())
             }
@@ -300,7 +300,7 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
                         layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutHelper.dp(48f, context))
 
                         txViewBackground.setBackgroundColor(Color.TRANSPARENT)
-                        txtTitle.text = getString(R.string.Charts_Category)
+                        txtTitle.text = getString(R.string.CoinPage_Category)
                         valueText.text = categories.map { it.name }.joinToString(", ")
                         valueText.isVisible = true
                         btnAction.isVisible = false
@@ -321,7 +321,7 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
 
                 item.coinMeta.links[LinkType.GUIDE]?.let {
                     val link = SettingsView(context).apply {
-                        showTitle(context.getString(R.string.Charts_Guide))
+                        showTitle(context.getString(R.string.CoinPage_Guide))
                         showIcon(ContextCompat.getDrawable(context, R.drawable.ic_academy_20))
 
                         layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT).apply {
@@ -340,31 +340,31 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
 
                     when (entry.key) {
                         LinkType.GUIDE -> {
-                            link.showTitle(getString(R.string.Charts_Guide))
+                            link.showTitle(getString(R.string.CoinPage_Guide))
                             link.showIcon(ContextCompat.getDrawable(context, R.drawable.ic_academy_20))
                         }
                         LinkType.WEBSITE -> {
-                            link.showTitle(getString(R.string.Charts_Website))
+                            link.showTitle(getString(R.string.CoinPage_Website))
                             link.showIcon(ContextCompat.getDrawable(context, R.drawable.ic_globe))
                         }
                         LinkType.WHITEPAPER -> {
-                            link.showTitle(getString(R.string.Charts_Whitepaper))
+                            link.showTitle(getString(R.string.CoinPage_Whitepaper))
                             link.showIcon(ContextCompat.getDrawable(context, R.drawable.ic_clipboard))
                         }
                         LinkType.TWITTER -> {
-                            link.showTitle(getString(R.string.Charts_Twitter))
+                            link.showTitle(getString(R.string.CoinPage_Twitter))
                             link.showIcon(ContextCompat.getDrawable(context, R.drawable.ic_twitter))
                         }
                         LinkType.TELEGRAM -> {
-                            link.showTitle(getString(R.string.Charts_Telegram))
+                            link.showTitle(getString(R.string.CoinPage_Telegram))
                             link.showIcon(ContextCompat.getDrawable(context, R.drawable.ic_telegram))
                         }
                         LinkType.REDDIT -> {
-                            link.showTitle(getString(R.string.Charts_Reddit))
+                            link.showTitle(getString(R.string.CoinPage_Reddit))
                             link.showIcon(ContextCompat.getDrawable(context, R.drawable.ic_reddit))
                         }
                         LinkType.GITHUB -> {
-                            link.showTitle(getString(R.string.Charts_Github))
+                            link.showTitle(getString(R.string.CoinPage_Github))
                             link.showIcon(ContextCompat.getDrawable(context, R.drawable.ic_github))
                         }
                     }
@@ -420,7 +420,7 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
         })
 
         viewModel.showChartError.observe(viewLifecycleOwner, Observer {
-            chart.showError(getString(R.string.Charts_Error_NotAvailable))
+            chart.showError(getString(R.string.CoinPage_Error_NotAvailable))
         })
 
         viewModel.showEma.observe(viewLifecycleOwner, Observer { enabled ->
