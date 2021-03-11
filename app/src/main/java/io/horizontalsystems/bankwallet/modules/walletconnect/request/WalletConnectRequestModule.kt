@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.walletconnect.request
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.ethereum.CoinService
+import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinService
 import io.horizontalsystems.bankwallet.core.ethereum.EthereumFeeViewModel
 import io.horizontalsystems.bankwallet.core.ethereum.EvmTransactionService
 import io.horizontalsystems.bankwallet.core.factories.FeeRateProviderFactory
@@ -34,7 +34,7 @@ object WalletConnectRequestModule {
             }
         }
         private val service by lazy { WalletConnectSendEthereumTransactionRequestService(request, baseService) }
-        private val coinService by lazy { CoinService(coin, App.currencyManager, App.xRateManager) }
+        private val coinService by lazy { EvmCoinService(coin, App.currencyManager, App.xRateManager) }
         private val transactionService by lazy {
             val feeRateProvider = FeeRateProviderFactory.provider(coin)!!
             EvmTransactionService(evmKit, feeRateProvider, 10)

@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.swap.approve.confirmation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.ethereum.CoinService
+import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinService
 import io.horizontalsystems.bankwallet.core.ethereum.EthereumFeeViewModel
 import io.horizontalsystems.bankwallet.core.ethereum.EvmTransactionService
 import io.horizontalsystems.bankwallet.core.factories.FeeRateProviderFactory
@@ -11,7 +11,6 @@ import io.horizontalsystems.bankwallet.core.providers.StringProvider
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionService
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
 import io.horizontalsystems.bankwallet.modules.swap.SwapModule
-import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceService
 import io.horizontalsystems.ethereumkit.models.TransactionData
 
 object SwapApproveConfirmationModule {
@@ -27,7 +26,7 @@ object SwapApproveConfirmationModule {
             val feeRateProvider = FeeRateProviderFactory.provider(coin)!!
             EvmTransactionService(evmKit, feeRateProvider, 20)
         }
-        private val coinService by lazy { CoinService(coin, App.currencyManager, App.xRateManager) }
+        private val coinService by lazy { EvmCoinService(coin, App.currencyManager, App.xRateManager) }
         private val sendService by lazy { SendEvmTransactionService(transactionData, evmKit, transactionService) }
         private val stringProvider by lazy { StringProvider() }
 

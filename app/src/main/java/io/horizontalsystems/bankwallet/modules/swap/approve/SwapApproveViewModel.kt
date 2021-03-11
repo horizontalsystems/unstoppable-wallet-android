@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.convertedError
-import io.horizontalsystems.bankwallet.core.ethereum.CoinService
+import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinService
 import io.horizontalsystems.bankwallet.core.providers.StringProvider
 import io.horizontalsystems.bankwallet.modules.swap.SwapModule
 import io.horizontalsystems.core.SingleLiveEvent
@@ -15,7 +15,7 @@ import java.math.BigDecimal
 class SwapApproveViewModel(
         val dex: SwapModule.Dex,
         private val service: SwapApproveService,
-        private val coinService: CoinService,
+        private val coinService: EvmCoinService,
         private val stringProvider: StringProvider
 ) : ViewModel() {
 
