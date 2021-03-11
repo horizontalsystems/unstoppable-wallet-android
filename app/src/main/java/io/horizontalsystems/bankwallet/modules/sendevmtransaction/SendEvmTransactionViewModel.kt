@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.EvmError
 import io.horizontalsystems.bankwallet.core.convertedError
-import io.horizontalsystems.bankwallet.core.ethereum.CoinService
+import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinService
 import io.horizontalsystems.bankwallet.core.providers.StringProvider
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.core.toHexString
@@ -13,7 +13,7 @@ import io.reactivex.disposables.CompositeDisposable
 
 class SendEvmTransactionViewModel(
         private val service: SendEvmTransactionService,
-        private val coinService: CoinService,
+        private val coinService: EvmCoinService,
         private val stringProvider: StringProvider
 ) : ViewModel() {
     private val disposable = CompositeDisposable()
