@@ -43,7 +43,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:gravity="center"
-        android:text="@string/Charts_Range24"
+        android:text="@string/CoinPage_Range24"
         android:textColor="@color/grey"
         android:textSize="14sp"
         app:layout_constraintEnd_toStartOf="@+id/priceRangeMax"
