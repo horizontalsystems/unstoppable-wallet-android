@@ -143,22 +143,22 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/aboutText" />
 
-    <View
-        android:id="@+id/border8"
-        android:layout_width="0dp"
-        android:layout_height="0.5dp"
+    <LinearLayout
+        android:id="@+id/categoriesLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:layout_marginTop="20dp"
-        android:background="@color/steel_20"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/aboutTextToggle" />
 
     <LinearLayout
         android:id="@+id/linksLayout"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:layout_marginTop="12dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/border8" />
+        app:layout_constraintTop_toBottomOf="@id/categoriesLayout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
