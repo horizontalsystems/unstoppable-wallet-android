@@ -232,14 +232,23 @@
                 app:layout_constraintStart_toEndOf="@id/indicatorMACD"
                 app:layout_constraintTop_toTopOf="@+id/indicatorEMA" />
 
-            <include
-                layout="@layout/coin_market_details"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+            <View
+                android:id="@+id/border4"
+                android:layout_width="0dp"
+                android:layout_height="0.5dp"
+                android:background="@color/steel_20"
                 android:layout_marginTop="7dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/indicatorRSI" />
+
+            <include
+                layout="@layout/coin_market_details"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/border4" />
 
             <ProgressBar
                 android:id="@+id/marketSpinner"

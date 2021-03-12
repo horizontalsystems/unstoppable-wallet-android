@@ -1,9 +1,13 @@
 package io.horizontalsystems.bankwallet.modules.coin
 
+import androidx.annotation.StringRes
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.chartview.*
+import io.horizontalsystems.chartview.ChartData
+import io.horizontalsystems.chartview.ChartDataFactory
+import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.chartview.models.ChartPoint
 import io.horizontalsystems.chartview.models.MacdInfo
 import io.horizontalsystems.core.entities.Currency
@@ -27,23 +31,22 @@ data class ChartPointViewItem(
 data class CoinDetailsViewItem(
         val currency: Currency,
         val rateValue: BigDecimal,
-        val marketCap: BigDecimal,
-        val circulatingSupply: CoinModule.CoinCodeWithValue,
-        val totalSupply: CoinModule.CoinCodeWithValue,
+        val marketDataList: List<MarketData>,
         val rateHigh24h: BigDecimal,
         val rateLow24h: BigDecimal,
-        val volume24h: BigDecimal,
         val marketCapDiff24h: BigDecimal,
         val coinMeta: CoinMeta,
         val rateDiffs: Map<TimePeriod, Map<String, BigDecimal>>
 )
+
+class MarketData(@StringRes val title: Int, val value: String)
 
 data class LastPoint(
         val rate: BigDecimal,
         val timestamp: Long
 )
 
-class RateChartViewFactory(private val currency: Currency, private val numberFormatter: IAppNumberFormatter) {
+class CoinViewFactory(private val currency: Currency, private val numberFormatter: IAppNumberFormatter) {
     fun createChartInfo(type: ChartType, chartInfo: ChartInfo, lastPoint: LastPoint?): ChartInfoViewItem {
         val chartData = createChartData(chartInfo, lastPoint)
         val chartType = when (type) {
@@ -63,18 +66,34 @@ class RateChartViewFactory(private val currency: Currency, private val numberFor
 
     fun createCoinDetailsViewItem(coinMarket: CoinMarketDetails, currency: Currency, coinCode: String): CoinDetailsViewItem {
         return CoinDetailsViewItem(
-            currency = currency,
-            rateValue = coinMarket.rate,
-            marketCap = coinMarket.marketCap,
-            circulatingSupply = CoinModule.CoinCodeWithValue(coinCode, coinMarket.circulatingSupply),
-            totalSupply = CoinModule.CoinCodeWithValue(coinCode, coinMarket.totalSupply),
-            rateHigh24h = coinMarket.rateHigh24h,
-            rateLow24h = coinMarket.rateLow24h,
-            volume24h = coinMarket.volume24h,
-            marketCapDiff24h = coinMarket.marketCapDiff24h,
-            coinMeta = coinMarket.meta,
-            rateDiffs = coinMarket.rateDiffs
+                currency = currency,
+                rateValue = coinMarket.rate,
+                marketDataList = getMarketData(coinMarket, currency, coinCode),
+                rateHigh24h = coinMarket.rateHigh24h,
+                rateLow24h = coinMarket.rateLow24h,
+                marketCapDiff24h = coinMarket.marketCapDiff24h,
+                coinMeta = coinMarket.meta,
+                rateDiffs = coinMarket.rateDiffs
         )
+    }
+
+    private fun getMarketData(coinMarket: CoinMarketDetails, currency: Currency, coinCode: String): MutableList<MarketData> {
+        val marketData = mutableListOf<MarketData>()
+        if (coinMarket.marketCap > BigDecimal.ZERO) {
+            marketData.add(MarketData(R.string.CoinPage_MarketCap, formatFiatShortened(coinMarket.marketCap, currency.symbol)))
+        }
+        if (coinMarket.volume24h > BigDecimal.ZERO) {
+            marketData.add(MarketData(R.string.CoinPage_Volume24, formatFiatShortened(coinMarket.volume24h, currency.symbol)))
+        }
+        if (coinMarket.circulatingSupply > BigDecimal.ZERO) {
+            val value = numberFormatter.formatCoin(coinMarket.circulatingSupply, coinCode, 0, 2)
+            marketData.add(MarketData(R.string.CoinPage_inCirculation, value))
+        }
+        if (coinMarket.totalSupply > BigDecimal.ZERO) {
+            val value = numberFormatter.formatCoin(coinMarket.totalSupply, coinCode, 0, 2)
+            marketData.add(MarketData(R.string.CoinPage_TotalSupply, value))
+        }
+        return marketData
     }
 
     private fun createChartData(chartInfo: ChartInfo, lastPoint: LastPoint?): ChartData {
@@ -100,5 +119,10 @@ class RateChartViewFactory(private val currency: Currency, private val numberFor
                     numberFormatter.formatFiat(shortenValue, currency.symbol, 0, 2) + " $suffix ${it.target}"
             )
         }
+    }
+
+    private fun formatFiatShortened(value: BigDecimal, symbol: String): String {
+        val shortCapValue = numberFormatter.shortenValue(value)
+        return numberFormatter.formatFiat(shortCapValue.first, symbol, 0, 2) + " " + shortCapValue.second
     }
 }

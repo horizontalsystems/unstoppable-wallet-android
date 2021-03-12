@@ -8,46 +8,21 @@
     android:visibility="gone"
     tools:visibility="visible">
 
-    <View
-        android:id="@+id/border4"
-        android:layout_width="0dp"
-        android:layout_height="0.5dp"
-        android:background="@color/steel_20"
-        app:layout_constraintEnd_toEndOf="parent"
+    <LinearLayout
+        android:id="@+id/marketDataLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="12dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/marketTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="16dp"
-        android:text="@string/CoinPage_Market"
-        android:textColor="@color/oz"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/border4" />
-
-    <include
-        android:id="@+id/marketData"
-        layout="@layout/coin_market"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/marketTitle" />
 
     <io.horizontalsystems.views.SettingsView
         android:id="@+id/coinMarketsButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
-        app:layout_constraintTop_toBottomOf="@id/marketData"
+        app:layout_constraintTop_toBottomOf="@id/marketDataLayout"
         app:position="single"
         app:title="@string/CoinPage_CoinMarket" />
 

@@ -33,7 +33,6 @@ import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.views.ListPosition
 import io.horizontalsystems.views.SettingsView
 import io.horizontalsystems.xrateskit.entities.*
-import kotlinx.android.synthetic.main.coin_market.*
 import kotlinx.android.synthetic.main.coin_market_details.*
 import kotlinx.android.synthetic.main.coin_performance.*
 import kotlinx.android.synthetic.main.fragment_coin.*
@@ -209,45 +208,14 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
 
             coinRateLast.text = formatter.formatFiat(item.rateValue, item.currency.symbol, 2, 4)
 
-            marketCapValue.apply {
-                if (item.marketCap > BigDecimal.ZERO) {
-                    text = formatFiatShortened(item.marketCap, item.currency.symbol)
-                } else {
-                    isEnabled = false
-                    text = getString(R.string.NotAvailable)
-                }
-            }
+            setMarketData(item.marketDataList)
 
-            volume24Value.apply {
-                text = formatFiatShortened(item.volume24h, item.currency.symbol)
-            }
-
-            circulationValue.apply {
-                if (item.circulatingSupply.value > BigDecimal.ZERO) {
-                    text = formatter.formatCoin(item.circulatingSupply.value, item.circulatingSupply.coinCode, 0, 2)
-                } else {
-                    isEnabled = false
-                    text = getString(R.string.NotAvailable)
-                }
-            }
-
-            totalSupplyValue.apply {
-                if (item.totalSupply.value > BigDecimal.ZERO) {
-                    text = formatter.formatCoin(item.totalSupply.value, item.totalSupply.coinCode, 0, 2)
-                } else {
-                    isEnabled = false
-                    text = getString(R.string.NotAvailable)
-                }
-            }
-
-            // Market
+            // Coin Markets
 
             coinMarketsButton.showTitle(getString(R.string.CoinPage_CoinMarket, coinCode))
             coinMarketsButton.setOnClickListener {
                 findNavController().navigate(R.id.coinFragment_to_coinMarketsFragment, null, navOptions())
             }
-
-            marketCapPercent.text = formatter.format(item.marketCapDiff24h.abs(), 0, 2, suffix = "%")
 
             // Performance
 
@@ -355,6 +323,24 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
         viewModel.coinMarkets.observe(viewLifecycleOwner, { items ->
             coinMarketsButton.isVisible = items.isNotEmpty()
         })
+    }
+
+    private fun setMarketData(marketDataList: List<MarketData>) {
+        marketDataLayout.removeAllViews()
+
+        context?.let { context ->
+            marketDataList.forEachIndexed { index, marketData ->
+                val coinInfoView = CoinInfoItemView(context).apply {
+                    bind(
+                            title = getString(marketData.title),
+                            value = marketData.value,
+                            listPosition = ListPosition.getListPosition(marketDataList.size, index)
+                    )
+                }
+
+                marketDataLayout.addView(coinInfoView)
+            }
+        }
     }
 
     private fun setLinks(links: Map<LinkType, String>) {
