@@ -56,6 +56,7 @@ class SendEvmTransactionAdapter(val items: List<ViewItem>) : RecyclerView.Adapte
     enum class ViewType {
         Amount, TitleValue, TitleValueHex, TitleValueItalic
     }
+
     private val viewTypes = ViewType.values()
 
     override fun getItemCount() = items.size
@@ -65,6 +66,7 @@ class SendEvmTransactionAdapter(val items: List<ViewItem>) : RecyclerView.Adapte
             is ViewItem.Amount -> ViewType.Amount.ordinal
             is ViewItem.Address -> ViewType.TitleValueHex.ordinal
             is ViewItem.Input -> ViewType.TitleValue.ordinal
+            is ViewItem.Value -> ViewType.TitleValue.ordinal
         }
     }
 
@@ -83,6 +85,7 @@ class SendEvmTransactionAdapter(val items: List<ViewItem>) : RecyclerView.Adapte
             is ViewItem.Amount -> (holder as? AmountViewHolder)?.bind(item, listPosition)
             is ViewItem.Address -> (holder as? TitleValueHexViewHolder)?.bind(item.title, item.value, listPosition)
             is ViewItem.Input -> (holder as? TitleValueViewHolder)?.bind(item.title, item.value, listPosition)
+            is ViewItem.Value -> (holder as? TitleValueViewHolder)?.bind(item.title, item.value, listPosition)
         }
     }
 

@@ -5,6 +5,7 @@ import io.horizontalsystems.bankwallet.core.ethereum.EvmTransactionService
 import io.horizontalsystems.bankwallet.core.ethereum.EvmTransactionService.GasPriceType
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
+import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.core.TransactionDecoration
 import io.horizontalsystems.ethereumkit.models.Address
@@ -16,7 +17,7 @@ import io.reactivex.subjects.PublishSubject
 import java.math.BigInteger
 
 class SendEvmTransactionService(
-        val transactionData: TransactionData,
+        private val sendEvmData: SendEvmData,
         private val evmKit: EthereumKit,
         private val transactionsService: EvmTransactionService,
         gasPrice: Long? = null
@@ -42,12 +43,14 @@ class SendEvmTransactionService(
         }
     val sendStateObservable: Flowable<SendState> = sendStateSubject.toFlowable(BackpressureStrategy.BUFFER)
 
+    val transactionData: TransactionData = sendEvmData.transactionData
+    val additionalItems: List<SendEvmData.AdditionalItem> = sendEvmData.additionalItems
     val ownAddress: Address = evmKit.receiveAddress
-    val decoration: TransactionDecoration? by lazy { evmKit.decorate(transactionData) }
+    val decoration: TransactionDecoration? by lazy { evmKit.decorate(sendEvmData.transactionData) }
 
     init {
         transactionsService.transactionStatusObservable.subscribeIO { syncState() }
-        transactionsService.transactionData = transactionData
+        transactionsService.transactionData = sendEvmData.transactionData
         gasPrice?.let { transactionsService.gasPriceType = GasPriceType.Custom(it) }
     }
 
@@ -57,7 +60,7 @@ class SendEvmTransactionService(
 
         sendState = SendState.Sending
 
-        evmKit.send(transactionData, transaction.gasData.gasPrice, transaction.gasData.gasLimit)
+        evmKit.send(sendEvmData.transactionData, transaction.gasData.gasPrice, transaction.gasData.gasLimit)
                 .subscribeIO({ fullTransaction ->
                     sendState = SendState.Sent(fullTransaction.transaction.hash)
                 }, { error ->

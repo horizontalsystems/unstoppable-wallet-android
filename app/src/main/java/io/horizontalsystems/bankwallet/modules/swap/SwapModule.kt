@@ -26,6 +26,7 @@ import java.math.BigInteger
 object SwapModule {
 
     const val transactionDataKey = "transactionData"
+    const val additionalItemsKey = "additionalItems"
 
     @Parcelize
     data class TransactionDataParcelable(

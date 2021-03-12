@@ -13,8 +13,11 @@ import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
-import io.horizontalsystems.bankwallet.modules.swap.SwapModule
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceService
+import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveModule.dataKey
+import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveModule.requestKey
+import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveModule.resultKey
+import io.horizontalsystems.bankwallet.modules.swap.approve.confirmation.SwapApproveConfirmationModule
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.getNavigationResult
 import io.horizontalsystems.core.setNavigationResult
@@ -79,9 +82,7 @@ class SwapApproveFragment : BaseFragment() {
         })
 
         viewModel.openConfirmationLiveEvent.observe(viewLifecycleOwner, { transactionData ->
-            val transactionDataParcelable = SwapModule.TransactionDataParcelable(transactionData)
-            val arguments = bundleOf(SwapModule.transactionDataKey to transactionDataParcelable)
-            findNavController().navigate(R.id.swapApproveFragment_to_swapApproveConfirmationFragment, arguments, navOptions())
+            SwapApproveConfirmationModule.start(this, R.id.swapApproveFragment_to_swapApproveConfirmationFragment, navOptions(), transactionData)
         })
 
         getNavigationResult(requestKey)?.let {
@@ -92,9 +93,4 @@ class SwapApproveFragment : BaseFragment() {
         }
     }
 
-    companion object {
-        const val requestKey = "approve"
-        const val resultKey = "result"
-        const val dataKey = "data_key"
-    }
 }
