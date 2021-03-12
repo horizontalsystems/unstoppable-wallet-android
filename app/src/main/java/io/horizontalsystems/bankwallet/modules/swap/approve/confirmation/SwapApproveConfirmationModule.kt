@@ -3,8 +3,8 @@ package io.horizontalsystems.bankwallet.modules.swap.approve.confirmation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinService
 import io.horizontalsystems.bankwallet.core.ethereum.EthereumFeeViewModel
+import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinServiceFactory
 import io.horizontalsystems.bankwallet.core.ethereum.EvmTransactionService
 import io.horizontalsystems.bankwallet.core.factories.FeeRateProviderFactory
 import io.horizontalsystems.bankwallet.core.providers.StringProvider
@@ -26,7 +26,7 @@ object SwapApproveConfirmationModule {
             val feeRateProvider = FeeRateProviderFactory.provider(coin)!!
             EvmTransactionService(evmKit, feeRateProvider, 20)
         }
-        private val coinService by lazy { EvmCoinService(coin, App.currencyManager, App.xRateManager) }
+        private val coinServiceFactory by lazy { EvmCoinServiceFactory(coin, App.coinKit, App.currencyManager, App.xRateManager) }
         private val sendService by lazy { SendEvmTransactionService(transactionData, evmKit, transactionService) }
         private val stringProvider by lazy { StringProvider() }
 
@@ -34,10 +34,10 @@ object SwapApproveConfirmationModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return when (modelClass) {
                 SendEvmTransactionViewModel::class.java -> {
-                    SendEvmTransactionViewModel(sendService, coinService, stringProvider) as T
+                    SendEvmTransactionViewModel(sendService, coinServiceFactory, stringProvider) as T
                 }
                 EthereumFeeViewModel::class.java -> {
-                    EthereumFeeViewModel(transactionService, coinService, stringProvider) as T
+                    EthereumFeeViewModel(transactionService, coinServiceFactory.baseCoinService, stringProvider) as T
                 }
                 else -> throw IllegalArgumentException()
             }

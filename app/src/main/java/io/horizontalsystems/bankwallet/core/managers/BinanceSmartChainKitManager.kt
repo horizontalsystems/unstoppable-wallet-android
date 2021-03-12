@@ -5,8 +5,10 @@ import io.horizontalsystems.bankwallet.core.UnsupportedAccountException
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.core.BackgroundManager
+import io.horizontalsystems.erc20kit.core.Erc20Kit
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.core.EthereumKit.NetworkType
+import io.horizontalsystems.uniswapkit.UniswapKit
 
 class BinanceSmartChainKitManager(
         private val bscscanApiKey: String,
@@ -52,6 +54,9 @@ class BinanceSmartChainKitManager(
     private fun createKitInstance(accountType: AccountType.Mnemonic, account: Account): EthereumKit {
         val syncSource = EthereumKit.defaultBscWebSocketSyncSource()
         val kit = EthereumKit.getInstance(App.instance, accountType.words, NetworkType.BscMainNet, syncSource, bscscanApiKey, account.id)
+
+        kit.addDecorator(Erc20Kit.getDecorator())
+        kit.addDecorator(UniswapKit.getDecorator())
 
         kit.start()
 

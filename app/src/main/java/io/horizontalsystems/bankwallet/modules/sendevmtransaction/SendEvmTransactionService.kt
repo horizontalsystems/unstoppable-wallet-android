@@ -6,6 +6,7 @@ import io.horizontalsystems.bankwallet.core.ethereum.EvmTransactionService.GasPr
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.ethereumkit.core.EthereumKit
+import io.horizontalsystems.ethereumkit.core.TransactionDecoration
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.reactivex.BackpressureStrategy
@@ -15,7 +16,7 @@ import io.reactivex.subjects.PublishSubject
 import java.math.BigInteger
 
 class SendEvmTransactionService(
-        private val transactionData: TransactionData,
+        val transactionData: TransactionData,
         private val evmKit: EthereumKit,
         private val transactionsService: EvmTransactionService,
         gasPrice: Long? = null
@@ -41,9 +42,8 @@ class SendEvmTransactionService(
         }
     val sendStateObservable: Flowable<SendState> = sendStateSubject.toFlowable(BackpressureStrategy.BUFFER)
 
-    val toAddress: Address = transactionData.to
-    val amount: BigInteger = transactionData.value
-    val inputData: ByteArray = transactionData.input
+    val ownAddress: Address = evmKit.receiveAddress
+    val decoration: TransactionDecoration? by lazy { evmKit.decorate(transactionData) }
 
     init {
         transactionsService.transactionStatusObservable.subscribeIO { syncState() }
