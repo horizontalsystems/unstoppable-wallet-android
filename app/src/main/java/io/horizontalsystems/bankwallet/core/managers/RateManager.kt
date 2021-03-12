@@ -58,12 +58,12 @@ class RateManager(
         kit.set(coins.map { it.type })
     }
 
-    override fun latesRate(coinType: CoinType, currencyCode: String): LatestRate? {
+    override fun latestRate(coinType: CoinType, currencyCode: String): LatestRate? {
         return kit.getLatestRate(coinType, currencyCode)
     }
 
     override fun getLatestRate(coinType: CoinType, currencyCode: String): BigDecimal? {
-        val marketInfo = latesRate(coinType, currencyCode)
+        val marketInfo = latestRate(coinType, currencyCode)
 
         return when {
             marketInfo == null -> null

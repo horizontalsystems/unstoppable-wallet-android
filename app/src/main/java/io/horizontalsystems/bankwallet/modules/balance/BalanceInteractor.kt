@@ -52,7 +52,7 @@ class BalanceInteractor(
         get() = connectivityManager.isConnected
 
     override fun latestRate(coinType: CoinType, currencyCode: String): LatestRate? {
-        return rateManager.latesRate(coinType, currencyCode)
+        return rateManager.latestRate(coinType, currencyCode)
     }
 
     override fun chartInfo(coinType: CoinType, currencyCode: String): ChartInfo? {
