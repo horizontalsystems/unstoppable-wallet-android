@@ -257,6 +257,7 @@
     <string name="Send_Confirmation_Title">Confirm</string>
     <string name="Send_Confirmation_Domain">Domain</string>
     <string name="Send_Confirmation_Receiver">Receiver</string>
+    <string name="Send_Confirmation_Input">Input</string>
     <string name="Send_Confirmation_HintMemo" translatable="false">Memo</string>
     <string name="Send_Confirmation_EstimateTime">Duration</string>
     <string name="Send_Confirmation_LockTime" translatable="false">TimeLock</string>
@@ -386,6 +387,7 @@
     <string name="Approve_Title">Swap Approve</string>
     <string name="Approve_Info">You should grant permission to a smart contract to swap given token on your behalf. This permission sets amount that can be used by a smart contract. It doesn\'t affect your balance but requires a small fee to execute approval transaction. \n\nWhile it may be done on demand before each trade, it\'s cheaper to approve higher amount in advance for us in future trades.</string>
     <string name="Approve_Error_AlreadyApproved">You already have an allowance for this amount</string>
+    <string name="Approve_Spender">Spender</string>
 
     <!--Uniswap Info -->
 

@@ -4,76 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout">
 
-    <TextView
-        android:id="@+id/toAddressTitle"
-        style="@style/Subhead2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:includeFontPadding="false"
-        android:text="@string/TransactionInfo_To"
-        android:textColor="@color/grey"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/toAddressValue"
-        style="@style/Subhead2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:includeFontPadding="false"
-        android:textColor="@color/grey"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/toAddressTitle"
-        tools:text="0.0005 BTC" />
-
-    <TextView
-        android:id="@+id/amountTitle"
-        style="@style/Subhead2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:includeFontPadding="false"
-        android:text="Amount"
-        android:textColor="@color/grey"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toAddressTitle" />
-
-    <TextView
-        android:id="@+id/amountValue"
-        style="@style/Subhead2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:includeFontPadding="false"
-        android:textColor="@color/grey"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/amountTitle"
-        tools:text="0.0005 BTC" />
-
-    <TextView
-        android:id="@+id/inputTitle"
-        style="@style/Subhead2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:includeFontPadding="false"
-        android:text="Input"
-        android:textColor="@color/grey"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/amountTitle" />
-
-    <TextView
-        android:id="@+id/inputValue"
-        style="@style/Subhead2"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:includeFontPadding="false"
-        android:textColor="@color/grey"
+        android:layout_marginTop="12dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/inputTitle"
-        tools:text="0x23jasdf23kl234k2k3ljkj234jl23jl 4kj42j234jj3h42j3h423h4k2j42j342j3h42jh42j3h42kjh42h42kh42kjh42kjh42kjh" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:itemCount="1"
+        tools:listitem="@layout/view_holder_amount" />
 
     <io.horizontalsystems.bankwallet.ui.FeeSelectorView
         android:id="@+id/feeSelectorView"
@@ -81,7 +22,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/inputValue" />
+        app:layout_constraintTop_toBottomOf="@id/recyclerView" />
 
     <TextView
         android:id="@+id/error"

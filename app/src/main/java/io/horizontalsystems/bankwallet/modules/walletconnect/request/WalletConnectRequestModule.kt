@@ -3,8 +3,8 @@ package io.horizontalsystems.bankwallet.modules.walletconnect.request
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinService
 import io.horizontalsystems.bankwallet.core.ethereum.EthereumFeeViewModel
+import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinServiceFactory
 import io.horizontalsystems.bankwallet.core.ethereum.EvmTransactionService
 import io.horizontalsystems.bankwallet.core.factories.FeeRateProviderFactory
 import io.horizontalsystems.bankwallet.core.providers.StringProvider
@@ -34,7 +34,7 @@ object WalletConnectRequestModule {
             }
         }
         private val service by lazy { WalletConnectSendEthereumTransactionRequestService(request, baseService) }
-        private val coinService by lazy { EvmCoinService(coin, App.currencyManager, App.xRateManager) }
+        private val coinServiceFactory by lazy { EvmCoinServiceFactory(coin, App.coinKit, App.currencyManager, App.xRateManager) }
         private val transactionService by lazy {
             val feeRateProvider = FeeRateProviderFactory.provider(coin)!!
             EvmTransactionService(evmKit, feeRateProvider, 10)
@@ -49,10 +49,10 @@ object WalletConnectRequestModule {
                     WalletConnectSendEthereumTransactionRequestViewModel(service) as T
                 }
                 EthereumFeeViewModel::class.java -> {
-                    EthereumFeeViewModel(transactionService, coinService, stringProvider) as T
+                    EthereumFeeViewModel(transactionService, coinServiceFactory.baseCoinService, stringProvider) as T
                 }
                 SendEvmTransactionViewModel::class.java -> {
-                    SendEvmTransactionViewModel(sendService, coinService, stringProvider) as T
+                    SendEvmTransactionViewModel(sendService, coinServiceFactory, stringProvider) as T
                 }
                 else -> throw IllegalArgumentException()
             }
