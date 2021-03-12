@@ -9,7 +9,7 @@ import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.xrateskit.entities.ChartInfo
 import io.horizontalsystems.xrateskit.entities.ChartType
-import io.horizontalsystems.xrateskit.entities.MarketInfo
+import io.horizontalsystems.xrateskit.entities.LatestRate
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import java.math.BigDecimal
@@ -51,8 +51,8 @@ class BalanceInteractor(
     override val networkAvailable: Boolean
         get() = connectivityManager.isConnected
 
-    override fun marketInfo(coinType: CoinType, currencyCode: String): MarketInfo? {
-        return rateManager.marketInfo(coinType, currencyCode)
+    override fun latestRate(coinType: CoinType, currencyCode: String): LatestRate? {
+        return rateManager.latesRate(coinType, currencyCode)
     }
 
     override fun chartInfo(coinType: CoinType, currencyCode: String): ChartInfo? {
@@ -128,11 +128,11 @@ class BalanceInteractor(
     override fun subscribeToMarketInfo(currencyCode: String) {
         marketInfoDisposables.clear()
 
-        rateManager.marketInfoObservable(currencyCode)
+        rateManager.latestRateObservable(currencyCode)
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .subscribe {
-                    delegate?.didUpdateMarketInfo(it)
+                    delegate?.didUpdateLatestRate(it)
                 }.let {
                     marketInfoDisposables.add(it)
                 }

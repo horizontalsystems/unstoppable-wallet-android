@@ -268,10 +268,10 @@ interface IAppConfigProvider {
 
 interface IRateManager {
     fun set(coins: List<Coin>)
-    fun marketInfo(coinType: CoinType, currencyCode: String): MarketInfo?
+    fun latesRate(coinType: CoinType, currencyCode: String): LatestRate?
     fun getLatestRate(coinType: CoinType, currencyCode: String): BigDecimal?
-    fun marketInfoObservable(coinType: CoinType, currencyCode: String): Observable<MarketInfo>
-    fun marketInfoObservable(currencyCode: String): Observable<Map<CoinType, MarketInfo>>
+    fun latestRateObservable(coinType: CoinType, currencyCode: String): Observable<LatestRate>
+    fun latestRateObservable(currencyCode: String): Observable<Map<CoinType, LatestRate>>
     fun historicalRateCached(coinType: CoinType, currencyCode: String, timestamp: Long): BigDecimal?
     fun historicalRate(coinType: CoinType, currencyCode: String, timestamp: Long): Single<BigDecimal>
     fun chartInfo(coinType: CoinType, currencyCode: String, chartType: ChartType): ChartInfo?

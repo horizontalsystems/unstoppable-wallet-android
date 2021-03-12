@@ -58,12 +58,12 @@ class RateManager(
         kit.set(coins.map { it.type })
     }
 
-    override fun marketInfo(coinType: CoinType, currencyCode: String): MarketInfo? {
-        return kit.getMarketInfo(coinType, currencyCode)
+    override fun latesRate(coinType: CoinType, currencyCode: String): LatestRate? {
+        return kit.getLatestRate(coinType, currencyCode)
     }
 
     override fun getLatestRate(coinType: CoinType, currencyCode: String): BigDecimal? {
-        val marketInfo = marketInfo(coinType, currencyCode)
+        val marketInfo = latesRate(coinType, currencyCode)
 
         return when {
             marketInfo == null -> null
@@ -73,21 +73,21 @@ class RateManager(
 
     }
 
-    override fun marketInfoObservable(coinType: CoinType, currencyCode: String): Observable<MarketInfo> {
-        return kit.marketInfoObservable(coinType, currencyCode)
+    override fun latestRateObservable(coinType: CoinType, currencyCode: String): Observable<LatestRate> {
+        return kit.getLatestRateAsync(coinType, currencyCode)
     }
 
-    override fun marketInfoObservable(currencyCode: String): Observable<Map<CoinType, MarketInfo>> {
-        return kit.marketInfoMapObservable(currencyCode)
+    override fun latestRateObservable(currencyCode: String): Observable<Map<CoinType, LatestRate>> {
+        return kit.latestRateMapObservable(currencyCode)
     }
 
     override fun historicalRateCached(coinType: CoinType, currencyCode: String, timestamp: Long): BigDecimal? {
-        return kit.historicalRate(coinType, currencyCode, timestamp)
+        return kit.getHistoricalRate(coinType, currencyCode, timestamp)
     }
 
     override fun historicalRate(coinType: CoinType, currencyCode: String, timestamp: Long): Single<BigDecimal> {
-        return kit.historicalRate(coinType, currencyCode, timestamp)?.let { Single.just(it) }
-                ?: kit.historicalRateFromApi(coinType, currencyCode, timestamp)
+        return kit.getHistoricalRate(coinType, currencyCode, timestamp)?.let { Single.just(it) }
+                ?: kit.getHistoricalRateAsync(coinType, currencyCode, timestamp)
     }
 
     override fun chartInfo(coinType: CoinType, currencyCode: String, chartType: ChartType): ChartInfo? {

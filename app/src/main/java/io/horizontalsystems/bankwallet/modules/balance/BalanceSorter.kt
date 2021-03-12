@@ -8,7 +8,7 @@ class BalanceSorter : BalanceModule.IBalanceSorter {
         return when (sortType) {
             BalanceSortType.Value -> sortByBalance(items)
             BalanceSortType.Name -> items.sortedBy { it.wallet.coin.title }
-            BalanceSortType.PercentGrowth -> items.sortedByDescending { it.marketInfo?.rateDiff }
+            BalanceSortType.PercentGrowth -> items.sortedByDescending { it.latestRate?.rateDiff24h }
         }
     }
 
