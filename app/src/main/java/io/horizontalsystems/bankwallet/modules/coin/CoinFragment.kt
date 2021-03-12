@@ -280,6 +280,7 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
 
             // About
 
+            aboutGroup.isVisible = item.coinMeta.description.isNotBlank()
             val aboutTextSpanned = Html.fromHtml(item.coinMeta.description.replace("\n", "<br />"), Html.FROM_HTML_MODE_COMPACT)
             aboutText.text = removeLinkSpans(aboutTextSpanned)
 

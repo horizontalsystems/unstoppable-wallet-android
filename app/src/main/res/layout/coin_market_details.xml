@@ -86,6 +86,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/performanceTitle" />
 
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/aboutGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="border7,aboutTitle,aboutText,aboutTextToggle" />
+
     <View
         android:id="@+id/border7"
         android:layout_width="0dp"
