@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.coin
 
 import android.content.Intent
-import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.text.*
@@ -10,10 +9,8 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.addCallback
-import androidx.constraintlayout.widget.ConstraintLayout.LayoutParams
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.isInvisible
@@ -26,7 +23,7 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.settings.notifications.bottommenu.BottomNotificationMenu
 import io.horizontalsystems.bankwallet.modules.settings.notifications.bottommenu.NotificationMenuMode
-import io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoItemView
+import io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.CoinInfoItemView
 import io.horizontalsystems.bankwallet.ui.extensions.createTextView
 import io.horizontalsystems.chartview.Chart
 import io.horizontalsystems.chartview.models.PointInfo
@@ -35,16 +32,11 @@ import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.views.ListPosition
 import io.horizontalsystems.views.SettingsView
-import io.horizontalsystems.views.helpers.LayoutHelper
-import io.horizontalsystems.xrateskit.entities.ChartType
-import io.horizontalsystems.xrateskit.entities.LinkType
-import io.horizontalsystems.xrateskit.entities.TimePeriod
+import io.horizontalsystems.xrateskit.entities.*
 import kotlinx.android.synthetic.main.coin_market.*
 import kotlinx.android.synthetic.main.coin_market_details.*
 import kotlinx.android.synthetic.main.coin_performance.*
-import kotlinx.android.synthetic.main.coin_price_change.*
 import kotlinx.android.synthetic.main.fragment_coin.*
-import kotlinx.android.synthetic.main.view_transaction_info_item.view.*
 import java.math.BigDecimal
 import java.util.*
 
@@ -284,99 +276,11 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
             val aboutTextSpanned = Html.fromHtml(item.coinMeta.description.replace("\n", "<br />"), Html.FROM_HTML_MODE_COMPACT)
             aboutText.text = removeLinkSpans(aboutTextSpanned)
 
-            // Categories/Links
+            // Categories/Platforms/Links
+            setCategoriesAndPlatforms(item.coinMeta.categories, item.coinMeta.platforms)
 
-            context?.let { context ->
-                linksLayout.removeAllViews()
-
-                item.coinMeta.categories?.let { categories ->
-                    val category = TransactionInfoItemView(context).apply {
-                        layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutHelper.dp(48f, context))
-
-                        txViewBackground.setBackgroundColor(Color.TRANSPARENT)
-                        txtTitle.text = getString(R.string.CoinPage_Category)
-                        valueText.text = categories.map { it.name }.joinToString(", ")
-                        valueText.isVisible = true
-                        btnAction.isVisible = false
-                        decoratedText.isVisible = false
-                    }
-
-                    linksLayout.addView(category)
-                }
-
-                item.coinMeta.platforms?.forEach { (platform, value) ->
-                    val contract = TransactionInfoItemView(context).apply {
-                        txViewBackground.setBackgroundColor(Color.TRANSPARENT)
-                        bindHashId(platform.name, value)
-                    }
-
-                    linksLayout.addView(contract)
-                }
-
-                item.coinMeta.links[LinkType.GUIDE]?.let {
-                    val link = SettingsView(context).apply {
-                        showTitle(context.getString(R.string.CoinPage_Guide))
-                        showIcon(ContextCompat.getDrawable(context, R.drawable.ic_academy_20))
-
-                        layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT).apply {
-                            topMargin = LayoutHelper.dp(32f, context)
-                            bottomMargin = LayoutHelper.dp(32f, context)
-                        }
-                    }
-
-                    linksLayout.addView(link)
-                }
-
-                val allLinks = item.coinMeta.links.filter { it.key != LinkType.GUIDE }
-
-                allLinks.onEachIndexed { index, entry ->
-                    val link = SettingsView(context)
-
-                    when (entry.key) {
-                        LinkType.GUIDE -> {
-                            link.showTitle(getString(R.string.CoinPage_Guide))
-                            link.showIcon(ContextCompat.getDrawable(context, R.drawable.ic_academy_20))
-                        }
-                        LinkType.WEBSITE -> {
-                            link.showTitle(getString(R.string.CoinPage_Website))
-                            link.showIcon(ContextCompat.getDrawable(context, R.drawable.ic_globe))
-                        }
-                        LinkType.WHITEPAPER -> {
-                            link.showTitle(getString(R.string.CoinPage_Whitepaper))
-                            link.showIcon(ContextCompat.getDrawable(context, R.drawable.ic_clipboard))
-                        }
-                        LinkType.TWITTER -> {
-                            link.showTitle(getString(R.string.CoinPage_Twitter))
-                            link.showIcon(ContextCompat.getDrawable(context, R.drawable.ic_twitter))
-                        }
-                        LinkType.TELEGRAM -> {
-                            link.showTitle(getString(R.string.CoinPage_Telegram))
-                            link.showIcon(ContextCompat.getDrawable(context, R.drawable.ic_telegram))
-                        }
-                        LinkType.REDDIT -> {
-                            link.showTitle(getString(R.string.CoinPage_Reddit))
-                            link.showIcon(ContextCompat.getDrawable(context, R.drawable.ic_reddit))
-                        }
-                        LinkType.GITHUB -> {
-                            link.showTitle(getString(R.string.CoinPage_Github))
-                            link.showIcon(ContextCompat.getDrawable(context, R.drawable.ic_github))
-                        }
-                    }
-
-                    if (index == 0) {
-                        link.layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT).apply {
-                            topMargin = LayoutHelper.dp(32f, context)
-                        }
-                    }
-
-                    link.setListPosition(ListPosition.Companion.getListPosition(allLinks.size, index))
-                    link.setOnClickListener {
-                        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(entry.value)));
-                    }
-
-                    linksLayout.addView(link)
-                }
-            }
+            //Links
+            setLinks(item.coinMeta.links)
         })
 
         viewModel.setSelectedPoint.observe(viewLifecycleOwner, Observer { item ->
@@ -451,6 +355,86 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
         viewModel.coinMarkets.observe(viewLifecycleOwner, { items ->
             coinMarketsButton.isVisible = items.isNotEmpty()
         })
+    }
+
+    private fun setLinks(links: Map<LinkType, String>) {
+        context?.let { context ->
+            linksLayout.removeAllViews()
+
+            links.onEachIndexed { index, entry ->
+                val link = SettingsView(context)
+
+                when (entry.key) {
+                    LinkType.GUIDE -> {
+                        link.showTitle(getString(R.string.CoinPage_Guide))
+                        link.showIcon(ContextCompat.getDrawable(context, R.drawable.ic_academy_20))
+                    }
+                    LinkType.WEBSITE -> {
+                        link.showTitle(getString(R.string.CoinPage_Website))
+                        link.showIcon(ContextCompat.getDrawable(context, R.drawable.ic_globe))
+                    }
+                    LinkType.WHITEPAPER -> {
+                        link.showTitle(getString(R.string.CoinPage_Whitepaper))
+                        link.showIcon(ContextCompat.getDrawable(context, R.drawable.ic_clipboard))
+                    }
+                    LinkType.TWITTER -> {
+                        link.showTitle(getString(R.string.CoinPage_Twitter))
+                        link.showIcon(ContextCompat.getDrawable(context, R.drawable.ic_twitter))
+                    }
+                    LinkType.TELEGRAM -> {
+                        link.showTitle(getString(R.string.CoinPage_Telegram))
+                        link.showIcon(ContextCompat.getDrawable(context, R.drawable.ic_telegram))
+                    }
+                    LinkType.REDDIT -> {
+                        link.showTitle(getString(R.string.CoinPage_Reddit))
+                        link.showIcon(ContextCompat.getDrawable(context, R.drawable.ic_reddit))
+                    }
+                    LinkType.GITHUB -> {
+                        link.showTitle(getString(R.string.CoinPage_Github))
+                        link.showIcon(ContextCompat.getDrawable(context, R.drawable.ic_github))
+                    }
+                }
+
+                link.setListPosition(ListPosition.getListPosition(links.size, index))
+                link.setOnClickListener {
+                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(entry.value)));
+                }
+
+                linksLayout.addView(link)
+            }
+        }
+    }
+
+    private fun setCategoriesAndPlatforms(categories: List<CoinCategory>, platforms: Map<CoinPlatformType, String>) {
+        context?.let { context ->
+            categoriesLayout.removeAllViews()
+            val categoryCellsCount = if (categories.isNotEmpty()) 1 else 0
+            val categoryPlatformCellsCount = platforms.size + categoryCellsCount
+
+            if (categories.isNotEmpty()) {
+                val categoriesView = CoinInfoItemView(context).apply {
+                    bind(
+                            title = getString(R.string.CoinPage_Category),
+                            value = categories.joinToString(", ") { it.name },
+                            listPosition = ListPosition.getListPosition(categoryPlatformCellsCount, 0)
+                    )
+                }
+
+                categoriesLayout.addView(categoriesView)
+            }
+
+            platforms.onEachIndexed { index, (platform, value) ->
+                val platformView = CoinInfoItemView(context).apply {
+                    bind(
+                            title = platform.name,
+                            decoratedValue = value,
+                            listPosition = ListPosition.getListPosition(categoryPlatformCellsCount, index + categoryCellsCount)
+                    )
+                }
+
+                categoriesLayout.addView(platformView)
+            }
+        }
     }
 
     private fun removeLinkSpans(spanned: Spanned): Spannable {
