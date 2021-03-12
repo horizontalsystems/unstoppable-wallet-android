@@ -248,15 +248,6 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
                 }
             }
 
-            // Rating
-            ratingDetails.isVisible = !item.coinMeta.rating.isNullOrBlank()
-
-            // Price
-            priceRangeMin.text = formatter.formatFiat(item.rateLow24h, item.currency.symbol, 2, 4)
-            priceRangeMax.text = formatter.formatFiat(item.rateHigh24h, item.currency.symbol, 2, 4)
-
-            moveMarker(marker24h, item.rateValue.toFloat(), item.rateLow24h.toFloat(), item.rateHigh24h.toFloat())
-
             // Market
 
             coinMarketsButton.showTitle(getString(R.string.CoinPage_CoinMarket, coinCode))
@@ -475,17 +466,6 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
 
         textView.setTextColor(requireContext().getColor(color))
         textView.text = formatter.format(percentage.abs(), 0, 2, prefix = sign, suffix = "%")
-    }
-
-    private fun moveMarker(markerView: ImageView, price: Float, low: Float, high: Float) {
-        val priceMax = Math.max(high - low, 1f)
-        val priceActual = Math.max(price - low, 1f)
-
-        val markerWrapWidth = LayoutHelper.dp(32 * 2f, context)
-        val percent = Math.min(100 * priceActual / priceMax, 98f)
-        val coordinate = percent / 100 * (chart.width - markerWrapWidth)
-
-        markerView.animate().translationX(coordinate)
     }
 
     private fun formatFiatShortened(value: BigDecimal, symbol: String): String {
