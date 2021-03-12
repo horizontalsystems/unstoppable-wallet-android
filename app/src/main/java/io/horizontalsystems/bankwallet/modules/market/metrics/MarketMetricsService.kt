@@ -5,14 +5,14 @@ import io.horizontalsystems.bankwallet.core.IRateManager
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.core.BackgroundManager
-import io.horizontalsystems.core.entities.Currency
+import io.horizontalsystems.core.ICurrencyManager
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
 
 class MarketMetricsService(
         private val xRateManager: IRateManager,
-        private val currency: Currency,
-        private val backgroundManager: BackgroundManager
+        private val backgroundManager: BackgroundManager,
+        private val currencyManager: ICurrencyManager
 ) : Clearable, BackgroundManager.Listener {
 
     val marketMetricsObservable: BehaviorSubject<DataState<MarketMetricsItem>> = BehaviorSubject.createDefault(DataState.Loading)
@@ -22,6 +22,13 @@ class MarketMetricsService(
     init {
         fetchMarketMetrics()
         backgroundManager.registerListener(this)
+        currencyManager.baseCurrencyUpdatedSignal
+                .subscribeIO {
+                    fetchMarketMetrics()
+                }
+                .let {
+                    disposables.add(it)
+                }
     }
 
     override fun willEnterForeground() {
@@ -35,9 +42,9 @@ class MarketMetricsService(
     private fun fetchMarketMetrics() {
         marketMetricsObservable.onNext(DataState.Loading)
 
-        xRateManager.getGlobalMarketInfoAsync(currency.code)
+        xRateManager.getGlobalMarketInfoAsync(currencyManager.baseCurrency.code)
                 .subscribeIO({
-                    val marketMetricsItem = MarketMetricsItem.createFromGlobalCoinMarket(it, currency)
+                    val marketMetricsItem = MarketMetricsItem.createFromGlobalCoinMarket(it, currencyManager.baseCurrency)
                     marketMetricsObservable.onNext(DataState.Success(marketMetricsItem))
                 }, {
                     marketMetricsObservable.onNext(DataState.Error(it))

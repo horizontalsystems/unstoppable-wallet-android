@@ -7,15 +7,20 @@ import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.bankwallet.modules.market.Score
 import io.horizontalsystems.bankwallet.modules.market.list.IMarketListFetcher
+import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.xrateskit.entities.CoinMarket
 import io.reactivex.Observable
 import io.reactivex.Single
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.BehaviorSubject
 import io.horizontalsystems.xrateskit.entities.TimePeriod as XRatesKitTimePeriod
 
-class MarketAdvancedSearchService(private val currency: Currency, private val xRateManager: IRateManager) : Clearable, IMarketListFetcher {
+class MarketAdvancedSearchService(
+        private val xRateManager: IRateManager,
+        private val currencyManager: ICurrencyManager
+) : Clearable, IMarketListFetcher {
 
     var coinCount: Int = CoinList.Top250.itemsCount
         set(value) {
@@ -61,17 +66,27 @@ class MarketAdvancedSearchService(private val currency: Currency, private val xR
     var numberOfItemsAsync = BehaviorSubject.create<DataState<Int>>()
 
     private var topItemsDisposable: Disposable? = null
+    private var disposables = CompositeDisposable()
     private var cache: List<CoinMarket>? = null
 
     init {
         refreshCounter()
+
+        currencyManager.baseCurrencyUpdatedSignal
+                .subscribeIO {
+                    cache = null
+                    refreshCounter()
+                }
+                .let {
+                    disposables.add(it)
+                }
     }
 
     private fun refreshCounter() {
         topItemsDisposable?.dispose()
 
         numberOfItemsAsync.onNext(DataState.Loading)
-        topItemsDisposable = getTopMarketList(currency)
+        topItemsDisposable = getTopMarketList(currencyManager.baseCurrency)
                 .map { it.size }
                 .subscribeIO({
                     numberOfItemsAsync.onNext(DataState.Success(it))
@@ -140,5 +155,6 @@ class MarketAdvancedSearchService(private val currency: Currency, private val xR
 
     override fun clear() {
         topItemsDisposable?.dispose()
+        disposables.dispose()
     }
 }

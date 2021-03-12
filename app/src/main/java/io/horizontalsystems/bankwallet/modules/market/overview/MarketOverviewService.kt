@@ -6,15 +6,16 @@ import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.bankwallet.modules.market.Score
 import io.horizontalsystems.core.BackgroundManager
-import io.horizontalsystems.core.entities.Currency
+import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.xrateskit.entities.TimePeriod
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.BehaviorSubject
 
 class MarketOverviewService(
-        private val currency: Currency,
         private val rateManager: IRateManager,
-        private val backgroundManager: BackgroundManager
+        private val backgroundManager: BackgroundManager,
+        private val currencyManager: ICurrencyManager
 ) : Clearable, BackgroundManager.Listener {
 
     sealed class State {
@@ -28,10 +29,18 @@ class MarketOverviewService(
     var marketItems: List<MarketItem> = listOf()
 
     private var topItemsDisposable: Disposable? = null
+    private val disposables = CompositeDisposable()
 
     init {
         fetch()
         backgroundManager.registerListener(this)
+        currencyManager.baseCurrencyUpdatedSignal
+                .subscribeIO {
+                    fetch()
+                }
+                .let {
+                    disposables.add(it)
+                }
     }
 
     override fun willEnterForeground() {
@@ -47,10 +56,10 @@ class MarketOverviewService(
 
         stateObservable.onNext(State.Loading)
 
-        topItemsDisposable = rateManager.getTopMarketList(currency.code, 250, TimePeriod.HOUR_24)
+        topItemsDisposable = rateManager.getTopMarketList(currencyManager.baseCurrency.code, 250, TimePeriod.HOUR_24)
                 .subscribeIO({
                     marketItems = it.mapIndexed { index, topMarket ->
-                        MarketItem.createFromCoinMarket(topMarket, currency, Score.Rank(index + 1))
+                        MarketItem.createFromCoinMarket(topMarket, currencyManager.baseCurrency, Score.Rank(index + 1))
                     }
 
                     stateObservable.onNext(State.Loaded)
@@ -61,6 +70,7 @@ class MarketOverviewService(
 
     override fun clear() {
         topItemsDisposable?.dispose()
+        disposables.dispose()
         backgroundManager.unregisterListener(this)
     }
 
