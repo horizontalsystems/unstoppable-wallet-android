@@ -10,6 +10,7 @@ import io.horizontalsystems.bankwallet.core.providers.StringProvider
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.core.toHexString
 import io.horizontalsystems.bankwallet.modules.send.SendModule.AmountData
+import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData
 import io.horizontalsystems.ethereumkit.core.TransactionDecoration
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.reactivex.disposables.CompositeDisposable
@@ -69,7 +70,7 @@ class SendEvmTransactionViewModel(
                 is SendEvmTransactionService.SendState.Failed -> sendFailedLiveData.postValue(convertError(sendState.error))
             }
 
-    private fun getViewItems(decoration: TransactionDecoration) = when (decoration) {
+    private fun getViewItems(decoration: TransactionDecoration): List<ViewItem>? = when (decoration) {
         is TransactionDecoration.Transfer -> getTransferViewItems(decoration)
         is TransactionDecoration.Eip20Transfer -> getEip20TransferViewItems(decoration)
         is TransactionDecoration.Eip20Approve -> getEip20ApproveViewItems(decoration)
@@ -79,21 +80,26 @@ class SendEvmTransactionViewModel(
 
     private fun getTransferViewItems(transfer: TransactionDecoration.Transfer): List<ViewItem> {
         val viewItems = mutableListOf<ViewItem>(ViewItem.Amount(coinServiceFactory.baseCoinService.amountData(transfer.value)))
+        getDomainViewItem()?.let {
+            viewItems.add(it)
+        }
         transfer.to?.let { to ->
             viewItems.add(ViewItem.Address(stringProvider.string(R.string.Send_Confirmation_Receiver), value = to.eip55))
         }
         return viewItems
     }
 
-    private fun getEip20TransferViewItems(eip20Transfer: TransactionDecoration.Eip20Transfer) =
+    private fun getEip20TransferViewItems(eip20Transfer: TransactionDecoration.Eip20Transfer): List<ViewItem>? =
             coinServiceFactory.getCoinService(eip20Transfer.contractAddress)?.let { coinService ->
-                listOf(
-                        ViewItem.Amount(coinService.amountData(eip20Transfer.value)),
-                        ViewItem.Address(stringProvider.string(R.string.Send_Confirmation_Receiver), eip20Transfer.to.eip55)
-                )
+                val viewItems = mutableListOf<ViewItem>(ViewItem.Amount(coinService.amountData(eip20Transfer.value)))
+                getDomainViewItem()?.let {
+                    viewItems.add(it)
+                }
+                viewItems.add(ViewItem.Address(stringProvider.string(R.string.Send_Confirmation_Receiver), eip20Transfer.to.eip55))
+                viewItems
             }
 
-    private fun getEip20ApproveViewItems(eip20Approve: TransactionDecoration.Eip20Approve) =
+    private fun getEip20ApproveViewItems(eip20Approve: TransactionDecoration.Eip20Approve): List<ViewItem>? =
             coinServiceFactory.getCoinService(eip20Approve.contractAddress)?.let { coinService ->
                 listOf(
                         ViewItem.Amount(coinService.amountData(eip20Approve.value)),
@@ -136,6 +142,15 @@ class SendEvmTransactionViewModel(
             ViewItem.Input(stringProvider.string(R.string.Send_Confirmation_Input), transactionData.input.toHexString())
     )
 
+    private fun getDomainViewItem(): ViewItem? {
+        service.additionalItems.forEach {
+            if (it is SendEvmData.AdditionalItem.Domain) {
+                return ViewItem.Value(stringProvider.string(R.string.Send_Confirmation_Domain), it.value)
+            }
+        }
+        return null
+    }
+
     private fun convertError(error: Throwable) =
             when (val convertedError = error.convertedError) {
                 is SendEvmTransactionService.TransactionError.InsufficientBalance -> {
@@ -154,4 +169,5 @@ sealed class ViewItem {
     class Amount(val amountData: AmountData) : ViewItem()
     class Address(val title: String, val value: String) : ViewItem()
     class Input(val title: String, val value: String) : ViewItem()
+    class Value(val title: String, val value: String) : ViewItem()
 }

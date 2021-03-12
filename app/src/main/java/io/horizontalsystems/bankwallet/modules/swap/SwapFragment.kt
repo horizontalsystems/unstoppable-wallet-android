@@ -6,17 +6,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.core.ethereum.EthereumFeeViewModel
-import io.horizontalsystems.bankwallet.modules.swap.SwapModule.transactionDataKey
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceViewModel
-import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveFragment
+import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveModule
 import io.horizontalsystems.bankwallet.modules.swap.coincard.SwapCoinCardViewModel
+import io.horizontalsystems.bankwallet.modules.swap.confirmation.SwapConfirmationModule
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.getNavigationResult
 import io.horizontalsystems.core.setOnSingleClickListener
@@ -61,8 +59,8 @@ class SwapFragment : BaseFragment() {
 
         observeViewModel()
 
-        getNavigationResult(SwapApproveFragment.requestKey)?.let {
-            if (it.getBoolean(SwapApproveFragment.resultKey)) {
+        getNavigationResult(SwapApproveModule.requestKey)?.let {
+            if (it.getBoolean(SwapApproveModule.resultKey)) {
                 viewModel.didApprove()
             }
         }
@@ -107,7 +105,7 @@ class SwapFragment : BaseFragment() {
         })
 
         viewModel.openApproveLiveEvent().observe(viewLifecycleOwner, { approveData ->
-            findNavController().navigate(R.id.swapFragment_to_swapApproveFragment, bundleOf(SwapApproveFragment.dataKey to approveData), navOptions())
+            SwapApproveModule.start(this, R.id.swapFragment_to_swapApproveFragment, navOptions(), approveData)
         })
 
         viewModel.advancedSettingsVisibleLiveData().observe(viewLifecycleOwner, { visible ->
@@ -115,9 +113,7 @@ class SwapFragment : BaseFragment() {
         })
 
         viewModel.openConfirmationLiveEvent().observe(viewLifecycleOwner, { transactionData ->
-            val transactionDataParcelable = SwapModule.TransactionDataParcelable(transactionData)
-            val arguments = bundleOf(transactionDataKey to transactionDataParcelable)
-            findNavController().navigate(R.id.swapFragment_to_swapConfirmationFragment, arguments, navOptions())
+            SwapConfirmationModule.start(this, R.id.swapFragment_to_swapConfirmationFragment, navOptions(), transactionData)
         })
     }
 

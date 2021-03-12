@@ -12,9 +12,10 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.ethereum.EthereumFeeViewModel
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
+import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
+import io.horizontalsystems.bankwallet.modules.swap.SwapModule
 import io.horizontalsystems.bankwallet.modules.swap.SwapModule.TransactionDataParcelable
-import io.horizontalsystems.bankwallet.modules.swap.SwapModule.transactionDataKey
 import io.horizontalsystems.bankwallet.modules.swap.SwapViewModel
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
@@ -28,7 +29,7 @@ class SwapConfirmationFragment : BaseFragment() {
 
     private val mainViewModel by navGraphViewModels<SwapViewModel>(R.id.swapFragment)
 
-    private val vmFactory by lazy { SwapConfirmationModule.Factory(mainViewModel.service, transactionData) }
+    private val vmFactory by lazy { SwapConfirmationModule.Factory(mainViewModel.service, SendEvmData(transactionData, additionalItems)) }
     private val sendViewModel by viewModels<SendEvmTransactionViewModel> { vmFactory }
     private val feeViewModel by viewModels<EthereumFeeViewModel> { vmFactory }
 
@@ -36,13 +37,15 @@ class SwapConfirmationFragment : BaseFragment() {
 
     private val transactionData: TransactionData
         get() {
-            val transactionDataParcelable = arguments?.getParcelable<TransactionDataParcelable>(transactionDataKey)!!
+            val transactionDataParcelable = arguments?.getParcelable<TransactionDataParcelable>(SwapModule.transactionDataKey)!!
             return TransactionData(
                     Address(transactionDataParcelable.toAddress),
                     transactionDataParcelable.value,
                     transactionDataParcelable.input
             )
         }
+    private val additionalItems: List<SendEvmData.AdditionalItem>
+        get() = arguments?.getParcelableArrayList(SwapModule.additionalItemsKey) ?: listOf()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_confirmation_swap, container, false)
