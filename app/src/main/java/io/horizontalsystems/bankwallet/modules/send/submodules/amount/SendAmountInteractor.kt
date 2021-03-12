@@ -24,7 +24,7 @@ class SendAmountInteractor(
     init {
         backgroundManager.registerListener(this)
 
-        rateManager.marketInfoObservable(coin.type, baseCurrency.code)
+        rateManager.latestRateObservable(coin.type, baseCurrency.code)
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .subscribe { marketInfo ->

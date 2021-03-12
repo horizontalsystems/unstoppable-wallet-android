@@ -19,7 +19,7 @@ class EvmCoinService(
         get() {
             val baseCurrency = currencyManager.baseCurrency
 
-            return xRateManager.marketInfo(coin.type, baseCurrency.code)?.let {
+            return xRateManager.latesRate(coin.type, baseCurrency.code)?.let {
                 CurrencyValue(baseCurrency, it.rate)
             }
         }

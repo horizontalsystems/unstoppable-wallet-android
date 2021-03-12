@@ -8,7 +8,7 @@ import io.horizontalsystems.bankwallet.modules.send.SendModule.AmountInfo
 import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.core.entities.Currency
-import io.horizontalsystems.xrateskit.entities.MarketInfo
+import io.horizontalsystems.xrateskit.entities.LatestRate
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -25,7 +25,7 @@ class FiatService(
 ) : AmountTypeSwitchService.IToggleAvailableListener {
 
     private val disposables = CompositeDisposable()
-    private var marketInfoDisposable: Disposable? = null
+    private var latestRateDisposable: Disposable? = null
 
     private var coin: Coin? = null
     private var coinAmount: BigDecimal? = null
@@ -58,25 +58,25 @@ class FiatService(
                 .let { disposables.add(it) }
     }
 
-    private fun subscribeToMarketInfo() {
-        marketInfoDisposable?.dispose()
-        marketInfoDisposable = null
+    private fun subscribeToLatestRate() {
+        latestRateDisposable?.dispose()
+        latestRateDisposable = null
 
         toggleAvailable = false
 
         val coin = coin ?: return
 
-        syncMarketInfo(rateManager.marketInfo(coin.type, currency.code))
-        marketInfoDisposable = rateManager.marketInfoObservable(coin.type, currency.code)
+        syncLatestRate(rateManager.latesRate(coin.type, currency.code))
+        latestRateDisposable = rateManager.latestRateObservable(coin.type, currency.code)
                 .subscribeOn(Schedulers.io())
                 .subscribe {
-                    syncMarketInfo(it)
+                    syncLatestRate(it)
                 }
     }
 
-    private fun syncMarketInfo(marketInfo: MarketInfo?) {
-        rate = if (marketInfo != null && !marketInfo.isExpired()) {
-            marketInfo.rate
+    private fun syncLatestRate(latestRate: LatestRate?) {
+        rate = if (latestRate != null && !latestRate.isExpired()) {
+            latestRate.rate
         } else {
             null
         }
@@ -156,7 +156,7 @@ class FiatService(
         this.coin = coin
 
         rate = null
-        subscribeToMarketInfo()
+        subscribeToLatestRate()
 
         when (switchService.amountType) {
             AmountType.Coin -> fullAmountInfoSubject.onNext(Optional.ofNullable(buildForCoin(coinAmount)))

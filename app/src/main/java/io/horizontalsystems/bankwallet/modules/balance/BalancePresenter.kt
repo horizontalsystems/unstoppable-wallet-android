@@ -7,7 +7,7 @@ import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.balance.BalanceModule.BalanceItem
 import io.horizontalsystems.coinkit.models.CoinType
-import io.horizontalsystems.xrateskit.entities.MarketInfo
+import io.horizontalsystems.xrateskit.entities.LatestRate
 import java.math.BigDecimal
 import java.util.concurrent.Executors
 
@@ -78,7 +78,7 @@ class BalancePresenter(
 
     override fun onChart(viewItem: BalanceViewItem) {
         val balanceItem = items.firstOrNull { it.wallet == viewItem.wallet }
-        if (balanceItem?.marketInfo != null) {
+        if (balanceItem?.latestRate != null) {
             router.openChart(viewItem.wallet.coin)
         }
     }
@@ -241,11 +241,11 @@ class BalancePresenter(
         }
     }
 
-    override fun didUpdateMarketInfo(marketInfo: Map<CoinType, MarketInfo>) {
+    override fun didUpdateLatestRate(latestRate: Map<CoinType, LatestRate>) {
         executor.submit {
             items.forEachIndexed { index, item ->
-                marketInfo[item.wallet.coin.type]?.let {
-                    item.marketInfo = it
+                latestRate[item.wallet.coin.type]?.let {
+                    item.latestRate = it
                     viewItems[index] = factory.viewItem(item, currency, viewItems[index].expanded, hideBalance)
                 }
             }
@@ -290,7 +290,7 @@ class BalancePresenter(
         interactor.subscribeToMarketInfo(currency.code)
 
         items.forEach { item ->
-            item.marketInfo = interactor.marketInfo(item.wallet.coin.type, currency.code)
+            item.latestRate = interactor.latestRate(item.wallet.coin.type, currency.code)
         }
     }
 
