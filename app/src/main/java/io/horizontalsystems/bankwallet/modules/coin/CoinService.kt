@@ -36,7 +36,7 @@ class CoinService(
 
     var coinMarketDetails: CoinMarketDetails? = null
 
-    var lastPoint: LastPoint? = xRateManager.latesRate(coinType, currency.code)?.let { LastPoint(it.rate, it.timestamp) }
+    var lastPoint: LastPoint? = xRateManager.latestRate(coinType, currency.code)?.let { LastPoint(it.rate, it.timestamp) }
         set(value) {
             field = value
             chartInfoUpdatedObservable.onNext(Unit)

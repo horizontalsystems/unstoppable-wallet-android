@@ -66,7 +66,7 @@ class FiatService(
 
         val coin = coin ?: return
 
-        syncLatestRate(rateManager.latesRate(coin.type, currency.code))
+        syncLatestRate(rateManager.latestRate(coin.type, currency.code))
         latestRateDisposable = rateManager.latestRateObservable(coin.type, currency.code)
                 .subscribeOn(Schedulers.io())
                 .subscribe {
