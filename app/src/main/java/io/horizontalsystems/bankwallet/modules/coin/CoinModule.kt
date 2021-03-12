@@ -15,7 +15,7 @@ object CoinModule {
             val currency = App.currencyManager.baseCurrency
             val rateFormatter = RateFormatter(currency)
             val service = CoinService(coinType, currency, App.xRateManager, App.chartTypeStorage, App.priceAlertManager, App.notificationManager, App.localStorage, App.marketFavoritesManager)
-            return CoinViewModel(rateFormatter, service, coinCode, coinTitle, coinId, RateChartViewFactory(currency, App.numberFormatter), listOf(service)) as T
+            return CoinViewModel(rateFormatter, service, coinCode, coinTitle, coinId, CoinViewFactory(currency, App.numberFormatter), listOf(service)) as T
         }
 
     }

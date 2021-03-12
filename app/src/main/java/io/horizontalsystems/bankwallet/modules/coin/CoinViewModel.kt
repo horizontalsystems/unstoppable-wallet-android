@@ -16,7 +16,7 @@ class CoinViewModel(
         val coinCode: String,
         private val coinTitle: String,
         private val coinId: String?,
-        private val factory: RateChartViewFactory,
+        private val factory: CoinViewFactory,
         private val clearables: List<Clearable>
         )
     : ViewModel() {
