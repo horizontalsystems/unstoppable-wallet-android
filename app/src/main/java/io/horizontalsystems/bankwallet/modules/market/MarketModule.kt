@@ -15,8 +15,6 @@ import java.util.*
 
 object MarketModule {
 
-    val currencyUSD = Currency(code = "USD", symbol = "\u0024", decimal = 2)
-
     class Factory : ViewModelProvider.Factory {
 
         @Suppress("UNCHECKED_CAST")

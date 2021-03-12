@@ -3,14 +3,15 @@ package io.horizontalsystems.bankwallet.modules.market.list
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
-import io.horizontalsystems.core.entities.Currency
+import io.horizontalsystems.core.ICurrencyManager
+import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.BehaviorSubject
 
 class MarketListService(
-        private val currency: Currency,
-        private val fetcher: IMarketListFetcher
+        private val fetcher: IMarketListFetcher,
+        private val currencyManager: ICurrencyManager
 ) : Clearable {
 
     sealed class State {
@@ -29,7 +30,7 @@ class MarketListService(
     init {
         fetch()
 
-        fetcher.dataUpdatedAsync
+        Observable.merge(fetcher.dataUpdatedAsync, currencyManager.baseCurrencyUpdatedSignal)
                 .subscribeIO {
                     marketItems = listOf()
                     fetch()
@@ -48,7 +49,7 @@ class MarketListService(
 
         stateObservable.onNext(State.Loading)
 
-        topItemsDisposable = fetcher.fetchAsync(currency)
+        topItemsDisposable = fetcher.fetchAsync(currencyManager.baseCurrency)
                 .subscribeIO({
                     marketItems = it
                     stateObservable.onNext(State.Loaded)
