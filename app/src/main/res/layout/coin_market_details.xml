@@ -8,64 +8,14 @@
     android:visibility="gone"
     tools:visibility="visible">
 
-    <io.horizontalsystems.views.SettingsViewRating
-        android:id="@+id/ratingDetails"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:paddingTop="12dp"
-        android:paddingBottom="12dp"
-        app:color="@color/jacob"
-        app:icon="@drawable/ic_rating_a"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:position="single"
-        app:value="@string/CoinPage_RatingDetails" />
-
     <View
         android:id="@+id/border4"
         android:layout_width="0dp"
         android:layout_height="0.5dp"
-        android:layout_marginTop="12dp"
         android:background="@color/steel_20"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ratingDetails" />
-
-    <TextView
-        android:id="@+id/priceTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="16dp"
-        android:text="@string/CoinPage_Price"
-        android:textColor="@color/oz"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/border4" />
-
-    <include
-        android:id="@+id/priceData"
-        layout="@layout/coin_price_change"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/priceTitle" />
-
-    <View
-        android:id="@+id/border5"
-        android:layout_width="0dp"
-        android:layout_height="0.5dp"
-        android:layout_marginTop="12dp"
-        android:background="@color/steel_20"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/priceData" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/marketTitle"
@@ -78,7 +28,7 @@
         android:textColor="@color/oz"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/border5" />
+        app:layout_constraintTop_toBottomOf="@id/border4" />
 
     <include
         android:id="@+id/marketData"
