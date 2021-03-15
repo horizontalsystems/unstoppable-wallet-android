@@ -85,11 +85,13 @@ class CoinViewFactory(private val currency: Currency, private val numberFormatte
             marketData.add(MarketData(R.string.CoinPage_Volume24, formatFiatShortened(coinMarket.volume24h, currency.symbol)))
         }
         if (coinMarket.circulatingSupply > BigDecimal.ZERO) {
-            val value = numberFormatter.formatCoin(coinMarket.circulatingSupply, coinCode, 0, 2)
+            val (shortenValue, suffix) = numberFormatter.shortenValue(coinMarket.circulatingSupply)
+            val value = "$shortenValue $suffix $coinCode"
             marketData.add(MarketData(R.string.CoinPage_inCirculation, value))
         }
         if (coinMarket.totalSupply > BigDecimal.ZERO) {
-            val value = numberFormatter.formatCoin(coinMarket.totalSupply, coinCode, 0, 2)
+            val (shortenValue, suffix) = numberFormatter.shortenValue(coinMarket.totalSupply)
+            val value = "$shortenValue $suffix $coinCode"
             marketData.add(MarketData(R.string.CoinPage_TotalSupply, value))
         }
         return marketData
