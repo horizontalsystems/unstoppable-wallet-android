@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.modules.coin
 
 import androidx.annotation.StringRes
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.chartview.ChartData
@@ -111,12 +110,12 @@ class CoinViewFactory(private val currency: Currency, private val numberFormatte
 
     fun createCoinMarketItems(coinDetails: CoinMarketDetails): List<MarketTickerViewItem> {
         return coinDetails.tickers.map {
-            val (shortenValue, suffix) = App.numberFormatter.shortenValue(it.volume)
+            val (shortenValue, suffix) = numberFormatter.shortenValue(it.volume)
             MarketTickerViewItem(
                     it.marketName,
                     "${it.base}/${it.target}",
-                    numberFormatter.formatFiat(it.rate, currency.symbol, 0, 6),
-                    numberFormatter.formatFiat(shortenValue, currency.symbol, 0, 2) + " $suffix ${it.target}"
+                    numberFormatter.formatCoin(it.rate, it.target, 0, 2),
+                    "$shortenValue $suffix ${it.base}"
             )
         }
     }
