@@ -9,7 +9,6 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.activity.addCallback
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
@@ -34,7 +33,6 @@ import io.horizontalsystems.views.ListPosition
 import io.horizontalsystems.views.SettingsView
 import io.horizontalsystems.xrateskit.entities.*
 import kotlinx.android.synthetic.main.coin_market_details.*
-import kotlinx.android.synthetic.main.coin_performance.*
 import kotlinx.android.synthetic.main.fragment_coin.*
 import java.math.BigDecimal
 import java.util.*
@@ -219,24 +217,7 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
 
             // Performance
 
-            item.rateDiffs.forEach { (period, values) ->
-                val usdValue = values["USD"] ?: BigDecimal.ZERO
-                val ethValue = values["ETH"] ?: BigDecimal.ZERO
-                val btcValue = values["BTC"] ?: BigDecimal.ZERO
-
-                when (period) {
-                    TimePeriod.DAY_7 -> {
-                        setColoredPercentageValue(usd1WPercent, usdValue)
-                        setColoredPercentageValue(eth1WPercent, ethValue)
-                        setColoredPercentageValue(btc1WPercent, btcValue)
-                    }
-                    TimePeriod.DAY_30 -> {
-                        setColoredPercentageValue(usd1MPercent, usdValue)
-                        setColoredPercentageValue(eth1MPercent, ethValue)
-                        setColoredPercentageValue(btc1MPercent, btcValue)
-                    }
-                }
-            }
+            coinPerformanceView.bind(item.rateDiffs)
 
             // About
 
@@ -429,14 +410,6 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
             spannable.removeSpan(u)
         }
         return spannable
-    }
-
-    private fun setColoredPercentageValue(textView: TextView, percentage: BigDecimal) {
-        val color = if (percentage >= BigDecimal.ZERO) R.color.remus else R.color.lucian
-        val sign = if (percentage >= BigDecimal.ZERO) "+" else "-"
-
-        textView.setTextColor(requireContext().getColor(color))
-        textView.text = formatter.format(percentage.abs(), 0, 2, prefix = sign, suffix = "%")
     }
 
     private fun formatFiatShortened(value: BigDecimal, symbol: String): String {
