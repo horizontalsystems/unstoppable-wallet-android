@@ -1,25 +1,15 @@
 package io.horizontalsystems.bankwallet.ui.extensions
 
 import android.content.Context
-import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.views.helpers.LayoutHelper
 import java.math.BigDecimal
-import java.math.RoundingMode
 
 class RateDiffView : androidx.appcompat.widget.AppCompatTextView {
 
-    var diff: BigDecimal? = null
-        set(value) {
-            field = value
-            updateText(value)
-        }
-
-    private var negativeColor = context.getColor(R.color.grey)
-    private var positiveColor = context.getColor(R.color.grey)
-    private val diffScale = 2
+    private var negativeColor = context.getColor(R.color.lucian)
+    private var positiveColor = context.getColor(R.color.remus)
 
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
@@ -40,27 +30,17 @@ class RateDiffView : androidx.appcompat.widget.AppCompatTextView {
         }
     }
 
-    private fun updateText(value: BigDecimal?) {
+    fun setDiff(value: BigDecimal?) {
         if (value == null) {
-            setLeftIcon(null)
             text = null
         } else {
-            val scaledValue = value.setScale(diffScale, RoundingMode.HALF_EVEN).stripTrailingZeros()
-            val isPositive = scaledValue >= BigDecimal.ZERO
+            val sign = if (value >= BigDecimal.ZERO) "+" else "-"
+            text = App.numberFormatter.format(value.abs(), 0, 2, sign, "%")
 
-            val textColor = if (isPositive) positiveColor else negativeColor
-            val iconRes = if (isPositive) R.drawable.ic_up_green_20 else R.drawable.ic_down_red_20
+            val color = if (value >= BigDecimal.ZERO) positiveColor else negativeColor
 
-            setTextColor(textColor)
-            setLeftIcon(context.getDrawable(iconRes))
-
-            text = App.numberFormatter.format(scaledValue.abs(), 0, diffScale, suffix = "%")
+            setTextColor(color)
         }
     }
 
-    private fun setLeftIcon(icon: Drawable?) {
-        setCompoundDrawablesRelativeWithIntrinsicBounds(icon, null, null, null)
-        val padding = LayoutHelper.dp(4f, context)
-        compoundDrawablePadding = padding
-    }
 }
