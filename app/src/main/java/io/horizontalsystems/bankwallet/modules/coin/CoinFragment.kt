@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.coin
 
 import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.text.*
@@ -77,7 +78,7 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        toolbar.title = coinTitle
+        toolbar.title = coinCode
         toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }
@@ -100,6 +101,8 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
         }
         notificationMenuItem = toolbar.menu.findItem(R.id.menuNotification)
         updateNotificationMenuItem()
+
+        coinName.text = coinTitle
 
         chart.setListener(this)
         chart.rateFormatter = viewModel.rateFormatter
@@ -198,7 +201,7 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
                 chart.setData(item.chartData, item.chartType)
             }
 
-            coinRateDiff.diff = item.diffValue
+            coinRateDiff.setDiff(item.diffValue)
         })
 
         viewModel.coinDetailsLiveData.observe(viewLifecycleOwner, Observer { item ->
@@ -207,6 +210,11 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
             coinRateLast.text = formatter.formatFiat(item.rateValue, item.currency.symbol, 2, 4)
 
             setMarketData(item.marketDataList)
+
+            // Coin Rating
+            coinRating.isVisible = !item.coinMeta.rating.isNullOrBlank()
+            coinRating.setImageDrawable(getRatingIcon(item.coinMeta.rating))
+            coinRating.isEnabled = false
 
             // Coin Markets
 
@@ -304,6 +312,17 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
         viewModel.coinMarkets.observe(viewLifecycleOwner, { items ->
             coinMarketsButton.isVisible = items.isNotEmpty()
         })
+    }
+
+    private fun getRatingIcon(rating: String?): Drawable? {
+        val icon = when(rating?.toLowerCase(Locale.ENGLISH)){
+            "a" -> R.drawable.ic_rating_a
+            "b" -> R.drawable.ic_rating_b
+            "c" -> R.drawable.ic_rating_c
+            "d" -> R.drawable.ic_rating_d
+            else -> return null
+        }
+        return context?.let { ContextCompat.getDrawable(it, icon) }
     }
 
     private fun setMarketData(marketDataList: List<MarketData>) {

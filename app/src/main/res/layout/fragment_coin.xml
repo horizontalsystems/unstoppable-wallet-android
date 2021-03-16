@@ -43,15 +43,29 @@
                 app:layout_constraintGuide_end="16dp" />
 
             <TextView
+                android:id="@+id/coinName"
+                style="@style/Subhead2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:singleLine="true"
+                android:textColor="@color/grey"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Coin Name" />
+
+            <TextView
                 android:id="@+id/coinRateLast"
-                style="@style/Title3"
+                style="@style/Headline1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:textColor="?BottomDialogTextColor"
-                android:textSize="16sp"
+                android:layout_marginTop="20dp"
+                android:textColor="@color/leah"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/coinName"
                 tools:text="3,979.87" />
 
             <io.horizontalsystems.bankwallet.ui.extensions.RateDiffView
@@ -59,12 +73,23 @@
                 style="@style/Subhead1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                app:layout_constraintBottom_toBottomOf="@+id/coinRateLast"
+                app:layout_constraintStart_toEndOf="@+id/coinRateLast"
+                app:layout_constraintTop_toTopOf="@+id/coinRateLast"
+                tools:text="+18%" />
+
+            <ImageButton
+                android:id="@+id/coinRating"
+                style="@style/ImageButtonSecondary"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:visibility="invisible"
+                android:src="@drawable/ic_rating_a"
                 app:layout_constraintBottom_toBottomOf="@+id/coinRateLast"
                 app:layout_constraintEnd_toEndOf="@+id/endGuideline"
                 app:layout_constraintTop_toTopOf="@+id/coinRateLast"
-                app:negativeColor="@color/leah"
-                app:positiveColor="@color/leah"
-                tools:text="-18" />
+                tools:visibility="visible"/>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/chartPointsInfo"
