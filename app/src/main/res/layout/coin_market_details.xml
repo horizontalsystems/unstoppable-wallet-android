@@ -110,4 +110,26 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/categoriesLayout" />
 
+    <View
+        android:id="@+id/poweredByBorder"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="32dp"
+        android:background="@color/steel_10"
+        app:layout_constraintEnd_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linksLayout" />
+
+    <TextView
+        style="@style/Caption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="11dp"
+        android:paddingBottom="32dp"
+        android:text="@string/Market_PoweredByApi"
+        android:textColor="@color/grey"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/poweredByBorder" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
