@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.core.managers
 
 import android.util.Log
 import com.google.firebase.messaging.FirebaseMessaging
-import io.horizontalsystems.bankwallet.core.INotificationManager
 import io.horizontalsystems.bankwallet.core.INotificationSubscriptionManager
 import io.horizontalsystems.bankwallet.core.storage.AppDatabase
 import io.horizontalsystems.bankwallet.entities.SubscriptionJob
@@ -10,9 +9,7 @@ import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.schedulers.Schedulers
 
-class NotificationSubscriptionManager(
-        appDatabase: AppDatabase,
-        private val notificationManager: INotificationManager): INotificationSubscriptionManager {
+class NotificationSubscriptionManager(appDatabase: AppDatabase): INotificationSubscriptionManager {
 
     private val dao = appDatabase.subscriptionJobDao()
 

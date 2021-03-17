@@ -10,6 +10,7 @@ import androidx.room.TypeConverters
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.managers.PriceAlertManager
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.coinkit.models.CoinType
@@ -502,6 +503,9 @@ abstract class AppDatabase : RoomDatabase() {
                 // change coinIds in enabled wallets
                 updateCoinIdInEnabledWallets(customCoins, database)
 
+                //unsubscribe from old Notifications
+                addNotificationsUnsubscribeJobs(database)
+
                 //drop CoinRecord table and clean PriceAlert table
                 database.execSQL("DROP TABLE CoinRecord")
                 database.execSQL("DELETE FROM PriceAlert")
@@ -512,6 +516,38 @@ abstract class AppDatabase : RoomDatabase() {
             override fun migrate(database: SupportSQLiteDatabase) {
                 database.execSQL("DROP TABLE FavoriteCoin")
                 database.execSQL("CREATE TABLE IF NOT EXISTS `FavoriteCoin` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `coinType` TEXT NOT NULL)")
+            }
+        }
+
+        private fun addNotificationsUnsubscribeJobs(database: SupportSQLiteDatabase) {
+            val unsubscribeJobs = mutableListOf<SubscriptionJob>()
+            val priceAlertsCursor = database.query("SELECT * FROM PriceAlert")
+            while (priceAlertsCursor.moveToNext()) {
+                val coinIdColumn = priceAlertsCursor.getColumnIndex("coinId")
+                if (coinIdColumn >= 0) {
+                    val coinId = priceAlertsCursor.getString(coinIdColumn)
+                    val changeColumn = priceAlertsCursor.getColumnIndex("changeState")
+                    if (changeColumn >= 0) {
+                        val changeValue = priceAlertsCursor.getString(changeColumn)
+                        if (changeValue != PriceAlert.ChangeState.OFF.value) {
+                            unsubscribeJobs.add(PriceAlertManager.getChangeSubscriptionJob(coinId, changeValue, SubscriptionJob.JobType.Unsubscribe))
+                        }
+                    }
+                    val trendColumn = priceAlertsCursor.getColumnIndex("trendState")
+                    if (trendColumn >= 0) {
+                        val trendValue = priceAlertsCursor.getString(trendColumn)
+                        if (trendValue != PriceAlert.TrendState.OFF.value) {
+                            unsubscribeJobs.add(PriceAlertManager.getTrendSubscriptionJob(coinId, trendValue, SubscriptionJob.JobType.Unsubscribe))
+                        }
+                    }
+                }
+            }
+
+            unsubscribeJobs.forEach { job ->
+                database.execSQL("""
+                                        INSERT INTO SubscriptionJob (`coinId`,`topicName`,`stateType`,`jobType`) 
+                                        VALUES ('${job.coinId}', '${job.topicName}', '${job.stateType.value}', '${job.jobType.value}')
+                                        """.trimIndent())
             }
         }
 
