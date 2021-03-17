@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.swap.tradeoptions
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.IAddressParser
+import io.horizontalsystems.bankwallet.core.convertedError
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.Observable
@@ -13,7 +14,7 @@ import java.math.BigDecimal
 
 interface IRecipientAddressService {
     val initialAddress: Address?
-    var error: Throwable?
+    val error: Throwable?
     val errorObservable: Observable<Unit>
 
     fun set(address: Address?)
@@ -106,7 +107,7 @@ class RecipientAddressViewModel(
         if ((isEditing && !forceShowError) || resolutionService.isResolving) {
             cautionLiveData.postValue(null)
         } else {
-            val caution = service.error?.localizedMessage?.let {
+            val caution = service.error?.convertedError?.localizedMessage?.let {
                 Caution(it, Caution.Type.Error)
             }
 

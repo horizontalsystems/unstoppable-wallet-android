@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.swap.approve.confirmation
+package io.horizontalsystems.bankwallet.modules.sendevm.confirmation
 
 import android.os.Bundle
 import android.os.Handler
@@ -6,7 +6,6 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
@@ -15,30 +14,29 @@ import io.horizontalsystems.bankwallet.core.ethereum.EthereumFeeViewModel
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule
-import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule.additionalItemsKey
-import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule.transactionDataKey
+import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmViewModel
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
-import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveModule
-import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveViewModel
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
-import io.horizontalsystems.core.setNavigationResult
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.snackbar.CustomSnackbar
 import io.horizontalsystems.snackbar.SnackbarDuration
-import kotlinx.android.synthetic.main.fragment_confirmation_approve_swap.*
+import kotlinx.android.synthetic.main.fragment_confirmation_send_evm.*
 
-class SwapApproveConfirmationFragment : BaseFragment() {
-    private val mainViewModel by navGraphViewModels<SwapApproveViewModel>(R.id.swapApproveFragment)
-    private val vmFactory by lazy {
-        SwapApproveConfirmationModule.Factory(SendEvmData(transactionData, additionalItems), mainViewModel.dex)
-    }
+class SendEvmConfirmationFragment : BaseFragment() {
+
+    private val sendEvmMViewModel by navGraphViewModels<SendEvmViewModel>(R.id.sendEvmFragment)
+
+    private val vmFactory by lazy { SendEvmConfirmationModule.Factory(sendEvmMViewModel.service.adapter.evmKit, SendEvmData(transactionData, additionalItems)) }
     private val sendViewModel by viewModels<SendEvmTransactionViewModel> { vmFactory }
     private val feeViewModel by viewModels<EthereumFeeViewModel> { vmFactory }
+
+    private var snackbarInProcess: CustomSnackbar? = null
+
     private val transactionData: TransactionData
         get() {
-            val transactionDataParcelable = arguments?.getParcelable<SendEvmModule.TransactionDataParcelable>(transactionDataKey)!!
+            val transactionDataParcelable = arguments?.getParcelable<SendEvmModule.TransactionDataParcelable>(SendEvmModule.transactionDataKey)!!
             return TransactionData(
                     Address(transactionDataParcelable.toAddress),
                     transactionDataParcelable.value,
@@ -46,12 +44,10 @@ class SwapApproveConfirmationFragment : BaseFragment() {
             )
         }
     private val additionalItems: List<SendEvmData.AdditionalItem>
-        get() = arguments?.getParcelableArrayList(additionalItemsKey) ?: listOf()
-
-    private var snackbarInProcess: CustomSnackbar? = null
+        get() = arguments?.getParcelableArrayList(SendEvmModule.additionalItemsKey) ?: listOf()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_confirmation_approve_swap, container, false)
+        return inflater.inflate(R.layout.fragment_confirmation_send_evm, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -67,18 +63,17 @@ class SwapApproveConfirmationFragment : BaseFragment() {
         }
 
         sendViewModel.sendEnabledLiveData.observe(viewLifecycleOwner, { enabled ->
-            approveButton.isEnabled = enabled
+            sendButton.isEnabled = enabled
         })
 
         sendViewModel.sendingLiveData.observe(viewLifecycleOwner, {
-            snackbarInProcess = HudHelper.showInProcessMessage(requireView(), R.string.Swap_Approving, SnackbarDuration.INDEFINITE)
+            snackbarInProcess = HudHelper.showInProcessMessage(requireView(), R.string.Send_Sending, SnackbarDuration.INDEFINITE)
         })
 
-        sendViewModel.sendSuccessLiveData.observe(viewLifecycleOwner, {
+        sendViewModel.sendSuccessLiveData.observe(viewLifecycleOwner, { transactionHash ->
             HudHelper.showSuccessMessage(requireActivity().findViewById(android.R.id.content), R.string.Hud_Text_Success)
             Handler(Looper.getMainLooper()).postDelayed({
-                setNavigationResult(SwapApproveModule.requestKey, bundleOf(SwapApproveModule.resultKey to true))
-                findNavController().popBackStack(R.id.swapApproveFragment, false)
+                findNavController().popBackStack(R.id.sendEvmFragment, true)
             }, 1200)
         })
 
@@ -94,11 +89,11 @@ class SwapApproveConfirmationFragment : BaseFragment() {
                 viewLifecycleOwner,
                 parentFragmentManager,
                 showSpeedInfoListener = {
-                    findNavController().navigate(R.id.swapApproveConfirmationFragment_to_feeSpeedInfo, null, navOptions())
+                    findNavController().navigate(R.id.sendEvmConfirmationFragment_to_feeSpeedInfo, null, navOptions())
                 }
         )
 
-        approveButton.setOnSingleClickListener {
+        sendButton.setOnSingleClickListener {
             sendViewModel.send()
         }
     }

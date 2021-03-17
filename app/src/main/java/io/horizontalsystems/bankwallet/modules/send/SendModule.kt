@@ -27,7 +27,6 @@ import io.horizontalsystems.bitcoincore.core.IPluginData
 import io.horizontalsystems.hodler.LockTimeInterval
 import io.reactivex.Single
 import java.math.BigDecimal
-import kotlin.jvm.Throws
 
 object SendModule {
 
@@ -293,6 +292,18 @@ object SendModule {
         data class CoinValueInfo(val coinValue: CoinValue) : AmountInfo()
         data class CurrencyValueInfo(val currencyValue: CurrencyValue) : AmountInfo()
 
+        val value: BigDecimal
+            get() = when (this) {
+                is CoinValueInfo -> coinValue.value
+                is CurrencyValueInfo -> currencyValue.value
+            }
+
+        val decimal: Int
+            get() = when (this) {
+                is CoinValueInfo -> coinValue.coin.decimal
+                is CurrencyValueInfo -> currencyValue.currency.decimal
+            }
+
         fun getAmountName(): String = when (this) {
             is CoinValueInfo -> coinValue.coin.title
             is CurrencyValueInfo -> currencyValue.currency.code
@@ -307,7 +318,7 @@ object SendModule {
             }
         }
 
-        fun getFormattedForTxInfo(): String = when(this) {
+        fun getFormattedForTxInfo(): String = when (this) {
             is CoinValueInfo -> {
                 coinValue.getFormatted()
             }
@@ -317,6 +328,8 @@ object SendModule {
                 App.numberFormatter.formatFiat(currencyValue.value, currencyValue.currency.symbol, 0, significantDecimal)
             }
         }
+
+
     }
 
 }

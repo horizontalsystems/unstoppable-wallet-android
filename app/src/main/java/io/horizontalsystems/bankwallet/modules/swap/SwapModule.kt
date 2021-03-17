@@ -25,18 +25,6 @@ import java.math.BigInteger
 
 object SwapModule {
 
-    const val transactionDataKey = "transactionData"
-    const val additionalItemsKey = "additionalItems"
-
-    @Parcelize
-    data class TransactionDataParcelable(
-            val toAddress: String,
-            val value: BigInteger,
-            val input: ByteArray
-    ) : Parcelable {
-        constructor(transactionData: TransactionData) : this(transactionData.to.hex, transactionData.value, transactionData.input)
-    }
-
     @Parcelize
     data class CoinBalanceItem(
             val coin: Coin,

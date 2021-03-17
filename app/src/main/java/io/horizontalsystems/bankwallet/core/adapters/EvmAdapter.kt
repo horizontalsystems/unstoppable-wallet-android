@@ -10,6 +10,7 @@ import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.core.hexStringToByteArray
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.FullTransaction
+import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.reactivex.Flowable
 import io.reactivex.Single
 import java.math.BigDecimal
@@ -139,6 +140,9 @@ class EvmAdapter(kit: EthereumKit) : BaseEvmAdapter(kit, decimal) {
         return BigDecimal.ZERO.max(balance - fee(gasPrice, gasLimit))
     }
 
+    override fun getTransactionData(amount: BigInteger, address: Address): TransactionData {
+        return TransactionData(address, amount, byteArrayOf())
+    }
 
     companion object {
         const val decimal = 18

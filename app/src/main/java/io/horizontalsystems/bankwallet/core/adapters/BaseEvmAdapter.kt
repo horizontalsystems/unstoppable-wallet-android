@@ -12,13 +12,14 @@ import java.math.BigDecimal
 import java.math.BigInteger
 
 abstract class BaseEvmAdapter(
-        protected val evmKit: EthereumKit,
+        override val evmKit: EthereumKit,
         val decimal: Int
 ) : IAdapter, ISendEthereumAdapter, ITransactionsAdapter, IBalanceAdapter, IReceiveAdapter {
 
     override fun getReceiveAddressType(wallet: Wallet): String? = null
 
-    override val debugInfo: String = evmKit.debugInfo()
+    override val debugInfo: String
+        get() = evmKit.debugInfo()
 
     // ITransactionsAdapter
 

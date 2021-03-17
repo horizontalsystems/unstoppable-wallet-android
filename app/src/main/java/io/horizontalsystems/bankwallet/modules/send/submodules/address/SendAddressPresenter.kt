@@ -16,8 +16,7 @@ import java.util.*
 class SendAddressPresenter(
         private val moduleDelegate: SendAddressModule.IAddressModuleDelegate,
         private val stringProvider: StringProvider
-)
-    : ViewModel(), IRecipientAddressService, SendAddressModule.IAddressModule, SendAddressModule.IInteractorDelegate, SendAddressModule.IViewDelegate {
+) : ViewModel(), IRecipientAddressService, SendAddressModule.IAddressModule, SendAddressModule.IInteractorDelegate, SendAddressModule.IViewDelegate {
 
     private val errorsObservable = BehaviorSubject.createDefault<Optional<Throwable>>(Optional.empty())
 
@@ -26,7 +25,7 @@ class SendAddressPresenter(
     override val initialAddress: Address? = null
 
     override var error: Throwable? = null
-        set(value) {
+        private set(value) {
             errorsObservable.onNext(Optional.ofNullable(value))
             field = value
         }

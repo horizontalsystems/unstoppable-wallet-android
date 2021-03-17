@@ -16,6 +16,7 @@ import io.horizontalsystems.ethereumkit.core.EthereumKit.SyncState
 import io.horizontalsystems.ethereumkit.core.hexStringToByteArray
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.DefaultBlockParameter
+import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.reactivex.Flowable
 import io.reactivex.Single
 import java.math.BigDecimal
@@ -110,6 +111,10 @@ class Eip20Adapter(
 
     override val ethereumBalance: BigDecimal
         get() = balanceInBigDecimal(evmKit.accountState?.balance, EvmAdapter.decimal)
+
+    override fun getTransactionData(amount: BigInteger, address: Address): TransactionData {
+        return eip20Kit.buildTransferTransactionData(address, amount)
+    }
 
     private fun convertToAdapterState(syncState: SyncState): AdapterState = when (syncState) {
         is SyncState.Synced -> AdapterState.Synced
