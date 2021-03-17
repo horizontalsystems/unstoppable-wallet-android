@@ -131,7 +131,6 @@ class MarketAdvancedSearchService(
     private fun filterCoinMarket(coinMarket: CoinMarket): Boolean {
         return filterByRange(filterMarketCap, coinMarket.marketInfo.marketCap?.toLong())
                 && filterByRange(filterVolume, coinMarket.marketInfo.volume.toLong())
-                && filterByRange(filterLiquidity, coinMarket.marketInfo.liquidity?.toLong())
                 && filterByRange(filterPriceChange, coinMarket.marketInfo.rateDiffPeriod.toLong())
     }
 
