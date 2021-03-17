@@ -13,9 +13,10 @@ import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.ethereum.EthereumFeeViewModel
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData
+import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule
+import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule.additionalItemsKey
+import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule.transactionDataKey
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
-import io.horizontalsystems.bankwallet.modules.swap.SwapModule
-import io.horizontalsystems.bankwallet.modules.swap.SwapModule.TransactionDataParcelable
 import io.horizontalsystems.bankwallet.modules.swap.SwapViewModel
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
@@ -37,7 +38,7 @@ class SwapConfirmationFragment : BaseFragment() {
 
     private val transactionData: TransactionData
         get() {
-            val transactionDataParcelable = arguments?.getParcelable<TransactionDataParcelable>(SwapModule.transactionDataKey)!!
+            val transactionDataParcelable = arguments?.getParcelable<SendEvmModule.TransactionDataParcelable>(transactionDataKey)!!
             return TransactionData(
                     Address(transactionDataParcelable.toAddress),
                     transactionDataParcelable.value,
@@ -45,7 +46,7 @@ class SwapConfirmationFragment : BaseFragment() {
             )
         }
     private val additionalItems: List<SendEvmData.AdditionalItem>
-        get() = arguments?.getParcelableArrayList(SwapModule.additionalItemsKey) ?: listOf()
+        get() = arguments?.getParcelableArrayList(additionalItemsKey) ?: listOf()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_confirmation_swap, container, false)

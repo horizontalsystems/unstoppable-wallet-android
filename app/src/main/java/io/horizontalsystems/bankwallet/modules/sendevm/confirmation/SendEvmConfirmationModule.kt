@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.swap.confirmation
+package io.horizontalsystems.bankwallet.modules.sendevm.confirmation
 
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -15,24 +15,33 @@ import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionService
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
-import io.horizontalsystems.bankwallet.modules.swap.SwapService
+import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.findNavController
+import io.horizontalsystems.ethereumkit.core.EthereumKit
+import io.horizontalsystems.ethereumkit.core.EthereumKit.NetworkType
 import io.horizontalsystems.ethereumkit.models.TransactionData
 
-object SwapConfirmationModule {
+object SendEvmConfirmationModule {
 
     class Factory(
-            private val service: SwapService,
+            private val evmKit: EthereumKit,
             private val sendEvmData: SendEvmData
     ) : ViewModelProvider.Factory {
 
-        private val evmKit by lazy { service.dex.evmKit!! }
-        private val coin by lazy { service.dex.coin }
+        private val feeCoin by lazy {
+            when (evmKit.networkType) {
+                NetworkType.EthMainNet,
+                NetworkType.EthRopsten,
+                NetworkType.EthKovan,
+                NetworkType.EthRinkeby -> App.coinKit.getCoin(CoinType.Ethereum)!!
+                NetworkType.BscMainNet -> App.coinKit.getCoin(CoinType.BinanceSmartChain)!!
+            }
+        }
         private val transactionService by lazy {
-            val feeRateProvider = FeeRateProviderFactory.provider(coin)!!
+            val feeRateProvider = FeeRateProviderFactory.provider(feeCoin)!!
             EvmTransactionService(evmKit, feeRateProvider, 20)
         }
-        private val coinServiceFactory by lazy { EvmCoinServiceFactory(coin, App.coinKit, App.currencyManager, App.xRateManager) }
+        private val coinServiceFactory by lazy { EvmCoinServiceFactory(feeCoin, App.coinKit, App.currencyManager, App.xRateManager) }
         private val sendService by lazy { SendEvmTransactionService(sendEvmData, evmKit, transactionService) }
         private val stringProvider by lazy { StringProvider() }
 

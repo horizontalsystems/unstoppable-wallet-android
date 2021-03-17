@@ -15,6 +15,9 @@ import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.entities.AppVersion
 import io.horizontalsystems.core.entities.Currency
+import io.horizontalsystems.ethereumkit.core.EthereumKit
+import io.horizontalsystems.ethereumkit.models.Address
+import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.xrateskit.entities.*
 import io.reactivex.Flowable
 import io.reactivex.Observable
@@ -205,6 +208,7 @@ interface ISendDashAdapter {
 }
 
 interface ISendEthereumAdapter {
+    val evmKit: EthereumKit
     val balance: BigDecimal
     val ethereumBalance: BigDecimal
     val minimumRequiredBalance: BigDecimal
@@ -215,7 +219,7 @@ interface ISendEthereumAdapter {
     fun validate(address: String)
     fun send(amount: BigDecimal, address: String, gasPrice: Long, gasLimit: Long, logger: AppLogger): Single<Unit>
     fun estimateGasLimit(toAddress: String?, value: BigDecimal, gasPrice: Long?): Single<Long>
-
+    fun getTransactionData(amount: BigInteger, address: Address): TransactionData
 }
 
 interface ISendBinanceAdapter {

@@ -49,7 +49,7 @@ class SendEvmTransactionService(
     val decoration: TransactionDecoration? by lazy { evmKit.decorate(sendEvmData.transactionData) }
 
     init {
-        transactionsService.transactionStatusObservable.subscribeIO { syncState() }
+        transactionsService.transactionStatusObservable.subscribeIO { syncState() }.let { disposable.add(it) }
         transactionsService.transactionData = sendEvmData.transactionData
         gasPrice?.let { transactionsService.gasPriceType = GasPriceType.Custom(it) }
     }

@@ -73,8 +73,26 @@
         <action
             android:id="@+id/mainFragment_to_marketSearchFragment"
             app:destination="@id/marketSearchFragment" />
+        <action
+            android:id="@+id/mainFragment_to_sendEvmFragment"
+            app:destination="@id/sendEvmFragment" />
     </fragment>
-
+    <fragment
+        android:id="@+id/sendEvmFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.sendevm.SendEvmFragment"
+        tools:layout="@layout/fragment_send_evm">
+        <action
+            android:id="@+id/sendEvmFragment_to_sendEvmConfirmationFragment"
+            app:destination="@id/sendEvmConfirmationFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/sendEvmConfirmationFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.sendevm.confirmation.SendEvmConfirmationFragment"
+        tools:layout="@layout/fragment_confirmation_send_evm">
+        <action
+            android:id="@+id/sendEvmConfirmationFragment_to_feeSpeedInfo"
+            app:destination="@id/feeSpeedInfoFragment" />
+    </fragment>
     <fragment
         android:id="@+id/manageWalletsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.managewallets.view.ManageWalletsFragment"
@@ -123,8 +141,8 @@
     <fragment
         android:id="@+id/faqListFragment"
         android:name="io.horizontalsystems.bankwallet.modules.settings.faq.FaqListFragment"
-        tools:layout="@layout/fragment_faq_list"
-        android:label="@string/Settings_Faq">
+        android:label="@string/Settings_Faq"
+        tools:layout="@layout/fragment_faq_list">
         <action
             android:id="@+id/faqFragment_to_markdownFragment"
             app:destination="@id/markdownFragment" />
@@ -132,8 +150,8 @@
     <fragment
         android:id="@+id/academyFragment"
         android:name="io.horizontalsystems.bankwallet.modules.settings.guides.GuidesFragment"
-        tools:layout="@layout/fragment_guides"
-        android:label="@string/Guides_Title">
+        android:label="@string/Guides_Title"
+        tools:layout="@layout/fragment_guides">
         <action
             android:id="@+id/academyFragment_to_markdownFragment"
             app:destination="@id/markdownFragment" />
@@ -199,7 +217,7 @@
     <fragment
         android:id="@+id/coinFragment"
         android:name="io.horizontalsystems.bankwallet.modules.coin.CoinFragment"
-        tools:layout="@layout/fragment_coin" >
+        tools:layout="@layout/fragment_coin">
         <action
             android:id="@+id/coinFragment_to_coinMarketsFragment"
             app:destination="@id/coinMarketsFragment" />
@@ -231,8 +249,8 @@
     <fragment
         android:id="@+id/swapFragment"
         android:name="io.horizontalsystems.bankwallet.modules.swap.SwapFragment"
-        tools:layout="@layout/fragment_swap"
-        android:label="@string/Swap">
+        android:label="@string/Swap"
+        tools:layout="@layout/fragment_swap">
         <action
             android:id="@+id/swapFragment_to_swapApproveFragment"
             app:destination="@id/swapApproveFragment" />

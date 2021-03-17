@@ -2,11 +2,12 @@ package io.horizontalsystems.bankwallet.modules.balance
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.coinkit.models.Coin
+import io.horizontalsystems.coinkit.models.CoinType
+import io.horizontalsystems.core.SingleLiveEvent
 
 class BalanceViewModel : ViewModel(), BalanceModule.IView, BalanceModule.IRouter {
 
@@ -14,6 +15,7 @@ class BalanceViewModel : ViewModel(), BalanceModule.IView, BalanceModule.IRouter
 
     val openReceiveDialog = SingleLiveEvent<Wallet>()
     val openSendDialog = SingleLiveEvent<Wallet>()
+    val openSendEvmDialog = SingleLiveEvent<Wallet>()
     val openSwap = SingleLiveEvent<Wallet>()
     val openManageCoinsLiveEvent = SingleLiveEvent<Void>()
     val openSortingTypeDialogLiveEvent = SingleLiveEvent<BalanceSortType>()
@@ -38,7 +40,16 @@ class BalanceViewModel : ViewModel(), BalanceModule.IView, BalanceModule.IRouter
     }
 
     override fun openSend(wallet: Wallet) {
-        openSendDialog.postValue(wallet)
+        when (wallet.coin.type) {
+            CoinType.Ethereum, is CoinType.Erc20,
+            /*CoinType.BinanceSmartChain, is CoinType.Bep20*/ -> {
+                openSendEvmDialog.postValue(wallet)
+            }
+            else -> {
+                openSendDialog.postValue(wallet)
+            }
+        }
+
     }
 
     override fun openSwap(wallet: Wallet) {
