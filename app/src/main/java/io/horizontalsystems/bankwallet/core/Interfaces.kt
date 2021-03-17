@@ -264,6 +264,7 @@ interface IAppConfigProvider {
     val maxDecimal: Int
     val feeRateAdjustForCurrencies: List<String>
     val currencies: List<Currency>
+    val featuredCoinTypes: List<CoinType>
 }
 
 interface IRateManager {
@@ -411,7 +412,7 @@ interface IRateAppManager {
 interface ICoinManager {
     val coinAddedObservable: Flowable<Coin>
     val coins: List<Coin>
-    val featuredCoins: List<Coin>
+    val groupedCoins: Pair<List<Coin>, List<Coin>>
     fun getCoin(coinType: CoinType): Coin?
     fun save(coin: Coin)
 }

@@ -4,6 +4,7 @@ import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.coinkit.models.Coin
 import io.reactivex.subjects.BehaviorSubject
+import java.util.*
 
 class CreateWalletService(
         private val predefinedAccountType: PredefinedAccountType?,
@@ -23,10 +24,13 @@ class CreateWalletService(
             stateAsync.onNext(value)
         }
 
+    private var featuredCoins = listOf<Coin>()
+    private var coins = listOf<Coin>()
     private val accounts = mutableMapOf<PredefinedAccountType, Account>()
     private val wallets = mutableMapOf<Coin, Wallet>()
 
     init {
+        syncCoins()
         syncState()
     }
 
@@ -68,6 +72,14 @@ class CreateWalletService(
     override fun clear() {
     }
 
+    private fun syncCoins() {
+        val (featuredCoins, regularCoins) = coinManager.groupedCoins
+
+        this.featuredCoins = filteredCoins(featuredCoins)
+
+        coins = filteredCoins(regularCoins).sortedBy { it.title.toLowerCase(Locale.ENGLISH) }
+    }
+
     private fun filteredCoins(coins: List<Coin>): List<Coin> {
         return predefinedAccountType?.let { type ->
             coins.filter { it.type.predefinedAccountType == type }
@@ -79,9 +91,6 @@ class CreateWalletService(
     }
 
     private fun syncState() {
-        val featuredCoins = filteredCoins(coinManager.featuredCoins)
-        val coins = filteredCoins(coinManager.coins).filterNot { featuredCoins.contains(it) }
-
         state = State(featuredCoins.map { item(it) }, coins.map { item(it) })
     }
 

@@ -9,6 +9,7 @@ import io.horizontalsystems.bankwallet.modules.swap.SwapModule.Dex
 import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.coinkit.models.CoinType
 import java.math.BigDecimal
+import java.util.*
 
 class SwapCoinProvider(
         private val dex: Dex,
@@ -21,7 +22,7 @@ class SwapCoinProvider(
         val enabledCoinItems = walletItems.filter { item ->
             val zeroBalance = item.balance == BigDecimal.ZERO
             dexSupportsCoin(item.coin) && !exclude.contains(item.coin) && !zeroBalance
-        }.sortedBy { it.balance }
+        }.sortedBy { it.coin.title.toLowerCase(Locale.ENGLISH) }
 
         return if (enabledCoins) {
             enabledCoinItems
@@ -30,7 +31,8 @@ class SwapCoinProvider(
                 dexSupportsCoin(coin) && !exclude.contains(coin) && !enabledCoinItems.any { it.coin == coin }
             }.map { coin ->
                 CoinBalanceItem(coin, balance(coin), coin.type.label)
-            }
+            }.sortedBy { it.coin.title.toLowerCase(Locale.ENGLISH) }
+
             enabledCoinItems + disabledCoinItems
         }
     }

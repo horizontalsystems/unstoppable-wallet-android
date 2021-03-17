@@ -10,6 +10,8 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
+import java.util.*
+import kotlin.Comparator
 
 class RestoreSelectCoinsService(
         private val predefinedAccountType: PredefinedAccountType,
@@ -20,6 +22,9 @@ class RestoreSelectCoinsService(
     : RestoreSelectCoinsModule.IService, Clearable {
 
     private val disposables = CompositeDisposable()
+
+    private var featuredCoins = listOf<Coin>()
+    private var coins = listOf<Coin>()
 
     val cancelEnableCoinAsync = PublishSubject.create<Coin>()
 
@@ -38,7 +43,7 @@ class RestoreSelectCoinsService(
         enableCoinsService.enableCoinsAsync
                 .subscribeOn(Schedulers.io())
                 .subscribe { coins ->
-                    enable(coins)
+                    enable(coins, true)
                 }.let {
                     disposables.add(it)
                 }
@@ -59,7 +64,25 @@ class RestoreSelectCoinsService(
                     disposables.add(it)
                 }
 
+        syncCoins()
         syncState()
+    }
+
+    private fun syncCoins() {
+        val (featuredCoins, regularCoins) = coinManager.groupedCoins
+
+        this.featuredCoins = filteredCoins(featuredCoins)
+
+        coins = filteredCoins(regularCoins).sortedWith(Comparator{ lhsCoin, rhsCoin ->
+            val lhsEnabled = enabledCoins.contains(lhsCoin)
+            val rhsEnabled = enabledCoins.contains(rhsCoin)
+
+            if (lhsEnabled != rhsEnabled) {
+                return@Comparator if (lhsEnabled) -1 else 1
+            }
+
+            return@Comparator lhsCoin.title.toLowerCase(Locale.ENGLISH).compareTo(rhsCoin.title.toLowerCase(Locale.ENGLISH))
+        })
     }
 
     private fun handleApproveEnable(coin: Coin) {
@@ -67,9 +90,13 @@ class RestoreSelectCoinsService(
         enableCoinsService.handle(coin.type, accountType)
     }
 
-    private fun enable(coins: List<Coin>) {
+    private fun enable(coins: List<Coin>, resyncCoins: Boolean = false) {
         coins.forEach {
             enabledCoins.add(it)
+        }
+
+        if (resyncCoins) {
+            syncCoins()
         }
 
         syncState()
@@ -99,9 +126,6 @@ class RestoreSelectCoinsService(
     }
 
     private fun syncState() {
-        val featuredCoins = filteredCoins(coinManager.featuredCoins)
-        val coins = filteredCoins(coinManager.coins).filter { !featuredCoins.contains(it) }
-
         state = State(featuredCoins.mapNotNull { item(it) }, coins.mapNotNull { item(it) })
     }
 

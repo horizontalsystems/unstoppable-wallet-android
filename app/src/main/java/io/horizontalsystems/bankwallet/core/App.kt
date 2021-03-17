@@ -122,7 +122,7 @@ class App : CoreApp() {
 
         AppLog.logsDao = appDatabase.logsDao()
 
-        coinManager = CoinManager(coinKit)
+        coinManager = CoinManager(coinKit, appConfigProvider)
 
         enabledWalletsStorage = EnabledWalletsStorage(appDatabase)
         blockchainSettingsStorage = BlockchainSettingsStorage(appDatabase)

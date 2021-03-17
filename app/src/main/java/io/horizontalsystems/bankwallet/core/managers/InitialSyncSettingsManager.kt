@@ -21,7 +21,7 @@ class InitialSyncSettingsManager(
 
     override fun allSettings(): List<Triple<InitialSyncSetting, Coin, Boolean>> {
         return supportedCoinTypes.mapNotNull { supportedCoinType ->
-            val coin = coinManager.featuredCoins.firstOrNull { it.type == supportedCoinType.coinType } ?: return@mapNotNull null
+            val coin = coinManager.getCoin(supportedCoinType.coinType) ?: return@mapNotNull null
             val setting = setting(supportedCoinType.coinType) ?: return@mapNotNull null
 
             Triple(setting, coin, supportedCoinType.changeable)
