@@ -81,8 +81,8 @@ class SwapApproveFragment : BaseFragment() {
             amountError.text = it
         })
 
-        viewModel.openConfirmationLiveEvent.observe(viewLifecycleOwner, { transactionData ->
-            SwapApproveConfirmationModule.start(this, R.id.swapApproveFragment_to_swapApproveConfirmationFragment, navOptions(), transactionData)
+        viewModel.openConfirmationLiveEvent.observe(viewLifecycleOwner, { sendEvmData ->
+            SwapApproveConfirmationModule.start(this, R.id.swapApproveFragment_to_swapApproveConfirmationFragment, navOptions(), sendEvmData)
         })
 
         getNavigationResult(requestKey)?.let {

@@ -14,7 +14,7 @@ import io.horizontalsystems.bankwallet.core.ethereum.EthereumFeeViewModel
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule
-import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule.additionalItemsKey
+import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule.additionalInfoKey
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule.transactionDataKey
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
 import io.horizontalsystems.bankwallet.modules.swap.SwapViewModel
@@ -30,7 +30,7 @@ class SwapConfirmationFragment : BaseFragment() {
 
     private val mainViewModel by navGraphViewModels<SwapViewModel>(R.id.swapFragment)
 
-    private val vmFactory by lazy { SwapConfirmationModule.Factory(mainViewModel.service, SendEvmData(transactionData, additionalItems)) }
+    private val vmFactory by lazy { SwapConfirmationModule.Factory(mainViewModel.service, SendEvmData(transactionData, additionalInfo)) }
     private val sendViewModel by viewModels<SendEvmTransactionViewModel> { vmFactory }
     private val feeViewModel by viewModels<EthereumFeeViewModel> { vmFactory }
 
@@ -45,8 +45,8 @@ class SwapConfirmationFragment : BaseFragment() {
                     transactionDataParcelable.input
             )
         }
-    private val additionalItems: List<SendEvmData.AdditionalItem>
-        get() = arguments?.getParcelableArrayList(additionalItemsKey) ?: listOf()
+    private val additionalInfo: SendEvmData.AdditionalInfo?
+        get() = arguments?.getParcelable(additionalInfoKey)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_confirmation_swap, container, false)

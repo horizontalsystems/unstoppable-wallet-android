@@ -112,8 +112,8 @@ class SwapFragment : BaseFragment() {
             advancedSettingsViews.isVisible = visible
         })
 
-        viewModel.openConfirmationLiveEvent().observe(viewLifecycleOwner, { transactionData ->
-            SwapConfirmationModule.start(this, R.id.swapFragment_to_swapConfirmationFragment, navOptions(), transactionData)
+        viewModel.openConfirmationLiveEvent().observe(viewLifecycleOwner, { sendEvmData ->
+            SwapConfirmationModule.start(this, R.id.swapFragment_to_swapConfirmationFragment, navOptions(), sendEvmData)
         })
     }
 

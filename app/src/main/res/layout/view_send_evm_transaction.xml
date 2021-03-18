@@ -14,7 +14,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:itemCount="1"
-        tools:listitem="@layout/view_holder_amount" />
+        tools:listitem="@layout/view_holder_evm_confirmation_subhead" />
 
     <io.horizontalsystems.bankwallet.ui.FeeSelectorView
         android:id="@+id/feeSelectorView"

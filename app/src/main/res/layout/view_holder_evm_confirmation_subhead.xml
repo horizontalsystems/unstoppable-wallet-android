@@ -19,34 +19,35 @@
 
     <TextView
         android:id="@+id/titleTextView"
-        style="@style/Subhead1"
+        style="@style/Headline2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="12dp"
-        android:layout_marginBottom="13dp"
+        android:layout_marginBottom="12dp"
         android:includeFontPadding="false"
-        android:textColor="@color/grey"
+        android:textColor="@color/oz"
+        app:layout_constraintBottom_toBottomOf="@id/backgroundView"
         app:layout_constraintStart_toStartOf="@id/backgroundView"
         app:layout_constraintTop_toTopOf="@id/backgroundView"
-        tools:text="@string/Send_Confirmation_HintMemo" />
+        tools:text="You Pay" />
 
     <TextView
         android:id="@+id/valueTextView"
-        style="@style/SubheadItalic"
+        style="@style/Subhead1"
+        android:textColor="@color/grey"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:ellipsize="end"
-        android:includeFontPadding="false"
-        android:maxLines="1"
+        android:ellipsize="middle"
+        android:maxWidth="157dp"
+        android:singleLine="true"
         android:textAlignment="textEnd"
-        android:textColor="?attr/TextColorBarsToDark"
-        app:layout_constraintBottom_toBottomOf="@+id/titleTextView"
+        app:layout_constraintBottom_toBottomOf="@id/backgroundView"
         app:layout_constraintEnd_toEndOf="@id/backgroundView"
-        app:layout_constraintStart_toEndOf="@+id/titleTextView"
-        app:layout_constraintTop_toTopOf="@+id/titleTextView"
-        tools:text="Monthly salary" />
+        app:layout_constraintStart_toEndOf="@id/titleTextView"
+        app:layout_constraintTop_toTopOf="@id/backgroundView"
+        tools:text="Ether" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

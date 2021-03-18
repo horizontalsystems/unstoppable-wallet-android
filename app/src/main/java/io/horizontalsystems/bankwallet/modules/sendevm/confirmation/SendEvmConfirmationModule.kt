@@ -19,7 +19,6 @@ import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.core.EthereumKit.NetworkType
-import io.horizontalsystems.ethereumkit.models.TransactionData
 
 object SendEvmConfirmationModule {
 
@@ -59,9 +58,11 @@ object SendEvmConfirmationModule {
         }
     }
 
-    fun start(fragment: Fragment, navigateTo: Int, navOptions: NavOptions, transactionData: TransactionData) {
-        val transactionDataParcelable = SendEvmModule.TransactionDataParcelable(transactionData)
-        val arguments = bundleOf(SendEvmModule.transactionDataKey to transactionDataParcelable)
+    fun start(fragment: Fragment, navigateTo: Int, navOptions: NavOptions, sendData: SendEvmData) {
+        val arguments = bundleOf(
+                SendEvmModule.transactionDataKey to SendEvmModule.TransactionDataParcelable(sendData.transactionData),
+                SendEvmModule.additionalInfoKey to sendData.additionalInfo
+        )
         fragment.findNavController().navigate(navigateTo, arguments, navOptions)
     }
 
