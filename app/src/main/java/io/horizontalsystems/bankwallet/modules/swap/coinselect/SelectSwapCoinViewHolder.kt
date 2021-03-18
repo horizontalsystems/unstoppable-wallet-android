@@ -30,7 +30,7 @@ class SelectSwapCoinViewHolder(
         bottomShade.isVisible = showBottomBorder
 
         coinItem.apply {
-            coinIcon.setCoinImage(coin.code, coin.type)
+            coinIcon.setCoinImage(coin.type)
             coinTitle.text = coin.title
             coinSubtitle.text = coin.code
             coinBalance.text = balance?.let { App.numberFormatter.formatCoin(it, coin.code, 0, 8) }

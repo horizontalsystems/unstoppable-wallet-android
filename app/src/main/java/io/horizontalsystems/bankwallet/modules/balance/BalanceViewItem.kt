@@ -20,7 +20,7 @@ data class BalanceViewItem(
         val wallet: Wallet,
         val coinCode: String,
         val coinTitle: String,
-        val coinType: CoinType?,
+        val coinType: CoinType,
         val coinValue: DeemedValue,
         val exchangeValue: DeemedValue,
         val diff: RateDiff,

@@ -135,7 +135,7 @@ class PrivacySettingsFragment :
                     childFragmentManager,
                     getString(R.string.BlockchainSettings_SyncModeChangeAlert_Title),
                     coin.title,
-                    context?.let { AppLayoutHelper.getCoinDrawable(it, coin.code, coin.type) },
+                    context?.let { AppLayoutHelper.getCoinDrawable(it, coin.type) },
                     items.map { getSyncModeInfo(it) },
                     items.indexOf(selected),
                     onItemSelected = { position ->
@@ -155,7 +155,7 @@ class PrivacySettingsFragment :
                     childFragmentManager,
                     getString(R.string.SettingsPrivacy_CommunicationSettingsTitle),
                     coin.title,
-                    context?.let { AppLayoutHelper.getCoinDrawable(it, coin.code, coin.type) },
+                    context?.let { AppLayoutHelper.getCoinDrawable(it, coin.type) },
                     items.map { getCommunicationModeInfo(it) },
                     items.indexOf(selected),
                     onItemSelected = { position ->

@@ -31,7 +31,7 @@ class CoinDataItemsAdapter(private val onItemClick: (CoinDataViewItem) -> Unit) 
         fun bind(item: CoinDataViewItem) {
             this.item = item
 
-            val drawableResId = AppLayoutHelper.getCoinDrawableResId(containerView.context, item.code)
+            val drawableResId = AppLayoutHelper.getCoinDrawableResId(containerView.context, item.type)
                     ?: R.drawable.coin_placeholder
             icon.setImageResource(drawableResId)
 

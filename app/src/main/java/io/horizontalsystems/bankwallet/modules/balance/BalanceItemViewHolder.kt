@@ -61,10 +61,10 @@ class BalanceItemViewHolder(override val containerView: View, private val listen
 
         item.apply {
 
-            iconCoin.setCoinImage(coinCode, coinType)
+            iconCoin.setCoinImage(coinType)
 
             coinName.text = coinTitle
-            coinLabel.text = coinType?.label
+            coinLabel.text = coinType.label
 
             balanceCoin.text = coinValue.text
             balanceFiat.text = fiatValue.text
