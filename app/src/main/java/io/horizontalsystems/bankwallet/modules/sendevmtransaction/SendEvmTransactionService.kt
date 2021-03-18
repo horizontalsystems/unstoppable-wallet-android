@@ -41,12 +41,19 @@ class SendEvmTransactionService(
             field = value
             sendStateSubject.onNext(value)
         }
-    val sendStateObservable: Flowable<SendState> = sendStateSubject.toFlowable(BackpressureStrategy.BUFFER)
+    val sendStateObservable: Flowable<SendState>
+        get() = sendStateSubject.toFlowable(BackpressureStrategy.BUFFER)
 
-    val transactionData: TransactionData = sendEvmData.transactionData
-    val additionalItems: List<SendEvmData.AdditionalItem> = sendEvmData.additionalItems
+    private val txDataStateSubject = PublishSubject.create<TxDataState>()
+    var txDataState: TxDataState = TxDataState(sendEvmData.transactionData, sendEvmData.additionalItems, evmKit.decorate(sendEvmData.transactionData))
+        private set(value) {
+            field = value
+            txDataStateSubject.onNext(value)
+        }
+    val txDataStateObservable: Flowable<TxDataState>
+        get() = txDataStateSubject.toFlowable(BackpressureStrategy.BUFFER)
+
     val ownAddress: Address = evmKit.receiveAddress
-    val decoration: TransactionDecoration? by lazy { evmKit.decorate(sendEvmData.transactionData) }
 
     init {
         transactionsService.transactionStatusObservable.subscribeIO { syncState() }.let { disposable.add(it) }
@@ -77,6 +84,7 @@ class SendEvmTransactionService(
         when (val status = transactionsService.transactionStatus) {
             is DataState.Error -> {
                 state = State.NotReady(listOf(status.error))
+                syncDataState()
             }
             DataState.Loading -> {
                 state = State.NotReady()
@@ -88,14 +96,26 @@ class SendEvmTransactionService(
                 } else {
                     State.Ready
                 }
+                syncDataState(transaction)
             }
         }
+    }
+
+    private fun syncDataState(transaction: EvmTransactionService.Transaction? = null) {
+        val transactionData = transaction?.data ?: sendEvmData.transactionData
+        txDataState = TxDataState(transactionData, sendEvmData.additionalItems, evmKit.decorate(transactionData))
     }
 
     sealed class State {
         object Ready : State()
         class NotReady(val errors: List<Throwable> = listOf()) : State()
     }
+
+    data class TxDataState(
+            val transactionData: TransactionData,
+            val additionalItems: List<SendEvmData.AdditionalItem>,
+            val decoration: TransactionDecoration?
+    )
 
     sealed class SendState {
         object Idle : SendState()

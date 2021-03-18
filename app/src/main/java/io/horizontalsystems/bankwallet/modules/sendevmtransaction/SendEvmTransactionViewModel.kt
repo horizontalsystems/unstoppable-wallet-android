@@ -29,17 +29,15 @@ class SendEvmTransactionViewModel(
     val sendSuccessLiveData = MutableLiveData<ByteArray>()
     val sendFailedLiveData = MutableLiveData<String>()
 
-    val viewItems: List<ViewItem> by lazy {
-        service.decoration?.let {
-            getViewItems(it)
-        } ?: getFallbackViewItems(service.transactionData)
-    }
+    val viewItemsLiveData = MutableLiveData<List<ViewItem>>()
 
     init {
         service.stateObservable.subscribeIO { sync(it) }.let { disposable.add(it) }
+        service.txDataStateObservable.subscribeIO { sync(it) }.let { disposable.add(it) }
         service.sendStateObservable.subscribeIO { sync(it) }.let { disposable.add(it) }
 
         sync(service.state)
+        sync(service.txDataState)
         sync(service.sendState)
     }
 
@@ -59,6 +57,14 @@ class SendEvmTransactionViewModel(
                 }
             }
 
+    private fun sync(txDataState: SendEvmTransactionService.TxDataState) {
+        val viewItems = txDataState.decoration?.let {
+            getViewItems(it, txDataState.additionalItems)
+        } ?: getFallbackViewItems(txDataState.transactionData)
+
+        viewItemsLiveData.postValue(viewItems)
+    }
+
     private fun sync(sendState: SendEvmTransactionService.SendState) =
             when (sendState) {
                 SendEvmTransactionService.SendState.Idle -> Unit
@@ -70,17 +76,17 @@ class SendEvmTransactionViewModel(
                 is SendEvmTransactionService.SendState.Failed -> sendFailedLiveData.postValue(convertError(sendState.error))
             }
 
-    private fun getViewItems(decoration: TransactionDecoration): List<ViewItem>? = when (decoration) {
-        is TransactionDecoration.Transfer -> getTransferViewItems(decoration)
-        is TransactionDecoration.Eip20Transfer -> getEip20TransferViewItems(decoration)
-        is TransactionDecoration.Eip20Approve -> getEip20ApproveViewItems(decoration)
-        is TransactionDecoration.Swap -> getSwapViewItems(decoration)
+    private fun getViewItems(decoration: TransactionDecoration, additionalItems: List<SendEvmData.AdditionalItem>): List<ViewItem>? = when (decoration) {
+        is TransactionDecoration.Transfer -> getTransferViewItems(decoration, additionalItems)
+        is TransactionDecoration.Eip20Transfer -> getEip20TransferViewItems(decoration, additionalItems)
+        is TransactionDecoration.Eip20Approve -> getEip20ApproveViewItems(decoration, additionalItems)
+        is TransactionDecoration.Swap -> getSwapViewItems(decoration, additionalItems)
         else -> null
     }
 
-    private fun getTransferViewItems(transfer: TransactionDecoration.Transfer): List<ViewItem> {
+    private fun getTransferViewItems(transfer: TransactionDecoration.Transfer, additionalItems: List<SendEvmData.AdditionalItem>): List<ViewItem> {
         val viewItems = mutableListOf<ViewItem>(ViewItem.Amount(coinServiceFactory.baseCoinService.amountData(transfer.value)))
-        getDomainViewItem()?.let {
+        getDomainViewItem(additionalItems)?.let {
             viewItems.add(it)
         }
         transfer.to?.let { to ->
@@ -89,17 +95,17 @@ class SendEvmTransactionViewModel(
         return viewItems
     }
 
-    private fun getEip20TransferViewItems(eip20Transfer: TransactionDecoration.Eip20Transfer): List<ViewItem>? =
+    private fun getEip20TransferViewItems(eip20Transfer: TransactionDecoration.Eip20Transfer, additionalItems: List<SendEvmData.AdditionalItem>): List<ViewItem>? =
             coinServiceFactory.getCoinService(eip20Transfer.contractAddress)?.let { coinService ->
                 val viewItems = mutableListOf<ViewItem>(ViewItem.Amount(coinService.amountData(eip20Transfer.value)))
-                getDomainViewItem()?.let {
+                getDomainViewItem(additionalItems)?.let {
                     viewItems.add(it)
                 }
                 viewItems.add(ViewItem.Address(stringProvider.string(R.string.Send_Confirmation_Receiver), eip20Transfer.to.eip55))
                 viewItems
             }
 
-    private fun getEip20ApproveViewItems(eip20Approve: TransactionDecoration.Eip20Approve): List<ViewItem>? =
+    private fun getEip20ApproveViewItems(eip20Approve: TransactionDecoration.Eip20Approve, additionalItems: List<SendEvmData.AdditionalItem>): List<ViewItem>? =
             coinServiceFactory.getCoinService(eip20Approve.contractAddress)?.let { coinService ->
                 listOf(
                         ViewItem.Amount(coinService.amountData(eip20Approve.value)),
@@ -107,7 +113,7 @@ class SendEvmTransactionViewModel(
                 )
             }
 
-    private fun getSwapViewItems(swap: TransactionDecoration.Swap): List<ViewItem>? {
+    private fun getSwapViewItems(swap: TransactionDecoration.Swap, additionalItems: List<SendEvmData.AdditionalItem>): List<ViewItem>? {
         val coinServiceIn = getCoinService(swap.tokenIn) ?: return null
         val coinServiceOut = getCoinService(swap.tokenOut) ?: return null
 
@@ -142,8 +148,8 @@ class SendEvmTransactionViewModel(
             ViewItem.Input(stringProvider.string(R.string.Send_Confirmation_Input), transactionData.input.toHexString())
     )
 
-    private fun getDomainViewItem(): ViewItem? {
-        service.additionalItems.forEach {
+    private fun getDomainViewItem(additionalItems: List<SendEvmData.AdditionalItem>): ViewItem? {
+        additionalItems.forEach {
             if (it is SendEvmData.AdditionalItem.Domain) {
                 return ViewItem.Value(stringProvider.string(R.string.Send_Confirmation_Domain), it.value)
             }
