@@ -122,9 +122,9 @@ class EvmAdapter(kit: EthereumKit) : BaseEvmAdapter(kit, decimal) {
                 confirmationsThreshold = confirmationsThreshold,
                 fee = fee,
                 timestamp = transaction.timestamp,
-                from = fromAddress.hex,
+                from = fromAddress.eip55,
                 memo = null,
-                to = toAddress?.hex,
+                to = toAddress?.eip55,
                 type = type,
                 failed = fullTransaction.isFailed()
         )
