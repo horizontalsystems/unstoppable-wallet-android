@@ -28,7 +28,7 @@ class SendEvmConfirmationFragment : BaseFragment() {
 
     private val sendEvmMViewModel by navGraphViewModels<SendEvmViewModel>(R.id.sendEvmFragment)
 
-    private val vmFactory by lazy { SendEvmConfirmationModule.Factory(sendEvmMViewModel.service.adapter.evmKit, SendEvmData(transactionData, additionalItems)) }
+    private val vmFactory by lazy { SendEvmConfirmationModule.Factory(sendEvmMViewModel.service.adapter.evmKit, SendEvmData(transactionData, additionalInfo)) }
     private val sendViewModel by viewModels<SendEvmTransactionViewModel> { vmFactory }
     private val feeViewModel by viewModels<EthereumFeeViewModel> { vmFactory }
 
@@ -43,8 +43,8 @@ class SendEvmConfirmationFragment : BaseFragment() {
                     transactionDataParcelable.input
             )
         }
-    private val additionalItems: List<SendEvmData.AdditionalItem>
-        get() = arguments?.getParcelableArrayList(SendEvmModule.additionalItemsKey) ?: listOf()
+    private val additionalInfo: SendEvmData.AdditionalInfo?
+        get() = arguments?.getParcelable(SendEvmModule.additionalInfoKey)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_confirmation_send_evm, container, false)

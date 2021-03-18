@@ -4,6 +4,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ISendEthereumAdapter
 import io.horizontalsystems.bankwallet.entities.Address
+import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData.AdditionalInfo
 import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.IRecipientAddressService
 import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.ethereumkit.core.AddressValidator
@@ -57,10 +58,8 @@ class SendEvmService(
 
         state = if (amountError == null && addressError == null && evmAmount != null && addressData != null) {
             val transactionData = adapter.getTransactionData(evmAmount, addressData.evmAddress)
-            val additionalItems: List<SendEvmData.AdditionalItem> = addressData.domain?.let {
-                listOf(SendEvmData.AdditionalItem.Domain(it))
-            } ?: listOf()
-            State.Ready(SendEvmData(transactionData, additionalItems))
+            val additionalInfo = AdditionalInfo.Send(SendEvmData.SendInfo(addressData.domain))
+            State.Ready(SendEvmData(transactionData, additionalInfo))
         } else {
             State.NotReady
         }

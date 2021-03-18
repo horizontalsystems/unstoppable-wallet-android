@@ -17,11 +17,9 @@ import io.horizontalsystems.bankwallet.modules.swap.providers.UniswapProvider
 import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.ethereumkit.core.EthereumKit
-import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.uniswapkit.UniswapKit
 import kotlinx.android.parcel.Parcelize
 import java.math.BigDecimal
-import java.math.BigInteger
 
 object SwapModule {
 
@@ -47,8 +45,10 @@ object SwapModule {
 
         val coin: Coin
             get() = when (this) {
-                Uniswap -> App.coinManager.getCoin(CoinType.Ethereum) ?: throw IllegalArgumentException()
-                PancakeSwap -> App.coinManager.getCoin(CoinType.BinanceSmartChain) ?: throw IllegalArgumentException()
+                Uniswap -> App.coinManager.getCoin(CoinType.Ethereum)
+                        ?: throw IllegalArgumentException()
+                PancakeSwap -> App.coinManager.getCoin(CoinType.BinanceSmartChain)
+                        ?: throw IllegalArgumentException()
             }
     }
 

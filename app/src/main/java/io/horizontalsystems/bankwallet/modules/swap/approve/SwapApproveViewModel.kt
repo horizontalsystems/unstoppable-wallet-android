@@ -6,9 +6,9 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.convertedError
 import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinService
 import io.horizontalsystems.bankwallet.core.providers.StringProvider
+import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.swap.SwapModule
 import io.horizontalsystems.core.SingleLiveEvent
-import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.reactivex.disposables.CompositeDisposable
 import java.math.BigDecimal
 
@@ -35,7 +35,7 @@ class SwapApproveViewModel(
     private val disposables = CompositeDisposable()
 
     val approveAllowedLiveData = MutableLiveData<Boolean>()
-    val openConfirmationLiveEvent = SingleLiveEvent<TransactionData>()
+    val openConfirmationLiveEvent = SingleLiveEvent<SendEvmData>()
     val amountErrorLiveData = MutableLiveData<String?>(null)
 
     init {
@@ -88,7 +88,7 @@ class SwapApproveViewModel(
     fun onProceed() {
         val serviceState = service.state
         if (serviceState is SwapApproveService.State.ApproveAllowed) {
-            openConfirmationLiveEvent.postValue(serviceState.transactionData)
+            openConfirmationLiveEvent.postValue(SendEvmData(serviceState.transactionData))
         }
     }
 

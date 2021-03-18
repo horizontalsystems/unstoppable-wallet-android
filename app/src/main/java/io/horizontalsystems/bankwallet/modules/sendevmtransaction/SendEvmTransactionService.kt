@@ -45,7 +45,7 @@ class SendEvmTransactionService(
         get() = sendStateSubject.toFlowable(BackpressureStrategy.BUFFER)
 
     private val txDataStateSubject = PublishSubject.create<TxDataState>()
-    var txDataState: TxDataState = TxDataState(sendEvmData.transactionData, sendEvmData.additionalItems, evmKit.decorate(sendEvmData.transactionData))
+    var txDataState: TxDataState = TxDataState(sendEvmData.transactionData, sendEvmData.additionalInfo, evmKit.decorate(sendEvmData.transactionData))
         private set(value) {
             field = value
             txDataStateSubject.onNext(value)
@@ -103,7 +103,7 @@ class SendEvmTransactionService(
 
     private fun syncDataState(transaction: EvmTransactionService.Transaction? = null) {
         val transactionData = transaction?.data ?: sendEvmData.transactionData
-        txDataState = TxDataState(transactionData, sendEvmData.additionalItems, evmKit.decorate(transactionData))
+        txDataState = TxDataState(transactionData, sendEvmData.additionalInfo, evmKit.decorate(transactionData))
     }
 
     sealed class State {
@@ -113,7 +113,7 @@ class SendEvmTransactionService(
 
     data class TxDataState(
             val transactionData: TransactionData,
-            val additionalItems: List<SendEvmData.AdditionalItem>,
+            val additionalInfo: SendEvmData.AdditionalInfo?,
             val decoration: TransactionDecoration?
     )
 

@@ -7,17 +7,18 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.convertedError
 import io.horizontalsystems.bankwallet.core.ethereum.EvmTransactionService
 import io.horizontalsystems.bankwallet.core.providers.StringProvider
+import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.swap.SwapService.SwapError
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceService
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapPendingAllowanceService
 import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.SwapTradeOptions
 import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.ethereumkit.api.jsonrpc.JsonRpc
-import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.uniswapkit.TradeError
 import io.horizontalsystems.uniswapkit.models.TradeOptions
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import java.math.BigDecimal
 
 class SwapViewModel(
         val service: SwapService,
@@ -37,7 +38,7 @@ class SwapViewModel(
     private val approveActionLiveData = MutableLiveData<ActionState>(ActionState.Hidden)
     private val openApproveLiveEvent = SingleLiveEvent<SwapAllowanceService.ApproveData>()
     private val advancedSettingsVisibleLiveData = MutableLiveData(false)
-    private val openConfirmationLiveEvent = SingleLiveEvent<TransactionData>()
+    private val openConfirmationLiveEvent = SingleLiveEvent<SendEvmData>()
 
     init {
         subscribeToServices()
@@ -56,7 +57,7 @@ class SwapViewModel(
     fun approveActionLiveData(): LiveData<ActionState> = approveActionLiveData
     fun openApproveLiveEvent(): LiveData<SwapAllowanceService.ApproveData> = openApproveLiveEvent
     fun advancedSettingsVisibleLiveData(): LiveData<Boolean> = advancedSettingsVisibleLiveData
-    fun openConfirmationLiveEvent(): LiveData<TransactionData> = openConfirmationLiveEvent
+    fun openConfirmationLiveEvent(): LiveData<SendEvmData> = openConfirmationLiveEvent
 
     fun onTapSwitch() {
         tradeService.switchCoins()
@@ -71,7 +72,17 @@ class SwapViewModel(
     fun onTapProceed() {
         val serviceState = service.state
         if (serviceState is SwapService.State.Ready) {
-            openConfirmationLiveEvent.postValue(serviceState.transactionData)
+            val trade = (tradeService.state as? SwapTradeService.State.Ready)?.trade
+            val swapInfo = SendEvmData.SwapInfo(
+                    estimatedIn = tradeService.amountFrom ?: BigDecimal.ZERO,
+                    estimatedOut = tradeService.amountTo ?: BigDecimal.ZERO,
+                    slippage = formatter.slippage(tradeService.tradeOptions.allowedSlippage),
+                    deadline = formatter.deadline(tradeService.tradeOptions.ttl),
+                    recipientDomain = tradeService.tradeRecipientDomain,
+                    price = formatter.price(trade?.tradeData?.executionPrice, tradeService.coinFrom, tradeService.coinTo),
+                    priceImpact = trade?.let { formatter.priceImpactViewItem(it)?.value }
+            )
+            openConfirmationLiveEvent.postValue(SendEvmData(serviceState.transactionData, SendEvmData.AdditionalInfo.Swap(swapInfo)))
         }
     }
 

@@ -13,12 +13,10 @@ import io.horizontalsystems.bankwallet.core.factories.FeeRateProviderFactory
 import io.horizontalsystems.bankwallet.core.providers.StringProvider
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule
-import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule.transactionDataKey
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionService
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
 import io.horizontalsystems.bankwallet.modules.swap.SwapModule
 import io.horizontalsystems.core.findNavController
-import io.horizontalsystems.ethereumkit.models.TransactionData
 
 object SwapApproveConfirmationModule {
 
@@ -51,9 +49,11 @@ object SwapApproveConfirmationModule {
         }
     }
 
-    fun start(fragment: Fragment, navigateTo: Int, navOptions: NavOptions, transactionData: TransactionData) {
-        val transactionDataParcelable = SendEvmModule.TransactionDataParcelable(transactionData)
-        val arguments = bundleOf(transactionDataKey to transactionDataParcelable)
+    fun start(fragment: Fragment, navigateTo: Int, navOptions: NavOptions, sendEvmData: SendEvmData) {
+        val arguments = bundleOf(
+                SendEvmModule.transactionDataKey to SendEvmModule.TransactionDataParcelable(sendEvmData.transactionData),
+                SendEvmModule.additionalInfoKey to sendEvmData.additionalInfo
+        )
         fragment.findNavController().navigate(navigateTo, arguments, navOptions)
     }
 

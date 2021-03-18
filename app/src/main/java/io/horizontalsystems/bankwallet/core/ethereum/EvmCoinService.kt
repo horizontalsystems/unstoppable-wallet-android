@@ -36,6 +36,10 @@ class EvmCoinService(
         return SendModule.AmountData(primaryAmountInfo, secondaryAmountInfo)
     }
 
+    fun amountData(value: BigDecimal): SendModule.AmountData {
+        return amountData(value.movePointRight(coin.decimal).toBigInteger())
+    }
+
     fun coinValue(value: BigInteger): CoinValue {
         return CoinValue(coin, convertToMonetaryValue(value))
     }

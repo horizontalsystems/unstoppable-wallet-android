@@ -24,7 +24,8 @@ import kotlinx.android.synthetic.main.fragment_send_evm.*
 
 class SendEvmFragment : BaseFragment() {
 
-    private val vmFactory by lazy { SendEvmModule.Factory(requireArguments().getParcelable(SendEvmModule.walletKey)!!) }
+    private val wallet by lazy { requireArguments().getParcelable<Wallet>(SendEvmModule.walletKey)!! }
+    private val vmFactory by lazy { SendEvmModule.Factory(wallet) }
     private val viewModel by navGraphViewModels<SendEvmViewModel>(R.id.sendEvmFragment) { vmFactory }
     private val availableBalanceViewModel by viewModels<SendAvailableBalanceViewModel> { vmFactory }
     private val amountViewModel by viewModels<AmountInputViewModel> { vmFactory }
@@ -49,9 +50,8 @@ class SendEvmFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val wallet = requireArguments().getParcelable<Wallet>(SendEvmModule.walletKey)!!
         toolbar.title = getString(R.string.Send_Title, wallet.coin.code)
-        toolbar.navigationIcon = AppLayoutHelper.getCoinDrawable(requireContext(), wallet.coin.code, wallet.coin.type)
+        toolbar.navigationIcon = AppLayoutHelper.getCoinDrawable(requireContext(), wallet.coin.type)
         toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.menuClose -> {
@@ -119,7 +119,7 @@ class SendEvmFragment : BaseFragment() {
         })
 
         viewModel.proceedLiveEvent.observe(viewLifecycleOwner, { sendData ->
-            SendEvmConfirmationModule.start(this, R.id.sendEvmFragment_to_sendEvmConfirmationFragment, navOptions(), sendData.transactionData)
+            SendEvmConfirmationModule.start(this, R.id.sendEvmFragment_to_sendEvmConfirmationFragment, navOptions(), sendData)
         })
     }
 
@@ -142,6 +142,5 @@ class SendEvmFragment : BaseFragment() {
             }
         }
     }
-
 
 }

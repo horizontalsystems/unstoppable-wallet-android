@@ -34,6 +34,7 @@
 
     <TextView
         android:id="@+id/valueTextView"
+        style="@style/Subhead1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -41,6 +42,7 @@
         android:ellipsize="middle"
         android:maxWidth="157dp"
         android:singleLine="true"
+        android:textAlignment="textEnd"
         app:layout_constraintBottom_toBottomOf="@id/backgroundView"
         app:layout_constraintEnd_toEndOf="@id/backgroundView"
         app:layout_constraintStart_toEndOf="@id/titleTextView"
