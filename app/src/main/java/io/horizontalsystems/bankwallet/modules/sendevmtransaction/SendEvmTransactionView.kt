@@ -40,9 +40,13 @@ class SendEvmTransactionView @JvmOverloads constructor(context: Context, attrs: 
                 showSpeedInfoListener
         )
 
-        val adapter = SendEvmTransactionAdapter(transactionViewModel.viewItems)
+        val adapter = SendEvmTransactionAdapter()
         recyclerView.adapter = adapter
-        adapter.notifyDataSetChanged()
+
+        transactionViewModel.viewItemsLiveData.observe(viewLifecycleOwner, {
+            adapter.items = it
+            adapter.notifyDataSetChanged()
+        })
 
         transactionViewModel.errorLiveData.observe(viewLifecycleOwner, {
             error.text = it
@@ -51,7 +55,9 @@ class SendEvmTransactionView @JvmOverloads constructor(context: Context, attrs: 
 
 }
 
-class SendEvmTransactionAdapter(val items: List<ViewItem>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class SendEvmTransactionAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+    var items: List<ViewItem> = listOf()
 
     enum class ViewType {
         Amount, TitleValue, TitleValueHex, TitleValueItalic
