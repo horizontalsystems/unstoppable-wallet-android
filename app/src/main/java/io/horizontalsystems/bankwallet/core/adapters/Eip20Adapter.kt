@@ -145,9 +145,9 @@ class Eip20Adapter(
                 amount = scaleDown(transaction.value.toBigDecimal()),
                 confirmationsThreshold = confirmationsThreshold,
                 timestamp = transaction.timestamp,
-                from = transaction.from.hex,
+                from = transaction.from.eip55,
                 memo = null,
-                to = transaction.to.hex,
+                to = transaction.to.eip55,
                 type = type,
                 failed = transaction.isError
         )
