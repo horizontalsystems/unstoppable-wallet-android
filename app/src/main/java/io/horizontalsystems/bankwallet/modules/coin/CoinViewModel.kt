@@ -5,8 +5,9 @@ import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.bankwallet.entities.PriceAlert
 import io.horizontalsystems.chartview.models.PointInfo
+import io.horizontalsystems.coinkit.models.CoinType
+import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.xrateskit.entities.*
 import io.reactivex.disposables.CompositeDisposable
 
@@ -32,11 +33,11 @@ class CoinViewModel(
     val showMacd = MutableLiveData<Boolean>()
     val showRsi = MutableLiveData<Boolean>()
     val alertNotificationUpdated = MutableLiveData<Unit>()
-    val showNotificationMenu = MutableLiveData<Pair<String, String>>()
+    val showNotificationMenu = SingleLiveEvent<Pair<CoinType, String>>()
     val isFavorite = MutableLiveData<Boolean>()
     val coinMarkets = MutableLiveData<List<MarketTickerViewItem>>()
 
-    var notificationIconVisible = coinId != null && service.notificationsAreEnabled
+    var notificationIconVisible = service.notificationsAreEnabled && service.notificationSupported
     var notificationIconActive = false
 
     private var emaIsEnabled = false
@@ -114,9 +115,7 @@ class CoinViewModel(
     }
 
     fun onNotificationClick() {
-        coinId?.let {
-            showNotificationMenu.postValue(Pair(it, coinTitle))
-        }
+        showNotificationMenu.postValue(Pair(service.coinType, coinTitle))
     }
 
     fun onFavoriteClick() {
@@ -170,9 +169,7 @@ class CoinViewModel(
     }
 
     private fun updateAlertNotificationIconState() {
-        val coinId = coinId ?: return
-        val priceAlert = service.getPriceAlert(coinId)
-        notificationIconActive = priceAlert.changeState != PriceAlert.ChangeState.OFF || priceAlert.trendState != PriceAlert.TrendState.OFF
+        notificationIconActive = service.hasPriceAlert
         alertNotificationUpdated.postValue(Unit)
     }
 

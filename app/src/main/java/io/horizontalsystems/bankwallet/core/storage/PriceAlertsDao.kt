@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.core.storage
 
 import androidx.room.*
 import io.horizontalsystems.bankwallet.entities.PriceAlert
+import io.horizontalsystems.coinkit.models.CoinType
 
 @Dao
 interface PriceAlertsDao {
@@ -11,8 +12,8 @@ interface PriceAlertsDao {
     @Query("SELECT * FROM PriceAlert")
     fun all(): List<PriceAlert>
 
-    @Query("SELECT * FROM PriceAlert WHERE coinId = :coinId")
-    fun priceAlert(coinId: String): PriceAlert?
+    @Query("SELECT * FROM PriceAlert WHERE coinType = :coinType")
+    fun priceAlert(coinType: CoinType): PriceAlert?
 
     @Query("SELECT COUNT(*) FROM PriceAlert")
     fun count(): Int

@@ -285,6 +285,7 @@ interface IRateManager {
     fun getCoinRatingsAsync(): Single<Map<CoinType, String>>
     fun getGlobalMarketInfoAsync(currency: String): Single<GlobalCoinMarket>
     fun searchCoins(searchText: String): List<CoinData>
+    fun getNotificationCoinCode(coinType: CoinType): String?
     fun refresh()
 }
 
@@ -426,9 +427,11 @@ interface IAddTokenBlockchainService {
 
 interface IPriceAlertManager {
     val notificationChangedFlowable: Flowable<Unit>
+    fun notificationCode(coinType: CoinType): String?
     fun getPriceAlerts(): List<PriceAlert>
-    fun savePriceAlert(priceAlert: PriceAlert)
-    fun getPriceAlert(coinId: String): PriceAlert
+    fun savePriceAlert(coinType: CoinType, changeState: PriceAlert.ChangeState, trendState: PriceAlert.TrendState)
+    fun getAlertStates(coinType: CoinType): Pair<PriceAlert.ChangeState, PriceAlert.TrendState>
+    fun hasPriceAlert(coinType: CoinType): Boolean
     fun deactivateAllNotifications()
     fun enablePriceAlerts()
     fun disablePriceAlerts()

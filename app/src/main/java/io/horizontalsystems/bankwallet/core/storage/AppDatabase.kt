@@ -15,7 +15,7 @@ import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.coinkit.models.CoinType
 
-@Database(version = 29, exportSchema = false, entities = [
+@Database(version = 30, exportSchema = false, entities = [
     EnabledWallet::class,
     PriceAlert::class,
     AccountRecord::class,
@@ -75,6 +75,7 @@ abstract class AppDatabase : RoomDatabase() {
                             MIGRATION_26_27,
                             MIGRATION_27_28,
                             MIGRATION_28_29,
+                            MIGRATION_29_30,
                     )
                     .build()
         }
@@ -503,12 +504,8 @@ abstract class AppDatabase : RoomDatabase() {
                 // change coinIds in enabled wallets
                 updateCoinIdInEnabledWallets(customCoins, database)
 
-                //unsubscribe from old Notifications
-                addNotificationsUnsubscribeJobs(database)
-
                 //drop CoinRecord table and clean PriceAlert table
                 database.execSQL("DROP TABLE CoinRecord")
-                database.execSQL("DELETE FROM PriceAlert")
             }
         }
 
@@ -516,6 +513,19 @@ abstract class AppDatabase : RoomDatabase() {
             override fun migrate(database: SupportSQLiteDatabase) {
                 database.execSQL("DROP TABLE FavoriteCoin")
                 database.execSQL("CREATE TABLE IF NOT EXISTS `FavoriteCoin` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `coinType` TEXT NOT NULL)")
+            }
+        }
+
+        private val MIGRATION_29_30: Migration = object : Migration(29, 30) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("DROP TABLE SubscriptionJob")
+                database.execSQL("CREATE TABLE IF NOT EXISTS SubscriptionJob (`coinCode` TEXT NOT NULL, `topicName` TEXT NOT NULL, `stateType` TEXT NOT NULL, `jobType` TEXT NOT NULL, PRIMARY KEY(`coinCode`, `stateType`))")
+
+                //unsubscribe from old Notifications
+                addNotificationsUnsubscribeJobs(database)
+
+                database.execSQL("DROP TABLE PriceAlert")
+                database.execSQL("CREATE TABLE IF NOT EXISTS PriceAlert (`coinType` TEXT NOT NULL, `notificationCoinCode` TEXT NOT NULL, `changeState` TEXT NOT NULL, `trendState` TEXT NOT NULL, PRIMARY KEY(`coinType`))")
             }
         }
 
@@ -545,8 +555,8 @@ abstract class AppDatabase : RoomDatabase() {
 
             unsubscribeJobs.forEach { job ->
                 database.execSQL("""
-                                        INSERT INTO SubscriptionJob (`coinId`,`topicName`,`stateType`,`jobType`) 
-                                        VALUES ('${job.coinId}', '${job.topicName}', '${job.stateType.value}', '${job.jobType.value}')
+                                        INSERT INTO SubscriptionJob (`coinCode`,`topicName`,`stateType`,`jobType`) 
+                                        VALUES ('${job.coinCode}', '${job.topicName}', '${job.stateType.value}', '${job.jobType.value}')
                                         """.trimIndent())
             }
         }

@@ -8,6 +8,7 @@ import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.PriceAlert
 import io.horizontalsystems.bankwallet.modules.settings.notifications.bottommenu.NotificationMenuMode
 import io.horizontalsystems.coinkit.models.Coin
+import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -27,7 +28,7 @@ class NotificationsViewModel(
     val openNotificationSettings = SingleLiveEvent<Void>()
     val setWarningVisible = MutableLiveData<Boolean>()
     val notificationIsOnLiveData = MutableLiveData<Boolean>()
-    val openOptionsDialog = SingleLiveEvent<Triple<String, String, NotificationMenuMode>>()
+    val openOptionsDialog = SingleLiveEvent<Triple<String, CoinType, NotificationMenuMode>>()
     val controlsVisible = MutableLiveData<Boolean>()
     val setDeactivateButtonEnabled = MutableLiveData<Boolean>()
 
@@ -74,12 +75,12 @@ class NotificationsViewModel(
     }
 
     fun onDropdownTap(item: NotificationViewItem) {
-        val coinId = item.coinId ?: return
+        val coinType = item.coinType ?: return
         val mode = when (item.type) {
             NotificationViewItemType.ChangeOption -> NotificationMenuMode.Change
             else -> NotificationMenuMode.Trend
         }
-        openOptionsDialog.postValue(Triple(item.coinName, coinId, mode))
+        openOptionsDialog.postValue(Triple(item.coinName, coinType, mode))
     }
 
     private fun updateControlsVisibility() {
@@ -91,12 +92,12 @@ class NotificationsViewModel(
 
         val priceAlerts = priceAlertManager.getPriceAlerts()
         portfolioCoins.forEach { coin ->
-            val priceAlert = priceAlerts.firstOrNull { it.coinId == coin.id }
+            val priceAlert = priceAlerts.firstOrNull { it.coinType == coin.type }
             viewItems.addAll(getPriceAlertViewItems(coin, priceAlert))
         }
 
         getOtherCoinsWithAlert(priceAlerts).forEach { coin ->
-            priceAlerts.firstOrNull { it.coinId == coin.id }?.let { priceAlert ->
+            priceAlerts.firstOrNull { it.coinType == coin.type }?.let { priceAlert ->
                 viewItems.addAll(getPriceAlertViewItems(coin, priceAlert))
             }
         }
@@ -108,22 +109,22 @@ class NotificationsViewModel(
     }
 
     private fun getOtherCoinsWithAlert(priceAlerts: List<PriceAlert>): List<Coin> {
-        val portfolioCoinCodes = portfolioCoins.map { it.id }
+        val portfolioCoinTypes = portfolioCoins.map { it.type }
         val allCoins = coinManager.coins
         val nonPortfolioCoinAlerts = priceAlerts.filter { alert ->
-            portfolioCoinCodes.indexOf(alert.coinId) == -1
+            portfolioCoinTypes.indexOf(alert.coinType) == -1
         }
 
         return nonPortfolioCoinAlerts.mapNotNull { priceAlert ->
-            allCoins.firstOrNull { priceAlert.coinId == it.id }
+            allCoins.firstOrNull { priceAlert.coinType == it.type }
         }
     }
 
     private fun getPriceAlertViewItems(coin: Coin, priceAlert: PriceAlert?): List<NotificationViewItem> {
         val items = mutableListOf<NotificationViewItem>()
         items.add(NotificationViewItem(coin.title, NotificationViewItemType.CoinName))
-        items.add(NotificationViewItem(coin.title, NotificationViewItemType.ChangeOption, coin.id, titleRes = R.string.NotificationBottomMenu_Change24h, dropdownValue = getChangeValue(priceAlert?.changeState)))
-        items.add(NotificationViewItem(coin.title, NotificationViewItemType.TrendOption, coin.id, titleRes = R.string.NotificationBottomMenu_PriceTrendChange, dropdownValue = getTrendValue(priceAlert?.trendState)))
+        items.add(NotificationViewItem(coin.title, NotificationViewItemType.ChangeOption, coin.type, titleRes = R.string.NotificationBottomMenu_Change24h, dropdownValue = getChangeValue(priceAlert?.changeState)))
+        items.add(NotificationViewItem(coin.title, NotificationViewItemType.TrendOption, coin.type, titleRes = R.string.NotificationBottomMenu_PriceTrendChange, dropdownValue = getTrendValue(priceAlert?.trendState)))
         return items
     }
 
@@ -151,7 +152,7 @@ class NotificationsViewModel(
 data class NotificationViewItem(
         val coinName: String,
         val type: NotificationViewItemType,
-        val coinId: String? = null,
+        val coinType: CoinType? = null,
         @StringRes val titleRes: Int? = null,
         @StringRes val dropdownValue: Int = R.string.SettingsNotifications_Off)
 
