@@ -191,7 +191,7 @@ dependencies {
 
     // Wallet kits
     implementation 'com.github.horizontalsystems:bitcoin-kit-android:ae78efd'
-    implementation 'com.github.horizontalsystems:ethereum-kit-android:396b0de'
+    implementation 'com.github.horizontalsystems:ethereum-kit-android:d5c6f59'
     implementation 'com.github.horizontalsystems:blockchain-fee-rate-kit-android:047596b'
     implementation 'com.github.horizontalsystems:binance-chain-kit-android:b9e1b11'
     implementation 'com.github.horizontalsystems:xrates-kit-android:580f4c6'
