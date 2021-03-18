@@ -13,7 +13,7 @@ import io.reactivex.subjects.BehaviorSubject
 import java.util.concurrent.TimeUnit
 
 class CoinService(
-        private val coinType: CoinType,
+        val coinType: CoinType,
         val currency: Currency,
         private val xRateManager: IRateManager,
         private val chartTypeStorage: IChartTypeStorage,
@@ -33,6 +33,15 @@ class CoinService(
     val chartInfoErrorObservable: BehaviorSubject<Throwable> = BehaviorSubject.create()
     val coinDetailsStateObservable: BehaviorSubject<CoinDetailsState> = BehaviorSubject.createDefault(CoinDetailsState.Loading)
     val alertNotificationUpdatedObservable: BehaviorSubject<Unit> = BehaviorSubject.createDefault(Unit)
+    val notificationSupported: Boolean
+        get () {
+            return priceAlertManager.notificationCode(coinType) != null
+        }
+
+    val hasPriceAlert: Boolean
+        get() {
+            return priceAlertManager.hasPriceAlert(coinType)
+        }
 
     var coinMarketDetails: CoinMarketDetails? = null
 
@@ -107,10 +116,6 @@ class CoinService(
                 }).let {
                     disposables.add(it)
                 }
-    }
-
-    fun getPriceAlert(coinCode: String): PriceAlert {
-        return priceAlertManager.getPriceAlert(coinCode)
     }
 
     fun isCoinFavorite(): Boolean {

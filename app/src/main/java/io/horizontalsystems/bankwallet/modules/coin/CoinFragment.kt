@@ -300,8 +300,8 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
             updateNotificationMenuItem()
         })
 
-        viewModel.showNotificationMenu.observe(viewLifecycleOwner, Observer { (coinId, coinName) ->
-            BottomNotificationMenu.show(childFragmentManager, NotificationMenuMode.All, coinName, coinId)
+        viewModel.showNotificationMenu.observe(viewLifecycleOwner, Observer { (coinType, coinName) ->
+            BottomNotificationMenu.show(childFragmentManager, NotificationMenuMode.All, coinName, coinType)
         })
 
         viewModel.isFavorite.observe(viewLifecycleOwner, Observer {

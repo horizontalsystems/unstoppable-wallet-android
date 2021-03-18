@@ -130,6 +130,10 @@ class RateManager(
         return kit.searchCoins(searchText)
     }
 
+    override fun getNotificationCoinCode(coinType: CoinType): String? {
+        return kit.getNotificationCoinCode(coinType)
+    }
+
     override fun refresh() {
         kit.refresh()
     }
