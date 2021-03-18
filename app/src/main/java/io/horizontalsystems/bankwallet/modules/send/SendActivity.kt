@@ -38,7 +38,7 @@ class SendActivity : BaseActivity() {
         val wallet: Wallet = intent.getParcelableExtra(WALLET) ?: run { finish(); return }
 
         toolbar.title = getString(R.string.Send_Title, wallet.coin.code)
-        toolbar.navigationIcon = AppLayoutHelper.getCoinDrawable(this, wallet.coin.code, wallet.coin.type)
+        toolbar.navigationIcon = AppLayoutHelper.getCoinDrawable(this, wallet.coin.type)
         toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.menuClose -> {

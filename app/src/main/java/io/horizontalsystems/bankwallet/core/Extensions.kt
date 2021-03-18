@@ -20,8 +20,8 @@ import io.reactivex.schedulers.Schedulers
 
 //View
 
-fun ImageView.setCoinImage(coinCode: String, coinType: CoinType? = null) {
-    setImageDrawable(AppLayoutHelper.getCoinDrawable(context, coinCode, coinType))
+fun ImageView.setCoinImage(coinType: CoinType) {
+    setImageDrawable(AppLayoutHelper.getCoinDrawable(context, coinType))
 
     imageTintList = ColorStateList.valueOf(context.getColor(R.color.grey))
 }
