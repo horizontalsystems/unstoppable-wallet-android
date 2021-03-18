@@ -28,6 +28,7 @@ import io.horizontalsystems.core.CoreApp
 import io.horizontalsystems.core.ICoreApp
 import io.horizontalsystems.core.security.EncryptionManager
 import io.horizontalsystems.core.security.KeyStoreManager
+import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.pin.PinComponent
 import io.reactivex.plugins.RxJavaPlugins
 import java.util.logging.Level
@@ -99,6 +100,8 @@ class App : CoreApp() {
         RxJavaPlugins.setErrorHandler { e: Throwable? ->
             Log.w("RxJava ErrorHandler", e)
         }
+
+        EthereumKit.init()
 
         instance = this
         preferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
