@@ -131,12 +131,12 @@
     </style>
 
     <style name="TabComponent" parent="ButtonTransparent">
-        <item name="android:layout_marginStart">4dp</item>
-        <item name="android:layout_marginEnd">4dp</item>
-        <item name="android:layout_marginTop">8dp</item>
-        <item name="android:layout_marginBottom">8dp</item>
-        <item name="android:paddingStart">24dp</item>
-        <item name="android:paddingEnd">24dp</item>
+        <item name="android:background">@drawable/tab_rounded_background</item>
+        <item name="android:paddingTop">6dp</item>
+        <item name="android:paddingBottom">6dp</item>
+        <item name="android:paddingStart">12dp</item>
+        <item name="android:paddingEnd">12dp</item>
+        <item name="android:textAlignment">center</item>
     </style>
 
     <style name="ButtonPrivacySettings">
