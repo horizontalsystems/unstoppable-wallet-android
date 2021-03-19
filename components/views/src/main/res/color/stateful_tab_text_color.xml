@@ -1,0 +1,5 @@
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:color="@color/oz" android:state_activated="true" />
+    <item android:color="@color/grey_50" android:state_pressed="true" />
+    <item android:color="@color/grey" android:state_pressed="false" />
+</selector>
