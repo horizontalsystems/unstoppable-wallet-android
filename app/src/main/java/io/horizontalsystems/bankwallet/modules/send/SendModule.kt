@@ -281,7 +281,7 @@ object SendModule {
             var formatted = primary.getFormatted()
 
             secondary?.let {
-                formatted += " | " + it.getFormatted()
+                formatted += "  |  " + it.getFormatted()
             }
 
             return formatted

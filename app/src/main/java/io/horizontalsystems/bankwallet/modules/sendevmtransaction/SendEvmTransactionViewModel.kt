@@ -93,7 +93,7 @@ class SendEvmTransactionViewModel(
                 ),
                 ViewItem.Value(
                         stringProvider.string(R.string.Send_Confirmation_Amount),
-                        coinServiceFactory.baseCoinService.amountData(transfer.value).primary.getFormatted(), ValueType.Outgoing
+                        coinServiceFactory.baseCoinService.amountData(transfer.value).getFormatted(), ValueType.Outgoing
                 )
         )
         transfer.to?.let { to ->
@@ -113,7 +113,7 @@ class SendEvmTransactionViewModel(
             coinServiceFactory.getCoinService(eip20Transfer.contractAddress)?.let { coinService ->
                 val viewItems = mutableListOf(
                         ViewItem.Subhead(stringProvider.string(R.string.Send_Confirmation_YouSend), coinService.coin.title),
-                        ViewItem.Value(stringProvider.string(R.string.Send_Confirmation_Amount), coinService.amountData(eip20Transfer.value).primary.getFormatted(), ValueType.Outgoing)
+                        ViewItem.Value(stringProvider.string(R.string.Send_Confirmation_Amount), coinService.amountData(eip20Transfer.value).getFormatted(), ValueType.Outgoing)
                 )
                 val addressValue = eip20Transfer.to.eip55
                 val addressTitle = additionalInfo?.sendInfo?.domain
@@ -130,7 +130,7 @@ class SendEvmTransactionViewModel(
                 val addressTitle = TransactionInfoAddressMapper.map(addressValue)
                 val viewItems = listOf(
                         ViewItem.Subhead(stringProvider.string(R.string.Approve_YouApprove), coinService.coin.title),
-                        ViewItem.Value(stringProvider.string(R.string.Send_Confirmation_Amount), coinService.amountData(eip20Approve.value).primary.getFormatted(), ValueType.Regular),
+                        ViewItem.Value(stringProvider.string(R.string.Send_Confirmation_Amount), coinService.amountData(eip20Approve.value).getFormatted(), ValueType.Regular),
                         ViewItem.Address(stringProvider.string(R.string.Approve_Spender), addressTitle, addressValue)
                 )
                 listOf(SectionViewItem(viewItems))
