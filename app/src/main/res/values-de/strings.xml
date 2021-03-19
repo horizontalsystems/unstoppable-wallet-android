@@ -218,7 +218,11 @@
     <string name="Send_Button_Max">Max.</string>
     <string name="Send_Confirmation_Title">Bestätigen</string>
     <string name="Send_Confirmation_Domain">Domäne</string>
+    <string name="Send_Confirmation_YouSend">You Send</string>
+    <string name="Send_Confirmation_Amount">Amount</string>
+    <string name="Send_Confirmation_To">To</string>
     <string name="Send_Confirmation_Receiver">Empfänger</string>
+    <string name="Send_Confirmation_Input">Input</string>
     <string name="Send_Confirmation_EstimateTime">Geschätzte Zeit:</string>
     <string name="Send_Confirmation_Send_Button">Senden</string>
     <string name="Send_Success">\u2713 Gesendet</string>
@@ -321,11 +325,16 @@
     <string name="SwapSettings_Error_InvalidDeadline">Ungültige Frist</string>
     <!-- Swap Confirmation -->
     <string name="Swap_Confirmation">Bestätigung</string>
+    <string name="Swap_Confirmation_Guaranteed">Guaranteed</string>
+    <string name="Swap_Confirmation_Maximum">Maximum</string>
+    <string name="Swap_Confirmation_Estimated">Estimated</string>
     <!--Swap Coin Select-->
     <!--Approve-->
     <string name="Approve_Title">Tausch genehmigen</string>
     <string name="Approve_Info">Sie sollten einem intelligenten Vertrag die Erlaubnis erteilen, in Ihrem Namen gegebene Token einzutauschen. Diese Erlaubnis legt einen Betrag fest, der von einem intelligenten Vertrag verwendet werden kann. Sie wirkt sich nicht auf Ihr Guthaben aus, erfordert jedoch eine geringe Gebühr für die Ausführung der Genehmigungstransaktion.\n\nEs kann zwar vor jedem Handel auf Anfrage erfolgen, es ist jedoch günstiger, bei zukünftigen Handelsgeschäften einen höheren Betrag im Voraus für uns zu genehmigen.</string>
     <string name="Approve_Error_AlreadyApproved">Sie haben bereits eine Vergütung für diesen Betrag</string>
+    <string name="Approve_Spender">Spender</string>
+    <string name="Approve_YouApprove">You Approve</string>
     <!--Uniswap Info -->
     <string name="UniswapInfo_Title">Uniswap v.2</string>
     <string name="UniswapInfo_Description">Dieser Tauschdienst wird von Uniswap betrieben, einem dezentralisierten und auf der Ethereum Blockchain aufbauenden Token-Austauschprotokoll.\n\nUniswap ist vollständig automatisiert und wird durch intelligente Verträge verwaltet, die den zuverlässigen Austausch von Token ohne jegliche Betrugsmöglichkeit ermöglichen.</string>
