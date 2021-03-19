@@ -42,7 +42,7 @@ class BalanceViewModel : ViewModel(), BalanceModule.IView, BalanceModule.IRouter
     override fun openSend(wallet: Wallet) {
         when (wallet.coin.type) {
             CoinType.Ethereum, is CoinType.Erc20,
-            /*CoinType.BinanceSmartChain, is CoinType.Bep20*/ -> {
+            CoinType.BinanceSmartChain, is CoinType.Bep20 -> {
                 openSendEvmDialog.postValue(wallet)
             }
             else -> {
