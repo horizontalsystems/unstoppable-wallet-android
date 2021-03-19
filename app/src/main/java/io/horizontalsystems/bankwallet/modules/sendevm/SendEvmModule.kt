@@ -7,8 +7,8 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ISendEthereumAdapter
 import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinService
-import io.horizontalsystems.bankwallet.core.fiat.AmountTypeSwitchServiceNew
-import io.horizontalsystems.bankwallet.core.fiat.FiatServiceNew
+import io.horizontalsystems.bankwallet.core.fiat.AmountTypeSwitchServiceSendEvm
+import io.horizontalsystems.bankwallet.core.fiat.FiatServiceSendEvm
 import io.horizontalsystems.bankwallet.core.providers.StringProvider
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.AddressResolutionService
@@ -81,8 +81,8 @@ object SendEvmModule {
                     SendEvmViewModel(service) as T
                 }
                 AmountInputViewModel::class.java -> {
-                    val switchService = AmountTypeSwitchServiceNew()
-                    val fiatService = FiatServiceNew(switchService, App.currencyManager, App.xRateManager)
+                    val switchService = AmountTypeSwitchServiceSendEvm()
+                    val fiatService = FiatServiceSendEvm(switchService, App.currencyManager, App.xRateManager)
                     switchService.add(fiatService.toggleAvailableObservable)
 
                     AmountInputViewModel(service, fiatService, switchService) as T

@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.core.fiat
 
 import io.horizontalsystems.bankwallet.core.IRateManager
-import io.horizontalsystems.bankwallet.core.fiat.AmountTypeSwitchServiceNew.AmountType
+import io.horizontalsystems.bankwallet.core.fiat.AmountTypeSwitchServiceSendEvm.AmountType
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
@@ -18,8 +18,8 @@ import java.math.BigDecimal
 import java.math.RoundingMode
 import java.util.*
 
-class FiatServiceNew(
-        private val switchService: AmountTypeSwitchServiceNew,
+class FiatServiceSendEvm(
+        private val switchService: AmountTypeSwitchServiceSendEvm,
         private val currencyManager: ICurrencyManager,
         private val rateManager: IRateManager
 ) {
