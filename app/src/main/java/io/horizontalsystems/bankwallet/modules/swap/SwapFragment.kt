@@ -6,11 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.modules.swap.info.SwapInfoFragment.Companion.dexKey
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceViewModel
 import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveModule
 import io.horizontalsystems.bankwallet.modules.swap.coincard.SwapCoinCardViewModel
@@ -40,7 +42,7 @@ class SwapFragment : BaseFragment() {
                     true
                 }
                 R.id.menuInfo -> {
-                    findNavController().navigate(R.id.swapFragment_to_uniswapInfoFragment, null, navOptions())
+                    findNavController().navigate(R.id.swapFragment_to_swapInfoFragment, bundleOf(dexKey to viewModel.service.dex), navOptions())
                     true
                 }
                 else -> false

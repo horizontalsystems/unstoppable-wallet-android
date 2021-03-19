@@ -34,7 +34,8 @@ object SwapModule {
 
     data class PriceImpactViewItem(val level: SwapTradeService.PriceImpactLevel, val value: String)
 
-    enum class Dex {
+    @Parcelize
+    enum class Dex : Parcelable {
         Uniswap, PancakeSwap;
 
         val evmKit: EthereumKit?

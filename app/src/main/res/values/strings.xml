@@ -398,25 +398,24 @@
 
     <!--Uniswap Info -->
 
-    <string name="UniswapInfo_Title">Uniswap v.2</string>
-    <string name="UniswapInfo_Description">This exchange service is powered by Uniswap, a decentralized token exchange protocol built on Ethereum blockchain.\n\nUniswap is fully automated and managed by smart contracts that facilitate token exchanges in a reliable manner without any means to cheat.</string>
-    <string name="UniswapInfo_UniswapRelated">Uniswap Related</string>
-    <string name="UniswapInfo_AllowanceTitle">Allowance</string>
-    <string name="UniswapInfo_AllowanceDescription">The amount of some currency that Uniswap can spend on your behalf when executing token swaps. Sufficient allowance is required before swap action can take place</string>
-    <string name="UniswapInfo_PriceImpactTitle">Price Impact</string>
-    <string name="UniswapInfo_PriceImpactDescription">Expected price deviation from a shown price, typically increases with the swap amount.</string>
-    <string name="UniswapInfo_SwapFeeTitle">Swap Fee</string>
-    <string name="UniswapInfo_SwapFeeDescription">A service fee for the swap action on Uniswap platform, shown in the currency the user sells. For most orders it should be either 0.3 % or 0.6 %.</string>
-    <string name="UniswapInfo_GuaranteedAmountTitle">Guaranteed Amount</string>
-    <string name="UniswapInfo_GuaranteedAmountDescription">The minimum amount a user is going to receive as a result of a swap action.</string>
-    <string name="UniswapInfo_MaxSpendTitle">Maximum Spend</string>
-    <string name="UniswapInfo_MaxSpendDescription">The maximum amount a user is going to spend as a result of a swap action.</string>
-    <string name="UniswapInfo_Other">Other</string>
-    <string name="UniswapInfo_TransactionFeeTitle">Transaction Fee</string>
-    <string name="UniswapInfo_TransactionFeeDescription">The estimated processing cost of the given transaction on Ethereum blockchain. Uniswap related transactions will typically cost more than generic token transfer transactions.</string>
-    <string name="UniswapInfo_TransactionSpeedTitle">Transaction Speed</string>
-    <string name="UniswapInfo_TransactionSpeedDescription">Transactions with higher transaction fee will result in faster processing speeds. The opposite is true as well.</string>
-    <string name="UniswapInfo_UniswapSite">Uniswap Site</string>
+    <string name="SwapInfo_Description">This exchange service is powered by %s, a decentralized token exchange protocol built on %s blockchain.\n\%s is fully automated and managed by smart contracts that facilitate token exchanges in a reliable manner without any means to cheat.</string>
+    <string name="SwapInfo_DexRelated">%s Related</string>
+    <string name="SwapInfo_AllowanceTitle">Allowance</string>
+    <string name="SwapInfo_AllowanceDescription">The amount of some currency that service can spend on your behalf when executing token swaps. Sufficient allowance is required before swap action can take place</string>
+    <string name="SwapInfo_PriceImpactTitle">Price Impact</string>
+    <string name="SwapInfo_PriceImpactDescription">Expected price deviation from a shown price, typically increases with the swap amount.</string>
+    <string name="SwapInfo_SwapFeeTitle">Swap Fee</string>
+    <string name="SwapInfo_SwapFeeDescription">A service fee for the swap action on platform, shown in the currency the user sells. For most orders it should be either 0.3 % or 0.6 %.</string>
+    <string name="SwapInfo_GuaranteedAmountTitle">Guaranteed Amount</string>
+    <string name="SwapInfo_GuaranteedAmountDescription">The minimum amount a user is going to receive as a result of a swap action.</string>
+    <string name="SwapInfo_MaxSpendTitle">Maximum Spend</string>
+    <string name="SwapInfo_MaxSpendDescription">The maximum amount a user is going to spend as a result of a swap action.</string>
+    <string name="SwapInfo_Other">Other</string>
+    <string name="SwapInfo_TransactionFeeTitle">Transaction Fee</string>
+    <string name="SwapInfo_TransactionFeeDescription">The estimated processing cost of the given transaction on %s blockchain. %s related transactions will typically cost more than generic token transfer transactions.</string>
+    <string name="SwapInfo_TransactionSpeedTitle">Transaction Speed</string>
+    <string name="SwapInfo_TransactionSpeedDescription">Transactions with higher transaction fee will result in faster processing speeds. The opposite is true as well.</string>
+    <string name="SwapInfo_Site">%s Site</string>
 
     <!--Deposit-->
 
