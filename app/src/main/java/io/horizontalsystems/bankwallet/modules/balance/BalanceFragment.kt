@@ -243,7 +243,7 @@ class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener, ReceiveFra
         })
 
         viewModel.openChartModule.observe(viewLifecycleOwner, Observer { coin ->
-            val arguments = CoinFragment.prepareParams(coin.type, coin.code, coin.title, null)
+            val arguments = CoinFragment.prepareParams(coin.type, coin.code, coin.title)
 
             findNavController().navigate(R.id.mainFragment_to_coinFragment, arguments, navOptions())
         })

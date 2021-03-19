@@ -8,6 +8,7 @@ import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.chartview.models.PointInfo
 import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.SingleLiveEvent
+import io.horizontalsystems.views.ListPosition
 import io.horizontalsystems.xrateskit.entities.*
 import io.reactivex.disposables.CompositeDisposable
 
@@ -16,7 +17,6 @@ class CoinViewModel(
         private val service: CoinService,
         val coinCode: String,
         private val coinTitle: String,
-        private val coinId: String?,
         private val factory: CoinViewFactory,
         private val clearables: List<Clearable>
         )
@@ -36,6 +36,8 @@ class CoinViewModel(
     val showNotificationMenu = SingleLiveEvent<Pair<CoinType, String>>()
     val isFavorite = MutableLiveData<Boolean>()
     val coinMarkets = MutableLiveData<List<MarketTickerViewItem>>()
+    val coinInvestors = MutableLiveData<List<InvestorItem>>()
+    val extraPages = MutableLiveData<List<CoinExtraPage>>()
 
     var notificationIconVisible = service.notificationsAreEnabled && service.notificationSupported
     var notificationIconActive = false
@@ -180,7 +182,26 @@ class CoinViewModel(
     private fun updateCoinDetails() {
         val coinDetails = service.coinMarketDetails ?: return
         coinDetailsLiveData.postValue(factory.createCoinDetailsViewItem(coinDetails, service.currency, coinCode))
-        coinMarkets.postValue(factory.createCoinMarketItems(coinDetails))
+
+        val coinMarketItems = factory.createCoinMarketItems(coinDetails.tickers)
+        val coinInvestorItems = factory.createCoinInvestorItems(coinDetails.meta.fundCategories)
+        setExtraPageButtons(coinMarketItems, coinInvestorItems)
+
+        coinMarkets.postValue(coinMarketItems)
+        coinInvestors.postValue(coinInvestorItems)
+    }
+
+    private fun setExtraPageButtons(coinMarketItems: List<MarketTickerViewItem>, coinInvestorItems: List<InvestorItem>) {
+        val coinExtraPages = mutableListOf<CoinExtraPage>()
+        if (coinMarketItems.isNotEmpty()) {
+            val listPosition = if (coinInvestorItems.isEmpty()) ListPosition.Single else ListPosition.First
+            coinExtraPages.add(CoinExtraPage.Markets(listPosition))
+        }
+        if (coinInvestorItems.isNotEmpty()) {
+            val listPosition = if (coinMarketItems.isEmpty()) ListPosition.Single else ListPosition.Last
+            coinExtraPages.add(CoinExtraPage.Investors(listPosition))
+        }
+        extraPages.postValue(coinExtraPages)
     }
 
     private fun updateChartInfo() {

@@ -221,11 +221,18 @@
         <action
             android:id="@+id/coinFragment_to_coinMarketsFragment"
             app:destination="@id/coinMarketsFragment" />
+        <action
+            android:id="@+id/coinFragment_to_coinInvestorsFragment"
+            app:destination="@id/coinInvestorsFragment" />
     </fragment>
     <fragment
         android:id="@+id/coinMarketsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.coin.coinmarkets.CoinMarketsFragment"
         tools:layout="@layout/fragment_coin_markets" />
+    <fragment
+        android:id="@+id/coinInvestorsFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.coin.coininvestors.CoinInvestorsFragment"
+        tools:layout="@layout/fragment_coin_investors" />
     <fragment
         android:id="@+id/pinFragment"
         android:name="io.horizontalsystems.pin.PinFragment"
