@@ -193,6 +193,8 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="TimePeriod_24h">24h</string>
     <!--Coin Markets-->
     <string name="CoinMarket_Title">%s Markets</string>
+    <!--Coin Investors-->
+    <string name="CoinInvestors_Title">%s Investors</string>
     <!--Balance-->
     <string name="Balance_Title">Balance</string>
     <string name="Balance_Deposit">Recevoir</string>
@@ -618,6 +620,7 @@ Si vous changez le format d\'adresse pour %2$s , l\'historique du solde actuel e
     <string name="CoinPage_Price">Price</string>
     <string name="CoinPage_Market">Market</string>
     <string name="CoinPage_CoinMarket">%s Markets</string>
+    <string name="CoinPage_CoinInvestors">%s Investors</string>
     <string name="CoinPage_Range24">24h Range</string>
     <string name="CoinPage_Performance">Performance</string>
     <string name="CoinPage_About">About</string>
