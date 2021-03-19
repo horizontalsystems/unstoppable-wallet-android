@@ -10,6 +10,9 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.ethereum.EthereumFeeViewModel
+import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
+import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
+import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.views.ListPosition
 import io.horizontalsystems.views.inflate
 import kotlinx.android.extensions.LayoutContainer
@@ -137,6 +140,11 @@ class SendEvmTransactionAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(
             valueTextView.text = valueTitle
 
             backgroundView.setBackgroundResource(position.getBackground())
+
+            valueTextView.setOnSingleClickListener {
+                TextHelper.copyText(value)
+                HudHelper.showSuccessMessage(containerView, R.string.Hud_Text_Copied)
+            }
         }
 
         companion object {
