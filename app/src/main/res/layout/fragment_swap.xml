@@ -250,4 +250,22 @@
 
     </androidx.core.widget.NestedScrollView>
 
+    <View
+        android:id="@+id/poweredByLine"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="61dp"
+        android:background="@color/steel_10" />
+
+    <TextView
+        android:id="@+id/poweredBy"
+        style="@style/CaptionSB"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="32dp"
+        android:textAlignment="center"
+        android:textColor="@color/grey"
+        tools:text="Powered by Uniswap" />
 </FrameLayout>
