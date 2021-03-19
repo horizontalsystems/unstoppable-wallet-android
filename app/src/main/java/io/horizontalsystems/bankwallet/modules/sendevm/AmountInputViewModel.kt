@@ -34,7 +34,13 @@ class AmountInputViewModel(
 ) : ViewModel() {
     private val disposable = CompositeDisposable()
 
-    private var validDecimals = maxValidDecimals
+    private var coinDecimal = maxCoinDecimal
+
+    private val validDecimal: Int
+        get() = when (switchService.amountType) {
+            AmountTypeSwitchServiceSendEvm.AmountType.Coin -> coinDecimal
+            AmountTypeSwitchServiceSendEvm.AmountType.Currency -> fiatService.currency.decimal
+        }
 
     val prefixLiveData = MutableLiveData<String?>(null)
     val amountLiveData = MutableLiveData<String?>(null)
@@ -63,8 +69,8 @@ class AmountInputViewModel(
     }
 
     private fun syncCoin(coin: Coin?) {
-        val max = maxValidDecimals
-        validDecimals = min(max, (coin?.decimal ?: max))
+        val max = maxCoinDecimal
+        coinDecimal = min(max, (coin?.decimal ?: max))
 
         fiatService.setCoin(coin)
 
@@ -92,12 +98,12 @@ class AmountInputViewModel(
                     if (amountInfo == null || amountInfo.value <= BigDecimal.ZERO) {
                         null
                     } else {
-                        val amount = amountInfo.value.setScale(min(amountInfo.decimal, maxValidDecimals), RoundingMode.DOWN)
+                        val amount = amountInfo.value.setScale(min(amountInfo.decimal, maxCoinDecimal), RoundingMode.DOWN)
                         amount.stripTrailingZeros().toPlainString()
                     }
                 }
                 is FiatServiceSendEvm.PrimaryInfo.Amount -> {
-                    val amount = primaryInfo.amount.setScale(maxValidDecimals, RoundingMode.DOWN)
+                    val amount = primaryInfo.amount.setScale(maxCoinDecimal, RoundingMode.DOWN)
                     amount.stripTrailingZeros().toPlainString()
                 }
             }
@@ -111,11 +117,6 @@ class AmountInputViewModel(
         secondaryTextLiveData.postValue(amountInfo?.getFormatted())
     }
 
-    fun isValid(amount: String?): Boolean {
-        val amountDecimal = amount?.toBigDecimalOrNull()
-        return amountDecimal != null && amountDecimal.scale() <= validDecimals
-    }
-
     fun areAmountsEqual(lhs: String?, rhs: String?): Boolean {
         val lhsDecimal = lhs?.toBigDecimalOrNull() ?: BigDecimal.ZERO
         val rhsDecimal = rhs?.toBigDecimalOrNull() ?: BigDecimal.ZERO
@@ -125,8 +126,8 @@ class AmountInputViewModel(
 
     fun onChangeAmount(amount: String?) {
         val amountDecimal = amount?.toBigDecimalOrNull() ?: BigDecimal.ZERO
-        if (amountDecimal != null && amountDecimal.scale() > validDecimals) {
-            val amountNumber = amountDecimal.setScale(validDecimals, RoundingMode.FLOOR)
+        if (amountDecimal != null && amountDecimal.scale() > validDecimal) {
+            val amountNumber = amountDecimal.setScale(validDecimal, RoundingMode.FLOOR)
             val revertedInput = amountNumber.toPlainString()
             revertAmountLiveData.postValue(revertedInput)
         } else {
@@ -145,7 +146,7 @@ class AmountInputViewModel(
     }
 
     companion object {
-        const val maxValidDecimals = 8
+        const val maxCoinDecimal = 8
     }
 
 }
