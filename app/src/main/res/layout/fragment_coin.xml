@@ -195,6 +195,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/coinRateLast"
+                app:tabPaddingStart="4dp"
+                app:tabPaddingEnd="4dp"
                 app:tabMinWidth="0dp"
                 app:tabGravity="start"
                 app:tabMode="scrollable" />
