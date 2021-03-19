@@ -258,8 +258,8 @@
             android:id="@+id/swapFragment_to_swapConfirmationFragment"
             app:destination="@id/swapConfirmationFragment" />
         <action
-            android:id="@+id/swapFragment_to_uniswapInfoFragment"
-            app:destination="@id/uniswapInfoFragment" />
+            android:id="@+id/swapFragment_to_swapInfoFragment"
+            app:destination="@id/swapInfoFragment" />
         <action
             android:id="@+id/swapFragment_to_swapTradeOptionsFragment"
             app:destination="@id/swapTradeOptionsFragment"
@@ -295,8 +295,8 @@
     </fragment>
 
     <fragment
-        android:id="@+id/uniswapInfoFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.swap.UniswapInfoFragment"
+        android:id="@+id/swapInfoFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.swap.info.SwapInfoFragment"
         tools:layout="@layout/fragment_swap_info" />
     <fragment
         android:id="@+id/walletConnectListFragment"

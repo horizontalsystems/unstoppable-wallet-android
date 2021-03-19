@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?android:windowBackground"
@@ -11,8 +12,8 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         app:menu="@menu/uniswap_info_menu"
-        app:title="@string/UniswapInfo_Title"
-        app:titleTextAppearance="@style/Title3" />
+        app:titleTextAppearance="@style/Title3"
+        tools:title="Uniswap v.2" />
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -26,12 +27,13 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/description"
                 style="@style/Body"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                android:text="@string/UniswapInfo_Description"
-                android:textColor="@color/bran" />
+                android:textColor="@color/bran"
+                tools:text="@string/SwapInfo_Description" />
 
             <TextView
                 android:id="@+id/headerRelated"
@@ -40,7 +42,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="36dp"
                 android:layout_marginBottom="8dp"
-                android:text="@string/UniswapInfo_UniswapRelated"
+                android:text="@string/SwapInfo_DexRelated"
                 android:textColor="@color/jacob" />
 
             <View
@@ -54,7 +56,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                android:text="@string/UniswapInfo_AllowanceTitle"
+                android:text="@string/SwapInfo_AllowanceTitle"
                 android:textColor="@color/jacob" />
 
             <TextView
@@ -62,7 +64,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                android:text="@string/UniswapInfo_AllowanceDescription"
+                android:text="@string/SwapInfo_AllowanceDescription"
                 android:textColor="@color/bran" />
 
             <TextView
@@ -70,7 +72,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                android:text="@string/UniswapInfo_PriceImpactTitle"
+                android:text="@string/SwapInfo_PriceImpactTitle"
                 android:textColor="@color/jacob" />
 
             <TextView
@@ -78,7 +80,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                android:text="@string/UniswapInfo_PriceImpactDescription"
+                android:text="@string/SwapInfo_PriceImpactDescription"
                 android:textColor="@color/bran" />
 
             <TextView
@@ -86,7 +88,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                android:text="@string/UniswapInfo_SwapFeeTitle"
+                android:text="@string/SwapInfo_SwapFeeTitle"
                 android:textColor="@color/jacob" />
 
             <TextView
@@ -94,7 +96,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                android:text="@string/UniswapInfo_SwapFeeDescription"
+                android:text="@string/SwapInfo_SwapFeeDescription"
                 android:textColor="@color/bran" />
 
             <TextView
@@ -102,7 +104,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                android:text="@string/UniswapInfo_GuaranteedAmountTitle"
+                android:text="@string/SwapInfo_GuaranteedAmountTitle"
                 android:textColor="@color/jacob" />
 
             <TextView
@@ -110,7 +112,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                android:text="@string/UniswapInfo_GuaranteedAmountDescription"
+                android:text="@string/SwapInfo_GuaranteedAmountDescription"
                 android:textColor="@color/bran" />
 
             <TextView
@@ -118,7 +120,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                android:text="@string/UniswapInfo_MaxSpendTitle"
+                android:text="@string/SwapInfo_MaxSpendTitle"
                 android:textColor="@color/jacob" />
 
             <TextView
@@ -126,7 +128,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                android:text="@string/UniswapInfo_MaxSpendDescription"
+                android:text="@string/SwapInfo_MaxSpendDescription"
                 android:textColor="@color/bran" />
 
             <TextView
@@ -136,7 +138,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
                 android:layout_marginBottom="8dp"
-                android:text="@string/UniswapInfo_Other"
+                android:text="@string/SwapInfo_Other"
                 android:textColor="@color/jacob" />
 
             <View
@@ -150,15 +152,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                android:text="@string/UniswapInfo_TransactionFeeTitle"
+                android:text="@string/SwapInfo_TransactionFeeTitle"
                 android:textColor="@color/jacob" />
 
             <TextView
+                android:id="@+id/transactionFeeDescription"
                 style="@style/Body"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                android:text="@string/UniswapInfo_TransactionFeeDescription"
+                android:text="@string/SwapInfo_TransactionFeeDescription"
                 android:textColor="@color/bran" />
 
             <TextView
@@ -166,7 +169,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                android:text="@string/UniswapInfo_TransactionSpeedTitle"
+                android:text="@string/SwapInfo_TransactionSpeedTitle"
                 android:textColor="@color/jacob" />
 
             <TextView
@@ -174,20 +177,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                android:text="@string/UniswapInfo_TransactionSpeedDescription"
+                android:text="@string/SwapInfo_TransactionSpeedDescription"
                 android:textColor="@color/bran" />
 
             <Button
-                android:id="@+id/buttonUniswap"
+                android:id="@+id/btnLink"
                 style="@style/ButtonSecondary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="44dp"
                 android:layout_marginBottom="32dp"
-                android:text="@string/UniswapInfo_UniswapSite"
-                app:layout_constraintStart_toStartOf="parent"
+                android:text="@string/SwapInfo_Site"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/textWarning" />
 
         </LinearLayout>
