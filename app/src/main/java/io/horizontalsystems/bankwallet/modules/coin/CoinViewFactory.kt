@@ -4,12 +4,14 @@ import androidx.annotation.StringRes
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.chartview.ChartData
 import io.horizontalsystems.chartview.ChartDataFactory
 import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.chartview.models.ChartPoint
 import io.horizontalsystems.chartview.models.MacdInfo
 import io.horizontalsystems.core.entities.Currency
+import io.horizontalsystems.views.ListPosition
 import io.horizontalsystems.xrateskit.entities.*
 import java.lang.Long.max
 import java.math.BigDecimal
@@ -110,8 +112,8 @@ class CoinViewFactory(private val currency: Currency, private val numberFormatte
         return ChartDataFactory.build(points, chartInfo.startTimestamp, endTimestamp, chartInfo.isExpired)
     }
 
-    fun createCoinMarketItems(coinDetails: CoinMarketDetails): List<MarketTickerViewItem> {
-        return coinDetails.tickers.map {
+    fun createCoinMarketItems(tickers: List<MarketTicker>): List<MarketTickerViewItem> {
+        return tickers.map {
             val (shortenValue, suffix) = numberFormatter.shortenValue(it.volume)
             MarketTickerViewItem(
                     it.marketName,
@@ -120,6 +122,17 @@ class CoinViewFactory(private val currency: Currency, private val numberFormatte
                     "$shortenValue $suffix ${it.base}"
             )
         }
+    }
+
+    fun createCoinInvestorItems(fundCategories: List<CoinFundCategory>): List<InvestorItem> {
+        val items = mutableListOf<InvestorItem>()
+        fundCategories.forEach { category ->
+            items.add(InvestorItem.Header(category.name))
+            category.funds.forEachIndexed { index, fund ->
+                items.add(InvestorItem.Fund(fund.name, fund.url, TextHelper.getCleanedUrl(fund.url), ListPosition.getListPosition(category.funds.size, index)))
+            }
+        }
+        return items
     }
 
     private fun formatFiatShortened(value: BigDecimal, symbol: String): String {

@@ -107,7 +107,7 @@ class MarketOverviewFragment : BaseFragment(), ViewHolderMarketOverviewItem.List
     }
 
     override fun onItemClick(marketViewItem: MarketViewItem) {
-        val arguments = CoinFragment.prepareParams(marketViewItem.coinType, marketViewItem.coinCode, marketViewItem.coinName, null)
+        val arguments = CoinFragment.prepareParams(marketViewItem.coinType, marketViewItem.coinCode, marketViewItem.coinName)
 
         findNavController().navigate(R.id.coinFragment, arguments, navOptions())
     }

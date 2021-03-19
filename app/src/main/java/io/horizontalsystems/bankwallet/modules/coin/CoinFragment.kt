@@ -50,8 +50,7 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
         CoinModule.Factory(
                 coinTitle,
                 requireArguments().getParcelable(COIN_TYPE_KEY)!!,
-                coinCode,
-                requireArguments().getString(COIN_ID_KEY)
+                coinCode
         )
     }
 
@@ -216,13 +215,6 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
             coinRating.setImageDrawable(getRatingIcon(item.coinMeta.rating))
             coinRating.isEnabled = false
 
-            // Coin Markets
-
-            coinMarketsButton.showTitle(getString(R.string.CoinPage_CoinMarket, coinCode))
-            coinMarketsButton.setOnClickListener {
-                findNavController().navigate(R.id.coinFragment_to_coinMarketsFragment, null, navOptions())
-            }
-
             // Performance
 
             coinPerformanceView.bind(item.rateDiffs)
@@ -309,9 +301,38 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
             toolbar.menu.findItem(R.id.menuUnfavorite).isVisible = it
         })
 
-        viewModel.coinMarkets.observe(viewLifecycleOwner, { items ->
-            coinMarketsButton.isVisible = items.isNotEmpty()
+        viewModel.extraPages.observe(viewLifecycleOwner, { pages ->
+            setExtraPages(pages)
         })
+    }
+
+    private fun setExtraPages(pages: List<CoinExtraPage>) {
+        extraPagesLayout.removeAllViews()
+
+        context?.let { context ->
+            pages.forEach { item ->
+                val coinInfoView = SettingsView(context).apply {
+                    when (item) {
+                        is CoinExtraPage.Markets -> {
+                            setListPosition(item.position)
+                            showTitle(getString(R.string.CoinPage_CoinMarket, coinCode))
+                            setOnClickListener {
+                                findNavController().navigate(R.id.coinFragment_to_coinMarketsFragment, null, navOptions())
+                            }
+                        }
+                        is CoinExtraPage.Investors -> {
+                            setListPosition(item.position)
+                            showTitle(getString(R.string.CoinPage_CoinInvestors, coinCode))
+                            setOnClickListener {
+                                findNavController().navigate(R.id.coinFragment_to_coinInvestorsFragment, null, navOptions())
+                            }
+                        }
+                    }
+                }
+
+                extraPagesLayout.addView(coinInfoView)
+            }
+        }
     }
 
     private fun getRatingIcon(rating: String?): Drawable? {
@@ -383,7 +404,7 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
 
                 link.setListPosition(ListPosition.getListPosition(links.size, index))
                 link.setOnClickListener {
-                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(entry.value)));
+                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(entry.value)))
                 }
 
                 linksLayout.addView(link)
@@ -478,14 +499,12 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
         private const val COIN_TYPE_KEY = "coin_type_key"
         private const val COIN_CODE_KEY = "coin_code_key"
         private const val COIN_TITLE_KEY = "coin_title_key"
-        private const val COIN_ID_KEY = "coin_id_key"
 
-        fun prepareParams(coinType: CoinType, coinCode: String, coinTitle: String, coinId: String?): Bundle {
+        fun prepareParams(coinType: CoinType, coinCode: String, coinTitle: String): Bundle {
             return bundleOf(
                     COIN_TYPE_KEY to coinType,
                     COIN_CODE_KEY to coinCode,
-                    COIN_TITLE_KEY to coinTitle,
-                    COIN_ID_KEY to coinId
+                    COIN_TITLE_KEY to coinTitle
             )
         }
     }
