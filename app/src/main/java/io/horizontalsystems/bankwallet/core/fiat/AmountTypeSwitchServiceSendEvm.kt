@@ -6,7 +6,7 @@ import io.reactivex.Flowable
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.PublishSubject
 
-class AmountTypeSwitchServiceNew(
+class AmountTypeSwitchServiceSendEvm(
         amountType: AmountType = AmountType.Coin
 ) {
     private var disposable: Disposable? = null

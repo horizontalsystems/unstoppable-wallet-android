@@ -2,8 +2,8 @@ package io.horizontalsystems.bankwallet.modules.sendevm
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import io.horizontalsystems.bankwallet.core.fiat.AmountTypeSwitchServiceNew
-import io.horizontalsystems.bankwallet.core.fiat.FiatServiceNew
+import io.horizontalsystems.bankwallet.core.fiat.AmountTypeSwitchServiceSendEvm
+import io.horizontalsystems.bankwallet.core.fiat.FiatServiceSendEvm
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.modules.send.SendModule.AmountInfo
 import io.horizontalsystems.coinkit.models.Coin
@@ -28,8 +28,8 @@ interface IAmountInputService {
 
 class AmountInputViewModel(
         private val service: IAmountInputService,
-        private val fiatServiceNew: FiatServiceNew,
-        private val switchServiceNew: AmountTypeSwitchServiceNew,
+        private val fiatService: FiatServiceSendEvm,
+        private val switchService: AmountTypeSwitchServiceSendEvm,
         private val isMaxSupported: Boolean = true
 ) : ViewModel() {
     private val disposable = CompositeDisposable()
@@ -46,27 +46,27 @@ class AmountInputViewModel(
     init {
         service.amountObservable.subscribeIO { syncAmount(it) }.let { disposable.add(it) }
         service.coinObservable.subscribeIO { syncCoin(it.orElse(null)) }.let { disposable.add(it) }
-        fiatServiceNew.coinAmountObservable.subscribeIO { syncCoinAmount(it) }.let { disposable.add(it) }
-        fiatServiceNew.primaryInfoObservable.subscribeIO { syncPrimaryInfo(it) }.let { disposable.add(it) }
-        fiatServiceNew.secondaryAmountInfoObservable.subscribeIO { syncSecondaryAmountInfo(it.orElse(null)) }.let { disposable.add(it) }
-        switchServiceNew.toggleAvailableObservable.subscribeIO { switchEnabledLiveData.postValue(it) }.let { disposable.add(it) }
+        fiatService.coinAmountObservable.subscribeIO { syncCoinAmount(it) }.let { disposable.add(it) }
+        fiatService.primaryInfoObservable.subscribeIO { syncPrimaryInfo(it) }.let { disposable.add(it) }
+        fiatService.secondaryAmountInfoObservable.subscribeIO { syncSecondaryAmountInfo(it.orElse(null)) }.let { disposable.add(it) }
+        switchService.toggleAvailableObservable.subscribeIO { switchEnabledLiveData.postValue(it) }.let { disposable.add(it) }
 
         syncAmount(service.amount)
         syncCoin(service.coin)
-        syncCoinAmount(fiatServiceNew.coinAmount)
-        syncPrimaryInfo(fiatServiceNew.primaryInfo)
-        syncSecondaryAmountInfo(fiatServiceNew.secondaryAmountInfo)
+        syncCoinAmount(fiatService.coinAmount)
+        syncPrimaryInfo(fiatService.primaryInfo)
+        syncSecondaryAmountInfo(fiatService.secondaryAmountInfo)
     }
 
     private fun syncAmount(amount: BigDecimal) {
-        fiatServiceNew.setCoinAmount(amount)
+        fiatService.setCoinAmount(amount)
     }
 
     private fun syncCoin(coin: Coin?) {
         val max = maxValidDecimals
         validDecimals = min(max, (coin?.decimal ?: max))
 
-        fiatServiceNew.setCoin(coin)
+        fiatService.setCoin(coin)
 
         maxEnabledLiveData.postValue(isMaxSupported &&
                 (service.balance ?: BigDecimal.ZERO) > BigDecimal.ZERO)
@@ -76,8 +76,8 @@ class AmountInputViewModel(
         service.onChangeAmount(amount)
     }
 
-    private fun getPrefix(primaryInfo: FiatServiceNew.PrimaryInfo): String? =
-            if (primaryInfo is FiatServiceNew.PrimaryInfo.Info) {
+    private fun getPrefix(primaryInfo: FiatServiceSendEvm.PrimaryInfo): String? =
+            if (primaryInfo is FiatServiceSendEvm.PrimaryInfo.Info) {
                 primaryInfo.amountInfo?.let {
                     if (it is AmountInfo.CurrencyValueInfo) {
                         it.currencyValue.currency.symbol
@@ -85,9 +85,9 @@ class AmountInputViewModel(
                 }
             } else null
 
-    private fun getAmountString(primaryInfo: FiatServiceNew.PrimaryInfo): String? =
+    private fun getAmountString(primaryInfo: FiatServiceSendEvm.PrimaryInfo): String? =
             when (primaryInfo) {
-                is FiatServiceNew.PrimaryInfo.Info -> {
+                is FiatServiceSendEvm.PrimaryInfo.Info -> {
                     val amountInfo = primaryInfo.amountInfo
                     if (amountInfo == null || amountInfo.value <= BigDecimal.ZERO) {
                         null
@@ -96,13 +96,13 @@ class AmountInputViewModel(
                         amount.stripTrailingZeros().toPlainString()
                     }
                 }
-                is FiatServiceNew.PrimaryInfo.Amount -> {
+                is FiatServiceSendEvm.PrimaryInfo.Amount -> {
                     val amount = primaryInfo.amount.setScale(maxValidDecimals, RoundingMode.DOWN)
                     amount.stripTrailingZeros().toPlainString()
                 }
             }
 
-    private fun syncPrimaryInfo(primaryInfo: FiatServiceNew.PrimaryInfo) {
+    private fun syncPrimaryInfo(primaryInfo: FiatServiceSendEvm.PrimaryInfo) {
         amountLiveData.postValue(getAmountString(primaryInfo))
         prefixLiveData.postValue(getPrefix(primaryInfo))
     }
@@ -130,18 +130,18 @@ class AmountInputViewModel(
             val revertedInput = amountNumber.toPlainString()
             revertAmountLiveData.postValue(revertedInput)
         } else {
-            fiatServiceNew.setAmount(amountDecimal)
+            fiatService.setAmount(amountDecimal)
         }
     }
 
     fun onClickMax() {
         service.balance?.let { balance ->
-            fiatServiceNew.setCoinAmount(balance)
+            fiatService.setCoinAmount(balance)
         }
     }
 
     fun onSwitch() {
-        switchServiceNew.toggle()
+        switchService.toggle()
     }
 
     companion object {
