@@ -12,11 +12,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.modules.swap.info.SwapInfoFragment.Companion.dexKey
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceViewModel
 import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveModule
 import io.horizontalsystems.bankwallet.modules.swap.coincard.SwapCoinCardViewModel
 import io.horizontalsystems.bankwallet.modules.swap.confirmation.SwapConfirmationModule
+import io.horizontalsystems.bankwallet.modules.swap.info.SwapInfoFragment.Companion.dexKey
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.getNavigationResult
 import io.horizontalsystems.core.setOnSingleClickListener
@@ -117,6 +117,12 @@ class SwapFragment : BaseFragment() {
         viewModel.openConfirmationLiveEvent().observe(viewLifecycleOwner, { sendEvmData ->
             SwapConfirmationModule.start(this, R.id.swapFragment_to_swapConfirmationFragment, navOptions(), sendEvmData)
         })
+
+        val dexName = when (viewModel.service.dex) {
+            SwapModule.Dex.Uniswap -> "Uniswap"
+            SwapModule.Dex.PancakeSwap -> "PancakeSwap"
+        }
+        poweredBy.text = "Powered by $dexName"
     }
 
     private fun handleButtonAction(button: Button, action: SwapViewModel.ActionState?) {
@@ -155,6 +161,8 @@ class SwapFragment : BaseFragment() {
         } else {
             guaranteedAmountViews.isVisible = false
         }
+        poweredBy.isVisible = tradeViewItem == null
+        poweredByLine.isVisible = tradeViewItem == null
     }
 
     private fun priceImpactColor(ctx: Context, priceImpactLevel: SwapTradeService.PriceImpactLevel?): Int {
