@@ -73,7 +73,7 @@ class FiatServiceSendEvm(
     val secondaryAmountInfoObservable: Flowable<Optional<SendModule.AmountInfo>>
         get() = secondaryAmountInfoSubject.toFlowable(BackpressureStrategy.BUFFER)
 
-    private val currency = currencyManager.baseCurrency
+    val currency = currencyManager.baseCurrency
 
     var coinAmountLocked = false
 
@@ -102,6 +102,8 @@ class FiatServiceSendEvm(
         } else {
             rate = null
         }
+
+        sync()
     }
 
     private fun sync() {
