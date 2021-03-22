@@ -29,8 +29,10 @@ class CoinManager(
 
             appConfigProvider.featuredCoinTypes.forEach { coinType ->
                 coins.indexOfFirst { it.type == coinType }.let { index ->
-                    featured.add(coins[index])
-                    coins.removeAt(index)
+                    if (index != -1) {
+                        featured.add(coins[index])
+                        coins.removeAt(index)
+                    }
                 }
             }
             return Pair(featured, coins)
