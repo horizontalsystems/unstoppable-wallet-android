@@ -10,6 +10,7 @@ import io.horizontalsystems.chartview.helpers.ChartAnimator
 import io.horizontalsystems.chartview.helpers.GridHelper
 import io.horizontalsystems.chartview.helpers.PointConverter
 import io.horizontalsystems.chartview.models.ChartConfig
+import io.horizontalsystems.chartview.models.ChartIndicator
 import io.horizontalsystems.chartview.models.PointInfo
 import kotlinx.android.synthetic.main.view_chart.view.*
 import java.math.BigDecimal
@@ -99,23 +100,38 @@ class Chart @JvmOverloads constructor(context: Context, attrs: AttributeSet? = n
         chartError.text = error
     }
 
-    fun showEma(visible: Boolean) {
-        setVisible(emaFastCurve, emaSlowCurve, emaLabel, isVisible = visible)
-        updateItemsVisibility()
-        animatorMain.start()
+    fun setIndicator(indicator: ChartIndicator, visible: Boolean){
+        if (visible){
+            hideOtherIndicators(indicator)
+        }
+        when(indicator){
+            ChartIndicator.Ema -> {
+                setVisible(emaFastCurve, emaSlowCurve, emaLabel, isVisible = visible)
+                animatorMain.start()
+            }
+            ChartIndicator.Macd -> setVisible(macdCurve, macdSignal, macdHistogram, macdLabel, isVisible = visible)
+            ChartIndicator.Rsi -> setVisible(rsiCurve, rsiRange, isVisible = visible)
+        }
+
+        setVisible(bottomVolume, mainRange, isVisible = !visible)
+
+        animatorTopBottomRange.start()
         animatorBottom.start()
     }
 
-    fun showMacd(visible: Boolean) {
-        setVisible(macdCurve, macdSignal, macdHistogram, macdLabel, isVisible = visible)
-        updateItemsVisibility()
-        animatorBottom.start()
-    }
-
-    fun showRsi(visible: Boolean) {
-        setVisible(rsiCurve, rsiRange, isVisible = visible)
-        updateItemsVisibility()
-        animatorBottom.start()
+    private fun hideOtherIndicators(indicator: ChartIndicator) {
+        ChartIndicator.values().filter { it != indicator }.forEach {
+            if (it == ChartIndicator.Ema && emaFastCurve.isVisible){
+                setVisible(emaFastCurve, emaSlowCurve, emaLabel, isVisible = false)
+                animatorMain.start()
+            }
+            if (it == ChartIndicator.Macd && macdCurve.isVisible){
+                setVisible(macdCurve, macdSignal, macdHistogram, macdLabel, isVisible = false)
+            }
+            if (it == ChartIndicator.Rsi && rsiCurve.isVisible){
+                setVisible(rsiCurve, rsiRange, isVisible = false)
+            }
+        }
     }
 
     fun showChart(visible: Boolean = true) {
@@ -233,13 +249,6 @@ class Chart @JvmOverloads constructor(context: Context, attrs: AttributeSet? = n
         chartTimeline.invalidate()
 
         animatorMain.start()
-        animatorTopBottomRange.start()
-        animatorBottom.start()
-    }
-
-    private fun updateItemsVisibility() {
-        val visible = macdCurve.isVisible || rsiCurve.isVisible || emaFastCurve.isVisible
-        setVisible(bottomVolume, mainRange, isVisible = !visible)
         animatorTopBottomRange.start()
         animatorBottom.start()
     }
