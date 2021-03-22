@@ -41,8 +41,6 @@ class ViewHolderMarketItem(override val containerView: View) : RecyclerView.View
 
         rank.isVisible = false
 
-        icon.setImageResource(R.drawable.coin_placeholder)
-
         title.text = item.title
 
         subtitle.text = item.subtitle
