@@ -15,6 +15,7 @@ import io.horizontalsystems.views.ListPosition
 import io.horizontalsystems.xrateskit.entities.*
 import java.lang.Long.max
 import java.math.BigDecimal
+import java.math.RoundingMode
 
 data class ChartInfoViewItem(
         val chartData: ChartData,
@@ -96,6 +97,11 @@ class CoinViewFactory(private val currency: Currency, private val numberFormatte
             val value = "$shortenValue $suffix $coinCode"
             marketData.add(MarketData(R.string.CoinPage_TotalSupply, value))
         }
+        if (coinMarket.marketCap > BigDecimal.ZERO && coinMarket.circulatingSupply > BigDecimal.ZERO && coinMarket.totalSupply > BigDecimal.ZERO) {
+            val rate = coinMarket.marketCap.divide(coinMarket.circulatingSupply, SCALE_UP_TO_BILLIONTH, RoundingMode.HALF_EVEN)
+            val dilutedMarketCap = coinMarket.totalSupply.multiply(rate)
+            marketData.add(MarketData(R.string.CoinPage_DilutedMarketCap, formatFiatShortened(dilutedMarketCap, currency.symbol)))
+        }
         return marketData
     }
 
@@ -139,4 +145,9 @@ class CoinViewFactory(private val currency: Currency, private val numberFormatte
         val shortCapValue = numberFormatter.shortenValue(value)
         return numberFormatter.formatFiat(shortCapValue.first, symbol, 0, 2) + " " + shortCapValue.second
     }
+
+    companion object {
+        const val SCALE_UP_TO_BILLIONTH = 9
+    }
+
 }
