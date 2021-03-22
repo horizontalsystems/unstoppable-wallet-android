@@ -36,6 +36,7 @@ class Chart @JvmOverloads constructor(context: Context, attrs: AttributeSet? = n
     private val config = ChartConfig(context, attrs)
     private val animatorMain = ChartAnimator { chartMain.invalidate() }
     private val animatorBottom = ChartAnimator { chartBottom.invalidate() }
+    private val animatorTopBottomRange = ChartAnimator { topLowRange.invalidate() }
 
     private val mainCurve = ChartCurve(config, animatorMain, isVisible = true)
     private val mainGradient = ChartGradient(animatorMain)
@@ -100,23 +101,25 @@ class Chart @JvmOverloads constructor(context: Context, attrs: AttributeSet? = n
 
     fun showEma(visible: Boolean) {
         setVisible(emaFastCurve, emaSlowCurve, emaLabel, isVisible = visible)
+        updateItemsVisibility()
         animatorMain.start()
+        animatorBottom.start()
     }
 
     fun showMacd(visible: Boolean) {
         setVisible(macdCurve, macdSignal, macdHistogram, macdLabel, isVisible = visible)
-        setVisible(bottomVolume, isVisible = !visible)
+        updateItemsVisibility()
         animatorBottom.start()
     }
 
     fun showRsi(visible: Boolean) {
         setVisible(rsiCurve, rsiRange, isVisible = visible)
-        setVisible(bottomVolume, isVisible = !visible)
+        updateItemsVisibility()
         animatorBottom.start()
     }
 
     fun showChart(visible: Boolean = true) {
-        setVisible(chartMain, chartBottom, chartTimeline, isVisible = visible)
+        setVisible(chartMain, topLowRange, chartBottom, chartTimeline, isVisible = visible)
     }
 
     fun setData(data: ChartData, chartType: ChartView.ChartType) {
@@ -213,12 +216,15 @@ class Chart @JvmOverloads constructor(context: Context, attrs: AttributeSet? = n
 
         chartMain.clear()
         chartMain.add(mainCurve, mainGradient)
-        chartMain.add(mainGrid, mainRange, emaLabel)
+        chartMain.add(mainGrid, emaLabel)
         chartMain.add(emaFastCurve, emaSlowCurve)
 
+        topLowRange.clear()
+        topLowRange.add(mainRange)
+
         chartBottom.clear()
-        chartBottom.add(bottomGrid)
         chartBottom.add(bottomVolume)
+        chartBottom.add(bottomGrid)
         chartBottom.add(macdHistogram, macdCurve, this.macdSignal, macdLabel)
         chartBottom.add(rsiCurve, rsiRange)
 
@@ -227,6 +233,14 @@ class Chart @JvmOverloads constructor(context: Context, attrs: AttributeSet? = n
         chartTimeline.invalidate()
 
         animatorMain.start()
+        animatorTopBottomRange.start()
+        animatorBottom.start()
+    }
+
+    private fun updateItemsVisibility() {
+        val visible = macdCurve.isVisible || rsiCurve.isVisible || emaFastCurve.isVisible
+        setVisible(bottomVolume, mainRange, isVisible = !visible)
+        animatorTopBottomRange.start()
         animatorBottom.start()
     }
 

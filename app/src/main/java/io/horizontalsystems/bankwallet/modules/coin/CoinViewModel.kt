@@ -131,6 +131,12 @@ class CoinViewModel(
     }
 
     fun toggleEma() {
+        if (rsiIsEnabled) {
+            toggleRsi()
+        }
+        if (macdIsEnabled) {
+            toggleMacd()
+        }
         emaIsEnabled = !emaIsEnabled
         showEma.postValue(emaIsEnabled)
     }
@@ -138,6 +144,9 @@ class CoinViewModel(
     fun toggleMacd() {
         if (rsiIsEnabled) {
             toggleRsi()
+        }
+        if (emaIsEnabled){
+            toggleEma()
         }
 
         macdIsEnabled = !macdIsEnabled
@@ -147,6 +156,9 @@ class CoinViewModel(
     fun toggleRsi() {
         if (macdIsEnabled) {
             toggleMacd()
+        }
+        if (emaIsEnabled){
+            toggleEma()
         }
 
         rsiIsEnabled = !rsiIsEnabled
