@@ -118,7 +118,7 @@ class CoinViewFactory(private val currency: Currency, private val numberFormatte
             MarketTickerViewItem(
                     it.marketName,
                     "${it.base}/${it.target}",
-                    numberFormatter.formatCoin(it.rate, it.target, 0, 2),
+                    numberFormatter.formatCoin(it.rate, it.target, 0, 8),
                     "$shortenValue $suffix ${it.base}"
             )
         }
