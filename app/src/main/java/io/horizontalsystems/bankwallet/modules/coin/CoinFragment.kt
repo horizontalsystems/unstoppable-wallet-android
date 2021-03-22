@@ -26,6 +26,7 @@ import io.horizontalsystems.bankwallet.modules.settings.notifications.bottommenu
 import io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.CoinInfoItemView
 import io.horizontalsystems.bankwallet.ui.extensions.createTextView
 import io.horizontalsystems.chartview.Chart
+import io.horizontalsystems.chartview.models.ChartIndicator
 import io.horizontalsystems.chartview.models.PointInfo
 import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.findNavController
@@ -270,22 +271,30 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
             chart.showError(getString(R.string.CoinPage_Error_NotAvailable))
         })
 
-        viewModel.showEma.observe(viewLifecycleOwner, Observer { enabled ->
-            chart.showEma(enabled)
-            indicatorEMA.isChecked = enabled
+        viewModel.showEma.observe(viewLifecycleOwner, Observer { visible ->
+            chart.setIndicator(ChartIndicator.Ema, visible)
         })
 
-        viewModel.showMacd.observe(viewLifecycleOwner, Observer { enabled ->
-            chart.showMacd(enabled)
-            indicatorMACD.isChecked = enabled
-
-            setViewVisibility(pointInfoVolume, pointInfoVolumeTitle, isVisible = !enabled)
-            setViewVisibility(macdSignal, macdHistogram, macdValue, isVisible = enabled)
+        viewModel.showMacd.observe(viewLifecycleOwner, Observer { visible ->
+            chart.setIndicator(ChartIndicator.Macd, visible)
+            setMacdInfoVisible(visible)
         })
 
-        viewModel.showRsi.observe(viewLifecycleOwner, Observer { enabled ->
-            chart.showRsi(enabled)
-            indicatorRSI.isChecked = enabled
+        viewModel.showRsi.observe(viewLifecycleOwner, Observer { visible ->
+            chart.setIndicator(ChartIndicator.Rsi, visible)
+        })
+
+        viewModel.uncheckIndicators.observe(viewLifecycleOwner, { indicators ->
+            indicators.forEach {
+                when(it){
+                    ChartIndicator.Ema -> indicatorEMA.isChecked = false
+                    ChartIndicator.Macd -> {
+                        indicatorMACD.isChecked = false
+                        setMacdInfoVisible(false)
+                    }
+                    ChartIndicator.Rsi -> indicatorRSI.isChecked = false
+                }
+            }
         })
 
         viewModel.alertNotificationUpdated.observe(viewLifecycleOwner, Observer {
@@ -304,6 +313,11 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
         viewModel.extraPages.observe(viewLifecycleOwner, { pages ->
             setExtraPages(pages)
         })
+    }
+
+    private fun setMacdInfoVisible(visible: Boolean) {
+        setViewVisibility(pointInfoVolume, pointInfoVolumeTitle, isVisible = !visible)
+        setViewVisibility(macdSignal, macdHistogram, macdValue, isVisible = visible)
     }
 
     private fun setExtraPages(pages: List<CoinExtraPage>) {
@@ -479,16 +493,17 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
         tabLayout.addOnTabSelectedListener(this)
 
         indicatorEMA.setOnClickListener {
-            viewModel.toggleEma()
+            viewModel.setIndicatorChanged(ChartIndicator.Ema, indicatorEMA.isChecked)
         }
 
         indicatorMACD.setOnClickListener {
-            viewModel.toggleMacd()
+            viewModel.setIndicatorChanged(ChartIndicator.Macd, indicatorMACD.isChecked)
         }
 
         indicatorRSI.setOnClickListener {
-            viewModel.toggleRsi()
+            viewModel.setIndicatorChanged(ChartIndicator.Rsi, indicatorRSI.isChecked)
         }
+
     }
 
     private fun setViewVisibility(vararg views: View, isVisible: Boolean) {

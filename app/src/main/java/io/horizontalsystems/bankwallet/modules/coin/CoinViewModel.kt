@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import io.horizontalsystems.chartview.models.ChartIndicator
 import io.horizontalsystems.chartview.models.PointInfo
 import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.SingleLiveEvent
@@ -38,13 +39,12 @@ class CoinViewModel(
     val coinMarkets = MutableLiveData<List<MarketTickerViewItem>>()
     val coinInvestors = MutableLiveData<List<InvestorItem>>()
     val extraPages = MutableLiveData<List<CoinExtraPage>>()
+    val uncheckIndicators = MutableLiveData<List<ChartIndicator>>()
 
     var notificationIconVisible = service.notificationsAreEnabled && service.notificationSupported
     var notificationIconActive = false
 
-    private var emaIsEnabled = false
     private var macdIsEnabled = false
-    private var rsiIsEnabled = false
     private val disposable = CompositeDisposable()
 
 
@@ -130,39 +130,17 @@ class CoinViewModel(
         updateFavoriteNotificationItemState()
     }
 
-    fun toggleEma() {
-        if (rsiIsEnabled) {
-            toggleRsi()
+    fun setIndicatorChanged(indicator: ChartIndicator, checked: Boolean) {
+        if (checked){
+            val itemsToUncheck = ChartIndicator.values().filter { it != indicator }
+            uncheckIndicators.postValue(itemsToUncheck)
         }
-        if (macdIsEnabled) {
-            toggleMacd()
+        when(indicator){
+            ChartIndicator.Ema -> showEma.postValue(checked)
+            ChartIndicator.Macd -> showMacd.postValue(checked)
+            ChartIndicator.Rsi -> showRsi.postValue(checked)
         }
-        emaIsEnabled = !emaIsEnabled
-        showEma.postValue(emaIsEnabled)
-    }
-
-    fun toggleMacd() {
-        if (rsiIsEnabled) {
-            toggleRsi()
-        }
-        if (emaIsEnabled){
-            toggleEma()
-        }
-
-        macdIsEnabled = !macdIsEnabled
-        showMacd.postValue(macdIsEnabled)
-    }
-
-    fun toggleRsi() {
-        if (macdIsEnabled) {
-            toggleMacd()
-        }
-        if (emaIsEnabled){
-            toggleEma()
-        }
-
-        rsiIsEnabled = !rsiIsEnabled
-        showRsi.postValue(rsiIsEnabled)
+        macdIsEnabled = indicator == ChartIndicator.Macd && checked
     }
 
     private fun onChartError(error: Throwable?) {

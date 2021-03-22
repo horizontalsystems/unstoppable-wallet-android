@@ -227,7 +227,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/chart" />
 
-            <RadioButton
+            <CheckBox
                 android:id="@+id/indicatorEMA"
                 style="@style/RadioButtonThird"
                 android:layout_width="wrap_content"
@@ -238,7 +238,7 @@
                 app:layout_constraintStart_toStartOf="@id/startGuideline"
                 app:layout_constraintTop_toBottomOf="@+id/border3" />
 
-            <RadioButton
+            <CheckBox
                 android:id="@+id/indicatorMACD"
                 style="@style/RadioButtonThird"
                 android:layout_width="wrap_content"
@@ -249,7 +249,7 @@
                 app:layout_constraintStart_toEndOf="@id/indicatorEMA"
                 app:layout_constraintTop_toTopOf="@+id/indicatorEMA" />
 
-            <RadioButton
+            <CheckBox
                 android:id="@+id/indicatorRSI"
                 style="@style/RadioButtonThird"
                 android:layout_width="wrap_content"
