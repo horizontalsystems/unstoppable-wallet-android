@@ -8,6 +8,7 @@ import androidx.activity.addCallback
 import androidx.fragment.app.viewModels
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.ethereum.EthereumFeeViewModel
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
@@ -18,7 +19,7 @@ import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.android.synthetic.main.fragment_wallet_connect_request.*
 
 class WalletConnectSendEthereumTransactionRequestFragment : BaseFragment() {
-
+    private val logger = AppLogger("wallet-connect")
     private val baseViewModel by navGraphViewModels<WalletConnectViewModel>(R.id.walletConnectMainFragment)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -34,7 +35,8 @@ class WalletConnectSendEthereumTransactionRequestFragment : BaseFragment() {
         val feeViewModel by viewModels<EthereumFeeViewModel> { vmFactory }
 
         btnApprove.setOnSingleClickListener {
-            sendViewModel.send()
+            logger.info("click approve button")
+            sendViewModel.send(logger)
         }
 
         btnReject.setOnSingleClickListener {

@@ -3,12 +3,9 @@ package io.horizontalsystems.bankwallet.modules.sendevmtransaction
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.EvmError
-import io.horizontalsystems.bankwallet.core.convertedError
+import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinServiceFactory
 import io.horizontalsystems.bankwallet.core.providers.StringProvider
-import io.horizontalsystems.bankwallet.core.subscribeIO
-import io.horizontalsystems.bankwallet.core.toHexString
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoAddressMapper
 import io.horizontalsystems.ethereumkit.core.TransactionDecoration
@@ -41,8 +38,8 @@ class SendEvmTransactionViewModel(
         sync(service.sendState)
     }
 
-    fun send() {
-        service.send()
+    fun send(logger: AppLogger) {
+        service.send(logger)
     }
 
     private fun sync(state: SendEvmTransactionService.State) =

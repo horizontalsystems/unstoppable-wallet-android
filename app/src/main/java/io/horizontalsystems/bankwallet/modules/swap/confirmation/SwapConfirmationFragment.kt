@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.ethereum.EthereumFeeViewModel
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
@@ -27,9 +28,8 @@ import io.horizontalsystems.snackbar.SnackbarDuration
 import kotlinx.android.synthetic.main.fragment_confirmation_swap.*
 
 class SwapConfirmationFragment : BaseFragment() {
-
+    private val logger = AppLogger("swap")
     private val mainViewModel by navGraphViewModels<SwapViewModel>(R.id.swapFragment)
-
     private val vmFactory by lazy { SwapConfirmationModule.Factory(mainViewModel.service, SendEvmData(transactionData, additionalInfo)) }
     private val sendViewModel by viewModels<SendEvmTransactionViewModel> { vmFactory }
     private val feeViewModel by viewModels<EthereumFeeViewModel> { vmFactory }
@@ -96,7 +96,8 @@ class SwapConfirmationFragment : BaseFragment() {
         )
 
         swapButton.setOnSingleClickListener {
-            sendViewModel.send()
+            logger.info("click swap button")
+            sendViewModel.send(logger)
         }
     }
 
