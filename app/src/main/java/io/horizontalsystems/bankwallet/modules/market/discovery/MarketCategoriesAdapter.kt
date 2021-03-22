@@ -134,10 +134,10 @@ class MarketCategoriesAdapter(
         if (isInitial) {
             // This trick needed to avoid initial animation when restoring fragment
             titleTextView.isInvisible = true
-            titleTextView.post {
+            titleTextView.postDelayed( {
                 titleTextView.translationY = topBorder.y - titleTextView.y
                 titleTextView.isInvisible = false
-            }
+            }, 250 )
             return
         }
 
