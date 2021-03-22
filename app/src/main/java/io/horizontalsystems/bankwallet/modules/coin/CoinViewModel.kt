@@ -11,8 +11,10 @@ import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.views.ListPosition
 import io.horizontalsystems.xrateskit.entities.ChartType
+import io.horizontalsystems.xrateskit.entities.LatestRate
 import io.horizontalsystems.xrateskit.entities.TimePeriod
 import io.reactivex.disposables.CompositeDisposable
+import java.math.BigDecimal
 
 class CoinViewModel(
         val rateFormatter: RateFormatter,
@@ -40,6 +42,8 @@ class CoinViewModel(
     val coinInvestors = MutableLiveData<List<InvestorItem>>()
     val extraPages = MutableLiveData<List<CoinExtraPage>>()
     val uncheckIndicators = MutableLiveData<List<ChartIndicator>>()
+    val latestRateLiveData = MutableLiveData<CurrencyValue>()
+    val latestRateDiffLiveData = MutableLiveData<BigDecimal>()
 
     var notificationIconVisible = service.notificationsAreEnabled && service.notificationSupported
     var notificationIconActive = false
@@ -60,6 +64,14 @@ class CoinViewModel(
         updateAlertNotificationIconState()
 
         updateFavoriteNotificationItemState()
+
+        service.latestRateAsync
+                .subscribeIO {
+                    updateLatestRate(it)
+                }
+                .let {
+                    disposable.add(it)
+                }
 
         service.chartInfoUpdatedObservable
                 .subscribeIO {
@@ -92,6 +104,11 @@ class CoinViewModel(
                 .let {
                     disposable.add(it)
                 }
+    }
+
+    private fun updateLatestRate(latestRate: LatestRate) {
+        latestRateLiveData.postValue(CurrencyValue(service.currency, latestRate.rate))
+        latestRateDiffLiveData.postValue(latestRate.rateDiff24h)
     }
 
     fun onSelect(type: ChartType) {
