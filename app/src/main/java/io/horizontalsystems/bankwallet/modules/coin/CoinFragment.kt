@@ -4,7 +4,10 @@ import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
-import android.text.*
+import android.text.Html
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.Spanned
 import android.text.style.URLSpan
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -21,6 +24,7 @@ import com.google.android.material.tabs.TabLayout
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.modules.markdown.MarkdownFragment
 import io.horizontalsystems.bankwallet.modules.settings.notifications.bottommenu.BottomNotificationMenu
 import io.horizontalsystems.bankwallet.modules.settings.notifications.bottommenu.NotificationMenuMode
 import io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.CoinInfoItemView
@@ -33,7 +37,10 @@ import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.views.ListPosition
 import io.horizontalsystems.views.SettingsView
-import io.horizontalsystems.xrateskit.entities.*
+import io.horizontalsystems.xrateskit.entities.ChartType
+import io.horizontalsystems.xrateskit.entities.CoinCategory
+import io.horizontalsystems.xrateskit.entities.CoinPlatformType
+import io.horizontalsystems.xrateskit.entities.LinkType
 import kotlinx.android.synthetic.main.coin_market_details.*
 import kotlinx.android.synthetic.main.fragment_coin.*
 import java.math.BigDecimal
@@ -230,7 +237,7 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
             setCategoriesAndPlatforms(item.coinMeta.categories, item.coinMeta.platforms)
 
             //Links
-            setLinks(item.coinMeta.links)
+            setLinks(item.coinMeta.links, item.guideUrl)
         })
 
         viewModel.setSelectedPoint.observe(viewLifecycleOwner, Observer { item ->
@@ -350,7 +357,7 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
     }
 
     private fun getRatingIcon(rating: String?): Drawable? {
-        val icon = when(rating?.toLowerCase(Locale.ENGLISH)){
+        val icon = when (rating?.toLowerCase(Locale.ENGLISH)) {
             "a" -> R.drawable.ic_rating_a
             "b" -> R.drawable.ic_rating_b
             "c" -> R.drawable.ic_rating_c
@@ -378,18 +385,25 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
         }
     }
 
-    private fun setLinks(links: Map<LinkType, String>) {
+    private fun setLinks(links: Map<LinkType, String>, guideUrl: String?) {
         context?.let { context ->
             linksLayout.removeAllViews()
 
+            guideUrl?.let {
+                val link = SettingsView(context)
+                link.showTitle(getString(R.string.CoinPage_Guide))
+                link.showIcon(ContextCompat.getDrawable(context, R.drawable.ic_academy_20))
+                link.setListPosition(ListPosition.getListPosition(links.size + 1, 0))
+                link.setOnClickListener {
+                    val arguments = bundleOf(MarkdownFragment.markdownUrlKey to guideUrl)
+                    findNavController().navigate(R.id.coinFragment_to_markdownFragment, arguments, navOptions())
+                }
+                linksLayout.addView(link)
+            }
+
             links.onEachIndexed { index, entry ->
                 val link = SettingsView(context)
-
                 when (entry.key) {
-                    LinkType.GUIDE -> {
-                        link.showTitle(getString(R.string.CoinPage_Guide))
-                        link.showIcon(ContextCompat.getDrawable(context, R.drawable.ic_academy_20))
-                    }
                     LinkType.WEBSITE -> {
                         link.showTitle(getString(R.string.CoinPage_Website))
                         link.showIcon(ContextCompat.getDrawable(context, R.drawable.ic_globe))
@@ -415,8 +429,8 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
                         link.showIcon(ContextCompat.getDrawable(context, R.drawable.ic_github))
                     }
                 }
-
-                link.setListPosition(ListPosition.getListPosition(links.size, index))
+                val shiftPosition = if (guideUrl != null) 1 else 0
+                link.setListPosition(ListPosition.getListPosition(links.size + shiftPosition, index + shiftPosition))
                 link.setOnClickListener {
                     startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(entry.value)))
                 }

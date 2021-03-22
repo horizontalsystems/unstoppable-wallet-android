@@ -38,7 +38,8 @@ data class CoinDetailsViewItem(
         val rateLow24h: BigDecimal,
         val marketCapDiff24h: BigDecimal,
         val coinMeta: CoinMeta,
-        val rateDiffs: Map<TimePeriod, Map<String, BigDecimal>>
+        val rateDiffs: Map<TimePeriod, Map<String, BigDecimal>>,
+        val guideUrl: String?
 )
 
 class MarketData(@StringRes val title: Int, val value: String)
@@ -66,7 +67,7 @@ class CoinViewFactory(private val currency: Currency, private val numberFormatte
         return ChartInfoViewItem(chartData, chartType, chartData.diff())
     }
 
-    fun createCoinDetailsViewItem(coinMarket: CoinMarketDetails, currency: Currency, coinCode: String): CoinDetailsViewItem {
+    fun createCoinDetailsViewItem(coinMarket: CoinMarketDetails, currency: Currency, coinCode: String, guideUrl: String? = null): CoinDetailsViewItem {
         return CoinDetailsViewItem(
                 currency = currency,
                 rateValue = coinMarket.rate,
@@ -75,7 +76,8 @@ class CoinViewFactory(private val currency: Currency, private val numberFormatte
                 rateLow24h = coinMarket.rateLow24h,
                 marketCapDiff24h = coinMarket.marketCapDiff24h,
                 coinMeta = coinMarket.meta,
-                rateDiffs = coinMarket.rateDiffs
+                rateDiffs = coinMarket.rateDiffs,
+                guideUrl = guideUrl
         )
     }
 

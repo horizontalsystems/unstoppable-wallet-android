@@ -10,7 +10,8 @@ import io.horizontalsystems.chartview.models.PointInfo
 import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.views.ListPosition
-import io.horizontalsystems.xrateskit.entities.*
+import io.horizontalsystems.xrateskit.entities.ChartType
+import io.horizontalsystems.xrateskit.entities.TimePeriod
 import io.reactivex.disposables.CompositeDisposable
 
 class CoinViewModel(
@@ -20,8 +21,7 @@ class CoinViewModel(
         private val coinTitle: String,
         private val factory: CoinViewFactory,
         private val clearables: List<Clearable>
-        )
-    : ViewModel() {
+) : ViewModel() {
 
     val chartSpinner = MutableLiveData<Boolean>()
     val marketSpinner = MutableLiveData<Boolean>()
@@ -171,7 +171,7 @@ class CoinViewModel(
 
     private fun updateCoinDetails() {
         val coinDetails = service.coinMarketDetails ?: return
-        coinDetailsLiveData.postValue(factory.createCoinDetailsViewItem(coinDetails, service.currency, coinCode))
+        coinDetailsLiveData.postValue(factory.createCoinDetailsViewItem(coinDetails, service.currency, coinCode, service.guideUrl))
 
         val coinMarketItems = factory.createCoinMarketItems(coinDetails.tickers)
         val coinInvestorItems = factory.createCoinInvestorItems(coinDetails.meta.fundCategories)
