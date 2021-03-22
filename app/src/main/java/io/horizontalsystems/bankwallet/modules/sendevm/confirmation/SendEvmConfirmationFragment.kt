@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.ethereum.EthereumFeeViewModel
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
@@ -26,6 +27,7 @@ import kotlinx.android.synthetic.main.fragment_confirmation_send_evm.*
 
 class SendEvmConfirmationFragment : BaseFragment() {
 
+    private val logger = AppLogger("send-evm")
     private val sendEvmMViewModel by navGraphViewModels<SendEvmViewModel>(R.id.sendEvmFragment)
 
     private val vmFactory by lazy { SendEvmConfirmationModule.Factory(sendEvmMViewModel.service.adapter.evmKit, SendEvmData(transactionData, additionalInfo)) }
@@ -94,7 +96,8 @@ class SendEvmConfirmationFragment : BaseFragment() {
         )
 
         sendButton.setOnSingleClickListener {
-            sendViewModel.send()
+            logger.info("click send button")
+            sendViewModel.send(logger)
         }
     }
 

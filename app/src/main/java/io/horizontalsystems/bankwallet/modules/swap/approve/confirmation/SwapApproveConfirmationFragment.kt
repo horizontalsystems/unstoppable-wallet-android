@@ -10,6 +10,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.ethereum.EthereumFeeViewModel
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
@@ -30,6 +31,7 @@ import io.horizontalsystems.snackbar.SnackbarDuration
 import kotlinx.android.synthetic.main.fragment_confirmation_approve_swap.*
 
 class SwapApproveConfirmationFragment : BaseFragment() {
+    private val logger = AppLogger("swap-approve")
     private val mainViewModel by navGraphViewModels<SwapApproveViewModel>(R.id.swapApproveFragment)
     private val vmFactory by lazy {
         SwapApproveConfirmationModule.Factory(SendEvmData(transactionData, additionalItems), mainViewModel.dex)
@@ -99,7 +101,8 @@ class SwapApproveConfirmationFragment : BaseFragment() {
         )
 
         approveButton.setOnSingleClickListener {
-            sendViewModel.send()
+            logger.info("click approve button")
+            sendViewModel.send(logger)
         }
     }
 

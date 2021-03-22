@@ -1,9 +1,11 @@
 package io.horizontalsystems.bankwallet.modules.sendevmtransaction
 
+import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.ethereum.EvmTransactionService
 import io.horizontalsystems.bankwallet.core.ethereum.EvmTransactionService.GasPriceType
 import io.horizontalsystems.bankwallet.core.subscribeIO
+import io.horizontalsystems.bankwallet.core.toHexString
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData
 import io.horizontalsystems.ethereumkit.core.EthereumKit
@@ -61,17 +63,23 @@ class SendEvmTransactionService(
         gasPrice?.let { transactionsService.gasPriceType = GasPriceType.Custom(it) }
     }
 
-    fun send() {
-        if (state != State.Ready) return
+    fun send(logger: AppLogger) {
+        if (state != State.Ready) {
+            logger.info("state is not Ready: ${state.javaClass.simpleName}")
+            return
+        }
         val transaction = transactionsService.transactionStatus.dataOrNull ?: return
 
         sendState = SendState.Sending
+        logger.info("sending tx")
 
         evmKit.send(sendEvmData.transactionData, transaction.gasData.gasPrice, transaction.gasData.gasLimit)
                 .subscribeIO({ fullTransaction ->
                     sendState = SendState.Sent(fullTransaction.transaction.hash)
+                    logger.info("success txHash: ${fullTransaction.transaction.hash.toHexString()}")
                 }, { error ->
                     sendState = SendState.Failed(error)
+                    logger.warning("failed", error)
                 })
                 .let { disposable.add(it) }
     }
