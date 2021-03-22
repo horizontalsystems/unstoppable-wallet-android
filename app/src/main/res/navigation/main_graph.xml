@@ -224,6 +224,9 @@
         <action
             android:id="@+id/coinFragment_to_coinInvestorsFragment"
             app:destination="@id/coinInvestorsFragment" />
+        <action
+            android:id="@+id/coinFragment_to_markdownFragment"
+            app:destination="@id/markdownFragment" />
     </fragment>
     <fragment
         android:id="@+id/coinMarketsFragment"
