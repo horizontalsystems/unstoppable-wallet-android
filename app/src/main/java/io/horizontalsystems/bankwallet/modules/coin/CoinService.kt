@@ -4,10 +4,7 @@ import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.managers.MarketFavoritesManager
 import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.entities.Currency
-import io.horizontalsystems.xrateskit.entities.ChartInfo
-import io.horizontalsystems.xrateskit.entities.ChartType
-import io.horizontalsystems.xrateskit.entities.CoinMarketDetails
-import io.horizontalsystems.xrateskit.entities.TimePeriod
+import io.horizontalsystems.xrateskit.entities.*
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -33,6 +30,7 @@ class CoinService(
         data class Error(val error: Throwable) : CoinDetailsState()
     }
 
+    val latestRateAsync = BehaviorSubject.create<LatestRate>()
     val chartInfoUpdatedObservable: BehaviorSubject<Unit> = BehaviorSubject.createDefault(Unit)
     val chartInfoErrorObservable: BehaviorSubject<Throwable> = BehaviorSubject.create()
     val coinDetailsStateObservable: BehaviorSubject<CoinDetailsState> = BehaviorSubject.createDefault(CoinDetailsState.Loading)
@@ -69,6 +67,17 @@ class CoinService(
                 .subscribeOn(Schedulers.io())
                 .subscribe {
                     alertNotificationUpdatedObservable.onNext(Unit)
+                }
+                .let {
+                    disposables.add(it)
+                }
+
+        xRateManager.latestRate(coinType, currency.code)?.let {
+            latestRateAsync.onNext(it)
+        }
+        xRateManager.latestRateObservable(coinType, currency.code)
+                .subscribeIO {
+                    latestRateAsync.onNext(it)
                 }
                 .let {
                     disposables.add(it)
