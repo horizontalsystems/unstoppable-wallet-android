@@ -635,6 +635,7 @@ Si vous changez le format d\'adresse pour %2$s , l\'historique du solde actuel e
     <string name="CoinPage_Changes1W">Changes (1W)</string>
     <string name="CoinPage_Changes1M">Changes (1M)</string>
     <string name="CoinPage_MarketCap">Market Cap</string>
+    <string name="CoinPage_DilutedMarketCap">Fully Diluted Market Cap</string>
     <string name="CoinPage_Volume24">Volume (24h)</string>
     <string name="CoinPage_inCirculation">In Circulation</string>
     <string name="CoinPage_TotalSupply">Total Supply</string>
