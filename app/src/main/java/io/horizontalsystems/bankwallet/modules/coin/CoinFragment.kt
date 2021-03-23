@@ -227,7 +227,7 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
 
             // Performance
 
-            coinPerformanceView.bind(item.rateDiffs)
+            coinPerformanceView.bind(item.currency.code, item.rateDiffs)
 
             // About
 
