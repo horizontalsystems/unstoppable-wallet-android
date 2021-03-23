@@ -4,10 +4,12 @@ import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.ethereum.EvmTransactionService
 import io.horizontalsystems.bankwallet.core.ethereum.EvmTransactionService.GasPriceType
+import io.horizontalsystems.bankwallet.core.managers.ActivateCoinManager
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.core.toHexString
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData
+import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.core.TransactionDecoration
 import io.horizontalsystems.ethereumkit.models.Address
@@ -22,6 +24,7 @@ class SendEvmTransactionService(
         private val sendEvmData: SendEvmData,
         private val evmKit: EthereumKit,
         private val transactionsService: EvmTransactionService,
+        private val activateCoinManager: ActivateCoinManager,
         gasPrice: Long? = null
 ) : Clearable {
     private val disposable = CompositeDisposable()
@@ -75,6 +78,7 @@ class SendEvmTransactionService(
 
         evmKit.send(sendEvmData.transactionData, transaction.gasData.gasPrice, transaction.gasData.gasLimit)
                 .subscribeIO({ fullTransaction ->
+                    handlePostSendActions()
                     sendState = SendState.Sent(fullTransaction.transaction.hash)
                     logger.info("success txHash: ${fullTransaction.transaction.hash.toHexString()}")
                 }, { error ->
@@ -112,6 +116,37 @@ class SendEvmTransactionService(
     private fun syncDataState(transaction: EvmTransactionService.Transaction? = null) {
         val transactionData = transaction?.data ?: sendEvmData.transactionData
         txDataState = TxDataState(transactionData, sendEvmData.additionalInfo, evmKit.decorate(transactionData))
+    }
+
+    private fun handlePostSendActions() {
+        (txDataState.decoration as? TransactionDecoration.Swap)?.let { swapDecoration ->
+            activateSwapCoinOut(swapDecoration.tokenOut)
+        }
+    }
+
+    private fun activateSwapCoinOut(tokenOut: TransactionDecoration.Swap.Token) {
+        val coinType = when (tokenOut) {
+            TransactionDecoration.Swap.Token.EvmCoin -> {
+                when (evmKit.networkType) {
+                    EthereumKit.NetworkType.EthMainNet,
+                    EthereumKit.NetworkType.EthRopsten,
+                    EthereumKit.NetworkType.EthKovan,
+                    EthereumKit.NetworkType.EthRinkeby -> CoinType.Ethereum
+                    EthereumKit.NetworkType.BscMainNet -> CoinType.BinanceSmartChain
+                }
+            }
+            is TransactionDecoration.Swap.Token.Eip20Coin -> {
+                when (evmKit.networkType) {
+                    EthereumKit.NetworkType.EthMainNet,
+                    EthereumKit.NetworkType.EthRopsten,
+                    EthereumKit.NetworkType.EthKovan,
+                    EthereumKit.NetworkType.EthRinkeby -> CoinType.Erc20(tokenOut.address.hex)
+                    EthereumKit.NetworkType.BscMainNet -> CoinType.Bep20(tokenOut.address.hex)
+                }
+            }
+        }
+
+        activateCoinManager.activate(coinType)
     }
 
     sealed class State {
