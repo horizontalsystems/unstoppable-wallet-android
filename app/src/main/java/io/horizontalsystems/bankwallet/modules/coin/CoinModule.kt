@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.views.ListPosition
+import io.horizontalsystems.xrateskit.entities.CoinPlatformType
 import java.math.BigDecimal
 
 object CoinModule {
@@ -29,7 +30,7 @@ data class MarketTickerViewItem(
         val subtitle: String,
         val value: String,
         val subvalue: String,
-){
+) {
     fun areItemsTheSame(other: MarketTickerViewItem): Boolean {
         return title == other.title && subtitle == other.subvalue
     }
@@ -39,12 +40,32 @@ data class MarketTickerViewItem(
     }
 }
 
-sealed class CoinExtraPage{
-    class Markets(val position: ListPosition): CoinExtraPage()
-    class Investors(val position: ListPosition): CoinExtraPage()
+sealed class CoinExtraPage {
+    class Markets(val position: ListPosition) : CoinExtraPage()
+    class Investors(val position: ListPosition) : CoinExtraPage()
 }
 
-sealed class InvestorItem{
-    data class Header(val title: String): InvestorItem()
-    data class Fund(val name: String, val url: String, val cleanedUrl: String, val position: ListPosition): InvestorItem()
+sealed class InvestorItem {
+    data class Header(val title: String) : InvestorItem()
+    data class Fund(val name: String, val url: String, val cleanedUrl: String, val position: ListPosition) : InvestorItem()
 }
+
+val CoinPlatformType.title: String
+    get() = when (this) {
+        CoinPlatformType.OTHER -> "Other"
+        CoinPlatformType.ETHEREUM -> "Ethereum"
+        CoinPlatformType.BINANCE -> "Binance DEX"
+        CoinPlatformType.BINANCE_SMART_CHAIN -> "Binance Smart Chain"
+        CoinPlatformType.TRON -> "Tron"
+        CoinPlatformType.EOS -> "Eos"
+    }
+
+val CoinPlatformType.order: Int
+    get() = when (this) {
+        CoinPlatformType.ETHEREUM -> 1
+        CoinPlatformType.BINANCE_SMART_CHAIN -> 2
+        CoinPlatformType.BINANCE -> 3
+        CoinPlatformType.TRON -> 4
+        CoinPlatformType.EOS -> 5
+        CoinPlatformType.OTHER -> 6
+    }
