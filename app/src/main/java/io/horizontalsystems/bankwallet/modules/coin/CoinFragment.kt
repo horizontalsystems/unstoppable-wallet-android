@@ -16,6 +16,7 @@ import android.view.ViewGroup
 import androidx.activity.addCallback
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
+import androidx.core.view.doOnPreDraw
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
@@ -123,15 +124,13 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
 
         aboutTextToggle.setOnClickListener {
             if (aboutText.maxLines == Integer.MAX_VALUE) {
-                aboutText.maxLines = 8
-                aboutTextToggle.text = "Read More"
+                aboutText.maxLines = ABOUT_MAX_LINES
+                aboutTextToggle.text = getString(R.string.CoinPage_ReadMore)
             } else {
                 aboutText.maxLines = Integer.MAX_VALUE
-                aboutTextToggle.text = "Read Less"
+                aboutTextToggle.text = getString(R.string.CoinPage_ReadLess)
             }
         }
-
-
     }
 
     private fun updateNotificationMenuItem() {
@@ -232,10 +231,19 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
 
             // About
 
-            aboutGroup.isVisible = item.coinMeta.description.isNotBlank()
-            val aboutTextSpanned = Html.fromHtml(item.coinMeta.description.replace("\n", "<br />"), Html.FROM_HTML_MODE_COMPACT)
-            aboutText.text = removeLinkSpans(aboutTextSpanned)
-
+            if (item.coinMeta.description.isNotBlank()) {
+                aboutGroup.isVisible = true
+                val aboutTextSpanned = Html.fromHtml(item.coinMeta.description.replace("\n", "<br />"), Html.FROM_HTML_MODE_COMPACT)
+                aboutText.text = removeLinkSpans(aboutTextSpanned)
+                aboutText.maxLines = Integer.MAX_VALUE
+                aboutText.doOnPreDraw {
+                    val lineCount = aboutText.lineCount
+                    aboutText.maxLines = ABOUT_MAX_LINES
+                    aboutTextToggle.isVisible = lineCount > ABOUT_MAX_LINES
+                }
+            } else {
+                aboutGroup.isVisible = false
+            }
             // Categories/Platforms/Links
             setCategoriesAndPlatforms(item.coinMeta.categories, item.coinMeta.platforms)
 
@@ -528,6 +536,7 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
     }
 
     companion object {
+        private const val ABOUT_MAX_LINES = 8
         private const val COIN_TYPE_KEY = "coin_type_key"
         private const val COIN_CODE_KEY = "coin_code_key"
         private const val COIN_TITLE_KEY = "coin_title_key"
