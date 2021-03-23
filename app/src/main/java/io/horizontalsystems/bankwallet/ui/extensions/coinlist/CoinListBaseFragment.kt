@@ -64,7 +64,6 @@ abstract class CoinListBaseFragment : BaseWithSearchFragment(), CoinListAdapter.
 
     protected fun showBottomSelectorDialog(config: BlockchainSettingsModule.Config) {
         val coinDrawable = context?.let { AppLayoutHelper.getCoinDrawable(it, config.coin.type) }
-                ?: return
 
         BottomSheetSelectorDialog.show(
                 fragmentManager = childFragmentManager,
