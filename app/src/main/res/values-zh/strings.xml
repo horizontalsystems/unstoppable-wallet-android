@@ -650,6 +650,8 @@
     <string name="CoinPage_Unfavorite">Unfavorite</string>
     <string name="CoinPage_Performance_Week">1 Week</string>
     <string name="CoinPage_Performance_Month">1 Month</string>
+    <string name="CoinPage_ReadMore">Read More</string>
+    <string name="CoinPage_ReadLess">Read Less</string>
     <!--Rate list-->
     <string name="RateList_portfolio">投资组合</string>
     <string name="RateList_top100">前100名</string>
