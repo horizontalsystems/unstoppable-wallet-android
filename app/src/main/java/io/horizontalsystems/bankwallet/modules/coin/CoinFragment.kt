@@ -469,17 +469,20 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
                 categoriesLayout.addView(categoriesView)
             }
 
-            platforms.toList().sortedBy { (platform, _) -> platform.order }.onEachIndexed { index, (platform, value) ->
-                val platformView = CoinInfoItemView(context).apply {
-                    bind(
-                            title = platform.title,
-                            decoratedValue = value,
-                            listPosition = ListPosition.getListPosition(categoryPlatformCellsCount, index + categoryCellsCount)
-                    )
-                }
+            platforms.toList()
+                    .filter { (platform, _) -> platform != CoinPlatformType.OTHER }
+                    .sortedBy { (platform, _) -> platform.order }
+                    .onEachIndexed { index, (platform, value) ->
+                        val platformView = CoinInfoItemView(context).apply {
+                            bind(
+                                    title = platform.title,
+                                    decoratedValue = value,
+                                    listPosition = ListPosition.getListPosition(categoryPlatformCellsCount, index + categoryCellsCount)
+                            )
+                        }
 
-                categoriesLayout.addView(platformView)
-            }
+                        categoriesLayout.addView(platformView)
+                    }
         }
     }
 
