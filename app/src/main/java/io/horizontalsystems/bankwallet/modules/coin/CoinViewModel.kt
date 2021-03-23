@@ -35,6 +35,7 @@ class CoinViewModel(
     val showEma = MutableLiveData<Boolean>()
     val showMacd = MutableLiveData<Boolean>()
     val showRsi = MutableLiveData<Boolean>()
+    val setChartIndicatorsEnabled = MutableLiveData<Boolean>()
     val alertNotificationUpdated = MutableLiveData<Unit>()
     val showNotificationMenu = SingleLiveEvent<Pair<CoinType, String>>()
     val isFavorite = MutableLiveData<Boolean>()
@@ -48,6 +49,7 @@ class CoinViewModel(
     var notificationIconVisible = service.notificationsAreEnabled && service.notificationSupported
     var notificationIconActive = false
 
+    private var enabledIndicator: ChartIndicator? = null
     private var macdIsEnabled = false
     private val disposable = CompositeDisposable()
 
@@ -58,6 +60,7 @@ class CoinViewModel(
 
     init {
         setDefaultMode.postValue(service.chartType)
+        updateChartIndicatorState()
 
         updateChartInfo()
 
@@ -121,6 +124,8 @@ class CoinViewModel(
 
         service.chartType = type
 
+        updateChartIndicatorState()
+
         fetchChartInfo()
     }
 
@@ -152,6 +157,8 @@ class CoinViewModel(
     }
 
     fun setIndicatorChanged(indicator: ChartIndicator, checked: Boolean) {
+        enabledIndicator = if (checked) indicator else null
+
         if (checked) {
             val itemsToUncheck = ChartIndicator.values().filter { it != indicator }
             uncheckIndicators.postValue(itemsToUncheck)
@@ -162,6 +169,25 @@ class CoinViewModel(
             ChartIndicator.Rsi -> showRsi.postValue(checked)
         }
         macdIsEnabled = indicator == ChartIndicator.Macd && checked
+    }
+
+    //chart indicators should be disabled for daily and 24hrs periods
+    private fun updateChartIndicatorState() {
+        val enabled = service.chartType != ChartType.DAILY && service.chartType != ChartType.TODAY
+
+        if (setChartIndicatorsEnabled.value == enabled){
+            return
+        }
+
+        setChartIndicatorsEnabled.postValue(enabled)
+
+        when (enabledIndicator) {
+            ChartIndicator.Ema -> showEma.postValue(enabled)
+            ChartIndicator.Macd -> showMacd.postValue(enabled)
+            ChartIndicator.Rsi -> showRsi.postValue(enabled)
+            else -> {
+            }
+        }
     }
 
     private fun onChartError(error: Throwable?) {
