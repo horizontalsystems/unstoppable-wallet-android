@@ -27,6 +27,7 @@ class PrivacySettingsPresenter(
     private val syncItems: List<PrivacySettingsViewItem> =
             interactor.syncSettings().mapIndexed { index, (initialSyncSetting, coin, changeable) ->
                 PrivacySettingsViewItem(
+                        coin.title,
                         coin,
                         RestoreModeSettingType(initialSyncSetting.syncMode),
                         changeable,
@@ -35,8 +36,9 @@ class PrivacySettingsPresenter(
             }
 
     private val communicationSettingsViewItems: List<PrivacySettingsViewItem> = listOf(
-            PrivacySettingsViewItem(interactor.ether, CommunicationModeSettingType(CommunicationMode.Infura), enabled = ethereumCommunicationModeCanBeChanged(), listPosition = ListPosition.First),
-            PrivacySettingsViewItem(interactor.binance, CommunicationModeSettingType(CommunicationMode.BinanceDex), enabled = false, listPosition = ListPosition.Last)
+            PrivacySettingsViewItem("Ethereum", interactor.ether, CommunicationModeSettingType(CommunicationMode.Infura), enabled = ethereumCommunicationModeCanBeChanged(), listPosition = ListPosition.First),
+            PrivacySettingsViewItem("Smart Chain", interactor.binanceSmartChain, CommunicationModeSettingType(CommunicationMode.Nariox), enabled = false, listPosition = ListPosition.Middle),
+            PrivacySettingsViewItem("Binance", interactor.binance, CommunicationModeSettingType(CommunicationMode.BinanceDex), enabled = false, listPosition = ListPosition.Last)
     )
 
     private val communicationModeOptions = listOf(CommunicationMode.Infura)

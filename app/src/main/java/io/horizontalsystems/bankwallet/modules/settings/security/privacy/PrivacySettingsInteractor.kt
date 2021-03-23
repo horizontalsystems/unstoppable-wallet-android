@@ -102,6 +102,8 @@ class PrivacySettingsInteractor(
 
     override val binance = coinManager.getCoin(CoinType.Bep2("BNB"))!!
 
+    override val binanceSmartChain = coinManager.getCoin(CoinType.BinanceSmartChain)!!
+
     override fun clear() {
         disposables.clear()
     }

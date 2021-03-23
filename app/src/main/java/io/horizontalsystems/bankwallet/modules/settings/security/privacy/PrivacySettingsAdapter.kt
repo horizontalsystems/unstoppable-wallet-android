@@ -91,7 +91,7 @@ class PrivacySettingsAdapter(
         fun bind(viewItem: PrivacySettingsViewItem) {
             dropdownView.apply {
                 showIcon(AppLayoutHelper.getCoinDrawable(containerView.context, viewItem.coin.type))
-                showTitle(viewItem.coin.title)
+                showTitle(viewItem.title)
                 showDropdownValue(viewItem.settingType.selectedTitle)
                 showDropdownIcon(viewItem.enabled)
                 setListPosition(viewItem.listPosition)
