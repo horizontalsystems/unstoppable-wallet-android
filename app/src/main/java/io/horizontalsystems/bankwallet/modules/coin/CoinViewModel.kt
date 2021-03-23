@@ -51,13 +51,17 @@ class CoinViewModel(
     private var macdIsEnabled = false
     private val disposable = CompositeDisposable()
 
+    private val rateDiffCoinCodes: List<String> = mutableListOf(service.currency.code).apply {
+        if (service.coinType != CoinType.Bitcoin) add("BTC")
+        if (service.coinType != CoinType.Ethereum) add("ETH")
+    }
 
     init {
         setDefaultMode.postValue(service.chartType)
 
         updateChartInfo()
 
-        service.getCoinDetails(listOf("USD", "BTC", "ETH"), listOf(TimePeriod.DAY_7, TimePeriod.DAY_30))
+        service.getCoinDetails(rateDiffCoinCodes, listOf(TimePeriod.DAY_7, TimePeriod.DAY_30))
 
         fetchChartInfo()
 
@@ -148,11 +152,11 @@ class CoinViewModel(
     }
 
     fun setIndicatorChanged(indicator: ChartIndicator, checked: Boolean) {
-        if (checked){
+        if (checked) {
             val itemsToUncheck = ChartIndicator.values().filter { it != indicator }
             uncheckIndicators.postValue(itemsToUncheck)
         }
-        when(indicator){
+        when (indicator) {
             ChartIndicator.Ema -> showEma.postValue(checked)
             ChartIndicator.Macd -> showMacd.postValue(checked)
             ChartIndicator.Rsi -> showRsi.postValue(checked)

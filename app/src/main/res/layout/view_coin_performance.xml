@@ -31,20 +31,23 @@
             android:background="@color/steel_10" />
 
         <TextView
+            android:id="@+id/currencyTitle"
             style="@style/Caption"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="USD"
-            android:textColor="@color/bran" />
+            android:textColor="@color/bran"
+            tools:text="USD" />
 
         <View
+            android:id="@+id/btcTitleLine"
             android:layout_width="1dp"
             android:layout_height="match_parent"
             android:background="@color/steel_10" />
 
         <TextView
+            android:id="@+id/btcTitle"
             style="@style/Caption"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -54,11 +57,13 @@
             android:textColor="@color/bran" />
 
         <View
+            android:id="@+id/ethTitleLine"
             android:layout_width="1dp"
             android:layout_height="match_parent"
             android:background="@color/steel_10" />
 
         <TextView
+            android:id="@+id/ethTitle"
             style="@style/Caption"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -95,7 +100,7 @@
             android:background="@color/steel_10" />
 
         <TextView
-            android:id="@+id/weekUsd"
+            android:id="@+id/weekCurrency"
             style="@style/Caption"
             android:layout_width="0dp"
             android:layout_height="44dp"
@@ -105,6 +110,7 @@
             tools:text="+56,62%" />
 
         <View
+            android:id="@+id/weekBtcLine"
             android:layout_width="1dp"
             android:layout_height="match_parent"
             android:background="@color/steel_10" />
@@ -120,6 +126,7 @@
             tools:text="- 6,62%" />
 
         <View
+            android:id="@+id/weekEthLine"
             android:layout_width="1dp"
             android:layout_height="match_parent"
             android:background="@color/steel_10" />
@@ -162,7 +169,7 @@
             android:background="@color/steel_10" />
 
         <TextView
-            android:id="@+id/monthUsd"
+            android:id="@+id/monthCurrency"
             style="@style/Caption"
             android:layout_width="0dp"
             android:layout_height="44dp"
@@ -172,6 +179,7 @@
             tools:text="+56,62%" />
 
         <View
+            android:id="@+id/monthBtcLine"
             android:layout_width="1dp"
             android:layout_height="match_parent"
             android:background="@color/steel_10" />
@@ -187,6 +195,7 @@
             tools:text="- 6,62%" />
 
         <View
+            android:id="@+id/monthEthLine"
             android:layout_width="1dp"
             android:layout_height="match_parent"
             android:background="@color/steel_10" />

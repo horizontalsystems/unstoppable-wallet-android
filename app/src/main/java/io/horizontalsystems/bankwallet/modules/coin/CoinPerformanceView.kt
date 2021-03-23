@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.isVisible
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.xrateskit.entities.TimePeriod
@@ -16,25 +17,52 @@ class CoinPerformanceView(context: Context, attrs: AttributeSet) : ConstraintLay
         inflate(context, R.layout.view_coin_performance, this)
     }
 
-    fun bind(rateDiffs: Map<TimePeriod, Map<String, BigDecimal>>) {
+    fun bind(currencyCode: String, rateDiffs: Map<TimePeriod, Map<String, BigDecimal>>) {
+        currencyTitle.text = currencyCode
         rateDiffs.forEach { (period, values) ->
-            val usdValue = values["USD"] ?: BigDecimal.ZERO
-            val ethValue = values["ETH"] ?: BigDecimal.ZERO
-            val btcValue = values["BTC"] ?: BigDecimal.ZERO
+            val currencyValue = values[currencyCode] ?: BigDecimal.ZERO
+            val ethValue = values["ETH"]
+            val btcValue = values["BTC"]
 
             when (period) {
                 TimePeriod.DAY_7 -> {
-                    setColoredPercentageValue(weekUsd, usdValue)
-                    setColoredPercentageValue(weekEth, ethValue)
-                    setColoredPercentageValue(weekBtc, btcValue)
+                    setColoredPercentageValue(weekCurrency, currencyValue)
+
+                    if (ethValue == null) hideEthColumn()
+                    else setColoredPercentageValue(weekEth, ethValue)
+
+                    if (btcValue == null) hideBtcColumn()
+                    else setColoredPercentageValue(weekBtc, btcValue)
                 }
                 TimePeriod.DAY_30 -> {
-                    setColoredPercentageValue(monthUsd, usdValue)
-                    setColoredPercentageValue(monthEth, ethValue)
-                    setColoredPercentageValue(monthBtc, btcValue)
+                    setColoredPercentageValue(monthCurrency, currencyValue)
+
+                    if (ethValue == null) hideEthColumn()
+                    else setColoredPercentageValue(monthEth, ethValue)
+
+                    if (btcValue == null) hideBtcColumn()
+                    else setColoredPercentageValue(monthBtc, btcValue)
                 }
             }
         }
+    }
+
+    private fun hideEthColumn() {
+        ethTitle.isVisible = false
+        ethTitleLine.isVisible = false
+        weekEth.isVisible = false
+        weekEthLine.isVisible = false
+        monthEth.isVisible = false
+        monthEthLine.isVisible = false
+    }
+
+    private fun hideBtcColumn() {
+        btcTitle.isVisible = false
+        btcTitleLine.isVisible = false
+        weekBtc.isVisible = false
+        weekBtcLine.isVisible = false
+        monthBtc.isVisible = false
+        monthBtcLine.isVisible = false
     }
 
     private fun setColoredPercentageValue(textView: TextView, percentage: BigDecimal) {
