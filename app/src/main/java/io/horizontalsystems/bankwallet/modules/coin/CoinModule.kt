@@ -53,11 +53,11 @@ sealed class InvestorItem {
 val CoinPlatformType.title: String
     get() = when (this) {
         CoinPlatformType.OTHER -> "Other"
-        CoinPlatformType.ETHEREUM -> "Ethereum"
-        CoinPlatformType.BINANCE -> "Binance DEX"
-        CoinPlatformType.BINANCE_SMART_CHAIN -> "Binance Smart Chain"
-        CoinPlatformType.TRON -> "Tron"
-        CoinPlatformType.EOS -> "Eos"
+        CoinPlatformType.ETHEREUM -> "ETH Contract"
+        CoinPlatformType.BINANCE -> "Binance DEX Contract"
+        CoinPlatformType.BINANCE_SMART_CHAIN -> "BSC Contract"
+        CoinPlatformType.TRON -> "TRON Contract"
+        CoinPlatformType.EOS -> "EOS Contract"
     }
 
 val CoinPlatformType.order: Int
