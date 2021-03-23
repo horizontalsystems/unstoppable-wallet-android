@@ -76,7 +76,7 @@ class SendEvmTransactionService(
         sendState = SendState.Sending
         logger.info("sending tx")
 
-        evmKit.send(sendEvmData.transactionData, transaction.gasData.gasPrice, transaction.gasData.gasLimit)
+        evmKit.send(transaction.data, transaction.gasData.gasPrice, transaction.gasData.gasLimit)
                 .subscribeIO({ fullTransaction ->
                     handlePostSendActions()
                     sendState = SendState.Sent(fullTransaction.transaction.hash)
