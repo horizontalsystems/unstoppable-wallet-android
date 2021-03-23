@@ -453,9 +453,11 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
 
     private fun setCategoriesAndPlatforms(categories: List<CoinCategory>, platforms: Map<CoinPlatformType, String>) {
         context?.let { context ->
+            val filteredPlatforms = platforms.toList()
+                    .filter { (platform, _) -> platform != CoinPlatformType.OTHER }
             categoriesLayout.removeAllViews()
             val categoryCellsCount = if (categories.isNotEmpty()) 1 else 0
-            val categoryPlatformCellsCount = platforms.size + categoryCellsCount
+            val categoryPlatformCellsCount = filteredPlatforms.size + categoryCellsCount
 
             if (categories.isNotEmpty()) {
                 val categoriesView = CoinInfoItemView(context).apply {
@@ -469,8 +471,7 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
                 categoriesLayout.addView(categoriesView)
             }
 
-            platforms.toList()
-                    .filter { (platform, _) -> platform != CoinPlatformType.OTHER }
+            filteredPlatforms
                     .sortedBy { (platform, _) -> platform.order }
                     .onEachIndexed { index, (platform, value) ->
                         val platformView = CoinInfoItemView(context).apply {
