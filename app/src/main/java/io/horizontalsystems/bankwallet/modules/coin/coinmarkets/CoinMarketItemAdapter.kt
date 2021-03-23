@@ -10,15 +10,15 @@ import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.coin.MarketTickerViewItem
 import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.view_holder_market_item.*
+import kotlinx.android.synthetic.main.view_holder_market_ticker.*
 
-class CoinMarketItemAdapter : ListAdapter<MarketTickerViewItem, ViewHolderMarketItem>(diffCallback) {
+class CoinMarketItemAdapter : ListAdapter<MarketTickerViewItem, ViewHolderMarketTicker>(diffCallback) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderMarketItem {
-        return ViewHolderMarketItem.create(parent)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderMarketTicker {
+        return ViewHolderMarketTicker.create(parent)
     }
 
-    override fun onBindViewHolder(holder: ViewHolderMarketItem, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolderMarketTicker, position: Int) {
         holder.bind(getItem(position))
     }
 
@@ -35,12 +35,9 @@ class CoinMarketItemAdapter : ListAdapter<MarketTickerViewItem, ViewHolderMarket
     }
 }
 
-class ViewHolderMarketItem(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+class ViewHolderMarketTicker(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
     fun bind(item: MarketTickerViewItem) {
-
-        rank.isVisible = false
-
         title.text = item.title
 
         subtitle.text = item.subtitle
@@ -54,8 +51,8 @@ class ViewHolderMarketItem(override val containerView: View) : RecyclerView.View
     }
 
     companion object {
-        fun create(parent: ViewGroup): ViewHolderMarketItem {
-            return ViewHolderMarketItem(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_market_item, parent, false))
+        fun create(parent: ViewGroup): ViewHolderMarketTicker {
+            return ViewHolderMarketTicker(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_market_ticker, parent, false))
         }
     }
 }

@@ -26,7 +26,7 @@
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_marginStart="16dp"
-        tools:src="@drawable/coin_ada"
+        android:background="@drawable/rounded_image_background_4dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -49,29 +49,10 @@
         tools:text="Bitcoin" />
 
     <TextView
-        android:id="@+id/rank"
-        style="@style/MicroSB"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/rounded_4"
-        android:backgroundTint="@color/jeremy"
-        android:includeFontPadding="false"
-        android:paddingStart="4dp"
-        android:paddingTop="2dp"
-        android:paddingEnd="4dp"
-        android:paddingBottom="2dp"
-        android:textColor="@color/grey"
-        app:layout_constraintBottom_toBottomOf="@id/subtitle"
-        app:layout_constraintStart_toStartOf="@+id/title"
-        app:layout_constraintTop_toTopOf="@id/subtitle"
-        tools:text="123" />
-
-    <TextView
         android:id="@+id/subtitle"
         style="@style/Subhead2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="4dp"
         android:layout_marginEnd="5dp"
         android:ellipsize="end"
@@ -81,9 +62,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/marketFieldCaption"
         app:layout_constraintHorizontal_bias="0"
-        app:layout_constraintStart_toEndOf="@id/rank"
+        app:layout_constraintStart_toStartOf="@+id/title"
         app:layout_constraintTop_toBottomOf="@id/title"
-        app:layout_goneMarginLeft="0dp"
         tools:text="BTC/ETH" />
 
     <TextView
