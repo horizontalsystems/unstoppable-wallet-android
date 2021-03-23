@@ -525,7 +525,7 @@ abstract class AppDatabase : RoomDatabase() {
                 addNotificationsUnsubscribeJobs(database)
 
                 database.execSQL("DROP TABLE PriceAlert")
-                database.execSQL("CREATE TABLE IF NOT EXISTS PriceAlert (`coinType` TEXT NOT NULL, `notificationCoinCode` TEXT NOT NULL, `changeState` TEXT NOT NULL, `trendState` TEXT NOT NULL, PRIMARY KEY(`coinType`))")
+                database.execSQL("CREATE TABLE IF NOT EXISTS PriceAlert (`coinType` TEXT NOT NULL, `notificationCoinCode` TEXT NOT NULL, `coinName` TEXT NOT NULL, `changeState` TEXT NOT NULL, `trendState` TEXT NOT NULL, PRIMARY KEY(`coinType`))")
             }
         }
 
