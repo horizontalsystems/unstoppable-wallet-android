@@ -331,6 +331,12 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
         viewModel.extraPages.observe(viewLifecycleOwner, { pages ->
             setExtraPages(pages)
         })
+
+        viewModel.setChartIndicatorsEnabled.observe(viewLifecycleOwner, { enabled ->
+            indicatorEMA.isEnabled = enabled
+            indicatorMACD.isEnabled = enabled
+            indicatorRSI.isEnabled = enabled
+        })
     }
 
     private fun setMacdInfoVisible(visible: Boolean) {
