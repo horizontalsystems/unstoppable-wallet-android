@@ -40,7 +40,7 @@ object WalletConnectRequestModule {
             val feeRateProvider = FeeRateProviderFactory.provider(coin)!!
             EvmTransactionService(evmKit, feeRateProvider, 10)
         }
-        private val sendService by lazy { SendEvmTransactionService(SendEvmData(service.transactionData), evmKit, transactionService, service.gasPrice) }
+        private val sendService by lazy { SendEvmTransactionService(SendEvmData(service.transactionData), evmKit, transactionService, App.activateCoinManager, service.gasPrice) }
         private val stringProvider by lazy { StringProvider() }
 
         @Suppress("UNCHECKED_CAST")
