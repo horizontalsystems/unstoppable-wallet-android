@@ -66,7 +66,7 @@ class MarketDiscoveryFragment : BaseFragment(), MarketListHeaderView.Listener, V
         })
 
         val marketCategoriesAdapter = MarketCategoriesAdapter(requireContext(), tabLayout, marketDiscoveryViewModel.marketCategories, this)
-        marketCategoriesAdapter.selectCategory(marketDiscoveryViewModel.marketCategory, isInitial = true)
+        marketCategoriesAdapter.selectCategory(marketDiscoveryViewModel.marketCategory)
 
         marketViewModel.discoveryListTypeLiveEvent.observe(viewLifecycleOwner) {
             marketListHeader.setSortingField(it.sortingField)
