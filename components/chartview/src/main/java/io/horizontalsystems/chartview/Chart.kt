@@ -45,7 +45,6 @@ class Chart @JvmOverloads constructor(context: Context, attrs: AttributeSet? = n
     private val mainGrid = ChartGrid(config)
     private val mainRange = ChartGridRange(config)
 
-    private val bottomGrid = ChartGrid(config)
     private val bottomVolume = ChartVolume(config, animatorBottom)
     private val timelineGrid = ChartGridTimeline(config)
 
@@ -219,9 +218,6 @@ class Chart @JvmOverloads constructor(context: Context, attrs: AttributeSet? = n
         bottomVolume.setPoints(volumes)
         bottomVolume.setShape(chartBottom.shape)
 
-        bottomGrid.setShape(chartBottom.shape)
-        bottomGrid.set(timeline)
-
         // Timeline
         timelineGrid.setColumns(timeline)
         timelineGrid.setShape(chartTimeline.shape)
@@ -240,8 +236,7 @@ class Chart @JvmOverloads constructor(context: Context, attrs: AttributeSet? = n
 
         chartBottom.clear()
         chartBottom.add(bottomVolume)
-        chartBottom.add(bottomGrid)
-        chartBottom.add(macdHistogram, macdCurve, this.macdSignal, macdLabel)
+        chartBottom.add(macdHistogram, macdCurve, macdSignal, macdLabel)
         chartBottom.add(rsiCurve, rsiRange)
 
         chartTimeline.clear()

@@ -208,7 +208,7 @@
                 android:layout_marginTop="4dp"
                 app:cursorColor="@color/oz"
                 app:curvePressedColor="@color/oz"
-                app:gridDashColor="@color/nina"
+                app:gridDashColor="@color/steel_10"
                 app:gridTextColor="@color/nina"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
