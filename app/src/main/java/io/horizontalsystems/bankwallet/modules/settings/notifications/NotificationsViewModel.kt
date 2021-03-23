@@ -7,7 +7,6 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.PriceAlert
 import io.horizontalsystems.bankwallet.modules.settings.notifications.bottommenu.NotificationMenuMode
-import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.Disposable
@@ -16,7 +15,6 @@ import io.reactivex.schedulers.Schedulers
 class NotificationsViewModel(
         private val priceAlertManager: IPriceAlertManager,
         walletManager: IWalletManager,
-        private val coinManager: ICoinManager,
         private val notificationManager: INotificationManager,
         private val localStorage: ILocalStorage) : ViewModel() {
 
@@ -91,15 +89,24 @@ class NotificationsViewModel(
         viewItems.clear()
 
         val priceAlerts = priceAlertManager.getPriceAlerts()
-        portfolioCoins.forEach { coin ->
+
+        //list portfolio coins with Notification support
+        portfolioCoins
+                .filter { priceAlertManager.notificationCode(it.type) != null }
+                .sortedBy { it.title }
+                .forEach { coin ->
             val priceAlert = priceAlerts.firstOrNull { it.coinType == coin.type }
-            viewItems.addAll(getPriceAlertViewItems(coin, priceAlert))
+            if (priceAlert != null){
+                priceAlerts.minus(priceAlert)
+            }
+            viewItems.addAll(getPriceAlertViewItems(coin.title, coin.type, priceAlert))
         }
 
-        getOtherCoinsWithAlert(priceAlerts).forEach { coin ->
-            priceAlerts.firstOrNull { it.coinType == coin.type }?.let { priceAlert ->
-                viewItems.addAll(getPriceAlertViewItems(coin, priceAlert))
-            }
+        //price alerts for Non portfolio coins
+        priceAlerts
+                .sortedBy { it.coinName }
+                .forEach { priceAlert ->
+            viewItems.addAll(getPriceAlertViewItems(priceAlert.coinName, priceAlert.coinType, priceAlert))
         }
 
         val deactivateAllButtonEnabled = priceAlerts.any { it.trendState != PriceAlert.TrendState.OFF || it.changeState != PriceAlert.ChangeState.OFF }
@@ -108,23 +115,11 @@ class NotificationsViewModel(
         itemsLiveData.postValue(viewItems)
     }
 
-    private fun getOtherCoinsWithAlert(priceAlerts: List<PriceAlert>): List<Coin> {
-        val portfolioCoinTypes = portfolioCoins.map { it.type }
-        val allCoins = coinManager.coins
-        val nonPortfolioCoinAlerts = priceAlerts.filter { alert ->
-            portfolioCoinTypes.indexOf(alert.coinType) == -1
-        }
-
-        return nonPortfolioCoinAlerts.mapNotNull { priceAlert ->
-            allCoins.firstOrNull { priceAlert.coinType == it.type }
-        }
-    }
-
-    private fun getPriceAlertViewItems(coin: Coin, priceAlert: PriceAlert?): List<NotificationViewItem> {
+    private fun getPriceAlertViewItems(coinName: String, coinType: CoinType, priceAlert: PriceAlert?): List<NotificationViewItem> {
         val items = mutableListOf<NotificationViewItem>()
-        items.add(NotificationViewItem(coin.title, NotificationViewItemType.CoinName))
-        items.add(NotificationViewItem(coin.title, NotificationViewItemType.ChangeOption, coin.type, titleRes = R.string.NotificationBottomMenu_Change24h, dropdownValue = getChangeValue(priceAlert?.changeState)))
-        items.add(NotificationViewItem(coin.title, NotificationViewItemType.TrendOption, coin.type, titleRes = R.string.NotificationBottomMenu_PriceTrendChange, dropdownValue = getTrendValue(priceAlert?.trendState)))
+        items.add(NotificationViewItem(coinName, NotificationViewItemType.CoinName))
+        items.add(NotificationViewItem(coinName, NotificationViewItemType.ChangeOption, coinType, titleRes = R.string.NotificationBottomMenu_Change24h, dropdownValue = getChangeValue(priceAlert?.changeState)))
+        items.add(NotificationViewItem(coinName, NotificationViewItemType.TrendOption, coinType, titleRes = R.string.NotificationBottomMenu_PriceTrendChange, dropdownValue = getTrendValue(priceAlert?.trendState)))
         return items
     }
 

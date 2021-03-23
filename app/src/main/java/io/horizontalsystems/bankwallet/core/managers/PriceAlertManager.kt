@@ -33,10 +33,10 @@ class PriceAlertManager(
         return dao.all()
     }
 
-    override fun savePriceAlert(coinType: CoinType, changeState: PriceAlert.ChangeState, trendState: PriceAlert.TrendState) {
+    override fun savePriceAlert(coinType: CoinType, coinName: String, changeState: PriceAlert.ChangeState, trendState: PriceAlert.TrendState) {
         val (oldChangeState, oldTrendState) = getAlertStates(coinType)
-        val notificationCoinCode = rateManager.getNotificationCoinCode(coinType)!!
-        val newPriceAlert = PriceAlert(coinType, notificationCoinCode, changeState, trendState)
+        val notificationCoinCode = rateManager.getNotificationCoinCode(coinType) ?: return
+        val newPriceAlert = PriceAlert(coinType, notificationCoinCode, coinName, changeState, trendState)
         dao.update(newPriceAlert)
         notificationChangedSubject.onNext(Unit)
 

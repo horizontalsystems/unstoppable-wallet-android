@@ -25,7 +25,7 @@ class BottomNotificationMenu(
         private val coinType: CoinType
 ) : BaseBottomSheetDialogFragment(), NotificationMenuItemsAdapter.Listener {
 
-    private val viewModel by viewModels<BottomNotificationsMenuViewModel> { NotificationBottomMenuModule.Factory(coinType, mode) }
+    private val viewModel by viewModels<BottomNotificationsMenuViewModel> { NotificationBottomMenuModule.Factory(coinType, coinName, mode) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

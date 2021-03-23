@@ -10,6 +10,7 @@ import io.horizontalsystems.coinkit.models.CoinType
 
 class BottomNotificationsMenuViewModel(
         private val coinType: CoinType,
+        private val coinName: String,
         private val priceAlertManager: IPriceAlertManager,
         private val mode: NotificationMenuMode) : ViewModel() {
 
@@ -44,7 +45,7 @@ class BottomNotificationsMenuViewModel(
         }
 
         setItems()
-        priceAlertManager.savePriceAlert(coinType, changeState, trendState)
+        priceAlertManager.savePriceAlert(coinType, coinName, changeState, trendState)
     }
 
     private fun setItems() {
