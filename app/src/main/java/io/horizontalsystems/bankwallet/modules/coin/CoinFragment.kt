@@ -293,7 +293,7 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
 
         viewModel.uncheckIndicators.observe(viewLifecycleOwner, { indicators ->
             indicators.forEach {
-                when(it){
+                when (it) {
                     ChartIndicator.Ema -> indicatorEMA.isChecked = false
                     ChartIndicator.Macd -> {
                         indicatorMACD.isChecked = false
@@ -458,10 +458,10 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
                 categoriesLayout.addView(categoriesView)
             }
 
-            platforms.onEachIndexed { index, (platform, value) ->
+            platforms.toList().sortedBy { (platform, _) -> platform.order }.onEachIndexed { index, (platform, value) ->
                 val platformView = CoinInfoItemView(context).apply {
                     bind(
-                            title = platform.name,
+                            title = platform.title,
                             decoratedValue = value,
                             listPosition = ListPosition.getListPosition(categoryPlatformCellsCount, index + categoryCellsCount)
                     )
