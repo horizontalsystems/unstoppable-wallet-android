@@ -458,25 +458,13 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
     }
 
     private fun setCategoriesAndPlatforms(categories: List<CoinCategory>, platforms: Map<CoinPlatformType, String>) {
+        categoriesText.text = categories.joinToString(", ") { it.name }
+        categoriesGroup.isVisible = categories.isNotEmpty()
+
         context?.let { context ->
-            val filteredPlatforms = platforms.toList()
-                    .filter { (platform, _) -> platform != CoinPlatformType.OTHER }
-            categoriesLayout.removeAllViews()
-            val categoryCellsCount = if (categories.isNotEmpty()) 1 else 0
-            val categoryPlatformCellsCount = filteredPlatforms.size + categoryCellsCount
+            platformsLayout.removeAllViews()
 
-            if (categories.isNotEmpty()) {
-                val categoriesView = CoinInfoItemView(context).apply {
-                    bind(
-                            title = getString(R.string.CoinPage_Category),
-                            value = categories.joinToString(", ") { it.name },
-                            listPosition = ListPosition.getListPosition(categoryPlatformCellsCount, 0)
-                    )
-                }
-
-                categoriesLayout.addView(categoriesView)
-            }
-
+            val filteredPlatforms = platforms.toList().filter { (platform, _) -> platform != CoinPlatformType.OTHER }
             filteredPlatforms
                     .sortedBy { (platform, _) -> platform.order }
                     .onEachIndexed { index, (platform, value) ->
@@ -484,11 +472,11 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
                             bind(
                                     title = platform.title,
                                     decoratedValue = value,
-                                    listPosition = ListPosition.getListPosition(categoryPlatformCellsCount, index + categoryCellsCount)
+                                    listPosition = ListPosition.getListPosition(filteredPlatforms.size, index)
                             )
                         }
 
-                        categoriesLayout.addView(platformView)
+                        platformsLayout.addView(platformView)
                     }
         }
     }
