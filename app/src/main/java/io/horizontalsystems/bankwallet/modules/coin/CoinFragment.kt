@@ -236,11 +236,13 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
                 val aboutTextSpanned = Html.fromHtml(item.coinMeta.description.replace("\n", "<br />"), Html.FROM_HTML_MODE_COMPACT)
                 aboutText.text = removeLinkSpans(aboutTextSpanned)
                 aboutText.maxLines = Integer.MAX_VALUE
+                aboutText.isVisible = false
                 aboutText.doOnPreDraw {
                     val lineCount = aboutText.lineCount
                     aboutText.maxLines = ABOUT_MAX_LINES
                     aboutTextToggle.isVisible = lineCount > ABOUT_MAX_LINES
                 }
+                aboutText.isVisible = true
             } else {
                 aboutGroup.isVisible = false
             }
