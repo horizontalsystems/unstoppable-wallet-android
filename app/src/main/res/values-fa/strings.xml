@@ -175,12 +175,12 @@
     <string name="Market_Filter_Range_100M_1B">100M - 1B</string>
     <string name="Market_Filter_Range_1B_5B">1B - 5B</string>
     <string name="Market_Filter_Range_5B_More">&gt; 5BN</string>
-    <string name="Market_Filter_TimePeriod_1D">1 Day</string>
-    <string name="Market_Filter_TimePeriod_1W">1 Week</string>
-    <string name="Market_Filter_TimePeriod_2W">2 Weeks</string>
-    <string name="Market_Filter_TimePeriod_1M">1 Month</string>
-    <string name="Market_Filter_TimePeriod_6M">6 Months</string>
-    <string name="Market_Filter_TimePeriod_1Y">1 Year</string>
+    <string name="Market_Filter_TimePeriod_1D">1Day</string>
+    <string name="Market_Filter_TimePeriod_1W">1Week</string>
+    <string name="Market_Filter_TimePeriod_2W">2Weeks</string>
+    <string name="Market_Filter_TimePeriod_1M">1Month</string>
+    <string name="Market_Filter_TimePeriod_6M">6Months</string>
+    <string name="Market_Filter_TimePeriod_1Y">1Year</string>
     <string name="Market_Filter_PriceChange_Positive_10_plus">&gt; +10%</string>
     <string name="Market_Filter_PriceChange_Positive_25_plus">&gt; +25%</string>
     <string name="Market_Filter_PriceChange_Positive_50_plus">&gt; +50%</string>
@@ -191,9 +191,9 @@
     <string name="Market_Filter_PriceChange_Negative_100_minus">&lt; -100%</string>
     <string name="TimePeriod_24h">24h</string>
     <!--Coin Markets-->
-    <string name="CoinMarket_Title">%s Markets</string>
+    <string name="CoinMarket_Title">Markets %s</string>
     <!--Coin Investors-->
-    <string name="CoinInvestors_Title">%s Investors</string>
+    <string name="CoinInvestors_Title">Investors %s</string>
     <!--Balance-->
     <string name="Balance_Title">بالانس</string>
     <string name="Balance_Deposit">دريافت</string>
@@ -221,8 +221,8 @@
     <string name="Send_Confirmation_Title">تایید</string>
     <string name="Send_Confirmation_Domain">Domain</string>
     <string name="Send_Confirmation_YouSend">You Send</string>
-    <string name="Send_Confirmation_Amount">Amount</string>
-    <string name="Send_Confirmation_To">To</string>
+    <string name="Send_Confirmation_Amount">مقدار</string>
+    <string name="Send_Confirmation_To">به</string>
     <string name="Send_Confirmation_Receiver">Receiver</string>
     <string name="Send_Confirmation_Input">Input</string>
     <string name="Send_Confirmation_EstimateTime">برآورد زمان:</string>
@@ -617,8 +617,8 @@
     <string name="CoinPage_RatingDetails">Rating Details</string>
     <string name="CoinPage_Price">Price</string>
     <string name="CoinPage_Market">Market</string>
-    <string name="CoinPage_CoinMarket">%s Markets</string>
-    <string name="CoinPage_CoinInvestors">%s Investors</string>
+    <string name="CoinPage_CoinMarket">Markets %s</string>
+    <string name="CoinPage_CoinInvestors">Investors %s</string>
     <string name="CoinPage_Range24">24h Range</string>
     <string name="CoinPage_Performance">Performance</string>
     <string name="CoinPage_About">About</string>
@@ -647,8 +647,8 @@
     <string name="CoinPage_LatestNews">Latest News</string>
     <string name="CoinPage_Favorite">Favorite</string>
     <string name="CoinPage_Unfavorite">Unfavorite</string>
-    <string name="CoinPage_Performance_Week">1 Week</string>
-    <string name="CoinPage_Performance_Month">1 Month</string>
+    <string name="CoinPage_Performance_Week">1Week</string>
+    <string name="CoinPage_Performance_Month"> 1Month </string>
     <string name="CoinPage_ReadMore">Read More</string>
     <string name="CoinPage_ReadLess">Read Less</string>
     <!--Rate list-->
