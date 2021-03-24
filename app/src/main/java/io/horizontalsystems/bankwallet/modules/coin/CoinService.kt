@@ -66,6 +66,7 @@ class CoinService(
 
     private val disposables = CompositeDisposable()
     private var alertNotificationDisposable: Disposable? = null
+    private var chartInfoDisposable: Disposable? = null
 
     init {
         priceAlertManager.notificationChangedFlowable
@@ -142,6 +143,8 @@ class CoinService(
     }
 
     fun updateChartInfo() {
+        chartInfoDisposable?.dispose()
+
         chartInfo = xRateManager.chartInfo(coinType, currency.code, chartType)
         xRateManager.chartInfoObservable(coinType, currency.code, chartType)
                 .subscribeIO({ chartInfo ->
@@ -149,7 +152,7 @@ class CoinService(
                 }, {
                     chartInfoErrorObservable.onNext(it)
                 }).let {
-                    disposables.add(it)
+                    chartInfoDisposable = it
                 }
     }
 
