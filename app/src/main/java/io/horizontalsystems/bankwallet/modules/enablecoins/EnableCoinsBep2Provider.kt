@@ -24,7 +24,7 @@ class EnableCoinsBep2Provider(appConfigProvider: IBuildConfigProvider) {
                             balance.symbol
                         else
                             null
-                    }
+                    }.distinct()
                 }
     }
 
