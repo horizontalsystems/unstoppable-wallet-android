@@ -24,7 +24,7 @@ class CoinInvestorsFragment : BaseFragment(), CoinInvestorCategoryAdapter.Listen
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        toolbar.title = getString(R.string.CoinInvestors_Title, coinViewModel.coinCode)
+        toolbar.title = getString(R.string.CoinPage_FundsInvested)
         toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }
