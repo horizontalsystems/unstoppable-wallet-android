@@ -15,6 +15,7 @@ import io.horizontalsystems.xrateskit.entities.LatestRate
 import io.horizontalsystems.xrateskit.entities.TimePeriod
 import io.reactivex.disposables.CompositeDisposable
 import java.math.BigDecimal
+import java.util.concurrent.TimeUnit
 
 class CoinViewModel(
         val rateFormatter: RateFormatter,
@@ -62,8 +63,6 @@ class CoinViewModel(
         setDefaultMode.postValue(service.chartType)
         updateChartIndicatorState()
 
-        updateChartInfo()
-
         service.getCoinDetails(rateDiffCoinCodes, listOf(TimePeriod.DAY_7, TimePeriod.DAY_30))
 
         fetchChartInfo()
@@ -81,6 +80,7 @@ class CoinViewModel(
                 }
 
         service.chartInfoUpdatedObservable
+                .throttleLast(600, TimeUnit.MILLISECONDS)
                 .subscribeIO {
                     updateChartInfo()
                 }
