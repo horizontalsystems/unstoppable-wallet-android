@@ -14,6 +14,7 @@ import io.horizontalsystems.xrateskit.entities.ChartType
 import io.horizontalsystems.xrateskit.entities.LatestRate
 import io.horizontalsystems.xrateskit.entities.TimePeriod
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
 import java.math.BigDecimal
 import java.util.concurrent.TimeUnit
 
@@ -53,6 +54,7 @@ class CoinViewModel(
     private var enabledIndicator: ChartIndicator? = null
     private var macdIsEnabled = false
     private val disposable = CompositeDisposable()
+    private var chartDisposable: Disposable? = null
 
     private val rateDiffCoinCodes: List<String> = mutableListOf(service.currency.code).apply {
         if (service.coinType != CoinType.Bitcoin) add("BTC")
@@ -65,7 +67,7 @@ class CoinViewModel(
 
         service.getCoinDetails(rateDiffCoinCodes, listOf(TimePeriod.DAY_7, TimePeriod.DAY_30))
 
-        fetchChartInfo()
+        fetchChartInfo(true)
 
         updateAlertNotificationIconState()
 
@@ -74,15 +76,6 @@ class CoinViewModel(
         service.latestRateAsync
                 .subscribeIO {
                     updateLatestRate(it)
-                }
-                .let {
-                    disposable.add(it)
-                }
-
-        service.chartInfoUpdatedObservable
-                .throttleLast(600, TimeUnit.MILLISECONDS)
-                .subscribeIO {
-                    updateChartInfo()
                 }
                 .let {
                     disposable.add(it)
@@ -175,7 +168,7 @@ class CoinViewModel(
     private fun updateChartIndicatorState() {
         val enabled = service.chartType != ChartType.DAILY && service.chartType != ChartType.TODAY
 
-        if (setChartIndicatorsEnabled.value == enabled){
+        if (setChartIndicatorsEnabled.value == enabled) {
             return
         }
 
@@ -192,12 +185,6 @@ class CoinViewModel(
 
     private fun onChartError(error: Throwable?) {
         showChartError.postValue(Unit)
-    }
-
-    private fun fetchChartInfo() {
-        chartSpinner.postValue(true)
-        service.observeLastPointData()
-        service.updateChartInfo()
     }
 
     private fun syncCoinDetailsState(state: CoinService.CoinDetailsState) {
@@ -239,6 +226,34 @@ class CoinViewModel(
             coinExtraPages.add(CoinExtraPage.Investors(listPosition))
         }
         extraPages.postValue(coinExtraPages)
+    }
+
+    private fun fetchChartInfo(fromInit: Boolean = false) {
+        service.updateChartInfo()
+
+        if (service.chartInfo == null) {
+            chartSpinner.postValue(true)
+        }
+
+        listenToChartInfo(fromInit)
+        service.fetchChartInfo()
+    }
+
+    private fun listenToChartInfo(fromInit: Boolean) {
+        chartDisposable?.dispose()
+
+        if (fromInit) {
+            //on first run beside service.chartInfo service.lastPoint is also called,
+            // hence we try to catch both requests and process them as single
+            service.chartInfoUpdatedObservable
+                    .throttleLast(900, TimeUnit.MILLISECONDS)
+                    .subscribeIO { updateChartInfo() }
+                    .let { chartDisposable = it }
+        } else {
+            service.chartInfoUpdatedObservable
+                    .subscribeIO { updateChartInfo() }
+                    .let { chartDisposable = it }
+        }
     }
 
     private fun updateChartInfo() {

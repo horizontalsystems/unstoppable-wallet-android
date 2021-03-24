@@ -75,11 +75,21 @@ class CoinService(
         xRateManager.latestRate(coinType, currency.code)?.let {
             latestRateAsync.onNext(it)
         }
+
         xRateManager.latestRateObservable(coinType, currency.code)
                 .subscribeIO {
                     latestRateAsync.onNext(it)
                 }
                 .let {
+                    disposables.add(it)
+                }
+
+        xRateManager.latestRateObservable(coinType, currency.code)
+                .subscribeIO({ marketInfo ->
+                    lastPoint = LastPoint(marketInfo.rate, marketInfo.timestamp)
+                }, {
+                    //ignore
+                }).let {
                     disposables.add(it)
                 }
     }
@@ -137,9 +147,12 @@ class CoinService(
     }
 
     fun updateChartInfo() {
+        chartInfo = xRateManager.chartInfo(coinType, currency.code, chartType)
+    }
+
+    fun fetchChartInfo() {
         chartInfoDisposable?.dispose()
 
-        chartInfo = xRateManager.chartInfo(coinType, currency.code, chartType)
         xRateManager.chartInfoObservable(coinType, currency.code, chartType)
                 .subscribeIO({ chartInfo ->
                     this.chartInfo = chartInfo
@@ -147,17 +160,6 @@ class CoinService(
                     chartInfoErrorObservable.onNext(it)
                 }).let {
                     chartInfoDisposable = it
-                }
-    }
-
-    fun observeLastPointData() {
-        xRateManager.latestRateObservable(coinType, currency.code)
-                .subscribeIO({ marketInfo ->
-                    lastPoint = LastPoint(marketInfo.rate, marketInfo.timestamp)
-                }, {
-                    //ignore
-                }).let {
-                    disposables.add(it)
                 }
     }
 
