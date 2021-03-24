@@ -80,7 +80,6 @@ class CoinViewModel(
                 }
 
         service.chartInfoUpdatedObservable
-                .throttleLast(600, TimeUnit.MILLISECONDS)
                 .subscribeIO {
                     updateChartInfo()
                 }
