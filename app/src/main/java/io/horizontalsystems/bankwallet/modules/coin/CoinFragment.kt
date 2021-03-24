@@ -362,7 +362,7 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
                         }
                         is CoinExtraPage.Investors -> {
                             setListPosition(item.position)
-                            showTitle(getString(R.string.CoinPage_CoinInvestors, coinCode))
+                            showTitle(getString(R.string.CoinPage_FundsInvested))
                             setOnClickListener {
                                 findNavController().navigate(R.id.coinFragment_to_coinInvestorsFragment, null, navOptions())
                             }
