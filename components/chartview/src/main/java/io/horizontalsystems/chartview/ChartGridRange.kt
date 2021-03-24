@@ -5,7 +5,7 @@ import io.horizontalsystems.chartview.models.ChartConfig
 
 class ChartGridRange(private val config: ChartConfig, override var isVisible: Boolean = true) : ChartDraw {
 
-    private var top: String = ""
+    private var high: String = ""
     private var low: String = ""
     private var offset = config.curveVerticalOffset
 
@@ -28,8 +28,8 @@ class ChartGridRange(private val config: ChartConfig, override var isVisible: Bo
         shape = rect
     }
 
-    fun setValues(top: String, low: String) {
-        this.top = top
+    fun setValues(high: String, low: String) {
+        this.high = high
         this.low = low
     }
 
@@ -39,10 +39,10 @@ class ChartGridRange(private val config: ChartConfig, override var isVisible: Bo
 
     override fun draw(canvas: Canvas) {
         if (!isVisible) return
-        canvas.drawTopLow()
+        canvas.drawHighLow()
     }
 
-    private fun Canvas.drawTopLow() {
+    private fun Canvas.drawHighLow() {
         val path = Path()
 
         val topY = shape.top + offset
@@ -56,9 +56,12 @@ class ChartGridRange(private val config: ChartConfig, override var isVisible: Bo
         path.lineTo(shape.right, bottomY)
         drawPath(path, dashPaint)
 
+        val highWidth = textPaint.measureText(high)
+        val lowWidth = textPaint.measureText(low)
+
         // Texts
-        drawText(top, shape.left + config.gridTextPadding, textPosition(topY, isTop = true), textPaint)
-        drawText(low, shape.left + config.gridTextPadding, textPosition(bottomY, isTop = false), textPaint)
+        drawText(high, shape.right - highWidth - config.gridSideTextPadding, textPosition(topY, isTop = true), textPaint)
+        drawText(low, shape.right - lowWidth - config.gridSideTextPadding, textPosition(bottomY, isTop = false), textPaint)
     }
 
     private fun textPosition(y: Float, isTop: Boolean): Float {
