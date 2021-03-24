@@ -8,6 +8,7 @@ class ChartGridRange(private val config: ChartConfig, override var isVisible: Bo
     private var high: String = ""
     private var low: String = ""
     private var offset = config.curveVerticalOffset
+    private var showOnTheRightSide = false
 
     private var shape = RectF(0f, 0f, 0f, 0f)
 
@@ -28,7 +29,8 @@ class ChartGridRange(private val config: ChartConfig, override var isVisible: Bo
         shape = rect
     }
 
-    fun setValues(high: String, low: String) {
+    fun setValues(high: String, low: String, showOnTheRight: Boolean = false) {
+        showOnTheRightSide = showOnTheRight
         this.high = high
         this.low = low
     }
@@ -56,12 +58,17 @@ class ChartGridRange(private val config: ChartConfig, override var isVisible: Bo
         path.lineTo(shape.right, bottomY)
         drawPath(path, dashPaint)
 
-        val highWidth = textPaint.measureText(high)
-        val lowWidth = textPaint.measureText(low)
-
         // Texts
-        drawText(high, shape.right - highWidth - config.gridSideTextPadding, textPosition(topY, isTop = true), textPaint)
-        drawText(low, shape.right - lowWidth - config.gridSideTextPadding, textPosition(bottomY, isTop = false), textPaint)
+        var highX = shape.left + config.gridSideTextPadding
+        var lowX = shape.left + config.gridSideTextPadding
+
+        if (showOnTheRightSide) {
+            highX = shape.right - textPaint.measureText(high) - config.gridSideTextPadding
+            lowX = shape.right - textPaint.measureText(low) - config.gridSideTextPadding
+        }
+
+        drawText(high, highX, textPosition(topY, isTop = true), textPaint)
+        drawText(low, lowX, textPosition(bottomY, isTop = false), textPaint)
     }
 
     private fun textPosition(y: Float, isTop: Boolean): Float {
