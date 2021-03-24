@@ -22,8 +22,8 @@
     <string name="Button_Reject">Отклонить</string>
     <string name="Button_Disconnect">Отсоединить</string>
     <string name="Button_Start">Start</string>
-    <string name="Button_Create">Create</string>
-    <string name="Button_Restore">Restore</string>
+    <string name="Button_Create">Создать</string>
+    <string name="Button_Restore">Восстановить</string>
     <string name="Button_Reset">Reset</string>
     <string name="Error">Ошибка</string>
     <string name="NotAvailable">Нет данных</string>
@@ -171,7 +171,7 @@
     <string name="Market_Filter_ShowResults_Counter">Show Results: %d</string>
     <string name="Market_Filter_Range_0_5M">&lt; 5M</string>
     <string name="Market_Filter_Range_5M_20M">5M - 20M</string>
-    <string name="Market_Filter_Range_20M_100M">20M - 100M</string>
+    <string name="Market_Filter_Range_20M_100M">20М - 100М</string>
     <string name="Market_Filter_Range_100M_1B">100M - 1B</string>
     <string name="Market_Filter_Range_1B_5B">1B - 5B</string>
     <string name="Market_Filter_Range_5B_More">&gt; 5BN</string>
@@ -210,7 +210,7 @@
     <string name="Balance_Sort_Az">Названию</string>
     <string name="Balance_Sort_24hPriceChange">Цене(%) за 24 ч</string>
     <string name="Balance_Backup_Alert">Вам нужно сделать резервную копию %s Кошелька, прежде чем вы сможете получать %s.</string>
-    <string name="Balance_NoWalletAlert">You don\’t have any wallets yet. Create new or restore existing </string>
+    <string name="Balance_NoWalletAlert">У вас пока нет кошельков. Создайте новый или восстановите существующий </string>
     <!--Send-->
     <string name="Send_Title">Отправить %s</string>
     <string name="Send_Hint_Address">Адрес или домен</string>
@@ -220,11 +220,11 @@
     <string name="Send_Button_Max">Макс.</string>
     <string name="Send_Confirmation_Title">Подтвердить</string>
     <string name="Send_Confirmation_Domain">Домен</string>
-    <string name="Send_Confirmation_YouSend">You Send</string>
-    <string name="Send_Confirmation_Amount">Amount</string>
-    <string name="Send_Confirmation_To">To</string>
+    <string name="Send_Confirmation_YouSend">Вы Отправляете</string>
+    <string name="Send_Confirmation_Amount">Сумма</string>
+    <string name="Send_Confirmation_To">Кому</string>
     <string name="Send_Confirmation_Receiver">Получатель</string>
-    <string name="Send_Confirmation_Input">Input</string>
+    <string name="Send_Confirmation_Input">Ввод</string>
     <string name="Send_Confirmation_EstimateTime">Приблизительное Время:</string>
     <string name="Send_Confirmation_Send_Button">Отправить</string>
     <string name="Send_Success">\u2713 Отправлено</string>
@@ -327,27 +327,27 @@
     <string name="SwapSettings_Error_InvalidDeadline">Недопустимый Срок</string>
     <!-- Swap Confirmation -->
     <string name="Swap_Confirmation">Подтверждение</string>
-    <string name="Swap_Confirmation_Guaranteed">Guaranteed</string>
-    <string name="Swap_Confirmation_Maximum">Maximum</string>
-    <string name="Swap_Confirmation_Estimated">Estimated</string>
+    <string name="Swap_Confirmation_Guaranteed">Гарантировано</string>
+    <string name="Swap_Confirmation_Maximum">Максимум</string>
+    <string name="Swap_Confirmation_Estimated">Ориентировочно</string>
     <!--Swap Coin Select-->
     <!--Approve-->
     <string name="Approve_Title">Разрешить Обмен</string>
     <string name="Approve_Info">Вы должны предоставить разрешение на смарт-контракт для того, чтобы обменивать указанный токен от вашего имени. Это разрешение определяет сумму, которая может быть использована по смарт-контракту. Это не повлияет на ваш баланс, но для подтверждения транзакции будет взята небольшая комиссия за ее выполнение.\n\nРазрешение можно запрашивать перед каждой сделкой, но дешевле заранее утвердить более высокую сумму для будущих операций.</string>
     <string name="Approve_Error_AlreadyApproved">У вас уже есть разрешение на эту сумму</string>
-    <string name="Approve_Spender">Spender</string>
-    <string name="Approve_YouApprove">You Approve</string>
+    <string name="Approve_Spender">Покупатель</string>
+    <string name="Approve_YouApprove">Вы Подтверждаете</string>
     <!--Uniswap Info -->
-    <string name="SwapInfo_Description">This exchange service is powered by %s, a decentralized token exchange protocol built on %s blockchain.\n\%s is fully automated and managed by smart contracts that facilitate token exchanges in a reliable manner without any means to cheat.</string>
+    <string name="SwapInfo_Description">Этот обменный сервис работает при поддержке %s - децентрализованного протокола обмена токенов, созданного на блокчейне %s.\n%s полностью автоматизирован и управляется смарт-контрактами, которые надежным способом упрощают обмен токенами без осуществления каких-либо махинаций.</string>
     <string name="SwapInfo_DexRelated">%s Related</string>
-    <string name="SwapInfo_AllowanceTitle">Allowance</string>
-    <string name="SwapInfo_AllowanceDescription">The amount of some currency that service can spend on your behalf when executing token swaps. Sufficient allowance is required before swap action can take place</string>
-    <string name="SwapInfo_PriceImpactTitle">Price Impact</string>
-    <string name="SwapInfo_PriceImpactDescription">Expected price deviation from a shown price, typically increases with the swap amount.</string>
-    <string name="SwapInfo_SwapFeeTitle">Swap Fee</string>
-    <string name="SwapInfo_SwapFeeDescription">A service fee for the swap action on platform, shown in the currency the user sells. For most orders it should be either 0.3 % or 0.6 %.</string>
-    <string name="SwapInfo_GuaranteedAmountTitle">Guaranteed Amount</string>
-    <string name="SwapInfo_GuaranteedAmountDescription">The minimum amount a user is going to receive as a result of a swap action.</string>
+    <string name="SwapInfo_AllowanceTitle">Разрешение</string>
+    <string name="SwapInfo_AllowanceDescription">Сумма в некоторых валютах, которую сервис может потратить от вашего имени при выполнении обмена токенов. Может потребоваться разрешение на использование достаточной суммы перед обменом</string>
+    <string name="SwapInfo_PriceImpactTitle">Отклонение от рын. цены</string>
+    <string name="SwapInfo_PriceImpactDescription">Ожидаемое отклонение цены от указанной цены, обычно увеличивается при увеличении суммы обмена.</string>
+    <string name="SwapInfo_SwapFeeTitle">Комиссия за обмен</string>
+    <string name="SwapInfo_SwapFeeDescription">Плата за услугу обмена на платформе, показана в валюте, в которой продает пользователь. Для большинства заказов составляет или 0,3% или 0,6%.</string>
+    <string name="SwapInfo_GuaranteedAmountTitle">Гарантированная Сумма</string>
+    <string name="SwapInfo_GuaranteedAmountDescription">Минимальная сумма, которую получит пользователь в результате обмена.</string>
     <string name="SwapInfo_MaxSpendTitle">Maximum Spend</string>
     <string name="SwapInfo_MaxSpendDescription">The maximum amount a user is going to spend as a result of a swap action.</string>
     <string name="SwapInfo_Other">Other</string>
@@ -355,7 +355,7 @@
     <string name="SwapInfo_TransactionFeeDescription">The estimated processing cost of the given transaction on %s blockchain. %s related transactions will typically cost more than generic token transfer transactions.</string>
     <string name="SwapInfo_TransactionSpeedTitle">Transaction Speed</string>
     <string name="SwapInfo_TransactionSpeedDescription">Transactions with higher transaction fee will result in faster processing speeds. The opposite is true as well.</string>
-    <string name="SwapInfo_Site">%s Site</string>
+    <string name="SwapInfo_Site">%s Сайт</string>
     <!--Deposit-->
     <string name="Deposit_Title">Получить %s</string>
     <string name="Deposit_Share">Поделиться</string>
@@ -553,7 +553,7 @@
     <string name="AddTokenDialog_Title">Выбрать Блокчейн</string>
     <string name="AddTokenDialog_Subtitle">Добавить Токен</string>
     <string name="AddTokenDialog_Erc20Tokens">Токен ERC20</string>
-    <string name="AddTokenDialog_Bep20Tokens">BEP20 Tokens</string>
+    <string name="AddTokenDialog_Bep20Tokens">Токен BEP20</string>
     <string name="AddTokenDialog_BinanceTokens">Токен BEP2</string>
     <!-- Enable Token -->
     <string name="EnalbeToken_Title">Активировать Токен</string>
@@ -573,7 +573,7 @@
     <string name="AddEvmToken_ContractNotFound">Контракт не найден</string>
     <string name="AddEvmToken_ContractAddressHint">Адрес Контракта</string>
     <string name="AddErc20Token_Title">Добавить ERC20</string>
-    <string name="AddBep20Token_Title">Add BEP20</string>
+    <string name="AddBep20Token_Title">Добавить BEP20</string>
     <!-- Add Bep2 Token -->
     <string name="AddBep2Token_Title">Добавить BEP2</string>
     <string name="AddBep2Token_TokenSymbolHint">Символ Токена</string>
@@ -646,7 +646,7 @@
     <string name="CoinPage_MarketCap_Billion">B</string>
     <string name="CoinPage_MarketCap_Trillion">T</string>
     <string name="CoinPage_Volume">Vol</string>
-    <string name="CoinPage_Error_NotAvailable">Chart not available</string>
+    <string name="CoinPage_Error_NotAvailable">График недоступен</string>
     <string name="CoinPage_LatestNews">Latest News</string>
     <string name="CoinPage_Favorite">Favorite</string>
     <string name="CoinPage_Unfavorite">Unfavorite</string>
