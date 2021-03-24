@@ -195,7 +195,6 @@ class CoinViewModel(
 
     private fun fetchChartInfo() {
         chartSpinner.postValue(true)
-        service.observeLastPointData()
         service.updateChartInfo()
     }
 
