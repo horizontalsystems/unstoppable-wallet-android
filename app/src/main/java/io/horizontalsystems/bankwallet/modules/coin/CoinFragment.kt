@@ -238,9 +238,12 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
                 aboutText.maxLines = Integer.MAX_VALUE
                 aboutText.isVisible = false
                 aboutText.doOnPreDraw {
-                    val lineCount = aboutText.lineCount
-                    aboutText.maxLines = ABOUT_MAX_LINES
-                    aboutTextToggle.isVisible = lineCount > ABOUT_MAX_LINES
+                    if (aboutText.lineCount > ABOUT_MAX_LINES + ABOUT_TOGGLE_LINES) {
+                        aboutText.maxLines = ABOUT_MAX_LINES
+                        aboutTextToggle.isVisible = true
+                    } else {
+                        aboutTextToggle.isVisible = false
+                    }
                 }
                 aboutText.isVisible = true
             } else {
@@ -537,6 +540,7 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
 
     companion object {
         private const val ABOUT_MAX_LINES = 8
+        private const val ABOUT_TOGGLE_LINES = 2
         private const val COIN_TYPE_KEY = "coin_type_key"
         private const val COIN_CODE_KEY = "coin_code_key"
         private const val COIN_TITLE_KEY = "coin_title_key"
