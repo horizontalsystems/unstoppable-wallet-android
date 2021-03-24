@@ -224,9 +224,6 @@
     <!--Coin Markets-->
     <string name="CoinMarket_Title">%s Markets</string>
 
-    <!--Coin Investors-->
-    <string name="CoinInvestors_Title">%s Investors</string>
-
     <!--Balance-->
 
     <string name="Balance_Title">Balance</string>
