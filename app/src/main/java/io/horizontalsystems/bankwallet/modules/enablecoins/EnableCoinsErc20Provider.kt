@@ -19,7 +19,7 @@ class EnableCoinsErc20Provider(private val networkManager: INetworkManager) {
                             } catch (error: Throwable) {
                                 null
                             }
-                        }
+                        }.distinct()
                     } else {
                         listOf()
                     }
