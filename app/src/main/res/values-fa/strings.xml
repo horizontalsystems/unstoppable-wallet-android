@@ -21,14 +21,14 @@
     <string name="Button_Connect">وصل شدن</string>
     <string name="Button_Reject">رد کردن</string>
     <string name="Button_Disconnect">قطع ارتباط</string>
-    <string name="Button_Start">Start</string>
+    <string name="Button_Start">شروع</string>
     <string name="Button_Create">به وجود آوردن</string>
     <string name="Button_Restore">بازگرداني</string>
     <string name="Button_Reset">Reset</string>
     <string name="Error">خطا</string>
     <string name="NotAvailable">مربوط نیست</string>
-    <string name="None">None</string>
-    <string name="Any">Any</string>
+    <string name="None">هیچکدام</string>
+    <string name="Any">هرکدام</string>
     <string name="Wallet">%s کیف پول</string>
     <!--Intro-->
     <string name="Intro_Wallet_Description">پس انداز و معامله ارز رمزنگاری شده. کنترل کامل بر دارایی ها داشته باشید. ناشناس بمانید.</string>
@@ -189,7 +189,7 @@
     <string name="Market_Filter_PriceChange_Negative_25_minus">&lt; -25%</string>
     <string name="Market_Filter_PriceChange_Negative_50_minus">&lt; -50%</string>
     <string name="Market_Filter_PriceChange_Negative_100_minus">&lt; -100%</string>
-    <string name="TimePeriod_24h">24h</string>
+    <string name="TimePeriod_24h">24 ساعت</string>
     <!--Coin Markets-->
     <string name="CoinMarket_Title">Markets %s</string>
     <!--Coin Investors-->
