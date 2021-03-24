@@ -10,7 +10,6 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 import java.net.URL
-import java.util.concurrent.TimeUnit
 
 class CoinService(
         val coinType: CoinType,
@@ -139,7 +138,6 @@ class CoinService(
     fun updateChartInfo() {
         chartInfo = xRateManager.chartInfo(coinType, currency.code, chartType)
         xRateManager.chartInfoObservable(coinType, currency.code, chartType)
-                .delay(600, TimeUnit.MILLISECONDS)
                 .subscribeIO({ chartInfo ->
                     this.chartInfo = chartInfo
                 }, {
