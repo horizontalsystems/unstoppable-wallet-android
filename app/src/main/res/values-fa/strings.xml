@@ -22,8 +22,8 @@
     <string name="Button_Reject">رد کردن</string>
     <string name="Button_Disconnect">قطع ارتباط</string>
     <string name="Button_Start">Start</string>
-    <string name="Button_Create">Create</string>
-    <string name="Button_Restore">Restore</string>
+    <string name="Button_Create">به وجود آوردن</string>
+    <string name="Button_Restore">بازگرداني</string>
     <string name="Button_Reset">Reset</string>
     <string name="Error">خطا</string>
     <string name="NotAvailable">مربوط نیست</string>
@@ -643,7 +643,7 @@
     <string name="CoinPage_MarketCap_Billion">B</string>
     <string name="CoinPage_MarketCap_Trillion">T</string>
     <string name="CoinPage_Volume">Vol</string>
-    <string name="CoinPage_Error_NotAvailable">Chart not available</string>
+    <string name="CoinPage_Error_NotAvailable">نمودار موجود نیست</string>
     <string name="CoinPage_LatestNews">Latest News</string>
     <string name="CoinPage_Favorite">Favorite</string>
     <string name="CoinPage_Unfavorite">Unfavorite</string>
