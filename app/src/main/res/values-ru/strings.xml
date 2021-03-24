@@ -21,7 +21,7 @@
     <string name="Button_Connect">Подключиться</string>
     <string name="Button_Reject">Отклонить</string>
     <string name="Button_Disconnect">Отсоединить</string>
-    <string name="Button_Start">Start</string>
+    <string name="Button_Start">Начать</string>
     <string name="Button_Create">Создать</string>
     <string name="Button_Restore">Восстановить</string>
     <string name="Button_Reset">Reset</string>
@@ -278,7 +278,7 @@
     <string name="WalletConnect_Status_Offline">Не доступен</string>
     <string name="WalletConnect_Status_Online">Доступен</string>
     <string name="WalletConnect_Status_Connecting">Подключение…</string>
-    <string name="WalletConnect_NewConnect">New Connect</string>
+    <string name="WalletConnect_NewConnect">Новое Подключение</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Error_InsufficientBalance">Для отправки транзакции требуется %s</string>
     <string name="EthereumTransaction_Error_InsufficientBalanceForFee">Текущий баланс %s ниже суммы, необходимой для обработки этой транзакции, включая комиссию за транзакцию.</string>
@@ -348,12 +348,12 @@
     <string name="SwapInfo_SwapFeeDescription">Плата за услугу обмена на платформе, показана в валюте, в которой продает пользователь. Для большинства заказов составляет или 0,3% или 0,6%.</string>
     <string name="SwapInfo_GuaranteedAmountTitle">Гарантированная Сумма</string>
     <string name="SwapInfo_GuaranteedAmountDescription">Минимальная сумма, которую получит пользователь в результате обмена.</string>
-    <string name="SwapInfo_MaxSpendTitle">Maximum Spend</string>
-    <string name="SwapInfo_MaxSpendDescription">The maximum amount a user is going to spend as a result of a swap action.</string>
-    <string name="SwapInfo_Other">Other</string>
-    <string name="SwapInfo_TransactionFeeTitle">Transaction Fee</string>
+    <string name="SwapInfo_MaxSpendTitle">Максимальная Трата</string>
+    <string name="SwapInfo_MaxSpendDescription">Максимальная сумма, которую получит пользователь в результате обмена.</string>
+    <string name="SwapInfo_Other">Другое</string>
+    <string name="SwapInfo_TransactionFeeTitle">Комиссия за транзакцию</string>
     <string name="SwapInfo_TransactionFeeDescription">The estimated processing cost of the given transaction on %s blockchain. %s related transactions will typically cost more than generic token transfer transactions.</string>
-    <string name="SwapInfo_TransactionSpeedTitle">Transaction Speed</string>
+    <string name="SwapInfo_TransactionSpeedTitle">Скорость Транзакции</string>
     <string name="SwapInfo_TransactionSpeedDescription">Transactions with higher transaction fee will result in faster processing speeds. The opposite is true as well.</string>
     <string name="SwapInfo_Site">%s Сайт</string>
     <!--Deposit-->
@@ -389,7 +389,7 @@
     <string name="TransactionInfo_Input">Ввод</string>
     <string name="TransactionInfo_ButtonViewOnExplorerName">Посмотреть на %s</string>
     <string name="StatusInfo_Pending">В обработке</string>
-    <string name="StatusInfo_SendingReceiving">Sending/Receiving</string>
+    <string name="StatusInfo_SendingReceiving">Отправка / Получение</string>
     <string name="StatusInfo_Confirmed">Подтверждено</string>
     <string name="StatusInfo_Failed">Не удалось</string>
     <string name="StatusInfo_PendingDescription">Транзакция еще не подтверждена в блокчейне. Эта процедура может занять от нескольких минут до нескольких часов в зависимости от комиссии за транзакцию. Отправляемые с очень низкой комиссией транзакции обычно обрабатываются в течение нескольких дней или же могут быть отклонены сетью, отменяя это действие.</string>
