@@ -177,7 +177,7 @@ class Chart @JvmOverloads constructor(context: Context, attrs: AttributeSet? = n
 
         rsiRange.setShape(chartBottom.shape)
         rsiRange.setOffset(chartBottom.shape.height() * 0.3f)
-        rsiRange.setValues(Rsi.max.toString(), Rsi.min.toString())
+        rsiRange.setValues(Rsi.max.toString(), Rsi.min.toString(), true)
 
         // MACD
         macdCurve.setShape(chartBottom.shape)

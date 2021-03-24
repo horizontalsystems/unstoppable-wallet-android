@@ -36,7 +36,7 @@ class ChartGridTimeline(private val config: ChartConfig, override var isVisible:
     }
 
     private fun textPosition(x: Float, text: String): Float {
-        val width = config.measureTextWidth(text)
+        val width = textPaint.measureText(text)
         if (width + x >= shape.right) {
             return shape.right - (width + config.timelineTextPadding)
         }
