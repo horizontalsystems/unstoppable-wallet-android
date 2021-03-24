@@ -88,6 +88,14 @@ class CoinService(
                 .let {
                     disposables.add(it)
                 }
+        xRateManager.latestRateObservable(coinType, currency.code)
+                .subscribeIO({ marketInfo ->
+                    lastPoint = LastPoint(marketInfo.rate, marketInfo.timestamp)
+                }, {
+                    //ignore
+                }).let {
+                    disposables.add(it)
+                }
     }
 
     val notificationsAreEnabled: Boolean
@@ -153,17 +161,6 @@ class CoinService(
                     chartInfoErrorObservable.onNext(it)
                 }).let {
                     chartInfoDisposable = it
-                }
-    }
-
-    fun observeLastPointData() {
-        xRateManager.latestRateObservable(coinType, currency.code)
-                .subscribeIO({ marketInfo ->
-                    lastPoint = LastPoint(marketInfo.rate, marketInfo.timestamp)
-                }, {
-                    //ignore
-                }).let {
-                    disposables.add(it)
                 }
     }
 
