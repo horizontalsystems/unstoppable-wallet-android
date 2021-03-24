@@ -30,7 +30,7 @@ class CoinService(
     }
 
     val latestRateAsync = BehaviorSubject.create<LatestRate>()
-    val chartInfoUpdatedObservable: BehaviorSubject<Unit> = BehaviorSubject.createDefault(Unit)
+    val chartInfoUpdatedObservable: BehaviorSubject<Unit> = BehaviorSubject.create()
     val chartInfoErrorObservable: BehaviorSubject<Throwable> = BehaviorSubject.create()
     val coinDetailsStateObservable: BehaviorSubject<CoinDetailsState> = BehaviorSubject.createDefault(CoinDetailsState.Loading)
     val alertNotificationUpdatedObservable: BehaviorSubject<Unit> = BehaviorSubject.createDefault(Unit)
@@ -49,14 +49,20 @@ class CoinService(
     var lastPoint: LastPoint? = xRateManager.latestRate(coinType, currency.code)?.let { LastPoint(it.rate, it.timestamp) }
         set(value) {
             field = value
-            chartInfoUpdatedObservable.onNext(Unit)
+            triggerChartUpdateIfEnoughData()
         }
 
     var chartInfo: ChartInfo? = null
         set(value) {
             field = value
+            triggerChartUpdateIfEnoughData()
+        }
+
+    private fun triggerChartUpdateIfEnoughData() {
+        if (chartInfo != null && lastPoint != null) {
             chartInfoUpdatedObservable.onNext(Unit)
         }
+    }
 
     private val disposables = CompositeDisposable()
     private var alertNotificationDisposable: Disposable? = null
