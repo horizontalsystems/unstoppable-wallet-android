@@ -38,10 +38,7 @@ import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.views.ListPosition
 import io.horizontalsystems.views.SettingsView
-import io.horizontalsystems.xrateskit.entities.ChartType
-import io.horizontalsystems.xrateskit.entities.CoinCategory
-import io.horizontalsystems.xrateskit.entities.CoinPlatformType
-import io.horizontalsystems.xrateskit.entities.LinkType
+import io.horizontalsystems.xrateskit.entities.*
 import kotlinx.android.synthetic.main.coin_market_details.*
 import kotlinx.android.synthetic.main.fragment_coin.*
 import java.math.BigDecimal
@@ -226,7 +223,8 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
 
             // Performance
 
-            coinPerformanceView.bind(item.currency.code, item.rateDiffs)
+            setCoinPerformance(item)
+
 
             // About
 
@@ -341,6 +339,37 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
             indicatorMACD.isEnabled = enabled
             indicatorRSI.isEnabled = enabled
         })
+    }
+
+    private fun setCoinPerformance(item: CoinDetailsViewItem) {
+        context?.let { ctx ->
+            var btcTitle: String? = null
+            var ethTitle: String? = null
+
+            val rows = item.rateDiffs.toList().mapIndexed { index, (period, values) ->
+                val background = CoinPerformanceRowView.getBackground(item.rateDiffs.size, index)
+                val currencyValue = values[item.currency.code] ?: BigDecimal.ZERO
+                val btcValue = values["BTC"]
+                val ethValue = values["ETH"]
+
+                btcTitle = if (btcValue != null) "BTC" else null
+                ethTitle = if (ethValue != null) "ETH" else null
+
+                CoinPerformanceRowView(ctx).apply {
+                    bind(period, currencyValue, btcValue, ethValue, background)
+                }
+            }
+
+            coinPerformanceLayout.isVisible = rows.isNotEmpty()
+
+            if (rows.isNotEmpty()) {
+                val headerRow = CoinPerformanceRowView(ctx)
+                headerRow.bindHeader("ROI", item.currency.code, btcTitle, ethTitle)
+                coinPerformanceLayout.addView(headerRow)
+
+                rows.forEach { coinPerformanceLayout.addView(it) }
+            }
+        }
     }
 
     private fun setMacdInfoVisible(visible: Boolean) {
