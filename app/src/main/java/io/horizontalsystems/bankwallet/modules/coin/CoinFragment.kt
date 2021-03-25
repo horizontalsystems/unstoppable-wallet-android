@@ -206,13 +206,12 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
             rootView.post {
                 chart.setData(item.chartData, item.chartType)
             }
+
+            coinRateDiff.setDiff(item.diffValue)
         })
 
         viewModel.latestRateLiveData.observe(viewLifecycleOwner) {
             coinRateLast.text = formatter.formatFiat(it.value, it.currency.symbol, 2, 4)
-        }
-        viewModel.latestRateDiffLiveData.observe(viewLifecycleOwner) {
-            coinRateDiff.setDiff(it)
         }
 
         viewModel.coinDetailsLiveData.observe(viewLifecycleOwner, Observer { item ->

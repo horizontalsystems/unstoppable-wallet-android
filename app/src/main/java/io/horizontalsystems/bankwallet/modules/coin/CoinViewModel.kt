@@ -45,7 +45,6 @@ class CoinViewModel(
     val extraPages = MutableLiveData<List<CoinExtraPage>>()
     val uncheckIndicators = MutableLiveData<List<ChartIndicator>>()
     val latestRateLiveData = MutableLiveData<CurrencyValue>()
-    val latestRateDiffLiveData = MutableLiveData<BigDecimal>()
 
     var notificationIconVisible = service.notificationsAreEnabled && service.notificationSupported
     var notificationIconActive = false
@@ -114,7 +113,6 @@ class CoinViewModel(
 
     private fun updateLatestRate(latestRate: LatestRate) {
         latestRateLiveData.postValue(CurrencyValue(service.currency, latestRate.rate))
-        latestRateDiffLiveData.postValue(latestRate.rateDiff24h)
     }
 
     fun onSelect(type: ChartType) {

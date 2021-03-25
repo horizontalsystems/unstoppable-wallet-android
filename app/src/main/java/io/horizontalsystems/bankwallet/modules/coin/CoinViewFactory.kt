@@ -46,12 +46,12 @@ class MarketData(@StringRes val title: Int, val value: String)
 
 data class LastPoint(
         val rate: BigDecimal,
-        val timestamp: Long
+        val timestamp: Long,
+        val rateDiff24h: BigDecimal
 )
 
 class CoinViewFactory(private val currency: Currency, private val numberFormatter: IAppNumberFormatter) {
     fun createChartInfo(type: ChartType, chartInfo: ChartInfo, lastPoint: LastPoint?): ChartInfoViewItem {
-        val chartData = createChartData(chartInfo, lastPoint)
         val chartType = when (type) {
             ChartType.TODAY -> ChartView.ChartType.TODAY
             ChartType.DAILY -> ChartView.ChartType.DAILY
@@ -63,6 +63,7 @@ class CoinViewFactory(private val currency: Currency, private val numberFormatte
             ChartType.MONTHLY12 -> ChartView.ChartType.MONTHLY12
             ChartType.MONTHLY24 -> ChartView.ChartType.MONTHLY24
         }
+        val chartData = createChartData(chartInfo, lastPoint, chartType)
 
         return ChartInfoViewItem(chartData, chartType, chartData.diff())
     }
@@ -107,7 +108,7 @@ class CoinViewFactory(private val currency: Currency, private val numberFormatte
         return marketData
     }
 
-    private fun createChartData(chartInfo: ChartInfo, lastPoint: LastPoint?): ChartData {
+    private fun createChartData(chartInfo: ChartInfo, lastPoint: LastPoint?, chartType: ChartView.ChartType): ChartData {
         val points = chartInfo.points.map { ChartPoint(it.value.toFloat(), it.volume?.toFloat(), it.timestamp) }.toMutableList()
         val chartInfoLastPoint = chartInfo.points.lastOrNull()
         var endTimestamp = chartInfo.endTimestamp
@@ -115,6 +116,15 @@ class CoinViewFactory(private val currency: Currency, private val numberFormatte
         if (lastPoint != null && chartInfoLastPoint?.timestamp != null && lastPoint.timestamp > chartInfoLastPoint.timestamp) {
             endTimestamp = max(lastPoint.timestamp, endTimestamp)
             points.add(ChartPoint(lastPoint.rate.toFloat(), null, lastPoint.timestamp))
+
+            if (chartType == ChartView.ChartType.DAILY) {
+                val startTimestamp = lastPoint.timestamp - 24 * 60 * 60
+                val startValue = lastPoint.rate.multiply(100.toBigDecimal()) / lastPoint.rateDiff24h.add(100.toBigDecimal())
+                val startPoint = ChartPoint(startValue.toFloat(), null, startTimestamp)
+
+                points.removeIf { it.timestamp <= startTimestamp }
+                points.add(0, startPoint)
+            }
         }
 
         return ChartDataFactory.build(points, chartInfo.startTimestamp, endTimestamp, chartInfo.isExpired)

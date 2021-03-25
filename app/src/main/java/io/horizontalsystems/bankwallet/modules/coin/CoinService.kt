@@ -46,7 +46,7 @@ class CoinService(
 
     var coinMarketDetails: CoinMarketDetails? = null
 
-    var lastPoint: LastPoint? = xRateManager.latestRate(coinType, currency.code)?.let { LastPoint(it.rate, it.timestamp) }
+    var lastPoint: LastPoint? = xRateManager.latestRate(coinType, currency.code)?.let { LastPoint(it.rate, it.timestamp, it.rateDiff24h) }
         set(value) {
             field = value
             triggerChartUpdateIfEnoughData()
@@ -90,7 +90,7 @@ class CoinService(
                 }
         xRateManager.latestRateObservable(coinType, currency.code)
                 .subscribeIO({ marketInfo ->
-                    lastPoint = LastPoint(marketInfo.rate, marketInfo.timestamp)
+                    lastPoint = LastPoint(marketInfo.rate, marketInfo.timestamp, marketInfo.rateDiff24h)
                 }, {
                     //ignore
                 }).let {
