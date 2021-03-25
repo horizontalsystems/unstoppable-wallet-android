@@ -17,7 +17,7 @@ class ViewItemWrapper<T>(val title: String, val item: T, val color: Int) {
 
     companion object {
         fun <T>getAny(): ViewItemWrapper<T?> {
-            return ViewItemWrapper(App.instance.getString(R.string.Any), null, R.color.grey)
+            return ViewItemWrapper(App.instance.localizedContext().getString(R.string.Any), null, R.color.grey)
         }
     }
 }

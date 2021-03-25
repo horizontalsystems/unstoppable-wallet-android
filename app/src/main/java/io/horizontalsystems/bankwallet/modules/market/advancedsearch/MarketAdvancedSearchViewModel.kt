@@ -18,20 +18,20 @@ class MarketAdvancedSearchViewModel(
 
     // Options
     val coinListsViewItemOptions = CoinList.values().map {
-        ViewItemWrapper(App.instance.getString(it.titleResId), it, R.color.leah)
+        ViewItemWrapper(App.instance.localizedContext().getString(it.titleResId), it, R.color.leah)
     }
     val marketCapViewItemOptions = ranges
     val volumeViewItemOptions = ranges
     val liquidityViewItemOptions = ranges
     val periodViewItemOptions = TimePeriod.values().map {
-        ViewItemWrapper(App.instance.getString(it.titleResId), it, R.color.leah)
+        ViewItemWrapper(App.instance.localizedContext().getString(it.titleResId), it, R.color.leah)
     }
     val priceChangeViewItemOptions = listOf(ViewItemWrapper.getAny<PriceChange>()) + PriceChange.values().map {
-        ViewItemWrapper<PriceChange?>(App.instance.getString(it.titleResId), it, it.colorResId)
+        ViewItemWrapper<PriceChange?>(App.instance.localizedContext().getString(it.titleResId), it, it.colorResId)
     }
 
     // ViewItem
-    var coinListViewItem = ViewItemWrapper(App.instance.getString(CoinList.Top250.titleResId), CoinList.Top250, R.color.leah)
+    var coinListViewItem = ViewItemWrapper(App.instance.localizedContext().getString(CoinList.Top250.titleResId), CoinList.Top250, R.color.leah)
         set(value) {
             field = value
             coinListViewItemLiveData.postValue(value)
@@ -59,7 +59,7 @@ class MarketAdvancedSearchViewModel(
 
             service.filterLiquidity = value.item?.values
         }
-    var periodViewItem = ViewItemWrapper(App.instance.getString(TimePeriod.TimePeriod_1D.titleResId), TimePeriod.TimePeriod_1D, R.color.leah)
+    var periodViewItem = ViewItemWrapper(App.instance.localizedContext().getString(TimePeriod.TimePeriod_1D.titleResId), TimePeriod.TimePeriod_1D, R.color.leah)
         set(value) {
             field = value
             periodViewItemLiveData.postValue(value)
@@ -111,11 +111,11 @@ class MarketAdvancedSearchViewModel(
     }
 
     fun reset() {
-        coinListViewItem = ViewItemWrapper(App.instance.getString(CoinList.Top250.titleResId), CoinList.Top250, R.color.leah)
+        coinListViewItem = ViewItemWrapper(App.instance.localizedContext().getString(CoinList.Top250.titleResId), CoinList.Top250, R.color.leah)
         marketCapViewItem = ViewItemWrapper.getAny()
         volumeViewItem = ViewItemWrapper.getAny()
         liquidityViewItem = ViewItemWrapper.getAny()
-        periodViewItem = ViewItemWrapper(App.instance.getString(TimePeriod.TimePeriod_1D.titleResId), TimePeriod.TimePeriod_1D, R.color.leah)
+        periodViewItem = ViewItemWrapper(App.instance.localizedContext().getString(TimePeriod.TimePeriod_1D.titleResId), TimePeriod.TimePeriod_1D, R.color.leah)
         priceChangeViewItem = ViewItemWrapper.getAny()
     }
 
@@ -125,12 +125,12 @@ class MarketAdvancedSearchViewModel(
     }
 
     private fun convertErrorMessage(it: Throwable) = when (it) {
-        is UnknownHostException -> App.instance.getString(R.string.Hud_Text_NoInternet)
+        is UnknownHostException -> App.instance.localizedContext().getString(R.string.Hud_Text_NoInternet)
         else -> it.message ?: it.javaClass.simpleName
     }
 }
 
 val rangeEmpty = ViewItemWrapper.getAny<Range>()
 val ranges = listOf(rangeEmpty) + Range.values().map {
-    ViewItemWrapper<Range?>(App.instance.getString(it.titleResId), it, R.color.leah)
+    ViewItemWrapper<Range?>(App.instance.localizedContext().getString(it.titleResId), it, R.color.leah)
 }
