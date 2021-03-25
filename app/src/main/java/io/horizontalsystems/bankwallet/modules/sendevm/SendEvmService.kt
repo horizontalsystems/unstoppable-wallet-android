@@ -158,7 +158,7 @@ class SendEvmService(
         object InvalidDecimal : AmountError()
         object InsufficientBalance : AmountError() {
             override fun getLocalizedMessage(): String {
-                return App.instance.getString(R.string.Swap_ErrorInsufficientBalance)
+                return App.instance.localizedContext().getString(R.string.Swap_ErrorInsufficientBalance)
             }
         }
     }

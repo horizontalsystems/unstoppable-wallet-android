@@ -21,13 +21,13 @@ class AppConfigProvider : IAppConfigProvider, ILanguageConfigProvider, IBuildCon
     override val walletHelpTelegramGroup = "UnstoppableWallet"
     override val btcCoreRpcUrl: String = "https://btc.horizontalsystems.xyz/rpc"
 
-    override val cryptoCompareApiKey = App.instance.getString(R.string.cryptoCompareApiKey)
-    override val infuraProjectId = App.instance.getString(R.string.infuraProjectId)
-    override val infuraProjectSecret = App.instance.getString(R.string.infuraSecretKey)
-    override val etherscanApiKey = App.instance.getString(R.string.etherscanKey)
-    override val bscscanApiKey = App.instance.getString(R.string.bscscanKey)
-    override val guidesUrl = App.instance.getString(R.string.guidesUrl)
-    override val faqUrl = App.instance.getString(R.string.faqUrl)
+    override val cryptoCompareApiKey = App.instance.localizedContext().getString(R.string.cryptoCompareApiKey)
+    override val infuraProjectId = App.instance.localizedContext().getString(R.string.infuraProjectId)
+    override val infuraProjectSecret = App.instance.localizedContext().getString(R.string.infuraSecretKey)
+    override val etherscanApiKey = App.instance.localizedContext().getString(R.string.etherscanKey)
+    override val bscscanApiKey = App.instance.localizedContext().getString(R.string.bscscanKey)
+    override val guidesUrl = App.instance.localizedContext().getString(R.string.guidesUrl)
+    override val faqUrl = App.instance.localizedContext().getString(R.string.faqUrl)
     override val fiatDecimal: Int = 2
     override val maxDecimal: Int = 8
     override val feeRateAdjustForCurrencies: List<String> = listOf("USD","EUR")
