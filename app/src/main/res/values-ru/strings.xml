@@ -337,7 +337,7 @@
     <string name="Approve_YouApprove">Вы Подтверждаете</string>
     <!--Uniswap Info -->
     <string name="SwapInfo_Description">Этот обменный сервис работает при поддержке %s - децентрализованного протокола обмена токенов, созданного на блокчейне %s.\n%s полностью автоматизирован и управляется смарт-контрактами, которые надежным способом упрощают обмен токенами без осуществления каких-либо махинаций.</string>
-    <string name="SwapInfo_DexRelated">%s Related</string>
+    <string name="SwapInfo_DexRelated">o %s</string>
     <string name="SwapInfo_AllowanceTitle">Разрешение</string>
     <string name="SwapInfo_AllowanceDescription">Сумма в некоторых валютах, которую сервис может потратить от вашего имени при выполнении обмена токенов. Может потребоваться разрешение на использование достаточной суммы перед обменом</string>
     <string name="SwapInfo_PriceImpactTitle">Отклонение от рын. цены</string>
@@ -350,9 +350,9 @@
     <string name="SwapInfo_MaxSpendDescription">Максимальная сумма, которую получит пользователь в результате обмена.</string>
     <string name="SwapInfo_Other">Другое</string>
     <string name="SwapInfo_TransactionFeeTitle">Комиссия за транзакцию</string>
-    <string name="SwapInfo_TransactionFeeDescription">The estimated processing cost of the given transaction on %s blockchain. %s related transactions will typically cost more than generic token transfer transactions.</string>
+    <string name="SwapInfo_TransactionFeeDescription">Примерная стоимость услуги по обработке данной транзакции на блокчейне %s. Стоимость транзакций, связанных с %s, обычно выше, чем стоимость транзакций по передаче обычных токенов.</string>
     <string name="SwapInfo_TransactionSpeedTitle">Скорость Транзакции</string>
-    <string name="SwapInfo_TransactionSpeedDescription">Transactions with higher transaction fee will result in faster processing speeds. The opposite is true as well.</string>
+    <string name="SwapInfo_TransactionSpeedDescription">Обработка транзакций с более высокой комиссией будет ускорена. Верно и обратное.</string>
     <string name="SwapInfo_Site">%s Сайт</string>
     <!--Deposit-->
     <string name="Deposit_Title">Получить %s</string>
@@ -391,7 +391,7 @@
     <string name="StatusInfo_Confirmed">Подтверждено</string>
     <string name="StatusInfo_Failed">Не удалось</string>
     <string name="StatusInfo_PendingDescription">Транзакция еще не подтверждена в блокчейне. Эта процедура может занять от нескольких минут до нескольких часов в зависимости от комиссии за транзакцию. Отправляемые с очень низкой комиссией транзакции обычно обрабатываются в течение нескольких дней или же могут быть отклонены сетью, отменяя это действие.</string>
-    <string name="StatusInfo_SendingReceivingDescription">Transaction has been included in the blockchain but has not reached finality yet. At this point, it\'s safe to consider transaction completed for smaller payments. For larger payments it\'s recommended to wait until the status changes to completed.</string>
+    <string name="StatusInfo_SendingReceivingDescription">Транзакция была включена в блокчейн, но пока не обработана до конца. На данном этапе до конца обработаны только транзакции для небольших платежей. Что касается более крупных транзакций, стоит дождаться смены статуса.</string>
     <string name="StatusInfo_ConfirmedDescription">Транзакция окончательна и необратима.</string>
     <string name="StatusInfo_FailedDescription">Транзакция не была обработана как планировалось, и передача токена не состоялась. На Ethereum за отклонённые транзакции взимают комиссионные сборы.</string>
     <!-- Info -->
