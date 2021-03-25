@@ -21,9 +21,9 @@
     <string name="Button_Connect">连接</string>
     <string name="Button_Reject">拒绝</string>
     <string name="Button_Disconnect">断开连接</string>
-    <string name="Button_Start">Start</string>
-    <string name="Button_Create">Create</string>
-    <string name="Button_Restore">Restore</string>
+    <string name="Button_Start">开始</string>
+    <string name="Button_Create">创建</string>
+    <string name="Button_Restore">恢复</string>
     <string name="Button_Reset">Reset</string>
     <string name="Error">出错</string>
     <string name="NotAvailable">不可用</string>
