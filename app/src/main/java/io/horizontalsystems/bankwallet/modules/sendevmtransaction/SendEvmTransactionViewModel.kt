@@ -93,16 +93,13 @@ class SendEvmTransactionViewModel(
                         coinServiceFactory.baseCoinService.amountData(transfer.value).getFormatted(), ValueType.Outgoing
                 )
         )
-        transfer.to?.let { to ->
-            val addressValue = to.eip55
-            val addressTitle = additionalInfo?.sendInfo?.domain
-                    ?: TransactionInfoAddressMapper.map(addressValue)
-            viewItems.add(ViewItem.Address(
-                    stringProvider.string(R.string.Send_Confirmation_To),
-                    addressTitle,
-                    value = addressValue)
-            )
-        }
+        val addressValue = transfer.to.eip55
+        val addressTitle = additionalInfo?.sendInfo?.domain ?: TransactionInfoAddressMapper.map(addressValue)
+        viewItems.add(ViewItem.Address(
+                stringProvider.string(R.string.Send_Confirmation_To),
+                addressTitle,
+                value = addressValue)
+        )
         return listOf(SectionViewItem(viewItems))
     }
 
