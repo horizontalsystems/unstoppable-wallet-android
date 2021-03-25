@@ -190,7 +190,7 @@ dependencies {
     implementation 'pub.devrel:easypermissions:3.0.0'
 
     // Wallet kits
-    implementation 'com.github.horizontalsystems:bitcoin-kit-android:61e35b7'
+    implementation 'com.github.horizontalsystems:bitcoin-kit-android:10d9d2c'
     implementation 'com.github.horizontalsystems:ethereum-kit-android:d5c6f59'
     implementation 'com.github.horizontalsystems:blockchain-fee-rate-kit-android:047596b'
     implementation 'com.github.horizontalsystems:binance-chain-kit-android:b9e1b11'
