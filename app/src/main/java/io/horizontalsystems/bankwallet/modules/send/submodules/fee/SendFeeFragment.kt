@@ -17,7 +17,6 @@ import io.horizontalsystems.bankwallet.ui.extensions.SelectorDialog
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorItem
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.coinkit.models.Coin
-import io.horizontalsystems.ethereumkit.api.models.ApiError
 import io.horizontalsystems.seekbar.FeeSeekBar
 import kotlinx.android.synthetic.main.view_send_fee.*
 
@@ -140,10 +139,6 @@ class SendFeeFragment(
     }
 
     private fun setError(error: Exception) {
-
-        if (error is ApiError)
-            txError.text = getString(R.string.Send_Error_WrongParameters)
-
         txError.isVisible = true
         txFeeTitle.isInvisible = true
         txFeeLoading.isVisible = false
