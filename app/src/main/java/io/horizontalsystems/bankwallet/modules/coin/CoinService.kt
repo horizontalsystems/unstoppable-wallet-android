@@ -65,7 +65,6 @@ class CoinService(
     }
 
     private val disposables = CompositeDisposable()
-    private var alertNotificationDisposable: Disposable? = null
     private var chartInfoDisposable: Disposable? = null
 
     init {
@@ -177,7 +176,7 @@ class CoinService(
     }
 
     override fun clear() {
+        chartInfoDisposable?.dispose()
         disposables.clear()
-        alertNotificationDisposable?.dispose()
     }
 }
