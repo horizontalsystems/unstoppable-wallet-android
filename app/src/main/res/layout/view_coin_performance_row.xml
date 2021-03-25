@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:parentTag="android.widget.LinearLayout">
+
+    <TextView
+        android:id="@+id/headerTextView"
+        style="@style/Caption"
+        android:layout_width="0dp"
+        android:layout_height="44dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:textColor="@color/oz"
+        tools:text="@string/CoinPage_Performance_Week" />
+
+    <View
+        android:layout_width="1dp"
+        android:layout_height="44dp"
+        android:background="@color/steel_10" />
+
+    <TextView
+        android:id="@+id/fiatTextView"
+        style="@style/Caption"
+        android:layout_width="0dp"
+        android:layout_height="44dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:textColor="@color/bran"
+        tools:text="+56,62%" />
+
+    <View
+        android:id="@+id/btcLine"
+        android:layout_width="1dp"
+        android:layout_height="44dp"
+        android:background="@color/steel_10" />
+
+    <TextView
+        android:id="@+id/btcTextView"
+        style="@style/Caption"
+        android:layout_width="0dp"
+        android:layout_height="44dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:textColor="@color/bran"
+        tools:text="- 6,62%" />
+
+    <View
+        android:id="@+id/ethLine"
+        android:layout_width="1dp"
+        android:layout_height="44dp"
+        android:background="@color/steel_10" />
+
+    <TextView
+        android:id="@+id/ethTextView"
+        style="@style/Caption"
+        android:layout_width="0dp"
+        android:layout_height="44dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:textColor="@color/bran"
+        tools:text="+56,62%" />
+
+</merge>

@@ -8,11 +8,14 @@
     android:visibility="gone"
     tools:visibility="visible">
 
-    <io.horizontalsystems.bankwallet.modules.coin.CoinPerformanceView
-        android:id="@+id/coinPerformanceView"
+    <LinearLayout
+        android:id="@+id/coinPerformanceLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -24,7 +27,7 @@
         android:layout_marginTop="12dp"
         android:orientation="vertical"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/coinPerformanceView" />
+        app:layout_constraintTop_toBottomOf="@+id/coinPerformanceLayout" />
 
     <LinearLayout
         android:id="@+id/extraPagesLayout"
