@@ -214,7 +214,7 @@ dependencies {
     implementation 'com.unstoppabledomains:resolution:1.9.1'
 
     // in case native file tor.so not loading, do full gradle clean and build.
-    implementation 'com.github.horizontalsystems:tor-kit-android:7038b2d'
+    implementation 'com.github.horizontalsystems:tor-kit-android:2f1bdeb'
 
     // UI modules
 
