@@ -277,7 +277,7 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="WalletConnect_Status_Offline">Déconnecté</string>
     <string name="WalletConnect_Status_Online">En ligne</string>
     <string name="WalletConnect_Status_Connecting">Connexion en cours…</string>
-    <string name="WalletConnect_NewConnect">Nouvelle connexion</string>
+    <string name="WalletConnect_NewConnect">New Connection</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Error_InsufficientBalance">La transaction nécessite %s pour l\'envoi</string>
     <string name="EthereumTransaction_Error_InsufficientBalanceForFee">Le solde actuel des %s est inférieur au montant requis pour traiter cette transaction, frais de transaction compris.</string>
@@ -337,7 +337,7 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="Approve_Spender">Spender</string>
     <string name="Approve_YouApprove">Vous approuvez</string>
     <!--Uniswap Info -->
-    <string name="SwapInfo_Description">Ce service d\'échange est assuré par %s, un protocole d\'échange de tokens décentralisé construit sur la blockchain %s.\n%s est entièrement automatisé et géré par des contrats intelligents qui facilitent les échanges de tokens de manière fiable sans aucune possibilité de tricher.</string>
+    <string name="SwapInfo_Description">This exchange service is powered by %s, a decentralized token exchange protocol built on %s blockchain.\n\n%s is fully automated and managed by smart contracts that facilitate token exchanges in a reliable manner without any means to cheat.</string>
     <string name="SwapInfo_DexRelated">Relatif à %s</string>
     <string name="SwapInfo_AllowanceTitle">Allocation</string>
     <string name="SwapInfo_AllowanceDescription">Le montant d\'une certaine monnaie que le service peut dépenser en votre nom lors de l\'exécution des échanges de tokens. Une allocation suffisante est requise avant que l\'opération d\'échange puisse avoir lieu</string>
@@ -633,7 +633,7 @@ Si vous changez le format d\'adresse pour %2$s , l\'historique du solde actuel e
     <string name="CoinPage_Changes1W">Changes (1W)</string>
     <string name="CoinPage_Changes1M">Changes (1M)</string>
     <string name="CoinPage_MarketCap">Market Cap</string>
-    <string name="CoinPage_DilutedMarketCap">Fully Diluted Market Cap</string>
+    <string name="CoinPage_DilutedMarketCap">Diluted MCap</string>
     <string name="CoinPage_Volume24">Volume(24h)</string>
     <string name="CoinPage_inCirculation">In Circulation</string>
     <string name="CoinPage_TotalSupply">Total Supply</string>
