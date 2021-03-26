@@ -27,7 +27,7 @@ object SwapTradeOptionsModule {
                     val addressParser = App.addressParserFactory.parser(ethereumCoin)
                     val resolutionService = AddressResolutionService(ethereumCoin.code, true)
                     val placeholder = stringProvider.string(R.string.SwapSettings_RecipientPlaceholder)
-                    RecipientAddressViewModel(service, resolutionService, addressParser, placeholder) as T
+                    RecipientAddressViewModel(service, resolutionService, addressParser, placeholder, listOf(service, resolutionService)) as T
                 }
                 else -> throw IllegalArgumentException()
             }

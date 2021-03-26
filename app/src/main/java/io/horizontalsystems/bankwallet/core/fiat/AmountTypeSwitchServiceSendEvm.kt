@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.core.fiat
 
+import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
@@ -8,7 +9,7 @@ import io.reactivex.subjects.PublishSubject
 
 class AmountTypeSwitchServiceSendEvm(
         amountType: AmountType = AmountType.Coin
-) {
+) : Clearable {
     private var disposable: Disposable? = null
     private val toggleAvailableObservables = mutableListOf<Flowable<Boolean>>()
 
@@ -61,6 +62,10 @@ class AmountTypeSwitchServiceSendEvm(
     fun add(toggleAvailableObservable: Flowable<Boolean>) {
         toggleAvailableObservables.add(toggleAvailableObservable)
         subscribeToObservables()
+    }
+
+    override fun clear() {
+        disposable?.dispose()
     }
 
     enum class AmountType {

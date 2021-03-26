@@ -78,25 +78,25 @@ object SendEvmModule {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             return when (modelClass) {
                 SendEvmViewModel::class.java -> {
-                    SendEvmViewModel(service) as T
+                    SendEvmViewModel(service, listOf(service)) as T
                 }
                 AmountInputViewModel::class.java -> {
                     val switchService = AmountTypeSwitchServiceSendEvm()
                     val fiatService = FiatServiceSendEvm(switchService, App.currencyManager, App.xRateManager)
                     switchService.add(fiatService.toggleAvailableObservable)
 
-                    AmountInputViewModel(service, fiatService, switchService) as T
+                    AmountInputViewModel(service, fiatService, switchService, clearables = listOf(service, fiatService, switchService)) as T
                 }
                 SendAvailableBalanceViewModel::class.java -> {
                     val coinService = EvmCoinService(wallet.coin, App.currencyManager, App.xRateManager)
-                    SendAvailableBalanceViewModel(service, coinService) as T
+                    SendAvailableBalanceViewModel(service, coinService, listOf(service, coinService)) as T
                 }
                 RecipientAddressViewModel::class.java -> {
                     val addressParser = App.addressParserFactory.parser(wallet.coin)
                     val resolutionService = AddressResolutionService(wallet.coin.code, true)
                     val stringProvider = StringProvider()
                     val placeholder = stringProvider.string(R.string.SwapSettings_RecipientPlaceholder)
-                    RecipientAddressViewModel(service, resolutionService, addressParser, placeholder) as T
+                    RecipientAddressViewModel(service, resolutionService, addressParser, placeholder, listOf(service, resolutionService)) as T
                 }
                 else -> throw IllegalArgumentException()
             }

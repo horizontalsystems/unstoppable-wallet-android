@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.sendevm
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.convertedError
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.Caution
@@ -10,7 +11,8 @@ import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
 
 class SendEvmViewModel(
-        val service: SendEvmService
+        val service: SendEvmService,
+        private val clearables: List<Clearable>
 ) : ViewModel() {
     private val disposable = CompositeDisposable()
 
@@ -46,4 +48,8 @@ class SendEvmViewModel(
         amountCautionLiveData.postValue(caution)
     }
 
+    override fun onCleared() {
+        clearables.forEach(Clearable::clear)
+        disposable.clear()
+    }
 }

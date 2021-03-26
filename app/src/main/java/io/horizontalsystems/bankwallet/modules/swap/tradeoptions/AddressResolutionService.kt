@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.swap.tradeoptions
 
+import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.entities.Address
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -7,7 +8,7 @@ import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 import java.util.*
 
-class AddressResolutionService(val coinCode: String, val isResolutionEnabled: Boolean = true) {
+class AddressResolutionService(val coinCode: String, val isResolutionEnabled: Boolean = true) : Clearable {
 
     val isResolvingAsync = BehaviorSubject.createDefault(false)
     val resolveFinishedAsync = BehaviorSubject.createDefault<Optional<Address>>(Optional.empty())
@@ -46,5 +47,9 @@ class AddressResolutionService(val coinCode: String, val isResolutionEnabled: Bo
                     isResolving = false
                     resolveFinishedAsync.onNext(Optional.empty())
                 })
+    }
+
+    override fun clear() {
+        disposable?.dispose()
     }
 }
