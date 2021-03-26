@@ -276,7 +276,7 @@
     <string name="WalletConnect_Status_Offline">Не доступен</string>
     <string name="WalletConnect_Status_Online">Доступен</string>
     <string name="WalletConnect_Status_Connecting">Подключение…</string>
-    <string name="WalletConnect_NewConnect">New Connection</string>
+    <string name="WalletConnect_NewConnect">Новое Подключение</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Error_InsufficientBalance">Для отправки транзакции требуется %s</string>
     <string name="EthereumTransaction_Error_InsufficientBalanceForFee">Текущий баланс %s ниже суммы, необходимой для обработки этой транзакции, включая комиссию за транзакцию.</string>
@@ -336,7 +336,7 @@
     <string name="Approve_Spender">Покупатель</string>
     <string name="Approve_YouApprove">Вы Подтверждаете</string>
     <!--Uniswap Info -->
-    <string name="SwapInfo_Description">This exchange service is powered by %s, a decentralized token exchange protocol built on %s blockchain.\n\n%s is fully automated and managed by smart contracts that facilitate token exchanges in a reliable manner without any means to cheat.</string>
+    <string name="SwapInfo_Description">Этот обменный сервис работает при поддержке %s - децентрализованного протокола обмена токенов, созданного в блокчейне %s.\n\n%s полностью автоматизирован и управляется смарт-контрактами, которые надежным способом упрощают обмен токенами без осуществления каких-либо махинаций.</string>
     <string name="SwapInfo_DexRelated">o %s</string>
     <string name="SwapInfo_AllowanceTitle">Разрешение</string>
     <string name="SwapInfo_AllowanceDescription">Сумма в некоторых валютах, которую сервис может потратить от вашего имени при выполнении обмена токенов. Может потребоваться разрешение на использование достаточной суммы перед обменом</string>
