@@ -276,7 +276,7 @@
     <string name="WalletConnect_Status_Offline">Desconectado</string>
     <string name="WalletConnect_Status_Online">En Línea</string>
     <string name="WalletConnect_Status_Connecting">Conectando…</string>
-    <string name="WalletConnect_NewConnect">New Connection</string>
+    <string name="WalletConnect_NewConnect">Nueva Conexión</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Error_InsufficientBalance">La transacción requiere %s para enviar</string>
     <string name="EthereumTransaction_Error_InsufficientBalanceForFee">El saldo actual de %s es inferior al monto requerido para procesar esta transacción, incluida la tarifa de transacción.</string>
@@ -336,7 +336,7 @@
     <string name="Approve_Spender">Gastador</string>
     <string name="Approve_YouApprove">Apruebas</string>
     <!--Uniswap Info -->
-    <string name="SwapInfo_Description">This exchange service is powered by %s, a decentralized token exchange protocol built on %s blockchain.\n\n%s is fully automated and managed by smart contracts that facilitate token exchanges in a reliable manner without any means to cheat.</string>
+    <string name="SwapInfo_Description">Este servicio de intercambio está impulsado por %s, un intercambio de token descentralizado construido en %s blockchain.\n\n%s está completamente automatizado y administrado por contratos inteligentes que facilitan los intercambios de token de una manera conflaible y sin ninguna intención para hacer estafas.</string>
     <string name="SwapInfo_DexRelated">%s Relacionado</string>
     <string name="SwapInfo_AllowanceTitle">Permiso de acceso</string>
     <string name="SwapInfo_AllowanceDescription">La cantidad de alguna moneda que el servicio puede gastar en su nombre cuando al ejecutar un intercambio de token. Se requiere una asignación suficiente antes de que se pueda realizar la acción de intercambio</string>
@@ -636,7 +636,7 @@ poner en peligro la seguridad de mis fondos.</string>
     <string name="CoinPage_Volume24">Volume (24h)</string>
     <string name="CoinPage_inCirculation">In Circulation</string>
     <string name="CoinPage_TotalSupply">Total Supply</string>
-    <string name="CoinPage_StartDate">Launch Date</string>
+    <string name="CoinPage_StartDate">Fecha de lanzamiento</string>
     <string name="CoinPage_MarketCap_Thousand">k</string>
     <string name="CoinPage_MarketCap_Million">M</string>
     <string name="CoinPage_MarketCap_Billion">B</string>
