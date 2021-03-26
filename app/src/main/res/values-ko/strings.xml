@@ -21,13 +21,13 @@
     <string name="Button_Connect">연결</string>
     <string name="Button_Reject">거절</string>
     <string name="Button_Disconnect">연결 해제</string>
-    <string name="Button_Start">Start</string>
-    <string name="Button_Create">Create</string>
-    <string name="Button_Restore">Restore</string>
+    <string name="Button_Start">시작</string>
+    <string name="Button_Create">생성하기</string>
+    <string name="Button_Restore">복구</string>
     <string name="Button_Reset">Reset</string>
     <string name="Error">오류</string>
     <string name="NotAvailable">해당 없음 </string>
-    <string name="None">None</string>
+    <string name="None">없음</string>
     <string name="Any">Any</string>
     <string name="Wallet">%s 지갑</string>
     <!--Intro-->
@@ -208,7 +208,7 @@
     <string name="Balance_Sort_Az">이름</string>
     <string name="Balance_Sort_24hPriceChange">24시간 가격 (%)</string>
     <string name="Balance_Backup_Alert">귀하께서 %s를 받기전에 %s 지갑의 백업이 필요합니다.</string>
-    <string name="Balance_NoWalletAlert">You don\’t have any wallets yet. Create new or restore existing </string>
+    <string name="Balance_NoWalletAlert">귀하께서는 아직 지갑이 없습니다. 새 생성 또는 기존 복원 해주십시오 </string>
     <!--Send-->
     <string name="Send_Title">전송 %s</string>
     <string name="Send_Hint_Address">주소 또는 도메인</string>
@@ -218,11 +218,11 @@
     <string name="Send_Button_Max">최대</string>
     <string name="Send_Confirmation_Title">확인</string>
     <string name="Send_Confirmation_Domain">도메인</string>
-    <string name="Send_Confirmation_YouSend">You Send</string>
-    <string name="Send_Confirmation_Amount">Amount</string>
-    <string name="Send_Confirmation_To">To</string>
+    <string name="Send_Confirmation_YouSend">보냅니다</string>
+    <string name="Send_Confirmation_Amount">양</string>
+    <string name="Send_Confirmation_To">에게</string>
     <string name="Send_Confirmation_Receiver">받는 사람</string>
-    <string name="Send_Confirmation_Input">Input</string>
+    <string name="Send_Confirmation_Input">입력</string>
     <string name="Send_Confirmation_EstimateTime">예상 소요시간:</string>
     <string name="Send_Confirmation_Send_Button">전송</string>
     <string name="Send_Success">\u2713 보냄</string>
