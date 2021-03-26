@@ -276,7 +276,7 @@
     <string name="WalletConnect_Status_Offline">离线</string>
     <string name="WalletConnect_Status_Online">在线</string>
     <string name="WalletConnect_Status_Connecting">正在连接...</string>
-    <string name="WalletConnect_NewConnect">新连接</string>
+    <string name="WalletConnect_NewConnect">New Connection</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Error_InsufficientBalance">交易要求%s用于发送。</string>
     <string name="EthereumTransaction_Error_InsufficientBalanceForFee">當前%s餘額低於處理此交易所需的金額，包括交易費用。</string>
@@ -336,7 +336,7 @@
     <string name="Approve_Spender">消费人</string>
     <string name="Approve_YouApprove">您批准</string>
     <!--Uniswap Info -->
-    <string name="SwapInfo_Description">此兑换服务由基于%s区块链的分散式代币兑换协议%s提供。\n%s由不存在任何欺诈手段、以可靠方式推动代币兑换的智能合约来实现完全自动化并管理。</string>
+    <string name="SwapInfo_Description">This exchange service is powered by %s, a decentralized token exchange protocol built on %s blockchain.\n\n%s is fully automated and managed by smart contracts that facilitate token exchanges in a reliable manner without any means to cheat.</string>
     <string name="SwapInfo_DexRelated">%s关联</string>
     <string name="SwapInfo_AllowanceTitle">补贴</string>
     <string name="SwapInfo_AllowanceDescription">执行代币互兑时，该服务可以代表您支出某种货币的金额。执行互兑操作之前要求具备足够的限额</string>
@@ -632,7 +632,7 @@
     <string name="CoinPage_Changes1W">Changes (1W)</string>
     <string name="CoinPage_Changes1M">Changes (1M)</string>
     <string name="CoinPage_MarketCap">Market Cap</string>
-    <string name="CoinPage_DilutedMarketCap">Fully Diluted Market Cap</string>
+    <string name="CoinPage_DilutedMarketCap">Diluted MCap</string>
     <string name="CoinPage_Volume24">Volume(24h)</string>
     <string name="CoinPage_inCirculation">In Circulation</string>
     <string name="CoinPage_TotalSupply">Total Supply</string>
