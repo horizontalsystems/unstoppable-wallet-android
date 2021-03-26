@@ -12,6 +12,7 @@ import io.horizontalsystems.coinkit.models.CoinType
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.subjects.PublishSubject
+import java.util.*
 
 class PriceAlertManager(
         appDatabase: AppDatabase,
@@ -138,10 +139,10 @@ class PriceAlertManager(
 
     companion object{
         fun getChangeSubscriptionJob(coinCode: String, value: String, subscribeType: SubscriptionJob.JobType) =
-                SubscriptionJob(coinCode, "${coinCode}_24hour_${value}percent", SubscriptionJob.StateType.Change, subscribeType)
+                SubscriptionJob(coinCode, "${coinCode.toUpperCase(Locale.ENGLISH)}_24hour_${value}percent", SubscriptionJob.StateType.Change, subscribeType)
 
         fun getTrendSubscriptionJob(coinCode: String, value: String, subscribeType: SubscriptionJob.JobType) =
-                SubscriptionJob(coinCode, "${coinCode}_${value}term_trend_change", SubscriptionJob.StateType.Trend, subscribeType)
+                SubscriptionJob(coinCode, "${coinCode.toUpperCase(Locale.ENGLISH)}_${value}term_trend_change", SubscriptionJob.StateType.Trend, subscribeType)
     }
 
 }
