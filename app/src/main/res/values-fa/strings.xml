@@ -276,7 +276,7 @@
     <string name="WalletConnect_Status_Offline">آفلاین</string>
     <string name="WalletConnect_Status_Online">آنلاین</string>
     <string name="WalletConnect_Status_Connecting">در حال اتصال…</string>
-    <string name="WalletConnect_NewConnect">اتصال جدید</string>
+    <string name="WalletConnect_NewConnect">New Connection</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Error_InsufficientBalance">تراکنش برای ارسال به %s نیاز دارد</string>
     <string name="EthereumTransaction_Error_InsufficientBalanceForFee">موجودی %s فعلی زیر مقدار مورد نیاز برای تراکنش این معامله از جمله هزینه معامله است.</string>
@@ -336,7 +336,7 @@
     <string name="Approve_Spender">خرج کننده</string>
     <string name="Approve_YouApprove">شما تایید کردید</string>
     <!--Uniswap Info -->
-    <string name="SwapInfo_Description">این سرویس مبادله توسط %s ، یک پروتکل تبادل رمز غیرمتمرکز ساخته شده بر روی زنجیره بلوکی %s تامین می شود.\n %sکاملاً خودکار است و توسط قراردادهای هوشمند مدیریت می شود که بدون هیچ راهی برای تقلب ، مبادله رمزها را به روشی مطمئن تسهیل می کند.</string>
+    <string name="SwapInfo_Description">This exchange service is powered by %s, a decentralized token exchange protocol built on %s blockchain.\n\n%s is fully automated and managed by smart contracts that facilitate token exchanges in a reliable manner without any means to cheat.</string>
     <string name="SwapInfo_DexRelated">%s مرتبط</string>
     <string name="SwapInfo_AllowanceTitle">کمک هزینه</string>
     <string name="SwapInfo_AllowanceDescription">مقدار برخی از ارزهایی که این سرویس می تواند از طرف شما هنگام اجرای مبادله رمزها خرج کند. قبل از اقدام به مبادله ، مقدار موجودی کافی لازم است</string>
@@ -631,7 +631,7 @@
     <string name="CoinPage_Changes1W">Changes (1W)</string>
     <string name="CoinPage_Changes1M">Changes (1M)</string>
     <string name="CoinPage_MarketCap">Market Cap</string>
-    <string name="CoinPage_DilutedMarketCap">Fully Diluted Market Cap</string>
+    <string name="CoinPage_DilutedMarketCap">Diluted MCap</string>
     <string name="CoinPage_Volume24">Volume (24h)</string>
     <string name="CoinPage_inCirculation">In Circulation</string>
     <string name="CoinPage_TotalSupply">Total Supply</string>
