@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.core.fiat
 
+import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.IRateManager
 import io.horizontalsystems.bankwallet.core.fiat.AmountTypeSwitchServiceSendEvm.AmountType
 import io.horizontalsystems.bankwallet.core.subscribeIO
@@ -22,7 +23,7 @@ class FiatServiceSendEvm(
         private val switchService: AmountTypeSwitchServiceSendEvm,
         private val currencyManager: ICurrencyManager,
         private val rateManager: IRateManager
-) {
+) : Clearable {
 
     private val disposable = CompositeDisposable()
     private var marketInfoDisposable: Disposable? = null
@@ -184,6 +185,9 @@ class FiatServiceSendEvm(
         sync()
     }
 
+    override fun clear() {
+        disposable.clear()
+    }
 
     sealed class PrimaryInfo {
         class Info(val amountInfo: SendModule.AmountInfo?) : PrimaryInfo()

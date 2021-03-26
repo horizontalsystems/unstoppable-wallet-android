@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.sendevm
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.fiat.AmountTypeSwitchServiceSendEvm
 import io.horizontalsystems.bankwallet.core.fiat.FiatServiceSendEvm
 import io.horizontalsystems.bankwallet.core.subscribeIO
@@ -30,7 +31,8 @@ class AmountInputViewModel(
         private val service: IAmountInputService,
         private val fiatService: FiatServiceSendEvm,
         private val switchService: AmountTypeSwitchServiceSendEvm,
-        private val isMaxSupported: Boolean = true
+        private val isMaxSupported: Boolean = true,
+        private val clearables: List<Clearable>
 ) : ViewModel() {
     private val disposable = CompositeDisposable()
 
@@ -143,6 +145,11 @@ class AmountInputViewModel(
 
     fun onSwitch() {
         switchService.toggle()
+    }
+
+    override fun onCleared() {
+        clearables.forEach(Clearable::clear)
+        disposable.clear()
     }
 
     companion object {

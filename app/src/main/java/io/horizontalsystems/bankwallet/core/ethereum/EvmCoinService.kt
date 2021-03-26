@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.core.ethereum
 
+import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.IRateManager
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
@@ -13,7 +14,7 @@ class EvmCoinService(
         val coin: Coin,
         private val currencyManager: ICurrencyManager,
         private val xRateManager: IRateManager
-) {
+) : Clearable {
 
     val rate: CurrencyValue?
         get() {
@@ -52,4 +53,5 @@ class EvmCoinService(
         return value.movePointRight(coin.decimal).toBigInteger()
     }
 
+    override fun clear() = Unit
 }

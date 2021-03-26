@@ -67,7 +67,7 @@ object SendAddressModule {
             val presenter = SendAddressPresenter(addressModuleDelete, StringProvider())
 
             val resolutionService = AddressResolutionService(coin.code, isResolutionEnabled)
-            val viewModel = RecipientAddressViewModel(presenter, resolutionService, addressParser, placeholder)
+            val viewModel = RecipientAddressViewModel(presenter, resolutionService, addressParser, placeholder, listOf(resolutionService))
 
             sendHandler.addressModule = presenter
 

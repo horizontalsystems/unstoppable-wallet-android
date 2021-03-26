@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.swap.tradeoptions
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.IAddressParser
 import io.horizontalsystems.bankwallet.core.convertedError
 import io.horizontalsystems.bankwallet.entities.Address
@@ -25,8 +26,9 @@ class RecipientAddressViewModel(
         private val service: IRecipientAddressService,
         private val resolutionService: AddressResolutionService,
         private val addressParser: IAddressParser,
-        override val inputFieldPlaceholder: String)
-    : ViewModel(), IVerifiedInputViewModel {
+        override val inputFieldPlaceholder: String,
+        private val clearables: List<Clearable>
+) : ViewModel(), IVerifiedInputViewModel {
 
     override val setTextLiveData = SingleLiveEvent<String?>()
     override val cautionLiveData = MutableLiveData<Caution?>(null)
@@ -116,6 +118,7 @@ class RecipientAddressViewModel(
     }
 
     override fun onCleared() {
-        disposables.dispose()
+        clearables.forEach(Clearable::clear)
+        disposables.clear()
     }
 }

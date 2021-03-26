@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.sendevm
 
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.ISendEthereumAdapter
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData.AdditionalInfo
@@ -20,7 +21,7 @@ import io.horizontalsystems.ethereumkit.models.Address as EvmAddress
 class SendEvmService(
         private val sendCoin: Coin,
         val adapter: ISendEthereumAdapter
-) : IAvailableBalanceService, IAmountInputService, IRecipientAddressService {
+) : IAvailableBalanceService, IAmountInputService, IRecipientAddressService, Clearable {
 
     private val stateSubject = PublishSubject.create<State>()
     var state: State = State.NotReady
@@ -147,6 +148,9 @@ class SendEvmService(
     override fun set(amount: BigDecimal) {
         //TODO
     }
+
+    override fun clear() = Unit
+
     //endregion
 
     sealed class State {
