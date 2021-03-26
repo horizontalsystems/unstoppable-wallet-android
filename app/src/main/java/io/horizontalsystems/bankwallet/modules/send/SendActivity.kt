@@ -35,6 +35,8 @@ class SendActivity : BaseActivity() {
         super.onCreate(null)
         setContentView(R.layout.activity_send)
 
+       overridePendingTransition(R.anim.slide_from_bottom, R.anim.slide_to_top)
+
         val wallet: Wallet = intent.getParcelableExtra(WALLET) ?: run { finish(); return }
 
         toolbar.title = getString(R.string.Send_Title, wallet.coin.code)
@@ -165,6 +167,12 @@ class SendActivity : BaseActivity() {
         fragments.forEach { it.init() }
 
         mainPresenter.onModulesDidLoad()
+    }
+
+    override fun finish() {
+        super.finish()
+
+        overridePendingTransition(0, R.anim.slide_to_bottom)
     }
 
     companion object {

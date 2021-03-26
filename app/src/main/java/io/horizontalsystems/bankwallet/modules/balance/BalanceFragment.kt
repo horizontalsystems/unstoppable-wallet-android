@@ -178,7 +178,7 @@ class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener, ReceiveFra
         })
 
         viewModel.openSendEvmDialog.observe(viewLifecycleOwner, { wallet ->
-            findNavController().navigate(R.id.mainFragment_to_sendEvmFragment, bundleOf(SendEvmModule.walletKey to wallet), navOptions())
+            findNavController().navigate(R.id.mainFragment_to_sendEvmFragment, bundleOf(SendEvmModule.walletKey to wallet), navOptionsFromBottom())
         })
 
         viewModel.openSwap.observe(viewLifecycleOwner, Observer { wallet ->
