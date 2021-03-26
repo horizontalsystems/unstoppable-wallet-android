@@ -208,7 +208,7 @@
     <string name="Balance_Sort_Az">İsim</string>
     <string name="Balance_Sort_24hPriceChange">24 saat Değişiklik</string>
     <string name="Balance_Backup_Alert">Öncelikle %s cüzdanınızı yedeklemeniz gerekiyor daha sonra %s kripto parasını alabilirsiniz.</string>
-    <string name="Balance_NoWalletAlert">You don\’t have any wallets yet. Create new or restore existing </string>
+    <string name="Balance_NoWalletAlert">Henüz cüzdanınız yok. Yeni oluşturun veya mevcut olanı geri yükleyin </string>
     <!--Send-->
     <string name="Send_Title">%s gönder</string>
     <string name="Send_Hint_Address">Adres veya Domain</string>
@@ -218,11 +218,11 @@
     <string name="Send_Button_Max">Azami</string>
     <string name="Send_Confirmation_Title">Onayla</string>
     <string name="Send_Confirmation_Domain">Domain</string>
-    <string name="Send_Confirmation_YouSend">You Send</string>
-    <string name="Send_Confirmation_Amount">Amount</string>
-    <string name="Send_Confirmation_To">To</string>
+    <string name="Send_Confirmation_YouSend">Gönderdiğiniz</string>
+    <string name="Send_Confirmation_Amount">Tutar</string>
+    <string name="Send_Confirmation_To">Alan</string>
     <string name="Send_Confirmation_Receiver">Fatura</string>
-    <string name="Send_Confirmation_Input">Input</string>
+    <string name="Send_Confirmation_Input">Giriş</string>
     <string name="Send_Confirmation_EstimateTime">Tahmini süre:</string>
     <string name="Send_Confirmation_Send_Button">Gönder</string>
     <string name="Send_Success">\u2713 Gönderilen</string>
@@ -261,7 +261,7 @@
     <string name="FeeInfo_Average">Ortalama</string>
     <string name="FeeInfo_AverageDescription">Tipik olarak bu ücret miktarı, işlemin Bitcoin için dakikalar / saat içinde ve Ethereum için dakikalar içinde işlenmesi için yeterli olmalıdır.</string>
     <string name="FeeInfo_Fast">Hızlı</string>
-    <string name="FeeInfo_FastDescription">For transactions where priority is important we recommend using high fee setting. It\'s expected that selecting high fee setting will be sufficient for transaction to be completed within 10 minutes for Bitcoin and within a few minutes for Ethereum.\n\nThe Unstoppable wallet makes an educated guess based on the network activity and can\'t not guarantee that the suggested fee values will always result in expected behavior.</string>
+    <string name="FeeInfo_FastDescription">Önceliğin önemli olduğu işlemler için yüksek ücret ayarını kullanmanızı öneririz. İşlemin Bitcoin için 10 dakika, Ethereum için birkaç dakika içinde tamamlanması için yüksek ücret ayarının seçilmesinin yeterli olması bekleniyor.</string>
     <!--Wallet Connect-->
     <string name="WalletConnect_Title">Wallet Connect</string>
     <string name="WalletConnect_Request">İstek</string>
@@ -276,7 +276,7 @@
     <string name="WalletConnect_Status_Offline">Çevrimdışı</string>
     <string name="WalletConnect_Status_Online">Çevrimiçi</string>
     <string name="WalletConnect_Status_Connecting">Bağlanıyor…</string>
-    <string name="WalletConnect_NewConnect">New Connection</string>
+    <string name="WalletConnect_NewConnect">Yeni bağlantı</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Error_InsufficientBalance">İşlem, göndermek için %s gerektirir</string>
     <string name="EthereumTransaction_Error_InsufficientBalanceForFee">Mevcut %s bakiyesi, işlem ücreti dahil bu işlemi gerçekleştirmek için gereken miktarın altında.</string>
@@ -325,34 +325,34 @@
     <string name="SwapSettings_Error_InvalidDeadline">Geçersiz Son Tarih</string>
     <!-- Swap Confirmation -->
     <string name="Swap_Confirmation">Onaylama</string>
-    <string name="Swap_Confirmation_Guaranteed">Guaranteed</string>
-    <string name="Swap_Confirmation_Maximum">Maximum</string>
-    <string name="Swap_Confirmation_Estimated">Estimated</string>
+    <string name="Swap_Confirmation_Guaranteed">Garanti</string>
+    <string name="Swap_Confirmation_Maximum">Maksimum</string>
+    <string name="Swap_Confirmation_Estimated">Tahmini</string>
     <!--Swap Coin Select-->
     <!--Approve-->
     <string name="Approve_Title">Takas Onayı</string>
     <string name="Approve_Info">Verilen jetonu sizin adınıza swap yapmak için bir akıllı sözleşmeye izin vermelisiniz. Bu izin, akıllı sözleşme tarafından kullanılabilecek tutarı belirler. Bakiyenizi etkilemez ancak onay işlemini gerçekleştirmek için küçük bir ücret gerekir.\n\nHer alım satımdan önce talep üzerine yapılabilirken, ileriki alım satımlarda bizim için önceden daha yüksek tutarı onaylamanız durumunda çok daha ucuz olur.</string>
     <string name="Approve_Error_AlreadyApproved">Bu miktar için zaten bir ödeneğiniz var</string>
-    <string name="Approve_Spender">Spender</string>
-    <string name="Approve_YouApprove">You Approve</string>
+    <string name="Approve_Spender">Harcayan</string>
+    <string name="Approve_YouApprove">Sen Onaylıyorsun</string>
     <!--Uniswap Info -->
-    <string name="SwapInfo_Description">This exchange service is powered by %s, a decentralized token exchange protocol built on %s blockchain.\n\n%s is fully automated and managed by smart contracts that facilitate token exchanges in a reliable manner without any means to cheat.</string>
-    <string name="SwapInfo_DexRelated">%s Related</string>
-    <string name="SwapInfo_AllowanceTitle">Allowance</string>
-    <string name="SwapInfo_AllowanceDescription">The amount of some currency that service can spend on your behalf when executing token swaps. Sufficient allowance is required before swap action can take place</string>
-    <string name="SwapInfo_PriceImpactTitle">Price Impact</string>
-    <string name="SwapInfo_PriceImpactDescription">Expected price deviation from a shown price, typically increases with the swap amount.</string>
-    <string name="SwapInfo_SwapFeeTitle">Swap Fee</string>
-    <string name="SwapInfo_SwapFeeDescription">A service fee for the swap action on platform, shown in the currency the user sells. For most orders it should be either 0.3 % or 0.6 %.</string>
-    <string name="SwapInfo_GuaranteedAmountTitle">Guaranteed Amount</string>
-    <string name="SwapInfo_GuaranteedAmountDescription">The minimum amount a user is going to receive as a result of a swap action.</string>
-    <string name="SwapInfo_MaxSpendTitle">Maximum Spend</string>
-    <string name="SwapInfo_MaxSpendDescription">The maximum amount a user is going to spend as a result of a swap action.</string>
-    <string name="SwapInfo_Other">Other</string>
-    <string name="SwapInfo_TransactionFeeTitle">Transaction Fee</string>
-    <string name="SwapInfo_TransactionFeeDescription">The estimated processing cost of the given transaction on %s blockchain. %s related transactions will typically cost more than generic token transfer transactions.</string>
-    <string name="SwapInfo_TransactionSpeedTitle">Transaction Speed</string>
-    <string name="SwapInfo_TransactionSpeedDescription">Transactions with higher transaction fee will result in faster processing speeds. The opposite is true as well.</string>
+    <string name="SwapInfo_Description">Bu takas etme hizmeti, %s blok zinciri üzerine inşa edilmiş ve merkezi olmayan jeton takas etme protokolü olan %s tarafından desteklenmektedir.\n\n%s, tamamen otomatiktir ve hile yapmadan jeton takaslarını güvenilir bir şekilde kolaylaştıran akıllı sözleşmelerle yönetilir.</string>
+    <string name="SwapInfo_DexRelated">%s</string>
+    <string name="SwapInfo_AllowanceTitle">Ödenek</string>
+    <string name="SwapInfo_AllowanceDescription">Uniswap\'ın jeton swaplarını gerçekleştirirken sizin adınıza harcayabileceği bazı para birimlerindeki tutar. Swap işleminin gerçekleşebilmesi için yeterli ödeme miktarı gereklidir</string>
+    <string name="SwapInfo_PriceImpactTitle">Fiyat Etkisi</string>
+    <string name="SwapInfo_PriceImpactDescription">Gösterilen bir fiyattan beklenen fiyat sapması, tipik olarak swap tutarı ile artar.</string>
+    <string name="SwapInfo_SwapFeeTitle">Swap Ücreti</string>
+    <string name="SwapInfo_SwapFeeDescription">Uniswap platformunda swap işlemi için kullanıcının sattığı para biriminde gösterilen bir hizmet ücreti. Çoğu talimatlar için % 0.3 veya % 0.6 olmalıdır.</string>
+    <string name="SwapInfo_GuaranteedAmountTitle">Garantili Tutar</string>
+    <string name="SwapInfo_GuaranteedAmountDescription">Bir swap işlemi sonucunda bir kullanıcının alacağı minimum tutar.</string>
+    <string name="SwapInfo_MaxSpendTitle">Maksimum Harcama</string>
+    <string name="SwapInfo_MaxSpendDescription">Bir swap işlemi sonucunda bir kullanıcının harcayacağı maksimum tutar.</string>
+    <string name="SwapInfo_Other">Diğer</string>
+    <string name="SwapInfo_TransactionFeeTitle">İşlem Ücreti</string>
+    <string name="SwapInfo_TransactionFeeDescription">%s blok zincirinde verilen işlemin tahmini işleme maliyeti. %s bağlantılı işlemler genellikle eşdeğer jeton transfer işlemlerinden daha pahalı olur.</string>
+    <string name="SwapInfo_TransactionSpeedTitle">İşlem hızı</string>
+    <string name="SwapInfo_TransactionSpeedDescription">Daha yüksek işlem ücretli işlemler, daha hızlı işleme hızlarıyla sonuçlanacaktır. Elbette bunun tersi de doğrudur.</string>
     <string name="SwapInfo_Site">%s Site</string>
     <!--Deposit-->
     <string name="Deposit_Title">%s al</string>
@@ -387,11 +387,11 @@
     <string name="TransactionInfo_Input">Giriş</string>
     <string name="TransactionInfo_ButtonViewOnExplorerName">View on %s</string>
     <string name="StatusInfo_Pending">Devam ediyor</string>
-    <string name="StatusInfo_SendingReceiving">Sending/Receiving</string>
+    <string name="StatusInfo_SendingReceiving">Gönderme / Alma</string>
     <string name="StatusInfo_Confirmed">Onaylandı</string>
     <string name="StatusInfo_Failed">Başarısız</string>
     <string name="StatusInfo_PendingDescription">İşlem blok zincirinde henüz onaylanmadı. Bu adım, işlem ücretine bağlı olarak birkaç dakikadan birkaç saate kadar sürebilir. Çok düşük bir ücretle gönderilen işlemler genellikle birkaç gün içinde işleme alınır ya da ağ tarafından reddedilebilir, yani hiçbir işlem gerçekleşmez.</string>
-    <string name="StatusInfo_SendingReceivingDescription">Transaction has been included in the blockchain but has not reached finality yet. At this point, it\'s safe to consider transaction completed for smaller payments. For larger payments it\'s recommended to wait until the status changes to completed.</string>
+    <string name="StatusInfo_SendingReceivingDescription">İşlem blok zincirine dahil edildi, ancak henüz kalıcı bir kesinliğe ulaşmadı. Bu noktada, daha küçük ödemeler için işlemin tamamlandığını düşünmek güvenlidir. Daha büyük ödemeler için, durum tamamlanana kadar beklemeniz önerilir.</string>
     <string name="StatusInfo_ConfirmedDescription">İşlem sonlandı ve geri alınamaz.</string>
     <string name="StatusInfo_FailedDescription">İşlem amaçlandığı gibi işlenmedi ve token değeri aktarımı gerçekleşmedi. Ethereum blok zincirinde başarısız işlemler, işlem ücretlerini tüketir.</string>
     <!-- Info -->
@@ -548,7 +548,7 @@
     <string name="AddTokenDialog_Title">Blockchain Seç</string>
     <string name="AddTokenDialog_Subtitle">Token Ekle</string>
     <string name="AddTokenDialog_Erc20Tokens">ERC20 tokenleri</string>
-    <string name="AddTokenDialog_Bep20Tokens">BEP20 Tokens</string>
+    <string name="AddTokenDialog_Bep20Tokens">BEP20 Token</string>
     <string name="AddTokenDialog_BinanceTokens">BEP2 tokenleri</string>
     <!-- Enable Token -->
     <string name="EnalbeToken_Title">Kripto Paraları Etkinleştir</string>
@@ -568,7 +568,7 @@
     <string name="AddEvmToken_ContractNotFound">Sözleşme bulunamadı</string>
     <string name="AddEvmToken_ContractAddressHint">Sözleşme Adresi</string>
     <string name="AddErc20Token_Title">ERC20 Ekle</string>
-    <string name="AddBep20Token_Title">Add BEP20</string>
+    <string name="AddBep20Token_Title">BEP20 Ekle</string>
     <!-- Add Bep2 Token -->
     <string name="AddBep2Token_Title">BEP2 Ekle</string>
     <string name="AddBep2Token_TokenSymbolHint">Token Sembolü</string>
@@ -641,7 +641,7 @@
     <string name="CoinPage_MarketCap_Billion">B</string>
     <string name="CoinPage_MarketCap_Trillion">T</string>
     <string name="CoinPage_Volume">Vol</string>
-    <string name="CoinPage_Error_NotAvailable">Chart not available</string>
+    <string name="CoinPage_Error_NotAvailable">Grafik yok</string>
     <string name="CoinPage_LatestNews">Latest News</string>
     <string name="CoinPage_Favorite">Favorite</string>
     <string name="CoinPage_Unfavorite">Unfavorite</string>
