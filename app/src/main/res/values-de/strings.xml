@@ -276,7 +276,7 @@
     <string name="WalletConnect_Status_Offline">Offline</string>
     <string name="WalletConnect_Status_Online">Online</string>
     <string name="WalletConnect_Status_Connecting">Verbinde…</string>
-    <string name="WalletConnect_NewConnect">New Connection</string>
+    <string name="WalletConnect_NewConnect">Neue Verbindung</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Error_InsufficientBalance">Die Transaktion erfordert %s zum Senden</string>
     <string name="EthereumTransaction_Error_InsufficientBalanceForFee">Das aktuelle %s-Guthaben liegt unter dem für die Abwicklung dieser Transaktion erforderlichen Betrag einschließlich der Transaktionsgebühr.</string>
@@ -336,7 +336,7 @@
     <string name="Approve_Spender">Spender</string>
     <string name="Approve_YouApprove">Sie genehmigen</string>
     <!--Uniswap Info -->
-    <string name="SwapInfo_Description">This exchange service is powered by %s, a decentralized token exchange protocol built on %s blockchain.\n\n%s is fully automated and managed by smart contracts that facilitate token exchanges in a reliable manner without any means to cheat.</string>
+    <string name="SwapInfo_Description">Dieser Tauschdienst wird von %s betrieben, einem dezentralen Token-Tauschprotokoll, das auf der %s Blockchain basiert.\n\n%s ist vollständig automatisiert und wird von intelligenten Verträgen verwaltet, die den Token-Tausch in einer zuverlässigen Art und Weise ermöglichen, ohne dass Betrug betrieben werden kann.</string>
     <string name="SwapInfo_DexRelated">%s zugehörige</string>
     <string name="SwapInfo_AllowanceTitle">Vergütung</string>
     <string name="SwapInfo_AllowanceDescription">Der Betrag einer Währung, den der Dienst in Ihrem Namen ausgeben kann, wenn er Token-Täusche ausführt. Ein ausreichender Betrag ist erforderlich, bevor eine Tauschaktion stattfinden kann</string>
