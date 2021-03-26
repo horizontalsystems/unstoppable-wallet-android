@@ -8,6 +8,7 @@ import android.view.animation.AnimationUtils
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.core.helpers.KeyboardHelper
 import kotlinx.android.synthetic.main.view_input_amount.view.*
 
 class AmountInputView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
@@ -75,12 +76,12 @@ class AmountInputView @JvmOverloads constructor(context: Context, attrs: Attribu
         topAmountPrefix.isVisible = prefix?.isNotBlank() ?: false
     }
 
-    fun setSecondaryText(text: String?){
+    fun setSecondaryText(text: String?) {
         txtHintInfo.text = text
     }
 
-    fun setFocus(){
-        editTxtAmount.requestFocus()
+    fun setFocus() {
+        KeyboardHelper.showKeyboard(context, editTxtAmount)
     }
 
     fun revertAmount(amount: String?) {
@@ -91,7 +92,7 @@ class AmountInputView @JvmOverloads constructor(context: Context, attrs: Attribu
         editTxtAmount.startAnimation(shake)
     }
 
-    fun setSecondaryEnabled(enabled: Boolean){
+    fun setSecondaryEnabled(enabled: Boolean) {
         secondaryArea.isEnabled = enabled
         context?.let { ctx ->
             val color = if (enabled) R.color.bran else R.color.grey_50
