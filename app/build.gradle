@@ -190,12 +190,11 @@ dependencies {
     implementation 'pub.devrel:easypermissions:3.0.0'
 
     // Wallet kits
-    implementation 'com.github.horizontalsystems:bitcoin-kit-android:ae78efd'
-    implementation 'com.github.horizontalsystems:ethereum-kit-android:396b0de'
-    implementation 'com.github.horizontalsystems:blockchain-fee-rate-kit-android:a8efc26'
+    implementation 'com.github.horizontalsystems:bitcoin-kit-android:10d9d2c'
+    implementation 'com.github.horizontalsystems:ethereum-kit-android:419fd59'
+    implementation 'com.github.horizontalsystems:blockchain-fee-rate-kit-android:047596b'
     implementation 'com.github.horizontalsystems:binance-chain-kit-android:b9e1b11'
-    implementation 'com.github.horizontalsystems:xrates-kit-android:4d335e1'
-    implementation 'com.github.horizontalsystems:coin-kit-android:ddd2c49'
+    implementation 'com.github.horizontalsystems:xrates-kit-android:ad10926'
 
 
     //Zcash SDK
@@ -215,7 +214,7 @@ dependencies {
     implementation 'com.unstoppabledomains:resolution:1.9.1'
 
     // in case native file tor.so not loading, do full gradle clean and build.
-    implementation 'com.github.horizontalsystems:tor-kit-android:7038b2d'
+    implementation 'com.github.horizontalsystems:tor-kit-android:2f1bdeb'
 
     // UI modules
 

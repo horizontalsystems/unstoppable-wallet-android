@@ -15,6 +15,9 @@ import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.entities.AppVersion
 import io.horizontalsystems.core.entities.Currency
+import io.horizontalsystems.ethereumkit.core.EthereumKit
+import io.horizontalsystems.ethereumkit.models.Address
+import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.xrateskit.entities.*
 import io.reactivex.Flowable
 import io.reactivex.Observable
@@ -205,6 +208,7 @@ interface ISendDashAdapter {
 }
 
 interface ISendEthereumAdapter {
+    val evmKit: EthereumKit
     val balance: BigDecimal
     val ethereumBalance: BigDecimal
     val minimumRequiredBalance: BigDecimal
@@ -215,7 +219,7 @@ interface ISendEthereumAdapter {
     fun validate(address: String)
     fun send(amount: BigDecimal, address: String, gasPrice: Long, gasLimit: Long, logger: AppLogger): Single<Unit>
     fun estimateGasLimit(toAddress: String?, value: BigDecimal, gasPrice: Long?): Single<Long>
-
+    fun getTransactionData(amount: BigInteger, address: Address): TransactionData
 }
 
 interface ISendBinanceAdapter {
@@ -264,14 +268,15 @@ interface IAppConfigProvider {
     val maxDecimal: Int
     val feeRateAdjustForCurrencies: List<String>
     val currencies: List<Currency>
+    val featuredCoinTypes: List<CoinType>
 }
 
 interface IRateManager {
     fun set(coins: List<Coin>)
-    fun marketInfo(coinType: CoinType, currencyCode: String): MarketInfo?
+    fun latestRate(coinType: CoinType, currencyCode: String): LatestRate?
     fun getLatestRate(coinType: CoinType, currencyCode: String): BigDecimal?
-    fun marketInfoObservable(coinType: CoinType, currencyCode: String): Observable<MarketInfo>
-    fun marketInfoObservable(currencyCode: String): Observable<Map<CoinType, MarketInfo>>
+    fun latestRateObservable(coinType: CoinType, currencyCode: String): Observable<LatestRate>
+    fun latestRateObservable(currencyCode: String): Observable<Map<CoinType, LatestRate>>
     fun historicalRateCached(coinType: CoinType, currencyCode: String, timestamp: Long): BigDecimal?
     fun historicalRate(coinType: CoinType, currencyCode: String, timestamp: Long): Single<BigDecimal>
     fun chartInfo(coinType: CoinType, currencyCode: String, chartType: ChartType): ChartInfo?
@@ -284,6 +289,7 @@ interface IRateManager {
     fun getCoinRatingsAsync(): Single<Map<CoinType, String>>
     fun getGlobalMarketInfoAsync(currency: String): Single<GlobalCoinMarket>
     fun searchCoins(searchText: String): List<CoinData>
+    fun getNotificationCoinCode(coinType: CoinType): String?
     fun refresh()
 }
 
@@ -411,7 +417,7 @@ interface IRateAppManager {
 interface ICoinManager {
     val coinAddedObservable: Flowable<Coin>
     val coins: List<Coin>
-    val featuredCoins: List<Coin>
+    val groupedCoins: Pair<List<Coin>, List<Coin>>
     fun getCoin(coinType: CoinType): Coin?
     fun save(coin: Coin)
 }
@@ -425,9 +431,11 @@ interface IAddTokenBlockchainService {
 
 interface IPriceAlertManager {
     val notificationChangedFlowable: Flowable<Unit>
+    fun notificationCode(coinType: CoinType): String?
     fun getPriceAlerts(): List<PriceAlert>
-    fun savePriceAlert(priceAlert: PriceAlert)
-    fun getPriceAlert(coinId: String): PriceAlert
+    fun savePriceAlert(coinType: CoinType, coinName: String, changeState: PriceAlert.ChangeState, trendState: PriceAlert.TrendState)
+    fun getAlertStates(coinType: CoinType): Pair<PriceAlert.ChangeState, PriceAlert.TrendState>
+    fun hasPriceAlert(coinType: CoinType): Boolean
     fun deactivateAllNotifications()
     fun enablePriceAlerts()
     fun disablePriceAlerts()

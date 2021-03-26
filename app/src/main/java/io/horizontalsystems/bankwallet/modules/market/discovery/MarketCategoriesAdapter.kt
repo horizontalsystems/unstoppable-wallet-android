@@ -47,13 +47,15 @@ class MarketCategoriesAdapter(
         tabLayout.addOnTabSelectedListener(this)
     }
 
-    fun selectCategory(category: MarketCategory?, isInitial: Boolean = false) {
+    fun selectCategory(category: MarketCategory?) {
         val tabIndex = marketCategories.indexOf(category)
         val tabToBeSelected = tabLayout.getTabAt(tabIndex)
         tabLayout.selectTab(tabToBeSelected)
 
-        if (isInitial) {
-            tabToBeSelected?.let { onTabSelected(it, isInitial = true) }
+        if (tabToBeSelected != null) {
+            onTabSelected(tabToBeSelected, true)
+        } else {
+            listener.onSelect(null)
         }
     }
 
@@ -81,7 +83,7 @@ class MarketCategoriesAdapter(
     }
 
     override fun onTabSelected(tab: TabLayout.Tab) {
-        onTabSelected(tab, isInitial = false)
+        onTabSelected(tab, false)
     }
 
     override fun onTabUnselected(tab: TabLayout.Tab) {
@@ -134,10 +136,10 @@ class MarketCategoriesAdapter(
         if (isInitial) {
             // This trick needed to avoid initial animation when restoring fragment
             titleTextView.isInvisible = true
-            titleTextView.post {
+            titleTextView.postDelayed({
                 titleTextView.translationY = topBorder.y - titleTextView.y
                 titleTextView.isInvisible = false
-            }
+            }, 250)
             return
         }
 

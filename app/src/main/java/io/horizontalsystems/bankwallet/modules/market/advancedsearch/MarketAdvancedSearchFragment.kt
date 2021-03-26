@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
@@ -27,10 +28,13 @@ class MarketAdvancedSearchFragment : BaseFragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        toolbar.setNavigationOnClickListener {
+            findNavController().popBackStack()
+        }
         toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
-                R.id.menuClose -> {
-                    findNavController().popBackStack()
+                R.id.menuReset -> {
+                    marketAdvancedSearchViewModel.reset()
                     true
                 }
                 else -> false
@@ -85,22 +89,6 @@ class MarketAdvancedSearchFragment : BaseFragment() {
             }
         }
 
-        marketAdvancedSearchViewModel.liquidityViewItemLiveData.observe(viewLifecycleOwner) {
-            filterLiquidity.setValueColored(it.title, it.color)
-        }
-        filterLiquidity.setOnSingleClickListener {
-            showSelectorDialog(
-                    title = R.string.Market_Filter_Liquidity,
-                    subtitleText = getString(R.string.TimePeriod_24h),
-                    headerIcon = R.drawable.ic_circle_check_24,
-                    items = marketAdvancedSearchViewModel.liquidityViewItemOptions,
-                    selectedItem = marketAdvancedSearchViewModel.liquidityViewItem,
-                    itemViewHolderFactory = SelectorItemViewHolderFactory()
-            ) {
-                marketAdvancedSearchViewModel.liquidityViewItem = it
-            }
-        }
-
         marketAdvancedSearchViewModel.periodViewItemLiveData.observe(viewLifecycleOwner) {
             filterPeriod.setValueColored(it.title, it.color)
         }
@@ -133,19 +121,12 @@ class MarketAdvancedSearchFragment : BaseFragment() {
             }
         }
 
-        reset.setOnSingleClickListener {
-            marketAdvancedSearchViewModel.reset()
-        }
-
         submit.setOnSingleClickListener {
             findNavController().navigate(R.id.marketAdvancedSearchFragment_to_marketAdvancedSearchFragmentResults, null, navOptions())
         }
 
-        marketAdvancedSearchViewModel.numberOfItemsLiveData.observe(viewLifecycleOwner) {
-            submit.text = when (it) {
-                null -> getString(R.string.Market_Filter_ShowResults)
-                else -> getString(R.string.Market_Filter_ShowResults_Counter, it)
-            }
+        marketAdvancedSearchViewModel.showResultsTitleLiveData.observe(viewLifecycleOwner) {
+            submit.text = it
         }
 
         marketAdvancedSearchViewModel.showResultsEnabledLiveData.observe(viewLifecycleOwner) {
@@ -154,6 +135,10 @@ class MarketAdvancedSearchFragment : BaseFragment() {
 
         marketAdvancedSearchViewModel.errorLiveEvent.observe(viewLifecycleOwner) {
             HudHelper.showErrorMessage(requireView(), it)
+        }
+
+        marketAdvancedSearchViewModel.loadingLiveData.observe(viewLifecycleOwner) {
+            progressBar.isVisible = it
         }
     }
 

@@ -336,24 +336,27 @@
     <string name="Approve_Spender">Gastador</string>
     <string name="Approve_YouApprove">Apruebas</string>
     <!--Uniswap Info -->
-    <string name="SwapInfo_Description">Este servicio de intercambio está impulsado por %s, un intercambio de token descentralizado construido en %s blockchain.\n\n%s está completamente automatizado y administrado por contratos inteligentes que facilitan los intercambios de token de una manera conflaible y sin ninguna intención para hacer estafas.</string>
-    <string name="SwapInfo_DexRelated">%s Relacionado</string>
+
+    <string name="SwapInfo_Title">Uniswap v.2</string>
+    <string name="SwapInfo_Description">Este servicio de intercambio está propulsado por Uniswap, un protocolo descentralizado de intercambio de tokens construido en blockchain de Ethereum.\n\nUniswap está completamente automatizado y gestionado por contratos inteligentes que facilitan el intercambio de tokens de una manera fiable sin ninguna intención para hacer estafas.</string>
+    <string name="SwapInfo_DexRelated">Uniswap Relacionado</string>
     <string name="SwapInfo_AllowanceTitle">Permiso de acceso</string>
-    <string name="SwapInfo_AllowanceDescription">La cantidad de alguna moneda que el servicio puede gastar en su nombre cuando al ejecutar un intercambio de token. Se requiere una asignación suficiente antes de que se pueda realizar la acción de intercambio</string>
+    <string name="SwapInfo_AllowanceDescription">La cantidad de alguna moneda que Uniswap puede gastar en su nombre al ejecutar swaps de token. Se requiere una asignación suficiente antes de que se pueda realizar la acción de intercambio</string>
     <string name="SwapInfo_PriceImpactTitle">Impacto en el precio</string>
     <string name="SwapInfo_PriceImpactDescription">Desviación de precio esperada de un valor mostrado, normalmente aumenta con la cantidad de swap.</string>
     <string name="SwapInfo_SwapFeeTitle">Tarifa por permutar</string>
-    <string name="SwapInfo_SwapFeeDescription">Una tarifa de servicio para la acción de intercambio en la plataforma, mostrada en la moneda que el usuario vende. Para la mayoría de las ordenes debería ser del 0.3% o del 0.6%.</string>
+    <string name="SwapInfo_SwapFeeDescription">Una tarifa de servicio para la acción de intercambio en la plataforma Uniswap, mostrada en la moneda que vende el usuario. Para la mayoría de los pedidos debe ser del 0, 3 % o del 0, 6 %.</string>
     <string name="SwapInfo_GuaranteedAmountTitle">Cantidad Garantizada</string>
     <string name="SwapInfo_GuaranteedAmountDescription">La cantidad mínima que un usuario va a recibir como resultado de una acción de intercambio.</string>
     <string name="SwapInfo_MaxSpendTitle">Gasto máximo</string>
     <string name="SwapInfo_MaxSpendDescription">La cantidad mínima que un usuario va a recibir como resultado de una acción de intercambio.</string>
     <string name="SwapInfo_Other">Otro</string>
     <string name="SwapInfo_TransactionFeeTitle">Tarifa de Transacción</string>
-    <string name="SwapInfo_TransactionFeeDescription">El costo estimado del proceso de la transacción dada en la %s blockchain. %s Las Transacciones Relacionadas normalmente costarán más que las transacciones genéricas de de token.</string>
+
+    <string name="SwapInfo_TransactionFeeDescription">El costo estimado de procesamiento de la transacción dada en la blockchain de Ethereum. Las transacciones relacionadas con Uniswap normalmente costarán más que las transacciones genéricas de transferencia de token.</string>
     <string name="SwapInfo_TransactionSpeedTitle">Velocidad de transacción</string>
     <string name="SwapInfo_TransactionSpeedDescription">Las transacciones con una tarifa de transacción más alta darán como resultado velocidades de procesamiento más rápidas. Lo opuesto también.</string>
-    <string name="SwapInfo_Site">%s Sitio</string>
+    <string name="SwapInfo_Site">Website de Uniswap</string>
     <!--Deposit-->
     <string name="Deposit_Title">Recibir %s</string>
     <string name="Deposit_Share">Compartir</string>
@@ -605,6 +608,7 @@ poner en peligro la seguridad de mis fondos.</string>
     <string name="CoinOption_bip84_Subtitle">Más nuevo (comenzar con %s...)</string>
     <!--Coin Page-->
     <string name="CoinPage_TimeDuration_Today">TDY</string>
+
     <string name="CoinPage_TimeDuration_Day">24H</string>
     <string name="CoinPage_TimeDuration_Week">7D</string>
     <string name="CoinPage_TimeDuration_Month">1M</string>
@@ -637,6 +641,7 @@ poner en peligro la seguridad de mis fondos.</string>
     <string name="CoinPage_inCirculation">In Circulation</string>
     <string name="CoinPage_TotalSupply">Total Supply</string>
     <string name="CoinPage_StartDate">Fecha de lanzamiento</string>
+
     <string name="CoinPage_MarketCap_Thousand">k</string>
     <string name="CoinPage_MarketCap_Million">M</string>
     <string name="CoinPage_MarketCap_Billion">B</string>
@@ -650,6 +655,7 @@ poner en peligro la seguridad de mis fondos.</string>
     <string name="CoinPage_Performance_Month">1 Month</string>
     <string name="CoinPage_ReadMore">Read More</string>
     <string name="CoinPage_ReadLess">Read Less</string>
+
     <!--Rate list-->
     <string name="RateList_portfolio">Cartera</string>
     <string name="RateList_top100">Top 100</string>

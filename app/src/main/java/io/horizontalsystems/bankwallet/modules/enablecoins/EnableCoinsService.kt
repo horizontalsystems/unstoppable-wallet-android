@@ -1,13 +1,13 @@
 package io.horizontalsystems.bankwallet.modules.enablecoins
 
 import io.horizontalsystems.bankwallet.core.ICoinManager
+import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.IBuildConfigProvider
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 
@@ -68,63 +68,73 @@ class EnableCoinsService(
     private fun fetchBep20Tokens(words: List<String>) {
         val address = EthereumKit.address(words, EthereumKit.NetworkType.BscMainNet)
 
-        bep20Provider.tokens(address.hex)
-                .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.io())
-                .subscribe({ coins ->
-                    handleReceivedCoins(coins)
+        bep20Provider.getTokenAddressesAsync(address.hex)
+                .subscribeIO({ coins ->
+                    handleFetchBep20(coins)
                 }, {
                     state = State.Failure(it)
                 })
                 .let { disposables.add(it) }
+    }
 
+    private fun handleFetchBep20(addresses: List<String>) {
+        val allCoins = coinManager.coins
+
+        val coins = addresses.mapNotNull { address ->
+            allCoins.firstOrNull { it.type is CoinType.Bep20 && (it.type as CoinType.Bep20).address.equals(address, ignoreCase = true) }
+        }
+
+        state = State.Success(coins)
+        enableCoinsAsync.onNext(coins)
     }
 
     private fun fetchErc20Tokens(words: List<String>) {
         val networkType = if (testMode) EthereumKit.NetworkType.EthRopsten else EthereumKit.NetworkType.EthMainNet
         val address = EthereumKit.address(words, networkType)
 
-        ethereumProvider.tokens(address.hex)
-                .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.io())
-                .subscribe({ coins ->
-                    handleReceivedCoins(coins)
+        ethereumProvider.getTokenAddressesAsync(address.hex)
+                .subscribeIO({ tokenAddresses ->
+                    handleFetchErc20(tokenAddresses)
                 }, {
                     state = State.Failure(it)
                 })
                 .let { disposables.add(it) }
+    }
+
+    private fun handleFetchErc20(addresses: List<String>) {
+        val allCoins = coinManager.coins
+
+        val coins = addresses.mapNotNull { address ->
+            allCoins.firstOrNull { it.type is CoinType.Erc20 && (it.type as CoinType.Erc20).address.equals(address, ignoreCase = true) }
+        }
+
+        state = State.Success(coins)
+        enableCoinsAsync.onNext(coins)
     }
 
     private fun fetchBep2Tokens(words: List<String>) {
-        bep2Provider.getCoinsAsync(words)
-                .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.io())
-                .subscribe({ coins ->
-                    handleReceivedCoins(coins)
+        bep2Provider.getTokenSymbolsAsync(words)
+                .subscribeIO({ coins ->
+                    handleFetchBep2(coins)
                 }, {
                     state = State.Failure(it)
                 })
                 .let { disposables.add(it) }
     }
 
-    private fun handleReceivedCoins(fetchedCoins: List<Coin>) {
-        val listedTokens = mutableListOf<Coin>()
-        val nonListedTokens = mutableListOf<Coin>()
+    private fun handleFetchBep2(tokenSymbols: List<String>) {
+        val allCoins = coinManager.coins
 
-        fetchedCoins.forEach { coin ->
-            coinManager.getCoin(coin.type)?.let { listedCoin ->
-                listedTokens.add(listedCoin)
-            } ?: kotlin.run {
-                nonListedTokens.add(coin)
+        val coins = tokenSymbols.mapNotNull { symbol ->
+            if (symbol.equals("BNB", ignoreCase = true)) {
+                allCoins.firstOrNull { it.type is CoinType.Bep2 && (it.type as CoinType.Bep2).symbol.equals(symbol, ignoreCase = true) }
+            } else {
+                null
             }
         }
 
-        nonListedTokens.forEach {
-            coinManager.save(it)
-        }
-
-        state = State.Success(listedTokens + nonListedTokens)
-        enableCoinsAsync.onNext(listedTokens + nonListedTokens)
+        state = State.Success(coins)
+        enableCoinsAsync.onNext(coins)
     }
 
     sealed class State {

@@ -6,7 +6,7 @@ import io.horizontalsystems.bankwallet.core.managers.BinanceSmartChainKitManager
 import io.horizontalsystems.bankwallet.core.managers.EthereumKitManager
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
-import io.horizontalsystems.coinkit.models.Coin
+import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.ISystemInfoManager
 import java.util.*
 import kotlin.collections.LinkedHashMap
@@ -91,20 +91,16 @@ class AppStatusService(
 
     private fun getBitcoinForkStatuses(): Map<String, Any> {
         val bitcoinChainStatus = LinkedHashMap<String, Any>()
-        val coinIdsToDisplay = listOf("BTC", "BCH", "DASH", "LTC")
+        val coinTypesToDisplay = listOf(CoinType.Bitcoin, CoinType.BitcoinCash, CoinType.Dash, CoinType.Litecoin)
 
-        for (coinId in coinIdsToDisplay) {
-            val coin = getCoin(coinId)
-            val wallet = walletManager.wallet(coin) ?: continue
-            val adapter = adapterManager.getAdapterForWallet(wallet) as? BitcoinBaseAdapter
-                    ?: continue
-            bitcoinChainStatus[coin.title] = adapter.statusInfo
+        coinTypesToDisplay.forEach { coinType ->
+            walletManager.wallets.firstOrNull { it.coin.type == coinType }?.let { wallet ->
+                (adapterManager.getAdapterForWallet(wallet) as? BitcoinBaseAdapter)?.let { adapter ->
+                    bitcoinChainStatus[wallet.coin.title] = adapter.statusInfo
+                }
+            }
         }
         return bitcoinChainStatus
-    }
-
-    private fun getCoin(coinId: String): Coin {
-        return coinManager.coins.first { it.id == coinId }
     }
 
 }

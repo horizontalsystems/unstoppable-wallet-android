@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.swap.tradeoptions
 
 import android.util.Range
+import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.ISwapTradeOptionsService.*
 import io.reactivex.Observable
@@ -8,7 +9,7 @@ import io.reactivex.subjects.BehaviorSubject
 import java.math.BigDecimal
 import io.horizontalsystems.ethereumkit.models.Address as EthAddress
 
-class SwapTradeOptionsService(tradeOptions: SwapTradeOptions) : IRecipientAddressService {
+class SwapTradeOptionsService(tradeOptions: SwapTradeOptions) : IRecipientAddressService, Clearable {
 
     var state: State = State.Valid(tradeOptions)
         private set(value) {
@@ -111,6 +112,8 @@ class SwapTradeOptionsService(tradeOptions: SwapTradeOptions) : IRecipientAddres
 
     override fun set(amount: BigDecimal) {
     }
+
+    override fun clear() = Unit
 
     companion object {
         val recommendedSlippageBounds = Range(BigDecimal("0.1"), BigDecimal("1"))

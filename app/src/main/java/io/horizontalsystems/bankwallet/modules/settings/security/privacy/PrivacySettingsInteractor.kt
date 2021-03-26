@@ -4,6 +4,7 @@ import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.managers.TorStatus
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.coinkit.models.Coin
+import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.IPinComponent
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -97,9 +98,11 @@ class PrivacySettingsInteractor(
         syncModeSettingsManager.save(syncModeSetting)
     }
 
-    override val ether = coinManager.featuredCoins.first { it.code == "ETH" }
+    override val ether = coinManager.getCoin(CoinType.Ethereum)!!
 
-    override val binance = coinManager.featuredCoins.first { it.code == "BNB" }
+    override val binance = coinManager.getCoin(CoinType.Bep2("BNB"))!!
+
+    override val binanceSmartChain = coinManager.getCoin(CoinType.BinanceSmartChain)!!
 
     override fun clear() {
         disposables.clear()

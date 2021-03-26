@@ -55,7 +55,9 @@ class MarketMetricSmallView @JvmOverloads constructor(context: Context, attrs: A
     private fun setDiff(diff: BigDecimal?, modeNotAvailable: Boolean) {
         when {
             diff != null -> {
-                diffCircle.animateVertical(diff.toFloat())
+                diffCircle.post {
+                    diffCircle.animateVertical(diff.toFloat())
+                }
 
                 val sign = if (diff >= BigDecimal.ZERO) "+" else "-"
                 diffPercentage.text = App.numberFormatter.format(diff.abs(), 0, 2, sign, "%")
@@ -68,8 +70,10 @@ class MarketMetricSmallView @JvmOverloads constructor(context: Context, attrs: A
                 diffPercentage.setTextColor(context.getColor(R.color.grey_50))
             }
             else -> {
-                diffCircle.animateVertical(null)
                 diffPercentage.text = null
+                diffCircle.post {
+                    diffCircle.animateVertical(null)
+                }
             }
         }
     }

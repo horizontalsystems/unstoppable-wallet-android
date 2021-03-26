@@ -337,24 +337,27 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="Approve_Spender">Spender</string>
     <string name="Approve_YouApprove">Vous approuvez</string>
     <!--Uniswap Info -->
-    <string name="SwapInfo_Description">Ce service d\'échange est assuré par %s, un protocole d\'échange de tokens décentralisé construit sur la blockchain %s.\n\n%s est entièrement automatisé et géré par des contrats intelligents qui facilitent les échanges de tokens de manière fiable sans aucune possibilité de tricher.</string>
-    <string name="SwapInfo_DexRelated">Relatif à %s</string>
+
+    <string name="SwapInfo_Title">Uniswap v.2</string>
+    <string name="SwapInfo_Description">Ce service d\'échange est assuré par Uniswap, un protocole d\'échange de tokens décentralisé basé sur la blockchain Ethereum.\n\nUniswap est entièrement automatisé et géré par des contrats intelligents qui facilitent les échanges de tokens de manière fiable sans aucun moyen de tricher.</string>
+    <string name="SwapInfo_DexRelated">Liés à Uniswap</string>
     <string name="SwapInfo_AllowanceTitle">Allocation</string>
-    <string name="SwapInfo_AllowanceDescription">Le montant d\'une certaine monnaie que le service peut dépenser en votre nom lors de l\'exécution des échanges de tokens. Une allocation suffisante est requise avant que l\'opération d\'échange puisse avoir lieu</string>
+    <string name="SwapInfo_AllowanceDescription">Le montant d\'une devise qu\'Uniswap peut dépenser en votre nom lors de l\'exécution d\'échanges de tokens. Une provision suffisante est nécessaire avant que l\'échange puisse avoir lieu</string>
     <string name="SwapInfo_PriceImpactTitle">Impact prix</string>
     <string name="SwapInfo_PriceImpactDescription">L\'écart de prix attendu par rapport à un prix affiché, augmente généralement avec le montant de l\'échange.</string>
     <string name="SwapInfo_SwapFeeTitle">Frais d\'échange</string>
-    <string name="SwapInfo_SwapFeeDescription">Des frais de service pour l\'opération d\'échange sur la plateforme, indiqués dans la devise dans laquelle l\'utilisateur vend. Pour la plupart des ordres, ils devraient être de 0,3 % ou 0,6 %.</string>
+    <string name="SwapInfo_SwapFeeDescription">Un frais de service pour le remplacement sur la plate-forme Uniswap, indiqué dans la devise vendue par l\'utilisateur. Pour la plupart des transactions, elle devrait être de 0,3 % ou 0,6 %.</string>
     <string name="SwapInfo_GuaranteedAmountTitle">Montant garanti</string>
     <string name="SwapInfo_GuaranteedAmountDescription">Le montant minimum qu\'un utilisateur va recevoir à la suite d\'une action de remplacement.</string>
     <string name="SwapInfo_MaxSpendTitle">Dépense maximale</string>
     <string name="SwapInfo_MaxSpendDescription">Le montant maximum qu\'un utilisateur va dépenser à la suite d\'une action de remplacement.</string>
     <string name="SwapInfo_Other">Autre</string>
     <string name="SwapInfo_TransactionFeeTitle">Frais de transaction</string>
-    <string name="SwapInfo_TransactionFeeDescription">Le coût de traitement estimé de la transaction sur la blockchain %s. Les transactions relatives à %s coûteront généralement plus cher que les transactions génériques de transfert de tokens.</string>
+
+    <string name="SwapInfo_TransactionFeeDescription">Le coût de traitement estimé de la transaction en question sur la blockchain Ethereum. Les transactions associées à Uniswap coûtent généralement plus cher que les transactions génériques de transfert de token.</string>
     <string name="SwapInfo_TransactionSpeedTitle">Vitesse de transaction</string>
     <string name="SwapInfo_TransactionSpeedDescription">Les transactions dont les frais de transaction sont plus élevés se traduiront par une vitesse de traitement plus rapide. L\'inverse est également vrai.</string>
-    <string name="SwapInfo_Site">Site %s</string>
+    <string name="SwapInfo_Site">Site Uniswap</string>
     <!--Deposit-->
     <string name="Deposit_Title">Recevoir %s</string>
     <string name="Deposit_Share">Partager</string>
@@ -608,6 +611,7 @@ Si vous changez le format d\'adresse pour %2$s , l\'historique du solde actuel e
     <string name="CoinPage_TimeDuration_Today">TDY</string>
     <string name="CoinPage_TimeDuration_Day">24H</string>
     <string name="CoinPage_TimeDuration_Week">7D</string>
+
     <string name="CoinPage_TimeDuration_Month">1M</string>
     <string name="CoinPage_TimeDuration_TwoWeeks">2W</string>
     <string name="CoinPage_TimeDuration_Month3">3M</string>
@@ -651,6 +655,7 @@ Si vous changez le format d\'adresse pour %2$s , l\'historique du solde actuel e
     <string name="CoinPage_Performance_Month">1 Month</string>
     <string name="CoinPage_ReadMore">Read More</string>
     <string name="CoinPage_ReadLess">Read Less</string>
+
     <!--Rate list-->
     <string name="RateList_portfolio">Portfolio</string>
     <string name="RateList_top100">Top 100</string>

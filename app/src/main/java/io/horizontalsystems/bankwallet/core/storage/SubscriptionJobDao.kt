@@ -11,8 +11,8 @@ interface SubscriptionJobDao {
     @Query("SELECT * FROM SubscriptionJob")
     fun all(): List<SubscriptionJob>
 
-    @Query("SELECT * FROM SubscriptionJob WHERE coinId = :coinId")
-    fun jobsByCoinId(coinId: String): List<SubscriptionJob>
+    @Query("SELECT * FROM SubscriptionJob WHERE coinCode = :coinCode")
+    fun jobsByCoinCode(coinCode: String): List<SubscriptionJob>
 
     @Delete()
     fun delete(subscriptionJob: SubscriptionJob)

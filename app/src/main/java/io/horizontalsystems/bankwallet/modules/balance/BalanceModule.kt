@@ -9,7 +9,7 @@ import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.xrateskit.entities.ChartInfo
-import io.horizontalsystems.xrateskit.entities.MarketInfo
+import io.horizontalsystems.xrateskit.entities.LatestRate
 import java.math.BigDecimal
 
 object BalanceModule {
@@ -60,7 +60,7 @@ object BalanceModule {
         var balanceHidden: Boolean
         val networkAvailable: Boolean
 
-        fun marketInfo(coinType: CoinType, currencyCode: String): MarketInfo?
+        fun latestRate(coinType: CoinType, currencyCode: String): LatestRate?
         fun chartInfo(coinType: CoinType, currencyCode: String): ChartInfo?
         fun balance(wallet: Wallet): BigDecimal?
         fun balanceLocked(wallet: Wallet): BigDecimal?
@@ -91,7 +91,7 @@ object BalanceModule {
         fun didUpdateState(wallet: Wallet, state: AdapterState)
 
         fun didUpdateCurrency(currency: Currency)
-        fun didUpdateMarketInfo(marketInfo: Map<CoinType, MarketInfo>)
+        fun didUpdateLatestRate(latestRate: Map<CoinType, LatestRate>)
 
         fun didRefresh()
     }
@@ -126,10 +126,10 @@ object BalanceModule {
             }
 
         var state: AdapterState? = null
-        var marketInfo: MarketInfo? = null
+        var latestRate: LatestRate? = null
 
         val fiatValue: BigDecimal?
-            get() = marketInfo?.rate?.let { balance?.times(it) }
+            get() = latestRate?.rate?.let { balance?.times(it) }
     }
 
     class Factory : ViewModelProvider.Factory {

@@ -336,24 +336,26 @@
     <string name="Approve_Spender">خرج کننده</string>
     <string name="Approve_YouApprove">شما تایید کردید</string>
     <!--Uniswap Info -->
-    <string name="SwapInfo_Description">این سرویس مبادله توسط %s ، یک پروتکل تبادل رمز غیرمتمرکز ساخته شده بر روی زنجیره بلوکی %s تامین می شود.\n\n %sکاملاً خودکار است و توسط قراردادهای هوشمند مدیریت می شود که بدون هیچ راهی برای تقلب ، مبادله رمزها را به روشی مطمئن تسهیل می کند.</string>
-    <string name="SwapInfo_DexRelated">%s مرتبط</string>
-    <string name="SwapInfo_AllowanceTitle">کمک هزینه</string>
-    <string name="SwapInfo_AllowanceDescription">مقدار برخی از ارزهایی که این سرویس می تواند از طرف شما هنگام اجرای مبادله رمزها خرج کند. قبل از اقدام به مبادله ، مقدار موجودی کافی لازم است</string>
+
+    <string name="SwapInfo_Title">Uniswap v.2</string>
+    <string name="SwapInfo_Description">این سرویس تبادل توسط Uniswap، پروتکل تبادل رمز غیرمتمرکز ساخته شده بر روی بلاک چین اتریوم تأمین می شود.\n\n سرویس Uniswap کاملاً خودکار است و توسط قراردادهای هوشمند مدیریت می شود که با سد کردن هرگونه مسیر تقلب، مبادله رمزها را به روشی مطمئن تسهیل می کند.</string>
+    <string name="SwapInfo_DexRelated">Uniswap مرتبط نیست</string>
+    <string name="SwapInfo_AllowanceTitle">مستمری</string>
+    <string name="SwapInfo_AllowanceDescription">مقدار کمی ارز که Uniswap می تواند هنگام اجرای مبادله های نشان از طرف شما خرج کند. قبل از اقدام به مبادله، مقدار مستمری کافی ضروری است</string>
     <string name="SwapInfo_PriceImpactTitle">تأثیر قیمت</string>
-    <string name="SwapInfo_PriceImpactDescription">انحراف قیمت پیش بینی شده از قیمت نشان داده شده ، معمولاً با مبلغ مبادله افزایش می یابد.</string>
+    <string name="SwapInfo_PriceImpactDescription">انحراف قیمت پیش بینی شده از قیمت نشان داده شده، معمولاً با مبلغ مبادله افزایش می یابد.</string>
     <string name="SwapInfo_SwapFeeTitle">هزینه جابجایی</string>
-    <string name="SwapInfo_SwapFeeDescription">هزینه خدمات مربوط به عمل مبادله در سیستم عامل ، با ارز فروشنده کاربر نشان داده می شود. برای بیشتر سفارشات این باید 0.3٪ یا 0.6٪ باشد.</string>
-    <string name="SwapInfo_GuaranteedAmountTitle">مقدار تضمین شده</string>
+    <string name="SwapInfo_SwapFeeDescription">هزینه خدمات مربوط به اقدام مبادله در پلتفرم Uniswap، به صورت ارز فروشنده کاربر نشان داده می شود. برای بیشتر سفارشات باید 0.3 % یا 0.6 % باشد.</string>
+    <string name="SwapInfo_GuaranteedAmountTitle">مبلغ تضمین شده</string>
     <string name="SwapInfo_GuaranteedAmountDescription">حداقل مبلغی که کاربر قصد دارد در نتیجه اقدام به مبادله دریافت کند.</string>
     <string name="SwapInfo_MaxSpendTitle">حداکثر هزینه</string>
-    <string name="SwapInfo_MaxSpendDescription">حداکثر مبلغی که یک کاربر در نتیجه اقدام به مبادله قرار است هزینه کند.</string>
+    <string name="SwapInfo_MaxSpendDescription">حداکثر مبلغی که یک کاربر در نتیجه شروع مبادله قرار است هزینه کند.</string>
     <string name="SwapInfo_Other">غیره</string>
-    <string name="SwapInfo_TransactionFeeTitle">هزینه تراکنش</string>
-    <string name="SwapInfo_TransactionFeeDescription">برآورد هزینه پردازش معامله داده شده در زنجیره بلوکی %s. هزینه معاملات مربوط به %s معمولاً بیشتر از معاملات انتقال رمز عام است.</string>
+    <string name="SwapInfo_TransactionFeeTitle">كارمزد تراکنش</string>
+    <string name="SwapInfo_TransactionFeeDescription">برآورد هزینه پردازش معامله انجام شده در بلاک چین اتریوم. هزینه انجام معاملات مربوط به Uniswap معمولاً بیشتر از معاملات انتقال رمز کلی است.</string>
     <string name="SwapInfo_TransactionSpeedTitle">سرعت تراکنش</string>
     <string name="SwapInfo_TransactionSpeedDescription">معاملات با کارمزد معامله بالاتر منجر به سرعت پردازش بیشتر می شود. عکس این نیز صادق است.</string>
-    <string name="SwapInfo_Site">%s سایت</string>
+    <string name="SwapInfo_Site">سایت Uniswap</string>
     <!--Deposit-->
     <string name="Deposit_Title">دریافت %s</string>
     <string name="Deposit_Share">به اشتراك گذاشتن</string>
@@ -649,6 +651,7 @@
     <string name="CoinPage_Performance_Month"> 1Month </string>
     <string name="CoinPage_ReadMore">Read More</string>
     <string name="CoinPage_ReadLess">Read Less</string>
+
     <!--Rate list-->
     <string name="RateList_portfolio">نمونه کار</string>
     <string name="RateList_top100">۱۰۰ برتر</string>

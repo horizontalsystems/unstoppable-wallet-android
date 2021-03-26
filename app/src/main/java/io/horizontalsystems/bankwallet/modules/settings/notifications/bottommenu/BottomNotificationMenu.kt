@@ -12,6 +12,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.extensions.BaseBottomSheetDialogFragment
+import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.views.inflate
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_bottom_notification_menu.*
@@ -21,10 +22,10 @@ import kotlinx.android.synthetic.main.view_holder_notification_menu_section_head
 class BottomNotificationMenu(
         private val mode: NotificationMenuMode,
         private val coinName: String,
-        private val coinId: String
+        private val coinType: CoinType
 ) : BaseBottomSheetDialogFragment(), NotificationMenuItemsAdapter.Listener {
 
-    private val viewModel by viewModels<BottomNotificationsMenuViewModel> { NotificationBottomMenuModule.Factory(coinId, mode) }
+    private val viewModel by viewModels<BottomNotificationsMenuViewModel> { NotificationBottomMenuModule.Factory(coinType, coinName, mode) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -60,8 +61,8 @@ class BottomNotificationMenu(
     }
 
     companion object {
-        fun show(fragmentManager: FragmentManager, mode: NotificationMenuMode, coinName: String, coinId: String) {
-            BottomNotificationMenu(mode, coinName, coinId)
+        fun show(fragmentManager: FragmentManager, mode: NotificationMenuMode, coinName: String, coinType: CoinType) {
+            BottomNotificationMenu(mode, coinName, coinType)
                     .show(fragmentManager, "notification_menu_dialog")
         }
     }

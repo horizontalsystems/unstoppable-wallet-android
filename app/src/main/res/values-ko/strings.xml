@@ -336,14 +336,16 @@
     <string name="Approve_Spender">스펜더</string>
     <string name="Approve_YouApprove">승인합니다</string>
     <!--Uniswap Info -->
-    <string name="SwapInfo_Description">이 거래소 서비스는 %s 블록체인에 구축된 분산형 토큰 교환 프로토콜인 %s에 의해 구동됩니다.\n\n%s는 스마트 계약에 의해 완전 자동화되고 관리되므로 부정 행위 없이 토큰 교환을 안정적으로 수행할 수 있습니다.</string>
-    <string name="SwapInfo_DexRelated">%s 관련됨</string>
+
+    <string name="SwapInfo_Title">Uniswap v.2</string>
+    <string name="SwapInfo_Description">이 거래소 서비스는 Ethereum 블록체인을 기반으로 구축된 분산형 토큰 교환 프로토콜인 Uniswap에서 운영됩니다.\n\n\Uniswap는 스마트 계약에 의해 완전히 자동화되고 관리되어 부정행위를 할 수 있는 방법 없이 토큰 교환을 신뢰할 수 있는 방법으로 가능하게 합니다.</string>
+    <string name="SwapInfo_DexRelated">Uniswap 관련됨</string>
     <string name="SwapInfo_AllowanceTitle">허용량</string>
-    <string name="SwapInfo_AllowanceDescription">토큰 스왑을 실행할 때 서비스에서 사용자를 대신하여 사용할 수 있는 일부 통화의 양입니다. 스왑 작업을 수행하려면 충분한 허용량이 필요합니다</string>
+    <string name="SwapInfo_AllowanceDescription">토큰 스왑을 실행할 때 Uniswap이 대신 사용할 수 있는 일부 통화의 금액. 스왑 행위가 일어나기 전에 충분한 허용량이 필요됩니다</string>
     <string name="SwapInfo_PriceImpactTitle">가격 영향</string>
     <string name="SwapInfo_PriceImpactDescription">표시된 가격과의 예상 가격 편차는 일반적으로 스왑 금액에 따라 증가합니다.</string>
     <string name="SwapInfo_SwapFeeTitle">스왑 비용</string>
-    <string name="SwapInfo_SwapFeeDescription">플랫폼에서의 스왑 작업에 대한 서비스 수수료이며, 사용자가 판매하는 통화에 표시됩니다. 대부분의 주문의 경우 0.3% 또는 0.6%여야 합니다.</string>
+    <string name="SwapInfo_SwapFeeDescription">사용자가 판매하는 통화에 표시된 Uniswap 플랫폼의 스왑 행위에 대한 서비스 요금. 대부분의 주문의 경우 0.3% 또는 0.6%여야 합니다.</string>
     <string name="SwapInfo_GuaranteedAmountTitle">보증 금액</string>
     <string name="SwapInfo_GuaranteedAmountDescription">스왑 행위로 인해 사용자가 받을 최소 금액.</string>
     <string name="SwapInfo_MaxSpendTitle">최대 속도</string>
@@ -354,6 +356,7 @@
     <string name="SwapInfo_TransactionSpeedTitle">거래 속도</string>
     <string name="SwapInfo_TransactionSpeedDescription">거래 수수료가 높은 거래는 처리 속도가 빨라집니다. 반대로도 그렇습니다.</string>
     <string name="SwapInfo_Site">%s 사이트</string>
+
     <!--Deposit-->
     <string name="Deposit_Title">수신%s</string>
     <string name="Deposit_Share">공유</string>
@@ -651,6 +654,7 @@
     <string name="CoinPage_Performance_Month">1 Month</string>
     <string name="CoinPage_ReadMore">Read More</string>
     <string name="CoinPage_ReadLess">Read Less</string>
+
     <!--Rate list-->
     <string name="RateList_portfolio">포트폴리오</string>
     <string name="RateList_top100">상위 100</string>

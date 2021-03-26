@@ -35,15 +35,15 @@ class ChartBottomLabel(private val config: ChartConfig, override var isVisible: 
 
     override fun draw(canvas: Canvas) {
         if (!isVisible) return
-        canvas.drawTopLow()
+        canvas.drawLabels()
     }
 
-    private fun Canvas.drawTopLow() {
+    private fun Canvas.drawLabels() {
         val bottom = shape.bottom - offset
-        var right = shape.right
+        var right = shape.right - config.gridSideTextPadding
 
         labels.forEach { (label, paint) ->
-            val textWidth = config.measureTextWidth(label)
+            val textWidth = paint.measureText(label)
             val startX = right - textWidth - config.gridTextPadding
 
             drawText(label, startX, bottom + config.gridTextSize, paint)

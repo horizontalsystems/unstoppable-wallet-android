@@ -7,14 +7,16 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 enum class CommunicationMode(val value: String) : Parcelable {
     Infura("Infura"),
+    Nariox("Nariox"),
     Incubed("Incubed"),
     BinanceDex("BinanceDex");
 
     val title: String
         get() = when (this) {
-            Infura -> "Infura"
+            Infura -> "infura.io"
+            Nariox -> "bsc-ws-node.nariox.org"
             Incubed -> "Incubed"
-            BinanceDex -> "Binance Dex"
+            BinanceDex -> "dex.binance.com"
         }
 }
 

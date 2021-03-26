@@ -4,152 +4,55 @@
     android:id="@+id/marketDetails"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="20dp"
     android:animateLayoutChanges="true"
     android:visibility="gone"
     tools:visibility="visible">
 
-    <io.horizontalsystems.views.SettingsViewRating
-        android:id="@+id/ratingDetails"
+    <LinearLayout
+        android:id="@+id/coinPerformanceLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:color="@color/jacob"
-        app:icon="@drawable/ic_rating_a"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:position="single"
-        app:value="@string/Charts_RatingDetails" />
-
-    <View
-        android:id="@+id/border4"
-        android:layout_width="0dp"
-        android:layout_height="0.5dp"
-        android:layout_marginStart="16dp"
         android:layout_marginTop="12dp"
+        android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:background="@color/steel_20"
+        android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ratingDetails" />
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/priceTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="16dp"
-        android:text="@string/Charts_Price"
-        android:textColor="@color/grey"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/border4" />
-
-    <include
-        android:id="@+id/priceData"
-        layout="@layout/coin_price_change"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/priceTitle" />
-
-    <View
-        android:id="@+id/border5"
-        android:layout_width="0dp"
-        android:layout_height="0.5dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="16dp"
-        android:background="@color/steel_20"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/priceData" />
-
-    <TextView
-        android:id="@+id/marketTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="16dp"
-        android:text="@string/Charts_Market"
-        android:textColor="@color/grey"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/border5" />
-
-    <include
-        android:id="@+id/marketData"
-        layout="@layout/coin_market"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/marketTitle" />
-
-    <io.horizontalsystems.views.SettingsView
-        android:id="@+id/btcDetails"
+    <LinearLayout
+        android:id="@+id/marketDataLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
-        app:layout_constraintTop_toBottomOf="@id/marketData"
-        app:position="single"
-        app:title="@string/Charts_MarketBTC" />
-
-    <View
-        android:id="@+id/border6"
-        android:layout_width="0dp"
-        android:layout_height="0.5dp"
-        android:layout_marginTop="12dp"
-        android:background="@color/steel_20"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:orientation="vertical"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btcDetails" />
+        app:layout_constraintTop_toBottomOf="@+id/coinPerformanceLayout" />
 
-    <TextView
-        android:id="@+id/performanceTitle"
+    <LinearLayout
+        android:id="@+id/extraPagesLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/marketDataLayout" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/aboutGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="16dp"
-        android:text="@string/Charts_Performance"
-        android:textColor="@color/grey"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/border6" />
-
-    <include
-        android:id="@+id/marketPerformance"
-        layout="@layout/coin_performance"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/performanceTitle" />
+        app:constraint_referenced_ids="border7,aboutTitle,aboutText" />
 
     <View
         android:id="@+id/border7"
         android:layout_width="0dp"
         android:layout_height="0.5dp"
-        android:layout_marginStart="16dp"
         android:layout_marginTop="12dp"
-        android:layout_marginEnd="16dp"
         android:background="@color/steel_20"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/marketPerformance" />
+        app:layout_constraintTop_toBottomOf="@id/extraPagesLayout" />
 
     <TextView
         android:id="@+id/aboutTitle"
@@ -158,8 +61,8 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="16dp"
-        android:text="@string/Charts_About"
-        android:textColor="@color/grey"
+        android:text="@string/CoinPage_About"
+        android:textColor="@color/oz"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/border7" />
@@ -168,34 +71,114 @@
         android:id="@+id/aboutText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="16dp"
-        android:text="Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
+        android:ellipsize="end"
+        android:maxLines="8"
         android:textColor="@color/grey"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/aboutTitle" />
+        app:layout_constraintTop_toBottomOf="@id/aboutTitle"
+        tools:text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry." />
+
+    <TextView
+        android:id="@+id/aboutTextToggle"
+        style="@style/Subhead2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="16dp"
+        android:text="@string/CoinPage_ReadMore"
+        android:textColor="@color/jacob"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/aboutText" />
 
     <View
-        android:id="@+id/border8"
+        android:id="@+id/categoriesSeparator"
         android:layout_width="0dp"
         android:layout_height="0.5dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginTop="20dp"
         android:background="@color/steel_20"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/aboutText" />
+        app:layout_constraintTop_toBottomOf="@id/aboutTextToggle" />
+
+    <TextView
+        android:id="@+id/categoriesTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="16dp"
+        android:text="@string/CoinPage_Category"
+        android:textColor="@color/oz"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/categoriesSeparator" />
+
+    <TextView
+        android:id="@+id/categoriesText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
+        android:ellipsize="end"
+        android:maxLines="8"
+        android:textColor="@color/grey"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/categoriesTitle"
+        tools:text="Algo Stablecoins, DEXes, Governance, asdf, srfad, asdfgf, asfa sfasf, asf, sadfas" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/categoriesGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="categoriesSeparator,categoriesTitle,categoriesText,categoriesSeparator" />
+
+    <LinearLayout
+        android:id="@+id/platformsLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/categoriesText" />
 
     <LinearLayout
         android:id="@+id/linksLayout"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
         android:orientation="vertical"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/border8" />
+        app:layout_constraintTop_toBottomOf="@id/platformsLayout" />
+
+    <View
+        android:id="@+id/poweredByBorder"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="32dp"
+        android:background="@color/steel_10"
+        app:layout_constraintEnd_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linksLayout" />
+
+    <TextView
+        style="@style/Caption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="11dp"
+        android:paddingBottom="32dp"
+        android:text="@string/Market_PoweredByApi"
+        android:textColor="@color/grey"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/poweredByBorder" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

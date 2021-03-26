@@ -22,9 +22,10 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.modules.balance.views.SyncErrorDialog
+import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.main.MainActivity
-import io.horizontalsystems.bankwallet.modules.ratechart.RateChartFragment
 import io.horizontalsystems.bankwallet.modules.receive.ReceiveFragment
+import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule
 import io.horizontalsystems.bankwallet.modules.settings.managekeys.views.ManageKeysDialog
 import io.horizontalsystems.bankwallet.modules.swap.SwapFragment
 import io.horizontalsystems.bankwallet.ui.extensions.NpaLinearLayoutManager
@@ -176,6 +177,10 @@ class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener, ReceiveFra
             (activity as? MainActivity)?.openSend(it)
         })
 
+        viewModel.openSendEvmDialog.observe(viewLifecycleOwner, { wallet ->
+            findNavController().navigate(R.id.mainFragment_to_sendEvmFragment, bundleOf(SendEvmModule.walletKey to wallet), navOptionsFromBottom())
+        })
+
         viewModel.openSwap.observe(viewLifecycleOwner, Observer { wallet ->
             findNavController().navigate(R.id.mainFragment_to_swapFragment, bundleOf(SwapFragment.fromCoinKey to wallet.coin))
         })
@@ -238,9 +243,9 @@ class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener, ReceiveFra
         })
 
         viewModel.openChartModule.observe(viewLifecycleOwner, Observer { coin ->
-            val arguments = RateChartFragment.prepareParams(coin.type, coin.code, coin.title, coin.id)
+            val arguments = CoinFragment.prepareParams(coin.type, coin.code, coin.title)
 
-            findNavController().navigate(R.id.mainFragment_to_rateChartFragment, arguments, navOptions())
+            findNavController().navigate(R.id.mainFragment_to_coinFragment, arguments, navOptions())
         })
 
         viewModel.openEmail.observe(viewLifecycleOwner, Observer { (email, report) ->

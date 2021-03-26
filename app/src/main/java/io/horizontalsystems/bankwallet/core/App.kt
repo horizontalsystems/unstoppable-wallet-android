@@ -28,6 +28,7 @@ import io.horizontalsystems.core.CoreApp
 import io.horizontalsystems.core.ICoreApp
 import io.horizontalsystems.core.security.EncryptionManager
 import io.horizontalsystems.core.security.KeyStoreManager
+import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.pin.PinComponent
 import io.reactivex.plugins.RxJavaPlugins
 import java.util.logging.Level
@@ -86,6 +87,7 @@ class App : CoreApp() {
         lateinit var zcashBirthdayProvider: ZcashBirthdayProvider
         lateinit var marketFavoritesManager: MarketFavoritesManager
         lateinit var coinKit: CoinKit
+        lateinit var activateCoinManager: ActivateCoinManager
     }
 
     override fun onCreate() {
@@ -99,6 +101,8 @@ class App : CoreApp() {
         RxJavaPlugins.setErrorHandler { e: Throwable? ->
             Log.w("RxJava ErrorHandler", e)
         }
+
+        EthereumKit.init()
 
         instance = this
         preferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
@@ -122,7 +126,7 @@ class App : CoreApp() {
 
         AppLog.logsDao = appDatabase.logsDao()
 
-        coinManager = CoinManager(coinKit)
+        coinManager = CoinManager(coinKit, appConfigProvider)
 
         enabledWalletsStorage = EnabledWalletsStorage(appDatabase)
         blockchainSettingsStorage = BlockchainSettingsStorage(appDatabase)
@@ -185,8 +189,8 @@ class App : CoreApp() {
         notificationManager = NotificationManager(NotificationManagerCompat.from(this)).apply {
             backgroundManager.registerListener(this)
         }
-        notificationSubscriptionManager = NotificationSubscriptionManager(appDatabase, notificationManager)
-        priceAlertManager = PriceAlertManager(appDatabase, notificationSubscriptionManager, coinManager)
+        notificationSubscriptionManager = NotificationSubscriptionManager(appDatabase)
+        priceAlertManager = PriceAlertManager(appDatabase, notificationSubscriptionManager, xRateManager)
 
         appVersionManager = AppVersionManager(systemInfoManager, localStorage).apply {
             backgroundManager.registerListener(this)
@@ -214,6 +218,8 @@ class App : CoreApp() {
         termsManager = TermsManager(localStorage)
 
         marketFavoritesManager = MarketFavoritesManager(appDatabase)
+
+        activateCoinManager = ActivateCoinManager(coinKit, walletManager, accountManager)
 
         val nightMode = if (CoreApp.themeStorage.isLightModeOn)
             AppCompatDelegate.MODE_NIGHT_NO else

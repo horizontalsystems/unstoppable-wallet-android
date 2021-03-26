@@ -47,7 +47,9 @@
                 android:clipToPadding="false"
                 android:orientation="horizontal"
                 android:paddingStart="12dp"
+                android:paddingTop="6dp"
                 android:paddingEnd="12dp"
+                android:paddingBottom="6dp"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:itemCount="3"
                 tools:listitem="@layout/view_holder_filter" />

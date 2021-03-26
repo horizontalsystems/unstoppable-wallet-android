@@ -10,6 +10,7 @@ import io.horizontalsystems.chartview.helpers.ChartAnimator
 import io.horizontalsystems.chartview.helpers.GridHelper
 import io.horizontalsystems.chartview.helpers.PointConverter
 import io.horizontalsystems.chartview.models.ChartConfig
+import io.horizontalsystems.chartview.models.ChartIndicator
 import io.horizontalsystems.chartview.models.PointInfo
 import kotlinx.android.synthetic.main.view_chart.view.*
 import java.math.BigDecimal
@@ -36,6 +37,7 @@ class Chart @JvmOverloads constructor(context: Context, attrs: AttributeSet? = n
     private val config = ChartConfig(context, attrs)
     private val animatorMain = ChartAnimator { chartMain.invalidate() }
     private val animatorBottom = ChartAnimator { chartBottom.invalidate() }
+    private val animatorTopBottomRange = ChartAnimator { topLowRange.invalidate() }
 
     private val mainCurve = ChartCurve(config, animatorMain, isVisible = true)
     private val mainGradient = ChartGradient(animatorMain)
@@ -43,7 +45,6 @@ class Chart @JvmOverloads constructor(context: Context, attrs: AttributeSet? = n
     private val mainGrid = ChartGrid(config)
     private val mainRange = ChartGridRange(config)
 
-    private val bottomGrid = ChartGrid(config)
     private val bottomVolume = ChartVolume(config, animatorBottom)
     private val timelineGrid = ChartGridTimeline(config)
 
@@ -98,25 +99,42 @@ class Chart @JvmOverloads constructor(context: Context, attrs: AttributeSet? = n
         chartError.text = error
     }
 
-    fun showEma(visible: Boolean) {
-        setVisible(emaFastCurve, emaSlowCurve, emaLabel, isVisible = visible)
-        animatorMain.start()
-    }
+    fun setIndicator(indicator: ChartIndicator, visible: Boolean){
+        if (visible){
+            hideOtherIndicators(indicator)
+        }
+        when(indicator){
+            ChartIndicator.Ema -> {
+                setVisible(emaFastCurve, emaSlowCurve, emaLabel, isVisible = visible)
+                animatorMain.start()
+            }
+            ChartIndicator.Macd -> setVisible(macdCurve, macdSignal, macdHistogram, macdLabel, isVisible = visible)
+            ChartIndicator.Rsi -> setVisible(rsiCurve, rsiRange, isVisible = visible)
+        }
 
-    fun showMacd(visible: Boolean) {
-        setVisible(macdCurve, macdSignal, macdHistogram, macdLabel, isVisible = visible)
-        setVisible(bottomVolume, isVisible = !visible)
+        setVisible(bottomVolume, mainRange, isVisible = !visible)
+
+        animatorTopBottomRange.start()
         animatorBottom.start()
     }
 
-    fun showRsi(visible: Boolean) {
-        setVisible(rsiCurve, rsiRange, isVisible = visible)
-        setVisible(bottomVolume, isVisible = !visible)
-        animatorBottom.start()
+    private fun hideOtherIndicators(indicator: ChartIndicator) {
+        ChartIndicator.values().filter { it != indicator }.forEach {
+            if (it == ChartIndicator.Ema && emaFastCurve.isVisible){
+                setVisible(emaFastCurve, emaSlowCurve, emaLabel, isVisible = false)
+                animatorMain.start()
+            }
+            if (it == ChartIndicator.Macd && macdCurve.isVisible){
+                setVisible(macdCurve, macdSignal, macdHistogram, macdLabel, isVisible = false)
+            }
+            if (it == ChartIndicator.Rsi && rsiCurve.isVisible){
+                setVisible(rsiCurve, rsiRange, isVisible = false)
+            }
+        }
     }
 
     fun showChart(visible: Boolean = true) {
-        setVisible(chartMain, chartBottom, chartTimeline, isVisible = visible)
+        setVisible(chartMain, topLowRange, chartBottom, chartTimeline, isVisible = visible)
     }
 
     fun setData(data: ChartData, chartType: ChartView.ChartType) {
@@ -159,7 +177,7 @@ class Chart @JvmOverloads constructor(context: Context, attrs: AttributeSet? = n
 
         rsiRange.setShape(chartBottom.shape)
         rsiRange.setOffset(chartBottom.shape.height() * 0.3f)
-        rsiRange.setValues(Rsi.max.toString(), Rsi.min.toString())
+        rsiRange.setValues(Rsi.max.toString(), Rsi.min.toString(), true)
 
         // MACD
         macdCurve.setShape(chartBottom.shape)
@@ -200,9 +218,6 @@ class Chart @JvmOverloads constructor(context: Context, attrs: AttributeSet? = n
         bottomVolume.setPoints(volumes)
         bottomVolume.setShape(chartBottom.shape)
 
-        bottomGrid.setShape(chartBottom.shape)
-        bottomGrid.set(timeline)
-
         // Timeline
         timelineGrid.setColumns(timeline)
         timelineGrid.setShape(chartTimeline.shape)
@@ -213,13 +228,15 @@ class Chart @JvmOverloads constructor(context: Context, attrs: AttributeSet? = n
 
         chartMain.clear()
         chartMain.add(mainCurve, mainGradient)
-        chartMain.add(mainGrid, mainRange, emaLabel)
+        chartMain.add(mainGrid, emaLabel)
         chartMain.add(emaFastCurve, emaSlowCurve)
 
+        topLowRange.clear()
+        topLowRange.add(mainRange)
+
         chartBottom.clear()
-        chartBottom.add(bottomGrid)
         chartBottom.add(bottomVolume)
-        chartBottom.add(macdHistogram, macdCurve, this.macdSignal, macdLabel)
+        chartBottom.add(macdHistogram, macdCurve, macdSignal, macdLabel)
         chartBottom.add(rsiCurve, rsiRange)
 
         chartTimeline.clear()
@@ -227,6 +244,7 @@ class Chart @JvmOverloads constructor(context: Context, attrs: AttributeSet? = n
         chartTimeline.invalidate()
 
         animatorMain.start()
+        animatorTopBottomRange.start()
         animatorBottom.start()
     }
 

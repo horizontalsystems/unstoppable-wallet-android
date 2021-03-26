@@ -24,7 +24,6 @@ sealed class MarketCategory(
     object TokenizedBitcoin : MarketCategory("tokenized_bitcoin", R.string.Market_Category_TokenizedBitcoin, R.drawable.ic_coin, R.string.Market_Category_TokenizedBitcoin_Description)
     object StablecoinIssuers : MarketCategory("stablecoin_issuers", R.string.Market_Category_StablecoinIssuers, R.drawable.ic_app_status_24, R.string.Market_Category_StablecoinIssuers_Description)
     object ExchangeTokens : MarketCategory("exchange_tokens", R.string.Market_Category_ExchangeTokens, R.drawable.ic_chart_24, R.string.Market_Category_ExchangeTokens_Description)
-    object Metals : MarketCategory("metals", R.string.Market_Category_Metals, R.drawable.ic_metals, R.string.Market_Category_Metals_Description)
     object RiskManagement : MarketCategory("risk_management", R.string.Market_Category_RiskManagement, R.drawable.ic_clipboard, R.string.Market_Category_RiskManagement_Description)
     object Wallets : MarketCategory("wallets", R.string.Market_Category_Wallets, R.drawable.ic_wallet, R.string.Market_Category_Wallets_Description)
     object Synthetics : MarketCategory("synthetics", R.string.Market_Category_Synthetics, R.drawable.ic_flask, R.string.Market_Category_Synthetics_Description)
@@ -38,4 +37,5 @@ sealed class MarketCategory(
     object Governance : MarketCategory("governance", R.string.Market_Category_Governance, R.drawable.ic_sort_4, R.string.Market_Category_Governance_Description)
     object CrossChain : MarketCategory("cross_chain", R.string.Market_Category_CrossChain, R.drawable.ic_link, R.string.Market_Category_CrossChain_Description)
     object Computing : MarketCategory("computing", R.string.Market_Category_Computing, R.drawable.ic_dialpad_alt, R.string.Market_Category_Computing_Description)
+    object RebaseTokens : MarketCategory("rebase_tokens", R.string.Market_Category_RebaseTokens, R.drawable.ic_rebase, R.string.Market_Category_RebaseTokens_Description)
 }

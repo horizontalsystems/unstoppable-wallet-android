@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--Colors-->
+    <color name="ripple_white">#b2ffffff</color>
+    <color name="ripple_black">#1f000000</color>
+    <color name="transparent">#00000000</color>
+
     <color name="yellow_d">#ffa800</color>
     <color name="yellow_l">#f58400</color>
     <color name="green_d">#05C46B</color>
@@ -15,20 +19,25 @@
     <color name="light_grey">#c8c7cc</color>
     <color name="steel_light">#ebebf0</color>
     <color name="white">#ffffff</color>
+    <color name="white_pressed">#e3e4e8</color>
     <color name="darkest">#0f1014</color>
 
     <color name="dark">#13151a</color>
+    <color name="dark_80">#CC13151A</color>
     <color name="light">#f5f5f5</color>
     <color name="white_20">#33FFFFFF</color>
     <color name="black_50">#80000000</color>
     <color name="white_50">#80ffffff</color>
+    <color name="yellow_20">#33FFA800</color>
     <color name="yellow_50">#80ffa800</color>
     <color name="green_50">#8013D670</color>
 
     <color name="grey_50">#80808085</color>
     <color name="steel_10">#1a6E7899</color>
     <color name="steel_20">#336E7899</color>
+    <color name="steel_dark_pressed">#353842</color>
     <color name="red_50">#80ff4820</color>
+    <color name="issykBlue">#3372FF</color>
 
     <!--Paired Colors-->
     <color name="jacob">@color/yellow_l</color>

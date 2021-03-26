@@ -40,7 +40,7 @@ class NoAccountDialog : BaseBottomSheetDialogFragment() {
 
         setTitle(activity?.getString(R.string.AddCoin_Title, coin.code))
         setSubtitle(getString(R.string.AddCoin_Subtitle, getString(predefinedAccountType?.title)))
-        context?.let { setHeaderIconDrawable(AppLayoutHelper.getCoinDrawable(it, coin.code, coin.type)) }
+        context?.let { setHeaderIconDrawable(AppLayoutHelper.getCoinDrawable(it, coin.type)) }
 
         val walletName = getString(predefinedAccountType.title)
         addKeyInfo.text = getString(

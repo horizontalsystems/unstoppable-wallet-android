@@ -57,6 +57,7 @@ object PrivacySettingsModule {
         fun saveSyncModeSetting(syncModeSetting: InitialSyncSetting)
         val ether: Coin
         val binance: Coin
+        val binanceSmartChain: Coin
 
         fun clear()
     }
@@ -102,6 +103,7 @@ sealed class PrivacySettingsType {
 }
 
 data class PrivacySettingsViewItem(
+        val title: String,
         val coin: Coin,
         val settingType: PrivacySettingsType,
         var enabled: Boolean = true,

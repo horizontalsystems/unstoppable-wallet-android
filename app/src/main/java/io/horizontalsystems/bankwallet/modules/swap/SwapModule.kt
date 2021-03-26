@@ -6,10 +6,6 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.savedstate.SavedStateRegistryOwner
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.ethereum.CoinService
-import io.horizontalsystems.bankwallet.core.ethereum.EthereumFeeViewModel
-import io.horizontalsystems.bankwallet.core.ethereum.EvmTransactionService
-import io.horizontalsystems.bankwallet.core.factories.FeeRateProviderFactory
 import io.horizontalsystems.bankwallet.core.fiat.AmountTypeSwitchService
 import io.horizontalsystems.bankwallet.core.fiat.FiatService
 import io.horizontalsystems.bankwallet.core.providers.StringProvider
@@ -34,20 +30,12 @@ object SwapModule {
             val blockchainType: String?
     ) : Parcelable
 
-    data class ConfirmationAmountViewItem(
-            val payTitle: String,
-            val payValue: String?,
-            val getTitle: String,
-            val getValue: String?
-    )
-
-    data class ConfirmationAdditionalViewItem(val title: String, val value: String?)
-
     data class GuaranteedAmountViewItem(val title: String, val value: String)
 
     data class PriceImpactViewItem(val level: SwapTradeService.PriceImpactLevel, val value: String)
 
-    enum class Dex {
+    @Parcelize
+    enum class Dex : Parcelable {
         Uniswap, PancakeSwap;
 
         val evmKit: EthereumKit?
@@ -58,8 +46,10 @@ object SwapModule {
 
         val coin: Coin
             get() = when (this) {
-                Uniswap -> App.coinManager.getCoin(CoinType.Ethereum) ?: throw IllegalArgumentException()
-                PancakeSwap -> App.coinManager.getCoin(CoinType.BinanceSmartChain) ?: throw IllegalArgumentException()
+                Uniswap -> App.coinManager.getCoin(CoinType.Ethereum)
+                        ?: throw IllegalArgumentException()
+                PancakeSwap -> App.coinManager.getCoin(CoinType.BinanceSmartChain)
+                        ?: throw IllegalArgumentException()
             }
     }
 
@@ -78,23 +68,16 @@ object SwapModule {
 
         private val evmKit: EthereumKit by lazy { dex.evmKit!! }
         private val uniswapKit by lazy { UniswapKit.getInstance(evmKit) }
-        private val feeRateProvider by lazy { FeeRateProviderFactory.provider(dex.coin)!! }
-        private val transactionService by lazy { EvmTransactionService(evmKit, feeRateProvider, 20) }
-        private val coinService by lazy { CoinService(dex.coin, App.currencyManager, App.xRateManager) }
         private val uniswapProvider by lazy { UniswapProvider(uniswapKit) }
         private val allowanceService by lazy { SwapAllowanceService(uniswapProvider.routerAddress, App.adapterManager, evmKit) }
         private val pendingAllowanceService by lazy { SwapPendingAllowanceService(App.adapterManager, allowanceService) }
         private val service by lazy {
             SwapService(
                     dex,
-                    evmKit,
                     tradeService,
                     allowanceService,
                     pendingAllowanceService,
-                    transactionService,
-                    App.adapterManager,
-                    App.walletManager,
-                    App.accountManager,
+                    App.adapterManager
             )
         }
         private val tradeService by lazy {
@@ -124,7 +107,7 @@ object SwapModule {
 
             return when (modelClass) {
                 SwapViewModel::class.java -> {
-                    SwapViewModel(service, tradeService, allowanceService, pendingAllowanceService, coinService, formatter, stringProvider) as T
+                    SwapViewModel(service, tradeService, pendingAllowanceService, formatter, stringProvider) as T
                 }
                 SwapCoinCardViewModel::class.java -> {
                     val fiatService = FiatService(switchService, App.currencyManager, App.xRateManager)
@@ -143,9 +126,6 @@ object SwapModule {
                 }
                 SwapAllowanceViewModel::class.java -> {
                     SwapAllowanceViewModel(service, allowanceService, pendingAllowanceService, formatter, stringProvider) as T
-                }
-                EthereumFeeViewModel::class.java -> {
-                    EthereumFeeViewModel(transactionService, coinService, stringProvider) as T
                 }
                 else -> throw IllegalArgumentException()
             }

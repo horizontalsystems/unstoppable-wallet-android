@@ -5,6 +5,7 @@ import android.content.res.ColorStateList
 import android.os.Parcelable
 import android.view.View
 import android.widget.ImageView
+import androidx.annotation.CheckResult
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
 import io.horizontalsystems.coinkit.models.CoinType
@@ -19,8 +20,8 @@ import io.reactivex.schedulers.Schedulers
 
 //View
 
-fun ImageView.setCoinImage(coinCode: String, coinType: CoinType? = null) {
-    setImageDrawable(AppLayoutHelper.getCoinDrawable(context, coinCode, coinType))
+fun ImageView.setCoinImage(coinType: CoinType) {
+    setImageDrawable(AppLayoutHelper.getCoinDrawable(context, coinType))
 
     imageTintList = ColorStateList.valueOf(context.getColor(R.color.grey))
 }
@@ -70,6 +71,7 @@ fun LockTimeInterval?.stringResId(): Int {
     }
 }
 
+@CheckResult
 fun <T> Observable<T>.subscribeIO(onNext: (t: T) -> Unit): Disposable {
     return this
             .subscribeOn(Schedulers.io())
@@ -77,6 +79,15 @@ fun <T> Observable<T>.subscribeIO(onNext: (t: T) -> Unit): Disposable {
             .subscribe(onNext)
 }
 
+@CheckResult
+fun <T> Observable<T>.subscribeIO(onSuccess: (t: T) -> Unit, onError: (e: Throwable) -> Unit): Disposable {
+    return this
+            .subscribeOn(Schedulers.io())
+            .observeOn(Schedulers.io())
+            .subscribe(onSuccess, onError)
+}
+
+@CheckResult
 fun <T> Flowable<T>.subscribeIO(onNext: (t: T) -> Unit): Disposable {
     return this
             .subscribeOn(Schedulers.io())
@@ -84,6 +95,7 @@ fun <T> Flowable<T>.subscribeIO(onNext: (t: T) -> Unit): Disposable {
             .subscribe(onNext)
 }
 
+@CheckResult
 fun <T> Single<T>.subscribeIO(onSuccess: (t: T) -> Unit, onError: (e: Throwable) -> Unit): Disposable {
     return this
             .subscribeOn(Schedulers.io())

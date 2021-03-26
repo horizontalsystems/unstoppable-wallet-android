@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="48dp">
+
+    <View
+        android:id="@+id/backgroundView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/rounded_lawrence_background_single"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_height="48dp" />
+
+    <TextView
+        android:id="@+id/titleTextView"
+        style="@style/Subhead2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="12dp"
+        android:includeFontPadding="false"
+        android:textColor="@color/grey"
+        app:layout_constraintBottom_toBottomOf="@id/backgroundView"
+        app:layout_constraintStart_toStartOf="@id/backgroundView"
+        app:layout_constraintTop_toTopOf="@id/backgroundView"
+        tools:text="Recipient" />
+
+    <TextView
+        android:id="@+id/valueTextView"
+        style="@style/Subhead1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:ellipsize="middle"
+        android:maxWidth="157dp"
+        android:singleLine="true"
+        android:textAlignment="textEnd"
+        app:layout_constraintBottom_toBottomOf="@id/backgroundView"
+        app:layout_constraintEnd_toEndOf="@id/backgroundView"
+        app:layout_constraintStart_toEndOf="@id/titleTextView"
+        app:layout_constraintTop_toTopOf="@id/backgroundView"
+        tools:text="1JeippMVXgWqiMUUiL7KCSrh4Ngm9xtfbfi" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

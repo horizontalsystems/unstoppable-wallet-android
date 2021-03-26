@@ -13,20 +13,28 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <io.horizontalsystems.chartview.ChartView
+        android:id="@+id/topLowRange"
+        android:layout_width="0dp"
+        android:layout_height="160dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <io.horizontalsystems.chartview.ChartView
         android:id="@+id/chartBottom"
         android:layout_width="0dp"
         android:layout_height="56dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/chartMain" />
+        app:layout_constraintBottom_toBottomOf="@+id/chartMain" />
 
     <io.horizontalsystems.chartview.ChartView
         android:id="@+id/chartTimeline"
         android:layout_width="0dp"
-        android:layout_height="16dp"
+        android:layout_height="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/chartBottom" />
+        app:layout_constraintTop_toBottomOf="@+id/chartMain" />
 
     <io.horizontalsystems.chartview.ChartTouchArea
         android:id="@+id/chartTouch"

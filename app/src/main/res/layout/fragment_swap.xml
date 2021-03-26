@@ -206,16 +206,6 @@
                 app:layout_constraintTop_toTopOf="@+id/minMaxTitle"
                 tools:text="0.112 Token" />
 
-            <io.horizontalsystems.bankwallet.ui.FeeSelectorView
-                android:id="@+id/feeSelectorView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/minMaxTitle" />
-
             <TextView
                 android:id="@+id/commonError"
                 style="@style/Subhead2"
@@ -226,7 +216,7 @@
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="@id/endBorder"
                 app:layout_constraintStart_toStartOf="@+id/startBorder"
-                app:layout_constraintTop_toBottomOf="@+id/feeSelectorView"
+                app:layout_constraintTop_toBottomOf="@+id/minMaxTitle"
                 tools:text="No Liquidity" />
 
             <Button
@@ -260,4 +250,22 @@
 
     </androidx.core.widget.NestedScrollView>
 
+    <View
+        android:id="@+id/poweredByLine"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="61dp"
+        android:background="@color/steel_10" />
+
+    <TextView
+        android:id="@+id/poweredBy"
+        style="@style/CaptionSB"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="32dp"
+        android:textAlignment="center"
+        android:textColor="@color/grey"
+        tools:text="Powered by Uniswap" />
 </FrameLayout>

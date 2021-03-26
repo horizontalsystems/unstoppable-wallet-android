@@ -10,6 +10,8 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
+import java.util.*
+import kotlin.Comparator
 
 class ManageWalletsService(
         private val coinManager: ICoinManager,
@@ -23,8 +25,13 @@ class ManageWalletsService(
     val cancelEnableCoinAsync = PublishSubject.create<Coin>()
 
     private val disposables = CompositeDisposable()
+
+    private var featuredCoins = listOf<Coin>()
+    private var coins = listOf<Coin>()
+    private var addedCoins = mutableListOf<Coin>()
     private var wallets = mutableMapOf<Coin, Wallet>()
     private var coinToEnable: Coin? = null
+    private var resyncCoins = false
 
     override val stateAsync = BehaviorSubject.create<ManageWalletsModule.State>()
 
@@ -45,14 +52,14 @@ class ManageWalletsService(
         disposables.add(coinManager.coinAddedObservable
                 .subscribeOn(Schedulers.io())
                 .subscribe {
-                    syncState()
+                    handleAdded(it)
                 })
 
         walletManager.walletsUpdatedObservable
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { wallets ->
-                    sync(wallets)
+                    handleUpdated(wallets)
                 }.let {
                     disposables.add(it)
                 }
@@ -82,6 +89,14 @@ class ManageWalletsService(
                 }
 
         sync(walletManager.wallets)
+        syncCoins()
+        syncState()
+    }
+
+    private fun handleAdded(coin: Coin) {
+        addedCoins.add(coin)
+        syncCoins()
+        syncState()
     }
 
     private fun enable(coins: List<Coin>) {
@@ -120,6 +135,41 @@ class ManageWalletsService(
         coinToEnable = null
     }
 
+    private fun handleUpdated(wallets: List<Wallet>) {
+        sync(wallets)
+
+        if (resyncCoins) {
+            syncCoins()
+            resyncCoins = false
+        }
+
+        syncState()
+    }
+
+    private fun syncCoins() {
+        val (featuredCoins, regularCoins) = coinManager.groupedCoins
+
+        this.featuredCoins = featuredCoins
+
+        coins = regularCoins.sortedWith(Comparator{ lhsCoin, rhsCoin ->
+            val lhsAdded = addedCoins.contains(lhsCoin)
+            val rhsAdded = addedCoins.contains(rhsCoin)
+            if (lhsAdded != rhsAdded) {
+                return@Comparator if (lhsAdded) -1 else 1
+            }
+
+            val lhsEnabled = wallets[lhsCoin] != null
+            val rhsEnabled = wallets[rhsCoin] != null
+
+            if (lhsEnabled != rhsEnabled) {
+                return@Comparator if (lhsEnabled) -1 else 1
+            }
+
+            return@Comparator lhsCoin.title.toLowerCase(Locale.ENGLISH).compareTo(rhsCoin.title.toLowerCase(Locale.ENGLISH))
+        })
+
+    }
+
     private fun sync(walletList: List<Wallet>) {
         wallets = mutableMapOf()
         walletList.forEach { wallet ->
@@ -156,9 +206,6 @@ class ManageWalletsService(
     }
 
     private fun syncState() {
-        val featuredCoins = coinManager.featuredCoins
-        val coins = coinManager.coins.filterNot { featuredCoins.contains(it) }
-
         state = ManageWalletsModule.State(
                 featuredItems = featuredCoins.map { item(it) },
                 items = coins.map { item(it) }

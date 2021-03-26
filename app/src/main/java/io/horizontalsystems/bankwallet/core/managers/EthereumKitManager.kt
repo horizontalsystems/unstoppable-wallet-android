@@ -6,8 +6,10 @@ import io.horizontalsystems.bankwallet.core.UnsupportedAccountException
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.core.BackgroundManager
+import io.horizontalsystems.erc20kit.core.Erc20Kit
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.core.EthereumKit.NetworkType
+import io.horizontalsystems.uniswapkit.UniswapKit
 
 class EthereumKitManager(
         private val infuraProjectId: String,
@@ -55,6 +57,9 @@ class EthereumKitManager(
         val syncSource = EthereumKit.infuraWebSocketSyncSource(networkType, infuraProjectId, infuraSecret)
                 ?: throw AdapterErrorWrongParameters("Could get syncSource!")
         val kit = EthereumKit.getInstance(App.instance, accountType.words, networkType, syncSource, etherscanApiKey, account.id)
+
+        kit.addDecorator(Erc20Kit.getDecorator())
+        kit.addDecorator(UniswapKit.getDecorator())
 
         kit.start()
 

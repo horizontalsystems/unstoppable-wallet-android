@@ -9,15 +9,17 @@ import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
+import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.core.ethereum.EthereumFeeViewModel
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceService
+import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveModule.dataKey
+import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveModule.requestKey
+import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveModule.resultKey
+import io.horizontalsystems.bankwallet.modules.swap.approve.confirmation.SwapApproveConfirmationModule
 import io.horizontalsystems.core.findNavController
-import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.core.getNavigationResult
 import io.horizontalsystems.core.setNavigationResult
 import kotlinx.android.synthetic.main.fragment_swap_approve.*
 
@@ -42,8 +44,7 @@ class SwapApproveFragment : BaseFragment() {
         val approveData = requireArguments().getParcelable<SwapAllowanceService.ApproveData>(dataKey)!!
 
         val vmFactory = SwapApproveModule.Factory(approveData)
-        val viewModel by viewModels<SwapApproveViewModel> { vmFactory }
-        val feeViewModel by viewModels<EthereumFeeViewModel> { vmFactory }
+        val viewModel by navGraphViewModels<SwapApproveViewModel>(R.id.swapApproveFragment) { vmFactory }
 
         amount.setText(viewModel.amount)
 
@@ -67,48 +68,29 @@ class SwapApproveFragment : BaseFragment() {
         }
         amount.addTextChangedListener(watcher)
 
-        btnApprove.setOnSingleClickListener {
-            viewModel.onApprove()
+        btnProceed.setOnSingleClickListener {
+            viewModel.onProceed()
         }
 
-        viewModel.approveAllowed.observe(viewLifecycleOwner, Observer {
-            btnApprove.isEnabled = it
+        viewModel.approveAllowedLiveData.observe(viewLifecycleOwner, {
+            btnProceed.isEnabled = it
         })
 
-        viewModel.approveSuccessLiveEvent.observe(viewLifecycleOwner, Observer {
-            setNavigationResult(requestKey, bundleOf(resultKey to true))
-
-            findNavController().popBackStack()
-        })
-
-        viewModel.approveError.observe(viewLifecycleOwner, Observer {
-            HudHelper.showErrorMessage(requireView(), it)
-        })
-
-        viewModel.amountError.observe(viewLifecycleOwner, Observer {
+        viewModel.amountErrorLiveData.observe(viewLifecycleOwner, {
             amountError.isVisible = it != null
             amountError.text = it
         })
 
-        viewModel.error.observe(viewLifecycleOwner, Observer {
-            error.isVisible = it != null
-            error.text = it
+        viewModel.openConfirmationLiveEvent.observe(viewLifecycleOwner, { sendEvmData ->
+            SwapApproveConfirmationModule.start(this, R.id.swapApproveFragment_to_swapApproveConfirmationFragment, navOptions(), sendEvmData)
         })
 
-        feeSelectorView.setFeeSelectorViewInteractions(
-                feeViewModel,
-                feeViewModel,
-                viewLifecycleOwner,
-                parentFragmentManager,
-                showSpeedInfoListener = {
-                    findNavController().navigate(R.id.swapApproveFragment_to_feeSpeedInfo, null, navOptions())
-                }
-        )
+        getNavigationResult(requestKey)?.let {
+            if (it.getBoolean(resultKey)) {
+                setNavigationResult(requestKey, bundleOf(resultKey to true))
+                findNavController().popBackStack(R.id.swapFragment, false)
+            }
+        }
     }
 
-    companion object {
-        const val requestKey = "approve"
-        const val resultKey = "result"
-        const val dataKey = "data_key"
-    }
 }

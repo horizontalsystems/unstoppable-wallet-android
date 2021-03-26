@@ -12,10 +12,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.core.ethereum.EthereumFeeViewModel
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceViewModel
-import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveFragment
+import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveModule
 import io.horizontalsystems.bankwallet.modules.swap.coincard.SwapCoinCardViewModel
+import io.horizontalsystems.bankwallet.modules.swap.confirmation.SwapConfirmationModule
+import io.horizontalsystems.bankwallet.modules.swap.info.SwapInfoFragment.Companion.dexKey
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.getNavigationResult
 import io.horizontalsystems.core.setOnSingleClickListener
@@ -26,7 +27,6 @@ class SwapFragment : BaseFragment() {
     private val vmFactory by lazy { SwapModule.Factory(this, requireArguments().getParcelable(fromCoinKey)!!) }
     private val viewModel by navGraphViewModels<SwapViewModel>(R.id.swapFragment) { vmFactory }
     private val allowanceViewModel by navGraphViewModels<SwapAllowanceViewModel>(R.id.swapFragment) { vmFactory }
-    private val feeViewModel by navGraphViewModels<EthereumFeeViewModel>(R.id.swapFragment) { vmFactory }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.fragment_swap, container, false)
@@ -42,7 +42,7 @@ class SwapFragment : BaseFragment() {
                     true
                 }
                 R.id.menuInfo -> {
-                    findNavController().navigate(R.id.swapFragment_to_uniswapInfoFragment, null, navOptions())
+                    findNavController().navigate(R.id.swapFragment_to_swapInfoFragment, bundleOf(dexKey to viewModel.service.dex), navOptions())
                     true
                 }
                 else -> false
@@ -61,18 +61,8 @@ class SwapFragment : BaseFragment() {
 
         observeViewModel()
 
-        feeSelectorView.setFeeSelectorViewInteractions(
-                feeViewModel,
-                feeViewModel,
-                viewLifecycleOwner,
-                parentFragmentManager,
-                showSpeedInfoListener = {
-                    findNavController().navigate(R.id.swapFragment_to_feeSpeedInfo, null, navOptions())
-                }
-        )
-
-        getNavigationResult(SwapApproveFragment.requestKey)?.let {
-            if (it.getBoolean(SwapApproveFragment.resultKey)) {
+        getNavigationResult(SwapApproveModule.requestKey)?.let {
+            if (it.getBoolean(SwapApproveModule.resultKey)) {
                 viewModel.didApprove()
             }
         }
@@ -90,7 +80,7 @@ class SwapFragment : BaseFragment() {
         }
 
         proceedButton.setOnSingleClickListener {
-            findNavController().navigate(R.id.swapFragment_to_swapConfirmationFragment, null, navOptions())
+            viewModel.onTapProceed()
         }
     }
 
@@ -117,16 +107,22 @@ class SwapFragment : BaseFragment() {
         })
 
         viewModel.openApproveLiveEvent().observe(viewLifecycleOwner, { approveData ->
-            findNavController().navigate(R.id.swapFragment_to_swapApproveFragment, bundleOf(SwapApproveFragment.dataKey to approveData), navOptions())
+            SwapApproveModule.start(this, R.id.swapFragment_to_swapApproveFragment, navOptions(), approveData)
         })
 
         viewModel.advancedSettingsVisibleLiveData().observe(viewLifecycleOwner, { visible ->
             advancedSettingsViews.isVisible = visible
         })
 
-        viewModel.feeVisibleLiveData().observe(viewLifecycleOwner, { visible ->
-            feeSelectorView.isVisible = visible
+        viewModel.openConfirmationLiveEvent().observe(viewLifecycleOwner, { sendEvmData ->
+            SwapConfirmationModule.start(this, R.id.swapFragment_to_swapConfirmationFragment, navOptions(), sendEvmData)
         })
+
+        val dexName = when (viewModel.service.dex) {
+            SwapModule.Dex.Uniswap -> "Uniswap"
+            SwapModule.Dex.PancakeSwap -> "PancakeSwap"
+        }
+        poweredBy.text = "Powered by $dexName"
     }
 
     private fun handleButtonAction(button: Button, action: SwapViewModel.ActionState?) {
@@ -165,6 +161,8 @@ class SwapFragment : BaseFragment() {
         } else {
             guaranteedAmountViews.isVisible = false
         }
+        poweredBy.isVisible = tradeViewItem == null
+        poweredByLine.isVisible = tradeViewItem == null
     }
 
     private fun priceImpactColor(ctx: Context, priceImpactLevel: SwapTradeService.PriceImpactLevel?): Int {

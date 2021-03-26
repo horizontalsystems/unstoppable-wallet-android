@@ -6,6 +6,13 @@
     android:layout_height="60dp"
     android:background="@drawable/clear_clickable_background">
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/verticalCenter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
+
     <View
         android:layout_width="0dp"
         android:layout_height="1dp"
@@ -19,10 +26,10 @@
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_marginStart="16dp"
+        tools:src="@drawable/coin_ada"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:src="@drawable/coin_ada" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/title"
@@ -40,20 +47,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed"
         tools:text="Bitcoin" />
-
-    <TextView
-        android:id="@+id/subtitle"
-        style="@style/Subhead2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="4dp"
-        android:textColor="@color/grey"
-        app:layout_goneMarginLeft="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/rank"
-        app:layout_constraintTop_toBottomOf="@id/title"
-        tools:text="BTC" />
 
     <TextView
         android:id="@+id/rank"
@@ -74,6 +67,26 @@
         tools:text="123" />
 
     <TextView
+        android:id="@+id/subtitle"
+        style="@style/Subhead2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="5dp"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:textColor="@color/grey"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/marketFieldCaption"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toEndOf="@id/rank"
+        app:layout_constraintTop_toBottomOf="@id/title"
+        app:layout_goneMarginLeft="0dp"
+        tools:text="BTC/ETH" />
+
+    <TextView
         android:id="@+id/rate"
         style="@style/Body"
         android:layout_width="wrap_content"
@@ -82,21 +95,10 @@
         android:textColor="@color/leah"
         app:layout_constraintBottom_toTopOf="@id/marketFieldValue"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/title"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed"
         tools:text="$17,315.48" />
-
-    <TextView
-        android:id="@+id/marketFieldValue"
-        style="@style/CaptionSB"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="3dp"
-        android:textColor="@color/grey"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@id/rate"
-        app:layout_constraintTop_toBottomOf="@id/rate"
-        tools:text="$105,239 B" />
 
     <TextView
         android:id="@+id/marketFieldCaption"
@@ -108,5 +110,25 @@
         app:layout_constraintEnd_toStartOf="@id/marketFieldValue"
         app:layout_constraintTop_toTopOf="@id/marketFieldValue"
         tools:text="Vol" />
+
+    <TextView
+        android:id="@+id/marketFieldValue"
+        style="@style/CaptionSB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="3dp"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:textColor="@color/grey"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/rate"
+        app:layout_constraintHorizontal_bias="1"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toEndOf="@+id/verticalCenter"
+        app:layout_constraintTop_toBottomOf="@id/rate"
+        tools:text="$105,239 B ETH" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -29,10 +29,12 @@
     <string name="Button_Start">Start</string>
     <string name="Button_Create">Create</string>
     <string name="Button_Restore">Restore</string>
+    <string name="Button_Reset">Reset</string>
 
     <string name="Error">Error</string>
     <string name="NotAvailable">N/A</string>
     <string name="None">None</string>
+    <string name="Any">Any</string>
 
     <string name="Wallet">%s Wallet</string>
     <string name="FooterText" translatable="false">© Horizontal Systems 2021</string>
@@ -97,6 +99,8 @@
     <string name="Market_Field_PriceDiff">Price</string>
     <string name="Market_Title">Markets</string>
     <string name="Market_Search">Search</string>
+    <string name="Market_FilterSection_MarketParameters">MARKET PARAMETERS</string>
+    <string name="Market_FilterSection_PriceParameters">PRICE PARAMETERS</string>
     <string name="Market_Field_HighestCap">Highest Cap</string>
     <string name="Market_Field_LowestCap">Lowest Cap</string>
     <string name="Market_Field_HighestVolume">Highest Volume</string>
@@ -143,8 +147,6 @@
     <string name="Market_Category_StablecoinIssuers_Description">Decentralized issuers of fiat pegged stablecoin tokens.</string>
     <string name="Market_Category_ExchangeTokens">Exchange Tokens</string>
     <string name="Market_Category_ExchangeTokens_Description">Tokens issued by centralized exchanges.</string>
-    <string name="Market_Category_Metals">Metals</string>
-    <string name="Market_Category_Metals_Description">Tokens pegged to metal prices.</string>
     <string name="Market_Category_RiskManagement">Risk Management</string>
     <string name="Market_Category_RiskManagement_Description">Risk assessment, insurance and hedging.</string>
     <string name="Market_Category_Wallets">Wallets</string>
@@ -171,6 +173,8 @@
     <string name="Market_Category_CrossChain_Description">Cross-chain protocols.</string>
     <string name="Market_Category_Computing">Computing</string>
     <string name="Market_Category_Computing_Description">Decentralized on-demand computing solutions.</string>
+    <string name="Market_Category_RebaseTokens">Rebase Tokens</string>
+    <string name="Market_Category_RebaseTokens_Description">Tokens that periodically adjust supply to achieve a target price.</string>
 
     <!--Market Search-->
     <string name="EmptyResults">No results found</string>
@@ -217,6 +221,9 @@
     <string name="Market_Filter_PriceChange_Negative_100_minus">&lt; -100%</string>
     <string name="TimePeriod_24h">24h</string>
 
+    <!--Coin Markets-->
+    <string name="CoinMarket_Title">%s Markets</string>
+
     <!--Balance-->
 
     <string name="Balance_Title">Balance</string>
@@ -249,7 +256,11 @@
 
     <string name="Send_Confirmation_Title">Confirm</string>
     <string name="Send_Confirmation_Domain">Domain</string>
+    <string name="Send_Confirmation_YouSend">You Send</string>
+    <string name="Send_Confirmation_Amount">Amount</string>
+    <string name="Send_Confirmation_To">To</string>
     <string name="Send_Confirmation_Receiver">Receiver</string>
+    <string name="Send_Confirmation_Input">Input</string>
     <string name="Send_Confirmation_HintMemo" translatable="false">Memo</string>
     <string name="Send_Confirmation_EstimateTime">Duration</string>
     <string name="Send_Confirmation_LockTime" translatable="false">TimeLock</string>
@@ -315,7 +326,7 @@
     <string name="WalletConnect_Status_Offline">Offline</string>
     <string name="WalletConnect_Status_Online">Online</string>
     <string name="WalletConnect_Status_Connecting">Connecting…</string>
-    <string name="WalletConnect_NewConnect">New Connect</string>
+    <string name="WalletConnect_NewConnect">New Connection</string>
 
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Error_InsufficientBalance">Transaction requires %s for sending</string>
@@ -371,6 +382,9 @@
 
     <!-- Swap Confirmation -->
     <string name="Swap_Confirmation">Confirmation</string>
+    <string name="Swap_Confirmation_Guaranteed">Guaranteed</string>
+    <string name="Swap_Confirmation_Maximum">Maximum</string>
+    <string name="Swap_Confirmation_Estimated">Estimated</string>
 
     <!--Swap Coin Select-->
 
@@ -379,28 +393,29 @@
     <string name="Approve_Title">Swap Approve</string>
     <string name="Approve_Info">You should grant permission to a smart contract to swap given token on your behalf. This permission sets amount that can be used by a smart contract. It doesn\'t affect your balance but requires a small fee to execute approval transaction. \n\nWhile it may be done on demand before each trade, it\'s cheaper to approve higher amount in advance for us in future trades.</string>
     <string name="Approve_Error_AlreadyApproved">You already have an allowance for this amount</string>
+    <string name="Approve_Spender">Spender</string>
+    <string name="Approve_YouApprove">You Approve</string>
 
     <!--Uniswap Info -->
 
-    <string name="UniswapInfo_Title">Uniswap v.2</string>
-    <string name="UniswapInfo_Description">This exchange service is powered by Uniswap, a decentralized token exchange protocol built on Ethereum blockchain.\n\nUniswap is fully automated and managed by smart contracts that facilitate token exchanges in a reliable manner without any means to cheat.</string>
-    <string name="UniswapInfo_UniswapRelated">Uniswap Related</string>
-    <string name="UniswapInfo_AllowanceTitle">Allowance</string>
-    <string name="UniswapInfo_AllowanceDescription">The amount of some currency that Uniswap can spend on your behalf when executing token swaps. Sufficient allowance is required before swap action can take place</string>
-    <string name="UniswapInfo_PriceImpactTitle">Price Impact</string>
-    <string name="UniswapInfo_PriceImpactDescription">Expected price deviation from a shown price, typically increases with the swap amount.</string>
-    <string name="UniswapInfo_SwapFeeTitle">Swap Fee</string>
-    <string name="UniswapInfo_SwapFeeDescription">A service fee for the swap action on Uniswap platform, shown in the currency the user sells. For most orders it should be either 0.3 % or 0.6 %.</string>
-    <string name="UniswapInfo_GuaranteedAmountTitle">Guaranteed Amount</string>
-    <string name="UniswapInfo_GuaranteedAmountDescription">The minimum amount a user is going to receive as a result of a swap action.</string>
-    <string name="UniswapInfo_MaxSpendTitle">Maximum Spend</string>
-    <string name="UniswapInfo_MaxSpendDescription">The maximum amount a user is going to spend as a result of a swap action.</string>
-    <string name="UniswapInfo_Other">Other</string>
-    <string name="UniswapInfo_TransactionFeeTitle">Transaction Fee</string>
-    <string name="UniswapInfo_TransactionFeeDescription">The estimated processing cost of the given transaction on Ethereum blockchain. Uniswap related transactions will typically cost more than generic token transfer transactions.</string>
-    <string name="UniswapInfo_TransactionSpeedTitle">Transaction Speed</string>
-    <string name="UniswapInfo_TransactionSpeedDescription">Transactions with higher transaction fee will result in faster processing speeds. The opposite is true as well.</string>
-    <string name="UniswapInfo_UniswapSite">Uniswap Site</string>
+    <string name="SwapInfo_Description">This exchange service is powered by %s, a decentralized token exchange protocol built on %s blockchain.\n\n%s is fully automated and managed by smart contracts that facilitate token exchanges in a reliable manner without any means to cheat.</string>
+    <string name="SwapInfo_DexRelated">%s Related</string>
+    <string name="SwapInfo_AllowanceTitle">Allowance</string>
+    <string name="SwapInfo_AllowanceDescription">The amount of some currency that service can spend on your behalf when executing token swaps. Sufficient allowance is required before swap action can take place</string>
+    <string name="SwapInfo_PriceImpactTitle">Price Impact</string>
+    <string name="SwapInfo_PriceImpactDescription">Expected price deviation from a shown price, typically increases with the swap amount.</string>
+    <string name="SwapInfo_SwapFeeTitle">Swap Fee</string>
+    <string name="SwapInfo_SwapFeeDescription">A service fee for the swap action on platform, shown in the currency the user sells. For most orders it should be either 0.3 % or 0.6 %.</string>
+    <string name="SwapInfo_GuaranteedAmountTitle">Guaranteed Amount</string>
+    <string name="SwapInfo_GuaranteedAmountDescription">The minimum amount a user is going to receive as a result of a swap action.</string>
+    <string name="SwapInfo_MaxSpendTitle">Maximum Spend</string>
+    <string name="SwapInfo_MaxSpendDescription">The maximum amount a user is going to spend as a result of a swap action.</string>
+    <string name="SwapInfo_Other">Other</string>
+    <string name="SwapInfo_TransactionFeeTitle">Transaction Fee</string>
+    <string name="SwapInfo_TransactionFeeDescription">The estimated processing cost of the given transaction on %s blockchain. %s related transactions will typically cost more than generic token transfer transactions.</string>
+    <string name="SwapInfo_TransactionSpeedTitle">Transaction Speed</string>
+    <string name="SwapInfo_TransactionSpeedDescription">Transactions with higher transaction fee will result in faster processing speeds. The opposite is true as well.</string>
+    <string name="SwapInfo_Site">%s Site</string>
 
     <!--Deposit-->
 
@@ -734,53 +749,59 @@
     <string name="CoinOption_bip49_Subtitle">Popular (starts with %s...)</string>
     <string name="CoinOption_bip84_Subtitle">Newest (starts with %s...)</string>
 
-    <!--Charts-->
+    <!--Coin Page-->
 
-    <string name="Charts_TimeDuration_Today">TDY</string>
-    <string name="Charts_TimeDuration_Day">24H</string>
-    <string name="Charts_TimeDuration_Week">7D</string>
-    <string name="Charts_TimeDuration_Month">1M</string>
-    <string name="Charts_TimeDuration_TwoWeeks">2W</string>
-    <string name="Charts_TimeDuration_Month3">3M</string>
-    <string name="Charts_TimeDuration_HalfYear">6M</string>
-    <string name="Charts_TimeDuration_Year">1Y</string>
-    <string name="Charts_TimeDuration_Year2">2Y</string>
+    <string name="CoinPage_TimeDuration_Today">TDY</string>
+    <string name="CoinPage_TimeDuration_Day">24H</string>
+    <string name="CoinPage_TimeDuration_Week">7D</string>
+    <string name="CoinPage_TimeDuration_Month">1M</string>
+    <string name="CoinPage_TimeDuration_TwoWeeks">2W</string>
+    <string name="CoinPage_TimeDuration_Month3">3M</string>
+    <string name="CoinPage_TimeDuration_HalfYear">6M</string>
+    <string name="CoinPage_TimeDuration_Year">1Y</string>
+    <string name="CoinPage_TimeDuration_Year2">2Y</string>
 
-    <string name="Charts_RatingDetails">Rating Details</string>
-    <string name="Charts_Price">Price</string>
-    <string name="Charts_Market">Market</string>
-    <string name="Charts_MarketBTC">BTC Markets</string>
-    <string name="Charts_Range24">24h Range</string>
-    <string name="Charts_Performance">Performance</string>
-    <string name="Charts_About">About</string>
-    <string name="Charts_Category">Category</string>
-    <string name="Charts_Guide">Guide</string>
-    <string name="Charts_Website">Website</string>
-    <string name="Charts_Whitepaper">Whitepaper</string>
-    <string name="Charts_Reddit">Reddit</string>
-    <string name="Charts_Twitter">Twitter</string>
-    <string name="Charts_Telegram">Telegram</string>
-    <string name="Charts_Github">Github</string>
-    <string name="Charts_Changes1W">Changes (1W)</string>
-    <string name="Charts_Changes1M">Changes (1M)</string>
-    <string name="Charts_MarketCap">Market Cap</string>
-    <string name="Charts_Volume24">Volume (24h)</string>
-    <string name="Charts_inCirculation">In Circulation</string>
-    <string name="Charts_TotalSupply">Total Supply</string>
-    <string name="Charts_StartDate">Launch Date</string>
-    <string name="Charts_CryptoCompare" translatable="false">\@CryptoCompare.com</string>
-    <string name="Charts_IndicatorEMA" translatable="false">EMA</string>
-    <string name="Charts_IndicatorMACD" translatable="false">MACD</string>
-    <string name="Charts_IndicatorRSI" translatable="false">RSI</string>
-    <string name="Charts_MarketCap_Thousand">k</string>
-    <string name="Charts_MarketCap_Million">M</string>
-    <string name="Charts_MarketCap_Billion">B</string>
-    <string name="Charts_MarketCap_Trillion">T</string>
-    <string name="Charts_Volume">Vol</string>
-    <string name="Charts_Error_NotAvailable">Chart not available</string>
-    <string name="Charts_LatestNews">Latest News</string>
-    <string name="Charts_Favorite">Favorite</string>
-    <string name="Charts_Unfavorite">Unfavorite</string>
+    <string name="CoinPage_RatingDetails">Rating Details</string>
+    <string name="CoinPage_Price">Price</string>
+    <string name="CoinPage_Market">Market</string>
+    <string name="CoinPage_CoinMarket">%s Markets</string>
+    <string name="CoinPage_FundsInvested">Funds Invested</string>
+    <string name="CoinPage_Range24">24h Range</string>
+    <string name="CoinPage_Performance">Performance</string>
+    <string name="CoinPage_About">About</string>
+    <string name="CoinPage_Category">Category</string>
+    <string name="CoinPage_Guide">Guide</string>
+    <string name="CoinPage_Website">Website</string>
+    <string name="CoinPage_Whitepaper">Whitepaper</string>
+    <string name="CoinPage_Reddit">Reddit</string>
+    <string name="CoinPage_Twitter">Twitter</string>
+    <string name="CoinPage_Telegram">Telegram</string>
+    <string name="CoinPage_Github">Github</string>
+    <string name="CoinPage_Changes1W">Changes (1W)</string>
+    <string name="CoinPage_Changes1M">Changes (1M)</string>
+    <string name="CoinPage_MarketCap">Market Cap</string>
+    <string name="CoinPage_DilutedMarketCap">Diluted MCap</string>
+    <string name="CoinPage_Volume24">Volume (24h)</string>
+    <string name="CoinPage_inCirculation">In Circulation</string>
+    <string name="CoinPage_TotalSupply">Total Supply</string>
+    <string name="CoinPage_StartDate">Launch Date</string>
+    <string name="CoinPage_CryptoCompare" translatable="false">\@CryptoCompare.com</string>
+    <string name="CoinPage_IndicatorEMA" translatable="false">EMA</string>
+    <string name="CoinPage_IndicatorMACD" translatable="false">MACD</string>
+    <string name="CoinPage_IndicatorRSI" translatable="false">RSI</string>
+    <string name="CoinPage_MarketCap_Thousand">k</string>
+    <string name="CoinPage_MarketCap_Million">M</string>
+    <string name="CoinPage_MarketCap_Billion">B</string>
+    <string name="CoinPage_MarketCap_Trillion">T</string>
+    <string name="CoinPage_Volume">Vol</string>
+    <string name="CoinPage_Error_NotAvailable">Chart not available</string>
+    <string name="CoinPage_LatestNews">Latest News</string>
+    <string name="CoinPage_Favorite">Favorite</string>
+    <string name="CoinPage_Unfavorite">Unfavorite</string>
+    <string name="CoinPage_Performance_Week">1 Week</string>
+    <string name="CoinPage_Performance_Month">1 Month</string>
+    <string name="CoinPage_ReadMore">Read More</string>
+    <string name="CoinPage_ReadLess">Read Less</string>
 
     <!--Rate list-->
 

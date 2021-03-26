@@ -117,7 +117,7 @@ class CoinWithSwitchViewHolder(
 
     private fun set(coin: Coin, listPosition: ListPosition) {
         backgroundView.setBackgroundResource(listPosition.getBackground())
-        coinIcon.setCoinImage(coin.code, coin.type)
+        coinIcon.setCoinImage(coin.type)
         coinTitle.text = coin.title
         coinSubtitle.text = coin.code
         coinTypeLabel.text = coin.type.label

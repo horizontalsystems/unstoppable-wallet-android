@@ -3,7 +3,6 @@ package io.horizontalsystems.chartview
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.RectF
-import android.graphics.Typeface
 import io.horizontalsystems.chartview.models.ChartConfig
 import io.horizontalsystems.chartview.models.GridColumn
 
@@ -32,12 +31,12 @@ class ChartGridTimeline(private val config: ChartConfig, override var isVisible:
 
     private fun Canvas.drawColumns() {
         columns.forEach {
-            drawText(it.value, textPosition(it.x, it.value), config.timelineTextSize, textPaint)
+            drawText(it.value, textPosition(it.x, it.value), config.timelineTextSize + config.timelineTextPadding, textPaint)
         }
     }
 
     private fun textPosition(x: Float, text: String): Float {
-        val width = config.measureTextWidth(text)
+        val width = textPaint.measureText(text)
         if (width + x >= shape.right) {
             return shape.right - (width + config.timelineTextPadding)
         }

@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?android:windowBackground"
+    android:clickable="true">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:menu="@menu/rate_chart_menu"
+        app:navigationIcon="@drawable/ic_back"
+        app:titleTextAppearance="@style/Title3" />
+
+    <io.horizontalsystems.bankwallet.ui.extensions.LockableNestedScrollView
+        android:id="@+id/scroller"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:fillViewport="true">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="32dp">
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/startGuideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_begin="16dp" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/endGuideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_end="16dp" />
+
+            <TextView
+                android:id="@+id/coinName"
+                style="@style/Subhead2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:singleLine="true"
+                android:textColor="@color/grey"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Coin Name" />
+
+            <TextView
+                android:id="@+id/coinRateLast"
+                style="@style/Headline1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="20dp"
+                android:textColor="@color/leah"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/coinName"
+                tools:text="3,979.87" />
+
+            <io.horizontalsystems.bankwallet.ui.extensions.RateDiffView
+                android:id="@+id/coinRateDiff"
+                style="@style/Subhead1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                app:layout_constraintBottom_toBottomOf="@+id/coinRateLast"
+                app:layout_constraintStart_toEndOf="@+id/coinRateLast"
+                app:layout_constraintTop_toTopOf="@+id/coinRateLast"
+                tools:text="+18%" />
+
+            <ImageButton
+                android:id="@+id/coinRating"
+                style="@style/ImageButtonSecondary"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:visibility="invisible"
+                android:src="@drawable/ic_rating_a"
+                app:layout_constraintBottom_toBottomOf="@+id/coinRateLast"
+                app:layout_constraintEnd_toEndOf="@+id/endGuideline"
+                app:layout_constraintTop_toTopOf="@+id/coinRateLast"
+                tools:visibility="visible"/>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/chartPointsInfo"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="7dp"
+                android:layout_marginEnd="16dp"
+                android:visibility="invisible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/coinRateLast">
+
+                <!--Price and Date info-->
+
+                <TextView
+                    android:id="@+id/pointInfoPrice"
+                    style="@style/CaptionSB"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/oz"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="$9530.12" />
+
+                <TextView
+                    android:id="@+id/pointInfoDate"
+                    style="@style/Caption"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/grey"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    tools:text="Jun 12, 12:30" />
+
+                <!--Volume info-->
+
+                <TextView
+                    android:id="@+id/pointInfoVolumeTitle"
+                    style="@style/Caption"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/CoinPage_Volume"
+                    android:textColor="@color/grey"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/pointInfoPrice" />
+
+                <TextView
+                    android:id="@+id/pointInfoVolume"
+                    style="@style/Caption"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/CoinPage_Volume"
+                    android:textColor="@color/grey"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    tools:text="$36,166B" />
+
+                <!--MACD info-->
+
+                <TextView
+                    android:id="@+id/macdHistogram"
+                    style="@style/Caption"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/lucian"
+                    android:visibility="invisible"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/pointInfoPrice"
+                    tools:text="-163.24" />
+
+                <TextView
+                    android:id="@+id/macdSignal"
+                    style="@style/Caption"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/jacob"
+                    android:visibility="invisible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    tools:text="-123" />
+
+                <TextView
+                    android:id="@+id/macdValue"
+                    style="@style/Caption"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="4dp"
+                    android:textColor="@color/issyk_blue"
+                    android:visibility="invisible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/macdSignal"
+                    tools:text="-286.61" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabLayout"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/coinRateLast"
+                app:tabPaddingStart="4dp"
+                app:tabPaddingEnd="4dp"
+                app:tabMinWidth="0dp"
+                app:tabGravity="start"
+                app:tabMode="scrollable" />
+
+            <io.horizontalsystems.chartview.Chart
+                android:id="@+id/chart"
+                android:layout_width="0dp"
+                android:layout_height="180dp"
+                android:layout_marginTop="4dp"
+                app:cursorColor="@color/oz"
+                app:curvePressedColor="@color/oz"
+                app:gridDashColor="@color/steel_10"
+                app:gridTextColor="@color/nina"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/chartPointsInfo"
+                app:partialChartColor="@color/grey_50"
+                app:timelineTextColor="@color/nina"
+                app:trendDownColor="@color/red_d"
+                app:trendUpColor="@color/green_d" />
+
+            <View
+                android:id="@+id/border3"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:background="@color/steel_10"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/chart" />
+
+            <CheckBox
+                android:id="@+id/indicatorEMA"
+                style="@style/RadioButtonThird"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="7dp"
+                android:text="@string/CoinPage_IndicatorEMA"
+                android:visibility="invisible"
+                app:layout_constraintStart_toStartOf="@id/startGuideline"
+                app:layout_constraintTop_toBottomOf="@+id/border3" />
+
+            <CheckBox
+                android:id="@+id/indicatorMACD"
+                style="@style/RadioButtonThird"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@string/CoinPage_IndicatorMACD"
+                android:visibility="invisible"
+                app:layout_constraintStart_toEndOf="@id/indicatorEMA"
+                app:layout_constraintTop_toTopOf="@+id/indicatorEMA" />
+
+            <CheckBox
+                android:id="@+id/indicatorRSI"
+                style="@style/RadioButtonThird"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@string/CoinPage_IndicatorRSI"
+                android:visibility="invisible"
+                app:layout_constraintStart_toEndOf="@id/indicatorMACD"
+                app:layout_constraintTop_toTopOf="@+id/indicatorEMA" />
+
+            <View
+                android:id="@+id/border4"
+                android:layout_width="0dp"
+                android:layout_height="0.5dp"
+                android:background="@color/steel_20"
+                android:layout_marginTop="7dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/indicatorRSI" />
+
+            <include
+                layout="@layout/coin_market_details"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/border4" />
+
+            <ProgressBar
+                android:id="@+id/marketSpinner"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/grey"
+                android:indeterminate="true"
+                android:indeterminateTint="@color/grey"
+                android:indeterminateTintMode="src_atop"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/indicatorRSI" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </io.horizontalsystems.bankwallet.ui.extensions.LockableNestedScrollView>
+</FrameLayout>

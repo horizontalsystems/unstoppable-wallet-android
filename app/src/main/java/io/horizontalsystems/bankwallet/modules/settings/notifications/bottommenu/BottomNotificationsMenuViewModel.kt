@@ -6,20 +6,20 @@ import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IPriceAlertManager
 import io.horizontalsystems.bankwallet.entities.PriceAlert
+import io.horizontalsystems.coinkit.models.CoinType
 
 class BottomNotificationsMenuViewModel(
-        private val coinId: String,
+        private val coinType: CoinType,
+        private val coinName: String,
         private val priceAlertManager: IPriceAlertManager,
         private val mode: NotificationMenuMode) : ViewModel() {
 
     val menuItemsLiveData = MutableLiveData<List<NotificationMenuViewItem>>()
-    private var changeState: PriceAlert.ChangeState = PriceAlert.ChangeState.OFF
-    private var trendState: PriceAlert.TrendState = PriceAlert.TrendState.OFF
+    private val alertStates = priceAlertManager.getAlertStates(coinType)
+    private var changeState: PriceAlert.ChangeState = alertStates.first
+    private var trendState: PriceAlert.TrendState = alertStates.second
 
     init {
-        val priceAlert = priceAlertManager.getPriceAlert(coinId)
-        changeState = priceAlert.changeState
-        trendState = priceAlert.trendState
         setItems()
     }
 
@@ -45,7 +45,7 @@ class BottomNotificationsMenuViewModel(
         }
 
         setItems()
-        priceAlertManager.savePriceAlert(PriceAlert(coinId, changeState, trendState))
+        priceAlertManager.savePriceAlert(coinType, coinName, changeState, trendState)
     }
 
     private fun setItems() {

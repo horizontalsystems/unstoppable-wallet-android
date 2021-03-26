@@ -5,10 +5,11 @@ import android.graphics.drawable.Drawable
 import androidx.core.content.ContextCompat
 import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.views.R
+import java.util.*
 
 object AppLayoutHelper {
-    fun getCoinDrawable(context: Context, coinCode: String, coinType: CoinType? = null): Drawable? {
-        val coinDrawableResId = getCoinDrawableResId(context, coinCode)
+    fun getCoinDrawable(context: Context, coinType: CoinType): Drawable? {
+        val coinDrawableResId = getCoinDrawableResId(context, coinType)
 
         val resId = when {
             coinDrawableResId != null -> coinDrawableResId
@@ -21,8 +22,8 @@ object AppLayoutHelper {
         return resId?.let { ContextCompat.getDrawable(context, it) }
     }
 
-    fun getCoinDrawableResId(context: Context, coinCode: String): Int? {
-        val coinResourceName = "coin_${coinCode.replace("-", "_").toLowerCase()}"
+    fun getCoinDrawableResId(context: Context, coinType: CoinType): Int? {
+        val coinResourceName = coinType.ID.replace("[|-]".toRegex(), "_").toLowerCase(Locale.ENGLISH)
         val imgRes = context.resources.getIdentifier(coinResourceName, "drawable", context.packageName)
 
         return when {

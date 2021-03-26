@@ -10,11 +10,12 @@ import androidx.room.TypeConverters
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.managers.PriceAlertManager
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.coinkit.models.CoinType
 
-@Database(version = 29, exportSchema = false, entities = [
+@Database(version = 30, exportSchema = false, entities = [
     EnabledWallet::class,
     PriceAlert::class,
     AccountRecord::class,
@@ -74,6 +75,7 @@ abstract class AppDatabase : RoomDatabase() {
                             MIGRATION_26_27,
                             MIGRATION_27_28,
                             MIGRATION_28_29,
+                            MIGRATION_29_30,
                     )
                     .build()
         }
@@ -504,7 +506,6 @@ abstract class AppDatabase : RoomDatabase() {
 
                 //drop CoinRecord table and clean PriceAlert table
                 database.execSQL("DROP TABLE CoinRecord")
-                database.execSQL("DELETE FROM PriceAlert")
             }
         }
 
@@ -512,6 +513,51 @@ abstract class AppDatabase : RoomDatabase() {
             override fun migrate(database: SupportSQLiteDatabase) {
                 database.execSQL("DROP TABLE FavoriteCoin")
                 database.execSQL("CREATE TABLE IF NOT EXISTS `FavoriteCoin` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `coinType` TEXT NOT NULL)")
+            }
+        }
+
+        private val MIGRATION_29_30: Migration = object : Migration(29, 30) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("DROP TABLE SubscriptionJob")
+                database.execSQL("CREATE TABLE IF NOT EXISTS SubscriptionJob (`coinCode` TEXT NOT NULL, `topicName` TEXT NOT NULL, `stateType` TEXT NOT NULL, `jobType` TEXT NOT NULL, PRIMARY KEY(`coinCode`, `stateType`))")
+
+                //unsubscribe from old Notifications
+                addNotificationsUnsubscribeJobs(database)
+
+                database.execSQL("DROP TABLE PriceAlert")
+                database.execSQL("CREATE TABLE IF NOT EXISTS PriceAlert (`coinType` TEXT NOT NULL, `notificationCoinCode` TEXT NOT NULL, `coinName` TEXT NOT NULL, `changeState` TEXT NOT NULL, `trendState` TEXT NOT NULL, PRIMARY KEY(`coinType`))")
+            }
+        }
+
+        private fun addNotificationsUnsubscribeJobs(database: SupportSQLiteDatabase) {
+            val unsubscribeJobs = mutableListOf<SubscriptionJob>()
+            val priceAlertsCursor = database.query("SELECT * FROM PriceAlert")
+            while (priceAlertsCursor.moveToNext()) {
+                val coinIdColumn = priceAlertsCursor.getColumnIndex("coinId")
+                if (coinIdColumn >= 0) {
+                    val coinId = priceAlertsCursor.getString(coinIdColumn)
+                    val changeColumn = priceAlertsCursor.getColumnIndex("changeState")
+                    if (changeColumn >= 0) {
+                        val changeValue = priceAlertsCursor.getString(changeColumn)
+                        if (changeValue != PriceAlert.ChangeState.OFF.value) {
+                            unsubscribeJobs.add(PriceAlertManager.getChangeSubscriptionJob(coinId, changeValue, SubscriptionJob.JobType.Unsubscribe))
+                        }
+                    }
+                    val trendColumn = priceAlertsCursor.getColumnIndex("trendState")
+                    if (trendColumn >= 0) {
+                        val trendValue = priceAlertsCursor.getString(trendColumn)
+                        if (trendValue != PriceAlert.TrendState.OFF.value) {
+                            unsubscribeJobs.add(PriceAlertManager.getTrendSubscriptionJob(coinId, trendValue, SubscriptionJob.JobType.Unsubscribe))
+                        }
+                    }
+                }
+            }
+
+            unsubscribeJobs.forEach { job ->
+                database.execSQL("""
+                                        INSERT INTO SubscriptionJob (`coinCode`,`topicName`,`stateType`,`jobType`) 
+                                        VALUES ('${job.coinCode}', '${job.topicName}', '${job.stateType.value}', '${job.jobType.value}')
+                                        """.trimIndent())
             }
         }
 

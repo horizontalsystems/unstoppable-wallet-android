@@ -2,10 +2,8 @@ package io.horizontalsystems.chartview.models
 
 import android.content.Context
 import android.graphics.Color
-import android.graphics.Paint
 import android.graphics.Typeface
 import android.util.AttributeSet
-import androidx.core.content.res.ResourcesCompat
 import io.horizontalsystems.chartview.ChartData
 import io.horizontalsystems.chartview.R
 import java.math.BigDecimal
@@ -15,7 +13,7 @@ class ChartConfig(private val context: Context, attrs: AttributeSet?) {
     //  colors
     val textFont: Typeface = Typeface.DEFAULT
     var timelineTextColor = context.getColor(R.color.grey)
-    var timelineTextSize = dp2px(12f)
+    var timelineTextSize = dp2px(10f)
     var timelineTextPadding = dp2px(4f)
 
     var gridTextColor = context.getColor(R.color.light_grey)
@@ -25,6 +23,7 @@ class ChartConfig(private val context: Context, attrs: AttributeSet?) {
 
     var gridTextSize = dp2px(12f)
     var gridTextPadding = dp2px(4f)
+    var gridSideTextPadding = dp2px(16f)
     var gridEdgeOffset = dp2px(5f)
 
     var curveColor = context.getColor(R.color.red_d)
@@ -78,13 +77,6 @@ class ChartConfig(private val context: Context, attrs: AttributeSet?) {
         } else {
             curveColor = trendUpColor
         }
-    }
-
-    fun measureTextWidth(text: String): Float {
-        val paint = Paint()
-        val width = paint.measureText(text)
-
-        return dp2px(width)
     }
 
     private fun dp2px(dps: Float): Float {

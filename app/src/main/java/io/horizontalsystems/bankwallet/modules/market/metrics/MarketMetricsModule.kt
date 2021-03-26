@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.bankwallet.modules.market.MarketModule
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.xrateskit.entities.GlobalCoinMarket
 import java.math.BigDecimal
@@ -14,7 +13,7 @@ object MarketMetricsModule {
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            val service = MarketMetricsService(App.xRateManager, MarketModule.currencyUSD, App.backgroundManager)
+            val service = MarketMetricsService(App.xRateManager, App.backgroundManager, App.currencyManager)
             return MarketMetricsViewModel(service, listOf(service)) as T
         }
 

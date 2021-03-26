@@ -336,13 +336,16 @@
     <string name="Approve_Spender">Harcayan</string>
     <string name="Approve_YouApprove">Sen Onaylıyorsun</string>
     <!--Uniswap Info -->
-    <string name="SwapInfo_Description">Bu takas etme hizmeti, %s blok zinciri üzerine inşa edilmiş ve merkezi olmayan jeton takas etme protokolü olan %s tarafından desteklenmektedir.\n\n%s, tamamen otomatiktir ve hile yapmadan jeton takaslarını güvenilir bir şekilde kolaylaştıran akıllı sözleşmelerle yönetilir.</string>
-    <string name="SwapInfo_DexRelated">%s</string>
+
+    <string name="SwapInfo_Title">Uniswap v.2</string>
+    <string name="SwapInfo_Description">Bu takas etme hizmeti, Ethereum blok zinciri üzerine inşa edilmiş ve merkezi olmayan jeton takas etme protokolü olan Uniswap tarafından desteklenmektedir.\n\nUniswap, tamamen otomatiktir ve hile yapmadan jeton takaslarını güvenilir bir şekilde kolaylaştıran akıllı sözleşmelerle yönetilir.</string>
+    <string name="SwapInfo_DexRelated">Uniswap Bağlantılı</string>
     <string name="SwapInfo_AllowanceTitle">Ödenek</string>
     <string name="SwapInfo_AllowanceDescription">Uniswap\'ın jeton swaplarını gerçekleştirirken sizin adınıza harcayabileceği bazı para birimlerindeki tutar. Swap işleminin gerçekleşebilmesi için yeterli ödeme miktarı gereklidir</string>
     <string name="SwapInfo_PriceImpactTitle">Fiyat Etkisi</string>
     <string name="SwapInfo_PriceImpactDescription">Gösterilen bir fiyattan beklenen fiyat sapması, tipik olarak swap tutarı ile artar.</string>
     <string name="SwapInfo_SwapFeeTitle">Swap Ücreti</string>
+
     <string name="SwapInfo_SwapFeeDescription">Uniswap platformunda swap işlemi için kullanıcının sattığı para biriminde gösterilen bir hizmet ücreti. Çoğu talimatlar için % 0.3 veya % 0.6 olmalıdır.</string>
     <string name="SwapInfo_GuaranteedAmountTitle">Garantili Tutar</string>
     <string name="SwapInfo_GuaranteedAmountDescription">Bir swap işlemi sonucunda bir kullanıcının alacağı minimum tutar.</string>
@@ -354,6 +357,7 @@
     <string name="SwapInfo_TransactionSpeedTitle">İşlem hızı</string>
     <string name="SwapInfo_TransactionSpeedDescription">Daha yüksek işlem ücretli işlemler, daha hızlı işleme hızlarıyla sonuçlanacaktır. Elbette bunun tersi de doğrudur.</string>
     <string name="SwapInfo_Site">%s Site</string>
+
     <!--Deposit-->
     <string name="Deposit_Title">%s al</string>
     <string name="Deposit_Share">Paylaş</string>
@@ -636,6 +640,7 @@
     <string name="CoinPage_inCirculation">In Circulation</string>
     <string name="CoinPage_TotalSupply">Total Supply</string>
     <string name="CoinPage_StartDate">Launch Date</string>
+
     <string name="CoinPage_MarketCap_Thousand">k</string>
     <string name="CoinPage_MarketCap_Million">M</string>
     <string name="CoinPage_MarketCap_Billion">B</string>
@@ -649,6 +654,7 @@
     <string name="CoinPage_Performance_Month">1 Month</string>
     <string name="CoinPage_ReadMore">Read More</string>
     <string name="CoinPage_ReadLess">Read Less</string>
+
     <!--Rate list-->
     <string name="RateList_portfolio">Portföy</string>
     <string name="RateList_top100">En Beğenilen 100</string>

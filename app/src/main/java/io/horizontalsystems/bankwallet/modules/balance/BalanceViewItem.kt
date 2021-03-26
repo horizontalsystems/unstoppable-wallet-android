@@ -12,7 +12,7 @@ import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.core.helpers.DateHelper
-import io.horizontalsystems.xrateskit.entities.MarketInfo
+import io.horizontalsystems.xrateskit.entities.LatestRate
 import java.math.BigDecimal
 import java.math.RoundingMode
 
@@ -20,7 +20,7 @@ data class BalanceViewItem(
         val wallet: Wallet,
         val coinCode: String,
         val coinTitle: String,
-        val coinType: CoinType?,
+        val coinType: CoinType,
         val coinValue: DeemedValue,
         val exchangeValue: DeemedValue,
         val diff: RateDiff,
@@ -77,9 +77,9 @@ class BalanceViewItemFactory {
         return DeemedValue(value, dimmed, visible)
     }
 
-    private fun currencyValue(state: AdapterState?, balance: BigDecimal?, currency: Currency, marketInfo: MarketInfo?, visible: Boolean): DeemedValue {
-        val dimmed = state !is AdapterState.Synced || marketInfo?.isExpired() ?: false
-        val value = marketInfo?.rate?.let { rate ->
+    private fun currencyValue(state: AdapterState?, balance: BigDecimal?, currency: Currency, latestRate: LatestRate?, visible: Boolean): DeemedValue {
+        val dimmed = state !is AdapterState.Synced || latestRate?.isExpired() ?: false
+        val value = latestRate?.rate?.let { rate ->
             balance?.let {
                 App.numberFormatter.formatFiat(it * rate, currency.symbol, 0, 2)
             }
@@ -88,11 +88,11 @@ class BalanceViewItemFactory {
         return DeemedValue(value, dimmed, visible)
     }
 
-    private fun rateValue(currency: Currency, marketInfo: MarketInfo?): DeemedValue {
+    private fun rateValue(currency: Currency, latestRate: LatestRate?): DeemedValue {
         var dimmed = false
-        val value = marketInfo?.let {
-            dimmed = marketInfo.isExpired()
-            App.numberFormatter.formatFiat(marketInfo.rate, currency.symbol, 2, 4)
+        val value = latestRate?.let {
+            dimmed = latestRate.isExpired()
+            App.numberFormatter.formatFiat(latestRate.rate, currency.symbol, 2, 4)
         }
 
         return DeemedValue(value, dimmed = dimmed)
@@ -121,7 +121,7 @@ class BalanceViewItemFactory {
         val wallet = item.wallet
         val coin = wallet.coin
         val state = item.state
-        val marketInfo = item.marketInfo
+        val latestRate = item.latestRate
 
         val syncing = state is AdapterState.Syncing || state is AdapterState.SearchingTxs
         val balanceTotalVisibility = item.balanceTotal != null && (!syncing || expanded)
@@ -136,9 +136,9 @@ class BalanceViewItemFactory {
                 coinType = coin.type,
                 coinValue = coinValue(state, item.balanceTotal, coin, balanceTotalVisibility),
                 coinValueLocked = coinValue(state, item.balanceLocked, coin, balanceLockedVisibility),
-                fiatValue = currencyValue(state, item.balanceTotal, currency, marketInfo, balanceTotalVisibility),
-                fiatValueLocked = currencyValue(state, item.balanceLocked, currency, marketInfo, balanceLockedVisibility),
-                exchangeValue = rateValue(currency, marketInfo),
+                fiatValue = currencyValue(state, item.balanceTotal, currency, latestRate, balanceTotalVisibility),
+                fiatValueLocked = currencyValue(state, item.balanceLocked, currency, latestRate, balanceLockedVisibility),
+                exchangeValue = rateValue(currency, latestRate),
                 diff = rateDiff,
                 expanded = expanded,
                 sendEnabled = state is AdapterState.Synced,
@@ -154,10 +154,10 @@ class BalanceViewItemFactory {
     }
 
     private fun getRateDiff(item: BalanceModule.BalanceItem): RateDiff {
-        val scaledValue = item.marketInfo?.rateDiff?.setScale(diffScale, RoundingMode.HALF_EVEN)?.stripTrailingZeros()
+        val scaledValue = item.latestRate?.rateDiff24h?.setScale(diffScale, RoundingMode.HALF_EVEN)?.stripTrailingZeros()
         val isPositive = (scaledValue ?: BigDecimal.ZERO) >= BigDecimal.ZERO
         val rateDiffText = scaledValue?.let { App.numberFormatter.format(scaledValue.abs(), 0, diffScale, suffix = "%") }
-        val dimmed = item.marketInfo?.isExpired() ?: true
+        val dimmed = item.latestRate?.isExpired() ?: true
         return RateDiff(DeemedValue(rateDiffText, dimmed, true), isPositive)
     }
 
@@ -167,7 +167,7 @@ class BalanceViewItemFactory {
 
         items.forEach { item ->
             val balanceTotal = item.balanceTotal
-            val marketInfo = item.marketInfo
+            val marketInfo = item.latestRate
 
             if (balanceTotal != null && marketInfo != null) {
                 total += balanceTotal.multiply(marketInfo.rate)

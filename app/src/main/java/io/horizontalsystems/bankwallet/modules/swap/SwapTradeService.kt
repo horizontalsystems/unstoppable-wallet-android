@@ -95,7 +95,6 @@ class SwapTradeService(
         }
 
     val tradeOptionsObservable: Observable<SwapTradeOptions> = tradeOptionsSubject
-    var tradeRecipientDomain: String? = null
 
     @Throws
     fun transactionData(tradeData: TradeData): TransactionData {
