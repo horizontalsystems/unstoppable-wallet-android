@@ -21,8 +21,14 @@
     <string name="Button_Connect">Подключиться</string>
     <string name="Button_Reject">Отклонить</string>
     <string name="Button_Disconnect">Отсоединить</string>
+    <string name="Button_Start">Начать</string>
+    <string name="Button_Create">Создать</string>
+    <string name="Button_Restore">Восстановить</string>
+    <string name="Button_Reset">Reset</string>
     <string name="Error">Ошибка</string>
     <string name="NotAvailable">Нет данных</string>
+    <string name="None">None</string>
+    <string name="Any">Any</string>
     <string name="Wallet">%s Кошелек</string>
     <!--Intro-->
     <string name="Intro_Wallet_Description">Храните и торгуйте криптовалютой. Полностью контролируйте свои активы. Оставайтесь анонимными.</string>
@@ -69,6 +75,8 @@
     <string name="Market_Field_PriceDiff">Price</string>
     <string name="Market_Title">Markets</string>
     <string name="Market_Search">Search</string>
+    <string name="Market_FilterSection_MarketParameters">MARKET PARAMETERS</string>
+    <string name="Market_FilterSection_PriceParameters">PRICE PARAMETERS</string>
     <string name="Market_Field_HighestCap">Highest Cap</string>
     <string name="Market_Field_LowestCap">Lowest Cap</string>
     <string name="Market_Field_HighestVolume">Highest Volume</string>
@@ -114,8 +122,6 @@
     <string name="Market_Category_StablecoinIssuers_Description">Decentralized issuers of fiat pegged stablecoin tokens.</string>
     <string name="Market_Category_ExchangeTokens">Exchange Tokens</string>
     <string name="Market_Category_ExchangeTokens_Description">Tokens issued by centralized exchanges.</string>
-    <string name="Market_Category_Metals">Metals</string>
-    <string name="Market_Category_Metals_Description">Tokens pegged to metal prices.</string>
     <string name="Market_Category_RiskManagement">Risk Management</string>
     <string name="Market_Category_RiskManagement_Description">Risk assessment, insurance and hedging.</string>
     <string name="Market_Category_Wallets">Wallets</string>
@@ -142,6 +148,50 @@
     <string name="Market_Category_CrossChain_Description">Cross-chain protocols.</string>
     <string name="Market_Category_Computing">Computing</string>
     <string name="Market_Category_Computing_Description">Decentralized on-demand computing solutions.</string>
+    <string name="Market_Category_RebaseTokens">Rebase Tokens</string>
+    <string name="Market_Category_RebaseTokens_Description">Tokens that periodically adjust supply to achieve a target price.</string>
+    <!--Market Search-->
+    <string name="EmptyResults">No results found</string>
+    <string name="Market_AdvancedSearch">Advanced Search</string>
+    <string name="Market_AdvancedSearch_Results">Results</string>
+    <string name="Market_Filter_ChooseSet">Choose Set</string>
+    <string name="Market_Filter_MarketCap">Market Cap</string>
+    <string name="Market_Filter_Volume">Trading Volume</string>
+    <string name="Market_Filter_Liquidity">DEX Liquidity</string>
+    <string name="Market_Filter_LiquidityHint">This setting applies to tokens traded on Ethereum (Uniswap DEX) and Binance Smart Chain (Pancake DEX).</string>
+    <string name="Market_Filter_PricePeriod">Price Period</string>
+    <string name="Market_Filter_PriceChange">Price Change</string>
+    <string name="Market_Filter_ResetAll">Reset All</string>
+    <string name="Market_Filter_Top_100">Top 100</string>
+    <string name="Market_Filter_Top_250">Top 250</string>
+    <string name="Market_Filter_Top_500">Top 500</string>
+    <string name="Market_Filter_Top_1000">Top 1000</string>
+    <string name="Market_Filter_Top_1500">Top 1500</string>
+    <string name="Market_Filter_ShowResults">Show Results</string>
+    <string name="Market_Filter_ShowResults_Counter">Show Results: %d</string>
+    <string name="Market_Filter_Range_0_5M">&lt; 5M</string>
+    <string name="Market_Filter_Range_5M_20M">5M - 20M</string>
+    <string name="Market_Filter_Range_20M_100M">20М - 100М</string>
+    <string name="Market_Filter_Range_100M_1B">100M - 1B</string>
+    <string name="Market_Filter_Range_1B_5B">1B - 5B</string>
+    <string name="Market_Filter_Range_5B_More">&gt; 5BN</string>
+    <string name="Market_Filter_TimePeriod_1D">1 Day</string>
+    <string name="Market_Filter_TimePeriod_1W">1 Week</string>
+    <string name="Market_Filter_TimePeriod_2W">2 Weeks</string>
+    <string name="Market_Filter_TimePeriod_1M">1 Month</string>
+    <string name="Market_Filter_TimePeriod_6M">6 Months</string>
+    <string name="Market_Filter_TimePeriod_1Y">1 Year</string>
+    <string name="Market_Filter_PriceChange_Positive_10_plus">&gt; +10%</string>
+    <string name="Market_Filter_PriceChange_Positive_25_plus">&gt; +25%</string>
+    <string name="Market_Filter_PriceChange_Positive_50_plus">&gt; +50%</string>
+    <string name="Market_Filter_PriceChange_Positive_100_plus">&gt; +100%</string>
+    <string name="Market_Filter_PriceChange_Negative_10_minus">&lt; -10%</string>
+    <string name="Market_Filter_PriceChange_Negative_25_minus">&lt; -25%</string>
+    <string name="Market_Filter_PriceChange_Negative_50_minus">&lt; -50%</string>
+    <string name="Market_Filter_PriceChange_Negative_100_minus">&lt; -100%</string>
+    <string name="TimePeriod_24h">24h</string>
+    <!--Coin Markets-->
+    <string name="CoinMarket_Title">%s Markets</string>
     <!--Balance-->
     <string name="Balance_Title">Баланс</string>
     <string name="Balance_Deposit">Получить</string>
@@ -158,6 +208,7 @@
     <string name="Balance_Sort_Az">Названию</string>
     <string name="Balance_Sort_24hPriceChange">Цене(%) за 24 ч</string>
     <string name="Balance_Backup_Alert">Вам нужно сделать резервную копию %s Кошелька, прежде чем вы сможете получать %s.</string>
+    <string name="Balance_NoWalletAlert">У вас пока нет кошельков. Создайте новый или восстановите существующий </string>
     <!--Send-->
     <string name="Send_Title">Отправить %s</string>
     <string name="Send_Hint_Address">Адрес или домен</string>
@@ -167,7 +218,11 @@
     <string name="Send_Button_Max">Макс.</string>
     <string name="Send_Confirmation_Title">Подтвердить</string>
     <string name="Send_Confirmation_Domain">Домен</string>
+    <string name="Send_Confirmation_YouSend">Вы Отправляете</string>
+    <string name="Send_Confirmation_Amount">Сумма</string>
+    <string name="Send_Confirmation_To">Кому</string>
     <string name="Send_Confirmation_Receiver">Получатель</string>
+    <string name="Send_Confirmation_Input">Ввод</string>
     <string name="Send_Confirmation_EstimateTime">Приблизительное Время:</string>
     <string name="Send_Confirmation_Send_Button">Отправить</string>
     <string name="Send_Success">\u2713 Отправлено</string>
@@ -184,7 +239,6 @@
     <string name="Send_DialogAvailableBalance">Доступный Баланс</string>
     <string name="Send_DialogSpeed">Скорость Транзакции</string>
     <string name="Send_TxSpeed_Low">Низкая</string>
-    <string name="Send_TxSpeed_Medium">Средняя</string>
     <string name="Send_TxSpeed_High">Высокая</string>
     <string name="Send_TxSpeed_Recommended">Рекомендовано</string>
     <string name="Send_TxSpeed_Custom">Индивидуальная</string>
@@ -222,6 +276,7 @@
     <string name="WalletConnect_Status_Offline">Не доступен</string>
     <string name="WalletConnect_Status_Online">Доступен</string>
     <string name="WalletConnect_Status_Connecting">Подключение…</string>
+    <string name="WalletConnect_NewConnect">Новое Подключение</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Error_InsufficientBalance">Для отправки транзакции требуется %s</string>
     <string name="EthereumTransaction_Error_InsufficientBalanceForFee">Текущий баланс %s ниже суммы, необходимой для обработки этой транзакции, включая комиссию за транзакцию.</string>
@@ -270,12 +325,18 @@
     <string name="SwapSettings_Error_InvalidDeadline">Недопустимый Срок</string>
     <!-- Swap Confirmation -->
     <string name="Swap_Confirmation">Подтверждение</string>
+    <string name="Swap_Confirmation_Guaranteed">Гарантировано</string>
+    <string name="Swap_Confirmation_Maximum">Максимум</string>
+    <string name="Swap_Confirmation_Estimated">Ориентировочно</string>
     <!--Swap Coin Select-->
     <!--Approve-->
     <string name="Approve_Title">Разрешить Обмен</string>
     <string name="Approve_Info">Вы должны предоставить разрешение на смарт-контракт для того, чтобы обменивать указанный токен от вашего имени. Это разрешение определяет сумму, которая может быть использована по смарт-контракту. Это не повлияет на ваш баланс, но для подтверждения транзакции будет взята небольшая комиссия за ее выполнение.\n\nРазрешение можно запрашивать перед каждой сделкой, но дешевле заранее утвердить более высокую сумму для будущих операций.</string>
     <string name="Approve_Error_AlreadyApproved">У вас уже есть разрешение на эту сумму</string>
+    <string name="Approve_Spender">Покупатель</string>
+    <string name="Approve_YouApprove">Вы Подтверждаете</string>
     <!--Uniswap Info -->
+
     <string name="SwapInfo_Title">Uniswap v.2</string>
     <string name="SwapInfo_Description">Данный сервис обмена работает при поддержке Uniswap - децентрализированного протокола обмена токенов, основанного на блокчейне Ethereum.\n\nnСервис Uniswap полностью автоматизирован и управляется смарт-контрактами, которые надежным способом упрощают обмен токенами без каких-либо средств мошенничества.</string>
     <string name="SwapInfo_DexRelated">О Uniswap</string>
@@ -291,10 +352,11 @@
     <string name="SwapInfo_MaxSpendDescription">Максимальная сумма, которую получит пользователь в результате обмена.</string>
     <string name="SwapInfo_Other">Другое</string>
     <string name="SwapInfo_TransactionFeeTitle">Комиссия за транзакцию</string>
-    <string name="SwapInfo_TransactionFeeDescription">Примерная стоимость услуги по обработке данной транзакции на блокчейне Ethereum. Стоимость транзакций, связанных с Uniswap, обычно выше, чем стоимость транзакций по передаче обычных токенов.</string>
-    <string name="SwapInfo_TransactionSpeedTitle">Скорость транзакции</string>
-    <string name="SwapInfo_TransactionSpeedDescription">Обработка транзакций с более высокой комиссией будет ускорена. Также вено и обратное.</string>
-    <string name="SwapInfo_Site">Веб-сайт Uniswap</string>
+    <string name="SwapInfo_TransactionFeeDescription">Примерная стоимость услуги по обработке данной транзакции на блокчейне %s. Стоимость транзакций, связанных с %s, обычно выше, чем стоимость транзакций по передаче обычных токенов.</string>
+    <string name="SwapInfo_TransactionSpeedTitle">Скорость Транзакции</string>
+    <string name="SwapInfo_TransactionSpeedDescription">Обработка транзакций с более высокой комиссией будет ускорена. Верно и обратное.</string>
+    <string name="SwapInfo_Site">%s Сайт</string>
+
     <!--Deposit-->
     <string name="Deposit_Title">Получить %s</string>
     <string name="Deposit_Share">Поделиться</string>
@@ -328,10 +390,11 @@
     <string name="TransactionInfo_Input">Ввод</string>
     <string name="TransactionInfo_ButtonViewOnExplorerName">Посмотреть на %s</string>
     <string name="StatusInfo_Pending">В обработке</string>
+    <string name="StatusInfo_SendingReceiving">Отправка / Получение</string>
     <string name="StatusInfo_Confirmed">Подтверждено</string>
     <string name="StatusInfo_Failed">Не удалось</string>
     <string name="StatusInfo_PendingDescription">Транзакция еще не подтверждена в блокчейне. Эта процедура может занять от нескольких минут до нескольких часов в зависимости от комиссии за транзакцию. Отправляемые с очень низкой комиссией транзакции обычно обрабатываются в течение нескольких дней или же могут быть отклонены сетью, отменяя это действие.</string>
-    <string name="StatusInfo_ReceivingDescription">Отправитель послал вам транзакцию, но она еще не завершена. В случае с крупными платежами нужно дождаться, пока статус транзакции изменится на \'обработка завершена\'. Обычно этот процесс занимает около часа. Однако, может потребоваться больше времени, если отправитель послал транзакцию с низкой комиссией.</string>
+    <string name="StatusInfo_SendingReceivingDescription">Транзакция была включена в блокчейн, но пока не обработана до конца. На данном этапе до конца обработаны только транзакции для небольших платежей. Что касается более крупных транзакций, стоит дождаться смены статуса.</string>
     <string name="StatusInfo_ConfirmedDescription">Транзакция окончательна и необратима.</string>
     <string name="StatusInfo_FailedDescription">Транзакция не была обработана как планировалось, и передача токена не состоялась. На Ethereum за отклонённые транзакции взимают комиссионные сборы.</string>
     <!-- Info -->
@@ -491,6 +554,7 @@
     <string name="AddTokenDialog_Title">Выбрать Блокчейн</string>
     <string name="AddTokenDialog_Subtitle">Добавить Токен</string>
     <string name="AddTokenDialog_Erc20Tokens">Токен ERC20</string>
+    <string name="AddTokenDialog_Bep20Tokens">Токен BEP20</string>
     <string name="AddTokenDialog_BinanceTokens">Токен BEP2</string>
     <!-- Enable Token -->
     <string name="EnalbeToken_Title">Активировать Токен</string>
@@ -507,10 +571,10 @@
     <string name="AddToken_CoinAlreadyInListWarning">Этот токен уже есть в списке поддерживаемых токенов</string>
     <string name="AddToken_InvalidAddressError">Неверный Адрес</string>
     <string name="AddToken_ApiLimitExceeded">Превышен лимит Api. Повторите попытку позже.</string>
-    <!-- Add Erc20 Token -->
-    <string name="AddErc20Token_Title">Добавить ERC20</string>
-    <string name="AddEvmToken_ContractAddressHint">Адрес Контракта</string>
     <string name="AddEvmToken_ContractNotFound">Контракт не найден</string>
+    <string name="AddEvmToken_ContractAddressHint">Адрес Контракта</string>
+    <string name="AddErc20Token_Title">Добавить ERC20</string>
+    <string name="AddBep20Token_Title">Добавить BEP20</string>
     <!-- Add Bep2 Token -->
     <string name="AddBep2Token_Title">Добавить BEP2</string>
     <string name="AddBep2Token_TokenSymbolHint">Символ Токена</string>
@@ -544,31 +608,54 @@
     <string name="CoinOption_bip44_Subtitle">Старый (начинается с %s...)</string>
     <string name="CoinOption_bip49_Subtitle">Популярный (начинается с %s...)</string>
     <string name="CoinOption_bip84_Subtitle">Новый (начинается с %s...)</string>
-    <!--Charts-->
-    <string name="CoinPage_TimeDuration_Today">СГД</string>
-    <string name="CoinPage_TimeDuration_Day">24ч</string>
-    <string name="CoinPage_TimeDuration_Week">7Д</string>
-    <string name="CoinPage_TimeDuration_Month">1М</string>
-    <string name="CoinPage_TimeDuration_TwoWeeks">2Н</string>
-    <string name="CoinPage_TimeDuration_Month3">3М</string>
-    <string name="CoinPage_TimeDuration_HalfYear">6М</string>
-    <string name="CoinPage_TimeDuration_Year">1Г</string>
-    <string name="CoinPage_TimeDuration_Year2">2Г</string>
+    <!--Coin Page-->
+    <string name="CoinPage_TimeDuration_Today">TDY</string>
+    <string name="CoinPage_TimeDuration_Day">24H</string>
+    <string name="CoinPage_TimeDuration_Week">7D</string>
+    <string name="CoinPage_TimeDuration_Month">1M</string>
+    <string name="CoinPage_TimeDuration_TwoWeeks">2W</string>
+    <string name="CoinPage_TimeDuration_Month3">3M</string>
+    <string name="CoinPage_TimeDuration_HalfYear">6M</string>
+    <string name="CoinPage_TimeDuration_Year">1Y</string>
+    <string name="CoinPage_TimeDuration_Year2">2Y</string>
+    <string name="CoinPage_RatingDetails">Rating Details</string>
+    <string name="CoinPage_Price">Price</string>
+    <string name="CoinPage_Market">Market</string>
+    <string name="CoinPage_CoinMarket">%s Markets</string>
+    <string name="CoinPage_FundsInvested">Funds Invested</string>
+    <string name="CoinPage_Range24">24h Range</string>
+    <string name="CoinPage_Performance">Performance</string>
+    <string name="CoinPage_About">About</string>
+    <string name="CoinPage_Category">Category</string>
+    <string name="CoinPage_Guide">Guide</string>
+    <string name="CoinPage_Website">Website</string>
+    <string name="CoinPage_Whitepaper">Whitepaper</string>
+    <string name="CoinPage_Reddit">Reddit</string>
+    <string name="CoinPage_Twitter">Twitter</string>
+    <string name="CoinPage_Telegram">Telegram</string>
+    <string name="CoinPage_Github">Github</string>
+    <string name="CoinPage_Changes1W">Changes (1W)</string>
+    <string name="CoinPage_Changes1M">Changes (1M)</string>
     <string name="CoinPage_MarketCap">Market Cap</string>
-    <string name="CoinPage_Volume24">Объем (24 ч)</string>
-    <string name="CoinPage_inCirculation">В обороте</string>
-    <string name="CoinPage_TotalSupply">Макс.выпуск</string>
-    <string name="CoinPage_StartDate">Дата Запуска</string>
-    <string name="CoinPage_Website">Сайт Проекта</string>
-    <string name="CoinPage_MarketCap_Thousand">тыс.</string>
-    <string name="CoinPage_MarketCap_Million">млн.</string>
-    <string name="CoinPage_MarketCap_Billion">млр.</string>
-    <string name="CoinPage_MarketCap_Trillion">трл.</string>
-    <string name="CoinPage_Volume">Объём</string>
+    <string name="CoinPage_DilutedMarketCap">Diluted MCap</string>
+    <string name="CoinPage_Volume24">Volume (24h)</string>
+    <string name="CoinPage_inCirculation">In Circulation</string>
+    <string name="CoinPage_TotalSupply">Total Supply</string>
+    <string name="CoinPage_StartDate">Launch Date</string>
+    <string name="CoinPage_MarketCap_Thousand">k</string>
+    <string name="CoinPage_MarketCap_Million">M</string>
+    <string name="CoinPage_MarketCap_Billion">B</string>
+    <string name="CoinPage_MarketCap_Trillion">T</string>
+    <string name="CoinPage_Volume">Vol</string>
     <string name="CoinPage_Error_NotAvailable">График недоступен</string>
-    <string name="CoinPage_LatestNews">Последние Новости</string>
+    <string name="CoinPage_LatestNews">Latest News</string>
     <string name="CoinPage_Favorite">Favorite</string>
     <string name="CoinPage_Unfavorite">Unfavorite</string>
+    <string name="CoinPage_Performance_Week">1 Week</string>
+    <string name="CoinPage_Performance_Month">1 Month</string>
+    <string name="CoinPage_ReadMore">Read More</string>
+    <string name="CoinPage_ReadLess">Read Less</string>
+
     <!--Rate list-->
     <string name="RateList_portfolio">Портфель</string>
     <string name="RateList_top100">Топ-100</string>

@@ -21,8 +21,14 @@
     <string name="Button_Connect">연결</string>
     <string name="Button_Reject">거절</string>
     <string name="Button_Disconnect">연결 해제</string>
+    <string name="Button_Start">시작</string>
+    <string name="Button_Create">생성하기</string>
+    <string name="Button_Restore">복구</string>
+    <string name="Button_Reset">Reset</string>
     <string name="Error">오류</string>
     <string name="NotAvailable">해당 없음 </string>
+    <string name="None">없음</string>
+    <string name="Any">Any</string>
     <string name="Wallet">%s 지갑</string>
     <!--Intro-->
     <string name="Intro_Wallet_Description">암호를 저장 및 거래합니다. 자산을 완전히 통제합니다. 익명인 상태로 유지합니다.</string>
@@ -69,6 +75,8 @@
     <string name="Market_Field_PriceDiff">Price</string>
     <string name="Market_Title">Markets</string>
     <string name="Market_Search">Search</string>
+    <string name="Market_FilterSection_MarketParameters">MARKET PARAMETERS</string>
+    <string name="Market_FilterSection_PriceParameters">PRICE PARAMETERS</string>
     <string name="Market_Field_HighestCap">Highest Cap</string>
     <string name="Market_Field_LowestCap">Lowest Cap</string>
     <string name="Market_Field_HighestVolume">Highest Volume</string>
@@ -114,8 +122,6 @@
     <string name="Market_Category_StablecoinIssuers_Description">Decentralized issuers of fiat pegged stablecoin tokens.</string>
     <string name="Market_Category_ExchangeTokens">Exchange Tokens</string>
     <string name="Market_Category_ExchangeTokens_Description">Tokens issued by centralized exchanges.</string>
-    <string name="Market_Category_Metals">Metals</string>
-    <string name="Market_Category_Metals_Description">Tokens pegged to metal prices.</string>
     <string name="Market_Category_RiskManagement">Risk Management</string>
     <string name="Market_Category_RiskManagement_Description">Risk assessment, insurance and hedging.</string>
     <string name="Market_Category_Wallets">Wallets</string>
@@ -142,6 +148,50 @@
     <string name="Market_Category_CrossChain_Description">Cross-chain protocols.</string>
     <string name="Market_Category_Computing">Computing</string>
     <string name="Market_Category_Computing_Description">Decentralized on-demand computing solutions.</string>
+    <string name="Market_Category_RebaseTokens">Rebase Tokens</string>
+    <string name="Market_Category_RebaseTokens_Description">Tokens that periodically adjust supply to achieve a target price.</string>
+    <!--Market Search-->
+    <string name="EmptyResults">No results found</string>
+    <string name="Market_AdvancedSearch">Advanced Search</string>
+    <string name="Market_AdvancedSearch_Results">Results</string>
+    <string name="Market_Filter_ChooseSet">Choose Set</string>
+    <string name="Market_Filter_MarketCap">Market Cap</string>
+    <string name="Market_Filter_Volume">Trading Volume</string>
+    <string name="Market_Filter_Liquidity">DEX Liquidity</string>
+    <string name="Market_Filter_LiquidityHint">This setting applies to tokens traded on Ethereum (Uniswap DEX) and Binance Smart Chain (Pancake DEX).</string>
+    <string name="Market_Filter_PricePeriod">Price Period</string>
+    <string name="Market_Filter_PriceChange">Price Change</string>
+    <string name="Market_Filter_ResetAll">Reset All</string>
+    <string name="Market_Filter_Top_100">Top 100</string>
+    <string name="Market_Filter_Top_250">Top 250</string>
+    <string name="Market_Filter_Top_500">Top 500</string>
+    <string name="Market_Filter_Top_1000">Top 1000</string>
+    <string name="Market_Filter_Top_1500">Top 1500</string>
+    <string name="Market_Filter_ShowResults">Show Results</string>
+    <string name="Market_Filter_ShowResults_Counter">Show Results: %d</string>
+    <string name="Market_Filter_Range_0_5M">&lt; 5M</string>
+    <string name="Market_Filter_Range_5M_20M">5M - 20M</string>
+    <string name="Market_Filter_Range_20M_100M">20M - 100M</string>
+    <string name="Market_Filter_Range_100M_1B">100M - 1B</string>
+    <string name="Market_Filter_Range_1B_5B">1B - 5B</string>
+    <string name="Market_Filter_Range_5B_More">&gt; 5BN</string>
+    <string name="Market_Filter_TimePeriod_1D">1 Day</string>
+    <string name="Market_Filter_TimePeriod_1W">1 Week</string>
+    <string name="Market_Filter_TimePeriod_2W">2 Weeks</string>
+    <string name="Market_Filter_TimePeriod_1M">1 Month</string>
+    <string name="Market_Filter_TimePeriod_6M">6 Months</string>
+    <string name="Market_Filter_TimePeriod_1Y">1 Year</string>
+    <string name="Market_Filter_PriceChange_Positive_10_plus">&gt; +10%</string>
+    <string name="Market_Filter_PriceChange_Positive_25_plus">&gt; +25%</string>
+    <string name="Market_Filter_PriceChange_Positive_50_plus">&gt; +50%</string>
+    <string name="Market_Filter_PriceChange_Positive_100_plus">&gt; +100%</string>
+    <string name="Market_Filter_PriceChange_Negative_10_minus">&lt; -10%</string>
+    <string name="Market_Filter_PriceChange_Negative_25_minus">&lt; -25%</string>
+    <string name="Market_Filter_PriceChange_Negative_50_minus">&lt; -50%</string>
+    <string name="Market_Filter_PriceChange_Negative_100_minus">&lt; -100%</string>
+    <string name="TimePeriod_24h">24h</string>
+    <!--Coin Markets-->
+    <string name="CoinMarket_Title">%s Markets</string>
     <!--Balance-->
     <string name="Balance_Title">잔액</string>
     <string name="Balance_Deposit">수신</string>
@@ -158,6 +208,7 @@
     <string name="Balance_Sort_Az">이름</string>
     <string name="Balance_Sort_24hPriceChange">24시간 가격 (%)</string>
     <string name="Balance_Backup_Alert">귀하께서 %s를 받기전에 %s 지갑의 백업이 필요합니다.</string>
+    <string name="Balance_NoWalletAlert">귀하께서는 아직 지갑이 없습니다. 새 생성 또는 기존 복원 해주십시오 </string>
     <!--Send-->
     <string name="Send_Title">전송 %s</string>
     <string name="Send_Hint_Address">주소 또는 도메인</string>
@@ -167,7 +218,11 @@
     <string name="Send_Button_Max">최대</string>
     <string name="Send_Confirmation_Title">확인</string>
     <string name="Send_Confirmation_Domain">도메인</string>
+    <string name="Send_Confirmation_YouSend">보냅니다</string>
+    <string name="Send_Confirmation_Amount">양</string>
+    <string name="Send_Confirmation_To">에게</string>
     <string name="Send_Confirmation_Receiver">받는 사람</string>
+    <string name="Send_Confirmation_Input">입력</string>
     <string name="Send_Confirmation_EstimateTime">예상 소요시간:</string>
     <string name="Send_Confirmation_Send_Button">전송</string>
     <string name="Send_Success">\u2713 보냄</string>
@@ -184,7 +239,6 @@
     <string name="Send_DialogAvailableBalance">사용 가능한 잔액</string>
     <string name="Send_DialogSpeed">거래 속도</string>
     <string name="Send_TxSpeed_Low">낮음</string>
-    <string name="Send_TxSpeed_Medium">보통</string>
     <string name="Send_TxSpeed_High">높음</string>
     <string name="Send_TxSpeed_Recommended">권장</string>
     <string name="Send_TxSpeed_Custom">사용자 지정</string>
@@ -207,7 +261,7 @@
     <string name="FeeInfo_Average">평균</string>
     <string name="FeeInfo_AverageDescription">일반적으로 이 수수료 범위는 비트코인의 경우 시간당 몇 분 이내, 이더리움의 경우 몇 분 이내에 거래가 처리되기에 충분해야 합니다.</string>
     <string name="FeeInfo_Fast">빠르게</string>
-    <string name="FeeInfo_FastDescription">For transactions where priority is important we recommend using high fee setting. It\'s expected that selecting high fee setting will be sufficient for transaction to be completed within 10 minutes for Bitcoin and within a few minutes for Ethereum.\n\nThe Unstoppable wallet makes an educated guess based on the network activity and can\'t not guarantee that the suggested fee values will always result in expected behavior.</string>
+    <string name="FeeInfo_FastDescription">우선 순위가 중요한 거래의 경우 높은 수수료 설정을 사용하는 것이 좋습니다. 비트코인은 10분 이내, 이더리움은 몇 분 이내 거래가 완료되기에 고액 수수료 설정 선택만으로도 충분할 것으로 예상됩니다.</string>
     <!--Wallet Connect-->
     <string name="WalletConnect_Title">Wallet Connect</string>
     <string name="WalletConnect_Request">요청</string>
@@ -222,6 +276,7 @@
     <string name="WalletConnect_Status_Offline">오프라인</string>
     <string name="WalletConnect_Status_Online">온라인</string>
     <string name="WalletConnect_Status_Connecting">연결중...</string>
+    <string name="WalletConnect_NewConnect">새로운 연결</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Error_InsufficientBalance">거래에서 전송하려면 %s가 필요합니다</string>
     <string name="EthereumTransaction_Error_InsufficientBalanceForFee">현재 %s 잔액은 거래 수수료를 포함하여이 거래를 처리하는 데 필요한 금액보다 적습니다.</string>
@@ -270,12 +325,18 @@
     <string name="SwapSettings_Error_InvalidDeadline">올바르지 않은 마감 시간</string>
     <!-- Swap Confirmation -->
     <string name="Swap_Confirmation">확인</string>
+    <string name="Swap_Confirmation_Guaranteed">보증됨</string>
+    <string name="Swap_Confirmation_Maximum">최대</string>
+    <string name="Swap_Confirmation_Estimated">예상</string>
     <!--Swap Coin Select-->
     <!--Approve-->
     <string name="Approve_Title">스왑 승인</string>
     <string name="Approve_Info">귀하를 대신하여 주어진 토큰을 교환할 수 있는 스마트 계약에 권한을 부여해야 합니다. 이 허가는 스마트 계약으로 사용할 수 있는 금액을 설정합니다. 잔액에는 영향을 미치지 않지만, 승인거래를 하기 위해서는 소정의 수수료가 필요합니다.\n\n각 거래 전에 주문형으로 할 수 있지만, 향후 거래에서는 더 많은 금액을 미리 승인하는 것이 더 저렴합니다.</string>
     <string name="Approve_Error_AlreadyApproved">귀하는 이미 이 금액에 대한 허용량을 가지고 있습니다.</string>
+    <string name="Approve_Spender">스펜더</string>
+    <string name="Approve_YouApprove">승인합니다</string>
     <!--Uniswap Info -->
+
     <string name="SwapInfo_Title">Uniswap v.2</string>
     <string name="SwapInfo_Description">이 거래소 서비스는 Ethereum 블록체인을 기반으로 구축된 분산형 토큰 교환 프로토콜인 Uniswap에서 운영됩니다.\n\n\Uniswap는 스마트 계약에 의해 완전히 자동화되고 관리되어 부정행위를 할 수 있는 방법 없이 토큰 교환을 신뢰할 수 있는 방법으로 가능하게 합니다.</string>
     <string name="SwapInfo_DexRelated">Uniswap 관련됨</string>
@@ -291,10 +352,11 @@
     <string name="SwapInfo_MaxSpendDescription">스왑 행위로 인해 사용자가 사용할 최대 금액.</string>
     <string name="SwapInfo_Other">기타</string>
     <string name="SwapInfo_TransactionFeeTitle">거래 비용</string>
-    <string name="SwapInfo_TransactionFeeDescription">Ethereum 블록체인에 대한 해당 거래의 예상 처리 비용. Uniswap 관련 거래는 보통 일반적인 토큰 전송 거래보다 비용이 더 많이 듭니다.</string>
+    <string name="SwapInfo_TransactionFeeDescription">%s블록체인에서 주어진 거래의 예상 처리 비용. %s 관련 거래는 일반적으로 일반 토큰 전송 거래보다 더 많은 비용이 듭니다.</string>
     <string name="SwapInfo_TransactionSpeedTitle">거래 속도</string>
     <string name="SwapInfo_TransactionSpeedDescription">거래 수수료가 높은 거래는 처리 속도가 빨라집니다. 반대로도 그렇습니다.</string>
-    <string name="SwapInfo_Site">Uniswap 사이트</string>
+    <string name="SwapInfo_Site">%s 사이트</string>
+
     <!--Deposit-->
     <string name="Deposit_Title">수신%s</string>
     <string name="Deposit_Share">공유</string>
@@ -328,10 +390,11 @@
     <string name="TransactionInfo_Input">입력</string>
     <string name="TransactionInfo_ButtonViewOnExplorerName">%s에서 보기</string>
     <string name="StatusInfo_Pending">보류 중</string>
+    <string name="StatusInfo_SendingReceiving">보내는 중 / 받는 중</string>
     <string name="StatusInfo_Confirmed">확인</string>
     <string name="StatusInfo_Failed">실패</string>
     <string name="StatusInfo_PendingDescription">거래가 아직 블록체인에서 확인되지 않았습니다. 거래 수수료에 따라 거래 확인에 수 분에서 수 시간까지 소요될 수 있습니다. 거래 수수료가 매우 적은 경우에는 거래 확인에 수 일이 소요되거나 네트워크에 의해 거래가 거절될 수도 있습니다. 예시: 거래가 완료되지 않았습니다.</string>
-    <string name="StatusInfo_ReceivingDescription">전송자가 거래를 전송했으나 거래가 아직 완료되지는 않았습니다. 거래 금액이 큰 경우 거래 상태가 \'완료됨\'으로 변경될 때까지 대기하는 것을 권장합니다. 거래 완료는 보통 한 시간 안에 완료되나 전송자가 낮은 수수료로 거래를 보내는 경우 더 오래 걸릴 수도 있습니다.</string>
+    <string name="StatusInfo_SendingReceivingDescription">거래는 블록체인에 포함됐지만 아직 영구적인 완성도에 도달하지 못했습니다. 이 시점에서는 소액결제에 대해 완료된 거래를 고려하는 것이 안전합니다. 더 큰 결제의 경우 상태가 완료로 변경될 때까지 기다리는 것이 좋습니다.</string>
     <string name="StatusInfo_ConfirmedDescription">거래가 완료되었으며 취소할 수 없습니다.</string>
     <string name="StatusInfo_FailedDescription">거래가 의도한 대로 처리되지 않았으며 전송된 토큰 값이 없습니다. 이더리움 블록체인에서는 실패한 거래에도 거래 수수료가 부과됩니다.</string>
     <!-- Info -->
@@ -489,6 +552,7 @@
     <string name="AddTokenDialog_Title">블록체인 선택</string>
     <string name="AddTokenDialog_Subtitle">토큰 추가 중</string>
     <string name="AddTokenDialog_Erc20Tokens">ERC20 토큰</string>
+    <string name="AddTokenDialog_Bep20Tokens">BEP20 토큰</string>
     <string name="AddTokenDialog_BinanceTokens">BEP2 토큰</string>
     <!-- Enable Token -->
     <string name="EnalbeToken_Title">코인 활성</string>
@@ -505,10 +569,10 @@
     <string name="AddToken_CoinAlreadyInListWarning">이 토큰은 이미 코인 매니저 리스트에 있습니다.</string>
     <string name="AddToken_InvalidAddressError">잘못된 주소</string>
     <string name="AddToken_ApiLimitExceeded">Api limit exceeded. Try again later.</string>
-    <!-- Add Erc20 Token -->
-    <string name="AddErc20Token_Title">ERC20 추가</string>
-    <string name="AddEvmToken_ContractAddressHint">계약 주소</string>
     <string name="AddEvmToken_ContractNotFound">거래 발견되지 않음</string>
+    <string name="AddEvmToken_ContractAddressHint">계약 주소</string>
+    <string name="AddErc20Token_Title">ERC20 추가</string>
+    <string name="AddBep20Token_Title">BEP20 추가</string>
     <!-- Add Bep2 Token -->
     <string name="AddBep2Token_Title">BEP2 추가</string>
     <string name="AddBep2Token_TokenSymbolHint">토큰 심볼</string>
@@ -543,31 +607,54 @@
     <string name="CoinOption_bip44_Subtitle">더 오래된 (%s부터 시작...)</string>
     <string name="CoinOption_bip49_Subtitle">인기있는 (%s부터 시작...)</string>
     <string name="CoinOption_bip84_Subtitle">최신 (%s부터 시작...)</string>
-    <!--Charts-->
-    <string name="CoinPage_TimeDuration_Today">오늘</string>
-    <string name="CoinPage_TimeDuration_Day">24시</string>
-    <string name="CoinPage_TimeDuration_Week">일주일</string>
-    <string name="CoinPage_TimeDuration_Month">한 달</string>
-    <string name="CoinPage_TimeDuration_TwoWeeks">2주</string>
-    <string name="CoinPage_TimeDuration_Month3">3개월</string>
-    <string name="CoinPage_TimeDuration_HalfYear">6개월</string>
-    <string name="CoinPage_TimeDuration_Year">1년</string>
-    <string name="CoinPage_TimeDuration_Year2">2년</string>
-    <string name="CoinPage_MarketCap">시가총액</string>
-    <string name="CoinPage_Volume24">볼륨 (24 시간)</string>
-    <string name="CoinPage_inCirculation">유통</string>
-    <string name="CoinPage_TotalSupply">총 발행량</string>
-    <string name="CoinPage_StartDate">출시일</string>
-    <string name="CoinPage_Website">프로젝트 웹사이트</string>
-    <string name="CoinPage_MarketCap_Thousand">천</string>
-    <string name="CoinPage_MarketCap_Million">백만</string>
-    <string name="CoinPage_MarketCap_Billion">십억</string>
-    <string name="CoinPage_MarketCap_Trillion">조</string>
-    <string name="CoinPage_Volume">음량</string>
+    <!--Coin Page-->
+    <string name="CoinPage_TimeDuration_Today">TDY</string>
+    <string name="CoinPage_TimeDuration_Day">24H</string>
+    <string name="CoinPage_TimeDuration_Week">7D</string>
+    <string name="CoinPage_TimeDuration_Month">1M</string>
+    <string name="CoinPage_TimeDuration_TwoWeeks">2W</string>
+    <string name="CoinPage_TimeDuration_Month3">3M</string>
+    <string name="CoinPage_TimeDuration_HalfYear">6M</string>
+    <string name="CoinPage_TimeDuration_Year">1Y</string>
+    <string name="CoinPage_TimeDuration_Year2">2Y</string>
+    <string name="CoinPage_RatingDetails">Rating Details</string>
+    <string name="CoinPage_Price">Price</string>
+    <string name="CoinPage_Market">Market</string>
+    <string name="CoinPage_CoinMarket">%s Markets</string>
+    <string name="CoinPage_FundsInvested">Funds Invested</string>
+    <string name="CoinPage_Range24">24h Range</string>
+    <string name="CoinPage_Performance">Performance</string>
+    <string name="CoinPage_About">About</string>
+    <string name="CoinPage_Category">Category</string>
+    <string name="CoinPage_Guide">Guide</string>
+    <string name="CoinPage_Website">Website</string>
+    <string name="CoinPage_Whitepaper">Whitepaper</string>
+    <string name="CoinPage_Reddit">Reddit</string>
+    <string name="CoinPage_Twitter">Twitter</string>
+    <string name="CoinPage_Telegram">Telegram</string>
+    <string name="CoinPage_Github">Github</string>
+    <string name="CoinPage_Changes1W">Changes (1W)</string>
+    <string name="CoinPage_Changes1M">Changes (1M)</string>
+    <string name="CoinPage_MarketCap">Market Cap</string>
+    <string name="CoinPage_DilutedMarketCap">Diluted MCap</string>
+    <string name="CoinPage_Volume24">Volume (24h)</string>
+    <string name="CoinPage_inCirculation">In Circulation</string>
+    <string name="CoinPage_TotalSupply">Total Supply</string>
+    <string name="CoinPage_StartDate">Launch Date</string>
+    <string name="CoinPage_MarketCap_Thousand">k</string>
+    <string name="CoinPage_MarketCap_Million">M</string>
+    <string name="CoinPage_MarketCap_Billion">B</string>
+    <string name="CoinPage_MarketCap_Trillion">T</string>
+    <string name="CoinPage_Volume">Vol</string>
     <string name="CoinPage_Error_NotAvailable">차트 이용불가</string>
-    <string name="CoinPage_LatestNews">최신 뉴스</string>
+    <string name="CoinPage_LatestNews">Latest News</string>
     <string name="CoinPage_Favorite">Favorite</string>
     <string name="CoinPage_Unfavorite">Unfavorite</string>
+    <string name="CoinPage_Performance_Week">1 Week</string>
+    <string name="CoinPage_Performance_Month">1 Month</string>
+    <string name="CoinPage_ReadMore">Read More</string>
+    <string name="CoinPage_ReadLess">Read Less</string>
+
     <!--Rate list-->
     <string name="RateList_portfolio">포트폴리오</string>
     <string name="RateList_top100">상위 100</string>

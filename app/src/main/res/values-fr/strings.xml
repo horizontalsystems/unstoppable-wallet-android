@@ -21,8 +21,14 @@
     <string name="Button_Connect">Connecter</string>
     <string name="Button_Reject">Rejeter</string>
     <string name="Button_Disconnect">Déconnecter</string>
+    <string name="Button_Start">Commencer</string>
+    <string name="Button_Create">Créer</string>
+    <string name="Button_Restore">Restaurer</string>
+    <string name="Button_Reset">Reset</string>
     <string name="Error">Erreur</string>
     <string name="NotAvailable">S. O.</string>
+    <string name="None">None</string>
+    <string name="Any">Any</string>
     <string name="Wallet">%s Portefeuille</string>
     <!--Intro-->
     <string name="Intro_Wallet_Description">Stockez et échangez des crypto-monnaies. Ayez le contrôle total sur les actifs. Restez anonyme.</string>
@@ -70,6 +76,8 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="Market_Field_PriceDiff">Prix</string>
     <string name="Market_Title">Markets</string>
     <string name="Market_Search">Search</string>
+    <string name="Market_FilterSection_MarketParameters">MARKET PARAMETERS</string>
+    <string name="Market_FilterSection_PriceParameters">PRICE PARAMETERS</string>
     <string name="Market_Field_HighestCap">Highest Cap</string>
     <string name="Market_Field_LowestCap">Lowest Cap</string>
     <string name="Market_Field_HighestVolume">Highest Volume</string>
@@ -115,8 +123,6 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="Market_Category_StablecoinIssuers_Description">Decentralized issuers of fiat pegged stablecoin tokens.</string>
     <string name="Market_Category_ExchangeTokens">Exchange Tokens</string>
     <string name="Market_Category_ExchangeTokens_Description">Tokens issued by centralized exchanges.</string>
-    <string name="Market_Category_Metals">Metals</string>
-    <string name="Market_Category_Metals_Description">Tokens pegged to metal prices.</string>
     <string name="Market_Category_RiskManagement">Risk Management</string>
     <string name="Market_Category_RiskManagement_Description">Risk assessment, insurance and hedging.</string>
     <string name="Market_Category_Wallets">Portefeuilles</string>
@@ -143,6 +149,50 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="Market_Category_CrossChain_Description">Cross-chain protocols.</string>
     <string name="Market_Category_Computing">Computing</string>
     <string name="Market_Category_Computing_Description">Decentralized on-demand computing solutions.</string>
+    <string name="Market_Category_RebaseTokens">Rebase Tokens</string>
+    <string name="Market_Category_RebaseTokens_Description">Tokens that periodically adjust to achieve a target price.</string>
+    <!--Market Search-->
+    <string name="EmptyResults">No results found</string>
+    <string name="Market_AdvancedSearch">Advanced Search</string>
+    <string name="Market_AdvancedSearch_Results">Results</string>
+    <string name="Market_Filter_ChooseSet">Choose Set</string>
+    <string name="Market_Filter_MarketCap">Market Cap</string>
+    <string name="Market_Filter_Volume">Trading Volume</string>
+    <string name="Market_Filter_Liquidity">DEX Liquidity</string>
+    <string name="Market_Filter_LiquidityHint">This setting applies to tokens traded on Ethereum (Uniswap DEX) and Binance Smart Chain (Pancake DEX).</string>
+    <string name="Market_Filter_PricePeriod">Price Period</string>
+    <string name="Market_Filter_PriceChange">Price Change</string>
+    <string name="Market_Filter_ResetAll">Reset All</string>
+    <string name="Market_Filter_Top_100">Top 100</string>
+    <string name="Market_Filter_Top_250">Top 250</string>
+    <string name="Market_Filter_Top_500">Top 500</string>
+    <string name="Market_Filter_Top_1000">Top 1000</string>
+    <string name="Market_Filter_Top_1500">Top 1500</string>
+    <string name="Market_Filter_ShowResults">Show Results</string>
+    <string name="Market_Filter_ShowResults_Counter">Show Results: %d</string>
+    <string name="Market_Filter_Range_0_5M">&lt; 5M</string>
+    <string name="Market_Filter_Range_5M_20M">5M - 20M</string>
+    <string name="Market_Filter_Range_20M_100M">20M - 100M</string>
+    <string name="Market_Filter_Range_100M_1B">100M - 1B</string>
+    <string name="Market_Filter_Range_1B_5B">1B - 5B</string>
+    <string name="Market_Filter_Range_5B_More">&gt; 5BN</string>
+    <string name="Market_Filter_TimePeriod_1D">1 Day</string>
+    <string name="Market_Filter_TimePeriod_1W">1 Week</string>
+    <string name="Market_Filter_TimePeriod_2W">2 Weeks</string>
+    <string name="Market_Filter_TimePeriod_1M">1 Month</string>
+    <string name="Market_Filter_TimePeriod_6M">6 Months</string>
+    <string name="Market_Filter_TimePeriod_1Y">1 Year</string>
+    <string name="Market_Filter_PriceChange_Positive_10_plus">&gt; +10%</string>
+    <string name="Market_Filter_PriceChange_Positive_25_plus">&gt; +25%</string>
+    <string name="Market_Filter_PriceChange_Positive_50_plus">&gt; +50%</string>
+    <string name="Market_Filter_PriceChange_Positive_100_plus">&gt; +100%</string>
+    <string name="Market_Filter_PriceChange_Negative_10_minus">&lt; -10%</string>
+    <string name="Market_Filter_PriceChange_Negative_25_minus">&lt; -25%</string>
+    <string name="Market_Filter_PriceChange_Negative_50_minus">&lt; -50%</string>
+    <string name="Market_Filter_PriceChange_Negative_100_minus">&lt; -100%</string>
+    <string name="TimePeriod_24h">24h</string>
+    <!--Coin Markets-->
+    <string name="CoinMarket_Title">%s Markets</string>
     <!--Balance-->
     <string name="Balance_Title">Balance</string>
     <string name="Balance_Deposit">Recevoir</string>
@@ -159,6 +209,7 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="Balance_Sort_Az">Nom</string>
     <string name="Balance_Sort_24hPriceChange">Prix 24h (%)</string>
     <string name="Balance_Backup_Alert">Vous devez sauvegarder le portefeuille %s avant de recevoir %s.</string>
+    <string name="Balance_NoWalletAlert">Vous n\'avez pas encore de portefeuille. Veuillez créer un nouveau portefeuille ou restaurer un portefeuille existant </string>
     <!--Send-->
     <string name="Send_Title">Envoyer %s</string>
     <string name="Send_Hint_Address">Adresse ou domaine</string>
@@ -168,7 +219,11 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="Send_Button_Max">Max</string>
     <string name="Send_Confirmation_Title">Confirmer</string>
     <string name="Send_Confirmation_Domain">Domaine</string>
+    <string name="Send_Confirmation_YouSend">Vous envoyez</string>
+    <string name="Send_Confirmation_Amount">Montant</string>
+    <string name="Send_Confirmation_To">À</string>
     <string name="Send_Confirmation_Receiver">Récepteur</string>
+    <string name="Send_Confirmation_Input">Entrées</string>
     <string name="Send_Confirmation_EstimateTime">Temps estimé :</string>
     <string name="Send_Confirmation_Send_Button">Envoyer</string>
     <string name="Send_Success">\u2713 Envoyé</string>
@@ -185,7 +240,6 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="Send_DialogAvailableBalance">Solde disponible</string>
     <string name="Send_DialogSpeed">Vitesse de transaction </string>
     <string name="Send_TxSpeed_Low">Faible</string>
-    <string name="Send_TxSpeed_Medium">Moyenne</string>
     <string name="Send_TxSpeed_High">Élevée</string>
     <string name="Send_TxSpeed_Recommended">Recommandé</string>
     <string name="Send_TxSpeed_Custom">Personnalisé</string>
@@ -208,7 +262,7 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="FeeInfo_Average">Moyen</string>
     <string name="FeeInfo_AverageDescription">Généralement, cette fourchette de frais devrait être suffisante pour que la transaction soit traitée en quelques minutes/heure pour Bitcoin et en quelques minutes pour Ethereum.</string>
     <string name="FeeInfo_Fast">Rapide</string>
-    <string name="FeeInfo_FastDescription">For transactions where priority is important we recommend using high fee setting. It\'s expected that selecting high fee setting will be sufficient for transaction to be completed within 10 minutes for Bitcoin and within a few minutes for Ethereum.\n\nThe Unstoppable wallet makes an educated guess based on the network activity and can\'t not guarantee that the suggested fee values will always result in expected behavior.</string>
+    <string name="FeeInfo_FastDescription">Pour les transactions où la priorité est importante, nous recommandons de prévoir des frais élevés. Le choix d\'une tarification élevée devrait suffire pour que la transaction soit effectuée dans les 10 minutes pour Bitcoin et dans les quelques minutes pour Ethereum.</string>
     <!--Wallet Connect-->
     <string name="WalletConnect_Title">Wallet Connect</string>
     <string name="WalletConnect_Request">Requête</string>
@@ -223,6 +277,7 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="WalletConnect_Status_Offline">Déconnecté</string>
     <string name="WalletConnect_Status_Online">En ligne</string>
     <string name="WalletConnect_Status_Connecting">Connexion en cours…</string>
+    <string name="WalletConnect_NewConnect">Nouvelle connexion</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Error_InsufficientBalance">La transaction nécessite %s pour l\'envoi</string>
     <string name="EthereumTransaction_Error_InsufficientBalanceForFee">Le solde actuel des %s est inférieur au montant requis pour traiter cette transaction, frais de transaction compris.</string>
@@ -271,12 +326,18 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="SwapSettings_Error_InvalidDeadline">Date limite invalide</string>
     <!-- Swap Confirmation -->
     <string name="Swap_Confirmation">Confirmation</string>
+    <string name="Swap_Confirmation_Guaranteed">Garanti</string>
+    <string name="Swap_Confirmation_Maximum">Maximum</string>
+    <string name="Swap_Confirmation_Estimated">Estimé</string>
     <!--Swap Coin Select-->
     <!--Approve-->
     <string name="Approve_Title">Swap approuvé</string>
     <string name="Approve_Info">Vous devez autoriser un contrat intelligent pour échanger un token donné en votre nom. Cette autorisation fixe le montant qui peut être utilisé par un contrat intelligent. Elle n\'affecte pas votre solde, mais nécessite des frais minimes pour l\'exécution de la transaction de validation.\n\nBien que cela puisse être fait à la demande avant chaque transaction, il est moins coûteux d\'approuver à l\'avance un montant plus élevé pour de futures transactions.</string>
     <string name="Approve_Error_AlreadyApproved">Vous avez déjà une provision pour ce montant</string>
+    <string name="Approve_Spender">Spender</string>
+    <string name="Approve_YouApprove">Vous approuvez</string>
     <!--Uniswap Info -->
+
     <string name="SwapInfo_Title">Uniswap v.2</string>
     <string name="SwapInfo_Description">Ce service d\'échange est assuré par Uniswap, un protocole d\'échange de tokens décentralisé basé sur la blockchain Ethereum.\n\nUniswap est entièrement automatisé et géré par des contrats intelligents qui facilitent les échanges de tokens de manière fiable sans aucun moyen de tricher.</string>
     <string name="SwapInfo_DexRelated">Liés à Uniswap</string>
@@ -292,6 +353,7 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="SwapInfo_MaxSpendDescription">Le montant maximum qu\'un utilisateur va dépenser à la suite d\'une action de remplacement.</string>
     <string name="SwapInfo_Other">Autre</string>
     <string name="SwapInfo_TransactionFeeTitle">Frais de transaction</string>
+
     <string name="SwapInfo_TransactionFeeDescription">Le coût de traitement estimé de la transaction en question sur la blockchain Ethereum. Les transactions associées à Uniswap coûtent généralement plus cher que les transactions génériques de transfert de token.</string>
     <string name="SwapInfo_TransactionSpeedTitle">Vitesse de transaction</string>
     <string name="SwapInfo_TransactionSpeedDescription">Les transactions dont les frais de transaction sont plus élevés se traduiront par une vitesse de traitement plus rapide. L\'inverse est également vrai.</string>
@@ -329,10 +391,11 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="TransactionInfo_Input">Entrées</string>
     <string name="TransactionInfo_ButtonViewOnExplorerName">Afficher sur %s</string>
     <string name="StatusInfo_Pending">En attente</string>
+    <string name="StatusInfo_SendingReceiving">Envoi/Réception</string>
     <string name="StatusInfo_Confirmed">Confirmé</string>
     <string name="StatusInfo_Failed">Échec</string>
     <string name="StatusInfo_PendingDescription">La transaction n\'a pas encore été confirmée sur la blockchain. Cette étape peut prendre de quelques minutes à quelques heures selon les frais de transaction. Les transactions envoyées avec des frais très bas sont généralement traitées en quelques jours ou peuvent être rejetées par le réseau, ce qui signifie que la transaction n\'a pas eu lieu.</string>
-    <string name="StatusInfo_ReceivingDescription">L\'expéditeur vous a envoyé une transaction, mais elle n\'est pas encore définitive. Pour les paiements plus importants, il est conseillé d\'attendre que l\'opération passe au statut \"terminé\". En général, cela devrait se produire dans l\'heure qui suit, mais cela peut parfois prendre plus longtemps si l\'expéditeur a envoyé la transaction avec des frais peu élevés.</string>
+    <string name="StatusInfo_SendingReceivingDescription">La transaction a été incluse dans la blockchain mais n\'a pas encore atteint sa finalité permanente. À ce stade, pour les petits paiements, il est prudent de considérer que la transaction est terminée. Pour les paiements plus importants, il est recommandé d\'attendre que le statut passe à \"complété\".</string>
     <string name="StatusInfo_ConfirmedDescription">La transaction est définitive et irréversible.</string>
     <string name="StatusInfo_FailedDescription">La transaction n\'a pas été traitée comme prévu et aucun transfert de token n\'a eu lieu. Sur la blockchain Ethereum, les transactions qui échouent entraînent des frais de transaction.</string>
     <!-- Info -->
@@ -489,6 +552,7 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="AddTokenDialog_Title">Choisir la blockchain</string>
     <string name="AddTokenDialog_Subtitle">Ajouter le token</string>
     <string name="AddTokenDialog_Erc20Tokens">ERC20 Token</string>
+    <string name="AddTokenDialog_Bep20Tokens">BEP20 Token</string>
     <string name="AddTokenDialog_BinanceTokens">BEP2 Token</string>
     <!-- Enable Token -->
     <string name="EnalbeToken_Title">Activer les Pièces</string>
@@ -505,10 +569,10 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="AddToken_CoinAlreadyInListWarning">Ce token figure déjà sur la liste du gestionnaire des pièces</string>
     <string name="AddToken_InvalidAddressError">Addresse invalide</string>
     <string name="AddToken_ApiLimitExceeded">Limite d\'Api dépassée. Réessayez plus tard.</string>
-    <!-- Add Erc20 Token -->
-    <string name="AddErc20Token_Title">Ajouter ERC20</string>
-    <string name="AddEvmToken_ContractAddressHint">Adresse du contrat</string>
     <string name="AddEvmToken_ContractNotFound">Contrat non trouvé</string>
+    <string name="AddEvmToken_ContractAddressHint">Adresse du contrat</string>
+    <string name="AddErc20Token_Title">Ajouter ERC20</string>
+    <string name="AddBep20Token_Title">Ajouter BEP20</string>
     <!-- Add Bep2 Token -->
     <string name="AddBep2Token_Title">Ajouter BEP2</string>
     <string name="AddBep2Token_TokenSymbolHint">Symbole du token</string>
@@ -543,31 +607,55 @@ Si vous changez le format d\'adresse pour %2$s , l\'historique du solde actuel e
     <string name="CoinOption_bip44_Subtitle">Plus ancient (commence par %s...)</string>
     <string name="CoinOption_bip49_Subtitle">Populaire (commence par %s...)</string>
     <string name="CoinOption_bip84_Subtitle">Plus récent (commence par %s...)</string>
-    <!--Charts-->
-    <string name="CoinPage_TimeDuration_Today">Aujourd\'hui</string>
+    <!--Coin Page-->
+    <string name="CoinPage_TimeDuration_Today">TDY</string>
     <string name="CoinPage_TimeDuration_Day">24H</string>
-    <string name="CoinPage_TimeDuration_Week">7J</string>
+    <string name="CoinPage_TimeDuration_Week">7D</string>
+
     <string name="CoinPage_TimeDuration_Month">1M</string>
     <string name="CoinPage_TimeDuration_TwoWeeks">2W</string>
     <string name="CoinPage_TimeDuration_Month3">3M</string>
     <string name="CoinPage_TimeDuration_HalfYear">6M</string>
-    <string name="CoinPage_TimeDuration_Year">1A</string>
-    <string name="CoinPage_TimeDuration_Year2">2A</string>
-    <string name="CoinPage_MarketCap">Cap. marché</string>
+    <string name="CoinPage_TimeDuration_Year">1Y</string>
+    <string name="CoinPage_TimeDuration_Year2">2Y</string>
+    <string name="CoinPage_RatingDetails">Rating Details</string>
+    <string name="CoinPage_Price">Price</string>
+    <string name="CoinPage_Market">Market</string>
+    <string name="CoinPage_CoinMarket">%s Markets</string>
+    <string name="CoinPage_FundsInvested">Funds Invested</string>
+    <string name="CoinPage_Range24">24h Range</string>
+    <string name="CoinPage_Performance">Performance</string>
+    <string name="CoinPage_About">About</string>
+    <string name="CoinPage_Category">Category</string>
+    <string name="CoinPage_Guide">Guide</string>
+    <string name="CoinPage_Website">Website</string>
+    <string name="CoinPage_Whitepaper">Whitepaper</string>
+    <string name="CoinPage_Reddit">Reddit</string>
+    <string name="CoinPage_Twitter">Twitter</string>
+    <string name="CoinPage_Telegram">Telegram</string>
+    <string name="CoinPage_Github">Github</string>
+    <string name="CoinPage_Changes1W">Changes (1W)</string>
+    <string name="CoinPage_Changes1M">Changes (1M)</string>
+    <string name="CoinPage_MarketCap">Market Cap</string>
+    <string name="CoinPage_DilutedMarketCap">Diluted MCap</string>
     <string name="CoinPage_Volume24">Volume(24h)</string>
-    <string name="CoinPage_inCirculation">Offre en Circulation</string>
-    <string name="CoinPage_TotalSupply">Offre totale</string>
-    <string name="CoinPage_StartDate">Date de lancement</string>
-    <string name="CoinPage_Website">Site web du projet</string>
+    <string name="CoinPage_inCirculation">In Circulation</string>
+    <string name="CoinPage_TotalSupply">Total Supply</string>
+    <string name="CoinPage_StartDate">Launch Date</string>
     <string name="CoinPage_MarketCap_Thousand">k</string>
     <string name="CoinPage_MarketCap_Million">M</string>
-    <string name="CoinPage_MarketCap_Billion">G</string>
+    <string name="CoinPage_MarketCap_Billion">B</string>
     <string name="CoinPage_MarketCap_Trillion">T</string>
-    <string name="CoinPage_Volume">Volume</string>
+    <string name="CoinPage_Volume">Vol</string>
     <string name="CoinPage_Error_NotAvailable">Graphique non disponible</string>
-    <string name="CoinPage_LatestNews">Dernières nouvelles</string>
+    <string name="CoinPage_LatestNews">Latest News</string>
     <string name="CoinPage_Favorite">Favorite</string>
     <string name="CoinPage_Unfavorite">Unfavorite</string>
+    <string name="CoinPage_Performance_Week">1 Week</string>
+    <string name="CoinPage_Performance_Month">1 Month</string>
+    <string name="CoinPage_ReadMore">Read More</string>
+    <string name="CoinPage_ReadLess">Read Less</string>
+
     <!--Rate list-->
     <string name="RateList_portfolio">Portfolio</string>
     <string name="RateList_top100">Top 100</string>
