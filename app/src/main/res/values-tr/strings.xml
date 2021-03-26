@@ -21,9 +21,9 @@
     <string name="Button_Connect">Bağlan</string>
     <string name="Button_Reject">Reddet</string>
     <string name="Button_Disconnect">Bağlantıyı Kes</string>
-    <string name="Button_Start">Start</string>
-    <string name="Button_Create">Create</string>
-    <string name="Button_Restore">Restore</string>
+    <string name="Button_Start">Başlangıç</string>
+    <string name="Button_Create">Oluştur</string>
+    <string name="Button_Restore">Geri Yükle</string>
     <string name="Button_Reset">Reset</string>
     <string name="Error">Hata</string>
     <string name="NotAvailable">N/A</string>
@@ -276,7 +276,7 @@
     <string name="WalletConnect_Status_Offline">Çevrimdışı</string>
     <string name="WalletConnect_Status_Online">Çevrimiçi</string>
     <string name="WalletConnect_Status_Connecting">Bağlanıyor…</string>
-    <string name="WalletConnect_NewConnect">New Connect</string>
+    <string name="WalletConnect_NewConnect">New Connection</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Error_InsufficientBalance">İşlem, göndermek için %s gerektirir</string>
     <string name="EthereumTransaction_Error_InsufficientBalanceForFee">Mevcut %s bakiyesi, işlem ücreti dahil bu işlemi gerçekleştirmek için gereken miktarın altında.</string>
@@ -336,7 +336,7 @@
     <string name="Approve_Spender">Spender</string>
     <string name="Approve_YouApprove">You Approve</string>
     <!--Uniswap Info -->
-    <string name="SwapInfo_Description">This exchange service is powered by %s, a decentralized token exchange protocol built on %s blockchain.\n\%s is fully automated and managed by smart contracts that facilitate token exchanges in a reliable manner without any means to cheat.</string>
+    <string name="SwapInfo_Description">This exchange service is powered by %s, a decentralized token exchange protocol built on %s blockchain.\n\n%s is fully automated and managed by smart contracts that facilitate token exchanges in a reliable manner without any means to cheat.</string>
     <string name="SwapInfo_DexRelated">%s Related</string>
     <string name="SwapInfo_AllowanceTitle">Allowance</string>
     <string name="SwapInfo_AllowanceDescription">The amount of some currency that service can spend on your behalf when executing token swaps. Sufficient allowance is required before swap action can take place</string>
@@ -631,7 +631,7 @@
     <string name="CoinPage_Changes1W">Changes (1W)</string>
     <string name="CoinPage_Changes1M">Changes (1M)</string>
     <string name="CoinPage_MarketCap">Market Cap</string>
-    <string name="CoinPage_DilutedMarketCap">Fully Diluted Market Cap</string>
+    <string name="CoinPage_DilutedMarketCap">Diluted MCap</string>
     <string name="CoinPage_Volume24">Volume (24h)</string>
     <string name="CoinPage_inCirculation">In Circulation</string>
     <string name="CoinPage_TotalSupply">Total Supply</string>
