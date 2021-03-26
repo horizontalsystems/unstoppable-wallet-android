@@ -27,7 +27,7 @@
     <string name="Button_Reset">Reset</string>
     <string name="Error">出错</string>
     <string name="NotAvailable">不可用</string>
-    <string name="None">None</string>
+    <string name="None">无动画</string>
     <string name="Any">Any</string>
     <string name="Wallet">%s钱包</string>
     <!--Intro-->
@@ -218,11 +218,11 @@
     <string name="Send_Button_Max">最多</string>
     <string name="Send_Confirmation_Title">确认</string>
     <string name="Send_Confirmation_Domain">域名</string>
-    <string name="Send_Confirmation_YouSend">You Send</string>
-    <string name="Send_Confirmation_Amount">Amount</string>
-    <string name="Send_Confirmation_To">To</string>
+    <string name="Send_Confirmation_YouSend">您发送</string>
+    <string name="Send_Confirmation_Amount">金额</string>
+    <string name="Send_Confirmation_To">接收人</string>
     <string name="Send_Confirmation_Receiver">接收器</string>
-    <string name="Send_Confirmation_Input">Input</string>
+    <string name="Send_Confirmation_Input">输入</string>
     <string name="Send_Confirmation_EstimateTime">预计时间：</string>
     <string name="Send_Confirmation_Send_Button">发送​​</string>
     <string name="Send_Success">\u2713已发送</string>
@@ -325,35 +325,35 @@
     <string name="SwapSettings_Error_InvalidDeadline">无效截止日期</string>
     <!-- Swap Confirmation -->
     <string name="Swap_Confirmation">确认</string>
-    <string name="Swap_Confirmation_Guaranteed">Guaranteed</string>
-    <string name="Swap_Confirmation_Maximum">Maximum</string>
-    <string name="Swap_Confirmation_Estimated">Estimated</string>
+    <string name="Swap_Confirmation_Guaranteed">保证</string>
+    <string name="Swap_Confirmation_Maximum">最大金额</string>
+    <string name="Swap_Confirmation_Estimated">估计</string>
     <!--Swap Coin Select-->
     <!--Approve-->
     <string name="Approve_Title">互兑批准</string>
     <string name="Approve_Info">您应为智能合约授予权限，以代表您互兑给定的代币。此权限设定了智能合约可以使用的金额。它不会影响您的余额，但需要小额费用以执行批准交易。\n\n虽然这可以在每一次交易之前按需完成，但是预先为我们对将来的交易批准较大的金额将使成本更低。</string>
     <string name="Approve_Error_AlreadyApproved">您已经有了此金额的限额</string>
-    <string name="Approve_Spender">Spender</string>
-    <string name="Approve_YouApprove">You Approve</string>
+    <string name="Approve_Spender">消费人</string>
+    <string name="Approve_YouApprove">您批准</string>
     <!--Uniswap Info -->
-    <string name="SwapInfo_Description">This exchange service is powered by %s, a decentralized token exchange protocol built on %s blockchain.\n\%s is fully automated and managed by smart contracts that facilitate token exchanges in a reliable manner without any means to cheat.</string>
-    <string name="SwapInfo_DexRelated">%s Related</string>
-    <string name="SwapInfo_AllowanceTitle">Allowance</string>
-    <string name="SwapInfo_AllowanceDescription">The amount of some currency that service can spend on your behalf when executing token swaps. Sufficient allowance is required before swap action can take place</string>
-    <string name="SwapInfo_PriceImpactTitle">Price Impact</string>
-    <string name="SwapInfo_PriceImpactDescription">Expected price deviation from a shown price, typically increases with the swap amount.</string>
-    <string name="SwapInfo_SwapFeeTitle">Swap Fee</string>
-    <string name="SwapInfo_SwapFeeDescription">A service fee for the swap action on platform, shown in the currency the user sells. For most orders it should be either 0.3 % or 0.6 %.</string>
-    <string name="SwapInfo_GuaranteedAmountTitle">Guaranteed Amount</string>
+    <string name="SwapInfo_Description">此兑换服务由基于%s区块链的分散式代币兑换协议%s提供。\n%s由不存在任何欺诈手段、以可靠方式推动代币兑换的智能合约来实现完全自动化并管理。</string>
+    <string name="SwapInfo_DexRelated">%s关联</string>
+    <string name="SwapInfo_AllowanceTitle">补贴</string>
+    <string name="SwapInfo_AllowanceDescription">执行代币互兑时，该服务可以代表您支出某种货币的金额。执行互兑操作之前要求具备足够的限额</string>
+    <string name="SwapInfo_PriceImpactTitle">价格影响</string>
+    <string name="SwapInfo_PriceImpactDescription">预期价格和显示价格的偏差通常会增加互兑金额。</string>
+    <string name="SwapInfo_SwapFeeTitle">掉期交易费用</string>
+    <string name="SwapInfo_SwapFeeDescription">以用户出售货币显示的 平台上互兑操作的服务费。对于大部分订单，这应为0.3%或0.6%。</string>
+    <string name="SwapInfo_GuaranteedAmountTitle">保证金额</string>
     <string name="SwapInfo_GuaranteedAmountDescription">The minimum amount a user is going to receive as a result of a swap action.</string>
-    <string name="SwapInfo_MaxSpendTitle">Maximum Spend</string>
+    <string name="SwapInfo_MaxSpendTitle">最大支出</string>
     <string name="SwapInfo_MaxSpendDescription">The maximum amount a user is going to spend as a result of a swap action.</string>
-    <string name="SwapInfo_Other">Other</string>
-    <string name="SwapInfo_TransactionFeeTitle">Transaction Fee</string>
-    <string name="SwapInfo_TransactionFeeDescription">The estimated processing cost of the given transaction on %s blockchain. %s related transactions will typically cost more than generic token transfer transactions.</string>
-    <string name="SwapInfo_TransactionSpeedTitle">Transaction Speed</string>
-    <string name="SwapInfo_TransactionSpeedDescription">Transactions with higher transaction fee will result in faster processing speeds. The opposite is true as well.</string>
-    <string name="SwapInfo_Site">%s Site</string>
+    <string name="SwapInfo_Other">其他</string>
+    <string name="SwapInfo_TransactionFeeTitle">交易费用</string>
+    <string name="SwapInfo_TransactionFeeDescription">%s区块链上给定交易的预计处理成本。%s相关交易的成本通常会高于通用代币转账交易。</string>
+    <string name="SwapInfo_TransactionSpeedTitle">交易速度</string>
+    <string name="SwapInfo_TransactionSpeedDescription">交易费用较高的交易会实现更快的处理速度。反之亦然。</string>
+    <string name="SwapInfo_Site">%s 站点</string>
     <!--Deposit-->
     <string name="Deposit_Title">收到%s</string>
     <string name="Deposit_Share">分享</string>
@@ -387,11 +387,11 @@
     <string name="TransactionInfo_Input">输入</string>
     <string name="TransactionInfo_ButtonViewOnExplorerName">View on %s</string>
     <string name="StatusInfo_Pending">待处理</string>
-    <string name="StatusInfo_SendingReceiving">Sending/Receiving</string>
+    <string name="StatusInfo_SendingReceiving">发送 / 接收</string>
     <string name="StatusInfo_Confirmed">已确认</string>
     <string name="StatusInfo_Failed">失败</string>
     <string name="StatusInfo_PendingDescription">交易尚未在区块链上确认。 根据交易费用的不同，此步骤可能需要几分钟到几个小时。通过极低费用发送的交易通常会在几天内得到处理或被网络拒绝，即没有进行交易。</string>
-    <string name="StatusInfo_SendingReceivingDescription">Transaction has been included in the blockchain but has not reached finality yet. At this point, it\'s safe to consider transaction completed for smaller payments. For larger payments it\'s recommended to wait until the status changes to completed.</string>
+    <string name="StatusInfo_SendingReceivingDescription">交易已包括在区块链中，但尚未达到永久终结。此时，可以安全地考虑以较小金额完成的交易。对于较大的金额，建议等待状态变更的完成。</string>
     <string name="StatusInfo_ConfirmedDescription">交易是最终且不可逆的。</string>
     <string name="StatusInfo_FailedDescription">交易没有按预定方式处理，也没有进行代币价值转移。在Etherum区块链中，失败的交易会消耗交易费用。</string>
     <!-- Info -->
@@ -548,7 +548,7 @@
     <string name="AddTokenDialog_Title">选择区块链</string>
     <string name="AddTokenDialog_Subtitle">正在添加代币</string>
     <string name="AddTokenDialog_Erc20Tokens">ERC20 代币</string>
-    <string name="AddTokenDialog_Bep20Tokens">BEP20 Tokens</string>
+    <string name="AddTokenDialog_Bep20Tokens">BEP20 代币</string>
     <string name="AddTokenDialog_BinanceTokens">BEP2 代币</string>
     <!-- Enable Token -->
     <string name="EnalbeToken_Title">启用代币</string>
@@ -568,7 +568,7 @@
     <string name="AddEvmToken_ContractNotFound">没找到合同</string>
     <string name="AddEvmToken_ContractAddressHint">智能合约地址</string>
     <string name="AddErc20Token_Title">添加ERC20</string>
-    <string name="AddBep20Token_Title">Add BEP20</string>
+    <string name="AddBep20Token_Title">添加BEP20</string>
     <!-- Add Bep2 Token -->
     <string name="AddBep2Token_Title">添加BEP2</string>
     <string name="AddBep2Token_TokenSymbolHint">代币符号</string>
