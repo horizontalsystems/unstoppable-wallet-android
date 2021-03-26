@@ -21,9 +21,9 @@
     <string name="Button_Connect">Connecter</string>
     <string name="Button_Reject">Rejeter</string>
     <string name="Button_Disconnect">Déconnecter</string>
-    <string name="Button_Start">Start</string>
-    <string name="Button_Create">Create</string>
-    <string name="Button_Restore">Restore</string>
+    <string name="Button_Start">Commencer</string>
+    <string name="Button_Create">Créer</string>
+    <string name="Button_Restore">Restaurer</string>
     <string name="Button_Reset">Reset</string>
     <string name="Error">Erreur</string>
     <string name="NotAvailable">S. O.</string>
@@ -150,7 +150,7 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="Market_Category_Computing">Computing</string>
     <string name="Market_Category_Computing_Description">Decentralized on-demand computing solutions.</string>
     <string name="Market_Category_RebaseTokens">Rebase Tokens</string>
-    <string name="Market_Category_RebaseTokens_Description">Tokens that periodically adjust supply to achieve a target price.</string>
+    <string name="Market_Category_RebaseTokens_Description">Tokens that periodically adjust to achieve a target price.</string>
     <!--Market Search-->
     <string name="EmptyResults">No results found</string>
     <string name="Market_AdvancedSearch">Advanced Search</string>
@@ -209,7 +209,7 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="Balance_Sort_Az">Nom</string>
     <string name="Balance_Sort_24hPriceChange">Prix 24h (%)</string>
     <string name="Balance_Backup_Alert">Vous devez sauvegarder le portefeuille %s avant de recevoir %s.</string>
-    <string name="Balance_NoWalletAlert">You don\’t have any wallets yet. Create new or restore existing </string>
+    <string name="Balance_NoWalletAlert">Vous n\'avez pas encore de portefeuille. Veuillez créer un nouveau portefeuille ou restaurer un portefeuille existant </string>
     <!--Send-->
     <string name="Send_Title">Envoyer %s</string>
     <string name="Send_Hint_Address">Adresse ou domaine</string>
@@ -219,11 +219,11 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="Send_Button_Max">Max</string>
     <string name="Send_Confirmation_Title">Confirmer</string>
     <string name="Send_Confirmation_Domain">Domaine</string>
-    <string name="Send_Confirmation_YouSend">You Send</string>
-    <string name="Send_Confirmation_Amount">Amount</string>
-    <string name="Send_Confirmation_To">To</string>
+    <string name="Send_Confirmation_YouSend">Vous envoyez</string>
+    <string name="Send_Confirmation_Amount">Montant</string>
+    <string name="Send_Confirmation_To">À</string>
     <string name="Send_Confirmation_Receiver">Récepteur</string>
-    <string name="Send_Confirmation_Input">Input</string>
+    <string name="Send_Confirmation_Input">Entrées</string>
     <string name="Send_Confirmation_EstimateTime">Temps estimé :</string>
     <string name="Send_Confirmation_Send_Button">Envoyer</string>
     <string name="Send_Success">\u2713 Envoyé</string>
@@ -262,7 +262,7 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="FeeInfo_Average">Moyen</string>
     <string name="FeeInfo_AverageDescription">Généralement, cette fourchette de frais devrait être suffisante pour que la transaction soit traitée en quelques minutes/heure pour Bitcoin et en quelques minutes pour Ethereum.</string>
     <string name="FeeInfo_Fast">Rapide</string>
-    <string name="FeeInfo_FastDescription">For transactions where priority is important we recommend using high fee setting. It\'s expected that selecting high fee setting will be sufficient for transaction to be completed within 10 minutes for Bitcoin and within a few minutes for Ethereum.\n\nThe Unstoppable wallet makes an educated guess based on the network activity and can\'t not guarantee that the suggested fee values will always result in expected behavior.</string>
+    <string name="FeeInfo_FastDescription">Pour les transactions où la priorité est importante, nous recommandons de prévoir des frais élevés. Le choix d\'une tarification élevée devrait suffire pour que la transaction soit effectuée dans les 10 minutes pour Bitcoin et dans les quelques minutes pour Ethereum.</string>
     <!--Wallet Connect-->
     <string name="WalletConnect_Title">Wallet Connect</string>
     <string name="WalletConnect_Request">Requête</string>
@@ -277,7 +277,7 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="WalletConnect_Status_Offline">Déconnecté</string>
     <string name="WalletConnect_Status_Online">En ligne</string>
     <string name="WalletConnect_Status_Connecting">Connexion en cours…</string>
-    <string name="WalletConnect_NewConnect">New Connect</string>
+    <string name="WalletConnect_NewConnect">Nouvelle connexion</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Error_InsufficientBalance">La transaction nécessite %s pour l\'envoi</string>
     <string name="EthereumTransaction_Error_InsufficientBalanceForFee">Le solde actuel des %s est inférieur au montant requis pour traiter cette transaction, frais de transaction compris.</string>
@@ -326,35 +326,35 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="SwapSettings_Error_InvalidDeadline">Date limite invalide</string>
     <!-- Swap Confirmation -->
     <string name="Swap_Confirmation">Confirmation</string>
-    <string name="Swap_Confirmation_Guaranteed">Guaranteed</string>
+    <string name="Swap_Confirmation_Guaranteed">Garanti</string>
     <string name="Swap_Confirmation_Maximum">Maximum</string>
-    <string name="Swap_Confirmation_Estimated">Estimated</string>
+    <string name="Swap_Confirmation_Estimated">Estimé</string>
     <!--Swap Coin Select-->
     <!--Approve-->
     <string name="Approve_Title">Swap approuvé</string>
     <string name="Approve_Info">Vous devez autoriser un contrat intelligent pour échanger un token donné en votre nom. Cette autorisation fixe le montant qui peut être utilisé par un contrat intelligent. Elle n\'affecte pas votre solde, mais nécessite des frais minimes pour l\'exécution de la transaction de validation.\n\nBien que cela puisse être fait à la demande avant chaque transaction, il est moins coûteux d\'approuver à l\'avance un montant plus élevé pour de futures transactions.</string>
     <string name="Approve_Error_AlreadyApproved">Vous avez déjà une provision pour ce montant</string>
     <string name="Approve_Spender">Spender</string>
-    <string name="Approve_YouApprove">You Approve</string>
+    <string name="Approve_YouApprove">Vous approuvez</string>
     <!--Uniswap Info -->
-    <string name="SwapInfo_Description">This exchange service is powered by %s, a decentralized token exchange protocol built on %s blockchain.\n\%s is fully automated and managed by smart contracts that facilitate token exchanges in a reliable manner without any means to cheat.</string>
-    <string name="SwapInfo_DexRelated">%s Related</string>
-    <string name="SwapInfo_AllowanceTitle">Allowance</string>
-    <string name="SwapInfo_AllowanceDescription">The amount of some currency that service can spend on your behalf when executing token swaps. Sufficient allowance is required before swap action can take place</string>
-    <string name="SwapInfo_PriceImpactTitle">Price Impact</string>
-    <string name="SwapInfo_PriceImpactDescription">Expected price deviation from a shown price, typically increases with the swap amount.</string>
-    <string name="SwapInfo_SwapFeeTitle">Swap Fee</string>
-    <string name="SwapInfo_SwapFeeDescription">A service fee for the swap action on platform, shown in the currency the user sells. For most orders it should be either 0.3 % or 0.6 %.</string>
-    <string name="SwapInfo_GuaranteedAmountTitle">Guaranteed Amount</string>
-    <string name="SwapInfo_GuaranteedAmountDescription">The minimum amount a user is going to receive as a result of a swap action.</string>
-    <string name="SwapInfo_MaxSpendTitle">Maximum Spend</string>
-    <string name="SwapInfo_MaxSpendDescription">The maximum amount a user is going to spend as a result of a swap action.</string>
-    <string name="SwapInfo_Other">Other</string>
-    <string name="SwapInfo_TransactionFeeTitle">Transaction Fee</string>
-    <string name="SwapInfo_TransactionFeeDescription">The estimated processing cost of the given transaction on %s blockchain. %s related transactions will typically cost more than generic token transfer transactions.</string>
-    <string name="SwapInfo_TransactionSpeedTitle">Transaction Speed</string>
-    <string name="SwapInfo_TransactionSpeedDescription">Transactions with higher transaction fee will result in faster processing speeds. The opposite is true as well.</string>
-    <string name="SwapInfo_Site">%s Site</string>
+    <string name="SwapInfo_Description">Ce service d\'échange est assuré par %s, un protocole d\'échange de tokens décentralisé construit sur la blockchain %s.\n%s est entièrement automatisé et géré par des contrats intelligents qui facilitent les échanges de tokens de manière fiable sans aucune possibilité de tricher.</string>
+    <string name="SwapInfo_DexRelated">Relatif à %s</string>
+    <string name="SwapInfo_AllowanceTitle">Allocation</string>
+    <string name="SwapInfo_AllowanceDescription">Le montant d\'une certaine monnaie que le service peut dépenser en votre nom lors de l\'exécution des échanges de tokens. Une allocation suffisante est requise avant que l\'opération d\'échange puisse avoir lieu</string>
+    <string name="SwapInfo_PriceImpactTitle">Impact prix</string>
+    <string name="SwapInfo_PriceImpactDescription">L\'écart de prix attendu par rapport à un prix affiché, augmente généralement avec le montant de l\'échange.</string>
+    <string name="SwapInfo_SwapFeeTitle">Frais d\'échange</string>
+    <string name="SwapInfo_SwapFeeDescription">Des frais de service pour l\'opération d\'échange sur la plateforme, indiqués dans la devise dans laquelle l\'utilisateur vend. Pour la plupart des ordres, ils devraient être de 0,3 % ou 0,6 %.</string>
+    <string name="SwapInfo_GuaranteedAmountTitle">Montant garanti</string>
+    <string name="SwapInfo_GuaranteedAmountDescription">Le montant minimum qu\'un utilisateur va recevoir à la suite d\'une action de remplacement.</string>
+    <string name="SwapInfo_MaxSpendTitle">Dépense maximale</string>
+    <string name="SwapInfo_MaxSpendDescription">Le montant maximum qu\'un utilisateur va dépenser à la suite d\'une action de remplacement.</string>
+    <string name="SwapInfo_Other">Autre</string>
+    <string name="SwapInfo_TransactionFeeTitle">Frais de transaction</string>
+    <string name="SwapInfo_TransactionFeeDescription">Le coût de traitement estimé de la transaction sur la blockchain %s. Les transactions relatives à %s coûteront généralement plus cher que les transactions génériques de transfert de tokens.</string>
+    <string name="SwapInfo_TransactionSpeedTitle">Vitesse de transaction</string>
+    <string name="SwapInfo_TransactionSpeedDescription">Les transactions dont les frais de transaction sont plus élevés se traduiront par une vitesse de traitement plus rapide. L\'inverse est également vrai.</string>
+    <string name="SwapInfo_Site">Site %s</string>
     <!--Deposit-->
     <string name="Deposit_Title">Recevoir %s</string>
     <string name="Deposit_Share">Partager</string>
@@ -388,11 +388,11 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="TransactionInfo_Input">Entrées</string>
     <string name="TransactionInfo_ButtonViewOnExplorerName">Afficher sur %s</string>
     <string name="StatusInfo_Pending">En attente</string>
-    <string name="StatusInfo_SendingReceiving">Sending/Receiving</string>
+    <string name="StatusInfo_SendingReceiving">Envoi/Réception</string>
     <string name="StatusInfo_Confirmed">Confirmé</string>
     <string name="StatusInfo_Failed">Échec</string>
     <string name="StatusInfo_PendingDescription">La transaction n\'a pas encore été confirmée sur la blockchain. Cette étape peut prendre de quelques minutes à quelques heures selon les frais de transaction. Les transactions envoyées avec des frais très bas sont généralement traitées en quelques jours ou peuvent être rejetées par le réseau, ce qui signifie que la transaction n\'a pas eu lieu.</string>
-    <string name="StatusInfo_SendingReceivingDescription">Transaction has been included in the blockchain but has not reached finality yet. At this point, it\'s safe to consider transaction completed for smaller payments. For larger payments it\'s recommended to wait until the status changes to completed.</string>
+    <string name="StatusInfo_SendingReceivingDescription">La transaction a été incluse dans la blockchain mais n\'a pas encore atteint sa finalité permanente. À ce stade, pour les petits paiements, il est prudent de considérer que la transaction est terminée. Pour les paiements plus importants, il est recommandé d\'attendre que le statut passe à \"complété\".</string>
     <string name="StatusInfo_ConfirmedDescription">La transaction est définitive et irréversible.</string>
     <string name="StatusInfo_FailedDescription">La transaction n\'a pas été traitée comme prévu et aucun transfert de token n\'a eu lieu. Sur la blockchain Ethereum, les transactions qui échouent entraînent des frais de transaction.</string>
     <!-- Info -->
@@ -549,7 +549,7 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="AddTokenDialog_Title">Choisir la blockchain</string>
     <string name="AddTokenDialog_Subtitle">Ajouter le token</string>
     <string name="AddTokenDialog_Erc20Tokens">ERC20 Token</string>
-    <string name="AddTokenDialog_Bep20Tokens">BEP20 Tokens</string>
+    <string name="AddTokenDialog_Bep20Tokens">BEP20 Token</string>
     <string name="AddTokenDialog_BinanceTokens">BEP2 Token</string>
     <!-- Enable Token -->
     <string name="EnalbeToken_Title">Activer les Pièces</string>
@@ -569,7 +569,7 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="AddEvmToken_ContractNotFound">Contrat non trouvé</string>
     <string name="AddEvmToken_ContractAddressHint">Adresse du contrat</string>
     <string name="AddErc20Token_Title">Ajouter ERC20</string>
-    <string name="AddBep20Token_Title">Add BEP20</string>
+    <string name="AddBep20Token_Title">Ajouter BEP20</string>
     <!-- Add Bep2 Token -->
     <string name="AddBep2Token_Title">Ajouter BEP2</string>
     <string name="AddBep2Token_TokenSymbolHint">Symbole du token</string>
@@ -634,7 +634,7 @@ Si vous changez le format d\'adresse pour %2$s , l\'historique du solde actuel e
     <string name="CoinPage_Changes1M">Changes (1M)</string>
     <string name="CoinPage_MarketCap">Market Cap</string>
     <string name="CoinPage_DilutedMarketCap">Fully Diluted Market Cap</string>
-    <string name="CoinPage_Volume24">Volume (24h)</string>
+    <string name="CoinPage_Volume24">Volume(24h)</string>
     <string name="CoinPage_inCirculation">In Circulation</string>
     <string name="CoinPage_TotalSupply">Total Supply</string>
     <string name="CoinPage_StartDate">Launch Date</string>
@@ -643,7 +643,7 @@ Si vous changez le format d\'adresse pour %2$s , l\'historique du solde actuel e
     <string name="CoinPage_MarketCap_Billion">B</string>
     <string name="CoinPage_MarketCap_Trillion">T</string>
     <string name="CoinPage_Volume">Vol</string>
-    <string name="CoinPage_Error_NotAvailable">Chart not available</string>
+    <string name="CoinPage_Error_NotAvailable">Graphique non disponible</string>
     <string name="CoinPage_LatestNews">Latest News</string>
     <string name="CoinPage_Favorite">Favorite</string>
     <string name="CoinPage_Unfavorite">Unfavorite</string>
