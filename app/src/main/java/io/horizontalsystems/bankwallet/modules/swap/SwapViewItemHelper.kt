@@ -35,7 +35,7 @@ class SwapViewItemHelper(private val translator: Translator, private val numberF
             return null
         }
 
-        return SwapModule.PriceImpactViewItem(impactLevel, translator.string(R.string.Swap_Percent, priceImpact))
+        return SwapModule.PriceImpactViewItem(impactLevel, translator.getString(R.string.Swap_Percent, priceImpact))
     }
 
     fun guaranteedAmountViewItem(tradeData: TradeData, coinIn: Coin?, coinOut: Coin?): SwapModule.GuaranteedAmountViewItem? {
@@ -44,13 +44,13 @@ class SwapViewItemHelper(private val translator: Translator, private val numberF
                 val amount = tradeData.amountOutMin ?: return null
                 val coin = coinOut ?: return null
 
-                return SwapModule.GuaranteedAmountViewItem(translator.string(R.string.Swap_MinimumGot), coinAmount(amount, coin))
+                return SwapModule.GuaranteedAmountViewItem(translator.getString(R.string.Swap_MinimumGot), coinAmount(amount, coin))
             }
             TradeType.ExactOut -> {
                 val amount = tradeData.amountInMax ?: return null
                 val coin = coinIn ?: return null
 
-                return SwapModule.GuaranteedAmountViewItem(translator.string(R.string.Swap_MaximumPaid), coinAmount(amount, coin))
+                return SwapModule.GuaranteedAmountViewItem(translator.getString(R.string.Swap_MaximumPaid), coinAmount(amount, coin))
             }
         }
     }
@@ -69,7 +69,7 @@ class SwapViewItemHelper(private val translator: Translator, private val numberF
         return if (ttl == defaultTradeOptions.ttl) {
             null
         } else {
-            translator.string(R.string.Duration_Minutes, ttl)
+            translator.getString(R.string.Duration_Minutes, ttl)
         }
     }
 

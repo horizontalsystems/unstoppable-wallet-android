@@ -67,13 +67,13 @@ class BlockchainSettingsViewModel(
     private fun derivationConfig(coin: Coin, derivations: List<AccountType.Derivation>, current: AccountType.Derivation): BlockchainSettingsModule.Config {
         return BlockchainSettingsModule.Config(
                 coin = coin,
-                title = translator.string(R.string.AddressFormatSettings_Title),
+                title = translator.getString(R.string.AddressFormatSettings_Title),
                 subtitle = coin.title,
                 selectedIndex = derivations.indexOfFirst { it == current },
                 viewItems = derivations.map { derivation ->
                     BottomSheetSelectorViewItem(
                             title = derivation.longTitle(),
-                            subtitle = translator.string(derivation.description(), (derivation.addressPrefix(coin.type)
+                            subtitle = translator.getString(derivation.description(), (derivation.addressPrefix(coin.type)
                                     ?: ""))
                     )
                 }
@@ -83,13 +83,13 @@ class BlockchainSettingsViewModel(
     private fun bitcoinCashCoinTypeConfig(coin: Coin, types: List<BitcoinCashCoinType>, current: BitcoinCashCoinType): BlockchainSettingsModule.Config {
         return BlockchainSettingsModule.Config(
                 coin = coin,
-                title = translator.string(R.string.AddressFormatSettings_Title),
+                title = translator.getString(R.string.AddressFormatSettings_Title),
                 subtitle = coin.title,
                 selectedIndex = types.indexOfFirst { it == current },
                 viewItems = types.map { type ->
                     BottomSheetSelectorViewItem(
-                            title = translator.string(type.title),
-                            subtitle = translator.string(type.description)
+                            title = translator.getString(type.title),
+                            subtitle = translator.getString(type.description)
                     )
                 }
         )

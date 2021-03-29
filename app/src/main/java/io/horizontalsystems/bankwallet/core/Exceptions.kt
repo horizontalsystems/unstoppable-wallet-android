@@ -21,7 +21,7 @@ sealed class EvmError(message: String? = null) : Throwable(message) {
 sealed class EvmAddressError : Throwable() {
     object InvalidAddress : EvmAddressError() {
         override fun getLocalizedMessage(): String {
-            return Translator.string(R.string.SwapSettings_Error_InvalidAddress)
+            return Translator.getString(R.string.SwapSettings_Error_InvalidAddress)
         }
     }
 }

@@ -61,7 +61,7 @@ class AppStatusService(
 
         for (predefinedAccountType in predefinedAccountTypeManager.allTypes) {
             val account = predefinedAccountTypeManager.account(predefinedAccountType) ?: continue
-            val title = Translator.string(predefinedAccountType.title)
+            val title = Translator.getString(predefinedAccountType.title)
 
             wallets[title] = getAccountDetails(account)
         }

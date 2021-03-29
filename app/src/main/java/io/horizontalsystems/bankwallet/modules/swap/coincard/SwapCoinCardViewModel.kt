@@ -165,7 +165,7 @@ class SwapCoinCardViewModel(
     private fun syncBalance(balance: BigDecimal?) {
         val coin = coinCardService.coin
         val formattedBalance = when {
-            coin == null -> translator.string(R.string.NotAvailable)
+            coin == null -> translator.getString(R.string.NotAvailable)
             balance == null -> null
             else -> formatter.coinAmount(balance, coin)
         }

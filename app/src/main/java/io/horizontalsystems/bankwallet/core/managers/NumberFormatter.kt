@@ -101,10 +101,10 @@ class NumberFormatter(
     override fun shortenValue(number: Number): Pair<BigDecimal, String> {
         val suffix = arrayOf(
                 " ",
-                translator.string(R.string.CoinPage_MarketCap_Thousand),
-                translator.string(R.string.CoinPage_MarketCap_Million),
-                translator.string(R.string.CoinPage_MarketCap_Billion),
-                translator.string(R.string.CoinPage_MarketCap_Trillion))
+                translator.getString(R.string.CoinPage_MarketCap_Thousand),
+                translator.getString(R.string.CoinPage_MarketCap_Million),
+                translator.getString(R.string.CoinPage_MarketCap_Billion),
+                translator.getString(R.string.CoinPage_MarketCap_Trillion))
 
         val valueLong = number.toLong()
         val value = floor(log10(valueLong.toDouble())).toInt()

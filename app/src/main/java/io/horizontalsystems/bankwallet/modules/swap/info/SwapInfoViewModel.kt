@@ -30,12 +30,12 @@ class SwapInfoViewModel(
         SwapModule.Dex.PancakeSwap -> "PancakeSwap"
     }
 
-    val description = translator.string(R.string.SwapInfo_Description, dexName, blockchain, dexName)
+    val description = translator.getString(R.string.SwapInfo_Description, dexName, blockchain, dexName)
 
-    val dexRelated = translator.string(R.string.SwapInfo_DexRelated, dexName)
+    val dexRelated = translator.getString(R.string.SwapInfo_DexRelated, dexName)
 
-    val transactionFeeDescription = translator.string(R.string.SwapInfo_TransactionFeeDescription, blockchain, dexName)
+    val transactionFeeDescription = translator.getString(R.string.SwapInfo_TransactionFeeDescription, blockchain, dexName)
 
-    val linkText = translator.string(R.string.SwapInfo_Site, dexName)
+    val linkText = translator.getString(R.string.SwapInfo_Site, dexName)
 
 }

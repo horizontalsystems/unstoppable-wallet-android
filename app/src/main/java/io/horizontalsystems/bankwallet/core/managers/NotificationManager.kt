@@ -67,7 +67,7 @@ class NotificationManager(
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val name = translator.string(R.string.App_Name)
+            val name = translator.getString(R.string.App_Name)
             val importance = SystemNotificationManager.IMPORTANCE_DEFAULT
             val channel = NotificationChannel(channelId, name, importance)
             // Register the channel with the system

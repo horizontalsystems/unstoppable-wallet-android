@@ -40,13 +40,13 @@ class SwapTradeOptionsViewModel(
 
                 when (error) {
                     is TradeOptionsError.InvalidAddress -> {
-                        errorText = translator.string(R.string.SwapSettings_Error_InvalidAddress)
+                        errorText = translator.getString(R.string.SwapSettings_Error_InvalidAddress)
                     }
                     is TradeOptionsError.InvalidSlippage -> {
-                        errorText = translator.string(R.string.SwapSettings_Error_InvalidSlippage)
+                        errorText = translator.getString(R.string.SwapSettings_Error_InvalidSlippage)
                     }
                     is TradeOptionsError.ZeroDeadline -> {
-                        errorText = translator.string(R.string.SwapSettings_Error_InvalidDeadline)
+                        errorText = translator.getString(R.string.SwapSettings_Error_InvalidDeadline)
                     }
                 }
 

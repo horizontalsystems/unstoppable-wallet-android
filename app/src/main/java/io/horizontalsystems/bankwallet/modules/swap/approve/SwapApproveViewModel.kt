@@ -79,7 +79,7 @@ class SwapApproveViewModel(
     private fun convertError(error: Throwable): String {
         return when (val convertedError = error.convertedError) {
             is SwapApproveService.TransactionAmountError.AlreadyApproved -> {
-                translator.string(R.string.Approve_Error_AlreadyApproved)
+                translator.getString(R.string.Approve_Error_AlreadyApproved)
             }
             else -> convertedError.message ?: convertedError.javaClass.simpleName
         }
