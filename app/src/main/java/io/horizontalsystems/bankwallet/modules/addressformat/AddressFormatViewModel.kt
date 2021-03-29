@@ -2,7 +2,7 @@ package io.horizontalsystems.bankwallet.modules.addressformat
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import io.horizontalsystems.bankwallet.core.providers.StringProvider
+import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.SingleLiveEvent
@@ -12,7 +12,7 @@ import io.reactivex.schedulers.Schedulers
 
 class AddressFormatViewModel(
         private val service: AddressFormatModule.IService,
-        private val stringProvider: StringProvider
+        private val translator: Translator
 ) : ViewModel() {
 
     val sections = MutableLiveData<List<AddressFormatModule.SectionItem>>()
@@ -51,7 +51,7 @@ class AddressFormatViewModel(
             is AddressFormatModule.ItemType.BitcoinCashType -> {
                 val selectedType = item.type.types[index]
                 if (selectedType != item.type.current) {
-                    showAddressFormatChangeAlert.postValue(Pair(item.coinType.title, stringProvider.string(selectedType.title)))
+                    showAddressFormatChangeAlert.postValue(Pair(item.coinType.title, translator.string(selectedType.title)))
                 }
             }
         }
@@ -85,7 +85,7 @@ class AddressFormatViewModel(
             is AddressFormatModule.ItemType.Derivation -> {
                 itemType.derivations.mapIndexed { index, derivation ->
                     val title = "${derivation.addressType()} - ${derivation.title()}"
-                    val subtitle = stringProvider.string(derivation.description(), (derivation.addressPrefix(coinType)
+                    val subtitle = translator.string(derivation.description(), (derivation.addressPrefix(coinType)
                             ?: ""))
                     AddressFormatModule.ViewItem(
                             title,
@@ -98,8 +98,8 @@ class AddressFormatViewModel(
             is AddressFormatModule.ItemType.BitcoinCashType -> {
                 itemType.types.mapIndexed { index, type ->
                     AddressFormatModule.ViewItem(
-                            stringProvider.string(type.title),
-                            stringProvider.string(type.description),
+                            translator.string(type.title),
+                            translator.string(type.description),
                             type == itemType.current,
                             listPosition = ListPosition.getListPosition(itemType.types.size, index)
                     )

@@ -9,7 +9,7 @@ import io.horizontalsystems.bankwallet.core.ISendEthereumAdapter
 import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinService
 import io.horizontalsystems.bankwallet.core.fiat.AmountTypeSwitchServiceSendEvm
 import io.horizontalsystems.bankwallet.core.fiat.FiatServiceSendEvm
-import io.horizontalsystems.bankwallet.core.providers.StringProvider
+import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.AddressResolutionService
 import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.RecipientAddressViewModel
@@ -94,8 +94,7 @@ object SendEvmModule {
                 RecipientAddressViewModel::class.java -> {
                     val addressParser = App.addressParserFactory.parser(wallet.coin)
                     val resolutionService = AddressResolutionService(wallet.coin.code, true)
-                    val stringProvider = StringProvider()
-                    val placeholder = stringProvider.string(R.string.SwapSettings_RecipientPlaceholder)
+                    val placeholder = Translator.string(R.string.SwapSettings_RecipientPlaceholder)
                     RecipientAddressViewModel(service, resolutionService, addressParser, placeholder, listOf(service, resolutionService)) as T
                 }
                 else -> throw IllegalArgumentException()

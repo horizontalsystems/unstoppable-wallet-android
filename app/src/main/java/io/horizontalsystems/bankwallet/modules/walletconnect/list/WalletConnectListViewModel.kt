@@ -2,8 +2,7 @@ package io.horizontalsystems.bankwallet.modules.walletconnect.list
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import io.horizontalsystems.bankwallet.core.Clearable
-import io.horizontalsystems.bankwallet.core.providers.StringProvider
+import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.WalletConnectSession
 import io.horizontalsystems.views.ListPosition
@@ -11,7 +10,7 @@ import io.reactivex.disposables.CompositeDisposable
 
 class WalletConnectListViewModel(
         service: WalletConnectListService,
-        private val stringProvider: StringProvider
+        private val translator: Translator
 ) : ViewModel() {
 
     private val disposables = CompositeDisposable()
@@ -29,7 +28,7 @@ class WalletConnectListViewModel(
         val viewItems = mutableListOf<WalletConnectViewItem>()
         items.forEach { item ->
             val accountViewItem = WalletConnectViewItem.Account(
-                    title = stringProvider.string(item.predefinedAccountType.title),
+                    title = translator.string(item.predefinedAccountType.title),
                     address = item.address.eip55
             )
             viewItems.add(accountViewItem)

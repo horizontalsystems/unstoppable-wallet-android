@@ -5,8 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.providers.StringProvider
+import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
@@ -14,17 +13,17 @@ import io.reactivex.disposables.CompositeDisposable
 class EthereumFeeViewModel(
         val transactionService: EvmTransactionService,
         private val coinService: EvmCoinService,
-        private val stringProvider: StringProvider
+        private val translator: Translator
 ) : ViewModel(), ISendFeeViewModel, ISendFeePriorityViewModel {
 
     override val hasEstimatedFee: Boolean = transactionService.hasEstimatedFee
 
     enum class Priority {
         Recommended {
-            override val description by lazy { App.instance.localizedContext().getString(R.string.Send_TxSpeed_Recommended) }
+            override val description by lazy { Translator.string(R.string.Send_TxSpeed_Recommended) }
         },
         Custom {
-            override val description by lazy { App.instance.localizedContext().getString(R.string.Send_TxSpeed_Custom) }
+            override val description by lazy { Translator.string(R.string.Send_TxSpeed_Custom) }
         };
 
         abstract val description: String
@@ -134,10 +133,10 @@ class EthereumFeeViewModel(
     private fun estimatedFeeStatus(transactionStatus: DataState<EvmTransactionService.Transaction>): String {
         return when (transactionStatus) {
             DataState.Loading -> {
-                stringProvider.string(R.string.Alert_Loading)
+                translator.string(R.string.Alert_Loading)
             }
             is DataState.Error -> {
-                stringProvider.string(R.string.NotAvailable)
+                translator.string(R.string.NotAvailable)
             }
             is DataState.Success -> {
                 coinService.amountData(transactionStatus.data.gasData.estimatedFee).getFormatted()
@@ -148,10 +147,10 @@ class EthereumFeeViewModel(
     private fun feeStatus(transactionStatus: DataState<EvmTransactionService.Transaction>): String {
         return when (transactionStatus) {
             DataState.Loading -> {
-                stringProvider.string(R.string.Alert_Loading)
+                translator.string(R.string.Alert_Loading)
             }
             is DataState.Error -> {
-                stringProvider.string(R.string.NotAvailable)
+                translator.string(R.string.NotAvailable)
             }
             is DataState.Success -> {
                 coinService.amountData(transactionStatus.data.gasData.fee).getFormatted()

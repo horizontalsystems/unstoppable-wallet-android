@@ -1,9 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.sendevm
 
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.ISendEthereumAdapter
+import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData.AdditionalInfo
 import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.IRecipientAddressService
@@ -162,7 +162,7 @@ class SendEvmService(
         object InvalidDecimal : AmountError()
         object InsufficientBalance : AmountError() {
             override fun getLocalizedMessage(): String {
-                return App.instance.localizedContext().getString(R.string.Swap_ErrorInsufficientBalance)
+                return Translator.string(R.string.Swap_ErrorInsufficientBalance)
             }
         }
     }

@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.addtoken
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.providers.StringProvider
+import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.ApiError
 import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.Caution
 import io.horizontalsystems.coinkit.models.Coin
@@ -13,7 +13,7 @@ import io.reactivex.disposables.CompositeDisposable
 
 class AddTokenViewModel(
         private val addTokenService: AddTokenService,
-        private val stringProvider: StringProvider,
+        private val translator: Translator,
         val titleTextRes: Int,
         val hintTextRes: Int
         ) : ViewModel() {
@@ -67,7 +67,7 @@ class AddTokenViewModel(
                 Caution(getErrorText(state.error), Caution.Type.Error)
             }
             is AddTokenModule.State.AlreadyExists -> {
-                Caution(stringProvider.string(R.string.AddToken_CoinAlreadyInListWarning), Caution.Type.Warning)
+                Caution(translator.string(R.string.AddToken_CoinAlreadyInListWarning), Caution.Type.Warning)
             }
             else -> null
         }
@@ -97,6 +97,6 @@ class AddTokenViewModel(
             else -> R.string.Error
         }
 
-        return stringProvider.string(errorKey)
+        return translator.string(errorKey)
     }
 }

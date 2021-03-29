@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.core.providers
 
 import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAppConfigProvider
 import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.IBuildConfigProvider
@@ -21,13 +20,13 @@ class AppConfigProvider : IAppConfigProvider, ILanguageConfigProvider, IBuildCon
     override val walletHelpTelegramGroup = "UnstoppableWallet"
     override val btcCoreRpcUrl: String = "https://btc.horizontalsystems.xyz/rpc"
 
-    override val cryptoCompareApiKey = App.instance.localizedContext().getString(R.string.cryptoCompareApiKey)
-    override val infuraProjectId = App.instance.localizedContext().getString(R.string.infuraProjectId)
-    override val infuraProjectSecret = App.instance.localizedContext().getString(R.string.infuraSecretKey)
-    override val etherscanApiKey = App.instance.localizedContext().getString(R.string.etherscanKey)
-    override val bscscanApiKey = App.instance.localizedContext().getString(R.string.bscscanKey)
-    override val guidesUrl = App.instance.localizedContext().getString(R.string.guidesUrl)
-    override val faqUrl = App.instance.localizedContext().getString(R.string.faqUrl)
+    override val cryptoCompareApiKey = Translator.string(R.string.cryptoCompareApiKey)
+    override val infuraProjectId = Translator.string(R.string.infuraProjectId)
+    override val infuraProjectSecret = Translator.string(R.string.infuraSecretKey)
+    override val etherscanApiKey = Translator.string(R.string.etherscanKey)
+    override val bscscanApiKey = Translator.string(R.string.bscscanKey)
+    override val guidesUrl = Translator.string(R.string.guidesUrl)
+    override val faqUrl = Translator.string(R.string.faqUrl)
     override val fiatDecimal: Int = 2
     override val maxDecimal: Int = 8
     override val feeRateAdjustForCurrencies: List<String> = listOf("USD","EUR")

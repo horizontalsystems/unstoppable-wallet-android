@@ -15,6 +15,7 @@ import io.horizontalsystems.bankwallet.core.managers.*
 import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.bankwallet.core.providers.FeeCoinProvider
 import io.horizontalsystems.bankwallet.core.providers.FeeRateProvider
+import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.storage.*
 import io.horizontalsystems.bankwallet.modules.keystore.KeyStoreActivity
 import io.horizontalsystems.bankwallet.modules.launcher.LauncherActivity
@@ -164,7 +165,7 @@ class App : CoreApp() {
 
         languageManager = LanguageManager()
         currencyManager = CurrencyManager(localStorage, appConfigProvider)
-        numberFormatter = NumberFormatter(languageManager)
+        numberFormatter = NumberFormatter(languageManager, Translator)
 
         connectivityManager = ConnectivityManager(backgroundManager)
 
@@ -186,7 +187,7 @@ class App : CoreApp() {
 
         addressParserFactory = AddressParserFactory()
 
-        notificationManager = NotificationManager(NotificationManagerCompat.from(this)).apply {
+        notificationManager = NotificationManager(NotificationManagerCompat.from(this), Translator).apply {
             backgroundManager.registerListener(this)
         }
         notificationSubscriptionManager = NotificationSubscriptionManager(appDatabase)

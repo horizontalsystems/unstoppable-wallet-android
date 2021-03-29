@@ -7,6 +7,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.AlertNotification
 import java.lang.Exception
 
@@ -43,13 +44,13 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             NotificationType.Trend -> {
                 val isDown = topic.contains("down")
                 val stringRes = if (isDown) R.string.Notification_TrendDown else R.string.Notification_TrendUp
-                App.instance.localizedContext().getString(stringRes, coinCode)
+                Translator.string(stringRes, coinCode)
             }
             NotificationType.Change -> {
                 val changeValue = args[1]
                 val isUp = changeValue.toFloat() > 0
                 val stringRes = if (isUp) R.string.Notification_PriceUp else R.string.Notification_PriceDown
-                App.instance.localizedContext().getString(stringRes, coinCode, changeValue)
+                Translator.string(stringRes, coinCode, changeValue)
             }
         }
     }

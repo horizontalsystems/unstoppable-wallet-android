@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.swap.tradeoptions
 
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.providers.Translator
 import java.math.BigDecimal
 
 interface ISwapTradeOptionsService {
@@ -13,25 +13,25 @@ interface ISwapTradeOptionsService {
 
     sealed class TradeOptionsError : Exception() {
         object ZeroSlippage : TradeOptionsError() {
-            override fun getLocalizedMessage() = App.instance.localizedContext().getString(R.string.SwapSettings_Error_SlippageZero)
+            override fun getLocalizedMessage() = Translator.string(R.string.SwapSettings_Error_SlippageZero)
         }
 
         object ZeroDeadline : TradeOptionsError() {
-            override fun getLocalizedMessage() = App.instance.localizedContext().getString(R.string.SwapSettings_Error_DeadlineZero)
+            override fun getLocalizedMessage() = Translator.string(R.string.SwapSettings_Error_DeadlineZero)
         }
 
         class InvalidSlippage(val invalidSlippageType: InvalidSlippageType) : TradeOptionsError() {
             override fun getLocalizedMessage(): String {
                 return when (invalidSlippageType) {
-                    is InvalidSlippageType.Lower -> App.instance.localizedContext().getString(R.string.SwapSettings_Error_SlippageTooLow)
-                    is InvalidSlippageType.Higher -> App.instance.localizedContext().getString(R.string.SwapSettings_Error_SlippageTooHigh, invalidSlippageType.max)
+                    is InvalidSlippageType.Lower -> Translator.string(R.string.SwapSettings_Error_SlippageTooLow)
+                    is InvalidSlippageType.Higher -> Translator.string(R.string.SwapSettings_Error_SlippageTooHigh, invalidSlippageType.max)
                 }
             }
         }
 
         object InvalidAddress : TradeOptionsError() {
             override fun getLocalizedMessage(): String {
-                return App.instance.localizedContext().getString(R.string.SwapSettings_Error_InvalidAddress)
+                return Translator.string(R.string.SwapSettings_Error_InvalidAddress)
             }
         }
     }

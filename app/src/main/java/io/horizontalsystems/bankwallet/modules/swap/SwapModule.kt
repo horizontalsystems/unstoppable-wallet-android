@@ -8,7 +8,7 @@ import androidx.savedstate.SavedStateRegistryOwner
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.fiat.AmountTypeSwitchService
 import io.horizontalsystems.bankwallet.core.fiat.FiatService
-import io.horizontalsystems.bankwallet.core.providers.StringProvider
+import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceService
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceViewModel
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapPendingAllowanceService
@@ -83,11 +83,11 @@ object SwapModule {
         private val tradeService by lazy {
             SwapTradeService(evmKit, uniswapProvider, fromCoin)
         }
-        private val stringProvider by lazy {
-            StringProvider()
+        private val translator by lazy {
+            Translator
         }
         private val formatter by lazy {
-            SwapViewItemHelper(stringProvider, App.numberFormatter)
+            SwapViewItemHelper(translator, App.numberFormatter)
         }
         private val coinProvider by lazy {
             SwapCoinProvider(dex, App.coinManager, App.walletManager, App.adapterManager)
@@ -107,7 +107,7 @@ object SwapModule {
 
             return when (modelClass) {
                 SwapViewModel::class.java -> {
-                    SwapViewModel(service, tradeService, pendingAllowanceService, formatter, stringProvider) as T
+                    SwapViewModel(service, tradeService, pendingAllowanceService, formatter, translator) as T
                 }
                 SwapCoinCardViewModel::class.java -> {
                     val fiatService = FiatService(switchService, App.currencyManager, App.xRateManager)
@@ -122,10 +122,10 @@ object SwapModule {
                         coinCardService = toCoinCardService
                         switchService.toListener = fiatService
                     }
-                    SwapCoinCardViewModel(coinCardService, fiatService, switchService, maxButtonEnabled, formatter, stringProvider) as T
+                    SwapCoinCardViewModel(coinCardService, fiatService, switchService, maxButtonEnabled, formatter, translator) as T
                 }
                 SwapAllowanceViewModel::class.java -> {
-                    SwapAllowanceViewModel(service, allowanceService, pendingAllowanceService, formatter, stringProvider) as T
+                    SwapAllowanceViewModel(service, allowanceService, pendingAllowanceService, formatter, translator) as T
                 }
                 else -> throw IllegalArgumentException()
             }

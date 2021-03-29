@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.ui.selector
 
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.providers.Translator
 
 class ViewItemWrapper<T>(val title: String, val item: T, val color: Int) {
     override fun equals(other: Any?) = when {
@@ -17,7 +17,7 @@ class ViewItemWrapper<T>(val title: String, val item: T, val color: Int) {
 
     companion object {
         fun <T>getAny(): ViewItemWrapper<T?> {
-            return ViewItemWrapper(App.instance.localizedContext().getString(R.string.Any), null, R.color.grey)
+            return ViewItemWrapper(Translator.string(R.string.Any), null, R.color.grey)
         }
     }
 }
