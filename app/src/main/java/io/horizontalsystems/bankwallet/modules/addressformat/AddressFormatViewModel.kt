@@ -51,7 +51,7 @@ class AddressFormatViewModel(
             is AddressFormatModule.ItemType.BitcoinCashType -> {
                 val selectedType = item.type.types[index]
                 if (selectedType != item.type.current) {
-                    showAddressFormatChangeAlert.postValue(Pair(item.coinType.title, translator.string(selectedType.title)))
+                    showAddressFormatChangeAlert.postValue(Pair(item.coinType.title, translator.getString(selectedType.title)))
                 }
             }
         }
@@ -85,7 +85,7 @@ class AddressFormatViewModel(
             is AddressFormatModule.ItemType.Derivation -> {
                 itemType.derivations.mapIndexed { index, derivation ->
                     val title = "${derivation.addressType()} - ${derivation.title()}"
-                    val subtitle = translator.string(derivation.description(), (derivation.addressPrefix(coinType)
+                    val subtitle = translator.getString(derivation.description(), (derivation.addressPrefix(coinType)
                             ?: ""))
                     AddressFormatModule.ViewItem(
                             title,
@@ -98,8 +98,8 @@ class AddressFormatViewModel(
             is AddressFormatModule.ItemType.BitcoinCashType -> {
                 itemType.types.mapIndexed { index, type ->
                     AddressFormatModule.ViewItem(
-                            translator.string(type.title),
-                            translator.string(type.description),
+                            translator.getString(type.title),
+                            translator.getString(type.description),
                             type == itemType.current,
                             listPosition = ListPosition.getListPosition(itemType.types.size, index)
                     )

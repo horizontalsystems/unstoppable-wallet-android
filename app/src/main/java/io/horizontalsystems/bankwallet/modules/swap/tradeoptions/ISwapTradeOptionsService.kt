@@ -13,25 +13,25 @@ interface ISwapTradeOptionsService {
 
     sealed class TradeOptionsError : Exception() {
         object ZeroSlippage : TradeOptionsError() {
-            override fun getLocalizedMessage() = Translator.string(R.string.SwapSettings_Error_SlippageZero)
+            override fun getLocalizedMessage() = Translator.getString(R.string.SwapSettings_Error_SlippageZero)
         }
 
         object ZeroDeadline : TradeOptionsError() {
-            override fun getLocalizedMessage() = Translator.string(R.string.SwapSettings_Error_DeadlineZero)
+            override fun getLocalizedMessage() = Translator.getString(R.string.SwapSettings_Error_DeadlineZero)
         }
 
         class InvalidSlippage(val invalidSlippageType: InvalidSlippageType) : TradeOptionsError() {
             override fun getLocalizedMessage(): String {
                 return when (invalidSlippageType) {
-                    is InvalidSlippageType.Lower -> Translator.string(R.string.SwapSettings_Error_SlippageTooLow)
-                    is InvalidSlippageType.Higher -> Translator.string(R.string.SwapSettings_Error_SlippageTooHigh, invalidSlippageType.max)
+                    is InvalidSlippageType.Lower -> Translator.getString(R.string.SwapSettings_Error_SlippageTooLow)
+                    is InvalidSlippageType.Higher -> Translator.getString(R.string.SwapSettings_Error_SlippageTooHigh, invalidSlippageType.max)
                 }
             }
         }
 
         object InvalidAddress : TradeOptionsError() {
             override fun getLocalizedMessage(): String {
-                return Translator.string(R.string.SwapSettings_Error_InvalidAddress)
+                return Translator.getString(R.string.SwapSettings_Error_InvalidAddress)
             }
         }
     }

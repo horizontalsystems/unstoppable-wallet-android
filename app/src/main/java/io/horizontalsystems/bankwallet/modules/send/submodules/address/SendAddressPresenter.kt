@@ -85,10 +85,10 @@ class SendAddressPresenter(
 
     private fun getError(error: Throwable): Throwable {
         val message = when (error) {
-            is HodlerPlugin.UnsupportedAddressType -> translator.string(R.string.Send_Error_UnsupportedAddress)
-            is AddressValidator.AddressValidationException -> translator.string(R.string.Send_Error_IncorrectAddress)
-            is ZcashAdapter.ZcashError.TransparentAddressNotAllowed -> translator.string(R.string.Send_Error_TransparentAddress)
-            is ZcashAdapter.ZcashError.SendToSelfNotAllowed -> translator.string(R.string.Send_Error_SendToSelf)
+            is HodlerPlugin.UnsupportedAddressType -> translator.getString(R.string.Send_Error_UnsupportedAddress)
+            is AddressValidator.AddressValidationException -> translator.getString(R.string.Send_Error_IncorrectAddress)
+            is ZcashAdapter.ZcashError.TransparentAddressNotAllowed -> translator.getString(R.string.Send_Error_TransparentAddress)
+            is ZcashAdapter.ZcashError.SendToSelfNotAllowed -> translator.getString(R.string.Send_Error_SendToSelf)
             else -> error.message ?: error.javaClass.simpleName
         }
 

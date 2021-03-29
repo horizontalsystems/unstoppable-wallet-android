@@ -21,25 +21,25 @@ class AppConfigProvider : IAppConfigProvider, ILanguageConfigProvider, IBuildCon
     override val btcCoreRpcUrl: String = "https://btc.horizontalsystems.xyz/rpc"
 
     override val cryptoCompareApiKey by lazy {
-        Translator.string(R.string.cryptoCompareApiKey)
+        Translator.getString(R.string.cryptoCompareApiKey)
     }
     override val infuraProjectId by lazy {
-        Translator.string(R.string.infuraProjectId)
+        Translator.getString(R.string.infuraProjectId)
     }
     override val infuraProjectSecret by lazy {
-        Translator.string(R.string.infuraSecretKey)
+        Translator.getString(R.string.infuraSecretKey)
     }
     override val etherscanApiKey by lazy {
-        Translator.string(R.string.etherscanKey)
+        Translator.getString(R.string.etherscanKey)
     }
     override val bscscanApiKey by lazy {
-        Translator.string(R.string.bscscanKey)
+        Translator.getString(R.string.bscscanKey)
     }
     override val guidesUrl by lazy {
-        Translator.string(R.string.guidesUrl)
+        Translator.getString(R.string.guidesUrl)
     }
     override val faqUrl by lazy {
-        Translator.string(R.string.faqUrl)
+        Translator.getString(R.string.faqUrl)
     }
 
     override val fiatDecimal: Int = 2

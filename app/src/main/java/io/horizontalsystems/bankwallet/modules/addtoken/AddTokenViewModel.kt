@@ -67,7 +67,7 @@ class AddTokenViewModel(
                 Caution(getErrorText(state.error), Caution.Type.Error)
             }
             is AddTokenModule.State.AlreadyExists -> {
-                Caution(translator.string(R.string.AddToken_CoinAlreadyInListWarning), Caution.Type.Warning)
+                Caution(translator.getString(R.string.AddToken_CoinAlreadyInListWarning), Caution.Type.Warning)
             }
             else -> null
         }
@@ -97,6 +97,6 @@ class AddTokenViewModel(
             else -> R.string.Error
         }
 
-        return translator.string(errorKey)
+        return translator.getString(errorKey)
     }
 }

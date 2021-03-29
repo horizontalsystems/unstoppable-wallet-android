@@ -243,7 +243,7 @@ class SendAmountPresenter(
     private fun syncHint() {
         var hint = presenterHelper.getHint(this.amount, inputType, xRate)
         view.setHintStateEnabled(hint != null)
-        hint = hint ?: translator.string(R.string.NotAvailable)
+        hint = hint ?: translator.getString(R.string.NotAvailable)
         view.setHint(hint)
     }
 

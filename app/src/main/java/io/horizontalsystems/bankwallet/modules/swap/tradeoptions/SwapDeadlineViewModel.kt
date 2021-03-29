@@ -20,11 +20,11 @@ class SwapDeadlineViewModel(
             val upperMinutes = toMinutes(bounds.upper)
 
             return listOf(
-                    InputFieldButtonItem(translator.string(R.string.SwapSettings_DeadlineMinute, lowerMinutes)) {
+                    InputFieldButtonItem(translator.getString(R.string.SwapSettings_DeadlineMinute, lowerMinutes)) {
                         setTextLiveData.postValue(lowerMinutes)
                         onChangeText(lowerMinutes)
                     },
-                    InputFieldButtonItem(translator.string(R.string.SwapSettings_DeadlineMinute, upperMinutes)) {
+                    InputFieldButtonItem(translator.getString(R.string.SwapSettings_DeadlineMinute, upperMinutes)) {
                         setTextLiveData.postValue(upperMinutes)
                         onChangeText(upperMinutes)
                     },

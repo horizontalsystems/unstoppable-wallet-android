@@ -94,7 +94,7 @@ object SendEvmModule {
                 RecipientAddressViewModel::class.java -> {
                     val addressParser = App.addressParserFactory.parser(wallet.coin)
                     val resolutionService = AddressResolutionService(wallet.coin.code, true)
-                    val placeholder = Translator.string(R.string.SwapSettings_RecipientPlaceholder)
+                    val placeholder = Translator.getString(R.string.SwapSettings_RecipientPlaceholder)
                     RecipientAddressViewModel(service, resolutionService, addressParser, placeholder, listOf(service, resolutionService)) as T
                 }
                 else -> throw IllegalArgumentException()

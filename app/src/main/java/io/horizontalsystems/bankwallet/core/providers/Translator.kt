@@ -5,11 +5,11 @@ import io.horizontalsystems.bankwallet.core.App
 
 object Translator {
 
-    fun string(@StringRes id: Int): String {
+    fun getString(@StringRes id: Int): String {
         return App.instance.localizedContext().getString(id)
     }
 
-    fun string(@StringRes id: Int, vararg params: Any): String {
+    fun getString(@StringRes id: Int, vararg params: Any): String {
         return App.instance.localizedContext().getString(id, *params)
     }
 }

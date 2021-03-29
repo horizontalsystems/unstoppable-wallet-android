@@ -28,7 +28,7 @@ class WalletConnectListViewModel(
         val viewItems = mutableListOf<WalletConnectViewItem>()
         items.forEach { item ->
             val accountViewItem = WalletConnectViewItem.Account(
-                    title = translator.string(item.predefinedAccountType.title),
+                    title = translator.getString(item.predefinedAccountType.title),
                     address = item.address.eip55
             )
             viewItems.add(accountViewItem)
