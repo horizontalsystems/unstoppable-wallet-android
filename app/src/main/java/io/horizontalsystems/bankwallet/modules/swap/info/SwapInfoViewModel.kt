@@ -6,8 +6,7 @@ import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.modules.swap.SwapModule
 
 class SwapInfoViewModel(
-        dex: SwapModule.Dex,
-        translator: Translator
+        dex: SwapModule.Dex
 ) : ViewModel() {
 
     private val dexName = when (dex) {
@@ -30,12 +29,12 @@ class SwapInfoViewModel(
         SwapModule.Dex.PancakeSwap -> "PancakeSwap"
     }
 
-    val description = translator.getString(R.string.SwapInfo_Description, dexName, blockchain, dexName)
+    val description = Translator.getString(R.string.SwapInfo_Description, dexName, blockchain, dexName)
 
-    val dexRelated = translator.getString(R.string.SwapInfo_DexRelated, dexName)
+    val dexRelated = Translator.getString(R.string.SwapInfo_DexRelated, dexName)
 
-    val transactionFeeDescription = translator.getString(R.string.SwapInfo_TransactionFeeDescription, blockchain, dexName)
+    val transactionFeeDescription = Translator.getString(R.string.SwapInfo_TransactionFeeDescription, blockchain, dexName)
 
-    val linkText = translator.getString(R.string.SwapInfo_Site, dexName)
+    val linkText = Translator.getString(R.string.SwapInfo_Site, dexName)
 
 }

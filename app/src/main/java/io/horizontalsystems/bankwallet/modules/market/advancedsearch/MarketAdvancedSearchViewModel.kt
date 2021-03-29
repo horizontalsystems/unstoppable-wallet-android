@@ -13,26 +13,25 @@ import java.net.UnknownHostException
 
 class MarketAdvancedSearchViewModel(
         val service: MarketAdvancedSearchService,
-        private val translator: Translator,
         private val clearables: List<Clearable>
 ) : ViewModel() {
 
     // Options
     val coinListsViewItemOptions = CoinList.values().map {
-        ViewItemWrapper(translator.getString(it.titleResId), it, R.color.leah)
+        ViewItemWrapper(Translator.getString(it.titleResId), it, R.color.leah)
     }
     val marketCapViewItemOptions = ranges
     val volumeViewItemOptions = ranges
     val liquidityViewItemOptions = ranges
     val periodViewItemOptions = TimePeriod.values().map {
-        ViewItemWrapper(translator.getString(it.titleResId), it, R.color.leah)
+        ViewItemWrapper(Translator.getString(it.titleResId), it, R.color.leah)
     }
     val priceChangeViewItemOptions = listOf(ViewItemWrapper.getAny<PriceChange>()) + PriceChange.values().map {
-        ViewItemWrapper<PriceChange?>(translator.getString(it.titleResId), it, it.colorResId)
+        ViewItemWrapper<PriceChange?>(Translator.getString(it.titleResId), it, it.colorResId)
     }
 
     // ViewItem
-    var coinListViewItem = ViewItemWrapper(translator.getString(CoinList.Top250.titleResId), CoinList.Top250, R.color.leah)
+    var coinListViewItem = ViewItemWrapper(Translator.getString(CoinList.Top250.titleResId), CoinList.Top250, R.color.leah)
         set(value) {
             field = value
             coinListViewItemLiveData.postValue(value)
@@ -60,7 +59,7 @@ class MarketAdvancedSearchViewModel(
 
             service.filterLiquidity = value.item?.values
         }
-    var periodViewItem = ViewItemWrapper(translator.getString(TimePeriod.TimePeriod_1D.titleResId), TimePeriod.TimePeriod_1D, R.color.leah)
+    var periodViewItem = ViewItemWrapper(Translator.getString(TimePeriod.TimePeriod_1D.titleResId), TimePeriod.TimePeriod_1D, R.color.leah)
         set(value) {
             field = value
             periodViewItemLiveData.postValue(value)
@@ -93,8 +92,8 @@ class MarketAdvancedSearchViewModel(
         service.numberOfItemsAsync
                 .subscribe {
                     val title = when (it) {
-                        is DataState.Success -> translator.getString(R.string.Market_Filter_ShowResults_Counter, it.data)
-                        is DataState.Error -> translator.getString(R.string.Market_Filter_ShowResults)
+                        is DataState.Success -> Translator.getString(R.string.Market_Filter_ShowResults_Counter, it.data)
+                        is DataState.Error -> Translator.getString(R.string.Market_Filter_ShowResults)
                         is DataState.Loading -> ""
                     }
                     showResultsTitleLiveData.postValue(title)
@@ -112,11 +111,11 @@ class MarketAdvancedSearchViewModel(
     }
 
     fun reset() {
-        coinListViewItem = ViewItemWrapper(translator.getString(CoinList.Top250.titleResId), CoinList.Top250, R.color.leah)
+        coinListViewItem = ViewItemWrapper(Translator.getString(CoinList.Top250.titleResId), CoinList.Top250, R.color.leah)
         marketCapViewItem = ViewItemWrapper.getAny()
         volumeViewItem = ViewItemWrapper.getAny()
         liquidityViewItem = ViewItemWrapper.getAny()
-        periodViewItem = ViewItemWrapper(translator.getString(TimePeriod.TimePeriod_1D.titleResId), TimePeriod.TimePeriod_1D, R.color.leah)
+        periodViewItem = ViewItemWrapper(Translator.getString(TimePeriod.TimePeriod_1D.titleResId), TimePeriod.TimePeriod_1D, R.color.leah)
         priceChangeViewItem = ViewItemWrapper.getAny()
     }
 
@@ -126,7 +125,7 @@ class MarketAdvancedSearchViewModel(
     }
 
     private fun convertErrorMessage(it: Throwable) = when (it) {
-        is UnknownHostException -> translator.getString(R.string.Hud_Text_NoInternet)
+        is UnknownHostException -> Translator.getString(R.string.Hud_Text_NoInternet)
         else -> it.message ?: it.javaClass.simpleName
     }
 }

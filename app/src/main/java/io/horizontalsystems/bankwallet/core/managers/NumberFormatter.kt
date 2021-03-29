@@ -13,8 +13,7 @@ import kotlin.math.floor
 import kotlin.math.log10
 
 class NumberFormatter(
-        private val languageManager: ILanguageManager,
-        private val translator: Translator
+        private val languageManager: ILanguageManager
         ) : IAppNumberFormatter {
 
     private var formatters: MutableMap<String, NumberFormat> = mutableMapOf()
@@ -101,10 +100,10 @@ class NumberFormatter(
     override fun shortenValue(number: Number): Pair<BigDecimal, String> {
         val suffix = arrayOf(
                 " ",
-                translator.getString(R.string.CoinPage_MarketCap_Thousand),
-                translator.getString(R.string.CoinPage_MarketCap_Million),
-                translator.getString(R.string.CoinPage_MarketCap_Billion),
-                translator.getString(R.string.CoinPage_MarketCap_Trillion))
+                Translator.getString(R.string.CoinPage_MarketCap_Thousand),
+                Translator.getString(R.string.CoinPage_MarketCap_Million),
+                Translator.getString(R.string.CoinPage_MarketCap_Billion),
+                Translator.getString(R.string.CoinPage_MarketCap_Trillion))
 
         val valueLong = number.toLong()
         val value = floor(log10(valueLong.toDouble())).toInt()

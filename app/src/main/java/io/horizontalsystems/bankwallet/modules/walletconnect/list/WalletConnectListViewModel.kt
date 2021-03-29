@@ -9,8 +9,7 @@ import io.horizontalsystems.views.ListPosition
 import io.reactivex.disposables.CompositeDisposable
 
 class WalletConnectListViewModel(
-        service: WalletConnectListService,
-        private val translator: Translator
+        service: WalletConnectListService
 ) : ViewModel() {
 
     private val disposables = CompositeDisposable()
@@ -28,7 +27,7 @@ class WalletConnectListViewModel(
         val viewItems = mutableListOf<WalletConnectViewItem>()
         items.forEach { item ->
             val accountViewItem = WalletConnectViewItem.Account(
-                    title = translator.getString(item.predefinedAccountType.title),
+                    title = Translator.getString(item.predefinedAccountType.title),
                     address = item.address.eip55
             )
             viewItems.add(accountViewItem)

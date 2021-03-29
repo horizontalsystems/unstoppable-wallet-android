@@ -13,7 +13,6 @@ import io.reactivex.disposables.CompositeDisposable
 
 class AddTokenViewModel(
         private val addTokenService: AddTokenService,
-        private val translator: Translator,
         val titleTextRes: Int,
         val hintTextRes: Int
         ) : ViewModel() {
@@ -67,7 +66,7 @@ class AddTokenViewModel(
                 Caution(getErrorText(state.error), Caution.Type.Error)
             }
             is AddTokenModule.State.AlreadyExists -> {
-                Caution(translator.getString(R.string.AddToken_CoinAlreadyInListWarning), Caution.Type.Warning)
+                Caution(Translator.getString(R.string.AddToken_CoinAlreadyInListWarning), Caution.Type.Warning)
             }
             else -> null
         }
@@ -97,6 +96,6 @@ class AddTokenViewModel(
             else -> R.string.Error
         }
 
-        return translator.getString(errorKey)
+        return Translator.getString(errorKey)
     }
 }

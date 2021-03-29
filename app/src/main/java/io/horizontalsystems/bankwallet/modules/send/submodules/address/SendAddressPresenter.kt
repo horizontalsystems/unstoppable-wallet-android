@@ -14,8 +14,7 @@ import java.math.BigDecimal
 import java.util.*
 
 class SendAddressPresenter(
-        private val moduleDelegate: SendAddressModule.IAddressModuleDelegate,
-        private val translator: Translator
+        private val moduleDelegate: SendAddressModule.IAddressModuleDelegate
 ) : ViewModel(), IRecipientAddressService, SendAddressModule.IAddressModule, SendAddressModule.IInteractorDelegate, SendAddressModule.IViewDelegate {
 
     private val errorsObservable = BehaviorSubject.createDefault<Optional<Throwable>>(Optional.empty())
@@ -85,10 +84,10 @@ class SendAddressPresenter(
 
     private fun getError(error: Throwable): Throwable {
         val message = when (error) {
-            is HodlerPlugin.UnsupportedAddressType -> translator.getString(R.string.Send_Error_UnsupportedAddress)
-            is AddressValidator.AddressValidationException -> translator.getString(R.string.Send_Error_IncorrectAddress)
-            is ZcashAdapter.ZcashError.TransparentAddressNotAllowed -> translator.getString(R.string.Send_Error_TransparentAddress)
-            is ZcashAdapter.ZcashError.SendToSelfNotAllowed -> translator.getString(R.string.Send_Error_SendToSelf)
+            is HodlerPlugin.UnsupportedAddressType -> Translator.getString(R.string.Send_Error_UnsupportedAddress)
+            is AddressValidator.AddressValidationException -> Translator.getString(R.string.Send_Error_IncorrectAddress)
+            is ZcashAdapter.ZcashError.TransparentAddressNotAllowed -> Translator.getString(R.string.Send_Error_TransparentAddress)
+            is ZcashAdapter.ZcashError.SendToSelfNotAllowed -> Translator.getString(R.string.Send_Error_SendToSelf)
             else -> error.message ?: error.javaClass.simpleName
         }
 

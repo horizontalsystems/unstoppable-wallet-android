@@ -24,8 +24,7 @@ class SwapViewModel(
         val service: SwapService,
         val tradeService: SwapTradeService,
         private val pendingAllowanceService: SwapPendingAllowanceService,
-        private val formatter: SwapViewItemHelper,
-        private val translator: Translator
+        private val formatter: SwapViewItemHelper
 ) : ViewModel() {
 
     private val disposables = CompositeDisposable()
@@ -136,7 +135,7 @@ class SwapViewModel(
             convertedError.error.message
         }
         is TradeError.TradeNotFound -> {
-            translator.getString(R.string.Swap_ErrorNoLiquidity)
+            Translator.getString(R.string.Swap_ErrorNoLiquidity)
         }
         else -> {
             convertedError.message ?: convertedError.javaClass.simpleName
@@ -173,21 +172,21 @@ class SwapViewModel(
     private fun syncProceedAction() {
         val proceedAction = when {
             service.state is SwapService.State.Ready -> {
-                ActionState.Enabled(translator.getString(R.string.Swap_Proceed))
+                ActionState.Enabled(Translator.getString(R.string.Swap_Proceed))
             }
             tradeService.state is SwapTradeService.State.Ready -> {
                 when {
                     service.errors.any { it == SwapError.InsufficientBalanceFrom } -> {
-                        ActionState.Disabled(translator.getString(R.string.Swap_ErrorInsufficientBalance))
+                        ActionState.Disabled(Translator.getString(R.string.Swap_ErrorInsufficientBalance))
                     }
                     service.errors.any { it == SwapError.ForbiddenPriceImpactLevel } -> {
-                        ActionState.Disabled(translator.getString(R.string.Swap_ErrorHighPriceImpact))
+                        ActionState.Disabled(Translator.getString(R.string.Swap_ErrorHighPriceImpact))
                     }
                     pendingAllowanceService.isPending -> {
                         ActionState.Hidden
                     }
                     else -> {
-                        ActionState.Disabled(translator.getString(R.string.Swap_Proceed))
+                        ActionState.Disabled(Translator.getString(R.string.Swap_Proceed))
                     }
                 }
             }
@@ -204,10 +203,10 @@ class SwapViewModel(
                 ActionState.Hidden
             }
             pendingAllowanceService.isPending -> {
-                ActionState.Disabled(translator.getString(R.string.Swap_Approving))
+                ActionState.Disabled(Translator.getString(R.string.Swap_Approving))
             }
             service.errors.any { it == SwapError.InsufficientAllowance } -> {
-                ActionState.Enabled(translator.getString(R.string.Swap_Approve))
+                ActionState.Enabled(Translator.getString(R.string.Swap_Approve))
             }
             else -> {
                 ActionState.Hidden

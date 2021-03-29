@@ -10,7 +10,7 @@ import io.horizontalsystems.uniswapkit.models.TradeType
 import java.math.BigDecimal
 import java.math.RoundingMode
 
-class SwapViewItemHelper(private val translator: Translator, private val numberFormatter: IAppNumberFormatter) {
+class SwapViewItemHelper(private val numberFormatter: IAppNumberFormatter) {
 
     fun price(price: BigDecimal?, coinFrom: Coin?, coinTo: Coin?): String? {
         if (price == null || coinFrom == null || coinTo == null)
@@ -35,7 +35,7 @@ class SwapViewItemHelper(private val translator: Translator, private val numberF
             return null
         }
 
-        return SwapModule.PriceImpactViewItem(impactLevel, translator.getString(R.string.Swap_Percent, priceImpact))
+        return SwapModule.PriceImpactViewItem(impactLevel, Translator.getString(R.string.Swap_Percent, priceImpact))
     }
 
     fun guaranteedAmountViewItem(tradeData: TradeData, coinIn: Coin?, coinOut: Coin?): SwapModule.GuaranteedAmountViewItem? {
@@ -44,13 +44,13 @@ class SwapViewItemHelper(private val translator: Translator, private val numberF
                 val amount = tradeData.amountOutMin ?: return null
                 val coin = coinOut ?: return null
 
-                return SwapModule.GuaranteedAmountViewItem(translator.getString(R.string.Swap_MinimumGot), coinAmount(amount, coin))
+                return SwapModule.GuaranteedAmountViewItem(Translator.getString(R.string.Swap_MinimumGot), coinAmount(amount, coin))
             }
             TradeType.ExactOut -> {
                 val amount = tradeData.amountInMax ?: return null
                 val coin = coinIn ?: return null
 
-                return SwapModule.GuaranteedAmountViewItem(translator.getString(R.string.Swap_MaximumPaid), coinAmount(amount, coin))
+                return SwapModule.GuaranteedAmountViewItem(Translator.getString(R.string.Swap_MaximumPaid), coinAmount(amount, coin))
             }
         }
     }
@@ -69,7 +69,7 @@ class SwapViewItemHelper(private val translator: Translator, private val numberF
         return if (ttl == defaultTradeOptions.ttl) {
             null
         } else {
-            translator.getString(R.string.Duration_Minutes, ttl)
+            Translator.getString(R.string.Duration_Minutes, ttl)
         }
     }
 

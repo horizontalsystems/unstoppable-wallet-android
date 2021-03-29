@@ -12,8 +12,7 @@ import io.reactivex.disposables.CompositeDisposable
 
 class EthereumFeeViewModel(
         val transactionService: EvmTransactionService,
-        private val coinService: EvmCoinService,
-        private val translator: Translator
+        private val coinService: EvmCoinService
 ) : ViewModel(), ISendFeeViewModel, ISendFeePriorityViewModel {
 
     override val hasEstimatedFee: Boolean = transactionService.hasEstimatedFee
@@ -133,10 +132,10 @@ class EthereumFeeViewModel(
     private fun estimatedFeeStatus(transactionStatus: DataState<EvmTransactionService.Transaction>): String {
         return when (transactionStatus) {
             DataState.Loading -> {
-                translator.getString(R.string.Alert_Loading)
+                Translator.getString(R.string.Alert_Loading)
             }
             is DataState.Error -> {
-                translator.getString(R.string.NotAvailable)
+                Translator.getString(R.string.NotAvailable)
             }
             is DataState.Success -> {
                 coinService.amountData(transactionStatus.data.gasData.estimatedFee).getFormatted()
@@ -147,10 +146,10 @@ class EthereumFeeViewModel(
     private fun feeStatus(transactionStatus: DataState<EvmTransactionService.Transaction>): String {
         return when (transactionStatus) {
             DataState.Loading -> {
-                translator.getString(R.string.Alert_Loading)
+                Translator.getString(R.string.Alert_Loading)
             }
             is DataState.Error -> {
-                translator.getString(R.string.NotAvailable)
+                Translator.getString(R.string.NotAvailable)
             }
             is DataState.Success -> {
                 coinService.amountData(transactionStatus.data.gasData.fee).getFormatted()

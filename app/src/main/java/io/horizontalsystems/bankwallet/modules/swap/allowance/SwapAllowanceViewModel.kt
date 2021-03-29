@@ -14,8 +14,7 @@ class SwapAllowanceViewModel(
         private val service: SwapService,
         private val allowanceService: SwapAllowanceService,
         private val pendingAllowanceService: SwapPendingAllowanceService,
-        private val formatter: SwapViewItemHelper,
-        private val translator: Translator
+        private val formatter: SwapViewItemHelper
 ) : ViewModel() {
 
     private val disposables = CompositeDisposable()
@@ -87,9 +86,9 @@ class SwapAllowanceViewModel(
 
     private fun allowance(allowanceState: SwapAllowanceService.State): String {
         return when (allowanceState) {
-            SwapAllowanceService.State.Loading -> translator.getString(R.string.Alert_Loading)
+            SwapAllowanceService.State.Loading -> Translator.getString(R.string.Alert_Loading)
             is SwapAllowanceService.State.Ready -> allowanceState.allowance.let { formatter.coinAmount(it.value, it.coin) }
-            is SwapAllowanceService.State.NotReady -> translator.getString(R.string.NotAvailable)
+            is SwapAllowanceService.State.NotReady -> Translator.getString(R.string.NotAvailable)
         }
     }
 

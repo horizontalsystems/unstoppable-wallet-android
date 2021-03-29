@@ -9,8 +9,7 @@ import io.horizontalsystems.core.SingleLiveEvent
 import kotlin.math.floor
 
 class SwapDeadlineViewModel(
-        private val service: SwapTradeOptionsService,
-        private val translator: Translator
+        private val service: SwapTradeOptionsService
 ) : ViewModel(), IVerifiedInputViewModel {
 
     override val inputFieldButtonItems: List<InputFieldButtonItem>
@@ -20,11 +19,11 @@ class SwapDeadlineViewModel(
             val upperMinutes = toMinutes(bounds.upper)
 
             return listOf(
-                    InputFieldButtonItem(translator.getString(R.string.SwapSettings_DeadlineMinute, lowerMinutes)) {
+                    InputFieldButtonItem(Translator.getString(R.string.SwapSettings_DeadlineMinute, lowerMinutes)) {
                         setTextLiveData.postValue(lowerMinutes)
                         onChangeText(lowerMinutes)
                     },
-                    InputFieldButtonItem(translator.getString(R.string.SwapSettings_DeadlineMinute, upperMinutes)) {
+                    InputFieldButtonItem(Translator.getString(R.string.SwapSettings_DeadlineMinute, upperMinutes)) {
                         setTextLiveData.postValue(upperMinutes)
                         onChangeText(upperMinutes)
                     },
