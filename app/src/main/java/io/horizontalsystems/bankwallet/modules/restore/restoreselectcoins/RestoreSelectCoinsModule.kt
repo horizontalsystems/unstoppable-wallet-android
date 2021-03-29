@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.restore.restoreselectcoins
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.providers.StringProvider
+import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.DerivationSetting
 import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
@@ -52,7 +52,7 @@ object RestoreSelectCoinsModule {
                     RestoreSelectCoinsViewModel(restoreSelectCoinsService, listOf(restoreSelectCoinsService)) as T
                 }
                 BlockchainSettingsViewModel::class.java -> {
-                    BlockchainSettingsViewModel(blockchainSettingsService, StringProvider()) as T
+                    BlockchainSettingsViewModel(blockchainSettingsService, Translator) as T
                 }
                 EnableCoinsViewModel::class.java -> {
                     EnableCoinsViewModel(enableCoinsService) as T

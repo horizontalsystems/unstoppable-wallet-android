@@ -4,6 +4,7 @@ import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.adapters.BitcoinBaseAdapter
 import io.horizontalsystems.bankwallet.core.managers.BinanceSmartChainKitManager
 import io.horizontalsystems.bankwallet.core.managers.EthereumKitManager
+import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.coinkit.models.CoinType
@@ -60,7 +61,7 @@ class AppStatusService(
 
         for (predefinedAccountType in predefinedAccountTypeManager.allTypes) {
             val account = predefinedAccountTypeManager.account(predefinedAccountType) ?: continue
-            val title = App.instance.localizedContext().getString(predefinedAccountType.title)
+            val title = Translator.string(predefinedAccountType.title)
 
             wallets[title] = getAccountDetails(account)
         }

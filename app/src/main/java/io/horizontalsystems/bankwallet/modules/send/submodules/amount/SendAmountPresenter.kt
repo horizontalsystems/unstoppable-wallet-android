@@ -2,7 +2,7 @@ package io.horizontalsystems.bankwallet.modules.send.submodules.amount
 
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.providers.StringProvider
+import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.send.SendModule
@@ -21,7 +21,7 @@ class SendAmountPresenter(
         private val presenterHelper: SendAmountPresenterHelper,
         private val coin: Coin,
         private val baseCurrency: Currency,
-        private val stringProvider: StringProvider)
+        private val translator: Translator)
     : ViewModel(), SendAmountModule.IViewDelegate, SendAmountModule.IInteractorDelegate, SendAmountModule.IAmountModule {
 
     var moduleDelegate: SendAmountModule.IAmountModuleDelegate? = null
@@ -243,7 +243,7 @@ class SendAmountPresenter(
     private fun syncHint() {
         var hint = presenterHelper.getHint(this.amount, inputType, xRate)
         view.setHintStateEnabled(hint != null)
-        hint = hint ?: stringProvider.string(R.string.NotAvailable)
+        hint = hint ?: translator.string(R.string.NotAvailable)
         view.setHint(hint)
     }
 

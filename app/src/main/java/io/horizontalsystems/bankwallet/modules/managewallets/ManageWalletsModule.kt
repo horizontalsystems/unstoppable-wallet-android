@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.managewallets
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.providers.StringProvider
+import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.DerivationSetting
 import io.horizontalsystems.bankwallet.modules.blockchainsettings.BlockchainSettingsService
@@ -70,7 +70,7 @@ object ManageWalletsModule {
                     ManageWalletsViewModel(manageWalletsService, blockchainSettingsService, listOf(manageWalletsService)) as T
                 }
                 BlockchainSettingsViewModel::class.java -> {
-                    BlockchainSettingsViewModel(blockchainSettingsService, StringProvider()) as T
+                    BlockchainSettingsViewModel(blockchainSettingsService, Translator) as T
                 }
                 EnableCoinsViewModel::class.java -> {
                     EnableCoinsViewModel(enableCoinsService) as T

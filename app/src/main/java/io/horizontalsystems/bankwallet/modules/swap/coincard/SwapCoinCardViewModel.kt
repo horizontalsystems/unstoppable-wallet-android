@@ -7,7 +7,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.fiat.AmountTypeSwitchService
 import io.horizontalsystems.bankwallet.core.fiat.AmountTypeSwitchService.AmountType
 import io.horizontalsystems.bankwallet.core.fiat.FiatService
-import io.horizontalsystems.bankwallet.core.providers.StringProvider
+import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.send.SendModule.AmountInfo
@@ -27,7 +27,7 @@ class SwapCoinCardViewModel(
         private val switchService: AmountTypeSwitchService,
         private val maxButtonSupported: Boolean,
         private val formatter: SwapViewItemHelper,
-        private val stringProvider: StringProvider
+        private val translator: Translator
 ) : ViewModel() {
 
     private val disposables = CompositeDisposable()
@@ -165,7 +165,7 @@ class SwapCoinCardViewModel(
     private fun syncBalance(balance: BigDecimal?) {
         val coin = coinCardService.coin
         val formattedBalance = when {
-            coin == null -> stringProvider.string(R.string.NotAvailable)
+            coin == null -> translator.string(R.string.NotAvailable)
             balance == null -> null
             else -> formatter.coinAmount(balance, coin)
         }

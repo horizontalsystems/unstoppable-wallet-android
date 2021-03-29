@@ -10,7 +10,7 @@ import io.horizontalsystems.bankwallet.core.ethereum.EthereumFeeViewModel
 import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinServiceFactory
 import io.horizontalsystems.bankwallet.core.ethereum.EvmTransactionService
 import io.horizontalsystems.bankwallet.core.factories.FeeRateProviderFactory
-import io.horizontalsystems.bankwallet.core.providers.StringProvider
+import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionService
@@ -42,16 +42,16 @@ object SendEvmConfirmationModule {
         }
         private val coinServiceFactory by lazy { EvmCoinServiceFactory(feeCoin, App.coinKit, App.currencyManager, App.xRateManager) }
         private val sendService by lazy { SendEvmTransactionService(sendEvmData, evmKit, transactionService, App.activateCoinManager) }
-        private val stringProvider by lazy { StringProvider() }
+        private val translator by lazy { Translator }
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             return when (modelClass) {
                 SendEvmTransactionViewModel::class.java -> {
-                    SendEvmTransactionViewModel(sendService, coinServiceFactory, stringProvider) as T
+                    SendEvmTransactionViewModel(sendService, coinServiceFactory, translator) as T
                 }
                 EthereumFeeViewModel::class.java -> {
-                    EthereumFeeViewModel(transactionService, coinServiceFactory.baseCoinService, stringProvider) as T
+                    EthereumFeeViewModel(transactionService, coinServiceFactory.baseCoinService, translator) as T
                 }
                 else -> throw IllegalArgumentException()
             }

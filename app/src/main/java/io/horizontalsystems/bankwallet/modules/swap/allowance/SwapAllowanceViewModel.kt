@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.providers.StringProvider
+import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.modules.swap.SwapViewItemHelper
 import io.horizontalsystems.bankwallet.modules.swap.SwapService
 import io.reactivex.disposables.CompositeDisposable
@@ -15,7 +15,7 @@ class SwapAllowanceViewModel(
         private val allowanceService: SwapAllowanceService,
         private val pendingAllowanceService: SwapPendingAllowanceService,
         private val formatter: SwapViewItemHelper,
-        private val stringProvider: StringProvider
+        private val translator: Translator
 ) : ViewModel() {
 
     private val disposables = CompositeDisposable()
@@ -87,9 +87,9 @@ class SwapAllowanceViewModel(
 
     private fun allowance(allowanceState: SwapAllowanceService.State): String {
         return when (allowanceState) {
-            SwapAllowanceService.State.Loading -> stringProvider.string(R.string.Alert_Loading)
+            SwapAllowanceService.State.Loading -> translator.string(R.string.Alert_Loading)
             is SwapAllowanceService.State.Ready -> allowanceState.allowance.let { formatter.coinAmount(it.value, it.coin) }
-            is SwapAllowanceService.State.NotReady -> stringProvider.string(R.string.NotAvailable)
+            is SwapAllowanceService.State.NotReady -> translator.string(R.string.NotAvailable)
         }
     }
 

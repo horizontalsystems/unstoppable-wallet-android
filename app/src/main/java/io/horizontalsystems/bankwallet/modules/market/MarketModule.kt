@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.entities.Currency
@@ -166,7 +167,7 @@ data class MarketViewItem(
                         App.numberFormatter.formatFiat(shortenValue, marketCap.currency.symbol, 0, 2) + " $suffix"
                     }
 
-                    MarketDataValue.MarketCap(marketCapFormatted ?: App.instance.localizedContext().getString(R.string.NotAvailable))
+                    MarketDataValue.MarketCap(marketCapFormatted ?: Translator.string(R.string.NotAvailable))
                 }
                 MarketField.Volume -> {
                     val (shortenValue, suffix) = App.numberFormatter.shortenValue(marketItem.volume.value)

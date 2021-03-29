@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.addressformat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.providers.StringProvider
+import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.entities.AccountType.Derivation
 import io.horizontalsystems.coinkit.models.CoinType
@@ -24,7 +24,7 @@ object AddressFormatModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val service = AddressFormatService(App.derivationSettingsManager, App.bitcoinCashCoinTypeManager)
 
-            return AddressFormatViewModel(service, StringProvider()) as T
+            return AddressFormatViewModel(service, Translator) as T
         }
     }
 

@@ -2,7 +2,7 @@ package io.horizontalsystems.bankwallet.modules.blockchainsettings
 
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.providers.StringProvider
+import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorViewItem
 import io.horizontalsystems.coinkit.models.Coin
@@ -12,7 +12,7 @@ import io.reactivex.schedulers.Schedulers
 
 class BlockchainSettingsViewModel(
         private val service: BlockchainSettingsService,
-        private val stringProvider: StringProvider
+        private val translator: Translator
 ) : ViewModel() {
 
     val openBottomSelectorLiveEvent = SingleLiveEvent<BlockchainSettingsModule.Config>()
@@ -67,13 +67,13 @@ class BlockchainSettingsViewModel(
     private fun derivationConfig(coin: Coin, derivations: List<AccountType.Derivation>, current: AccountType.Derivation): BlockchainSettingsModule.Config {
         return BlockchainSettingsModule.Config(
                 coin = coin,
-                title = stringProvider.string(R.string.AddressFormatSettings_Title),
+                title = translator.string(R.string.AddressFormatSettings_Title),
                 subtitle = coin.title,
                 selectedIndex = derivations.indexOfFirst { it == current },
                 viewItems = derivations.map { derivation ->
                     BottomSheetSelectorViewItem(
                             title = derivation.longTitle(),
-                            subtitle = stringProvider.string(derivation.description(), (derivation.addressPrefix(coin.type)
+                            subtitle = translator.string(derivation.description(), (derivation.addressPrefix(coin.type)
                                     ?: ""))
                     )
                 }
@@ -83,13 +83,13 @@ class BlockchainSettingsViewModel(
     private fun bitcoinCashCoinTypeConfig(coin: Coin, types: List<BitcoinCashCoinType>, current: BitcoinCashCoinType): BlockchainSettingsModule.Config {
         return BlockchainSettingsModule.Config(
                 coin = coin,
-                title = stringProvider.string(R.string.AddressFormatSettings_Title),
+                title = translator.string(R.string.AddressFormatSettings_Title),
                 subtitle = coin.title,
                 selectedIndex = types.indexOfFirst { it == current },
                 viewItems = types.map { type ->
                     BottomSheetSelectorViewItem(
-                            title = stringProvider.string(type.title),
-                            subtitle = stringProvider.string(type.description)
+                            title = translator.string(type.title),
+                            subtitle = translator.string(type.description)
                     )
                 }
         )

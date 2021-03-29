@@ -1,8 +1,8 @@
 package io.horizontalsystems.bankwallet.core.managers
 
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
+import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.core.ILanguageManager
 import java.math.BigDecimal
 import java.math.BigInteger
@@ -12,7 +12,10 @@ import java.util.*
 import kotlin.math.floor
 import kotlin.math.log10
 
-class NumberFormatter(private val languageManager: ILanguageManager) : IAppNumberFormatter {
+class NumberFormatter(
+        private val languageManager: ILanguageManager,
+        private val translator: Translator
+        ) : IAppNumberFormatter {
 
     private var formatters: MutableMap<String, NumberFormat> = mutableMapOf()
 
@@ -98,10 +101,10 @@ class NumberFormatter(private val languageManager: ILanguageManager) : IAppNumbe
     override fun shortenValue(number: Number): Pair<BigDecimal, String> {
         val suffix = arrayOf(
                 " ",
-                App.instance.localizedContext().getString(R.string.CoinPage_MarketCap_Thousand),
-                App.instance.localizedContext().getString(R.string.CoinPage_MarketCap_Million),
-                App.instance.localizedContext().getString(R.string.CoinPage_MarketCap_Billion),
-                App.instance.localizedContext().getString(R.string.CoinPage_MarketCap_Trillion))
+                translator.string(R.string.CoinPage_MarketCap_Thousand),
+                translator.string(R.string.CoinPage_MarketCap_Million),
+                translator.string(R.string.CoinPage_MarketCap_Billion),
+                translator.string(R.string.CoinPage_MarketCap_Trillion))
 
         val valueLong = number.toLong()
         val value = floor(log10(valueLong.toDouble())).toInt()

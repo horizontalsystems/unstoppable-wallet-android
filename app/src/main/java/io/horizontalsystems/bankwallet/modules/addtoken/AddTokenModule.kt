@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.providers.StringProvider
+import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.modules.addtoken.bep2.AddBep2TokenBlockchainService
 import io.horizontalsystems.bankwallet.modules.addtoken.bep20.AddBep20TokenResolver
 import io.horizontalsystems.bankwallet.modules.addtoken.erc20.AddErc20TokenResolver
@@ -15,7 +15,7 @@ import kotlinx.android.parcel.Parcelize
 
 object AddTokenModule {
     class Factory(private val tokenType: TokenType) : ViewModelProvider.Factory {
-        private val stringProvider by lazy { StringProvider() }
+        private val translator by lazy { Translator }
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -24,18 +24,18 @@ object AddTokenModule {
                     val resolver = AddErc20TokenResolver(App.buildConfigProvider.testMode, App.appConfigProvider.etherscanApiKey)
                     val blockchainService = AddEvmTokenBlockchainService(resolver, App.networkManager)
                     val service = AddTokenService(App.coinManager, blockchainService, App.walletManager, App.accountManager)
-                    AddTokenViewModel(service, stringProvider, R.string.AddErc20Token_Title, R.string.AddEvmToken_ContractAddressHint)
+                    AddTokenViewModel(service, translator, R.string.AddErc20Token_Title, R.string.AddEvmToken_ContractAddressHint)
                 }
                 TokenType.Bep20 -> {
                     val resolver = AddBep20TokenResolver(App.buildConfigProvider.testMode, App.appConfigProvider.bscscanApiKey)
                     val blockchainService = AddEvmTokenBlockchainService(resolver, App.networkManager)
                     val service = AddTokenService(App.coinManager, blockchainService, App.walletManager, App.accountManager)
-                    AddTokenViewModel(service, stringProvider, R.string.AddBep20Token_Title, R.string.AddEvmToken_ContractAddressHint)
+                    AddTokenViewModel(service, translator, R.string.AddBep20Token_Title, R.string.AddEvmToken_ContractAddressHint)
                 }
                 TokenType.Bep2 -> {
                     val blockchainService = AddBep2TokenBlockchainService(App.buildConfigProvider)
                     val service = AddTokenService(App.coinManager, blockchainService, App.walletManager, App.accountManager)
-                    AddTokenViewModel(service, stringProvider, R.string.AddBep2Token_Title, R.string.AddBep2Token_TokenSymbolHint)
+                    AddTokenViewModel(service, translator, R.string.AddBep2Token_Title, R.string.AddBep2Token_TokenSymbolHint)
                 }
             }
             return viewModel as T

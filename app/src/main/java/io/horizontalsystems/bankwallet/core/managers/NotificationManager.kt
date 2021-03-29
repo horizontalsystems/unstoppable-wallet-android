@@ -9,12 +9,15 @@ import androidx.core.app.NotificationManagerCompat
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.INotificationManager
+import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.AlertNotification
 import io.horizontalsystems.bankwallet.modules.launcher.LauncherActivity
 import io.horizontalsystems.core.BackgroundManager
 import android.app.NotificationManager as SystemNotificationManager
 
-class NotificationManager(private val androidNotificationManager: NotificationManagerCompat) : INotificationManager, BackgroundManager.Listener {
+class NotificationManager(
+        private val androidNotificationManager: NotificationManagerCompat,
+        private val translator: Translator) : INotificationManager, BackgroundManager.Listener {
 
     override val isEnabled: Boolean
         get() = when {
@@ -64,7 +67,7 @@ class NotificationManager(private val androidNotificationManager: NotificationMa
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val name = App.instance.localizedContext().getString(R.string.App_Name)
+            val name = translator.string(R.string.App_Name)
             val importance = SystemNotificationManager.IMPORTANCE_DEFAULT
             val channel = NotificationChannel(channelId, name, importance)
             // Register the channel with the system

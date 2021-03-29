@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.send.submodules.address
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
-import io.horizontalsystems.bankwallet.core.providers.StringProvider
+import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.IRecipientAddressService
 import io.horizontalsystems.ethereumkit.core.AddressValidator
@@ -15,7 +15,7 @@ import java.util.*
 
 class SendAddressPresenter(
         private val moduleDelegate: SendAddressModule.IAddressModuleDelegate,
-        private val stringProvider: StringProvider
+        private val translator: Translator
 ) : ViewModel(), IRecipientAddressService, SendAddressModule.IAddressModule, SendAddressModule.IInteractorDelegate, SendAddressModule.IViewDelegate {
 
     private val errorsObservable = BehaviorSubject.createDefault<Optional<Throwable>>(Optional.empty())
@@ -85,10 +85,10 @@ class SendAddressPresenter(
 
     private fun getError(error: Throwable): Throwable {
         val message = when (error) {
-            is HodlerPlugin.UnsupportedAddressType -> stringProvider.string(R.string.Send_Error_UnsupportedAddress)
-            is AddressValidator.AddressValidationException -> stringProvider.string(R.string.Send_Error_IncorrectAddress)
-            is ZcashAdapter.ZcashError.TransparentAddressNotAllowed -> stringProvider.string(R.string.Send_Error_TransparentAddress)
-            is ZcashAdapter.ZcashError.SendToSelfNotAllowed -> stringProvider.string(R.string.Send_Error_SendToSelf)
+            is HodlerPlugin.UnsupportedAddressType -> translator.string(R.string.Send_Error_UnsupportedAddress)
+            is AddressValidator.AddressValidationException -> translator.string(R.string.Send_Error_IncorrectAddress)
+            is ZcashAdapter.ZcashError.TransparentAddressNotAllowed -> translator.string(R.string.Send_Error_TransparentAddress)
+            is ZcashAdapter.ZcashError.SendToSelfNotAllowed -> translator.string(R.string.Send_Error_SendToSelf)
             else -> error.message ?: error.javaClass.simpleName
         }
 

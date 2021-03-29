@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.convertedError
 import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinService
-import io.horizontalsystems.bankwallet.core.providers.StringProvider
+import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.swap.SwapModule
 import io.horizontalsystems.core.SingleLiveEvent
@@ -16,7 +16,7 @@ class SwapApproveViewModel(
         val dex: SwapModule.Dex,
         private val service: SwapApproveService,
         private val coinService: EvmCoinService,
-        private val stringProvider: StringProvider
+        private val translator: Translator
 ) : ViewModel() {
 
     var amount: String
@@ -79,7 +79,7 @@ class SwapApproveViewModel(
     private fun convertError(error: Throwable): String {
         return when (val convertedError = error.convertedError) {
             is SwapApproveService.TransactionAmountError.AlreadyApproved -> {
-                stringProvider.string(R.string.Approve_Error_AlreadyApproved)
+                translator.string(R.string.Approve_Error_AlreadyApproved)
             }
             else -> convertedError.message ?: convertedError.javaClass.simpleName
         }

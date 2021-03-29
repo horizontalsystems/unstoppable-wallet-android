@@ -2,7 +2,7 @@ package io.horizontalsystems.bankwallet.modules.swap
 
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
-import io.horizontalsystems.bankwallet.core.providers.StringProvider
+import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.uniswapkit.models.TradeData
 import io.horizontalsystems.uniswapkit.models.TradeOptions
@@ -10,7 +10,7 @@ import io.horizontalsystems.uniswapkit.models.TradeType
 import java.math.BigDecimal
 import java.math.RoundingMode
 
-class SwapViewItemHelper(private val stringProvider: StringProvider, private val numberFormatter: IAppNumberFormatter) {
+class SwapViewItemHelper(private val translator: Translator, private val numberFormatter: IAppNumberFormatter) {
 
     fun price(price: BigDecimal?, coinFrom: Coin?, coinTo: Coin?): String? {
         if (price == null || coinFrom == null || coinTo == null)
@@ -35,7 +35,7 @@ class SwapViewItemHelper(private val stringProvider: StringProvider, private val
             return null
         }
 
-        return SwapModule.PriceImpactViewItem(impactLevel, stringProvider.string(R.string.Swap_Percent, priceImpact))
+        return SwapModule.PriceImpactViewItem(impactLevel, translator.string(R.string.Swap_Percent, priceImpact))
     }
 
     fun guaranteedAmountViewItem(tradeData: TradeData, coinIn: Coin?, coinOut: Coin?): SwapModule.GuaranteedAmountViewItem? {
@@ -44,13 +44,13 @@ class SwapViewItemHelper(private val stringProvider: StringProvider, private val
                 val amount = tradeData.amountOutMin ?: return null
                 val coin = coinOut ?: return null
 
-                return SwapModule.GuaranteedAmountViewItem(stringProvider.string(R.string.Swap_MinimumGot), coinAmount(amount, coin))
+                return SwapModule.GuaranteedAmountViewItem(translator.string(R.string.Swap_MinimumGot), coinAmount(amount, coin))
             }
             TradeType.ExactOut -> {
                 val amount = tradeData.amountInMax ?: return null
                 val coin = coinIn ?: return null
 
-                return SwapModule.GuaranteedAmountViewItem(stringProvider.string(R.string.Swap_MaximumPaid), coinAmount(amount, coin))
+                return SwapModule.GuaranteedAmountViewItem(translator.string(R.string.Swap_MaximumPaid), coinAmount(amount, coin))
             }
         }
     }
@@ -69,7 +69,7 @@ class SwapViewItemHelper(private val stringProvider: StringProvider, private val
         return if (ttl == defaultTradeOptions.ttl) {
             null
         } else {
-            stringProvider.string(R.string.Duration_Minutes, ttl)
+            translator.string(R.string.Duration_Minutes, ttl)
         }
     }
 

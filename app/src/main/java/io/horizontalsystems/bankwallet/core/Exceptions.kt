@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.core
 
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.ethereumkit.api.jsonrpc.JsonRpc
 import io.horizontalsystems.ethereumkit.core.AddressValidator
 
@@ -20,7 +21,7 @@ sealed class EvmError(message: String? = null) : Throwable(message) {
 sealed class EvmAddressError : Throwable() {
     object InvalidAddress : EvmAddressError() {
         override fun getLocalizedMessage(): String {
-            return App.instance.localizedContext().getString(R.string.SwapSettings_Error_InvalidAddress)
+            return Translator.string(R.string.SwapSettings_Error_InvalidAddress)
         }
     }
 }
