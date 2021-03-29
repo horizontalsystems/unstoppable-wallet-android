@@ -45,7 +45,7 @@
             app:layout_constraintEnd_toEndOf="@+id/coinBackgroundSquare"
             app:layout_constraintStart_toStartOf="@+id/coinBackgroundSquare"
             app:layout_constraintTop_toTopOf="@+id/coinBackgroundSquare"
-            tools:src="@drawable/coin_btc" />
+            tools:src="@drawable/bitcoin" />
 
         <ImageView
             android:id="@+id/iconNotSynced"

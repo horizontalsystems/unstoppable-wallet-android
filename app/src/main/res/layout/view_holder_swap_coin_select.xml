@@ -26,7 +26,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@drawable/coin_eth" />
+        tools:src="@drawable/ethereum" />
 
     <TextView
         android:id="@+id/coinTitle"
