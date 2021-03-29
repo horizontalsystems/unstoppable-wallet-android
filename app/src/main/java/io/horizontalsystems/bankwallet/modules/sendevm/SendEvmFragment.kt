@@ -70,7 +70,7 @@ class SendEvmFragment : BaseFragment() {
         amountInput.onTextChangeCallback = { _, new -> amountViewModel.onChangeAmount(new ?: "") }
         amountInput.onTapSecondaryCallback = { amountViewModel.onSwitch() }
         amountInput.onTapMaxCallback = { amountViewModel.onClickMax() }
-        amountInput.setFocus()
+        amountInput.postDelayed({ amountInput.setFocus()}, 200)
 
         amountViewModel.prefixLiveData.observe(viewLifecycleOwner, { prefix ->
             amountInput.setPrefix(prefix)
