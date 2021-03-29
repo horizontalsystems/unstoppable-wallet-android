@@ -20,16 +20,31 @@ class AppConfigProvider : IAppConfigProvider, ILanguageConfigProvider, IBuildCon
     override val walletHelpTelegramGroup = "UnstoppableWallet"
     override val btcCoreRpcUrl: String = "https://btc.horizontalsystems.xyz/rpc"
 
-    override val cryptoCompareApiKey = Translator.string(R.string.cryptoCompareApiKey)
-    override val infuraProjectId = Translator.string(R.string.infuraProjectId)
-    override val infuraProjectSecret = Translator.string(R.string.infuraSecretKey)
-    override val etherscanApiKey = Translator.string(R.string.etherscanKey)
-    override val bscscanApiKey = Translator.string(R.string.bscscanKey)
-    override val guidesUrl = Translator.string(R.string.guidesUrl)
-    override val faqUrl = Translator.string(R.string.faqUrl)
+    override val cryptoCompareApiKey by lazy {
+        Translator.string(R.string.cryptoCompareApiKey)
+    }
+    override val infuraProjectId by lazy {
+        Translator.string(R.string.infuraProjectId)
+    }
+    override val infuraProjectSecret by lazy {
+        Translator.string(R.string.infuraSecretKey)
+    }
+    override val etherscanApiKey by lazy {
+        Translator.string(R.string.etherscanKey)
+    }
+    override val bscscanApiKey by lazy {
+        Translator.string(R.string.bscscanKey)
+    }
+    override val guidesUrl by lazy {
+        Translator.string(R.string.guidesUrl)
+    }
+    override val faqUrl by lazy {
+        Translator.string(R.string.faqUrl)
+    }
+
     override val fiatDecimal: Int = 2
     override val maxDecimal: Int = 8
-    override val feeRateAdjustForCurrencies: List<String> = listOf("USD","EUR")
+    override val feeRateAdjustForCurrencies: List<String> = listOf("USD", "EUR")
 
     override val currencies: List<Currency> = listOf(
             Currency(code = "USD", symbol = "\u0024", decimal = 2),
