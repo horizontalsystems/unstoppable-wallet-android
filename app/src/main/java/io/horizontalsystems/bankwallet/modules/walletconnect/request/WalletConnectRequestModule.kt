@@ -7,7 +7,6 @@ import io.horizontalsystems.bankwallet.core.ethereum.EthereumFeeViewModel
 import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinServiceFactory
 import io.horizontalsystems.bankwallet.core.ethereum.EvmTransactionService
 import io.horizontalsystems.bankwallet.core.factories.FeeRateProviderFactory
-import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionService
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
@@ -41,7 +40,6 @@ object WalletConnectRequestModule {
             EvmTransactionService(evmKit, feeRateProvider, 10)
         }
         private val sendService by lazy { SendEvmTransactionService(SendEvmData(service.transactionData), evmKit, transactionService, App.activateCoinManager, service.gasPrice) }
-        private val translator by lazy { Translator }
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
@@ -50,10 +48,10 @@ object WalletConnectRequestModule {
                     WalletConnectSendEthereumTransactionRequestViewModel(service) as T
                 }
                 EthereumFeeViewModel::class.java -> {
-                    EthereumFeeViewModel(transactionService, coinServiceFactory.baseCoinService, translator) as T
+                    EthereumFeeViewModel(transactionService, coinServiceFactory.baseCoinService) as T
                 }
                 SendEvmTransactionViewModel::class.java -> {
-                    SendEvmTransactionViewModel(sendService, coinServiceFactory, translator) as T
+                    SendEvmTransactionViewModel(sendService, coinServiceFactory) as T
                 }
                 else -> throw IllegalArgumentException()
             }

@@ -15,8 +15,7 @@ import java.math.BigDecimal
 class SwapApproveViewModel(
         val dex: SwapModule.Dex,
         private val service: SwapApproveService,
-        private val coinService: EvmCoinService,
-        private val translator: Translator
+        private val coinService: EvmCoinService
 ) : ViewModel() {
 
     var amount: String
@@ -79,7 +78,7 @@ class SwapApproveViewModel(
     private fun convertError(error: Throwable): String {
         return when (val convertedError = error.convertedError) {
             is SwapApproveService.TransactionAmountError.AlreadyApproved -> {
-                translator.getString(R.string.Approve_Error_AlreadyApproved)
+                Translator.getString(R.string.Approve_Error_AlreadyApproved)
             }
             else -> convertedError.message ?: convertedError.javaClass.simpleName
         }

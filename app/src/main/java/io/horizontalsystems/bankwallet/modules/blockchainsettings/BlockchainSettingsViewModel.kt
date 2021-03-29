@@ -11,8 +11,7 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 
 class BlockchainSettingsViewModel(
-        private val service: BlockchainSettingsService,
-        private val translator: Translator
+        private val service: BlockchainSettingsService
 ) : ViewModel() {
 
     val openBottomSelectorLiveEvent = SingleLiveEvent<BlockchainSettingsModule.Config>()
@@ -67,13 +66,13 @@ class BlockchainSettingsViewModel(
     private fun derivationConfig(coin: Coin, derivations: List<AccountType.Derivation>, current: AccountType.Derivation): BlockchainSettingsModule.Config {
         return BlockchainSettingsModule.Config(
                 coin = coin,
-                title = translator.getString(R.string.AddressFormatSettings_Title),
+                title = Translator.getString(R.string.AddressFormatSettings_Title),
                 subtitle = coin.title,
                 selectedIndex = derivations.indexOfFirst { it == current },
                 viewItems = derivations.map { derivation ->
                     BottomSheetSelectorViewItem(
                             title = derivation.longTitle(),
-                            subtitle = translator.getString(derivation.description(), (derivation.addressPrefix(coin.type)
+                            subtitle = Translator.getString(derivation.description(), (derivation.addressPrefix(coin.type)
                                     ?: ""))
                     )
                 }
@@ -83,13 +82,13 @@ class BlockchainSettingsViewModel(
     private fun bitcoinCashCoinTypeConfig(coin: Coin, types: List<BitcoinCashCoinType>, current: BitcoinCashCoinType): BlockchainSettingsModule.Config {
         return BlockchainSettingsModule.Config(
                 coin = coin,
-                title = translator.getString(R.string.AddressFormatSettings_Title),
+                title = Translator.getString(R.string.AddressFormatSettings_Title),
                 subtitle = coin.title,
                 selectedIndex = types.indexOfFirst { it == current },
                 viewItems = types.map { type ->
                     BottomSheetSelectorViewItem(
-                            title = translator.getString(type.title),
-                            subtitle = translator.getString(type.description)
+                            title = Translator.getString(type.title),
+                            subtitle = Translator.getString(type.description)
                     )
                 }
         )

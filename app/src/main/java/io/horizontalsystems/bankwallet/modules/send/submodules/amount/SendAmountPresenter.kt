@@ -20,8 +20,7 @@ class SendAmountPresenter(
         private val interactor: SendAmountModule.IInteractor,
         private val presenterHelper: SendAmountPresenterHelper,
         private val coin: Coin,
-        private val baseCurrency: Currency,
-        private val translator: Translator)
+        private val baseCurrency: Currency)
     : ViewModel(), SendAmountModule.IViewDelegate, SendAmountModule.IInteractorDelegate, SendAmountModule.IAmountModule {
 
     var moduleDelegate: SendAmountModule.IAmountModuleDelegate? = null
@@ -243,7 +242,7 @@ class SendAmountPresenter(
     private fun syncHint() {
         var hint = presenterHelper.getHint(this.amount, inputType, xRate)
         view.setHintStateEnabled(hint != null)
-        hint = hint ?: translator.getString(R.string.NotAvailable)
+        hint = hint ?: Translator.getString(R.string.NotAvailable)
         view.setHint(hint)
     }
 

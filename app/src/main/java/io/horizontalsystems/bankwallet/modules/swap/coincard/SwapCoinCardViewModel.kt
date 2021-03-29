@@ -26,8 +26,7 @@ class SwapCoinCardViewModel(
         private val fiatService: FiatService,
         private val switchService: AmountTypeSwitchService,
         private val maxButtonSupported: Boolean,
-        private val formatter: SwapViewItemHelper,
-        private val translator: Translator
+        private val formatter: SwapViewItemHelper
 ) : ViewModel() {
 
     private val disposables = CompositeDisposable()
@@ -165,7 +164,7 @@ class SwapCoinCardViewModel(
     private fun syncBalance(balance: BigDecimal?) {
         val coin = coinCardService.coin
         val formattedBalance = when {
-            coin == null -> translator.getString(R.string.NotAvailable)
+            coin == null -> Translator.getString(R.string.NotAvailable)
             balance == null -> null
             else -> formatter.coinAmount(balance, coin)
         }

@@ -16,8 +16,8 @@ import io.horizontalsystems.core.BackgroundManager
 import android.app.NotificationManager as SystemNotificationManager
 
 class NotificationManager(
-        private val androidNotificationManager: NotificationManagerCompat,
-        private val translator: Translator) : INotificationManager, BackgroundManager.Listener {
+        private val androidNotificationManager: NotificationManagerCompat
+        ) : INotificationManager, BackgroundManager.Listener {
 
     override val isEnabled: Boolean
         get() = when {
@@ -67,7 +67,7 @@ class NotificationManager(
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val name = translator.getString(R.string.App_Name)
+            val name = Translator.getString(R.string.App_Name)
             val importance = SystemNotificationManager.IMPORTANCE_DEFAULT
             val channel = NotificationChannel(channelId, name, importance)
             // Register the channel with the system

@@ -8,7 +8,6 @@ import androidx.navigation.NavOptions
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.adapters.Eip20Adapter
 import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinService
-import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceService
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.ethereumkit.models.Address
@@ -31,8 +30,7 @@ object SwapApproveModule {
                     val allowanceAmountBigInteger = approveData.allowance.movePointRight(approveData.coin.decimal).toBigInteger()
                     val swapApproveService = SwapApproveService(erc20Adapter.eip20Kit, approveAmountBigInteger, Address(approveData.spenderAddress), allowanceAmountBigInteger)
                     val coinService by lazy { EvmCoinService(approveData.coin, App.currencyManager, App.xRateManager) }
-                    val translator by lazy { Translator }
-                    SwapApproveViewModel(approveData.dex, swapApproveService, coinService, translator) as T
+                    SwapApproveViewModel(approveData.dex, swapApproveService, coinService) as T
                 }
                 else -> throw IllegalArgumentException()
             }

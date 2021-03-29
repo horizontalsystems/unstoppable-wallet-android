@@ -11,8 +11,7 @@ import io.reactivex.disposables.CompositeDisposable
 
 class SwapTradeOptionsViewModel(
         private val service: SwapTradeOptionsService,
-        private val tradeService: SwapTradeService,
-        private val translator: Translator
+        private val tradeService: SwapTradeService
         ) : ViewModel() {
 
     val actionStateLiveData = MutableLiveData<ActionState>(ActionState.Enabled())
@@ -40,13 +39,13 @@ class SwapTradeOptionsViewModel(
 
                 when (error) {
                     is TradeOptionsError.InvalidAddress -> {
-                        errorText = translator.getString(R.string.SwapSettings_Error_InvalidAddress)
+                        errorText = Translator.getString(R.string.SwapSettings_Error_InvalidAddress)
                     }
                     is TradeOptionsError.InvalidSlippage -> {
-                        errorText = translator.getString(R.string.SwapSettings_Error_InvalidSlippage)
+                        errorText = Translator.getString(R.string.SwapSettings_Error_InvalidSlippage)
                     }
                     is TradeOptionsError.ZeroDeadline -> {
-                        errorText = translator.getString(R.string.SwapSettings_Error_InvalidDeadline)
+                        errorText = Translator.getString(R.string.SwapSettings_Error_InvalidDeadline)
                     }
                 }
 

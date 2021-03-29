@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.xrateskit.entities.TimePeriod as XRatesKitTimePeriod
 
 object MarketAdvancedSearchModule {
@@ -15,7 +14,7 @@ object MarketAdvancedSearchModule {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             val service = MarketAdvancedSearchService(App.xRateManager, App.currencyManager)
-            return MarketAdvancedSearchViewModel(service, Translator, listOf(service)) as T
+            return MarketAdvancedSearchViewModel(service, listOf(service)) as T
         }
 
     }

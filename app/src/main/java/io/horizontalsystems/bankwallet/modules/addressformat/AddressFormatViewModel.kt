@@ -11,8 +11,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
 class AddressFormatViewModel(
-        private val service: AddressFormatModule.IService,
-        private val translator: Translator
+        private val service: AddressFormatModule.IService
 ) : ViewModel() {
 
     val sections = MutableLiveData<List<AddressFormatModule.SectionItem>>()
@@ -51,7 +50,7 @@ class AddressFormatViewModel(
             is AddressFormatModule.ItemType.BitcoinCashType -> {
                 val selectedType = item.type.types[index]
                 if (selectedType != item.type.current) {
-                    showAddressFormatChangeAlert.postValue(Pair(item.coinType.title, translator.getString(selectedType.title)))
+                    showAddressFormatChangeAlert.postValue(Pair(item.coinType.title, Translator.getString(selectedType.title)))
                 }
             }
         }
@@ -85,7 +84,7 @@ class AddressFormatViewModel(
             is AddressFormatModule.ItemType.Derivation -> {
                 itemType.derivations.mapIndexed { index, derivation ->
                     val title = "${derivation.addressType()} - ${derivation.title()}"
-                    val subtitle = translator.getString(derivation.description(), (derivation.addressPrefix(coinType)
+                    val subtitle = Translator.getString(derivation.description(), (derivation.addressPrefix(coinType)
                             ?: ""))
                     AddressFormatModule.ViewItem(
                             title,
@@ -98,8 +97,8 @@ class AddressFormatViewModel(
             is AddressFormatModule.ItemType.BitcoinCashType -> {
                 itemType.types.mapIndexed { index, type ->
                     AddressFormatModule.ViewItem(
-                            translator.getString(type.title),
-                            translator.getString(type.description),
+                            Translator.getString(type.title),
+                            Translator.getString(type.description),
                             type == itemType.current,
                             listPosition = ListPosition.getListPosition(itemType.types.size, index)
                     )

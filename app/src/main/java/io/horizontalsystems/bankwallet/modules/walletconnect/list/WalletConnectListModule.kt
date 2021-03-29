@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavOptions
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.core.findNavController
 
 object WalletConnectListModule {
@@ -15,7 +14,7 @@ object WalletConnectListModule {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             val service = WalletConnectListService(App.predefinedAccountTypeManager, App.walletConnectSessionManager)
 
-            return WalletConnectListViewModel(service, Translator) as T
+            return WalletConnectListViewModel(service) as T
         }
     }
 

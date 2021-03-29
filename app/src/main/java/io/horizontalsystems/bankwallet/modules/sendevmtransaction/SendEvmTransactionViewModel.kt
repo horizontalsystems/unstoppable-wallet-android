@@ -14,8 +14,7 @@ import io.reactivex.disposables.CompositeDisposable
 
 class SendEvmTransactionViewModel(
         private val service: SendEvmTransactionService,
-        private val coinServiceFactory: EvmCoinServiceFactory,
-        private val translator: Translator
+        private val coinServiceFactory: EvmCoinServiceFactory
 ) : ViewModel() {
     private val disposable = CompositeDisposable()
 
@@ -85,18 +84,18 @@ class SendEvmTransactionViewModel(
     private fun getTransferViewItems(transfer: TransactionDecoration.Transfer, additionalInfo: SendEvmData.AdditionalInfo?): List<SectionViewItem> {
         val viewItems = mutableListOf(
                 ViewItem.Subhead(
-                        translator.getString(R.string.Send_Confirmation_YouSend),
+                        Translator.getString(R.string.Send_Confirmation_YouSend),
                         coinServiceFactory.baseCoinService.coin.title
                 ),
                 ViewItem.Value(
-                        translator.getString(R.string.Send_Confirmation_Amount),
+                        Translator.getString(R.string.Send_Confirmation_Amount),
                         coinServiceFactory.baseCoinService.amountData(transfer.value).getFormatted(), ValueType.Outgoing
                 )
         )
         val addressValue = transfer.to.eip55
         val addressTitle = additionalInfo?.sendInfo?.domain ?: TransactionInfoAddressMapper.map(addressValue)
         viewItems.add(ViewItem.Address(
-                translator.getString(R.string.Send_Confirmation_To),
+                Translator.getString(R.string.Send_Confirmation_To),
                 addressTitle,
                 value = addressValue)
         )
@@ -106,14 +105,14 @@ class SendEvmTransactionViewModel(
     private fun getEip20TransferViewItems(eip20Transfer: TransactionDecoration.Eip20Transfer, additionalInfo: SendEvmData.AdditionalInfo?): List<SectionViewItem>? =
             coinServiceFactory.getCoinService(eip20Transfer.contractAddress)?.let { coinService ->
                 val viewItems = mutableListOf(
-                        ViewItem.Subhead(translator.getString(R.string.Send_Confirmation_YouSend), coinService.coin.title),
-                        ViewItem.Value(translator.getString(R.string.Send_Confirmation_Amount), coinService.amountData(eip20Transfer.value).getFormatted(), ValueType.Outgoing)
+                        ViewItem.Subhead(Translator.getString(R.string.Send_Confirmation_YouSend), coinService.coin.title),
+                        ViewItem.Value(Translator.getString(R.string.Send_Confirmation_Amount), coinService.amountData(eip20Transfer.value).getFormatted(), ValueType.Outgoing)
                 )
                 val addressValue = eip20Transfer.to.eip55
                 val addressTitle = additionalInfo?.sendInfo?.domain
                         ?: TransactionInfoAddressMapper.map(addressValue)
                 viewItems.add(
-                        ViewItem.Address(translator.getString(R.string.Send_Confirmation_To), addressTitle, value = addressValue)
+                        ViewItem.Address(Translator.getString(R.string.Send_Confirmation_To), addressTitle, value = addressValue)
                 )
                 listOf(SectionViewItem(viewItems))
             }
@@ -123,9 +122,9 @@ class SendEvmTransactionViewModel(
                 val addressValue = eip20Approve.spender.eip55
                 val addressTitle = TransactionInfoAddressMapper.map(addressValue)
                 val viewItems = listOf(
-                        ViewItem.Subhead(translator.getString(R.string.Approve_YouApprove), coinService.coin.title),
-                        ViewItem.Value(translator.getString(R.string.Send_Confirmation_Amount), coinService.amountData(eip20Approve.value).getFormatted(), ValueType.Regular),
-                        ViewItem.Address(translator.getString(R.string.Approve_Spender), addressTitle, addressValue)
+                        ViewItem.Subhead(Translator.getString(R.string.Approve_YouApprove), coinService.coin.title),
+                        ViewItem.Value(Translator.getString(R.string.Send_Confirmation_Amount), coinService.amountData(eip20Approve.value).getFormatted(), ValueType.Regular),
+                        ViewItem.Address(Translator.getString(R.string.Approve_Spender), addressTitle, addressValue)
                 )
                 listOf(SectionViewItem(viewItems))
             }
@@ -140,46 +139,46 @@ class SendEvmTransactionViewModel(
         when (val trade = swap.trade) {
             is TransactionDecoration.Swap.Trade.ExactIn -> {
                 sections.add(SectionViewItem(listOf(
-                        ViewItem.Subhead(translator.getString(R.string.Swap_FromAmountTitle), coinServiceIn.coin.title),
-                        ViewItem.Value(translator.getString(R.string.Send_Confirmation_Amount), coinServiceIn.amountData(trade.amountIn).getFormatted(), ValueType.Outgoing)
+                        ViewItem.Subhead(Translator.getString(R.string.Swap_FromAmountTitle), coinServiceIn.coin.title),
+                        ViewItem.Value(Translator.getString(R.string.Send_Confirmation_Amount), coinServiceIn.amountData(trade.amountIn).getFormatted(), ValueType.Outgoing)
                 )))
                 sections.add(SectionViewItem(listOf(
-                        ViewItem.Subhead(translator.getString(R.string.Swap_ToAmountTitle), coinServiceOut.coin.title),
+                        ViewItem.Subhead(Translator.getString(R.string.Swap_ToAmountTitle), coinServiceOut.coin.title),
                         getEstimatedSwapAmount(info?.let { coinServiceOut.amountData(it.estimatedOut).getFormatted() }, ValueType.Incoming),
-                        ViewItem.Value(translator.getString(R.string.Swap_Confirmation_Guaranteed), coinServiceOut.amountData(trade.amountOutMin).getFormatted(), ValueType.Regular)
+                        ViewItem.Value(Translator.getString(R.string.Swap_Confirmation_Guaranteed), coinServiceOut.amountData(trade.amountOutMin).getFormatted(), ValueType.Regular)
                 )))
             }
             is TransactionDecoration.Swap.Trade.ExactOut -> {
                 sections.add(SectionViewItem(listOf(
-                        ViewItem.Subhead(translator.getString(R.string.Swap_FromAmountTitle), coinServiceIn.coin.title),
+                        ViewItem.Subhead(Translator.getString(R.string.Swap_FromAmountTitle), coinServiceIn.coin.title),
                         getEstimatedSwapAmount(info?.let { coinServiceOut.amountData(it.estimatedOut).getFormatted() }, ValueType.Outgoing),
-                        ViewItem.Value(translator.getString(R.string.Swap_Confirmation_Maximum), coinServiceIn.amountData(trade.amountInMax).getFormatted(), ValueType.Regular)
+                        ViewItem.Value(Translator.getString(R.string.Swap_Confirmation_Maximum), coinServiceIn.amountData(trade.amountInMax).getFormatted(), ValueType.Regular)
                 )))
                 sections.add(SectionViewItem(listOf(
-                        ViewItem.Subhead(translator.getString(R.string.Swap_ToAmountTitle), coinServiceOut.coin.title),
-                        ViewItem.Value(translator.getString(R.string.Swap_Confirmation_Guaranteed), coinServiceOut.amountData(trade.amountOut).getFormatted(), ValueType.Regular)
+                        ViewItem.Subhead(Translator.getString(R.string.Swap_ToAmountTitle), coinServiceOut.coin.title),
+                        ViewItem.Value(Translator.getString(R.string.Swap_Confirmation_Guaranteed), coinServiceOut.amountData(trade.amountOut).getFormatted(), ValueType.Regular)
                 )))
             }
         }
 
         val otherViewItems = mutableListOf<ViewItem>()
         info?.slippage?.let {
-            otherViewItems.add(ViewItem.Value(translator.getString(R.string.SwapSettings_SlippageTitle), it, ValueType.Regular))
+            otherViewItems.add(ViewItem.Value(Translator.getString(R.string.SwapSettings_SlippageTitle), it, ValueType.Regular))
         }
         info?.deadline?.let {
-            otherViewItems.add(ViewItem.Value(translator.getString(R.string.SwapSettings_DeadlineTitle), it, ValueType.Regular))
+            otherViewItems.add(ViewItem.Value(Translator.getString(R.string.SwapSettings_DeadlineTitle), it, ValueType.Regular))
         }
         if (swap.to != service.ownAddress) {
             val addressValue = swap.to.eip55
             val addressTitle = info?.recipientDomain
                     ?: TransactionInfoAddressMapper.map(addressValue)
-            otherViewItems.add(ViewItem.Address(translator.getString(R.string.SwapSettings_RecipientAddressTitle), addressTitle, addressValue))
+            otherViewItems.add(ViewItem.Address(Translator.getString(R.string.SwapSettings_RecipientAddressTitle), addressTitle, addressValue))
         }
         info?.price?.let {
-            otherViewItems.add(ViewItem.Value(translator.getString(R.string.Swap_Price), it, ValueType.Regular))
+            otherViewItems.add(ViewItem.Value(Translator.getString(R.string.Swap_Price), it, ValueType.Regular))
         }
         info?.priceImpact?.let {
-            otherViewItems.add(ViewItem.Value(translator.getString(R.string.Swap_PriceImpact), it, ValueType.Regular))
+            otherViewItems.add(ViewItem.Value(Translator.getString(R.string.Swap_PriceImpact), it, ValueType.Regular))
         }
         if (otherViewItems.isNotEmpty()) {
             sections.add(SectionViewItem(otherViewItems))
@@ -189,9 +188,9 @@ class SendEvmTransactionViewModel(
     }
 
     private fun getEstimatedSwapAmount(value: String?, type: ValueType): ViewItem {
-        val title = translator.getString(R.string.Swap_Confirmation_Estimated)
+        val title = Translator.getString(R.string.Swap_Confirmation_Estimated)
         return value?.let { ViewItem.Value(title, it, type) }
-                ?: ViewItem.Value(title, translator.getString(R.string.NotAvailable), ValueType.Disabled)
+                ?: ViewItem.Value(title, Translator.getString(R.string.NotAvailable), ValueType.Disabled)
     }
 
     private fun getCoinService(token: TransactionDecoration.Swap.Token) = when (token) {
@@ -202,8 +201,8 @@ class SendEvmTransactionViewModel(
     private fun getFallbackViewItems(transactionData: TransactionData): List<SectionViewItem> {
         val addressValue = transactionData.to.eip55
         val viewItems = listOf(
-                ViewItem.Value(translator.getString(R.string.Send_Confirmation_Amount), coinServiceFactory.baseCoinService.amountData(transactionData.value).getFormatted(), ValueType.Outgoing),
-                ViewItem.Address(translator.getString(R.string.Send_Confirmation_To), addressValue, addressValue),
+                ViewItem.Value(Translator.getString(R.string.Send_Confirmation_Amount), coinServiceFactory.baseCoinService.amountData(transactionData.value).getFormatted(), ValueType.Outgoing),
+                ViewItem.Address(Translator.getString(R.string.Send_Confirmation_To), addressValue, addressValue),
                 ViewItem.Input(transactionData.input.toHexString())
         )
         return listOf(SectionViewItem(viewItems))
@@ -212,11 +211,11 @@ class SendEvmTransactionViewModel(
     private fun convertError(error: Throwable) =
             when (val convertedError = error.convertedError) {
                 is SendEvmTransactionService.TransactionError.InsufficientBalance -> {
-                    translator.getString(R.string.EthereumTransaction_Error_InsufficientBalance, coinServiceFactory.baseCoinService.coinValue(convertedError.requiredBalance).getFormatted())
+                    Translator.getString(R.string.EthereumTransaction_Error_InsufficientBalance, coinServiceFactory.baseCoinService.coinValue(convertedError.requiredBalance).getFormatted())
                 }
                 is EvmError.InsufficientBalanceWithFee,
                 is EvmError.ExecutionReverted -> {
-                    translator.getString(R.string.EthereumTransaction_Error_InsufficientBalanceForFee, coinServiceFactory.baseCoinService.coin.code)
+                    Translator.getString(R.string.EthereumTransaction_Error_InsufficientBalanceForFee, coinServiceFactory.baseCoinService.coin.code)
                 }
                 else -> convertedError.message ?: convertedError.javaClass.simpleName
             }
