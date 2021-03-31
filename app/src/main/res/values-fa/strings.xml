@@ -336,8 +336,6 @@
     <string name="Approve_Spender">خرج کننده</string>
     <string name="Approve_YouApprove">شما تایید کردید</string>
     <!--Uniswap Info -->
-
-    <string name="SwapInfo_Title">Uniswap v.2</string>
     <string name="SwapInfo_Description">این سرویس تبادل توسط Uniswap، پروتکل تبادل رمز غیرمتمرکز ساخته شده بر روی بلاک چین اتریوم تأمین می شود.\n\n سرویس Uniswap کاملاً خودکار است و توسط قراردادهای هوشمند مدیریت می شود که با سد کردن هرگونه مسیر تقلب، مبادله رمزها را به روشی مطمئن تسهیل می کند.</string>
     <string name="SwapInfo_DexRelated">Uniswap مرتبط نیست</string>
     <string name="SwapInfo_AllowanceTitle">مستمری</string>
@@ -651,7 +649,6 @@
     <string name="CoinPage_Performance_Month"> 1Month </string>
     <string name="CoinPage_ReadMore">Read More</string>
     <string name="CoinPage_ReadLess">Read Less</string>
-
     <!--Rate list-->
     <string name="RateList_portfolio">نمونه کار</string>
     <string name="RateList_top100">۱۰۰ برتر</string>
