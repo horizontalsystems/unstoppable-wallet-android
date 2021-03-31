@@ -336,8 +336,6 @@
     <string name="Approve_Spender">스펜더</string>
     <string name="Approve_YouApprove">승인합니다</string>
     <!--Uniswap Info -->
-
-    <string name="SwapInfo_Title">Uniswap v.2</string>
     <string name="SwapInfo_Description">이 거래소 서비스는 Ethereum 블록체인을 기반으로 구축된 분산형 토큰 교환 프로토콜인 Uniswap에서 운영됩니다.\n\n\Uniswap는 스마트 계약에 의해 완전히 자동화되고 관리되어 부정행위를 할 수 있는 방법 없이 토큰 교환을 신뢰할 수 있는 방법으로 가능하게 합니다.</string>
     <string name="SwapInfo_DexRelated">Uniswap 관련됨</string>
     <string name="SwapInfo_AllowanceTitle">허용량</string>
@@ -356,7 +354,6 @@
     <string name="SwapInfo_TransactionSpeedTitle">거래 속도</string>
     <string name="SwapInfo_TransactionSpeedDescription">거래 수수료가 높은 거래는 처리 속도가 빨라집니다. 반대로도 그렇습니다.</string>
     <string name="SwapInfo_Site">%s 사이트</string>
-
     <!--Deposit-->
     <string name="Deposit_Title">수신%s</string>
     <string name="Deposit_Share">공유</string>
@@ -654,7 +651,6 @@
     <string name="CoinPage_Performance_Month">1 Month</string>
     <string name="CoinPage_ReadMore">Read More</string>
     <string name="CoinPage_ReadLess">Read Less</string>
-
     <!--Rate list-->
     <string name="RateList_portfolio">포트폴리오</string>
     <string name="RateList_top100">상위 100</string>
