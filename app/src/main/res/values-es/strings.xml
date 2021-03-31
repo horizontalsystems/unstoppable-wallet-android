@@ -336,8 +336,6 @@
     <string name="Approve_Spender">Gastador</string>
     <string name="Approve_YouApprove">Apruebas</string>
     <!--Uniswap Info -->
-
-    <string name="SwapInfo_Title">Uniswap v.2</string>
     <string name="SwapInfo_Description">Este servicio de intercambio está propulsado por Uniswap, un protocolo descentralizado de intercambio de tokens construido en blockchain de Ethereum.\n\nUniswap está completamente automatizado y gestionado por contratos inteligentes que facilitan el intercambio de tokens de una manera fiable sin ninguna intención para hacer estafas.</string>
     <string name="SwapInfo_DexRelated">Uniswap Relacionado</string>
     <string name="SwapInfo_AllowanceTitle">Permiso de acceso</string>
@@ -352,7 +350,6 @@
     <string name="SwapInfo_MaxSpendDescription">La cantidad mínima que un usuario va a recibir como resultado de una acción de intercambio.</string>
     <string name="SwapInfo_Other">Otro</string>
     <string name="SwapInfo_TransactionFeeTitle">Tarifa de Transacción</string>
-
     <string name="SwapInfo_TransactionFeeDescription">El costo estimado de procesamiento de la transacción dada en la blockchain de Ethereum. Las transacciones relacionadas con Uniswap normalmente costarán más que las transacciones genéricas de transferencia de token.</string>
     <string name="SwapInfo_TransactionSpeedTitle">Velocidad de transacción</string>
     <string name="SwapInfo_TransactionSpeedDescription">Las transacciones con una tarifa de transacción más alta darán como resultado velocidades de procesamiento más rápidas. Lo opuesto también.</string>
@@ -608,7 +605,6 @@ poner en peligro la seguridad de mis fondos.</string>
     <string name="CoinOption_bip84_Subtitle">Más nuevo (comenzar con %s...)</string>
     <!--Coin Page-->
     <string name="CoinPage_TimeDuration_Today">TDY</string>
-
     <string name="CoinPage_TimeDuration_Day">24H</string>
     <string name="CoinPage_TimeDuration_Week">7D</string>
     <string name="CoinPage_TimeDuration_Month">1M</string>
@@ -641,7 +637,6 @@ poner en peligro la seguridad de mis fondos.</string>
     <string name="CoinPage_inCirculation">In Circulation</string>
     <string name="CoinPage_TotalSupply">Total Supply</string>
     <string name="CoinPage_StartDate">Fecha de lanzamiento</string>
-
     <string name="CoinPage_MarketCap_Thousand">k</string>
     <string name="CoinPage_MarketCap_Million">M</string>
     <string name="CoinPage_MarketCap_Billion">B</string>
@@ -655,7 +650,6 @@ poner en peligro la seguridad de mis fondos.</string>
     <string name="CoinPage_Performance_Month">1 Month</string>
     <string name="CoinPage_ReadMore">Read More</string>
     <string name="CoinPage_ReadLess">Read Less</string>
-
     <!--Rate list-->
     <string name="RateList_portfolio">Cartera</string>
     <string name="RateList_top100">Top 100</string>
