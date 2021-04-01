@@ -53,6 +53,8 @@ class LocalStorageManager(private val preferences: SharedPreferences)
     private val BIOMETRIC_ENABLED = "biometric_auth_enabled"
     private val PIN = "lock_pin"
     private val MAIN_SHOWED_ONCE = "main_showed_once"
+    private val NOTIFICATION_ID = "notification_id"
+    private val NOTIFICATION_SERVER_TIME = "notification_server_time"
 
     val gson by lazy { Gson() }
 
@@ -316,5 +318,17 @@ class LocalStorageManager(private val preferences: SharedPreferences)
         get() = preferences.getBoolean(MAIN_SHOWED_ONCE, false)
         set(value) {
             preferences.edit().putBoolean(MAIN_SHOWED_ONCE, value).apply()
+        }
+
+    override var notificationId: String?
+        get() = preferences.getString(NOTIFICATION_ID, null)
+        set(value) {
+            preferences.edit().putString(NOTIFICATION_ID, value).apply()
+        }
+
+    override var notificationServerTime: Long
+        get() = preferences.getLong(NOTIFICATION_SERVER_TIME, 0)
+        set(value) {
+            preferences.edit().putLong(NOTIFICATION_SERVER_TIME, value).apply()
         }
 }

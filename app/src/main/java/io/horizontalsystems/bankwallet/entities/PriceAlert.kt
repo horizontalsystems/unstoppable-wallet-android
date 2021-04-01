@@ -8,7 +8,6 @@ import io.horizontalsystems.coinkit.models.CoinType
 @Entity
 class PriceAlert(
         @PrimaryKey val coinType: CoinType,
-        val notificationCoinCode: String,
         val coinName: String,
         var changeState: ChangeState,
         var trendState: TrendState

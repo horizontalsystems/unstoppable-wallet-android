@@ -6,12 +6,12 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.NotificationManagerCompat
 import androidx.preference.PreferenceManager
-import com.google.firebase.FirebaseApp
 import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.core.factories.AccountFactory
 import io.horizontalsystems.bankwallet.core.factories.AdapterFactory
 import io.horizontalsystems.bankwallet.core.factories.AddressParserFactory
 import io.horizontalsystems.bankwallet.core.managers.*
+import io.horizontalsystems.bankwallet.core.notifications.NotificationWorker
 import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.bankwallet.core.providers.FeeCoinProvider
 import io.horizontalsystems.bankwallet.core.providers.FeeRateProvider
@@ -189,8 +189,8 @@ class App : CoreApp() {
         notificationManager = NotificationManager(NotificationManagerCompat.from(this)).apply {
             backgroundManager.registerListener(this)
         }
-        notificationSubscriptionManager = NotificationSubscriptionManager(appDatabase)
-        priceAlertManager = PriceAlertManager(appDatabase, notificationSubscriptionManager, xRateManager)
+        notificationSubscriptionManager = NotificationSubscriptionManager(appDatabase, localStorage, networkManager, appConfigProvider)
+        priceAlertManager = PriceAlertManager(appDatabase, notificationSubscriptionManager, networkManager, notificationManager, appConfigProvider, localStorage)
 
         appVersionManager = AppVersionManager(systemInfoManager, localStorage).apply {
             backgroundManager.registerListener(this)
@@ -233,7 +233,7 @@ class App : CoreApp() {
 
         startManagers()
 
-        FirebaseApp.initializeApp(this)
+        NotificationWorker.startPeriodicWorker(instance)
     }
 
     override fun onTrimMemory(level: Int) {

@@ -1,73 +1,86 @@
 package io.horizontalsystems.bankwallet.core.managers
 
 import android.util.Log
-import com.google.firebase.messaging.FirebaseMessaging
+import io.horizontalsystems.bankwallet.core.IAppConfigProvider
+import io.horizontalsystems.bankwallet.core.ILocalStorage
+import io.horizontalsystems.bankwallet.core.INetworkManager
 import io.horizontalsystems.bankwallet.core.INotificationSubscriptionManager
 import io.horizontalsystems.bankwallet.core.storage.AppDatabase
+import io.horizontalsystems.bankwallet.entities.PriceAlert
 import io.horizontalsystems.bankwallet.entities.SubscriptionJob
-import io.reactivex.BackpressureStrategy
-import io.reactivex.Flowable
-import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.*
+import java.util.*
+import kotlin.collections.HashMap
 
-class NotificationSubscriptionManager(appDatabase: AppDatabase): INotificationSubscriptionManager {
+class NotificationSubscriptionManager(
+        appDatabase: AppDatabase,
+        private val localStorage: ILocalStorage,
+        private val networkManager: INetworkManager,
+        appConfigProvider: IAppConfigProvider
+) : INotificationSubscriptionManager {
 
     private val dao = appDatabase.subscriptionJobDao()
+    private val priceAlertDao = appDatabase.priceAlertsDao()
+
+    private val job = Job()
+    private val ioScope = CoroutineScope(Dispatchers.IO + job)
+
+    private val host = appConfigProvider.notificationUrl
 
     override fun processJobs() {
-        val jobs = dao.all()
-        jobs.forEach {
-            processJob(it)
+        ioScope.launch {
+            val jobs = dao.all()
+            jobs.forEach {
+                processJob(it)
+            }
         }
     }
 
     override fun addNewJobs(jobs: List<SubscriptionJob>) {
-        jobs.forEach {
-            dao.save(it)
-            processJob(it)
+        ioScope.launch {
+            jobs.forEach {
+                dao.save(it)
+                processJob(it)
+            }
         }
     }
 
-    private fun processJob(subscriptionJob: SubscriptionJob) {
-        val flowable = when (subscriptionJob.jobType) {
-            SubscriptionJob.JobType.Subscribe -> subscribe(subscriptionJob.topicName)
-            else -> unsubscribe(subscriptionJob.topicName)
+    override fun getNotificationId(): String {
+        var notificationId = localStorage.notificationId
+        if (notificationId == null) {
+            notificationId = UUID.randomUUID().toString()
+            localStorage.notificationId = notificationId
         }
-
-        val disposable = flowable
-                .firstOrError()
-                .subscribeOn(Schedulers.io())
-                .subscribe({
-                    dao.delete(subscriptionJob)
-                },{
-                    Log.e("NotifSubscrManager", "subscribe error", it)
-                })
+        return notificationId
     }
 
-     private fun subscribe(topicName: String): Flowable<Unit> {
-        return Flowable.create(({ emitter ->
-            FirebaseMessaging.getInstance().subscribeToTopic(topicName)
-                    .addOnCompleteListener { task ->
-                        if (task.isSuccessful){
-                            emitter.onNext(Unit)
-                        } else {
-                            emitter.onError(task.exception ?: Throwable("Error in subscribing to  notification topic"))
-                        }
-                        emitter.onComplete()
-                    }
-        }), BackpressureStrategy.BUFFER)
+    private suspend fun processJob(subscriptionJob: SubscriptionJob) {
+        try {
+            val priceAlert = priceAlertDao.priceAlert(subscriptionJob.coinType) ?: return
+            val body = getBody(priceAlert, subscriptionJob.stateType)
+            val notificationId = getNotificationId()
+
+            when (subscriptionJob.jobType) {
+                SubscriptionJob.JobType.Subscribe -> networkManager.subscribe(host, "subscribe/$notificationId", body)
+                SubscriptionJob.JobType.Unsubscribe -> networkManager.unsubscribe(host, "unsubscribe/$notificationId", body)
+            }
+
+            dao.delete(subscriptionJob)
+        } catch (e: Exception) {
+            Log.e("NotifSubscrManager", "subscribe error", e)
+        }
     }
 
-     private fun unsubscribe(topicName: String): Flowable<Unit> {
-        return Flowable.create(({ emitter ->
-            FirebaseMessaging.getInstance().unsubscribeFromTopic(topicName)
-                    .addOnCompleteListener { task ->
-                        if (task.isSuccessful){
-                            emitter.onNext(Unit)
-                        } else {
-                            emitter.onError(task.exception ?: Throwable("Error in unsubscribing to  notification topic"))
-                        }
-                        emitter.onComplete()
-                    }
-        }), BackpressureStrategy.BUFFER)
+    private fun getBody(priceAlert: PriceAlert, stateType: SubscriptionJob.StateType): HashMap<String, Any> {
+        return when (stateType) {
+            SubscriptionJob.StateType.Change -> {
+                val data = hashMapOf("coin_id" to priceAlert.coinType.ID, "change" to priceAlert.changeState.value)
+                hashMapOf("type" to "PRICE", "data" to data)
+            }
+            SubscriptionJob.StateType.Trend -> {
+                val data = hashMapOf("coin_id" to priceAlert.coinType.ID, "term" to priceAlert.trendState.value)
+                hashMapOf("type" to "TRENDS", "data" to data)
+            }
+        }
     }
 }
