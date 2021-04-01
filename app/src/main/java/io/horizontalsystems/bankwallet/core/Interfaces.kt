@@ -451,7 +451,6 @@ interface IPriceAlertManager {
 }
 
 interface INotificationSubscriptionManager {
-    fun getNotificationId(): String
     fun addNewJobs(jobs: List<SubscriptionJob>)
     fun processJobs()
 }

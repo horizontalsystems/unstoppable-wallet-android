@@ -11,6 +11,7 @@ import io.horizontalsystems.bankwallet.core.factories.AccountFactory
 import io.horizontalsystems.bankwallet.core.factories.AdapterFactory
 import io.horizontalsystems.bankwallet.core.factories.AddressParserFactory
 import io.horizontalsystems.bankwallet.core.managers.*
+import io.horizontalsystems.bankwallet.core.notifications.NotificationNetworkWrapper
 import io.horizontalsystems.bankwallet.core.notifications.NotificationWorker
 import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.bankwallet.core.providers.FeeCoinProvider
@@ -70,6 +71,7 @@ class App : CoreApp() {
         lateinit var numberFormatter: IAppNumberFormatter
         lateinit var addressParserFactory: AddressParserFactory
         lateinit var feeCoinProvider: FeeCoinProvider
+        lateinit var notificationNetworkWrapper: NotificationNetworkWrapper
         lateinit var notificationManager: INotificationManager
         lateinit var appVersionManager: AppVersionManager
         lateinit var ethereumRpcModeSettingsManager: IEthereumRpcModeSettingsManager
@@ -186,11 +188,12 @@ class App : CoreApp() {
 
         addressParserFactory = AddressParserFactory()
 
+        notificationNetworkWrapper = NotificationNetworkWrapper(localStorage, networkManager, appConfigProvider)
         notificationManager = NotificationManager(NotificationManagerCompat.from(this)).apply {
             backgroundManager.registerListener(this)
         }
-        notificationSubscriptionManager = NotificationSubscriptionManager(appDatabase, localStorage, networkManager, appConfigProvider)
-        priceAlertManager = PriceAlertManager(appDatabase, notificationSubscriptionManager, networkManager, notificationManager, appConfigProvider, localStorage)
+        notificationSubscriptionManager = NotificationSubscriptionManager(appDatabase, notificationNetworkWrapper)
+        priceAlertManager = PriceAlertManager(appDatabase, notificationSubscriptionManager, notificationManager, localStorage, notificationNetworkWrapper)
 
         appVersionManager = AppVersionManager(systemInfoManager, localStorage).apply {
             backgroundManager.registerListener(this)
