@@ -11,12 +11,10 @@ class NotificationWorker(appContext: Context, workerParams: WorkerParameters)
 
     override suspend fun doWork(): Result {
         return try {
-            App.priceAlertManager.
-            fetchNotifications()
-            Log.e("TAG", "doWork success: " )
+            App.priceAlertManager.fetchNotifications()
             Result.success()
         } catch (e: Exception) {
-            Log.e("TAG", "doWork failed: ", e)
+            Log.e("NotificationWorker", "doWork failed:", e)
             Result.failure()
         }
     }
