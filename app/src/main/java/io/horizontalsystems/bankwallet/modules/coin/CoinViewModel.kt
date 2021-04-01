@@ -46,7 +46,6 @@ class CoinViewModel(
     val uncheckIndicators = MutableLiveData<List<ChartIndicator>>()
     val latestRateLiveData = MutableLiveData<CurrencyValue>()
 
-    var notificationIconVisible = service.notificationsAreEnabled && service.notificationSupported
     var notificationIconActive = false
 
     private var enabledIndicator: ChartIndicator? = null

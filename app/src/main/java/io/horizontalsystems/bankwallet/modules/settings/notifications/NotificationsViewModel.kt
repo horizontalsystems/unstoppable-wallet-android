@@ -88,19 +88,16 @@ class NotificationsViewModel(
     private fun loadAlerts() {
         viewItems.clear()
 
-        val priceAlerts = priceAlertManager.getPriceAlerts()
+        val priceAlerts = priceAlertManager.getPriceAlerts().toMutableList()
 
         //list portfolio coins with Notification support
         portfolioCoins
-                .filter { priceAlertManager.notificationCode(it.type) != null }
                 .sortedBy { it.title }
                 .forEach { coin ->
-            val priceAlert = priceAlerts.firstOrNull { it.coinType == coin.type }
-            if (priceAlert != null){
-                priceAlerts.minus(priceAlert)
-            }
-            viewItems.addAll(getPriceAlertViewItems(coin.title, coin.type, priceAlert))
-        }
+                    val priceAlert = priceAlerts.firstOrNull { it.coinType == coin.type }
+                    priceAlerts.removeIf { it.coinType == coin.type }
+                    viewItems.addAll(getPriceAlertViewItems(coin.title, coin.type, priceAlert))
+                }
 
         //price alerts for Non portfolio coins
         priceAlerts

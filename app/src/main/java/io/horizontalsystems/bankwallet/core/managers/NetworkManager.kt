@@ -44,6 +44,18 @@ class NetworkManager : INetworkManager {
     override fun getEvmInfo(host: String, path: String): Single<JsonObject> {
         return ServiceEvmContractInfo.service(host).getTokenInfo(path)
     }
+
+    override suspend fun subscribe(host: String, path: String, body: Map<String, Any>): JsonObject {
+        return ServiceNotifications.service(host).subscribe(path, body.mapValues { it.value.toString() })
+    }
+
+    override suspend fun unsubscribe(host: String, path: String, body: Map<String, Any>): JsonObject {
+        return ServiceNotifications.service(host).unsubscribe(path, body.mapValues { it.value.toString() })
+    }
+
+    override suspend fun getNotifications(host: String, path: String): JsonObject {
+        return ServiceNotifications.service(host).getNotifications(path)
+    }
 }
 
 object ServiceFullTransaction {
@@ -97,6 +109,28 @@ object ServiceGuide {
     interface GuidesAPI {
         @GET
         fun getGuide(@Url path: String): Single<String>
+    }
+}
+
+object ServiceNotifications {
+    fun service(apiURL: String): NotificationsAPI {
+        return APIClient.retrofit(apiURL, 60)
+                .create(NotificationsAPI::class.java)
+    }
+
+    interface NotificationsAPI {
+
+        @GET
+        @Headers("Content-Type: application/json")
+        suspend fun getNotifications(@Url path: String): JsonObject
+
+        @POST
+        @Headers("Content-Type: application/json")
+        suspend fun subscribe(@Url path: String, @Body body: Map<String, String>): JsonObject
+
+        @POST
+        @Headers("Content-Type: application/json")
+        suspend fun unsubscribe(@Url path: String, @Body body: Map<String, String>): JsonObject
     }
 }
 

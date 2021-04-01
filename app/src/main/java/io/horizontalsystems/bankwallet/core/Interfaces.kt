@@ -65,6 +65,8 @@ interface ILocalStorage {
     var balanceHidden: Boolean
     var checkedTerms: List<Term>
     var mainShowedOnce: Boolean
+    var notificationId: String?
+    var notificationServerTime: Long
 
     fun clear()
 }
@@ -131,6 +133,10 @@ interface INetworkManager {
     fun getTransactionWithPost(host: String, path: String, body: Map<String, Any>): Flowable<JsonObject>
     fun ping(host: String, url: String, isSafeCall: Boolean): Flowable<Any>
     fun getEvmInfo(host: String, path: String): Single<JsonObject>
+
+    suspend fun subscribe(host: String, path: String, body: Map<String, Any>): JsonObject
+    suspend fun unsubscribe(host: String, path: String, body: Map<String, Any>): JsonObject
+    suspend fun getNotifications(host: String, path: String): JsonObject
 }
 
 interface IClipboardManager {
@@ -260,6 +266,7 @@ interface IAppConfigProvider {
     val infuraProjectId: String
     val infuraProjectSecret: String
     val btcCoreRpcUrl: String
+    val notificationUrl: String
     val etherscanApiKey: String
     val bscscanApiKey: String
     val guidesUrl: String
@@ -431,7 +438,6 @@ interface IAddTokenBlockchainService {
 
 interface IPriceAlertManager {
     val notificationChangedFlowable: Flowable<Unit>
-    fun notificationCode(coinType: CoinType): String?
     fun getPriceAlerts(): List<PriceAlert>
     fun savePriceAlert(coinType: CoinType, coinName: String, changeState: PriceAlert.ChangeState, trendState: PriceAlert.TrendState)
     fun getAlertStates(coinType: CoinType): Pair<PriceAlert.ChangeState, PriceAlert.TrendState>
@@ -440,9 +446,12 @@ interface IPriceAlertManager {
     fun enablePriceAlerts()
     fun disablePriceAlerts()
     fun deleteAlertsByAccountType(accountType: AccountType)
+
+    suspend fun fetchNotifications()
 }
 
 interface INotificationSubscriptionManager {
+    fun getNotificationId(): String
     fun addNewJobs(jobs: List<SubscriptionJob>)
     fun processJobs()
 }
