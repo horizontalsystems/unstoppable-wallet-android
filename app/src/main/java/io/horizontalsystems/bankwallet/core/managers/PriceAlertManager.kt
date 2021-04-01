@@ -1,8 +1,12 @@
 package io.horizontalsystems.bankwallet.core.managers
 
 import android.util.Log
-import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.core.ILocalStorage
+import io.horizontalsystems.bankwallet.core.INotificationManager
+import io.horizontalsystems.bankwallet.core.INotificationSubscriptionManager
+import io.horizontalsystems.bankwallet.core.IPriceAlertManager
 import io.horizontalsystems.bankwallet.core.notifications.NotificationFactory
+import io.horizontalsystems.bankwallet.core.notifications.NotificationNetworkWrapper
 import io.horizontalsystems.bankwallet.core.storage.AppDatabase
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.PriceAlert
@@ -12,17 +16,13 @@ import io.horizontalsystems.coinkit.models.CoinType
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.subjects.PublishSubject
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.withContext
 
 class PriceAlertManager(
         appDatabase: AppDatabase,
         private val notificationSubscriptionManager: INotificationSubscriptionManager,
-        private val networkManager: INetworkManager,
         private val notificationManager: INotificationManager,
-        private val appConfigProvider: IAppConfigProvider,
-        private val localStorageManager: ILocalStorage
+        private val localStorageManager: ILocalStorage,
+        private val notificationNetworkWrapper: NotificationNetworkWrapper
 ) : IPriceAlertManager {
 
     private val dao = appDatabase.priceAlertsDao()
@@ -88,29 +88,26 @@ class PriceAlertManager(
         if (priceAlerts.isEmpty())
             return
 
-        coroutineScope {
-            val notificationsId = notificationSubscriptionManager.getNotificationId()
-            val jsonObject = withContext(Dispatchers.Default) { networkManager.getNotifications(appConfigProvider.notificationUrl, "messages/$notificationsId") }
-            val messages = jsonObject.asJsonObject["messages"].asJsonArray.mapNotNull { jsonElement ->
-                NotificationFactory.getMessageFromJson(jsonElement.asJsonObject)
-            }
-
-            //get previous server time
-            val previousTime = localStorageManager.notificationServerTime
-
-            val testTimeFilter = messages.filter { it.timestamp <= previousTime }
-            Log.e("TAG", "fetchNotifications: messages with old timestamp ${testTimeFilter.size}" )
-
-            messages
-                    .filter { it.timestamp > previousTime }
-                    .forEach {
-                        notificationManager.show(it)
-                    }
-
-            //store new server time
-            val time = jsonObject.asJsonObject["server_time"].asNumber.toLong()
-            localStorageManager.notificationServerTime = time
+        val messagesJsonObject =notificationNetworkWrapper.fetchNotifications()
+        val messages = messagesJsonObject.asJsonObject["messages"].asJsonArray.mapNotNull { jsonElement ->
+            NotificationFactory.getMessageFromJson(jsonElement.asJsonObject)
         }
+
+        //get previous server time
+        val previousTime = localStorageManager.notificationServerTime
+
+        val testTimeFilter = messages.filter { it.timestamp <= previousTime }
+        Log.e("TAG", "fetchNotifications: messages with old timestamp ${testTimeFilter.size}")
+
+        messages
+                .filter { it.timestamp > previousTime }
+                .forEach {
+                    notificationManager.show(it)
+                }
+
+        //store new server time
+        val time = messagesJsonObject.asJsonObject["server_time"].asNumber.toLong()
+        localStorageManager.notificationServerTime = time
     }
 
     private fun updateSubscription(alerts: List<PriceAlert>, jobType: SubscriptionJob.JobType) {

@@ -1,22 +1,19 @@
 package io.horizontalsystems.bankwallet.core.managers
 
 import android.util.Log
-import io.horizontalsystems.bankwallet.core.IAppConfigProvider
-import io.horizontalsystems.bankwallet.core.ILocalStorage
-import io.horizontalsystems.bankwallet.core.INetworkManager
 import io.horizontalsystems.bankwallet.core.INotificationSubscriptionManager
+import io.horizontalsystems.bankwallet.core.notifications.NotificationNetworkWrapper
 import io.horizontalsystems.bankwallet.core.storage.AppDatabase
 import io.horizontalsystems.bankwallet.entities.PriceAlert
 import io.horizontalsystems.bankwallet.entities.SubscriptionJob
-import kotlinx.coroutines.*
-import java.util.*
-import kotlin.collections.HashMap
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
 class NotificationSubscriptionManager(
         appDatabase: AppDatabase,
-        private val localStorage: ILocalStorage,
-        private val networkManager: INetworkManager,
-        appConfigProvider: IAppConfigProvider
+        private val notificationNetworkWrapper: NotificationNetworkWrapper
 ) : INotificationSubscriptionManager {
 
     private val dao = appDatabase.subscriptionJobDao()
@@ -24,8 +21,6 @@ class NotificationSubscriptionManager(
 
     private val job = Job()
     private val ioScope = CoroutineScope(Dispatchers.IO + job)
-
-    private val host = appConfigProvider.notificationUrl
 
     override fun processJobs() {
         ioScope.launch {
@@ -45,25 +40,13 @@ class NotificationSubscriptionManager(
         }
     }
 
-    override fun getNotificationId(): String {
-        var notificationId = localStorage.notificationId
-        if (notificationId == null) {
-            notificationId = UUID.randomUUID().toString()
-            localStorage.notificationId = notificationId
-        }
-        return notificationId
-    }
-
     private suspend fun processJob(subscriptionJob: SubscriptionJob) {
         try {
             val priceAlert = priceAlertDao.priceAlert(subscriptionJob.coinType) ?: return
-            val body = getBody(priceAlert, subscriptionJob.stateType)
-            val notificationId = getNotificationId()
 
-            when (subscriptionJob.jobType) {
-                SubscriptionJob.JobType.Subscribe -> networkManager.subscribe(host, "subscribe/$notificationId", body)
-                SubscriptionJob.JobType.Unsubscribe -> networkManager.unsubscribe(host, "unsubscribe/$notificationId", body)
-            }
+            val body = getBody(priceAlert, subscriptionJob.stateType)
+
+            notificationNetworkWrapper.processSubscription(subscriptionJob.jobType, body)
 
             dao.delete(subscriptionJob)
         } catch (e: Exception) {
