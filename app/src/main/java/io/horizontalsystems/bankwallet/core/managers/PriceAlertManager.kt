@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.core.managers
 
-import android.util.Log
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.INotificationManager
 import io.horizontalsystems.bankwallet.core.INotificationSubscriptionManager
@@ -95,9 +94,6 @@ class PriceAlertManager(
 
         //get previous server time
         val previousTime = localStorageManager.notificationServerTime
-
-        val testTimeFilter = messages.filter { it.timestamp <= previousTime }
-        Log.e("TAG", "fetchNotifications: messages with old timestamp ${testTimeFilter.size}")
 
         messages
                 .filter { it.timestamp > previousTime }
