@@ -412,7 +412,7 @@
     <string name="Settings_ExperimentalFeatures">Deneysel Özellikler</string>
     <string name="Settings_BaseCurrency">Para birimi</string>
     <string name="Settings_Language">Dil</string>
-    <string name="Settings_LightMode">Aydınlık mod</string>
+    <string name="Settings_Theme">Theme</string>
     <string name="Settings_Terms">Şartlar</string>
     <string name="Settings_ShareThisWallet">Arkadaşlarına bahset</string>
     <string name="Settings_Faq">FAQ</string>
@@ -501,6 +501,11 @@
     <string name="NotificationBottomMenu_Short">Kısa</string>
     <string name="NotificationBottomMenu_LongTerm">Uzun Vade 6A</string>
     <string name="NotificationBottomMenu_Long">Uzun</string>
+    <!--Settings-->
+    <string name="SettingsTheme_Title">Theme</string>
+    <string name="SettingsTheme_Dark">Dark</string>
+    <string name="SettingsTheme_Light">Light</string>
+    <string name="SettingsTheme_System">System</string>
     <!--Errors-->
     <string name="Binance_Backend_Error_MemoRequired">Aktarım işleminde alıcı boş olmayan not istiyor</string>
     <string name="Binance_Backend_Error_RequiresDigits">Notun yalnızca rakam içermesini gerektirir</string>
