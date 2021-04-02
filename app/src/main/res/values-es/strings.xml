@@ -412,7 +412,7 @@
     <string name="Settings_ExperimentalFeatures">Características experimentales</string>
     <string name="Settings_BaseCurrency">Moneda principal</string>
     <string name="Settings_Language">Idioma</string>
-    <string name="Settings_LightMode">Modo ligero</string>
+    <string name="Settings_Theme">Theme</string>
     <string name="Settings_Terms">Términos</string>
     <string name="Settings_ShareThisWallet">Recomendar a un amigo</string>
     <string name="Settings_Faq">FAQ</string>
@@ -502,6 +502,11 @@ poner en peligro la seguridad de mis fondos.</string>
     <string name="NotificationBottomMenu_Short">Corto plazo</string>
     <string name="NotificationBottomMenu_LongTerm">Largo Plazo 6M</string>
     <string name="NotificationBottomMenu_Long">Largo plazo</string>
+    <!--Settings-->
+    <string name="SettingsTheme_Title">Theme</string>
+    <string name="SettingsTheme_Dark">Dark</string>
+    <string name="SettingsTheme_Light">Light</string>
+    <string name="SettingsTheme_System">System</string>
     <!--Errors-->
     <string name="Binance_Backend_Error_MemoRequired">El receptor requiere que el memo no esté vacío en la transacción de transferencia</string>
     <string name="Binance_Backend_Error_RequiresDigits">Es necesario que el memo contenga únicamente dígitos</string>
