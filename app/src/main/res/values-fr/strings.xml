@@ -413,7 +413,7 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="Settings_ExperimentalFeatures">Fonctionnalités expérimentales</string>
     <string name="Settings_BaseCurrency">Devise de Base</string>
     <string name="Settings_Language">Langue</string>
-    <string name="Settings_LightMode">Mode lumineux</string>
+    <string name="Settings_Theme">Theme</string>
     <string name="Settings_Terms">Conditions</string>
     <string name="Settings_ShareThisWallet">Partager avec ami</string>
     <string name="Settings_Faq">FAQ</string>
@@ -502,6 +502,11 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="NotificationBottomMenu_Short">Court</string>
     <string name="NotificationBottomMenu_LongTerm">Long terme 6M</string>
     <string name="NotificationBottomMenu_Long">Long</string>
+    <!--Settings-->
+    <string name="SettingsTheme_Title">Theme</string>
+    <string name="SettingsTheme_Dark">Dark</string>
+    <string name="SettingsTheme_Light">Light</string>
+    <string name="SettingsTheme_System">System</string>
     <!--Errors-->
     <string name="Binance_Backend_Error_MemoRequired">Le destinataire a besoin d\'une note non vide pour une opération de transfert</string>
     <string name="Binance_Backend_Error_RequiresDigits">Nécessite que le mémo ne contienne que des chiffres</string>
