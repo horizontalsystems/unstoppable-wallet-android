@@ -412,7 +412,7 @@
     <string name="Settings_ExperimentalFeatures">ویژگی های تجربی</string>
     <string name="Settings_BaseCurrency">ارز مرجع</string>
     <string name="Settings_Language">زبان</string>
-    <string name="Settings_LightMode">حالت روشن</string>
+    <string name="Settings_Theme">Theme</string>
     <string name="Settings_Terms">شرایط</string>
     <string name="Settings_ShareThisWallet">گفتن به دوستان</string>
     <string name="Settings_Faq">FAQ</string>
@@ -501,6 +501,11 @@
     <string name="NotificationBottomMenu_Short">کوتاه</string>
     <string name="NotificationBottomMenu_LongTerm">بلندمدت 6M</string>
     <string name="NotificationBottomMenu_Long">بلند</string>
+    <!--Settings-->
+    <string name="SettingsTheme_Title">Theme</string>
+    <string name="SettingsTheme_Dark">Dark</string>
+    <string name="SettingsTheme_Light">Light</string>
+    <string name="SettingsTheme_System">System</string>
     <!--Errors-->
     <string name="Binance_Backend_Error_MemoRequired">دریافت کننده در انتقال تراکنش ها به نمونه غیر خالی نیاز دارد</string>
     <string name="Binance_Backend_Error_RequiresDigits">به نمونه شامل تنها رقم نیاز دارد</string>
