@@ -412,7 +412,7 @@
     <string name="Settings_ExperimentalFeatures">실험적 기능</string>
     <string name="Settings_BaseCurrency">기초 통화</string>
     <string name="Settings_Language">언어</string>
-    <string name="Settings_LightMode">밝은 모드</string>
+    <string name="Settings_Theme">Theme</string>
     <string name="Settings_Terms">약관</string>
     <string name="Settings_ShareThisWallet">친구에게 추천하기</string>
     <string name="Settings_Faq">FAQ</string>
@@ -501,6 +501,11 @@
     <string name="NotificationBottomMenu_Short">단기</string>
     <string name="NotificationBottomMenu_LongTerm">장기 6M</string>
     <string name="NotificationBottomMenu_Long">장기</string>
+    <!--Settings-->
+    <string name="SettingsTheme_Title">Theme</string>
+    <string name="SettingsTheme_Dark">Dark</string>
+    <string name="SettingsTheme_Light">Light</string>
+    <string name="SettingsTheme_System">System</string>
     <!--Errors-->
     <string name="Binance_Backend_Error_MemoRequired">수신자는 송금 내역에 메모 기록을 필요로 합니다</string>
     <string name="Binance_Backend_Error_RequiresDigits">메모에는 숫자만 포함하셔야 합니다</string>
