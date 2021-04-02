@@ -34,6 +34,9 @@
             android:id="@+id/mainFragment_to_languageSettingsFragment"
             app:destination="@id/languageSettingsFragment" />
         <action
+            android:id="@+id/mainFragment_to_themeSwitchFragment"
+            app:destination="@id/themeSwitchFragment" />
+        <action
             android:id="@+id/mainFragment_to_aboutAppFragment"
             app:destination="@id/aboutAppFragment" />
         <action
@@ -164,6 +167,10 @@
         android:id="@+id/languageSettingsFragment"
         android:name="io.horizontalsystems.languageswitcher.LanguageSettingsFragment"
         tools:layout="@layout/fragment_language_settings" />
+    <fragment
+        android:id="@+id/themeSwitchFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.settings.theme.ThemeSwitchFragment"
+        tools:layout="@layout/fragment_theme_switcher" />
     <fragment
         android:id="@+id/termsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.settings.terms.TermsFragment"

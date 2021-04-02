@@ -490,7 +490,7 @@
     <string name="Settings_ExperimentalFeatures">Experimental Features</string>
     <string name="Settings_BaseCurrency">Base Currency</string>
     <string name="Settings_Language">Language</string>
-    <string name="Settings_LightMode">Light Mode</string>
+    <string name="Settings_Theme">Theme</string>
     <string name="Settings_Terms">Terms</string>
     <string name="Settings_ShareThisWallet">Tell Friends</string>
     <string name="Settings_InfoTitleWithVersion" translatable="false">Unstoppable %s</string>
@@ -606,6 +606,13 @@
     <string name="NotificationBottomMenu_Short">Short</string>
     <string name="NotificationBottomMenu_LongTerm">Long Term 6M</string>
     <string name="NotificationBottomMenu_Long">Long</string>
+
+    <!--Settings-->
+
+    <string name="SettingsTheme_Title">Theme</string>
+    <string name="SettingsTheme_Dark">Dark</string>
+    <string name="SettingsTheme_Light">Light</string>
+    <string name="SettingsTheme_System">System</string>
 
     <!--Errors-->
 

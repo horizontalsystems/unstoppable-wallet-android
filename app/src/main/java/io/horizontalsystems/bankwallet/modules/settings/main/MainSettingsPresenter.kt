@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.settings.main
 
 import androidx.lifecycle.ViewModel
-import com.trustwallet.walletconnect.models.WCPeerMeta
 import io.horizontalsystems.bankwallet.modules.settings.main.MainSettingsModule.IMainSettingsInteractor
 import io.horizontalsystems.bankwallet.modules.settings.main.MainSettingsModule.IMainSettingsInteractorDelegate
 import io.horizontalsystems.bankwallet.modules.settings.main.MainSettingsModule.IMainSettingsRouter
@@ -20,7 +19,7 @@ class MainSettingsPresenter(
         view.setBackedUp(interactor.allBackedUp)
         view.setBaseCurrency(helper.displayName(interactor.baseCurrency))
         view.setLanguage(interactor.currentLanguageDisplayName)
-        view.setLightMode(interactor.lightMode)
+        view.setThemeName(interactor.themeName)
         view.setAppVersion(interactor.appVersion)
         view.setTermsAccepted(interactor.termsAccepted)
         view.setPinIsSet(interactor.isPinSet)
@@ -75,9 +74,8 @@ class MainSettingsPresenter(
         router.showLanguageSettings()
     }
 
-    override fun didSwitchLightMode(lightMode: Boolean) {
-        interactor.lightMode = lightMode
-        router.reloadAppInterface()
+    override fun didTapTheme() {
+        router.showThemeSwitcher()
     }
 
     override fun didTapAboutApp() {

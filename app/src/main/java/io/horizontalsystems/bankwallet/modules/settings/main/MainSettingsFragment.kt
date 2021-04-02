@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import io.horizontalsystems.bankwallet.BuildConfig
@@ -15,7 +14,6 @@ import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.main.MainActivity
 import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListModule
-import io.horizontalsystems.core.CoreApp
 import io.horizontalsystems.core.getNavigationResult
 import io.horizontalsystems.languageswitcher.LanguageSettingsFragment
 import io.horizontalsystems.views.ListPosition
@@ -52,8 +50,8 @@ class MainSettingsFragment : BaseFragment() {
         val language = SettingsMenuItem(R.string.Settings_Language, R.drawable.ic_language, listPosition = ListPosition.Middle) {
             presenter.didTapLanguage()
         }
-        val lightMode = SettingsMenuSwitch(R.string.Settings_LightMode, R.drawable.ic_light_mode, listPosition = ListPosition.Middle) {
-            presenter.didSwitchLightMode(it)
+        val theme = SettingsMenuItem(R.string.Settings_Theme, R.drawable.ic_light_mode, listPosition = ListPosition.Middle) {
+            presenter.didTapTheme()
         }
         val experimentalFeatures = SettingsMenuItem(R.string.Settings_ExperimentalFeatures, R.drawable.ic_experimental, listPosition = ListPosition.Last) {
             presenter.didTapExperimentalFeatures()
@@ -90,7 +88,7 @@ class MainSettingsFragment : BaseFragment() {
                 notifications,
                 baseCurrency,
                 language,
-                lightMode,
+                theme,
                 experimentalFeatures,
                 null,
                 faq,
@@ -128,9 +126,9 @@ class MainSettingsFragment : BaseFragment() {
             mainSettingsAdapter.notifyChanged(language)
         })
 
-        presenterView.lightMode.observe(viewLifecycleOwner, { isChecked ->
-            lightMode.isChecked = isChecked
-            mainSettingsAdapter.notifyChanged(lightMode)
+        presenterView.currentThemeName.observe(viewLifecycleOwner, {
+            theme.value = getString(it)
+            mainSettingsAdapter.notifyChanged(theme)
         })
 
         presenterView.appVersion.observe(viewLifecycleOwner, { version ->
@@ -179,6 +177,10 @@ class MainSettingsFragment : BaseFragment() {
             findNavController().navigate(R.id.mainFragment_to_languageSettingsFragment, null, navOptions())
         })
 
+        router.showThemeSwitcherLiveEvent.observe(viewLifecycleOwner, {
+            findNavController().navigate(R.id.mainFragment_to_themeSwitchFragment, null, navOptions())
+        })
+
         router.showAboutLiveEvent.observe(viewLifecycleOwner, {
             findNavController().navigate(R.id.mainFragment_to_aboutAppFragment, null, navOptions())
         })
@@ -207,14 +209,6 @@ class MainSettingsFragment : BaseFragment() {
             val uri = Uri.parse(link)
             val intent = Intent(Intent.ACTION_VIEW, uri)
             activity?.startActivity(intent)
-        })
-
-        router.reloadAppLiveEvent.observe(viewLifecycleOwner, {
-            val nightMode = if (CoreApp.themeStorage.isLightModeOn)
-                AppCompatDelegate.MODE_NIGHT_NO else
-                AppCompatDelegate.MODE_NIGHT_YES
-
-            AppCompatDelegate.setDefaultNightMode(nightMode)
         })
 
         router.openWalletConnectLiveEvent.observe(viewLifecycleOwner, {

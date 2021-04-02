@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.settings.main
 
+import androidx.annotation.StringRes
 import androidx.lifecycle.MutableLiveData
 
 class MainSettingsView : MainSettingsModule.IMainSettingsView {
@@ -9,7 +10,7 @@ class MainSettingsView : MainSettingsModule.IMainSettingsView {
     val baseCurrency = MutableLiveData<String>()
     val walletConnectSessionCount = MutableLiveData<String?>()
     val language = MutableLiveData<String>()
-    val lightMode = MutableLiveData<Boolean>()
+    val currentThemeName = MutableLiveData<Int>()
     val appVersion = MutableLiveData<String>()
     val termsAccepted = MutableLiveData<Boolean>()
 
@@ -33,8 +34,8 @@ class MainSettingsView : MainSettingsModule.IMainSettingsView {
         this.language.postValue(language)
     }
 
-    override fun setLightMode(lightMode: Boolean) {
-        this.lightMode.postValue(lightMode)
+    override fun setThemeName(@StringRes themeName: Int) {
+        currentThemeName.postValue(themeName)
     }
 
     override fun setAppVersion(appVersion: String) {

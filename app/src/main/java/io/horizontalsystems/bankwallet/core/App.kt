@@ -20,6 +20,7 @@ import io.horizontalsystems.bankwallet.core.storage.*
 import io.horizontalsystems.bankwallet.modules.keystore.KeyStoreActivity
 import io.horizontalsystems.bankwallet.modules.launcher.LauncherActivity
 import io.horizontalsystems.bankwallet.modules.lockscreen.LockScreenActivity
+import io.horizontalsystems.bankwallet.modules.settings.theme.ThemeType
 import io.horizontalsystems.bankwallet.modules.tor.TorConnectionActivity
 import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectSessionManager
@@ -139,7 +140,6 @@ class App : CoreApp() {
             chartTypeStorage = this
             pinStorage = this
             thirdKeyboardStorage = this
-            themeStorage = this
             marketStorage = this
         }
 
@@ -224,19 +224,25 @@ class App : CoreApp() {
 
         activateCoinManager = ActivateCoinManager(coinKit, walletManager, accountManager)
 
-        val nightMode = if (CoreApp.themeStorage.isLightModeOn)
-            AppCompatDelegate.MODE_NIGHT_NO else
-            AppCompatDelegate.MODE_NIGHT_YES
-
-        if (AppCompatDelegate.getDefaultNightMode() != nightMode) {
-            AppCompatDelegate.setDefaultNightMode(nightMode)
-        }
+        setAppTheme()
 
         registerActivityLifecycleCallbacks(ActivityLifecycleCallbacks(torKitManager))
 
         startManagers()
 
         NotificationWorker.startPeriodicWorker(instance)
+    }
+
+    private fun setAppTheme() {
+        val nightMode = when (localStorage.currentTheme) {
+            ThemeType.Light -> AppCompatDelegate.MODE_NIGHT_NO
+            ThemeType.Dark -> AppCompatDelegate.MODE_NIGHT_YES
+            ThemeType.System -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+        }
+
+        if (AppCompatDelegate.getDefaultNightMode() != nightMode) {
+            AppCompatDelegate.setDefaultNightMode(nightMode)
+        }
     }
 
     override fun onTrimMemory(level: Int) {

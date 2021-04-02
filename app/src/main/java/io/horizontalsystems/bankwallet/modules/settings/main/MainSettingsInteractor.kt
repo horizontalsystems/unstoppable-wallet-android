@@ -1,8 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.settings.main
 
-import com.trustwallet.walletconnect.models.WCPeerMeta
 import io.horizontalsystems.bankwallet.core.IAppConfigProvider
 import io.horizontalsystems.bankwallet.core.IBackupManager
+import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.ITermsManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectSessionManager
 import io.horizontalsystems.core.*
@@ -10,7 +10,7 @@ import io.horizontalsystems.core.entities.Currency
 import io.reactivex.disposables.CompositeDisposable
 
 class MainSettingsInteractor(
-        private val themeStorage: IThemeStorage,
+        private val localStorage: ILocalStorage,
         private val backupManager: IBackupManager,
         private val languageManager: ILanguageManager,
         private val systemInfoManager: ISystemInfoManager,
@@ -47,6 +47,9 @@ class MainSettingsInteractor(
         })
     }
 
+    override val themeName: Int
+        get() = localStorage.currentTheme.getTitle()
+
     override val companyWebPageLink: String
         get() = appConfigProvider.companyWebPageLink
 
@@ -73,12 +76,6 @@ class MainSettingsInteractor(
 
     override val baseCurrency: Currency
         get() = currencyManager.baseCurrency
-
-    override var lightMode: Boolean
-        get() = themeStorage.isLightModeOn
-        set(value) {
-            themeStorage.isLightModeOn = value
-        }
 
     override val termsAccepted: Boolean
         get() = termsManager.termsAccepted
