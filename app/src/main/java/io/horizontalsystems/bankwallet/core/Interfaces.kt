@@ -9,6 +9,7 @@ import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
 import io.horizontalsystems.bankwallet.modules.market.MarketModule
 import io.horizontalsystems.bankwallet.modules.send.SendModule
+import io.horizontalsystems.bankwallet.modules.settings.theme.ThemeType
 import io.horizontalsystems.binancechainkit.BinanceChainKit
 import io.horizontalsystems.bitcoincore.core.IPluginData
 import io.horizontalsystems.coinkit.models.Coin
@@ -67,6 +68,7 @@ interface ILocalStorage {
     var mainShowedOnce: Boolean
     var notificationId: String?
     var notificationServerTime: Long
+    var currentTheme: ThemeType
 
     fun clear()
 }

@@ -13,16 +13,15 @@ import io.horizontalsystems.bankwallet.entities.TransactionDataSortingType
 import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
 import io.horizontalsystems.bankwallet.modules.market.MarketModule
 import io.horizontalsystems.bankwallet.modules.send.SendModule
+import io.horizontalsystems.bankwallet.modules.settings.theme.ThemeType
 import io.horizontalsystems.core.IPinStorage
-import io.horizontalsystems.core.IThemeStorage
 import io.horizontalsystems.core.IThirdKeyboard
 import io.horizontalsystems.core.entities.AppVersion
 import io.horizontalsystems.xrateskit.entities.ChartType
 
 class LocalStorageManager(private val preferences: SharedPreferences)
-    : ILocalStorage, IThemeStorage, IPinStorage, IChartTypeStorage, IThirdKeyboard, IMarketStorage {
+    : ILocalStorage, IPinStorage, IChartTypeStorage, IThirdKeyboard, IMarketStorage {
 
-    private val LIGHT_MODE_ENABLED = "light_mode_enabled"
     private val THIRD_KEYBOARD_WARNING_MSG = "third_keyboard_warning_msg"
     private val SEND_INPUT_TYPE = "send_input_type"
     private val BASE_CURRENCY_CODE = "base_currency_code"
@@ -55,6 +54,7 @@ class LocalStorageManager(private val preferences: SharedPreferences)
     private val MAIN_SHOWED_ONCE = "main_showed_once"
     private val NOTIFICATION_ID = "notification_id"
     private val NOTIFICATION_SERVER_TIME = "notification_server_time"
+    private val CURRENT_THEME = "current_theme"
 
     val gson by lazy { Gson() }
 
@@ -159,12 +159,10 @@ class LocalStorageManager(private val preferences: SharedPreferences)
         preferences.edit().clear().apply()
     }
 
-    //  IThemeStorage
-
-    override var isLightModeOn: Boolean
-        get() = preferences.getBoolean(LIGHT_MODE_ENABLED, false)
-        set(enabled) {
-            preferences.edit().putBoolean(LIGHT_MODE_ENABLED, enabled).apply()
+    override var currentTheme: ThemeType
+        get() = preferences.getString(CURRENT_THEME, null)?.let { ThemeType.valueOf(it) } ?: ThemeType.Dark
+        set(themeType) {
+            preferences.edit().putString(CURRENT_THEME, themeType.value).apply()
         }
 
     //  IKeyboardStorage
