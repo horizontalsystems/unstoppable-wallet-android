@@ -412,7 +412,7 @@
     <string name="Settings_ExperimentalFeatures">实验性功能</string>
     <string name="Settings_BaseCurrency">基础货币</string>
     <string name="Settings_Language">语言</string>
-    <string name="Settings_LightMode">简单模式</string>
+    <string name="Settings_Theme">Theme</string>
     <string name="Settings_Terms">条款</string>
     <string name="Settings_ShareThisWallet">分享给好友</string>
     <string name="Settings_Faq">FAQ</string>
@@ -501,6 +501,11 @@
     <string name="NotificationBottomMenu_Short">做空</string>
     <string name="NotificationBottomMenu_LongTerm">长期6个月</string>
     <string name="NotificationBottomMenu_Long">做多</string>
+    <!--Settings-->
+    <string name="SettingsTheme_Title">Theme</string>
+    <string name="SettingsTheme_Dark">Dark</string>
+    <string name="SettingsTheme_Light">Light</string>
+    <string name="SettingsTheme_System">System</string>
     <!--Errors-->
     <string name="Binance_Backend_Error_MemoRequired">收款人要求在转账交易中包含非空的备注</string>
     <string name="Binance_Backend_Error_RequiresDigits">要求备注仅包含数字</string>
