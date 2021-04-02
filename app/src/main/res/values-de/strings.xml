@@ -412,7 +412,7 @@
     <string name="Settings_ExperimentalFeatures">Experimentelles Feature</string>
     <string name="Settings_BaseCurrency">Währung</string>
     <string name="Settings_Language">Sprache</string>
-    <string name="Settings_LightMode">Licht Modus</string>
+    <string name="Settings_Theme">Theme</string>
     <string name="Settings_Terms">Bedingungen</string>
     <string name="Settings_ShareThisWallet">Freunden erzählen</string>
     <string name="Settings_Faq">FAQ</string>
@@ -501,6 +501,11 @@
     <string name="NotificationBottomMenu_Short">Kurz</string>
     <string name="NotificationBottomMenu_LongTerm">Langfristig 6M</string>
     <string name="NotificationBottomMenu_Long">Lang</string>
+    <!--Settings-->
+    <string name="SettingsTheme_Title">Theme</string>
+    <string name="SettingsTheme_Dark">Dark</string>
+    <string name="SettingsTheme_Light">Light</string>
+    <string name="SettingsTheme_System">System</string>
     <!--Errors-->
     <string name="Binance_Backend_Error_MemoRequired">Empfänger benötigt nicht-leeren Vermerk bei Transfer einer Transaktion</string>
     <string name="Binance_Backend_Error_RequiresDigits">Der Vermerk darf nur Zahlen enthalten</string>
