@@ -412,7 +412,7 @@
     <string name="Settings_ExperimentalFeatures">Экспериментальные Функции</string>
     <string name="Settings_BaseCurrency">Базовая Валюта</string>
     <string name="Settings_Language">Язык</string>
-    <string name="Settings_LightMode">Светлый Режим</string>
+    <string name="Settings_Theme">Theme</string>
     <string name="Settings_Terms">Условия Использования</string>
     <string name="Settings_ShareThisWallet">Рассказать Друзьям</string>
     <string name="Settings_Faq">FAQ</string>
@@ -504,6 +504,11 @@
     <string name="NotificationBottomMenu_Short">Короткая позиция</string>
     <string name="NotificationBottomMenu_LongTerm">Долгосрочный 6М</string>
     <string name="NotificationBottomMenu_Long">Длинная позиция</string>
+    <!--Settings-->
+    <string name="SettingsTheme_Title">Theme</string>
+    <string name="SettingsTheme_Dark">Dark</string>
+    <string name="SettingsTheme_Light">Light</string>
+    <string name="SettingsTheme_System">System</string>
     <!--Errors-->
     <string name="Binance_Backend_Error_MemoRequired">При отправке транзакции получателю необходимо заполнить поле мемо</string>
     <string name="Binance_Backend_Error_RequiresDigits">Поле мемо должно содержать только цифры</string>
