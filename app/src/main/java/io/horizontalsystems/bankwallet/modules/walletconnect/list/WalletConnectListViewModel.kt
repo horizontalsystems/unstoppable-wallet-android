@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.WalletConnectSession
+import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.views.ListPosition
 import io.reactivex.disposables.CompositeDisposable
 
@@ -14,13 +15,18 @@ class WalletConnectListViewModel(
 
     private val disposables = CompositeDisposable()
     val viewItemsLiveData = MutableLiveData<List<WalletConnectViewItem>>()
+    val startNewConnectionEvent = SingleLiveEvent<Unit>()
 
     init {
         service.itemsObservable
                 .subscribeIO { sync(it) }
                 .let { disposables.add(it) }
 
-        sync(service.items)
+        if (service.items.isEmpty()){
+            startNewConnectionEvent.call()
+        } else {
+            sync(service.items)
+        }
     }
 
     private fun sync(items: List<WalletConnectListService.Item>) {
