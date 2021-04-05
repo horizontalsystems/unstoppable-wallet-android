@@ -60,7 +60,7 @@
     </style>
 
     <style name="LauncherTheme" parent="Theme.AppTheme">
-        <item name="android:windowBackground">@color/dark</item>
+        <item name="android:windowBackground">@color/tyler</item>
         <item name="android:windowLightStatusBar">false</item>
     </style>
 
