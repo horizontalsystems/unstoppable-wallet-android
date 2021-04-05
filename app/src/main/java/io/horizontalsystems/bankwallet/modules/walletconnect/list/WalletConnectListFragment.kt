@@ -33,7 +33,7 @@ class WalletConnectListFragment : BaseFragment(), SessionViewHolder.Listener {
         }
 
         newConnect.setOnSingleClickListener {
-            WalletConnectMainModule.start(this, R.id.walletConnectListFragment_to_walletConnectMainFragment, navOptions())
+            startNewConnection()
         }
 
         val walletConnectListAdapter = WalletConnectListAdapter(this)
@@ -43,6 +43,14 @@ class WalletConnectListFragment : BaseFragment(), SessionViewHolder.Listener {
             walletConnectListAdapter.items = viewItems
             walletConnectListAdapter.notifyDataSetChanged()
         })
+
+        viewModel.startNewConnectionEvent.observe(viewLifecycleOwner, {
+            startNewConnection()
+        })
+    }
+
+    private fun startNewConnection() {
+        WalletConnectMainModule.start(this, R.id.walletConnectListFragment_to_walletConnectMainFragment, navOptions())
     }
 
     override fun onSessionClick(session: WalletConnectViewItem.Session) {
