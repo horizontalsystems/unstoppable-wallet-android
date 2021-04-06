@@ -29,10 +29,10 @@ class AddressParserTest {
         paymentData = AddressData(address = "address_data", version = "1.0", label = "test")
         checkPaymentData(addressParser, "bitcoin:address_data;version=1.0?label=test", paymentData)
 
-        paymentData = AddressData(address = "address_data", amount = 0.01)
+        paymentData = AddressData(address = "address_data", amount = "0.01".toBigDecimal())
         checkPaymentData(addressParser, "bitcoin:address_data?amount=0.01", paymentData)
 
-        paymentData = AddressData(address = "address_data", amount = 0.01, label = "test_sender")
+        paymentData = AddressData(address = "address_data", amount = "0.01".toBigDecimal(), label = "test_sender")
         checkPaymentData(addressParser, "bitcoin:address_data?amount=0.01?label=test_sender", paymentData)
 
         paymentData = AddressData(address = "address_data", parameters = mutableMapOf("custom" to "any"))
@@ -61,10 +61,10 @@ class AddressParserTest {
         paymentData = AddressData(address = "bitcoincash:address_data", version = "1.0", label = "test")
         checkPaymentData(addressParser, "bitcoincash:address_data;version=1.0?label=test", paymentData)
 
-        paymentData = AddressData(address = "bitcoincash:address_data", amount = 0.01)
+        paymentData = AddressData(address = "bitcoincash:address_data", amount = "0.01".toBigDecimal())
         checkPaymentData(addressParser, "bitcoincash:address_data?amount=0.01", paymentData)
 
-        paymentData = AddressData(address = "bitcoincash:address_data", amount = 0.01, label = "test_sender")
+        paymentData = AddressData(address = "bitcoincash:address_data", amount = "0.01".toBigDecimal(), label = "test_sender")
         checkPaymentData(addressParser, "bitcoincash:address_data?amount=0.01?label=test_sender", paymentData)
 
         paymentData = AddressData(address = "bitcoincash:address_data", parameters = mutableMapOf("custom" to "any"))
@@ -93,10 +93,10 @@ class AddressParserTest {
         paymentData = AddressData(address = "address_data", version = "1.0", label = "test")
         checkPaymentData(addressParser, "ethereum:address_data;version=1.0?label=test", paymentData)
 
-        paymentData = AddressData(address = "address_data", amount = 0.01)
+        paymentData = AddressData(address = "address_data", amount = "0.01".toBigDecimal())
         checkPaymentData(addressParser, "ethereum:address_data?amount=0.01", paymentData)
 
-        paymentData = AddressData(address = "address_data", amount = 0.01, label = "test_sender")
+        paymentData = AddressData(address = "address_data", amount = "0.01".toBigDecimal(), label = "test_sender")
         checkPaymentData(addressParser, "ethereum:address_data?amount=0.01?label=test_sender", paymentData)
 
         paymentData = AddressData(address = "address_data", parameters = mutableMapOf("custom" to "any"))
