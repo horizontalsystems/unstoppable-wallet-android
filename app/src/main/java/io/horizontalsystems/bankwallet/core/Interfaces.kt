@@ -136,8 +136,8 @@ interface INetworkManager {
     fun ping(host: String, url: String, isSafeCall: Boolean): Flowable<Any>
     fun getEvmInfo(host: String, path: String): Single<JsonObject>
 
-    suspend fun subscribe(host: String, path: String, body: Map<String, Any>): JsonObject
-    suspend fun unsubscribe(host: String, path: String, body: Map<String, Any>): JsonObject
+    suspend fun subscribe(host: String, path: String, body: String): JsonObject
+    suspend fun unsubscribe(host: String, path: String, body: String): JsonObject
     suspend fun getNotifications(host: String, path: String): JsonObject
 }
 

@@ -6,6 +6,7 @@ import io.horizontalsystems.coinkit.models.CoinType
 @Entity(primaryKeys = ["coinType", "stateType"])
 class SubscriptionJob(
         val coinType: CoinType,
+        val body: String,
         val stateType: StateType,
         val jobType: JobType
 ) {

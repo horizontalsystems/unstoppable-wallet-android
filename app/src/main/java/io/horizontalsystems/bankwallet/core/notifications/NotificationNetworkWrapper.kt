@@ -25,7 +25,7 @@ class NotificationNetworkWrapper(
             return notificationId
         }
 
-    suspend fun processSubscription(jobType: SubscriptionJob.JobType, body: HashMap<String, Any>) {
+    suspend fun processSubscription(jobType: SubscriptionJob.JobType, body: String) {
         when (jobType) {
             SubscriptionJob.JobType.Subscribe -> networkManager.subscribe(host, "subscribe/$notificationId", body)
             SubscriptionJob.JobType.Unsubscribe -> networkManager.unsubscribe(host, "unsubscribe/$notificationId", body)
