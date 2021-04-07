@@ -130,7 +130,7 @@ interface IRandomProvider {
 }
 
 interface INetworkManager {
-    fun getGuide(host: String, path: String): Single<String>
+    fun getMarkdown(host: String, path: String): Single<String>
     fun getTransaction(host: String, path: String, isSafeCall: Boolean): Flowable<JsonObject>
     fun getTransactionWithPost(host: String, path: String, body: Map<String, Any>): Flowable<JsonObject>
     fun ping(host: String, url: String, isSafeCall: Boolean): Flowable<Any>

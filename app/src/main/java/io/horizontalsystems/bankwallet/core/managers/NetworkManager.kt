@@ -24,7 +24,7 @@ import javax.net.ssl.X509TrustManager
 
 class NetworkManager : INetworkManager {
 
-    override fun getGuide(host: String, path: String): Single<String> {
+    override fun getMarkdown(host: String, path: String): Single<String> {
         return ServiceGuide.service(host).getGuide(path)
     }
 
