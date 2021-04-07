@@ -45,12 +45,12 @@ class NetworkManager : INetworkManager {
         return ServiceEvmContractInfo.service(host).getTokenInfo(path)
     }
 
-    override suspend fun subscribe(host: String, path: String, body: Map<String, Any>): JsonObject {
-        return ServiceNotifications.service(host).subscribe(path, body.mapValues { it.value.toString() })
+    override suspend fun subscribe(host: String, path: String, body: String): JsonObject {
+        return ServiceNotifications.service(host).subscribe(path, body)
     }
 
-    override suspend fun unsubscribe(host: String, path: String, body: Map<String, Any>): JsonObject {
-        return ServiceNotifications.service(host).unsubscribe(path, body.mapValues { it.value.toString() })
+    override suspend fun unsubscribe(host: String, path: String, body: String): JsonObject {
+        return ServiceNotifications.service(host).unsubscribe(path, body)
     }
 
     override suspend fun getNotifications(host: String, path: String): JsonObject {
@@ -126,11 +126,11 @@ object ServiceNotifications {
 
         @POST
         @Headers("Content-Type: application/json")
-        suspend fun subscribe(@Url path: String, @Body body: Map<String, String>): JsonObject
+        suspend fun subscribe(@Url path: String, @Body body: String): JsonObject
 
         @POST
         @Headers("Content-Type: application/json")
-        suspend fun unsubscribe(@Url path: String, @Body body: Map<String, String>): JsonObject
+        suspend fun unsubscribe(@Url path: String, @Body body: String): JsonObject
     }
 }
 

@@ -4,12 +4,8 @@ import android.util.Log
 import io.horizontalsystems.bankwallet.core.INotificationSubscriptionManager
 import io.horizontalsystems.bankwallet.core.notifications.NotificationNetworkWrapper
 import io.horizontalsystems.bankwallet.core.storage.AppDatabase
-import io.horizontalsystems.bankwallet.entities.PriceAlert
 import io.horizontalsystems.bankwallet.entities.SubscriptionJob
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 class NotificationSubscriptionManager(
         appDatabase: AppDatabase,
@@ -17,7 +13,6 @@ class NotificationSubscriptionManager(
 ) : INotificationSubscriptionManager {
 
     private val dao = appDatabase.subscriptionJobDao()
-    private val priceAlertDao = appDatabase.priceAlertsDao()
 
     private val job = Job()
     private val ioScope = CoroutineScope(Dispatchers.IO + job)
@@ -42,28 +37,11 @@ class NotificationSubscriptionManager(
 
     private suspend fun processJob(subscriptionJob: SubscriptionJob) {
         try {
-            val priceAlert = priceAlertDao.priceAlert(subscriptionJob.coinType) ?: return
-
-            val body = getBody(priceAlert, subscriptionJob.stateType)
-
-            notificationNetworkWrapper.processSubscription(subscriptionJob.jobType, body)
-
+            notificationNetworkWrapper.processSubscription(subscriptionJob.jobType, subscriptionJob.body)
             dao.delete(subscriptionJob)
-        } catch (e: Exception) {
+        } catch (e: Exception){
             Log.e("NotifSubscrManager", "subscribe error", e)
         }
     }
 
-    private fun getBody(priceAlert: PriceAlert, stateType: SubscriptionJob.StateType): HashMap<String, Any> {
-        return when (stateType) {
-            SubscriptionJob.StateType.Change -> {
-                val data = hashMapOf("coin_id" to priceAlert.coinType.ID, "change" to priceAlert.changeState.value)
-                hashMapOf("type" to "PRICE", "data" to data)
-            }
-            SubscriptionJob.StateType.Trend -> {
-                val data = hashMapOf("coin_id" to priceAlert.coinType.ID, "term" to priceAlert.trendState.value)
-                hashMapOf("type" to "TRENDS", "data" to data)
-            }
-        }
-    }
 }

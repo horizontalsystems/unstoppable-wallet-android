@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.core.managers
 
+import com.google.gson.Gson
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.INotificationManager
 import io.horizontalsystems.bankwallet.core.INotificationSubscriptionManager
@@ -110,10 +111,10 @@ class PriceAlertManager(
         val jobs = mutableListOf<SubscriptionJob>()
         alerts.forEach { alert ->
             if (alert.changeState != PriceAlert.ChangeState.OFF) {
-                jobs.add(SubscriptionJob(alert.coinType, SubscriptionJob.StateType.Change, jobType))
+                jobs.add(getChangeSubscriptionJob(alert.coinType, alert.changeState, jobType))
             }
             if (alert.trendState != PriceAlert.TrendState.OFF) {
-                jobs.add(SubscriptionJob(alert.coinType, SubscriptionJob.StateType.Trend, jobType))
+                jobs.add(getTrendSubscriptionJob(alert.coinType, alert.trendState, jobType))
             }
         }
         notificationSubscriptionManager.addNewJobs(jobs)
@@ -123,8 +124,8 @@ class PriceAlertManager(
         val jobs = mutableListOf<SubscriptionJob>()
 
         if (oldChangeState != newAlert.changeState) {
-            val subscribeJob = SubscriptionJob(newAlert.coinType, SubscriptionJob.StateType.Change, SubscriptionJob.JobType.Subscribe)
-            val unsubscribeJob = SubscriptionJob(newAlert.coinType, SubscriptionJob.StateType.Change, SubscriptionJob.JobType.Unsubscribe)
+            val subscribeJob = getChangeSubscriptionJob(newAlert.coinType, newAlert.changeState, SubscriptionJob.JobType.Subscribe)
+            val unsubscribeJob = getChangeSubscriptionJob(newAlert.coinType, oldChangeState, SubscriptionJob.JobType.Unsubscribe)
 
             when {
                 oldChangeState == PriceAlert.ChangeState.OFF -> {
@@ -139,8 +140,8 @@ class PriceAlertManager(
                 }
             }
         } else if (oldTrendState != newAlert.trendState) {
-            val subscribeJob = SubscriptionJob(newAlert.coinType, SubscriptionJob.StateType.Trend, SubscriptionJob.JobType.Subscribe)
-            val unsubscribeJob = SubscriptionJob(newAlert.coinType, SubscriptionJob.StateType.Trend, SubscriptionJob.JobType.Unsubscribe)
+            val subscribeJob = getTrendSubscriptionJob(newAlert.coinType, newAlert.trendState, SubscriptionJob.JobType.Subscribe)
+            val unsubscribeJob = getTrendSubscriptionJob(newAlert.coinType, oldTrendState, SubscriptionJob.JobType.Unsubscribe)
 
             when {
                 oldTrendState == PriceAlert.TrendState.OFF -> {
@@ -157,6 +158,22 @@ class PriceAlertManager(
         }
 
         notificationSubscriptionManager.addNewJobs(jobs)
+    }
+
+    companion object{
+        fun getChangeSubscriptionJob(coinType: CoinType, changeState: PriceAlert.ChangeState, subscribeType: SubscriptionJob.JobType): SubscriptionJob {
+            val data = hashMapOf("coin_id" to coinType.ID, "change" to changeState.getIntValue(), "period" to "24h")
+            val bodyMap = hashMapOf("type" to "PRICE", "data" to data)
+            val body = Gson().toJson(bodyMap)
+            return SubscriptionJob(coinType, body, SubscriptionJob.StateType.Change, subscribeType)
+        }
+
+        fun getTrendSubscriptionJob(coinType: CoinType, trendState: PriceAlert.TrendState, subscribeType: SubscriptionJob.JobType) : SubscriptionJob {
+            val data = hashMapOf("coin_id" to coinType.ID, "term" to trendState.value)
+            val bodyMap = hashMapOf("type" to "TRENDS", "data" to data)
+            val body = Gson().toJson(bodyMap)
+            return SubscriptionJob(coinType, body, SubscriptionJob.StateType.Trend, subscribeType)
+        }
     }
 
 }
