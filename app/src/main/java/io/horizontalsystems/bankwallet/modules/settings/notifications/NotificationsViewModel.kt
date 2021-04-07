@@ -103,8 +103,8 @@ class NotificationsViewModel(
         priceAlerts
                 .sortedBy { it.coinName }
                 .forEach { priceAlert ->
-            viewItems.addAll(getPriceAlertViewItems(priceAlert.coinName, priceAlert.coinType, priceAlert))
-        }
+                    viewItems.addAll(getPriceAlertViewItems(priceAlert.coinName, priceAlert.coinType, priceAlert))
+                }
 
         val deactivateAllButtonEnabled = priceAlerts.any { it.trendState != PriceAlert.TrendState.OFF || it.changeState != PriceAlert.ChangeState.OFF }
 
