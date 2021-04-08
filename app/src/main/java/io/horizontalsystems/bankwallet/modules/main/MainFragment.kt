@@ -7,21 +7,23 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.addCallback
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.managers.RateAppManager
 import io.horizontalsystems.bankwallet.modules.main.MainActivity.Companion.ACTIVE_TAB_KEY
+import io.horizontalsystems.bankwallet.modules.markdown.MarkdownFragment
 import io.horizontalsystems.bankwallet.modules.rateapp.RateAppDialogFragment
 import io.horizontalsystems.core.findNavController
 import kotlinx.android.synthetic.main.fragment_main.*
 import kotlinx.android.synthetic.main.fragment_main.view.*
 
-class MainFragment : Fragment(), RateAppDialogFragment.Listener {
+class MainFragment : BaseFragment(), RateAppDialogFragment.Listener {
 
     private val viewModel by viewModels<MainViewModel>{ MainModule.Factory() }
     private var bottomBadgeView: View? = null
@@ -61,10 +63,15 @@ class MainFragment : Fragment(), RateAppDialogFragment.Listener {
             }
         })
 
+        viewModel.showWhatsNewLiveEvent.observe(viewLifecycleOwner, Observer { changeLogFileName ->
+            val arguments = bundleOf(MarkdownFragment.markdownUrlKey to changeLogFileName, MarkdownFragment.showAsClosablePopupKey to true)
+            findNavController().navigate(R.id.mainFragment_to_markdownViewer, arguments, navOptionsFromBottom())
+        })
+
         viewModel.openPlayMarketLiveEvent.observe(viewLifecycleOwner, Observer {
             openAppInPlayMarket()
         })
-
+6
         viewModel.hideContentLiveData.observe(viewLifecycleOwner, Observer { hide ->
             screenSecureDim.isVisible = hide
         })

@@ -23,14 +23,31 @@ class MarkdownFragment : BaseFragment(), MarkdownContentAdapter.Listener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        toolbar.title = ""
-        toolbar.setNavigationOnClickListener {
-            findNavController().popBackStack()
+
+        if (arguments?.getBoolean(showAsClosablePopupKey) == true){
+            toolbar.inflateMenu(R.menu.markdown_viewer_menu)
+            toolbar.setOnMenuItemClickListener { item ->
+                when (item.itemId) {
+                    R.id.closeButton -> {
+                        findNavController().popBackStack()
+                        true
+                    }
+                    else -> false
+                }
+            }
+        } else {
+            toolbar.setNavigationIcon(R.drawable.ic_back)
+            toolbar.setNavigationOnClickListener {
+                findNavController().popBackStack()
+            }
         }
 
         rvBlocks.adapter = contentAdapter
 
-        val markdownUrl = arguments?.getString(markdownUrlKey)
+        val markdownUrl = arguments?.getString(markdownUrlKey) ?: run {
+            findNavController().popBackStack()
+            return
+        }
         val viewModel by viewModels<MarkdownViewModel> { MarkdownModule.Factory(markdownUrl) }
 
         observe(viewModel)
@@ -54,5 +71,6 @@ class MarkdownFragment : BaseFragment(), MarkdownContentAdapter.Listener {
 
     companion object {
         const val markdownUrlKey = "urlKey"
+        const val showAsClosablePopupKey = "showAsClosablePopupKey"
     }
 }

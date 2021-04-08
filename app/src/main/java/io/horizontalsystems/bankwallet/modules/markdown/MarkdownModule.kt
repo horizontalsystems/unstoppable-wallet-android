@@ -7,7 +7,7 @@ import io.reactivex.Single
 
 object MarkdownModule {
 
-    class Factory(private val guideUrl: String?) : ViewModelProvider.Factory {
+    class Factory(private val guideUrl: String) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val contentProvider = MarkdownContentProvider(App.networkManager)

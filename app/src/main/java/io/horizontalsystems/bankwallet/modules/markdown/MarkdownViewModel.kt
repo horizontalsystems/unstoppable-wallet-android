@@ -7,9 +7,10 @@ import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import org.commonmark.parser.Parser
+import java.net.URL
 
 class MarkdownViewModel(
-        private val markdownUrl: String?,
+        private val markdownUrl: String,
         private val connectivityManager: ConnectivityManager,
         private val markdownContentProvider: MarkdownContentProvider) : ViewModel() {
 
@@ -47,34 +48,40 @@ class MarkdownViewModel(
         val parser = Parser.builder().build()
         val document = parser.parse(content)
 
-        val markdownVisitor = MarkdownVisitorBlock(markdownUrl!!)
+        val markdownVisitor = MarkdownVisitorBlock(getUrlForParser(markdownUrl))
 
         document.accept(markdownVisitor)
 
         blocks.postValue(markdownVisitor.blocks + MarkdownBlock.Footer())
     }
 
-    private fun loadContent() {
-        markdownUrl?.let {
-            getContent(it)
-                    .subscribeOn(Schedulers.io())
-                    .doOnSubscribe {
-                        status = LoadStatus.Loading
-                    }
-                    .subscribe({
-                        status = LoadStatus.Loaded
-
-                        didFetchContent(it)
-                    }, {
-                        status = LoadStatus.Failed(it)
-                    })
-                    .let {
-                        disposables.add(it)
-                    }
+    private fun getUrlForParser(contentUrl: String): String {
+        return when (URL(contentUrl).protocol) {
+            "http", "https" -> contentUrl
+            else -> ""
         }
     }
 
-    private fun getContent(fileUrl: String): Single<String> {
-        return markdownContentProvider.getContent(fileUrl)
+    private fun loadContent() {
+        getContent(markdownUrl)
+                .subscribeOn(Schedulers.io())
+                .doOnSubscribe {
+                    status = LoadStatus.Loading
+                }
+                .subscribe({
+                    status = LoadStatus.Loaded
+
+                    didFetchContent(it)
+                }, {
+                    status = LoadStatus.Failed(it)
+                })
+                .let {
+                    disposables.add(it)
+                }
+
+    }
+
+    private fun getContent(contentUrl: String): Single<String> {
+        return markdownContentProvider.getContent(contentUrl)
     }
 }

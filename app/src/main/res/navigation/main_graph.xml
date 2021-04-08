@@ -79,6 +79,9 @@
         <action
             android:id="@+id/mainFragment_to_sendEvmFragment"
             app:destination="@id/sendEvmFragment" />
+        <action
+            android:id="@+id/mainFragment_to_markdownViewer"
+            app:destination="@id/markdownFragment" />
     </fragment>
     <fragment
         android:id="@+id/sendEvmFragment"
@@ -185,6 +188,9 @@
         <action
             android:id="@+id/aboutAppFragment_to_termsFragment"
             app:destination="@id/termsFragment" />
+        <action
+            android:id="@+id/aboutAppFragment_to_markdownViewer"
+            app:destination="@id/markdownFragment" />
     </fragment>
     <fragment
         android:id="@+id/notificationsFragment"

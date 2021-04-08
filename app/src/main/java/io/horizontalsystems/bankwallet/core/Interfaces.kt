@@ -69,6 +69,7 @@ interface ILocalStorage {
     var notificationId: String?
     var notificationServerTime: Long
     var currentTheme: ThemeType
+    var lastAppVersion: String?
 
     fun clear()
 }

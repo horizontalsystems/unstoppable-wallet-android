@@ -2,22 +2,28 @@ package io.horizontalsystems.bankwallet.modules.main
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.core.managers.ChangeLogsManager
 import io.horizontalsystems.bankwallet.core.managers.RateUsType
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.core.IPinComponent
 import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class MainViewModel(
         private val pinComponent: IPinComponent,
         rateAppManager: IRateAppManager,
         private val backupManager: IBackupManager,
         private val termsManager: ITermsManager,
-        accountManager: IAccountManager
+        accountManager: IAccountManager,
+        private val changeLogsManager: ChangeLogsManager
 ) : ViewModel() {
 
     val showRateAppLiveEvent = SingleLiveEvent<Unit>()
+    val showWhatsNewLiveEvent = SingleLiveEvent<String>()
     val openPlayMarketLiveEvent = SingleLiveEvent<Unit>()
     val hideContentLiveData = MutableLiveData<Boolean>()
     val setBadgeVisibleLiveData = MutableLiveData<Boolean>()
@@ -53,6 +59,8 @@ class MainViewModel(
                 .let {
                     disposables.add(it)
                 }
+
+        showWhatsNew()
     }
 
     override fun onCleared() {
@@ -68,6 +76,15 @@ class MainViewModel(
 
     fun sync(accounts: List<Account>) {
         transactionTabEnabledLiveData.postValue(accounts.isNotEmpty())
+    }
+
+    private fun showWhatsNew() {
+        viewModelScope.launch{
+            delay(2000)
+            if (changeLogsManager.shouldShowChangeLog()){
+                showWhatsNewLiveEvent.postValue(changeLogsManager.getChangeLog())
+            }
+        }
     }
 
     private fun showRateApp(showRateUs: RateUsType) {
