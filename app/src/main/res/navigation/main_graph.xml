@@ -387,6 +387,10 @@
         android:id="@+id/feeSpeedInfoFragment"
         android:name="io.horizontalsystems.bankwallet.ui.FeeInfoFragment"
         tools:layout="@layout/fragment_fee_info" />
+    <fragment
+        android:id="@+id/createAccountFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.createaccount.CreateAccountFragment"
+        tools:layout="@layout/fragment_create_account" />
 
     <!--  Dialogs/BottomSheets  -->
     <dialog

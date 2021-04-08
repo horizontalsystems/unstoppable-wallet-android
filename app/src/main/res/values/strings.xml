@@ -55,6 +55,11 @@
     <string name="Welcome_RestoreWallet">Restore Wallet</string>
     <string name="Welcome_Version" translatable="false">version %s</string>
 
+    <!--Create Wallet-->
+    <string name="CreateWallet_Title">New Wallet</string>
+    <string name="CreateWallet_Mnemonic">Mnemonic</string>
+    <string name="CreateWallet_N_Words">%s words</string>
+
     <!--Rate App-->
     <string name="RateApp_Title_Rate_This_App">Rate this App</string>
     <string name="RateApp_Description_Rate_This_App">Enjoying Unstoppable Wallet? Please take a moment to rate this app</string>

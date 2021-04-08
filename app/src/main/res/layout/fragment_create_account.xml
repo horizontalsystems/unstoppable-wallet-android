@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:windowBackground"
+    android:clickable="true"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:menu="@menu/create_account_menu"
+        app:navigationIcon="@drawable/ic_back"
+        app:title="@string/CreateWallet_Title"
+        app:titleTextAppearance="@style/Title3" />
+
+    <io.horizontalsystems.views.SettingsView
+        android:id="@+id/kind"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="12dp"
+        app:icon="@drawable/ic_key_20"
+        app:title="@string/CreateWallet_Mnemonic"
+        tools:value="@string/CreateWallet_N_Words" />
+
+</LinearLayout>
