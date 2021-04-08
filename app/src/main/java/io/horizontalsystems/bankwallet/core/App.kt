@@ -91,6 +91,7 @@ class App : CoreApp() {
         lateinit var marketFavoritesManager: MarketFavoritesManager
         lateinit var coinKit: CoinKit
         lateinit var activateCoinManager: ActivateCoinManager
+        lateinit var changeLogsManager: ChangeLogsManager
     }
 
     override fun onCreate() {
@@ -223,6 +224,8 @@ class App : CoreApp() {
         marketFavoritesManager = MarketFavoritesManager(appDatabase)
 
         activateCoinManager = ActivateCoinManager(coinKit, walletManager, accountManager)
+
+        changeLogsManager = ChangeLogsManager(systemInfoManager, localStorage)
 
         setAppTheme()
 
