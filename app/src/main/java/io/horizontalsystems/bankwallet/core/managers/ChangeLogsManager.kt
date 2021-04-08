@@ -8,26 +8,42 @@ class ChangeLogsManager(
         private val localStorage: ILocalStorage
 ) {
 
+    fun getChangeLog(): String {
+        return "file:///changelogs/changelog.md"
+    }
+
     fun shouldShowChangeLog(): Boolean {
-        val lastAppVersion = localStorage.lastAppVersion
+        val shownForVersion = localStorage.changelogShownForAppVersion
         val currentAppVersion = systemInfoManager.appVersion
 
-        if (lastAppVersion != null) {
-            if (Version(currentAppVersion) > Version(lastAppVersion)) {
-                localStorage.lastAppVersion = systemInfoManager.appVersion
-                return true
+        if (shownForVersion != null) {
+            return if (Version(currentAppVersion) > Version(shownForVersion)) {
+                updateShownAppVersion()
+                true
+            } else {
+                false
             }
-        } else if (Version(currentAppVersion).getMinorVersion() == 21) {
-            //todo remove this check in version 22
-            localStorage.lastAppVersion = systemInfoManager.appVersion
-            return true
         }
 
+        //todo remove this check in version 22
+        if (Version(currentAppVersion).getMinorVersion() == 21) {
+            val storedAppVersions = localStorage.appVersions
+            storedAppVersions.reversed().forEach {
+                val minorVersion = Version(it.version).getMinorVersion()
+                if (minorVersion != null && minorVersion < 21) {
+                    updateShownAppVersion()
+                    return true
+                }
+            }
+        }
+
+        //its fresh install, no need to show
+        updateShownAppVersion()
         return false
     }
 
-    fun getChangeLog(): String {
-        return "file:///changelogs/changelog.md"
+    private fun updateShownAppVersion() {
+        localStorage.changelogShownForAppVersion = systemInfoManager.appVersion
     }
 
 }
