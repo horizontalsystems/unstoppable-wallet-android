@@ -17,20 +17,17 @@ class ChangeLogsManager(
                 localStorage.lastAppVersion = systemInfoManager.appVersion
                 return true
             }
-        } else {
+        } else if (Version(currentAppVersion).getMinorVersion() == 21) {
             //todo remove this check in version 22
-            val currentMinorVersion = currentAppVersion.split(".").getOrNull(1)?.toIntOrNull() ?: return false
-            if (currentMinorVersion == 21) {
-                localStorage.lastAppVersion = systemInfoManager.appVersion
-                return true
-            }
+            localStorage.lastAppVersion = systemInfoManager.appVersion
+            return true
         }
 
         return false
     }
 
     fun getChangeLog(): String {
-        return "file:///changelogs/changelog21.md"
+        return "file:///changelogs/changelog.md"
     }
 
 }
@@ -39,6 +36,10 @@ class Version(private val value: String) : Comparable<Version> {
     //Semantic Version: Major/Minor/Patch
 
     private val splitted by lazy { value.split(".").map { it.toIntOrNull() ?: 0 }.toMutableList() }
+
+    fun getMinorVersion(): Int? {
+        return value.split(".").getOrNull(1)?.toIntOrNull()
+    }
 
     //compare only first two numbers, which stands for Major and Minor versions
     override fun compareTo(other: Version): Int {
