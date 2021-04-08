@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.modules.markdown
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
-import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import org.commonmark.parser.Parser
@@ -63,7 +62,7 @@ class MarkdownViewModel(
     }
 
     private fun loadContent() {
-        getContent(markdownUrl)
+        markdownContentProvider.getContent(markdownUrl)
                 .subscribeOn(Schedulers.io())
                 .doOnSubscribe {
                     status = LoadStatus.Loading
@@ -78,8 +77,6 @@ class MarkdownViewModel(
                 .let {
                     disposables.add(it)
                 }
-
     }
 
-    private fun getContent(contentUrl: String): Single<String> = markdownContentProvider.getContent(contentUrl)
 }
