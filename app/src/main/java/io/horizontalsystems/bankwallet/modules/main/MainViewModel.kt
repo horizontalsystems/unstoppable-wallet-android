@@ -80,8 +80,8 @@ class MainViewModel(
 
     private fun showWhatsNew() {
         viewModelScope.launch{
-            delay(2000)
             if (changeLogsManager.shouldShowChangeLog()){
+                delay(2000)
                 showWhatsNewLiveEvent.postValue(changeLogsManager.getChangeLog())
             }
         }

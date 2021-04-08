@@ -16,7 +16,7 @@ class MarkdownContentProvider(private val networkManager: INetworkManager) : Mar
                         App.instance.assets.open(assetFilePath).readBytes().toString(Charsets.UTF_8)
                 )
             }
-            else -> throw Exception("Invalid protocol")
+            else -> throw Exception("Invalid protocol: ${url.protocol}")
         }
     }
 }

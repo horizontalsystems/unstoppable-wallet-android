@@ -81,7 +81,5 @@ class MarkdownViewModel(
 
     }
 
-    private fun getContent(contentUrl: String): Single<String> {
-        return markdownContentProvider.getContent(contentUrl)
-    }
+    private fun getContent(contentUrl: String): Single<String> = markdownContentProvider.getContent(contentUrl)
 }
