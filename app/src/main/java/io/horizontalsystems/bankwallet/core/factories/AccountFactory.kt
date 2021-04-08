@@ -10,10 +10,11 @@ class AccountFactory : IAccountFactory {
 
     override fun account(type: AccountType, origin: AccountOrigin, backedUp: Boolean): Account {
         val id = UUID.randomUUID().toString()
+        val name = "Wallet 1"
 
         return Account(
                 id = id,
-                name = id,
+                name = name,
                 type = type,
                 origin = origin,
                 isBackedUp = backedUp
