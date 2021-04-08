@@ -55,7 +55,7 @@ class LocalStorageManager(private val preferences: SharedPreferences)
     private val NOTIFICATION_ID = "notification_id"
     private val NOTIFICATION_SERVER_TIME = "notification_server_time"
     private val CURRENT_THEME = "current_theme"
-    private val LAST_APP_VERSION = "last_app_version"
+    private val CHANGELOG_SHOWN_FOR_APP_VERSION = "changelog_shown_for_app_version"
 
     val gson by lazy { Gson() }
 
@@ -331,9 +331,9 @@ class LocalStorageManager(private val preferences: SharedPreferences)
             preferences.edit().putLong(NOTIFICATION_SERVER_TIME, value).apply()
         }
 
-    override var lastAppVersion: String?
-        get() = preferences.getString(LAST_APP_VERSION, null)
+    override var changelogShownForAppVersion: String?
+        get() = preferences.getString(CHANGELOG_SHOWN_FOR_APP_VERSION, null)
         set(value) {
-            preferences.edit().putString(LAST_APP_VERSION, value).apply()
+            preferences.edit().putString(CHANGELOG_SHOWN_FOR_APP_VERSION, value).apply()
         }
 }
