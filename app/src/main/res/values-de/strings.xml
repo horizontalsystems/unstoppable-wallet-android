@@ -421,6 +421,7 @@
     <string name="Settings_RateUs">Bewerten Sie uns</string>
     <string name="SettingsAboutApp_Title">Über die App</string>
     <string name="SettingsAboutApp_Site">Webseite</string>
+    <string name="SettingsAboutApp_WhatsNew">What\'s New</string>
     <string name="SettingsPrivacy_Info">Diese App gibt keine Ihrer Daten weiter. Da sie jedoch mit Blockchains kommuniziert, können einige öffentliche Daten wie z. B. die IP-Adresse möglicherweise durchsickern. Benutzen Sie den Info-Knopf oben rechts, um detaillierte Informationen über jeden Abschnitt zu erhalten.</string>
     <string name="SettingsPrivacy_ConnectionSettingsTitle">Internet</string>
     <string name="SettingsPrivacy_CommunicationSettingsTitle">Blockchain Sync</string>
