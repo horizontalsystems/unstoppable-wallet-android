@@ -160,9 +160,29 @@ class PriceAlertManager(
         notificationSubscriptionManager.addNewJobs(jobs)
     }
 
+    /*
+    JSON format
+    {
+        type: "PRICE",
+        data: {
+            coin_id: "aave|0x12312312",
+            period: "24h",
+            percent: 5
+        }
+    }
+
+    {
+        type: "TRENDS",
+        data: {
+            coin_id: "aave|0x12312312",
+            term: "short"
+        }
+    }
+    */
+
     companion object{
         fun getChangeSubscriptionJob(coinType: CoinType, changeState: PriceAlert.ChangeState, subscribeType: SubscriptionJob.JobType): SubscriptionJob {
-            val data = hashMapOf("coin_id" to coinType.ID, "change" to changeState.getIntValue(), "period" to "24h")
+            val data = hashMapOf("coin_id" to coinType.ID, "percent" to changeState.getIntValue(), "period" to "24h")
             val bodyMap = hashMapOf("type" to "PRICE", "data" to data)
             val body = Gson().toJson(bodyMap)
             return SubscriptionJob(coinType, body, SubscriptionJob.StateType.Change, subscribeType)
