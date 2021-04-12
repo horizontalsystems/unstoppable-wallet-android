@@ -15,7 +15,7 @@ class NotificationWorker(appContext: Context, workerParams: WorkerParameters)
             Result.success()
         } catch (e: Exception) {
             Log.e("NotificationWorker", "doWork failed:", e)
-            Result.failure()
+            Result.success()//mark as success, otherwise it will cancel all work
         }
     }
 
@@ -31,13 +31,9 @@ class NotificationWorker(appContext: Context, workerParams: WorkerParameters)
 
         private fun createPeriodicWorkRequest() =
                 PeriodicWorkRequestBuilder<NotificationWorker>(15, TimeUnit.MINUTES)
-                        .setConstraints(createConstraints())
                         .setBackoffCriteria(BackoffPolicy.LINEAR, PeriodicWorkRequest.MIN_BACKOFF_MILLIS, TimeUnit.MILLISECONDS)
                         .build()
 
-        private fun createConstraints() = Constraints.Builder()
-                .setRequiredNetworkType(NetworkType.CONNECTED)
-                .build()
     }
 
 }
