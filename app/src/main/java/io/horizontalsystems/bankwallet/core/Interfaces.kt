@@ -24,6 +24,7 @@ import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.subjects.Subject
+import retrofit2.Response
 import java.math.BigDecimal
 import java.math.BigInteger
 import java.util.*
@@ -139,7 +140,7 @@ interface INetworkManager {
 
     suspend fun subscribe(host: String, path: String, body: String): JsonObject
     suspend fun unsubscribe(host: String, path: String, body: String): JsonObject
-    suspend fun getNotifications(host: String, path: String): JsonObject
+    suspend fun getNotifications(host: String, path: String): Response<JsonObject>
 }
 
 interface IClipboardManager {

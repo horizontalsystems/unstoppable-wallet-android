@@ -8,6 +8,7 @@ import io.reactivex.Flowable
 import io.reactivex.Single
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
@@ -53,7 +54,7 @@ class NetworkManager : INetworkManager {
         return ServiceNotifications.service(host).unsubscribe(path, body)
     }
 
-    override suspend fun getNotifications(host: String, path: String): JsonObject {
+    override suspend fun getNotifications(host: String, path: String): Response<JsonObject> {
         return ServiceNotifications.service(host).getNotifications(path)
     }
 }
@@ -122,7 +123,7 @@ object ServiceNotifications {
 
         @GET
         @Headers("Content-Type: application/json")
-        suspend fun getNotifications(@Url path: String): JsonObject
+        suspend fun getNotifications(@Url path: String): Response<JsonObject>
 
         @POST
         @Headers("Content-Type: application/json")
