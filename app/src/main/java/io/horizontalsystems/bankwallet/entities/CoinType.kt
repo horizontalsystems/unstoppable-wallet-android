@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.entities
 
+import io.horizontalsystems.bankwallet.modules.restore.restoreselectcoins.RestoreSettingType
 import io.horizontalsystems.coinkit.models.CoinType
 
 fun CoinType.canSupport(accountType: AccountType) = when (this) {
@@ -48,4 +49,26 @@ val CoinType.predefinedAccountType: PredefinedAccountType
         CoinType.Bitcoin, CoinType.Litecoin, CoinType.BitcoinCash, CoinType.Dash, CoinType.Ethereum, is CoinType.Erc20, is CoinType.Unsupported -> PredefinedAccountType.Standard
         CoinType.BinanceSmartChain, is CoinType.Bep20, is CoinType.Bep2 -> PredefinedAccountType.Binance
         CoinType.Zcash -> PredefinedAccountType.Zcash
+    }
+
+val CoinType.coinSettingTypes: List<CoinSettingType>
+    get() = when (this) {
+        CoinType.Bitcoin,
+        CoinType.Litecoin -> listOf(CoinSettingType.derivation)
+        CoinType.BitcoinCash -> listOf(CoinSettingType.bitcoinCashCoinType)
+        else -> listOf()
+    }
+
+val CoinType.defaultSettingsArray: List<CoinSettings>
+    get() = when (this) {
+        CoinType.Bitcoin,
+        CoinType.Litecoin -> listOf(CoinSettings(mapOf(CoinSettingType.derivation to AccountType.Derivation.bip49.value)))
+        CoinType.BitcoinCash -> listOf(CoinSettings(mapOf(CoinSettingType.bitcoinCashCoinType to AccountType.Derivation.bip49.value)))
+        else -> listOf()
+    }
+
+val CoinType.restoreSettingTypes: List<RestoreSettingType>
+    get() = when (this) {
+        CoinType.Zcash -> listOf(RestoreSettingType.birthdayHeight)
+        else -> listOf()
     }
