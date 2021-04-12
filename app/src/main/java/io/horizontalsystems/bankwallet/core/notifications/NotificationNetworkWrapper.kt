@@ -5,6 +5,7 @@ import io.horizontalsystems.bankwallet.core.IAppConfigProvider
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.INetworkManager
 import io.horizontalsystems.bankwallet.entities.SubscriptionJob
+import retrofit2.Response
 import java.util.*
 
 class NotificationNetworkWrapper(
@@ -32,7 +33,7 @@ class NotificationNetworkWrapper(
         }
     }
 
-    suspend fun fetchNotifications(): JsonObject {
+    suspend fun fetchNotifications(): Response<JsonObject> {
         return networkManager.getNotifications(host, "messages/$notificationId")
     }
 
