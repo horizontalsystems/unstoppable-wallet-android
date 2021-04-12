@@ -58,7 +58,7 @@ class NotificationsViewModel(
 
     fun onResume() {
         updateControlsVisibility()
-        setWarningVisible.postValue(!notificationManager.isEnabled)
+        setWarningVisible.postValue(!notificationManager.enabledInPhone)
     }
 
     fun switchAlertNotification(checked: Boolean) {
@@ -82,7 +82,7 @@ class NotificationsViewModel(
     }
 
     private fun updateControlsVisibility() {
-        controlsVisible.postValue(notificationManager.isEnabled && localStorage.isAlertNotificationOn)
+        controlsVisible.postValue(notificationManager.enabled)
     }
 
     private fun loadAlerts() {
