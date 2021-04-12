@@ -194,7 +194,7 @@ class App : CoreApp() {
             backgroundManager.registerListener(this)
         }
         notificationSubscriptionManager = NotificationSubscriptionManager(appDatabase, notificationNetworkWrapper)
-        priceAlertManager = PriceAlertManager(appDatabase, notificationSubscriptionManager, notificationManager, localStorage, notificationNetworkWrapper)
+        priceAlertManager = PriceAlertManager(appDatabase, notificationSubscriptionManager, notificationManager, localStorage, notificationNetworkWrapper, backgroundManager)
 
         appVersionManager = AppVersionManager(systemInfoManager, localStorage).apply {
             backgroundManager.registerListener(this)

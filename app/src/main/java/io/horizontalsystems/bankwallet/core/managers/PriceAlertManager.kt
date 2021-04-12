@@ -1,10 +1,7 @@
 package io.horizontalsystems.bankwallet.core.managers
 
 import com.google.gson.Gson
-import io.horizontalsystems.bankwallet.core.ILocalStorage
-import io.horizontalsystems.bankwallet.core.INotificationManager
-import io.horizontalsystems.bankwallet.core.INotificationSubscriptionManager
-import io.horizontalsystems.bankwallet.core.IPriceAlertManager
+import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.notifications.NotificationFactory
 import io.horizontalsystems.bankwallet.core.notifications.NotificationNetworkWrapper
 import io.horizontalsystems.bankwallet.core.storage.AppDatabase
@@ -13,6 +10,7 @@ import io.horizontalsystems.bankwallet.entities.PriceAlert
 import io.horizontalsystems.bankwallet.entities.SubscriptionJob
 import io.horizontalsystems.bankwallet.entities.canSupport
 import io.horizontalsystems.coinkit.models.CoinType
+import io.horizontalsystems.core.BackgroundManager
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.subjects.PublishSubject
@@ -22,7 +20,8 @@ class PriceAlertManager(
         private val notificationSubscriptionManager: INotificationSubscriptionManager,
         private val notificationManager: INotificationManager,
         private val localStorageManager: ILocalStorage,
-        private val notificationNetworkWrapper: NotificationNetworkWrapper
+        private val notificationNetworkWrapper: NotificationNetworkWrapper,
+        private val backgroundManager: BackgroundManager
 ) : IPriceAlertManager {
 
     private val dao = appDatabase.priceAlertsDao()
@@ -86,6 +85,9 @@ class PriceAlertManager(
     override suspend fun fetchNotifications() {
         val priceAlerts = getPriceAlerts()
         if (priceAlerts.isEmpty())
+            return
+
+        if (backgroundManager.inForeground)
             return
 
         val messagesJsonObject =notificationNetworkWrapper.fetchNotifications()
