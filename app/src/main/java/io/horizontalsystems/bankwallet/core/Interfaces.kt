@@ -317,7 +317,8 @@ interface IAccountsStorage {
 }
 
 interface INotificationManager {
-    val isEnabled: Boolean
+    val enabledInPhone: Boolean
+    val enabled: Boolean
     fun clear()
     fun show(notification: AlertNotification)
 }

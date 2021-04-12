@@ -190,7 +190,7 @@ class App : CoreApp() {
         addressParserFactory = AddressParserFactory()
 
         notificationNetworkWrapper = NotificationNetworkWrapper(localStorage, networkManager, appConfigProvider)
-        notificationManager = NotificationManager(NotificationManagerCompat.from(this)).apply {
+        notificationManager = NotificationManager(NotificationManagerCompat.from(this), localStorage).apply {
             backgroundManager.registerListener(this)
         }
         notificationSubscriptionManager = NotificationSubscriptionManager(appDatabase, notificationNetworkWrapper)

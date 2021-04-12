@@ -8,6 +8,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.INotificationManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.AlertNotification
@@ -16,16 +17,22 @@ import io.horizontalsystems.core.BackgroundManager
 import android.app.NotificationManager as SystemNotificationManager
 
 class NotificationManager(
-        private val androidNotificationManager: NotificationManagerCompat
+        private val androidNotificationManager: NotificationManagerCompat,
+        private val localStorage: ILocalStorage
         ) : INotificationManager, BackgroundManager.Listener {
 
-    override val isEnabled: Boolean
+    override val enabledInPhone: Boolean
         get() = when {
             !androidNotificationManager.areNotificationsEnabled() -> false
             else -> {
                 val notificationChannel = androidNotificationManager.getNotificationChannel(channelId)
                 notificationChannel?.importance != NotificationManagerCompat.IMPORTANCE_NONE
             }
+        }
+
+    override val enabled: Boolean
+        get() {
+            return enabledInPhone && localStorage.isAlertNotificationOn
         }
 
     override fun willEnterForeground() {

@@ -16,7 +16,16 @@ object CoinModule {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             val currency = App.currencyManager.baseCurrency
             val rateFormatter = RateFormatter(currency)
-            val service = CoinService(coinType, currency, App.xRateManager, App.chartTypeStorage, App.priceAlertManager, App.marketFavoritesManager, App.appConfigProvider.guidesUrl)
+            val service = CoinService(
+                    coinType,
+                    currency,
+                    App.xRateManager,
+                    App.chartTypeStorage,
+                    App.priceAlertManager,
+                    App.notificationManager,
+                    App.marketFavoritesManager,
+                    App.appConfigProvider.guidesUrl
+            )
             return CoinViewModel(rateFormatter, service, coinCode, coinTitle, CoinViewFactory(currency, App.numberFormatter), listOf(service)) as T
         }
 

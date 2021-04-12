@@ -132,6 +132,7 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
 
     private fun updateNotificationMenuItem() {
         notificationMenuItem?.apply {
+            isVisible = viewModel.notificationIconVisible
             icon = context?.let {
                 val iconRes = if (viewModel.notificationIconActive) R.drawable.ic_notification_24 else R.drawable.ic_notification_disabled
                 ContextCompat.getDrawable(it, iconRes)

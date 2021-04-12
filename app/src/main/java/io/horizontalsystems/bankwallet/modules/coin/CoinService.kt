@@ -17,6 +17,7 @@ class CoinService(
         private val xRateManager: IRateManager,
         private val chartTypeStorage: IChartTypeStorage,
         private val priceAlertManager: IPriceAlertManager,
+        private val notificationManager: INotificationManager,
         private val marketFavoritesManager: MarketFavoritesManager,
         guidesBaseUrl: String
 ) : Clearable {
@@ -37,6 +38,9 @@ class CoinService(
         get() {
             return priceAlertManager.hasPriceAlert(coinType)
         }
+
+    val notificationsAreEnabled: Boolean
+        get() = notificationManager.enabled
 
     var coinMarketDetails: CoinMarketDetails? = null
 
