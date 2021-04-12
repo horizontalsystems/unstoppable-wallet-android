@@ -27,16 +27,16 @@ class CoinListAdapter(private val listener: Listener) : ListAdapter<CoinViewItem
         return CoinWithSwitchViewHolder(
                 inflate(parent, R.layout.view_holder_coin_manage_item, false),
                 onSwitch = { isChecked, index ->
-                    (getItem(index) as? CoinViewItem.ToggleVisible)?.let {
-                        onSwitchToggle(isChecked, it.coin)
-                        //update state in adapter item list: coins
-                        it.enabled = isChecked
-                    }
+//                    (getItem(index) as? CoinViewItem.ToggleVisible)?.let {
+//                        onSwitchToggle(isChecked, it.coin)
+//                        //update state in adapter item list: coins
+//                        it.enabled = isChecked
+//                    }
                 },
                 onClick = { index ->
-                    (getItem(index) as? CoinViewItem.ToggleHidden)?.coin?.let {
-                        listener.select(it)
-                    }
+//                    (getItem(index) as? CoinViewItem.ToggleHidden)?.coin?.let {
+//                        listener.select(it)
+//                    }
                 })
     }
 
@@ -55,19 +55,11 @@ class CoinListAdapter(private val listener: Listener) : ListAdapter<CoinViewItem
     companion object {
         private val diffCallback = object : DiffUtil.ItemCallback<CoinViewItem>() {
             override fun areItemsTheSame(oldItem: CoinViewItem, newItem: CoinViewItem): Boolean {
-                if ((oldItem as? CoinViewItem.ToggleHidden)?.coin?.id == (newItem as? CoinViewItem.ToggleHidden)?.coin?.id
-                        || (oldItem as? CoinViewItem.ToggleVisible)?.coin?.id == (newItem as? CoinViewItem.ToggleVisible)?.coin?.id) {
-                    return true
-                }
-                return false
+                return oldItem == newItem
             }
 
             override fun areContentsTheSame(oldItem: CoinViewItem, newItem: CoinViewItem): Boolean {
-                if (oldItem is CoinViewItem.ToggleHidden && newItem is CoinViewItem.ToggleHidden) {
-                    return oldItem.coin.id == newItem.coin.id && oldItem.listPosition == newItem.listPosition
-                } else if (oldItem is CoinViewItem.ToggleVisible && newItem is CoinViewItem.ToggleVisible) {
-                    return oldItem.coin.id == newItem.coin.id && oldItem.enabled == newItem.enabled && oldItem.listPosition == newItem.listPosition
-                } else return false
+                return oldItem == newItem
             }
         }
     }
@@ -91,27 +83,27 @@ class CoinWithSwitchViewHolder(
     }
 
     fun bind(viewItem: CoinViewItem) {
-        when (viewItem) {
-            is CoinViewItem.ToggleHidden -> {
-                set(viewItem.coin, viewItem.listPosition)
-
-                rightArrow.isVisible = true
-                toggleSwitch.isVisible = false
-            }
-            is CoinViewItem.ToggleVisible -> {
-                set(viewItem.coin, viewItem.listPosition)
-
-                rightArrow.isVisible = false
-                toggleSwitch.isVisible = true
-
-                // set switch value without triggering onChangeListener
-                toggleSwitch.setOnCheckedChangeListener(null)
-                toggleSwitch.isChecked = viewItem.enabled
-                toggleSwitch.setOnCheckedChangeListener { _, isChecked ->
-                    onSwitch.invoke(isChecked, bindingAdapterPosition)
-                }
-            }
-        }
+//        when (viewItem) {
+//            is CoinViewItem.ToggleHidden -> {
+//                set(viewItem.coin, viewItem.listPosition)
+//
+//                rightArrow.isVisible = true
+//                toggleSwitch.isVisible = false
+//            }
+//            is CoinViewItem.ToggleVisible -> {
+//                set(viewItem.coin, viewItem.listPosition)
+//
+//                rightArrow.isVisible = false
+//                toggleSwitch.isVisible = true
+//
+//                // set switch value without triggering onChangeListener
+//                toggleSwitch.setOnCheckedChangeListener(null)
+//                toggleSwitch.isChecked = viewItem.enabled
+//                toggleSwitch.setOnCheckedChangeListener { _, isChecked ->
+//                    onSwitch.invoke(isChecked, bindingAdapterPosition)
+//                }
+//            }
+//        }
 
     }
 
@@ -126,9 +118,6 @@ class CoinWithSwitchViewHolder(
     }
 }
 
-sealed class CoinViewItem {
-    class ToggleHidden(val coin: Coin, val listPosition: ListPosition) : CoinViewItem()
-    class ToggleVisible(val coin: Coin, var enabled: Boolean, val listPosition: ListPosition) : CoinViewItem()
-}
+data class CoinViewItem(val coin: Coin, val hasSettings: Boolean, val enabled: Boolean, val listPosition: ListPosition)
 
 data class CoinViewState(val featuredViewItems: List<CoinViewItem>, val viewItems: List<CoinViewItem>)
