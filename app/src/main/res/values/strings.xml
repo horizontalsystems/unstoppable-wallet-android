@@ -672,6 +672,12 @@
     <string name="ManageKeys_Show">Show Key</string>
     <string name="ManageKeys_Unlink">Delete</string>
 
+    <!--Manage Accounts-->
+    <string name="ManageAccounts_Title">Manage Wallets</string>
+    <string name="ManageAccounts_CreateNewWallet">Create New Wallet</string>
+    <string name="ManageAccounts_ImportWallet">Import Wallet</string>
+
+
     <!--Manage Keys Delete Alert-->
 
     <string name="ManageKeys_Delete_Title">Delete Wallet</string>

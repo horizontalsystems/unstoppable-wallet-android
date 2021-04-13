@@ -17,7 +17,7 @@
             app:destination="@id/manageWalletsFragment" />
         <action
             android:id="@+id/mainFragment_to_manageKeysFragment"
-            app:destination="@id/manageKeysFragment" />
+            app:destination="@id/manageAccountsFragment" />
         <action
             android:id="@+id/mainFragment_to_securitySettingsFragment"
             app:destination="@id/securitySettingsFragment" />
@@ -127,6 +127,15 @@
         <action
             android:id="@+id/manageKeysFragment_to_restoreFragment"
             app:destination="@id/restore_graph" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/manageAccountsFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsFragment"
+        tools:layout="@layout/fragment_manage_accounts">
+        <action
+            android:id="@+id/manageAccountsFragment_to_createWalletFragment"
+            app:destination="@id/createWalletFragment" />
     </fragment>
 
     <fragment
