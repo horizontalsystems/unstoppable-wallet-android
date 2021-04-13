@@ -7,6 +7,7 @@ import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.bankwallet.modules.market.Score
 import io.horizontalsystems.bankwallet.modules.market.list.IMarketListFetcher
+import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.xrateskit.entities.CoinMarket
@@ -15,12 +16,15 @@ import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.BehaviorSubject
+import java.math.BigDecimal
 import io.horizontalsystems.xrateskit.entities.TimePeriod as XRatesKitTimePeriod
 
 class MarketAdvancedSearchService(
         private val xRateManager: IRateManager,
         private val currencyManager: ICurrencyManager
 ) : Clearable, IMarketListFetcher {
+
+    private val allTimeDeltaPercent = BigDecimal.TEN
 
     var coinCount: Int = CoinList.Top250.itemsCount
         set(value) {
@@ -55,6 +59,36 @@ class MarketAdvancedSearchService(
             refreshCounter()
         }
     var filterPriceChange: Pair<Long?, Long?>? = null
+        set(value) {
+            field = value
+
+            refreshCounter()
+        }
+    var filterOutperformedBtcOn: Boolean = false
+        set(value) {
+            field = value
+
+            refreshCounter()
+        }
+    var filterOutperformedEthOn: Boolean = false
+        set(value) {
+            field = value
+
+            refreshCounter()
+        }
+    var filterOutperformedBnbOn: Boolean = false
+        set(value) {
+            field = value
+
+            refreshCounter()
+        }
+    var filterPriceCloseToAth: Boolean = false
+        set(value) {
+            field = value
+
+            refreshCounter()
+        }
+    var filterPriceCloseToAtl: Boolean = false
         set(value) {
             field = value
 
@@ -132,6 +166,11 @@ class MarketAdvancedSearchService(
         return filterByRange(filterMarketCap, coinMarket.marketInfo.marketCap?.toLong())
                 && filterByRange(filterVolume, coinMarket.marketInfo.volume.toLong())
                 && filterByRange(filterPriceChange, coinMarket.marketInfo.rateDiffPeriod.toLong())
+                && (!filterPriceCloseToAth || closeToAllTime(coinMarket.marketInfo.athChangePercentage))
+                && (!filterPriceCloseToAtl || closeToAllTime(coinMarket.marketInfo.atlChangePercentage))
+                && (!filterOutperformedBtcOn || outperformed(coinMarket.marketInfo.rateDiffPeriod, CoinType.Bitcoin))
+                && (!filterOutperformedEthOn || outperformed(coinMarket.marketInfo.rateDiffPeriod, CoinType.Ethereum))
+                && (!filterOutperformedBnbOn || outperformed(coinMarket.marketInfo.rateDiffPeriod, CoinType.Bep2("BNB")))
     }
 
     private fun filterByRange(filter: Pair<Long?, Long?>?, value: Long?): Boolean {
@@ -150,6 +189,20 @@ class MarketAdvancedSearchService(
         }
 
         return true
+    }
+
+    private fun coinMarket(coinType: CoinType): CoinMarket? = cache?.firstOrNull { it.data.type == coinType }
+
+    private fun outperformed(value: BigDecimal, coinType: CoinType): Boolean {
+        val coinMarket = coinMarket(coinType) ?: return false
+
+        return coinMarket.marketInfo.rateDiffPeriod < value
+    }
+
+    private fun closeToAllTime(value: BigDecimal?): Boolean {
+        value ?: return false
+
+        return value.abs() < allTimeDeltaPercent
     }
 
     override fun clear() {
