@@ -188,6 +188,11 @@
     <string name="Market_Filter_PricePeriod">Price Period</string>
     <string name="Market_Filter_PriceChange">Price Change</string>
     <string name="Market_Filter_ResetAll">Reset All</string>
+    <string name="Market_Filter_OutperformedBtc">Outperformed BTC</string>
+    <string name="Market_Filter_OutperformedEth">Outperformed ETH</string>
+    <string name="Market_Filter_OutperformedBnb">Outperformed BNB</string>
+    <string name="Market_Filter_PriceCloseToAth">Price Close To ATH</string>
+    <string name="Market_Filter_PriceCloseToAtl">Price Close To ATL</string>
 
     <string name="Market_Filter_Top_100">Top 100</string>
     <string name="Market_Filter_Top_250">Top 250</string>

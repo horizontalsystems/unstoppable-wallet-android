@@ -73,6 +73,36 @@ class MarketAdvancedSearchViewModel(
 
             service.filterPriceChange = value.item?.values
         }
+    var outperformedBtcOn = false
+        set(value) {
+            field = value
+            outperformedBtcOnFilter.postValue(value)
+            service.filterOutperformedBtcOn = value
+        }
+    var outperformedEthOn = false
+        set(value) {
+            field = value
+            outperformedEthOnFilter.postValue(value)
+            service.filterOutperformedEthOn = value
+        }
+    var outperformedBnbOn = false
+        set(value) {
+            field = value
+            outperformedBnbOnFilter.postValue(value)
+            service.filterOutperformedBnbOn = value
+        }
+    var priceCloseToAth = false
+        set(value) {
+            field = value
+            priceCloseToAthFilter.postValue(value)
+            service.filterPriceCloseToAth = value
+        }
+    var priceCloseToAtl = false
+        set(value) {
+            field = value
+            priceCloseToAtlFilter.postValue(value)
+            service.filterPriceCloseToAtl = value
+        }
 
     // LiveData
     val coinListViewItemLiveData = MutableLiveData(coinListViewItem)
@@ -85,6 +115,11 @@ class MarketAdvancedSearchViewModel(
     val showResultsEnabledLiveData = MutableLiveData(false)
     val errorLiveEvent = SingleLiveEvent<String>()
     val loadingLiveData = MutableLiveData(false)
+    val outperformedBtcOnFilter = MutableLiveData(false)
+    val outperformedEthOnFilter = MutableLiveData(false)
+    val outperformedBnbOnFilter = MutableLiveData(false)
+    val priceCloseToAthFilter = MutableLiveData(false)
+    val priceCloseToAtlFilter = MutableLiveData(false)
 
     val disposable = CompositeDisposable()
 

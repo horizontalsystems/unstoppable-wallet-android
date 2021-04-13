@@ -14,6 +14,10 @@
         <attr name="title" />
         <attr name="value" />
     </declare-styleable>
+    <declare-styleable name="MarketFilterSwitchView">
+        <attr name="title" />
+        <attr name="checked" format="boolean" />
+    </declare-styleable>
     <declare-styleable name="MarketMetricLargeView">
         <attr name="title" />
         <attr name="value" />
