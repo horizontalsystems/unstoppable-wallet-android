@@ -88,11 +88,7 @@ class PriceAlertManager(
     }
 
     override suspend fun fetchNotifications() {
-        val priceAlerts = getPriceAlerts()
-        if (priceAlerts.isEmpty())
-            return
-
-        if (backgroundManager.inForeground)
+        if (backgroundManager.inForeground || getPriceAlerts().isEmpty())
             return
 
         val response = notificationNetworkWrapper.fetchNotifications()
