@@ -96,6 +96,7 @@ interface IAccountManager {
     val accountsDeletedFlowable: Flowable<Unit>
 
     fun account(coinType: CoinType): Account?
+    fun account(id: String): Account?
     fun loadAccounts()
     fun save(account: Account)
     fun update(account: Account)

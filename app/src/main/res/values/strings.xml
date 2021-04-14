@@ -677,6 +677,12 @@
     <string name="ManageAccounts_CreateNewWallet">Create New Wallet</string>
     <string name="ManageAccounts_ImportWallet">Import Wallet</string>
 
+    <!--Manage Account-->
+    <string name="ManageAccount_Name">Name</string>
+    <string name="ManageAccount_Save">Save</string>
+    <string name="ManageAccount_RecoveryPhraseBackup">Backup</string>
+    <string name="ManageAccount_RecoveryPhraseShow">Show Key</string>
+    <string name="ManageAccount_Unlink">Unlink</string>
 
     <!--Manage Keys Delete Alert-->
 

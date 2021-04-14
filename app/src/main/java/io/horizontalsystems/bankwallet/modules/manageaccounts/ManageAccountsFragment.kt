@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.manageaccounts
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
+import io.horizontalsystems.bankwallet.modules.manageaccount.ManageAccountModule
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule.AccountViewItem
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule.ActionViewItem
 import io.horizontalsystems.core.findNavController
@@ -53,11 +53,11 @@ class ManageAccountsFragment : BaseFragment(), AccountViewHolder.Listener {
     }
 
     private fun onClickCreateWallet() {
-        Log.e("AAA", "onClickCreateWallet")
+
     }
 
     private fun onClickRestoreWallet() {
-        Log.e("AAA", "onClickRestoreWallet")
+
     }
 
     override fun onSelect(accountViewItem: AccountViewItem) {
@@ -65,7 +65,7 @@ class ManageAccountsFragment : BaseFragment(), AccountViewHolder.Listener {
     }
 
     override fun onEdit(accountViewItem: AccountViewItem) {
-        viewModel.onEdit(accountViewItem)
+        ManageAccountModule.start(this, navOptions(), accountViewItem.accountId)
     }
 
 }
