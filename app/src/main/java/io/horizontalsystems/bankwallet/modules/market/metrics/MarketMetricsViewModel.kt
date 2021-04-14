@@ -90,6 +90,22 @@ class MarketMetricsViewModel(
         disposables.clear()
     }
 
+    fun onBtcDominanceClick() {
+
+    }
+
+    fun on24VolumeClick() {
+
+    }
+
+    fun onDefiCapClick() {
+
+    }
+
+    fun onTvlInDefiClick() {
+
+    }
+
 }
 
 data class MarketMetrics(
