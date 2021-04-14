@@ -134,21 +134,20 @@
         android:name="io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsFragment"
         tools:layout="@layout/fragment_manage_accounts">
         <action
-            android:id="@+id/manageAccountsFragment_to_createWalletFragment"
-            app:destination="@id/createWalletFragment" />
+            android:id="@+id/manageAccountsFragment_to_createAccountFragment"
+            app:destination="@id/createAccountFragment" />
+        <action
+            android:id="@+id/manageAccountsFragment_to_restoreMnemonicFragment"
+            app:destination="@id/restoreMnemonicFragment" />
         <action
             android:id="@+id/manageAccountsFragment_to_manageAccount"
             app:destination="@id/manageAccountFragment" />
-
     </fragment>
 
     <fragment
         android:id="@+id/manageAccountFragment"
         android:name="io.horizontalsystems.bankwallet.modules.manageaccount.ManageAccountFragment"
         tools:layout="@layout/fragment_manage_account">
-        <action
-            android:id="@+id/manageAccountFragment_to_createWalletFragment"
-            app:destination="@id/createWalletFragment" />
     </fragment>
 
     <fragment
