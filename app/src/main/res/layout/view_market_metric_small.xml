@@ -2,31 +2,26 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    tools:background="@drawable/stateful_overview_card_background"
     tools:layout_height="wrap_content"
-    tools:layout_width="wrap_content"
+    tools:layout_width="match_parent"
     tools:parentTag="io.horizontalsystems.bankwallet.ui.extensions.MarketMetricSmallView">
 
-    <io.horizontalsystems.bankwallet.ui.extensions.PriceGradientView
-        android:id="@+id/diffCircle"
-        android:layout_width="3dp"
-        android:layout_height="36dp"
-        android:layout_marginTop="6dp"
-        android:alpha="0"
-        app:cardBackgroundColor="@color/transparent"
-        app:cardCornerRadius="3dp"
-        app:cardElevation="0dp"
-        app:gradient="@drawable/gradient_price_up"
-        app:gradientSecond="@drawable/gradient_price_down"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/title" />
+    <View
+        android:id="@+id/chartPlaceHolder"
+        android:layout_width="72dp"
+        android:layout_height="30dp"
+        android:background="@color/green_d"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
         android:id="@+id/title"
         style="@style/Micro"
-        android:layout_width="79dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:includeFontPadding="false"
         android:textColor="@color/grey"
-        android:visibility="invisible"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="BTC Dominance" />
@@ -36,11 +31,10 @@
         style="@style/Subhead2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="14dp"
-        android:includeFontPadding="false"
+        android:layout_marginTop="6dp"
         android:textColor="@color/bran"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/diffCircle"
+        app:layout_constraintTop_toBottomOf="@id/title"
         tools:text="64.09%" />
 
     <TextView
@@ -48,10 +42,10 @@
         style="@style/Caption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:includeFontPadding="false"
+        android:layout_marginTop="8dp"
         android:textColor="@color/remus"
-        app:layout_constraintBottom_toBottomOf="@id/diffCircle"
-        app:layout_constraintStart_toStartOf="@+id/value"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/value"
         tools:text="+6.91%" />
 
 </merge>
