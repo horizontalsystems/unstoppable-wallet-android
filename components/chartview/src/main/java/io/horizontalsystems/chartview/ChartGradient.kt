@@ -19,7 +19,7 @@ class ChartGradient(private val animator: ChartAnimator, override var isVisible:
     }
 
     fun setShader(color: Int) {
-        setGradient(setAlphaComponent(color, 0xCC), setAlphaComponent(color, 0x0D))
+        setGradient(setAlphaComponent(color, 0x0D), setAlphaComponent(color, 0x80))
     }
 
     fun setShape(rect: RectF) {
@@ -51,6 +51,6 @@ class ChartGradient(private val animator: ChartAnimator, override var isVisible:
     }
 
     private fun setGradient(colorStart: Int, colorEnd: Int) {
-        paint.shader = LinearGradient(0f, 0f, 0f, shape.bottom + 2, colorStart, colorEnd, Shader.TileMode.REPEAT)
+        paint.shader = LinearGradient(0f, 0f, shape.width(), 0f, colorStart, colorEnd, Shader.TileMode.REPEAT)
     }
 }
