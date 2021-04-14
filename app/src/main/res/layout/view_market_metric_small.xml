@@ -11,7 +11,7 @@
         android:id="@+id/chartPlaceHolder"
         android:layout_width="72dp"
         android:layout_height="30dp"
-        android:background="@color/green_d"
+        android:background="@color/steel_20"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

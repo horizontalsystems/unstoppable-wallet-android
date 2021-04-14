@@ -31,9 +31,14 @@ class MarketMetricsAdapter(private val viewModel: MarketMetricsViewModel, viewLi
     override fun onBindViewHolder(holder: MarketMetricsViewHolder, position: Int) = Unit
 
     override fun onBindViewHolder(holder: MarketMetricsViewHolder, position: Int, payloads: MutableList<Any>) {
-        holder.bind(getItem(position)) {
-            viewModel.refresh()
-        }
+        holder.bind(
+                getItem(position),
+                { viewModel.refresh() },
+                { viewModel.onBtcDominanceClick() },
+                { viewModel.on24VolumeClick() },
+                { viewModel.onDefiCapClick() },
+                { viewModel.onTvlInDefiClick() }
+        )
     }
 
     fun refresh() {
@@ -53,7 +58,14 @@ data class MarketMetricsWrapper(val marketMetrics: MarketMetrics?, val loading: 
 
 class MarketMetricsViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
-    fun bind(data: MarketMetricsWrapper?, onErrorClick: (() -> Unit)) {
+    fun bind(
+            data: MarketMetricsWrapper?,
+            onErrorClick: (() -> Unit),
+            onBtcDominanceClick: (() -> Unit),
+            on24VolumeClick: (() -> Unit),
+            onDefiCapClick: (() -> Unit),
+            onTvlInDefiClick: (() -> Unit)
+    ) {
         val metrics = data?.marketMetrics
         val diff = metrics?.totalMarketCap?.diff
         diff?.let {
@@ -66,6 +78,13 @@ class MarketMetricsViewHolder(override val containerView: View) : RecyclerView.V
         volume24h.setMetricData(metrics?.volume24h)
         defiCap.setMetricData(metrics?.defiCap)
         defiTvl.setMetricData(metrics?.defiTvl)
+
+        metrics?.let {
+            btcDominance.setOnClickListener { onBtcDominanceClick() }
+            volume24h.setOnClickListener { on24VolumeClick() }
+            defiCap.setOnClickListener { onDefiCapClick() }
+            defiTvl.setOnClickListener { onTvlInDefiClick() }
+        }
 
         marketCapTitle.alpha = if (metrics == null) 0.5f else 1f
         marketCapValue.text = metrics?.totalMarketCap?.value
