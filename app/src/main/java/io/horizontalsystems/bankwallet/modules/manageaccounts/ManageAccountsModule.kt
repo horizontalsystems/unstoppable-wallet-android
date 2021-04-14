@@ -19,7 +19,7 @@ object ManageAccountsModule {
     }
 
     data class AccountViewItem(
-            val id: String,
+            val accountId: String,
             val title: String,
             val subtitle: String,
             val selected: Boolean,

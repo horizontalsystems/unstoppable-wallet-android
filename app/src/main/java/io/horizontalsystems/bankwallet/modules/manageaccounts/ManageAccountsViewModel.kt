@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.manageaccounts
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.subscribeIO
@@ -43,14 +42,8 @@ class ManageAccountsViewModel(
     }
 
     fun onSelect(accountViewItem: AccountViewItem) {
-        Log.e("AAA", "onSelect ${accountViewItem.title} - ${accountViewItem.subtitle}")
 
-        viewItemsLiveData.postValue(service.accounts.map { getViewItem(it, it.id == accountViewItem.id) })
+        viewItemsLiveData.postValue(service.accounts.map { getViewItem(it, it.id == accountViewItem.accountId) })
     }
-
-    fun onEdit(accountViewItem: AccountViewItem) {
-        Log.e("AAA", "onEdit: ${accountViewItem.title} - ${accountViewItem.subtitle}")
-    }
-
 
 }

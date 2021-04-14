@@ -136,6 +136,19 @@
         <action
             android:id="@+id/manageAccountsFragment_to_createWalletFragment"
             app:destination="@id/createWalletFragment" />
+        <action
+            android:id="@+id/manageAccountsFragment_to_manageAccount"
+            app:destination="@id/manageAccountFragment" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/manageAccountFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.manageaccount.ManageAccountFragment"
+        tools:layout="@layout/fragment_manage_account">
+        <action
+            android:id="@+id/manageAccountFragment_to_createWalletFragment"
+            app:destination="@id/createWalletFragment" />
     </fragment>
 
     <fragment

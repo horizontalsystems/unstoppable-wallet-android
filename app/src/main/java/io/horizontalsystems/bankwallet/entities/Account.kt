@@ -4,11 +4,10 @@ import android.os.Parcelable
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.coinkit.models.CoinType
 import kotlinx.android.parcel.Parcelize
-import java.util.*
 
 @Parcelize
 class Account(val id: String,
-              val name: String,
+              var name: String,
               val type: AccountType,
               val origin: AccountOrigin,
               var isBackedUp: Boolean = false
@@ -23,7 +22,7 @@ class Account(val id: String,
     }
 
     override fun hashCode(): Int {
-        return Objects.hash(name, type)
+        return id.hashCode()
     }
 }
 
