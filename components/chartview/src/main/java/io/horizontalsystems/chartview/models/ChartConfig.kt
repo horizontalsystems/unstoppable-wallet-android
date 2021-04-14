@@ -27,7 +27,7 @@ class ChartConfig(private val context: Context, attrs: AttributeSet?) {
     var gridEdgeOffset = dp2px(5f)
 
     var curveColor = context.getColor(R.color.red_d)
-    var curvePressedColor = context.getColor(R.color.light)
+    var curvePressedColor = context.getColor(R.color.oz)
     var curveOutdatedColor = context.getColor(R.color.grey_50)
     var curveVerticalOffset = dp2px(18f)
     var curveFastColor = Color.parseColor("#801A60FF")
@@ -54,13 +54,10 @@ class ChartConfig(private val context: Context, attrs: AttributeSet?) {
     init {
         val ta = context.obtainStyledAttributes(attrs, R.styleable.Chart)
         try {
-            trendUpColor = ta.getInt(R.styleable.Chart_trendUpColor, trendUpColor)
-            trendDownColor = ta.getInt(R.styleable.Chart_trendDownColor, trendDownColor)
             timelineTextColor = ta.getInt(R.styleable.Chart_timelineTextColor, timelineTextColor)
             gridTextColor = ta.getInt(R.styleable.Chart_gridTextColor, gridTextColor)
             gridLineColor = ta.getInt(R.styleable.Chart_gridColor, gridLineColor)
             gridDashColor = ta.getInt(R.styleable.Chart_gridDashColor, gridDashColor)
-            curvePressedColor = ta.getInt(R.styleable.Chart_curvePressedColor, curvePressedColor)
             curveOutdatedColor = ta.getInt(R.styleable.Chart_partialChartColor, curveOutdatedColor)
             cursorColor = ta.getInt(R.styleable.Chart_cursorColor, cursorColor)
         } finally {

@@ -208,16 +208,13 @@
                 android:layout_height="180dp"
                 android:layout_marginTop="4dp"
                 app:cursorColor="@color/oz"
-                app:curvePressedColor="@color/oz"
                 app:gridDashColor="@color/steel_10"
                 app:gridTextColor="@color/nina"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/chartPointsInfo"
                 app:partialChartColor="@color/grey_50"
-                app:timelineTextColor="@color/nina"
-                app:trendDownColor="@color/red_d"
-                app:trendUpColor="@color/green_d" />
+                app:timelineTextColor="@color/nina" />
 
             <View
                 android:id="@+id/border3"
