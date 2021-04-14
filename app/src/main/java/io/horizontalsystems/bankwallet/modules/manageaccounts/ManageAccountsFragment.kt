@@ -53,11 +53,11 @@ class ManageAccountsFragment : BaseFragment(), AccountViewHolder.Listener {
     }
 
     private fun onClickCreateWallet() {
-
+        findNavController().navigate(R.id.manageAccountsFragment_to_createAccountFragment, null, navOptions())
     }
 
     private fun onClickRestoreWallet() {
-
+        findNavController().navigate(R.id.manageAccountsFragment_to_restoreMnemonicFragment, null, navOptions())
     }
 
     override fun onSelect(accountViewItem: AccountViewItem) {
