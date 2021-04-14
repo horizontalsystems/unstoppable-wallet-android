@@ -2,13 +2,10 @@
 <resources>
     <declare-styleable name="Chart">
         <attr name="cursorColor" format="color" />
-        <attr name="curvePressedColor" format="color" />
         <attr name="gridColor" format="color" />
         <attr name="gridTextColor" format="color" />
         <attr name="gridDashColor" format="color" />
         <attr name="timelineTextColor" format="color" />
-        <attr name="trendUpColor" format="color" />
-        <attr name="trendDownColor" format="color" />
         <attr name="partialChartColor" format="color" />
     </declare-styleable>
 </resources>
