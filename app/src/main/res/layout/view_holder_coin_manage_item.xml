@@ -73,28 +73,25 @@
         tools:text="ERC20"
         tools:visibility="visible" />
 
-    <Switch
+    <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/toggleSwitch"
         android:layout_width="wrap_content"
         android:layout_height="34dp"
         android:layout_marginEnd="8dp"
         android:clickable="true"
         android:theme="@style/SwitchTheme"
-        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/backgroundView"
         app:layout_constraintEnd_toEndOf="@+id/backgroundView"
-        app:layout_constraintTop_toTopOf="@+id/backgroundView"
-        tools:visibility="visible" />
+        app:layout_constraintTop_toTopOf="@+id/backgroundView" />
 
     <ImageView
-        android:id="@+id/rightArrow"
+        android:id="@+id/edit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:src="@drawable/ic_add"
-        android:visibility="gone"
+        android:src="@drawable/ic_edit_20"
         app:layout_constraintBottom_toBottomOf="@+id/backgroundView"
-        app:layout_constraintEnd_toEndOf="@+id/backgroundView"
+        app:layout_constraintEnd_toStartOf="@+id/toggleSwitch"
         app:layout_constraintTop_toTopOf="@+id/backgroundView" />
 
     <View

@@ -25,6 +25,7 @@ import java.util.*
     LogEntry::class,
     FavoriteCoin::class,
     WalletConnectSession::class,
+    RestoreSettingRecord::class,
 ])
 
 @TypeConverters(DatabaseConverters::class)
@@ -34,6 +35,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun accountsDao(): AccountsDao
     abstract fun priceAlertsDao(): PriceAlertsDao
     abstract fun blockchainSettingDao(): BlockchainSettingDao
+    abstract fun restoreSettingDao(): RestoreSettingDao
     abstract fun subscriptionJobDao(): SubscriptionJobDao
     abstract fun logsDao(): LogsDao
     abstract fun marketFavoritesDao(): MarketFavoritesDao

@@ -79,6 +79,12 @@ interface IChartTypeStorage {
     var chartType: ChartType?
 }
 
+interface IRestoreSettingsStorage {
+    fun restoreSettings(accountId: String, coinId: String) : List<RestoreSettingRecord>
+    fun save(restoreSettingRecords: List<RestoreSettingRecord>)
+    fun deleteAllRestoreSettings(accountId: String)
+}
+
 interface IMarketStorage {
     var currentTab: MarketModule.Tab?
 }

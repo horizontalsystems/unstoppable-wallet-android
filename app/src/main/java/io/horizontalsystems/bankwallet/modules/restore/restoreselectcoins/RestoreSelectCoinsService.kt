@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.restore.restoreselectcoins
 
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.factories.AccountFactory
+import io.horizontalsystems.bankwallet.core.managers.RestoreSettings
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.modules.enablecoins.EnableCoinsService
 import io.horizontalsystems.coinkit.models.Coin

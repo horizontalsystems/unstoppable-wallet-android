@@ -14,7 +14,6 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
-import io.horizontalsystems.bankwallet.modules.restore.restoreselectcoins.RestoreSelectCoinsFragment
 import io.horizontalsystems.bankwallet.modules.restore.restoreselectpredefinedaccounttype.RestoreSelectPredefinedAccountTypeFragment
 import io.horizontalsystems.bankwallet.modules.restore.words.RestoreWordsFragment
 import io.horizontalsystems.bankwallet.modules.restore.words.RestoreWordsModule.RestoreAccountType
@@ -87,9 +86,7 @@ class RestoreFragment : BaseFragment() {
                 }
             }
             is RestoreViewModel.Screen.SelectCoins -> {
-                setSelectCoinsListener()
-
-                RestoreSelectCoinsFragment.instance(screen.predefinedAccountType, screen.accountType)
+                throw Exception("Yahoo")
             }
         }
     }

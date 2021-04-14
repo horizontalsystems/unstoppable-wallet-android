@@ -22,7 +22,6 @@ class RestoreSelectCoinsViewModel(
     val viewStateLiveData = MutableLiveData<CoinViewState>()
     val disableCoinLiveData = MutableLiveData<Coin>()
     val successLiveEvent = SingleLiveEvent<Unit>()
-
     val restoreEnabledLiveData: LiveData<Boolean>
         get() = LiveDataReactiveStreams.fromPublisher(service.canRestore.toFlowable(BackpressureStrategy.DROP))
 

@@ -47,7 +47,6 @@ abstract class CoinListBaseFragment : BaseWithSearchFragment(), CoinListAdapter.
 
     override fun disable(coin: Coin) {}
 
-    override fun select(coin: Coin) {}
 
     // CoinListBaseFragment
 
@@ -56,6 +55,11 @@ abstract class CoinListBaseFragment : BaseWithSearchFragment(), CoinListAdapter.
         itemsAdapter.submitList(viewState.viewItems)
 
         progressLoading.isVisible = false
+    }
+
+    protected fun disableCoin(coin: Coin) {
+        featuredItemsAdapter.disableCoin(coin)
+        itemsAdapter.disableCoin(coin)
     }
 
     open fun onCancelSelection() {}
@@ -71,7 +75,7 @@ abstract class CoinListBaseFragment : BaseWithSearchFragment(), CoinListAdapter.
                 subtitle = config.subtitle,
                 icon = coinDrawable,
                 items = config.viewItems,
-                selected = config.selectedIndex,
+                selected = config.selectedIndexes.first(),
                 notifyUnchanged = true,
                 onItemSelected = { onSelect(it) },
                 onCancelled = { onCancelSelection() }

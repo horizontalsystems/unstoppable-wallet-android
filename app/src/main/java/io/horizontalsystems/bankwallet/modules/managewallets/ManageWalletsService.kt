@@ -193,10 +193,6 @@ class ManageWalletsService(
         walletManager.delete(listOf(wallet))
     }
 
-    override fun storeCoinToEnable(coin: Coin) {
-        coinToEnable = coin
-    }
-
     override fun account(coin: Coin): Account? {
         return accountManager.account(coin.type)
     }

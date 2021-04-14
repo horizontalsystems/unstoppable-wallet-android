@@ -6,8 +6,9 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.DerivationSetting
 import io.horizontalsystems.bankwallet.modules.blockchainsettings.BlockchainSettingsService
-import io.horizontalsystems.bankwallet.modules.blockchainsettings.BlockchainSettingsViewModel
+import io.horizontalsystems.bankwallet.modules.blockchainsettings.CoinSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.enablecoins.*
+import io.horizontalsystems.bankwallet.modules.restore.restoreselectcoins.CoinSettingsService
 import io.horizontalsystems.coinkit.models.Coin
 import io.reactivex.Observable
 
@@ -18,7 +19,6 @@ object ManageWalletsModule {
         val stateAsync: Observable<State>
         fun enable(coin: Coin, derivationSetting: DerivationSetting? = null)
         fun disable(coin: Coin)
-        fun storeCoinToEnable(coin: Coin)
         fun account(coin: Coin): Account?
     }
 
@@ -62,14 +62,18 @@ object ManageWalletsModule {
             ManageWalletsService(App.coinManager, App.walletManager, App.accountManager, enableCoinsService, blockchainSettingsService)
         }
 
+        private val coinSettingsService by lazy {
+            CoinSettingsService()
+        }
+
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return when (modelClass) {
                 ManageWalletsViewModel::class.java -> {
                     ManageWalletsViewModel(manageWalletsService, blockchainSettingsService, listOf(manageWalletsService)) as T
                 }
-                BlockchainSettingsViewModel::class.java -> {
-                    BlockchainSettingsViewModel(blockchainSettingsService) as T
+                CoinSettingsViewModel::class.java -> {
+                    CoinSettingsViewModel(coinSettingsService, listOf()) as T
                 }
                 EnableCoinsViewModel::class.java -> {
                     EnableCoinsViewModel(enableCoinsService) as T

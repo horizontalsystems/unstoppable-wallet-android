@@ -99,7 +99,7 @@ class CreateWalletViewModel(
     }
 
     private fun viewItem(item: CreateWalletService.Item, listPosition: ListPosition): CoinViewItem {
-        return CoinViewItem.ToggleVisible(item.coin, item.enabled, listPosition)
+        TODO()
     }
 
     private fun filtered(items: List<CreateWalletService.Item>): List<CreateWalletService.Item> {

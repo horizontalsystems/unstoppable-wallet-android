@@ -1,11 +1,16 @@
 package io.horizontalsystems.bankwallet.entities
 
-enum class CoinSettingType {
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
+@Parcelize
+enum class CoinSettingType : Parcelable {
     derivation,
     bitcoinCashCoinType
 }
 
-class CoinSettings(private val settings: Map<CoinSettingType, String> = mapOf()) {
+@Parcelize
+class CoinSettings(val settings: Map<CoinSettingType, String> = mapOf()) : Parcelable {
 
     val id: String
         get() = settings.map { (t, u) ->
