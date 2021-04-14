@@ -60,9 +60,6 @@ class CreateWalletFragment : CoinListBaseFragment() {
         viewModel.disable(coin)
     }
 
-    override fun select(coin: Coin) {
-        //not used here
-    }
 
     // CoinListBaseFragment
 

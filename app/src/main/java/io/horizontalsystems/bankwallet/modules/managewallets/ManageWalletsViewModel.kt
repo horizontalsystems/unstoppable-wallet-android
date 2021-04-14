@@ -69,10 +69,6 @@ class ManageWalletsViewModel(
         syncViewState()
     }
 
-    fun onAddAccount(coin: Coin) {
-        service.storeCoinToEnable(coin)
-    }
-
     private fun syncViewState(updatedState: ManageWalletsModule.State? = null) {
         val state = updatedState ?: service.state
 
@@ -91,10 +87,11 @@ class ManageWalletsViewModel(
     }
 
     private fun viewItem(item: ManageWalletsModule.Item, listPosition: ListPosition): CoinViewItem {
-        return when (val itemState = item.state) {
-            ManageWalletsModule.ItemState.NoAccount -> CoinViewItem.ToggleHidden(item.coin, listPosition)
-            is ManageWalletsModule.ItemState.HasAccount -> CoinViewItem.ToggleVisible(item.coin, itemState.hasWallet, listPosition)
-        }
+//        return when (val itemState = item.state) {
+//            ManageWalletsModule.ItemState.NoAccount -> CoinViewItem.ToggleHidden(item.coin, listPosition)
+//            is ManageWalletsModule.ItemState.HasAccount -> CoinViewItem.ToggleVisible(item.coin, itemState.hasWallet, listPosition)
+//        }
+        TODO()
     }
 
     private fun filtered(items: List<ManageWalletsModule.Item>): List<ManageWalletsModule.Item> {

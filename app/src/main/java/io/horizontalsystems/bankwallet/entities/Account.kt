@@ -67,6 +67,12 @@ open class AccountType : Parcelable {
         bip44("bip44"),
         bip49("bip49"),
         bip84("bip84");
+
+        companion object {
+            private val map = values().associateBy(Derivation::value)
+
+            fun fromString(value: String?): Derivation? = map[value]
+        }
     }
 }
 

@@ -1,6 +1,6 @@
 package io.horizontalsystems.bankwallet.entities
 
-import io.horizontalsystems.bankwallet.modules.restore.restoreselectcoins.RestoreSettingType
+import io.horizontalsystems.bankwallet.core.managers.RestoreSettingType
 import io.horizontalsystems.coinkit.models.CoinType
 
 fun CoinType.canSupport(accountType: AccountType) = when (this) {
@@ -63,7 +63,7 @@ val CoinType.defaultSettingsArray: List<CoinSettings>
     get() = when (this) {
         CoinType.Bitcoin,
         CoinType.Litecoin -> listOf(CoinSettings(mapOf(CoinSettingType.derivation to AccountType.Derivation.bip49.value)))
-        CoinType.BitcoinCash -> listOf(CoinSettings(mapOf(CoinSettingType.bitcoinCashCoinType to AccountType.Derivation.bip49.value)))
+        CoinType.BitcoinCash -> listOf(CoinSettings(mapOf(CoinSettingType.bitcoinCashCoinType to BitcoinCashCoinType.type145.value)))
         else -> listOf()
     }
 

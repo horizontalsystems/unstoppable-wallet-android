@@ -46,6 +46,7 @@ class App : CoreApp() {
         lateinit var marketStorage: IMarketStorage
         lateinit var torKitManager: ITorManager
         lateinit var chartTypeStorage: IChartTypeStorage
+        lateinit var restoreSettingsStorage: IRestoreSettingsStorage
 
         lateinit var wordsManager: WordsManager
         lateinit var networkManager: INetworkManager
@@ -91,6 +92,7 @@ class App : CoreApp() {
         lateinit var coinKit: CoinKit
         lateinit var activateCoinManager: ActivateCoinManager
         lateinit var changeLogsManager: ChangeLogsManager
+        lateinit var restoreSettingsManager: RestoreSettingsManager
     }
 
     override fun onCreate() {
@@ -126,6 +128,7 @@ class App : CoreApp() {
 
         appDatabase = AppDatabase.getInstance(this)
         accountsStorage = AccountsStorage(appDatabase)
+        restoreSettingsStorage = RestoreSettingsStorage(appDatabase)
 
         AppLog.logsDao = appDatabase.logsDao()
 
@@ -222,6 +225,8 @@ class App : CoreApp() {
         activateCoinManager = ActivateCoinManager(coinKit, walletManager, accountManager)
 
         changeLogsManager = ChangeLogsManager(systemInfoManager, localStorage)
+
+        restoreSettingsManager = RestoreSettingsManager(restoreSettingsStorage)
 
         setAppTheme()
 

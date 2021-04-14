@@ -79,6 +79,9 @@
 
     <string name="Select_Coins">Choose Crypto</string>
 
+    <string name="Restore_ZCash_BirthdayHeight">ZCash Birthday Height</string>
+    <string name="Restore_ZCash_BirthdayHeight_Hint">If you know your birthday height of wallet enter it for quick syncing</string>
+
     <string name="Restore_BirthdayHeight_Hint">Wallet birthday height (optional)</string>
     <string name="Restore_BirthdayHeight_Description">This determines where to start scanning for transactions. Leave it blank to scan from the beginning, which takes a while.</string>
     <string name="Restore_BirthdayHeight_InvalidError">Invalid birthday height</string>
