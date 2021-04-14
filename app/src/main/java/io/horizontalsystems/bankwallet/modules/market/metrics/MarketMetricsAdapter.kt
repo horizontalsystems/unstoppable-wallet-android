@@ -2,15 +2,18 @@ package io.horizontalsystems.bankwallet.modules.market.metrics
 
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.views.inflate
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_market_totals.*
+import java.math.BigDecimal
 
 class MarketMetricsAdapter(private val viewModel: MarketMetricsViewModel, viewLifecycleOwner: LifecycleOwner)
     : ListAdapter<MarketMetricsWrapper, MarketMetricsViewHolder>(diff) {
@@ -52,14 +55,26 @@ class MarketMetricsViewHolder(override val containerView: View) : RecyclerView.V
 
     fun bind(data: MarketMetricsWrapper?, onErrorClick: (() -> Unit)) {
         val metrics = data?.marketMetrics
+        val diff = metrics?.totalMarketCap?.diff
+        diff?.let {
+            diffCircle.post {
+                diffCircle.animateHorizontal(it.toFloat() * 3)
+            }
+        }
 
-        totalMarketCap.setMetricData(metrics?.totalMarketCap)
         btcDominance.setMetricData(metrics?.btcDominance)
         volume24h.setMetricData(metrics?.volume24h)
         defiCap.setMetricData(metrics?.defiCap)
         defiTvl.setMetricData(metrics?.defiTvl)
 
+        marketCapTitle.alpha = if (metrics == null) 0.5f else 1f
+        marketCapValue.text = metrics?.totalMarketCap?.value
+
+        setDiffPercentage(diff, diffPercentage)
+
         progressBar.isVisible = data?.loading == true
+        marketCapValue.isVisible = (metrics != null)
+        diffPercentage.isVisible = (metrics != null)
 
         error.isVisible = data?.error != null
         error.text = data?.error
@@ -67,5 +82,14 @@ class MarketMetricsViewHolder(override val containerView: View) : RecyclerView.V
             onErrorClick()
         }
     }
-}
 
+    private fun setDiffPercentage(diff: BigDecimal?, view: TextView) {
+        diff ?: return
+
+        val sign = if (diff >= BigDecimal.ZERO) "+" else "-"
+        view.text = App.numberFormatter.format(diff.abs(), 0, 2, sign, "%")
+
+        val color = if (diff >= BigDecimal.ZERO) R.color.remus else R.color.lucian
+        view.setTextColor(containerView.context.getColor(color))
+    }
+}

@@ -2,10 +2,10 @@ package io.horizontalsystems.bankwallet.ui.extensions
 
 import android.content.Context
 import android.util.AttributeSet
-import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.views.helpers.LayoutHelper
 import kotlinx.android.synthetic.main.view_market_metric_small.view.*
 import java.math.BigDecimal
 
@@ -14,6 +14,11 @@ class MarketMetricSmallView @JvmOverloads constructor(context: Context, attrs: A
 
     init {
         inflate(context, R.layout.view_market_metric_small, this)
+
+        setBackgroundResource(R.drawable.stateful_overview_card_background)
+
+        val padding = LayoutHelper.dp(12f, context)
+        setPadding(padding, padding, padding, padding)
 
         val ta = context.obtainStyledAttributes(attrs, R.styleable.MarketMetricSmallView)
         try {
@@ -26,11 +31,11 @@ class MarketMetricSmallView @JvmOverloads constructor(context: Context, attrs: A
 
     fun setMetricData(data: MetricData?) {
         if (data == null) {
-            title.visibility = View.INVISIBLE
+            title.alpha = 0.5f
             setValueText(null, false)
             setDiff(null, false)
         } else {
-            title.visibility = View.VISIBLE
+            title.alpha = 1f
             setValueText(data.value, true)
             setDiff(data.diff, true)
         }
@@ -55,27 +60,20 @@ class MarketMetricSmallView @JvmOverloads constructor(context: Context, attrs: A
     private fun setDiff(diff: BigDecimal?, modeNotAvailable: Boolean) {
         when {
             diff != null -> {
-                diffCircle.post {
-                    diffCircle.animateVertical(diff.toFloat())
-                }
-
                 val sign = if (diff >= BigDecimal.ZERO) "+" else "-"
                 diffPercentage.text = App.numberFormatter.format(diff.abs(), 0, 2, sign, "%")
                 val textColor = if (diff >= BigDecimal.ZERO) R.color.remus else R.color.lucian
                 diffPercentage.setTextColor(context.getColor(textColor))
             }
             modeNotAvailable -> {
-                diffCircle.setBackground(context.getColor(R.color.jeremy))
                 diffPercentage.text = "----"
                 diffPercentage.setTextColor(context.getColor(R.color.grey_50))
             }
             else -> {
                 diffPercentage.text = null
-                diffCircle.post {
-                    diffCircle.animateVertical(null)
-                }
             }
         }
     }
 }
 
+data class MetricData(val value: String?, val diff: BigDecimal?)
