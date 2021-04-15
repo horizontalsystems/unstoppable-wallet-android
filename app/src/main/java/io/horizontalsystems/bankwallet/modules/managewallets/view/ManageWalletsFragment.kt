@@ -10,14 +10,11 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.addtoken.AddTokenFragment
 import io.horizontalsystems.bankwallet.modules.addtoken.TokenType
 import io.horizontalsystems.bankwallet.modules.blockchainsettings.CoinSettingsViewModel
-import io.horizontalsystems.bankwallet.modules.enablecoins.EnableCoinsDialog
-import io.horizontalsystems.bankwallet.modules.enablecoins.EnableCoinsViewModel
 import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsModule
 import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsViewModel
 import io.horizontalsystems.bankwallet.ui.extensions.coinlist.CoinListBaseFragment
 import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.core.findNavController
-import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.android.synthetic.main.fragment_manage_wallets.*
 
 class ManageWalletsFragment : CoinListBaseFragment() {
@@ -28,7 +25,6 @@ class ManageWalletsFragment : CoinListBaseFragment() {
     private val vmFactory by lazy { ManageWalletsModule.Factory() }
     private val viewModel by viewModels<ManageWalletsViewModel> { vmFactory }
     private val coinSettingsViewModel by viewModels<CoinSettingsViewModel> { vmFactory }
-    private val enableCoinsViewModel by viewModels<EnableCoinsViewModel> { vmFactory }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -71,6 +67,10 @@ class ManageWalletsFragment : CoinListBaseFragment() {
         viewModel.disable(coin)
     }
 
+    override fun edit(coin: Coin) {
+        viewModel.onClickSettings(coin)
+    }
+
     // CoinListBaseFragment
 
     override fun updateFilter(query: String) {
@@ -93,36 +93,6 @@ class ManageWalletsFragment : CoinListBaseFragment() {
         coinSettingsViewModel.openBottomSelectorLiveEvent.observe(viewLifecycleOwner, Observer { config ->
             hideKeyboard()
             showBottomSelectorDialog(config)
-        })
-
-        enableCoinsViewModel.confirmationLiveData.observe(viewLifecycleOwner, Observer { tokenType ->
-            activity?.let {
-                EnableCoinsDialog.show(it, tokenType, object: EnableCoinsDialog.Listener {
-                    override fun onClickEnable() {
-                        enableCoinsViewModel.onConfirmEnable()
-                    }
-                })
-            }
-        })
-
-        enableCoinsViewModel.hudStateLiveData.observe(viewLifecycleOwner, Observer { state ->
-            when (state) {
-                EnableCoinsViewModel.HudState.Hidden -> {
-                }
-                EnableCoinsViewModel.HudState.Loading -> {
-                    HudHelper.showInProcessMessage(requireView(), R.string.EnalbeToken_Enabling)
-                }
-                EnableCoinsViewModel.HudState.Error -> {
-                    HudHelper.showErrorMessage(requireView(), R.string.Error)
-                }
-                is EnableCoinsViewModel.HudState.Success -> {
-                    if (state.count == 0) {
-                        HudHelper.showSuccessMessage(requireView(), R.string.EnalbeToken_NoCoins)
-                    } else {
-                        HudHelper.showSuccessMessage(requireView(), getString(R.string.EnalbeToken_EnabledCoins, state.count))
-                    }
-                }
-            }
         })
     }
 

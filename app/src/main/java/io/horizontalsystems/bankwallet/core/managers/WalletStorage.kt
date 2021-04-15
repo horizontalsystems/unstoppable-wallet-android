@@ -22,6 +22,17 @@ class WalletStorage(
         }.mapNotNull { it }
     }
 
+    override fun wallets(account: Account): List<Wallet> {
+        val coins = coinManager.coins
+
+        val enabledWallets = storage.enabledWallets(account.id)
+        return enabledWallets.mapNotNull { enabledWallet ->
+            val coin = coins.find { it.id == enabledWallet.coinId } ?: return@mapNotNull null
+
+            Wallet(coin, account)
+        }
+    }
+
     override fun wallet(account: Account, coin: Coin): Wallet? {
         val enabledWallets = storage.enabledWallets
         enabledWallets.firstOrNull { it.coinId == coin.id && it.accountId == account.id }?.let { _ ->

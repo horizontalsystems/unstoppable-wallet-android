@@ -9,6 +9,9 @@ interface EnabledWalletsDao {
     @Query("SELECT * FROM EnabledWallet ORDER BY `walletOrder` ASC")
     fun enabledCoins(): List<EnabledWallet>
 
+    @Query("SELECT * FROM EnabledWallet WHERE accountId = :accountId ORDER BY `walletOrder` ASC")
+    fun enabledCoins(accountId: String): List<EnabledWallet>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(storableCoin: EnabledWallet)
 
