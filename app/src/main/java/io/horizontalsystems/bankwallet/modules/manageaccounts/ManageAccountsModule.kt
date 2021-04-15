@@ -11,10 +11,8 @@ object ManageAccountsModule {
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-
             val service = ManageAccountsService(App.accountManager)
-
-            return ManageAccountsViewModel(service) as T
+            return ManageAccountsViewModel(service, listOf(service)) as T
         }
     }
 

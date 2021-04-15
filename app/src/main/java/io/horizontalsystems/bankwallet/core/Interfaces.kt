@@ -80,7 +80,7 @@ interface IChartTypeStorage {
 }
 
 interface IRestoreSettingsStorage {
-    fun restoreSettings(accountId: String, coinId: String) : List<RestoreSettingRecord>
+    fun restoreSettings(accountId: String, coinId: String): List<RestoreSettingRecord>
     fun save(restoreSettingRecords: List<RestoreSettingRecord>)
     fun deleteAllRestoreSettings(accountId: String)
 }
@@ -90,11 +90,14 @@ interface IMarketStorage {
 }
 
 interface IAccountManager {
+    val activeAccount: Account?
+    val activeAccountObservable: Flowable<Optional<Account>>
     val isAccountsEmpty: Boolean
     val accounts: List<Account>
     val accountsFlowable: Flowable<List<Account>>
     val accountsDeletedFlowable: Flowable<Unit>
 
+    fun setActiveAccountId(activeAccountId: String?)
     fun account(coinType: CoinType): Account?
     fun account(id: String): Account?
     fun loadAccounts()
@@ -312,6 +315,7 @@ interface IRateManager {
 }
 
 interface IAccountsStorage {
+    var activeAccountId: String?
     val isAccountsEmpty: Boolean
 
     fun allAccounts(): List<Account>

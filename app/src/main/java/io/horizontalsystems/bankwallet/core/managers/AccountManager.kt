@@ -11,13 +11,24 @@ import io.reactivex.Flowable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
+import java.util.*
 import java.util.concurrent.TimeUnit
 
-class AccountManager(private val storage: IAccountsStorage, private val accountCleaner: IAccountCleaner) : IAccountManager {
+class AccountManager(
+        private val storage: IAccountsStorage,
+        private val accountCleaner: IAccountCleaner
+) : IAccountManager {
 
     private val cache = AccountsCache()
     private val accountsSubject = PublishSubject.create<List<Account>>()
     private val accountsDeletedSubject = PublishSubject.create<Unit>()
+    private val activeAccountSubject = PublishSubject.create<Optional<Account>>()
+
+    override val activeAccount: Account?
+        get() = cache.activeAccount
+
+    override val activeAccountObservable: Flowable<Optional<Account>>
+        get() = activeAccountSubject.toFlowable(BackpressureStrategy.BUFFER)
 
     override val isAccountsEmpty: Boolean
         get() = storage.isAccountsEmpty
@@ -31,6 +42,14 @@ class AccountManager(private val storage: IAccountsStorage, private val accountC
     override val accountsDeletedFlowable: Flowable<Unit>
         get() = accountsDeletedSubject.toFlowable(BackpressureStrategy.BUFFER)
 
+    override fun setActiveAccountId(activeAccountId: String?) {
+        if (cache.activeAccount?.id != activeAccountId) {
+            storage.activeAccountId = activeAccountId
+            cache.setActiveAccountId(activeAccountId)
+            activeAccountSubject.onNext(Optional.ofNullable(activeAccount))
+        }
+    }
+
     override fun account(coinType: CoinType): Account? {
         return accounts.find { account -> coinType.canSupport(account.type) }
     }
@@ -40,8 +59,8 @@ class AccountManager(private val storage: IAccountsStorage, private val accountC
     }
 
     override fun loadAccounts() {
-        val accounts = storage.allAccounts()
-        cache.set(accounts)
+        cache.set(storage.allAccounts())
+        cache.setActiveAccountId(storage.activeAccountId)
     }
 
     override fun save(account: Account) {
@@ -49,6 +68,10 @@ class AccountManager(private val storage: IAccountsStorage, private val accountC
 
         cache.insert(account)
         accountsSubject.onNext(accounts)
+
+        if (accounts.size == 1) {
+            setActiveAccountId(accounts.firstOrNull()?.id)
+        }
     }
 
     override fun update(account: Account) {
@@ -64,6 +87,10 @@ class AccountManager(private val storage: IAccountsStorage, private val accountC
 
         accountsSubject.onNext(accounts)
         accountsDeletedSubject.onNext(Unit)
+
+        if (id == activeAccount?.id) {
+            setActiveAccountId(accounts.firstOrNull()?.id)
+        }
     }
 
     override fun clear() {
@@ -71,6 +98,7 @@ class AccountManager(private val storage: IAccountsStorage, private val accountC
         cache.set(listOf())
         accountsSubject.onNext(listOf())
         accountsDeletedSubject.onNext(Unit)
+        setActiveAccountId(null)
     }
 
     override fun clearAccounts() {
@@ -89,6 +117,9 @@ class AccountManager(private val storage: IAccountsStorage, private val accountC
         var accountsSet = mutableSetOf<Account>()
             private set
 
+        var activeAccount: Account? = null
+            private set
+
         fun insert(account: Account) {
             accountsSet.add(account)
         }
@@ -103,6 +134,14 @@ class AccountManager(private val storage: IAccountsStorage, private val accountC
 
         fun delete(id: String) {
             accountsSet.removeAll { it.id == id }
+        }
+
+        fun setActiveAccountId(activeAccountId: String?) {
+            activeAccount = if (activeAccountId != null) {
+                accountsSet.find { it.id == activeAccountId}
+            } else {
+                null
+            }
         }
     }
 }

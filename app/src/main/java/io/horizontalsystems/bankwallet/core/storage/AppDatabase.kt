@@ -16,7 +16,7 @@ import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.coinkit.models.CoinType
 import java.util.*
 
-@Database(version = 31, exportSchema = false, entities = [
+@Database(version = 32, exportSchema = false, entities = [
     EnabledWallet::class,
     PriceAlert::class,
     AccountRecord::class,
@@ -26,6 +26,7 @@ import java.util.*
     FavoriteCoin::class,
     WalletConnectSession::class,
     RestoreSettingRecord::class,
+    ActiveAccount::class
 ])
 
 @TypeConverters(DatabaseConverters::class)
