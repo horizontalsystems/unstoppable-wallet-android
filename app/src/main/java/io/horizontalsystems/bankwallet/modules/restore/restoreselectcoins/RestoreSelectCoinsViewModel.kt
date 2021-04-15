@@ -58,7 +58,7 @@ class RestoreSelectCoinsViewModel(
                     viewItem(item, ListPosition.getListPosition(state.featured.size, index))
                 },
                 state.items.mapIndexed { index, item ->
-                    viewItem(item, ListPosition.getListPosition(state.featured.size, index))
+                    viewItem(item, ListPosition.getListPosition(state.items.size, index))
                 },
         )
 
