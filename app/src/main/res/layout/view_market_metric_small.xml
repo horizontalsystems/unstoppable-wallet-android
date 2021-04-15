@@ -7,11 +7,10 @@
     tools:layout_width="match_parent"
     tools:parentTag="io.horizontalsystems.bankwallet.ui.extensions.MarketMetricSmallView">
 
-    <View
-        android:id="@+id/chartPlaceHolder"
+    <io.horizontalsystems.chartview.ChartMinimal
+        android:id="@+id/chart"
         android:layout_width="72dp"
-        android:layout_height="30dp"
-        android:background="@color/steel_20"
+        android:layout_height="32dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
