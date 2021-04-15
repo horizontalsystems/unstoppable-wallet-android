@@ -32,7 +32,11 @@ data class MarketMetricsItem (
         var defiMarketCap: CurrencyValue,
         var defiMarketCapDiff24h: BigDecimal = BigDecimal.ZERO,
         var defiTvl: CurrencyValue,
-        var defiTvlDiff24h: BigDecimal = BigDecimal.ZERO
+        var defiTvlDiff24h: BigDecimal = BigDecimal.ZERO,
+        val btcDominancePoints: List<MarketMetricsPoint>,
+        val volume24Points: List<MarketMetricsPoint>,
+        val defiMarketCapPoints: List<MarketMetricsPoint>,
+        val defiTvlPoints: List<MarketMetricsPoint>
 ){
     companion object{
         fun createFromGlobalCoinMarket(globalCoinMarket: GlobalCoinMarket, currency: Currency): MarketMetricsItem {
@@ -47,8 +51,14 @@ data class MarketMetricsItem (
                     CurrencyValue(currency, globalCoinMarket.defiMarketCap),
                     globalCoinMarket.defiMarketCapDiff24h,
                     CurrencyValue(currency, globalCoinMarket.defiTvl),
-                    globalCoinMarket.defiTvlDiff24h
+                    globalCoinMarket.defiTvlDiff24h,
+                    btcDominancePoints = globalCoinMarket.globalCoinMarketPoints.reversed().map { MarketMetricsPoint(it.btcDominance, it.timestamp) },
+                    volume24Points = globalCoinMarket.globalCoinMarketPoints.reversed().map { MarketMetricsPoint(it.volume24h, it.timestamp) },
+                    defiMarketCapPoints = globalCoinMarket.globalCoinMarketPoints.reversed().map { MarketMetricsPoint(it.defiMarketCap, it.timestamp) },
+                    defiTvlPoints = globalCoinMarket.globalCoinMarketPoints.reversed().map { MarketMetricsPoint(it.defiTvl, it.timestamp) }
             )
         }
     }
 }
+
+data class MarketMetricsPoint(val value: BigDecimal, val timestamp: Long)
