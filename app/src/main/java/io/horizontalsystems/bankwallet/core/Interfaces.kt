@@ -125,6 +125,7 @@ interface IAccountFactory {
 
 interface IWalletStorage {
     fun wallets(accounts: List<Account>): List<Wallet>
+    fun wallets(account: Account): List<Wallet>
     fun enabledCoins(): List<Coin>
     fun save(wallets: List<Wallet>)
     fun delete(wallets: List<Wallet>)
@@ -337,6 +338,7 @@ interface INotificationManager {
 
 interface IEnabledWalletStorage {
     val enabledWallets: List<EnabledWallet>
+    fun enabledWallets(accountId: String): List<EnabledWallet>
     fun save(enabledWallets: List<EnabledWallet>)
     fun delete(enabledWallets: List<EnabledWallet>)
     fun deleteAll()
@@ -354,6 +356,9 @@ interface IBlockchainSettingsStorage {
 }
 
 interface IWalletManager {
+    val activeWallets: List<Wallet>
+    val activeWalletsUpdatedObservable: Observable<List<Wallet>>
+
     val wallets: List<Wallet>
     val walletsUpdatedObservable: Observable<List<Wallet>>
     fun wallet(coin: Coin): Wallet?
@@ -363,6 +368,7 @@ interface IWalletManager {
     fun save(wallets: List<Wallet>)
     fun delete(wallets: List<Wallet>)
     fun clear()
+    fun handle(newWallets: List<Wallet>, deletedWallets: List<Wallet>)
 }
 
 interface IAppNumberFormatter {
