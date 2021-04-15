@@ -1,0 +1,7 @@
+<shape android:shape="rectangle"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <gradient
+        android:angle="90"
+        android:endColor="@color/tylerGradientEnd"
+        android:startColor="@color/tylerGradientStart" />
+</shape>

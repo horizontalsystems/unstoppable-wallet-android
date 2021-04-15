@@ -58,4 +58,7 @@
     <color name="andy">@color/steel_20</color>
     <color name="nina">@color/black_50</color>
     <color name="raina">@color/white_50</color>
+
+    <color name="tylerGradientStart">#fff5f5f5</color>
+    <color name="tylerGradientEnd">#00f5f5f5</color>
 </resources>

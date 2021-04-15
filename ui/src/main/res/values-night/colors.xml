@@ -19,4 +19,7 @@
     <color name="andy">@color/black_50</color>
     <color name="nina">@color/white_50</color>
     <color name="raina">@color/steel_10</color>
+
+    <color name="tylerGradientStart">#ff13151a</color>
+    <color name="tylerGradientEnd">#0013151a</color>
 </resources>
