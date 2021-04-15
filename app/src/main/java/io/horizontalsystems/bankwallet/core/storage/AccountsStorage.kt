@@ -6,6 +6,7 @@ import io.horizontalsystems.bankwallet.core.toRawHexString
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountOrigin
 import io.horizontalsystems.bankwallet.entities.AccountType
+import io.horizontalsystems.bankwallet.entities.ActiveAccount
 import io.reactivex.Flowable
 
 class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
@@ -20,6 +21,16 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
         private const val PRIVATE_KEY = "private_key"
         private const val ZCASH = "zcash"
     }
+
+    override var activeAccountId: String?
+        get() = dao.getActiveAccount()?.accountId
+        set(value) {
+            if (value != null) {
+                dao.insertActiveAccount(ActiveAccount(value))
+            } else {
+                dao.deleteActiveAccount()
+            }
+        }
 
     override val isAccountsEmpty: Boolean
         get() = dao.getTotalCount() == 0
