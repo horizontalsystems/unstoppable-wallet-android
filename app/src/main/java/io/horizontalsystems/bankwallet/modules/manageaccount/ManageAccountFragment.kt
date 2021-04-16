@@ -10,13 +10,17 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.modules.manageaccount.ManageAccountModule.ACCOUNT_ID_KEY
 import io.horizontalsystems.bankwallet.modules.manageaccount.ManageAccountViewModel.KeyActionState
+import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog
+import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.UnlinkConfirmationDialog
 import io.horizontalsystems.core.findNavController
 import kotlinx.android.synthetic.main.fragment_manage_account.*
 import kotlinx.android.synthetic.main.fragment_manage_accounts.toolbar
 
-class ManageAccountFragment : BaseFragment() {
+class ManageAccountFragment : BaseFragment(), BackupRequiredDialog.Listener, UnlinkConfirmationDialog.Listener {
+    private val viewModel by viewModels<ManageAccountViewModel> { ManageAccountModule.Factory(arguments?.getString(ACCOUNT_ID_KEY)!!) }
     private var saveMenuItem: MenuItem? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,9 +34,6 @@ class ManageAccountFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        val accountId = arguments?.getString(ACCOUNT_ID_KEY)!!
-        val viewModel by viewModels<ManageAccountViewModel> { ManageAccountModule.Factory(accountId) }
 
         saveMenuItem = toolbar.menu.findItem(R.id.menuSave)
 
@@ -65,6 +66,35 @@ class ManageAccountFragment : BaseFragment() {
         }
         name.addTextChangedListener(textWatcher)
 
+        unlinkButton.setOnSingleClickListener {
+            viewModel.onUnlink()
+        }
+
+        actionButton.setOnSingleClickListener {
+            viewModel.onClickActionButton()
+        }
+
+        childFragmentManager.addFragmentOnAttachListener { _, fragment ->
+            when (fragment) {
+                is BackupRequiredDialog -> fragment.setListener(this)
+                is UnlinkConfirmationDialog -> fragment.setListener(this)
+            }
+        }
+
+        viewModel.confirmBackupLiveEvent.observe(viewLifecycleOwner, {
+            BackupRequiredDialog.show(childFragmentManager, viewModel.accountName)
+        })
+
+        viewModel.confirmUnlinkLiveEvent.observe(viewLifecycleOwner, {
+            val confirmationList = listOf(
+                    getString(R.string.ManageAccount_Delete_ConfirmationRemove),
+                    getString(R.string.ManageAccount_Delete_ConfirmationDisable),
+                    getString(R.string.ManageAccount_Delete_ConfirmationLose)
+            )
+
+            UnlinkConfirmationDialog.show(childFragmentManager, viewModel.accountName, confirmationList)
+        })
+
         viewModel.keyActionStateLiveData.observe(viewLifecycleOwner, { keyActionState ->
             when (keyActionState) {
                 KeyActionState.ShowRecoveryPhrase -> {
@@ -87,4 +117,11 @@ class ManageAccountFragment : BaseFragment() {
         })
     }
 
+    override fun onClickBackup() {
+        viewModel.onClickBackup()
+    }
+
+    override fun onUnlinkConfirm() {
+        viewModel.onUnlinkConfirm()
+    }
 }
