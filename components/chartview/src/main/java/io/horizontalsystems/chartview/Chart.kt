@@ -64,14 +64,14 @@ class Chart @JvmOverloads constructor(context: Context, attrs: AttributeSet? = n
         chartTouch.onUpdate(object : Listener {
             override fun onTouchDown() {
                 mainCurve.setColor(config.curvePressedColor)
-                mainGradient.setShader(config.curvePressedColor)
+                mainGradient.setShader(config.pressedGradient)
                 chartMain.invalidate()
                 listener.onTouchDown()
             }
 
             override fun onTouchUp() {
                 mainCurve.setColor(config.curveColor)
-                mainGradient.setShader(config.curveColor)
+                mainGradient.setShader(config.curveGradient)
                 chartMain.invalidate()
                 listener.onTouchUp()
             }
@@ -205,7 +205,7 @@ class Chart @JvmOverloads constructor(context: Context, attrs: AttributeSet? = n
 
         mainGradient.setPoints(points)
         mainGradient.setShape(chartMain.shape)
-        mainGradient.setShader(config.curveColor)
+        mainGradient.setShader(config.curveGradient)
 
         mainGrid.setShape(chartMain.shape)
         mainGrid.set(timeline)
