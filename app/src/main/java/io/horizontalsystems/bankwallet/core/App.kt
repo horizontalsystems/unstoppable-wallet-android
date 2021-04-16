@@ -227,7 +227,7 @@ class App : CoreApp() {
 
         registerActivityLifecycleCallbacks(ActivityLifecycleCallbacks(torKitManager))
 
-        startInNewThread()
+        startTasks()
 
         NotificationWorker.startPeriodicWorker(instance)
     }
@@ -282,7 +282,7 @@ class App : CoreApp() {
         localeAwareContext(this)
     }
 
-    private fun startInNewThread() {
+    private fun startTasks() {
         Thread(Runnable {
             rateAppManager.onAppLaunch()
             accountManager.loadAccounts()
