@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.modules.walletconnect.list
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.WalletConnectSession
 import io.horizontalsystems.core.SingleLiveEvent
@@ -22,7 +21,7 @@ class WalletConnectListViewModel(
                 .subscribeIO { sync(it) }
                 .let { disposables.add(it) }
 
-        if (service.items.isEmpty()){
+        if (service.items.isEmpty()) {
             startNewConnectionEvent.call()
         } else {
             sync(service.items)
@@ -33,8 +32,7 @@ class WalletConnectListViewModel(
         val viewItems = mutableListOf<WalletConnectViewItem>()
         items.forEach { item ->
             val accountViewItem = WalletConnectViewItem.Account(
-                    title = Translator.getString(item.predefinedAccountType.title),
-                    address = item.address.eip55
+                    title = getTitle(item.chain),
             )
             viewItems.add(accountViewItem)
 
@@ -52,16 +50,18 @@ class WalletConnectListViewModel(
         viewItemsLiveData.postValue(viewItems)
     }
 
+    private fun getTitle(chain: WalletConnectListService.Chain) = when (chain) {
+        WalletConnectListService.Chain.Ethereum -> "Ethereum"
+        WalletConnectListService.Chain.BinanceSmartChain -> "Binance Smart Chain"
+    }
+
     //TODO improve this method
     private fun getSuitableIcon(imageUrls: List<String>): String? {
         return imageUrls.lastOrNull { it.endsWith("png", ignoreCase = true) }
     }
 
     sealed class WalletConnectViewItem {
-        class Account(
-                val title: String,
-                val address: String
-        ) : WalletConnectViewItem()
+        class Account(val title: String) : WalletConnectViewItem()
 
         class Session(
                 val session: WalletConnectSession,

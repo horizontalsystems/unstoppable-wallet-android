@@ -230,10 +230,10 @@ class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener, ReceiveFra
             sortButton.isVisible = visible
         })
 
-        viewModel.showBackupAlert.observe(viewLifecycleOwner, Observer { (coin, predefinedAccount) ->
+        viewModel.showBackupAlert.observe(viewLifecycleOwner, Observer { wallet ->
             val title = getString(R.string.ManageKeys_Delete_Alert_Title)
-            val subtitle = getString(predefinedAccount.title)
-            val description = getString(R.string.Balance_Backup_Alert, getString(predefinedAccount.title), coin.title)
+            val subtitle = wallet.account.name
+            val description = getString(R.string.Balance_Backup_Alert, wallet.account.name, wallet.coin.title)
             ManageKeysDialog.show(childFragmentManager, title, subtitle, description)
         })
 

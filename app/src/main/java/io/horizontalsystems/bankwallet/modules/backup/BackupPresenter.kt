@@ -49,9 +49,9 @@ class BackupPresenter(
     }
 
     private fun startBackupWords(accountType: AccountType, words: List<String>, additionalInfo: String? = null) {
-        interactor.predefinedAccountType(accountType)?.let {
-            router.startBackupWordsModule(words, it.title, additionalInfo)
-        }
+//        interactor.predefinedAccountType(accountType)?.let {
+//            router.startBackupWordsModule(words, it.title, additionalInfo)
+//        }
     }
 }
 

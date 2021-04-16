@@ -110,7 +110,7 @@ class WalletConnectService(
     }
 
     private fun initSession(peerId: String, peerMeta: WCPeerMeta, chainId: Int) {
-        val account = manager.currentAccount(chainId) ?: throw SessionError.NoSuitableAccount
+        val account = manager.activeAccount ?: throw SessionError.NoSuitableAccount
         val evmKit = manager.evmKit(chainId, account) ?: throw SessionError.UnsupportedChainId
 
         sessionData = SessionData(peerId, peerMeta, account, evmKit)
