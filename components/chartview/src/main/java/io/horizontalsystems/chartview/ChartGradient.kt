@@ -5,7 +5,7 @@ import androidx.core.graphics.ColorUtils.setAlphaComponent
 import io.horizontalsystems.chartview.helpers.ChartAnimator
 import io.horizontalsystems.chartview.models.ChartConfig
 
-class ChartGradient(private val animator: ChartAnimator, override var isVisible: Boolean = true) : ChartDraw {
+class ChartGradient(private val animator: ChartAnimator? = null, override var isVisible: Boolean = true) : ChartDraw {
 
     private var shape = RectF(0f, 0f, 0f, 0f)
     private var points = listOf<PointF>()
@@ -36,10 +36,9 @@ class ChartGradient(private val animator: ChartAnimator, override var isVisible:
         val path = Path()
 
         points.forEachIndexed { index, point ->
-            if (index == 0) {
-                path.moveTo(point.x, animator.getAnimatedY(point.y, shape.bottom))
-            } else {
-                path.lineTo(point.x, animator.getAnimatedY(point.y, shape.bottom))
+            when (index) {
+                0 -> path.moveTo(point.x, getY(point))
+                else -> path.lineTo(point.x, getY(point))
             }
         }
 
@@ -49,6 +48,13 @@ class ChartGradient(private val animator: ChartAnimator, override var isVisible:
         path.close()
 
         drawPath(path, paint)
+    }
+
+    private fun getY(point: PointF) : Float {
+        return when {
+            animator != null -> animator.getAnimatedY(point.y, shape.bottom)
+            else -> point.y
+        }
     }
 
     private fun setGradient(colorStart: Int, colorEnd: Int) {
