@@ -54,7 +54,7 @@ class MarketMetricsAdapter(private val viewModel: MarketMetricsViewModel, viewLi
     }
 }
 
-data class MarketMetricsWrapper(val marketMetrics: MarketMetrics?, val loading: Boolean, val error: String? = null)
+data class MarketMetricsWrapper(val marketMetrics: MarketMetrics?, val loading: Boolean, val showSyncError: Boolean)
 
 class MarketMetricsViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
@@ -95,8 +95,7 @@ class MarketMetricsViewHolder(override val containerView: View) : RecyclerView.V
         marketCapValue.isVisible = (metrics != null)
         diffPercentage.isVisible = (metrics != null)
 
-        error.isVisible = data?.error != null
-        error.text = data?.error
+        error.isVisible = data?.showSyncError == true
         error.setOnClickListener {
             onErrorClick()
         }

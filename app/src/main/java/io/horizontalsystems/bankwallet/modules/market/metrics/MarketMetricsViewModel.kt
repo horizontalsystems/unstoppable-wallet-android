@@ -50,10 +50,10 @@ class MarketMetricsViewModel(
             loading = dataState.loading
         }
 
-        var error: String? = null
+        var showSyncError = false
         if (dataState is DataState.Error) {
             if (metricsNotSet) {
-                error = convertErrorMessage(dataState.error)
+                showSyncError = true
             } else {
                 toastLiveData.postValue(convertErrorMessage(dataState.error))
             }
@@ -76,7 +76,7 @@ class MarketMetricsViewModel(
             metrics = marketMetrics
         }
 
-        metricsWrapper = MarketMetricsWrapper(metrics, loading, error)
+        metricsWrapper = MarketMetricsWrapper(metrics, loading, showSyncError)
     }
 
     private fun getChartData(marketMetricsPoints: List<MarketMetricsPoint>): ChartData {
