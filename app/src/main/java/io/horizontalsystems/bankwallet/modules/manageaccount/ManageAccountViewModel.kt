@@ -17,8 +17,8 @@ class ManageAccountViewModel(
     val keyActionStateLiveData = MutableLiveData<KeyActionState>()
     val saveEnabledLiveData = MutableLiveData<Boolean>()
     val finishLiveEvent = SingleLiveEvent<Unit>()
-    val confirmUnlinkLiveEvent = SingleLiveEvent<Unit>()
-    val confirmBackupLiveEvent = SingleLiveEvent<Unit>()
+    val openUnlinkLiveEvent = SingleLiveEvent<Unit>()
+    val openBackupRequiredLiveEvent = SingleLiveEvent<Unit>()
 
     val accountName: String
         get() = service.account.name
@@ -29,6 +29,9 @@ class ManageAccountViewModel(
                 .let { disposable.add(it) }
         service.accountObservable
                 .subscribeIO { syncAccount(it) }
+                .let { disposable.add(it) }
+        service.accountDeletedObservable
+                .subscribeIO { finishLiveEvent.postValue(Unit) }
                 .let { disposable.add(it) }
 
         syncState(service.state)
@@ -57,22 +60,20 @@ class ManageAccountViewModel(
 
     fun onUnlink() {
         if (service.account.isBackedUp) {
-            confirmUnlinkLiveEvent.postValue(Unit)
+            openUnlinkLiveEvent.postValue(Unit)
         } else {
-            confirmBackupLiveEvent.postValue(Unit)
+            openBackupRequiredLiveEvent.postValue(Unit)
         }
     }
 
-    fun onClickBackup() {
-        TODO("not implemented")
-    }
-
     fun onUnlinkConfirm() {
-        TODO("not implemented")
+        service.deleteAccount()
     }
 
-    fun onClickActionButton() {
-        TODO("not implemented")
+    fun onClickShowKey() {
+    }
+
+    fun onClickBackupKey() {
     }
 
     override fun onCleared() {
