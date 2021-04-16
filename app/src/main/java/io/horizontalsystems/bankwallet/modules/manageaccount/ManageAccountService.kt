@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.manageaccount
 
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.IAccountManager
+import io.horizontalsystems.bankwallet.core.IPriceAlertManager
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Account
 import io.reactivex.BackpressureStrategy
@@ -11,7 +12,8 @@ import io.reactivex.subjects.PublishSubject
 
 class ManageAccountService(
         accountId: String,
-        private val accountManager: IAccountManager
+        private val accountManager: IAccountManager,
+        private val priceAlertManager: IPriceAlertManager
 ) : Clearable {
     private val disposable = CompositeDisposable()
 
@@ -33,6 +35,9 @@ class ManageAccountService(
             stateSubject.onNext(value)
         }
 
+    private val accountDeletedSubject = PublishSubject.create<Unit>()
+    val accountDeletedObservable: Flowable<Unit> = accountDeletedSubject.toFlowable(BackpressureStrategy.BUFFER)
+
     init {
         accountManager.accountsFlowable
                 .subscribeIO { handleUpdatedAccounts(it) }
@@ -49,8 +54,11 @@ class ManageAccountService(
     }
 
     private fun handleUpdatedAccounts(accounts: List<Account>) {
-        accounts.find { it.id == account.id }?.let {
-            account == it
+        val account = accounts.find { it.id == account.id }
+        if (account != null) {
+            this.account = account
+        } else {
+            accountDeletedSubject.onNext(Unit)
         }
     }
 
@@ -66,6 +74,11 @@ class ManageAccountService(
 
     override fun clear() {
         disposable.clear()
+    }
+
+    fun deleteAccount() {
+        accountManager.delete(account.id)
+        priceAlertManager.deleteAlertsByAccountType(account.type)
     }
 
     enum class State {

@@ -70,10 +70,6 @@ class ManageAccountFragment : BaseFragment(), BackupRequiredDialog.Listener, Unl
             viewModel.onUnlink()
         }
 
-        actionButton.setOnSingleClickListener {
-            viewModel.onClickActionButton()
-        }
-
         childFragmentManager.addFragmentOnAttachListener { _, fragment ->
             when (fragment) {
                 is BackupRequiredDialog -> fragment.setListener(this)
@@ -81,11 +77,11 @@ class ManageAccountFragment : BaseFragment(), BackupRequiredDialog.Listener, Unl
             }
         }
 
-        viewModel.confirmBackupLiveEvent.observe(viewLifecycleOwner, {
+        viewModel.openBackupRequiredLiveEvent.observe(viewLifecycleOwner, {
             BackupRequiredDialog.show(childFragmentManager, viewModel.accountName)
         })
 
-        viewModel.confirmUnlinkLiveEvent.observe(viewLifecycleOwner, {
+        viewModel.openUnlinkLiveEvent.observe(viewLifecycleOwner, {
             val confirmationList = listOf(
                     getString(R.string.ManageAccount_Delete_ConfirmationRemove),
                     getString(R.string.ManageAccount_Delete_ConfirmationDisable),
@@ -100,10 +96,16 @@ class ManageAccountFragment : BaseFragment(), BackupRequiredDialog.Listener, Unl
                 KeyActionState.ShowRecoveryPhrase -> {
                     actionButton.showAttention(false)
                     actionButton.showTitle(getString(R.string.ManageAccount_RecoveryPhraseShow))
+                    actionButton.setOnClickListener {
+                        viewModel.onClickShowKey()
+                    }
                 }
                 KeyActionState.BackupRecoveryPhrase -> {
                     actionButton.showAttention(true)
                     actionButton.showTitle(getString(R.string.ManageAccount_RecoveryPhraseBackup))
+                    actionButton.setOnClickListener {
+                        viewModel.onClickBackupKey()
+                    }
                 }
             }
         })
@@ -118,7 +120,7 @@ class ManageAccountFragment : BaseFragment(), BackupRequiredDialog.Listener, Unl
     }
 
     override fun onClickBackup() {
-        viewModel.onClickBackup()
+        viewModel.onClickBackupKey()
     }
 
     override fun onUnlinkConfirm() {
