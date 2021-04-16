@@ -45,9 +45,6 @@ class BackupPresenter(
             is AccountType.Mnemonic -> {
                 startBackupWords(accountType, accountType.words)
             }
-            is AccountType.Zcash -> {
-                startBackupWords(accountType, accountType.words, accountType.birthdayHeight?.toString())
-            }
         }
     }
 

@@ -24,7 +24,7 @@ object SwapApproveModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return when (modelClass) {
                 SwapApproveViewModel::class.java -> {
-                    val wallet = checkNotNull(App.walletManager.wallet(approveData.coin))
+                    val wallet = checkNotNull(App.walletManager.activeWallets.firstOrNull { it.coin == approveData.coin })
                     val erc20Adapter = App.adapterManager.getAdapterForWallet(wallet) as Eip20Adapter
                     val approveAmountBigInteger = approveData.amount.movePointRight(approveData.coin.decimal).toBigInteger()
                     val allowanceAmountBigInteger = approveData.allowance.movePointRight(approveData.coin.decimal).toBigInteger()

@@ -11,9 +11,34 @@ enum class CoinSettingType : Parcelable {
 
 @Parcelize
 class CoinSettings(val settings: Map<CoinSettingType, String> = mapOf()) : Parcelable {
+    constructor(id: String) : this(fromId(id))
 
     val id: String
         get() = settings.map { (t, u) ->
             "${t.name}:$u"
         }.joinToString("|")
+
+    val derivation: AccountType.Derivation?
+        get() = settings[CoinSettingType.derivation]?.let {
+            AccountType.Derivation.fromString(it)
+        }
+
+    val bitcoinCashCoinType: BitcoinCashCoinType?
+        get() = settings[CoinSettingType.bitcoinCashCoinType]?.let {
+            BitcoinCashCoinType.fromString(it)
+        }
+
+    companion object {
+
+        private fun fromId(id: String): Map<CoinSettingType, String> {
+            return id.split("|").mapNotNull {
+                val parts = it.split(":")
+                if (parts.size != 2) return@mapNotNull null
+
+                val (key, value) = parts
+
+                CoinSettingType.valueOf(key) to value
+            }.toMap()
+        }
+    }
 }

@@ -5,10 +5,7 @@ import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.bankwallet.core.factories.AccountFactory
 import io.horizontalsystems.bankwallet.core.managers.WordsManager
-import io.horizontalsystems.bankwallet.entities.Account
-import io.horizontalsystems.bankwallet.entities.AccountOrigin
-import io.horizontalsystems.bankwallet.entities.AccountType
-import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.coinkit.CoinKit
 import io.horizontalsystems.coinkit.models.CoinType
 import io.reactivex.subjects.BehaviorSubject
@@ -43,9 +40,20 @@ class CreateAccountService(
     private fun activateDefaultWallets(account: Account) {
         val defaultCoinTypes = listOf(CoinType.Bitcoin, CoinType.Ethereum, CoinType.BinanceSmartChain)
 
-        val wallets = defaultCoinTypes.mapNotNull { coinType ->
-            coinKit.getCoin(coinType)?.let { coin ->
-                Wallet(coin, account)
+        val wallets = mutableListOf<Wallet>()
+
+        for (coinType in defaultCoinTypes) {
+            val coin = coinKit.getCoin(coinType) ?: continue
+
+            val defaultSettingsArray = coinType.defaultSettingsArray
+
+            if (defaultSettingsArray.isEmpty()) {
+                wallets.add(Wallet(coin, account))
+            } else {
+                defaultSettingsArray.forEach { coinSettings ->
+                    val configuredCoin = ConfiguredCoin(coin, coinSettings)
+                    wallets.add(Wallet(configuredCoin, account))
+                }
             }
         }
 

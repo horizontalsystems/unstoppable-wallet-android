@@ -21,8 +21,8 @@ class BitcoinCashAdapter(
         backgroundManager: BackgroundManager
 ) : BitcoinBaseAdapter(kit, syncMode = syncMode, backgroundManager = backgroundManager), BitcoinCashKit.Listener, ISendBitcoinAdapter {
 
-    constructor(wallet: Wallet, syncMode: SyncMode?, bitcoinCashCoinType: BitcoinCashCoinType?, testMode: Boolean, backgroundManager: BackgroundManager) :
-            this(createKit(wallet, syncMode, bitcoinCashCoinType, testMode), syncMode, backgroundManager)
+    constructor(wallet: Wallet, syncMode: SyncMode?, testMode: Boolean, backgroundManager: BackgroundManager) :
+            this(createKit(wallet, syncMode, testMode), syncMode, backgroundManager)
 
     init {
         kit.listener = this
@@ -70,25 +70,21 @@ class BitcoinCashAdapter(
 
     companion object {
 
-        private fun createKit(wallet: Wallet, syncMode: SyncMode?, bitcoinCashCoinType: BitcoinCashCoinType?, testMode: Boolean): BitcoinCashKit {
+        private fun createKit(wallet: Wallet, syncMode: SyncMode?, testMode: Boolean): BitcoinCashKit {
             val account = wallet.account
-            val accountType = account.type
-            val bchCoinType = bitcoinCashCoinType ?: throw AdapterErrorWrongParameters("BitcoinCashCoinType is null")
+            val accountType = (account.type as? AccountType.Mnemonic) ?: throw UnsupportedAccountException()
+            val bchCoinType = wallet.configuredCoin.settings.bitcoinCashCoinType ?: throw AdapterErrorWrongParameters("BitcoinCashCoinType is null")
             val kitCoinType = when(bchCoinType){
                 BitcoinCashCoinType.type145 -> MainNetBitcoinCash.CoinType.Type145
                 BitcoinCashCoinType.type0 -> MainNetBitcoinCash.CoinType.Type0
             }
 
-            if (accountType is AccountType.Mnemonic && accountType.words.size == 12) {
-                return BitcoinCashKit(context = App.instance,
-                        words = accountType.words,
-                        walletId = account.id,
-                        syncMode = getSyncMode(syncMode ?: SyncMode.Slow),
-                        networkType = getNetworkType(testMode, kitCoinType),
-                        confirmationsThreshold = confirmationsThreshold)
-            }
-
-            throw UnsupportedAccountException()
+            return BitcoinCashKit(context = App.instance,
+                    words = accountType.words,
+                    walletId = account.id,
+                    syncMode = getSyncMode(syncMode ?: SyncMode.Slow),
+                    networkType = getNetworkType(testMode, kitCoinType),
+                    confirmationsThreshold = confirmationsThreshold)
         }
 
         fun clear(walletId: String, testMode: Boolean) {

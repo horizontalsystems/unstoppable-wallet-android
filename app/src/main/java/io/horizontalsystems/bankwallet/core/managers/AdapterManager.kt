@@ -35,7 +35,7 @@ class AdapterManager(
         start()
         handler = Handler(looper)
 
-        disposables.add(walletManager.walletsUpdatedObservable
+        disposables.add(walletManager.activeWalletsUpdatedObservable
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .subscribe { wallets ->
@@ -46,7 +46,7 @@ class AdapterManager(
 
     override fun preloadAdapters() {
         handler.post {
-            initAdapters(walletManager.wallets)
+            initAdapters(walletManager.activeWallets)
         }
     }
 
@@ -148,7 +148,7 @@ class AdapterManager(
     }
 
     override fun getAdapterForCoin(coin: Coin): IAdapter? {
-        return walletManager.wallets.firstOrNull { it.coin == coin }?.let { wallet ->
+        return walletManager.activeWallets.firstOrNull { it.coin == coin }?.let { wallet ->
             adaptersMap[wallet]
         }
     }

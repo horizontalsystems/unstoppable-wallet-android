@@ -3,25 +3,15 @@ package io.horizontalsystems.bankwallet.entities
 import io.horizontalsystems.bankwallet.core.managers.RestoreSettingType
 import io.horizontalsystems.coinkit.models.CoinType
 
-fun CoinType.canSupport(accountType: AccountType) = when (this) {
-    is CoinType.Bitcoin,
-    is CoinType.Litecoin,
-    is CoinType.BitcoinCash,
-    is CoinType.Dash,
-    is CoinType.Ethereum,
-    is CoinType.Erc20 -> {
-        accountType is AccountType.Mnemonic && accountType.words.size == 12 && accountType.salt == null
+val CoinType.blockchainType: String?
+    get() {
+        return when (this) {
+            is CoinType.Erc20 -> "ERC20"
+            is CoinType.Bep20 -> "BEP20"
+            is CoinType.Bep2 -> "BEP2"
+            else -> null
+        }
     }
-    is CoinType.BinanceSmartChain,
-    is CoinType.Bep20,
-    is CoinType.Bep2 -> {
-        accountType is AccountType.Mnemonic && accountType.words.size == 24 && accountType.salt == null
-    }
-    is CoinType.Zcash -> {
-        accountType is AccountType.Zcash && accountType.words.size == 24
-    }
-    is CoinType.Unsupported -> false
-}
 
 val CoinType.title: String
     get() {

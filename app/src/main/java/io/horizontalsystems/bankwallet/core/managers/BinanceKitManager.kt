@@ -32,7 +32,7 @@ class BinanceKitManager(
         }
 
         if (kit == null) {
-            if (accountType !is AccountType.Mnemonic || accountType.words.size != 24)
+            if (accountType !is AccountType.Mnemonic)
                 throw UnsupportedAccountException()
 
             useCount = 0

@@ -35,7 +35,7 @@ class RateManager(
     }
 
     init {
-        walletManager.walletsUpdatedObservable
+        walletManager.activeWalletsUpdatedObservable
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .subscribe { wallets ->

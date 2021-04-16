@@ -36,7 +36,7 @@ sealed class PredefinedAccountType : Parcelable {
             accountType is AccountType.Mnemonic && accountType.words.size == 24
         }
         Zcash -> {
-            accountType is AccountType.Zcash && accountType.words.size == 24
+            throw Exception("Yahoo")
         }
     }
 

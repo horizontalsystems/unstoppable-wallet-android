@@ -51,17 +51,6 @@ open class AccountType : Parcelable {
     }
 
     @Parcelize
-    data class Zcash(val words: List<String>, val birthdayHeight: Long? = null) : AccountType() {
-        override fun equals(other: Any?): Boolean {
-            return other is Zcash && words.toTypedArray().contentEquals(other.words.toTypedArray())
-        }
-
-        override fun hashCode(): Int {
-            return words.toTypedArray().contentHashCode()
-        }
-    }
-
-    @Parcelize
     enum class Derivation(val value: String) : Parcelable {
         bip44("bip44"),
         bip49("bip49"),

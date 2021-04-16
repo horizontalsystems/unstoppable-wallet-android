@@ -19,7 +19,6 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
         // account type codes stored in db
         private const val MNEMONIC = "mnemonic"
         private const val PRIVATE_KEY = "private_key"
-        private const val ZCASH = "zcash"
     }
 
     override var activeAccountId: String?
@@ -42,7 +41,6 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
                         val accountType = when (record.type) {
                             MNEMONIC -> AccountType.Mnemonic(record.words!!.list, record.salt?.value)
                             PRIVATE_KEY -> AccountType.PrivateKey(record.key!!.value.hexToByteArray())
-                            ZCASH -> AccountType.Zcash(record.words!!.list, record.birthdayHeight)
                             else -> null
                         }
                         Account(record.id, record.name, accountType!!, AccountOrigin.valueOf(record.origin), record.isBackedUp)
@@ -81,28 +79,19 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
     }
 
     private fun getAccountRecord(account: Account): AccountRecord {
-        return when (account.type) {
-            is AccountType.Mnemonic,
-            is AccountType.PrivateKey,
-            is AccountType.Zcash -> {
-                AccountRecord(
-                        id = account.id,
-                        name = account.name,
-                        type = getAccountTypeCode(account.type),
-                        origin = account.origin.value,
-                        isBackedUp = account.isBackedUp,
-                        words = when (account.type) {
-                            is AccountType.Mnemonic -> SecretList(account.type.words)
-                            is AccountType.Zcash -> SecretList(account.type.words)
-                            else -> null
-                        },
-                        salt = (account.type as? AccountType.Mnemonic)?.salt?.let { SecretString(it) },
-                        key = getKey(account.type)?.let { SecretString(it) },
-                        birthdayHeight = (account.type as? AccountType.Zcash)?.birthdayHeight
-                )
-            }
-            else -> throw Exception("Cannot save account with type: ${account.type}")
-        }
+        return AccountRecord(
+                id = account.id,
+                name = account.name,
+                type = getAccountTypeCode(account.type),
+                origin = account.origin.value,
+                isBackedUp = account.isBackedUp,
+                words = when (account.type) {
+                    is AccountType.Mnemonic -> SecretList(account.type.words)
+                    else -> null
+                },
+                salt = (account.type as? AccountType.Mnemonic)?.salt?.let { SecretString(it) },
+                key = getKey(account.type)?.let { SecretString(it) }
+        )
     }
 
     private fun getKey(accountType: AccountType): String? {
@@ -115,8 +104,8 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
     private fun getAccountTypeCode(accountType: AccountType): String {
         return when (accountType) {
             is AccountType.PrivateKey -> PRIVATE_KEY
-            is AccountType.Zcash -> ZCASH
-            else -> MNEMONIC
+            is AccountType.Mnemonic -> MNEMONIC
+            else -> throw Exception("Unsupported AccountType: $accountType")
         }
     }
 

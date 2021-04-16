@@ -44,12 +44,12 @@ class SwapCoinProvider(
     }
 
     private val walletItems: List<CoinBalanceItem>
-        get() = walletManager.wallets.map { wallet ->
+        get() = walletManager.activeWallets.map { wallet ->
             CoinBalanceItem(wallet.coin, adapterManager.getBalanceAdapterForWallet(wallet)?.balance, wallet.coin.type.label)
         }
 
     private fun balance(coin: Coin): BigDecimal? {
-        val wallet = walletManager.wallets.firstOrNull { it.coin == coin }
+        val wallet = walletManager.activeWallets.firstOrNull { it.coin == coin }
         return wallet?.let { adapterManager.getBalanceAdapterForWallet(it)?.balance }
     }
 

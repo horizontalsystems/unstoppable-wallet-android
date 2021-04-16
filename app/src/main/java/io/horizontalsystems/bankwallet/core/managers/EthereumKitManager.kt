@@ -39,7 +39,7 @@ class EthereumKitManager(
         }
 
         if (this.evmKit == null) {
-            if (account.type !is AccountType.Mnemonic || account.type.words.size != 12)
+            if (account.type !is AccountType.Mnemonic)
                 throw UnsupportedAccountException()
 
             useCount = 0

@@ -4,8 +4,6 @@ import io.horizontalsystems.bankwallet.core.IAccountCleaner
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.IAccountsStorage
 import io.horizontalsystems.bankwallet.entities.Account
-import io.horizontalsystems.bankwallet.entities.canSupport
-import io.horizontalsystems.coinkit.models.CoinType
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.Single
@@ -50,10 +48,6 @@ class AccountManager(
         }
     }
 
-    override fun account(coinType: CoinType): Account? {
-        return accounts.find { account -> coinType.canSupport(account.type) }
-    }
-
     override fun account(id: String): Account? {
         return accounts.find { account -> account.id == id }
     }
@@ -69,9 +63,7 @@ class AccountManager(
         cache.insert(account)
         accountsSubject.onNext(accounts)
 
-        if (accounts.size == 1) {
-            setActiveAccountId(accounts.firstOrNull()?.id)
-        }
+        setActiveAccountId(account.id)
     }
 
     override fun update(account: Account) {

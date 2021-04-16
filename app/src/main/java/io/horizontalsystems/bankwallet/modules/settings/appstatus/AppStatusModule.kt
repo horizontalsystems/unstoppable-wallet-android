@@ -30,7 +30,7 @@ object AppStatusModule {
             val appStatusService = AppStatusService(
                     App.systemInfoManager,
                     App.localStorage,
-                    App.predefinedAccountTypeManager,
+                    App.accountManager,
                     App.walletManager,
                     App.adapterManager,
                     App.coinManager,

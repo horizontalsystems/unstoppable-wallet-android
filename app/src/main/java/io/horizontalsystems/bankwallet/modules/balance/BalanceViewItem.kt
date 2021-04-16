@@ -6,7 +6,7 @@ import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.Wallet
-import io.horizontalsystems.bankwallet.entities.label
+import io.horizontalsystems.bankwallet.entities.blockchainType
 import io.horizontalsystems.bankwallet.entities.swappable
 import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.coinkit.models.CoinType
@@ -15,6 +15,7 @@ import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.xrateskit.entities.LatestRate
 import java.math.BigDecimal
 import java.math.RoundingMode
+import java.util.*
 
 data class BalanceViewItem(
         val wallet: Wallet,
@@ -33,7 +34,7 @@ data class BalanceViewItem(
         val syncingData: SyncingData?,
         val failedIconVisible: Boolean,
         val coinIconVisible: Boolean,
-        val coinTypeLabelVisible: Boolean,
+        val coinTypeLabel: String?,
         var hideBalance: Boolean,
         val swapVisible: Boolean,
         val swapEnabled: Boolean = false
@@ -50,7 +51,7 @@ data class BalanceHeaderViewItem(val currencyValue: CurrencyValue?, val upToDate
         App.numberFormatter.formatFiat(it.value, it.currency.symbol, 2, 2)
     }
 
-    fun getBalanceTextColor(context: Context) : Int {
+    fun getBalanceTextColor(context: Context): Int {
         val color = if (upToDate) R.color.jacob else R.color.yellow_50
         return context.getColor(color)
     }
@@ -113,10 +114,6 @@ class BalanceViewItemFactory {
 
     }
 
-    private fun coinTypeLabelVisible(coinType: CoinType): Boolean {
-        return coinType.label != null
-    }
-
     fun viewItem(item: BalanceModule.BalanceItem, currency: Currency, expanded: Boolean, hideBalance: Boolean): BalanceViewItem {
         val wallet = item.wallet
         val coin = wallet.coin
@@ -146,11 +143,24 @@ class BalanceViewItemFactory {
                 syncingData = syncingData(state, expanded),
                 failedIconVisible = state is AdapterState.NotSynced,
                 coinIconVisible = state !is AdapterState.NotSynced,
-                coinTypeLabelVisible = coinTypeLabelVisible(coin.type),
+                coinTypeLabel = coinTypeLabel(wallet),
                 hideBalance = hideBalance,
                 swapVisible = item.wallet.coin.type.swappable,
                 swapEnabled = state is AdapterState.Synced
         )
+    }
+
+    private fun coinTypeLabel(wallet: Wallet) = when (wallet.coin.type) {
+        CoinType.Bitcoin,
+        CoinType.Litecoin -> {
+            wallet.configuredCoin.settings.derivation?.value?.toUpperCase(Locale.ENGLISH)
+        }
+        CoinType.BitcoinCash -> {
+            wallet.configuredCoin.settings.bitcoinCashCoinType?.value?.toUpperCase(Locale.ENGLISH)
+        }
+        else -> {
+            wallet.coin.type.blockchainType
+        }
     }
 
     private fun getRateDiff(item: BalanceModule.BalanceItem): RateDiff {

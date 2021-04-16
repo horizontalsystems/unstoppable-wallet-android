@@ -6,7 +6,6 @@ import io.horizontalsystems.bankwallet.core.IWalletStorage
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.Wallet
-import io.horizontalsystems.coinkit.models.Coin
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
 
@@ -48,11 +47,6 @@ class WalletManager(
                 .let {
                     disposables.add(it)
                 }
-    }
-
-    override fun wallet(coin: Coin): Wallet? {
-        val account = accountManager.account(coin.type) ?: return null
-        return storage.wallet(account, coin)
     }
 
     override fun loadWallets() {

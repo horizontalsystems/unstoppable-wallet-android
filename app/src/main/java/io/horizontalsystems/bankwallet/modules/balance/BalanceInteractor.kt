@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.balance
 
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
+import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.coinkit.models.CoinType
@@ -21,6 +22,7 @@ class BalanceInteractor(
         private val localStorage: ILocalStorage,
         private val rateManager: IRateManager,
         private val predefinedAccountTypeManager: IPredefinedAccountTypeManager,
+        private val accountManager: IAccountManager,
         private val rateAppManager: IRateAppManager,
         private val connectivityManager: ConnectivityManager,
         appConfigProvider: IAppConfigProvider)
@@ -33,8 +35,11 @@ class BalanceInteractor(
     private var marketInfoDisposables = CompositeDisposable()
     override val reportEmail = appConfigProvider.reportEmail
 
+    override val activeAccount: Account?
+        get() = accountManager.activeAccount
+
     override val wallets: List<Wallet>
-        get() = walletManager.wallets
+        get() = walletManager.activeWallets
 
     override val baseCurrency: Currency
         get() = currencyManager.baseCurrency
@@ -50,6 +55,24 @@ class BalanceInteractor(
 
     override val networkAvailable: Boolean
         get() = connectivityManager.isConnected
+
+    init {
+        accountManager.activeAccountObservable
+                .subscribeIO {
+                    delegate?.didUpdateAciveAccount(it.orElseGet(null))
+                }
+                .let {
+                    disposables.add(it)
+                }
+
+        accountManager.accountsFlowable
+                .subscribeIO {
+                    delegate?.didUpdateAciveAccount(accountManager.activeAccount)
+                }
+                .let {
+                    disposables.add(it)
+                }
+    }
 
     override fun latestRate(coinType: CoinType, currencyCode: String): LatestRate? {
         return rateManager.latestRate(coinType, currencyCode)
@@ -72,7 +95,7 @@ class BalanceInteractor(
     }
 
     override fun subscribeToWallets() {
-        walletManager.walletsUpdatedObservable
+        walletManager.activeWalletsUpdatedObservable
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .subscribe { wallets ->
