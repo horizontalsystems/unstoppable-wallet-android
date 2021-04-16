@@ -24,7 +24,7 @@ class ChartMinimal @JvmOverloads constructor(context: Context, attrs: AttributeS
     fun setData(data: ChartData) {
         config.setTrendColor(data)
 
-        val points = PointConverter.curve(data.values(Candle), chartMain.shape, config.curveVerticalOffset)
+        val points = PointConverter.curve(data.values(Candle), chartMain.shape, config.curveMinimalVerticalOffset)
 
         mainCurve.setShape(chartMain.shape)
         mainCurve.setPoints(points)
