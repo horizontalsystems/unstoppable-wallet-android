@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.balance
 
 import io.horizontalsystems.bankwallet.core.AdapterState
-import io.horizontalsystems.bankwallet.core.IPredefinedAccountTypeManager
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.balance.BalanceModule.BalanceItem
@@ -15,7 +14,6 @@ class BalancePresenter(
         private val interactor: BalanceModule.IInteractor,
         private val router: BalanceModule.IRouter,
         private val sorter: BalanceModule.IBalanceSorter,
-        private val predefinedAccountTypeManager: IPredefinedAccountTypeManager,
         private val factory: BalanceViewItemFactory,
         private val sortingOnThreshold: Int = 5
 ) : BalanceModule.IViewDelegate, BalanceModule.IInteractorDelegate {
@@ -63,10 +61,7 @@ class BalancePresenter(
         if (wallet.account.isBackedUp) {
             router.openReceive(wallet)
         } else {
-            interactor.predefinedAccountType(wallet)?.let { predefinedAccountType ->
-                accountToBackup = wallet.account
-                view?.showBackupRequired(wallet.coin, predefinedAccountType)
-            }
+            view?.showBackupRequired(wallet)
         }
     }
 
@@ -156,11 +151,7 @@ class BalancePresenter(
     }
 
     override fun onBackupClick() {
-        accountToBackup?.let { account ->
-            val accountType = predefinedAccountTypeManager.allTypes.first { it.supports(account.type) }
-            router.openBackup(account, accountType.coinCodes)
-            accountToBackup = null
-        }
+        // todo
     }
 
     override fun onClear() {

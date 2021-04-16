@@ -15,7 +15,8 @@ class PrivacySettingsInteractor(
         private val syncModeSettingsManager: IInitialSyncModeSettingsManager,
         private val ethereumRpcModeSettingsManager: IEthereumRpcModeSettingsManager,
         coinManager: ICoinManager,
-        walletManager: IWalletManager,
+        private val walletManager: IWalletManager,
+        private val accountManager: IAccountManager,
         private val localStorageManager: ILocalStorage
 ) : PrivacySettingsModule.IPrivacySettingsInteractor {
 
@@ -29,7 +30,11 @@ class PrivacySettingsInteractor(
             localStorageManager.transactionSortingType = value
         }
 
-    override val wallets = walletManager.wallets
+    override val wallets: List<Wallet>
+        get() = walletManager.activeWallets
+
+    override val activeAccount: Account?
+        get() = accountManager.activeAccount
 
     override var isTorEnabled: Boolean
         get() = torManager.isTorEnabled

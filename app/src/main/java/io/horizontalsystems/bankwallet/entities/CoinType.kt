@@ -34,13 +34,6 @@ val CoinType.label: String?
 val CoinType.swappable: Boolean
     get() = this is CoinType.Ethereum || this is CoinType.Erc20 || this is CoinType.BinanceSmartChain || this is CoinType.Bep20
 
-val CoinType.predefinedAccountType: PredefinedAccountType
-    get() = when (this) {
-        CoinType.Bitcoin, CoinType.Litecoin, CoinType.BitcoinCash, CoinType.Dash, CoinType.Ethereum, is CoinType.Erc20, is CoinType.Unsupported -> PredefinedAccountType.Standard
-        CoinType.BinanceSmartChain, is CoinType.Bep20, is CoinType.Bep2 -> PredefinedAccountType.Binance
-        CoinType.Zcash -> PredefinedAccountType.Zcash
-    }
-
 val CoinType.coinSettingTypes: List<CoinSettingType>
     get() = when (this) {
         CoinType.Bitcoin,

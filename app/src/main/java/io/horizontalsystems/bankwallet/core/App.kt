@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.NotificationManagerCompat
 import androidx.preference.PreferenceManager
 import io.horizontalsystems.bankwallet.BuildConfig
-import io.horizontalsystems.bankwallet.core.factories.AccountFactory
 import io.horizontalsystems.bankwallet.core.factories.AdapterFactory
 import io.horizontalsystems.bankwallet.core.factories.AddressParserFactory
 import io.horizontalsystems.bankwallet.core.managers.*
@@ -57,8 +56,6 @@ class App : CoreApp() {
         lateinit var walletStorage: IWalletStorage
         lateinit var accountManager: IAccountManager
         lateinit var backupManager: IBackupManager
-        lateinit var accountCreator: IAccountCreator
-        lateinit var predefinedAccountTypeManager: IPredefinedAccountTypeManager
 
         lateinit var xRateManager: IRateManager
         lateinit var connectivityManager: ConnectivityManager
@@ -155,8 +152,6 @@ class App : CoreApp() {
         backupManager = BackupManager(accountManager)
         walletManager = WalletManager(accountManager, walletStorage)
         zcashBirthdayProvider = ZcashBirthdayProvider(this)
-        accountCreator = AccountCreator(AccountFactory(), wordsManager, zcashBirthdayProvider)
-        predefinedAccountTypeManager = PredefinedAccountTypeManager(accountManager, accountCreator)
 
         KeyStoreManager("MASTER_KEY", KeyStoreCleaner(localStorage, accountManager, walletManager)).apply {
             keyStoreManager = this
@@ -216,7 +211,7 @@ class App : CoreApp() {
         rateAppManager = RateAppManager(walletManager, adapterManager, localStorage)
         walletConnectSessionStorage = WalletConnectSessionStorage(appDatabase)
         walletConnectSessionManager = WalletConnectSessionManager(walletConnectSessionStorage, accountManager)
-        walletConnectManager = WalletConnectManager(predefinedAccountTypeManager, ethereumKitManager, binanceSmartChainKitManager)
+        walletConnectManager = WalletConnectManager(accountManager, ethereumKitManager, binanceSmartChainKitManager)
 
         termsManager = TermsManager(localStorage)
 

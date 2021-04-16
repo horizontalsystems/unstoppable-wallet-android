@@ -113,11 +113,6 @@ interface IBackupManager {
     fun setIsBackedUp(id: String)
 }
 
-interface IAccountCreator {
-    fun newAccount(predefinedAccountType: PredefinedAccountType): Account
-    fun restoredAccount(accountType: AccountType): Account
-}
-
 interface IAccountFactory {
     fun account(type: AccountType, origin: AccountOrigin, backedUp: Boolean): Account
 }
@@ -127,12 +122,6 @@ interface IWalletStorage {
     fun wallets(account: Account): List<Wallet>
     fun save(wallets: List<Wallet>)
     fun delete(wallets: List<Wallet>)
-}
-
-interface IPredefinedAccountTypeManager {
-    val allTypes: List<PredefinedAccountType>
-    fun account(predefinedAccountType: PredefinedAccountType): Account?
-    fun predefinedAccountType(type: AccountType): PredefinedAccountType?
 }
 
 interface IRandomProvider {

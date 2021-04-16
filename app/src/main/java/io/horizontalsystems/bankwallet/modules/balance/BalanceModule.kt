@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Account
-import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.coinkit.models.CoinType
@@ -21,7 +20,7 @@ object BalanceModule {
         fun set(viewItems: List<BalanceViewItem>)
         fun set(headerViewItem: BalanceHeaderViewItem)
         fun set(sortIsOn: Boolean)
-        fun showBackupRequired(coin: Coin, predefinedAccountType: PredefinedAccountType)
+        fun showBackupRequired(wallet: Wallet)
         fun didRefresh()
         fun setBalanceHidden(hidden: Boolean, animate: Boolean)
         fun showSyncErrorDialog(wallet: Wallet, errorMessage: String, sourceChangeable: Boolean)
@@ -77,7 +76,6 @@ object BalanceModule {
         fun subscribeToMarketInfo(currencyCode: String)
 
         fun refresh()
-        fun predefinedAccountType(wallet: Wallet): PredefinedAccountType?
 
         fun saveSortType(sortType: BalanceSortType)
 
@@ -148,13 +146,12 @@ object BalanceModule {
                     App.currencyManager,
                     App.localStorage,
                     App.xRateManager,
-                    App.predefinedAccountTypeManager,
                     App.accountManager,
                     App.rateAppManager,
                     App.connectivityManager,
                     App.appConfigProvider)
 
-            val presenter = BalancePresenter(interactor, viewAndRouter, BalanceSorter(), App.predefinedAccountTypeManager, BalanceViewItemFactory())
+            val presenter = BalancePresenter(interactor, viewAndRouter, BalanceSorter(), BalanceViewItemFactory())
 
             presenter.view = viewAndRouter
             interactor.delegate = presenter

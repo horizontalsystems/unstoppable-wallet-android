@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.walletconnect
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.storage.WalletConnectSessionStorage
 import io.horizontalsystems.bankwallet.core.subscribeIO
+import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.WalletConnectSession
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
@@ -20,7 +21,9 @@ class WalletConnectSessionManager(
         get() = sessionsSubject.toFlowable(BackpressureStrategy.BUFFER)
 
     val sessions: List<WalletConnectSession>
-        get() = storage.getSessions()
+        get() = accountManager.activeAccount?.id?.let { accountId ->
+            storage.getSessions(accountId)
+        } ?: listOf()
 
     init {
         accountManager.accountsDeletedFlowable
@@ -30,6 +33,18 @@ class WalletConnectSessionManager(
                 .let {
                     disposable.add(it)
                 }
+
+        accountManager.activeAccountObservable
+                .subscribeIO {
+                    handleActiveAccount(it.orElse(null))
+                }
+                .let {
+                    disposable.add(it)
+                }
+    }
+
+    private fun handleActiveAccount(account: Account?) {
+        sessionsSubject.onNext(sessions)
     }
 
     fun save(session: WalletConnectSession) {

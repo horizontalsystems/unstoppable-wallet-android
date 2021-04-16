@@ -1,15 +1,11 @@
 package io.horizontalsystems.bankwallet.modules.backup
 
 import io.horizontalsystems.bankwallet.core.IBackupManager
-import io.horizontalsystems.bankwallet.core.IPredefinedAccountTypeManager
-import io.horizontalsystems.bankwallet.entities.AccountType
-import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
 import io.horizontalsystems.core.IPinComponent
 
 class BackupInteractor(
         private val backupManager: IBackupManager,
-        private val pinComponent: IPinComponent,
-        private val predefinedAccountTypeManager: IPredefinedAccountTypeManager
+        private val pinComponent: IPinComponent
 )
     : BackupModule.Interactor {
 
@@ -22,7 +18,7 @@ class BackupInteractor(
         backupManager.setIsBackedUp(accountId)
     }
 
-    override fun predefinedAccountType(accountType: AccountType): PredefinedAccountType? {
-        return predefinedAccountTypeManager.predefinedAccountType(accountType)
-    }
+//    override fun predefinedAccountType(accountType: AccountType): PredefinedAccountType? {
+//        return predefinedAccountTypeManager.predefinedAccountType(accountType)
+//    }
 }

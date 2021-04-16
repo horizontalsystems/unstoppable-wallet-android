@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.modules.restore.RestoreFragment
 import io.horizontalsystems.core.findNavController
 import kotlinx.android.synthetic.main.fragment_no_wallet.*
 

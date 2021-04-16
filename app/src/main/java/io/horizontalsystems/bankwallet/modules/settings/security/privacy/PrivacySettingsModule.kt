@@ -42,6 +42,7 @@ object PrivacySettingsModule {
 
     interface IPrivacySettingsInteractor {
         val wallets: List<Wallet>
+        val activeAccount: Account?
         var transactionsSortingType: TransactionDataSortingType
         var isTorEnabled: Boolean
         val isTorNotificationEnabled: Boolean
@@ -79,6 +80,7 @@ object PrivacySettingsModule {
                 App.ethereumRpcModeSettingsManager,
                 App.coinManager,
                 App.walletManager,
+                App.accountManager,
                 App.localStorage)
 
         val presenter = PrivacySettingsPresenter(interactor, router)

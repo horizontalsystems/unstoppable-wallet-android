@@ -2,8 +2,6 @@ package io.horizontalsystems.bankwallet.modules.backup
 
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Account
-import io.horizontalsystems.bankwallet.entities.AccountType
-import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
 
 object BackupModule {
 
@@ -21,7 +19,7 @@ object BackupModule {
         val isPinSet: Boolean
 
         fun setBackedUp(accountId: String)
-        fun predefinedAccountType(accountType: AccountType): PredefinedAccountType?
+//        fun predefinedAccountType(accountType: AccountType): PredefinedAccountType?
     }
 
     interface InteractorDelegate
@@ -36,7 +34,7 @@ object BackupModule {
     //  helpers
 
     fun init(view: BackupViewModel, router: Router, account: Account) {
-        val interactor = BackupInteractor(App.backupManager, App.pinComponent, App.predefinedAccountTypeManager)
+        val interactor = BackupInteractor(App.backupManager, App.pinComponent)
         val presenter = BackupPresenter(interactor, router, account)
 
         view.delegate = presenter

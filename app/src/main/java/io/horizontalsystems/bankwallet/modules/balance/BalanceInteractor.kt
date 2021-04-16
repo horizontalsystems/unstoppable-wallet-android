@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.modules.balance
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
 import io.horizontalsystems.bankwallet.entities.Account
-import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.ICurrencyManager
@@ -21,7 +20,6 @@ class BalanceInteractor(
         private val currencyManager: ICurrencyManager,
         private val localStorage: ILocalStorage,
         private val rateManager: IRateManager,
-        private val predefinedAccountTypeManager: IPredefinedAccountTypeManager,
         private val accountManager: IAccountManager,
         private val rateAppManager: IRateAppManager,
         private val connectivityManager: ConnectivityManager,
@@ -166,10 +164,6 @@ class BalanceInteractor(
         rateManager.refresh()
 
         delegate?.didRefresh()
-    }
-
-    override fun predefinedAccountType(wallet: Wallet): PredefinedAccountType? {
-        return predefinedAccountTypeManager.predefinedAccountType(wallet.account.type)
     }
 
     override fun saveSortType(sortType: BalanceSortType) {

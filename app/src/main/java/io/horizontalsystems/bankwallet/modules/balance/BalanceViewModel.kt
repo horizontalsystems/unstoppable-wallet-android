@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.modules.balance
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.entities.Account
-import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.coinkit.models.CoinType
@@ -27,7 +26,7 @@ class BalanceViewModel : ViewModel(), BalanceModule.IView, BalanceModule.IRouter
     val setHeaderViewItem = MutableLiveData<BalanceHeaderViewItem>()
     val setViewItems = MutableLiveData<List<BalanceViewItem>>()
     val titleLiveData = MutableLiveData<String>()
-    val showBackupAlert = SingleLiveEvent<Pair<Coin, PredefinedAccountType>>()
+    val showBackupAlert = SingleLiveEvent<Wallet>()
     val didRefreshLiveEvent = SingleLiveEvent<Void>()
     val setBalanceHidden = MutableLiveData<Pair<Boolean, Boolean>>()
     val showSyncError = SingleLiveEvent<Triple<Wallet, String, Boolean>>()
@@ -95,8 +94,8 @@ class BalanceViewModel : ViewModel(), BalanceModule.IView, BalanceModule.IRouter
         titleLiveData.postValue(v)
     }
 
-    override fun showBackupRequired(coin: Coin, predefinedAccountType: PredefinedAccountType) {
-        showBackupAlert.postValue(Pair(coin, predefinedAccountType))
+    override fun showBackupRequired(wallet: Wallet) {
+        showBackupAlert.postValue(wallet)
     }
 
     override fun didRefresh() {
