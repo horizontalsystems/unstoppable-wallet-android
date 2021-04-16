@@ -26,6 +26,7 @@ class BalanceViewModel : ViewModel(), BalanceModule.IView, BalanceModule.IRouter
     val isSortOn = MutableLiveData<Boolean>()
     val setHeaderViewItem = MutableLiveData<BalanceHeaderViewItem>()
     val setViewItems = MutableLiveData<List<BalanceViewItem>>()
+    val titleLiveData = MutableLiveData<String>()
     val showBackupAlert = SingleLiveEvent<Pair<Coin, PredefinedAccountType>>()
     val didRefreshLiveEvent = SingleLiveEvent<Void>()
     val setBalanceHidden = MutableLiveData<Pair<Boolean, Boolean>>()
@@ -88,6 +89,10 @@ class BalanceViewModel : ViewModel(), BalanceModule.IView, BalanceModule.IRouter
 
     override fun set(viewItems: List<BalanceViewItem>) {
         setViewItems.postValue(viewItems)
+    }
+
+    override fun setTitle(v: String?) {
+        titleLiveData.postValue(v)
     }
 
     override fun showBackupRequired(coin: Coin, predefinedAccountType: PredefinedAccountType) {

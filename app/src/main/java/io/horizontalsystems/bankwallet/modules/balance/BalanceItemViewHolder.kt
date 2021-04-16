@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.setCoinImage
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
-import io.horizontalsystems.bankwallet.entities.label
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_balance_item.*
 
@@ -64,7 +63,7 @@ class BalanceItemViewHolder(override val containerView: View, private val listen
             iconCoin.setCoinImage(coinType)
 
             coinName.text = coinTitle
-            coinLabel.text = coinType.label
+            coinLabel.text = coinTypeLabel
 
             balanceCoin.text = coinValue.text
             balanceFiat.text = fiatValue.text
@@ -96,7 +95,7 @@ class BalanceItemViewHolder(override val containerView: View, private val listen
             iconCoin.isVisible = coinIconVisible
             iconNotSynced.isVisible = failedIconVisible
 
-            coinLabel.isVisible = coinTypeLabelVisible
+            coinLabel.isVisible = !coinTypeLabel.isNullOrBlank()
         }
 
         BalanceCellAnimator.toggleBalanceAndButtons(this, item)

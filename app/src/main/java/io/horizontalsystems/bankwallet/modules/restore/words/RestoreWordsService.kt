@@ -51,7 +51,7 @@ class RestoreWordsService(
                         throw RestoreWordsException.InvalidBirthdayHeightException()
                     }
                 }
-                AccountType.Zcash(words, birthdayHeight)
+                AccountType.Mnemonic(words)
             }
         }
     }

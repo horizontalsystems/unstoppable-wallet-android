@@ -38,7 +38,7 @@ class BinanceSmartChainKitManager(
         }
 
         if (this.evmKit == null) {
-            if (account.type !is AccountType.Mnemonic || account.type.words.size != 24)
+            if (account.type !is AccountType.Mnemonic)
                 throw UnsupportedAccountException()
 
             useCount = 0

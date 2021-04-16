@@ -11,7 +11,6 @@ import io.horizontalsystems.bankwallet.core.storage.AppDatabase
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.PriceAlert
 import io.horizontalsystems.bankwallet.entities.SubscriptionJob
-import io.horizontalsystems.bankwallet.entities.canSupport
 import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.BackgroundManager
 import io.reactivex.BackpressureStrategy
@@ -77,14 +76,15 @@ class PriceAlertManager(
 
     override fun deleteAlertsByAccountType(accountType: AccountType) {
         val alerts = dao.all()
-        val selectedAlerts = alerts.filter { it.coinType.canSupport(accountType) }
-
-        updateSubscription(selectedAlerts, SubscriptionJob.JobType.Unsubscribe)
-        selectedAlerts.forEach {
-            dao.delete(it)
-        }
-
-        notificationChangedSubject.onNext(Unit)
+        TODO()
+//        val selectedAlerts = alerts.filter { it.coinType.canSupport(accountType) }
+//
+//        updateSubscription(selectedAlerts, SubscriptionJob.JobType.Unsubscribe)
+//        selectedAlerts.forEach {
+//            dao.delete(it)
+//        }
+//
+//        notificationChangedSubject.onNext(Unit)
     }
 
     override suspend fun fetchNotifications() {

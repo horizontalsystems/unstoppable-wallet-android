@@ -3,10 +3,10 @@ package io.horizontalsystems.bankwallet.modules.balance
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.IPredefinedAccountTypeManager
 import io.horizontalsystems.bankwallet.entities.Account
-import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.balance.BalanceModule.BalanceItem
 import io.horizontalsystems.coinkit.models.CoinType
+import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.xrateskit.entities.LatestRate
 import java.math.BigDecimal
 import java.util.concurrent.Executors
@@ -37,6 +37,8 @@ class BalancePresenter(
 
     override fun onLoad() {
         executor.submit {
+            updateTitle(interactor.activeAccount)
+
             view?.setBalanceHidden(hideBalance, false)
 
             interactor.subscribeToWallets()
@@ -138,6 +140,10 @@ class BalancePresenter(
         hideBalance = hidden
         view?.setBalanceHidden(hidden, true)
         toggleBalanceVisibility()
+    }
+
+    private fun updateTitle(account: Account?) {
+        view?.setTitle(account?.name)
     }
 
     override fun onSortTypeChange(sortType: BalanceSortType) {
@@ -256,6 +262,10 @@ class BalancePresenter(
 
     override fun didRefresh() {
         view?.didRefresh()
+    }
+
+    override fun didUpdateAciveAccount(account: Account?) {
+        updateTitle(account)
     }
 
     private fun sourceChangeable(coinType: CoinType): Boolean {

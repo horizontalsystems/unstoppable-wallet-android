@@ -4,7 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.bankwallet.entities.Account
+import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
+import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.entities.Currency
@@ -15,6 +17,7 @@ import java.math.BigDecimal
 object BalanceModule {
 
     interface IView {
+        fun setTitle(v: String?)
         fun set(viewItems: List<BalanceViewItem>)
         fun set(headerViewItem: BalanceHeaderViewItem)
         fun set(sortIsOn: Boolean)
@@ -54,6 +57,7 @@ object BalanceModule {
 
     interface IInteractor {
         val reportEmail: String
+        val activeAccount: Account?
         val wallets: List<Wallet>
         val baseCurrency: Currency
         val sortType: BalanceSortType
@@ -94,6 +98,7 @@ object BalanceModule {
         fun didUpdateLatestRate(latestRate: Map<CoinType, LatestRate>)
 
         fun didRefresh()
+        fun didUpdateAciveAccount(account: Account?)
     }
 
     interface IRouter {
@@ -144,6 +149,7 @@ object BalanceModule {
                     App.localStorage,
                     App.xRateManager,
                     App.predefinedAccountTypeManager,
+                    App.accountManager,
                     App.rateAppManager,
                     App.connectivityManager,
                     App.appConfigProvider)

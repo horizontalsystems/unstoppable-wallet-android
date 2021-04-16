@@ -70,7 +70,7 @@ class TransactionsInteractor(
         }
 
         val flowables: List<Single<Pair<Wallet, List<TransactionRecord>>>> = fetchDataList.map { fetchData ->
-            val adapter = walletManager.wallets.find { it == fetchData.wallet }?.let {
+            val adapter = walletManager.activeWallets.find { it == fetchData.wallet }?.let {
                 adapterManager.getTransactionsAdapterForWallet(it)
             }
 
@@ -97,13 +97,13 @@ class TransactionsInteractor(
     }
 
     override fun setSelectedWallets(selectedWallets: List<Wallet>) {
-        delegate?.onUpdateSelectedWallets(if (selectedWallets.isEmpty()) walletManager.wallets else selectedWallets)
+        delegate?.onUpdateSelectedWallets(if (selectedWallets.isEmpty()) walletManager.activeWallets else selectedWallets)
     }
 
     override fun fetchLastBlockHeights() {
         lastBlockHeightDisposables.clear()
 
-        walletManager.wallets.forEach { wallet ->
+        walletManager.activeWallets.forEach { wallet ->
             adapterManager.getTransactionsAdapterForWallet(wallet)?.let { adapter ->
                 adapter.lastBlockUpdatedFlowable
                         .throttleLast(3, TimeUnit.SECONDS)
@@ -159,7 +159,7 @@ class TransactionsInteractor(
         val walletsData = mutableListOf<Pair<Wallet, LastBlockInfo?>>()
         val adapterStates = mutableMapOf<Wallet, AdapterState>()
 
-        walletManager.wallets.forEach { wallet ->
+        walletManager.activeWallets.forEach { wallet ->
             adapterManager.getTransactionsAdapterForWallet(wallet)?.let { adapter ->
                 walletsData.add(Pair(wallet, adapter.lastBlockInfo))
                 adapterStates[wallet] = adapter.transactionsState

@@ -98,7 +98,6 @@ interface IAccountManager {
     val accountsDeletedFlowable: Flowable<Unit>
 
     fun setActiveAccountId(activeAccountId: String?)
-    fun account(coinType: CoinType): Account?
     fun account(id: String): Account?
     fun loadAccounts()
     fun save(account: Account)
@@ -126,10 +125,8 @@ interface IAccountFactory {
 interface IWalletStorage {
     fun wallets(accounts: List<Account>): List<Wallet>
     fun wallets(account: Account): List<Wallet>
-    fun enabledCoins(): List<Coin>
     fun save(wallets: List<Wallet>)
     fun delete(wallets: List<Wallet>)
-    fun wallet(account: Account, coin: Coin): Wallet?
 }
 
 interface IPredefinedAccountTypeManager {
@@ -207,7 +204,6 @@ interface IBalanceAdapter {
 
 interface IReceiveAdapter {
     val receiveAddress: String
-    fun getReceiveAddressType(wallet: Wallet): String?
 }
 
 interface ISendBitcoinAdapter {
@@ -361,7 +357,6 @@ interface IWalletManager {
 
     val wallets: List<Wallet>
     val walletsUpdatedObservable: Observable<List<Wallet>>
-    fun wallet(coin: Coin): Wallet?
 
     fun loadWallets()
     fun enable(wallets: List<Wallet>)

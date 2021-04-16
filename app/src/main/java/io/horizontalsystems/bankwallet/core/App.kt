@@ -173,7 +173,9 @@ class App : CoreApp() {
 
         connectivityManager = ConnectivityManager(backgroundManager)
 
-        val adapterFactory = AdapterFactory(instance, buildConfigProvider.testMode, ethereumKitManager, binanceSmartChainKitManager, binanceKitManager, backgroundManager)
+        restoreSettingsManager = RestoreSettingsManager(restoreSettingsStorage)
+
+        val adapterFactory = AdapterFactory(instance, buildConfigProvider.testMode, ethereumKitManager, binanceSmartChainKitManager, binanceKitManager, backgroundManager, restoreSettingsManager)
         adapterManager = AdapterManager(walletManager, adapterFactory, ethereumKitManager, binanceSmartChainKitManager, binanceKitManager)
 
         initialSyncModeSettingsManager = InitialSyncSettingsManager(coinManager, blockchainSettingsStorage, adapterManager, walletManager)
@@ -182,9 +184,7 @@ class App : CoreApp() {
         bitcoinCashCoinTypeManager = BitcoinCashCoinTypeManager(walletManager, adapterManager, blockchainSettingsStorage)
 
         adapterFactory.initialSyncModeSettingsManager = initialSyncModeSettingsManager
-        adapterFactory.derivationSettingsManager = derivationSettingsManager
         adapterFactory.ethereumRpcModeSettingsManager = ethereumRpcModeSettingsManager
-        adapterFactory.bitcoinCashCoinTypeManager = bitcoinCashCoinTypeManager
 
         feeCoinProvider = FeeCoinProvider(coinKit)
         xRateManager = RateManager(this, walletManager, currencyManager, feeCoinProvider, appConfigProvider)
@@ -225,8 +225,6 @@ class App : CoreApp() {
         activateCoinManager = ActivateCoinManager(coinKit, walletManager, accountManager)
 
         changeLogsManager = ChangeLogsManager(systemInfoManager, localStorage)
-
-        restoreSettingsManager = RestoreSettingsManager(restoreSettingsStorage)
 
         setAppTheme()
 

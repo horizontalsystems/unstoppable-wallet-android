@@ -1,9 +1,13 @@
 package io.horizontalsystems.bankwallet.core.adapters
 
+import io.horizontalsystems.bankwallet.core.AdapterErrorWrongParameters
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ISendBitcoinAdapter
 import io.horizontalsystems.bankwallet.core.UnsupportedAccountException
-import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.bankwallet.entities.AccountType
+import io.horizontalsystems.bankwallet.entities.SyncMode
+import io.horizontalsystems.bankwallet.entities.TransactionRecord
+import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bitcoincore.BitcoinCore
 import io.horizontalsystems.bitcoincore.models.BalanceInfo
 import io.horizontalsystems.bitcoincore.models.BlockInfo
@@ -15,12 +19,11 @@ import java.math.BigDecimal
 
 class BitcoinAdapter(
         override val kit: BitcoinKit,
-        derivation: AccountType.Derivation?,
         syncMode: SyncMode?,
         backgroundManager: BackgroundManager
-) : BitcoinBaseAdapter(kit, derivation, syncMode, backgroundManager), BitcoinKit.Listener, ISendBitcoinAdapter {
+) : BitcoinBaseAdapter(kit, syncMode, backgroundManager), BitcoinKit.Listener, ISendBitcoinAdapter {
 
-    constructor(wallet: Wallet, derivation: AccountType.Derivation?, syncMode: SyncMode?, testMode: Boolean, backgroundManager: BackgroundManager) : this(createKit(wallet, derivation, syncMode, testMode), derivation, syncMode, backgroundManager)
+    constructor(wallet: Wallet, syncMode: SyncMode?, testMode: Boolean, backgroundManager: BackgroundManager) : this(createKit(wallet, syncMode, testMode), syncMode, backgroundManager)
 
     init {
         kit.listener = this
@@ -31,10 +34,6 @@ class BitcoinAdapter(
     //
 
     override val satoshisInBitcoin: BigDecimal = BigDecimal.valueOf(Math.pow(10.0, decimal.toDouble()))
-
-    override fun getReceiveAddressType(wallet: Wallet): String? {
-        return derivation?.addressType()
-    }
 
     //
     // BitcoinKit Listener
@@ -75,20 +74,18 @@ class BitcoinAdapter(
         private fun getNetworkType(testMode: Boolean) =
                 if (testMode) NetworkType.TestNet else NetworkType.MainNet
 
-        private fun createKit(wallet: Wallet, derivation: AccountType.Derivation?, syncMode: SyncMode?, testMode: Boolean): BitcoinKit {
+        private fun createKit(wallet: Wallet, syncMode: SyncMode?, testMode: Boolean): BitcoinKit {
             val account = wallet.account
-            val accountType = account.type
-            if (accountType is AccountType.Mnemonic && accountType.words.size == 12) {
-                return BitcoinKit(context = App.instance,
-                        words = accountType.words,
-                        walletId = account.id,
-                        syncMode = getSyncMode(syncMode),
-                        networkType = getNetworkType(testMode),
-                        confirmationsThreshold = confirmationsThreshold,
-                        bip = getBip(derivation))
-            }
+            val accountType = (account.type as? AccountType.Mnemonic) ?: throw UnsupportedAccountException()
+            val derivation = wallet.configuredCoin.settings.derivation ?: throw AdapterErrorWrongParameters("Derivation not set")
 
-            throw UnsupportedAccountException()
+            return BitcoinKit(context = App.instance,
+                    words = accountType.words,
+                    walletId = account.id,
+                    syncMode = getSyncMode(syncMode),
+                    networkType = getNetworkType(testMode),
+                    confirmationsThreshold = confirmationsThreshold,
+                    bip = getBip(derivation))
         }
 
         fun clear(walletId: String, testMode: Boolean) {

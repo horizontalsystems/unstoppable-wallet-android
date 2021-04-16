@@ -27,7 +27,7 @@ class AccountCreator(
         return when (predefinedAccountType) {
             is PredefinedAccountType.Standard -> AccountType.Mnemonic(wordsManager.generateWords(12))
             is PredefinedAccountType.Binance -> AccountType.Mnemonic(wordsManager.generateWords(24))
-            is PredefinedAccountType.Zcash -> AccountType.Zcash(wordsManager.generateWords(24), zcashBirthdayProvider.getNearestBirthdayHeight())
+            is PredefinedAccountType.Zcash -> AccountType.Mnemonic(wordsManager.generateWords(24))
         }
     }
 

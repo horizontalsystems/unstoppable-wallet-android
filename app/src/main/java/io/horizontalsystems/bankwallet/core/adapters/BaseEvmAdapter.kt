@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.core.adapters
 
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.LastBlockInfo
-import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.ethereumkit.core.AddressValidator
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.models.Address
@@ -15,8 +14,6 @@ abstract class BaseEvmAdapter(
         override val evmKit: EthereumKit,
         val decimal: Int
 ) : IAdapter, ISendEthereumAdapter, ITransactionsAdapter, IBalanceAdapter, IReceiveAdapter {
-
-    override fun getReceiveAddressType(wallet: Wallet): String? = null
 
     override val debugInfo: String
         get() = evmKit.debugInfo()

@@ -169,6 +169,10 @@ class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener, ReceiveFra
     // LiveData
 
     private fun observeLiveData() {
+        viewModel.titleLiveData.observe(viewLifecycleOwner) {
+            toolbar.title = it ?: getString(R.string.Balance_Title)
+        }
+
         viewModel.openReceiveDialog.observe(viewLifecycleOwner, Observer { wallet ->
             ReceiveFragment.newInstance(wallet).show(childFragmentManager, "ReceiveFragment")
         })

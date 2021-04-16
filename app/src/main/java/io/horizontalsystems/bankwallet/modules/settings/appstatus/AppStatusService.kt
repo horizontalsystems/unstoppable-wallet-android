@@ -4,7 +4,6 @@ import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.adapters.BitcoinBaseAdapter
 import io.horizontalsystems.bankwallet.core.managers.BinanceSmartChainKitManager
 import io.horizontalsystems.bankwallet.core.managers.EthereumKitManager
-import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.coinkit.models.CoinType
@@ -15,7 +14,7 @@ import kotlin.collections.LinkedHashMap
 class AppStatusService(
         private val systemInfoManager: ISystemInfoManager,
         private val localStorage: ILocalStorage,
-        private val predefinedAccountTypeManager: IPredefinedAccountTypeManager,
+        private val accountManager: IAccountManager,
         private val walletManager: IWalletManager,
         private val adapterManager: IAdapterManager,
         private val coinManager: ICoinManager,
@@ -59,9 +58,8 @@ class AppStatusService(
     private fun getWalletsStatus(): Map<String, Any> {
         val wallets = LinkedHashMap<String, Any>()
 
-        for (predefinedAccountType in predefinedAccountTypeManager.allTypes) {
-            val account = predefinedAccountTypeManager.account(predefinedAccountType) ?: continue
-            val title = Translator.getString(predefinedAccountType.title)
+        for (account in accountManager.accounts) {
+            val title = account.name
 
             wallets[title] = getAccountDetails(account)
         }
@@ -70,6 +68,8 @@ class AppStatusService(
 
     private fun getAccountDetails(account: Account): LinkedHashMap<String, Any> {
         val accountDetails = LinkedHashMap<String, Any>()
+
+        accountDetails["Origin"] = account.origin.value
 
         when (val accountType = account.type) {
             is AccountType.Mnemonic -> {

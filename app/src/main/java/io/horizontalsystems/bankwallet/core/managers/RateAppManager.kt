@@ -34,7 +34,7 @@ class RateAppManager(
 
         var balance: BigDecimal = BigDecimal.ZERO
 
-        for (wallet in walletManager.wallets) {
+        for (wallet in walletManager.activeWallets) {
             val adapter = adapterManager.getBalanceAdapterForWallet(wallet)
             adapter?.let {
                 balance = it.balance
@@ -44,7 +44,7 @@ class RateAppManager(
                 break
         }
 
-        if (walletManager.wallets.size >= MIN_COINS_COUNT && balance > BigDecimal.ZERO) {
+        if (walletManager.activeWallets.size >= MIN_COINS_COUNT && balance > BigDecimal.ZERO) {
             isRequestAllowed = true
             showIfAllowed()
         }
