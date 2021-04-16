@@ -4,7 +4,7 @@ import android.graphics.*
 import io.horizontalsystems.chartview.helpers.ChartAnimator
 import io.horizontalsystems.chartview.models.ChartConfig
 
-class ChartCurve(private val config: ChartConfig, private val animator: ChartAnimator, override var isVisible: Boolean = false) : ChartDraw {
+class ChartCurve(private val config: ChartConfig, private val animator: ChartAnimator? = null, override var isVisible: Boolean = false) : ChartDraw {
 
     private var shape = RectF(0f, 0f, 0f, 0f)
     private var points = listOf<PointF>()
@@ -33,13 +33,19 @@ class ChartCurve(private val config: ChartConfig, private val animator: ChartAni
         val path = Path()
 
         points.forEachIndexed { index, point ->
-            if (index == 0) {
-                path.moveTo(point.x, animator.getAnimatedY(point.y, shape.bottom))
-            } else {
-                path.lineTo(point.x, animator.getAnimatedY(point.y, shape.bottom))
+            when (index) {
+                0 -> path.moveTo(point.x, getY(point))
+                else -> path.lineTo(point.x, getY(point))
             }
         }
 
         canvas.drawPath(path, paint)
+    }
+
+    private fun getY(point: PointF) : Float {
+        return when {
+            animator != null -> animator.getAnimatedY(point.y, shape.bottom)
+            else -> point.y
+        }
     }
 }

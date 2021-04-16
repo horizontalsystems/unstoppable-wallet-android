@@ -4,7 +4,6 @@ import android.content.Context
 import android.util.AttributeSet
 import androidx.constraintlayout.widget.ConstraintLayout
 import io.horizontalsystems.chartview.Indicator.Candle
-import io.horizontalsystems.chartview.helpers.ChartAnimator
 import io.horizontalsystems.chartview.helpers.PointConverter
 import io.horizontalsystems.chartview.models.ChartConfig
 import kotlinx.android.synthetic.main.view_chart_minimal.view.*
@@ -17,10 +16,9 @@ class ChartMinimal @JvmOverloads constructor(context: Context, attrs: AttributeS
     }
 
     private val config = ChartConfig(context, attrs)
-    private val animatorMain = ChartAnimator { chartMain.invalidate() }
 
-    private val mainCurve = ChartCurve(config, animatorMain, isVisible = true)
-    private val mainGradient = ChartGradient(animatorMain)
+    private val mainCurve = ChartCurve(config, isVisible = true)
+    private val mainGradient = ChartGradient()
 
 
     fun setData(data: ChartData) {
@@ -39,7 +37,7 @@ class ChartMinimal @JvmOverloads constructor(context: Context, attrs: AttributeS
         chartMain.clear()
         chartMain.add(mainCurve, mainGradient)
 
-        animatorMain.start()
+        chartMain.invalidate()
     }
 
 }

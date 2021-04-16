@@ -28,7 +28,7 @@ class ChartConfig(private val context: Context, attrs: AttributeSet?) {
 
     var trendUpColor = context.getColor(R.color.green_d)
     var trendDownColor = context.getColor(R.color.red_d)
-    var trendUpGradient = GradientColor(Color.parseColor("#00416BFF"), Color.parseColor("#0012D670"))
+    var trendUpGradient = GradientColor(Color.parseColor("#00416BFF"), Color.parseColor("#0013D670"))
     var trendDownGradient = GradientColor(Color.parseColor("#007413D6"), Color.parseColor("#00FF0303"))
     var pressedGradient = GradientColor(context.getColor(R.color.oz), context.getColor(R.color.oz))
     var outdatedGradient = GradientColor(context.getColor(R.color.grey_50), context.getColor(R.color.grey_50))
