@@ -74,7 +74,6 @@ class App : CoreApp() {
         lateinit var feeCoinProvider: FeeCoinProvider
         lateinit var notificationNetworkWrapper: NotificationNetworkWrapper
         lateinit var notificationManager: INotificationManager
-        lateinit var appVersionManager: AppVersionManager
         lateinit var ethereumRpcModeSettingsManager: IEthereumRpcModeSettingsManager
         lateinit var initialSyncModeSettingsManager: IInitialSyncModeSettingsManager
         lateinit var derivationSettingsManager: IDerivationSettingsManager
@@ -196,9 +195,6 @@ class App : CoreApp() {
         notificationSubscriptionManager = NotificationSubscriptionManager(appDatabase, notificationNetworkWrapper)
         priceAlertManager = PriceAlertManager(appDatabase, notificationSubscriptionManager, notificationManager, localStorage, notificationNetworkWrapper, backgroundManager)
 
-        appVersionManager = AppVersionManager(systemInfoManager, localStorage).apply {
-            backgroundManager.registerListener(this)
-        }
         pinComponent = PinComponent(
                 pinStorage = pinStorage,
                 encryptionManager = encryptionManager,
@@ -231,7 +227,7 @@ class App : CoreApp() {
 
         registerActivityLifecycleCallbacks(ActivityLifecycleCallbacks(torKitManager))
 
-        startManagers()
+        startInNewThread()
 
         NotificationWorker.startPeriodicWorker(instance)
     }
@@ -286,7 +282,7 @@ class App : CoreApp() {
         localeAwareContext(this)
     }
 
-    private fun startManagers() {
+    private fun startInNewThread() {
         Thread(Runnable {
             rateAppManager.onAppLaunch()
             accountManager.loadAccounts()
@@ -294,6 +290,9 @@ class App : CoreApp() {
             adapterManager.preloadAdapters()
             accountManager.clearAccounts()
             notificationSubscriptionManager.processJobs()
+
+            AppVersionManager(systemInfoManager, localStorage).apply { storeAppVersion() }
+
         }).start()
 
         rateAppManager.onAppBecomeActive()
