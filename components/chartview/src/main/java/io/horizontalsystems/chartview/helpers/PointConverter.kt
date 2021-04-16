@@ -38,18 +38,6 @@ object PointConverter {
         return coordinates
     }
 
-    fun curve(values: List<ChartData.Value>, shape: RectF, verticalPadding: Float): List<PointF> {
-        val height = shape.height() - verticalPadding * 2
-
-        return values.map {
-            val point = it.point
-            val x = point.x * shape.width()
-            val y = point.y * height
-
-            PointF(x, shape.height() - verticalPadding - y)
-        }
-    }
-
     fun volume(values: List<ChartData.Value>, shape: RectF, topPadding: Float): List<PointF> {
         val height = shape.height() - topPadding
 
@@ -62,9 +50,24 @@ object PointConverter {
         }
     }
 
+    fun curve(values: List<ChartData.Value>, shape: RectF, verticalPadding: Float): List<PointF> {
+        //use padding both for top and bottom
+        val height = shape.height() - verticalPadding * 2
+        return getPoints(values, shape, height, verticalPadding)
+    }
+
+    fun curveForMinimal(values: List<ChartData.Value>, shape: RectF, verticalPadding: Float): List<PointF> {
+        //use padding only for bottom side
+        val height = shape.height() - verticalPadding
+        return getPoints(values, shape, height, verticalPadding)
+    }
+
     fun histogram(values: List<ChartData.Value>, shape: RectF, verticalPadding: Float): List<PointF> {
         val height = shape.height() - verticalPadding * 2
+        return getPoints(values, shape, height, verticalPadding)
+    }
 
+    private fun getPoints(values: List<ChartData.Value>, shape: RectF, height: Float, verticalPadding: Float): List<PointF> {
         return values.map {
             val point = it.point
             val x = point.x * shape.width()
