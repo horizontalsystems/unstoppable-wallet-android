@@ -17,6 +17,8 @@ class ManageAccountViewModel(
     val keyActionStateLiveData = MutableLiveData<KeyActionState>()
     val saveEnabledLiveData = MutableLiveData<Boolean>()
     val finishLiveEvent = SingleLiveEvent<Unit>()
+    val confirmUnlinkLiveEvent = SingleLiveEvent<Unit>()
+    val confirmBackupLiveEvent = SingleLiveEvent<Unit>()
 
     val accountName: String
         get() = service.account.name
@@ -51,6 +53,26 @@ class ManageAccountViewModel(
     fun onSave() {
         service.saveAccount()
         finishLiveEvent.postValue(Unit)
+    }
+
+    fun onUnlink() {
+        if (service.account.isBackedUp) {
+            confirmUnlinkLiveEvent.postValue(Unit)
+        } else {
+            confirmBackupLiveEvent.postValue(Unit)
+        }
+    }
+
+    fun onClickBackup() {
+        TODO("not implemented")
+    }
+
+    fun onUnlinkConfirm() {
+        TODO("not implemented")
+    }
+
+    fun onClickActionButton() {
+        TODO("not implemented")
     }
 
     override fun onCleared() {
