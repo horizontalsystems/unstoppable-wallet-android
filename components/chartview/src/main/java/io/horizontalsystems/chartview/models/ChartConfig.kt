@@ -26,7 +26,15 @@ class ChartConfig(private val context: Context, attrs: AttributeSet?) {
     var gridSideTextPadding = dp2px(16f)
     var gridEdgeOffset = dp2px(5f)
 
-    var curveColor = context.getColor(R.color.red_d)
+    var trendUpColor = context.getColor(R.color.green_d)
+    var trendDownColor = context.getColor(R.color.red_d)
+    var trendUpGradient = GradientColor(Color.parseColor("#00416BFF"), Color.parseColor("#0012D670"))
+    var trendDownGradient = GradientColor(Color.parseColor("#007413D6"), Color.parseColor("#00FF0303"))
+    var pressedGradient = GradientColor(context.getColor(R.color.oz), context.getColor(R.color.oz))
+    var outdatedGradient = GradientColor(context.getColor(R.color.grey_50), context.getColor(R.color.grey_50))
+
+    var curveColor = trendUpColor
+    var curveGradient = trendUpGradient
     var curvePressedColor = context.getColor(R.color.oz)
     var curveOutdatedColor = context.getColor(R.color.grey_50)
     var curveVerticalOffset = dp2px(18f)
@@ -34,9 +42,6 @@ class ChartConfig(private val context: Context, attrs: AttributeSet?) {
     var curveSlowColor = Color.parseColor("#80ffa800")
 
     var cursorColor = context.getColor(R.color.light)
-
-    var trendUpColor = context.getColor(R.color.green_d)
-    var trendDownColor = context.getColor(R.color.red_d)
 
     var volumeColor = context.getColor(R.color.steel_20)
     var volumeWidth = dp2px(4f)
@@ -67,12 +72,19 @@ class ChartConfig(private val context: Context, attrs: AttributeSet?) {
 
     //  Helper methods
     fun setTrendColor(chartData: ChartData) {
-        if (chartData.isExpired) {
-            curveColor = curveOutdatedColor
-        } else if (chartData.diff() < BigDecimal.ZERO) {
-            curveColor = trendDownColor
-        } else {
-            curveColor = trendUpColor
+        when {
+            chartData.isExpired -> {
+                curveColor = curveOutdatedColor
+                curveGradient = outdatedGradient
+            }
+            chartData.diff() < BigDecimal.ZERO -> {
+                curveColor = trendDownColor
+                curveGradient = trendDownGradient
+            }
+            else -> {
+                curveColor = trendUpColor
+                curveGradient = trendUpGradient
+            }
         }
     }
 
@@ -82,4 +94,6 @@ class ChartConfig(private val context: Context, attrs: AttributeSet?) {
         //  Convert the dps to pixels, based on density scale
         return dps * scale + 0.5f
     }
+
+    data class GradientColor(val startColor: Int, val endColor: Int)
 }

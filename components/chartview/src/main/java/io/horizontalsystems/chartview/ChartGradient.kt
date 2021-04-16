@@ -3,6 +3,7 @@ package io.horizontalsystems.chartview
 import android.graphics.*
 import androidx.core.graphics.ColorUtils.setAlphaComponent
 import io.horizontalsystems.chartview.helpers.ChartAnimator
+import io.horizontalsystems.chartview.models.ChartConfig
 
 class ChartGradient(private val animator: ChartAnimator, override var isVisible: Boolean = true) : ChartDraw {
 
@@ -18,8 +19,8 @@ class ChartGradient(private val animator: ChartAnimator, override var isVisible:
         points = list
     }
 
-    fun setShader(color: Int) {
-        setGradient(setAlphaComponent(color, 0x0D), setAlphaComponent(color, 0x80))
+    fun setShader(gradient: ChartConfig.GradientColor) {
+        setGradient(setAlphaComponent(gradient.startColor, 0x0D), setAlphaComponent(gradient.endColor, 0x80))
     }
 
     fun setShape(rect: RectF) {

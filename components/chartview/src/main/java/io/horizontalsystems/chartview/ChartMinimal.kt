@@ -34,7 +34,7 @@ class ChartMinimal @JvmOverloads constructor(context: Context, attrs: AttributeS
 
         mainGradient.setPoints(points)
         mainGradient.setShape(chartMain.shape)
-        mainGradient.setShader(config.curveColor)
+        mainGradient.setShader(config.curveGradient)
 
         chartMain.clear()
         chartMain.add(mainCurve, mainGradient)
