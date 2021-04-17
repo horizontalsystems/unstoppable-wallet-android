@@ -121,7 +121,27 @@
         android:id="@+id/manageAccountFragment"
         android:name="io.horizontalsystems.bankwallet.modules.manageaccount.ManageAccountFragment"
         tools:layout="@layout/fragment_manage_account">
+        <action
+            android:id="@+id/manageAccountFragment_to_showKeyFragment"
+            app:destination="@id/showKeyFragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/showKeyFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.showkey.ShowKeyFragment"
+        tools:layout="@layout/fragment_show_key">
+        <action
+            android:id="@+id/showKeyFragment_to_pinFragment"
+            app:destination="@id/pinFragment" />
+        <action
+            android:id="@+id/showKeyFragment_to_showKeyWordsFragment"
+            app:destination="@id/showKeyWordsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/showKeyWordsFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.showkey.ShowKeyWordsFragment"
+        tools:layout="@layout/fragment_show_key_words" />
 
     <fragment
         android:id="@+id/securitySettingsFragment"
