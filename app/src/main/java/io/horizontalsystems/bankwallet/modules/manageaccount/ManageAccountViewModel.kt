@@ -20,8 +20,8 @@ class ManageAccountViewModel(
     val openUnlinkLiveEvent = SingleLiveEvent<Unit>()
     val openBackupRequiredLiveEvent = SingleLiveEvent<Unit>()
 
-    val accountName: String
-        get() = service.account.name
+    val account: Account
+        get() = service.account
 
     init {
         service.stateObservable
@@ -68,9 +68,6 @@ class ManageAccountViewModel(
 
     fun onUnlinkConfirm() {
         service.deleteAccount()
-    }
-
-    fun onClickShowKey() {
     }
 
     fun onClickBackupKey() {

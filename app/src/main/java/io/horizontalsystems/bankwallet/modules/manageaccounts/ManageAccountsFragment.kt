@@ -65,7 +65,13 @@ class ManageAccountsFragment : BaseFragment(), AccountViewHolder.Listener {
     }
 
     override fun onEdit(accountViewItem: AccountViewItem) {
-        ManageAccountModule.start(this, navOptions(), accountViewItem.accountId)
+        ManageAccountModule.start(this, R.id.manageAccountsFragment_to_manageAccount, navOptions(), accountViewItem.accountId)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+
+        recyclerView.adapter = null
     }
 
 }

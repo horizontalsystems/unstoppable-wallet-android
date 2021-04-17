@@ -5,7 +5,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavOptions
-import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.core.findNavController
 
@@ -21,8 +20,8 @@ object ManageAccountModule {
         }
     }
 
-    fun start(fragment: Fragment, navOptions: NavOptions, accountId: String) {
-        fragment.findNavController().navigate(R.id.manageAccountsFragment_to_manageAccount, bundleOf(ACCOUNT_ID_KEY to accountId), navOptions)
+    fun start(fragment: Fragment, navigateTo: Int, navOptions: NavOptions, accountId: String) {
+        fragment.findNavController().navigate(navigateTo, bundleOf(ACCOUNT_ID_KEY to accountId), navOptions)
     }
 
 }
