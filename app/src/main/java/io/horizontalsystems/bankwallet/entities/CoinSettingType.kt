@@ -28,6 +28,16 @@ class CoinSettings(val settings: Map<CoinSettingType, String> = mapOf()) : Parce
             BitcoinCashCoinType.fromString(it)
         }
 
+    override fun equals(other: Any?): Boolean {
+        if (other !is CoinSettings) return false
+
+        return id == other.id
+    }
+
+    override fun hashCode(): Int {
+        return id.hashCode()
+    }
+
     companion object {
 
         private fun fromId(id: String): Map<CoinSettingType, String> {
