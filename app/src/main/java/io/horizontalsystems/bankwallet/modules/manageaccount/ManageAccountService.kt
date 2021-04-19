@@ -78,7 +78,6 @@ class ManageAccountService(
 
     fun deleteAccount() {
         accountManager.delete(account.id)
-        priceAlertManager.deleteAlertsByAccountType(account.type)
     }
 
     enum class State {

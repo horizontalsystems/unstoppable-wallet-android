@@ -74,19 +74,6 @@ class PriceAlertManager(
         updateSubscription(alerts, SubscriptionJob.JobType.Unsubscribe)
     }
 
-    override fun deleteAlertsByAccountType(accountType: AccountType) {
-        val alerts = dao.all()
-        TODO()
-//        val selectedAlerts = alerts.filter { it.coinType.canSupport(accountType) }
-//
-//        updateSubscription(selectedAlerts, SubscriptionJob.JobType.Unsubscribe)
-//        selectedAlerts.forEach {
-//            dao.delete(it)
-//        }
-//
-//        notificationChangedSubject.onNext(Unit)
-    }
-
     override suspend fun fetchNotifications() {
         if (backgroundManager.inForeground || getPriceAlerts().isEmpty())
             return
