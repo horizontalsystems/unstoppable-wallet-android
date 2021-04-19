@@ -11,6 +11,7 @@ import androidx.fragment.app.viewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
+import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.backupkey.BackupKeyModule
 import io.horizontalsystems.bankwallet.modules.manageaccount.ManageAccountModule.ACCOUNT_ID_KEY
 import io.horizontalsystems.bankwallet.modules.manageaccount.ManageAccountViewModel.KeyActionState
@@ -75,7 +76,7 @@ class ManageAccountFragment : BaseFragment(), BackupRequiredDialog.Listener, Unl
         }
 
         viewModel.openBackupRequiredLiveEvent.observe(viewLifecycleOwner, {
-            BackupRequiredDialog.show(childFragmentManager, viewModel.account.name)
+            BackupRequiredDialog.show(childFragmentManager, viewModel.account)
         })
 
         viewModel.openUnlinkLiveEvent.observe(viewLifecycleOwner, {
@@ -101,7 +102,7 @@ class ManageAccountFragment : BaseFragment(), BackupRequiredDialog.Listener, Unl
                     actionButton.showAttention(true)
                     actionButton.showTitle(getString(R.string.ManageAccount_RecoveryPhraseBackup))
                     actionButton.setOnClickListener {
-                        onClickBackupKey()
+                        openBackupModule(viewModel.account)
                     }
                 }
             }
@@ -116,12 +117,12 @@ class ManageAccountFragment : BaseFragment(), BackupRequiredDialog.Listener, Unl
         })
     }
 
-    override fun onClickBackup() {
-        onClickBackupKey()
+    override fun onClickBackup(account: Account) {
+        openBackupModule(account)
     }
 
-    private fun onClickBackupKey() {
-        BackupKeyModule.start(this, R.id.manageAccountFragment_to_backupKeyFragment, navOptions(), viewModel.account)
+    private fun openBackupModule(account: Account) {
+        BackupKeyModule.start(this, R.id.manageAccountFragment_to_backupKeyFragment, navOptions(), account)
     }
 
     override fun onUnlinkConfirm() {

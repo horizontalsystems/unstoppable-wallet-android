@@ -150,10 +150,6 @@ class BalancePresenter(
         }
     }
 
-    override fun onBackupClick() {
-        // todo
-    }
-
     override fun onClear() {
         interactor.clear()
     }
@@ -171,7 +167,7 @@ class BalancePresenter(
         val nonSyncedState = (state as? AdapterState.NotSynced) ?: return
         val errorMessage = nonSyncedState.error.message ?: ""
 
-        if (interactor.networkAvailable){
+        if (interactor.networkAvailable) {
             view?.showSyncErrorDialog(viewItem.wallet, errorMessage, sourceChangeable(viewItem.wallet.coin.type))
         } else {
             view?.showNetworkNotAvailable()
@@ -260,7 +256,7 @@ class BalancePresenter(
     }
 
     private fun sourceChangeable(coinType: CoinType): Boolean {
-        return when(coinType) {
+        return when (coinType) {
             is CoinType.Bep2,
             is CoinType.Ethereum,
             is CoinType.Erc20 -> false

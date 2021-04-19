@@ -41,7 +41,6 @@ object BalanceModule {
 
         fun onSortTypeChange(sortType: BalanceSortType)
         fun onSortClick()
-        fun onBackupClick()
 
         fun onClear()
 
@@ -105,7 +104,6 @@ object BalanceModule {
         fun openSwap(wallet: Wallet)
         fun openManageCoins()
         fun openSortTypeDialog(sortingType: BalanceSortType)
-        fun openBackup(account: Account, coinCodesStringRes: Int)
         fun openChart(coin: Coin)
         fun openEmail(emailAddress: String, errorMessage: String)
     }
