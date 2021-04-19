@@ -16,7 +16,7 @@ class AppConfigProvider : IAppConfigProvider, ILanguageConfigProvider, IBuildCon
     override val companyTwitterLink: String = "https://twitter.com/UnstoppableByHS"
     override val companyTelegramLink: String = "https://t.me/unstoppable_announcements"
     override val companyRedditLink: String = "https://reddit.com/r/UNSTOPPABLEWallet/"
-    override val reportEmail = "unstoppable.support@protonmail.com"
+    override val reportEmail = "support.unstoppable@protonmail.com"
     override val walletHelpTelegramGroup = "UnstoppableWallet"
     override val btcCoreRpcUrl: String = "https://btc.horizontalsystems.xyz/rpc"
     override val notificationUrl: String = "https://pns-dev.horizontalsystems.xyz/api/v1/pns/"
