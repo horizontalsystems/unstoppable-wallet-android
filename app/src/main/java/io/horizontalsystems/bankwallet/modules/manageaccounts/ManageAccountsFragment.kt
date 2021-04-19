@@ -24,7 +24,7 @@ import kotlinx.android.synthetic.main.view_holder_manage_account_action.title
 import kotlinx.android.synthetic.main.view_holder_manage_account_item.*
 
 class ManageAccountsFragment : BaseFragment(), AccountViewHolder.Listener {
-    private val viewModel by viewModels<ManageAccountsViewModel> { ManageAccountsModule.Factory() }
+    private val viewModel by viewModels<ManageAccountsViewModel> { ManageAccountsModule.Factory(arguments?.getParcelable(ManageAccountsModule.MODE)!!) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_manage_accounts, container, false)
@@ -33,6 +33,20 @@ class ManageAccountsFragment : BaseFragment(), AccountViewHolder.Listener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        toolbar.menu.findItem(R.id.menuCancel)?.isVisible = viewModel.isCloseButtonVisible
+        toolbar.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.menuCancel -> {
+                    findNavController().popBackStack()
+                    true
+                }
+                else -> false
+            }
+        }
+
+        if (viewModel.isCloseButtonVisible) {
+            toolbar.navigationIcon = null
+        }
         toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }
@@ -49,6 +63,10 @@ class ManageAccountsFragment : BaseFragment(), AccountViewHolder.Listener {
         viewModel.viewItemsLiveData.observe(viewLifecycleOwner, { items ->
             accountsAdapter.items = items
             accountsAdapter.notifyDataSetChanged()
+        })
+
+        viewModel.finishLiveEvent.observe(viewLifecycleOwner, {
+            findNavController().popBackStack()
         })
     }
 

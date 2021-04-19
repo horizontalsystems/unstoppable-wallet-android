@@ -12,6 +12,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:navigationIcon="@drawable/ic_back"
+        app:menu="@menu/swap_settings_menu"
         app:title="@string/ManageAccounts_Title" />
 
     <androidx.recyclerview.widget.RecyclerView

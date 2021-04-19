@@ -6,16 +6,20 @@ import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule.AccountViewItem
+import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
 import java.util.*
 
 class ManageAccountsViewModel(
         private val service: ManageAccountsService,
+        private val mode: ManageAccountsModule.Mode,
         private val clearables: List<Clearable>
 ) : ViewModel() {
     private val disposable = CompositeDisposable()
 
     val viewItemsLiveData = MutableLiveData<List<AccountViewItem>>()
+    val finishLiveEvent = SingleLiveEvent<Unit>()
+    val isCloseButtonVisible: Boolean = mode == ManageAccountsModule.Mode.Switcher
 
     init {
         service.itemsObservable
@@ -47,6 +51,10 @@ class ManageAccountsViewModel(
 
     fun onSelect(accountViewItem: AccountViewItem) {
         service.setActiveAccountId(accountViewItem.accountId)
+
+        if (mode == ManageAccountsModule.Mode.Switcher) {
+            finishLiveEvent.postValue(Unit)
+        }
     }
 
     override fun onCleared() {

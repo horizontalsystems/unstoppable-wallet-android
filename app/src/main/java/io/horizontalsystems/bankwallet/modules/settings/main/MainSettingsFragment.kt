@@ -13,6 +13,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.main.MainActivity
 import io.horizontalsystems.bankwallet.modules.main.MainModule
+import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListModule
 import io.horizontalsystems.core.getNavigationResult
 import io.horizontalsystems.languageswitcher.LanguageSettingsFragment
@@ -166,7 +167,7 @@ class MainSettingsFragment : BaseFragment() {
 
     private fun subscribeToRouterEvents(router: MainSettingsRouter) {
         router.showManageKeysLiveEvent.observe(this, {
-            findNavController().navigate(R.id.mainFragment_to_manageKeysFragment, null, navOptions())
+            ManageAccountsModule.start(this, R.id.mainFragment_to_manageKeysFragment, navOptions(), ManageAccountsModule.Mode.Manage)
         })
 
         router.showBaseCurrencySettingsLiveEvent.observe(viewLifecycleOwner, {
