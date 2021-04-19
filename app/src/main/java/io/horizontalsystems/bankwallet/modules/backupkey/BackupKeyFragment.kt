@@ -1,11 +1,11 @@
-package io.horizontalsystems.bankwallet.modules.showkey
+package io.horizontalsystems.bankwallet.modules.backupkey
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
-import androidx.fragment.app.viewModels
+import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.core.findNavController
@@ -14,11 +14,11 @@ import io.horizontalsystems.pin.PinInteractionType
 import io.horizontalsystems.pin.PinModule
 import kotlinx.android.synthetic.main.fragment_show_key.*
 
-class ShowKeyFragment : BaseFragment() {
-    private val viewModel by viewModels<ShowKeyViewModel> { ShowKeyModule.Factory(arguments?.getParcelable(ShowKeyModule.ACCOUNT)!!) }
+class BackupKeyFragment : BaseFragment() {
+    private val viewModel by navGraphViewModels<BackupKeyViewModel>(R.id.backupKeyFragment) { BackupKeyModule.Factory(arguments?.getParcelable(BackupKeyModule.ACCOUNT)!!) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_show_key, container, false)
+        return inflater.inflate(R.layout.fragment_backup_key, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -33,11 +33,11 @@ class ShowKeyFragment : BaseFragment() {
         }
 
         viewModel.showKeyLiveEvent.observe(viewLifecycleOwner, {
-            findNavController().navigate(R.id.showKeyFragment_to_showWordsFragment, bundleOf(ShowWordsFragment.WORDS to viewModel.words.toTypedArray()), navOptions())
+            findNavController().navigate(R.id.backupKeyFragment_to_showBackupWordsFragment, bundleOf(ShowBackupWordsFragment.WORDS to viewModel.words.toTypedArray()), navOptions())
         })
 
         viewModel.openUnlockLiveEvent.observe(viewLifecycleOwner, {
-            findNavController().navigate(R.id.showKeyFragment_to_pinFragment, PinModule.forUnlock(), navOptions())
+            findNavController().navigate(R.id.backupKeyFragment_to_pinFragment, PinModule.forUnlock(), navOptions())
         })
 
         subscribeFragmentResults()

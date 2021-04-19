@@ -11,7 +11,7 @@ class RandomProvider : IRandomProvider {
         val random = Random()
 
         while (indexes.size < count) {
-            val index = random.nextInt(maxIndex) + 1
+            val index = random.nextInt(maxIndex)
 
             if (!indexes.contains(index)) {
                 indexes.add(index)

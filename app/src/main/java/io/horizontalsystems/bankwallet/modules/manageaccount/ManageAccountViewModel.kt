@@ -70,9 +70,6 @@ class ManageAccountViewModel(
         service.deleteAccount()
     }
 
-    fun onClickBackupKey() {
-    }
-
     override fun onCleared() {
         disposable.clear()
         clearables.forEach(Clearable::clear)
