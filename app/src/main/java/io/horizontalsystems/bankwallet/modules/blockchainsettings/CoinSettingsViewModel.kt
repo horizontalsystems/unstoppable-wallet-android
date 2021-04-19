@@ -56,7 +56,8 @@ class CoinSettingsViewModel(
                             title = derivation.longTitle(),
                             subtitle = Translator.getString(derivation.description(), (derivation.addressPrefix(coin.type) ?: ""))
                     )
-                }
+                },
+                description = Translator.getString(R.string.AddressFormatSettings_Description, coin.title)
         )
     }
 
@@ -71,7 +72,8 @@ class CoinSettingsViewModel(
                             title = Translator.getString(type.title),
                             subtitle = Translator.getString(type.description)
                     )
-                }
+                },
+                description = Translator.getString(R.string.AddressFormatSettings_Description, coin.title)
         )
     }
 
