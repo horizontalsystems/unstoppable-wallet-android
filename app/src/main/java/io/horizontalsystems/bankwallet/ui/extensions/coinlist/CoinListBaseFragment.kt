@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.ConcatAdapter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseWithSearchFragment
 import io.horizontalsystems.bankwallet.modules.blockchainsettings.BlockchainSettingsModule
-import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorDialog
+import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorMultipleDialog
 import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
 import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.core.findNavController
@@ -64,18 +64,18 @@ abstract class CoinListBaseFragment : BaseWithSearchFragment(), CoinListAdapter.
 
     open fun onCancelSelection() {}
 
-    open fun onSelect(index: Int) {}
+    open fun onSelect(indexes: List<Int>) {}
 
     protected fun showBottomSelectorDialog(config: BlockchainSettingsModule.Config) {
         val coinDrawable = context?.let { AppLayoutHelper.getCoinDrawable(it, config.coin.type) }
 
-        BottomSheetSelectorDialog.show(
+        BottomSheetSelectorMultipleDialog.show(
                 fragmentManager = childFragmentManager,
                 title = config.title,
                 subtitle = config.subtitle,
                 icon = coinDrawable,
                 items = config.viewItems,
-                selected = config.selectedIndexes.first(),
+                selected = config.selectedIndexes,
                 notifyUnchanged = true,
                 onItemSelected = { onSelect(it) },
                 onCancelled = { onCancelSelection() }
