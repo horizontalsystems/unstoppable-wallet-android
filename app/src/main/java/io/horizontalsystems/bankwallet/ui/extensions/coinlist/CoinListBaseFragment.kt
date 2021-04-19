@@ -78,8 +78,9 @@ abstract class CoinListBaseFragment : BaseWithSearchFragment(), CoinListAdapter.
                 selected = config.selectedIndexes,
                 notifyUnchanged = true,
                 onItemSelected = { onSelect(it) },
-                onCancelled = { onCancelSelection() }
-        )
+                onCancelled = { onCancelSelection() },
+                warning = config.description
+                )
     }
 
 }

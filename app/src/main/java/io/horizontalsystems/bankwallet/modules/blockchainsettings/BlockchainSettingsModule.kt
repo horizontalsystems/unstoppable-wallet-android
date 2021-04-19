@@ -19,7 +19,8 @@ object BlockchainSettingsModule {
             val title: String,
             val subtitle: String,
             val selectedIndexes: List<Int>,
-            val viewItems: List<BottomSheetSelectorViewItem>
+            val viewItems: List<BottomSheetSelectorViewItem>,
+            val description: String
     )
 
 }
