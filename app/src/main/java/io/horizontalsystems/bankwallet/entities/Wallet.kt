@@ -15,13 +15,13 @@ class Wallet(val configuredCoin: ConfiguredCoin, val account: Account) : Parcela
 
     override fun equals(other: Any?): Boolean {
         if (other is Wallet) {
-            return coin == other.coin && account == other.account
+            return configuredCoin == other.configuredCoin && account == other.account
         }
 
         return super.equals(other)
     }
 
     override fun hashCode(): Int {
-        return Objects.hash(coin, account)
+        return Objects.hash(configuredCoin, account)
     }
 }
