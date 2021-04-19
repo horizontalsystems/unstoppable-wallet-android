@@ -20,13 +20,14 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.SimpleItemAnimator
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.core.utils.ModuleField
+import io.horizontalsystems.bankwallet.entities.Account
+import io.horizontalsystems.bankwallet.modules.backupkey.BackupKeyModule
 import io.horizontalsystems.bankwallet.modules.balance.views.SyncErrorDialog
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.main.MainActivity
+import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog
 import io.horizontalsystems.bankwallet.modules.receive.ReceiveFragment
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule
-import io.horizontalsystems.bankwallet.modules.settings.managekeys.views.ManageKeysDialog
 import io.horizontalsystems.bankwallet.modules.swap.SwapFragment
 import io.horizontalsystems.bankwallet.ui.extensions.NpaLinearLayoutManager
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorDialog
@@ -39,7 +40,7 @@ import io.horizontalsystems.core.measureHeight
 import io.horizontalsystems.views.helpers.LayoutHelper
 import kotlinx.android.synthetic.main.fragment_balance.*
 
-class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener, ReceiveFragment.Listener, ManageKeysDialog.Listener {
+class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener, ReceiveFragment.Listener, BackupRequiredDialog.Listener {
 
     private val viewModel by viewModels<BalanceViewModel> { BalanceModule.Factory() }
     private val balanceItemsAdapter = BalanceItemsAdapter(this)
@@ -113,10 +114,10 @@ class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener, ReceiveFra
         }
     }
 
-    //  ManageKeysDialog Listener
+    //  BackupRequiredDialog Listener
 
-    override fun onClickBackupKey() {
-        viewModel.delegate.onBackupClick()
+    override fun onClickBackup(account: Account) {
+        BackupKeyModule.start(this, R.id.mainFragment_to_backupKeyFragment, navOptions(), account)
     }
 
     // BalanceAdapter listener
@@ -152,7 +153,7 @@ class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener, ReceiveFra
     override fun onAttachFragment(childFragment: Fragment) {
         if (childFragment is ReceiveFragment) {
             childFragment.setListener(this)
-        } else if (childFragment is ManageKeysDialog) {
+        } else if (childFragment is BackupRequiredDialog) {
             childFragment.setListener(this)
         }
     }
@@ -230,20 +231,8 @@ class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener, ReceiveFra
             sortButton.isVisible = visible
         })
 
-        viewModel.showBackupAlert.observe(viewLifecycleOwner, Observer { wallet ->
-            val title = getString(R.string.ManageKeys_Delete_Alert_Title)
-            val subtitle = wallet.account.name
-            val description = getString(R.string.Balance_Backup_Alert, wallet.account.name, wallet.coin.title)
-            ManageKeysDialog.show(childFragmentManager, title, subtitle, description)
-        })
-
-        viewModel.openBackup.observe(viewLifecycleOwner, Observer { (account, coinCodesStringRes) ->
-            val arguments = Bundle(2).apply {
-                putParcelable(ModuleField.ACCOUNT, account)
-                putString(ModuleField.ACCOUNT_COINS, getString(coinCodesStringRes))
-            }
-
-            findNavController().navigate(R.id.mainFragment_to_backupFragment, arguments, navOptions())
+        viewModel.showBackupAlert.observe(viewLifecycleOwner, { wallet ->
+            BackupRequiredDialog.show(childFragmentManager, wallet.account)
         })
 
         viewModel.openChartModule.observe(viewLifecycleOwner, Observer { coin ->
