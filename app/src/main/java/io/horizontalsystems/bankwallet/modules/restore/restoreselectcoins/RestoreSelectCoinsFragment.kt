@@ -114,8 +114,8 @@ class RestoreSelectCoinsFragment : CoinListBaseFragment() {
         coinSettingsViewModel.onCancelSelect()
     }
 
-    override fun onSelect(index: Int) {
-        coinSettingsViewModel.onSelect(listOf(index))
+    override fun onSelect(indexes: List<Int>) {
+        coinSettingsViewModel.onSelect(indexes)
     }
 
     private fun observe() {

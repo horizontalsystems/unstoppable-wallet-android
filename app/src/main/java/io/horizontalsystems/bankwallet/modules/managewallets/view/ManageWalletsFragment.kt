@@ -81,14 +81,18 @@ class ManageWalletsFragment : CoinListBaseFragment() {
         coinSettingsViewModel.onCancelSelect()
     }
 
-    override fun onSelect(index: Int) {
-        coinSettingsViewModel.onSelect(listOf(index))
+    override fun onSelect(indexes: List<Int>) {
+        coinSettingsViewModel.onSelect(indexes)
     }
 
     private fun observe() {
         viewModel.viewStateLiveData.observe(viewLifecycleOwner, Observer { state ->
             setViewState(state)
         })
+
+        viewModel.disableCoinLiveData.observe(viewLifecycleOwner) {
+            disableCoin(it)
+        }
 
         coinSettingsViewModel.openBottomSelectorLiveEvent.observe(viewLifecycleOwner, Observer { config ->
             hideKeyboard()
