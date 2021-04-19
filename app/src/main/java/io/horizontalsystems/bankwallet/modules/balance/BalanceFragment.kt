@@ -20,12 +20,14 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.SimpleItemAnimator
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.backupkey.BackupKeyModule
 import io.horizontalsystems.bankwallet.modules.balance.views.SyncErrorDialog
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.main.MainActivity
 import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog
+import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.modules.receive.ReceiveFragment
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule
 import io.horizontalsystems.bankwallet.modules.swap.SwapFragment
@@ -78,6 +80,10 @@ class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener, ReceiveFra
 
         pullToRefresh.setOnRefreshListener {
             viewModel.delegate.onRefresh()
+        }
+
+        toolbarTitle.setOnSingleClickListener {
+            ManageAccountsModule.start(this, R.id.mainFragment_to_manageKeysFragment, navOptionsFromBottom(), ManageAccountsModule.Mode.Switcher)
         }
 
         totalBalanceWrapper.setOnClickListener { viewModel.delegate.onHideBalanceClick() }
@@ -171,7 +177,7 @@ class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener, ReceiveFra
 
     private fun observeLiveData() {
         viewModel.titleLiveData.observe(viewLifecycleOwner) {
-            toolbar.title = it ?: getString(R.string.Balance_Title)
+            toolbarTitle.text = it ?: getString(R.string.Balance_Title)
         }
 
         viewModel.openReceiveDialog.observe(viewLifecycleOwner, Observer { wallet ->
