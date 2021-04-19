@@ -124,6 +124,9 @@
         <action
             android:id="@+id/manageAccountFragment_to_showKeyFragment"
             app:destination="@id/showKeyFragment" />
+        <action
+            android:id="@+id/manageAccountFragment_to_backupKeyFragment"
+            app:destination="@id/backupKeyFragment" />
     </fragment>
 
     <fragment
@@ -134,14 +137,40 @@
             android:id="@+id/showKeyFragment_to_pinFragment"
             app:destination="@id/pinFragment" />
         <action
-            android:id="@+id/showKeyFragment_to_showKeyWordsFragment"
-            app:destination="@id/showKeyWordsFragment" />
+            android:id="@+id/showKeyFragment_to_showWordsFragment"
+            app:destination="@id/showWordsFragment" />
     </fragment>
 
     <fragment
-        android:id="@+id/showKeyWordsFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.showkey.ShowKeyWordsFragment"
-        tools:layout="@layout/fragment_show_key_words" />
+        android:id="@+id/showWordsFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.showkey.ShowWordsFragment"
+        tools:layout="@layout/fragment_show_words" />
+
+    <fragment
+        android:id="@+id/backupKeyFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.backupkey.BackupKeyFragment"
+        tools:layout="@layout/fragment_backup_key">
+        <action
+            android:id="@+id/backupKeyFragment_to_pinFragment"
+            app:destination="@id/pinFragment" />
+        <action
+            android:id="@+id/backupKeyFragment_to_showBackupWordsFragment"
+            app:destination="@id/showBackupWordsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/showBackupWordsFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.backupkey.ShowBackupWordsFragment"
+        tools:layout="@layout/fragment_show_words">
+        <action
+            android:id="@+id/showBackupWordsFragment_to_backupConfirmationKeyFragment"
+            app:destination="@id/backupConfirmationKeyFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/backupConfirmationKeyFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.backupconfirmkey.BackupConfirmKeyFragment"
+        tools:layout="@layout/fragment_show_words" />
 
     <fragment
         android:id="@+id/securitySettingsFragment"

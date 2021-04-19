@@ -11,6 +11,7 @@ import androidx.fragment.app.viewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
+import io.horizontalsystems.bankwallet.modules.backupkey.BackupKeyModule
 import io.horizontalsystems.bankwallet.modules.manageaccount.ManageAccountModule.ACCOUNT_ID_KEY
 import io.horizontalsystems.bankwallet.modules.manageaccount.ManageAccountViewModel.KeyActionState
 import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog
@@ -100,7 +101,7 @@ class ManageAccountFragment : BaseFragment(), BackupRequiredDialog.Listener, Unl
                     actionButton.showAttention(true)
                     actionButton.showTitle(getString(R.string.ManageAccount_RecoveryPhraseBackup))
                     actionButton.setOnClickListener {
-                        viewModel.onClickBackupKey()
+                        onClickBackupKey()
                     }
                 }
             }
@@ -116,7 +117,11 @@ class ManageAccountFragment : BaseFragment(), BackupRequiredDialog.Listener, Unl
     }
 
     override fun onClickBackup() {
-        viewModel.onClickBackupKey()
+        onClickBackupKey()
+    }
+
+    private fun onClickBackupKey() {
+        BackupKeyModule.start(this, R.id.manageAccountFragment_to_backupKeyFragment, navOptions(), viewModel.account)
     }
 
     override fun onUnlinkConfirm() {

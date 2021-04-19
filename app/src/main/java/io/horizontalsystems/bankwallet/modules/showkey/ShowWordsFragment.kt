@@ -4,22 +4,23 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
+import androidx.annotation.StringRes
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
-import io.horizontalsystems.bankwallet.modules.backup.words.BackupWordsModule
 import io.horizontalsystems.core.findNavController
-import io.horizontalsystems.core.setNavigationResult
 import io.horizontalsystems.views.BackupWordView
-import kotlinx.android.synthetic.main.fragment_backup_words_list.*
+import kotlinx.android.synthetic.main.fragment_show_words.*
 
-class ShowKeyWordsFragment : BaseFragment() {
+open class ShowWordsFragment : BaseFragment() {
     private val words: Array<String>
-        get() = requireArguments().getStringArray(ShowKeyModule.WORDS) ?: arrayOf()
+        get() = requireArguments().getStringArray(WORDS) ?: arrayOf()
+
+    @StringRes
+    protected open val actionButtonText: Int = R.string.Button_Close
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_show_key_words, container, false)
+        return inflater.inflate(R.layout.fragment_show_words, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -29,15 +30,16 @@ class ShowKeyWordsFragment : BaseFragment() {
             findNavController().popBackStack()
         }
 
-        populateWords(words)
-
-        buttonClose.setOnSingleClickListener {
-            setNavigationResult(BackupWordsModule.requestKey, bundleOf(
-                    ShowKeyModule.SHOW_KEY_REQUEST to ShowKeyModule.RESULT_OK
-            ))
-            findNavController().popBackStack()
+        actionButton.setText(actionButtonText)
+        actionButton.setOnSingleClickListener {
+            onActionButtonClick()
         }
 
+        populateWords(words)
+    }
+
+    protected open fun onActionButtonClick() {
+        findNavController().popBackStack(R.id.showKeyFragment, true)
     }
 
     private fun populateWords(words: Array<String>) {
@@ -55,6 +57,10 @@ class ShowKeyWordsFragment : BaseFragment() {
                 }
             }
         }
+    }
+
+    companion object {
+        const val WORDS = "words"
     }
 
 }

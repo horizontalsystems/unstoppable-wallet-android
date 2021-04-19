@@ -5,6 +5,7 @@
     <item
         android:id="@+id/itemDone"
         android:title="@string/Button_Done"
+        android:icon="@drawable/ic_checkmark_yellow"
         app:showAsAction="always" />
 
 </menu>

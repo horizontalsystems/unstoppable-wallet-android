@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.showkey
+package io.horizontalsystems.bankwallet.modules.backupkey
 
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -9,14 +9,14 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.core.findNavController
 
-object ShowKeyModule {
+object BackupKeyModule {
     const val ACCOUNT = "account"
 
     class Factory(private val account: Account) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            val service = ShowKeyService(account, App.pinComponent)
-            return ShowKeyViewModel(service) as T
+            val service = BackupKeyService(account, App.pinComponent)
+            return BackupKeyViewModel(service) as T
         }
     }
 

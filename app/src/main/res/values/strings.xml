@@ -695,6 +695,15 @@
     <string name="ShowKey_Description">The recovery phrases that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken etc.\n\nMake sure that no one is watching your screen.</string>
     <string name="ShowKey_ButtonShow">Show</string>
 
+    <!-- Backup Key -->
+    <string name="BackupKey_Title">Backup</string>
+    <string name="BackupKey_Description">The recovery phrases that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken etc.\n\nMake sure that no one is watching your screen.</string>
+    <string name="BackupKey_ButtonShow">Show</string>
+    <string name="BackupKey_ButtonBackup">Backup</string>
+
+    <string name="BackupConfirmKey_Description">Enter the recovery phrases in correct order to confirm</string>
+    <string name="BackupConfirmKey_EmptyOrInvalidWords">Entered words are empty or invalid</string>
+
     <!--Manage Keys Delete Alert-->
 
     <string name="ManageKeys_Delete_Title">Delete Wallet</string>
