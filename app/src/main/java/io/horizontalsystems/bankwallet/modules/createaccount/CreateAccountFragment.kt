@@ -8,8 +8,8 @@ import androidx.fragment.app.viewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
-import io.horizontalsystems.bankwallet.ui.selector.SelectorBottomSheetDialog
-import io.horizontalsystems.bankwallet.ui.selector.SelectorItemViewHolderFactory
+import io.horizontalsystems.bankwallet.ui.selector.SelectorOptionTextViewHolderFactory
+import io.horizontalsystems.bankwallet.ui.selector.SelectorPopupDialog
 import io.horizontalsystems.bankwallet.ui.selector.ViewItemWrapper
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
@@ -50,7 +50,7 @@ class CreateAccountFragment : BaseFragment() {
         }
 
         kind.setOnSingleClickListener {
-            val dialog = SelectorBottomSheetDialog<ViewItemWrapper<CreateAccountModule.Kind>>()
+            val dialog = SelectorPopupDialog<ViewItemWrapper<CreateAccountModule.Kind>>()
 
             dialog.titleText = getString(R.string.CreateWallet_Mnemonic)
             dialog.items = viewModel.kindViewItems
@@ -58,7 +58,7 @@ class CreateAccountFragment : BaseFragment() {
             dialog.onSelectListener = {
                 viewModel.selectedKindViewItem = it
             }
-            dialog.itemViewHolderFactory = SelectorItemViewHolderFactory()
+            dialog.itemViewHolderFactory = SelectorOptionTextViewHolderFactory()
 
             dialog.show(childFragmentManager, "selector_dialog")
         }
