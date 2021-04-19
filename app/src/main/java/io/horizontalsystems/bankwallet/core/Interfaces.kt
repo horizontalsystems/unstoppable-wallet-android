@@ -451,7 +451,6 @@ interface IPriceAlertManager {
     fun deactivateAllNotifications()
     fun enablePriceAlerts()
     fun disablePriceAlerts()
-    fun deleteAlertsByAccountType(accountType: AccountType)
 
     suspend fun fetchNotifications()
 }

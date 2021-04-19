@@ -19,7 +19,7 @@ class NotificationsViewModel(
         private val localStorage: ILocalStorage) : ViewModel() {
 
     private val viewItems = mutableListOf<NotificationViewItem>()
-    private val portfolioCoins = walletManager.wallets.map { it.coin }
+    private val portfolioCoins = walletManager.wallets.map { it.coin }.distinct()
     private var disposable: Disposable? = null
 
     val itemsLiveData = MutableLiveData<List<NotificationViewItem>>()
