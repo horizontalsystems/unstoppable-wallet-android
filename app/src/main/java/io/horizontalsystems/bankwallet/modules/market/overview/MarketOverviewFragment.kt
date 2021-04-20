@@ -9,6 +9,7 @@ import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.ConcatAdapter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.market.MarketLoadingAdapter
 import io.horizontalsystems.bankwallet.modules.market.MarketModule
 import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
@@ -16,7 +17,6 @@ import io.horizontalsystems.bankwallet.modules.market.MarketViewModel
 import io.horizontalsystems.bankwallet.modules.market.metrics.MarketMetricsAdapter
 import io.horizontalsystems.bankwallet.modules.market.metrics.MarketMetricsModule
 import io.horizontalsystems.bankwallet.modules.market.metrics.MarketMetricsViewModel
-import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.android.synthetic.main.fragment_overview.*
@@ -98,11 +98,11 @@ class MarketOverviewFragment : BaseFragment(), ViewHolderMarketOverviewItem.List
         }
 
         marketMetricsViewModel.toastLiveData.observe(viewLifecycleOwner) {
-            HudHelper.showErrorMessage(requireView(), it)
+            HudHelper.showErrorMessage(requireActivity().findViewById(android.R.id.content), it)
         }
 
         marketOverviewViewModel.toastLiveData.observe(viewLifecycleOwner) {
-            HudHelper.showErrorMessage(requireView(), it)
+            HudHelper.showErrorMessage(requireActivity().findViewById(android.R.id.content), it)
         }
     }
 
