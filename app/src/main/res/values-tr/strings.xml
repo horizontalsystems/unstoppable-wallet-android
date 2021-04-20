@@ -42,6 +42,10 @@
     <string name="Welcome_PrivacySettings">Gizlilik Ayarları</string>
     <string name="Welcome_CreateWallet">Cüzdan Oluştur</string>
     <string name="Welcome_RestoreWallet">Cüzdanı Geri Yükle</string>
+    <!--Create Wallet-->
+    <string name="CreateWallet_Title">New Wallet</string>
+    <string name="CreateWallet_Mnemonic">Mnemonic</string>
+    <string name="CreateWallet_N_Words">%s words</string>
     <!--Rate App-->
     <string name="RateApp_Title_Rate_This_App">Uygulamayı Değerlendirin</string>
     <string name="RateApp_Description_Rate_This_App">Unstoppable Cüzdandan Yararlanıyor musunuz? Lütfen bu uygulamayı değerlendirmek için bir dakikanızı ayırın</string>
@@ -51,10 +55,14 @@
     <string name="Restore_ChooseWallet">Cüzdan Seçin</string>
     <string name="Restore_Enter_Key_Title">Anahtarı girin</string>
     <string name="Restore_Enter_Key_Description_Mnemonic">%2s kelimelerinden oluşan %1s Cüzdanı için özel anahtarınızı girin. Kelimelerin doğru sırayla girilmesi ve boşluklarla ayrılması gerekir.</string>
+    <string name="Restore_Mnemonic_Description">Enter your mnemonic which consists of 12 or 24 words. The words needs to be entered in correct order and separated by spaces.</string>
     <string name="Restore_ValidationFailed">Yanlış Anahtar</string>
     <string name="Restore_InvalidWordCount">Yanlış sözcük sayısı: %1$d, %2$d olmalıdır</string>
+    <string name="Restore_Error_MnemonicWordCount">Wrong words count. Must be 12 or 24. You entered: %d</string>
     <string name="Restore_InvalidChecksum">Geçersiz sağlama toplamı</string>
     <string name="Select_Coins">Kripto Parayi Seç</string>
+    <string name="Restore_ZCash_BirthdayHeight">ZCash Birthday Height</string>
+    <string name="Restore_ZCash_BirthdayHeight_Hint">If you know your birthday height of wallet enter it for quick syncing</string>
     <string name="Restore_BirthdayHeight_Hint">Cüzdan oluşturulma günü üst sınırı (isteğe bağlı)</string>
     <string name="Restore_BirthdayHeight_Description">Bu, işlemler için taramaya nereden başlanacağını belirler. Biraz zaman alacak olan en baştan tarama için boş bırakınız.</string>
     <string name="Restore_BirthdayHeight_InvalidError">Geçersiz oluşturulma günü üst sınırı</string>
@@ -541,6 +549,33 @@
     <string name="ManageKeys_Backup">Yedekle</string>
     <string name="ManageKeys_Show">Göster</string>
     <string name="ManageKeys_Unlink">Sil</string>
+    <!--Manage Accounts-->
+    <string name="ManageAccounts_Title">Manage Wallets</string>
+    <string name="ManageAccounts_CreateNewWallet">Create New Wallet</string>
+    <string name="ManageAccounts_ImportWallet">Import Wallet</string>
+    <!--Manage Account-->
+    <string name="ManageAccount_Name">Name</string>
+    <string name="ManageAccount_Save">Save</string>
+    <string name="ManageAccount_RecoveryPhraseBackup">Backup</string>
+    <string name="ManageAccount_RecoveryPhraseShow">Show Key</string>
+    <string name="ManageAccount_Unlink">Unlink</string>
+    <string name="ManageAccount_BackupRequired_Title">Backup Required</string>
+    <string name="ManageAccount_BackupRequired_Description">You need to backup the private key for this wallet before it can be deleted from this phone.</string>
+    <string name="ManageAccount_DeleteFromPhone">Delete from Phone</string>
+    <string name="ManageAccount_Delete_ConfirmationRemove">This action will delete the selected wallet from this device.</string>
+    <string name="ManageAccount_Delete_ConfirmationDisable">All coins that belong to this wallet will be disabled on balance tab.</string>
+    <string name="ManageAccount_Delete_ConfirmationLose">If you didn\'t backup the private key for this wallet, you will lose access to the funds on the selected wallet.</string>
+    <!-- Show Key -->
+    <string name="ShowKey_Title">Key</string>
+    <string name="ShowKey_Description">The recovery phrases that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken etc.\n\nMake sure that no one is watching your screen.</string>
+    <string name="ShowKey_ButtonShow">Show</string>
+    <!-- Backup Key -->
+    <string name="BackupKey_Title">Backup</string>
+    <string name="BackupKey_Description">The recovery phrases that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken etc.\n\nMake sure that no one is watching your screen.</string>
+    <string name="BackupKey_ButtonShow">Show</string>
+    <string name="BackupKey_ButtonBackup">Backup</string>
+    <string name="BackupConfirmKey_Description">Enter the recovery phrases in correct order to confirm</string>
+    <string name="BackupConfirmKey_EmptyOrInvalidWords">Entered words are empty or invalid</string>
     <!--Manage Keys Delete Alert-->
     <string name="ManageKeys_Delete_Title">Cüzdanı Sil</string>
     <string name="ManageKeys_Delete_ConfirmationRemove">Bu işlem %s Cüzdanını bu cihazdan kaldıracak.</string>
@@ -586,6 +621,7 @@
     <string name="AddBep2Token_TokenNotFound">Token bulunamadı</string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Title">Adres Formatı</string>
+    <string name="AddressFormatSettings_Description">Choose the address format for your %s wallet. Each selected format represents a different wallet on app\'s balance tab.</string>
     <!-- Blockchain Settings -->
     <string name="BlockchainSettings_BipChangeAlert_Title">Adres Formatı</string>
     <string name="BlockchainSettings_ChangeAlert_ActionButtonText">%s\'e değiştir</string>
