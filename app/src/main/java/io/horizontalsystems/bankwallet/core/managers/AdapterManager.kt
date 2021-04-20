@@ -79,7 +79,7 @@ class AdapterManager(
         disabledWallets.forEach { wallet ->
             adaptersMap.remove(wallet)?.let { disabledAdapter ->
                 disabledAdapter.stop()
-                adapterFactory.unlinkAdapter(wallet.coin.type)
+                adapterFactory.unlinkAdapter(wallet)
             }
         }
 
@@ -101,7 +101,7 @@ class AdapterManager(
             walletsToRefresh.forEach { wallet ->
                 adaptersMap.remove(wallet)?.let { previousAdapter ->
                     previousAdapter.stop()
-                    adapterFactory.unlinkAdapter(wallet.coin.type)
+                    adapterFactory.unlinkAdapter(wallet)
                 }
             }
 
