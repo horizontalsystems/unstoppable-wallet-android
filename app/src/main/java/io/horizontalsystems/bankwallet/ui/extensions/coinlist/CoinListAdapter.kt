@@ -105,7 +105,7 @@ class CoinWithSwitchViewHolder(
     }
 
     private fun set(coin: Coin, listPosition: ListPosition) {
-        backgroundView.setBackgroundResource(listPosition.getBackground())
+        backgroundView.setBackgroundResource(getBackground(listPosition))
         coinIcon.setCoinImage(coin.type)
         coinTitle.text = coin.title
         coinSubtitle.text = coin.code
@@ -113,6 +113,16 @@ class CoinWithSwitchViewHolder(
         coinTypeLabel.isVisible = coin.type.label != null
         dividerView.isVisible = listPosition == ListPosition.Last || listPosition == ListPosition.Single
     }
+
+    private fun getBackground(listPosition: ListPosition): Int {
+        return when (listPosition) {
+            ListPosition.First -> R.drawable.border_steel10_top
+            ListPosition.Middle -> R.drawable.border_steel10_top
+            ListPosition.Last -> R.drawable.border_steel10_top_bottom
+            ListPosition.Single -> R.drawable.border_steel10_top_bottom
+        }
+    }
+
 }
 
 data class CoinViewItem(val coin: Coin, val hasSettings: Boolean, var enabled: Boolean, val listPosition: ListPosition)
