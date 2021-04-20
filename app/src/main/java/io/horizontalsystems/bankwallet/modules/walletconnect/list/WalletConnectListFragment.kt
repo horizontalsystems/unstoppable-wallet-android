@@ -102,7 +102,6 @@ class AccountViewHolder(override val containerView: View) : RecyclerView.ViewHol
 
     fun bind(account: WalletConnectViewItem.Account) {
         accountTextView.text = account.title
-        addressTextView.text = "TODO"
     }
 
     companion object {
