@@ -1,9 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.createaccount
 
 import io.horizontalsystems.bankwallet.core.Clearable
+import io.horizontalsystems.bankwallet.core.IAccountFactory
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.IWalletManager
-import io.horizontalsystems.bankwallet.core.factories.AccountFactory
 import io.horizontalsystems.bankwallet.core.managers.WordsManager
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.coinkit.CoinKit
@@ -11,7 +11,7 @@ import io.horizontalsystems.coinkit.models.CoinType
 import io.reactivex.subjects.BehaviorSubject
 
 class CreateAccountService(
-        private val accountFactory: AccountFactory,
+        private val accountFactory: IAccountFactory,
         private val wordsManager: WordsManager,
         private val accountManager: IAccountManager,
         private val walletManager: IWalletManager,

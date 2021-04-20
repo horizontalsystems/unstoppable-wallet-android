@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.factories.AccountFactory
 import io.horizontalsystems.bankwallet.core.providers.Translator
 
 object CreateAccountModule {
@@ -13,7 +12,7 @@ object CreateAccountModule {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val service = CreateAccountService(
-                    AccountFactory(),
+                    App.accountFactory,
                     App.wordsManager,
                     App.accountManager,
                     App.walletManager,

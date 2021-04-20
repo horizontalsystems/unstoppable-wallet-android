@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.modules.restore.restoreselectcoins
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.factories.AccountFactory
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.modules.blockchainsettings.CoinSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.enablecoins.*
@@ -32,7 +31,7 @@ object RestoreSelectCoinsModule {
         private val restoreSelectCoinsService by lazy {
             RestoreSelectCoinsService(
                     accountType,
-                    AccountFactory(),
+                    App.accountFactory,
                     App.accountManager,
                     App.walletManager,
                     App.coinManager,

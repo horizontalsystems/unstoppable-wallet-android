@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.restore.restoreselectcoins
 
 import io.horizontalsystems.bankwallet.core.*
-import io.horizontalsystems.bankwallet.core.factories.AccountFactory
 import io.horizontalsystems.bankwallet.core.managers.RestoreSettings
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.modules.enablecoins.EnableCoinsService
@@ -13,7 +12,7 @@ import java.util.*
 
 class RestoreSelectCoinsService(
         private val accountType: AccountType,
-        private val accountFactory: AccountFactory,
+        private val accountFactory: IAccountFactory,
         private val accountManager: IAccountManager,
         private val walletManager: IWalletManager,
         private val coinManager: ICoinManager,
