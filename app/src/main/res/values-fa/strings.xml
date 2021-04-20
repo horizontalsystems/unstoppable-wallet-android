@@ -42,6 +42,10 @@
     <string name="Welcome_PrivacySettings">تنظیمات حریم خصوصی</string>
     <string name="Welcome_CreateWallet">ايجاد كيف پول</string>
     <string name="Welcome_RestoreWallet">بازیابی کیف پول</string>
+    <!--Create Wallet-->
+    <string name="CreateWallet_Title">New Wallet</string>
+    <string name="CreateWallet_Mnemonic">Mnemonic</string>
+    <string name="CreateWallet_N_Words">%s words</string>
     <!--Rate App-->
     <string name="RateApp_Title_Rate_This_App">به این برنامه امتیاز دهید</string>
     <string name="RateApp_Description_Rate_This_App">از کیف پول غیر قابل توقف لذت می برید؟ لطفاً برای امتیاز دادن به این این برنامه یک لحظه وقت بگذارید</string>
@@ -51,10 +55,14 @@
     <string name="Restore_ChooseWallet">انتخاب کیف پول</string>
     <string name="Restore_Enter_Key_Title">کلید را وارد کنید</string>
     <string name="Restore_Enter_Key_Description_Mnemonic">کلید خصوصی خود را برای کیف پول %1s که از کلمات %2s تشکیل شده است وارد کنید. کلمات باید به ترتیب صحیح وارد شوند و با فاصله از هم جدا شوند.</string>
+    <string name="Restore_Mnemonic_Description">Enter your mnemonic which consists of 12 or 24 words. The words needs to be entered in correct order and separated by spaces.</string>
     <string name="Restore_ValidationFailed">کلید نادرست</string>
     <string name="Restore_InvalidWordCount">تعداد کلمات نامعتبر: %2$d  مورد نیاز است%1$d</string>
+    <string name="Restore_Error_MnemonicWordCount">Wrong words count. Must be 12 or 24. You entered: %d</string>
     <string name="Restore_InvalidChecksum">Checksum نامعتبر است</string>
     <string name="Select_Coins">کیف پول جدید</string>
+    <string name="Restore_ZCash_BirthdayHeight">ZCash Birthday Height</string>
+    <string name="Restore_ZCash_BirthdayHeight_Hint">If you know your birthday height of wallet enter it for quick syncing</string>
     <string name="Restore_BirthdayHeight_Hint">اندازه کیف پول تولد (اختیاری)</string>
     <string name="Restore_BirthdayHeight_Description">این تعیین می کند که از کجا بررسی برای معاملات شروع شود. خالی بگذارید تا از اول اسکن شود که مدتی طول می کشد.</string>
     <string name="Restore_BirthdayHeight_InvalidError">سایز تولد نامعتبر</string>
@@ -541,6 +549,33 @@
     <string name="ManageKeys_Backup">پيشتيباني</string>
     <string name="ManageKeys_Show">نشان دادن</string>
     <string name="ManageKeys_Unlink">پاک کردن</string>
+    <!--Manage Accounts-->
+    <string name="ManageAccounts_Title">Manage Wallets</string>
+    <string name="ManageAccounts_CreateNewWallet">Create New Wallet</string>
+    <string name="ManageAccounts_ImportWallet">Import Wallet</string>
+    <!--Manage Account-->
+    <string name="ManageAccount_Name">Name</string>
+    <string name="ManageAccount_Save">Save</string>
+    <string name="ManageAccount_RecoveryPhraseBackup">Backup</string>
+    <string name="ManageAccount_RecoveryPhraseShow">Show Key</string>
+    <string name="ManageAccount_Unlink">Unlink</string>
+    <string name="ManageAccount_BackupRequired_Title">Backup Required</string>
+    <string name="ManageAccount_BackupRequired_Description">You need to backup the private key for this wallet before it can be deleted from this phone.</string>
+    <string name="ManageAccount_DeleteFromPhone">Delete from Phone</string>
+    <string name="ManageAccount_Delete_ConfirmationRemove">This action will delete the selected wallet from this device.</string>
+    <string name="ManageAccount_Delete_ConfirmationDisable">All coins that belong to this wallet will be disabled on balance tab.</string>
+    <string name="ManageAccount_Delete_ConfirmationLose">If you didn\'t backup the private key for this wallet, you will lose access to the funds on the selected wallet.</string>
+    <!-- Show Key -->
+    <string name="ShowKey_Title">Key</string>
+    <string name="ShowKey_Description">The recovery phrases that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken etc.\n\nMake sure that no one is watching your screen.</string>
+    <string name="ShowKey_ButtonShow">Show</string>
+    <!-- Backup Key -->
+    <string name="BackupKey_Title">Backup</string>
+    <string name="BackupKey_Description">The recovery phrases that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken etc.\n\nMake sure that no one is watching your screen.</string>
+    <string name="BackupKey_ButtonShow">Show</string>
+    <string name="BackupKey_ButtonBackup">Backup</string>
+    <string name="BackupConfirmKey_Description">Enter the recovery phrases in correct order to confirm</string>
+    <string name="BackupConfirmKey_EmptyOrInvalidWords">Entered words are empty or invalid</string>
     <!--Manage Keys Delete Alert-->
     <string name="ManageKeys_Delete_Title">پاک کردن کیف پول</string>
     <string name="ManageKeys_Delete_ConfirmationRemove">این عمل کیف پول %s را از این دستگاه پاک خواهد کرد.</string>
@@ -586,6 +621,7 @@
     <string name="AddBep2Token_TokenNotFound">نشانه یافت نشد</string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Title">ساختار آدرس</string>
+    <string name="AddressFormatSettings_Description">Choose the address format for your %s wallet. Each selected format represents a different wallet on app\'s balance tab.</string>
     <!-- Blockchain Settings -->
     <string name="BlockchainSettings_BipChangeAlert_Title">ساختار آدرس</string>
     <string name="BlockchainSettings_ChangeAlert_ActionButtonText">تغییر به %s</string>
