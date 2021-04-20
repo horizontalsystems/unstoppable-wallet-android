@@ -42,6 +42,10 @@
     <string name="Welcome_PrivacySettings">개인 정보 설정</string>
     <string name="Welcome_CreateWallet">새 지갑</string>
     <string name="Welcome_RestoreWallet">지갑 복원</string>
+    <!--Create Wallet-->
+    <string name="CreateWallet_Title">New Wallet</string>
+    <string name="CreateWallet_Mnemonic">Mnemonic</string>
+    <string name="CreateWallet_N_Words">%s words</string>
     <!--Rate App-->
     <string name="RateApp_Title_Rate_This_App">이 앱 평가하기</string>
     <string name="RateApp_Description_Rate_This_App">Unstoppable Wallet 을 즐기고 계신가요? 잠시 시간을 내어 이 앱을 평가해주세요</string>
@@ -51,10 +55,14 @@
     <string name="Restore_ChooseWallet">지갑 선택하기</string>
     <string name="Restore_Enter_Key_Title">암호를 입력하세요</string>
     <string name="Restore_Enter_Key_Description_Mnemonic">%2s 의 단어로 이루어진 개인 암호를 %1s 지갑에 입력해 주십시오. 단어들은 올바르게 입력 되어야 하고 또 스페이스를 통해 분리되어야 합니다.</string>
+    <string name="Restore_Mnemonic_Description">Enter your mnemonic which consists of 12 or 24 words. The words needs to be entered in correct order and separated by spaces.</string>
     <string name="Restore_ValidationFailed">틀린 암호 입니다</string>
     <string name="Restore_InvalidWordCount">잘못된 단어 수입니다: %1$d.  %2$d 개여야 합니다</string>
+    <string name="Restore_Error_MnemonicWordCount">Wrong words count. Must be 12 or 24. You entered: %d</string>
     <string name="Restore_InvalidChecksum">유효하지 않은 체크섬</string>
     <string name="Select_Coins">암호화를 선택해 주세요</string>
+    <string name="Restore_ZCash_BirthdayHeight">ZCash Birthday Height</string>
+    <string name="Restore_ZCash_BirthdayHeight_Hint">If you know your birthday height of wallet enter it for quick syncing</string>
     <string name="Restore_BirthdayHeight_Hint">월렛 벌스데이 (선택 사항)</string>
     <string name="Restore_BirthdayHeight_Description">이를 통해 월렛 앱이 Zcash 블록체인과 훨씬 빠르게 동기화할 수 있습니다. 기억이 나지 않을 경우, 칸을 비워주세요.</string>
     <string name="Restore_BirthdayHeight_InvalidError">잘못된 벌스데이 높이</string>
@@ -542,6 +550,33 @@
     <string name="ManageKeys_Backup">백업</string>
     <string name="ManageKeys_Show">표시</string>
     <string name="ManageKeys_Unlink">삭제</string>
+    <!--Manage Accounts-->
+    <string name="ManageAccounts_Title">Manage Wallets</string>
+    <string name="ManageAccounts_CreateNewWallet">Create New Wallet</string>
+    <string name="ManageAccounts_ImportWallet">Import Wallet</string>
+    <!--Manage Account-->
+    <string name="ManageAccount_Name">Name</string>
+    <string name="ManageAccount_Save">Save</string>
+    <string name="ManageAccount_RecoveryPhraseBackup">Backup</string>
+    <string name="ManageAccount_RecoveryPhraseShow">Show Key</string>
+    <string name="ManageAccount_Unlink">Unlink</string>
+    <string name="ManageAccount_BackupRequired_Title">Backup Required</string>
+    <string name="ManageAccount_BackupRequired_Description">You need to backup the private key for this wallet before it can be deleted from this phone.</string>
+    <string name="ManageAccount_DeleteFromPhone">Delete from Phone</string>
+    <string name="ManageAccount_Delete_ConfirmationRemove">This action will delete the selected wallet from this device.</string>
+    <string name="ManageAccount_Delete_ConfirmationDisable">All coins that belong to this wallet will be disabled on balance tab.</string>
+    <string name="ManageAccount_Delete_ConfirmationLose">If you didn\'t backup the private key for this wallet, you will lose access to the funds on the selected wallet.</string>
+    <!-- Show Key -->
+    <string name="ShowKey_Title">Key</string>
+    <string name="ShowKey_Description">The recovery phrases that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken etc.\n\nMake sure that no one is watching your screen.</string>
+    <string name="ShowKey_ButtonShow">Show</string>
+    <!-- Backup Key -->
+    <string name="BackupKey_Title">Backup</string>
+    <string name="BackupKey_Description">The recovery phrases that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken etc.\n\nMake sure that no one is watching your screen.</string>
+    <string name="BackupKey_ButtonShow">Show</string>
+    <string name="BackupKey_ButtonBackup">Backup</string>
+    <string name="BackupConfirmKey_Description">Enter the recovery phrases in correct order to confirm</string>
+    <string name="BackupConfirmKey_EmptyOrInvalidWords">Entered words are empty or invalid</string>
     <!--Manage Keys Delete Alert-->
     <string name="ManageKeys_Delete_Title">지갑 삭제하기</string>
     <string name="ManageKeys_Delete_ConfirmationRemove">이 행동은 %s 지갑을 장치에서 삭제합니다.</string>
@@ -587,6 +622,7 @@
     <string name="AddBep2Token_TokenNotFound">토큰 찾을 수 없음</string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Title">주소 형식</string>
+    <string name="AddressFormatSettings_Description">Choose the address format for your %s wallet. Each selected format represents a different wallet on app\'s balance tab.</string>
     <!-- Blockchain Settings -->
     <string name="BlockchainSettings_BipChangeAlert_Title">주소 형식</string>
     <string name="BlockchainSettings_ChangeAlert_ActionButtonText">%s으로 변경</string>
