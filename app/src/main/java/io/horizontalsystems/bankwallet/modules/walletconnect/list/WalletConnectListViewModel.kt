@@ -60,6 +60,10 @@ class WalletConnectListViewModel(
         return imageUrls.lastOrNull { it.endsWith("png", ignoreCase = true) }
     }
 
+    override fun onCleared() {
+        disposables.clear()
+    }
+
     sealed class WalletConnectViewItem {
         class Account(val title: String) : WalletConnectViewItem()
 
