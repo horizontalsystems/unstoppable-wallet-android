@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.NotificationManagerCompat
 import androidx.preference.PreferenceManager
 import io.horizontalsystems.bankwallet.BuildConfig
+import io.horizontalsystems.bankwallet.core.factories.AccountFactory
 import io.horizontalsystems.bankwallet.core.factories.AdapterFactory
 import io.horizontalsystems.bankwallet.core.factories.AddressParserFactory
 import io.horizontalsystems.bankwallet.core.managers.*
@@ -55,6 +56,7 @@ class App : CoreApp() {
         lateinit var walletManager: IWalletManager
         lateinit var walletStorage: IWalletStorage
         lateinit var accountManager: IAccountManager
+        lateinit var accountFactory: IAccountFactory
         lateinit var backupManager: IBackupManager
 
         lateinit var xRateManager: IRateManager
@@ -149,6 +151,7 @@ class App : CoreApp() {
         networkManager = NetworkManager()
         accountCleaner = AccountCleaner(buildConfigProvider.testMode)
         accountManager = AccountManager(accountsStorage, accountCleaner)
+        accountFactory = AccountFactory(accountManager)
         backupManager = BackupManager(accountManager)
         walletManager = WalletManager(accountManager, walletStorage)
         zcashBirthdayProvider = ZcashBirthdayProvider(this)
