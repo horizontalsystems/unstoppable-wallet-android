@@ -12,8 +12,7 @@ import io.reactivex.subjects.PublishSubject
 
 class ManageAccountService(
         accountId: String,
-        private val accountManager: IAccountManager,
-        private val priceAlertManager: IPriceAlertManager
+        private val accountManager: IAccountManager
 ) : Clearable {
     private val disposable = CompositeDisposable()
 

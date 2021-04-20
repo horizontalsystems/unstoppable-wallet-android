@@ -95,7 +95,7 @@ object BalanceModule {
         fun didUpdateLatestRate(latestRate: Map<CoinType, LatestRate>)
 
         fun didRefresh()
-        fun didUpdateAciveAccount(account: Account?)
+        fun didUpdateActiveAccount(account: Account?)
     }
 
     interface IRouter {
