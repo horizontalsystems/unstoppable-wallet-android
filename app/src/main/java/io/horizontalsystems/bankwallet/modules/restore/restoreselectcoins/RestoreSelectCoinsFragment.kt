@@ -128,7 +128,7 @@ class RestoreSelectCoinsFragment : CoinListBaseFragment() {
         }
 
         viewModel.successLiveEvent.observe(viewLifecycleOwner) {
-            findNavController().popBackStack()
+            findNavController().popBackStack(R.id.restoreMnemonicFragment, true)
         }
 
         viewModel.restoreEnabledLiveData.observe(viewLifecycleOwner, Observer { enabled ->
