@@ -44,13 +44,13 @@ class AdapterFactory(
         }
     }
 
-    fun unlinkAdapter(coinType: CoinType) {
-        when (coinType) {
+    fun unlinkAdapter(wallet: Wallet) {
+        when (wallet.coin.type) {
             CoinType.Ethereum, is CoinType.Erc20 -> {
-                ethereumKitManager.unlink()
+                ethereumKitManager.unlink(wallet.account)
             }
             CoinType.BinanceSmartChain, is CoinType.Bep20 -> {
-                binanceSmartChainKitManager.unlink()
+                binanceSmartChainKitManager.unlink(wallet.account)
             }
             is CoinType.Bep2 -> {
                 binanceKitManager.unlink()

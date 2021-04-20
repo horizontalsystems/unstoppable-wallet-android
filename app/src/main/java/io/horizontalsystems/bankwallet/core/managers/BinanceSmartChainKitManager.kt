@@ -26,10 +26,10 @@ class BinanceSmartChainKitManager(
     private var useCount = 0
     private var currentAccount: Account? = null
 
-
     val statusInfo: Map<String, Any>?
         get() = evmKit?.statusInfo()
 
+    @Synchronized
     fun evmKit(account: Account): EthereumKit {
         if (this.evmKit != null && currentAccount != account) {
             this.evmKit?.stop()
@@ -63,13 +63,16 @@ class BinanceSmartChainKitManager(
         return kit
     }
 
-    fun unlink() {
-        useCount -= 1
+    @Synchronized
+    fun unlink(account: Account) {
+        if (account == currentAccount) {
+            useCount -= 1
 
-        if (useCount < 1) {
-            this.evmKit?.stop()
-            this.evmKit = null
-            currentAccount = null
+            if (useCount < 1) {
+                this.evmKit?.stop()
+                this.evmKit = null
+                currentAccount = null
+            }
         }
     }
 
