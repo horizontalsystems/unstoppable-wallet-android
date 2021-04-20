@@ -251,7 +251,7 @@ class BalancePresenter(
         view?.didRefresh()
     }
 
-    override fun didUpdateAciveAccount(account: Account?) {
+    override fun didUpdateActiveAccount(account: Account?) {
         updateTitle(account)
     }
 

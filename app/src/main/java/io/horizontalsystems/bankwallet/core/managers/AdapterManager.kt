@@ -133,16 +133,6 @@ class AdapterManager(
 
     }
 
-    override fun stopKits() {
-        handler.post {
-            adaptersMap.forEach { (wallet, adapter) ->
-                adapter.stop()
-                adapterFactory.unlinkAdapter(wallet.coin.type)
-            }
-            adaptersMap.clear()
-        }
-    }
-
     override fun getAdapterForWallet(wallet: Wallet): IAdapter? {
         return adaptersMap[wallet]
     }

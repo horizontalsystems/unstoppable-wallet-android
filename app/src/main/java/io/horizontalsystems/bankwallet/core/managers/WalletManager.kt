@@ -36,12 +36,7 @@ class WalletManager(
 
         accountManager.activeAccountObservable
                 .subscribeIO {
-                    val account = if (it.isPresent) {
-                        it.get()
-                    } else {
-                        null
-                    }
-
+                    val account =  it.orElseGet(null)
                     handleUpdated(account)
                 }
                 .let {

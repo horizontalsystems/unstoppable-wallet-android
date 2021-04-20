@@ -57,7 +57,7 @@ class BalanceInteractor(
     init {
         accountManager.activeAccountObservable
                 .subscribeIO {
-                    delegate?.didUpdateAciveAccount(it.orElseGet(null))
+                    delegate?.didUpdateActiveAccount(it.orElseGet(null))
                 }
                 .let {
                     disposables.add(it)
@@ -65,7 +65,7 @@ class BalanceInteractor(
 
         accountManager.accountsFlowable
                 .subscribeIO {
-                    delegate?.didUpdateAciveAccount(accountManager.activeAccount)
+                    delegate?.didUpdateActiveAccount(accountManager.activeAccount)
                 }
                 .let {
                     disposables.add(it)
