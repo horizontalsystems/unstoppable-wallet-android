@@ -19,10 +19,9 @@ object BalanceModule {
         fun setTitle(v: String?)
         fun set(viewItems: List<BalanceViewItem>)
         fun set(headerViewItem: BalanceHeaderViewItem)
-        fun set(sortIsOn: Boolean)
         fun showBackupRequired(wallet: Wallet)
         fun didRefresh()
-        fun setBalanceHidden(hidden: Boolean, animate: Boolean)
+        fun hideBalance()
         fun showSyncErrorDialog(wallet: Wallet, errorMessage: String, sourceChangeable: Boolean)
         fun showNetworkNotAvailable()
     }
@@ -46,8 +45,7 @@ object BalanceModule {
 
         fun onResume()
         fun onPause()
-        fun onHideBalanceClick()
-        fun onShowBalanceClick()
+        fun onBalanceClick()
         fun onSyncErrorClick(viewItem: BalanceViewItem)
         fun onReportClick(errorMessage: String)
         fun refreshByWallet(wallet: Wallet)

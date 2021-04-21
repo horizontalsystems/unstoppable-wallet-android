@@ -14,8 +14,7 @@ class BalancePresenter(
         private val interactor: BalanceModule.IInteractor,
         private val router: BalanceModule.IRouter,
         private val sorter: BalanceModule.IBalanceSorter,
-        private val factory: BalanceViewItemFactory,
-        private val sortingOnThreshold: Int = 5
+        private val factory: BalanceViewItemFactory
 ) : BalanceModule.IViewDelegate, BalanceModule.IInteractorDelegate {
 
     var view: BalanceModule.IView? = null
@@ -28,7 +27,6 @@ class BalancePresenter(
         get() = viewItems.map { it.copy() }
     private var currency: Currency = interactor.baseCurrency
     private var sortType: BalanceSortType = interactor.sortType
-    private var accountToBackup: Account? = null
     private var hideBalance = interactor.balanceHidden
 
     // IViewDelegate
@@ -36,8 +34,6 @@ class BalancePresenter(
     override fun onLoad() {
         executor.submit {
             updateTitle(interactor.activeAccount)
-
-            view?.setBalanceHidden(hideBalance, false)
 
             interactor.subscribeToWallets()
             interactor.subscribeToBaseCurrency()
@@ -122,18 +118,14 @@ class BalancePresenter(
         router.openSortTypeDialog(sortType)
     }
 
-    override fun onHideBalanceClick() {
-        setBalanceHidden(hidden = true)
+    override fun onBalanceClick() {
+        hideBalance = !hideBalance
+        syncBalanceHidden()
     }
 
-    override fun onShowBalanceClick() {
-        setBalanceHidden(hidden = false)
-    }
-
-    private fun setBalanceHidden(hidden: Boolean) {
-        interactor.balanceHidden = hidden
-        hideBalance = hidden
-        view?.setBalanceHidden(hidden, true)
+    private fun syncBalanceHidden() {
+        interactor.balanceHidden = hideBalance
+        updateHeaderViewItem()
         toggleBalanceVisibility()
     }
 
@@ -269,8 +261,6 @@ class BalancePresenter(
 
         handleAdaptersReady()
         handleRates()
-
-        view?.set(sortIsOn = items.size >= sortingOnThreshold)
     }
 
     private fun handleAdaptersReady() {
@@ -319,8 +309,12 @@ class BalancePresenter(
     }
 
     private fun updateHeaderViewItem() {
-        val headerViewItem = factory.headerViewItem(items, currency)
-        view?.set(headerViewItem)
+        if (hideBalance) {
+            view?.hideBalance()
+        } else {
+            val headerViewItem = factory.headerViewItem(items, currency)
+            view?.set(headerViewItem)
+        }
     }
 
 }

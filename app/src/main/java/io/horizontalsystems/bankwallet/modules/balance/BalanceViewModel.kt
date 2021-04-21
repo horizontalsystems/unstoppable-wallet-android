@@ -20,13 +20,12 @@ class BalanceViewModel : ViewModel(), BalanceModule.IView, BalanceModule.IRouter
     val openChartModule = SingleLiveEvent<Coin>()
     val openEmail = SingleLiveEvent<Pair<String, String>>()
 
-    val isSortOn = MutableLiveData<Boolean>()
     val setHeaderViewItem = MutableLiveData<BalanceHeaderViewItem>()
     val setViewItems = MutableLiveData<List<BalanceViewItem>>()
     val titleLiveData = MutableLiveData<String>()
     val showBackupAlert = SingleLiveEvent<Wallet>()
     val didRefreshLiveEvent = SingleLiveEvent<Void>()
-    val setBalanceHidden = MutableLiveData<Pair<Boolean, Boolean>>()
+    val hideBalance = MutableLiveData<Unit>()
     val showSyncError = SingleLiveEvent<Triple<Wallet, String, Boolean>>()
     val networkNotAvailable = SingleLiveEvent<Void>()
 
@@ -72,10 +71,6 @@ class BalanceViewModel : ViewModel(), BalanceModule.IView, BalanceModule.IRouter
 
     // IView
 
-    override fun set(sortIsOn: Boolean) {
-        isSortOn.postValue(sortIsOn)
-    }
-
     override fun set(headerViewItem: BalanceHeaderViewItem) {
         setHeaderViewItem.postValue(headerViewItem)
     }
@@ -96,8 +91,8 @@ class BalanceViewModel : ViewModel(), BalanceModule.IView, BalanceModule.IRouter
         didRefreshLiveEvent.postValue(null)
     }
 
-    override fun setBalanceHidden(hidden: Boolean, animate: Boolean) {
-        setBalanceHidden.postValue(Pair(hidden, animate))
+    override fun hideBalance() {
+        hideBalance.postValue(Unit)
     }
 
     override fun showSyncErrorDialog(wallet: Wallet, errorMessage: String, sourceChangeable: Boolean) {

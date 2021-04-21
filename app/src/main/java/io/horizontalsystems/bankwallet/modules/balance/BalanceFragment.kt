@@ -7,13 +7,10 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.core.app.ShareCompat
 import androidx.core.os.bundleOf
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -36,9 +33,7 @@ import io.horizontalsystems.bankwallet.ui.extensions.SelectorDialog
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorItem
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.findNavController
-import io.horizontalsystems.core.getValueAnimator
 import io.horizontalsystems.core.helpers.HudHelper
-import io.horizontalsystems.core.measureHeight
 import io.horizontalsystems.views.helpers.LayoutHelper
 import kotlinx.android.synthetic.main.fragment_balance.*
 
@@ -46,10 +41,6 @@ class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener, ReceiveFra
 
     private val viewModel by viewModels<BalanceViewModel> { BalanceModule.Factory() }
     private val balanceItemsAdapter = BalanceItemsAdapter(this)
-    private var totalBalanceTabHeight: Int = 0
-    private val animationPlaybackSpeed: Double = 1.3
-    private val expandDuration: Long get() = (300L / animationPlaybackSpeed).toLong()
-    private var showBalanceMenuItem: MenuItem? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_balance, container, false)
@@ -57,18 +48,6 @@ class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener, ReceiveFra
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        toolbar.setOnMenuItemClickListener { item ->
-            when (item.itemId) {
-                R.id.menuShowBalance -> {
-                    viewModel.delegate.onShowBalanceClick()
-                    true
-                }
-                else -> false
-            }
-        }
-        showBalanceMenuItem = toolbar.menu.findItem(R.id.menuShowBalance)
-
-        totalBalanceTabHeight = balanceTabWrapper.measureHeight()
 
         recyclerCoins.adapter = balanceItemsAdapter
         recyclerCoins.layoutManager = NpaLinearLayoutManager(context)
@@ -86,7 +65,13 @@ class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener, ReceiveFra
             ManageAccountsModule.start(this, R.id.mainFragment_to_manageKeysFragment, navOptionsFromBottom(), ManageAccountsModule.Mode.Switcher)
         }
 
-        totalBalanceWrapper.setOnClickListener { viewModel.delegate.onHideBalanceClick() }
+        balanceText.setOnClickListener {
+            viewModel.delegate.onBalanceClick()
+        }
+
+        addCoinButton.setOnClickListener {
+            viewModel.delegate.onAddCoinClick()
+        }
 
         observeLiveData()
         setSwipeBackground()
@@ -95,7 +80,6 @@ class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener, ReceiveFra
     override fun onDestroyView() {
         super.onDestroyView()
 
-        showBalanceMenuItem = null
         recyclerCoins.adapter = null
         recyclerCoins.layoutManager = null
     }
@@ -150,10 +134,6 @@ class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener, ReceiveFra
 
     override fun onSyncErrorClicked(viewItem: BalanceViewItem) {
         viewModel.delegate.onSyncErrorClick(viewItem)
-    }
-
-    override fun onAddCoinClicked() {
-        viewModel.delegate.onAddCoinClick()
     }
 
     override fun onAttachFragment(childFragment: Fragment) {
@@ -233,10 +213,6 @@ class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener, ReceiveFra
                     .show(parentFragmentManager, "balance_sort_type_selector")
         })
 
-        viewModel.isSortOn.observe(viewLifecycleOwner, Observer { visible ->
-            sortButton.isVisible = visible
-        })
-
         viewModel.showBackupAlert.observe(viewLifecycleOwner, { wallet ->
             BackupRequiredDialog.show(childFragmentManager, wallet.account)
         })
@@ -251,17 +227,9 @@ class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener, ReceiveFra
             sendEmail(email, report)
         })
 
-        viewModel.setBalanceHidden.observe(viewLifecycleOwner, Observer { (hideBalance, animate) ->
-            showBalanceMenuItem?.isVisible = hideBalance
-
-            if (animate) {
-                val animator = getValueAnimator(!hideBalance, expandDuration, AccelerateDecelerateInterpolator()) { progress ->
-                    setExpandProgress(balanceTabWrapper, 0, totalBalanceTabHeight, progress)
-                }
-                animator.start()
-            } else {
-                setExpandProgress(balanceTabWrapper, 0, totalBalanceTabHeight, if (hideBalance) 0f else 1f)
-            }
+        viewModel.hideBalance.observe(viewLifecycleOwner, {
+            balanceText.text = "*****"
+            context?.getColor(R.color.jacob)?.let { balanceText.setTextColor(it) }
         })
 
         viewModel.showSyncError.observe(viewLifecycleOwner, Observer { (wallet, errorMessage, sourceChangeable) ->
@@ -301,11 +269,6 @@ class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener, ReceiveFra
             TextHelper.copyText(email)
             HudHelper.showSuccessMessage(this.requireView(), R.string.Hud_Text_EmailAddressCopied)
         }
-    }
-
-    private fun setExpandProgress(view: View, smallHeight: Int, bigHeight: Int, progress: Float) {
-        view.layoutParams.height = (smallHeight + (bigHeight - smallHeight) * progress).toInt()
-        view.requestLayout()
     }
 
     private fun setHeaderViewItem(headerViewItem: BalanceHeaderViewItem) {
