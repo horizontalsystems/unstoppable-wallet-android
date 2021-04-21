@@ -186,6 +186,12 @@
     <string name="Market_Category_RebaseTokens">Rebase Tokens</string>
     <string name="Market_Category_RebaseTokens_Description">Tokens that periodically adjust supply to achieve a target price.</string>
 
+    <!--Market Global Metrics-->
+    <string name="MarketGlobalMetrics_BitcoinDominance">Bitcoin Dominance</string>
+    <string name="MarketGlobalMetrics_Volume">Volume</string>
+    <string name="MarketGlobalMetrics_DefiCap">DeFi Cap</string>
+    <string name="MarketGlobalMetrics_TvlInDefi">TVL in DeFi</string>
+
     <!--Market Search-->
     <string name="EmptyResults">No results found</string>
     <string name="Market_AdvancedSearch">Advanced Search</string>

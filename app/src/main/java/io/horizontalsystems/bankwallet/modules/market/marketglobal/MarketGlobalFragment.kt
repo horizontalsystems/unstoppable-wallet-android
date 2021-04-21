@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.chartview.ChartView
+import io.horizontalsystems.core.findNavController
 import kotlinx.android.synthetic.main.fragment_market_global.*
 
 class MarketGlobalFragment : BaseFragment(), MarketGlobalChartAdapter.Listener {
@@ -29,6 +30,11 @@ class MarketGlobalFragment : BaseFragment(), MarketGlobalChartAdapter.Listener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        toolbar.setTitle(viewModel.title)
+        toolbar.setNavigationOnClickListener {
+            findNavController().popBackStack()
+        }
 
         val chartAdapter = MarketGlobalChartAdapter(this, viewModel.chartType)
 
