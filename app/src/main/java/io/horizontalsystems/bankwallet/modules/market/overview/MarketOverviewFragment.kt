@@ -17,6 +17,7 @@ import io.horizontalsystems.bankwallet.modules.market.MarketViewModel
 import io.horizontalsystems.bankwallet.modules.market.metrics.MarketMetricsAdapter
 import io.horizontalsystems.bankwallet.modules.market.metrics.MarketMetricsModule
 import io.horizontalsystems.bankwallet.modules.market.metrics.MarketMetricsViewModel
+import io.horizontalsystems.bankwallet.modules.market.marketglobal.MarketGlobalFragment
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.android.synthetic.main.fragment_overview.*
@@ -104,6 +105,10 @@ class MarketOverviewFragment : BaseFragment(), ViewHolderMarketOverviewItem.List
         marketOverviewViewModel.toastLiveData.observe(viewLifecycleOwner) {
             HudHelper.showErrorMessage(requireActivity().findViewById(android.R.id.content), it)
         }
+
+        marketMetricsViewModel.showGlobalMarketMetricsPage.observe(viewLifecycleOwner, {
+            findNavController().navigate(R.id.marketGlobalFragment, MarketGlobalFragment.prepareParams(it), navOptions())
+        })
     }
 
     override fun onItemClick(marketViewItem: MarketViewItem) {

@@ -6,10 +6,12 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
+import io.horizontalsystems.bankwallet.modules.market.marketglobal.MetricsType
 import io.horizontalsystems.bankwallet.ui.extensions.MetricData
 import io.horizontalsystems.chartview.ChartData
 import io.horizontalsystems.chartview.ChartDataFactory
 import io.horizontalsystems.chartview.models.ChartPoint
+import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
 import java.math.BigDecimal
 
@@ -20,6 +22,7 @@ class MarketMetricsViewModel(
 
     val marketMetricsLiveData = MutableLiveData<MarketMetricsWrapper?>(null)
     val toastLiveData = MutableLiveData<String>()
+    val showGlobalMarketMetricsPage = SingleLiveEvent<MetricsType>()
 
     private var metricsWrapper: MarketMetricsWrapper? = null
         set(value) {
@@ -101,19 +104,19 @@ class MarketMetricsViewModel(
     }
 
     fun onBtcDominanceClick() {
-
+        showGlobalMarketMetricsPage.postValue(MetricsType.BtcDominance)
     }
 
     fun on24VolumeClick() {
-
+        showGlobalMarketMetricsPage.postValue(MetricsType.Volume24h)
     }
 
     fun onDefiCapClick() {
-
+        showGlobalMarketMetricsPage.postValue(MetricsType.DefiCap)
     }
 
     fun onTvlInDefiClick() {
-
+        showGlobalMarketMetricsPage.postValue(MetricsType.TvlInDefi)
     }
 
 }
