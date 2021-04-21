@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.market.marketglobal
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
@@ -23,6 +24,17 @@ class MarketGlobalViewModel(
     val chartViewItem = MutableLiveData<ChartViewItem>()
 
     var chartType: ChartType = ChartType.DAILY
+
+    val title: Int
+        get() {
+            return when (metricType) {
+                MetricsType.BtcDominance -> R.string.MarketGlobalMetrics_BitcoinDominance
+                MetricsType.Volume24h -> R.string.MarketGlobalMetrics_Volume
+                MetricsType.DefiCap -> R.string.MarketGlobalMetrics_DefiCap
+                MetricsType.TvlInDefi -> R.string.MarketGlobalMetrics_TvlInDefi
+            }
+        }
+
     private var chartData: ChartData? = null
     private var loading: Boolean = false
     private var topValueWithDiff: TopValueWithDiff? = null
