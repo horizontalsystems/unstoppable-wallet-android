@@ -216,12 +216,14 @@
     <string name="Balance_FoundTx">%s tx</string>
     <string name="Balance_Syncing_WithProgress">正在同步... %s%%</string>
     <string name="Balance_AddCoins">添加代币</string>
+    <string name="Balance_AddCoin">Add Coin</string>
     <string name="Balance_Sort_Balance">余额</string>
     <string name="Balance_Sort_PopupTitle">排序方式</string>
     <string name="Balance_Sort_Az">名称</string>
     <string name="Balance_Sort_24hPriceChange">24小时变更 (%)</string>
     <string name="Balance_Backup_Alert">您必须在接收%s之前先备份%s钱包。</string>
     <string name="Balance_NoWalletAlert">您还没有任何钱包。创建新钱包或恢复已有钱包 </string>
+    <string name="Balance_NoCoinsAlert">You don\’t have an added coins.\nAdd the coins you will be using </string>
     <!--Send-->
     <string name="Send_Title">发送%s</string>
     <string name="Send_Hint_Address">地址或域名</string>
