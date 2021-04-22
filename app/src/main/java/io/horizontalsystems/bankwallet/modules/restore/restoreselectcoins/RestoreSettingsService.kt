@@ -39,7 +39,7 @@ class RestoreSettingsService(private val manager: RestoreSettingsManager) : Clea
 
     fun enter(birthdayHeight: String?, coin: Coin) {
         val settings = RestoreSettings()
-        settings.birthdayHeight = birthdayHeight?.toInt()
+        settings.birthdayHeight = birthdayHeight?.toIntOrNull()
 
         val coinWithSettings = CoinWithSettings(coin, settings)
         approveSettingsObservable.onNext(coinWithSettings)
