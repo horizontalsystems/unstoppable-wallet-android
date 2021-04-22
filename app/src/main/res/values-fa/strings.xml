@@ -216,12 +216,14 @@
     <string name="Balance_FoundTx">%s tx</string>
     <string name="Balance_Syncing_WithProgress">همزمانی... %%%s</string>
     <string name="Balance_AddCoins">اضافه کردن سکه ها</string>
+    <string name="Balance_AddCoin">Add Coin</string>
     <string name="Balance_Sort_Balance">مانده حساب</string>
     <string name="Balance_Sort_PopupTitle">مرتب‌ کردن بر اساس</string>
     <string name="Balance_Sort_Az">نام</string>
     <string name="Balance_Sort_24hPriceChange">قیمت ۲۴ ساعت (%)</string>
     <string name="Balance_Backup_Alert">قبل از اینکه %s را دریافت کنید به نسخه پشتیبان از کیف پول %s نیاز دارید.</string>
     <string name="Balance_NoWalletAlert">هنوز کیف پول ندارید. کیف جدید ایجاد کنید یا کیف موجود را بازیابی کنید </string>
+    <string name="Balance_NoCoinsAlert">You don\’t have an added coins.\nAdd the coins you will be using </string>
     <!--Send-->
     <string name="Send_Title">ارسال %s</string>
     <string name="Send_Hint_Address">آدرس یا دامنه</string>
