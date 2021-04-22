@@ -17,8 +17,6 @@ class ManageAccountViewModel(
     val keyActionStateLiveData = MutableLiveData<KeyActionState>()
     val saveEnabledLiveData = MutableLiveData<Boolean>()
     val finishLiveEvent = SingleLiveEvent<Unit>()
-    val openUnlinkLiveEvent = SingleLiveEvent<Unit>()
-    val openBackupRequiredLiveEvent = SingleLiveEvent<Unit>()
 
     val account: Account
         get() = service.account
@@ -59,14 +57,6 @@ class ManageAccountViewModel(
     }
 
     fun onUnlink() {
-        if (service.account.isBackedUp) {
-            openUnlinkLiveEvent.postValue(Unit)
-        } else {
-            openBackupRequiredLiveEvent.postValue(Unit)
-        }
-    }
-
-    fun onUnlinkConfirm() {
         service.deleteAccount()
     }
 
