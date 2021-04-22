@@ -13,6 +13,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:menu="@menu/manage_account_menu"
         app:navigationIcon="@drawable/ic_back"
+        app:titleTextAppearance="@style/Title3"
         app:title="@string/ManageAccounts_Title" />
 
     <TextView

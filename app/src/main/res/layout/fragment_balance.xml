@@ -30,7 +30,6 @@
                 android:drawablePadding="8dp"
                 android:singleLine="true"
                 android:ellipsize="end"
-                android:text="@string/Balance_Title"
                 app:drawableEndCompat="@drawable/ic_down_24" />
         </androidx.appcompat.widget.Toolbar>
         <TextView
