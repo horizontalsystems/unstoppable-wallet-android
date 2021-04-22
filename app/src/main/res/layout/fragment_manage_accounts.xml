@@ -13,10 +13,12 @@
         app:layout_constraintTop_toTopOf="parent"
         app:navigationIcon="@drawable/ic_back"
         app:menu="@menu/swap_settings_menu"
+        app:titleTextAppearance="@style/Title3"
         app:title="@string/ManageAccounts_Title" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
+        android:layout_marginTop="12dp"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
