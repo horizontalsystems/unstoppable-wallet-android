@@ -12,6 +12,8 @@ import io.horizontalsystems.bankwallet.modules.addtoken.TokenType
 import io.horizontalsystems.bankwallet.modules.blockchainsettings.CoinSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsModule
 import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsViewModel
+import io.horizontalsystems.bankwallet.modules.restore.restoreselectcoins.RestoreSettingsViewModel
+import io.horizontalsystems.bankwallet.ui.extensions.ZcashBirhdayHeightDialog
 import io.horizontalsystems.bankwallet.ui.extensions.coinlist.CoinListBaseFragment
 import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.core.findNavController
@@ -25,6 +27,7 @@ class ManageWalletsFragment : CoinListBaseFragment() {
     private val vmFactory by lazy { ManageWalletsModule.Factory() }
     private val viewModel by viewModels<ManageWalletsViewModel> { vmFactory }
     private val coinSettingsViewModel by viewModels<CoinSettingsViewModel> { vmFactory }
+    private val restoreSettingsViewModel by viewModels<RestoreSettingsViewModel> { vmFactory }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -98,6 +101,18 @@ class ManageWalletsFragment : CoinListBaseFragment() {
             hideKeyboard()
             showBottomSelectorDialog(config)
         })
+
+        restoreSettingsViewModel.openBirthdayAlertSignal.observe(viewLifecycleOwner) {
+            val zcashBirhdayHeightDialog = ZcashBirhdayHeightDialog()
+            zcashBirhdayHeightDialog.onEnter = {
+                restoreSettingsViewModel.onEnter(it)
+            }
+            zcashBirhdayHeightDialog.onCancel = {
+                restoreSettingsViewModel.onCancelEnterBirthdayHeight()
+            }
+
+            zcashBirhdayHeightDialog.show(requireActivity().supportFragmentManager, "ZcashBirhdayHeightDialog")
+        }
     }
 
     private fun showAddTokenDialog() {

@@ -42,9 +42,9 @@ class RestoreSettings {
     val values = mutableMapOf<RestoreSettingType, String>()
 
     var birthdayHeight: Int?
-        get() = values[RestoreSettingType.birthdayHeight]?.toInt()
+        get() = values[RestoreSettingType.birthdayHeight]?.toIntOrNull()
         set(value) {
-            values[RestoreSettingType.birthdayHeight] = value.toString()
+            values[RestoreSettingType.birthdayHeight] = value?.toString() ?: ""
         }
 
     fun isNotEmpty() = values.isNotEmpty()
