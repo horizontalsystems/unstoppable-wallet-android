@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.chartview.ChartData
 import io.horizontalsystems.chartview.ChartView
-import io.horizontalsystems.core.entities.Currency
 import kotlinx.android.parcel.Parcelize
 import java.math.BigDecimal
 
@@ -23,6 +22,7 @@ object MarketGlobalModule {
 
 }
 
+data class SelectedPoint(val value: String, val date: String)
 data class LastValueWithDiff(val value: String, val diff: BigDecimal?)
 data class ChartViewItem(
         val lastValueWithDiff: LastValueWithDiff?,
@@ -30,7 +30,6 @@ data class ChartViewItem(
         val maxValue: String?,
         val minValue: String?,
         val chartType: ChartView.ChartType,
-        val currency: Currency,
         val loading: Boolean
         )
 

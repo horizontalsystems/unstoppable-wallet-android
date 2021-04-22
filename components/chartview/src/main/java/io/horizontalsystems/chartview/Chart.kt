@@ -13,7 +13,6 @@ import io.horizontalsystems.chartview.models.ChartConfig
 import io.horizontalsystems.chartview.models.ChartIndicator
 import io.horizontalsystems.chartview.models.PointInfo
 import kotlinx.android.synthetic.main.view_chart.view.*
-import java.math.BigDecimal
 
 class Chart @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
     : ConstraintLayout(context, attrs, defStyleAttr) {
@@ -22,10 +21,6 @@ class Chart @JvmOverloads constructor(context: Context, attrs: AttributeSet? = n
         fun onTouchDown()
         fun onTouchUp()
         fun onTouchSelect(point: PointInfo)
-    }
-
-    interface RateFormatter {
-        fun format(value: BigDecimal): String?
     }
 
     init {

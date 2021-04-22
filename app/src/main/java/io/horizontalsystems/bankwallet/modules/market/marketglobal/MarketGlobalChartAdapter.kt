@@ -3,34 +3,43 @@ package io.horizontalsystems.bankwallet.modules.market.marketglobal
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isInvisible
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabLayout
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.bankwallet.modules.coin.ChartPointViewItem
 import io.horizontalsystems.bankwallet.ui.extensions.createTextView
 import io.horizontalsystems.chartview.Chart
 import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.chartview.models.PointInfo
-import io.horizontalsystems.core.entities.Currency
-import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.views.inflate
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_metrics_global_chart.*
-import java.util.*
 
-class MarketGlobalChartAdapter(private val listener: Listener, private val chartType: ChartView.ChartType)
+class MarketGlobalChartAdapter(
+        private val listener: Listener,
+        private val chartType: ChartView.ChartType,
+        selectedPointLiveData: LiveData<SelectedPoint>,
+        viewLifecycleOwner: LifecycleOwner
+)
     : RecyclerView.Adapter<MarketGlobalChartAdapter.ChartViewHolder>() {
 
     interface Listener {
         fun onChartTouchDown()
         fun onChartTouchUp()
         fun onTabSelected(chartType: ChartView.ChartType)
+        fun onTouchSelect(point: PointInfo)
+    }
+
+    private var chartViewItem: ChartViewItem? = null
+
+    init {
+        selectedPointLiveData.observe(viewLifecycleOwner, {
+            notifyItemChanged(0, it)
+        })
     }
 
     override fun getItemCount() = 1
-    private var chartViewItem: ChartViewItem? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChartViewHolder {
         return ChartViewHolder.create(parent, listener, chartType)
@@ -44,7 +53,8 @@ class MarketGlobalChartAdapter(private val listener: Listener, private val chart
         } else {
             payloads.firstOrNull().let { payload ->
                 when (payload) {
-                    is ChartViewItem -> holder.bind(payload)
+                    is ChartViewItem -> holder.bind(chartViewItem = payload)
+                    is SelectedPoint -> holder.bind(selectedPoint = payload)
                 }
             }
         }
@@ -66,8 +76,6 @@ class MarketGlobalChartAdapter(private val listener: Listener, private val chart
                 Pair(ChartView.ChartType.WEEKLY, R.string.CoinPage_TimeDuration_Week),
                 Pair(ChartView.ChartType.MONTHLY, R.string.CoinPage_TimeDuration_Month),
         )
-
-        private var currency: Currency? = null
 
         init {
             actions.forEach { (_, textId) ->
@@ -108,7 +116,12 @@ class MarketGlobalChartAdapter(private val listener: Listener, private val chart
                 }
             }
 
-            currency = chartViewItem.currency
+        }
+
+        fun bind(selectedPoint: SelectedPoint){
+            pointInfoDate.text = selectedPoint.date
+            pointInfoValue.text = selectedPoint.value
+
         }
 
         //Chart.Listener
@@ -128,12 +141,7 @@ class MarketGlobalChartAdapter(private val listener: Listener, private val chart
         }
 
         override fun onTouchSelect(point: PointInfo) {
-            val currency = currency ?: return
-            val price = CurrencyValue(currency, point.value.toBigDecimal())
-            val item = ChartPointViewItem(point.timestamp, price, null, null)
-
-            pointInfoDate.text = DateHelper.getDayAndTime(Date(item.date * 1000))
-            pointInfoPrice.text = App.numberFormatter.formatFiat(item.price.value, item.price.currency.symbol, 2, 4)
+            listener.onTouchSelect(point)
         }
 
         // TabLayout.OnTabSelectedListener
