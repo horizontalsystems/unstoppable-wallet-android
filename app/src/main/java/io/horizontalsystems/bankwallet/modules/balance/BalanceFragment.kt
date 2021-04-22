@@ -192,7 +192,7 @@ class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener, ReceiveFra
             val scrollToTop = balanceItemsAdapter.itemCount == 1
             balanceItemsAdapter.submitList(it) {
                 if (scrollToTop) {
-                    recyclerCoins.layoutManager?.scrollToPosition(0)
+                    recyclerCoins?.layoutManager?.scrollToPosition(0)
                 }
             }
         })
