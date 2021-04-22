@@ -216,12 +216,14 @@
     <string name="Balance_FoundTx">%s tx</string>
     <string name="Balance_Syncing_WithProgress">Sincronizando... %s%%</string>
     <string name="Balance_AddCoins">Añadir Monedas</string>
+    <string name="Balance_AddCoin">Add Coin</string>
     <string name="Balance_Sort_Balance">Saldo</string>
     <string name="Balance_Sort_PopupTitle">Ordenar por</string>
     <string name="Balance_Sort_Az">Nombre</string>
     <string name="Balance_Sort_24hPriceChange">Precio 24h (%)</string>
     <string name="Balance_Backup_Alert">Necesita respaldar el monedero %s antes de poder recibir %s.</string>
     <string name="Balance_NoWalletAlert">Aún no tienes ningún monedero. Crea nuevos o restaura existentes </string>
+    <string name="Balance_NoCoinsAlert">You don\’t have an added coins.\nAdd the coins you will be using </string>
     <!--Send-->
     <string name="Send_Title">Enviar %s</string>
     <string name="Send_Hint_Address">Dominio o dirección</string>
