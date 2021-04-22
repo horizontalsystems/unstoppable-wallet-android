@@ -34,10 +34,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="invisible"
-        app:constraint_referenced_ids="pointInfoPrice,pointInfoDate" />
+        app:constraint_referenced_ids="pointInfoValue,pointInfoDate" />
 
     <TextView
-        android:id="@+id/pointInfoPrice"
+        android:id="@+id/pointInfoValue"
         style="@style/CaptionSB"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -55,8 +55,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="6dp"
         android:textColor="@color/grey"
-        app:layout_constraintStart_toStartOf="@+id/pointInfoPrice"
-        app:layout_constraintTop_toBottomOf="@+id/pointInfoPrice"
+        app:layout_constraintStart_toStartOf="@+id/pointInfoValue"
+        app:layout_constraintTop_toBottomOf="@+id/pointInfoValue"
         tools:text="Jun 12, 12:30" />
 
     <!--EndOf Price and Date info-->

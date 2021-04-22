@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.chartview.ChartView
+import io.horizontalsystems.chartview.models.PointInfo
 import io.horizontalsystems.core.findNavController
 import kotlinx.android.synthetic.main.fragment_market_global.*
 
@@ -36,7 +37,7 @@ class MarketGlobalFragment : BaseFragment(), MarketGlobalChartAdapter.Listener {
             findNavController().popBackStack()
         }
 
-        val chartAdapter = MarketGlobalChartAdapter(this, viewModel.chartType)
+        val chartAdapter = MarketGlobalChartAdapter(this, viewModel.chartType, viewModel.selectedPointLiveData, viewLifecycleOwner)
 
         metricsRecyclerView.itemAnimator = null
         metricsRecyclerView.adapter = ConcatAdapter(chartAdapter)
@@ -59,8 +60,12 @@ class MarketGlobalFragment : BaseFragment(), MarketGlobalChartAdapter.Listener {
         canVerticallyScroll = true
     }
 
+    override fun onTouchSelect(point: PointInfo) {
+        viewModel.onTouchSelect(point)
+    }
+
     override fun onTabSelected(chartType: ChartView.ChartType) {
-        viewModel.onSelect(chartType)
+        viewModel.onChartTypeSelect(chartType)
     }
 
     companion object {
