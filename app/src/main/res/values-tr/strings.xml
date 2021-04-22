@@ -216,12 +216,14 @@
     <string name="Balance_FoundTx">%s tx</string>
     <string name="Balance_Syncing_WithProgress">Eşitleniyor...%s%%</string>
     <string name="Balance_AddCoins">Kredi Ekle</string>
+    <string name="Balance_AddCoin">Add Coin</string>
     <string name="Balance_Sort_Balance">Bakiye</string>
     <string name="Balance_Sort_PopupTitle">Sıralama şekli</string>
     <string name="Balance_Sort_Az">İsim</string>
     <string name="Balance_Sort_24hPriceChange">24 saat Değişiklik</string>
     <string name="Balance_Backup_Alert">Öncelikle %s cüzdanınızı yedeklemeniz gerekiyor daha sonra %s kripto parasını alabilirsiniz.</string>
     <string name="Balance_NoWalletAlert">Henüz cüzdanınız yok. Yeni oluşturun veya mevcut olanı geri yükleyin </string>
+    <string name="Balance_NoCoinsAlert">You don\’t have an added coins.\nAdd the coins you will be using </string>
     <!--Send-->
     <string name="Send_Title">%s gönder</string>
     <string name="Send_Hint_Address">Adres veya Domain</string>
