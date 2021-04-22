@@ -32,8 +32,6 @@ class Chart @JvmOverloads constructor(context: Context, attrs: AttributeSet? = n
         inflate(context, R.layout.view_chart, this)
     }
 
-    var rateFormatter: RateFormatter? = null
-
     private val config = ChartConfig(context, attrs)
     private val animatorMain = ChartAnimator { chartMain.invalidate() }
     private val animatorBottom = ChartAnimator { chartBottom.invalidate() }
@@ -137,7 +135,7 @@ class Chart @JvmOverloads constructor(context: Context, attrs: AttributeSet? = n
         setVisible(chartMain, topLowRange, chartBottom, chartTimeline, isVisible = visible)
     }
 
-    fun setData(data: ChartData, chartType: ChartView.ChartType) {
+    fun setData(data: ChartData, chartType: ChartView.ChartType, maxValue: String?, minValue: String?) {
         config.setTrendColor(data)
 
         val emaFast = PointConverter.curve(data.values(EmaFast), chartMain.shape, config.curveVerticalOffset)
@@ -210,9 +208,8 @@ class Chart @JvmOverloads constructor(context: Context, attrs: AttributeSet? = n
         mainGrid.setShape(chartMain.shape)
         mainGrid.set(timeline)
 
-        val candleRange = data.valueRange
         mainRange.setShape(chartMain.shape)
-        mainRange.setValues(formatRate(candleRange.upper), formatRate(candleRange.lower))
+        mainRange.setValues(maxValue, minValue)
 
         // Volume
         bottomVolume.setPoints(volumes)
@@ -256,7 +253,4 @@ class Chart @JvmOverloads constructor(context: Context, attrs: AttributeSet? = n
         view.forEach { it.isVisible = isVisible }
     }
 
-    private fun formatRate(value: Float): String {
-        return rateFormatter?.format(value.toBigDecimal()) ?: value.toString()
-    }
 }

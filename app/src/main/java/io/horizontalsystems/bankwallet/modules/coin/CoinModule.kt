@@ -6,7 +6,6 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.views.ListPosition
 import io.horizontalsystems.xrateskit.entities.CoinPlatformType
-import java.math.BigDecimal
 
 object CoinModule {
 
@@ -15,7 +14,6 @@ object CoinModule {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             val currency = App.currencyManager.baseCurrency
-            val rateFormatter = RateFormatter(currency)
             val service = CoinService(
                     coinType,
                     currency,
@@ -26,12 +24,10 @@ object CoinModule {
                     App.marketFavoritesManager,
                     App.appConfigProvider.guidesUrl
             )
-            return CoinViewModel(rateFormatter, service, coinCode, coinTitle, CoinViewFactory(currency, App.numberFormatter), listOf(service)) as T
+            return CoinViewModel(service, coinCode, coinTitle, CoinViewFactory(currency, App.numberFormatter), listOf(service)) as T
         }
 
     }
-
-    data class CoinCodeWithValue(val coinCode: String, val value: BigDecimal)
 }
 
 data class MarketTickerViewItem(

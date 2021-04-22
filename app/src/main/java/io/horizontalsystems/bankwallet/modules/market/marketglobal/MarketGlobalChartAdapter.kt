@@ -92,8 +92,8 @@ class MarketGlobalChartAdapter(private val listener: Listener, private val chart
 
         fun bind(chartViewItem: ChartViewItem) {
 
-            topValue.text = chartViewItem.topValueWithDiff?.value
-            diffValue.setDiff(chartViewItem.topValueWithDiff?.diff)
+            topValue.text = chartViewItem.lastValueWithDiff?.value
+            diffValue.setDiff(chartViewItem.lastValueWithDiff?.diff)
 
             if (chartViewItem.loading) {
                 chart.showSinner()
@@ -103,7 +103,7 @@ class MarketGlobalChartAdapter(private val listener: Listener, private val chart
                 chartViewItem.chartData?.let {
                     chart.showChart()
                     containerView.post {
-                        chart.setData(it, chartViewItem.chartType)
+                        chart.setData(it, chartViewItem.chartType, chartViewItem.maxValue, chartViewItem.minValue)
                     }
                 }
             }
