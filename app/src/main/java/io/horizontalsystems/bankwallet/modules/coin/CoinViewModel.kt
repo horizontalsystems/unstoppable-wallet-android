@@ -14,11 +14,8 @@ import io.horizontalsystems.xrateskit.entities.ChartType
 import io.horizontalsystems.xrateskit.entities.LatestRate
 import io.horizontalsystems.xrateskit.entities.TimePeriod
 import io.reactivex.disposables.CompositeDisposable
-import java.math.BigDecimal
-import java.util.concurrent.TimeUnit
 
 class CoinViewModel(
-        val rateFormatter: RateFormatter,
         private val service: CoinService,
         val coinCode: String,
         private val coinTitle: String,

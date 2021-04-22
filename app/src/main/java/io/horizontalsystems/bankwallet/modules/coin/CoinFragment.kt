@@ -110,7 +110,6 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
         coinName.text = coinTitle
 
         chart.setListener(this)
-        chart.rateFormatter = viewModel.rateFormatter
 
         observeData()
         bindActions()
@@ -201,7 +200,7 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
             setViewVisibility(indicatorEMA, indicatorMACD, indicatorRSI, isVisible = true)
 
             rootView.post {
-                chart.setData(item.chartData, item.chartType)
+                chart.setData(item.chartData, item.chartType, item.maxValue, item.minValue)
             }
 
             coinRateDiff.setDiff(item.diffValue)

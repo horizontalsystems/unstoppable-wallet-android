@@ -23,10 +23,12 @@ object MarketGlobalModule {
 
 }
 
-data class TopValueWithDiff(val value: String, val diff: BigDecimal?)
+data class LastValueWithDiff(val value: String, val diff: BigDecimal?)
 data class ChartViewItem(
-        val topValueWithDiff: TopValueWithDiff?,
+        val lastValueWithDiff: LastValueWithDiff?,
         val chartData: ChartData?,
+        val maxValue: String?,
+        val minValue: String?,
         val chartType: ChartView.ChartType,
         val currency: Currency,
         val loading: Boolean

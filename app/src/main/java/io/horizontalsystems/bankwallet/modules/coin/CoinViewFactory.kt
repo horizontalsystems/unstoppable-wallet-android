@@ -20,7 +20,9 @@ import java.math.RoundingMode
 data class ChartInfoViewItem(
         val chartData: ChartData,
         val chartType: ChartView.ChartType,
-        val diffValue: BigDecimal
+        val diffValue: BigDecimal,
+        val maxValue: String?,
+        val minValue: String?
 )
 
 data class ChartPointViewItem(
@@ -64,8 +66,10 @@ class CoinViewFactory(private val currency: Currency, private val numberFormatte
             ChartType.MONTHLY24 -> ChartView.ChartType.MONTHLY24
         }
         val chartData = createChartData(chartInfo, lastPoint, chartType)
+        val maxValue = numberFormatter.formatFiat(chartData.valueRange.upper, currency.symbol, 0, 2)
+        val minValue = numberFormatter.formatFiat(chartData.valueRange.lower, currency.symbol, 0, 2)
 
-        return ChartInfoViewItem(chartData, chartType, chartData.diff())
+        return ChartInfoViewItem(chartData, chartType, chartData.diff(), maxValue, minValue)
     }
 
     fun createCoinDetailsViewItem(coinMarket: CoinMarketDetails, currency: Currency, coinCode: String, guideUrl: String? = null): CoinDetailsViewItem {

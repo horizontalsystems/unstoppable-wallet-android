@@ -45,7 +45,7 @@ class MarketGlobalFragment : BaseFragment(), MarketGlobalChartAdapter.Listener {
             override fun canScrollVertically(): Boolean = canVerticallyScroll
         }
 
-        viewModel.chartViewItem.observe(viewLifecycleOwner, {
+        viewModel.chartViewItemLiveData.observe(viewLifecycleOwner, {
             chartAdapter.setChartViewItem(it)
         })
 

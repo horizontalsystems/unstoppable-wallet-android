@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.modules.market.marketglobal
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.core.subscribeIO
@@ -21,7 +20,7 @@ class MarketGlobalViewModel(
         private val numberFormatter: IAppNumberFormatter,
         private val clearables: List<MarketGlobalService>) : ViewModel() {
 
-    val chartViewItem = MutableLiveData<ChartViewItem>()
+    val chartViewItemLiveData = MutableLiveData<ChartViewItem>()
 
     var chartType: ChartType = ChartType.DAILY
 
@@ -37,7 +36,7 @@ class MarketGlobalViewModel(
 
     private var chartData: ChartData? = null
     private var loading: Boolean = false
-    private var topValueWithDiff: TopValueWithDiff? = null
+    private var topValueWithDiff: LastValueWithDiff? = null
 
     private val disposables = CompositeDisposable()
 
@@ -67,15 +66,26 @@ class MarketGlobalViewModel(
     private fun updateChartInfo() {
         val points = service.chartPoints?.reversed() ?: return
 
-        val chartData = getChartData(points)
+        chartData = getChartData(points)
 
-        topValueWithDiff = TopValueWithDiff(getTopValue(points.last()), chartData.diff())
-
-        this.chartData = chartData
+        chartData?.let {
+            topValueWithDiff = LastValueWithDiff(getTopValue(points.last()), it.diff())
+        }
 
         loading = false
 
         updateChartViewItem()
+    }
+
+    private fun getRangeValue(value: Float?): String? {
+        value ?: return null
+
+        return when(metricType){
+            MetricsType.BtcDominance -> numberFormatter.format(value, 0, 2, suffix = "%")
+            MetricsType.Volume24h,
+            MetricsType.DefiCap,
+            MetricsType.TvlInDefi -> formatFiatShortened(value.toBigDecimal(), service.currency.symbol)
+        }
     }
 
     private fun fetchChartInfo() {
@@ -85,7 +95,20 @@ class MarketGlobalViewModel(
     }
 
     private fun updateChartViewItem() {
-        chartViewItem.postValue(ChartViewItem(topValueWithDiff, chartData, chartType, service.currency, loading))
+        val maxValue = getRangeValue(chartData?.valueRange?.upper)
+        val minValue = getRangeValue(chartData?.valueRange?.lower)
+
+        val chartViewItem = ChartViewItem(
+                topValueWithDiff,
+                chartData,
+                maxValue,
+                minValue,
+                chartType,
+                service.currency,
+                loading
+        )
+
+        chartViewItemLiveData.postValue(chartViewItem)
     }
 
     private fun getChartData(points: List<GlobalCoinMarketPoint>): ChartData {
@@ -106,7 +129,7 @@ class MarketGlobalViewModel(
 
     private fun formatFiatShortened(value: BigDecimal, symbol: String): String {
         val (shortenValue, suffix) = numberFormatter.shortenValue(value)
-        return App.numberFormatter.formatFiat(shortenValue, symbol, 0, 2) + " $suffix"
+        return numberFormatter.formatFiat(shortenValue, symbol, 0, 2) + " $suffix"
     }
 
     private fun getTopValue(point: GlobalCoinMarketPoint): String {
