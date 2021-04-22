@@ -15,14 +15,13 @@ import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.backupkey.BackupKeyModule
 import io.horizontalsystems.bankwallet.modules.manageaccount.ManageAccountModule.ACCOUNT_ID_KEY
 import io.horizontalsystems.bankwallet.modules.manageaccount.ManageAccountViewModel.KeyActionState
-import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog
 import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.UnlinkConfirmationDialog
 import io.horizontalsystems.bankwallet.modules.showkey.ShowKeyModule
 import io.horizontalsystems.core.findNavController
 import kotlinx.android.synthetic.main.fragment_manage_account.*
 import kotlinx.android.synthetic.main.fragment_manage_accounts.toolbar
 
-class ManageAccountFragment : BaseFragment(), BackupRequiredDialog.Listener, UnlinkConfirmationDialog.Listener {
+class ManageAccountFragment : BaseFragment(), UnlinkConfirmationDialog.Listener {
     private val viewModel by viewModels<ManageAccountViewModel> { ManageAccountModule.Factory(arguments?.getString(ACCOUNT_ID_KEY)!!) }
     private var saveMenuItem: MenuItem? = null
 
@@ -65,29 +64,19 @@ class ManageAccountFragment : BaseFragment(), BackupRequiredDialog.Listener, Unl
         name.addTextChangedListener(textWatcher)
 
         unlinkButton.setOnSingleClickListener {
-            viewModel.onUnlink()
-        }
-
-        childFragmentManager.addFragmentOnAttachListener { _, fragment ->
-            when (fragment) {
-                is BackupRequiredDialog -> fragment.setListener(this)
-                is UnlinkConfirmationDialog -> fragment.setListener(this)
-            }
-        }
-
-        viewModel.openBackupRequiredLiveEvent.observe(viewLifecycleOwner, {
-            BackupRequiredDialog.show(childFragmentManager, viewModel.account)
-        })
-
-        viewModel.openUnlinkLiveEvent.observe(viewLifecycleOwner, {
             val confirmationList = listOf(
                     getString(R.string.ManageAccount_Delete_ConfirmationRemove),
                     getString(R.string.ManageAccount_Delete_ConfirmationDisable),
                     getString(R.string.ManageAccount_Delete_ConfirmationLose)
             )
-
             UnlinkConfirmationDialog.show(childFragmentManager, viewModel.account.name, confirmationList)
-        })
+        }
+
+        childFragmentManager.addFragmentOnAttachListener { _, fragment ->
+            when (fragment) {
+                is UnlinkConfirmationDialog -> fragment.setListener(this)
+            }
+        }
 
         viewModel.keyActionStateLiveData.observe(viewLifecycleOwner, { keyActionState ->
             when (keyActionState) {
@@ -117,16 +106,12 @@ class ManageAccountFragment : BaseFragment(), BackupRequiredDialog.Listener, Unl
         })
     }
 
-    override fun onClickBackup(account: Account) {
-        openBackupModule(account)
-    }
-
     private fun openBackupModule(account: Account) {
         BackupKeyModule.start(this, R.id.manageAccountFragment_to_backupKeyFragment, navOptions(), account)
     }
 
     override fun onUnlinkConfirm() {
-        viewModel.onUnlinkConfirm()
+        viewModel.onUnlink()
     }
 
     override fun onDestroyView() {
