@@ -17,7 +17,6 @@ class AppStatusService(
         private val accountManager: IAccountManager,
         private val walletManager: IWalletManager,
         private val adapterManager: IAdapterManager,
-        private val coinManager: ICoinManager,
         private val ethereumKitManager: EthereumKitManager,
         private val binanceSmartChainKitManager: BinanceSmartChainKitManager,
         private val binanceKitManager: IBinanceKitManager
@@ -94,13 +93,18 @@ class AppStatusService(
         val bitcoinChainStatus = LinkedHashMap<String, Any>()
         val coinTypesToDisplay = listOf(CoinType.Bitcoin, CoinType.BitcoinCash, CoinType.Dash, CoinType.Litecoin)
 
-        coinTypesToDisplay.forEach { coinType ->
-            walletManager.wallets.firstOrNull { it.coin.type == coinType }?.let { wallet ->
-                (adapterManager.getAdapterForWallet(wallet) as? BitcoinBaseAdapter)?.let { adapter ->
-                    bitcoinChainStatus[wallet.coin.title] = adapter.statusInfo
+        walletManager.activeWallets
+                .filter { coinTypesToDisplay.contains(it.coin.type) }
+                .sortedBy { it.coin.title }
+                .forEach { wallet ->
+                    (adapterManager.getAdapterForWallet(wallet) as? BitcoinBaseAdapter)?.let { adapter ->
+                        val settings = wallet.configuredCoin.settings
+                        val settingsValue = settings.derivation?.value
+                                ?: settings.bitcoinCashCoinType?.value
+                        val statusTitle = "${wallet.coin.title}${settingsValue?.let { "-$it" } ?: ""}"
+                        bitcoinChainStatus[statusTitle] = adapter.statusInfo
+                    }
                 }
-            }
-        }
         return bitcoinChainStatus
     }
 

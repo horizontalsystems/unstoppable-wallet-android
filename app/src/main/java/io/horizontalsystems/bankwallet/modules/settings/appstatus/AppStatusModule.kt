@@ -33,7 +33,6 @@ object AppStatusModule {
                     App.accountManager,
                     App.walletManager,
                     App.adapterManager,
-                    App.coinManager,
                     App.ethereumKitManager,
                     App.binanceSmartChainKitManager,
                     App.binanceKitManager
