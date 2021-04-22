@@ -12,6 +12,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:navigationIcon="@drawable/ic_back"
+        app:titleTextAppearance="@style/Title3"
         app:title="@string/WalletConnect_Title" />
 
     <io.horizontalsystems.views.SettingsView

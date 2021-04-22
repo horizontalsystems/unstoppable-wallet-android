@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         app:navigationIcon="@drawable/ic_back"
+        app:titleTextAppearance="@style/Title3"
         app:title="@string/SettingsCurrency_Title" />
 
     <androidx.recyclerview.widget.RecyclerView
