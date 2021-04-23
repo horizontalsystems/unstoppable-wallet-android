@@ -31,10 +31,20 @@ class MarketGlobalViewModel(
     val title: Int
         get() {
             return when (metricType) {
-                MetricsType.BtcDominance -> R.string.MarketGlobalMetrics_BitcoinDominance
+                MetricsType.BtcDominance -> R.string.MarketGlobalMetrics_BtcDominance
                 MetricsType.Volume24h -> R.string.MarketGlobalMetrics_Volume
                 MetricsType.DefiCap -> R.string.MarketGlobalMetrics_DefiCap
                 MetricsType.TvlInDefi -> R.string.MarketGlobalMetrics_TvlInDefi
+            }
+        }
+
+    val description: Int
+        get() {
+            return when (metricType) {
+                MetricsType.BtcDominance -> R.string.MarketGlobalMetrics_BtcDominanceDescription
+                MetricsType.Volume24h -> R.string.MarketGlobalMetrics_VolumeDescription
+                MetricsType.DefiCap -> R.string.MarketGlobalMetrics_DefiCapDescription
+                MetricsType.TvlInDefi -> R.string.MarketGlobalMetrics_TvlInDefiDescription
             }
         }
 
@@ -75,7 +85,7 @@ class MarketGlobalViewModel(
     }
 
     private fun updateChartInfo() {
-        val points = service.chartPoints?.reversed() ?: return
+        val points = service.chartPoints ?: return
 
         chartData = getChartData(points)
 

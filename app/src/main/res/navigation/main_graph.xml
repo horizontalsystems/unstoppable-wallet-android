@@ -262,10 +262,6 @@
             app:destination="@id/markdownFragment" />
     </fragment>
     <fragment
-        android:id="@+id/marketGlobalFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.market.marketglobal.MarketGlobalFragment"
-        tools:layout="@layout/fragment_market_global"/>
-    <fragment
         android:id="@+id/coinMarketsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.coin.coinmarkets.CoinMarketsFragment"
         tools:layout="@layout/fragment_coin_markets" />
