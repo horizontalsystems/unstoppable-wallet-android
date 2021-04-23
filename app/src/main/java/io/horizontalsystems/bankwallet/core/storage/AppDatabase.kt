@@ -11,6 +11,7 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.google.gson.Gson
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.storage.migrations.Migration_31_32
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.coinkit.models.CoinType
@@ -80,7 +81,8 @@ abstract class AppDatabase : RoomDatabase() {
                             MIGRATION_27_28,
                             MIGRATION_28_29,
                             MIGRATION_29_30,
-                            MIGRATION_30_31
+                            MIGRATION_30_31,
+                            Migration_31_32
                     )
                     .build()
         }
