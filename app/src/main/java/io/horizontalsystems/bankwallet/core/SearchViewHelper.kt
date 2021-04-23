@@ -7,6 +7,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
+import android.widget.ImageView
 import androidx.appcompat.widget.SearchView
 import io.horizontalsystems.bankwallet.R
 
@@ -31,6 +32,10 @@ object SearchViewHelper {
             searchView.findViewById<EditText>(R.id.search_src_text)?.let { editText ->
                 context.getColor(R.color.grey_50).let { color -> editText.setHintTextColor(color) }
             }
+
+            // hide magnifier icon in the beginning of hint
+            searchView.setIconifiedByDefault(false)
+            searchView.findViewById<ImageView>(androidx.appcompat.R.id.search_mag_icon)?.setImageDrawable(null)
 
             searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextChange(newQuery: String): Boolean {
