@@ -256,11 +256,7 @@ interface IAppConfigProvider {
     val companyWebPageLink: String
     val appWebPageLink: String
     val appGithubLink: String
-    val companyTwitterLink: String
-    val companyTelegramLink: String
-    val companyRedditLink: String
     val reportEmail: String
-    val walletHelpTelegramGroup: String
     val cryptoCompareApiKey: String
     val infuraProjectId: String
     val infuraProjectSecret: String

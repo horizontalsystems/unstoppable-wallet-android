@@ -525,9 +525,6 @@
     <string name="Settings_InfoSubtitle" translatable="false">decentralized app</string>
     <string name="Settings_CompanyName" translatable="false">horizontal systems</string>
     <string name="Settings_Faq">FAQ</string>
-    <string name="Settings_Twitter" translatable="false">Twitter</string>
-    <string name="Settings_Telegram" translatable="false">Telegram</string>
-    <string name="Settings_Reddit" translatable="false">Reddit</string>
     <string name="Settings_AppStatus">App Status</string>
     <string name="Settings_WalletConnect">Wallet Connect</string>
     <string name="Settings_RateUs">Rate Us</string>
