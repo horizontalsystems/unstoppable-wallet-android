@@ -33,6 +33,12 @@ open class BaseBottomSheetDialogFragment : BottomSheetDialogFragment() {
         }
     }
 
+    var draggable: Boolean = true
+        set(value) {
+            field = value
+            bottomSheetBehavior?.isHideable = value
+        }
+
     var shouldCloseOnSwipe: Boolean = true
         set(shouldClose) {
             field = shouldClose

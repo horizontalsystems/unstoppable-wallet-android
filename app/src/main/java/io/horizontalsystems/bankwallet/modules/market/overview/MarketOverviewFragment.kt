@@ -107,7 +107,7 @@ class MarketOverviewFragment : BaseFragment(), ViewHolderMarketOverviewItem.List
         }
 
         marketMetricsViewModel.showGlobalMarketMetricsPage.observe(viewLifecycleOwner, {
-            findNavController().navigate(R.id.marketGlobalFragment, MarketGlobalFragment.prepareParams(it), navOptions())
+            MarketGlobalFragment.show(childFragmentManager, it)
         })
     }
 

@@ -52,10 +52,10 @@ data class MarketMetricsItem (
                     globalCoinMarket.defiMarketCapDiff24h,
                     CurrencyValue(currency, globalCoinMarket.defiTvl),
                     globalCoinMarket.defiTvlDiff24h,
-                    btcDominancePoints = globalCoinMarket.globalCoinMarketPoints.reversed().map { MarketMetricsPoint(it.btcDominance, it.timestamp) },
-                    volume24Points = globalCoinMarket.globalCoinMarketPoints.reversed().map { MarketMetricsPoint(it.volume24h, it.timestamp) },
-                    defiMarketCapPoints = globalCoinMarket.globalCoinMarketPoints.reversed().map { MarketMetricsPoint(it.defiMarketCap, it.timestamp) },
-                    defiTvlPoints = globalCoinMarket.globalCoinMarketPoints.reversed().map { MarketMetricsPoint(it.defiTvl, it.timestamp) }
+                    btcDominancePoints = globalCoinMarket.globalCoinMarketPoints.map { MarketMetricsPoint(it.btcDominance, it.timestamp) },
+                    volume24Points = globalCoinMarket.globalCoinMarketPoints.map { MarketMetricsPoint(it.volume24h, it.timestamp) },
+                    defiMarketCapPoints = globalCoinMarket.globalCoinMarketPoints.map { MarketMetricsPoint(it.defiMarketCap, it.timestamp) },
+                    defiTvlPoints = globalCoinMarket.globalCoinMarketPoints.map { MarketMetricsPoint(it.defiTvl, it.timestamp) }
             )
         }
     }

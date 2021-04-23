@@ -10,7 +10,7 @@ sealed class MarketCategory(
         @DrawableRes val iconResId: Int,
         @StringRes val descriptionResId: Int
 ) {
-    object Rated : MarketCategory("rated", R.string.Market_Category_Rated, R.drawable.ic_chart, R.string.Market_Category_Rated_Description)
+    object Rated : MarketCategory("rated", R.string.Market_Category_Rated, R.drawable.ic_chart_24, R.string.Market_Category_Rated_Description)
     object Blockchains : MarketCategory("blockchain", R.string.Market_Category_Blockchains, R.drawable.ic_blocks, R.string.Market_Category_Blockchains_Description)
     object Dexes : MarketCategory("dexes", R.string.Market_Category_Dexes, R.drawable.ic_swap_2, R.string.Market_Category_Dexes_Description)
     object Lending : MarketCategory("lending", R.string.Market_Category_Lending, R.drawable.ic_swap_approval_4, R.string.Market_Category_Lending_Description)
