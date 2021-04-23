@@ -44,7 +44,12 @@ class WalletConnectMainFragment : BaseFragment() {
                 }
             }
             Activity.RESULT_CANCELED -> {
-                findNavController().popBackStack()
+                val sessionsCount = arguments?.getInt(WalletConnectMainModule.SESSIONS_COUNT_KEY) ?: 0
+                if (sessionsCount == 0){
+                    findNavController().popBackStack(R.id.mainFragment, false)
+                } else {
+                    findNavController().popBackStack()
+                }
             }
         }
     }
