@@ -50,11 +50,11 @@ class WalletConnectListFragment : BaseFragment(), SessionViewHolder.Listener {
     }
 
     private fun startNewConnection() {
-        WalletConnectMainModule.start(this, R.id.walletConnectListFragment_to_walletConnectMainFragment, navOptions())
+        WalletConnectMainModule.start(this, R.id.walletConnectListFragment_to_walletConnectMainFragment, navOptions(), viewModel.getSessionsCount())
     }
 
     override fun onSessionClick(session: WalletConnectViewItem.Session) {
-        WalletConnectMainModule.start(this, R.id.walletConnectListFragment_to_walletConnectMainFragment, navOptions(), session.session.remotePeerId)
+        WalletConnectMainModule.start(this, R.id.walletConnectListFragment_to_walletConnectMainFragment, navOptions(), remotePeerId = session.session.remotePeerId)
     }
 }
 

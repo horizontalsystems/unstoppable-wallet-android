@@ -9,7 +9,7 @@ import io.horizontalsystems.views.ListPosition
 import io.reactivex.disposables.CompositeDisposable
 
 class WalletConnectListViewModel(
-        service: WalletConnectListService
+        private val service: WalletConnectListService
 ) : ViewModel() {
 
     private val disposables = CompositeDisposable()
@@ -27,6 +27,8 @@ class WalletConnectListViewModel(
             sync(service.items)
         }
     }
+
+    fun getSessionsCount(): Int = service.items.size
 
     private fun sync(items: List<WalletConnectListService.Item>) {
         val viewItems = mutableListOf<WalletConnectViewItem>()
