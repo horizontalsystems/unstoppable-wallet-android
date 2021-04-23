@@ -714,7 +714,6 @@
     <string name="RateList_Rank">رتبه</string>
     <string name="RateList_TopGainers">Top Gainers</string>
     <string name="RateList_TopLosers">بازندگان برتر</string>
-    <string name="RateList_TopByVolume">Top by Volume</string>
     <!-- Balance Sync Error -->
     <string name="BalanceSyncError_Title">خطا ی همگام سازی</string>
     <string name="BalanceSyncError_ButtonRetry">دوباره تلاش کنید</string>
