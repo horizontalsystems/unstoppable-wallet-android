@@ -17,7 +17,6 @@ class MarketOverviewViewModel(
 
     val topGainersViewItemsLiveData = MutableLiveData<List<MarketViewItem>>()
     val topLosersViewItemsLiveData = MutableLiveData<List<MarketViewItem>>()
-    val topByVolumeViewItemsLiveData = MutableLiveData<List<MarketViewItem>>()
     val showPoweredByLiveData = MutableLiveData(false)
 
     val loadingLiveData = MutableLiveData(false)
@@ -63,9 +62,8 @@ class MarketOverviewViewModel(
     }
 
     private fun syncViewItemsBySortingField() {
-        topGainersViewItemsLiveData.postValue(service.marketItems.sort(SortingField.TopGainers).subList(0, 3).map { MarketViewItem.create(it, MarketField.PriceDiff) })
-        topLosersViewItemsLiveData.postValue(service.marketItems.sort(SortingField.TopLosers).subList(0, 3).map { MarketViewItem.create(it, MarketField.PriceDiff) })
-        topByVolumeViewItemsLiveData.postValue(service.marketItems.sort(SortingField.HighestVolume).subList(0, 3).map { MarketViewItem.create(it, MarketField.Volume) })
+        topGainersViewItemsLiveData.postValue(service.marketItems.sort(SortingField.TopGainers).subList(0, 5).map { MarketViewItem.create(it, MarketField.PriceDiff) })
+        topLosersViewItemsLiveData.postValue(service.marketItems.sort(SortingField.TopLosers).subList(0, 5).map { MarketViewItem.create(it, MarketField.PriceDiff) })
     }
 
     private fun convertErrorMessage(it: Throwable): String {
