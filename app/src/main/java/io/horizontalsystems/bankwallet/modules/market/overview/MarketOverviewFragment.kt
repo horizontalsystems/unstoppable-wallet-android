@@ -64,17 +64,6 @@ class MarketOverviewFragment : BaseFragment(), ViewHolderMarketOverviewItem.List
                 marketOverviewViewModel.topLosersViewItemsLiveData,
                 viewLifecycleOwner)
 
-        val topByVolumeHeaderAdapter = MarketOverviewSectionHeaderAdapter(
-                marketOverviewViewModel.topGainersViewItemsLiveData,
-                viewLifecycleOwner,
-                MarketOverviewSectionHeaderAdapter.SectionHeaderItem(R.string.RateList_TopByVolume, R.drawable.ic_chart_20, getString(R.string.Market_SeeAll)) {
-                    marketViewModel.onClickSeeAll(MarketModule.ListType.TopByVolume)
-                }
-        )
-        val topByVolumeAdapter = MarketOverviewItemsAdapter(
-                this,
-                marketOverviewViewModel.topByVolumeViewItemsLiveData,
-                viewLifecycleOwner)
 
         val poweredByAdapter = PoweredByAdapter(marketOverviewViewModel.showPoweredByLiveData, viewLifecycleOwner)
 
@@ -85,8 +74,6 @@ class MarketOverviewFragment : BaseFragment(), ViewHolderMarketOverviewItem.List
                 topGainersAdapter,
                 topLosersHeaderAdapter,
                 topLosersAdapter,
-                topByVolumeHeaderAdapter,
-                topByVolumeAdapter,
                 poweredByAdapter
         )
         coinRatesRecyclerView.itemAnimator = null
