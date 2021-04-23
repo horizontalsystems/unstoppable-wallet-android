@@ -56,15 +56,6 @@ class MainSettingsInteractor(
     override val appWebPageLink: String
         get() = appConfigProvider.appWebPageLink
 
-    override val companyTwitterLink: String
-        get() = appConfigProvider.companyTwitterLink
-
-    override val companyTelegramLink: String
-        get() = appConfigProvider.companyTelegramLink
-
-    override val companyRedditLink: String
-        get() = appConfigProvider.companyRedditLink
-
     override val allBackedUp: Boolean
         get() = backupManager.allBackedUp
 

@@ -32,18 +32,12 @@ object MainSettingsModule {
         fun didTapWalletConnect()
         fun didTapFaq()
         fun didTapAcademy()
-        fun didTapTwitter()
-        fun didTapTelegram()
-        fun didTapReddit()
     }
 
     interface IMainSettingsInteractor {
         val themeName: Int
         val companyWebPageLink: String
         val appWebPageLink: String
-        val companyTwitterLink: String
-        val companyTelegramLink: String
-        val companyRedditLink: String
         val allBackedUp: Boolean
         val walletConnectSessionCount: Int
         val currentLanguageDisplayName: String
