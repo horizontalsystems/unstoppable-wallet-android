@@ -716,7 +716,6 @@ Si vous changez le format d\'adresse pour %2$s , l\'historique du solde actuel e
     <string name="RateList_Rank">Rang</string>
     <string name="RateList_TopGainers">Top Gainers</string>
     <string name="RateList_TopLosers">Top Losers</string>
-    <string name="RateList_TopByVolume">Top by Volume</string>
     <!-- Balance Sync Error -->
     <string name="BalanceSyncError_Title">Erreur de synchronisation</string>
     <string name="BalanceSyncError_ButtonRetry">Réessayer</string>
