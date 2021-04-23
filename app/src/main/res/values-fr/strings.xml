@@ -159,6 +159,16 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="Market_Category_Computing_Description">Decentralized on-demand computing solutions.</string>
     <string name="Market_Category_RebaseTokens">Rebase Tokens</string>
     <string name="Market_Category_RebaseTokens_Description">Tokens that periodically adjust to achieve a target price.</string>
+    <!--Market Global Metrics-->
+    <string name="MarketGlobalMetrics_Chart">Chart</string>
+    <string name="MarketGlobalMetrics_BtcDominance">Bitcoin Dominance</string>
+    <string name="MarketGlobalMetrics_Volume">Volume</string>
+    <string name="MarketGlobalMetrics_DefiCap">DeFi Cap</string>
+    <string name="MarketGlobalMetrics_TvlInDefi">TVL in DeFi</string>
+    <string name="MarketGlobalMetrics_BtcDominanceDescription">The market dominance of bitcoin, or the largest cryptocurrency\'s value as a share of the overall market.</string>
+    <string name="MarketGlobalMetrics_VolumeDescription">Volume refers to the total amount of transactions that traders conducted in a  markets.</string>
+    <string name="MarketGlobalMetrics_DefiCapDescription">DeFi Cap chart shows a change of DeFi tokens capitalisation.</string>
+    <string name="MarketGlobalMetrics_TvlInDefiDescription">Capital deposited into the platform in the form of loan collateral or liquidity pool.</string>
     <!--Market Search-->
     <string name="EmptyResults">No results found</string>
     <string name="Market_AdvancedSearch">Advanced Search</string>
