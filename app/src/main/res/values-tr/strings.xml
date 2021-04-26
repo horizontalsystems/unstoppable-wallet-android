@@ -61,17 +61,13 @@
     <string name="Restore_Error_MnemonicWordCount">Wrong words count. Must be 12 or 24. You entered: %d</string>
     <string name="Restore_InvalidChecksum">Geçersiz sağlama toplamı</string>
     <string name="Select_Coins">Kripto Parayi Seç</string>
-    <string name="Restore_ZCash_BirthdayHeight">ZCash Birthday Height</string>
+    <string name="Restore_ZCash_BirthdayHeight">Zcash Birthday Height</string>
     <string name="Restore_ZCash_BirthdayHeight_Hint">If you know your birthday height of wallet enter it for quick syncing</string>
-    <string name="Restore_BirthdayHeight_Hint">Cüzdan oluşturulma günü üst sınırı (isteğe bağlı)</string>
-    <string name="Restore_BirthdayHeight_Description">Bu, işlemler için taramaya nereden başlanacağını belirler. Biraz zaman alacak olan en baştan tarama için boş bırakınız.</string>
-    <string name="Restore_BirthdayHeight_InvalidError">Geçersiz oluşturulma günü üst sınırı</string>
     <!--Backup-->
     <string name="Backup_Intro_Title">Yedekle</string>
     <string name="Backup_Intro_TitleShow">Anahtarı Göster</string>
     <string name="Backup_Intro_Subtitle">Az sonra görüceğiniz anahtar cihazınızın kaybolması, çalınması veya bozulması durumunda hesabı geri yüklemenin tek yoludur.\n\nEkranınıza başka bir kişinin izlemediğinden emin olun.\n\nKurlar bu anahtar ile kontrol ediliyor: %s</string>
     <string name="Backup_DisplayTitle">Gizli Anahtar</string>
-    <string name="Backup_BirthdayHeight">Oluşturulma Günü Üst Sınırı</string>
     <string name="Backup_Confirmation_Description">%s Anahtarınızda ki kelimeleri girin</string>
     <string name="Backup_Confirmation_FailureAlertText"> Kelimeler eşleşmiyor</string>
     <string name="Backup_Confirmation_CheckTitle">Kontrol etme…</string>
@@ -577,6 +573,7 @@
     <string name="ManageAccount_Delete_ConfirmationRemove">This action will delete the selected wallet from this device.</string>
     <string name="ManageAccount_Delete_ConfirmationDisable">All coins that belong to this wallet will be disabled on balance tab.</string>
     <string name="ManageAccount_Delete_ConfirmationLose">If you didn\'t backup the private key for this wallet, you will lose access to the funds on the selected wallet.</string>
+    <string name="ManageAccount_BirthdayHeight">%s Birthday Height</string>
     <!-- Show Key -->
     <string name="ShowKey_Title">Key</string>
     <string name="ShowKey_Description">The recovery phrases that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken etc.\n\nMake sure that no one is watching your screen.</string>
