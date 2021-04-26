@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout">
+
+    <io.horizontalsystems.views.ViewState
+        android:id="@+id/inputBackground"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:background="@drawable/input_background_stateful"
+        app:layout_constraintBottom_toBottomOf="@id/input"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/input"
+        style="@style/Body"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/transparent"
+        android:includeFontPadding="false"
+        android:padding="12dp"
+        android:textColor="?attr/TextColorBarsToDark"
+        android:textColorHint="@color/grey_50"
+        app:layout_constraintEnd_toStartOf="@+id/actionsLayout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/inputBackground"
+        tools:hint="Hint" />
+
+    <LinearLayout
+        android:id="@+id/actionsLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="28dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="@id/inputBackground"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/inputBackground" />
+
+    <TextView
+        android:id="@+id/error"
+        style="@style/Caption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:includeFontPadding="false"
+        android:textColor="@color/lucian"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/inputBackground"
+        tools:text="Error"
+        tools:visibility="visible" />
+
+</merge>
