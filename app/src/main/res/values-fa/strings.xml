@@ -61,17 +61,13 @@
     <string name="Restore_Error_MnemonicWordCount">Wrong words count. Must be 12 or 24. You entered: %d</string>
     <string name="Restore_InvalidChecksum">Checksum نامعتبر است</string>
     <string name="Select_Coins">کیف پول جدید</string>
-    <string name="Restore_ZCash_BirthdayHeight">ZCash Birthday Height</string>
+    <string name="Restore_ZCash_BirthdayHeight">Zcash Birthday Height</string>
     <string name="Restore_ZCash_BirthdayHeight_Hint">If you know your birthday height of wallet enter it for quick syncing</string>
-    <string name="Restore_BirthdayHeight_Hint">اندازه کیف پول تولد (اختیاری)</string>
-    <string name="Restore_BirthdayHeight_Description">این تعیین می کند که از کجا بررسی برای معاملات شروع شود. خالی بگذارید تا از اول اسکن شود که مدتی طول می کشد.</string>
-    <string name="Restore_BirthdayHeight_InvalidError">سایز تولد نامعتبر</string>
     <!--Backup-->
     <string name="Backup_Intro_Title">پيشتيباني</string>
     <string name="Backup_Intro_TitleShow">نمایش کلید</string>
     <string name="Backup_Intro_Subtitle">کلید خصوصی که بعدا نشان داده خواهد شد تنها راه برای بازیابی وجه شما در صورت گم شدن ، دزدی ، خراب شدن و غیره است.\n\nمطمئن شوید که هیچ کس در حال تماشای صفحه شما نیست.\n\nسکه ها توسط این کلید کنترل می شوند:%s.</string>
     <string name="Backup_DisplayTitle">کلید خصوصی</string>
-    <string name="Backup_BirthdayHeight">قد تولد</string>
     <string name="Backup_Confirmation_Description">کلمات را از %s خود وارد کنید.</string>
     <string name="Backup_Confirmation_FailureAlertText"> ارقام با هم شباهت ندارند</string>
     <string name="Backup_Confirmation_CheckTitle">بررسي…</string>
@@ -577,6 +573,7 @@
     <string name="ManageAccount_Delete_ConfirmationRemove">This action will delete the selected wallet from this device.</string>
     <string name="ManageAccount_Delete_ConfirmationDisable">All coins that belong to this wallet will be disabled on balance tab.</string>
     <string name="ManageAccount_Delete_ConfirmationLose">If you didn\'t backup the private key for this wallet, you will lose access to the funds on the selected wallet.</string>
+    <string name="ManageAccount_BirthdayHeight">%s Birthday Height</string>
     <!-- Show Key -->
     <string name="ShowKey_Title">Key</string>
     <string name="ShowKey_Description">The recovery phrases that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken etc.\n\nMake sure that no one is watching your screen.</string>
