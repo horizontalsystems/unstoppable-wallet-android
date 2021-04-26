@@ -80,6 +80,7 @@ interface IChartTypeStorage {
 
 interface IRestoreSettingsStorage {
     fun restoreSettings(accountId: String, coinId: String): List<RestoreSettingRecord>
+    fun restoreSettings(accountId: String): List<RestoreSettingRecord>
     fun save(restoreSettingRecords: List<RestoreSettingRecord>)
     fun deleteAllRestoreSettings(accountId: String)
 }
@@ -351,6 +352,7 @@ interface IWalletManager {
     fun delete(wallets: List<Wallet>)
     fun clear()
     fun handle(newWallets: List<Wallet>, deletedWallets: List<Wallet>)
+    fun getWallets(account: Account): List<Wallet>
 }
 
 interface IAppNumberFormatter {

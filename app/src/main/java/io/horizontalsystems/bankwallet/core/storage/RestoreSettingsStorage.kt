@@ -12,6 +12,10 @@ class RestoreSettingsStorage(appDatabase: AppDatabase) : IRestoreSettingsStorage
         return dao.get(accountId, coinId)
     }
 
+    override fun restoreSettings(accountId: String): List<RestoreSettingRecord> {
+        return dao.get(accountId)
+    }
+
     override fun save(restoreSettingRecords: List<RestoreSettingRecord>) {
         dao.insert(restoreSettingRecords)
     }

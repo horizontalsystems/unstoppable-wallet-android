@@ -12,13 +12,13 @@ import androidx.fragment.app.DialogFragment
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 
-class ZcashBirhdayHeightDialog : DialogFragment() {
+class ZcashBirthdayHeightDialog : DialogFragment() {
 
     lateinit var onEnter: ((String?) -> Unit)
     lateinit var onCancel: (() -> Unit)
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val rootView = View.inflate(context, R.layout.fragment_dialog_zash_bday_height, null)
+        val rootView = View.inflate(context, R.layout.fragment_dialog_zcash_bday_height, null)
 
         val input = rootView.findViewById<EditText>(R.id.input)
 

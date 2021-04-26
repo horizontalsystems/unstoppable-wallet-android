@@ -15,6 +15,9 @@ interface RestoreSettingDao {
     @Query("SELECT * FROM `RestoreSettingRecord` WHERE accountId = :accountId AND coinId = :coinId")
     fun get(accountId: String, coinId: String): List<RestoreSettingRecord>
 
+    @Query("SELECT * FROM `RestoreSettingRecord` WHERE accountId = :accountId")
+    fun get(accountId: String): List<RestoreSettingRecord>
+
     @Query("DELETE FROM `RestoreSettingRecord` WHERE accountId = :accountId")
     fun delete(accountId: String)
 

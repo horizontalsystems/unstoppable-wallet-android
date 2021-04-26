@@ -1,11 +1,17 @@
 package io.horizontalsystems.bankwallet.core.managers
 
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IRestoreSettingsStorage
+import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.RestoreSettingRecord
 import io.horizontalsystems.coinkit.models.Coin
+import io.horizontalsystems.coinkit.models.CoinType
 
-class RestoreSettingsManager(private val storage: IRestoreSettingsStorage) {
+class RestoreSettingsManager(
+        private val storage: IRestoreSettingsStorage,
+        private val zcashBirthdayProvider: ZcashBirthdayProvider
+) {
     fun settings(account: Account, coin: Coin): RestoreSettings {
         val records = storage.restoreSettings(account.id, coin.id)
 
@@ -19,6 +25,15 @@ class RestoreSettingsManager(private val storage: IRestoreSettingsStorage) {
         return settings
     }
 
+    fun accountSettingsInfo(account: Account): List<Triple<CoinType, RestoreSettingType, String>> {
+        return storage.restoreSettings(account.id).mapNotNull { record ->
+            RestoreSettingType.fromString(record.key)?.let { settingType ->
+                val coinType = CoinType.fromString(record.coinId)
+                Triple(coinType, settingType, record.value)
+            }
+        }
+    }
+
     fun save(settings: RestoreSettings, account: Account, coin: Coin) {
         val records = settings.values.map { (type, value) ->
             RestoreSettingRecord(account.id, coin.id, type.name, value)
@@ -26,10 +41,30 @@ class RestoreSettingsManager(private val storage: IRestoreSettingsStorage) {
 
         storage.save(records)
     }
+
+    fun getSettingValueForCreatedAccount(settingType: RestoreSettingType, coinType: CoinType): String? {
+        return when (settingType) {
+            RestoreSettingType.BirthdayHeight -> {
+                when (coinType) {
+                    CoinType.Zcash -> {
+                        return zcashBirthdayProvider.getNearestBirthdayHeight().toString()
+                    }
+                    else -> null
+                }
+            }
+        }
+    }
+
+    fun getSettingsTitle(settingType: RestoreSettingType, coin: Coin): String {
+        return when (settingType) {
+            RestoreSettingType.BirthdayHeight -> Translator.getString(R.string.ManageAccount_BirthdayHeight, coin.code)
+        }
+    }
+
 }
 
 enum class RestoreSettingType {
-    birthdayHeight;
+    BirthdayHeight;
 
     companion object {
         private val map = values().associateBy(RestoreSettingType::name)
@@ -42,9 +77,9 @@ class RestoreSettings {
     val values = mutableMapOf<RestoreSettingType, String>()
 
     var birthdayHeight: Int?
-        get() = values[RestoreSettingType.birthdayHeight]?.toIntOrNull()
+        get() = values[RestoreSettingType.BirthdayHeight]?.toIntOrNull()
         set(value) {
-            values[RestoreSettingType.birthdayHeight] = value?.toString() ?: ""
+            values[RestoreSettingType.BirthdayHeight] = value?.toString() ?: ""
         }
 
     fun isNotEmpty() = values.isNotEmpty()

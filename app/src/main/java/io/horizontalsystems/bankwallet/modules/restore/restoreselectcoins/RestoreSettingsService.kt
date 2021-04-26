@@ -18,13 +18,19 @@ class RestoreSettingsService(private val manager: RestoreSettingsManager) : Clea
 
     fun approveSettings(coin: Coin, account: Account? = null) {
         if (account != null && account.origin == AccountOrigin.Created) {
-            approveSettingsObservable.onNext(CoinWithSettings(coin, RestoreSettings()))
+            val settings = RestoreSettings()
+            coin.type.restoreSettingTypes.forEach { settingType ->
+                manager.getSettingValueForCreatedAccount(settingType, coin.type)?.let {
+                    settings[settingType] = it
+                }
+            }
+            approveSettingsObservable.onNext(CoinWithSettings(coin, settings))
             return
         }
 
         val existingSettings = account?.let { manager.settings(it, coin) } ?: RestoreSettings()
 
-        if (coin.type.restoreSettingTypes.contains(RestoreSettingType.birthdayHeight)
+        if (coin.type.restoreSettingTypes.contains(RestoreSettingType.BirthdayHeight)
                 && existingSettings.birthdayHeight == null) {
             requestObservable.onNext(Request(coin, RequestType.birthdayHeight))
             return

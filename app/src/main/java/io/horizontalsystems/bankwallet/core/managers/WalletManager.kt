@@ -36,7 +36,7 @@ class WalletManager(
 
         accountManager.activeAccountObservable
                 .subscribeIO {
-                    val account =  it.orElseGet(null)
+                    val account = it.orElseGet(null)
                     handleUpdated(account)
                 }
                 .let {
@@ -83,6 +83,9 @@ class WalletManager(
         notifyActiveWallets()
     }
 
+    override fun getWallets(account: Account): List<Wallet> {
+        return storage.wallets(account)
+    }
 
     override fun clear() {
         cachedWallets.clear()

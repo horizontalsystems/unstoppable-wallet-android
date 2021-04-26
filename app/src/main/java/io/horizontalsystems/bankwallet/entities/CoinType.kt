@@ -52,6 +52,6 @@ val CoinType.defaultSettingsArray: List<CoinSettings>
 
 val CoinType.restoreSettingTypes: List<RestoreSettingType>
     get() = when (this) {
-        CoinType.Zcash -> listOf(RestoreSettingType.birthdayHeight)
+        CoinType.Zcash -> listOf(RestoreSettingType.BirthdayHeight)
         else -> listOf()
     }
