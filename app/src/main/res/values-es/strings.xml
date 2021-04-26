@@ -61,17 +61,13 @@
     <string name="Restore_Error_MnemonicWordCount">Wrong words count. Must be 12 or 24. You entered: %d</string>
     <string name="Restore_InvalidChecksum">Suma de verificación inválida</string>
     <string name="Select_Coins">Elegir Cripto</string>
-    <string name="Restore_ZCash_BirthdayHeight">ZCash Birthday Height</string>
+    <string name="Restore_ZCash_BirthdayHeight">Zcash Birthday Height</string>
     <string name="Restore_ZCash_BirthdayHeight_Hint">If you know your birthday height of wallet enter it for quick syncing</string>
-    <string name="Restore_BirthdayHeight_Hint">Talla de cumpleaños del monedero (opcional)</string>
-    <string name="Restore_BirthdayHeight_Description">Esto determina desde dónde empezar a escanear por transacciones. Déjalo en blanco para escanear desde el principio, esto puede demorar un poco.</string>
-    <string name="Restore_BirthdayHeight_InvalidError">Talla de cumpleaños inválida</string>
     <!--Backup-->
     <string name="Backup_Intro_Title">Copia de seguridad</string>
     <string name="Backup_Intro_TitleShow">Mostrar clave</string>
     <string name="Backup_Intro_Subtitle">La clave privada que se mostrará a continuación es la única forma de restaurar sus fondos en caso de que su teléfono se pierda, lo roben, se averíe, etc.\n\nAsegúrese de que nadie está viendo su pantalla.\n\nLas monedas controladas por esta clave: %s.</string>
     <string name="Backup_DisplayTitle">Clave privada</string>
-    <string name="Backup_BirthdayHeight">Altura de Cumpleaños</string>
     <string name="Backup_Confirmation_Description">Insertar palabras de su clave %s</string>
     <string name="Backup_Confirmation_FailureAlertText"> Las contraseñas no coinciden</string>
     <string name="Backup_Confirmation_CheckTitle">Comprobar…</string>
@@ -578,6 +574,7 @@ poner en peligro la seguridad de mis fondos.</string>
     <string name="ManageAccount_Delete_ConfirmationRemove">This action will delete the selected wallet from this device.</string>
     <string name="ManageAccount_Delete_ConfirmationDisable">All coins that belong to this wallet will be disabled on balance tab.</string>
     <string name="ManageAccount_Delete_ConfirmationLose">If you didn\'t backup the private key for this wallet, you will lose access to the funds on the selected wallet.</string>
+    <string name="ManageAccount_BirthdayHeight">%s Birthday Height</string>
     <!-- Show Key -->
     <string name="ShowKey_Title">Key</string>
     <string name="ShowKey_Description">The recovery phrases that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken etc.\n\nMake sure that no one is watching your screen.</string>
