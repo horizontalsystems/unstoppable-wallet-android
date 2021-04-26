@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="?android:windowBackground">
 
     <androidx.appcompat.widget.Toolbar
@@ -13,8 +14,8 @@
         app:layout_constraintTop_toTopOf="parent"
         app:menu="@menu/manage_account_menu"
         app:navigationIcon="@drawable/ic_back"
-        app:titleTextAppearance="@style/Title3"
-        app:title="@string/ManageAccounts_Title" />
+        app:title="@string/ManageAccounts_Title"
+        app:titleTextAppearance="@style/Title3" />
 
     <TextView
         android:id="@+id/nameLabel"
@@ -58,7 +59,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/name"
+        app:position="first"
         app:title="@string/ManageAccount_RecoveryPhraseBackup" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/additionalInfoItems"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/actionButton"
+        tools:itemCount="1"
+        tools:listitem="@layout/view_holder_account_setting_view" />
 
     <Button
         android:id="@+id/unlinkButton"
@@ -79,6 +91,6 @@
         app:drawableTint="@color/lucian"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/actionButton" />
+        app:layout_constraintTop_toBottomOf="@id/additionalInfoItems" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

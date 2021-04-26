@@ -20,8 +20,8 @@
 
     <ImageView
         android:id="@+id/settingsIcon"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         android:layout_marginStart="16dp"
         android:src="@drawable/ic_attention_24"
         app:layout_constraintBottom_toBottomOf="@+id/frame"

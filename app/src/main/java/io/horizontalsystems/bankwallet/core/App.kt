@@ -86,7 +86,6 @@ class App : CoreApp() {
         lateinit var walletConnectManager: WalletConnectManager
         lateinit var notificationSubscriptionManager: INotificationSubscriptionManager
         lateinit var termsManager: ITermsManager
-        lateinit var zcashBirthdayProvider: ZcashBirthdayProvider
         lateinit var marketFavoritesManager: MarketFavoritesManager
         lateinit var coinKit: CoinKit
         lateinit var activateCoinManager: ActivateCoinManager
@@ -154,7 +153,6 @@ class App : CoreApp() {
         accountFactory = AccountFactory(accountManager)
         backupManager = BackupManager(accountManager)
         walletManager = WalletManager(accountManager, walletStorage)
-        zcashBirthdayProvider = ZcashBirthdayProvider(this)
 
         KeyStoreManager("MASTER_KEY", KeyStoreCleaner(localStorage, accountManager, walletManager)).apply {
             keyStoreManager = this
@@ -171,7 +169,8 @@ class App : CoreApp() {
 
         connectivityManager = ConnectivityManager(backgroundManager)
 
-        restoreSettingsManager = RestoreSettingsManager(restoreSettingsStorage)
+        val zcashBirthdayProvider = ZcashBirthdayProvider(this)
+        restoreSettingsManager = RestoreSettingsManager(restoreSettingsStorage, zcashBirthdayProvider)
 
         val adapterFactory = AdapterFactory(instance, buildConfigProvider.testMode, ethereumKitManager, binanceSmartChainKitManager, binanceKitManager, backgroundManager, restoreSettingsManager)
         adapterManager = AdapterManager(walletManager, adapterFactory, ethereumKitManager, binanceSmartChainKitManager, binanceKitManager)

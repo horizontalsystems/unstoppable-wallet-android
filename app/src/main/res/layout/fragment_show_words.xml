@@ -29,32 +29,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-            <LinearLayout
-                android:id="@+id/additionalInfoLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:background="?attr/InputBackground"
-                android:orientation="horizontal"
-                android:visibility="gone">
-                <TextView
-                    style="@style/Subhead2"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="12dp"
-                    android:layout_marginBottom="12dp"
-                    android:layout_weight="1"
-                    android:text="@string/Backup_BirthdayHeight" />
-                <Button
-                    android:id="@+id/additionalInfoButton"
-                    style="@style/ButtonSecondary"
-                    android:layout_width="wrap_content"
-                    android:layout_height="28dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginEnd="16dp"
-                    tools:text="1232432" />
-            </LinearLayout>
             <TableLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

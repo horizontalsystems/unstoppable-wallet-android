@@ -13,7 +13,7 @@ import io.horizontalsystems.bankwallet.modules.blockchainsettings.CoinSettingsVi
 import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsModule
 import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsViewModel
 import io.horizontalsystems.bankwallet.modules.restore.restoreselectcoins.RestoreSettingsViewModel
-import io.horizontalsystems.bankwallet.ui.extensions.ZcashBirhdayHeightDialog
+import io.horizontalsystems.bankwallet.ui.extensions.ZcashBirthdayHeightDialog
 import io.horizontalsystems.bankwallet.ui.extensions.coinlist.CoinListBaseFragment
 import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.core.findNavController
@@ -103,7 +103,7 @@ class ManageWalletsFragment : CoinListBaseFragment() {
         })
 
         restoreSettingsViewModel.openBirthdayAlertSignal.observe(viewLifecycleOwner) {
-            val zcashBirhdayHeightDialog = ZcashBirhdayHeightDialog()
+            val zcashBirhdayHeightDialog = ZcashBirthdayHeightDialog()
             zcashBirhdayHeightDialog.onEnter = {
                 restoreSettingsViewModel.onEnter(it)
             }

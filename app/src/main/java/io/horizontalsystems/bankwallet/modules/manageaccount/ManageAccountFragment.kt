@@ -8,8 +8,10 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.setCoinImage
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.backupkey.BackupKeyModule
@@ -17,9 +19,13 @@ import io.horizontalsystems.bankwallet.modules.manageaccount.ManageAccountModule
 import io.horizontalsystems.bankwallet.modules.manageaccount.ManageAccountViewModel.KeyActionState
 import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.UnlinkConfirmationDialog
 import io.horizontalsystems.bankwallet.modules.showkey.ShowKeyModule
+import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.findNavController
+import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.views.ListPosition
+import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_manage_account.*
-import kotlinx.android.synthetic.main.fragment_manage_accounts.toolbar
+import kotlinx.android.synthetic.main.view_holder_account_setting_view.*
 
 class ManageAccountFragment : BaseFragment(), UnlinkConfirmationDialog.Listener {
     private val viewModel by viewModels<ManageAccountViewModel> { ManageAccountModule.Factory(arguments?.getString(ACCOUNT_ID_KEY)!!) }
@@ -97,6 +103,14 @@ class ManageAccountFragment : BaseFragment(), UnlinkConfirmationDialog.Listener 
             }
         })
 
+        viewModel.additionalViewItemsLiveData.observe(viewLifecycleOwner, { additionalItems ->
+            if (additionalItems.isNotEmpty()) {
+                additionalInfoItems.adapter = AdditionalInfoAdapter(additionalItems)
+            } else {
+                actionButton.setListPosition(ListPosition.Single)
+            }
+        })
+
         viewModel.saveEnabledLiveData.observe(viewLifecycleOwner, {
             saveMenuItem?.isEnabled = it
         })
@@ -121,3 +135,41 @@ class ManageAccountFragment : BaseFragment(), UnlinkConfirmationDialog.Listener 
     }
 
 }
+
+class AdditionalInfoAdapter(
+        private val items: List<ManageAccountViewModel.AdditionalViewItem> = listOf()
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return AdditionalInfoViewHolder.create(parent)
+    }
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        val listPosition = if (position == items.size - 1) ListPosition.Last else ListPosition.Middle
+        (holder as? AdditionalInfoViewHolder)?.bind(items[position], listPosition)
+    }
+
+    override fun getItemCount(): Int {
+        return items.size
+    }
+}
+
+class AdditionalInfoViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+    fun bind(additionViewItem: ManageAccountViewModel.AdditionalViewItem, position: ListPosition) {
+        icon.setCoinImage(additionViewItem.coinType)
+        title.text = additionViewItem.title
+        decoratedText.text = additionViewItem.value
+        containerView.setBackgroundResource(position.getBackground())
+        decoratedText.setOnClickListener {
+            TextHelper.copyText(additionViewItem.value)
+            HudHelper.showSuccessMessage(containerView, R.string.Hud_Text_Copied)
+        }
+    }
+
+    companion object {
+        fun create(parent: ViewGroup): AdditionalInfoViewHolder {
+            return AdditionalInfoViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_account_setting_view, parent, false))
+        }
+    }
+}
+

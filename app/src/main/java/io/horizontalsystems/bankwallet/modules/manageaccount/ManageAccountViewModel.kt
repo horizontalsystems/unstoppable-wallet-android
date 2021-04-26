@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Account
+import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
 
@@ -17,6 +18,7 @@ class ManageAccountViewModel(
     val keyActionStateLiveData = MutableLiveData<KeyActionState>()
     val saveEnabledLiveData = MutableLiveData<Boolean>()
     val finishLiveEvent = SingleLiveEvent<Unit>()
+    val additionalViewItemsLiveData = MutableLiveData<List<AdditionalViewItem>>()
 
     val account: Account
         get() = service.account
@@ -34,6 +36,7 @@ class ManageAccountViewModel(
 
         syncState(service.state)
         syncAccount(service.account)
+        syncAccountSettings()
     }
 
     private fun syncState(state: ManageAccountService.State) {
@@ -45,6 +48,13 @@ class ManageAccountViewModel(
 
     private fun syncAccount(account: Account) {
         keyActionStateLiveData.postValue(if (account.isBackedUp) KeyActionState.ShowRecoveryPhrase else KeyActionState.BackupRecoveryPhrase)
+    }
+
+    private fun syncAccountSettings() {
+        val additionalViewItems = service.accountSettingsInfo.map { (coin, restoreSettingType, value) ->
+            AdditionalViewItem(coin.type, service.getSettingsTitle(restoreSettingType, coin), value)
+        }
+        additionalViewItemsLiveData.postValue(additionalViewItems)
     }
 
     fun onChange(name: String?) {
@@ -68,5 +78,11 @@ class ManageAccountViewModel(
     enum class KeyActionState {
         ShowRecoveryPhrase, BackupRecoveryPhrase
     }
+
+    data class AdditionalViewItem(
+            val coinType: CoinType,
+            val title: String,
+            val value: String
+    )
 
 }

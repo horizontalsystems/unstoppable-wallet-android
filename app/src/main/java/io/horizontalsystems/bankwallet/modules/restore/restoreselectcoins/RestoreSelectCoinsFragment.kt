@@ -11,7 +11,7 @@ import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.modules.blockchainsettings.CoinSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.enablecoins.EnableCoinsDialog
 import io.horizontalsystems.bankwallet.modules.enablecoins.EnableCoinsViewModel
-import io.horizontalsystems.bankwallet.ui.extensions.ZcashBirhdayHeightDialog
+import io.horizontalsystems.bankwallet.ui.extensions.ZcashBirthdayHeightDialog
 import io.horizontalsystems.bankwallet.ui.extensions.coinlist.CoinListBaseFragment
 import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.core.findNavController
@@ -47,7 +47,8 @@ class RestoreSelectCoinsFragment : CoinListBaseFragment() {
         configureSearchMenu(toolbar.menu)
         doneMenuButton = toolbar.menu.findItem(R.id.menuDone)
 
-        val accountType = arguments?.getParcelable<AccountType>(ACCOUNT_TYPE_KEY) ?: throw Exception("Parameter missing")
+        val accountType = arguments?.getParcelable<AccountType>(ACCOUNT_TYPE_KEY)
+                ?: throw Exception("Parameter missing")
 
         val vmFactory by lazy { RestoreSelectCoinsModule.Factory(accountType) }
 
@@ -143,15 +144,15 @@ class RestoreSelectCoinsFragment : CoinListBaseFragment() {
         })
 
         restoreSettingsViewModel.openBirthdayAlertSignal.observe(viewLifecycleOwner) {
-            val zcashBirhdayHeightDialog = ZcashBirhdayHeightDialog()
-            zcashBirhdayHeightDialog.onEnter = {
+            val zcashBirthdayHeightDialog = ZcashBirthdayHeightDialog()
+            zcashBirthdayHeightDialog.onEnter = {
                 restoreSettingsViewModel.onEnter(it)
             }
-            zcashBirhdayHeightDialog.onCancel = {
+            zcashBirthdayHeightDialog.onCancel = {
                 restoreSettingsViewModel.onCancelEnterBirthdayHeight()
             }
 
-            zcashBirhdayHeightDialog.show(requireActivity().supportFragmentManager, "ZcashBirhdayHeightDialog")
+            zcashBirthdayHeightDialog.show(requireActivity().supportFragmentManager, "ZcashBirhdayHeightDialog")
         }
     }
 
