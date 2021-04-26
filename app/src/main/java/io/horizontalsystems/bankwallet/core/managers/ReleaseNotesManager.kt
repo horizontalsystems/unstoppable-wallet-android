@@ -1,20 +1,23 @@
 package io.horizontalsystems.bankwallet.core.managers
 
+import io.horizontalsystems.bankwallet.core.IAppConfigProvider
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.core.ISystemInfoManager
 
-class ChangeLogsManager(
+class ReleaseNotesManager(
         private val systemInfoManager: ISystemInfoManager,
-        private val localStorage: ILocalStorage
+        private val localStorage: ILocalStorage,
+        appConfigProvider: IAppConfigProvider
 ) {
 
-    fun getChangeLog(): String {
-        return "file:///changelogs/changelog.md"
+    private val currentAppVersion: String by lazy {
+        systemInfoManager.appVersion
     }
+
+    val releaseNotesUrl = "${appConfigProvider.releaseNotesUrl}$currentAppVersion"
 
     fun shouldShowChangeLog(): Boolean {
         val shownForVersion = localStorage.changelogShownForAppVersion
-        val currentAppVersion = systemInfoManager.appVersion
 
         if (shownForVersion != null) {
             return if (Version(currentAppVersion) > Version(shownForVersion)) {

@@ -16,6 +16,7 @@ class AppConfigProvider : IAppConfigProvider, ILanguageConfigProvider, IBuildCon
     override val reportEmail = "support.unstoppable@protonmail.com"
     override val btcCoreRpcUrl: String = "https://btc.horizontalsystems.xyz/rpc"
     override val notificationUrl: String = "https://pns-dev.horizontalsystems.xyz/api/v1/pns/"
+    override val releaseNotesUrl: String = "https://api.github.com/repos/horizontalsystems/unstoppable-wallet-android/releases/tags/"
 
     override val cryptoCompareApiKey by lazy {
         Translator.getString(R.string.cryptoCompareApiKey)

@@ -29,6 +29,10 @@ class NetworkManager : INetworkManager {
         return ServiceGuide.service(host).getGuide(path)
     }
 
+    override fun getReleaseNotes(host: String, path: String): Single<JsonObject> {
+        return ServiceChangeLogs.service(host).getReleaseNotes(path)
+    }
+
     override fun getTransaction(host: String, path: String, isSafeCall: Boolean): Flowable<JsonObject> {
         return ServiceFullTransaction.service(host, isSafeCall).getFullTransaction(path)
     }
@@ -132,6 +136,20 @@ object ServiceNotifications {
         @POST
         @Headers("Content-Type: application/json")
         suspend fun unsubscribe(@Url path: String, @Body body: String): JsonObject
+    }
+}
+
+object ServiceChangeLogs {
+    fun service(apiURL: String): ChangeLogsAPI {
+        return APIClient.retrofit(apiURL, 60)
+                .create(ChangeLogsAPI::class.java)
+    }
+
+    interface ChangeLogsAPI {
+
+        @GET
+        @Headers("Content-Type: application/json")
+        fun getReleaseNotes(@Url path: String): Single<JsonObject>
     }
 }
 

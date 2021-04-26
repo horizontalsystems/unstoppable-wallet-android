@@ -129,6 +129,7 @@ interface IRandomProvider {
 
 interface INetworkManager {
     fun getMarkdown(host: String, path: String): Single<String>
+    fun getReleaseNotes(host: String, path: String): Single<JsonObject>
     fun getTransaction(host: String, path: String, isSafeCall: Boolean): Flowable<JsonObject>
     fun getTransactionWithPost(host: String, path: String, body: Map<String, Any>): Flowable<JsonObject>
     fun ping(host: String, url: String, isSafeCall: Boolean): Flowable<Any>
@@ -262,6 +263,7 @@ interface IAppConfigProvider {
     val infuraProjectSecret: String
     val btcCoreRpcUrl: String
     val notificationUrl: String
+    val releaseNotesUrl: String
     val etherscanApiKey: String
     val bscscanApiKey: String
     val guidesUrl: String

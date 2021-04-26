@@ -90,7 +90,7 @@ class App : CoreApp() {
         lateinit var marketFavoritesManager: MarketFavoritesManager
         lateinit var coinKit: CoinKit
         lateinit var activateCoinManager: ActivateCoinManager
-        lateinit var changeLogsManager: ChangeLogsManager
+        lateinit var releaseNotesManager: ReleaseNotesManager
         lateinit var restoreSettingsManager: RestoreSettingsManager
     }
 
@@ -222,7 +222,7 @@ class App : CoreApp() {
 
         activateCoinManager = ActivateCoinManager(coinKit, walletManager, accountManager)
 
-        changeLogsManager = ChangeLogsManager(systemInfoManager, localStorage)
+        releaseNotesManager = ReleaseNotesManager(systemInfoManager, localStorage, appConfigProvider)
 
         setAppTheme()
 
