@@ -53,6 +53,10 @@
         <attr name="hint" format="string" />
         <attr name="android:inputType" />
     </declare-styleable>
+    <declare-styleable name="InputView">
+        <attr name="android:inputType" />
+        <attr name="android:hint" />
+    </declare-styleable>
     <declare-styleable name="PicassoRoundedImageView">
         <attr name="radius" format="integer" />
     </declare-styleable>

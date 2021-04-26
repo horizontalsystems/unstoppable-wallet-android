@@ -26,4 +26,39 @@
         app:title="@string/CreateWallet_Mnemonic"
         tools:value="@string/CreateWallet_N_Words" />
 
+    <io.horizontalsystems.views.SettingsViewSwitch
+        android:id="@+id/passphraseToggle"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="32dp"
+        app:icon="@drawable/ic_key_phrase_20"
+        app:title="@string/CreateWallet_Passphrase" />
+
+    <io.horizontalsystems.bankwallet.ui.extensions.InputView
+        android:id="@+id/passphrase"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="24dp"
+        android:hint="@string/CreateWallet_EnterPassphrase"
+        android:inputType="textPassword" />
+
+    <io.horizontalsystems.bankwallet.ui.extensions.InputView
+        android:id="@+id/passphraseConfirm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="24dp"
+        android:hint="@string/CreateWallet_PassphraseConfirm"
+        android:inputType="textPassword" />
+
+    <TextView
+        style="@style/Subhead2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="36dp"
+        android:text="@string/CreateWallet_PassphraseDescription"
+        android:textColor="@color/grey" />
+
 </LinearLayout>
