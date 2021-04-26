@@ -61,17 +61,13 @@
     <string name="Restore_Error_MnemonicWordCount">Wrong words count. Must be 12 or 24. You entered: %d</string>
     <string name="Restore_InvalidChecksum">校验和无效</string>
     <string name="Select_Coins">选择加密货币</string>
-    <string name="Restore_ZCash_BirthdayHeight">ZCash Birthday Height</string>
+    <string name="Restore_ZCash_BirthdayHeight">Zcash Birthday Height</string>
     <string name="Restore_ZCash_BirthdayHeight_Hint">If you know your birthday height of wallet enter it for quick syncing</string>
-    <string name="Restore_BirthdayHeight_Hint">钱包生日高度 (自主性)</string>
-    <string name="Restore_BirthdayHeight_Description">这将决定从哪里开始对交易进行扫描。留空即可从开始时进行扫描，这需要一定的时间。</string>
-    <string name="Restore_BirthdayHeight_InvalidError">无效的生日高度</string>
     <!--Backup-->
     <string name="Backup_Intro_Title">备份</string>
     <string name="Backup_Intro_TitleShow">显示密钥</string>
     <string name="Backup_Intro_Subtitle">如果您的手机出现丢失、被盗或损坏等情况，那么在下一步显示的私钥将是恢复您资金的唯一方法。\n\n确保不会有任何人看到您的屏幕。\n\n此密钥控制的代币：%s</string>
     <string name="Backup_DisplayTitle">私钥</string>
-    <string name="Backup_BirthdayHeight">生日高度</string>
     <string name="Backup_Confirmation_Description">输入您%s密钥中的文字</string>
     <string name="Backup_Confirmation_FailureAlertText">文字不匹配</string>
     <string name="Backup_Confirmation_CheckTitle">检查...</string>
@@ -577,6 +573,7 @@
     <string name="ManageAccount_Delete_ConfirmationRemove">This action will delete the selected wallet from this device.</string>
     <string name="ManageAccount_Delete_ConfirmationDisable">All coins that belong to this wallet will be disabled on balance tab.</string>
     <string name="ManageAccount_Delete_ConfirmationLose">If you didn\'t backup the private key for this wallet, you will lose access to the funds on the selected wallet.</string>
+    <string name="ManageAccount_BirthdayHeight">%s Birthday Height</string>
     <!-- Show Key -->
     <string name="ShowKey_Title">Key</string>
     <string name="ShowKey_Description">The recovery phrases that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken etc.\n\nMake sure that no one is watching your screen.</string>
