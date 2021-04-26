@@ -63,8 +63,8 @@ class MainFragment : BaseFragment(), RateAppDialogFragment.Listener {
             }
         })
 
-        viewModel.showWhatsNewLiveEvent.observe(viewLifecycleOwner, Observer { changeLogFileName ->
-            val arguments = bundleOf(MarkdownFragment.markdownUrlKey to changeLogFileName, MarkdownFragment.showAsClosablePopupKey to true)
+        viewModel.showWhatsNewLiveEvent.observe(viewLifecycleOwner, { gitReleaseUrl ->
+            val arguments = bundleOf(MarkdownFragment.gitReleaseNotesUrlKey to gitReleaseUrl, MarkdownFragment.showAsClosablePopupKey to true)
             findNavController().navigate(R.id.mainFragment_to_markdownViewer, arguments, navOptionsFromBottom())
         })
 

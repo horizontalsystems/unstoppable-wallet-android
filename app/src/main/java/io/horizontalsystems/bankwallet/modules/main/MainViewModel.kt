@@ -4,8 +4,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.*
-import io.horizontalsystems.bankwallet.core.managers.ChangeLogsManager
 import io.horizontalsystems.bankwallet.core.managers.RateUsType
+import io.horizontalsystems.bankwallet.core.managers.ReleaseNotesManager
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.core.IPinComponent
 import io.horizontalsystems.core.SingleLiveEvent
@@ -19,7 +19,7 @@ class MainViewModel(
         private val backupManager: IBackupManager,
         private val termsManager: ITermsManager,
         accountManager: IAccountManager,
-        private val changeLogsManager: ChangeLogsManager
+        private val releaseNotesManager: ReleaseNotesManager
 ) : ViewModel() {
 
     val showRateAppLiveEvent = SingleLiveEvent<Unit>()
@@ -80,9 +80,9 @@ class MainViewModel(
 
     private fun showWhatsNew() {
         viewModelScope.launch{
-            if (changeLogsManager.shouldShowChangeLog()){
+            if (releaseNotesManager.shouldShowChangeLog()){
                 delay(2000)
-                showWhatsNewLiveEvent.postValue(changeLogsManager.getChangeLog())
+                showWhatsNewLiveEvent.postValue(releaseNotesManager.releaseNotesUrl)
             }
         }
     }

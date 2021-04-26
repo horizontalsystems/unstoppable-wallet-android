@@ -7,15 +7,23 @@ import io.reactivex.Single
 
 object MarkdownModule {
 
-    class Factory(private val guideUrl: String) : ViewModelProvider.Factory {
+    class Factory(private val markdownUrl: String?, private val gitReleaseUrl: String?) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val contentProvider = MarkdownContentProvider(App.networkManager)
-            return MarkdownViewModel(guideUrl, App.connectivityManager, contentProvider) as T
+            return MarkdownViewModel(App.connectivityManager, getContentProvider()) as T
+        }
+
+        private fun getContentProvider(): IMarkdownContentProvider {
+            return when{
+                markdownUrl != null -> MarkdownPlainContentProvider(App.networkManager, markdownUrl)
+                gitReleaseUrl != null -> MarkdownGitReleaseContentProvider(App.networkManager, gitReleaseUrl)
+                else -> throw IllegalArgumentException()
+            }
         }
     }
 
     interface IMarkdownContentProvider{
-        fun getContent(contentUrl: String): Single<String>
+        fun getContent(): Single<String>
+        var markdownUrl: String
     }
 }

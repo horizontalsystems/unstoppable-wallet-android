@@ -44,11 +44,9 @@ class MarkdownFragment : BaseFragment(), MarkdownContentAdapter.Listener {
 
         rvBlocks.adapter = contentAdapter
 
-        val markdownUrl = arguments?.getString(markdownUrlKey) ?: run {
-            findNavController().popBackStack()
-            return
-        }
-        val viewModel by viewModels<MarkdownViewModel> { MarkdownModule.Factory(markdownUrl) }
+        val markdownUrl = arguments?.getString(markdownUrlKey)
+        val gitReleaseUrl = arguments?.getString(gitReleaseNotesUrlKey)
+        val viewModel by viewModels<MarkdownViewModel> { MarkdownModule.Factory(markdownUrl, gitReleaseUrl) }
 
         observe(viewModel)
     }
@@ -71,6 +69,7 @@ class MarkdownFragment : BaseFragment(), MarkdownContentAdapter.Listener {
 
     companion object {
         const val markdownUrlKey = "urlKey"
+        const val gitReleaseNotesUrlKey = "gitReleaseNotesUrlKey"
         const val showAsClosablePopupKey = "showAsClosablePopupKey"
     }
 }

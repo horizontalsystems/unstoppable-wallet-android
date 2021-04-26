@@ -6,12 +6,10 @@ import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import org.commonmark.parser.Parser
-import java.net.URL
 
 class MarkdownViewModel(
-        private val markdownUrl: String,
         private val connectivityManager: ConnectivityManager,
-        private val markdownContentProvider: MarkdownContentProvider) : ViewModel() {
+        private val contentProvider: MarkdownModule.IMarkdownContentProvider) : ViewModel() {
 
     val statusLiveData = MutableLiveData<LoadStatus>()
     val blocks = MutableLiveData<List<MarkdownBlock>>()
@@ -47,22 +45,15 @@ class MarkdownViewModel(
         val parser = Parser.builder().build()
         val document = parser.parse(content)
 
-        val markdownVisitor = MarkdownVisitorBlock(getUrlForParser(markdownUrl))
+        val markdownVisitor = MarkdownVisitorBlock(contentProvider.markdownUrl)
 
         document.accept(markdownVisitor)
 
         blocks.postValue(markdownVisitor.blocks + MarkdownBlock.Footer())
     }
 
-    private fun getUrlForParser(contentUrl: String): String {
-        return when (URL(contentUrl).protocol) {
-            "http", "https" -> contentUrl
-            else -> ""
-        }
-    }
-
     private fun loadContent() {
-        markdownContentProvider.getContent(markdownUrl)
+        contentProvider.getContent()
                 .subscribeOn(Schedulers.io())
                 .doOnSubscribe {
                     status = LoadStatus.Loading

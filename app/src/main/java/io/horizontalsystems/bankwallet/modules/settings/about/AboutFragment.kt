@@ -118,8 +118,8 @@ class AboutFragment : BaseFragment() {
             }
         })
 
-        viewModel.showWhatsNewLiveEvent.observe(viewLifecycleOwner, { changeLogUrl ->
-            val arguments = bundleOf(MarkdownFragment.markdownUrlKey to changeLogUrl)
+        viewModel.showWhatsNewLiveEvent.observe(viewLifecycleOwner, { gitReleaseUrl ->
+            val arguments = bundleOf(MarkdownFragment.gitReleaseNotesUrlKey to gitReleaseUrl)
             findNavController().navigate(R.id.aboutAppFragment_to_markdownViewer, arguments, navOptions())
         })
 
