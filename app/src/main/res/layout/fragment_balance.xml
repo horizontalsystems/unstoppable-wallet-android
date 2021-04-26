@@ -27,10 +27,12 @@
                 style="@style/Title3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
                 android:drawablePadding="8dp"
-                android:singleLine="true"
                 android:ellipsize="end"
-                app:drawableEndCompat="@drawable/ic_down_24" />
+                android:singleLine="true"
+                app:drawableEndCompat="@drawable/ic_down_24"
+                tools:text="Wallet 1" />
         </androidx.appcompat.widget.Toolbar>
         <TextView
             android:id="@+id/balanceText"
