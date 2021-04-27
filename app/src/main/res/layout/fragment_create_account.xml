@@ -53,6 +53,7 @@
         android:inputType="textPassword" />
 
     <TextView
+        android:id="@+id/passphraseDescription"
         style="@style/Subhead2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
