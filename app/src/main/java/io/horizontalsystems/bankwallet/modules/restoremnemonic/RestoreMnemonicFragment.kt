@@ -12,6 +12,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import io.horizontalsystems.bankwallet.R
@@ -101,6 +102,19 @@ class RestoreMnemonicFragment : BaseFragment() {
             }
             HudHelper.showErrorMessage(this.requireView(), errorMessage)
         })
+
+        viewModel.inputsVisibleLiveData.observe(viewLifecycleOwner) {
+            passphrase.isVisible = it
+            passphraseDescription.isVisible = it
+        }
+
+        viewModel.passphraseCautionLiveData.observe(viewLifecycleOwner) {
+            passphrase.setError(it)
+        }
+
+        viewModel.clearInputsLiveData.observe(viewLifecycleOwner) {
+            passphrase.setText(null)
+        }
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -119,6 +133,14 @@ class RestoreMnemonicFragment : BaseFragment() {
                 }
             }
             return@setOnTouchListener false
+        }
+
+        passphraseToggle.setOnCheckedChangeListenerSingle {
+            viewModel.onTogglePassphrase(it)
+        }
+
+        passphrase.onTextChange {
+            viewModel.onChangePassphrase(it ?: "")
         }
     }
 

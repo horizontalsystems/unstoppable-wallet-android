@@ -26,7 +26,7 @@ class CreateAccountViewModel(private val service: CreateAccountService, private 
     val inputsVisibleLiveData = LiveDataReactiveStreams.fromPublisher(service.passphraseEnabledObservable.toFlowable(BackpressureStrategy.BUFFER))
     val passphraseCautionLiveData = MutableLiveData<Caution?>()
     val passphraseConfirmationCautionLiveData = MutableLiveData<Caution?>()
-    val clearInputsLiveData = MutableLiveData<Unit>()
+    val clearInputsLiveData = SingleLiveEvent<Unit>()
     val showErrorLiveEvent = SingleLiveEvent<String>()
     val finishLiveEvent = SingleLiveEvent<Unit>()
 

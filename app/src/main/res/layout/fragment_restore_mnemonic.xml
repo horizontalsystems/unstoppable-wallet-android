@@ -55,6 +55,32 @@
                 android:text="@string/Restore_Mnemonic_Description"
                 android:textColor="@color/grey" />
 
+            <io.horizontalsystems.views.SettingsViewSwitch
+                android:id="@+id/passphraseToggle"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="32dp"
+                app:icon="@drawable/ic_key_phrase_20"
+                app:title="@string/CreateWallet_Passphrase" />
+
+            <io.horizontalsystems.bankwallet.ui.extensions.InputView
+                android:id="@+id/passphrase"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="24dp"
+                android:hint="@string/EnterPassphrase"
+                android:inputType="textPassword" />
+
+            <TextView
+                android:id="@+id/passphraseDescription"
+                style="@style/Subhead2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="36dp"
+                android:text="@string/PassphraseDescription"
+                android:textColor="@color/grey" />
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
