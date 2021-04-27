@@ -27,9 +27,24 @@ class CreateAccountService(
         }
     val kindObservable = BehaviorSubject.createDefault(kind)
 
+    var passphraseEnabled: Boolean = false
+        set(value) {
+            field = value
+            passphraseEnabledObservable.onNext(value)
+        }
+    val passphraseEnabledObservable = BehaviorSubject.createDefault(passphraseEnabled)
+
+    var passphrase = ""
+    var passphraseConfirmation = ""
+
     override fun clear() = Unit
 
     fun createAccount() {
+        if (passphraseEnabled) {
+            if (passphrase.isBlank()) throw CreateError.EmptyPassphrase
+            if (passphrase != passphraseConfirmation) throw CreateError.InvalidConfirmation
+        }
+
         val accountType = resolveAccountType()
         val account = accountFactory.account(accountType, AccountOrigin.Created, false)
 
@@ -67,7 +82,12 @@ class CreateAccountService(
 
     private fun mnemonicAccountType(wordCount: Int): AccountType {
         val words = wordsManager.generateWords(wordCount)
-        return AccountType.Mnemonic(words, null)
+        return AccountType.Mnemonic(words, passphrase)
+    }
+
+    sealed class CreateError : Throwable() {
+        object EmptyPassphrase : CreateError()
+        object InvalidConfirmation : CreateError()
     }
 
 }

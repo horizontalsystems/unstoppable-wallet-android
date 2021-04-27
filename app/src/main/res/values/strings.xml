@@ -63,6 +63,8 @@
     <string name="CreateWallet_EnterPassphrase">Enter Passphrase</string>
     <string name="CreateWallet_PassphraseConfirm">Confirm</string>
     <string name="CreateWallet_PassphraseDescription">Passphrases add additional security layer to the wallets enabling users to create multiple independent multi-coin wallets using a single mnemonic recovery phrase (secret 12 words) but associated with different passwords. \n\nTo restore these wallets a user will require mnemonic recovery phrase as well as a password for each to be restored wallet.</string>
+    <string name="CreateWallet_Error_EmptyPassphrase">Passphrase cannot be empty</string>
+    <string name="CreateWallet_Error_InvalidConfirmation">Passphrase confirmation does not match</string>
 
     <!--Rate App-->
     <string name="RateApp_Title_Rate_This_App">Rate this App</string>

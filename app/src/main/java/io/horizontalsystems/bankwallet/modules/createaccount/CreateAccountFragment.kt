@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
@@ -41,12 +42,26 @@ class CreateAccountFragment : BaseFragment() {
             kind.showValue(it)
         }
 
+        viewModel.inputsVisibleLiveData.observe(viewLifecycleOwner) {
+            passphrase.isVisible = it
+            passphraseConfirm.isVisible = it
+            passphraseDescription.isVisible = it
+        }
+
         viewModel.finishLiveEvent.observe(viewLifecycleOwner) {
             findNavController().popBackStack()
         }
 
         viewModel.showErrorLiveEvent.observe(viewLifecycleOwner) {
             HudHelper.showErrorMessage(requireView(), it)
+        }
+
+        viewModel.passphraseCautionLiveData.observe(viewLifecycleOwner) {
+            passphrase.setError(it)
+        }
+
+        viewModel.passphraseConfirmationCautionLiveData.observe(viewLifecycleOwner) {
+            passphraseConfirm.setError(it)
         }
 
         kind.setOnSingleClickListener {
@@ -63,5 +78,16 @@ class CreateAccountFragment : BaseFragment() {
             dialog.show(childFragmentManager, "selector_dialog")
         }
 
+        passphraseToggle.setOnCheckedChangeListenerSingle {
+            viewModel.onTogglePassphrase(it)
+        }
+
+        passphrase.onTextChange {
+            viewModel.onChangePassphrase(it ?: "")
+        }
+
+        passphraseConfirm.onTextChange {
+            viewModel.onChangePassphraseConfirmation(it ?: "")
+        }
     }
 }

@@ -1,15 +1,32 @@
 package io.horizontalsystems.bankwallet.modules.createaccount
 
+import androidx.lifecycle.LiveDataReactiveStreams
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.Clearable
+import io.horizontalsystems.bankwallet.core.providers.Translator
+import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.Caution
 import io.horizontalsystems.bankwallet.ui.selector.ViewItemWrapper
 import io.horizontalsystems.core.SingleLiveEvent
+import io.reactivex.BackpressureStrategy
 import io.reactivex.disposables.CompositeDisposable
 
 class CreateAccountViewModel(private val service: CreateAccountService, private val clearables: List<Clearable>) : ViewModel() {
 
-    val kindLiveData = MutableLiveData<String>()
+    val kindLiveData = service.kindObservable
+            .toFlowable(BackpressureStrategy.BUFFER)
+            .map {
+                it.title
+            }
+            .let {
+                LiveDataReactiveStreams.fromPublisher(it)
+            }
+
+    val inputsVisibleLiveData = LiveDataReactiveStreams.fromPublisher(service.passphraseEnabledObservable.toFlowable(BackpressureStrategy.BUFFER))
+    val passphraseCautionLiveData = MutableLiveData<Caution?>()
+    val passphraseConfirmationCautionLiveData = MutableLiveData<Caution?>()
+    val clearInputsLiveData = MutableLiveData<Unit>()
     val showErrorLiveEvent = SingleLiveEvent<String>()
     val finishLiveEvent = SingleLiveEvent<Unit>()
 
@@ -25,20 +42,22 @@ class CreateAccountViewModel(private val service: CreateAccountService, private 
             service.kind = value.item
         }
 
-    init {
-        service.kindObservable
-                .subscribe {
-                    sync(it)
-                }
-                .let {
-                    disposables.add(it)
-                }
+    private fun clearInputs() {
+        clearInputsLiveData.postValue(Unit)
+        clearCautions()
 
-        sync(service.kind)
+        service.passphrase = ""
+        service.passphraseConfirmation = ""
     }
 
-    private fun sync(kind: CreateAccountModule.Kind) {
-        kindLiveData.postValue(kind.title)
+    private fun clearCautions() {
+        if (passphraseCautionLiveData.value != null) {
+            passphraseCautionLiveData.postValue(null)
+        }
+
+        if (passphraseConfirmationCautionLiveData.value != null) {
+            passphraseConfirmationCautionLiveData.postValue(null)
+        }
     }
 
     override fun onCleared() {
@@ -46,10 +65,29 @@ class CreateAccountViewModel(private val service: CreateAccountService, private 
         disposables.clear()
     }
 
+    fun onTogglePassphrase(enabled: Boolean) {
+        service.passphraseEnabled = enabled
+        clearInputs()
+    }
+
+    fun onChangePassphrase(v: String) {
+        service.passphrase = v
+        clearCautions()
+    }
+
+    fun onChangePassphraseConfirmation(v: String) {
+        service.passphraseConfirmation = v
+        clearCautions()
+    }
+
     fun onClickCreate() {
         try {
             service.createAccount()
             finishLiveEvent.postValue(Unit)
+        } catch (t: CreateAccountService.CreateError.EmptyPassphrase) {
+            passphraseCautionLiveData.postValue(Caution(Translator.getString(R.string.CreateWallet_Error_EmptyPassphrase), Caution.Type.Error))
+        } catch (t: CreateAccountService.CreateError.InvalidConfirmation) {
+            passphraseConfirmationCautionLiveData.postValue(Caution(Translator.getString(R.string.CreateWallet_Error_InvalidConfirmation), Caution.Type.Error))
         } catch (t: Throwable) {
             showErrorLiveEvent.postValue(t.localizedMessage ?: t.javaClass.simpleName)
         }
