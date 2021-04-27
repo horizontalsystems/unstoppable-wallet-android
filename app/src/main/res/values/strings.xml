@@ -706,6 +706,7 @@
     <string name="ShowKey_Title">Key</string>
     <string name="ShowKey_Description">The recovery phrases that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken etc.\n\nMake sure that no one is watching your screen.</string>
     <string name="ShowKey_ButtonShow">Show</string>
+    <string name="ShowKey_Passphrase">Passphrase</string>
     <string name="ShowKey_ButtonClose">Close</string>
     <string name="ShowKey_TabMnemonicPhrase">Recovery Phrases</string>
     <string name="ShowKey_TabPrivateKey">Private Key</string>

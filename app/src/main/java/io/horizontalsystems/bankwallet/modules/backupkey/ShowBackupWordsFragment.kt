@@ -33,7 +33,7 @@ class ShowBackupWordsFragment : BaseFragment() {
             viewModel.onClickBackup()
         }
 
-        mnemonicPhraseView.populateWords(viewModel.words)
+        mnemonicPhraseView.populateWords(viewModel.words, viewModel.passphrase)
     }
 
 }

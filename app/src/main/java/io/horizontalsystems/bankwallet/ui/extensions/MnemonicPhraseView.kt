@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.ui.extensions
 
 import android.content.Context
 import android.util.AttributeSet
+import androidx.core.view.isVisible
 import androidx.core.widget.NestedScrollView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.views.BackupWordView
@@ -14,7 +15,7 @@ class MnemonicPhraseView @JvmOverloads constructor(context: Context, attrs: Attr
         inflate(context, R.layout.view_mnemonic_phrase, this)
     }
 
-    fun populateWords(words: List<String>) {
+    fun populateWords(words: List<String>, passphrase: String) {
         val is12Words = words.count() == 12
 
         words.forEachIndexed { index, word ->
@@ -41,6 +42,9 @@ class MnemonicPhraseView @JvmOverloads constructor(context: Context, attrs: Attr
             }
             viewGroup.addView(wordView)
         }
+
+        passphraseGroup.isVisible = passphrase.isNotBlank()
+        passphraseValue.text = passphrase
     }
 
 }

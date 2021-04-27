@@ -28,7 +28,7 @@ class ShowKeyMainFragment : BaseFragment() {
             findNavController().popBackStack()
         }
 
-        viewPager.adapter = ShowKeyTabsAdapter(showKeyTabs, viewModel.words, viewModel.salt, viewModel.privateKeys, childFragmentManager, viewLifecycleOwner.lifecycle)
+        viewPager.adapter = ShowKeyTabsAdapter(showKeyTabs, viewModel.words, viewModel.passphrase, viewModel.privateKeys, childFragmentManager, viewLifecycleOwner.lifecycle)
 
         tabLayout.setSelectedTabIndicator(null)
         tabLayout.tabRippleColor = null
