@@ -14,7 +14,7 @@ class BackupKeyViewModel(
     val words: List<String>
         get() = service.words
 
-    val salt: String?
+    val passphrase: String?
         get() = service.salt
 
     fun onClickShow() {

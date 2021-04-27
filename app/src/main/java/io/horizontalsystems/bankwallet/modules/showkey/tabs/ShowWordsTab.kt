@@ -13,6 +13,9 @@ class ShowWordsTab : BaseFragment() {
     private val words: List<String>
         get() = requireArguments().getStringArrayList(WORDS) ?: listOf()
 
+    private val passphrase: String
+        get() = requireArguments().getString(PASSPHRASE) ?: ""
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_show_words_tab, container, false)
     }
@@ -20,7 +23,7 @@ class ShowWordsTab : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        mnemonicPhraseView.populateWords(words)
+        mnemonicPhraseView.populateWords(words, passphrase)
     }
 
     companion object {
