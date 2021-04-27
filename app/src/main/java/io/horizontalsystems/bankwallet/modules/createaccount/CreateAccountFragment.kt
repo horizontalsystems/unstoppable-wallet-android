@@ -64,6 +64,11 @@ class CreateAccountFragment : BaseFragment() {
             passphraseConfirm.setError(it)
         }
 
+        viewModel.clearInputsLiveData.observe(viewLifecycleOwner) {
+            passphrase.setText(null)
+            passphraseConfirm.setText(null)
+        }
+
         kind.setOnSingleClickListener {
             val dialog = SelectorPopupDialog<ViewItemWrapper<CreateAccountModule.Kind>>()
 
