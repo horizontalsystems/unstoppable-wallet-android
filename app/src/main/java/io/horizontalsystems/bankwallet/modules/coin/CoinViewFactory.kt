@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.coin
 
+import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
@@ -35,16 +36,17 @@ data class ChartPointViewItem(
 data class CoinDetailsViewItem(
         val currency: Currency,
         val rateValue: BigDecimal,
-        val marketDataList: List<MarketData>,
+        val marketDataList: List<CoinDataItem>,
         val rateHigh24h: BigDecimal,
         val rateLow24h: BigDecimal,
         val marketCapDiff24h: BigDecimal,
         val coinMeta: CoinMeta,
         val rateDiffs: Map<TimePeriod, Map<String, BigDecimal>>,
-        val guideUrl: String?
+        val guideUrl: String?,
+        val tvlInfo: List<CoinDataItem>,
 )
 
-class MarketData(@StringRes val title: Int, val value: String)
+class CoinDataItem(@StringRes val title: Int, val value: String, @DrawableRes val icon: Int? = null)
 
 data class LastPoint(
         val rate: BigDecimal,
@@ -82,32 +84,42 @@ class CoinViewFactory(private val currency: Currency, private val numberFormatte
                 marketCapDiff24h = coinMarket.marketCapDiff24h,
                 coinMeta = coinMarket.meta,
                 rateDiffs = coinMarket.rateDiffs,
-                guideUrl = guideUrl
+                guideUrl = guideUrl,
+                tvlInfo = getTvlInfo(coinMarket, currency)
         )
     }
 
-    private fun getMarketData(coinMarket: CoinMarketDetails, currency: Currency, coinCode: String): MutableList<MarketData> {
-        val marketData = mutableListOf<MarketData>()
+    private fun getTvlInfo(coinMarket: CoinMarketDetails, currency: Currency): List<CoinDataItem> {
+        val tvlInfoList = mutableListOf<CoinDataItem>()
+
+        coinMarket.defiTvl?.let { defiValue ->
+            tvlInfoList.add(CoinDataItem(R.string.CoinPage_Tvl, formatFiatShortened(defiValue, currency.symbol), R.drawable.ic_chart_20))
+        }
+        return tvlInfoList
+    }
+
+    private fun getMarketData(coinMarket: CoinMarketDetails, currency: Currency, coinCode: String): MutableList<CoinDataItem> {
+        val marketData = mutableListOf<CoinDataItem>()
         if (coinMarket.marketCap > BigDecimal.ZERO) {
-            marketData.add(MarketData(R.string.CoinPage_MarketCap, formatFiatShortened(coinMarket.marketCap, currency.symbol)))
+            marketData.add(CoinDataItem(R.string.CoinPage_MarketCap, formatFiatShortened(coinMarket.marketCap, currency.symbol)))
         }
         if (coinMarket.volume24h > BigDecimal.ZERO) {
-            marketData.add(MarketData(R.string.CoinPage_Volume24, formatFiatShortened(coinMarket.volume24h, currency.symbol)))
+            marketData.add(CoinDataItem(R.string.CoinPage_Volume24, formatFiatShortened(coinMarket.volume24h, currency.symbol)))
         }
         if (coinMarket.circulatingSupply > BigDecimal.ZERO) {
             val (shortenValue, suffix) = numberFormatter.shortenValue(coinMarket.circulatingSupply)
             val value = "$shortenValue $suffix $coinCode"
-            marketData.add(MarketData(R.string.CoinPage_inCirculation, value))
+            marketData.add(CoinDataItem(R.string.CoinPage_inCirculation, value))
         }
         if (coinMarket.totalSupply > BigDecimal.ZERO) {
             val (shortenValue, suffix) = numberFormatter.shortenValue(coinMarket.totalSupply)
             val value = "$shortenValue $suffix $coinCode"
-            marketData.add(MarketData(R.string.CoinPage_TotalSupply, value))
+            marketData.add(CoinDataItem(R.string.CoinPage_TotalSupply, value))
         }
         if (coinMarket.marketCap > BigDecimal.ZERO && coinMarket.circulatingSupply > BigDecimal.ZERO && coinMarket.totalSupply > BigDecimal.ZERO) {
             val rate = coinMarket.marketCap.divide(coinMarket.circulatingSupply, SCALE_UP_TO_BILLIONTH, RoundingMode.HALF_EVEN)
             val dilutedMarketCap = coinMarket.totalSupply.multiply(rate)
-            marketData.add(MarketData(R.string.CoinPage_DilutedMarketCap, formatFiatShortened(dilutedMarketCap, currency.symbol)))
+            marketData.add(CoinDataItem(R.string.CoinPage_DilutedMarketCap, formatFiatShortened(dilutedMarketCap, currency.symbol)))
         }
         return marketData
     }

@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.market.marketglobal
+package io.horizontalsystems.bankwallet.modules.metricchart
 
 import android.os.Bundle
 import android.view.View
@@ -14,12 +14,13 @@ import io.horizontalsystems.bankwallet.ui.extensions.createTextView
 import io.horizontalsystems.chartview.Chart
 import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.chartview.models.PointInfo
+import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.android.synthetic.main.fragment_market_global.*
 
-class MarketGlobalFragment : BaseBottomSheetDialogFragment(), Chart.Listener, TabLayout.OnTabSelectedListener {
+class MetricChartFragment : BaseBottomSheetDialogFragment(), Chart.Listener, TabLayout.OnTabSelectedListener {
 
-    private val metricsType by lazy {
-        requireArguments().getParcelable(METRICS_TYPE_KEY) ?: MetricsType.BtcDominance
+    private val metricChartType by lazy {
+        requireArguments().getParcelable<MetricChartType>(METRICS_CHART_TYPE_KEY)
     }
 
     private val actions = listOf(
@@ -28,7 +29,7 @@ class MarketGlobalFragment : BaseBottomSheetDialogFragment(), Chart.Listener, Ta
             Pair(ChartView.ChartType.MONTHLY, R.string.CoinPage_TimeDuration_Month),
     )
 
-    private val viewModel by viewModels<MarketGlobalViewModel> { MarketGlobalModule.Factory(metricsType) }
+    private val viewModel by viewModels<MetricChartViewModel> { MetricChartModule.Factory(metricChartType) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -39,32 +40,41 @@ class MarketGlobalFragment : BaseBottomSheetDialogFragment(), Chart.Listener, Ta
         setSubtitle(getString(R.string.MarketGlobalMetrics_Chart))
         setHeaderIconDrawable(context?.let { AppCompatResources.getDrawable(it, R.drawable.ic_chart_24) })
 
-        descriptionText.text = getString(viewModel.description)
+        viewModel.description?.let {
+            descriptionText.text = getString(it)
+        }
         chart.setListener(this)
         setChartTabs()
+
+        viewModel.loadingLiveData.observe(viewLifecycleOwner, { loading ->
+            if (loading) {
+                chart.showSinner()
+            } else {
+                chart.hideSinner()
+            }
+        })
 
         viewModel.chartViewItemLiveData.observe(viewLifecycleOwner, { chartViewItem ->
             topValue.text = chartViewItem.lastValueWithDiff?.value
             diffValue.setDiff(chartViewItem.lastValueWithDiff?.diff)
 
-            if (chartViewItem.loading) {
-                chart.showSinner()
-            } else {
-                chart.hideSinner()
-
-                chartViewItem.chartData?.let {
-                    chart.showChart()
-                    rootView.post {
-                        chart.setData(it, chartViewItem.chartType, chartViewItem.maxValue, chartViewItem.minValue)
-                    }
+            chartViewItem.chartData?.let {
+                chart.showChart()
+                rootView.post {
+                    chart.setData(it, chartViewItem.chartType, chartViewItem.maxValue, chartViewItem.minValue)
                 }
             }
+
         })
 
         viewModel.selectedPointLiveData.observe(viewLifecycleOwner, { selectedPoint ->
             pointInfoDate.text = selectedPoint.date
             pointInfoValue.text = selectedPoint.value
         })
+
+        viewModel.toastLiveData.observe(viewLifecycleOwner) {
+            HudHelper.showErrorMessage(this.requireView(), it)
+        }
 
     }
 
@@ -128,12 +138,12 @@ class MarketGlobalFragment : BaseBottomSheetDialogFragment(), Chart.Listener, Ta
     }
 
     companion object {
-        private const val METRICS_TYPE_KEY = "metrics_type"
+        private const val METRICS_CHART_TYPE_KEY = "metric_chart_type"
 
-        fun show(fragmentManager: FragmentManager, metricsType: MetricsType) {
-            val fragment = MarketGlobalFragment()
-            fragment.arguments = bundleOf(METRICS_TYPE_KEY to metricsType)
-            fragment.show(fragmentManager, "market_global_chart_dialog")
+        fun show(fragmentManager: FragmentManager, metricChartType: MetricChartType) {
+            val fragment = MetricChartFragment()
+            fragment.arguments = bundleOf(METRICS_CHART_TYPE_KEY to metricChartType)
+            fragment.show(fragmentManager, "metric_chart_dialog")
         }
     }
 }

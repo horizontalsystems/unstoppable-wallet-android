@@ -46,6 +46,9 @@ class CoinViewModel(
     var notificationIconVisible = service.notificationsAreEnabled
     var notificationIconActive = false
 
+    val coinType: CoinType
+        get() = service.coinType
+
     private var enabledIndicator: ChartIndicator? = null
     private var macdIsEnabled = false
     private val disposable = CompositeDisposable()

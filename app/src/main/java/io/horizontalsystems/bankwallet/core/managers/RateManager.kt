@@ -138,6 +138,14 @@ class RateManager(
         return kit.getNotificationCoinCode(coinType)
     }
 
+    override fun topDefiTvl(currencyCode: String, fetchDiffPeriod: TimePeriod, itemsCount: Int) : Single<List<DefiTvl>> {
+        return kit.getTopDefiTvlAsync(currencyCode, fetchDiffPeriod, itemsCount)
+    }
+
+    override fun defiTvlPoints(coinType: CoinType, currencyCode: String, fetchDiffPeriod: TimePeriod) : Single<List<DefiTvlPoint>> {
+        return kit.getDefiTvlPointsAsync(coinType, currencyCode, fetchDiffPeriod)
+    }
+
     override fun refresh() {
         kit.refresh()
     }

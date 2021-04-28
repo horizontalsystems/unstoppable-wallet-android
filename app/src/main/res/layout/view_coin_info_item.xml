@@ -63,6 +63,7 @@
         android:singleLine="true"
         android:textColor="?BottomDialogTextColor"
         android:visibility="gone"
+        android:drawablePadding="6dp"
         app:layout_constrainedWidth="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/viewBackground"

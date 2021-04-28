@@ -30,13 +30,22 @@
         app:layout_constraintTop_toBottomOf="@+id/coinPerformanceLayout" />
 
     <LinearLayout
-        android:id="@+id/extraPagesLayout"
+        android:id="@+id/tvlLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:orientation="vertical"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/marketDataLayout" />
+
+    <LinearLayout
+        android:id="@+id/extraPagesLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvlLayout" />
 
     <androidx.constraintlayout.widget.Group
         android:id="@+id/aboutGroup"

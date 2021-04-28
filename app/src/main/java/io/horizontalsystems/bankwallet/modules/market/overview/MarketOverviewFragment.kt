@@ -17,7 +17,8 @@ import io.horizontalsystems.bankwallet.modules.market.MarketViewModel
 import io.horizontalsystems.bankwallet.modules.market.metrics.MarketMetricsAdapter
 import io.horizontalsystems.bankwallet.modules.market.metrics.MarketMetricsModule
 import io.horizontalsystems.bankwallet.modules.market.metrics.MarketMetricsViewModel
-import io.horizontalsystems.bankwallet.modules.market.marketglobal.MarketGlobalFragment
+import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartFragment
+import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartType
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.android.synthetic.main.fragment_overview.*
@@ -94,7 +95,7 @@ class MarketOverviewFragment : BaseFragment(), ViewHolderMarketOverviewItem.List
         }
 
         marketMetricsViewModel.showGlobalMarketMetricsPage.observe(viewLifecycleOwner, {
-            MarketGlobalFragment.show(childFragmentManager, it)
+            MetricChartFragment.show(childFragmentManager, MetricChartType.MarketGlobal(it))
         })
     }
 
