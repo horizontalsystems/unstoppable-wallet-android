@@ -1,33 +1,22 @@
-package io.horizontalsystems.bankwallet.modules.market.marketglobal
+package io.horizontalsystems.bankwallet.modules.metricchart
 
 import io.horizontalsystems.bankwallet.core.Clearable
-import io.horizontalsystems.bankwallet.core.IRateManager
 import io.horizontalsystems.bankwallet.core.subscribeIO
+import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.core.entities.Currency
-import io.horizontalsystems.xrateskit.entities.GlobalCoinMarketPoint
 import io.horizontalsystems.xrateskit.entities.TimePeriod
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.BehaviorSubject
 
-class MarketGlobalService(
+class MetricChartService(
         val currency: Currency,
-        private val xRateManager: IRateManager,
+        private val fetcher: MetricChartModule.IMetricChartFetcher,
 ): Clearable {
 
-    val chartPointsUpdatedObservable: BehaviorSubject<Unit> = BehaviorSubject.create()
-    val chartInfoErrorObservable: BehaviorSubject<Throwable> = BehaviorSubject.create()
-
-    private val disposables = CompositeDisposable()
+    val stateObservable: BehaviorSubject<DataState<List<MetricChartModule.Item>>> = BehaviorSubject.createDefault(DataState.Loading)
 
     private var chartInfoDisposable: Disposable? = null
-
-    var chartPoints: List<GlobalCoinMarketPoint>? = null
-        set(value) {
-            field = value
-            chartPointsUpdatedObservable.onNext(Unit)
-        }
 
     override fun clear() {
        chartInfoDisposable?.dispose()
@@ -36,13 +25,15 @@ class MarketGlobalService(
     fun updateChartInfo(chartType: ChartView.ChartType) {
         chartInfoDisposable?.dispose()
 
+        stateObservable.onNext(DataState.Loading)
+
         val timePeriod = getTimePeriod(chartType)
 
-        xRateManager.getGlobalCoinMarketPointsAsync(currency.code, timePeriod)
+        fetcher.fetchSingle(currency.code, timePeriod)
                 .subscribeIO({
-                    chartPoints = it
+                    stateObservable.onNext(DataState.Success(it))
                 }, {
-                    chartInfoErrorObservable.onNext(it)
+                    stateObservable.onNext(DataState.Error(it))
                 }).let {
                     chartInfoDisposable = it
                 }

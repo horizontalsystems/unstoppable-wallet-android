@@ -26,6 +26,8 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.markdown.MarkdownFragment
+import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartFragment
+import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartType
 import io.horizontalsystems.bankwallet.modules.settings.notifications.bottommenu.BottomNotificationMenu
 import io.horizontalsystems.bankwallet.modules.settings.notifications.bottommenu.NotificationMenuMode
 import io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.CoinInfoItemView
@@ -214,6 +216,7 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
             marketDetails.isVisible = true
 
             setMarketData(item.marketDataList)
+            setTvlData(item.tvlInfo)
 
             // Coin Rating
             coinRating.isVisible = !item.coinMeta.rating.isNullOrBlank()
@@ -416,7 +419,7 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
         return context?.let { ContextCompat.getDrawable(it, icon) }
     }
 
-    private fun setMarketData(marketDataList: List<MarketData>) {
+    private fun setMarketData(marketDataList: List<CoinDataItem>) {
         marketDataLayout.removeAllViews()
 
         context?.let { context ->
@@ -430,6 +433,31 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
                 }
 
                 marketDataLayout.addView(coinInfoView)
+            }
+        }
+    }
+
+    private fun setTvlData(tvlDataList: List<CoinDataItem>) {
+        tvlLayout.removeAllViews()
+
+        context?.let { context ->
+            tvlDataList.forEachIndexed { index, marketData ->
+                val view = CoinInfoItemView(context).apply {
+                    bind(
+                            title = getString(marketData.title),
+                            value = marketData.value,
+                            listPosition = ListPosition.getListPosition(tvlDataList.size, index),
+                            icon = marketData.icon
+                    )
+                }
+
+                if (index == 0) {
+                    view.setOnClickListener {
+                        MetricChartFragment.show(childFragmentManager, MetricChartType.Coin(viewModel.coinType))
+                    }
+                }
+
+                tvlLayout.addView(view)
             }
         }
     }
