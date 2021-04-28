@@ -5,7 +5,6 @@ import android.graphics.Typeface
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.AttributeSet
-import android.view.inputmethod.EditorInfo
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import io.horizontalsystems.bankwallet.R
@@ -49,10 +48,13 @@ class InputView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
         val ta = context.obtainStyledAttributes(attrs, R.styleable.InputView)
         try {
             input.hint = ta.getString(R.styleable.InputView_android_hint)
-            input.inputType = ta.getInt(R.styleable.InputView_android_inputType, EditorInfo.TYPE_TEXT_VARIATION_NORMAL)
+            val inputType = ta.getInt(R.styleable.InputView_android_inputType, -1)
+            if (inputType != -1) {
+                input.inputType = inputType
 
-            // When inputType is password it uses monospace font and hint looks different. We need to set it to Typeface.DEFAULT
-            input.typeface = Typeface.DEFAULT
+                // When inputType is password it uses monospace font and hint looks different. We need to set it to Typeface.DEFAULT
+                input.typeface = Typeface.DEFAULT
+            }
         } finally {
             ta.recycle()
         }
@@ -109,6 +111,11 @@ class InputView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
 
     fun setEditable(isEditable: Boolean) {
         input.isEnabled = isEditable
+    }
+
+    fun bindPrefix(prefix: String?) {
+        txtPrefix.text = prefix
+        txtPrefix.isVisible = !prefix.isNullOrBlank()
     }
 
     private fun setDeleteButtonVisibility(visible: Boolean) {

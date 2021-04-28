@@ -22,8 +22,13 @@ class BackupConfirmKeyService(
             indexItemSubject.onNext(value)
         }
 
-    val words: List<String>
-    val salt: String?
+    private val words: List<String>
+    private val salt: String?
+
+    var firstWord: String = ""
+    var secondWord: String = ""
+    var passphrase: String = ""
+
     init {
         if (account.type is AccountType.Mnemonic) {
             words = account.type.words
@@ -34,10 +39,30 @@ class BackupConfirmKeyService(
         }
     }
 
-    private fun validate(word: String, validWord: String) {
-        if (!word.trim().equals(validWord, ignoreCase = true)) {
-            throw BackupValidationException()
+    private fun validate(): List<ValidationError> {
+        val errors = mutableListOf<ValidationError>()
+
+        if (firstWord.isBlank()) {
+            errors.add(ValidationError.EmptyFirstWord)
+        } else if (firstWord != words[indexItem.first]) {
+            errors.add(ValidationError.InvalidFirstWord)
         }
+
+        if (secondWord.isBlank()) {
+            errors.add(ValidationError.EmptySecondWord)
+        } else if (secondWord != words[indexItem.second]) {
+            errors.add(ValidationError.InvalidSecondWord)
+        }
+
+        if (!salt.isNullOrBlank()) {
+            if (passphrase.isBlank()) {
+                errors.add(ValidationError.EmptyPassphrase)
+            } else if (passphrase != salt) {
+                errors.add(ValidationError.InvalidPassphrase)
+            }
+        }
+
+        return errors
     }
 
     fun generateIndices() {
@@ -45,9 +70,16 @@ class BackupConfirmKeyService(
         indexItem = IndexItem(indices[0], indices[1])
     }
 
-    fun backup(firstWord: String, secondWord: String) {
-        validate(firstWord, words[indexItem.first])
-        validate(secondWord, words[indexItem.second])
+    fun hasSalt(): Boolean {
+        return !salt.isNullOrBlank()
+    }
+
+    fun backup() {
+        val validationErrors = validate()
+
+        if (validationErrors.isNotEmpty()) {
+            throw BackupError(validationErrors)
+        }
 
         account.isBackedUp = true
         accountManager.update(account)
@@ -55,6 +87,15 @@ class BackupConfirmKeyService(
 
     data class IndexItem(val first: Int, val second: Int)
 
-    class BackupValidationException : Exception()
+    class BackupError(val validationErrors: List<ValidationError>) : Exception()
+
+    sealed class ValidationError : Exception() {
+        object EmptyFirstWord : ValidationError()
+        object InvalidFirstWord : ValidationError()
+        object EmptySecondWord : ValidationError()
+        object InvalidSecondWord : ValidationError()
+        object EmptyPassphrase : ValidationError()
+        object InvalidPassphrase : ValidationError()
+    }
 
 }

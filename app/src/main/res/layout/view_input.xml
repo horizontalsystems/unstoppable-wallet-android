@@ -14,6 +14,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/txtPrefix"
+        style="@style/Body"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:textColor="@color/grey"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/input"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/input"
+        tools:text="12."
+        tools:visibility="visible" />
+
     <EditText
         android:id="@+id/input"
         style="@style/Body"
@@ -25,7 +39,7 @@
         android:textColor="?attr/TextColorBarsToDark"
         android:textColorHint="@color/grey_50"
         app:layout_constraintEnd_toStartOf="@+id/actionsLayout"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@id/txtPrefix"
         app:layout_constraintTop_toTopOf="@id/inputBackground"
         tools:hint="Hint" />
 

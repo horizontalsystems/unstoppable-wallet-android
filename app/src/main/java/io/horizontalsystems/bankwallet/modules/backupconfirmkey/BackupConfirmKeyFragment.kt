@@ -6,6 +6,7 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
@@ -37,15 +38,12 @@ class BackupConfirmKeyFragment : BaseFragment() {
             }
         }
 
-        textDescription.setText(R.string.BackupConfirmKey_Description)
+        passphrase.isVisible = viewModel.passpraseVisible
+        passphraseDescription.isVisible = viewModel.passpraseVisible
 
         viewModel.indexViewItemLiveData.observe(viewLifecycleOwner, { indexViewItem ->
             wordOne.bindPrefix(indexViewItem.first)
             wordTwo.bindPrefix(indexViewItem.second)
-        })
-
-        viewModel.errorLiveEvent.observe(viewLifecycleOwner, { error ->
-            HudHelper.showErrorMessage(this.requireView(), error)
         })
 
         viewModel.successLiveEvent.observe(viewLifecycleOwner, {
@@ -55,15 +53,43 @@ class BackupConfirmKeyFragment : BaseFragment() {
             }, 1200)
         })
 
+        viewModel.firstWordCautionLiveData.observe(viewLifecycleOwner) {
+            wordOne.setError(it)
+        }
+
+        viewModel.secondWordCautionLiveData.observe(viewLifecycleOwner) {
+            wordTwo.setError(it)
+        }
+
+        viewModel.passphraseCautionLiveData.observe(viewLifecycleOwner) {
+            passphrase.setError(it)
+        }
+
+        viewModel.clearInputsLiveEvent.observe(viewLifecycleOwner) {
+            wordOne.setText(null)
+            wordTwo.setText(null)
+            passphrase.setText(null)
+        }
+
+        wordOne.onTextChange {
+            viewModel.onChangeFirstWord(it ?: "")
+        }
+
+        wordTwo.onTextChange {
+            viewModel.onChangeSecondWord(it ?: "")
+        }
+
+        passphrase.onTextChange {
+            viewModel.onChangePassphrase(it ?: "")
+        }
+
         KeyboardHelper.showKeyboardDelayed(requireActivity(), wordOne, 200)
 
         viewModel.onViewCreated()
     }
 
     private fun onClickDone() {
-        val firstWord = wordOne.getEnteredText() ?: ""
-        val secondWord = wordTwo.getEnteredText() ?: ""
-        viewModel.onClickDone(firstWord, secondWord)
+        viewModel.onClickDone()
     }
 
 }

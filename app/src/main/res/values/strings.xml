@@ -58,7 +58,7 @@
     <!--Create Wallet-->
     <string name="CreateWallet_Title">New Wallet</string>
     <string name="CreateWallet_Mnemonic">Mnemonic</string>
-    <string name="CreateWallet_Passphrase">Passphrase</string>
+    <string name="Passphrase">Passphrase</string>
     <string name="CreateWallet_N_Words">%s words</string>
     <string name="CreateWallet_PassphraseConfirm">Confirm</string>
     <string name="CreateWallet_Error_EmptyPassphrase">Passphrase cannot be empty</string>
@@ -710,6 +710,10 @@
 
     <string name="BackupConfirmKey_Description">Enter the recovery phrases in correct order to confirm</string>
     <string name="BackupConfirmKey_EmptyOrInvalidWords">Entered words are empty or invalid</string>
+    <string name="BackupConfirmKey_Error_EmptyWord">Empty word</string>
+    <string name="BackupConfirmKey_Error_InvalidWord">Invalid word</string>
+    <string name="BackupConfirmKey_Error_EmptyPassphrase">Empty passphrase</string>
+    <string name="BackupConfirmKey_Error_InvalidPassphrase">Invalid passphrase</string>
 
     <!--Manage Keys Delete Alert-->
 

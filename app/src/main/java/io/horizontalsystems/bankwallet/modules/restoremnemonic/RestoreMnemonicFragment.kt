@@ -112,7 +112,7 @@ class RestoreMnemonicFragment : BaseFragment() {
             passphrase.setError(it)
         }
 
-        viewModel.clearInputsLiveData.observe(viewLifecycleOwner) {
+        viewModel.clearInputsLiveEvent.observe(viewLifecycleOwner) {
             passphrase.setText(null)
         }
     }

@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
+import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.Caution
 import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
 
@@ -15,8 +16,14 @@ class BackupConfirmKeyViewModel(
     private val disposable = CompositeDisposable()
 
     val indexViewItemLiveData = MutableLiveData<IndexViewItem>()
-    val errorLiveEvent = SingleLiveEvent<String>()
     val successLiveEvent = SingleLiveEvent<Unit>()
+
+    val firstWordCautionLiveData = MutableLiveData<Caution?>(null)
+    val secondWordCautionLiveData = MutableLiveData<Caution?>(null)
+    val passphraseCautionLiveData = MutableLiveData<Caution?>(null)
+    val clearInputsLiveEvent = SingleLiveEvent<Unit>()
+
+    val passpraseVisible get() = service.hasSalt()
 
     init {
         service.indexItemObservable
@@ -30,8 +37,20 @@ class BackupConfirmKeyViewModel(
         indexViewItemLiveData.postValue(indexViewItem)
     }
 
+    private fun clearInputs() {
+        clearInputsLiveEvent.postValue(Unit)
+
+        firstWordCautionLiveData.postValue(null)
+        secondWordCautionLiveData.postValue(null)
+        passphraseCautionLiveData.postValue(null)
+
+        service.firstWord = ""
+        service.secondWord = ""
+        service.passphrase = ""
+    }
+
     private fun getErrorText(error: Throwable): String {
-        return if (error is BackupConfirmKeyService.BackupValidationException) {
+        return if (error is BackupConfirmKeyService.BackupError) {
             translator.getString(R.string.BackupConfirmKey_EmptyOrInvalidWords)
         } else {
             error.javaClass.simpleName
@@ -40,14 +59,53 @@ class BackupConfirmKeyViewModel(
 
     fun onViewCreated() {
         service.generateIndices()
+        clearInputs()
     }
 
-    fun onClickDone(firstWord: String, secondWord: String) {
+    fun onChangeFirstWord(v: String) {
+        service.firstWord = v
+        firstWordCautionLiveData.postValue(null)
+    }
+
+    fun onChangeSecondWord(v: String) {
+        service.secondWord = v
+        secondWordCautionLiveData.postValue(null)
+    }
+
+    fun onChangePassphrase(v: String) {
+        service.passphrase = v
+        passphraseCautionLiveData.postValue(null)
+    }
+
+    fun onClickDone() {
         try {
-            service.backup(firstWord, secondWord)
+            service.backup()
             successLiveEvent.postValue(Unit)
-        } catch (error: Throwable) {
-            errorLiveEvent.postValue(getErrorText(error))
+        } catch (e: BackupConfirmKeyService.BackupError) {
+            e.validationErrors.forEach {
+                when (it) {
+                    BackupConfirmKeyService.ValidationError.EmptyFirstWord -> {
+                        firstWordCautionLiveData.postValue(Caution(Translator.getString(R.string.BackupConfirmKey_Error_EmptyWord), Caution.Type.Error))
+                    }
+                    BackupConfirmKeyService.ValidationError.InvalidFirstWord -> {
+                        firstWordCautionLiveData.postValue(Caution(Translator.getString(R.string.BackupConfirmKey_Error_InvalidWord), Caution.Type.Error))
+                    }
+                    BackupConfirmKeyService.ValidationError.EmptySecondWord -> {
+                        secondWordCautionLiveData.postValue(Caution(Translator.getString(R.string.BackupConfirmKey_Error_EmptyWord), Caution.Type.Error))
+                    }
+                    BackupConfirmKeyService.ValidationError.InvalidSecondWord -> {
+                        secondWordCautionLiveData.postValue(Caution(Translator.getString(R.string.BackupConfirmKey_Error_InvalidWord), Caution.Type.Error))
+                    }
+                    BackupConfirmKeyService.ValidationError.EmptyPassphrase -> {
+                        passphraseCautionLiveData.postValue(Caution(Translator.getString(R.string.BackupConfirmKey_Error_EmptyPassphrase), Caution.Type.Error))
+                    }
+                    BackupConfirmKeyService.ValidationError.InvalidPassphrase -> {
+                        passphraseCautionLiveData.postValue(Caution(Translator.getString(R.string.BackupConfirmKey_Error_InvalidPassphrase), Caution.Type.Error))
+                    }
+                }
+            }
+        } catch (e: Throwable) {
+
         }
     }
 
