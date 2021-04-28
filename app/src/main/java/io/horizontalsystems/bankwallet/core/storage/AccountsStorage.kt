@@ -39,7 +39,7 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
                 .mapNotNull { record ->
                     try {
                         val accountType = when (record.type) {
-                            MNEMONIC -> AccountType.Mnemonic(record.words!!.list, record.salt?.value)
+                            MNEMONIC -> AccountType.Mnemonic(record.words!!.list, record.salt?.value ?: "")
                             PRIVATE_KEY -> AccountType.PrivateKey(record.key!!.value.hexToByteArray())
                             else -> null
                         }
@@ -79,34 +79,34 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
     }
 
     private fun getAccountRecord(account: Account): AccountRecord {
+        var words: SecretList? = null
+        var salt: SecretString? = null
+        var key: SecretString? = null
+        val accountType: String
+
+        when (account.type) {
+            is AccountType.Mnemonic -> {
+                words = SecretList(account.type.words)
+                salt = SecretString(account.type.salt)
+                accountType = MNEMONIC
+            }
+            is AccountType.PrivateKey -> {
+                key = SecretString(account.type.key.toRawHexString())
+                accountType = PRIVATE_KEY
+            }
+            else -> throw Exception("Unsupported AccountType: ${account.type}")
+        }
+
         return AccountRecord(
                 id = account.id,
                 name = account.name,
-                type = getAccountTypeCode(account.type),
+                type = accountType,
                 origin = account.origin.value,
                 isBackedUp = account.isBackedUp,
-                words = when (account.type) {
-                    is AccountType.Mnemonic -> SecretList(account.type.words)
-                    else -> null
-                },
-                salt = (account.type as? AccountType.Mnemonic)?.salt?.let { SecretString(it) },
-                key = getKey(account.type)?.let { SecretString(it) }
+                words = words,
+                salt = salt,
+                key = key
         )
-    }
-
-    private fun getKey(accountType: AccountType): String? {
-        return when (accountType) {
-            is AccountType.PrivateKey -> accountType.key.toRawHexString()
-            else -> null
-        }
-    }
-
-    private fun getAccountTypeCode(accountType: AccountType): String {
-        return when (accountType) {
-            is AccountType.PrivateKey -> PRIVATE_KEY
-            is AccountType.Mnemonic -> MNEMONIC
-            else -> throw Exception("Unsupported AccountType: $accountType")
-        }
     }
 
 }

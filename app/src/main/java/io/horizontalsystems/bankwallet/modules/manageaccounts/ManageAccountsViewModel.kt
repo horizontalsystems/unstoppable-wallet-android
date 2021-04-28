@@ -2,7 +2,9 @@ package io.horizontalsystems.bankwallet.modules.manageaccounts
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.Clearable
+import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule.AccountViewItem
@@ -43,7 +45,12 @@ class ManageAccountsViewModel(
         return when (accountType) {
             is AccountType.Mnemonic -> {
                 val count = accountType.words.size
-                "$count words ${if (accountType.salt != null) "with passphrase" else ""}"
+
+                if (accountType.salt.isNotBlank()) {
+                    Translator.getString(R.string.ManageAccount_NWordsWithPassphrase, count)
+                } else {
+                    Translator.getString(R.string.ManageAccount_NWords, count)
+                }
             }
             else -> ""
         }

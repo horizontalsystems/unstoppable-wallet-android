@@ -9,14 +9,14 @@ class BackupKeyService(
         private val pinComponent: IPinComponent
 ) {
     val words: List<String>
-    val salt: String?
+    val salt: String
     init {
         if (account.type is AccountType.Mnemonic) {
             words = account.type.words
             salt = account.type.salt
         } else {
             words = listOf()
-            salt = null
+            salt = ""
         }
     }
 

@@ -23,7 +23,7 @@ class BackupConfirmKeyService(
         }
 
     private val words: List<String>
-    private val salt: String?
+    private val salt: String
 
     var firstWord: String = ""
     var secondWord: String = ""
@@ -35,7 +35,7 @@ class BackupConfirmKeyService(
             salt = account.type.salt
         } else {
             words = listOf()
-            salt = null
+            salt = ""
         }
     }
 
@@ -54,7 +54,7 @@ class BackupConfirmKeyService(
             errors.add(ValidationError.InvalidSecondWord)
         }
 
-        if (!salt.isNullOrBlank()) {
+        if (salt.isNotBlank()) {
             if (passphrase.isBlank()) {
                 errors.add(ValidationError.EmptyPassphrase)
             } else if (passphrase != salt) {
@@ -71,7 +71,7 @@ class BackupConfirmKeyService(
     }
 
     fun hasSalt(): Boolean {
-        return !salt.isNullOrBlank()
+        return salt.isNotBlank()
     }
 
     fun backup() {

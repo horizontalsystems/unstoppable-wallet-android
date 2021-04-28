@@ -12,7 +12,7 @@ class ShowKeyViewModel(
     val words: List<String>
         get() = service.words
 
-    val passphrase: String?
+    val passphrase: String
         get() = service.salt
 
     val privateKeys: List<ShowKeyModule.PrivateKey>
