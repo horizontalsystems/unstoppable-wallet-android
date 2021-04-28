@@ -472,7 +472,10 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
                 link.showIcon(ContextCompat.getDrawable(context, R.drawable.ic_academy_20))
                 link.setListPosition(ListPosition.getListPosition(links.size + 1, 0))
                 link.setOnClickListener {
-                    val arguments = bundleOf(MarkdownFragment.markdownUrlKey to guideUrl)
+                    val arguments = bundleOf(
+                            MarkdownFragment.markdownUrlKey to guideUrl,
+                            MarkdownFragment.handleRelativeUrlKey to true
+                    )
                     findNavController().navigate(R.id.coinFragment_to_markdownFragment, arguments, navOptions())
                 }
                 linksLayout.addView(link)

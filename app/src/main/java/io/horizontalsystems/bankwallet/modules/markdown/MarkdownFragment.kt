@@ -15,7 +15,7 @@ import kotlinx.android.synthetic.main.fragment_markdown.*
 
 class MarkdownFragment : BaseFragment(), MarkdownContentAdapter.Listener {
 
-    private val contentAdapter = MarkdownContentAdapter(this)
+    private lateinit var contentAdapter: MarkdownContentAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.fragment_markdown, container, false)
@@ -42,11 +42,13 @@ class MarkdownFragment : BaseFragment(), MarkdownContentAdapter.Listener {
             }
         }
 
-        rvBlocks.adapter = contentAdapter
-
+        val handleRelativeUrl = arguments?.getBoolean(handleRelativeUrlKey) ?: false
         val markdownUrl = arguments?.getString(markdownUrlKey)
         val gitReleaseUrl = arguments?.getString(gitReleaseNotesUrlKey)
         val viewModel by viewModels<MarkdownViewModel> { MarkdownModule.Factory(markdownUrl, gitReleaseUrl) }
+
+        contentAdapter = MarkdownContentAdapter(this, handleRelativeUrl)
+        rvBlocks.adapter = contentAdapter
 
         observe(viewModel)
     }
@@ -69,6 +71,7 @@ class MarkdownFragment : BaseFragment(), MarkdownContentAdapter.Listener {
 
     companion object {
         const val markdownUrlKey = "urlKey"
+        const val handleRelativeUrlKey = "handleRelativeUrlKey"
         const val gitReleaseNotesUrlKey = "gitReleaseNotesUrlKey"
         const val showAsClosablePopupKey = "showAsClosablePopupKey"
     }

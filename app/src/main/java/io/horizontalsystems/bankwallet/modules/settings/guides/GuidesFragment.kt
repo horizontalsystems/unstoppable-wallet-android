@@ -51,7 +51,10 @@ class GuidesFragment : BaseFragment(), GuidesAdapter.Listener, FilterAdapter.Lis
     }
 
     override fun onItemClick(guide: Guide) {
-        val arguments = bundleOf(MarkdownFragment.markdownUrlKey to guide.fileUrl)
+        val arguments = bundleOf(
+                MarkdownFragment.markdownUrlKey to guide.fileUrl,
+                MarkdownFragment.handleRelativeUrlKey to true
+        )
         findNavController().navigate(R.id.academyFragment_to_markdownFragment, arguments, navOptions())
     }
 
