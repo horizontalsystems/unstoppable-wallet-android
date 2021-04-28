@@ -12,7 +12,7 @@ import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.getNavigationResult
 import io.horizontalsystems.pin.PinInteractionType
 import io.horizontalsystems.pin.PinModule
-import kotlinx.android.synthetic.main.fragment_show_key.*
+import kotlinx.android.synthetic.main.fragment_backup_key.*
 
 class BackupKeyFragment : BaseFragment() {
     private val viewModel by navGraphViewModels<BackupKeyViewModel>(R.id.backupKeyFragment) { BackupKeyModule.Factory(arguments?.getParcelable(BackupKeyModule.ACCOUNT)!!) }

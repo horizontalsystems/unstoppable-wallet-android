@@ -39,7 +39,7 @@ open class ShowWordsFragment : BaseFragment() {
     }
 
     protected open fun onActionButtonClick() {
-        findNavController().popBackStack(R.id.showKeyFragment, true)
+        findNavController().popBackStack(R.id.showKeyIntroFragment, true)
     }
 
     private fun populateWords(words: Array<String>) {
