@@ -92,8 +92,10 @@ class CoinViewFactory(private val currency: Currency, private val numberFormatte
     private fun getTvlInfo(coinMarket: CoinMarketDetails, currency: Currency): List<CoinDataItem> {
         val tvlInfoList = mutableListOf<CoinDataItem>()
 
-        coinMarket.defiTvl?.let { defiValue ->
-            tvlInfoList.add(CoinDataItem(R.string.CoinPage_Tvl, formatFiatShortened(defiValue, currency.symbol), R.drawable.ic_chart_20))
+        coinMarket.defiTvlInfo?.let { defiTvlInfo ->
+            tvlInfoList.add(CoinDataItem(R.string.CoinPage_Tvl, formatFiatShortened(defiTvlInfo.tvl, currency.symbol), R.drawable.ic_chart_20))
+            tvlInfoList.add(CoinDataItem(R.string.CoinPage_TvlRank, "#${defiTvlInfo.tvlRank}"))
+            tvlInfoList.add(CoinDataItem(R.string.CoinPage_TvlMCapRatio, numberFormatter.format(defiTvlInfo.marketCapTvlRatio, 0, 2)))
         }
         return tvlInfoList
     }
