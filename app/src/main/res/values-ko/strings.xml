@@ -579,6 +579,9 @@
     <string name="ShowKey_Title">Key</string>
     <string name="ShowKey_Description">The recovery phrases that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken etc.\n\nMake sure that no one is watching your screen.</string>
     <string name="ShowKey_ButtonShow">Show</string>
+    <string name="ShowKey_ButtonClose">Close</string>
+    <string name="ShowKey_TabMnemonicPhrase">Recovery Phrases</string>
+    <string name="ShowKey_TabPrivateKey">Private Key</string>
     <!-- Backup Key -->
     <string name="BackupKey_Title">Backup</string>
     <string name="BackupKey_Description">The recovery phrases that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken etc.\n\nMake sure that no one is watching your screen.</string>
@@ -708,6 +711,8 @@
     <string name="CoinPage_ReadMore">Read More</string>
     <string name="CoinPage_ReadLess">Read Less</string>
     <string name="CoinPage_Tvl">Total Value Locked</string>
+    <string name="CoinPage_TvlRank">TVL Rank</string>
+    <string name="CoinPage_TvlMCapRatio">M.cap / TVL ratio</string>
     <string name="CoinPage_TvlDescription">Capital deposited into the platform in the form of loan collateral or liquidity pool.</string>
     <!--Rate list-->
     <string name="RateList_portfolio">포트폴리오</string>
