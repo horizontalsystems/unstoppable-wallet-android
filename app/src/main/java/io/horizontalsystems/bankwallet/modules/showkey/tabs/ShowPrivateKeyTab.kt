@@ -10,13 +10,13 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.showkey.ShowKeyModule
 import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.fragment_show_private_key.*
+import kotlinx.android.synthetic.main.fragment_show_private_key_tab.*
 import kotlinx.android.synthetic.main.view_holder_private_key.*
 
 class ShowPrivateKeyFragment : BaseFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_show_private_key, container, false)
+        return inflater.inflate(R.layout.fragment_show_private_key_tab, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
@@ -33,7 +32,7 @@ class ShowKeyIntroFragment : BaseFragment() {
         }
 
         viewModel.showKeyLiveEvent.observe(viewLifecycleOwner, {
-            findNavController().navigate(R.id.showKeyIntroFragment_to_showKeyMainFragment, bundleOf(ShowWordsFragment.WORDS to viewModel.words.toTypedArray()), navOptions())
+            findNavController().navigate(R.id.showKeyIntroFragment_to_showKeyMainFragment, null, navOptions())
         })
 
         viewModel.openUnlockLiveEvent.observe(viewLifecycleOwner, {

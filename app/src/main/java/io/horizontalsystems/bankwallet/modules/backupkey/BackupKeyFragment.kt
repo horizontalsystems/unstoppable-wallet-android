@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
@@ -33,7 +32,7 @@ class BackupKeyFragment : BaseFragment() {
         }
 
         viewModel.showKeyLiveEvent.observe(viewLifecycleOwner, {
-            findNavController().navigate(R.id.backupKeyFragment_to_showBackupWordsFragment, bundleOf(ShowBackupWordsFragment.WORDS to viewModel.words.toTypedArray()), navOptions())
+            findNavController().navigate(R.id.backupKeyFragment_to_showBackupWordsFragment, null, navOptions())
         })
 
         viewModel.openUnlockLiveEvent.observe(viewLifecycleOwner, {
