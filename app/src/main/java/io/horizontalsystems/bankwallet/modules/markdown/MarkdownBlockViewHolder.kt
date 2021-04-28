@@ -99,7 +99,7 @@ class ViewHolderImage(override val containerView: View) : MarkdownBlockViewHolde
     }
 }
 
-class ViewHolderParagraph(override val containerView: View, private val listener: MarkdownContentAdapter.Listener) : MarkdownBlockViewHolder(containerView), LayoutContainer {
+class ViewHolderParagraph(override val containerView: View, private val listener: MarkdownContentAdapter.Listener, private val handleRelativeUrl: Boolean) : MarkdownBlockViewHolder(containerView), LayoutContainer {
     private val blockQuoteVerticalPadding = LayoutHelper.dp(12f, containerView.context)
     private val listItemIndent = LayoutHelper.dp(24f, containerView.context)
 
@@ -109,8 +109,11 @@ class ViewHolderParagraph(override val containerView: View, private val listener
         val text = item.text
 
         val spans = text.getSpans<URLSpan>(0, text.length)
-        spans.forEach {
-            handleLinkToGuideInApp(text, it)
+
+        if (handleRelativeUrl) {
+            spans.forEach {
+                handleLinkToGuideInApp(text, it)
+            }
         }
 
         paragraph.text = text

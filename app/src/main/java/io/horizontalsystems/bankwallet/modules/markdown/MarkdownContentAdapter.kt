@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.ListAdapter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.views.inflate
 
-class MarkdownContentAdapter(private val listener: Listener) : ListAdapter<MarkdownBlock, MarkdownBlockViewHolder>(diffCallback) {
+class MarkdownContentAdapter(private val listener: Listener, private val handleRelativeUrl: Boolean) : ListAdapter<MarkdownBlock, MarkdownBlockViewHolder>(diffCallback) {
 
     interface Listener {
         fun onClick(url: String)
@@ -25,7 +25,7 @@ class MarkdownContentAdapter(private val listener: Listener) : ListAdapter<Markd
         R.layout.view_holder_markdown_h1 -> ViewHolderH1(inflate(parent, viewType))
         R.layout.view_holder_markdown_h2 -> ViewHolderH2(inflate(parent, viewType))
         R.layout.view_holder_markdown_h3 -> ViewHolderH3(inflate(parent, viewType))
-        R.layout.view_holder_markdown_paragraph -> ViewHolderParagraph(inflate(parent, viewType), listener)
+        R.layout.view_holder_markdown_paragraph -> ViewHolderParagraph(inflate(parent, viewType), listener, handleRelativeUrl)
         R.layout.view_holder_markdown_image -> ViewHolderImage(inflate(parent, viewType))
         R.layout.view_holder_markdown_footer -> ViewHolderFooter(inflate(parent, viewType))
         else -> throw Exception("Undefined viewType: $viewType")
