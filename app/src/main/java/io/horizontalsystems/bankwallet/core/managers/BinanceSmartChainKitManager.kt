@@ -52,7 +52,7 @@ class BinanceSmartChainKitManager(
     }
 
     private fun createKitInstance(accountType: AccountType.Mnemonic, account: Account): EthereumKit {
-        val syncSource = EthereumKit.defaultBscWebSocketSyncSource()
+        val syncSource = EthereumKit.defaultBscHttpSyncSource()
         val kit = EthereumKit.getInstance(App.instance, accountType.words, NetworkType.BscMainNet, syncSource, bscscanApiKey, account.id)
 
         kit.addDecorator(Erc20Kit.getDecorator())
