@@ -61,7 +61,7 @@
                 android:layout_height="48dp"
                 android:layout_marginTop="32dp"
                 app:icon="@drawable/ic_key_phrase_20"
-                app:title="@string/CreateWallet_Passphrase" />
+                app:title="@string/Passphrase" />
 
             <io.horizontalsystems.bankwallet.ui.extensions.InputView
                 android:id="@+id/passphrase"

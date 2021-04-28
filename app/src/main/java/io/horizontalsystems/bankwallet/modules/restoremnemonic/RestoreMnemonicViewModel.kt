@@ -19,7 +19,7 @@ class RestoreMnemonicViewModel(private val service: RestoreMnemonicService, priv
 
     val inputsVisibleLiveData = LiveDataReactiveStreams.fromPublisher(service.passphraseEnabledObservable.toFlowable(BackpressureStrategy.BUFFER))
     val passphraseCautionLiveData = MutableLiveData<Caution?>()
-    val clearInputsLiveData = SingleLiveEvent<Unit>()
+    val clearInputsLiveEvent = SingleLiveEvent<Unit>()
 
     val invalidRangesLiveData = MutableLiveData<List<IntRange>>()
     val proceedLiveEvent = SingleLiveEvent<AccountType>()
@@ -49,7 +49,7 @@ class RestoreMnemonicViewModel(private val service: RestoreMnemonicService, priv
     }
 
     private fun clearInputs() {
-        clearInputsLiveData.postValue(Unit)
+        clearInputsLiveEvent.postValue(Unit)
         clearCautions()
 
         service.passphrase = ""

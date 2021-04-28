@@ -64,7 +64,7 @@ class CreateAccountFragment : BaseFragment() {
             passphraseConfirm.setError(it)
         }
 
-        viewModel.clearInputsLiveData.observe(viewLifecycleOwner) {
+        viewModel.clearInputsLiveEvent.observe(viewLifecycleOwner) {
             passphrase.setText(null)
             passphraseConfirm.setText(null)
         }
