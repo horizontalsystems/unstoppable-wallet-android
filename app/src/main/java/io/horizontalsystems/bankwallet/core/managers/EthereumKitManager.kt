@@ -60,7 +60,7 @@ class EthereumKitManager(
         val networkType = if (testMode) NetworkType.EthRopsten else NetworkType.EthMainNet
         val syncSource = EthereumKit.infuraWebSocketSyncSource(networkType, infuraProjectId, infuraSecret)
                 ?: throw AdapterErrorWrongParameters("Couldn't get syncSource!")
-        val kit = EthereumKit.getInstance(App.instance, accountType.words, "", networkType, syncSource, etherscanApiKey, account.id)
+        val kit = EthereumKit.getInstance(App.instance, accountType.words, accountType.salt, networkType, syncSource, etherscanApiKey, account.id)
 
         kit.addDecorator(Erc20Kit.getDecorator())
         kit.addDecorator(UniswapKit.getDecorator())

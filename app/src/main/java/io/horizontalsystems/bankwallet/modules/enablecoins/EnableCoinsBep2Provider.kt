@@ -14,8 +14,8 @@ class EnableCoinsBep2Provider(appConfigProvider: IBuildConfigProvider) {
 
     private val binanceApi = BinanceChainApi(networkType)
 
-    fun getTokenSymbolsAsync(words: List<String>): Single<List<String>> {
-        val address = BinanceChainKit.wallet(words, networkType).address
+    fun getTokenSymbolsAsync(words: List<String>, salt: String): Single<List<String>> {
+        val address = BinanceChainKit.wallet(words, salt, networkType).address
 
         return binanceApi.getBalances(address)
                 .map { balances ->
