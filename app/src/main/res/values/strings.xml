@@ -865,6 +865,8 @@
     <string name="CoinPage_ReadMore">Read More</string>
     <string name="CoinPage_ReadLess">Read Less</string>
     <string name="CoinPage_Tvl">Total Value Locked</string>
+    <string name="CoinPage_TvlRank">TVL Rank</string>
+    <string name="CoinPage_TvlMCapRatio">M.cap / TVL ratio</string>
     <string name="CoinPage_TvlDescription">Capital deposited into the platform in the form of loan collateral or liquidity pool.</string>
 
     <!--Rate list-->
