@@ -15,17 +15,31 @@ class MnemonicPhraseView @JvmOverloads constructor(context: Context, attrs: Attr
     }
 
     fun populateWords(words: List<String>) {
+        val is12Words = words.count() == 12
+
         words.forEachIndexed { index, word ->
             val normalizedIndex = index + 1
             val wordView = BackupWordView(context).apply {
                 bind("$normalizedIndex.", word)
             }
-            when {
-                normalizedIndex <= 6 -> topLeft.addView(wordView)
-                normalizedIndex <= 12 -> topRight.addView(wordView)
-                normalizedIndex <= 18 -> bottomLeft.addView(wordView)
-                normalizedIndex <= 24 -> bottomRight.addView(wordView)
+            val viewGroup = if (is12Words) {
+                when {
+                    normalizedIndex <= 3 -> topLeft
+                    normalizedIndex <= 6 -> middleLeft
+                    normalizedIndex <= 9 -> topRight
+                    else -> middleRight
+                }
+            } else {
+                when {
+                    normalizedIndex <= 4 -> topLeft
+                    normalizedIndex <= 8 -> middleLeft
+                    normalizedIndex <= 12 -> bottomLeft
+                    normalizedIndex <= 16 -> topRight
+                    normalizedIndex <= 20 -> middleRight
+                    else -> bottomRight
+                }
             }
+            viewGroup.addView(wordView)
         }
     }
 
