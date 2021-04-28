@@ -123,28 +123,28 @@
         tools:layout="@layout/fragment_manage_account">
         <action
             android:id="@+id/manageAccountFragment_to_showKeyFragment"
-            app:destination="@id/showKeyFragment" />
+            app:destination="@id/showKeyIntroFragment" />
         <action
             android:id="@+id/manageAccountFragment_to_backupKeyFragment"
             app:destination="@id/backupKeyFragment" />
     </fragment>
 
     <fragment
-        android:id="@+id/showKeyFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.showkey.ShowKeyFragment"
-        tools:layout="@layout/fragment_show_key">
+        android:id="@+id/showKeyIntroFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.showkey.ShowKeyIntroFragment"
+        tools:layout="@layout/fragment_show_key_intro">
         <action
-            android:id="@+id/showKeyFragment_to_pinFragment"
+            android:id="@+id/showKeyIntroFragment_to_pinFragment"
             app:destination="@id/pinFragment" />
         <action
-            android:id="@+id/showKeyFragment_to_showWordsFragment"
-            app:destination="@id/showWordsFragment" />
+            android:id="@+id/showKeyIntroFragment_to_showKeyMainFragment"
+            app:destination="@id/showKeyMainFragment" />
     </fragment>
 
     <fragment
-        android:id="@+id/showWordsFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.showkey.ShowWordsFragment"
-        tools:layout="@layout/fragment_show_words" />
+        android:id="@+id/showKeyMainFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.showkey.ShowKeyMainFragment"
+        tools:layout="@layout/fragment_show_key_main" />
 
     <fragment
         android:id="@+id/backupKeyFragment"

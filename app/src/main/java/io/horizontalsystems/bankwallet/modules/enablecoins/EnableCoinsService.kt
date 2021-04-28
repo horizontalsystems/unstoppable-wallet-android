@@ -66,7 +66,7 @@ class EnableCoinsService(
     }
 
     private fun fetchBep20Tokens(words: List<String>) {
-        val address = EthereumKit.address(words, EthereumKit.NetworkType.BscMainNet)
+        val address = EthereumKit.address(words, "", EthereumKit.NetworkType.BscMainNet)
 
         bep20Provider.getTokenAddressesAsync(address.hex)
                 .subscribeIO({ coins ->
@@ -90,7 +90,7 @@ class EnableCoinsService(
 
     private fun fetchErc20Tokens(words: List<String>) {
         val networkType = if (testMode) EthereumKit.NetworkType.EthRopsten else EthereumKit.NetworkType.EthMainNet
-        val address = EthereumKit.address(words, networkType)
+        val address = EthereumKit.address(words, "", networkType)
 
         ethereumProvider.getTokenAddressesAsync(address.hex)
                 .subscribeIO({ tokenAddresses ->

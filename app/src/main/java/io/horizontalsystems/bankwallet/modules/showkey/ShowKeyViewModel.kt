@@ -12,8 +12,11 @@ class ShowKeyViewModel(
     val words: List<String>
         get() = service.words
 
-    val salt: String?
+    val salt: String
         get() = service.salt
+
+    val privateKeys: List<ShowKeyModule.PrivateKey>
+        get() = listOf(ShowKeyModule.PrivateKey("Ethereum / Binance Smart Chain", service.evmPrivateKey))
 
     fun onClickShow() {
         if (service.isPinSet) {
