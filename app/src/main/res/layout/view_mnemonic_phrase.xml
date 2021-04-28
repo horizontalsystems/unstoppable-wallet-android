@@ -33,6 +33,21 @@
             <TableRow android:layout_marginTop="35dp">
 
                 <LinearLayout
+                    android:id="@+id/middleLeft"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
+
+                <LinearLayout
+                    android:id="@+id/middleRight"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
+            </TableRow>
+
+            <TableRow android:layout_marginTop="35dp">
+
+                <LinearLayout
                     android:id="@+id/bottomLeft"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
