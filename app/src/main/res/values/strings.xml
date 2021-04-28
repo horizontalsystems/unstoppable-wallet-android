@@ -702,6 +702,8 @@
     <string name="ManageAccount_Delete_ConfirmationDisable">All coins that belong to this wallet will be disabled on balance tab.</string>
     <string name="ManageAccount_Delete_ConfirmationLose">If you didn\'t backup the private key for this wallet, you will lose access to the funds on the selected wallet.</string>
     <string name="ManageAccount_BirthdayHeight">%s Birthday Height</string>
+    <string name="ManageAccount_NWords">%s words</string>
+    <string name="ManageAccount_NWordsWithPassphrase">%s words with passphrase</string>
 
     <!-- Show Key -->
     <string name="ShowKey_Title">Key</string>
