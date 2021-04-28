@@ -102,6 +102,7 @@ class DashAdapter(
             if (accountType is AccountType.Mnemonic && accountType.words.size == 12) {
                 return DashKit(context = App.instance,
                         words = accountType.words,
+                        passphrase = accountType.salt,
                         walletId = account.id,
                         syncMode = getSyncMode(syncMode),
                         networkType = getNetworkType(testMode),
