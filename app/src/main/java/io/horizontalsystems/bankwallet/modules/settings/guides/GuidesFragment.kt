@@ -65,7 +65,8 @@ class GuidesFragment : BaseFragment(), GuidesAdapter.Listener, FilterAdapter.Lis
         })
 
         viewModel.filters.observe(viewLifecycleOwner, Observer {
-            filterAdapter.setFilters(it.map { FilterAdapter.FilterItem(it) })
+            val selectedFilterItem = viewModel.selectedFilter?.let{ selected -> FilterAdapter.FilterItem(selected) }
+            filterAdapter.setFilters(it.map { filter -> FilterAdapter.FilterItem(filter) }, selectedFilterItem)
         })
 
         viewModel.loading.observe(viewLifecycleOwner, Observer {
