@@ -12,6 +12,7 @@ class GuidesViewModel(val repository: GuidesRepository) : ViewModel() {
     val loading = MutableLiveData<Boolean>(false)
     val filters = MutableLiveData<List<String>>()
     val error = MutableLiveData<Throwable?>()
+    var selectedFilter: String? = null
 
     private var guideCategories: Array<GuideCategory> = arrayOf()
     private var currentCategoryIndex = 0
@@ -38,6 +39,7 @@ class GuidesViewModel(val repository: GuidesRepository) : ViewModel() {
             it.category == filterId
         }
 
+        selectedFilter = filterId
         syncViewItems()
     }
 
