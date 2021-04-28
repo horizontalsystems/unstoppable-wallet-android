@@ -5,7 +5,7 @@ import android.util.AttributeSet
 import androidx.core.widget.NestedScrollView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.views.BackupWordView
-import kotlinx.android.synthetic.main.fragment_show_words.view.*
+import kotlinx.android.synthetic.main.view_mnemonic_phrase.view.*
 
 class MnemonicPhraseView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
     : NestedScrollView(context, attrs, defStyleAttr) {

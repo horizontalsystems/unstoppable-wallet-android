@@ -20,7 +20,7 @@ class ShowKeyTabsAdapter(
 
     override fun createFragment(position: Int): Fragment {
         return when (showKeyTabs[position]) {
-            ShowKeyTab.MnemonicPhrase -> ShowWordsFragmentNew.getInstance(words, passphrase)
+            ShowKeyTab.MnemonicPhrase -> ShowWordsTab.getInstance(words, passphrase)
             ShowKeyTab.PrivateKey -> ShowPrivateKeyFragment.getInstance(privateKeys)
         }
     }

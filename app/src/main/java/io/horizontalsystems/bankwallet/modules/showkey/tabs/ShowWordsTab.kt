@@ -7,14 +7,14 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import kotlinx.android.synthetic.main.fragment_show_words_new.*
+import kotlinx.android.synthetic.main.fragment_show_words_tab.*
 
-open class ShowWordsFragmentNew : BaseFragment() {
+class ShowWordsTab : BaseFragment() {
     private val words: List<String>
         get() = requireArguments().getStringArrayList(WORDS) ?: listOf()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_show_words_new, container, false)
+        return inflater.inflate(R.layout.fragment_show_words_tab, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -27,8 +27,8 @@ open class ShowWordsFragmentNew : BaseFragment() {
         private const val WORDS = "words"
         private const val PASSPHRASE = "passphrase"
 
-        fun getInstance(words: List<String>, passphrase: String): ShowWordsFragmentNew {
-            val fragment = ShowWordsFragmentNew()
+        fun getInstance(words: List<String>, passphrase: String): ShowWordsTab {
+            val fragment = ShowWordsTab()
             val arguments = bundleOf(WORDS to ArrayList(words), PASSPHRASE to passphrase)
             fragment.arguments = arguments
             return fragment
