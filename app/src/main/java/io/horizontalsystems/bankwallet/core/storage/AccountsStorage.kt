@@ -39,7 +39,7 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
                 .mapNotNull { record ->
                     try {
                         val accountType = when (record.type) {
-                            MNEMONIC -> AccountType.Mnemonic(record.words!!.list, record.salt?.value ?: "")
+                            MNEMONIC -> AccountType.Mnemonic(record.words!!.list, record.passphrase?.value ?: "")
                             PRIVATE_KEY -> AccountType.PrivateKey(record.key!!.value.hexToByteArray())
                             else -> null
                         }
@@ -80,14 +80,14 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
 
     private fun getAccountRecord(account: Account): AccountRecord {
         var words: SecretList? = null
-        var salt: SecretString? = null
+        var passphrase: SecretString? = null
         var key: SecretString? = null
         val accountType: String
 
         when (account.type) {
             is AccountType.Mnemonic -> {
                 words = SecretList(account.type.words)
-                salt = SecretString(account.type.salt)
+                passphrase = SecretString(account.type.passphrase)
                 accountType = MNEMONIC
             }
             is AccountType.PrivateKey -> {
@@ -104,7 +104,7 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
                 origin = account.origin.value,
                 isBackedUp = account.isBackedUp,
                 words = words,
-                salt = salt,
+                passphrase = passphrase,
                 key = key
         )
     }

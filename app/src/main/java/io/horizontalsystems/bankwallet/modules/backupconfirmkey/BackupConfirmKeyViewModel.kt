@@ -23,7 +23,7 @@ class BackupConfirmKeyViewModel(
     val passphraseCautionLiveData = MutableLiveData<Caution?>(null)
     val clearInputsLiveEvent = SingleLiveEvent<Unit>()
 
-    val passpraseVisible get() = service.hasSalt()
+    val passpraseVisible get() = service.hasPassphrase()
 
     init {
         service.indexItemObservable
@@ -46,7 +46,7 @@ class BackupConfirmKeyViewModel(
 
         service.firstWord = ""
         service.secondWord = ""
-        service.passphrase = ""
+        service.passphraseConfirm = ""
     }
 
     private fun getErrorText(error: Throwable): String {
@@ -73,7 +73,7 @@ class BackupConfirmKeyViewModel(
     }
 
     fun onChangePassphrase(v: String) {
-        service.passphrase = v
+        service.passphraseConfirm = v
         passphraseCautionLiveData.postValue(null)
     }
 

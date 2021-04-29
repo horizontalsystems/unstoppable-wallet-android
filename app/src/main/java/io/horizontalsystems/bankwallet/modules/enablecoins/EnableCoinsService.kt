@@ -59,15 +59,15 @@ class EnableCoinsService(
     private fun resolveTokenType(coinType: CoinType, accountType: AccountType): TokenType? {
         return when {
             accountType !is AccountType.Mnemonic -> null
-            coinType is CoinType.Ethereum && accountType.words.size == 12 -> TokenType.Erc20(accountType.words, accountType.salt)
-            coinType is CoinType.BinanceSmartChain && accountType.words.size == 24 -> TokenType.Bep20(accountType.words, accountType.salt)
-            coinType is CoinType.Bep2 && coinType.symbol == "BNB" && accountType.words.size == 24 -> TokenType.Bep2(accountType.words, accountType.salt)
+            coinType is CoinType.Ethereum && accountType.words.size == 12 -> TokenType.Erc20(accountType.words, accountType.passphrase)
+            coinType is CoinType.BinanceSmartChain && accountType.words.size == 24 -> TokenType.Bep20(accountType.words, accountType.passphrase)
+            coinType is CoinType.Bep2 && coinType.symbol == "BNB" && accountType.words.size == 24 -> TokenType.Bep2(accountType.words, accountType.passphrase)
             else -> null
         }
     }
 
     private fun fetchBep20Tokens(bep20: TokenType.Bep20) {
-        val address = EthereumKit.address(bep20.words, bep20.salt, EthereumKit.NetworkType.BscMainNet)
+        val address = EthereumKit.address(bep20.words, bep20.passphrase, EthereumKit.NetworkType.BscMainNet)
 
         bep20Provider.getTokenAddressesAsync(address.hex)
                 .subscribeIO({ coins ->
@@ -91,7 +91,7 @@ class EnableCoinsService(
 
     private fun fetchErc20Tokens(erc20: TokenType.Erc20) {
         val networkType = if (testMode) EthereumKit.NetworkType.EthRopsten else EthereumKit.NetworkType.EthMainNet
-        val address = EthereumKit.address(erc20.words, erc20.salt, networkType)
+        val address = EthereumKit.address(erc20.words, erc20.passphrase, networkType)
 
         ethereumProvider.getTokenAddressesAsync(address.hex)
                 .subscribeIO({ tokenAddresses ->
@@ -114,7 +114,7 @@ class EnableCoinsService(
     }
 
     private fun fetchBep2Tokens(bep2: TokenType.Bep2) {
-        bep2Provider.getTokenSymbolsAsync(bep2.words, bep2.salt)
+        bep2Provider.getTokenSymbolsAsync(bep2.words, bep2.passphrase)
                 .subscribeIO({ coins ->
                     handleFetchBep2(coins)
                 }, {
@@ -147,9 +147,9 @@ class EnableCoinsService(
     }
 
     sealed class TokenType {
-        class Erc20(val words: List<String>, val salt: String) : TokenType()
-        class Bep2(val words: List<String>, val salt: String) : TokenType()
-        class Bep20(val words: List<String>, val salt: String) : TokenType()
+        class Erc20(val words: List<String>, val passphrase: String) : TokenType()
+        class Bep2(val words: List<String>, val passphrase: String) : TokenType()
+        class Bep20(val words: List<String>, val passphrase: String) : TokenType()
 
         val title: String
             get() = when (this) {

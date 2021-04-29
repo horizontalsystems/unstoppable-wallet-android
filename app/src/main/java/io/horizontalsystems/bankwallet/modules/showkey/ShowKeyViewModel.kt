@@ -13,7 +13,7 @@ class ShowKeyViewModel(
         get() = service.words
 
     val passphrase: String
-        get() = service.salt
+        get() = service.passphrase
 
     val privateKeys: List<ShowKeyModule.PrivateKey>
         get() = listOf(ShowKeyModule.PrivateKey("Ethereum / Binance Smart Chain", service.evmPrivateKey))

@@ -46,7 +46,7 @@ class ManageAccountsViewModel(
             is AccountType.Mnemonic -> {
                 val count = accountType.words.size
 
-                if (accountType.salt.isNotBlank()) {
+                if (accountType.passphrase.isNotBlank()) {
                     Translator.getString(R.string.ManageAccount_NWordsWithPassphrase, count)
                 } else {
                     Translator.getString(R.string.ManageAccount_NWords, count)

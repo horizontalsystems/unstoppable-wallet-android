@@ -10,7 +10,7 @@ object Migration_31_32 : Migration(31, 32) {
         createTableRestoreSettings(database)
 
         handleZcashAccount(database)
-        removeBirthdayHeightFromAccountRecord(database)
+        updateAccountRecordTable(database)
         moveCoinSettingsFromBlockchainSettingsToWallet(database)
         setActiveAccount(database)
         setAccountUserFriendlyName(database)
@@ -31,10 +31,10 @@ object Migration_31_32 : Migration(31, 32) {
         database.execSQL("UPDATE `AccountRecord` SET `type` = 'mnemonic' WHERE `type` = 'zcash'")
     }
 
-    private fun removeBirthdayHeightFromAccountRecord(database: SupportSQLiteDatabase) {
+    private fun updateAccountRecordTable(database: SupportSQLiteDatabase) {
         database.execSQL("ALTER TABLE AccountRecord RENAME TO TempAccountRecord")
-        database.execSQL("CREATE TABLE IF NOT EXISTS `AccountRecord` (`deleted` INTEGER NOT NULL, `id` TEXT NOT NULL, `name` TEXT NOT NULL, `type` TEXT NOT NULL, `origin` TEXT NOT NULL, `isBackedUp` INTEGER NOT NULL, `words` TEXT, `salt` TEXT, `key` TEXT, PRIMARY KEY(`id`))")
-        database.execSQL("INSERT INTO AccountRecord (`deleted`, `id`, `name`, `type`, `origin`, `isBackedUp`, `words`, `salt`, `key`) SELECT `deleted`, `id`, `name`, `type`, `origin`, `isBackedUp`, `words`, `salt`, `key` FROM TempAccountRecord")
+        database.execSQL("CREATE TABLE IF NOT EXISTS `AccountRecord` (`deleted` INTEGER NOT NULL, `id` TEXT NOT NULL, `name` TEXT NOT NULL, `type` TEXT NOT NULL, `origin` TEXT NOT NULL, `isBackedUp` INTEGER NOT NULL, `words` TEXT, `passphrase` TEXT, `key` TEXT, PRIMARY KEY(`id`))")
+        database.execSQL("INSERT INTO AccountRecord (`deleted`, `id`, `name`, `type`, `origin`, `isBackedUp`, `words`, `passphrase`, `key`) SELECT `deleted`, `id`, `name`, `type`, `origin`, `isBackedUp`, `words`, `salt`, `key` FROM TempAccountRecord")
         database.execSQL("DROP TABLE TempAccountRecord")
     }
 
