@@ -71,16 +71,16 @@ class BackupConfirmKeyFragment : BaseFragment() {
             passphrase.setText(null)
         }
 
-        wordOne.onTextChange {
-            viewModel.onChangeFirstWord(it ?: "")
+        wordOne.onTextChange { _, text ->
+            viewModel.onChangeFirstWord(text ?: "")
         }
 
-        wordTwo.onTextChange {
-            viewModel.onChangeSecondWord(it ?: "")
+        wordTwo.onTextChange { _, text ->
+            viewModel.onChangeSecondWord(text ?: "")
         }
 
-        passphrase.onTextChange {
-            viewModel.onChangePassphrase(it ?: "")
+        passphrase.onTextChange { _, text ->
+            viewModel.onChangePassphrase(text ?: "")
         }
 
         KeyboardHelper.showKeyboardDelayed(requireActivity(), wordOne, 200)

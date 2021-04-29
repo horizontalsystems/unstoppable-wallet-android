@@ -81,6 +81,9 @@ class CreateAccountViewModel(private val service: CreateAccountService, private 
     }
 
     fun onClickCreate() {
+        passphraseCautionLiveData.postValue(null)
+        passphraseConfirmationCautionLiveData.postValue(null)
+
         try {
             service.createAccount()
             finishLiveEvent.postValue(Unit)
@@ -92,4 +95,21 @@ class CreateAccountViewModel(private val service: CreateAccountService, private 
             showErrorLiveEvent.postValue(t.localizedMessage ?: t.javaClass.simpleName)
         }
     }
+
+    fun validatePassphrase(text: String?): Boolean {
+        return validatePassphraseAndNotify(text, passphraseCautionLiveData)
+    }
+
+    fun validatePassphraseConfirmation(text: String?): Boolean {
+        return validatePassphraseAndNotify(text, passphraseConfirmationCautionLiveData)
+    }
+
+    private fun validatePassphraseAndNotify(text: String?, cautionLiveData: MutableLiveData<Caution?>): Boolean {
+        val valid = service.validatePassphrase(text)
+        if (!valid) {
+            cautionLiveData.postValue(Caution(Translator.getString(R.string.CreateWallet_Error_PassphraseForbiddenSymbols), Caution.Type.Error))
+        }
+        return valid
+    }
+
 }
