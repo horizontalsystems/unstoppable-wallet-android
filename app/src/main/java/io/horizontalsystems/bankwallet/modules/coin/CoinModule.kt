@@ -35,6 +35,7 @@ data class MarketTickerViewItem(
         val subtitle: String,
         val value: String,
         val subvalue: String,
+        val imageUrl: String?,
 ) {
     fun areItemsTheSame(other: MarketTickerViewItem): Boolean {
         return title == other.title && subtitle == other.subvalue
