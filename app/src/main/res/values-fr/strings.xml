@@ -550,14 +550,6 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <!-- Bitcoin Hodling -->
     <string name="BitcoinHodling_Title">TimeLock</string>
     <string name="BitcoinHodling_Description">Permet d\'envoyer des Bitcoins qui ne peuvent pas être dépensées avant la date spécifiée.\n\nLe destinataire d\'une telle transaction devrait utiliser un portefeuille Unstoppable.\n\nSeul un portefeuille Unstoppable peut identifier correctement de telles transactions sur le réseau Bitcoin ainsi que permettre au destinataire de dépenser ces Bitcoins après l\'expiration de la période de verrouillage.\n\nSi vous êtes un HODLer, vous pouvez utiliser cette fonction pour vous obliger à garder vos Bitcoins en vous envoyant une telle transaction à vous-même.\n\nPuisqu\'il s\'agit d\'une fonctionnalité expérimentale, le montant maximum par transaction est limité à 0,5 BTC.</string>
-    <!--Manage Keys-->
-    <string name="ManageKeys_Title">Portefeuilles</string>
-    <string name="ManageKeys_AddressFormat">Format de l\'adresse</string>
-    <string name="ManageKeys_Create">Créer</string>
-    <string name="ManageKeys_Restore">Restaurer</string>
-    <string name="ManageKeys_Backup">Sauvegarde</string>
-    <string name="ManageKeys_Show">Afficher</string>
-    <string name="ManageKeys_Unlink">Supprimer</string>
     <!--Manage Accounts-->
     <string name="ManageAccounts_Title">Manage Wallets</string>
     <string name="ManageAccounts_CreateNewWallet">Create New Wallet</string>
@@ -565,8 +557,8 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <!--Manage Account-->
     <string name="ManageAccount_Name">Name</string>
     <string name="ManageAccount_Save">Save</string>
-    <string name="ManageAccount_RecoveryPhraseBackup">Backup</string>
-    <string name="ManageAccount_RecoveryPhraseShow">Show Key</string>
+    <string name="ManageAccount_RecoveryPhraseBackup">Backup Phrases</string>
+    <string name="ManageAccount_RecoveryPhraseShow">Show Phrases</string>
     <string name="ManageAccount_Unlink">Unlink</string>
     <string name="ManageAccount_BackupRequired_Title">Backup Required</string>
     <string name="ManageAccount_BackupRequired_Description">You need to backup the private key for this wallet before it can be deleted from this phone.</string>
