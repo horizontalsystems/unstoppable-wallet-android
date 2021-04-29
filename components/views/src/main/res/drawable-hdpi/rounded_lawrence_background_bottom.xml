@@ -3,13 +3,13 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_pressed="true">
         <shape android:shape="rectangle">
-            <corners android:bottomLeftRadius="16dp" android:bottomRightRadius="16dp" />
+            <corners android:bottomLeftRadius="12dp" android:bottomRightRadius="12dp" />
             <solid android:color="@color/lawrence_pressed" />
         </shape>
     </item>
     <item>
         <shape android:shape="rectangle">
-            <corners android:bottomLeftRadius="16dp" android:bottomRightRadius="16dp" />
+            <corners android:bottomLeftRadius="12dp" android:bottomRightRadius="12dp" />
             <solid android:color="@color/lawrence" />
         </shape>
     </item>
