@@ -152,6 +152,11 @@ class MarketAdvancedSearchViewModel(
         liquidityViewItem = ViewItemWrapper.getAny()
         periodViewItem = ViewItemWrapper(Translator.getString(TimePeriod.TimePeriod_1D.titleResId), TimePeriod.TimePeriod_1D, R.color.leah)
         priceChangeViewItem = ViewItemWrapper.getAny()
+        outperformedBtcOn = false
+        outperformedEthOn = false
+        outperformedBnbOn = false
+        priceCloseToAth = false
+        priceCloseToAtl = false
     }
 
     override fun onCleared() {
