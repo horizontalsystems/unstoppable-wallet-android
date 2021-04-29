@@ -35,7 +35,7 @@ class PrivacySettingsPresenter(
 
     private val communicationSettingsViewItems: List<PrivacySettingsViewItem> = listOf(
             PrivacySettingsViewItem("Ethereum", interactor.ether, CommunicationModeSettingType(CommunicationMode.Infura), enabled = ethereumCommunicationModeCanBeChanged(), listPosition = ListPosition.First),
-            PrivacySettingsViewItem("Smart Chain", interactor.binanceSmartChain, CommunicationModeSettingType(CommunicationMode.Nariox), enabled = false, listPosition = ListPosition.Middle),
+            PrivacySettingsViewItem("BSC", interactor.binanceSmartChain, CommunicationModeSettingType(CommunicationMode.Nariox), enabled = false, listPosition = ListPosition.Middle),
             PrivacySettingsViewItem("Binance", interactor.binance, CommunicationModeSettingType(CommunicationMode.BinanceDex), enabled = false, listPosition = ListPosition.Last)
     )
 
