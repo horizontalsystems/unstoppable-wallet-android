@@ -549,14 +549,6 @@
     <!-- Bitcoin Hodling -->
     <string name="BitcoinHodling_Title">TimeLock</string>
     <string name="BitcoinHodling_Description">Damit können Sie gesendete Bitcoins sperren, sodass sie bis zu dem festgesetzten Datum nicht ausgegeben werden können.\n\nDer Empfänger einer solchen Transaktion sollte das Unstoppable-Wallet in der Version 0.10 (oder neuer) sowie das Bitcoin-Adressformat BIP44 verwenden.\n\nNur das Unstoppable-Wallet erkennt solche Transaktionen im Bitcoin-Netzwerk korrekt und ermöglicht es dem Empfänger, die Bitcoins nach der Sperrzeit zu auszugeben.\n\nWenn Sie ein HODLer* sind, können Sie diese Funktion auch für sich selbst nutzen, indem Sie sich selbst eine solche Transaktion schicken und so ihre Bitcoin für sich selbst zeitlich sperren.\n\nDa es sich noch um eine experimentelle Funktion handelt, liegt der maximale Betrag bei 0,5 BTC.</string>
-    <!--Manage Keys-->
-    <string name="ManageKeys_Title">Wallets verwalten</string>
-    <string name="ManageKeys_AddressFormat">Adressformat</string>
-    <string name="ManageKeys_Create">Erstellen</string>
-    <string name="ManageKeys_Restore">Wiederherstellen</string>
-    <string name="ManageKeys_Backup">Sicherung</string>
-    <string name="ManageKeys_Show">Anzeigen</string>
-    <string name="ManageKeys_Unlink">Löschen</string>
     <!--Manage Accounts-->
     <string name="ManageAccounts_Title">Manage Wallets</string>
     <string name="ManageAccounts_CreateNewWallet">Create New Wallet</string>
@@ -564,8 +556,8 @@
     <!--Manage Account-->
     <string name="ManageAccount_Name">Name</string>
     <string name="ManageAccount_Save">Save</string>
-    <string name="ManageAccount_RecoveryPhraseBackup">Backup</string>
-    <string name="ManageAccount_RecoveryPhraseShow">Show Key</string>
+    <string name="ManageAccount_RecoveryPhraseBackup">Backup Phrases</string>
+    <string name="ManageAccount_RecoveryPhraseShow">Show Phrases</string>
     <string name="ManageAccount_Unlink">Unlink</string>
     <string name="ManageAccount_BackupRequired_Title">Backup Required</string>
     <string name="ManageAccount_BackupRequired_Description">You need to backup the private key for this wallet before it can be deleted from this phone.</string>
