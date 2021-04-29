@@ -549,14 +549,6 @@
     <!-- Bitcoin Hodling -->
     <string name="BitcoinHodling_Title">TimeLock</string>
     <string name="BitcoinHodling_Description">Belirtilen tarihe kadar harcanmamış Bitcoin\'leri göndermenize olanak verir.\n\nBu tür bir işlemin alıcısı Unstoppable cüzdan kullanmalıdır.\n\nSadece Unstoppable cüzdan, Bitcoin ağındaki bu tür işlemleri doğru bir şekilde tanımlayabilir ve kilitleme süresi dolduktan sonra da alıcının bu Bitcoin\'leri harcamasını sağlayabilir.\n\nEğer bir HODLer iseniz, kendinize böyle bir işlem göndererek, bu özelliği Bitcoin\'lerinizi zarar etmeden uzun süre elinizde tutmaya zorlamak için kullanabilirsiniz.\n\nDeneysel bir özellik olduğundan, işlem başına maksimum tutar 0.5 BTC ile sınırlandırılmıştır.</string>
-    <!--Manage Keys-->
-    <string name="ManageKeys_Title">Cüzdanları yönet</string>
-    <string name="ManageKeys_AddressFormat">Adres Formatı</string>
-    <string name="ManageKeys_Create">Oluştur</string>
-    <string name="ManageKeys_Restore">Geri Yükle</string>
-    <string name="ManageKeys_Backup">Yedekle</string>
-    <string name="ManageKeys_Show">Göster</string>
-    <string name="ManageKeys_Unlink">Sil</string>
     <!--Manage Accounts-->
     <string name="ManageAccounts_Title">Manage Wallets</string>
     <string name="ManageAccounts_CreateNewWallet">Create New Wallet</string>
@@ -564,8 +556,8 @@
     <!--Manage Account-->
     <string name="ManageAccount_Name">Name</string>
     <string name="ManageAccount_Save">Save</string>
-    <string name="ManageAccount_RecoveryPhraseBackup">Backup</string>
-    <string name="ManageAccount_RecoveryPhraseShow">Show Key</string>
+    <string name="ManageAccount_RecoveryPhraseBackup">Backup Phrases</string>
+    <string name="ManageAccount_RecoveryPhraseShow">Show Phrases</string>
     <string name="ManageAccount_Unlink">Unlink</string>
     <string name="ManageAccount_BackupRequired_Title">Backup Required</string>
     <string name="ManageAccount_BackupRequired_Description">You need to backup the private key for this wallet before it can be deleted from this phone.</string>
