@@ -550,14 +550,6 @@ poner en peligro la seguridad de mis fondos.</string>
     <!-- Bitcoin Hodling -->
     <string name="BitcoinHodling_Title">TimeLock</string>
     <string name="BitcoinHodling_Description">Permite enviar bitcoins que no se pueden gastar hasta la fecha especificada.\n\nEl receptor de dicha transacción debe utilizar la versión 0.10 de la aplicación de cartera Unstoppable o más reciente con el formato de dirección BIP44 para el Bitcoin.\n\nSolo un monedero Unstoppable puede identificar correctamente dichas transacciones en la red de Bitcoin, así como habilitar el receptor para gastar esos Bitcoins después de que el período de bloqueo caduque.\n\nSi eres un HODLer, puedes usar esta función para obligarte a retener tus Bitcoins enviándote a ti mismo la transacción.\n\nSiendo una característica experimental, el monto máximo por transacción está limitado a 0.5 BTC.</string>
-    <!--Manage Keys-->
-    <string name="ManageKeys_Title">Gestionar Monederos</string>
-    <string name="ManageKeys_AddressFormat">Formato de dirección</string>
-    <string name="ManageKeys_Create">Crear</string>
-    <string name="ManageKeys_Restore">Restaurar</string>
-    <string name="ManageKeys_Backup">Copia de seguridad</string>
-    <string name="ManageKeys_Show">Mostrar</string>
-    <string name="ManageKeys_Unlink">Eliminar</string>
     <!--Manage Accounts-->
     <string name="ManageAccounts_Title">Manage Wallets</string>
     <string name="ManageAccounts_CreateNewWallet">Create New Wallet</string>
@@ -565,8 +557,8 @@ poner en peligro la seguridad de mis fondos.</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">Name</string>
     <string name="ManageAccount_Save">Save</string>
-    <string name="ManageAccount_RecoveryPhraseBackup">Backup</string>
-    <string name="ManageAccount_RecoveryPhraseShow">Show Key</string>
+    <string name="ManageAccount_RecoveryPhraseBackup">Backup Phrases</string>
+    <string name="ManageAccount_RecoveryPhraseShow">Show Phrases</string>
     <string name="ManageAccount_Unlink">Unlink</string>
     <string name="ManageAccount_BackupRequired_Title">Backup Required</string>
     <string name="ManageAccount_BackupRequired_Description">You need to backup the private key for this wallet before it can be deleted from this phone.</string>
