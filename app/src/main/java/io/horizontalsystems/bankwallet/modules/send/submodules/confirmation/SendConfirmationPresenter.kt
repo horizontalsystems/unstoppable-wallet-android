@@ -31,15 +31,15 @@ class SendConfirmationPresenter(
             when (item) {
                 is SendConfirmationAmountViewItem -> {
                     primaryName = item.primaryInfo.getAmountName()
-                    primaryAmount = item.primaryInfo.getFormatted()
+                    primaryAmount = item.primaryInfo.getFormattedPlain()
                     secondaryName = item.secondaryInfo?.getAmountName()
-                    secondaryAmount = item.secondaryInfo?.getFormatted()
+                    secondaryAmount = item.secondaryInfo?.getFormattedPlain()
                     domain = item.receiver.domain
                     receiver = item.receiver.hex
                 }
                 is SendConfirmationFeeViewItem -> {
-                    primaryFeeAmount = item.primaryInfo.getFormatted()
-                    secondaryFeeAmount = item.secondaryInfo?.getFormatted()
+                    primaryFeeAmount = item.primaryInfo.getFormattedPlain()
+                    secondaryFeeAmount = item.secondaryInfo?.getFormattedPlain()
                 }
                 is SendConfirmationMemoViewItem -> {
                     memo = item.memo
