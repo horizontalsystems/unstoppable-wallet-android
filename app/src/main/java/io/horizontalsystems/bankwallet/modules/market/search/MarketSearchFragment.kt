@@ -14,9 +14,10 @@ import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
-import io.horizontalsystems.bankwallet.modules.market.favorites.EmptyListAdapter
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
+import io.horizontalsystems.bankwallet.modules.market.favorites.EmptyListAdapter
 import io.horizontalsystems.core.findNavController
+import io.horizontalsystems.core.helpers.KeyboardHelper
 import io.horizontalsystems.views.inflate
 import kotlinx.android.synthetic.main.fragment_market_search.*
 
@@ -66,6 +67,8 @@ class MarketSearchFragment : BaseFragment() {
         marketSearchViewModel.advancedSearchButtonVisibleLiveDataViewItem.observe(viewLifecycleOwner) {
             advancedSearch.isVisible = it
         }
+
+        KeyboardHelper.showKeyboardDelayed(requireActivity(), searchView, 200)
     }
 
     fun onItemClick(coinDataViewItem: CoinDataViewItem) {
