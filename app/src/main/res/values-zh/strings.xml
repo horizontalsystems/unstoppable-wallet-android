@@ -549,14 +549,6 @@
     <!-- Bitcoin Hodling -->
     <string name="BitcoinHodling_Title">时间锁定</string>
     <string name="BitcoinHodling_Description">让您汇出在指定日期前无法消费的比特币。\n\n 此交易的收款人应使用Unstoppable钱包。\n\n只有Unstoppable钱包能够正确识别此类在比特币网络上的交易并让收款人在锁定期限结束后消费那些比特币。\n\n如果您是持有人，您可以使用此功能通过向自己发送此类交易的方式来强制自己持有比特币。\n\n作为实验性功能，每次交易的最大金额限制为0.5 BTC。</string>
-    <!--Manage Keys-->
-    <string name="ManageKeys_Title">管理钱包</string>
-    <string name="ManageKeys_AddressFormat">地址格式</string>
-    <string name="ManageKeys_Create">创建</string>
-    <string name="ManageKeys_Restore">恢复</string>
-    <string name="ManageKeys_Backup">备份</string>
-    <string name="ManageKeys_Show">显示</string>
-    <string name="ManageKeys_Unlink">删除</string>
     <!--Manage Accounts-->
     <string name="ManageAccounts_Title">Manage Wallets</string>
     <string name="ManageAccounts_CreateNewWallet">Create New Wallet</string>
@@ -564,8 +556,8 @@
     <!--Manage Account-->
     <string name="ManageAccount_Name">Name</string>
     <string name="ManageAccount_Save">Save</string>
-    <string name="ManageAccount_RecoveryPhraseBackup">Backup</string>
-    <string name="ManageAccount_RecoveryPhraseShow">Show Key</string>
+    <string name="ManageAccount_RecoveryPhraseBackup">Backup Phrases</string>
+    <string name="ManageAccount_RecoveryPhraseShow">Show Phrases</string>
     <string name="ManageAccount_Unlink">Unlink</string>
     <string name="ManageAccount_BackupRequired_Title">Backup Required</string>
     <string name="ManageAccount_BackupRequired_Description">You need to backup the private key for this wallet before it can be deleted from this phone.</string>
