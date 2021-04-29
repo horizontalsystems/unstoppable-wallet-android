@@ -12,6 +12,7 @@ import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.chartview.models.ChartPoint
 import io.horizontalsystems.chartview.models.MacdInfo
 import io.horizontalsystems.core.entities.Currency
+import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.views.ListPosition
 import io.horizontalsystems.xrateskit.entities.*
 import java.lang.Long.max
@@ -122,6 +123,10 @@ class CoinViewFactory(private val currency: Currency, private val numberFormatte
             val rate = coinMarket.marketCap.divide(coinMarket.circulatingSupply, SCALE_UP_TO_BILLIONTH, RoundingMode.HALF_EVEN)
             val dilutedMarketCap = coinMarket.totalSupply.multiply(rate)
             marketData.add(CoinDataItem(R.string.CoinPage_DilutedMarketCap, formatFiatShortened(dilutedMarketCap, currency.symbol)))
+        }
+        coinMarket.meta.launchDate?.let { date ->
+            val formattedDate = DateHelper.formatDate(date, "MMM d, yyyy")
+            marketData.add(CoinDataItem(R.string.CoinPage_LaunchDate, formattedDate))
         }
         return marketData
     }
