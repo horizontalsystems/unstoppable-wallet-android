@@ -45,7 +45,13 @@
     <!--Create Wallet-->
     <string name="CreateWallet_Title">New Wallet</string>
     <string name="CreateWallet_Mnemonic">Mnemonic</string>
+    <string name="Passphrase">Passphrase</string>
     <string name="CreateWallet_N_Words">%s words</string>
+    <string name="CreateWallet_PassphraseConfirm">Confirm</string>
+    <string name="CreateWallet_Error_EmptyPassphrase">Passphrase cannot be empty</string>
+    <string name="CreateWallet_Error_InvalidConfirmation">Passphrase confirmation does not match</string>
+    <string name="EnterPassphrase">Enter Passphrase</string>
+    <string name="PassphraseDescription">Passphrases add additional security layer to the wallets enabling users to create multiple independent multi-coin wallets using a single mnemonic recovery phrase (secret 12 words) but associated with different passwords. \n\nTo restore these wallets a user will require mnemonic recovery phrase as well as a password for each to be restored wallet.</string>
     <!--Rate App-->
     <string name="RateApp_Title_Rate_This_App">به این برنامه امتیاز دهید</string>
     <string name="RateApp_Description_Rate_This_App">از کیف پول غیر قابل توقف لذت می برید؟ لطفاً برای امتیاز دادن به این این برنامه یک لحظه وقت بگذارید</string>
@@ -59,6 +65,7 @@
     <string name="Restore_ValidationFailed">کلید نادرست</string>
     <string name="Restore_InvalidWordCount">تعداد کلمات نامعتبر: %2$d  مورد نیاز است%1$d</string>
     <string name="Restore_Error_MnemonicWordCount">Wrong words count. Must be 12 or 24. You entered: %d</string>
+    <string name="Restore_Error_EmptyPassphrase">Passphrase cannot be empty</string>
     <string name="Restore_InvalidChecksum">Checksum نامعتبر است</string>
     <string name="Select_Coins">کیف پول جدید</string>
     <string name="Restore_ZCash_BirthdayHeight">Zcash Birthday Height</string>
@@ -566,10 +573,13 @@
     <string name="ManageAccount_Delete_ConfirmationDisable">All coins that belong to this wallet will be disabled on balance tab.</string>
     <string name="ManageAccount_Delete_ConfirmationLose">If you didn\'t backup the private key for this wallet, you will lose access to the funds on the selected wallet.</string>
     <string name="ManageAccount_BirthdayHeight">%s Birthday Height</string>
+    <string name="ManageAccount_NWords">%s words</string>
+    <string name="ManageAccount_NWordsWithPassphrase">%s words with passphrase</string>
     <!-- Show Key -->
     <string name="ShowKey_Title">Key</string>
     <string name="ShowKey_Description">The recovery phrases that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken etc.\n\nMake sure that no one is watching your screen.</string>
     <string name="ShowKey_ButtonShow">Show</string>
+    <string name="ShowKey_Passphrase">Passphrase</string>
     <string name="ShowKey_ButtonClose">Close</string>
     <string name="ShowKey_TabMnemonicPhrase">Recovery Phrases</string>
     <string name="ShowKey_TabPrivateKey">Private Key</string>
@@ -580,6 +590,10 @@
     <string name="BackupKey_ButtonBackup">Backup</string>
     <string name="BackupConfirmKey_Description">Enter the recovery phrases in correct order to confirm</string>
     <string name="BackupConfirmKey_EmptyOrInvalidWords">Entered words are empty or invalid</string>
+    <string name="BackupConfirmKey_Error_EmptyWord">Empty word</string>
+    <string name="BackupConfirmKey_Error_InvalidWord">Invalid word</string>
+    <string name="BackupConfirmKey_Error_EmptyPassphrase">Empty passphrase</string>
+    <string name="BackupConfirmKey_Error_InvalidPassphrase">Invalid passphrase</string>
     <!--Manage Keys Delete Alert-->
     <string name="ManageKeys_Delete_Title">پاک کردن کیف پول</string>
     <string name="ManageKeys_Delete_ConfirmationRemove">این عمل کیف پول %s را از این دستگاه پاک خواهد کرد.</string>
