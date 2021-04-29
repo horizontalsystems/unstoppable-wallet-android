@@ -154,13 +154,14 @@ class CoinViewFactory(private val currency: Currency, private val numberFormatte
     }
 
     fun createCoinMarketItems(tickers: List<MarketTicker>): List<MarketTickerViewItem> {
-        return tickers.map {
-            val (shortenValue, suffix) = numberFormatter.shortenValue(it.volume)
+        return tickers.map { ticker ->
+            val (shortenValue, suffix) = numberFormatter.shortenValue(ticker.volume)
             MarketTickerViewItem(
-                    it.marketName,
-                    "${it.base}/${it.target}",
-                    numberFormatter.formatCoin(it.rate, it.target, 0, 8),
-                    "$shortenValue $suffix ${it.base}"
+                    ticker.marketName,
+                    "${ticker.base}/${ticker.target}",
+                    numberFormatter.formatCoin(ticker.rate, ticker.target, 0, 8),
+                    "$shortenValue $suffix ${ticker.base}",
+                    ticker.imageUrl
             )
         }
     }

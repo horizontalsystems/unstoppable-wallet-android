@@ -38,6 +38,8 @@ class CoinMarketItemAdapter : ListAdapter<MarketTickerViewItem, ViewHolderMarket
 class ViewHolderMarketTicker(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
     fun bind(item: MarketTickerViewItem) {
+        icon.loadImage(item.imageUrl)
+
         title.text = item.title
 
         subtitle.text = item.subtitle
