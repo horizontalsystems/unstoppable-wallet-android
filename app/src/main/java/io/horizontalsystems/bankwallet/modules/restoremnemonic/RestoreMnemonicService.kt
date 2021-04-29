@@ -1,11 +1,15 @@
 package io.horizontalsystems.bankwallet.modules.restoremnemonic
 
 import io.horizontalsystems.bankwallet.core.Clearable
+import io.horizontalsystems.bankwallet.core.managers.PassphraseValidator
 import io.horizontalsystems.bankwallet.core.managers.WordsManager
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.reactivex.subjects.BehaviorSubject
 
-class RestoreMnemonicService(private val wordsManager: WordsManager) : Clearable {
+class RestoreMnemonicService(
+        private val wordsManager: WordsManager,
+        private val passphraseValidator: PassphraseValidator
+) : Clearable {
 
     var passphraseEnabled: Boolean = false
         set(value) {
@@ -38,6 +42,10 @@ class RestoreMnemonicService(private val wordsManager: WordsManager) : Clearable
         wordsManager.validateChecksum(words)
 
         return AccountType.Mnemonic(words, passphrase)
+    }
+
+    fun validatePassphrase(text: String?): Boolean {
+        return passphraseValidator.validate(text)
     }
 
     sealed class ValidationError : Throwable() {

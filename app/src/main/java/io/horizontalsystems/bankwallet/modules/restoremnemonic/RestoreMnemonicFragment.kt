@@ -24,7 +24,12 @@ import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.core.helpers.KeyboardHelper
 import io.horizontalsystems.hdwalletkit.Mnemonic
+import kotlinx.android.synthetic.main.fragment_create_account.*
 import kotlinx.android.synthetic.main.fragment_restore_mnemonic.*
+import kotlinx.android.synthetic.main.fragment_restore_mnemonic.passphrase
+import kotlinx.android.synthetic.main.fragment_restore_mnemonic.passphraseDescription
+import kotlinx.android.synthetic.main.fragment_restore_mnemonic.passphraseToggle
+import kotlinx.android.synthetic.main.fragment_restore_mnemonic.toolbar
 import kotlinx.android.synthetic.main.view_input_address.view.*
 
 class RestoreMnemonicFragment : BaseFragment() {
@@ -139,8 +144,12 @@ class RestoreMnemonicFragment : BaseFragment() {
             viewModel.onTogglePassphrase(it)
         }
 
-        passphrase.onTextChange {
-            viewModel.onChangePassphrase(it ?: "")
+        passphrase.onTextChange { old, new ->
+            if (viewModel.validatePassphrase(new)) {
+                viewModel.onChangePassphrase(new ?: "")
+            } else {
+                passphrase.revertText(old)
+            }
         }
     }
 

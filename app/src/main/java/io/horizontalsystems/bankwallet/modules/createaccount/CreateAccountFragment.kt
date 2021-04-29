@@ -87,12 +87,20 @@ class CreateAccountFragment : BaseFragment() {
             viewModel.onTogglePassphrase(it)
         }
 
-        passphrase.onTextChange {
-            viewModel.onChangePassphrase(it ?: "")
+        passphrase.onTextChange { old, new ->
+            if (viewModel.validatePassphrase(new)) {
+                viewModel.onChangePassphrase(new ?: "")
+            } else {
+                passphrase.revertText(old)
+            }
         }
 
-        passphraseConfirm.onTextChange {
-            viewModel.onChangePassphraseConfirmation(it ?: "")
+        passphraseConfirm.onTextChange { old, new ->
+            if (viewModel.validatePassphraseConfirmation(new)) {
+                viewModel.onChangePassphraseConfirmation(new ?: "")
+            } else {
+                passphraseConfirm.revertText(old)
+            }
         }
     }
 }

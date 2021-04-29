@@ -4,6 +4,7 @@ import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.IAccountFactory
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.IWalletManager
+import io.horizontalsystems.bankwallet.core.managers.PassphraseValidator
 import io.horizontalsystems.bankwallet.core.managers.WordsManager
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.coinkit.CoinKit
@@ -15,6 +16,7 @@ class CreateAccountService(
         private val wordsManager: WordsManager,
         private val accountManager: IAccountManager,
         private val walletManager: IWalletManager,
+        private val passphraseValidator: PassphraseValidator,
         private val coinKit: CoinKit
 ) : Clearable {
 
@@ -83,6 +85,10 @@ class CreateAccountService(
     private fun mnemonicAccountType(wordCount: Int): AccountType {
         val words = wordsManager.generateWords(wordCount)
         return AccountType.Mnemonic(words, passphrase)
+    }
+
+    fun validatePassphrase(text: String?): Boolean {
+        return passphraseValidator.validate(text)
     }
 
     sealed class CreateError : Throwable() {

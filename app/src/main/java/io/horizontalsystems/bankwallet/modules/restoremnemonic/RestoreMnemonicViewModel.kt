@@ -83,7 +83,17 @@ class RestoreMnemonicViewModel(private val service: RestoreMnemonicService, priv
         clearCautions()
     }
 
+    fun validatePassphrase(text: String?): Boolean {
+        val valid = service.validatePassphrase(text)
+        if (!valid) {
+            passphraseCautionLiveData.postValue(Caution(Translator.getString(R.string.CreateWallet_Error_PassphraseForbiddenSymbols), Caution.Type.Error))
+        }
+        return valid
+    }
+
     fun onProceed() {
+        passphraseCautionLiveData.postValue(null)
+
         if (state.invalidItems.isNotEmpty()) {
             invalidRangesLiveData.postValue(state.invalidItems.map { it.range })
             return
