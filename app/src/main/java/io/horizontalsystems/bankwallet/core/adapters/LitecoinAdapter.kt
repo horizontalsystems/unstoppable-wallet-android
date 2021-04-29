@@ -81,7 +81,7 @@ class LitecoinAdapter(
 
             return LitecoinKit(context = App.instance,
                     words = accountType.words,
-                    passphrase = accountType.salt,
+                    passphrase = accountType.passphrase,
                     walletId = account.id,
                     syncMode = getSyncMode(syncMode),
                     networkType = getNetworkType(testMode),

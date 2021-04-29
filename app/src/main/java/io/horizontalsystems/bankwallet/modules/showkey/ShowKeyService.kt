@@ -13,15 +13,15 @@ class ShowKeyService(
         private val ethereumKitManager: EthereumKitManager
 ) {
     val words: List<String>
-    val salt: String
+    val passphrase: String
 
     init {
         if (account.type is AccountType.Mnemonic) {
             words = account.type.words
-            salt = account.type.salt ?: ""
+            passphrase = account.type.passphrase ?: ""
         } else {
             words = listOf()
-            salt = ""
+            passphrase = ""
         }
     }
 
@@ -29,6 +29,6 @@ class ShowKeyService(
         get() = pinComponent.isPinSet
 
     val evmPrivateKey: String
-        get() = EthereumKit.privateKey(words, salt, ethereumKitManager.networkType).toByteArray().toHexString()
+        get() = EthereumKit.privateKey(words, passphrase, ethereumKitManager.networkType).toByteArray().toHexString()
 
 }

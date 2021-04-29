@@ -29,13 +29,13 @@ class Account(val id: String,
 @Parcelize
 open class AccountType : Parcelable {
     @Parcelize
-    data class Mnemonic(val words: List<String>, val salt: String) : AccountType() {
+    data class Mnemonic(val words: List<String>, val passphrase: String) : AccountType() {
         override fun equals(other: Any?): Boolean {
-            return other is Mnemonic && words.toTypedArray().contentEquals(other.words.toTypedArray()) && salt == other.salt
+            return other is Mnemonic && words.toTypedArray().contentEquals(other.words.toTypedArray()) && passphrase == other.passphrase
         }
 
         override fun hashCode(): Int {
-            return words.toTypedArray().contentHashCode() + salt.hashCode()
+            return words.toTypedArray().contentHashCode() + passphrase.hashCode()
         }
     }
 

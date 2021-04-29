@@ -15,7 +15,7 @@ class BackupKeyViewModel(
         get() = service.words
 
     val passphrase: String
-        get() = service.salt
+        get() = service.passphrase
 
     fun onClickShow() {
         if (service.isPinSet) {

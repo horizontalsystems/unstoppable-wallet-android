@@ -50,7 +50,7 @@ class BinanceKitManager(
             BinanceChainKit.NetworkType.TestNet else
             BinanceChainKit.NetworkType.MainNet
 
-        val kit = BinanceChainKit.instance(App.instance, accountType.words, accountType.salt, account.id, networkType)
+        val kit = BinanceChainKit.instance(App.instance, accountType.words, accountType.passphrase, account.id, networkType)
         kit.refresh()
 
         return kit

@@ -23,19 +23,19 @@ class BackupConfirmKeyService(
         }
 
     private val words: List<String>
-    private val salt: String
+    private val passphrase: String
 
     var firstWord: String = ""
     var secondWord: String = ""
-    var passphrase: String = ""
+    var passphraseConfirm: String = ""
 
     init {
         if (account.type is AccountType.Mnemonic) {
             words = account.type.words
-            salt = account.type.salt
+            passphrase = account.type.passphrase
         } else {
             words = listOf()
-            salt = ""
+            passphrase = ""
         }
     }
 
@@ -54,10 +54,10 @@ class BackupConfirmKeyService(
             errors.add(ValidationError.InvalidSecondWord)
         }
 
-        if (salt.isNotBlank()) {
-            if (passphrase.isBlank()) {
+        if (passphrase.isNotBlank()) {
+            if (passphraseConfirm.isBlank()) {
                 errors.add(ValidationError.EmptyPassphrase)
-            } else if (passphrase != salt) {
+            } else if (passphraseConfirm != passphrase) {
                 errors.add(ValidationError.InvalidPassphrase)
             }
         }
@@ -70,8 +70,8 @@ class BackupConfirmKeyService(
         indexItem = IndexItem(indices[0], indices[1])
     }
 
-    fun hasSalt(): Boolean {
-        return salt.isNotBlank()
+    fun hasPassphrase(): Boolean {
+        return passphrase.isNotBlank()
     }
 
     fun backup() {
