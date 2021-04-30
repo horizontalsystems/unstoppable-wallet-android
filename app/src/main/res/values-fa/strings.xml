@@ -72,7 +72,7 @@
     <string name="Restore_InvalidChecksum">Checksum نامعتبر است</string>
     <string name="Select_Coins">کیف پول جدید</string>
     <string name="Restore_ZCash_BirthdayHeight">Zcash Birthday Height</string>
-    <string name="Restore_ZCash_BirthdayHeight_Hint">If you know your birthday height of wallet enter it for quick syncing</string>
+    <string name="Restore_ZCash_BirthdayHeight_Hint">If you know a birthday height for your Zcash wallet add it below to speedup syncing process.</string>
     <!--Backup-->
     <string name="Backup_Intro_Title">پيشتيباني</string>
     <string name="Backup_Intro_TitleShow">نمایش کلید</string>
@@ -170,10 +170,10 @@
     <string name="MarketGlobalMetrics_Volume">Volume</string>
     <string name="MarketGlobalMetrics_DefiCap">DeFi Cap</string>
     <string name="MarketGlobalMetrics_TvlInDefi">TVL in DeFi</string>
-    <string name="MarketGlobalMetrics_BtcDominanceDescription">The market dominance of bitcoin, or the largest cryptocurrency\'s value as a share of the overall market.</string>
-    <string name="MarketGlobalMetrics_VolumeDescription">Volume refers to the total amount of transactions that traders conducted in a  markets.</string>
-    <string name="MarketGlobalMetrics_DefiCapDescription">DeFi Cap chart shows a change of DeFi tokens capitalisation.</string>
-    <string name="MarketGlobalMetrics_TvlInDefiDescription">Capital deposited into the platform in the form of loan collateral or liquidity pool.</string>
+    <string name="MarketGlobalMetrics_BtcDominanceDescription">The historical change in ratio between the market cap of Bitcoin to the rest of the cryptocurrency markets. \n\nTypically, when Bitcoin dominance trending higher the rest of the crypto market trends down and vice versa.</string>
+    <string name="MarketGlobalMetrics_VolumeDescription">The historical change in daily aggregate trading market volume for all cryptocurrencies.</string>
+    <string name="MarketGlobalMetrics_DefiCapDescription">The historical change in cumulative market value of tokens in Decentralized Finance sector.</string>
+    <string name="MarketGlobalMetrics_TvlInDefiDescription">The historical change in cumulative value of all cryptocurrency managed by decentralized protocols.</string>
     <!--Market Search-->
     <string name="EmptyResults">No results found</string>
     <string name="Market_AdvancedSearch">Advanced Search</string>
@@ -239,7 +239,7 @@
     <string name="Balance_Sort_24hPriceChange">قیمت ۲۴ ساعت (%)</string>
     <string name="Balance_Backup_Alert">قبل از اینکه %s را دریافت کنید به نسخه پشتیبان از کیف پول %s نیاز دارید.</string>
     <string name="Balance_NoWalletAlert">هنوز کیف پول ندارید. کیف جدید ایجاد کنید یا کیف موجود را بازیابی کنید </string>
-    <string name="Balance_NoCoinsAlert">You don\’t have an added coins.\nAdd the coins you will be using </string>
+    <string name="Balance_NoCoinsAlert">You haven\'t added any coins to this wallet</string>
     <!--Send-->
     <string name="Send_Title">ارسال %s</string>
     <string name="Send_Hint_Address">آدرس یا دامنه</string>
@@ -362,7 +362,7 @@
     <!--Swap Coin Select-->
     <!--Approve-->
     <string name="Approve_Title">تایید کنید</string>
-    <string name="Approve_Info">شما باید به یک قرارداد هوشمند اجازه بدهید که به تعویض رمز داده شده از طرف شما اقدام کند. این مجوز مبلغی را تعیین می کند که می تواند در یک قرارداد هوشمند استفاده شود. این باقیمانده موجودی شما را تحت تأثیر قرار نمی دهد اما برای تأیید معامله به هزینه کمی نیاز دارد. \n\nاگرچه ممکن است قبل از هر معامله بر اساس تقاضا انجام شود ، تصویب مبلغ بالاتر برای ما در معاملات آینده ارزان تر است.</string>
+    <string name="Approve_Info">You should grant permission to a smart contract to swap given token on your behalf. This permission sets amount that can be used by a smart contract. It doesn\'t affect your balance but requires a small fee to execute approval transaction. \n\nWhile it may be done on demand before each trade, it\'s cheaper to approve higher amount in advance for future trades.</string>
     <string name="Approve_Error_AlreadyApproved">شما از قبل مبلغی را برای این مستمری در نظر گرفته اید</string>
     <string name="Approve_Spender">خرج کننده</string>
     <string name="Approve_YouApprove">شما تایید کردید</string>
@@ -561,8 +561,8 @@
     <string name="BitcoinHodling_Description">شما را قادر می سازد بیت کوین هایی ارسال کنید که تا تاریخ مشخص نمی توان هزینه کرد. \n\n گیرنده چنین معامله ای باید از کیف پول غیرقابل توقف استفاده کند. \n\nفقط کیف پول غیر قابل توقف می تواند چنین تراکنش هایی را به صورت صحیح در شبکه بیت کوین شناسایی کند و همچنین گیرنده را قادر به خرج کردن آن بیت کوین ها پس از پایان دوره قفل کند. \n\n اگر شما نگهدارنده هستید ، ممکن است از این ویژگی استفاده کنید تا با ارسال چنین معامله ای به خودتان ، خود را مجبور به هک کردن بیت کوین های خود کنید. \n\n با استفاده از یک ویژگی آزمایشی ، حداکثر مقدار هر تراکنش به 0.5 BTC محدود شده است.</string>
     <!--Manage Accounts-->
     <string name="ManageAccounts_Title">Manage Wallets</string>
-    <string name="ManageAccounts_CreateNewWallet">Create New Wallet</string>
-    <string name="ManageAccounts_ImportWallet">Import Wallet</string>
+    <string name="ManageAccounts_CreateNewWallet">Create</string>
+    <string name="ManageAccounts_ImportWallet">Restore</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">Name</string>
     <string name="ManageAccount_Save">Save</string>
@@ -584,14 +584,14 @@
     <string name="ShowKey_ButtonShow">Show</string>
     <string name="ShowKey_Passphrase">Passphrase</string>
     <string name="ShowKey_ButtonClose">Close</string>
-    <string name="ShowKey_TabMnemonicPhrase">Recovery Phrases</string>
+    <string name="ShowKey_TabMnemonicPhrase">Recovery Phrase</string>
     <string name="ShowKey_TabPrivateKey">Private Key</string>
     <!-- Backup Key -->
     <string name="BackupKey_Title">Backup</string>
-    <string name="BackupKey_Description">The recovery phrases that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken etc.\n\nMake sure that no one is watching your screen.</string>
+    <string name="BackupKey_Description">The recovery phrase that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken etc.\n\nMake sure that no one is watching your screen.</string>
     <string name="BackupKey_ButtonShow">Show</string>
     <string name="BackupKey_ButtonBackup">Backup</string>
-    <string name="BackupConfirmKey_Description">Enter the recovery phrases in correct order to confirm</string>
+    <string name="BackupConfirmKey_Description">Enter the recovery phrase in correct order to confirm</string>
     <string name="BackupConfirmKey_EmptyOrInvalidWords">Entered words are empty or invalid</string>
     <string name="BackupConfirmKey_Error_EmptyWord">Empty word</string>
     <string name="BackupConfirmKey_Error_InvalidWord">Invalid word</string>
