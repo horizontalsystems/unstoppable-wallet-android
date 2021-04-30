@@ -38,6 +38,8 @@
     <string name="Intro_Independence_Description">Unstoppable wurde entwickelt, um sicherzustellen, dass Benutzer jederzeit und von überall her auf Finanzmittel zugreifen können.</string>
     <string name="Intro_Privacy_Title">Privat bleiben</string>
     <string name="Intro_Privacy_Description">Benutzen Sie dieses Wallet, um inkognito zu bleiben und Ihre Informationen geheim halten zu können.</string>
+    <!--Rooted Device-->
+    <string name="RootedDevice_Button_Understand">I understand</string>
     <!--Welcome-->
     <string name="Welcome_PrivacySettings">Privatsphäre-Einstellungen</string>
     <string name="Welcome_CreateWallet">Wallet Erstellen</string>
