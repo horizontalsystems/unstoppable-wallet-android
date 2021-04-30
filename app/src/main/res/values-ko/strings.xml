@@ -72,7 +72,7 @@
     <string name="Restore_InvalidChecksum">유효하지 않은 체크섬</string>
     <string name="Select_Coins">암호화를 선택해 주세요</string>
     <string name="Restore_ZCash_BirthdayHeight">Zcash Birthday Height</string>
-    <string name="Restore_ZCash_BirthdayHeight_Hint">If you know your birthday height of wallet enter it for quick syncing</string>
+    <string name="Restore_ZCash_BirthdayHeight_Hint">If you know a birthday height for your Zcash wallet add it below to speedup syncing process.</string>
     <!--Backup-->
     <string name="Backup_Intro_Title">백업</string>
     <string name="Backup_Intro_TitleShow">암호 보이기</string>
@@ -170,10 +170,10 @@
     <string name="MarketGlobalMetrics_Volume">Volume</string>
     <string name="MarketGlobalMetrics_DefiCap">DeFi Cap</string>
     <string name="MarketGlobalMetrics_TvlInDefi">TVL in DeFi</string>
-    <string name="MarketGlobalMetrics_BtcDominanceDescription">The market dominance of bitcoin, or the largest cryptocurrency\'s value as a share of the overall market.</string>
-    <string name="MarketGlobalMetrics_VolumeDescription">Volume refers to the total amount of transactions that traders conducted in a  markets.</string>
-    <string name="MarketGlobalMetrics_DefiCapDescription">DeFi Cap chart shows a change of DeFi tokens capitalisation.</string>
-    <string name="MarketGlobalMetrics_TvlInDefiDescription">Capital deposited into the platform in the form of loan collateral or liquidity pool.</string>
+    <string name="MarketGlobalMetrics_BtcDominanceDescription">The historical change in ratio between the market cap of Bitcoin to the rest of the cryptocurrency markets. \n\nTypically, when Bitcoin dominance trending higher the rest of the crypto market trends down and vice versa.</string>
+    <string name="MarketGlobalMetrics_VolumeDescription">The historical change in daily aggregate trading market volume for all cryptocurrencies.</string>
+    <string name="MarketGlobalMetrics_DefiCapDescription">The historical change in cumulative market value of tokens in Decentralized Finance sector.</string>
+    <string name="MarketGlobalMetrics_TvlInDefiDescription">The historical change in cumulative value of all cryptocurrency managed by decentralized protocols.</string>
     <!--Market Search-->
     <string name="EmptyResults">No results found</string>
     <string name="Market_AdvancedSearch">Advanced Search</string>
@@ -239,7 +239,7 @@
     <string name="Balance_Sort_24hPriceChange">24시간 가격 (%)</string>
     <string name="Balance_Backup_Alert">귀하께서 %s를 받기전에 %s 지갑의 백업이 필요합니다.</string>
     <string name="Balance_NoWalletAlert">귀하께서는 아직 지갑이 없습니다. 새 생성 또는 기존 복원 해주십시오 </string>
-    <string name="Balance_NoCoinsAlert">You don\’t have an added coins.\nAdd the coins you will be using </string>
+    <string name="Balance_NoCoinsAlert">You haven\'t added any coins to this wallet</string>
     <!--Send-->
     <string name="Send_Title">전송 %s</string>
     <string name="Send_Hint_Address">주소 또는 도메인</string>
@@ -362,7 +362,7 @@
     <!--Swap Coin Select-->
     <!--Approve-->
     <string name="Approve_Title">스왑 승인</string>
-    <string name="Approve_Info">귀하를 대신하여 주어진 토큰을 교환할 수 있는 스마트 계약에 권한을 부여해야 합니다. 이 허가는 스마트 계약으로 사용할 수 있는 금액을 설정합니다. 잔액에는 영향을 미치지 않지만, 승인거래를 하기 위해서는 소정의 수수료가 필요합니다.\n\n각 거래 전에 주문형으로 할 수 있지만, 향후 거래에서는 더 많은 금액을 미리 승인하는 것이 더 저렴합니다.</string>
+    <string name="Approve_Info">You should grant permission to a smart contract to swap given token on your behalf. This permission sets amount that can be used by a smart contract. It doesn\'t affect your balance but requires a small fee to execute approval transaction. \n\nWhile it may be done on demand before each trade, it\'s cheaper to approve higher amount in advance for future trades.</string>
     <string name="Approve_Error_AlreadyApproved">귀하는 이미 이 금액에 대한 허용량을 가지고 있습니다.</string>
     <string name="Approve_Spender">스펜더</string>
     <string name="Approve_YouApprove">승인합니다</string>
@@ -562,8 +562,8 @@
 \n\n귀하께서 호들러 이시면, 이 기능을 쓸 수 있고 이러한 거래를 귀하께 보냄으로써 귀하의 비트코인을 강제적으로 호들링 하게 할 수 있습니다.\n\n실험적인 기능의 한번의 최대 거래 양은 0.5 비트코인으로 제한되있습니다.</string>
     <!--Manage Accounts-->
     <string name="ManageAccounts_Title">Manage Wallets</string>
-    <string name="ManageAccounts_CreateNewWallet">Create New Wallet</string>
-    <string name="ManageAccounts_ImportWallet">Import Wallet</string>
+    <string name="ManageAccounts_CreateNewWallet">Create</string>
+    <string name="ManageAccounts_ImportWallet">Restore</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">Name</string>
     <string name="ManageAccount_Save">Save</string>
@@ -585,14 +585,14 @@
     <string name="ShowKey_ButtonShow">Show</string>
     <string name="ShowKey_Passphrase">Passphrase</string>
     <string name="ShowKey_ButtonClose">Close</string>
-    <string name="ShowKey_TabMnemonicPhrase">Recovery Phrases</string>
+    <string name="ShowKey_TabMnemonicPhrase">Recovery Phrase</string>
     <string name="ShowKey_TabPrivateKey">Private Key</string>
     <!-- Backup Key -->
     <string name="BackupKey_Title">Backup</string>
-    <string name="BackupKey_Description">The recovery phrases that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken etc.\n\nMake sure that no one is watching your screen.</string>
+    <string name="BackupKey_Description">The recovery phrase that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken etc.\n\nMake sure that no one is watching your screen.</string>
     <string name="BackupKey_ButtonShow">Show</string>
     <string name="BackupKey_ButtonBackup">Backup</string>
-    <string name="BackupConfirmKey_Description">Enter the recovery phrases in correct order to confirm</string>
+    <string name="BackupConfirmKey_Description">Enter the recovery phrase in correct order to confirm</string>
     <string name="BackupConfirmKey_EmptyOrInvalidWords">Entered words are empty or invalid</string>
     <string name="BackupConfirmKey_Error_EmptyWord">Empty word</string>
     <string name="BackupConfirmKey_Error_InvalidWord">Invalid word</string>
