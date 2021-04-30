@@ -39,7 +39,7 @@
     <string name="Intro_Privacy_Title">Gizli Kalın</string>
     <string name="Intro_Privacy_Description">Gizli kalmak ve bilgilerinizi gizli tutmak için bu cüzdanı kullanın.</string>
     <!--Rooted Device-->
-    <string name="RootedDevice_Button_Understand">I understand</string>
+    <string name="RootedDevice_Button_Understand">I ACCEPT</string>
     <!--Welcome-->
     <string name="Welcome_PrivacySettings">Gizlilik Ayarları</string>
     <string name="Welcome_CreateWallet">Cüzdan Oluştur</string>
