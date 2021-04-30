@@ -39,7 +39,7 @@
     <string name="Intro_Privacy_Title">保持私密状态</string>
     <string name="Intro_Privacy_Description">使用此钱包保持隐身并能够保证您信息的私密性。</string>
     <!--Rooted Device-->
-    <string name="RootedDevice_Button_Understand">I understand</string>
+    <string name="RootedDevice_Button_Understand">I ACCEPT</string>
     <!--Welcome-->
     <string name="Welcome_PrivacySettings">隐私设置</string>
     <string name="Welcome_CreateWallet">创建钱包</string>
