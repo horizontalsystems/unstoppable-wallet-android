@@ -38,6 +38,8 @@
     <string name="Intro_Independence_Description">توقف ناپذیر برای اطمینان از قابلیت دسترسی کاربران به بودجه خود در هر زمان و مکان ساخته شده است.</string>
     <string name="Intro_Privacy_Title">محرمانه باقی بمانید</string>
     <string name="Intro_Privacy_Description">از این کیف پول استفاده کنید تا در حالت ناشناس باقی بمانید و بتوانید اطلاعات خود را خصوصی نگه دارید.</string>
+    <!--Rooted Device-->
+    <string name="RootedDevice_Button_Understand">I understand</string>
     <!--Welcome-->
     <string name="Welcome_PrivacySettings">تنظیمات حریم خصوصی</string>
     <string name="Welcome_CreateWallet">ايجاد كيف پول</string>
