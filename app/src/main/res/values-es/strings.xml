@@ -38,6 +38,8 @@
     <string name="Intro_Independence_Description">Unstoppable se construye para asegurar que los usuarios puedan acceder a los fondos en cualquier momento desde cualquier lugar.</string>
     <string name="Intro_Privacy_Title">Permanezca en privado</string>
     <string name="Intro_Privacy_Description">Utilice esta cartera para permanecer incógnito y sea capaz de resgurdar su información privada.</string>
+    <!--Rooted Device-->
+    <string name="RootedDevice_Button_Understand">I understand</string>
     <!--Welcome-->
     <string name="Welcome_PrivacySettings">Ajustes de privacidad</string>
     <string name="Welcome_CreateWallet">Crear Monedero</string>
