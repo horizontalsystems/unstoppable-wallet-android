@@ -38,6 +38,8 @@
     <string name="Intro_Independence_Description">Unstoppable은 사용자들이 어디서든 언제든지 자금에 접근할 수 있도록 하기 위해 설계되었습니다.</string>
     <string name="Intro_Privacy_Title">개인 정보 유지</string>
     <string name="Intro_Privacy_Description">이 지갑을 사용하여 신분을 숨기고 귀하의 정보를 안전하게 보호할 수 있습니다.</string>
+    <!--Rooted Device-->
+    <string name="RootedDevice_Button_Understand">I understand</string>
     <!--Welcome-->
     <string name="Welcome_PrivacySettings">개인 정보 설정</string>
     <string name="Welcome_CreateWallet">새 지갑</string>
