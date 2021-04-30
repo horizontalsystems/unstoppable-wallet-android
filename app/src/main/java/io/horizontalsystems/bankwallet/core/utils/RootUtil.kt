@@ -7,9 +7,9 @@ import java.io.InputStreamReader
 
 object RootUtil {
 
-    fun isRooted(): Boolean {
-        return buildTags() || checkPaths() || checkSu()
-    }
+    val isRooted: Boolean
+        get() = buildTags() || checkPaths() || checkSu()
+
 
     private fun buildTags(): Boolean {
         val buildTags = Build.TAGS

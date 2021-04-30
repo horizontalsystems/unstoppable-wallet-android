@@ -70,6 +70,4 @@ class AppConfigProvider : IAppConfigProvider, ILanguageConfigProvider, IBuildCon
 
     override val testMode: Boolean = BuildConfig.testMode
 
-    override val skipRootCheck: Boolean = BuildConfig.skipRootCheck
-
 }
