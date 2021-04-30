@@ -39,7 +39,7 @@
     <string name="Intro_Privacy_Title">Сохраняйте Конфиденциальность</string>
     <string name="Intro_Privacy_Description">Используйте этот кошелек, чтобы оставаться инкогнито и иметь возможность сохранить конфиденциальность вашей информации.</string>
     <!--Rooted Device-->
-    <string name="RootedDevice_Button_Understand">I understand</string>
+    <string name="RootedDevice_Button_Understand">I ACCEPT</string>
     <!--Welcome-->
     <string name="Welcome_PrivacySettings">Настройки Приватности</string>
     <string name="Welcome_CreateWallet">Создать Кошелек</string>
