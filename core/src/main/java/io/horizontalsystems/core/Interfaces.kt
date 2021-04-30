@@ -35,7 +35,6 @@ interface IEncryptionManager {
 
 interface IBuildConfigProvider {
     val testMode: Boolean
-    val skipRootCheck: Boolean
 }
 
 interface ILanguageConfigProvider {

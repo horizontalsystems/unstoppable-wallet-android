@@ -56,6 +56,7 @@ class LocalStorageManager(private val preferences: SharedPreferences)
     private val NOTIFICATION_SERVER_TIME = "notification_server_time"
     private val CURRENT_THEME = "current_theme"
     private val CHANGELOG_SHOWN_FOR_APP_VERSION = "changelog_shown_for_app_version"
+    private val IGNORE_ROOTED_DEVICE_WARNING = "ignore_rooted_device_warning"
 
     val gson by lazy { Gson() }
 
@@ -335,5 +336,11 @@ class LocalStorageManager(private val preferences: SharedPreferences)
         get() = preferences.getString(CHANGELOG_SHOWN_FOR_APP_VERSION, null)
         set(value) {
             preferences.edit().putString(CHANGELOG_SHOWN_FOR_APP_VERSION, value).apply()
+        }
+
+    override var ignoreRootedDeviceWarning: Boolean
+        get() = preferences.getBoolean(IGNORE_ROOTED_DEVICE_WARNING, false)
+        set(value) {
+            preferences.edit().putBoolean(IGNORE_ROOTED_DEVICE_WARNING, value).apply()
         }
 }

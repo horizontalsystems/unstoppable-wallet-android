@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.main
 
 import android.content.ActivityNotFoundException
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -19,6 +20,7 @@ import io.horizontalsystems.bankwallet.core.managers.RateAppManager
 import io.horizontalsystems.bankwallet.modules.main.MainActivity.Companion.ACTIVE_TAB_KEY
 import io.horizontalsystems.bankwallet.modules.markdown.MarkdownFragment
 import io.horizontalsystems.bankwallet.modules.rateapp.RateAppDialogFragment
+import io.horizontalsystems.bankwallet.modules.rooteddevice.RootedDeviceActivity
 import io.horizontalsystems.core.findNavController
 import kotlinx.android.synthetic.main.fragment_main.*
 import kotlinx.android.synthetic.main.fragment_main.view.*
@@ -56,6 +58,10 @@ class MainFragment : BaseFragment(), RateAppDialogFragment.Listener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        viewModel.showRootedDeviceWarningLiveEvent.observe(viewLifecycleOwner, {
+            startActivity(Intent(activity, RootedDeviceActivity::class.java))
+        })
 
         viewModel.showRateAppLiveEvent.observe(viewLifecycleOwner, Observer {
             activity?.let {

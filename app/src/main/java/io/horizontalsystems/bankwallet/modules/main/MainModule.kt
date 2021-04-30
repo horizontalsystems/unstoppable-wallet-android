@@ -6,13 +6,15 @@ import android.content.Intent
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.utils.RootUtil
 
 object MainModule {
 
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return MainViewModel(App.pinComponent, App.rateAppManager, App.backupManager, App.termsManager, App.accountManager, App.releaseNotesManager) as T
+            val service = MainService(RootUtil, App.localStorage)
+            return MainViewModel(App.pinComponent, App.rateAppManager, App.backupManager, App.termsManager, App.accountManager, App.releaseNotesManager, service) as T
         }
     }
 

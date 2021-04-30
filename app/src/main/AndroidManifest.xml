@@ -59,6 +59,9 @@
         <activity
             android:name=".modules.keystore.KeyStoreActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".modules.rooteddevice.RootedDeviceActivity"
+            android:screenOrientation="portrait"/>
 
         <receiver android:name=".core.receiver.BootCompletionReceiver" >
             <intent-filter>

@@ -70,6 +70,7 @@ interface ILocalStorage {
     var notificationServerTime: Long
     var currentTheme: ThemeType
     var changelogShownForAppVersion: String?
+    var ignoreRootedDeviceWarning: Boolean
 
     fun clear()
 }

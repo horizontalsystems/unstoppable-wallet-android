@@ -19,9 +19,11 @@ class MainViewModel(
         private val backupManager: IBackupManager,
         private val termsManager: ITermsManager,
         accountManager: IAccountManager,
-        private val releaseNotesManager: ReleaseNotesManager
+        private val releaseNotesManager: ReleaseNotesManager,
+        service: MainService
 ) : ViewModel() {
 
+    val showRootedDeviceWarningLiveEvent = SingleLiveEvent<Unit>()
     val showRateAppLiveEvent = SingleLiveEvent<Unit>()
     val showWhatsNewLiveEvent = SingleLiveEvent<String>()
     val openPlayMarketLiveEvent = SingleLiveEvent<Unit>()
@@ -33,6 +35,11 @@ class MainViewModel(
     private var contentHidden = pinComponent.isLocked
 
     init {
+
+        if (!service.ignoreRootCheck && service.isDeviceRooted) {
+            showRootedDeviceWarningLiveEvent.call()
+        }
+
         updateBadgeVisibility()
         sync(accountManager.accounts)
 

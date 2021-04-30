@@ -44,10 +44,6 @@ class KeyStoreActivity : BaseKeyStoreActivity() {
             start(context, KeyStoreModule.ModeType.InvalidKey)
         }
 
-        fun startForDeviceIsRooted(context: Context) {
-            start(context, KeyStoreModule.ModeType.DeviceIsRooted)
-        }
-
         fun startForUserAuthentication(context: Context) {
             start(context, KeyStoreModule.ModeType.UserAuthentication)
         }

@@ -48,6 +48,10 @@
     <string name="Intro_Privacy_Title">Keep your privacy safe</string>
     <string name="Intro_Privacy_Description">Remain incognito and be able to keep your information private.</string>
 
+    <!--Rooted Device-->
+
+    <string name="RootedDevice_Button_Understand">I understand</string>
+
     <!--Welcome-->
 
     <string name="Welcome_PrivacySettings">Privacy Settings</string>

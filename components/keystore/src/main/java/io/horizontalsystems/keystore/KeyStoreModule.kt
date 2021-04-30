@@ -12,7 +12,6 @@ object KeyStoreModule {
         fun showNoSystemLockWarning()
         fun showInvalidKeyWarning()
         fun promptUserAuthentication()
-        fun showDeviceIsRootedWarning()
     }
 
     interface IViewDelegate {
@@ -35,7 +34,7 @@ object KeyStoreModule {
     }
 
     fun init(view: KeyStoreViewModel, router: IRouter, mode: ModeType) {
-        val interactor = KeyStoreInteractor(CoreApp.systemInfoManager, CoreApp.keyStoreManager)
+        val interactor = KeyStoreInteractor(CoreApp.keyStoreManager)
         val presenter = KeyStorePresenter(interactor, router, mode)
 
         view.delegate = presenter
@@ -47,8 +46,7 @@ object KeyStoreModule {
     enum class ModeType : Parcelable {
         NoSystemLock,
         InvalidKey,
-        UserAuthentication,
-        DeviceIsRooted
+        UserAuthentication
     }
 
 }
