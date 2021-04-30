@@ -73,7 +73,7 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="Restore_InvalidChecksum">Somme de contrôle invalide</string>
     <string name="Select_Coins">Choisissez la Crypto</string>
     <string name="Restore_ZCash_BirthdayHeight">Zcash Birthday Height</string>
-    <string name="Restore_ZCash_BirthdayHeight_Hint">If you know your birthday height of wallet enter it for quick syncing</string>
+    <string name="Restore_ZCash_BirthdayHeight_Hint">If you know a birthday height for your Zcash wallet add it below to speedup syncing process.</string>
     <!--Backup-->
     <string name="Backup_Intro_Title">Sauvegarde</string>
     <string name="Backup_Intro_TitleShow">Voir la clé</string>
@@ -171,10 +171,10 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="MarketGlobalMetrics_Volume">Volume</string>
     <string name="MarketGlobalMetrics_DefiCap">DeFi Cap</string>
     <string name="MarketGlobalMetrics_TvlInDefi">TVL in DeFi</string>
-    <string name="MarketGlobalMetrics_BtcDominanceDescription">The market dominance of bitcoin, or the largest cryptocurrency\'s value as a share of the overall market.</string>
-    <string name="MarketGlobalMetrics_VolumeDescription">Volume refers to the total amount of transactions that traders conducted in a  markets.</string>
-    <string name="MarketGlobalMetrics_DefiCapDescription">DeFi Cap chart shows a change of DeFi tokens capitalisation.</string>
-    <string name="MarketGlobalMetrics_TvlInDefiDescription">Capital deposited into the platform in the form of loan collateral or liquidity pool.</string>
+    <string name="MarketGlobalMetrics_BtcDominanceDescription">The historical change in ratio between the market cap of Bitcoin to the rest of the cryptocurrency markets. \n\nTypically, when Bitcoin dominance trending higher the rest of the crypto market trends down and vice versa.</string>
+    <string name="MarketGlobalMetrics_VolumeDescription">The historical change in daily aggregate trading market volume for all cryptocurrencies.</string>
+    <string name="MarketGlobalMetrics_DefiCapDescription">The historical change in cumulative market value of tokens in Decentralized Finance sector.</string>
+    <string name="MarketGlobalMetrics_TvlInDefiDescription">The historical change in cumulative value of all cryptocurrency managed by decentralized protocols.</string>
     <!--Market Search-->
     <string name="EmptyResults">No results found</string>
     <string name="Market_AdvancedSearch">Advanced Search</string>
@@ -240,7 +240,7 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="Balance_Sort_24hPriceChange">Prix 24h (%)</string>
     <string name="Balance_Backup_Alert">Vous devez sauvegarder le portefeuille %s avant de recevoir %s.</string>
     <string name="Balance_NoWalletAlert">Vous n\'avez pas encore de portefeuille. Veuillez créer un nouveau portefeuille ou restaurer un portefeuille existant </string>
-    <string name="Balance_NoCoinsAlert">You don\’t have an added coins.\nAdd the coins you will be using </string>
+    <string name="Balance_NoCoinsAlert">You haven\'t added any coins to this wallet</string>
     <!--Send-->
     <string name="Send_Title">Envoyer %s</string>
     <string name="Send_Hint_Address">Adresse ou domaine</string>
@@ -363,7 +363,7 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <!--Swap Coin Select-->
     <!--Approve-->
     <string name="Approve_Title">Swap approuvé</string>
-    <string name="Approve_Info">Vous devez autoriser un contrat intelligent pour échanger un token donné en votre nom. Cette autorisation fixe le montant qui peut être utilisé par un contrat intelligent. Elle n\'affecte pas votre solde, mais nécessite des frais minimes pour l\'exécution de la transaction de validation.\n\nBien que cela puisse être fait à la demande avant chaque transaction, il est moins coûteux d\'approuver à l\'avance un montant plus élevé pour de futures transactions.</string>
+    <string name="Approve_Info">You should grant permission to a smart contract to swap given token on your behalf. This permission sets amount that can be used by a smart contract. It doesn\'t affect your balance but requires a small fee to execute approval transaction. \n\nWhile it may be done on demand before each trade, it\'s cheaper to approve higher amount in advance for future trades.</string>
     <string name="Approve_Error_AlreadyApproved">Vous avez déjà une provision pour ce montant</string>
     <string name="Approve_Spender">Spender</string>
     <string name="Approve_YouApprove">Vous approuvez</string>
@@ -562,8 +562,8 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="BitcoinHodling_Description">Permet d\'envoyer des Bitcoins qui ne peuvent pas être dépensées avant la date spécifiée.\n\nLe destinataire d\'une telle transaction devrait utiliser un portefeuille Unstoppable.\n\nSeul un portefeuille Unstoppable peut identifier correctement de telles transactions sur le réseau Bitcoin ainsi que permettre au destinataire de dépenser ces Bitcoins après l\'expiration de la période de verrouillage.\n\nSi vous êtes un HODLer, vous pouvez utiliser cette fonction pour vous obliger à garder vos Bitcoins en vous envoyant une telle transaction à vous-même.\n\nPuisqu\'il s\'agit d\'une fonctionnalité expérimentale, le montant maximum par transaction est limité à 0,5 BTC.</string>
     <!--Manage Accounts-->
     <string name="ManageAccounts_Title">Manage Wallets</string>
-    <string name="ManageAccounts_CreateNewWallet">Create New Wallet</string>
-    <string name="ManageAccounts_ImportWallet">Import Wallet</string>
+    <string name="ManageAccounts_CreateNewWallet">Create</string>
+    <string name="ManageAccounts_ImportWallet">Restore</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">Name</string>
     <string name="ManageAccount_Save">Save</string>
@@ -585,14 +585,14 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="ShowKey_ButtonShow">Show</string>
     <string name="ShowKey_Passphrase">Passphrase</string>
     <string name="ShowKey_ButtonClose">Close</string>
-    <string name="ShowKey_TabMnemonicPhrase">Recovery Phrases</string>
+    <string name="ShowKey_TabMnemonicPhrase">Recovery Phrase</string>
     <string name="ShowKey_TabPrivateKey">Private Key</string>
     <!-- Backup Key -->
     <string name="BackupKey_Title">Backup</string>
-    <string name="BackupKey_Description">The recovery phrases that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken etc.\n\nMake sure that no one is watching your screen.</string>
+    <string name="BackupKey_Description">The recovery phrase that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken etc.\n\nMake sure that no one is watching your screen.</string>
     <string name="BackupKey_ButtonShow">Show</string>
     <string name="BackupKey_ButtonBackup">Backup</string>
-    <string name="BackupConfirmKey_Description">Enter the recovery phrases in correct order to confirm</string>
+    <string name="BackupConfirmKey_Description">Enter the recovery phrase in correct order to confirm</string>
     <string name="BackupConfirmKey_EmptyOrInvalidWords">Entered words are empty or invalid</string>
     <string name="BackupConfirmKey_Error_EmptyWord">Empty word</string>
     <string name="BackupConfirmKey_Error_InvalidWord">Invalid word</string>
