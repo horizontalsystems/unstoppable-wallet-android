@@ -38,6 +38,8 @@
     <string name="Intro_Independence_Description">Unstoppable, kullanıcıların istedikleri anda istedikleri yerde paraya erişebilmelerini sağlamak için geliştirilmiştir.</string>
     <string name="Intro_Privacy_Title">Gizli Kalın</string>
     <string name="Intro_Privacy_Description">Gizli kalmak ve bilgilerinizi gizli tutmak için bu cüzdanı kullanın.</string>
+    <!--Rooted Device-->
+    <string name="RootedDevice_Button_Understand">I understand</string>
     <!--Welcome-->
     <string name="Welcome_PrivacySettings">Gizlilik Ayarları</string>
     <string name="Welcome_CreateWallet">Cüzdan Oluştur</string>
