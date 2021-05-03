@@ -284,6 +284,7 @@
     <string name="Send_LockTime_Year">1 년</string>
     <string name="Send_Sending">전송중</string>
     <string name="Send_Token_InsufficientFeeAlert">%s (%s) 에 대한 거래 수수료는 %s로 지불되었습니다. 귀하는 %s가 필요합니다.</string>
+    <string name="Send_Warning_LowFee">Warning! Risk of getting stuck</string>
     <!--Fee Info -->
     <string name="FeeInfo_Title">거래 속도</string>
     <string name="FeeInfo_Description">비트코인과 이더리움 블록체인 모두 사용자가 블록체인으로 거래를 전송하면서 사용료를 내야 합니다.\n\n언스타퍼블 사용자가 현재 적절한 거래 수수료를 결정하는 데 도움이 되도록 공공 요금 추정 서비스를 사용합니다. 수수료는 거래가 많을 때 더 비싸고 블록체인이 덜 바쁠 때 더 낮아집니다.</string>
@@ -730,6 +731,10 @@
     <string name="RateList_Rank">순위</string>
     <string name="RateList_TopGainers">Top Gainers</string>
     <string name="RateList_TopLosers">Top Losers</string>
+    <string name="RateList_Posts">News</string>
+    <string name="Market_DaysAgo">%dd. ago</string>
+    <string name="Market_HoursAgo">%dh. ago</string>
+    <string name="Market_MinutesAgo">%dm. ago</string>
     <!-- Balance Sync Error -->
     <string name="BalanceSyncError_Title">동기화 오류</string>
     <string name="BalanceSyncError_ButtonRetry">재시도</string>
