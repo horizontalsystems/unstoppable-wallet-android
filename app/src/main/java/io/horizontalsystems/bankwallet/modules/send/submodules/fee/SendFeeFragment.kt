@@ -122,6 +122,10 @@ class SendFeeFragment(
         presenterView.setError.observe(viewLifecycleOwner, Observer { error ->
             setError(error)
         })
+
+        presenterView.showLowFeeWarningLiveData.observe(viewLifecycleOwner, { show ->
+            lowFeeWarning.isVisible = show
+        })
     }
 
     override fun init() {
