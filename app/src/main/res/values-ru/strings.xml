@@ -284,6 +284,7 @@
     <string name="Send_LockTime_Year">1 год</string>
     <string name="Send_Sending">Отправка</string>
     <string name="Send_Token_InsufficientFeeAlert">Комиссии за транзакцию %s (%s) взимаются в %s. Вам нужно %s.</string>
+    <string name="Send_Warning_LowFee">Warning! Risk of getting stuck</string>
     <!--Fee Info -->
     <string name="FeeInfo_Title">Скорость Транзакции</string>
     <string name="FeeInfo_Description">При использования блокчейнов Bitcoin и Ethereum пользователи должны платить комиссию при отправке транзакций.\n\nUnstoppable использует общественные сервисы оценки сумм комиссионных сборов, чтобы помогать пользователю определять размеры соответствующих комиссий на данный момент. Размеры комиссий возрастают при совершении большого количества транзакций и понижаются при меньшей занятости блокчейна.</string>
@@ -731,6 +732,10 @@
     <string name="RateList_Rank">Месту</string>
     <string name="RateList_TopGainers">Top Gainers</string>
     <string name="RateList_TopLosers">Top Losers</string>
+    <string name="RateList_Posts">News</string>
+    <string name="Market_DaysAgo">%dd. ago</string>
+    <string name="Market_HoursAgo">%dh. ago</string>
+    <string name="Market_MinutesAgo">%dm. ago</string>
     <!-- Balance Sync Error -->
     <string name="BalanceSyncError_Title">Ошибка Синхронизации</string>
     <string name="BalanceSyncError_ButtonRetry">Повторить</string>
