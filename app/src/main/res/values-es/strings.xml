@@ -258,6 +258,7 @@
     <string name="Send_Confirmation_Send_Button">Enviar</string>
     <string name="Send_Success">\u2713 Enviado</string>
     <string name="ScanQr_PleaseGrantCameraPermission">Por favor, autorice acceso a la camara</string>
+    <string name="ScanQr_NoCameraPermission">No camera permission</string>
     <string name="Send_Error_IncorrectAddress">Código incorrecto</string>
     <string name="Send_Error_UnsupportedAddress">El bloqueo del tiempo solo funciona con direcciones P2PKH (a partir de 1)</string>
     <string name="Send_Error_BalanceAmount">Saldo %s</string>
