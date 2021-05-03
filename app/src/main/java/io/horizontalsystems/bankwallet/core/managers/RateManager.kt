@@ -102,10 +102,6 @@ class RateManager(
         return kit.getCoinMarketDetailsAsync(coinType, currencyCode, rateDiffCoinCodes, rateDiffPeriods)
     }
 
-    override fun getCryptoNews(coinCode: String): Single<List<CryptoNews>> {
-        return kit.cryptoNewsAync()
-    }
-
     override fun getTopMarketList(currency: String, itemsCount: Int, diffPeriod: TimePeriod): Single<List<CoinMarket>> {
         return kit.getTopCoinMarketsAsync(currency, itemsCount = itemsCount, fetchDiffPeriod = diffPeriod)
     }
@@ -148,6 +144,10 @@ class RateManager(
 
     override fun refresh() {
         kit.refresh()
+    }
+
+    override fun getCryptoNews(timestamp: Long?): Single<List<CryptoNews>> {
+        return kit.cryptoNewsAync(timestamp)
     }
 
     private fun onWalletsUpdated(wallets: List<Wallet>) {
