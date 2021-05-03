@@ -34,6 +34,7 @@ class EthereumFeeViewModel(
     override val priorityLiveData = MutableLiveData<String>("")
     override val openSelectPriorityLiveEvent = SingleLiveEvent<List<SendPriorityViewItem>>()
     override val feeSliderLiveData = MutableLiveData<SendFeeSliderViewItem?>(null)
+    override val warningOfStuckLiveData = MutableLiveData<Boolean>()
 
     private val customFeeUnit = "gwei"
     private val customFeeRange = Range(1L, 400L)
@@ -54,6 +55,14 @@ class EthereumFeeViewModel(
         transactionService.gasPriceTypeObservable
                 .subscribe { gasPriceType ->
                     syncGasPriceType(gasPriceType)
+                }
+                .let {
+                    disposable.add(it)
+                }
+
+        transactionService.warningOfStuckObservable
+                .subscribe { warningOfStuck ->
+                    warningOfStuckLiveData.postValue(warningOfStuck)
                 }
                 .let {
                     disposable.add(it)
@@ -166,6 +175,7 @@ interface ISendFeeViewModel {
     val hasEstimatedFee: Boolean
     val estimatedFeeLiveData: MutableLiveData<String>
     val feeLiveData: LiveData<String>
+    val warningOfStuckLiveData: LiveData<Boolean>
 }
 
 interface ISendFeePriorityViewModel {

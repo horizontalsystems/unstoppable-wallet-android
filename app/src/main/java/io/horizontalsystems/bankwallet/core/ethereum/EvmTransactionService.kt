@@ -6,6 +6,8 @@ import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.models.TransactionData
+import io.reactivex.BackpressureStrategy
+import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
@@ -17,6 +19,11 @@ class EvmTransactionService(
         private val feeRateProvider: IFeeRateProvider,
         private val gasLimitSurchargePercent: Int
 ) {
+
+    private var recommendedGasPrice: BigInteger? = null
+    private var warningOfStuckSubject = PublishSubject.create<Boolean>()
+    val warningOfStuckObservable: Flowable<Boolean>
+        get() = warningOfStuckSubject.toFlowable(BackpressureStrategy.BUFFER)
 
     val hasEstimatedFee: Boolean = gasLimitSurchargePercent != 0
 
@@ -110,12 +117,25 @@ class EvmTransactionService(
     }
 
     private fun getGasPriceAsync(gasPriceType: GasPriceType): Single<BigInteger> {
+        var recommendedGasPriceSingle = feeRateProvider.feeRate(FeeRatePriority.RECOMMENDED)
+                .doOnSuccess { gasPrice ->
+                    recommendedGasPrice = gasPrice
+                }
+
         return when (gasPriceType) {
             is GasPriceType.Recommended -> {
-                feeRateProvider.feeRate(FeeRatePriority.RECOMMENDED)
+                warningOfStuckSubject.onNext(false)
+                recommendedGasPriceSingle
             }
             is GasPriceType.Custom -> {
-                Single.just(gasPriceType.gasPrice.toBigInteger())
+                recommendedGasPrice?.let {
+                    recommendedGasPriceSingle = Single.just(it)
+                }
+                recommendedGasPriceSingle.map { recommended ->
+                    val customGasPrice = gasPriceType.gasPrice.toBigInteger()
+                    warningOfStuckSubject.onNext(customGasPrice < recommended)
+                    customGasPrice
+                }
             }
         }
     }
