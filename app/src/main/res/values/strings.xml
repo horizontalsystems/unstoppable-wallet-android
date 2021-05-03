@@ -304,6 +304,7 @@
     <string name="Send_Success">\u2713 Sent</string>
 
     <string name="ScanQr_PleaseGrantCameraPermission">Please grant the camera permission</string>
+    <string name="ScanQr_NoCameraPermission">No camera permission</string>
 
     <string name="Send_Error_IncorrectAddress">Incorrect Address</string>
     <string name="Send_Error_UnsupportedAddress">Time locking works only with P2PKH addresses (starting with 1)</string>
