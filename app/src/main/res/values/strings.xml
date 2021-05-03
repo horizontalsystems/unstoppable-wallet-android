@@ -889,6 +889,11 @@
     <string name="RateList_Rank">Rank</string>
     <string name="RateList_TopGainers">Top Gainers</string>
     <string name="RateList_TopLosers">Top Losers</string>
+    <string name="RateList_Posts">News</string>
+
+    <string name="Market_DaysAgo">%dd. ago</string>
+    <string name="Market_HoursAgo">%dh. ago</string>
+    <string name="Market_MinutesAgo">%dm. ago</string>
 
     <!-- Balance Sync Error -->
 

@@ -288,7 +288,6 @@ interface IRateManager {
     fun chartInfo(coinType: CoinType, currencyCode: String, chartType: ChartType): ChartInfo?
     fun chartInfoObservable(coinType: CoinType, currencyCode: String, chartType: ChartType): Observable<ChartInfo>
     fun coinMarketDetailsAsync(coinType: CoinType, currencyCode: String, rateDiffCoinCodes: List<String>, rateDiffPeriods: List<TimePeriod>): Single<CoinMarketDetails>
-    fun getCryptoNews(coinCode: String): Single<List<CryptoNews>>
     fun getTopMarketList(currency: String, itemsCount: Int, diffPeriod: TimePeriod): Single<List<CoinMarket>>
     fun getCoinMarketList(coinTypes: List<CoinType>, currency: String): Single<List<CoinMarket>>
     fun getCoinMarketListByCategory(categoryId: String, currency: String): Single<List<CoinMarket>>
@@ -299,6 +298,7 @@ interface IRateManager {
     fun getNotificationCoinCode(coinType: CoinType): String?
     fun topDefiTvl(currencyCode: String, fetchDiffPeriod: TimePeriod, itemsCount: Int) : Single<List<DefiTvl>>
     fun defiTvlPoints(coinType: CoinType, currencyCode: String, fetchDiffPeriod: TimePeriod) : Single<List<DefiTvlPoint>>
+    fun getCryptoNews(timestamp: Long? = null): Single<List<CryptoNews>>
     fun refresh()
 }
 
