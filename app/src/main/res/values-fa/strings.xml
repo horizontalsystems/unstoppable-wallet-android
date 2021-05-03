@@ -284,6 +284,7 @@
     <string name="Send_LockTime_Year">1 سال</string>
     <string name="Send_Sending">در حال ارسال</string>
     <string name="Send_Token_InsufficientFeeAlert">هزینه تراکنش برای %s (%s) پرداخت شده در %s. شما نیاز دارید %s.</string>
+    <string name="Send_Warning_LowFee">Warning! Risk of getting stuck</string>
     <!--Fee Info -->
     <string name="FeeInfo_Title">سرعت تراکنش</string>
     <string name="FeeInfo_Description">هر دو زنجیره بلوکی بیت کوین و اتریوم کاربران را ملزم به پرداخت هزینه استفاده هنگام ارسال تراکنش در زنجیره بلوکی می کنند.\n\nتوقف ناپذیر از خدمات تخمین هزینه عمومی برای کمک به کاربر در تعیین هزینه تراکنش های مناسب در حال حاضر استفاده می کند. این هزینه ها وقتی تراکنش های زیادی انجام می شود بیشتر هستند و وقتی زنجیره بلوکی کمتر مشغول باشد ، کمتر است.</string>
@@ -728,6 +729,10 @@
     <string name="RateList_Rank">رتبه</string>
     <string name="RateList_TopGainers">Top Gainers</string>
     <string name="RateList_TopLosers">بازندگان برتر</string>
+    <string name="RateList_Posts">News</string>
+    <string name="Market_DaysAgo">%dd. ago</string>
+    <string name="Market_HoursAgo">%dh. ago</string>
+    <string name="Market_MinutesAgo">%dm. ago</string>
     <!-- Balance Sync Error -->
     <string name="BalanceSyncError_Title">خطا ی همگام سازی</string>
     <string name="BalanceSyncError_ButtonRetry">دوباره تلاش کنید</string>
