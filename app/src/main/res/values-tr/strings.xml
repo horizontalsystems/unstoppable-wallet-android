@@ -258,6 +258,7 @@
     <string name="Send_Confirmation_Send_Button">Gönder</string>
     <string name="Send_Success">\u2713 Gönderilen</string>
     <string name="ScanQr_PleaseGrantCameraPermission">Lütfen kamere erişim izni verin</string>
+    <string name="ScanQr_NoCameraPermission">No camera permission</string>
     <string name="Send_Error_IncorrectAddress">Geçersiz adres</string>
     <string name="Send_Error_UnsupportedAddress">Zaman kilitleme sadece P2PKH adresleriyle çalışır (1 ile başlayan)</string>
     <string name="Send_Error_BalanceAmount">%s bakiye</string>
