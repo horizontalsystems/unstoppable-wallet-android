@@ -258,6 +258,7 @@
     <string name="Send_Confirmation_Send_Button">发送​​</string>
     <string name="Send_Success">\u2713已发送</string>
     <string name="ScanQr_PleaseGrantCameraPermission">请授予相机权限</string>
+    <string name="ScanQr_NoCameraPermission">No camera permission</string>
     <string name="Send_Error_IncorrectAddress">错误地址</string>
     <string name="Send_Error_UnsupportedAddress">时间锁定只能和P2PKH地址（以1开头）一起使用</string>
     <string name="Send_Error_BalanceAmount">余额%s</string>
