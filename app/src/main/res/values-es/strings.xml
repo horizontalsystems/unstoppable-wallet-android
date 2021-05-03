@@ -284,6 +284,7 @@
     <string name="Send_LockTime_Year">1 año</string>
     <string name="Send_Sending">Enviando</string>
     <string name="Send_Token_InsufficientFeeAlert">Las comisiones de transacción para %s (%s) pagado en %s. Es necesario %s.</string>
+    <string name="Send_Warning_LowFee">Warning! Risk of getting stuck</string>
     <!--Fee Info -->
     <string name="FeeInfo_Title">Velocidad de transacción</string>
     <string name="FeeInfo_Description">Las blockchains de Ethereum y Bitcoin requieren que los usuarios paguen tarifas de uso mientras envian transaciones en la blockchain \n\n Unstoppable utiliza tarifas de servicios publicos estimados para ayudar al usuario a determinar tarifas de transación apropiadas para el momento. Las tarifas son altas cuando hay muchas transacciones ocurriendo al mismo tiempo y menos cuando la blockchain se encuentra menos ocupada. </string>
@@ -729,6 +730,10 @@ poner en peligro la seguridad de mis fondos.</string>
     <string name="RateList_Rank">Puesto</string>
     <string name="RateList_TopGainers">Top Gainers</string>
     <string name="RateList_TopLosers">Top Losers</string>
+    <string name="RateList_Posts">News</string>
+    <string name="Market_DaysAgo">%dd. ago</string>
+    <string name="Market_HoursAgo">%dh. ago</string>
+    <string name="Market_MinutesAgo">%dm. ago</string>
     <!-- Balance Sync Error -->
     <string name="BalanceSyncError_Title">Error de sincronización</string>
     <string name="BalanceSyncError_ButtonRetry">Reintentar</string>
