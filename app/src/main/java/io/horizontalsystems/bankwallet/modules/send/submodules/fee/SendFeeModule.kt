@@ -35,6 +35,7 @@ object SendFeeModule {
         fun setLoading(loading: Boolean)
         fun setFee(fee: AmountInfo, convertedFee: AmountInfo?)
         fun setError(error: Exception?)
+        fun showLowFeeWarning(show: Boolean)
 
     }
 
@@ -54,7 +55,7 @@ object SendFeeModule {
     }
 
     interface IInteractorDelegate {
-        fun didUpdate(feeRate: BigInteger)
+        fun didUpdate(feeRate: BigInteger, feeRatePriority: FeeRatePriority)
         fun didReceiveError(error: Exception)
         fun didUpdateExchangeRate(rate: BigDecimal)
     }

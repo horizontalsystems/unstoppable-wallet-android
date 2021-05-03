@@ -1,9 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.send.submodules.fee
 
 import androidx.lifecycle.MutableLiveData
-import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.bankwallet.core.FeeRatePriority
 import io.horizontalsystems.bankwallet.modules.send.SendModule
+import io.horizontalsystems.core.SingleLiveEvent
 
 class SendFeeView : SendFeeModule.IView {
 
@@ -17,6 +17,7 @@ class SendFeeView : SendFeeModule.IView {
     val insufficientFeeBalanceError = SingleLiveEvent<SendFeeModule.InsufficientFeeBalance?>()
     val setLoading = MutableLiveData<Boolean>()
     val setError = MutableLiveData<Exception>()
+    val showLowFeeWarningLiveData = MutableLiveData<Boolean>()
 
     override fun setAdjustableFeeVisible(visible: Boolean) {
         showAdjustableFeeMenu.postValue(visible)
@@ -60,4 +61,9 @@ class SendFeeView : SendFeeModule.IView {
     override fun setInsufficientFeeBalanceError(insufficientFeeBalance: SendFeeModule.InsufficientFeeBalance?) {
         insufficientFeeBalanceError.postValue(insufficientFeeBalance)
     }
+
+    override fun showLowFeeWarning(show: Boolean) {
+        showLowFeeWarningLiveData.postValue(show)
+    }
+
 }

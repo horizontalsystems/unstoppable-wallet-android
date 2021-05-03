@@ -1,8 +1,11 @@
 package io.horizontalsystems.bankwallet.modules.send.submodules.fee
 
+import android.os.CpuUsageInfo
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.FeeRatePriority
-import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.bankwallet.entities.CoinValue
+import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import io.horizontalsystems.bankwallet.entities.FeeRateState
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.SendModule.AmountInfo
 import io.horizontalsystems.bankwallet.modules.send.SendModule.AmountInfo.CoinValueInfo
@@ -35,9 +38,17 @@ class SendFeePresenter(
     private var error: Exception? = null
 
     private var customFeeRate: BigInteger? = null
+        set(value) {
+            field = value
+            value?.let {
+                view.showLowFeeWarning(value < recommendedFeeRate ?: BigInteger.ZERO)
+            }
+        }
+
     private var fetchedFeeRate: BigInteger? = null
     private var feeRatePriority: FeeRatePriority? = interactor.defaultFeeRatePriority
     private var feeRateAdjustmentInfo: FeeRateAdjustmentInfo = FeeRateAdjustmentInfo(SendAmountInfo.NotEntered, null, baseCurrency, null)
+    private var recommendedFeeRate: BigInteger? = null
 
     private val coin: Coin
         get() = feeCoinData?.first ?: baseCoin
@@ -237,7 +248,23 @@ class SendFeePresenter(
 
     // IInteractorDelegate
 
-    override fun didUpdate(feeRate: BigInteger) {
+    override fun didUpdate(feeRate: BigInteger, feeRatePriority: FeeRatePriority) {
+        when (feeRatePriority) {
+            FeeRatePriority.HIGH -> {
+                view.showLowFeeWarning(false)
+            }
+            FeeRatePriority.RECOMMENDED -> {
+                recommendedFeeRate = feeRate
+                view.showLowFeeWarning(false)
+            }
+            is FeeRatePriority.Custom -> {
+                // handled in customFeeRate setter
+            }
+            FeeRatePriority.LOW -> {
+                view.showLowFeeWarning(true)
+            }
+        }
+
         this.fetchedFeeRate = feeRate
         moduleDelegate?.onUpdateFeeRate()
     }

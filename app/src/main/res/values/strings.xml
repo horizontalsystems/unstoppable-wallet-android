@@ -335,6 +335,7 @@
     <string name="Send_Sending">Sending</string>
 
     <string name="Send_Token_InsufficientFeeAlert">Transaction fees for %1$s (%2$s) paid in %3$s. You need %4$s.</string>
+    <string name="Send_Warning_LowFee">Warning! Risk of getting stuck</string>
 
     <!--Fee Info -->
 
