@@ -258,6 +258,7 @@
     <string name="Send_Confirmation_Send_Button">Отправить</string>
     <string name="Send_Success">\u2713 Отправлено</string>
     <string name="ScanQr_PleaseGrantCameraPermission">Пожалуйста, дайте разрешение на доступ к камере</string>
+    <string name="ScanQr_NoCameraPermission">No camera permission</string>
     <string name="Send_Error_IncorrectAddress">Неверный Адрес</string>
     <string name="Send_Error_UnsupportedAddress">Блокировка по времени работает только с адресами P2PKH (начиная с 1)</string>
     <string name="Send_Error_BalanceAmount">Баланс %s</string>
