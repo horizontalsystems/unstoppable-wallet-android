@@ -258,6 +258,7 @@
     <string name="Send_Confirmation_Send_Button">ارسال</string>
     <string name="Send_Success">\u2713 ارسال شد</string>
     <string name="ScanQr_PleaseGrantCameraPermission">لطفا مجوز دسترسی به دوربین را تایید کنید</string>
+    <string name="ScanQr_NoCameraPermission">No camera permission</string>
     <string name="Send_Error_IncorrectAddress">آدرس اشتباه</string>
     <string name="Send_Error_UnsupportedAddress">قفل کردن زمان فقط با آدرس های P2PKH کار می کند (شروع از ۱)</string>
     <string name="Send_Error_BalanceAmount">مانده حساب %s</string>
