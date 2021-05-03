@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.send.submodules.fee
 
-import android.os.CpuUsageInfo
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.FeeRatePriority
 import io.horizontalsystems.bankwallet.entities.CoinValue
