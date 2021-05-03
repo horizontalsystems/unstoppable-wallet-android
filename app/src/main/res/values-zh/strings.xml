@@ -284,6 +284,7 @@
     <string name="Send_LockTime_Year">1 年</string>
     <string name="Send_Sending">正在发送</string>
     <string name="Send_Token_InsufficientFeeAlert">%s（%s）的交易费用以%s支付。您需要%s。</string>
+    <string name="Send_Warning_LowFee">Warning! Risk of getting stuck</string>
     <!--Fee Info -->
     <string name="FeeInfo_Title">交易速度</string>
     <string name="FeeInfo_Description">比特币（Bitcoin）和 以太币（Etherum）区块链都要求用户在区块链上发送交易时支付使用费。\n\nUnstoppable使用公共费用估算服务来帮助用户确定当前合适的交易费用。 当大量交易正在进行时，费用较高，而当区块链不那么繁忙时，费用较低。</string>
@@ -729,6 +730,10 @@
     <string name="RateList_Rank">排名</string>
     <string name="RateList_TopGainers">Top Gainers</string>
     <string name="RateList_TopLosers">顶级输家</string>
+    <string name="RateList_Posts">News</string>
+    <string name="Market_DaysAgo">%dd. ago</string>
+    <string name="Market_HoursAgo">%dh. ago</string>
+    <string name="Market_MinutesAgo">%dm. ago</string>
     <!-- Balance Sync Error -->
     <string name="BalanceSyncError_Title">同步出错</string>
     <string name="BalanceSyncError_ButtonRetry">重试</string>
