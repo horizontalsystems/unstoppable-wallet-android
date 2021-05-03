@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.qrscanner
 
 import android.Manifest
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -19,11 +18,12 @@ import com.journeyapps.barcodescanner.DefaultDecoderFactory
 import com.journeyapps.barcodescanner.camera.CameraSettings
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
+import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.android.synthetic.main.activity_qr_scanner.*
 import pub.devrel.easypermissions.AfterPermissionGranted
 import pub.devrel.easypermissions.EasyPermissions
 
-class QRScannerActivity : AppCompatActivity() {
+class QRScannerActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
 
     private val callback = BarcodeCallback {
         barcodeView.pause()
@@ -51,10 +51,7 @@ class QRScannerActivity : AppCompatActivity() {
         barcodeView.decodeSingle(callback)
 
         initializeFromIntent(intent)
-    }
 
-    override fun onResume() {
-        super.onResume()
         openCameraWithPermission()
     }
 
@@ -64,8 +61,19 @@ class QRScannerActivity : AppCompatActivity() {
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         // Forward results to EasyPermissions
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
+    }
+
+    override fun onPermissionsGranted(requestCode: Int, perms: MutableList<String>) {
+        if (perms.contains( Manifest.permission.CAMERA)) {
+            barcodeView.resume()
+        }
+    }
+
+    override fun onPermissionsDenied(requestCode: Int, perms: MutableList<String>) {
+        HudHelper.showErrorMessage(findViewById(android.R.id.content), R.string.ScanQr_NoCameraPermission)
     }
 
     @AfterPermissionGranted(REQUEST_CAMERA_PERMISSION)
