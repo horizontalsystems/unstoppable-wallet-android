@@ -62,10 +62,10 @@ class NumberFormatterTest {
 
         assertFormattedCoinSignificant(BigDecimal("0.00000123"), "0.00000123 BTC")
         assertFormattedCoinSignificant(BigDecimal("0.00001234"), "0.00001234 BTC")
-        assertFormattedCoinSignificant(BigDecimal("0.00012345"), "0.0001 BTC")
-        assertFormattedCoinSignificant(BigDecimal("0.00123456"), "0.0012 BTC")
-        assertFormattedCoinSignificant(BigDecimal("0.01234567"), "0.0123 BTC")
-        assertFormattedCoinSignificant(BigDecimal("0.12345678"), "0.1234 BTC")
+        assertFormattedCoinSignificant(BigDecimal("0.00012345"), "0.00012345 BTC")
+        assertFormattedCoinSignificant(BigDecimal("0.00123456"), "0.00123456 BTC")
+        assertFormattedCoinSignificant(BigDecimal("0.01234567"), "0.01234567 BTC")
+        assertFormattedCoinSignificant(BigDecimal("0.12345678"), "0.12345678 BTC")
 
         assertFormattedCoinSignificant(BigDecimal("1.00000123"), "1.00000123 BTC")
         assertFormattedCoinSignificant(BigDecimal("5.00000123"), "5.00000123 BTC")
