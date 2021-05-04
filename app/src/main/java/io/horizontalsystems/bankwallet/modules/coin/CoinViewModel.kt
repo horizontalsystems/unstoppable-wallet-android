@@ -218,17 +218,18 @@ class CoinViewModel(
 
         val coinMarketItems = factory.createCoinMarketItems(coinDetails.tickers)
         val coinInvestorItems = factory.createCoinInvestorItems(coinDetails.meta.fundCategories)
-        setExtraPageButtons(coinMarketItems, coinInvestorItems)
+        val coinVolume = factory.getVolume(coinDetails)
+        setExtraPageButtons(coinMarketItems, coinInvestorItems, coinVolume)
 
         coinMarkets.postValue(coinMarketItems)
         coinInvestors.postValue(coinInvestorItems)
     }
 
-    private fun setExtraPageButtons(coinMarketItems: List<MarketTickerViewItem>, coinInvestorItems: List<InvestorItem>) {
+    private fun setExtraPageButtons(coinMarketItems: List<MarketTickerViewItem>, coinInvestorItems: List<InvestorItem>, coinVolume: String?) {
         val coinExtraPages = mutableListOf<CoinExtraPage>()
-        if (coinMarketItems.isNotEmpty()) {
+        if (coinVolume != null || coinMarketItems.isNotEmpty()) {
             val listPosition = if (coinInvestorItems.isEmpty()) ListPosition.Single else ListPosition.First
-            coinExtraPages.add(CoinExtraPage.Markets(listPosition))
+            coinExtraPages.add(CoinExtraPage.TradingVolume(listPosition, coinVolume, coinMarketItems.isNotEmpty()))
         }
         if (coinInvestorItems.isNotEmpty()) {
             val listPosition = if (coinMarketItems.isEmpty()) ListPosition.Single else ListPosition.Last

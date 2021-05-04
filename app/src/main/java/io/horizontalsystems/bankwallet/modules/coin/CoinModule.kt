@@ -47,7 +47,7 @@ data class MarketTickerViewItem(
 }
 
 sealed class CoinExtraPage {
-    class Markets(val position: ListPosition) : CoinExtraPage()
+    class TradingVolume(val position: ListPosition, val value: String?, val canShowMarkets: Boolean) : CoinExtraPage()
     class Investors(val position: ListPosition) : CoinExtraPage()
 }
 

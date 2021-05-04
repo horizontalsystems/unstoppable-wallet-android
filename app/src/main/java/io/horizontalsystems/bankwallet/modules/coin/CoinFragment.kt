@@ -215,9 +215,6 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
         viewModel.coinDetailsLiveData.observe(viewLifecycleOwner, Observer { item ->
             marketDetails.isVisible = true
 
-            setMarketData(item.marketDataList)
-            setTvlData(item.tvlInfo)
-
             // Coin Rating
             coinRating.isVisible = !item.coinMeta.rating.isNullOrBlank()
             coinRating.setImageDrawable(getRatingIcon(item.coinMeta.rating))
@@ -226,6 +223,14 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
             // Performance
 
             setCoinPerformance(item)
+
+            // Market
+
+            setMarketData(item.marketDataList)
+
+            // TVL
+
+            setTvlData(item.tvlInfo)
 
 
             // About
@@ -384,18 +389,27 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
 
         context?.let { context ->
             pages.forEach { item ->
-                val coinInfoView = SettingsView(context).apply {
+                val coinInfoView = CoinInfoItemView(context).apply {
                     when (item) {
-                        is CoinExtraPage.Markets -> {
-                            setListPosition(item.position)
-                            showTitle(getString(R.string.CoinPage_CoinMarket, coinCode))
-                            setOnClickListener {
-                                findNavController().navigate(R.id.coinFragment_to_coinMarketsFragment, null, navOptions())
+                        is CoinExtraPage.TradingVolume -> {
+                            bind(
+                                    title = getString(R.string.CoinPage_TradingVolume),
+                                    value = item.value,
+                                    listPosition = item.position,
+                                    icon = if (item.canShowMarkets) R.drawable.ic_arrow_right else null
+                            )
+                            if (item.canShowMarkets) {
+                                setOnClickListener {
+                                    findNavController().navigate(R.id.coinFragment_to_coinMarketsFragment, null, navOptions())
+                                }
                             }
                         }
                         is CoinExtraPage.Investors -> {
-                            setListPosition(item.position)
-                            showTitle(getString(R.string.CoinPage_FundsInvested))
+                            bind(
+                                    title = getString(R.string.CoinPage_FundsInvested),
+                                    listPosition = item.position,
+                                    icon = R.drawable.ic_arrow_right
+                            )
                             setOnClickListener {
                                 findNavController().navigate(R.id.coinFragment_to_coinInvestorsFragment, null, navOptions())
                             }
