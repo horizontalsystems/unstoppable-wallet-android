@@ -47,7 +47,7 @@ class BalancePresenter(
 
     override fun onRefresh() {
         executor.submit {
-            interactor.refresh()
+            interactor.refresh(currency.code)
         }
     }
 
@@ -274,7 +274,7 @@ class BalancePresenter(
     }
 
     private fun handleRates() {
-        interactor.subscribeToMarketInfo(currency.code)
+        interactor.subscribeToMarketInfo(items.map { it.wallet.coin.type }, currency.code)
 
         items.forEach { item ->
             item.latestRate = interactor.latestRate(item.wallet.coin.type, currency.code)

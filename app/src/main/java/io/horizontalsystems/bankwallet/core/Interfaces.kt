@@ -278,11 +278,10 @@ interface IAppConfigProvider {
 }
 
 interface IRateManager {
-    fun set(coins: List<Coin>)
     fun latestRate(coinType: CoinType, currencyCode: String): LatestRate?
     fun getLatestRate(coinType: CoinType, currencyCode: String): BigDecimal?
     fun latestRateObservable(coinType: CoinType, currencyCode: String): Observable<LatestRate>
-    fun latestRateObservable(currencyCode: String): Observable<Map<CoinType, LatestRate>>
+    fun latestRateObservable(coinTypes: List<CoinType>, currencyCode: String): Observable<Map<CoinType, LatestRate>>
     fun historicalRateCached(coinType: CoinType, currencyCode: String, timestamp: Long): BigDecimal?
     fun historicalRate(coinType: CoinType, currencyCode: String, timestamp: Long): Single<BigDecimal>
     fun chartInfo(coinType: CoinType, currencyCode: String, chartType: ChartType): ChartInfo?
@@ -299,7 +298,7 @@ interface IRateManager {
     fun topDefiTvl(currencyCode: String, fetchDiffPeriod: TimePeriod, itemsCount: Int) : Single<List<DefiTvl>>
     fun defiTvlPoints(coinType: CoinType, currencyCode: String, fetchDiffPeriod: TimePeriod) : Single<List<DefiTvlPoint>>
     fun getCryptoNews(timestamp: Long? = null): Single<List<CryptoNews>>
-    fun refresh()
+    fun refresh(currencyCode: String)
 }
 
 interface IAccountsStorage {
