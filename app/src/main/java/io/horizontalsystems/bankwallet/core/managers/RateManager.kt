@@ -147,7 +147,7 @@ class RateManager(
     }
 
     override fun getCryptoNews(timestamp: Long?): Single<List<CryptoNews>> {
-        return kit.cryptoNewsAync(timestamp)
+        return kit.cryptoNewsAsync(timestamp)
     }
 
     private fun onWalletsUpdated(wallets: List<Wallet>) {
