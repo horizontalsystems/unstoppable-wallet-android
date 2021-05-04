@@ -70,9 +70,9 @@ object BalanceModule {
         fun subscribeToBaseCurrency()
         fun subscribeToAdapters(wallets: List<Wallet>)
 
-        fun subscribeToMarketInfo(currencyCode: String)
+        fun subscribeToMarketInfo(coinTypes: List<CoinType>, currencyCode: String)
 
-        fun refresh()
+        fun refresh(currencyCode: String)
 
         fun saveSortType(sortType: BalanceSortType)
 

@@ -146,10 +146,10 @@ class BalanceInteractor(
         }
     }
 
-    override fun subscribeToMarketInfo(currencyCode: String) {
+    override fun subscribeToMarketInfo(coinTypes: List<CoinType>, currencyCode: String) {
         marketInfoDisposables.clear()
 
-        rateManager.latestRateObservable(currencyCode)
+        rateManager.latestRateObservable(coinTypes, currencyCode)
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .subscribe {
@@ -159,9 +159,9 @@ class BalanceInteractor(
                 }
     }
 
-    override fun refresh() {
+    override fun refresh(currencyCode: String) {
         adapterManager.refresh()
-        rateManager.refresh()
+        rateManager.refresh(currencyCode)
 
         delegate?.didRefresh()
     }

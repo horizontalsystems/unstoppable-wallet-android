@@ -184,7 +184,7 @@ class App : CoreApp() {
         adapterFactory.ethereumRpcModeSettingsManager = ethereumRpcModeSettingsManager
 
         feeCoinProvider = FeeCoinProvider(coinKit)
-        xRateManager = RateManager(this, walletManager, currencyManager, feeCoinProvider, appConfigProvider)
+        xRateManager = RateManager(this, currencyManager, appConfigProvider)
 
         addressParserFactory = AddressParserFactory()
 
