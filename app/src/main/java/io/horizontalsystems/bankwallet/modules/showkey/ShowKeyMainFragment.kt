@@ -18,7 +18,13 @@ class ShowKeyMainFragment : BaseFragment() {
     private val showKeyTabs = listOf(ShowKeyTab.MnemonicPhrase, ShowKeyTab.PrivateKey)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        disallowScreenshot()
         return inflater.inflate(R.layout.fragment_show_key_main, container, false)
+    }
+
+    override fun onDestroyView() {
+        allowScreenshot()
+        super.onDestroyView()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

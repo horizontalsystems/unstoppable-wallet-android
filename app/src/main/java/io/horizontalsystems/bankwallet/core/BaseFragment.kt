@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import android.view.MenuItem
+import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import androidx.core.graphics.BlendModeColorFilterCompat
 import androidx.core.graphics.BlendModeCompat
@@ -42,6 +43,14 @@ abstract class BaseFragment : Fragment() {
                 .setPopEnterAnim(R.anim.slide_from_top)
                 .setPopExitAnim(R.anim.slide_to_bottom)
                 .build()
+    }
+
+    protected fun allowScreenshot() {
+        requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE)
+    }
+
+    protected fun disallowScreenshot() {
+        requireActivity().window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
     }
 
     fun showCustomKeyboardAlert() {

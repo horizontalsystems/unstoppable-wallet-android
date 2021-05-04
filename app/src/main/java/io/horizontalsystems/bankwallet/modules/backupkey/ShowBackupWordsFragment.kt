@@ -15,7 +15,13 @@ class ShowBackupWordsFragment : BaseFragment() {
     private val viewModel by navGraphViewModels<BackupKeyViewModel>(R.id.backupKeyFragment)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        disallowScreenshot()
         return inflater.inflate(R.layout.fragment_show_backup_words, container, false)
+    }
+
+    override fun onDestroyView() {
+        allowScreenshot()
+        super.onDestroyView()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
