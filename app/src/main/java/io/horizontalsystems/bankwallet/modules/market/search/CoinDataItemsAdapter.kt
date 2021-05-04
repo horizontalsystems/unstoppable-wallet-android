@@ -38,8 +38,10 @@ class CoinDataItemsAdapter(private val onItemClick: (CoinDataViewItem) -> Unit) 
             title.text = item.name
             subtitle.text = item.code
 
-            if(item.type is CoinType.Erc20 || item.type is CoinType.Bep20  || item.type is CoinType.Bep2)
-                rank.text = item.type::class.simpleName
+            if(item.type is CoinType.Erc20 || item.type is CoinType.Bep20  || item.type is CoinType.Bep2) {
+                rank.text = item.type.javaClass.simpleName
+                rank.isVisible = true
+            }
             else
                 rank.isVisible = false
         }
