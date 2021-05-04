@@ -29,7 +29,7 @@ class FeeCoinProvider(private val coinKit: CoinKit) {
         if (symbol == "BNB") {
             return null
         }
-        return coinKit.getCoin(CoinType.Bep2(symbol))?.let {
+        return coinKit.getCoin(CoinType.Bep2("BNB"))?.let {
             Pair(it, "BEP2")
         }
     }
