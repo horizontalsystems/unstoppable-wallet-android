@@ -90,6 +90,13 @@ class CoinViewFactory(private val currency: Currency, private val numberFormatte
         )
     }
 
+    fun getVolume(coinMarket: CoinMarketDetails): String? {
+        if (coinMarket.volume24h > BigDecimal.ZERO) {
+            return formatFiatShortened(coinMarket.volume24h, currency.symbol)
+        }
+        return null
+    }
+
     private fun getTvlInfo(coinMarket: CoinMarketDetails, currency: Currency): List<CoinDataItem> {
         val tvlInfoList = mutableListOf<CoinDataItem>()
 
@@ -105,9 +112,6 @@ class CoinViewFactory(private val currency: Currency, private val numberFormatte
         val marketData = mutableListOf<CoinDataItem>()
         if (coinMarket.marketCap > BigDecimal.ZERO) {
             marketData.add(CoinDataItem(R.string.CoinPage_MarketCap, formatFiatShortened(coinMarket.marketCap, currency.symbol)))
-        }
-        if (coinMarket.volume24h > BigDecimal.ZERO) {
-            marketData.add(CoinDataItem(R.string.CoinPage_Volume24, formatFiatShortened(coinMarket.volume24h, currency.symbol)))
         }
         if (coinMarket.circulatingSupply > BigDecimal.ZERO) {
             val (shortenValue, suffix) = numberFormatter.shortenValue(coinMarket.circulatingSupply)

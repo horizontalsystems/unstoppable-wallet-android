@@ -41,8 +41,10 @@ class CoinInfoItemView : ConstraintLayout {
         valueText.text = value
         valueText.isVisible = !value.isNullOrBlank()
 
+        iconView.isVisible = icon != null
+
         icon?.let {
-            valueText.setCompoundDrawablesWithIntrinsicBounds(0, 0, it, 0)
+            iconView.setImageResource(it)
         }
 
         viewBackground.setBackgroundResource(listPosition.getBackground())
