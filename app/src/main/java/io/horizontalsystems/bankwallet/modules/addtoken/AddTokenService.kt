@@ -64,7 +64,7 @@ class AddTokenService(
 
     fun save() {
         val coin = (state as? AddTokenModule.State.Fetched)?.coin ?: return
-        coinManager.save(coin)
+        coinManager.save(listOf(coin))
 
         val account = accountManager.activeAccount ?: return
         val wallet = Wallet(coin, account)

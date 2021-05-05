@@ -430,11 +430,11 @@ interface IRateAppManager {
 }
 
 interface ICoinManager {
-    val coinAddedObservable: Flowable<Coin>
+    val coinAddedObservable: Flowable<List<Coin>>
     val coins: List<Coin>
     val groupedCoins: Pair<List<Coin>, List<Coin>>
     fun getCoin(coinType: CoinType): Coin?
-    fun save(coin: Coin)
+    fun save(coins: List<Coin>)
 }
 
 interface IAddTokenBlockchainService {

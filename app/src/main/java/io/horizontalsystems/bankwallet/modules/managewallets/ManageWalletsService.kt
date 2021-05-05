@@ -189,8 +189,8 @@ class ManageWalletsService(
         }
     }
 
-    private fun handleAdded(coin: Coin) {
-        addedCoins.add(coin)
+    private fun handleAdded(coins: List<Coin>) {
+        addedCoins.addAll(coins)
 
         syncCoins()
         sortCoins()

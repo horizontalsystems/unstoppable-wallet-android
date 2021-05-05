@@ -14,10 +14,10 @@ object RestoreSelectCoinsModule {
         private val enableCoinsService by lazy {
             EnableCoinsService(
                     App.buildConfigProvider,
-                    EnableCoinsErc20Provider(App.networkManager),
+                    App.coinManager,
                     EnableCoinsBep2Provider(App.buildConfigProvider),
-                    EnableCoinsBep20Provider(App.networkManager, App.appConfigProvider.bscscanApiKey),
-                    App.coinManager
+                    EnableCoinsEip20Provider(App.networkManager, App.appConfigProvider, EnableCoinsEip20Provider.EnableCoinMode.Erc20),
+                    EnableCoinsEip20Provider(App.networkManager, App.appConfigProvider, EnableCoinsEip20Provider.EnableCoinMode.Bep20)
             )
         }
 

@@ -43,8 +43,7 @@ class RestoreSelectCoinsService(
     init {
         enableCoinsService.enableCoinsAsync
                 .subscribeIO { coins ->
-                    val configuredCoins = coins.map { ConfiguredCoin(it) }
-                    enable(configuredCoins, true)
+                    handleEnable(coins)
                 }.let {
                     disposables.add(it)
                 }
@@ -170,6 +169,35 @@ class RestoreSelectCoinsService(
         enabledCoins.addAll(newConfiguredCoins)
         enabledCoins.removeAll(removedConfiguredCoins)
     }
+
+    private fun handleEnable(coins: List<Coin>) {
+        val allCoins = coinManager.coins
+
+        val existingCoins = mutableListOf<Coin>()
+        val newCoins = mutableListOf<Coin>()
+
+        coins.forEach { coin ->
+            if (notEnabled(coin)) {
+                val existingCoin = allCoins.firstOrNull { it.type == coin.type }
+                if (existingCoin != null) {
+                    existingCoins.add(existingCoin)
+                } else {
+                    newCoins.add(coin)
+                }
+            }
+        }
+
+        if (newCoins.isNotEmpty()) {
+            this.coins.addAll(newCoins)
+            coinManager.save(newCoins)
+        }
+
+        val configuredCoins = coins.map { ConfiguredCoin(it) }
+        enable(configuredCoins, true)
+    }
+
+    private fun notEnabled(coin: Coin) =
+            enabledCoins.firstOrNull { it.coin.type == coin.type } == null
 
     private fun enable(configuredCoins: List<ConfiguredCoin>, sortCoins: Boolean = false) {
         enabledCoins.addAll(configuredCoins)
