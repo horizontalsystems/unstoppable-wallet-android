@@ -70,7 +70,7 @@ object BalanceModule {
         fun subscribeToBaseCurrency()
         fun subscribeToAdapters(wallets: List<Wallet>)
 
-        fun subscribeToMarketInfo(coinTypes: List<CoinType>, currencyCode: String)
+        fun subscribeToMarketInfo(coins: List<Coin>, currencyCode: String)
 
         fun refresh(currencyCode: String)
 
@@ -145,7 +145,9 @@ object BalanceModule {
                     App.accountManager,
                     App.rateAppManager,
                     App.connectivityManager,
-                    App.appConfigProvider)
+                    App.appConfigProvider,
+                    App.feeCoinProvider,
+            )
 
             val presenter = BalancePresenter(interactor, viewAndRouter, BalanceSorter(), BalanceViewItemFactory())
 
