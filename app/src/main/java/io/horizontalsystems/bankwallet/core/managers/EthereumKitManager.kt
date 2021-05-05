@@ -65,6 +65,8 @@ class EthereumKitManager(
         kit.addDecorator(Erc20Kit.getDecorator())
         kit.addDecorator(UniswapKit.getDecorator())
 
+        kit.addTransactionSyncer(Erc20Kit.getTransactionSyncer(kit))
+
         kit.start()
 
         return kit
