@@ -45,10 +45,19 @@ class AppConfigProvider : IAppConfigProvider, ILanguageConfigProvider, IBuildCon
     override val feeRateAdjustForCurrencies: List<String> = listOf("USD", "EUR")
 
     override val currencies: List<Currency> = listOf(
-            Currency(code = "USD", symbol = "\u0024", decimal = 2),
-            Currency(code = "EUR", symbol = "\u20AC", decimal = 2),
-            Currency(code = "GBP", symbol = "\u00A3", decimal = 2),
-            Currency(code = "JPY", symbol = "\u00A5", decimal = 2)
+            Currency("AUD", "A$", 2),
+            Currency("BRL", "R$", 2),
+            Currency("CAD", "C$", 2),
+            Currency("CHF", "₣", 2),
+            Currency("CNY", "¥", 2),
+            Currency("EUR", "€", 2),
+            Currency("GBP", "£", 2),
+            Currency("HKD", "HK$", 2),
+            Currency("ILS", "₪", 2),
+            Currency("JPY", "¥", 2),
+            Currency("RUB", "₽", 2),
+            Currency("SGD", "S$", 2),
+            Currency("USD", "$", 2),
     )
     override val featuredCoinTypes: List<CoinType> = listOf(
             CoinType.Bitcoin,

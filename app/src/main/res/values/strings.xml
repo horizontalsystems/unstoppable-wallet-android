@@ -521,6 +521,10 @@
 
     <string name="Markdown_Error_NotFound">Page not found</string>
 
+    <!--Setting_Currency-->
+    <string name="SettingsCurrency_Title">Base Currency</string>
+    <string name="SettingsCurrency_Other">OTHER</string>
+
     <!--Settings-->
 
     <string name="Settings_Title">Settings</string>

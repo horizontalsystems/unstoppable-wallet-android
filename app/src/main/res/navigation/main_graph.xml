@@ -27,8 +27,8 @@
             android:id="@+id/mainFragment_to_academyFragment"
             app:destination="@id/academyFragment" />
         <action
-            android:id="@+id/mainFragment_to_currencySwitcherFragment"
-            app:destination="@id/currencySwitcherFragment" />
+            android:id="@+id/mainFragment_to_baseCurrencySettingsFragment"
+            app:destination="@id/baseCurrencySettingsFragment" />
         <action
             android:id="@+id/mainFragment_to_languageSettingsFragment"
             app:destination="@id/languageSettingsFragment" />
@@ -206,9 +206,9 @@
             app:destination="@id/markdownFragment" />
     </fragment>
     <fragment
-        android:id="@+id/currencySwitcherFragment"
-        android:name="io.horizontalsystems.currencyswitcher.CurrencySwitcherFragment"
-        tools:layout="@layout/fragment_currency_switcher" />
+        android:id="@+id/baseCurrencySettingsFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.basecurrency.BaseCurrencySettingsFragment"
+        tools:layout="@layout/fragment_base_currency_settings" />
     <fragment
         android:id="@+id/languageSettingsFragment"
         android:name="io.horizontalsystems.languageswitcher.LanguageSettingsFragment"

@@ -409,6 +409,8 @@
     <string name="Guides_Title">Akademi</string>
     <!--Markdown-->
     <string name="Markdown_Error_NotFound">Hiçbir sayfa bulunamadı</string>
+    <!--Setting_Currency-->
+    <string name="SettingsCurrency_Title">Para birimi</string>
     <!--Settings-->
     <string name="Settings_Title">Ayarlar</string>
     <string name="Settings_SecurityCenter">Güvenlik Merkezi</string>

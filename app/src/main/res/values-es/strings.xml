@@ -408,6 +408,8 @@
     <string name="Guides_Title">Academia</string>
     <!--Markdown-->
     <string name="Markdown_Error_NotFound">No se encontró la página</string>
+    <!--Setting_Currency-->
+    <string name="SettingsCurrency_Title">Moneda principal</string>
     <!--Settings-->
     <string name="Settings_Title">Ajustes</string>
     <string name="Settings_SecurityCenter">Centro de seguridad</string>

@@ -158,7 +158,7 @@ class MainSettingsFragment : BaseFragment() {
         })
 
         router.showBaseCurrencySettingsLiveEvent.observe(viewLifecycleOwner, {
-            findNavController().navigate(R.id.mainFragment_to_currencySwitcherFragment, null, navOptions())
+            findNavController().navigate(R.id.mainFragment_to_baseCurrencySettingsFragment, null, navOptions())
         })
 
         router.showLanguageSettingsLiveEvent.observe(viewLifecycleOwner, {

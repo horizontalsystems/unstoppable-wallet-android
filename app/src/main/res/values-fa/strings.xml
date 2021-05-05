@@ -407,6 +407,8 @@
     <string name="Guides_Title">آکادمی</string>
     <!--Markdown-->
     <string name="Markdown_Error_NotFound">صفحه پیدا نشد</string>
+    <!--Setting_Currency-->
+    <string name="SettingsCurrency_Title">ارز مرجع</string>
     <!--Settings-->
     <string name="Settings_Title">تنظيمات</string>
     <string name="Settings_SecurityCenter">مركز امنيتي</string>
