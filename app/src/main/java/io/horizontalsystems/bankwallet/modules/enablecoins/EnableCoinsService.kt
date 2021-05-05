@@ -13,10 +13,10 @@ import io.reactivex.subjects.PublishSubject
 
 class EnableCoinsService(
         appConfigProvider: IBuildConfigProvider,
-        private val ethereumProvider: EnableCoinsErc20Provider,
+        private val coinManager: ICoinManager,
         private val bep2Provider: EnableCoinsBep2Provider,
-        private val bep20Provider: EnableCoinsBep20Provider,
-        private val coinManager: ICoinManager) {
+        private val erc20Provider: EnableCoinsEip20Provider,
+        private val bep20Provider: EnableCoinsEip20Provider) {
 
     val testMode = appConfigProvider.testMode
     val enableCoinsAsync = PublishSubject.create<List<Coin>>()
@@ -45,8 +45,7 @@ class EnableCoinsService(
         disposables.clear()
 
         try {
-            val tokenType = state.tokenType
-            when (tokenType) {
+            when (val tokenType = state.tokenType) {
                 is TokenType.Erc20 -> fetchErc20Tokens(tokenType)
                 is TokenType.Bep2 -> fetchBep2Tokens(tokenType)
                 is TokenType.Bep20 -> fetchBep20Tokens(tokenType)
@@ -69,48 +68,28 @@ class EnableCoinsService(
     private fun fetchBep20Tokens(bep20: TokenType.Bep20) {
         val address = EthereumKit.address(bep20.words, bep20.passphrase, EthereumKit.NetworkType.BscMainNet)
 
-        bep20Provider.getTokenAddressesAsync(address.hex)
+        bep20Provider.getCoinsAsync(address.hex)
                 .subscribeIO({ coins ->
-                    handleFetchBep20(coins)
+                    state = State.Success(coins)
+                    enableCoinsAsync.onNext(coins)
                 }, {
                     state = State.Failure(it)
                 })
                 .let { disposables.add(it) }
-    }
-
-    private fun handleFetchBep20(addresses: List<String>) {
-        val allCoins = coinManager.coins
-
-        val coins = addresses.mapNotNull { address ->
-            allCoins.firstOrNull { it.type is CoinType.Bep20 && (it.type as CoinType.Bep20).address.equals(address, ignoreCase = true) }
-        }
-
-        state = State.Success(coins)
-        enableCoinsAsync.onNext(coins)
     }
 
     private fun fetchErc20Tokens(erc20: TokenType.Erc20) {
         val networkType = if (testMode) EthereumKit.NetworkType.EthRopsten else EthereumKit.NetworkType.EthMainNet
         val address = EthereumKit.address(erc20.words, erc20.passphrase, networkType)
 
-        ethereumProvider.getTokenAddressesAsync(address.hex)
-                .subscribeIO({ tokenAddresses ->
-                    handleFetchErc20(tokenAddresses)
+        erc20Provider.getCoinsAsync(address.hex)
+                .subscribeIO({ coins ->
+                    state = State.Success(coins)
+                    enableCoinsAsync.onNext(coins)
                 }, {
                     state = State.Failure(it)
                 })
                 .let { disposables.add(it) }
-    }
-
-    private fun handleFetchErc20(addresses: List<String>) {
-        val allCoins = coinManager.coins
-
-        val coins = addresses.mapNotNull { address ->
-            allCoins.firstOrNull { it.type is CoinType.Erc20 && (it.type as CoinType.Erc20).address.equals(address, ignoreCase = true) }
-        }
-
-        state = State.Success(coins)
-        enableCoinsAsync.onNext(coins)
     }
 
     private fun fetchBep2Tokens(bep2: TokenType.Bep2) {

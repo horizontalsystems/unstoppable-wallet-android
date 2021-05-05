@@ -14,9 +14,9 @@ class CoinManager(
         private val appConfigProvider: IAppConfigProvider
 ) : ICoinManager {
 
-    private val coinAddedSubject = PublishSubject.create<Coin>()
+    private val coinAddedSubject = PublishSubject.create<List<Coin>>()
 
-    override val coinAddedObservable: Flowable<Coin>
+    override val coinAddedObservable: Flowable<List<Coin>>
         get() = coinAddedSubject.toFlowable(BackpressureStrategy.BUFFER)
 
     override val coins: List<Coin>
@@ -42,8 +42,8 @@ class CoinManager(
         return coinKit.getCoin(coinType)
     }
 
-    override fun save(coin: Coin) {
-        coinKit.saveCoin(coin)
-        coinAddedSubject.onNext(coin)
+    override fun save(coins: List<Coin>) {
+        coinKit.saveCoins(coins)
+        coinAddedSubject.onNext(coins)
     }
 }

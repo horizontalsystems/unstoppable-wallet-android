@@ -504,9 +504,7 @@ abstract class AppDatabase : RoomDatabase() {
             override fun migrate(database: SupportSQLiteDatabase) {
                 // extract custom coins
                 val customCoins = extractCustomCoins(database)
-                customCoins.forEach {
-                    App.coinKit.saveCoin(it)
-                }
+                App.coinKit.saveCoins(customCoins)
 
                 // change coinIds in enabled wallets
                 updateCoinIdInEnabledWallets(customCoins, database)
