@@ -14,7 +14,7 @@ class CurrencyManager(private val localStorage: ILocalStorage, private val appCo
             val storedCode = localStorage.baseCurrencyCode
             return storedCode?.let { code ->
                 currencies.find { it.code == code }
-            } ?: currencies.first()
+            } ?: currencies.first { it.code == "USD" }
         }
         set(value) {
             localStorage.baseCurrencyCode = value.code
