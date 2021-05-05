@@ -440,6 +440,12 @@
     <string name="Guides_Title">Akademi</string>
     <!--Markdown-->
     <string name="Markdown_Error_NotFound">Hiçbir sayfa bulunamadı</string>
+    <!--Setting_Currency-->
+    <string name="SettingsCurrency_Title">Base Currency</string>
+    <string name="SettingsCurrency_Other">OTHER</string>
+    <string name="SettingsCurrency_DisclaimerTitle">Disclaimer</string>
+    <string name="SettingsCurrency_DisclaimerText">The exchange rate data provided by a third party service Coingecko.com\n\nUnstoppable wallet app doesn\'t guarantee these values are always correct and match market data. The chance for inconsistency is higher if you select any base currency other than %s.</string>
+    <string name="SettingsCurrency_Understand">I Understand</string>
     <!--Settings-->
     <string name="Settings_Title">Ayarlar</string>
     <string name="Settings_SecurityCenter">Güvenlik Merkezi</string>
