@@ -7,20 +7,15 @@ import io.horizontalsystems.views.ListPosition
 
 class BaseCurrencySettingsViewModel(private val service: BaseCurrencySettingsService) : ViewModel() {
 
+    val disclaimerLiveEvent = SingleLiveEvent<String>()
     val finishLiveEvent = SingleLiveEvent<Unit>()
 
-    var baseCurrency: Currency
-        get() = service.baseCurrency
-        set(value) {
-            service.baseCurrency = value
-
-            finishLiveEvent.call()
-        }
+    private var tmpBaseCurrency: Currency? = null
 
     val popularItems = service.popularCurrencies.mapIndexed { index, currency ->
         CurrencyViewItemWrapper(
                 currency,
-                currency == baseCurrency,
+                currency == service.baseCurrency,
                 ListPosition.getListPosition(service.popularCurrencies.size, index)
         )
     }
@@ -28,8 +23,29 @@ class BaseCurrencySettingsViewModel(private val service: BaseCurrencySettingsSer
     val otherItems = service.otherCurrencies.mapIndexed { index, currency ->
         CurrencyViewItemWrapper(
                 currency,
-                currency == baseCurrency,
+                currency == service.baseCurrency,
                 ListPosition.getListPosition(service.otherCurrencies.size, index)
         )
     }
+
+    fun setBaseCurrency(v: Currency) {
+        if (service.popularCurrencies.contains(v)) {
+            doSetBaseCurrency(v)
+        } else {
+            tmpBaseCurrency = v
+            disclaimerLiveEvent.postValue(service.popularCurrencies.map { it.code }.joinToString())
+        }
+    }
+
+    fun onAcceptDisclaimer() {
+        tmpBaseCurrency?.let {
+            doSetBaseCurrency(it)
+        }
+    }
+
+    private fun doSetBaseCurrency(v: Currency) {
+        service.baseCurrency = v
+        finishLiveEvent.call()
+    }
+
 }

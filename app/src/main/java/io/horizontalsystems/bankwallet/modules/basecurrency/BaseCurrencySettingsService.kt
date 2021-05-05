@@ -16,11 +16,14 @@ class BaseCurrencySettingsService(private val currencyManager: ICurrencyManager)
     val otherCurrencies: List<Currency>
 
     init {
-        val (popularCurrencies, otherCurrencies) = currencyManager.currencies.partition {
-            popularCurrencyCodes.contains(it.code)
+        val currencies = currencyManager.currencies.toMutableList()
+        val populars = mutableListOf<Currency>()
+
+        popularCurrencyCodes.forEach { code ->
+            populars.add(currencies.removeAt(currencies.indexOfFirst { it.code == code }))
         }
 
-        this.popularCurrencies = popularCurrencies
-        this.otherCurrencies = otherCurrencies
+        popularCurrencies = populars
+        otherCurrencies = currencies
     }
 }

@@ -34,6 +34,14 @@ class BaseCurrencySettingsFragment : BaseFragment(), RVAdapter.ViewHolder.Listen
             findNavController().popBackStack()
         }
 
+        viewModel.disclaimerLiveEvent.observe(viewLifecycleOwner) {
+            val dialog = BaseCurrencyDisclaimerDialog(it)
+            dialog.onConfirm = {
+                viewModel.onAcceptDisclaimer()
+            }
+            dialog.show(childFragmentManager, "selector_dialog")
+        }
+
         viewModel.finishLiveEvent.observe(viewLifecycleOwner) {
             findNavController().popBackStack()
         }
@@ -45,7 +53,7 @@ class BaseCurrencySettingsFragment : BaseFragment(), RVAdapter.ViewHolder.Listen
     }
 
     override fun onSelectItem(item: CurrencyViewItemWrapper) {
-        viewModel.baseCurrency = item.currency
+        viewModel.setBaseCurrency(item.currency)
     }
 }
 

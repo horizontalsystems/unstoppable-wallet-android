@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <View
+        android:id="@+id/backgroundView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/bottom_sheet_floating_background"
+        android:backgroundTint="@color/lawrence"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/headerIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="20dp"
+        android:layout_marginStart="12dp"
+        android:src="@drawable/ic_attention_yellow_24"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/txtTitle"
+        style="@style/Headline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/SettingsCurrency_DisclaimerTitle"
+        android:textColor="@color/oz"
+        app:layout_constraintBottom_toBottomOf="@id/headerIcon"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/headerIcon" />
+
+    <View
+        android:id="@+id/border1"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="12dp"
+        android:background="@color/steel_10"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/headerIcon" />
+
+    <TextView
+        android:id="@+id/text"
+        style="@style/ImportantText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="@string/SettingsCurrency_DisclaimerText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/border1" />
+
+    <Button
+        android:id="@+id/buttonConfirm"
+        style="@style/ButtonPrimaryYellow"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="16dp"
+        android:text="@string/SettingsCurrency_Understand"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
