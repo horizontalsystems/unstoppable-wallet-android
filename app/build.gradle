@@ -218,7 +218,6 @@ dependencies {
     implementation project(':components:icons')
     implementation project(':components:chartview')
     implementation project(':components:languageswitcher')
-    implementation project(':components:currencyswitcher')
     implementation project(':components:keystore')
     implementation project(':components:pin')
     implementation project(':components:seekbar')

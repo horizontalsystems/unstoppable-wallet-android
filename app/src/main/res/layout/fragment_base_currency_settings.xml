@@ -11,8 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         app:navigationIcon="@drawable/ic_back"
-        app:titleTextAppearance="@style/Title3"
-        app:title="@string/SettingsCurrency_Title" />
+        app:title="@string/SettingsCurrency_Title"
+        app:titleTextAppearance="@style/Title3" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
@@ -20,6 +20,8 @@
         android:layout_height="match_parent"
         android:layout_marginTop="?attr/actionBarSize"
         android:clipToPadding="false"
-        android:paddingTop="12dp" />
+        android:paddingTop="12dp"
+        android:paddingBottom="32dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
 </FrameLayout>

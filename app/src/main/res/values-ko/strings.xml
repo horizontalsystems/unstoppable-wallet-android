@@ -408,6 +408,8 @@
     <string name="Guides_Title">아카데미</string>
     <!--Markdown-->
     <string name="Markdown_Error_NotFound">연락처</string>
+    <!--Setting_Currency-->
+    <string name="SettingsCurrency_Title">기초 통화</string>
     <!--Settings-->
     <string name="Settings_Title">설정</string>
     <string name="Settings_SecurityCenter">보안 센터</string>

@@ -408,6 +408,8 @@
     <string name="Guides_Title">Академия</string>
     <!--Markdown-->
     <string name="Markdown_Error_NotFound">Страница не найдена</string>
+    <!--Setting_Currency-->
+    <string name="SettingsCurrency_Title">Базовая Валюта</string>
     <!--Settings-->
     <string name="Settings_Title">Настройки</string>
     <string name="Settings_SecurityCenter">Центр Безопасности</string>
