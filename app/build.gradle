@@ -87,7 +87,7 @@ android {
             resValue "string", "infuraProjectId", "5bf760228fcd47bb8d277dba49b7b369"
             resValue "string", "infuraSecretKey", "7b81c992c98d4e60aaa8a0ef9acff2be"
             resValue "string", "etherscanKey", "TTH1114D5VD5ZMCJZ4B74SGIDRCGSKWGX9"
-            resValue "string", "bscscanKey", "5ZGSHWYHZVA8XZHB8PF6UUTRNNB4KT43ZZ"
+            resValue "string", "bscscanKey", "HBQQN4GTKCHYSRZCKFVQJ3FWGPY4T8237Y"
             resValue "string", "is_release", "true"
             resValue "string", "guidesUrl", "https://raw.githubusercontent.com/horizontalsystems/blockchain-crypto-guides/v1.1/index.json"
             resValue "string", "faqUrl", "https://raw.githubusercontent.com/horizontalsystems/Unstoppable-Wallet-Website/v1.0/src/faq_android.json"
@@ -185,7 +185,7 @@ dependencies {
 
     // Wallet kits
     implementation 'com.github.horizontalsystems:bitcoin-kit-android:aa4cb9e'
-    implementation 'com.github.horizontalsystems:ethereum-kit-android:5111432'
+    implementation 'com.github.horizontalsystems:ethereum-kit-android:696b46a'
     implementation 'com.github.horizontalsystems:blockchain-fee-rate-kit-android:047596b'
     implementation 'com.github.horizontalsystems:binance-chain-kit-android:18c39c9'
     implementation 'com.github.horizontalsystems:xrates-kit-android:aad3899'
