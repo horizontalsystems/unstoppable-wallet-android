@@ -157,14 +157,16 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="Market_Category_Infrastructure_Description">Projects building infrastructure solutions.</string>
     <string name="Market_Category_Staking">Staking ETH 2.0</string>
     <string name="Market_Category_Staking_Description">Protocols that reward liquidity providers.</string>
-    <string name="Market_Category_Governance">Governance</string>
-    <string name="Market_Category_Governance_Description">Decentralized governance protocols for DAOs.</string>
     <string name="Market_Category_CrossChain">Cross Chain</string>
     <string name="Market_Category_CrossChain_Description">Cross-chain protocols.</string>
     <string name="Market_Category_Computing">Computing</string>
     <string name="Market_Category_Computing_Description">Decentralized on-demand computing solutions.</string>
     <string name="Market_Category_RebaseTokens">Rebase Tokens</string>
     <string name="Market_Category_RebaseTokens_Description">Tokens that periodically adjust to achieve a target price.</string>
+    <string name="Market_Category_FanTokens">Fan Tokens</string>
+    <string name="Market_Category_FanTokens_Description">Digital fan tokens, typically specific to a team or club.</string>
+    <string name="Market_Category_InvestmentTools">Investment Tools</string>
+    <string name="Market_Category_InvestmentTools_Description">Token-powered analytics and investment instruments.</string>
     <!--Market Global Metrics-->
     <string name="MarketGlobalMetrics_Chart">Chart</string>
     <string name="MarketGlobalMetrics_BtcDominance">Bitcoin Dominance</string>
