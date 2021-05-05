@@ -8,6 +8,7 @@ import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.SendModule.AmountInfo
+import io.horizontalsystems.bankwallet.ui.extensions.AmountInputView
 import java.math.BigDecimal
 import kotlin.math.min
 
@@ -16,14 +17,13 @@ object SendAmountModule {
     interface IView {
 
         fun setLoading(loading: Boolean)
-        fun setAmountType(prefix: String)
         fun setAmount(amount: String)
         fun setAvailableBalance(availableBalance: String)
         fun setHint(hint: String)
-        fun setHintStateEnabled(enabled: Boolean)
         fun setValidationError(error: ValidationError?)
         fun revertAmount(amount: String)
         fun setMaxButtonVisible(visible: Boolean)
+        fun setInputFields(inputParams: AmountInputView.InputParams)
     }
 
     interface IViewDelegate {

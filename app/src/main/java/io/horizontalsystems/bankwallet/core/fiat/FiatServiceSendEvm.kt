@@ -56,23 +56,15 @@ class FiatServiceSendEvm(
 
     private var currencyAmount: BigDecimal? = null
 
-    private val primaryInfoSubject = PublishSubject.create<PrimaryInfo>()
-    var primaryInfo: PrimaryInfo = PrimaryInfo.Amount(BigDecimal.ZERO)
-        private set(value) {
-            field = value
-            primaryInfoSubject.onNext(value)
-        }
-    val primaryInfoObservable: Flowable<PrimaryInfo>
-        get() = primaryInfoSubject.toFlowable(BackpressureStrategy.BUFFER)
+    private val inputsUpdatedSubject = PublishSubject.create<Unit>()
+    val inputsUpdatedObservable: Flowable<Unit>
+        get() = inputsUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
 
-    private val secondaryAmountInfoSubject = PublishSubject.create<Optional<SendModule.AmountInfo>>()
+    var primaryInfo: PrimaryInfo = PrimaryInfo.Amount(BigDecimal.ZERO)
+        private set
+
     var secondaryAmountInfo: SendModule.AmountInfo? = null
-        private set(value) {
-            field = value
-            secondaryAmountInfoSubject.onNext(Optional.ofNullable(value))
-        }
-    val secondaryAmountInfoObservable: Flowable<Optional<SendModule.AmountInfo>>
-        get() = secondaryAmountInfoSubject.toFlowable(BackpressureStrategy.BUFFER)
+        private set
 
     val currency = currencyManager.baseCurrency
 
@@ -127,6 +119,7 @@ class FiatServiceSendEvm(
             primaryInfo = PrimaryInfo.Amount(coinAmount)
             secondaryAmountInfo = SendModule.AmountInfo.CurrencyValueInfo(CurrencyValue(currency, BigDecimal.ZERO))
         }
+        inputsUpdatedSubject.onNext(Unit)
     }
 
     private fun syncCoinAmount() {
