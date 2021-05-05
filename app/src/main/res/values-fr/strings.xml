@@ -441,6 +441,12 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="Guides_Title">Académie</string>
     <!--Markdown-->
     <string name="Markdown_Error_NotFound">Página no encontrada</string>
+    <!--Setting_Currency-->
+    <string name="SettingsCurrency_Title">Base Currency</string>
+    <string name="SettingsCurrency_Other">OTHER</string>
+    <string name="SettingsCurrency_DisclaimerTitle">Disclaimer</string>
+    <string name="SettingsCurrency_DisclaimerText">The exchange rate data provided by a third party service Coingecko.com\n\nUnstoppable wallet app doesn\'t guarantee these values are always correct and match market data. The chance for inconsistency is higher if you select any base currency other than %s.</string>
+    <string name="SettingsCurrency_Understand">I Understand</string>
     <!--Settings-->
     <string name="Settings_Title">Paramètres</string>
     <string name="Settings_SecurityCenter">Centre de Sécurité</string>
