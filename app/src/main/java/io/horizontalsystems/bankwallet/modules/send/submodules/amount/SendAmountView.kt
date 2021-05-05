@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.send.submodules.amount
 
 import androidx.lifecycle.MutableLiveData
+import io.horizontalsystems.bankwallet.ui.extensions.AmountInputView
 import io.horizontalsystems.core.SingleLiveEvent
 
 class SendAmountView : SendAmountModule.IView {
@@ -8,16 +9,12 @@ class SendAmountView : SendAmountModule.IView {
     val amount = MutableLiveData<String>()
     val availableBalance = MutableLiveData<String>()
     val hint = MutableLiveData<String>()
-    val hintStateEnabled = MutableLiveData<Boolean>()
-    val amountInputPrefix = MutableLiveData<String>()
     val maxButtonVisibleValue = MutableLiveData<Boolean>()
     val revertAmount = SingleLiveEvent<String>()
     val validationError = MutableLiveData<SendAmountModule.ValidationError?>()
     val setLoading = MutableLiveData<Boolean>()
+    val inputParamsLiveData = MutableLiveData<AmountInputView.InputParams>()
 
-    override fun setAmountType(prefix: String) {
-        amountInputPrefix.value = prefix
-    }
 
     override fun setAmount(amount: String) {
         this.amount.postValue(amount)
@@ -29,10 +26,6 @@ class SendAmountView : SendAmountModule.IView {
 
     override fun setHint(hint: String) {
         this.hint.postValue(hint)
-    }
-
-    override fun setHintStateEnabled(enabled: Boolean) {
-        hintStateEnabled.postValue(enabled)
     }
 
     override fun setMaxButtonVisible(visible: Boolean) {
@@ -49,5 +42,9 @@ class SendAmountView : SendAmountModule.IView {
 
     override fun setLoading(loading: Boolean) {
         setLoading.postValue(loading)
+    }
+
+    override fun setInputFields(inputParams: AmountInputView.InputParams) {
+        inputParamsLiveData.postValue(inputParams)
     }
 }

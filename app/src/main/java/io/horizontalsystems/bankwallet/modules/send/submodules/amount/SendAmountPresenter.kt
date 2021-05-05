@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.send.submodules.amount
 
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.fiat.AmountTypeSwitchService
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
@@ -10,6 +11,7 @@ import io.horizontalsystems.bankwallet.modules.send.SendModule.AmountInfo.CoinVa
 import io.horizontalsystems.bankwallet.modules.send.SendModule.AmountInfo.CurrencyValueInfo
 import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmountModule.ValidationError.InsufficientBalance
 import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmountModule.ValidationError.TooFewAmount
+import io.horizontalsystems.bankwallet.ui.extensions.AmountInputView
 import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.core.entities.Currency
 import java.math.BigDecimal
@@ -30,6 +32,7 @@ class SendAmountPresenter(
     private var minimumAmount: BigDecimal? = null
     private var maximumAmount: BigDecimal? = null
     private var minimumRequiredBalance: BigDecimal = BigDecimal.ZERO
+    private var switchAvailable = false
 
     override var xRate: BigDecimal? = null
     override var sendAmountInfo: SendAmountInfo = SendAmountInfo.NotEntered
@@ -96,6 +99,7 @@ class SendAmountPresenter(
 
         syncAmount()
         syncHint()
+        updateInputFields()
         syncError()
 
         moduleDelegate?.onChangeAmount()
@@ -134,9 +138,9 @@ class SendAmountPresenter(
         moduleDelegate?.onChangeInputType(inputType)
         moduleDelegate?.onRateUpdated(xRate)
 
-        syncAmountType()
         syncAmount()
         syncHint()
+        updateInputFields()
     }
 
     override fun onSwitchClick() {
@@ -147,9 +151,9 @@ class SendAmountPresenter(
         interactor.defaultInputType = inputType
         moduleDelegate?.onChangeInputType(inputType)
 
-        syncAmountType()
         syncAmount()
         syncHint()
+        updateInputFields()
         syncError()
         syncAvailableBalance()
     }
@@ -168,6 +172,7 @@ class SendAmountPresenter(
             sendAmountInfo = this.amount?.let { SendAmountInfo.Entered(it) } ?: SendAmountInfo.NotEntered
 
             syncHint()
+            updateInputFields()
             syncError()
 
             moduleDelegate?.onChangeAmount()
@@ -180,6 +185,7 @@ class SendAmountPresenter(
 
         syncAmount()
         syncHint()
+        updateInputFields()
         syncError()
 
         moduleDelegate?.onChangeAmount()
@@ -218,9 +224,9 @@ class SendAmountPresenter(
         moduleDelegate?.onRateUpdated(rate)
 
         syncAmount()
-        syncAvailableBalance()
-        syncAmountType()
         syncHint()
+        updateInputFields()
+        syncAvailableBalance()
     }
 
     private fun syncAmount() {
@@ -234,14 +240,9 @@ class SendAmountPresenter(
         }
     }
 
-    private fun syncAmountType() {
-        val prefix = presenterHelper.getAmountPrefix(inputType, xRate) ?: ""
-        view.setAmountType(prefix)
-    }
-
-    private fun syncHint() {
+    private fun syncHint(){
         var hint = presenterHelper.getHint(this.amount, inputType, xRate)
-        view.setHintStateEnabled(hint != null)
+        switchAvailable = hint != null
         hint = hint ?: Translator.getString(R.string.NotAvailable)
         view.setHint(hint)
     }
@@ -304,6 +305,22 @@ class SendAmountPresenter(
 
         } catch (e: SendAmountModule.ValidationError) {
             view.setValidationError(e)
+        }
+    }
+
+    private fun updateInputFields() {
+        val amountType = getAmountType(inputType)
+        val prefix = presenterHelper.getAmountPrefix(inputType, xRate) ?: ""
+
+        val inputParams = AmountInputView.InputParams(amountType, prefix, switchAvailable)
+
+        view.setInputFields(inputParams)
+    }
+
+    private fun getAmountType(inputType: SendModule.InputType): AmountTypeSwitchService.AmountType {
+        return when(inputType){
+            SendModule.InputType.COIN -> AmountTypeSwitchService.AmountType.Coin
+            SendModule.InputType.CURRENCY -> AmountTypeSwitchService.AmountType.Currency
         }
     }
 

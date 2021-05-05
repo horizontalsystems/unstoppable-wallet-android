@@ -21,6 +21,10 @@ import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.RecipientAddres
 import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
 import io.horizontalsystems.core.findNavController
 import kotlinx.android.synthetic.main.fragment_send_evm.*
+import kotlinx.android.synthetic.main.fragment_send_evm.amountInput
+import kotlinx.android.synthetic.main.fragment_send_evm.availableBalanceValue
+import kotlinx.android.synthetic.main.fragment_send_evm.background
+import kotlinx.android.synthetic.main.fragment_send_evm.txtHintError
 
 class SendEvmFragment : BaseFragment() {
 
@@ -72,9 +76,6 @@ class SendEvmFragment : BaseFragment() {
         amountInput.onTapMaxCallback = { amountViewModel.onClickMax() }
         amountInput.postDelayed({ amountInput.setFocus()}, 200)
 
-        amountViewModel.prefixLiveData.observe(viewLifecycleOwner, { prefix ->
-            amountInput.setPrefix(prefix)
-        })
 
         amountViewModel.amountLiveData.observe(viewLifecycleOwner, { amount ->
             if (amountInput.getAmount() != amount && !amountViewModel.areAmountsEqual(amountInput.getAmount(), amount))
@@ -89,16 +90,12 @@ class SendEvmFragment : BaseFragment() {
             amountInput.maxButtonVisible = maxEnabled
         })
 
-        amountViewModel.switchEnabledLiveData.observe(viewLifecycleOwner, { switchEnabled ->
-            amountInput.onTapSecondaryCallback = if (switchEnabled) {
-                { amountViewModel.onSwitch() }
-            } else {
-                null
-            }
-        })
-
         amountViewModel.secondaryTextLiveData.observe(viewLifecycleOwner, { secondaryText ->
             amountInput.setSecondaryText(secondaryText)
+        })
+
+        amountViewModel.inputParamsLiveData.observe(viewLifecycleOwner, {
+            amountInput.setInputParams(it)
         })
 
         viewModel.amountCautionLiveData.observe(viewLifecycleOwner, { caution ->

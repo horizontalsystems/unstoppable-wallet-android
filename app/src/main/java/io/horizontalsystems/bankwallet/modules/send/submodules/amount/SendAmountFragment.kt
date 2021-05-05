@@ -39,10 +39,6 @@ class SendAmountFragment(
         amountInput.onTapMaxCallback = { presenter.onMaxClick() }
         amountInput.setFocus()
 
-        presenterView.amountInputPrefix.observe(viewLifecycleOwner, Observer { prefix ->
-            amountInput.setPrefix(prefix)
-        })
-
         presenterView.amount.observe(viewLifecycleOwner, Observer { amount ->
             amountInput.setAmount(amount)
         })
@@ -53,10 +49,6 @@ class SendAmountFragment(
 
         presenterView.hint.observe(viewLifecycleOwner, Observer { hint ->
             amountInput.setSecondaryText(hint)
-        })
-
-        presenterView.hintStateEnabled.observe(viewLifecycleOwner, Observer { enabled ->
-            amountInput.setSecondaryEnabled(enabled)
         })
 
         presenterView.maxButtonVisibleValue.observe(viewLifecycleOwner, Observer { visible ->
@@ -73,6 +65,10 @@ class SendAmountFragment(
 
         presenterView.setLoading.observe(viewLifecycleOwner, Observer { loading ->
             setLoading(loading)
+        })
+
+        presenterView.inputParamsLiveData.observe(viewLifecycleOwner, {
+            amountInput.setInputParams(it)
         })
     }
 
