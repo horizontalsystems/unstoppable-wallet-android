@@ -274,7 +274,7 @@ class BalancePresenter(
     }
 
     private fun handleRates() {
-        interactor.subscribeToMarketInfo(items.map { it.wallet.coin.type }, currency.code)
+        interactor.subscribeToMarketInfo(items.map { it.wallet.coin }, currency.code)
 
         items.forEach { item ->
             item.latestRate = interactor.latestRate(item.wallet.coin.type, currency.code)

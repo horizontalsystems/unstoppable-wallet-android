@@ -2,8 +2,10 @@ package io.horizontalsystems.bankwallet.modules.balance
 
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
+import io.horizontalsystems.bankwallet.core.providers.FeeCoinProvider
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.core.entities.Currency
@@ -23,7 +25,8 @@ class BalanceInteractor(
         private val accountManager: IAccountManager,
         private val rateAppManager: IRateAppManager,
         private val connectivityManager: ConnectivityManager,
-        appConfigProvider: IAppConfigProvider)
+        appConfigProvider: IAppConfigProvider,
+        private val feeCoinProvider: FeeCoinProvider)
     : BalanceModule.IInteractor {
 
     var delegate: BalanceModule.IInteractorDelegate? = null
@@ -146,10 +149,14 @@ class BalanceInteractor(
         }
     }
 
-    override fun subscribeToMarketInfo(coinTypes: List<CoinType>, currencyCode: String) {
+    override fun subscribeToMarketInfo(coins: List<Coin>, currencyCode: String) {
         marketInfoDisposables.clear()
 
-        rateManager.latestRateObservable(coinTypes, currencyCode)
+        val feeCoins = coins.mapNotNull {
+            feeCoinProvider.feeCoinData(it)?.first
+        }
+
+        rateManager.latestRateObservable((coins + feeCoins).distinct().map { it.type }, currencyCode)
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .subscribe {
