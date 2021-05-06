@@ -16,11 +16,6 @@ class MarketMetricSmallView @JvmOverloads constructor(context: Context, attrs: A
     init {
         inflate(context, R.layout.view_market_metric_small, this)
 
-        setBackgroundResource(R.drawable.stateful_overview_card_background)
-
-        val padding = LayoutHelper.dp(12f, context)
-        setPadding(padding, padding, padding, padding)
-
         val ta = context.obtainStyledAttributes(attrs, R.styleable.MarketMetricSmallView)
         try {
             title.text = ta.getString(R.styleable.MarketMetricSmallView_title)
