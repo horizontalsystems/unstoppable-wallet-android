@@ -67,7 +67,7 @@ class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener, ReceiveFra
 
         balanceText.setOnClickListener {
             viewModel.delegate.onBalanceClick()
-            HudHelper.vibrateMedium(requireContext())
+            HudHelper.vibrate(requireContext())
         }
 
         addCoinButton.setOnClickListener {

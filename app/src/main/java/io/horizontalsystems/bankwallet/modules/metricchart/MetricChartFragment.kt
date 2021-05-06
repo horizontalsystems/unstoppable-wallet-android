@@ -135,7 +135,7 @@ class MetricChartFragment : BaseBottomSheetDialogFragment(), Chart.Listener, Tab
 
     override fun onTouchSelect(point: PointInfo) {
         viewModel.onTouchSelect(point)
-        HudHelper.vibrateSoft(requireContext())
+        HudHelper.vibrate(requireContext())
     }
 
     companion object {

@@ -163,7 +163,7 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
 
     override fun onTouchSelect(point: PointInfo) {
         viewModel.onTouchSelect(point)
-        HudHelper.vibrateSoft(requireContext())
+        HudHelper.vibrate(requireContext())
     }
 
     //  TabLayout.OnTabSelectedListener
