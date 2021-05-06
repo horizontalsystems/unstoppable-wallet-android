@@ -13,6 +13,8 @@ import java.util.*
 
 class MetricChartFactory(private val numberFormatter: IAppNumberFormatter) {
 
+    private val noChangesLimitPercent = 0.2f
+
     fun convert(
             items: List<MetricChartModule.Item>,
             chartType: ChartView.ChartType,
@@ -22,8 +24,16 @@ class MetricChartFactory(private val numberFormatter: IAppNumberFormatter) {
 
         val chartData = chartData(items)
 
-        val maxValue = chartData.valueRange.upper?.let { getFormattedValue(it, currency, valueType) }
-        val minValue = chartData.valueRange.lower?.let { getFormattedValue(it, currency, valueType) }
+        var max = chartData.valueRange.upper
+        var min = chartData.valueRange.lower
+
+        if (max!= null && min != null && max == min){
+            min *= (1 - noChangesLimitPercent)
+            max *= (1 + noChangesLimitPercent)
+        }
+
+        val maxValue = max?.let { getFormattedValue(it, currency, valueType) }
+        val minValue = min?.let { getFormattedValue(it, currency, valueType) }
 
         val topValue = getFormattedValue(items.last().value.toFloat(), currency, valueType)
         val topValueWithDiff = LastValueWithDiff(topValue, chartData.diff())
