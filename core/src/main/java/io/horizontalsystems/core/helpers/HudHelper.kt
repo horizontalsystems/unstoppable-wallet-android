@@ -32,17 +32,17 @@ object HudHelper {
         return showHudNotification(contenView, text, R.color.red_d, SnackbarDuration.LONG, gravity, false)
     }
 
-    fun vibrateMedium(context: Context) {
-        vibrate(context, 20)
-    }
-
-    fun vibrateSoft(context: Context) {
-        vibrate(context, 10)
-    }
-
-    private fun vibrate(context: Context, duration: Long) {
+    fun vibrate(context: Context) {
         val vibratorService = context.getSystemService(Context.VIBRATOR_SERVICE) as? Vibrator
-        vibratorService?.vibrate(VibrationEffect.createOneShot(duration, VibrationEffect.DEFAULT_AMPLITUDE))
+
+        // this type of vibration requires API 29
+        val vibrationEffect = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+            VibrationEffect.createPredefined(VibrationEffect.EFFECT_TICK)
+        } else {
+            VibrationEffect.createOneShot(20, VibrationEffect.DEFAULT_AMPLITUDE)
+        }
+
+        vibratorService?.vibrate(vibrationEffect)
     }
 
     private fun showHudNotification(
