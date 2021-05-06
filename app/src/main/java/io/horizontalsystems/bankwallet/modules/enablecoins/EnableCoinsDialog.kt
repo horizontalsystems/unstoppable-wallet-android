@@ -21,15 +21,21 @@ class EnableCoinsDialog(private val listener: Listener, private val tokenType: S
         setSubtitle(tokenType)
         alertText.text = getString(R.string.EnalbeToken_Description, tokenType)
 
-        if (tokenType == "BEP2") {
-            setHeaderIcon(R.drawable.ic_bep2)
-        } else {
-            setHeaderIcon(R.drawable.ic_erc20)
-        }
+        val icon = getIcon(tokenType)
+
+        setHeaderIcon(icon)
 
         enableBtn.setOnClickListener {
             listener.onClickEnable()
             dismiss()
+        }
+    }
+
+    private fun getIcon(tokenType: String): Int {
+        return when(tokenType){
+            "BEP2" -> R.drawable.ic_bep2
+            "BEP20" -> R.drawable.ic_bep20
+            else -> R.drawable.ic_erc20
         }
     }
 
