@@ -38,9 +38,13 @@ import io.horizontalsystems.chartview.models.PointInfo
 import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.DateHelper
+import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.views.ListPosition
 import io.horizontalsystems.views.SettingsView
-import io.horizontalsystems.xrateskit.entities.*
+import io.horizontalsystems.xrateskit.entities.ChartType
+import io.horizontalsystems.xrateskit.entities.CoinCategory
+import io.horizontalsystems.xrateskit.entities.CoinPlatformType
+import io.horizontalsystems.xrateskit.entities.LinkType
 import kotlinx.android.synthetic.main.coin_market_details.*
 import kotlinx.android.synthetic.main.fragment_coin.*
 import java.math.BigDecimal
@@ -159,6 +163,7 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
 
     override fun onTouchSelect(point: PointInfo) {
         viewModel.onTouchSelect(point)
+        HudHelper.vibrateSoft(requireContext())
     }
 
     //  TabLayout.OnTabSelectedListener
