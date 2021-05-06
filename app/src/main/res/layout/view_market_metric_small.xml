@@ -2,17 +2,28 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:background="@drawable/stateful_overview_card_background"
     tools:layout_height="wrap_content"
     tools:layout_width="match_parent"
     tools:parentTag="io.horizontalsystems.bankwallet.ui.extensions.MarketMetricSmallView">
+
+    <View
+        android:id="@+id/frame"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/rounded_lawrence_background_single"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <io.horizontalsystems.chartview.ChartMinimal
         android:id="@+id/chart"
         android:layout_width="72dp"
         android:layout_height="32dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:layout_marginEnd="12dp"
+        android:layout_marginBottom="12dp"
+        app:layout_constraintBottom_toBottomOf="@id/frame"
+        app:layout_constraintEnd_toEndOf="@id/frame" />
 
     <TextView
         android:id="@+id/title"
@@ -21,8 +32,10 @@
         android:layout_height="wrap_content"
         android:includeFontPadding="false"
         android:textColor="@color/grey"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="12dp"
+        android:layout_marginStart="12dp"
+        app:layout_constraintStart_toStartOf="@id/frame"
+        app:layout_constraintTop_toTopOf="@id/frame"
         tools:text="BTC Dominance" />
 
     <TextView
@@ -31,8 +44,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="6dp"
+        android:layout_marginStart="12dp"
         android:textColor="@color/bran"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@id/frame"
         app:layout_constraintTop_toBottomOf="@id/title"
         tools:text="64.09%" />
 
@@ -42,9 +56,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginBottom="12dp"
         android:textColor="@color/remus"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@id/frame"
         app:layout_constraintTop_toBottomOf="@+id/value"
+        app:layout_constraintBottom_toBottomOf="@id/frame"
         tools:text="+6.91%" />
 
 </merge>
