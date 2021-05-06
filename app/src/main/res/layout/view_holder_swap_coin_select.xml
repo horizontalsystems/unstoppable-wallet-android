@@ -37,7 +37,7 @@
         android:layout_marginStart="16dp"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textColor="?TitleColor"
+        android:textColor="@color/oz"
         app:layout_constraintBottom_toTopOf="@+id/coinSubtitle"
         app:layout_constraintEnd_toStartOf="@+id/coinBalance"
         app:layout_constraintStart_toEndOf="@+id/coinIcon"
@@ -63,14 +63,27 @@
 
     <TextView
         android:id="@+id/coinBalance"
-        style="@style/Subhead1"
+        style="@style/Body"
+        android:textColor="@color/oz"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         tools:text="1.2345 ETH"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/coinTitle"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@id/coinTitle" />
+
+    <TextView
+        android:id="@+id/fiatBalance"
+        style="@style/Subhead2"
+        android:textColor="@color/grey"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        tools:text="$100.23"
+        app:layout_constraintBottom_toBottomOf="@id/coinSubtitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/coinSubtitle" />
 
     <View
         android:id="@+id/bottomShade"
