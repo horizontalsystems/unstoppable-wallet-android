@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.core
 
 import android.content.Intent
-import android.content.res.ColorStateList
 import android.os.Parcelable
 import android.view.View
 import android.widget.ImageView
@@ -22,8 +21,6 @@ import io.reactivex.schedulers.Schedulers
 
 fun ImageView.setCoinImage(coinType: CoinType) {
     setImageDrawable(AppLayoutHelper.getCoinDrawable(context, coinType))
-
-    imageTintList = ColorStateList.valueOf(context.getColor(R.color.grey))
 }
 
 fun View.setOnSingleClickListener(l: ((v: View) -> Unit)) {
