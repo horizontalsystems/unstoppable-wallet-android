@@ -10,6 +10,7 @@ class WalletConnectViewModel(
 ) : ViewModel() {
 
     var sharedSendEthereumTransactionRequest: WalletConnectSendEthereumTransactionRequest? = null
+    var sharedSignMessageRequest: WalletConnectSignMessageRequest? = null
 
     val initialScreen: InitialScreen
         get() = when (service.state) {

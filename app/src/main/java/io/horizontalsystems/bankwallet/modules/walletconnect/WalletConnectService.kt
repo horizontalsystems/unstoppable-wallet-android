@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect
 
 import com.trustwallet.walletconnect.models.WCPeerMeta
+import com.trustwallet.walletconnect.models.ethereum.WCEthereumSignMessage
 import com.trustwallet.walletconnect.models.ethereum.WCEthereumTransaction
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
@@ -211,6 +212,12 @@ class WalletConnectService(
     override fun didRequestSendEthTransaction(id: Long, transaction: WCEthereumTransaction) {
         handleRequest(id) {
             WalletConnectSendEthereumTransactionRequest(id, transaction)
+        }
+    }
+
+    override fun didRequestSignMessage(id: Long, message: WCEthereumSignMessage) {
+        handleRequest(id) {
+            WalletConnectSignMessageRequest(id, message)
         }
     }
 
