@@ -41,10 +41,8 @@ import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.views.ListPosition
 import io.horizontalsystems.views.SettingsView
-import io.horizontalsystems.xrateskit.entities.ChartType
-import io.horizontalsystems.xrateskit.entities.CoinCategory
-import io.horizontalsystems.xrateskit.entities.CoinPlatformType
-import io.horizontalsystems.xrateskit.entities.LinkType
+import io.horizontalsystems.xrateskit.entities.*
+import io.noties.markwon.Markwon
 import kotlinx.android.synthetic.main.coin_market_details.*
 import kotlinx.android.synthetic.main.fragment_coin.*
 import java.math.BigDecimal
@@ -242,7 +240,16 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
 
             if (item.coinMeta.description.isNotBlank()) {
                 aboutGroup.isVisible = true
-                val aboutTextSpanned = Html.fromHtml(item.coinMeta.description.replace("\n", "<br />"), Html.FROM_HTML_MODE_COMPACT)
+                val aboutTextSpanned = when (item.coinMeta.descriptionType) {
+                    CoinMeta.DescriptionType.HTML -> {
+                        Html.fromHtml(item.coinMeta.description.replace("\n", "<br />"), Html.FROM_HTML_MODE_COMPACT)
+                    }
+                    CoinMeta.DescriptionType.MARKDOWN -> {
+                        val markwon = Markwon.create(requireContext())
+                        markwon.toMarkdown(item.coinMeta.description)
+                    }
+                }
+
                 aboutText.text = removeLinkSpans(aboutTextSpanned)
                 aboutText.maxLines = Integer.MAX_VALUE
                 aboutText.isVisible = false
