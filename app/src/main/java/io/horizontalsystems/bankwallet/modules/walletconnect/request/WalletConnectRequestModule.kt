@@ -18,6 +18,7 @@ import io.horizontalsystems.ethereumkit.models.Address
 import java.math.BigInteger
 
 object WalletConnectRequestModule {
+    const val TYPED_MESSAGE = "typed_message"
 
     class Factory(
             private val request: WalletConnectSendEthereumTransactionRequest,

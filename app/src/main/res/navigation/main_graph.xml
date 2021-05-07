@@ -362,6 +362,9 @@
         <action
             android:id="@+id/walletConnectMainFragment_to_walletConnectSendEthereumTransactionRequestFragment"
             app:destination="@id/walletConnectSendEthereumTransactionRequestFragment" />
+        <action
+            android:id="@+id/walletConnectMainFragment_to_walletConnectSignMessageRequestFragment"
+            app:destination="@id/walletConnectSignMessageRequestFragment" />
     </fragment>
     <fragment
         android:id="@+id/walletConnectErrorFragment"
@@ -375,6 +378,18 @@
             android:id="@+id/walletConnectRequestFragment_to_feeSpeedInfo"
             app:destination="@id/feeSpeedInfoFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/walletConnectSignMessageRequestFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.walletconnect.request.signmessage.WalletConnectSignMessageRequestFragment"
+        tools:layout="@layout/fragment_wallet_connect_sign_message_request">
+        <action
+            android:id="@+id/walletConnectSignMessageRequestFragment_to_walletConnectDisplayTypedMessageFragment"
+            app:destination="@id/walletConnectDisplayTypedMessageFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/walletConnectDisplayTypedMessageFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.walletconnect.request.signmessage.WalletConnectDisplayTypedMessageFragment"
+        tools:layout="@layout/fragment_wallet_connect_display_typed_message" />
     <fragment
         android:id="@+id/swapTradeOptionsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.swap.tradeoptions.SwapTradeOptionsFragment"

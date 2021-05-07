@@ -367,6 +367,11 @@
     <string name="WalletConnect_Status_Online">Online</string>
     <string name="WalletConnect_Status_Connecting">Connecting…</string>
     <string name="WalletConnect_NewConnect">New Connection</string>
+    <string name="WalletConnect_SignMessageRequest_Title">Sign Request</string>
+    <string name="WalletConnect_SignMessageRequest_Domain">Domain</string>
+    <string name="WalletConnect_SignMessageRequest_ShowMessageTitle">Message to sign</string>
+    <string name="WalletConnect_SignMessageRequest_SignMessageHint">Please sign a message to authenticate</string>
+    <string name="WalletConnect_SignMessageRequest_ButtonSign">Sign</string>
 
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Error_InsufficientBalance">Transaction requires %s for sending</string>

@@ -18,10 +18,7 @@ import io.horizontalsystems.bankwallet.core.managers.WalletConnectInteractor
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerActivity
-import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectErrorFragment
-import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectModule
-import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectSendEthereumTransactionRequest
-import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectViewModel
+import io.horizontalsystems.bankwallet.modules.walletconnect.*
 import io.horizontalsystems.bankwallet.modules.walletconnect.scanqr.WalletConnectScanQrModule
 import io.horizontalsystems.bankwallet.modules.walletconnect.scanqr.WalletConnectScanQrViewModel
 import io.horizontalsystems.bankwallet.ui.extensions.ConfirmationDialog
@@ -35,6 +32,7 @@ class WalletConnectMainFragment : BaseFragment() {
     private val viewModelScan by viewModels<WalletConnectScanQrViewModel> { WalletConnectScanQrModule.Factory(baseViewModel.service) }
     private val viewModel by viewModels<WalletConnectMainViewModel> { WalletConnectMainModule.Factory(baseViewModel.service) }
     private var closeMenuItem: MenuItem? = null
+    private var containerView: View? = null
 
     private val qrScannerResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         when (result.resultCode) {
@@ -45,7 +43,7 @@ class WalletConnectMainFragment : BaseFragment() {
             }
             Activity.RESULT_CANCELED -> {
                 val sessionsCount = arguments?.getInt(WalletConnectMainModule.SESSIONS_COUNT_KEY) ?: 0
-                if (sessionsCount == 0){
+                if (sessionsCount == 0) {
                     findNavController().popBackStack(R.id.mainFragment, false)
                 } else {
                     findNavController().popBackStack()
@@ -60,6 +58,8 @@ class WalletConnectMainFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        containerView = view
+
         toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.menuClose -> {
@@ -73,7 +73,7 @@ class WalletConnectMainFragment : BaseFragment() {
         }
         closeMenuItem = toolbar.menu.findItem(R.id.menuClose)
 
-        view.isVisible = false
+        containerView?.isVisible = false
 
         when (baseViewModel.initialScreen) {
             WalletConnectViewModel.InitialScreen.ScanQrCode -> {
@@ -81,7 +81,7 @@ class WalletConnectMainFragment : BaseFragment() {
                 qrScannerResultLauncher.launch(intent)
             }
             WalletConnectViewModel.InitialScreen.Main -> {
-                view.isVisible = true
+                containerView?.isVisible = true
             }
         }
 
@@ -95,7 +95,7 @@ class WalletConnectMainFragment : BaseFragment() {
         })
 
         viewModelScan.openMainLiveEvent.observe(this, {
-            view.isVisible = true
+            containerView?.isVisible = true
         })
 
 
@@ -151,10 +151,17 @@ class WalletConnectMainFragment : BaseFragment() {
         })
 
         viewModel.openRequestLiveEvent.observe(viewLifecycleOwner, {
-            if (it is WalletConnectSendEthereumTransactionRequest) {
-                baseViewModel.sharedSendEthereumTransactionRequest = it
+            when (it) {
+                is WalletConnectSendEthereumTransactionRequest -> {
+                    baseViewModel.sharedSendEthereumTransactionRequest = it
 
-                findNavController().navigate(R.id.walletConnectMainFragment_to_walletConnectSendEthereumTransactionRequestFragment, null, navOptionsFromBottom())
+                    findNavController().navigate(R.id.walletConnectMainFragment_to_walletConnectSendEthereumTransactionRequestFragment, null, navOptionsFromBottom())
+                }
+                is WalletConnectSignMessageRequest -> {
+                    baseViewModel.sharedSignMessageRequest = it
+
+                    findNavController().navigate(R.id.walletConnectMainFragment_to_walletConnectSignMessageRequestFragment, null, navOptionsFromBottom())
+                }
             }
         })
 
@@ -183,6 +190,12 @@ class WalletConnectMainFragment : BaseFragment() {
         cancelButton.setOnSingleClickListener {
             viewModel.cancel()
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        closeMenuItem = null
+        containerView = null
     }
 
 }

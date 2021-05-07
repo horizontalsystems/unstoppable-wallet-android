@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect
 
+import com.trustwallet.walletconnect.models.ethereum.WCEthereumSignMessage
 import com.trustwallet.walletconnect.models.ethereum.WCEthereumTransaction
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.WalletConnectTransaction
 import io.horizontalsystems.ethereumkit.core.hexStringToByteArray
@@ -8,7 +9,6 @@ import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.spv.core.toBigInteger
 import io.horizontalsystems.ethereumkit.spv.core.toLong
 import java.math.BigInteger
-import kotlin.Exception
 
 interface WalletConnectRequest {
     val id: Long
@@ -16,7 +16,10 @@ interface WalletConnectRequest {
     fun convertResult(result: Any): String?
 }
 
-class WalletConnectSendEthereumTransactionRequest(override val id: Long, val transaction: WalletConnectTransaction) : WalletConnectRequest {
+class WalletConnectSendEthereumTransactionRequest(
+        override val id: Long,
+        val transaction: WalletConnectTransaction
+) : WalletConnectRequest {
 
     constructor(id: Long, transaction: WCEthereumTransaction) : this(id, convertTx(transaction))
 
@@ -29,6 +32,15 @@ class WalletConnectSendEthereumTransactionRequest(override val id: Long, val tra
     }
 }
 
+class WalletConnectSignMessageRequest(
+        override val id: Long,
+        val message: WCEthereumSignMessage
+) : WalletConnectRequest {
+
+    override fun convertResult(result: Any): String? {
+        return (result as? ByteArray)?.toHexString()
+    }
+}
 
 fun convertTx(transaction: WCEthereumTransaction): WalletConnectTransaction {
     val to = transaction.to
