@@ -33,9 +33,9 @@ class EnableCoinsDialog(private val listener: Listener, private val tokenType: S
 
     private fun getIcon(tokenType: String): Int {
         return when(tokenType){
-            "BEP2" -> R.drawable.ic_bep2
-            "BEP20" -> R.drawable.ic_bep20
-            else -> R.drawable.ic_erc20
+            "BEP2" -> R.drawable.bep2
+            "BEP20" -> R.drawable.bep20
+            else -> R.drawable.erc20
         }
     }
 
