@@ -57,7 +57,7 @@ class ManageAccountsFragment : BaseFragment(), AccountViewHolder.Listener {
                 ActionViewItem(R.drawable.ic_download, R.string.ManageAccounts_ImportWallet, ::onClickRestoreWallet)
         ))
 
-        val concatAdapter = ConcatAdapter(accountsAdapter, MarginAdapter(), actionsAdapter)
+        val concatAdapter = ConcatAdapter(accountsAdapter, MarginAdapter(), actionsAdapter, ManageAccountsHintAdapter())
         recyclerView.adapter = concatAdapter
 
         viewModel.viewItemsLiveData.observe(viewLifecycleOwner, { items ->
@@ -188,6 +188,26 @@ class ActionViewHolder(override val containerView: View) : RecyclerView.ViewHold
     companion object {
         fun create(parent: ViewGroup): ActionViewHolder {
             return ActionViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_manage_account_action, parent, false))
+        }
+    }
+}
+
+class ManageAccountsHintAdapter : RecyclerView.Adapter<ManageAccountHintViewHolder>() {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ManageAccountHintViewHolder {
+        return ManageAccountHintViewHolder.create(parent)
+    }
+
+    override fun onBindViewHolder(holder: ManageAccountHintViewHolder, position: Int) {}
+
+    override fun getItemCount(): Int {
+        return 1
+    }
+}
+
+class ManageAccountHintViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+    companion object {
+        fun create(parent: ViewGroup): ManageAccountHintViewHolder {
+            return ManageAccountHintViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_manage_accounts_hint, parent, false))
         }
     }
 }
