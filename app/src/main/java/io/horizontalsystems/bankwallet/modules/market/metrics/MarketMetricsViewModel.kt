@@ -21,7 +21,7 @@ class MarketMetricsViewModel(
 ) : ViewModel() {
 
     val marketMetricsLiveData = MutableLiveData<MarketMetricsWrapper?>(null)
-    val toastLiveData = MutableLiveData<String>()
+    val toastLiveData = SingleLiveEvent<String>()
     val showGlobalMarketMetricsPage = SingleLiveEvent<MetricsType>()
 
     private var metricsWrapper: MarketMetricsWrapper? = null
