@@ -120,6 +120,7 @@ class MarketOverviewViewModel(
 
     fun onErrorClick() {
         service.refresh()
+        postService.refresh()
     }
 
     override fun onCleared() {
@@ -129,5 +130,6 @@ class MarketOverviewViewModel(
 
     fun refresh() {
         service.refresh()
+        postService.refresh()
     }
 }
