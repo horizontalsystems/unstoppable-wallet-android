@@ -156,6 +156,7 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.71828'
 
     implementation 'com.atlassian.commonmark:commonmark:0.15.1'
+    implementation "io.noties.markwon:core:4.6.2"
 
     // ViewPager circle indicator
     implementation 'me.relex:circleindicator:2.1.4'
@@ -188,7 +189,7 @@ dependencies {
     implementation 'com.github.horizontalsystems:ethereum-kit-android:696b46a'
     implementation 'com.github.horizontalsystems:blockchain-fee-rate-kit-android:047596b'
     implementation 'com.github.horizontalsystems:binance-chain-kit-android:18c39c9'
-    implementation 'com.github.horizontalsystems:xrates-kit-android:7ec404f'
+    implementation 'com.github.horizontalsystems:xrates-kit-android:0b579e5'
 
 
     //Zcash SDK
