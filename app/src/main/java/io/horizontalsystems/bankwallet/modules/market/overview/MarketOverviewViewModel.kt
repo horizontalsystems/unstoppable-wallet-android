@@ -11,6 +11,7 @@ import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
 import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.market.posts.MarketPostService
 import io.horizontalsystems.bankwallet.modules.market.sort
+import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.core.helpers.DateHelper
 import io.reactivex.disposables.CompositeDisposable
 
@@ -27,7 +28,7 @@ class MarketOverviewViewModel(
 
     val loadingLiveData = MutableLiveData(false)
     val errorLiveData = MutableLiveData<String?>(null)
-    val toastLiveData = MutableLiveData<String>()
+    val toastLiveData = SingleLiveEvent<String>()
 
     private val disposable = CompositeDisposable()
 
