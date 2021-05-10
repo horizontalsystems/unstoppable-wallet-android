@@ -32,7 +32,7 @@ class CoinDataItemsAdapter(private val onItemClick: (CoinDataViewItem) -> Unit) 
             this.item = item
 
             val drawableResId = AppLayoutHelper.getCoinDrawableResId(containerView.context, item.type)
-                    ?: R.drawable.coin_placeholder
+                    ?: R.drawable.place_holder
             icon.setImageResource(drawableResId)
 
             title.text = item.name

@@ -98,7 +98,7 @@ class ViewHolderMarketItem(override val containerView: View, private val listene
 
         if (item.coinCode != prev?.coinCode) {
             val drawableResId = AppLayoutHelper.getCoinDrawableResId(containerView.context, item.coinType)
-                    ?: R.drawable.coin_placeholder
+                    ?: R.drawable.place_holder
             icon.setImageResource(drawableResId)
         }
 
