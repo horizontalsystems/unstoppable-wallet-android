@@ -234,14 +234,14 @@
     <string name="Balance_FoundTx">%s tx</string>
     <string name="Balance_Syncing_WithProgress">Синхронизация… %s%%</string>
     <string name="Balance_AddCoins">Добавить Токен</string>
-    <string name="Balance_AddCoin">Add Coin</string>
+    <string name="Balance_AddCoin">Добавить Токен</string>
     <string name="Balance_Sort_Balance">Балансу</string>
     <string name="Balance_Sort_PopupTitle">Сортировать по</string>
     <string name="Balance_Sort_Az">Названию</string>
     <string name="Balance_Sort_24hPriceChange">Цене(%) за 24 ч</string>
     <string name="Balance_Backup_Alert">Вам нужно сделать резервную копию %s Кошелька, прежде чем вы сможете получать %s.</string>
     <string name="Balance_NoWalletAlert">У вас пока нет кошельков. Создайте новый или восстановите существующий </string>
-    <string name="Balance_NoCoinsAlert">You haven\'t added any coins to this wallet</string>
+    <string name="Balance_NoCoinsAlert">Вы еще не добавили монеты в этот кошелек</string>
     <!--Send-->
     <string name="Send_Title">Отправить %s</string>
     <string name="Send_Hint_Address">Адрес или домен</string>
@@ -260,7 +260,7 @@
     <string name="Send_Confirmation_Send_Button">Отправить</string>
     <string name="Send_Success">\u2713 Отправлено</string>
     <string name="ScanQr_PleaseGrantCameraPermission">Пожалуйста, дайте разрешение на доступ к камере</string>
-    <string name="ScanQr_NoCameraPermission">No camera permission</string>
+    <string name="ScanQr_NoCameraPermission">Нет разрешения для камеры</string>
     <string name="Send_Error_IncorrectAddress">Неверный Адрес</string>
     <string name="Send_Error_UnsupportedAddress">Блокировка по времени работает только с адресами P2PKH (начиная с 1)</string>
     <string name="Send_Error_BalanceAmount">Баланс %s</string>
@@ -287,7 +287,7 @@
     <string name="Send_LockTime_Year">1 год</string>
     <string name="Send_Sending">Отправка</string>
     <string name="Send_Token_InsufficientFeeAlert">Комиссии за транзакцию %s (%s) взимаются в %s. Вам нужно %s.</string>
-    <string name="Send_Warning_LowFee">Warning! Risk of getting stuck</string>
+    <string name="Send_Warning_LowFee">Внимание! Транзакция может застрять в сети</string>
     <!--Fee Info -->
     <string name="FeeInfo_Title">Скорость Транзакции</string>
     <string name="FeeInfo_Description">При использования блокчейнов Bitcoin и Ethereum пользователи должны платить комиссию при отправке транзакций.\n\nUnstoppable использует общественные сервисы оценки сумм комиссионных сборов, чтобы помогать пользователю определять размеры соответствующих комиссий на данный момент. Размеры комиссий возрастают при совершении большого количества транзакций и понижаются при меньшей занятости блокчейна.</string>
@@ -366,7 +366,7 @@
     <!--Swap Coin Select-->
     <!--Approve-->
     <string name="Approve_Title">Разрешить Обмен</string>
-    <string name="Approve_Info">You should grant permission to a smart contract to swap given token on your behalf. This permission sets amount that can be used by a smart contract. It doesn\'t affect your balance but requires a small fee to execute approval transaction. \n\nWhile it may be done on demand before each trade, it\'s cheaper to approve higher amount in advance for future trades.</string>
+    <string name="Approve_Info">Вы должны предоставить разрешение на смарт-контракт, чтобы обменять этот токен от своего имени. С помощью этого разрешения задается сумма, которая может быть использована в рамках смарт-контракта. Это не повлияет на ваш баланс, но вам придется заплатить небольшой сбор за исполнение транзакции.\n\nРазрешение может быть запрошено перед каждой сделкой, но дешевле заранее задать более высокую сумму для будущих сделок.</string>
     <string name="Approve_Error_AlreadyApproved">У вас уже есть разрешение на эту сумму</string>
     <string name="Approve_Spender">Покупатель</string>
     <string name="Approve_YouApprove">Вы Подтверждаете</string>
@@ -441,10 +441,10 @@
     <!--Markdown-->
     <string name="Markdown_Error_NotFound">Страница не найдена</string>
     <!--Setting_Currency-->
-    <string name="SettingsCurrency_Title">Base Currency</string>
+    <string name="SettingsCurrency_Title">Базовая Валюта</string>
     <string name="SettingsCurrency_Other">OTHER</string>
-    <string name="SettingsCurrency_DisclaimerTitle">Disclaimer</string>
-    <string name="SettingsCurrency_DisclaimerText">The exchange rate data provided by a third party service Coingecko.com\n\nUnstoppable wallet app doesn\'t guarantee these values are always correct and match market data. The chance for inconsistency is higher if you select any base currency other than %s.</string>
+    <string name="SettingsCurrency_DisclaimerTitle">Отказ от ответственности</string>
+    <string name="SettingsCurrency_DisclaimerText">Данные об обменном курсе предоставлены третьим лицом Coingecko.сom\n\n Приложение Unstoppable Wallet не гарантирует, что эти данные всегда верны и соответствуют рыночным. Шанс на несоответствие повышается при выборе базовой валюты, отличающейся от %s.</string>
     <string name="SettingsCurrency_Understand">I Understand</string>
     <!--Settings-->
     <string name="Settings_Title">Настройки</string>
@@ -453,7 +453,7 @@
     <string name="Settings_ExperimentalFeatures">Экспериментальные Функции</string>
     <string name="Settings_BaseCurrency">Базовая Валюта</string>
     <string name="Settings_Language">Язык</string>
-    <string name="Settings_Theme">Theme</string>
+    <string name="Settings_Theme">Тема</string>
     <string name="Settings_Terms">Условия Использования</string>
     <string name="Settings_ShareThisWallet">Рассказать Друзьям</string>
     <string name="Settings_Faq">FAQ</string>
@@ -547,10 +547,10 @@
     <string name="NotificationBottomMenu_LongTerm">Долгосрочный 6М</string>
     <string name="NotificationBottomMenu_Long">Длинная позиция</string>
     <!--Settings-->
-    <string name="SettingsTheme_Title">Theme</string>
-    <string name="SettingsTheme_Dark">Dark</string>
-    <string name="SettingsTheme_Light">Light</string>
-    <string name="SettingsTheme_System">System</string>
+    <string name="SettingsTheme_Title">Тема</string>
+    <string name="SettingsTheme_Dark">Тёмная</string>
+    <string name="SettingsTheme_Light">Светлая</string>
+    <string name="SettingsTheme_System">Системная</string>
     <!--Errors-->
     <string name="Binance_Backend_Error_MemoRequired">При отправке транзакции получателю необходимо заполнить поле мемо</string>
     <string name="Binance_Backend_Error_RequiresDigits">Поле мемо должно содержать только цифры</string>
@@ -573,16 +573,16 @@
     <string name="BitcoinHodling_Title">TimeLock</string>
     <string name="BitcoinHodling_Description">Позволяет отправлять биткойны, которые могут быть потрачены только после указанной даты.\n\nПолучатель такой транзакции должен быть пользователем кошелька Unstoppable.\n\nТолько кошелек Unstoppable может правильно распознать и обработать такие транзакции в сети Bitcoin, и позволить получателю тратить эти биткойны по истечении периода блокировки.\n\nЕсли вы HODLer (долгосрочный инвестор), то вы можете использовать эту функцию отправив биткойны себе. \n\nТак как это экспериментальная функция, максимальная сумма транзакции ограничена 0,5 BTC.</string>
     <!--Manage Accounts-->
-    <string name="ManageAccounts_Title">Manage Wallets</string>
-    <string name="ManageAccounts_CreateNewWallet">Create</string>
-    <string name="ManageAccounts_ImportWallet">Restore</string>
+    <string name="ManageAccounts_Title">Кошельки</string>
+    <string name="ManageAccounts_CreateNewWallet">Создать</string>
+    <string name="ManageAccounts_ImportWallet">Восстановить</string>
     <string name="ManageAccounts_Hint">Tip! Restoring an existing wallet but with a new passphrase will a generate a brand new wallet. Handy if you want to use a single 12-24 word mnemonic recovery phrase for multiple wallets.</string>
     <!--Manage Account-->
-    <string name="ManageAccount_Name">Name</string>
-    <string name="ManageAccount_Save">Save</string>
+    <string name="ManageAccount_Name">Названию</string>
+    <string name="ManageAccount_Save">Сохранить</string>
     <string name="ManageAccount_RecoveryPhraseBackup">Backup Phrases</string>
     <string name="ManageAccount_RecoveryPhraseShow">Show Phrases</string>
-    <string name="ManageAccount_Unlink">Unlink</string>
+    <string name="ManageAccount_Unlink">Отсоединить</string>
     <string name="ManageAccount_BackupRequired_Title">Backup Required</string>
     <string name="ManageAccount_BackupRequired_Description">You need to backup the private key for this wallet before it can be deleted from this phone.</string>
     <string name="ManageAccount_DeleteFromPhone">Delete from Phone</string>
@@ -734,7 +734,7 @@
     <string name="CoinPage_LaunchDate">Launch Date</string>
     <string name="CoinPage_Tvl">Total Value Locked</string>
     <string name="CoinPage_TvlRank">TVL Rank</string>
-    <string name="CoinPage_TvlMCapRatio">M.cap / TVL ratio</string>
+    <string name="CoinPage_TvlMCapRatio">M.cap / TVL Ratio</string>
     <string name="CoinPage_TvlDescription">Capital deposited into the platform in the form of loan collateral or liquidity pool.</string>
     <!--Rate list-->
     <string name="RateList_portfolio">Портфель</string>
