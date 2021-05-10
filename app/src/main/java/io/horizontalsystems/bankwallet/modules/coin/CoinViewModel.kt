@@ -52,17 +52,19 @@ class CoinViewModel(
     private var enabledIndicator: ChartIndicator? = null
     private var macdIsEnabled = false
     private val disposable = CompositeDisposable()
+    private val rateDiffPeriods = listOf(TimePeriod.DAY_7, TimePeriod.DAY_30)
 
     private val rateDiffCoinCodes: List<String> = mutableListOf(service.currency.code).apply {
         if (service.coinType != CoinType.Bitcoin) add("BTC")
         if (service.coinType != CoinType.Ethereum) add("ETH")
+        if (service.coinType != CoinType.BinanceSmartChain) add("BNB")
     }
 
     init {
         setDefaultMode.postValue(service.chartType)
         updateChartIndicatorState()
 
-        service.getCoinDetails(rateDiffCoinCodes, listOf(TimePeriod.DAY_7, TimePeriod.DAY_30))
+        service.getCoinDetails(rateDiffCoinCodes, rateDiffPeriods)
 
         fetchChartInfo()
 
@@ -214,7 +216,7 @@ class CoinViewModel(
 
     private fun updateCoinDetails() {
         val coinDetails = service.coinMarketDetails ?: return
-        coinDetailsLiveData.postValue(factory.createCoinDetailsViewItem(coinDetails, service.currency, coinCode, service.guideUrl))
+        coinDetailsLiveData.postValue(factory.createCoinDetailsViewItem(coinDetails, service.currency, coinCode, rateDiffCoinCodes, rateDiffPeriods, service.guideUrl))
 
         val coinMarketItems = factory.createCoinMarketItems(coinDetails.tickers)
         val coinInvestorItems = factory.createCoinInvestorItems(coinDetails.meta.fundCategories)

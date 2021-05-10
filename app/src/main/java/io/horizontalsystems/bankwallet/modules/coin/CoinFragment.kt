@@ -361,33 +361,26 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
     }
 
     private fun setCoinPerformance(item: CoinDetailsViewItem) {
+        if (item.rateDiffs.isEmpty()){
+            return
+        }
         context?.let { ctx ->
-            var btcTitle: String? = null
-            var ethTitle: String? = null
-
-            val rows = item.rateDiffs.toList().mapIndexed { index, (period, values) ->
-                val background = CoinPerformanceRowView.getBackground(item.rateDiffs.size, index)
-                val currencyValue = values[item.currency.code] ?: BigDecimal.ZERO
-                val btcValue = values["BTC"]
-                val ethValue = values["ETH"]
-
-                btcTitle = if (btcValue != null) "BTC" else null
-                ethTitle = if (ethValue != null) "ETH" else null
-
-                CoinPerformanceRowView(ctx).apply {
-                    bind(period, currencyValue, btcValue, ethValue, background)
+            item.rateDiffs.forEachIndexed { index, rowViewItem ->
+                val row = when(rowViewItem){
+                    is RoiViewItem.HeaderRowViewItem -> {
+                        CoinPerformanceRowView(ctx).apply {
+                            bindHeader(rowViewItem.title, rowViewItem.periods)
+                        }
+                    }
+                    is RoiViewItem.RowViewItem -> {
+                        CoinPerformanceRowView(ctx).apply {
+                            bind(rowViewItem.title, rowViewItem.values, item.rateDiffs.size-1, index)
+                        }
+                    }
                 }
+                coinPerformanceLayout.addView(row)
             }
 
-            coinPerformanceLayout.isVisible = rows.isNotEmpty()
-
-            if (rows.isNotEmpty()) {
-                val headerRow = CoinPerformanceRowView(ctx)
-                headerRow.bindHeader("ROI", item.currency.code, btcTitle, ethTitle)
-                coinPerformanceLayout.addView(headerRow)
-
-                rows.forEach { coinPerformanceLayout.addView(it) }
-            }
         }
     }
 
