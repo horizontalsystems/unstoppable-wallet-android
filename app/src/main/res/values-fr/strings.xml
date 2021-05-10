@@ -54,7 +54,7 @@
     <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Please use only latin letters and numbers for the passphrase</string>
     <string name="CreateWallet_Error_InvalidConfirmation">Passphrase confirmation does not match</string>
     <string name="EnterPassphrase">Enter Passphrase</string>
-    <string name="PassphraseDescription">Passphrases add additional security layer to the wallets enabling users to create multiple independent multi-coin wallets using a single mnemonic recovery phrase (secret 12 words) but associated with different passwords. \n\nTo restore these wallets a user will require mnemonic recovery phrase as well as a password for each to be restored wallet.</string>
+    <string name="CreateWallet_PassphraseDescription">Passphrases add additional security layer to the wallets enabling users to create multiple independent multi-coin wallets using a single mnemonic recovery phrase (secret 12 words) but associated with different passwords. \n\nTo restore these wallets a user will require mnemonic recovery phrase as well as a password for each to be restored wallet.</string>
     <!--Rate App-->
     <string name="RateApp_Title_Rate_This_App">Evaluez cette application</string>
     <string name="RateApp_Description_Rate_This_App">Vous aimez Unstoppable Wallet ? Merci de prendre un moment pour évaluer cette application.</string>
@@ -71,6 +71,7 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="Restore_Error_MnemonicWordCount">Wrong words count. Must be 12 or 24. You entered: %d</string>
     <string name="Restore_Error_EmptyPassphrase">Passphrase cannot be empty</string>
     <string name="Restore_InvalidChecksum">Somme de contrôle invalide</string>
+    <string name="Restore_PassphraseDescription">Enter your passphrase that you used when creating this mnemonic phrase.</string>
     <string name="Select_Coins">Choisissez la Crypto</string>
     <string name="Restore_ZCash_BirthdayHeight">Zcash Birthday Height</string>
     <string name="Restore_ZCash_BirthdayHeight_Hint">If you know a birthday height for your Zcash wallet add it below to speedup syncing process.</string>
@@ -514,16 +515,16 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
 \n\nNous avons construit Unstoppable à notre intention car les solutions disponibles n\'étaient pas à la hauteur de nos attentes. Tant du point de vue de l\'ingénierie que de la convivialité, nous pensons que ce portefeuille a une avance considérable sur les produits alternatifs.</string>
     <string name="SettingsTerms_TermAcademy">J\'ai parcouru la section Académie de cette application et me suis familiarisé avec les aspects fondamentaux du stockage des cryptomonnaies.</string>
     <string name="SettingsTerms_TermBackup">J\'ai sauvegardé la/les clé(s) privée(s) de mes portefeuilles qui m\'ont été présentées sous une formule de 12 à 24 mots. Je comprends que ces clés privées sont stockées sur mon smartphone et non ailleurs.</string>
-    <string name="SettingsTerms_TermOwner">Je comprends que seul le propriétaire de ma (mes) clé(s) privée(s) peut accéder à mon portefeuille et y dépenser des fonds, et que ces clés ne doivent donc jamais être partagées avec qui que ce soit.</string>
-    <string name="SettingsTerms_TermRecover">Je suis conscient que j\'aurai besoin de mes clés privées afin de pouvoir accéder à mes fonds si je perds mon téléphone ou si l\'application fonctionne mal. Sans mes clés privées, il me sera impossible de récupérer l\'accès à mon portefeuille.</string>
-    <string name="SettingsTerms_TermPhone">Je comprends que le fait de confier mon téléphone à des entités non fiables ou de laisser l\'application portefeuille sans verrouillage du code PIN peut potentiellement compromettre la sécurité de mes fonds.</string>
-    <string name="SettingsTerms_TermRoot">Je comprends que le fait débrider (rooting) mon téléphone, d\'installer des applications tierces de sources inconnues, de conserver un système d\'exploitation obsolète peut potentiellement mettre en danger la sécurité de mes fonds.</string>
-    <string name="SettingsTerms_TermBugs">Je suis conscient qu\'il pourrait y avoir des problèmes non détectés dans le code de cette application de portefeuille, ce qui pourrait entraîner un comportement inattendu ou un dysfonctionnement de l\'application.</string>
-    <string name="Settings_TermsPin">Je comprends que la désactivation du code de déverrouillage du téléphone dans les paramètres Android effacera les clés privées du portefeuille de mon appareil. J\'aurai besoin de mes clés privées pour pouvoir accéder à mon portefeuille.</string>
+    <string name="SettingsTerms_TermOwner">I understand that passing my phone to untrusted entities and leaving the wallet app without safe PIN lock may potentially endanger the safety of my funds.</string>
+    <string name="SettingsTerms_TermRecover">I understand that jail breaking (rooting) my phone, installing third party apps from unknown sources, keeping the operating system outdated can potentially endanger the safety of my funds.</string>
+    <string name="SettingsTerms_TermPhone">I understand there may be undiscovered software issues in the code powering this wallet app which may potentially lead to unexpected behavior or the app malfunctioning.</string>
+    <string name="SettingsTerms_TermRoot">I understand that I will need my private keys in order to restore access to my funds should I lose my phone or if the app malfunctions. Without my private keys it will be impossible to recover access to my wallet.</string>
+    <string name="SettingsTerms_TermBugs">I understand that disabling the phone unlock PIN(or its equivalent) in Settings of Android OS will erase wallet private keys from my device. I will need my private keys to regain access to my funds.</string>
+    <string name="Settings_TermsPin"> I understand that only I myself is responsible for safety of my funds and no other entity.</string>
     <string name="SettingsTerms_BottomThankYou">Merci d\'avoir choisi ce portefeuille !</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Partager</string>
-    <string name="SettingsShare_Text">Unstoppable Wallet - un porte-monnaie crypto que je recommande</string>
+    <string name="SettingsShare_Text">Be Unstoppable</string>
     <!--Setting_Contact-->
     <string name="SettingsContact_Title">Contact</string>
     <!--Setting_Notifications-->
