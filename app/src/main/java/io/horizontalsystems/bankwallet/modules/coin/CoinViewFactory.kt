@@ -45,7 +45,10 @@ data class CoinDetailsViewItem(
         val rateDiffs: List<RoiViewItem>,
         val guideUrl: String?,
         val tvlInfo: List<CoinDataItem>,
+        val contractInfo: ContractInfo?
 )
+
+data class ContractInfo(val title: String, val value: String)
 
 sealed class RoiViewItem {
     class HeaderRowViewItem(val title: String, val periods: List<TimePeriod>) : RoiViewItem()
@@ -86,6 +89,7 @@ class CoinViewFactory(private val currency: Currency, private val numberFormatte
             coinCode: String,
             rateDiffCoinCodes: List<String>,
             rateDiffPeriods: List<TimePeriod>,
+            contractInfo: ContractInfo?,
             guideUrl: String? = null
     ): CoinDetailsViewItem {
         return CoinDetailsViewItem(
@@ -98,7 +102,8 @@ class CoinViewFactory(private val currency: Currency, private val numberFormatte
                 coinMeta = coinMarket.meta,
                 rateDiffs = getRoi(coinMarket.rateDiffs, rateDiffCoinCodes, rateDiffPeriods),
                 guideUrl = guideUrl,
-                tvlInfo = getTvlInfo(coinMarket, currency)
+                tvlInfo = getTvlInfo(coinMarket, currency),
+                contractInfo = contractInfo
         )
     }
 
