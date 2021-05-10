@@ -42,10 +42,15 @@ data class CoinDetailsViewItem(
         val rateLow24h: BigDecimal,
         val marketCapDiff24h: BigDecimal,
         val coinMeta: CoinMeta,
-        val rateDiffs: Map<TimePeriod, Map<String, BigDecimal>>,
+        val rateDiffs: List<RoiViewItem>,
         val guideUrl: String?,
         val tvlInfo: List<CoinDataItem>,
 )
+
+sealed class RoiViewItem {
+    class HeaderRowViewItem(val title: String, val periods: List<TimePeriod>) : RoiViewItem()
+    class RowViewItem(val title: String, val values: List<BigDecimal?>) : RoiViewItem()
+}
 
 class CoinDataItem(@StringRes val title: Int, val value: String, @DrawableRes val icon: Int? = null)
 
@@ -75,7 +80,14 @@ class CoinViewFactory(private val currency: Currency, private val numberFormatte
         return ChartInfoViewItem(chartData, chartType, chartData.diff(), maxValue, minValue)
     }
 
-    fun createCoinDetailsViewItem(coinMarket: CoinMarketDetails, currency: Currency, coinCode: String, guideUrl: String? = null): CoinDetailsViewItem {
+    fun createCoinDetailsViewItem(
+            coinMarket: CoinMarketDetails,
+            currency: Currency,
+            coinCode: String,
+            rateDiffCoinCodes: List<String>,
+            rateDiffPeriods: List<TimePeriod>,
+            guideUrl: String? = null
+    ): CoinDetailsViewItem {
         return CoinDetailsViewItem(
                 currency = currency,
                 rateValue = coinMarket.rate,
@@ -84,10 +96,28 @@ class CoinViewFactory(private val currency: Currency, private val numberFormatte
                 rateLow24h = coinMarket.rateLow24h,
                 marketCapDiff24h = coinMarket.marketCapDiff24h,
                 coinMeta = coinMarket.meta,
-                rateDiffs = coinMarket.rateDiffs,
+                rateDiffs = getRoi(coinMarket.rateDiffs, rateDiffCoinCodes, rateDiffPeriods),
                 guideUrl = guideUrl,
                 tvlInfo = getTvlInfo(coinMarket, currency)
         )
+    }
+
+    private fun getRoi(rateDiffs: Map<TimePeriod, Map<String, BigDecimal>>, roiCoinCodes: List<String>, roiPeriods: List<TimePeriod>) : List<RoiViewItem> {
+        if (rateDiffs.isEmpty()){
+            return listOf()
+        }
+
+        val rows = mutableListOf<RoiViewItem>()
+        rows.add(RoiViewItem.HeaderRowViewItem("ROI", roiPeriods))
+
+        roiCoinCodes.forEach { coinCode ->
+            val values = roiPeriods.map { period ->
+                rateDiffs[period]?.get(coinCode)
+            }
+            rows.add(RoiViewItem.RowViewItem("vs $coinCode", values))
+        }
+
+        return rows
     }
 
     fun getVolume(coinMarket: CoinMarketDetails): String? {
