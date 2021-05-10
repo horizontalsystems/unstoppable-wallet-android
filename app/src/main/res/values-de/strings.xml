@@ -54,7 +54,7 @@
     <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Please use only latin letters and numbers for the passphrase</string>
     <string name="CreateWallet_Error_InvalidConfirmation">Passphrase confirmation does not match</string>
     <string name="EnterPassphrase">Enter Passphrase</string>
-    <string name="PassphraseDescription">Passphrases add additional security layer to the wallets enabling users to create multiple independent multi-coin wallets using a single mnemonic recovery phrase (secret 12 words) but associated with different passwords. \n\nTo restore these wallets a user will require mnemonic recovery phrase as well as a password for each to be restored wallet.</string>
+    <string name="CreateWallet_PassphraseDescription">Passphrases add additional security layer to the wallets enabling users to create multiple independent multi-coin wallets using a single mnemonic recovery phrase (secret 12 words) but associated with different passwords. \n\nTo restore these wallets a user will require mnemonic recovery phrase as well as a password for each to be restored wallet.</string>
     <!--Rate App-->
     <string name="RateApp_Title_Rate_This_App">Diese App bewerten</string>
     <string name="RateApp_Description_Rate_This_App">Gefällt Ihnen das Unstoppable Wallet? Nehmen Sie sich kurz Zeit und bewerten Sie die App</string>
@@ -70,6 +70,7 @@
     <string name="Restore_Error_MnemonicWordCount">Wrong words count. Must be 12 or 24. You entered: %d</string>
     <string name="Restore_Error_EmptyPassphrase">Passphrase cannot be empty</string>
     <string name="Restore_InvalidChecksum">Ungültige Prüfsumme</string>
+    <string name="Restore_PassphraseDescription">Enter your passphrase that you used when creating this mnemonic phrase.</string>
     <string name="Select_Coins">Krypto auswählen</string>
     <string name="Restore_ZCash_BirthdayHeight">Zcash Birthday Height</string>
     <string name="Restore_ZCash_BirthdayHeight_Hint">If you know a birthday height for your Zcash wallet add it below to speedup syncing process.</string>
@@ -513,16 +514,16 @@
 \n\nWir haben Unstoppable für uns selbst entwickelt, da die verfügbaren Lösungen nicht gut waren. Sowohl aus technischer Sicht als auch aus Sicht der Nutzbarkeit sind wir der Meinung, dass diese Wallets den alternativen Produkten deutlich voraus ist.</string>
     <string name="SettingsTerms_TermAcademy">Ich bin durch den Academy-Bereich dieser App gegangen und machte mich mit den grundlegenden Aspekten der Aufbewahrung von Kryptowährungen vertraut.</string>
     <string name="SettingsTerms_TermBackup">Ich habe den/die Private Key(s) für meine Wallets gesichert, die mir in Form von 12-24 Wörtern angezeigt wurden. Mir ist bewusst, dass diese Private Keys auf meinem Smartphone und nirgendwo anders gespeichert werden.</string>
-    <string name="SettingsTerms_TermOwner">Mir ist bewusst, dass nur der Eigentümer meines/meiner Private Key(s) auf mein Wallet zugreifen und Geld ausgeben kann und dass diese Keys daher niemals mit irgendjemandem geteilt werden sollten.</string>
-    <string name="SettingsTerms_TermRecover">Mir ist bewusst, dass ich meine Private Keys benötige, um den Zugriff auf mein Geld wiederherzustellen, falls ich mein Mobiltelefon verlieren sollte oder wenn die App nicht funktioniert. Ohne meine Private Keys wird es unmöglich sein, den Zugriff auf mein Wallet wiederherzustellen.</string>
-    <string name="SettingsTerms_TermPhone">Mir ist bewusst, dass das Übergeben meines Mobiltelefons an nicht vertrauenswürdige Personen oder das Verlassen der Wallet-App ohne sichere PIN-Sperre die Sicherheit meines Guthabens gefährden könnte.</string>
-    <string name="SettingsTerms_TermRoot">Mir ist bewusst, dass Jailbreaking (Rooting) meines Mobiltelefons, Installieren von Apps von Drittanbietern aus unbekannten Quellen und die Veraltung des Betriebssystems die Sicherheit meines Geldes gefährden kann.</string>
-    <string name="SettingsTerms_TermBugs">Mir ist bewusst, dass es möglicherweise ungelöste Softwarefehler in dem Code gibt, mit dem diese Wallet-App betrieben wird, was zu unerwartetem Verhalten oder zu Fehlfunktionen der App führen kann.</string>
-    <string name="Settings_TermsPin">Ich verstehe, dass die Deaktivierung des Passcodes zum Entsperren des Telefons in den Einstellungen von Android die Private Keys des Wallets von meinem Gerät löscht. Ich benötige meine Private Keys, um wieder Zugang zu meinem Wallet zu erhalten.</string>
+    <string name="SettingsTerms_TermOwner">I understand that passing my phone to untrusted entities and leaving the wallet app without safe PIN lock may potentially endanger the safety of my funds.</string>
+    <string name="SettingsTerms_TermRecover">I understand that jail breaking (rooting) my phone, installing third party apps from unknown sources, keeping the operating system outdated can potentially endanger the safety of my funds.</string>
+    <string name="SettingsTerms_TermPhone">I understand there may be undiscovered software issues in the code powering this wallet app which may potentially lead to unexpected behavior or the app malfunctioning.</string>
+    <string name="SettingsTerms_TermRoot">I understand that I will need my private keys in order to restore access to my funds should I lose my phone or if the app malfunctions. Without my private keys it will be impossible to recover access to my wallet.</string>
+    <string name="SettingsTerms_TermBugs">I understand that disabling the phone unlock PIN(or its equivalent) in Settings of Android OS will erase wallet private keys from my device. I will need my private keys to regain access to my funds.</string>
+    <string name="Settings_TermsPin"> I understand that only I myself is responsible for safety of my funds and no other entity.</string>
     <string name="SettingsTerms_BottomThankYou">Vielen Dank, \ndass Sie \ndieses Wallet nutzen!</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Teilen</string>
-    <string name="SettingsShare_Text">Unstoppable Wallet - eine krypto Wallet, die ich empfehle</string>
+    <string name="SettingsShare_Text">Be Unstoppable</string>
     <!--Setting_Contact-->
     <string name="SettingsContact_Title">Kontakt</string>
     <!--Setting_Notifications-->
