@@ -8,6 +8,8 @@ import android.text.Html
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.Spanned
+import android.text.style.ForegroundColorSpan
+import android.text.style.TextAppearanceSpan
 import android.text.style.URLSpan
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -42,10 +44,16 @@ import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.views.ListPosition
 import io.horizontalsystems.views.SettingsView
+import io.horizontalsystems.views.helpers.LayoutHelper
 import io.horizontalsystems.xrateskit.entities.*
+import io.noties.markwon.AbstractMarkwonPlugin
 import io.noties.markwon.Markwon
+import io.noties.markwon.MarkwonSpansFactory
+import io.noties.markwon.core.spans.LastLineSpacingSpan
 import kotlinx.android.synthetic.main.coin_market_details.*
 import kotlinx.android.synthetic.main.fragment_coin.*
+import org.commonmark.node.Heading
+import org.commonmark.node.Paragraph
 import java.math.BigDecimal
 import java.util.*
 
@@ -242,12 +250,33 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
 
             if (item.coinMeta.description.isNotBlank()) {
                 aboutGroup.isVisible = true
+                aboutTitle.isVisible = item.coinMeta.descriptionType == CoinMeta.DescriptionType.HTML
                 val aboutTextSpanned = when (item.coinMeta.descriptionType) {
                     CoinMeta.DescriptionType.HTML -> {
                         Html.fromHtml(item.coinMeta.description.replace("\n", "<br />"), Html.FROM_HTML_MODE_COMPACT)
                     }
                     CoinMeta.DescriptionType.MARKDOWN -> {
-                        val markwon = Markwon.create(requireContext())
+                        val markwon = Markwon.builder(requireContext())
+                                .usePlugin(object : AbstractMarkwonPlugin() {
+
+                                    override fun configureSpansFactory(builder: MarkwonSpansFactory.Builder) {
+                                        builder.setFactory(Heading::class.java) { configuration, props ->
+                                            arrayOf(
+                                                    TextAppearanceSpan(context, R.style.Headline2),
+                                                    ForegroundColorSpan(resources.getColor(R.color.bran, null))
+                                            )
+                                        }
+                                        builder.setFactory(Paragraph::class.java) { configuration, props ->
+                                            arrayOf(
+                                                    LastLineSpacingSpan(LayoutHelper.dp(24f, requireContext())),
+                                                    TextAppearanceSpan(context, R.style.Subhead2),
+                                                    ForegroundColorSpan(resources.getColor(R.color.grey, null))
+                                            )
+                                        }
+                                    }
+                                })
+                                .build()
+
                         markwon.toMarkdown(item.coinMeta.description)
                     }
                 }
