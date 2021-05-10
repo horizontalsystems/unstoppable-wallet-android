@@ -57,12 +57,12 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="12dp"
                 android:singleLine="true"
                 android:textColor="@color/grey"
+                app:layout_constraintBottom_toBottomOf="@+id/coinIcon"
                 app:layout_constraintEnd_toEndOf="@+id/guideEnd"
                 app:layout_constraintStart_toEndOf="@+id/coinIcon"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/coinIcon"
                 tools:text="Coin Name" />
 
             <TextView
