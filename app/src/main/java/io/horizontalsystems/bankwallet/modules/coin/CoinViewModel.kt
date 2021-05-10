@@ -2,7 +2,9 @@ package io.horizontalsystems.bankwallet.modules.coin
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.Clearable
+import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.chartview.models.ChartIndicator
@@ -11,6 +13,7 @@ import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.views.ListPosition
 import io.horizontalsystems.xrateskit.entities.ChartType
+import io.horizontalsystems.xrateskit.entities.CoinMarketDetails
 import io.horizontalsystems.xrateskit.entities.LatestRate
 import io.horizontalsystems.xrateskit.entities.TimePeriod
 import io.reactivex.disposables.CompositeDisposable
@@ -174,7 +177,7 @@ class CoinViewModel(
     private fun updateChartIndicatorState() {
         val enabled = service.chartType != ChartType.DAILY && service.chartType != ChartType.TODAY
 
-        if (setChartIndicatorsEnabled.value == enabled){
+        if (setChartIndicatorsEnabled.value == enabled) {
             return
         }
 
@@ -216,7 +219,7 @@ class CoinViewModel(
 
     private fun updateCoinDetails() {
         val coinDetails = service.coinMarketDetails ?: return
-        coinDetailsLiveData.postValue(factory.createCoinDetailsViewItem(coinDetails, service.currency, coinCode, rateDiffCoinCodes, rateDiffPeriods, service.guideUrl))
+        coinDetailsLiveData.postValue(factory.createCoinDetailsViewItem(coinDetails, service.currency, coinCode, rateDiffCoinCodes, rateDiffPeriods, getContractInfo(coinDetails), service.guideUrl))
 
         val coinMarketItems = factory.createCoinMarketItems(coinDetails.tickers)
         val coinInvestorItems = factory.createCoinInvestorItems(coinDetails.meta.fundCategories)
@@ -226,6 +229,14 @@ class CoinViewModel(
         coinMarkets.postValue(coinMarketItems)
         coinInvestors.postValue(coinInvestorItems)
     }
+
+    private fun getContractInfo(coinDetails: CoinMarketDetails): ContractInfo? =
+            when (val coinType = coinDetails.data.type) {
+                is CoinType.Erc20 -> ContractInfo(Translator.getString(R.string.CoinPage_Contract, "ETH"), coinType.address)
+                is CoinType.Bep20 -> ContractInfo(Translator.getString(R.string.CoinPage_Contract, "BSC"), coinType.address)
+                is CoinType.Bep2 -> ContractInfo(Translator.getString(R.string.CoinPage_Bep2Symbol), coinType.symbol)
+                else -> null
+            }
 
     private fun setExtraPageButtons(coinMarketItems: List<MarketTickerViewItem>, coinInvestorItems: List<InvestorItem>, coinVolume: String?) {
         val coinExtraPages = mutableListOf<CoinExtraPage>()

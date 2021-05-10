@@ -300,7 +300,7 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
                 aboutGroup.isVisible = false
             }
             // Categories/Platforms/Links
-            setCategoriesAndPlatforms(item.coinMeta.categories, item.coinMeta.platforms)
+            setCategoriesAndContractInfo(item.coinMeta.categories, item.contractInfo)
 
             //Links
             setLinks(item.coinMeta.links, item.guideUrl)
@@ -395,12 +395,12 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
     }
 
     private fun setCoinPerformance(item: CoinDetailsViewItem) {
-        if (item.rateDiffs.isEmpty()){
+        if (item.rateDiffs.isEmpty()) {
             return
         }
         context?.let { ctx ->
             item.rateDiffs.forEachIndexed { index, rowViewItem ->
-                val row = when(rowViewItem){
+                val row = when (rowViewItem) {
                     is RoiViewItem.HeaderRowViewItem -> {
                         CoinPerformanceRowView(ctx).apply {
                             bindHeader(rowViewItem.title, rowViewItem.periods)
@@ -408,7 +408,7 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
                     }
                     is RoiViewItem.RowViewItem -> {
                         CoinPerformanceRowView(ctx).apply {
-                            bind(rowViewItem.title, rowViewItem.values, item.rateDiffs.size-1, index)
+                            bind(rowViewItem.title, rowViewItem.values, item.rateDiffs.size - 1, index)
                         }
                     }
                 }
@@ -573,27 +573,24 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
         }
     }
 
-    private fun setCategoriesAndPlatforms(categories: List<CoinCategory>, platforms: Map<CoinPlatformType, String>) {
+    private fun setCategoriesAndContractInfo(categories: List<CoinCategory>, contractInfo: ContractInfo?) {
         categoriesText.text = categories.joinToString(", ") { it.name }
         categoriesGroup.isVisible = categories.isNotEmpty()
 
         context?.let { context ->
             platformsLayout.removeAllViews()
 
-            val filteredPlatforms = platforms.toList().filter { (platform, _) -> platform != CoinPlatformType.OTHER }
-            filteredPlatforms
-                    .sortedBy { (platform, _) -> platform.order }
-                    .onEachIndexed { index, (platform, value) ->
-                        val platformView = CoinInfoItemView(context).apply {
-                            bind(
-                                    title = platform.title,
-                                    decoratedValue = value,
-                                    listPosition = ListPosition.getListPosition(filteredPlatforms.size, index)
-                            )
-                        }
+            contractInfo?.let {
+                val platformView = CoinInfoItemView(context).apply {
+                    bind(
+                            title = contractInfo.title,
+                            decoratedValue = contractInfo.value,
+                            listPosition = ListPosition.Single
+                    )
+                }
 
-                        platformsLayout.addView(platformView)
-                    }
+                platformsLayout.addView(platformView)
+            }
         }
     }
 

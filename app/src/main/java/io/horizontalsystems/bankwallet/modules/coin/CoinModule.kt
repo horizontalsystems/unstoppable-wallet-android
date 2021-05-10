@@ -56,22 +56,3 @@ sealed class InvestorItem {
     data class Fund(val name: String, val url: String, val cleanedUrl: String, val position: ListPosition) : InvestorItem()
 }
 
-val CoinPlatformType.title: String
-    get() = when (this) {
-        CoinPlatformType.OTHER -> "Other"
-        CoinPlatformType.ETHEREUM -> "ETH Contract"
-        CoinPlatformType.BINANCE -> "Binance DEX Contract"
-        CoinPlatformType.BINANCE_SMART_CHAIN -> "BSC Contract"
-        CoinPlatformType.TRON -> "TRON Contract"
-        CoinPlatformType.EOS -> "EOS Contract"
-    }
-
-val CoinPlatformType.order: Int
-    get() = when (this) {
-        CoinPlatformType.ETHEREUM -> 1
-        CoinPlatformType.BINANCE_SMART_CHAIN -> 2
-        CoinPlatformType.BINANCE -> 3
-        CoinPlatformType.TRON -> 4
-        CoinPlatformType.EOS -> 5
-        CoinPlatformType.OTHER -> 6
-    }
