@@ -79,7 +79,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="36dp"
-                android:text="@string/PassphraseDescription"
+                android:text="@string/Restore_PassphraseDescription"
                 android:textColor="@color/grey" />
 
         </LinearLayout>
