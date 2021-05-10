@@ -589,23 +589,23 @@
     <string name="ManageAccount_Delete_ConfirmationRemove">This action will delete the selected wallet from this device.</string>
     <string name="ManageAccount_Delete_ConfirmationDisable">All coins that belong to this wallet will be disabled on balance tab.</string>
     <string name="ManageAccount_Delete_ConfirmationLose">If you didn\'t backup the private key for this wallet, you will lose access to the funds on the selected wallet.</string>
-    <string name="ManageAccount_BirthdayHeight">%s Birthday Height</string>
-    <string name="ManageAccount_NWords">%s words</string>
-    <string name="ManageAccount_NWordsWithPassphrase">%s words with passphrase</string>
+    <string name="ManageAccount_BirthdayHeight">%s Блок Создания</string>
+    <string name="ManageAccount_NWords">%s слов</string>
+    <string name="ManageAccount_NWordsWithPassphrase">%s слов с кодовой фразой</string>
     <!-- Show Key -->
-    <string name="ShowKey_Title">Key</string>
-    <string name="ShowKey_Description">The recovery phrases that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken etc.\n\nMake sure that no one is watching your screen.</string>
-    <string name="ShowKey_ButtonShow">Show</string>
-    <string name="ShowKey_Passphrase">Passphrase</string>
-    <string name="ShowKey_ButtonClose">Close</string>
-    <string name="ShowKey_TabMnemonicPhrase">Recovery Phrase</string>
+    <string name="ShowKey_Title">Ключ</string>
+    <string name="ShowKey_Description">Показанные далее фразы для восстановления являются единственным способом восстановления ваших средств в случае потери, кражи или поломки вашего телефона.\n\nУбедитесь, что никто не смотрит на ваш экран.</string>
+    <string name="ShowKey_ButtonShow">Показать</string>
+    <string name="ShowKey_Passphrase">Кодовая Фраза</string>
+    <string name="ShowKey_ButtonClose">Закрыть</string>
+    <string name="ShowKey_TabMnemonicPhrase">Фраза для восстановления</string>
     <string name="ShowKey_TabPrivateKey">Private Key</string>
     <!-- Backup Key -->
-    <string name="BackupKey_Title">Backup</string>
-    <string name="BackupKey_Description">The recovery phrase that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken etc.\n\nMake sure that no one is watching your screen.</string>
-    <string name="BackupKey_ButtonShow">Show</string>
-    <string name="BackupKey_ButtonBackup">Backup</string>
-    <string name="BackupConfirmKey_Description">Enter the recovery phrase in correct order to confirm</string>
+    <string name="BackupKey_Title">Резервная Копия</string>
+    <string name="BackupKey_Description">Показанные далее фразы для восстановления являются единственным способом восстановления ваших средств в случае потери, кражи или поломки вашего телефона.\n\nУбедитесь, что никто не смотрит на ваш экран.</string>
+    <string name="BackupKey_ButtonShow">Показать</string>
+    <string name="BackupKey_ButtonBackup">Резервная Копия</string>
+    <string name="BackupConfirmKey_Description">Введите фразы для восстановления в правильном порядке, чтобы подтвердить</string>
     <string name="BackupConfirmKey_EmptyOrInvalidWords">Entered words are empty or invalid</string>
     <string name="BackupConfirmKey_Error_EmptyWord">Empty word</string>
     <string name="BackupConfirmKey_Error_InvalidWord">Invalid word</string>
@@ -656,7 +656,7 @@
     <string name="AddBep2Token_TokenNotFound">Токен не найден</string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Title">Формат Адреса</string>
-    <string name="AddressFormatSettings_Description">Choose the address format for your %s wallet. Each selected format represents a different wallet on app\'s balance tab.</string>
+    <string name="AddressFormatSettings_Description">Выберите формат адреса для вашего %s кошелька. Каждый выбранный формат представляет отдельный кошелек во вкладке приложения для отображения баланса.</string>
     <!-- Blockchain Settings -->
     <string name="BlockchainSettings_BipChangeAlert_Title">Формат Адреса</string>
     <string name="BlockchainSettings_ChangeAlert_ActionButtonText">Изменить на %s</string>
@@ -688,7 +688,7 @@
     <string name="CoinPage_TimeDuration_Today">TDY</string>
     <string name="CoinPage_TimeDuration_Day">24H</string>
     <string name="CoinPage_TimeDuration_Week">7D</string>
-    <string name="CoinPage_TimeDuration_Month">1M</string>
+    <string name="CoinPage_TimeDuration_Month">1М</string>
     <string name="CoinPage_TimeDuration_TwoWeeks">2W</string>
     <string name="CoinPage_TimeDuration_Month3">3M</string>
     <string name="CoinPage_TimeDuration_HalfYear">6M</string>
