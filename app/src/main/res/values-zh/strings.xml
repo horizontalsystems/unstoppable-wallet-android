@@ -45,16 +45,16 @@
     <string name="Welcome_CreateWallet">创建钱包</string>
     <string name="Welcome_RestoreWallet">恢复钱包</string>
     <!--Create Wallet-->
-    <string name="CreateWallet_Title">New Wallet</string>
-    <string name="CreateWallet_Mnemonic">Mnemonic</string>
-    <string name="Passphrase">Passphrase</string>
-    <string name="CreateWallet_N_Words">%s words</string>
-    <string name="CreateWallet_PassphraseConfirm">Confirm</string>
-    <string name="CreateWallet_Error_EmptyPassphrase">Passphrase cannot be empty</string>
-    <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Please use only latin letters and numbers for the passphrase</string>
-    <string name="CreateWallet_Error_InvalidConfirmation">Passphrase confirmation does not match</string>
-    <string name="EnterPassphrase">Enter Passphrase</string>
-    <string name="CreateWallet_PassphraseDescription">Passphrases add additional security layer to the wallets enabling users to create multiple independent multi-coin wallets using a single mnemonic recovery phrase (secret 12 words) but associated with different passwords. \n\nTo restore these wallets a user will require mnemonic recovery phrase as well as a password for each to be restored wallet.</string>
+    <string name="CreateWallet_Title">新的钱包</string>
+    <string name="CreateWallet_Mnemonic">助记词</string>
+    <string name="Passphrase">密码</string>
+    <string name="CreateWallet_N_Words">%s 个单词</string>
+    <string name="CreateWallet_PassphraseConfirm">确认</string>
+    <string name="CreateWallet_Error_EmptyPassphrase">助记词不能为空</string>
+    <string name="CreateWallet_Error_PassphraseForbiddenSymbols">请只对密码使用拉丁字母和数字</string>
+    <string name="CreateWallet_Error_InvalidConfirmation">确认密码不匹配</string>
+    <string name="EnterPassphrase">Passphrase</string>
+    <string name="CreateWallet_PassphraseDescription">Passphrase add additional security layer to the wallets enabling users to create multiple independent multi-coin wallets using a single mnemonic recovery phrase (secret 12 words) but associated with different passwords. \n\nTo restore these wallets a user will require mnemonic recovery phrase as well as a password for each to be restored wallet.</string>
     <!--Rate App-->
     <string name="RateApp_Title_Rate_This_App">评价此应用</string>
     <string name="RateApp_Description_Rate_This_App">希望Unstoppable钱包？请抽点时间评价此应用</string>
@@ -64,16 +64,16 @@
     <string name="Restore_ChooseWallet">选择钱包</string>
     <string name="Restore_Enter_Key_Title">输入密钥</string>
     <string name="Restore_Enter_Key_Description_Mnemonic">为%1s钱包输入私钥，其中应包含%2s个单词。这些单词必须以正确的顺序输入并用空格分隔。</string>
-    <string name="Restore_Mnemonic_Description">Enter your mnemonic which consists of 12 or 24 words. The words needs to be entered in correct order and separated by spaces.</string>
+    <string name="Restore_Mnemonic_Description">输入助记词，其中应包含12或24个单词。这些单词必须以正确的顺序输入并用空格分隔。</string>
     <string name="Restore_ValidationFailed">错误密钥</string>
     <string name="Restore_InvalidWordCount">字数有误: %1$d, 必须为%2$d。</string>
-    <string name="Restore_Error_MnemonicWordCount">Wrong words count. Must be 12 or 24. You entered: %d</string>
-    <string name="Restore_Error_EmptyPassphrase">Passphrase cannot be empty</string>
+    <string name="Restore_Error_MnemonicWordCount">字数有误。必须为12或24个。您输入了：%d</string>
+    <string name="Restore_Error_EmptyPassphrase">助记词不能为空</string>
     <string name="Restore_InvalidChecksum">校验和无效</string>
-    <string name="Restore_PassphraseDescription">Enter your passphrase that you used when creating this mnemonic phrase.</string>
+    <string name="Restore_PassphraseDescription">输入您在创建此助记词时使用的密码.</string>
     <string name="Select_Coins">选择加密货币</string>
-    <string name="Restore_ZCash_BirthdayHeight">Zcash Birthday Height</string>
-    <string name="Restore_ZCash_BirthdayHeight_Hint">If you know a birthday height for your Zcash wallet add it below to speedup syncing process.</string>
+    <string name="Restore_ZCash_BirthdayHeight">Birthday Height</string>
+    <string name="Restore_ZCash_BirthdayHeight_Hint">如果您知道您Zcash钱包的生日高度，请将其添加至下方以加速同步过程。</string>
     <!--Backup-->
     <string name="Backup_Intro_Title">备份</string>
     <string name="Backup_Intro_TitleShow">显示密钥</string>
@@ -576,10 +576,10 @@
     <string name="ManageAccounts_ImportWallet">Restore</string>
     <string name="ManageAccounts_Hint">Tip! Restoring an existing wallet but with a new passphrase will a generate a brand new wallet. Handy if you want to use a single 12-24 word mnemonic recovery phrase for multiple wallets.</string>
     <!--Manage Account-->
-    <string name="ManageAccount_Name">Name</string>
-    <string name="ManageAccount_Save">Save</string>
-    <string name="ManageAccount_RecoveryPhraseBackup">Backup Phrases</string>
-    <string name="ManageAccount_RecoveryPhraseShow">Show Phrases</string>
+    <string name="ManageAccount_Name">名称</string>
+    <string name="ManageAccount_Save">保存</string>
+    <string name="ManageAccount_RecoveryPhraseBackup">Backup Phrase</string>
+    <string name="ManageAccount_RecoveryPhraseShow">Show Phrase</string>
     <string name="ManageAccount_Unlink">Unlink</string>
     <string name="ManageAccount_BackupRequired_Title">Backup Required</string>
     <string name="ManageAccount_BackupRequired_Description">You need to backup the private key for this wallet before it can be deleted from this phone.</string>
@@ -592,7 +592,7 @@
     <string name="ManageAccount_NWordsWithPassphrase">%s words with passphrase</string>
     <!-- Show Key -->
     <string name="ShowKey_Title">Key</string>
-    <string name="ShowKey_Description">The recovery phrases that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken etc.\n\nMake sure that no one is watching your screen.</string>
+    <string name="ShowKey_Description">The recovery phrase that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken etc.\n\nMake sure that no one is watching your screen.</string>
     <string name="ShowKey_ButtonShow">Show</string>
     <string name="ShowKey_Passphrase">Passphrase</string>
     <string name="ShowKey_ButtonClose">Close</string>
