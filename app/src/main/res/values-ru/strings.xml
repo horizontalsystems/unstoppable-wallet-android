@@ -53,8 +53,8 @@
     <string name="CreateWallet_Error_EmptyPassphrase">Поле для кодовой фразы не может быть пустым</string>
     <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Пожалуйста, используйте только латинские буквы и цифры для кодовой фразы</string>
     <string name="CreateWallet_Error_InvalidConfirmation">Подтвержденная кодовая фраза не совпадает</string>
-    <string name="EnterPassphrase">Введите кодовую фразу</string>
-    <string name="CreateWallet_PassphraseDescription">Passphrases add additional security layer to the wallets enabling users to create multiple independent multi-coin wallets using a single mnemonic recovery phrase (secret 12 words) but associated with different passwords. \n\nTo restore these wallets a user will require mnemonic recovery phrase as well as a password for each to be restored wallet.</string>
+    <string name="EnterPassphrase">Passphrase</string>
+    <string name="CreateWallet_PassphraseDescription">Passphrase add additional security layer to the wallets enabling users to create multiple independent multi-coin wallets using a single mnemonic recovery phrase (secret 12 words) but associated with different passwords. \n\nTo restore these wallets a user will require mnemonic recovery phrase as well as a password for each to be restored wallet.</string>
     <!--Rate App-->
     <string name="RateApp_Title_Rate_This_App">Оценить приложение</string>
     <string name="RateApp_Description_Rate_This_App">Вам нравится Unstoppable Wallet? Пожалуйста, найдите минутку, чтобы оценить это приложение</string>
@@ -70,9 +70,9 @@
     <string name="Restore_Error_MnemonicWordCount">Неправильное количество слов. Должно быть 12 или 24 слова. Длина вашей мнемонической фразы составляет: %d</string>
     <string name="Restore_Error_EmptyPassphrase">Поле для кодовой фразы не может быть пустым</string>
     <string name="Restore_InvalidChecksum">Неверная Контрольная Сумма</string>
-    <string name="Restore_PassphraseDescription">Enter your passphrase that you used when creating this mnemonic phrase.</string>
+    <string name="Restore_PassphraseDescription">Введите свою кодовую фразу, которую вы использовали при создании этой мнемонической фразы.</string>
     <string name="Select_Coins">Выберите Валюту</string>
-    <string name="Restore_ZCash_BirthdayHeight">Zcash Birthday Height</string>
+    <string name="Restore_ZCash_BirthdayHeight">Birthday Height</string>
     <string name="Restore_ZCash_BirthdayHeight_Hint">Если вы знаете блок создания вашего Zcash кошелька, добавьте его ниже для ускорения процесса синхронизации.</string>
     <!--Backup-->
     <string name="Backup_Intro_Title">Резервная Копия</string>
@@ -581,8 +581,8 @@
     <!--Manage Account-->
     <string name="ManageAccount_Name">Названию</string>
     <string name="ManageAccount_Save">Сохранить</string>
-    <string name="ManageAccount_RecoveryPhraseBackup">Резервная Фраза</string>
-    <string name="ManageAccount_RecoveryPhraseShow">Показать Фразу</string>
+    <string name="ManageAccount_RecoveryPhraseBackup">Backup Phrase</string>
+    <string name="ManageAccount_RecoveryPhraseShow">Show Phrase</string>
     <string name="ManageAccount_Unlink">Отсоединить</string>
     <string name="ManageAccount_BackupRequired_Title">Необходима Резервная Копия</string>
     <string name="ManageAccount_BackupRequired_Description">Вам нужно сделать резервную копию персонального ключа для этого кошелька, прежде чем он будет удален с этого телефона.</string>
@@ -595,7 +595,7 @@
     <string name="ManageAccount_NWordsWithPassphrase">%s слов с кодовой фразой</string>
     <!-- Show Key -->
     <string name="ShowKey_Title">Ключ</string>
-    <string name="ShowKey_Description">Показанные далее фразы для восстановления являются единственным способом восстановления ваших средств в случае потери, кражи или поломки вашего телефона.\n\nУбедитесь, что никто не смотрит на ваш экран.</string>
+    <string name="ShowKey_Description">The recovery phrase that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken etc.\n\nMake sure that no one is watching your screen.</string>
     <string name="ShowKey_ButtonShow">Показать</string>
     <string name="ShowKey_Passphrase">Кодовая Фраза</string>
     <string name="ShowKey_ButtonClose">Закрыть</string>
