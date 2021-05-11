@@ -39,7 +39,7 @@
     <string name="Intro_Privacy_Title">Сохраняйте Конфиденциальность</string>
     <string name="Intro_Privacy_Description">Используйте этот кошелек, чтобы оставаться инкогнито и иметь возможность сохранить конфиденциальность вашей информации.</string>
     <!--Rooted Device-->
-    <string name="RootedDevice_Button_Understand">I ACCEPT</string>
+    <string name="RootedDevice_Button_Understand">Я принимаю</string>
     <!--Welcome-->
     <string name="Welcome_PrivacySettings">Настройки Приватности</string>
     <string name="Welcome_CreateWallet">Создать Кошелек</string>
@@ -443,10 +443,10 @@
     <string name="Markdown_Error_NotFound">Страница не найдена</string>
     <!--Setting_Currency-->
     <string name="SettingsCurrency_Title">Базовая Валюта</string>
-    <string name="SettingsCurrency_Other">OTHER</string>
+    <string name="SettingsCurrency_Other">ДРУГИЕ</string>
     <string name="SettingsCurrency_DisclaimerTitle">Отказ от ответственности</string>
     <string name="SettingsCurrency_DisclaimerText">Данные об обменном курсе предоставлены третьим лицом Coingecko.сom\n\n Приложение Unstoppable Wallet не гарантирует, что эти данные всегда верны и соответствуют рыночным. Шанс на несоответствие повышается при выборе базовой валюты, отличающейся от %s.</string>
-    <string name="SettingsCurrency_Understand">I Understand</string>
+    <string name="SettingsCurrency_Understand">Я Понимаю</string>
     <!--Settings-->
     <string name="Settings_Title">Настройки</string>
     <string name="Settings_SecurityCenter">Центр Безопасности</string>
@@ -517,12 +517,12 @@
 \n\nМы создали кошелек Unstoppable для себя, так как доступные в сети решения не предлагают необходимый функционал на должном уровне. С точки зрения инженерии и простоты использования, мы считаем, что этот кошелек значительно опережает альтернативные продукты.</string>
     <string name="SettingsTerms_TermAcademy">Я зашел в раздел \"Академия\" в этом приложении и ознакомился с базовыми аспектами хранения криптовалют.</string>
     <string name="SettingsTerms_TermBackup">Я создал резервную копию приватного ключа (-ей) для своих кошельков, показанных мне в виде 12-24 слов. Я понимаю, что эти приватные ключи хранятся на моем смартфоне, а не в другом месте.</string>
-    <string name="SettingsTerms_TermOwner">I understand that passing my phone to untrusted entities and leaving the wallet app without safe PIN lock may potentially endanger the safety of my funds.</string>
-    <string name="SettingsTerms_TermRecover">I understand that jail breaking (rooting) my phone, installing third party apps from unknown sources, keeping the operating system outdated can potentially endanger the safety of my funds.</string>
-    <string name="SettingsTerms_TermPhone">I understand there may be undiscovered software issues in the code powering this wallet app which may potentially lead to unexpected behavior or the app malfunctioning.</string>
-    <string name="SettingsTerms_TermRoot">I understand that I will need my private keys in order to restore access to my funds should I lose my phone or if the app malfunctions. Without my private keys it will be impossible to recover access to my wallet.</string>
-    <string name="SettingsTerms_TermBugs">I understand that disabling the phone unlock PIN(or its equivalent) in Settings of Android OS will erase wallet private keys from my device. I will need my private keys to regain access to my funds.</string>
-    <string name="Settings_TermsPin"> I understand that only I myself is responsible for safety of my funds and no other entity.</string>
+    <string name="SettingsTerms_TermOwner">Я понимаю, что передача моего телефона ненадежным лицам и отсутствие безопасной блокировки кошелька с помощью PIN-кода может поставить под угрозу безопасность моих средств.</string>
+    <string name="SettingsTerms_TermRecover">Я понимаю, что джейлбрейк (или рутинг) моего телефона, установка приложений из неизвестных источников и устаревшая операционная система могут поставить под угрозу безопасность моих средств.</string>
+    <string name="SettingsTerms_TermPhone">Я понимаю, что в коде этого кошелька могут быть не обнаруженные проблемы с программным обеспечением, что может привести к неожиданному поведению или сбоям в работе приложения.</string>
+    <string name="SettingsTerms_TermRoot">Я понимаю, что в случае если я потеряю телефон или не будет работать приложение, для восстановления доступа к моим средствам мне понадобятся приватные ключи. Я не смогу восстановить доступ к моему кошельку без персональных ключей.</string>
+    <string name="SettingsTerms_TermBugs">Я понимаю, что отключение секретного кода разблокировки телефона (или его эквивалента) в настройках iOS удалит приватные ключи кошелька с моего устройства. Мне понадобятся приватные ключи для восстановления доступа к моему кошельку.</string>
+    <string name="Settings_TermsPin"> Я понимаю, что только я один полностью несу ответственность за безопасность своих средств.</string>
     <string name="SettingsTerms_BottomThankYou">Благодарим вас \nза выбор \nэтого кошелька!</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Поделиться</string>
@@ -577,17 +577,17 @@
     <string name="ManageAccounts_Title">Кошельки</string>
     <string name="ManageAccounts_CreateNewWallet">Создать</string>
     <string name="ManageAccounts_ImportWallet">Восстановить</string>
-    <string name="ManageAccounts_Hint">Tip! Restoring an existing wallet but with a new passphrase will a generate a brand new wallet. Handy if you want to use a single 12-24 word mnemonic recovery phrase for multiple wallets.</string>
+    <string name="ManageAccounts_Hint">Совет: Восстановление существующего кошелька с другой кодовой фразой приведет к созданию нового кошелька. Это очень удобно, когда вы хотите использовать одну мнемоническую восстановительную фразу длиной от 12 до 24 слов для нескольких кошельков.</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">Названию</string>
     <string name="ManageAccount_Save">Сохранить</string>
-    <string name="ManageAccount_RecoveryPhraseBackup">Backup Phrases</string>
-    <string name="ManageAccount_RecoveryPhraseShow">Show Phrases</string>
+    <string name="ManageAccount_RecoveryPhraseBackup">Резервная Фраза</string>
+    <string name="ManageAccount_RecoveryPhraseShow">Показать Фразу</string>
     <string name="ManageAccount_Unlink">Отсоединить</string>
-    <string name="ManageAccount_BackupRequired_Title">Backup Required</string>
-    <string name="ManageAccount_BackupRequired_Description">You need to backup the private key for this wallet before it can be deleted from this phone.</string>
-    <string name="ManageAccount_DeleteFromPhone">Delete from Phone</string>
-    <string name="ManageAccount_Delete_ConfirmationRemove">This action will delete the selected wallet from this device.</string>
+    <string name="ManageAccount_BackupRequired_Title">Необходима Резервная Копия</string>
+    <string name="ManageAccount_BackupRequired_Description">Вам нужно сделать резервную копию персонального ключа для этого кошелька, прежде чем он будет удален с этого телефона.</string>
+    <string name="ManageAccount_DeleteFromPhone">Удалить с Телефона</string>
+    <string name="ManageAccount_Delete_ConfirmationRemove">Это действие удалит ваш %s кошелек с этого устройства.</string>
     <string name="ManageAccount_Delete_ConfirmationDisable">All coins that belong to this wallet will be disabled on balance tab.</string>
     <string name="ManageAccount_Delete_ConfirmationLose">If you didn\'t backup the private key for this wallet, you will lose access to the funds on the selected wallet.</string>
     <string name="ManageAccount_BirthdayHeight">%s Блок Создания</string>
@@ -608,10 +608,10 @@
     <string name="BackupKey_ButtonBackup">Резервная Копия</string>
     <string name="BackupConfirmKey_Description">Введите фразы для восстановления в правильном порядке, чтобы подтвердить</string>
     <string name="BackupConfirmKey_EmptyOrInvalidWords">Entered words are empty or invalid</string>
-    <string name="BackupConfirmKey_Error_EmptyWord">Empty word</string>
-    <string name="BackupConfirmKey_Error_InvalidWord">Invalid word</string>
-    <string name="BackupConfirmKey_Error_EmptyPassphrase">Empty passphrase</string>
-    <string name="BackupConfirmKey_Error_InvalidPassphrase">Invalid passphrase</string>
+    <string name="BackupConfirmKey_Error_EmptyWord">Отсутствует слово</string>
+    <string name="BackupConfirmKey_Error_InvalidWord">Неверное слово</string>
+    <string name="BackupConfirmKey_Error_EmptyPassphrase">Отсутствует кодовая фраза</string>
+    <string name="BackupConfirmKey_Error_InvalidPassphrase">Неверная кодовая фраза</string>
     <!--Manage Keys Delete Alert-->
     <string name="ManageKeys_Delete_Title">Удалить Кошелек</string>
     <string name="ManageKeys_Delete_ConfirmationRemove">Это действие удалит ваш %s кошелек с этого устройства.</string>
