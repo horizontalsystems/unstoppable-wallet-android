@@ -11,6 +11,7 @@
         style="@style/ImportantText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
         android:layout_marginTop="12dp"
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toTopOf="@+id/enableBtn"
