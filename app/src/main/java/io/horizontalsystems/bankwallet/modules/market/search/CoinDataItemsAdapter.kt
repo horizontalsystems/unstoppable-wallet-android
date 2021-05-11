@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
-import io.horizontalsystems.bankwallet.entities.title
+import io.horizontalsystems.bankwallet.entities.label
 import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
 import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.views.inflate
@@ -39,7 +39,7 @@ class CoinDataItemsAdapter(private val onItemClick: (CoinDataViewItem) -> Unit) 
             subtitle.text = item.code
 
             if(item.type is CoinType.Erc20 || item.type is CoinType.Bep20  || item.type is CoinType.Bep2) {
-                rank.text = item.type.javaClass.simpleName
+                rank.text = item.type.label
                 rank.isVisible = true
             }
             else
