@@ -117,7 +117,10 @@
         android:includeFontPadding="false"
         android:text="@string/Send_DialogSpeed"
         android:textColor="@color/grey"
+        app:layout_constrainedWidth="true"
         app:layout_constraintBottom_toBottomOf="@+id/speedLayoutFrame"
+        app:layout_constraintEnd_toStartOf="@+id/txSpeedMenu"
+        app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toEndOf="@+id/feeInfoButton"
         app:layout_constraintTop_toTopOf="@+id/speedLayoutFrame" />
 
