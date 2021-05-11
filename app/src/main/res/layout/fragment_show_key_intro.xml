@@ -19,6 +19,7 @@
         style="@style/ImportantText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
         android:layout_marginTop="12dp"
         android:text="@string/ShowKey_Description"
         app:layout_constraintEnd_toEndOf="parent"

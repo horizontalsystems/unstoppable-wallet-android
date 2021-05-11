@@ -11,12 +11,13 @@
         style="@style/ImportantText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
         android:layout_marginTop="12dp"
         android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/btnYellow"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/btnYellow"
         tools:text="@string/AddCoin_Description" />
 
     <Button
