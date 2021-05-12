@@ -45,16 +45,16 @@
     <string name="Welcome_CreateWallet">Crear Monedero</string>
     <string name="Welcome_RestoreWallet">Restaurar Monedero</string>
     <!--Create Wallet-->
-    <string name="CreateWallet_Title">New Wallet</string>
-    <string name="CreateWallet_Mnemonic">Mnemonic</string>
-    <string name="Passphrase">Passphrase</string>
-    <string name="CreateWallet_N_Words">%s words</string>
-    <string name="CreateWallet_PassphraseConfirm">Confirm</string>
-    <string name="CreateWallet_Error_EmptyPassphrase">Passphrase cannot be empty</string>
-    <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Please use only latin letters and numbers for the passphrase</string>
-    <string name="CreateWallet_Error_InvalidConfirmation">Passphrase confirmation does not match</string>
-    <string name="EnterPassphrase">Passphrase</string>
-    <string name="CreateWallet_PassphraseDescription">Passphrase add additional security layer to the wallets enabling users to create multiple independent multi-coin wallets using a single mnemonic recovery phrase (secret 12 words) but associated with different passwords. \n\nTo restore these wallets a user will require mnemonic recovery phrase as well as a password for each to be restored wallet.</string>
+    <string name="CreateWallet_Title">Nueva cartera</string>
+    <string name="CreateWallet_Mnemonic">Mnemotécnica</string>
+    <string name="Passphrase">Frase de contraseña</string>
+    <string name="CreateWallet_N_Words">%s palabras</string>
+    <string name="CreateWallet_PassphraseConfirm">Confirmar</string>
+    <string name="CreateWallet_Error_EmptyPassphrase">La frase de contraseña no puede estar vacío</string>
+    <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Por favor, utiliza solo letras del alfabeto latino y números para la frase de contraseña</string>
+    <string name="CreateWallet_Error_InvalidConfirmation">La confirmación de la frase de contraseña no coincide</string>
+    <string name="EnterPassphrase">Frase de contraseña</string>
+    <string name="CreateWallet_PassphraseDescription">La frase de contraseña añade una capa de seguridad adicional a los monederos permitiendo a los usuarios crear múltiples monederos multi-monedas independientes usando una sola frase de recuperación mnemotécnica pero asociada con diferentes contraseñas.\n\nPara restaurar estos monederos un usuario necesitará una frase de recuperación mnemotécnica, así como una contraseña para cada monedero restaurado.</string>
     <!--Rate App-->
     <string name="RateApp_Title_Rate_This_App">Valorar app</string>
     <string name="RateApp_Description_Rate_This_App">¿Disfrutas Unstoppable Wallet? Por favor, ten un momento para calificar la aplicación</string>
@@ -64,16 +64,16 @@
     <string name="Restore_ChooseWallet">Elegir el monedero</string>
     <string name="Restore_Enter_Key_Title">Coloque la clave</string>
     <string name="Restore_Enter_Key_Description_Mnemonic">Introduzca su clave privada para el monedero %1s, la cual consta de %2s palabras. Las palabras deben ser introducidas en orden correcto y separadas por espacios.</string>
-    <string name="Restore_Mnemonic_Description">Enter your mnemonic which consists of 12 or 24 words. The words needs to be entered in correct order and separated by spaces.</string>
+    <string name="Restore_Mnemonic_Description">Introduzca su clave mnemotécnica para el monedero, la cual está compuesta por 12 o 24 palabras. Las palabras deben ser introducidas en el orden correcto y separadas por espacios.</string>
     <string name="Restore_ValidationFailed">Clave incorrecta</string>
     <string name="Restore_InvalidWordCount">Número de palabras errónes: %1$d, deberian ser %2$d</string>
-    <string name="Restore_Error_MnemonicWordCount">Wrong words count. Must be 12 or 24. You entered: %d</string>
-    <string name="Restore_Error_EmptyPassphrase">Passphrase cannot be empty</string>
+    <string name="Restore_Error_MnemonicWordCount">La cantidad ingresada de palabras es incorrecta. Deberian ser 12 o 24. Usted a ingresado: %d</string>
+    <string name="Restore_Error_EmptyPassphrase">La frase de contraseña no puede estar vacío</string>
     <string name="Restore_InvalidChecksum">Suma de verificación inválida</string>
-    <string name="Restore_PassphraseDescription">Enter your passphrase that you used when creating this mnemonic phrase.</string>
+    <string name="Restore_PassphraseDescription">Introduzca su frase de contraseña que utilizó al crear esta frase mnemotécnica.</string>
     <string name="Select_Coins">Elegir Cripto</string>
-    <string name="Restore_ZCash_BirthdayHeight">Birthday Height</string>
-    <string name="Restore_ZCash_BirthdayHeight_Hint">If you know a birthday height for your Zcash wallet add it below to speedup syncing process.</string>
+    <string name="Restore_ZCash_BirthdayHeight">Altura de Cumpleaños</string>
+    <string name="Restore_ZCash_BirthdayHeight_Hint">Si conoce una altura de cumpleaños para su monedero Zcash añádela abajo para acelerar el proceso de sincronización.</string>
     <!--Backup-->
     <string name="Backup_Intro_Title">Copia de seguridad</string>
     <string name="Backup_Intro_TitleShow">Mostrar clave</string>
