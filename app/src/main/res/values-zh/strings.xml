@@ -39,7 +39,7 @@
     <string name="Intro_Privacy_Title">保持私密状态</string>
     <string name="Intro_Privacy_Description">使用此钱包保持隐身并能够保证您信息的私密性。</string>
     <!--Rooted Device-->
-    <string name="RootedDevice_Button_Understand">I ACCEPT</string>
+    <string name="RootedDevice_Button_Understand">I Understand</string>
     <!--Welcome-->
     <string name="Welcome_PrivacySettings">隐私设置</string>
     <string name="Welcome_CreateWallet">创建钱包</string>
@@ -54,7 +54,7 @@
     <string name="CreateWallet_Error_PassphraseForbiddenSymbols">请只对密码使用拉丁字母和数字</string>
     <string name="CreateWallet_Error_InvalidConfirmation">确认密码不匹配</string>
     <string name="EnterPassphrase">密码</string>
-    <string name="CreateWallet_PassphraseDescription">Passphrase add additional security layer to the wallets enabling users to create multiple independent multi-coin wallets using a single mnemonic recovery phrase (secret 12 words) but associated with different passwords. \n\nTo restore these wallets a user will require mnemonic recovery phrase as well as a password for each to be restored wallet.</string>
+    <string name="CreateWallet_PassphraseDescription">密码为钱包增加了一个额外的保安层，让用户可以使用可关联不同密码的单一个助记词恢复码来创建多个独立的多代币钱包。\n\n要恢复这些钱包，用户必须具备助记词恢复码以及每一个待恢复钱包的密码。</string>
     <!--Rate App-->
     <string name="RateApp_Title_Rate_This_App">评价此应用</string>
     <string name="RateApp_Description_Rate_This_App">希望Unstoppable钱包？请抽点时间评价此应用</string>
@@ -157,7 +157,7 @@
     <string name="Market_Category_Infrastructure_Description">Projects building infrastructure solutions.</string>
     <string name="Market_Category_Staking">Staking ETH 2.0</string>
     <string name="Market_Category_Staking_Description">Protocols that reward liquidity providers.</string>
-    <string name="Market_Category_CrossChain">Cross Chain</string>
+    <string name="Market_Category_CrossChain">Cross-Chain</string>
     <string name="Market_Category_CrossChain_Description">Cross-chain protocols.</string>
     <string name="Market_Category_Computing">Computing</string>
     <string name="Market_Category_Computing_Description">Decentralized on-demand computing solutions.</string>
@@ -443,7 +443,7 @@
     <string name="Markdown_Error_NotFound">无法找到页面</string>
     <!--Setting_Currency-->
     <string name="SettingsCurrency_Title">基本货币</string>
-    <string name="SettingsCurrency_Other">OTHER</string>
+    <string name="SettingsCurrency_Other">其他</string>
     <string name="SettingsCurrency_DisclaimerTitle">声明</string>
     <string name="SettingsCurrency_DisclaimerText">汇率数据由第三方服务Coingecko.com提供\n\nUnstoppable钱包应用不保证这是数值总是准确以及和市场数据匹配。如果您选择任何基础货币而不是%s，那么出现不一致的机会将较高。</string>
     <string name="SettingsCurrency_Understand">我理解</string>
@@ -584,9 +584,9 @@
     <string name="ManageAccount_BackupRequired_Title">需要备份</string>
     <string name="ManageAccount_BackupRequired_Description">您应该在将此钱包的私钥从该手机删除之前先对其进行备份。</string>
     <string name="ManageAccount_DeleteFromPhone">从手机中删除</string>
-    <string name="ManageAccount_Delete_ConfirmationRemove">This action will delete the selected wallet from this device.</string>
-    <string name="ManageAccount_Delete_ConfirmationDisable">All coins that belong to this wallet will be disabled on balance tab.</string>
-    <string name="ManageAccount_Delete_ConfirmationLose">If you didn\'t backup the private key for this wallet, you will lose access to the funds on the selected wallet.</string>
+    <string name="ManageAccount_Delete_ConfirmationRemove">该操作将从此设备删除 钱包。</string>
+    <string name="ManageAccount_Delete_ConfirmationDisable">属于此钱包的所有硬币将在余额选项卡上被禁用。</string>
+    <string name="ManageAccount_Delete_ConfirmationLose">如果您尚未对此钱包备份私钥，您将失去您的资金。</string>
     <string name="ManageAccount_BirthdayHeight">%s 生日高度</string>
     <string name="ManageAccount_NWords">%s 个单词</string>
     <string name="ManageAccount_NWordsWithPassphrase">%s 个单词的密码</string>
@@ -604,7 +604,7 @@
     <string name="BackupKey_ButtonShow">查看</string>
     <string name="BackupKey_ButtonBackup">备份</string>
     <string name="BackupConfirmKey_Description">以正确顺序输入恢复码进行确认</string>
-    <string name="BackupConfirmKey_EmptyOrInvalidWords">Entered words are empty or invalid</string>
+    <string name="BackupConfirmKey_EmptyOrInvalidWords">输入的单词为空或无效</string>
     <string name="BackupConfirmKey_Error_EmptyWord">空单词</string>
     <string name="BackupConfirmKey_Error_InvalidWord">无效单词</string>
     <string name="BackupConfirmKey_Error_EmptyPassphrase">空密码</string>
