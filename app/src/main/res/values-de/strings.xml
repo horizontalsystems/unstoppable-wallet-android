@@ -45,14 +45,14 @@
     <string name="Welcome_CreateWallet">Wallet Erstellen</string>
     <string name="Welcome_RestoreWallet">Wallet Wiederherstellen</string>
     <!--Create Wallet-->
-    <string name="CreateWallet_Title">New Wallet</string>
-    <string name="CreateWallet_Mnemonic">Mnemonic</string>
+    <string name="CreateWallet_Title">Wallet Erstellen</string>
+    <string name="CreateWallet_Mnemonic">Eselsbrücke</string>
     <string name="Passphrase">Passphrase</string>
-    <string name="CreateWallet_N_Words">%s words</string>
-    <string name="CreateWallet_PassphraseConfirm">Confirm</string>
-    <string name="CreateWallet_Error_EmptyPassphrase">Passphrase cannot be empty</string>
-    <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Please use only latin letters and numbers for the passphrase</string>
-    <string name="CreateWallet_Error_InvalidConfirmation">Passphrase confirmation does not match</string>
+    <string name="CreateWallet_N_Words">%s Wörter</string>
+    <string name="CreateWallet_PassphraseConfirm">Bestätigen</string>
+    <string name="CreateWallet_Error_EmptyPassphrase">Passphrase darf nicht leer sein</string>
+    <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Bitte verwenden Sie nur lateinische Buchstaben und Zahlen für die Passphrase</string>
+    <string name="CreateWallet_Error_InvalidConfirmation">Passphrase-Bestätigung stimmt nicht überein</string>
     <string name="EnterPassphrase">Passphrase</string>
     <string name="CreateWallet_PassphraseDescription">Passphrase add additional security layer to the wallets enabling users to create multiple independent multi-coin wallets using a single mnemonic recovery phrase (secret 12 words) but associated with different passwords. \n\nTo restore these wallets a user will require mnemonic recovery phrase as well as a password for each to be restored wallet.</string>
     <!--Rate App-->
@@ -170,7 +170,7 @@
     <!--Market Global Metrics-->
     <string name="MarketGlobalMetrics_Chart">Chart</string>
     <string name="MarketGlobalMetrics_BtcDominance">Bitcoin Dominance</string>
-    <string name="MarketGlobalMetrics_Volume">Volume</string>
+    <string name="MarketGlobalMetrics_Volume">Lautstärke</string>
     <string name="MarketGlobalMetrics_DefiCap">DeFi Cap</string>
     <string name="MarketGlobalMetrics_TvlInDefi">TVL in DeFi</string>
     <string name="MarketGlobalMetrics_BtcDominanceDescription">The historical change in ratio between the market cap of Bitcoin to the rest of the cryptocurrency markets. \n\nTypically, when Bitcoin dominance trending higher the rest of the crypto market trends down and vice versa.</string>
@@ -514,12 +514,12 @@
 \n\nWir haben Unstoppable für uns selbst entwickelt, da die verfügbaren Lösungen nicht gut waren. Sowohl aus technischer Sicht als auch aus Sicht der Nutzbarkeit sind wir der Meinung, dass diese Wallets den alternativen Produkten deutlich voraus ist.</string>
     <string name="SettingsTerms_TermAcademy">Ich bin durch den Academy-Bereich dieser App gegangen und machte mich mit den grundlegenden Aspekten der Aufbewahrung von Kryptowährungen vertraut.</string>
     <string name="SettingsTerms_TermBackup">Ich habe den/die Private Key(s) für meine Wallets gesichert, die mir in Form von 12-24 Wörtern angezeigt wurden. Mir ist bewusst, dass diese Private Keys auf meinem Smartphone und nirgendwo anders gespeichert werden.</string>
-    <string name="SettingsTerms_TermOwner">I understand that passing my phone to untrusted entities and leaving the wallet app without safe PIN lock may potentially endanger the safety of my funds.</string>
-    <string name="SettingsTerms_TermRecover">I understand that jail breaking (rooting) my phone, installing third party apps from unknown sources, keeping the operating system outdated can potentially endanger the safety of my funds.</string>
-    <string name="SettingsTerms_TermPhone">I understand there may be undiscovered software issues in the code powering this wallet app which may potentially lead to unexpected behavior or the app malfunctioning.</string>
-    <string name="SettingsTerms_TermRoot">I understand that I will need my private keys in order to restore access to my funds should I lose my phone or if the app malfunctions. Without my private keys it will be impossible to recover access to my wallet.</string>
-    <string name="SettingsTerms_TermBugs">I understand that disabling the phone unlock PIN(or its equivalent) in Settings of Android OS will erase wallet private keys from my device. I will need my private keys to regain access to my funds.</string>
-    <string name="Settings_TermsPin"> I understand that only I myself is responsible for safety of my funds and no other entity.</string>
+    <string name="SettingsTerms_TermOwner">Mir ist bewusst, dass das Übergeben meines Mobiltelefons an nicht vertrauenswürdige Personen oder das Verlassen der Wallet-App ohne sichere PIN-Sperre die Sicherheit meines Guthabens gefährden könnte.</string>
+    <string name="SettingsTerms_TermRecover">Mir ist bewusst, dass Jailbreaking (Rooting) meines Mobiltelefons, Installieren von Apps von Drittanbietern aus unbekannten Quellen und die Veraltung des Betriebssystems die Sicherheit meines Geldes gefährden kann.</string>
+    <string name="SettingsTerms_TermPhone">Mir ist bewusst, dass es möglicherweise ungelöste Softwarefehler in dem Code gibt, mit dem diese Wallet-App betrieben wird, was zu unerwartetem Verhalten oder zu Fehlfunktionen der App führen kann.</string>
+    <string name="SettingsTerms_TermRoot">Mir ist bewusst, dass ich meine Private Keys benötige, um den Zugriff auf mein Geld wiederherzustellen, falls ich mein Mobiltelefon verlieren sollte oder wenn die App nicht funktioniert. Ohne meine Private Keys wird es unmöglich sein, den Zugriff auf mein Wallet wiederherzustellen.</string>
+    <string name="SettingsTerms_TermBugs">Ich verstehe, dass die Deaktivierung des Passcodes zum Entsperren des Telefons in den Einstellungen von Android die Private Keys des Wallets von meinem Gerät löscht. Ich benötige meine Private Keys, um wieder Zugang zu meinem Wallet zu erhalten.</string>
+    <string name="Settings_TermsPin"> Ich verstehe, dass nur ich selbst für die Sicherheit meiner Mittel und keine andere Einheit verantwortlich bin.</string>
     <string name="SettingsTerms_BottomThankYou">Vielen Dank, \ndass Sie \ndieses Wallet nutzen!</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Teilen</string>
@@ -545,9 +545,9 @@
     <string name="NotificationBottomMenu_LongTerm">Langfristig 6M</string>
     <string name="NotificationBottomMenu_Long">Lang</string>
     <!--Settings-->
-    <string name="SettingsTheme_Title">Theme</string>
-    <string name="SettingsTheme_Dark">Dark</string>
-    <string name="SettingsTheme_Light">Light</string>
+    <string name="SettingsTheme_Title">Thema</string>
+    <string name="SettingsTheme_Dark">Dunkel</string>
+    <string name="SettingsTheme_Light">Hell</string>
     <string name="SettingsTheme_System">System</string>
     <!--Errors-->
     <string name="Binance_Backend_Error_MemoRequired">Empfänger benötigt nicht-leeren Vermerk bei Transfer einer Transaktion</string>
@@ -558,7 +558,7 @@
     <string name="Hud_Text_NoInternet">Kein Internet</string>
     <string name="Hud_Text_Copied">Kopiert</string>
     <string name="Hud_Text_EmailAddressCopied">E-Mail-Adresse kopiert</string>
-    <string name="Hud_UnknownError">%s</string>
+    <string name="Hud_UnknownError">%s </string>
     <!--Manage Coins-->
     <string name="ManageCoins_title">Coins auswählen</string>
     <string name="ManageCoins_Search">Suche</string>
@@ -571,10 +571,10 @@
     <string name="BitcoinHodling_Title">TimeLock</string>
     <string name="BitcoinHodling_Description">Damit können Sie gesendete Bitcoins sperren, sodass sie bis zu dem festgesetzten Datum nicht ausgegeben werden können.\n\nDer Empfänger einer solchen Transaktion sollte das Unstoppable-Wallet in der Version 0.10 (oder neuer) sowie das Bitcoin-Adressformat BIP44 verwenden.\n\nNur das Unstoppable-Wallet erkennt solche Transaktionen im Bitcoin-Netzwerk korrekt und ermöglicht es dem Empfänger, die Bitcoins nach der Sperrzeit zu auszugeben.\n\nWenn Sie ein HODLer* sind, können Sie diese Funktion auch für sich selbst nutzen, indem Sie sich selbst eine solche Transaktion schicken und so ihre Bitcoin für sich selbst zeitlich sperren.\n\nDa es sich noch um eine experimentelle Funktion handelt, liegt der maximale Betrag bei 0,5 BTC.</string>
     <!--Manage Accounts-->
-    <string name="ManageAccounts_Title">Manage Wallets</string>
-    <string name="ManageAccounts_CreateNewWallet">Create</string>
-    <string name="ManageAccounts_ImportWallet">Restore</string>
-    <string name="ManageAccounts_Hint">Tip! Restoring an existing wallet but with a new passphrase will a generate a brand new wallet. Handy if you want to use a single 12-24 word mnemonic recovery phrase for multiple wallets.</string>
+    <string name="ManageAccounts_Title">Wallets verwalten</string>
+    <string name="ManageAccounts_CreateNewWallet">Erstellen</string>
+    <string name="ManageAccounts_ImportWallet">Wiederherstellen</string>
+    <string name="ManageAccounts_Hint">Tipp! Wenn Sie ein bestehendes Wallet mit einer neuen Passphrase wiederherstellen, wird ein brandneues Wallet erzeugt. Praktisch, wenn Sie eine einzelne 12-24-Wörter-Wiederherstellungsphrase für mehrere Wallets verwenden möchten.</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">Name</string>
     <string name="ManageAccount_Save">Save</string>
