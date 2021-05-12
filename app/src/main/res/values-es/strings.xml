@@ -39,7 +39,7 @@
     <string name="Intro_Privacy_Title">Permanezca en privado</string>
     <string name="Intro_Privacy_Description">Utilice esta cartera para permanecer incógnito y sea capaz de resgurdar su información privada.</string>
     <!--Rooted Device-->
-    <string name="RootedDevice_Button_Understand">I Understand</string>
+    <string name="RootedDevice_Button_Understand">Entiendo</string>
     <!--Welcome-->
     <string name="Welcome_PrivacySettings">Ajustes de privacidad</string>
     <string name="Welcome_CreateWallet">Crear Monedero</string>
