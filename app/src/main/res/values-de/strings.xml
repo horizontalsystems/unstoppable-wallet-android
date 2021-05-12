@@ -39,7 +39,7 @@
     <string name="Intro_Privacy_Title">Privat bleiben</string>
     <string name="Intro_Privacy_Description">Benutzen Sie dieses Wallet, um inkognito zu bleiben und Ihre Informationen geheim halten zu können.</string>
     <!--Rooted Device-->
-    <string name="RootedDevice_Button_Understand">I Understand</string>
+    <string name="RootedDevice_Button_Understand">Ich stimme zu</string>
     <!--Welcome-->
     <string name="Welcome_PrivacySettings">Privatsphäre-Einstellungen</string>
     <string name="Welcome_CreateWallet">Wallet Erstellen</string>
