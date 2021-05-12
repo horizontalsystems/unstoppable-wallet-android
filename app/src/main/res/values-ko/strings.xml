@@ -53,7 +53,7 @@
     <string name="CreateWallet_Error_EmptyPassphrase">Passphrase cannot be empty</string>
     <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Please use only latin letters and numbers for the passphrase</string>
     <string name="CreateWallet_Error_InvalidConfirmation">Passphrase confirmation does not match</string>
-    <string name="EnterPassphrase">Passphrase</string>
+    <string name="EnterPassphrase">암호문구</string>
     <string name="CreateWallet_PassphraseDescription">Passphrase add additional security layer to the wallets enabling users to create multiple independent multi-coin wallets using a single mnemonic recovery phrase (secret 12 words) but associated with different passwords. \n\nTo restore these wallets a user will require mnemonic recovery phrase as well as a password for each to be restored wallet.</string>
     <!--Rate App-->
     <string name="RateApp_Title_Rate_This_App">이 앱 평가하기</string>
@@ -64,15 +64,15 @@
     <string name="Restore_ChooseWallet">지갑 선택하기</string>
     <string name="Restore_Enter_Key_Title">암호를 입력하세요</string>
     <string name="Restore_Enter_Key_Description_Mnemonic">%2s 의 단어로 이루어진 개인 암호를 %1s 지갑에 입력해 주십시오. 단어들은 올바르게 입력 되어야 하고 또 스페이스를 통해 분리되어야 합니다.</string>
-    <string name="Restore_Mnemonic_Description">Enter your mnemonic which consists of 12 or 24 words. The words needs to be entered in correct order and separated by spaces.</string>
+    <string name="Restore_Mnemonic_Description">12 또는 24개의 단어로 구성된 연상 기호를 입력합니다. 단어는 올바른 순서로 입력하고 공백으로 구분해야 합니다.</string>
     <string name="Restore_ValidationFailed">틀린 암호 입니다</string>
     <string name="Restore_InvalidWordCount">잘못된 단어 수입니다: %1$d.  %2$d 개여야 합니다</string>
-    <string name="Restore_Error_MnemonicWordCount">Wrong words count. Must be 12 or 24. You entered: %d</string>
-    <string name="Restore_Error_EmptyPassphrase">Passphrase cannot be empty</string>
+    <string name="Restore_Error_MnemonicWordCount">단어 수가 틀렸습니다. 12 개 또는 24개여야 합니다. 이렇게 입력하셨습니다: %d</string>
+    <string name="Restore_Error_EmptyPassphrase">암호 문구는 필수 입력 사항입니다</string>
     <string name="Restore_InvalidChecksum">유효하지 않은 체크섬</string>
-    <string name="Restore_PassphraseDescription">Enter your passphrase that you used when creating this mnemonic phrase.</string>
+    <string name="Restore_PassphraseDescription">이 연상 부호를 만들 때 사용한 암호 문구 입력.</string>
     <string name="Select_Coins">암호화를 선택해 주세요</string>
-    <string name="Restore_ZCash_BirthdayHeight">Birthday Height</string>
+    <string name="Restore_ZCash_BirthdayHeight">생일 신장</string>
     <string name="Restore_ZCash_BirthdayHeight_Hint">If you know a birthday height for your Zcash wallet add it below to speedup syncing process.</string>
     <!--Backup-->
     <string name="Backup_Intro_Title">백업</string>
