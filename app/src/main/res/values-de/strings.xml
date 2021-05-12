@@ -442,11 +442,11 @@
     <!--Markdown-->
     <string name="Markdown_Error_NotFound">Seite nicht gefunden</string>
     <!--Setting_Currency-->
-    <string name="SettingsCurrency_Title">Base Currency</string>
+    <string name="SettingsCurrency_Title">Währung</string>
     <string name="SettingsCurrency_Other">OTHER</string>
     <string name="SettingsCurrency_DisclaimerTitle">Disclaimer</string>
     <string name="SettingsCurrency_DisclaimerText">The exchange rate data provided by a third party service Coingecko.com\n\nUnstoppable wallet app doesn\'t guarantee these values are always correct and match market data. The chance for inconsistency is higher if you select any base currency other than %s.</string>
-    <string name="SettingsCurrency_Understand">I Understand</string>
+    <string name="SettingsCurrency_Understand">Ich stimme zu</string>
     <!--Settings-->
     <string name="Settings_Title">Einstellungen</string>
     <string name="Settings_SecurityCenter">Sicherheit</string>
@@ -454,7 +454,7 @@
     <string name="Settings_ExperimentalFeatures">Experimentelles Feature</string>
     <string name="Settings_BaseCurrency">Währung</string>
     <string name="Settings_Language">Sprache</string>
-    <string name="Settings_Theme">Theme</string>
+    <string name="Settings_Theme">Design</string>
     <string name="Settings_Terms">Bedingungen</string>
     <string name="Settings_ShareThisWallet">Freunden erzählen</string>
     <string name="Settings_Faq">FAQ</string>
@@ -654,7 +654,7 @@
     <string name="AddBep2Token_TokenNotFound">Token nicht gefunden</string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Title">Adressformat</string>
-    <string name="AddressFormatSettings_Description">Choose the address format for your %s wallet. Each selected format represents a different wallet on app\'s balance tab.</string>
+    <string name="AddressFormatSettings_Description">Wählen Sie das Adressformat für Ihr %s Wallet. Jedes ausgewählte Format repräsentiert ein anderes Wallet auf der Registerkarte \"Kontostand\" der App.</string>
     <!-- Blockchain Settings -->
     <string name="BlockchainSettings_BipChangeAlert_Title">Adressformatierung</string>
     <string name="BlockchainSettings_ChangeAlert_ActionButtonText">Ändern zu %s</string>
@@ -693,7 +693,7 @@
     <string name="CoinPage_TimeDuration_Year">1Y</string>
     <string name="CoinPage_TimeDuration_Year2">2Y</string>
     <string name="CoinPage_RatingDetails">Rating Details</string>
-    <string name="CoinPage_Price">Price</string>
+    <string name="CoinPage_Price">Preis</string>
     <string name="CoinPage_Market">Market</string>
     <string name="CoinPage_TradingVolume">Trading Volume</string>
     <string name="CoinPage_FundsInvested">Funds Invested</string>
