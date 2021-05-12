@@ -39,18 +39,18 @@
     <string name="Intro_Privacy_Title">محرمانه باقی بمانید</string>
     <string name="Intro_Privacy_Description">از این کیف پول استفاده کنید تا در حالت ناشناس باقی بمانید و بتوانید اطلاعات خود را خصوصی نگه دارید.</string>
     <!--Rooted Device-->
-    <string name="RootedDevice_Button_Understand">I ACCEPT</string>
+    <string name="RootedDevice_Button_Understand">I Understand</string>
     <!--Welcome-->
     <string name="Welcome_PrivacySettings">تنظیمات حریم خصوصی</string>
     <string name="Welcome_CreateWallet">ايجاد كيف پول</string>
     <string name="Welcome_RestoreWallet">بازیابی کیف پول</string>
     <!--Create Wallet-->
-    <string name="CreateWallet_Title">New Wallet</string>
-    <string name="CreateWallet_Mnemonic">Mnemonic</string>
-    <string name="Passphrase">Passphrase</string>
-    <string name="CreateWallet_N_Words">%s words</string>
-    <string name="CreateWallet_PassphraseConfirm">Confirm</string>
-    <string name="CreateWallet_Error_EmptyPassphrase">Passphrase cannot be empty</string>
+    <string name="CreateWallet_Title">کیف پول جدید</string>
+    <string name="CreateWallet_Mnemonic">وابسته</string>
+    <string name="Passphrase">عبارت عبور</string>
+    <string name="CreateWallet_N_Words">%s کلمه</string>
+    <string name="CreateWallet_PassphraseConfirm">تاييد</string>
+    <string name="CreateWallet_Error_EmptyPassphrase">رمز عبور نمی تواند خالی باشد</string>
     <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Please use only latin letters and numbers for the passphrase</string>
     <string name="CreateWallet_Error_InvalidConfirmation">Passphrase confirmation does not match</string>
     <string name="EnterPassphrase">Passphrase</string>
@@ -157,7 +157,7 @@
     <string name="Market_Category_Infrastructure_Description">Projects building infrastructure solutions.</string>
     <string name="Market_Category_Staking">Staking ETH 2.0</string>
     <string name="Market_Category_Staking_Description">Protocols that reward liquidity providers.</string>
-    <string name="Market_Category_CrossChain">Cross Chain</string>
+    <string name="Market_Category_CrossChain">Cross-Chain</string>
     <string name="Market_Category_CrossChain_Description">Cross-chain protocols.</string>
     <string name="Market_Category_Computing">Computing</string>
     <string name="Market_Category_Computing_Description">Decentralized on-demand computing solutions.</string>
@@ -182,7 +182,7 @@
     <string name="Market_AdvancedSearch">Advanced Search</string>
     <string name="Market_AdvancedSearch_Results">Results</string>
     <string name="Market_Filter_ChooseSet">Choose Set</string>
-    <string name="Market_Filter_MarketCap">Market Cap</string>
+    <string name="Market_Filter_MarketCap">سقف بازار</string>
     <string name="Market_Filter_Volume">Trading Volume</string>
     <string name="Market_Filter_Liquidity">DEX Liquidity</string>
     <string name="Market_Filter_LiquidityHint">This setting applies to tokens traded on Ethereum (Uniswap DEX) and Binance Smart Chain (Pancake DEX).</string>
