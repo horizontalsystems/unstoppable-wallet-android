@@ -53,7 +53,7 @@
     <string name="CreateWallet_Error_EmptyPassphrase">助记词不能为空</string>
     <string name="CreateWallet_Error_PassphraseForbiddenSymbols">请只对密码使用拉丁字母和数字</string>
     <string name="CreateWallet_Error_InvalidConfirmation">确认密码不匹配</string>
-    <string name="EnterPassphrase">Passphrase</string>
+    <string name="EnterPassphrase">密码</string>
     <string name="CreateWallet_PassphraseDescription">Passphrase add additional security layer to the wallets enabling users to create multiple independent multi-coin wallets using a single mnemonic recovery phrase (secret 12 words) but associated with different passwords. \n\nTo restore these wallets a user will require mnemonic recovery phrase as well as a password for each to be restored wallet.</string>
     <!--Rate App-->
     <string name="RateApp_Title_Rate_This_App">评价此应用</string>
@@ -72,7 +72,7 @@
     <string name="Restore_InvalidChecksum">校验和无效</string>
     <string name="Restore_PassphraseDescription">输入您在创建此助记词时使用的密码.</string>
     <string name="Select_Coins">选择加密货币</string>
-    <string name="Restore_ZCash_BirthdayHeight">Birthday Height</string>
+    <string name="Restore_ZCash_BirthdayHeight">生日高度</string>
     <string name="Restore_ZCash_BirthdayHeight_Hint">如果您知道您Zcash钱包的生日高度，请将其添加至下方以加速同步过程。</string>
     <!--Backup-->
     <string name="Backup_Intro_Title">备份</string>
@@ -235,14 +235,14 @@
     <string name="Balance_FoundTx">%s tx</string>
     <string name="Balance_Syncing_WithProgress">正在同步... %s%%</string>
     <string name="Balance_AddCoins">添加代币</string>
-    <string name="Balance_AddCoin">Add Coin</string>
+    <string name="Balance_AddCoin">添加代币</string>
     <string name="Balance_Sort_Balance">余额</string>
     <string name="Balance_Sort_PopupTitle">排序方式</string>
     <string name="Balance_Sort_Az">名称</string>
     <string name="Balance_Sort_24hPriceChange">24小时变更 (%)</string>
     <string name="Balance_Backup_Alert">您必须在接收%s之前先备份%s钱包。</string>
     <string name="Balance_NoWalletAlert">您还没有任何钱包。创建新钱包或恢复已有钱包 </string>
-    <string name="Balance_NoCoinsAlert">You haven\'t added any coins to this wallet</string>
+    <string name="Balance_NoCoinsAlert">您还没有添加任何代币到此钱包中。</string>
     <!--Send-->
     <string name="Send_Title">发送%s</string>
     <string name="Send_Hint_Address">地址或域名</string>
@@ -261,7 +261,7 @@
     <string name="Send_Confirmation_Send_Button">发送​​</string>
     <string name="Send_Success">\u2713已发送</string>
     <string name="ScanQr_PleaseGrantCameraPermission">请授予相机权限</string>
-    <string name="ScanQr_NoCameraPermission">No camera permission</string>
+    <string name="ScanQr_NoCameraPermission">没有拍照权限</string>
     <string name="Send_Error_IncorrectAddress">错误地址</string>
     <string name="Send_Error_UnsupportedAddress">时间锁定只能和P2PKH地址（以1开头）一起使用</string>
     <string name="Send_Error_BalanceAmount">余额%s</string>
@@ -288,7 +288,7 @@
     <string name="Send_LockTime_Year">1 年</string>
     <string name="Send_Sending">正在发送</string>
     <string name="Send_Token_InsufficientFeeAlert">%s（%s）的交易费用以%s支付。您需要%s。</string>
-    <string name="Send_Warning_LowFee">Warning! Risk of getting stuck</string>
+    <string name="Send_Warning_LowFee">警告！有被骗的风险</string>
     <!--Fee Info -->
     <string name="FeeInfo_Title">交易速度</string>
     <string name="FeeInfo_Description">比特币（Bitcoin）和 以太币（Etherum）区块链都要求用户在区块链上发送交易时支付使用费。\n\nUnstoppable使用公共费用估算服务来帮助用户确定当前合适的交易费用。 当大量交易正在进行时，费用较高，而当区块链不那么繁忙时，费用较低。</string>
@@ -367,7 +367,7 @@
     <!--Swap Coin Select-->
     <!--Approve-->
     <string name="Approve_Title">互兑批准</string>
-    <string name="Approve_Info">You should grant permission to a smart contract to swap given token on your behalf. This permission sets amount that can be used by a smart contract. It doesn\'t affect your balance but requires a small fee to execute approval transaction. \n\nWhile it may be done on demand before each trade, it\'s cheaper to approve higher amount in advance for future trades.</string>
+    <string name="Approve_Info">您应为智能合约授予权限，以代表您互兑给定的代币。此权限设定了智能合约可以使用的金额。它不会影响您的余额，但需要小额费用以执行批准交易。\n\n虽然这可以在每一次交易之前按需完成，但是预先对将来的交易批准较大的金额将使成本更低。</string>
     <string name="Approve_Error_AlreadyApproved">您已经有了此金额的限额</string>
     <string name="Approve_Spender">消费人</string>
     <string name="Approve_YouApprove">您批准</string>
@@ -412,7 +412,7 @@
     <string name="TransactionInfo_RawTransaction">原始交易</string>
     <string name="TransactionInfo_To">接收人</string>
     <string name="TransactionInfo_From">发送人</string>
-    <string name="TransactionInfo_Memo">Memo</string>
+    <string name="TransactionInfo_Memo">备忘录</string>
     <string name="TransactionInfo_LockedUntil">锁定至 %s</string>
     <string name="TransactionInfo_UnlockedAt">在 %s 解锁了</string>
     <string name="TransactionInfo_RecipientHash">收款人</string>
@@ -421,7 +421,7 @@
     <string name="TransactionInfo_SentToSelfNote">交易已发送至自有地址</string>
     <string name="TransactionInfo_DoubleSpendNote">双重支付风险！</string>
     <string name="TransactionInfo_Input">输入</string>
-    <string name="TransactionInfo_ButtonViewOnExplorerName">View on %s</string>
+    <string name="TransactionInfo_ButtonViewOnExplorerName">查看于%s</string>
     <string name="StatusInfo_Pending">待处理</string>
     <string name="StatusInfo_SendingReceiving">发送 / 接收</string>
     <string name="StatusInfo_Confirmed">已确认</string>
@@ -442,11 +442,11 @@
     <!--Markdown-->
     <string name="Markdown_Error_NotFound">无法找到页面</string>
     <!--Setting_Currency-->
-    <string name="SettingsCurrency_Title">Base Currency</string>
+    <string name="SettingsCurrency_Title">基本货币</string>
     <string name="SettingsCurrency_Other">OTHER</string>
-    <string name="SettingsCurrency_DisclaimerTitle">Disclaimer</string>
-    <string name="SettingsCurrency_DisclaimerText">The exchange rate data provided by a third party service Coingecko.com\n\nUnstoppable wallet app doesn\'t guarantee these values are always correct and match market data. The chance for inconsistency is higher if you select any base currency other than %s.</string>
-    <string name="SettingsCurrency_Understand">I Understand</string>
+    <string name="SettingsCurrency_DisclaimerTitle">声明</string>
+    <string name="SettingsCurrency_DisclaimerText">汇率数据由第三方服务Coingecko.com提供\n\nUnstoppable钱包应用不保证这是数值总是准确以及和市场数据匹配。如果您选择任何基础货币而不是%s，那么出现不一致的机会将较高。</string>
+    <string name="SettingsCurrency_Understand">我理解</string>
     <!--Settings-->
     <string name="Settings_Title">设置</string>
     <string name="Settings_SecurityCenter">安全中心</string>
@@ -454,7 +454,7 @@
     <string name="Settings_ExperimentalFeatures">实验性功能</string>
     <string name="Settings_BaseCurrency">基础货币</string>
     <string name="Settings_Language">语言</string>
-    <string name="Settings_Theme">Theme</string>
+    <string name="Settings_Theme">主题</string>
     <string name="Settings_Terms">条款</string>
     <string name="Settings_ShareThisWallet">分享给好友</string>
     <string name="Settings_Faq">FAQ</string>
@@ -463,7 +463,7 @@
     <string name="Settings_RateUs">评价我们</string>
     <string name="SettingsAboutApp_Title">关于应用</string>
     <string name="SettingsAboutApp_Site">网站</string>
-    <string name="SettingsAboutApp_WhatsNew">What\'s New</string>
+    <string name="SettingsAboutApp_WhatsNew">更新说明</string>
     <string name="SettingsPrivacy_Info">虽然此APP不会将您的个人数据提供给任何第三方，但您的某些个人数据（例如IP地址）在与区块链通信时可能会泄漏。单击右上角的“信息”按钮以获取更多详细信息。</string>
     <string name="SettingsPrivacy_ConnectionSettingsTitle">互联网</string>
     <string name="SettingsPrivacy_CommunicationSettingsTitle">同步区块链</string>
@@ -514,12 +514,12 @@
 \n\n我们为我们自己创立了Unstoppable作为符合标准的可用的解决方案。从工程和可用性角度而言，我们相信此钱包远远领先于其他产品。</string>
     <string name="SettingsTerms_TermAcademy">我浏览了此应用的“学院”（Academy）部分并掌握了储存加密货币的基础知识。</string>
     <string name="SettingsTerms_TermBackup">我已对我钱包的私钥备份，该私钥以12-24字的格式展示给我。我理解这些私钥将保存在我的智能手机而不是其他地方。</string>
-    <string name="SettingsTerms_TermOwner">I understand that passing my phone to untrusted entities and leaving the wallet app without safe PIN lock may potentially endanger the safety of my funds.</string>
-    <string name="SettingsTerms_TermRecover">I understand that jail breaking (rooting) my phone, installing third party apps from unknown sources, keeping the operating system outdated can potentially endanger the safety of my funds.</string>
-    <string name="SettingsTerms_TermPhone">I understand there may be undiscovered software issues in the code powering this wallet app which may potentially lead to unexpected behavior or the app malfunctioning.</string>
-    <string name="SettingsTerms_TermRoot">I understand that I will need my private keys in order to restore access to my funds should I lose my phone or if the app malfunctions. Without my private keys it will be impossible to recover access to my wallet.</string>
-    <string name="SettingsTerms_TermBugs">I understand that disabling the phone unlock PIN(or its equivalent) in Settings of Android OS will erase wallet private keys from my device. I will need my private keys to regain access to my funds.</string>
-    <string name="Settings_TermsPin"> I understand that only I myself is responsible for safety of my funds and no other entity.</string>
+    <string name="SettingsTerms_TermOwner">我理解，将我的手机交给不可信的实体或者在未设置安全PIN码锁定的情况下离开钱包应用可能会危害我的资金安全。</string>
+    <string name="SettingsTerms_TermRecover">我理解对我的手机进行越狱（root）、安装来源不明的第三方应用、未及时更新操作系统可能会危害我的资金安全。</string>
+    <string name="SettingsTerms_TermPhone">我理解，在实现此钱包应用的代码中可能存在未发现的软件问题，这可能会导致意外行为或应用故障的发生。</string>
+    <string name="SettingsTerms_TermRoot">我理解，如果我丢失了手机或者应用出现故障时，我需要私钥才能恢复对我资金的访问。没有私钥，将无法恢复对我钱包的访问。</string>
+    <string name="SettingsTerms_TermBugs">我知道在Android系统的设置中禁用手机解锁密码（或类似代码）将从我的设备中擦除钱包私钥。我需要我的私钥才能重新访问我的钱包。</string>
+    <string name="Settings_TermsPin">我的理解是，只有我本人负责我的资金的安全，没有任何其他实体。</string>
     <string name="SettingsTerms_BottomThankYou">感谢您选择我们的钱包！</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">分享</string>
@@ -545,10 +545,10 @@
     <string name="NotificationBottomMenu_LongTerm">长期6个月</string>
     <string name="NotificationBottomMenu_Long">做多</string>
     <!--Settings-->
-    <string name="SettingsTheme_Title">Theme</string>
-    <string name="SettingsTheme_Dark">Dark</string>
-    <string name="SettingsTheme_Light">Light</string>
-    <string name="SettingsTheme_System">System</string>
+    <string name="SettingsTheme_Title">主题</string>
+    <string name="SettingsTheme_Dark">深色</string>
+    <string name="SettingsTheme_Light">浅色</string>
+    <string name="SettingsTheme_System">系统</string>
     <!--Errors-->
     <string name="Binance_Backend_Error_MemoRequired">收款人要求在转账交易中包含非空的备注</string>
     <string name="Binance_Backend_Error_RequiresDigits">要求备注仅包含数字</string>
@@ -571,44 +571,44 @@
     <string name="BitcoinHodling_Title">时间锁定</string>
     <string name="BitcoinHodling_Description">让您汇出在指定日期前无法消费的比特币。\n\n 此交易的收款人应使用Unstoppable钱包。\n\n只有Unstoppable钱包能够正确识别此类在比特币网络上的交易并让收款人在锁定期限结束后消费那些比特币。\n\n如果您是持有人，您可以使用此功能通过向自己发送此类交易的方式来强制自己持有比特币。\n\n作为实验性功能，每次交易的最大金额限制为0.5 BTC。</string>
     <!--Manage Accounts-->
-    <string name="ManageAccounts_Title">Manage Wallets</string>
-    <string name="ManageAccounts_CreateNewWallet">Create</string>
-    <string name="ManageAccounts_ImportWallet">Restore</string>
-    <string name="ManageAccounts_Hint">Tip! Restoring an existing wallet but with a new passphrase will a generate a brand new wallet. Handy if you want to use a single 12-24 word mnemonic recovery phrase for multiple wallets.</string>
+    <string name="ManageAccounts_Title">管理钱包</string>
+    <string name="ManageAccounts_CreateNewWallet">创建</string>
+    <string name="ManageAccounts_ImportWallet">恢复自</string>
+    <string name="ManageAccounts_Hint">贴士！使用一个新密码恢复现有的钱包将生成一个全新的钱包。如果您希望对多个钱包使用单个12-24个单词的助记词恢复码，这将非常方便。</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">名称</string>
     <string name="ManageAccount_Save">保存</string>
-    <string name="ManageAccount_RecoveryPhraseBackup">Backup Phrase</string>
-    <string name="ManageAccount_RecoveryPhraseShow">Show Phrase</string>
-    <string name="ManageAccount_Unlink">Unlink</string>
-    <string name="ManageAccount_BackupRequired_Title">Backup Required</string>
-    <string name="ManageAccount_BackupRequired_Description">You need to backup the private key for this wallet before it can be deleted from this phone.</string>
-    <string name="ManageAccount_DeleteFromPhone">Delete from Phone</string>
+    <string name="ManageAccount_RecoveryPhraseBackup">备份码</string>
+    <string name="ManageAccount_RecoveryPhraseShow">显示恢复码</string>
+    <string name="ManageAccount_Unlink">取消链接</string>
+    <string name="ManageAccount_BackupRequired_Title">需要备份</string>
+    <string name="ManageAccount_BackupRequired_Description">您应该在将此钱包的私钥从该手机删除之前先对其进行备份。</string>
+    <string name="ManageAccount_DeleteFromPhone">从手机中删除</string>
     <string name="ManageAccount_Delete_ConfirmationRemove">This action will delete the selected wallet from this device.</string>
     <string name="ManageAccount_Delete_ConfirmationDisable">All coins that belong to this wallet will be disabled on balance tab.</string>
     <string name="ManageAccount_Delete_ConfirmationLose">If you didn\'t backup the private key for this wallet, you will lose access to the funds on the selected wallet.</string>
-    <string name="ManageAccount_BirthdayHeight">%s Birthday Height</string>
-    <string name="ManageAccount_NWords">%s words</string>
-    <string name="ManageAccount_NWordsWithPassphrase">%s words with passphrase</string>
+    <string name="ManageAccount_BirthdayHeight">%s 生日高度</string>
+    <string name="ManageAccount_NWords">%s 个单词</string>
+    <string name="ManageAccount_NWordsWithPassphrase">%s 个单词的密码</string>
     <!-- Show Key -->
-    <string name="ShowKey_Title">Key</string>
-    <string name="ShowKey_Description">The recovery phrase that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken etc.\n\nMake sure that no one is watching your screen.</string>
-    <string name="ShowKey_ButtonShow">Show</string>
-    <string name="ShowKey_Passphrase">Passphrase</string>
-    <string name="ShowKey_ButtonClose">Close</string>
-    <string name="ShowKey_TabMnemonicPhrase">Recovery Phrase</string>
-    <string name="ShowKey_TabPrivateKey">Private Key</string>
+    <string name="ShowKey_Title">密钥</string>
+    <string name="ShowKey_Description">如果您的手机出现丢失、被盗或损坏等情况，那么在下一步显示的恢复码将是恢复您资金的唯一方法。\n\n确保不会有任何人看到您的屏幕。</string>
+    <string name="ShowKey_ButtonShow">查看</string>
+    <string name="ShowKey_Passphrase">密码</string>
+    <string name="ShowKey_ButtonClose">关闭</string>
+    <string name="ShowKey_TabMnemonicPhrase">恢复码</string>
+    <string name="ShowKey_TabPrivateKey">私钥</string>
     <!-- Backup Key -->
-    <string name="BackupKey_Title">Backup</string>
-    <string name="BackupKey_Description">The recovery phrase that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken etc.\n\nMake sure that no one is watching your screen.</string>
-    <string name="BackupKey_ButtonShow">Show</string>
-    <string name="BackupKey_ButtonBackup">Backup</string>
-    <string name="BackupConfirmKey_Description">Enter the recovery phrase in correct order to confirm</string>
+    <string name="BackupKey_Title">备份</string>
+    <string name="BackupKey_Description">如果您的手机出现丢失、被盗或损坏等情况，那么在下一步显示的恢复码将是恢复您资金的唯一方法。\n\n确保不会有任何人看到您的屏幕。</string>
+    <string name="BackupKey_ButtonShow">查看</string>
+    <string name="BackupKey_ButtonBackup">备份</string>
+    <string name="BackupConfirmKey_Description">以正确顺序输入恢复码进行确认</string>
     <string name="BackupConfirmKey_EmptyOrInvalidWords">Entered words are empty or invalid</string>
-    <string name="BackupConfirmKey_Error_EmptyWord">Empty word</string>
-    <string name="BackupConfirmKey_Error_InvalidWord">Invalid word</string>
-    <string name="BackupConfirmKey_Error_EmptyPassphrase">Empty passphrase</string>
-    <string name="BackupConfirmKey_Error_InvalidPassphrase">Invalid passphrase</string>
+    <string name="BackupConfirmKey_Error_EmptyWord">空单词</string>
+    <string name="BackupConfirmKey_Error_InvalidWord">无效单词</string>
+    <string name="BackupConfirmKey_Error_EmptyPassphrase">空密码</string>
+    <string name="BackupConfirmKey_Error_InvalidPassphrase">无效密码</string>
     <!--Manage Keys Delete Alert-->
     <string name="ManageKeys_Delete_Title">删除钱包</string>
     <string name="ManageKeys_Delete_ConfirmationRemove">该操作将从此设备删除%s 钱包。</string>
@@ -654,7 +654,7 @@
     <string name="AddBep2Token_TokenNotFound">找不到代币</string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Title">地址格式</string>
-    <string name="AddressFormatSettings_Description">Choose the address format for your %s wallet. Each selected format represents a different wallet on app\'s balance tab.</string>
+    <string name="AddressFormatSettings_Description">选择您 %s 钱包的地址格式。每个选中的格式代表应用的余额选项卡上不同的钱包。</string>
     <!-- Blockchain Settings -->
     <string name="BlockchainSettings_BipChangeAlert_Title">地址格式</string>
     <string name="BlockchainSettings_ChangeAlert_ActionButtonText">更改为%s</string>
@@ -733,7 +733,7 @@
     <string name="CoinPage_LaunchDate">Launch Date</string>
     <string name="CoinPage_Tvl">Total Value Locked</string>
     <string name="CoinPage_TvlRank">TVL Rank</string>
-    <string name="CoinPage_TvlMCapRatio">M.cap / TVL ratio</string>
+    <string name="CoinPage_TvlMCapRatio">MCap / TVL Ratio</string>
     <string name="CoinPage_TvlDescription">Capital deposited into the platform in the form of loan collateral or liquidity pool.</string>
     <string name="CoinPage_Contract">%s Contract</string>
     <string name="CoinPage_Bep2Symbol">BEP2 Symbol</string>
