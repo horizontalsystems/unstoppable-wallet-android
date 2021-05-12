@@ -3,10 +3,12 @@ package io.horizontalsystems.bankwallet.modules.sendevm
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.Clearable
+import io.horizontalsystems.bankwallet.core.fiat.AmountTypeSwitchService
 import io.horizontalsystems.bankwallet.core.fiat.AmountTypeSwitchServiceSendEvm
 import io.horizontalsystems.bankwallet.core.fiat.FiatServiceSendEvm
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.modules.send.SendModule.AmountInfo
+import io.horizontalsystems.bankwallet.ui.extensions.AmountInputView
 import io.horizontalsystems.coinkit.models.Coin
 import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
@@ -44,26 +46,29 @@ class AmountInputViewModel(
             AmountTypeSwitchServiceSendEvm.AmountType.Currency -> fiatService.currency.decimal
         }
 
-    val prefixLiveData = MutableLiveData<String?>(null)
     val amountLiveData = MutableLiveData<String?>(null)
     val maxEnabledLiveData = MutableLiveData(false)
     val secondaryTextLiveData = MutableLiveData<String?>(null)
-    val switchEnabledLiveData = MutableLiveData(false)
     val revertAmountLiveData = MutableLiveData<String>()
+    val inputParamsLiveData = MutableLiveData<AmountInputView.InputParams>()
 
     init {
         service.amountObservable.subscribeIO { syncAmount(it) }.let { disposable.add(it) }
         service.coinObservable.subscribeIO { syncCoin(it.orElse(null)) }.let { disposable.add(it) }
         fiatService.coinAmountObservable.subscribeIO { syncCoinAmount(it) }.let { disposable.add(it) }
-        fiatService.primaryInfoObservable.subscribeIO { syncPrimaryInfo(it) }.let { disposable.add(it) }
-        fiatService.secondaryAmountInfoObservable.subscribeIO { syncSecondaryAmountInfo(it.orElse(null)) }.let { disposable.add(it) }
-        switchService.toggleAvailableObservable.subscribeIO { switchEnabledLiveData.postValue(it) }.let { disposable.add(it) }
+        fiatService.inputsUpdatedObservable.subscribeIO { syncInputs() }.let { disposable.add(it) }
+        switchService.toggleAvailableObservable.subscribeIO { updateInputFields() }.let { disposable.add(it) }
 
         syncAmount(service.amount)
         syncCoin(service.coin)
+        syncInputs()
         syncCoinAmount(fiatService.coinAmount)
-        syncPrimaryInfo(fiatService.primaryInfo)
-        syncSecondaryAmountInfo(fiatService.secondaryAmountInfo)
+    }
+
+    private fun syncInputs() {
+        amountLiveData.postValue(getAmountString(fiatService.primaryInfo))
+        secondaryTextLiveData.postValue(fiatService.secondaryAmountInfo?.getFormatted())
+        updateInputFields()
     }
 
     private fun syncAmount(amount: BigDecimal) {
@@ -110,13 +115,27 @@ class AmountInputViewModel(
                 }
             }
 
-    private fun syncPrimaryInfo(primaryInfo: FiatServiceSendEvm.PrimaryInfo) {
-        amountLiveData.postValue(getAmountString(primaryInfo))
-        prefixLiveData.postValue(getPrefix(primaryInfo))
+    private fun updateInputFields() {
+        val switchAvailable = switchService.toggleAvailable
+        val amountType = getAmountType(fiatService.primaryInfo)
+        val prefix = getPrefix(fiatService.primaryInfo)
+
+        val inputParams = AmountInputView.InputParams(amountType, prefix, switchAvailable)
+
+        inputParamsLiveData.postValue(inputParams)
     }
 
-    private fun syncSecondaryAmountInfo(amountInfo: AmountInfo?) {
-        secondaryTextLiveData.postValue(amountInfo?.getFormatted())
+    private fun getAmountType(primaryInfo: FiatServiceSendEvm.PrimaryInfo): AmountTypeSwitchService.AmountType {
+        var type = AmountTypeSwitchService.AmountType.Coin
+        if (primaryInfo is FiatServiceSendEvm.PrimaryInfo.Info) {
+            primaryInfo.amountInfo?.let {
+                if (it is AmountInfo.CurrencyValueInfo) {
+                    type = AmountTypeSwitchService.AmountType.Currency
+                }
+            }
+        }
+
+        return type
     }
 
     fun areAmountsEqual(lhs: String?, rhs: String?): Boolean {

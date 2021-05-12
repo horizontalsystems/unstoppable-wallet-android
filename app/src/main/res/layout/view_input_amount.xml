@@ -33,7 +33,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
-        android:textColor="?attr/TextColorBarsToDark"
+        android:textColor="@color/oz"
         app:layout_constraintBottom_toTopOf="@id/amountDivider"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -50,7 +50,7 @@
         android:inputType="number|numberDecimal"
         android:maxLines="1"
         android:saveEnabled="false"
-        android:textColor="?attr/TextColorBarsToDark"
+        android:textColor="@color/oz"
         android:textColorHint="@color/grey_50"
         app:layout_constraintBottom_toTopOf="@+id/amountDivider"
         app:layout_constraintEnd_toStartOf="@+id/btnMax"

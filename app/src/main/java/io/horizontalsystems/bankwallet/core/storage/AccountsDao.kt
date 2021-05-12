@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.core.storage
 
 import androidx.room.*
+import io.horizontalsystems.bankwallet.entities.ActiveAccount
 import io.reactivex.Flowable
 
 @Dao
@@ -32,4 +33,14 @@ interface AccountsDao {
 
     @Query("DELETE FROM AccountRecord WHERE deleted = 1")
     fun clearDeleted()
+
+    @Query("SELECT * FROM ActiveAccount LIMIT 1")
+    fun getActiveAccount(): ActiveAccount?
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertActiveAccount(activeAccount: ActiveAccount)
+
+    @Query("DELETE FROM ActiveAccount")
+    fun deleteActiveAccount()
+
 }

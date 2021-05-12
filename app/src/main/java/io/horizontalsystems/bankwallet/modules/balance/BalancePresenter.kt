@@ -1,12 +1,11 @@
 package io.horizontalsystems.bankwallet.modules.balance
 
 import io.horizontalsystems.bankwallet.core.AdapterState
-import io.horizontalsystems.bankwallet.core.IPredefinedAccountTypeManager
 import io.horizontalsystems.bankwallet.entities.Account
-import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.balance.BalanceModule.BalanceItem
 import io.horizontalsystems.coinkit.models.CoinType
+import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.xrateskit.entities.LatestRate
 import java.math.BigDecimal
 import java.util.concurrent.Executors
@@ -15,9 +14,7 @@ class BalancePresenter(
         private val interactor: BalanceModule.IInteractor,
         private val router: BalanceModule.IRouter,
         private val sorter: BalanceModule.IBalanceSorter,
-        private val predefinedAccountTypeManager: IPredefinedAccountTypeManager,
-        private val factory: BalanceViewItemFactory,
-        private val sortingOnThreshold: Int = 5
+        private val factory: BalanceViewItemFactory
 ) : BalanceModule.IViewDelegate, BalanceModule.IInteractorDelegate {
 
     var view: BalanceModule.IView? = null
@@ -30,14 +27,13 @@ class BalancePresenter(
         get() = viewItems.map { it.copy() }
     private var currency: Currency = interactor.baseCurrency
     private var sortType: BalanceSortType = interactor.sortType
-    private var accountToBackup: Account? = null
     private var hideBalance = interactor.balanceHidden
 
     // IViewDelegate
 
     override fun onLoad() {
         executor.submit {
-            view?.setBalanceHidden(hideBalance, false)
+            updateTitle(interactor.activeAccount)
 
             interactor.subscribeToWallets()
             interactor.subscribeToBaseCurrency()
@@ -51,7 +47,7 @@ class BalancePresenter(
 
     override fun onRefresh() {
         executor.submit {
-            interactor.refresh()
+            interactor.refresh(currency.code)
         }
     }
 
@@ -61,10 +57,7 @@ class BalancePresenter(
         if (wallet.account.isBackedUp) {
             router.openReceive(wallet)
         } else {
-            interactor.predefinedAccountType(wallet)?.let { predefinedAccountType ->
-                accountToBackup = wallet.account
-                view?.showBackupRequired(wallet.coin, predefinedAccountType)
-            }
+            view?.showBackupRequired(wallet)
         }
     }
 
@@ -125,19 +118,19 @@ class BalancePresenter(
         router.openSortTypeDialog(sortType)
     }
 
-    override fun onHideBalanceClick() {
-        setBalanceHidden(hidden = true)
+    override fun onBalanceClick() {
+        hideBalance = !hideBalance
+        syncBalanceHidden()
     }
 
-    override fun onShowBalanceClick() {
-        setBalanceHidden(hidden = false)
-    }
-
-    private fun setBalanceHidden(hidden: Boolean) {
-        interactor.balanceHidden = hidden
-        hideBalance = hidden
-        view?.setBalanceHidden(hidden, true)
+    private fun syncBalanceHidden() {
+        interactor.balanceHidden = hideBalance
+        updateHeaderViewItem()
         toggleBalanceVisibility()
+    }
+
+    private fun updateTitle(account: Account?) {
+        view?.setTitle(account?.name)
     }
 
     override fun onSortTypeChange(sortType: BalanceSortType) {
@@ -146,14 +139,6 @@ class BalancePresenter(
             interactor.saveSortType(sortType)
 
             updateViewItems()
-        }
-    }
-
-    override fun onBackupClick() {
-        accountToBackup?.let { account ->
-            val accountType = predefinedAccountTypeManager.allTypes.first { it.supports(account.type) }
-            router.openBackup(account, accountType.coinCodes)
-            accountToBackup = null
         }
     }
 
@@ -174,7 +159,7 @@ class BalancePresenter(
         val nonSyncedState = (state as? AdapterState.NotSynced) ?: return
         val errorMessage = nonSyncedState.error.message ?: ""
 
-        if (interactor.networkAvailable){
+        if (interactor.networkAvailable) {
             view?.showSyncErrorDialog(viewItem.wallet, errorMessage, sourceChangeable(viewItem.wallet.coin.type))
         } else {
             view?.showNetworkNotAvailable()
@@ -258,8 +243,12 @@ class BalancePresenter(
         view?.didRefresh()
     }
 
+    override fun didUpdateActiveAccount(account: Account?) {
+        updateTitle(account)
+    }
+
     private fun sourceChangeable(coinType: CoinType): Boolean {
-        return when(coinType) {
+        return when (coinType) {
             is CoinType.Bep2,
             is CoinType.Ethereum,
             is CoinType.Erc20 -> false
@@ -272,8 +261,6 @@ class BalancePresenter(
 
         handleAdaptersReady()
         handleRates()
-
-        view?.set(sortIsOn = items.size >= sortingOnThreshold)
     }
 
     private fun handleAdaptersReady() {
@@ -287,7 +274,7 @@ class BalancePresenter(
     }
 
     private fun handleRates() {
-        interactor.subscribeToMarketInfo(currency.code)
+        interactor.subscribeToMarketInfo(items.map { it.wallet.coin }, currency.code)
 
         items.forEach { item ->
             item.latestRate = interactor.latestRate(item.wallet.coin.type, currency.code)
@@ -322,8 +309,12 @@ class BalancePresenter(
     }
 
     private fun updateHeaderViewItem() {
-        val headerViewItem = factory.headerViewItem(items, currency)
-        view?.set(headerViewItem)
+        if (hideBalance) {
+            view?.hideBalance()
+        } else {
+            val headerViewItem = factory.headerViewItem(items, currency)
+            view?.set(headerViewItem)
+        }
     }
 
 }

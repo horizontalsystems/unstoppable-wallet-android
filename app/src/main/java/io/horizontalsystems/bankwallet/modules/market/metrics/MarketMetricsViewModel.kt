@@ -6,7 +6,12 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
+import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
 import io.horizontalsystems.bankwallet.ui.extensions.MetricData
+import io.horizontalsystems.chartview.ChartData
+import io.horizontalsystems.chartview.ChartDataFactory
+import io.horizontalsystems.chartview.models.ChartPoint
+import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
 import java.math.BigDecimal
 
@@ -16,7 +21,8 @@ class MarketMetricsViewModel(
 ) : ViewModel() {
 
     val marketMetricsLiveData = MutableLiveData<MarketMetricsWrapper?>(null)
-    val toastLiveData = MutableLiveData<String>()
+    val toastLiveData = SingleLiveEvent<String>()
+    val showGlobalMarketMetricsPage = SingleLiveEvent<MetricsType>()
 
     private var metricsWrapper: MarketMetricsWrapper? = null
         set(value) {
@@ -47,10 +53,10 @@ class MarketMetricsViewModel(
             loading = dataState.loading
         }
 
-        var error: String? = null
+        var showSyncError = false
         if (dataState is DataState.Error) {
             if (metricsNotSet) {
-                error = convertErrorMessage(dataState.error)
+                showSyncError = true
             } else {
                 toastLiveData.postValue(convertErrorMessage(dataState.error))
             }
@@ -63,17 +69,24 @@ class MarketMetricsViewModel(
 
             val btcDominanceFormatted = App.numberFormatter.format(marketMetricsItem.btcDominance, 0, 2, suffix = "%")
             val marketMetrics = MarketMetrics(
-                    totalMarketCap = MetricData(formatFiatShortened(marketMetricsItem.marketCap.value, marketMetricsItem.marketCap.currency.symbol), marketMetricsItem.marketCapDiff24h),
-                    btcDominance = MetricData(btcDominanceFormatted, marketMetricsItem.btcDominanceDiff24h),
-                    volume24h = MetricData(formatFiatShortened(marketMetricsItem.volume24h.value, marketMetricsItem.volume24h.currency.symbol), marketMetricsItem.volume24hDiff24h),
-                    defiCap = MetricData(formatFiatShortened(marketMetricsItem.defiMarketCap.value, marketMetricsItem.defiMarketCap.currency.symbol), marketMetricsItem.defiMarketCapDiff24h),
-                    defiTvl = MetricData(formatFiatShortened(marketMetricsItem.defiTvl.value, marketMetricsItem.defiTvl.currency.symbol), marketMetricsItem.defiTvlDiff24h),
+                    totalMarketCap = MetricData(formatFiatShortened(marketMetricsItem.marketCap.value, marketMetricsItem.marketCap.currency.symbol), marketMetricsItem.marketCapDiff24h, null),
+                    btcDominance = MetricData(btcDominanceFormatted, marketMetricsItem.btcDominanceDiff24h, getChartData(marketMetricsItem.btcDominancePoints)),
+                    volume24h = MetricData(formatFiatShortened(marketMetricsItem.volume24h.value, marketMetricsItem.volume24h.currency.symbol), marketMetricsItem.volume24hDiff24h, getChartData(marketMetricsItem.volume24Points)),
+                    defiCap = MetricData(formatFiatShortened(marketMetricsItem.defiMarketCap.value, marketMetricsItem.defiMarketCap.currency.symbol), marketMetricsItem.defiMarketCapDiff24h, getChartData(marketMetricsItem.defiMarketCapPoints)),
+                    defiTvl = MetricData(formatFiatShortened(marketMetricsItem.defiTvl.value, marketMetricsItem.defiTvl.currency.symbol), marketMetricsItem.defiTvlDiff24h, getChartData(marketMetricsItem.defiTvlPoints)),
             )
 
             metrics = marketMetrics
         }
 
-        metricsWrapper = MarketMetricsWrapper(metrics, loading, error)
+        metricsWrapper = MarketMetricsWrapper(metrics, loading, showSyncError)
+    }
+
+    private fun getChartData(marketMetricsPoints: List<MarketMetricsPoint>): ChartData {
+        val startTimestamp = marketMetricsPoints.first().timestamp
+        val endTimestamp = marketMetricsPoints.last().timestamp
+        val points = marketMetricsPoints.map { ChartPoint(it.value.toFloat(), null, it.timestamp) }
+        return ChartDataFactory.build(points, startTimestamp, endTimestamp, false)
     }
 
     private fun formatFiatShortened(value: BigDecimal, symbol: String): String {
@@ -88,6 +101,22 @@ class MarketMetricsViewModel(
     override fun onCleared() {
         clearables.forEach(Clearable::clear)
         disposables.clear()
+    }
+
+    fun onBtcDominanceClick() {
+        showGlobalMarketMetricsPage.postValue(MetricsType.BtcDominance)
+    }
+
+    fun on24VolumeClick() {
+        showGlobalMarketMetricsPage.postValue(MetricsType.Volume24h)
+    }
+
+    fun onDefiCapClick() {
+        showGlobalMarketMetricsPage.postValue(MetricsType.DefiCap)
+    }
+
+    fun onTvlInDefiClick() {
+        showGlobalMarketMetricsPage.postValue(MetricsType.TvlInDefi)
     }
 
 }

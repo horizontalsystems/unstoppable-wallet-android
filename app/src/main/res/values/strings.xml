@@ -48,12 +48,28 @@
     <string name="Intro_Privacy_Title">Keep your privacy safe</string>
     <string name="Intro_Privacy_Description">Remain incognito and be able to keep your information private.</string>
 
+    <!--Rooted Device-->
+
+    <string name="RootedDevice_Button_Understand">I Understand</string>
+
     <!--Welcome-->
 
     <string name="Welcome_PrivacySettings">Privacy Settings</string>
     <string name="Welcome_CreateWallet">Create Wallet</string>
     <string name="Welcome_RestoreWallet">Restore Wallet</string>
     <string name="Welcome_Version" translatable="false">version %s</string>
+
+    <!--Create Wallet-->
+    <string name="CreateWallet_Title">New Wallet</string>
+    <string name="CreateWallet_Mnemonic">Mnemonic</string>
+    <string name="Passphrase">Passphrase</string>
+    <string name="CreateWallet_N_Words">%s words</string>
+    <string name="CreateWallet_PassphraseConfirm">Confirm</string>
+    <string name="CreateWallet_Error_EmptyPassphrase">Passphrase cannot be empty</string>
+    <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Please use only latin letters and numbers for the passphrase</string>
+    <string name="CreateWallet_Error_InvalidConfirmation">Passphrase confirmation does not match</string>
+    <string name="EnterPassphrase">Passphrase</string>
+    <string name="CreateWallet_PassphraseDescription">Passphrase add additional security layer to the wallets enabling users to create multiple independent multi-coin wallets using a single mnemonic recovery phrase (secret 12 words) but associated with different passwords. \n\nTo restore these wallets a user will require mnemonic recovery phrase as well as a password for each to be restored wallet.</string>
 
     <!--Rate App-->
     <string name="RateApp_Title_Rate_This_App">Rate this App</string>
@@ -66,15 +82,18 @@
     <string name="Restore_ChooseWallet">Choose Wallet</string>
     <string name="Restore_Enter_Key_Title">Enter Key</string>
     <string name="Restore_Enter_Key_Description_Mnemonic">Enter your private key for %1s Wallet which consists of %2s words. The words needs to be entered in correct order and separated by spaces.</string>
+    <string name="Restore_Mnemonic_Description">Enter your mnemonic which consists of 12 or 24 words. The words needs to be entered in correct order and separated by spaces.</string>
     <string name="Restore_ValidationFailed">Incorrect Key</string>
     <string name="Restore_InvalidWordCount">Invalid words count: %1$d but required %2$d</string>
+    <string name="Restore_Error_MnemonicWordCount">Wrong words count. Must be 12 or 24. You entered: %d</string>
+    <string name="Restore_Error_EmptyPassphrase">Passphrase cannot be empty</string>
     <string name="Restore_InvalidChecksum">Invalid Checksum</string>
+    <string name="Restore_PassphraseDescription">Enter your passphrase that you used when creating this mnemonic phrase.</string>
 
     <string name="Select_Coins">Choose Crypto</string>
 
-    <string name="Restore_BirthdayHeight_Hint">Wallet birthday height (optional)</string>
-    <string name="Restore_BirthdayHeight_Description">This determines where to start scanning for transactions. Leave it blank to scan from the beginning, which takes a while.</string>
-    <string name="Restore_BirthdayHeight_InvalidError">Invalid birthday height</string>
+    <string name="Restore_ZCash_BirthdayHeight">Birthday Height</string>
+    <string name="Restore_ZCash_BirthdayHeight_Hint">If you know a birthday height for your Zcash wallet add it below to speedup syncing process.</string>
 
     <!--Backup-->
 
@@ -83,7 +102,6 @@
     <string name="Backup_Intro_Subtitle">The private key that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken etc.\n\nMake sure that no one is watching your screen.\n\nThe coins controlled by this key: %s.</string>
 
     <string name="Backup_DisplayTitle">Private Key</string>
-    <string name="Backup_BirthdayHeight">Birthday Height</string>
 
     <string name="Backup_Confirmation_Description">Enter words from your %s key</string>
     <string name="Backup_Confirmation_FailureAlertText"> Words do not match</string>
@@ -108,7 +126,7 @@
     <string name="Market_Field_HighestPrice">Highest Price</string>
     <string name="Market_Field_LowestPrice">Lowest Price</string>
     <string name="Market_Sort_PopupTitle">Sort by</string>
-    <string name="Market_TotalMarketCap">Total\nMarket Cap</string>
+    <string name="Market_TotalMarketCap">Total Market Cap</string>
     <string name="Market_BtcDominance">BTC Dominance</string>
     <string name="Market_Volume24h">24h Volume</string>
     <string name="Market_TvlDeFi">TVL in DeFi</string>
@@ -167,14 +185,27 @@
     <string name="Market_Category_Infrastructure_Description">Projects building infrastructure solutions.</string>
     <string name="Market_Category_Staking">Staking ETH 2.0</string>
     <string name="Market_Category_Staking_Description">Protocols that reward liquidity providers.</string>
-    <string name="Market_Category_Governance">Governance</string>
-    <string name="Market_Category_Governance_Description">Decentralized governance protocols for DAOs.</string>
-    <string name="Market_Category_CrossChain">Cross Chain</string>
+    <string name="Market_Category_CrossChain">Cross-Chain</string>
     <string name="Market_Category_CrossChain_Description">Cross-chain protocols.</string>
     <string name="Market_Category_Computing">Computing</string>
     <string name="Market_Category_Computing_Description">Decentralized on-demand computing solutions.</string>
     <string name="Market_Category_RebaseTokens">Rebase Tokens</string>
     <string name="Market_Category_RebaseTokens_Description">Tokens that periodically adjust supply to achieve a target price.</string>
+    <string name="Market_Category_FanTokens">Fan Tokens</string>
+    <string name="Market_Category_FanTokens_Description">Digital fan tokens, typically specific to a team or club.</string>
+    <string name="Market_Category_InvestmentTools">Investment Tools</string>
+    <string name="Market_Category_InvestmentTools_Description">Token-powered analytics and investment instruments.</string>
+
+    <!--Market Global Metrics-->
+    <string name="MarketGlobalMetrics_Chart">Chart</string>
+    <string name="MarketGlobalMetrics_BtcDominance">Bitcoin Dominance</string>
+    <string name="MarketGlobalMetrics_Volume">Volume</string>
+    <string name="MarketGlobalMetrics_DefiCap">DeFi Cap</string>
+    <string name="MarketGlobalMetrics_TvlInDefi">TVL in DeFi</string>
+    <string name="MarketGlobalMetrics_BtcDominanceDescription">The historical change in ratio between the market cap of Bitcoin to the rest of the cryptocurrency markets. \n\nTypically, when Bitcoin dominance trending higher the rest of the crypto market trends down and vice versa.</string>
+    <string name="MarketGlobalMetrics_VolumeDescription">The historical change in daily aggregate trading market volume for all cryptocurrencies.</string>
+    <string name="MarketGlobalMetrics_DefiCapDescription">The historical change in cumulative market value of tokens in Decentralized Finance sector.</string>
+    <string name="MarketGlobalMetrics_TvlInDefiDescription">The historical change in cumulative value of all cryptocurrency managed by decentralized protocols.</string>
 
     <!--Market Search-->
     <string name="EmptyResults">No results found</string>
@@ -188,6 +219,11 @@
     <string name="Market_Filter_PricePeriod">Price Period</string>
     <string name="Market_Filter_PriceChange">Price Change</string>
     <string name="Market_Filter_ResetAll">Reset All</string>
+    <string name="Market_Filter_OutperformedBtc">Outperformed BTC</string>
+    <string name="Market_Filter_OutperformedEth">Outperformed ETH</string>
+    <string name="Market_Filter_OutperformedBnb">Outperformed BNB</string>
+    <string name="Market_Filter_PriceCloseToAth">Price Close To ATH</string>
+    <string name="Market_Filter_PriceCloseToAtl">Price Close To ATL</string>
 
     <string name="Market_Filter_Top_100">Top 100</string>
     <string name="Market_Filter_Top_250">Top 250</string>
@@ -236,12 +272,14 @@
     <string name="Balance_FoundTx">%s tx</string>
     <string name="Balance_Syncing_WithProgress">Syncing… %s%%</string>
     <string name="Balance_AddCoins">Add Coins</string>
+    <string name="Balance_AddCoin">Add Coin</string>
     <string name="Balance_Sort_Balance">Balance</string>
     <string name="Balance_Sort_PopupTitle">Sort by</string>
     <string name="Balance_Sort_Az">Name</string>
     <string name="Balance_Sort_24hPriceChange">24h Price (%)</string>
     <string name="Balance_Backup_Alert">You need to backup the %1$s Wallet before you may receive %2$s.</string>
     <string name="Balance_NoWalletAlert">You don\’t have any wallets yet. Create new or restore existing </string>
+    <string name="Balance_NoCoinsAlert">You haven\'t added any coins to this wallet</string>
 
     <!--Send-->
 
@@ -269,6 +307,7 @@
     <string name="Send_Success">\u2713 Sent</string>
 
     <string name="ScanQr_PleaseGrantCameraPermission">Please grant the camera permission</string>
+    <string name="ScanQr_NoCameraPermission">No camera permission</string>
 
     <string name="Send_Error_IncorrectAddress">Incorrect Address</string>
     <string name="Send_Error_UnsupportedAddress">Time locking works only with P2PKH addresses (starting with 1)</string>
@@ -300,6 +339,7 @@
     <string name="Send_Sending">Sending</string>
 
     <string name="Send_Token_InsufficientFeeAlert">Transaction fees for %1$s (%2$s) paid in %3$s. You need %4$s.</string>
+    <string name="Send_Warning_LowFee">Warning! Risk of getting stuck</string>
 
     <!--Fee Info -->
 
@@ -391,7 +431,7 @@
     <!--Approve-->
 
     <string name="Approve_Title">Swap Approve</string>
-    <string name="Approve_Info">You should grant permission to a smart contract to swap given token on your behalf. This permission sets amount that can be used by a smart contract. It doesn\'t affect your balance but requires a small fee to execute approval transaction. \n\nWhile it may be done on demand before each trade, it\'s cheaper to approve higher amount in advance for us in future trades.</string>
+    <string name="Approve_Info">You should grant permission to a smart contract to swap given token on your behalf. This permission sets amount that can be used by a smart contract. It doesn\'t affect your balance but requires a small fee to execute approval transaction. \n\nWhile it may be done on demand before each trade, it\'s cheaper to approve higher amount in advance for future trades.</string>
     <string name="Approve_Error_AlreadyApproved">You already have an allowance for this amount</string>
     <string name="Approve_Spender">Spender</string>
     <string name="Approve_YouApprove">You Approve</string>
@@ -482,6 +522,13 @@
 
     <string name="Markdown_Error_NotFound">Page not found</string>
 
+    <!--Setting_Currency-->
+    <string name="SettingsCurrency_Title">Base Currency</string>
+    <string name="SettingsCurrency_Other">OTHER</string>
+    <string name="SettingsCurrency_DisclaimerTitle">Disclaimer</string>
+    <string name="SettingsCurrency_DisclaimerText">The exchange rate data provided by a third party service Coingecko.com\n\nUnstoppable wallet app doesn\'t guarantee these values are always correct and match market data. The chance for inconsistency is higher if you select any base currency other than %s.</string>
+    <string name="SettingsCurrency_Understand">I Understand</string>
+
     <!--Settings-->
 
     <string name="Settings_Title">Settings</string>
@@ -490,16 +537,13 @@
     <string name="Settings_ExperimentalFeatures">Experimental Features</string>
     <string name="Settings_BaseCurrency">Base Currency</string>
     <string name="Settings_Language">Language</string>
-    <string name="Settings_LightMode">Light Mode</string>
+    <string name="Settings_Theme">Theme</string>
     <string name="Settings_Terms">Terms</string>
     <string name="Settings_ShareThisWallet">Tell Friends</string>
     <string name="Settings_InfoTitleWithVersion" translatable="false">Unstoppable %s</string>
     <string name="Settings_InfoSubtitle" translatable="false">decentralized app</string>
     <string name="Settings_CompanyName" translatable="false">horizontal systems</string>
     <string name="Settings_Faq">FAQ</string>
-    <string name="Settings_Twitter" translatable="false">Twitter</string>
-    <string name="Settings_Telegram" translatable="false">Telegram</string>
-    <string name="Settings_Reddit" translatable="false">Reddit</string>
     <string name="Settings_AppStatus">App Status</string>
     <string name="Settings_WalletConnect">Wallet Connect</string>
     <string name="Settings_RateUs">Rate Us</string>
@@ -507,6 +551,7 @@
     <string name="SettingsAboutApp_Title">About App</string>
     <string name="SettingsAboutApp_Github" translatable="false">Github</string>
     <string name="SettingsAboutApp_Site">Website</string>
+    <string name="SettingsAboutApp_WhatsNew">What\'s New</string>
 
     <string name="SettingsPrivacy_Info">This app doesn’t share any of your data. However, as it communicates with blockchains some public data like IP address can potentially be leaked. Use the info button on the top right to get detailed information about each section.</string>
     <string name="SettingsPrivacy_ConnectionSettingsTitle">Internet</string>
@@ -564,19 +609,19 @@
 \n\nWe built Unstoppable for ourselves as the available solutions were not up to par. Both from engineering and usability perspective we believe this wallet to be significantly ahead of alternative products.</string>
     <string name="SettingsTerms_TermAcademy">I went through the Academy section of this app and got familiar with the fundamental aspects of storing cryptocurrencies.</string>
     <string name="SettingsTerms_TermBackup">I have backed up the private key(s) for my wallets that were shown to me in a form of 12-24 words. I understand that these private keys are stored on my smartphone and not elsewhere.</string>
-    <string name="SettingsTerms_TermOwner">I understand that only the owner of my private key(s) can access and spend funds on my wallet and therefore these keys should never be shared with anyone.</string>
-    <string name="SettingsTerms_TermRecover">I understand that I will need my private keys in order to restore access to my funds should I lose my phone or if the app malfunctions. Without my private keys it will be impossible to recover access to my wallet.</string>
-    <string name="SettingsTerms_TermPhone">I understand that passing my phone to untrusted entities or leaving the wallet app without safe PIN lock may potentially endanger the safety of my funds.</string>
-    <string name="SettingsTerms_TermRoot">I understand that jail breaking (rooting) my phone, installing third party apps from unknown sources, keeping the operating system outdated can potentially endanger the safety of my funds.</string>
-    <string name="SettingsTerms_TermBugs">I understand there may be undiscovered software issues in the code powering this wallet app which may lead to unexpected behavior or the app malfunctioning.</string>
-    <string name="Settings_TermsPin">I understand that disabling the phone unlock PIN (or its equivalent) in Settings of Android OS will erase wallet private keys from my device.I will need my private keys to regain access to my wallet.</string>
+    <string name="SettingsTerms_TermOwner">I understand that passing my phone to untrusted entities and leaving the wallet app without safe PIN lock may potentially endanger the safety of my funds.</string>
+    <string name="SettingsTerms_TermRecover">I understand that jail breaking (rooting) my phone, installing third party apps from unknown sources, keeping the operating system outdated can potentially endanger the safety of my funds.</string>
+    <string name="SettingsTerms_TermPhone">I understand there may be undiscovered software issues in the code powering this wallet app which may potentially lead to unexpected behavior or the app malfunctioning.</string>
+    <string name="SettingsTerms_TermRoot">I understand that I will need my private keys in order to restore access to my funds should I lose my phone or if the app malfunctions. Without my private keys it will be impossible to recover access to my wallet.</string>
+    <string name="SettingsTerms_TermBugs">I understand that disabling the phone unlock PIN(or its equivalent) in Settings of Android OS will erase wallet private keys from my device. I will need my private keys to regain access to my funds.</string>
+    <string name="Settings_TermsPin"> I understand that only I myself is responsible for safety of my funds and no other entity.</string>
     <string name="SettingsTerms_BottomThankYou">Thank you \nfor choosing \nthis wallet!</string>
 
 
     <!--Setting_Tell Friends-->
 
     <string name="SettingsShare_Title">Share</string>
-    <string name="SettingsShare_Text">Unstoppable Wallet - a crypto wallet I recommend</string>
+    <string name="SettingsShare_Text">Be Unstoppable</string>
 
     <!--Setting_Contact-->
 
@@ -606,6 +651,13 @@
     <string name="NotificationBottomMenu_Short">Short</string>
     <string name="NotificationBottomMenu_LongTerm">Long Term 6M</string>
     <string name="NotificationBottomMenu_Long">Long</string>
+
+    <!--Settings-->
+
+    <string name="SettingsTheme_Title">Theme</string>
+    <string name="SettingsTheme_Dark">Dark</string>
+    <string name="SettingsTheme_Light">Light</string>
+    <string name="SettingsTheme_System">System</string>
 
     <!--Errors-->
 
@@ -639,15 +691,49 @@
     <string name="BitcoinHodling_LockTime" translatable="false">Activate</string>
     <string name="BitcoinHodling_Description">Enables you to send Bitcoins that can not be spent until specified date.\n\nThe receiver of such transaction should use Unstoppable wallet app version 0.10 or newer with BIP44 address format for the Bitcoin.\n\nOnly Unstoppable wallet can correctly identify such transactions on Bitcoin network as well as enable receiver to spend those Bitcoins after the lock period expires.\n\nIf you’re a HODLer, you may use this feature to force yourself into hodling your Bitcoins by sending such transaction to yourself.\n\nBeing an experimental feature the maximum amount per transaction is limited to 0.5 BTC.</string>
 
-    <!--Manage Keys-->
+    <!--Manage Accounts-->
+    <string name="ManageAccounts_Title">Manage Wallets</string>
+    <string name="ManageAccounts_CreateNewWallet">Create</string>
+    <string name="ManageAccounts_ImportWallet">Restore</string>
+    <string name="ManageAccounts_Hint">Tip! Restoring an existing wallet but with a new passphrase will a generate a brand new wallet. Handy if you want to use a single 12-24 word mnemonic recovery phrase for multiple wallets.</string>
 
-    <string name="ManageKeys_Title">Manage Wallets</string>
-    <string name="ManageKeys_AddressFormat">Address Format</string>
-    <string name="ManageKeys_Create">Create</string>
-    <string name="ManageKeys_Restore">Restore</string>
-    <string name="ManageKeys_Backup">Backup</string>
-    <string name="ManageKeys_Show">Show Key</string>
-    <string name="ManageKeys_Unlink">Delete</string>
+    <!--Manage Account-->
+    <string name="ManageAccount_Name">Name</string>
+    <string name="ManageAccount_Save">Save</string>
+    <string name="ManageAccount_RecoveryPhraseBackup">Backup Phrase</string>
+    <string name="ManageAccount_RecoveryPhraseShow">Show Phrase</string>
+    <string name="ManageAccount_Unlink">Unlink</string>
+    <string name="ManageAccount_BackupRequired_Title">Backup Required</string>
+    <string name="ManageAccount_BackupRequired_Description">You need to backup the private key for this wallet before it can be deleted from this phone.</string>
+    <string name="ManageAccount_DeleteFromPhone">Delete from Phone</string>
+    <string name="ManageAccount_Delete_ConfirmationRemove">This action will delete the selected wallet from this device.</string>
+    <string name="ManageAccount_Delete_ConfirmationDisable">All coins that belong to this wallet will be disabled on balance tab.</string>
+    <string name="ManageAccount_Delete_ConfirmationLose">If you didn\'t backup the private key for this wallet, you will lose access to the funds on the selected wallet.</string>
+    <string name="ManageAccount_BirthdayHeight">%s Birthday Height</string>
+    <string name="ManageAccount_NWords">%s words</string>
+    <string name="ManageAccount_NWordsWithPassphrase">%s words with passphrase</string>
+
+    <!-- Show Key -->
+    <string name="ShowKey_Title">Key</string>
+    <string name="ShowKey_Description">The recovery phrase that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken etc.\n\nMake sure that no one is watching your screen.</string>
+    <string name="ShowKey_ButtonShow">Show</string>
+    <string name="ShowKey_Passphrase">Passphrase</string>
+    <string name="ShowKey_ButtonClose">Close</string>
+    <string name="ShowKey_TabMnemonicPhrase">Recovery Phrase</string>
+    <string name="ShowKey_TabPrivateKey">Private Key</string>
+
+    <!-- Backup Key -->
+    <string name="BackupKey_Title">Backup</string>
+    <string name="BackupKey_Description">The recovery phrase that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken etc.\n\nMake sure that no one is watching your screen.</string>
+    <string name="BackupKey_ButtonShow">Show</string>
+    <string name="BackupKey_ButtonBackup">Backup</string>
+
+    <string name="BackupConfirmKey_Description">Enter the recovery phrase in correct order to confirm</string>
+    <string name="BackupConfirmKey_EmptyOrInvalidWords">Entered words are empty or invalid</string>
+    <string name="BackupConfirmKey_Error_EmptyWord">Empty word</string>
+    <string name="BackupConfirmKey_Error_InvalidWord">Invalid word</string>
+    <string name="BackupConfirmKey_Error_EmptyPassphrase">Empty passphrase</string>
+    <string name="BackupConfirmKey_Error_InvalidPassphrase">Invalid passphrase</string>
 
     <!--Manage Keys Delete Alert-->
 
@@ -707,6 +793,7 @@
     <!-- Address Format Settings List -->
 
     <string name="AddressFormatSettings_Title">Address Format</string>
+    <string name="AddressFormatSettings_Description">Choose the address format for your %s wallet. Each selected format represents a different wallet on app\'s balance tab.</string>
 
     <!-- Blockchain Settings -->
 
@@ -764,7 +851,7 @@
     <string name="CoinPage_RatingDetails">Rating Details</string>
     <string name="CoinPage_Price">Price</string>
     <string name="CoinPage_Market">Market</string>
-    <string name="CoinPage_CoinMarket">%s Markets</string>
+    <string name="CoinPage_TradingVolume">Trading Volume</string>
     <string name="CoinPage_FundsInvested">Funds Invested</string>
     <string name="CoinPage_Range24">24h Range</string>
     <string name="CoinPage_Performance">Performance</string>
@@ -802,6 +889,13 @@
     <string name="CoinPage_Performance_Month">1 Month</string>
     <string name="CoinPage_ReadMore">Read More</string>
     <string name="CoinPage_ReadLess">Read Less</string>
+    <string name="CoinPage_LaunchDate">Launch Date</string>
+    <string name="CoinPage_Tvl">Total Value Locked</string>
+    <string name="CoinPage_TvlRank">TVL Rank</string>
+    <string name="CoinPage_TvlMCapRatio">M.cap / TVL ratio</string>
+    <string name="CoinPage_TvlDescription">Capital deposited into the platform in the form of loan collateral or liquidity pool.</string>
+    <string name="CoinPage_Contract">%s Contract</string>
+    <string name="CoinPage_Bep2Symbol">BEP2 Symbol</string>
 
     <!--Rate list-->
 
@@ -810,7 +904,11 @@
     <string name="RateList_Rank">Rank</string>
     <string name="RateList_TopGainers">Top Gainers</string>
     <string name="RateList_TopLosers">Top Losers</string>
-    <string name="RateList_TopByVolume">Top by Volume</string>
+    <string name="RateList_Posts">News</string>
+
+    <string name="Market_DaysAgo">%dd. ago</string>
+    <string name="Market_HoursAgo">%dh. ago</string>
+    <string name="Market_MinutesAgo">%dm. ago</string>
 
     <!-- Balance Sync Error -->
 

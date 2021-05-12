@@ -8,6 +8,8 @@ import android.text.Html
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.Spanned
+import android.text.style.ForegroundColorSpan
+import android.text.style.TextAppearanceSpan
 import android.text.style.URLSpan
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -25,22 +27,34 @@ import com.google.android.material.tabs.TabLayout
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.setCoinImage
 import io.horizontalsystems.bankwallet.modules.markdown.MarkdownFragment
+import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartFragment
+import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartType
 import io.horizontalsystems.bankwallet.modules.settings.notifications.bottommenu.BottomNotificationMenu
 import io.horizontalsystems.bankwallet.modules.settings.notifications.bottommenu.NotificationMenuMode
 import io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.CoinInfoItemView
 import io.horizontalsystems.bankwallet.ui.extensions.createTextView
+import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
 import io.horizontalsystems.chartview.Chart
 import io.horizontalsystems.chartview.models.ChartIndicator
 import io.horizontalsystems.chartview.models.PointInfo
 import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.DateHelper
+import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.views.ListPosition
 import io.horizontalsystems.views.SettingsView
+import io.horizontalsystems.views.helpers.LayoutHelper
 import io.horizontalsystems.xrateskit.entities.*
+import io.noties.markwon.AbstractMarkwonPlugin
+import io.noties.markwon.Markwon
+import io.noties.markwon.MarkwonSpansFactory
+import io.noties.markwon.core.spans.LastLineSpacingSpan
 import kotlinx.android.synthetic.main.coin_market_details.*
 import kotlinx.android.synthetic.main.fragment_coin.*
+import org.commonmark.node.Heading
+import org.commonmark.node.Paragraph
 import java.math.BigDecimal
 import java.util.*
 
@@ -108,9 +122,11 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
         updateNotificationMenuItem()
 
         coinName.text = coinTitle
+        val drawableResId = context?.let { AppLayoutHelper.getCoinDrawableResId(it, viewModel.coinType) }
+                ?: R.drawable.place_holder
+        coinIcon.setImageResource(drawableResId)
 
         chart.setListener(this)
-        chart.rateFormatter = viewModel.rateFormatter
 
         observeData()
         bindActions()
@@ -158,6 +174,7 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
 
     override fun onTouchSelect(point: PointInfo) {
         viewModel.onTouchSelect(point)
+        HudHelper.vibrate(requireContext())
     }
 
     //  TabLayout.OnTabSelectedListener
@@ -201,7 +218,7 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
             setViewVisibility(indicatorEMA, indicatorMACD, indicatorRSI, isVisible = true)
 
             rootView.post {
-                chart.setData(item.chartData, item.chartType)
+                chart.setData(item.chartData, item.chartType, item.maxValue, item.minValue)
             }
 
             coinRateDiff.setDiff(item.diffValue)
@@ -214,8 +231,6 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
         viewModel.coinDetailsLiveData.observe(viewLifecycleOwner, Observer { item ->
             marketDetails.isVisible = true
 
-            setMarketData(item.marketDataList)
-
             // Coin Rating
             coinRating.isVisible = !item.coinMeta.rating.isNullOrBlank()
             coinRating.setImageDrawable(getRatingIcon(item.coinMeta.rating))
@@ -225,12 +240,50 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
 
             setCoinPerformance(item)
 
+            // Market
+
+            setMarketData(item.marketDataList)
+
+            // TVL
+
+            setTvlData(item.tvlInfo)
+
 
             // About
 
             if (item.coinMeta.description.isNotBlank()) {
                 aboutGroup.isVisible = true
-                val aboutTextSpanned = Html.fromHtml(item.coinMeta.description.replace("\n", "<br />"), Html.FROM_HTML_MODE_COMPACT)
+                aboutTitle.isVisible = item.coinMeta.descriptionType == CoinMeta.DescriptionType.HTML
+                val aboutTextSpanned = when (item.coinMeta.descriptionType) {
+                    CoinMeta.DescriptionType.HTML -> {
+                        Html.fromHtml(item.coinMeta.description.replace("\n", "<br />"), Html.FROM_HTML_MODE_COMPACT)
+                    }
+                    CoinMeta.DescriptionType.MARKDOWN -> {
+                        val markwon = Markwon.builder(requireContext())
+                                .usePlugin(object : AbstractMarkwonPlugin() {
+
+                                    override fun configureSpansFactory(builder: MarkwonSpansFactory.Builder) {
+                                        builder.setFactory(Heading::class.java) { configuration, props ->
+                                            arrayOf(
+                                                    TextAppearanceSpan(context, R.style.Headline2),
+                                                    ForegroundColorSpan(resources.getColor(R.color.bran, null))
+                                            )
+                                        }
+                                        builder.setFactory(Paragraph::class.java) { configuration, props ->
+                                            arrayOf(
+                                                    LastLineSpacingSpan(LayoutHelper.dp(24f, requireContext())),
+                                                    TextAppearanceSpan(context, R.style.Subhead2),
+                                                    ForegroundColorSpan(resources.getColor(R.color.grey, null))
+                                            )
+                                        }
+                                    }
+                                })
+                                .build()
+
+                        markwon.toMarkdown(item.coinMeta.description)
+                    }
+                }
+
                 aboutText.text = removeLinkSpans(aboutTextSpanned)
                 aboutText.maxLines = Integer.MAX_VALUE
                 aboutText.isVisible = false
@@ -247,7 +300,7 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
                 aboutGroup.isVisible = false
             }
             // Categories/Platforms/Links
-            setCategoriesAndPlatforms(item.coinMeta.categories, item.coinMeta.platforms)
+            setCategoriesAndContractInfo(item.coinMeta.categories, item.contractInfo)
 
             //Links
             setLinks(item.coinMeta.links, item.guideUrl)
@@ -342,33 +395,26 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
     }
 
     private fun setCoinPerformance(item: CoinDetailsViewItem) {
+        if (item.rateDiffs.isEmpty()) {
+            return
+        }
         context?.let { ctx ->
-            var btcTitle: String? = null
-            var ethTitle: String? = null
-
-            val rows = item.rateDiffs.toList().mapIndexed { index, (period, values) ->
-                val background = CoinPerformanceRowView.getBackground(item.rateDiffs.size, index)
-                val currencyValue = values[item.currency.code] ?: BigDecimal.ZERO
-                val btcValue = values["BTC"]
-                val ethValue = values["ETH"]
-
-                btcTitle = if (btcValue != null) "BTC" else null
-                ethTitle = if (ethValue != null) "ETH" else null
-
-                CoinPerformanceRowView(ctx).apply {
-                    bind(period, currencyValue, btcValue, ethValue, background)
+            item.rateDiffs.forEachIndexed { index, rowViewItem ->
+                val row = when (rowViewItem) {
+                    is RoiViewItem.HeaderRowViewItem -> {
+                        CoinPerformanceRowView(ctx).apply {
+                            bindHeader(rowViewItem.title, rowViewItem.periods)
+                        }
+                    }
+                    is RoiViewItem.RowViewItem -> {
+                        CoinPerformanceRowView(ctx).apply {
+                            bind(rowViewItem.title, rowViewItem.values, item.rateDiffs.size - 1, index)
+                        }
+                    }
                 }
+                coinPerformanceLayout.addView(row)
             }
 
-            coinPerformanceLayout.isVisible = rows.isNotEmpty()
-
-            if (rows.isNotEmpty()) {
-                val headerRow = CoinPerformanceRowView(ctx)
-                headerRow.bindHeader("ROI", item.currency.code, btcTitle, ethTitle)
-                coinPerformanceLayout.addView(headerRow)
-
-                rows.forEach { coinPerformanceLayout.addView(it) }
-            }
         }
     }
 
@@ -382,18 +428,27 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
 
         context?.let { context ->
             pages.forEach { item ->
-                val coinInfoView = SettingsView(context).apply {
+                val coinInfoView = CoinInfoItemView(context).apply {
                     when (item) {
-                        is CoinExtraPage.Markets -> {
-                            setListPosition(item.position)
-                            showTitle(getString(R.string.CoinPage_CoinMarket, coinCode))
-                            setOnClickListener {
-                                findNavController().navigate(R.id.coinFragment_to_coinMarketsFragment, null, navOptions())
+                        is CoinExtraPage.TradingVolume -> {
+                            bind(
+                                    title = getString(R.string.CoinPage_TradingVolume),
+                                    value = item.value,
+                                    listPosition = item.position,
+                                    icon = if (item.canShowMarkets) R.drawable.ic_arrow_right else null
+                            )
+                            if (item.canShowMarkets) {
+                                setOnClickListener {
+                                    findNavController().navigate(R.id.coinFragment_to_coinMarketsFragment, null, navOptions())
+                                }
                             }
                         }
                         is CoinExtraPage.Investors -> {
-                            setListPosition(item.position)
-                            showTitle(getString(R.string.CoinPage_FundsInvested))
+                            bind(
+                                    title = getString(R.string.CoinPage_FundsInvested),
+                                    listPosition = item.position,
+                                    icon = R.drawable.ic_arrow_right
+                            )
                             setOnClickListener {
                                 findNavController().navigate(R.id.coinFragment_to_coinInvestorsFragment, null, navOptions())
                             }
@@ -417,7 +472,7 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
         return context?.let { ContextCompat.getDrawable(it, icon) }
     }
 
-    private fun setMarketData(marketDataList: List<MarketData>) {
+    private fun setMarketData(marketDataList: List<CoinDataItem>) {
         marketDataLayout.removeAllViews()
 
         context?.let { context ->
@@ -435,6 +490,31 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
         }
     }
 
+    private fun setTvlData(tvlDataList: List<CoinDataItem>) {
+        tvlLayout.removeAllViews()
+
+        context?.let { context ->
+            tvlDataList.forEachIndexed { index, marketData ->
+                val view = CoinInfoItemView(context).apply {
+                    bind(
+                            title = getString(marketData.title),
+                            value = marketData.value,
+                            listPosition = ListPosition.getListPosition(tvlDataList.size, index),
+                            icon = marketData.icon
+                    )
+                }
+
+                if (index == 0) {
+                    view.setOnClickListener {
+                        MetricChartFragment.show(childFragmentManager, MetricChartType.Coin(viewModel.coinType))
+                    }
+                }
+
+                tvlLayout.addView(view)
+            }
+        }
+    }
+
     private fun setLinks(links: Map<LinkType, String>, guideUrl: String?) {
         context?.let { context ->
             linksLayout.removeAllViews()
@@ -445,7 +525,10 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
                 link.showIcon(ContextCompat.getDrawable(context, R.drawable.ic_academy_20))
                 link.setListPosition(ListPosition.getListPosition(links.size + 1, 0))
                 link.setOnClickListener {
-                    val arguments = bundleOf(MarkdownFragment.markdownUrlKey to guideUrl)
+                    val arguments = bundleOf(
+                            MarkdownFragment.markdownUrlKey to guideUrl,
+                            MarkdownFragment.handleRelativeUrlKey to true
+                    )
                     findNavController().navigate(R.id.coinFragment_to_markdownFragment, arguments, navOptions())
                 }
                 linksLayout.addView(link)
@@ -490,27 +573,24 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
         }
     }
 
-    private fun setCategoriesAndPlatforms(categories: List<CoinCategory>, platforms: Map<CoinPlatformType, String>) {
+    private fun setCategoriesAndContractInfo(categories: List<CoinCategory>, contractInfo: ContractInfo?) {
         categoriesText.text = categories.joinToString(", ") { it.name }
         categoriesGroup.isVisible = categories.isNotEmpty()
 
         context?.let { context ->
             platformsLayout.removeAllViews()
 
-            val filteredPlatforms = platforms.toList().filter { (platform, _) -> platform != CoinPlatformType.OTHER }
-            filteredPlatforms
-                    .sortedBy { (platform, _) -> platform.order }
-                    .onEachIndexed { index, (platform, value) ->
-                        val platformView = CoinInfoItemView(context).apply {
-                            bind(
-                                    title = platform.title,
-                                    decoratedValue = value,
-                                    listPosition = ListPosition.getListPosition(filteredPlatforms.size, index)
-                            )
-                        }
+            contractInfo?.let {
+                val platformView = CoinInfoItemView(context).apply {
+                    bind(
+                            title = contractInfo.title,
+                            decoratedValue = contractInfo.value,
+                            listPosition = ListPosition.Single
+                    )
+                }
 
-                        platformsLayout.addView(platformView)
-                    }
+                platformsLayout.addView(platformView)
+            }
         }
     }
 

@@ -8,7 +8,7 @@ object BalanceOnboardingModule {
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return BalanceOnboardingViewModel(App.accountManager) as T
+            return BalanceOnboardingViewModel(App.accountManager, App.walletManager) as T
         }
     }
 }

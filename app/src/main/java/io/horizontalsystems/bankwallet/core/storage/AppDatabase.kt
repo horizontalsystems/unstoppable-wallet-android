@@ -9,13 +9,15 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.google.gson.Gson
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.managers.PriceAlertManager
+import io.horizontalsystems.bankwallet.core.storage.migrations.Migration_31_32
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.coinkit.models.CoinType
+import java.util.*
 
-@Database(version = 30, exportSchema = false, entities = [
+@Database(version = 32, exportSchema = false, entities = [
     EnabledWallet::class,
     PriceAlert::class,
     AccountRecord::class,
@@ -24,6 +26,8 @@ import io.horizontalsystems.coinkit.models.CoinType
     LogEntry::class,
     FavoriteCoin::class,
     WalletConnectSession::class,
+    RestoreSettingRecord::class,
+    ActiveAccount::class
 ])
 
 @TypeConverters(DatabaseConverters::class)
@@ -33,6 +37,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun accountsDao(): AccountsDao
     abstract fun priceAlertsDao(): PriceAlertsDao
     abstract fun blockchainSettingDao(): BlockchainSettingDao
+    abstract fun restoreSettingDao(): RestoreSettingDao
     abstract fun subscriptionJobDao(): SubscriptionJobDao
     abstract fun logsDao(): LogsDao
     abstract fun marketFavoritesDao(): MarketFavoritesDao
@@ -76,6 +81,8 @@ abstract class AppDatabase : RoomDatabase() {
                             MIGRATION_27_28,
                             MIGRATION_28_29,
                             MIGRATION_29_30,
+                            MIGRATION_30_31,
+                            Migration_31_32
                     )
                     .build()
         }
@@ -497,9 +504,7 @@ abstract class AppDatabase : RoomDatabase() {
             override fun migrate(database: SupportSQLiteDatabase) {
                 // extract custom coins
                 val customCoins = extractCustomCoins(database)
-                customCoins.forEach {
-                    App.coinKit.saveCoin(it)
-                }
+                App.coinKit.saveCoins(customCoins)
 
                 // change coinIds in enabled wallets
                 updateCoinIdInEnabledWallets(customCoins, database)
@@ -527,37 +532,96 @@ abstract class AppDatabase : RoomDatabase() {
                 database.execSQL("DROP TABLE PriceAlert")
                 database.execSQL("CREATE TABLE IF NOT EXISTS PriceAlert (`coinType` TEXT NOT NULL, `notificationCoinCode` TEXT NOT NULL, `coinName` TEXT NOT NULL, `changeState` TEXT NOT NULL, `trendState` TEXT NOT NULL, PRIMARY KEY(`coinType`))")
             }
-        }
 
-        private fun addNotificationsUnsubscribeJobs(database: SupportSQLiteDatabase) {
-            val unsubscribeJobs = mutableListOf<SubscriptionJob>()
-            val priceAlertsCursor = database.query("SELECT * FROM PriceAlert")
-            while (priceAlertsCursor.moveToNext()) {
-                val coinIdColumn = priceAlertsCursor.getColumnIndex("coinId")
-                if (coinIdColumn >= 0) {
-                    val coinId = priceAlertsCursor.getString(coinIdColumn)
-                    val changeColumn = priceAlertsCursor.getColumnIndex("changeState")
-                    if (changeColumn >= 0) {
-                        val changeValue = priceAlertsCursor.getString(changeColumn)
-                        if (changeValue != PriceAlert.ChangeState.OFF.value) {
-                            unsubscribeJobs.add(PriceAlertManager.getChangeSubscriptionJob(coinId, changeValue, SubscriptionJob.JobType.Unsubscribe))
+            fun addNotificationsUnsubscribeJobs(database: SupportSQLiteDatabase) {
+                val priceAlertsCursor = database.query("SELECT * FROM PriceAlert")
+                while (priceAlertsCursor.moveToNext()) {
+                    val coinIdColumn = priceAlertsCursor.getColumnIndex("coinId")
+                    if (coinIdColumn >= 0) {
+                        val coinId = priceAlertsCursor.getString(coinIdColumn)
+                        val changeColumn = priceAlertsCursor.getColumnIndex("changeState")
+                        if (changeColumn >= 0) {
+                            val value = priceAlertsCursor.getString(changeColumn)
+                            if (value != PriceAlert.ChangeState.OFF.value) {
+                                val topic = "${coinId.toUpperCase(Locale.ENGLISH)}_24hour_${value}percent"
+                                insertUnsubscribeJobs(database, coinId, topic, SubscriptionJob.StateType.Change, value)
+                            }
+                        }
+                        val trendColumn = priceAlertsCursor.getColumnIndex("trendState")
+                        if (trendColumn >= 0) {
+                            val value = priceAlertsCursor.getString(trendColumn)
+                            if (value != PriceAlert.TrendState.OFF.value) {
+                                val topic = "${coinId.toUpperCase(Locale.ENGLISH)}_${value}term_trend_change"
+                                insertUnsubscribeJobs(database, coinId, topic, SubscriptionJob.StateType.Trend, value)
+                            }
                         }
                     }
-                    val trendColumn = priceAlertsCursor.getColumnIndex("trendState")
-                    if (trendColumn >= 0) {
-                        val trendValue = priceAlertsCursor.getString(trendColumn)
-                        if (trendValue != PriceAlert.TrendState.OFF.value) {
-                            unsubscribeJobs.add(PriceAlertManager.getTrendSubscriptionJob(coinId, trendValue, SubscriptionJob.JobType.Unsubscribe))
+                }
+
+            }
+
+            fun insertUnsubscribeJobs(database: SupportSQLiteDatabase, coinCode: String, topic: String, stateType: SubscriptionJob.StateType, changeValue: String) {
+                database.execSQL("""
+                                INSERT INTO SubscriptionJob (`coinCode`,`topicName`,`stateType`,`jobType`)
+                                VALUES ('$coinCode', '${topic}', '${stateType.value}', '${SubscriptionJob.JobType.Unsubscribe.value}')
+                                """.trimIndent())
+            }
+        }
+
+        private val MIGRATION_30_31: Migration = object : Migration(30, 31) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("ALTER TABLE PriceAlert RENAME TO TempPriceAlert")
+                database.execSQL("CREATE TABLE IF NOT EXISTS PriceAlert (`coinType` TEXT NOT NULL, `coinName` TEXT NOT NULL, `changeState` TEXT NOT NULL, `trendState` TEXT NOT NULL, PRIMARY KEY(`coinType`))")
+                database.execSQL("INSERT INTO PriceAlert (`coinType`,`coinName`,`changeState`,`trendState`) SELECT `coinType`,`coinName`,`changeState`,`trendState` FROM TempPriceAlert")
+                database.execSQL("DROP TABLE TempPriceAlert")
+
+                database.execSQL("ALTER TABLE SubscriptionJob RENAME TO TempSubscriptionJob")
+                database.execSQL("CREATE TABLE IF NOT EXISTS SubscriptionJob (`coinType` TEXT NOT NULL, `body` TEXT NOT NULL, `stateType` TEXT NOT NULL, `jobType` TEXT NOT NULL, PRIMARY KEY(`coinType`, `stateType`))")
+                database.execSQL("DROP TABLE TempSubscriptionJob")
+
+                //add Notification Subscribe Jobs
+                val priceAlertsCursor = database.query("SELECT * FROM PriceAlert")
+                while (priceAlertsCursor.moveToNext()) {
+                    val coinTypeColumn = priceAlertsCursor.getColumnIndex("coinType")
+                    if (coinTypeColumn >= 0) {
+                        val coinType = priceAlertsCursor.getString(coinTypeColumn)
+                        val changeColumn = priceAlertsCursor.getColumnIndex("changeState")
+                        if (changeColumn >= 0) {
+                            val changeValue = priceAlertsCursor.getString(changeColumn)
+                            if (changeValue != PriceAlert.ChangeState.OFF.value) {
+                                val body = getChangeBody(coinType, changeValue)
+                                insertSubscriptionJob(database, coinType, body, SubscriptionJob.StateType.Change)
+                            }
+                        }
+                        val trendColumn = priceAlertsCursor.getColumnIndex("trendState")
+                        if (trendColumn >= 0) {
+                            val trendValue = priceAlertsCursor.getString(trendColumn)
+                            if (trendValue != PriceAlert.TrendState.OFF.value) {
+                                val body = getTrendBody(coinType, trendValue)
+                                insertSubscriptionJob(database, coinType, body, SubscriptionJob.StateType.Trend)
+                            }
                         }
                     }
                 }
             }
 
-            unsubscribeJobs.forEach { job ->
+            fun insertSubscriptionJob(database: SupportSQLiteDatabase, coinType: String, body: String, stateType: SubscriptionJob.StateType) {
                 database.execSQL("""
-                                        INSERT INTO SubscriptionJob (`coinCode`,`topicName`,`stateType`,`jobType`) 
-                                        VALUES ('${job.coinCode}', '${job.topicName}', '${job.stateType.value}', '${job.jobType.value}')
-                                        """.trimIndent())
+                                INSERT INTO SubscriptionJob (`coinType`,`body`,`stateType`,`jobType`)
+                                VALUES ('$coinType','$body','${stateType.value}','${SubscriptionJob.JobType.Subscribe.value}')
+                                """.trimIndent())
+            }
+
+            fun getChangeBody(coinTypeId: String, changeValue: String): String {
+                val data = hashMapOf("coin_id" to coinTypeId, "change" to changeValue, "period" to "24h")
+                val bodyMap = hashMapOf("type" to "PRICE", "data" to data)
+                return Gson().toJson(bodyMap)
+            }
+
+            fun getTrendBody(coinTypeId: String, trendValue: String): String {
+                val data = hashMapOf("coin_id" to coinTypeId, "term" to trendValue)
+                val bodyMap = hashMapOf("type" to "TRENDS", "data" to data)
+                return Gson().toJson(bodyMap)
             }
         }
 

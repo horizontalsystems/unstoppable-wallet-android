@@ -26,10 +26,10 @@ class BinanceSmartChainKitManager(
     private var useCount = 0
     private var currentAccount: Account? = null
 
-
     val statusInfo: Map<String, Any>?
         get() = evmKit?.statusInfo()
 
+    @Synchronized
     fun evmKit(account: Account): EthereumKit {
         if (this.evmKit != null && currentAccount != account) {
             this.evmKit?.stop()
@@ -38,7 +38,7 @@ class BinanceSmartChainKitManager(
         }
 
         if (this.evmKit == null) {
-            if (account.type !is AccountType.Mnemonic || account.type.words.size != 24)
+            if (account.type !is AccountType.Mnemonic)
                 throw UnsupportedAccountException()
 
             useCount = 0
@@ -52,24 +52,29 @@ class BinanceSmartChainKitManager(
     }
 
     private fun createKitInstance(accountType: AccountType.Mnemonic, account: Account): EthereumKit {
-        val syncSource = EthereumKit.defaultBscWebSocketSyncSource()
-        val kit = EthereumKit.getInstance(App.instance, accountType.words, NetworkType.BscMainNet, syncSource, bscscanApiKey, account.id)
+        val syncSource = EthereumKit.defaultBscHttpSyncSource()
+        val kit = EthereumKit.getInstance(App.instance, accountType.words, accountType.passphrase, NetworkType.BscMainNet, syncSource, bscscanApiKey, account.id)
 
         kit.addDecorator(Erc20Kit.getDecorator())
         kit.addDecorator(UniswapKit.getDecorator())
+
+        kit.addTransactionSyncer(Erc20Kit.getTransactionSyncer(kit))
 
         kit.start()
 
         return kit
     }
 
-    fun unlink() {
-        useCount -= 1
+    @Synchronized
+    fun unlink(account: Account) {
+        if (account == currentAccount) {
+            useCount -= 1
 
-        if (useCount < 1) {
-            this.evmKit?.stop()
-            this.evmKit = null
-            currentAccount = null
+            if (useCount < 1) {
+                this.evmKit?.stop()
+                this.evmKit = null
+                currentAccount = null
+            }
         }
     }
 

@@ -4,11 +4,10 @@ import android.os.Parcelable
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.coinkit.models.CoinType
 import kotlinx.android.parcel.Parcelize
-import java.util.*
 
 @Parcelize
 class Account(val id: String,
-              val name: String,
+              var name: String,
               val type: AccountType,
               val origin: AccountOrigin,
               var isBackedUp: Boolean = false
@@ -23,20 +22,20 @@ class Account(val id: String,
     }
 
     override fun hashCode(): Int {
-        return Objects.hash(name, type)
+        return id.hashCode()
     }
 }
 
 @Parcelize
 open class AccountType : Parcelable {
     @Parcelize
-    data class Mnemonic(val words: List<String>, val salt: String? = null) : AccountType() {
+    data class Mnemonic(val words: List<String>, val passphrase: String) : AccountType() {
         override fun equals(other: Any?): Boolean {
-            return other is Mnemonic && words.toTypedArray().contentEquals(other.words.toTypedArray()) && salt == other.salt
+            return other is Mnemonic && words.toTypedArray().contentEquals(other.words.toTypedArray()) && passphrase == other.passphrase
         }
 
         override fun hashCode(): Int {
-            return words.toTypedArray().contentHashCode() + salt.hashCode()
+            return words.toTypedArray().contentHashCode() + passphrase.hashCode()
         }
     }
 
@@ -52,21 +51,16 @@ open class AccountType : Parcelable {
     }
 
     @Parcelize
-    data class Zcash(val words: List<String>, val birthdayHeight: Long? = null) : AccountType() {
-        override fun equals(other: Any?): Boolean {
-            return other is Zcash && words.toTypedArray().contentEquals(other.words.toTypedArray())
-        }
-
-        override fun hashCode(): Int {
-            return words.toTypedArray().contentHashCode()
-        }
-    }
-
-    @Parcelize
     enum class Derivation(val value: String) : Parcelable {
         bip44("bip44"),
         bip49("bip49"),
         bip84("bip84");
+
+        companion object {
+            private val map = values().associateBy(Derivation::value)
+
+            fun fromString(value: String?): Derivation? = map[value]
+        }
     }
 }
 

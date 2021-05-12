@@ -24,6 +24,7 @@
         android:id="@+id/dialogRecyclerView"
         android:layout_width="280dp"
         android:layout_height="wrap_content"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/dialogTitle" />

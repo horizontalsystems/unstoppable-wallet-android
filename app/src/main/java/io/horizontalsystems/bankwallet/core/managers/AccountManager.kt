@@ -4,20 +4,29 @@ import io.horizontalsystems.bankwallet.core.IAccountCleaner
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.IAccountsStorage
 import io.horizontalsystems.bankwallet.entities.Account
-import io.horizontalsystems.bankwallet.entities.canSupport
-import io.horizontalsystems.coinkit.models.CoinType
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
+import java.util.*
 import java.util.concurrent.TimeUnit
 
-class AccountManager(private val storage: IAccountsStorage, private val accountCleaner: IAccountCleaner) : IAccountManager {
+class AccountManager(
+        private val storage: IAccountsStorage,
+        private val accountCleaner: IAccountCleaner
+) : IAccountManager {
 
     private val cache = AccountsCache()
     private val accountsSubject = PublishSubject.create<List<Account>>()
     private val accountsDeletedSubject = PublishSubject.create<Unit>()
+    private val activeAccountSubject = PublishSubject.create<Optional<Account>>()
+
+    override val activeAccount: Account?
+        get() = cache.activeAccount
+
+    override val activeAccountObservable: Flowable<Optional<Account>>
+        get() = activeAccountSubject.toFlowable(BackpressureStrategy.BUFFER)
 
     override val isAccountsEmpty: Boolean
         get() = storage.isAccountsEmpty
@@ -31,13 +40,21 @@ class AccountManager(private val storage: IAccountsStorage, private val accountC
     override val accountsDeletedFlowable: Flowable<Unit>
         get() = accountsDeletedSubject.toFlowable(BackpressureStrategy.BUFFER)
 
-    override fun account(coinType: CoinType): Account? {
-        return accounts.find { account -> coinType.canSupport(account.type) }
+    override fun setActiveAccountId(activeAccountId: String?) {
+        if (cache.activeAccount?.id != activeAccountId) {
+            storage.activeAccountId = activeAccountId
+            cache.setActiveAccountId(activeAccountId)
+            activeAccountSubject.onNext(Optional.ofNullable(activeAccount))
+        }
+    }
+
+    override fun account(id: String): Account? {
+        return accounts.find { account -> account.id == id }
     }
 
     override fun loadAccounts() {
-        val accounts = storage.allAccounts()
-        cache.set(accounts)
+        cache.set(storage.allAccounts())
+        cache.setActiveAccountId(storage.activeAccountId)
     }
 
     override fun save(account: Account) {
@@ -45,6 +62,8 @@ class AccountManager(private val storage: IAccountsStorage, private val accountC
 
         cache.insert(account)
         accountsSubject.onNext(accounts)
+
+        setActiveAccountId(account.id)
     }
 
     override fun update(account: Account) {
@@ -60,6 +79,10 @@ class AccountManager(private val storage: IAccountsStorage, private val accountC
 
         accountsSubject.onNext(accounts)
         accountsDeletedSubject.onNext(Unit)
+
+        if (id == activeAccount?.id) {
+            setActiveAccountId(accounts.firstOrNull()?.id)
+        }
     }
 
     override fun clear() {
@@ -67,6 +90,7 @@ class AccountManager(private val storage: IAccountsStorage, private val accountC
         cache.set(listOf())
         accountsSubject.onNext(listOf())
         accountsDeletedSubject.onNext(Unit)
+        setActiveAccountId(null)
     }
 
     override fun clearAccounts() {
@@ -85,6 +109,9 @@ class AccountManager(private val storage: IAccountsStorage, private val accountC
         var accountsSet = mutableSetOf<Account>()
             private set
 
+        var activeAccount: Account? = null
+            private set
+
         fun insert(account: Account) {
             accountsSet.add(account)
         }
@@ -99,6 +126,14 @@ class AccountManager(private val storage: IAccountsStorage, private val accountC
 
         fun delete(id: String) {
             accountsSet.removeAll { it.id == id }
+        }
+
+        fun setActiveAccountId(activeAccountId: String?) {
+            activeAccount = if (activeAccountId != null) {
+                accountsSet.find { it.id == activeAccountId}
+            } else {
+                null
+            }
         }
     }
 }

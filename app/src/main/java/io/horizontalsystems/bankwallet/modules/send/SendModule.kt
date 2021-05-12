@@ -278,10 +278,10 @@ object SendModule {
 
     data class AmountData(val primary: AmountInfo, val secondary: AmountInfo?) {
         fun getFormatted(): String {
-            var formatted = primary.getFormatted()
+            var formatted = primary.getFormattedPlain()
 
             secondary?.let {
-                formatted += "  |  " + it.getFormatted()
+                formatted += "  |  " + it.getFormattedPlain()
             }
 
             return formatted
@@ -312,6 +312,15 @@ object SendModule {
         fun getFormatted(): String = when (this) {
             is CoinValueInfo -> {
                 coinValue.getFormatted()
+            }
+            is CurrencyValueInfo -> {
+                App.numberFormatter.formatFiat(currencyValue.value, currencyValue.currency.symbol, 2, 2)
+            }
+        }
+
+        fun getFormattedPlain(): String = when (this) {
+            is CoinValueInfo -> {
+                App.numberFormatter.format(value, 0, 8)
             }
             is CurrencyValueInfo -> {
                 App.numberFormatter.formatFiat(currencyValue.value, currencyValue.currency.symbol, 2, 2)

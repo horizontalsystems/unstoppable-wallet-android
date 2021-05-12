@@ -20,7 +20,13 @@ class CoinInfoItemView : ConstraintLayout {
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
-    fun bind(title: String, value: String? = null, decoratedValue: String? = null, listPosition: ListPosition, onClickValue: (value: String) -> Unit = {}) {
+    fun bind(
+            title: String,
+            value: String? = null,
+            icon: Int? = null,
+            decoratedValue: String? = null,
+            listPosition: ListPosition
+    ) {
         txtTitle.text = title
         decoratedText.isVisible = !decoratedValue.isNullOrBlank()
 
@@ -34,6 +40,12 @@ class CoinInfoItemView : ConstraintLayout {
 
         valueText.text = value
         valueText.isVisible = !value.isNullOrBlank()
+
+        iconView.isVisible = icon != null
+
+        icon?.let {
+            iconView.setImageResource(it)
+        }
 
         viewBackground.setBackgroundResource(listPosition.getBackground())
 

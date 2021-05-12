@@ -17,10 +17,15 @@ object WalletConnectMainModule {
         }
     }
 
-    fun start(fragment: Fragment, navigateTo: Int, navOptions: NavOptions, remotePeerId: String? = null) {
-        fragment.findNavController().navigate(navigateTo, bundleOf(REMOTE_PEER_ID_KEY to remotePeerId), navOptions)
+    fun start(fragment: Fragment, navigateTo: Int, navOptions: NavOptions, sessionsCount: Int = 0, remotePeerId: String? = null) {
+        val arguments = bundleOf(
+                REMOTE_PEER_ID_KEY to remotePeerId,
+                SESSIONS_COUNT_KEY to sessionsCount
+        )
+        fragment.findNavController().navigate(navigateTo, arguments, navOptions)
     }
 
     const val REMOTE_PEER_ID_KEY = "remote_peer_id"
+    const val SESSIONS_COUNT_KEY = "sessions_count"
 
 }

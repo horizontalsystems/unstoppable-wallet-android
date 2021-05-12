@@ -3,8 +3,9 @@ package io.horizontalsystems.chartview
 import android.graphics.*
 import androidx.core.graphics.ColorUtils.setAlphaComponent
 import io.horizontalsystems.chartview.helpers.ChartAnimator
+import io.horizontalsystems.chartview.models.ChartConfig
 
-class ChartGradient(private val animator: ChartAnimator, override var isVisible: Boolean = true) : ChartDraw {
+class ChartGradient(private val animator: ChartAnimator? = null, override var isVisible: Boolean = true) : ChartDraw {
 
     private var shape = RectF(0f, 0f, 0f, 0f)
     private var points = listOf<PointF>()
@@ -18,8 +19,8 @@ class ChartGradient(private val animator: ChartAnimator, override var isVisible:
         points = list
     }
 
-    fun setShader(color: Int) {
-        setGradient(setAlphaComponent(color, 0xCC), setAlphaComponent(color, 0x0D))
+    fun setShader(gradient: ChartConfig.GradientColor) {
+        setGradient(setAlphaComponent(gradient.startColor, 0x0D), setAlphaComponent(gradient.endColor, 0x80))
     }
 
     fun setShape(rect: RectF) {
@@ -35,10 +36,9 @@ class ChartGradient(private val animator: ChartAnimator, override var isVisible:
         val path = Path()
 
         points.forEachIndexed { index, point ->
-            if (index == 0) {
-                path.moveTo(point.x, animator.getAnimatedY(point.y, shape.bottom))
-            } else {
-                path.lineTo(point.x, animator.getAnimatedY(point.y, shape.bottom))
+            when (index) {
+                0 -> path.moveTo(point.x, getY(point))
+                else -> path.lineTo(point.x, getY(point))
             }
         }
 
@@ -50,7 +50,14 @@ class ChartGradient(private val animator: ChartAnimator, override var isVisible:
         drawPath(path, paint)
     }
 
+    private fun getY(point: PointF) : Float {
+        return when {
+            animator != null -> animator.getAnimatedY(point.y, shape.bottom)
+            else -> point.y
+        }
+    }
+
     private fun setGradient(colorStart: Int, colorEnd: Int) {
-        paint.shader = LinearGradient(0f, 0f, 0f, shape.bottom + 2, colorStart, colorEnd, Shader.TileMode.REPEAT)
+        paint.shader = LinearGradient(0f, 0f, shape.width(), 0f, colorStart, colorEnd, Shader.TileMode.REPEAT)
     }
 }

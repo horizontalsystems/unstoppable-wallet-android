@@ -121,6 +121,41 @@ class MarketAdvancedSearchFragment : BaseFragment() {
             }
         }
 
+        marketAdvancedSearchViewModel.outperformedBtcOnFilter.observe(viewLifecycleOwner, { checked ->
+            filterOutperformedBtc.setChecked(checked)
+        })
+        filterOutperformedBtc.onCheckedChange { checked->
+            marketAdvancedSearchViewModel.outperformedBtcOn = checked
+        }
+
+        marketAdvancedSearchViewModel.outperformedEthOnFilter.observe(viewLifecycleOwner, { checked ->
+            filterOutperformedEth.setChecked(checked)
+        })
+        filterOutperformedEth.onCheckedChange { checked->
+            marketAdvancedSearchViewModel.outperformedEthOn = checked
+        }
+
+        marketAdvancedSearchViewModel.outperformedBnbOnFilter.observe(viewLifecycleOwner, { checked ->
+            filterOutperformedBnb.setChecked(checked)
+        })
+        filterOutperformedBnb.onCheckedChange { checked->
+            marketAdvancedSearchViewModel.outperformedBnbOn = checked
+        }
+
+        marketAdvancedSearchViewModel.priceCloseToAthFilter.observe(viewLifecycleOwner, { checked ->
+            filterPriceCloseToAth.setChecked(checked)
+        })
+        filterPriceCloseToAth.onCheckedChange { checked->
+            marketAdvancedSearchViewModel.priceCloseToAth = checked
+        }
+
+        marketAdvancedSearchViewModel.priceCloseToAtlFilter.observe(viewLifecycleOwner, { checked ->
+            filterPriceCloseToAtl.setChecked(checked)
+        })
+        filterPriceCloseToAtl.onCheckedChange { checked->
+            marketAdvancedSearchViewModel.priceCloseToAtl = checked
+        }
+
         submit.setOnSingleClickListener {
             findNavController().navigate(R.id.marketAdvancedSearchFragment_to_marketAdvancedSearchFragmentResults, null, navOptions())
         }

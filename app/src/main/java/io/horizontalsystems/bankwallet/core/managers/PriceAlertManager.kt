@@ -1,23 +1,30 @@
 package io.horizontalsystems.bankwallet.core.managers
 
+import com.google.gson.Gson
+import io.horizontalsystems.bankwallet.core.ILocalStorage
+import io.horizontalsystems.bankwallet.core.INotificationManager
 import io.horizontalsystems.bankwallet.core.INotificationSubscriptionManager
 import io.horizontalsystems.bankwallet.core.IPriceAlertManager
-import io.horizontalsystems.bankwallet.core.IRateManager
+import io.horizontalsystems.bankwallet.core.notifications.NotificationFactory
+import io.horizontalsystems.bankwallet.core.notifications.NotificationNetworkWrapper
 import io.horizontalsystems.bankwallet.core.storage.AppDatabase
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.PriceAlert
 import io.horizontalsystems.bankwallet.entities.SubscriptionJob
-import io.horizontalsystems.bankwallet.entities.canSupport
 import io.horizontalsystems.coinkit.models.CoinType
+import io.horizontalsystems.core.BackgroundManager
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.subjects.PublishSubject
-import java.util.*
+import java.net.HttpURLConnection
 
 class PriceAlertManager(
         appDatabase: AppDatabase,
         private val notificationSubscriptionManager: INotificationSubscriptionManager,
-        private val rateManager: IRateManager
+        private val notificationManager: INotificationManager,
+        private val localStorageManager: ILocalStorage,
+        private val notificationNetworkWrapper: NotificationNetworkWrapper,
+        private val backgroundManager: BackgroundManager
 ) : IPriceAlertManager {
 
     private val dao = appDatabase.priceAlertsDao()
@@ -26,18 +33,13 @@ class PriceAlertManager(
     override val notificationChangedFlowable: Flowable<Unit>
         get() = notificationChangedSubject.toFlowable(BackpressureStrategy.BUFFER)
 
-    override fun notificationCode(coinType: CoinType): String? {
-        return rateManager.getNotificationCoinCode(coinType)
-    }
-
     override fun getPriceAlerts(): List<PriceAlert> {
         return dao.all()
     }
 
     override fun savePriceAlert(coinType: CoinType, coinName: String, changeState: PriceAlert.ChangeState, trendState: PriceAlert.TrendState) {
         val (oldChangeState, oldTrendState) = getAlertStates(coinType)
-        val notificationCoinCode = rateManager.getNotificationCoinCode(coinType) ?: return
-        val newPriceAlert = PriceAlert(coinType, notificationCoinCode, coinName, changeState, trendState)
+        val newPriceAlert = PriceAlert(coinType, coinName, changeState, trendState)
         dao.update(newPriceAlert)
         notificationChangedSubject.onNext(Unit)
 
@@ -46,7 +48,8 @@ class PriceAlertManager(
 
     override fun getAlertStates(coinType: CoinType): Pair<PriceAlert.ChangeState, PriceAlert.TrendState> {
         val priceAlert = dao.priceAlert(coinType)
-        return Pair(priceAlert?.changeState ?: PriceAlert.ChangeState.OFF, priceAlert?.trendState ?: PriceAlert.TrendState.OFF)
+        return Pair(priceAlert?.changeState ?: PriceAlert.ChangeState.OFF, priceAlert?.trendState
+                ?: PriceAlert.TrendState.OFF)
     }
 
     override fun hasPriceAlert(coinType: CoinType): Boolean {
@@ -71,38 +74,54 @@ class PriceAlertManager(
         updateSubscription(alerts, SubscriptionJob.JobType.Unsubscribe)
     }
 
-    override fun deleteAlertsByAccountType(accountType: AccountType) {
-        val alerts = dao.all()
-        val selectedAlerts = alerts.filter { it.coinType.canSupport(accountType) }
+    override suspend fun fetchNotifications() {
+        if (backgroundManager.inForeground || getPriceAlerts().isEmpty())
+            return
 
-        updateSubscription(selectedAlerts, SubscriptionJob.JobType.Unsubscribe)
-        selectedAlerts.forEach {
-            dao.delete(it)
+        val response = notificationNetworkWrapper.fetchNotifications()
+
+        if (response.code() == HttpURLConnection.HTTP_OK){
+            val responseBody = response.body() ?: return
+            val messages = responseBody.asJsonObject["messages"].asJsonArray.mapNotNull { jsonElement ->
+                NotificationFactory.getMessageFromJson(jsonElement.asJsonObject)
+            }
+
+            //get previous server time
+            val previousTime = localStorageManager.notificationServerTime
+
+            messages
+                    .filter { it.timestamp > previousTime }
+                    .forEach {
+                        notificationManager.show(it)
+                    }
+
+            localStorageManager.notificationServerTime = responseBody.asJsonObject["server_time"].asNumber.toLong()
+        } else if (response.code() == HttpURLConnection.HTTP_NO_CONTENT){
+            //error 204 means - we are asking messages with token without subscriptions
+            //we need to update subscriptions with new token
+            enablePriceAlerts()
         }
-
-        notificationChangedSubject.onNext(Unit)
     }
 
     private fun updateSubscription(alerts: List<PriceAlert>, jobType: SubscriptionJob.JobType) {
         val jobs = mutableListOf<SubscriptionJob>()
         alerts.forEach { alert ->
             if (alert.changeState != PriceAlert.ChangeState.OFF) {
-                jobs.add(getChangeSubscriptionJob(alert.notificationCoinCode, alert.changeState.value, jobType))
+                jobs.add(getChangeSubscriptionJob(alert.coinType, alert.changeState, jobType))
             }
             if (alert.trendState != PriceAlert.TrendState.OFF) {
-                jobs.add(getTrendSubscriptionJob(alert.notificationCoinCode, alert.trendState.value, jobType))
+                jobs.add(getTrendSubscriptionJob(alert.coinType, alert.trendState, jobType))
             }
         }
         notificationSubscriptionManager.addNewJobs(jobs)
     }
 
     private fun updateSubscription(newAlert: PriceAlert, oldChangeState: PriceAlert.ChangeState, oldTrendState: PriceAlert.TrendState) {
-        val coinCode = newAlert.notificationCoinCode
         val jobs = mutableListOf<SubscriptionJob>()
 
         if (oldChangeState != newAlert.changeState) {
-            val subscribeJob = getChangeSubscriptionJob(coinCode, newAlert.changeState.value, SubscriptionJob.JobType.Subscribe)
-            val unsubscribeJob = getChangeSubscriptionJob(coinCode, newAlert.changeState.value, SubscriptionJob.JobType.Unsubscribe)
+            val subscribeJob = getChangeSubscriptionJob(newAlert.coinType, newAlert.changeState, SubscriptionJob.JobType.Subscribe)
+            val unsubscribeJob = getChangeSubscriptionJob(newAlert.coinType, oldChangeState, SubscriptionJob.JobType.Unsubscribe)
 
             when {
                 oldChangeState == PriceAlert.ChangeState.OFF -> {
@@ -117,8 +136,8 @@ class PriceAlertManager(
                 }
             }
         } else if (oldTrendState != newAlert.trendState) {
-            val subscribeJob = getTrendSubscriptionJob(coinCode, newAlert.trendState.value, SubscriptionJob.JobType.Subscribe)
-            val unsubscribeJob = getTrendSubscriptionJob(coinCode, newAlert.trendState.value, SubscriptionJob.JobType.Unsubscribe)
+            val subscribeJob = getTrendSubscriptionJob(newAlert.coinType, newAlert.trendState, SubscriptionJob.JobType.Subscribe)
+            val unsubscribeJob = getTrendSubscriptionJob(newAlert.coinType, oldTrendState, SubscriptionJob.JobType.Unsubscribe)
 
             when {
                 oldTrendState == PriceAlert.TrendState.OFF -> {
@@ -137,12 +156,40 @@ class PriceAlertManager(
         notificationSubscriptionManager.addNewJobs(jobs)
     }
 
-    companion object{
-        fun getChangeSubscriptionJob(coinCode: String, value: String, subscribeType: SubscriptionJob.JobType) =
-                SubscriptionJob(coinCode, "${coinCode.toUpperCase(Locale.ENGLISH)}_24hour_${value}percent", SubscriptionJob.StateType.Change, subscribeType)
+    /*
+    JSON format
+    {
+        type: "PRICE",
+        data: {
+            coin_id: "aave|0x12312312",
+            period: "24h",
+            percent: 5
+        }
+    }
 
-        fun getTrendSubscriptionJob(coinCode: String, value: String, subscribeType: SubscriptionJob.JobType) =
-                SubscriptionJob(coinCode, "${coinCode.toUpperCase(Locale.ENGLISH)}_${value}term_trend_change", SubscriptionJob.StateType.Trend, subscribeType)
+    {
+        type: "TRENDS",
+        data: {
+            coin_id: "aave|0x12312312",
+            term: "short"
+        }
+    }
+    */
+
+    companion object {
+        fun getChangeSubscriptionJob(coinType: CoinType, changeState: PriceAlert.ChangeState, subscribeType: SubscriptionJob.JobType): SubscriptionJob {
+            val data = hashMapOf("coin_id" to coinType.ID, "percent" to changeState.getIntValue(), "period" to "24h")
+            val bodyMap = hashMapOf("type" to "PRICE", "data" to data)
+            val body = Gson().toJson(bodyMap)
+            return SubscriptionJob(coinType, body, SubscriptionJob.StateType.Change, subscribeType)
+        }
+
+        fun getTrendSubscriptionJob(coinType: CoinType, trendState: PriceAlert.TrendState, subscribeType: SubscriptionJob.JobType): SubscriptionJob {
+            val data = hashMapOf("coin_id" to coinType.ID, "term" to trendState.value)
+            val bodyMap = hashMapOf("type" to "TRENDS", "data" to data)
+            val body = Gson().toJson(bodyMap)
+            return SubscriptionJob(coinType, body, SubscriptionJob.StateType.Trend, subscribeType)
+        }
     }
 
 }

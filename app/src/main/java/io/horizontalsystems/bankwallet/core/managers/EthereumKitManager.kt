@@ -31,6 +31,10 @@ class EthereumKitManager(
     val statusInfo: Map<String, Any>?
         get() = evmKit?.statusInfo()
 
+    val networkType: NetworkType
+        get() = if (testMode) NetworkType.EthRopsten else NetworkType.EthMainNet
+
+    @Synchronized
     fun evmKit(account: Account): EthereumKit {
         if (this.evmKit != null && currentAccount != account) {
             this.evmKit?.stop()
@@ -39,7 +43,7 @@ class EthereumKitManager(
         }
 
         if (this.evmKit == null) {
-            if (account.type !is AccountType.Mnemonic || account.type.words.size != 12)
+            if (account.type !is AccountType.Mnemonic)
                 throw UnsupportedAccountException()
 
             useCount = 0
@@ -55,24 +59,29 @@ class EthereumKitManager(
     private fun createKitInstance(accountType: AccountType.Mnemonic, account: Account): EthereumKit {
         val networkType = if (testMode) NetworkType.EthRopsten else NetworkType.EthMainNet
         val syncSource = EthereumKit.infuraWebSocketSyncSource(networkType, infuraProjectId, infuraSecret)
-                ?: throw AdapterErrorWrongParameters("Could get syncSource!")
-        val kit = EthereumKit.getInstance(App.instance, accountType.words, networkType, syncSource, etherscanApiKey, account.id)
+                ?: throw AdapterErrorWrongParameters("Couldn't get syncSource!")
+        val kit = EthereumKit.getInstance(App.instance, accountType.words, accountType.passphrase, networkType, syncSource, etherscanApiKey, account.id)
 
         kit.addDecorator(Erc20Kit.getDecorator())
         kit.addDecorator(UniswapKit.getDecorator())
+
+        kit.addTransactionSyncer(Erc20Kit.getTransactionSyncer(kit))
 
         kit.start()
 
         return kit
     }
 
-    fun unlink() {
-        useCount -= 1
+    @Synchronized
+    fun unlink(account: Account) {
+        if (account == currentAccount) {
+            useCount -= 1
 
-        if (useCount < 1) {
-            this.evmKit?.stop()
-            this.evmKit = null
-            currentAccount = null
+            if (useCount < 1) {
+                this.evmKit?.stop()
+                this.evmKit = null
+                currentAccount = null
+            }
         }
     }
 

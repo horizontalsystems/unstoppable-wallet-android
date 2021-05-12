@@ -1,11 +1,12 @@
 package io.horizontalsystems.bankwallet.entities
 
 import androidx.room.Entity
+import io.horizontalsystems.coinkit.models.CoinType
 
-@Entity(primaryKeys = ["coinCode", "stateType"])
+@Entity(primaryKeys = ["coinType", "stateType"])
 class SubscriptionJob(
-        val coinCode: String,
-        val topicName: String,
+        val coinType: CoinType,
+        val body: String,
         val stateType: StateType,
         val jobType: JobType
 ) {

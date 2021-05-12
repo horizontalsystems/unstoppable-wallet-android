@@ -4,35 +4,30 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.View
 import androidx.activity.addCallback
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
 import io.horizontalsystems.bankwallet.modules.addtoken.AddTokenFragment
 import io.horizontalsystems.bankwallet.modules.addtoken.TokenType
-import io.horizontalsystems.bankwallet.modules.blockchainsettings.BlockchainSettingsViewModel
-import io.horizontalsystems.bankwallet.modules.enablecoins.EnableCoinsDialog
-import io.horizontalsystems.bankwallet.modules.enablecoins.EnableCoinsViewModel
+import io.horizontalsystems.bankwallet.modules.blockchainsettings.CoinSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsModule
 import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsViewModel
-import io.horizontalsystems.bankwallet.modules.noaccount.NoAccountDialog
-import io.horizontalsystems.bankwallet.modules.restore.RestoreFragment
+import io.horizontalsystems.bankwallet.modules.restore.restoreselectcoins.RestoreSettingsViewModel
+import io.horizontalsystems.bankwallet.ui.extensions.ZcashBirthdayHeightDialog
 import io.horizontalsystems.bankwallet.ui.extensions.coinlist.CoinListBaseFragment
 import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.core.findNavController
-import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.android.synthetic.main.fragment_manage_wallets.*
 
-class ManageWalletsFragment : CoinListBaseFragment(), NoAccountDialog.Listener {
+class ManageWalletsFragment : CoinListBaseFragment() {
 
     override val title
         get() = getString(R.string.ManageCoins_title)
 
     private val vmFactory by lazy { ManageWalletsModule.Factory() }
     private val viewModel by viewModels<ManageWalletsViewModel> { vmFactory }
-    private val blockchainSettingsViewModel by viewModels<BlockchainSettingsViewModel> { vmFactory }
-    private val enableCoinsViewModel by viewModels<EnableCoinsViewModel> { vmFactory }
+    private val coinSettingsViewModel by viewModels<CoinSettingsViewModel> { vmFactory }
+    private val restoreSettingsViewModel by viewModels<RestoreSettingsViewModel> { vmFactory }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -57,12 +52,6 @@ class ManageWalletsFragment : CoinListBaseFragment(), NoAccountDialog.Listener {
         observe()
     }
 
-    override fun onAttachFragment(childFragment: Fragment) {
-        if (childFragment is NoAccountDialog) {
-            childFragment.setListener(this)
-        }
-    }
-
     override fun searchExpanded(menu: Menu) {
         menu.findItem(R.id.menuAddToken)?.isVisible = false
     }
@@ -81,9 +70,8 @@ class ManageWalletsFragment : CoinListBaseFragment(), NoAccountDialog.Listener {
         viewModel.disable(coin)
     }
 
-    override fun select(coin: Coin) {
-        NoAccountDialog.show(childFragmentManager, coin)
-        viewModel.onAddAccount(coin)
+    override fun edit(coin: Coin) {
+        viewModel.onClickSettings(coin)
     }
 
     // CoinListBaseFragment
@@ -93,23 +81,11 @@ class ManageWalletsFragment : CoinListBaseFragment(), NoAccountDialog.Listener {
     }
 
     override fun onCancelSelection() {
-        blockchainSettingsViewModel.onCancelSelect()
+        coinSettingsViewModel.onCancelSelect()
     }
 
-    override fun onSelect(index: Int) {
-        blockchainSettingsViewModel.onSelect(index)
-    }
-
-    // NoAccountDialog.Listener
-
-    override fun onClickRestoreKey(predefinedAccountType: PredefinedAccountType, coin: Coin) {
-        val arguments = Bundle(3).apply {
-            putParcelable(RestoreFragment.PREDEFINED_ACCOUNT_TYPE_KEY, predefinedAccountType)
-            putParcelable(RestoreFragment.COIN_TO_ENABLE, coin)
-            putBoolean(RestoreFragment.SELECT_COINS_KEY, false)
-        }
-
-        findNavController().navigate(R.id.manageWalletsFragment_to_restoreFragment, arguments, navOptions())
+    override fun onSelect(indexes: List<Int>) {
+        coinSettingsViewModel.onSelect(indexes)
     }
 
     private fun observe() {
@@ -117,40 +93,26 @@ class ManageWalletsFragment : CoinListBaseFragment(), NoAccountDialog.Listener {
             setViewState(state)
         })
 
-        blockchainSettingsViewModel.openBottomSelectorLiveEvent.observe(viewLifecycleOwner, Observer { config ->
+        viewModel.disableCoinLiveData.observe(viewLifecycleOwner) {
+            disableCoin(it)
+        }
+
+        coinSettingsViewModel.openBottomSelectorLiveEvent.observe(viewLifecycleOwner, Observer { config ->
             hideKeyboard()
             showBottomSelectorDialog(config)
         })
 
-        enableCoinsViewModel.confirmationLiveData.observe(viewLifecycleOwner, Observer { tokenType ->
-            activity?.let {
-                EnableCoinsDialog.show(it, tokenType, object: EnableCoinsDialog.Listener {
-                    override fun onClickEnable() {
-                        enableCoinsViewModel.onConfirmEnable()
-                    }
-                })
+        restoreSettingsViewModel.openBirthdayAlertSignal.observe(viewLifecycleOwner) {
+            val zcashBirhdayHeightDialog = ZcashBirthdayHeightDialog()
+            zcashBirhdayHeightDialog.onEnter = {
+                restoreSettingsViewModel.onEnter(it)
             }
-        })
+            zcashBirhdayHeightDialog.onCancel = {
+                restoreSettingsViewModel.onCancelEnterBirthdayHeight()
+            }
 
-        enableCoinsViewModel.hudStateLiveData.observe(viewLifecycleOwner, Observer { state ->
-            when (state) {
-                EnableCoinsViewModel.HudState.Hidden -> {
-                }
-                EnableCoinsViewModel.HudState.Loading -> {
-                    HudHelper.showInProcessMessage(requireView(), R.string.EnalbeToken_Enabling)
-                }
-                EnableCoinsViewModel.HudState.Error -> {
-                    HudHelper.showErrorMessage(requireView(), R.string.Error)
-                }
-                is EnableCoinsViewModel.HudState.Success -> {
-                    if (state.count == 0) {
-                        HudHelper.showSuccessMessage(requireView(), R.string.EnalbeToken_NoCoins)
-                    } else {
-                        HudHelper.showSuccessMessage(requireView(), getString(R.string.EnalbeToken_EnabledCoins, state.count))
-                    }
-                }
-            }
-        })
+            zcashBirhdayHeightDialog.show(requireActivity().supportFragmentManager, "ZcashBirhdayHeightDialog")
+        }
     }
 
     private fun showAddTokenDialog() {

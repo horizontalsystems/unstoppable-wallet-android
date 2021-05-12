@@ -13,6 +13,7 @@ import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.send.SendModule.AmountInfo
 import io.horizontalsystems.bankwallet.modules.swap.SwapModule
 import io.horizontalsystems.bankwallet.modules.swap.SwapViewItemHelper
+import io.horizontalsystems.bankwallet.ui.extensions.AmountInputView
 import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.coinkit.models.CoinType
 import io.reactivex.disposables.CompositeDisposable
@@ -45,8 +46,7 @@ class SwapCoinCardViewModel(
     private val balanceErrorLiveData = MutableLiveData(false)
     private val tokenCodeLiveData = MutableLiveData<String?>(null)
     private val isEstimatedLiveData = MutableLiveData(false)
-    private val switchEnabledLiveData = MutableLiveData(false)
-    private val prefixLiveData = MutableLiveData<String?>(null)
+    private val inputParamsLiveData = MutableLiveData<AmountInputView.InputParams>()
     private val secondaryInfoLiveData = MutableLiveData<String?>(null)
     private val maxEnabledLiveData = MutableLiveData(false)
 
@@ -56,8 +56,7 @@ class SwapCoinCardViewModel(
     fun balanceErrorLiveData(): LiveData<Boolean> = balanceErrorLiveData
     fun tokenCodeLiveData(): LiveData<String?> = tokenCodeLiveData
     fun isEstimatedLiveData(): LiveData<Boolean> = isEstimatedLiveData
-    fun switchEnabledLiveData(): LiveData<Boolean> = switchEnabledLiveData
-    fun prefixLiveData(): LiveData<String?> = prefixLiveData
+    fun inputParamsLiveData(): LiveData<AmountInputView.InputParams> = inputParamsLiveData
     fun secondaryInfoLiveData(): LiveData<String?> = secondaryInfoLiveData
     fun maxEnabledLiveData(): LiveData<Boolean> = maxEnabledLiveData
 
@@ -141,7 +140,7 @@ class SwapCoinCardViewModel(
 
         switchService.toggleAvailableObservable
                 .subscribeOn(Schedulers.io())
-                .subscribe { switchEnabledLiveData.postValue(it) }
+                .subscribe { updateInputFields() }
                 .let { disposables.add(it) }
     }
 
@@ -189,7 +188,7 @@ class SwapCoinCardViewModel(
     }
 
     private fun syncFullAmountInfo(fullAmountInfo: FiatService.FullAmountInfo?, force: Boolean = false, inputAmount: BigDecimal? = null) {
-        prefixLiveData.postValue(if (switchService.amountType == AmountType.Currency) fiatService.currency.symbol else null)
+        updateInputFields()
 
         if (fullAmountInfo == null) {
             if (!force && coinCardService.isEstimated) {
@@ -207,6 +206,14 @@ class SwapCoinCardViewModel(
 
             setCoinValueToService(fullAmountInfo.coinValue.value, force)
         }
+    }
+
+    private fun updateInputFields() {
+        val switchAvailable = switchService.toggleAvailable
+        val prefix = if (switchService.amountType == AmountType.Currency) fiatService.currency.symbol else null
+        val inputParams = AmountInputView.InputParams(switchService.amountType, prefix, switchAvailable)
+
+        inputParamsLiveData.postValue(inputParams)
     }
 
     private fun setCoinValueToService(coinAmount: BigDecimal?, force: Boolean) {

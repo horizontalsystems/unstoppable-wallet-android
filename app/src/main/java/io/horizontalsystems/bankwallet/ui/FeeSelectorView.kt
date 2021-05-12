@@ -119,6 +119,10 @@ class FeeSelectorView @JvmOverloads constructor(context: Context, attrs: Attribu
             setFeeSliderViewItem(it)
         })
 
+        sendFeeViewModel.warningOfStuckLiveData.observe(viewLifecycleOwner, {
+            warningOfStuck.isVisible = it
+        })
+
         onTxSpeedClickListener = {
             sendFeePriorityViewModel.openSelectPriority()
         }

@@ -1,2 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="io.horizontalsystems.core" />
+    package="io.horizontalsystems.core" >
+
+    <uses-permission android:name="android.permission.VIBRATE" />
+</manifest>

@@ -32,7 +32,7 @@ class BinanceKitManager(
         }
 
         if (kit == null) {
-            if (accountType !is AccountType.Mnemonic || accountType.words.size != 24)
+            if (accountType !is AccountType.Mnemonic)
                 throw UnsupportedAccountException()
 
             useCount = 0
@@ -50,7 +50,7 @@ class BinanceKitManager(
             BinanceChainKit.NetworkType.TestNet else
             BinanceChainKit.NetworkType.MainNet
 
-        val kit = BinanceChainKit.instance(App.instance, accountType.words, account.id, networkType)
+        val kit = BinanceChainKit.instance(App.instance, accountType.words, accountType.passphrase, account.id, networkType)
         kit.refresh()
 
         return kit

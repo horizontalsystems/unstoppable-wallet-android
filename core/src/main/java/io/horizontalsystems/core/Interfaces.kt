@@ -23,7 +23,6 @@ interface ICoreApp {
     var keyProvider: IKeyProvider
     var pinComponent: IPinComponent
     var pinStorage: IPinStorage
-    var themeStorage: IThemeStorage
     var thirdKeyboardStorage: IThirdKeyboard
     var instance: CoreApp
 }
@@ -36,7 +35,6 @@ interface IEncryptionManager {
 
 interface IBuildConfigProvider {
     val testMode: Boolean
-    val skipRootCheck: Boolean
 }
 
 interface ILanguageConfigProvider {
@@ -91,10 +89,6 @@ interface IPinStorage {
     var pin: String?
 
     fun clearPin()
-}
-
-interface IThemeStorage {
-    var isLightModeOn: Boolean
 }
 
 interface IThirdKeyboard {

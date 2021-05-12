@@ -33,7 +33,7 @@ class WalletConnectListFragment : BaseFragment(), SessionViewHolder.Listener {
         }
 
         newConnect.setOnSingleClickListener {
-            WalletConnectMainModule.start(this, R.id.walletConnectListFragment_to_walletConnectMainFragment, navOptions())
+            startNewConnection()
         }
 
         val walletConnectListAdapter = WalletConnectListAdapter(this)
@@ -43,10 +43,18 @@ class WalletConnectListFragment : BaseFragment(), SessionViewHolder.Listener {
             walletConnectListAdapter.items = viewItems
             walletConnectListAdapter.notifyDataSetChanged()
         })
+
+        viewModel.startNewConnectionEvent.observe(viewLifecycleOwner, {
+            startNewConnection()
+        })
+    }
+
+    private fun startNewConnection() {
+        WalletConnectMainModule.start(this, R.id.walletConnectListFragment_to_walletConnectMainFragment, navOptions(), viewModel.getSessionsCount())
     }
 
     override fun onSessionClick(session: WalletConnectViewItem.Session) {
-        WalletConnectMainModule.start(this, R.id.walletConnectListFragment_to_walletConnectMainFragment, navOptions(), session.session.remotePeerId)
+        WalletConnectMainModule.start(this, R.id.walletConnectListFragment_to_walletConnectMainFragment, navOptions(), remotePeerId = session.session.remotePeerId)
     }
 }
 
@@ -94,7 +102,6 @@ class AccountViewHolder(override val containerView: View) : RecyclerView.ViewHol
 
     fun bind(account: WalletConnectViewItem.Account) {
         accountTextView.text = account.title
-        addressTextView.text = account.address
     }
 
     companion object {

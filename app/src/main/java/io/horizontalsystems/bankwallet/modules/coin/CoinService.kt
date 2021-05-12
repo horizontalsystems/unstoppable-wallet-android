@@ -18,7 +18,6 @@ class CoinService(
         private val chartTypeStorage: IChartTypeStorage,
         private val priceAlertManager: IPriceAlertManager,
         private val notificationManager: INotificationManager,
-        private val localStorage: ILocalStorage,
         private val marketFavoritesManager: MarketFavoritesManager,
         guidesBaseUrl: String
 ) : Clearable {
@@ -34,15 +33,14 @@ class CoinService(
     val chartInfoErrorObservable: BehaviorSubject<Throwable> = BehaviorSubject.create()
     val coinDetailsStateObservable: BehaviorSubject<CoinDetailsState> = BehaviorSubject.createDefault(CoinDetailsState.Loading)
     val alertNotificationUpdatedObservable: BehaviorSubject<Unit> = BehaviorSubject.createDefault(Unit)
-    val notificationSupported: Boolean
-        get() {
-            return priceAlertManager.notificationCode(coinType) != null
-        }
 
     val hasPriceAlert: Boolean
         get() {
             return priceAlertManager.hasPriceAlert(coinType)
         }
+
+    val notificationsAreEnabled: Boolean
+        get() = notificationManager.enabled
 
     var coinMarketDetails: CoinMarketDetails? = null
 
@@ -96,9 +94,6 @@ class CoinService(
                     disposables.add(it)
                 }
     }
-
-    val notificationsAreEnabled: Boolean
-        get() = notificationManager.isEnabled && localStorage.isAlertNotificationOn
 
     var chartType: ChartType
         get() = chartTypeStorage.chartType ?: ChartType.TODAY

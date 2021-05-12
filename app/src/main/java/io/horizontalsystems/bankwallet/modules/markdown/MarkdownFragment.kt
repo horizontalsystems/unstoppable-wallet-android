@@ -15,7 +15,7 @@ import kotlinx.android.synthetic.main.fragment_markdown.*
 
 class MarkdownFragment : BaseFragment(), MarkdownContentAdapter.Listener {
 
-    private val contentAdapter = MarkdownContentAdapter(this)
+    private lateinit var contentAdapter: MarkdownContentAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.fragment_markdown, container, false)
@@ -23,15 +23,32 @@ class MarkdownFragment : BaseFragment(), MarkdownContentAdapter.Listener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        toolbar.title = ""
-        toolbar.setNavigationOnClickListener {
-            findNavController().popBackStack()
+
+        if (arguments?.getBoolean(showAsClosablePopupKey) == true){
+            toolbar.inflateMenu(R.menu.markdown_viewer_menu)
+            toolbar.setOnMenuItemClickListener { item ->
+                when (item.itemId) {
+                    R.id.closeButton -> {
+                        findNavController().popBackStack()
+                        true
+                    }
+                    else -> false
+                }
+            }
+        } else {
+            toolbar.setNavigationIcon(R.drawable.ic_back)
+            toolbar.setNavigationOnClickListener {
+                findNavController().popBackStack()
+            }
         }
 
-        rvBlocks.adapter = contentAdapter
-
+        val handleRelativeUrl = arguments?.getBoolean(handleRelativeUrlKey) ?: false
         val markdownUrl = arguments?.getString(markdownUrlKey)
-        val viewModel by viewModels<MarkdownViewModel> { MarkdownModule.Factory(markdownUrl) }
+        val gitReleaseUrl = arguments?.getString(gitReleaseNotesUrlKey)
+        val viewModel by viewModels<MarkdownViewModel> { MarkdownModule.Factory(markdownUrl, gitReleaseUrl) }
+
+        contentAdapter = MarkdownContentAdapter(this, handleRelativeUrl)
+        rvBlocks.adapter = contentAdapter
 
         observe(viewModel)
     }
@@ -54,5 +71,8 @@ class MarkdownFragment : BaseFragment(), MarkdownContentAdapter.Listener {
 
     companion object {
         const val markdownUrlKey = "urlKey"
+        const val handleRelativeUrlKey = "handleRelativeUrlKey"
+        const val gitReleaseNotesUrlKey = "gitReleaseNotesUrlKey"
+        const val showAsClosablePopupKey = "showAsClosablePopupKey"
     }
 }

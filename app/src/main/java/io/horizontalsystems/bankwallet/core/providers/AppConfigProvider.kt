@@ -13,12 +13,10 @@ class AppConfigProvider : IAppConfigProvider, ILanguageConfigProvider, IBuildCon
     override val companyWebPageLink: String = "https://horizontalsystems.io"
     override val appWebPageLink: String = "https://unstoppable.money"
     override val appGithubLink: String = "https://github.com/horizontalsystems/unstoppable-wallet-android"
-    override val companyTwitterLink: String = "https://twitter.com/UnstoppableByHS"
-    override val companyTelegramLink: String = "https://t.me/unstoppable_announcements"
-    override val companyRedditLink: String = "https://reddit.com/r/UNSTOPPABLEWallet/"
-    override val reportEmail = "unstoppable.support@protonmail.com"
-    override val walletHelpTelegramGroup = "UnstoppableWallet"
+    override val reportEmail = "support.unstoppable@protonmail.com"
     override val btcCoreRpcUrl: String = "https://btc.horizontalsystems.xyz/rpc"
+    override val notificationUrl: String = "https://pns-dev.horizontalsystems.xyz/api/v1/pns/"
+    override val releaseNotesUrl: String = "https://api.github.com/repos/horizontalsystems/unstoppable-wallet-android/releases/tags/"
 
     override val cryptoCompareApiKey by lazy {
         Translator.getString(R.string.cryptoCompareApiKey)
@@ -47,10 +45,19 @@ class AppConfigProvider : IAppConfigProvider, ILanguageConfigProvider, IBuildCon
     override val feeRateAdjustForCurrencies: List<String> = listOf("USD", "EUR")
 
     override val currencies: List<Currency> = listOf(
-            Currency(code = "USD", symbol = "\u0024", decimal = 2),
-            Currency(code = "EUR", symbol = "\u20AC", decimal = 2),
-            Currency(code = "GBP", symbol = "\u00A3", decimal = 2),
-            Currency(code = "JPY", symbol = "\u00A5", decimal = 2)
+            Currency("AUD", "A$", 2),
+            Currency("BRL", "R$", 2),
+            Currency("CAD", "C$", 2),
+            Currency("CHF", "₣", 2),
+            Currency("CNY", "¥", 2),
+            Currency("EUR", "€", 2),
+            Currency("GBP", "£", 2),
+            Currency("HKD", "HK$", 2),
+            Currency("ILS", "₪", 2),
+            Currency("JPY", "¥", 2),
+            Currency("RUB", "₽", 2),
+            Currency("SGD", "S$", 2),
+            Currency("USD", "$", 2),
     )
     override val featuredCoinTypes: List<CoinType> = listOf(
             CoinType.Bitcoin,
@@ -71,7 +78,5 @@ class AppConfigProvider : IAppConfigProvider, ILanguageConfigProvider, IBuildCon
     //  IBuildConfigProvider
 
     override val testMode: Boolean = BuildConfig.testMode
-
-    override val skipRootCheck: Boolean = BuildConfig.skipRootCheck
 
 }

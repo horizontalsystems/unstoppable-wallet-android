@@ -1,14 +1,12 @@
 package io.horizontalsystems.bankwallet.ui.extensions
 
 import android.content.Context
-import android.content.DialogInterface
 import android.os.Bundle
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import kotlinx.android.extensions.LayoutContainer
@@ -31,7 +29,6 @@ class SelectorDialog : DialogFragment(), SelectorAdapter.Listener {
         val dialogTitle = view.findViewById<TextView>(R.id.dialogTitle)
 
         recyclerView.adapter = SelectorAdapter(items, this, title != null)
-        recyclerView.layoutManager = LinearLayoutManager(context)
 
         dialogTitle.isVisible = title != null
         dialogTitle.text = title

@@ -19,7 +19,7 @@ class NotificationsViewModel(
         private val localStorage: ILocalStorage) : ViewModel() {
 
     private val viewItems = mutableListOf<NotificationViewItem>()
-    private val portfolioCoins = walletManager.wallets.map { it.coin }
+    private val portfolioCoins = walletManager.wallets.map { it.coin }.distinct()
     private var disposable: Disposable? = null
 
     val itemsLiveData = MutableLiveData<List<NotificationViewItem>>()
@@ -58,7 +58,7 @@ class NotificationsViewModel(
 
     fun onResume() {
         updateControlsVisibility()
-        setWarningVisible.postValue(!notificationManager.isEnabled)
+        setWarningVisible.postValue(!notificationManager.enabledInPhone)
     }
 
     fun switchAlertNotification(checked: Boolean) {
@@ -82,32 +82,29 @@ class NotificationsViewModel(
     }
 
     private fun updateControlsVisibility() {
-        controlsVisible.postValue(notificationManager.isEnabled && localStorage.isAlertNotificationOn)
+        controlsVisible.postValue(notificationManager.enabled)
     }
 
     private fun loadAlerts() {
         viewItems.clear()
 
-        val priceAlerts = priceAlertManager.getPriceAlerts()
+        val priceAlerts = priceAlertManager.getPriceAlerts().toMutableList()
 
         //list portfolio coins with Notification support
         portfolioCoins
-                .filter { priceAlertManager.notificationCode(it.type) != null }
                 .sortedBy { it.title }
                 .forEach { coin ->
-            val priceAlert = priceAlerts.firstOrNull { it.coinType == coin.type }
-            if (priceAlert != null){
-                priceAlerts.minus(priceAlert)
-            }
-            viewItems.addAll(getPriceAlertViewItems(coin.title, coin.type, priceAlert))
-        }
+                    val priceAlert = priceAlerts.firstOrNull { it.coinType == coin.type }
+                    priceAlerts.removeIf { it.coinType == coin.type }
+                    viewItems.addAll(getPriceAlertViewItems(coin.title, coin.type, priceAlert))
+                }
 
         //price alerts for Non portfolio coins
         priceAlerts
                 .sortedBy { it.coinName }
                 .forEach { priceAlert ->
-            viewItems.addAll(getPriceAlertViewItems(priceAlert.coinName, priceAlert.coinType, priceAlert))
-        }
+                    viewItems.addAll(getPriceAlertViewItems(priceAlert.coinName, priceAlert.coinType, priceAlert))
+                }
 
         val deactivateAllButtonEnabled = priceAlerts.any { it.trendState != PriceAlert.TrendState.OFF || it.changeState != PriceAlert.ChangeState.OFF }
 

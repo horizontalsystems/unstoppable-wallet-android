@@ -4,7 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.bankwallet.entities.Account
+import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.entities.Currency
@@ -15,12 +16,12 @@ import java.math.BigDecimal
 object BalanceModule {
 
     interface IView {
+        fun setTitle(v: String?)
         fun set(viewItems: List<BalanceViewItem>)
         fun set(headerViewItem: BalanceHeaderViewItem)
-        fun set(sortIsOn: Boolean)
-        fun showBackupRequired(coin: Coin, predefinedAccountType: PredefinedAccountType)
+        fun showBackupRequired(wallet: Wallet)
         fun didRefresh()
-        fun setBalanceHidden(hidden: Boolean, animate: Boolean)
+        fun hideBalance()
         fun showSyncErrorDialog(wallet: Wallet, errorMessage: String, sourceChangeable: Boolean)
         fun showNetworkNotAvailable()
     }
@@ -39,14 +40,12 @@ object BalanceModule {
 
         fun onSortTypeChange(sortType: BalanceSortType)
         fun onSortClick()
-        fun onBackupClick()
 
         fun onClear()
 
         fun onResume()
         fun onPause()
-        fun onHideBalanceClick()
-        fun onShowBalanceClick()
+        fun onBalanceClick()
         fun onSyncErrorClick(viewItem: BalanceViewItem)
         fun onReportClick(errorMessage: String)
         fun refreshByWallet(wallet: Wallet)
@@ -54,6 +53,7 @@ object BalanceModule {
 
     interface IInteractor {
         val reportEmail: String
+        val activeAccount: Account?
         val wallets: List<Wallet>
         val baseCurrency: Currency
         val sortType: BalanceSortType
@@ -70,10 +70,9 @@ object BalanceModule {
         fun subscribeToBaseCurrency()
         fun subscribeToAdapters(wallets: List<Wallet>)
 
-        fun subscribeToMarketInfo(currencyCode: String)
+        fun subscribeToMarketInfo(coins: List<Coin>, currencyCode: String)
 
-        fun refresh()
-        fun predefinedAccountType(wallet: Wallet): PredefinedAccountType?
+        fun refresh(currencyCode: String)
 
         fun saveSortType(sortType: BalanceSortType)
 
@@ -94,6 +93,7 @@ object BalanceModule {
         fun didUpdateLatestRate(latestRate: Map<CoinType, LatestRate>)
 
         fun didRefresh()
+        fun didUpdateActiveAccount(account: Account?)
     }
 
     interface IRouter {
@@ -102,7 +102,6 @@ object BalanceModule {
         fun openSwap(wallet: Wallet)
         fun openManageCoins()
         fun openSortTypeDialog(sortingType: BalanceSortType)
-        fun openBackup(account: Account, coinCodesStringRes: Int)
         fun openChart(coin: Coin)
         fun openEmail(emailAddress: String, errorMessage: String)
     }
@@ -143,12 +142,14 @@ object BalanceModule {
                     App.currencyManager,
                     App.localStorage,
                     App.xRateManager,
-                    App.predefinedAccountTypeManager,
+                    App.accountManager,
                     App.rateAppManager,
                     App.connectivityManager,
-                    App.appConfigProvider)
+                    App.appConfigProvider,
+                    App.feeCoinProvider,
+            )
 
-            val presenter = BalancePresenter(interactor, viewAndRouter, BalanceSorter(), App.predefinedAccountTypeManager, BalanceViewItemFactory())
+            val presenter = BalancePresenter(interactor, viewAndRouter, BalanceSorter(), BalanceViewItemFactory())
 
             presenter.view = viewAndRouter
             interactor.delegate = presenter

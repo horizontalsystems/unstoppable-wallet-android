@@ -6,12 +6,13 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.NotificationManagerCompat
 import androidx.preference.PreferenceManager
-import com.google.firebase.FirebaseApp
 import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.core.factories.AccountFactory
 import io.horizontalsystems.bankwallet.core.factories.AdapterFactory
 import io.horizontalsystems.bankwallet.core.factories.AddressParserFactory
 import io.horizontalsystems.bankwallet.core.managers.*
+import io.horizontalsystems.bankwallet.core.notifications.NotificationNetworkWrapper
+import io.horizontalsystems.bankwallet.core.notifications.NotificationWorker
 import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.bankwallet.core.providers.FeeCoinProvider
 import io.horizontalsystems.bankwallet.core.providers.FeeRateProvider
@@ -19,6 +20,7 @@ import io.horizontalsystems.bankwallet.core.storage.*
 import io.horizontalsystems.bankwallet.modules.keystore.KeyStoreActivity
 import io.horizontalsystems.bankwallet.modules.launcher.LauncherActivity
 import io.horizontalsystems.bankwallet.modules.lockscreen.LockScreenActivity
+import io.horizontalsystems.bankwallet.modules.settings.theme.ThemeType
 import io.horizontalsystems.bankwallet.modules.tor.TorConnectionActivity
 import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectSessionManager
@@ -44,6 +46,7 @@ class App : CoreApp() {
         lateinit var marketStorage: IMarketStorage
         lateinit var torKitManager: ITorManager
         lateinit var chartTypeStorage: IChartTypeStorage
+        lateinit var restoreSettingsStorage: IRestoreSettingsStorage
 
         lateinit var wordsManager: WordsManager
         lateinit var networkManager: INetworkManager
@@ -53,9 +56,8 @@ class App : CoreApp() {
         lateinit var walletManager: IWalletManager
         lateinit var walletStorage: IWalletStorage
         lateinit var accountManager: IAccountManager
+        lateinit var accountFactory: IAccountFactory
         lateinit var backupManager: IBackupManager
-        lateinit var accountCreator: IAccountCreator
-        lateinit var predefinedAccountTypeManager: IPredefinedAccountTypeManager
 
         lateinit var xRateManager: IRateManager
         lateinit var connectivityManager: ConnectivityManager
@@ -70,8 +72,8 @@ class App : CoreApp() {
         lateinit var numberFormatter: IAppNumberFormatter
         lateinit var addressParserFactory: AddressParserFactory
         lateinit var feeCoinProvider: FeeCoinProvider
+        lateinit var notificationNetworkWrapper: NotificationNetworkWrapper
         lateinit var notificationManager: INotificationManager
-        lateinit var appVersionManager: AppVersionManager
         lateinit var ethereumRpcModeSettingsManager: IEthereumRpcModeSettingsManager
         lateinit var initialSyncModeSettingsManager: IInitialSyncModeSettingsManager
         lateinit var derivationSettingsManager: IDerivationSettingsManager
@@ -84,10 +86,11 @@ class App : CoreApp() {
         lateinit var walletConnectManager: WalletConnectManager
         lateinit var notificationSubscriptionManager: INotificationSubscriptionManager
         lateinit var termsManager: ITermsManager
-        lateinit var zcashBirthdayProvider: ZcashBirthdayProvider
         lateinit var marketFavoritesManager: MarketFavoritesManager
         lateinit var coinKit: CoinKit
         lateinit var activateCoinManager: ActivateCoinManager
+        lateinit var releaseNotesManager: ReleaseNotesManager
+        lateinit var restoreSettingsManager: RestoreSettingsManager
     }
 
     override fun onCreate() {
@@ -123,6 +126,7 @@ class App : CoreApp() {
 
         appDatabase = AppDatabase.getInstance(this)
         accountsStorage = AccountsStorage(appDatabase)
+        restoreSettingsStorage = RestoreSettingsStorage(appDatabase)
 
         AppLog.logsDao = appDatabase.logsDao()
 
@@ -137,7 +141,6 @@ class App : CoreApp() {
             chartTypeStorage = this
             pinStorage = this
             thirdKeyboardStorage = this
-            themeStorage = this
             marketStorage = this
         }
 
@@ -147,11 +150,9 @@ class App : CoreApp() {
         networkManager = NetworkManager()
         accountCleaner = AccountCleaner(buildConfigProvider.testMode)
         accountManager = AccountManager(accountsStorage, accountCleaner)
+        accountFactory = AccountFactory(accountManager)
         backupManager = BackupManager(accountManager)
         walletManager = WalletManager(accountManager, walletStorage)
-        zcashBirthdayProvider = ZcashBirthdayProvider(this)
-        accountCreator = AccountCreator(AccountFactory(), wordsManager, zcashBirthdayProvider)
-        predefinedAccountTypeManager = PredefinedAccountTypeManager(accountManager, accountCreator)
 
         KeyStoreManager("MASTER_KEY", KeyStoreCleaner(localStorage, accountManager, walletManager)).apply {
             keyStoreManager = this
@@ -168,7 +169,10 @@ class App : CoreApp() {
 
         connectivityManager = ConnectivityManager(backgroundManager)
 
-        val adapterFactory = AdapterFactory(instance, buildConfigProvider.testMode, ethereumKitManager, binanceSmartChainKitManager, binanceKitManager, backgroundManager)
+        val zcashBirthdayProvider = ZcashBirthdayProvider(this)
+        restoreSettingsManager = RestoreSettingsManager(restoreSettingsStorage, zcashBirthdayProvider)
+
+        val adapterFactory = AdapterFactory(instance, buildConfigProvider.testMode, ethereumKitManager, binanceSmartChainKitManager, binanceKitManager, backgroundManager, restoreSettingsManager)
         adapterManager = AdapterManager(walletManager, adapterFactory, ethereumKitManager, binanceSmartChainKitManager, binanceKitManager)
 
         initialSyncModeSettingsManager = InitialSyncSettingsManager(coinManager, blockchainSettingsStorage, adapterManager, walletManager)
@@ -177,24 +181,20 @@ class App : CoreApp() {
         bitcoinCashCoinTypeManager = BitcoinCashCoinTypeManager(walletManager, adapterManager, blockchainSettingsStorage)
 
         adapterFactory.initialSyncModeSettingsManager = initialSyncModeSettingsManager
-        adapterFactory.derivationSettingsManager = derivationSettingsManager
         adapterFactory.ethereumRpcModeSettingsManager = ethereumRpcModeSettingsManager
-        adapterFactory.bitcoinCashCoinTypeManager = bitcoinCashCoinTypeManager
 
         feeCoinProvider = FeeCoinProvider(coinKit)
-        xRateManager = RateManager(this, walletManager, currencyManager, feeCoinProvider, appConfigProvider)
+        xRateManager = RateManager(this, currencyManager, appConfigProvider)
 
         addressParserFactory = AddressParserFactory()
 
-        notificationManager = NotificationManager(NotificationManagerCompat.from(this)).apply {
+        notificationNetworkWrapper = NotificationNetworkWrapper(localStorage, networkManager, appConfigProvider)
+        notificationManager = NotificationManager(NotificationManagerCompat.from(this), localStorage).apply {
             backgroundManager.registerListener(this)
         }
-        notificationSubscriptionManager = NotificationSubscriptionManager(appDatabase)
-        priceAlertManager = PriceAlertManager(appDatabase, notificationSubscriptionManager, xRateManager)
+        notificationSubscriptionManager = NotificationSubscriptionManager(appDatabase, notificationNetworkWrapper)
+        priceAlertManager = PriceAlertManager(appDatabase, notificationSubscriptionManager, notificationManager, localStorage, notificationNetworkWrapper, backgroundManager)
 
-        appVersionManager = AppVersionManager(systemInfoManager, localStorage).apply {
-            backgroundManager.registerListener(this)
-        }
         pinComponent = PinComponent(
                 pinStorage = pinStorage,
                 encryptionManager = encryptionManager,
@@ -213,7 +213,7 @@ class App : CoreApp() {
         rateAppManager = RateAppManager(walletManager, adapterManager, localStorage)
         walletConnectSessionStorage = WalletConnectSessionStorage(appDatabase)
         walletConnectSessionManager = WalletConnectSessionManager(walletConnectSessionStorage, accountManager)
-        walletConnectManager = WalletConnectManager(predefinedAccountTypeManager, ethereumKitManager, binanceSmartChainKitManager)
+        walletConnectManager = WalletConnectManager(accountManager, ethereumKitManager, binanceSmartChainKitManager)
 
         termsManager = TermsManager(localStorage)
 
@@ -221,19 +221,27 @@ class App : CoreApp() {
 
         activateCoinManager = ActivateCoinManager(coinKit, walletManager, accountManager)
 
-        val nightMode = if (CoreApp.themeStorage.isLightModeOn)
-            AppCompatDelegate.MODE_NIGHT_NO else
-            AppCompatDelegate.MODE_NIGHT_YES
+        releaseNotesManager = ReleaseNotesManager(systemInfoManager, localStorage, appConfigProvider)
+
+        setAppTheme()
+
+        registerActivityLifecycleCallbacks(ActivityLifecycleCallbacks(torKitManager))
+
+        startTasks()
+
+        NotificationWorker.startPeriodicWorker(instance)
+    }
+
+    private fun setAppTheme() {
+        val nightMode = when (localStorage.currentTheme) {
+            ThemeType.Light -> AppCompatDelegate.MODE_NIGHT_NO
+            ThemeType.Dark -> AppCompatDelegate.MODE_NIGHT_YES
+            ThemeType.System -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+        }
 
         if (AppCompatDelegate.getDefaultNightMode() != nightMode) {
             AppCompatDelegate.setDefaultNightMode(nightMode)
         }
-
-        registerActivityLifecycleCallbacks(ActivityLifecycleCallbacks(torKitManager))
-
-        startManagers()
-
-        FirebaseApp.initializeApp(this)
     }
 
     override fun onTrimMemory(level: Int) {
@@ -274,7 +282,7 @@ class App : CoreApp() {
         localeAwareContext(this)
     }
 
-    private fun startManagers() {
+    private fun startTasks() {
         Thread(Runnable {
             rateAppManager.onAppLaunch()
             accountManager.loadAccounts()
@@ -282,6 +290,9 @@ class App : CoreApp() {
             adapterManager.preloadAdapters()
             accountManager.clearAccounts()
             notificationSubscriptionManager.processJobs()
+
+            AppVersionManager(systemInfoManager, localStorage).apply { storeAppVersion() }
+
         }).start()
 
         rateAppManager.onAppBecomeActive()

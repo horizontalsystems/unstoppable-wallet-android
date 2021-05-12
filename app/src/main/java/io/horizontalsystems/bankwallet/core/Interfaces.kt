@@ -9,6 +9,7 @@ import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
 import io.horizontalsystems.bankwallet.modules.market.MarketModule
 import io.horizontalsystems.bankwallet.modules.send.SendModule
+import io.horizontalsystems.bankwallet.modules.settings.theme.ThemeType
 import io.horizontalsystems.binancechainkit.BinanceChainKit
 import io.horizontalsystems.bitcoincore.core.IPluginData
 import io.horizontalsystems.coinkit.models.Coin
@@ -23,6 +24,7 @@ import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.subjects.Subject
+import retrofit2.Response
 import java.math.BigDecimal
 import java.math.BigInteger
 import java.util.*
@@ -31,7 +33,6 @@ interface IAdapterManager {
     val adaptersReadyObservable: Flowable<Unit>
     fun preloadAdapters()
     fun refresh()
-    fun stopKits()
     fun getAdapterForWallet(wallet: Wallet): IAdapter?
     fun getAdapterForCoin(coin: Coin): IAdapter?
     fun getTransactionsAdapterForWallet(wallet: Wallet): ITransactionsAdapter?
@@ -65,6 +66,11 @@ interface ILocalStorage {
     var balanceHidden: Boolean
     var checkedTerms: List<Term>
     var mainShowedOnce: Boolean
+    var notificationId: String?
+    var notificationServerTime: Long
+    var currentTheme: ThemeType
+    var changelogShownForAppVersion: String?
+    var ignoreRootedDeviceWarning: Boolean
 
     fun clear()
 }
@@ -73,17 +79,27 @@ interface IChartTypeStorage {
     var chartType: ChartType?
 }
 
+interface IRestoreSettingsStorage {
+    fun restoreSettings(accountId: String, coinId: String): List<RestoreSettingRecord>
+    fun restoreSettings(accountId: String): List<RestoreSettingRecord>
+    fun save(restoreSettingRecords: List<RestoreSettingRecord>)
+    fun deleteAllRestoreSettings(accountId: String)
+}
+
 interface IMarketStorage {
     var currentTab: MarketModule.Tab?
 }
 
 interface IAccountManager {
+    val activeAccount: Account?
+    val activeAccountObservable: Flowable<Optional<Account>>
     val isAccountsEmpty: Boolean
     val accounts: List<Account>
     val accountsFlowable: Flowable<List<Account>>
     val accountsDeletedFlowable: Flowable<Unit>
 
-    fun account(coinType: CoinType): Account?
+    fun setActiveAccountId(activeAccountId: String?)
+    fun account(id: String): Account?
     fun loadAccounts()
     fun save(account: Account)
     fun update(account: Account)
@@ -98,27 +114,15 @@ interface IBackupManager {
     fun setIsBackedUp(id: String)
 }
 
-interface IAccountCreator {
-    fun newAccount(predefinedAccountType: PredefinedAccountType): Account
-    fun restoredAccount(accountType: AccountType): Account
-}
-
 interface IAccountFactory {
     fun account(type: AccountType, origin: AccountOrigin, backedUp: Boolean): Account
 }
 
 interface IWalletStorage {
     fun wallets(accounts: List<Account>): List<Wallet>
-    fun enabledCoins(): List<Coin>
+    fun wallets(account: Account): List<Wallet>
     fun save(wallets: List<Wallet>)
     fun delete(wallets: List<Wallet>)
-    fun wallet(account: Account, coin: Coin): Wallet?
-}
-
-interface IPredefinedAccountTypeManager {
-    val allTypes: List<PredefinedAccountType>
-    fun account(predefinedAccountType: PredefinedAccountType): Account?
-    fun predefinedAccountType(type: AccountType): PredefinedAccountType?
 }
 
 interface IRandomProvider {
@@ -126,11 +130,16 @@ interface IRandomProvider {
 }
 
 interface INetworkManager {
-    fun getGuide(host: String, path: String): Single<String>
+    fun getMarkdown(host: String, path: String): Single<String>
+    fun getReleaseNotes(host: String, path: String): Single<JsonObject>
     fun getTransaction(host: String, path: String, isSafeCall: Boolean): Flowable<JsonObject>
     fun getTransactionWithPost(host: String, path: String, body: Map<String, Any>): Flowable<JsonObject>
     fun ping(host: String, url: String, isSafeCall: Boolean): Flowable<Any>
     fun getEvmInfo(host: String, path: String): Single<JsonObject>
+
+    suspend fun subscribe(host: String, path: String, body: String): JsonObject
+    suspend fun unsubscribe(host: String, path: String, body: String): JsonObject
+    suspend fun getNotifications(host: String, path: String): Response<JsonObject>
 }
 
 interface IClipboardManager {
@@ -186,7 +195,6 @@ interface IBalanceAdapter {
 
 interface IReceiveAdapter {
     val receiveAddress: String
-    fun getReceiveAddressType(wallet: Wallet): String?
 }
 
 interface ISendBitcoinAdapter {
@@ -251,15 +259,13 @@ interface IAppConfigProvider {
     val companyWebPageLink: String
     val appWebPageLink: String
     val appGithubLink: String
-    val companyTwitterLink: String
-    val companyTelegramLink: String
-    val companyRedditLink: String
     val reportEmail: String
-    val walletHelpTelegramGroup: String
     val cryptoCompareApiKey: String
     val infuraProjectId: String
     val infuraProjectSecret: String
     val btcCoreRpcUrl: String
+    val notificationUrl: String
+    val releaseNotesUrl: String
     val etherscanApiKey: String
     val bscscanApiKey: String
     val guidesUrl: String
@@ -272,28 +278,31 @@ interface IAppConfigProvider {
 }
 
 interface IRateManager {
-    fun set(coins: List<Coin>)
     fun latestRate(coinType: CoinType, currencyCode: String): LatestRate?
     fun getLatestRate(coinType: CoinType, currencyCode: String): BigDecimal?
     fun latestRateObservable(coinType: CoinType, currencyCode: String): Observable<LatestRate>
-    fun latestRateObservable(currencyCode: String): Observable<Map<CoinType, LatestRate>>
+    fun latestRateObservable(coinTypes: List<CoinType>, currencyCode: String): Observable<Map<CoinType, LatestRate>>
     fun historicalRateCached(coinType: CoinType, currencyCode: String, timestamp: Long): BigDecimal?
     fun historicalRate(coinType: CoinType, currencyCode: String, timestamp: Long): Single<BigDecimal>
     fun chartInfo(coinType: CoinType, currencyCode: String, chartType: ChartType): ChartInfo?
     fun chartInfoObservable(coinType: CoinType, currencyCode: String, chartType: ChartType): Observable<ChartInfo>
     fun coinMarketDetailsAsync(coinType: CoinType, currencyCode: String, rateDiffCoinCodes: List<String>, rateDiffPeriods: List<TimePeriod>): Single<CoinMarketDetails>
-    fun getCryptoNews(coinCode: String): Single<List<CryptoNews>>
     fun getTopMarketList(currency: String, itemsCount: Int, diffPeriod: TimePeriod): Single<List<CoinMarket>>
     fun getCoinMarketList(coinTypes: List<CoinType>, currency: String): Single<List<CoinMarket>>
     fun getCoinMarketListByCategory(categoryId: String, currency: String): Single<List<CoinMarket>>
     fun getCoinRatingsAsync(): Single<Map<CoinType, String>>
     fun getGlobalMarketInfoAsync(currency: String): Single<GlobalCoinMarket>
+    fun getGlobalCoinMarketPointsAsync(currencyCode: String, timePeriod: TimePeriod): Single<List<GlobalCoinMarketPoint>>
     fun searchCoins(searchText: String): List<CoinData>
     fun getNotificationCoinCode(coinType: CoinType): String?
-    fun refresh()
+    fun topDefiTvl(currencyCode: String, fetchDiffPeriod: TimePeriod, itemsCount: Int) : Single<List<DefiTvl>>
+    fun defiTvlPoints(coinType: CoinType, currencyCode: String, fetchDiffPeriod: TimePeriod) : Single<List<DefiTvlPoint>>
+    fun getCryptoNews(timestamp: Long? = null): Single<List<CryptoNews>>
+    fun refresh(currencyCode: String)
 }
 
 interface IAccountsStorage {
+    var activeAccountId: String?
     val isAccountsEmpty: Boolean
 
     fun allAccounts(): List<Account>
@@ -307,13 +316,15 @@ interface IAccountsStorage {
 }
 
 interface INotificationManager {
-    val isEnabled: Boolean
+    val enabledInPhone: Boolean
+    val enabled: Boolean
     fun clear()
     fun show(notification: AlertNotification)
 }
 
 interface IEnabledWalletStorage {
     val enabledWallets: List<EnabledWallet>
+    fun enabledWallets(accountId: String): List<EnabledWallet>
     fun save(enabledWallets: List<EnabledWallet>)
     fun delete(enabledWallets: List<EnabledWallet>)
     fun deleteAll()
@@ -331,15 +342,19 @@ interface IBlockchainSettingsStorage {
 }
 
 interface IWalletManager {
+    val activeWallets: List<Wallet>
+    val activeWalletsUpdatedObservable: Observable<List<Wallet>>
+
     val wallets: List<Wallet>
     val walletsUpdatedObservable: Observable<List<Wallet>>
-    fun wallet(coin: Coin): Wallet?
 
     fun loadWallets()
     fun enable(wallets: List<Wallet>)
     fun save(wallets: List<Wallet>)
     fun delete(wallets: List<Wallet>)
     fun clear()
+    fun handle(newWallets: List<Wallet>, deletedWallets: List<Wallet>)
+    fun getWallets(account: Account): List<Wallet>
 }
 
 interface IAppNumberFormatter {
@@ -415,11 +430,11 @@ interface IRateAppManager {
 }
 
 interface ICoinManager {
-    val coinAddedObservable: Flowable<Coin>
+    val coinAddedObservable: Flowable<List<Coin>>
     val coins: List<Coin>
     val groupedCoins: Pair<List<Coin>, List<Coin>>
     fun getCoin(coinType: CoinType): Coin?
-    fun save(coin: Coin)
+    fun save(coins: List<Coin>)
 }
 
 interface IAddTokenBlockchainService {
@@ -431,7 +446,6 @@ interface IAddTokenBlockchainService {
 
 interface IPriceAlertManager {
     val notificationChangedFlowable: Flowable<Unit>
-    fun notificationCode(coinType: CoinType): String?
     fun getPriceAlerts(): List<PriceAlert>
     fun savePriceAlert(coinType: CoinType, coinName: String, changeState: PriceAlert.ChangeState, trendState: PriceAlert.TrendState)
     fun getAlertStates(coinType: CoinType): Pair<PriceAlert.ChangeState, PriceAlert.TrendState>
@@ -439,7 +453,8 @@ interface IPriceAlertManager {
     fun deactivateAllNotifications()
     fun enablePriceAlerts()
     fun disablePriceAlerts()
-    fun deleteAlertsByAccountType(accountType: AccountType)
+
+    suspend fun fetchNotifications()
 }
 
 interface INotificationSubscriptionManager {

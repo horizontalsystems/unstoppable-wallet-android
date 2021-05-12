@@ -34,11 +34,10 @@ class MarketOverviewItemsAdapter(
 
     override fun onBindViewHolder(holder: ViewHolderMarketOverviewItem, position: Int) = Unit
 
-    private fun getListPosition(position: Int): ListPosition = when (position) {
-        0 -> ListPosition.First
-        1 -> ListPosition.Middle
-        2 -> ListPosition.Last
-        else -> throw Exception("Index exceeded. This list should consist only from 3 items")
+    private fun getListPosition(position: Int): ListPosition = when {
+        position == 0 -> ListPosition.First
+        position == itemCount - 1 -> ListPosition.Last
+        else -> ListPosition.Middle
     }
 
     companion object {

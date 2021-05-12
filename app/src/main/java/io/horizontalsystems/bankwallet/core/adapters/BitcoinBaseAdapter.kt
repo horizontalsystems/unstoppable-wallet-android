@@ -24,7 +24,6 @@ import kotlin.math.absoluteValue
 
 abstract class BitcoinBaseAdapter(
         open val kit: AbstractKit,
-        open val derivation: AccountType.Derivation? = null,
         open val syncMode: SyncMode? = null,
         backgroundManager: BackgroundManager
 ) : IAdapter, ITransactionsAdapter, IBalanceAdapter, IReceiveAdapter, BackgroundManager.Listener {
@@ -68,8 +67,6 @@ abstract class BitcoinBaseAdapter(
 
     override val receiveAddress: String
         get() = kit.receiveAddress()
-
-    override fun getReceiveAddressType(wallet: Wallet): String? = null
 
     protected val balanceUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()
     protected val lastBlockUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()
@@ -284,10 +281,10 @@ abstract class BitcoinBaseAdapter(
             else -> TransactionDataSortType.Shuffle
         }
 
-        fun getBip(derivation: AccountType.Derivation?): Bip = when (derivation) {
+        fun getBip(derivation: AccountType.Derivation): Bip = when (derivation) {
+            AccountType.Derivation.bip44 -> Bip.BIP44
             AccountType.Derivation.bip49 -> Bip.BIP49
             AccountType.Derivation.bip84 -> Bip.BIP84
-            else -> Bip.BIP44
         }
 
         fun getSyncMode(mode: SyncMode?): BitcoinCore.SyncMode {

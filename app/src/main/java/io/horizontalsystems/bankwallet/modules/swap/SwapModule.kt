@@ -8,6 +8,7 @@ import androidx.savedstate.SavedStateRegistryOwner
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.fiat.AmountTypeSwitchService
 import io.horizontalsystems.bankwallet.core.fiat.FiatService
+import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceService
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceViewModel
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapPendingAllowanceService
@@ -26,7 +27,7 @@ object SwapModule {
     data class CoinBalanceItem(
             val coin: Coin,
             val balance: BigDecimal?,
-            val blockchainType: String?
+            val fiatBalanceValue: CurrencyValue?,
     ) : Parcelable
 
     data class GuaranteedAmountViewItem(val title: String, val value: String)
@@ -86,7 +87,7 @@ object SwapModule {
             SwapViewItemHelper(App.numberFormatter)
         }
         private val coinProvider by lazy {
-            SwapCoinProvider(dex, App.coinManager, App.walletManager, App.adapterManager)
+            SwapCoinProvider(dex, App.coinManager, App.walletManager, App.adapterManager, App.currencyManager, App.xRateManager)
         }
         private val fromCoinCardService by lazy {
             SwapFromCoinCardService(service, tradeService, coinProvider)

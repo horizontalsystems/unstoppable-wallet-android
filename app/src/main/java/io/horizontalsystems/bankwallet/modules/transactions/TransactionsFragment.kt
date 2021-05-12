@@ -258,7 +258,16 @@ class FilterAdapter(private var listener: Listener) : Adapter<ViewHolder>(), Vie
         fun onFilterItemClick(item: FilterItem?, itemPosition: Int, itemWidth: Int)
     }
 
-    open class FilterItem(val filterId: String)
+    open class FilterItem(val filterId: String) {
+        override fun equals(other: Any?) = when (other) {
+            is FilterItem -> filterId == other.filterId
+            else -> false
+        }
+
+        override fun hashCode(): Int {
+            return filterId.hashCode()
+        }
+    }
 
     var filterChangeable = true
 
@@ -279,7 +288,7 @@ class FilterAdapter(private var listener: Listener) : Adapter<ViewHolder>(), Vie
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         when (holder) {
             is ViewHolderFilter -> {
-                holder.bind(filters[position]?.filterId, selectedFilterItem?.filterId == filters[position]?.filterId)
+                holder.bind(filters[position]?.filterId, selectedFilterItem == filters[position])
             }
         }
     }

@@ -21,11 +21,6 @@ abstract class BaseKeyStoreActivity : AppCompatActivity() {
             warningText.setText(R.string.OSPin_Confirm_Desciption)
         })
 
-        viewModel.showDeviceIsRootedWarning.observe(this, Observer {
-            warningView.isVisible = true
-            warningText.setText(R.string.Alert_DeviceIsRootedWarning)
-        })
-
         viewModel.showInvalidKeyWarning.observe(this, Observer {
             AlertDialogFragment.newInstance(
                     titleString = getString(R.string.Alert_KeysInvalidatedTitle),

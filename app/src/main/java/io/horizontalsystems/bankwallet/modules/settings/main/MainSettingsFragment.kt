@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import io.horizontalsystems.bankwallet.BuildConfig
@@ -14,8 +13,8 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.main.MainActivity
 import io.horizontalsystems.bankwallet.modules.main.MainModule
+import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListModule
-import io.horizontalsystems.core.CoreApp
 import io.horizontalsystems.core.getNavigationResult
 import io.horizontalsystems.languageswitcher.LanguageSettingsFragment
 import io.horizontalsystems.views.ListPosition
@@ -52,8 +51,8 @@ class MainSettingsFragment : BaseFragment() {
         val language = SettingsMenuItem(R.string.Settings_Language, R.drawable.ic_language, listPosition = ListPosition.Middle) {
             presenter.didTapLanguage()
         }
-        val lightMode = SettingsMenuSwitch(R.string.Settings_LightMode, R.drawable.ic_light_mode, listPosition = ListPosition.Middle) {
-            presenter.didSwitchLightMode(it)
+        val theme = SettingsMenuItem(R.string.Settings_Theme, R.drawable.ic_light_mode, listPosition = ListPosition.Middle) {
+            presenter.didTapTheme()
         }
         val experimentalFeatures = SettingsMenuItem(R.string.Settings_ExperimentalFeatures, R.drawable.ic_experimental, listPosition = ListPosition.Last) {
             presenter.didTapExperimentalFeatures()
@@ -63,15 +62,6 @@ class MainSettingsFragment : BaseFragment() {
         }
         val academy = SettingsMenuItem(R.string.Guides_Title, R.drawable.ic_academy_20, listPosition = ListPosition.Last) {
             presenter.didTapAcademy()
-        }
-        val twitter = SettingsMenuItem(R.string.Settings_Twitter, R.drawable.ic_twitter, listPosition = ListPosition.First) {
-            presenter.didTapTwitter()
-        }
-        val telegram = SettingsMenuItem(R.string.Settings_Telegram, R.drawable.ic_telegram, listPosition = ListPosition.Middle) {
-            presenter.didTapTelegram()
-        }
-        val reddit = SettingsMenuItem(R.string.Settings_Reddit, R.drawable.ic_reddit, listPosition = ListPosition.Last) {
-            presenter.didTapReddit()
         }
         val aboutApp = SettingsMenuItem(R.string.SettingsAboutApp_Title, R.drawable.ic_about_app_20, listPosition = ListPosition.Single) {
             presenter.didTapAboutApp()
@@ -90,15 +80,11 @@ class MainSettingsFragment : BaseFragment() {
                 notifications,
                 baseCurrency,
                 language,
-                lightMode,
+                theme,
                 experimentalFeatures,
                 null,
                 faq,
                 academy,
-                null,
-                twitter,
-                telegram,
-                reddit,
                 null,
                 aboutApp,
                 settingsBottom
@@ -128,9 +114,9 @@ class MainSettingsFragment : BaseFragment() {
             mainSettingsAdapter.notifyChanged(language)
         })
 
-        presenterView.lightMode.observe(viewLifecycleOwner, { isChecked ->
-            lightMode.isChecked = isChecked
-            mainSettingsAdapter.notifyChanged(lightMode)
+        presenterView.currentThemeName.observe(viewLifecycleOwner, {
+            theme.value = getString(it)
+            mainSettingsAdapter.notifyChanged(theme)
         })
 
         presenterView.appVersion.observe(viewLifecycleOwner, { version ->
@@ -168,15 +154,19 @@ class MainSettingsFragment : BaseFragment() {
 
     private fun subscribeToRouterEvents(router: MainSettingsRouter) {
         router.showManageKeysLiveEvent.observe(this, {
-            findNavController().navigate(R.id.mainFragment_to_manageKeysFragment, null, navOptions())
+            ManageAccountsModule.start(this, R.id.mainFragment_to_manageKeysFragment, navOptions(), ManageAccountsModule.Mode.Manage)
         })
 
         router.showBaseCurrencySettingsLiveEvent.observe(viewLifecycleOwner, {
-            findNavController().navigate(R.id.mainFragment_to_currencySwitcherFragment, null, navOptions())
+            findNavController().navigate(R.id.mainFragment_to_baseCurrencySettingsFragment, null, navOptions())
         })
 
         router.showLanguageSettingsLiveEvent.observe(viewLifecycleOwner, {
             findNavController().navigate(R.id.mainFragment_to_languageSettingsFragment, null, navOptions())
+        })
+
+        router.showThemeSwitcherLiveEvent.observe(viewLifecycleOwner, {
+            findNavController().navigate(R.id.mainFragment_to_themeSwitchFragment, null, navOptions())
         })
 
         router.showAboutLiveEvent.observe(viewLifecycleOwner, {
@@ -207,14 +197,6 @@ class MainSettingsFragment : BaseFragment() {
             val uri = Uri.parse(link)
             val intent = Intent(Intent.ACTION_VIEW, uri)
             activity?.startActivity(intent)
-        })
-
-        router.reloadAppLiveEvent.observe(viewLifecycleOwner, {
-            val nightMode = if (CoreApp.themeStorage.isLightModeOn)
-                AppCompatDelegate.MODE_NIGHT_NO else
-                AppCompatDelegate.MODE_NIGHT_YES
-
-            AppCompatDelegate.setDefaultNightMode(nightMode)
         })
 
         router.openWalletConnectLiveEvent.observe(viewLifecycleOwner, {

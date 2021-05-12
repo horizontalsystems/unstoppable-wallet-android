@@ -8,10 +8,10 @@ class MainSettingsRouter : MainSettingsModule.IMainSettingsRouter {
     val showExperimentalFeaturesLiveEvent = SingleLiveEvent<Unit>()
     val showBaseCurrencySettingsLiveEvent = SingleLiveEvent<Unit>()
     val showLanguageSettingsLiveEvent = SingleLiveEvent<Unit>()
+    val showThemeSwitcherLiveEvent = SingleLiveEvent<Unit>()
     val showAboutLiveEvent = SingleLiveEvent<Unit>()
     val showNotificationsLiveEvent = SingleLiveEvent<Unit>()
     val openLinkLiveEvent = SingleLiveEvent<String>()
-    val reloadAppLiveEvent = SingleLiveEvent<Unit>()
     val showManageKeysLiveEvent = SingleLiveEvent<Unit>()
     val openWalletConnectLiveEvent = SingleLiveEvent<Unit>()
     val openFaqLiveEvent = SingleLiveEvent<Unit>()
@@ -45,10 +45,6 @@ class MainSettingsRouter : MainSettingsModule.IMainSettingsRouter {
         openLinkLiveEvent.postValue(url)
     }
 
-    override fun reloadAppInterface() {
-        reloadAppLiveEvent.call()
-    }
-
     override fun showNotifications() {
         showNotificationsLiveEvent.call()
     }
@@ -63,5 +59,9 @@ class MainSettingsRouter : MainSettingsModule.IMainSettingsRouter {
 
     override fun openAcademy() {
         openAcademyLiveEvent.call()
+    }
+
+    override fun showThemeSwitcher() {
+        showThemeSwitcherLiveEvent.call()
     }
 }

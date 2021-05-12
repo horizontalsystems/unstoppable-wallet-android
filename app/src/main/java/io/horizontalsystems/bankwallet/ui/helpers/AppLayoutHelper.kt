@@ -13,9 +13,9 @@ object AppLayoutHelper {
 
         val resId = when {
             coinDrawableResId != null -> coinDrawableResId
-            coinType is CoinType.Erc20 -> R.drawable.ic_erc20
-            coinType is CoinType.Bep2 -> R.drawable.ic_bep2
-            coinType is CoinType.Bep20 -> R.drawable.ic_bep20
+            coinType is CoinType.Erc20 -> R.drawable.erc20
+            coinType is CoinType.Bep2 -> R.drawable.bep2
+            coinType is CoinType.Bep20 -> R.drawable.bep20
             else -> null
         }
 

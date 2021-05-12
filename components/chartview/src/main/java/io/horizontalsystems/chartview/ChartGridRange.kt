@@ -29,10 +29,10 @@ class ChartGridRange(private val config: ChartConfig, override var isVisible: Bo
         shape = rect
     }
 
-    fun setValues(high: String, low: String, showOnTheRight: Boolean = false) {
+    fun setValues(high: String?, low: String?, showOnTheRight: Boolean = false) {
         showOnTheRightSide = showOnTheRight
-        this.high = high
-        this.low = low
+        this.high = high ?: ""
+        this.low = low ?: ""
     }
 
     fun setOffset(padding: Float) {

@@ -41,7 +41,6 @@ object MarketModule {
     enum class ListType(val sortingField: SortingField, val marketField: MarketField) {
         TopGainers(SortingField.TopGainers, MarketField.PriceDiff),
         TopLosers(SortingField.TopLosers, MarketField.PriceDiff),
-        TopByVolume(SortingField.HighestVolume, MarketField.Volume),
     }
 
 }

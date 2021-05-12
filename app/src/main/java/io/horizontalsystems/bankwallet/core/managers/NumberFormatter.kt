@@ -76,6 +76,7 @@ class NumberFormatter(
         val valueAfterDot = absValue - valueBeforeDot
 
         return when {
+            valueBeforeDot < BigDecimal("1") -> 8
             valueBeforeDot < BigDecimal("10") && valueAfterDot < BigDecimal("0.0001") -> 8
             valueBeforeDot < BigDecimal("100") -> 4
             else -> 2

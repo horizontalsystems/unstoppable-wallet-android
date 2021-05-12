@@ -30,7 +30,7 @@
         app:layout_constraintTop_toBottomOf="@+id/coinPerformanceLayout" />
 
     <LinearLayout
-        android:id="@+id/extraPagesLayout"
+        android:id="@+id/tvlLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
@@ -38,34 +38,77 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/marketDataLayout" />
 
+    <LinearLayout
+        android:id="@+id/extraPagesLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvlLayout" />
+
+    <LinearLayout
+        android:id="@+id/platformsLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/extraPagesLayout" />
+
     <androidx.constraintlayout.widget.Group
         android:id="@+id/aboutGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:constraint_referenced_ids="border7,aboutTitle,aboutText" />
+        app:constraint_referenced_ids="aboutTitle,aboutText" />
 
-    <View
-        android:id="@+id/border7"
+    <TextView
+        android:id="@+id/categoriesTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
+        android:text="@string/CoinPage_Category"
+        android:textColor="@color/oz"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/platformsLayout" />
+
+    <TextView
+        android:id="@+id/categoriesText"
         android:layout_width="0dp"
-        android:layout_height="0.5dp"
-        android:layout_marginTop="12dp"
-        android:background="@color/steel_20"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
+        android:ellipsize="end"
+        android:maxLines="8"
+        android:textColor="@color/grey"
+        android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/extraPagesLayout" />
+        app:layout_constraintTop_toBottomOf="@id/categoriesTitle"
+        tools:text="Algo Stablecoins, DEXes, Governance, asdf, srfad, asdfgf, asfa sfasf, asf, sadfas" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/categoriesGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="categoriesTitle,categoriesText" />
 
     <TextView
         android:id="@+id/aboutTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="16dp"
         android:text="@string/CoinPage_About"
         android:textColor="@color/oz"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/border7" />
+        app:layout_constraintTop_toBottomOf="@id/categoriesText" />
 
     <TextView
         android:id="@+id/aboutText"
@@ -96,74 +139,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/aboutText" />
 
-    <View
-        android:id="@+id/categoriesSeparator"
-        android:layout_width="0dp"
-        android:layout_height="0.5dp"
-        android:layout_marginTop="20dp"
-        android:background="@color/steel_20"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/aboutTextToggle" />
-
-    <TextView
-        android:id="@+id/categoriesTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="16dp"
-        android:text="@string/CoinPage_Category"
-        android:textColor="@color/oz"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/categoriesSeparator" />
-
-    <TextView
-        android:id="@+id/categoriesText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="24dp"
-        android:ellipsize="end"
-        android:maxLines="8"
-        android:textColor="@color/grey"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/categoriesTitle"
-        tools:text="Algo Stablecoins, DEXes, Governance, asdf, srfad, asdfgf, asfa sfasf, asf, sadfas" />
-
-    <androidx.constraintlayout.widget.Group
-        android:id="@+id/categoriesGroup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:constraint_referenced_ids="categoriesSeparator,categoriesTitle,categoriesText,categoriesSeparator" />
-
-    <LinearLayout
-        android:id="@+id/platformsLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:orientation="vertical"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/categoriesText" />
-
     <LinearLayout
         android:id="@+id/linksLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="20dp"
         android:orientation="vertical"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/platformsLayout" />
+        app:layout_constraintTop_toBottomOf="@id/aboutTextToggle" />
 
     <View
         android:id="@+id/poweredByBorder"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="28dp"
         android:background="@color/steel_10"
         app:layout_constraintEnd_toStartOf="parent"
         app:layout_constraintStart_toStartOf="parent"

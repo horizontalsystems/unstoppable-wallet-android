@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
@@ -12,18 +13,17 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
 import kotlinx.android.extensions.LayoutContainer
 
 class MarketOverviewSectionHeaderAdapter(
-        viewItemsLiveData: LiveData<List<MarketViewItem>>,
+        hasItemsLiveData: LiveData<Boolean>,
         viewLifecycleOwner: LifecycleOwner,
         private val settingsHeaderItem: SectionHeaderItem
 ) : ListAdapter<MarketOverviewSectionHeaderAdapter.SectionHeaderItem, MarketOverviewSectionHeaderAdapter.SectionHeaderViewHolder>(diffCallback) {
 
     init {
         Transformations
-                .distinctUntilChanged(Transformations.map(viewItemsLiveData) { it.isNotEmpty() })
+                .distinctUntilChanged(hasItemsLiveData)
                 .observe(viewLifecycleOwner) { showHeader ->
                     val items = if (showHeader) {
                         listOf(settingsHeaderItem)
@@ -59,13 +59,17 @@ class MarketOverviewSectionHeaderAdapter(
         private val titleText = containerView.findViewById<TextView>(R.id.titleTextView)
         private val valueText = containerView.findViewById<TextView>(R.id.valueTextView)
         private val icon = containerView.findViewById<ImageView>(R.id.sectionIcon)
+        private val arrowIcon = containerView.findViewById<ImageView>(R.id.arrowIcon)
 
         fun bind(item: SectionHeaderItem) {
             titleText.setText(item.title)
             valueText.text = item.value
             icon.setImageResource(item.icon)
-            containerView.setOnClickListener {
-                item.onClick()
+            arrowIcon.isVisible = item.onClick != null
+            item.onClick?.let { onClick ->
+                containerView.setOnClickListener {
+                    onClick()
+                }
             }
         }
 
@@ -80,7 +84,7 @@ class MarketOverviewSectionHeaderAdapter(
             val title: Int,
             val icon: Int,
             var value: String? = null,
-            val onClick: () -> Unit
+            val onClick: (() -> Unit)? = null
     )
 
 }

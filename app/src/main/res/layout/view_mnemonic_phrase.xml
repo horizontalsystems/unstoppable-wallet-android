@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:parentTag="androidx.core.widget.NestedScrollView">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TableLayout
+            android:id="@+id/words"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="12dp"
+            android:stretchColumns="*"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TableRow>
+                <LinearLayout
+                    android:id="@+id/topLeft"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
+
+                <LinearLayout
+                    android:id="@+id/topRight"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
+
+            </TableRow>
+
+            <TableRow android:layout_marginTop="35dp">
+
+                <LinearLayout
+                    android:id="@+id/middleLeft"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
+
+                <LinearLayout
+                    android:id="@+id/middleRight"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
+            </TableRow>
+
+            <TableRow android:layout_marginTop="35dp">
+
+                <LinearLayout
+                    android:id="@+id/bottomLeft"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
+
+                <LinearLayout
+                    android:id="@+id/bottomRight"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
+            </TableRow>
+
+        </TableLayout>
+
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/passphraseGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:constraint_referenced_ids="passphraseCaption,passphraseValue" />
+
+        <TextView
+            android:id="@+id/passphraseCaption"
+            style="@style/Subhead2"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="32dp"
+            android:background="@drawable/rounded_lawrence_background_single"
+            android:drawableStart="@drawable/ic_key_phrase_20"
+            android:drawablePadding="16dp"
+            android:gravity="center_vertical"
+            android:paddingStart="16dp"
+            android:text="@string/ShowKey_Passphrase"
+            android:textColor="@color/grey"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/words" />
+
+        <TextView
+            android:id="@+id/passphraseValue"
+            style="@style/Subhead1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:textColor="@color/leah"
+            app:layout_constraintBottom_toBottomOf="@id/passphraseCaption"
+            app:layout_constraintEnd_toEndOf="@id/passphraseCaption"
+            app:layout_constraintTop_toTopOf="@id/passphraseCaption"
+            tools:text="yahoo" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</merge>

@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.modules.settings.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.trustwallet.walletconnect.models.WCPeerMeta
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.core.entities.Currency
 
@@ -12,7 +11,7 @@ object MainSettingsModule {
         fun setBackedUp(backedUp: Boolean)
         fun setBaseCurrency(currency: String)
         fun setLanguage(language: String)
-        fun setLightMode(lightMode: Boolean)
+        fun setThemeName(themeName: Int)
         fun setAppVersion(appVersion: String)
         fun setTermsAccepted(termsAccepted: Boolean)
         fun setPinIsSet(pinSet: Boolean)
@@ -24,7 +23,7 @@ object MainSettingsModule {
         fun didTapSecurity()
         fun didTapBaseCurrency()
         fun didTapLanguage()
-        fun didSwitchLightMode(lightMode: Boolean)
+        fun didTapTheme()
         fun didTapAboutApp()
         fun didTapCompanyLogo()
         fun didTapNotifications()
@@ -33,23 +32,17 @@ object MainSettingsModule {
         fun didTapWalletConnect()
         fun didTapFaq()
         fun didTapAcademy()
-        fun didTapTwitter()
-        fun didTapTelegram()
-        fun didTapReddit()
     }
 
     interface IMainSettingsInteractor {
+        val themeName: Int
         val companyWebPageLink: String
         val appWebPageLink: String
-        val companyTwitterLink: String
-        val companyTelegramLink: String
-        val companyRedditLink: String
         val allBackedUp: Boolean
         val walletConnectSessionCount: Int
         val currentLanguageDisplayName: String
         val baseCurrency: Currency
         val appVersion: String
-        var lightMode: Boolean
         val termsAccepted: Boolean
         val isPinSet: Boolean
 
@@ -70,13 +63,13 @@ object MainSettingsModule {
         fun showLanguageSettings()
         fun showAboutApp()
         fun openLink(url: String)
-        fun reloadAppInterface()
         fun showNotifications()
         fun showExperimentalFeatures()
         fun showManageKeys()
         fun openWalletConnect()
         fun openFaq()
         fun openAcademy()
+        fun showThemeSwitcher()
     }
 
     class Factory : ViewModelProvider.Factory {
@@ -85,7 +78,7 @@ object MainSettingsModule {
             val view = MainSettingsView()
             val router = MainSettingsRouter()
             val interactor = MainSettingsInteractor(
-                    themeStorage = App.themeStorage,
+                    localStorage = App.localStorage,
                     backupManager = App.backupManager,
                     languageManager = App.languageManager,
                     systemInfoManager = App.systemInfoManager,

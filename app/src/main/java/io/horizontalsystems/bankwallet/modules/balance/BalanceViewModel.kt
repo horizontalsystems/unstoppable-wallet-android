@@ -2,8 +2,6 @@ package io.horizontalsystems.bankwallet.modules.balance
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import io.horizontalsystems.bankwallet.entities.Account
-import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.coinkit.models.CoinType
@@ -19,16 +17,15 @@ class BalanceViewModel : ViewModel(), BalanceModule.IView, BalanceModule.IRouter
     val openSwap = SingleLiveEvent<Wallet>()
     val openManageCoinsLiveEvent = SingleLiveEvent<Void>()
     val openSortingTypeDialogLiveEvent = SingleLiveEvent<BalanceSortType>()
-    val openBackup = SingleLiveEvent<Pair<Account, Int>>()
     val openChartModule = SingleLiveEvent<Coin>()
     val openEmail = SingleLiveEvent<Pair<String, String>>()
 
-    val isSortOn = MutableLiveData<Boolean>()
     val setHeaderViewItem = MutableLiveData<BalanceHeaderViewItem>()
     val setViewItems = MutableLiveData<List<BalanceViewItem>>()
-    val showBackupAlert = SingleLiveEvent<Pair<Coin, PredefinedAccountType>>()
+    val titleLiveData = MutableLiveData<String>()
+    val showBackupAlert = SingleLiveEvent<Wallet>()
     val didRefreshLiveEvent = SingleLiveEvent<Void>()
-    val setBalanceHidden = MutableLiveData<Pair<Boolean, Boolean>>()
+    val hideBalance = MutableLiveData<Unit>()
     val showSyncError = SingleLiveEvent<Triple<Wallet, String, Boolean>>()
     val networkNotAvailable = SingleLiveEvent<Void>()
 
@@ -64,10 +61,6 @@ class BalanceViewModel : ViewModel(), BalanceModule.IView, BalanceModule.IRouter
         openSortingTypeDialogLiveEvent.postValue(sortingType)
     }
 
-    override fun openBackup(account: Account, coinCodesStringRes: Int) {
-        openBackup.postValue(Pair(account, coinCodesStringRes))
-    }
-
     override fun openChart(coin: Coin) {
         openChartModule.postValue(coin)
     }
@@ -78,10 +71,6 @@ class BalanceViewModel : ViewModel(), BalanceModule.IView, BalanceModule.IRouter
 
     // IView
 
-    override fun set(sortIsOn: Boolean) {
-        isSortOn.postValue(sortIsOn)
-    }
-
     override fun set(headerViewItem: BalanceHeaderViewItem) {
         setHeaderViewItem.postValue(headerViewItem)
     }
@@ -90,16 +79,20 @@ class BalanceViewModel : ViewModel(), BalanceModule.IView, BalanceModule.IRouter
         setViewItems.postValue(viewItems)
     }
 
-    override fun showBackupRequired(coin: Coin, predefinedAccountType: PredefinedAccountType) {
-        showBackupAlert.postValue(Pair(coin, predefinedAccountType))
+    override fun setTitle(v: String?) {
+        titleLiveData.postValue(v)
+    }
+
+    override fun showBackupRequired(wallet: Wallet) {
+        showBackupAlert.postValue(wallet)
     }
 
     override fun didRefresh() {
         didRefreshLiveEvent.postValue(null)
     }
 
-    override fun setBalanceHidden(hidden: Boolean, animate: Boolean) {
-        setBalanceHidden.postValue(Pair(hidden, animate))
+    override fun hideBalance() {
+        hideBalance.postValue(Unit)
     }
 
     override fun showSyncErrorDialog(wallet: Wallet, errorMessage: String, sourceChangeable: Boolean) {

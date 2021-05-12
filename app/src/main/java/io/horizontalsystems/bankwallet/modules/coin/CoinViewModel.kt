@@ -2,7 +2,9 @@ package io.horizontalsystems.bankwallet.modules.coin
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.Clearable
+import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.chartview.models.ChartIndicator
@@ -11,14 +13,12 @@ import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.views.ListPosition
 import io.horizontalsystems.xrateskit.entities.ChartType
+import io.horizontalsystems.xrateskit.entities.CoinMarketDetails
 import io.horizontalsystems.xrateskit.entities.LatestRate
 import io.horizontalsystems.xrateskit.entities.TimePeriod
 import io.reactivex.disposables.CompositeDisposable
-import java.math.BigDecimal
-import java.util.concurrent.TimeUnit
 
 class CoinViewModel(
-        val rateFormatter: RateFormatter,
         private val service: CoinService,
         val coinCode: String,
         private val coinTitle: String,
@@ -46,23 +46,28 @@ class CoinViewModel(
     val uncheckIndicators = MutableLiveData<List<ChartIndicator>>()
     val latestRateLiveData = MutableLiveData<CurrencyValue>()
 
-    var notificationIconVisible = service.notificationsAreEnabled && service.notificationSupported
+    var notificationIconVisible = service.notificationsAreEnabled
     var notificationIconActive = false
+
+    val coinType: CoinType
+        get() = service.coinType
 
     private var enabledIndicator: ChartIndicator? = null
     private var macdIsEnabled = false
     private val disposable = CompositeDisposable()
+    private val rateDiffPeriods = listOf(TimePeriod.DAY_7, TimePeriod.DAY_30)
 
     private val rateDiffCoinCodes: List<String> = mutableListOf(service.currency.code).apply {
         if (service.coinType != CoinType.Bitcoin) add("BTC")
         if (service.coinType != CoinType.Ethereum) add("ETH")
+        if (service.coinType != CoinType.BinanceSmartChain) add("BNB")
     }
 
     init {
         setDefaultMode.postValue(service.chartType)
         updateChartIndicatorState()
 
-        service.getCoinDetails(rateDiffCoinCodes, listOf(TimePeriod.DAY_7, TimePeriod.DAY_30))
+        service.getCoinDetails(rateDiffCoinCodes, rateDiffPeriods)
 
         fetchChartInfo()
 
@@ -172,7 +177,7 @@ class CoinViewModel(
     private fun updateChartIndicatorState() {
         val enabled = service.chartType != ChartType.DAILY && service.chartType != ChartType.TODAY
 
-        if (setChartIndicatorsEnabled.value == enabled){
+        if (setChartIndicatorsEnabled.value == enabled) {
             return
         }
 
@@ -214,21 +219,30 @@ class CoinViewModel(
 
     private fun updateCoinDetails() {
         val coinDetails = service.coinMarketDetails ?: return
-        coinDetailsLiveData.postValue(factory.createCoinDetailsViewItem(coinDetails, service.currency, coinCode, service.guideUrl))
+        coinDetailsLiveData.postValue(factory.createCoinDetailsViewItem(coinDetails, service.currency, coinCode, rateDiffCoinCodes, rateDiffPeriods, getContractInfo(coinDetails), service.guideUrl))
 
         val coinMarketItems = factory.createCoinMarketItems(coinDetails.tickers)
         val coinInvestorItems = factory.createCoinInvestorItems(coinDetails.meta.fundCategories)
-        setExtraPageButtons(coinMarketItems, coinInvestorItems)
+        val coinVolume = factory.getVolume(coinDetails)
+        setExtraPageButtons(coinMarketItems, coinInvestorItems, coinVolume)
 
         coinMarkets.postValue(coinMarketItems)
         coinInvestors.postValue(coinInvestorItems)
     }
 
-    private fun setExtraPageButtons(coinMarketItems: List<MarketTickerViewItem>, coinInvestorItems: List<InvestorItem>) {
+    private fun getContractInfo(coinDetails: CoinMarketDetails): ContractInfo? =
+            when (val coinType = coinDetails.data.type) {
+                is CoinType.Erc20 -> ContractInfo(Translator.getString(R.string.CoinPage_Contract, "ETH"), coinType.address)
+                is CoinType.Bep20 -> ContractInfo(Translator.getString(R.string.CoinPage_Contract, "BSC"), coinType.address)
+                is CoinType.Bep2 -> ContractInfo(Translator.getString(R.string.CoinPage_Bep2Symbol), coinType.symbol)
+                else -> null
+            }
+
+    private fun setExtraPageButtons(coinMarketItems: List<MarketTickerViewItem>, coinInvestorItems: List<InvestorItem>, coinVolume: String?) {
         val coinExtraPages = mutableListOf<CoinExtraPage>()
-        if (coinMarketItems.isNotEmpty()) {
+        if (coinVolume != null || coinMarketItems.isNotEmpty()) {
             val listPosition = if (coinInvestorItems.isEmpty()) ListPosition.Single else ListPosition.First
-            coinExtraPages.add(CoinExtraPage.Markets(listPosition))
+            coinExtraPages.add(CoinExtraPage.TradingVolume(listPosition, coinVolume, coinMarketItems.isNotEmpty()))
         }
         if (coinInvestorItems.isNotEmpty()) {
             val listPosition = if (coinMarketItems.isEmpty()) ListPosition.Single else ListPosition.Last

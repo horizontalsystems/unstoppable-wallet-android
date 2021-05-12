@@ -3,28 +3,19 @@ package io.horizontalsystems.bankwallet.core.managers
 import android.content.Context
 import io.horizontalsystems.bankwallet.core.IAppConfigProvider
 import io.horizontalsystems.bankwallet.core.IRateManager
-import io.horizontalsystems.bankwallet.core.IWalletManager
-import io.horizontalsystems.bankwallet.core.providers.FeeCoinProvider
-import io.horizontalsystems.bankwallet.entities.Wallet
-import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.xrateskit.XRatesKit
 import io.horizontalsystems.xrateskit.entities.*
 import io.reactivex.Observable
 import io.reactivex.Single
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 import java.math.BigDecimal
 
 class RateManager(
         context: Context,
-        walletManager: IWalletManager,
         private val currencyManager: ICurrencyManager,
-        private val feeCoinProvider: FeeCoinProvider,
         private val appConfigProvider: IAppConfigProvider) : IRateManager {
 
-    private val disposables = CompositeDisposable()
     private val kit: XRatesKit by lazy {
         XRatesKit.create(
                 context,
@@ -32,30 +23,6 @@ class RateManager(
                 rateExpirationInterval = 60 * 10,
                 cryptoCompareApiKey = appConfigProvider.cryptoCompareApiKey
         )
-    }
-
-    init {
-        walletManager.walletsUpdatedObservable
-                .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.io())
-                .subscribe { wallets ->
-                    onWalletsUpdated(wallets)
-                }.let {
-                    disposables.add(it)
-                }
-
-        currencyManager.baseCurrencyUpdatedSignal
-                .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.io())
-                .subscribe {
-                    onBaseCurrencyUpdated()
-                }.let {
-                    disposables.add(it)
-                }
-    }
-
-    override fun set(coins: List<Coin>) {
-        kit.set(coins.map { it.type })
     }
 
     override fun latestRate(coinType: CoinType, currencyCode: String): LatestRate? {
@@ -77,8 +44,8 @@ class RateManager(
         return kit.getLatestRateAsync(coinType, currencyCode)
     }
 
-    override fun latestRateObservable(currencyCode: String): Observable<Map<CoinType, LatestRate>> {
-        return kit.latestRateMapObservable(currencyCode)
+    override fun latestRateObservable(coinTypes: List<CoinType>, currencyCode: String): Observable<Map<CoinType, LatestRate>> {
+        return kit.latestRateMapObservable(coinTypes, currencyCode)
     }
 
     override fun historicalRateCached(coinType: CoinType, currencyCode: String, timestamp: Long): BigDecimal? {
@@ -102,10 +69,6 @@ class RateManager(
         return kit.getCoinMarketDetailsAsync(coinType, currencyCode, rateDiffCoinCodes, rateDiffPeriods)
     }
 
-    override fun getCryptoNews(coinCode: String): Single<List<CryptoNews>> {
-        return kit.cryptoNews(coinCode)
-    }
-
     override fun getTopMarketList(currency: String, itemsCount: Int, diffPeriod: TimePeriod): Single<List<CoinMarket>> {
         return kit.getTopCoinMarketsAsync(currency, itemsCount = itemsCount, fetchDiffPeriod = diffPeriod)
     }
@@ -126,6 +89,10 @@ class RateManager(
         return kit.getGlobalCoinMarketsAsync(currency)
     }
 
+    override fun getGlobalCoinMarketPointsAsync(currencyCode: String, timePeriod: TimePeriod): Single<List<GlobalCoinMarketPoint>> {
+        return kit.getGlobalCoinMarketPointsAsync(currencyCode, timePeriod)
+    }
+
     override fun searchCoins(searchText: String): List<CoinData> {
         return kit.searchCoins(searchText)
     }
@@ -134,19 +101,19 @@ class RateManager(
         return kit.getNotificationCoinCode(coinType)
     }
 
-    override fun refresh() {
-        kit.refresh()
+    override fun topDefiTvl(currencyCode: String, fetchDiffPeriod: TimePeriod, itemsCount: Int) : Single<List<DefiTvl>> {
+        return kit.getTopDefiTvlAsync(currencyCode, fetchDiffPeriod, itemsCount)
     }
 
-    private fun onWalletsUpdated(wallets: List<Wallet>) {
-        val feeCoins = wallets.mapNotNull { feeCoinProvider.feeCoinData(it.coin)?.first }
-        val coins = wallets.map { it.coin }
-        val uniqueCoins = (feeCoins + coins).distinct()
-        kit.set(uniqueCoins.map { it.type })
+    override fun defiTvlPoints(coinType: CoinType, currencyCode: String, fetchDiffPeriod: TimePeriod) : Single<List<DefiTvlPoint>> {
+        return kit.getDefiTvlPointsAsync(coinType, currencyCode, fetchDiffPeriod)
     }
 
-    private fun onBaseCurrencyUpdated() {
-        kit.set(currencyManager.baseCurrency.code)
+    override fun refresh(currencyCode: String) {
+        kit.refresh(currencyCode)
     }
 
+    override fun getCryptoNews(timestamp: Long?): Single<List<CryptoNews>> {
+        return kit.cryptoNewsAsync(timestamp)
+    }
 }

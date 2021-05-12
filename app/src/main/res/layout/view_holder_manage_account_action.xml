@@ -1,0 +1,42 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <View
+        android:id="@+id/backgroundView"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/rounded_lawrence_background_single"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="16dp"
+        app:layout_constraintBottom_toBottomOf="@id/backgroundView"
+        app:layout_constraintStart_toStartOf="@id/backgroundView"
+        app:layout_constraintTop_toTopOf="@id/backgroundView"
+        app:tint="@color/jacob"
+        tools:src="@drawable/ic_download" />
+
+    <TextView
+        android:id="@+id/title"
+        style="@style/Body"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:textColor="@color/jacob"
+        app:layout_constraintBottom_toBottomOf="@id/backgroundView"
+        app:layout_constraintEnd_toEndOf="@id/backgroundView"
+        app:layout_constraintStart_toEndOf="@id/icon"
+        app:layout_constraintTop_toTopOf="@id/backgroundView"
+        tools:text="Import Wallet" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

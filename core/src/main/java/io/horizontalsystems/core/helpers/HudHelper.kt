@@ -1,5 +1,8 @@
 package io.horizontalsystems.core.helpers
 
+import android.content.Context
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.view.View
 import android.view.ViewGroup
 import io.horizontalsystems.core.R
@@ -27,6 +30,19 @@ object HudHelper {
 
     fun showErrorMessage(contenView: View, text: String, gravity: SnackbarGravity = SnackbarGravity.BOTTOM): CustomSnackbar? {
         return showHudNotification(contenView, text, R.color.red_d, SnackbarDuration.LONG, gravity, false)
+    }
+
+    fun vibrate(context: Context) {
+        val vibratorService = context.getSystemService(Context.VIBRATOR_SERVICE) as? Vibrator
+
+        // this type of vibration requires API 29
+        val vibrationEffect = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+            VibrationEffect.createPredefined(VibrationEffect.EFFECT_TICK)
+        } else {
+            VibrationEffect.createOneShot(20, VibrationEffect.DEFAULT_AMPLITUDE)
+        }
+
+        vibratorService?.vibrate(vibrationEffect)
     }
 
     private fun showHudNotification(

@@ -8,6 +8,7 @@ import cash.z.ecc.android.sdk.ext.*
 import cash.z.ecc.android.sdk.tool.DerivationTool
 import cash.z.ecc.android.sdk.validate.AddressType
 import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.core.managers.RestoreSettings
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.hdwalletkit.Mnemonic
 import io.reactivex.BackpressureStrategy
@@ -22,6 +23,7 @@ import java.math.BigDecimal
 class ZcashAdapter(
         context: Context,
         wallet: Wallet,
+        restoreSettings: RestoreSettings,
         testMode: Boolean
 ) : IAdapter, IBalanceAdapter, IReceiveAdapter, ITransactionsAdapter, ISendZcashAdapter {
 
@@ -42,13 +44,18 @@ class ZcashAdapter(
     private var downloadProgress: Int = 0
 
     init {
-        val accountType = (wallet.account.type as? AccountType.Zcash)
-            ?: throw UnsupportedAccountException()
-        val isRestored = wallet.account.origin == AccountOrigin.Restored
+        val accountType = (wallet.account.type as? AccountType.Mnemonic) ?: throw UnsupportedAccountException()
         seed = Mnemonic().toSeed(accountType.words)
+
+        val isRestored = wallet.account.origin == AccountOrigin.Restored
+        val birthdayHeight = when (wallet.account.origin) {
+            AccountOrigin.Created -> null
+            AccountOrigin.Restored -> restoreSettings.birthdayHeight
+        }
+
         val config = Initializer.Config { config ->
             config.server(lightWalletDHost, lightWalletDPort)
-            config.setBirthdayHeight(accountType.birthdayHeight?.toInt(), isRestored)
+            config.setBirthdayHeight(birthdayHeight, isRestored)
             config.alias = getValidAliasFromAccountId(wallet.account.id)
             config.setSeed(seed)
         }
@@ -125,8 +132,6 @@ class ZcashAdapter(
 
     //region IReceiveAdapter
     override val receiveAddress = DerivationTool.deriveShieldedAddress(seed)
-
-    override fun getReceiveAddressType(wallet: Wallet): String? = null
     //endregion
 
     //region ITransactionsAdapter

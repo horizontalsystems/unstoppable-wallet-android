@@ -8,7 +8,7 @@
     <style name="Theme.AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
         <item name="colorAccent">@color/yellow_l</item>
         <item name="buttonStyle">@style/Button</item>
-        <item name="android:windowBackground">@drawable/light_gradient_background</item>
+        <item name="android:windowBackground">@color/light</item>
         <item name="android:navigationBarColor">@color/transparent</item>
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
@@ -60,7 +60,7 @@
     </style>
 
     <style name="LauncherTheme" parent="Theme.AppTheme">
-        <item name="android:windowBackground">@color/dark</item>
+        <item name="android:windowBackground">@color/tyler</item>
         <item name="android:windowLightStatusBar">false</item>
     </style>
 

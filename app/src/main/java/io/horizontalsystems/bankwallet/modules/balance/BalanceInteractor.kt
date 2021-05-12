@@ -2,8 +2,10 @@ package io.horizontalsystems.bankwallet.modules.balance
 
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
-import io.horizontalsystems.bankwallet.entities.PredefinedAccountType
+import io.horizontalsystems.bankwallet.core.providers.FeeCoinProvider
+import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.core.entities.Currency
@@ -20,10 +22,11 @@ class BalanceInteractor(
         private val currencyManager: ICurrencyManager,
         private val localStorage: ILocalStorage,
         private val rateManager: IRateManager,
-        private val predefinedAccountTypeManager: IPredefinedAccountTypeManager,
+        private val accountManager: IAccountManager,
         private val rateAppManager: IRateAppManager,
         private val connectivityManager: ConnectivityManager,
-        appConfigProvider: IAppConfigProvider)
+        appConfigProvider: IAppConfigProvider,
+        private val feeCoinProvider: FeeCoinProvider)
     : BalanceModule.IInteractor {
 
     var delegate: BalanceModule.IInteractorDelegate? = null
@@ -33,8 +36,11 @@ class BalanceInteractor(
     private var marketInfoDisposables = CompositeDisposable()
     override val reportEmail = appConfigProvider.reportEmail
 
+    override val activeAccount: Account?
+        get() = accountManager.activeAccount
+
     override val wallets: List<Wallet>
-        get() = walletManager.wallets
+        get() = walletManager.activeWallets
 
     override val baseCurrency: Currency
         get() = currencyManager.baseCurrency
@@ -50,6 +56,24 @@ class BalanceInteractor(
 
     override val networkAvailable: Boolean
         get() = connectivityManager.isConnected
+
+    init {
+        accountManager.activeAccountObservable
+                .subscribeIO {
+                    delegate?.didUpdateActiveAccount(it.orElseGet(null))
+                }
+                .let {
+                    disposables.add(it)
+                }
+
+        accountManager.accountsFlowable
+                .subscribeIO {
+                    delegate?.didUpdateActiveAccount(accountManager.activeAccount)
+                }
+                .let {
+                    disposables.add(it)
+                }
+    }
 
     override fun latestRate(coinType: CoinType, currencyCode: String): LatestRate? {
         return rateManager.latestRate(coinType, currencyCode)
@@ -72,7 +96,7 @@ class BalanceInteractor(
     }
 
     override fun subscribeToWallets() {
-        walletManager.walletsUpdatedObservable
+        walletManager.activeWalletsUpdatedObservable
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .subscribe { wallets ->
@@ -125,10 +149,14 @@ class BalanceInteractor(
         }
     }
 
-    override fun subscribeToMarketInfo(currencyCode: String) {
+    override fun subscribeToMarketInfo(coins: List<Coin>, currencyCode: String) {
         marketInfoDisposables.clear()
 
-        rateManager.latestRateObservable(currencyCode)
+        val feeCoins = coins.mapNotNull {
+            feeCoinProvider.feeCoinData(it)?.first
+        }
+
+        rateManager.latestRateObservable((coins + feeCoins).distinct().map { it.type }, currencyCode)
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .subscribe {
@@ -138,15 +166,11 @@ class BalanceInteractor(
                 }
     }
 
-    override fun refresh() {
+    override fun refresh(currencyCode: String) {
         adapterManager.refresh()
-        rateManager.refresh()
+        rateManager.refresh(currencyCode)
 
         delegate?.didRefresh()
-    }
-
-    override fun predefinedAccountType(wallet: Wallet): PredefinedAccountType? {
-        return predefinedAccountTypeManager.predefinedAccountType(wallet.account.type)
     }
 
     override fun saveSortType(sortType: BalanceSortType) {

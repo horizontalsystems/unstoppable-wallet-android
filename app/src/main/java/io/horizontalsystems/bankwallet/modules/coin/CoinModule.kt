@@ -6,7 +6,6 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.views.ListPosition
 import io.horizontalsystems.xrateskit.entities.CoinPlatformType
-import java.math.BigDecimal
 
 object CoinModule {
 
@@ -15,14 +14,20 @@ object CoinModule {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             val currency = App.currencyManager.baseCurrency
-            val rateFormatter = RateFormatter(currency)
-            val service = CoinService(coinType, currency, App.xRateManager, App.chartTypeStorage, App.priceAlertManager, App.notificationManager, App.localStorage, App.marketFavoritesManager, App.appConfigProvider.guidesUrl)
-            return CoinViewModel(rateFormatter, service, coinCode, coinTitle, CoinViewFactory(currency, App.numberFormatter), listOf(service)) as T
+            val service = CoinService(
+                    coinType,
+                    currency,
+                    App.xRateManager,
+                    App.chartTypeStorage,
+                    App.priceAlertManager,
+                    App.notificationManager,
+                    App.marketFavoritesManager,
+                    App.appConfigProvider.guidesUrl
+            )
+            return CoinViewModel(service, coinCode, coinTitle, CoinViewFactory(currency, App.numberFormatter), listOf(service)) as T
         }
 
     }
-
-    data class CoinCodeWithValue(val coinCode: String, val value: BigDecimal)
 }
 
 data class MarketTickerViewItem(
@@ -30,6 +35,7 @@ data class MarketTickerViewItem(
         val subtitle: String,
         val value: String,
         val subvalue: String,
+        val imageUrl: String?,
 ) {
     fun areItemsTheSame(other: MarketTickerViewItem): Boolean {
         return title == other.title && subtitle == other.subvalue
@@ -41,7 +47,7 @@ data class MarketTickerViewItem(
 }
 
 sealed class CoinExtraPage {
-    class Markets(val position: ListPosition) : CoinExtraPage()
+    class TradingVolume(val position: ListPosition, val value: String?, val canShowMarkets: Boolean) : CoinExtraPage()
     class Investors(val position: ListPosition) : CoinExtraPage()
 }
 
@@ -50,22 +56,3 @@ sealed class InvestorItem {
     data class Fund(val name: String, val url: String, val cleanedUrl: String, val position: ListPosition) : InvestorItem()
 }
 
-val CoinPlatformType.title: String
-    get() = when (this) {
-        CoinPlatformType.OTHER -> "Other"
-        CoinPlatformType.ETHEREUM -> "ETH Contract"
-        CoinPlatformType.BINANCE -> "Binance DEX Contract"
-        CoinPlatformType.BINANCE_SMART_CHAIN -> "BSC Contract"
-        CoinPlatformType.TRON -> "TRON Contract"
-        CoinPlatformType.EOS -> "EOS Contract"
-    }
-
-val CoinPlatformType.order: Int
-    get() = when (this) {
-        CoinPlatformType.ETHEREUM -> 1
-        CoinPlatformType.BINANCE_SMART_CHAIN -> 2
-        CoinPlatformType.BINANCE -> 3
-        CoinPlatformType.TRON -> 4
-        CoinPlatformType.EOS -> 5
-        CoinPlatformType.OTHER -> 6
-    }

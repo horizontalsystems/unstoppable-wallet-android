@@ -42,18 +42,28 @@
                 android:orientation="vertical"
                 app:layout_constraintGuide_end="16dp" />
 
+            <ImageView
+                android:id="@+id/coinIcon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginTop="9dp"
+                app:layout_constraintStart_toStartOf="@id/startGuideline"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@drawable/bitcoin" />
+
             <TextView
                 android:id="@+id/coinName"
-                style="@style/Subhead2"
+                style="@style/Body"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
                 android:singleLine="true"
+                android:ellipsize="end"
                 android:textColor="@color/grey"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="@+id/coinIcon"
+                app:layout_constraintEnd_toEndOf="@+id/endGuideline"
+                app:layout_constraintStart_toEndOf="@+id/coinIcon"
+                app:layout_constraintTop_toTopOf="@+id/coinIcon"
                 tools:text="Coin Name" />
 
             <TextView
@@ -65,7 +75,7 @@
                 android:layout_marginTop="20dp"
                 android:textColor="@color/leah"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/coinName"
+                app:layout_constraintTop_toBottomOf="@+id/coinIcon"
                 tools:text="3,979.87" />
 
             <io.horizontalsystems.bankwallet.ui.extensions.RateDiffView
@@ -84,12 +94,12 @@
                 style="@style/ImageButtonSecondary"
                 android:layout_width="28dp"
                 android:layout_height="28dp"
-                android:visibility="invisible"
                 android:src="@drawable/ic_rating_a"
+                android:visibility="invisible"
                 app:layout_constraintBottom_toBottomOf="@+id/coinRateLast"
                 app:layout_constraintEnd_toEndOf="@+id/endGuideline"
                 app:layout_constraintTop_toTopOf="@+id/coinRateLast"
-                tools:visibility="visible"/>
+                tools:visibility="visible" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/chartPointsInfo"
@@ -190,16 +200,17 @@
                 android:layout_width="0dp"
                 android:layout_height="40dp"
                 android:layout_marginTop="8dp"
-                android:layout_marginStart="4dp"
-                android:layout_marginEnd="4dp"
+                android:clipToPadding="false"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/coinRateLast"
-                app:tabPaddingStart="4dp"
-                app:tabPaddingEnd="4dp"
-                app:tabMinWidth="0dp"
                 app:tabGravity="start"
-                app:tabMode="scrollable" />
+                app:tabMinWidth="0dp"
+                app:tabMode="scrollable"
+                app:tabPaddingEnd="4dp"
+                app:tabPaddingStart="4dp" />
 
             <io.horizontalsystems.chartview.Chart
                 android:id="@+id/chart"
@@ -207,16 +218,13 @@
                 android:layout_height="180dp"
                 android:layout_marginTop="4dp"
                 app:cursorColor="@color/oz"
-                app:curvePressedColor="@color/oz"
                 app:gridDashColor="@color/steel_10"
                 app:gridTextColor="@color/nina"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/chartPointsInfo"
                 app:partialChartColor="@color/grey_50"
-                app:timelineTextColor="@color/nina"
-                app:trendDownColor="@color/red_d"
-                app:trendUpColor="@color/green_d" />
+                app:timelineTextColor="@color/nina" />
 
             <View
                 android:id="@+id/border3"
@@ -264,8 +272,8 @@
                 android:id="@+id/border4"
                 android:layout_width="0dp"
                 android:layout_height="0.5dp"
-                android:background="@color/steel_20"
                 android:layout_marginTop="7dp"
+                android:background="@color/steel_20"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/indicatorRSI" />

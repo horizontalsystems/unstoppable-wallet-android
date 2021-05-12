@@ -47,7 +47,7 @@ class SendFeeInteractor(
         feeRateProvider.feeRate(feeRatePriority)
                 .subscribeOn(Schedulers.io())
                 .subscribe({
-                    delegate?.didUpdate(it)
+                    delegate?.didUpdate(it, feeRatePriority)
                 }, {
                     delegate?.didReceiveError(it as Exception)
                 })

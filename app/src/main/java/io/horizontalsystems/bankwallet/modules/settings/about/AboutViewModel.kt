@@ -2,7 +2,11 @@ package io.horizontalsystems.bankwallet.modules.settings.about
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.core.IAppConfigProvider
+import io.horizontalsystems.bankwallet.core.IClipboardManager
+import io.horizontalsystems.bankwallet.core.IRateAppManager
+import io.horizontalsystems.bankwallet.core.ITermsManager
+import io.horizontalsystems.bankwallet.core.managers.ReleaseNotesManager
 import io.horizontalsystems.core.ISystemInfoManager
 import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.Disposable
@@ -11,6 +15,7 @@ class AboutViewModel(
         private val appConfigProvider: IAppConfigProvider,
         private val clipboardManager: IClipboardManager,
         private val rateAppManager: IRateAppManager,
+        private val releaseNotesManager: ReleaseNotesManager,
         termsManager: ITermsManager,
         systemInfoManager: ISystemInfoManager
 ) : ViewModel() {
@@ -19,6 +24,7 @@ class AboutViewModel(
     val showShareAppLiveData = SingleLiveEvent<String>()
     val termsAcceptedData = MutableLiveData<Boolean>()
     val showCopiedLiveEvent = SingleLiveEvent<Unit>()
+    val showWhatsNewLiveEvent = SingleLiveEvent<String>()
 
     val appVersion = systemInfoManager.appVersion
     val reportEmail = appConfigProvider.reportEmail
@@ -58,6 +64,10 @@ class AboutViewModel(
 
     fun onRateUsClicked() {
         rateAppManager.forceShow()
+    }
+
+    fun onWhatsNewTap() {
+        showWhatsNewLiveEvent.postValue(releaseNotesManager.releaseNotesUrl)
     }
 
 }

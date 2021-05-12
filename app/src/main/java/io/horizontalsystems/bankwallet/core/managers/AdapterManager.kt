@@ -35,7 +35,7 @@ class AdapterManager(
         start()
         handler = Handler(looper)
 
-        disposables.add(walletManager.walletsUpdatedObservable
+        disposables.add(walletManager.activeWalletsUpdatedObservable
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .subscribe { wallets ->
@@ -46,7 +46,7 @@ class AdapterManager(
 
     override fun preloadAdapters() {
         handler.post {
-            initAdapters(walletManager.wallets)
+            initAdapters(walletManager.activeWallets)
         }
     }
 
@@ -79,7 +79,7 @@ class AdapterManager(
         disabledWallets.forEach { wallet ->
             adaptersMap.remove(wallet)?.let { disabledAdapter ->
                 disabledAdapter.stop()
-                adapterFactory.unlinkAdapter(wallet.coin.type)
+                adapterFactory.unlinkAdapter(wallet)
             }
         }
 
@@ -101,7 +101,7 @@ class AdapterManager(
             walletsToRefresh.forEach { wallet ->
                 adaptersMap.remove(wallet)?.let { previousAdapter ->
                     previousAdapter.stop()
-                    adapterFactory.unlinkAdapter(wallet.coin.type)
+                    adapterFactory.unlinkAdapter(wallet)
                 }
             }
 
@@ -133,22 +133,12 @@ class AdapterManager(
 
     }
 
-    override fun stopKits() {
-        handler.post {
-            adaptersMap.forEach { (wallet, adapter) ->
-                adapter.stop()
-                adapterFactory.unlinkAdapter(wallet.coin.type)
-            }
-            adaptersMap.clear()
-        }
-    }
-
     override fun getAdapterForWallet(wallet: Wallet): IAdapter? {
         return adaptersMap[wallet]
     }
 
     override fun getAdapterForCoin(coin: Coin): IAdapter? {
-        return walletManager.wallets.firstOrNull { it.coin == coin }?.let { wallet ->
+        return walletManager.activeWallets.firstOrNull { it.coin == coin }?.let { wallet ->
             adaptersMap[wallet]
         }
     }

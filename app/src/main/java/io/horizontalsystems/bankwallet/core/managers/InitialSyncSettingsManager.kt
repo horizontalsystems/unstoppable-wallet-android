@@ -47,7 +47,7 @@ class InitialSyncSettingsManager(
     override fun save(setting: InitialSyncSetting) {
         blockchainSettingsStorage.saveInitialSyncSetting(setting)
 
-        val walletsForUpdate = walletManager.wallets.filter { it.coin.type == setting.coinType && it.account.origin == AccountOrigin.Restored }
+        val walletsForUpdate = walletManager.activeWallets.filter { it.coin.type == setting.coinType && it.account.origin == AccountOrigin.Restored }
 
         if (walletsForUpdate.isNotEmpty()) {
             adapterManager.refreshAdapters(walletsForUpdate)

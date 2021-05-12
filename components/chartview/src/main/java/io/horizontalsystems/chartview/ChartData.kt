@@ -12,8 +12,9 @@ class ChartData(val items: MutableList<Item>, val startTimestamp: Long, val endT
     class Item(val timestamp: Long, val values: MutableMap<Indicator, Value?> = mutableMapOf()) {
 
         fun setPoint(x: Float, indicator: Indicator, range: Range<Float>) {
+            val delta = range.upper - range.lower
             values[indicator]?.let {
-                val y = (it.value - range.lower) / (range.upper - range.lower)
+                val y = if (delta == 0F && range.upper > 0f) 0.5f else (it.value - range.lower) / delta
                 it.point = PointF(x, y)
             }
         }

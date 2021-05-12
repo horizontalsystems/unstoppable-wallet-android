@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.receive
 import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.IClipboardManager
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.entities.addressType
 import io.horizontalsystems.bankwallet.modules.receive.viewitems.AddressItem
 
 class ReceiveInteractor(
@@ -15,8 +16,12 @@ class ReceiveInteractor(
 
     override fun getReceiveAddress() {
         adapterManager.getReceiveAdapterForWallet(wallet)?.let { adapter ->
-            val addressItem = AddressItem(adapter.receiveAddress,
-                                          adapter.getReceiveAddressType(wallet), wallet.coin)
+
+            val addressItem = AddressItem(
+                    adapter.receiveAddress,
+                    wallet.configuredCoin.settings.derivation?.addressType(),
+                    wallet.coin)
+
             delegate?.didReceiveAddress(addressItem)
         }
     }

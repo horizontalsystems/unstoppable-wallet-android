@@ -117,7 +117,10 @@
         android:includeFontPadding="false"
         android:text="@string/Send_DialogSpeed"
         android:textColor="@color/grey"
+        app:layout_constrainedWidth="true"
         app:layout_constraintBottom_toBottomOf="@+id/speedLayoutFrame"
+        app:layout_constraintEnd_toStartOf="@+id/txSpeedMenu"
+        app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toEndOf="@+id/feeInfoButton"
         app:layout_constraintTop_toTopOf="@+id/speedLayoutFrame" />
 
@@ -173,5 +176,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/speedLayoutFrame"
         app:textColor="@color/leah" />
+
+    <TextView
+        android:id="@+id/warningOfStuck"
+        style="@style/ImportantText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="26dp"
+        android:text="@string/Send_Warning_LowFee"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/customFeeSeekBar" />
 
 </merge>

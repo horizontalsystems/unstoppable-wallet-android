@@ -3,28 +3,47 @@ package io.horizontalsystems.bankwallet.modules.balanceonboarding
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.IAccountManager
-import io.horizontalsystems.bankwallet.entities.Account
+import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.reactivex.disposables.CompositeDisposable
 
-class BalanceOnboardingViewModel(accountManager: IAccountManager): ViewModel() {
+class BalanceOnboardingViewModel(
+        private val accountManager: IAccountManager,
+        private val walletManager: IWalletManager
+) : ViewModel() {
 
-    val hasAccountsLiveData = MutableLiveData<Boolean>()
+    val balanceViewTypeLiveData = MutableLiveData<BalanceViewType>()
 
     val disposables = CompositeDisposable()
 
     init {
-        disposables.add(accountManager.accountsFlowable.subscribe {
-            sync(it)
-        })
+        accountManager.accountsFlowable
+                .subscribe { syncBalanceViewType() }
+                .let { disposables.add(it) }
 
-        sync(accountManager.accounts)
+        walletManager.activeWalletsUpdatedObservable
+                .subscribe { syncBalanceViewType() }
+                .let { disposables.add(it) }
+
+        syncBalanceViewType()
     }
 
-    fun sync(accounts: List<Account>) {
-        hasAccountsLiveData.postValue(accounts.isNotEmpty())
+    private fun syncBalanceViewType() {
+        val balanceViewType = when {
+            accountManager.accounts.isEmpty() -> BalanceViewType.NoAccounts
+            walletManager.activeWallets.isEmpty() -> BalanceViewType.NoCoins(accountManager.activeAccount?.name)
+            else -> BalanceViewType.Balance
+        }
+        balanceViewTypeLiveData.postValue(balanceViewType)
     }
 
     override fun onCleared() {
         disposables.clear()
     }
+
+    sealed class BalanceViewType {
+        object NoAccounts: BalanceViewType()
+        class NoCoins(val accountName: String?): BalanceViewType()
+        object Balance: BalanceViewType()
+    }
+
 }

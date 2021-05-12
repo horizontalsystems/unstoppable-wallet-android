@@ -193,4 +193,15 @@
         app:layout_constraintTop_toBottomOf="@+id/customFeeSeekBar"
         tools:text="Transaction fees for USDT (ERC20) paid in Ethereum. You don&apos;t have 0,00028 ETH." />
 
+    <TextView
+        android:id="@+id/lowFeeWarning"
+        style="@style/ImportantText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="26dp"
+        android:text="@string/Send_Warning_LowFee"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/feeError" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

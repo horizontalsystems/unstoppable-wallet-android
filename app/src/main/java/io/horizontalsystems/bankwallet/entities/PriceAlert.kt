@@ -8,7 +8,6 @@ import io.horizontalsystems.coinkit.models.CoinType
 @Entity
 class PriceAlert(
         @PrimaryKey val coinType: CoinType,
-        val notificationCoinCode: String,
         val coinName: String,
         var changeState: ChangeState,
         var trendState: TrendState
@@ -19,6 +18,16 @@ class PriceAlert(
         PERCENT_2("2"),
         PERCENT_5("5"),
         PERCENT_10("10");
+
+        //needed for sending this enum value as Int in Server request
+        fun getIntValue(): Int {
+            return when(this){
+                OFF -> 0
+                PERCENT_2 -> 2
+                PERCENT_5 -> 5
+                PERCENT_10 -> 10
+            }
+        }
 
         companion object {
             fun valueOf(value: String?): ChangeState {

@@ -8,6 +8,7 @@ import io.reactivex.Flowable
 import io.reactivex.Single
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
@@ -24,8 +25,12 @@ import javax.net.ssl.X509TrustManager
 
 class NetworkManager : INetworkManager {
 
-    override fun getGuide(host: String, path: String): Single<String> {
+    override fun getMarkdown(host: String, path: String): Single<String> {
         return ServiceGuide.service(host).getGuide(path)
+    }
+
+    override fun getReleaseNotes(host: String, path: String): Single<JsonObject> {
+        return ServiceChangeLogs.service(host).getReleaseNotes(path)
     }
 
     override fun getTransaction(host: String, path: String, isSafeCall: Boolean): Flowable<JsonObject> {
@@ -43,6 +48,18 @@ class NetworkManager : INetworkManager {
 
     override fun getEvmInfo(host: String, path: String): Single<JsonObject> {
         return ServiceEvmContractInfo.service(host).getTokenInfo(path)
+    }
+
+    override suspend fun subscribe(host: String, path: String, body: String): JsonObject {
+        return ServiceNotifications.service(host).subscribe(path, body)
+    }
+
+    override suspend fun unsubscribe(host: String, path: String, body: String): JsonObject {
+        return ServiceNotifications.service(host).unsubscribe(path, body)
+    }
+
+    override suspend fun getNotifications(host: String, path: String): Response<JsonObject> {
+        return ServiceNotifications.service(host).getNotifications(path)
     }
 }
 
@@ -97,6 +114,42 @@ object ServiceGuide {
     interface GuidesAPI {
         @GET
         fun getGuide(@Url path: String): Single<String>
+    }
+}
+
+object ServiceNotifications {
+    fun service(apiURL: String): NotificationsAPI {
+        return APIClient.retrofit(apiURL, 60)
+                .create(NotificationsAPI::class.java)
+    }
+
+    interface NotificationsAPI {
+
+        @GET
+        @Headers("Content-Type: application/json")
+        suspend fun getNotifications(@Url path: String): Response<JsonObject>
+
+        @POST
+        @Headers("Content-Type: application/json")
+        suspend fun subscribe(@Url path: String, @Body body: String): JsonObject
+
+        @POST
+        @Headers("Content-Type: application/json")
+        suspend fun unsubscribe(@Url path: String, @Body body: String): JsonObject
+    }
+}
+
+object ServiceChangeLogs {
+    fun service(apiURL: String): ChangeLogsAPI {
+        return APIClient.retrofit(apiURL, 60)
+                .create(ChangeLogsAPI::class.java)
+    }
+
+    interface ChangeLogsAPI {
+
+        @GET
+        @Headers("Content-Type: application/json")
+        fun getReleaseNotes(@Url path: String): Single<JsonObject>
     }
 }
 

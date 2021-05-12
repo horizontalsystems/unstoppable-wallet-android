@@ -21,64 +21,68 @@
             android:paddingStart="0dp"
             android:paddingEnd="4dp"
             app:layout_collapseMode="pin"
-            app:layout_scrollFlags="scroll|enterAlways|snap"
-            app:menu="@menu/balance_menu"
-            app:title="@string/Balance_Title"
-            app:titleTextAppearance="@style/Title3" />
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/balanceTabWrapper"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:orientation="horizontal"
-            android:paddingStart="16dp"
-            android:paddingEnd="12dp">
-
-            <ImageView
-                android:id="@+id/sortButton"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_marginTop="4dp"
-                android:padding="4dp"
-                android:src="@drawable/ic_sort"
-                android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:tint="@color/stateful_button_yellow_color"
-                tools:visibility="visible" />
-
-            <FrameLayout
-                android:id="@+id/totalBalanceWrapper"
+            app:layout_scrollFlags="scroll|enterAlways|snap">
+            <TextView
+                android:id="@+id/toolbarTitle"
+                style="@style/Title3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="6dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <TextView
-                    android:id="@+id/balanceText"
-                    style="@style/Headline1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="31dp"
-                    android:textColor="@color/yellow_50"
-                    tools:text="$ 200,234.90" />
-
-                <ImageView
-                    android:id="@+id/hideButton"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_gravity="end"
-                    android:layout_marginStart="7dp"
-                    android:layout_marginTop="2dp"
-                    android:src="@drawable/ic_hide_24"
-                    app:layout_constraintStart_toEndOf="@+id/balanceText"
-                    app:layout_constraintTop_toTopOf="parent" />
-            </FrameLayout>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
+                android:layout_marginEnd="16dp"
+                android:drawablePadding="8dp"
+                android:ellipsize="end"
+                android:singleLine="true"
+                app:drawableEndCompat="@drawable/ic_down_24"
+                tools:text="Wallet 1" />
+        </androidx.appcompat.widget.Toolbar>
+        <TextView
+            android:id="@+id/balanceText"
+            style="@style/Headline1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="9dp"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textAlignment="textStart"
+            android:textColor="@color/yellow_50"
+            tools:text="$ 200,234.90" />
     </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp">
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="@color/steel_10"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/sortButton"
+            style="@style/ButtonSecondaryTransparentEndIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableEnd="@drawable/ic_down_arrow_20"
+            android:text="@string/Balance_Sort_PopupTitle"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/addCoinButton"
+            style="@style/ButtonThird"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:text="@string/Balance_AddCoin"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/pullToRefresh"
@@ -91,7 +95,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
-            android:paddingTop="4dp"
+            android:paddingTop="8dp"
             android:paddingBottom="18dp"
             tools:itemCount="1"
             tools:listitem="@layout/view_holder_balance_item" />

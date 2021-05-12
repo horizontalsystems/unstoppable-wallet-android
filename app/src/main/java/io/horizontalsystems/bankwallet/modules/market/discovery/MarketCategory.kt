@@ -10,14 +10,14 @@ sealed class MarketCategory(
         @DrawableRes val iconResId: Int,
         @StringRes val descriptionResId: Int
 ) {
-    object Rated : MarketCategory("rated", R.string.Market_Category_Rated, R.drawable.ic_chart, R.string.Market_Category_Rated_Description)
+    object Rated : MarketCategory("rated", R.string.Market_Category_Rated, R.drawable.ic_chart_24, R.string.Market_Category_Rated_Description)
     object Blockchains : MarketCategory("blockchain", R.string.Market_Category_Blockchains, R.drawable.ic_blocks, R.string.Market_Category_Blockchains_Description)
     object Dexes : MarketCategory("dexes", R.string.Market_Category_Dexes, R.drawable.ic_swap_2, R.string.Market_Category_Dexes_Description)
     object Lending : MarketCategory("lending", R.string.Market_Category_Lending, R.drawable.ic_swap_approval_4, R.string.Market_Category_Lending_Description)
     object Privacy : MarketCategory("privacy", R.string.Market_Category_Privacy, R.drawable.ic_shield, R.string.Market_Category_Privacy_Description)
     object Scaling : MarketCategory("scaling", R.string.Market_Category_Scaling, R.drawable.ic_scale, R.string.Market_Category_Scaling_Description)
     object Oracles : MarketCategory("oracles", R.string.Market_Category_Oracles, R.drawable.ic_eye, R.string.Market_Category_Oracles_Description)
-    object Prediction : MarketCategory("prediction_markets", R.string.Market_Category_Prediction, R.drawable.ic_markets, R.string.Market_Category_Prediction_Description)
+    object Prediction : MarketCategory("prediction_markets", R.string.Market_Category_Prediction, R.drawable.ic_prediction, R.string.Market_Category_Prediction_Description)
     object YieldAggregators : MarketCategory("yield_aggregators", R.string.Market_Category_YieldAggregators, R.drawable.ic_portfolio, R.string.Market_Category_YieldAggregators_Description)
     object FiatStablecoins : MarketCategory("fiat_stablecoins", R.string.Market_Category_FiatStableCoins, R.drawable.ic_usd, R.string.Market_Category_FiatStableCoins_Description)
     object AlgoStablecoins : MarketCategory("algo_stablecoins", R.string.Market_Category_AlgoStablecoins, R.drawable.ic_unordered_2, R.string.Market_Category_AlgoStablecoins_Description)
@@ -34,8 +34,9 @@ sealed class MarketCategory(
     object B2B : MarketCategory("b2b", R.string.Market_Category_B2B, R.drawable.ic_swap, R.string.Market_Category_B2B_Description)
     object Infrastructure : MarketCategory("infrastructure", R.string.Market_Category_Infrastructure, R.drawable.ic_settings_2, R.string.Market_Category_Infrastructure_Description)
     object Staking : MarketCategory("staking_eth_2_0", R.string.Market_Category_Staking, R.drawable.ic_plus_circled, R.string.Market_Category_Staking_Description)
-    object Governance : MarketCategory("governance", R.string.Market_Category_Governance, R.drawable.ic_sort_4, R.string.Market_Category_Governance_Description)
     object CrossChain : MarketCategory("cross_chain", R.string.Market_Category_CrossChain, R.drawable.ic_link, R.string.Market_Category_CrossChain_Description)
     object Computing : MarketCategory("computing", R.string.Market_Category_Computing, R.drawable.ic_dialpad_alt, R.string.Market_Category_Computing_Description)
     object RebaseTokens : MarketCategory("rebase_tokens", R.string.Market_Category_RebaseTokens, R.drawable.ic_rebase, R.string.Market_Category_RebaseTokens_Description)
+    object FanTokens : MarketCategory("fan_tokens", R.string.Market_Category_FanTokens, R.drawable.ic_heart, R.string.Market_Category_FanTokens_Description)
+    object InvestmentTools : MarketCategory("investment_tools", R.string.Market_Category_InvestmentTools, R.drawable.ic_markets, R.string.Market_Category_InvestmentTools_Description)
 }

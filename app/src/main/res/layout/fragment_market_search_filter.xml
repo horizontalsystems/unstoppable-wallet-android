@@ -32,7 +32,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingBottom="32dp">
 
             <io.horizontalsystems.bankwallet.ui.extensions.MarketFilterView
                 android:id="@+id/filterCoinList"
@@ -103,19 +104,69 @@
                 android:layout_height="48dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
-                android:background="@drawable/rounded_lawrence_background_bottom"
+                android:background="@drawable/rounded_lawrence_background_middle"
                 app:title="@string/Market_Filter_PricePeriod"
                 app:value="@string/Any" />
+
+            <io.horizontalsystems.bankwallet.ui.extensions.MarketFilterSwitchView
+                android:id="@+id/filterOutperformedBtc"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/rounded_lawrence_background_middle"
+                app:title="@string/Market_Filter_OutperformedBtc" />
+
+            <io.horizontalsystems.bankwallet.ui.extensions.MarketFilterSwitchView
+                android:id="@+id/filterOutperformedEth"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/rounded_lawrence_background_middle"
+                app:title="@string/Market_Filter_OutperformedEth" />
+
+            <io.horizontalsystems.bankwallet.ui.extensions.MarketFilterSwitchView
+                android:id="@+id/filterOutperformedBnb"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/rounded_lawrence_background_middle"
+                app:title="@string/Market_Filter_OutperformedBnb" />
+
+            <io.horizontalsystems.bankwallet.ui.extensions.MarketFilterSwitchView
+                android:id="@+id/filterPriceCloseToAth"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/rounded_lawrence_background_middle"
+                app:title="@string/Market_Filter_PriceCloseToAth" />
+
+            <io.horizontalsystems.bankwallet.ui.extensions.MarketFilterSwitchView
+                android:id="@+id/filterPriceCloseToAtl"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="32dp"
+                android:background="@drawable/rounded_lawrence_background_bottom"
+                app:title="@string/Market_Filter_PriceCloseToAtl" />
 
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
 
-    <Button
-        app:layout_constraintStart_toStartOf="parent"
+    <View
+        android:layout_width="0dp"
+        android:layout_height="24dp"
+        android:background="@drawable/bottom_button_top_fading"
+        app:layout_constraintBottom_toTopOf="@+id/submit"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/content"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
         android:id="@+id/submit"
         style="@style/ButtonPrimaryYellow"
         android:layout_width="match_parent"
@@ -123,7 +174,11 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="32dp"
-        android:text="@string/Market_Filter_ShowResults" />
+        android:text="@string/Market_Filter_ShowResults"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/content" />
 
     <ProgressBar
         android:id="@+id/progressBar"

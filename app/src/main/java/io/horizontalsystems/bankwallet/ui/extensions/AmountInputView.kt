@@ -8,6 +8,7 @@ import android.view.animation.AnimationUtils
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.fiat.AmountTypeSwitchService
 import io.horizontalsystems.core.helpers.KeyboardHelper
 import kotlinx.android.synthetic.main.view_input_amount.view.*
 
@@ -46,9 +47,6 @@ class AmountInputView @JvmOverloads constructor(context: Context, attrs: Attribu
         btnMax.setOnClickListener {
             onTapMaxCallback?.invoke()
         }
-        secondaryArea.setOnClickListener {
-            onTapSecondaryCallback?.invoke()
-        }
     }
 
     fun getAmount(): String? {
@@ -71,9 +69,36 @@ class AmountInputView @JvmOverloads constructor(context: Context, attrs: Attribu
         }
     }
 
-    fun setPrefix(prefix: String?) {
-        topAmountPrefix.text = prefix
-        topAmountPrefix.isVisible = prefix?.isNotBlank() ?: false
+    fun setInputParams(inputParams: InputParams) {
+        val primaryColor = getPrimaryTextColor(inputParams.amountType)
+        topAmountPrefix.setTextColor(context.getColor(primaryColor))
+        editTxtAmount.setTextColor(context.getColor(primaryColor))
+
+        topAmountPrefix.text = inputParams.primaryPrefix
+        topAmountPrefix.isVisible = inputParams.primaryPrefix?.isNotBlank() ?: false
+
+        val hintTextColor = getSecondaryTextColor(inputParams.amountType, inputParams.switchEnabled)
+
+        txtHintInfo.setTextColor(context.getColor(hintTextColor))
+
+        secondaryArea.setOnClickListener {
+            if (inputParams.switchEnabled) onTapSecondaryCallback?.invoke() else null
+        }
+    }
+
+    private fun getPrimaryTextColor(type: AmountTypeSwitchService.AmountType): Int {
+        return when (type) {
+            AmountTypeSwitchService.AmountType.Currency -> R.color.jacob
+            AmountTypeSwitchService.AmountType.Coin -> R.color.oz
+        }
+    }
+
+    private fun getSecondaryTextColor(type: AmountTypeSwitchService.AmountType, switchEnabled: Boolean): Int {
+        return when{
+            !switchEnabled -> R.color.grey_50
+            type == AmountTypeSwitchService.AmountType.Coin -> R.color.jacob
+            else -> R.color.oz
+        }
     }
 
     fun setSecondaryText(text: String?) {
@@ -92,15 +117,9 @@ class AmountInputView @JvmOverloads constructor(context: Context, attrs: Attribu
         editTxtAmount.startAnimation(shake)
     }
 
-    fun setSecondaryEnabled(enabled: Boolean) {
-        secondaryArea.isEnabled = enabled
-        context?.let { ctx ->
-            val color = if (enabled) R.color.bran else R.color.grey_50
-            txtHintInfo.setTextColor(ctx.getColor(color))
-        }
-    }
-
     private fun syncButtonStates() {
         btnMax.isVisible = maxButtonVisible && editTxtAmount.text.isNullOrBlank()
     }
+
+    class InputParams(val amountType: AmountTypeSwitchService.AmountType, val primaryPrefix: String?, val switchEnabled: Boolean)
 }

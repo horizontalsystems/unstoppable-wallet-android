@@ -19,10 +19,8 @@ class PrivacySettingsPresenter(
     private val needToRestartAppForTor: Boolean
         get() = interactor.wallets.isNotEmpty()
 
-    private val standardCreatedWalletExists: Boolean
-        get() = interactor.wallets.firstOrNull {
-            it.account.origin == AccountOrigin.Created && it.coin.type.predefinedAccountType == PredefinedAccountType.Standard
-        } != null
+    private val isActiveAccountCreated: Boolean
+        get() = interactor.activeAccount?.origin == AccountOrigin.Created
 
     private val syncItems: List<PrivacySettingsViewItem> =
             interactor.syncSettings().mapIndexed { index, (initialSyncSetting, coin, changeable) ->
@@ -37,7 +35,7 @@ class PrivacySettingsPresenter(
 
     private val communicationSettingsViewItems: List<PrivacySettingsViewItem> = listOf(
             PrivacySettingsViewItem("Ethereum", interactor.ether, CommunicationModeSettingType(CommunicationMode.Infura), enabled = ethereumCommunicationModeCanBeChanged(), listPosition = ListPosition.First),
-            PrivacySettingsViewItem("Smart Chain", interactor.binanceSmartChain, CommunicationModeSettingType(CommunicationMode.Nariox), enabled = false, listPosition = ListPosition.Middle),
+            PrivacySettingsViewItem("BSC", interactor.binanceSmartChain, CommunicationModeSettingType(CommunicationMode.Nariox), enabled = false, listPosition = ListPosition.Middle),
             PrivacySettingsViewItem("Binance", interactor.binance, CommunicationModeSettingType(CommunicationMode.BinanceDex), enabled = false, listPosition = ListPosition.Last)
     )
 
@@ -52,7 +50,7 @@ class PrivacySettingsPresenter(
 
         view?.setCommunicationSettingsViewItems(communicationSettingsViewItems)
 
-        if (!standardCreatedWalletExists)
+        if (!isActiveAccountCreated)
             view?.setRestoreWalletSettingsViewItems(syncItems)
     }
 

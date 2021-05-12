@@ -15,9 +15,9 @@ class ActivateCoinManager(
     fun activate(coinType: CoinType) {
         val coin = coinKit.getCoin(coinType) ?: return // coin type is not supported
 
-        if (walletManager.wallets.any { it.coin == coin })  return // wallet already exists
+        if (walletManager.activeWallets.any { it.coin == coin })  return // wallet already exists
 
-        val account = accountManager.account(coinType) ?: return // no account for this coin type
+        val account = accountManager.activeAccount ?: return // active account does not exist
 
         val wallet = Wallet(coin, account)
         walletManager.save(listOf(wallet))

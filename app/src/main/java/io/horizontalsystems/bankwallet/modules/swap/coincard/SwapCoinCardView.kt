@@ -73,9 +73,7 @@ class SwapCoinCardView @JvmOverloads constructor(context: Context, attrs: Attrib
 
         viewModel.secondaryInfoLiveData().observe(lifecycleOwner, { amountInput.setSecondaryText(it) })
 
-        viewModel.prefixLiveData().observe(lifecycleOwner, { amountInput.setPrefix(it) })
-
-        viewModel.switchEnabledLiveData().observe(lifecycleOwner, { amountInput.setSecondaryEnabled(it) })
+        viewModel.inputParamsLiveData().observe(lifecycleOwner, { amountInput.setInputParams(it) })
 
         viewModel.maxEnabledLiveData().observe(lifecycleOwner, { enabled ->
             amountInput.maxButtonVisible = enabled

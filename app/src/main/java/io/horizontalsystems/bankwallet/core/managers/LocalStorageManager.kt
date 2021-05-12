@@ -13,16 +13,15 @@ import io.horizontalsystems.bankwallet.entities.TransactionDataSortingType
 import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
 import io.horizontalsystems.bankwallet.modules.market.MarketModule
 import io.horizontalsystems.bankwallet.modules.send.SendModule
+import io.horizontalsystems.bankwallet.modules.settings.theme.ThemeType
 import io.horizontalsystems.core.IPinStorage
-import io.horizontalsystems.core.IThemeStorage
 import io.horizontalsystems.core.IThirdKeyboard
 import io.horizontalsystems.core.entities.AppVersion
 import io.horizontalsystems.xrateskit.entities.ChartType
 
 class LocalStorageManager(private val preferences: SharedPreferences)
-    : ILocalStorage, IThemeStorage, IPinStorage, IChartTypeStorage, IThirdKeyboard, IMarketStorage {
+    : ILocalStorage, IPinStorage, IChartTypeStorage, IThirdKeyboard, IMarketStorage {
 
-    private val LIGHT_MODE_ENABLED = "light_mode_enabled"
     private val THIRD_KEYBOARD_WARNING_MSG = "third_keyboard_warning_msg"
     private val SEND_INPUT_TYPE = "send_input_type"
     private val BASE_CURRENCY_CODE = "base_currency_code"
@@ -53,6 +52,11 @@ class LocalStorageManager(private val preferences: SharedPreferences)
     private val BIOMETRIC_ENABLED = "biometric_auth_enabled"
     private val PIN = "lock_pin"
     private val MAIN_SHOWED_ONCE = "main_showed_once"
+    private val NOTIFICATION_ID = "notification_id"
+    private val NOTIFICATION_SERVER_TIME = "notification_server_time"
+    private val CURRENT_THEME = "current_theme"
+    private val CHANGELOG_SHOWN_FOR_APP_VERSION = "changelog_shown_for_app_version"
+    private val IGNORE_ROOTED_DEVICE_WARNING = "ignore_rooted_device_warning"
 
     val gson by lazy { Gson() }
 
@@ -157,12 +161,10 @@ class LocalStorageManager(private val preferences: SharedPreferences)
         preferences.edit().clear().apply()
     }
 
-    //  IThemeStorage
-
-    override var isLightModeOn: Boolean
-        get() = preferences.getBoolean(LIGHT_MODE_ENABLED, false)
-        set(enabled) {
-            preferences.edit().putBoolean(LIGHT_MODE_ENABLED, enabled).apply()
+    override var currentTheme: ThemeType
+        get() = preferences.getString(CURRENT_THEME, null)?.let { ThemeType.valueOf(it) } ?: ThemeType.Dark
+        set(themeType) {
+            preferences.edit().putString(CURRENT_THEME, themeType.value).apply()
         }
 
     //  IKeyboardStorage
@@ -316,5 +318,29 @@ class LocalStorageManager(private val preferences: SharedPreferences)
         get() = preferences.getBoolean(MAIN_SHOWED_ONCE, false)
         set(value) {
             preferences.edit().putBoolean(MAIN_SHOWED_ONCE, value).apply()
+        }
+
+    override var notificationId: String?
+        get() = preferences.getString(NOTIFICATION_ID, null)
+        set(value) {
+            preferences.edit().putString(NOTIFICATION_ID, value).apply()
+        }
+
+    override var notificationServerTime: Long
+        get() = preferences.getLong(NOTIFICATION_SERVER_TIME, 0)
+        set(value) {
+            preferences.edit().putLong(NOTIFICATION_SERVER_TIME, value).apply()
+        }
+
+    override var changelogShownForAppVersion: String?
+        get() = preferences.getString(CHANGELOG_SHOWN_FOR_APP_VERSION, null)
+        set(value) {
+            preferences.edit().putString(CHANGELOG_SHOWN_FOR_APP_VERSION, value).apply()
+        }
+
+    override var ignoreRootedDeviceWarning: Boolean
+        get() = preferences.getBoolean(IGNORE_ROOTED_DEVICE_WARNING, false)
+        set(value) {
+            preferences.edit().putBoolean(IGNORE_ROOTED_DEVICE_WARNING, value).apply()
         }
 }

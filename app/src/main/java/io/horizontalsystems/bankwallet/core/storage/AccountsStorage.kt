@@ -6,6 +6,7 @@ import io.horizontalsystems.bankwallet.core.toRawHexString
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountOrigin
 import io.horizontalsystems.bankwallet.entities.AccountType
+import io.horizontalsystems.bankwallet.entities.ActiveAccount
 import io.reactivex.Flowable
 
 class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
@@ -18,8 +19,17 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
         // account type codes stored in db
         private const val MNEMONIC = "mnemonic"
         private const val PRIVATE_KEY = "private_key"
-        private const val ZCASH = "zcash"
     }
+
+    override var activeAccountId: String?
+        get() = dao.getActiveAccount()?.accountId
+        set(value) {
+            if (value != null) {
+                dao.insertActiveAccount(ActiveAccount(value))
+            } else {
+                dao.deleteActiveAccount()
+            }
+        }
 
     override val isAccountsEmpty: Boolean
         get() = dao.getTotalCount() == 0
@@ -29,9 +39,8 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
                 .mapNotNull { record ->
                     try {
                         val accountType = when (record.type) {
-                            MNEMONIC -> AccountType.Mnemonic(record.words!!.list, record.salt?.value)
+                            MNEMONIC -> AccountType.Mnemonic(record.words!!.list, record.passphrase?.value ?: "")
                             PRIVATE_KEY -> AccountType.PrivateKey(record.key!!.value.hexToByteArray())
-                            ZCASH -> AccountType.Zcash(record.words!!.list, record.birthdayHeight)
                             else -> null
                         }
                         Account(record.id, record.name, accountType!!, AccountOrigin.valueOf(record.origin), record.isBackedUp)
@@ -70,43 +79,34 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
     }
 
     private fun getAccountRecord(account: Account): AccountRecord {
-        return when (account.type) {
-            is AccountType.Mnemonic,
-            is AccountType.PrivateKey,
-            is AccountType.Zcash -> {
-                AccountRecord(
-                        id = account.id,
-                        name = account.name,
-                        type = getAccountTypeCode(account.type),
-                        origin = account.origin.value,
-                        isBackedUp = account.isBackedUp,
-                        words = when (account.type) {
-                            is AccountType.Mnemonic -> SecretList(account.type.words)
-                            is AccountType.Zcash -> SecretList(account.type.words)
-                            else -> null
-                        },
-                        salt = (account.type as? AccountType.Mnemonic)?.salt?.let { SecretString(it) },
-                        key = getKey(account.type)?.let { SecretString(it) },
-                        birthdayHeight = (account.type as? AccountType.Zcash)?.birthdayHeight
-                )
+        var words: SecretList? = null
+        var passphrase: SecretString? = null
+        var key: SecretString? = null
+        val accountType: String
+
+        when (account.type) {
+            is AccountType.Mnemonic -> {
+                words = SecretList(account.type.words)
+                passphrase = SecretString(account.type.passphrase)
+                accountType = MNEMONIC
             }
-            else -> throw Exception("Cannot save account with type: ${account.type}")
+            is AccountType.PrivateKey -> {
+                key = SecretString(account.type.key.toRawHexString())
+                accountType = PRIVATE_KEY
+            }
+            else -> throw Exception("Unsupported AccountType: ${account.type}")
         }
-    }
 
-    private fun getKey(accountType: AccountType): String? {
-        return when (accountType) {
-            is AccountType.PrivateKey -> accountType.key.toRawHexString()
-            else -> null
-        }
-    }
-
-    private fun getAccountTypeCode(accountType: AccountType): String {
-        return when (accountType) {
-            is AccountType.PrivateKey -> PRIVATE_KEY
-            is AccountType.Zcash -> ZCASH
-            else -> MNEMONIC
-        }
+        return AccountRecord(
+                id = account.id,
+                name = account.name,
+                type = accountType,
+                origin = account.origin.value,
+                isBackedUp = account.isBackedUp,
+                words = words,
+                passphrase = passphrase,
+                key = key
+        )
     }
 
 }
