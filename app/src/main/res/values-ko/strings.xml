@@ -39,7 +39,7 @@
     <string name="Intro_Privacy_Title">개인 정보 유지</string>
     <string name="Intro_Privacy_Description">이 지갑을 사용하여 신분을 숨기고 귀하의 정보를 안전하게 보호할 수 있습니다.</string>
     <!--Rooted Device-->
-    <string name="RootedDevice_Button_Understand">I Understand</string>
+    <string name="RootedDevice_Button_Understand">이해합니다</string>
     <!--Welcome-->
     <string name="Welcome_PrivacySettings">개인 정보 설정</string>
     <string name="Welcome_CreateWallet">새 지갑</string>
@@ -586,7 +586,7 @@
     <string name="ManageAccount_BackupRequired_Description">개인 암호가 휴대폰에서 지워질 수 있기 전에 귀하께서는 개인 암호를 백업 하셔야 합니다.</string>
     <string name="ManageAccount_DeleteFromPhone">휴대전화에서 삭제</string>
     <string name="ManageAccount_Delete_ConfirmationRemove">장치에서 이 지갑을 삭제합니다.</string>
-    <string name="ManageAccount_Delete_ConfirmationDisable">All coins that belong to this wallet will be disabled on balance tab.</string>
+    <string name="ManageAccount_Delete_ConfirmationDisable">이 지갑에 속한 모든 코인은 잔액 탭에서 비활성화됩니다.</string>
     <string name="ManageAccount_Delete_ConfirmationLose">지갑에서 개인 암호를 백업 시키지 않으셨을 경우, 귀하께서는 자금 접근에 제한이 있을 것 입니다.</string>
     <string name="ManageAccount_BirthdayHeight">%s Birthday Height</string>
     <string name="ManageAccount_NWords">%s 단어</string>
@@ -605,7 +605,7 @@
     <string name="BackupKey_ButtonShow">표시</string>
     <string name="BackupKey_ButtonBackup">백업</string>
     <string name="BackupConfirmKey_Description">확인할 복구 문구를 올바른 순서로 입력하십시오</string>
-    <string name="BackupConfirmKey_EmptyOrInvalidWords">Entered words are empty or invalid</string>
+    <string name="BackupConfirmKey_EmptyOrInvalidWords">입력 한 단어가 비어 있거나 잘못되었습니다.</string>
     <string name="BackupConfirmKey_Error_EmptyWord">빈 단어</string>
     <string name="BackupConfirmKey_Error_InvalidWord">잘못된 단어</string>
     <string name="BackupConfirmKey_Error_EmptyPassphrase">빈 암호 문구</string>
