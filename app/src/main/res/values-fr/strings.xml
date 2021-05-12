@@ -39,7 +39,7 @@
     <string name="Intro_Privacy_Title">Gardez votre confidentialité</string>
     <string name="Intro_Privacy_Description">Utilisez ce portefeuille pour rester incognito et conserver la confidentialité de vos informations.</string>
     <!--Rooted Device-->
-    <string name="RootedDevice_Button_Understand">I Understand</string>
+    <string name="RootedDevice_Button_Understand">J’ai Compris</string>
     <!--Welcome-->
     <string name="Welcome_PrivacySettings">Paramètres de Confidentialité</string>
     <string name="Welcome_CreateWallet">Nouveu Porte-Monnaie</string>
