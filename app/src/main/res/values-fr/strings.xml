@@ -39,7 +39,7 @@
     <string name="Intro_Privacy_Title">Gardez votre confidentialité</string>
     <string name="Intro_Privacy_Description">Utilisez ce portefeuille pour rester incognito et conserver la confidentialité de vos informations.</string>
     <!--Rooted Device-->
-    <string name="RootedDevice_Button_Understand">I ACCEPT</string>
+    <string name="RootedDevice_Button_Understand">I Understand</string>
     <!--Welcome-->
     <string name="Welcome_PrivacySettings">Paramètres de Confidentialité</string>
     <string name="Welcome_CreateWallet">Nouveu Porte-Monnaie</string>
@@ -158,7 +158,7 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="Market_Category_Infrastructure_Description">Projects building infrastructure solutions.</string>
     <string name="Market_Category_Staking">Staking ETH 2.0</string>
     <string name="Market_Category_Staking_Description">Protocols that reward liquidity providers.</string>
-    <string name="Market_Category_CrossChain">Cross Chain</string>
+    <string name="Market_Category_CrossChain">Cross-Chain</string>
     <string name="Market_Category_CrossChain_Description">Cross-chain protocols.</string>
     <string name="Market_Category_Computing">Computing</string>
     <string name="Market_Category_Computing_Description">Decentralized on-demand computing solutions.</string>
@@ -444,7 +444,7 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="Markdown_Error_NotFound">Página no encontrada</string>
     <!--Setting_Currency-->
     <string name="SettingsCurrency_Title">Devise de Base</string>
-    <string name="SettingsCurrency_Other">OTHER</string>
+    <string name="SettingsCurrency_Other">AUTRE</string>
     <string name="SettingsCurrency_DisclaimerTitle">Avertissement</string>
     <string name="SettingsCurrency_DisclaimerText">Les données relatives aux taux de change fournies par un service tiers Coingecko.com\n\nUnstoppable wallet app ne garantit pas que ces valeurs sont toujours correctes et correspondent aux données du marché. Le risque de divergence est plus élevé si vous sélectionnez une devise de base autre que %s.</string>
     <string name="SettingsCurrency_Understand">J’ai Compris</string>
@@ -464,7 +464,7 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="Settings_RateUs">Evaluez-nous</string>
     <string name="SettingsAboutApp_Title">À propos de l\'application</string>
     <string name="SettingsAboutApp_Site">Website</string>
-    <string name="SettingsAboutApp_WhatsNew">What\'s New</string>
+    <string name="SettingsAboutApp_WhatsNew">Nouveautés</string>
     <string name="SettingsPrivacy_Info">Cette application ne partage aucune de vos données. Cependant, comme elle communique avec des blockchains, certaines données publiques comme l\'adresse IP peuvent potentiellement être divulguées. Utilisez le bouton \"info\" en haut à droite pour obtenir des informations détaillées sur chaque section.</string>
     <string name="SettingsPrivacy_ConnectionSettingsTitle">Internet</string>
     <string name="SettingsPrivacy_CommunicationSettingsTitle">Sync Blockchain</string>
@@ -585,9 +585,9 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="ManageAccount_BackupRequired_Title">Sauvegarde requise</string>
     <string name="ManageAccount_BackupRequired_Description">Vous devez sauvegarder la clé privée avant de pouvoir la supprimer de ce téléphone.</string>
     <string name="ManageAccount_DeleteFromPhone">Supprimer de l\'appareil</string>
-    <string name="ManageAccount_Delete_ConfirmationRemove">This action will delete the selected wallet from this device.</string>
-    <string name="ManageAccount_Delete_ConfirmationDisable">All coins that belong to this wallet will be disabled on balance tab.</string>
-    <string name="ManageAccount_Delete_ConfirmationLose">If you didn\'t backup the private key for this wallet, you will lose access to the funds on the selected wallet.</string>
+    <string name="ManageAccount_Delete_ConfirmationRemove">L\'action va supprimer ce portefeuille de l\'appareil.</string>
+    <string name="ManageAccount_Delete_ConfirmationDisable">Toutes les pièces qui appartiennent à ce portefeuille seront désactivées sur l\'onglet solde.</string>
+    <string name="ManageAccount_Delete_ConfirmationLose">Si vous n\'avez pas sauvegardé la clé privée de ce portefeuille, vous perdrez l\'accès à vos fonds.</string>
     <string name="ManageAccount_BirthdayHeight">Hauteur de l\'anniversaire %s</string>
     <string name="ManageAccount_NWords">%s mots</string>
     <string name="ManageAccount_NWordsWithPassphrase">%s mots avec phrase d\'authentification</string>
@@ -605,7 +605,7 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="BackupKey_ButtonShow">Afficher</string>
     <string name="BackupKey_ButtonBackup">Sauvegarde</string>
     <string name="BackupConfirmKey_Description">Entrez les phrases de réinitialisation dans l\'ordre correct pour confirmer</string>
-    <string name="BackupConfirmKey_EmptyOrInvalidWords">Entered words are empty or invalid</string>
+    <string name="BackupConfirmKey_EmptyOrInvalidWords">Les mots saisis sont vides ou non valides</string>
     <string name="BackupConfirmKey_Error_EmptyWord">Mot manquant</string>
     <string name="BackupConfirmKey_Error_InvalidWord">Mot incorrect</string>
     <string name="BackupConfirmKey_Error_EmptyPassphrase">Phrase d\'authentification manquante</string>
