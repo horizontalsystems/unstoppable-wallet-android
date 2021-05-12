@@ -39,7 +39,7 @@
     <string name="Intro_Privacy_Title">개인 정보 유지</string>
     <string name="Intro_Privacy_Description">이 지갑을 사용하여 신분을 숨기고 귀하의 정보를 안전하게 보호할 수 있습니다.</string>
     <!--Rooted Device-->
-    <string name="RootedDevice_Button_Understand">I ACCEPT</string>
+    <string name="RootedDevice_Button_Understand">I Understand</string>
     <!--Welcome-->
     <string name="Welcome_PrivacySettings">개인 정보 설정</string>
     <string name="Welcome_CreateWallet">새 지갑</string>
@@ -157,7 +157,7 @@
     <string name="Market_Category_Infrastructure_Description">Projects building infrastructure solutions.</string>
     <string name="Market_Category_Staking">Staking ETH 2.0</string>
     <string name="Market_Category_Staking_Description">Protocols that reward liquidity providers.</string>
-    <string name="Market_Category_CrossChain">Cross Chain</string>
+    <string name="Market_Category_CrossChain">Cross-Chain</string>
     <string name="Market_Category_CrossChain_Description">Cross-chain protocols.</string>
     <string name="Market_Category_Computing">Computing</string>
     <string name="Market_Category_Computing_Description">Decentralized on-demand computing solutions.</string>
@@ -443,10 +443,10 @@
     <string name="Markdown_Error_NotFound">연락처</string>
     <!--Setting_Currency-->
     <string name="SettingsCurrency_Title">기초 통화</string>
-    <string name="SettingsCurrency_Other">OTHER</string>
+    <string name="SettingsCurrency_Other">기타</string>
     <string name="SettingsCurrency_DisclaimerTitle">면책</string>
     <string name="SettingsCurrency_DisclaimerText">제3자 서비스 Coingecko.com\n\nUnstoppable 지갑 앱에서 제공하는 환율 데이터는 이러한 가치가 항상 올바르고 시장 데이터와 일치함을 보장하지는 않습니다. %s 이외의 기준 통화를 선택할 경우 불일치가 발생할 가능성이 더 높습니다.</string>
-    <string name="SettingsCurrency_Understand">I Understand</string>
+    <string name="SettingsCurrency_Understand">이해합니다</string>
     <!--Settings-->
     <string name="Settings_Title">설정</string>
     <string name="Settings_SecurityCenter">보안 센터</string>
@@ -585,9 +585,9 @@
     <string name="ManageAccount_BackupRequired_Title">백업이 필요합니다</string>
     <string name="ManageAccount_BackupRequired_Description">개인 암호가 휴대폰에서 지워질 수 있기 전에 귀하께서는 개인 암호를 백업 하셔야 합니다.</string>
     <string name="ManageAccount_DeleteFromPhone">휴대전화에서 삭제</string>
-    <string name="ManageAccount_Delete_ConfirmationRemove">This action will delete the selected wallet from this device.</string>
+    <string name="ManageAccount_Delete_ConfirmationRemove">장치에서 이 지갑을 삭제합니다.</string>
     <string name="ManageAccount_Delete_ConfirmationDisable">All coins that belong to this wallet will be disabled on balance tab.</string>
-    <string name="ManageAccount_Delete_ConfirmationLose">If you didn\'t backup the private key for this wallet, you will lose access to the funds on the selected wallet.</string>
+    <string name="ManageAccount_Delete_ConfirmationLose">지갑에서 개인 암호를 백업 시키지 않으셨을 경우, 귀하께서는 자금 접근에 제한이 있을 것 입니다.</string>
     <string name="ManageAccount_BirthdayHeight">%s Birthday Height</string>
     <string name="ManageAccount_NWords">%s 단어</string>
     <string name="ManageAccount_NWordsWithPassphrase">암호 문구로 이루어진 %s 단어</string>
