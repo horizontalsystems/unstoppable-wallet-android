@@ -45,16 +45,16 @@
     <string name="Welcome_CreateWallet">Nouveu Porte-Monnaie</string>
     <string name="Welcome_RestoreWallet">Restaurer le porte-monnaie</string>
     <!--Create Wallet-->
-    <string name="CreateWallet_Title">New Wallet</string>
-    <string name="CreateWallet_Mnemonic">Mnemonic</string>
-    <string name="Passphrase">Passphrase</string>
-    <string name="CreateWallet_N_Words">%s words</string>
-    <string name="CreateWallet_PassphraseConfirm">Confirm</string>
-    <string name="CreateWallet_Error_EmptyPassphrase">Passphrase cannot be empty</string>
-    <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Please use only latin letters and numbers for the passphrase</string>
-    <string name="CreateWallet_Error_InvalidConfirmation">Passphrase confirmation does not match</string>
-    <string name="EnterPassphrase">Passphrase</string>
-    <string name="CreateWallet_PassphraseDescription">Passphrase add additional security layer to the wallets enabling users to create multiple independent multi-coin wallets using a single mnemonic recovery phrase (secret 12 words) but associated with different passwords. \n\nTo restore these wallets a user will require mnemonic recovery phrase as well as a password for each to be restored wallet.</string>
+    <string name="CreateWallet_Title">Nouveau porte-monnaie</string>
+    <string name="CreateWallet_Mnemonic">Mnémonique</string>
+    <string name="Passphrase">Phrase d\'authentification</string>
+    <string name="CreateWallet_N_Words">%s mots</string>
+    <string name="CreateWallet_PassphraseConfirm">Confirmer</string>
+    <string name="CreateWallet_Error_EmptyPassphrase">La phrase d\'authentification ne peut pas être laissée en blanc</string>
+    <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Veuillez utiliser uniquement des lettres et des chiffres latins pour la phrase d\'authentification</string>
+    <string name="CreateWallet_Error_InvalidConfirmation">La confirmation de la phrase d\'authentification ne correspond pas</string>
+    <string name="EnterPassphrase">Phrase d\'authentification</string>
+    <string name="CreateWallet_PassphraseDescription">Les phrases d\'authentification ajoutent une strate de sécurité supplémentaire aux portefeuilles. Les utilisateurs peuvent ainsi créer plusieurs portefeuilles indépendants à pièces multiples à l\'aide d\'une seule phrase de réinitialisation mnémonique, mais associée à des mots de passe différents. \n\nPour restaurer ces portefeuilles, l\'utilisateur doit disposer d\'une phrase de réinitialisation mnémonique et d\'un mot de passe pour chaque portefeuille à restaurer.</string>
     <!--Rate App-->
     <string name="RateApp_Title_Rate_This_App">Evaluez cette application</string>
     <string name="RateApp_Description_Rate_This_App">Vous aimez Unstoppable Wallet ? Merci de prendre un moment pour évaluer cette application.</string>
@@ -65,16 +65,16 @@
     <string name="Restore_Enter_Key_Title">Entrez la clé</string>
     <string name="Restore_Enter_Key_Description_Mnemonic">Entrez votre clé privée pour le Portefeuille %1s 
 qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact et séparés par des espaces.</string>
-    <string name="Restore_Mnemonic_Description">Enter your mnemonic which consists of 12 or 24 words. The words needs to be entered in correct order and separated by spaces.</string>
+    <string name="Restore_Mnemonic_Description">Saisissez votre mnémonique qui consiste en 12 ou 24 mots. Les mots doivent être saisis dans l\'ordre correct et séparés par des espaces.</string>
     <string name="Restore_ValidationFailed">Clé incorrect</string>
     <string name="Restore_InvalidWordCount">Mauvais nombre de mots: %1$d, doit être %2$d</string>
-    <string name="Restore_Error_MnemonicWordCount">Wrong words count. Must be 12 or 24. You entered: %d</string>
-    <string name="Restore_Error_EmptyPassphrase">Passphrase cannot be empty</string>
+    <string name="Restore_Error_MnemonicWordCount">Le nombre de mots est incorrect. Il doit être de 12 ou 24. Vous avez saisi : %d</string>
+    <string name="Restore_Error_EmptyPassphrase">La phrase d\'authentification ne peut pas être laissée en blanc</string>
     <string name="Restore_InvalidChecksum">Somme de contrôle invalide</string>
-    <string name="Restore_PassphraseDescription">Enter your passphrase that you used when creating this mnemonic phrase.</string>
+    <string name="Restore_PassphraseDescription">Entrez la phrase d\'authentification que vous avez utilisée pour créer cette phrase mnémonique.</string>
     <string name="Select_Coins">Choisissez la Crypto</string>
-    <string name="Restore_ZCash_BirthdayHeight">Birthday Height</string>
-    <string name="Restore_ZCash_BirthdayHeight_Hint">If you know a birthday height for your Zcash wallet add it below to speedup syncing process.</string>
+    <string name="Restore_ZCash_BirthdayHeight">Hauteur de l\'anniversaire</string>
+    <string name="Restore_ZCash_BirthdayHeight_Hint">Si vous savez quelle est la hauteur de l\'anniversaire de votre portefeuille Zcash, ajoutez-la ci-dessous pour accélérer le processus de synchronisation.</string>
     <!--Backup-->
     <string name="Backup_Intro_Title">Sauvegarde</string>
     <string name="Backup_Intro_TitleShow">Voir la clé</string>
@@ -236,14 +236,14 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="Balance_FoundTx">%s tx</string>
     <string name="Balance_Syncing_WithProgress">Synchronisation... %s%%</string>
     <string name="Balance_AddCoins">Ajouter des coins</string>
-    <string name="Balance_AddCoin">Add Coin</string>
+    <string name="Balance_AddCoin">Ajouter la pièce</string>
     <string name="Balance_Sort_Balance">Balance</string>
     <string name="Balance_Sort_PopupTitle">Trier par</string>
     <string name="Balance_Sort_Az">Nom</string>
     <string name="Balance_Sort_24hPriceChange">Prix 24h (%)</string>
     <string name="Balance_Backup_Alert">Vous devez sauvegarder le portefeuille %s avant de recevoir %s.</string>
     <string name="Balance_NoWalletAlert">Vous n\'avez pas encore de portefeuille. Veuillez créer un nouveau portefeuille ou restaurer un portefeuille existant </string>
-    <string name="Balance_NoCoinsAlert">You haven\'t added any coins to this wallet</string>
+    <string name="Balance_NoCoinsAlert">Vous n\'avez ajouté aucune pièce à ce portefeuille</string>
     <!--Send-->
     <string name="Send_Title">Envoyer %s</string>
     <string name="Send_Hint_Address">Adresse ou domaine</string>
@@ -262,7 +262,7 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="Send_Confirmation_Send_Button">Envoyer</string>
     <string name="Send_Success">\u2713 Envoyé</string>
     <string name="ScanQr_PleaseGrantCameraPermission">Veuillez autoriser l\'accès à l\'appareil photo</string>
-    <string name="ScanQr_NoCameraPermission">No camera permission</string>
+    <string name="ScanQr_NoCameraPermission">Pas de permission caméra</string>
     <string name="Send_Error_IncorrectAddress">Adresse incorrect</string>
     <string name="Send_Error_UnsupportedAddress">Time lock ne fonctionne qu\'avec les adresses P2PKH (commençant par 1)</string>
     <string name="Send_Error_BalanceAmount">Balance %s</string>
@@ -289,7 +289,7 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="Send_LockTime_Year">1 an</string>
     <string name="Send_Sending">En attente</string>
     <string name="Send_Token_InsufficientFeeAlert">Frais de transaction pour %s (%s) payé en %s. Il est nécessaire %s.</string>
-    <string name="Send_Warning_LowFee">Warning! Risk of getting stuck</string>
+    <string name="Send_Warning_LowFee">Attention ! Risque de blocage</string>
     <!--Fee Info -->
     <string name="FeeInfo_Title">Vitesse de transaction </string>
     <string name="FeeInfo_Description">Les blockchains Bitcoin et Ethereum imposent aux utilisateurs des frais d\'utilisation lors de l\'envoi de transactions sur la blockchain.\n\nUnstoppable utilise des services publics d\'estimation des frais pour aider l\'utilisateur à déterminer les frais de transaction appropriés sur le moment. Les frais sont plus élevés lorsque de nombreuses transactions sont effectuées et plus réduits lorsque la blockchain est moins fréquentée.</string>
@@ -368,7 +368,7 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <!--Swap Coin Select-->
     <!--Approve-->
     <string name="Approve_Title">Swap approuvé</string>
-    <string name="Approve_Info">You should grant permission to a smart contract to swap given token on your behalf. This permission sets amount that can be used by a smart contract. It doesn\'t affect your balance but requires a small fee to execute approval transaction. \n\nWhile it may be done on demand before each trade, it\'s cheaper to approve higher amount in advance for future trades.</string>
+    <string name="Approve_Info">Vous devriez donner la permission à un contrat intelligent d\'échanger un token donné en votre nom. Cette permission fixe le montant qui peut être utilisé par un contrat intelligent. Cela n\'affecte pas votre solde mais nécessite des frais minimes pour exécuter la transaction d\'approbation.\n\nBien que cela puisse être fait au cas par cas avant chaque transaction, il est plus économique d\'approuver un montant plus élevé à l\'avance pour les transactions futures.</string>
     <string name="Approve_Error_AlreadyApproved">Vous avez déjà une provision pour ce montant</string>
     <string name="Approve_Spender">Spender</string>
     <string name="Approve_YouApprove">Vous approuvez</string>
@@ -443,11 +443,11 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <!--Markdown-->
     <string name="Markdown_Error_NotFound">Página no encontrada</string>
     <!--Setting_Currency-->
-    <string name="SettingsCurrency_Title">Base Currency</string>
+    <string name="SettingsCurrency_Title">Devise de Base</string>
     <string name="SettingsCurrency_Other">OTHER</string>
-    <string name="SettingsCurrency_DisclaimerTitle">Disclaimer</string>
-    <string name="SettingsCurrency_DisclaimerText">The exchange rate data provided by a third party service Coingecko.com\n\nUnstoppable wallet app doesn\'t guarantee these values are always correct and match market data. The chance for inconsistency is higher if you select any base currency other than %s.</string>
-    <string name="SettingsCurrency_Understand">I Understand</string>
+    <string name="SettingsCurrency_DisclaimerTitle">Avertissement</string>
+    <string name="SettingsCurrency_DisclaimerText">Les données relatives aux taux de change fournies par un service tiers Coingecko.com\n\nUnstoppable wallet app ne garantit pas que ces valeurs sont toujours correctes et correspondent aux données du marché. Le risque de divergence est plus élevé si vous sélectionnez une devise de base autre que %s.</string>
+    <string name="SettingsCurrency_Understand">J’ai Compris</string>
     <!--Settings-->
     <string name="Settings_Title">Paramètres</string>
     <string name="Settings_SecurityCenter">Centre de Sécurité</string>
@@ -455,7 +455,7 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="Settings_ExperimentalFeatures">Fonctionnalités expérimentales</string>
     <string name="Settings_BaseCurrency">Devise de Base</string>
     <string name="Settings_Language">Langue</string>
-    <string name="Settings_Theme">Theme</string>
+    <string name="Settings_Theme">Thème</string>
     <string name="Settings_Terms">Conditions</string>
     <string name="Settings_ShareThisWallet">Partager avec ami</string>
     <string name="Settings_Faq">FAQ</string>
@@ -515,12 +515,12 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
 \n\nNous avons construit Unstoppable à notre intention car les solutions disponibles n\'étaient pas à la hauteur de nos attentes. Tant du point de vue de l\'ingénierie que de la convivialité, nous pensons que ce portefeuille a une avance considérable sur les produits alternatifs.</string>
     <string name="SettingsTerms_TermAcademy">J\'ai parcouru la section Académie de cette application et me suis familiarisé avec les aspects fondamentaux du stockage des cryptomonnaies.</string>
     <string name="SettingsTerms_TermBackup">J\'ai sauvegardé la/les clé(s) privée(s) de mes portefeuilles qui m\'ont été présentées sous une formule de 12 à 24 mots. Je comprends que ces clés privées sont stockées sur mon smartphone et non ailleurs.</string>
-    <string name="SettingsTerms_TermOwner">I understand that passing my phone to untrusted entities and leaving the wallet app without safe PIN lock may potentially endanger the safety of my funds.</string>
-    <string name="SettingsTerms_TermRecover">I understand that jail breaking (rooting) my phone, installing third party apps from unknown sources, keeping the operating system outdated can potentially endanger the safety of my funds.</string>
-    <string name="SettingsTerms_TermPhone">I understand there may be undiscovered software issues in the code powering this wallet app which may potentially lead to unexpected behavior or the app malfunctioning.</string>
-    <string name="SettingsTerms_TermRoot">I understand that I will need my private keys in order to restore access to my funds should I lose my phone or if the app malfunctions. Without my private keys it will be impossible to recover access to my wallet.</string>
-    <string name="SettingsTerms_TermBugs">I understand that disabling the phone unlock PIN(or its equivalent) in Settings of Android OS will erase wallet private keys from my device. I will need my private keys to regain access to my funds.</string>
-    <string name="Settings_TermsPin"> I understand that only I myself is responsible for safety of my funds and no other entity.</string>
+    <string name="SettingsTerms_TermOwner">Je comprends que le fait de confier mon téléphone à des entités non fiables ou de laisser l\'application portefeuille sans verrouillage du code PIN peut potentiellement compromettre la sécurité de mes fonds.</string>
+    <string name="SettingsTerms_TermRecover">Je comprends que le fait débrider (rooting) mon téléphone, d\'installer des applications tierces de sources inconnues, de conserver un système d\'exploitation obsolète peut potentiellement mettre en danger la sécurité de mes fonds.</string>
+    <string name="SettingsTerms_TermPhone">Je suis conscient qu\'il pourrait y avoir des problèmes non détectés dans le code de cette application de portefeuille, ce qui pourrait entraîner un comportement inattendu ou un dysfonctionnement de l\'application.</string>
+    <string name="SettingsTerms_TermRoot">Je suis conscient que j\'aurai besoin de mes clés privées afin de pouvoir accéder à mes fonds si je perds mon téléphone ou si l\'application fonctionne mal. Sans mes clés privées, il me sera impossible de récupérer l\'accès à mon portefeuille.</string>
+    <string name="SettingsTerms_TermBugs">Je comprends que la désactivation du code de déverrouillage du téléphone dans les paramètres Android effacera les clés privées du portefeuille de mon appareil. J\'aurai besoin de mes clés privées pour pouvoir accéder à mon portefeuille.</string>
+    <string name="Settings_TermsPin"> Je comprends que seul je suis responsable de la sécurité de mes fonds et aucune autre entité.</string>
     <string name="SettingsTerms_BottomThankYou">Merci d\'avoir choisi ce portefeuille !</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Partager</string>
@@ -547,9 +547,9 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="NotificationBottomMenu_Long">Long</string>
     <!--Settings-->
     <string name="SettingsTheme_Title">Theme</string>
-    <string name="SettingsTheme_Dark">Dark</string>
-    <string name="SettingsTheme_Light">Light</string>
-    <string name="SettingsTheme_System">System</string>
+    <string name="SettingsTheme_Dark">Sombre</string>
+    <string name="SettingsTheme_Light">Classique</string>
+    <string name="SettingsTheme_System">Système</string>
     <!--Errors-->
     <string name="Binance_Backend_Error_MemoRequired">Le destinataire a besoin d\'une note non vide pour une opération de transfert</string>
     <string name="Binance_Backend_Error_RequiresDigits">Nécessite que le mémo ne contienne que des chiffres</string>
@@ -572,44 +572,44 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="BitcoinHodling_Title">TimeLock</string>
     <string name="BitcoinHodling_Description">Permet d\'envoyer des Bitcoins qui ne peuvent pas être dépensées avant la date spécifiée.\n\nLe destinataire d\'une telle transaction devrait utiliser un portefeuille Unstoppable.\n\nSeul un portefeuille Unstoppable peut identifier correctement de telles transactions sur le réseau Bitcoin ainsi que permettre au destinataire de dépenser ces Bitcoins après l\'expiration de la période de verrouillage.\n\nSi vous êtes un HODLer, vous pouvez utiliser cette fonction pour vous obliger à garder vos Bitcoins en vous envoyant une telle transaction à vous-même.\n\nPuisqu\'il s\'agit d\'une fonctionnalité expérimentale, le montant maximum par transaction est limité à 0,5 BTC.</string>
     <!--Manage Accounts-->
-    <string name="ManageAccounts_Title">Manage Wallets</string>
-    <string name="ManageAccounts_CreateNewWallet">Create</string>
-    <string name="ManageAccounts_ImportWallet">Restore</string>
-    <string name="ManageAccounts_Hint">Tip! Restoring an existing wallet but with a new passphrase will a generate a brand new wallet. Handy if you want to use a single 12-24 word mnemonic recovery phrase for multiple wallets.</string>
+    <string name="ManageAccounts_Title">Portefeuilles</string>
+    <string name="ManageAccounts_CreateNewWallet">Créer</string>
+    <string name="ManageAccounts_ImportWallet">Restaurer</string>
+    <string name="ManageAccounts_Hint">Astuce ! La restauration d\'un portefeuille existant, mais avec une nouvelle phrase d\'authentification, génère un tout nouveau portefeuille. Pratique si vous souhaitez utiliser une seule phrase de réinitialisation mnémonique de 12 à 24 mots pour plusieurs portefeuilles.</string>
     <!--Manage Account-->
-    <string name="ManageAccount_Name">Name</string>
-    <string name="ManageAccount_Save">Save</string>
-    <string name="ManageAccount_RecoveryPhraseBackup">Backup Phrase</string>
-    <string name="ManageAccount_RecoveryPhraseShow">Show Phrase</string>
-    <string name="ManageAccount_Unlink">Unlink</string>
-    <string name="ManageAccount_BackupRequired_Title">Backup Required</string>
-    <string name="ManageAccount_BackupRequired_Description">You need to backup the private key for this wallet before it can be deleted from this phone.</string>
-    <string name="ManageAccount_DeleteFromPhone">Delete from Phone</string>
+    <string name="ManageAccount_Name">Nom</string>
+    <string name="ManageAccount_Save">Sauvegarder</string>
+    <string name="ManageAccount_RecoveryPhraseBackup">Sauvegarder la phrase</string>
+    <string name="ManageAccount_RecoveryPhraseShow">Afficher la phrase</string>
+    <string name="ManageAccount_Unlink">Délier</string>
+    <string name="ManageAccount_BackupRequired_Title">Sauvegarde requise</string>
+    <string name="ManageAccount_BackupRequired_Description">Vous devez sauvegarder la clé privée avant de pouvoir la supprimer de ce téléphone.</string>
+    <string name="ManageAccount_DeleteFromPhone">Supprimer de l\'appareil</string>
     <string name="ManageAccount_Delete_ConfirmationRemove">This action will delete the selected wallet from this device.</string>
     <string name="ManageAccount_Delete_ConfirmationDisable">All coins that belong to this wallet will be disabled on balance tab.</string>
     <string name="ManageAccount_Delete_ConfirmationLose">If you didn\'t backup the private key for this wallet, you will lose access to the funds on the selected wallet.</string>
-    <string name="ManageAccount_BirthdayHeight">%s Birthday Height</string>
-    <string name="ManageAccount_NWords">%s words</string>
-    <string name="ManageAccount_NWordsWithPassphrase">%s words with passphrase</string>
+    <string name="ManageAccount_BirthdayHeight">Hauteur de l\'anniversaire %s</string>
+    <string name="ManageAccount_NWords">%s mots</string>
+    <string name="ManageAccount_NWordsWithPassphrase">%s mots avec phrase d\'authentification</string>
     <!-- Show Key -->
-    <string name="ShowKey_Title">Key</string>
-    <string name="ShowKey_Description">The recovery phrase that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken etc.\n\nMake sure that no one is watching your screen.</string>
-    <string name="ShowKey_ButtonShow">Show</string>
-    <string name="ShowKey_Passphrase">Passphrase</string>
-    <string name="ShowKey_ButtonClose">Close</string>
-    <string name="ShowKey_TabMnemonicPhrase">Recovery Phrase</string>
-    <string name="ShowKey_TabPrivateKey">Private Key</string>
+    <string name="ShowKey_Title">Clé</string>
+    <string name="ShowKey_Description">Les phrases de réinitialisation qui vont suivre sont le seul moyen de restaurer vos fonds si votre téléphone est perdu, volé, endommagé, etc.\n\nVeuillez vous assurer que personne ne regarde votre écran.</string>
+    <string name="ShowKey_ButtonShow">Afficher</string>
+    <string name="ShowKey_Passphrase">Phrase d\'authentification</string>
+    <string name="ShowKey_ButtonClose">Fermer</string>
+    <string name="ShowKey_TabMnemonicPhrase">Phrase de réinitialisation</string>
+    <string name="ShowKey_TabPrivateKey">Clé privée</string>
     <!-- Backup Key -->
-    <string name="BackupKey_Title">Backup</string>
-    <string name="BackupKey_Description">The recovery phrase that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken etc.\n\nMake sure that no one is watching your screen.</string>
-    <string name="BackupKey_ButtonShow">Show</string>
-    <string name="BackupKey_ButtonBackup">Backup</string>
-    <string name="BackupConfirmKey_Description">Enter the recovery phrase in correct order to confirm</string>
+    <string name="BackupKey_Title">Sauvegarde</string>
+    <string name="BackupKey_Description">Les phrases de réinitialisation qui vont suivre sont le seul moyen de restaurer vos fonds si votre téléphone est perdu, volé, endommagé, etc.\n\nVeuillez vous assurer que personne ne regarde votre écran.</string>
+    <string name="BackupKey_ButtonShow">Afficher</string>
+    <string name="BackupKey_ButtonBackup">Sauvegarde</string>
+    <string name="BackupConfirmKey_Description">Entrez les phrases de réinitialisation dans l\'ordre correct pour confirmer</string>
     <string name="BackupConfirmKey_EmptyOrInvalidWords">Entered words are empty or invalid</string>
-    <string name="BackupConfirmKey_Error_EmptyWord">Empty word</string>
-    <string name="BackupConfirmKey_Error_InvalidWord">Invalid word</string>
-    <string name="BackupConfirmKey_Error_EmptyPassphrase">Empty passphrase</string>
-    <string name="BackupConfirmKey_Error_InvalidPassphrase">Invalid passphrase</string>
+    <string name="BackupConfirmKey_Error_EmptyWord">Mot manquant</string>
+    <string name="BackupConfirmKey_Error_InvalidWord">Mot incorrect</string>
+    <string name="BackupConfirmKey_Error_EmptyPassphrase">Phrase d\'authentification manquante</string>
+    <string name="BackupConfirmKey_Error_InvalidPassphrase">Phrase d\'authentification incorrecte</string>
     <!--Manage Keys Delete Alert-->
     <string name="ManageKeys_Delete_Title">Supprimer le portefeuille</string>
     <string name="ManageKeys_Delete_ConfirmationRemove">Cette action supprimera le portefeuille %s de cet appareil.</string>
@@ -655,7 +655,7 @@ qui se compose de %2s mots. Les mots doivent être entrés dans leur ordre exact
     <string name="AddBep2Token_TokenNotFound">Token non trouvé</string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Title">Format de l\'adresse</string>
-    <string name="AddressFormatSettings_Description">Choose the address format for your %s wallet. Each selected format represents a different wallet on app\'s balance tab.</string>
+    <string name="AddressFormatSettings_Description">Choisissez le format d\'adresse de votre portefeuille %s. Chaque format sélectionné représente un portefeuille différent dans l\'onglet du solde de l\'application.</string>
     <!-- Blockchain Settings -->
     <string name="BlockchainSettings_BipChangeAlert_Title">Format de l\'adresse</string>
     <string name="BlockchainSettings_ChangeAlert_ActionButtonText">Changer en %s</string>
@@ -734,7 +734,7 @@ Si vous changez le format d\'adresse pour %2$s , l\'historique du solde actuel e
     <string name="CoinPage_LaunchDate">Launch Date</string>
     <string name="CoinPage_Tvl">Total Value Locked</string>
     <string name="CoinPage_TvlRank">TVL Rank</string>
-    <string name="CoinPage_TvlMCapRatio">M.cap / TVL ratio</string>
+    <string name="CoinPage_TvlMCapRatio">MCap / TVL Ratio</string>
     <string name="CoinPage_TvlDescription">Capital deposited into the platform in the form of loan collateral or liquidity pool.</string>
     <string name="CoinPage_Contract">%s Contract</string>
     <string name="CoinPage_Bep2Symbol">BEP2 Symbol</string>
