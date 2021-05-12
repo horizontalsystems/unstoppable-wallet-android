@@ -39,7 +39,7 @@
     <string name="Intro_Privacy_Title">Сохраняйте Конфиденциальность</string>
     <string name="Intro_Privacy_Description">Используйте этот кошелек, чтобы оставаться инкогнито и иметь возможность сохранить конфиденциальность вашей информации.</string>
     <!--Rooted Device-->
-    <string name="RootedDevice_Button_Understand">Я принимаю</string>
+    <string name="RootedDevice_Button_Understand">I Understand</string>
     <!--Welcome-->
     <string name="Welcome_PrivacySettings">Настройки Приватности</string>
     <string name="Welcome_CreateWallet">Создать Кошелек</string>
@@ -53,8 +53,8 @@
     <string name="CreateWallet_Error_EmptyPassphrase">Поле для кодовой фразы не может быть пустым</string>
     <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Пожалуйста, используйте только латинские буквы и цифры для кодовой фразы</string>
     <string name="CreateWallet_Error_InvalidConfirmation">Подтвержденная кодовая фраза не совпадает</string>
-    <string name="EnterPassphrase">Passphrase</string>
-    <string name="CreateWallet_PassphraseDescription">Passphrase add additional security layer to the wallets enabling users to create multiple independent multi-coin wallets using a single mnemonic recovery phrase (secret 12 words) but associated with different passwords. \n\nTo restore these wallets a user will require mnemonic recovery phrase as well as a password for each to be restored wallet.</string>
+    <string name="EnterPassphrase">Кодовая Фраза</string>
+    <string name="CreateWallet_PassphraseDescription">Кодовые фразы обеспечивают дополнительную защиту для кошельков, позволяя пользователям создавать несколько независимых мультивалютных кошельков, использующих одну мнемоническую фразу для восстановления, но имеющих разные пароли.\n\nДля восстановления этих кошельков пользователю потребуются мнемоническая фраза для восстановления, а также пароль для каждого восстанавливаемого кошелька.</string>
     <!--Rate App-->
     <string name="RateApp_Title_Rate_This_App">Оценить приложение</string>
     <string name="RateApp_Description_Rate_This_App">Вам нравится Unstoppable Wallet? Пожалуйста, найдите минутку, чтобы оценить это приложение</string>
@@ -72,7 +72,7 @@
     <string name="Restore_InvalidChecksum">Неверная Контрольная Сумма</string>
     <string name="Restore_PassphraseDescription">Введите свою кодовую фразу, которую вы использовали при создании этой мнемонической фразы.</string>
     <string name="Select_Coins">Выберите Валюту</string>
-    <string name="Restore_ZCash_BirthdayHeight">Birthday Height</string>
+    <string name="Restore_ZCash_BirthdayHeight">Блок Создания</string>
     <string name="Restore_ZCash_BirthdayHeight_Hint">Если вы знаете блок создания вашего Zcash кошелька, добавьте его ниже для ускорения процесса синхронизации.</string>
     <!--Backup-->
     <string name="Backup_Intro_Title">Резервная Копия</string>
@@ -157,7 +157,7 @@
     <string name="Market_Category_Infrastructure_Description">Projects building infrastructure solutions.</string>
     <string name="Market_Category_Staking">Staking ETH 2.0</string>
     <string name="Market_Category_Staking_Description">Protocols that reward liquidity providers.</string>
-    <string name="Market_Category_CrossChain">Cross chain</string>
+    <string name="Market_Category_CrossChain">Cross-Chain</string>
     <string name="Market_Category_CrossChain_Description">Cross-chain protocols.</string>
     <string name="Market_Category_Computing">Computing</string>
     <string name="Market_Category_Computing_Description">Decentralized on-demand computing solutions.</string>
@@ -463,7 +463,7 @@
     <string name="Settings_RateUs">Оцените наше приложение</string>
     <string name="SettingsAboutApp_Title">О приложении</string>
     <string name="SettingsAboutApp_Site">Веб-сайт</string>
-    <string name="SettingsAboutApp_WhatsNew">What\'s New</string>
+    <string name="SettingsAboutApp_WhatsNew">Что Нового</string>
     <string name="SettingsPrivacy_Info">Это приложение не передает ваши данные, но, поскольку оно связывается с блокчейнами, возможна потенциальная утечка некоторых общедоступных данных, таких как IP-адрес. Используйте кнопку \"Информация\" в правом верхнем углу для получения более подробной информации о каждом разделе.</string>
     <string name="SettingsPrivacy_ConnectionSettingsTitle">Доступ в Интернет</string>
     <string name="SettingsPrivacy_CommunicationSettingsTitle">Синхронизация Блокчейна</string>
@@ -581,21 +581,21 @@
     <!--Manage Account-->
     <string name="ManageAccount_Name">Названию</string>
     <string name="ManageAccount_Save">Сохранить</string>
-    <string name="ManageAccount_RecoveryPhraseBackup">Backup Phrase</string>
-    <string name="ManageAccount_RecoveryPhraseShow">Show Phrase</string>
+    <string name="ManageAccount_RecoveryPhraseBackup">Резервная Фраза</string>
+    <string name="ManageAccount_RecoveryPhraseShow">Показать Фразу</string>
     <string name="ManageAccount_Unlink">Отсоединить</string>
     <string name="ManageAccount_BackupRequired_Title">Необходима Резервная Копия</string>
     <string name="ManageAccount_BackupRequired_Description">Вам нужно сделать резервную копию персонального ключа для этого кошелька, прежде чем он будет удален с этого телефона.</string>
     <string name="ManageAccount_DeleteFromPhone">Удалить с Телефона</string>
     <string name="ManageAccount_Delete_ConfirmationRemove">Это действие удалит ваш %s кошелек с этого устройства.</string>
-    <string name="ManageAccount_Delete_ConfirmationDisable">All coins that belong to this wallet will be disabled on balance tab.</string>
-    <string name="ManageAccount_Delete_ConfirmationLose">If you didn\'t backup the private key for this wallet, you will lose access to the funds on the selected wallet.</string>
+    <string name="ManageAccount_Delete_ConfirmationDisable">Все монеты, принадлежащие этому кошельку, будут отключены на вкладке баланса.</string>
+    <string name="ManageAccount_Delete_ConfirmationLose">Если вы не создавали резервную копию закрытого ключа для этого кошелька, вы потеряете доступ к средствам в выбранном кошельке.</string>
     <string name="ManageAccount_BirthdayHeight">%s Блок Создания</string>
     <string name="ManageAccount_NWords">%s слов</string>
     <string name="ManageAccount_NWordsWithPassphrase">%s слов с кодовой фразой</string>
     <!-- Show Key -->
     <string name="ShowKey_Title">Ключ</string>
-    <string name="ShowKey_Description">The recovery phrase that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken etc.\n\nMake sure that no one is watching your screen.</string>
+    <string name="ShowKey_Description">Показанные далее фразы для восстановления являются единственным способом восстановления ваших средств в случае потери, кражи или поломки вашего телефона.\n\nУбедитесь, что никто не смотрит на ваш экран.</string>
     <string name="ShowKey_ButtonShow">Показать</string>
     <string name="ShowKey_Passphrase">Кодовая Фраза</string>
     <string name="ShowKey_ButtonClose">Закрыть</string>
@@ -607,7 +607,7 @@
     <string name="BackupKey_ButtonShow">Показать</string>
     <string name="BackupKey_ButtonBackup">Резервная Копия</string>
     <string name="BackupConfirmKey_Description">Введите фразы для восстановления в правильном порядке, чтобы подтвердить</string>
-    <string name="BackupConfirmKey_EmptyOrInvalidWords">Entered words are empty or invalid</string>
+    <string name="BackupConfirmKey_EmptyOrInvalidWords">Введенные слова пусты или недопустимы</string>
     <string name="BackupConfirmKey_Error_EmptyWord">Отсутствует слово</string>
     <string name="BackupConfirmKey_Error_InvalidWord">Неверное слово</string>
     <string name="BackupConfirmKey_Error_EmptyPassphrase">Отсутствует кодовая фраза</string>
