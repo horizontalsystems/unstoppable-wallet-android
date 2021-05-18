@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.walletconnect.request
+package io.horizontalsystems.bankwallet.modules.walletconnect.request.sendtransaction
 
 import androidx.lifecycle.ViewModel
 

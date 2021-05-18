@@ -12,6 +12,8 @@ import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransac
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
 import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectSendEthereumTransactionRequest
 import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectService
+import io.horizontalsystems.bankwallet.modules.walletconnect.request.sendtransaction.WalletConnectSendEthereumTransactionRequestService
+import io.horizontalsystems.bankwallet.modules.walletconnect.request.sendtransaction.WalletConnectSendEthereumTransactionRequestViewModel
 import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.ethereumkit.core.EthereumKit.NetworkType
 import io.horizontalsystems.ethereumkit.models.Address
