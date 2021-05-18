@@ -18,8 +18,8 @@ interface EnabledWalletsDao {
     @Query("DELETE FROM EnabledWallet")
     fun deleteAll()
 
-    @Query("DELETE FROM EnabledWallet WHERE coinId = :coinId AND accountId = :accountId")
-    fun delete(coinId: String, accountId: String)
+    @Query("DELETE FROM EnabledWallet WHERE coinId = :coinId AND accountId = :accountId AND coinSettingsId = :coinSettingsId")
+    fun delete(coinId: String, accountId: String, coinSettingsId: String)
 
     @Transaction
     fun insertWallets(coins: List<EnabledWallet>) {
@@ -28,7 +28,7 @@ interface EnabledWalletsDao {
 
     @Transaction
     fun deleteWallets(enabledWallets: List<EnabledWallet>) {
-        enabledWallets.forEach { delete(it.coinId, it.accountId) }
+        enabledWallets.forEach { delete(it.coinId, it.accountId, it.coinSettingsId) }
     }
 
 }
