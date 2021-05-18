@@ -34,7 +34,7 @@ class IntroActivity : BaseActivity() {
         } catch (e: Exception) {
         }
 
-        val images = arrayOf(R.drawable.ic_onboarding_logo, R.drawable.ic_independence, R.drawable.ic_privacy, R.drawable.ic_knowledge)
+        val images = arrayOf(R.drawable.ic_onboarding_logo, R.drawable.ic_independence, R.drawable.ic_knowledge, R.drawable.ic_privacy)
         viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrollStateChanged(state: Int) = Unit
 
