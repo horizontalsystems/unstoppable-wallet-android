@@ -27,7 +27,6 @@ import com.google.android.material.tabs.TabLayout
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.core.setCoinImage
 import io.horizontalsystems.bankwallet.modules.markdown.MarkdownFragment
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartFragment
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartType
@@ -46,7 +45,10 @@ import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.views.ListPosition
 import io.horizontalsystems.views.SettingsView
 import io.horizontalsystems.views.helpers.LayoutHelper
-import io.horizontalsystems.xrateskit.entities.*
+import io.horizontalsystems.xrateskit.entities.ChartType
+import io.horizontalsystems.xrateskit.entities.CoinCategory
+import io.horizontalsystems.xrateskit.entities.CoinMeta
+import io.horizontalsystems.xrateskit.entities.LinkType
 import io.noties.markwon.AbstractMarkwonPlugin
 import io.noties.markwon.Markwon
 import io.noties.markwon.MarkwonSpansFactory
@@ -565,7 +567,7 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
                 val shiftPosition = if (guideUrl != null) 1 else 0
                 link.setListPosition(ListPosition.getListPosition(links.size + shiftPosition, index + shiftPosition))
                 link.setOnClickListener {
-                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(entry.value)))
+                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(entry.value.trim())))
                 }
 
                 linksLayout.addView(link)
