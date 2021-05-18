@@ -55,11 +55,7 @@ data class BalanceHeaderViewItem(val currencyValue: CurrencyValue?, val upToDate
 }
 
 data class DeemedValue(val text: String?, val dimmed: Boolean = false, val visible: Boolean = true)
-data class SyncingProgress(val progress: Int, val dimmed: Boolean = false)
-sealed class SyncingData {
-    data class Blockchain(val progress: Int?, val spinnerProgress: Int, val until: String?) : SyncingData()
-    data class SearchingTxs(val txCount: Int) : SyncingData()
-}
+data class SyncingProgress(val progress: Int?, val dimmed: Boolean = false)
 
 class BalanceViewItemFactory {
 
@@ -98,7 +94,7 @@ class BalanceViewItemFactory {
         return when (state) {
             is AdapterState.Syncing -> SyncingProgress(state.progress, false)
             is AdapterState.SearchingTxs -> SyncingProgress(10, true)
-            else -> SyncingProgress(0, false)
+            else -> SyncingProgress(null, false)
         }
     }
 
