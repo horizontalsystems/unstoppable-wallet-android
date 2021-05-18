@@ -8,11 +8,11 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.setCoinImage
 import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
 import io.horizontalsystems.bankwallet.modules.market.getBackgroundTintColor
 import io.horizontalsystems.bankwallet.modules.market.getText
 import io.horizontalsystems.bankwallet.modules.market.getTextColor
-import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
 import io.horizontalsystems.views.ListPosition
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_market_overview_item.*
@@ -39,9 +39,7 @@ class ViewHolderMarketOverviewItem(override val containerView: View, private val
         this.item = item
 
         if (item.coinCode != prev?.coinCode) {
-            val drawableResId = AppLayoutHelper.getCoinDrawableResId(containerView.context, item.coinType)
-                    ?: R.drawable.place_holder
-            icon.setImageResource(drawableResId)
+            icon.setCoinImage(item.coinType)
         }
 
         if (item.score != prev?.score) {
