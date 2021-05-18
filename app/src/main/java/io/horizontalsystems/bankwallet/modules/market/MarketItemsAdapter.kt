@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
+import io.horizontalsystems.bankwallet.core.setCoinImage
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_market_item.*
 import java.math.BigDecimal
@@ -97,9 +97,7 @@ class ViewHolderMarketItem(override val containerView: View, private val listene
         this.item = item
 
         if (item.coinCode != prev?.coinCode) {
-            val drawableResId = AppLayoutHelper.getCoinDrawableResId(containerView.context, item.coinType)
-                    ?: R.drawable.place_holder
-            icon.setImageResource(drawableResId)
+            icon.setCoinImage(item.coinType)
         }
 
         if (prev == null || item.score != prev.score) {

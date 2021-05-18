@@ -7,9 +7,9 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.setCoinImage
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.entities.label
-import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
 import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.views.inflate
 import kotlinx.android.extensions.LayoutContainer
@@ -31,9 +31,7 @@ class CoinDataItemsAdapter(private val onItemClick: (CoinDataViewItem) -> Unit) 
         fun bind(item: CoinDataViewItem) {
             this.item = item
 
-            val drawableResId = AppLayoutHelper.getCoinDrawableResId(containerView.context, item.type)
-                    ?: R.drawable.place_holder
-            icon.setImageResource(drawableResId)
+            icon.setCoinImage(item.type)
 
             title.text = item.name
             subtitle.text = item.code

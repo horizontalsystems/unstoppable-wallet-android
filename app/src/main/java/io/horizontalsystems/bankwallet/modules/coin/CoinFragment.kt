@@ -35,7 +35,6 @@ import io.horizontalsystems.bankwallet.modules.settings.notifications.bottommenu
 import io.horizontalsystems.bankwallet.modules.settings.notifications.bottommenu.NotificationMenuMode
 import io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.CoinInfoItemView
 import io.horizontalsystems.bankwallet.ui.extensions.createTextView
-import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
 import io.horizontalsystems.chartview.Chart
 import io.horizontalsystems.chartview.models.ChartIndicator
 import io.horizontalsystems.chartview.models.PointInfo
@@ -122,9 +121,8 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
         updateNotificationMenuItem()
 
         coinName.text = coinTitle
-        val drawableResId = context?.let { AppLayoutHelper.getCoinDrawableResId(it, viewModel.coinType) }
-                ?: R.drawable.place_holder
-        coinIcon.setImageResource(drawableResId)
+
+        coinIcon.setCoinImage(viewModel.coinType)
 
         chart.setListener(this)
 

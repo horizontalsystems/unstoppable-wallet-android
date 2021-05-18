@@ -22,7 +22,7 @@ object AppLayoutHelper {
         return resId?.let { ContextCompat.getDrawable(context, it) }
     }
 
-    fun getCoinDrawableResId(context: Context, coinType: CoinType): Int? {
+    private fun getCoinDrawableResId(context: Context, coinType: CoinType): Int? {
         val coinResourceName = coinType.ID.replace("[|-]".toRegex(), "_").toLowerCase(Locale.ENGLISH)
         val imgRes = context.resources.getIdentifier(coinResourceName, "drawable", context.packageName)
 
