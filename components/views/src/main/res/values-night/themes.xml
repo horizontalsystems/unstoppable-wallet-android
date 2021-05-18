@@ -28,8 +28,6 @@
         <item name="TextColorBarsToDark">@color/light</item>
         <item name="AboutBackgroundColor">@color/transparent</item>
         <item name="TransactionItemBackgroundColor">@color/transaction_item_background_dark</item>
-        <item name="CoinItemBackground">@drawable/coinholder_bg</item>
-        <item name="PredefinedAccountBackground">@drawable/predefined_account_background_dark</item>
         <item name="BottomNavigationBackgroundColor">@color/dark</item>
         <item name="RippleColor">@color/ripple_white</item>
         <item name="RoundRippleColor">@color/white_50</item>

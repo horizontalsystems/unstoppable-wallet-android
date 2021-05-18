@@ -11,40 +11,30 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginStart="13dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="13dp"
-        android:background="?CoinItemBackground"
+        android:background="@drawable/balance_coin_background"
         android:paddingStart="3dp"
-        android:paddingEnd="3dp"
-        android:paddingBottom="8dp">
-
-        <!-- first line -->
-        <ImageView
-            android:id="@+id/coinBackgroundSquare"
-            android:layout_width="46dp"
-            android:layout_height="46dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:src="@drawable/coin_icon_square"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        android:paddingEnd="3dp">
 
         <io.horizontalsystems.bankwallet.ui.extensions.RotatingCircleProgressView
             android:id="@+id/iconProgress"
-            android:layout_width="46dp"
-            android:layout_height="46dp"
-            app:layout_constraintBottom_toBottomOf="@+id/coinBackgroundSquare"
-            app:layout_constraintEnd_toEndOf="@+id/coinBackgroundSquare"
-            app:layout_constraintStart_toStartOf="@+id/coinBackgroundSquare"
-            app:layout_constraintTop_toTopOf="@+id/coinBackgroundSquare" />
+            android:layout_width="41dp"
+            android:layout_height="41dp"
+            app:layout_constraintBottom_toBottomOf="@+id/iconCoin"
+            app:layout_constraintEnd_toEndOf="@+id/iconCoin"
+            app:layout_constraintStart_toStartOf="@+id/iconCoin"
+            app:layout_constraintTop_toTopOf="@+id/iconCoin" />
 
         <ImageView
             android:id="@+id/iconCoin"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            app:layout_constraintBottom_toBottomOf="@+id/coinBackgroundSquare"
-            app:layout_constraintEnd_toEndOf="@+id/coinBackgroundSquare"
-            app:layout_constraintStart_toStartOf="@+id/coinBackgroundSquare"
-            app:layout_constraintTop_toTopOf="@+id/coinBackgroundSquare"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="22dp"
+            android:visibility="visible"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             tools:src="@drawable/bitcoin" />
 
         <ImageView
@@ -54,10 +44,11 @@
             android:indeterminateTint="@color/grey"
             android:indeterminateTintMode="src_atop"
             android:src="@drawable/ic_attention_24"
-            app:layout_constraintBottom_toBottomOf="@+id/coinBackgroundSquare"
-            app:layout_constraintEnd_toEndOf="@+id/coinBackgroundSquare"
-            app:layout_constraintStart_toStartOf="@+id/coinBackgroundSquare"
-            app:layout_constraintTop_toTopOf="@+id/coinBackgroundSquare"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="@+id/iconCoin"
+            app:layout_constraintEnd_toEndOf="@+id/iconCoin"
+            app:layout_constraintStart_toStartOf="@+id/iconCoin"
+            app:layout_constraintTop_toTopOf="@+id/iconCoin"
             app:tint="@color/lucian" />
 
         <TextView
@@ -65,8 +56,8 @@
             style="@style/Headline2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="2dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="14dp"
             android:layout_marginEnd="4dp"
             android:ellipsize="end"
             android:includeFontPadding="false"
@@ -76,9 +67,9 @@
             app:layout_constraintEnd_toStartOf="@+id/coinLabel"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintStart_toEndOf="@+id/coinBackgroundSquare"
-            app:layout_constraintTop_toTopOf="@+id/coinBackgroundSquare"
-            tools:text="Coin rgre" />
+            app:layout_constraintStart_toEndOf="@+id/iconCoin"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Coin Name" />
 
         <TextView
             android:id="@+id/coinLabel"
@@ -87,10 +78,25 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="4dp"
             app:layout_constraintBottom_toBottomOf="@+id/coinName"
-            app:layout_constraintEnd_toStartOf="@+id/rateDiffWrapper"
+            app:layout_constraintEnd_toStartOf="@+id/balanceFiat"
             app:layout_constraintStart_toEndOf="@+id/coinName"
             app:layout_constraintTop_toTopOf="@+id/coinName"
             tools:text="ERC20" />
+
+        <TextView
+            android:id="@+id/textSyncing"
+            style="@style/Subhead2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:includeFontPadding="false"
+            android:singleLine="true"
+            android:textColor="@color/grey"
+            android:visibility="invisible"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toStartOf="@+id/coinName"
+            app:layout_constraintTop_toBottomOf="@+id/coinName"
+            tools:text="Syncing... 40%" />
 
         <TextView
             android:id="@+id/exchangeRate"
@@ -102,220 +108,203 @@
             android:textColor="@color/grey"
             app:layout_constraintStart_toStartOf="@+id/coinName"
             app:layout_constraintTop_toBottomOf="@+id/coinName"
-            tools:text="$6500 per BTC" />
+            tools:text="$6500" />
 
-        <FrameLayout
-            android:id="@+id/rateDiffWrapper"
-            android:layout_width="80dp"
-            android:layout_height="46dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:background="@drawable/stateful_rate_diff_background"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <ImageView
-                android:id="@+id/rateDiffIcon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="1dp"
-                android:src="@drawable/ic_up_green_20" />
-
-            <View
-                android:layout_width="1dp"
-                android:layout_height="26dp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="21dp"
-                android:background="@color/steel_20" />
-
-            <TextView
-                android:id="@+id/rateDiff"
-                style="@style/CaptionSB"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="20.5dp"
-                android:layout_marginEnd="0dp"
-                android:textAlignment="center"
-                tools:text="20.87%" />
-        </FrameLayout>
-
-        <FrameLayout
-            android:id="@+id/border"
-            android:layout_width="0dp"
+        <TextView
+            android:id="@+id/rateDiff"
+            style="@style/Subhead2"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="3dp"
+            app:layout_constraintBottom_toBottomOf="@+id/exchangeRate"
+            app:layout_constraintStart_toEndOf="@+id/exchangeRate"
+            tools:text="+65%" />
+
+        <TextView
+            android:id="@+id/balanceFiat"
+            style="@style/Headline2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:layout_marginEnd="16dp"
+            android:includeFontPadding="false"
+            android:textColor="@color/jacob"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/coinBackgroundSquare">
+            app:layout_constraintTop_toTopOf="@+id/coinName"
+            tools:text="$52.50" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_gravity="bottom"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginEnd="8dp"
-                android:background="@color/steel_10" />
-        </FrameLayout>
-
-        <!-- Second Line-->
-        <FrameLayout
-            android:id="@+id/balanceWrapper"
-            android:layout_width="0dp"
-            android:layout_height="34dp"
-            android:paddingBottom="3dp"
+        <TextView
+            android:id="@+id/textSyncedUntil"
+            style="@style/Subhead2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginTop="3dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="16dp"
+            android:ellipsize="end"
+            android:includeFontPadding="false"
+            android:singleLine="true"
+            android:textColor="@color/grey"
+            android:visibility="invisible"
+            app:layout_constrainedWidth="true"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/border">
+            app:layout_constraintHorizontal_bias="1"
+            app:layout_constraintStart_toEndOf="@+id/textSyncing"
+            app:layout_constraintTop_toBottomOf="@+id/coinName"
+            tools:text="until Aug 11, 2019" />
 
-            <TextView
-                android:id="@+id/balanceCoin"
-                style="@style/Subhead2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:layout_marginStart="12dp"
-                android:layout_marginTop="10dp"
-                android:includeFontPadding="false"
-                android:textColor="?BallanceCoinAmountColor"
-                tools:text="0.000078 BTC" />
-
-            <TextView
-                android:id="@+id/balanceFiat"
-                style="@style/Headline2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end|bottom"
-                android:layout_marginTop="11dp"
-                android:layout_marginEnd="12dp"
-                android:includeFontPadding="false"
-                android:textColor="@color/jacob"
-                tools:text="$52.50" />
-
-            <TextView
-                android:id="@+id/textSyncing"
-                style="@style/Subhead2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:layout_marginStart="12dp"
-                android:layout_marginTop="10dp"
-                android:includeFontPadding="false"
-                android:textColor="@color/grey"
-                android:visibility="gone"
-                tools:text="Syncing... 45%" />
-
-            <TextView
-                android:id="@+id/textSyncedUntil"
-                style="@style/Subhead2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end|bottom"
-                android:layout_marginTop="11dp"
-                android:layout_marginEnd="12dp"
-                android:includeFontPadding="false"
-                android:textColor="@color/grey"
-                android:visibility="gone"
-                tools:text="Until Dec 17. 2018" />
-        </FrameLayout>
-
-        <View
-            android:id="@+id/collapsedBottom"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginTop="8dp"
-            android:background="@color/red_d"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/balanceWrapper" />
+        <TextView
+            android:id="@+id/balanceCoin"
+            style="@style/Subhead2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:layout_marginEnd="16dp"
+            android:includeFontPadding="false"
+            android:textColor="@color/grey"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/coinName"
+            tools:text="0.000078" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/buttonsWrapper"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:paddingStart="8dp"
-            android:paddingTop="4dp"
-            android:paddingEnd="8dp"
-            android:paddingBottom="8dp"
+            android:layout_marginTop="56dp"
+            android:paddingStart="12dp"
+            android:paddingTop="10dp"
+            android:paddingEnd="12dp"
+            android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/collapsedBottom">
+            app:layout_constraintTop_toTopOf="parent">
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_gravity="bottom"
+                android:layout_marginTop="1dp"
+                android:background="@color/steel_20"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <FrameLayout
                 android:id="@+id/lockedBalanceWrapper"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
                     android:id="@+id/balanceCoinLocked"
-                    style="@style/Subhead2"
+                    style="@style/Caption"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginBottom="8dp"
-                    android:drawableStart="@drawable/ic_lock_16"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginBottom="10dp"
                     android:drawablePadding="4dp"
                     android:textColor="@color/grey"
+                    app:drawableStartCompat="@drawable/ic_lock_16"
                     tools:text="0.000078 BTC" />
 
                 <TextView
                     android:id="@+id/balanceFiatLocked"
-                    style="@style/Subhead1"
+                    style="@style/Caption"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
-                    android:layout_marginTop="4dp"
+                    android:layout_marginTop="12dp"
                     android:layout_marginEnd="4dp"
-                    android:layout_marginBottom="8dp"
-                    android:textColor="@color/leah"
+                    android:layout_marginBottom="10dp"
+                    android:textColor="@color/jacob"
                     tools:text="$52.50" />
-            </FrameLayout>
 
-            <Button
-                android:id="@+id/buttonReceive"
-                style="@style/ButtonPrimaryGreen"
-                android:layout_width="0dp"
-                android:layout_height="50dp"
-                android:layout_marginEnd="4dp"
-                android:text="@string/Balance_Deposit"
-                app:layout_constraintEnd_toStartOf="@+id/buttonSend"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/lockedBalanceWrapper" />
+                <View
+                    android:id="@+id/lockedBorder"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_gravity="bottom"
+                    android:background="@color/steel_20" />
+            </FrameLayout>
 
             <Button
                 android:id="@+id/buttonSend"
                 style="@style/ButtonPrimaryYellow"
                 android:layout_width="0dp"
                 android:layout_height="50dp"
-                android:layout_marginStart="4dp"
                 android:text="@string/Balance_Send"
-                app:layout_constraintEnd_toStartOf="@+id/swapButtonWrapper"
-                app:layout_constraintStart_toEndOf="@id/buttonReceive"
+                app:layout_constraintEnd_toStartOf="@+id/buttonReceive"
+                app:layout_constraintHorizontal_chainStyle="spread"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/buttonReceive" />
+
+            <Button
+                android:id="@+id/buttonReceive"
+                style="@style/ButtonPrimaryGreen"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="10dp"
+                android:drawableTop="@drawable/ic_down_left"
+                android:drawableTint="@color/button_text_color_selector"
+                app:layout_constraintEnd_toStartOf="@+id/swapButtonWrapper"
+                app:layout_constraintStart_toEndOf="@+id/buttonSend"
+                app:layout_constraintTop_toBottomOf="@+id/lockedBalanceWrapper" />
 
             <FrameLayout
                 android:id="@+id/swapButtonWrapper"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/buttonSend"
-                app:layout_constraintTop_toTopOf="@+id/buttonSend">
+                app:layout_constraintEnd_toStartOf="@+id/chartButtonWrapper"
+                app:layout_constraintStart_toEndOf="@id/buttonReceive"
+                app:layout_constraintTop_toTopOf="@+id/buttonReceive">
+
                 <Button
                     android:id="@+id/buttonSwap"
                     style="@style/ButtonPrimarySteel"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_marginStart="8dp"
-                    android:visibility="gone"
                     android:drawableTop="@drawable/ic_swap"
-                    android:drawableTint="@color/button_text_color_selector" />
+                    android:drawableTint="@color/button_text_color_selector"
+                    android:visibility="gone" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/chartButtonWrapper"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/buttonReceive">
+
+                <Button
+                    android:id="@+id/buttonChart"
+                    style="@style/ButtonPrimarySteel"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="8dp"
+                    android:drawableTop="@drawable/ic_chart_24"
+                    android:drawableTint="@color/button_text_color_selector"
+                    android:visibility="visible"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/buttonReceive" />
             </FrameLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <View
+            android:id="@+id/bottomPadding"
+            android:layout_width="0dp"
+            android:layout_height="12dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/buttonsWrapper" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

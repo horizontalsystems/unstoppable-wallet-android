@@ -1,15 +1,17 @@
 package io.horizontalsystems.bankwallet.modules.balance
 
-import android.content.res.ColorStateList
 import android.view.View
-import androidx.core.content.ContextCompat
+import android.widget.TextView
+import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.setCoinImage
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_balance_item.*
+import java.math.BigDecimal
 
 class BalanceItemViewHolder(override val containerView: View, private val listener: BalanceItemsAdapter.Listener) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
@@ -22,7 +24,7 @@ class BalanceItemViewHolder(override val containerView: View, private val listen
             }
         }
 
-        rateDiffWrapper.setOnSingleClickListener {
+        buttonChart.setOnSingleClickListener {
             balanceViewItem?.let {
                 listener.onChartClicked(it)
             }
@@ -73,9 +75,8 @@ class BalanceItemViewHolder(override val containerView: View, private val listen
             exchangeRate.text = exchangeValue.text
             exchangeRate.setTextColor(containerView.context.getColor(if (exchangeValue.dimmed) R.color.grey_50 else R.color.grey))
 
-            setTextSyncing(syncingData)
-
-            setRateDiff(item.diff)
+            setDiffPercentage(diff, rateDiff)
+            setSyncProgressIcon(syncingProgress)
 
             buttonReceive.isEnabled = receiveEnabled
             buttonSend.isEnabled = sendEnabled
@@ -86,27 +87,32 @@ class BalanceItemViewHolder(override val containerView: View, private val listen
             balanceFiat.isVisible = fiatValue.visible
             balanceCoinLocked.isVisible = coinValueLocked.visible
             balanceFiatLocked.isVisible = fiatValueLocked.visible
+            lockedBorder.isVisible = coinValueLocked.visible
 
-            balanceCoin.dimIf(coinValue.dimmed, 0.3f)
+            balanceCoin.dimIf(coinValue.dimmed)
             balanceFiat.dimIf(fiatValue.dimmed)
-            balanceCoinLocked.dimIf(coinValueLocked.dimmed, 0.3f)
+            balanceCoinLocked.dimIf(coinValueLocked.dimmed)
             balanceFiatLocked.dimIf(fiatValueLocked.dimmed)
 
-            iconCoin.isVisible = coinIconVisible
+            iconCoin.isInvisible = !coinIconVisible
             iconNotSynced.isVisible = failedIconVisible
 
             coinLabel.isVisible = !coinTypeLabel.isNullOrBlank()
+            exchangeRate.isInvisible = !exchangeValue.visible
+            rateDiff.isInvisible = !exchangeValue.visible
+            buttonChart.isEnabled = exchangeValue.text != null
         }
 
-        BalanceCellAnimator.toggleBalanceAndButtons(this, item)
+        BalanceCellAnimator.toggleButtons(this, item, false)
     }
 
     fun bindUpdate(current: BalanceViewItem, prev: BalanceViewItem) {
-        if (current.hideBalance != prev.hideBalance || current.expanded != prev.expanded) {
-            BalanceCellAnimator.toggleBalanceAndButtonsAnimate(this, current, prev)
+        if (current.expanded != prev.expanded) {
+            BalanceCellAnimator.toggleButtons(this, current, true)
         }
 
         current.apply {
+
             if (coinValue.text != prev.coinValue.text) {
                 balanceCoin.text = coinValue.text
             }
@@ -124,17 +130,36 @@ class BalanceItemViewHolder(override val containerView: View, private val listen
 
             if (exchangeValue.text != prev.exchangeValue.text) {
                 exchangeRate.text = exchangeValue.text
+                buttonChart.isEnabled = exchangeValue.text != null
             }
             if (exchangeValue.dimmed != prev.exchangeValue.dimmed) {
                 exchangeRate.setTextColor(containerView.context.getColor(if (exchangeValue.dimmed) R.color.grey_50 else R.color.grey))
             }
+            if (exchangeValue.visible != prev.exchangeValue.visible) {
+                exchangeRate.isVisible = exchangeValue.visible
+                rateDiff.isVisible = exchangeValue.visible
+            }
 
 
-            if (syncingData != prev.syncingData) {
-                setTextSyncing(syncingData)
+            if (syncingTextValue.text != prev.syncingTextValue.text) {
+                textSyncing.text = syncingTextValue.text
+            }
+            if (syncingTextValue.visible != prev.syncingTextValue.visible) {
+                textSyncing.isVisible = syncingTextValue.visible
+            }
+
+            if (syncedUntilTextValue.text != prev.syncedUntilTextValue.text) {
+                textSyncedUntil.text = syncedUntilTextValue.text
+            }
+            if (syncedUntilTextValue.visible != prev.syncedUntilTextValue.visible) {
+                textSyncedUntil.isVisible = syncedUntilTextValue.visible
+            }
+
+            if (syncingProgress != prev.syncingProgress) {
+                setSyncProgressIcon(syncingProgress)
             }
             if (diff != prev.diff) {
-                setRateDiff(diff)
+                setDiffPercentage(diff, rateDiff)
             }
 
             if (receiveEnabled != prev.receiveEnabled) {
@@ -158,26 +183,27 @@ class BalanceItemViewHolder(override val containerView: View, private val listen
             }
             if (coinValueLocked.visible != prev.coinValueLocked.visible) {
                 balanceCoinLocked.isVisible = coinValueLocked.visible
+                lockedBorder.isVisible = coinValueLocked.visible
             }
             if (fiatValueLocked.visible != prev.fiatValueLocked.visible) {
                 balanceFiatLocked.isVisible = fiatValueLocked.visible
             }
 
             if (coinValue.dimmed != prev.coinValue.dimmed) {
-                balanceCoin.dimIf(coinValue.dimmed, 0.3f)
+                balanceCoin.dimIf(coinValue.dimmed)
             }
             if (fiatValue.dimmed != prev.fiatValue.dimmed) {
                 balanceFiat.dimIf(fiatValue.dimmed)
             }
             if (coinValueLocked.dimmed != prev.coinValueLocked.dimmed) {
-                balanceCoinLocked.dimIf(coinValueLocked.dimmed, 0.3f)
+                balanceCoinLocked.dimIf(coinValueLocked.dimmed)
             }
             if (fiatValueLocked.dimmed != prev.fiatValueLocked.dimmed) {
                 balanceFiatLocked.dimIf(fiatValueLocked.dimmed)
             }
 
             if (coinIconVisible != prev.coinIconVisible) {
-                iconCoin.isVisible = coinIconVisible
+                iconCoin.isInvisible = !coinIconVisible
             }
             if (failedIconVisible != prev.failedIconVisible) {
                 iconNotSynced.isVisible = failedIconVisible
@@ -185,70 +211,20 @@ class BalanceItemViewHolder(override val containerView: View, private val listen
         }
     }
 
-    private fun setRateDiff(rDiff: RateDiff) {
-        rateDiff.text = rDiff.deemedValue.text ?: containerView.context.getString(R.string.NotAvailable)
-        rateDiff.setTextColor(getRateDiffTextColor(rDiff.deemedValue.dimmed))
-        rateDiffIcon.setImageResource(if (rDiff.positive) R.drawable.ic_up_green_20 else R.drawable.ic_down_red_20)
-        rateDiffIcon.imageTintList = getRateDiffTintList(rDiff.deemedValue.dimmed)
+    private fun setDiffPercentage(diff: BigDecimal?, view: TextView) {
+        diff ?: return
+
+        val sign = if (diff >= BigDecimal.ZERO) "+" else "-"
+        view.text = App.numberFormatter.format(diff.abs(), 0, 2, sign, "%")
+
+        val color = if (diff >= BigDecimal.ZERO) R.color.remus else R.color.lucian
+        view.setTextColor(containerView.context.getColor(color))
     }
 
-    private fun getRateDiffTextColor(dimmed: Boolean): Int {
-        return containerView.context.getColor(if (dimmed) R.color.grey_50 else R.color.leah)
-    }
-
-    private fun getRateDiffTintList(dimmed: Boolean): ColorStateList? {
-        if (dimmed) {
-            val greyColor = ContextCompat.getColor(containerView.context, R.color.grey_50)
-            return ColorStateList.valueOf(greyColor)
-        }
-        return null
-    }
-
-    private fun setTextSyncing(syncingData: SyncingData?) {
-        when (syncingData) {
-            is SyncingData.Blockchain -> {
-                iconProgress.setProgressColored(syncingData.spinnerProgress, itemView.context.getColor(R.color.grey))
-                iconProgress.isVisible = true
-
-                textSyncing.isVisible = syncingData.syncingTextVisible
-                textSyncedUntil.isVisible = syncingData.syncingTextVisible
-
-
-                textSyncing.text = if (syncingData.progress != null) {
-                    containerView.context.getString(R.string.Balance_Syncing_WithProgress, syncingData.progress.toString())
-                } else {
-                    containerView.context.getString(R.string.Balance_Syncing)
-                }
-
-                textSyncedUntil.text = if (syncingData.until != null) {
-                    containerView.context.getString(R.string.Balance_SyncedUntil, syncingData.until)
-                } else {
-                    null
-                }
-            }
-            is SyncingData.SearchingTxs -> {
-                iconProgress.setProgressColored(10, itemView.context.getColor(R.color.grey_50))
-                iconProgress.isVisible = true
-
-                textSyncing.isVisible = syncingData.syncingTextVisible
-                textSyncedUntil.isVisible = syncingData.syncingTextVisible
-
-                textSyncing.text = containerView.context.getString(R.string.Balance_SearchingTransactions)
-                textSyncedUntil.text = if (syncingData.txCount > 0) {
-                    containerView.context.getString(R.string.Balance_FoundTx, syncingData.txCount.toString())
-                } else {
-                    null
-                }
-            }
-            null -> {
-                iconProgress.isVisible = false
-                textSyncing.isVisible = false
-                textSyncedUntil.isVisible = false
-
-                textSyncing.text = null
-                textSyncedUntil.text = null
-            }
-        }
+    private fun setSyncProgressIcon(syncingProgress: SyncingProgress) {
+        val color = if (syncingProgress.dimmed) R.color.grey_50 else R.color.grey
+        iconProgress.setProgressColored(syncingProgress.progress, itemView.context.getColor(color))
+        iconProgress.isVisible = syncingProgress.progress > 0
     }
 
     private fun View.dimIf(condition: Boolean, dimmedAlpha: Float = 0.5f) {
