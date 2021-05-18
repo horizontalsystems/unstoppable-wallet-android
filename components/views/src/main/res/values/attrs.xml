@@ -59,8 +59,6 @@
     <attr name="TextColorBarsToDark" format="reference|color" />
     <attr name="AboutBackgroundColor" format="reference|color" />
     <attr name="TransactionItemBackgroundColor" format="reference|color" />
-    <attr name="CoinItemBackground" format="reference" />
-    <attr name="PredefinedAccountBackground" format="reference" />
     <attr name="BottomNavigationBackgroundColor" format="reference|color" />
     <attr name="RippleColor" format="reference|color" />
     <attr name="RoundRippleColor" format="reference|color" />

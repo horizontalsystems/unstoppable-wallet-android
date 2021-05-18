@@ -126,7 +126,7 @@ class BalancePresenter(
     private fun syncBalanceHidden() {
         interactor.balanceHidden = hideBalance
         updateHeaderViewItem()
-        toggleBalanceVisibility()
+        updateViewItems()
     }
 
     private fun updateTitle(account: Account?) {
@@ -290,13 +290,6 @@ class BalancePresenter(
         updateBlock(item)
         viewItems[index] = factory.viewItem(item, currency, viewItems[index].expanded, hideBalance)
 
-        view?.set(viewItemsCopy)
-    }
-
-    private fun toggleBalanceVisibility() {
-        viewItems.forEach {
-            it.hideBalance = hideBalance
-        }
         view?.set(viewItemsCopy)
     }
 
