@@ -223,8 +223,10 @@ class BalanceItemViewHolder(override val containerView: View, private val listen
 
     private fun setSyncProgressIcon(syncingProgress: SyncingProgress) {
         val color = if (syncingProgress.dimmed) R.color.grey_50 else R.color.grey
-        iconProgress.setProgressColored(syncingProgress.progress, itemView.context.getColor(color))
-        iconProgress.isVisible = syncingProgress.progress > 0
+        syncingProgress.progress?.let {
+            iconProgress.setProgressColored(it, itemView.context.getColor(color))
+        }
+        iconProgress.isVisible = syncingProgress.progress != null
     }
 
     private fun View.dimIf(condition: Boolean, dimmedAlpha: Float = 0.5f) {
