@@ -27,6 +27,7 @@ import com.google.android.material.tabs.TabLayout
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.setCoinImage
 import io.horizontalsystems.bankwallet.modules.markdown.MarkdownFragment
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartFragment
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartType
