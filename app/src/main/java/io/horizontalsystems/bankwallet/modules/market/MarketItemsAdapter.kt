@@ -145,11 +145,17 @@ class ViewHolderMarketItem(override val containerView: View, private val listene
                 }
                 is MarketViewItem.MarketDataValue.Diff -> {
                     val v = marketField.value
-                    val sign = if (v >= BigDecimal.ZERO) "+" else "-"
-                    marketFieldValue.text = App.numberFormatter.format(v.abs(), 0, 2, sign, "%")
+                    if (v != null){
+                        val sign = if (v >= BigDecimal.ZERO) "+" else "-"
+                        marketFieldValue.text = App.numberFormatter.format(v.abs(), 0, 2, sign, "%")
 
-                    val color = if (v >= BigDecimal.ZERO) R.color.remus else R.color.lucian
-                    marketFieldValue.setTextColor(containerView.context.getColor(color))
+                        val color = if (v >= BigDecimal.ZERO) R.color.remus else R.color.lucian
+                        marketFieldValue.setTextColor(containerView.context.getColor(color))
+                    } else {
+                        marketFieldValue.text = "----"
+                        marketFieldValue.setTextColor(containerView.context.getColor(R.color.grey_50))
+                    }
+
                 }
             }
         }

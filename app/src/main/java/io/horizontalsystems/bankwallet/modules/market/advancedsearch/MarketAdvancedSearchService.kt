@@ -165,7 +165,7 @@ class MarketAdvancedSearchService(
     private fun filterCoinMarket(coinMarket: CoinMarket): Boolean {
         return filterByRange(filterMarketCap, coinMarket.marketInfo.marketCap?.toLong())
                 && filterByRange(filterVolume, coinMarket.marketInfo.volume.toLong())
-                && filterByRange(filterPriceChange, coinMarket.marketInfo.rateDiffPeriod.toLong())
+                && filterByRange(filterPriceChange, coinMarket.marketInfo.rateDiffPeriod?.toLong())
                 && (!filterPriceCloseToAth || closeToAllTime(coinMarket.marketInfo.athChangePercentage))
                 && (!filterPriceCloseToAtl || closeToAllTime(coinMarket.marketInfo.atlChangePercentage))
                 && (!filterOutperformedBtcOn || outperformed(coinMarket.marketInfo.rateDiffPeriod, CoinType.Bitcoin))
@@ -193,10 +193,16 @@ class MarketAdvancedSearchService(
 
     private fun coinMarket(coinType: CoinType): CoinMarket? = cache?.firstOrNull { it.data.type == coinType }
 
-    private fun outperformed(value: BigDecimal, coinType: CoinType): Boolean {
+    private fun outperformed(value: BigDecimal?, coinType: CoinType): Boolean {
         val coinMarket = coinMarket(coinType) ?: return false
 
-        return coinMarket.marketInfo.rateDiffPeriod < value
+        val diff = coinMarket.marketInfo.rateDiffPeriod
+
+        if (value == null || diff == null){
+            return false
+        }
+
+        return diff < value
     }
 
     private fun closeToAllTime(value: BigDecimal?): Boolean {

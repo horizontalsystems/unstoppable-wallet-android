@@ -9,6 +9,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
+import java.math.BigDecimal
 import java.net.URL
 
 class CoinService(
@@ -44,7 +45,7 @@ class CoinService(
 
     var coinMarketDetails: CoinMarketDetails? = null
 
-    var lastPoint: LastPoint? = xRateManager.latestRate(coinType, currency.code)?.let { LastPoint(it.rate, it.timestamp, it.rateDiff24h) }
+    var lastPoint: LastPoint? = xRateManager.latestRate(coinType, currency.code)?.let { LastPoint(it.rate, it.timestamp, it.rateDiff24h ?: BigDecimal.ZERO) }
         set(value) {
             field = value
             triggerChartUpdateIfEnoughData()
@@ -87,7 +88,7 @@ class CoinService(
                 }
         xRateManager.latestRateObservable(coinType, currency.code)
                 .subscribeIO({ marketInfo ->
-                    lastPoint = LastPoint(marketInfo.rate, marketInfo.timestamp, marketInfo.rateDiff24h)
+                    lastPoint = LastPoint(marketInfo.rate, marketInfo.timestamp, marketInfo.rateDiff24h ?: BigDecimal.ZERO)
                 }, {
                     //ignore
                 }).let {
