@@ -52,7 +52,7 @@ data class MarketItem(
         val coinName: String,
         val volume: CurrencyValue,
         val rate: CurrencyValue,
-        val diff: BigDecimal,
+        val diff: BigDecimal?,
         val marketCap: CurrencyValue?
 ) {
     companion object {
@@ -138,13 +138,13 @@ data class MarketViewItem(
         val coinCode: String,
         val coinName: String,
         val rate: String,
-        val diff: BigDecimal,
+        val diff: BigDecimal?,
         val marketDataValue: MarketDataValue
 ) {
     sealed class MarketDataValue {
         class MarketCap(val value: String) : MarketDataValue()
         class Volume(val value: String) : MarketDataValue()
-        class Diff(val value: BigDecimal) : MarketDataValue()
+        class Diff(val value: BigDecimal?) : MarketDataValue()
     }
 
     fun areItemsTheSame(other: MarketViewItem): Boolean {
@@ -191,9 +191,9 @@ data class MarketViewItem(
 }
 
 inline fun <T, R : Comparable<R>> Iterable<T>.sortedByDescendingNullLast(crossinline selector: (T) -> R?): List<T> {
-    return sortedWith(Comparator.nullsLast(compareByDescending(selector)))
+    return sortedWith(compareBy(nullsFirst(), selector)).sortedByDescending(selector)
 }
 
 inline fun <T, R : Comparable<R>> Iterable<T>.sortedByNullLast(crossinline selector: (T) -> R?): List<T> {
-    return sortedWith(Comparator.nullsLast(compareBy(selector)))
+    return sortedWith(compareBy(nullsLast(), selector))
 }
