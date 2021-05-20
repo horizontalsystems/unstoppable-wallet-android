@@ -193,6 +193,7 @@ class CoinViewModel(
     }
 
     private fun onChartError(error: Throwable?) {
+        chartSpinner.postValue(false)
         showChartError.postValue(Unit)
     }
 
