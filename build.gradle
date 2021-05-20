@@ -22,7 +22,7 @@ buildscript {
 
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:4.1.3'
@@ -36,8 +36,17 @@ buildscript {
 allprojects {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
         maven { url "https://jitpack.io" }
+        jcenter() {
+            content {
+                includeModule("cash.z.ecc.android", "zcash-android-sdk-mainnet")
+                includeModule("cash.z.ecc.android", "zcash-android-sdk-testnet")
+                includeModule("me.relex", "circleindicator")
+                includeModule("org.briarproject", "jtorctl")
+                includeModule("org.dashj", "dashj-bls")
+            }
+        }
     }
 }
 
