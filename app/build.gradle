@@ -157,7 +157,7 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation "androidx.biometric:biometric:$biometric_version"
 
-    implementation 'com.squareup.picasso:picasso:2.71828'
+    implementation 'com.squareup.picasso:picasso:2.8'
 
     implementation 'com.atlassian.commonmark:commonmark:0.15.1'
     implementation "io.noties.markwon:core:4.6.2"
