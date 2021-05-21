@@ -39,6 +39,12 @@ class AppConfigProvider : IAppConfigProvider, ILanguageConfigProvider, IBuildCon
     override val faqUrl by lazy {
         Translator.getString(R.string.faqUrl)
     }
+    override val coinsJsonUrl by lazy {
+        Translator.getString(R.string.coinsJsonUrl)
+    }
+    override val providerCoinsJsonUrl by lazy {
+        Translator.getString(R.string.providerCoinsJsonUrl)
+    }
 
     override val fiatDecimal: Int = 2
     override val maxDecimal: Int = 8
