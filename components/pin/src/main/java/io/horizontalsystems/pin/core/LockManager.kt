@@ -1,22 +1,22 @@
 package io.horizontalsystems.pin.core
 
-import io.horizontalsystems.core.IPinStorage
 import io.horizontalsystems.core.helpers.DateHelper
 import java.util.*
 
 class LockManager(
-        private val pinManager: PinManager,
-        private val pinStorage: IPinStorage) {
+        private val pinManager: PinManager
+) {
 
     var isLocked: Boolean = false
     private val lockTimeout = 60L
+    private var appLastVisitTime: Long = 0
 
     fun didEnterBackground() {
         if (isLocked) {
             return
         }
 
-        pinStorage.appLastVisitTime = Date().time
+        appLastVisitTime = Date().time
     }
 
     fun willEnterForeground() {
@@ -24,7 +24,7 @@ class LockManager(
             return
         }
 
-        val secondsAgo = DateHelper.getSecondsAgo(pinStorage.appLastVisitTime)
+        val secondsAgo = DateHelper.getSecondsAgo(appLastVisitTime)
         if (secondsAgo > lockTimeout) {
             isLocked = true
         }
@@ -35,7 +35,7 @@ class LockManager(
     }
 
     fun updateLastExitDate() {
-        pinStorage.appLastVisitTime = Date().time
+        appLastVisitTime = Date().time
     }
 
 }

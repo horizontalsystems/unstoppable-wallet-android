@@ -20,7 +20,7 @@ class PinComponent(
     }
 
     private val appLockManager: LockManager by lazy {
-        LockManager(pinManager, pinStorage)
+        LockManager(pinManager)
     }
 
     override val pinSetFlowable: Flowable<Unit>
