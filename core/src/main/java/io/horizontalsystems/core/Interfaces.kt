@@ -84,7 +84,6 @@ interface ICurrencyManager {
 interface IPinStorage {
     var failedAttempts: Int?
     var lockoutUptime: Long?
-    var appLastVisitTime: Long
     var biometricAuthEnabled: Boolean
     var pin: String?
 
