@@ -6,19 +6,20 @@ import com.trustwallet.walletconnect.models.ethereum.WCEthereumTransaction
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
 import io.horizontalsystems.bankwallet.core.managers.WalletConnectInteractor
+import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.WalletConnectSession
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 
 class WalletConnectService(
         remotePeerId: String?,
         private val manager: WalletConnectManager,
         private val sessionManager: WalletConnectSessionManager,
+        private val requestManager: WalletConnectRequestManager,
         private val connectivityManager: ConnectivityManager
 ) : WalletConnectInteractor.Delegate, Clearable {
 
@@ -43,11 +44,13 @@ class WalletConnectService(
     }
 
     private var interactor: WalletConnectInteractor? = null
-    private val pendingRequests = linkedMapOf<Long, WalletConnectRequest>()
     private val disposable = CompositeDisposable()
     private var requestIsProcessing = false
-
     private var sessionData: SessionData? = null
+
+    private val peerId: String?
+        get() = sessionData?.peerId
+
     val remotePeerMeta: WCPeerMeta?
         get() = sessionData?.peerMeta
 
@@ -84,10 +87,8 @@ class WalletConnectService(
         }
 
         connectivityManager.networkAvailabilitySignal
-                .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.io())
-                .subscribe {
-                    if (connectivityManager.isConnected) {
+                .subscribeIO {
+                    if (connectivityManager.isConnected && interactor?.state == WalletConnectInteractor.State.Disconnected) {
                         interactor?.connect()
                     }
                 }
@@ -117,10 +118,22 @@ class WalletConnectService(
         sessionData = SessionData(peerId, peerMeta, account, evmKit)
     }
 
+    private fun getSessionFromUri(uri: String): WalletConnectSession? {
+        return sessionManager.sessions.firstOrNull { session -> "wc:${session.session.topic}@${session.session.version}" == uri }
+    }
+
     fun connect(uri: String) {
-        interactor = WalletConnectInteractor(uri)
-        interactor?.delegate = this
-        interactor?.connect()
+        val session = getSessionFromUri(uri)
+
+        if (session != null) {
+            if (sessionData?.peerId != session.remotePeerId) { // session is not current active session
+                restoreSession(session)
+            }
+        } else {
+            interactor = WalletConnectInteractor(uri)
+            interactor?.delegate = this
+            interactor?.connect()
+        }
     }
 
     override fun clear() {
@@ -164,7 +177,7 @@ class WalletConnectService(
     }
 
     fun approveRequest(requestId: Long, result: Any) {
-        val request = pendingRequests.remove(requestId)
+        val request = peerId?.let { requestManager.remove(it, requestId) }
 
         request?.let {
             interactor?.approveRequest(requestId, it.convertResult(result))
@@ -175,7 +188,7 @@ class WalletConnectService(
     }
 
     fun rejectRequest(requestId: Long) {
-        pendingRequests.remove(requestId)
+        peerId?.let { requestManager.remove(it, requestId) }
 
         interactor?.rejectRequest(requestId, "Rejected by User")
 
@@ -185,6 +198,10 @@ class WalletConnectService(
 
     override fun didUpdateState(state: WalletConnectInteractor.State) {
         connectionStateSubject.onNext(state)
+
+        if (state == WalletConnectInteractor.State.Connected) {
+            processNextRequest()
+        }
     }
 
     override fun didKillSession() {
@@ -223,10 +240,11 @@ class WalletConnectService(
 
     private fun handleRequest(id: Long, requestResolver: () -> WalletConnectRequest) {
         try {
-            val request = requestResolver()
-            pendingRequests[request.id] = request
-
-            processNextRequest()
+            peerId?.let { peerId ->
+                val request = requestResolver()
+                requestManager.save(peerId, request)
+                processNextRequest()
+            }
         } catch (t: Throwable) {
             interactor?.rejectRequest(id, t.message ?: "")
         }
@@ -236,9 +254,11 @@ class WalletConnectService(
     private fun processNextRequest() {
         if (requestIsProcessing) return
 
-        pendingRequests.values.firstOrNull()?.let {
-            requestSubject.onNext(it)
-            requestIsProcessing = true
+        peerId?.let { peerId ->
+            requestManager.getNextRequest(peerId)?.let { request ->
+                requestSubject.onNext(request)
+                requestIsProcessing = true
+            }
         }
     }
 }

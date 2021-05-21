@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/wallet_connect_graph"
+    app:startDestination="@+id/walletConnectListFragment">
+    <fragment
+        android:id="@+id/walletConnectListFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListFragment"
+        tools:layout="@layout/fragment_wallet_connect_list">
+        <action
+            android:id="@+id/walletConnectListFragment_to_walletConnectMainFragment"
+            app:destination="@id/walletConnectMainFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/walletConnectMainFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.walletconnect.main.WalletConnectMainFragment"
+        tools:layout="@layout/fragment_wallet_connect_main">
+        <action
+            android:id="@+id/walletConnectMainFragment_to_walletConnectErrorFragment"
+            app:destination="@id/walletConnectErrorFragment"
+            app:popExitAnim="@anim/slide_to_right"
+            app:popUpTo="@id/walletConnectMainFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/walletConnectMainFragment_to_walletConnectSendEthereumTransactionRequestFragment"
+            app:destination="@id/walletConnectSendEthereumTransactionRequestFragment" />
+        <action
+            android:id="@+id/walletConnectMainFragment_to_walletConnectSignMessageRequestFragment"
+            app:destination="@id/walletConnectSignMessageRequestFragment" />
+        <deepLink
+            app:action=""
+            android:id="@+id/deepLink"
+            app:uri="wc:{topic}"/>
+        <argument android:name="topic" app:argType="string"/>
+        <argument android:name="bridge" app:argType="string"/>
+        <argument android:name="key" app:argType="string"/>
+    </fragment>
+    <fragment
+        android:id="@+id/walletConnectErrorFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectErrorFragment"
+        tools:layout="@layout/fragment_wallet_connect_error" />
+    <fragment
+        android:id="@+id/walletConnectSendEthereumTransactionRequestFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.walletconnect.request.sendtransaction.WalletConnectSendEthereumTransactionRequestFragment"
+        tools:layout="@layout/fragment_wallet_connect_request">
+        <action
+            android:id="@+id/walletConnectRequestFragment_to_feeSpeedInfo"
+            app:destination="@id/feeSpeedInfoFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/walletConnectSignMessageRequestFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.walletconnect.request.signmessage.WalletConnectSignMessageRequestFragment"
+        tools:layout="@layout/fragment_wallet_connect_sign_message_request">
+        <action
+            android:id="@+id/walletConnectSignMessageRequestFragment_to_walletConnectDisplayTypedMessageFragment"
+            app:destination="@id/walletConnectDisplayTypedMessageFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/walletConnectDisplayTypedMessageFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.walletconnect.request.signmessage.WalletConnectDisplayTypedMessageFragment"
+        tools:layout="@layout/fragment_wallet_connect_display_typed_message" />
+</navigation>

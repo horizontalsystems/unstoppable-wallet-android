@@ -6,6 +6,7 @@
     app:startDestination="@id/mainFragment">
 
     <include app:graph="@navigation/privacy_settings_graph" />
+    <include app:graph="@navigation/wallet_connect_graph" />
 
     <fragment
         android:id="@+id/mainFragment"
@@ -61,8 +62,8 @@
             app:popEnterAnim="@android:anim/fade_in"
             app:popExitAnim="@anim/slide_to_bottom_long" />
         <action
-            android:id="@+id/mainFragment_to_walletConnectListFragment"
-            app:destination="@id/walletConnectListFragment" />
+            android:id="@+id/mainFragment_to_walletConnect"
+            app:destination="@id/wallet_connect_graph" />
         <action
             android:id="@+id/mainFragment_to_transactionInfoDialog"
             app:destination="@id/transactionInfoDialog" />
@@ -341,55 +342,6 @@
         android:id="@+id/swapInfoFragment"
         android:name="io.horizontalsystems.bankwallet.modules.swap.info.SwapInfoFragment"
         tools:layout="@layout/fragment_swap_info" />
-    <fragment
-        android:id="@+id/walletConnectListFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListFragment"
-        tools:layout="@layout/fragment_wallet_connect_list">
-        <action
-            android:id="@+id/walletConnectListFragment_to_walletConnectMainFragment"
-            app:destination="@id/walletConnectMainFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/walletConnectMainFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.walletconnect.main.WalletConnectMainFragment"
-        tools:layout="@layout/fragment_wallet_connect_main">
-        <action
-            android:id="@+id/walletConnectMainFragment_to_walletConnectErrorFragment"
-            app:destination="@id/walletConnectErrorFragment"
-            app:popExitAnim="@anim/slide_to_right"
-            app:popUpTo="@id/walletConnectMainFragment"
-            app:popUpToInclusive="true" />
-        <action
-            android:id="@+id/walletConnectMainFragment_to_walletConnectSendEthereumTransactionRequestFragment"
-            app:destination="@id/walletConnectSendEthereumTransactionRequestFragment" />
-        <action
-            android:id="@+id/walletConnectMainFragment_to_walletConnectSignMessageRequestFragment"
-            app:destination="@id/walletConnectSignMessageRequestFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/walletConnectErrorFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectErrorFragment"
-        tools:layout="@layout/fragment_wallet_connect_error" />
-    <fragment
-        android:id="@+id/walletConnectSendEthereumTransactionRequestFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.walletconnect.request.sendtransaction.WalletConnectSendEthereumTransactionRequestFragment"
-        tools:layout="@layout/fragment_wallet_connect_request">
-        <action
-            android:id="@+id/walletConnectRequestFragment_to_feeSpeedInfo"
-            app:destination="@id/feeSpeedInfoFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/walletConnectSignMessageRequestFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.walletconnect.request.signmessage.WalletConnectSignMessageRequestFragment"
-        tools:layout="@layout/fragment_wallet_connect_sign_message_request">
-        <action
-            android:id="@+id/walletConnectSignMessageRequestFragment_to_walletConnectDisplayTypedMessageFragment"
-            app:destination="@id/walletConnectDisplayTypedMessageFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/walletConnectDisplayTypedMessageFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.walletconnect.request.signmessage.WalletConnectDisplayTypedMessageFragment"
-        tools:layout="@layout/fragment_wallet_connect_display_typed_message" />
     <fragment
         android:id="@+id/swapTradeOptionsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.swap.tradeoptions.SwapTradeOptionsFragment"

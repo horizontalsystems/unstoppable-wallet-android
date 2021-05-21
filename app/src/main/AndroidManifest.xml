@@ -41,7 +41,14 @@
         <activity
             android:name=".modules.main.MainActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden" >
+            <intent-filter android:label="@string/App_Name">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="wc" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".modules.send.SendActivity"
             android:screenOrientation="portrait"
