@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.walletconnect.main
 
 import android.app.Activity
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -38,6 +39,7 @@ class WalletConnectMainFragment : BaseFragment() {
         when (result.resultCode) {
             Activity.RESULT_OK -> {
                 result.data?.getStringExtra(ModuleField.SCAN_ADDRESS)?.let {
+                    Log.e("AAA", "uri: $it")
                     viewModelScan.handleScanned(it)
                 }
             }
@@ -75,13 +77,21 @@ class WalletConnectMainFragment : BaseFragment() {
 
         containerView?.isVisible = false
 
-        when (baseViewModel.initialScreen) {
-            WalletConnectViewModel.InitialScreen.ScanQrCode -> {
-                val intent = QRScannerActivity.getIntentForFragment(this)
-                qrScannerResultLauncher.launch(intent)
-            }
-            WalletConnectViewModel.InitialScreen.Main -> {
-                containerView?.isVisible = true
+        val deepLinkUri = activity?.intent?.data?.toString()
+
+        if (deepLinkUri != null) {
+            activity?.intent?.data = null
+
+            viewModelScan.handleScanned(deepLinkUri)
+        } else {
+            when (baseViewModel.initialScreen) {
+                WalletConnectViewModel.InitialScreen.ScanQrCode -> {
+                    val intent = QRScannerActivity.getIntentForFragment(this)
+                    qrScannerResultLauncher.launch(intent)
+                }
+                WalletConnectViewModel.InitialScreen.Main -> {
+                    containerView?.isVisible = true
+                }
             }
         }
 
@@ -97,7 +107,6 @@ class WalletConnectMainFragment : BaseFragment() {
         viewModelScan.openMainLiveEvent.observe(this, {
             containerView?.isVisible = true
         })
-
 
         val dappInfoAdapter = DappInfoAdapter()
         dappInfo.adapter = dappInfoAdapter

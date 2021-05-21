@@ -23,6 +23,7 @@ import io.horizontalsystems.bankwallet.modules.lockscreen.LockScreenActivity
 import io.horizontalsystems.bankwallet.modules.settings.theme.ThemeType
 import io.horizontalsystems.bankwallet.modules.tor.TorConnectionActivity
 import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectManager
+import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectRequestManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectSessionManager
 import io.horizontalsystems.coinkit.CoinKit
 import io.horizontalsystems.core.BackgroundManager
@@ -83,6 +84,7 @@ class App : CoreApp() {
         lateinit var coinManager: ICoinManager
         lateinit var walletConnectSessionStorage: WalletConnectSessionStorage
         lateinit var walletConnectSessionManager: WalletConnectSessionManager
+        lateinit var walletConnectRequestManager: WalletConnectRequestManager
         lateinit var walletConnectManager: WalletConnectManager
         lateinit var notificationSubscriptionManager: INotificationSubscriptionManager
         lateinit var termsManager: ITermsManager
@@ -213,6 +215,7 @@ class App : CoreApp() {
         rateAppManager = RateAppManager(walletManager, adapterManager, localStorage)
         walletConnectSessionStorage = WalletConnectSessionStorage(appDatabase)
         walletConnectSessionManager = WalletConnectSessionManager(walletConnectSessionStorage, accountManager)
+        walletConnectRequestManager = WalletConnectRequestManager()
         walletConnectManager = WalletConnectManager(accountManager, ethereumKitManager, binanceSmartChainKitManager)
 
         termsManager = TermsManager(localStorage)
