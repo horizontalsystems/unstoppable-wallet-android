@@ -270,6 +270,8 @@ interface IAppConfigProvider {
     val bscscanApiKey: String
     val guidesUrl: String
     val faqUrl: String
+    val coinsJsonUrl: String
+    val providerCoinsJsonUrl: String
     val fiatDecimal: Int
     val maxDecimal: Int
     val feeRateAdjustForCurrencies: List<String>

@@ -4,7 +4,6 @@ import android.content.Context
 import io.horizontalsystems.bankwallet.core.IAppConfigProvider
 import io.horizontalsystems.bankwallet.core.IRateManager
 import io.horizontalsystems.coinkit.models.CoinType
-import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.xrateskit.XRatesKit
 import io.horizontalsystems.xrateskit.entities.*
 import io.reactivex.Observable
@@ -13,15 +12,15 @@ import java.math.BigDecimal
 
 class RateManager(
         context: Context,
-        private val currencyManager: ICurrencyManager,
         private val appConfigProvider: IAppConfigProvider) : IRateManager {
 
     private val kit: XRatesKit by lazy {
         XRatesKit.create(
                 context,
-                currencyManager.baseCurrency.code,
                 rateExpirationInterval = 60 * 10,
-                cryptoCompareApiKey = appConfigProvider.cryptoCompareApiKey
+                cryptoCompareApiKey = appConfigProvider.cryptoCompareApiKey,
+                coinsRemoteUrl = appConfigProvider.coinsJsonUrl,
+                providerCoinsRemoteUrl = appConfigProvider.providerCoinsJsonUrl,
         )
     }
 
