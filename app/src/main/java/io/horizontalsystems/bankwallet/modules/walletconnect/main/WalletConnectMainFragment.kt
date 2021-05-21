@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.modules.walletconnect.main
 
 import android.app.Activity
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -39,7 +38,6 @@ class WalletConnectMainFragment : BaseFragment() {
         when (result.resultCode) {
             Activity.RESULT_OK -> {
                 result.data?.getStringExtra(ModuleField.SCAN_ADDRESS)?.let {
-                    Log.e("AAA", "uri: $it")
                     viewModelScan.handleScanned(it)
                 }
             }

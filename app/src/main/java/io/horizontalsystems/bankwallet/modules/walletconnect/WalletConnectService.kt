@@ -124,7 +124,6 @@ class WalletConnectService(
 
     fun connect(uri: String) {
         val session = getSessionFromUri(uri)
-
         if (session != null) {
             if (sessionData?.peerId != session.remotePeerId) { // session is not current active session
                 restoreSession(session)
