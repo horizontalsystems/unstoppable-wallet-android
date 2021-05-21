@@ -202,7 +202,7 @@ dependencies {
     debugImplementation zcashDependencyMainNet
 
     // WalletConnect
-    implementation 'com.github.horizontalsystems:wallet-connect-kotlin:71984f2'
+    implementation 'com.github.horizontalsystems:wallet-connect-kotlin:918c099'
     implementation 'com.squareup.okhttp3:okhttp:4.9.0'
 
     // Unstoppable Domains
