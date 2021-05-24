@@ -48,9 +48,9 @@ class MetricChartFragment : BaseBottomSheetDialogFragment(), Chart.Listener, Tab
 
         viewModel.loadingLiveData.observe(viewLifecycleOwner, { loading ->
             if (loading) {
-                chart.showSinner()
+                chart.showSpinner()
             } else {
-                chart.hideSinner()
+                chart.hideSpinner()
             }
         })
 

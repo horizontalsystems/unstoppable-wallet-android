@@ -75,13 +75,13 @@ class Chart @JvmOverloads constructor(context: Context, attrs: AttributeSet? = n
         })
     }
 
-    fun showSinner() {
+    fun showSpinner() {
         chartError.isVisible = false
         chartViewSpinner.isVisible = true
         loadingShade.isVisible = true
     }
 
-    fun hideSinner() {
+    fun hideSpinner() {
         chartViewSpinner.isVisible = false
         loadingShade.isVisible = false
     }

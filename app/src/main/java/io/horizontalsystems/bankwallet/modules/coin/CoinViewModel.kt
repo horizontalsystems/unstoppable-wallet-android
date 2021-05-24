@@ -7,8 +7,9 @@ import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.chartview.models.ChartIndicator
-import io.horizontalsystems.chartview.models.PointInfo
+import io.horizontalsystems.bankwallet.modules.coin.adapters.CoinChartAdapter
+import io.horizontalsystems.bankwallet.modules.coin.adapters.CoinSubtitleAdapter
+import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.views.ListPosition
@@ -17,6 +18,7 @@ import io.horizontalsystems.xrateskit.entities.CoinMarketDetails
 import io.horizontalsystems.xrateskit.entities.LatestRate
 import io.horizontalsystems.xrateskit.entities.TimePeriod
 import io.reactivex.disposables.CompositeDisposable
+import java.math.BigDecimal
 
 class CoinViewModel(
         private val service: CoinService,
@@ -26,25 +28,41 @@ class CoinViewModel(
         private val clearables: List<Clearable>
 ) : ViewModel() {
 
-    val chartSpinner = MutableLiveData<Boolean>()
     val marketSpinner = MutableLiveData<Boolean>()
-    val setDefaultMode = MutableLiveData<ChartType>()
-    val setSelectedPoint = MutableLiveData<ChartPointViewItem>()
-    val showChartInfo = MutableLiveData<ChartInfoViewItem>()
+    val subtitleLiveData = MutableLiveData<CoinSubtitleAdapter.ViewItemWrapper>()
+    val chartInfoLiveData = MutableLiveData<CoinChartAdapter.ViewItemWrapper>()
     val coinDetailsLiveData = MutableLiveData<CoinDetailsViewItem>()
-    val showChartError = MutableLiveData<Unit>()
-    val showEma = MutableLiveData<Boolean>()
-    val showMacd = MutableLiveData<Boolean>()
-    val showRsi = MutableLiveData<Boolean>()
-    val setChartIndicatorsEnabled = MutableLiveData<Boolean>()
     val alertNotificationUpdated = MutableLiveData<Unit>()
     val showNotificationMenu = SingleLiveEvent<Pair<CoinType, String>>()
     val isFavorite = MutableLiveData<Boolean>()
     val coinMarkets = MutableLiveData<List<MarketTickerViewItem>>()
     val coinInvestors = MutableLiveData<List<InvestorItem>>()
     val extraPages = MutableLiveData<List<CoinExtraPage>>()
-    val uncheckIndicators = MutableLiveData<List<ChartIndicator>>()
-    val latestRateLiveData = MutableLiveData<CurrencyValue>()
+
+    val currency = service.currency
+
+    private var latestRateText: String? = null
+        set(value) {
+            field = value
+            syncSubtitle()
+        }
+
+    private var rateDiffValue: BigDecimal? = null
+        set(value) {
+            field = value
+            syncSubtitle()
+        }
+
+    private var ratingValue: String? = null
+        set(value) {
+            field = value
+            syncSubtitle()
+        }
+
+    private var chartInfoData: ChartInfoData? = null
+    private var showChartSpinner: Boolean = false
+    private var showChartError: Boolean = false
+
 
     var notificationIconVisible = service.notificationsAreEnabled
     var notificationIconActive = false
@@ -52,8 +70,6 @@ class CoinViewModel(
     val coinType: CoinType
         get() = service.coinType
 
-    private var enabledIndicator: ChartIndicator? = null
-    private var macdIsEnabled = false
     private val disposable = CompositeDisposable()
     private val rateDiffPeriods = listOf(TimePeriod.DAY_7, TimePeriod.DAY_30)
 
@@ -64,8 +80,7 @@ class CoinViewModel(
     }
 
     init {
-        setDefaultMode.postValue(service.chartType)
-        updateChartIndicatorState()
+        syncSubtitle()
 
         service.getCoinDetails(rateDiffCoinCodes, rateDiffPeriods)
 
@@ -117,31 +132,31 @@ class CoinViewModel(
     }
 
     private fun updateLatestRate(latestRate: LatestRate) {
-        latestRateLiveData.postValue(CurrencyValue(service.currency, latestRate.rate))
+        val currencyValue = CurrencyValue(service.currency, latestRate.rate)
+        latestRateText = factory.getFormattedLatestRate(currencyValue)
     }
 
-    fun onSelect(type: ChartType) {
-        if (service.chartType == type)
+    private fun syncSubtitle() {
+        val subtitle = CoinSubtitleAdapter.ViewItemWrapper(
+                coinTitle,
+                coinType,
+                ratingValue,
+                latestRateText,
+                rateDiffValue,
+                null
+        )
+        subtitleLiveData.postValue(subtitle)
+    }
+
+    fun onSelect(type: ChartView.ChartType) {
+        val convertedChartType = getKitChartType(type)
+
+        if (service.chartType == convertedChartType)
             return
 
-        service.chartType = type
-
-        updateChartIndicatorState()
+        service.chartType = convertedChartType
 
         fetchChartInfo()
-    }
-
-    fun onTouchSelect(point: PointInfo) {
-        val price = CurrencyValue(service.currency, point.value.toBigDecimal())
-
-        if (macdIsEnabled) {
-            setSelectedPoint.postValue(ChartPointViewItem(point.timestamp, price, null, point.macdInfo))
-        } else {
-            val volume = point.volume?.let { volume ->
-                CurrencyValue(service.currency, volume.toBigDecimal())
-            }
-            setSelectedPoint.postValue(ChartPointViewItem(point.timestamp, price, volume, null))
-        }
     }
 
     fun onNotificationClick() {
@@ -158,47 +173,14 @@ class CoinViewModel(
         updateFavoriteNotificationItemState()
     }
 
-    fun setIndicatorChanged(indicator: ChartIndicator, checked: Boolean) {
-        enabledIndicator = if (checked) indicator else null
-
-        if (checked) {
-            val itemsToUncheck = ChartIndicator.values().filter { it != indicator }
-            uncheckIndicators.postValue(itemsToUncheck)
-        }
-        when (indicator) {
-            ChartIndicator.Ema -> showEma.postValue(checked)
-            ChartIndicator.Macd -> showMacd.postValue(checked)
-            ChartIndicator.Rsi -> showRsi.postValue(checked)
-        }
-        macdIsEnabled = indicator == ChartIndicator.Macd && checked
-    }
-
-    //chart indicators should be disabled for daily and 24hrs periods
-    private fun updateChartIndicatorState() {
-        val enabled = service.chartType != ChartType.DAILY && service.chartType != ChartType.TODAY
-
-        if (setChartIndicatorsEnabled.value == enabled) {
-            return
-        }
-
-        setChartIndicatorsEnabled.postValue(enabled)
-
-        when (enabledIndicator) {
-            ChartIndicator.Ema -> showEma.postValue(enabled)
-            ChartIndicator.Macd -> showMacd.postValue(enabled)
-            ChartIndicator.Rsi -> showRsi.postValue(enabled)
-            else -> {
-            }
-        }
-    }
-
     private fun onChartError(error: Throwable?) {
-        chartSpinner.postValue(false)
-        showChartError.postValue(Unit)
+        showChartError = true
+        syncChartInfo()
     }
 
     private fun fetchChartInfo() {
-        chartSpinner.postValue(true)
+        showChartSpinner = true
+        syncChartInfo()
         service.updateChartInfo()
     }
 
@@ -220,6 +202,8 @@ class CoinViewModel(
 
     private fun updateCoinDetails() {
         val coinDetails = service.coinMarketDetails ?: return
+        coinDetails.meta.rating?.let { ratingValue = it }
+
         coinDetailsLiveData.postValue(factory.createCoinDetailsViewItem(coinDetails, service.currency, coinCode, rateDiffCoinCodes, rateDiffPeriods, getContractInfo(coinDetails), service.guideUrl))
 
         val coinMarketItems = factory.createCoinMarketItems(coinDetails.tickers)
@@ -254,8 +238,35 @@ class CoinViewModel(
 
     private fun updateChartInfo() {
         val info = service.chartInfo ?: return
-        chartSpinner.postValue(false)
-        showChartInfo.postValue(factory.createChartInfo(service.chartType, info, service.lastPoint))
+        showChartSpinner = false
+        chartInfoData = factory.createChartInfoData(service.chartType, info, service.lastPoint)
+        syncChartInfo()
+
+        rateDiffValue = chartInfoData?.chartData?.diff()
+    }
+
+    private fun syncChartInfo() {
+        chartInfoLiveData.postValue(
+                CoinChartAdapter.ViewItemWrapper(
+                        chartInfoData,
+                        showChartSpinner,
+                        showChartError
+                )
+        )
+    }
+
+    private fun getKitChartType(type: ChartView.ChartType): ChartType {
+        return when (type) {
+            ChartView.ChartType.TODAY -> ChartType.TODAY
+            ChartView.ChartType.DAILY -> ChartType.DAILY
+            ChartView.ChartType.WEEKLY -> ChartType.WEEKLY
+            ChartView.ChartType.WEEKLY2 -> ChartType.WEEKLY2
+            ChartView.ChartType.MONTHLY -> ChartType.MONTHLY
+            ChartView.ChartType.MONTHLY3 -> ChartType.MONTHLY3
+            ChartView.ChartType.MONTHLY6 -> ChartType.MONTHLY6
+            ChartView.ChartType.MONTHLY12 -> ChartType.MONTHLY12
+            ChartView.ChartType.MONTHLY24 -> ChartType.MONTHLY24
+        }
     }
 
     //  ViewModel

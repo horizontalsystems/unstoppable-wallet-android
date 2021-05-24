@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.coin
 
 import android.content.Intent
-import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.text.Html
@@ -19,33 +18,27 @@ import androidx.activity.addCallback
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.doOnPreDraw
-import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.navigation.navGraphViewModels
-import com.google.android.material.tabs.TabLayout
+import androidx.recyclerview.widget.ConcatAdapter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.core.setCoinImage
+import io.horizontalsystems.bankwallet.modules.coin.adapters.CoinChartAdapter
+import io.horizontalsystems.bankwallet.modules.coin.adapters.CoinSubtitleAdapter
 import io.horizontalsystems.bankwallet.modules.markdown.MarkdownFragment
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartFragment
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartType
 import io.horizontalsystems.bankwallet.modules.settings.notifications.bottommenu.BottomNotificationMenu
 import io.horizontalsystems.bankwallet.modules.settings.notifications.bottommenu.NotificationMenuMode
 import io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.CoinInfoItemView
-import io.horizontalsystems.bankwallet.ui.extensions.createTextView
-import io.horizontalsystems.chartview.Chart
-import io.horizontalsystems.chartview.models.ChartIndicator
-import io.horizontalsystems.chartview.models.PointInfo
+import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.findNavController
-import io.horizontalsystems.core.helpers.DateHelper
-import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.views.ListPosition
 import io.horizontalsystems.views.SettingsView
 import io.horizontalsystems.views.helpers.LayoutHelper
-import io.horizontalsystems.xrateskit.entities.ChartType
 import io.horizontalsystems.xrateskit.entities.CoinCategory
 import io.horizontalsystems.xrateskit.entities.CoinMeta
 import io.horizontalsystems.xrateskit.entities.LinkType
@@ -57,10 +50,8 @@ import kotlinx.android.synthetic.main.coin_market_details.*
 import kotlinx.android.synthetic.main.fragment_coin.*
 import org.commonmark.node.Heading
 import org.commonmark.node.Paragraph
-import java.math.BigDecimal
-import java.util.*
 
-class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedListener {
+class CoinFragment : BaseFragment(), CoinChartAdapter.Listener {
 
     private val coinTitle by lazy {
         requireArguments().getString(COIN_TITLE_KEY) ?: ""
@@ -80,17 +71,6 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
 
     private val formatter = App.numberFormatter
     private var notificationMenuItem: MenuItem? = null
-    private val actions = listOf(
-            Pair(ChartType.TODAY, R.string.CoinPage_TimeDuration_Today),
-            Pair(ChartType.DAILY, R.string.CoinPage_TimeDuration_Day),
-            Pair(ChartType.WEEKLY, R.string.CoinPage_TimeDuration_Week),
-            Pair(ChartType.WEEKLY2, R.string.CoinPage_TimeDuration_TwoWeeks),
-            Pair(ChartType.MONTHLY, R.string.CoinPage_TimeDuration_Month),
-            Pair(ChartType.MONTHLY3, R.string.CoinPage_TimeDuration_Month3),
-            Pair(ChartType.MONTHLY6, R.string.CoinPage_TimeDuration_HalfYear),
-            Pair(ChartType.MONTHLY12, R.string.CoinPage_TimeDuration_Year),
-            Pair(ChartType.MONTHLY24, R.string.CoinPage_TimeDuration_Year2)
-    )
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.fragment_coin, container, false)
@@ -123,14 +103,14 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
         notificationMenuItem = toolbar.menu.findItem(R.id.menuNotification)
         updateNotificationMenuItem()
 
-        coinName.text = coinTitle
+        val subtitleAdapter = CoinSubtitleAdapter(viewModel.subtitleLiveData, viewLifecycleOwner)
+        val chartAdapter = CoinChartAdapter(viewModel, viewLifecycleOwner, this)
 
-        coinIcon.setCoinImage(viewModel.coinType)
+        val concatAdapter = ConcatAdapter(subtitleAdapter, chartAdapter)
 
-        chart.setListener(this)
+        controlledRecyclerView.adapter = concatAdapter
 
         observeData()
-        bindActions()
 
         activity?.onBackPressedDispatcher?.addCallback(this) {
             findNavController().popBackStack()
@@ -157,85 +137,29 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
         }
     }
 
-    //  ChartView Listener
+    //  CoinChartAdapter Listener
 
-    override fun onTouchDown() {
-        scroller.setScrollingEnabled(false)
-
-        setViewVisibility(chartPointsInfo, isVisible = true)
-        setViewVisibility(tabLayout, isVisible = false)
+    override fun onChartTouchDown() {
+        controlledRecyclerView.enableVerticalScroll(false)
     }
 
-    override fun onTouchUp() {
-        scroller.setScrollingEnabled(true)
-
-        setViewVisibility(chartPointsInfo, isVisible = false)
-        setViewVisibility(tabLayout, isVisible = true)
+    override fun onChartTouchUp() {
+        controlledRecyclerView.enableVerticalScroll(true)
     }
 
-    override fun onTouchSelect(point: PointInfo) {
-        viewModel.onTouchSelect(point)
-        HudHelper.vibrate(requireContext())
-    }
-
-    //  TabLayout.OnTabSelectedListener
-
-    override fun onTabSelected(tab: TabLayout.Tab) {
-        viewModel.onSelect(actions[tab.position].first)
-    }
-
-    override fun onTabUnselected(tab: TabLayout.Tab) {
-    }
-
-    override fun onTabReselected(tab: TabLayout.Tab) {
+    override fun onTabSelect(chartType: ChartView.ChartType) {
+        viewModel.onSelect(chartType)
     }
 
     //  Private
 
     private fun observeData() {
-        viewModel.chartSpinner.observe(viewLifecycleOwner, Observer { isLoading ->
-            if (isLoading) {
-                chart.showSinner()
-            } else {
-                chart.hideSinner()
-            }
-        })
-
         viewModel.marketSpinner.observe(viewLifecycleOwner, Observer { isLoading ->
             marketSpinner.isVisible = isLoading
         })
 
-        viewModel.setDefaultMode.observe(viewLifecycleOwner, Observer { type ->
-            val indexOf = actions.indexOfFirst { it.first == type }
-            if (indexOf > -1) {
-                tabLayout.removeOnTabSelectedListener(this)
-                tabLayout.selectTab(tabLayout.getTabAt(indexOf))
-                tabLayout.addOnTabSelectedListener(this)
-            }
-        })
-
-        viewModel.showChartInfo.observe(viewLifecycleOwner, Observer { item ->
-            chart.showChart()
-            setViewVisibility(indicatorEMA, indicatorMACD, indicatorRSI, isVisible = true)
-
-            rootView.post {
-                chart.setData(item.chartData, item.chartType, item.maxValue, item.minValue)
-            }
-
-            coinRateDiff.setDiff(item.diffValue)
-        })
-
-        viewModel.latestRateLiveData.observe(viewLifecycleOwner) {
-            coinRateLast.text = formatter.formatFiat(it.value, it.currency.symbol, 2, 4)
-        }
-
         viewModel.coinDetailsLiveData.observe(viewLifecycleOwner, Observer { item ->
             marketDetails.isVisible = true
-
-            // Coin Rating
-            coinRating.isVisible = !item.coinMeta.rating.isNullOrBlank()
-            coinRating.setImageDrawable(getRatingIcon(item.coinMeta.rating))
-            coinRating.isEnabled = false
 
             // Performance
 
@@ -307,70 +231,6 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
             setLinks(item.coinMeta.links, item.guideUrl)
         })
 
-        viewModel.setSelectedPoint.observe(viewLifecycleOwner, Observer { item ->
-            pointInfoVolume.isInvisible = true
-            pointInfoVolumeTitle.isInvisible = true
-
-            macdHistogram.isInvisible = true
-            macdSignal.isInvisible = true
-            macdValue.isInvisible = true
-
-            pointInfoDate.text = DateHelper.getDayAndTime(Date(item.date * 1000))
-            pointInfoPrice.text = formatter.formatFiat(item.price.value, item.price.currency.symbol, 2, 4)
-
-            item.volume?.let {
-                pointInfoVolumeTitle.isVisible = true
-                pointInfoVolume.isVisible = true
-                pointInfoVolume.text = formatFiatShortened(item.volume.value, item.volume.currency.symbol)
-            }
-
-            item.macdInfo?.let { macdInfo ->
-                macdInfo.histogram?.let {
-                    macdHistogram.isVisible = true
-                    getHistogramColor(it)?.let { it1 -> macdHistogram.setTextColor(it1) }
-                    macdHistogram.text = formatter.format(it, 0, 2)
-                }
-                macdInfo.signal?.let {
-                    macdSignal.isVisible = true
-                    macdSignal.text = formatter.format(it, 0, 2)
-                }
-                macdInfo.macd?.let {
-                    macdValue.isVisible = true
-                    macdValue.text = formatter.format(it, 0, 2)
-                }
-            }
-        })
-
-        viewModel.showChartError.observe(viewLifecycleOwner, Observer {
-            chart.showError(getString(R.string.CoinPage_Error_NotAvailable))
-        })
-
-        viewModel.showEma.observe(viewLifecycleOwner, Observer { visible ->
-            chart.setIndicator(ChartIndicator.Ema, visible)
-        })
-
-        viewModel.showMacd.observe(viewLifecycleOwner, Observer { visible ->
-            chart.setIndicator(ChartIndicator.Macd, visible)
-            setMacdInfoVisible(visible)
-        })
-
-        viewModel.showRsi.observe(viewLifecycleOwner, Observer { visible ->
-            chart.setIndicator(ChartIndicator.Rsi, visible)
-        })
-
-        viewModel.uncheckIndicators.observe(viewLifecycleOwner, { indicators ->
-            indicators.forEach {
-                when (it) {
-                    ChartIndicator.Ema -> indicatorEMA.isChecked = false
-                    ChartIndicator.Macd -> {
-                        indicatorMACD.isChecked = false
-                        setMacdInfoVisible(false)
-                    }
-                    ChartIndicator.Rsi -> indicatorRSI.isChecked = false
-                }
-            }
-        })
-
         viewModel.alertNotificationUpdated.observe(viewLifecycleOwner, Observer {
             updateNotificationMenuItem()
         })
@@ -386,12 +246,6 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
 
         viewModel.extraPages.observe(viewLifecycleOwner, { pages ->
             setExtraPages(pages)
-        })
-
-        viewModel.setChartIndicatorsEnabled.observe(viewLifecycleOwner, { enabled ->
-            indicatorEMA.isEnabled = enabled
-            indicatorMACD.isEnabled = enabled
-            indicatorRSI.isEnabled = enabled
         })
     }
 
@@ -417,11 +271,6 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
             }
 
         }
-    }
-
-    private fun setMacdInfoVisible(visible: Boolean) {
-        setViewVisibility(pointInfoVolume, pointInfoVolumeTitle, isVisible = !visible)
-        setViewVisibility(macdSignal, macdHistogram, macdValue, isVisible = visible)
     }
 
     private fun setExtraPages(pages: List<CoinExtraPage>) {
@@ -460,17 +309,6 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
                 extraPagesLayout.addView(coinInfoView)
             }
         }
-    }
-
-    private fun getRatingIcon(rating: String?): Drawable? {
-        val icon = when (rating?.toLowerCase(Locale.ENGLISH)) {
-            "a" -> R.drawable.ic_rating_a
-            "b" -> R.drawable.ic_rating_b
-            "c" -> R.drawable.ic_rating_c
-            "d" -> R.drawable.ic_rating_d
-            else -> return null
-        }
-        return context?.let { ContextCompat.getDrawable(it, icon) }
     }
 
     private fun setMarketData(marketDataList: List<CoinDataItem>) {
@@ -601,50 +439,6 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
             spannable.removeSpan(u)
         }
         return spannable
-    }
-
-    private fun formatFiatShortened(value: BigDecimal, symbol: String): String {
-        val shortCapValue = App.numberFormatter.shortenValue(value)
-        return formatter.formatFiat(shortCapValue.first, symbol, 0, 2) + " " + shortCapValue.second
-    }
-
-    private fun getHistogramColor(value: Float): Int? {
-        val textColor = if (value > 0) R.color.green_d else R.color.red_d
-        return context?.getColor(textColor)
-    }
-
-    private fun bindActions() {
-        actions.forEach { (_, textId) ->
-            tabLayout.newTab()
-                    .setCustomView(createTextView(requireContext(), R.style.TabComponent).apply {
-                        id = android.R.id.text1
-                    })
-                    .setText(getString(textId))
-                    .let {
-                        tabLayout.addTab(it, false)
-                    }
-        }
-
-        tabLayout.tabRippleColor = null
-        tabLayout.setSelectedTabIndicator(null)
-        tabLayout.addOnTabSelectedListener(this)
-
-        indicatorEMA.setOnClickListener {
-            viewModel.setIndicatorChanged(ChartIndicator.Ema, indicatorEMA.isChecked)
-        }
-
-        indicatorMACD.setOnClickListener {
-            viewModel.setIndicatorChanged(ChartIndicator.Macd, indicatorMACD.isChecked)
-        }
-
-        indicatorRSI.setOnClickListener {
-            viewModel.setIndicatorChanged(ChartIndicator.Rsi, indicatorRSI.isChecked)
-        }
-
-    }
-
-    private fun setViewVisibility(vararg views: View, isVisible: Boolean) {
-        views.forEach { it.isInvisible = !isVisible }
     }
 
     companion object {
