@@ -5,6 +5,8 @@ import androidx.annotation.StringRes
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import io.horizontalsystems.bankwallet.modules.coin.adapters.CoinChartAdapter
+import io.horizontalsystems.bankwallet.modules.coin.adapters.CoinSubtitleAdapter
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.chartview.ChartData
 import io.horizontalsystems.chartview.ChartDataFactory
@@ -19,10 +21,9 @@ import java.lang.Long.max
 import java.math.BigDecimal
 import java.math.RoundingMode
 
-data class ChartInfoViewItem(
+data class ChartInfoData(
         val chartData: ChartData,
         val chartType: ChartView.ChartType,
-        val diffValue: BigDecimal,
         val maxValue: String?,
         val minValue: String?
 )
@@ -64,7 +65,7 @@ data class LastPoint(
 )
 
 class CoinViewFactory(private val currency: Currency, private val numberFormatter: IAppNumberFormatter) {
-    fun createChartInfo(type: ChartType, chartInfo: ChartInfo, lastPoint: LastPoint?): ChartInfoViewItem {
+    fun createChartInfoData(type: ChartType, chartInfo: ChartInfo, lastPoint: LastPoint?): ChartInfoData {
         val chartType = when (type) {
             ChartType.TODAY -> ChartView.ChartType.TODAY
             ChartType.DAILY -> ChartView.ChartType.DAILY
@@ -80,7 +81,7 @@ class CoinViewFactory(private val currency: Currency, private val numberFormatte
         val maxValue = numberFormatter.formatFiat(chartData.valueRange.upper, currency.symbol, 0, 2)
         val minValue = numberFormatter.formatFiat(chartData.valueRange.lower, currency.symbol, 0, 2)
 
-        return ChartInfoViewItem(chartData, chartType, chartData.diff(), maxValue, minValue)
+        return ChartInfoData(chartData, chartType, maxValue, minValue)
     }
 
     fun createCoinDetailsViewItem(
@@ -214,6 +215,10 @@ class CoinViewFactory(private val currency: Currency, private val numberFormatte
             }
         }
         return items
+    }
+
+    fun getFormattedLatestRate(currencyValue: CurrencyValue): String{
+        return numberFormatter.formatFiat(currencyValue.value, currencyValue.currency.symbol, 2, 4)
     }
 
     private fun formatFiatShortened(value: BigDecimal, symbol: String): String {
