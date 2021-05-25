@@ -36,7 +36,6 @@ data class ChartPointViewItem(
 data class CoinDetailsViewItem(
         val currency: Currency,
         val rateValue: BigDecimal,
-        val marketDataList: List<CoinDataItem>,
         val rateHigh24h: BigDecimal,
         val rateLow24h: BigDecimal,
         val marketCapDiff24h: BigDecimal,
@@ -53,7 +52,7 @@ sealed class RoiViewItem {
 
 data class ContractInfo(val title: String, val value: String)
 
-class CoinDataItem(@StringRes val title: Int, val value: String, @DrawableRes val icon: Int? = null)
+data class CoinDataItem(@StringRes val title: Int, val value: String, @DrawableRes val icon: Int? = null, var listPosition: ListPosition? = null)
 
 data class LastPoint(
         val rate: BigDecimal,
@@ -84,14 +83,12 @@ class CoinViewFactory(private val currency: Currency, private val numberFormatte
     fun createCoinDetailsViewItem(
             coinMarket: CoinMarketDetails,
             currency: Currency,
-            coinCode: String,
             contractInfo: ContractInfo?,
             guideUrl: String? = null
     ): CoinDetailsViewItem {
         return CoinDetailsViewItem(
                 currency = currency,
                 rateValue = coinMarket.rate,
-                marketDataList = getMarketData(coinMarket, currency, coinCode),
                 rateHigh24h = coinMarket.rateHigh24h,
                 rateLow24h = coinMarket.rateLow24h,
                 marketCapDiff24h = coinMarket.marketCapDiff24h,
@@ -138,7 +135,7 @@ class CoinViewFactory(private val currency: Currency, private val numberFormatte
         return tvlInfoList
     }
 
-    private fun getMarketData(coinMarket: CoinMarketDetails, currency: Currency, coinCode: String): MutableList<CoinDataItem> {
+    fun getMarketData(coinMarket: CoinMarketDetails, currency: Currency, coinCode: String): MutableList<CoinDataItem> {
         val marketData = mutableListOf<CoinDataItem>()
         if (coinMarket.marketCap > BigDecimal.ZERO) {
             marketData.add(CoinDataItem(R.string.CoinPage_MarketCap, formatFiatShortened(coinMarket.marketCap, currency.symbol)))
@@ -162,6 +159,12 @@ class CoinViewFactory(private val currency: Currency, private val numberFormatte
             val formattedDate = DateHelper.formatDate(date, "MMM d, yyyy")
             marketData.add(CoinDataItem(R.string.CoinPage_LaunchDate, formattedDate))
         }
+
+        //set List position by total list size
+        marketData.forEachIndexed{index, coinDataItem ->
+            coinDataItem.listPosition = ListPosition.Companion.getListPosition(marketData.size, index)
+        }
+
         return marketData
     }
 
