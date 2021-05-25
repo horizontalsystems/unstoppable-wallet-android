@@ -35,6 +35,8 @@ class CoinViewModel(
     val marketDataLiveData = MutableLiveData<List<CoinDataItem>>()
     val tvlDataLiveData = MutableLiveData<List<CoinDataItem>>()
     val categoriesLiveData = MutableLiveData<String>()
+    val contractInfoLiveData = MutableLiveData<List<CoinDataItem>>()
+
     val coinDetailsLiveData = MutableLiveData<CoinDetailsViewItem>()
     val alertNotificationUpdated = MutableLiveData<Unit>()
     val showNotificationMenu = SingleLiveEvent<Pair<CoinType, String>>()
@@ -214,9 +216,13 @@ class CoinViewModel(
 
         tvlDataLiveData.postValue(factory.getTvlInfo(coinDetails, service.currency))
 
-        coinDetailsLiveData.postValue(factory.createCoinDetailsViewItem(coinDetails, service.currency, getContractInfo(coinDetails), service.guideUrl))
+        coinDetailsLiveData.postValue(factory.createCoinDetailsViewItem(coinDetails, service.currency, service.guideUrl))
 
         categoriesLiveData.postValue(coinDetails.meta.categories.joinToString(", ") { it.name })
+
+        getContractInfo(coinDetails)?.let {
+            contractInfoLiveData.postValue(listOf(CoinDataItem(it.title, it.value, valueDecorated = true, listPosition = ListPosition.Single)))
+        }
 
         val coinMarketItems = factory.createCoinMarketItems(coinDetails.tickers)
         val coinInvestorItems = factory.createCoinInvestorItems(coinDetails.meta.fundCategories)

@@ -37,7 +37,6 @@ import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.views.ListPosition
 import io.horizontalsystems.views.SettingsView
 import io.horizontalsystems.views.helpers.LayoutHelper
-import io.horizontalsystems.xrateskit.entities.CoinCategory
 import io.horizontalsystems.xrateskit.entities.CoinMeta
 import io.horizontalsystems.xrateskit.entities.LinkType
 import io.noties.markwon.AbstractMarkwonPlugin
@@ -106,6 +105,7 @@ class CoinFragment : BaseFragment(), CoinChartAdapter.Listener, CoinDataAdapter.
         val marketDataAdapter = CoinDataAdapter(viewModel.marketDataLiveData, viewLifecycleOwner, this)
         val tvlDataAdapter = CoinDataAdapter(viewModel.tvlDataLiveData, viewLifecycleOwner, this)
         val categoriesAdapter = CoinCategoryAdapter(viewModel.categoriesLiveData, viewLifecycleOwner)
+        val contractInfoAdapter = CoinDataAdapter(viewModel.contractInfoLiveData, viewLifecycleOwner, this)
 
         val concatAdapter = ConcatAdapter(
                 subtitleAdapter,
@@ -116,7 +116,9 @@ class CoinFragment : BaseFragment(), CoinChartAdapter.Listener, CoinDataAdapter.
                 marketDataAdapter,
                 SpacerAdapter(),
                 tvlDataAdapter,
-                categoriesAdapter
+                categoriesAdapter,
+                SpacerAdapter(),
+                contractInfoAdapter
         )
 
         controlledRecyclerView.adapter = concatAdapter
@@ -233,8 +235,6 @@ class CoinFragment : BaseFragment(), CoinChartAdapter.Listener, CoinDataAdapter.
             } else {
                 aboutGroup.isVisible = false
             }
-            // Categories/Platforms/Links
-            setCategoriesAndContractInfo(item.coinMeta.categories, item.contractInfo)
 
             //Links
             setLinks(item.coinMeta.links, item.guideUrl)
@@ -350,27 +350,6 @@ class CoinFragment : BaseFragment(), CoinChartAdapter.Listener, CoinDataAdapter.
                 }
 
                 linksLayout.addView(link)
-            }
-        }
-    }
-
-    private fun setCategoriesAndContractInfo(categories: List<CoinCategory>, contractInfo: ContractInfo?) {
-        categoriesText.text = categories.joinToString(", ") { it.name }
-        categoriesGroup.isVisible = categories.isNotEmpty()
-
-        context?.let { context ->
-            platformsLayout.removeAllViews()
-
-            contractInfo?.let {
-                val platformView = CoinInfoItemView(context).apply {
-                    bind(
-                            title = contractInfo.title,
-                            decoratedValue = contractInfo.value,
-                            listPosition = ListPosition.Single
-                    )
-                }
-
-                platformsLayout.addView(platformView)
             }
         }
     }
