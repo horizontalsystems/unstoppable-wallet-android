@@ -33,6 +33,7 @@ class CoinViewModel(
     val chartInfoLiveData = MutableLiveData<CoinChartAdapter.ViewItemWrapper>()
     val roiLiveData = MutableLiveData<List<RoiViewItem>>()
     val marketDataLiveData = MutableLiveData<List<CoinDataItem>>()
+    val tvlDataLiveData = MutableLiveData<List<CoinDataItem>>()
     val coinDetailsLiveData = MutableLiveData<CoinDetailsViewItem>()
     val alertNotificationUpdated = MutableLiveData<Unit>()
     val showNotificationMenu = SingleLiveEvent<Pair<CoinType, String>>()
@@ -210,7 +211,10 @@ class CoinViewModel(
 
         marketDataLiveData.postValue(factory.getMarketData(coinDetails, service.currency, coinCode))
 
+        tvlDataLiveData.postValue(factory.getTvlInfo(coinDetails, service.currency))
+
         coinDetailsLiveData.postValue(factory.createCoinDetailsViewItem(coinDetails, service.currency, getContractInfo(coinDetails), service.guideUrl))
+
 
         val coinMarketItems = factory.createCoinMarketItems(coinDetails.tickers)
         val coinInvestorItems = factory.createCoinInvestorItems(coinDetails.meta.fundCategories)

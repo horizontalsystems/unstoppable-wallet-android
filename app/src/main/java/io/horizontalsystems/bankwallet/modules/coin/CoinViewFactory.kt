@@ -41,7 +41,6 @@ data class CoinDetailsViewItem(
         val marketCapDiff24h: BigDecimal,
         val coinMeta: CoinMeta,
         val guideUrl: String?,
-        val tvlInfo: List<CoinDataItem>,
         val contractInfo: ContractInfo?
 )
 
@@ -52,7 +51,18 @@ sealed class RoiViewItem {
 
 data class ContractInfo(val title: String, val value: String)
 
-data class CoinDataItem(@StringRes val title: Int, val value: String, @DrawableRes val icon: Int? = null, var listPosition: ListPosition? = null)
+data class CoinDataItem(
+        @StringRes val title: Int,
+        val value: String, @DrawableRes
+        val icon: Int? = null,
+        var listPosition: ListPosition? = null,
+        val clickType: CoinDataClickType? = null
+)
+
+sealed class CoinDataClickType {
+    object MetricChart : CoinDataClickType()
+    class Link(val url: String) : CoinDataClickType()
+}
 
 data class LastPoint(
         val rate: BigDecimal,
@@ -94,7 +104,6 @@ class CoinViewFactory(private val currency: Currency, private val numberFormatte
                 marketCapDiff24h = coinMarket.marketCapDiff24h,
                 coinMeta = coinMarket.meta,
                 guideUrl = guideUrl,
-                tvlInfo = getTvlInfo(coinMarket, currency),
                 contractInfo = contractInfo
         )
     }
@@ -124,14 +133,22 @@ class CoinViewFactory(private val currency: Currency, private val numberFormatte
         return null
     }
 
-    private fun getTvlInfo(coinMarket: CoinMarketDetails, currency: Currency): List<CoinDataItem> {
+    fun getTvlInfo(coinMarket: CoinMarketDetails, currency: Currency): List<CoinDataItem> {
         val tvlInfoList = mutableListOf<CoinDataItem>()
 
         coinMarket.defiTvlInfo?.let { defiTvlInfo ->
-            tvlInfoList.add(CoinDataItem(R.string.CoinPage_Tvl, formatFiatShortened(defiTvlInfo.tvl, currency.symbol), R.drawable.ic_chart_20))
+            tvlInfoList.add(CoinDataItem(
+                    R.string.CoinPage_Tvl,
+                    formatFiatShortened(defiTvlInfo.tvl, currency.symbol),
+                    R.drawable.ic_chart_20,
+                    clickType = CoinDataClickType.MetricChart
+            ))
             tvlInfoList.add(CoinDataItem(R.string.CoinPage_TvlRank, "#${defiTvlInfo.tvlRank}"))
             tvlInfoList.add(CoinDataItem(R.string.CoinPage_TvlMCapRatio, numberFormatter.format(defiTvlInfo.marketCapTvlRatio, 0, 2)))
         }
+
+        setListPosition(tvlInfoList)
+
         return tvlInfoList
     }
 
@@ -161,11 +178,15 @@ class CoinViewFactory(private val currency: Currency, private val numberFormatte
         }
 
         //set List position by total list size
-        marketData.forEachIndexed{index, coinDataItem ->
-            coinDataItem.listPosition = ListPosition.Companion.getListPosition(marketData.size, index)
-        }
+        setListPosition(marketData)
 
         return marketData
+    }
+
+    private fun setListPosition(list: MutableList<CoinDataItem>) {
+        list.forEachIndexed { index, coinDataItem ->
+            coinDataItem.listPosition = ListPosition.getListPosition(list.size, index)
+        }
     }
 
     private fun createChartData(chartInfo: ChartInfo, lastPoint: LastPoint?, chartType: ChartView.ChartType): ChartData {

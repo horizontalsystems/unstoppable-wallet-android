@@ -57,7 +57,8 @@ class CoinInfoItemView : ConstraintLayout {
         bind(
                 title = context.getString(item.title),
                 value = item.value,
-                listPosition = item.listPosition ?: ListPosition.Middle
+                listPosition = item.listPosition ?: ListPosition.Middle,
+                icon = item.icon
         )
     }
 

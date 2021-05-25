@@ -8,15 +8,17 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.modules.coin.CoinDataClickType
 import io.horizontalsystems.bankwallet.modules.coin.CoinDataItem
 import io.horizontalsystems.views.inflate
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_coin_market_info.*
 
-class CoinMarketDataAdapter(
+class CoinDataAdapter(
         rateDiffsLiveData: MutableLiveData<List<CoinDataItem>>,
-        viewLifecycleOwner: LifecycleOwner
-) : ListAdapter<CoinDataItem, CoinMarketDataAdapter.ViewHolder>(diff) {
+        viewLifecycleOwner: LifecycleOwner,
+        private val listener: Listener
+) : ListAdapter<CoinDataItem, CoinDataAdapter.ViewHolder>(diff) {
 
     init {
         rateDiffsLiveData.observe(viewLifecycleOwner) {
@@ -24,8 +26,12 @@ class CoinMarketDataAdapter(
         }
     }
 
+    interface Listener {
+        fun onClick(clickType: CoinDataClickType)
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(inflate(parent, R.layout.view_holder_coin_market_info, false))
+        return ViewHolder(inflate(parent, R.layout.view_holder_coin_market_info, false), listener)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -42,9 +48,12 @@ class CoinMarketDataAdapter(
         }
     }
 
-    class ViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+    class ViewHolder(override val containerView: View, private val listener: Listener) : RecyclerView.ViewHolder(containerView), LayoutContainer {
         fun bind(item: CoinDataItem) {
             coinMarketInfoLine.bindItem(item)
+            item.clickType?.let { clickType ->
+                coinMarketInfoLine.setOnClickListener { listener.onClick(clickType) }
+            }
         }
     }
 }
