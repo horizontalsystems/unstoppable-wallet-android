@@ -6,6 +6,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
+import io.horizontalsystems.bankwallet.modules.coin.CoinDataItem
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.views.ListPosition
@@ -50,6 +51,14 @@ class CoinInfoItemView : ConstraintLayout {
         viewBackground.setBackgroundResource(listPosition.getBackground())
 
         invalidate()
+    }
+
+    fun bindItem(item: CoinDataItem){
+        bind(
+                title = context.getString(item.title),
+                value = item.value,
+                listPosition = item.listPosition ?: ListPosition.Middle
+        )
     }
 
 }

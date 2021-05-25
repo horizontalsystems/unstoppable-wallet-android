@@ -25,10 +25,7 @@ import androidx.recyclerview.widget.ConcatAdapter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.modules.coin.adapters.CoinChartAdapter
-import io.horizontalsystems.bankwallet.modules.coin.adapters.CoinRoiAdapter
-import io.horizontalsystems.bankwallet.modules.coin.adapters.CoinSubtitleAdapter
-import io.horizontalsystems.bankwallet.modules.coin.adapters.SpacerAdapter
+import io.horizontalsystems.bankwallet.modules.coin.adapters.*
 import io.horizontalsystems.bankwallet.modules.markdown.MarkdownFragment
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartFragment
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartType
@@ -71,7 +68,6 @@ class CoinFragment : BaseFragment(), CoinChartAdapter.Listener {
 
     private val viewModel by navGraphViewModels<CoinViewModel>(R.id.coinFragment) { vmFactory }
 
-    private val formatter = App.numberFormatter
     private var notificationMenuItem: MenuItem? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -108,13 +104,15 @@ class CoinFragment : BaseFragment(), CoinChartAdapter.Listener {
         val subtitleAdapter = CoinSubtitleAdapter(viewModel.subtitleLiveData, viewLifecycleOwner)
         val chartAdapter = CoinChartAdapter(viewModel, viewLifecycleOwner, this)
         val coinRoiAdapter = CoinRoiAdapter(viewModel.roiLiveData, viewLifecycleOwner)
-        val spacer = SpacerAdapter()
+        val marketInfoAdapter = CoinMarketDataAdapter(viewModel.marketDataLiveData, viewLifecycleOwner)
 
         val concatAdapter = ConcatAdapter(
                 subtitleAdapter,
                 chartAdapter,
-                spacer,
-                coinRoiAdapter
+                SpacerAdapter(),
+                coinRoiAdapter,
+                SpacerAdapter(),
+                marketInfoAdapter
         )
 
         controlledRecyclerView.adapter = concatAdapter
@@ -169,10 +167,6 @@ class CoinFragment : BaseFragment(), CoinChartAdapter.Listener {
 
         viewModel.coinDetailsLiveData.observe(viewLifecycleOwner, Observer { item ->
             marketDetails.isVisible = true
-
-            // Market
-
-            setMarketData(item.marketDataList)
 
             // TVL
 
@@ -288,24 +282,6 @@ class CoinFragment : BaseFragment(), CoinChartAdapter.Listener {
                 }
 
                 extraPagesLayout.addView(coinInfoView)
-            }
-        }
-    }
-
-    private fun setMarketData(marketDataList: List<CoinDataItem>) {
-        marketDataLayout.removeAllViews()
-
-        context?.let { context ->
-            marketDataList.forEachIndexed { index, marketData ->
-                val coinInfoView = CoinInfoItemView(context).apply {
-                    bind(
-                            title = getString(marketData.title),
-                            value = marketData.value,
-                            listPosition = ListPosition.getListPosition(marketDataList.size, index)
-                    )
-                }
-
-                marketDataLayout.addView(coinInfoView)
             }
         }
     }
