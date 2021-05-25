@@ -1,9 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.coin
 
 import androidx.annotation.DrawableRes
-import androidx.annotation.StringRes
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
+import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.chartview.ChartData
@@ -40,8 +40,7 @@ data class CoinDetailsViewItem(
         val rateLow24h: BigDecimal,
         val marketCapDiff24h: BigDecimal,
         val coinMeta: CoinMeta,
-        val guideUrl: String?,
-        val contractInfo: ContractInfo?
+        val guideUrl: String?
 )
 
 sealed class RoiViewItem {
@@ -52,9 +51,10 @@ sealed class RoiViewItem {
 data class ContractInfo(val title: String, val value: String)
 
 data class CoinDataItem(
-        @StringRes val title: Int,
-        val value: String, @DrawableRes
-        val icon: Int? = null,
+        val title: String,
+        val value: String? = null,
+        val valueDecorated: Boolean = false,
+        @DrawableRes val icon: Int? = null,
         var listPosition: ListPosition? = null,
         val clickType: CoinDataClickType? = null
 )
@@ -93,7 +93,6 @@ class CoinViewFactory(private val currency: Currency, private val numberFormatte
     fun createCoinDetailsViewItem(
             coinMarket: CoinMarketDetails,
             currency: Currency,
-            contractInfo: ContractInfo?,
             guideUrl: String? = null
     ): CoinDetailsViewItem {
         return CoinDetailsViewItem(
@@ -103,8 +102,7 @@ class CoinViewFactory(private val currency: Currency, private val numberFormatte
                 rateLow24h = coinMarket.rateLow24h,
                 marketCapDiff24h = coinMarket.marketCapDiff24h,
                 coinMeta = coinMarket.meta,
-                guideUrl = guideUrl,
-                contractInfo = contractInfo
+                guideUrl = guideUrl
         )
     }
 
@@ -138,13 +136,13 @@ class CoinViewFactory(private val currency: Currency, private val numberFormatte
 
         coinMarket.defiTvlInfo?.let { defiTvlInfo ->
             tvlInfoList.add(CoinDataItem(
-                    R.string.CoinPage_Tvl,
+                    Translator.getString(R.string.CoinPage_Tvl),
                     formatFiatShortened(defiTvlInfo.tvl, currency.symbol),
-                    R.drawable.ic_chart_20,
+                    icon = R.drawable.ic_chart_20,
                     clickType = CoinDataClickType.MetricChart
             ))
-            tvlInfoList.add(CoinDataItem(R.string.CoinPage_TvlRank, "#${defiTvlInfo.tvlRank}"))
-            tvlInfoList.add(CoinDataItem(R.string.CoinPage_TvlMCapRatio, numberFormatter.format(defiTvlInfo.marketCapTvlRatio, 0, 2)))
+            tvlInfoList.add(CoinDataItem(Translator.getString(R.string.CoinPage_TvlRank), "#${defiTvlInfo.tvlRank}"))
+            tvlInfoList.add(CoinDataItem(Translator.getString(R.string.CoinPage_TvlMCapRatio), numberFormatter.format(defiTvlInfo.marketCapTvlRatio, 0, 2)))
         }
 
         setListPosition(tvlInfoList)
@@ -155,26 +153,26 @@ class CoinViewFactory(private val currency: Currency, private val numberFormatte
     fun getMarketData(coinMarket: CoinMarketDetails, currency: Currency, coinCode: String): MutableList<CoinDataItem> {
         val marketData = mutableListOf<CoinDataItem>()
         if (coinMarket.marketCap > BigDecimal.ZERO) {
-            marketData.add(CoinDataItem(R.string.CoinPage_MarketCap, formatFiatShortened(coinMarket.marketCap, currency.symbol)))
+            marketData.add(CoinDataItem(Translator.getString(R.string.CoinPage_MarketCap), formatFiatShortened(coinMarket.marketCap, currency.symbol)))
         }
         if (coinMarket.circulatingSupply > BigDecimal.ZERO) {
             val (shortenValue, suffix) = numberFormatter.shortenValue(coinMarket.circulatingSupply)
             val value = "$shortenValue $suffix $coinCode"
-            marketData.add(CoinDataItem(R.string.CoinPage_inCirculation, value))
+            marketData.add(CoinDataItem(Translator.getString(R.string.CoinPage_inCirculation), value))
         }
         if (coinMarket.totalSupply > BigDecimal.ZERO) {
             val (shortenValue, suffix) = numberFormatter.shortenValue(coinMarket.totalSupply)
             val value = "$shortenValue $suffix $coinCode"
-            marketData.add(CoinDataItem(R.string.CoinPage_TotalSupply, value))
+            marketData.add(CoinDataItem(Translator.getString(R.string.CoinPage_TotalSupply), value))
         }
         if (coinMarket.marketCap > BigDecimal.ZERO && coinMarket.circulatingSupply > BigDecimal.ZERO && coinMarket.totalSupply > BigDecimal.ZERO) {
             val rate = coinMarket.marketCap.divide(coinMarket.circulatingSupply, SCALE_UP_TO_BILLIONTH, RoundingMode.HALF_EVEN)
             val dilutedMarketCap = coinMarket.totalSupply.multiply(rate)
-            marketData.add(CoinDataItem(R.string.CoinPage_DilutedMarketCap, formatFiatShortened(dilutedMarketCap, currency.symbol)))
+            marketData.add(CoinDataItem(Translator.getString(R.string.CoinPage_DilutedMarketCap), formatFiatShortened(dilutedMarketCap, currency.symbol)))
         }
         coinMarket.meta.launchDate?.let { date ->
             val formattedDate = DateHelper.formatDate(date, "MMM d, yyyy")
-            marketData.add(CoinDataItem(R.string.CoinPage_LaunchDate, formattedDate))
+            marketData.add(CoinDataItem(Translator.getString(R.string.CoinPage_LaunchDate), formattedDate))
         }
 
         //set List position by total list size

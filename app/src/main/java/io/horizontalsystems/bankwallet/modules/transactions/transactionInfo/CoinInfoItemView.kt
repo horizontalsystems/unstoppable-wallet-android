@@ -25,22 +25,24 @@ class CoinInfoItemView : ConstraintLayout {
             title: String,
             value: String? = null,
             icon: Int? = null,
-            decoratedValue: String? = null,
+            valueDecorated: Boolean = false,
             listPosition: ListPosition
     ) {
         txtTitle.text = title
-        decoratedText.isVisible = !decoratedValue.isNullOrBlank()
+        decoratedText.isVisible = valueDecorated
+        valueText.isVisible = !valueDecorated
 
-        decoratedValue?.let {
-            decoratedText.text = decoratedValue
-            decoratedText.setOnSingleClickListener {
-                TextHelper.copyText(decoratedValue)
-                HudHelper.showSuccessMessage(this, R.string.Hud_Text_Copied)
+        if (valueDecorated) {
+            decoratedText.text = value
+            value?.let { decoratedValue ->
+                decoratedText.setOnSingleClickListener {
+                    TextHelper.copyText(decoratedValue)
+                    HudHelper.showSuccessMessage(this, R.string.Hud_Text_Copied)
+                }
             }
+        } else {
+            valueText.text = value
         }
-
-        valueText.text = value
-        valueText.isVisible = !value.isNullOrBlank()
 
         iconView.isVisible = icon != null
 
@@ -53,10 +55,11 @@ class CoinInfoItemView : ConstraintLayout {
         invalidate()
     }
 
-    fun bindItem(item: CoinDataItem){
+    fun bindItem(item: CoinDataItem) {
         bind(
-                title = context.getString(item.title),
+                title = item.title,
                 value = item.value,
+                valueDecorated = item.valueDecorated,
                 listPosition = item.listPosition ?: ListPosition.Middle,
                 icon = item.icon
         )
