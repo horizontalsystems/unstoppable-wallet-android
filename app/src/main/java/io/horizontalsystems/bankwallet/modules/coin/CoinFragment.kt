@@ -105,6 +105,7 @@ class CoinFragment : BaseFragment(), CoinChartAdapter.Listener, CoinDataAdapter.
         val coinRoiAdapter = CoinRoiAdapter(viewModel.roiLiveData, viewLifecycleOwner)
         val marketDataAdapter = CoinDataAdapter(viewModel.marketDataLiveData, viewLifecycleOwner, this)
         val tvlDataAdapter = CoinDataAdapter(viewModel.tvlDataLiveData, viewLifecycleOwner, this)
+        val categoriesAdapter = CoinCategoryAdapter(viewModel.categoriesLiveData, viewLifecycleOwner)
 
         val concatAdapter = ConcatAdapter(
                 subtitleAdapter,
@@ -114,7 +115,8 @@ class CoinFragment : BaseFragment(), CoinChartAdapter.Listener, CoinDataAdapter.
                 SpacerAdapter(),
                 marketDataAdapter,
                 SpacerAdapter(),
-                tvlDataAdapter
+                tvlDataAdapter,
+                categoriesAdapter
         )
 
         controlledRecyclerView.adapter = concatAdapter
