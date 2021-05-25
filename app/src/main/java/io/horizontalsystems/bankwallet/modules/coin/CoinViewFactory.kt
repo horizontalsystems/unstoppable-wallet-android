@@ -64,6 +64,8 @@ sealed class CoinDataClickType {
     class Link(val url: String) : CoinDataClickType()
 }
 
+data class AboutText(val value: String, val type: CoinMeta.DescriptionType)
+
 data class LastPoint(
         val rate: BigDecimal,
         val timestamp: Long,

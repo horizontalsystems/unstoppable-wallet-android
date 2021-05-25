@@ -3,13 +3,6 @@ package io.horizontalsystems.bankwallet.modules.coin
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.text.Html
-import android.text.Spannable
-import android.text.SpannableString
-import android.text.Spanned
-import android.text.style.ForegroundColorSpan
-import android.text.style.TextAppearanceSpan
-import android.text.style.URLSpan
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -17,7 +10,6 @@ import android.view.ViewGroup
 import androidx.activity.addCallback
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
-import androidx.core.view.doOnPreDraw
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.navigation.navGraphViewModels
@@ -36,17 +28,9 @@ import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.views.ListPosition
 import io.horizontalsystems.views.SettingsView
-import io.horizontalsystems.views.helpers.LayoutHelper
-import io.horizontalsystems.xrateskit.entities.CoinMeta
 import io.horizontalsystems.xrateskit.entities.LinkType
-import io.noties.markwon.AbstractMarkwonPlugin
-import io.noties.markwon.Markwon
-import io.noties.markwon.MarkwonSpansFactory
-import io.noties.markwon.core.spans.LastLineSpacingSpan
 import kotlinx.android.synthetic.main.coin_market_details.*
 import kotlinx.android.synthetic.main.fragment_coin.*
-import org.commonmark.node.Heading
-import org.commonmark.node.Paragraph
 
 class CoinFragment : BaseFragment(), CoinChartAdapter.Listener, CoinDataAdapter.Listener {
 
@@ -106,6 +90,7 @@ class CoinFragment : BaseFragment(), CoinChartAdapter.Listener, CoinDataAdapter.
         val tvlDataAdapter = CoinDataAdapter(viewModel.tvlDataLiveData, viewLifecycleOwner, this)
         val categoriesAdapter = CoinCategoryAdapter(viewModel.categoriesLiveData, viewLifecycleOwner)
         val contractInfoAdapter = CoinDataAdapter(viewModel.contractInfoLiveData, viewLifecycleOwner, this)
+        val aboutAdapter = CoinAboutAdapter(viewModel.aboutTextLiveData, viewLifecycleOwner)
 
         val concatAdapter = ConcatAdapter(
                 subtitleAdapter,
@@ -118,7 +103,8 @@ class CoinFragment : BaseFragment(), CoinChartAdapter.Listener, CoinDataAdapter.
                 tvlDataAdapter,
                 categoriesAdapter,
                 SpacerAdapter(),
-                contractInfoAdapter
+                contractInfoAdapter,
+                aboutAdapter
         )
 
         controlledRecyclerView.adapter = concatAdapter
@@ -129,15 +115,6 @@ class CoinFragment : BaseFragment(), CoinChartAdapter.Listener, CoinDataAdapter.
             findNavController().popBackStack()
         }
 
-        aboutTextToggle.setOnClickListener {
-            if (aboutText.maxLines == Integer.MAX_VALUE) {
-                aboutText.maxLines = ABOUT_MAX_LINES
-                aboutTextToggle.text = getString(R.string.CoinPage_ReadMore)
-            } else {
-                aboutText.maxLines = Integer.MAX_VALUE
-                aboutTextToggle.text = getString(R.string.CoinPage_ReadLess)
-            }
-        }
     }
 
     private fun updateNotificationMenuItem() {
@@ -184,57 +161,6 @@ class CoinFragment : BaseFragment(), CoinChartAdapter.Listener, CoinDataAdapter.
 
         viewModel.coinDetailsLiveData.observe(viewLifecycleOwner, Observer { item ->
             marketDetails.isVisible = true
-
-            // About
-
-            if (item.coinMeta.description.isNotBlank()) {
-                aboutGroup.isVisible = true
-                aboutTitle.isVisible = item.coinMeta.descriptionType == CoinMeta.DescriptionType.HTML
-                val aboutTextSpanned = when (item.coinMeta.descriptionType) {
-                    CoinMeta.DescriptionType.HTML -> {
-                        Html.fromHtml(item.coinMeta.description.replace("\n", "<br />"), Html.FROM_HTML_MODE_COMPACT)
-                    }
-                    CoinMeta.DescriptionType.MARKDOWN -> {
-                        val markwon = Markwon.builder(requireContext())
-                                .usePlugin(object : AbstractMarkwonPlugin() {
-
-                                    override fun configureSpansFactory(builder: MarkwonSpansFactory.Builder) {
-                                        builder.setFactory(Heading::class.java) { configuration, props ->
-                                            arrayOf(
-                                                    TextAppearanceSpan(context, R.style.Headline2),
-                                                    ForegroundColorSpan(resources.getColor(R.color.bran, null))
-                                            )
-                                        }
-                                        builder.setFactory(Paragraph::class.java) { configuration, props ->
-                                            arrayOf(
-                                                    LastLineSpacingSpan(LayoutHelper.dp(24f, requireContext())),
-                                                    TextAppearanceSpan(context, R.style.Subhead2),
-                                                    ForegroundColorSpan(resources.getColor(R.color.grey, null))
-                                            )
-                                        }
-                                    }
-                                })
-                                .build()
-
-                        markwon.toMarkdown(item.coinMeta.description)
-                    }
-                }
-
-                aboutText.text = removeLinkSpans(aboutTextSpanned)
-                aboutText.maxLines = Integer.MAX_VALUE
-                aboutText.isVisible = false
-                aboutText.doOnPreDraw {
-                    if (aboutText.lineCount > ABOUT_MAX_LINES + ABOUT_TOGGLE_LINES) {
-                        aboutText.maxLines = ABOUT_MAX_LINES
-                        aboutTextToggle.isVisible = true
-                    } else {
-                        aboutTextToggle.isVisible = false
-                    }
-                }
-                aboutText.isVisible = true
-            } else {
-                aboutGroup.isVisible = false
-            }
 
             //Links
             setLinks(item.coinMeta.links, item.guideUrl)
@@ -354,17 +280,7 @@ class CoinFragment : BaseFragment(), CoinChartAdapter.Listener, CoinDataAdapter.
         }
     }
 
-    private fun removeLinkSpans(spanned: Spanned): Spannable {
-        val spannable = SpannableString(spanned)
-        for (u in spannable.getSpans(0, spannable.length, URLSpan::class.java)) {
-            spannable.removeSpan(u)
-        }
-        return spannable
-    }
-
     companion object {
-        private const val ABOUT_MAX_LINES = 8
-        private const val ABOUT_TOGGLE_LINES = 2
         private const val COIN_TYPE_KEY = "coin_type_key"
         private const val COIN_CODE_KEY = "coin_code_key"
         private const val COIN_TITLE_KEY = "coin_title_key"

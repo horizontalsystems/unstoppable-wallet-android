@@ -13,10 +13,7 @@ import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.views.ListPosition
-import io.horizontalsystems.xrateskit.entities.ChartType
-import io.horizontalsystems.xrateskit.entities.CoinMarketDetails
-import io.horizontalsystems.xrateskit.entities.LatestRate
-import io.horizontalsystems.xrateskit.entities.TimePeriod
+import io.horizontalsystems.xrateskit.entities.*
 import io.reactivex.disposables.CompositeDisposable
 import java.math.BigDecimal
 
@@ -36,6 +33,7 @@ class CoinViewModel(
     val tvlDataLiveData = MutableLiveData<List<CoinDataItem>>()
     val categoriesLiveData = MutableLiveData<String>()
     val contractInfoLiveData = MutableLiveData<List<CoinDataItem>>()
+    val aboutTextLiveData = MutableLiveData<AboutText>()
 
     val coinDetailsLiveData = MutableLiveData<CoinDetailsViewItem>()
     val alertNotificationUpdated = MutableLiveData<Unit>()
@@ -222,6 +220,10 @@ class CoinViewModel(
 
         getContractInfo(coinDetails)?.let {
             contractInfoLiveData.postValue(listOf(CoinDataItem(it.title, it.value, valueDecorated = true, listPosition = ListPosition.Single)))
+        }
+
+        if (coinDetails.meta.description.isNotBlank()){
+            aboutTextLiveData.postValue(AboutText(coinDetails.meta.description, coinDetails.meta.descriptionType))
         }
 
         val coinMarketItems = factory.createCoinMarketItems(coinDetails.tickers)
