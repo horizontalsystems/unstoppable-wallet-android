@@ -23,7 +23,6 @@ import androidx.lifecycle.Observer
 import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.ConcatAdapter
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.coin.adapters.*
 import io.horizontalsystems.bankwallet.modules.markdown.MarkdownFragment
@@ -50,7 +49,7 @@ import kotlinx.android.synthetic.main.fragment_coin.*
 import org.commonmark.node.Heading
 import org.commonmark.node.Paragraph
 
-class CoinFragment : BaseFragment(), CoinChartAdapter.Listener {
+class CoinFragment : BaseFragment(), CoinChartAdapter.Listener, CoinDataAdapter.Listener {
 
     private val coinTitle by lazy {
         requireArguments().getString(COIN_TITLE_KEY) ?: ""
@@ -104,7 +103,8 @@ class CoinFragment : BaseFragment(), CoinChartAdapter.Listener {
         val subtitleAdapter = CoinSubtitleAdapter(viewModel.subtitleLiveData, viewLifecycleOwner)
         val chartAdapter = CoinChartAdapter(viewModel, viewLifecycleOwner, this)
         val coinRoiAdapter = CoinRoiAdapter(viewModel.roiLiveData, viewLifecycleOwner)
-        val marketInfoAdapter = CoinMarketDataAdapter(viewModel.marketDataLiveData, viewLifecycleOwner)
+        val marketDataAdapter = CoinDataAdapter(viewModel.marketDataLiveData, viewLifecycleOwner, this)
+        val tvlDataAdapter = CoinDataAdapter(viewModel.tvlDataLiveData, viewLifecycleOwner, this)
 
         val concatAdapter = ConcatAdapter(
                 subtitleAdapter,
@@ -112,7 +112,9 @@ class CoinFragment : BaseFragment(), CoinChartAdapter.Listener {
                 SpacerAdapter(),
                 coinRoiAdapter,
                 SpacerAdapter(),
-                marketInfoAdapter
+                marketDataAdapter,
+                SpacerAdapter(),
+                tvlDataAdapter
         )
 
         controlledRecyclerView.adapter = concatAdapter
@@ -158,6 +160,17 @@ class CoinFragment : BaseFragment(), CoinChartAdapter.Listener {
         viewModel.onSelect(chartType)
     }
 
+    //CoinDataAdapter.Listener
+
+    override fun onClick(clickType: CoinDataClickType) {
+        when(clickType){
+            CoinDataClickType.MetricChart -> MetricChartFragment.show(childFragmentManager, MetricChartType.Coin(viewModel.coinType))
+            is CoinDataClickType.Link -> {
+                //open link
+            }
+        }
+    }
+
     //  Private
 
     private fun observeData() {
@@ -167,11 +180,6 @@ class CoinFragment : BaseFragment(), CoinChartAdapter.Listener {
 
         viewModel.coinDetailsLiveData.observe(viewLifecycleOwner, Observer { item ->
             marketDetails.isVisible = true
-
-            // TVL
-
-            setTvlData(item.tvlInfo)
-
 
             // About
 
@@ -282,31 +290,6 @@ class CoinFragment : BaseFragment(), CoinChartAdapter.Listener {
                 }
 
                 extraPagesLayout.addView(coinInfoView)
-            }
-        }
-    }
-
-    private fun setTvlData(tvlDataList: List<CoinDataItem>) {
-        tvlLayout.removeAllViews()
-
-        context?.let { context ->
-            tvlDataList.forEachIndexed { index, marketData ->
-                val view = CoinInfoItemView(context).apply {
-                    bind(
-                            title = getString(marketData.title),
-                            value = marketData.value,
-                            listPosition = ListPosition.getListPosition(tvlDataList.size, index),
-                            icon = marketData.icon
-                    )
-                }
-
-                if (index == 0) {
-                    view.setOnClickListener {
-                        MetricChartFragment.show(childFragmentManager, MetricChartType.Coin(viewModel.coinType))
-                    }
-                }
-
-                tvlLayout.addView(view)
             }
         }
     }
