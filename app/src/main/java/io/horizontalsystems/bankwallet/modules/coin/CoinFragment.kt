@@ -26,7 +26,9 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.coin.adapters.CoinChartAdapter
+import io.horizontalsystems.bankwallet.modules.coin.adapters.CoinRoiAdapter
 import io.horizontalsystems.bankwallet.modules.coin.adapters.CoinSubtitleAdapter
+import io.horizontalsystems.bankwallet.modules.coin.adapters.SpacerAdapter
 import io.horizontalsystems.bankwallet.modules.markdown.MarkdownFragment
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartFragment
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartType
@@ -105,8 +107,15 @@ class CoinFragment : BaseFragment(), CoinChartAdapter.Listener {
 
         val subtitleAdapter = CoinSubtitleAdapter(viewModel.subtitleLiveData, viewLifecycleOwner)
         val chartAdapter = CoinChartAdapter(viewModel, viewLifecycleOwner, this)
+        val coinRoiAdapter = CoinRoiAdapter(viewModel.roiLiveData, viewLifecycleOwner)
+        val spacer = SpacerAdapter()
 
-        val concatAdapter = ConcatAdapter(subtitleAdapter, chartAdapter)
+        val concatAdapter = ConcatAdapter(
+                subtitleAdapter,
+                chartAdapter,
+                spacer,
+                coinRoiAdapter
+        )
 
         controlledRecyclerView.adapter = concatAdapter
 
@@ -160,10 +169,6 @@ class CoinFragment : BaseFragment(), CoinChartAdapter.Listener {
 
         viewModel.coinDetailsLiveData.observe(viewLifecycleOwner, Observer { item ->
             marketDetails.isVisible = true
-
-            // Performance
-
-            setCoinPerformance(item)
 
             // Market
 
@@ -247,30 +252,6 @@ class CoinFragment : BaseFragment(), CoinChartAdapter.Listener {
         viewModel.extraPages.observe(viewLifecycleOwner, { pages ->
             setExtraPages(pages)
         })
-    }
-
-    private fun setCoinPerformance(item: CoinDetailsViewItem) {
-        if (item.rateDiffs.isEmpty()) {
-            return
-        }
-        context?.let { ctx ->
-            item.rateDiffs.forEachIndexed { index, rowViewItem ->
-                val row = when (rowViewItem) {
-                    is RoiViewItem.HeaderRowViewItem -> {
-                        CoinPerformanceRowView(ctx).apply {
-                            bindHeader(rowViewItem.title, rowViewItem.periods)
-                        }
-                    }
-                    is RoiViewItem.RowViewItem -> {
-                        CoinPerformanceRowView(ctx).apply {
-                            bind(rowViewItem.title, rowViewItem.values, item.rateDiffs.size - 1, index)
-                        }
-                    }
-                }
-                coinPerformanceLayout.addView(row)
-            }
-
-        }
     }
 
     private fun setExtraPages(pages: List<CoinExtraPage>) {

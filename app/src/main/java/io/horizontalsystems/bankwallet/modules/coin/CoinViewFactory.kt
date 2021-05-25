@@ -5,8 +5,6 @@ import androidx.annotation.StringRes
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.bankwallet.modules.coin.adapters.CoinChartAdapter
-import io.horizontalsystems.bankwallet.modules.coin.adapters.CoinSubtitleAdapter
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.chartview.ChartData
 import io.horizontalsystems.chartview.ChartDataFactory
@@ -43,18 +41,17 @@ data class CoinDetailsViewItem(
         val rateLow24h: BigDecimal,
         val marketCapDiff24h: BigDecimal,
         val coinMeta: CoinMeta,
-        val rateDiffs: List<RoiViewItem>,
         val guideUrl: String?,
         val tvlInfo: List<CoinDataItem>,
         val contractInfo: ContractInfo?
 )
 
-data class ContractInfo(val title: String, val value: String)
-
 sealed class RoiViewItem {
     class HeaderRowViewItem(val title: String, val periods: List<TimePeriod>) : RoiViewItem()
-    class RowViewItem(val title: String, val values: List<BigDecimal?>) : RoiViewItem()
+    class RowViewItem(val title: String, val values: List<BigDecimal?>, val last: Boolean) : RoiViewItem()
 }
+
+data class ContractInfo(val title: String, val value: String)
 
 class CoinDataItem(@StringRes val title: Int, val value: String, @DrawableRes val icon: Int? = null)
 
@@ -88,8 +85,6 @@ class CoinViewFactory(private val currency: Currency, private val numberFormatte
             coinMarket: CoinMarketDetails,
             currency: Currency,
             coinCode: String,
-            rateDiffCoinCodes: List<String>,
-            rateDiffPeriods: List<TimePeriod>,
             contractInfo: ContractInfo?,
             guideUrl: String? = null
     ): CoinDetailsViewItem {
@@ -101,26 +96,25 @@ class CoinViewFactory(private val currency: Currency, private val numberFormatte
                 rateLow24h = coinMarket.rateLow24h,
                 marketCapDiff24h = coinMarket.marketCapDiff24h,
                 coinMeta = coinMarket.meta,
-                rateDiffs = getRoi(coinMarket.rateDiffs, rateDiffCoinCodes, rateDiffPeriods),
                 guideUrl = guideUrl,
                 tvlInfo = getTvlInfo(coinMarket, currency),
                 contractInfo = contractInfo
         )
     }
 
-    private fun getRoi(rateDiffs: Map<TimePeriod, Map<String, BigDecimal>>, roiCoinCodes: List<String>, roiPeriods: List<TimePeriod>) : List<RoiViewItem> {
-        if (rateDiffs.isEmpty()){
+    fun getRoi(rateDiffs: Map<TimePeriod, Map<String, BigDecimal>>, roiCoinCodes: List<String>, roiPeriods: List<TimePeriod>): List<RoiViewItem> {
+        if (rateDiffs.isEmpty()) {
             return listOf()
         }
 
         val rows = mutableListOf<RoiViewItem>()
         rows.add(RoiViewItem.HeaderRowViewItem("ROI", roiPeriods))
 
-        roiCoinCodes.forEach { coinCode ->
+        roiCoinCodes.forEachIndexed { index, coinCode ->
             val values = roiPeriods.map { period ->
                 rateDiffs[period]?.get(coinCode)
             }
-            rows.add(RoiViewItem.RowViewItem("vs $coinCode", values))
+            rows.add(RoiViewItem.RowViewItem("vs $coinCode", values, roiCoinCodes.size - 1 == index))
         }
 
         return rows
@@ -217,7 +211,7 @@ class CoinViewFactory(private val currency: Currency, private val numberFormatte
         return items
     }
 
-    fun getFormattedLatestRate(currencyValue: CurrencyValue): String{
+    fun getFormattedLatestRate(currencyValue: CurrencyValue): String {
         return numberFormatter.formatFiat(currencyValue.value, currencyValue.currency.symbol, 2, 4)
     }
 

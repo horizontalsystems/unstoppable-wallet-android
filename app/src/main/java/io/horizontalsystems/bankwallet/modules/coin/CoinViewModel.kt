@@ -31,6 +31,7 @@ class CoinViewModel(
     val marketSpinner = MutableLiveData<Boolean>()
     val subtitleLiveData = MutableLiveData<CoinSubtitleAdapter.ViewItemWrapper>()
     val chartInfoLiveData = MutableLiveData<CoinChartAdapter.ViewItemWrapper>()
+    val roiLiveData = MutableLiveData<List<RoiViewItem>>()
     val coinDetailsLiveData = MutableLiveData<CoinDetailsViewItem>()
     val alertNotificationUpdated = MutableLiveData<Unit>()
     val showNotificationMenu = SingleLiveEvent<Pair<CoinType, String>>()
@@ -204,7 +205,9 @@ class CoinViewModel(
         val coinDetails = service.coinMarketDetails ?: return
         coinDetails.meta.rating?.let { ratingValue = it }
 
-        coinDetailsLiveData.postValue(factory.createCoinDetailsViewItem(coinDetails, service.currency, coinCode, rateDiffCoinCodes, rateDiffPeriods, getContractInfo(coinDetails), service.guideUrl))
+        roiLiveData.postValue(factory.getRoi(coinDetails.rateDiffs, rateDiffCoinCodes, rateDiffPeriods))
+
+        coinDetailsLiveData.postValue(factory.createCoinDetailsViewItem(coinDetails, service.currency, coinCode, getContractInfo(coinDetails), service.guideUrl))
 
         val coinMarketItems = factory.createCoinMarketItems(coinDetails.tickers)
         val coinInvestorItems = factory.createCoinInvestorItems(coinDetails.meta.fundCategories)
