@@ -20,7 +20,14 @@ class CoinPerformanceRowView @JvmOverloads constructor(context: Context, attrs: 
         orientation = HORIZONTAL
     }
 
-    fun bindHeader(title: String, periods: List<TimePeriod>) {
+    fun bind(item: RoiViewItem) {
+        when (item) {
+            is RoiViewItem.RowViewItem -> bind(item.title, item.values, item.last)
+            is RoiViewItem.HeaderRowViewItem -> bindHeader(item.title, item.periods)
+        }
+    }
+
+    private fun bindHeader(title: String, periods: List<TimePeriod>) {
         val titleTextView = getHeaderTextView(title).apply {
             setTextAppearance(R.style.Subhead1)
             setTextColor(context.getColor(R.color.oz))
@@ -37,7 +44,7 @@ class CoinPerformanceRowView @JvmOverloads constructor(context: Context, attrs: 
         setBackgroundResource(R.drawable.rounded_lawrence_background_top)
     }
 
-    fun bind(title: String, values: List<BigDecimal?>, itemsCount: Int, position: Int) {
+    private fun bind(title: String, values: List<BigDecimal?>, last: Boolean) {
         addView(getRowTitleTextView(title))
 
         values.forEach { value ->
@@ -45,7 +52,7 @@ class CoinPerformanceRowView @JvmOverloads constructor(context: Context, attrs: 
             addView(getDiffTextView(value))
         }
 
-        setBackgroundResource(Companion.getBackground(itemsCount, position))
+        setBackgroundResource(getLineBackground(last))
     }
 
     private fun getSeparatorLine(): View {
@@ -105,13 +112,11 @@ class CoinPerformanceRowView @JvmOverloads constructor(context: Context, attrs: 
         }
     }
 
-    companion object {
-        fun getBackground(size: Int, position: Int): Int {
-            return when (position) {
-                size -> R.drawable.rounded_steel10_background_bottom
-                else -> R.drawable.rounded_steel10_background_middle
-            }
-        }
+    private fun getLineBackground(last: Boolean): Int {
+        return if (last)
+            R.drawable.rounded_steel10_background_bottom
+        else
+            R.drawable.rounded_steel10_background_middle
     }
 
 }
