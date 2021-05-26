@@ -21,6 +21,8 @@ class CoinPerformanceRowView @JvmOverloads constructor(context: Context, attrs: 
     }
 
     fun bind(item: RoiViewItem) {
+        removeAllViews()
+
         when (item) {
             is RoiViewItem.RowViewItem -> bind(item.title, item.values, item.last)
             is RoiViewItem.HeaderRowViewItem -> bindHeader(item.title, item.periods)
