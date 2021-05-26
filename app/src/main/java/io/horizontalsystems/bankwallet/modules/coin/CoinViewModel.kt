@@ -34,8 +34,8 @@ class CoinViewModel(
     val categoriesLiveData = MutableLiveData<String>()
     val contractInfoLiveData = MutableLiveData<List<CoinDataItem>>()
     val aboutTextLiveData = MutableLiveData<AboutText>()
+    val linksLiveData =  MutableLiveData<List<CoinLink>>()
 
-    val coinDetailsLiveData = MutableLiveData<CoinDetailsViewItem>()
     val alertNotificationUpdated = MutableLiveData<Unit>()
     val showNotificationMenu = SingleLiveEvent<Pair<CoinType, String>>()
     val isFavorite = MutableLiveData<Boolean>()
@@ -214,8 +214,6 @@ class CoinViewModel(
 
         tvlDataLiveData.postValue(factory.getTvlInfo(coinDetails, service.currency))
 
-        coinDetailsLiveData.postValue(factory.createCoinDetailsViewItem(coinDetails, service.currency, service.guideUrl))
-
         categoriesLiveData.postValue(coinDetails.meta.categories.joinToString(", ") { it.name })
 
         getContractInfo(coinDetails)?.let {
@@ -225,6 +223,8 @@ class CoinViewModel(
         if (coinDetails.meta.description.isNotBlank()){
             aboutTextLiveData.postValue(AboutText(coinDetails.meta.description, coinDetails.meta.descriptionType))
         }
+
+        linksLiveData.postValue(factory.getLinks(coinDetails, service.guideUrl))
 
         val coinMarketItems = factory.createCoinMarketItems(coinDetails.tickers)
         val coinInvestorItems = factory.createCoinInvestorItems(coinDetails.meta.fundCategories)
