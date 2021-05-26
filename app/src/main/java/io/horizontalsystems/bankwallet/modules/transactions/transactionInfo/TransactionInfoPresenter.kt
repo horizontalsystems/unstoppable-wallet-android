@@ -79,7 +79,9 @@ class TransactionInfoPresenter(
 
         if (transaction.showRawTransaction) {
             viewItems.add(TransactionDetailViewItem.RawTransaction())
+            viewItems.add(TransactionDetailViewItem.Id(transaction.transactionHash))
         } else {
+            viewItems.add(TransactionDetailViewItem.RawTransaction())
             viewItems.add(TransactionDetailViewItem.Id(transaction.transactionHash))
         }
 
