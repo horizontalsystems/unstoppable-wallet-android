@@ -33,16 +33,6 @@ data class ChartPointViewItem(
         val macdInfo: MacdInfo?
 )
 
-data class CoinDetailsViewItem(
-        val currency: Currency,
-        val rateValue: BigDecimal,
-        val rateHigh24h: BigDecimal,
-        val rateLow24h: BigDecimal,
-        val marketCapDiff24h: BigDecimal,
-        val coinMeta: CoinMeta,
-        val guideUrl: String?
-)
-
 sealed class RoiViewItem {
     class HeaderRowViewItem(val title: String, val periods: List<TimePeriod>) : RoiViewItem()
     class RowViewItem(val title: String, val values: List<BigDecimal?>, val last: Boolean) : RoiViewItem()
@@ -65,6 +55,8 @@ sealed class CoinDataClickType {
 }
 
 data class AboutText(val value: String, val type: CoinMeta.DescriptionType)
+
+data class CoinLink(val url: String, val linkType: LinkType, val title: Int, val icon: Int, var listPosition: ListPosition? = null)
 
 data class LastPoint(
         val rate: BigDecimal,
@@ -90,22 +82,6 @@ class CoinViewFactory(private val currency: Currency, private val numberFormatte
         val minValue = numberFormatter.formatFiat(chartData.valueRange.lower, currency.symbol, 0, 2)
 
         return ChartInfoData(chartData, chartType, maxValue, minValue)
-    }
-
-    fun createCoinDetailsViewItem(
-            coinMarket: CoinMarketDetails,
-            currency: Currency,
-            guideUrl: String? = null
-    ): CoinDetailsViewItem {
-        return CoinDetailsViewItem(
-                currency = currency,
-                rateValue = coinMarket.rate,
-                rateHigh24h = coinMarket.rateHigh24h,
-                rateLow24h = coinMarket.rateLow24h,
-                marketCapDiff24h = coinMarket.marketCapDiff24h,
-                coinMeta = coinMarket.meta,
-                guideUrl = guideUrl
-        )
     }
 
     fun getRoi(rateDiffs: Map<TimePeriod, Map<String, BigDecimal>>, roiCoinCodes: List<String>, roiPeriods: List<TimePeriod>): List<RoiViewItem> {
@@ -181,6 +157,49 @@ class CoinViewFactory(private val currency: Currency, private val numberFormatte
         setListPosition(marketData)
 
         return marketData
+    }
+
+    fun getLinks(coinMarketDetails: CoinMarketDetails, guideUrl: String?): List<CoinLink> {
+        val links = mutableListOf<CoinLink>()
+        guideUrl?.let {
+            links.add(CoinLink(it, LinkType.GUIDE, getTitle(LinkType.GUIDE), getIcon(LinkType.GUIDE)))
+        }
+
+        coinMarketDetails.meta.links.forEach { (linkType, link) ->
+            links.add(CoinLink(link, linkType, getTitle(linkType), getIcon(linkType)))
+        }
+
+        links.forEachIndexed { index, link ->
+            link.listPosition = ListPosition.getListPosition(links.size, index)
+        }
+
+        return links
+    }
+
+    private fun getIcon(linkType: LinkType): Int {
+        return when(linkType){
+            LinkType.GUIDE -> R.drawable.ic_academy_20
+            LinkType.WEBSITE -> R.drawable.ic_globe
+            LinkType.WHITEPAPER -> R.drawable.ic_clipboard
+            LinkType.TWITTER -> R.drawable.ic_twitter
+            LinkType.TELEGRAM -> R.drawable.ic_telegram
+            LinkType.REDDIT -> R.drawable.ic_reddit
+            LinkType.GITHUB -> R.drawable.ic_github
+            LinkType.YOUTUBE -> R.drawable.ic_globe
+        }
+    }
+
+    private fun getTitle(linkType: LinkType): Int {
+        return when(linkType){
+            LinkType.GUIDE -> R.string.CoinPage_Guide
+            LinkType.WEBSITE -> R.string.CoinPage_Website
+            LinkType.WHITEPAPER -> R.string.CoinPage_Whitepaper
+            LinkType.TWITTER -> R.string.CoinPage_Twitter
+            LinkType.TELEGRAM -> R.string.CoinPage_Telegram
+            LinkType.REDDIT -> R.string.CoinPage_Reddit
+            LinkType.GITHUB -> R.string.CoinPage_Github
+            LinkType.YOUTUBE -> R.string.CoinPage_Youtube
+        }
     }
 
     private fun setListPosition(list: MutableList<CoinDataItem>) {

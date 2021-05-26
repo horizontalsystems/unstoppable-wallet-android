@@ -26,13 +26,11 @@ import io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.Coin
 import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.findNavController
-import io.horizontalsystems.views.ListPosition
-import io.horizontalsystems.views.SettingsView
 import io.horizontalsystems.xrateskit.entities.LinkType
 import kotlinx.android.synthetic.main.coin_market_details.*
 import kotlinx.android.synthetic.main.fragment_coin.*
 
-class CoinFragment : BaseFragment(), CoinChartAdapter.Listener, CoinDataAdapter.Listener {
+class CoinFragment : BaseFragment(), CoinChartAdapter.Listener, CoinDataAdapter.Listener, CoinLinksAdapter.Listener {
 
     private val coinTitle by lazy {
         requireArguments().getString(COIN_TITLE_KEY) ?: ""
@@ -91,6 +89,7 @@ class CoinFragment : BaseFragment(), CoinChartAdapter.Listener, CoinDataAdapter.
         val categoriesAdapter = CoinCategoryAdapter(viewModel.categoriesLiveData, viewLifecycleOwner)
         val contractInfoAdapter = CoinDataAdapter(viewModel.contractInfoLiveData, viewLifecycleOwner, this)
         val aboutAdapter = CoinAboutAdapter(viewModel.aboutTextLiveData, viewLifecycleOwner)
+        val linksAdapter = CoinLinksAdapter(viewModel.linksLiveData, viewLifecycleOwner, this)
 
         val concatAdapter = ConcatAdapter(
                 subtitleAdapter,
@@ -104,7 +103,9 @@ class CoinFragment : BaseFragment(), CoinChartAdapter.Listener, CoinDataAdapter.
                 categoriesAdapter,
                 SpacerAdapter(),
                 contractInfoAdapter,
-                aboutAdapter
+                aboutAdapter,
+                SpacerAdapter(),
+                linksAdapter
         )
 
         controlledRecyclerView.adapter = concatAdapter
@@ -141,6 +142,23 @@ class CoinFragment : BaseFragment(), CoinChartAdapter.Listener, CoinDataAdapter.
         viewModel.onSelect(chartType)
     }
 
+    //  CoinLinksAdapter Listener
+
+    override fun onClick(coinLink: CoinLink) {
+        when(coinLink.linkType){
+            LinkType.GUIDE -> {
+                val arguments = bundleOf(
+                        MarkdownFragment.markdownUrlKey to coinLink.url,
+                        MarkdownFragment.handleRelativeUrlKey to true
+                )
+                findNavController().navigate(R.id.coinFragment_to_markdownFragment, arguments, navOptions())
+            }
+            else -> {
+                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(coinLink.url.trim())))
+            }
+        }
+    }
+
     //CoinDataAdapter.Listener
 
     override fun onClick(clickType: CoinDataClickType) {
@@ -157,13 +175,6 @@ class CoinFragment : BaseFragment(), CoinChartAdapter.Listener, CoinDataAdapter.
     private fun observeData() {
         viewModel.marketSpinner.observe(viewLifecycleOwner, Observer { isLoading ->
             marketSpinner.isVisible = isLoading
-        })
-
-        viewModel.coinDetailsLiveData.observe(viewLifecycleOwner, Observer { item ->
-            marketDetails.isVisible = true
-
-            //Links
-            setLinks(item.coinMeta.links, item.guideUrl)
         })
 
         viewModel.alertNotificationUpdated.observe(viewLifecycleOwner, Observer {
@@ -218,64 +229,6 @@ class CoinFragment : BaseFragment(), CoinChartAdapter.Listener, CoinDataAdapter.
                 }
 
                 extraPagesLayout.addView(coinInfoView)
-            }
-        }
-    }
-
-    private fun setLinks(links: Map<LinkType, String>, guideUrl: String?) {
-        context?.let { context ->
-            linksLayout.removeAllViews()
-
-            guideUrl?.let {
-                val link = SettingsView(context)
-                link.showTitle(getString(R.string.CoinPage_Guide))
-                link.showIcon(ContextCompat.getDrawable(context, R.drawable.ic_academy_20))
-                link.setListPosition(ListPosition.getListPosition(links.size + 1, 0))
-                link.setOnClickListener {
-                    val arguments = bundleOf(
-                            MarkdownFragment.markdownUrlKey to guideUrl,
-                            MarkdownFragment.handleRelativeUrlKey to true
-                    )
-                    findNavController().navigate(R.id.coinFragment_to_markdownFragment, arguments, navOptions())
-                }
-                linksLayout.addView(link)
-            }
-
-            links.onEachIndexed { index, entry ->
-                val link = SettingsView(context)
-                when (entry.key) {
-                    LinkType.WEBSITE -> {
-                        link.showTitle(getString(R.string.CoinPage_Website))
-                        link.showIcon(ContextCompat.getDrawable(context, R.drawable.ic_globe))
-                    }
-                    LinkType.WHITEPAPER -> {
-                        link.showTitle(getString(R.string.CoinPage_Whitepaper))
-                        link.showIcon(ContextCompat.getDrawable(context, R.drawable.ic_clipboard))
-                    }
-                    LinkType.TWITTER -> {
-                        link.showTitle(getString(R.string.CoinPage_Twitter))
-                        link.showIcon(ContextCompat.getDrawable(context, R.drawable.ic_twitter))
-                    }
-                    LinkType.TELEGRAM -> {
-                        link.showTitle(getString(R.string.CoinPage_Telegram))
-                        link.showIcon(ContextCompat.getDrawable(context, R.drawable.ic_telegram))
-                    }
-                    LinkType.REDDIT -> {
-                        link.showTitle(getString(R.string.CoinPage_Reddit))
-                        link.showIcon(ContextCompat.getDrawable(context, R.drawable.ic_reddit))
-                    }
-                    LinkType.GITHUB -> {
-                        link.showTitle(getString(R.string.CoinPage_Github))
-                        link.showIcon(ContextCompat.getDrawable(context, R.drawable.ic_github))
-                    }
-                }
-                val shiftPosition = if (guideUrl != null) 1 else 0
-                link.setListPosition(ListPosition.getListPosition(links.size + shiftPosition, index + shiftPosition))
-                link.setOnClickListener {
-                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(entry.value.trim())))
-                }
-
-                linksLayout.addView(link)
             }
         }
     }
