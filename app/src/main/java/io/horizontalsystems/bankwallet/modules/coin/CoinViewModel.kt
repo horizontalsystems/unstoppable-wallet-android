@@ -35,6 +35,7 @@ class CoinViewModel(
     val contractInfoLiveData = MutableLiveData<List<CoinDataItem>>()
     val aboutTextLiveData = MutableLiveData<AboutText>()
     val linksLiveData =  MutableLiveData<List<CoinLink>>()
+    val showFooterLiveData = MutableLiveData(false)
 
     val alertNotificationUpdated = MutableLiveData<Unit>()
     val showNotificationMenu = SingleLiveEvent<Pair<CoinType, String>>()
@@ -225,6 +226,8 @@ class CoinViewModel(
         }
 
         linksLiveData.postValue(factory.getLinks(coinDetails, service.guideUrl))
+
+        showFooterLiveData.postValue(true)
 
         val coinMarketItems = factory.createCoinMarketItems(coinDetails.tickers)
         val coinInvestorItems = factory.createCoinInvestorItems(coinDetails.meta.fundCategories)
