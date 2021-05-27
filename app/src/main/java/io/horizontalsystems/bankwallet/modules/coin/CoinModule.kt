@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.views.ListPosition
-import io.horizontalsystems.xrateskit.entities.CoinPlatformType
 
 object CoinModule {
 
@@ -46,13 +45,7 @@ data class MarketTickerViewItem(
     }
 }
 
-sealed class CoinExtraPage {
-    class TradingVolume(val position: ListPosition, val value: String?, val canShowMarkets: Boolean) : CoinExtraPage()
-    class Investors(val position: ListPosition) : CoinExtraPage()
-}
-
 sealed class InvestorItem {
     data class Header(val title: String) : InvestorItem()
     data class Fund(val name: String, val url: String, val cleanedUrl: String, val position: ListPosition) : InvestorItem()
 }
-
