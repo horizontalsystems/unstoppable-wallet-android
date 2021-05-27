@@ -8,7 +8,7 @@ androidExtensions {
 }
 
 def computeVersionCode() {
-    ext.buildNumber = System.getenv("BUILD_NUMBER") ?: 44
+    ext.buildNumber = System.getenv("BUILD_NUMBER") ?: 46
     return "$buildNumber".toInteger()
 }
 
@@ -189,7 +189,7 @@ dependencies {
     implementation 'pub.devrel:easypermissions:3.0.0'
 
     // Wallet kits
-    implementation 'com.github.horizontalsystems:bitcoin-kit-android:5a20000'
+    implementation 'com.github.horizontalsystems:bitcoin-kit-android:3d57571'
     implementation 'com.github.horizontalsystems:ethereum-kit-android:de4c4ff'
     implementation 'com.github.horizontalsystems:blockchain-fee-rate-kit-android:047596b'
     implementation 'com.github.horizontalsystems:binance-chain-kit-android:18c39c9'

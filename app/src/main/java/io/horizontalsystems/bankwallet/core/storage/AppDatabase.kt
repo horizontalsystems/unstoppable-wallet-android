@@ -12,12 +12,13 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.google.gson.Gson
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.storage.migrations.Migration_31_32
+import io.horizontalsystems.bankwallet.core.storage.migrations.Migration_32_33
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.coinkit.models.CoinType
 import java.util.*
 
-@Database(version = 32, exportSchema = false, entities = [
+@Database(version = 33, exportSchema = false, entities = [
     EnabledWallet::class,
     PriceAlert::class,
     AccountRecord::class,
@@ -82,7 +83,8 @@ abstract class AppDatabase : RoomDatabase() {
                             MIGRATION_28_29,
                             MIGRATION_29_30,
                             MIGRATION_30_31,
-                            Migration_31_32
+                            Migration_31_32,
+                            Migration_32_33
                     )
                     .build()
         }
