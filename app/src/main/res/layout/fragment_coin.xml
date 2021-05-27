@@ -24,41 +24,4 @@
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:itemCount="1"
         tools:listitem="@layout/view_holder_coin_subtitle" />
-
-    <io.horizontalsystems.bankwallet.ui.extensions.LockableNestedScrollView
-        android:id="@+id/scroller"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="?attr/actionBarSize"
-        android:fillViewport="true">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="32dp">
-
-            <include
-                layout="@layout/coin_market_details"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ProgressBar
-                android:id="@+id/marketSpinner"
-                style="?android:attr/progressBarStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@color/grey"
-                android:indeterminate="true"
-                android:indeterminateTint="@color/grey"
-                android:indeterminateTintMode="src_atop"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/indicatorRSI" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </io.horizontalsystems.bankwallet.ui.extensions.LockableNestedScrollView>
 </FrameLayout>

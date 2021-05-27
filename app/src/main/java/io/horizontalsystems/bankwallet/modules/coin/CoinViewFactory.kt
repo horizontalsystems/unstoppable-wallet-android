@@ -51,7 +51,9 @@ data class CoinDataItem(
 
 sealed class CoinDataClickType {
     object MetricChart : CoinDataClickType()
-    class Link(val url: String) : CoinDataClickType()
+    object TradingVolume : CoinDataClickType()
+    object MajorHolders : CoinDataClickType()
+    object FundsInvested : CoinDataClickType()
 }
 
 data class AboutText(val value: String, val type: CoinMeta.DescriptionType)
@@ -100,13 +102,6 @@ class CoinViewFactory(private val currency: Currency, private val numberFormatte
         }
 
         return rows
-    }
-
-    fun getVolume(coinMarket: CoinMarketDetails): String? {
-        if (coinMarket.volume24h > BigDecimal.ZERO) {
-            return formatFiatShortened(coinMarket.volume24h, currency.symbol)
-        }
-        return null
     }
 
     fun getTvlInfo(coinMarket: CoinMarketDetails, currency: Currency): List<CoinDataItem> {
@@ -176,8 +171,54 @@ class CoinViewFactory(private val currency: Currency, private val numberFormatte
         return links
     }
 
+    fun getTradingVolume(coinDetails: CoinMarketDetails, currency: Currency): List<CoinDataItem> {
+        val items = mutableListOf<CoinDataItem>()
+
+        if (coinDetails.volume24h > BigDecimal.ZERO) {
+            val volume = formatFiatShortened(coinDetails.volume24h, currency.symbol)
+            val clickType = if (coinDetails.tickers.isNotEmpty()) CoinDataClickType.TradingVolume else null
+            items.add(CoinDataItem(Translator.getString(R.string.CoinPage_TradingVolume), volume, icon = R.drawable.ic_arrow_right, clickType = clickType))
+        }
+
+        if (coinDetails.meta.fundCategories.isNotEmpty()) {
+            items.add(CoinDataItem(Translator.getString(R.string.CoinPage_FundsInvested), icon = R.drawable.ic_arrow_right, clickType = CoinDataClickType.FundsInvested))
+        }
+
+        setListPosition(items)
+
+        return items
+    }
+
+    fun getCoinMarketItems(tickers: List<MarketTicker>): List<MarketTickerViewItem> {
+        return tickers.map { ticker ->
+            val (shortenValue, suffix) = numberFormatter.shortenValue(ticker.volume)
+            MarketTickerViewItem(
+                    ticker.marketName,
+                    "${ticker.base}/${ticker.target}",
+                    numberFormatter.formatCoin(ticker.rate, ticker.target, 0, 8),
+                    "$shortenValue $suffix ${ticker.base}",
+                    ticker.imageUrl
+            )
+        }
+    }
+
+    fun getCoinInvestorItems(fundCategories: List<CoinFundCategory>): List<InvestorItem> {
+        val items = mutableListOf<InvestorItem>()
+        fundCategories.forEach { category ->
+            items.add(InvestorItem.Header(category.name))
+            category.funds.forEachIndexed { index, fund ->
+                items.add(InvestorItem.Fund(fund.name, fund.url, TextHelper.getCleanedUrl(fund.url), ListPosition.getListPosition(category.funds.size, index)))
+            }
+        }
+        return items
+    }
+
+    fun getFormattedLatestRate(currencyValue: CurrencyValue): String {
+        return numberFormatter.formatFiat(currencyValue.value, currencyValue.currency.symbol, 2, 4)
+    }
+
     private fun getIcon(linkType: LinkType): Int {
-        return when(linkType){
+        return when (linkType) {
             LinkType.GUIDE -> R.drawable.ic_academy_20
             LinkType.WEBSITE -> R.drawable.ic_globe
             LinkType.WHITEPAPER -> R.drawable.ic_clipboard
@@ -190,7 +231,7 @@ class CoinViewFactory(private val currency: Currency, private val numberFormatte
     }
 
     private fun getTitle(linkType: LinkType): Int {
-        return when(linkType){
+        return when (linkType) {
             LinkType.GUIDE -> R.string.CoinPage_Guide
             LinkType.WEBSITE -> R.string.CoinPage_Website
             LinkType.WHITEPAPER -> R.string.CoinPage_Whitepaper
@@ -228,34 +269,6 @@ class CoinViewFactory(private val currency: Currency, private val numberFormatte
         }
 
         return ChartDataFactory.build(points, chartInfo.startTimestamp, endTimestamp, chartInfo.isExpired)
-    }
-
-    fun createCoinMarketItems(tickers: List<MarketTicker>): List<MarketTickerViewItem> {
-        return tickers.map { ticker ->
-            val (shortenValue, suffix) = numberFormatter.shortenValue(ticker.volume)
-            MarketTickerViewItem(
-                    ticker.marketName,
-                    "${ticker.base}/${ticker.target}",
-                    numberFormatter.formatCoin(ticker.rate, ticker.target, 0, 8),
-                    "$shortenValue $suffix ${ticker.base}",
-                    ticker.imageUrl
-            )
-        }
-    }
-
-    fun createCoinInvestorItems(fundCategories: List<CoinFundCategory>): List<InvestorItem> {
-        val items = mutableListOf<InvestorItem>()
-        fundCategories.forEach { category ->
-            items.add(InvestorItem.Header(category.name))
-            category.funds.forEachIndexed { index, fund ->
-                items.add(InvestorItem.Fund(fund.name, fund.url, TextHelper.getCleanedUrl(fund.url), ListPosition.getListPosition(category.funds.size, index)))
-            }
-        }
-        return items
-    }
-
-    fun getFormattedLatestRate(currencyValue: CurrencyValue): String {
-        return numberFormatter.formatFiat(currencyValue.value, currencyValue.currency.symbol, 2, 4)
     }
 
     private fun formatFiatShortened(value: BigDecimal, symbol: String): String {

@@ -31,6 +31,7 @@ class CoinViewModel(
     val roiLiveData = MutableLiveData<List<RoiViewItem>>()
     val marketDataLiveData = MutableLiveData<List<CoinDataItem>>()
     val tvlDataLiveData = MutableLiveData<List<CoinDataItem>>()
+    val tradingVolumeLiveData = MutableLiveData<List<CoinDataItem>>()
     val categoriesLiveData = MutableLiveData<String>()
     val contractInfoLiveData = MutableLiveData<List<CoinDataItem>>()
     val aboutTextLiveData = MutableLiveData<AboutText>()
@@ -42,7 +43,6 @@ class CoinViewModel(
     val isFavorite = MutableLiveData<Boolean>()
     val coinMarkets = MutableLiveData<List<MarketTickerViewItem>>()
     val coinInvestors = MutableLiveData<List<InvestorItem>>()
-    val extraPages = MutableLiveData<List<CoinExtraPage>>()
 
     val currency = service.currency
 
@@ -215,6 +215,8 @@ class CoinViewModel(
 
         tvlDataLiveData.postValue(factory.getTvlInfo(coinDetails, service.currency))
 
+        tradingVolumeLiveData.postValue(factory.getTradingVolume(coinDetails, service.currency))
+
         categoriesLiveData.postValue(coinDetails.meta.categories.joinToString(", ") { it.name })
 
         getContractInfo(coinDetails)?.let {
@@ -229,13 +231,8 @@ class CoinViewModel(
 
         showFooterLiveData.postValue(true)
 
-        val coinMarketItems = factory.createCoinMarketItems(coinDetails.tickers)
-        val coinInvestorItems = factory.createCoinInvestorItems(coinDetails.meta.fundCategories)
-        val coinVolume = factory.getVolume(coinDetails)
-        setExtraPageButtons(coinMarketItems, coinInvestorItems, coinVolume)
-
-        coinMarkets.postValue(coinMarketItems)
-        coinInvestors.postValue(coinInvestorItems)
+        coinMarkets.postValue(factory.getCoinMarketItems(coinDetails.tickers))
+        coinInvestors.postValue(factory.getCoinInvestorItems(coinDetails.meta.fundCategories))
     }
 
     private fun getContractInfo(coinDetails: CoinMarketDetails): ContractInfo? =
@@ -245,19 +242,6 @@ class CoinViewModel(
                 is CoinType.Bep2 -> ContractInfo(Translator.getString(R.string.CoinPage_Bep2Symbol), coinType.symbol)
                 else -> null
             }
-
-    private fun setExtraPageButtons(coinMarketItems: List<MarketTickerViewItem>, coinInvestorItems: List<InvestorItem>, coinVolume: String?) {
-        val coinExtraPages = mutableListOf<CoinExtraPage>()
-        if (coinVolume != null || coinMarketItems.isNotEmpty()) {
-            val listPosition = if (coinInvestorItems.isEmpty()) ListPosition.Single else ListPosition.First
-            coinExtraPages.add(CoinExtraPage.TradingVolume(listPosition, coinVolume, coinMarketItems.isNotEmpty()))
-        }
-        if (coinInvestorItems.isNotEmpty()) {
-            val listPosition = if (coinMarketItems.isEmpty()) ListPosition.Single else ListPosition.Last
-            coinExtraPages.add(CoinExtraPage.Investors(listPosition))
-        }
-        extraPages.postValue(coinExtraPages)
-    }
 
     private fun updateChartInfo() {
         val info = service.chartInfo ?: return
@@ -298,4 +282,5 @@ class CoinViewModel(
         disposable.clear()
         clearables.forEach(Clearable::clear)
     }
+
 }

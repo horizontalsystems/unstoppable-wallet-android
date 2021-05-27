@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import androidx.activity.addCallback
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
-import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.ConcatAdapter
@@ -23,12 +22,10 @@ import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartFragment
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartType
 import io.horizontalsystems.bankwallet.modules.settings.notifications.bottommenu.BottomNotificationMenu
 import io.horizontalsystems.bankwallet.modules.settings.notifications.bottommenu.NotificationMenuMode
-import io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.CoinInfoItemView
 import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.xrateskit.entities.LinkType
-import kotlinx.android.synthetic.main.coin_market_details.*
 import kotlinx.android.synthetic.main.fragment_coin.*
 
 class CoinFragment : BaseFragment(), CoinChartAdapter.Listener, CoinDataAdapter.Listener, CoinLinksAdapter.Listener {
@@ -87,6 +84,7 @@ class CoinFragment : BaseFragment(), CoinChartAdapter.Listener, CoinDataAdapter.
         val coinRoiAdapter = CoinRoiAdapter(viewModel.roiLiveData, viewLifecycleOwner)
         val marketDataAdapter = CoinDataAdapter(viewModel.marketDataLiveData, viewLifecycleOwner, this)
         val tvlDataAdapter = CoinDataAdapter(viewModel.tvlDataLiveData, viewLifecycleOwner, this)
+        val tradingVolumeAdapter = CoinDataAdapter(viewModel.tradingVolumeLiveData, viewLifecycleOwner, this)
         val categoriesAdapter = CoinCategoryAdapter(viewModel.categoriesLiveData, viewLifecycleOwner)
         val contractInfoAdapter = CoinDataAdapter(viewModel.contractInfoLiveData, viewLifecycleOwner, this)
         val aboutAdapter = CoinAboutAdapter(viewModel.aboutTextLiveData, viewLifecycleOwner)
@@ -100,6 +98,8 @@ class CoinFragment : BaseFragment(), CoinChartAdapter.Listener, CoinDataAdapter.
                 coinRoiAdapter,
                 SpacerAdapter(),
                 marketDataAdapter,
+                SpacerAdapter(),
+                tradingVolumeAdapter,
                 SpacerAdapter(),
                 tvlDataAdapter,
                 categoriesAdapter,
@@ -167,9 +167,8 @@ class CoinFragment : BaseFragment(), CoinChartAdapter.Listener, CoinDataAdapter.
     override fun onClick(clickType: CoinDataClickType) {
         when(clickType){
             CoinDataClickType.MetricChart -> MetricChartFragment.show(childFragmentManager, MetricChartType.Coin(viewModel.coinType))
-            is CoinDataClickType.Link -> {
-                //open link
-            }
+            CoinDataClickType.TradingVolume -> findNavController().navigate(R.id.coinFragment_to_coinMarketsFragment, null, navOptions())
+            CoinDataClickType.FundsInvested -> findNavController().navigate(R.id.coinFragment_to_coinInvestorsFragment, null, navOptions())
         }
     }
 
@@ -177,7 +176,7 @@ class CoinFragment : BaseFragment(), CoinChartAdapter.Listener, CoinDataAdapter.
 
     private fun observeData() {
         viewModel.marketSpinner.observe(viewLifecycleOwner, Observer { isLoading ->
-            marketSpinner.isVisible = isLoading
+//            marketSpinner.isVisible = isLoading
         })
 
         viewModel.alertNotificationUpdated.observe(viewLifecycleOwner, Observer {
@@ -193,47 +192,6 @@ class CoinFragment : BaseFragment(), CoinChartAdapter.Listener, CoinDataAdapter.
             toolbar.menu.findItem(R.id.menuUnfavorite).isVisible = it
         })
 
-        viewModel.extraPages.observe(viewLifecycleOwner, { pages ->
-            setExtraPages(pages)
-        })
-    }
-
-    private fun setExtraPages(pages: List<CoinExtraPage>) {
-        extraPagesLayout.removeAllViews()
-
-        context?.let { context ->
-            pages.forEach { item ->
-                val coinInfoView = CoinInfoItemView(context).apply {
-                    when (item) {
-                        is CoinExtraPage.TradingVolume -> {
-                            bind(
-                                    title = getString(R.string.CoinPage_TradingVolume),
-                                    value = item.value,
-                                    listPosition = item.position,
-                                    icon = if (item.canShowMarkets) R.drawable.ic_arrow_right else null
-                            )
-                            if (item.canShowMarkets) {
-                                setOnClickListener {
-                                    findNavController().navigate(R.id.coinFragment_to_coinMarketsFragment, null, navOptions())
-                                }
-                            }
-                        }
-                        is CoinExtraPage.Investors -> {
-                            bind(
-                                    title = getString(R.string.CoinPage_FundsInvested),
-                                    listPosition = item.position,
-                                    icon = R.drawable.ic_arrow_right
-                            )
-                            setOnClickListener {
-                                findNavController().navigate(R.id.coinFragment_to_coinInvestorsFragment, null, navOptions())
-                            }
-                        }
-                    }
-                }
-
-                extraPagesLayout.addView(coinInfoView)
-            }
-        }
     }
 
     companion object {
