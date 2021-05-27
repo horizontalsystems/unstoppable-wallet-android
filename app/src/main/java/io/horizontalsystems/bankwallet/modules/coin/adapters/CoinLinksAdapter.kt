@@ -5,8 +5,6 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.coin.CoinLink
@@ -18,33 +16,45 @@ class CoinLinksAdapter(
         linksLiveData: MutableLiveData<List<CoinLink>>,
         viewLifecycleOwner: LifecycleOwner,
         private val listener: Listener
-) : ListAdapter<CoinLink, CoinLinksAdapter.ViewHolder>(diff) {
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     init {
         linksLiveData.observe(viewLifecycleOwner) {
-            submitList(it)
+            items = it
+            notifyDataSetChanged()
         }
     }
+
+    private var items = listOf<CoinLink>()
+    private val viewTypeItem = 0
+    private val viewTypeSpacer = 1
 
     interface Listener {
         fun onClick(coinLink: CoinLink)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(inflate(parent, R.layout.view_holder_coin_link, false), listener)
+    override fun getItemCount(): Int {
+        return if (items.isNotEmpty()) items.size + 1 else 0
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(getItem(position))
+    override fun getItemViewType(position: Int): Int {
+        return when (position) {
+            0 -> viewTypeSpacer
+            else -> viewTypeItem
+        }
     }
 
-    companion object {
-        private val diff = object : DiffUtil.ItemCallback<CoinLink>() {
-            override fun areItemsTheSame(oldItem: CoinLink, newItem: CoinLink): Boolean = true
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return when (viewType) {
+            viewTypeItem -> ViewHolder(inflate(parent, R.layout.view_holder_coin_link, false), listener)
+            viewTypeSpacer -> SpacerViewHolder(inflate(parent, R.layout.view_holder_coin_page_spacer, false))
+            else -> throw  IllegalArgumentException("No such viewType $viewType")
+        }
+    }
 
-            override fun areContentsTheSame(oldItem: CoinLink, newItem: CoinLink): Boolean {
-                return oldItem == newItem
-            }
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        when (holder) {
+            is ViewHolder -> holder.bind(items[position-1])
         }
     }
 

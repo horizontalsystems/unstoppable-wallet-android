@@ -4,8 +4,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.coin.RoiViewItem
@@ -16,29 +14,41 @@ import kotlinx.android.synthetic.main.view_holder_coin_roi.*
 class CoinRoiAdapter(
         rateDiffsLiveData: MutableLiveData<List<RoiViewItem>>,
         viewLifecycleOwner: LifecycleOwner
-) : ListAdapter<RoiViewItem, CoinRoiAdapter.ViewHolder>(diff) {
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     init {
         rateDiffsLiveData.observe(viewLifecycleOwner) {
-            submitList(it)
+            items = it
+            notifyDataSetChanged()
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(inflate(parent, R.layout.view_holder_coin_roi, false))
+    private var items = listOf<RoiViewItem>()
+    private val viewTypeItem = 0
+    private val viewTypeSpacer = 1
+
+    override fun getItemCount(): Int {
+        return if (items.isNotEmpty()) items.size + 1 else 0
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(getItem(position))
+    override fun getItemViewType(position: Int): Int {
+        return when (position) {
+            0 -> viewTypeSpacer
+            else -> viewTypeItem
+        }
     }
 
-    companion object {
-        private val diff = object : DiffUtil.ItemCallback<RoiViewItem>() {
-            override fun areItemsTheSame(oldItem: RoiViewItem, newItem: RoiViewItem): Boolean = true
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return when (viewType) {
+            viewTypeItem -> ViewHolder(inflate(parent, R.layout.view_holder_coin_roi, false))
+            viewTypeSpacer -> SpacerViewHolder(inflate(parent, R.layout.view_holder_coin_page_spacer, false))
+            else -> throw  IllegalArgumentException("No such viewType $viewType")
+        }
+    }
 
-            override fun areContentsTheSame(oldItem: RoiViewItem, newItem: RoiViewItem): Boolean {
-                return oldItem == newItem
-            }
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        when (holder) {
+            is ViewHolder -> holder.bind(items[position - 1])
         }
     }
 
@@ -48,3 +58,5 @@ class CoinRoiAdapter(
         }
     }
 }
+
+class SpacerViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer

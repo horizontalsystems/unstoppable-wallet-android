@@ -4,8 +4,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.coin.CoinDataClickType
@@ -18,33 +16,45 @@ class CoinDataAdapter(
         rateDiffsLiveData: MutableLiveData<List<CoinDataItem>>,
         viewLifecycleOwner: LifecycleOwner,
         private val listener: Listener
-) : ListAdapter<CoinDataItem, CoinDataAdapter.ViewHolder>(diff) {
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     init {
         rateDiffsLiveData.observe(viewLifecycleOwner) {
-            submitList(it)
+            items = it
+            notifyDataSetChanged()
         }
     }
+
+    private var items = listOf<CoinDataItem>()
+    private val viewTypeItem = 0
+    private val viewTypeSpacer = 1
 
     interface Listener {
         fun onClick(clickType: CoinDataClickType)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(inflate(parent, R.layout.view_holder_coin_market_info, false), listener)
+    override fun getItemCount(): Int {
+        return if (items.isNotEmpty()) items.size + 1 else 0
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(getItem(position))
+    override fun getItemViewType(position: Int): Int {
+        return when (position) {
+            0 -> viewTypeSpacer
+            else -> viewTypeItem
+        }
     }
 
-    companion object {
-        private val diff = object : DiffUtil.ItemCallback<CoinDataItem>() {
-            override fun areItemsTheSame(oldItem: CoinDataItem, newItem: CoinDataItem): Boolean = true
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return when (viewType) {
+            viewTypeItem -> ViewHolder(inflate(parent, R.layout.view_holder_coin_market_info, false), listener)
+            viewTypeSpacer -> SpacerViewHolder(inflate(parent, R.layout.view_holder_coin_page_spacer, false))
+            else -> throw  IllegalArgumentException("No such viewType $viewType")
+        }
+    }
 
-            override fun areContentsTheSame(oldItem: CoinDataItem, newItem: CoinDataItem): Boolean {
-                return oldItem == newItem
-            }
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        when (holder) {
+            is ViewHolder -> holder.bind(items[position - 1])
         }
     }
 
