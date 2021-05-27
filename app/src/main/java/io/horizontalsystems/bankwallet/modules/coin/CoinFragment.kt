@@ -91,6 +91,8 @@ class CoinFragment : BaseFragment(), CoinChartAdapter.Listener, CoinDataAdapter.
         val linksAdapter = CoinLinksAdapter(viewModel.linksLiveData, viewLifecycleOwner, this)
         val footerAdapter = PoweredByAdapter(viewModel.showFooterLiveData, viewLifecycleOwner)
 
+        val loadingAdapter = CoinLoadingAdapter(viewModel.loadingLiveData, viewLifecycleOwner)
+
         val concatAdapter = ConcatAdapter(
                 subtitleAdapter,
                 chartAdapter,
@@ -108,6 +110,7 @@ class CoinFragment : BaseFragment(), CoinChartAdapter.Listener, CoinDataAdapter.
                 aboutAdapter,
                 SpacerAdapter(),
                 linksAdapter,
+                loadingAdapter,
                 footerAdapter
         )
 
@@ -175,10 +178,6 @@ class CoinFragment : BaseFragment(), CoinChartAdapter.Listener, CoinDataAdapter.
     //  Private
 
     private fun observeData() {
-        viewModel.marketSpinner.observe(viewLifecycleOwner, Observer { isLoading ->
-//            marketSpinner.isVisible = isLoading
-        })
-
         viewModel.alertNotificationUpdated.observe(viewLifecycleOwner, Observer {
             updateNotificationMenuItem()
         })
