@@ -25,7 +25,7 @@ class CoinViewModel(
         private val clearables: List<Clearable>
 ) : ViewModel() {
 
-    val marketSpinner = MutableLiveData<Boolean>()
+    val loadingLiveData = MutableLiveData<Boolean>()
     val subtitleLiveData = MutableLiveData<CoinSubtitleAdapter.ViewItemWrapper>()
     val chartInfoLiveData = MutableLiveData<CoinChartAdapter.ViewItemWrapper>()
     val roiLiveData = MutableLiveData<List<RoiViewItem>>()
@@ -190,7 +190,7 @@ class CoinViewModel(
     }
 
     private fun syncCoinDetailsState(state: CoinService.CoinDetailsState) {
-        marketSpinner.postValue(state is CoinService.CoinDetailsState.Loading)
+        loadingLiveData.postValue(state is CoinService.CoinDetailsState.Loading)
         if (state is CoinService.CoinDetailsState.Loaded) {
             updateCoinDetails()
         }
