@@ -34,6 +34,17 @@
         tools:text="From" />
 
     <TextView
+        android:id="@+id/txtRank"
+        style="@style/TextLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/txtTitle"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="#23" />
+
+    <TextView
         android:id="@+id/decoratedText"
         style="@style/ButtonSecondary"
         android:layout_width="wrap_content"
@@ -46,7 +57,7 @@
         app:layout_constraintEnd_toStartOf="@+id/valueText"
         app:layout_constraintHorizontal_bias="1"
         app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toEndOf="@+id/txtTitle"
+        app:layout_constraintStart_toEndOf="@+id/txtRank"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_goneMarginEnd="16dp"
         tools:text="Here we can have token very very very long contract address" />

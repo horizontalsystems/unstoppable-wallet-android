@@ -26,11 +26,15 @@ class CoinInfoItemView : ConstraintLayout {
             value: String? = null,
             icon: Int? = null,
             valueDecorated: Boolean = false,
+            rank: String? = null,
             listPosition: ListPosition
     ) {
         txtTitle.text = title
         decoratedText.isVisible = valueDecorated
         valueText.isVisible = !valueDecorated
+
+        txtRank.isVisible = rank != null
+        txtRank.text = rank
 
         if (valueDecorated) {
             decoratedText.text = value
@@ -61,7 +65,8 @@ class CoinInfoItemView : ConstraintLayout {
                 value = item.value,
                 valueDecorated = item.valueDecorated,
                 listPosition = item.listPosition ?: ListPosition.Middle,
-                icon = item.icon
+                icon = item.icon,
+                rank = item.rankLabel
         )
     }
 
