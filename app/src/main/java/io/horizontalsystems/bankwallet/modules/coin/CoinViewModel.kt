@@ -32,6 +32,7 @@ class CoinViewModel(
     val marketDataLiveData = MutableLiveData<List<CoinDataItem>>()
     val tvlDataLiveData = MutableLiveData<List<CoinDataItem>>()
     val tradingVolumeLiveData = MutableLiveData<List<CoinDataItem>>()
+    val investorDataLiveData = MutableLiveData<List<CoinDataItem>>()
     val categoriesLiveData = MutableLiveData<String>()
     val contractInfoLiveData = MutableLiveData<List<CoinDataItem>>()
     val aboutTextLiveData = MutableLiveData<AboutText>()
@@ -208,7 +209,7 @@ class CoinViewModel(
 
     private fun syncTopTokenHoldersState(state: CoinService.CoinDetailsState){
         if (state is CoinService.CoinDetailsState.Loaded) {
-            updateTradingVolumeBlock()
+            updateInvestorDataBlock()
         }
     }
 
@@ -229,9 +230,11 @@ class CoinViewModel(
 
         marketDataLiveData.postValue(factory.getMarketData(coinDetails, service.currency, coinCode))
 
+        tradingVolumeLiveData.postValue(factory.getTradingVolume(coinDetails, service.currency))
+
         tvlDataLiveData.postValue(factory.getTvlInfo(coinDetails, service.currency))
 
-        updateTradingVolumeBlock()
+        updateInvestorDataBlock()
 
         categoriesLiveData.postValue(coinDetails.meta.categories.joinToString(", ") { it.name })
 
@@ -251,10 +254,10 @@ class CoinViewModel(
         coinInvestors.postValue(factory.getCoinInvestorItems(coinDetails.meta.fundCategories))
     }
 
-    private fun updateTradingVolumeBlock() {
+    private fun updateInvestorDataBlock() {
         val coinDetails = service.coinMarketDetails ?: return
         coinMajorHolders.postValue(factory.getCoinMajorHolders(service.topTokenHolders))
-        tradingVolumeLiveData.postValue(factory.getTradingVolume(coinDetails, service.currency, service.topTokenHolders))
+        investorDataLiveData.postValue(factory.getInvestorData(coinDetails, service.topTokenHolders))
     }
 
     private fun getContractInfo(coinDetails: CoinMarketDetails): ContractInfo? =

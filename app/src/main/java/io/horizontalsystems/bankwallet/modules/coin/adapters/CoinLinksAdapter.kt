@@ -19,9 +19,13 @@ class CoinLinksAdapter(
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     init {
-        linksLiveData.observe(viewLifecycleOwner) {
+        linksLiveData.observe(viewLifecycleOwner) { list ->
+            if (list.isEmpty()){
+                return@observe
+            }
+
             val insertAction = items.isEmpty()
-            items = it
+            items = list
             if (insertAction) {
                 notifyItemRangeInserted(0, items.size + 1)
             } else {
