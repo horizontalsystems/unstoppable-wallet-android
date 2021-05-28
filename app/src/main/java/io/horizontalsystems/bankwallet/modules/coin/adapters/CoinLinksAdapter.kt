@@ -20,8 +20,13 @@ class CoinLinksAdapter(
 
     init {
         linksLiveData.observe(viewLifecycleOwner) {
+            val insertAction = items.isEmpty()
             items = it
-            notifyDataSetChanged()
+            if (insertAction) {
+                notifyItemRangeInserted(0, items.size + 1)
+            } else {
+                notifyItemRangeChanged(0, items.size + 1)
+            }
         }
     }
 

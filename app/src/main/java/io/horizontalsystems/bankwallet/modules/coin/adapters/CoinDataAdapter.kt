@@ -20,8 +20,13 @@ class CoinDataAdapter(
 
     init {
         rateDiffsLiveData.observe(viewLifecycleOwner) {
+            val insert = items.isEmpty()
             items = it
-            notifyDataSetChanged()
+            if (insert) {
+                notifyItemRangeInserted(0, items.size + 1)
+            } else {
+                notifyItemRangeChanged(0, items.size + 1)
+            }
         }
     }
 
