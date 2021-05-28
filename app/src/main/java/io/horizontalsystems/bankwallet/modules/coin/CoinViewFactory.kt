@@ -33,6 +33,22 @@ data class ChartPointViewItem(
         val macdInfo: MacdInfo?
 )
 
+data class MarketTickerViewItem(
+        val title: String,
+        val subtitle: String,
+        val value: String,
+        val subvalue: String,
+        val imageUrl: String?,
+) {
+    fun areItemsTheSame(other: MarketTickerViewItem): Boolean {
+        return title == other.title && subtitle == other.subvalue
+    }
+
+    fun areContentsTheSame(other: MarketTickerViewItem): Boolean {
+        return this == other
+    }
+}
+
 sealed class RoiViewItem {
     class HeaderRowViewItem(val title: String, val periods: List<TimePeriod>) : RoiViewItem()
     class RowViewItem(val title: String, val values: List<BigDecimal?>, val last: Boolean) : RoiViewItem()
@@ -54,6 +70,17 @@ sealed class CoinDataClickType {
     object TradingVolume : CoinDataClickType()
     object MajorHolders : CoinDataClickType()
     object FundsInvested : CoinDataClickType()
+}
+
+sealed class InvestorItem {
+    data class Header(val title: String) : InvestorItem()
+    data class Fund(val name: String, val url: String, val cleanedUrl: String, val position: ListPosition) : InvestorItem()
+}
+
+sealed class MajorHolderItem {
+    object Header : MajorHolderItem()
+    class Item(val address: String, val share: String, val position: ListPosition) : MajorHolderItem()
+    object Description : MajorHolderItem()
 }
 
 data class AboutText(val value: String, val type: CoinMeta.DescriptionType)
@@ -171,13 +198,17 @@ class CoinViewFactory(private val currency: Currency, private val numberFormatte
         return links
     }
 
-    fun getTradingVolume(coinDetails: CoinMarketDetails, currency: Currency): List<CoinDataItem> {
+    fun getTradingVolume(coinDetails: CoinMarketDetails, currency: Currency, topTokenHolders: List<TokenHolder>): List<CoinDataItem> {
         val items = mutableListOf<CoinDataItem>()
 
         if (coinDetails.volume24h > BigDecimal.ZERO) {
             val volume = formatFiatShortened(coinDetails.volume24h, currency.symbol)
             val clickType = if (coinDetails.tickers.isNotEmpty()) CoinDataClickType.TradingVolume else null
             items.add(CoinDataItem(Translator.getString(R.string.CoinPage_TradingVolume), volume, icon = R.drawable.ic_arrow_right, clickType = clickType))
+        }
+
+        if (topTokenHolders.isNotEmpty()) {
+            items.add(CoinDataItem(Translator.getString(R.string.CoinPage_MajorHolders), icon = R.drawable.ic_arrow_right, clickType = CoinDataClickType.MajorHolders))
         }
 
         if (coinDetails.meta.fundCategories.isNotEmpty()) {
@@ -211,6 +242,24 @@ class CoinViewFactory(private val currency: Currency, private val numberFormatte
             }
         }
         return items
+    }
+
+    fun getCoinMajorHolders(topTokenHolders: List<TokenHolder>): List<MajorHolderItem> {
+        val list = mutableListOf<MajorHolderItem>()
+        if (topTokenHolders.isEmpty()) {
+            return list
+        }
+
+        list.add(MajorHolderItem.Header)
+        topTokenHolders
+                .sortedByDescending { it.share }
+                .forEachIndexed { index, holder ->
+                    val shareFormatted = numberFormatter.format(holder.share, 0, 2, suffix = "%")
+                    list.add(MajorHolderItem.Item(holder.address, shareFormatted, ListPosition.Companion.getListPosition(topTokenHolders.size, index)))
+                }
+        list.add(MajorHolderItem.Description)
+
+        return list
     }
 
     fun getFormattedLatestRate(currencyValue: CurrencyValue): String {

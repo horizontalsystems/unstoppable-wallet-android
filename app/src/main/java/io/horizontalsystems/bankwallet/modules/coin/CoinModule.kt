@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.coinkit.models.CoinType
-import io.horizontalsystems.views.ListPosition
 
 object CoinModule {
 
@@ -27,25 +26,4 @@ object CoinModule {
         }
 
     }
-}
-
-data class MarketTickerViewItem(
-        val title: String,
-        val subtitle: String,
-        val value: String,
-        val subvalue: String,
-        val imageUrl: String?,
-) {
-    fun areItemsTheSame(other: MarketTickerViewItem): Boolean {
-        return title == other.title && subtitle == other.subvalue
-    }
-
-    fun areContentsTheSame(other: MarketTickerViewItem): Boolean {
-        return this == other
-    }
-}
-
-sealed class InvestorItem {
-    data class Header(val title: String) : InvestorItem()
-    data class Fund(val name: String, val url: String, val cleanedUrl: String, val position: ListPosition) : InvestorItem()
 }

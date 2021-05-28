@@ -33,6 +33,7 @@ class CoinService(
     val chartInfoUpdatedObservable: BehaviorSubject<Unit> = BehaviorSubject.create()
     val chartInfoErrorObservable: BehaviorSubject<Throwable> = BehaviorSubject.create()
     val coinDetailsStateObservable: BehaviorSubject<CoinDetailsState> = BehaviorSubject.createDefault(CoinDetailsState.Loading)
+    val topTokenHoldersStateObservable: BehaviorSubject<CoinDetailsState> = BehaviorSubject.createDefault(CoinDetailsState.Loading)
     val alertNotificationUpdatedObservable: BehaviorSubject<Unit> = BehaviorSubject.createDefault(Unit)
 
     val hasPriceAlert: Boolean
@@ -44,6 +45,7 @@ class CoinService(
         get() = notificationManager.enabled
 
     var coinMarketDetails: CoinMarketDetails? = null
+    var topTokenHolders: List<TokenHolder> = listOf()
 
     var lastPoint: LastPoint? = xRateManager.latestRate(coinType, currency.code)?.let { LastPoint(it.rate, it.timestamp, it.rateDiff24h ?: BigDecimal.ZERO) }
         set(value) {
@@ -140,6 +142,18 @@ class CoinService(
                     coinDetailsStateObservable.onNext(CoinDetailsState.Loaded)
                 }, {
                     coinDetailsStateObservable.onNext(CoinDetailsState.Error(it))
+                }).let {
+                    disposables.add(it)
+                }
+    }
+
+    fun getTopTokenHolders(){
+        xRateManager.getTopTokenHoldersAsync(coinType)
+                .subscribeIO({ topTokenHolders ->
+                    this.topTokenHolders = topTokenHolders
+                    topTokenHoldersStateObservable.onNext(CoinDetailsState.Loaded)
+                }, {
+                    topTokenHoldersStateObservable.onNext(CoinDetailsState.Error(it))
                 }).let {
                     disposables.add(it)
                 }

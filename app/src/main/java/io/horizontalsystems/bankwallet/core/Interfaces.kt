@@ -292,6 +292,7 @@ interface IRateManager {
     fun chartInfo(coinType: CoinType, currencyCode: String, chartType: ChartType): ChartInfo?
     fun chartInfoObservable(coinType: CoinType, currencyCode: String, chartType: ChartType): Observable<ChartInfo>
     fun coinMarketDetailsAsync(coinType: CoinType, currencyCode: String, rateDiffCoinCodes: List<String>, rateDiffPeriods: List<TimePeriod>): Single<CoinMarketDetails>
+    fun getTopTokenHoldersAsync(coinType: CoinType): Single<List<TokenHolder>>
     fun getTopMarketList(currency: String, itemsCount: Int, diffPeriod: TimePeriod): Single<List<CoinMarket>>
     fun getCoinMarketList(coinTypes: List<CoinType>, currency: String): Single<List<CoinMarket>>
     fun getCoinMarketListByCategory(categoryId: String, currency: String): Single<List<CoinMarket>>
