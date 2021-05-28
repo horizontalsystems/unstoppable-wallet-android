@@ -41,6 +41,7 @@ class CoinViewModel(
     val alertNotificationUpdated = MutableLiveData<Unit>()
     val showNotificationMenu = SingleLiveEvent<Pair<CoinType, String>>()
     val isFavorite = MutableLiveData<Boolean>()
+    val coinMajorHolders = MutableLiveData<List<MajorHolderItem>>()
     val coinMarkets = MutableLiveData<List<MarketTickerViewItem>>()
     val coinInvestors = MutableLiveData<List<InvestorItem>>()
 
@@ -88,6 +89,7 @@ class CoinViewModel(
         syncSubtitle()
 
         service.getCoinDetails(rateDiffCoinCodes, rateDiffPeriods)
+        service.getTopTokenHolders()
 
         fetchChartInfo()
 
@@ -122,6 +124,14 @@ class CoinViewModel(
         service.coinDetailsStateObservable
                 .subscribeIO {
                     syncCoinDetailsState(it)
+                }
+                .let {
+                    disposable.add(it)
+                }
+
+        service.topTokenHoldersStateObservable
+                .subscribeIO {
+                    syncTopTokenHoldersState(it)
                 }
                 .let {
                     disposable.add(it)
@@ -196,6 +206,12 @@ class CoinViewModel(
         }
     }
 
+    private fun syncTopTokenHoldersState(state: CoinService.CoinDetailsState){
+        if (state is CoinService.CoinDetailsState.Loaded) {
+            updateTradingVolumeBlock()
+        }
+    }
+
     private fun updateAlertNotificationIconState() {
         notificationIconActive = service.hasPriceAlert
         alertNotificationUpdated.postValue(Unit)
@@ -215,7 +231,7 @@ class CoinViewModel(
 
         tvlDataLiveData.postValue(factory.getTvlInfo(coinDetails, service.currency))
 
-        tradingVolumeLiveData.postValue(factory.getTradingVolume(coinDetails, service.currency))
+        updateTradingVolumeBlock()
 
         categoriesLiveData.postValue(coinDetails.meta.categories.joinToString(", ") { it.name })
 
@@ -233,6 +249,12 @@ class CoinViewModel(
 
         coinMarkets.postValue(factory.getCoinMarketItems(coinDetails.tickers))
         coinInvestors.postValue(factory.getCoinInvestorItems(coinDetails.meta.fundCategories))
+    }
+
+    private fun updateTradingVolumeBlock() {
+        val coinDetails = service.coinMarketDetails ?: return
+        coinMajorHolders.postValue(factory.getCoinMajorHolders(service.topTokenHolders))
+        tradingVolumeLiveData.postValue(factory.getTradingVolume(coinDetails, service.currency, service.topTokenHolders))
     }
 
     private fun getContractInfo(coinDetails: CoinMarketDetails): ContractInfo? =

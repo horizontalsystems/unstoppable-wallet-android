@@ -68,6 +68,10 @@ class RateManager(
         return kit.getCoinMarketDetailsAsync(coinType, currencyCode, rateDiffCoinCodes, rateDiffPeriods)
     }
 
+    override fun getTopTokenHoldersAsync(coinType: CoinType): Single<List<TokenHolder>> {
+        return kit.getTopTokenHoldersAsync(coinType)
+    }
+
     override fun getTopMarketList(currency: String, itemsCount: Int, diffPeriod: TimePeriod): Single<List<CoinMarket>> {
         return kit.getTopCoinMarketsAsync(currency, itemsCount = itemsCount, fetchDiffPeriod = diffPeriod)
     }

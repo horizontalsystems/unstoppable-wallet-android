@@ -73,7 +73,6 @@
 
     <ImageView
         android:id="@+id/iconView"
-        style="@style/Subhead1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
