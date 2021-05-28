@@ -84,6 +84,9 @@
         <item name="android:textSize">10sp</item>
         <item name="android:paddingStart">4dp</item>
         <item name="android:paddingEnd">4dp</item>
-        <item name="android:textColor">@color/grey</item>
+        <item name="android:paddingTop">2dp</item>
+        <item name="android:paddingBottom">2dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:textColor">@color/bran</item>
     </style>
 </resources>
