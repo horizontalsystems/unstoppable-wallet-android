@@ -62,7 +62,8 @@ class CoinChartAdapter(
             override fun areItemsTheSame(oldItem: ViewItemWrapper, newItem: ViewItemWrapper): Boolean = true
 
             override fun areContentsTheSame(oldItem: ViewItemWrapper, newItem: ViewItemWrapper): Boolean {
-                return oldItem == newItem
+                return oldItem.data?.chartData?.startTimestamp == newItem.data?.chartData?.startTimestamp
+                        && oldItem.data?.chartData?.endTimestamp == newItem.data?.chartData?.endTimestamp
             }
         }
     }
@@ -103,7 +104,6 @@ class ChartViewHolder(override val containerView: View, private val listener: Co
         }
 
         item.data?.let { data ->
-            chart.showChart()
             containerView.post {
                 chart.setData(data.chartData, data.chartType, data.maxValue, data.minValue)
             }
@@ -121,6 +121,7 @@ class ChartViewHolder(override val containerView: View, private val listener: Co
     }
 
     override fun onTabSelected(tab: TabLayout.Tab) {
+        chart.showSpinner()
         listener.onTabSelect(actions[tab.position].first)
     }
 
