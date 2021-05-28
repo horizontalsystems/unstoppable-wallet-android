@@ -199,7 +199,7 @@ class CoinViewFactory(private val currency: Currency, private val numberFormatte
         return links
     }
 
-    fun getTradingVolume(coinDetails: CoinMarketDetails, currency: Currency, topTokenHolders: List<TokenHolder>): List<CoinDataItem> {
+    fun getTradingVolume(coinDetails: CoinMarketDetails, currency: Currency): List<CoinDataItem> {
         val items = mutableListOf<CoinDataItem>()
 
         if (coinDetails.volume24h > BigDecimal.ZERO) {
@@ -207,6 +207,14 @@ class CoinViewFactory(private val currency: Currency, private val numberFormatte
             val clickType = if (coinDetails.tickers.isNotEmpty()) CoinDataClickType.TradingVolume else null
             items.add(CoinDataItem(Translator.getString(R.string.CoinPage_TradingVolume), volume, icon = R.drawable.ic_arrow_right, clickType = clickType))
         }
+
+        setListPosition(items)
+
+        return items
+    }
+
+    fun getInvestorData(coinDetails: CoinMarketDetails, topTokenHolders: List<TokenHolder>): List<CoinDataItem> {
+        val items = mutableListOf<CoinDataItem>()
 
         if (topTokenHolders.isNotEmpty()) {
             items.add(CoinDataItem(Translator.getString(R.string.CoinPage_MajorHolders), icon = R.drawable.ic_arrow_right, clickType = CoinDataClickType.MajorHolders))

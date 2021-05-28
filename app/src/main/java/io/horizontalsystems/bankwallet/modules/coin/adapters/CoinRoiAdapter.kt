@@ -17,9 +17,13 @@ class CoinRoiAdapter(
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     init {
-        rateDiffsLiveData.observe(viewLifecycleOwner) {
+        rateDiffsLiveData.observe(viewLifecycleOwner) { list ->
+            if (list.isEmpty()){
+                return@observe
+            }
+
             val insert = items.isEmpty()
-            items = it
+            items = list
             if (insert) {
                 notifyItemRangeInserted(0, items.size + 1)
             } else {
