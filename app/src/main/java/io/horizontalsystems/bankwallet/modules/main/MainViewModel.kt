@@ -3,10 +3,12 @@ package io.horizontalsystems.bankwallet.modules.main
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.core.IAccountManager
+import io.horizontalsystems.bankwallet.core.IBackupManager
+import io.horizontalsystems.bankwallet.core.IRateAppManager
+import io.horizontalsystems.bankwallet.core.ITermsManager
 import io.horizontalsystems.bankwallet.core.managers.RateUsType
 import io.horizontalsystems.bankwallet.core.managers.ReleaseNotesManager
-import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.core.IPinComponent
 import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
@@ -18,7 +20,7 @@ class MainViewModel(
         rateAppManager: IRateAppManager,
         private val backupManager: IBackupManager,
         private val termsManager: ITermsManager,
-        accountManager: IAccountManager,
+        private val accountManager: IAccountManager,
         private val releaseNotesManager: ReleaseNotesManager,
         service: MainService
 ) : ViewModel() {
@@ -41,7 +43,7 @@ class MainViewModel(
         }
 
         updateBadgeVisibility()
-        sync(accountManager.accounts)
+        updateTransactionsTabEnabled()
 
         disposables.add(backupManager.allBackedUpFlowable.subscribe {
             updateBadgeVisibility()
@@ -56,7 +58,7 @@ class MainViewModel(
         })
 
         disposables.add(accountManager.accountsFlowable.subscribe {
-            sync(it)
+            updateTransactionsTabEnabled()
         })
 
         rateAppManager.showRateAppObservable
@@ -81,8 +83,8 @@ class MainViewModel(
         contentHidden = pinComponent.isLocked
     }
 
-    fun sync(accounts: List<Account>) {
-        transactionTabEnabledLiveData.postValue(accounts.isNotEmpty())
+    fun updateTransactionsTabEnabled() {
+        transactionTabEnabledLiveData.postValue(!accountManager.isAccountsEmpty)
     }
 
     private fun showWhatsNew() {
