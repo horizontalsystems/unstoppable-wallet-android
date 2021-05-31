@@ -10,12 +10,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginStart="13dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="13dp"
-        android:background="@drawable/balance_coin_background"
-        android:paddingStart="3dp"
-        android:paddingEnd="3dp">
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/balance_coin_background">
 
         <io.horizontalsystems.bankwallet.ui.extensions.RotatingCircleProgressView
             android:id="@+id/iconProgress"
