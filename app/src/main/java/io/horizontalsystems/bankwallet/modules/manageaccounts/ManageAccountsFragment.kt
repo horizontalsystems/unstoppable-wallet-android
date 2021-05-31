@@ -101,16 +101,16 @@ class AccountsAdapter(private val listener: AccountViewHolder.Listener) : Recycl
     private val bottomMarginView = 1
 
     override fun getItemViewType(position: Int): Int {
-        return when(position){
+        return when (position) {
             itemCount - 1 -> bottomMarginView
             else -> itemView
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return when(viewType){
+        return when (viewType) {
             bottomMarginView -> MarginViewHolder.create(parent)
-            else  -> AccountViewHolder.create(parent, listener)
+            else -> AccountViewHolder.create(parent, listener)
         }
     }
 
@@ -150,18 +150,6 @@ class AccountViewHolder(override val containerView: View, val listener: Listener
         fun create(parent: ViewGroup, listener: Listener): AccountViewHolder {
             return AccountViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_manage_account_item, parent, false), listener)
         }
-    }
-}
-
-class MarginAdapter : RecyclerView.Adapter<MarginViewHolder>() {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MarginViewHolder {
-        return MarginViewHolder.create(parent)
-    }
-
-    override fun onBindViewHolder(holder: MarginViewHolder, position: Int) {}
-
-    override fun getItemCount(): Int {
-        return 1
     }
 }
 
