@@ -76,7 +76,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="4dp"
             app:layout_constraintBottom_toBottomOf="@+id/coinName"
-            app:layout_constraintEnd_toStartOf="@+id/balanceFiat"
+            app:layout_constraintEnd_toStartOf="@+id/rightSideBarrier"
             app:layout_constraintStart_toEndOf="@+id/coinName"
             app:layout_constraintTop_toTopOf="@+id/coinName"
             tools:text="ERC20" />
@@ -164,6 +164,13 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/coinName"
             tools:text="0.000078" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/rightSideBarrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="start"
+            app:constraint_referenced_ids="balanceCoin,balanceFiat" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/buttonsWrapper"
