@@ -57,7 +57,7 @@ class ManageAccountsFragment : BaseFragment(), AccountViewHolder.Listener {
                 ActionViewItem(R.drawable.ic_download, R.string.ManageAccounts_ImportWallet, ::onClickRestoreWallet)
         ))
 
-        val concatAdapter = ConcatAdapter(accountsAdapter, MarginAdapter(), actionsAdapter, ManageAccountsHintAdapter())
+        val concatAdapter = ConcatAdapter(accountsAdapter, actionsAdapter, ManageAccountsHintAdapter())
         recyclerView.adapter = concatAdapter
 
         viewModel.viewItemsLiveData.observe(viewLifecycleOwner, { items ->
@@ -97,8 +97,21 @@ class ManageAccountsFragment : BaseFragment(), AccountViewHolder.Listener {
 class AccountsAdapter(private val listener: AccountViewHolder.Listener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     var items: List<AccountViewItem> = listOf()
 
+    private val itemView = 0
+    private val bottomMarginView = 1
+
+    override fun getItemViewType(position: Int): Int {
+        return when(position){
+            itemCount - 1 -> bottomMarginView
+            else -> itemView
+        }
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return AccountViewHolder.create(parent, listener)
+        return when(viewType){
+            bottomMarginView -> MarginViewHolder.create(parent)
+            else  -> AccountViewHolder.create(parent, listener)
+        }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -106,7 +119,7 @@ class AccountsAdapter(private val listener: AccountViewHolder.Listener) : Recycl
     }
 
     override fun getItemCount(): Int {
-        return items.size
+        return if (items.isEmpty()) 0 else items.size + 1
     }
 }
 
