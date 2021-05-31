@@ -303,6 +303,7 @@ interface IRateManager {
     fun getNotificationCoinCode(coinType: CoinType): String?
     fun topDefiTvl(currencyCode: String, fetchDiffPeriod: TimePeriod, itemsCount: Int) : Single<List<DefiTvl>>
     fun defiTvlPoints(coinType: CoinType, currencyCode: String, fetchDiffPeriod: TimePeriod) : Single<List<DefiTvlPoint>>
+    fun getCoinMarketVolumePointsAsync(coinType: CoinType, currencyCode: String, fetchDiffPeriod: TimePeriod = TimePeriod.HOUR_24): Single<List<CoinMarketPoint>>
     fun getCryptoNews(timestamp: Long? = null): Single<List<CryptoNews>>
     fun refresh(currencyCode: String)
 }

@@ -166,6 +166,7 @@ class CoinFragment : BaseFragment(), CoinChartAdapter.Listener, CoinDataAdapter.
     override fun onClick(clickType: CoinDataClickType) {
         when(clickType){
             CoinDataClickType.MetricChart -> MetricChartFragment.show(childFragmentManager, MetricChartType.Coin(viewModel.coinType))
+            CoinDataClickType.TradingVolumeMetricChart -> MetricChartFragment.show(childFragmentManager, MetricChartType.TradingVolume(viewModel.coinType))
             CoinDataClickType.TradingVolume -> findNavController().navigate(R.id.coinFragment_to_coinMarketsFragment, null, navOptions())
             CoinDataClickType.FundsInvested -> findNavController().navigate(R.id.coinFragment_to_coinInvestorsFragment, null, navOptions())
             CoinDataClickType.MajorHolders -> findNavController().navigate(R.id.coinFragment_to_coinMajorHoldersFragment, null, navOptions())

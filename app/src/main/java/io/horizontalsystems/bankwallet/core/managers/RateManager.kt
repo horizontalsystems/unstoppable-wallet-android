@@ -112,6 +112,10 @@ class RateManager(
         return kit.getDefiTvlPointsAsync(coinType, currencyCode, fetchDiffPeriod)
     }
 
+    override fun getCoinMarketVolumePointsAsync(coinType: CoinType, currencyCode: String, fetchDiffPeriod: TimePeriod): Single<List<CoinMarketPoint>> {
+        return kit.getCoinMarketPointsAsync(coinType, currencyCode, fetchDiffPeriod)
+    }
+
     override fun refresh(currencyCode: String) {
         kit.refresh(currencyCode)
     }

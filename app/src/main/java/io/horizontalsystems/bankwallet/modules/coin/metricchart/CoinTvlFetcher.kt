@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.coin.cointvl
+package io.horizontalsystems.bankwallet.modules.coin.metricchart
 
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IRateManager

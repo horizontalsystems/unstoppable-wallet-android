@@ -5,7 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.modules.coin.cointvl.CoinTvlFetcher
+import io.horizontalsystems.bankwallet.modules.coin.metricchart.CoinTradingVolumeFetcher
+import io.horizontalsystems.bankwallet.modules.coin.metricchart.CoinTvlFetcher
 import io.horizontalsystems.bankwallet.modules.market.marketglobal.MarketGlobalFetcher
 import io.horizontalsystems.chartview.ChartData
 import io.horizontalsystems.chartview.ChartView
@@ -23,6 +24,7 @@ object MetricChartModule {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             val fetcher = when (val type = metricsChartType) {
                 is MetricChartType.Coin -> CoinTvlFetcher(App.xRateManager, type.coinType)
+                is MetricChartType.TradingVolume -> CoinTradingVolumeFetcher(App.xRateManager, type.coinType)
                 is MetricChartType.MarketGlobal -> MarketGlobalFetcher(App.xRateManager, type.metricsType)
                 else -> throw IllegalArgumentException("Expected type of MetricChartType, but got different value")
             }
@@ -58,6 +60,8 @@ sealed class MetricChartType: Parcelable {
     class Coin(val coinType: CoinType) : MetricChartType()
     @Parcelize
     class MarketGlobal(val metricsType: MetricsType) : MetricChartType()
+    @Parcelize
+    class TradingVolume(val coinType: CoinType) : MetricChartType()
 }
 
 data class SelectedPoint(val value: String, val date: String)
