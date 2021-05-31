@@ -17,14 +17,14 @@
     <color name="steel_dark">#252933</color>
     <color name="grey">#808085</color>
     <color name="light_grey">#c8c7cc</color>
-    <color name="steel_light">#ebebf0</color>
+    <color name="steel_light">#e1e1e5</color>
     <color name="white">#ffffff</color>
     <color name="white_pressed">#e3e4e8</color>
     <color name="darkest">#0f1014</color>
 
     <color name="dark">#13151a</color>
     <color name="dark_80">#CC13151A</color>
-    <color name="light">#f5f5f5</color>
+    <color name="light">#f0f0f0</color>
     <color name="white_20">#33FFFFFF</color>
     <color name="black_50">#80000000</color>
     <color name="white_50">#80ffffff</color>
@@ -59,6 +59,6 @@
     <color name="nina">@color/black_50</color>
     <color name="raina">@color/white_50</color>
 
-    <color name="tylerGradientStart">#fff5f5f5</color>
-    <color name="tylerGradientEnd">#00f5f5f5</color>
+    <color name="tylerGradientStart">#fff0f0f0</color>
+    <color name="tylerGradientEnd">#00f0f0f0</color>
 </resources>

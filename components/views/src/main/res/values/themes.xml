@@ -54,7 +54,7 @@
 
         <!--  Gradient colors-->
         <item name="ColorGradientWhite">@color/white</item>
-        <item name="ColorWindowBackground">@drawable/light_gradient_background</item>
+        <item name="ColorWindowBackground">@color/light</item>
     </style>
 
     <style name="LauncherTheme" parent="Theme.AppTheme">
