@@ -69,6 +69,7 @@ data class CoinDataItem(
 sealed class CoinDataClickType {
     object MetricChart : CoinDataClickType()
     object TradingVolume : CoinDataClickType()
+    object TradingVolumeMetricChart : CoinDataClickType()
     object MajorHolders : CoinDataClickType()
     object FundsInvested : CoinDataClickType()
 }
@@ -204,8 +205,20 @@ class CoinViewFactory(private val currency: Currency, private val numberFormatte
 
         if (coinDetails.volume24h > BigDecimal.ZERO) {
             val volume = formatFiatShortened(coinDetails.volume24h, currency.symbol)
-            val clickType = if (coinDetails.tickers.isNotEmpty()) CoinDataClickType.TradingVolume else null
-            items.add(CoinDataItem(Translator.getString(R.string.CoinPage_TradingVolume), volume, icon = R.drawable.ic_arrow_right, clickType = clickType))
+            items.add(CoinDataItem(
+                    title = Translator.getString(R.string.CoinPage_TradingVolume),
+                    value = volume,
+                    icon = R.drawable.ic_chart_20,
+                    clickType = CoinDataClickType.TradingVolumeMetricChart
+            ))
+        }
+
+        if (coinDetails.tickers.isNotEmpty()) {
+            items.add(CoinDataItem(
+                    Translator.getString(R.string.CoinPage_Markets),
+                    icon = R.drawable.ic_arrow_right,
+                    clickType = CoinDataClickType.TradingVolume
+            ))
         }
 
         setListPosition(items)

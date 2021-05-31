@@ -859,6 +859,7 @@
     <string name="CoinPage_RatingDetails">Rating Details</string>
     <string name="CoinPage_Price">Price</string>
     <string name="CoinPage_Market">Market</string>
+    <string name="CoinPage_Markets">Markets</string>
     <string name="CoinPage_TradingVolume">Trading Volume</string>
     <string name="CoinPage_MajorHolders">Major Holders</string>
     <string name="CoinPage_InvestorData">Investor Data</string>
