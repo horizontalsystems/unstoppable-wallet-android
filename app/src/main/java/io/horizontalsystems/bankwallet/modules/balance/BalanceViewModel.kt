@@ -22,9 +22,9 @@ class BalanceViewModel : ViewModel(), BalanceModule.IView, BalanceModule.IRouter
 
     val setHeaderViewItem = MutableLiveData<BalanceHeaderViewItem>()
     val setViewItems = MutableLiveData<List<BalanceViewItem>>()
-    val titleLiveData = MutableLiveData<String>()
+    val titleLiveData = MutableLiveData<String?>()
     val showBackupAlert = SingleLiveEvent<Wallet>()
-    val didRefreshLiveEvent = SingleLiveEvent<Void>()
+    val didRefreshLiveEvent = SingleLiveEvent<Unit>()
     val hideBalance = MutableLiveData<Unit>()
     val showSyncError = SingleLiveEvent<Triple<Wallet, String, Boolean>>()
     val networkNotAvailable = SingleLiveEvent<Void>()
@@ -88,7 +88,7 @@ class BalanceViewModel : ViewModel(), BalanceModule.IView, BalanceModule.IRouter
     }
 
     override fun didRefresh() {
-        didRefreshLiveEvent.postValue(null)
+        didRefreshLiveEvent.postValue(Unit)
     }
 
     override fun hideBalance() {
