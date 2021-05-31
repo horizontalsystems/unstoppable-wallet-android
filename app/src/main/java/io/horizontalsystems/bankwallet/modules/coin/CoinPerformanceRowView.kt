@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.views.ListPosition
 import io.horizontalsystems.views.helpers.LayoutHelper
 import io.horizontalsystems.xrateskit.entities.TimePeriod
 import java.math.BigDecimal
@@ -24,12 +25,12 @@ class CoinPerformanceRowView @JvmOverloads constructor(context: Context, attrs: 
         removeAllViews()
 
         when (item) {
-            is RoiViewItem.RowViewItem -> bind(item.title, item.values, item.last)
-            is RoiViewItem.HeaderRowViewItem -> bindHeader(item.title, item.periods)
+            is RoiViewItem.RowViewItem -> bind(item.title, item.values, item.listPosition)
+            is RoiViewItem.HeaderRowViewItem -> bindHeader(item.title, item.periods, item.listPosition)
         }
     }
 
-    private fun bindHeader(title: String, periods: List<TimePeriod>) {
+    private fun bindHeader(title: String, periods: List<TimePeriod>, listPosition: ListPosition?) {
         val titleTextView = getHeaderTextView(title).apply {
             setTextAppearance(R.style.Subhead1)
             setTextColor(context.getColor(R.color.oz))
@@ -43,10 +44,10 @@ class CoinPerformanceRowView @JvmOverloads constructor(context: Context, attrs: 
             addView(getHeaderTextView(periodName))
         }
 
-        setBackgroundResource(R.drawable.rounded_lawrence_background_top)
+        listPosition?.getBackground()?.let { setBackgroundResource(it) }
     }
 
-    private fun bind(title: String, values: List<BigDecimal?>, last: Boolean) {
+    private fun bind(title: String, values: List<BigDecimal?>, listPosition: ListPosition?) {
         addView(getRowTitleTextView(title))
 
         values.forEach { value ->
@@ -54,7 +55,7 @@ class CoinPerformanceRowView @JvmOverloads constructor(context: Context, attrs: 
             addView(getDiffTextView(value))
         }
 
-        setBackgroundResource(getLineBackground(last))
+        listPosition?.getBackground()?.let { setBackgroundResource(it) }
     }
 
     private fun getSeparatorLine(): View {
@@ -112,13 +113,6 @@ class CoinPerformanceRowView @JvmOverloads constructor(context: Context, attrs: 
             TimePeriod.DAY_30 -> context.getString(R.string.CoinPage_Performance_Month)
             else -> ""
         }
-    }
-
-    private fun getLineBackground(last: Boolean): Int {
-        return if (last)
-            R.drawable.rounded_steel10_background_bottom
-        else
-            R.drawable.rounded_steel10_background_middle
     }
 
 }

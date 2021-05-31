@@ -50,8 +50,8 @@ data class MarketTickerViewItem(
 }
 
 sealed class RoiViewItem {
-    class HeaderRowViewItem(val title: String, val periods: List<TimePeriod>) : RoiViewItem()
-    class RowViewItem(val title: String, val values: List<BigDecimal?>, val last: Boolean) : RoiViewItem()
+    class HeaderRowViewItem(val title: String, val periods: List<TimePeriod>, var listPosition: ListPosition? = null) : RoiViewItem()
+    class RowViewItem(val title: String, val values: List<BigDecimal?>, var listPosition: ListPosition? = null) : RoiViewItem()
 }
 
 data class ContractInfo(val title: String, val value: String)
@@ -127,7 +127,14 @@ class CoinViewFactory(private val currency: Currency, private val numberFormatte
             val values = roiPeriods.map { period ->
                 rateDiffs[period]?.get(coinCode)
             }
-            rows.add(RoiViewItem.RowViewItem("vs $coinCode", values, roiCoinCodes.size - 1 == index))
+            rows.add(RoiViewItem.RowViewItem("vs $coinCode", values))
+        }
+
+        rows.forEachIndexed{ index, item ->
+            when(item){
+                is RoiViewItem.RowViewItem -> item.listPosition = ListPosition.Companion.getListPosition(rows.size, index)
+                is RoiViewItem.HeaderRowViewItem -> item.listPosition = ListPosition.Companion.getListPosition(rows.size, index)
+            }
         }
 
         return rows
