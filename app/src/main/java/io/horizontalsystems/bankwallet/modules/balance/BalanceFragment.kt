@@ -12,8 +12,8 @@ import android.view.ViewGroup
 import androidx.core.app.ShareCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.SimpleItemAnimator
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
@@ -39,7 +39,7 @@ import kotlinx.android.synthetic.main.fragment_balance.*
 
 class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener, ReceiveFragment.Listener, BackupRequiredDialog.Listener {
 
-    private val viewModel by viewModels<BalanceViewModel> { BalanceModule.Factory() }
+    private val viewModel by navGraphViewModels<BalanceViewModel>(R.id.mainFragment) { BalanceModule.Factory() }
     private val balanceItemsAdapter = BalanceItemsAdapter(this)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
