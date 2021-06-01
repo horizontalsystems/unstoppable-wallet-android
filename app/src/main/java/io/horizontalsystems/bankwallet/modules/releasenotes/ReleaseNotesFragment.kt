@@ -29,7 +29,7 @@ class ReleaseNotesFragment : BaseFragment() {
         val markdownFragment = MarkdownFragment().apply {
             val bundle = Bundle()
             bundle.putString(MarkdownFragment.gitReleaseNotesUrlKey, viewModel.releaseNotesUrl)
-            if (closablePopup){
+            if (closablePopup) {
                 bundle.putBoolean(MarkdownFragment.showAsClosablePopupKey, true)
             }
             arguments = bundle
@@ -39,23 +39,23 @@ class ReleaseNotesFragment : BaseFragment() {
             replace(R.id.fragmentContainerView, markdownFragment)
         }
 
-        viewModel.openLinkLiveData.observe(viewLifecycleOwner, { link ->
-            val uri = Uri.parse(link)
-            val intent = Intent(Intent.ACTION_VIEW, uri)
-            activity?.startActivity(intent)
-        })
-
         twitterIcon.setOnClickListener {
-            viewModel.onTwitterTap()
+            openLink(viewModel.twitterUrl)
         }
 
         telegramIcon.setOnClickListener {
-            viewModel.onTelegramTap()
+            openLink(viewModel.telegramUrl)
         }
 
         redditIcon.setOnClickListener {
-            viewModel.onRedditTap()
+            openLink(viewModel.redditUrl)
         }
+    }
+
+    private fun openLink(link: String) {
+        val uri = Uri.parse(link)
+        val intent = Intent(Intent.ACTION_VIEW, uri)
+        activity?.startActivity(intent)
     }
 
     companion object {
