@@ -925,4 +925,8 @@
     <string name="BalanceSyncError_ButtonChangeSource">Change Source</string>
     <string name="BalanceSyncError_ButtonReport">Report</string>
 
+    <!--Release notes-->
+
+    <string name="ReleaseNotes_FollowUs">Follow Us</string>
+
 </resources>

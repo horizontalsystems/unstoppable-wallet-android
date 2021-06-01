@@ -12,6 +12,7 @@ import io.horizontalsystems.bankwallet.core.managers.ReleaseNotesManager
 import io.horizontalsystems.core.IPinComponent
 import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -27,7 +28,7 @@ class MainViewModel(
 
     val showRootedDeviceWarningLiveEvent = SingleLiveEvent<Unit>()
     val showRateAppLiveEvent = SingleLiveEvent<Unit>()
-    val showWhatsNewLiveEvent = SingleLiveEvent<String>()
+    val showWhatsNewLiveEvent = SingleLiveEvent<Unit>()
     val openPlayMarketLiveEvent = SingleLiveEvent<Unit>()
     val hideContentLiveData = MutableLiveData<Boolean>()
     val setBadgeVisibleLiveData = MutableLiveData<Boolean>()
@@ -88,10 +89,10 @@ class MainViewModel(
     }
 
     private fun showWhatsNew() {
-        viewModelScope.launch{
+        viewModelScope.launch(Dispatchers.IO){
             if (releaseNotesManager.shouldShowChangeLog()){
                 delay(2000)
-                showWhatsNewLiveEvent.postValue(releaseNotesManager.releaseNotesUrl)
+                showWhatsNewLiveEvent.postValue(Unit)
             }
         }
     }
