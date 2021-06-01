@@ -162,7 +162,7 @@ class CoinViewFactory(private val currency: Currency, private val numberFormatte
     fun getMarketData(coinMarket: CoinMarketDetails, currency: Currency, coinCode: String): MutableList<CoinDataItem> {
         val marketData = mutableListOf<CoinDataItem>()
         if (coinMarket.marketCap > BigDecimal.ZERO) {
-            marketData.add(CoinDataItem(Translator.getString(R.string.CoinPage_MarketCap), formatFiatShortened(coinMarket.marketCap, currency.symbol), rankLabel = "#${coinMarket.marketCapRank}"))
+            marketData.add(CoinDataItem(Translator.getString(R.string.CoinPage_MarketCap), formatFiatShortened(coinMarket.marketCap, currency.symbol), rankLabel = coinMarket.marketCapRank?.let{"#$it"}))
         }
         if (coinMarket.circulatingSupply > BigDecimal.ZERO) {
             val (shortenValue, suffix) = numberFormatter.shortenValue(coinMarket.circulatingSupply)
