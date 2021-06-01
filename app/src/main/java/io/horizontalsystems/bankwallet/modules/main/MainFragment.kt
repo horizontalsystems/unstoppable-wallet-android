@@ -18,8 +18,8 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.managers.RateAppManager
 import io.horizontalsystems.bankwallet.modules.main.MainActivity.Companion.ACTIVE_TAB_KEY
-import io.horizontalsystems.bankwallet.modules.markdown.MarkdownFragment
 import io.horizontalsystems.bankwallet.modules.rateapp.RateAppDialogFragment
+import io.horizontalsystems.bankwallet.modules.releasenotes.ReleaseNotesFragment
 import io.horizontalsystems.bankwallet.modules.rooteddevice.RootedDeviceActivity
 import io.horizontalsystems.core.findNavController
 import kotlinx.android.synthetic.main.fragment_main.*
@@ -69,9 +69,12 @@ class MainFragment : BaseFragment(), RateAppDialogFragment.Listener {
             }
         })
 
-        viewModel.showWhatsNewLiveEvent.observe(viewLifecycleOwner, { gitReleaseUrl ->
-            val arguments = bundleOf(MarkdownFragment.gitReleaseNotesUrlKey to gitReleaseUrl, MarkdownFragment.showAsClosablePopupKey to true)
-            findNavController().navigate(R.id.mainFragment_to_markdownViewer, arguments, navOptionsFromBottom())
+        viewModel.showWhatsNewLiveEvent.observe(viewLifecycleOwner, {
+            findNavController().navigate(
+                    R.id.mainFragment_to_releaseNotesFragment,
+                    bundleOf(ReleaseNotesFragment.showAsClosablePopupKey to true),
+                    navOptionsFromBottom()
+            )
         })
 
         viewModel.openPlayMarketLiveEvent.observe(viewLifecycleOwner, Observer {

@@ -74,8 +74,8 @@
             android:id="@+id/mainFragment_to_sendEvmFragment"
             app:destination="@id/sendEvmFragment" />
         <action
-            android:id="@+id/mainFragment_to_markdownViewer"
-            app:destination="@id/markdownFragment" />
+            android:id="@+id/mainFragment_to_releaseNotesFragment"
+            app:destination="@id/releaseNotesFragment" />
     </fragment>
     <fragment
         android:id="@+id/sendEvmFragment"
@@ -233,8 +233,8 @@
             android:id="@+id/aboutAppFragment_to_termsFragment"
             app:destination="@id/termsFragment" />
         <action
-            android:id="@+id/aboutAppFragment_to_markdownViewer"
-            app:destination="@id/markdownFragment" />
+            android:id="@+id/aboutAppFragment_to_releaseNotesFragment"
+            app:destination="@id/releaseNotesFragment" />
     </fragment>
     <fragment
         android:id="@+id/notificationsFragment"
@@ -278,6 +278,10 @@
         android:id="@+id/bitcoinHodlingFragment"
         android:name="io.horizontalsystems.bankwallet.modules.settings.experimental.bitcoinhodling.BitcoinHodlingFragment"
         tools:layout="@layout/fragment_bitcoin_hodling" />
+    <fragment
+        android:id="@+id/releaseNotesFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.releasenotes.ReleaseNotesFragment"
+        tools:layout="@layout/fragment_release_notes" />
     <fragment
         android:id="@+id/markdownFragment"
         android:name="io.horizontalsystems.bankwallet.modules.markdown.MarkdownFragment"

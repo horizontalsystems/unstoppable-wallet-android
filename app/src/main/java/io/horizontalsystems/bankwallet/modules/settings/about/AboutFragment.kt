@@ -7,16 +7,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.BaseFragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.BuildConfig
-import io.horizontalsystems.bankwallet.modules.markdown.MarkdownFragment
+import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.settings.main.MainSettingsAdapter
 import io.horizontalsystems.bankwallet.modules.settings.main.SettingsMenuItem
 import io.horizontalsystems.core.helpers.HudHelper
@@ -42,7 +40,7 @@ class AboutFragment : BaseFragment() {
         }
 
         val whatsNewItem = SettingsMenuItem(R.string.SettingsAboutApp_WhatsNew, R.drawable.ic_info_20, listPosition = ListPosition.Single) {
-            viewModel.onWhatsNewTap()
+            findNavController().navigate(R.id.aboutAppFragment_to_releaseNotesFragment, null, navOptions())
         }
 
         val appStatusItem = SettingsMenuItem(R.string.Settings_AppStatus, R.drawable.ic_app_status, listPosition = ListPosition.First) {
@@ -116,11 +114,6 @@ class AboutFragment : BaseFragment() {
             activity?.let {
                 HudHelper.showSuccessMessage(it.findViewById(android.R.id.content), R.string.Hud_Text_EmailAddressCopied)
             }
-        })
-
-        viewModel.showWhatsNewLiveEvent.observe(viewLifecycleOwner, { gitReleaseUrl ->
-            val arguments = bundleOf(MarkdownFragment.gitReleaseNotesUrlKey to gitReleaseUrl)
-            findNavController().navigate(R.id.aboutAppFragment_to_markdownViewer, arguments, navOptions())
         })
 
     }

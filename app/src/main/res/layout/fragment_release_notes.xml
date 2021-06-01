@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?android:windowBackground"
+    android:clickable="true">
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragmentContainerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="62dp"
+        app:defaultNavHost="true" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="62dp"
+        android:layout_gravity="bottom">
+
+        <View
+            android:id="@+id/border"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="@color/steel_10"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/twitterIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14dp"
+            android:layout_marginTop="6dp"
+            android:clickable="true"
+            android:padding="10dp"
+            android:src="@drawable/ic_twitter_filled_24"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/stateful_image_button_grey_tint_color" />
+
+        <ImageView
+            android:id="@+id/telegramIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:clickable="true"
+            android:padding="10dp"
+            android:src="@drawable/ic_telegram_filled_24"
+            app:layout_constraintStart_toEndOf="@+id/twitterIcon"
+            app:layout_constraintTop_toTopOf="@+id/twitterIcon"
+            app:tint="@color/stateful_image_button_grey_tint_color" />
+
+        <ImageView
+            android:id="@+id/redditIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:clickable="true"
+            android:padding="10dp"
+            android:src="@drawable/ic_reddit_filled_24"
+            app:layout_constraintStart_toEndOf="@+id/telegramIcon"
+            app:layout_constraintTop_toTopOf="@+id/twitterIcon"
+            app:tint="@color/stateful_image_button_grey_tint_color" />
+
+        <TextView
+            style="@style/Caption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="26dp"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:text="@string/ReleaseNotes_FollowUs"
+            android:textColor="@color/grey"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1"
+            app:layout_constraintStart_toEndOf="@+id/redditIcon"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>
