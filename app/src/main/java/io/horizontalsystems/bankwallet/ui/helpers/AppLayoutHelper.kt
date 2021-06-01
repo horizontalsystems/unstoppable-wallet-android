@@ -16,10 +16,10 @@ object AppLayoutHelper {
             coinType is CoinType.Erc20 -> R.drawable.erc20
             coinType is CoinType.Bep2 -> R.drawable.bep2
             coinType is CoinType.Bep20 -> R.drawable.bep20
-            else -> null
+            else -> R.drawable.place_holder
         }
 
-        return resId?.let { ContextCompat.getDrawable(context, it) }
+        return ContextCompat.getDrawable(context, resId)
     }
 
     private fun getCoinDrawableResId(context: Context, coinType: CoinType): Int? {
