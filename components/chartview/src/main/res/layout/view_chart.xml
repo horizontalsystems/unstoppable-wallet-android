@@ -24,9 +24,9 @@
         android:id="@+id/chartBottom"
         android:layout_width="0dp"
         android:layout_height="56dp"
+        app:layout_constraintBottom_toBottomOf="@+id/chartMain"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="@+id/chartMain" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <io.horizontalsystems.chartview.ChartView
         android:id="@+id/chartTimeline"
@@ -70,14 +70,15 @@
 
     <TextView
         android:id="@+id/chartError"
-        style="@style/Headline2"
+        style="@style/Subhead2"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:gravity="center"
-        android:textColor="@color/red_d"
+        android:textColor="@color/grey"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="No Data" />
 
 </merge>
