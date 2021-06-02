@@ -99,7 +99,7 @@ class DashAdapter(
         private fun createKit(wallet: Wallet, syncMode: SyncMode?, testMode: Boolean): DashKit {
             val account = wallet.account
             val accountType = account.type
-            if (accountType is AccountType.Mnemonic && accountType.words.size == 12) {
+            if (accountType is AccountType.Mnemonic) {
                 return DashKit(context = App.instance,
                         words = accountType.words,
                         passphrase = accountType.passphrase,
