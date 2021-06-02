@@ -6,6 +6,7 @@ import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 class MarketSearchViewModel(private val service: MarketSearchService, private val clearables: List<Clearable>) : ViewModel() {
@@ -25,11 +26,11 @@ class MarketSearchViewModel(private val service: MarketSearchService, private va
 
     init {
         service.itemsAsync
-                .subscribeIO {
-                    emptyResultsLiveData.postValue(it.isPresent && it.get().isEmpty())
+                .subscribeIO { coinData ->
+                    emptyResultsLiveData.postValue(coinData.isPresent && coinData.get().isEmpty())
                     advancedSearchButtonVisibleLiveDataViewItem.postValue(service.query.isBlank())
 
-                    itemsLiveData.postValue(it.orElse(listOf()).map { CoinDataViewItem(it.code, it.title, it.type) })
+                    itemsLiveData.postValue(coinData.orElse(listOf()).map { CoinDataViewItem(it.code.toUpperCase(Locale.US), it.title, it.type) })
                 }.let {
                     disposable.add(it)
                 }
