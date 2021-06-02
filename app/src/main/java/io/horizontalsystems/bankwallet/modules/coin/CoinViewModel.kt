@@ -278,13 +278,7 @@ class CoinViewModel(
     }
 
     private fun syncChartInfo() {
-        chartInfoLiveData.postValue(
-                CoinChartAdapter.ViewItemWrapper(
-                        chartInfoData,
-                        showChartSpinner,
-                        showChartError
-                )
-        )
+        chartInfoLiveData.postValue(CoinChartAdapter.ViewItemWrapper(chartInfoData, showChartSpinner, showChartError))
     }
 
     private fun getKitChartType(type: ChartView.ChartType): ChartType {

@@ -64,6 +64,8 @@ class CoinChartAdapter(
             override fun areContentsTheSame(oldItem: ViewItemWrapper, newItem: ViewItemWrapper): Boolean {
                 return oldItem.data?.chartData?.startTimestamp == newItem.data?.chartData?.startTimestamp
                         && oldItem.data?.chartData?.endTimestamp == newItem.data?.chartData?.endTimestamp
+                        && oldItem.showError == newItem.showError
+                        && oldItem.showSpinner == newItem.showSpinner
             }
         }
     }
@@ -92,7 +94,7 @@ class ChartViewHolder(override val containerView: View, private val listener: Co
     fun bind(item: CoinChartAdapter.ViewItemWrapper) {
 
         if (item.showError) {
-            chart.showError(containerView.context.getString(R.string.CoinPage_Error_NotAvailable))
+            chart.showError(containerView.context.getString(R.string.CoinPage_NoData))
             chart.hideSpinner()
             return
         }
