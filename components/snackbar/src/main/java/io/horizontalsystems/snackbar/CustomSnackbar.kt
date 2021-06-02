@@ -50,11 +50,10 @@ class CustomSnackbar (
                  backgroundColor: Int,
                  duration: SnackbarDuration,
                  gravity: SnackbarGravity,
-                 showProgressBar: Boolean): CustomSnackbar {
+                 showProgressBar: Boolean): CustomSnackbar? {
 
-            val parent = viewGroup.findSuitableParent() ?: throw IllegalArgumentException(
-                    "No suitable parent found from the given view. Please provide a valid view."
-            )
+            val parent = viewGroup.findSuitableParent() ?: return null
+
             val inflater = LayoutInflater.from(viewGroup.context)
             val view = inflater.inflate(R.layout.view_custom_snackbar, parent, false)
 
