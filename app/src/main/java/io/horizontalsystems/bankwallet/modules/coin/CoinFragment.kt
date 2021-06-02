@@ -93,6 +93,7 @@ class CoinFragment : BaseFragment(), CoinChartAdapter.Listener, CoinDataAdapter.
         val footerAdapter = PoweredByAdapter(viewModel.showFooterLiveData, viewLifecycleOwner)
 
         val loadingAdapter = CoinLoadingAdapter(viewModel.loadingLiveData, viewLifecycleOwner)
+        val errorAdapter = CoinInfoErrorAdapter(viewModel.coinInfoErrorLiveData, viewLifecycleOwner)
 
         val concatAdapter = ConcatAdapter(
                 subtitleAdapter,
@@ -107,6 +108,7 @@ class CoinFragment : BaseFragment(), CoinChartAdapter.Listener, CoinDataAdapter.
                 aboutAdapter,
                 linksAdapter,
                 loadingAdapter,
+                errorAdapter,
                 footerAdapter
         )
 

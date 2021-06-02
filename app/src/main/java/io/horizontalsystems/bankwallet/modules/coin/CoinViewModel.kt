@@ -15,6 +15,7 @@ import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.views.ListPosition
 import io.horizontalsystems.xrateskit.entities.*
 import io.reactivex.disposables.CompositeDisposable
+import retrofit2.HttpException
 import java.math.BigDecimal
 
 class CoinViewModel(
@@ -26,6 +27,7 @@ class CoinViewModel(
 ) : ViewModel() {
 
     val loadingLiveData = MutableLiveData<Boolean>()
+    val coinInfoErrorLiveData = MutableLiveData<String>()
     val subtitleLiveData = MutableLiveData<CoinSubtitleAdapter.ViewItemWrapper>()
     val chartInfoLiveData = MutableLiveData<CoinChartAdapter.ViewItemWrapper>()
     val roiLiveData = MutableLiveData<List<RoiViewItem>>()
@@ -36,7 +38,7 @@ class CoinViewModel(
     val categoriesLiveData = MutableLiveData<String>()
     val contractInfoLiveData = MutableLiveData<List<CoinDataItem>>()
     val aboutTextLiveData = MutableLiveData<AboutText>()
-    val linksLiveData =  MutableLiveData<List<CoinLink>>()
+    val linksLiveData = MutableLiveData<List<CoinLink>>()
     val showFooterLiveData = MutableLiveData(false)
 
     val alertNotificationUpdated = MutableLiveData<Unit>()
@@ -205,9 +207,24 @@ class CoinViewModel(
         if (state is CoinService.CoinDetailsState.Loaded) {
             updateCoinDetails()
         }
+
+        coinInfoErrorLiveData.postValue(getError(state))
+        showFooterLiveData.postValue(state !is CoinService.CoinDetailsState.Loading)
     }
 
-    private fun syncTopTokenHoldersState(state: CoinService.CoinDetailsState){
+    private fun getError(state: CoinService.CoinDetailsState): String {
+        if (state !is CoinService.CoinDetailsState.Error) {
+            return ""
+        }
+
+        return if (state.error is HttpException && state.error.code() == 404) {
+            Translator.getString(R.string.CoinPage_NoData)
+        } else {
+            Translator.getString(R.string.BalanceSyncError_Title)
+        }
+    }
+
+    private fun syncTopTokenHoldersState(state: CoinService.CoinDetailsState) {
         if (state is CoinService.CoinDetailsState.Loaded) {
             updateInvestorDataBlock()
         }
@@ -242,7 +259,7 @@ class CoinViewModel(
             contractInfoLiveData.postValue(listOf(CoinDataItem(it.title, it.value, valueDecorated = true, listPosition = ListPosition.Single)))
         }
 
-        if (coinDetails.meta.description.isNotBlank()){
+        if (coinDetails.meta.description.isNotBlank()) {
             aboutTextLiveData.postValue(AboutText(coinDetails.meta.description, coinDetails.meta.descriptionType))
         }
 
