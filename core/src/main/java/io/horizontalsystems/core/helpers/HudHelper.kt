@@ -55,7 +55,7 @@ object HudHelper {
     ): CustomSnackbar? {
 
         val snackbar = CustomSnackbar.make(contenView as ViewGroup, text, backgroundColor, duration, gravity, showProgressBar)
-        snackbar.show()
+        snackbar?.show()
 
         return snackbar
     }
