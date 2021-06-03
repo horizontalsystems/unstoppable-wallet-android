@@ -31,13 +31,13 @@
     <string name="Any">Any</string>
     <string name="Wallet">%s cüzdanı</string>
     <!--Intro-->
-    <string name="Intro_Wallet_Description">Kripto Biriktirin ve Ticaretini Yapın. Mevduat üzerinde tam kontrole sahip olun. Anonim kalın.</string>
-    <string name="Intro_Invest_Title">Akıllıca Yatırım Yapın</string>
-    <string name="Intro_Invest_Description">Unstoppable, benzersiz alım satım, izleme ve analitik araçların entegrasyonlarını sağlar.</string>
-    <string name="Intro_Independence_Title">Bağımsız Olun</string>
-    <string name="Intro_Independence_Description">Unstoppable, kullanıcıların istedikleri anda istedikleri yerde paraya erişebilmelerini sağlamak için geliştirilmiştir.</string>
-    <string name="Intro_Privacy_Title">Gizli Kalın</string>
-    <string name="Intro_Privacy_Description">Gizli kalmak ve bilgilerinizi gizli tutmak için bu cüzdanı kullanın.</string>
+    <string name="Intro_Wallet_Screen1Description">Be Unstoppable</string>
+    <string name="Intro_Wallet_Screen2Title">Unchain Assets</string>
+    <string name="Intro_Wallet_Screen2Description">Don\'t lock yourself in and don\'t let others do that to you.</string>
+    <string name="Intro_Wallet_Screen3Title">Go Borderless</string>
+    <string name="Intro_Wallet_Screen3Description">Bypass conditional barriers and access markets globally.</string>
+    <string name="Intro_Wallet_Screen4Title">Stay Private</string>
+    <string name="Intro_Wallet_Screen4Description">Do not leak your private and financial data to the world.</string>
     <!--Rooted Device-->
     <string name="RootedDevice_Button_Understand">Anlıyorum</string>
     <!--Welcome-->
@@ -240,6 +240,8 @@
     <string name="Balance_Sort_PopupTitle">Sıralama şekli</string>
     <string name="Balance_Sort_Az">İsim</string>
     <string name="Balance_Sort_24hPriceChange">24 saat Değişiklik</string>
+    <string name="Balance_LockedBalance">Locked Balance</string>
+    <string name="Balance_Hidden">hidden</string>
     <string name="Balance_Backup_Alert">Öncelikle %s cüzdanınızı yedeklemeniz gerekiyor daha sonra %s kripto parasını alabilirsiniz.</string>
     <string name="Balance_NoWalletAlert">Henüz cüzdanınız yok. Yeni oluşturun veya mevcut olanı geri yükleyin </string>
     <string name="Balance_NoCoinsAlert">Bu cüzdana hiç jeton eklemediniz</string>
@@ -313,6 +315,11 @@
     <string name="WalletConnect_Status_Online">Çevrimiçi</string>
     <string name="WalletConnect_Status_Connecting">Bağlanıyor…</string>
     <string name="WalletConnect_NewConnect">Yeni bağlantı</string>
+    <string name="WalletConnect_SignMessageRequest_Title">Sign Request</string>
+    <string name="WalletConnect_SignMessageRequest_Domain">Domain</string>
+    <string name="WalletConnect_SignMessageRequest_ShowMessageTitle">Message to sign</string>
+    <string name="WalletConnect_SignMessageRequest_SignMessageHint">Please sign a message to authenticate</string>
+    <string name="WalletConnect_SignMessageRequest_ButtonSign">Sign</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Error_InsufficientBalance">İşlem, göndermek için %s gerektirir</string>
     <string name="EthereumTransaction_Error_InsufficientBalanceForFee">Mevcut %s bakiyesi, işlem ücreti dahil bu işlemi gerçekleştirmek için gereken miktarın altında.</string>
@@ -695,7 +702,10 @@
     <string name="CoinPage_RatingDetails">Rating Details</string>
     <string name="CoinPage_Price">Fiyat</string>
     <string name="CoinPage_Market">Market</string>
+    <string name="CoinPage_Markets">Markets</string>
     <string name="CoinPage_TradingVolume">Trading Volume</string>
+    <string name="CoinPage_MajorHolders">Major Holders</string>
+    <string name="CoinPage_InvestorData">Investor Data</string>
     <string name="CoinPage_FundsInvested">Funds Invested</string>
     <string name="CoinPage_Range24">24h Range</string>
     <string name="CoinPage_Performance">Performance</string>
@@ -722,6 +732,7 @@
     <string name="CoinPage_MarketCap_Trillion">T</string>
     <string name="CoinPage_Volume">Vol</string>
     <string name="CoinPage_Error_NotAvailable">Grafik yok</string>
+    <string name="CoinPage_NoData">No Data</string>
     <string name="CoinPage_LatestNews">Latest News</string>
     <string name="CoinPage_Favorite">Favorite</string>
     <string name="CoinPage_Unfavorite">Unfavorite</string>
@@ -736,6 +747,8 @@
     <string name="CoinPage_TvlDescription">Capital deposited into the platform in the form of loan collateral or liquidity pool.</string>
     <string name="CoinPage_Contract">%s Contract</string>
     <string name="CoinPage_Bep2Symbol">BEP2 Symbol</string>
+    <string name="CoinPage_MajorHolders_Address">Address</string>
+    <string name="CoinPage_MajorHolders_Description">Bitcoin is a cryptocurrency and worldwide payment system. It is the first decentralized digital currency, as the system works without a central bank or single administrator.</string>
     <!--Rate list-->
     <string name="RateList_portfolio">Portföy</string>
     <string name="RateList_top100">En Beğenilen 100</string>
@@ -751,4 +764,6 @@
     <string name="BalanceSyncError_ButtonRetry">Yeniden Dene</string>
     <string name="BalanceSyncError_ButtonChangeSource">Kaynağı Değiştir</string>
     <string name="BalanceSyncError_ButtonReport">Şikayet Et</string>
+    <!--Release notes-->
+    <string name="ReleaseNotes_FollowUs">Follow Us</string>
 </resources>
