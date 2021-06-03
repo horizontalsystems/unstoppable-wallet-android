@@ -20,11 +20,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppTheme.DayNight"
         tools:ignore="GoogleAppIndexingWarning">
-        <meta-data android:name="firebase_analytics_collection_deactivated" android:value="true" />
-        <meta-data
-            android:name="com.google.firebase.messaging.default_notification_icon"
-            android:resource="@drawable/ic_notification_icon" />
-
         <activity
             android:name=".modules.tor.TorConnectionActivity"
             android:launchMode="singleTask" />
