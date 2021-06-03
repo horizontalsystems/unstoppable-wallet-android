@@ -879,7 +879,7 @@
     <string name="CoinPage_Volume24">Volume (24h)</string>
     <string name="CoinPage_inCirculation">In Circulation</string>
     <string name="CoinPage_TotalSupply">Total Supply</string>
-    <string name="CoinPage_StartDate">Launch Date</string>
+    <string name="CoinPage_StartDate">Inception Date</string>
     <string name="CoinPage_CryptoCompare" translatable="false">\@CryptoCompare.com</string>
     <string name="CoinPage_IndicatorEMA" translatable="false">EMA</string>
     <string name="CoinPage_IndicatorMACD" translatable="false">MACD</string>
@@ -897,7 +897,7 @@
     <string name="CoinPage_Performance_Month">1 Month</string>
     <string name="CoinPage_ReadMore">Read More</string>
     <string name="CoinPage_ReadLess">Read Less</string>
-    <string name="CoinPage_LaunchDate">Launch Date</string>
+    <string name="CoinPage_LaunchDate">Inception Date</string>
     <string name="CoinPage_Tvl">Total Value Locked</string>
     <string name="CoinPage_TvlRank">TVL Rank</string>
     <string name="CoinPage_TvlMCapRatio">M.cap / TVL ratio</string>
