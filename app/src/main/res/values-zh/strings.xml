@@ -31,13 +31,13 @@
     <string name="Any">Any</string>
     <string name="Wallet">%s钱包</string>
     <!--Intro-->
-    <string name="Intro_Wallet_Description">存储和交易加密货币。完全控制资产。保持匿名。</string>
-    <string name="Intro_Invest_Title">明智投资</string>
-    <string name="Intro_Invest_Description">Unstoppable整合了无与伦比的交易、监控和分析工具。</string>
-    <string name="Intro_Independence_Title">保持独立</string>
-    <string name="Intro_Independence_Description">Unstoppable的建立可确保用户能够随时随地存取资金。</string>
-    <string name="Intro_Privacy_Title">保持私密状态</string>
-    <string name="Intro_Privacy_Description">使用此钱包保持隐身并能够保证您信息的私密性。</string>
+    <string name="Intro_Wallet_Screen1Description">Be Unstoppable</string>
+    <string name="Intro_Wallet_Screen2Title">Unchain Assets</string>
+    <string name="Intro_Wallet_Screen2Description">Don\'t lock yourself in and don\'t let others do that to you.</string>
+    <string name="Intro_Wallet_Screen3Title">Go Borderless</string>
+    <string name="Intro_Wallet_Screen3Description">Bypass conditional barriers and access markets globally.</string>
+    <string name="Intro_Wallet_Screen4Title">Stay Private</string>
+    <string name="Intro_Wallet_Screen4Description">Do not leak your private and financial data to the world.</string>
     <!--Rooted Device-->
     <string name="RootedDevice_Button_Understand">我理解</string>
     <!--Welcome-->
@@ -240,6 +240,8 @@
     <string name="Balance_Sort_PopupTitle">排序方式</string>
     <string name="Balance_Sort_Az">名称</string>
     <string name="Balance_Sort_24hPriceChange">24小时变更 (%)</string>
+    <string name="Balance_LockedBalance">Locked Balance</string>
+    <string name="Balance_Hidden">hidden</string>
     <string name="Balance_Backup_Alert">您必须在接收%s之前先备份%s钱包。</string>
     <string name="Balance_NoWalletAlert">您还没有任何钱包。创建新钱包或恢复已有钱包 </string>
     <string name="Balance_NoCoinsAlert">您还没有添加任何代币到此钱包中。</string>
@@ -313,6 +315,11 @@
     <string name="WalletConnect_Status_Online">在线</string>
     <string name="WalletConnect_Status_Connecting">正在连接...</string>
     <string name="WalletConnect_NewConnect">新连接</string>
+    <string name="WalletConnect_SignMessageRequest_Title">Sign Request</string>
+    <string name="WalletConnect_SignMessageRequest_Domain">Domain</string>
+    <string name="WalletConnect_SignMessageRequest_ShowMessageTitle">Message to sign</string>
+    <string name="WalletConnect_SignMessageRequest_SignMessageHint">Please sign a message to authenticate</string>
+    <string name="WalletConnect_SignMessageRequest_ButtonSign">Sign</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Error_InsufficientBalance">交易要求%s用于发送。</string>
     <string name="EthereumTransaction_Error_InsufficientBalanceForFee">當前%s餘額低於處理此交易所需的金額，包括交易費用。</string>
@@ -696,7 +703,10 @@
     <string name="CoinPage_RatingDetails">Ratings Details</string>
     <string name="CoinPage_Price">Price</string>
     <string name="CoinPage_Market">Market</string>
+    <string name="CoinPage_Markets">Markets</string>
     <string name="CoinPage_TradingVolume">Trading Volume</string>
+    <string name="CoinPage_MajorHolders">Major Holders</string>
+    <string name="CoinPage_InvestorData">Investor Data</string>
     <string name="CoinPage_FundsInvested">Funds Invested</string>
     <string name="CoinPage_Range24">24h Range</string>
     <string name="CoinPage_Performance">Performance</string>
@@ -723,6 +733,7 @@
     <string name="CoinPage_MarketCap_Trillion">T</string>
     <string name="CoinPage_Volume">Vol</string>
     <string name="CoinPage_Error_NotAvailable">无可用图表</string>
+    <string name="CoinPage_NoData">No Data</string>
     <string name="CoinPage_LatestNews">Latest News</string>
     <string name="CoinPage_Favorite">Favorite</string>
     <string name="CoinPage_Unfavorite">Unfavorite</string>
@@ -737,6 +748,8 @@
     <string name="CoinPage_TvlDescription">Capital deposited into the platform in the form of loan collateral or liquidity pool.</string>
     <string name="CoinPage_Contract">%s Contract</string>
     <string name="CoinPage_Bep2Symbol">BEP2 Symbol</string>
+    <string name="CoinPage_MajorHolders_Address">Address</string>
+    <string name="CoinPage_MajorHolders_Description">Bitcoin is a cryptocurrency and worldwide payment system. It is the first decentralized digital currency, as the system works without a central bank or single administrator.</string>
     <!--Rate list-->
     <string name="RateList_portfolio">投资组合</string>
     <string name="RateList_top100">前100名</string>
@@ -752,4 +765,6 @@
     <string name="BalanceSyncError_ButtonRetry">重试</string>
     <string name="BalanceSyncError_ButtonChangeSource">更改源</string>
     <string name="BalanceSyncError_ButtonReport">报告</string>
+    <!--Release notes-->
+    <string name="ReleaseNotes_FollowUs">Follow Us</string>
 </resources>
