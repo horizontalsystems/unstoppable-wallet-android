@@ -45,16 +45,16 @@ class CustomSnackbar (
     }
 
     companion object {
-        fun make(viewGroup: ViewGroup,
+        fun make(contentView: View,
                  text: String,
                  backgroundColor: Int,
                  duration: SnackbarDuration,
                  gravity: SnackbarGravity,
                  showProgressBar: Boolean): CustomSnackbar? {
 
-            val parent = viewGroup.findSuitableParent() ?: return null
+            val parent = (contentView as? ViewGroup)?.findSuitableParent() ?: return null
 
-            val inflater = LayoutInflater.from(viewGroup.context)
+            val inflater = LayoutInflater.from(parent.context)
             val view = inflater.inflate(R.layout.view_custom_snackbar, parent, false)
 
             val callback = ContentViewCallback(view)
@@ -72,10 +72,10 @@ class CustomSnackbar (
                 progressbar.visibility = View.VISIBLE
             }
 
-            contentLayout.background.setTint(ContextCompat.getColor(viewGroup.context, backgroundColor))
+            contentLayout.background.setTint(ContextCompat.getColor(parent.context, backgroundColor))
 
             if(gravity == SnackbarGravity.TOP_OF_VIEW)
-                customSnackbar.anchorView = viewGroup
+                customSnackbar.anchorView = parent
 
 
             return customSnackbar
