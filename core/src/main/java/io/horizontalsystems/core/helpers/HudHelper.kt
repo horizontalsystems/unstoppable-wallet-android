@@ -46,7 +46,7 @@ object HudHelper {
     }
 
     private fun showHudNotification(
-            contenView: View,
+            contentView: View,
             text: String,
             backgroundColor: Int,
             duration: SnackbarDuration,
@@ -54,7 +54,7 @@ object HudHelper {
             showProgressBar: Boolean = false
     ): CustomSnackbar? {
 
-        val snackbar = CustomSnackbar.make(contenView as ViewGroup, text, backgroundColor, duration, gravity, showProgressBar)
+        val snackbar = CustomSnackbar.make(contentView, text, backgroundColor, duration, gravity, showProgressBar)
         snackbar?.show()
 
         return snackbar
