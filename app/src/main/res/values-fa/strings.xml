@@ -31,13 +31,13 @@
     <string name="Any">هرکدام</string>
     <string name="Wallet">%s کیف پول</string>
     <!--Intro-->
-    <string name="Intro_Wallet_Description">پس انداز و معامله ارز رمزنگاری شده. کنترل کامل بر دارایی ها داشته باشید. ناشناس بمانید.</string>
-    <string name="Intro_Invest_Title">سرمایه گذاری عاقلانه</string>
-    <string name="Intro_Invest_Description">توقف ناپذیر ابزارهای تجارتی ، نظارتی و تحلیلی بی نظیر را تلفیق می کند.</string>
-    <string name="Intro_Independence_Title">مستقل باشید</string>
-    <string name="Intro_Independence_Description">توقف ناپذیر برای اطمینان از قابلیت دسترسی کاربران به بودجه خود در هر زمان و مکان ساخته شده است.</string>
-    <string name="Intro_Privacy_Title">محرمانه باقی بمانید</string>
-    <string name="Intro_Privacy_Description">از این کیف پول استفاده کنید تا در حالت ناشناس باقی بمانید و بتوانید اطلاعات خود را خصوصی نگه دارید.</string>
+    <string name="Intro_Wallet_Screen1Description">Be Unstoppable</string>
+    <string name="Intro_Wallet_Screen2Title">Unchain Assets</string>
+    <string name="Intro_Wallet_Screen2Description">Don\'t lock yourself in and don\'t let others do that to you.</string>
+    <string name="Intro_Wallet_Screen3Title">Go Borderless</string>
+    <string name="Intro_Wallet_Screen3Description">Bypass conditional barriers and access markets globally.</string>
+    <string name="Intro_Wallet_Screen4Title">Stay Private</string>
+    <string name="Intro_Wallet_Screen4Description">Do not leak your private and financial data to the world.</string>
     <!--Rooted Device-->
     <string name="RootedDevice_Button_Understand">می فهمم</string>
     <!--Welcome-->
@@ -240,6 +240,8 @@
     <string name="Balance_Sort_PopupTitle">مرتب‌ کردن بر اساس</string>
     <string name="Balance_Sort_Az">نام</string>
     <string name="Balance_Sort_24hPriceChange">قیمت ۲۴ ساعت (%)</string>
+    <string name="Balance_LockedBalance">Locked Balance</string>
+    <string name="Balance_Hidden">hidden</string>
     <string name="Balance_Backup_Alert">قبل از اینکه %s را دریافت کنید به نسخه پشتیبان از کیف پول %s نیاز دارید.</string>
     <string name="Balance_NoWalletAlert">هنوز کیف پول ندارید. کیف جدید ایجاد کنید یا کیف موجود را بازیابی کنید </string>
     <string name="Balance_NoCoinsAlert">You haven\'t added any coins to this wallet</string>
@@ -313,6 +315,11 @@
     <string name="WalletConnect_Status_Online">آنلاین</string>
     <string name="WalletConnect_Status_Connecting">در حال اتصال…</string>
     <string name="WalletConnect_NewConnect">New Connection</string>
+    <string name="WalletConnect_SignMessageRequest_Title">Sign Request</string>
+    <string name="WalletConnect_SignMessageRequest_Domain">Domain</string>
+    <string name="WalletConnect_SignMessageRequest_ShowMessageTitle">Message to sign</string>
+    <string name="WalletConnect_SignMessageRequest_SignMessageHint">Please sign a message to authenticate</string>
+    <string name="WalletConnect_SignMessageRequest_ButtonSign">Sign</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Error_InsufficientBalance">تراکنش برای ارسال به %s نیاز دارد</string>
     <string name="EthereumTransaction_Error_InsufficientBalanceForFee">موجودی %s فعلی زیر مقدار مورد نیاز برای تراکنش این معامله از جمله هزینه معامله است.</string>
@@ -695,7 +702,10 @@
     <string name="CoinPage_RatingDetails">Rating Details</string>
     <string name="CoinPage_Price">قیمت</string>
     <string name="CoinPage_Market">Market</string>
+    <string name="CoinPage_Markets">Markets</string>
     <string name="CoinPage_TradingVolume">Trading Volume</string>
+    <string name="CoinPage_MajorHolders">Major Holders</string>
+    <string name="CoinPage_InvestorData">Investor Data</string>
     <string name="CoinPage_FundsInvested">وجوه سرمایه گذاری شده</string>
     <string name="CoinPage_Range24">24h Range</string>
     <string name="CoinPage_Performance">Performance</string>
@@ -722,6 +732,7 @@
     <string name="CoinPage_MarketCap_Trillion">T</string>
     <string name="CoinPage_Volume">Vol</string>
     <string name="CoinPage_Error_NotAvailable">نمودار موجود نیست</string>
+    <string name="CoinPage_NoData">No Data</string>
     <string name="CoinPage_LatestNews">Latest News</string>
     <string name="CoinPage_Favorite">Favorite</string>
     <string name="CoinPage_Unfavorite">Unfavorite</string>
@@ -736,6 +747,8 @@
     <string name="CoinPage_TvlDescription">Capital deposited into the platform in the form of loan collateral or liquidity pool.</string>
     <string name="CoinPage_Contract">%s Contract</string>
     <string name="CoinPage_Bep2Symbol">BEP2 Symbol</string>
+    <string name="CoinPage_MajorHolders_Address">Address</string>
+    <string name="CoinPage_MajorHolders_Description">Bitcoin is a cryptocurrency and worldwide payment system. It is the first decentralized digital currency, as the system works without a central bank or single administrator.</string>
     <!--Rate list-->
     <string name="RateList_portfolio">نمونه کار</string>
     <string name="RateList_top100">۱۰۰ برتر</string>
@@ -751,4 +764,6 @@
     <string name="BalanceSyncError_ButtonRetry">دوباره تلاش کنید</string>
     <string name="BalanceSyncError_ButtonChangeSource">تغییر منبع</string>
     <string name="BalanceSyncError_ButtonReport">گزارش</string>
+    <!--Release notes-->
+    <string name="ReleaseNotes_FollowUs">Follow Us</string>
 </resources>
