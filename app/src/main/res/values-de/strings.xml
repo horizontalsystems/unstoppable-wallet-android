@@ -31,13 +31,13 @@
     <string name="Any">Any</string>
     <string name="Wallet">%s wallet</string>
     <!--Intro-->
-    <string name="Intro_Wallet_Description">Krypto aufbewahren und handeln. Volle Kontrolle über die Vermögenswerte haben. Bleiben Sie anonym.</string>
-    <string name="Intro_Invest_Title">Klug investieren</string>
-    <string name="Intro_Invest_Description">Unstoppable integriert unvergleichliche Handels-, Überwachungs- und Analyseinstrumente.</string>
-    <string name="Intro_Independence_Title">Unabhängig sein</string>
-    <string name="Intro_Independence_Description">Unstoppable wurde entwickelt, um sicherzustellen, dass Benutzer jederzeit und von überall her auf Finanzmittel zugreifen können.</string>
-    <string name="Intro_Privacy_Title">Privat bleiben</string>
-    <string name="Intro_Privacy_Description">Benutzen Sie dieses Wallet, um inkognito zu bleiben und Ihre Informationen geheim halten zu können.</string>
+    <string name="Intro_Wallet_Screen1Description">Be Unstoppable</string>
+    <string name="Intro_Wallet_Screen2Title">Unchain Assets</string>
+    <string name="Intro_Wallet_Screen2Description">Don\'t lock yourself in and don\'t let others do that to you.</string>
+    <string name="Intro_Wallet_Screen3Title">Go Borderless</string>
+    <string name="Intro_Wallet_Screen3Description">Bypass conditional barriers and access markets globally.</string>
+    <string name="Intro_Wallet_Screen4Title">Stay Private</string>
+    <string name="Intro_Wallet_Screen4Description">Do not leak your private and financial data to the world.</string>
     <!--Rooted Device-->
     <string name="RootedDevice_Button_Understand">Ich stimme zu</string>
     <!--Welcome-->
@@ -240,6 +240,8 @@
     <string name="Balance_Sort_PopupTitle">Sortieren nach</string>
     <string name="Balance_Sort_Az">Name</string>
     <string name="Balance_Sort_24hPriceChange">24h Preis (%)</string>
+    <string name="Balance_LockedBalance">Locked Balance</string>
+    <string name="Balance_Hidden">hidden</string>
     <string name="Balance_Backup_Alert">Sie müssen ein Backup des %s Wallet machen, bevor Sie %s erhalten können.</string>
     <string name="Balance_NoWalletAlert">Sie haben noch keine Wallets. Ein neues erstellen oder ein vorhandenes wiederherstellen </string>
     <string name="Balance_NoCoinsAlert">Sie haben keine Coins zu diesem Wallet hinzugefügt</string>
@@ -313,6 +315,11 @@
     <string name="WalletConnect_Status_Online">Online</string>
     <string name="WalletConnect_Status_Connecting">Verbinde…</string>
     <string name="WalletConnect_NewConnect">Neue Verbindung</string>
+    <string name="WalletConnect_SignMessageRequest_Title">Sign Request</string>
+    <string name="WalletConnect_SignMessageRequest_Domain">Domain</string>
+    <string name="WalletConnect_SignMessageRequest_ShowMessageTitle">Message to sign</string>
+    <string name="WalletConnect_SignMessageRequest_SignMessageHint">Please sign a message to authenticate</string>
+    <string name="WalletConnect_SignMessageRequest_ButtonSign">Sign</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Error_InsufficientBalance">Die Transaktion erfordert %s zum Senden</string>
     <string name="EthereumTransaction_Error_InsufficientBalanceForFee">Das aktuelle %s-Guthaben liegt unter dem für die Abwicklung dieser Transaktion erforderlichen Betrag einschließlich der Transaktionsgebühr.</string>
@@ -695,7 +702,10 @@
     <string name="CoinPage_RatingDetails">Rating Details</string>
     <string name="CoinPage_Price">Preis</string>
     <string name="CoinPage_Market">Market</string>
+    <string name="CoinPage_Markets">Markets</string>
     <string name="CoinPage_TradingVolume">Trading Volume</string>
+    <string name="CoinPage_MajorHolders">Major Holders</string>
+    <string name="CoinPage_InvestorData">Investor Data</string>
     <string name="CoinPage_FundsInvested">Funds Invested</string>
     <string name="CoinPage_Range24">24h Range</string>
     <string name="CoinPage_Performance">Performance</string>
@@ -722,6 +732,7 @@
     <string name="CoinPage_MarketCap_Trillion">T</string>
     <string name="CoinPage_Volume">Vol</string>
     <string name="CoinPage_Error_NotAvailable">Diagramm nicht verfügbar</string>
+    <string name="CoinPage_NoData">No Data</string>
     <string name="CoinPage_LatestNews">Latest News</string>
     <string name="CoinPage_Favorite">Favorite</string>
     <string name="CoinPage_Unfavorite">Unfavorite</string>
@@ -736,6 +747,8 @@
     <string name="CoinPage_TvlDescription">Capital deposited into the platform in the form of loan collateral or liquidity pool.</string>
     <string name="CoinPage_Contract">%s Contract</string>
     <string name="CoinPage_Bep2Symbol">BEP2 Symbol</string>
+    <string name="CoinPage_MajorHolders_Address">Address</string>
+    <string name="CoinPage_MajorHolders_Description">Bitcoin is a cryptocurrency and worldwide payment system. It is the first decentralized digital currency, as the system works without a central bank or single administrator.</string>
     <!--Rate list-->
     <string name="RateList_portfolio">Portfolio</string>
     <string name="RateList_top100">Top 100</string>
@@ -751,4 +764,6 @@
     <string name="BalanceSyncError_ButtonRetry">Wiederholen</string>
     <string name="BalanceSyncError_ButtonChangeSource">Quelle ändern</string>
     <string name="BalanceSyncError_ButtonReport">Melden</string>
+    <!--Release notes-->
+    <string name="ReleaseNotes_FollowUs">Follow Us</string>
 </resources>
