@@ -147,6 +147,15 @@ class CoinViewModel(
                 .let {
                     disposable.add(it)
                 }
+
+        service.chartSpinnerObservable
+                .subscribeIO {
+                    showChartSpinner = true
+                    syncChartInfo()
+                }
+                .let {
+                    disposable.add(it)
+                }
     }
 
     private fun updateLatestRate(latestRate: LatestRate) {
@@ -193,11 +202,11 @@ class CoinViewModel(
 
     private fun onChartError(error: Throwable?) {
         showChartError = true
+        showChartSpinner = false
         syncChartInfo()
     }
 
     private fun fetchChartInfo() {
-        showChartSpinner = true
         syncChartInfo()
         service.updateChartInfo()
     }

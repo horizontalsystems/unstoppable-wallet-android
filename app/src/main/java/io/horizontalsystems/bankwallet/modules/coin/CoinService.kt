@@ -31,6 +31,7 @@ class CoinService(
 
     val latestRateAsync = BehaviorSubject.create<LatestRate>()
     val chartInfoUpdatedObservable: BehaviorSubject<Unit> = BehaviorSubject.create()
+    val chartSpinnerObservable: BehaviorSubject<Unit> = BehaviorSubject.create()
     val chartInfoErrorObservable: BehaviorSubject<Throwable> = BehaviorSubject.create()
     val coinDetailsStateObservable: BehaviorSubject<CoinDetailsState> = BehaviorSubject.createDefault(CoinDetailsState.Loading)
     val topTokenHoldersStateObservable: BehaviorSubject<CoinDetailsState> = BehaviorSubject.createDefault(CoinDetailsState.Loading)
@@ -163,6 +164,11 @@ class CoinService(
         chartInfoDisposable?.dispose()
 
         chartInfo = xRateManager.chartInfo(coinType, currency.code, chartType)
+        if (chartInfo == null){
+                //show chart spinner only when chart data is not locally cached
+                // and we need to wait for network response for data
+            chartSpinnerObservable.onNext(Unit)
+        }
         xRateManager.chartInfoObservable(coinType, currency.code, chartType)
                 .subscribeIO({ chartInfo ->
                     this.chartInfo = chartInfo
