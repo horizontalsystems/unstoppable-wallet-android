@@ -50,7 +50,7 @@
             app:tint="@color/lucian" />
 
         <TextView
-            android:id="@+id/coinName"
+            android:id="@+id/coinCodeTextView"
             style="@style/Headline2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -75,10 +75,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="4dp"
-            app:layout_constraintBottom_toBottomOf="@+id/coinName"
+            app:layout_constraintBottom_toBottomOf="@+id/coinCodeTextView"
             app:layout_constraintEnd_toStartOf="@+id/rightSideBarrier"
-            app:layout_constraintStart_toEndOf="@+id/coinName"
-            app:layout_constraintTop_toTopOf="@+id/coinName"
+            app:layout_constraintStart_toEndOf="@+id/coinCodeTextView"
+            app:layout_constraintTop_toTopOf="@+id/coinCodeTextView"
             tools:text="ERC20" />
 
         <TextView
@@ -92,8 +92,8 @@
             android:textColor="@color/grey"
             android:visibility="invisible"
             app:layout_constraintHorizontal_bias="0"
-            app:layout_constraintStart_toStartOf="@+id/coinName"
-            app:layout_constraintTop_toBottomOf="@+id/coinName"
+            app:layout_constraintStart_toStartOf="@+id/coinCodeTextView"
+            app:layout_constraintTop_toBottomOf="@+id/coinCodeTextView"
             tools:text="Syncing... 40%" />
 
         <TextView
@@ -104,8 +104,8 @@
             android:layout_marginTop="3dp"
             android:includeFontPadding="false"
             android:textColor="@color/grey"
-            app:layout_constraintStart_toStartOf="@+id/coinName"
-            app:layout_constraintTop_toBottomOf="@+id/coinName"
+            app:layout_constraintStart_toStartOf="@+id/coinCodeTextView"
+            app:layout_constraintTop_toBottomOf="@+id/coinCodeTextView"
             tools:text="$6500" />
 
         <TextView
@@ -128,7 +128,7 @@
             android:includeFontPadding="false"
             android:textColor="@color/jacob"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/coinName"
+            app:layout_constraintTop_toTopOf="@+id/coinCodeTextView"
             tools:text="$52.50" />
 
         <TextView
@@ -149,7 +149,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1"
             app:layout_constraintStart_toEndOf="@+id/textSyncing"
-            app:layout_constraintTop_toBottomOf="@+id/coinName"
+            app:layout_constraintTop_toBottomOf="@+id/coinCodeTextView"
             tools:text="until Aug 11, 2019" />
 
         <TextView
@@ -162,7 +162,7 @@
             android:includeFontPadding="false"
             android:textColor="@color/grey"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/coinName"
+            app:layout_constraintTop_toBottomOf="@+id/coinCodeTextView"
             tools:text="0.000078" />
 
         <androidx.constraintlayout.widget.Barrier
