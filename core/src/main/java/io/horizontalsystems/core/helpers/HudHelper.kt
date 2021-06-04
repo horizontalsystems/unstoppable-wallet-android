@@ -4,7 +4,6 @@ import android.content.Context
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.view.View
-import android.view.ViewGroup
 import io.horizontalsystems.core.R
 import io.horizontalsystems.snackbar.CustomSnackbar
 import io.horizontalsystems.snackbar.SnackbarDuration
