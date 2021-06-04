@@ -53,8 +53,17 @@ class CoinChartAdapter(
         return ChartViewHolder(inflate(parent, R.layout.view_holder_coin_chart, false), listener, currency)
     }
 
-    override fun onBindViewHolder(holder: ChartViewHolder, position: Int) {
-        holder.bind(getItem(position))
+    override fun onBindViewHolder(holder: ChartViewHolder, position: Int) {}
+
+    override fun onBindViewHolder(holder: ChartViewHolder, position: Int, payloads: MutableList<Any>) {
+        val item = getItem(position)
+        val prev = payloads.lastOrNull() as? ViewItemWrapper
+
+        if (prev == null) {
+            holder.bind(item)
+        } else {
+            holder.bindUpdate(item, prev)
+        }
     }
 
     companion object {
@@ -62,10 +71,13 @@ class CoinChartAdapter(
             override fun areItemsTheSame(oldItem: ViewItemWrapper, newItem: ViewItemWrapper): Boolean = true
 
             override fun areContentsTheSame(oldItem: ViewItemWrapper, newItem: ViewItemWrapper): Boolean {
-                return oldItem.data?.chartData?.startTimestamp == newItem.data?.chartData?.startTimestamp
-                        && oldItem.data?.chartData?.endTimestamp == newItem.data?.chartData?.endTimestamp
+                return oldItem.data == newItem.data
                         && oldItem.showError == newItem.showError
                         && oldItem.showSpinner == newItem.showSpinner
+            }
+
+            override fun getChangePayload(oldItem: ViewItemWrapper, newItem: ViewItemWrapper): Any? {
+                return oldItem
             }
         }
     }
@@ -96,7 +108,6 @@ class ChartViewHolder(override val containerView: View, private val listener: Co
         if (item.showError) {
             chart.showError(containerView.context.getString(R.string.CoinPage_NoData))
             chart.hideSpinner()
-            return
         }
 
         if (item.showSpinner) {
@@ -110,20 +121,39 @@ class ChartViewHolder(override val containerView: View, private val listener: Co
                 chart.setData(data.chartData, data.chartType, data.maxValue, data.minValue)
             }
 
-            val indexOf = actions.indexOfFirst { it.first == data.chartType }
-            if (indexOf > -1) {
-                tabLayout.removeOnTabSelectedListener(this)
-                tabLayout.selectTab(tabLayout.getTabAt(indexOf))
-                tabLayout.addOnTabSelectedListener(this)
-            }
+            updateTabSelection(data.chartType)
 
             updateIndicatorsState(data.chartType)
         }
 
     }
 
+    fun bindUpdate(current: CoinChartAdapter.ViewItemWrapper, prev: CoinChartAdapter.ViewItemWrapper) {
+        current.apply {
+            if (showSpinner != prev.showSpinner) {
+                if (showSpinner) {
+                    chart.showSpinner()
+                } else {
+                    chart.hideSpinner()
+                }
+            }
+            if (showError != prev.showError && showError) {
+                chart.showError(containerView.context.getString(R.string.CoinPage_NoData))
+                chart.hideSpinner()
+            }
+            if (data != prev.data) {
+                data?.let { data ->
+                    chart.setData(data.chartData, data.chartType, data.maxValue, data.minValue)
+
+                    updateTabSelection(data.chartType)
+
+                    updateIndicatorsState(data.chartType)
+                }
+            }
+        }
+    }
+
     override fun onTabSelected(tab: TabLayout.Tab) {
-        chart.showSpinner()
         listener.onTabSelect(actions[tab.position].first)
     }
 
@@ -158,6 +188,15 @@ class ChartViewHolder(override val containerView: View, private val listener: Co
         }
 
         HudHelper.vibrate(containerView.context)
+    }
+
+    private fun updateTabSelection(chartType: ChartView.ChartType) {
+        val indexOf = actions.indexOfFirst { it.first == chartType }
+        if (indexOf > -1) {
+            tabLayout.removeOnTabSelectedListener(this@ChartViewHolder)
+            tabLayout.selectTab(tabLayout.getTabAt(indexOf))
+            tabLayout.addOnTabSelectedListener(this@ChartViewHolder)
+        }
     }
 
     private fun updateIndicatorsState(chartType: ChartView.ChartType) {
