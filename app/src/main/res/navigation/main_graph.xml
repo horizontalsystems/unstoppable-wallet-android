@@ -74,6 +74,9 @@
             android:id="@+id/mainFragment_to_sendEvmFragment"
             app:destination="@id/sendEvmFragment" />
         <action
+            android:id="@+id/mainFragment_to_receiveFragment"
+            app:destination="@id/receiveFragment" />
+        <action
             android:id="@+id/mainFragment_to_releaseNotesFragment"
             app:destination="@id/releaseNotesFragment" />
     </fragment>
@@ -397,6 +400,10 @@
         android:id="@+id/restoreSelectCoinsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.restore.restoreselectcoins.RestoreSelectCoinsFragment"
         tools:layout="@layout/fragment_manage_wallets" />
+    <fragment
+        android:id="@+id/receiveFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.receive.ReceiveFragment"
+        android:label="ReceiveFragment" />
 
     <!--  Dialogs/BottomSheets  -->
     <dialog
