@@ -9,7 +9,6 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.app.ShareCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -37,7 +36,7 @@ import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.views.helpers.LayoutHelper
 import kotlinx.android.synthetic.main.fragment_balance.*
 
-class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener, ReceiveFragment.Listener, BackupRequiredDialog.Listener {
+class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener, BackupRequiredDialog.Listener {
 
     private val viewModel by navGraphViewModels<BalanceViewModel>(R.id.mainFragment) { BalanceModule.Factory() }
     private val balanceItemsAdapter = BalanceItemsAdapter(this)
@@ -94,17 +93,6 @@ class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener, ReceiveFra
         }
     }
 
-    // ReceiveFragment listener
-    override fun shareReceiveAddress(address: String) {
-        activity?.let {
-            ShareCompat.IntentBuilder
-                    .from(it)
-                    .setType("text/plain")
-                    .setText(address)
-                    .startChooser()
-        }
-    }
-
     //  BackupRequiredDialog Listener
 
     override fun onClickBackup(account: Account) {
@@ -138,9 +126,7 @@ class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener, ReceiveFra
     }
 
     override fun onAttachFragment(childFragment: Fragment) {
-        if (childFragment is ReceiveFragment) {
-            childFragment.setListener(this)
-        } else if (childFragment is BackupRequiredDialog) {
+        if (childFragment is BackupRequiredDialog) {
             childFragment.setListener(this)
         }
     }
@@ -162,7 +148,7 @@ class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener, ReceiveFra
         }
 
         viewModel.openReceiveDialog.observe(viewLifecycleOwner, Observer { wallet ->
-            ReceiveFragment.newInstance(wallet).show(childFragmentManager, "ReceiveFragment")
+            findNavController().navigate(R.id.mainFragment_to_receiveFragment, bundleOf(ReceiveFragment.WALLET_KEY to wallet), navOptionsFromBottom())
         })
 
         viewModel.openSendDialog.observe(viewLifecycleOwner, Observer {

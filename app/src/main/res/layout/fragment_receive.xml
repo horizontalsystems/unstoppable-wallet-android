@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?android:windowBackground">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        app:menu="@menu/receive_menu"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:layout_constraintBottom_toTopOf="@id/middleGroup"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="spread_inside"
+        app:layout_constraintVertical_weight="1"
+        app:titleTextAppearance="@style/Title3"
+        tools:navigationIcon="@drawable/bitcoin"
+        tools:title="@string/Deposit_Title" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/middleGroup"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/btnClose"
+        app:layout_constraintTop_toBottomOf="@id/toolbar">
+
+        <ImageView
+            android:id="@+id/imgQrCode"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginHorizontal="72dp"
+            android:background="@android:color/transparent"
+            app:layout_constraintBottom_toTopOf="@+id/receiverHint"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"
+            app:layout_constraintVertical_weight="0"
+
+            tools:src="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/receiverHint"
+            style="@style/Subhead2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="23dp"
+            android:textColor="@color/grey"
+            app:layout_constraintBottom_toTopOf="@+id/receiveAddressView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imgQrCode"
+            app:layout_constraintVertical_weight="0"
+            tools:text="@string/Deposit_Your_Address" />
+
+        <TextView
+            android:id="@+id/receiveAddressView"
+            style="@style/Subhead1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="24dp"
+            android:layout_marginTop="12dp"
+            android:gravity="center"
+            android:maxLines="2"
+            android:textColor="@color/bran"
+            app:layout_constraintBottom_toTopOf="@+id/btnCopy"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/receiverHint"
+            app:layout_constraintVertical_weight="0"
+            tools:text="1JeippMVXgWqiMUUiL7KCSrh4Ngmixtbfi1JeippMVXgWqiMUUiL7KCSrh4Ngmixtbfi" />
+
+        <Button
+            android:id="@+id/btnCopy"
+            style="@style/ButtonSecondary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="23dp"
+            android:text="@string/Alert_Copy"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/btnShare"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/receiveAddressView"
+            app:layout_constraintVertical_weight="0" />
+
+        <Button
+            android:id="@+id/btnShare"
+            style="@style/ButtonSecondary"
+            android:layout_width="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_height="wrap_content"
+            android:text="@string/Deposit_Share"
+            app:layout_constraintEnd_toEndOf="parent"
+
+            app:layout_constraintStart_toEndOf="@id/btnCopy"
+            app:layout_constraintTop_toTopOf="@id/btnCopy" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <Button
+        android:id="@+id/btnClose"
+        style="@style/ButtonPrimaryYellow"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="38dp"
+        android:text="@string/Button_Close"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/middleGroup" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
