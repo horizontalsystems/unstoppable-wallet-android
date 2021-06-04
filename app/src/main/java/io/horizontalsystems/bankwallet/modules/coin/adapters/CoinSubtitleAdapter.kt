@@ -34,8 +34,17 @@ class CoinSubtitleAdapter(
         return ViewHolder(inflate(parent, R.layout.view_holder_coin_subtitle, false))
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(getItem(position))
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {}
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int, payloads: MutableList<Any>) {
+        val item = getItem(position)
+        val prev = payloads.lastOrNull() as? ViewItemWrapper
+
+        if (prev == null) {
+            holder.bind(item)
+        } else {
+            holder.bindUpdate(item, prev)
+        }
     }
 
     companion object {
@@ -43,7 +52,11 @@ class CoinSubtitleAdapter(
             override fun areItemsTheSame(oldItem: ViewItemWrapper, newItem: ViewItemWrapper): Boolean = true
 
             override fun areContentsTheSame(oldItem: ViewItemWrapper, newItem: ViewItemWrapper): Boolean {
-                return oldItem == newItem
+                return oldItem.rate == newItem.rate && oldItem.rateDiff == newItem.rateDiff
+            }
+
+            override fun getChangePayload(oldItem: ViewItemWrapper, newItem: ViewItemWrapper): Any? {
+                return oldItem
             }
         }
     }
@@ -60,7 +73,7 @@ class CoinSubtitleAdapter(
     class ViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
         fun bind(item: ViewItemWrapper) {
             coinIcon.setCoinImage(item.coinType)
-            coinName.text = item.coinName
+            coinNameTextView.text = item.coinName
             coinRateLast.text = item.rate
             coinRateDiff.setDiff(item.rateDiff)
 
@@ -79,6 +92,29 @@ class CoinSubtitleAdapter(
                 else -> return null
             }
             return ContextCompat.getDrawable(containerView.context, icon)
+        }
+
+        fun bindUpdate(current: ViewItemWrapper, prev: ViewItemWrapper) {
+            current.apply {
+                if (coinType != prev.coinType){
+                    coinIcon.setCoinImage(coinType)
+                }
+                if (coinName != prev.coinName) {
+                    coinNameTextView.text = coinName
+                }
+                if (rate != prev.rate) {
+                    coinRateLast.text = rate
+                }
+                if (rateDiff != prev.rateDiff) {
+                    coinRateDiff.setDiff(rateDiff)
+                }
+                if (rating != prev.rating) {
+                    coinRating.isVisible = !rating.isNullOrBlank()
+                    coinRating.setImageDrawable(getRatingIcon(rating))
+                    coinRating.isEnabled = false
+                }
+
+            }
         }
 
     }
