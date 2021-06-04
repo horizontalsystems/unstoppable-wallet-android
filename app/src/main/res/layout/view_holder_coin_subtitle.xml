@@ -29,7 +29,7 @@
         tools:src="@drawable/bitcoin" />
 
     <TextView
-        android:id="@+id/coinName"
+        android:id="@+id/coinNameTextView"
         style="@style/Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
