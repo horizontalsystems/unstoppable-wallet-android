@@ -93,6 +93,8 @@ class App : CoreApp() {
         lateinit var activateCoinManager: ActivateCoinManager
         lateinit var releaseNotesManager: ReleaseNotesManager
         lateinit var restoreSettingsManager: RestoreSettingsManager
+        lateinit var evmNetworkManager: EvmNetworkManager
+        lateinit var accountSettingManager: AccountSettingManager
     }
 
     override fun onCreate() {
@@ -225,6 +227,9 @@ class App : CoreApp() {
         activateCoinManager = ActivateCoinManager(coinKit, walletManager, accountManager)
 
         releaseNotesManager = ReleaseNotesManager(systemInfoManager, localStorage, appConfigProvider)
+
+        evmNetworkManager = EvmNetworkManager(appConfigProvider)
+        accountSettingManager = AccountSettingManager(AccountSettingRecordStorage(appDatabase), evmNetworkManager)
 
         setAppTheme()
 

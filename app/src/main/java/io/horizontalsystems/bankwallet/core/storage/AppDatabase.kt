@@ -13,12 +13,13 @@ import com.google.gson.Gson
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.storage.migrations.Migration_31_32
 import io.horizontalsystems.bankwallet.core.storage.migrations.Migration_32_33
+import io.horizontalsystems.bankwallet.core.storage.migrations.Migration_33_34
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.coinkit.models.CoinType
 import java.util.*
 
-@Database(version = 33, exportSchema = false, entities = [
+@Database(version = 34, exportSchema = false, entities = [
     EnabledWallet::class,
     PriceAlert::class,
     AccountRecord::class,
@@ -28,7 +29,8 @@ import java.util.*
     FavoriteCoin::class,
     WalletConnectSession::class,
     RestoreSettingRecord::class,
-    ActiveAccount::class
+    ActiveAccount::class,
+    AccountSettingRecord::class,
 ])
 
 @TypeConverters(DatabaseConverters::class)
@@ -43,6 +45,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun logsDao(): LogsDao
     abstract fun marketFavoritesDao(): MarketFavoritesDao
     abstract fun walletConnectSessionDao(): WalletConnectSessionDao
+    abstract fun accountSettingDao(): AccountSettingDao
 
     companion object {
 
@@ -84,7 +87,8 @@ abstract class AppDatabase : RoomDatabase() {
                             MIGRATION_29_30,
                             MIGRATION_30_31,
                             Migration_31_32,
-                            Migration_32_33
+                            Migration_32_33,
+                            Migration_33_34,
                     )
                     .build()
         }

@@ -131,6 +131,7 @@ class SendEvmTransactionService(
                     EthereumKit.NetworkType.EthMainNet,
                     EthereumKit.NetworkType.EthRopsten,
                     EthereumKit.NetworkType.EthKovan,
+                    EthereumKit.NetworkType.EthGoerli,
                     EthereumKit.NetworkType.EthRinkeby -> CoinType.Ethereum
                     EthereumKit.NetworkType.BscMainNet -> CoinType.BinanceSmartChain
                 }
@@ -140,6 +141,7 @@ class SendEvmTransactionService(
                     EthereumKit.NetworkType.EthMainNet,
                     EthereumKit.NetworkType.EthRopsten,
                     EthereumKit.NetworkType.EthKovan,
+                    EthereumKit.NetworkType.EthGoerli,
                     EthereumKit.NetworkType.EthRinkeby -> CoinType.Erc20(tokenOut.address.hex)
                     EthereumKit.NetworkType.BscMainNet -> CoinType.Bep20(tokenOut.address.hex)
                 }

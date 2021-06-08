@@ -32,6 +32,7 @@ object WalletConnectRequestModule {
                 NetworkType.EthMainNet,
                 NetworkType.EthRopsten,
                 NetworkType.EthKovan,
+                NetworkType.EthGoerli,
                 NetworkType.EthRinkeby -> App.coinManager.getCoin(CoinType.Ethereum)!!
                 NetworkType.BscMainNet -> App.coinManager.getCoin(CoinType.BinanceSmartChain)!!
             }
