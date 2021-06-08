@@ -18,6 +18,7 @@ import io.horizontalsystems.bankwallet.modules.backupkey.BackupKeyModule
 import io.horizontalsystems.bankwallet.modules.manageaccount.ManageAccountModule.ACCOUNT_ID_KEY
 import io.horizontalsystems.bankwallet.modules.manageaccount.ManageAccountViewModel.KeyActionState
 import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.UnlinkConfirmationDialog
+import io.horizontalsystems.bankwallet.modules.networksettings.NetworkSettingsModule
 import io.horizontalsystems.bankwallet.modules.showkey.ShowKeyModule
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.findNavController
@@ -78,6 +79,10 @@ class ManageAccountFragment : BaseFragment(), UnlinkConfirmationDialog.Listener 
             UnlinkConfirmationDialog.show(childFragmentManager, viewModel.account.name, confirmationList)
         }
 
+        networkSettings.setOnClickListener {
+            openNetworkSettings(viewModel.account)
+        }
+
         childFragmentManager.addFragmentOnAttachListener { _, fragment ->
             when (fragment) {
                 is UnlinkConfirmationDialog -> fragment.setListener(this)
@@ -107,7 +112,7 @@ class ManageAccountFragment : BaseFragment(), UnlinkConfirmationDialog.Listener 
             if (additionalItems.isNotEmpty()) {
                 additionalInfoItems.adapter = AdditionalInfoAdapter(additionalItems)
             } else {
-                actionButton.setListPosition(ListPosition.Single)
+                networkSettings.setListPosition(ListPosition.Last)
             }
         })
 
@@ -122,6 +127,10 @@ class ManageAccountFragment : BaseFragment(), UnlinkConfirmationDialog.Listener 
 
     private fun openBackupModule(account: Account) {
         BackupKeyModule.start(this, R.id.manageAccountFragment_to_backupKeyFragment, navOptions(), account)
+    }
+
+    private fun openNetworkSettings(account: Account) {
+        findNavController().navigate(R.id.manageAccountFragment_to_networkSettingsFragment, NetworkSettingsModule.args(account), navOptions())
     }
 
     override fun onUnlinkConfirm() {

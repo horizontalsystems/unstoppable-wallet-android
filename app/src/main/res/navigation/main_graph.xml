@@ -131,6 +131,9 @@
         <action
             android:id="@+id/manageAccountFragment_to_backupKeyFragment"
             app:destination="@id/backupKeyFragment" />
+        <action
+            android:id="@+id/manageAccountFragment_to_networkSettingsFragment"
+            app:destination="@id/networkSettingsFragment" />
     </fragment>
 
     <fragment
@@ -404,6 +407,18 @@
         android:id="@+id/receiveFragment"
         android:name="io.horizontalsystems.bankwallet.modules.receive.ReceiveFragment"
         android:label="ReceiveFragment" />
+    <fragment
+        android:id="@+id/networkSettingsFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.networksettings.NetworkSettingsFragment"
+        android:label="NetworkSettingsFragment">
+        <action
+            android:id="@+id/networkSettingsFragment_to_evmNetworkFragment"
+            app:destination="@id/evmNetworkFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/evmNetworkFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.evmnetwork.EvmNetworkFragment"
+        android:label="EvmNetworkFragment" />
 
     <!--  Dialogs/BottomSheets  -->
     <dialog

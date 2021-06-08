@@ -10,6 +10,7 @@ import io.horizontalsystems.erc20kit.core.Erc20Kit
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.core.EthereumKit.NetworkType
 import io.horizontalsystems.uniswapkit.UniswapKit
+import java.net.URL
 
 class EthereumKitManager(
         private val infuraProjectId: String,
@@ -100,3 +101,9 @@ class EthereumKitManager(
     }
 
 }
+
+val EthereumKit.SyncSource.url: URL
+    get() = when (this) {
+        is EthereumKit.SyncSource.WebSocket -> this.url
+        is EthereumKit.SyncSource.Http -> this.url
+    }

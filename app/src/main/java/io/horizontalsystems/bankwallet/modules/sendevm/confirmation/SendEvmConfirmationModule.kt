@@ -31,6 +31,7 @@ object SendEvmConfirmationModule {
                 NetworkType.EthMainNet,
                 NetworkType.EthRopsten,
                 NetworkType.EthKovan,
+                NetworkType.EthGoerli,
                 NetworkType.EthRinkeby -> App.coinKit.getCoin(CoinType.Ethereum)!!
                 NetworkType.BscMainNet -> App.coinKit.getCoin(CoinType.BinanceSmartChain)!!
             }

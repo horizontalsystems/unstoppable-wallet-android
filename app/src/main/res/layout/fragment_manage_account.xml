@@ -62,13 +62,24 @@
         app:position="first"
         app:title="@string/ManageAccount_RecoveryPhraseBackup" />
 
+    <io.horizontalsystems.views.SettingsView
+        android:id="@+id/networkSettings"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        app:icon="@drawable/ic_blocks"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/actionButton"
+        app:position="middle"
+        app:title="@string/ManageAccount_NetworkSettings" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/additionalInfoItems"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/actionButton"
+        app:layout_constraintTop_toBottomOf="@id/networkSettings"
         tools:itemCount="1"
         tools:listitem="@layout/view_holder_account_setting_view" />
 

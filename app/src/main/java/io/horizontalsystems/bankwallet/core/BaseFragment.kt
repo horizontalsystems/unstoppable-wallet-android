@@ -4,8 +4,8 @@ import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import android.view.MenuItem
-import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
+import androidx.annotation.LayoutRes
 import androidx.core.graphics.BlendModeColorFilterCompat
 import androidx.core.graphics.BlendModeCompat
 import androidx.fragment.app.Fragment
@@ -13,7 +13,7 @@ import androidx.navigation.NavOptions
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.views.AlertDialogKeyboardFragment
 
-abstract class BaseFragment : Fragment() {
+abstract class BaseFragment(@LayoutRes layoutResId: Int = 0) : Fragment(layoutResId) {
 
     protected fun hideKeyboard() {
         activity?.getSystemService(InputMethodManager::class.java)?.hideSoftInputFromWindow(activity?.currentFocus?.windowToken, 0)

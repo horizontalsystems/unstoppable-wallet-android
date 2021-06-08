@@ -144,7 +144,7 @@ class WalletConnectService(
         sessionData?.let { sessionData ->
             interactor?.let { interactor ->
                 val evmKit = sessionData.evmKit
-                val chainId = evmKit.networkType.getNetwork().id
+                val chainId = evmKit.networkType.chainId
                 interactor.approveSession(evmKit.receiveAddress.eip55, chainId)
 
                 val session = WalletConnectSession(
