@@ -560,6 +560,7 @@
     <string name="ManageAccount_Save">Сохранить</string>
     <string name="ManageAccount_RecoveryPhraseBackup">Резервная Фраза</string>
     <string name="ManageAccount_RecoveryPhraseShow">Показать Фразу</string>
+    <string name="ManageAccount_NetworkSettings">Network Settings</string>
     <string name="ManageAccount_Unlink">Отсоединить</string>
     <string name="ManageAccount_BackupRequired_Title">Необходима Резервная Копия</string>
     <string name="ManageAccount_BackupRequired_Description">Вам нужно сделать резервную копию персонального ключа для этого кошелька, прежде чем он будет удален с этого телефона.</string>
@@ -569,6 +570,8 @@
     <string name="ManageAccount_BirthdayHeight">%s Блок Создания</string>
     <string name="ManageAccount_NWords">%s слов</string>
     <string name="ManageAccount_NWordsWithPassphrase">%s слов с кодовой фразой</string>
+    <!--Network Settings-->
+    <string name="NetworkSettings_Title">Network Settings</string>
     <!-- Show Key -->
     <string name="ShowKey_Title">Ключ</string>
     <string name="ShowKey_Description">Показанные далее фразы для восстановления являются единственным способом восстановления ваших средств в случае потери, кражи или поломки вашего телефона.\n\nУбедитесь, что никто не смотрит на ваш экран.</string>
