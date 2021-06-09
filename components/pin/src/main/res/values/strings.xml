@@ -19,9 +19,7 @@
     <!--Set Pin-->
     <string name="SetPin_Title">Passcode</string>
     <string name="SetPin_Info">Your passcode will be used to unlock your wallet</string>
-    <string name="SetPin_ErrorShortPin">Please enter all digits.</string>
     <string name="SetPin_ConfirmInfo">Confirm</string>
-    <string name="SetPin_Success">Lock passcode was set successfully!</string>
     <string name="SetPin_ErrorPinsDontMatch">Passcode did not match. Try again.</string>
     <string name="SetPin_ErrorFailedToSavePin">Error occurred while saving your passcode. Please, try again.</string>
 

@@ -1,11 +1,4 @@
 <resources>
-    <!--Timestamp-->
-
-    <string name="Timestamp_JustNow">just now</string>
-    <string name="Timestamp_MinAgo">%dm. ago</string>
-    <string name="Timestamp_HoursAgo">%dh. ago</string>
-    <string name="Timestamp_Today">Тoday</string>
-    <string name="Timestamp_Yesterday">Yesterday</string>
 
     <string name="Duration_instant">instant</string>
     <string name="Duration_Within">within %s</string>
