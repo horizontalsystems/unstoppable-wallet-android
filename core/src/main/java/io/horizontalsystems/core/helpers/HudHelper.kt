@@ -34,12 +34,7 @@ object HudHelper {
     fun vibrate(context: Context) {
         val vibratorService = context.getSystemService(Context.VIBRATOR_SERVICE) as? Vibrator
 
-        // this type of vibration requires API 29
-        val vibrationEffect = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
-            VibrationEffect.createPredefined(VibrationEffect.EFFECT_TICK)
-        } else {
-            VibrationEffect.createOneShot(20, VibrationEffect.DEFAULT_AMPLITUDE)
-        }
+        val vibrationEffect = VibrationEffect.createOneShot(20, VibrationEffect.DEFAULT_AMPLITUDE)
 
         vibratorService?.vibrate(vibrationEffect)
     }
