@@ -1,31 +1,63 @@
 package io.horizontalsystems.bankwallet.modules.addtoken
 
 import io.horizontalsystems.bankwallet.core.IAddTokenBlockchainService
+import io.horizontalsystems.bankwallet.core.IAppConfigProvider
 import io.horizontalsystems.bankwallet.core.INetworkManager
 import io.horizontalsystems.bankwallet.entities.ApiError
 import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.ethereumkit.core.AddressValidator
+import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.reactivex.Single
 import java.util.*
 
 class AddEvmTokenBlockchainService(
-        private val resolver: IAddEvmTokenResolver,
-        private val networkManager: INetworkManager
+    private val networkType: EthereumKit.NetworkType,
+    private val appConfigProvider: IAppConfigProvider,
+    private val networkManager: INetworkManager
 ) : IAddTokenBlockchainService {
+
+    private val apiUrl: String
+        get() = when (networkType) {
+            EthereumKit.NetworkType.EthMainNet -> "https://api.etherscan.io"
+            EthereumKit.NetworkType.EthRopsten -> "https://api-ropsten.etherscan.io"
+            EthereumKit.NetworkType.EthKovan -> "https://api-kovan.etherscan.io"
+            EthereumKit.NetworkType.EthRinkeby -> "https://api-rinkeby.etherscan.io"
+            EthereumKit.NetworkType.EthGoerli -> "https://api-goerli.etherscan.io"
+            EthereumKit.NetworkType.BscMainNet -> "https://api.bscscan.com"
+        }
+
+    val explorerKey: String
+        get() = when (networkType) {
+            EthereumKit.NetworkType.EthMainNet,
+            EthereumKit.NetworkType.EthRopsten,
+            EthereumKit.NetworkType.EthKovan,
+            EthereumKit.NetworkType.EthRinkeby,
+            EthereumKit.NetworkType.EthGoerli -> appConfigProvider.etherscanApiKey
+            EthereumKit.NetworkType.BscMainNet -> appConfigProvider.bscscanApiKey
+        }
 
     override fun validate(reference: String) {
         AddressValidator.validate(reference)
     }
 
     override fun coinType(reference: String): CoinType {
-        return resolver.coinType(reference)
+        val address = reference.toLowerCase(Locale.ENGLISH)
+
+        return when (networkType) {
+            EthereumKit.NetworkType.EthMainNet,
+            EthereumKit.NetworkType.EthRopsten,
+            EthereumKit.NetworkType.EthKovan,
+            EthereumKit.NetworkType.EthRinkeby,
+            EthereumKit.NetworkType.EthGoerli -> CoinType.Erc20(address)
+            EthereumKit.NetworkType.BscMainNet -> CoinType.Bep20(address)
+        }
     }
 
     override fun coinAsync(reference: String): Single<Coin> {
-        val request = "api?module=account&action=tokentx&contractaddress=$reference&page=1&offset=1&sort=asc&apikey=${resolver.explorerKey}"
+        val request = "api?module=account&action=tokentx&contractaddress=$reference&page=1&offset=1&sort=asc&apikey=${explorerKey}"
 
-        return networkManager.getEvmInfo(resolver.apiUrl, request)
+        return networkManager.getEvmInfo(apiUrl, request)
                 .map { response ->
                     if (response.get("status").asString == "0") {
                         try {
@@ -50,7 +82,7 @@ class AddEvmTokenBlockchainService(
                     val tokenDecimal = result.get("tokenDecimal")?.asString?.toInt()
                             ?: throw ApiError.InvalidResponse
 
-                    return@map Coin(title = tokenName, code = tokenSymbol, decimal = tokenDecimal, type = resolver.coinType(reference))
+                    return@map Coin(title = tokenName, code = tokenSymbol, decimal = tokenDecimal, type = coinType(reference))
                 }
     }
 

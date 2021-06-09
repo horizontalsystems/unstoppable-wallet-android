@@ -6,10 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.addtoken.bep2.AddBep2TokenBlockchainService
-import io.horizontalsystems.bankwallet.modules.addtoken.bep20.AddBep20TokenResolver
-import io.horizontalsystems.bankwallet.modules.addtoken.erc20.AddErc20TokenResolver
 import io.horizontalsystems.coinkit.models.Coin
-import io.horizontalsystems.coinkit.models.CoinType
 import kotlinx.android.parcel.Parcelize
 
 object AddTokenModule {
@@ -19,14 +16,16 @@ object AddTokenModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val viewModel = when (tokenType) {
                 TokenType.Erc20 -> {
-                    val resolver = AddErc20TokenResolver(App.buildConfigProvider.testMode, App.appConfigProvider.etherscanApiKey)
-                    val blockchainService = AddEvmTokenBlockchainService(resolver, App.networkManager)
+                    val activeAccount = App.accountManager.activeAccount!!
+                    val networkType = App.accountSettingManager.ethereumNetwork(activeAccount).networkType
+                    val blockchainService = AddEvmTokenBlockchainService(networkType, App.appConfigProvider, App.networkManager)
                     val service = AddTokenService(App.coinManager, blockchainService, App.walletManager, App.accountManager)
                     AddTokenViewModel(service, R.string.AddErc20Token_Title, R.string.AddEvmToken_ContractAddressHint)
                 }
                 TokenType.Bep20 -> {
-                    val resolver = AddBep20TokenResolver(App.buildConfigProvider.testMode, App.appConfigProvider.bscscanApiKey)
-                    val blockchainService = AddEvmTokenBlockchainService(resolver, App.networkManager)
+                    val activeAccount = App.accountManager.activeAccount!!
+                    val networkType = App.accountSettingManager.binanceSmartChainNetwork(activeAccount).networkType
+                    val blockchainService = AddEvmTokenBlockchainService(networkType, App.appConfigProvider, App.networkManager)
                     val service = AddTokenService(App.coinManager, blockchainService, App.walletManager, App.accountManager)
                     AddTokenViewModel(service, R.string.AddBep20Token_Title, R.string.AddEvmToken_ContractAddressHint)
                 }
@@ -56,10 +55,4 @@ enum class TokenType(val value: String) : Parcelable {
     Erc20("erc20"),
     Bep20("bep20"),
     Bep2("bep2");
-}
-
-interface IAddEvmTokenResolver {
-    val apiUrl: String
-    val explorerKey: String
-    fun coinType(address: String): CoinType
 }
