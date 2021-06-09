@@ -7,8 +7,6 @@
     <string name="Alert_Loading">Загрузка...</string>
     <string name="Alert_Restart">Перезапустить</string>
     <string name="Button_Cancel">Отменить</string>
-    <string name="Button_Skip">Пропустить</string>
-    <string name="Button_Next">Далее</string>
     <string name="Button_Enable">Активировать</string>
     <string name="Button_Disable">Выкл.</string>
     <string name="Button_Close">Закрыть</string>
@@ -27,9 +25,7 @@
     <string name="Button_Reset">Reset</string>
     <string name="Error">Ошибка</string>
     <string name="NotAvailable">Нет данных</string>
-    <string name="None">None</string>
     <string name="Any">Any</string>
-    <string name="Wallet">%s Кошелек</string>
     <!--Intro-->
     <string name="Intro_Wallet_Screen1Description">Be Unstoppable</string>
     <string name="Intro_Wallet_Screen2Title">Unchain Assets</string>
@@ -42,8 +38,6 @@
     <string name="RootedDevice_Button_Understand">Я Понимаю</string>
     <!--Welcome-->
     <string name="Welcome_PrivacySettings">Настройки Приватности</string>
-    <string name="Welcome_CreateWallet">Создать Кошелек</string>
-    <string name="Welcome_RestoreWallet">Восстановить Кошелек</string>
     <!--Create Wallet-->
     <string name="CreateWallet_Title">Создать Кошелек</string>
     <string name="CreateWallet_Mnemonic">Мнемоническая Фраза</string>
@@ -61,12 +55,9 @@
     <string name="RateApp_Button_RateIt">Оценить</string>
     <string name="RateApp_Button_NotNow">Не сейчас</string>
     <!--Restore-->
-    <string name="Restore_ChooseWallet">Выберите Кошелек</string>
     <string name="Restore_Enter_Key_Title">Введите ключ</string>
-    <string name="Restore_Enter_Key_Description_Mnemonic">Введите приватный ключ для кошелька %1s, который состоит из %2s слов. Слова нужно ввести в правильном порядке и использовать пробелы между ними.</string>
     <string name="Restore_Mnemonic_Description">Введите мнемоническую фразу, которая состоит из 12 или 24 слов. Слова должны быть введены в правильном порядке и разделены пробелами.</string>
     <string name="Restore_ValidationFailed">Неверный Ключ</string>
-    <string name="Restore_InvalidWordCount">Неправильное количество слов: %1$d, а должно быть: %2$d</string>
     <string name="Restore_Error_MnemonicWordCount">Неправильное количество слов. Должно быть 12 или 24 слова. Длина вашей мнемонической фразы составляет: %d</string>
     <string name="Restore_Error_EmptyPassphrase">Поле для кодовой фразы не может быть пустым</string>
     <string name="Restore_InvalidChecksum">Неверная Контрольная Сумма</string>
@@ -75,15 +66,7 @@
     <string name="Restore_ZCash_BirthdayHeight">Блок Создания</string>
     <string name="Restore_ZCash_BirthdayHeight_Hint">Если вы знаете блок создания вашего Zcash кошелька, добавьте его ниже для ускорения процесса синхронизации.</string>
     <!--Backup-->
-    <string name="Backup_Intro_Title">Резервная Копия</string>
-    <string name="Backup_Intro_TitleShow">Показать Ключ</string>
-    <string name="Backup_Intro_Subtitle">Приватный ключ, который будет показан далее, является единственным способом восстановления ваших средств в случае утери, кражи или поломки вашего телефона. \n\nУбедитесь, что никто не смотрит в ваш экран.\n\nЭтот ключ контролирует следующие токены: %s.</string>
-    <string name="Backup_DisplayTitle">Приватный Ключ</string>
-    <string name="Backup_Confirmation_Description">Введите слова из вашего %s ключа</string>
-    <string name="Backup_Confirmation_FailureAlertText">Слова не совпадают</string>
     <string name="Backup_Confirmation_CheckTitle">Проверка…</string>
-    <string name="Backup_Button_Backup">Резервная копия</string>
-    <string name="Backup_Button_ShowKey">Показать Ключ</string>
     <!--Market-->
     <string name="Market_Field_MarketCap">MCap</string>
     <string name="Market_Field_Volume">Volume</string>
@@ -184,11 +167,8 @@
     <string name="Market_Filter_ChooseSet">Choose Set</string>
     <string name="Market_Filter_MarketCap">Market Cap</string>
     <string name="Market_Filter_Volume">Trading Volume</string>
-    <string name="Market_Filter_Liquidity">DEX Liquidity</string>
-    <string name="Market_Filter_LiquidityHint">This setting applies to tokens traded on Ethereum (Uniswap DEX) and Binance Smart Chain (Pancake DEX).</string>
     <string name="Market_Filter_PricePeriod">Price Period</string>
     <string name="Market_Filter_PriceChange">Price Change</string>
-    <string name="Market_Filter_ResetAll">Reset All</string>
     <string name="Market_Filter_OutperformedBtc">Outperformed BTC</string>
     <string name="Market_Filter_OutperformedEth">Outperformed ETH</string>
     <string name="Market_Filter_OutperformedBnb">Outperformed BNB</string>
@@ -226,7 +206,6 @@
     <string name="CoinMarket_Title">%s Markets</string>
     <!--Balance-->
     <string name="Balance_Title">Баланс</string>
-    <string name="Balance_Deposit">Получить</string>
     <string name="Balance_Send">Отправить</string>
     <string name="Balance_RatePerCoin">%s за %s</string>
     <string name="Balance_SyncedUntil">до %s</string>
@@ -240,7 +219,6 @@
     <string name="Balance_Sort_PopupTitle">Сортировать по</string>
     <string name="Balance_Sort_Az">Названию</string>
     <string name="Balance_Sort_24hPriceChange">Цене(%) за 24 ч</string>
-    <string name="Balance_LockedBalance">Locked Balance</string>
     <string name="Balance_Hidden">hidden</string>
     <string name="Balance_Backup_Alert">Вам нужно сделать резервную копию %s Кошелька, прежде чем вы сможете получать %s.</string>
     <string name="Balance_NoWalletAlert">У вас пока нет кошельков. Создайте новый или восстановите существующий </string>
@@ -248,7 +226,6 @@
     <!--Send-->
     <string name="Send_Title">Отправить %s</string>
     <string name="Send_Hint_Address">Адрес или домен</string>
-    <string name="Send_Hint_Amount">Сумма</string>
     <string name="Send_Fee">Комиссия</string>
     <string name="Send_Button_Paste">Вставить</string>
     <string name="Send_Button_Max">Макс.</string>
@@ -258,7 +235,6 @@
     <string name="Send_Confirmation_Amount">Сумма</string>
     <string name="Send_Confirmation_To">Кому</string>
     <string name="Send_Confirmation_Receiver">Получатель</string>
-    <string name="Send_Confirmation_Input">Ввод</string>
     <string name="Send_Confirmation_EstimateTime">Приблизительное Время:</string>
     <string name="Send_Confirmation_Send_Button">Отправить</string>
     <string name="Send_Success">\u2713 Отправлено</string>
@@ -270,7 +246,6 @@
     <string name="Send_Error_MinimumAmount">Мин. сумма %s</string>
     <string name="Send_Error_MaximumAmount">Макс. сумма %s</string>
     <string name="Send_Error_MinRequiredBalance">Мин. обязательный остаток %s</string>
-    <string name="Send_Error_WrongParameters">Неверные параметры</string>
     <string name="Send_Error_TransparentAddress">Unstoppable не поддерживает платежи на публичный адрес</string>
     <string name="Send_Error_SendToSelf">Отправка самому себе невозможна</string>
     <string name="Send_DialogAvailableBalance">Доступный Баланс</string>
@@ -280,7 +255,6 @@
     <string name="Send_TxSpeed_Recommended">Рекомендовано</string>
     <string name="Send_TxSpeed_Custom">Индивидуальная</string>
     <string name="Send_TxSpeed_CustomFeeHint">sat/byte</string>
-    <string name="Send_DialogDuration">Продолжительность</string>
     <string name="Send_DialogFee">Комиссия:</string>
     <string name="Send_DialogProceed">Далее</string>
     <string name="Send_LockTime_Off">Выкл.</string>
@@ -310,7 +284,6 @@
     <string name="WalletConnect_Ready_Hint">Вы можете перейти в браузер. Не закрывайте эту страницу во время использования браузера.</string>
     <string name="WalletConnect_Error_InvalidUrl">Неверный URL-адрес</string>
     <string name="WalletConnect_Requirement">Требования</string>
-    <string name="WalletConnect_RequirementDescription">Вам нужно добавить Ethereum или немного ERC20 монет на балансе для использования WalletConnect.</string>
     <string name="WalletConnect_Status_Offline">Не доступен</string>
     <string name="WalletConnect_Status_Online">Доступен</string>
     <string name="WalletConnect_Status_Connecting">Подключение…</string>
@@ -335,7 +308,6 @@
     <string name="Swap_Price">Цена</string>
     <string name="Swap_PriceImpact">Колебание Цен</string>
     <string name="Swap_MinimumReceived">Гарантированная Сумма</string>
-    <string name="Swap_SwapFee">Комиссия за обмен</string>
     <string name="Swap_EstimatedFee">Предполагаемая Комиссия</string>
     <string name="Swap_MaxFee">Макс. Комиссия</string>
     <string name="Swap_Fee">Комиссия</string>
@@ -427,7 +399,6 @@
     <string name="TransactionInfo_Fee">Комиссия</string>
     <string name="TransactionInfo_SentToSelfNote">Данная транзакция отправлена на собственный адрес</string>
     <string name="TransactionInfo_DoubleSpendNote">Риск Двойной Траты!</string>
-    <string name="TransactionInfo_Input">Ввод</string>
     <string name="TransactionInfo_ButtonViewOnExplorerName">Посмотреть на %s</string>
     <string name="StatusInfo_Pending">В обработке</string>
     <string name="StatusInfo_SendingReceiving">Отправка / Получение</string>
@@ -564,7 +535,6 @@
     <string name="Binance_Backend_Error_RequiresDigits">Поле мемо должно содержать только цифры</string>
     <!--Hud texts-->
     <string name="Hud_Text_Success">Успешно</string>
-    <string name="Hud_Text_Done">Готово</string>
     <string name="Hud_Text_NoInternet">Нет Интернета</string>
     <string name="Hud_Text_Copied">Скопировано</string>
     <string name="Hud_Text_EmailAddressCopied">Адрес электронной почты скопирован</string>
@@ -593,7 +563,6 @@
     <string name="ManageAccount_Unlink">Отсоединить</string>
     <string name="ManageAccount_BackupRequired_Title">Необходима Резервная Копия</string>
     <string name="ManageAccount_BackupRequired_Description">Вам нужно сделать резервную копию персонального ключа для этого кошелька, прежде чем он будет удален с этого телефона.</string>
-    <string name="ManageAccount_DeleteFromPhone">Удалить с Телефона</string>
     <string name="ManageAccount_Delete_ConfirmationRemove">Это действие удалит ваш %s кошелек с этого устройства.</string>
     <string name="ManageAccount_Delete_ConfirmationDisable">Все монеты, принадлежащие этому кошельку, будут отключены на вкладке баланса.</string>
     <string name="ManageAccount_Delete_ConfirmationLose">Если вы не создавали резервную копию закрытого ключа для этого кошелька, вы потеряете доступ к средствам в выбранном кошельке.</string>
@@ -611,7 +580,6 @@
     <!-- Backup Key -->
     <string name="BackupKey_Title">Резервная Копия</string>
     <string name="BackupKey_Description">Показанные далее фразы для восстановления являются единственным способом восстановления ваших средств в случае потери, кражи или поломки вашего телефона.\n\nУбедитесь, что никто не смотрит на ваш экран.</string>
-    <string name="BackupKey_ButtonShow">Показать</string>
     <string name="BackupKey_ButtonBackup">Резервная Копия</string>
     <string name="BackupConfirmKey_Description">Введите фразы для восстановления в правильном порядке, чтобы подтвердить</string>
     <string name="BackupConfirmKey_EmptyOrInvalidWords">Введенные слова пусты или недопустимы</string>
@@ -622,14 +590,8 @@
     <!--Manage Keys Delete Alert-->
     <string name="ManageKeys_Delete_Title">Удалить Кошелек</string>
     <string name="ManageKeys_Delete_ConfirmationRemove">Это действие удалит ваш %s кошелек с этого устройства.</string>
-    <string name="ManageKeys_Delete_ConfirmationDisable">Токены, которые будут отключены: %s</string>
-    <string name="ManageKeys_Delete_ConfirmationLose">Если вы не сделали резервную копию приватного ключа для этого кошелька, вы потеряете доступ к вашим средствам.</string>
     <string name="ManageKeys_Delete_FromPhone">Удалить с Телефона</string>
-    <string name="ManageKeys_Delete_Alert_Title">Необходима Резервная Копия</string>
-    <string name="ManageKeys_Delete_Alert">Вам нужно сделать резервную копию приватного ключа для этого кошелька, прежде чем он будет удален с этого телефона.</string>
     <!-- Manage Keys Alert -->
-    <string name="AddCoin_Title">Добавить %s</string>
-    <string name="AddCoin_Subtitle">%s Кошелек</string>
     <string name="AddCoin_Description">Вам нужно настроить кошелек %1$s, чтобы иметь возможность отправлять или получать %2$s.\n\nИспользуйте кнопку \'Создать\', чтобы настроить новый кошелек %3$s или \'Восстановить\', чтобы импортировать существующий.\n\nВы сможете использовать этот кошелек для: %4$s.</string>
     <string name="AddCoin_CreateKey">Создать</string>
     <string name="AddCoin_RestoreKey">Восстановить</string>
@@ -666,9 +628,6 @@
     <string name="AddressFormatSettings_Title">Формат Адреса</string>
     <string name="AddressFormatSettings_Description">Выберите формат адреса для вашего %s кошелька. Каждый выбранный формат представляет отдельный кошелек во вкладке приложения для отображения баланса.</string>
     <!-- Blockchain Settings -->
-    <string name="BlockchainSettings_BipChangeAlert_Title">Формат Адреса</string>
-    <string name="BlockchainSettings_ChangeAlert_ActionButtonText">Изменить на %s</string>
-    <string name="BlockchainSettings_BipChangeAlert_Content">После того, как данное изменение вступит в силу, кошелек должен будет повторно синхронизироваться с блокчейном %1$s.\n\nПри изменении формата адреса для %2$s текущий баланс и история транзакций больше не будут отображаться. При возвращении предыдущих настроек баланс и история восстановятся после того, как кошелек повторно синхронизируется с блокчейном. Рекомендуем не менять настройки, если вы не уверены, что это такое.</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">Источник Восстановления</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">После вступления данного изменения в силу кошелек должен будет повторно синхронизироваться с блокчейном %s.</string>
     <string name="BlockchainSettings_CommunicationModeChangeAlert_Title">Связь</string>
@@ -686,8 +645,6 @@
     <string name="TorPage_Failed">Не удалось</string>
     <string name="TorPage_ConnectionClosed">Отсоединено</string>
     <string name="Tor_PrerequisitesAlert_Content">Активация TOR вернет соединение блокчейна Ethereum к Infura.</string>
-    <!-- Account Types -->
-    <string name="AccountType_Unstoppable">Стандартный</string>
     <!--Coin Option-->
     <string name="CoinOption_bip44_Subtitle">Старый (начинается с %s...)</string>
     <string name="CoinOption_bip49_Subtitle">Популярный (начинается с %s...)</string>
@@ -702,16 +659,11 @@
     <string name="CoinPage_TimeDuration_HalfYear">6M</string>
     <string name="CoinPage_TimeDuration_Year">1Y</string>
     <string name="CoinPage_TimeDuration_Year2">2Y</string>
-    <string name="CoinPage_RatingDetails">Rating Details</string>
-    <string name="CoinPage_Price">Price</string>
-    <string name="CoinPage_Market">Market</string>
     <string name="CoinPage_Markets">Markets</string>
     <string name="CoinPage_TradingVolume">Trading Volume</string>
     <string name="CoinPage_MajorHolders">Major Holders</string>
     <string name="CoinPage_InvestorData">Investor Data</string>
     <string name="CoinPage_FundsInvested">Funds Invested</string>
-    <string name="CoinPage_Range24">24h Range</string>
-    <string name="CoinPage_Performance">Performance</string>
     <string name="CoinPage_About">About</string>
     <string name="CoinPage_Category">Category</string>
     <string name="CoinPage_Guide">Guide</string>
@@ -721,22 +673,16 @@
     <string name="CoinPage_Twitter">Twitter</string>
     <string name="CoinPage_Telegram">Telegram</string>
     <string name="CoinPage_Github">Github</string>
-    <string name="CoinPage_Changes1W">Changes (1W)</string>
-    <string name="CoinPage_Changes1M">Changes (1M)</string>
     <string name="CoinPage_MarketCap">Market Cap</string>
     <string name="CoinPage_DilutedMarketCap">Diluted MCap</string>
-    <string name="CoinPage_Volume24">Volume (24h)</string>
     <string name="CoinPage_inCirculation">In Circulation</string>
     <string name="CoinPage_TotalSupply">Total Supply</string>
-    <string name="CoinPage_StartDate">Inception Date</string>
     <string name="CoinPage_MarketCap_Thousand">k</string>
     <string name="CoinPage_MarketCap_Million">M</string>
     <string name="CoinPage_MarketCap_Billion">B</string>
     <string name="CoinPage_MarketCap_Trillion">T</string>
     <string name="CoinPage_Volume">Vol</string>
-    <string name="CoinPage_Error_NotAvailable">График недоступен</string>
     <string name="CoinPage_NoData">No Data</string>
-    <string name="CoinPage_LatestNews">Latest News</string>
     <string name="CoinPage_Favorite">Favorite</string>
     <string name="CoinPage_Unfavorite">Unfavorite</string>
     <string name="CoinPage_Performance_Week">1 Week</string>
@@ -753,9 +699,6 @@
     <string name="CoinPage_MajorHolders_Address">Address</string>
     <string name="CoinPage_MajorHolders_Description">Bitcoin is a cryptocurrency and worldwide payment system. It is the first decentralized digital currency, as the system works without a central bank or single administrator.</string>
     <!--Rate list-->
-    <string name="RateList_portfolio">Портфель</string>
-    <string name="RateList_top100">Топ-100</string>
-    <string name="RateList_Rank">Месту</string>
     <string name="RateList_TopGainers">Top Gainers</string>
     <string name="RateList_TopLosers">Top Losers</string>
     <string name="RateList_Posts">News</string>
