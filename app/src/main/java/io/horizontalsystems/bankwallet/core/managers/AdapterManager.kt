@@ -42,6 +42,47 @@ class AdapterManager(
                     initAdapters(wallets)
                 }
         )
+
+        ethereumKitManager.evmKitUpdatedObservable
+            .subscribeIO {
+                handleUpdatedEthereumKit()
+            }
+            .let {
+                disposables.add(it)
+            }
+
+        binanceSmartChainKitManager.evmKitUpdatedObservable
+            .subscribeIO {
+                handleUpdatedBinanceSmartChainKit()
+            }
+            .let {
+                disposables.add(it)
+            }
+    }
+
+    private fun handleUpdatedEthereumKit() {
+        handleUpdatedKit {
+            it.coin.type is CoinType.Ethereum || it.coin.type is CoinType.Erc20
+        }
+    }
+
+    private fun handleUpdatedBinanceSmartChainKit() {
+        handleUpdatedKit {
+            it.coin.type is CoinType.BinanceSmartChain || it.coin.type is CoinType.Bep20
+        }
+    }
+
+    private fun handleUpdatedKit(filter: (Wallet) -> Boolean) {
+        val wallets = adaptersMap.keys().toList().filter(filter)
+
+        if (wallets.isEmpty()) return
+
+        wallets.forEach {
+            adaptersMap[it]?.stop()
+            adaptersMap.remove(it)
+        }
+
+        initAdapters(walletManager.activeWallets)
     }
 
     override fun preloadAdapters() {
