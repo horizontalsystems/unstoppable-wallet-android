@@ -557,6 +557,7 @@
     <string name="ManageAccount_Save">Kaydet</string>
     <string name="ManageAccount_RecoveryPhraseBackup">Yedekleme İfadesi</string>
     <string name="ManageAccount_RecoveryPhraseShow">İfadeyi Göster</string>
+    <string name="ManageAccount_NetworkSettings">Network Settings</string>
     <string name="ManageAccount_Unlink">Ayır</string>
     <string name="ManageAccount_BackupRequired_Title">Yedekleme Gerekli</string>
     <string name="ManageAccount_BackupRequired_Description">Bu cüzdanın özel anahtarını, bu telefondan silinmeden önce yedeklemeniz gerekir.</string>
@@ -566,6 +567,8 @@
     <string name="ManageAccount_BirthdayHeight">%s Oluşturulma Günü Üst Sınırı</string>
     <string name="ManageAccount_NWords">%s kelime</string>
     <string name="ManageAccount_NWordsWithPassphrase">%s parolalı kelime</string>
+    <!--Network Settings-->
+    <string name="NetworkSettings_Title">Network Settings</string>
     <!-- Show Key -->
     <string name="ShowKey_Title">Anahtar</string>
     <string name="ShowKey_Description">Telefonunuzun kaybolması, çalınması, kırılması vb. Durumunda, aşağıda gösterilecek olan kurtarma ifadeleri paranızı geri yüklemenin tek yoludur. \n\nKimsenin ekranınızı izlemediğinden emin olun.</string>
