@@ -2,22 +2,44 @@ package io.horizontalsystems.bankwallet.core.managers
 
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.UnsupportedAccountException
+import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.erc20kit.core.Erc20Kit
 import io.horizontalsystems.ethereumkit.core.EthereumKit
-import io.horizontalsystems.ethereumkit.core.EthereumKit.NetworkType
 import io.horizontalsystems.uniswapkit.UniswapKit
+import io.reactivex.Observable
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.subjects.PublishSubject
 
 class BinanceSmartChainKitManager(
-        private val bscscanApiKey: String,
-        private val testMode: Boolean,
-        private val backgroundManager: BackgroundManager
+    private val bscscanApiKey: String,
+    private val testMode: Boolean,
+    private val backgroundManager: BackgroundManager,
+    private val accountSettingManager: AccountSettingManager
 ) : BackgroundManager.Listener {
+
+    private val disposables = CompositeDisposable()
 
     init {
         backgroundManager.registerListener(this)
+
+        accountSettingManager.ethereumNetworkObservable
+            .subscribeIO { (account, _) ->
+                handleUpdateNetwork(account)
+            }
+            .let {
+                disposables.add(it)
+            }
+    }
+
+    private fun handleUpdateNetwork(account: Account) {
+        if (account != currentAccount) return
+
+        stopEvmKit()
+
+        evmKitUpdatedRelay.onNext(Unit)
     }
 
     var evmKit: EthereumKit? = null
@@ -25,6 +47,10 @@ class BinanceSmartChainKitManager(
 
     private var useCount = 0
     private var currentAccount: Account? = null
+    private val evmKitUpdatedRelay = PublishSubject.create<Unit>()
+
+    val evmKitUpdatedObservable: Observable<Unit>
+        get() = evmKitUpdatedRelay
 
     val statusInfo: Map<String, Any>?
         get() = evmKit?.statusInfo()
@@ -32,9 +58,7 @@ class BinanceSmartChainKitManager(
     @Synchronized
     fun evmKit(account: Account): EthereumKit {
         if (this.evmKit != null && currentAccount != account) {
-            this.evmKit?.stop()
-            this.evmKit = null
-            currentAccount = null
+            stopEvmKit()
         }
 
         if (this.evmKit == null) {
@@ -52,8 +76,16 @@ class BinanceSmartChainKitManager(
     }
 
     private fun createKitInstance(accountType: AccountType.Mnemonic, account: Account): EthereumKit {
-        val syncSource = EthereumKit.defaultBscHttpSyncSource()
-        val kit = EthereumKit.getInstance(App.instance, accountType.words, accountType.passphrase, NetworkType.BscMainNet, syncSource, bscscanApiKey, account.id)
+        val evmNetwork = accountSettingManager.binanceSmartChainNetwork(account)
+        val kit = EthereumKit.getInstance(
+            App.instance,
+            accountType.words,
+            accountType.passphrase,
+            evmNetwork.networkType,
+            evmNetwork.syncSource,
+            bscscanApiKey,
+            account.id
+        )
 
         kit.addDecorator(Erc20Kit.getDecorator())
         kit.addDecorator(UniswapKit.getDecorator())
@@ -71,11 +103,15 @@ class BinanceSmartChainKitManager(
             useCount -= 1
 
             if (useCount < 1) {
-                this.evmKit?.stop()
-                this.evmKit = null
-                currentAccount = null
+                stopEvmKit()
             }
         }
+    }
+
+    private fun stopEvmKit() {
+        evmKit?.stop()
+        evmKit = null
+        currentAccount = null
     }
 
     //

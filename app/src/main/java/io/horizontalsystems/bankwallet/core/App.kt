@@ -124,11 +124,15 @@ class App : CoreApp() {
         feeRateProvider = FeeRateProvider(appConfigProvider)
         backgroundManager = BackgroundManager(this)
 
-        ethereumKitManager = EthereumKitManager(appConfig.infuraProjectId, appConfig.infuraProjectSecret, appConfig.etherscanApiKey, appConfig.testMode, backgroundManager)
-        binanceSmartChainKitManager = BinanceSmartChainKitManager(appConfig.bscscanApiKey, appConfig.testMode, backgroundManager)
+        appDatabase = AppDatabase.getInstance(this)
+
+        evmNetworkManager = EvmNetworkManager(appConfigProvider)
+        accountSettingManager = AccountSettingManager(AccountSettingRecordStorage(appDatabase), evmNetworkManager)
+
+        ethereumKitManager = EthereumKitManager(appConfig.etherscanApiKey, backgroundManager, accountSettingManager)
+        binanceSmartChainKitManager = BinanceSmartChainKitManager(appConfig.bscscanApiKey, appConfig.testMode, backgroundManager, accountSettingManager)
         binanceKitManager = BinanceKitManager(buildConfigProvider.testMode)
 
-        appDatabase = AppDatabase.getInstance(this)
         accountsStorage = AccountsStorage(appDatabase)
         restoreSettingsStorage = RestoreSettingsStorage(appDatabase)
 
@@ -227,9 +231,6 @@ class App : CoreApp() {
         activateCoinManager = ActivateCoinManager(coinKit, walletManager, accountManager)
 
         releaseNotesManager = ReleaseNotesManager(systemInfoManager, localStorage, appConfigProvider)
-
-        evmNetworkManager = EvmNetworkManager(appConfigProvider)
-        accountSettingManager = AccountSettingManager(AccountSettingRecordStorage(appDatabase), evmNetworkManager)
 
         setAppTheme()
 
