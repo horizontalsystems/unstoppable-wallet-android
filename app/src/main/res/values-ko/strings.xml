@@ -558,6 +558,7 @@
     <string name="ManageAccount_Save">저장</string>
     <string name="ManageAccount_RecoveryPhraseBackup">백업 문구</string>
     <string name="ManageAccount_RecoveryPhraseShow">문구 표시</string>
+    <string name="ManageAccount_NetworkSettings">Network Settings</string>
     <string name="ManageAccount_Unlink">연결되지 않은</string>
     <string name="ManageAccount_BackupRequired_Title">백업이 필요합니다</string>
     <string name="ManageAccount_BackupRequired_Description">개인 암호가 휴대폰에서 지워질 수 있기 전에 귀하께서는 개인 암호를 백업 하셔야 합니다.</string>
@@ -567,6 +568,8 @@
     <string name="ManageAccount_BirthdayHeight">%s Birthday Height</string>
     <string name="ManageAccount_NWords">%s 단어</string>
     <string name="ManageAccount_NWordsWithPassphrase">암호 문구로 이루어진 %s 단어</string>
+    <!--Network Settings-->
+    <string name="NetworkSettings_Title">Network Settings</string>
     <!-- Show Key -->
     <string name="ShowKey_Title">키</string>
     <string name="ShowKey_Description">다음에 표시될 복구 문구는 휴대폰을 분실, 도난, 파손된 경우 자금을 복구할 수 있는 유일한 방법입니다.\n\n아무도 화면을 보고 있지 않은지 확인합니다.</string>
