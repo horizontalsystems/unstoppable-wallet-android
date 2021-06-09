@@ -557,6 +557,7 @@
     <string name="ManageAccount_Save">Speichern</string>
     <string name="ManageAccount_RecoveryPhraseBackup">Wiederherstellungsphrase</string>
     <string name="ManageAccount_RecoveryPhraseShow">Phrase anzeigen</string>
+    <string name="ManageAccount_NetworkSettings">Network Settings</string>
     <string name="ManageAccount_Unlink">Verknüpfung trennen</string>
     <string name="ManageAccount_BackupRequired_Title">Sicherung erforderlich</string>
     <string name="ManageAccount_BackupRequired_Description">Sie müssen den Private Key für dieses Wallet sichern, bevor Sie es von diesem Telefon löschen können.</string>
@@ -566,6 +567,8 @@
     <string name="ManageAccount_BirthdayHeight">%s Geburtstagshöhe</string>
     <string name="ManageAccount_NWords">%s Wörter</string>
     <string name="ManageAccount_NWordsWithPassphrase">%s Wörter mit Passphrase</string>
+    <!--Network Settings-->
+    <string name="NetworkSettings_Title">Network Settings</string>
     <!-- Show Key -->
     <string name="ShowKey_Title">Schlüssel</string>
     <string name="ShowKey_Description">Die Wiederherstellungsphrasen, die als nächstes gezeigt werden, sind die einzige Möglichkeit, Ihr Guthaben wiederherzustellen, falls Ihr Mobiltelefon jemals verloren geht, gestohlen wird, kaputt geht usw.\n\nStellen Sie sicher, dass niemand Ihren Bildschirm beobachtet.</string>
