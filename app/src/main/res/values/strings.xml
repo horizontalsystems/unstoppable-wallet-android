@@ -12,8 +12,6 @@
     <string name="Alert_Select" translatable="false">SELECT</string>
 
     <string name="Button_Cancel">Cancel</string>
-    <string name="Button_Skip">Skip</string>
-    <string name="Button_Next">Next</string>
     <string name="Button_Enable">Enable</string>
     <string name="Button_Disable">Disable</string>
     <string name="Button_Close">Close</string>
@@ -33,10 +31,8 @@
 
     <string name="Error">Error</string>
     <string name="NotAvailable">N/A</string>
-    <string name="None">None</string>
     <string name="Any">Any</string>
 
-    <string name="Wallet">%s Wallet</string>
     <string name="FooterText" translatable="false">© Horizontal Systems 2021</string>
 
     <!--Intro-->
@@ -56,9 +52,6 @@
     <!--Welcome-->
 
     <string name="Welcome_PrivacySettings">Privacy Settings</string>
-    <string name="Welcome_CreateWallet">Create Wallet</string>
-    <string name="Welcome_RestoreWallet">Restore Wallet</string>
-    <string name="Welcome_Version" translatable="false">version %s</string>
 
     <!--Create Wallet-->
     <string name="CreateWallet_Title">New Wallet</string>
@@ -80,12 +73,9 @@
 
     <!--Restore-->
 
-    <string name="Restore_ChooseWallet">Choose Wallet</string>
     <string name="Restore_Enter_Key_Title">Enter Key</string>
-    <string name="Restore_Enter_Key_Description_Mnemonic">Enter your private key for %1s Wallet which consists of %2s words. The words needs to be entered in correct order and separated by spaces.</string>
     <string name="Restore_Mnemonic_Description">Enter your mnemonic which consists of 12 or 24 words. The words needs to be entered in correct order and separated by spaces.</string>
     <string name="Restore_ValidationFailed">Incorrect Key</string>
-    <string name="Restore_InvalidWordCount">Invalid words count: %1$d but required %2$d</string>
     <string name="Restore_Error_MnemonicWordCount">Wrong words count. Must be 12 or 24. You entered: %d</string>
     <string name="Restore_Error_EmptyPassphrase">Passphrase cannot be empty</string>
     <string name="Restore_InvalidChecksum">Invalid Checksum</string>
@@ -98,18 +88,7 @@
 
     <!--Backup-->
 
-    <string name="Backup_Intro_Title">Backup</string>
-    <string name="Backup_Intro_TitleShow">Show Key</string>
-    <string name="Backup_Intro_Subtitle">The private key that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken etc.\n\nMake sure that no one is watching your screen.\n\nThe coins controlled by this key: %s.</string>
-
-    <string name="Backup_DisplayTitle">Private Key</string>
-
-    <string name="Backup_Confirmation_Description">Enter words from your %s key</string>
-    <string name="Backup_Confirmation_FailureAlertText"> Words do not match</string>
     <string name="Backup_Confirmation_CheckTitle">Check…</string>
-
-    <string name="Backup_Button_Backup">Backup</string>
-    <string name="Backup_Button_ShowKey">Show Key</string>
 
     <!--Market-->
 
@@ -215,11 +194,8 @@
     <string name="Market_Filter_ChooseSet">Choose Set</string>
     <string name="Market_Filter_MarketCap">Market Cap</string>
     <string name="Market_Filter_Volume">Trading Volume</string>
-    <string name="Market_Filter_Liquidity">DEX Liquidity</string>
-    <string name="Market_Filter_LiquidityHint">This setting applies to tokens traded on Ethereum (Uniswap DEX) and Binance Smart Chain (Pancake DEX).</string>
     <string name="Market_Filter_PricePeriod">Price Period</string>
     <string name="Market_Filter_PriceChange">Price Change</string>
-    <string name="Market_Filter_ResetAll">Reset All</string>
     <string name="Market_Filter_OutperformedBtc">Outperformed BTC</string>
     <string name="Market_Filter_OutperformedEth">Outperformed ETH</string>
     <string name="Market_Filter_OutperformedBnb">Outperformed BNB</string>
@@ -264,7 +240,6 @@
     <!--Balance-->
 
     <string name="Balance_Title">Balance</string>
-    <string name="Balance_Deposit">Receive</string>
     <string name="Balance_Send">Send</string>
     <string name="Balance_RatePerCoin">%1$s per %2$s</string>
     <string name="Balance_SyncedUntil">until %s</string>
@@ -278,7 +253,6 @@
     <string name="Balance_Sort_PopupTitle">Sort by</string>
     <string name="Balance_Sort_Az">Name</string>
     <string name="Balance_Sort_24hPriceChange">24h Price (%)</string>
-    <string name="Balance_LockedBalance">Locked Balance</string>
     <string name="Balance_Hidden">hidden</string>
     <string name="Balance_Backup_Alert">You need to backup the %1$s Wallet before you may receive %2$s.</string>
     <string name="Balance_NoWalletAlert">You don\’t have any wallets yet. Create new or restore existing </string>
@@ -289,7 +263,6 @@
     <string name="Send_Title">Send %s</string>
 
     <string name="Send_Hint_Address">Address or Domain</string>
-    <string name="Send_Hint_Amount">Amount</string>
 
     <string name="Send_Fee">Fee</string>
     <string name="Send_Button_Paste">Paste</string>
@@ -301,7 +274,6 @@
     <string name="Send_Confirmation_Amount">Amount</string>
     <string name="Send_Confirmation_To">To</string>
     <string name="Send_Confirmation_Receiver">Receiver</string>
-    <string name="Send_Confirmation_Input">Input</string>
     <string name="Send_Confirmation_HintMemo" translatable="false">Memo</string>
     <string name="Send_Confirmation_EstimateTime">Duration</string>
     <string name="Send_Confirmation_LockTime" translatable="false">TimeLock</string>
@@ -318,7 +290,6 @@
     <string name="Send_Error_MinimumAmount">Min. amount %s</string>
     <string name="Send_Error_MaximumAmount">Max. amount %s</string>
     <string name="Send_Error_MinRequiredBalance">Min. required remainder %s</string>
-    <string name="Send_Error_WrongParameters">Wrong parameters</string>
     <string name="Send_Error_TransparentAddress">Unstoppable doesn\'t support payments to a transparent address</string>
     <string name="Send_Error_SendToSelf">Sending to self is not supported</string>
 
@@ -329,7 +300,6 @@
     <string name="Send_TxSpeed_Recommended">Recommended</string>
     <string name="Send_TxSpeed_Custom">Custom</string>
     <string name="Send_TxSpeed_CustomFeeHint">sat/byte</string>
-    <string name="Send_DialogDuration">Duration</string>
     <string name="Send_DialogFee">Fee</string>
     <string name="Send_DialogMemoHint" translatable="false">Memo</string>
     <string name="Send_DialogProceed">Next</string>
@@ -365,7 +335,6 @@
     <string name="WalletConnect_Ready_Hint">You can go to the browser. Do not close this page while interacting in the browser.</string>
     <string name="WalletConnect_Error_InvalidUrl">Invalid URL Address</string>
     <string name="WalletConnect_Requirement">Requirement</string>
-    <string name="WalletConnect_RequirementDescription">You need to add Ethereum or some ERC20 coin to balance tab in order to use WalletConnect.</string>
     <string name="WalletConnect_Status_Offline">Offline</string>
     <string name="WalletConnect_Status_Online">Online</string>
     <string name="WalletConnect_Status_Connecting">Connecting…</string>
@@ -394,7 +363,6 @@
     <string name="Swap_Price">Price</string>
     <string name="Swap_PriceImpact">Price Impact</string>
     <string name="Swap_MinimumReceived">Guaranteed Amount</string>
-    <string name="Swap_SwapFee">Swap Fee</string>
     <string name="Swap_EstimatedFee">Estimated Fee</string>
     <string name="Swap_MaxFee">Max Fee</string>
     <string name="Swap_Fee">Fee</string>
@@ -500,7 +468,6 @@
     <string name="TransactionInfo_Fee">Fee</string>
     <string name="TransactionInfo_SentToSelfNote">The transaction sent to own address</string>
     <string name="TransactionInfo_DoubleSpendNote">Double Spend Risk!</string>
-    <string name="TransactionInfo_Input">Input</string>
     <string name="TransactionInfo_ButtonViewOnExplorerName">View on %s</string>
 
     <string name="StatusInfo_Pending">Pending</string>
@@ -675,7 +642,6 @@
     <!--Hud texts-->
 
     <string name="Hud_Text_Success">Success</string>
-    <string name="Hud_Text_Done">Done</string>
     <string name="Hud_Text_NoInternet">No Internet</string>
     <string name="Hud_Text_Copied">Copied</string>
     <string name="Hud_Text_EmailAddressCopied">Email address copied</string>
@@ -713,7 +679,6 @@
     <string name="ManageAccount_Unlink">Unlink</string>
     <string name="ManageAccount_BackupRequired_Title">Backup Required</string>
     <string name="ManageAccount_BackupRequired_Description">You need to backup the private key for this wallet before it can be deleted from this phone.</string>
-    <string name="ManageAccount_DeleteFromPhone">Delete from Phone</string>
     <string name="ManageAccount_Delete_ConfirmationRemove">This action will delete the selected wallet from this device.</string>
     <string name="ManageAccount_Delete_ConfirmationDisable">All coins that belong to this wallet will be disabled on balance tab.</string>
     <string name="ManageAccount_Delete_ConfirmationLose">If you didn\'t backup the private key for this wallet, you will lose access to the funds on the selected wallet.</string>
@@ -733,7 +698,6 @@
     <!-- Backup Key -->
     <string name="BackupKey_Title">Backup</string>
     <string name="BackupKey_Description">The recovery phrase that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken etc.\n\nMake sure that no one is watching your screen.</string>
-    <string name="BackupKey_ButtonShow">Show</string>
     <string name="BackupKey_ButtonBackup">Backup</string>
 
     <string name="BackupConfirmKey_Description">Enter the recovery phrase in correct order to confirm</string>
@@ -747,16 +711,10 @@
 
     <string name="ManageKeys_Delete_Title">Delete Wallet</string>
     <string name="ManageKeys_Delete_ConfirmationRemove">This action will delete the %s Wallet from this device.</string>
-    <string name="ManageKeys_Delete_ConfirmationDisable">Coins that will be disabled: %s</string>
-    <string name="ManageKeys_Delete_ConfirmationLose">If you didn\'t backup the private key for this wallet, you will lose access to your funds.</string>
     <string name="ManageKeys_Delete_FromPhone">Delete from Phone</string>
-    <string name="ManageKeys_Delete_Alert_Title">Backup Required</string>
-    <string name="ManageKeys_Delete_Alert">You need to backup the private key for this wallet before it can be deleted from this phone.</string>
 
     <!-- Manage Keys Alert -->
 
-    <string name="AddCoin_Title">Add %s</string>
-    <string name="AddCoin_Subtitle">%s Wallet</string>
     <string name="AddCoin_Description">You need to set up %1$s wallet to be able to send or receive %2$s.\n\nUse the Create button below to set up a new %3$s wallet, or Restore button to import the existing one.\n\nYou will be able to use this wallet for: %4$s.</string>
     <string name="AddCoin_CreateKey">Create</string>
     <string name="AddCoin_RestoreKey">Restore</string>
@@ -805,9 +763,6 @@
 
     <!-- Blockchain Settings -->
 
-    <string name="BlockchainSettings_BipChangeAlert_Title">Address Format</string>
-    <string name="BlockchainSettings_ChangeAlert_ActionButtonText">Change to %s</string>
-    <string name="BlockchainSettings_BipChangeAlert_Content">After this change the wallet will have to resync itself with the %1$s blockchain.\n\nWhen you change the address format for %2$s the current balance and transaction history will no longer be visible. Changing it back to previous setting will bring everything back after the wallet resyncs itself with the blockchain. We recommend not to change it if not sure what that is.</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">Restore Source</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">After this change the wallet will have to resync itself with the %s blockchain.</string>
     <string name="BlockchainSettings_CommunicationModeChangeAlert_Title">Communication</string>
@@ -828,16 +783,6 @@
     <string name="TorPage_ConnectionClosed">Disconnected</string>
     <string name="Tor_PrerequisitesAlert_Content">Activating TOR will reset Ethereum blockchain connection back to Infura.</string>
 
-
-    <!-- Account Types -->
-
-    <string name="AccountType_Unstoppable">Standard</string>
-    <string name="AccountType_Unstoppable_Text" translatable="false">BTC, LTC, BCH, DASH, ETH, ERC20 tokens</string>
-    <string name="AccountType_Binance" translatable="false">Binance</string>
-    <string name="AccountType_Binance_Text" translatable="false">BNB, BEP20, BEP2 tokens</string>
-    <string name="AccountType_Zcash" translatable="false">Zcash</string>
-    <string name="AccountType_Zcash_Text" translatable="false">ZEC</string>
-
     <!--Coin Option-->
 
     <string name="CoinOption_bip44_Subtitle">Older (starts with %s...)</string>
@@ -856,16 +801,11 @@
     <string name="CoinPage_TimeDuration_Year">1Y</string>
     <string name="CoinPage_TimeDuration_Year2">2Y</string>
 
-    <string name="CoinPage_RatingDetails">Rating Details</string>
-    <string name="CoinPage_Price">Price</string>
-    <string name="CoinPage_Market">Market</string>
     <string name="CoinPage_Markets">Markets</string>
     <string name="CoinPage_TradingVolume">Trading Volume</string>
     <string name="CoinPage_MajorHolders">Major Holders</string>
     <string name="CoinPage_InvestorData">Investor Data</string>
     <string name="CoinPage_FundsInvested">Funds Invested</string>
-    <string name="CoinPage_Range24">24h Range</string>
-    <string name="CoinPage_Performance">Performance</string>
     <string name="CoinPage_About">About</string>
     <string name="CoinPage_Category">Category</string>
     <string name="CoinPage_Guide">Guide</string>
@@ -876,15 +816,10 @@
     <string name="CoinPage_Telegram">Telegram</string>
     <string name="CoinPage_Github">Github</string>
     <string name="CoinPage_Youtube" translatable="false">Youtube</string>
-    <string name="CoinPage_Changes1W">Changes (1W)</string>
-    <string name="CoinPage_Changes1M">Changes (1M)</string>
     <string name="CoinPage_MarketCap">Market Cap</string>
     <string name="CoinPage_DilutedMarketCap">Diluted MCap</string>
-    <string name="CoinPage_Volume24">Volume (24h)</string>
     <string name="CoinPage_inCirculation">In Circulation</string>
     <string name="CoinPage_TotalSupply">Total Supply</string>
-    <string name="CoinPage_StartDate">Inception Date</string>
-    <string name="CoinPage_CryptoCompare" translatable="false">\@CryptoCompare.com</string>
     <string name="CoinPage_IndicatorEMA" translatable="false">EMA</string>
     <string name="CoinPage_IndicatorMACD" translatable="false">MACD</string>
     <string name="CoinPage_IndicatorRSI" translatable="false">RSI</string>
@@ -893,9 +828,7 @@
     <string name="CoinPage_MarketCap_Billion">B</string>
     <string name="CoinPage_MarketCap_Trillion">T</string>
     <string name="CoinPage_Volume">Vol</string>
-    <string name="CoinPage_Error_NotAvailable">Chart not available</string>
     <string name="CoinPage_NoData">No Data</string>
-    <string name="CoinPage_LatestNews">Latest News</string>
     <string name="CoinPage_Favorite">Favorite</string>
     <string name="CoinPage_Unfavorite">Unfavorite</string>
     <string name="CoinPage_Performance_Week">1 Week</string>
@@ -915,9 +848,6 @@
 
     <!--Rate list-->
 
-    <string name="RateList_portfolio">Portfolio</string>
-    <string name="RateList_top100">Top 100</string>
-    <string name="RateList_Rank">Rank</string>
     <string name="RateList_TopGainers">Top Gainers</string>
     <string name="RateList_TopLosers">Top Losers</string>
     <string name="RateList_Posts">News</string>
