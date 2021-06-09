@@ -4,6 +4,7 @@ import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoModule.TitleViewItem
 import io.horizontalsystems.coinkit.models.CoinType
+import io.horizontalsystems.ethereumkit.core.EthereumKit
 import java.util.*
 
 class TransactionInfoPresenter(
@@ -164,9 +165,20 @@ class TransactionInfoPresenter(
             is CoinType.Litecoin -> TransactionInfoModule.ExplorerData("blockchair.com", if (testMode) null else "https://blockchair.com/litecoin/transaction/$hash")
             is CoinType.Dash -> TransactionInfoModule.ExplorerData("dash.org", if (testMode) null else "https://insight.dash.org/insight/tx/$hash")
             is CoinType.Ethereum,
-            is CoinType.Erc20 -> TransactionInfoModule.ExplorerData("etherscan.io", if (testMode) "https://ropsten.etherscan.io/tx/$hash" else "https://etherscan.io/tx/$hash")
+            is CoinType.Erc20 -> {
+                val domain = when (interactor.ethereumNetworkType(wallet.account)) {
+                    EthereumKit.NetworkType.EthMainNet -> "etherscan.io"
+                    EthereumKit.NetworkType.EthRopsten -> "ropsten.etherscan.io"
+                    EthereumKit.NetworkType.EthKovan -> "kovan.etherscan.io"
+                    EthereumKit.NetworkType.EthRinkeby -> "rinkeby.etherscan.io"
+                    EthereumKit.NetworkType.EthGoerli -> "goerli.etherscan.io"
+                    EthereumKit.NetworkType.BscMainNet -> throw IllegalArgumentException("")
+                }
+                TransactionInfoModule.ExplorerData("etherscan.io", "https://$domain/tx/$hash")
+            }
             is CoinType.Bep2 -> TransactionInfoModule.ExplorerData("binance.org", if (testMode) "https://testnet-explorer.binance.org/tx/$hash" else "https://explorer.binance.org/tx/$hash")
-            CoinType.BinanceSmartChain, is CoinType.Bep20 -> TransactionInfoModule.ExplorerData("bscscan.com", if (testMode) null else "https://bscscan.com/tx/$hash")
+            is CoinType.BinanceSmartChain,
+            is CoinType.Bep20 -> TransactionInfoModule.ExplorerData("bscscan.com", "https://bscscan.com/tx/$hash")
             is CoinType.Zcash -> TransactionInfoModule.ExplorerData("blockchair.com", if (testMode) null else "https://blockchair.com/zcash/transaction/$hash")
             is CoinType.Unsupported ->  throw IllegalArgumentException()
         }

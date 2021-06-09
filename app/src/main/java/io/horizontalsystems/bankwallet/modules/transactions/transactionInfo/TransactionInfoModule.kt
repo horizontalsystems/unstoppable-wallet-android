@@ -6,6 +6,7 @@ import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.coinkit.models.CoinType
+import io.horizontalsystems.ethereumkit.core.EthereumKit
 import java.util.*
 
 object TransactionInfoModule {
@@ -39,6 +40,8 @@ object TransactionInfoModule {
         fun getRate(coinType: CoinType, timestamp: Long): CurrencyValue?
         fun feeCoin(coin: Coin): Coin?
         fun getRaw(transactionHash: String): String?
+        fun ethereumNetworkType(account: Account): EthereumKit.NetworkType
+        fun binanceSmartChainNetworkType(account: Account): EthereumKit.NetworkType
     }
 
     interface InteractorDelegate
@@ -52,7 +55,7 @@ object TransactionInfoModule {
 
     fun init(view: TransactionInfoViewModel, router: Router, transactionRecord: TransactionRecord, wallet: Wallet) {
         val adapter = App.adapterManager.getTransactionsAdapterForWallet(wallet)!!
-        val interactor = TransactionInfoInteractor(TextHelper, adapter, App.xRateManager, App.currencyManager, App.feeCoinProvider, App.buildConfigProvider)
+        val interactor = TransactionInfoInteractor(TextHelper, adapter, App.xRateManager, App.currencyManager, App.feeCoinProvider, App.buildConfigProvider, App.accountSettingManager)
         val presenter = TransactionInfoPresenter(interactor, router, transactionRecord, wallet, TransactionInfoAddressMapper)
 
         view.delegate = presenter
