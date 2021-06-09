@@ -558,6 +558,7 @@ poner en peligro la seguridad de mis fondos.</string>
     <string name="ManageAccount_Save">Guardar</string>
     <string name="ManageAccount_RecoveryPhraseBackup">Frase de copia de seguridad</string>
     <string name="ManageAccount_RecoveryPhraseShow">Mostrar Frase</string>
+    <string name="ManageAccount_NetworkSettings">Network Settings</string>
     <string name="ManageAccount_Unlink">Desvincular</string>
     <string name="ManageAccount_BackupRequired_Title">Se requiere una copia de seg</string>
     <string name="ManageAccount_BackupRequired_Description">Necesita respaldar esta clave privada antes de que pueda eliminarla de este teléfono.</string>
@@ -567,6 +568,8 @@ poner en peligro la seguridad de mis fondos.</string>
     <string name="ManageAccount_BirthdayHeight">%s Altura de Cumpleaños</string>
     <string name="ManageAccount_NWords">%s palabras</string>
     <string name="ManageAccount_NWordsWithPassphrase">%s palabras con frase de contraseña</string>
+    <!--Network Settings-->
+    <string name="NetworkSettings_Title">Network Settings</string>
     <!-- Show Key -->
     <string name="ShowKey_Title">Clave</string>
     <string name="ShowKey_Description">Las frase de recuperación que se mostrará a continuación es la única forma de restaurar sus fondos en caso de que su teléfono se pierda, lo roben, se averíe, etc.\n\nAsegúrese de que nadie está viendo su pantalla.</string>
