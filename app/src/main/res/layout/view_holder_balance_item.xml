@@ -15,6 +15,15 @@
         android:layout_marginEnd="16dp"
         android:background="@drawable/balance_coin_background">
 
+        <ImageView
+            android:id="@+id/testnet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/testnet"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="@id/iconCoin"
+            app:layout_constraintEnd_toEndOf="@id/iconCoin" />
+
         <io.horizontalsystems.bankwallet.ui.extensions.RotatingCircleProgressView
             android:id="@+id/iconProgress"
             android:layout_width="41dp"

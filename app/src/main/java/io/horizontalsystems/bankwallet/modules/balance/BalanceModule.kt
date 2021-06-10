@@ -81,6 +81,7 @@ object BalanceModule {
         fun notifyPageActive()
         fun notifyPageInactive()
         fun refreshByWallet(wallet: Wallet)
+        fun isMainNet(wallet: Wallet): Boolean
     }
 
     interface IInteractorDelegate {
@@ -110,7 +111,7 @@ object BalanceModule {
         fun sort(items: List<BalanceItem>, sortType: BalanceSortType): List<BalanceItem>
     }
 
-    data class BalanceItem(val wallet: Wallet) {
+    data class BalanceItem(val wallet: Wallet, val mainNet: Boolean) {
         var balance: BigDecimal? = null
         var balanceLocked: BigDecimal? = null
         val balanceTotal: BigDecimal?
@@ -147,6 +148,7 @@ object BalanceModule {
                     App.connectivityManager,
                     App.appConfigProvider,
                     App.feeCoinProvider,
+                    App.accountSettingManager
             )
 
             val presenter = BalancePresenter(interactor, viewAndRouter, BalanceSorter(), BalanceViewItemFactory())

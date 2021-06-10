@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.balance
 
 import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.core.managers.AccountSettingManager
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
 import io.horizontalsystems.bankwallet.core.providers.FeeCoinProvider
 import io.horizontalsystems.bankwallet.entities.Account
@@ -26,7 +27,9 @@ class BalanceInteractor(
         private val rateAppManager: IRateAppManager,
         private val connectivityManager: ConnectivityManager,
         appConfigProvider: IAppConfigProvider,
-        private val feeCoinProvider: FeeCoinProvider)
+        private val feeCoinProvider: FeeCoinProvider,
+        private val accountSettingManager: AccountSettingManager
+)
     : BalanceModule.IInteractor {
 
     var delegate: BalanceModule.IInteractorDelegate? = null
@@ -75,6 +78,17 @@ class BalanceInteractor(
                 }
     }
 
+    override fun isMainNet(wallet: Wallet) = when (wallet.coin.type) {
+        is CoinType.Ethereum,
+        is CoinType.Erc20 -> {
+            accountSettingManager.ethereumNetwork(wallet.account).networkType.isMainNet
+        }
+        is CoinType.BinanceSmartChain -> {
+            accountSettingManager.binanceSmartChainNetwork(wallet.account).networkType.isMainNet
+        }
+        else -> true
+    }
+
     override fun latestRate(coinType: CoinType, currencyCode: String): LatestRate? {
         return rateManager.latestRate(coinType, currencyCode)
     }
@@ -104,6 +118,22 @@ class BalanceInteractor(
                 }.let {
                     disposables.add(it)
                 }
+
+        accountSettingManager.ethereumNetworkObservable
+            .subscribeIO {
+                onUpdateWallets(walletManager.activeWallets)
+            }
+            .let {
+                disposables.add(it)
+            }
+
+        accountSettingManager.binanceSmartChainNetworkObservable
+            .subscribeIO {
+                onUpdateWallets(walletManager.activeWallets)
+            }
+            .let {
+                disposables.add(it)
+            }
 
         adapterManager.adaptersReadyObservable
                 .subscribeOn(Schedulers.io())
