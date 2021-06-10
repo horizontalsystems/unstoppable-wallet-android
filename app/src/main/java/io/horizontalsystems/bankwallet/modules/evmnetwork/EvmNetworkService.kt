@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.evmnetwork
 
+import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.managers.AccountSettingManager
 import io.horizontalsystems.bankwallet.core.managers.EvmNetworkManager
 import io.horizontalsystems.bankwallet.entities.Account
@@ -13,7 +14,7 @@ class EvmNetworkService(
     private val account: Account,
     private val evmNetworkManager: EvmNetworkManager,
     private val accountSettingManager: AccountSettingManager
-) {
+) : Clearable {
     private val disposables = CompositeDisposable()
 
     private val itemsRelay = BehaviorSubject.create<List<Item>>()
@@ -68,6 +69,10 @@ class EvmNetworkService(
                 accountSettingManager.saveBsc(network, account)
             }
         }
+    }
+
+    override fun clear() {
+        disposables.clear()
     }
 
     data class Item(val network: EvmNetwork, val isMainNet: Boolean, val selected: Boolean)

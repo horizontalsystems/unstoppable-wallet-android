@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.networksettings
 
+import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.managers.AccountSettingManager
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Account
@@ -11,7 +12,7 @@ import io.reactivex.subjects.PublishSubject
 class NetworkSettingsService(
     val account: Account,
     private val accountSettingManager: AccountSettingManager
-) {
+) : Clearable {
     private val disposables = CompositeDisposable()
 
     private val itemsRelay = PublishSubject.create<List<Item>>()
@@ -58,6 +59,10 @@ class NetworkSettingsService(
             evmItem(Blockchain.Ethereum, accountSettingManager.ethereumNetwork(account)),
             evmItem(Blockchain.BinanceSmartChain, accountSettingManager.binanceSmartChainNetwork(account))
         )
+    }
+
+    override fun clear() {
+        disposables.clear()
     }
 
     enum class Blockchain {
