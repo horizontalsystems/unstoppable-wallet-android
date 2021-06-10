@@ -25,7 +25,7 @@ class BinanceSmartChainKitManager(
     init {
         backgroundManager.registerListener(this)
 
-        accountSettingManager.ethereumNetworkObservable
+        accountSettingManager.binanceSmartChainNetworkObservable
             .subscribeIO { (account, _) ->
                 handleUpdateNetwork(account)
             }
