@@ -7,6 +7,7 @@
     <string name="Alert_Loading">Загрузка...</string>
     <string name="Alert_Restart">Перезапустить</string>
     <string name="Button_Cancel">Отменить</string>
+    <string name="Button_Next">Next</string>
     <string name="Button_Enable">Активировать</string>
     <string name="Button_Disable">Выкл.</string>
     <string name="Button_Close">Закрыть</string>
@@ -667,6 +668,7 @@
     <string name="CoinPage_MajorHolders">Major Holders</string>
     <string name="CoinPage_InvestorData">Investor Data</string>
     <string name="CoinPage_FundsInvested">Funds Invested</string>
+    <string name="CoinPage_Range24">24h Range</string>
     <string name="CoinPage_About">About</string>
     <string name="CoinPage_Category">Category</string>
     <string name="CoinPage_Guide">Guide</string>
