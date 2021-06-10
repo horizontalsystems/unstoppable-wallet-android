@@ -61,6 +61,11 @@ class EvmNetworkViewModel(private val service: EvmNetworkService): ViewModel() {
         finishLiveEvent.postValue(Unit)
     }
 
+    override fun onCleared() {
+        service.clear()
+        disposables.clear()
+    }
+
     data class SectionViewItem(
         val title: String,
         val viewItems: List<ViewItem>

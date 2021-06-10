@@ -66,4 +66,9 @@ class NetworkSettingsViewModel(private val service: NetworkSettingsService): Vie
 
         openEvmNetworkLiveEvent.postValue(Pair(evmNetworkBlockchain, service.account))
     }
+
+    override fun onCleared() {
+        service.clear()
+        disposables.clear()
+    }
 }
