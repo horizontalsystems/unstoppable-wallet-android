@@ -7,6 +7,7 @@
     <string name="Alert_Loading">正在加载...</string>
     <string name="Alert_Restart">重新启动</string>
     <string name="Button_Cancel">取消</string>
+    <string name="Button_Next">Next</string>
     <string name="Button_Enable">启用</string>
     <string name="Button_Disable">禁用</string>
     <string name="Button_Close">关闭</string>
@@ -664,6 +665,7 @@
     <string name="CoinPage_MajorHolders">Major Holders</string>
     <string name="CoinPage_InvestorData">Investor Data</string>
     <string name="CoinPage_FundsInvested">Funds Invested</string>
+    <string name="CoinPage_Range24">24h Range</string>
     <string name="CoinPage_About">About</string>
     <string name="CoinPage_Category">Category</string>
     <string name="CoinPage_Guide">Guide</string>
