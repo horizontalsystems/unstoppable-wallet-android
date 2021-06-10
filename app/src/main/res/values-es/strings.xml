@@ -7,6 +7,7 @@
     <string name="Alert_Loading">Cargando...</string>
     <string name="Alert_Restart">Reiniciar</string>
     <string name="Button_Cancel">Cancelar</string>
+    <string name="Button_Next">Next</string>
     <string name="Button_Enable">Habilitar</string>
     <string name="Button_Disable">Desactivar</string>
     <string name="Button_Close">Cerrar</string>
@@ -665,6 +666,7 @@ poner en peligro la seguridad de mis fondos.</string>
     <string name="CoinPage_MajorHolders">Major Holders</string>
     <string name="CoinPage_InvestorData">Investor Data</string>
     <string name="CoinPage_FundsInvested">Funds Invested</string>
+    <string name="CoinPage_Range24">24h Range</string>
     <string name="CoinPage_About">About</string>
     <string name="CoinPage_Category">Category</string>
     <string name="CoinPage_Guide">Guide</string>
