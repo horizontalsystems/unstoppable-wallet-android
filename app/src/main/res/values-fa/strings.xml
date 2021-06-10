@@ -7,6 +7,7 @@
     <string name="Alert_Loading">درحال بارگذاری...</string>
     <string name="Alert_Restart">راه اندازی مجدد</string>
     <string name="Button_Cancel">کنسل</string>
+    <string name="Button_Next">Next</string>
     <string name="Button_Enable">فعال کردن</string>
     <string name="Button_Disable">غیرفعال</string>
     <string name="Button_Close">بستن</string>
@@ -664,6 +665,7 @@
     <string name="CoinPage_MajorHolders">Major Holders</string>
     <string name="CoinPage_InvestorData">Investor Data</string>
     <string name="CoinPage_FundsInvested">وجوه سرمایه گذاری شده</string>
+    <string name="CoinPage_Range24">24h Range</string>
     <string name="CoinPage_About">About</string>
     <string name="CoinPage_Category">Category</string>
     <string name="CoinPage_Guide">Guide</string>
