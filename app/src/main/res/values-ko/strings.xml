@@ -7,6 +7,7 @@
     <string name="Alert_Loading">로딩중...</string>
     <string name="Alert_Restart">재시작</string>
     <string name="Button_Cancel">취소</string>
+    <string name="Button_Next">Next</string>
     <string name="Button_Enable">활성화</string>
     <string name="Button_Disable">비활성화</string>
     <string name="Button_Close">가까운, 닫힌</string>
@@ -665,6 +666,7 @@
     <string name="CoinPage_MajorHolders">Major Holders</string>
     <string name="CoinPage_InvestorData">Investor Data</string>
     <string name="CoinPage_FundsInvested">Funds Invested</string>
+    <string name="CoinPage_Range24">24h Range</string>
     <string name="CoinPage_About">About</string>
     <string name="CoinPage_Category">Category</string>
     <string name="CoinPage_Guide">Guide</string>
