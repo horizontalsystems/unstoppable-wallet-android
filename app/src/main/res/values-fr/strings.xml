@@ -7,6 +7,7 @@
     <string name="Alert_Loading">Chargement en cours...</string>
     <string name="Alert_Restart">Redémarrer</string>
     <string name="Button_Cancel">Annuler</string>
+    <string name="Button_Next">Next</string>
     <string name="Button_Enable">Activer</string>
     <string name="Button_Disable">Désactiver</string>
     <string name="Button_Close">Fermer</string>
@@ -664,6 +665,7 @@
     <string name="CoinPage_MajorHolders">Major Holders</string>
     <string name="CoinPage_InvestorData">Investor Data</string>
     <string name="CoinPage_FundsInvested">Funds Invested</string>
+    <string name="CoinPage_Range24">24h Range</string>
     <string name="CoinPage_About">About</string>
     <string name="CoinPage_Category">Category</string>
     <string name="CoinPage_Guide">Guide</string>
