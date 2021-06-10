@@ -38,7 +38,8 @@ data class BalanceViewItem(
         val coinIconVisible: Boolean,
         val coinTypeLabel: String?,
         val swapVisible: Boolean,
-        val swapEnabled: Boolean = false
+        val swapEnabled: Boolean = false,
+        val mainNet: Boolean
 )
 
 data class BalanceHeaderViewItem(val currencyValue: CurrencyValue?, val upToDate: Boolean) {
@@ -204,7 +205,8 @@ class BalanceViewItemFactory {
                 coinIconVisible = state !is AdapterState.NotSynced,
                 coinTypeLabel = coinTypeLabel(wallet),
                 swapVisible = item.wallet.coin.type.swappable,
-                swapEnabled = state is AdapterState.Synced
+                swapEnabled = state is AdapterState.Synced,
+                mainNet = item.mainNet
         )
     }
 

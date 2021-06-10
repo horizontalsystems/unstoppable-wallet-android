@@ -257,7 +257,7 @@ class BalancePresenter(
     }
 
     private fun handleUpdate(wallets: List<Wallet>) {
-        items = wallets.map { BalanceItem(it) }
+        items = wallets.map { BalanceItem(it, interactor.isMainNet(it)) }
 
         handleAdaptersReady()
         handleRates()

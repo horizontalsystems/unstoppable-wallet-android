@@ -64,6 +64,8 @@ class BalanceItemViewHolder(override val containerView: View, private val listen
 
             iconCoin.setCoinImage(coinType)
 
+            testnet.isVisible = !mainNet
+
             coinCodeTextView.text = coinCode
             coinLabel.text = coinTypeLabel
 
