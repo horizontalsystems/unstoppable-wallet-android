@@ -42,11 +42,7 @@ data class BalanceViewItem(
         val mainNet: Boolean
 )
 
-data class BalanceHeaderViewItem(val currencyValue: CurrencyValue?, val upToDate: Boolean) {
-
-    val xBalanceText = currencyValue?.let {
-        App.numberFormatter.formatFiat(it.value, it.currency.symbol, 2, 2)
-    }
+data class BalanceHeaderViewItem(val xBalanceText: String, val upToDate: Boolean) {
 
     fun getBalanceTextColor(context: Context): Int {
         val color = if (upToDate) R.color.jacob else R.color.yellow_50
@@ -210,26 +206,34 @@ class BalanceViewItemFactory {
         )
     }
 
-    fun headerViewItem(items: List<BalanceModule.BalanceItem>, currency: Currency): BalanceHeaderViewItem {
-        var total = BigDecimal.ZERO
-        var upToDate = true
+    fun headerViewItem(items: List<BalanceModule.BalanceItem>, currency: Currency, balanceHidden: Boolean): BalanceHeaderViewItem = when {
+        balanceHidden -> BalanceHeaderViewItem("*****", true)
+        else -> {
+            var total = BigDecimal.ZERO
+            var upToDate = true
 
-        items.forEach { item ->
-            val balanceTotal = item.balanceTotal
-            val marketInfo = item.latestRate
+            items.forEach { item ->
+                val balanceTotal = item.balanceTotal
+                val marketInfo = item.latestRate
 
-            if (balanceTotal != null && marketInfo != null) {
-                total += balanceTotal.multiply(marketInfo.rate)
+                if (balanceTotal != null && marketInfo != null) {
+                    total += balanceTotal.multiply(marketInfo.rate)
 
-                upToDate = !marketInfo.isExpired()
+                    upToDate = !marketInfo.isExpired()
+                }
+
+                if (item.state == null || item.state != AdapterState.Synced) {
+                    upToDate = false
+                }
             }
 
-            if (item.state == null || item.state != AdapterState.Synced) {
-                upToDate = false
+            val currencyValue = CurrencyValue(currency, total)
+            val balanceText = currencyValue.let {
+                App.numberFormatter.formatFiat(it.value, it.currency.symbol, 2, 2)
             }
+
+            BalanceHeaderViewItem(balanceText, upToDate)
         }
-
-        return BalanceHeaderViewItem(CurrencyValue(currency, total), upToDate)
     }
 
 }

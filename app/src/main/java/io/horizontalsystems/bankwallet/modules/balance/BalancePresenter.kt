@@ -305,7 +305,7 @@ class BalancePresenter(
         if (hideBalance) {
             view?.hideBalance()
         } else {
-            val headerViewItem = factory.headerViewItem(items, currency)
+            val headerViewItem = factory.headerViewItem(items, currency, false)
             view?.set(headerViewItem)
         }
     }
