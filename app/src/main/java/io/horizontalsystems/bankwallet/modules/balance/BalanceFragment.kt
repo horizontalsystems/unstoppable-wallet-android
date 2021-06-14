@@ -19,7 +19,6 @@ import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.backupkey.BackupKeyModule
-import io.horizontalsystems.bankwallet.modules.balance.views.SyncErrorDialog
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.main.MainActivity
 import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog
@@ -31,6 +30,7 @@ import io.horizontalsystems.bankwallet.ui.extensions.NpaLinearLayoutManager
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorDialog
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorItem
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
+import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.views.helpers.LayoutHelper
@@ -38,7 +38,7 @@ import kotlinx.android.synthetic.main.fragment_balance.*
 
 class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener, BackupRequiredDialog.Listener {
 
-    private val viewModel by navGraphViewModels<BalanceViewModel>(R.id.mainFragment) { BalanceModule.Factory() }
+    private val viewModel by navGraphViewModels<BalanceViewModel2>(R.id.mainFragment) { BalanceModule2.Factory() }
     private val balanceItemsAdapter = BalanceItemsAdapter(this)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -53,11 +53,23 @@ class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener, BackupRequ
         (recyclerCoins.itemAnimator as? SimpleItemAnimator)?.supportsChangeAnimations = false
 
         sortButton.setOnClickListener {
-            viewModel.delegate.onSortClick()
+            val sortTypes = listOf(BalanceSortType.Name, BalanceSortType.Value, BalanceSortType.PercentGrowth)
+            val selectorItems = sortTypes.map {
+                SelectorItem(getString(it.getTitleRes()), it == viewModel.sortType)
+            }
+            SelectorDialog
+                .newInstance(selectorItems, getString(R.string.Balance_Sort_PopupTitle)) { position ->
+                    viewModel.sortType = sortTypes[position]
+                }
+                .show(parentFragmentManager, "balance_sort_type_selector")
         }
 
         pullToRefresh.setOnRefreshListener {
-            viewModel.delegate.onRefresh()
+            viewModel.onRefresh()
+
+            Handler(Looper.getMainLooper()).postDelayed({
+                pullToRefresh.isRefreshing = false
+            }, 1000)
         }
 
         toolbarTitle.setOnSingleClickListener {
@@ -65,12 +77,12 @@ class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener, BackupRequ
         }
 
         balanceText.setOnClickListener {
-            viewModel.delegate.onBalanceClick()
+            viewModel.onBalanceClick()
             HudHelper.vibrate(requireContext())
         }
 
         addCoinButton.setOnClickListener {
-            viewModel.delegate.onAddCoinClick()
+            findNavController().navigate(R.id.mainFragment_to_manageWalletsFragment, null, navOptions())
         }
 
         observeLiveData()
@@ -102,27 +114,49 @@ class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener, BackupRequ
     // BalanceAdapter listener
 
     override fun onSendClicked(viewItem: BalanceViewItem) {
-        viewModel.delegate.onPay(viewItem)
+        when (viewItem.wallet.coin.type) {
+            CoinType.Ethereum, is CoinType.Erc20,
+            CoinType.BinanceSmartChain, is CoinType.Bep20 -> {
+                findNavController().navigate(
+                    R.id.mainFragment_to_sendEvmFragment,
+                    bundleOf(SendEvmModule.walletKey to viewItem.wallet),
+                    navOptionsFromBottom()
+                )
+            }
+            else -> {
+                (activity as? MainActivity)?.openSend(viewItem.wallet)
+            }
+        }
     }
 
     override fun onReceiveClicked(viewItem: BalanceViewItem) {
-        viewModel.delegate.onReceive(viewItem)
+        val wallet = viewItem.wallet
+
+        if (wallet.account.isBackedUp) {
+            findNavController().navigate(R.id.mainFragment_to_receiveFragment, bundleOf(ReceiveFragment.WALLET_KEY to wallet), navOptionsFromBottom())
+        } else {
+            BackupRequiredDialog.show(childFragmentManager, wallet.account)
+        }
     }
 
     override fun onSwapClicked(viewItem: BalanceViewItem) {
-        viewModel.delegate.onSwap(viewItem)
+        findNavController().navigate(R.id.mainFragment_to_swapFragment, bundleOf(SwapFragment.fromCoinKey to viewItem.wallet.coin))
     }
 
     override fun onItemClicked(viewItem: BalanceViewItem) {
-        viewModel.delegate.onItem(viewItem)
+        viewModel.onItem(viewItem)
     }
 
     override fun onChartClicked(viewItem: BalanceViewItem) {
-        viewModel.delegate.onChart(viewItem)
+        val coin = viewItem.wallet.coin
+        val arguments = CoinFragment.prepareParams(coin.type, coin.code, coin.title)
+
+        findNavController().navigate(R.id.mainFragment_to_coinFragment, arguments, navOptions())
+
     }
 
     override fun onSyncErrorClicked(viewItem: BalanceViewItem) {
-        viewModel.delegate.onSyncErrorClick(viewItem)
+        viewModel.onSyncErrorClick(viewItem)
     }
 
     override fun onAttachFragment(childFragment: Fragment) {
@@ -133,12 +167,12 @@ class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener, BackupRequ
 
     override fun onResume() {
         super.onResume()
-        viewModel.delegate.onResume()
+        viewModel.onResume()
     }
 
     override fun onPause() {
         super.onPause()
-        viewModel.delegate.onPause()
+        viewModel.onPause()
     }
     // LiveData
 
@@ -147,35 +181,7 @@ class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener, BackupRequ
             toolbarTitle.text = it ?: getString(R.string.Balance_Title)
         }
 
-        viewModel.openReceiveDialog.observe(viewLifecycleOwner, Observer { wallet ->
-            findNavController().navigate(R.id.mainFragment_to_receiveFragment, bundleOf(ReceiveFragment.WALLET_KEY to wallet), navOptionsFromBottom())
-        })
-
-        viewModel.openSendDialog.observe(viewLifecycleOwner, Observer {
-            (activity as? MainActivity)?.openSend(it)
-        })
-
-        viewModel.openSendEvmDialog.observe(viewLifecycleOwner, { wallet ->
-            findNavController().navigate(R.id.mainFragment_to_sendEvmFragment, bundleOf(SendEvmModule.walletKey to wallet), navOptionsFromBottom())
-        })
-
-        viewModel.openSwap.observe(viewLifecycleOwner, Observer { wallet ->
-            findNavController().navigate(R.id.mainFragment_to_swapFragment, bundleOf(SwapFragment.fromCoinKey to wallet.coin))
-        })
-
-        viewModel.didRefreshLiveEvent.observe(viewLifecycleOwner, Observer {
-            Handler(Looper.getMainLooper()).postDelayed({
-                if (view != null) {
-                    pullToRefresh.isRefreshing = false
-                }
-            }, 1000)
-        })
-
-        viewModel.openManageCoinsLiveEvent.observe(viewLifecycleOwner, Observer {
-            findNavController().navigate(R.id.mainFragment_to_manageWalletsFragment, null, navOptions())
-        })
-
-        viewModel.setViewItems.observe(viewLifecycleOwner, Observer {
+        viewModel.balanceViewItemsLiveData.observe(viewLifecycleOwner, Observer {
             val scrollToTop = balanceItemsAdapter.itemCount == 1
             balanceItemsAdapter.submitList(it) {
                 if (scrollToTop) {
@@ -184,62 +190,35 @@ class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener, BackupRequ
             }
         })
 
-        viewModel.setHeaderViewItem.observe(viewLifecycleOwner, Observer {
+        viewModel.headerViewItemLiveData.observe(viewLifecycleOwner) {
             setHeaderViewItem(it)
-        })
+        }
 
-        viewModel.openSortingTypeDialogLiveEvent.observe(viewLifecycleOwner, Observer { selected ->
-            val sortTypes = listOf(BalanceSortType.Name, BalanceSortType.Value, BalanceSortType.PercentGrowth)
-            val selectorItems = sortTypes.map {
-                SelectorItem(getString(it.getTitleRes()), it == selected)
-            }
-            SelectorDialog
-                    .newInstance(selectorItems, getString(R.string.Balance_Sort_PopupTitle)) { position ->
-                        viewModel.delegate.onSortTypeChange(sortTypes[position])
-                    }
-                    .show(parentFragmentManager, "balance_sort_type_selector")
-        })
-
-        viewModel.showBackupAlert.observe(viewLifecycleOwner, { wallet ->
-            BackupRequiredDialog.show(childFragmentManager, wallet.account)
-        })
-
-        viewModel.openChartModule.observe(viewLifecycleOwner, Observer { coin ->
-            val arguments = CoinFragment.prepareParams(coin.type, coin.code, coin.title)
-
-            findNavController().navigate(R.id.mainFragment_to_coinFragment, arguments, navOptions())
-        })
-
-        viewModel.openEmail.observe(viewLifecycleOwner, Observer { (email, report) ->
-            sendEmail(email, report)
-        })
-
-        viewModel.hideBalance.observe(viewLifecycleOwner, {
-            balanceText.text = "*****"
-            context?.getColor(R.color.jacob)?.let { balanceText.setTextColor(it) }
-        })
-
-        viewModel.showSyncError.observe(viewLifecycleOwner, Observer { (wallet, errorMessage, sourceChangeable) ->
-            activity?.let { fragmentActivity ->
-                SyncErrorDialog.show(fragmentActivity, wallet.coin.title, sourceChangeable, object : SyncErrorDialog.Listener {
-                    override fun onClickRetry() {
-                        viewModel.delegate.refreshByWallet(wallet)
-                    }
-
-                    override fun onClickChangeSource() {
-                        findNavController().navigate(R.id.mainFragment_to_privacySettingsFragment, null, navOptions())
-                    }
-
-                    override fun onClickReport() {
-                        viewModel.delegate.onReportClick(errorMessage)
-                    }
-                })
-            }
-        })
-
-        viewModel.networkNotAvailable.observe(viewLifecycleOwner, Observer {
-            HudHelper.showErrorMessage(this.requireView(), R.string.Hud_Text_NoInternet)
-        })
+//        viewModel.openEmail.observe(viewLifecycleOwner, Observer { (email, report) ->
+//            sendEmail(email, report)
+//        })
+//
+//        viewModel.showSyncError.observe(viewLifecycleOwner, Observer { (wallet, errorMessage, sourceChangeable) ->
+//            activity?.let { fragmentActivity ->
+//                SyncErrorDialog.show(fragmentActivity, wallet.coin.title, sourceChangeable, object : SyncErrorDialog.Listener {
+//                    override fun onClickRetry() {
+//                        viewModel.refreshByWallet(wallet)
+//                    }
+//
+//                    override fun onClickChangeSource() {
+//                        findNavController().navigate(R.id.mainFragment_to_privacySettingsFragment, null, navOptions())
+//                    }
+//
+//                    override fun onClickReport() {
+//                        viewModel.onReportClick(errorMessage)
+//                    }
+//                })
+//            }
+//        })
+//
+//        viewModel.networkNotAvailable.observe(viewLifecycleOwner, Observer {
+//            HudHelper.showErrorMessage(this.requireView(), R.string.Hud_Text_NoInternet)
+//        })
 
     }
 
