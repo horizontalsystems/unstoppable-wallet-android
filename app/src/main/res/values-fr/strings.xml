@@ -610,10 +610,12 @@
     <string name="EnalbeToken_NoCoins">Aucune pièce trouvée avec un solde</string>
     <string name="EnalbeToken_EnableKey">Activer</string>
     <!-- Add Token -->
+    <string name="AddToken_Title">Add Token</string>
     <string name="AddToken_CoinName">Nom de la pièce</string>
     <string name="AddToken_Symbol">Symbole</string>
     <string name="AddToken_Decimals">Decimales</string>
     <string name="AddToken_Dots">…</string>
+    <string name="AddToken_CoinType">Coin Type</string>
     <string name="AddToken_CoinAlreadyInListWarning">Ce token figure déjà sur la liste du gestionnaire des pièces</string>
     <string name="AddToken_InvalidAddressError">Addresse invalide</string>
     <string name="AddToken_ApiLimitExceeded">Limite d\'Api dépassée. Réessayez plus tard.</string>
