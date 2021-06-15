@@ -610,10 +610,12 @@
     <string name="EnalbeToken_NoCoins">找不到有余额的代币</string>
     <string name="EnalbeToken_EnableKey">启用</string>
     <!-- Add Token -->
+    <string name="AddToken_Title">Add Token</string>
     <string name="AddToken_CoinName">代币图片</string>
     <string name="AddToken_Symbol">标志</string>
     <string name="AddToken_Decimals">小数</string>
     <string name="AddToken_Dots">…</string>
+    <string name="AddToken_CoinType">Coin Type</string>
     <string name="AddToken_CoinAlreadyInListWarning">该代币已在代币管理列表中</string>
     <string name="AddToken_InvalidAddressError">错误地址</string>
     <string name="AddToken_ApiLimitExceeded">超过Api限制。请稍后再试。</string>
