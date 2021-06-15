@@ -611,10 +611,12 @@ poner en peligro la seguridad de mis fondos.</string>
     <string name="EnalbeToken_NoCoins">No hay monedas con saldo</string>
     <string name="EnalbeToken_EnableKey">Habilitar</string>
     <!-- Add Token -->
+    <string name="AddToken_Title">Add Token</string>
     <string name="AddToken_CoinName">Nombre de moneda</string>
     <string name="AddToken_Symbol">Símbolo</string>
     <string name="AddToken_Decimals">Decimales</string>
     <string name="AddToken_Dots">…</string>
+    <string name="AddToken_CoinType">Coin Type</string>
     <string name="AddToken_CoinAlreadyInListWarning">Este token ya está en la lista del gestor de monedas</string>
     <string name="AddToken_InvalidAddressError">Dirección inválida</string>
     <string name="AddToken_ApiLimitExceeded">Límite de Api superado. Inténtalo de nuevo más tarde.</string>
