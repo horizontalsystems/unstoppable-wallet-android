@@ -611,10 +611,12 @@
     <string name="EnalbeToken_NoCoins">잔액이 있는 코인을 찾을 수 없습니다</string>
     <string name="EnalbeToken_EnableKey">활성화</string>
     <!-- Add Token -->
+    <string name="AddToken_Title">Add Token</string>
     <string name="AddToken_CoinName">코인 이름</string>
     <string name="AddToken_Symbol">심볼</string>
     <string name="AddToken_Decimals">소수점</string>
     <string name="AddToken_Dots">…</string>
+    <string name="AddToken_CoinType">Coin Type</string>
     <string name="AddToken_CoinAlreadyInListWarning">이 토큰은 이미 코인 매니저 리스트에 있습니다.</string>
     <string name="AddToken_InvalidAddressError">잘못된 주소</string>
     <string name="AddToken_ApiLimitExceeded">Api limit exceeded. Try again later.</string>
