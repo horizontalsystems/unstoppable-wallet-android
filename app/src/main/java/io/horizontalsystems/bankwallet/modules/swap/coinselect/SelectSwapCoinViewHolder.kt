@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.setCoinImage
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
-import io.horizontalsystems.bankwallet.modules.swap.SwapModule.CoinBalanceItem
+import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.CoinBalanceItem
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_swap_coin_select.*
 

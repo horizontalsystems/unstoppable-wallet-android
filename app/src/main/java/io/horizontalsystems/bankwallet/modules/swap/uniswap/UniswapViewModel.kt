@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.swap
+package io.horizontalsystems.bankwallet.modules.swap.uniswap
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -8,10 +8,12 @@ import io.horizontalsystems.bankwallet.core.convertedError
 import io.horizontalsystems.bankwallet.core.ethereum.EvmTransactionService
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData
-import io.horizontalsystems.bankwallet.modules.swap.SwapService.SwapError
+import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
+import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.SwapError
+import io.horizontalsystems.bankwallet.modules.swap.SwapViewItemHelper
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceService
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapPendingAllowanceService
-import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.SwapTradeOptions
+import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.uniswap.SwapTradeOptions
 import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.ethereumkit.api.jsonrpc.JsonRpc
 import io.horizontalsystems.uniswapkit.TradeError
@@ -20,9 +22,9 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import java.math.BigDecimal
 
-class SwapViewModel(
-        val service: SwapService,
-        val tradeService: SwapTradeService,
+class UniswapViewModel(
+        val service: UniswapService,
+        val tradeService: UniswapTradeService,
         private val pendingAllowanceService: SwapPendingAllowanceService,
         private val formatter: SwapViewItemHelper
 ) : ViewModel() {
@@ -70,8 +72,8 @@ class SwapViewModel(
 
     fun onTapProceed() {
         val serviceState = service.state
-        if (serviceState is SwapService.State.Ready) {
-            val trade = (tradeService.state as? SwapTradeService.State.Ready)?.trade
+        if (serviceState is UniswapService.State.Ready) {
+            val trade = (tradeService.state as? UniswapTradeService.State.Ready)?.trade
             val swapInfo = SendEvmData.SwapInfo(
                     estimatedIn = tradeService.amountFrom ?: BigDecimal.ZERO,
                     estimatedOut = tradeService.amountTo ?: BigDecimal.ZERO,
@@ -87,6 +89,16 @@ class SwapViewModel(
 
     fun didApprove() {
         pendingAllowanceService.syncAllowance()
+    }
+
+    fun restoreProviderState(swapProviderState: SwapMainModule.SwapProviderState) {
+//        if (getProviderState() != swapProviderState) {
+        tradeService.restoreState(swapProviderState)
+//        }
+    }
+
+    fun getProviderState(): SwapMainModule.SwapProviderState {
+        return SwapMainModule.SwapProviderState(tradeService.coinFrom, tradeService.coinTo, tradeService.amountFrom, tradeService.amountTo, tradeService.amountType)
     }
     //endregion
 
@@ -125,8 +137,8 @@ class SwapViewModel(
                 .let { disposables.add(it) }
     }
 
-    private fun sync(serviceState: SwapService.State) {
-        isLoadingLiveData.postValue(serviceState == SwapService.State.Loading)
+    private fun sync(serviceState: UniswapService.State) {
+        isLoadingLiveData.postValue(serviceState == UniswapService.State.Loading)
         syncProceedAction()
     }
 
@@ -150,9 +162,9 @@ class SwapViewModel(
         syncApproveAction()
     }
 
-    private fun sync(tradeServiceState: SwapTradeService.State) {
+    private fun sync(tradeServiceState: UniswapTradeService.State) {
         when (tradeServiceState) {
-            is SwapTradeService.State.Ready -> {
+            is UniswapTradeService.State.Ready -> {
                 tradeViewItemLiveData.postValue(tradeViewItem(tradeServiceState.trade))
                 advancedSettingsVisibleLiveData.postValue(true)
             }
@@ -171,10 +183,10 @@ class SwapViewModel(
 
     private fun syncProceedAction() {
         val proceedAction = when {
-            service.state is SwapService.State.Ready -> {
+            service.state is UniswapService.State.Ready -> {
                 ActionState.Enabled(Translator.getString(R.string.Swap_Proceed))
             }
-            tradeService.state is SwapTradeService.State.Ready -> {
+            tradeService.state is UniswapTradeService.State.Ready -> {
                 when {
                     service.errors.any { it == SwapError.InsufficientBalanceFrom } -> {
                         ActionState.Disabled(Translator.getString(R.string.Swap_ErrorInsufficientBalance))
@@ -199,7 +211,7 @@ class SwapViewModel(
 
     private fun syncApproveAction() {
         val approveAction = when {
-            tradeService.state !is SwapTradeService.State.Ready || service.errors.any { it == SwapError.InsufficientBalanceFrom || it == SwapError.ForbiddenPriceImpactLevel } -> {
+            tradeService.state !is UniswapTradeService.State.Ready || service.errors.any { it == SwapError.InsufficientBalanceFrom || it == SwapError.ForbiddenPriceImpactLevel } -> {
                 ActionState.Hidden
             }
             pendingAllowanceService.isPending -> {
@@ -215,10 +227,10 @@ class SwapViewModel(
         approveActionLiveData.postValue(approveAction)
     }
 
-    private fun tradeViewItem(trade: SwapTradeService.Trade): TradeViewItem {
+    private fun tradeViewItem(trade: UniswapTradeService.Trade): TradeViewItem {
         return TradeViewItem(
                 formatter.price(trade.tradeData.executionPrice, tradeService.coinFrom, tradeService.coinTo),
-                formatter.priceImpactViewItem(trade, SwapTradeService.PriceImpactLevel.Warning),
+                formatter.priceImpactViewItem(trade, UniswapTradeService.PriceImpactLevel.Warning),
                 formatter.guaranteedAmountViewItem(trade.tradeData, tradeService.coinFrom, tradeService.coinTo)
         )
     }
@@ -235,8 +247,8 @@ class SwapViewModel(
     //region models
     data class TradeViewItem(
             val price: String? = null,
-            val priceImpact: SwapModule.PriceImpactViewItem? = null,
-            val guaranteedAmount: SwapModule.GuaranteedAmountViewItem? = null
+            val priceImpact: UniswapModule.PriceImpactViewItem? = null,
+            val guaranteedAmount: UniswapModule.GuaranteedAmountViewItem? = null
     )
 
     data class TradeOptionsViewItem(

@@ -1,7 +1,9 @@
-package io.horizontalsystems.bankwallet.modules.swap
+package io.horizontalsystems.bankwallet.modules.swap.uniswap
 
+import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
+import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.AmountType
 import io.horizontalsystems.bankwallet.modules.swap.providers.UniswapProvider
-import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.SwapTradeOptions
+import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.uniswap.SwapTradeOptions
 import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.models.TransactionData
@@ -16,18 +18,17 @@ import java.math.BigDecimal
 import java.util.*
 
 
-class SwapTradeService(
+class UniswapTradeService(
         evmKit: EthereumKit,
-        private val uniswapProvider: UniswapProvider,
-        coinFrom: Coin?
-) {
+        private val uniswapProvider: UniswapProvider
+) : SwapMainModule.ISwapTradeService {
 
     private var swapDataDisposable: Disposable? = null
     private var lastBlockDisposable: Disposable? = null
     private var swapData: SwapData? = null
 
     //region internal subjects
-    private val tradeTypeSubject = PublishSubject.create<TradeType>()
+    private val amountTypeSubject = PublishSubject.create<AmountType>()
     private val coinFromSubject = PublishSubject.create<Optional<Coin>>()
     private val coinToSubject = PublishSubject.create<Optional<Coin>>()
     private val amountFromSubject = PublishSubject.create<Optional<BigDecimal>>()
@@ -45,40 +46,40 @@ class SwapTradeService(
     }
 
     //region outputs
-    var coinFrom: Coin? = coinFrom
+    override var coinFrom: Coin? = null
         private set(value) {
             field = value
             coinFromSubject.onNext(Optional.ofNullable(value))
         }
-    val coinFromObservable: Observable<Optional<Coin>> = coinFromSubject
+    override val coinFromObservable: Observable<Optional<Coin>> = coinFromSubject
 
-    var coinTo: Coin? = null
+    override var coinTo: Coin? = null
         private set(value) {
             field = value
             coinToSubject.onNext(Optional.ofNullable(value))
         }
-    val coinToObservable: Observable<Optional<Coin>> = coinToSubject
+    override val coinToObservable: Observable<Optional<Coin>> = coinToSubject
 
-    var amountFrom: BigDecimal? = null
+    override var amountFrom: BigDecimal? = null
         private set(value) {
             field = value
             amountFromSubject.onNext(Optional.ofNullable(value))
         }
-    val amountFromObservable: Observable<Optional<BigDecimal>> = amountFromSubject
+    override val amountFromObservable: Observable<Optional<BigDecimal>> = amountFromSubject
 
-    var amountTo: BigDecimal? = null
+    override var amountTo: BigDecimal? = null
         private set(value) {
             field = value
             amountToSubject.onNext(Optional.ofNullable(value))
         }
-    val amountToObservable: Observable<Optional<BigDecimal>> = amountToSubject
+    override val amountToObservable: Observable<Optional<BigDecimal>> = amountToSubject
 
-    var tradeType: TradeType = TradeType.ExactIn
+    override var amountType: AmountType = AmountType.ExactFrom
         private set(value) {
             field = value
-            tradeTypeSubject.onNext(value)
+            amountTypeSubject.onNext(value)
         }
-    val tradeTypeObservable: Observable<TradeType> = tradeTypeSubject
+    override val amountTypeObservable: Observable<AmountType> = amountTypeSubject
 
     var state: State = State.NotReady()
         private set(value) {
@@ -101,12 +102,12 @@ class SwapTradeService(
         return uniswapProvider.transactionData(tradeData)
     }
 
-    fun enterCoinFrom(coin: Coin?) {
+    override fun enterCoinFrom(coin: Coin?) {
         if (coinFrom == coin) return
 
         coinFrom = coin
 
-        if (tradeType == TradeType.ExactOut){
+        if (amountType == AmountType.ExactTo) {
             amountFrom = null
         }
 
@@ -119,12 +120,12 @@ class SwapTradeService(
         syncSwapData()
     }
 
-    fun enterCoinTo(coin: Coin?) {
+    override fun enterCoinTo(coin: Coin?) {
         if (coinTo == coin) return
 
         coinTo = coin
 
-        if (tradeType == TradeType.ExactIn){
+        if (amountType == AmountType.ExactFrom) {
             amountTo = null
         }
 
@@ -137,8 +138,8 @@ class SwapTradeService(
         syncSwapData()
     }
 
-    fun enterAmountFrom(amount: BigDecimal?) {
-        tradeType = TradeType.ExactIn
+    override fun enterAmountFrom(amount: BigDecimal?) {
+        amountType = AmountType.ExactFrom
 
         if (amountsEqual(amountFrom, amount)) return
 
@@ -147,8 +148,8 @@ class SwapTradeService(
         syncTradeData()
     }
 
-    fun enterAmountTo(amount: BigDecimal?) {
-        tradeType = TradeType.ExactOut
+    override fun enterAmountTo(amount: BigDecimal?) {
+        amountType = AmountType.ExactTo
 
         if (amountsEqual(amountTo, amount)) return
 
@@ -157,7 +158,27 @@ class SwapTradeService(
         syncTradeData()
     }
 
-    fun switchCoins() {
+    override fun restoreState(swapProviderState: SwapMainModule.SwapProviderState) {
+        coinTo = swapProviderState.coinTo
+        coinFrom = swapProviderState.coinFrom
+        amountType = swapProviderState.amountType
+
+        when (swapProviderState.amountType) {
+            AmountType.ExactFrom -> {
+                amountFrom = swapProviderState.amountFrom
+                amountTo = null
+            }
+            AmountType.ExactTo -> {
+                amountTo = swapProviderState.amountTo
+                amountFrom = null
+            }
+        }
+
+        swapData = null
+        syncSwapData()
+    }
+
+    override fun switchCoins() {
         val swapCoin = coinTo
         coinTo = coinFrom
 
@@ -199,7 +220,7 @@ class SwapTradeService(
     private fun syncTradeData() {
         val swapData = swapData ?: return
 
-        val amount = if (tradeType == TradeType.ExactIn) amountFrom else amountTo
+        val amount = if (amountType == AmountType.ExactFrom) amountFrom else amountTo
 
         if (amount == null || amount.compareTo(BigDecimal.ZERO) == 0) {
             state = State.NotReady()
@@ -207,6 +228,10 @@ class SwapTradeService(
         }
 
         try {
+            val tradeType = when (amountType) {
+                AmountType.ExactFrom -> TradeType.ExactIn
+                AmountType.ExactTo -> TradeType.ExactOut
+            }
             val tradeData = uniswapProvider.tradeData(swapData, amount, tradeType, tradeOptions.tradeOptions)
             handle(tradeData)
         } catch (e: Throwable) {

@@ -14,78 +14,11 @@
         app:title="@string/SwapSettings_Title"
         app:titleTextAppearance="@style/Title3" />
 
-    <androidx.core.widget.NestedScrollView
+    <LinearLayout
+        android:id="@+id/fragment_placeholder"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="?attr/actionBarSize">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/startBorder"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_begin="16dp" />
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/endBorder"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_end="16dp" />
-
-            <io.horizontalsystems.bankwallet.ui.extensions.AddressInputView
-                android:id="@+id/recipientAddressInputView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="18dp"
-                app:description="@string/SwapSettings_RecipientAddressDescription"
-                app:layout_constraintEnd_toEndOf="@id/endBorder"
-                app:layout_constraintStart_toStartOf="@id/startBorder"
-                app:layout_constraintTop_toTopOf="parent"
-                app:title="@string/SwapSettings_RecipientAddressTitle" />
-
-            <io.horizontalsystems.bankwallet.ui.extensions.InputWithButtonsView
-                android:id="@+id/slippageInputView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="42dp"
-                android:inputType="numberDecimal"
-                app:description="@string/SwapSettings_SlippageDescription"
-                app:layout_constraintEnd_toEndOf="@id/endBorder"
-                app:layout_constraintStart_toStartOf="@id/startBorder"
-                app:layout_constraintTop_toBottomOf="@id/recipientAddressInputView"
-                app:title="@string/SwapSettings_SlippageTitle" />
-
-            <io.horizontalsystems.bankwallet.ui.extensions.InputWithButtonsView
-                android:id="@+id/deadlineInputView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="42dp"
-                android:inputType="number"
-                app:description="@string/SwapSettings_DeadlineDescription"
-                app:layout_constraintEnd_toEndOf="@id/endBorder"
-                app:layout_constraintStart_toStartOf="@id/startBorder"
-                app:layout_constraintTop_toBottomOf="@id/slippageInputView"
-                app:title="@string/SwapSettings_DeadlineTitle" />
-
-            <Button
-                android:id="@+id/applyButton"
-                style="@style/ButtonPrimaryYellow"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="28dp"
-                android:layout_marginBottom="12dp"
-                android:text="@string/SwapSettings_Apply"
-                app:layout_constraintEnd_toEndOf="@id/endBorder"
-                app:layout_constraintStart_toStartOf="@id/startBorder"
-                app:layout_constraintTop_toBottomOf="@+id/deadlineInputView" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </androidx.core.widget.NestedScrollView>
+        android:layout_marginTop="?attr/actionBarSize"
+        android:orientation="vertical" />
 
 </FrameLayout>

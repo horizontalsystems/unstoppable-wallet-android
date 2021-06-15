@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.swap
+package io.horizontalsystems.bankwallet.modules.swap.oneinch
 
 import android.content.Context
 import android.os.Bundle
@@ -6,54 +6,49 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.modules.swap.SwapBaseFragment
+import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceViewModel
 import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveModule
 import io.horizontalsystems.bankwallet.modules.swap.coincard.SwapCoinCardViewModel
 import io.horizontalsystems.bankwallet.modules.swap.confirmation.SwapConfirmationModule
-import io.horizontalsystems.bankwallet.modules.swap.info.SwapInfoFragment.Companion.dexKey
+import io.horizontalsystems.bankwallet.modules.swap.uniswap.UniswapTradeService
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.getNavigationResult
 import io.horizontalsystems.core.setOnSingleClickListener
-import kotlinx.android.synthetic.main.fragment_swap.*
+import kotlinx.android.synthetic.main.fragment_uniswap.*
 
-class SwapFragment : BaseFragment() {
+class OneInchFragment : SwapBaseFragment() {
 
-    private val vmFactory by lazy { SwapModule.Factory(this, requireArguments().getParcelable(fromCoinKey)!!) }
-    private val viewModel by navGraphViewModels<SwapViewModel>(R.id.swapFragment) { vmFactory }
+    private val vmFactory by lazy { OneInchModule.Factory(dex) }
+    private val oneInchViewModel by navGraphViewModels<OneInchSwapViewModel>(R.id.swapFragment) { vmFactory }
     private val allowanceViewModel by navGraphViewModels<SwapAllowanceViewModel>(R.id.swapFragment) { vmFactory }
+    private val coinCardViewModelFactory by lazy { SwapMainModule.CoinCardViewModelFactory(this, dex, oneInchViewModel.service, oneInchViewModel.tradeService) }
+
+    override fun restoreProviderState(providerState: SwapMainModule.SwapProviderState) {
+        oneInchViewModel.restoreProviderState(providerState)
+    }
+
+    override fun getProviderState(): SwapMainModule.SwapProviderState {
+        return oneInchViewModel.getProviderState()
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.fragment_swap, container, false)
+        return inflater.inflate(R.layout.fragment_uniswap, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        toolbar.setOnMenuItemClickListener { item ->
-            when (item.itemId) {
-                R.id.menuCancel -> {
-                    findNavController().popBackStack()
-                    true
-                }
-                R.id.menuInfo -> {
-                    findNavController().navigate(R.id.swapFragment_to_swapInfoFragment, bundleOf(dexKey to viewModel.service.dex), navOptions())
-                    true
-                }
-                else -> false
-            }
-        }
-
-        val fromCoinCardViewModel = ViewModelProvider(this, vmFactory).get(SwapModule.Factory.coinCardTypeFrom, SwapCoinCardViewModel::class.java)
+        val fromCoinCardViewModel = ViewModelProvider(this, coinCardViewModelFactory).get(SwapMainModule.coinCardTypeFrom, SwapCoinCardViewModel::class.java)
         val fromCoinCardTitle = getString(R.string.Swap_FromAmountTitle)
         fromCoinCard.initialize(fromCoinCardTitle, fromCoinCardViewModel, this, viewLifecycleOwner)
 
-        val toCoinCardViewModel = ViewModelProvider(this, vmFactory).get(SwapModule.Factory.coinCardTypeTo, SwapCoinCardViewModel::class.java)
+        val toCoinCardViewModel = ViewModelProvider(this, coinCardViewModelFactory).get(SwapMainModule.coinCardTypeTo, SwapCoinCardViewModel::class.java)
         val toCoinCardTile = getString(R.string.Swap_ToAmountTitle)
         toCoinCard.initialize(toCoinCardTile, toCoinCardViewModel, this, viewLifecycleOwner)
 
@@ -63,79 +58,75 @@ class SwapFragment : BaseFragment() {
 
         getNavigationResult(SwapApproveModule.requestKey)?.let {
             if (it.getBoolean(SwapApproveModule.resultKey)) {
-                viewModel.didApprove()
+                oneInchViewModel.didApprove()
             }
         }
 
         switchButton.setOnClickListener {
-            viewModel.onTapSwitch()
+            oneInchViewModel.onTapSwitch()
         }
 
         advancedSettings.setOnSingleClickListener {
-            findNavController().navigate(R.id.swapFragment_to_swapTradeOptionsFragment)
+            findNavController().navigate(R.id.swapFragment_to_swapSettingsMainFragment)
         }
 
         approveButton.setOnSingleClickListener {
-            viewModel.onTapApprove()
+            oneInchViewModel.onTapApprove()
         }
 
         proceedButton.setOnSingleClickListener {
-            viewModel.onTapProceed()
+            oneInchViewModel.onTapProceed()
         }
+
+        poweredBy.text = getString(R.string.Swap_PoweredBy, dex.provider.title)
     }
 
     private fun observeViewModel() {
-        viewModel.isLoadingLiveData().observe(viewLifecycleOwner, { isLoading ->
+        oneInchViewModel.isLoadingLiveData().observe(viewLifecycleOwner, { isLoading ->
             progressBar.isVisible = isLoading
         })
 
-        viewModel.swapErrorLiveData().observe(viewLifecycleOwner, { error ->
+        oneInchViewModel.swapErrorLiveData().observe(viewLifecycleOwner, { error ->
             commonError.text = error
             commonError.isVisible = error != null
         })
 
-        viewModel.tradeViewItemLiveData().observe(viewLifecycleOwner, { tradeViewItem ->
+        oneInchViewModel.tradeViewItemLiveData().observe(viewLifecycleOwner, { tradeViewItem ->
             setTradeViewItem(tradeViewItem)
         })
 
-        viewModel.proceedActionLiveData().observe(viewLifecycleOwner, { action ->
+        oneInchViewModel.proceedActionLiveData().observe(viewLifecycleOwner, { action ->
             handleButtonAction(proceedButton, action)
         })
 
-        viewModel.approveActionLiveData().observe(viewLifecycleOwner, { approveActionState ->
+        oneInchViewModel.approveActionLiveData().observe(viewLifecycleOwner, { approveActionState ->
             handleButtonAction(approveButton, approveActionState)
         })
 
-        viewModel.openApproveLiveEvent().observe(viewLifecycleOwner, { approveData ->
+        oneInchViewModel.openApproveLiveEvent().observe(viewLifecycleOwner, { approveData ->
             SwapApproveModule.start(this, R.id.swapFragment_to_swapApproveFragment, navOptions(), approveData)
         })
 
-        viewModel.advancedSettingsVisibleLiveData().observe(viewLifecycleOwner, { visible ->
+        oneInchViewModel.advancedSettingsVisibleLiveData().observe(viewLifecycleOwner, { visible ->
             advancedSettingsViews.isVisible = visible
         })
 
-        viewModel.openConfirmationLiveEvent().observe(viewLifecycleOwner, { sendEvmData ->
+        oneInchViewModel.openConfirmationLiveEvent().observe(viewLifecycleOwner, { sendEvmData ->
             SwapConfirmationModule.start(this, R.id.swapFragment_to_swapConfirmationFragment, navOptions(), sendEvmData)
         })
-
-        val dexName = when (viewModel.service.dex) {
-            SwapModule.Dex.Uniswap -> "Uniswap"
-            SwapModule.Dex.PancakeSwap -> "PancakeSwap"
-        }
-        poweredBy.text = "Powered by $dexName"
     }
 
-    private fun handleButtonAction(button: Button, action: SwapViewModel.ActionState?) {
+    private fun handleButtonAction(button: Button, action: OneInchSwapViewModel.ActionState?) {
         when (action) {
-            SwapViewModel.ActionState.Hidden -> {
+            OneInchSwapViewModel.ActionState.Hidden -> {
                 button.isVisible = false
             }
-            is SwapViewModel.ActionState.Enabled -> {
+            is OneInchSwapViewModel.ActionState.Enabled -> {
                 button.isVisible = true
                 button.isEnabled = true
                 button.text = action.title
             }
-            is SwapViewModel.ActionState.Disabled -> {
+            is OneInchSwapViewModel.ActionState.Disabled -> {
                 button.isVisible = true
                 button.isEnabled = false
                 button.text = action.title
@@ -143,7 +134,7 @@ class SwapFragment : BaseFragment() {
         }
     }
 
-    private fun setTradeViewItem(tradeViewItem: SwapViewModel.TradeViewItem?) {
+    private fun setTradeViewItem(tradeViewItem: OneInchSwapViewModel.TradeViewItem?) {
         price.text = tradeViewItem?.price
 
         if (tradeViewItem?.priceImpact != null) {
@@ -165,19 +156,15 @@ class SwapFragment : BaseFragment() {
         poweredByLine.isVisible = tradeViewItem == null
     }
 
-    private fun priceImpactColor(ctx: Context, priceImpactLevel: SwapTradeService.PriceImpactLevel?): Int {
+    private fun priceImpactColor(ctx: Context, priceImpactLevel: UniswapTradeService.PriceImpactLevel?): Int {
         val color = when (priceImpactLevel) {
-            SwapTradeService.PriceImpactLevel.Normal -> R.color.remus
-            SwapTradeService.PriceImpactLevel.Warning -> R.color.jacob
-            SwapTradeService.PriceImpactLevel.Forbidden -> R.color.lucian
+            UniswapTradeService.PriceImpactLevel.Normal -> R.color.remus
+            UniswapTradeService.PriceImpactLevel.Warning -> R.color.jacob
+            UniswapTradeService.PriceImpactLevel.Forbidden -> R.color.lucian
             else -> R.color.grey
         }
 
         return ctx.getColor(color)
-    }
-
-    companion object {
-        const val fromCoinKey = "fromCoinKey"
     }
 
 }

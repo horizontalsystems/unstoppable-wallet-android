@@ -1,20 +1,21 @@
-package io.horizontalsystems.bankwallet.modules.swap.tradeoptions
+package io.horizontalsystems.bankwallet.modules.swap.tradeoptions.uniswap
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.providers.Translator
-import io.horizontalsystems.bankwallet.modules.swap.SwapTradeService
-import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.ISwapTradeOptionsService.*
+import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.SwapSettingsModule.SwapSettingsError
+import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.uniswap.UniswapSettingsModule.State
+import io.horizontalsystems.bankwallet.modules.swap.uniswap.UniswapTradeService
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 
-class SwapTradeOptionsViewModel(
-        private val service: SwapTradeOptionsService,
-        private val tradeService: SwapTradeService
-        ) : ViewModel() {
+class UniswapSettingsViewModel(
+        private val service: UniswapSettingsService,
+        private val tradeService: UniswapTradeService
+) : ViewModel() {
 
-    val actionStateLiveData = MutableLiveData<ActionState>(ActionState.Enabled())
+    val actionStateLiveData = MutableLiveData<ActionState>(ActionState.Enabled)
 
     private val disposable = CompositeDisposable()
 
@@ -31,20 +32,20 @@ class SwapTradeOptionsViewModel(
     private fun syncAction() {
         when (service.state) {
             is State.Valid -> {
-                actionStateLiveData.postValue(ActionState.Enabled())
+                actionStateLiveData.postValue(ActionState.Enabled)
             }
             State.Invalid -> {
                 val error = service.errors.firstOrNull() ?: return
                 var errorText: String? = null
 
                 when (error) {
-                    is TradeOptionsError.InvalidAddress -> {
+                    is SwapSettingsError.InvalidAddress -> {
                         errorText = Translator.getString(R.string.SwapSettings_Error_InvalidAddress)
                     }
-                    is TradeOptionsError.InvalidSlippage -> {
+                    is SwapSettingsError.InvalidSlippage -> {
                         errorText = Translator.getString(R.string.SwapSettings_Error_InvalidSlippage)
                     }
-                    is TradeOptionsError.ZeroDeadline -> {
+                    is SwapSettingsError.ZeroDeadline -> {
                         errorText = Translator.getString(R.string.SwapSettings_Error_InvalidDeadline)
                     }
                 }
@@ -73,7 +74,7 @@ class SwapTradeOptionsViewModel(
     }
 
     sealed class ActionState {
-        class Enabled : ActionState()
+        object Enabled : ActionState()
         class Disabled(val title: String) : ActionState()
     }
 }

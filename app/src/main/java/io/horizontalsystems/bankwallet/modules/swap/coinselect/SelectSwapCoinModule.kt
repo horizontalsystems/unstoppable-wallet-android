@@ -2,7 +2,7 @@ package io.horizontalsystems.bankwallet.modules.swap.coinselect
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import io.horizontalsystems.bankwallet.modules.swap.SwapModule.CoinBalanceItem
+import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.CoinBalanceItem
 
 object SelectSwapCoinModule {
 

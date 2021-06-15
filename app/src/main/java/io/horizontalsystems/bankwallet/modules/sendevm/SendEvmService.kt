@@ -122,13 +122,13 @@ class SendEvmService(
     override val initialAddress: Address?
         get() = null
 
-    override val error: Throwable?
+    override val recipientAddressError: Throwable?
         get() = addressError
 
-    override val errorObservable: Observable<Unit>
+    override val recipientAddressErrorObservable: Observable<Unit>
         get() = addressErrorSubject.map { }
 
-    override fun set(address: Address?) {
+    override fun setRecipientAddress(address: Address?) {
         if (address != null && address.hex.isNotEmpty()) {
             try {
                 AddressValidator.validate(address.hex)
@@ -145,7 +145,7 @@ class SendEvmService(
         syncState()
     }
 
-    override fun set(amount: BigDecimal) {
+    override fun setRecipientAmount(amount: BigDecimal) {
         //TODO
     }
 

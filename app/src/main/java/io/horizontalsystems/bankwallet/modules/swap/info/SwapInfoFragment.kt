@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.modules.swap.SwapModule
+import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.Dex
 import io.horizontalsystems.core.findNavController
 import kotlinx.android.synthetic.main.fragment_swap_info.*
 
@@ -31,7 +31,7 @@ class SwapInfoFragment : BaseFragment() {
             }
         }
 
-        val dex = arguments?.getParcelable(dexKey) ?: SwapModule.Dex.Uniswap
+        val dex: Dex = requireArguments().getParcelable(dexKey)!!
         val viewModel = ViewModelProvider(this, SwapInfoModule.Factory(dex)).get(SwapInfoViewModel::class.java)
 
         toolbar.title = viewModel.title

@@ -14,14 +14,14 @@ import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionService
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
-import io.horizontalsystems.bankwallet.modules.swap.SwapModule
+import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.core.findNavController
 
 object SwapApproveConfirmationModule {
 
     class Factory(
             private val sendEvmData: SendEvmData,
-            private val dex: SwapModule.Dex
+            private val dex: SwapMainModule.Dex
     ) : ViewModelProvider.Factory {
 
         private val coin by lazy { dex.coin }
@@ -30,7 +30,7 @@ object SwapApproveConfirmationModule {
             val feeRateProvider = FeeRateProviderFactory.provider(coin)!!
             EvmTransactionService(evmKit, feeRateProvider, 20)
         }
-        private val coinServiceFactory by lazy { EvmCoinServiceFactory(coin, App.coinKit, App.currencyManager, App.xRateManager) }
+        private val coinServiceFactory by lazy { EvmCoinServiceFactory(coin!!, App.coinKit, App.currencyManager, App.xRateManager) }
         private val sendService by lazy { SendEvmTransactionService(sendEvmData, evmKit, transactionService, App.activateCoinManager) }
 
         @Suppress("UNCHECKED_CAST")

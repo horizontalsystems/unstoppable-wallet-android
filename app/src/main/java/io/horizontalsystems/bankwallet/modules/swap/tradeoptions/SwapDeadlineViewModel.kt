@@ -1,20 +1,38 @@
 package io.horizontalsystems.bankwallet.modules.swap.tradeoptions
 
+import android.util.Range
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.core.SingleLiveEvent
+import io.reactivex.Observable
+import io.reactivex.disposables.CompositeDisposable
+import java.util.*
 import kotlin.math.floor
 
+interface ISwapDeadlineService {
+    val initialDeadline: Long?
+    val defaultDeadline: Long
+
+    val deadlineError: Throwable?
+    val deadlineErrorObservable: Observable<Optional<Throwable>>
+
+    val recommendedDeadlineBounds: Range<Long>
+
+    fun setDeadline(value: Long)
+}
+
 class SwapDeadlineViewModel(
-        private val service: SwapTradeOptionsService
+        private val service: ISwapDeadlineService
 ) : ViewModel(), IVerifiedInputViewModel {
+
+    private val disposable = CompositeDisposable()
 
     override val inputFieldButtonItems: List<InputFieldButtonItem>
         get() {
-            val bounds = SwapTradeOptionsService.recommendedDeadlineBounds
+            val bounds = service.recommendedDeadlineBounds
             val lowerMinutes = toMinutes(bounds.lower)
             val upperMinutes = toMinutes(bounds.upper)
 
@@ -30,24 +48,30 @@ class SwapDeadlineViewModel(
             )
         }
 
-    override val inputFieldPlaceholder = toMinutes(defaultTtl)
+    override val inputFieldPlaceholder = toMinutes(service.defaultDeadline)
     override val setTextLiveData = MutableLiveData<String?>(null)
     override val cautionLiveData = MutableLiveData<Caution?>(null)
     override val initialValue: String?
-        get() {
-            val state = service.state
+        get() = service.initialDeadline?.let { toMinutes(it) }
 
-            if (state is ISwapTradeOptionsService.State.Valid) {
-                if (state.tradeOptions.ttl != defaultTtl) {
-                    return toMinutes(state.tradeOptions.ttl)
+    init {
+        service.deadlineErrorObservable
+                .subscribe { sync() }
+                .let {
+                    disposable.add(it)
                 }
-            }
+        sync()
+    }
 
-            return null
+    private fun sync() {
+        val caution = service.deadlineError?.localizedMessage?.let { localizedMessage ->
+            Caution(localizedMessage, Caution.Type.Error)
         }
+        cautionLiveData.postValue(caution)
+    }
 
     override fun onChangeText(text: String?) {
-        service.deadline = text?.toLongOrNull()?.times(60) ?: defaultTtl
+        service.setDeadline(text?.toLongOrNull()?.times(60) ?: service.defaultDeadline)
     }
 
     override fun isValid(text: String?): Boolean {
@@ -58,9 +82,6 @@ class SwapDeadlineViewModel(
         return floor(seconds / 60.0).toLong().toString()
     }
 
-    companion object {
-        const val defaultTtl: Long = 20 * 60
-    }
 }
 
 

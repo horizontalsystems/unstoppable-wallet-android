@@ -15,11 +15,11 @@ import java.math.BigDecimal
 
 interface IRecipientAddressService {
     val initialAddress: Address?
-    val error: Throwable?
-    val errorObservable: Observable<Unit>
+    val recipientAddressError: Throwable?
+    val recipientAddressErrorObservable: Observable<Unit>
 
-    fun set(address: Address?)
-    fun set(amount: BigDecimal)
+    fun setRecipientAddress(address: Address?)
+    fun setRecipientAmount(amount: BigDecimal)
 }
 
 class RecipientAddressViewModel(
@@ -41,7 +41,7 @@ class RecipientAddressViewModel(
     private var disposables = CompositeDisposable()
 
     init {
-        service.errorObservable
+        service.recipientAddressErrorObservable
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
@@ -57,7 +57,7 @@ class RecipientAddressViewModel(
                     forceShowError = true
 
                     if (address.isPresent) {
-                        service.set(address.get())
+                        service.setRecipientAddress(address.get())
                     } else {
                         sync()
                     }
@@ -79,7 +79,7 @@ class RecipientAddressViewModel(
     override fun onChangeText(text: String?) {
         forceShowError = false
 
-        service.set(text?.let { Address(it) })
+        service.setRecipientAddress(text?.let { Address(it) })
         resolutionService.setText(text)
     }
 
@@ -101,7 +101,7 @@ class RecipientAddressViewModel(
         setTextLiveData.postValue(addressData.address)
 
         addressData.amount?.let {
-            service.set(it)
+            service.setRecipientAmount(it)
         }
     }
 
@@ -109,7 +109,7 @@ class RecipientAddressViewModel(
         if ((isEditing && !forceShowError) || resolutionService.isResolving) {
             cautionLiveData.postValue(null)
         } else {
-            val caution = service.error?.convertedError?.localizedMessage?.let {
+            val caution = service.recipientAddressError?.convertedError?.localizedMessage?.let {
                 Caution(it, Caution.Type.Error)
             }
 

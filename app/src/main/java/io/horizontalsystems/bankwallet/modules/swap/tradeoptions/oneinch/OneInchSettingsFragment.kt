@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.swap.tradeoptions
+package io.horizontalsystems.bankwallet.modules.swap.tradeoptions.oneinch
 
 import android.app.Activity
 import android.os.Bundle
@@ -9,24 +9,24 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerActivity
-import io.horizontalsystems.bankwallet.modules.swap.SwapViewModel
-import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.SwapTradeOptionsViewModel.ActionState
+import io.horizontalsystems.bankwallet.modules.swap.oneinch.OneInchModule
+import io.horizontalsystems.bankwallet.modules.swap.oneinch.OneInchSwapViewModel
+import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.RecipientAddressViewModel
+import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.SwapSettingsBaseFragment
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
-import kotlinx.android.synthetic.main.fragment_swap_settings.*
+import kotlinx.android.synthetic.main.fragment_swap_settings_uniswap.*
 
-class SwapTradeOptionsFragment : BaseFragment() {
-    private val swapViewModel by navGraphViewModels<SwapViewModel>(R.id.swapFragment)
+class OneInchSettingsFragment : SwapSettingsBaseFragment() {
 
-    private val vmFactory by lazy { SwapTradeOptionsModule.Factory(swapViewModel.tradeService) }
-    private val viewModel by viewModels<SwapTradeOptionsViewModel> { vmFactory }
-    private val deadlineViewModel by viewModels<SwapDeadlineViewModel> { vmFactory }
+    private val oneInchViewModel by navGraphViewModels<OneInchSwapViewModel>(R.id.swapFragment) { OneInchModule.Factory(dex) }
+
+    private val vmFactory by lazy { OneInchSwapSettingsModule.Factory(oneInchViewModel.tradeService, dex) }
+    private val oneInchSettingsViewModel by viewModels<OneInchSettingsViewModel> { vmFactory }
     private val recipientAddressViewModel by viewModels<RecipientAddressViewModel> { vmFactory }
-    private val slippageViewModel by viewModels<SwapSlippageViewModel> { vmFactory }
 
     private val qrScannerResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         when (result.resultCode) {
@@ -42,29 +42,19 @@ class SwapTradeOptionsFragment : BaseFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.fragment_swap_settings, container, false)
+        return inflater.inflate(R.layout.fragment_swap_settings_1inch, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        toolbar.setOnMenuItemClickListener { item ->
-            when (item.itemId) {
-                R.id.menuCancel -> {
-                    findNavController().popBackStack()
-                    true
-                }
-                else -> false
-            }
-        }
-
-        viewModel.actionStateLiveData.observe(viewLifecycleOwner) { actionState ->
+        oneInchSettingsViewModel.actionStateLiveData.observe(viewLifecycleOwner) { actionState ->
             when (actionState) {
-                is ActionState.Enabled -> {
+                is OneInchSettingsViewModel.ActionState.Enabled -> {
                     applyButton.isEnabled = true
                     applyButton.text = getString(R.string.SwapSettings_Apply)
                 }
-                is ActionState.Disabled -> {
+                is OneInchSettingsViewModel.ActionState.Disabled -> {
                     applyButton.isEnabled = false
                     applyButton.text = actionState.title
                 }
@@ -72,7 +62,7 @@ class SwapTradeOptionsFragment : BaseFragment() {
         }
 
         applyButton.setOnSingleClickListener {
-            if (viewModel.onDoneClick()) {
+            if (oneInchSettingsViewModel.onDoneClick()) {
                 findNavController().popBackStack()
             } else {
                 HudHelper.showErrorMessage(this.requireView(), getString(R.string.default_error_msg))
@@ -84,8 +74,6 @@ class SwapTradeOptionsFragment : BaseFragment() {
             qrScannerResultLauncher.launch(intent)
         })
 
-        slippageInputView.setViewModel(slippageViewModel, viewLifecycleOwner)
-        deadlineInputView.setViewModel(deadlineViewModel, viewLifecycleOwner)
     }
 
 }

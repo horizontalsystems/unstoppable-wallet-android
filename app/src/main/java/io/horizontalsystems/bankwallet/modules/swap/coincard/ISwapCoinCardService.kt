@@ -1,6 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.swap.coincard
 
-import io.horizontalsystems.bankwallet.modules.swap.SwapModule
+import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.coinkit.models.Coin
 import io.reactivex.Observable
 import java.math.BigDecimal
@@ -11,7 +11,7 @@ interface ISwapCoinCardService {
     val amount: BigDecimal?
     val coin: Coin?
     val balance: BigDecimal?
-    val tokensForSelection: List<SwapModule.CoinBalanceItem>
+    val tokensForSelection: List<SwapMainModule.CoinBalanceItem>
 
     val isEstimatedObservable: Observable<Boolean>
     val amountObservable: Observable<Optional<BigDecimal>>

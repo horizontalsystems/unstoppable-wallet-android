@@ -2,11 +2,11 @@ package io.horizontalsystems.bankwallet.modules.swap.coinselect
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import io.horizontalsystems.bankwallet.modules.swap.SwapModule.CoinBalanceItem
+import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.CoinBalanceItem
 import java.util.*
 
 class SelectSwapCoinViewModel(
-      private val coins: List<CoinBalanceItem>
+        private val coins: List<CoinBalanceItem>
 ) : ViewModel() {
 
     val coinItemsLivedData = MutableLiveData<List<CoinBalanceItem>>()

@@ -11,7 +11,7 @@ import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.send.SendModule.AmountInfo
-import io.horizontalsystems.bankwallet.modules.swap.SwapModule
+import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.swap.SwapViewItemHelper
 import io.horizontalsystems.bankwallet.ui.extensions.AmountInputView
 import io.horizontalsystems.coinkit.models.Coin
@@ -60,7 +60,7 @@ class SwapCoinCardViewModel(
     fun secondaryInfoLiveData(): LiveData<String?> = secondaryInfoLiveData
     fun maxEnabledLiveData(): LiveData<Boolean> = maxEnabledLiveData
 
-    val tokensForSelection: List<SwapModule.CoinBalanceItem>
+    val tokensForSelection: List<SwapMainModule.CoinBalanceItem>
         get() = coinCardService.tokensForSelection
 
     fun onSelectCoin(coin: Coin) {
@@ -149,10 +149,8 @@ class SwapCoinCardViewModel(
     }
 
     private fun syncAmount(amount: BigDecimal?) {
-        if (coinCardService.isEstimated) {
-            val fullAmountInfo = fiatService.buildForCoin(amount)
-            syncFullAmountInfo(fullAmountInfo, false)
-        }
+        val fullAmountInfo = fiatService.buildForCoin(amount)
+        syncFullAmountInfo(fullAmountInfo, false)
     }
 
     private fun syncCoin(coin: Coin?) {
@@ -191,9 +189,7 @@ class SwapCoinCardViewModel(
         updateInputFields()
 
         if (fullAmountInfo == null) {
-            if (!force && coinCardService.isEstimated) {
-                amountLiveData.postValue(null)
-            }
+            amountLiveData.postValue(null)
             secondaryInfoLiveData.postValue(secondaryInfoPlaceHolder())
 
             setCoinValueToService(inputAmount, force)

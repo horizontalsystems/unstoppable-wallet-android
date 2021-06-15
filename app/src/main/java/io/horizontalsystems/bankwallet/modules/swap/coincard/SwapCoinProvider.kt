@@ -5,8 +5,9 @@ import io.horizontalsystems.bankwallet.core.ICoinManager
 import io.horizontalsystems.bankwallet.core.IRateManager
 import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.bankwallet.modules.swap.SwapModule.CoinBalanceItem
-import io.horizontalsystems.bankwallet.modules.swap.SwapModule.Dex
+import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.Blockchain
+import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.CoinBalanceItem
+import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.Dex
 import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.ICurrencyManager
@@ -44,8 +45,8 @@ class SwapCoinProvider(
     }
 
     private fun dexSupportsCoin(coin: Coin) = when (coin.type) {
-        CoinType.Ethereum, is CoinType.Erc20 -> dex == Dex.Uniswap
-        CoinType.BinanceSmartChain, is CoinType.Bep20 -> dex == Dex.PancakeSwap
+        CoinType.Ethereum, is CoinType.Erc20 -> dex.blockchain == Blockchain.Ethereum
+        CoinType.BinanceSmartChain, is CoinType.Bep20 -> dex.blockchain == Blockchain.BinanceSmartChain
         else -> false
     }
 
@@ -74,6 +75,7 @@ class SwapCoinProvider(
             }
         }
     }
+
     private fun balance(coin: Coin): BigDecimal? {
         val wallet = walletManager.activeWallets.firstOrNull { it.coin == coin }
         return wallet?.let { adapterManager.getBalanceAdapterForWallet(it)?.balanceData?.available }

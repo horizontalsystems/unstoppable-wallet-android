@@ -23,27 +23,27 @@ class SendAddressPresenter(
 
     override val initialAddress: Address? = null
 
-    override var error: Throwable? = null
+    override var recipientAddressError: Throwable? = null
         private set(value) {
             errorsObservable.onNext(Optional.ofNullable(value))
             field = value
         }
 
-    override val errorObservable: Observable<Unit> = errorsObservable.map {
+    override val recipientAddressErrorObservable: Observable<Unit> = errorsObservable.map {
         Unit
     }
 
-    override fun set(address: Address?) {
+    override fun setRecipientAddress(address: Address?) {
         onSetAddress(address)
     }
 
-    override fun set(amount: BigDecimal) {
+    override fun setRecipientAmount(amount: BigDecimal) {
         moduleDelegate.onUpdateAmount(amount)
     }
 
     private fun onSetAddress(address: Address?) {
         if (address == null || address.hex.isEmpty()) {
-            error = null
+            recipientAddressError = null
             currentAddress = null
             enteredAddress = null
             moduleDelegate.onUpdateAddress()
@@ -74,10 +74,10 @@ class SendAddressPresenter(
         try {
             moduleDelegate.validate(address.hex)
             currentAddress = address
-            error = null
+            recipientAddressError = null
         } catch (err: Exception) {
             currentAddress = null
-            error = getError(err)
+            recipientAddressError = getError(err)
             throw err
         }
     }

@@ -14,18 +14,18 @@ import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionService
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
-import io.horizontalsystems.bankwallet.modules.swap.SwapService
+import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.core.findNavController
 
 object SwapConfirmationModule {
 
     class Factory(
-            private val service: SwapService,
+            private val dex: SwapMainModule.Dex,
             private val sendEvmData: SendEvmData
     ) : ViewModelProvider.Factory {
 
-        private val evmKit by lazy { service.dex.evmKit!! }
-        private val coin by lazy { service.dex.coin }
+        private val evmKit by lazy { dex.evmKit!! }
+        private val coin by lazy { dex.coin!! }
         private val transactionService by lazy {
             val feeRateProvider = FeeRateProviderFactory.provider(coin)!!
             EvmTransactionService(evmKit, feeRateProvider, 20)

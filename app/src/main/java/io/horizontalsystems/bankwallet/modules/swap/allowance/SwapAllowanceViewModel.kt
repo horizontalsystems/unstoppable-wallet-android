@@ -5,13 +5,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.providers.Translator
+import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.swap.SwapViewItemHelper
-import io.horizontalsystems.bankwallet.modules.swap.SwapService
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
 class SwapAllowanceViewModel(
-        private val service: SwapService,
+        private val service: SwapMainModule.ISwapService,
         private val allowanceService: SwapAllowanceService,
         private val pendingAllowanceService: SwapPendingAllowanceService,
         private val formatter: SwapViewItemHelper
@@ -71,7 +71,7 @@ class SwapAllowanceViewModel(
     }
 
     private fun handle(errors: List<Throwable>) {
-        isError = errors.any { it is SwapService.SwapError.InsufficientAllowance }
+        isError = errors.any { it is SwapMainModule.SwapError.InsufficientAllowance }
 
         syncVisible()
     }

@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.swap.coinselect
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.modules.swap.SwapModule.CoinBalanceItem
+import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.CoinBalanceItem
 import io.horizontalsystems.views.inflate
 
 class SelectSwapCoinAdapter(

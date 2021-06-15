@@ -1,8 +1,8 @@
-package io.horizontalsystems.bankwallet.modules.swap.tradeoptions
+package io.horizontalsystems.bankwallet.modules.swap.tradeoptions.uniswap
 
+import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.uniswapkit.models.TradeOptions
 import java.math.BigDecimal
-import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.ethereumkit.models.Address as EthAddress
 
 class SwapTradeOptions(
