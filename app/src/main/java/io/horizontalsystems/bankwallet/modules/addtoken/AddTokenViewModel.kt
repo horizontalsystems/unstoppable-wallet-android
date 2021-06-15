@@ -3,19 +3,17 @@ package io.horizontalsystems.bankwallet.modules.addtoken
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.InvalidContractAddress
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.ApiError
+import io.horizontalsystems.bankwallet.entities.blockchainType
 import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.Caution
 import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.ethereumkit.core.AddressValidator
 import io.reactivex.disposables.CompositeDisposable
 
-class AddTokenViewModel(
-        private val addTokenService: AddTokenService,
-        val titleTextRes: Int,
-        val hintTextRes: Int
-        ) : ViewModel() {
+class AddTokenViewModel(private val addTokenService: AddTokenService) : ViewModel() {
 
     val loadingLiveData = MutableLiveData<Boolean>()
     val cautionLiveData = MutableLiveData<Caution?>()
@@ -83,12 +81,13 @@ class AddTokenViewModel(
     }
 
     private fun getViewItem(coin: Coin) =
-            AddTokenModule.ViewItem(coin.title, coin.code, coin.decimal)
+            AddTokenModule.ViewItem(coin.type.blockchainType, coin.title, coin.code, coin.decimal)
 
     private fun getErrorText(error: Throwable): String {
         val errorKey = when (error) {
             is AddressValidator.InvalidAddressLength,
             is AddressValidator.InvalidAddressHex,
+            is InvalidContractAddress,
             is AddressValidator.InvalidAddressChecksum -> R.string.AddToken_InvalidAddressError
             is ApiError.ContractNotFound -> R.string.AddEvmToken_ContractNotFound
             is ApiError.TokenNotFound -> R.string.AddBep2Token_TokenNotFound

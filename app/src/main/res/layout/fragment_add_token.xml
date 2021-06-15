@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?android:windowBackground"
@@ -12,8 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         app:navigationIcon="@drawable/ic_back"
-        app:titleTextAppearance="@style/Title3"
-        tools:title="@string/AddErc20Token_Title" />
+        app:title="@string/AddToken_Title"
+        app:titleTextAppearance="@style/Title3" />
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -22,8 +21,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="8dp">
+            android:layout_height="match_parent">
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guidelineLeft"
@@ -43,125 +41,55 @@
                 android:id="@+id/addressInputView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
                 app:layout_constraintEnd_toStartOf="@id/guidelineRight"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="@id/guidelineLeft"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <ProgressBar
-                android:id="@+id/progressLoading"
-                style="?android:attr/progressBarStyle"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_gravity="center"
-                android:layout_marginTop="32dp"
-                android:backgroundTint="@color/grey"
-                android:indeterminate="true"
-                android:indeterminateTint="@color/grey"
-                android:indeterminateTintMode="src_atop"
-                android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="@id/guidelineRight"
+            <io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.CoinInfoItemView xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/coinTypeView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
                 app:layout_constraintStart_toStartOf="@id/guidelineLeft"
                 app:layout_constraintTop_toBottomOf="@id/addressInputView" />
 
-            <TextView
-                android:id="@+id/coinNameTitle"
-                style="@style/Subhead2"
-                android:layout_width="wrap_content"
+            <io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.CoinInfoItemView xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/coinNameView"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:text="@string/AddToken_CoinName"
-                android:textColor="@color/grey"
-                android:visibility="gone"
                 app:layout_constraintStart_toStartOf="@id/guidelineLeft"
-                app:layout_constraintTop_toBottomOf="@id/addressInputView"
-                tools:visibility="visible" />
+                app:layout_constraintTop_toBottomOf="@id/coinTypeView" />
 
-            <TextView
-                android:id="@+id/coinNameValue"
-                style="@style/Subhead2"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_marginStart="10dp"
-                android:ellipsize="end"
-                android:text="@string/AddToken_Dots"
-                android:textAlignment="textEnd"
-                android:textColor="@color/grey"
-                android:visibility="gone"
-                app:layout_constrainedWidth="true"
-                app:layout_constraintEnd_toEndOf="@id/guidelineRight"
-                app:layout_constraintHorizontal_bias="1"
-                app:layout_constraintStart_toEndOf="@+id/coinNameTitle"
-                app:layout_constraintTop_toTopOf="@+id/coinNameTitle"
-                tools:visibility="visible" />
-
-            <TextView
-                android:id="@+id/symbolTitle"
-                style="@style/Subhead2"
-                android:layout_width="wrap_content"
+            <io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.CoinInfoItemView xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/coinSymbolView"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:text="@string/AddToken_Symbol"
-                android:textColor="@color/grey"
-                android:visibility="gone"
                 app:layout_constraintStart_toStartOf="@id/guidelineLeft"
-                app:layout_constraintTop_toBottomOf="@+id/coinNameTitle"
-                tools:visibility="visible" />
+                app:layout_constraintTop_toBottomOf="@id/coinNameView" />
 
-            <TextView
-                android:id="@+id/symbolValue"
-                style="@style/Subhead2"
-                android:layout_width="wrap_content"
+            <io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.CoinInfoItemView xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/coinDecimalsView"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/AddToken_Dots"
-                android:textColor="@color/grey"
-                android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="@id/guidelineRight"
-                app:layout_constraintTop_toTopOf="@+id/symbolTitle"
-                tools:visibility="visible" />
-
-            <TextView
-                android:id="@+id/decimalTitle"
-                style="@style/Subhead2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:text="@string/AddToken_Decimals"
-                android:textColor="@color/grey"
-                android:visibility="gone"
                 app:layout_constraintStart_toStartOf="@id/guidelineLeft"
-                app:layout_constraintTop_toBottomOf="@+id/symbolTitle"
-                tools:visibility="visible" />
-
-            <TextView
-                android:id="@+id/decimalsValue"
-                style="@style/Subhead2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/AddToken_Dots"
-                android:textColor="@color/grey"
-                android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="@id/guidelineRight"
-                app:layout_constraintTop_toTopOf="@+id/decimalTitle"
-                tools:visibility="visible" />
-
-            <Button
-                android:id="@+id/btnAddToken"
-                style="@style/ButtonPrimaryYellow"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="28dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="12dp"
-                android:text="@string/Button_Add"
-                android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="@id/guidelineRight"
-                app:layout_constraintStart_toStartOf="@id/guidelineLeft"
-                app:layout_constraintTop_toBottomOf="@+id/decimalTitle"
-                tools:visibility="visible" />
+                app:layout_constraintTop_toBottomOf="@id/coinSymbolView" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
+
+    <Button
+        android:id="@+id/btnAddToken"
+        style="@style/ButtonPrimaryYellow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="32dp"
+        android:text="@string/Button_Add"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/guidelineRight"
+        app:layout_constraintStart_toStartOf="@id/guidelineLeft" />
 
 </FrameLayout>

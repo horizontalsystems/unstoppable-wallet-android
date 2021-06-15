@@ -11,6 +11,8 @@ class LocalizedException(val errorTextRes: Int) : Exception()
 class AdapterErrorWrongParameters(override val message: String) : Exception()
 class EthereumKitNotCreated() : Exception()
 class NoFeeSendTransactionError() : Exception()
+class InvalidBep2Address: Exception()
+class InvalidContractAddress: Exception()
 
 sealed class EvmError(message: String? = null) : Throwable(message) {
     object InsufficientBalanceWithFee : EvmError()

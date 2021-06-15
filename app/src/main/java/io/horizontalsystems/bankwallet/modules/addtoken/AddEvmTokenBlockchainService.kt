@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.addtoken
 
-import io.horizontalsystems.bankwallet.core.IAddTokenBlockchainService
 import io.horizontalsystems.bankwallet.core.IAppConfigProvider
 import io.horizontalsystems.bankwallet.core.INetworkManager
 import io.horizontalsystems.bankwallet.entities.ApiError
@@ -12,13 +11,12 @@ import io.reactivex.Single
 import java.util.*
 
 class AddEvmTokenBlockchainService(
-    private val networkType: EthereumKit.NetworkType,
-    private val appConfigProvider: IAppConfigProvider,
-    private val networkManager: INetworkManager
-) : IAddTokenBlockchainService {
+        private val appConfigProvider: IAppConfigProvider,
+        private val networkManager: INetworkManager
+) {
 
-    private val apiUrl: String
-        get() = when (networkType) {
+    private fun getApiUrl(networkType: EthereumKit.NetworkType): String {
+        return when (networkType) {
             EthereumKit.NetworkType.EthMainNet -> "https://api.etherscan.io"
             EthereumKit.NetworkType.EthRopsten -> "https://api-ropsten.etherscan.io"
             EthereumKit.NetworkType.EthKovan -> "https://api-kovan.etherscan.io"
@@ -26,9 +24,10 @@ class AddEvmTokenBlockchainService(
             EthereumKit.NetworkType.EthGoerli -> "https://api-goerli.etherscan.io"
             EthereumKit.NetworkType.BscMainNet -> "https://api.bscscan.com"
         }
+    }
 
-    val explorerKey: String
-        get() = when (networkType) {
+    fun getExplorerKey(networkType: EthereumKit.NetworkType): String {
+        return when (networkType) {
             EthereumKit.NetworkType.EthMainNet,
             EthereumKit.NetworkType.EthRopsten,
             EthereumKit.NetworkType.EthKovan,
@@ -36,12 +35,13 @@ class AddEvmTokenBlockchainService(
             EthereumKit.NetworkType.EthGoerli -> appConfigProvider.etherscanApiKey
             EthereumKit.NetworkType.BscMainNet -> appConfigProvider.bscscanApiKey
         }
+    }
 
-    override fun validate(reference: String) {
+    fun validate(reference: String) {
         AddressValidator.validate(reference)
     }
 
-    override fun coinType(reference: String): CoinType {
+    fun coinType(reference: String, networkType: EthereumKit.NetworkType): CoinType {
         val address = reference.toLowerCase(Locale.ENGLISH)
 
         return when (networkType) {
@@ -54,10 +54,10 @@ class AddEvmTokenBlockchainService(
         }
     }
 
-    override fun coinAsync(reference: String): Single<Coin> {
-        val request = "api?module=account&action=tokentx&contractaddress=$reference&page=1&offset=1&sort=asc&apikey=${explorerKey}"
+    fun coinAsync(reference: String, networkType: EthereumKit.NetworkType): Single<Coin> {
+        val request = "api?module=account&action=tokentx&contractaddress=$reference&page=1&offset=1&sort=asc&apikey=${getExplorerKey(networkType)}"
 
-        return networkManager.getEvmInfo(apiUrl, request)
+        return networkManager.getEvmInfo(getApiUrl(networkType), request)
                 .map { response ->
                     if (response.get("status").asString == "0") {
                         try {
@@ -82,7 +82,7 @@ class AddEvmTokenBlockchainService(
                     val tokenDecimal = result.get("tokenDecimal")?.asString?.toInt()
                             ?: throw ApiError.InvalidResponse
 
-                    return@map Coin(title = tokenName, code = tokenSymbol, decimal = tokenDecimal, type = coinType(reference))
+                    return@map Coin(title = tokenName, code = tokenSymbol, decimal = tokenDecimal, type = coinType(reference, networkType))
                 }
     }
 

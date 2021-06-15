@@ -1,6 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.addtoken.bep2
 
-import io.horizontalsystems.bankwallet.core.IAddTokenBlockchainService
+import io.horizontalsystems.bankwallet.core.InvalidBep2Address
 import io.horizontalsystems.bankwallet.entities.ApiError
 import io.horizontalsystems.binancechainkit.BinanceChainKit
 import io.horizontalsystems.binancechainkit.core.api.BinanceChainApi
@@ -11,7 +11,7 @@ import io.reactivex.Single
 
 class AddBep2TokenBlockchainService(
         appConfigProvider: IBuildConfigProvider
-): IAddTokenBlockchainService {
+) {
 
     private val networkType = if (appConfigProvider.testMode)
         BinanceChainKit.NetworkType.TestNet else
@@ -19,15 +19,19 @@ class AddBep2TokenBlockchainService(
 
     private val binanceApi = BinanceChainApi(networkType)
 
-    override fun validate(reference: String) {
-        //Not yet implemented
+    fun validate(reference: String) {
+        //check reference for period in the middle
+        val regex = "\\w+-\\w+".toRegex()
+        if (!regex.matches(reference)){
+            throw InvalidBep2Address()
+        }
     }
 
-    override fun coinType(reference: String): CoinType {
+    fun coinType(reference: String): CoinType {
         return CoinType.Bep2(reference)
     }
 
-    override fun coinAsync(reference: String) : Single<Coin>{
+    fun coinAsync(reference: String) : Single<Coin>{
         return binanceApi.getTokens()
                 .flatMap {tokens ->
                     val token = tokens.firstOrNull { it.symbol.equals(reference, ignoreCase = true) }
