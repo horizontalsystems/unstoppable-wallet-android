@@ -740,10 +740,12 @@
     <string name="EnalbeToken_EnableKey">Enable</string>
 
     <!-- Add Token -->
+    <string name="AddToken_Title">Add Token</string>
     <string name="AddToken_CoinName">Coin Name</string>
     <string name="AddToken_Symbol">Symbol</string>
     <string name="AddToken_Decimals">Decimals</string>
     <string name="AddToken_Dots">…</string>
+    <string name="AddToken_CoinType">Coin Type</string>
 
     <string name="AddToken_CoinAlreadyInListWarning">This token is already in the coin manager list</string>
     <string name="AddToken_InvalidAddressError">Invalid Address</string>

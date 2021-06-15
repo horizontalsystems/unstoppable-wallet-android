@@ -8,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import io.horizontalsystems.bankwallet.R
@@ -18,6 +17,7 @@ import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerActivity
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.snackbar.SnackbarDuration
+import io.horizontalsystems.views.ListPosition
 import kotlinx.android.synthetic.main.fragment_add_token.*
 
 class AddTokenFragment : BaseFragment() {
@@ -32,17 +32,10 @@ class AddTokenFragment : BaseFragment() {
             findNavController().popBackStack()
         }
 
-        val tokenType = arguments?.getParcelable<TokenType>(TOKEN_TYPE_KEY) ?: run {
-            findNavController().popBackStack()
-            return
-        }
-
-        val model: AddTokenViewModel by viewModels { AddTokenModule.Factory(tokenType) }
-
-        toolbar.title = getString(model.titleTextRes)
+        val model: AddTokenViewModel by viewModels { AddTokenModule.Factory() }
 
         addressInputView.setEditable(false)
-        addressInputView.setHint(getString(model.hintTextRes))
+        addressInputView.setHint(getString(R.string.AddEvmToken_ContractAddressHint))
 
         btnAddToken.setOnClickListener {
             model.onAddClick()
@@ -71,12 +64,13 @@ class AddTokenFragment : BaseFragment() {
             qrScannerResultLauncher.launch(intent)
         }
 
+        setCoinDetails(null)
         observeViewModel(model)
     }
 
     private fun observeViewModel(model: AddTokenViewModel) {
         model.loadingLiveData.observe(viewLifecycleOwner, Observer { visible ->
-            progressLoading.isVisible = visible
+            addressInputView.setSpinner(visible)
         })
 
         model.showSuccess.observe(viewLifecycleOwner, Observer {
@@ -95,26 +89,16 @@ class AddTokenFragment : BaseFragment() {
         })
 
         model.showAddButton.observe(viewLifecycleOwner, Observer { visible ->
-            btnAddToken.isVisible = visible
+            btnAddToken.isEnabled = visible
         })
     }
 
     private fun setCoinDetails(viewItem: AddTokenModule.ViewItem?) {
-        coinNameTitle.isVisible = viewItem != null
-        coinNameValue.isVisible = viewItem != null
-
-        symbolTitle.isVisible = viewItem != null
-        symbolValue.isVisible = viewItem != null
-
-        decimalTitle.isVisible = viewItem != null
-        decimalsValue.isVisible = viewItem != null
-
-        coinNameValue.text = viewItem?.coinName ?: ""
-        symbolValue.text = viewItem?.symbol ?: ""
-        decimalsValue.text = viewItem?.decimal?.toString() ?: ""
+        val dots = getString(R.string.AddToken_Dots)
+        coinTypeView.bind(getString(R.string.AddToken_CoinType), viewItem?.coinType ?: dots, listPosition = ListPosition.First)
+        coinNameView.bind(getString(R.string.AddToken_CoinName), viewItem?.coinName ?: dots, listPosition = ListPosition.Middle)
+        coinSymbolView.bind(getString(R.string.AddToken_Symbol), viewItem?.symbol ?: dots, listPosition = ListPosition.Middle)
+        coinDecimalsView.bind(getString(R.string.AddToken_Decimals), viewItem?.decimal?.toString() ?: dots, listPosition = ListPosition.Last)
     }
 
-    companion object {
-        const val TOKEN_TYPE_KEY = "token_type_key"
-    }
 }
