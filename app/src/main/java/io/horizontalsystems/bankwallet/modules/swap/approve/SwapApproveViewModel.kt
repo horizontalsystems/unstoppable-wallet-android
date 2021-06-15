@@ -7,13 +7,13 @@ import io.horizontalsystems.bankwallet.core.convertedError
 import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinService
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData
-import io.horizontalsystems.bankwallet.modules.swap.SwapModule
+import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
 import java.math.BigDecimal
 
 class SwapApproveViewModel(
-        val dex: SwapModule.Dex,
+        val dex: SwapMainModule.Dex,
         private val service: SwapApproveService,
         private val coinService: EvmCoinService
 ) : ViewModel() {

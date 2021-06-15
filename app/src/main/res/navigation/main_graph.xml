@@ -309,7 +309,7 @@
         tools:layout="@layout/fragment_add_token" />
     <fragment
         android:id="@+id/swapFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.swap.SwapFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.swap.SwapMainFragment"
         android:label="@string/Swap"
         tools:layout="@layout/fragment_swap">
         <action
@@ -322,8 +322,8 @@
             android:id="@+id/swapFragment_to_swapInfoFragment"
             app:destination="@id/swapInfoFragment" />
         <action
-            android:id="@+id/swapFragment_to_swapTradeOptionsFragment"
-            app:destination="@id/swapTradeOptionsFragment"
+            android:id="@+id/swapFragment_to_swapSettingsMainFragment"
+            app:destination="@id/swapSettingsMainFragment"
             app:enterAnim="@anim/slide_from_bottom_long"
             app:exitAnim="@android:anim/fade_out"
             app:popEnterAnim="@android:anim/fade_in"
@@ -360,8 +360,8 @@
         android:name="io.horizontalsystems.bankwallet.modules.swap.info.SwapInfoFragment"
         tools:layout="@layout/fragment_swap_info" />
     <fragment
-        android:id="@+id/swapTradeOptionsFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.swap.tradeoptions.SwapTradeOptionsFragment"
+        android:id="@+id/swapSettingsMainFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.swap.tradeoptions.SwapSettingsMainFragment"
         android:label="SwapTradeOptionsFragment"
         app:enterAnim="@anim/slide_from_bottom"
         app:exitAnim="@android:anim/fade_out"

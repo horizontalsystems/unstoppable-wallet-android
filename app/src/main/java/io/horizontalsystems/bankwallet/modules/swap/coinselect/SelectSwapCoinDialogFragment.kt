@@ -10,7 +10,7 @@ import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseWithSearchDialogFragment
-import io.horizontalsystems.bankwallet.modules.swap.SwapModule.CoinBalanceItem
+import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.CoinBalanceItem
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.setNavigationResult
 import kotlinx.android.synthetic.main.fragment_swap_select_token.*

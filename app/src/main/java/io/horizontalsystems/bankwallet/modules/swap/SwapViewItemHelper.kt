@@ -3,6 +3,8 @@ package io.horizontalsystems.bankwallet.modules.swap
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.core.providers.Translator
+import io.horizontalsystems.bankwallet.modules.swap.uniswap.UniswapModule
+import io.horizontalsystems.bankwallet.modules.swap.uniswap.UniswapTradeService
 import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.uniswapkit.models.TradeData
 import io.horizontalsystems.uniswapkit.models.TradeOptions
@@ -16,7 +18,7 @@ class SwapViewItemHelper(private val numberFormatter: IAppNumberFormatter) {
         if (price == null || coinFrom == null || coinTo == null)
             return null
 
-        val inversePrice = if (price.compareTo(BigDecimal.ZERO)== 0)
+        val inversePrice = if (price.compareTo(BigDecimal.ZERO) == 0)
             BigDecimal.ZERO
         else
             BigDecimal.ONE.divide(price, price.scale(), RoundingMode.HALF_UP)
@@ -25,9 +27,9 @@ class SwapViewItemHelper(private val numberFormatter: IAppNumberFormatter) {
     }
 
     fun priceImpactViewItem(
-            trade: SwapTradeService.Trade,
-            minLevel: SwapTradeService.PriceImpactLevel = SwapTradeService.PriceImpactLevel.Normal
-    ): SwapModule.PriceImpactViewItem? {
+            trade: UniswapTradeService.Trade,
+            minLevel: UniswapTradeService.PriceImpactLevel = UniswapTradeService.PriceImpactLevel.Normal
+    ): UniswapModule.PriceImpactViewItem? {
 
         val priceImpact = trade.tradeData.priceImpact ?: return null
         val impactLevel = trade.priceImpactLevel ?: return null
@@ -35,29 +37,29 @@ class SwapViewItemHelper(private val numberFormatter: IAppNumberFormatter) {
             return null
         }
 
-        return SwapModule.PriceImpactViewItem(impactLevel, Translator.getString(R.string.Swap_Percent, priceImpact))
+        return UniswapModule.PriceImpactViewItem(impactLevel, Translator.getString(R.string.Swap_Percent, priceImpact))
     }
 
-    fun guaranteedAmountViewItem(tradeData: TradeData, coinIn: Coin?, coinOut: Coin?): SwapModule.GuaranteedAmountViewItem? {
+    fun guaranteedAmountViewItem(tradeData: TradeData, coinIn: Coin?, coinOut: Coin?): UniswapModule.GuaranteedAmountViewItem? {
         when (tradeData.type) {
             TradeType.ExactIn -> {
                 val amount = tradeData.amountOutMin ?: return null
                 val coin = coinOut ?: return null
 
-                return SwapModule.GuaranteedAmountViewItem(Translator.getString(R.string.Swap_MinimumGot), coinAmount(amount, coin))
+                return UniswapModule.GuaranteedAmountViewItem(Translator.getString(R.string.Swap_MinimumGot), coinAmount(amount, coin))
             }
             TradeType.ExactOut -> {
                 val amount = tradeData.amountInMax ?: return null
                 val coin = coinIn ?: return null
 
-                return SwapModule.GuaranteedAmountViewItem(Translator.getString(R.string.Swap_MaximumPaid), coinAmount(amount, coin))
+                return UniswapModule.GuaranteedAmountViewItem(Translator.getString(R.string.Swap_MaximumPaid), coinAmount(amount, coin))
             }
         }
     }
 
     fun slippage(allowedSlippage: BigDecimal): String? {
         val defaultTradeOptions = TradeOptions()
-        return if (allowedSlippage.compareTo(defaultTradeOptions.allowedSlippagePercent) == 0){
+        return if (allowedSlippage.compareTo(defaultTradeOptions.allowedSlippagePercent) == 0) {
             null
         } else {
             "$allowedSlippage%"

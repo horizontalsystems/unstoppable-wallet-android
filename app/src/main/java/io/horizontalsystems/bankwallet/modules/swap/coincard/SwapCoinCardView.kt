@@ -8,7 +8,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.modules.swap.SwapModule
+import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.swap.coinselect.SelectSwapCoinDialogFragment
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.getNavigationLiveData
@@ -49,7 +49,7 @@ class SwapCoinCardView @JvmOverloads constructor(context: Context, attrs: Attrib
 
         fragment.getNavigationLiveData(SelectSwapCoinDialogFragment.resultBundleKey)?.observe(lifecycleOwner, { bundle ->
             val requestId = bundle.getInt(SelectSwapCoinDialogFragment.requestIdKey)
-            val coinBalanceItem = bundle.getParcelable<SwapModule.CoinBalanceItem>(SelectSwapCoinDialogFragment.coinBalanceItemResultKey)
+            val coinBalanceItem = bundle.getParcelable<SwapMainModule.CoinBalanceItem>(SelectSwapCoinDialogFragment.coinBalanceItemResultKey)
             if (requestId == id && coinBalanceItem != null) {
                 viewModel.onSelectCoin(coinBalanceItem.coin)
             }

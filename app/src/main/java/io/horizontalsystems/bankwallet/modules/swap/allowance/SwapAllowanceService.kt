@@ -4,7 +4,7 @@ import android.os.Parcelable
 import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.adapters.Eip20Adapter
 import io.horizontalsystems.bankwallet.entities.CoinValue
-import io.horizontalsystems.bankwallet.modules.swap.SwapModule
+import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.models.Address
@@ -53,7 +53,7 @@ class SwapAllowanceService(
         sync()
     }
 
-    fun approveData(dex: SwapModule.Dex, amount: BigDecimal): ApproveData? {
+    fun approveData(dex: SwapMainModule.Dex, amount: BigDecimal): ApproveData? {
         val allowance = (state as? State.Ready)?.allowance
 
         return allowance?.let {
@@ -121,7 +121,7 @@ class SwapAllowanceService(
 
     @Parcelize
     data class ApproveData(
-            val dex: SwapModule.Dex,
+            val dex: SwapMainModule.Dex,
             val coin: Coin,
             val spenderAddress: String,
             val amount: BigDecimal,

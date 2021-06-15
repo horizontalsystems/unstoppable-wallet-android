@@ -18,7 +18,7 @@ import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule.additionalInfoKey
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule.transactionDataKey
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
-import io.horizontalsystems.bankwallet.modules.swap.SwapViewModel
+import io.horizontalsystems.bankwallet.modules.swap.SwapMainViewModel
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.ethereumkit.models.Address
@@ -29,8 +29,8 @@ import kotlinx.android.synthetic.main.fragment_confirmation_swap.*
 
 class SwapConfirmationFragment : BaseFragment() {
     private val logger = AppLogger("swap")
-    private val mainViewModel by navGraphViewModels<SwapViewModel>(R.id.swapFragment)
-    private val vmFactory by lazy { SwapConfirmationModule.Factory(mainViewModel.service, SendEvmData(transactionData, additionalInfo)) }
+    private val mainViewModel by navGraphViewModels<SwapMainViewModel>(R.id.swapFragment)
+    private val vmFactory by lazy { SwapConfirmationModule.Factory(mainViewModel.dex, SendEvmData(transactionData, additionalInfo)) }
     private val sendViewModel by viewModels<SendEvmTransactionViewModel> { vmFactory }
     private val feeViewModel by viewModels<EthereumFeeViewModel> { vmFactory }
 

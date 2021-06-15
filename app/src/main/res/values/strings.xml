@@ -377,6 +377,7 @@
     <string name="Swap_Swapping">Swapping</string>
     <string name="Swap_MaximumPaid">Maximum Amount</string>
     <string name="Swap_MinimumGot">Guaranteed Amount</string>
+    <string name="Swap_PoweredBy" translatable="false">Powered by %s</string>
 
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">Advanced Settings</string>

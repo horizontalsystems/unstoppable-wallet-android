@@ -3,31 +3,19 @@ package io.horizontalsystems.bankwallet.modules.swap.info
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.providers.Translator
-import io.horizontalsystems.bankwallet.modules.swap.SwapModule
+import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 
 class SwapInfoViewModel(
-        dex: SwapModule.Dex
+        dex: SwapMainModule.Dex
 ) : ViewModel() {
 
-    private val dexName = when (dex) {
-        SwapModule.Dex.Uniswap -> "Uniswap"
-        SwapModule.Dex.PancakeSwap -> "PancakeSwap"
-    }
+    private val dexName = dex.provider.title
 
-    private val blockchain = when (dex) {
-        SwapModule.Dex.Uniswap -> "Ethereum"
-        SwapModule.Dex.PancakeSwap -> "Binance Smart Chain"
-    }
+    private val blockchain = dex.blockchain.title
 
-    val dexUrl = when (dex) {
-        SwapModule.Dex.Uniswap -> "https://uniswap.org/"
-        SwapModule.Dex.PancakeSwap -> "https://pancakeswap.finance/"
-    }
+    val title = dex.provider.title
 
-    val title: String = when (dex) {
-        SwapModule.Dex.Uniswap -> "Uniswap v.2"
-        SwapModule.Dex.PancakeSwap -> "PancakeSwap"
-    }
+    val dexUrl = dex.provider.url
 
     val description = Translator.getString(R.string.SwapInfo_Description, dexName, blockchain, dexName)
 

@@ -1,8 +1,9 @@
-package io.horizontalsystems.bankwallet.modules.swap
+package io.horizontalsystems.bankwallet.modules.swap.oneinch
 
 import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.IBalanceAdapter
-import io.horizontalsystems.bankwallet.modules.swap.SwapTradeService.PriceImpactLevel
+import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
+import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.SwapError
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceService
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapPendingAllowanceService
 import io.horizontalsystems.coinkit.models.Coin
@@ -14,13 +15,13 @@ import io.reactivex.subjects.PublishSubject
 import java.math.BigDecimal
 import java.util.*
 
-class SwapService(
-        val dex: SwapModule.Dex,
-        private val tradeService: SwapTradeService,
+class OneInchSwapService(
+        val dex: SwapMainModule.Dex,
+        private val tradeService: OneInchTradeService,
         private val allowanceService: SwapAllowanceService,
         private val pendingAllowanceService: SwapPendingAllowanceService,
         private val adapterManager: IAdapterManager
-) {
+) : SwapMainModule.ISwapService {
     private val disposables = CompositeDisposable()
 
     //region internal subjects
@@ -38,26 +39,26 @@ class SwapService(
         }
     val stateObservable: Observable<State> = stateSubject
 
-    var errors: List<Throwable> = listOf()
+    override var errors: List<Throwable> = listOf()
         private set(value) {
             field = value
             errorsSubject.onNext(value)
         }
-    val errorsObservable: Observable<List<Throwable>> = errorsSubject
+    override val errorsObservable: Observable<List<Throwable>> = errorsSubject
 
-    var balanceFrom: BigDecimal? = null
+    override var balanceFrom: BigDecimal? = null
         private set(value) {
             field = value
             balanceFromSubject.onNext(Optional.ofNullable(value))
         }
-    val balanceFromObservable: Observable<Optional<BigDecimal>> = balanceFromSubject
+    override val balanceFromObservable: Observable<Optional<BigDecimal>> = balanceFromSubject
 
-    var balanceTo: BigDecimal? = null
+    override var balanceTo: BigDecimal? = null
         private set(value) {
             field = value
             balanceToSubject.onNext(Optional.ofNullable(value))
         }
-    val balanceToObservable: Observable<Optional<BigDecimal>> = balanceToSubject
+    override val balanceToObservable: Observable<Optional<BigDecimal>> = balanceToSubject
 
     val approveData: SwapAllowanceService.ApproveData?
         get() = balanceFrom?.let { amount ->
@@ -117,7 +118,7 @@ class SwapService(
         pendingAllowanceService.onCleared()
     }
 
-    private fun onUpdateTrade(state: SwapTradeService.State) {
+    private fun onUpdateTrade(state: OneInchTradeService.State) {
         syncState()
     }
 
@@ -145,20 +146,17 @@ class SwapService(
         var transactionData: TransactionData? = null
 
         when (val state = tradeService.state) {
-            SwapTradeService.State.Loading -> {
+            OneInchTradeService.State.Loading -> {
                 loading = true
             }
-            is SwapTradeService.State.Ready -> {
-                if (state.trade.priceImpactLevel == PriceImpactLevel.Forbidden) {
-                    allErrors.add(SwapError.ForbiddenPriceImpactLevel)
-                }
+            is OneInchTradeService.State.Ready -> {
                 transactionData = try {
-                    tradeService.transactionData(state.trade.tradeData)
+                    tradeService.getTransactionData(state.swap)
                 } catch (error: Throwable) {
                     null
                 }
             }
-            is SwapTradeService.State.NotReady -> {
+            is OneInchTradeService.State.NotReady -> {
                 allErrors.addAll(state.errors)
             }
         }
@@ -200,19 +198,13 @@ class SwapService(
     }
 
     private fun balance(coin: Coin): BigDecimal? =
-            (adapterManager.getAdapterForCoin(coin) as? IBalanceAdapter)?.balanceData?.available
+            (adapterManager.getAdapterForCoin(coin) as? IBalanceAdapter)?.balance
 
     //region models
     sealed class State {
         object Loading : State()
         class Ready(val transactionData: TransactionData) : State()
         object NotReady : State()
-    }
-
-    sealed class SwapError : Throwable() {
-        object InsufficientBalanceFrom : SwapError()
-        object InsufficientAllowance : SwapError()
-        object ForbiddenPriceImpactLevel : SwapError()
     }
 
     //endregion

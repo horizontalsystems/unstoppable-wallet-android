@@ -46,11 +46,12 @@ data class SendEvmData(
     data class SwapInfo(
             val estimatedOut: BigDecimal,
             val estimatedIn: BigDecimal,
-            val slippage: String?,
-            val deadline: String?,
-            val recipientDomain: String?,
-            val price: String?,
-            val priceImpact: String?
+            val slippage: String? = null,
+            val deadline: String? = null,
+            val recipientDomain: String? = null,
+            val price: String? = null,
+            val priceImpact: String? = null,
+            val gasPrice: String? = null
     ) : Parcelable
 }
 
