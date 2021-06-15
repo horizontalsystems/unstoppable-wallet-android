@@ -610,10 +610,12 @@
     <string name="EnalbeToken_NoCoins">Bakiyesi olan para bulunamadı</string>
     <string name="EnalbeToken_EnableKey">Etkinleştir</string>
     <!-- Add Token -->
+    <string name="AddToken_Title">Add Token</string>
     <string name="AddToken_CoinName">Kripto Para Adı</string>
     <string name="AddToken_Symbol">Sembol</string>
     <string name="AddToken_Decimals">Ondalıklar</string>
     <string name="AddToken_Dots">…</string>
+    <string name="AddToken_CoinType">Coin Type</string>
     <string name="AddToken_CoinAlreadyInListWarning">Bu token zaten kripto para yöneticisi listesindedir</string>
     <string name="AddToken_InvalidAddressError">Geçersiz Adres</string>
     <string name="AddToken_ApiLimitExceeded">Api limit exceeded. Try again later.</string>
