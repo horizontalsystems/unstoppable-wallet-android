@@ -18,6 +18,7 @@ import io.horizontalsystems.xrateskit.entities.*
 import java.lang.Long.max
 import java.math.BigDecimal
 import java.math.RoundingMode
+import java.net.URI
 
 data class ChartInfoData(
         val chartData: ChartData,
@@ -87,7 +88,7 @@ sealed class MajorHolderItem {
 
 data class AboutText(val value: String, val type: CoinMeta.DescriptionType)
 
-data class CoinLink(val url: String, val linkType: LinkType, val title: Int, val icon: Int, var listPosition: ListPosition? = null)
+data class CoinLink(val url: String, val linkType: LinkType, val title: String, val icon: Int, var listPosition: ListPosition? = null)
 
 data class LastPoint(
         val rate: BigDecimal,
@@ -130,8 +131,8 @@ class CoinViewFactory(private val currency: Currency, private val numberFormatte
             rows.add(RoiViewItem.RowViewItem("vs $coinCode", values))
         }
 
-        rows.forEachIndexed{ index, item ->
-            when(item){
+        rows.forEachIndexed { index, item ->
+            when (item) {
                 is RoiViewItem.RowViewItem -> item.listPosition = ListPosition.Companion.getListPosition(rows.size, index)
                 is RoiViewItem.HeaderRowViewItem -> item.listPosition = ListPosition.Companion.getListPosition(rows.size, index)
             }
@@ -162,7 +163,7 @@ class CoinViewFactory(private val currency: Currency, private val numberFormatte
     fun getMarketData(coinMarket: CoinMarketDetails, currency: Currency, coinCode: String): MutableList<CoinDataItem> {
         val marketData = mutableListOf<CoinDataItem>()
         if (coinMarket.marketCap > BigDecimal.ZERO) {
-            marketData.add(CoinDataItem(Translator.getString(R.string.CoinPage_MarketCap), formatFiatShortened(coinMarket.marketCap, currency.symbol), rankLabel = coinMarket.marketCapRank?.let{"#$it"}))
+            marketData.add(CoinDataItem(Translator.getString(R.string.CoinPage_MarketCap), formatFiatShortened(coinMarket.marketCap, currency.symbol), rankLabel = coinMarket.marketCapRank?.let { "#$it" }))
         }
         if (coinMarket.circulatingSupply > BigDecimal.ZERO) {
             val (shortenValue, suffix) = numberFormatter.shortenValue(coinMarket.circulatingSupply)
@@ -197,7 +198,7 @@ class CoinViewFactory(private val currency: Currency, private val numberFormatte
         }
 
         coinMarketDetails.meta.links.forEach { (linkType, link) ->
-            links.add(CoinLink(link, linkType, getTitle(linkType), getIcon(linkType)))
+            links.add(CoinLink(link, linkType, getTitle(linkType, link), getIcon(linkType)))
         }
 
         links.forEachIndexed { index, link ->
@@ -308,16 +309,22 @@ class CoinViewFactory(private val currency: Currency, private val numberFormatte
         }
     }
 
-    private fun getTitle(linkType: LinkType): Int {
+    private fun getTitle(linkType: LinkType, link: String? = null): String {
         return when (linkType) {
-            LinkType.GUIDE -> R.string.CoinPage_Guide
-            LinkType.WEBSITE -> R.string.CoinPage_Website
-            LinkType.WHITEPAPER -> R.string.CoinPage_Whitepaper
-            LinkType.TWITTER -> R.string.CoinPage_Twitter
-            LinkType.TELEGRAM -> R.string.CoinPage_Telegram
-            LinkType.REDDIT -> R.string.CoinPage_Reddit
-            LinkType.GITHUB -> R.string.CoinPage_Github
-            LinkType.YOUTUBE -> R.string.CoinPage_Youtube
+            LinkType.GUIDE -> Translator.getString(R.string.CoinPage_Guide)
+            LinkType.WEBSITE -> {
+                link?.let { URI(it).host.replaceFirst("www.", "") }
+                        ?: Translator.getString(R.string.CoinPage_Website)
+            }
+            LinkType.WHITEPAPER -> Translator.getString(R.string.CoinPage_Whitepaper)
+            LinkType.TWITTER -> {
+                link?.split("/")?.lastOrNull()?.replaceFirst("@", "")?.let { "@$it" }
+                        ?: Translator.getString(R.string.CoinPage_Twitter)
+            }
+            LinkType.TELEGRAM -> Translator.getString(R.string.CoinPage_Telegram)
+            LinkType.REDDIT -> Translator.getString(R.string.CoinPage_Reddit)
+            LinkType.GITHUB -> Translator.getString(R.string.CoinPage_Github)
+            LinkType.YOUTUBE -> Translator.getString(R.string.CoinPage_Youtube)
         }
     }
 

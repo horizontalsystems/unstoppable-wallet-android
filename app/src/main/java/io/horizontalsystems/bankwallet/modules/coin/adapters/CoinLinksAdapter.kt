@@ -69,7 +69,7 @@ class CoinLinksAdapter(
 
     class ViewHolder(override val containerView: View, private val listener: Listener) : RecyclerView.ViewHolder(containerView), LayoutContainer {
         fun bind(item: CoinLink) {
-            linkView.showTitle(containerView.context.getString(item.title))
+            linkView.showTitle(item.title)
             linkView.showIcon(ContextCompat.getDrawable(containerView.context, item.icon))
             linkView.setOnClickListener { listener.onClick(item) }
             item.listPosition?.let { linkView.setListPosition(it) }
