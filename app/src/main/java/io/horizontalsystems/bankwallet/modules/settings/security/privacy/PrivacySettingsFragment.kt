@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.ConcatAdapter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.entities.CommunicationMode
 import io.horizontalsystems.bankwallet.entities.SyncMode
 import io.horizontalsystems.bankwallet.entities.TransactionDataSortingType
 import io.horizontalsystems.bankwallet.modules.main.MainModule
@@ -33,7 +32,6 @@ class PrivacySettingsFragment :
 
     private lateinit var viewModel: PrivacySettingsViewModel
     private lateinit var torControlAdapter: PrivacySettingsTorAdapter
-    private lateinit var communicationSettingsAdapter: PrivacySettingsAdapter
     private lateinit var walletRestoreSettingsAdapter: PrivacySettingsAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -62,10 +60,6 @@ class PrivacySettingsFragment :
         val topDescriptionAdapter = PrivacySettingsHeaderAdapter()
         torControlAdapter = PrivacySettingsTorAdapter(this)
         val transactionsStructureAdapter = PrivacySettingsTransactionsStructureAdapter(this)
-        communicationSettingsAdapter = PrivacySettingsAdapter(
-                viewModel.delegate,
-                getString(R.string.SettingsPrivacy_CommunicationSettingsTitle),
-                getString(R.string.SettingsPrivacy_CommunicationDescription))
         walletRestoreSettingsAdapter = PrivacySettingsAdapter(
                 viewModel.delegate,
                 getString(R.string.SettingsPrivacy_WalletRestore),
@@ -75,7 +69,6 @@ class PrivacySettingsFragment :
                 topDescriptionAdapter,
                 torControlAdapter,
                 transactionsStructureAdapter,
-                communicationSettingsAdapter,
                 walletRestoreSettingsAdapter
         )
 
@@ -105,10 +98,6 @@ class PrivacySettingsFragment :
 
         viewModel.showNotificationsNotEnabledAlert.observe(viewLifecycleOwner, Observer {
             showNotificationsNotEnabledAlert()
-        })
-
-        viewModel.showTorPrerequisitesAlert.observe(viewLifecycleOwner, Observer {
-            showTorPrerequisitesAlert()
         })
 
         viewModel.showTransactionsSortingSelectorDialog.observe(viewLifecycleOwner, Observer { (items, selected) ->
@@ -143,48 +132,6 @@ class PrivacySettingsFragment :
                     },
                     warning = getString(R.string.BlockchainSettings_SyncModeChangeAlert_Content, coin.title)
             )
-        })
-
-        viewModel.communicationSettingsViewItems.observe(this, Observer {
-            communicationSettingsAdapter.items = it
-            communicationSettingsAdapter.notifyDataSetChanged()
-        })
-
-        viewModel.showCommunicationSelectorDialog.observe(this, Observer { (items, selected, coin) ->
-            BottomSheetSelectorDialog.show(
-                    childFragmentManager,
-                    getString(R.string.SettingsPrivacy_CommunicationSettingsTitle),
-                    coin.title,
-                    context?.let { AppLayoutHelper.getCoinDrawable(it, coin.type) },
-                    items.map { getCommunicationModeInfo(it) },
-                    items.indexOf(selected),
-                    onItemSelected = { position ->
-                        viewModel.delegate.onSelectSetting(position)
-                    }
-            )
-        })
-
-        viewModel.showCommunicationModeChangeAlert.observe(this, Observer { (coin, communicationMode) ->
-            activity?.let {
-                ConfirmationDialog.show(
-                        title = getString(R.string.BlockchainSettings_CommunicationModeChangeAlert_Title),
-                        subtitle = communicationMode.title,
-                        contentText = getString(R.string.Tor_PrerequisitesAlert_Content),
-                        actionButtonTitle = getString(R.string.Button_Change),
-                        cancelButtonTitle = getString(R.string.Alert_Cancel),
-                        activity = it,
-                        listener = object : ConfirmationDialog.Listener {
-                            override fun onActionButtonClick() {
-                                viewModel.delegate.proceedWithCommunicationModeChange(coin, communicationMode)
-                            }
-
-                            override fun onCancelButtonClick() {
-                                torControlAdapter.setTorSwitch(false)
-                                viewModel.delegate.onApplyTorPrerequisites(false)
-                            }
-                        }
-                )
-            }
         })
 
         // IRouter
@@ -227,13 +174,6 @@ class PrivacySettingsFragment :
         }
     }
 
-    private fun getCommunicationModeInfo(communicationMode: CommunicationMode): BottomSheetSelectorViewItem {
-        return when (communicationMode) {
-            CommunicationMode.Infura -> BottomSheetSelectorViewItem(communicationMode.title, "infura.io")
-            else -> throw Exception("Unsupported syncMode: $communicationMode")
-        }
-    }
-
     private fun showAppRestartAlert(checked: Boolean) {
         activity?.let {
             ConfirmationDialog.show(
@@ -251,7 +191,7 @@ class PrivacySettingsFragment :
 
                         override fun onCancelButtonClick() {
                             torControlAdapter.setTorSwitch(!checked)
-                            viewModel.delegate.onApplyTorPrerequisites(!checked)
+//                            viewModel.delegate.onApplyTorPrerequisites(!checked)
                         }
                     }
             )
@@ -273,22 +213,6 @@ class PrivacySettingsFragment :
                         torControlAdapter.setTorSwitch(false)
                     }
                 }).show(childFragmentManager, "alert_dialog_notification")
-    }
-
-    private fun showTorPrerequisitesAlert() {
-        AlertDialogFragment.newInstance(
-                descriptionString = getString(R.string.Tor_PrerequisitesAlert_Content),
-                buttonText = R.string.Button_Ok,
-                cancelable = true,
-                listener = object : AlertDialogFragment.Listener {
-                    override fun onButtonClick() {
-                        viewModel.delegate.updateTorState(true)
-                    }
-
-                    override fun onCancel() {
-                        torControlAdapter.setTorSwitch(false)
-                    }
-                }).show(childFragmentManager, "alert_dialog")
     }
 
     private fun openAppNotificationSettings() {

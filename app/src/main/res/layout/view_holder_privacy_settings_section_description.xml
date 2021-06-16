@@ -8,4 +8,4 @@
     android:paddingTop="12dp"
     android:paddingEnd="24dp"
     android:textColor="@color/grey"
-    tools:text="@string/SettingsPrivacy_CommunicationDescription" />
+    tools:text="Some blockchains do not yet provide means for mobile apps..." />

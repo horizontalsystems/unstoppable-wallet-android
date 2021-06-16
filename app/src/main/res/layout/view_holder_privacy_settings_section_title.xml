@@ -10,4 +10,4 @@
     android:paddingBottom="12dp"
     android:textAllCaps="true"
     android:textColor="@color/grey"
-    tools:text="@string/SettingsPrivacy_CommunicationSettingsTitle" />
+    tools:text="BLOCKCHAIN SYNC" />
