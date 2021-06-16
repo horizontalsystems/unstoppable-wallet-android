@@ -123,6 +123,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="3dp"
+            android:includeFontPadding="false"
             app:layout_constraintBottom_toBottomOf="@+id/exchangeRate"
             app:layout_constraintStart_toEndOf="@+id/exchangeRate"
             tools:text="+65%" />
