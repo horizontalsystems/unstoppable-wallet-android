@@ -445,8 +445,6 @@
     <string name="SettingsAboutApp_WhatsNew">更新说明</string>
     <string name="SettingsPrivacy_Info">虽然此APP不会将您的个人数据提供给任何第三方，但您的某些个人数据（例如IP地址）在与区块链通信时可能会泄漏。单击右上角的“信息”按钮以获取更多详细信息。</string>
     <string name="SettingsPrivacy_ConnectionSettingsTitle">互联网</string>
-    <string name="SettingsPrivacy_CommunicationSettingsTitle">同步区块链</string>
-    <string name="SettingsPrivacy_CommunicationDescription">部分区块链未为手机应用提供以点对点运行的方法。与BTC、BCH、LTC、DASH 区块链的通信属于完全点对点。</string>
     <string name="SettingsPrivacy_WalletRestore">区块链恢复</string>
     <string name="SettingsPrivacy_WalletRestoreDescription">通过交易为恢复钱包选择数据源。</string>
     <string name="SettingsPrivacy_Transactions">区块链交易</string>
