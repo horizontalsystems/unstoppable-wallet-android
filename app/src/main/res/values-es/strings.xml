@@ -445,8 +445,6 @@
     <string name="SettingsAboutApp_WhatsNew">Qué novedades hay</string>
     <string name="SettingsPrivacy_Info">Esta aplicación no comparte ninguno de tus datos. Sin embargo, ya que se comunica con blockchains, algunos datos públicos como la dirección IP pueden ser filtrados. Utilice el botón Info de la parte superior derecha para obtener información detallada sobre cada sección.</string>
     <string name="SettingsPrivacy_ConnectionSettingsTitle">Internet</string>
-    <string name="SettingsPrivacy_CommunicationSettingsTitle">Sincronización de Blockchain</string>
-    <string name="SettingsPrivacy_CommunicationDescription">Algunos blockchains aún no brindan medios para poder usarse en aplicaciones móviles de modo peer-to-peer. Las comunicaciones con las blockchains BTC, BCH, LTC, DASH son completamente peer-to-peer.</string>
     <string name="SettingsPrivacy_WalletRestore">Restaurar blockchain</string>
     <string name="SettingsPrivacy_WalletRestoreDescription">Seleccione la fuente de información para restaurar el monedero con las transacciones.</string>
     <string name="SettingsPrivacy_Transactions">Transacciones de blockchain</string>
