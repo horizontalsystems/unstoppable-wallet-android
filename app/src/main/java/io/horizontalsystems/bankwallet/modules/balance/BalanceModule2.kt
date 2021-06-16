@@ -16,9 +16,12 @@ object BalanceModule2 {
                 App.xRateManager,
                 App.currencyManager,
                 App.localStorage,
-                BalanceSorter()
+                BalanceSorter(),
+                App.connectivityManager
             )
-            return BalanceViewModel2(balanceService, BalanceViewItemFactory()) as T
+            val rateAppService = RateAppService(App.rateAppManager)
+
+            return BalanceViewModel2(balanceService, rateAppService, BalanceViewItemFactory()) as T
         }
     }
 }

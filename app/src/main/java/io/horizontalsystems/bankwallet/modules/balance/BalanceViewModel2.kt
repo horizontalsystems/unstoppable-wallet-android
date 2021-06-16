@@ -1,51 +1,21 @@
 package io.horizontalsystems.bankwallet.modules.balance
 
-import androidx.lifecycle.LiveDataReactiveStreams
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import io.reactivex.Flowable
+import io.horizontalsystems.bankwallet.core.subscribeIO
+import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.coinkit.models.CoinType
 import io.reactivex.disposables.CompositeDisposable
 
 class BalanceViewModel2(
     private val service: BalanceService,
+    private val rateAppService: RateAppService,
     private val balanceViewItemFactory: BalanceViewItemFactory
 ) : ViewModel() {
 
-    val titleLiveData = service.activeAccountObservable
-        .map { it.name }
-        .let {
-            LiveDataReactiveStreams.fromPublisher(it)
-        }
-
-    val balanceViewItemsLiveData = Flowable
-        .combineLatest(
-            service.balanceItemsObservable,
-            service.balanceHiddenObservable,
-            service.expandedWalletObservable,
-        ) { items, balanceHidden, expandedWallet ->
-            items.map { balanceItem ->
-                balanceViewItemFactory.viewItem(
-                    balanceItem,
-                    service.baseCurrency,
-                    balanceItem.wallet == expandedWallet.orElse(null),
-                    balanceHidden
-                )
-            }
-        }
-        .let {
-            LiveDataReactiveStreams.fromPublisher(it)
-        }
-
-    val headerViewItemLiveData = Flowable
-        .combineLatest(
-            service.balanceItemsObservable,
-            service.balanceHiddenObservable
-        ) { items: List<BalanceModule.BalanceItem>, balanceHidden: Boolean ->
-            balanceViewItemFactory.headerViewItem(items, service.baseCurrency, balanceHidden)
-        }
-        .let {
-            LiveDataReactiveStreams.fromPublisher(it)
-        }
-
+    val titleLiveData = MutableLiveData<String>()
+    val headerViewItemLiveData = MutableLiveData<BalanceHeaderViewItem>()
+    val balanceViewItemsLiveData = MutableLiveData<List<BalanceViewItem>>()
 
     private var disposables = CompositeDisposable()
 
@@ -55,8 +25,46 @@ class BalanceViewModel2(
             service.sortType = value
         }
 
-    init {
+    private var expandedWallet: Wallet? = null
 
+    init {
+        service.activeAccountObservable
+            .subscribeIO {
+                titleLiveData.postValue(it.name)
+            }
+            .let {
+                disposables.add(it)
+            }
+
+        service.balanceItemsObservable
+            .subscribeIO {
+                refreshViewItems()
+                refreshHeaderViewItem()
+            }
+            .let {
+                disposables.add(it)
+            }
+    }
+
+    private fun refreshViewItems() {
+        balanceViewItemsLiveData.postValue(service.balanceItemsSorted.map { balanceItem ->
+            balanceViewItemFactory.viewItem(
+                balanceItem,
+                service.baseCurrency,
+                balanceItem.wallet == expandedWallet,
+                service.balanceHidden
+            )
+        })
+    }
+
+    private fun refreshHeaderViewItem() {
+        headerViewItemLiveData.postValue(
+            balanceViewItemFactory.headerViewItem(
+                service.balanceItemsSorted,
+                service.baseCurrency,
+                service.balanceHidden
+            )
+        )
     }
 
     fun onRefresh() {
@@ -64,23 +72,54 @@ class BalanceViewModel2(
     }
 
     fun onBalanceClick() {
-        service.toggleBalanceVisibility()
+        service.balanceHidden = !service.balanceHidden
     }
 
     fun onItem(viewItem: BalanceViewItem) {
-        service.toggleExpanded(viewItem.wallet)
-    }
+        expandedWallet = when {
+            viewItem.wallet == expandedWallet -> null
+            else -> viewItem.wallet
+        }
 
-    fun onSyncErrorClick(viewItem: BalanceViewItem) {
-        TODO("Not yet implemented")
+        refreshViewItems()
     }
 
     fun onResume() {
-//        TODO("Not yet implemented")
+        rateAppService.onBalancePageActive()
     }
 
     fun onPause() {
-//        TODO("Not yet implemented")
+        rateAppService.onBalancePageInactive()
+    }
+
+    fun getSyncErrorDetails(viewItem: BalanceViewItem): SyncError = when {
+        service.networkAvailable -> {
+            SyncError.Dialog(viewItem.wallet, viewItem.errorMessage ?: "", sourceChangeable(viewItem.wallet.coin.type))
+        }
+        else -> {
+            SyncError.NetworkNotAvailable()
+        }
+    }
+
+    private fun sourceChangeable(coinType: CoinType) = when (coinType) {
+        is CoinType.Bep2,
+        is CoinType.Ethereum,
+        is CoinType.Erc20 -> false
+        else -> true
+    }
+
+    fun refreshByWallet(wallet: Wallet) {
+        TODO("Not yet implemented")
+    }
+
+    fun onReportClick(errorMessage: Any) {
+        TODO("Not yet implemented")
+    }
+
+
+    sealed class SyncError {
+        class NetworkNotAvailable : SyncError()
+        class Dialog(val wallet: Wallet, val errorMessage: String, val sourceChangeable: Boolean) : SyncError()
     }
 
 }

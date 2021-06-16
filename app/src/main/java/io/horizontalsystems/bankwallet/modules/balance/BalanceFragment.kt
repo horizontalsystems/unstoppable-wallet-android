@@ -19,6 +19,7 @@ import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.backupkey.BackupKeyModule
+import io.horizontalsystems.bankwallet.modules.balance.views.SyncErrorDialog
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.main.MainActivity
 import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog
@@ -152,11 +153,38 @@ class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener, BackupRequ
         val arguments = CoinFragment.prepareParams(coin.type, coin.code, coin.title)
 
         findNavController().navigate(R.id.mainFragment_to_coinFragment, arguments, navOptions())
-
     }
 
     override fun onSyncErrorClicked(viewItem: BalanceViewItem) {
-        viewModel.onSyncErrorClick(viewItem)
+        when (val syncErrorDetails = viewModel.getSyncErrorDetails(viewItem)) {
+            is BalanceViewModel2.SyncError.Dialog -> {
+
+                val wallet = syncErrorDetails.wallet
+                val sourceChangeable = syncErrorDetails.sourceChangeable
+                val errorMessage = syncErrorDetails.errorMessage
+
+                activity?.let { fragmentActivity ->
+                    SyncErrorDialog.show(fragmentActivity, wallet.coin.title, sourceChangeable, object : SyncErrorDialog.Listener {
+                        override fun onClickRetry() {
+                            viewModel.refreshByWallet(wallet)
+                        }
+
+                        override fun onClickChangeSource() {
+                            findNavController().navigate(R.id.mainFragment_to_privacySettingsFragment, null, navOptions())
+                        }
+
+                        override fun onClickReport() {
+                            viewModel.onReportClick(errorMessage)
+                        }
+                    })
+                }
+            }
+            is BalanceViewModel2.SyncError.NetworkNotAvailable -> {
+                HudHelper.showErrorMessage(this.requireView(), R.string.Hud_Text_NoInternet)
+            }
+        }
+
+
     }
 
     override fun onAttachFragment(childFragment: Fragment) {
@@ -198,27 +226,7 @@ class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener, BackupRequ
 //            sendEmail(email, report)
 //        })
 //
-//        viewModel.showSyncError.observe(viewLifecycleOwner, Observer { (wallet, errorMessage, sourceChangeable) ->
-//            activity?.let { fragmentActivity ->
-//                SyncErrorDialog.show(fragmentActivity, wallet.coin.title, sourceChangeable, object : SyncErrorDialog.Listener {
-//                    override fun onClickRetry() {
-//                        viewModel.refreshByWallet(wallet)
-//                    }
 //
-//                    override fun onClickChangeSource() {
-//                        findNavController().navigate(R.id.mainFragment_to_privacySettingsFragment, null, navOptions())
-//                    }
-//
-//                    override fun onClickReport() {
-//                        viewModel.onReportClick(errorMessage)
-//                    }
-//                })
-//            }
-//        })
-//
-//        viewModel.networkNotAvailable.observe(viewLifecycleOwner, Observer {
-//            HudHelper.showErrorMessage(this.requireView(), R.string.Hud_Text_NoInternet)
-//        })
 
     }
 
