@@ -191,7 +191,6 @@ class PrivacySettingsFragment :
 
                         override fun onCancelButtonClick() {
                             torControlAdapter.setTorSwitch(!checked)
-//                            viewModel.delegate.onApplyTorPrerequisites(!checked)
                         }
                     }
             )
