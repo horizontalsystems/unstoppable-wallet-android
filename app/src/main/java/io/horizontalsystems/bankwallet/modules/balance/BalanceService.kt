@@ -1,8 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.balance
 
 import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
 import io.horizontalsystems.bankwallet.entities.Account
-import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.core.entities.Currency
@@ -11,7 +11,6 @@ import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
-import java.util.*
 
 class BalanceService(
     private val accountManager: IAccountManager,
@@ -20,12 +19,24 @@ class BalanceService(
     private val xRateManager: IRateManager,
     private val currencyManager: ICurrencyManager,
     private val localStorage: ILocalStorage,
-    private val balanceSorter: BalanceSorter
+    private val balanceSorter: BalanceSorter,
+    private val connectivityManager: ConnectivityManager
 ) {
+    val networkAvailable: Boolean
+        get() = connectivityManager.isConnected
+
     var sortType: BalanceSortType
         get() = localStorage.sortType
         set(value) {
             localStorage.sortType = value
+
+            emitBalanceItems()
+        }
+
+    var balanceHidden: Boolean
+        get() = localStorage.balanceHidden
+        set(value) {
+            localStorage.balanceHidden = value
 
             emitBalanceItems()
         }
@@ -35,31 +46,17 @@ class BalanceService(
     private val adaptersDisposables = CompositeDisposable()
 
     private val activeAccountSubject = BehaviorSubject.create<Account>()
-    val activeAccountObservable: Flowable<Account> =
-        activeAccountSubject.toFlowable(BackpressureStrategy.DROP)
+    val activeAccountObservable: Flowable<Account> = activeAccountSubject.toFlowable(BackpressureStrategy.DROP)
 
-    private val balanceItemsSubject = BehaviorSubject.create<List<BalanceModule.BalanceItem>>()
-    val balanceItemsObservable: Flowable<List<BalanceModule.BalanceItem>> =
-        balanceItemsSubject.toFlowable(BackpressureStrategy.DROP)
-
-    private var balanceHidden: Boolean
-        get() = localStorage.balanceHidden
-        set(value) {
-            localStorage.balanceHidden = value
-
-            balanceHiddenSubject.onNext(balanceHidden)
-        }
-    private val balanceHiddenSubject = BehaviorSubject.createDefault(balanceHidden)
-    val balanceHiddenObservable: Flowable<Boolean> = balanceHiddenSubject.toFlowable(BackpressureStrategy.DROP)
+    private val balanceItemsSubject = BehaviorSubject.create<Unit>()
+    val balanceItemsObservable: Flowable<Unit> = balanceItemsSubject.toFlowable(BackpressureStrategy.DROP)
 
     val baseCurrency: Currency
         get() = currencyManager.baseCurrency
 
     private var balanceItems = listOf<BalanceModule.BalanceItem>()
-    private var expandedWallet = Optional.empty<Wallet>()
-    private val expandedWalletSubject = BehaviorSubject.createDefault(expandedWallet)
-    val expandedWalletObservable: Flowable<Optional<Wallet>> =
-        expandedWalletSubject.toFlowable(BackpressureStrategy.DROP)
+    val balanceItemsSorted: List<BalanceModule.BalanceItem>
+        get() = balanceSorter.sort(balanceItems, sortType)
 
     init {
         refreshActiveAccount()
@@ -202,7 +199,7 @@ class BalanceService(
     }
 
     private fun emitBalanceItems() {
-        balanceItemsSubject.onNext(balanceSorter.sort(balanceItems, sortType))
+        balanceItemsSubject.onNext(Unit)
     }
 
     private fun rebuildBalanceItems() {
@@ -226,21 +223,6 @@ class BalanceService(
     fun refresh() {
         adapterManager.refresh()
         xRateManager.refresh(baseCurrency.code)
-    }
-
-    fun toggleBalanceVisibility() {
-        balanceHidden = !balanceHidden
-    }
-
-    fun toggleExpanded(wallet: Wallet) {
-        val currentExpanded = expandedWallet.orElse(null)
-
-        expandedWallet = when {
-            wallet == currentExpanded -> Optional.empty()
-            else -> Optional.of(wallet)
-        }
-
-        expandedWalletSubject.onNext(expandedWallet)
     }
 
 }

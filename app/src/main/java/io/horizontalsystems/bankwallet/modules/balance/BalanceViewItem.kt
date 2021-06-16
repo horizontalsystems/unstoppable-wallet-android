@@ -18,28 +18,29 @@ import java.math.BigDecimal
 import java.util.*
 
 data class BalanceViewItem(
-        val wallet: Wallet,
-        val coinCode: String,
-        val coinTitle: String,
-        val coinType: CoinType,
-        val coinValue: DeemedValue,
-        val exchangeValue: DeemedValue,
-        val diff: BigDecimal?,
-        val fiatValue: DeemedValue,
-        val coinValueLocked: DeemedValue,
-        val fiatValueLocked: DeemedValue,
-        val expanded: Boolean,
-        val sendEnabled: Boolean = false,
-        val receiveEnabled: Boolean = false,
-        val syncingProgress: SyncingProgress,
-        val syncingTextValue: DeemedValue,
-        val syncedUntilTextValue: DeemedValue,
-        val failedIconVisible: Boolean,
-        val coinIconVisible: Boolean,
-        val coinTypeLabel: String?,
-        val swapVisible: Boolean,
-        val swapEnabled: Boolean = false,
-        val mainNet: Boolean
+    val wallet: Wallet,
+    val coinCode: String,
+    val coinTitle: String,
+    val coinType: CoinType,
+    val coinValue: DeemedValue,
+    val exchangeValue: DeemedValue,
+    val diff: BigDecimal?,
+    val fiatValue: DeemedValue,
+    val coinValueLocked: DeemedValue,
+    val fiatValueLocked: DeemedValue,
+    val expanded: Boolean,
+    val sendEnabled: Boolean = false,
+    val receiveEnabled: Boolean = false,
+    val syncingProgress: SyncingProgress,
+    val syncingTextValue: DeemedValue,
+    val syncedUntilTextValue: DeemedValue,
+    val failedIconVisible: Boolean,
+    val coinIconVisible: Boolean,
+    val coinTypeLabel: String?,
+    val swapVisible: Boolean,
+    val swapEnabled: Boolean = false,
+    val mainNet: Boolean,
+    val errorMessage: String?
 )
 
 data class BalanceHeaderViewItem(val xBalanceText: String, val upToDate: Boolean) {
@@ -202,7 +203,8 @@ class BalanceViewItemFactory {
                 coinTypeLabel = coinTypeLabel(wallet),
                 swapVisible = item.wallet.coin.type.swappable,
                 swapEnabled = state is AdapterState.Synced,
-                mainNet = item.mainNet
+                mainNet = item.mainNet,
+                errorMessage = (state as? AdapterState.NotSynced)?.error?.message
         )
     }
 
