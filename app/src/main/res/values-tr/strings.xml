@@ -445,8 +445,6 @@
     <string name="SettingsAboutApp_WhatsNew">Neler yeni</string>
     <string name="SettingsPrivacy_Info">Bu uygulama sizin hiçbir veriyi paylaşmıyor. Bununla birlikte, blok zincirlerle iletişim kurduğundan, IP adresi gibi bazı genel veriler potansiyel olarak sızdırılabilir. Her bölüm hakkında ayrıntılı bilgi almak için sağ üstteki bilgi düğmesini kullanın.</string>
     <string name="SettingsPrivacy_ConnectionSettingsTitle">İnternet</string>
-    <string name="SettingsPrivacy_CommunicationSettingsTitle">Blockchain Senk.</string>
-    <string name="SettingsPrivacy_CommunicationDescription">Bazı blok zincirler, mobil uygulamaların peer to peer şekilde çalışması için henüz bir araç sağlamamaktadır. BTC, BCH, LTC, DASH blok zincirleriyle iletişim tamamen peer to peer.</string>
     <string name="SettingsPrivacy_WalletRestore">Blockchain Geri Yükleme</string>
     <string name="SettingsPrivacy_WalletRestoreDescription">Cüzdanı işlemlerle geri yüklemek için veri kaynağını seçin.</string>
     <string name="SettingsPrivacy_Transactions">Blockchain İşlemleri</string>
