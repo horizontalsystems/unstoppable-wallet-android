@@ -445,8 +445,6 @@
     <string name="SettingsAboutApp_WhatsNew">새로운 기능</string>
     <string name="SettingsPrivacy_Info">이 앱은 귀하의 데이터를 공유하지 않습니다. 하지만 앱이 블록체인과 통신할 때 IP 주소와 같은 일부 공개 데이터가 유출 될 수도 있습니다. 각 섹션에 대한 자세한 정보를 확인하려면 오른쪽 상단의 정보 버튼을 누르십시오.</string>
     <string name="SettingsPrivacy_ConnectionSettingsTitle">인터넷</string>
-    <string name="SettingsPrivacy_CommunicationSettingsTitle">블록체인 동기화</string>
-    <string name="SettingsPrivacy_CommunicationDescription">몇몇의 블록체인은 아직 모바일 앱이 P2P 방식으로 작동하는 방법을 제공하지 않습니다. BTC, BCH, LTC, DASH 블록체인과의 통신은 전부 P2P 방식입니다.</string>
     <string name="SettingsPrivacy_WalletRestore">블록체인 복원</string>
     <string name="SettingsPrivacy_WalletRestoreDescription">매매거래로 지갑을 복원 할 데이터 소스를 선택하세요.</string>
     <string name="SettingsPrivacy_Transactions">블록체인 매매거래</string>
