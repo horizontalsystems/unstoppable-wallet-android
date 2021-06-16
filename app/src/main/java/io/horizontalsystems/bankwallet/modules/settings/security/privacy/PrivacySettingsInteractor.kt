@@ -4,7 +4,6 @@ import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.managers.TorStatus
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.coinkit.models.Coin
-import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.IPinComponent
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -13,8 +12,6 @@ class PrivacySettingsInteractor(
         private val pinComponent: IPinComponent,
         private val torManager: ITorManager,
         private val syncModeSettingsManager: IInitialSyncModeSettingsManager,
-        private val ethereumRpcModeSettingsManager: IEthereumRpcModeSettingsManager,
-        coinManager: ICoinManager,
         private val walletManager: IWalletManager,
         private val accountManager: IAccountManager,
         private val localStorageManager: ILocalStorage
@@ -49,9 +46,6 @@ class PrivacySettingsInteractor(
 
     override val isTorNotificationEnabled: Boolean
         get() = torManager.isTorNotificationEnabled
-
-    override val ethereumCommunicationModes: List<CommunicationMode>
-        get() = ethereumRpcModeSettingsManager.communicationModes
 
     override fun subscribeToTorStatus() {
         delegate?.onTorConnectionStatusUpdated(TorStatus.Closed)
@@ -91,23 +85,9 @@ class PrivacySettingsInteractor(
         return syncModeSettingsManager.allSettings()
     }
 
-    override fun ethereumConnection(): EthereumRpcMode {
-        return ethereumRpcModeSettingsManager.rpcMode()
-    }
-
-    override fun saveEthereumRpcModeSetting(rpcModeSetting: EthereumRpcMode) {
-        ethereumRpcModeSettingsManager.save(rpcModeSetting)
-    }
-
     override fun saveSyncModeSetting(syncModeSetting: InitialSyncSetting) {
         syncModeSettingsManager.save(syncModeSetting)
     }
-
-    override val ether = coinManager.getCoin(CoinType.Ethereum)!!
-
-    override val binance = coinManager.getCoin(CoinType.Bep2("BNB"))!!
-
-    override val binanceSmartChain = coinManager.getCoin(CoinType.BinanceSmartChain)!!
 
     override fun clear() {
         disposables.clear()

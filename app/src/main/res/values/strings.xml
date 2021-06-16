@@ -532,8 +532,6 @@
 
     <string name="SettingsPrivacy_Info">This app doesn’t share any of your data. However, as it communicates with blockchains some public data like IP address can potentially be leaked. Use the info button on the top right to get detailed information about each section.</string>
     <string name="SettingsPrivacy_ConnectionSettingsTitle">Internet</string>
-    <string name="SettingsPrivacy_CommunicationSettingsTitle">Blockchain Sync</string>
-    <string name="SettingsPrivacy_CommunicationDescription">Some blockchains do not yet provide means for mobile apps to operate in peer to peer manner. The communications with BTC, BCH, LTC, DASH blockchains is fully peer to peer.</string>
     <string name="SettingsPrivacy_WalletRestore">Blockchain Restore</string>
     <string name="SettingsPrivacy_WalletRestoreDescription">Select data source for restoring wallet with transactions.</string>
     <string name="SettingsPrivacy_Transactions">Blockchain Transactions</string>
