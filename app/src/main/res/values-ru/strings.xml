@@ -445,8 +445,6 @@
     <string name="SettingsAboutApp_WhatsNew">Что Нового</string>
     <string name="SettingsPrivacy_Info">Это приложение не передает ваши данные, но, поскольку оно связывается с блокчейнами, возможна потенциальная утечка некоторых общедоступных данных, таких как IP-адрес. Используйте кнопку \"Информация\" в правом верхнем углу для получения более подробной информации о каждом разделе.</string>
     <string name="SettingsPrivacy_ConnectionSettingsTitle">Доступ в Интернет</string>
-    <string name="SettingsPrivacy_CommunicationSettingsTitle">Синхронизация Блокчейна</string>
-    <string name="SettingsPrivacy_CommunicationDescription">Некоторые блокчейны всё еще не разработали инфраструктуру для работы мобильных приложений в пиринговом режиме (P2P). Работа с блокчейнами BTC, BCH, LTC, DASH проходит полностью в режиме P2P.</string>
     <string name="SettingsPrivacy_WalletRestore">Восстановить Блокчейн</string>
     <string name="SettingsPrivacy_WalletRestoreDescription">Выберите источник данных для восстановления кошелька с транзакциями.</string>
     <string name="SettingsPrivacy_Transactions">Блокчейн Tранзакции</string>
