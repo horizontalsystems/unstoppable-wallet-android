@@ -445,8 +445,6 @@
     <string name="SettingsAboutApp_WhatsNew">What\'s New</string>
     <string name="SettingsPrivacy_Info">این برنامه هیچ یک از داده های شما را به اشتراک نمی گذارد. با این حال، بخاطر ارتباط با زنجیره های بلوکی، برخی از داده های عمومی مانند آدرس آی پی می توانند به طور بالقوه فاش شوند. برای کسب اطلاعات دقیق در مورد هر بخش از دکمه اطلاعات در سمت راست بالا استفاده کنید.</string>
     <string name="SettingsPrivacy_ConnectionSettingsTitle">اینترنت</string>
-    <string name="SettingsPrivacy_CommunicationSettingsTitle">همزمانی بلوک چین</string>
-    <string name="SettingsPrivacy_CommunicationDescription">بعضی از زنجیره های بلوکی هنوز وسیله ای برای برنامه های تلفن همراه برای کار به روش همتا به همتا ارائه نمی دهند. ارتباطات با زنجیره های بلوکی BTC ، BCH ، LTC ، DASH کاملاً همتا به همتا است.</string>
     <string name="SettingsPrivacy_WalletRestore">بازیابی زنجیره بلوکی</string>
     <string name="SettingsPrivacy_WalletRestoreDescription">منبع داده را برای بازیابی کیف پول با تراکنش ها انتخاب کنید.</string>
     <string name="SettingsPrivacy_Transactions">تراکنش های زنجیره بلوکی</string>
