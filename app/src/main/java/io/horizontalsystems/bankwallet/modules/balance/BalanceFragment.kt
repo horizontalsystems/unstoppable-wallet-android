@@ -38,7 +38,7 @@ import kotlinx.android.synthetic.main.fragment_balance.*
 
 class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener, BackupRequiredDialog.Listener {
 
-    private val viewModel by navGraphViewModels<BalanceViewModel2>(R.id.mainFragment) { BalanceModule.Factory() }
+    private val viewModel by navGraphViewModels<BalanceViewModel>(R.id.mainFragment) { BalanceModule.Factory() }
     private val balanceItemsAdapter = BalanceItemsAdapter(this)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -132,7 +132,7 @@ class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener, BackupRequ
     override fun onReceiveClicked(viewItem: BalanceViewItem) {
         try {
             findNavController().navigate(R.id.mainFragment_to_receiveFragment, bundleOf(ReceiveFragment.WALLET_KEY to viewModel.getWalletForReceive(viewItem)), navOptionsFromBottom())
-        } catch (e: BalanceViewModel2.BackupRequiredError) {
+        } catch (e: BalanceViewModel.BackupRequiredError) {
             BackupRequiredDialog.show(childFragmentManager, e.account)
         }
     }
@@ -154,7 +154,7 @@ class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener, BackupRequ
 
     override fun onSyncErrorClicked(viewItem: BalanceViewItem) {
         when (val syncErrorDetails = viewModel.getSyncErrorDetails(viewItem)) {
-            is BalanceViewModel2.SyncError.Dialog -> {
+            is BalanceViewModel.SyncError.Dialog -> {
 
                 val wallet = syncErrorDetails.wallet
                 val sourceChangeable = syncErrorDetails.sourceChangeable
@@ -176,7 +176,7 @@ class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener, BackupRequ
                     })
                 }
             }
-            is BalanceViewModel2.SyncError.NetworkNotAvailable -> {
+            is BalanceViewModel.SyncError.NetworkNotAvailable -> {
                 HudHelper.showErrorMessage(this.requireView(), R.string.Hud_Text_NoInternet)
             }
         }

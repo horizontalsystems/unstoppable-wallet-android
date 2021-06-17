@@ -28,7 +28,7 @@ object BalanceModule {
             )
             val rateAppService = RateAppService(App.rateAppManager)
 
-            return BalanceViewModel2(
+            return BalanceViewModel(
                 balanceService,
                 rateAppService,
                 activeAccountService,
