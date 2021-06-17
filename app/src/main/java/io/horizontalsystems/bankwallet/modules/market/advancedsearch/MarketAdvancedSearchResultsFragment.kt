@@ -19,6 +19,9 @@ import io.horizontalsystems.bankwallet.ui.extensions.SelectorItem
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.android.synthetic.main.fragment_market_advanced_search_results.*
+import kotlinx.android.synthetic.main.fragment_market_advanced_search_results.coinRatesRecyclerView
+import kotlinx.android.synthetic.main.fragment_market_advanced_search_results.marketListHeader
+import kotlinx.android.synthetic.main.fragment_market_advanced_search_results.pullToRefresh
 
 class MarketAdvancedSearchResultsFragment : BaseFragment(), MarketListHeaderView.Listener, ViewHolderMarketItem.Listener {
 
@@ -38,7 +41,7 @@ class MarketAdvancedSearchResultsFragment : BaseFragment(), MarketListHeaderView
 
         marketListHeader.listener = this
         marketListHeader.setSortingField(marketListViewModel.sortingField)
-        marketListHeader.setMarketField(marketListViewModel.marketField)
+        marketListHeader.setFieldViewOptions(marketListViewModel.marketFields)
         marketListHeader.isVisible = false
         marketListViewModel.marketViewItemsLiveData.observe(viewLifecycleOwner, { (list, _) ->
             marketListHeader.isVisible = list.isNotEmpty()
@@ -82,8 +85,8 @@ class MarketAdvancedSearchResultsFragment : BaseFragment(), MarketListHeaderView
                 .show(childFragmentManager, "sorting_field_selector")
     }
 
-    override fun onSelectMarketField(marketField: MarketField) {
-        marketListViewModel.update(marketField = marketField)
+    override fun onSelectFieldViewOption(fieldViewOptionId: Int) {
+        marketListViewModel.update(marketFieldIndex = fieldViewOptionId)
     }
 
     override fun onItemClick(marketViewItem: MarketViewItem) {

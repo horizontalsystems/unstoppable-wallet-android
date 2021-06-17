@@ -4,11 +4,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
+import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.modules.market.MarketField
 import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
 import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.market.sort
+import io.horizontalsystems.bankwallet.ui.extensions.MarketListHeaderView
 import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
 
@@ -23,15 +25,18 @@ class MarketListViewModel(
     var sortingField: SortingField = sortingFields.first()
         private set
 
-    var marketField: MarketField = MarketField.PriceDiff
-        private set
+    private var marketFieldIndex: Int = MarketField.values().indexOf(MarketField.PriceDiff)
 
-    fun update(sortingField: SortingField? = null, marketField: MarketField? = null) {
+    val marketFields: List<MarketListHeaderView.FieldViewOption> = MarketField.values().mapIndexed { index, marketField ->
+        MarketListHeaderView.FieldViewOption(index, Translator.getString(marketField.titleResId), index == marketFieldIndex)
+    }
+
+    fun update(sortingField: SortingField? = null, marketFieldIndex: Int? = null) {
         sortingField?.let {
             this.sortingField = it
         }
-        marketField?.let {
-            this.marketField = it
+        marketFieldIndex?.let {
+            this.marketFieldIndex = it
         }
         syncViewItemsBySortingField(sortingField != null)
     }
@@ -71,8 +76,8 @@ class MarketListViewModel(
     private fun syncViewItemsBySortingField(scrollToTop: Boolean) {
         val viewItems = service.marketItems
                 .sort(sortingField)
-                .map {
-                    MarketViewItem.create(it, marketField)
+                .map { marketItem ->
+                    MarketViewItem.create(marketItem, MarketField.values()[marketFieldIndex])
                 }
 
         showEmptyListTextLiveData.postValue(viewItems.isEmpty())

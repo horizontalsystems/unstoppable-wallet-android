@@ -1,14 +1,11 @@
 package io.horizontalsystems.bankwallet.modules.market.favorites
 
-import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import io.horizontalsystems.bankwallet.R
 
 class EmptyListAdapter(
         showEmptyListText: LiveData<Boolean>,

@@ -36,7 +36,7 @@ class MarketDiscoveryFragment : BaseFragment(), MarketListHeaderView.Listener, V
 
         marketListHeader.listener = this
         marketListHeader.setSortingField(marketListViewModel.sortingField)
-        marketListHeader.setMarketField(marketListViewModel.marketField)
+        marketListHeader.setFieldViewOptions(marketListViewModel.marketFields)
 
         val marketItemsAdapter = MarketItemsAdapter(
                 this,
@@ -70,9 +70,8 @@ class MarketDiscoveryFragment : BaseFragment(), MarketListHeaderView.Listener, V
 
         marketViewModel.discoveryListTypeLiveEvent.observe(viewLifecycleOwner) {
             marketListHeader.setSortingField(it.sortingField)
-            marketListHeader.setMarketField(it.marketField)
 
-            marketListViewModel.update(sortingField = it.sortingField, marketField = it.marketField)
+            marketListViewModel.update(sortingField = it.sortingField, marketFieldIndex = it.marketField.titleResId)
 
             marketCategoriesAdapter.selectCategory(null)
         }
@@ -93,8 +92,8 @@ class MarketDiscoveryFragment : BaseFragment(), MarketListHeaderView.Listener, V
                 .show(childFragmentManager, "sorting_field_selector")
     }
 
-    override fun onSelectMarketField(marketField: MarketField) {
-        marketListViewModel.update(marketField = marketField)
+    override fun onSelectFieldViewOption(fieldViewOptionId: Int) {
+        marketListViewModel.update(marketFieldIndex = fieldViewOptionId)
     }
 
     override fun onItemClick(marketViewItem: MarketViewItem) {
