@@ -131,12 +131,10 @@ class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener, BackupRequ
     }
 
     override fun onReceiveClicked(viewItem: BalanceViewItem) {
-        val wallet = viewItem.wallet
-
-        if (wallet.account.isBackedUp) {
-            findNavController().navigate(R.id.mainFragment_to_receiveFragment, bundleOf(ReceiveFragment.WALLET_KEY to wallet), navOptionsFromBottom())
-        } else {
-            BackupRequiredDialog.show(childFragmentManager, wallet.account)
+        try {
+            findNavController().navigate(R.id.mainFragment_to_receiveFragment, bundleOf(ReceiveFragment.WALLET_KEY to viewModel.getWalletForReceive(viewItem)), navOptionsFromBottom())
+        } catch (e: BalanceViewModel2.BackupRequiredError) {
+            BackupRequiredDialog.show(childFragmentManager, e.account)
         }
     }
 
@@ -221,13 +219,6 @@ class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener, BackupRequ
         viewModel.headerViewItemLiveData.observe(viewLifecycleOwner) {
             setHeaderViewItem(it)
         }
-
-//        viewModel.openEmail.observe(viewLifecycleOwner, Observer { (email, report) ->
-//            sendEmail(email, report)
-//        })
-//
-//
-
     }
 
     private fun sendEmail(email: String, report: String) {
