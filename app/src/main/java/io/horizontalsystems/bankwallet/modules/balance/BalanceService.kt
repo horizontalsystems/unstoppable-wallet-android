@@ -11,6 +11,7 @@ import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
+import java.util.concurrent.CopyOnWriteArraySet
 
 class BalanceService(
     private val walletManager: IWalletManager,
@@ -50,7 +51,7 @@ class BalanceService(
     val baseCurrency: Currency
         get() = currencyManager.baseCurrency
 
-    private var balanceItems = listOf<BalanceModule.BalanceItem>()
+    private var balanceItems = CopyOnWriteArraySet<BalanceModule.BalanceItem>()
     val balanceItemsSorted: List<BalanceModule.BalanceItem>
         get() = balanceSorter.sort(balanceItems, sortType)
 
@@ -182,9 +183,10 @@ class BalanceService(
     }
 
     private fun rebuildBalanceItems() {
-        balanceItems = walletManager.activeWallets.map { wallet ->
+        balanceItems.clear()
+        balanceItems.addAll(walletManager.activeWallets.map { wallet ->
             BalanceModule.BalanceItem(wallet, true)
-        }
+        })
     }
 
     private fun setLatestRates() {
