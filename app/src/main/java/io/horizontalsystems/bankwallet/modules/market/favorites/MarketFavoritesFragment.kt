@@ -10,9 +10,12 @@ import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.modules.market.*
-import io.horizontalsystems.bankwallet.modules.market.list.MarketListViewModel
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
+import io.horizontalsystems.bankwallet.modules.market.MarketItemsAdapter
+import io.horizontalsystems.bankwallet.modules.market.MarketLoadingAdapter
+import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
+import io.horizontalsystems.bankwallet.modules.market.ViewHolderMarketItem
+import io.horizontalsystems.bankwallet.modules.market.list.MarketListViewModel
 import io.horizontalsystems.bankwallet.ui.extensions.MarketListHeaderView
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorDialog
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorItem
@@ -33,7 +36,7 @@ class MarketFavoritesFragment : BaseFragment(), MarketListHeaderView.Listener, V
 
         marketListHeader.listener = this
         marketListHeader.setSortingField(marketListViewModel.sortingField)
-        marketListHeader.setMarketField(marketListViewModel.marketField)
+        marketListHeader.setFieldViewOptions(marketListViewModel.marketFields)
         marketListHeader.isVisible = false
         marketListViewModel.marketViewItemsLiveData.observe(viewLifecycleOwner, { (list, _) ->
             marketListHeader.isVisible = list.isNotEmpty()
@@ -81,8 +84,8 @@ class MarketFavoritesFragment : BaseFragment(), MarketListHeaderView.Listener, V
                 .show(childFragmentManager, "sorting_field_selector")
     }
 
-    override fun onSelectMarketField(marketField: MarketField) {
-        marketListViewModel.update(marketField = marketField)
+    override fun onSelectFieldViewOption(fieldViewOptionId: Int) {
+        marketListViewModel.update(marketFieldIndex = fieldViewOptionId)
     }
 
     override fun onItemClick(marketViewItem: MarketViewItem) {

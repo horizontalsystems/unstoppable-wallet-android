@@ -2,11 +2,12 @@ package io.horizontalsystems.bankwallet.ui.extensions
 
 import android.content.Context
 import android.util.AttributeSet
+import android.widget.RadioButton
 import androidx.constraintlayout.widget.ConstraintLayout
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
-import io.horizontalsystems.bankwallet.modules.market.MarketField
 import io.horizontalsystems.bankwallet.modules.market.SortingField
+import io.horizontalsystems.views.helpers.LayoutHelper
 import kotlinx.android.synthetic.main.view_market_list_header.view.*
 
 class MarketListHeaderView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
@@ -14,12 +15,10 @@ class MarketListHeaderView @JvmOverloads constructor(context: Context, attrs: At
 
     interface Listener {
         fun onClickSortingField()
-        fun onSelectMarketField(marketField: MarketField)
+        fun onSelectFieldViewOption(fieldViewOptionId: Int)
     }
 
     var listener: Listener? = null
-
-    private var triggerMarketFieldChangeListener = true
 
     init {
         inflate(context, R.layout.view_market_list_header, this)
@@ -27,18 +26,31 @@ class MarketListHeaderView @JvmOverloads constructor(context: Context, attrs: At
         sortingField.setOnSingleClickListener {
             listener?.onClickSortingField()
         }
-        marketFieldSelector.setOnCheckedChangeListener { _, checkedId ->
-            if (!triggerMarketFieldChangeListener) return@setOnCheckedChangeListener
+    }
 
-            val marketField = when (checkedId) {
-                R.id.fieldMarketCap -> MarketField.MarketCap
-                R.id.fieldVolume -> MarketField.Volume
-                R.id.fieldPriceDiff -> MarketField.PriceDiff
-                else -> throw IllegalStateException("")
+    fun setFieldViewOptions(items: List<FieldViewOption>){
+        val buttonParams = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT).apply {
+            setMargins(LayoutHelper.dp(8f, context), 0, 0, 0)
+        }
+
+        marketFieldSelector.removeAllViews()
+
+        items.forEach { item ->
+            val button = RadioButton(context, null, 0, R.style.RadioButtonThird).apply {
+                id = item.index
+                text = item.title
+                isChecked = item.selected
+                isClickable = true
+                layoutParams = buttonParams
             }
 
-            listener?.onSelectMarketField(marketField)
+            marketFieldSelector.addView(button)
         }
+
+        marketFieldSelector.setOnCheckedChangeListener { _, checkedId ->
+            listener?.onSelectFieldViewOption(checkedId)
+        }
+
     }
 
     fun setSortingField(fieldToSort: SortingField) {
@@ -48,15 +60,5 @@ class MarketListHeaderView @JvmOverloads constructor(context: Context, attrs: At
         }
     }
 
-    fun setMarketField(marketField: MarketField) {
-        val selectedMarketFieldId = when (marketField) {
-            MarketField.MarketCap -> R.id.fieldMarketCap
-            MarketField.Volume -> R.id.fieldVolume
-            MarketField.PriceDiff -> R.id.fieldPriceDiff
-        }
-        triggerMarketFieldChangeListener = false
-        marketFieldSelector.check(selectedMarketFieldId)
-        triggerMarketFieldChangeListener = true
-    }
-
+    data class FieldViewOption(val index: Int, val title: String, var selected: Boolean)
 }

@@ -29,39 +29,14 @@
 
     <RadioGroup
         android:id="@+id/marketFieldSelector"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
+        android:gravity="end"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <RadioButton
-            android:id="@+id/fieldMarketCap"
-            style="@style/RadioButtonThird"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checked="true"
-            android:text="@string/Market_Field_MarketCap" />
-
-        <RadioButton
-            android:id="@+id/fieldVolume"
-            style="@style/RadioButtonThird"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:text="@string/Market_Field_Volume" />
-
-        <RadioButton
-            android:id="@+id/fieldPriceDiff"
-            style="@style/RadioButtonThird"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:text="@string/Market_Field_PriceDiff" />
-
-    </RadioGroup>
-
+        app:layout_constraintStart_toEndOf="@+id/sortingField"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </merge>

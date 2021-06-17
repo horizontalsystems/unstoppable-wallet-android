@@ -9,6 +9,8 @@ import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.coin.adapters.CoinChartAdapter
 import io.horizontalsystems.bankwallet.modules.coin.adapters.CoinSubtitleAdapter
+import io.horizontalsystems.bankwallet.modules.market.*
+import io.horizontalsystems.bankwallet.ui.extensions.MarketListHeaderView
 import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.SingleLiveEvent
@@ -49,6 +51,21 @@ class CoinViewModel(
     val coinInvestors = MutableLiveData<List<InvestorItem>>()
 
     val currency = service.currency
+    val coinMarketsSortingFields: Array<SortingField> = arrayOf(SortingField.HighestVolume, SortingField.LowestVolume)
+    var coinMarketsSortingField: SortingField = coinMarketsSortingFields.first()
+        private set
+
+    private val fieldViewOptions = listOf(coinCode, "USD")
+    private var selectedCoinMarketFieldViewOptionId: Int = 0
+    private val showCurrencyValue: Boolean
+        get() {
+            return selectedCoinMarketFieldViewOptionId == 1
+        }
+
+    val coinMarketFieldViewOptions = fieldViewOptions.mapIndexed { index, title ->
+        MarketListHeaderView.FieldViewOption(index, title, index == selectedCoinMarketFieldViewOptionId)
+    }
+
 
     private var latestRateText: String? = null
         set(value) {
@@ -200,6 +217,29 @@ class CoinViewModel(
         updateFavoriteNotificationItemState()
     }
 
+    fun update(sortingField: SortingField? = null, fieldViewOptionId: Int? = null) {
+        sortingField?.let {
+            this.coinMarketsSortingField = it
+        }
+        fieldViewOptionId?.let {
+            this.selectedCoinMarketFieldViewOptionId = it
+        }
+        syncCoinMarketItems()
+    }
+
+    private fun syncCoinMarketItems() {
+        val coinDetails = service.coinMarketDetails ?: return
+        val marketTickersSorted = coinDetails.tickers.sort(coinMarketsSortingField)
+        val viewItems = factory.getCoinMarketItems(marketTickersSorted, showCurrencyValue)
+        coinMarkets.postValue(viewItems)
+    }
+
+    private fun List<MarketTicker>.sort(sortingField: SortingField) = when (sortingField) {
+        SortingField.HighestVolume -> sortedByDescendingNullLast { it.volume }
+        SortingField.LowestVolume -> sortedByNullLast { it.volume }
+        else -> throw IllegalArgumentException()
+    }
+
     private fun onChartError(error: Throwable?) {
         showChartError = true
         showChartSpinner = false
@@ -215,6 +255,7 @@ class CoinViewModel(
         loadingLiveData.postValue(state is CoinService.CoinDetailsState.Loading)
         if (state is CoinService.CoinDetailsState.Loaded) {
             updateCoinDetails()
+            syncCoinMarketItems()
         }
 
         coinInfoErrorLiveData.postValue(getError(state))
@@ -276,7 +317,6 @@ class CoinViewModel(
 
         showFooterLiveData.postValue(true)
 
-        coinMarkets.postValue(factory.getCoinMarketItems(coinDetails.tickers))
         coinInvestors.postValue(factory.getCoinInvestorItems(coinDetails.meta.fundCategories))
     }
 
