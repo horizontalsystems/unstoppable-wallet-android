@@ -4,7 +4,7 @@ import java.math.BigDecimal
 
 class BalanceSorter : BalanceModule.IBalanceSorter {
 
-    override fun sort(items: List<BalanceModule.BalanceItem>, sortType: BalanceSortType): List<BalanceModule.BalanceItem> {
+    override fun sort(items: Iterable<BalanceModule.BalanceItem>, sortType: BalanceSortType): List<BalanceModule.BalanceItem> {
         return when (sortType) {
             BalanceSortType.Value -> sortByBalance(items)
             BalanceSortType.Name -> items.sortedBy { it.wallet.coin.title }
@@ -12,7 +12,7 @@ class BalanceSorter : BalanceModule.IBalanceSorter {
         }
     }
 
-    private fun sortByBalance(items: List<BalanceModule.BalanceItem>): List<BalanceModule.BalanceItem> {
+    private fun sortByBalance(items: Iterable<BalanceModule.BalanceItem>): List<BalanceModule.BalanceItem> {
         val comparator =
                 compareByDescending<BalanceModule.BalanceItem> {
                     it.balance ?: BigDecimal.ZERO > BigDecimal.ZERO

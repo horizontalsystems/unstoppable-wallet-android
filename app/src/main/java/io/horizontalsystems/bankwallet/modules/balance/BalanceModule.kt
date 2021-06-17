@@ -108,7 +108,7 @@ object BalanceModule {
     }
 
     interface IBalanceSorter {
-        fun sort(items: List<BalanceItem>, sortType: BalanceSortType): List<BalanceItem>
+        fun sort(items: Iterable<BalanceItem>, sortType: BalanceSortType): List<BalanceItem>
     }
 
     data class BalanceItem(val wallet: Wallet, val mainNet: Boolean) {
