@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.modules.balance
 
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
-import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.core.entities.Currency
@@ -13,7 +12,6 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
 
 class BalanceService(
-    private val accountManager: IAccountManager,
     private val walletManager: IWalletManager,
     private val adapterManager: IAdapterManager,
     private val xRateManager: IRateManager,
@@ -21,7 +19,7 @@ class BalanceService(
     private val localStorage: ILocalStorage,
     private val balanceSorter: BalanceSorter,
     private val connectivityManager: ConnectivityManager
-) {
+) : Clearable {
     val networkAvailable: Boolean
         get() = connectivityManager.isConnected
 
@@ -41,12 +39,9 @@ class BalanceService(
             emitBalanceItems()
         }
 
-    private var disposables = CompositeDisposable()
+    private val disposables = CompositeDisposable()
     private val latestRatesDisposables = CompositeDisposable()
     private val adaptersDisposables = CompositeDisposable()
-
-    private val activeAccountSubject = BehaviorSubject.create<Account>()
-    val activeAccountObservable: Flowable<Account> = activeAccountSubject.toFlowable(BackpressureStrategy.DROP)
 
     private val balanceItemsSubject = BehaviorSubject.create<Unit>()
     val balanceItemsObservable: Flowable<Unit> = balanceItemsSubject.toFlowable(BackpressureStrategy.DROP)
@@ -59,20 +54,11 @@ class BalanceService(
         get() = balanceSorter.sort(balanceItems, sortType)
 
     init {
-        refreshActiveAccount()
         refreshBalanceItems()
 
-        accountManager.activeAccountObservable
+        walletManager.activeWalletsUpdatedObservable
             .subscribeIO {
-                refreshActiveAccount()
-            }
-            .let {
-                disposables.add(it)
-            }
-
-        accountManager.accountsFlowable
-            .subscribeIO {
-                refreshActiveAccount()
+                refreshBalanceItems()
             }
             .let {
                 disposables.add(it)
@@ -86,14 +72,6 @@ class BalanceService(
                 emitBalanceItems()
 
                 subscribeForAdapterUpdates()
-            }
-            .let {
-                disposables.add(it)
-            }
-
-        walletManager.activeWalletsUpdatedObservable
-            .subscribeIO {
-                refreshBalanceItems()
             }
             .let {
                 disposables.add(it)
@@ -214,15 +192,14 @@ class BalanceService(
         }
     }
 
-    private fun refreshActiveAccount() {
-        accountManager.activeAccount?.let {
-            activeAccountSubject.onNext(it)
-        }
-    }
-
     fun refresh() {
         adapterManager.refresh()
         xRateManager.refresh(baseCurrency.code)
     }
 
+    override fun clear() {
+        disposables.clear()
+        adaptersDisposables.clear()
+        latestRatesDisposables.clear()
+    }
 }

@@ -10,6 +10,7 @@ import io.reactivex.disposables.CompositeDisposable
 class BalanceViewModel2(
     private val service: BalanceService,
     private val rateAppService: RateAppService,
+    private val activeAccountService: ActiveAccountService,
     private val balanceViewItemFactory: BalanceViewItemFactory
 ) : ViewModel() {
 
@@ -28,7 +29,7 @@ class BalanceViewModel2(
     private var expandedWallet: Wallet? = null
 
     init {
-        service.activeAccountObservable
+        activeAccountService.activeAccountObservable
             .subscribeIO {
                 titleLiveData.postValue(it.name)
             }
@@ -116,6 +117,11 @@ class BalanceViewModel2(
         TODO("Not yet implemented")
     }
 
+    override fun onCleared() {
+        activeAccountService.clear()
+        service.clear()
+        rateAppService.clear()
+    }
 
     sealed class SyncError {
         class NetworkNotAvailable : SyncError()
