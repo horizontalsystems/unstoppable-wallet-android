@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.balance
 
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
+import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.core.entities.Currency
@@ -201,5 +202,9 @@ class BalanceService(
         disposables.clear()
         adaptersDisposables.clear()
         latestRatesDisposables.clear()
+    }
+
+    fun refreshByWallet(wallet: Wallet) {
+        adapterManager.refreshByWallet(wallet)
     }
 }

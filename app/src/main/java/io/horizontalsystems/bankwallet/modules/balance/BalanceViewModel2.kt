@@ -11,7 +11,8 @@ class BalanceViewModel2(
     private val service: BalanceService,
     private val rateAppService: RateAppService,
     private val activeAccountService: ActiveAccountService,
-    private val balanceViewItemFactory: BalanceViewItemFactory
+    private val balanceViewItemFactory: BalanceViewItemFactory,
+    val reportEmail: String
 ) : ViewModel() {
 
     val titleLiveData = MutableLiveData<String>()
@@ -110,11 +111,7 @@ class BalanceViewModel2(
     }
 
     fun refreshByWallet(wallet: Wallet) {
-        TODO("Not yet implemented")
-    }
-
-    fun onReportClick(errorMessage: Any) {
-        TODO("Not yet implemented")
+        service.refreshByWallet(wallet)
     }
 
     override fun onCleared() {
