@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.balance
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.subscribeIO
+import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.coinkit.models.CoinType
 import io.reactivex.disposables.CompositeDisposable
@@ -120,9 +121,16 @@ class BalanceViewModel2(
         rateAppService.clear()
     }
 
+    fun getWalletForReceive(viewItem: BalanceViewItem) = when {
+        viewItem.wallet.account.isBackedUp -> viewItem.wallet
+        else -> throw BackupRequiredError(viewItem.wallet.account)
+    }
+
     sealed class SyncError {
         class NetworkNotAvailable : SyncError()
         class Dialog(val wallet: Wallet, val errorMessage: String, val sourceChangeable: Boolean) : SyncError()
     }
+
+    class BackupRequiredError(val account: Account) : Error("Backup Required")
 
 }
