@@ -11,7 +11,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.SimpleItemAnimator
 import io.horizontalsystems.bankwallet.R
@@ -39,7 +38,7 @@ import kotlinx.android.synthetic.main.fragment_balance.*
 
 class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener, BackupRequiredDialog.Listener {
 
-    private val viewModel by navGraphViewModels<BalanceViewModel2>(R.id.mainFragment) { BalanceModule2.Factory() }
+    private val viewModel by navGraphViewModels<BalanceViewModel2>(R.id.mainFragment) { BalanceModule.Factory() }
     private val balanceItemsAdapter = BalanceItemsAdapter(this)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -207,14 +206,14 @@ class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener, BackupRequ
             toolbarTitle.text = it ?: getString(R.string.Balance_Title)
         }
 
-        viewModel.balanceViewItemsLiveData.observe(viewLifecycleOwner, Observer {
+        viewModel.balanceViewItemsLiveData.observe(viewLifecycleOwner) {
             val scrollToTop = balanceItemsAdapter.itemCount == 1
             balanceItemsAdapter.submitList(it) {
                 if (scrollToTop) {
                     recyclerCoins?.layoutManager?.scrollToPosition(0)
                 }
             }
-        })
+        }
 
         viewModel.headerViewItemLiveData.observe(viewLifecycleOwner) {
             setHeaderViewItem(it)
