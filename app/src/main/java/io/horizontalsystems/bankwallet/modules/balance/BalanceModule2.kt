@@ -26,7 +26,8 @@ object BalanceModule2 {
                 balanceService,
                 rateAppService,
                 activeAccountService,
-                BalanceViewItemFactory()
+                BalanceViewItemFactory(),
+                App.appConfigProvider.reportEmail
             ) as T
         }
     }

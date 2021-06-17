@@ -174,7 +174,7 @@ class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener, BackupRequ
                         }
 
                         override fun onClickReport() {
-                            viewModel.onReportClick(errorMessage)
+                            sendEmail(viewModel.reportEmail, errorMessage)
                         }
                     })
                 }
