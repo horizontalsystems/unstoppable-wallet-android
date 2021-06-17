@@ -2,9 +2,9 @@ package io.horizontalsystems.bankwallet.modules.balance
 
 import java.math.BigDecimal
 
-class BalanceSorter : BalanceModule.IBalanceSorter {
+class BalanceSorter {
 
-    override fun sort(items: Iterable<BalanceModule.BalanceItem>, sortType: BalanceSortType): List<BalanceModule.BalanceItem> {
+    fun sort(items: Iterable<BalanceModule.BalanceItem>, sortType: BalanceSortType): List<BalanceModule.BalanceItem> {
         return when (sortType) {
             BalanceSortType.Value -> sortByBalance(items)
             BalanceSortType.Name -> items.sortedBy { it.wallet.coin.title }
