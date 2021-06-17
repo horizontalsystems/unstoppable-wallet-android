@@ -9,8 +9,9 @@ object BalanceModule2 {
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            val activeAccountService = ActiveAccountService(App.accountManager)
+
             val balanceService = BalanceService(
-                App.accountManager,
                 App.walletManager,
                 App.adapterManager,
                 App.xRateManager,
@@ -21,7 +22,12 @@ object BalanceModule2 {
             )
             val rateAppService = RateAppService(App.rateAppManager)
 
-            return BalanceViewModel2(balanceService, rateAppService, BalanceViewItemFactory()) as T
+            return BalanceViewModel2(
+                balanceService,
+                rateAppService,
+                activeAccountService,
+                BalanceViewItemFactory()
+            ) as T
         }
     }
 }
