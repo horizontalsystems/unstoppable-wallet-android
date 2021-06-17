@@ -13,6 +13,18 @@ class FeeCoinProvider(private val coinKit: CoinKit) {
         else -> null
     }
 
+    fun feeCoinType(coinType: CoinType): CoinType? = when (coinType) {
+        is CoinType.Erc20 -> CoinType.Ethereum
+        is CoinType.Bep20 -> CoinType.BinanceSmartChain
+        is CoinType.Bep2 -> {
+            when (coinType.symbol) {
+                "BNB" -> null
+                else -> CoinType.Bep2("BNB")
+            }
+        }
+        else -> null
+    }
+
     private fun erc20(): Pair<Coin, String>? {
         return coinKit.getCoin(CoinType.Ethereum)?.let {
             Pair(it, "ERC20")

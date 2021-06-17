@@ -1,7 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.balance
 
 import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.core.managers.AccountSettingManager
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
+import io.horizontalsystems.bankwallet.core.providers.FeeCoinProvider
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.ICurrencyManager
@@ -20,7 +22,9 @@ class BalanceService(
     private val currencyManager: ICurrencyManager,
     private val localStorage: ILocalStorage,
     private val balanceSorter: BalanceSorter,
-    private val connectivityManager: ConnectivityManager
+    private val connectivityManager: ConnectivityManager,
+    private val feeCoinProvider: FeeCoinProvider,
+    private val accountSettingManager: AccountSettingManager
 ) : Clearable {
     val networkAvailable: Boolean
         get() = connectivityManager.isConnected
@@ -59,6 +63,22 @@ class BalanceService(
         refreshBalanceItems()
 
         walletManager.activeWalletsUpdatedObservable
+            .subscribeIO {
+                refreshBalanceItems()
+            }
+            .let {
+                disposables.add(it)
+            }
+
+        accountSettingManager.ethereumNetworkObservable
+            .subscribeIO {
+                refreshBalanceItems()
+            }
+            .let {
+                disposables.add(it)
+            }
+
+        accountSettingManager.binanceSmartChainNetworkObservable
             .subscribeIO {
                 refreshBalanceItems()
             }
@@ -159,7 +179,15 @@ class BalanceService(
     }
 
     private fun subscribeForLatestRateUpdates() {
-        xRateManager.latestRateObservable(balanceItems.map { it.wallet.coin.type }, baseCurrency.code)
+        val coinTypes = balanceItems.map { it.wallet.coin.type }
+
+        // the send module needs the fee coin rate synchronous
+        // that is why here we request fee coins too
+        // todo: need to find a better solution
+        val feeCoinTypes = coinTypes.mapNotNull { feeCoinProvider.feeCoinType(it) }
+        val allCoinTypes = (coinTypes + feeCoinTypes).distinct()
+
+        xRateManager.latestRateObservable(allCoinTypes, baseCurrency.code)
             .subscribeIO { latestRates: Map<CoinType, LatestRate> ->
                 balanceItems.forEach { balanceItem ->
                     latestRates[balanceItem.wallet.coin.type]?.let {
@@ -185,9 +213,21 @@ class BalanceService(
     private fun rebuildBalanceItems() {
         balanceItems.clear()
         balanceItems.addAll(walletManager.activeWallets.map { wallet ->
-            BalanceModule.BalanceItem(wallet, true)
+            BalanceModule.BalanceItem(wallet, isMainNet(wallet))
         })
     }
+
+    private fun isMainNet(wallet: Wallet) = when (wallet.coin.type) {
+        is CoinType.Ethereum,
+        is CoinType.Erc20 -> {
+            accountSettingManager.ethereumNetwork(wallet.account).networkType.isMainNet
+        }
+        is CoinType.BinanceSmartChain -> {
+            accountSettingManager.binanceSmartChainNetwork(wallet.account).networkType.isMainNet
+        }
+        else -> true
+    }
+
 
     private fun setLatestRates() {
         balanceItems.forEach { balanceItem ->
