@@ -50,7 +50,7 @@ class BalanceViewModel(
     }
 
     private fun refreshViewItems() {
-        balanceViewItemsLiveData.postValue(service.balanceItemsSorted.map { balanceItem ->
+        balanceViewItemsLiveData.postValue(service.balanceItems.map { balanceItem ->
             balanceViewItemFactory.viewItem(
                 balanceItem,
                 service.baseCurrency,
@@ -63,7 +63,7 @@ class BalanceViewModel(
     private fun refreshHeaderViewItem() {
         headerViewItemLiveData.postValue(
             balanceViewItemFactory.headerViewItem(
-                service.balanceItemsSorted,
+                service.balanceItems,
                 service.baseCurrency,
                 service.balanceHidden
             )
@@ -76,6 +76,9 @@ class BalanceViewModel(
 
     fun onBalanceClick() {
         service.balanceHidden = !service.balanceHidden
+
+        refreshViewItems()
+        refreshHeaderViewItem()
     }
 
     fun onItem(viewItem: BalanceViewItem) {
