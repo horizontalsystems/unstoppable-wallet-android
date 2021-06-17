@@ -15,17 +15,25 @@ object BalanceModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val activeAccountService = ActiveAccountService(App.accountManager)
 
-            val balanceService = BalanceService(
-                App.walletManager,
-                App.adapterManager,
+            val activeWalletRepository = ActiveWalletRepository(App.walletManager, App.accountSettingManager)
+            val balanceItemRepository = BalanceItemRepository(activeWalletRepository, App.accountSettingManager)
+            val balanceItemRepositoryWithAdapter = BalanceItemWithAdapterRepository(balanceItemRepository, App.adapterManager)
+            val balanceItemXRateRepository = BalanceItemXRateRepository(
+                balanceItemRepositoryWithAdapter,
                 App.xRateManager,
+                App.currencyManager,
+                App.feeCoinProvider
+            )
+
+            val balanceService = BalanceService(
+                App.adapterManager,
                 App.currencyManager,
                 App.localStorage,
                 BalanceSorter(),
                 App.connectivityManager,
-                App.feeCoinProvider,
-                App.accountSettingManager
+                balanceItemXRateRepository
             )
+
             val rateAppService = RateAppService(App.rateAppManager)
 
             return BalanceViewModel(
