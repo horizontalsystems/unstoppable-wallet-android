@@ -8,6 +8,7 @@ import io.horizontalsystems.bankwallet.entities.Wallet
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
+import java.math.BigDecimal
 import java.util.concurrent.CopyOnWriteArrayList
 
 class BalanceItemWithAdapterRepository(
@@ -93,7 +94,7 @@ class BalanceItemWithAdapterRepository(
             val balanceItem = balanceItems[i]
             val adapter = adapterManager.getBalanceAdapterForWallet(balanceItem.wallet) ?: continue
 
-            balanceCache.setCache(balanceItem.wallet, adapter.balance, adapter.balanceLocked)
+            balanceCache.setCache(balanceItem.wallet, adapter.balance, adapter.balanceLocked ?: BigDecimal.ZERO)
 
             balanceItems[i] = balanceItem.copy(balance = adapter.balance, balanceLocked = adapter.balanceLocked, state = adapter.balanceState)
         }
@@ -114,7 +115,7 @@ class BalanceItemWithAdapterRepository(
                 val indexOfFirst = balanceItems.indexOfFirst { it.wallet == balanceItem.wallet }
                 if (indexOfFirst != -1) {
                     val itemToUpdate = balanceItems[indexOfFirst]
-                    balanceCache.setCache(itemToUpdate.wallet, adapter.balance, adapter.balanceLocked)
+                    balanceCache.setCache(itemToUpdate.wallet, adapter.balance, adapter.balanceLocked ?: BigDecimal.ZERO)
 
                     balanceItems[indexOfFirst] = itemToUpdate.copy(balance = adapter.balance, balanceLocked = adapter.balanceLocked)
 

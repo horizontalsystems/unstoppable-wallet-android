@@ -4,6 +4,7 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import io.horizontalsystems.bankwallet.core.storage.AccountRecord
+import java.math.BigDecimal
 
 @Entity(primaryKeys = ["coinId", "coinSettingsId", "accountId"],
         foreignKeys = [ForeignKey(
@@ -20,5 +21,7 @@ data class EnabledWallet(
         val coinId: String,
         val coinSettingsId: String,
         val accountId: String,
-        val walletOrder: Int? = null
+        val walletOrder: Int? = null,
+        val balance: BigDecimal,
+        val balanceLocked: BigDecimal,
 )

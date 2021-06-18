@@ -122,6 +122,7 @@ interface IWalletStorage {
     fun wallets(accounts: List<Account>): List<Wallet>
     fun wallets(account: Account): List<Wallet>
     fun save(wallets: List<Wallet>)
+    fun save(wallet: Wallet)
     fun delete(wallets: List<Wallet>)
 }
 
@@ -333,6 +334,7 @@ interface IEnabledWalletStorage {
     val enabledWallets: List<EnabledWallet>
     fun enabledWallets(accountId: String): List<EnabledWallet>
     fun save(enabledWallets: List<EnabledWallet>)
+    fun save(wallet: EnabledWallet)
     fun delete(enabledWallets: List<EnabledWallet>)
     fun deleteAll()
 }
