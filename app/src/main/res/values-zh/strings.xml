@@ -7,7 +7,7 @@
     <string name="Alert_Loading">正在加载...</string>
     <string name="Alert_Restart">重新启动</string>
     <string name="Button_Cancel">取消</string>
-    <string name="Button_Next">Next</string>
+    <string name="Button_Next">继续</string>
     <string name="Button_Enable">启用</string>
     <string name="Button_Disable">禁用</string>
     <string name="Button_Close">关闭</string>
