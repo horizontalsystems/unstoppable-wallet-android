@@ -10,6 +10,7 @@ import io.horizontalsystems.xrateskit.entities.LatestRate
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
+import java.util.concurrent.CopyOnWriteArrayList
 
 class BalanceItemXRateRepository(
     private val itemRepository: ItemRepository<BalanceModule.BalanceItem>,
@@ -18,7 +19,7 @@ class BalanceItemXRateRepository(
     private val feeCoinProvider: FeeCoinProvider
 ) : ItemRepository<BalanceModule.BalanceItem> {
 
-    private var balanceItems = listOf<BalanceModule.BalanceItem>()
+    private var balanceItems = CopyOnWriteArrayList<BalanceModule.BalanceItem>()
     private val disposables = CompositeDisposable()
     private val latestRatesDisposables = CompositeDisposable()
 
@@ -49,7 +50,8 @@ class BalanceItemXRateRepository(
     private fun subscribeForUpdates() {
         itemRepository.itemsObservable
             .subscribeIO {
-                balanceItems = it
+                balanceItems.clear()
+                balanceItems.addAll(it)
 
                 reset()
             }
@@ -64,8 +66,6 @@ class BalanceItemXRateRepository(
             .let {
                 disposables.add(it)
             }
-
-
     }
 
     private fun reset() {
@@ -86,8 +86,10 @@ class BalanceItemXRateRepository(
     }
 
     private fun setLatestRates() {
-        balanceItems.forEach { balanceItem ->
-            balanceItem.latestRate = xRateManager.latestRate(balanceItem.wallet.coin.type, baseCurrency.code)
+        for (i in 0 until balanceItems.size) {
+            val balanceItem = balanceItems[i]
+
+            balanceItems[i] = balanceItem.copy(latestRate = xRateManager.latestRate(balanceItem.wallet.coin.type, baseCurrency.code))
         }
     }
 
@@ -102,9 +104,11 @@ class BalanceItemXRateRepository(
 
         xRateManager.latestRateObservable(allCoinTypes, baseCurrency.code)
             .subscribeIO { latestRates: Map<CoinType, LatestRate> ->
-                balanceItems.forEach { balanceItem ->
+                for (i in 0 until balanceItems.size) {
+                    val balanceItem = balanceItems[i]
+
                     latestRates[balanceItem.wallet.coin.type]?.let {
-                        balanceItem.latestRate = it
+                        balanceItems[i] = balanceItem.copy(latestRate = it)
                     }
                 }
 
