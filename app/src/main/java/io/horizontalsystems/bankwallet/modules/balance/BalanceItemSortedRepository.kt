@@ -12,7 +12,7 @@ class BalanceItemSortedRepository(
     private val balanceConfigurator: BalanceConfigurator
 ) : ItemRepository<BalanceModule.BalanceItem> {
 
-    private var balanceItems = CopyOnWriteArrayList<BalanceModule.BalanceItem>()
+    private val balanceItems = CopyOnWriteArrayList<BalanceModule.BalanceItem>()
     private val disposables = CompositeDisposable()
 
     private val itemsSubject = BehaviorSubject.create<List<BalanceModule.BalanceItem>>()

@@ -19,7 +19,7 @@ class BalanceItemXRateRepository(
     private val feeCoinProvider: FeeCoinProvider
 ) : ItemRepository<BalanceModule.BalanceItem> {
 
-    private var balanceItems = CopyOnWriteArrayList<BalanceModule.BalanceItem>()
+    private val balanceItems = CopyOnWriteArrayList<BalanceModule.BalanceItem>()
     private val disposables = CompositeDisposable()
     private val latestRatesDisposables = CompositeDisposable()
 
