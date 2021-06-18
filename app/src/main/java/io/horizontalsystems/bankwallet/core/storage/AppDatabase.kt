@@ -14,12 +14,13 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.storage.migrations.Migration_31_32
 import io.horizontalsystems.bankwallet.core.storage.migrations.Migration_32_33
 import io.horizontalsystems.bankwallet.core.storage.migrations.Migration_33_34
+import io.horizontalsystems.bankwallet.core.storage.migrations.Migration_34_35
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.coinkit.models.CoinType
 import java.util.*
 
-@Database(version = 34, exportSchema = false, entities = [
+@Database(version = 35, exportSchema = false, entities = [
     EnabledWallet::class,
     PriceAlert::class,
     AccountRecord::class,
@@ -89,6 +90,7 @@ abstract class AppDatabase : RoomDatabase() {
                             Migration_31_32,
                             Migration_32_33,
                             Migration_33_34,
+                            Migration_34_35,
                     )
                     .build()
         }

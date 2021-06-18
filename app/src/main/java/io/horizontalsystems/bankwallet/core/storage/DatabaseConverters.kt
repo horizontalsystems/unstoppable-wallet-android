@@ -18,8 +18,10 @@ class DatabaseConverters {
     // BigDecimal
 
     @TypeConverter
-    fun fromString(value: String?): BigDecimal? {
-        return value?.let { BigDecimal(it) }
+    fun fromString(value: String?): BigDecimal? = try {
+        value?.let { BigDecimal(it) }
+    } catch (e: Exception) {
+        null
     }
 
     @TypeConverter

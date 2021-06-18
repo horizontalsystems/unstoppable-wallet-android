@@ -20,7 +20,7 @@ object BalanceModule {
                 activeWalletRepository,
                 App.adapterManager,
                 NetworkTypeChecker(App.accountSettingManager),
-                BalanceCache()
+                BalanceCache(App.walletStorage)
             )
             val balanceItemXRateRepository = BalanceItemXRateRepository(
                 balanceItemRepositoryWithAdapter,

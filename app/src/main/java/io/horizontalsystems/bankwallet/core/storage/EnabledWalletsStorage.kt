@@ -16,6 +16,10 @@ class EnabledWalletsStorage(private val appDatabase: AppDatabase) : IEnabledWall
         appDatabase.walletsDao().insertWallets(enabledWallets)
     }
 
+    override fun save(wallet: EnabledWallet) {
+        appDatabase.walletsDao().insert(wallet)
+    }
+
     override fun deleteAll() {
         appDatabase.walletsDao().deleteAll()
     }

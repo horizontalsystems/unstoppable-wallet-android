@@ -21,7 +21,7 @@ class WalletStorage(
             val settings = CoinSettings(enabledWallet.coinSettingsId)
             val configuredCoin = ConfiguredCoin(coin, settings)
 
-            Wallet(configuredCoin, account)
+            Wallet(configuredCoin, account, enabledWallet.balance, enabledWallet.balanceLocked)
         }.mapNotNull { it }
     }
 
@@ -35,7 +35,7 @@ class WalletStorage(
             val settings = CoinSettings(enabledWallet.coinSettingsId)
             val configuredCoin = ConfiguredCoin(coin, settings)
 
-            Wallet(configuredCoin, account)
+            Wallet(configuredCoin, account, enabledWallet.balance, enabledWallet.balanceLocked)
         }
     }
 
@@ -49,7 +49,9 @@ class WalletStorage(
                             wallet.coin.id,
                             wallet.configuredCoin.settings.id,
                             wallet.account.id,
-                            index
+                            index,
+                            wallet.balance,
+                            wallet.balanceLocked,
                     )
             )
         }
@@ -57,9 +59,22 @@ class WalletStorage(
         storage.save(enabledWallets)
     }
 
+    override fun save(wallet: Wallet) {
+        storage.save(
+            EnabledWallet(
+                wallet.coin.id,
+                wallet.configuredCoin.settings.id,
+                wallet.account.id,
+                null,
+                wallet.balance,
+                wallet.balanceLocked,
+            )
+        )
+    }
+
     override fun delete(wallets: List<Wallet>) {
         val enabledWallets = wallets.map {
-            EnabledWallet(it.coin.id, it.configuredCoin.settings.id, it.account.id)
+            EnabledWallet(it.coin.id, it.configuredCoin.settings.id, it.account.id, null, it.balance, it.balanceLocked)
         }
         storage.delete(enabledWallets)
     }
