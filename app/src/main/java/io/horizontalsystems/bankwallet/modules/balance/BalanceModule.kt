@@ -46,9 +46,14 @@ object BalanceModule {
         }
     }
 
-    data class BalanceItem(val wallet: Wallet, val mainNet: Boolean) {
-        var balance: BigDecimal? = null
-        var balanceLocked: BigDecimal? = null
+    data class BalanceItem(
+        val wallet: Wallet,
+        val mainNet: Boolean,
+        val balance: BigDecimal? = null,
+        val balanceLocked: BigDecimal? = null,
+        val state: AdapterState? = null,
+        val latestRate: LatestRate? = null
+    ) {
         val balanceTotal: BigDecimal?
             get() {
                 var result = balance ?: return null
@@ -60,8 +65,6 @@ object BalanceModule {
                 return result
             }
 
-        var state: AdapterState? = null
-        var latestRate: LatestRate? = null
 
         val fiatValue: BigDecimal?
             get() = latestRate?.rate?.let { balance?.times(it) }

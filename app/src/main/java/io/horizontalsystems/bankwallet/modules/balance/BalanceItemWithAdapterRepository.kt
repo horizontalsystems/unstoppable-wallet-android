@@ -6,13 +6,14 @@ import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
+import java.util.concurrent.CopyOnWriteArrayList
 
 class BalanceItemWithAdapterRepository(
     private val itemRepository: ItemRepository<BalanceModule.BalanceItem>,
     private val adapterManager: IAdapterManager
 ) : ItemRepository<BalanceModule.BalanceItem> {
 
-    private var balanceItems = listOf<BalanceModule.BalanceItem>()
+    private val balanceItems = CopyOnWriteArrayList<BalanceModule.BalanceItem>()
     private val disposables = CompositeDisposable()
     private val adaptersDisposables = CompositeDisposable()
 
@@ -34,7 +35,8 @@ class BalanceItemWithAdapterRepository(
     private fun subscribeForUpdates() {
         itemRepository.itemsObservable
             .subscribeIO {
-                balanceItems = it
+                balanceItems.clear()
+                balanceItems.addAll(it)
 
                 reset()
             }
@@ -73,12 +75,11 @@ class BalanceItemWithAdapterRepository(
     }
 
     private fun setDataFromAdapters() {
-        for (balanceItem in balanceItems) {
+        for (i in 0 until balanceItems.size) {
+            val balanceItem = balanceItems[i]
             val adapter = adapterManager.getBalanceAdapterForWallet(balanceItem.wallet) ?: continue
 
-            balanceItem.balance = adapter.balance
-            balanceItem.balanceLocked = adapter.balanceLocked
-            balanceItem.state = adapter.balanceState
+            balanceItems[i] = balanceItem.copy(balance = adapter.balance, balanceLocked = adapter.balanceLocked, state = adapter.balanceState)
         }
     }
 
@@ -94,12 +95,12 @@ class BalanceItemWithAdapterRepository(
     private fun subscribeForBalanceUpdate(adapter: IBalanceAdapter, balanceItem: BalanceModule.BalanceItem) {
         adapter.balanceUpdatedFlowable
             .subscribeIO {
-                balanceItems.find { it == balanceItem }?.apply {
-                    this.balance = adapter.balance
-                    this.balanceLocked = adapter.balanceLocked
-                }
+                val indexOfFirst = balanceItems.indexOfFirst { it.wallet == balanceItem.wallet }
+                if (indexOfFirst != -1) {
+                    balanceItems[indexOfFirst] = balanceItems[indexOfFirst].copy(balance = adapter.balance, balanceLocked = adapter.balanceLocked)
 
-                emitBalanceItems()
+                    emitBalanceItems()
+                }
             }
             .let {
                 adaptersDisposables.add(it)
@@ -109,11 +110,12 @@ class BalanceItemWithAdapterRepository(
     private fun subscribeForStateUpdate(adapter: IBalanceAdapter, balanceItem: BalanceModule.BalanceItem) {
         adapter.balanceStateUpdatedFlowable
             .subscribeIO {
-                balanceItems.find { it == balanceItem }?.apply {
-                    this.state = adapter.balanceState
-                }
+                val indexOfFirst = balanceItems.indexOfFirst { it.wallet == balanceItem.wallet }
+                if (indexOfFirst != -1) {
+                    balanceItems[indexOfFirst] = balanceItems[indexOfFirst].copy(state = adapter.balanceState)
 
-                emitBalanceItems()
+                    emitBalanceItems()
+                }
             }
             .let {
                 adaptersDisposables.add(it)
