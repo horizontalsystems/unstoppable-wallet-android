@@ -42,11 +42,11 @@ data class MarketTickerViewItem(
         val imageUrl: String?,
 ) {
     fun areItemsTheSame(other: MarketTickerViewItem): Boolean {
-        return title == other.title && subtitle == other.subvalue
+        return title == other.title && subtitle == other.subtitle
     }
 
     fun areContentsTheSame(other: MarketTickerViewItem): Boolean {
-        return this == other
+        return value == other.value && subvalue == other.subvalue && imageUrl == other.imageUrl
     }
 }
 

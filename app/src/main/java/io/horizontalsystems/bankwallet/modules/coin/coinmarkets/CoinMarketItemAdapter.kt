@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.modules.coin.coinmarkets
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -18,8 +17,10 @@ class CoinMarketItemAdapter : ListAdapter<MarketTickerViewItem, ViewHolderMarket
         return ViewHolderMarketTicker.create(parent)
     }
 
-    override fun onBindViewHolder(holder: ViewHolderMarketTicker, position: Int) {
-        holder.bind(getItem(position))
+    override fun onBindViewHolder(holder: ViewHolderMarketTicker, position: Int) = Unit
+
+    override fun onBindViewHolder(holder: ViewHolderMarketTicker, position: Int, payloads: MutableList<Any>) {
+        holder.bind(getItem(position), payloads.firstOrNull { it is MarketTickerViewItem } as? MarketTickerViewItem)
     }
 
     companion object {
@@ -31,25 +32,36 @@ class CoinMarketItemAdapter : ListAdapter<MarketTickerViewItem, ViewHolderMarket
             override fun areContentsTheSame(oldItem: MarketTickerViewItem, newItem: MarketTickerViewItem): Boolean {
                 return oldItem.areContentsTheSame(newItem)
             }
+
+            override fun getChangePayload(oldItem: MarketTickerViewItem, newItem: MarketTickerViewItem): Any? {
+                return oldItem
+            }
         }
     }
 }
 
 class ViewHolderMarketTicker(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
-    fun bind(item: MarketTickerViewItem) {
-        icon.loadImage(item.imageUrl)
+    fun bind(item: MarketTickerViewItem, prev: MarketTickerViewItem?) {
+        if (item.imageUrl != prev?.imageUrl){
+            icon.loadImage(item.imageUrl)
+        }
 
-        title.text = item.title
+        if (item.title != prev?.title) {
+            title.text = item.title
+        }
 
-        subtitle.text = item.subtitle
+        if (item.subtitle != prev?.subtitle) {
+            subtitle.text = item.subtitle
+        }
 
-        rate.text = item.value
+        if (item.value != prev?.value) {
+            rate.text = item.value
+        }
 
-        marketFieldCaption.text = "Vol"
-
-        marketFieldValue.text = item.subvalue
-        marketFieldValue.setTextColor(containerView.resources.getColor(R.color.grey, containerView.context.theme))
+        if (item.subvalue != prev?.subvalue) {
+            marketFieldValue.text = item.subvalue
+        }
     }
 
     companion object {

@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="60dp"
-    android:background="@drawable/clear_clickable_background">
+    android:background="@drawable/clear_clickable_background"
+    android:clickable="true">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/verticalCenter"
@@ -87,10 +88,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="4dp"
+        android:text="Vol"
         android:textColor="@color/jacob"
         app:layout_constraintEnd_toStartOf="@id/marketFieldValue"
-        app:layout_constraintTop_toTopOf="@id/marketFieldValue"
-        tools:text="Vol" />
+        app:layout_constraintTop_toTopOf="@id/marketFieldValue" />
 
     <TextView
         android:id="@+id/marketFieldValue"
