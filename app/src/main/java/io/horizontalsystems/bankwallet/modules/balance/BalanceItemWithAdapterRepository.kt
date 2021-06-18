@@ -1,16 +1,20 @@
 package io.horizontalsystems.bankwallet.modules.balance
 
+import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.IBalanceAdapter
 import io.horizontalsystems.bankwallet.core.subscribeIO
+import io.horizontalsystems.bankwallet.entities.Wallet
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
 import java.util.concurrent.CopyOnWriteArrayList
 
 class BalanceItemWithAdapterRepository(
-    private val itemRepository: ItemRepository<BalanceModule.BalanceItem>,
-    private val adapterManager: IAdapterManager
+    private val itemRepository: ItemRepository<Wallet>,
+    private val adapterManager: IAdapterManager,
+    private val networkTypeChecker: NetworkTypeChecker,
+    private val balanceCache: BalanceCache
 ) : ItemRepository<BalanceModule.BalanceItem> {
 
     private val balanceItems = CopyOnWriteArrayList<BalanceModule.BalanceItem>()
@@ -34,9 +38,19 @@ class BalanceItemWithAdapterRepository(
 
     private fun subscribeForUpdates() {
         itemRepository.itemsObservable
-            .subscribeIO {
+            .subscribeIO { wallets ->
                 balanceItems.clear()
-                balanceItems.addAll(it)
+                balanceItems.addAll(wallets.map { wallet ->
+                    val (balance, balanceLocked) = balanceCache.getCache(wallet)
+
+                    BalanceModule.BalanceItem(
+                        wallet,
+                        networkTypeChecker.isMainNet(wallet),
+                        balance,
+                        balanceLocked,
+                        AdapterState.Syncing(10, null)
+                    )
+                })
 
                 reset()
             }
@@ -79,6 +93,8 @@ class BalanceItemWithAdapterRepository(
             val balanceItem = balanceItems[i]
             val adapter = adapterManager.getBalanceAdapterForWallet(balanceItem.wallet) ?: continue
 
+            balanceCache.setCache(balanceItem.wallet, adapter.balance, adapter.balanceLocked)
+
             balanceItems[i] = balanceItem.copy(balance = adapter.balance, balanceLocked = adapter.balanceLocked, state = adapter.balanceState)
         }
     }
@@ -97,7 +113,10 @@ class BalanceItemWithAdapterRepository(
             .subscribeIO {
                 val indexOfFirst = balanceItems.indexOfFirst { it.wallet == balanceItem.wallet }
                 if (indexOfFirst != -1) {
-                    balanceItems[indexOfFirst] = balanceItems[indexOfFirst].copy(balance = adapter.balance, balanceLocked = adapter.balanceLocked)
+                    val itemToUpdate = balanceItems[indexOfFirst]
+                    balanceCache.setCache(itemToUpdate.wallet, adapter.balance, adapter.balanceLocked)
+
+                    balanceItems[indexOfFirst] = itemToUpdate.copy(balance = adapter.balance, balanceLocked = adapter.balanceLocked)
 
                     emitBalanceItems()
                 }
