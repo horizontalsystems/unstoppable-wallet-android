@@ -22,11 +22,7 @@ class BalanceViewModel(
 
     private var disposables = CompositeDisposable()
 
-    var sortType: BalanceSortType
-        get() = service.sortType
-        set(value) {
-            service.sortType = value
-        }
+    var sortType: BalanceSortType by service::sortType
 
     private var expandedWallet: Wallet? = null
 

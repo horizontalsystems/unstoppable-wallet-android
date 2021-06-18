@@ -25,13 +25,17 @@ object BalanceModule {
                 App.feeCoinProvider
             )
 
+            val balanceConfigurator = BalanceConfigurator(App.localStorage)
+            val balanceItemRepositorySorted = BalanceItemSortedRepository(balanceItemXRateRepository, BalanceSorter(),
+                balanceConfigurator
+            )
+
             val balanceService = BalanceService(
                 App.adapterManager,
                 App.currencyManager,
-                App.localStorage,
-                BalanceSorter(),
                 App.connectivityManager,
-                balanceItemXRateRepository
+                balanceItemRepositorySorted,
+                balanceConfigurator
             )
 
             val rateAppService = RateAppService(App.rateAppManager)
