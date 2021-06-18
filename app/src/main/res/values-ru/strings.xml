@@ -142,7 +142,7 @@
     <string name="Market_Category_Staking">Staking ETH 2.0</string>
     <string name="Market_Category_Staking_Description">Прибыльные протоколы для поставщиков ликвидности.</string>
     <string name="Market_Category_CrossChain">Cross-Chain</string>
-    <string name="Market_Category_CrossChain_Description">Cross-chain protocols.</string>
+    <string name="Market_Category_CrossChain_Description">Кросс-чейн протоколы.</string>
     <string name="Market_Category_Computing">Computing</string>
     <string name="Market_Category_Computing_Description">Децентрализованные компьютерные решения по требованию.</string>
     <string name="Market_Category_RebaseTokens">Rebase Tokens</string>
@@ -202,9 +202,9 @@
     <string name="Market_Filter_PriceChange_Negative_25_minus">&lt; -25%</string>
     <string name="Market_Filter_PriceChange_Negative_50_minus">&lt; -50%</string>
     <string name="Market_Filter_PriceChange_Negative_100_minus">&lt; -100%</string>
-    <string name="TimePeriod_24h">24h</string>
+    <string name="TimePeriod_24h">24ч</string>
     <!--Coin Markets-->
-    <string name="CoinMarket_Title">%s Markets</string>
+    <string name="CoinMarket_Title">%s Рынки</string>
     <!--Balance-->
     <string name="Balance_Title">Баланс</string>
     <string name="Balance_Send">Отправить</string>
@@ -290,7 +290,7 @@
     <string name="WalletConnect_Status_Connecting">Подключение…</string>
     <string name="WalletConnect_NewConnect">Новое Подключение</string>
     <string name="WalletConnect_SignMessageRequest_Title">Sign Request</string>
-    <string name="WalletConnect_SignMessageRequest_Domain">Domain</string>
+    <string name="WalletConnect_SignMessageRequest_Domain">Домен</string>
     <string name="WalletConnect_SignMessageRequest_ShowMessageTitle">Message to sign</string>
     <string name="WalletConnect_SignMessageRequest_SignMessageHint">Please sign a message to authenticate</string>
     <string name="WalletConnect_SignMessageRequest_ButtonSign">Sign</string>
@@ -540,7 +540,7 @@
     <string name="Hud_UnknownError">%s</string>
     <!--Manage Coins-->
     <string name="ManageCoins_title">Выберите Токены</string>
-    <string name="ManageCoins_Search">Search</string>
+    <string name="ManageCoins_Search">Поиск</string>
     <string name="ManageCoins_AddToken">Добавить Токен</string>
     <!-- Experimental Feature -->
     <string name="ExperimentalFeatures_Title">Функции</string>
@@ -611,7 +611,7 @@
     <string name="EnalbeToken_NoCoins">На балансе нет монет</string>
     <string name="EnalbeToken_EnableKey">Активировать</string>
     <!-- Add Token -->
-    <string name="AddToken_Title">Add Token</string>
+    <string name="AddToken_Title">Добавить Токен</string>
     <string name="AddToken_CoinName">Название Токена</string>
     <string name="AddToken_Symbol">Символ</string>
     <string name="AddToken_Decimals">Десятичные Знаки</string>
@@ -654,20 +654,20 @@
     <string name="CoinOption_bip49_Subtitle">Популярный (начинается с %s...)</string>
     <string name="CoinOption_bip84_Subtitle">Новый (начинается с %s...)</string>
     <!--Coin Page-->
-    <string name="CoinPage_TimeDuration_Today">TDY</string>
-    <string name="CoinPage_TimeDuration_Day">24H</string>
-    <string name="CoinPage_TimeDuration_Week">7D</string>
+    <string name="CoinPage_TimeDuration_Today">СГД</string>
+    <string name="CoinPage_TimeDuration_Day">24Ч</string>
+    <string name="CoinPage_TimeDuration_Week">7Д</string>
     <string name="CoinPage_TimeDuration_Month">1М</string>
-    <string name="CoinPage_TimeDuration_TwoWeeks">2W</string>
-    <string name="CoinPage_TimeDuration_Month3">3M</string>
-    <string name="CoinPage_TimeDuration_HalfYear">6M</string>
-    <string name="CoinPage_TimeDuration_Year">1Y</string>
-    <string name="CoinPage_TimeDuration_Year2">2Y</string>
-    <string name="CoinPage_Markets">Markets</string>
-    <string name="CoinPage_TradingVolume">Trading Volume</string>
+    <string name="CoinPage_TimeDuration_TwoWeeks">2Н</string>
+    <string name="CoinPage_TimeDuration_Month3">3М</string>
+    <string name="CoinPage_TimeDuration_HalfYear">6М</string>
+    <string name="CoinPage_TimeDuration_Year">1Г</string>
+    <string name="CoinPage_TimeDuration_Year2">2Г</string>
+    <string name="CoinPage_Markets">Рынки</string>
+    <string name="CoinPage_TradingVolume">Объем Торговли</string>
     <string name="CoinPage_MajorHolders">Major Holders</string>
     <string name="CoinPage_InvestorData">Investor Data</string>
-    <string name="CoinPage_FundsInvested">Funds Invested</string>
+    <string name="CoinPage_FundsInvested">Средства Инвестированы</string>
     <string name="CoinPage_Range24">Диапазон за 24 ч</string>
     <string name="CoinPage_About">О программе</string>
     <string name="CoinPage_Category">Категория</string>
