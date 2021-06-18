@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
@@ -18,6 +19,7 @@ import kotlinx.android.synthetic.main.fragment_coin_markets.marketListHeader
 class CoinMarketsFragment : BaseFragment(), MarketListHeaderView.Listener {
 
     private val coinViewModel by navGraphViewModels<CoinViewModel>(R.id.coinFragment)
+    private val viewModel by viewModels<CoinMarketsViewModel>{ CoinMarketsModule.Factory(coinViewModel.coinCode) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_coin_markets, container, false)
@@ -32,35 +34,39 @@ class CoinMarketsFragment : BaseFragment(), MarketListHeaderView.Listener {
         }
 
         marketListHeader.listener = this
-        marketListHeader.setSortingField(coinViewModel.coinMarketsSortingField)
-        marketListHeader.setFieldViewOptions(coinViewModel.coinMarketFieldViewOptions)
+        marketListHeader.setSortingField(viewModel.sortingField)
+        marketListHeader.setFieldViewOptions(viewModel.fieldViewOptions)
 
         val marketItemsAdapter = CoinMarketItemAdapter()
 
         recyclerView.adapter = marketItemsAdapter
         recyclerView.itemAnimator = null
 
-        coinViewModel.coinMarkets.observe(viewLifecycleOwner, {
+        coinViewModel.coinMarketTickers.observe(viewLifecycleOwner, {
+            viewModel.marketTickers = it
+        })
+
+        viewModel.coinMarketItems.observe(viewLifecycleOwner, {
             marketItemsAdapter.submitList(it)
         })
     }
 
     override fun onClickSortingField() {
-        val items = coinViewModel.coinMarketsSortingFields.map {
-            SelectorItem(getString(it.titleResId), it == coinViewModel.coinMarketsSortingField)
+        val items = viewModel.sortingFields.map {
+            SelectorItem(getString(it.titleResId), it == viewModel.sortingField)
         }
 
         SelectorDialog
                 .newInstance(items, getString(R.string.Market_Sort_PopupTitle)) { position ->
-                    val selectedSortingField = coinViewModel.coinMarketsSortingFields[position]
+                    val selectedSortingField = viewModel.sortingFields[position]
 
                     marketListHeader.setSortingField(selectedSortingField)
-                    coinViewModel.update(selectedSortingField)
+                    viewModel.update(selectedSortingField)
                 }
                 .show(childFragmentManager, "sorting_field_selector")
     }
 
     override fun onSelectFieldViewOption(fieldViewOptionId: Int) {
-        coinViewModel.update(fieldViewOptionId = fieldViewOptionId)
+        viewModel.update(fieldViewOptionId = fieldViewOptionId)
     }
 }

@@ -250,25 +250,6 @@ class CoinViewFactory(private val currency: Currency, private val numberFormatte
         return items
     }
 
-    fun getCoinMarketItems(tickers: List<MarketTicker>, showCurrencyValue: Boolean): List<MarketTickerViewItem> {
-        return tickers.map { ticker ->
-            val subvalue = if (showCurrencyValue) {
-                formatFiatShortened(ticker.volume.multiply(ticker.rate), currency.symbol)
-            } else {
-                val (shortenValue, suffix) = numberFormatter.shortenValue(ticker.volume)
-                "$shortenValue $suffix ${ticker.base}"
-            }
-
-            MarketTickerViewItem(
-                    ticker.marketName,
-                    "${ticker.base}/${ticker.target}",
-                    numberFormatter.formatCoin(ticker.rate, ticker.target, 0, 8),
-                    subvalue,
-                    ticker.imageUrl
-            )
-        }
-    }
-
     fun getCoinInvestorItems(fundCategories: List<CoinFundCategory>): List<InvestorItem> {
         val items = mutableListOf<InvestorItem>()
         fundCategories.forEach { category ->
