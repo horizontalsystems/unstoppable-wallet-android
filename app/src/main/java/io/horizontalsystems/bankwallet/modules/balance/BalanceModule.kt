@@ -16,8 +16,12 @@ object BalanceModule {
             val activeAccountService = ActiveAccountService(App.accountManager)
 
             val activeWalletRepository = ActiveWalletRepository(App.walletManager, App.accountSettingManager)
-            val balanceItemRepository = BalanceItemRepository(activeWalletRepository, App.accountSettingManager)
-            val balanceItemRepositoryWithAdapter = BalanceItemWithAdapterRepository(balanceItemRepository, App.adapterManager)
+            val balanceItemRepositoryWithAdapter = BalanceItemWithAdapterRepository(
+                activeWalletRepository,
+                App.adapterManager,
+                NetworkTypeChecker(App.accountSettingManager),
+                BalanceCache()
+            )
             val balanceItemXRateRepository = BalanceItemXRateRepository(
                 balanceItemRepositoryWithAdapter,
                 App.xRateManager,
