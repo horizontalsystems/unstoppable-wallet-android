@@ -7,9 +7,12 @@ androidExtensions {
     experimental = true
 }
 
-def computeVersionCode() {
-    ext.buildNumber = System.getenv("BUILD_NUMBER") ?: 49
-    return "$buildNumber".toInteger()
+class Globals {
+    String buildNumber =  System.getenv('BUILD_NUMBER')?.toString() ?: ""
+}
+
+ext {
+    globals = new Globals()
 }
 
 android {
@@ -20,7 +23,7 @@ android {
         applicationId "io.horizontalsystems.bankwallet"
         minSdkVersion min_sdk_version
         targetSdkVersion compile_sdk_version
-        versionCode computeVersionCode()
+        versionCode 49
         versionName "0.22.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -58,7 +61,7 @@ android {
             resValue "string", "infuraSecretKey", "fc479a9290b64a84a15fa6544a130218"
             resValue "string", "etherscanKey", "GKNHXT22ED7PRVCKZATFZQD1YI7FK9AAYE"
             resValue "string", "bscscanKey", "5ZGSHWYHZVA8XZHB8PF6UUTRNNB4KT43ZZ"
-            resValue "string", "is_release", "false"
+            resValue "string", "build_number", globals.buildNumber
             resValue "string", "guidesUrl", "https://raw.githubusercontent.com/horizontalsystems/blockchain-crypto-guides/develop/index.json"
             resValue "string", "faqUrl", "https://raw.githubusercontent.com/horizontalsystems/Unstoppable-Wallet-Website/master/src/faq_android.json"
             resValue "string", "coinsJsonUrl", "https://raw.githubusercontent.com/horizontalsystems/cryptocurrencies/master/coins.json"
@@ -90,7 +93,7 @@ android {
             resValue "string", "infuraSecretKey", "7b81c992c98d4e60aaa8a0ef9acff2be"
             resValue "string", "etherscanKey", "TTH1114D5VD5ZMCJZ4B74SGIDRCGSKWGX9"
             resValue "string", "bscscanKey", "HBQQN4GTKCHYSRZCKFVQJ3FWGPY4T8237Y"
-            resValue "string", "is_release", "true"
+            resValue "string", "build_number", ""
             resValue "string", "guidesUrl", "https://raw.githubusercontent.com/horizontalsystems/blockchain-crypto-guides/v1.1/index.json"
             resValue "string", "faqUrl", "https://raw.githubusercontent.com/horizontalsystems/Unstoppable-Wallet-Website/v1.0/src/faq_android.json"
             resValue "string", "coinsJsonUrl", "https://raw.githubusercontent.com/horizontalsystems/cryptocurrencies/v0.21/coins.json"
