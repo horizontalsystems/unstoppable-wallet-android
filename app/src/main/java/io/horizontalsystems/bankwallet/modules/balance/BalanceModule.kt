@@ -4,9 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.BalanceData
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.xrateskit.entities.LatestRate
-import java.math.BigDecimal
 
 object BalanceModule {
 
@@ -40,24 +40,10 @@ object BalanceModule {
     data class BalanceItem(
         val wallet: Wallet,
         val mainNet: Boolean,
-        val balance: BigDecimal? = null,
-        val balanceLocked: BigDecimal? = null,
+        val balanceData: BalanceData,
         val state: AdapterState? = null,
         val latestRate: LatestRate? = null
     ) {
-        val balanceTotal: BigDecimal?
-            get() {
-                var result = balance ?: return null
-
-                balanceLocked?.let { balanceLocked ->
-                    result += balanceLocked
-                }
-
-                return result
-            }
-
-
-        val fiatValue: BigDecimal?
-            get() = latestRate?.rate?.let { balance?.times(it) }
+        val fiatValue get() = latestRate?.rate?.let { balanceData.available.times(it) }
     }
 }

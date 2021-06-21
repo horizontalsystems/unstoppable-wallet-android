@@ -23,7 +23,7 @@ class SendBitcoinInteractor(
     override val isLockTimeEnabled: Boolean
         get() = storage.isLockTimeEnabled
 
-    override val balance = adapter.balance
+    override val balance = adapter.balanceData.available
 
     override fun fetchAvailableBalance(feeRate: Long, address: String?, pluginData: Map<Byte, IPluginData>?) {
         Single.just(adapter.availableBalance(feeRate, address, pluginData))

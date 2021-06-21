@@ -1,10 +1,7 @@
 package io.horizontalsystems.bankwallet.core.adapters
 
 import android.content.Context
-import io.horizontalsystems.bankwallet.core.AdapterState
-import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.AppLogger
-import io.horizontalsystems.bankwallet.core.toHexString
+import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.bankwallet.entities.TransactionType
 import io.horizontalsystems.erc20kit.core.Erc20Kit
@@ -60,8 +57,8 @@ class Eip20Adapter(
     override val balanceStateUpdatedFlowable: Flowable<Unit>
         get() = eip20Kit.syncStateFlowable.map { }
 
-    override val balance: BigDecimal
-        get() = balanceInBigDecimal(eip20Kit.balance, decimal)
+    override val balanceData: BalanceData
+        get() = BalanceData(balanceInBigDecimal(eip20Kit.balance, decimal))
 
     override val balanceUpdatedFlowable: Flowable<Unit>
         get() = eip20Kit.balanceFlowable.map { Unit }
@@ -106,7 +103,7 @@ class Eip20Adapter(
     }
 
     override fun availableBalance(gasPrice: Long, gasLimit: Long): BigDecimal {
-        return BigDecimal.ZERO.max(balance - fee)
+        return BigDecimal.ZERO.max(balanceData.available - fee)
     }
 
     override val ethereumBalance: BigDecimal

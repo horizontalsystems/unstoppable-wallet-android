@@ -200,7 +200,7 @@ class SwapService(
     }
 
     private fun balance(coin: Coin): BigDecimal? =
-            (adapterManager.getAdapterForCoin(coin) as? IBalanceAdapter)?.balance
+            (adapterManager.getAdapterForCoin(coin) as? IBalanceAdapter)?.balanceData?.available
 
     //region models
     sealed class State {

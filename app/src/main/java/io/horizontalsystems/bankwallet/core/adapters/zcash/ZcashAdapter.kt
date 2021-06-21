@@ -107,7 +107,10 @@ class ZcashAdapter(
     override val balanceStateUpdatedFlowable: Flowable<Unit>
         get() = adapterStateUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
 
-    override val balance: BigDecimal
+    override val balanceData: BalanceData
+        get() = BalanceData(balance, balanceLocked)
+
+    private val balance: BigDecimal
         get() {
             val totalZatoshi = synchronizer.latestBalance.availableZatoshi
             return if (totalZatoshi > 0)
@@ -116,14 +119,14 @@ class ZcashAdapter(
                 BigDecimal.ZERO
         }
 
-    override val balanceLocked: BigDecimal?
+    private val balanceLocked: BigDecimal
         get() {
             val latestBalance = synchronizer.latestBalance
             val lockedBalance = (latestBalance.totalZatoshi - latestBalance.availableZatoshi).coerceAtLeast(0)
             return if (lockedBalance > 0)
                 lockedBalance.convertZatoshiToZec()
             else
-                null
+                BigDecimal.ZERO
         }
 
     override val balanceUpdatedFlowable: Flowable<Unit>

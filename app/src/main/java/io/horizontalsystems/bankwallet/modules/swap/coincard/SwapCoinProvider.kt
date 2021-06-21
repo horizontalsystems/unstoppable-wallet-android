@@ -51,7 +51,7 @@ class SwapCoinProvider(
 
     private val walletItems: List<CoinBalanceItem>
         get() = walletManager.activeWallets.map { wallet ->
-            val balance = adapterManager.getBalanceAdapterForWallet(wallet)?.balance
+            val balance = adapterManager.getBalanceAdapterForWallet(wallet)?.balanceData?.available
 
             CoinBalanceItem(wallet.coin, balance, getFiatValue(wallet.coin, balance))
         }
@@ -76,7 +76,7 @@ class SwapCoinProvider(
     }
     private fun balance(coin: Coin): BigDecimal? {
         val wallet = walletManager.activeWallets.firstOrNull { it.coin == coin }
-        return wallet?.let { adapterManager.getBalanceAdapterForWallet(it)?.balance }
+        return wallet?.let { adapterManager.getBalanceAdapterForWallet(it)?.balanceData?.available }
     }
 
 }

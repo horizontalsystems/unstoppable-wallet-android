@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.balance
 
 import io.horizontalsystems.bankwallet.core.AdapterState
+import io.horizontalsystems.bankwallet.core.BalanceData
 import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Wallet
@@ -8,7 +9,6 @@ import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.PublishSubject
-import java.math.BigDecimal
 
 class BalanceAdapterRepository(
     private val adapterManager: IAdapterManager,
@@ -73,8 +73,7 @@ class BalanceAdapterRepository(
                     .subscribeIO {
                         balanceCache.setCache(
                             wallet,
-                            adapter.balance,
-                            adapter.balanceLocked ?: BigDecimal.ZERO
+                            adapter.balanceData
                         )
 
                         updatesSubject.onNext(wallet)
@@ -91,15 +90,8 @@ class BalanceAdapterRepository(
             ?: AdapterState.Syncing(10, null)
     }
 
-    fun balance(wallet: Wallet): BigDecimal {
-        return adapterManager.getBalanceAdapterForWallet(wallet)?.balance ?: balanceCache.getCache(
-            wallet
-        ).first
-    }
-
-    fun balanceLocked(wallet: Wallet): BigDecimal {
-        return adapterManager.getBalanceAdapterForWallet(wallet)?.balanceLocked
-            ?: balanceCache.getCache(wallet).second
+    fun balanceData(wallet: Wallet): BalanceData {
+        return adapterManager.getBalanceAdapterForWallet(wallet)?.balanceData ?: balanceCache.getCache(wallet)
     }
 
     fun refresh() {

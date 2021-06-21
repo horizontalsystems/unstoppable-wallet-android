@@ -67,12 +67,10 @@ class BalanceViewItemFactory {
         return DeemedValue(value, dimmed, visible)
     }
 
-    private fun currencyValue(state: AdapterState?, balance: BigDecimal?, currency: Currency, latestRate: LatestRate?, visible: Boolean): DeemedValue {
+    private fun currencyValue(state: AdapterState?, balance: BigDecimal, currency: Currency, latestRate: LatestRate?, visible: Boolean): DeemedValue {
         val dimmed = state !is AdapterState.Synced || latestRate?.isExpired() ?: false
         val value = latestRate?.rate?.let { rate ->
-            balance?.let {
-                App.numberFormatter.formatFiat(it * rate, currency.symbol, 0, 2)
-            }
+            App.numberFormatter.formatFiat(balance * rate, currency.symbol, 0, 2)
         }
 
         return DeemedValue(value, dimmed, visible)
@@ -155,18 +153,16 @@ class BalanceViewItemFactory {
         }
     }
 
-    private fun lockedCoinValue(state: AdapterState?, balance: BigDecimal?, coinCode: String, hideBalance: Boolean): DeemedValue {
-        val visible = balance != null
+    private fun lockedCoinValue(state: AdapterState?, balance: BigDecimal, coinCode: String, hideBalance: Boolean): DeemedValue {
+        val visible = balance > BigDecimal.ZERO
         val deemed = state !is AdapterState.Synced
 
-        val value =
-                if (hideBalance)
-                    Translator.getString(R.string.Balance_Hidden)
-                else
-                    balance?.let {
-                        val significantDecimal = App.numberFormatter.getSignificantDecimalCoin(it)
-                        App.numberFormatter.formatCoin(balance, coinCode, 0, significantDecimal)
-                    }
+        val value = if (hideBalance) {
+            Translator.getString(R.string.Balance_Hidden)
+        } else {
+            val significantDecimal = App.numberFormatter.getSignificantDecimalCoin(balance)
+            App.numberFormatter.formatCoin(balance, coinCode, 0, significantDecimal)
+        }
 
         return DeemedValue(value, deemed, visible)
     }
@@ -178,18 +174,18 @@ class BalanceViewItemFactory {
         val latestRate = item.latestRate
 
         val showSyncing = expanded && (state is AdapterState.Syncing || state is AdapterState.SearchingTxs)
-        val balanceTotalVisibility = !hideBalance && item.balanceTotal != null && !showSyncing
-        val fiatLockedVisibility = !hideBalance && item.balanceLocked != null
+        val balanceTotalVisibility = !hideBalance && !showSyncing
+        val fiatLockedVisibility = !hideBalance && item.balanceData.locked > BigDecimal.ZERO
 
         return BalanceViewItem(
                 wallet = item.wallet,
                 coinCode = coin.code,
                 coinTitle = coin.title,
                 coinType = coin.type,
-                coinValue = coinValue(state, item.balanceTotal, coin, balanceTotalVisibility),
-                fiatValue = currencyValue(state, item.balanceTotal, currency, latestRate, balanceTotalVisibility),
-                coinValueLocked = lockedCoinValue(state, item.balanceLocked, coin.code, hideBalance),
-                fiatValueLocked = currencyValue(state, item.balanceLocked, currency, latestRate, fiatLockedVisibility),
+                coinValue = coinValue(state, item.balanceData.total, coin, balanceTotalVisibility),
+                fiatValue = currencyValue(state, item.balanceData.total, currency, latestRate, balanceTotalVisibility),
+                coinValueLocked = lockedCoinValue(state, item.balanceData.locked, coin.code, hideBalance),
+                fiatValueLocked = currencyValue(state, item.balanceData.locked, currency, latestRate, fiatLockedVisibility),
                 exchangeValue = rateValue(currency, latestRate, showSyncing),
                 diff = item.latestRate?.rateDiff24h,
                 expanded = expanded,
@@ -215,10 +211,10 @@ class BalanceViewItemFactory {
             var upToDate = true
 
             items.forEach { item ->
-                val balanceTotal = item.balanceTotal
+                val balanceTotal = item.balanceData.total
                 val marketInfo = item.latestRate
 
-                if (balanceTotal != null && marketInfo != null) {
+                if (marketInfo != null) {
                     total += balanceTotal.multiply(marketInfo.rate)
 
                     upToDate = !marketInfo.isExpired()
