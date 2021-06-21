@@ -615,16 +615,10 @@
     <string name="AddToken_Dots">…</string>
     <string name="AddToken_CoinType">Coin Type</string>
     <string name="AddToken_CoinAlreadyInListWarning">Dieser Token befindet sich bereits in der Coin-Verwaltungsliste</string>
-    <string name="AddToken_InvalidAddressError">Ungültige Adresse</string>
+    <string name="AddToken_InvalidAddressError">Invalid contract address or BEP2 symbol</string>
     <string name="AddToken_ApiLimitExceeded">Api Limit überschritten. Versuchen Sie es später erneut.</string>
     <string name="AddEvmToken_ContractNotFound">Vertrag nicht gefunden</string>
-    <string name="AddEvmToken_ContractAddressHint">Vertragsadresse</string>
-    <string name="AddErc20Token_Title">ERC-20 hinzufügen</string>
-    <string name="AddBep20Token_Title">BEP20 hinzufügen</string>
-    <!-- Add Bep2 Token -->
-    <string name="AddBep2Token_Title">BEP2 hinzufügen</string>
-    <string name="AddBep2Token_TokenSymbolHint">Tokensymbol</string>
-    <string name="AddBep2Token_TokenNotFound">Token nicht gefunden</string>
+    <string name="AddBep2Token_SymbolNotFound">Symbol not found</string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Title">Adressformat</string>
     <string name="AddressFormatSettings_Description">Wählen Sie das Adressformat für Ihr %s Wallet. Jedes ausgewählte Format repräsentiert ein anderes Wallet auf der Registerkarte \"Kontostand\" der App.</string>
