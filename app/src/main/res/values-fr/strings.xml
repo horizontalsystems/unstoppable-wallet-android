@@ -615,16 +615,10 @@
     <string name="AddToken_Dots">…</string>
     <string name="AddToken_CoinType">Coin Type</string>
     <string name="AddToken_CoinAlreadyInListWarning">Ce token figure déjà sur la liste du gestionnaire des pièces</string>
-    <string name="AddToken_InvalidAddressError">Addresse invalide</string>
+    <string name="AddToken_InvalidAddressError">Invalid contract address or BEP2 symbol</string>
     <string name="AddToken_ApiLimitExceeded">Limite d\'Api dépassée. Réessayez plus tard.</string>
     <string name="AddEvmToken_ContractNotFound">Contrat non trouvé</string>
-    <string name="AddEvmToken_ContractAddressHint">Adresse du contrat</string>
-    <string name="AddErc20Token_Title">Ajouter ERC20</string>
-    <string name="AddBep20Token_Title">Ajouter BEP20</string>
-    <!-- Add Bep2 Token -->
-    <string name="AddBep2Token_Title">Ajouter BEP2</string>
-    <string name="AddBep2Token_TokenSymbolHint">Symbole du token</string>
-    <string name="AddBep2Token_TokenNotFound">Token non trouvé</string>
+    <string name="AddBep2Token_SymbolNotFound">Symbol not found</string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Title">Format de l\'adresse</string>
     <string name="AddressFormatSettings_Description">Choisissez le format d\'adresse de votre portefeuille %s. Chaque format sélectionné représente un portefeuille différent dans l\'onglet du solde de l\'application.</string>
