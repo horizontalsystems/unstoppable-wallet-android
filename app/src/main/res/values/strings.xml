@@ -747,20 +747,11 @@
     <string name="AddToken_CoinType">Coin Type</string>
 
     <string name="AddToken_CoinAlreadyInListWarning">This token is already in the coin manager list</string>
-    <string name="AddToken_InvalidAddressError">Invalid Address</string>
+    <string name="AddToken_InvalidAddressError">Invalid contract address or BEP2 symbol</string>
     <string name="AddToken_ApiLimitExceeded">Api limit exceeded. Try again later.</string>
 
     <string name="AddEvmToken_ContractNotFound">Contract not found</string>
-    <string name="AddEvmToken_ContractAddressHint">Contract Address</string>
-
-    <string name="AddErc20Token_Title">Add ERC20</string>
-    <string name="AddBep20Token_Title">Add BEP20</string>
-
-    <!-- Add Bep2 Token -->
-    <string name="AddBep2Token_Title">Add BEP2</string>
-    <string name="AddBep2Token_TokenSymbolHint">Token Symbol</string>
-    <string name="AddBep2Token_TokenNotFound">Token Not Found</string>
-
+    <string name="AddBep2Token_SymbolNotFound">Symbol not found</string>
 
     <!-- Address Format Settings List -->
 

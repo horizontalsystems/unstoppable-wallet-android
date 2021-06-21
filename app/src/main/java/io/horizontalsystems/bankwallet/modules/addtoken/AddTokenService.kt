@@ -1,25 +1,19 @@
 package io.horizontalsystems.bankwallet.modules.addtoken
 
-import io.horizontalsystems.bankwallet.core.IAccountManager
-import io.horizontalsystems.bankwallet.core.ICoinManager
-import io.horizontalsystems.bankwallet.core.IWalletManager
-import io.horizontalsystems.bankwallet.core.InvalidContractAddress
+import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.Wallet
-import io.horizontalsystems.bankwallet.modules.addtoken.bep2.AddBep2TokenBlockchainService
-import io.horizontalsystems.ethereumkit.core.EthereumKit
+import io.horizontalsystems.coinkit.models.Coin
 import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 
 class AddTokenService(
         private val coinManager: ICoinManager,
-        private val evmService: AddEvmTokenBlockchainService,
-        private val bep2Service: AddBep2TokenBlockchainService,
+        private val blockchainServices: List<IAddTokenBlockchainService>,
         private val walletManager: IWalletManager,
-        private val accountManager: IAccountManager,
-        private val erc20NetworkType: EthereumKit.NetworkType,
-        private val bep20NetworkType: EthereumKit.NetworkType) {
+        private val accountManager: IAccountManager) {
 
     private val stateSubject = PublishSubject.create<AddTokenModule.State>()
 
@@ -43,48 +37,30 @@ class AddTokenService(
             reference
         }
 
-        if (isValidEvmAddress(referenceNonNull)) {
-            //check for existing tokens
-            coinManager.getCoin(evmService.coinType(referenceNonNull, erc20NetworkType))?.let {
-                state = AddTokenModule.State.AlreadyExists(it)
-                return
-            }
-            coinManager.getCoin(evmService.coinType(referenceNonNull, bep20NetworkType))?.let {
-                state = AddTokenModule.State.AlreadyExists(it)
-                return
-            }
-            state = AddTokenModule.State.Loading
+        val validServices = blockchainServices.filter { it.isValid(referenceNonNull) }
 
-            //get token info from Erc20 and Bep20 APIs
-            disposable = evmService.coinAsync(referenceNonNull, erc20NetworkType)
-                    .onErrorResumeNext(evmService.coinAsync(referenceNonNull, bep20NetworkType))
-                    .subscribeOn(Schedulers.io())
-                    .subscribe({ coin ->
-                        state = AddTokenModule.State.Fetched(coin)
-                    }, { error ->
-                        state = AddTokenModule.State.Failed(error)
-                    })
-
-        } else if (isValidBep2Address(referenceNonNull)) {
-            //get token info from Bep2
-            coinManager.getCoin(bep2Service.coinType(referenceNonNull))?.let {
-                state = AddTokenModule.State.AlreadyExists(it)
-                return
-            }
-            state = AddTokenModule.State.Loading
-            //fetch token info from network
-            disposable = bep2Service.coinAsync(referenceNonNull)
-                    .subscribeOn(Schedulers.io())
-                    .subscribe({ coin ->
-                        state = AddTokenModule.State.Fetched(coin)
-                    }, { error ->
-                        state = AddTokenModule.State.Failed(error)
-                    })
-        } else {
-            //show invalid address error
+        if (validServices.isEmpty()) {
             state = AddTokenModule.State.Failed(InvalidContractAddress())
+            return
         }
 
+        validServices.forEach { service ->
+            val coinType = service.coinType(referenceNonNull)
+            coinManager.getCoin(coinType)?.let {
+                state = AddTokenModule.State.AlreadyExists(it)
+                return
+            }
+        }
+
+        state = AddTokenModule.State.Loading
+
+        disposable = chainedCoinAsync(validServices, referenceNonNull)
+                .subscribeOn(Schedulers.io())
+                .subscribe({ coin ->
+                    state = AddTokenModule.State.Fetched(coin)
+                }, { error ->
+                    state = AddTokenModule.State.Failed(error)
+                })
     }
 
     fun save() {
@@ -101,21 +77,16 @@ class AddTokenService(
         disposable?.dispose()
     }
 
-    private fun isValidEvmAddress(referenceNonNull: String): Boolean {
-        return try {
-            evmService.validate(referenceNonNull)
-            true
-        } catch (e: Exception) {
-            false
+    private fun chainedCoinAsync(services: List<IAddTokenBlockchainService>, reference: String): Single<Coin> {
+        val single = services[0].coinAsync(reference)
+
+        return if (services.size == 1) {
+            single
+        } else {
+            val remainedServices = services.drop(1)
+            val nextSingle = chainedCoinAsync(remainedServices, reference)
+            single.onErrorResumeNext(nextSingle)
         }
     }
 
-    private fun isValidBep2Address(referenceNonNull: String): Boolean {
-        return try {
-            bep2Service.validate(referenceNonNull)
-            true
-        } catch (e: Exception) {
-            false
-        }
-    }
 }

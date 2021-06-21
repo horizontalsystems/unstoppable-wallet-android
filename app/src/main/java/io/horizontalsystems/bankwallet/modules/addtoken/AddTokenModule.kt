@@ -4,7 +4,6 @@ import android.os.Parcelable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.modules.addtoken.bep2.AddBep2TokenBlockchainService
 import io.horizontalsystems.coinkit.models.Coin
 import kotlinx.android.parcel.Parcelize
 
@@ -17,9 +16,13 @@ object AddTokenModule {
             val activeAccount = App.accountManager.activeAccount!!
             val erc20NetworkType = App.accountSettingManager.ethereumNetwork(activeAccount).networkType
             val bep20NetworkType = App.accountSettingManager.binanceSmartChainNetwork(activeAccount).networkType
-            val evmService = AddEvmTokenBlockchainService(App.appConfigProvider, App.networkManager)
-            val bep2Service = AddBep2TokenBlockchainService(App.buildConfigProvider)
-            val service = AddTokenService(App.coinManager, evmService, bep2Service, App.walletManager, App.accountManager, erc20NetworkType, bep20NetworkType)
+
+            val ethereumService = AddEvmTokenBlockchainService(App.appConfigProvider, App.networkManager, erc20NetworkType)
+            val binanceSmartChainService = AddEvmTokenBlockchainService(App.appConfigProvider, App.networkManager, bep20NetworkType)
+            val binanceService = AddBep2TokenBlockchainService(App.buildConfigProvider)
+            val services = listOf(ethereumService, binanceSmartChainService, binanceService)
+
+            val service = AddTokenService(App.coinManager, services, App.walletManager, App.accountManager)
             val viewModel = AddTokenViewModel(service)
 
             return viewModel as T

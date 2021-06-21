@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.addtoken
 
+import io.horizontalsystems.bankwallet.core.IAddTokenBlockchainService
 import io.horizontalsystems.bankwallet.core.IAppConfigProvider
 import io.horizontalsystems.bankwallet.core.INetworkManager
 import io.horizontalsystems.bankwallet.entities.ApiError
@@ -12,8 +13,9 @@ import java.util.*
 
 class AddEvmTokenBlockchainService(
         private val appConfigProvider: IAppConfigProvider,
-        private val networkManager: INetworkManager
-) {
+        private val networkManager: INetworkManager,
+        private val networkType: EthereumKit.NetworkType
+): IAddTokenBlockchainService {
 
     private fun getApiUrl(networkType: EthereumKit.NetworkType): String {
         return when (networkType) {
@@ -26,7 +28,7 @@ class AddEvmTokenBlockchainService(
         }
     }
 
-    fun getExplorerKey(networkType: EthereumKit.NetworkType): String {
+    private fun getExplorerKey(networkType: EthereumKit.NetworkType): String {
         return when (networkType) {
             EthereumKit.NetworkType.EthMainNet,
             EthereumKit.NetworkType.EthRopsten,
@@ -37,11 +39,16 @@ class AddEvmTokenBlockchainService(
         }
     }
 
-    fun validate(reference: String) {
-        AddressValidator.validate(reference)
+    override fun isValid(reference: String): Boolean {
+        return try{
+            AddressValidator.validate(reference)
+            true
+        } catch (e: Exception){
+            false
+        }
     }
 
-    fun coinType(reference: String, networkType: EthereumKit.NetworkType): CoinType {
+    override fun coinType(reference: String): CoinType {
         val address = reference.toLowerCase(Locale.ENGLISH)
 
         return when (networkType) {
@@ -54,7 +61,7 @@ class AddEvmTokenBlockchainService(
         }
     }
 
-    fun coinAsync(reference: String, networkType: EthereumKit.NetworkType): Single<Coin> {
+    override fun coinAsync(reference: String): Single<Coin> {
         val request = "api?module=account&action=tokentx&contractaddress=$reference&page=1&offset=1&sort=asc&apikey=${getExplorerKey(networkType)}"
 
         return networkManager.getEvmInfo(getApiUrl(networkType), request)
@@ -82,7 +89,7 @@ class AddEvmTokenBlockchainService(
                     val tokenDecimal = result.get("tokenDecimal")?.asString?.toInt()
                             ?: throw ApiError.InvalidResponse
 
-                    return@map Coin(title = tokenName, code = tokenSymbol, decimal = tokenDecimal, type = coinType(reference, networkType))
+                    return@map Coin(title = tokenName, code = tokenSymbol, decimal = tokenDecimal, type = coinType(reference))
                 }
     }
 
