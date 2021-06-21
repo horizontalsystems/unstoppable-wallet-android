@@ -9,7 +9,7 @@ import android.view.animation.AnimationUtils
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.Caution
+import io.horizontalsystems.bankwallet.modules.swap.settings.Caution
 import io.horizontalsystems.views.helpers.LayoutHelper
 import kotlinx.android.synthetic.main.view_input.view.*
 

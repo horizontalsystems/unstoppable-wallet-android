@@ -2,6 +2,7 @@ package io.horizontalsystems.views
 
 import android.content.Context
 import android.util.AttributeSet
+import androidx.annotation.ColorRes
 import androidx.core.view.isVisible
 import kotlinx.android.synthetic.main.view_settings_item.view.*
 import kotlinx.android.synthetic.main.view_settings_value_text.view.*
@@ -12,6 +13,12 @@ class SettingsView @JvmOverloads constructor(context: Context, attrs: AttributeS
     fun showValue(text: String?) {
         settingsValueRight.text = text
         settingsValueRight.isVisible = text != null
+    }
+
+    fun showValueWithColor(text: String?, @ColorRes color: Int? = null) {
+        settingsValueRight.text = text
+        settingsValueRight.isVisible = text != null
+        color?.let { settingsValueRight.setTextColor(context.getColor(it)) }
     }
 
     fun showAttention(show: Boolean) {

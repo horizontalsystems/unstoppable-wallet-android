@@ -7,14 +7,4 @@
         android:iconTint="@color/jacob"
         android:title="@string/Button_Cancel"
         app:showAsAction="always" />
-
-    <item
-        android:id="@+id/menuUniswap"
-        android:title="Uniswap"
-        app:showAsAction="never" />
-
-    <item
-        android:id="@+id/menu1inch"
-        android:title="1Inch Network"
-        app:showAsAction="never" />
 </menu>

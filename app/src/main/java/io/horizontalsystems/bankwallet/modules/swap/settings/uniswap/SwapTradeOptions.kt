@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.swap.tradeoptions.uniswap
+package io.horizontalsystems.bankwallet.modules.swap.settings.uniswap
 
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.uniswapkit.models.TradeOptions

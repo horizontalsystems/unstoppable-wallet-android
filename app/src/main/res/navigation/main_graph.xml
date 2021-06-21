@@ -361,7 +361,7 @@
         tools:layout="@layout/fragment_swap_info" />
     <fragment
         android:id="@+id/swapSettingsMainFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.swap.tradeoptions.SwapSettingsMainFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.swap.settings.SwapSettingsMainFragment"
         android:label="SwapTradeOptionsFragment"
         app:enterAnim="@anim/slide_from_bottom"
         app:exitAnim="@android:anim/fade_out"
@@ -438,5 +438,8 @@
         android:id="@+id/selectSwapCoinDialog"
         android:name="io.horizontalsystems.bankwallet.modules.swap.coinselect.SelectSwapCoinDialogFragment"
         tools:layout="@layout/fragment_swap_select_token" />
-
+    <dialog
+        android:id="@+id/selectSwapProviderDialog"
+        android:name="io.horizontalsystems.bankwallet.modules.swap.providerselect.SelectSwapProviderDialogFragment"
+        tools:layout="@layout/fragment_swap_select_provider" />
 </navigation>

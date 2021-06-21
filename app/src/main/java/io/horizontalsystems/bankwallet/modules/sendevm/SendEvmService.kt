@@ -6,7 +6,7 @@ import io.horizontalsystems.bankwallet.core.ISendEthereumAdapter
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData.AdditionalInfo
-import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.IRecipientAddressService
+import io.horizontalsystems.bankwallet.modules.swap.settings.IRecipientAddressService
 import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.ethereumkit.core.AddressValidator
 import io.reactivex.BackpressureStrategy

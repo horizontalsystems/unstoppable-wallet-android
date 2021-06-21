@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.swap.tradeoptions
+package io.horizontalsystems.bankwallet.modules.swap.settings
 
 import android.util.Range
 import androidx.lifecycle.LiveData

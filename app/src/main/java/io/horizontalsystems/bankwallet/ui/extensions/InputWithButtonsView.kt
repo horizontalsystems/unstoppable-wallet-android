@@ -10,7 +10,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import androidx.lifecycle.LifecycleOwner
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.IVerifiedInputViewModel
+import io.horizontalsystems.bankwallet.modules.swap.settings.IVerifiedInputViewModel
 import kotlinx.android.synthetic.main.view_input_with_buttons.view.*
 
 class InputWithButtonsView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
