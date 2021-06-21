@@ -120,9 +120,8 @@ class AboutFragment : BaseFragment() {
 
     private fun getAppVersion(): String {
         var appVersion = getString(R.string.Settings_InfoTitleWithVersion, viewModel.appVersion)
-        val buildNumber = getString(R.string.build_number)
-        if (buildNumber.isNotEmpty()) {
-            appVersion += " ($buildNumber)"
+        if (getString(R.string.is_release) == "false") {
+            appVersion += " (${BuildConfig.VERSION_CODE})"
         }
         return appVersion
     }

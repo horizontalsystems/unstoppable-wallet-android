@@ -121,9 +121,8 @@ class MainSettingsFragment : BaseFragment() {
 
         presenterView.appVersion.observe(viewLifecycleOwner, { version ->
             var appVersion = getString(R.string.Settings_InfoTitleWithVersion, version)
-            val buildNumber = getString(R.string.build_number)
-            if (buildNumber.isNotEmpty()) {
-                appVersion += " ($buildNumber)"
+            if (getString(R.string.is_release) == "false") {
+                appVersion += " (${BuildConfig.VERSION_CODE})"
             }
 
             settingsBottom.appName = appVersion
