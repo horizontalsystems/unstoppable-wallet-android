@@ -5,12 +5,12 @@ import io.horizontalsystems.bankwallet.core.managers.AccountSettingManager
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.reactivex.Observable
 
-class ActiveWalletRepository(
+class BalanceActiveWalletRepository(
     private val walletManager: IWalletManager,
     private val accountSettingManager: AccountSettingManager
-) : ItemRepository<Wallet> {
+) {
 
-    override val itemsObservable: Observable<List<Wallet>> =
+    val itemsObservable: Observable<List<Wallet>> =
         Observable
             .merge(
                 Observable.just(Unit),
@@ -21,7 +21,5 @@ class ActiveWalletRepository(
             .map {
                 walletManager.activeWallets
             }
-
-    override fun refresh() = Unit
 
 }

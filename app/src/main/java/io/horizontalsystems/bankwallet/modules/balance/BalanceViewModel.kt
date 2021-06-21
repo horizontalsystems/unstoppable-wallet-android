@@ -9,7 +9,7 @@ import io.horizontalsystems.coinkit.models.CoinType
 import io.reactivex.disposables.CompositeDisposable
 
 class BalanceViewModel(
-    private val service: BalanceService,
+    private val service: BalanceService2,
     private val rateAppService: RateAppService,
     private val activeAccountService: ActiveAccountService,
     private val balanceViewItemFactory: BalanceViewItemFactory,
