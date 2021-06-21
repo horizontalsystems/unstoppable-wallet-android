@@ -85,12 +85,9 @@ class AddTokenViewModel(private val addTokenService: AddTokenService) : ViewMode
 
     private fun getErrorText(error: Throwable): String {
         val errorKey = when (error) {
-            is AddressValidator.InvalidAddressLength,
-            is AddressValidator.InvalidAddressHex,
-            is InvalidContractAddress,
-            is AddressValidator.InvalidAddressChecksum -> R.string.AddToken_InvalidAddressError
+            is InvalidContractAddress -> R.string.AddToken_InvalidAddressError
             is ApiError.ContractNotFound -> R.string.AddEvmToken_ContractNotFound
-            is ApiError.TokenNotFound -> R.string.AddBep2Token_TokenNotFound
+            is ApiError.Bep2SymbolNotFound -> R.string.AddBep2Token_SymbolNotFound
             is ApiError.ApiLimitExceeded -> R.string.AddToken_ApiLimitExceeded
             else -> R.string.Error
         }

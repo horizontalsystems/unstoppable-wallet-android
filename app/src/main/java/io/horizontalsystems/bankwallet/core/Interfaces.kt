@@ -445,8 +445,7 @@ interface ICoinManager {
 }
 
 interface IAddTokenBlockchainService {
-    @Throws
-    fun validate(reference: String)
+    fun isValid(reference: String): Boolean
     fun coinType(reference: String): CoinType
     fun coinAsync(reference: String): Single<Coin>
 }

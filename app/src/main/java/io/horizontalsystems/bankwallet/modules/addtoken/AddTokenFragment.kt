@@ -35,8 +35,9 @@ class AddTokenFragment : BaseFragment() {
         val model: AddTokenViewModel by viewModels { AddTokenModule.Factory() }
 
         addressInputView.setEditable(false)
-        addressInputView.setHint(getString(R.string.AddEvmToken_ContractAddressHint))
+        addressInputView.setHint("ERC20 / BEP20 / BEP2")
 
+        btnAddToken.isEnabled = false
         btnAddToken.setOnClickListener {
             model.onAddClick()
         }
