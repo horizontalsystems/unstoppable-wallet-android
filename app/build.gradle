@@ -7,14 +7,6 @@ androidExtensions {
     experimental = true
 }
 
-class Globals {
-    String buildNumber =  System.getenv('BUILD_NUMBER')?.toString() ?: ""
-}
-
-ext {
-    globals = new Globals()
-}
-
 android {
     compileSdkVersion compile_sdk_version
     buildToolsVersion build_tools_version
@@ -61,7 +53,7 @@ android {
             resValue "string", "infuraSecretKey", "fc479a9290b64a84a15fa6544a130218"
             resValue "string", "etherscanKey", "GKNHXT22ED7PRVCKZATFZQD1YI7FK9AAYE"
             resValue "string", "bscscanKey", "5ZGSHWYHZVA8XZHB8PF6UUTRNNB4KT43ZZ"
-            resValue "string", "build_number", globals.buildNumber
+            resValue "string", "build_number", System.getenv('BUILD_NUMBER')?.toString() ?: ""
             resValue "string", "guidesUrl", "https://raw.githubusercontent.com/horizontalsystems/blockchain-crypto-guides/develop/index.json"
             resValue "string", "faqUrl", "https://raw.githubusercontent.com/horizontalsystems/Unstoppable-Wallet-Website/master/src/faq_android.json"
             resValue "string", "coinsJsonUrl", "https://raw.githubusercontent.com/horizontalsystems/cryptocurrencies/master/coins.json"
@@ -77,6 +69,7 @@ android {
 
         appcenter {
             initWith debug
+            defaultConfig.versionCode System.getenv('BUILD_NUMBER') ?: 1
             applicationIdSuffix ".dev.appcenter"
             signingConfig signingConfigs.appCenter
             matchingFallbacks = ['debug']
