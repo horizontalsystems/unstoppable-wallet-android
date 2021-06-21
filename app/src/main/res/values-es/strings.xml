@@ -616,16 +616,10 @@ poner en peligro la seguridad de mis fondos.</string>
     <string name="AddToken_Dots">…</string>
     <string name="AddToken_CoinType">Coin Type</string>
     <string name="AddToken_CoinAlreadyInListWarning">Este token ya está en la lista del gestor de monedas</string>
-    <string name="AddToken_InvalidAddressError">Dirección inválida</string>
+    <string name="AddToken_InvalidAddressError">Invalid contract address or BEP2 symbol</string>
     <string name="AddToken_ApiLimitExceeded">Límite de Api superado. Inténtalo de nuevo más tarde.</string>
     <string name="AddEvmToken_ContractNotFound">Contrato no encontrado</string>
-    <string name="AddEvmToken_ContractAddressHint">Dirección del contrato</string>
-    <string name="AddErc20Token_Title">Añadir ERC20</string>
-    <string name="AddBep20Token_Title">Añadir BEP20</string>
-    <!-- Add Bep2 Token -->
-    <string name="AddBep2Token_Title">Añadir BEP2</string>
-    <string name="AddBep2Token_TokenSymbolHint">Símbolo del token</string>
-    <string name="AddBep2Token_TokenNotFound">Token no encontrado</string>
+    <string name="AddBep2Token_SymbolNotFound">Symbol not found</string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Title">Formato de dirección</string>
     <string name="AddressFormatSettings_Description">Elija el formato de dirección para su monedero %s. Cada formato seleccionado representa un monedero diferente en la pestaña de saldo de la aplicación.</string>
