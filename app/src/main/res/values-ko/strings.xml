@@ -616,16 +616,10 @@
     <string name="AddToken_Dots">…</string>
     <string name="AddToken_CoinType">Coin Type</string>
     <string name="AddToken_CoinAlreadyInListWarning">이 토큰은 이미 코인 매니저 리스트에 있습니다.</string>
-    <string name="AddToken_InvalidAddressError">잘못된 주소</string>
+    <string name="AddToken_InvalidAddressError">Invalid contract address or BEP2 symbol</string>
     <string name="AddToken_ApiLimitExceeded">Api limit exceeded. Try again later.</string>
     <string name="AddEvmToken_ContractNotFound">거래 발견되지 않음</string>
-    <string name="AddEvmToken_ContractAddressHint">계약 주소</string>
-    <string name="AddErc20Token_Title">ERC20 추가</string>
-    <string name="AddBep20Token_Title">BEP20 추가</string>
-    <!-- Add Bep2 Token -->
-    <string name="AddBep2Token_Title">BEP2 추가</string>
-    <string name="AddBep2Token_TokenSymbolHint">토큰 심볼</string>
-    <string name="AddBep2Token_TokenNotFound">토큰 찾을 수 없음</string>
+    <string name="AddBep2Token_SymbolNotFound">Symbol not found</string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Title">주소 형식</string>
     <string name="AddressFormatSettings_Description">귀하의 %s 지갑의 주소 형식을 선택하십시오. 선택한 각 형식은 앱의 잔고 탭에 있는 다른 지갑을 나타냅니다.</string>
