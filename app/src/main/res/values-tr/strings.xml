@@ -615,16 +615,10 @@
     <string name="AddToken_Dots">…</string>
     <string name="AddToken_CoinType">Coin Type</string>
     <string name="AddToken_CoinAlreadyInListWarning">Bu token zaten kripto para yöneticisi listesindedir</string>
-    <string name="AddToken_InvalidAddressError">Geçersiz Adres</string>
+    <string name="AddToken_InvalidAddressError">Invalid contract address or BEP2 symbol</string>
     <string name="AddToken_ApiLimitExceeded">Api limit exceeded. Try again later.</string>
     <string name="AddEvmToken_ContractNotFound">Sözleşme bulunamadı</string>
-    <string name="AddEvmToken_ContractAddressHint">Sözleşme Adresi</string>
-    <string name="AddErc20Token_Title">ERC20 Ekle</string>
-    <string name="AddBep20Token_Title">BEP20 Ekle</string>
-    <!-- Add Bep2 Token -->
-    <string name="AddBep2Token_Title">BEP2 Ekle</string>
-    <string name="AddBep2Token_TokenSymbolHint">Token Sembolü</string>
-    <string name="AddBep2Token_TokenNotFound">Token bulunamadı</string>
+    <string name="AddBep2Token_SymbolNotFound">Symbol not found</string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Title">Adres Formatı</string>
     <string name="AddressFormatSettings_Description">%s Cüzdanınız için adres biçimini seçin. Seçilen her format, uygulamanın bakiye sekmesinde farklı bir cüzdanı temsil eder.</string>
