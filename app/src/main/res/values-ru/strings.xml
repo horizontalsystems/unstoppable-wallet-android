@@ -618,16 +618,10 @@
     <string name="AddToken_Dots">…</string>
     <string name="AddToken_CoinType">Coin Type</string>
     <string name="AddToken_CoinAlreadyInListWarning">Этот токен уже есть в списке поддерживаемых токенов</string>
-    <string name="AddToken_InvalidAddressError">Неверный Адрес</string>
+    <string name="AddToken_InvalidAddressError">Invalid contract address or BEP2 symbol</string>
     <string name="AddToken_ApiLimitExceeded">Превышен лимит Api. Повторите попытку позже.</string>
     <string name="AddEvmToken_ContractNotFound">Контракт не найден</string>
-    <string name="AddEvmToken_ContractAddressHint">Адрес Контракта</string>
-    <string name="AddErc20Token_Title">Добавить ERC20</string>
-    <string name="AddBep20Token_Title">Добавить BEP20</string>
-    <!-- Add Bep2 Token -->
-    <string name="AddBep2Token_Title">Добавить BEP2</string>
-    <string name="AddBep2Token_TokenSymbolHint">Символ Токена</string>
-    <string name="AddBep2Token_TokenNotFound">Токен не найден</string>
+    <string name="AddBep2Token_SymbolNotFound">Symbol not found</string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Title">Формат Адреса</string>
     <string name="AddressFormatSettings_Description">Выберите формат адреса для вашего %s кошелька. Каждый выбранный формат представляет отдельный кошелек во вкладке приложения для отображения баланса.</string>
