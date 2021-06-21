@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.swap.oneinch
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.AmountType
-import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.oneinch.OneInchSwapSettingsModule.OneInchSwapSettings
+import io.horizontalsystems.bankwallet.modules.swap.settings.oneinch.OneInchSwapSettingsModule.OneInchSwapSettings
 import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.ethereumkit.core.EthereumKit

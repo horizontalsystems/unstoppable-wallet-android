@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.swap.tradeoptions
+package io.horizontalsystems.bankwallet.modules.swap.settings
 
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R

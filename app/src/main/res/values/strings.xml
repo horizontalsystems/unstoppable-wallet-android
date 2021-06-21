@@ -381,6 +381,7 @@
 
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">Advanced Settings</string>
+    <string name="SwapSettings_Service">Service</string>
     <string name="SwapSettings_SlippageTitle">Slippage Tolerance</string>
     <string name="SwapSettings_SlippageDescription">Your Transaction will revert if the price change unfavorably by more than this percentage</string>
     <string name="SwapSettings_DeadlineTitle">Transaction Deadline</string>

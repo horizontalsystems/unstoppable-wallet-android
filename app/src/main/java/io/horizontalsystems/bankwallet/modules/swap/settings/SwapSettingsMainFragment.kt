@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.swap.tradeoptions
+package io.horizontalsystems.bankwallet.modules.swap.settings
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -28,28 +28,29 @@ class SwapSettingsMainFragment : BaseFragment() {
                     findNavController().popBackStack()
                     true
                 }
-                R.id.menuUniswap -> {
-                    mainViewModel.setProvider(mainViewModel.swapProviders.first { it.id == "uniswap" })
-                    true
-                }
-                R.id.menu1inch -> {
-                    mainViewModel.setProvider(mainViewModel.swapProviders.first { it.id == "oneInch" })
-                    true
-                }
-
                 else -> false
             }
         }
 
-        updateDexView(mainViewModel.provider)
+        providerButton.setOnClickListener {
+            findNavController().navigate(R.id.selectSwapProviderDialog)
+        }
+
+        setProviderButtonTitle(mainViewModel.provider.title)
+        setView(mainViewModel.provider)
 
         mainViewModel.providerLiveData.observe(viewLifecycleOwner, { provider ->
-            updateDexView(provider)
+            setProviderButtonTitle(provider.title)
+            setView(provider)
         })
 
     }
 
-    private fun updateDexView(provider: ISwapProvider) {
+    private fun setProviderButtonTitle(title: String) {
+        providerButton.showValueWithColor(title, R.color.leah)
+    }
+
+    private fun setView(provider: ISwapProvider) {
         childFragmentManager
                 .beginTransaction()
                 .replace(R.id.fragment_placeholder, provider.settingsFragment)

@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.swap.tradeoptions.oneinch
+package io.horizontalsystems.bankwallet.modules.swap.settings.oneinch
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -8,8 +8,8 @@ import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.swap.oneinch.OneInchTradeService
-import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.AddressResolutionService
-import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.RecipientAddressViewModel
+import io.horizontalsystems.bankwallet.modules.swap.settings.AddressResolutionService
+import io.horizontalsystems.bankwallet.modules.swap.settings.RecipientAddressViewModel
 import java.math.BigDecimal
 
 object OneInchSwapSettingsModule {

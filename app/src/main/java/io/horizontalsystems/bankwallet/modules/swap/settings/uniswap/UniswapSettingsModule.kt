@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.swap.tradeoptions.uniswap
+package io.horizontalsystems.bankwallet.modules.swap.settings.uniswap
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -6,10 +6,10 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
-import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.AddressResolutionService
-import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.RecipientAddressViewModel
-import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.SwapDeadlineViewModel
-import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.SwapSlippageViewModel
+import io.horizontalsystems.bankwallet.modules.swap.settings.AddressResolutionService
+import io.horizontalsystems.bankwallet.modules.swap.settings.RecipientAddressViewModel
+import io.horizontalsystems.bankwallet.modules.swap.settings.SwapDeadlineViewModel
+import io.horizontalsystems.bankwallet.modules.swap.settings.SwapSlippageViewModel
 import io.horizontalsystems.bankwallet.modules.swap.uniswap.UniswapTradeService
 
 object UniswapSettingsModule {

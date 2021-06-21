@@ -17,9 +17,9 @@ import io.horizontalsystems.bankwallet.core.fiat.FiatService
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.swap.coincard.*
 import io.horizontalsystems.bankwallet.modules.swap.oneinch.OneInchFragment
-import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.SwapSettingsBaseFragment
-import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.oneinch.OneInchSettingsFragment
-import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.uniswap.UniswapSettingsFragment
+import io.horizontalsystems.bankwallet.modules.swap.settings.SwapSettingsBaseFragment
+import io.horizontalsystems.bankwallet.modules.swap.settings.oneinch.OneInchSettingsFragment
+import io.horizontalsystems.bankwallet.modules.swap.settings.uniswap.UniswapSettingsFragment
 import io.horizontalsystems.bankwallet.modules.swap.uniswap.UniswapFragment
 import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.coinkit.models.CoinType
@@ -47,6 +47,8 @@ object SwapMainModule {
         val url: String
         val fragment: SwapBaseFragment
         val settingsFragment: SwapSettingsBaseFragment
+
+        fun supports(blockchain: Blockchain): Boolean
     }
 
     @Parcelize
@@ -58,28 +60,40 @@ object SwapMainModule {
             get() = UniswapFragment()
         override val settingsFragment: SwapSettingsBaseFragment
             get() = UniswapSettingsFragment()
+
+        override fun supports(blockchain: Blockchain): Boolean {
+            return blockchain == Blockchain.Ethereum
+        }
     }
 
     @Parcelize
     class PancakeSwapProvider : ISwapProvider {
-        override val id = "pancakeSwap"
+        override val id = "pancake"
         override val title = "PancakeSwap"
         override val url = "https://pancakeswap.finance/"
         override val fragment: SwapBaseFragment
             get() = UniswapFragment()
         override val settingsFragment: SwapSettingsBaseFragment
             get() = UniswapSettingsFragment()
+
+        override fun supports(blockchain: Blockchain): Boolean {
+            return blockchain == Blockchain.BinanceSmartChain
+        }
     }
 
     @Parcelize
     class OneInchProvider : ISwapProvider {
-        override val id = "oneInch"
+        override val id = "oneinch"
         override val title = "1inch Network"
         override val url = "https://app.1inch.io/"
         override val fragment: SwapBaseFragment
             get() = OneInchFragment()
         override val settingsFragment: SwapSettingsBaseFragment
             get() = OneInchSettingsFragment()
+
+        override fun supports(blockchain: Blockchain): Boolean {
+            return blockchain == Blockchain.Ethereum || blockchain == Blockchain.BinanceSmartChain
+        }
     }
 
     @Parcelize
@@ -186,7 +200,6 @@ object SwapMainModule {
     }
 
     class Factory(arguments: Bundle?) : ViewModelProvider.Factory {
-
         private val coinFrom: Coin? = arguments?.getParcelable(coinFromKey)
         private val swapProviders: List<ISwapProvider> = listOf(UniswapProvider(), PancakeSwapProvider(), OneInchProvider())
 
@@ -195,7 +208,7 @@ object SwapMainModule {
 
             return when (modelClass) {
                 SwapMainViewModel::class.java -> {
-                    SwapMainViewModel(coinFrom, swapProviders) as T
+                    SwapMainViewModel(SwapMainService(coinFrom, swapProviders)) as T
                 }
                 else -> throw IllegalArgumentException()
             }

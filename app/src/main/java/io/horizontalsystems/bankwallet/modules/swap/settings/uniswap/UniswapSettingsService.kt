@@ -1,14 +1,14 @@
-package io.horizontalsystems.bankwallet.modules.swap.tradeoptions.uniswap
+package io.horizontalsystems.bankwallet.modules.swap.settings.uniswap
 
 import android.util.Range
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.entities.Address
-import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.IRecipientAddressService
-import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.ISwapDeadlineService
-import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.ISwapSlippageService
-import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.SwapSettingsModule.InvalidSlippageType
-import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.SwapSettingsModule.SwapSettingsError
-import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.uniswap.UniswapSettingsModule.State
+import io.horizontalsystems.bankwallet.modules.swap.settings.IRecipientAddressService
+import io.horizontalsystems.bankwallet.modules.swap.settings.ISwapDeadlineService
+import io.horizontalsystems.bankwallet.modules.swap.settings.ISwapSlippageService
+import io.horizontalsystems.bankwallet.modules.swap.settings.SwapSettingsModule.InvalidSlippageType
+import io.horizontalsystems.bankwallet.modules.swap.settings.SwapSettingsModule.SwapSettingsError
+import io.horizontalsystems.bankwallet.modules.swap.settings.uniswap.UniswapSettingsModule.State
 import io.horizontalsystems.uniswapkit.models.TradeOptions
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject

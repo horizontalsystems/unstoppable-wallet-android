@@ -16,8 +16,8 @@ import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerActivity
 import io.horizontalsystems.bankwallet.modules.sendevm.confirmation.SendEvmConfirmationModule
-import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.Caution
-import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.RecipientAddressViewModel
+import io.horizontalsystems.bankwallet.modules.swap.settings.Caution
+import io.horizontalsystems.bankwallet.modules.swap.settings.RecipientAddressViewModel
 import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
 import io.horizontalsystems.core.findNavController
 import kotlinx.android.synthetic.main.fragment_send_evm.*

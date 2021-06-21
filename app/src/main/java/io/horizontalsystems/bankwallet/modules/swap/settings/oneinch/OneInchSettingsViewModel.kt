@@ -1,18 +1,18 @@
-package io.horizontalsystems.bankwallet.modules.swap.tradeoptions.uniswap
+package io.horizontalsystems.bankwallet.modules.swap.settings.oneinch
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.providers.Translator
-import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.SwapSettingsModule.SwapSettingsError
-import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.uniswap.UniswapSettingsModule.State
-import io.horizontalsystems.bankwallet.modules.swap.uniswap.UniswapTradeService
+import io.horizontalsystems.bankwallet.modules.swap.oneinch.OneInchTradeService
+import io.horizontalsystems.bankwallet.modules.swap.settings.SwapSettingsModule.SwapSettingsError
+import io.horizontalsystems.bankwallet.modules.swap.settings.oneinch.OneInchSwapSettingsModule.State
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 
-class UniswapSettingsViewModel(
-        private val service: UniswapSettingsService,
-        private val tradeService: UniswapTradeService
+class OneInchSettingsViewModel(
+        private val service: OneInchSettingsService,
+        private val tradeService: OneInchTradeService
 ) : ViewModel() {
 
     val actionStateLiveData = MutableLiveData<ActionState>(ActionState.Enabled)
@@ -64,7 +64,7 @@ class UniswapSettingsViewModel(
     fun onDoneClick(): Boolean {
         return when (val state = service.state) {
             is State.Valid -> {
-                tradeService.tradeOptions = state.tradeOptions
+                tradeService.swapSettings = state.swapSettings
                 true
             }
             is State.Invalid -> {
