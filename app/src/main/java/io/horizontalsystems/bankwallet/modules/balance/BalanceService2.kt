@@ -83,8 +83,7 @@ class BalanceService2(
             val itemToUpdate = balanceItems[indexOfFirst]
 
             balanceItems[indexOfFirst] = itemToUpdate.copy(
-                balance = adapterRepository.balance(wallet),
-                balanceLocked = adapterRepository.balanceLocked(wallet),
+                balanceData = adapterRepository.balanceData(wallet),
                 state = adapterRepository.state(wallet)
             )
 
@@ -114,8 +113,7 @@ class BalanceService2(
             BalanceModule.BalanceItem(
                 wallet,
                 networkTypeChecker.isMainNet(wallet),
-                adapterRepository.balance(wallet),
-                adapterRepository.balanceLocked(wallet),
+                adapterRepository.balanceData(wallet),
                 adapterRepository.state(wallet),
                 xRateRepository.latestRate(wallet.coin.type)
             )

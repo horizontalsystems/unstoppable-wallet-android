@@ -51,8 +51,8 @@ class BinanceAdapter(
     override val balanceStateUpdatedFlowable: Flowable<Unit>
         get() = binanceKit.syncStateFlowable.map { }
 
-    override val balance: BigDecimal
-        get() = asset.balance
+    override val balanceData: BalanceData
+        get() = BalanceData(asset.balance)
 
     override val balanceUpdatedFlowable: Flowable<Unit>
         get() = asset.balanceFlowable.map { }

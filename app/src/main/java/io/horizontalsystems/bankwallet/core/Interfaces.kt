@@ -188,10 +188,12 @@ interface IBalanceAdapter {
     val balanceState: AdapterState
     val balanceStateUpdatedFlowable: Flowable<Unit>
 
-    val balance: BigDecimal
-    val balanceLocked: BigDecimal? get() = null
+    val balanceData: BalanceData
     val balanceUpdatedFlowable: Flowable<Unit>
+}
 
+data class BalanceData(val available: BigDecimal, val locked: BigDecimal = BigDecimal.ZERO) {
+    val total get() = available + locked
 }
 
 interface IReceiveAdapter {
@@ -199,7 +201,7 @@ interface IReceiveAdapter {
 }
 
 interface ISendBitcoinAdapter {
-    val balance: BigDecimal
+    val balanceData: BalanceData
     fun availableBalance(feeRate: Long, address: String?, pluginData: Map<Byte, IPluginData>?): BigDecimal
     fun minimumSendAmount(address: String?): BigDecimal
     fun maximumSendAmount(pluginData: Map<Byte, IPluginData>): BigDecimal?
@@ -218,7 +220,7 @@ interface ISendDashAdapter {
 
 interface ISendEthereumAdapter {
     val evmKit: EthereumKit
-    val balance: BigDecimal
+    val balanceData: BalanceData
     val ethereumBalance: BigDecimal
     val minimumRequiredBalance: BigDecimal
     val minimumSendAmount: BigDecimal

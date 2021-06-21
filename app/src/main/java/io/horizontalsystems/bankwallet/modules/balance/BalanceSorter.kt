@@ -15,13 +15,13 @@ class BalanceSorter {
     private fun sortByBalance(items: Iterable<BalanceModule.BalanceItem>): List<BalanceModule.BalanceItem> {
         val comparator =
                 compareByDescending<BalanceModule.BalanceItem> {
-                    it.balance ?: BigDecimal.ZERO > BigDecimal.ZERO
+                    it.balanceData.available > BigDecimal.ZERO
                 }.thenByDescending {
                     it.fiatValue ?: BigDecimal.ZERO > BigDecimal.ZERO
                 }.thenByDescending {
                     it.fiatValue
                 }.thenByDescending {
-                    it.balance
+                    it.balanceData.available
                 }.thenBy {
                     it.wallet.coin.title
                 }

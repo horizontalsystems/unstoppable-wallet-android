@@ -73,7 +73,7 @@ class SendEvmService(
         } catch (error: Throwable) {
             throw AmountError.InvalidDecimal
         }
-        if (amount > adapter.balance) {
+        if (amount > adapter.balanceData.available) {
             throw AmountError.InsufficientBalance
         }
         return evmAmount
@@ -81,7 +81,7 @@ class SendEvmService(
 
     //region IAvailableBalanceService
     override val availableBalance: BigDecimal
-        get() = adapter.balance
+        get() = adapter.balanceData.available
     //endregion
 
     //region IAmountInputService
@@ -92,7 +92,7 @@ class SendEvmService(
         get() = sendCoin
 
     override val balance: BigDecimal
-        get() = adapter.balance
+        get() = adapter.balanceData.available
 
     override val amountObservable: Flowable<BigDecimal>
         get() = Flowable.empty()

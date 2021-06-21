@@ -1,9 +1,6 @@
 package io.horizontalsystems.bankwallet.core.adapters
 
-import io.horizontalsystems.bankwallet.core.AdapterState
-import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.AppLogger
-import io.horizontalsystems.bankwallet.core.toHexString
+import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.bankwallet.entities.TransactionType
 import io.horizontalsystems.ethereumkit.core.EthereumKit
@@ -52,8 +49,8 @@ class EvmAdapter(kit: EthereumKit) : BaseEvmAdapter(kit, decimal) {
         return evmKit.estimateGas(toAddress, value, gasPrice)
     }
 
-    override val balance: BigDecimal
-        get() = balanceInBigDecimal(evmKit.accountState?.balance, decimal)
+    override val balanceData: BalanceData
+        get() = BalanceData(balanceInBigDecimal(evmKit.accountState?.balance, decimal))
 
     override val minimumRequiredBalance: BigDecimal
         get() = BigDecimal.ZERO
@@ -134,10 +131,10 @@ class EvmAdapter(kit: EthereumKit) : BaseEvmAdapter(kit, decimal) {
     // ISendEthereumAdapter
 
     override val ethereumBalance: BigDecimal
-        get() = balance
+        get() = balanceData.available
 
     override fun availableBalance(gasPrice: Long, gasLimit: Long): BigDecimal {
-        return BigDecimal.ZERO.max(balance - fee(gasPrice, gasLimit))
+        return BigDecimal.ZERO.max(balanceData.available - fee(gasPrice, gasLimit))
     }
 
     override fun getTransactionData(amount: BigInteger, address: Address): TransactionData {
