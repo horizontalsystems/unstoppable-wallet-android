@@ -33,7 +33,7 @@
     <string name="Intro_Wallet_Screen2Description">Don\'t lock yourself in and don\'t let others do that to you.</string>
     <string name="Intro_Wallet_Screen3Title">Go Borderless</string>
     <string name="Intro_Wallet_Screen3Description">Bypass conditional barriers and access markets globally.</string>
-    <string name="Intro_Wallet_Screen4Title">Stay Private</string>
+    <string name="Intro_Wallet_Screen4Title">保持私密状态</string>
     <string name="Intro_Wallet_Screen4Description">Do not leak your private and financial data to the world.</string>
     <!--Rooted Device-->
     <string name="RootedDevice_Button_Understand">我理解</string>
@@ -608,7 +608,7 @@
     <string name="EnalbeToken_NoCoins">找不到有余额的代币</string>
     <string name="EnalbeToken_EnableKey">启用</string>
     <!-- Add Token -->
-    <string name="AddToken_Title">Add Token</string>
+    <string name="AddToken_Title">添加代币</string>
     <string name="AddToken_CoinName">代币图片</string>
     <string name="AddToken_Symbol">标志</string>
     <string name="AddToken_Decimals">小数</string>
