@@ -15,37 +15,20 @@ object BalanceModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val activeAccountService = ActiveAccountService(App.accountManager)
 
-            val activeWalletRepository = ActiveWalletRepository(App.walletManager, App.accountSettingManager)
-            val balanceItemRepositoryWithAdapter = BalanceItemWithAdapterRepository(
-                activeWalletRepository,
-                App.adapterManager,
+            val balanceService2 = BalanceService2(
+                BalanceActiveWalletRepository(App.walletManager, App.accountSettingManager),
+                BalanceXRateRepository(App.currencyManager, App.xRateManager),
+                BalanceAdapterRepository(App.adapterManager, BalanceCache(App.walletStorage)),
                 NetworkTypeChecker(App.accountSettingManager),
-                BalanceCache(App.walletStorage)
-            )
-            val balanceItemXRateRepository = BalanceItemXRateRepository(
-                balanceItemRepositoryWithAdapter,
-                App.xRateManager,
-                App.currencyManager,
-                App.feeCoinProvider
-            )
-
-            val balanceConfigurator = BalanceConfigurator(App.localStorage)
-            val balanceItemRepositorySorted = BalanceItemSortedRepository(balanceItemXRateRepository, BalanceSorter(),
-                balanceConfigurator
-            )
-
-            val balanceService = BalanceService(
-                App.adapterManager,
-                App.currencyManager,
+                App.localStorage,
                 App.connectivityManager,
-                balanceItemRepositorySorted,
-                balanceConfigurator
+                BalanceSorter(),
             )
 
             val rateAppService = RateAppService(App.rateAppManager)
 
             return BalanceViewModel(
-                balanceService,
+                balanceService2,
                 rateAppService,
                 activeAccountService,
                 BalanceViewItemFactory(),
