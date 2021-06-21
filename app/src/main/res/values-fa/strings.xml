@@ -615,16 +615,10 @@
     <string name="AddToken_Dots">…</string>
     <string name="AddToken_CoinType">Coin Type</string>
     <string name="AddToken_CoinAlreadyInListWarning">این نشان در حال حاضر در لیست مدیریت سکه قرار دارد</string>
-    <string name="AddToken_InvalidAddressError">آدرس نامعتبر است</string>
+    <string name="AddToken_InvalidAddressError">Invalid contract address or BEP2 symbol</string>
     <string name="AddToken_ApiLimitExceeded">از محدوده اپی فراتر رفت. بعدا دوباره تلاش کنید.</string>
     <string name="AddEvmToken_ContractNotFound">قرارداد یافت نشد</string>
-    <string name="AddEvmToken_ContractAddressHint">آدرس قرارداد</string>
-    <string name="AddErc20Token_Title">اضافه کردن ERC20</string>
-    <string name="AddBep20Token_Title">اضافه کردن BEP20</string>
-    <!-- Add Bep2 Token -->
-    <string name="AddBep2Token_Title">اضافه کردن بیپ۲</string>
-    <string name="AddBep2Token_TokenSymbolHint">نماد رمز</string>
-    <string name="AddBep2Token_TokenNotFound">نشانه یافت نشد</string>
+    <string name="AddBep2Token_SymbolNotFound">Symbol not found</string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Title">ساختار آدرس</string>
     <string name="AddressFormatSettings_Description">Choose the address format for your %s wallet. Each selected format represents a different wallet on app\'s balance tab.</string>
