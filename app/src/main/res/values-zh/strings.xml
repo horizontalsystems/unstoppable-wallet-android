@@ -615,16 +615,10 @@
     <string name="AddToken_Dots">…</string>
     <string name="AddToken_CoinType">Coin Type</string>
     <string name="AddToken_CoinAlreadyInListWarning">该代币已在代币管理列表中</string>
-    <string name="AddToken_InvalidAddressError">错误地址</string>
+    <string name="AddToken_InvalidAddressError">Invalid contract address or BEP2 symbol</string>
     <string name="AddToken_ApiLimitExceeded">超过Api限制。请稍后再试。</string>
     <string name="AddEvmToken_ContractNotFound">没找到合同</string>
-    <string name="AddEvmToken_ContractAddressHint">智能合约地址</string>
-    <string name="AddErc20Token_Title">添加ERC20</string>
-    <string name="AddBep20Token_Title">添加BEP20</string>
-    <!-- Add Bep2 Token -->
-    <string name="AddBep2Token_Title">添加BEP2</string>
-    <string name="AddBep2Token_TokenSymbolHint">代币符号</string>
-    <string name="AddBep2Token_TokenNotFound">找不到代币</string>
+    <string name="AddBep2Token_SymbolNotFound">Symbol not found</string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Title">地址格式</string>
     <string name="AddressFormatSettings_Description">选择您 %s 钱包的地址格式。每个选中的格式代表应用的余额选项卡上不同的钱包。</string>
