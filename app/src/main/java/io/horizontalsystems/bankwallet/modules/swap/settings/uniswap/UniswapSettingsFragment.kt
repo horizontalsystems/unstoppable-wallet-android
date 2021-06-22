@@ -17,13 +17,14 @@ import io.horizontalsystems.bankwallet.modules.swap.settings.SwapDeadlineViewMod
 import io.horizontalsystems.bankwallet.modules.swap.settings.SwapSettingsBaseFragment
 import io.horizontalsystems.bankwallet.modules.swap.settings.SwapSlippageViewModel
 import io.horizontalsystems.bankwallet.modules.swap.settings.uniswap.UniswapSettingsViewModel.ActionState
+import io.horizontalsystems.bankwallet.modules.swap.uniswap.UniswapModule
 import io.horizontalsystems.bankwallet.modules.swap.uniswap.UniswapViewModel
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.android.synthetic.main.fragment_swap_settings_uniswap.*
 
 class UniswapSettingsFragment : SwapSettingsBaseFragment() {
-    private val uniswapViewModel by navGraphViewModels<UniswapViewModel>(R.id.swapFragment) //{ UniswapModule.Factory(dex) }
+    private val uniswapViewModel by navGraphViewModels<UniswapViewModel>(R.id.swapFragment) { UniswapModule.Factory(dex) }
 
     private val vmFactory by lazy { UniswapSettingsModule.Factory(uniswapViewModel.tradeService, dex) }
     private val uniswapSettingsViewModel by viewModels<UniswapSettingsViewModel> { vmFactory }

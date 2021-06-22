@@ -64,9 +64,7 @@ class UniswapSettingsService(
     }
 
     private fun getSlippageError(errors: List<Throwable>): Throwable? {
-        return errors.firstOrNull {
-            it is SwapSettingsError.InvalidSlippage
-        }
+        return errors.find { it is SwapSettingsError.InvalidSlippage }
     }
     //endregion
 
@@ -94,9 +92,7 @@ class UniswapSettingsService(
         get() = errorsObservable.map { errors -> Optional.ofNullable(getDeadlineError(errors)) }
 
     private fun getDeadlineError(errors: List<Throwable>): Throwable? {
-        return errors.firstOrNull {
-            it is SwapSettingsError.ZeroDeadline
-        }
+        return errors.find { it is SwapSettingsError.ZeroDeadline }
     }
 
     override fun setDeadline(value: Long) {
@@ -123,10 +119,10 @@ class UniswapSettingsService(
         }
 
     override val recipientAddressError: Throwable?
-        get() = errors.find { it is SwapSettingsError.InvalidAddress }
+        get() = getRecipientAddressError(errors)
 
     override val recipientAddressErrorObservable: Observable<Unit> = errorsObservable.map { errors ->
-        errors.find { it is SwapSettingsError.InvalidAddress }
+        getRecipientAddressError(errors)
     }
 
     override fun setRecipientAddress(address: Address?) {
@@ -134,6 +130,10 @@ class UniswapSettingsService(
     }
 
     override fun setRecipientAmount(amount: BigDecimal) {
+    }
+
+    private fun getRecipientAddressError(errors: List<Throwable>): Throwable? {
+        return errors.find { it is SwapSettingsError.InvalidAddress }
     }
 
     //endregion

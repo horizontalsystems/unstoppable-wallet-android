@@ -4,6 +4,7 @@ import android.util.Range
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.modules.swap.settings.IRecipientAddressService
+import io.horizontalsystems.bankwallet.modules.swap.settings.ISwapSlippageService
 import io.horizontalsystems.bankwallet.modules.swap.settings.SwapSettingsModule.InvalidSlippageType
 import io.horizontalsystems.bankwallet.modules.swap.settings.SwapSettingsModule.SwapSettingsError
 import io.horizontalsystems.bankwallet.modules.swap.settings.oneinch.OneInchSwapSettingsModule.OneInchSwapSettings
@@ -11,11 +12,12 @@ import io.horizontalsystems.bankwallet.modules.swap.settings.oneinch.OneInchSwap
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import java.math.BigDecimal
+import java.util.*
 import io.horizontalsystems.ethereumkit.models.Address as EthAddress
 
 class OneInchSettingsService(
         swapSettings: OneInchSwapSettings
-) : IRecipientAddressService, Clearable {
+) : IRecipientAddressService, ISwapSlippageService, Clearable {
 
     var state: State = State.Valid(swapSettings)
         private set(value) {
@@ -32,23 +34,75 @@ class OneInchSettingsService(
             errorsObservable.onNext(value)
         }
 
-    var slippage: BigDecimal = swapSettings.slippage
+    //region IRecipientAddressService
+    private var recipient: Address? = swapSettings.recipient
         set(value) {
             field = value
             sync()
         }
 
-//    var deadline: Long = tradeOptions.ttl
-//        set(value) {
-//            field = value
-//            sync()
-//        }
+    override val initialAddress: Address?
+        get() {
+            val state = state
+            if (state is State.Valid) {
+                return state.swapSettings.recipient
+            }
 
-    var recipient: Address? = swapSettings.recipient
-        set(value) {
-            field = value
-            sync()
+            return null
         }
+
+    override val recipientAddressError: Throwable?
+        get() = getRecipientAddressError(errors)
+
+    override val recipientAddressErrorObservable: Observable<Unit> = errorsObservable.map { errors ->
+        getRecipientAddressError(errors)
+    }
+
+    override fun setRecipientAddress(address: Address?) {
+        recipient = address
+    }
+
+    override fun setRecipientAmount(amount: BigDecimal) {
+    }
+
+    private fun getRecipientAddressError(errors: List<Throwable>): Throwable? {
+        return errors.find { it is SwapSettingsError.InvalidAddress }
+    }
+    //endregion
+
+    // region ISwapSlippageService
+    private val limitSlippageBounds = Range(BigDecimal("0.01"), BigDecimal("20"))
+    private var slippage: BigDecimal = swapSettings.slippage
+
+    override val initialSlippage: BigDecimal?
+        get() = state.let {
+            if (it is State.Valid && it.swapSettings.slippage.compareTo(defaultSlippage) != 0) {
+                it.swapSettings.slippage.stripTrailingZeros()
+            } else {
+                null
+            }
+        }
+    override val defaultSlippage = OneInchSwapSettingsModule.defaultSlippage
+
+    override val recommendedSlippageBounds = Range(BigDecimal("0.1"), BigDecimal("3"))
+
+    override val slippageError: Throwable?
+        get() = getSlippageError(errors)
+
+    override val slippageErrorObservable: Observable<Optional<Throwable>>
+        get() = errorsObservable.map { errors -> Optional.ofNullable(getSlippageError(errors)) }
+
+    override fun setSlippage(value: BigDecimal) {
+        slippage = value
+        sync()
+    }
+
+    private fun getSlippageError(errors: List<Throwable>): Throwable? {
+        return errors.firstOrNull {
+            it is SwapSettingsError.InvalidSlippage
+        }
+    }
+    //endregion
 
     init {
         sync()
@@ -94,35 +148,6 @@ class OneInchSettingsService(
         }
     }
 
-    override val initialAddress: Address?
-        get() {
-            val state = state
-            if (state is State.Valid) {
-                return state.swapSettings.recipient
-            }
-
-            return null
-        }
-
-    override val recipientAddressError: Throwable?
-        get() = errors.find { it is SwapSettingsError.InvalidAddress }
-
-    override val recipientAddressErrorObservable: Observable<Unit> = errorsObservable.map { errors ->
-        errors.find { it is SwapSettingsError.InvalidAddress }
-    }
-
-    override fun setRecipientAddress(address: Address?) {
-        recipient = address
-    }
-
-    override fun setRecipientAmount(amount: BigDecimal) {
-    }
-
     override fun clear() = Unit
 
-    companion object {
-        //        val recommendedSlippageBounds = Range(BigDecimal("0.1"), BigDecimal("1"))
-//        val recommendedDeadlineBounds = Range(600L, 1800L)
-        private val limitSlippageBounds = Range(BigDecimal("0.01"), BigDecimal("20"))
-    }
 }

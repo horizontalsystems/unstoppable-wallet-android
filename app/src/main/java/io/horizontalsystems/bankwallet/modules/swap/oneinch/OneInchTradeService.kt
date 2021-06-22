@@ -90,7 +90,7 @@ class OneInchTradeService(
         }
     val stateObservable: Observable<State> = stateSubject
 
-    var swapSettings: OneInchSwapSettings = OneInchSwapSettings(gasPrice = 1200000, recipient = null) // TODO
+    var swapSettings: OneInchSwapSettings = OneInchSwapSettings()
         set(value) {
             field = value
             syncSwap()

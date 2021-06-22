@@ -10,11 +10,12 @@ import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.swap.oneinch.OneInchTradeService
 import io.horizontalsystems.bankwallet.modules.swap.settings.AddressResolutionService
 import io.horizontalsystems.bankwallet.modules.swap.settings.RecipientAddressViewModel
+import io.horizontalsystems.bankwallet.modules.swap.settings.SwapSlippageViewModel
 import java.math.BigDecimal
 
 object OneInchSwapSettingsModule {
 
-    val defaultSlippage = BigDecimal("0.5")
+    val defaultSlippage = BigDecimal("1")
 
     data class OneInchSwapSettings(
             var slippage: BigDecimal = defaultSlippage,
@@ -40,6 +41,7 @@ object OneInchSwapSettingsModule {
 
             return when (modelClass) {
                 OneInchSettingsViewModel::class.java -> OneInchSettingsViewModel(service, tradeService) as T
+                SwapSlippageViewModel::class.java -> SwapSlippageViewModel(service) as T
                 RecipientAddressViewModel::class.java -> {
                     val addressParser = App.addressParserFactory.parser(evmCoin)
                     val resolutionService = AddressResolutionService(evmCoin.code, true)
