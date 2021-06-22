@@ -41,7 +41,7 @@ object BalanceModule {
         val wallet: Wallet,
         val mainNet: Boolean,
         val balanceData: BalanceData,
-        val state: AdapterState? = null,
+        val state: AdapterState,
         val latestRate: LatestRate? = null
     ) {
         val fiatValue get() = latestRate?.rate?.let { balanceData.available.times(it) }
