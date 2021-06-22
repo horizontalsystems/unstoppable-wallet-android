@@ -71,11 +71,6 @@ class BalanceAdapterRepository(
 
                 adapter.balanceUpdatedFlowable
                     .subscribeIO {
-                        balanceCache.setCache(
-                            wallet,
-                            adapter.balanceData
-                        )
-
                         updatesSubject.onNext(wallet)
                     }
                     .let {
@@ -91,7 +86,13 @@ class BalanceAdapterRepository(
     }
 
     fun balanceData(wallet: Wallet): BalanceData {
-        return adapterManager.getBalanceAdapterForWallet(wallet)?.balanceData ?: balanceCache.getCache(wallet)
+        return when (val balanceData = adapterManager.getBalanceAdapterForWallet(wallet)?.balanceData) {
+            null -> balanceCache.getCache(wallet)
+            else -> {
+                balanceCache.setCache(wallet, balanceData)
+                balanceData
+            }
+        }
     }
 
     fun refresh() {
