@@ -5,7 +5,6 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.providers.Translator
-import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.entities.blockchainType
 import io.horizontalsystems.bankwallet.entities.swappable
@@ -207,27 +206,14 @@ class BalanceViewItemFactory {
     fun headerViewItem(items: List<BalanceModule.BalanceItem>, currency: Currency, balanceHidden: Boolean): BalanceHeaderViewItem = when {
         balanceHidden -> BalanceHeaderViewItem("*****", true)
         else -> {
-            var total = BigDecimal.ZERO
-            var upToDate = true
+            val total = items.mapNotNull { item ->
+                item.latestRate?.let { item.balanceData.total.multiply(it.rate) }
+            }.fold(BigDecimal.ZERO, BigDecimal::add)
 
-            items.forEach { item ->
-                val balanceTotal = item.balanceData.total
-                val marketInfo = item.latestRate
+            val balanceText = App.numberFormatter.formatFiat(total, currency.symbol, 2, 2)
 
-                if (marketInfo != null) {
-                    total += balanceTotal.multiply(marketInfo.rate)
-
-                    upToDate = !marketInfo.isExpired()
-                }
-
-                if (item.state == null || item.state != AdapterState.Synced) {
-                    upToDate = false
-                }
-            }
-
-            val currencyValue = CurrencyValue(currency, total)
-            val balanceText = currencyValue.let {
-                App.numberFormatter.formatFiat(it.value, it.currency.symbol, 2, 2)
+            val upToDate = !items.any {
+                it.state !is AdapterState.Synced || (it.latestRate != null && it.latestRate.isExpired())
             }
 
             BalanceHeaderViewItem(balanceText, upToDate)
