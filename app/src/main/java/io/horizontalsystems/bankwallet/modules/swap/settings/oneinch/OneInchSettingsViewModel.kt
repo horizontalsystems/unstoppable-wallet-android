@@ -4,10 +4,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.providers.Translator
+import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.modules.swap.oneinch.OneInchTradeService
 import io.horizontalsystems.bankwallet.modules.swap.settings.SwapSettingsModule.SwapSettingsError
 import io.horizontalsystems.bankwallet.modules.swap.settings.oneinch.OneInchSwapSettingsModule.State
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 
 class OneInchSettingsViewModel(
@@ -21,8 +21,7 @@ class OneInchSettingsViewModel(
 
     init {
         service.stateObservable
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
+                .subscribeIO {
                     syncAction()
                 }.let {
                     disposable.add(it)

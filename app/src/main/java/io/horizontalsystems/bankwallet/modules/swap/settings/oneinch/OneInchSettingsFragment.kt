@@ -16,9 +16,10 @@ import io.horizontalsystems.bankwallet.modules.swap.oneinch.OneInchModule
 import io.horizontalsystems.bankwallet.modules.swap.oneinch.OneInchSwapViewModel
 import io.horizontalsystems.bankwallet.modules.swap.settings.RecipientAddressViewModel
 import io.horizontalsystems.bankwallet.modules.swap.settings.SwapSettingsBaseFragment
+import io.horizontalsystems.bankwallet.modules.swap.settings.SwapSlippageViewModel
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
-import kotlinx.android.synthetic.main.fragment_swap_settings_uniswap.*
+import kotlinx.android.synthetic.main.fragment_swap_settings_1inch.*
 
 class OneInchSettingsFragment : SwapSettingsBaseFragment() {
 
@@ -27,6 +28,7 @@ class OneInchSettingsFragment : SwapSettingsBaseFragment() {
     private val vmFactory by lazy { OneInchSwapSettingsModule.Factory(oneInchViewModel.tradeService, dex) }
     private val oneInchSettingsViewModel by viewModels<OneInchSettingsViewModel> { vmFactory }
     private val recipientAddressViewModel by viewModels<RecipientAddressViewModel> { vmFactory }
+    private val slippageViewModel by viewModels<SwapSlippageViewModel> { vmFactory }
 
     private val qrScannerResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         when (result.resultCode) {
@@ -73,6 +75,8 @@ class OneInchSettingsFragment : SwapSettingsBaseFragment() {
             val intent = QRScannerActivity.getIntentForFragment(this)
             qrScannerResultLauncher.launch(intent)
         })
+
+        slippageInputView.setViewModel(slippageViewModel, viewLifecycleOwner)
 
     }
 
