@@ -17,10 +17,10 @@ import java.math.BigDecimal
 import java.util.*
 
 class UniswapService(
-        val dex: SwapMainModule.Dex,
+        private val dex: SwapMainModule.Dex,
         private val tradeService: UniswapTradeService,
-        private val allowanceService: SwapAllowanceService,
-        private val pendingAllowanceService: SwapPendingAllowanceService,
+        val allowanceService: SwapAllowanceService,
+        val pendingAllowanceService: SwapPendingAllowanceService,
         private val adapterManager: IAdapterManager
 ) : SwapMainModule.ISwapService {
     private val disposables = CompositeDisposable()

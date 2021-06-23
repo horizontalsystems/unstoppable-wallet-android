@@ -1,12 +1,12 @@
 package io.horizontalsystems.bankwallet.modules.swap.oneinch
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.core.view.isVisible
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
@@ -16,17 +16,17 @@ import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceViewM
 import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveModule
 import io.horizontalsystems.bankwallet.modules.swap.coincard.SwapCoinCardViewModel
 import io.horizontalsystems.bankwallet.modules.swap.confirmation.SwapConfirmationModule
-import io.horizontalsystems.bankwallet.modules.swap.uniswap.UniswapTradeService
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.getNavigationResult
 import io.horizontalsystems.core.setOnSingleClickListener
-import kotlinx.android.synthetic.main.fragment_uniswap.*
+import kotlinx.android.synthetic.main.fragment_1inch.*
 
 class OneInchFragment : SwapBaseFragment() {
 
     private val vmFactory by lazy { OneInchModule.Factory(dex) }
     private val oneInchViewModel by navGraphViewModels<OneInchSwapViewModel>(R.id.swapFragment) { vmFactory }
-    private val allowanceViewModel by navGraphViewModels<SwapAllowanceViewModel>(R.id.swapFragment) { vmFactory }
+    private val allowanceViewModelFactory by lazy { OneInchModule.AllowanceViewModelFactory(oneInchViewModel.service) }
+    private val allowanceViewModel by viewModels<SwapAllowanceViewModel> { allowanceViewModelFactory }
     private val coinCardViewModelFactory by lazy { SwapMainModule.CoinCardViewModelFactory(this, dex, oneInchViewModel.service, oneInchViewModel.tradeService) }
 
     override fun restoreProviderState(providerState: SwapMainModule.SwapProviderState) {
@@ -38,7 +38,7 @@ class OneInchFragment : SwapBaseFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.fragment_uniswap, container, false)
+        return inflater.inflate(R.layout.fragment_1inch, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -91,9 +91,9 @@ class OneInchFragment : SwapBaseFragment() {
             commonError.isVisible = error != null
         })
 
-        oneInchViewModel.tradeViewItemLiveData().observe(viewLifecycleOwner, { tradeViewItem ->
-            setTradeViewItem(tradeViewItem)
-        })
+//        oneInchViewModel.tradeViewItemLiveData().observe(viewLifecycleOwner, { tradeViewItem ->
+//            setTradeViewItem(tradeViewItem)
+//        })
 
         oneInchViewModel.proceedActionLiveData().observe(viewLifecycleOwner, { action ->
             handleButtonAction(proceedButton, action)
@@ -134,37 +134,11 @@ class OneInchFragment : SwapBaseFragment() {
         }
     }
 
-    private fun setTradeViewItem(tradeViewItem: OneInchSwapViewModel.TradeViewItem?) {
-        price.text = tradeViewItem?.price
-
-        if (tradeViewItem?.priceImpact != null) {
-            priceImpactViews.isVisible = true
-            priceImpactValue.text = tradeViewItem.priceImpact.value
-            priceImpactValue.setTextColor(priceImpactColor(requireContext(), tradeViewItem.priceImpact.level))
-        } else {
-            priceImpactViews.isVisible = false
-        }
-
-        if (tradeViewItem?.guaranteedAmount != null) {
-            guaranteedAmountViews.isVisible = true
-            minMaxTitle.text = tradeViewItem.guaranteedAmount.title
-            minMaxValue.text = tradeViewItem.guaranteedAmount.value
-        } else {
-            guaranteedAmountViews.isVisible = false
-        }
-        poweredBy.isVisible = tradeViewItem == null
-        poweredByLine.isVisible = tradeViewItem == null
-    }
-
-    private fun priceImpactColor(ctx: Context, priceImpactLevel: UniswapTradeService.PriceImpactLevel?): Int {
-        val color = when (priceImpactLevel) {
-            UniswapTradeService.PriceImpactLevel.Normal -> R.color.remus
-            UniswapTradeService.PriceImpactLevel.Warning -> R.color.jacob
-            UniswapTradeService.PriceImpactLevel.Forbidden -> R.color.lucian
-            else -> R.color.grey
-        }
-
-        return ctx.getColor(color)
-    }
+//    private fun setTradeViewItem(tradeViewItem: OneInchSwapViewModel.TradeViewItem?) {
+//        price.text = tradeViewItem?.price ?: ""
+//
+//        poweredBy.isVisible = tradeViewItem == null
+//        poweredByLine.isVisible = tradeViewItem == null
+//    }
 
 }

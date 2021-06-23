@@ -92,9 +92,7 @@ class UniswapViewModel(
     }
 
     fun restoreProviderState(swapProviderState: SwapMainModule.SwapProviderState) {
-//        if (getProviderState() != swapProviderState) {
         tradeService.restoreState(swapProviderState)
-//        }
     }
 
     fun getProviderState(): SwapMainModule.SwapProviderState {

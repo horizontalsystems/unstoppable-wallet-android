@@ -18,6 +18,20 @@ object UniswapModule {
 
     data class PriceImpactViewItem(val level: UniswapTradeService.PriceImpactLevel, val value: String)
 
+    class AllowanceViewModelFactory(
+            private val service: UniswapService
+    ) : ViewModelProvider.Factory {
+
+        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+            return when (modelClass) {
+                SwapAllowanceViewModel::class.java -> {
+                    SwapAllowanceViewModel(service, service.allowanceService, service.pendingAllowanceService, SwapViewItemHelper(App.numberFormatter)) as T
+                }
+                else -> throw IllegalArgumentException()
+            }
+        }
+    }
+
     class Factory(
             dex: SwapMainModule.Dex
     ) : ViewModelProvider.Factory {

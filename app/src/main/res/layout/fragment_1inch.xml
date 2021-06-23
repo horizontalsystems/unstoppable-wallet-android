@@ -61,7 +61,6 @@
                 android:layout_marginTop="12dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="12dp"
-                android:text="@string/Swap_Price"
                 android:textAlignment="center"
                 android:textColor="@color/grey"
                 app:layout_constraintEnd_toStartOf="@+id/switchButton"
@@ -126,20 +125,6 @@
                 app:layout_constraintStart_toStartOf="@+id/startBorder" />
 
             <androidx.constraintlayout.widget.Group
-                android:id="@+id/priceImpactViews"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="visible"
-                app:constraint_referenced_ids="priceImpactTitle,priceImpactValue" />
-
-            <androidx.constraintlayout.widget.Group
-                android:id="@+id/guaranteedAmountViews"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="visible"
-                app:constraint_referenced_ids="minMaxTitle,minMaxValue" />
-
-            <androidx.constraintlayout.widget.Group
                 android:id="@+id/advancedSettingsViews"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -156,48 +141,6 @@
                 app:layout_constraintTop_toBottomOf="@+id/advancedSettings" />
 
             <TextView
-                android:id="@+id/priceImpactTitle"
-                style="@style/Subhead2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:text="@string/Swap_PriceImpact"
-                android:textColor="@color/grey"
-                app:layout_constraintStart_toStartOf="@+id/startBorder"
-                app:layout_constraintTop_toBottomOf="@+id/allowanceView" />
-
-            <TextView
-                android:id="@+id/priceImpactValue"
-                style="@style/Subhead2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/grey"
-                app:layout_constraintEnd_toStartOf="@+id/endBorder"
-                app:layout_constraintTop_toTopOf="@+id/priceImpactTitle"
-                tools:text="0.01%" />
-
-            <TextView
-                android:id="@+id/minMaxTitle"
-                style="@style/Subhead2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:text="@string/Swap_MinimumReceived"
-                android:textColor="@color/grey"
-                app:layout_constraintStart_toStartOf="@+id/startBorder"
-                app:layout_constraintTop_toBottomOf="@+id/priceImpactTitle" />
-
-            <TextView
-                android:id="@+id/minMaxValue"
-                style="@style/Subhead2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/grey"
-                app:layout_constraintEnd_toStartOf="@+id/endBorder"
-                app:layout_constraintTop_toTopOf="@+id/minMaxTitle"
-                tools:text="0.112 Token" />
-
-            <TextView
                 android:id="@+id/commonError"
                 style="@style/Subhead2"
                 android:layout_width="0dp"
@@ -207,7 +150,7 @@
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="@id/endBorder"
                 app:layout_constraintStart_toStartOf="@+id/startBorder"
-                app:layout_constraintTop_toBottomOf="@+id/minMaxTitle"
+                app:layout_constraintTop_toBottomOf="@+id/allowanceView"
                 tools:text="No Liquidity" />
 
             <Button

@@ -13,16 +13,11 @@ import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.SwapError
 import io.horizontalsystems.bankwallet.modules.swap.SwapViewItemHelper
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceService
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapPendingAllowanceService
-import io.horizontalsystems.bankwallet.modules.swap.settings.uniswap.SwapTradeOptions
-import io.horizontalsystems.bankwallet.modules.swap.uniswap.UniswapModule
 import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.ethereumkit.api.jsonrpc.JsonRpc
-import io.horizontalsystems.oneinchkit.Swap
 import io.horizontalsystems.uniswapkit.TradeError
-import io.horizontalsystems.uniswapkit.models.TradeOptions
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import java.math.BigDecimal
 
 class OneInchSwapViewModel(
         val service: OneInchSwapService,
@@ -35,7 +30,6 @@ class OneInchSwapViewModel(
 
     private val isLoadingLiveData = MutableLiveData(false)
     private val swapErrorLiveData = MutableLiveData<String?>(null)
-    private val tradeViewItemLiveData = MutableLiveData<TradeViewItem?>(null)
     private val proceedActionLiveData = MutableLiveData<ActionState>(ActionState.Hidden)
     private val approveActionLiveData = MutableLiveData<ActionState>(ActionState.Hidden)
     private val openApproveLiveEvent = SingleLiveEvent<SwapAllowanceService.ApproveData>()
@@ -53,7 +47,6 @@ class OneInchSwapViewModel(
     //region outputs
     fun isLoadingLiveData(): LiveData<Boolean> = isLoadingLiveData
     fun swapErrorLiveData(): LiveData<String?> = swapErrorLiveData
-    fun tradeViewItemLiveData(): LiveData<TradeViewItem?> = tradeViewItemLiveData
     fun proceedActionLiveData(): LiveData<ActionState> = proceedActionLiveData
     fun approveActionLiveData(): LiveData<ActionState> = approveActionLiveData
     fun openApproveLiveEvent(): LiveData<SwapAllowanceService.ApproveData> = openApproveLiveEvent
@@ -73,17 +66,17 @@ class OneInchSwapViewModel(
     fun onTapProceed() {
         val serviceState = service.state
         if (serviceState is OneInchSwapService.State.Ready) {
-            val swap = (tradeService.state as? OneInchTradeService.State.Ready)?.swap
-            val swapInfo = SendEvmData.SwapInfo(
-                    estimatedIn = tradeService.amountFrom ?: BigDecimal.ZERO,
-                    estimatedOut = tradeService.amountTo ?: BigDecimal.ZERO,
-                    slippage = formatter.slippage(tradeService.swapSettings.slippage),
-                    deadline = null, // formatter.deadline(tradeService.tradeOptions.ttl),
-                    recipientDomain = tradeService.swapSettings.recipient?.title,
-                    price = null,//formatter.price(trade?.tradeData?.executionPrice, tradeService.coinFrom, tradeService.coinTo),
-                    priceImpact = null //trade?.let { formatter.priceImpactViewItem(it)?.value }
-            )
-            openConfirmationLiveEvent.postValue(SendEvmData(serviceState.transactionData, SendEvmData.AdditionalInfo.Swap(swapInfo)))
+//            val swap = (tradeService.state as? OneInchTradeService.State.Ready)?.swap
+//            val swapInfo = SendEvmData.SwapInfo(
+//                    estimatedIn = tradeService.amountFrom ?: BigDecimal.ZERO,
+//                    estimatedOut = tradeService.amountTo ?: BigDecimal.ZERO,
+//                    slippage = formatter.slippage(tradeService.swapSettings.slippage),
+//                    deadline = null, // formatter.deadline(tradeService.tradeOptions.ttl),
+//                    recipientDomain = tradeService.swapSettings.recipient?.title,
+//                    price = null,//formatter.price(trade?.tradeData?.executionPrice, tradeService.coinFrom, tradeService.coinTo),
+//                    priceImpact = null //trade?.let { formatter.priceImpactViewItem(it)?.value }
+//            )
+//            openConfirmationLiveEvent.postValue(SendEvmData(serviceState.transactionData, SendEvmData.AdditionalInfo.Swap(swapInfo)))
         }
     }
 
@@ -157,11 +150,9 @@ class OneInchSwapViewModel(
     private fun sync(tradeServiceState: OneInchTradeService.State) {
         when (tradeServiceState) {
             is OneInchTradeService.State.Ready -> {
-                tradeViewItemLiveData.postValue(tradeViewItem(tradeServiceState.swap))
                 advancedSettingsVisibleLiveData.postValue(true)
             }
             else -> {
-                tradeViewItemLiveData.postValue(null)
                 advancedSettingsVisibleLiveData.postValue(false)
             }
         }
@@ -215,36 +206,7 @@ class OneInchSwapViewModel(
         approveActionLiveData.postValue(approveAction)
     }
 
-    private fun tradeViewItem(swap: Swap): TradeViewItem {
-        return TradeViewItem(
-                formatter.price(BigDecimal.TEN, tradeService.coinFrom, tradeService.coinTo),
-                null,
-                null
-        )
-    }
-
-    private fun tradeOptionsViewItem(tradeOptions: SwapTradeOptions): TradeOptionsViewItem {
-        val defaultTradeOptions = TradeOptions()
-        val slippage = if (tradeOptions.allowedSlippage.compareTo(defaultTradeOptions.allowedSlippagePercent) == 0) null else tradeOptions.allowedSlippage.stripTrailingZeros().toPlainString()
-        val deadline = if (tradeOptions.ttl == defaultTradeOptions.ttl) null else tradeOptions.ttl.toString()
-        val recipientAddress = tradeOptions.recipient?.hex
-
-        return TradeOptionsViewItem(slippage, deadline, recipientAddress)
-    }
-
     //region models
-    data class TradeViewItem(
-            val price: String? = null,
-            val priceImpact: UniswapModule.PriceImpactViewItem? = null,
-            val guaranteedAmount: UniswapModule.GuaranteedAmountViewItem? = null
-    )
-
-    data class TradeOptionsViewItem(
-            val slippage: String?,
-            val deadline: String?,
-            val recipient: String?
-    )
-
     sealed class ActionState {
         object Hidden : ActionState()
         class Enabled(val title: String) : ActionState()

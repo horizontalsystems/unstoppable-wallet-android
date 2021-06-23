@@ -40,6 +40,8 @@ class SwapAllowanceViewModel(
     init {
         syncVisible()
 
+        handle(allowanceService.state)
+
         allowanceService.stateObservable
                 .subscribeOn(Schedulers.io())
                 .subscribe { allowanceState ->

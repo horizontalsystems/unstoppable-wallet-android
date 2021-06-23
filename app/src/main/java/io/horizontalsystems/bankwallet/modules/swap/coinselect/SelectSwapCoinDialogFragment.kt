@@ -33,7 +33,7 @@ class SelectSwapCoinDialogFragment : BaseWithSearchDialogFragment() {
         configureSearchMenu(toolbar.menu)
 
         val coinBalanceItems = arguments?.getParcelableArrayList<CoinBalanceItem>(coinBalanceItemsListKey)
-        val requestId = arguments?.getInt(requestIdKey)
+        val requestId = arguments?.getLong(requestIdKey)
         if (coinBalanceItems == null || requestId == null) {
             findNavController().popBackStack()
             return
@@ -57,7 +57,7 @@ class SelectSwapCoinDialogFragment : BaseWithSearchDialogFragment() {
         viewModel?.updateFilter(query)
     }
 
-    private fun closeWithResult(coinBalanceItem: CoinBalanceItem, requestId: Int) {
+    private fun closeWithResult(coinBalanceItem: CoinBalanceItem, requestId: Long) {
         setNavigationResult(resultBundleKey, bundleOf(
                 requestIdKey to requestId,
                 coinBalanceItemResultKey to coinBalanceItem
@@ -73,7 +73,7 @@ class SelectSwapCoinDialogFragment : BaseWithSearchDialogFragment() {
         const val requestIdKey = "requestIdKey"
         const val coinBalanceItemResultKey = "coinBalanceItemResultKey"
 
-        fun params(requestId: Int, coinBalanceItems: ArrayList<CoinBalanceItem>): Bundle {
+        fun params(requestId: Long, coinBalanceItems: ArrayList<CoinBalanceItem>): Bundle {
             return bundleOf(
                     requestIdKey to requestId,
                     coinBalanceItemsListKey to coinBalanceItems
