@@ -689,6 +689,7 @@
 
     <!--Network Settings-->
     <string name="NetworkSettings_Title">Network Settings</string>
+    <string name="NetworkSettings_TestNetDisclaimer">Please do not select Testnet options unless you understand what that is and how it works.\n\nTestnet is a parallel blockchain for testing purposes with its own currency. If someone sends a regular payment to your Testnet address, it will be lost.</string>
 
     <!-- Show Key -->
     <string name="ShowKey_Title">Key</string>

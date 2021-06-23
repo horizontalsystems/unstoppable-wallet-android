@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.basecurrency
+package io.horizontalsystems.bankwallet.modules.evmnetwork
 
 import android.app.Dialog
 import android.os.Bundle
@@ -11,7 +11,7 @@ import androidx.fragment.app.DialogFragment
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 
-class BaseCurrencyDisclaimerDialog(val popularCurrencies: String) : DialogFragment() {
+class TestnetDisclaimerDialog : DialogFragment() {
 
     var onConfirm: (() -> Unit)? = null
 
@@ -21,9 +21,14 @@ class BaseCurrencyDisclaimerDialog(val popularCurrencies: String) : DialogFragme
         rootView.findViewById<Button>(R.id.buttonConfirm)?.setOnSingleClickListener {
             onConfirm?.invoke()
         }
-        rootView.findViewById<TextView>(R.id.text)?.text = getString(R.string.SettingsCurrency_DisclaimerText, popularCurrencies)
+        rootView.findViewById<TextView>(R.id.text)?.text = getString(R.string.NetworkSettings_TestNetDisclaimer)
 
-        val builder = activity?.let { AlertDialog.Builder(it, io.horizontalsystems.pin.R.style.AlertDialog) }
+        val builder = activity?.let {
+            AlertDialog.Builder(
+                it,
+                io.horizontalsystems.pin.R.style.AlertDialog
+            )
+        }
         builder?.setView(rootView)
         val mDialog = builder?.create()
         mDialog?.setCanceledOnTouchOutside(true)

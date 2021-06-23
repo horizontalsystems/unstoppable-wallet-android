@@ -13,6 +13,9 @@ class EvmNetworkViewModel(private val service: EvmNetworkService): ViewModel() {
 
     val sectionViewItemsLiveData = MutableLiveData<List<SectionViewItem>>()
     val finishLiveEvent = SingleLiveEvent<Unit>()
+    val confirmLiveEvent = SingleLiveEvent<Unit>()
+
+    private var tmpViewItem: ViewItem? = null
 
     init {
         service.itemsObservable
@@ -57,6 +60,22 @@ class EvmNetworkViewModel(private val service: EvmNetworkService): ViewModel() {
         }
 
     fun onSelectViewItem(viewItem: ViewItem) {
+        if (service.isConfirmationRequired(viewItem.id)) {
+            tmpViewItem = viewItem
+            confirmLiveEvent.postValue(Unit)
+        } else {
+            setNetwork(viewItem)
+        }
+    }
+
+    fun confirmSelection() {
+        tmpViewItem?.let {
+            setNetwork(it)
+            tmpViewItem = null
+        }
+    }
+
+    private fun setNetwork(viewItem: ViewItem) {
         service.setCurrentNetwork(viewItem.id)
         finishLiveEvent.postValue(Unit)
     }
