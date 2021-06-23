@@ -28,6 +28,10 @@ class RateManager(
         return kit.getLatestRate(coinType, currencyCode)
     }
 
+    override fun latestRate(coinTypes: List<CoinType>, currencyCode: String): Map<CoinType, LatestRate> {
+        return kit.getLatestRateMap(coinTypes, currencyCode)
+    }
+
     override fun getLatestRate(coinType: CoinType, currencyCode: String): BigDecimal? {
         val marketInfo = latestRate(coinType, currencyCode)
 

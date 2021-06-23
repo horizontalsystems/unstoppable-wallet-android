@@ -34,7 +34,7 @@ class BalanceXRateRepository(
         baseCurrencyDisposable = currencyManager.baseCurrencyUpdatedSignal
             .subscribeIO {
                 unsubscribeFromLatestRateUpdates()
-                itemSubject.onNext(coinTypes.map { it to latestRate(it) }.toMap())
+                itemSubject.onNext(getLatestRates())
                 subscribeForLatestRateUpdates()
             }
     }
@@ -49,7 +49,9 @@ class BalanceXRateRepository(
         subscribeForLatestRateUpdates()
     }
 
-    fun latestRate(coinType: CoinType) = xRateManager.latestRate(coinType, baseCurrency.code)
+    fun getLatestRates(): Map<CoinType, LatestRate?> {
+        return coinTypes.map { it to null }.toMap() + xRateManager.latestRate(coinTypes, baseCurrency.code)
+    }
 
     fun refresh() {
         xRateManager.refresh(baseCurrency.code)

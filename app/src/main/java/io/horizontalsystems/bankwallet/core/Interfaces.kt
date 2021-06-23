@@ -287,6 +287,7 @@ interface IAppConfigProvider {
 
 interface IRateManager {
     fun latestRate(coinType: CoinType, currencyCode: String): LatestRate?
+    fun latestRate(coinTypes: List<CoinType>, currencyCode: String): Map<CoinType, LatestRate>
     fun getLatestRate(coinType: CoinType, currencyCode: String): BigDecimal?
     fun latestRateObservable(coinType: CoinType, currencyCode: String): Observable<LatestRate>
     fun latestRateObservable(coinTypes: List<CoinType>, currencyCode: String): Observable<Map<CoinType, LatestRate>>
