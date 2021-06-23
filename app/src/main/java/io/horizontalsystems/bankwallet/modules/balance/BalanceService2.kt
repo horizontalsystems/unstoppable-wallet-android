@@ -108,6 +108,7 @@ class BalanceService2(
     private fun handleWalletsUpdate(wallets: List<Wallet>) {
         adapterRepository.setWallet(wallets)
         xRateRepository.setCoinTypes(wallets.map { it.coin.type })
+        val latestRates = xRateRepository.getLatestRates()
 
         val balanceItems = wallets.map { wallet ->
             BalanceModule.BalanceItem(
@@ -115,7 +116,7 @@ class BalanceService2(
                 networkTypeChecker.isMainNet(wallet),
                 adapterRepository.balanceData(wallet),
                 adapterRepository.state(wallet),
-                xRateRepository.latestRate(wallet.coin.type)
+                latestRates[wallet.coin.type]
             )
         }
 

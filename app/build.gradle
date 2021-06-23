@@ -189,7 +189,7 @@ dependencies {
     implementation 'com.github.horizontalsystems:ethereum-kit-android:bb3d47a'
     implementation 'com.github.horizontalsystems:blockchain-fee-rate-kit-android:047596b'
     implementation 'com.github.horizontalsystems:binance-chain-kit-android:18c39c9'
-    implementation 'com.github.horizontalsystems:xrates-kit-android:76df204'
+    implementation 'com.github.horizontalsystems:xrates-kit-android:85a4b4f'
 
 
     //Zcash SDK
