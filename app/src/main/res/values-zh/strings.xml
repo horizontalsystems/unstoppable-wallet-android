@@ -568,6 +568,7 @@
     <string name="ManageAccount_NWordsWithPassphrase">%s 个单词的密码</string>
     <!--Network Settings-->
     <string name="NetworkSettings_Title">Network Settings</string>
+    <string name="NetworkSettings_TestNetDisclaimer">Please do not select Testnet options unless you understand what that is and how it works.\n\nTestnet is a parallel blockchain for testing purposes with its own currency. If someone sends a regular payment to your Testnet address, it will be lost.</string>
     <!-- Show Key -->
     <string name="ShowKey_Title">密钥</string>
     <string name="ShowKey_Description">如果您的手机出现丢失、被盗或损坏等情况，那么在下一步显示的恢复码将是恢复您资金的唯一方法。\n\n确保不会有任何人看到您的屏幕。</string>
