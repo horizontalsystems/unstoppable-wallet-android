@@ -568,6 +568,7 @@
     <string name="ManageAccount_NWordsWithPassphrase">%s mots avec phrase d\'authentification</string>
     <!--Network Settings-->
     <string name="NetworkSettings_Title">Network Settings</string>
+    <string name="NetworkSettings_TestNetDisclaimer">Please do not select Testnet options unless you understand what that is and how it works.\n\nTestnet is a parallel blockchain for testing purposes with its own currency. If someone sends a regular payment to your Testnet address, it will be lost.</string>
     <!-- Show Key -->
     <string name="ShowKey_Title">Clé</string>
     <string name="ShowKey_Description">Les phrases de réinitialisation qui vont suivre sont le seul moyen de restaurer vos fonds si votre téléphone est perdu, volé, endommagé, etc.\n\nVeuillez vous assurer que personne ne regarde votre écran.</string>
