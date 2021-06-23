@@ -16,9 +16,13 @@ import io.horizontalsystems.core.setOnSingleClickListener
 import io.horizontalsystems.views.helpers.LayoutHelper
 import kotlinx.android.synthetic.main.view_card_swap.view.*
 import java.math.BigDecimal
+import java.util.*
+import kotlin.collections.ArrayList
 
 class SwapCoinCardView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
     : CardView(context, attrs, defStyleAttr) {
+
+    private val uuid = UUID.randomUUID().leastSignificantBits
 
     init {
         radius = LayoutHelper.dpToPx(16f, context)
@@ -33,7 +37,7 @@ class SwapCoinCardView @JvmOverloads constructor(context: Context, attrs: Attrib
         observe(viewModel, lifecycleOwner)
 
         selectedToken.setOnSingleClickListener {
-            val params = SelectSwapCoinDialogFragment.params(id, ArrayList(viewModel.tokensForSelection))
+            val params = SelectSwapCoinDialogFragment.params(uuid, ArrayList(viewModel.tokensForSelection))
             fragment.findNavController().navigate(R.id.selectSwapCoinDialog, params)
         }
 
@@ -48,9 +52,9 @@ class SwapCoinCardView @JvmOverloads constructor(context: Context, attrs: Attrib
         }
 
         fragment.getNavigationLiveData(SelectSwapCoinDialogFragment.resultBundleKey)?.observe(lifecycleOwner, { bundle ->
-            val requestId = bundle.getInt(SelectSwapCoinDialogFragment.requestIdKey)
+            val requestId = bundle.getLong(SelectSwapCoinDialogFragment.requestIdKey)
             val coinBalanceItem = bundle.getParcelable<SwapMainModule.CoinBalanceItem>(SelectSwapCoinDialogFragment.coinBalanceItemResultKey)
-            if (requestId == id && coinBalanceItem != null) {
+            if (requestId == uuid && coinBalanceItem != null) {
                 viewModel.onSelectCoin(coinBalanceItem.coin)
             }
         })

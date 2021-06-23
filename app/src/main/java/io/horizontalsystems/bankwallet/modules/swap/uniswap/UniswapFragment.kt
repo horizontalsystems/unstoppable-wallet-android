@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.core.view.isVisible
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
@@ -25,7 +26,8 @@ class UniswapFragment : SwapBaseFragment() {
 
     private val vmFactory by lazy { UniswapModule.Factory(dex) }
     private val uniswapViewModel by navGraphViewModels<UniswapViewModel>(R.id.swapFragment) { vmFactory }
-    private val allowanceViewModel by navGraphViewModels<SwapAllowanceViewModel>(R.id.swapFragment) { vmFactory }
+    private val allowanceViewModelFactory by lazy { UniswapModule.AllowanceViewModelFactory(uniswapViewModel.service) }
+    private val allowanceViewModel by viewModels<SwapAllowanceViewModel> { allowanceViewModelFactory }
     private val coinCardViewModelFactory by lazy { SwapMainModule.CoinCardViewModelFactory(this, dex, uniswapViewModel.service, uniswapViewModel.tradeService) }
 
     override fun restoreProviderState(providerState: SwapMainModule.SwapProviderState) {

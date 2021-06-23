@@ -7,7 +7,6 @@ import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.SwapError
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceService
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapPendingAllowanceService
 import io.horizontalsystems.coinkit.models.Coin
-import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -16,10 +15,10 @@ import java.math.BigDecimal
 import java.util.*
 
 class OneInchSwapService(
-        val dex: SwapMainModule.Dex,
+        private val dex: SwapMainModule.Dex,
         private val tradeService: OneInchTradeService,
-        private val allowanceService: SwapAllowanceService,
-        private val pendingAllowanceService: SwapPendingAllowanceService,
+        val allowanceService: SwapAllowanceService,
+        val pendingAllowanceService: SwapPendingAllowanceService,
         private val adapterManager: IAdapterManager
 ) : SwapMainModule.ISwapService {
     private val disposables = CompositeDisposable()
@@ -143,18 +142,10 @@ class OneInchSwapService(
     private fun syncState() {
         val allErrors = mutableListOf<Throwable>()
         var loading = false
-        var transactionData: TransactionData? = null
 
         when (val state = tradeService.state) {
             OneInchTradeService.State.Loading -> {
                 loading = true
-            }
-            is OneInchTradeService.State.Ready -> {
-                transactionData = try {
-                    tradeService.getTransactionData(state.swap)
-                } catch (error: Throwable) {
-                    null
-                }
             }
             is OneInchTradeService.State.NotReady -> {
                 allErrors.addAll(state.errors)
@@ -192,7 +183,7 @@ class OneInchSwapService(
 
         state = when {
             loading -> State.Loading
-            errors.isEmpty() && transactionData != null -> State.Ready(transactionData)
+            errors.isEmpty() && tradeService.state is OneInchTradeService.State.Ready -> State.Ready
             else -> State.NotReady
         }
     }
@@ -203,14 +194,10 @@ class OneInchSwapService(
     //region models
     sealed class State {
         object Loading : State()
-        class Ready(val transactionData: TransactionData) : State()
+        object Ready : State()
         object NotReady : State()
     }
 
     //endregion
-
-    companion object {
-        val defaultSlippage = BigDecimal("0.5")
-    }
 
 }

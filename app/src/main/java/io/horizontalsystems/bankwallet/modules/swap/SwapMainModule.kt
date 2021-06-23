@@ -179,25 +179,7 @@ object SwapMainModule {
             val amountFrom: BigDecimal? = null,
             val amountTo: BigDecimal? = null,
             val amountType: AmountType = AmountType.ExactFrom
-    ) : Parcelable {
-        override fun equals(other: Any?): Boolean {
-            return if (other is SwapProviderState) {
-                coinFrom == other.coinFrom &&
-                        coinTo == other.coinTo &&
-                        (amountType == AmountType.ExactFrom && amountFrom == other.amountFrom ||
-                                amountType == AmountType.ExactTo && amountTo == other.amountTo)
-
-            } else {
-                false
-            }
-        }
-
-        override fun hashCode(): Int {
-            val amount = if (amountType == AmountType.ExactFrom) amountFrom else amountTo
-            return Objects.hash(coinFrom, coinTo, amountType, amount)
-        }
-
-    }
+    ) : Parcelable
 
     class Factory(arguments: Bundle?) : ViewModelProvider.Factory {
         private val coinFrom: Coin? = arguments?.getParcelable(coinFromKey)
