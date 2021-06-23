@@ -46,6 +46,14 @@ class EvmNetworkFragment : BaseFragment(R.layout.fragment_evm_network) {
             rvItems.adapter = ConcatAdapter(adapters)
         }
 
+        viewModel.confirmLiveEvent.observe(viewLifecycleOwner) {
+            val dialog = TestnetDisclaimerDialog()
+            dialog.onConfirm = {
+                viewModel.confirmSelection()
+            }
+            dialog.show(childFragmentManager, "selector_dialog")
+        }
+
         viewModel.finishLiveEvent.observe(viewLifecycleOwner) {
             findNavController().popBackStack()
         }

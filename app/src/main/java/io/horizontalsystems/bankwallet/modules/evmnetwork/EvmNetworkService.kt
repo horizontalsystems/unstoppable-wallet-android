@@ -56,6 +56,13 @@ class EvmNetworkService(
     val itemsObservable: Observable<List<Item>>
         get() = itemsRelay
 
+    fun isConfirmationRequired(id: String): Boolean {
+        if (currentNetwork.id == id) return false
+        val item = items.find { it.network.id == id } ?: return false
+
+        return !item.isMainNet
+    }
+
     fun setCurrentNetwork(id: String) {
         if (currentNetwork.id == id) return
 
