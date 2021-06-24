@@ -15,7 +15,7 @@ import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceViewModel
 import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveModule
 import io.horizontalsystems.bankwallet.modules.swap.coincard.SwapCoinCardViewModel
-import io.horizontalsystems.bankwallet.modules.swap.confirmation.SwapConfirmationModule
+import io.horizontalsystems.bankwallet.modules.swap.confirmation.oneinch.OneInchConfirmationModule
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.getNavigationResult
 import io.horizontalsystems.core.setOnSingleClickListener
@@ -111,8 +111,8 @@ class OneInchFragment : SwapBaseFragment() {
             advancedSettingsViews.isVisible = visible
         })
 
-        oneInchViewModel.openConfirmationLiveEvent().observe(viewLifecycleOwner, { sendEvmData ->
-            SwapConfirmationModule.start(this, R.id.swapFragment_to_swapConfirmationFragment, navOptions(), sendEvmData)
+        oneInchViewModel.openConfirmationLiveEvent().observe(viewLifecycleOwner, { oneInchSwapParameters ->
+            OneInchConfirmationModule.start(this, R.id.swapFragment_to_oneInchConfirmationFragment, navOptions(), oneInchSwapParameters)
         })
     }
 

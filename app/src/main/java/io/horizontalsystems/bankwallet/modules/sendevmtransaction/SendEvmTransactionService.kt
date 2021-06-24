@@ -20,58 +20,71 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
 import java.math.BigInteger
 
+interface ISendEvmTransactionService {
+    val state: SendEvmTransactionService.State
+    val stateObservable: Flowable<SendEvmTransactionService.State>
+
+    val txDataState: DataState<SendEvmTransactionService.TxDataState>
+    val txDataStateObservable: Flowable<DataState<SendEvmTransactionService.TxDataState>>
+
+    val sendState: SendEvmTransactionService.SendState
+    val sendStateObservable: Flowable<SendEvmTransactionService.SendState>
+
+    val ownAddress: Address
+
+    fun send(logger: AppLogger)
+}
+
 class SendEvmTransactionService(
         private val sendEvmData: SendEvmData,
         private val evmKit: EthereumKit,
-        private val transactionsService: EvmTransactionService,
+        private val transactionService: EvmTransactionService,
         private val activateCoinManager: ActivateCoinManager,
         gasPrice: Long? = null
-) : Clearable {
+) : Clearable, ISendEvmTransactionService {
     private val disposable = CompositeDisposable()
 
     private val evmBalance: BigInteger
         get() = evmKit.accountState?.balance ?: BigInteger.ZERO
 
     private val stateSubject = PublishSubject.create<State>()
-    var state: State = State.NotReady()
+    override var state: State = State.NotReady()
         private set(value) {
             field = value
             stateSubject.onNext(value)
         }
-    val stateObservable: Flowable<State> = stateSubject.toFlowable(BackpressureStrategy.BUFFER)
+    override val stateObservable: Flowable<State> = stateSubject.toFlowable(BackpressureStrategy.BUFFER)
 
     private val sendStateSubject = PublishSubject.create<SendState>()
-    var sendState: SendState = SendState.Idle
+    override var sendState: SendState = SendState.Idle
         private set(value) {
             field = value
             sendStateSubject.onNext(value)
         }
-    val sendStateObservable: Flowable<SendState>
-        get() = sendStateSubject.toFlowable(BackpressureStrategy.BUFFER)
+    override val sendStateObservable: Flowable<SendState> = sendStateSubject.toFlowable(BackpressureStrategy.BUFFER)
 
-    private val txDataStateSubject = PublishSubject.create<TxDataState>()
-    var txDataState: TxDataState = TxDataState(sendEvmData.transactionData, sendEvmData.additionalInfo, evmKit.decorate(sendEvmData.transactionData))
+    private val txDataStateSubject = PublishSubject.create<DataState<TxDataState>>()
+    override var txDataState: DataState<TxDataState> = DataState.Success(TxDataState(sendEvmData.transactionData, sendEvmData.additionalInfo, evmKit.decorate(sendEvmData.transactionData)))
         private set(value) {
             field = value
             txDataStateSubject.onNext(value)
         }
-    val txDataStateObservable: Flowable<TxDataState>
-        get() = txDataStateSubject.toFlowable(BackpressureStrategy.BUFFER)
+    override val txDataStateObservable: Flowable<DataState<TxDataState>> = txDataStateSubject.toFlowable(BackpressureStrategy.BUFFER)
 
-    val ownAddress: Address = evmKit.receiveAddress
+    override val ownAddress: Address = evmKit.receiveAddress
 
     init {
-        transactionsService.transactionStatusObservable.subscribeIO { syncState() }.let { disposable.add(it) }
-        transactionsService.transactionData = sendEvmData.transactionData
-        gasPrice?.let { transactionsService.gasPriceType = GasPriceType.Custom(it) }
+        transactionService.transactionStatusObservable.subscribeIO { syncState() }.let { disposable.add(it) }
+        transactionService.setTransactionData(sendEvmData.transactionData)
+        gasPrice?.let { transactionService.gasPriceType = GasPriceType.Custom(it) }
     }
 
-    fun send(logger: AppLogger) {
+    override fun send(logger: AppLogger) {
         if (state != State.Ready) {
             logger.info("state is not Ready: ${state.javaClass.simpleName}")
             return
         }
-        val transaction = transactionsService.transactionStatus.dataOrNull ?: return
+        val transaction = transactionService.transactionStatus.dataOrNull ?: return
 
         sendState = SendState.Sending
         logger.info("sending tx")
@@ -93,10 +106,9 @@ class SendEvmTransactionService(
     }
 
     private fun syncState() {
-        when (val status = transactionsService.transactionStatus) {
+        when (val status = transactionService.transactionStatus) {
             is DataState.Error -> {
                 state = State.NotReady(listOf(status.error))
-                syncDataState()
             }
             DataState.Loading -> {
                 state = State.NotReady()
@@ -108,18 +120,18 @@ class SendEvmTransactionService(
                 } else {
                     State.Ready
                 }
-                syncDataState(transaction)
             }
         }
+        syncTxDataState(transactionService.transactionStatus)
     }
 
-    private fun syncDataState(transaction: EvmTransactionService.Transaction? = null) {
-        val transactionData = transaction?.data ?: sendEvmData.transactionData
-        txDataState = TxDataState(transactionData, sendEvmData.additionalInfo, evmKit.decorate(transactionData))
+    private fun syncTxDataState(transactionDataState: DataState<EvmTransactionService.Transaction>) {
+        val transactionData = transactionDataState.dataOrNull?.data ?: sendEvmData.transactionData
+        txDataState = DataState.Success(TxDataState(transactionData, sendEvmData.additionalInfo, evmKit.decorate(transactionData)))
     }
 
     private fun handlePostSendActions() {
-        (txDataState.decoration as? TransactionDecoration.Swap)?.let { swapDecoration ->
+        (txDataState.dataOrNull?.decoration as? TransactionDecoration.Swap)?.let { swapDecoration ->
             activateSwapCoinOut(swapDecoration.tokenOut)
         }
     }
@@ -157,7 +169,7 @@ class SendEvmTransactionService(
     }
 
     data class TxDataState(
-            val transactionData: TransactionData,
+            val transactionData: TransactionData?,
             val additionalInfo: SendEvmData.AdditionalInfo?,
             val decoration: TransactionDecoration?
     )

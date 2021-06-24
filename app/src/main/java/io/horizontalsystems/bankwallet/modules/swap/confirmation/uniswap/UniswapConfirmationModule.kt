@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.swap.confirmation
+package io.horizontalsystems.bankwallet.modules.swap.confirmation.uniswap
 
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -15,9 +15,13 @@ import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionService
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
+import io.horizontalsystems.bankwallet.modules.swap.confirmation.oneinch.OneInchSendEvmTransactionService
+import io.horizontalsystems.bankwallet.modules.swap.confirmation.oneinch.OneInchSwapParameters
+import io.horizontalsystems.bankwallet.modules.swap.confirmation.oneinch.OneInchTransactionFeeService
 import io.horizontalsystems.core.findNavController
+import io.horizontalsystems.oneinchkit.OneInchKit
 
-object SwapConfirmationModule {
+object UniswapConfirmationModule {
 
     class Factory(
             private val dex: SwapMainModule.Dex,
