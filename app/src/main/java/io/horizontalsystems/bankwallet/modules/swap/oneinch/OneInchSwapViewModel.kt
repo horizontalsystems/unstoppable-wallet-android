@@ -7,12 +7,11 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.convertedError
 import io.horizontalsystems.bankwallet.core.ethereum.EvmTransactionService
 import io.horizontalsystems.bankwallet.core.providers.Translator
-import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.SwapError
-import io.horizontalsystems.bankwallet.modules.swap.SwapViewItemHelper
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceService
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapPendingAllowanceService
+import io.horizontalsystems.bankwallet.modules.swap.confirmation.oneinch.OneInchSwapParameters
 import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.ethereumkit.api.jsonrpc.JsonRpc
 import io.horizontalsystems.uniswapkit.TradeError
@@ -22,8 +21,7 @@ import io.reactivex.schedulers.Schedulers
 class OneInchSwapViewModel(
         val service: OneInchSwapService,
         val tradeService: OneInchTradeService,
-        private val pendingAllowanceService: SwapPendingAllowanceService,
-        private val formatter: SwapViewItemHelper
+        private val pendingAllowanceService: SwapPendingAllowanceService
 ) : ViewModel() {
 
     private val disposables = CompositeDisposable()
@@ -34,7 +32,7 @@ class OneInchSwapViewModel(
     private val approveActionLiveData = MutableLiveData<ActionState>(ActionState.Hidden)
     private val openApproveLiveEvent = SingleLiveEvent<SwapAllowanceService.ApproveData>()
     private val advancedSettingsVisibleLiveData = MutableLiveData(false)
-    private val openConfirmationLiveEvent = SingleLiveEvent<SendEvmData>()
+    private val openConfirmationLiveEvent = SingleLiveEvent<OneInchSwapParameters>()
 
     init {
         subscribeToServices()
@@ -51,7 +49,7 @@ class OneInchSwapViewModel(
     fun approveActionLiveData(): LiveData<ActionState> = approveActionLiveData
     fun openApproveLiveEvent(): LiveData<SwapAllowanceService.ApproveData> = openApproveLiveEvent
     fun advancedSettingsVisibleLiveData(): LiveData<Boolean> = advancedSettingsVisibleLiveData
-    fun openConfirmationLiveEvent(): LiveData<SendEvmData> = openConfirmationLiveEvent
+    fun openConfirmationLiveEvent(): LiveData<OneInchSwapParameters> = openConfirmationLiveEvent
 
     fun onTapSwitch() {
         tradeService.switchCoins()
@@ -65,18 +63,9 @@ class OneInchSwapViewModel(
 
     fun onTapProceed() {
         val serviceState = service.state
-        if (serviceState is OneInchSwapService.State.Ready) {
-//            val swap = (tradeService.state as? OneInchTradeService.State.Ready)?.swap
-//            val swapInfo = SendEvmData.SwapInfo(
-//                    estimatedIn = tradeService.amountFrom ?: BigDecimal.ZERO,
-//                    estimatedOut = tradeService.amountTo ?: BigDecimal.ZERO,
-//                    slippage = formatter.slippage(tradeService.swapSettings.slippage),
-//                    deadline = null, // formatter.deadline(tradeService.tradeOptions.ttl),
-//                    recipientDomain = tradeService.swapSettings.recipient?.title,
-//                    price = null,//formatter.price(trade?.tradeData?.executionPrice, tradeService.coinFrom, tradeService.coinTo),
-//                    priceImpact = null //trade?.let { formatter.priceImpactViewItem(it)?.value }
-//            )
-//            openConfirmationLiveEvent.postValue(SendEvmData(serviceState.transactionData, SendEvmData.AdditionalInfo.Swap(swapInfo)))
+        val tradeServiceState = tradeService.state
+        if (serviceState is OneInchSwapService.State.Ready && tradeServiceState is OneInchTradeService.State.Ready) {
+            openConfirmationLiveEvent.postValue(tradeServiceState.params)
         }
     }
 

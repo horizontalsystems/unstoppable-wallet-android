@@ -138,7 +138,7 @@ class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener, BackupRequ
     }
 
     override fun onSwapClicked(viewItem: BalanceViewItem) {
-        SwapMainModule.start(this, navOptions(), wallet.coin)
+        SwapMainModule.start(this, navOptions(), viewItem.wallet.coin)
     }
 
     override fun onItemClicked(viewItem: BalanceViewItem) {

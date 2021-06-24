@@ -13,6 +13,7 @@ import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.swap.settings.AddressResolutionService
 import io.horizontalsystems.bankwallet.modules.swap.settings.RecipientAddressViewModel
+import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import kotlinx.android.parcel.Parcelize
 import java.math.BigDecimal

@@ -3,13 +3,11 @@ package io.horizontalsystems.bankwallet.modules.swap.oneinch
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.AmountType
+import io.horizontalsystems.bankwallet.modules.swap.confirmation.oneinch.OneInchSwapParameters
 import io.horizontalsystems.bankwallet.modules.swap.settings.oneinch.OneInchSwapSettingsModule.OneInchSwapSettings
 import io.horizontalsystems.coinkit.models.Coin
-import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.ethereumkit.core.EthereumKit
-import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.TransactionData
-import io.horizontalsystems.oneinchkit.OneInchKit
 import io.horizontalsystems.oneinchkit.Quote
 import io.horizontalsystems.oneinchkit.Swap
 import io.reactivex.Observable
@@ -17,18 +15,15 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import java.math.BigDecimal
-import java.math.BigInteger
 import java.util.*
-import kotlin.math.absoluteValue
 
 
 class OneInchTradeService(
         evmKit: EthereumKit,
-        private val oneInchKit: OneInchKit
+        private val oneInchKitHelper: OneInchKitHelper
 ) : SwapMainModule.ISwapTradeService {
 
     private var getQuoteDisposable: Disposable? = null
-    private var getSwapDisposable: Disposable? = null
     private var lastBlockDisposable: Disposable? = null
 
     //region internal subjects
@@ -224,40 +219,22 @@ class OneInchTradeService(
         state = State.Loading
         getQuoteDisposable?.dispose()
 
-        val amountFromBigInteger = getRawAmount(coinFrom, amountFrom)
-        getQuoteDisposable = oneInchKit.getQuoteAsync(getCoinAddress(coinFrom), getCoinAddress(coinTo), amountFromBigInteger)
+        getQuoteDisposable = oneInchKitHelper.getQuoteAsync(coinFrom, coinTo, amountFrom)
                 .subscribeIO({ quote ->
-                    handle(quote)
+                    handle(quote, coinFrom, coinTo, amountFrom)
                 }, { error ->
                     state = State.NotReady(listOf(error))
                 })
     }
 
-    private fun getCoinAddress(coin: Coin): Address {
-        return when (val coinType = coin.type) {
-            CoinType.Ethereum, CoinType.BinanceSmartChain -> Address("0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
-            is CoinType.Erc20 -> Address(coinType.address)
-            is CoinType.Bep20 -> Address(coinType.address)
-            else -> throw IllegalStateException("Unsupported coinType: $coinType")
-        }
-    }
-
-    private fun getRawAmount(coin: Coin, decimal: BigDecimal): BigInteger {
-        val exponent = coin.decimal - decimal.scale()
-
-        return if (exponent >= 0) {
-            decimal.unscaledValue() * BigInteger.TEN.pow(exponent)
-        } else {
-            decimal.unscaledValue() / BigInteger.TEN.pow(exponent.absoluteValue)
-        }
-    }
-
-    private fun handle(quote: Quote) {
+    private fun handle(quote: Quote, coinFrom: Coin, coinTo: Coin, amountFrom: BigDecimal) {
         val amountToBigDecimal = quote.toTokenAmount.abs().toBigDecimal().movePointLeft(quote.toToken.decimals).stripTrailingZeros()
 
         amountTo = amountToBigDecimal
 
-        state = State.Ready(quote)
+        val parameters = OneInchSwapParameters(coinFrom, coinTo, amountFrom, amountToBigDecimal, swapSettings.slippage)
+
+        state = State.Ready(parameters)
     }
 
     private fun amountsEqual(amount1: BigDecimal?, amount2: BigDecimal?): Boolean {
@@ -271,7 +248,7 @@ class OneInchTradeService(
     //region models
     sealed class State {
         object Loading : State()
-        class Ready(val quote: Quote) : State()
+        class Ready(val params: OneInchSwapParameters) : State()
         class NotReady(val errors: List<Throwable> = listOf()) : State()
     }
     //endregion

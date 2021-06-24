@@ -43,7 +43,7 @@ class SwapMainService(
     private fun getSwapDefaultProvider(blockchain: SwapMainModule.Blockchain): SwapMainModule.ISwapProvider? {
         // TODO get default provider from local storage
         val providerId = when (blockchain) {
-            SwapMainModule.Blockchain.Ethereum -> "uniswap"
+            SwapMainModule.Blockchain.Ethereum -> "oneinch"
             SwapMainModule.Blockchain.BinanceSmartChain -> "uniswap"
         }
         return providers.firstOrNull { it.id == providerId }

@@ -9,7 +9,6 @@ import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceServi
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceViewModel
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapPendingAllowanceService
 import io.horizontalsystems.ethereumkit.core.EthereumKit
-import io.horizontalsystems.oneinchkit.OneInchKit
 
 object OneInchModule {
 
@@ -30,8 +29,8 @@ object OneInchModule {
 
     class Factory(dex: SwapMainModule.Dex) : ViewModelProvider.Factory {
         private val evmKit: EthereumKit by lazy { dex.evmKit!! }
-        private val oneIncKit by lazy { OneInchKit.getInstance(evmKit) }
-        private val allowanceService by lazy { SwapAllowanceService(oneIncKit.smartContractAddress, App.adapterManager, evmKit) }
+        private val oneIncKitHelper by lazy { OneInchKitHelper(evmKit) }
+        private val allowanceService by lazy { SwapAllowanceService(oneIncKitHelper.smartContractAddress, App.adapterManager, evmKit) }
         private val pendingAllowanceService by lazy { SwapPendingAllowanceService(App.adapterManager, allowanceService) }
         private val service by lazy {
             OneInchSwapService(
@@ -43,7 +42,7 @@ object OneInchModule {
             )
         }
         private val tradeService by lazy {
-            OneInchTradeService(evmKit, oneIncKit)
+            OneInchTradeService(evmKit, oneIncKitHelper)
         }
         private val formatter by lazy {
             SwapViewItemHelper(App.numberFormatter)
@@ -53,7 +52,7 @@ object OneInchModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return when (modelClass) {
                 OneInchSwapViewModel::class.java -> {
-                    OneInchSwapViewModel(service, tradeService, pendingAllowanceService, formatter) as T
+                    OneInchSwapViewModel(service, tradeService, pendingAllowanceService) as T
                 }
                 SwapAllowanceViewModel::class.java -> {
                     SwapAllowanceViewModel(service, allowanceService, pendingAllowanceService, formatter) as T

@@ -6,6 +6,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinServiceFactory
 import io.horizontalsystems.bankwallet.core.providers.Translator
+import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoAddressMapper
 import io.horizontalsystems.ethereumkit.core.TransactionDecoration
@@ -13,7 +14,7 @@ import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.reactivex.disposables.CompositeDisposable
 
 class SendEvmTransactionViewModel(
-        private val service: SendEvmTransactionService,
+        private val service: ISendEvmTransactionService,
         private val coinServiceFactory: EvmCoinServiceFactory
 ) : ViewModel() {
     private val disposable = CompositeDisposable()
@@ -53,12 +54,16 @@ class SendEvmTransactionViewModel(
                 }
             }
 
-    private fun sync(txDataState: SendEvmTransactionService.TxDataState) {
-        val viewItems = txDataState.decoration?.let {
-            getViewItems(it, txDataState.additionalInfo)
-        } ?: getFallbackViewItems(txDataState.transactionData)
+    private fun sync(txDataState: DataState<SendEvmTransactionService.TxDataState>) {
+        //if decoration is null try to use additional info
+        val viewItems = txDataState.dataOrNull?.decoration?.let {
+            getViewItems(it, txDataState.dataOrNull?.additionalInfo)
+        } ?: txDataState.dataOrNull?.transactionData?.let { getFallbackViewItems(it) } //?: listOf()
 
-        viewItemsLiveData.postValue(viewItems)
+
+        viewItems?.let {
+            viewItemsLiveData.postValue(it)
+        }
     }
 
     private fun sync(sendState: SendEvmTransactionService.SendState) =
@@ -93,7 +98,8 @@ class SendEvmTransactionViewModel(
                 )
         )
         val addressValue = transfer.to.eip55
-        val addressTitle = additionalInfo?.sendInfo?.domain ?: TransactionInfoAddressMapper.map(addressValue)
+        val addressTitle = additionalInfo?.sendInfo?.domain
+                ?: TransactionInfoAddressMapper.map(addressValue)
         viewItems.add(ViewItem.Address(
                 Translator.getString(R.string.Send_Confirmation_To),
                 addressTitle,
@@ -151,7 +157,7 @@ class SendEvmTransactionViewModel(
             is TransactionDecoration.Swap.Trade.ExactOut -> {
                 sections.add(SectionViewItem(listOf(
                         ViewItem.Subhead(Translator.getString(R.string.Swap_FromAmountTitle), coinServiceIn.coin.title),
-                        getEstimatedSwapAmount(info?.let { coinServiceOut.amountData(it.estimatedOut).getFormatted() }, ValueType.Outgoing),
+                        getEstimatedSwapAmount(info?.let { coinServiceOut.amountData(it.estimatedIn).getFormatted() }, ValueType.Outgoing),
                         ViewItem.Value(Translator.getString(R.string.Swap_Confirmation_Maximum), coinServiceIn.amountData(trade.amountInMax).getFormatted(), ValueType.Regular)
                 )))
                 sections.add(SectionViewItem(listOf(

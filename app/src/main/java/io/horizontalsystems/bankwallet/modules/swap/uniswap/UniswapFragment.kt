@@ -16,7 +16,7 @@ import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceViewModel
 import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveModule
 import io.horizontalsystems.bankwallet.modules.swap.coincard.SwapCoinCardViewModel
-import io.horizontalsystems.bankwallet.modules.swap.confirmation.SwapConfirmationModule
+import io.horizontalsystems.bankwallet.modules.swap.confirmation.uniswap.UniswapConfirmationModule
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.getNavigationResult
 import io.horizontalsystems.core.setOnSingleClickListener
@@ -113,7 +113,7 @@ class UniswapFragment : SwapBaseFragment() {
         })
 
         uniswapViewModel.openConfirmationLiveEvent().observe(viewLifecycleOwner, { sendEvmData ->
-            SwapConfirmationModule.start(this, R.id.swapFragment_to_swapConfirmationFragment, navOptions(), sendEvmData)
+            UniswapConfirmationModule.start(requireParentFragment(), R.id.swapFragment_to_uniswapConfirmationFragment, navOptions(), sendEvmData)
         })
     }
 

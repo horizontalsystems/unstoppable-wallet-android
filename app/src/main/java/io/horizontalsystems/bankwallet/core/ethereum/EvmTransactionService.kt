@@ -14,26 +14,34 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
 import java.math.BigInteger
 
+interface IEvmTransactionFeeService {
+    val hasEstimatedFee: Boolean
+
+    val transactionStatus: DataState<EvmTransactionService.Transaction>
+    val transactionStatusObservable: Observable<DataState<EvmTransactionService.Transaction>>
+
+    var gasPriceType: EvmTransactionService.GasPriceType
+    val gasPriceTypeObservable: Observable<EvmTransactionService.GasPriceType>
+
+    val warningOfStuckObservable: Flowable<Boolean>
+}
+
 class EvmTransactionService(
         private val evmKit: EthereumKit,
         private val feeRateProvider: IFeeRateProvider,
         private val gasLimitSurchargePercent: Int
-) {
+) : IEvmTransactionFeeService {
 
     private var recommendedGasPrice: BigInteger? = null
     private var warningOfStuckSubject = PublishSubject.create<Boolean>()
-    val warningOfStuckObservable: Flowable<Boolean>
+    override val warningOfStuckObservable: Flowable<Boolean>
         get() = warningOfStuckSubject.toFlowable(BackpressureStrategy.BUFFER)
 
-    val hasEstimatedFee: Boolean = gasLimitSurchargePercent != 0
+    override val hasEstimatedFee: Boolean = gasLimitSurchargePercent != 0
 
-    var transactionData: TransactionData? = null
-        set(value) {
-            field = value
-            sync()
-        }
+    private var transactionData: TransactionData? = null
 
-    var gasPriceType: GasPriceType = GasPriceType.Recommended
+    override var gasPriceType: GasPriceType = GasPriceType.Recommended
         set(value) {
             field = value
             gasPriceTypeSubject.onNext(value)
@@ -41,20 +49,25 @@ class EvmTransactionService(
         }
 
     private val gasPriceTypeSubject = PublishSubject.create<GasPriceType>()
-    val gasPriceTypeObservable: Observable<GasPriceType> = gasPriceTypeSubject
+    override val gasPriceTypeObservable: Observable<GasPriceType> = gasPriceTypeSubject
 
-    var transactionStatus: DataState<Transaction> = DataState.Error(GasDataError.NoTransactionData)
-        set(value) {
+    override var transactionStatus: DataState<Transaction> = DataState.Error(GasDataError.NoTransactionData)
+        private set(value) {
             field = value
             transactionStatusSubject.onNext(value)
         }
     private val transactionStatusSubject = PublishSubject.create<DataState<Transaction>>()
-    val transactionStatusObservable: Observable<DataState<Transaction>> = transactionStatusSubject
+    override val transactionStatusObservable: Observable<DataState<Transaction>> = transactionStatusSubject
 
     private val disposable = CompositeDisposable()
 
     private val evmBalance: BigInteger
         get() = evmKit.accountState?.balance ?: BigInteger.ZERO
+
+    fun setTransactionData(transactionData: TransactionData) {
+        this.transactionData = transactionData
+        sync()
+    }
 
     fun onCleared() {
         disposable.clear()

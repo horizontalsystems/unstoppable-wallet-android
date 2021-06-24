@@ -4,6 +4,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.ethereumkit.api.jsonrpc.JsonRpc
 import io.horizontalsystems.ethereumkit.core.AddressValidator
+import retrofit2.adapter.rxjava2.HttpException
 
 class UnsupportedAccountException : Exception()
 class WrongAccountTypeForThisProvider : Exception()
@@ -11,8 +12,8 @@ class LocalizedException(val errorTextRes: Int) : Exception()
 class AdapterErrorWrongParameters(override val message: String) : Exception()
 class EthereumKitNotCreated() : Exception()
 class NoFeeSendTransactionError() : Exception()
-class InvalidBep2Address: Exception()
-class InvalidContractAddress: Exception()
+class InvalidBep2Address : Exception()
+class InvalidContractAddress : Exception()
 
 sealed class EvmError(message: String? = null) : Throwable(message) {
     object InsufficientBalanceWithFee : EvmError()
@@ -41,6 +42,13 @@ val Throwable.convertedError: Throwable
         }
         is AddressValidator.AddressValidationException -> {
             EvmAddressError.InvalidAddress
+        }
+        is HttpException -> {
+            if (response()?.errorBody()?.string()?.contains("Try to leave the buffer of ETH for gas") == true) {
+                EvmError.InsufficientBalanceWithFee
+            } else {
+                this
+            }
         }
         else -> this
     }
