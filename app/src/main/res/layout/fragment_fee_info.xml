@@ -10,6 +10,7 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
+        android:paddingEnd="6dp"
         app:menu="@menu/fee_info_menu"
         app:title="@string/FeeInfo_Title"
         app:titleTextAppearance="@style/Title3" />
