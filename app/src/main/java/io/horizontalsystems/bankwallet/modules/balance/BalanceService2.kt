@@ -159,5 +159,6 @@ class BalanceService2(
 
     override fun clear() {
         disposables.clear()
+        adapterRepository.clear()
     }
 }
