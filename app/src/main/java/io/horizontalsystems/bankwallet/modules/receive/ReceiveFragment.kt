@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ShareCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
@@ -14,11 +15,10 @@ import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
-import kotlinx.android.synthetic.main.fragment_backup_words_confirm.*
 import kotlinx.android.synthetic.main.fragment_receive.*
 import kotlinx.android.synthetic.main.fragment_receive.toolbar
 
-class ReceiveFragment: BaseFragment() {
+class ReceiveFragment : BaseFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_receive, container, false)
@@ -32,7 +32,8 @@ class ReceiveFragment: BaseFragment() {
         }
 
         try {
-            val wallet = arguments?.getParcelable<Wallet>(WALLET_KEY) ?: run { findNavController().popBackStack(); return }
+            val wallet = arguments?.getParcelable<Wallet>(WALLET_KEY)
+                    ?: run { findNavController().popBackStack(); return }
             val viewModel by viewModels<ReceiveViewModel> { ReceiveModule.Factory(wallet) }
 
             toolbar.title = getString(R.string.Deposit_Title, wallet.coin.code)
@@ -49,19 +50,24 @@ class ReceiveFragment: BaseFragment() {
 
             receiveAddressView.text = viewModel.receiveAddress
             imgQrCode.setImageBitmap(TextHelper.getQrCodeBitmap(viewModel.receiveAddress))
+            testnetLabel.isVisible = viewModel.testNet
 
-            receiverHint.text = if (viewModel.addressType != null) {
-                getString(R.string.Deposit_Your_Address) + " (${viewModel.addressType})"
-            } else {
-                getString(R.string.Deposit_Your_Address)
+            val addressType = if (viewModel.testNet) "Testnet" else viewModel.addressType
+
+            receiverHint.text = when {
+                addressType != null -> getString(R.string.Deposit_Your_Address) + " ($addressType)"
+                else -> getString(R.string.Deposit_Your_Address)
             }
+
+            val hintColor = if (viewModel.testNet) R.color.lucian else R.color.grey
+            receiverHint.setTextColor(view.context.getColor(hintColor))
 
             btnShare.setOnSingleClickListener {
                 context?.let {
                     ShareCompat.IntentBuilder(it)
-                        .setType("text/plain")
-                        .setText(viewModel.receiveAddress)
-                        .startChooser()
+                            .setType("text/plain")
+                            .setText(viewModel.receiveAddress)
+                            .startChooser()
                 }
             }
 

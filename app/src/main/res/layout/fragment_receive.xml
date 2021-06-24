@@ -8,13 +8,13 @@
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
-        app:menu="@menu/receive_menu"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         app:layout_constraintBottom_toTopOf="@id/middleGroup"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="spread_inside"
         app:layout_constraintVertical_weight="1"
+        app:menu="@menu/receive_menu"
         app:titleTextAppearance="@style/Title3"
         tools:navigationIcon="@drawable/bitcoin"
         tools:title="@string/Deposit_Title" />
@@ -51,6 +51,15 @@
             app:layout_constraintStart_toStartOf="@id/imgBg"
             app:layout_constraintTop_toTopOf="@id/imgBg"
             tools:src="@tools:sample/avatars" />
+
+        <ImageView
+            android:id="@+id/testnetLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/testnet"
+            app:layout_constraintEnd_toEndOf="@id/imgQrCode"
+            app:layout_constraintStart_toStartOf="@id/imgQrCode"
+            app:layout_constraintTop_toBottomOf="@+id/imgQrCode" />
 
         <TextView
             android:id="@+id/receiverHint"
@@ -102,11 +111,10 @@
             android:id="@+id/btnShare"
             style="@style/ButtonSecondary"
             android:layout_width="wrap_content"
-            android:layout_marginStart="12dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
             android:text="@string/Deposit_Share"
             app:layout_constraintEnd_toEndOf="parent"
-
             app:layout_constraintStart_toEndOf="@id/btnCopy"
             app:layout_constraintTop_toTopOf="@id/btnCopy" />
 
