@@ -10,6 +10,7 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
+        android:paddingEnd="6dp"
         app:menu="@menu/restore_mnemonic_menu"
         app:navigationIcon="@drawable/ic_back"
         app:title="@string/Restore_Enter_Key_Title"
@@ -33,6 +34,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="12dp"
                 android:layout_marginEnd="16dp"
+                android:autofillHints=""
                 android:background="@drawable/input_background_themed"
                 android:gravity="top"
                 android:inputType="textMultiLine|textVisiblePassword"
@@ -41,8 +43,7 @@
                 android:paddingStart="12dp"
                 android:paddingTop="11dp"
                 android:paddingEnd="12dp"
-                android:paddingBottom="11dp"
-                android:autofillHints="" />
+                android:paddingBottom="11dp" />
 
             <TextView
                 android:id="@+id/description"

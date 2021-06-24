@@ -11,6 +11,7 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
+        android:paddingEnd="6dp"
         app:menu="@menu/uniswap_info_menu"
         app:titleTextAppearance="@style/Title3"
         tools:title="Uniswap v.2" />
