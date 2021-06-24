@@ -58,6 +58,14 @@ class BalanceService2(
                 disposables.add(it)
             }
 
+        adapterRepository.readyObservable
+            .subscribeIO {
+                handleAdaptersReady()
+            }
+            .let {
+                disposables.add(it)
+            }
+
         adapterRepository.updatesObservable
             .subscribeIO {
                 handleAdapterUpdate(it)
@@ -74,6 +82,20 @@ class BalanceService2(
         balanceItems.addAll(sorted)
 
         balanceItemsSubject.onNext(Unit)
+    }
+
+    @Synchronized
+    fun handleAdaptersReady() {
+        for (i in 0 until balanceItems.size) {
+            val balanceItem = balanceItems[i]
+
+            balanceItems[i] = balanceItem.copy(
+                balanceData = adapterRepository.balanceData(balanceItem.wallet),
+                state = adapterRepository.state(balanceItem.wallet)
+            )
+        }
+
+        sortAndEmitItems()
     }
 
     @Synchronized
