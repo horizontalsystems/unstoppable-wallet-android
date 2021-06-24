@@ -49,6 +49,10 @@ class ReceiveFragment : BaseFragment() {
             }
 
             receiveAddressView.text = viewModel.receiveAddress
+            receiveAddressView.setOnClickListener {
+                copyAddress(viewModel.receiveAddress)
+            }
+
             imgQrCode.setImageBitmap(TextHelper.getQrCodeBitmap(viewModel.receiveAddress))
             testnetLabel.isVisible = viewModel.testNet
 
@@ -72,8 +76,7 @@ class ReceiveFragment : BaseFragment() {
             }
 
             btnCopy.setOnSingleClickListener {
-                TextHelper.copyText(viewModel.receiveAddress)
-                HudHelper.showSuccessMessage(requireView(), R.string.Hud_Text_Copied)
+                copyAddress(viewModel.receiveAddress)
             }
 
             btnClose.setOnSingleClickListener {
@@ -83,6 +86,11 @@ class ReceiveFragment : BaseFragment() {
             HudHelper.showErrorMessage(this.requireView(), t.message ?: t.javaClass.simpleName)
             findNavController().popBackStack()
         }
+    }
+
+    private fun copyAddress(address: String) {
+        TextHelper.copyText(address)
+        HudHelper.showSuccessMessage(requireView(), R.string.Hud_Text_Copied)
     }
 
     companion object {
