@@ -1,33 +1,35 @@
 package io.horizontalsystems.bankwallet.modules.balance
 
-import io.horizontalsystems.bankwallet.core.AdapterState
-import io.horizontalsystems.bankwallet.core.BalanceData
-import io.horizontalsystems.bankwallet.core.IAdapterManager
-import io.horizontalsystems.bankwallet.core.subscribeIO
+import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.PublishSubject
 
 class BalanceAdapterRepository(
     private val adapterManager: IAdapterManager,
     private val balanceCache: BalanceCache
-) {
+) : Clearable {
     private var wallets = listOf<Wallet>()
 
     private val updatesDisposables = CompositeDisposable()
+    private var adapterReadyDisposable: Disposable? = null
 
-    val readyObservable get() = adapterManager.adaptersReadyObservable
+    private val readySubject = PublishSubject.create<Unit>()
+    val readyObservable: Observable<Unit> get() = readySubject
 
     private val updatesSubject = PublishSubject.create<Wallet>()
-    val updatesObservable: Observable<Wallet>
-        get() = updatesSubject
-            .doOnSubscribe {
-                subscribeForAdapterUpdates()
-            }
-            .doFinally {
-                unsubscribeFromAdapterUpdates()
-            }
+    val updatesObservable: Observable<Wallet> get() = updatesSubject
+
+    init {
+        subscribeForAdapterReadyUpdate()
+    }
+
+    override fun clear() {
+        unsubscribeFromAdapterUpdates()
+        unsubscribeFromAdapterReadyUpdate()
+    }
 
     fun setWallet(wallets: List<Wallet>) {
         unsubscribeFromAdapterUpdates()
@@ -35,6 +37,18 @@ class BalanceAdapterRepository(
         subscribeForAdapterUpdates()
     }
 
+    private fun unsubscribeFromAdapterReadyUpdate() {
+        adapterReadyDisposable?.dispose()
+    }
+
+    private fun subscribeForAdapterReadyUpdate() {
+        adapterReadyDisposable = adapterManager.adaptersReadyObservable
+            .subscribeIO {
+                unsubscribeFromAdapterUpdates()
+                readySubject.onNext(Unit)
+                subscribeForAdapterUpdates()
+            }
+    }
     private fun unsubscribeFromAdapterUpdates() {
         updatesDisposables.clear()
     }
