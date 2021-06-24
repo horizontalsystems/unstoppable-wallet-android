@@ -46,6 +46,15 @@ class BalanceAdapterRepository(
             .subscribeIO {
                 unsubscribeFromAdapterUpdates()
                 readySubject.onNext(Unit)
+
+                balanceCache.setCache(
+                    wallets.mapNotNull { wallet ->
+                        adapterManager.getBalanceAdapterForWallet(wallet)?.balanceData?.let {
+                            wallet to it
+                        }
+                    }.toMap()
+                )
+
                 subscribeForAdapterUpdates()
             }
     }
@@ -67,6 +76,10 @@ class BalanceAdapterRepository(
                 adapter.balanceUpdatedFlowable
                     .subscribeIO {
                         updatesSubject.onNext(wallet)
+
+                        adapterManager.getBalanceAdapterForWallet(wallet)?.balanceData?.let {
+                            balanceCache.setCache(wallet, it)
+                        }
                     }
                     .let {
                         updatesDisposables.add(it)
@@ -81,13 +94,7 @@ class BalanceAdapterRepository(
     }
 
     fun balanceData(wallet: Wallet): BalanceData {
-        return when (val balanceData = adapterManager.getBalanceAdapterForWallet(wallet)?.balanceData) {
-            null -> balanceCache.getCache(wallet)
-            else -> {
-                balanceCache.setCache(wallet, balanceData)
-                balanceData
-            }
-        }
+        return adapterManager.getBalanceAdapterForWallet(wallet)?.balanceData ?: balanceCache.getCache(wallet)
     }
 
     fun refresh() {
