@@ -24,7 +24,6 @@ import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.core.helpers.KeyboardHelper
 import io.horizontalsystems.hdwalletkit.Mnemonic
-import kotlinx.android.synthetic.main.fragment_create_account.*
 import kotlinx.android.synthetic.main.fragment_restore_mnemonic.*
 import kotlinx.android.synthetic.main.fragment_restore_mnemonic.passphrase
 import kotlinx.android.synthetic.main.fragment_restore_mnemonic.passphraseDescription
