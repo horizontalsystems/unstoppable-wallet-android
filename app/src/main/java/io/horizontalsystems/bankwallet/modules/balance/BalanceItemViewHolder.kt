@@ -214,13 +214,15 @@ class BalanceItemViewHolder(override val containerView: View, private val listen
     }
 
     private fun setDiffPercentage(diff: BigDecimal?, view: TextView) {
-        diff ?: return
+        if (diff == null) {
+            view.text = null
+        } else {
+            val sign = if (diff >= BigDecimal.ZERO) "+" else "-"
+            view.text = App.numberFormatter.format(diff.abs(), 0, 2, sign, "%")
 
-        val sign = if (diff >= BigDecimal.ZERO) "+" else "-"
-        view.text = App.numberFormatter.format(diff.abs(), 0, 2, sign, "%")
-
-        val color = if (diff >= BigDecimal.ZERO) R.color.remus else R.color.lucian
-        view.setTextColor(containerView.context.getColor(color))
+            val color = if (diff >= BigDecimal.ZERO) R.color.remus else R.color.lucian
+            view.setTextColor(containerView.context.getColor(color))
+        }
     }
 
     private fun setSyncProgressIcon(syncingProgress: SyncingProgress) {
