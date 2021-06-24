@@ -7,7 +7,6 @@ import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.PublishSubject
 
 class BalanceAdapterRepository(
@@ -17,36 +16,18 @@ class BalanceAdapterRepository(
     private var wallets = listOf<Wallet>()
 
     private val updatesDisposables = CompositeDisposable()
-    private var adapterReadyDisposable: Disposable? = null
+
+    val readyObservable get() = adapterManager.adaptersReadyObservable
 
     private val updatesSubject = PublishSubject.create<Wallet>()
     val updatesObservable: Observable<Wallet>
         get() = updatesSubject
             .doOnSubscribe {
-                subscribeForAdapterReadyUpdate()
                 subscribeForAdapterUpdates()
             }
             .doFinally {
-                unsubscribeFromAdapterReadyUpdate()
                 unsubscribeFromAdapterUpdates()
             }
-
-    private fun unsubscribeFromAdapterReadyUpdate() {
-        adapterReadyDisposable?.dispose()
-    }
-
-    private fun subscribeForAdapterReadyUpdate() {
-        adapterReadyDisposable = adapterManager.adaptersReadyObservable
-            .subscribeIO {
-                unsubscribeFromAdapterUpdates()
-
-                wallets.forEach { wallet ->
-                    updatesSubject.onNext(wallet)
-                }
-
-                subscribeForAdapterUpdates()
-            }
-    }
 
     fun setWallet(wallets: List<Wallet>) {
         unsubscribeFromAdapterUpdates()
