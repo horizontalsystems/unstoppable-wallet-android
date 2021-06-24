@@ -3,7 +3,7 @@
     style="@style/Subhead2"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="16dp"
-    android:layout_marginTop="36dp"
+    android:layout_marginHorizontal="24dp"
+    android:layout_marginTop="12dp"
     android:text="@string/ManageAccounts_Hint"
     android:textColor="@color/grey" />
