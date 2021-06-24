@@ -59,19 +59,6 @@ class WalletStorage(
         storage.save(enabledWallets)
     }
 
-    override fun save(wallet: Wallet) {
-        storage.save(
-            EnabledWallet(
-                wallet.coin.id,
-                wallet.configuredCoin.settings.id,
-                wallet.account.id,
-                null,
-                wallet.balance,
-                wallet.balanceLocked,
-            )
-        )
-    }
-
     override fun delete(wallets: List<Wallet>) {
         val enabledWallets = wallets.map {
             EnabledWallet(it.coin.id, it.configuredCoin.settings.id, it.account.id, null, it.balance, it.balanceLocked)
