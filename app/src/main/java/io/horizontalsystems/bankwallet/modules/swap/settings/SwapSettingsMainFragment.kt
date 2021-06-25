@@ -37,11 +37,11 @@ class SwapSettingsMainFragment : BaseFragment() {
         }
 
         setProviderButtonTitle(mainViewModel.provider.title)
-        setView(mainViewModel.provider)
+        setProviderView(mainViewModel.provider)
 
         mainViewModel.providerLiveData.observe(viewLifecycleOwner, { provider ->
             setProviderButtonTitle(provider.title)
-            setView(provider)
+            setProviderView(provider)
         })
 
     }
@@ -50,7 +50,7 @@ class SwapSettingsMainFragment : BaseFragment() {
         providerButton.showValueWithColor(title, R.color.leah)
     }
 
-    private fun setView(provider: ISwapProvider) {
+    private fun setProviderView(provider: ISwapProvider) {
         childFragmentManager
                 .beginTransaction()
                 .replace(R.id.fragment_placeholder, provider.settingsFragment)

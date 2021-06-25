@@ -55,11 +55,9 @@ class SendEvmTransactionViewModel(
             }
 
     private fun sync(txDataState: DataState<SendEvmTransactionService.TxDataState>) {
-        //if decoration is null try to use additional info
         val viewItems = txDataState.dataOrNull?.decoration?.let {
             getViewItems(it, txDataState.dataOrNull?.additionalInfo)
-        } ?: txDataState.dataOrNull?.transactionData?.let { getFallbackViewItems(it) } //?: listOf()
-
+        } ?: txDataState.dataOrNull?.transactionData?.let { getFallbackViewItems(it) }
 
         viewItems?.let {
             viewItemsLiveData.postValue(it)

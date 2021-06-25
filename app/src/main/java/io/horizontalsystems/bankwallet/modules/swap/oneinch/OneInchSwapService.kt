@@ -197,7 +197,6 @@ class OneInchSwapService(
         object Ready : State()
         object NotReady : State()
     }
-
     //endregion
 
 }

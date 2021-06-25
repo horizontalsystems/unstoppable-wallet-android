@@ -41,7 +41,7 @@ class UniswapTradeService(
         lastBlockDisposable = evmKit.lastBlockHeightFlowable
                 .subscribeOn(Schedulers.io())
                 .subscribe {
-                    syncSwapData()
+//                    syncSwapData()
                 }
     }
 
