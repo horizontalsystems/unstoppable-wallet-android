@@ -323,6 +323,7 @@
     <string name="Swap_MinimumGot">Montant garanti</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">Configuration avancée</string>
+    <string name="SwapSettings_Service">Service</string>
     <string name="SwapSettings_SlippageTitle">Effet de glissement</string>
     <string name="SwapSettings_SlippageDescription">Votre transaction sera annulée si le prix change défavorablement au-delà de ce pourcentage</string>
     <string name="SwapSettings_DeadlineTitle">Date limite de transaction</string>
