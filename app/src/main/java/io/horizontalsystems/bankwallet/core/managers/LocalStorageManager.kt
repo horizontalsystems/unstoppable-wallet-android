@@ -14,6 +14,7 @@ import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
 import io.horizontalsystems.bankwallet.modules.market.MarketModule
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.settings.theme.ThemeType
+import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.core.IPinStorage
 import io.horizontalsystems.core.IThirdKeyboard
 import io.horizontalsystems.core.entities.AppVersion
@@ -56,8 +57,9 @@ class LocalStorageManager(private val preferences: SharedPreferences)
     private val CURRENT_THEME = "current_theme"
     private val CHANGELOG_SHOWN_FOR_APP_VERSION = "changelog_shown_for_app_version"
     private val IGNORE_ROOTED_DEVICE_WARNING = "ignore_rooted_device_warning"
+    private val SWAP_PROVIDER = "swap_provider_"
 
-    val gson by lazy { Gson() }
+    private val gson by lazy { Gson() }
 
     override var sendInputType: SendModule.InputType?
         get() = preferences.getString(SEND_INPUT_TYPE, null)?.let {
@@ -161,7 +163,8 @@ class LocalStorageManager(private val preferences: SharedPreferences)
     }
 
     override var currentTheme: ThemeType
-        get() = preferences.getString(CURRENT_THEME, null)?.let { ThemeType.valueOf(it) } ?: ThemeType.Dark
+        get() = preferences.getString(CURRENT_THEME, null)?.let { ThemeType.valueOf(it) }
+                ?: ThemeType.Dark
         set(themeType) {
             preferences.edit().putString(CURRENT_THEME, themeType.value).apply()
         }
@@ -262,7 +265,7 @@ class LocalStorageManager(private val preferences: SharedPreferences)
         }
 
     override var appLaunchCount: Int
-        get() = preferences.getInt(APP_LAUNCH_COUNT, 0 )
+        get() = preferences.getInt(APP_LAUNCH_COUNT, 0)
         set(value) {
             preferences.edit().putInt(APP_LAUNCH_COUNT, value).apply()
         }
@@ -276,7 +279,8 @@ class LocalStorageManager(private val preferences: SharedPreferences)
     override var transactionSortingType: TransactionDataSortingType
         get() {
             val txSortingTypeString = preferences.getString(TRANSACTION_DATA_SORTING_TYPE, null)
-            return txSortingTypeString?.let { TransactionDataSortingType.valueOf(it) } ?: TransactionDataSortingType.Shuffle
+            return txSortingTypeString?.let { TransactionDataSortingType.valueOf(it) }
+                    ?: TransactionDataSortingType.Shuffle
         }
         set(sortingType) {
             preferences.edit().putString(TRANSACTION_DATA_SORTING_TYPE, sortingType.value).apply()
@@ -336,4 +340,13 @@ class LocalStorageManager(private val preferences: SharedPreferences)
         set(value) {
             preferences.edit().putBoolean(IGNORE_ROOTED_DEVICE_WARNING, value).apply()
         }
+
+    override fun getSwapProviderId(blockchain: SwapMainModule.Blockchain): String? {
+        return preferences.getString(SWAP_PROVIDER + blockchain.id, null)
+    }
+
+    override fun setSwapProviderId(blockchain: SwapMainModule.Blockchain, providerId: String) {
+        preferences.edit().putString(SWAP_PROVIDER + blockchain.id, providerId).apply()
+    }
+
 }

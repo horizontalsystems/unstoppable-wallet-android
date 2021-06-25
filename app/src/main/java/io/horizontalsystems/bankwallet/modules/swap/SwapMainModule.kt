@@ -52,7 +52,7 @@ object SwapMainModule {
     }
 
     @Parcelize
-    class UniswapProvider : ISwapProvider {
+    object UniswapProvider : ISwapProvider {
         override val id = "uniswap"
         override val title = "Uniswap"
         override val url = "https://uniswap.org/"
@@ -67,7 +67,7 @@ object SwapMainModule {
     }
 
     @Parcelize
-    class PancakeSwapProvider : ISwapProvider {
+    object PancakeSwapProvider : ISwapProvider {
         override val id = "pancake"
         override val title = "PancakeSwap"
         override val url = "https://pancakeswap.finance/"
@@ -82,7 +82,7 @@ object SwapMainModule {
     }
 
     @Parcelize
-    class OneInchProvider : ISwapProvider {
+    object OneInchProvider : ISwapProvider {
         override val id = "oneinch"
         override val title = "1inch Network"
         override val url = "https://app.1inch.io/"
@@ -183,14 +183,14 @@ object SwapMainModule {
 
     class Factory(arguments: Bundle?) : ViewModelProvider.Factory {
         private val coinFrom: Coin? = arguments?.getParcelable(coinFromKey)
-        private val swapProviders: List<ISwapProvider> = listOf(UniswapProvider(), PancakeSwapProvider(), OneInchProvider())
+        private val swapProviders: List<ISwapProvider> = listOf(UniswapProvider, PancakeSwapProvider, OneInchProvider)
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
 
             return when (modelClass) {
                 SwapMainViewModel::class.java -> {
-                    SwapMainViewModel(SwapMainService(coinFrom, swapProviders)) as T
+                    SwapMainViewModel(SwapMainService(coinFrom, swapProviders, App.localStorage)) as T
                 }
                 else -> throw IllegalArgumentException()
             }

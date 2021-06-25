@@ -10,6 +10,7 @@ import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
 import io.horizontalsystems.bankwallet.modules.market.MarketModule
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.settings.theme.ThemeType
+import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.binancechainkit.BinanceChainKit
 import io.horizontalsystems.bitcoincore.core.IPluginData
 import io.horizontalsystems.coinkit.models.Coin
@@ -71,6 +72,9 @@ interface ILocalStorage {
     var currentTheme: ThemeType
     var changelogShownForAppVersion: String?
     var ignoreRootedDeviceWarning: Boolean
+
+    fun getSwapProviderId(blockchain: SwapMainModule.Blockchain): String?
+    fun setSwapProviderId(blockchain: SwapMainModule.Blockchain, providerId: String)
 
     fun clear()
 }
