@@ -5,7 +5,6 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 
 object Migration_34_35 : Migration(34, 35) {
     override fun migrate(database: SupportSQLiteDatabase) {
-        database.execSQL("ALTER TABLE EnabledWallet ADD COLUMN `balance` TEXT NOT NULL DEFAULT '0'")
-        database.execSQL("ALTER TABLE EnabledWallet ADD COLUMN `balanceLocked` TEXT NOT NULL DEFAULT '0'")
+        database.execSQL("CREATE TABLE IF NOT EXISTS `EnabledWalletCache` (`coinId` TEXT NOT NULL, `coinSettingsId` TEXT NOT NULL, `accountId` TEXT NOT NULL, `balance` TEXT NOT NULL, `balanceLocked` TEXT NOT NULL, PRIMARY KEY(`coinId`, `coinSettingsId`, `accountId`), FOREIGN KEY(`accountId`) REFERENCES `AccountRecord`(`id`) ON UPDATE CASCADE ON DELETE CASCADE DEFERRABLE INITIALLY DEFERRED)")
     }
 }

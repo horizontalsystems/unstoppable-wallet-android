@@ -18,7 +18,7 @@ object BalanceModule {
             val balanceService2 = BalanceService2(
                 BalanceActiveWalletRepository(App.walletManager, App.accountSettingManager),
                 BalanceXRateRepository(App.currencyManager, App.xRateManager),
-                BalanceAdapterRepository(App.adapterManager, BalanceCache(App.walletStorage)),
+                BalanceAdapterRepository(App.adapterManager, BalanceCache(App.appDatabase.enabledWalletsCacheDao())),
                 NetworkTypeChecker(App.accountSettingManager),
                 App.localStorage,
                 App.connectivityManager,
