@@ -323,6 +323,7 @@
     <string name="Swap_MinimumGot">보증 금액</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">고급 설정</string>
+    <string name="SwapSettings_Service">Service</string>
     <string name="SwapSettings_SlippageTitle">Slippage Tolerance</string>
     <string name="SwapSettings_SlippageDescription">가격이 이 퍼센트보다 높게 불리한 조건으로 변경될 경우 귀하의 거래가 원상 복구됩니다.</string>
     <string name="SwapSettings_DeadlineTitle">거래 마감 시간</string>
