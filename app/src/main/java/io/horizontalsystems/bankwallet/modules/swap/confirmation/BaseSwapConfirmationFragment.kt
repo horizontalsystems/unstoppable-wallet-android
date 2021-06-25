@@ -12,17 +12,11 @@ import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.ethereum.EthereumFeeViewModel
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
-import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData
-import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule
-import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule.additionalInfoKey
-import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule.transactionDataKey
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainViewModel
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
-import io.horizontalsystems.ethereumkit.models.Address
-import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.snackbar.CustomSnackbar
 import io.horizontalsystems.snackbar.SnackbarDuration
 import kotlinx.android.synthetic.main.fragment_confirmation_swap.*
@@ -32,6 +26,7 @@ abstract class BaseSwapConfirmationFragment : BaseFragment() {
     protected abstract val logger: AppLogger
     protected abstract val sendViewModel: SendEvmTransactionViewModel
     protected abstract val feeViewModel: EthereumFeeViewModel
+    protected abstract fun navigateToFeeInfo()
 
     private val mainViewModel by navGraphViewModels<SwapMainViewModel>(R.id.swapFragment)
     protected val dex: SwapMainModule.Dex
@@ -82,7 +77,7 @@ abstract class BaseSwapConfirmationFragment : BaseFragment() {
                 viewLifecycleOwner,
                 parentFragmentManager,
                 showSpeedInfoListener = {
-                    findNavController().navigate(R.id.swapConfirmationFragment_to_feeSpeedInfo, null, navOptions())
+                    navigateToFeeInfo()
                 }
         )
 

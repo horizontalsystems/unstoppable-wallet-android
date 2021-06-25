@@ -345,7 +345,7 @@
         android:name="io.horizontalsystems.bankwallet.modules.swap.confirmation.uniswap.UniswapConfirmationFragment"
         tools:layout="@layout/fragment_confirmation_swap">
         <action
-            android:id="@+id/swapConfirmationFragment_to_feeSpeedInfo"
+            android:id="@+id/uniswapConfirmationFragment_to_feeSpeedInfo"
             app:destination="@id/feeSpeedInfoFragment" />
     </fragment>
     <fragment

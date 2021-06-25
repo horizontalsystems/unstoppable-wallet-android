@@ -40,14 +40,14 @@ class SwapMainFragment : BaseFragment() {
             }
         }
 
-        initProviderView(mainViewModel.provider)
+        setProviderView(mainViewModel.provider)
 
         mainViewModel.providerLiveData.observe(viewLifecycleOwner, { provider ->
-            initProviderView(provider)
+            setProviderView(provider)
         })
     }
 
-    private fun initProviderView(provider: ISwapProvider) {
+    private fun setProviderView(provider: ISwapProvider) {
         childFragmentManager
                 .beginTransaction()
                 .replace(R.id.fragment_placeholder, provider.fragment)
