@@ -15,6 +15,7 @@ class BalanceItemsAdapter(private val listener: Listener) : ListAdapter<BalanceV
         fun onChartClicked(viewItem: BalanceViewItem)
         fun onItemClicked(viewItem: BalanceViewItem)
         fun onSyncErrorClicked(viewItem: BalanceViewItem)
+        fun onSwiped(viewItem: BalanceViewItem)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {

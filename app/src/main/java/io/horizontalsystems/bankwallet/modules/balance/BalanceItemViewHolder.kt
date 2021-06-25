@@ -236,4 +236,10 @@ class BalanceItemViewHolder(override val containerView: View, private val listen
     private fun View.dimIf(condition: Boolean, dimmedAlpha: Float = 0.5f) {
         alpha = if (condition) dimmedAlpha else 1f
     }
+
+    fun swipe() {
+        balanceViewItem?.let {
+            listener.onSwiped(it)
+        }
+    }
 }

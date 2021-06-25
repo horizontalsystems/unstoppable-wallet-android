@@ -161,4 +161,15 @@ class BalanceService2(
         disposables.clear()
         adapterRepository.clear()
     }
+
+    val disabledWalletSubject = PublishSubject.create<Wallet>()
+    fun disable(wallet: Wallet) {
+        activeWalletRepository.disable(wallet)
+
+        disabledWalletSubject.onNext(wallet)
+    }
+
+    fun enable(wallet: Wallet) {
+        activeWalletRepository.enable(wallet)
+    }
 }
