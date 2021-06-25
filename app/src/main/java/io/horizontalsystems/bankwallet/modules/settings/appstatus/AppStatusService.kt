@@ -2,8 +2,7 @@ package io.horizontalsystems.bankwallet.modules.settings.appstatus
 
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.adapters.BitcoinBaseAdapter
-import io.horizontalsystems.bankwallet.core.managers.BinanceSmartChainKitManager
-import io.horizontalsystems.bankwallet.core.managers.EthereumKitManager
+import io.horizontalsystems.bankwallet.core.managers.EvmKitManager
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.coinkit.models.CoinType
@@ -17,8 +16,8 @@ class AppStatusService(
         private val accountManager: IAccountManager,
         private val walletManager: IWalletManager,
         private val adapterManager: IAdapterManager,
-        private val ethereumKitManager: EthereumKitManager,
-        private val binanceSmartChainKitManager: BinanceSmartChainKitManager,
+        private val ethereumKitManager: EvmKitManager,
+        private val binanceSmartChainKitManager: EvmKitManager,
         private val binanceKitManager: IBinanceKitManager
 ) {
 

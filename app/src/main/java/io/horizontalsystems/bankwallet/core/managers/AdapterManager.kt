@@ -19,8 +19,8 @@ import java.util.concurrent.ConcurrentHashMap
 class AdapterManager(
         private val walletManager: IWalletManager,
         private val adapterFactory: AdapterFactory,
-        private val ethereumKitManager: EthereumKitManager,
-        private val binanceSmartChainKitManager: BinanceSmartChainKitManager,
+        private val ethereumKitManager: EvmKitManager,
+        private val binanceSmartChainKitManager: EvmKitManager,
         private val binanceKitManager: BinanceKitManager
 ) : IAdapterManager, HandlerThread("A") {
 

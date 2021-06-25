@@ -6,10 +6,7 @@ import io.horizontalsystems.bankwallet.core.IEthereumRpcModeSettingsManager
 import io.horizontalsystems.bankwallet.core.IInitialSyncModeSettingsManager
 import io.horizontalsystems.bankwallet.core.adapters.*
 import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
-import io.horizontalsystems.bankwallet.core.managers.BinanceKitManager
-import io.horizontalsystems.bankwallet.core.managers.BinanceSmartChainKitManager
-import io.horizontalsystems.bankwallet.core.managers.EthereumKitManager
-import io.horizontalsystems.bankwallet.core.managers.RestoreSettingsManager
+import io.horizontalsystems.bankwallet.core.managers.*
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.BackgroundManager
@@ -17,8 +14,8 @@ import io.horizontalsystems.core.BackgroundManager
 class AdapterFactory(
         private val context: Context,
         private val testMode: Boolean,
-        private val ethereumKitManager: EthereumKitManager,
-        private val binanceSmartChainKitManager: BinanceSmartChainKitManager,
+        private val ethereumKitManager: EvmKitManager,
+        private val binanceSmartChainKitManager: EvmKitManager,
         private val binanceKitManager: BinanceKitManager,
         private val backgroundManager: BackgroundManager,
         private val restoreSettingsManager: RestoreSettingsManager) {

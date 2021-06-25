@@ -67,8 +67,8 @@ class App : CoreApp() {
         lateinit var priceAlertManager: IPriceAlertManager
         lateinit var enabledWalletsStorage: IEnabledWalletStorage
         lateinit var blockchainSettingsStorage: IBlockchainSettingsStorage
-        lateinit var ethereumKitManager: EthereumKitManager
-        lateinit var binanceSmartChainKitManager: BinanceSmartChainKitManager
+        lateinit var ethereumKitManager: EvmKitManager
+        lateinit var binanceSmartChainKitManager: EvmKitManager
         lateinit var binanceKitManager: BinanceKitManager
         lateinit var numberFormatter: IAppNumberFormatter
         lateinit var addressParserFactory: AddressParserFactory
@@ -129,8 +129,8 @@ class App : CoreApp() {
         evmNetworkManager = EvmNetworkManager(appConfigProvider)
         accountSettingManager = AccountSettingManager(AccountSettingRecordStorage(appDatabase), evmNetworkManager)
 
-        ethereumKitManager = EthereumKitManager(appConfig.etherscanApiKey, backgroundManager, accountSettingManager)
-        binanceSmartChainKitManager = BinanceSmartChainKitManager(appConfig.bscscanApiKey, appConfig.testMode, backgroundManager, accountSettingManager)
+        ethereumKitManager = EvmKitManager(appConfig.etherscanApiKey, backgroundManager, EvmNetworkProviderEth(accountSettingManager))
+        binanceSmartChainKitManager = EvmKitManager(appConfig.bscscanApiKey, backgroundManager, EvmNetworkProviderBsc(accountSettingManager))
         binanceKitManager = BinanceKitManager(buildConfigProvider.testMode)
 
         accountsStorage = AccountsStorage(appDatabase)
