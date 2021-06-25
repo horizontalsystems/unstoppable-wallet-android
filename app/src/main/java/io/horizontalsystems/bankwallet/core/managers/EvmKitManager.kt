@@ -5,6 +5,7 @@ import io.horizontalsystems.bankwallet.core.UnsupportedAccountException
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
+import io.horizontalsystems.bankwallet.entities.EvmNetwork
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.erc20kit.core.Erc20Kit
 import io.horizontalsystems.ethereumkit.core.EthereumKit
@@ -12,12 +13,32 @@ import io.horizontalsystems.uniswapkit.UniswapKit
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
+import java.net.URL
 
-class BinanceSmartChainKitManager(
-    private val bscscanApiKey: String,
-    private val testMode: Boolean,
-    private val backgroundManager: BackgroundManager,
-    private val accountSettingManager: AccountSettingManager
+interface IEvmNetworkProvider {
+    val evmNetworkObservable: Observable<Pair<Account, EvmNetwork>>
+
+    fun getEvmNetwork(account: Account): EvmNetwork
+}
+
+class EvmNetworkProviderBsc(private val accountSettingManager: AccountSettingManager) : IEvmNetworkProvider {
+    override val evmNetworkObservable: Observable<Pair<Account, EvmNetwork>>
+        get() = accountSettingManager.binanceSmartChainNetworkObservable
+
+    override fun getEvmNetwork(account: Account) = accountSettingManager.binanceSmartChainNetwork(account)
+}
+
+class EvmNetworkProviderEth(private val accountSettingManager: AccountSettingManager) : IEvmNetworkProvider {
+    override val evmNetworkObservable: Observable<Pair<Account, EvmNetwork>>
+        get() = accountSettingManager.ethereumNetworkObservable
+
+    override fun getEvmNetwork(account: Account) = accountSettingManager.ethereumNetwork(account)
+}
+
+class EvmKitManager(
+        private val etherscanApiKey: String,
+        private val backgroundManager: BackgroundManager,
+        private val evmNetworkProvider: IEvmNetworkProvider
 ) : BackgroundManager.Listener {
 
     private val disposables = CompositeDisposable()
@@ -25,13 +46,13 @@ class BinanceSmartChainKitManager(
     init {
         backgroundManager.registerListener(this)
 
-        accountSettingManager.binanceSmartChainNetworkObservable
-            .subscribeIO { (account, _) ->
-                handleUpdateNetwork(account)
-            }
-            .let {
-                disposables.add(it)
-            }
+        evmNetworkProvider.evmNetworkObservable
+                .subscribeIO { (account, _) ->
+                    handleUpdateNetwork(account)
+                }
+                .let {
+                    disposables.add(it)
+                }
     }
 
     private fun handleUpdateNetwork(account: Account) {
@@ -44,7 +65,6 @@ class BinanceSmartChainKitManager(
 
     var evmKit: EthereumKit? = null
         private set
-
     private var useCount = 0
     private var currentAccount: Account? = null
     private val evmKitUpdatedRelay = PublishSubject.create<Unit>()
@@ -76,15 +96,15 @@ class BinanceSmartChainKitManager(
     }
 
     private fun createKitInstance(accountType: AccountType.Mnemonic, account: Account): EthereumKit {
-        val evmNetwork = accountSettingManager.binanceSmartChainNetwork(account)
+        val evmNetwork = evmNetworkProvider.getEvmNetwork(account)
         val kit = EthereumKit.getInstance(
-            App.instance,
-            accountType.words,
-            accountType.passphrase,
-            evmNetwork.networkType,
-            evmNetwork.syncSource,
-            bscscanApiKey,
-            account.id
+                App.instance,
+                accountType.words,
+                accountType.passphrase,
+                evmNetwork.networkType,
+                evmNetwork.syncSource,
+                etherscanApiKey,
+                account.id
         )
 
         kit.addDecorator(Erc20Kit.getDecorator())
@@ -128,3 +148,9 @@ class BinanceSmartChainKitManager(
         this.evmKit?.onEnterBackground()
     }
 }
+
+val EthereumKit.SyncSource.url: URL
+    get() = when (this) {
+        is EthereumKit.SyncSource.WebSocket -> this.url
+        is EthereumKit.SyncSource.Http -> this.url
+    }
