@@ -6,6 +6,7 @@ import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.coinkit.models.CoinType
+import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
 
 class BalanceViewModel(
@@ -19,6 +20,7 @@ class BalanceViewModel(
     val titleLiveData = MutableLiveData<String>()
     val headerViewItemLiveData = MutableLiveData<BalanceHeaderViewItem>()
     val balanceViewItemsLiveData = MutableLiveData<List<BalanceViewItem>>()
+    val disabledWalletLiveData = SingleLiveEvent<Wallet>()
 
     private var disposables = CompositeDisposable()
 
@@ -27,6 +29,14 @@ class BalanceViewModel(
     private var expandedWallet: Wallet? = null
 
     init {
+        service.disabledWalletSubject
+            .subscribeIO {
+                disabledWalletLiveData.postValue(it)
+            }
+            .let {
+                disposables.add(it)
+            }
+
         activeAccountService.activeAccountObservable
             .subscribeIO {
                 titleLiveData.postValue(it.name)
@@ -123,6 +133,14 @@ class BalanceViewModel(
     fun getWalletForReceive(viewItem: BalanceViewItem) = when {
         viewItem.wallet.account.isBackedUp -> viewItem.wallet
         else -> throw BackupRequiredError(viewItem.wallet.account)
+    }
+
+    fun disable(viewItem: BalanceViewItem) {
+        service.disable(viewItem.wallet)
+    }
+
+    fun enable(wallet: Wallet) {
+        service.enable(wallet)
     }
 
     sealed class SyncError {

@@ -22,4 +22,12 @@ class BalanceActiveWalletRepository(
                 walletManager.activeWallets
             }
 
+    fun disable(wallet: Wallet) {
+        walletManager.delete(listOf(wallet))
+    }
+
+    fun enable(wallet: Wallet) {
+        walletManager.save(listOf(wallet))
+    }
+
 }

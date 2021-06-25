@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.balance
 
 import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.graphics.Canvas
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
@@ -9,10 +10,14 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.navGraphViewModels
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
+import com.google.android.material.snackbar.Snackbar
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
@@ -51,6 +56,9 @@ class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener, BackupRequ
         recyclerCoins.adapter = balanceItemsAdapter
         recyclerCoins.layoutManager = NpaLinearLayoutManager(context)
         (recyclerCoins.itemAnimator as? SimpleItemAnimator)?.supportsChangeAnimations = false
+
+        val itemTouchHelper = ItemTouchHelper(SwipeBalanceItemView())
+        itemTouchHelper.attachToRecyclerView(recyclerCoins)
 
         sortButton.setOnClickListener {
             val sortTypes = listOf(BalanceSortType.Name, BalanceSortType.Value, BalanceSortType.PercentGrowth)
@@ -184,6 +192,10 @@ class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener, BackupRequ
 
     }
 
+    override fun onSwiped(viewItem: BalanceViewItem) {
+        viewModel.disable(viewItem)
+    }
+
     override fun onAttachFragment(childFragment: Fragment) {
         if (childFragment is BackupRequiredDialog) {
             childFragment.setListener(this)
@@ -215,6 +227,14 @@ class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener, BackupRequ
             }
         }
 
+        viewModel.disabledWalletLiveData.observe(viewLifecycleOwner) { wallet ->
+            Snackbar.make(requireView(), getString(R.string.Balance_CoinDisabled, wallet.coin.title), Snackbar.LENGTH_LONG)
+                .setAction(R.string.Action_Undo) {
+                    viewModel.enable(wallet)
+                }
+                .show()
+        }
+
         viewModel.headerViewItemLiveData.observe(viewLifecycleOwner) {
             setHeaderViewItem(it)
         }
@@ -240,5 +260,43 @@ class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener, BackupRequ
             balanceText.text = xBalanceText
             context?.let { context -> balanceText.setTextColor(getBalanceTextColor(context)) }
         }
+    }
+}
+
+class SwipeBalanceItemView : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+
+    override fun onMove(
+        recyclerView: RecyclerView,
+        viewHolder: RecyclerView.ViewHolder,
+        target: RecyclerView.ViewHolder
+    ) = false
+
+    override fun onSwiped(viewHolder: RecyclerView.ViewHolder, swipeDir: Int) {
+        (viewHolder as? BalanceItemViewHolder)?.swipe()
+    }
+
+    override fun onChildDraw(
+        c: Canvas,
+        recyclerView: RecyclerView,
+        viewHolder: RecyclerView.ViewHolder,
+        dX: Float,
+        dY: Float,
+        actionState: Int,
+        isCurrentlyActive: Boolean
+    ) {
+        super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+
+        val itemView = viewHolder.itemView
+        val icon = ContextCompat.getDrawable(itemView.context, R.drawable.ic_attention_24)!!
+
+        val verticalMargin = ((itemView.height - icon.intrinsicHeight) / 2.0).toInt()
+        val rightMargin = LayoutHelper.dp(32f, itemView.context)
+        icon.setBounds(
+            itemView.right - rightMargin - icon.intrinsicWidth,
+            itemView.top + verticalMargin,
+            itemView.right - rightMargin,
+            itemView.top + verticalMargin + icon.intrinsicHeight
+        )
+        icon.draw(c)
     }
 }

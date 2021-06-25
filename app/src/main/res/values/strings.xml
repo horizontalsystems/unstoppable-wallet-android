@@ -11,6 +11,8 @@
     <string name="Alert_Skip" translatable="false">SKIP</string>
     <string name="Alert_Select" translatable="false">SELECT</string>
 
+    <string name="Action_Undo">UNDO</string>
+
     <string name="Button_Cancel">Cancel</string>
     <string name="Button_Next">Next</string>
     <string name="Button_Enable">Enable</string>
@@ -251,6 +253,7 @@
     <string name="Balance_Syncing_WithProgress">Syncing… %s%%</string>
     <string name="Balance_AddCoins">Add Coins</string>
     <string name="Balance_AddCoin">Add Coin</string>
+    <string name="Balance_CoinDisabled">Disabled coin %s</string>
     <string name="Balance_Sort_Balance">Balance</string>
     <string name="Balance_Sort_PopupTitle">Sort by</string>
     <string name="Balance_Sort_Az">Name</string>
