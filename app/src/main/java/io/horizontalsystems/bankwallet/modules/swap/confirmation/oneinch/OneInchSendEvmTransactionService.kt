@@ -126,7 +126,7 @@ class OneInchSendEvmTransactionService(
                     estimatedIn = it.amountFrom,
                     estimatedOut = it.amountTo,
                     slippage = getFormattedSlippage(it.slippage),
-                    recipientDomain = it.recipient
+                    recipientDomain = it.recipient?.title
             )
             SendEvmData.AdditionalInfo.Swap(swapInfo)
         }
@@ -153,7 +153,7 @@ class OneInchSendEvmTransactionService(
                     trade,
                     getSwapToken(it.coinFrom),
                     getSwapToken(it.coinTo),
-                    it.recipient?.let { recipient -> Address(recipient) } ?: ownAddress,
+                    it.recipient?.hex?.let { recipient -> Address(recipient) } ?: ownAddress,
                     BigInteger.ZERO)
         }
     }

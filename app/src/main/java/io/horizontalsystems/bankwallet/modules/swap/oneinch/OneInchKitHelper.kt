@@ -49,7 +49,7 @@ class OneInchKitHelper(
             toCoin: Coin,
             fromAmount: BigDecimal,
             slippagePercentage: Float,
-            recipient: Address? = null,
+            recipient: String? = null,
             gasPrice: Long? = null
     ): Single<Swap> {
         return oneInchKit.getSwapAsync(
@@ -57,7 +57,7 @@ class OneInchKitHelper(
                 toToken = getCoinAddress(toCoin),
                 amount = fromAmount.scaleUp(fromCoin.decimal),
                 slippagePercentage = slippagePercentage,
-                recipient = recipient,
+                recipient = recipient?.let { Address(it) },
                 gasPrice = gasPrice
         )
     }

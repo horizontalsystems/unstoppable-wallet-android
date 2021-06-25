@@ -91,9 +91,10 @@ class OneInchFragment : SwapBaseFragment() {
             commonError.isVisible = error != null
         })
 
-//        oneInchViewModel.tradeViewItemLiveData().observe(viewLifecycleOwner, { tradeViewItem ->
-//            setTradeViewItem(tradeViewItem)
-//        })
+        oneInchViewModel.swapProviderLiveData().observe(viewLifecycleOwner, { visible ->
+            poweredBy.isVisible = visible
+            poweredByLine.isVisible = visible
+        })
 
         oneInchViewModel.proceedActionLiveData().observe(viewLifecycleOwner, { action ->
             handleButtonAction(proceedButton, action)
@@ -133,12 +134,5 @@ class OneInchFragment : SwapBaseFragment() {
             }
         }
     }
-
-//    private fun setTradeViewItem(tradeViewItem: OneInchSwapViewModel.TradeViewItem?) {
-//        price.text = tradeViewItem?.price ?: ""
-//
-//        poweredBy.isVisible = tradeViewItem == null
-//        poweredByLine.isVisible = tradeViewItem == null
-//    }
 
 }

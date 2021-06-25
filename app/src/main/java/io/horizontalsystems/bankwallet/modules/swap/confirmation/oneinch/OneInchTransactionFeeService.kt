@@ -6,10 +6,10 @@ import io.horizontalsystems.bankwallet.core.IFeeRateProvider
 import io.horizontalsystems.bankwallet.core.ethereum.EvmTransactionService.*
 import io.horizontalsystems.bankwallet.core.ethereum.IEvmTransactionFeeService
 import io.horizontalsystems.bankwallet.core.subscribeIO
+import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.swap.oneinch.OneInchKitHelper
 import io.horizontalsystems.coinkit.models.Coin
-import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
@@ -29,7 +29,7 @@ data class OneInchSwapParameters(
         val amountFrom: BigDecimal,
         val amountTo: BigDecimal,
         val slippage: BigDecimal,
-        val recipient: String? = null
+        val recipient: Address? = null
 ) : Parcelable
 
 class OneInchTransactionFeeService(
@@ -80,7 +80,7 @@ class OneInchTransactionFeeService(
                             fromCoin = parameters.coinFrom,
                             toCoin = parameters.coinTo,
                             fromAmount = parameters.amountFrom,
-                            recipient = parameters.recipient?.let { Address(it) },
+                            recipient = parameters.recipient?.hex,
                             slippagePercentage = parameters.slippage.toFloat(),
                             gasPrice = gasPrice.orElse(null)?.toLong()
                     )
