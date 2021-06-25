@@ -6,6 +6,7 @@ import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.PublishSubject
+import java.math.BigDecimal
 
 class BalanceAdapterRepository(
     private val adapterManager: IAdapterManager,
@@ -94,7 +95,9 @@ class BalanceAdapterRepository(
     }
 
     fun balanceData(wallet: Wallet): BalanceData {
-        return adapterManager.getBalanceAdapterForWallet(wallet)?.balanceData ?: balanceCache.getCache(wallet)
+        return adapterManager.getBalanceAdapterForWallet(wallet)?.balanceData
+            ?: balanceCache.getCache(wallet)
+            ?: BalanceData(BigDecimal.ZERO)
     }
 
     fun refresh() {
