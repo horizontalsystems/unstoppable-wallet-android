@@ -32,6 +32,7 @@ class OneInchSwapViewModel(
     private val approveActionLiveData = MutableLiveData<ActionState>(ActionState.Hidden)
     private val openApproveLiveEvent = SingleLiveEvent<SwapAllowanceService.ApproveData>()
     private val advancedSettingsVisibleLiveData = MutableLiveData(false)
+    private val swapProviderVisibleLivedData = MutableLiveData(true)
     private val openConfirmationLiveEvent = SingleLiveEvent<OneInchSwapParameters>()
 
     init {
@@ -49,6 +50,7 @@ class OneInchSwapViewModel(
     fun approveActionLiveData(): LiveData<ActionState> = approveActionLiveData
     fun openApproveLiveEvent(): LiveData<SwapAllowanceService.ApproveData> = openApproveLiveEvent
     fun advancedSettingsVisibleLiveData(): LiveData<Boolean> = advancedSettingsVisibleLiveData
+    fun swapProviderLiveData(): LiveData<Boolean> = swapProviderVisibleLivedData
     fun openConfirmationLiveEvent(): LiveData<OneInchSwapParameters> = openConfirmationLiveEvent
 
     fun onTapSwitch() {
@@ -145,6 +147,7 @@ class OneInchSwapViewModel(
                 advancedSettingsVisibleLiveData.postValue(false)
             }
         }
+        swapProviderVisibleLivedData.postValue(tradeServiceState !is OneInchTradeService.State.Ready)
         syncProceedAction()
         syncApproveAction()
     }

@@ -84,7 +84,7 @@ object SwapMainModule {
     @Parcelize
     object OneInchProvider : ISwapProvider {
         override val id = "oneinch"
-        override val title = "1inch Network"
+        override val title = "1inch"
         override val url = "https://app.1inch.io/"
         override val fragment: SwapBaseFragment
             get() = OneInchFragment()

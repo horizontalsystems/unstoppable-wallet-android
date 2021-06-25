@@ -7,9 +7,7 @@ import io.horizontalsystems.bankwallet.modules.swap.confirmation.oneinch.OneInch
 import io.horizontalsystems.bankwallet.modules.swap.settings.oneinch.OneInchSwapSettingsModule.OneInchSwapSettings
 import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.ethereumkit.core.EthereumKit
-import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.oneinchkit.Quote
-import io.horizontalsystems.oneinchkit.Swap
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -39,7 +37,7 @@ class OneInchTradeService(
         lastBlockDisposable = evmKit.lastBlockHeightFlowable
                 .subscribeOn(Schedulers.io())
                 .subscribe {
-//                    syncQuote()
+                    syncQuote()
                 }
     }
 
@@ -92,12 +90,6 @@ class OneInchTradeService(
             syncQuote()
         }
 
-    fun getTransactionData(swap: Swap): TransactionData {
-        return swap.transaction.let {
-            TransactionData(it.to, it.value, it.data)
-        }
-    }
-
     override fun enterCoinFrom(coin: Coin?) {
         if (coinFrom == coin) return
 
@@ -139,6 +131,7 @@ class OneInchTradeService(
 
         amountFrom = amount
         amountTo = null
+
         syncQuote()
     }
 
@@ -149,6 +142,7 @@ class OneInchTradeService(
 
         amountTo = amount
         amountFrom = null
+
         syncQuote()
     }
 
@@ -183,29 +177,6 @@ class OneInchTradeService(
     }
     //endregion
 
-//    private fun syncQuote() {
-//        val amountFrom = amountFrom ?: return
-//        val coinFrom = coinFrom ?: return
-//        val coinTo = coinTo ?: return
-//
-//        state = State.Loading
-//
-//        getSwapDisposable = oneInchKit.getSwapAsync(getCoinAddress(coinFrom), getCoinAddress(coinTo), getRawAmount(coinFrom, amountFrom), swapSettings.slippage.toFloat())
-//                .subscribeIO({ quote ->
-//                    handle(quote)
-//                }, { error ->
-//                    state = State.NotReady(listOf(error))
-//                })
-//    }
-
-//    private fun handle(swap: Swap) {
-//        val amountToBigDecimal = swap.toTokenAmount.abs().toBigDecimal().movePointLeft(swap.toToken.decimals).stripTrailingZeros()
-//
-//        amountTo = amountToBigDecimal
-//
-//        state = State.Ready(swap)
-//    }
-
     private fun syncQuote() {
         val amountFrom = amountFrom ?: return
         val coinFrom = coinFrom ?: return
@@ -232,7 +203,7 @@ class OneInchTradeService(
 
         amountTo = amountToBigDecimal
 
-        val parameters = OneInchSwapParameters(coinFrom, coinTo, amountFrom, amountToBigDecimal, swapSettings.slippage)
+        val parameters = OneInchSwapParameters(coinFrom, coinTo, amountFrom, amountToBigDecimal, swapSettings.slippage, swapSettings.recipient)
 
         state = State.Ready(parameters)
     }

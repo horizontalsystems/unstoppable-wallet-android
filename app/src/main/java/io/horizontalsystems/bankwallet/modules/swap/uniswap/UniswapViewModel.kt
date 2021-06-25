@@ -79,7 +79,7 @@ class UniswapViewModel(
                     estimatedOut = tradeService.amountTo ?: BigDecimal.ZERO,
                     slippage = formatter.slippage(tradeService.tradeOptions.allowedSlippage),
                     deadline = formatter.deadline(tradeService.tradeOptions.ttl),
-                    recipientDomain = tradeService.tradeOptions.recipient?.domain,
+                    recipientDomain = tradeService.tradeOptions.recipient?.title,
                     price = formatter.price(trade?.tradeData?.executionPrice, tradeService.coinFrom, tradeService.coinTo),
                     priceImpact = trade?.let { formatter.priceImpactViewItem(it)?.value }
             )
