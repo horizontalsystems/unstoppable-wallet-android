@@ -15,8 +15,8 @@ import io.horizontalsystems.bankwallet.modules.swap.settings.oneinch.OneInchSwap
 import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.ethereumkit.core.EthereumKit
-import io.horizontalsystems.ethereumkit.core.TransactionDecoration
 import io.horizontalsystems.ethereumkit.models.Address
+import io.horizontalsystems.uniswapkit.decorations.SwapMethodDecoration
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
@@ -132,13 +132,13 @@ class OneInchSendEvmTransactionService(
         }
     }
 
-    private fun getSwapDecoration(parameters: OneInchSwapParameters): TransactionDecoration.Swap {
-        fun getSwapToken(coin: Coin): TransactionDecoration.Swap.Token {
+    private fun getSwapDecoration(parameters: OneInchSwapParameters): SwapMethodDecoration {
+        fun getSwapToken(coin: Coin): SwapMethodDecoration.Token {
             return when (val coinType = coin.type) {
                 CoinType.Ethereum,
-                CoinType.BinanceSmartChain -> TransactionDecoration.Swap.Token.EvmCoin
-                is CoinType.Erc20 -> TransactionDecoration.Swap.Token.Eip20Coin(Address(coinType.address))
-                is CoinType.Bep20 -> TransactionDecoration.Swap.Token.Eip20Coin(Address(coinType.address))
+                CoinType.BinanceSmartChain -> SwapMethodDecoration.Token.EvmCoin
+                is CoinType.Erc20 -> SwapMethodDecoration.Token.Eip20Coin(Address(coinType.address))
+                is CoinType.Bep20 -> SwapMethodDecoration.Token.Eip20Coin(Address(coinType.address))
                 else -> throw IllegalStateException("Not supported coin for swap")
             }
         }
@@ -147,9 +147,9 @@ class OneInchSendEvmTransactionService(
             val amountIn = it.amountFrom.scaleUp(it.coinFrom.decimal)
 
             val amountOutMinDecimal = it.amountTo - it.amountTo / BigDecimal("100") * it.slippage
-            val trade = TransactionDecoration.Swap.Trade.ExactIn(amountIn, amountOutMinDecimal.scaleUp(it.coinFrom.decimal))
+            val trade = SwapMethodDecoration.Trade.ExactIn(amountIn, amountOutMinDecimal.scaleUp(it.coinFrom.decimal))
 
-            TransactionDecoration.Swap(
+            SwapMethodDecoration(
                     trade,
                     getSwapToken(it.coinFrom),
                     getSwapToken(it.coinTo),

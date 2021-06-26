@@ -297,6 +297,7 @@
     <string name="Send_Confirmation_YouSend">You Send</string>
     <string name="Send_Confirmation_Amount">Amount</string>
     <string name="Send_Confirmation_To">To</string>
+    <string name="Send_Confirmation_Method">Method</string>
     <string name="Send_Confirmation_Receiver">Receiver</string>
     <string name="Send_Confirmation_HintMemo" translatable="false">Memo</string>
     <string name="Send_Confirmation_EstimateTime">Duration</string>
