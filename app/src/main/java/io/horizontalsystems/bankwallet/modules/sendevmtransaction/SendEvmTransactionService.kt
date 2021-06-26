@@ -11,9 +11,10 @@ import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData
 import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.ethereumkit.core.EthereumKit
-import io.horizontalsystems.ethereumkit.core.TransactionDecoration
+import io.horizontalsystems.ethereumkit.decorations.ContractMethodDecoration
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.TransactionData
+import io.horizontalsystems.uniswapkit.decorations.SwapMethodDecoration
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
@@ -131,14 +132,14 @@ class SendEvmTransactionService(
     }
 
     private fun handlePostSendActions() {
-        (txDataState.dataOrNull?.decoration as? TransactionDecoration.Swap)?.let { swapDecoration ->
+        (txDataState.dataOrNull?.decoration as? SwapMethodDecoration)?.let { swapDecoration ->
             activateSwapCoinOut(swapDecoration.tokenOut)
         }
     }
 
-    private fun activateSwapCoinOut(tokenOut: TransactionDecoration.Swap.Token) {
+    private fun activateSwapCoinOut(tokenOut: SwapMethodDecoration.Token) {
         val coinType = when (tokenOut) {
-            TransactionDecoration.Swap.Token.EvmCoin -> {
+            SwapMethodDecoration.Token.EvmCoin -> {
                 when (evmKit.networkType) {
                     EthereumKit.NetworkType.EthMainNet,
                     EthereumKit.NetworkType.EthRopsten,
@@ -148,7 +149,7 @@ class SendEvmTransactionService(
                     EthereumKit.NetworkType.BscMainNet -> CoinType.BinanceSmartChain
                 }
             }
-            is TransactionDecoration.Swap.Token.Eip20Coin -> {
+            is SwapMethodDecoration.Token.Eip20Coin -> {
                 when (evmKit.networkType) {
                     EthereumKit.NetworkType.EthMainNet,
                     EthereumKit.NetworkType.EthRopsten,
@@ -171,7 +172,7 @@ class SendEvmTransactionService(
     data class TxDataState(
             val transactionData: TransactionData?,
             val additionalInfo: SendEvmData.AdditionalInfo?,
-            val decoration: TransactionDecoration?
+            val decoration: ContractMethodDecoration?
     )
 
     sealed class SendState {

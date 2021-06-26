@@ -5,15 +5,10 @@ import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.TransactionRecord
 import io.horizontalsystems.bankwallet.entities.TransactionType
 import io.horizontalsystems.erc20kit.core.Erc20Kit
-import io.horizontalsystems.erc20kit.core.TransactionKey
-import io.horizontalsystems.erc20kit.models.Transaction
-import io.horizontalsystems.erc20kit.models.TransactionType.APPROVE
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.core.EthereumKit.SyncState
 import io.horizontalsystems.ethereumkit.core.hexStringToByteArray
-import io.horizontalsystems.ethereumkit.models.Address
-import io.horizontalsystems.ethereumkit.models.DefaultBlockParameter
-import io.horizontalsystems.ethereumkit.models.TransactionData
+import io.horizontalsystems.ethereumkit.models.*
 import io.reactivex.Flowable
 import io.reactivex.Single
 import java.math.BigDecimal
@@ -72,9 +67,11 @@ class Eip20Adapter(
         get() = eip20Kit.transactionsSyncStateFlowable.map { }
 
     override fun getTransactions(from: TransactionRecord?, limit: Int): Single<List<TransactionRecord>> {
-        return eip20Kit.getTransactionsAsync(from?.let { TransactionKey(it.transactionHash.hexStringToByteArray(), it.interTransactionIndex) }, limit).map {
-            it.map { tx -> transactionRecord(tx) }
-        }
+        val fromHash = from?.transactionHash?.hexStringToByteArray()
+        return eip20Kit.getTransactionsAsync(fromHash, limit)
+                .flatMap { fullTransactionList ->
+                    return@flatMap Single.just(fullTransactionList.map { transactionRecord(it) })
+                }
     }
 
     override val transactionRecordsFlowable: Flowable<List<TransactionRecord>>
@@ -113,45 +110,65 @@ class Eip20Adapter(
         return eip20Kit.buildTransferTransactionData(address, amount)
     }
 
+    private fun convertAmount(amount: BigInteger, fromAddress: Address): BigDecimal {
+        var significandAmount = scaleDown(amount.toBigDecimal())
+
+        if (significandAmount.compareTo(BigDecimal.ZERO) == 0) {
+            return BigDecimal.ZERO
+        }
+
+        val fromMine = fromAddress == evmKit.receiveAddress
+
+        if (fromMine) {
+            significandAmount = significandAmount.negate()
+        }
+
+        return significandAmount
+    }
+
     private fun convertToAdapterState(syncState: SyncState): AdapterState = when (syncState) {
         is SyncState.Synced -> AdapterState.Synced
         is SyncState.NotSynced -> AdapterState.NotSynced(syncState.error)
         is SyncState.Syncing -> AdapterState.Syncing(50, null)
     }
 
-    private fun transactionRecord(transaction: Transaction): TransactionRecord {
-        val myAddress = evmKit.receiveAddress
-        val fromMine = transaction.from == myAddress
-        val toMine = transaction.to == myAddress
-        var confirmationsThreshold: Int = confirmationsThreshold
+    private fun transactionRecord(fullTransaction: FullTransaction): TransactionRecord {
+        val transaction = fullTransaction.transaction
+        val receipt = fullTransaction.receiptWithLogs?.receipt
+
+        var from = transaction.from
+        var to = transaction.to
+
+        var amount = convertAmount(transaction.value, transaction.from)
+
+        amount += fullTransaction.internalTransactions
+                .map {
+                    from = it.from
+                    to = it.to
+                    convertAmount(it.value, it.from)
+                }.fold(BigDecimal.ZERO) { acc, bigDecimal -> acc + bigDecimal }
 
         val type = when {
-            transaction.type == APPROVE -> {
-                confirmationsThreshold = approveConfirmationsThreshold
-                TransactionType.Approve
-            }
-            fromMine && toMine -> TransactionType.SentToSelf
-            fromMine -> TransactionType.Outgoing
+            transaction.from == transaction.to -> TransactionType.SentToSelf
+            amount < BigDecimal.ZERO -> TransactionType.Outgoing
             else -> TransactionType.Incoming
         }
 
-        val txHashHex = transaction.transactionHash.toHexString()
-        val receipt = transaction.fullTransaction.receiptWithLogs?.receipt
-
+        val txHash = transaction.hash.toHexString()
         return TransactionRecord(
-                uid = "$txHashHex${transaction.interTransactionIndex}${contractAddress.hex}",
-                transactionHash = txHashHex,
-                transactionIndex = transaction.transactionIndex ?: 0,
-                interTransactionIndex = transaction.interTransactionIndex,
+                uid = txHash,
+                transactionHash = txHash,
+                transactionIndex = receipt?.transactionIndex ?: 0,
+                interTransactionIndex = 0,
                 blockHeight = receipt?.blockNumber,
-                amount = scaleDown(transaction.value.toBigDecimal()),
+                amount = amount.abs(),
                 confirmationsThreshold = confirmationsThreshold,
                 timestamp = transaction.timestamp,
-                from = transaction.from.eip55,
+                from = from.eip55,
                 memo = null,
-                to = transaction.to.eip55,
+                to = to?.eip55,
                 type = type,
-                failed = transaction.isError
+                failed = fullTransaction.isFailed()
         )
     }
 

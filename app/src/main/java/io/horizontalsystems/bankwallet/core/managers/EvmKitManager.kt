@@ -107,8 +107,8 @@ class EvmKitManager(
                 account.id
         )
 
-        kit.addDecorator(Erc20Kit.getDecorator())
-        kit.addDecorator(UniswapKit.getDecorator())
+        kit.addDecorator(Erc20Kit.decorator(kit))
+        kit.addDecorator(UniswapKit.decorator(kit))
 
         kit.addTransactionSyncer(Erc20Kit.getTransactionSyncer(kit))
 
