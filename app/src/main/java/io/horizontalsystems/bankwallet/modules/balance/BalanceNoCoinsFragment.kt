@@ -10,7 +10,7 @@ import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModu
 import io.horizontalsystems.core.findNavController
 import kotlinx.android.synthetic.main.fragment_no_coins.*
 
-class BalanceNoCoinsFragment : BaseFragment() {
+class BalanceNoCoinsFragment(private val accountName: String?) : BaseFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_no_coins, container, false)
@@ -19,7 +19,7 @@ class BalanceNoCoinsFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        toolbarTitle.text = arguments?.getString(ACCOUNT_NAME) ?: getString(R.string.Balance_Title)
+        toolbarTitle.text = accountName ?: getString(R.string.Balance_Title)
         toolbarTitle.setOnClickListener {
             ManageAccountsModule.start(this, R.id.manageAccountsFragment, navOptionsFromBottom(), ManageAccountsModule.Mode.Switcher)
         }
