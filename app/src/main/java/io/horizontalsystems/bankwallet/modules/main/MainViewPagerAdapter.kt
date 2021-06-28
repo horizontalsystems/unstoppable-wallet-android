@@ -12,9 +12,9 @@ import io.horizontalsystems.bankwallet.modules.transactions.TransactionsFragment
 
 class MainViewPagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
 
-    private val itemIds = mutableListOf(0, getBalancePageId(BalanceViewType.NoAccounts), 2, 3)
+    private val itemIds = mutableListOf(0, getBalancePageId(BalanceViewType.Balance), 2, 3)
 
-    var balancePageType: BalanceViewType = BalanceViewType.NoAccounts
+    var balancePageType: BalanceViewType = BalanceViewType.Balance
         set(value) {
             if (field == value) return
             field = value
