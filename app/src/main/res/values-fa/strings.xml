@@ -6,6 +6,7 @@
     <string name="Alert_Close">بستن</string>
     <string name="Alert_Loading">درحال بارگذاری...</string>
     <string name="Alert_Restart">راه اندازی مجدد</string>
+    <string name="Action_Undo">UNDO</string>
     <string name="Button_Cancel">کنسل</string>
     <string name="Button_Next">Next</string>
     <string name="Button_Enable">فعال کردن</string>
@@ -216,6 +217,7 @@
     <string name="Balance_Syncing_WithProgress">همزمانی... %%%s</string>
     <string name="Balance_AddCoins">اضافه کردن سکه ها</string>
     <string name="Balance_AddCoin">اضافه کردن سکه ها</string>
+    <string name="Balance_CoinDisabled">Disabled coin %s</string>
     <string name="Balance_Sort_Balance">مانده حساب</string>
     <string name="Balance_Sort_PopupTitle">مرتب‌ کردن بر اساس</string>
     <string name="Balance_Sort_Az">نام</string>
