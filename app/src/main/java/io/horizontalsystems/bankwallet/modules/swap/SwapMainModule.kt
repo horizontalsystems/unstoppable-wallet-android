@@ -181,8 +181,8 @@ object SwapMainModule {
             val amountType: AmountType = AmountType.ExactFrom
     ) : Parcelable
 
-    class Factory(arguments: Bundle?) : ViewModelProvider.Factory {
-        private val coinFrom: Coin? = arguments?.getParcelable(coinFromKey)
+    class Factory(arguments: Bundle) : ViewModelProvider.Factory {
+        private val coinFrom: Coin? = arguments.getParcelable(coinFromKey)
         private val swapProviders: List<ISwapProvider> = listOf(UniswapProvider, PancakeSwapProvider, OneInchProvider)
 
         @Suppress("UNCHECKED_CAST")

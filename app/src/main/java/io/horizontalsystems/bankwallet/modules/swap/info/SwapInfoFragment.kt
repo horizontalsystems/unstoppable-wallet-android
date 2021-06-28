@@ -6,14 +6,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.Dex
 import io.horizontalsystems.core.findNavController
 import kotlinx.android.synthetic.main.fragment_swap_info.*
 
 class SwapInfoFragment : BaseFragment() {
+
+    private val vmFactory by lazy { SwapInfoModule.Factory(requireArguments()) }
+    private val viewModel by viewModels<SwapInfoViewModel> { vmFactory }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.fragment_swap_info, container, false)
@@ -31,9 +33,6 @@ class SwapInfoFragment : BaseFragment() {
             }
         }
 
-        val dex: Dex = requireArguments().getParcelable(dexKey)!!
-        val viewModel = ViewModelProvider(this, SwapInfoModule.Factory(dex)).get(SwapInfoViewModel::class.java)
-
         toolbar.title = viewModel.title
         description.text = viewModel.description
         headerRelated.text = viewModel.dexRelated
@@ -45,10 +44,6 @@ class SwapInfoFragment : BaseFragment() {
             intent.data = Uri.parse(viewModel.dexUrl)
             startActivity(intent)
         }
-    }
-
-    companion object {
-        const val dexKey = "dex"
     }
 
 }
