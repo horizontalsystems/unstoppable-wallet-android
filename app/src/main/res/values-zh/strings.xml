@@ -6,6 +6,7 @@
     <string name="Alert_Close">关闭</string>
     <string name="Alert_Loading">正在加载...</string>
     <string name="Alert_Restart">重新启动</string>
+    <string name="Action_Undo">UNDO</string>
     <string name="Button_Cancel">取消</string>
     <string name="Button_Next">继续</string>
     <string name="Button_Enable">启用</string>
@@ -216,6 +217,7 @@
     <string name="Balance_Syncing_WithProgress">正在同步... %s%%</string>
     <string name="Balance_AddCoins">添加代币</string>
     <string name="Balance_AddCoin">添加代币</string>
+    <string name="Balance_CoinDisabled">Disabled coin %s</string>
     <string name="Balance_Sort_Balance">余额</string>
     <string name="Balance_Sort_PopupTitle">排序方式</string>
     <string name="Balance_Sort_Az">名称</string>
