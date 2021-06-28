@@ -108,6 +108,7 @@ class RestoreMnemonicFragment : BaseFragment() {
         })
 
         viewModel.inputsVisibleLiveData.observe(viewLifecycleOwner) {
+            passphraseToggle.setChecked(it)
             passphrase.isVisible = it
             passphraseDescription.isVisible = it
         }
