@@ -6,6 +6,7 @@
     <string name="Alert_Close">Cerrar</string>
     <string name="Alert_Loading">Cargando...</string>
     <string name="Alert_Restart">Reiniciar</string>
+    <string name="Action_Undo">UNDO</string>
     <string name="Button_Cancel">Cancelar</string>
     <string name="Button_Next">Next</string>
     <string name="Button_Enable">Habilitar</string>
@@ -216,6 +217,7 @@
     <string name="Balance_Syncing_WithProgress">Sincronizando... %s%%</string>
     <string name="Balance_AddCoins">Añadir Monedas</string>
     <string name="Balance_AddCoin">Añadir Monedas</string>
+    <string name="Balance_CoinDisabled">Disabled coin %s</string>
     <string name="Balance_Sort_Balance">Saldo</string>
     <string name="Balance_Sort_PopupTitle">Ordenar por</string>
     <string name="Balance_Sort_Az">Nombre</string>
