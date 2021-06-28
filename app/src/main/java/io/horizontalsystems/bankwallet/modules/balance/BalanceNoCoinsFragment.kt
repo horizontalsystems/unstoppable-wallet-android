@@ -29,8 +29,4 @@ class BalanceNoCoinsFragment(private val accountName: String?) : BaseFragment() 
         }
     }
 
-    companion object {
-        const val ACCOUNT_NAME = "accountName"
-    }
-
 }
