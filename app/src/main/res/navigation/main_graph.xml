@@ -322,9 +322,6 @@
             android:id="@+id/swapFragment_to_oneInchConfirmationFragment"
             app:destination="@id/oneInchConfirmationFragment" />
         <action
-            android:id="@+id/swapFragment_to_swapInfoFragment"
-            app:destination="@id/swapInfoFragment" />
-        <action
             android:id="@+id/swapFragment_to_swapSettingsMainFragment"
             app:destination="@id/swapSettingsMainFragment"
             app:enterAnim="@anim/slide_from_bottom_long"
@@ -377,7 +374,11 @@
         app:enterAnim="@anim/slide_from_bottom"
         app:exitAnim="@android:anim/fade_out"
         app:popEnterAnim="@android:anim/fade_in"
-        app:popExitAnim="@anim/slide_to_bottom" />
+        app:popExitAnim="@anim/slide_to_bottom">
+        <action
+            android:id="@+id/swapSettingsMainFragment_to_swapInfoFragment"
+            app:destination="@id/swapInfoFragment" />
+    </fragment>
     <fragment
         android:id="@+id/marketSearchFragment"
         android:name="io.horizontalsystems.bankwallet.modules.market.search.MarketSearchFragment"

@@ -9,6 +9,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.ISwapProvider
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainViewModel
+import io.horizontalsystems.bankwallet.modules.swap.info.SwapInfoModule
 import io.horizontalsystems.core.findNavController
 import kotlinx.android.synthetic.main.fragment_swap_settings.*
 
@@ -24,6 +25,10 @@ class SwapSettingsMainFragment : BaseFragment() {
 
         toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
+                R.id.menuInfo -> {
+                    SwapInfoModule.start(this, navOptions(), mainViewModel.dex)
+                    true
+                }
                 R.id.menuCancel -> {
                     findNavController().popBackStack()
                     true
