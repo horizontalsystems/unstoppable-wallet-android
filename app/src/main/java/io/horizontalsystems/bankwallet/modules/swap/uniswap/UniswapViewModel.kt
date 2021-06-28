@@ -218,15 +218,6 @@ class UniswapViewModel(
         )
     }
 
-    private fun tradeOptionsViewItem(tradeOptions: SwapTradeOptions): TradeOptionsViewItem {
-        val defaultTradeOptions = TradeOptions()
-        val slippage = if (tradeOptions.allowedSlippage.compareTo(defaultTradeOptions.allowedSlippagePercent) == 0) null else tradeOptions.allowedSlippage.stripTrailingZeros().toPlainString()
-        val deadline = if (tradeOptions.ttl == defaultTradeOptions.ttl) null else tradeOptions.ttl.toString()
-        val recipientAddress = tradeOptions.recipient?.hex
-
-        return TradeOptionsViewItem(slippage, deadline, recipientAddress)
-    }
-
     //region models
     data class TradeViewItem(
             val price: String? = null,
