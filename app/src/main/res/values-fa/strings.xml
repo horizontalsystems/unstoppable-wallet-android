@@ -323,6 +323,7 @@
     <string name="Swap_Swapping">در حال جابجایی</string>
     <string name="Swap_MaximumPaid">بیشترین مقدار</string>
     <string name="Swap_MinimumGot">مقدار تضمین شده</string>
+    <string name="Swap_PoweredBy">Powered by</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">تنظیمات پیشرفته</string>
     <string name="SwapSettings_Service">Service</string>
