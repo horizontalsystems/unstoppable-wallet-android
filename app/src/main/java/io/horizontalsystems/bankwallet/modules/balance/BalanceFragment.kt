@@ -287,7 +287,7 @@ class SwipeBalanceItemView : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.L
         super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
 
         val itemView = viewHolder.itemView
-        val icon = ContextCompat.getDrawable(itemView.context, R.drawable.ic_attention_24)!!
+        val icon = ContextCompat.getDrawable(itemView.context, R.drawable.ic_circle_minus_24)!!
 
         val verticalMargin = ((itemView.height - icon.intrinsicHeight) / 2.0).toInt()
         val rightMargin = LayoutHelper.dp(32f, itemView.context)
