@@ -31,8 +31,6 @@ class OneInchSwapViewModel(
     private val proceedActionLiveData = MutableLiveData<ActionState>(ActionState.Hidden)
     private val approveActionLiveData = MutableLiveData<ActionState>(ActionState.Hidden)
     private val openApproveLiveEvent = SingleLiveEvent<SwapAllowanceService.ApproveData>()
-    private val advancedSettingsVisibleLiveData = MutableLiveData(false)
-    private val swapProviderVisibleLivedData = MutableLiveData(true)
     private val openConfirmationLiveEvent = SingleLiveEvent<OneInchSwapParameters>()
 
     init {
@@ -40,7 +38,6 @@ class OneInchSwapViewModel(
 
         sync(service.state)
         sync(service.errors)
-        sync(tradeService.state)
     }
 
     //region outputs
@@ -49,8 +46,6 @@ class OneInchSwapViewModel(
     fun proceedActionLiveData(): LiveData<ActionState> = proceedActionLiveData
     fun approveActionLiveData(): LiveData<ActionState> = approveActionLiveData
     fun openApproveLiveEvent(): LiveData<SwapAllowanceService.ApproveData> = openApproveLiveEvent
-    fun advancedSettingsVisibleLiveData(): LiveData<Boolean> = advancedSettingsVisibleLiveData
-    fun swapProviderLiveData(): LiveData<Boolean> = swapProviderVisibleLivedData
     fun openConfirmationLiveEvent(): LiveData<OneInchSwapParameters> = openConfirmationLiveEvent
 
     fun onTapSwitch() {
@@ -100,11 +95,6 @@ class OneInchSwapViewModel(
                 .subscribe { sync(it) }
                 .let { disposables.add(it) }
 
-        tradeService.stateObservable
-                .subscribeOn(Schedulers.io())
-                .subscribe { sync(it) }
-                .let { disposables.add(it) }
-
         pendingAllowanceService.isPendingObservable
                 .subscribeOn(Schedulers.io())
                 .subscribe {
@@ -134,20 +124,6 @@ class OneInchSwapViewModel(
         val filtered = errors.filter { it !is EvmTransactionService.GasDataError && it !is SwapError }
         swapErrorLiveData.postValue(filtered.firstOrNull()?.let { convert(it) })
 
-        syncProceedAction()
-        syncApproveAction()
-    }
-
-    private fun sync(tradeServiceState: OneInchTradeService.State) {
-        when (tradeServiceState) {
-            is OneInchTradeService.State.Ready -> {
-                advancedSettingsVisibleLiveData.postValue(true)
-            }
-            else -> {
-                advancedSettingsVisibleLiveData.postValue(false)
-            }
-        }
-        swapProviderVisibleLivedData.postValue(tradeServiceState !is OneInchTradeService.State.Ready)
         syncProceedAction()
         syncApproveAction()
     }

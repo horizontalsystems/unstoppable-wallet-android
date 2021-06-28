@@ -16,7 +16,6 @@ import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceViewM
 import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveModule
 import io.horizontalsystems.bankwallet.modules.swap.coincard.SwapCoinCardViewModel
 import io.horizontalsystems.bankwallet.modules.swap.confirmation.oneinch.OneInchConfirmationModule
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.getNavigationResult
 import io.horizontalsystems.core.setOnSingleClickListener
 import kotlinx.android.synthetic.main.fragment_1inch.*
@@ -66,10 +65,6 @@ class OneInchFragment : SwapBaseFragment() {
             oneInchViewModel.onTapSwitch()
         }
 
-        advancedSettings.setOnSingleClickListener {
-            findNavController().navigate(R.id.swapFragment_to_swapSettingsMainFragment)
-        }
-
         approveButton.setOnSingleClickListener {
             oneInchViewModel.onTapApprove()
         }
@@ -78,7 +73,7 @@ class OneInchFragment : SwapBaseFragment() {
             oneInchViewModel.onTapProceed()
         }
 
-        poweredBy.text = getString(R.string.Swap_PoweredBy, dex.provider.title)
+        poweredBy.text = dex.provider.title
     }
 
     private fun observeViewModel() {
@@ -91,11 +86,6 @@ class OneInchFragment : SwapBaseFragment() {
             commonError.isVisible = error != null
         })
 
-        oneInchViewModel.swapProviderLiveData().observe(viewLifecycleOwner, { visible ->
-            poweredBy.isVisible = visible
-            poweredByLine.isVisible = visible
-        })
-
         oneInchViewModel.proceedActionLiveData().observe(viewLifecycleOwner, { action ->
             handleButtonAction(proceedButton, action)
         })
@@ -106,10 +96,6 @@ class OneInchFragment : SwapBaseFragment() {
 
         oneInchViewModel.openApproveLiveEvent().observe(viewLifecycleOwner, { approveData ->
             SwapApproveModule.start(this, R.id.swapFragment_to_swapApproveFragment, navOptions(), approveData)
-        })
-
-        oneInchViewModel.advancedSettingsVisibleLiveData().observe(viewLifecycleOwner, { visible ->
-            advancedSettingsViews.isVisible = visible
         })
 
         oneInchViewModel.openConfirmationLiveEvent().observe(viewLifecycleOwner, { oneInchSwapParameters ->

@@ -2,16 +2,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/menuInfo"
-        android:icon="@drawable/ic_info_24"
-        android:iconTint="@color/jacob"
-        android:title=""
+        android:id="@+id/menuSettings"
+        android:icon="@drawable/ic_settings_2"
+        android:title="@string/Settings_Title"
+        app:iconTint="@color/jacob"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/menuCancel"
         android:icon="@drawable/ic_close"
-        android:iconTint="@color/jacob"
         android:title="@string/Button_Cancel"
+        app:iconTint="@color/jacob"
         app:showAsAction="always" />
 </menu>

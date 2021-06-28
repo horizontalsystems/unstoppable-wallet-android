@@ -86,59 +86,35 @@
                 app:layout_constraintStart_toStartOf="@+id/startBorder"
                 app:layout_constraintTop_toBottomOf="@+id/switchButton" />
 
-            <View
-                android:id="@+id/settingsLineTop"
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:background="@color/steel_10"
-                app:layout_constraintBottom_toTopOf="@+id/advancedSettings"
-                app:layout_constraintEnd_toEndOf="@+id/endBorder"
-                app:layout_constraintStart_toStartOf="@+id/startBorder" />
-
             <TextView
-                android:id="@+id/advancedSettings"
+                android:id="@+id/poweredByTitle"
                 style="@style/Subhead2"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:background="@drawable/background_lawrence_onclick"
-                android:clickable="true"
-                android:paddingStart="16dp"
-                android:paddingTop="12dp"
-                android:paddingEnd="16dp"
-                android:paddingBottom="12dp"
-                android:text="@string/SwapSettings_Title"
-                android:textColor="@color/grey"
-                app:drawableEndCompat="@drawable/ic_arrow_right"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/toCoinCard" />
-
-            <View
-                android:id="@+id/settingsLineBottom"
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:layout_marginTop="12dp"
-                android:background="@color/steel_10"
-                app:layout_constraintBottom_toBottomOf="@+id/advancedSettings"
-                app:layout_constraintEnd_toEndOf="@+id/endBorder"
-                app:layout_constraintStart_toStartOf="@+id/startBorder" />
-
-            <androidx.constraintlayout.widget.Group
-                android:id="@+id/advancedSettingsViews"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="visible"
-                app:constraint_referenced_ids="settingsLineTop,settingsLineBottom,advancedSettings" />
+                android:layout_marginTop="20dp"
+                android:text="@string/Swap_PoweredBy"
+                android:textColor="@color/grey"
+                app:layout_constraintStart_toStartOf="@+id/startBorder"
+                app:layout_constraintTop_toBottomOf="@+id/toCoinCard" />
+
+            <TextView
+                android:id="@+id/poweredBy"
+                style="@style/Subhead2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/grey"
+                app:layout_constraintEnd_toStartOf="@+id/endBorder"
+                app:layout_constraintTop_toTopOf="@+id/poweredByTitle"
+                tools:text="0.112 Token" />
 
             <io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceView
                 android:id="@+id/allowanceView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                app:layout_constraintEnd_toStartOf="@+id/endBorder"
-                app:layout_constraintStart_toStartOf="@+id/startBorder"
-                app:layout_constraintTop_toBottomOf="@+id/advancedSettings" />
+                app:layout_constraintEnd_toStartOf="@id/endBorder"
+                app:layout_constraintStart_toStartOf="@id/startBorder"
+                app:layout_constraintTop_toBottomOf="@id/poweredByTitle" />
 
             <TextView
                 android:id="@+id/commonError"
@@ -184,22 +160,4 @@
 
     </androidx.core.widget.NestedScrollView>
 
-    <View
-        android:id="@+id/poweredByLine"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_gravity="bottom"
-        android:layout_marginBottom="57dp"
-        android:background="@color/steel_10" />
-
-    <TextView
-        android:id="@+id/poweredBy"
-        style="@style/CaptionSB"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:layout_marginBottom="28dp"
-        android:textAlignment="center"
-        android:textColor="@color/grey"
-        tools:text="Powered by Uniswap" />
 </FrameLayout>

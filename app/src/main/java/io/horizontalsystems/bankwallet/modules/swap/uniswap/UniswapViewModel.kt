@@ -38,7 +38,6 @@ class UniswapViewModel(
     private val proceedActionLiveData = MutableLiveData<ActionState>(ActionState.Hidden)
     private val approveActionLiveData = MutableLiveData<ActionState>(ActionState.Hidden)
     private val openApproveLiveEvent = SingleLiveEvent<SwapAllowanceService.ApproveData>()
-    private val advancedSettingsVisibleLiveData = MutableLiveData(false)
     private val openConfirmationLiveEvent = SingleLiveEvent<SendEvmData>()
 
     init {
@@ -57,7 +56,6 @@ class UniswapViewModel(
     fun proceedActionLiveData(): LiveData<ActionState> = proceedActionLiveData
     fun approveActionLiveData(): LiveData<ActionState> = approveActionLiveData
     fun openApproveLiveEvent(): LiveData<SwapAllowanceService.ApproveData> = openApproveLiveEvent
-    fun advancedSettingsVisibleLiveData(): LiveData<Boolean> = advancedSettingsVisibleLiveData
     fun openConfirmationLiveEvent(): LiveData<SendEvmData> = openConfirmationLiveEvent
 
     fun onTapSwitch() {
@@ -164,11 +162,9 @@ class UniswapViewModel(
         when (tradeServiceState) {
             is UniswapTradeService.State.Ready -> {
                 tradeViewItemLiveData.postValue(tradeViewItem(tradeServiceState.trade))
-                advancedSettingsVisibleLiveData.postValue(true)
             }
             else -> {
                 tradeViewItemLiveData.postValue(null)
-                advancedSettingsVisibleLiveData.postValue(false)
             }
         }
         syncProceedAction()

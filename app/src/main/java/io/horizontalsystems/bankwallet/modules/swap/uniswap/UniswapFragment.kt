@@ -17,7 +17,6 @@ import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceViewM
 import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveModule
 import io.horizontalsystems.bankwallet.modules.swap.coincard.SwapCoinCardViewModel
 import io.horizontalsystems.bankwallet.modules.swap.confirmation.uniswap.UniswapConfirmationModule
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.getNavigationResult
 import io.horizontalsystems.core.setOnSingleClickListener
 import kotlinx.android.synthetic.main.fragment_uniswap.*
@@ -67,10 +66,6 @@ class UniswapFragment : SwapBaseFragment() {
             uniswapViewModel.onTapSwitch()
         }
 
-        advancedSettings.setOnSingleClickListener {
-            findNavController().navigate(R.id.swapFragment_to_swapSettingsMainFragment)
-        }
-
         approveButton.setOnSingleClickListener {
             uniswapViewModel.onTapApprove()
         }
@@ -79,7 +74,7 @@ class UniswapFragment : SwapBaseFragment() {
             uniswapViewModel.onTapProceed()
         }
 
-        poweredBy.text = getString(R.string.Swap_PoweredBy, dex.provider.title)
+        poweredBy.text = dex.provider.title
     }
 
     private fun observeViewModel() {
@@ -106,10 +101,6 @@ class UniswapFragment : SwapBaseFragment() {
 
         uniswapViewModel.openApproveLiveEvent().observe(viewLifecycleOwner, { approveData ->
             SwapApproveModule.start(this, R.id.swapFragment_to_swapApproveFragment, navOptions(), approveData)
-        })
-
-        uniswapViewModel.advancedSettingsVisibleLiveData().observe(viewLifecycleOwner, { visible ->
-            advancedSettingsViews.isVisible = visible
         })
 
         uniswapViewModel.openConfirmationLiveEvent().observe(viewLifecycleOwner, { sendEvmData ->
@@ -153,8 +144,6 @@ class UniswapFragment : SwapBaseFragment() {
         } else {
             guaranteedAmountViews.isVisible = false
         }
-        poweredBy.isVisible = tradeViewItem == null
-        poweredByLine.isVisible = tradeViewItem == null
     }
 
     private fun priceImpactColor(ctx: Context, priceImpactLevel: UniswapTradeService.PriceImpactLevel?): Int {
