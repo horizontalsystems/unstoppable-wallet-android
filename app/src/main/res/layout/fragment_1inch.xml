@@ -48,43 +48,28 @@
                 android:indeterminateDrawable="@drawable/circular_spinner"
                 android:indeterminateTint="@color/grey"
                 android:visibility="visible"
-                app:layout_constraintBottom_toBottomOf="@+id/price"
-                app:layout_constraintStart_toStartOf="@+id/startBorder"
-                app:layout_constraintTop_toTopOf="@+id/price" />
-
-            <TextView
-                android:id="@+id/price"
-                style="@style/Subhead2"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="12dp"
-                android:textAlignment="center"
-                android:textColor="@color/grey"
-                app:layout_constraintEnd_toStartOf="@+id/switchButton"
-                app:layout_constraintStart_toEndOf="@+id/startBorder"
-                app:layout_constraintTop_toBottomOf="@+id/fromCoinCard" />
+                app:layout_constraintStart_toStartOf="@id/startBorder"
+                app:layout_constraintTop_toTopOf="@id/switchButton" />
 
             <ImageView
                 android:id="@+id/switchButton"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_switch"
-                app:layout_constraintEnd_toEndOf="@+id/endBorder"
-                app:layout_constraintStart_toEndOf="@+id/price"
-                app:layout_constraintTop_toTopOf="@id/price"
+                app:layout_constraintBottom_toTopOf="@id/toCoinCard"
+                app:layout_constraintEnd_toStartOf="@id/endBorder"
+                app:layout_constraintStart_toEndOf="@id/startBorder"
+                app:layout_constraintTop_toBottomOf="@id/fromCoinCard"
                 app:tint="@color/grey" />
 
             <io.horizontalsystems.bankwallet.modules.swap.coincard.SwapCoinCardView
                 android:id="@+id/toCoinCard"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                app:layout_constraintEnd_toEndOf="@+id/endBorder"
-                app:layout_constraintStart_toStartOf="@+id/startBorder"
-                app:layout_constraintTop_toBottomOf="@+id/switchButton" />
+                android:layout_marginTop="48dp"
+                app:layout_constraintEnd_toEndOf="@id/endBorder"
+                app:layout_constraintStart_toStartOf="@id/startBorder"
+                app:layout_constraintTop_toBottomOf="@id/fromCoinCard" />
 
             <TextView
                 android:id="@+id/poweredByTitle"
@@ -117,6 +102,29 @@
                 app:layout_constraintTop_toBottomOf="@id/poweredByTitle" />
 
             <TextView
+                android:id="@+id/priceTitle"
+                style="@style/Subhead2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="@string/Swap_Price"
+                android:textColor="@color/grey"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="@id/startBorder"
+                app:layout_constraintTop_toBottomOf="@id/allowanceView" />
+
+            <TextView
+                android:id="@+id/priceValue"
+                style="@style/Subhead2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/grey"
+                android:visibility="gone"
+                app:layout_constraintEnd_toStartOf="@id/endBorder"
+                app:layout_constraintTop_toTopOf="@id/priceTitle"
+                tools:text="ETH = 2,000 USDT" />
+
+            <TextView
                 android:id="@+id/commonError"
                 style="@style/Subhead2"
                 android:layout_width="0dp"
@@ -125,8 +133,8 @@
                 android:textColor="@color/lucian"
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="@id/endBorder"
-                app:layout_constraintStart_toStartOf="@+id/startBorder"
-                app:layout_constraintTop_toBottomOf="@+id/allowanceView"
+                app:layout_constraintStart_toStartOf="@id/startBorder"
+                app:layout_constraintTop_toBottomOf="@id/priceTitle"
                 tools:text="No Liquidity" />
 
             <Button
