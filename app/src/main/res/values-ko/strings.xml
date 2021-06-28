@@ -6,6 +6,7 @@
     <string name="Alert_Close">가까운, 닫힌</string>
     <string name="Alert_Loading">로딩중...</string>
     <string name="Alert_Restart">재시작</string>
+    <string name="Action_Undo">UNDO</string>
     <string name="Button_Cancel">취소</string>
     <string name="Button_Next">Next</string>
     <string name="Button_Enable">활성화</string>
@@ -216,6 +217,7 @@
     <string name="Balance_Syncing_WithProgress">동기화 중입니다...%s%%</string>
     <string name="Balance_AddCoins">코인 추가</string>
     <string name="Balance_AddCoin">코인 추가</string>
+    <string name="Balance_CoinDisabled">Disabled coin %s</string>
     <string name="Balance_Sort_Balance">잔액</string>
     <string name="Balance_Sort_PopupTitle">정렬 기준</string>
     <string name="Balance_Sort_Az">이름</string>
