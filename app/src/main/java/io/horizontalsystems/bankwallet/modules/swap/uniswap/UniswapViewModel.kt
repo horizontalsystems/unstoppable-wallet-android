@@ -34,7 +34,6 @@ class UniswapViewModel(
     private val isLoadingLiveData = MutableLiveData(false)
     private val swapErrorLiveData = MutableLiveData<String?>(null)
     private val tradeViewItemLiveData = MutableLiveData<TradeViewItem?>(null)
-    private val tradeOptionsViewItemLiveData = MutableLiveData<TradeOptionsViewItem?>(null)
     private val proceedActionLiveData = MutableLiveData<ActionState>(ActionState.Hidden)
     private val approveActionLiveData = MutableLiveData<ActionState>(ActionState.Hidden)
     private val openApproveLiveEvent = SingleLiveEvent<SwapAllowanceService.ApproveData>()
@@ -52,7 +51,6 @@ class UniswapViewModel(
     fun isLoadingLiveData(): LiveData<Boolean> = isLoadingLiveData
     fun swapErrorLiveData(): LiveData<String?> = swapErrorLiveData
     fun tradeViewItemLiveData(): LiveData<TradeViewItem?> = tradeViewItemLiveData
-    fun tradeOptionsViewItemLiveData(): LiveData<TradeOptionsViewItem?> = tradeOptionsViewItemLiveData
     fun proceedActionLiveData(): LiveData<ActionState> = proceedActionLiveData
     fun approveActionLiveData(): LiveData<ActionState> = approveActionLiveData
     fun openApproveLiveEvent(): LiveData<SwapAllowanceService.ApproveData> = openApproveLiveEvent
@@ -119,11 +117,6 @@ class UniswapViewModel(
                 .subscribe { sync(it) }
                 .let { disposables.add(it) }
 
-        tradeService.tradeOptionsObservable
-                .subscribeOn(Schedulers.io())
-                .subscribe { sync(it) }
-                .let { disposables.add(it) }
-
         pendingAllowanceService.isPendingObservable
                 .subscribeOn(Schedulers.io())
                 .subscribe {
@@ -169,10 +162,6 @@ class UniswapViewModel(
         }
         syncProceedAction()
         syncApproveAction()
-    }
-
-    private fun sync(swapTradeOptions: SwapTradeOptions) {
-        tradeOptionsViewItemLiveData.postValue(tradeOptionsViewItem(swapTradeOptions))
     }
 
     private fun syncProceedAction() {
