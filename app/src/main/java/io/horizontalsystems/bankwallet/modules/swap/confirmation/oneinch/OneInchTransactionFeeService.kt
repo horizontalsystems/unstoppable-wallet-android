@@ -92,7 +92,9 @@ class OneInchTransactionFeeService(
                             gasLimit = getSurchargedGasLimit(swapTx.gasLimit),
                             gasPrice = swapTx.gasPrice
                     )
-                    recommendedGasPrice = swapTx.gasPrice.toBigInteger()
+                    if (gasPriceType == GasPriceType.Recommended) {
+                        recommendedGasPrice = swapTx.gasPrice.toBigInteger()
+                    }
 
                     parameters = parameters.copy(amountTo = swap.toTokenAmount.toBigDecimal().movePointLeft(swap.toToken.decimals).stripTrailingZeros())
 
