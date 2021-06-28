@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.activity.addCallback
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
@@ -17,47 +16,48 @@ import com.google.android.material.bottomnavigation.BottomNavigationMenuView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.managers.RateAppManager
+import io.horizontalsystems.bankwallet.modules.balanceonboarding.BalanceOnboardingModule
+import io.horizontalsystems.bankwallet.modules.balanceonboarding.BalanceOnboardingViewModel
 import io.horizontalsystems.bankwallet.modules.main.MainActivity.Companion.ACTIVE_TAB_KEY
 import io.horizontalsystems.bankwallet.modules.rateapp.RateAppDialogFragment
 import io.horizontalsystems.bankwallet.modules.releasenotes.ReleaseNotesFragment
 import io.horizontalsystems.bankwallet.modules.rooteddevice.RootedDeviceActivity
 import io.horizontalsystems.core.findNavController
 import kotlinx.android.synthetic.main.fragment_main.*
-import kotlinx.android.synthetic.main.fragment_main.view.*
 
-class MainFragment : BaseFragment(), RateAppDialogFragment.Listener {
+class MainFragment : BaseFragment(R.layout.fragment_main), RateAppDialogFragment.Listener {
 
     private val viewModel by viewModels<MainViewModel>{ MainModule.Factory() }
+    private val balanceOnboardingViewModel by viewModels<BalanceOnboardingViewModel> { BalanceOnboardingModule.Factory() }
     private var bottomBadgeView: View? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_main, container, false)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        view.viewPager.offscreenPageLimit = 1
-        view.viewPager.adapter = MainViewPagerAdapter(childFragmentManager, viewLifecycleOwner.lifecycle)
+        val mainViewPagerAdapter = MainViewPagerAdapter(this)
 
-        view.viewPager.isUserInputEnabled = false
+        viewPager.offscreenPageLimit = 1
+        viewPager.adapter = mainViewPagerAdapter
+        viewPager.isUserInputEnabled = false
 
-        view.bottomNavigation.setOnNavigationItemSelectedListener {
+        bottomNavigation.setOnNavigationItemSelectedListener {
             when (it.itemId) {
-                R.id.navigation_market -> view.viewPager.setCurrentItem(0, false)
-                R.id.navigation_balance -> view.viewPager.setCurrentItem(1, false)
-                R.id.navigation_transactions -> view.viewPager.setCurrentItem(2, false)
-                R.id.navigation_settings -> view.viewPager.setCurrentItem(3, false)
+                R.id.navigation_market -> viewPager.setCurrentItem(0, false)
+                R.id.navigation_balance -> viewPager.setCurrentItem(1, false)
+                R.id.navigation_transactions -> viewPager.setCurrentItem(2, false)
+                R.id.navigation_settings -> viewPager.setCurrentItem(3, false)
             }
             true
         }
 
         arguments?.getInt(ACTIVE_TAB_KEY)?.let { position ->
-            view.bottomNavigation.menu.getItem(position).isChecked = true
-            view.viewPager.setCurrentItem(position, false)
+            bottomNavigation.menu.getItem(position).isChecked = true
+            viewPager.setCurrentItem(position, false)
         }
 
-        return view
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+        balanceOnboardingViewModel.balanceViewTypeLiveData.observe(viewLifecycleOwner) {
+            mainViewPagerAdapter.balancePageType = it
+        }
 
         viewModel.showRootedDeviceWarningLiveEvent.observe(viewLifecycleOwner, {
             startActivity(Intent(activity, RootedDeviceActivity::class.java))
@@ -80,7 +80,7 @@ class MainFragment : BaseFragment(), RateAppDialogFragment.Listener {
         viewModel.openPlayMarketLiveEvent.observe(viewLifecycleOwner, Observer {
             openAppInPlayMarket()
         })
-6
+
         viewModel.hideContentLiveData.observe(viewLifecycleOwner, Observer { hide ->
             screenSecureDim.isVisible = hide
         })
