@@ -323,6 +323,7 @@
     <string name="Swap_Swapping">Takas</string>
     <string name="Swap_MaximumPaid">Maksimum Ödenen</string>
     <string name="Swap_MinimumGot">Garantili Tutar</string>
+    <string name="Swap_PoweredBy">Powered by</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">Gelişmiş Ayarlar</string>
     <string name="SwapSettings_Service">Service</string>
