@@ -4,12 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.ISwapProvider
-import io.horizontalsystems.bankwallet.modules.swap.info.SwapInfoFragment.Companion.dexKey
 import io.horizontalsystems.core.findNavController
 import kotlinx.android.synthetic.main.fragment_swap.*
 
@@ -32,8 +30,8 @@ class SwapMainFragment : BaseFragment() {
                     findNavController().popBackStack()
                     true
                 }
-                R.id.menuInfo -> {
-                    findNavController().navigate(R.id.swapFragment_to_swapInfoFragment, bundleOf(dexKey to mainViewModel.dex), navOptions())
+                R.id.menuSettings -> {
+                    findNavController().navigate(R.id.swapFragment_to_swapSettingsMainFragment)
                     true
                 }
                 else -> false
