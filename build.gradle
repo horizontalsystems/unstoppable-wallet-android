@@ -7,7 +7,7 @@ buildscript {
         build_tools_version = "30.0.2"
         lifecycle_version = '2.3.1'
 
-        kotlin_version = '1.4.32'
+        kotlin_version = '1.5.20'
         material_version = "1.3.0"
         appcompat_version = "1.3.0-rc01"
         //increasing constraint version breaks visibility of Receive,Send buttons in BalanceScreen
@@ -25,7 +25,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.1.3'
+        classpath 'com.android.tools.build:gradle:4.2.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
 
         // NOTE: Do not place your application dependencies here; they belong
