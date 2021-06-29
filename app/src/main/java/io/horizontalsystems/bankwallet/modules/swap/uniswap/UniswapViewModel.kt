@@ -186,7 +186,7 @@ class UniswapViewModel(
                 }
             }
             else -> {
-                ActionState.Hidden
+                ActionState.Disabled(Translator.getString(R.string.Swap_Proceed))
             }
         }
         proceedActionLiveData.postValue(proceedAction)
@@ -223,12 +223,6 @@ class UniswapViewModel(
             val price: String? = null,
             val priceImpact: UniswapModule.PriceImpactViewItem? = null,
             val guaranteedAmount: UniswapModule.GuaranteedAmountViewItem? = null
-    )
-
-    data class TradeOptionsViewItem(
-            val slippage: String?,
-            val deadline: String?,
-            val recipient: String?
     )
 
     sealed class ActionState {

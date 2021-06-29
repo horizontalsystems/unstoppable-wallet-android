@@ -150,7 +150,7 @@ class OneInchSwapViewModel(
                 }
             }
             else -> {
-                ActionState.Hidden
+                ActionState.Disabled(Translator.getString(R.string.Swap_Proceed))
             }
         }
         proceedActionLiveData.postValue(proceedAction)
