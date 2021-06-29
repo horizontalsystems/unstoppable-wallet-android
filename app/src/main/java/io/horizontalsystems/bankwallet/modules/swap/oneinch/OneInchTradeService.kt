@@ -21,7 +21,7 @@ class OneInchTradeService(
         private val oneInchKitHelper: OneInchKitHelper
 ) : SwapMainModule.ISwapTradeService {
 
-    private var getQuoteDisposable: Disposable? = null
+    private var quoteDisposable: Disposable? = null
     private var lastBlockDisposable: Disposable? = null
 
     //region internal subjects
@@ -178,6 +178,9 @@ class OneInchTradeService(
     //endregion
 
     private fun syncQuote() {
+        quoteDisposable?.dispose()
+        quoteDisposable = null
+
         val amountFrom = amountFrom
         val coinFrom = coinFrom ?: return
         val coinTo = coinTo ?: return
@@ -188,9 +191,8 @@ class OneInchTradeService(
         }
 
         state = State.Loading
-        getQuoteDisposable?.dispose()
 
-        getQuoteDisposable = oneInchKitHelper.getQuoteAsync(coinFrom, coinTo, amountFrom)
+        quoteDisposable = oneInchKitHelper.getQuoteAsync(coinFrom, coinTo, amountFrom)
                 .subscribeIO({ quote ->
                     handle(quote, coinFrom, coinTo, amountFrom)
                 }, { error ->
