@@ -8,8 +8,10 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.setCoinImage
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.swap.coinselect.SelectSwapCoinDialogFragment
+import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.getNavigationLiveData
 import io.horizontalsystems.core.setOnSingleClickListener
@@ -61,7 +63,7 @@ class SwapCoinCardView @JvmOverloads constructor(context: Context, attrs: Attrib
     }
 
     private fun observe(viewModel: SwapCoinCardViewModel, lifecycleOwner: LifecycleOwner) {
-        viewModel.tokenCodeLiveData().observe(lifecycleOwner, { setTokenCode(it) })
+        viewModel.tokenCodeLiveData().observe(lifecycleOwner, { setCoin(it) })
 
         viewModel.balanceLiveData().observe(lifecycleOwner, { setBalance(it) })
 
@@ -95,11 +97,13 @@ class SwapCoinCardView @JvmOverloads constructor(context: Context, attrs: Attrib
         }
     }
 
-    private fun setTokenCode(code: String?) {
-        if (code != null) {
-            selectedToken.text = code
+    private fun setCoin(coin: Coin?) {
+        if (coin != null) {
+            iconCoin.setCoinImage(coin.type)
+            selectedToken.text = coin.code
             selectedToken.setTextColor(context.getColor(R.color.leah))
         } else {
+            iconCoin.setImageResource(R.drawable.ic_coin_placeholder)
             selectedToken.text = context.getString(R.string.Swap_TokenSelectorTitle)
             selectedToken.setTextColor(context.getColor(R.color.jacob))
         }

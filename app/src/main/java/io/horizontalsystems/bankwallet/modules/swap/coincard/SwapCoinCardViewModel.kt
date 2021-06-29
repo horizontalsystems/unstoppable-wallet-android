@@ -44,7 +44,7 @@ class SwapCoinCardViewModel(
     private val amountLiveData = MutableLiveData<String?>(null)
     private val balanceLiveData = MutableLiveData<String?>(null)
     private val balanceErrorLiveData = MutableLiveData(false)
-    private val tokenCodeLiveData = MutableLiveData<String?>(null)
+    private val tokenCodeLiveData = MutableLiveData<Coin?>(null)
     private val isEstimatedLiveData = MutableLiveData(false)
     private val inputParamsLiveData = MutableLiveData<AmountInputView.InputParams>()
     private val secondaryInfoLiveData = MutableLiveData<String?>(null)
@@ -54,7 +54,7 @@ class SwapCoinCardViewModel(
     fun amountLiveData(): LiveData<String?> = amountLiveData
     fun balanceLiveData(): LiveData<String?> = balanceLiveData
     fun balanceErrorLiveData(): LiveData<Boolean> = balanceErrorLiveData
-    fun tokenCodeLiveData(): LiveData<String?> = tokenCodeLiveData
+    fun tokenCodeLiveData(): LiveData<Coin?> = tokenCodeLiveData
     fun isEstimatedLiveData(): LiveData<Boolean> = isEstimatedLiveData
     fun inputParamsLiveData(): LiveData<AmountInputView.InputParams> = inputParamsLiveData
     fun secondaryInfoLiveData(): LiveData<String?> = secondaryInfoLiveData
@@ -155,7 +155,7 @@ class SwapCoinCardViewModel(
 
     private fun syncCoin(coin: Coin?) {
         fiatService.set(coin)
-        tokenCodeLiveData.postValue(coin?.code)
+        tokenCodeLiveData.postValue(coin)
     }
 
     private fun syncBalance(balance: BigDecimal?) {

@@ -6,13 +6,22 @@
     android:layout_height="wrap_content"
     android:background="@color/lawrence">
 
+    <ImageView
+        android:id="@+id/iconCoin"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="12dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@drawable/ethereum" />
+
     <TextView
         android:id="@+id/titleTextView"
         style="@style/Body"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="13dp"
         android:ellipsize="end"
         android:lines="1"
         android:textColor="@color/oz"
@@ -20,9 +29,10 @@
         app:layout_constraintEnd_toStartOf="@+id/estimatedLabel"
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="From Amount" />
+        app:layout_constraintStart_toEndOf="@id/iconCoin"
+        app:layout_constraintTop_toTopOf="@id/iconCoin"
+        app:layout_constraintBottom_toBottomOf="@id/iconCoin"
+        tools:text="You Pay" />
 
     <TextView
         android:id="@+id/estimatedLabel"
