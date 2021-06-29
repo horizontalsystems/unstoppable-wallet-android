@@ -178,11 +178,11 @@ class OneInchTradeService(
     //endregion
 
     private fun syncQuote() {
-        val amountFrom = amountFrom ?: return
+        val amountFrom = amountFrom
         val coinFrom = coinFrom ?: return
         val coinTo = coinTo ?: return
 
-        if (amountFrom.compareTo(BigDecimal.ZERO) == 0) {
+        if (amountFrom == null || amountFrom.compareTo(BigDecimal.ZERO) == 0) {
             state = State.NotReady()
             return
         }
