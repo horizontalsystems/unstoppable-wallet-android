@@ -26,29 +26,13 @@
         android:lines="1"
         android:textColor="@color/oz"
         app:layout_constrainedWidth="true"
-        app:layout_constraintEnd_toStartOf="@+id/estimatedLabel"
+        app:layout_constraintBottom_toBottomOf="@id/iconCoin"
+        app:layout_constraintEnd_toStartOf="@+id/selectedToken"
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toEndOf="@id/iconCoin"
         app:layout_constraintTop_toTopOf="@id/iconCoin"
-        app:layout_constraintBottom_toBottomOf="@id/iconCoin"
         tools:text="You Pay" />
-
-    <TextView
-        android:id="@+id/estimatedLabel"
-        style="@style/TextLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:layout_marginEnd="10dp"
-        android:ellipsize="end"
-        android:lines="1"
-        android:text="@string/Swap_Estimated"
-        app:layout_constrainedWidth="true"
-        app:layout_constraintBottom_toBottomOf="@+id/titleTextView"
-        app:layout_constraintEnd_toStartOf="@+id/selectedToken"
-        app:layout_constraintStart_toEndOf="@+id/titleTextView"
-        app:layout_constraintTop_toTopOf="@+id/titleTextView" />
 
     <TextView
         android:id="@+id/selectedToken"
@@ -74,15 +58,15 @@
         android:background="@drawable/swap_input_background"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/titleTextView" />
+        app:layout_constraintTop_toBottomOf="@id/titleTextView" />
 
     <io.horizontalsystems.bankwallet.ui.extensions.AmountInputView
         android:id="@+id/amountInput"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="@+id/background"
-        app:layout_constraintEnd_toEndOf="@+id/background"
-        app:layout_constraintTop_toTopOf="@+id/background" />
+        app:layout_constraintEnd_toEndOf="@id/background"
+        app:layout_constraintStart_toStartOf="@id/background"
+        app:layout_constraintTop_toTopOf="@id/background" />
 
     <TextView
         android:id="@+id/balanceTitle"
@@ -96,7 +80,7 @@
         android:textColor="@color/grey"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/background" />
+        app:layout_constraintTop_toBottomOf="@id/background" />
 
     <TextView
         android:id="@+id/balanceValue"
@@ -107,7 +91,7 @@
         android:text="@string/Swap_AmountHint"
         android:textColor="@color/grey"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/balanceTitle"
+        app:layout_constraintTop_toTopOf="@id/balanceTitle"
         tools:text="0.12345678 XRP" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -94,7 +94,7 @@ class AmountInputView @JvmOverloads constructor(context: Context, attrs: Attribu
     }
 
     private fun getSecondaryTextColor(type: AmountTypeSwitchService.AmountType, switchEnabled: Boolean): Int {
-        return when{
+        return when {
             !switchEnabled -> R.color.grey_50
             type == AmountTypeSwitchService.AmountType.Coin -> R.color.jacob
             else -> R.color.oz
@@ -115,6 +115,10 @@ class AmountInputView @JvmOverloads constructor(context: Context, attrs: Attribu
         setAmount(amount)
         val shake = AnimationUtils.loadAnimation(context, R.anim.shake_edittext)
         editTxtAmount.startAnimation(shake)
+    }
+
+    fun setEstimated(visible: Boolean) {
+        estimatedLabel.isVisible = visible
     }
 
     private fun syncButtonStates() {

@@ -4,7 +4,6 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.ViewGroup
 import androidx.cardview.widget.CardView
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import io.horizontalsystems.bankwallet.R
@@ -120,8 +119,8 @@ class SwapCoinCardView @JvmOverloads constructor(context: Context, attrs: Attrib
         balanceValue.setTextColor(context.getColor(color))
     }
 
-    private fun setEstimated(show: Boolean) {
-        estimatedLabel.isVisible = show
+    private fun setEstimated(visible: Boolean) {
+        amountInput.setEstimated(visible)
     }
 
 }
