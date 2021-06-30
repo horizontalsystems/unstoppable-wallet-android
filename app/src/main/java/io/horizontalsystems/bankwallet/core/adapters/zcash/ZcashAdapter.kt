@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.core.adapters.zcash
 
 import android.content.Context
 import cash.z.ecc.android.sdk.Initializer
+import cash.z.ecc.android.sdk.SdkSynchronizer
 import cash.z.ecc.android.sdk.Synchronizer
 import cash.z.ecc.android.sdk.block.CompactBlockProcessor
 import cash.z.ecc.android.sdk.ext.*
@@ -16,8 +17,7 @@ import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.Single
 import io.reactivex.subjects.PublishSubject
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.runBlocking
 import java.math.BigDecimal
 
@@ -62,14 +62,8 @@ class ZcashAdapter(
             config.setSeed(seed, network)
         }
 
+        transactionsProvider = ZcashTransactionsProvider()
         synchronizer = Synchronizer(Initializer(context, config))
-        transactionsProvider = ZcashTransactionsProvider(synchronizer)
-
-        synchronizer.status.distinctUntilChanged().collectWith(GlobalScope, ::onStatus)
-        synchronizer.progress.distinctUntilChanged().collectWith(GlobalScope, ::onDownloadProgress)
-        synchronizer.balances.distinctUntilChanged().collectWith(GlobalScope, ::onBalance)
-        synchronizer.processorInfo.distinctUntilChanged().collectWith(GlobalScope, ::onProcessorInfo)
-
         synchronizer.onProcessorErrorHandler = ::onProcessorError
         synchronizer.onChainErrorHandler = ::onChainError
     }
@@ -89,6 +83,7 @@ class ZcashAdapter(
     //region IAdapter
     override fun start() {
         synchronizer.start()
+        subscribe(synchronizer as SdkSynchronizer)
     }
 
     override fun stop() {
@@ -206,6 +201,24 @@ class ZcashAdapter(
                 }
             }
     //endregion
+
+    // Subscribe to a synchronizer on its own scope and begin responding to events
+    private fun subscribe(synchronizer: SdkSynchronizer) {
+        // Note: If any of these callback functions directly touch the UI, then the scope used here
+        //       should not live longer than that UI or else the context and view tree will be
+        //       invalid and lead to crashes. For now, we use a scope that is cancelled whenever
+        //       synchronizer.stop is called.
+        //       If the scope of the view is required for one of these, then consider using the
+        //       related viewModelScope instead of the synchronizer's scope.
+        //       synchronizer.coroutineScope cannot be accessed until the synchronizer is started
+        val scope = synchronizer.coroutineScope
+        synchronizer.clearedTransactions.distinctUntilChanged().collectWith(scope, transactionsProvider::onClearedTransactions)
+        synchronizer.pendingTransactions.distinctUntilChanged().collectWith(scope, transactionsProvider::onPendingTransactions)
+        synchronizer.status.distinctUntilChanged().collectWith(scope, ::onStatus)
+        synchronizer.progress.distinctUntilChanged().collectWith(scope, ::onDownloadProgress)
+        synchronizer.saplingBalances.collectWith(scope, ::onBalance)
+        synchronizer.processorInfo.distinctUntilChanged().collectWith(scope, ::onProcessorInfo)
+    }
 
     private fun onProcessorError(error: Throwable?): Boolean {
         error?.printStackTrace()
