@@ -102,11 +102,10 @@ class SwapCoinCardViewModel(
     }
 
     private fun subscribeToServices() {
-        syncEstimated(coinCardService.isEstimated)
-        syncAmount(coinCardService.amount)
+        syncEstimated()
         syncCoin(coinCardService.coin)
+        syncAmount(coinCardService.amount, true)
         syncBalance(coinCardService.balance)
-        syncFullAmountInfo(null, false)
 
         coinCardService.isEstimatedObservable
                 .subscribeOn(Schedulers.io())
@@ -148,9 +147,11 @@ class SwapCoinCardViewModel(
         isEstimatedLiveData.postValue(estimated)
     }
 
-    private fun syncAmount(amount: BigDecimal?) {
-        val fullAmountInfo = fiatService.buildForCoin(amount)
-        syncFullAmountInfo(fullAmountInfo, false)
+    private fun syncAmount(amount: BigDecimal?, force: Boolean = false) {
+        if (coinCardService.isEstimated || force) {
+            val fullAmountInfo = fiatService.buildForCoin(amount)
+            syncFullAmountInfo(fullAmountInfo, false)
+        }
     }
 
     private fun syncCoin(coin: Coin?) {
@@ -189,7 +190,9 @@ class SwapCoinCardViewModel(
         updateInputFields()
 
         if (fullAmountInfo == null) {
-            amountLiveData.postValue(null)
+            if (!force && coinCardService.isEstimated) {
+                amountLiveData.postValue(null)
+            }
             secondaryInfoLiveData.postValue(secondaryInfoPlaceHolder())
 
             setCoinValueToService(inputAmount, force)
