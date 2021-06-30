@@ -193,13 +193,7 @@ dependencies {
 
 
     //Zcash SDK
-    def zcashVersion = "1.2.1-beta04"
-    def zcashDependencyMainNet = "cash.z.ecc.android:zcash-android-sdk-mainnet:$zcashVersion"
-    def zcashDependencyTestNet = "cash.z.ecc.android:zcash-android-sdk-testnet:$zcashVersion"
-    releaseImplementation zcashDependencyMainNet
-    appcenterImplementation zcashDependencyMainNet
-    apptestnetImplementation zcashDependencyTestNet
-    debugImplementation zcashDependencyMainNet
+    implementation "cash.z.ecc.android:zcash-android-sdk:1.3.0-beta16"
 
     // WalletConnect
     implementation 'com.github.horizontalsystems:wallet-connect-kotlin:918c099'
