@@ -1,6 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
-import io.horizontalsystems.bankwallet.entities.TransactionRecord
+import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import java.util.concurrent.CopyOnWriteArrayList
 
 class TransactionItemDataSource {

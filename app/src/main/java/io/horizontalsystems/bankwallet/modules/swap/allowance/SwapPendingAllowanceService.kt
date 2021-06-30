@@ -2,7 +2,7 @@ package io.horizontalsystems.bankwallet.modules.swap.allowance
 
 import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.adapters.Eip20Adapter
-import io.horizontalsystems.bankwallet.entities.TransactionType
+import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.ApproveTransactionRecord
 import io.horizontalsystems.coinkit.models.Coin
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
@@ -54,7 +54,7 @@ class SwapPendingAllowanceService(
         val adapter = adapterManager.getAdapterForCoin(coin) as? Eip20Adapter ?: return
 
         adapter.pendingTransactions.forEach { transaction ->
-            if (transaction.type == TransactionType.Approve) {
+            if (transaction is ApproveTransactionRecord) {
                 pendingAllowance = transaction.amount
             }
         }

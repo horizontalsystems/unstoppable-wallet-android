@@ -2,7 +2,7 @@ package io.horizontalsystems.bankwallet.modules.transactions
 
 import io.horizontalsystems.bankwallet.core.factories.TransactionViewItemFactory
 import io.horizontalsystems.bankwallet.entities.LastBlockInfo
-import io.horizontalsystems.bankwallet.entities.TransactionRecord
+import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionsModule.FetchData
 import io.horizontalsystems.coinkit.models.Coin
@@ -89,8 +89,7 @@ class TransactionRecordDataSource(
 
     private fun transactionViewItem(wallet: Wallet, record: TransactionRecord): TransactionViewItem {
         val lastBlockInfo = metadataDataSource.getLastBlockInfo(wallet)
-        val rate = metadataDataSource.getRate(wallet.coin, record.timestamp)
-
+        val rate = record.mainCoin?.let { metadataDataSource.getRate(it, record.timestamp) }
         return viewItemFactory.item(wallet, record, lastBlockInfo, rate)
     }
 
@@ -113,7 +112,7 @@ class TransactionRecordDataSource(
 
         var hasUpdate = false
         itemsDataSource.items.forEachIndexed { index, item ->
-            if (item.wallet.coin == coin && item.record.timestamp == timestamp) {
+            if (item.record.mainCoin == coin && item.record.timestamp == timestamp) {
                 itemsDataSource.items[index] = transactionViewItem(item.wallet, item.record)
 
                 hasUpdate = true
@@ -139,7 +138,7 @@ class TransactionRecordDataSource(
 
         var hasUpdate = false
         itemsDataSource.items.forEachIndexed { index, item ->
-            if (item.wallet == wallet && (item.isPending || item.becomesUnlocked(oldBlockInfo.timestamp, lastBlockInfo.timestamp))) {
+            if (item.wallet == wallet && (item.record.changedBy(oldBlockInfo, lastBlockInfo))) {
                 itemsDataSource.items[index] = transactionViewItem(item.wallet, item.record)
 
                 hasUpdate = true

@@ -1,11 +1,13 @@
 package io.horizontalsystems.bankwallet.core
 
 import com.google.gson.JsonObject
+import io.horizontalsystems.bankwallet.core.adapters.EvmTransactionConverter
 import io.horizontalsystems.bankwallet.core.managers.RateUsType
 import io.horizontalsystems.bankwallet.core.managers.Term
 import io.horizontalsystems.bankwallet.core.managers.TorManager
 import io.horizontalsystems.bankwallet.core.managers.TorStatus
 import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
 import io.horizontalsystems.bankwallet.modules.market.MarketModule
 import io.horizontalsystems.bankwallet.modules.send.SendModule
@@ -227,6 +229,7 @@ interface ISendEthereumAdapter {
     val ethereumBalance: BigDecimal
     val minimumRequiredBalance: BigDecimal
     val minimumSendAmount: BigDecimal
+    val transactionConverter: EvmTransactionConverter
 
     fun availableBalance(gasPrice: Long, gasLimit: Long): BigDecimal
     fun fee(gasPrice: Long, gasLimit: Long): BigDecimal

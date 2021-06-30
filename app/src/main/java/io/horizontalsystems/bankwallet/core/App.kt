@@ -180,7 +180,7 @@ class App : CoreApp() {
         val zcashBirthdayProvider = ZcashBirthdayProvider(this, buildConfigProvider.testMode)
         restoreSettingsManager = RestoreSettingsManager(restoreSettingsStorage, zcashBirthdayProvider)
 
-        val adapterFactory = AdapterFactory(instance, buildConfigProvider.testMode, ethereumKitManager, binanceSmartChainKitManager, binanceKitManager, backgroundManager, restoreSettingsManager)
+        val adapterFactory = AdapterFactory(instance, buildConfigProvider.testMode, ethereumKitManager, binanceSmartChainKitManager, binanceKitManager, backgroundManager, restoreSettingsManager, coinManager)
         adapterManager = AdapterManager(walletManager, adapterFactory, ethereumKitManager, binanceSmartChainKitManager, binanceKitManager)
 
         initialSyncModeSettingsManager = InitialSyncSettingsManager(coinManager, blockchainSettingsStorage, adapterManager, walletManager)

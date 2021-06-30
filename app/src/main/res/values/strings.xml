@@ -472,10 +472,18 @@
     <string name="Transactions_FilterAll">ALL</string>
     <string name="Transactions_EmptyList">You don\’t have any pending or past transactions yet</string>
     <string name="Transactions_Pending">Pending</string>
+    <string name="Transactions_Received">Received</string>
     <string name="Transactions_Receiving">Receiving</string>
+    <string name="Transactions_Sent">Sent</string>
     <string name="Transactions_Sending">Sending</string>
+    <string name="Transactions_Approved">Swap approved</string>
     <string name="Transactions_Approving">Swap approval</string>
+    <string name="Transactions_Swapped">Swapped</string>
+    <string name="Transactions_Swapping">Swapping</string>
     <string name="Transactions_Failed">Failed</string>
+    <string name="Transactions_ContractCall">Contract Call</string>
+    <string name="Transactions_To">To %s</string>
+    <string name="Transactions_From">From %s</string>
 
     <!--Transaction Info-->
 

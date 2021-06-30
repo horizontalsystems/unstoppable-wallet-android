@@ -2,8 +2,8 @@ package io.horizontalsystems.bankwallet.modules.transactions.transactionInfo
 
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.TransactionLockState
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionStatus
-import java.util.*
 
 sealed class TransactionDetailViewItem {
     class Rate(val currencyValue: CurrencyValue, val coinCode: String) : TransactionDetailViewItem()
@@ -19,6 +19,3 @@ sealed class TransactionDetailViewItem {
     class RawTransaction : TransactionDetailViewItem()
     class LockInfo(val lockState: TransactionLockState) : TransactionDetailViewItem()
 }
-
-data class TransactionLockState(val locked: Boolean, val date: Date)
-

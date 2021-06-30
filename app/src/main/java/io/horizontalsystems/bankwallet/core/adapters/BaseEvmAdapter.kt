@@ -11,9 +11,12 @@ import java.math.BigDecimal
 import java.math.BigInteger
 
 abstract class BaseEvmAdapter(
-        override val evmKit: EthereumKit,
-        val decimal: Int
+        final override val evmKit: EthereumKit,
+        val decimal: Int,
+        val coinManager: ICoinManager
 ) : IAdapter, ISendEthereumAdapter, ITransactionsAdapter, IBalanceAdapter, IReceiveAdapter {
+
+    override val transactionConverter = EvmTransactionConverter(coinManager, evmKit)
 
     override val debugInfo: String
         get() = evmKit.debugInfo()

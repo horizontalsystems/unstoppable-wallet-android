@@ -1,8 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
+import android.util.Log
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.entities.LastBlockInfo
-import io.horizontalsystems.bankwallet.entities.TransactionRecord
+import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.core.entities.Currency
@@ -36,10 +37,10 @@ class TransactionsPresenter(
     }
 
     override fun willShow(transactionViewItem: TransactionViewItem) {
-        if (transactionViewItem.currencyValue == null) {
-            transactionViewItem.date?.let {
-                interactor.fetchRate(transactionViewItem.wallet.coin, it.time / 1000)
-            }
+        val coin = transactionViewItem.record.mainCoin ?: return
+        val date = transactionViewItem.date ?: return
+        if (transactionViewItem.mainAmountCurrencyValue == null) {
+            interactor.fetchRate(coin, date.time / 1000)
         }
     }
 
@@ -69,7 +70,9 @@ class TransactionsPresenter(
     }
 
     override fun didFetchRecords(records: Map<Wallet, List<TransactionRecord>>, initial: Boolean) {
+        Log.e("TAG", "didFetchRecords: ${records.size}" )
         dataSource.handleNextRecords(records)
+        Log.e("TAG", "didFetchRecords dataSource.increasePage(): ${dataSource.increasePage()}" )
         if (dataSource.increasePage()) {
             view?.showTransactions(dataSource.itemsCopy)
         } else if (initial) {
