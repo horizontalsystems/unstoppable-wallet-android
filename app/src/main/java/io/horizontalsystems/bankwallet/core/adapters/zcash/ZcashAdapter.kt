@@ -7,6 +7,7 @@ import cash.z.ecc.android.sdk.block.CompactBlockProcessor
 import cash.z.ecc.android.sdk.ext.*
 import cash.z.ecc.android.sdk.tool.DerivationTool
 import cash.z.ecc.android.sdk.validate.AddressType
+import cash.z.ecc.android.sdk.type.ZcashNetwork
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.managers.RestoreSettings
 import io.horizontalsystems.bankwallet.entities.*
@@ -28,6 +29,7 @@ class ZcashAdapter(
 ) : IAdapter, IBalanceAdapter, IReceiveAdapter, ITransactionsAdapter, ISendZcashAdapter {
 
     private val confirmationsThreshold = 10
+    private val network: ZcashNetwork = if (testMode) ZcashNetwork.Testnet else ZcashNetwork.Mainnet
     private val feeChangeHeight: Long = if (testMode) 1_028_500 else 1_077_550
     private val lightWalletDHost = if (testMode) "lightwalletd.testnet.electriccoin.co" else "zcash.horizontalsystems.xyz"
     private val lightWalletDPort = 9067
@@ -54,10 +56,10 @@ class ZcashAdapter(
         }
 
         val config = Initializer.Config { config ->
-            config.server(lightWalletDHost, lightWalletDPort)
+            config.setNetwork(network, lightWalletDHost, lightWalletDPort)
             config.setBirthdayHeight(birthdayHeight, isRestored)
             config.alias = getValidAliasFromAccountId(wallet.account.id)
-            config.setSeed(seed)
+            config.setSeed(seed, network)
         }
 
         synchronizer = Synchronizer(Initializer(context, config))
@@ -112,7 +114,7 @@ class ZcashAdapter(
 
     private val balance: BigDecimal
         get() {
-            val totalZatoshi = synchronizer.latestBalance.availableZatoshi
+            val totalZatoshi = synchronizer.saplingBalances.value.availableZatoshi
             return if (totalZatoshi > 0)
                 totalZatoshi.convertZatoshiToZec()
             else
@@ -121,8 +123,8 @@ class ZcashAdapter(
 
     private val balanceLocked: BigDecimal
         get() {
-            val latestBalance = synchronizer.latestBalance
-            val lockedBalance = (latestBalance.totalZatoshi - latestBalance.availableZatoshi).coerceAtLeast(0)
+            val latestBalance = synchronizer.saplingBalances.value
+            val lockedBalance = synchronizer.saplingBalances.value.pendingZatoshi
             return if (lockedBalance > 0)
                 lockedBalance.convertZatoshiToZec()
             else
@@ -134,7 +136,7 @@ class ZcashAdapter(
     //endregion
 
     //region IReceiveAdapter
-    override val receiveAddress = DerivationTool.deriveShieldedAddress(seed)
+    override val receiveAddress = DerivationTool.deriveShieldedAddress(seed, network)
     //endregion
 
     //region ITransactionsAdapter
@@ -171,7 +173,7 @@ class ZcashAdapter(
 
     //region ISendZcashAdapter
     override val availableBalance: BigDecimal
-        get() = (synchronizer.latestBalance.availableZatoshi - defaultFee()).coerceAtLeast(0).convertZatoshiToZec()
+        get() = (synchronizer.saplingBalances.value.availableZatoshi - defaultFee()).coerceAtLeast(0).convertZatoshiToZec()
 
     override val fee: BigDecimal
         get() = defaultFee().convertZatoshiToZec()
@@ -234,7 +236,7 @@ class ZcashAdapter(
         lastBlockUpdatedSubject.onNext(Unit)
     }
 
-    private fun onBalance(balance: CompactBlockProcessor.WalletBalance) {
+    private fun onBalance(balance: WalletBalance) {
         balanceUpdatedSubject.onNext(Unit)
     }
 
@@ -289,8 +291,9 @@ class ZcashAdapter(
             return ALIAS_PREFIX + accountId.replace("-", "_")
         }
 
-        fun clear(accountId: String) {
-            Initializer.erase(App.instance, getValidAliasFromAccountId(accountId))
+        fun clear(accountId: String, testMode: Boolean) {
+            val network = if (testMode) ZcashNetwork.Testnet else ZcashNetwork.Mainnet
+            Initializer.erase(App.instance, network, getValidAliasFromAccountId(accountId))
         }
     }
 }
