@@ -1,5 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.swap
 
+import android.os.Bundle
+import android.view.View
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
@@ -14,8 +16,8 @@ abstract class SwapBaseFragment : BaseFragment() {
     protected abstract fun restoreProviderState(providerState: SwapMainModule.SwapProviderState)
     protected abstract fun getProviderState(): SwapMainModule.SwapProviderState
 
-    override fun onStart() {
-        super.onStart()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         restoreProviderState(mainViewModel.providerState)
     }
