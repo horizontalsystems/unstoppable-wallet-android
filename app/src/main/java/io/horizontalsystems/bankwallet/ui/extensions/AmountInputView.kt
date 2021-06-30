@@ -121,6 +121,10 @@ class AmountInputView @JvmOverloads constructor(context: Context, attrs: Attribu
         estimatedLabel.isVisible = visible
     }
 
+    fun setAmountEnabled(enabled: Boolean) {
+        editTxtAmount.isEnabled = enabled
+    }
+
     private fun syncButtonStates() {
         btnMax.isVisible = maxButtonVisible && editTxtAmount.text.isNullOrBlank()
     }
