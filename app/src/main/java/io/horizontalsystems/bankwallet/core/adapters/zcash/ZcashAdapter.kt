@@ -5,9 +5,12 @@ import cash.z.ecc.android.sdk.Initializer
 import cash.z.ecc.android.sdk.SdkSynchronizer
 import cash.z.ecc.android.sdk.Synchronizer
 import cash.z.ecc.android.sdk.block.CompactBlockProcessor
+import cash.z.ecc.android.sdk.db.entity.isFailure
+import cash.z.ecc.android.sdk.db.entity.isSubmitSuccess
 import cash.z.ecc.android.sdk.ext.*
 import cash.z.ecc.android.sdk.tool.DerivationTool
-import cash.z.ecc.android.sdk.validate.AddressType
+import cash.z.ecc.android.sdk.type.AddressType
+import cash.z.ecc.android.sdk.type.WalletBalance
 import cash.z.ecc.android.sdk.type.ZcashNetwork
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.managers.RestoreSettings
@@ -190,11 +193,30 @@ class ZcashAdapter(
     override fun send(amount: BigDecimal, address: String, memo: String, logger: AppLogger): Single<Unit> =
             Single.create { emitter ->
                 try {
-                    val spendingKey = DerivationTool.deriveSpendingKeys(seed).first()
+                    val spendingKey = DerivationTool.deriveSpendingKeys(seed, network).first()
                     logger.info("call synchronizer.sendToAddress")
-                    synchronizer.sendToAddress(spendingKey, amount.convertZecToZatoshi(), address, memo)
-                            .collectWith(GlobalScope) {}
-                    emitter.onSuccess(Unit)
+                    // use a scope that automatically cancels when the synchronizer stops
+                    val scope = (synchronizer as SdkSynchronizer).coroutineScope
+                    // don't return until the transaction creation is complete
+                    synchronizer
+                        .sendToAddress(spendingKey, amount.convertZecToZatoshi(), address, memo)
+                        .filter { it.isSubmitSuccess() || it.isFailure() }
+                        .take(1)
+                        .onEach {
+                            if (it.isSubmitSuccess()) {
+                                emitter.onSuccess(Unit)
+                            } else {
+                                FailedTransaction(it.errorMessage).let { error ->
+                                    logger.warning("send error", error)
+                                    emitter.onError(error)
+                                }
+                            }
+                        }
+                        .catch {
+                            logger.warning("send error", it)
+                            emitter.onError(it)
+                        }
+                        .launchIn(scope)
                 } catch (error: Throwable) {
                     logger.warning("send error", error)
                     emitter.onError(error)
