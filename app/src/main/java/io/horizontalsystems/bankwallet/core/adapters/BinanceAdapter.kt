@@ -3,18 +3,21 @@ package io.horizontalsystems.bankwallet.core.adapters
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.LastBlockInfo
-import io.horizontalsystems.bankwallet.entities.TransactionRecord
-import io.horizontalsystems.bankwallet.entities.TransactionType
+import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
+import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.BitcoinIncomingTransactionRecord
+import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.BitcoinOutgoingTransactionRecord
 import io.horizontalsystems.binancechainkit.BinanceChainKit
 import io.horizontalsystems.binancechainkit.core.api.BinanceError
 import io.horizontalsystems.binancechainkit.models.TransactionInfo
+import io.horizontalsystems.coinkit.models.Coin
 import io.reactivex.Flowable
 import io.reactivex.Single
 import java.math.BigDecimal
 
 class BinanceAdapter(
         private val binanceKit: BinanceChainKit,
-        private val symbol: String)
+        private val symbol: String,
+        private val coin: Coin)
     : IAdapter, ITransactionsAdapter, IBalanceAdapter, IReceiveAdapter, ISendBinanceAdapter {
 
     private val asset = binanceKit.register(symbol)
@@ -85,27 +88,64 @@ class BinanceAdapter(
         val fromMine = transaction.from == myAddress
         val toMine = transaction.to == myAddress
 
-        val type = when {
-            fromMine && toMine -> TransactionType.SentToSelf
-            fromMine -> TransactionType.Outgoing
-            else -> TransactionType.Incoming
+        return when {
+            fromMine && !toMine -> {
+                BitcoinOutgoingTransactionRecord(
+                        coin = coin,
+                        uid = transaction.hash,
+                        transactionHash = transaction.hash,
+                        transactionIndex = 0,
+                        blockHeight = transaction.blockNumber,
+                        confirmationsThreshold = confirmationsThreshold,
+                        date = transaction.date,
+                        fee = transferFee,
+                        failed = false,
+                        lockInfo = null,
+                        conflictingHash = null,
+                        showRawTransaction = false,
+                        amount = transaction.amount.toBigDecimal(),
+                        to = transaction.to,
+                        sentToSelf = false
+                )
+            }
+            !fromMine && toMine -> {
+                BitcoinIncomingTransactionRecord(
+                        coin = coin,
+                        uid = transaction.hash,
+                        transactionHash = transaction.hash,
+                        transactionIndex = 0,
+                        blockHeight = transaction.blockNumber,
+                        confirmationsThreshold = confirmationsThreshold,
+                        date = transaction.date,
+                        fee = transferFee,
+                        failed = false,
+                        lockInfo = null,
+                        conflictingHash = null,
+                        showRawTransaction = false,
+                        amount = transaction.amount.toBigDecimal(),
+                        from = transaction.from
+                )
+            }
+            else -> {
+                BitcoinOutgoingTransactionRecord(
+                        coin = coin,
+                        uid = transaction.hash,
+                        transactionHash = transaction.hash,
+                        transactionIndex = 0,
+                        blockHeight = transaction.blockNumber,
+                        confirmationsThreshold = confirmationsThreshold,
+                        date = transaction.date,
+                        fee = transferFee,
+                        failed = false,
+                        lockInfo = null,
+                        conflictingHash = null,
+                        showRawTransaction = false,
+                        amount = transaction.amount.toBigDecimal(),
+                        to = transaction.to,
+                        sentToSelf = true
+                )
+            }
         }
-
-        return TransactionRecord(
-                uid = transaction.hash,
-                transactionHash = transaction.hash,
-                transactionIndex = 0,
-                interTransactionIndex = 0,
-                blockHeight = transaction.blockNumber.toLong(),
-                confirmationsThreshold = confirmationsThreshold,
-                amount = transaction.amount.toBigDecimal(),
-                fee = transferFee,
-                timestamp = transaction.date.time / 1000,
-                from = transaction.from,
-                memo = transaction.memo,
-                to = transaction.to,
-                type = type
-        )
     }
 
     // ISendBinanceAdapter

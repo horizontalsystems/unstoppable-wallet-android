@@ -1,10 +1,14 @@
 package io.horizontalsystems.bankwallet.modules.transactions.transactionInfo
 
 import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
+import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.TransactionLockState
 import io.horizontalsystems.bankwallet.modules.send.SendModule
+import io.horizontalsystems.bankwallet.modules.transactions.TransactionType
 import io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoModule.TitleViewItem
 import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.ethereumkit.core.EthereumKit
+import java.math.BigDecimal
 import java.util.*
 
 class TransactionInfoPresenter(
@@ -25,16 +29,18 @@ class TransactionInfoPresenter(
         val lastBlockInfo = interactor.lastBlockInfo
 
         val status = transaction.status(lastBlockInfo?.height)
-        val lockState = transaction.lockState(lastBlockInfo?.timestamp)
+        val lockState: TransactionLockState? = null
+        val transactionType = transaction.getType(lastBlockInfo)
 
         val rate = interactor.getRate(wallet.coin.type, transaction.timestamp)
 
         val primaryAmountInfo: SendModule.AmountInfo
         val secondaryAmountInfo: SendModule.AmountInfo?
 
-        val coinValue = CoinValue(coin, transaction.amount)
+        val amount = transaction.mainAmount ?: BigDecimal.ZERO
+        val coinValue = CoinValue(coin, transaction.mainAmount ?: BigDecimal.ZERO)
         if (rate != null) {
-            primaryAmountInfo = SendModule.AmountInfo.CurrencyValueInfo(CurrencyValue(rate.currency, rate.value * transaction.amount))
+            primaryAmountInfo = SendModule.AmountInfo.CurrencyValueInfo(CurrencyValue(rate.currency, rate.value * amount))
             secondaryAmountInfo = SendModule.AmountInfo.CoinValueInfo(coinValue)
         } else {
             primaryAmountInfo = SendModule.AmountInfo.CoinValueInfo(coinValue)
@@ -43,11 +49,11 @@ class TransactionInfoPresenter(
 
         val date = if (transaction.timestamp == 0L) null else Date(transaction.timestamp * 1000)
 
-        view?.showTitle(TitleViewItem(date, primaryAmountInfo, secondaryAmountInfo, transaction.type, lockState))
+        view?.showTitle(TitleViewItem(date, primaryAmountInfo, secondaryAmountInfo, transactionType, lockState))
 
         val viewItems = mutableListOf<TransactionDetailViewItem>()
 
-        viewItems.add(TransactionDetailViewItem.Status(status, transaction.type == TransactionType.Incoming))
+        viewItems.add(TransactionDetailViewItem.Status(status, transactionType is TransactionType.Incoming))
 
         rate?.let {
             viewItems.add(TransactionDetailViewItem.Rate(rate, wallet.coin.code))
@@ -58,43 +64,43 @@ class TransactionInfoPresenter(
             viewItems.add(TransactionDetailViewItem.Fee(CoinValue(feeCoin, fee), rate?.let { CurrencyValue(it.currency, it.value * fee) }))
         }
 
-        transaction.from?.let { from ->
-            if (showFromAddress(wallet.coin.type)) {
-                viewItems.add(TransactionDetailViewItem.From(transactionInfoAddressMapper.map(from)))
-            }
-        }
-
-        transaction.to?.let { to ->
-            viewItems.add(TransactionDetailViewItem.To(transactionInfoAddressMapper.map(to)))
-        }
-
-        transaction.memo?.let { memo ->
-            viewItems.add(TransactionDetailViewItem.Memo(memo))
-        }
-
-        transaction.lockInfo?.originalAddress?.let { recipient ->
-            if (transaction.type == TransactionType.Outgoing) {
-                viewItems.add(TransactionDetailViewItem.Recipient(transactionInfoAddressMapper.map(recipient)))
-            }
-        }
-
-        if (transaction.showRawTransaction) {
-            viewItems.add(TransactionDetailViewItem.RawTransaction())
-        } else {
+//        transaction.from?.let { from ->
+//            if (showFromAddress(wallet.coin.type)) {
+//                viewItems.add(TransactionDetailViewItem.From(transactionInfoAddressMapper.map(from)))
+//            }
+//        }
+//
+//        transaction.to?.let { to ->
+//            viewItems.add(TransactionDetailViewItem.To(transactionInfoAddressMapper.map(to)))
+//        }
+//
+//        transaction.memo?.let { memo ->
+//            viewItems.add(TransactionDetailViewItem.Memo(memo))
+//        }
+//
+//        transaction.lockInfo?.originalAddress?.let { recipient ->
+//            if (transaction.type == TransactionType.Outgoing) {
+//                viewItems.add(TransactionDetailViewItem.Recipient(transactionInfoAddressMapper.map(recipient)))
+//            }
+//        }
+//
+//        if (transaction.showRawTransaction) {
+//            viewItems.add(TransactionDetailViewItem.RawTransaction())
+//        } else {
             viewItems.add(TransactionDetailViewItem.Id(transaction.transactionHash))
-        }
-
-        if (transaction.conflictingTxHash != null) {
-            viewItems.add(TransactionDetailViewItem.DoubleSpend())
-        }
+//        }
+//
+//        if (transaction.conflictingTxHash != null) {
+//            viewItems.add(TransactionDetailViewItem.DoubleSpend())
+//        }
 
         lockState?.let {
             viewItems.add(TransactionDetailViewItem.LockInfo(it))
         }
 
-        if (transaction.type == TransactionType.SentToSelf) {
-            viewItems.add(TransactionDetailViewItem.SentToSelf())
-        }
+//        if (transaction.type == TransactionType.SentToSelf) {
+//            viewItems.add(TransactionDetailViewItem.SentToSelf())
+//        }
 
         view?.showDetails(viewItems)
 
@@ -116,27 +122,27 @@ class TransactionInfoPresenter(
     }
 
     override fun onClickLockInfo() {
-        transaction.lockInfo?.lockedUntil?.let {
-            router.openLockInfo(it)
-        }
+//        transaction.lockInfo?.lockedUntil?.let {
+//            router.openLockInfo(it)
+//        }
     }
 
     override fun onClickDoubleSpendInfo() {
-        transaction.conflictingTxHash?.let { conflictingTxHash ->
-            router.openDoubleSpendInfo(transaction.transactionHash, conflictingTxHash)
-        }
+//        transaction.conflictingTxHash?.let { conflictingTxHash ->
+//            router.openDoubleSpendInfo(transaction.transactionHash, conflictingTxHash)
+//        }
     }
 
     override fun onClickRecipientHash() {
-        onCopy(transaction.lockInfo?.originalAddress)
+//        onCopy(transaction.lockInfo?.originalAddress)
     }
 
     override fun onClickTo() {
-        onCopy(transaction.to)
+//        onCopy(transaction.to)
     }
 
     override fun onClickFrom() {
-        onCopy(transaction.from)
+//        onCopy(transaction.from)
     }
 
     override fun onClickTransactionId() {

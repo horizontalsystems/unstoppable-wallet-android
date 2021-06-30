@@ -2,8 +2,7 @@ package io.horizontalsystems.bankwallet.core.adapters
 
 import android.content.Context
 import io.horizontalsystems.bankwallet.core.*
-import io.horizontalsystems.bankwallet.entities.TransactionRecord
-import io.horizontalsystems.bankwallet.entities.TransactionType
+import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.erc20kit.core.Erc20Kit
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.core.EthereumKit.SyncState
@@ -19,16 +18,17 @@ class Eip20Adapter(
         evmKit: EthereumKit,
         decimal: Int,
         contractAddress: String,
+        coinManager: ICoinManager,
         private val fee: BigDecimal = BigDecimal.ZERO,
         override val minimumRequiredBalance: BigDecimal = BigDecimal.ZERO,
         override val minimumSendAmount: BigDecimal = BigDecimal.ZERO
-) : BaseEvmAdapter(evmKit, decimal) {
+) : BaseEvmAdapter(evmKit, decimal, coinManager) {
 
     private val contractAddress: Address = Address(contractAddress)
     val eip20Kit: Erc20Kit = Erc20Kit.getInstance(context, this.evmKit, this.contractAddress)
 
     val pendingTransactions: List<TransactionRecord>
-        get() = eip20Kit.getPendingTransactions().map { transactionRecord(it) }
+        get() = eip20Kit.getPendingTransactions().map { transactionConverter.transactionRecord(it) }
 
     // IAdapter
 
@@ -70,12 +70,14 @@ class Eip20Adapter(
         val fromHash = from?.transactionHash?.hexStringToByteArray()
         return eip20Kit.getTransactionsAsync(fromHash, limit)
                 .flatMap { fullTransactionList ->
-                    return@flatMap Single.just(fullTransactionList.map { transactionRecord(it) })
+                    return@flatMap Single.just(fullTransactionList.map { transactionConverter.transactionRecord(it) })
                 }
     }
 
     override val transactionRecordsFlowable: Flowable<List<TransactionRecord>>
-        get() = eip20Kit.transactionsFlowable.map { it.map { tx -> transactionRecord(tx) } }
+        get() = eip20Kit.transactionsFlowable.map {
+            it.map { tx -> transactionConverter.transactionRecord(tx) }
+        }
 
     // ISendEthereumAdapter
 
@@ -110,66 +112,10 @@ class Eip20Adapter(
         return eip20Kit.buildTransferTransactionData(address, amount)
     }
 
-    private fun convertAmount(amount: BigInteger, fromAddress: Address): BigDecimal {
-        var significandAmount = scaleDown(amount.toBigDecimal())
-
-        if (significandAmount.compareTo(BigDecimal.ZERO) == 0) {
-            return BigDecimal.ZERO
-        }
-
-        val fromMine = fromAddress == evmKit.receiveAddress
-
-        if (fromMine) {
-            significandAmount = significandAmount.negate()
-        }
-
-        return significandAmount
-    }
-
     private fun convertToAdapterState(syncState: SyncState): AdapterState = when (syncState) {
         is SyncState.Synced -> AdapterState.Synced
         is SyncState.NotSynced -> AdapterState.NotSynced(syncState.error)
         is SyncState.Syncing -> AdapterState.Syncing(50, null)
-    }
-
-    private fun transactionRecord(fullTransaction: FullTransaction): TransactionRecord {
-        val transaction = fullTransaction.transaction
-        val receipt = fullTransaction.receiptWithLogs?.receipt
-
-        var from = transaction.from
-        var to = transaction.to
-
-        var amount = convertAmount(transaction.value, transaction.from)
-
-        amount += fullTransaction.internalTransactions
-                .map {
-                    from = it.from
-                    to = it.to
-                    convertAmount(it.value, it.from)
-                }.fold(BigDecimal.ZERO) { acc, bigDecimal -> acc + bigDecimal }
-
-        val type = when {
-            transaction.from == transaction.to -> TransactionType.SentToSelf
-            amount < BigDecimal.ZERO -> TransactionType.Outgoing
-            else -> TransactionType.Incoming
-        }
-
-        val txHash = transaction.hash.toHexString()
-        return TransactionRecord(
-                uid = txHash,
-                transactionHash = txHash,
-                transactionIndex = receipt?.transactionIndex ?: 0,
-                interTransactionIndex = 0,
-                blockHeight = receipt?.blockNumber,
-                amount = amount.abs(),
-                confirmationsThreshold = confirmationsThreshold,
-                timestamp = transaction.timestamp,
-                from = from.eip55,
-                memo = null,
-                to = to?.eip55,
-                type = type,
-                failed = fullTransaction.isFailed()
-        )
     }
 
     fun allowance(spenderAddress: Address, defaultBlockParameter: DefaultBlockParameter): Single<BigDecimal> {
@@ -180,8 +126,6 @@ class Eip20Adapter(
     }
 
     companion object {
-        private const val approveConfirmationsThreshold = 1
-
         fun clear(walletId: String, testMode: Boolean) {
             val networkTypes = when {
                 testMode -> listOf(EthereumKit.NetworkType.EthRopsten)

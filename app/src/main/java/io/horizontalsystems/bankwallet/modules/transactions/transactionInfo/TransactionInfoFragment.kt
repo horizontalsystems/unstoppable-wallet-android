@@ -16,7 +16,7 @@ import androidx.navigation.navGraphViewModels
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.entities.TransactionType
+import io.horizontalsystems.bankwallet.modules.transactions.TransactionType
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewHelper
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionsPresenter
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionsViewModel
@@ -122,12 +122,12 @@ class TransactionInfoFragment : BottomSheetDialogFragment() {
         })
 
         viewModel.titleLiveData.observe(this, Observer { titleViewItem ->
-            val title = if (titleViewItem.type == TransactionType.Approve) R.string.TransactionInfo_Approval else R.string.TransactionInfo_Transaction
+            val title = if (titleViewItem.type is TransactionType.Approve) R.string.TransactionInfo_Approval else R.string.TransactionInfo_Transaction
             txtTitle.text = context?.getString(title)
             txtSubtitle.text = titleViewItem.date?.let { DateHelper.getFullDate(it) }
             headerIcon.setImageResource(TransactionViewHelper.getTransactionTypeIcon(titleViewItem.type))
 
-            sentToSelfIcon.isVisible = titleViewItem.type == TransactionType.SentToSelf
+//            sentToSelfIcon.isVisible = titleViewItem.type == TransactionType.SentToSelf
 
             primaryValue.setCompoundDrawablesWithIntrinsicBounds(0, 0, TransactionViewHelper.getLockIcon(titleViewItem.lockState), 0)
             primaryValue.setTextColor(TransactionViewHelper.getAmountColor(titleViewItem.type, requireContext()))

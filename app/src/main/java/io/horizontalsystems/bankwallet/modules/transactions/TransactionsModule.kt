@@ -5,8 +5,10 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.factories.TransactionViewItemFactory
-import io.horizontalsystems.bankwallet.entities.*
-import io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionLockState
+import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import io.horizontalsystems.bankwallet.entities.LastBlockInfo
+import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.core.entities.Currency
 import java.math.BigDecimal
@@ -17,16 +19,11 @@ typealias CoinCode = String
 data class TransactionViewItem(
         val wallet: Wallet,
         val record: TransactionRecord,
-        val coinValue: CoinValue,
-        var currencyValue: CurrencyValue?,
         val type: TransactionType,
         val date: Date?,
         val status: TransactionStatus,
-        val lockState: TransactionLockState?,
-        val doubleSpend: Boolean) : Comparable<TransactionViewItem> {
-
-    val isPending: Boolean
-        get() = status is TransactionStatus.Pending || status is TransactionStatus.Processing
+        var mainAmountCurrencyValue: CurrencyValue?
+        ) : Comparable<TransactionViewItem> {
 
     override fun compareTo(other: TransactionViewItem): Int {
         return record.compareTo(other.record)
@@ -48,23 +45,14 @@ data class TransactionViewItem(
     }
 
     fun contentTheSame(other: TransactionViewItem): Boolean {
-        return currencyValue == other.currencyValue
+        return mainAmountCurrencyValue == other.mainAmountCurrencyValue
                 && date == other.date
                 && status == other.status
-                && lockState == other.lockState
-                && doubleSpend == other.doubleSpend
+                && type == other.type
     }
 
     fun clearRates() {
-        currencyValue = null
-    }
-
-    fun becomesUnlocked(oldBlockTimestamp: Long?, lastBlockTimestamp: Long?): Boolean {
-        if (lastBlockTimestamp == null || record.lockInfo == null) return false
-
-        val lockedUntilTimestamp = record.lockInfo.lockedUntil.time / 1000
-
-        return lockedUntilTimestamp > oldBlockTimestamp ?: 0 && lockedUntilTimestamp <= lastBlockTimestamp
+        mainAmountCurrencyValue = null
     }
 
 }

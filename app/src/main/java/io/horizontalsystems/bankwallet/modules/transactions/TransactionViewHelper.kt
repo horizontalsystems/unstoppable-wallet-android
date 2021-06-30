@@ -2,8 +2,7 @@ package io.horizontalsystems.bankwallet.modules.transactions
 
 import android.content.Context
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.entities.TransactionType
-import io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionLockState
+import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.TransactionLockState
 
 object TransactionViewHelper {
 
@@ -14,21 +13,23 @@ object TransactionViewHelper {
     }
 
     fun getAmountColor(type: TransactionType, context: Context): Int {
-        val color = when (type) {
-            TransactionType.Outgoing, TransactionType.SentToSelf -> R.color.jacob
-            TransactionType.Incoming -> R.color.remus
-            TransactionType.Approve -> R.color.leah
-        }
+        val color = R.color.leah
+//                when (type) {
+//            TransactionType.Outgoing, TransactionType.SentToSelf -> R.color.jacob
+//            TransactionType.Incoming -> R.color.remus
+//            TransactionType.Approve -> R.color.leah
+//        }
 
         return context.getColor(color)
     }
 
     fun getTransactionTypeIcon(type: TransactionType): Int {
-        return when (type) {
-            TransactionType.Outgoing, TransactionType.SentToSelf -> R.drawable.ic_outgoing_20
-            TransactionType.Incoming -> R.drawable.ic_incoming_20
-            TransactionType.Approve -> R.drawable.ic_swap_approval_20
-        }
+        return R.drawable.ic_outgoing_20
+//        when (type) {
+//            TransactionType.Outgoing, TransactionType.SentToSelf -> R.drawable.ic_outgoing_20
+//            TransactionType.Incoming -> R.drawable.ic_incoming_20
+//            TransactionType.Approve -> R.drawable.ic_swap_approval_20
+//        }
     }
 
     fun getBottomIconImage(status: TransactionStatus): Int? {

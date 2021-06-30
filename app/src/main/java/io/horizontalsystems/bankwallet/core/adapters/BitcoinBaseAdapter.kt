@@ -2,6 +2,9 @@ package io.horizontalsystems.bankwallet.core.adapters
 
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
+import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.BitcoinIncomingTransactionRecord
+import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.BitcoinOutgoingTransactionRecord
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionLockInfo
 import io.horizontalsystems.bitcoincore.AbstractKit
 import io.horizontalsystems.bitcoincore.BitcoinCore
@@ -10,6 +13,7 @@ import io.horizontalsystems.bitcoincore.core.IPluginData
 import io.horizontalsystems.bitcoincore.models.TransactionDataSortType
 import io.horizontalsystems.bitcoincore.models.TransactionInfo
 import io.horizontalsystems.bitcoincore.models.TransactionStatus
+import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.hodler.HodlerOutputData
 import io.horizontalsystems.hodler.HodlerPlugin
@@ -25,7 +29,8 @@ import kotlin.math.absoluteValue
 abstract class BitcoinBaseAdapter(
         open val kit: AbstractKit,
         open val syncMode: SyncMode? = null,
-        backgroundManager: BackgroundManager
+        backgroundManager: BackgroundManager,
+        val coin: Coin
 ) : IAdapter, ITransactionsAdapter, IBalanceAdapter, IReceiveAdapter, BackgroundManager.Listener {
 
     init {
@@ -144,7 +149,8 @@ abstract class BitcoinBaseAdapter(
         return Single.create { emitter ->
             try {
                 logger.info("call btc-kit.send")
-                kit.send(address, (amount * satoshisInBitcoin).toLong(),  true, feeRate.toInt(), sortingType, pluginData ?: mapOf())
+                kit.send(address, (amount * satoshisInBitcoin).toLong(), true, feeRate.toInt(), sortingType, pluginData
+                        ?: mapOf())
                 emitter.onSuccess(Unit)
             } catch (ex: Exception) {
                 emitter.onError(ex)
@@ -190,11 +196,18 @@ abstract class BitcoinBaseAdapter(
     fun transactionRecord(transaction: TransactionInfo): TransactionRecord {
         var myInputsTotalValue = 0L
         var allInputsMine = true
+        var from: String? = null
+        var to: String? = null
+
         transaction.inputs.forEach { input ->
             if (input.mine) {
                 myInputsTotalValue += input.value ?: 0
             } else {
                 allInputsMine = false
+            }
+
+            if (from == null && input.address != null) {
+                from = input.address
             }
         }
 
@@ -208,21 +221,16 @@ abstract class BitcoinBaseAdapter(
                     myChangeOutputsTotalValue += output.value
                 }
             }
+
+            if (to == null && output.address != null && !output.mine) {
+                to = output.address
+            }
         }
 
         var amount = myOutputsTotalValue - myInputsTotalValue
 
         if (allInputsMine) {
             amount += transaction.fee ?: 0
-        }
-
-        val type = when {
-            amount > 0 -> TransactionType.Incoming
-            amount < 0 -> TransactionType.Outgoing
-            else -> {
-                amount = myOutputsTotalValue - myChangeOutputsTotalValue
-                TransactionType.SentToSelf
-            }
         }
 
         var transactionLockInfo: TransactionLockInfo? = null
@@ -235,33 +243,66 @@ abstract class BitcoinBaseAdapter(
             }
         }
 
-        var from: String? = null
-        var to: String? = null
-        if (type == TransactionType.Incoming) {
-            from = transaction.inputs.firstOrNull { !it.mine }?.address
-        } else if (type == TransactionType.Outgoing) {
-            to = transaction.outputs.firstOrNull { it.value > 0 && !it.mine }?.address
+        return when {
+            amount > 0 -> {
+                BitcoinIncomingTransactionRecord(
+                        coin = coin,
+                        uid = transaction.uid,
+                        transactionHash = transaction.transactionHash,
+                        transactionIndex = transaction.transactionIndex,
+                        blockHeight = transaction.blockHeight,
+                        confirmationsThreshold = confirmationsThreshold,
+                        date = Date(transaction.timestamp),
+                        fee = satoshiToBTC(transaction.fee),
+                        failed = transaction.status == TransactionStatus.INVALID,
+                        lockInfo = transactionLockInfo,
+                        conflictingHash = transaction.conflictingTxHash,
+                        showRawTransaction = transaction.status == TransactionStatus.NEW || transaction.status == TransactionStatus.INVALID,
+                        amount = satoshiToBTC(amount.absoluteValue),
+                        from = from
+                )
+            }
+            amount < 0 -> {
+                BitcoinOutgoingTransactionRecord(
+                        coin = coin,
+                        uid = transaction.uid,
+                        transactionHash = transaction.transactionHash,
+                        transactionIndex = transaction.transactionIndex,
+                        blockHeight = transaction.blockHeight,
+                        confirmationsThreshold = confirmationsThreshold,
+                        date = Date(transaction.timestamp),
+                        fee = satoshiToBTC(transaction.fee),
+                        failed = transaction.status == TransactionStatus.INVALID,
+                        lockInfo = transactionLockInfo,
+                        conflictingHash = transaction.conflictingTxHash,
+                        showRawTransaction = transaction.status == TransactionStatus.NEW || transaction.status == TransactionStatus.INVALID,
+                        amount = satoshiToBTC(amount.absoluteValue),
+                        to = to,
+                        sentToSelf = false
+                )
+            }
+            else -> {
+                amount = myOutputsTotalValue - myChangeOutputsTotalValue
+                BitcoinOutgoingTransactionRecord(
+                        coin = coin,
+                        uid = transaction.uid,
+                        transactionHash = transaction.transactionHash,
+                        transactionIndex = transaction.transactionIndex,
+                        blockHeight = transaction.blockHeight,
+                        confirmationsThreshold = confirmationsThreshold,
+                        date = Date(transaction.timestamp),
+                        fee = satoshiToBTC(transaction.fee),
+                        failed = transaction.status == TransactionStatus.INVALID,
+                        lockInfo = transactionLockInfo,
+                        conflictingHash = transaction.conflictingTxHash,
+                        showRawTransaction = transaction.status == TransactionStatus.NEW || transaction.status == TransactionStatus.INVALID,
+                        amount = satoshiToBTC(amount.absoluteValue),
+                        to = to,
+                        sentToSelf = true
+                )
+            }
         }
 
-        return TransactionRecord(
-                uid = transaction.uid,
-                transactionHash = transaction.transactionHash,
-                transactionIndex = transaction.transactionIndex,
-                interTransactionIndex = 0,
-                blockHeight = transaction.blockHeight?.toLong(),
-                confirmationsThreshold = confirmationsThreshold,
-                amount = satoshiToBTC(amount.absoluteValue),
-                fee = satoshiToBTC(transaction.fee),
-                timestamp = transaction.timestamp,
-                from = from,
-                memo = null,
-                to = to,
-                type = type,
-                failed = transaction.status == TransactionStatus.INVALID,
-                lockInfo = transactionLockInfo,
-                conflictingTxHash = transaction.conflictingTxHash,
-                showRawTransaction = transaction.status == TransactionStatus.NEW || transaction.status == TransactionStatus.INVALID
-        )
     }
 
     val statusInfo: Map<String, Any>
