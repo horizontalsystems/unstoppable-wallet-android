@@ -76,8 +76,10 @@ class MarketListViewModel(
     private fun syncViewItemsBySortingField(scrollToTop: Boolean) {
         val viewItems = service.marketItems
                 .sort(sortingField)
-                .map { marketItem ->
-                    MarketViewItem.create(marketItem, MarketField.values()[marketFieldIndex])
+                .mapNotNull { marketItem ->
+                    MarketField.fromIndex(marketFieldIndex)?.let { marketField ->
+                        MarketViewItem.create(marketItem, marketField)
+                    }
                 }
 
         showEmptyListTextLiveData.postValue(viewItems.isEmpty())

@@ -92,7 +92,12 @@ enum class SortingField(@StringRes val titleResId: Int) {
 enum class MarketField(@StringRes val titleResId: Int) {
     MarketCap(R.string.Market_Field_MarketCap),
     Volume(R.string.Market_Field_Volume),
-    PriceDiff(R.string.Market_Field_PriceDiff)
+    PriceDiff(R.string.Market_Field_PriceDiff);
+
+    companion object {
+        val map = values().associateBy(MarketField::ordinal)
+        fun fromIndex(id: Int): MarketField? = map[id]
+    }
 }
 
 sealed class Score {

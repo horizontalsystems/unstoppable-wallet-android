@@ -71,7 +71,7 @@ class MarketDiscoveryFragment : BaseFragment(), MarketListHeaderView.Listener, V
         marketViewModel.discoveryListTypeLiveEvent.observe(viewLifecycleOwner) {
             marketListHeader.setSortingField(it.sortingField)
 
-            marketListViewModel.update(sortingField = it.sortingField, marketFieldIndex = it.marketField.titleResId)
+            marketListViewModel.update(sortingField = it.sortingField, marketFieldIndex = it.marketField.ordinal)
 
             marketCategoriesAdapter.selectCategory(null)
         }
