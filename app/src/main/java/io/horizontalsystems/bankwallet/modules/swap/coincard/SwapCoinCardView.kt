@@ -61,6 +61,10 @@ class SwapCoinCardView @JvmOverloads constructor(context: Context, attrs: Attrib
         })
     }
 
+    fun setAmountEnabled(enabled: Boolean) {
+        amountInput.setAmountEnabled(enabled)
+    }
+
     private fun observe(viewModel: SwapCoinCardViewModel, lifecycleOwner: LifecycleOwner) {
         viewModel.tokenCodeLiveData().observe(lifecycleOwner, { setCoin(it) })
 

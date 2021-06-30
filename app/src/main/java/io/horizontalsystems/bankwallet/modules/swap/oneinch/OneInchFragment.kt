@@ -50,6 +50,7 @@ class OneInchFragment : SwapBaseFragment() {
         val toCoinCardViewModel = ViewModelProvider(this, coinCardViewModelFactory).get(SwapMainModule.coinCardTypeTo, SwapCoinCardViewModel::class.java)
         val toCoinCardTile = getString(R.string.Swap_ToAmountTitle)
         toCoinCard.initialize(toCoinCardTile, toCoinCardViewModel, this, viewLifecycleOwner)
+        toCoinCard.setAmountEnabled(false)
 
         allowanceView.initialize(allowanceViewModel, viewLifecycleOwner)
 
