@@ -31,7 +31,7 @@ class ZcashAdapter(
     private val confirmationsThreshold = 10
     private val network: ZcashNetwork = if (testMode) ZcashNetwork.Testnet else ZcashNetwork.Mainnet
     private val feeChangeHeight: Long = if (testMode) 1_028_500 else 1_077_550
-    private val lightWalletDHost = if (testMode) "lightwalletd.testnet.electriccoin.co" else "zcash.horizontalsystems.xyz"
+    private val lightWalletDHost = if (testMode) network.defaultHost else "zcash.horizontalsystems.xyz"
     private val lightWalletDPort = 9067
 
     private val synchronizer: Synchronizer
