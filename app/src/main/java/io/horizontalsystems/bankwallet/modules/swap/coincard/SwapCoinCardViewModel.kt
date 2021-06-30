@@ -109,7 +109,7 @@ class SwapCoinCardViewModel(
 
         coinCardService.isEstimatedObservable
                 .subscribeOn(Schedulers.io())
-                .subscribe { syncEstimated(it) }
+                .subscribe { syncEstimated() }
                 .let { disposables.add(it) }
 
         coinCardService.amountObservable
@@ -143,8 +143,8 @@ class SwapCoinCardViewModel(
                 .let { disposables.add(it) }
     }
 
-    private fun syncEstimated(estimated: Boolean) {
-        isEstimatedLiveData.postValue(estimated)
+    private fun syncEstimated() {
+        isEstimatedLiveData.postValue(coinCardService.isEstimated && coinCardService.amount != null)
     }
 
     private fun syncAmount(amount: BigDecimal?, force: Boolean = false) {
@@ -168,7 +168,7 @@ class SwapCoinCardViewModel(
         }
         balanceLiveData.postValue(formattedBalance)
         val balanceNonNull = balance ?: BigDecimal.ZERO
-        maxEnabledLiveData.postValue(balanceNonNull > BigDecimal.ZERO && coin?.type != CoinType.Ethereum && coin?.type != CoinType.BinanceSmartChain && maxButtonSupported)
+        maxEnabledLiveData.postValue(balanceNonNull > BigDecimal.ZERO && maxButtonSupported)
     }
 
     private fun syncError(error: Throwable?) {
@@ -205,6 +205,7 @@ class SwapCoinCardViewModel(
 
             setCoinValueToService(fullAmountInfo.coinValue.value, force)
         }
+        syncEstimated()
     }
 
     private fun updateInputFields() {
