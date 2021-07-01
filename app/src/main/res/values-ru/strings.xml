@@ -66,7 +66,7 @@
     <string name="Restore_PassphraseDescription">Введите свою кодовую фразу, которую вы использовали при создании этой мнемонической фразы.</string>
     <string name="Select_Coins">Выберите Валюту</string>
     <string name="Restore_ZCash_BirthdayHeight">Блок Создания</string>
-    <string name="Restore_ZCash_BirthdayHeight_Hint">Если вы знаете блок создания вашего Zcash кошелька, добавьте его ниже для ускорения процесса синхронизации.</string>
+    <string name="Restore_ZCash_BirthdayHeight_Hint">If you know a birthday height for your Zcash wallet, add it below to speed up the syncing process.</string>
     <!--Backup-->
     <string name="Backup_Confirmation_CheckTitle">Проверка…</string>
     <!--Market-->
