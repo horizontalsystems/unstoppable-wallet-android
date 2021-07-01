@@ -66,7 +66,7 @@
     <string name="Restore_PassphraseDescription">이 연상 부호를 만들 때 사용한 암호 문구 입력.</string>
     <string name="Select_Coins">암호화를 선택해 주세요</string>
     <string name="Restore_ZCash_BirthdayHeight">생일 신장</string>
-    <string name="Restore_ZCash_BirthdayHeight_Hint">Zcash 지갑의 birthday height를 알고 있다면 아래에 추가하여 동기화 속도를 높입니다.</string>
+    <string name="Restore_ZCash_BirthdayHeight_Hint">If you know a birthday height for your Zcash wallet, add it below to speed up the syncing process.</string>
     <!--Backup-->
     <string name="Backup_Confirmation_CheckTitle">확인 중…</string>
     <!--Market-->
