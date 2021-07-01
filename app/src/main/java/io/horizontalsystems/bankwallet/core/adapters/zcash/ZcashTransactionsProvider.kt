@@ -1,25 +1,16 @@
 package io.horizontalsystems.bankwallet.core.adapters.zcash
 
-import cash.z.ecc.android.sdk.Synchronizer
 import cash.z.ecc.android.sdk.db.entity.ConfirmedTransaction
 import cash.z.ecc.android.sdk.db.entity.PendingTransaction
 import cash.z.ecc.android.sdk.db.entity.hasRawTransactionId
 import cash.z.ecc.android.sdk.db.entity.isMined
-import cash.z.ecc.android.sdk.ext.collectWith
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.Single
 import io.reactivex.subjects.PublishSubject
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlin.math.min
 
-class ZcashTransactionsProvider(synchronizer: Synchronizer) {
-
-    init {
-        synchronizer.clearedTransactions.distinctUntilChanged().collectWith(GlobalScope, ::onClearedTransactions)
-        synchronizer.pendingTransactions.distinctUntilChanged().collectWith(GlobalScope, ::onPendingTransactions)
-    }
+class ZcashTransactionsProvider {
 
     private var confirmedTransactions: MutableList<ZcashTransaction> = mutableListOf()
     private var pendingTransactions: MutableList<ZcashTransaction> = mutableListOf()
@@ -30,7 +21,7 @@ class ZcashTransactionsProvider(synchronizer: Synchronizer) {
     }
 
     @Synchronized
-    private fun onClearedTransactions(transactions: List<ConfirmedTransaction>) {
+    fun onClearedTransactions(transactions: List<ConfirmedTransaction>) {
         val newTransactions = transactions.filter { tx -> tx.minedHeight > 0 && !confirmedTransactions.any { it.id == tx.id } }
 
         if (newTransactions.isNotEmpty()) {
@@ -38,11 +29,10 @@ class ZcashTransactionsProvider(synchronizer: Synchronizer) {
             newTransactionsSubject.onNext(newZcashTransactions)
             confirmedTransactions.addAll(newZcashTransactions)
         }
-
     }
 
     @Synchronized
-    private fun onPendingTransactions(transactions: List<PendingTransaction>) {
+    fun onPendingTransactions(transactions: List<PendingTransaction>) {
         val newTransactions = transactions.filter { tx -> tx.hasRawTransactionId() && !tx.isMined() && !pendingTransactions.any { it.id == tx.id } }
 
         if (newTransactions.isNotEmpty()) {

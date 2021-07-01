@@ -2,11 +2,16 @@ package io.horizontalsystems.bankwallet.core.adapters.zcash
 
 import android.content.Context
 import cash.z.ecc.android.sdk.Initializer
+import cash.z.ecc.android.sdk.SdkSynchronizer
 import cash.z.ecc.android.sdk.Synchronizer
 import cash.z.ecc.android.sdk.block.CompactBlockProcessor
+import cash.z.ecc.android.sdk.db.entity.isFailure
+import cash.z.ecc.android.sdk.db.entity.isSubmitSuccess
 import cash.z.ecc.android.sdk.ext.*
 import cash.z.ecc.android.sdk.tool.DerivationTool
-import cash.z.ecc.android.sdk.validate.AddressType
+import cash.z.ecc.android.sdk.type.AddressType
+import cash.z.ecc.android.sdk.type.WalletBalance
+import cash.z.ecc.android.sdk.type.ZcashNetwork
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.managers.RestoreSettings
 import io.horizontalsystems.bankwallet.entities.*
@@ -15,10 +20,10 @@ import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.Single
 import io.reactivex.subjects.PublishSubject
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.runBlocking
 import java.math.BigDecimal
+import java.util.Date
 
 class ZcashAdapter(
         context: Context,
@@ -28,8 +33,9 @@ class ZcashAdapter(
 ) : IAdapter, IBalanceAdapter, IReceiveAdapter, ITransactionsAdapter, ISendZcashAdapter {
 
     private val confirmationsThreshold = 10
+    private val network: ZcashNetwork = if (testMode) ZcashNetwork.Testnet else ZcashNetwork.Mainnet
     private val feeChangeHeight: Long = if (testMode) 1_028_500 else 1_077_550
-    private val lightWalletDHost = if (testMode) "lightwalletd.testnet.electriccoin.co" else "zcash.horizontalsystems.xyz"
+    private val lightWalletDHost = if (testMode) network.defaultHost else "zcash.horizontalsystems.xyz"
     private val lightWalletDPort = 9067
 
     private val synchronizer: Synchronizer
@@ -42,6 +48,7 @@ class ZcashAdapter(
 
     private var scanProgress: Int = 0
     private var downloadProgress: Int = 0
+    private val today: Date = Date()
 
     init {
         val accountType = (wallet.account.type as? AccountType.Mnemonic) ?: throw UnsupportedAccountException()
@@ -54,20 +61,14 @@ class ZcashAdapter(
         }
 
         val config = Initializer.Config { config ->
-            config.server(lightWalletDHost, lightWalletDPort)
+            config.setNetwork(network, lightWalletDHost, lightWalletDPort)
             config.setBirthdayHeight(birthdayHeight, isRestored)
             config.alias = getValidAliasFromAccountId(wallet.account.id)
-            config.setSeed(seed)
+            config.setSeed(seed, network)
         }
 
+        transactionsProvider = ZcashTransactionsProvider()
         synchronizer = Synchronizer(Initializer(context, config))
-        transactionsProvider = ZcashTransactionsProvider(synchronizer)
-
-        synchronizer.status.distinctUntilChanged().collectWith(GlobalScope, ::onStatus)
-        synchronizer.progress.distinctUntilChanged().collectWith(GlobalScope, ::onDownloadProgress)
-        synchronizer.balances.distinctUntilChanged().collectWith(GlobalScope, ::onBalance)
-        synchronizer.processorInfo.distinctUntilChanged().collectWith(GlobalScope, ::onProcessorInfo)
-
         synchronizer.onProcessorErrorHandler = ::onProcessorError
         synchronizer.onChainErrorHandler = ::onChainError
     }
@@ -87,6 +88,7 @@ class ZcashAdapter(
     //region IAdapter
     override fun start() {
         synchronizer.start()
+        subscribe(synchronizer as SdkSynchronizer)
     }
 
     override fun stop() {
@@ -112,7 +114,7 @@ class ZcashAdapter(
 
     private val balance: BigDecimal
         get() {
-            val totalZatoshi = synchronizer.latestBalance.availableZatoshi
+            val totalZatoshi = synchronizer.saplingBalances.value.availableZatoshi
             return if (totalZatoshi > 0)
                 totalZatoshi.convertZatoshiToZec()
             else
@@ -121,8 +123,8 @@ class ZcashAdapter(
 
     private val balanceLocked: BigDecimal
         get() {
-            val latestBalance = synchronizer.latestBalance
-            val lockedBalance = (latestBalance.totalZatoshi - latestBalance.availableZatoshi).coerceAtLeast(0)
+            val latestBalance = synchronizer.saplingBalances.value
+            val lockedBalance = synchronizer.saplingBalances.value.pendingZatoshi
             return if (lockedBalance > 0)
                 lockedBalance.convertZatoshiToZec()
             else
@@ -134,7 +136,7 @@ class ZcashAdapter(
     //endregion
 
     //region IReceiveAdapter
-    override val receiveAddress = DerivationTool.deriveShieldedAddress(seed)
+    override val receiveAddress = DerivationTool.deriveShieldedAddress(seed, network)
     //endregion
 
     //region ITransactionsAdapter
@@ -171,7 +173,7 @@ class ZcashAdapter(
 
     //region ISendZcashAdapter
     override val availableBalance: BigDecimal
-        get() = (synchronizer.latestBalance.availableZatoshi - defaultFee()).coerceAtLeast(0).convertZatoshiToZec()
+        get() = (synchronizer.saplingBalances.value.availableZatoshi - defaultFee()).coerceAtLeast(0).convertZatoshiToZec()
 
     override val fee: BigDecimal
         get() = defaultFee().convertZatoshiToZec()
@@ -193,17 +195,54 @@ class ZcashAdapter(
     override fun send(amount: BigDecimal, address: String, memo: String, logger: AppLogger): Single<Unit> =
             Single.create { emitter ->
                 try {
-                    val spendingKey = DerivationTool.deriveSpendingKeys(seed).first()
+                    val spendingKey = DerivationTool.deriveSpendingKeys(seed, network).first()
                     logger.info("call synchronizer.sendToAddress")
-                    synchronizer.sendToAddress(spendingKey, amount.convertZecToZatoshi(), address, memo)
-                            .collectWith(GlobalScope) {}
-                    emitter.onSuccess(Unit)
+                    // use a scope that automatically cancels when the synchronizer stops
+                    val scope = (synchronizer as SdkSynchronizer).coroutineScope
+                    // don't return until the transaction creation is complete
+                    synchronizer
+                        .sendToAddress(spendingKey, amount.convertZecToZatoshi(), address, memo)
+                        .filter { it.isSubmitSuccess() || it.isFailure() }
+                        .take(1)
+                        .onEach {
+                            if (it.isSubmitSuccess()) {
+                                emitter.onSuccess(Unit)
+                            } else {
+                                FailedTransaction(it.errorMessage).let { error ->
+                                    logger.warning("send error", error)
+                                    emitter.onError(error)
+                                }
+                            }
+                        }
+                        .catch {
+                            logger.warning("send error", it)
+                            emitter.onError(it)
+                        }
+                        .launchIn(scope)
                 } catch (error: Throwable) {
                     logger.warning("send error", error)
                     emitter.onError(error)
                 }
             }
     //endregion
+
+    // Subscribe to a synchronizer on its own scope and begin responding to events
+    private fun subscribe(synchronizer: SdkSynchronizer) {
+        // Note: If any of these callback functions directly touch the UI, then the scope used here
+        //       should not live longer than that UI or else the context and view tree will be
+        //       invalid and lead to crashes. For now, we use a scope that is cancelled whenever
+        //       synchronizer.stop is called.
+        //       If the scope of the view is required for one of these, then consider using the
+        //       related viewModelScope instead of the synchronizer's scope.
+        //       synchronizer.coroutineScope cannot be accessed until the synchronizer is started
+        val scope = synchronizer.coroutineScope
+        synchronizer.clearedTransactions.distinctUntilChanged().collectWith(scope, transactionsProvider::onClearedTransactions)
+        synchronizer.pendingTransactions.distinctUntilChanged().collectWith(scope, transactionsProvider::onPendingTransactions)
+        synchronizer.status.distinctUntilChanged().collectWith(scope, ::onStatus)
+        synchronizer.progress.distinctUntilChanged().collectWith(scope, ::onDownloadProgress)
+        synchronizer.saplingBalances.collectWith(scope, ::onBalance)
+        synchronizer.processorInfo.distinctUntilChanged().collectWith(scope, ::onProcessorInfo)
+    }
 
     private fun onProcessorError(error: Throwable?): Boolean {
         error?.printStackTrace()
@@ -234,7 +273,7 @@ class ZcashAdapter(
         lastBlockUpdatedSubject.onNext(Unit)
     }
 
-    private fun onBalance(balance: CompactBlockProcessor.WalletBalance) {
+    private fun onBalance(balance: WalletBalance) {
         balanceUpdatedSubject.onNext(Unit)
     }
 
@@ -242,7 +281,10 @@ class ZcashAdapter(
         val totalProgress = (downloadProgress + scanProgress) / 2
 
         if (totalProgress < 100) {
-            syncState = AdapterState.Syncing(totalProgress, null)
+            // Workaround: progress doesn't show unless date exists
+            // for Zcash, it's probably better to show progress percentage with a placeholder date
+            // rather than no percentage, because scanning can take a long time
+            syncState = AdapterState.Syncing(totalProgress, today)
         }
     }
 
@@ -289,8 +331,9 @@ class ZcashAdapter(
             return ALIAS_PREFIX + accountId.replace("-", "_")
         }
 
-        fun clear(accountId: String) {
-            Initializer.erase(App.instance, getValidAliasFromAccountId(accountId))
+        fun clear(accountId: String, testMode: Boolean) {
+            val network = if (testMode) ZcashNetwork.Testnet else ZcashNetwork.Mainnet
+            Initializer.erase(App.instance, network, getValidAliasFromAccountId(accountId))
         }
     }
 }

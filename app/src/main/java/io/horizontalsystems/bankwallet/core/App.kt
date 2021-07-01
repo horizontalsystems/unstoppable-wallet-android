@@ -177,7 +177,7 @@ class App : CoreApp() {
 
         connectivityManager = ConnectivityManager(backgroundManager)
 
-        val zcashBirthdayProvider = ZcashBirthdayProvider(this)
+        val zcashBirthdayProvider = ZcashBirthdayProvider(this, buildConfigProvider.testMode)
         restoreSettingsManager = RestoreSettingsManager(restoreSettingsStorage, zcashBirthdayProvider)
 
         val adapterFactory = AdapterFactory(instance, buildConfigProvider.testMode, ethereumKitManager, binanceSmartChainKitManager, binanceKitManager, backgroundManager, restoreSettingsManager)
