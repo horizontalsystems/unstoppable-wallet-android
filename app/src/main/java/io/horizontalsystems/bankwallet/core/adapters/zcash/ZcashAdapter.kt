@@ -23,6 +23,7 @@ import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.runBlocking
 import java.math.BigDecimal
+import java.util.Date
 
 class ZcashAdapter(
         context: Context,
@@ -47,6 +48,7 @@ class ZcashAdapter(
 
     private var scanProgress: Int = 0
     private var downloadProgress: Int = 0
+    private val today: Date = Date()
 
     init {
         val accountType = (wallet.account.type as? AccountType.Mnemonic) ?: throw UnsupportedAccountException()
@@ -279,7 +281,10 @@ class ZcashAdapter(
         val totalProgress = (downloadProgress + scanProgress) / 2
 
         if (totalProgress < 100) {
-            syncState = AdapterState.Syncing(totalProgress, null)
+            // Workaround: progress doesn't show unless date exists
+            // for Zcash, it's probably better to show progress percentage with a placeholder date
+            // rather than no percentage, because scanning can take a long time
+            syncState = AdapterState.Syncing(totalProgress, today)
         }
     }
 
