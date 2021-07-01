@@ -66,7 +66,7 @@
     <string name="Restore_PassphraseDescription">Bu anımsatıcı ifadeyi oluştururken kullandığınız parolanızı girin.</string>
     <string name="Select_Coins">Kripto Parayi Seç</string>
     <string name="Restore_ZCash_BirthdayHeight">Oluşturulma Günü Üst Sınırı</string>
-    <string name="Restore_ZCash_BirthdayHeight_Hint">Zcash cüzdanınız için bir doğum günü yüksekliği biliyorsanız, senkronizasyon işlemini hızlandırmak için aşağıya ekleyin.</string>
+    <string name="Restore_ZCash_BirthdayHeight_Hint">If you know a birthday height for your Zcash wallet, add it below to speed up the syncing process.</string>
     <!--Backup-->
     <string name="Backup_Confirmation_CheckTitle">Kontrol etme…</string>
     <!--Market-->
