@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="72dp"
+    android:layout_height="60dp"
     android:background="@drawable/clickable_transaction_bg"
     android:clickable="true"
     android:focusable="true">
@@ -17,89 +17,90 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <io.horizontalsystems.bankwallet.ui.extensions.RotatingCircleProgressView
+        android:id="@+id/iconProgress"
+        android:layout_width="41dp"
+        android:layout_height="41dp"
+        app:layout_constraintBottom_toBottomOf="@+id/txIcon"
+        app:layout_constraintEnd_toEndOf="@+id/txIcon"
+        app:layout_constraintStart_toStartOf="@+id/txIcon"
+        app:layout_constraintTop_toTopOf="@+id/txIcon" />
+
     <ImageView
-        android:id="@+id/txTypeIcon"
+        android:id="@+id/txIcon"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginStart="17dp"
+        android:layout_marginTop="17dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@drawable/ic_incoming_20" />
-
-    <ImageView
-        android:id="@+id/bottomIcon"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="12dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/txTypeIcon"
-        app:layout_constraintTop_toBottomOf="@+id/txTypeIcon"
-        tools:src="@drawable/ic_attention_red_20" />
-
-    <io.horizontalsystems.bankwallet.modules.transactions.TransactionProgressView
-        android:id="@+id/transactionProgressView"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="12dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/txTypeIcon"
-        app:layout_constraintTop_toBottomOf="@+id/txTypeIcon" />
-
-    <androidx.constraintlayout.widget.Barrier
-        android:id="@+id/barrierBottom"
-        android:layout_width="wrap_content"
-        android:layout_height="1dp"
-        app:barrierDirection="bottom"
-        app:constraint_referenced_ids="bottomIcon,transactionProgressView"
-        app:layout_constraintStart_toStartOf="parent" />
+        tools:src="@drawable/ic_tx_down_left_20" />
 
     <TextView
-        android:id="@+id/txDate"
+        android:id="@+id/txTopText"
         style="@style/Body"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:includeFontPadding="false"
-        android:textAllCaps="true"
-        android:textColor="?TextColorGreyLightToDark"
-        app:layout_constraintStart_toEndOf="@+id/txTypeIcon"
-        app:layout_constraintTop_toTopOf="@+id/txTypeIcon"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="9dp"
+        android:textColor="@color/oz"
+        app:layout_constraintStart_toEndOf="@+id/txIcon"
+        app:layout_constraintTop_toTopOf="parent"
         tools:text="Jun 3" />
 
-    <io.horizontalsystems.bankwallet.modules.transactions.TransactionStatusWithTimeView
-        android:id="@+id/txStatusWithTimeView"
+    <TextView
+        android:id="@+id/txBottomText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/barrierBottom"
-        app:layout_constraintStart_toStartOf="@+id/txDate" />
+        android:ellipsize="middle"
+        android:singleLine="true"
+        android:textColor="@color/grey"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintEnd_toEndOf="@+id/barrierLeft"
+        app:layout_constraintStart_toStartOf="@+id/txTopText"
+        app:layout_constraintTop_toBottomOf="@+id/txTopText"
+        tools:text="from 0x3123453fd45346gb54bgbf5t4512345" />
 
     <androidx.constraintlayout.widget.Barrier
         android:id="@+id/barrierLeft"
         android:layout_width="1dp"
         android:layout_height="wrap_content"
         app:barrierDirection="right"
-        app:constraint_referenced_ids="txStatusWithTimeView,txDate"
+        app:constraint_referenced_ids="txTopText,txBottomText"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/txValueInFiat"
-        style="@style/Headline1"
-        android:layout_width="0dp"
+        android:id="@+id/txPrimaryText"
+        style="@style/Headline2"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:ellipsize="end"
-        android:includeFontPadding="false"
         android:lines="1"
         android:textAlignment="textEnd"
         android:textColor="@color/remus"
         app:layout_constraintEnd_toStartOf="@+id/doubleSpendIcon"
+        app:layout_constraintHorizontal_bias="1"
         app:layout_constraintStart_toEndOf="@+id/barrierLeft"
-        app:layout_constraintTop_toTopOf="@+id/txDate"
+        app:layout_constraintTop_toTopOf="@+id/txTopText"
         tools:text="$400" />
+
+    <TextView
+        android:id="@+id/txSecondaryText"
+        style="@style/Subhead2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="16dp"
+        android:ellipsize="end"
+        android:gravity="end"
+        android:lines="1"
+        android:textColor="@color/grey"
+        app:layout_constraintBottom_toBottomOf="@+id/txBottomText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1"
+        app:layout_constraintStart_toEndOf="@+id/barrierLeft"
+        tools:text="+ 0,0064 BTC" />
 
     <ImageView
         android:id="@+id/doubleSpendIcon"
@@ -108,9 +109,9 @@
         android:paddingStart="4dp"
         android:src="@drawable/ic_double_spend_20"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/txValueInFiat"
+        app:layout_constraintBottom_toBottomOf="@+id/txPrimaryText"
         app:layout_constraintEnd_toStartOf="@+id/lockIcon"
-        app:layout_constraintTop_toTopOf="@+id/txValueInFiat" />
+        app:layout_constraintTop_toTopOf="@+id/txPrimaryText" />
 
     <ImageView
         android:id="@+id/lockIcon"
@@ -119,9 +120,9 @@
         android:paddingStart="4dp"
         android:src="@drawable/ic_lock_20"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/txValueInFiat"
+        app:layout_constraintBottom_toBottomOf="@+id/txPrimaryText"
         app:layout_constraintEnd_toStartOf="@+id/sentToSelfIcon"
-        app:layout_constraintTop_toTopOf="@+id/txValueInFiat" />
+        app:layout_constraintTop_toTopOf="@+id/txPrimaryText" />
 
     <ImageView
         android:id="@+id/sentToSelfIcon"
@@ -130,9 +131,9 @@
         android:paddingStart="4dp"
         android:src="@drawable/ic_incoming_20"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/txValueInFiat"
+        app:layout_constraintBottom_toBottomOf="@+id/txPrimaryText"
         app:layout_constraintEnd_toEndOf="@+id/guideEnd"
-        app:layout_constraintTop_toTopOf="@+id/txValueInFiat" />
+        app:layout_constraintTop_toTopOf="@+id/txPrimaryText" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideEnd"
@@ -141,28 +142,12 @@
         android:orientation="vertical"
         app:layout_constraintGuide_end="16dp" />
 
-    <TextView
-        android:id="@+id/txValueInCoin"
-        style="@style/Subhead2"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:ellipsize="end"
-        android:gravity="end"
-        android:includeFontPadding="false"
-        android:lines="1"
-        android:textColor="@color/grey"
-        app:layout_constraintBottom_toBottomOf="@+id/txStatusWithTimeView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/txValueInFiat"
-        tools:text="+ 0,0064 BTC" />
-
     <View
         android:id="@+id/bottomShade"
         android:layout_width="0dp"
         android:layout_height="1dp"
-        android:visibility="gone"
         android:background="@color/steel_10"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

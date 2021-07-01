@@ -7,12 +7,14 @@ import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.View
 import android.view.animation.DecelerateInterpolator
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.views.helpers.LayoutHelper
 import kotlin.math.max
 
 class RotatingCircleProgressView : View {
 
     private val mCirclePaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private val pathPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val mThickness: Float = LayoutHelper.dp(2f, context).toFloat()
 
     private val mCircleRect: RectF = RectF()
@@ -26,10 +28,17 @@ class RotatingCircleProgressView : View {
     private var currentProgressTime: Long = 0
     private var animatedProgressValue = 0f
 
+    private var showPath = false
+
     private var decelerateInterpolator: DecelerateInterpolator = DecelerateInterpolator()
 
     init {
         lastUpdateTime = System.currentTimeMillis()
+
+        pathPaint.style = Paint.Style.STROKE
+        pathPaint.strokeCap = Paint.Cap.BUTT
+        pathPaint.strokeWidth = mThickness
+        pathPaint.color = context.getColor(R.color.steel_10)
 
         mCirclePaint.style = Paint.Style.STROKE
         mCirclePaint.strokeCap = Paint.Cap.BUTT
@@ -42,7 +51,9 @@ class RotatingCircleProgressView : View {
 
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
-    fun setProgressColored(value: Int, color: Int) {
+    fun setProgressColored(value: Int, color: Int, showPath: Boolean = false) {
+        this.showPath = showPath
+
         mCirclePaint.color = color
 
         if (value > 10) {
@@ -60,6 +71,9 @@ class RotatingCircleProgressView : View {
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
+        if (showPath) {
+            canvas.drawArc(mCircleRect, radOffset, 360f, false, pathPaint)
+        }
         canvas.drawArc(mCircleRect, radOffset, max(4f, 360 * animatedProgressValue), false, mCirclePaint)
         updateAnimation()
     }

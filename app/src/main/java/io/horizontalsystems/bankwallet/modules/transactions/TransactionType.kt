@@ -11,16 +11,6 @@ sealed class TransactionType {
     class ContractCall(val contractAddress: String, val method: String?) : TransactionType()
     object ContractCreation : TransactionType()
 
-//    val coinValue: CoinValue?
-//        get() {
-//            return when (this) {
-//                is Incoming -> coinValue
-//                is Outgoing -> coinValue
-//                is Approve -> coinValue
-//                else -> null
-//            }
-//        }
-
     override fun equals(other: Any?): Boolean {
         return when{
             other is Incoming && this is Incoming -> other.lockState == this.lockState && other.conflictingTxHash == this.conflictingTxHash

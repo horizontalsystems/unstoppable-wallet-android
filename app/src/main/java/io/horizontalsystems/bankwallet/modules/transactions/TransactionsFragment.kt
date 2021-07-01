@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
+import androidx.annotation.StringRes
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -27,6 +27,7 @@ import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_transactions.*
 import kotlinx.android.synthetic.main.view_holder_filter.*
 import kotlinx.android.synthetic.main.view_holder_transaction.*
+import kotlinx.android.synthetic.main.view_holder_transaction.iconProgress
 import java.util.*
 
 class TransactionsFragment : Fragment(), TransactionsAdapter.Listener, FilterAdapter.Listener {
@@ -181,20 +182,26 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
         var primaryValueTextColor: Int = R.color.jacob
         var secondaryValueText: String? = null
         var secondaryValueTextColor: Int = R.color.remus
+        var showDoubleSpend = false
+        var lockState: TransactionLockState? = null
+        var showSentToSelf = false
 
-        when (transactionRecord.type){
+        when (transactionRecord.type) {
             is TransactionType.Incoming -> {
                 image = R.drawable.ic_incoming_20
                 val text = if (transactionRecord.status == TransactionStatus.Completed) R.string.Transactions_Received else R.string.Transactions_Receiving
-                topText = containerView.context.getString(text)
-                bottomText = transactionRecord.type.from ?: "---"
+                topText = getString(text)
+                bottomText = transactionRecord.type.from?.let { getString(R.string.Transactions_From, truncated(it)) }
+                        ?: "---"
+                lockState = transactionRecord.type.lockState
+                showDoubleSpend = transactionRecord.type.conflictingTxHash != null
 
-                formatCurrency(transactionRecord.mainAmountCurrencyValue)?.let{
+                formatCurrency(transactionRecord.mainAmountCurrencyValue)?.let {
                     primaryValueText = it
                     primaryValueTextColor = R.color.remus
                 }
 
-                formatCoin(transactionRecord.type.coinValue)?.let{
+                formatCoin(transactionRecord.type.coinValue)?.let {
                     secondaryValueText = it
                     secondaryValueTextColor = R.color.grey
                 }
@@ -202,86 +209,113 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
             is TransactionType.Outgoing -> {
                 image = R.drawable.ic_outgoing_20
                 val text = if (transactionRecord.status == TransactionStatus.Completed) R.string.Transactions_Sent else R.string.Transactions_Sending
-                topText = containerView.context.getString(text)
-                bottomText = transactionRecord.type.to ?: "---"
+                topText = getString(text)
+                bottomText = transactionRecord.type.to?.let { getString(R.string.Transactions_To, truncated(it)) }
+                        ?: "---"
+                showSentToSelf = transactionRecord.type.sentToSelf
+                lockState = transactionRecord.type.lockState
+                showDoubleSpend = transactionRecord.type.conflictingTxHash != null
 
-                formatCurrency(transactionRecord.mainAmountCurrencyValue)?.let{
+                formatCurrency(transactionRecord.mainAmountCurrencyValue)?.let {
                     primaryValueText = it
                     primaryValueTextColor = R.color.jacob
                 }
 
-                formatCoin(transactionRecord.type.coinValue)?.let{
+                formatCoin(transactionRecord.type.coinValue)?.let {
                     secondaryValueText = it
                     secondaryValueTextColor = R.color.grey
                 }
             }
             is TransactionType.Approve -> {
-                image = R.drawable.ic_swap_approval_20
+                image = R.drawable.ic_tx_checkmark_20
                 val text = if (transactionRecord.status == TransactionStatus.Completed) R.string.Transactions_Approved else R.string.Transactions_Approving
-                topText = containerView.context.getString(text)
-                bottomText = transactionRecord.type.spender
+                topText = getString(text)
+                bottomText = getString(R.string.Transactions_From, truncated(transactionRecord.type.spender))
 
-                formatCurrency(transactionRecord.mainAmountCurrencyValue)?.let{
+                formatCurrency(transactionRecord.mainAmountCurrencyValue)?.let {
                     primaryValueText = it
                     primaryValueTextColor = R.color.leah
                 }
 
-                formatCoin(transactionRecord.type.coinValue)?.let{
+                formatCoin(transactionRecord.type.coinValue)?.let {
                     secondaryValueText = it
                     secondaryValueTextColor = R.color.grey
                 }
             }
             is TransactionType.Swap -> {
-                image = R.drawable.ic_swap
+                image = R.drawable.ic_tx_swap_20
                 val text = if (transactionRecord.status == TransactionStatus.Completed) R.string.Transactions_Swapped else R.string.Transactions_Swapping
-                topText = containerView.context.getString(text)
-                bottomText = transactionRecord.type.exchangeAddress
+                topText = getString(text)
+                bottomText = getString(R.string.Transactions_From, truncated(transactionRecord.type.exchangeAddress))
 
-                formatCoin(transactionRecord.type.inCoinValue)?.let{
+                formatCoin(transactionRecord.type.inCoinValue)?.let {
                     primaryValueText = it
                     primaryValueTextColor = R.color.jacob
                 }
 
-                formatCoin(transactionRecord.type.outCoinValue)?.let{
+                formatCoin(transactionRecord.type.outCoinValue)?.let {
                     secondaryValueText = it
                     secondaryValueTextColor = R.color.remus
                 }
             }
             is TransactionType.ContractCall -> {
-                image = R.drawable.ic_swap
-                topText = transactionRecord.type.method?.toUpperCase(Locale.US) ?: containerView.context.getString(R.string.Transactions_ContractCall)
-                bottomText = transactionRecord.type.contractAddress
+                image = R.drawable.ic_tx_unordered
+                topText = transactionRecord.type.method?.toUpperCase(Locale.US)
+                        ?: getString(R.string.Transactions_ContractCall)
+                bottomText = getString(R.string.Transactions_From, truncated(transactionRecord.type.contractAddress))
             }
             is TransactionType.ContractCreation -> {
-                image = R.drawable.ic_swap
-                topText = containerView.context.getString(R.string.Transactions_ContractCall)
+                image = R.drawable.ic_tx_unordered
+                topText = getString(R.string.Transactions_ContractCall)
                 bottomText = "---"
             }
         }
 
-        image?.let {
-            txTypeIcon.setImageResource(it)
+        if (transactionRecord.status == TransactionStatus.Failed){
+            image = R.drawable.ic_attention_red_20
         }
-        txDate.text = topText
 
+        image?.let {
+            txIcon.setImageResource(it)
+        }
+        txTopText.text = topText
+        txBottomText.text = bottomText
+        txPrimaryText.text = primaryValueText
+        txSecondaryText.text = secondaryValueText
 
-//        txValueInFiat.text = transactionRecord.currencyValue?.let {
-//            App.numberFormatter.formatFiat(it.value, it.currency.symbol, 0, 2)
-//        }
-//        txValueInFiat.setTextColor(TransactionViewHelper.getAmountColor(transactionRecord.type, itemView.context))
-//        val significantDecimal = App.numberFormatter.getSignificantDecimalCoin(transactionRecord.coinValue.value)
-//        txValueInCoin.text = App.numberFormatter.formatCoin(transactionRecord.coinValue.value, transactionRecord.coinValue.coin.code, 0, significantDecimal)
-//        txTypeIcon.setImageResource(TransactionViewHelper.getTransactionTypeIcon(transactionRecord.type))
-//        txDate.text = transactionRecord.date?.let { DateHelper.shortDate(it) }
-//        val time = transactionRecord.date?.let { DateHelper.getOnlyTime(it) }
-//        txStatusWithTimeView.bind(transactionRecord.status, transactionRecord.type, time)
-//        bottomShade.isVisible = showBottomShade
-//
-//        sentToSelfIcon.isVisible = transactionRecord.type == TransactionType.SentToSelf
-//        doubleSpendIcon.isVisible = transactionRecord.doubleSpend
-//        setLockIcon(transactionRecord.lockState)
-//        setBottomIcon(transactionRecord.status, transactionRecord.type)
+        txPrimaryText.setTextColor(getColor(primaryValueTextColor))
+        txSecondaryText.setTextColor(getColor(secondaryValueTextColor))
+
+        setProgress(transactionRecord.status)
+
+        doubleSpendIcon.isVisible = showDoubleSpend
+        sentToSelfIcon.isVisible = showSentToSelf
+        bottomShade.isVisible = showBottomShade
+        setLockIcon(lockState)
     }
+
+    private fun setProgress(status: TransactionStatus) {
+        when(status){
+            TransactionStatus.Pending -> {
+                iconProgress.isVisible = true
+                iconProgress.setProgressColored(15, getColor(R.color.grey_50), true)
+            }
+            is TransactionStatus.Processing -> {
+                iconProgress.isVisible = true
+                val progressValue = (status.progress * 100).toInt()
+                iconProgress.setProgressColored(progressValue, getColor(R.color.grey_50), true)
+            }
+            else -> iconProgress.isVisible = false
+        }
+    }
+
+    private fun truncated(string: String): CharSequence {
+        return TransactionViewHelper.truncated(string, 75f)
+    }
+
+    private fun getString(@StringRes id: Int, vararg params: Any) = containerView.context.getString(id, *params)
+
+    private fun getColor(primaryValueTextColor: Int) = containerView.context.getColor(primaryValueTextColor)
 
     fun bindUpdate(current: TransactionViewItem, prev: TransactionViewItem) {
 //        if (current.currencyValue != prev.currencyValue) {
@@ -313,7 +347,7 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
     }
 
     private fun formatCoin(coinValue: CoinValue?): String? {
-        return coinValue?.let{
+        return coinValue?.let {
             val significantDecimal = App.numberFormatter.getSignificantDecimalCoin(it.value)
             App.numberFormatter.formatCoin(it.value, it.coin.code, 0, significantDecimal)
         }
@@ -322,29 +356,6 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
     private fun formatCurrency(currencyValue: CurrencyValue?): String? {
         return currencyValue?.let {
             App.numberFormatter.formatFiat(it.value, it.currency.symbol, 0, 2)
-        }
-    }
-
-    private fun setBottomIcon(status: TransactionStatus, type: TransactionType) {
-        when (status) {
-            is TransactionStatus.Processing -> {
-                bottomIcon.isVisible = false
-                transactionProgressView.isVisible = true
-                transactionProgressView.bind(status.progress, type)
-                return
-            }
-            is TransactionStatus.Pending -> {
-                bottomIcon.isVisible = false
-                transactionProgressView.isVisible = true
-                transactionProgressView.bind(type = type)
-                return
-            }
-            else -> {
-                bottomIcon.isVisible = true
-                transactionProgressView.isVisible = false
-                val image = TransactionViewHelper.getBottomIconImage(status)
-                bottomIcon.setImageDrawable(image?.let { ContextCompat.getDrawable(containerView.context, it) })
-            }
         }
     }
 
