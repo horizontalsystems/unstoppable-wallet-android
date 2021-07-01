@@ -66,7 +66,7 @@
     <string name="Restore_PassphraseDescription">输入您在创建此助记词时使用的密码.</string>
     <string name="Select_Coins">选择加密货币</string>
     <string name="Restore_ZCash_BirthdayHeight">生日高度</string>
-    <string name="Restore_ZCash_BirthdayHeight_Hint">如果您知道您Zcash钱包的生日高度，请将其添加至下方以加速同步过程。</string>
+    <string name="Restore_ZCash_BirthdayHeight_Hint">If you know a birthday height for your Zcash wallet, add it below to speed up the syncing process.</string>
     <!--Backup-->
     <string name="Backup_Confirmation_CheckTitle">检查...</string>
     <!--Market-->
