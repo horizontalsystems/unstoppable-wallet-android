@@ -4,6 +4,7 @@ import com.google.gson.*
 import com.google.gson.reflect.TypeToken
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Faq
+import io.horizontalsystems.bankwallet.entities.FaqMap
 import io.reactivex.Single
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -15,21 +16,21 @@ object FaqManager {
     private val faqListUrl = App.appConfigProvider.faqUrl
 
     private val gson = GsonBuilder()
-            .setDateFormat("yyyy-MM-dd")
-            .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-            .registerTypeAdapter(Faq::class.java, FaqDeserializer(faqListUrl))
-            .create()
+        .setDateFormat("yyyy-MM-dd")
+        .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+        .registerTypeAdapter(Faq::class.java, FaqDeserializer(faqListUrl))
+        .create()
 
-    fun getFaqList(): Single<List<HashMap<String, Faq>>> {
+    fun getFaqList(): Single<List<FaqMap>> {
         return Single.fromCallable {
             val request = Request.Builder()
-                    .url(faqListUrl)
-                    .build()
+                .url(faqListUrl)
+                .build()
 
             val response = OkHttpClient().newCall(request).execute()
 
-            val listType = object : TypeToken<List<HashMap<String, Faq>>>() {}.type
-            val list: List<HashMap<String, Faq>> = gson.fromJson(response.body?.charStream(), listType)
+            val listType = object : TypeToken<List<FaqMap>>() {}.type
+            val list: List<FaqMap> = gson.fromJson(response.body?.charStream(), listType)
             response.close()
 
             list
@@ -43,8 +44,8 @@ object FaqManager {
             val jsonObject = json.asJsonObject
 
             return Faq(
-                    jsonObject["title"].asString,
-                    absolutify(jsonObject["markdown"].asString)
+                jsonObject["title"].asString,
+                absolutify(jsonObject["markdown"].asString)
             )
         }
 

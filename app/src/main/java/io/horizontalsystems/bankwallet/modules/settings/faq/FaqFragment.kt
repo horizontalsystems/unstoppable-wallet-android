@@ -15,15 +15,17 @@ import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.entities.Faq
-import io.horizontalsystems.bankwallet.modules.settings.guides.ErrorAdapter
 import io.horizontalsystems.bankwallet.modules.markdown.MarkdownFragment
+import io.horizontalsystems.bankwallet.modules.settings.guides.ErrorAdapter
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.views.ListPosition
+import io.horizontalsystems.views.inflate
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_faq_list.*
 import kotlinx.android.synthetic.main.view_holder_faq_item.*
+import kotlinx.android.synthetic.main.view_holder_faq_section.*
 
-class FaqListFragment: BaseFragment(), FaqListAdapter.Listener {
+class FaqListFragment : BaseFragment(), FaqListAdapter.Listener {
 
     private val viewModel by viewModels<FaqViewModel> { FaqModule.Factory() }
     private val adapter = FaqListAdapter(this)
@@ -71,32 +73,56 @@ class FaqListFragment: BaseFragment(), FaqListAdapter.Listener {
     }
 }
 
-data class FaqItem(val faq: Faq, var listPosition: ListPosition)
+open class FaqData
+data class FaqSection(val title: String) : FaqData()
+data class FaqItem(val faq: Faq, var listPosition: ListPosition) : FaqData()
 
-class FaqListAdapter(private val listener: Listener) : ListAdapter<FaqItem, ViewHolderFaq>(faqDiff) {
+class FaqListAdapter(private val listener: Listener) : ListAdapter<FaqData, RecyclerView.ViewHolder>(faqDiff) {
 
     interface Listener {
         fun onItemClicked(faqItem: FaqItem)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderFaq {
-        return ViewHolderFaq(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_faq_item, parent, false), listener)
+    private val viewTypeSection = 0
+    private val viewTypeFaq = 1
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder = when (viewType) {
+        viewTypeSection -> ViewHolderSection(inflate(parent, R.layout.view_holder_faq_section))
+        else -> ViewHolderFaq(inflate(parent, R.layout.view_holder_faq_item), listener)
     }
 
-    override fun onBindViewHolder(holder: ViewHolderFaq, position: Int) {
-        holder.bind(getItem(position))
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        val item = getItem(position)
+
+        if (holder is ViewHolderSection && item is FaqSection) {
+            holder.bind(item)
+        }
+        if (holder is ViewHolderFaq && item is FaqItem) {
+            holder.bind(item)
+        }
+    }
+
+    override fun getItemViewType(position: Int) = when (getItem(position)) {
+        is FaqSection -> viewTypeSection
+        else -> viewTypeFaq
     }
 
     companion object {
-        private val faqDiff = object: DiffUtil.ItemCallback<FaqItem>() {
-            override fun areItemsTheSame(oldItem: FaqItem, newItem: FaqItem): Boolean {
-                return oldItem == newItem
+        private val faqDiff = object : DiffUtil.ItemCallback<FaqData>() {
+            override fun areItemsTheSame(oldItem: FaqData, newItem: FaqData): Boolean {
+                return oldItem.equals(newItem)
             }
 
-            override fun areContentsTheSame(oldItem: FaqItem, newItem: FaqItem): Boolean {
-                return oldItem == newItem
+            override fun areContentsTheSame(oldItem: FaqData, newItem: FaqData): Boolean {
+                return oldItem.equals(newItem)
             }
         }
+    }
+}
+
+class ViewHolderSection(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+    fun bind(item: FaqSection) {
+        faqHeadText.text = item.title
     }
 }
 
@@ -112,7 +138,7 @@ class ViewHolderFaq(override val containerView: View, listener: FaqListAdapter.L
     }
 
     fun bind(item: FaqItem) {
-        this.faqItem = item
+        faqItem = item
         faqTitleText.text = item.faq.title
         containerView.setBackgroundResource(item.listPosition.getBackground())
     }

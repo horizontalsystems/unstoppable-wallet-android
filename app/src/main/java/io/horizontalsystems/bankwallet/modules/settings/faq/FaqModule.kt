@@ -10,9 +10,9 @@ object FaqModule {
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val faqRepository = FaqRepository(FaqManager, App.connectivityManager, App.languageManager)
+            val faqRepository = FaqRepository(FaqManager, App.connectivityManager)
 
-            return FaqViewModel(faqRepository) as T
+            return FaqViewModel(faqRepository, App.languageManager) as T
         }
     }
 }
