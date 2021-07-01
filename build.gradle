@@ -40,8 +40,6 @@ allprojects {
         maven { url "https://jitpack.io" }
         jcenter() {
             content {
-                includeModule("cash.z.ecc.android", "zcash-android-sdk-mainnet")
-                includeModule("cash.z.ecc.android", "zcash-android-sdk-testnet")
                 includeModule("me.relex", "circleindicator")
                 includeModule("org.briarproject", "jtorctl")
                 includeModule("org.dashj", "dashj-bls")
