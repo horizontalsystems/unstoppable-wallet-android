@@ -59,7 +59,7 @@ class SelectSwapProviderAdapter(private var onItemClick: (position: Int) -> Unit
 
     var items = listOf<SwapProviderViewItem>()
 
-    override fun getItemCount() = if (items.isEmpty()) 1 else items.size
+    override fun getItemCount() = items.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderSwapProvider {
         val inflater = LayoutInflater.from(parent.context)
