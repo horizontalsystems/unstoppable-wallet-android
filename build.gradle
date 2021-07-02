@@ -37,13 +37,6 @@ allprojects {
         google()
         mavenCentral()
         maven { url "https://jitpack.io" }
-        jcenter() {
-            content {
-                includeModule("me.relex", "circleindicator")
-                includeModule("org.briarproject", "jtorctl")
-                includeModule("org.dashj", "dashj-bls")
-            }
-        }
     }
 }
 
