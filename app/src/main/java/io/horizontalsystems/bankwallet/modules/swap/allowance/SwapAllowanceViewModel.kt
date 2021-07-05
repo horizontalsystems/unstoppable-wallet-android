@@ -66,7 +66,7 @@ class SwapAllowanceViewModel(
 
         isVisible = when {
             allowanceState == null -> false
-            pendingAllowanceService.isPending -> true
+            pendingAllowanceService.state == SwapPendingAllowanceState.Pending -> true
             allowanceState is SwapAllowanceService.State.NotReady -> true
             else -> isError
         }

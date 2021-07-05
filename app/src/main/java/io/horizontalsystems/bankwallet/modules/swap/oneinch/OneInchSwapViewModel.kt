@@ -8,20 +8,21 @@ import io.horizontalsystems.bankwallet.core.convertedError
 import io.horizontalsystems.bankwallet.core.ethereum.EvmTransactionService
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
+import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.ApproveStep
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.SwapError
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceService
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapPendingAllowanceService
+import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapPendingAllowanceState
 import io.horizontalsystems.bankwallet.modules.swap.confirmation.oneinch.OneInchSwapParameters
 import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.ethereumkit.api.jsonrpc.JsonRpc
-import io.horizontalsystems.uniswapkit.TradeError
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
 class OneInchSwapViewModel(
-        val service: OneInchSwapService,
-        val tradeService: OneInchTradeService,
-        private val pendingAllowanceService: SwapPendingAllowanceService
+    val service: OneInchSwapService,
+    val tradeService: OneInchTradeService,
+    private val pendingAllowanceService: SwapPendingAllowanceService
 ) : ViewModel() {
 
     private val disposables = CompositeDisposable()
@@ -30,6 +31,7 @@ class OneInchSwapViewModel(
     private val swapErrorLiveData = MutableLiveData<String?>(null)
     private val proceedActionLiveData = MutableLiveData<ActionState>(ActionState.Hidden)
     private val approveActionLiveData = MutableLiveData<ActionState>(ActionState.Hidden)
+    private val approveStepLiveData = MutableLiveData(ApproveStep.NA)
     private val openApproveLiveEvent = SingleLiveEvent<SwapAllowanceService.ApproveData>()
     private val openConfirmationLiveEvent = SingleLiveEvent<OneInchSwapParameters>()
 
@@ -45,6 +47,7 @@ class OneInchSwapViewModel(
     fun swapErrorLiveData(): LiveData<String?> = swapErrorLiveData
     fun proceedActionLiveData(): LiveData<ActionState> = proceedActionLiveData
     fun approveActionLiveData(): LiveData<ActionState> = approveActionLiveData
+    fun approveStepLiveData(): LiveData<ApproveStep> = approveStepLiveData
     fun openApproveLiveEvent(): LiveData<SwapAllowanceService.ApproveData> = openApproveLiveEvent
     fun openConfirmationLiveEvent(): LiveData<OneInchSwapParameters> = openConfirmationLiveEvent
 
@@ -71,7 +74,13 @@ class OneInchSwapViewModel(
     }
 
     fun getProviderState(): SwapMainModule.SwapProviderState {
-        return SwapMainModule.SwapProviderState(tradeService.coinFrom, tradeService.coinTo, tradeService.amountFrom, tradeService.amountTo, tradeService.amountType)
+        return SwapMainModule.SwapProviderState(
+            tradeService.coinFrom,
+            tradeService.coinTo,
+            tradeService.amountFrom,
+            tradeService.amountTo,
+            tradeService.amountType
+        )
     }
 
     fun restoreProviderState(swapProviderState: SwapMainModule.SwapProviderState) {
@@ -86,21 +95,21 @@ class OneInchSwapViewModel(
 
     private fun subscribeToServices() {
         service.stateObservable
-                .subscribeOn(Schedulers.io())
-                .subscribe { sync(it) }
-                .let { disposables.add(it) }
+            .subscribeOn(Schedulers.io())
+            .subscribe { sync(it) }
+            .let { disposables.add(it) }
 
         service.errorsObservable
-                .subscribeOn(Schedulers.io())
-                .subscribe { sync(it) }
-                .let { disposables.add(it) }
+            .subscribeOn(Schedulers.io())
+            .subscribe { sync(it) }
+            .let { disposables.add(it) }
 
-        pendingAllowanceService.isPendingObservable
-                .subscribeOn(Schedulers.io())
-                .subscribe {
-                    syncApproveAction()
-                    syncProceedAction()
-                }.let { disposables.add(it) }
+        pendingAllowanceService.stateObservable
+            .subscribeOn(Schedulers.io())
+            .subscribe {
+                syncApproveAction()
+                syncProceedAction()
+            }.let { disposables.add(it) }
     }
 
     private fun sync(serviceState: OneInchSwapService.State) {
@@ -108,20 +117,19 @@ class OneInchSwapViewModel(
         syncProceedAction()
     }
 
-    private fun convert(error: Throwable): String = when (val convertedError = error.convertedError) {
-        is JsonRpc.ResponseError.RpcError -> {
-            convertedError.error.message
+    private fun convert(error: Throwable): String =
+        when (val convertedError = error.convertedError) {
+            is JsonRpc.ResponseError.RpcError -> {
+                convertedError.error.message
+            }
+            else -> {
+                convertedError.message ?: convertedError.javaClass.simpleName
+            }
         }
-        is TradeError.TradeNotFound -> {
-            Translator.getString(R.string.Swap_ErrorNoLiquidity)
-        }
-        else -> {
-            convertedError.message ?: convertedError.javaClass.simpleName
-        }
-    }
 
     private fun sync(errors: List<Throwable>) {
-        val filtered = errors.filter { it !is EvmTransactionService.GasDataError && it !is SwapError }
+        val filtered =
+            errors.filter { it !is EvmTransactionService.GasDataError && it !is SwapError }
         swapErrorLiveData.postValue(filtered.firstOrNull()?.let { convert(it) })
 
         syncProceedAction()
@@ -141,8 +149,8 @@ class OneInchSwapViewModel(
                     service.errors.any { it == SwapError.ForbiddenPriceImpactLevel } -> {
                         ActionState.Disabled(Translator.getString(R.string.Swap_ErrorHighPriceImpact))
                     }
-                    pendingAllowanceService.isPending -> {
-                        ActionState.Hidden
+                    pendingAllowanceService.state == SwapPendingAllowanceState.Pending -> {
+                        ActionState.Disabled(Translator.getString(R.string.Swap_Proceed))
                     }
                     else -> {
                         ActionState.Disabled(Translator.getString(R.string.Swap_Proceed))
@@ -157,21 +165,32 @@ class OneInchSwapViewModel(
     }
 
     private fun syncApproveAction() {
-        val approveAction = when {
-            tradeService.state !is OneInchTradeService.State.Ready || service.errors.any { it == SwapError.InsufficientBalanceFrom || it == SwapError.ForbiddenPriceImpactLevel } -> {
-                ActionState.Hidden
+        val approveAction: ActionState
+        val approveStep: ApproveStep
+        when {
+            tradeService.state !is OneInchTradeService.State.Ready || service.errors.any { it == SwapError.InsufficientBalanceFrom } -> {
+                approveAction = ActionState.Hidden
+                approveStep = ApproveStep.NA
             }
-            pendingAllowanceService.isPending -> {
-                ActionState.Disabled(Translator.getString(R.string.Swap_Approving))
+            pendingAllowanceService.state == SwapPendingAllowanceState.Pending -> {
+                approveAction = ActionState.Disabled(Translator.getString(R.string.Swap_Approving))
+                approveStep = ApproveStep.Approving
             }
             service.errors.any { it == SwapError.InsufficientAllowance } -> {
-                ActionState.Enabled(Translator.getString(R.string.Swap_Approve))
+                approveAction = ActionState.Enabled(Translator.getString(R.string.Swap_Approve))
+                approveStep = ApproveStep.ApproveRequired
+            }
+            pendingAllowanceService.state == SwapPendingAllowanceState.Approved -> {
+                approveAction = ActionState.Disabled(Translator.getString(R.string.Swap_Approve))
+                approveStep = ApproveStep.Approved
             }
             else -> {
-                ActionState.Hidden
+                approveAction = ActionState.Hidden
+                approveStep = ApproveStep.NA
             }
         }
         approveActionLiveData.postValue(approveAction)
+        approveStepLiveData.postValue(approveStep)
     }
 
     //region models

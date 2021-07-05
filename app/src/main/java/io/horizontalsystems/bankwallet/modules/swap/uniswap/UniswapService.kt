@@ -6,6 +6,7 @@ import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.SwapError
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceService
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapPendingAllowanceService
+import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapPendingAllowanceState
 import io.horizontalsystems.bankwallet.modules.swap.uniswap.UniswapTradeService.PriceImpactLevel
 import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.ethereumkit.models.TransactionData
@@ -104,10 +105,10 @@ class UniswapService(
                 }
                 .let { disposables.add(it) }
 
-        pendingAllowanceService.isPendingObservable
+        pendingAllowanceService.stateObservable
                 .subscribeOn(Schedulers.io())
                 .subscribe {
-                    onUpdateAllowancePending(it)
+                    onUpdateAllowancePending()
                 }
                 .let { disposables.add(it) }
     }
@@ -137,7 +138,7 @@ class UniswapService(
         syncState()
     }
 
-    private fun onUpdateAllowancePending(isPending: Boolean) {
+    private fun onUpdateAllowancePending() {
         syncState()
     }
 
@@ -188,7 +189,7 @@ class UniswapService(
             }
         }
 
-        if (pendingAllowanceService.isPending) {
+        if (pendingAllowanceService.state == SwapPendingAllowanceState.Pending) {
             loading = true
         }
 

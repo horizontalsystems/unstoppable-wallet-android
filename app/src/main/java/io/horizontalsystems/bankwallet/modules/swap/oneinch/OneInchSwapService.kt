@@ -2,10 +2,12 @@ package io.horizontalsystems.bankwallet.modules.swap.oneinch
 
 import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.IBalanceAdapter
+import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.SwapError
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceService
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapPendingAllowanceService
+import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapPendingAllowanceState
 import io.horizontalsystems.coinkit.models.Coin
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
@@ -15,11 +17,11 @@ import java.math.BigDecimal
 import java.util.*
 
 class OneInchSwapService(
-        private val dex: SwapMainModule.Dex,
-        private val tradeService: OneInchTradeService,
-        val allowanceService: SwapAllowanceService,
-        val pendingAllowanceService: SwapPendingAllowanceService,
-        private val adapterManager: IAdapterManager
+    private val dex: SwapMainModule.Dex,
+    private val tradeService: OneInchTradeService,
+    val allowanceService: SwapAllowanceService,
+    val pendingAllowanceService: SwapPendingAllowanceService,
+    private val adapterManager: IAdapterManager
 ) : SwapMainModule.ISwapService {
     private val disposables = CompositeDisposable()
 
@@ -67,47 +69,47 @@ class OneInchSwapService(
 
     init {
         tradeService.stateObservable
-                .subscribeOn(Schedulers.io())
-                .subscribe { state ->
-                    onUpdateTrade(state)
-                }
-                .let { disposables.add(it) }
+            .subscribeOn(Schedulers.io())
+            .subscribe { state ->
+                onUpdateTrade(state)
+            }
+            .let { disposables.add(it) }
 
         tradeService.coinFromObservable
-                .subscribeOn(Schedulers.io())
-                .subscribe { coin ->
-                    onUpdateCoinFrom(coin.orElse(null))
-                }
-                .let { disposables.add(it) }
+            .subscribeOn(Schedulers.io())
+            .subscribe { coin ->
+                onUpdateCoinFrom(coin.orElse(null))
+            }
+            .let { disposables.add(it) }
         onUpdateCoinFrom(tradeService.coinFrom)
 
         tradeService.coinToObservable
-                .subscribeOn(Schedulers.io())
-                .subscribe { coin ->
-                    onUpdateCoinTo(coin.orElse(null))
-                }
-                .let { disposables.add(it) }
+            .subscribeOn(Schedulers.io())
+            .subscribe { coin ->
+                onUpdateCoinTo(coin.orElse(null))
+            }
+            .let { disposables.add(it) }
 
         tradeService.amountFromObservable
-                .subscribeOn(Schedulers.io())
-                .subscribe {
-                    onUpdateAmountFrom(it.orElse(null))
-                }
-                .let { disposables.add(it) }
+            .subscribeOn(Schedulers.io())
+            .subscribe {
+                onUpdateAmountFrom(it.orElse(null))
+            }
+            .let { disposables.add(it) }
 
         allowanceService.stateObservable
-                .subscribeOn(Schedulers.io())
-                .subscribe {
-                    syncState()
-                }
-                .let { disposables.add(it) }
+            .subscribeOn(Schedulers.io())
+            .subscribe {
+                syncState()
+            }
+            .let { disposables.add(it) }
 
-        pendingAllowanceService.isPendingObservable
-                .subscribeOn(Schedulers.io())
-                .subscribe {
-                    onUpdateAllowancePending(it)
-                }
-                .let { disposables.add(it) }
+        pendingAllowanceService.stateObservable
+            .subscribeIO {
+                onUpdateAllowancePending()
+            }.let {
+                disposables.add(it)
+            }
     }
 
     fun onCleared() {
@@ -135,7 +137,7 @@ class OneInchSwapService(
         syncState()
     }
 
-    private fun onUpdateAllowancePending(isPending: Boolean) {
+    private fun onUpdateAllowancePending() {
         syncState()
     }
 
@@ -175,7 +177,7 @@ class OneInchSwapService(
             }
         }
 
-        if (pendingAllowanceService.isPending) {
+        if (pendingAllowanceService.state == SwapPendingAllowanceState.Pending) {
             loading = true
         }
 
@@ -189,7 +191,7 @@ class OneInchSwapService(
     }
 
     private fun balance(coin: Coin): BigDecimal? =
-            (adapterManager.getAdapterForCoin(coin) as? IBalanceAdapter)?.balanceData?.available
+        (adapterManager.getAdapterForCoin(coin) as? IBalanceAdapter)?.balanceData?.available
 
     //region models
     sealed class State {

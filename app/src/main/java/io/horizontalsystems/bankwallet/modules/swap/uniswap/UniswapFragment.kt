@@ -13,6 +13,7 @@ import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.swap.SwapBaseFragment
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
+import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.ApproveStep
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceViewModel
 import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveModule
 import io.horizontalsystems.bankwallet.modules.swap.coincard.SwapCoinCardViewModel
@@ -25,9 +26,20 @@ class UniswapFragment : SwapBaseFragment() {
 
     private val vmFactory by lazy { UniswapModule.Factory(dex) }
     private val uniswapViewModel by navGraphViewModels<UniswapViewModel>(R.id.swapFragment) { vmFactory }
-    private val allowanceViewModelFactory by lazy { UniswapModule.AllowanceViewModelFactory(uniswapViewModel.service) }
+    private val allowanceViewModelFactory by lazy {
+        UniswapModule.AllowanceViewModelFactory(
+            uniswapViewModel.service
+        )
+    }
     private val allowanceViewModel by viewModels<SwapAllowanceViewModel> { allowanceViewModelFactory }
-    private val coinCardViewModelFactory by lazy { SwapMainModule.CoinCardViewModelFactory(this, dex, uniswapViewModel.service, uniswapViewModel.tradeService) }
+    private val coinCardViewModelFactory by lazy {
+        SwapMainModule.CoinCardViewModelFactory(
+            this,
+            dex,
+            uniswapViewModel.service,
+            uniswapViewModel.tradeService
+        )
+    }
 
     override fun restoreProviderState(providerState: SwapMainModule.SwapProviderState) {
         uniswapViewModel.restoreProviderState(providerState)
@@ -37,18 +49,28 @@ class UniswapFragment : SwapBaseFragment() {
         return uniswapViewModel.getProviderState()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         return inflater.inflate(R.layout.fragment_uniswap, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val fromCoinCardViewModel = ViewModelProvider(this, coinCardViewModelFactory).get(SwapMainModule.coinCardTypeFrom, SwapCoinCardViewModel::class.java)
+        val fromCoinCardViewModel = ViewModelProvider(this, coinCardViewModelFactory).get(
+            SwapMainModule.coinCardTypeFrom,
+            SwapCoinCardViewModel::class.java
+        )
         val fromCoinCardTitle = getString(R.string.Swap_FromAmountTitle)
         fromCoinCard.initialize(fromCoinCardTitle, fromCoinCardViewModel, this, viewLifecycleOwner)
 
-        val toCoinCardViewModel = ViewModelProvider(this, coinCardViewModelFactory).get(SwapMainModule.coinCardTypeTo, SwapCoinCardViewModel::class.java)
+        val toCoinCardViewModel = ViewModelProvider(this, coinCardViewModelFactory).get(
+            SwapMainModule.coinCardTypeTo,
+            SwapCoinCardViewModel::class.java
+        )
         val toCoinCardTile = getString(R.string.Swap_ToAmountTitle)
         toCoinCard.initialize(toCoinCardTile, toCoinCardViewModel, this, viewLifecycleOwner)
 
@@ -100,11 +122,35 @@ class UniswapFragment : SwapBaseFragment() {
         })
 
         uniswapViewModel.openApproveLiveEvent().observe(viewLifecycleOwner, { approveData ->
-            SwapApproveModule.start(this, R.id.swapFragment_to_swapApproveFragment, navOptions(), approveData)
+            SwapApproveModule.start(
+                this,
+                R.id.swapFragment_to_swapApproveFragment,
+                navOptions(),
+                approveData
+            )
         })
 
         uniswapViewModel.openConfirmationLiveEvent().observe(viewLifecycleOwner, { sendEvmData ->
-            UniswapConfirmationModule.start(requireParentFragment(), R.id.swapFragment_to_uniswapConfirmationFragment, navOptions(), sendEvmData)
+            UniswapConfirmationModule.start(
+                requireParentFragment(),
+                R.id.swapFragment_to_uniswapConfirmationFragment,
+                navOptions(),
+                sendEvmData
+            )
+        })
+
+        uniswapViewModel.approveStepLiveData().observe(viewLifecycleOwner, { approveStep ->
+            when (approveStep) {
+                ApproveStep.ApproveRequired, ApproveStep.Approving -> {
+                    approveStepsView.setStepOne()
+                }
+                ApproveStep.Approved -> {
+                    approveStepsView.setStepTwo()
+                }
+                ApproveStep.NA, null -> {
+                    approveStepsView.hide()
+                }
+            }
         })
     }
 
@@ -137,7 +183,12 @@ class UniswapFragment : SwapBaseFragment() {
         if (tradeViewItem?.priceImpact != null) {
             priceImpactViews.isVisible = true
             priceImpactValue.text = tradeViewItem.priceImpact.value
-            priceImpactValue.setTextColor(priceImpactColor(requireContext(), tradeViewItem.priceImpact.level))
+            priceImpactValue.setTextColor(
+                priceImpactColor(
+                    requireContext(),
+                    tradeViewItem.priceImpact.level
+                )
+            )
         } else {
             priceImpactViews.isVisible = false
         }
@@ -151,7 +202,10 @@ class UniswapFragment : SwapBaseFragment() {
         }
     }
 
-    private fun priceImpactColor(ctx: Context, priceImpactLevel: UniswapTradeService.PriceImpactLevel?): Int {
+    private fun priceImpactColor(
+        ctx: Context,
+        priceImpactLevel: UniswapTradeService.PriceImpactLevel?
+    ): Int {
         val color = when (priceImpactLevel) {
             UniswapTradeService.PriceImpactLevel.Normal -> R.color.remus
             UniswapTradeService.PriceImpactLevel.Warning -> R.color.jacob

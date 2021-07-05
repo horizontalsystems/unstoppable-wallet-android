@@ -12,6 +12,7 @@ import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.swap.SwapBaseFragment
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
+import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.ApproveStep
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceViewModel
 import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveModule
 import io.horizontalsystems.bankwallet.modules.swap.coincard.SwapCoinCardViewModel
@@ -24,9 +25,20 @@ class OneInchFragment : SwapBaseFragment() {
 
     private val vmFactory by lazy { OneInchModule.Factory(dex) }
     private val oneInchViewModel by navGraphViewModels<OneInchSwapViewModel>(R.id.swapFragment) { vmFactory }
-    private val allowanceViewModelFactory by lazy { OneInchModule.AllowanceViewModelFactory(oneInchViewModel.service) }
+    private val allowanceViewModelFactory by lazy {
+        OneInchModule.AllowanceViewModelFactory(
+            oneInchViewModel.service
+        )
+    }
     private val allowanceViewModel by viewModels<SwapAllowanceViewModel> { allowanceViewModelFactory }
-    private val coinCardViewModelFactory by lazy { SwapMainModule.CoinCardViewModelFactory(this, dex, oneInchViewModel.service, oneInchViewModel.tradeService) }
+    private val coinCardViewModelFactory by lazy {
+        SwapMainModule.CoinCardViewModelFactory(
+            this,
+            dex,
+            oneInchViewModel.service,
+            oneInchViewModel.tradeService
+        )
+    }
 
     override fun restoreProviderState(providerState: SwapMainModule.SwapProviderState) {
         oneInchViewModel.restoreProviderState(providerState)
@@ -36,18 +48,28 @@ class OneInchFragment : SwapBaseFragment() {
         return oneInchViewModel.getProviderState()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         return inflater.inflate(R.layout.fragment_1inch, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val fromCoinCardViewModel = ViewModelProvider(this, coinCardViewModelFactory).get(SwapMainModule.coinCardTypeFrom, SwapCoinCardViewModel::class.java)
+        val fromCoinCardViewModel = ViewModelProvider(this, coinCardViewModelFactory).get(
+            SwapMainModule.coinCardTypeFrom,
+            SwapCoinCardViewModel::class.java
+        )
         val fromCoinCardTitle = getString(R.string.Swap_FromAmountTitle)
         fromCoinCard.initialize(fromCoinCardTitle, fromCoinCardViewModel, this, viewLifecycleOwner)
 
-        val toCoinCardViewModel = ViewModelProvider(this, coinCardViewModelFactory).get(SwapMainModule.coinCardTypeTo, SwapCoinCardViewModel::class.java)
+        val toCoinCardViewModel = ViewModelProvider(this, coinCardViewModelFactory).get(
+            SwapMainModule.coinCardTypeTo,
+            SwapCoinCardViewModel::class.java
+        )
         val toCoinCardTile = getString(R.string.Swap_ToAmountTitle)
         toCoinCard.initialize(toCoinCardTile, toCoinCardViewModel, this, viewLifecycleOwner)
         toCoinCard.setAmountEnabled(false)
@@ -96,11 +118,36 @@ class OneInchFragment : SwapBaseFragment() {
         })
 
         oneInchViewModel.openApproveLiveEvent().observe(viewLifecycleOwner, { approveData ->
-            SwapApproveModule.start(this, R.id.swapFragment_to_swapApproveFragment, navOptions(), approveData)
+            SwapApproveModule.start(
+                this,
+                R.id.swapFragment_to_swapApproveFragment,
+                navOptions(),
+                approveData
+            )
         })
 
-        oneInchViewModel.openConfirmationLiveEvent().observe(viewLifecycleOwner, { oneInchSwapParameters ->
-            OneInchConfirmationModule.start(this, R.id.swapFragment_to_oneInchConfirmationFragment, navOptions(), oneInchSwapParameters)
+        oneInchViewModel.openConfirmationLiveEvent()
+            .observe(viewLifecycleOwner, { oneInchSwapParameters ->
+                OneInchConfirmationModule.start(
+                    this,
+                    R.id.swapFragment_to_oneInchConfirmationFragment,
+                    navOptions(),
+                    oneInchSwapParameters
+                )
+            })
+
+        oneInchViewModel.approveStepLiveData().observe(viewLifecycleOwner, { approveStep ->
+            when (approveStep) {
+                ApproveStep.ApproveRequired, ApproveStep.Approving -> {
+                    approveStepsView.setStepOne()
+                }
+                ApproveStep.Approved -> {
+                    approveStepsView.setStepTwo()
+                }
+                ApproveStep.NA, null -> {
+                    approveStepsView.hide()
+                }
+            }
         })
     }
 

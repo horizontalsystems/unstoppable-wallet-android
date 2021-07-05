@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout">
+
+    <TextView
+        android:id="@+id/stepOne"
+        style="@style/CaptionSB"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:background="@drawable/swap_approve_steps_background"
+        android:gravity="center"
+        android:includeFontPadding="false"
+        android:text="1"
+        android:textColor="@color/claude"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/settingsLineBottom"
+        android:layout_width="0dp"
+        android:layout_height="2dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="8dp"
+        android:background="@color/steel_20"
+        app:layout_constraintEnd_toStartOf="@id/stepTwo"
+        app:layout_constraintStart_toEndOf="@id/stepOne"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/stepTwo"
+        style="@style/CaptionSB"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:background="@drawable/swap_approve_steps_background"
+        android:enabled="false"
+        android:gravity="center"
+        android:includeFontPadding="false"
+        android:textColor="@color/claude"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="2" />
+
+</merge>

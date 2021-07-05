@@ -10,32 +10,36 @@ import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import java.math.BigDecimal
 
+enum class SwapPendingAllowanceState {
+    NA, Pending, Approved
+}
+
 class SwapPendingAllowanceService(
-        private val adapterManager: IAdapterManager,
-        private val allowanceService: SwapAllowanceService
+    private val adapterManager: IAdapterManager,
+    private val allowanceService: SwapAllowanceService
 ) {
     private var coin: Coin? = null
     private var pendingAllowance: BigDecimal? = null
-    private val isPendingSubject = PublishSubject.create<Boolean>()
 
     private val disposables = CompositeDisposable()
 
-    var isPending: Boolean = false
+    private val stateSubject = PublishSubject.create<SwapPendingAllowanceState>()
+    var state: SwapPendingAllowanceState = SwapPendingAllowanceState.NA
         private set(value) {
             if (field != value) {
                 field = value
-                isPendingSubject.onNext(value)
+                stateSubject.onNext(value)
             }
         }
-    val isPendingObservable: Observable<Boolean> = isPendingSubject
+    val stateObservable: Observable<SwapPendingAllowanceState> = stateSubject
 
     init {
         allowanceService.stateObservable
-                .subscribeOn(Schedulers.io())
-                .subscribe {
-                    sync()
-                }
-                .let { disposables.add(it) }
+            .subscribeOn(Schedulers.io())
+            .subscribe {
+                sync()
+            }
+            .let { disposables.add(it) }
     }
 
     fun set(coin: Coin?) {
@@ -67,11 +71,14 @@ class SwapPendingAllowanceService(
         val allowanceState = allowanceService.state
 
         if (pendingAllowance == null || allowanceState == null || allowanceState !is SwapAllowanceService.State.Ready) {
-            isPending = false
+            state = SwapPendingAllowanceState.NA
             return
         }
 
-        isPending = allowanceState.allowance.value.compareTo(pendingAllowance) != 0
+        state = if (allowanceState.allowance.value.compareTo(pendingAllowance) != 0)
+            SwapPendingAllowanceState.Pending
+        else
+            SwapPendingAllowanceState.Approved
     }
 
 }
