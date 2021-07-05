@@ -301,6 +301,7 @@ interface IRateManager {
     fun coinMarketDetailsAsync(coinType: CoinType, currencyCode: String, rateDiffCoinCodes: List<String>, rateDiffPeriods: List<TimePeriod>): Single<CoinMarketDetails>
     fun getTopTokenHoldersAsync(coinType: CoinType): Single<List<TokenHolder>>
     fun getTopMarketList(currency: String, itemsCount: Int, diffPeriod: TimePeriod): Single<List<CoinMarket>>
+    fun getTopDefiTvlAsync(currencyCode: String, fetchDiffPeriod: TimePeriod = TimePeriod.HOUR_24, itemsCount: Int = 200): Single<List<DefiTvl>>
     fun getCoinMarketList(coinTypes: List<CoinType>, currency: String): Single<List<CoinMarket>>
     fun getCoinMarketListByCategory(categoryId: String, currency: String): Single<List<CoinMarket>>
     fun getCoinRatingsAsync(): Single<Map<CoinType, String>>

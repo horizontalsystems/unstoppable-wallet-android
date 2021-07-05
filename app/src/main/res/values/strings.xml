@@ -241,6 +241,19 @@
     <!--Coin Markets-->
     <string name="CoinMarket_Title">%s Markets</string>
 
+    <!--TVL Rank-->
+    <string name="TvlRank_Title">TVL Rank</string>
+    <string name="TvlRank_MultiChain">Multi-Chain</string>
+    <string name="TvlRank_Field_HighestTvl">Highest TVL</string>
+    <string name="TvlRank_Field_LowestTvl">Lowest TVL</string>
+    <string name="TvlRank_Field_All">All</string>
+    <string name="TvlRank_Field_Eth">Ethereum (ETH)</string>
+    <string name="TvlRank_Field_Bsc">Binance Smart Chain (BSC)</string>
+    <string name="TvlRank_Field_Sol">Solana (Sol)</string>
+    <string name="TvlRank_Field_Ava">Avalanche (Ava)</string>
+    <string name="TvlRank_Field_Others">Others</string>
+    <string name="TvlRank_Filters_PopupTitle">Filters</string>
+
     <!--Balance-->
 
     <string name="Balance_Title">Balance</string>
