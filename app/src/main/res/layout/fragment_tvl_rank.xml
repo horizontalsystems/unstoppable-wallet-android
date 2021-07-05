@@ -17,8 +17,8 @@
         app:titleTextAppearance="@style/Title3"
         />
 
-    <io.horizontalsystems.bankwallet.ui.extensions.MarketListHeaderView
-        android:id="@+id/marketListHeader"
+    <io.horizontalsystems.bankwallet.ui.extensions.TvlRankListHeaderView
+        android:id="@+id/listHeader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         />
@@ -31,6 +31,6 @@
         android:paddingBottom="16dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:itemCount="3"
-        tools:listitem="@layout/view_holder_coin_rate"
+        tools:listitem="@layout/view_holder_market_ticker"
         />
 </LinearLayout>

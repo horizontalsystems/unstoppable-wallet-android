@@ -262,6 +262,9 @@
             android:id="@+id/coinFragment_to_coinMarketsFragment"
             app:destination="@id/coinMarketsFragment" />
         <action
+            android:id="@+id/coinFragment_to_tvlRankFragment"
+            app:destination="@id/tvlRankFragment" />
+        <action
             android:id="@+id/coinFragment_to_coinInvestorsFragment"
             app:destination="@id/coinInvestorsFragment" />
         <action
@@ -274,6 +277,10 @@
     <fragment
         android:id="@+id/coinMarketsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.coin.coinmarkets.CoinMarketsFragment"
+        tools:layout="@layout/fragment_coin_markets" />
+    <fragment
+        android:id="@+id/tvlRankFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.coin.tvlrank.TvlRankFragment"
         tools:layout="@layout/fragment_coin_markets" />
     <fragment
         android:id="@+id/coinInvestorsFragment"
