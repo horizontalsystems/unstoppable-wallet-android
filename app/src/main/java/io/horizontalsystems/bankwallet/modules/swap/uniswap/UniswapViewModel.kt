@@ -9,24 +9,24 @@ import io.horizontalsystems.bankwallet.core.ethereum.EvmTransactionService
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
+import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.ApproveStep
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.SwapError
 import io.horizontalsystems.bankwallet.modules.swap.SwapViewItemHelper
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceService
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapPendingAllowanceService
-import io.horizontalsystems.bankwallet.modules.swap.settings.uniswap.SwapTradeOptions
+import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapPendingAllowanceState
 import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.ethereumkit.api.jsonrpc.JsonRpc
 import io.horizontalsystems.uniswapkit.TradeError
-import io.horizontalsystems.uniswapkit.models.TradeOptions
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import java.math.BigDecimal
 
 class UniswapViewModel(
-        val service: UniswapService,
-        val tradeService: UniswapTradeService,
-        private val pendingAllowanceService: SwapPendingAllowanceService,
-        private val formatter: SwapViewItemHelper
+    val service: UniswapService,
+    val tradeService: UniswapTradeService,
+    private val pendingAllowanceService: SwapPendingAllowanceService,
+    private val formatter: SwapViewItemHelper
 ) : ViewModel() {
 
     private val disposables = CompositeDisposable()
@@ -36,6 +36,7 @@ class UniswapViewModel(
     private val tradeViewItemLiveData = MutableLiveData<TradeViewItem?>(null)
     private val proceedActionLiveData = MutableLiveData<ActionState>(ActionState.Hidden)
     private val approveActionLiveData = MutableLiveData<ActionState>(ActionState.Hidden)
+    private val approveStepLiveData = MutableLiveData(ApproveStep.NA)
     private val openApproveLiveEvent = SingleLiveEvent<SwapAllowanceService.ApproveData>()
     private val openConfirmationLiveEvent = SingleLiveEvent<SendEvmData>()
 
@@ -53,6 +54,7 @@ class UniswapViewModel(
     fun tradeViewItemLiveData(): LiveData<TradeViewItem?> = tradeViewItemLiveData
     fun proceedActionLiveData(): LiveData<ActionState> = proceedActionLiveData
     fun approveActionLiveData(): LiveData<ActionState> = approveActionLiveData
+    fun approveStepLiveData(): LiveData<ApproveStep> = approveStepLiveData
     fun openApproveLiveEvent(): LiveData<SwapAllowanceService.ApproveData> = openApproveLiveEvent
     fun openConfirmationLiveEvent(): LiveData<SendEvmData> = openConfirmationLiveEvent
 
@@ -71,15 +73,24 @@ class UniswapViewModel(
         if (serviceState is UniswapService.State.Ready) {
             val trade = (tradeService.state as? UniswapTradeService.State.Ready)?.trade
             val swapInfo = SendEvmData.SwapInfo(
-                    estimatedIn = tradeService.amountFrom ?: BigDecimal.ZERO,
-                    estimatedOut = tradeService.amountTo ?: BigDecimal.ZERO,
-                    slippage = formatter.slippage(tradeService.tradeOptions.allowedSlippage),
-                    deadline = formatter.deadline(tradeService.tradeOptions.ttl),
-                    recipientDomain = tradeService.tradeOptions.recipient?.title,
-                    price = formatter.price(trade?.tradeData?.executionPrice, tradeService.coinFrom, tradeService.coinTo),
-                    priceImpact = trade?.let { formatter.priceImpactViewItem(it)?.value }
+                estimatedIn = tradeService.amountFrom ?: BigDecimal.ZERO,
+                estimatedOut = tradeService.amountTo ?: BigDecimal.ZERO,
+                slippage = formatter.slippage(tradeService.tradeOptions.allowedSlippage),
+                deadline = formatter.deadline(tradeService.tradeOptions.ttl),
+                recipientDomain = tradeService.tradeOptions.recipient?.title,
+                price = formatter.price(
+                    trade?.tradeData?.executionPrice,
+                    tradeService.coinFrom,
+                    tradeService.coinTo
+                ),
+                priceImpact = trade?.let { formatter.priceImpactViewItem(it)?.value }
             )
-            openConfirmationLiveEvent.postValue(SendEvmData(serviceState.transactionData, SendEvmData.AdditionalInfo.Swap(swapInfo)))
+            openConfirmationLiveEvent.postValue(
+                SendEvmData(
+                    serviceState.transactionData,
+                    SendEvmData.AdditionalInfo.Swap(swapInfo)
+                )
+            )
         }
     }
 
@@ -92,7 +103,13 @@ class UniswapViewModel(
     }
 
     fun getProviderState(): SwapMainModule.SwapProviderState {
-        return SwapMainModule.SwapProviderState(tradeService.coinFrom, tradeService.coinTo, tradeService.amountFrom, tradeService.amountTo, tradeService.amountType)
+        return SwapMainModule.SwapProviderState(
+            tradeService.coinFrom,
+            tradeService.coinTo,
+            tradeService.amountFrom,
+            tradeService.amountTo,
+            tradeService.amountType
+        )
     }
     //endregion
 
@@ -103,27 +120,27 @@ class UniswapViewModel(
 
     private fun subscribeToServices() {
         service.stateObservable
-                .subscribeOn(Schedulers.io())
-                .subscribe { sync(it) }
-                .let { disposables.add(it) }
+            .subscribeOn(Schedulers.io())
+            .subscribe { sync(it) }
+            .let { disposables.add(it) }
 
         service.errorsObservable
-                .subscribeOn(Schedulers.io())
-                .subscribe { sync(it) }
-                .let { disposables.add(it) }
+            .subscribeOn(Schedulers.io())
+            .subscribe { sync(it) }
+            .let { disposables.add(it) }
 
         tradeService.stateObservable
-                .subscribeOn(Schedulers.io())
-                .subscribe { sync(it) }
-                .let { disposables.add(it) }
+            .subscribeOn(Schedulers.io())
+            .subscribe { sync(it) }
+            .let { disposables.add(it) }
 
-        pendingAllowanceService.isPendingObservable
-                .subscribeOn(Schedulers.io())
-                .subscribe {
-                    syncApproveAction()
-                    syncProceedAction()
-                }
-                .let { disposables.add(it) }
+        pendingAllowanceService.stateObservable
+            .subscribeOn(Schedulers.io())
+            .subscribe {
+                syncApproveAction()
+                syncProceedAction()
+            }
+            .let { disposables.add(it) }
     }
 
     private fun sync(serviceState: UniswapService.State) {
@@ -131,20 +148,22 @@ class UniswapViewModel(
         syncProceedAction()
     }
 
-    private fun convert(error: Throwable): String = when (val convertedError = error.convertedError) {
-        is JsonRpc.ResponseError.RpcError -> {
-            convertedError.error.message
+    private fun convert(error: Throwable): String =
+        when (val convertedError = error.convertedError) {
+            is JsonRpc.ResponseError.RpcError -> {
+                convertedError.error.message
+            }
+            is TradeError.TradeNotFound -> {
+                Translator.getString(R.string.Swap_ErrorNoLiquidity)
+            }
+            else -> {
+                convertedError.message ?: convertedError.javaClass.simpleName
+            }
         }
-        is TradeError.TradeNotFound -> {
-            Translator.getString(R.string.Swap_ErrorNoLiquidity)
-        }
-        else -> {
-            convertedError.message ?: convertedError.javaClass.simpleName
-        }
-    }
 
     private fun sync(errors: List<Throwable>) {
-        val filtered = errors.filter { it !is EvmTransactionService.GasDataError && it !is SwapError }
+        val filtered =
+            errors.filter { it !is EvmTransactionService.GasDataError && it !is SwapError }
         swapErrorLiveData.postValue(filtered.firstOrNull()?.let { convert(it) })
 
         syncProceedAction()
@@ -177,8 +196,8 @@ class UniswapViewModel(
                     service.errors.any { it == SwapError.ForbiddenPriceImpactLevel } -> {
                         ActionState.Disabled(Translator.getString(R.string.Swap_ErrorHighPriceImpact))
                     }
-                    pendingAllowanceService.isPending -> {
-                        ActionState.Hidden
+                    pendingAllowanceService.state == SwapPendingAllowanceState.Pending -> {
+                        ActionState.Disabled(Translator.getString(R.string.Swap_Proceed))
                     }
                     else -> {
                         ActionState.Disabled(Translator.getString(R.string.Swap_Proceed))
@@ -193,36 +212,56 @@ class UniswapViewModel(
     }
 
     private fun syncApproveAction() {
-        val approveAction = when {
+        val approveAction: ActionState
+        val approveStep: ApproveStep
+
+        when {
             tradeService.state !is UniswapTradeService.State.Ready || service.errors.any { it == SwapError.InsufficientBalanceFrom || it == SwapError.ForbiddenPriceImpactLevel } -> {
-                ActionState.Hidden
+                approveAction = ActionState.Hidden
+                approveStep = ApproveStep.NA
             }
-            pendingAllowanceService.isPending -> {
-                ActionState.Disabled(Translator.getString(R.string.Swap_Approving))
+            pendingAllowanceService.state == SwapPendingAllowanceState.Pending -> {
+                approveAction = ActionState.Disabled(Translator.getString(R.string.Swap_Approving))
+                approveStep = ApproveStep.Approving
             }
             service.errors.any { it == SwapError.InsufficientAllowance } -> {
-                ActionState.Enabled(Translator.getString(R.string.Swap_Approve))
+                approveAction = ActionState.Enabled(Translator.getString(R.string.Swap_Approve))
+                approveStep = ApproveStep.ApproveRequired
+            }
+            pendingAllowanceService.state == SwapPendingAllowanceState.Approved -> {
+                approveAction = ActionState.Disabled(Translator.getString(R.string.Swap_Approve))
+                approveStep = ApproveStep.Approved
             }
             else -> {
-                ActionState.Hidden
+                approveAction = ActionState.Hidden
+                approveStep = ApproveStep.NA
             }
         }
         approveActionLiveData.postValue(approveAction)
+        approveStepLiveData.postValue(approveStep)
     }
 
     private fun tradeViewItem(trade: UniswapTradeService.Trade): TradeViewItem {
         return TradeViewItem(
-                formatter.price(trade.tradeData.executionPrice, tradeService.coinFrom, tradeService.coinTo),
-                formatter.priceImpactViewItem(trade, UniswapTradeService.PriceImpactLevel.Warning),
-                formatter.guaranteedAmountViewItem(trade.tradeData, tradeService.coinFrom, tradeService.coinTo)
+            formatter.price(
+                trade.tradeData.executionPrice,
+                tradeService.coinFrom,
+                tradeService.coinTo
+            ),
+            formatter.priceImpactViewItem(trade, UniswapTradeService.PriceImpactLevel.Warning),
+            formatter.guaranteedAmountViewItem(
+                trade.tradeData,
+                tradeService.coinFrom,
+                tradeService.coinTo
+            )
         )
     }
 
     //region models
     data class TradeViewItem(
-            val price: String? = null,
-            val priceImpact: UniswapModule.PriceImpactViewItem? = null,
-            val guaranteedAmount: UniswapModule.GuaranteedAmountViewItem? = null
+        val price: String? = null,
+        val priceImpact: UniswapModule.PriceImpactViewItem? = null,
+        val guaranteedAmount: UniswapModule.GuaranteedAmountViewItem? = null
     )
 
     sealed class ActionState {

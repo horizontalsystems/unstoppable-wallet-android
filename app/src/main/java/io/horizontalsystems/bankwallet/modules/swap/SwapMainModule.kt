@@ -15,6 +15,7 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.fiat.AmountTypeSwitchService
 import io.horizontalsystems.bankwallet.core.fiat.FiatService
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapPendingAllowanceService
 import io.horizontalsystems.bankwallet.modules.swap.coincard.*
 import io.horizontalsystems.bankwallet.modules.swap.oneinch.OneInchFragment
 import io.horizontalsystems.bankwallet.modules.swap.settings.SwapSettingsBaseFragment
@@ -38,7 +39,11 @@ object SwapMainModule {
     private const val coinFromKey = "coinFromKey"
 
     fun start(fragment: Fragment, navOptions: NavOptions, coinFrom: Coin) {
-        fragment.findNavController().navigate(R.id.mainFragment_to_swapFragment, bundleOf(coinFromKey to coinFrom), navOptions)
+        fragment.findNavController().navigate(
+            R.id.mainFragment_to_swapFragment,
+            bundleOf(coinFromKey to coinFrom),
+            navOptions
+        )
     }
 
     interface ISwapProvider : Parcelable {
@@ -167,30 +172,41 @@ object SwapMainModule {
 
     @Parcelize
     data class CoinBalanceItem(
-            val coin: Coin,
-            val balance: BigDecimal?,
-            val fiatBalanceValue: CurrencyValue?,
+        val coin: Coin,
+        val balance: BigDecimal?,
+        val fiatBalanceValue: CurrencyValue?,
     ) : Parcelable
+
+    enum class ApproveStep {
+        NA, ApproveRequired, Approving, Approved
+    }
 
     @Parcelize
     data class SwapProviderState(
-            val coinFrom: Coin? = null,
-            val coinTo: Coin? = null,
-            val amountFrom: BigDecimal? = null,
-            val amountTo: BigDecimal? = null,
-            val amountType: AmountType = AmountType.ExactFrom
+        val coinFrom: Coin? = null,
+        val coinTo: Coin? = null,
+        val amountFrom: BigDecimal? = null,
+        val amountTo: BigDecimal? = null,
+        val amountType: AmountType = AmountType.ExactFrom
     ) : Parcelable
 
     class Factory(arguments: Bundle) : ViewModelProvider.Factory {
         private val coinFrom: Coin? = arguments.getParcelable(coinFromKey)
-        private val swapProviders: List<ISwapProvider> = listOf(UniswapProvider, PancakeSwapProvider, OneInchProvider)
+        private val swapProviders: List<ISwapProvider> =
+            listOf(UniswapProvider, PancakeSwapProvider, OneInchProvider)
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
 
             return when (modelClass) {
                 SwapMainViewModel::class.java -> {
-                    SwapMainViewModel(SwapMainService(coinFrom, swapProviders, App.localStorage)) as T
+                    SwapMainViewModel(
+                        SwapMainService(
+                            coinFrom,
+                            swapProviders,
+                            App.localStorage
+                        )
+                    ) as T
                 }
                 else -> throw IllegalArgumentException()
             }
@@ -199,16 +215,23 @@ object SwapMainModule {
     }
 
     class CoinCardViewModelFactory(
-            owner: SavedStateRegistryOwner,
-            private val dex: Dex,
-            private val service: ISwapService,
-            private val tradeService: ISwapTradeService
+        owner: SavedStateRegistryOwner,
+        private val dex: Dex,
+        private val service: ISwapService,
+        private val tradeService: ISwapTradeService
     ) : AbstractSavedStateViewModelFactory(owner, null) {
         private val switchService by lazy {
             AmountTypeSwitchService()
         }
         private val coinProvider by lazy {
-            SwapCoinProvider(dex, App.coinManager, App.walletManager, App.adapterManager, App.currencyManager, App.xRateManager)
+            SwapCoinProvider(
+                dex,
+                App.coinManager,
+                App.walletManager,
+                App.adapterManager,
+                App.currencyManager,
+                App.xRateManager
+            )
         }
         private val fromCoinCardService by lazy {
             SwapFromCoinCardService(service, tradeService, coinProvider)
@@ -218,10 +241,15 @@ object SwapMainModule {
         }
 
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel?> create(key: String, modelClass: Class<T>, handle: SavedStateHandle): T {
+        override fun <T : ViewModel?> create(
+            key: String,
+            modelClass: Class<T>,
+            handle: SavedStateHandle
+        ): T {
             return when (modelClass) {
                 SwapCoinCardViewModel::class.java -> {
-                    val fiatService = FiatService(switchService, App.currencyManager, App.xRateManager)
+                    val fiatService =
+                        FiatService(switchService, App.currencyManager, App.xRateManager)
                     val coinCardService: ISwapCoinCardService
                     var maxButtonEnabled = false
 
@@ -234,7 +262,13 @@ object SwapMainModule {
                         switchService.toListener = fiatService
                     }
                     val formatter = SwapViewItemHelper(App.numberFormatter)
-                    SwapCoinCardViewModel(coinCardService, fiatService, switchService, maxButtonEnabled, formatter) as T
+                    SwapCoinCardViewModel(
+                        coinCardService,
+                        fiatService,
+                        switchService,
+                        maxButtonEnabled,
+                        formatter
+                    ) as T
                 }
                 else -> throw IllegalArgumentException()
             }

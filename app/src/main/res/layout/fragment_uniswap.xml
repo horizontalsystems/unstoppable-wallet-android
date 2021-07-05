@@ -225,6 +225,16 @@
                 app:layout_constraintStart_toEndOf="@id/approveButton"
                 app:layout_constraintTop_toBottomOf="@+id/commonError" />
 
+            <io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceStepsView
+                android:id="@+id/approveStepsView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="@id/endBorder"
+                app:layout_constraintStart_toEndOf="@id/startBorder"
+                app:layout_constraintTop_toBottomOf="@id/proceedButton" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.core.widget.NestedScrollView>
