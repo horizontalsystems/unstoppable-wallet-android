@@ -19,8 +19,8 @@ import java.util.*
 
 
 class UniswapTradeService(
-        evmKit: EthereumKit,
-        private val uniswapProvider: UniswapProvider
+    evmKit: EthereumKit,
+    private val uniswapProvider: UniswapProvider
 ) : SwapMainModule.ISwapTradeService {
 
     private var swapDataDisposable: Disposable? = null
@@ -39,10 +39,10 @@ class UniswapTradeService(
 
     init {
         lastBlockDisposable = evmKit.lastBlockHeightFlowable
-                .subscribeOn(Schedulers.io())
-                .subscribe {
-//                    syncSwapData()
-                }
+            .subscribeOn(Schedulers.io())
+            .subscribe {
+                syncSwapData()
+            }
     }
 
     //region outputs
@@ -208,13 +208,13 @@ class UniswapTradeService(
         swapDataDisposable = null
 
         swapDataDisposable = uniswapProvider.swapDataSingle(coinFrom, coinTo)
-                .subscribeOn(Schedulers.io())
-                .subscribe({
-                    swapData = it
-                    syncTradeData()
-                }, { error ->
-                    state = State.NotReady(listOf(error))
-                })
+            .subscribeOn(Schedulers.io())
+            .subscribe({
+                swapData = it
+                syncTradeData()
+            }, { error ->
+                state = State.NotReady(listOf(error))
+            })
     }
 
     private fun syncTradeData() {
@@ -232,7 +232,8 @@ class UniswapTradeService(
                 AmountType.ExactFrom -> TradeType.ExactIn
                 AmountType.ExactTo -> TradeType.ExactOut
             }
-            val tradeData = uniswapProvider.tradeData(swapData, amount, tradeType, tradeOptions.tradeOptions)
+            val tradeData =
+                uniswapProvider.tradeData(swapData, amount, tradeType, tradeOptions.tradeOptions)
             handle(tradeData)
         } catch (e: Throwable) {
             state = State.NotReady(listOf(e))
@@ -267,7 +268,7 @@ class UniswapTradeService(
     }
 
     data class Trade(
-            val tradeData: TradeData
+        val tradeData: TradeData
     ) {
         val priceImpactLevel: PriceImpactLevel? = tradeData.priceImpact?.let {
             when {

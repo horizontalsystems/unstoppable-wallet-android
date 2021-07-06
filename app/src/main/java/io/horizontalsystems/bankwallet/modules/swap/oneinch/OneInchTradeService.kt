@@ -37,7 +37,7 @@ class OneInchTradeService(
         lastBlockDisposable = evmKit.lastBlockHeightFlowable
                 .subscribeOn(Schedulers.io())
                 .subscribe {
-//                    syncQuote()
+                    syncQuote()
                 }
     }
 
