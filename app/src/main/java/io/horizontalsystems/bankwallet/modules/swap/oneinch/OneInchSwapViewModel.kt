@@ -168,13 +168,13 @@ class OneInchSwapViewModel(
         val approveAction: ActionState
         val approveStep: ApproveStep
         when {
-            tradeService.state !is OneInchTradeService.State.Ready || service.errors.any { it == SwapError.InsufficientBalanceFrom } -> {
-                approveAction = ActionState.Hidden
-                approveStep = ApproveStep.NA
-            }
             pendingAllowanceService.state == SwapPendingAllowanceState.Pending -> {
                 approveAction = ActionState.Disabled(Translator.getString(R.string.Swap_Approving))
                 approveStep = ApproveStep.Approving
+            }
+            tradeService.state is OneInchTradeService.State.NotReady || service.errors.any { it == SwapError.InsufficientBalanceFrom } -> {
+                approveAction = ActionState.Hidden
+                approveStep = ApproveStep.NA
             }
             service.errors.any { it == SwapError.InsufficientAllowance } -> {
                 approveAction = ActionState.Enabled(Translator.getString(R.string.Swap_Approve))

@@ -216,13 +216,13 @@ class UniswapViewModel(
         val approveStep: ApproveStep
 
         when {
-            tradeService.state !is UniswapTradeService.State.Ready || service.errors.any { it == SwapError.InsufficientBalanceFrom || it == SwapError.ForbiddenPriceImpactLevel } -> {
-                approveAction = ActionState.Hidden
-                approveStep = ApproveStep.NA
-            }
             pendingAllowanceService.state == SwapPendingAllowanceState.Pending -> {
                 approveAction = ActionState.Disabled(Translator.getString(R.string.Swap_Approving))
                 approveStep = ApproveStep.Approving
+            }
+            tradeService.state is UniswapTradeService.State.NotReady || service.errors.any { it == SwapError.InsufficientBalanceFrom || it == SwapError.ForbiddenPriceImpactLevel } -> {
+                approveAction = ActionState.Hidden
+                approveStep = ApproveStep.NA
             }
             service.errors.any { it == SwapError.InsufficientAllowance } -> {
                 approveAction = ActionState.Enabled(Translator.getString(R.string.Swap_Approve))
