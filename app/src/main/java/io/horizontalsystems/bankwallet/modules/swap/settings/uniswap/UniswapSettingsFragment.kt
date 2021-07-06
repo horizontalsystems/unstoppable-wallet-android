@@ -26,7 +26,7 @@ import kotlinx.android.synthetic.main.fragment_swap_settings_uniswap.*
 class UniswapSettingsFragment : SwapSettingsBaseFragment() {
     private val uniswapViewModel by navGraphViewModels<UniswapViewModel>(R.id.swapFragment) { UniswapModule.Factory(dex) }
 
-    private val vmFactory by lazy { UniswapSettingsModule.Factory(uniswapViewModel.tradeService, dex) }
+    private val vmFactory by lazy { UniswapSettingsModule.Factory(uniswapViewModel.tradeService, dex.blockchain) }
     private val uniswapSettingsViewModel by viewModels<UniswapSettingsViewModel> { vmFactory }
     private val deadlineViewModel by viewModels<SwapDeadlineViewModel> { vmFactory }
     private val recipientAddressViewModel by viewModels<RecipientAddressViewModel> { vmFactory }

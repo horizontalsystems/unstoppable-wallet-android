@@ -19,14 +19,14 @@ object OneInchConfirmationModule {
     private const val oneInchSwapParametersKey = "oneInchSwapParametersKey"
 
     class Factory(
-            private val dex: SwapMainModule.Dex,
+            private val blockchain: SwapMainModule.Blockchain,
             private val arguments: Bundle
     ) : ViewModelProvider.Factory {
 
         private val oneInchSwapParameters by lazy { arguments.getParcelable<OneInchSwapParameters>(oneInchSwapParametersKey)!! }
-        private val evmKit by lazy { dex.evmKit!! }
+        private val evmKit by lazy { blockchain.evmKit!! }
         private val oneInchKitHelper by lazy { OneInchKitHelper(evmKit) }
-        private val coin by lazy { dex.coin!! }
+        private val coin by lazy { blockchain.coin!! }
         private val transactionService by lazy {
             val feeRateProvider = FeeRateProviderFactory.provider(coin)!!
             OneInchTransactionFeeService(oneInchKitHelper, oneInchSwapParameters, feeRateProvider)

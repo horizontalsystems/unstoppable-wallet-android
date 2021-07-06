@@ -34,7 +34,7 @@ class SwapApproveConfirmationFragment : BaseFragment() {
     private val logger = AppLogger("swap-approve")
     private val mainViewModel by navGraphViewModels<SwapApproveViewModel>(R.id.swapApproveFragment)
     private val vmFactory by lazy {
-        SwapApproveConfirmationModule.Factory(SendEvmData(transactionData, additionalItems), mainViewModel.dex)
+        SwapApproveConfirmationModule.Factory(SendEvmData(transactionData, additionalItems), mainViewModel.dex.blockchain)
     }
     private val sendViewModel by viewModels<SendEvmTransactionViewModel> { vmFactory }
     private val feeViewModel by viewModels<EthereumFeeViewModel> { vmFactory }

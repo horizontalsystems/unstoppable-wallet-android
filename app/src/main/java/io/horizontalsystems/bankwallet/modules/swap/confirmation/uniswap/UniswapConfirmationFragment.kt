@@ -28,7 +28,7 @@ class UniswapConfirmationFragment : BaseSwapConfirmationFragment() {
     private val additionalInfo: SendEvmData.AdditionalInfo?
         get() = arguments?.getParcelable(SendEvmModule.additionalInfoKey)
 
-    private val vmFactory by lazy { UniswapConfirmationModule.Factory(dex, SendEvmData(transactionData, additionalInfo)) }
+    private val vmFactory by lazy { UniswapConfirmationModule.Factory(dex.blockchain, SendEvmData(transactionData, additionalInfo)) }
     override val sendViewModel by viewModels<SendEvmTransactionViewModel> { vmFactory }
     override val feeViewModel by viewModels<EthereumFeeViewModel> { vmFactory }
 

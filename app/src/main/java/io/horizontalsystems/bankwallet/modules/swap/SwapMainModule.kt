@@ -15,7 +15,6 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.fiat.AmountTypeSwitchService
 import io.horizontalsystems.bankwallet.core.fiat.FiatService
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapPendingAllowanceService
 import io.horizontalsystems.bankwallet.modules.swap.coincard.*
 import io.horizontalsystems.bankwallet.modules.swap.oneinch.OneInchFragment
 import io.horizontalsystems.bankwallet.modules.swap.settings.SwapSettingsBaseFragment
@@ -97,7 +96,7 @@ object SwapMainModule {
             get() = OneInchSettingsFragment()
 
         override fun supports(blockchain: Blockchain): Boolean {
-            return blockchain == Blockchain.Ethereum || blockchain == Blockchain.BinanceSmartChain
+            return blockchain.mainNet && (blockchain == Blockchain.Ethereum || blockchain == Blockchain.BinanceSmartChain)
         }
     }
 
@@ -105,23 +104,25 @@ object SwapMainModule {
     enum class Blockchain(val id: String, val title: String) : Parcelable {
         Ethereum("ethereum", "Ethereum"),
         BinanceSmartChain("binanceSmartChain", "Binance Smart Chain");
+
+        val evmKit: EthereumKit?
+            get() = when (this) {
+                Ethereum -> App.ethereumKitManager.evmKit
+                BinanceSmartChain -> App.binanceSmartChainKitManager.evmKit
+            }
+
+        val mainNet: Boolean
+            get() = evmKit?.networkType?.isMainNet ?: false
+
+        val coin: Coin?
+            get() = when (this) {
+                Ethereum -> App.coinKit.getCoin(CoinType.Ethereum)
+                BinanceSmartChain -> App.coinKit.getCoin(CoinType.BinanceSmartChain)
+            }
     }
 
     @Parcelize
-    class Dex(val blockchain: Blockchain, val provider: ISwapProvider) : Parcelable {
-
-        val evmKit: EthereumKit?
-            get() = when (blockchain) {
-                Blockchain.Ethereum -> App.ethereumKitManager.evmKit
-                Blockchain.BinanceSmartChain -> App.binanceSmartChainKitManager.evmKit
-            }
-
-        val coin: Coin?
-            get() = when (blockchain) {
-                Blockchain.Ethereum -> App.coinKit.getCoin(CoinType.Ethereum)
-                Blockchain.BinanceSmartChain -> App.coinKit.getCoin(CoinType.BinanceSmartChain)
-            }
-    }
+    class Dex(val blockchain: Blockchain, val provider: ISwapProvider) : Parcelable
 
     @Parcelize
     enum class AmountType : Parcelable {
