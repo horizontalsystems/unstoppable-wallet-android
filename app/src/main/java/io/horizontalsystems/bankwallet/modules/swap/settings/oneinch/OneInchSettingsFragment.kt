@@ -25,7 +25,7 @@ class OneInchSettingsFragment : SwapSettingsBaseFragment() {
 
     private val oneInchViewModel by navGraphViewModels<OneInchSwapViewModel>(R.id.swapFragment) { OneInchModule.Factory(dex) }
 
-    private val vmFactory by lazy { OneInchSwapSettingsModule.Factory(oneInchViewModel.tradeService, dex) }
+    private val vmFactory by lazy { OneInchSwapSettingsModule.Factory(oneInchViewModel.tradeService, dex.blockchain) }
     private val oneInchSettingsViewModel by viewModels<OneInchSettingsViewModel> { vmFactory }
     private val recipientAddressViewModel by viewModels<RecipientAddressViewModel> { vmFactory }
     private val slippageViewModel by viewModels<SwapSlippageViewModel> { vmFactory }

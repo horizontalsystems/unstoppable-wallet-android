@@ -36,7 +36,7 @@ object UniswapModule {
             dex: SwapMainModule.Dex
     ) : ViewModelProvider.Factory {
 
-        private val evmKit: EthereumKit by lazy { dex.evmKit!! }
+        private val evmKit: EthereumKit by lazy { dex.blockchain.evmKit!! }
         private val uniswapKit by lazy { UniswapKit.getInstance(evmKit) }
         private val uniswapProvider by lazy { UniswapProvider(uniswapKit) }
         private val allowanceService by lazy { SwapAllowanceService(uniswapProvider.routerAddress, App.adapterManager, evmKit) }

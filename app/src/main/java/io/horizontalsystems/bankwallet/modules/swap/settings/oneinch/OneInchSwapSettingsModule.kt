@@ -30,14 +30,14 @@ object OneInchSwapSettingsModule {
 
     class Factory(
             private val tradeService: OneInchTradeService,
-            private val dex: SwapMainModule.Dex
+            private val blockchain: SwapMainModule.Blockchain
     ) : ViewModelProvider.Factory {
 
         private val service by lazy { OneInchSettingsService(tradeService.swapSettings) }
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            val evmCoin = dex.coin ?: throw IllegalArgumentException()
+            val evmCoin = blockchain.coin!!
 
             return when (modelClass) {
                 OneInchSettingsViewModel::class.java -> OneInchSettingsViewModel(service, tradeService) as T

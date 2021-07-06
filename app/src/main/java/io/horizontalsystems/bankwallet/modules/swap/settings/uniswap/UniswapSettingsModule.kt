@@ -21,14 +21,14 @@ object UniswapSettingsModule {
 
     class Factory(
             private val tradeService: UniswapTradeService,
-            private val dex: SwapMainModule.Dex
+            private val blockchain: SwapMainModule.Blockchain
     ) : ViewModelProvider.Factory {
 
         private val service by lazy { UniswapSettingsService(tradeService.tradeOptions) }
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            val evmCoin = dex.coin ?: throw IllegalArgumentException()
+            val evmCoin = blockchain.coin ?: throw IllegalArgumentException()
 
             return when (modelClass) {
                 UniswapSettingsViewModel::class.java -> UniswapSettingsViewModel(service, tradeService) as T

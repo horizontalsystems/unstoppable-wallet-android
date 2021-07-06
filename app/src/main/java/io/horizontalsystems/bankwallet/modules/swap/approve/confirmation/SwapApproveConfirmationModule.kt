@@ -21,11 +21,11 @@ object SwapApproveConfirmationModule {
 
     class Factory(
             private val sendEvmData: SendEvmData,
-            private val dex: SwapMainModule.Dex
+            private val blockchain: SwapMainModule.Blockchain
     ) : ViewModelProvider.Factory {
 
-        private val coin by lazy { dex.coin }
-        private val evmKit by lazy { dex.evmKit!! }
+        private val coin by lazy { blockchain.coin }
+        private val evmKit by lazy { blockchain.evmKit!! }
         private val transactionService by lazy {
             val feeRateProvider = FeeRateProviderFactory.provider(coin)!!
             EvmTransactionService(evmKit, feeRateProvider, 20)

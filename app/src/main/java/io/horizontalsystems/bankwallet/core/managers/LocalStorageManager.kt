@@ -342,11 +342,15 @@ class LocalStorageManager(private val preferences: SharedPreferences)
         }
 
     override fun getSwapProviderId(blockchain: SwapMainModule.Blockchain): String? {
-        return preferences.getString(SWAP_PROVIDER + blockchain.id, null)
+        return preferences.getString(getSwapProviderKey(blockchain), null)
     }
 
     override fun setSwapProviderId(blockchain: SwapMainModule.Blockchain, providerId: String) {
-        preferences.edit().putString(SWAP_PROVIDER + blockchain.id, providerId).apply()
+        preferences.edit().putString(getSwapProviderKey(blockchain), providerId).apply()
+    }
+
+    private fun getSwapProviderKey(blockchain: SwapMainModule.Blockchain): String {
+        return SWAP_PROVIDER + blockchain.id + if (blockchain.mainNet) "MainNet" else "TestNet"
     }
 
 }
