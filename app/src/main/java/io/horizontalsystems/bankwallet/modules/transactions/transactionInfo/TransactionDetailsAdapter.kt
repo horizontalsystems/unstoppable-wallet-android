@@ -71,7 +71,7 @@ class TransactionDetailsAdapter(private val viewModel: TransactionInfoViewModel)
 
         private fun bindRecipient(detail: TransactionDetailViewItem.Recipient) {
             bindAddress(context.getString(R.string.TransactionInfo_RecipientHash), detail.recipient) {
-                viewModel.delegate.onClickRecipientHash()
+                viewModel.onClickRecipientHash()
             }
         }
 
@@ -79,7 +79,7 @@ class TransactionDetailsAdapter(private val viewModel: TransactionInfoViewModel)
             if (detail.lockState.locked) {
                 bindHint(context.getString(R.string.TransactionInfo_LockedUntil, DateHelper.getFullDate(detail.lockState.date)), R.drawable.ic_lock_20, R.drawable.ic_info_20)
                 itemView.setOnSingleClickListener {
-                    viewModel.delegate.onClickLockInfo()
+                    viewModel.onClickLockInfo()
                 }
             } else {
                 bindHint(context.getString(R.string.TransactionInfo_UnlockedAt, DateHelper.getFullDate(detail.lockState.date)), iconStart = R.drawable.ic_unlock_20)
@@ -89,17 +89,17 @@ class TransactionDetailsAdapter(private val viewModel: TransactionInfoViewModel)
         private fun bindDoubleSpend() {
             bindHint(context.getString(R.string.TransactionInfo_DoubleSpendNote), R.drawable.ic_double_spend_20, R.drawable.ic_info_20)
             itemView.setOnSingleClickListener {
-                viewModel.delegate.onClickDoubleSpendInfo()
+                viewModel.onClickDoubleSpendInfo()
             }
         }
 
         private fun bindId(detail: TransactionDetailViewItem.Id) {
             bindHashId(itemView.context.getString(R.string.TransactionInfo_Id), detail.id)
             decoratedText.setOnSingleClickListener {
-                viewModel.delegate.onClickTransactionId()
+                viewModel.onClickTransactionId()
             }
             btnAction.setOnSingleClickListener {
-                viewModel.delegate.onShare()
+                viewModel.onShare()
             }
         }
 
@@ -108,19 +108,19 @@ class TransactionDetailsAdapter(private val viewModel: TransactionInfoViewModel)
             btnAction.setImageResource(R.drawable.ic_copy_20)
             btnAction.isVisible = true
             btnAction.setOnSingleClickListener {
-                viewModel.delegate.onRawTransaction()
+                viewModel.onRawTransaction()
             }
         }
 
         private fun bindTo(detail: TransactionDetailViewItem.To) {
             bindAddress(itemView.context.getString(R.string.TransactionInfo_To), detail.to) {
-                viewModel.delegate.onClickTo()
+                viewModel.onClickTo()
             }
         }
 
         private fun bindFrom(detail: TransactionDetailViewItem.From) {
             bindAddress(itemView.context.getString(R.string.TransactionInfo_From), detail.from) {
-                viewModel.delegate.onClickFrom()
+                viewModel.onClickFrom()
             }
         }
 
@@ -147,7 +147,7 @@ class TransactionDetailsAdapter(private val viewModel: TransactionInfoViewModel)
             if (detail.status != TransactionStatus.Completed){
                 statusInfoIcon.isVisible = true
                 itemView.setOnSingleClickListener {
-                    viewModel.delegate.onClickStatusInfo()
+                    viewModel.onClickStatusInfo()
                 }
             }
         }

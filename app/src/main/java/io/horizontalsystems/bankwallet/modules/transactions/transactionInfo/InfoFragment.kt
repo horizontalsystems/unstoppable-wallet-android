@@ -69,14 +69,6 @@ class InfoFragment : BaseDialogFragment() {
         fun arguments(infoParameters: InfoParameters) = Bundle(1).apply {
             putParcelable(INFO_PARAMETERS_KEY, infoParameters)
         }
-
-        fun instance(infoParameters: InfoParameters): InfoFragment {
-            return InfoFragment().apply {
-                arguments = Bundle(1).apply {
-                    putParcelable(INFO_PARAMETERS_KEY, infoParameters)
-                }
-            }
-        }
     }
 }
 
