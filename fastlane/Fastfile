@@ -15,6 +15,12 @@ platform :android do
     upload_to_app_center(api_token: options[:api_token], app_name: options[:app_name], notes: "Author: #{commit[:author]}, changes: #{commit[:message]}")
   end
 
+  desc "Build app"
+  lane :app_assemble do
+    gradle(task: "clean")
+    gradle(task: "assembleAppcenter", flags: "--stacktrace --no-daemon")
+  end
+
   private_lane :upload_to_app_center do |options|
     appcenter_upload(
         api_token: options[:api_token],
