@@ -14,7 +14,7 @@
         app:title="@string/WalletConnect_SignMessageRequest_Title"
         app:titleTextAppearance="@style/Title3" />
 
-    <io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.CoinInfoItemView
+    <io.horizontalsystems.bankwallet.modules.transactionInfo.CoinInfoItemView
         android:id="@+id/domain"
         android:layout_width="0dp"
         android:layout_height="48dp"
@@ -23,7 +23,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
-    <io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.CoinInfoItemView
+    <io.horizontalsystems.bankwallet.modules.transactionInfo.CoinInfoItemView
         android:id="@+id/showMessageButton"
         android:layout_width="0dp"
         android:layout_height="48dp"

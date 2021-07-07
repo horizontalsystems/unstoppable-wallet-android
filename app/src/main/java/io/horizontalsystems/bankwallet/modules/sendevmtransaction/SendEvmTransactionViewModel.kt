@@ -8,7 +8,7 @@ import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinServiceFactory
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData
-import io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoAddressMapper
+import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoAddressMapper
 import io.horizontalsystems.core.toHexString
 import io.horizontalsystems.erc20kit.decorations.ApproveMethodDecoration
 import io.horizontalsystems.erc20kit.decorations.TransferMethodDecoration

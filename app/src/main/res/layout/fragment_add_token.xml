@@ -46,7 +46,7 @@
                 app:layout_constraintStart_toStartOf="@id/guidelineLeft"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.CoinInfoItemView xmlns:android="http://schemas.android.com/apk/res/android"
+            <io.horizontalsystems.bankwallet.modules.transactionInfo.CoinInfoItemView xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/coinTypeView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -54,21 +54,21 @@
                 app:layout_constraintStart_toStartOf="@id/guidelineLeft"
                 app:layout_constraintTop_toBottomOf="@id/addressInputView" />
 
-            <io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.CoinInfoItemView xmlns:android="http://schemas.android.com/apk/res/android"
+            <io.horizontalsystems.bankwallet.modules.transactionInfo.CoinInfoItemView xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/coinNameView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintStart_toStartOf="@id/guidelineLeft"
                 app:layout_constraintTop_toBottomOf="@id/coinTypeView" />
 
-            <io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.CoinInfoItemView xmlns:android="http://schemas.android.com/apk/res/android"
+            <io.horizontalsystems.bankwallet.modules.transactionInfo.CoinInfoItemView xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/coinSymbolView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintStart_toStartOf="@id/guidelineLeft"
                 app:layout_constraintTop_toBottomOf="@id/coinNameView" />
 
-            <io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.CoinInfoItemView xmlns:android="http://schemas.android.com/apk/res/android"
+            <io.horizontalsystems.bankwallet.modules.transactionInfo.CoinInfoItemView xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/coinDecimalsView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
