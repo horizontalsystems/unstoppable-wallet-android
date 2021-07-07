@@ -19,7 +19,7 @@ import java.util.*
 
 
 class UniswapTradeService(
-    evmKit: EthereumKit,
+    private val evmKit: EthereumKit,
     private val uniswapProvider: UniswapProvider
 ) : SwapMainModule.ISwapTradeService {
 
@@ -36,14 +36,6 @@ class UniswapTradeService(
     private val stateSubject = PublishSubject.create<State>()
     private val tradeOptionsSubject = PublishSubject.create<SwapTradeOptions>()
     //endregion
-
-    init {
-        lastBlockDisposable = evmKit.lastBlockHeightFlowable
-            .subscribeOn(Schedulers.io())
-            .subscribe {
-                syncSwapData()
-            }
-    }
 
     //region outputs
     override var coinFrom: Coin? = null
@@ -185,11 +177,30 @@ class UniswapTradeService(
         enterCoinFrom(swapCoin)
     }
 
+    fun start() {
+        lastBlockDisposable = evmKit.lastBlockHeightFlowable
+            .subscribeOn(Schedulers.io())
+            .subscribe {
+                syncSwapData()
+            }
+    }
+
+    fun stop() {
+        clearDisposables()
+    }
+
     fun onCleared() {
-        lastBlockDisposable?.dispose()
-        swapDataDisposable?.dispose()
+        clearDisposables()
     }
     //endregion
+
+    private fun clearDisposables() {
+        lastBlockDisposable?.dispose()
+        lastBlockDisposable = null
+
+        swapDataDisposable?.dispose()
+        swapDataDisposable = null
+    }
 
     private fun syncSwapData() {
         val coinFrom = coinFrom

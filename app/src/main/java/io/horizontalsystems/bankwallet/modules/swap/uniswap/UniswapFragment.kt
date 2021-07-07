@@ -57,6 +57,18 @@ class UniswapFragment : SwapBaseFragment() {
         return inflater.inflate(R.layout.fragment_uniswap, container, false)
     }
 
+    override fun onStart() {
+        super.onStart()
+
+        uniswapViewModel.onStart()
+    }
+
+    override fun onStop() {
+        super.onStop()
+
+        uniswapViewModel.onStop()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 

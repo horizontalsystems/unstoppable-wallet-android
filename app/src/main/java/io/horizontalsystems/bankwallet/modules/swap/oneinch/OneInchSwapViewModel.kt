@@ -86,6 +86,15 @@ class OneInchSwapViewModel(
     fun restoreProviderState(swapProviderState: SwapMainModule.SwapProviderState) {
         tradeService.restoreState(swapProviderState)
     }
+
+    fun onStart() {
+        service.start()
+    }
+
+    fun onStop() {
+        service.stop()
+    }
+
     //endregion
 
     override fun onCleared() {

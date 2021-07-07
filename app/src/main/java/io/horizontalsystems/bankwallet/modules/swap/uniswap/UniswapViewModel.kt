@@ -111,6 +111,15 @@ class UniswapViewModel(
             tradeService.amountType
         )
     }
+
+    fun onStart() {
+        service.start()
+    }
+
+    fun onStop() {
+        service.stop()
+    }
+
     //endregion
 
     override fun onCleared() {
