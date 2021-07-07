@@ -25,10 +25,10 @@ class MarkdownFragment : BaseFragment(), MarkdownContentAdapter.Listener {
         super.onViewCreated(view, savedInstanceState)
 
         if (arguments?.getBoolean(showAsClosablePopupKey) == true){
-            toolbar.inflateMenu(R.menu.markdown_viewer_menu)
+            toolbar.inflateMenu(R.menu.close_menu)
             toolbar.setOnMenuItemClickListener { item ->
                 when (item.itemId) {
-                    R.id.closeButton -> {
+                    R.id.menuClose -> {
                         findNavController().popBackStack()
                         true
                     }

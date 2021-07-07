@@ -19,7 +19,7 @@ class PrivacySettingsInfoFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
-                R.id.closeButton -> {
+                R.id.menuClose -> {
                     findNavController().popBackStack()
                     true
                 }

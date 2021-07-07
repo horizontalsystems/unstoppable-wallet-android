@@ -40,7 +40,7 @@ class ReceiveFragment : BaseFragment() {
             toolbar.navigationIcon = AppLayoutHelper.getCoinDrawable(requireContext(), wallet.coin.type)
             toolbar.setOnMenuItemClickListener { item ->
                 when (item.itemId) {
-                    R.id.closeButton -> {
+                    R.id.menuClose -> {
                         findNavController().popBackStack()
                         true
                     }
