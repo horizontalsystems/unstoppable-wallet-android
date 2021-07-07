@@ -1,4 +1,4 @@
-name: Telegram pull request notification
+name: PR check and notfity
 
 on:
   pull_request:
@@ -9,8 +9,11 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/setup-ruby@v1
+        with:
+          ruby-version: '2.6'
 
-      - name: Notify Telegrem PR open
+      - name: Notify to Telegrem
         uses: appleboy/telegram-action@master
         with:
           to: ${{secrets.TELEGRAM_TO}}
@@ -21,3 +24,9 @@ jobs:
             Title: ${{github.event.pull_request.title}}
             Author: ${{github.actor}}
             Event: ${{ github.event_name }}
+
+      - name: Fastlane Build
+        uses: maierj/fastlane-action@v2.0.1
+        with:
+            lane: 'app_assemble'
+
