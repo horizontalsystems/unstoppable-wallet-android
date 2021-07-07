@@ -2,28 +2,37 @@ package io.horizontalsystems.bankwallet.entities.transactionrecords.evm
 
 import io.horizontalsystems.bankwallet.core.adapters.BaseEvmAdapter
 import io.horizontalsystems.bankwallet.core.adapters.EvmAdapter
+import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
+import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.core.toHexString
 import io.horizontalsystems.ethereumkit.models.FullTransaction
-import java.math.BigDecimal
 
-abstract class EvmTransactionRecord(fullTransaction: FullTransaction) : TransactionRecord(
+abstract class EvmTransactionRecord(fullTransaction: FullTransaction, baseCoin: Coin) :
+    TransactionRecord(
         uid = fullTransaction.transaction.hash.toHexString(),
         transactionHash = fullTransaction.transaction.hash.toHexString(),
         transactionIndex = fullTransaction.receiptWithLogs?.receipt?.transactionIndex ?: 0,
         blockHeight = fullTransaction.receiptWithLogs?.receipt?.blockNumber?.toInt(),
         confirmationsThreshold = BaseEvmAdapter.confirmationsThreshold,
-        fee = fullTransaction.receiptWithLogs?.receipt?.gasUsed
-                ?.toBigDecimal()
-                ?.multiply(fullTransaction.transaction.gasPrice.toBigDecimal())
-                ?.movePointLeft(EvmAdapter.decimal)
-                ?.stripTrailingZeros(),
         timestamp = fullTransaction.transaction.timestamp,
         failed = fullTransaction.isFailed()
-) {
+    ) {
 
-    var incomingInternalETHs = mutableListOf<Pair<String, BigDecimal>>()
-    var incomingEip20Events = mutableListOf<Pair<String, BigDecimal>>()
-    var outgoingEip20Events = mutableListOf<Pair<String, BigDecimal>>()
+    var incomingInternalETHs = mutableListOf<Pair<String, CoinValue>>()
+    var incomingEip20Events = mutableListOf<Pair<String, CoinValue>>()
+    var outgoingEip20Events = mutableListOf<Pair<String, CoinValue>>()
+    val fee: CoinValue
+
+    init {
+        val feeAmount: Long = fullTransaction.receiptWithLogs?.receipt?.gasUsed
+            ?: fullTransaction.transaction.gasLimit
+
+        val feeDecimal = feeAmount.toBigDecimal()
+            .multiply(fullTransaction.transaction.gasPrice.toBigDecimal())
+            .movePointLeft(EvmAdapter.decimal).stripTrailingZeros()
+
+        fee = CoinValue(baseCoin, feeDecimal)
+    }
 
 }

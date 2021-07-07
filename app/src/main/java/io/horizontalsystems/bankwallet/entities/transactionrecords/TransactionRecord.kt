@@ -1,26 +1,24 @@
 package io.horizontalsystems.bankwallet.entities.transactionrecords
 
+import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.LastBlockInfo
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionStatus
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionType
-import io.horizontalsystems.coinkit.models.Coin
-import java.math.BigDecimal
 
 abstract class TransactionRecord(
-        val uid: String,
-        val transactionHash: String,
-        val transactionIndex: Int,
-        val blockHeight: Int?,
-        val confirmationsThreshold: Int?,
-        val fee: BigDecimal? = null,
-        val timestamp: Long,
-        val failed: Boolean = false
+    val uid: String,
+    val transactionHash: String,
+    val transactionIndex: Int,
+    val blockHeight: Int?,
+    val confirmationsThreshold: Int?,
+    val timestamp: Long,
+    val failed: Boolean = false
 ) : Comparable<TransactionRecord> {
 
-    open val mainAmount: BigDecimal? = null
-    open val mainCoin: Coin? = null
+    open val mainValue: CoinValue? = null
 
-    open fun changedBy(oldBlockInfo: LastBlockInfo?, newBlockInfo: LastBlockInfo?): Boolean = status(oldBlockInfo?.height) != status(newBlockInfo?.height)
+    open fun changedBy(oldBlockInfo: LastBlockInfo?, newBlockInfo: LastBlockInfo?): Boolean =
+        status(oldBlockInfo?.height) != status(newBlockInfo?.height)
 
     abstract fun getType(lastBlockInfo: LastBlockInfo?): TransactionType
 

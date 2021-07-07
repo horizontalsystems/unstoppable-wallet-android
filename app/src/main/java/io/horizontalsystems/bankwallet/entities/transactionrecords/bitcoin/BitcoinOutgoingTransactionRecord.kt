@@ -9,42 +9,40 @@ import java.math.BigDecimal
 import java.util.*
 
 class BitcoinOutgoingTransactionRecord(
-        coin: Coin,
-        uid: String,
-        transactionHash: String,
-        transactionIndex: Int,
-        blockHeight: Int?,
-        confirmationsThreshold: Int?,
-        date: Date,
-        fee: BigDecimal?,
-        failed: Boolean,
-        lockInfo: TransactionLockInfo?,
-        conflictingHash: String?,
-        showRawTransaction: Boolean,
-        val amount: BigDecimal,
-        val to: String?,
-        val sentToSelf: Boolean
+    coin: Coin,
+    uid: String,
+    transactionHash: String,
+    transactionIndex: Int,
+    blockHeight: Int?,
+    confirmationsThreshold: Int?,
+    date: Date,
+    fee: BigDecimal?,
+    failed: Boolean,
+    lockInfo: TransactionLockInfo?,
+    conflictingHash: String?,
+    showRawTransaction: Boolean,
+    amount: BigDecimal,
+    val to: String?,
+    val sentToSelf: Boolean
 ) : BitcoinTransactionRecord(
-        coin = coin,
-        uid = uid,
-        transactionHash = transactionHash,
-        transactionIndex = transactionIndex,
-        blockHeight = blockHeight,
-        confirmationsThreshold = confirmationsThreshold,
-        date = date,
-        fee = fee,
-        failed = failed,
-        lockInfo = lockInfo,
-        conflictingHash = conflictingHash,
-        showRawTransaction = showRawTransaction
+    uid = uid,
+    transactionHash = transactionHash,
+    transactionIndex = transactionIndex,
+    blockHeight = blockHeight,
+    confirmationsThreshold = confirmationsThreshold,
+    date = date,
+    fee = fee?.let { CoinValue(coin, it) },
+    failed = failed,
+    lockInfo = lockInfo,
+    conflictingHash = conflictingHash,
+    showRawTransaction = showRawTransaction
 ) {
+    val value: CoinValue = CoinValue(coin, amount)
 
-    override val mainAmount: BigDecimal?
-        get() = amount
+    override val mainValue: CoinValue = value
 
     override fun getType(lastBlockInfo: LastBlockInfo?): TransactionType {
-        val coinValue = CoinValue(coin, amount)
         val lockState = lockState(lastBlockInfo?.timestamp)
-        return TransactionType.Outgoing(to, coinValue, lockState, conflictingHash, sentToSelf)
+        return TransactionType.Outgoing(to, value, lockState, conflictingHash, sentToSelf)
     }
 }

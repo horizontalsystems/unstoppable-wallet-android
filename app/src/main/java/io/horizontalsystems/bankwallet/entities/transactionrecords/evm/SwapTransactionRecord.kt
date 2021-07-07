@@ -8,18 +8,22 @@ import io.horizontalsystems.ethereumkit.models.FullTransaction
 import java.math.BigDecimal
 
 class SwapTransactionRecord(
-        fullTransaction: FullTransaction,
-        val exchangeAddress: String,
-        val tokenIn: Coin,
-        val tokenOut: Coin,
-        val amountIn: BigDecimal, // amountIn stores amountInMax in cases when exact amountIn amount is not known
-        val amountOut: BigDecimal, // amountOut stores amountOutMin in cases when exact amountOut amount is not known
-        val foreignRecipient: Boolean
-): EvmTransactionRecord(fullTransaction) {
-    
+    fullTransaction: FullTransaction,
+    baseCoin: Coin,
+    tokenIn: Coin,
+    tokenOut: Coin,
+    amountIn: BigDecimal,
+    amountOut: BigDecimal?,
+    val exchangeAddress: String
+) : EvmTransactionRecord(fullTransaction, baseCoin) {
+
+    // valueIn stores amountInMax in cases when exact valueIn amount is not known
+    val valueIn = CoinValue(tokenIn, amountIn)
+
+    // valueOut stores amountOutMin in cases when exact valueOut amount is not known
+    val valueOut: CoinValue? = amountOut?.let { CoinValue(tokenOut, it) }
+
     override fun getType(lastBlockInfo: LastBlockInfo?): TransactionType {
-        val inCoinValue = CoinValue(tokenIn, amountIn)
-        val outCoinValue = CoinValue(tokenOut, amountOut)
-        return TransactionType.Swap(exchangeAddress, inCoinValue, outCoinValue)
+        return TransactionType.Swap(exchangeAddress, valueIn, valueOut)
     }
 }

@@ -10,10 +10,10 @@ import io.horizontalsystems.core.entities.Currency
 import java.math.BigDecimal
 
 class TransactionsPresenter(
-        private val interactor: TransactionsModule.IInteractor,
-        private val router: TransactionsModule.IRouter,
-        private val dataSource: TransactionRecordDataSource)
-    : TransactionsModule.IViewDelegate, TransactionsModule.IInteractorDelegate {
+    private val interactor: TransactionsModule.IInteractor,
+    private val router: TransactionsModule.IRouter,
+    private val dataSource: TransactionRecordDataSource
+) : TransactionsModule.IViewDelegate, TransactionsModule.IInteractorDelegate {
 
     var view: TransactionsModule.IView? = null
     var itemDetails: TransactionViewItem? = null
@@ -37,7 +37,7 @@ class TransactionsPresenter(
     }
 
     override fun willShow(transactionViewItem: TransactionViewItem) {
-        val coin = transactionViewItem.record.mainCoin ?: return
+        val coin = transactionViewItem.record.mainValue?.coin ?: return
         val date = transactionViewItem.date ?: return
         if (transactionViewItem.mainAmountCurrencyValue == null) {
             interactor.fetchRate(coin, date.time / 1000)
@@ -70,9 +70,9 @@ class TransactionsPresenter(
     }
 
     override fun didFetchRecords(records: Map<Wallet, List<TransactionRecord>>, initial: Boolean) {
-        Log.e("TAG", "didFetchRecords: ${records.size}" )
+        Log.e("TAG", "didFetchRecords: ${records.size}")
         dataSource.handleNextRecords(records)
-        Log.e("TAG", "didFetchRecords dataSource.increasePage(): ${dataSource.increasePage()}" )
+        Log.e("TAG", "didFetchRecords dataSource.increasePage(): ${dataSource.increasePage()}")
         if (dataSource.increasePage()) {
             view?.showTransactions(dataSource.itemsCopy)
         } else if (initial) {
@@ -92,7 +92,12 @@ class TransactionsPresenter(
         view?.showTransactions(dataSource.itemsCopy)
     }
 
-    override fun didFetchRate(rateValue: BigDecimal, coin: Coin, currency: Currency, timestamp: Long) {
+    override fun didFetchRate(
+        rateValue: BigDecimal,
+        coin: Coin,
+        currency: Currency,
+        timestamp: Long
+    ) {
         if (dataSource.setRate(rateValue, coin, currency, timestamp)) {
             view?.showTransactions(dataSource.itemsCopy)
         }

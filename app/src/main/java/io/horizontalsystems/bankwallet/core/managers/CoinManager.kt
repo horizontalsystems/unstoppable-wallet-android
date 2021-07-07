@@ -10,8 +10,8 @@ import io.reactivex.Flowable
 import io.reactivex.subjects.PublishSubject
 
 class CoinManager(
-        private val coinKit: CoinKit,
-        private val appConfigProvider: IAppConfigProvider
+    private val coinKit: CoinKit,
+    private val appConfigProvider: IAppConfigProvider
 ) : ICoinManager {
 
     private val coinAddedSubject = PublishSubject.create<List<Coin>>()
@@ -38,8 +38,17 @@ class CoinManager(
             return Pair(featured, coins)
         }
 
-    override fun getCoin(coinType: CoinType): Coin?{
+    override fun getCoin(coinType: CoinType): Coin? {
         return coinKit.getCoin(coinType)
+    }
+
+    override fun getCoinOrStub(coinType: CoinType): Coin {
+        return coinKit.getCoin(coinType) ?: Coin(
+            title = "",
+            code = "",
+            decimal = 18,
+            type = coinType
+        )
     }
 
     override fun save(coins: List<Coin>) {

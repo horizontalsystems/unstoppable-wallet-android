@@ -55,7 +55,7 @@ class SwapPendingAllowanceService(
 
         adapter.pendingTransactions.forEach { transaction ->
             if (transaction is ApproveTransactionRecord) {
-                pendingAllowance = transaction.amount
+                pendingAllowance = transaction.value.value
             }
         }
 
