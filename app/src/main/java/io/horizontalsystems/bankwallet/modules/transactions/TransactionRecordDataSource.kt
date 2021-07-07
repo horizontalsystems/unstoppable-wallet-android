@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
 import io.horizontalsystems.bankwallet.core.factories.TransactionViewItemFactory
+import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.LastBlockInfo
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.entities.Wallet
@@ -87,10 +88,17 @@ class TransactionRecordDataSource(
         return true
     }
 
-    private fun transactionViewItem(wallet: Wallet, record: TransactionRecord): TransactionViewItem {
+    private fun transactionViewItem(
+        wallet: Wallet,
+        record: TransactionRecord
+    ): TransactionViewItem {
         val lastBlockInfo = metadataDataSource.getLastBlockInfo(wallet)
-        val rate = record.mainCoin?.let { metadataDataSource.getRate(it, record.timestamp) }
-        return viewItemFactory.item(wallet, record, lastBlockInfo, rate)
+        val mainAmountCurrencyValue = record.mainValue?.let { mainValue ->
+            metadataDataSource.getRate(mainValue.coin, record.timestamp)?.let {
+                CurrencyValue(it.currency, mainValue.value)
+            }
+        }
+        return viewItemFactory.item(wallet, record, lastBlockInfo, mainAmountCurrencyValue)
     }
 
     fun setWallets(wallets: List<Wallet>) {
@@ -112,7 +120,7 @@ class TransactionRecordDataSource(
 
         var hasUpdate = false
         itemsDataSource.items.forEachIndexed { index, item ->
-            if (item.record.mainCoin == coin && item.record.timestamp == timestamp) {
+            if (item.record.mainValue?.coin == coin && item.record.timestamp == timestamp) {
                 itemsDataSource.items[index] = transactionViewItem(item.wallet, item.record)
 
                 hasUpdate = true

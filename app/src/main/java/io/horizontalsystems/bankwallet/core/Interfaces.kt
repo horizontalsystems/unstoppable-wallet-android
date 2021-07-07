@@ -139,7 +139,12 @@ interface INetworkManager {
     fun getMarkdown(host: String, path: String): Single<String>
     fun getReleaseNotes(host: String, path: String): Single<JsonObject>
     fun getTransaction(host: String, path: String, isSafeCall: Boolean): Flowable<JsonObject>
-    fun getTransactionWithPost(host: String, path: String, body: Map<String, Any>): Flowable<JsonObject>
+    fun getTransactionWithPost(
+        host: String,
+        path: String,
+        body: Map<String, Any>
+    ): Flowable<JsonObject>
+
     fun ping(host: String, url: String, isSafeCall: Boolean): Flowable<Any>
     fun getEvmInfo(host: String, path: String): Single<JsonObject>
 
@@ -207,12 +212,30 @@ interface IReceiveAdapter {
 
 interface ISendBitcoinAdapter {
     val balanceData: BalanceData
-    fun availableBalance(feeRate: Long, address: String?, pluginData: Map<Byte, IPluginData>?): BigDecimal
+    fun availableBalance(
+        feeRate: Long,
+        address: String?,
+        pluginData: Map<Byte, IPluginData>?
+    ): BigDecimal
+
     fun minimumSendAmount(address: String?): BigDecimal
     fun maximumSendAmount(pluginData: Map<Byte, IPluginData>): BigDecimal?
-    fun fee(amount: BigDecimal, feeRate: Long, address: String?, pluginData: Map<Byte, IPluginData>?): BigDecimal
+    fun fee(
+        amount: BigDecimal,
+        feeRate: Long,
+        address: String?,
+        pluginData: Map<Byte, IPluginData>?
+    ): BigDecimal
+
     fun validate(address: String, pluginData: Map<Byte, IPluginData>?)
-    fun send(amount: BigDecimal, address: String, feeRate: Long, pluginData: Map<Byte, IPluginData>?, transactionSorting: TransactionDataSortingType?, logger: AppLogger): Single<Unit>
+    fun send(
+        amount: BigDecimal,
+        address: String,
+        feeRate: Long,
+        pluginData: Map<Byte, IPluginData>?,
+        transactionSorting: TransactionDataSortingType?,
+        logger: AppLogger
+    ): Single<Unit>
 }
 
 interface ISendDashAdapter {
@@ -234,7 +257,14 @@ interface ISendEthereumAdapter {
     fun availableBalance(gasPrice: Long, gasLimit: Long): BigDecimal
     fun fee(gasPrice: Long, gasLimit: Long): BigDecimal
     fun validate(address: String)
-    fun send(amount: BigDecimal, address: String, gasPrice: Long, gasLimit: Long, logger: AppLogger): Single<Unit>
+    fun send(
+        amount: BigDecimal,
+        address: String,
+        gasPrice: Long,
+        gasLimit: Long,
+        logger: AppLogger
+    ): Single<Unit>
+
     fun estimateGasLimit(toAddress: String?, value: BigDecimal, gasPrice: Long?): Single<Long>
     fun getTransactionData(amount: BigInteger, address: Address): TransactionData
 }
@@ -296,25 +326,74 @@ interface IRateManager {
     fun latestRate(coinTypes: List<CoinType>, currencyCode: String): Map<CoinType, LatestRate>
     fun getLatestRate(coinType: CoinType, currencyCode: String): BigDecimal?
     fun latestRateObservable(coinType: CoinType, currencyCode: String): Observable<LatestRate>
-    fun latestRateObservable(coinTypes: List<CoinType>, currencyCode: String): Observable<Map<CoinType, LatestRate>>
+    fun latestRateObservable(
+        coinTypes: List<CoinType>,
+        currencyCode: String
+    ): Observable<Map<CoinType, LatestRate>>
+
     fun historicalRateCached(coinType: CoinType, currencyCode: String, timestamp: Long): BigDecimal?
-    fun historicalRate(coinType: CoinType, currencyCode: String, timestamp: Long): Single<BigDecimal>
+    fun historicalRate(
+        coinType: CoinType,
+        currencyCode: String,
+        timestamp: Long
+    ): Single<BigDecimal>
+
     fun chartInfo(coinType: CoinType, currencyCode: String, chartType: ChartType): ChartInfo?
-    fun chartInfoObservable(coinType: CoinType, currencyCode: String, chartType: ChartType): Observable<ChartInfo>
-    fun coinMarketDetailsAsync(coinType: CoinType, currencyCode: String, rateDiffCoinCodes: List<String>, rateDiffPeriods: List<TimePeriod>): Single<CoinMarketDetails>
+    fun chartInfoObservable(
+        coinType: CoinType,
+        currencyCode: String,
+        chartType: ChartType
+    ): Observable<ChartInfo>
+
+    fun coinMarketDetailsAsync(
+        coinType: CoinType,
+        currencyCode: String,
+        rateDiffCoinCodes: List<String>,
+        rateDiffPeriods: List<TimePeriod>
+    ): Single<CoinMarketDetails>
+
     fun getTopTokenHoldersAsync(coinType: CoinType): Single<List<TokenHolder>>
-    fun getTopMarketList(currency: String, itemsCount: Int, diffPeriod: TimePeriod): Single<List<CoinMarket>>
-    fun getTopDefiTvlAsync(currencyCode: String, fetchDiffPeriod: TimePeriod = TimePeriod.HOUR_24, itemsCount: Int = 200): Single<List<DefiTvl>>
+    fun getTopMarketList(
+        currency: String,
+        itemsCount: Int,
+        diffPeriod: TimePeriod
+    ): Single<List<CoinMarket>>
+
+    fun getTopDefiTvlAsync(
+        currencyCode: String,
+        fetchDiffPeriod: TimePeriod = TimePeriod.HOUR_24,
+        itemsCount: Int = 200
+    ): Single<List<DefiTvl>>
+
     fun getCoinMarketList(coinTypes: List<CoinType>, currency: String): Single<List<CoinMarket>>
     fun getCoinMarketListByCategory(categoryId: String, currency: String): Single<List<CoinMarket>>
     fun getCoinRatingsAsync(): Single<Map<CoinType, String>>
     fun getGlobalMarketInfoAsync(currency: String): Single<GlobalCoinMarket>
-    fun getGlobalCoinMarketPointsAsync(currencyCode: String, timePeriod: TimePeriod): Single<List<GlobalCoinMarketPoint>>
+    fun getGlobalCoinMarketPointsAsync(
+        currencyCode: String,
+        timePeriod: TimePeriod
+    ): Single<List<GlobalCoinMarketPoint>>
+
     fun searchCoins(searchText: String): List<CoinData>
     fun getNotificationCoinCode(coinType: CoinType): String?
-    fun topDefiTvl(currencyCode: String, fetchDiffPeriod: TimePeriod, itemsCount: Int) : Single<List<DefiTvl>>
-    fun defiTvlPoints(coinType: CoinType, currencyCode: String, fetchDiffPeriod: TimePeriod) : Single<List<DefiTvlPoint>>
-    fun getCoinMarketVolumePointsAsync(coinType: CoinType, currencyCode: String, fetchDiffPeriod: TimePeriod = TimePeriod.HOUR_24): Single<List<CoinMarketPoint>>
+    fun topDefiTvl(
+        currencyCode: String,
+        fetchDiffPeriod: TimePeriod,
+        itemsCount: Int
+    ): Single<List<DefiTvl>>
+
+    fun defiTvlPoints(
+        coinType: CoinType,
+        currencyCode: String,
+        fetchDiffPeriod: TimePeriod
+    ): Single<List<DefiTvlPoint>>
+
+    fun getCoinMarketVolumePointsAsync(
+        coinType: CoinType,
+        currencyCode: String,
+        fetchDiffPeriod: TimePeriod = TimePeriod.HOUR_24
+    ): Single<List<CoinMarketPoint>>
+
     fun getCryptoNews(timestamp: Long? = null): Single<List<CryptoNews>>
     fun refresh(currencyCode: String)
 }
@@ -376,9 +455,28 @@ interface IWalletManager {
 }
 
 interface IAppNumberFormatter {
-    fun format(value: Number, minimumFractionDigits: Int, maximumFractionDigits: Int, prefix: String = "", suffix: String = ""): String
-    fun formatCoin(value: Number, code: String, minimumFractionDigits: Int, maximumFractionDigits: Int): String
-    fun formatFiat(value: Number, symbol: String, minimumFractionDigits: Int, maximumFractionDigits: Int): String
+    fun format(
+        value: Number,
+        minimumFractionDigits: Int,
+        maximumFractionDigits: Int,
+        prefix: String = "",
+        suffix: String = ""
+    ): String
+
+    fun formatCoin(
+        value: Number,
+        code: String,
+        minimumFractionDigits: Int,
+        maximumFractionDigits: Int
+    ): String
+
+    fun formatFiat(
+        value: Number,
+        symbol: String,
+        minimumFractionDigits: Int,
+        maximumFractionDigits: Int
+    ): String
+
     fun getSignificantDecimalFiat(value: BigDecimal): Int
     fun getSignificantDecimalCoin(value: BigDecimal): Int
     fun shortenValue(number: Number): Pair<BigDecimal, String>
@@ -452,6 +550,7 @@ interface ICoinManager {
     val coins: List<Coin>
     val groupedCoins: Pair<List<Coin>, List<Coin>>
     fun getCoin(coinType: CoinType): Coin?
+    fun getCoinOrStub(coinType: CoinType): Coin
     fun save(coins: List<Coin>)
 }
 
@@ -464,7 +563,13 @@ interface IAddTokenBlockchainService {
 interface IPriceAlertManager {
     val notificationChangedFlowable: Flowable<Unit>
     fun getPriceAlerts(): List<PriceAlert>
-    fun savePriceAlert(coinType: CoinType, coinName: String, changeState: PriceAlert.ChangeState, trendState: PriceAlert.TrendState)
+    fun savePriceAlert(
+        coinType: CoinType,
+        coinName: String,
+        changeState: PriceAlert.ChangeState,
+        trendState: PriceAlert.TrendState
+    )
+
     fun getAlertStates(coinType: CoinType): Pair<PriceAlert.ChangeState, PriceAlert.TrendState>
     fun hasPriceAlert(coinType: CoinType): Boolean
     fun deactivateAllNotifications()

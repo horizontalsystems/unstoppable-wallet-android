@@ -9,41 +9,40 @@ import java.math.BigDecimal
 import java.util.*
 
 class BitcoinIncomingTransactionRecord(
-        coin: Coin,
-        uid: String,
-        transactionHash: String,
-        transactionIndex: Int,
-        blockHeight: Int?,
-        confirmationsThreshold: Int?,
-        date: Date,
-        fee: BigDecimal?,
-        failed: Boolean,
-        lockInfo: TransactionLockInfo?,
-        conflictingHash: String?,
-        showRawTransaction: Boolean,
-        val amount: BigDecimal,
-        val from: String?
+    coin: Coin,
+    uid: String,
+    transactionHash: String,
+    transactionIndex: Int,
+    blockHeight: Int?,
+    confirmationsThreshold: Int?,
+    date: Date,
+    fee: BigDecimal?,
+    failed: Boolean,
+    lockInfo: TransactionLockInfo?,
+    conflictingHash: String?,
+    showRawTransaction: Boolean,
+    amount: BigDecimal,
+    val from: String?
 ) : BitcoinTransactionRecord(
-        coin = coin,
-        uid = uid,
-        transactionHash = transactionHash,
-        transactionIndex = transactionIndex,
-        blockHeight = blockHeight,
-        confirmationsThreshold = confirmationsThreshold,
-        date = date,
-        fee = fee,
-        failed = failed,
-        lockInfo = lockInfo,
-        conflictingHash = conflictingHash,
-        showRawTransaction = showRawTransaction
+    uid = uid,
+    transactionHash = transactionHash,
+    transactionIndex = transactionIndex,
+    blockHeight = blockHeight,
+    confirmationsThreshold = confirmationsThreshold,
+    date = date,
+    fee = fee?.let { CoinValue(coin, it) },
+    failed = failed,
+    lockInfo = lockInfo,
+    conflictingHash = conflictingHash,
+    showRawTransaction = showRawTransaction
 ) {
 
-    override val mainAmount: BigDecimal?
-        get() = amount
+    val value: CoinValue = CoinValue(coin, amount)
+
+    override val mainValue: CoinValue = value
 
     override fun getType(lastBlockInfo: LastBlockInfo?): TransactionType {
-        val coinValue = CoinValue(coin, amount)
         val lockState = lockState(lastBlockInfo?.timestamp)
-        return TransactionType.Incoming(from, coinValue, lockState, conflictingHash)
+        return TransactionType.Incoming(from, value, lockState, conflictingHash)
     }
 }

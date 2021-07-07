@@ -7,22 +7,20 @@ import java.util.*
 
 class TransactionViewItemFactory {
 
-    fun item(wallet: Wallet, record: TransactionRecord, lastBlockInfo: LastBlockInfo?, rate: CurrencyValue?): TransactionViewItem {
-        val currencyValue = getCurrencyValue(record, rate)
-
+    fun item(
+        wallet: Wallet,
+        record: TransactionRecord,
+        lastBlockInfo: LastBlockInfo?,
+        mainAmountCurrencyValue: CurrencyValue? = null
+    ): TransactionViewItem {
         return TransactionViewItem(
-                wallet,
-                record,
-                record.getType(lastBlockInfo),
-                Date(record.timestamp),
-                record.status(lastBlockInfo?.height),
-                currencyValue
+            wallet,
+            record,
+            record.getType(lastBlockInfo),
+            Date(record.timestamp),
+            record.status(lastBlockInfo?.height),
+            mainAmountCurrencyValue
         )
     }
 
-    private fun getCurrencyValue(record: TransactionRecord, rate: CurrencyValue?): CurrencyValue? {
-        rate ?: return null
-        val amount = record.mainAmount ?: return null
-        return CurrencyValue(rate.currency, amount * rate.value)
-    }
 }

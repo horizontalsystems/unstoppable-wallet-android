@@ -36,7 +36,11 @@ class TransactionsFragment : Fragment(), TransactionsAdapter.Listener, FilterAda
     private val transactionsAdapter = TransactionsAdapter(this)
     private val filterAdapter = FilterAdapter(this)
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.fragment_transactions, container, false)
     }
 
@@ -45,7 +49,8 @@ class TransactionsFragment : Fragment(), TransactionsAdapter.Listener, FilterAda
 
         val layoutManager = NpaLinearLayoutManager(context)
         transactionsAdapter.viewModel = viewModel
-        transactionsAdapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
+        transactionsAdapter.registerAdapterDataObserver(object :
+            RecyclerView.AdapterDataObserver() {
             override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
                 if (positionStart == 0) {
                     layoutManager.scrollToPosition(0)
@@ -103,17 +108,26 @@ class TransactionsFragment : Fragment(), TransactionsAdapter.Listener, FilterAda
         findNavController().navigate(R.id.mainFragment_to_transactionInfoDialog)
     }
 
-    override fun onFilterItemClick(item: FilterAdapter.FilterItem?, itemPosition: Int, itemWidth: Int) {
+    override fun onFilterItemClick(
+        item: FilterAdapter.FilterItem?,
+        itemPosition: Int,
+        itemWidth: Int
+    ) {
         recyclerTransactions.layoutManager?.scrollToPosition(0)
         viewModel.delegate.onFilterSelect(item as? Wallet)
 
         val leftOffset = recyclerTags.width / 2 - itemWidth / 2
-        (recyclerTags.layoutManager as? LinearLayoutManager)?.scrollToPositionWithOffset(itemPosition, leftOffset)
+        (recyclerTags.layoutManager as? LinearLayoutManager)?.scrollToPositionWithOffset(
+            itemPosition,
+            leftOffset
+        )
     }
 
 }
 
-class TransactionsAdapter(private var listener: Listener) : ListAdapter<TransactionViewItem, ViewHolder>(TransactionViewItemDiff()), ViewHolderTransaction.ClickListener {
+class TransactionsAdapter(private var listener: Listener) :
+    ListAdapter<TransactionViewItem, ViewHolder>(TransactionViewItemDiff()),
+    ViewHolderTransaction.ClickListener {
 
     private val noTransactionsView = 0
     private val transactionView = 1
@@ -134,8 +148,14 @@ class TransactionsAdapter(private var listener: Listener) : ListAdapter<Transact
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return when (viewType) {
-            noTransactionsView -> ViewHolderEmptyScreen(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_empty_screen, parent, false))
-            else -> ViewHolderTransaction(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_transaction, parent, false), this)
+            noTransactionsView -> ViewHolderEmptyScreen(
+                LayoutInflater.from(parent.context)
+                    .inflate(R.layout.view_holder_empty_screen, parent, false)
+            )
+            else -> ViewHolderTransaction(
+                LayoutInflater.from(parent.context)
+                    .inflate(R.layout.view_holder_transaction, parent, false), this
+            )
         }
     }
 
@@ -163,7 +183,8 @@ class TransactionsAdapter(private var listener: Listener) : ListAdapter<Transact
     }
 }
 
-class ViewHolderTransaction(override val containerView: View, private val l: ClickListener) : ViewHolder(containerView), LayoutContainer {
+class ViewHolderTransaction(override val containerView: View, private val l: ClickListener) :
+    ViewHolder(containerView), LayoutContainer {
 
     interface ClickListener {
         fun onClick(position: Int)
@@ -189,10 +210,16 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
         when (transactionRecord.type) {
             is TransactionType.Incoming -> {
                 image = R.drawable.ic_incoming_20
-                val text = if (transactionRecord.status == TransactionStatus.Completed) R.string.Transactions_Received else R.string.Transactions_Receiving
+                val text =
+                    if (transactionRecord.status == TransactionStatus.Completed) R.string.Transactions_Received else R.string.Transactions_Receiving
                 topText = getString(text)
-                bottomText = transactionRecord.type.from?.let { getString(R.string.Transactions_From, truncated(it)) }
-                        ?: "---"
+                bottomText = transactionRecord.type.from?.let {
+                    getString(
+                        R.string.Transactions_From,
+                        truncated(it)
+                    )
+                }
+                    ?: "---"
                 lockState = transactionRecord.type.lockState
                 showDoubleSpend = transactionRecord.type.conflictingTxHash != null
 
@@ -208,10 +235,16 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
             }
             is TransactionType.Outgoing -> {
                 image = R.drawable.ic_outgoing_20
-                val text = if (transactionRecord.status == TransactionStatus.Completed) R.string.Transactions_Sent else R.string.Transactions_Sending
+                val text =
+                    if (transactionRecord.status == TransactionStatus.Completed) R.string.Transactions_Sent else R.string.Transactions_Sending
                 topText = getString(text)
-                bottomText = transactionRecord.type.to?.let { getString(R.string.Transactions_To, truncated(it)) }
-                        ?: "---"
+                bottomText = transactionRecord.type.to?.let {
+                    getString(
+                        R.string.Transactions_To,
+                        truncated(it)
+                    )
+                }
+                    ?: "---"
                 showSentToSelf = transactionRecord.type.sentToSelf
                 lockState = transactionRecord.type.lockState
                 showDoubleSpend = transactionRecord.type.conflictingTxHash != null
@@ -228,9 +261,11 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
             }
             is TransactionType.Approve -> {
                 image = R.drawable.ic_tx_checkmark_20
-                val text = if (transactionRecord.status == TransactionStatus.Completed) R.string.Transactions_Approved else R.string.Transactions_Approving
+                val text =
+                    if (transactionRecord.status == TransactionStatus.Completed) R.string.Transactions_Approved else R.string.Transactions_Approving
                 topText = getString(text)
-                bottomText = getString(R.string.Transactions_From, truncated(transactionRecord.type.spender))
+                bottomText =
+                    getString(R.string.Transactions_From, truncated(transactionRecord.type.spender))
 
                 formatCurrency(transactionRecord.mainAmountCurrencyValue)?.let {
                     primaryValueText = it
@@ -244,16 +279,20 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
             }
             is TransactionType.Swap -> {
                 image = R.drawable.ic_tx_swap_20
-                val text = if (transactionRecord.status == TransactionStatus.Completed) R.string.Transactions_Swapped else R.string.Transactions_Swapping
+                val text =
+                    if (transactionRecord.status == TransactionStatus.Completed) R.string.Transactions_Swapped else R.string.Transactions_Swapping
                 topText = getString(text)
-                bottomText = getString(R.string.Transactions_From, truncated(transactionRecord.type.exchangeAddress))
+                bottomText = getString(
+                    R.string.Transactions_From,
+                    truncated(transactionRecord.type.exchangeAddress)
+                )
 
-                formatCoin(transactionRecord.type.inCoinValue)?.let {
+                formatCoin(transactionRecord.type.valueIn)?.let {
                     primaryValueText = it
                     primaryValueTextColor = R.color.jacob
                 }
 
-                formatCoin(transactionRecord.type.outCoinValue)?.let {
+                formatCoin(transactionRecord.type.valueOut)?.let {
                     secondaryValueText = it
                     secondaryValueTextColor = R.color.remus
                 }
@@ -261,8 +300,11 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
             is TransactionType.ContractCall -> {
                 image = R.drawable.ic_tx_unordered
                 topText = transactionRecord.type.method?.toUpperCase(Locale.US)
-                        ?: getString(R.string.Transactions_ContractCall)
-                bottomText = getString(R.string.Transactions_From, truncated(transactionRecord.type.contractAddress))
+                    ?: getString(R.string.Transactions_ContractCall)
+                bottomText = getString(
+                    R.string.Transactions_From,
+                    truncated(transactionRecord.type.contractAddress)
+                )
             }
             is TransactionType.ContractCreation -> {
                 image = R.drawable.ic_tx_unordered
@@ -271,7 +313,7 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
             }
         }
 
-        if (transactionRecord.status == TransactionStatus.Failed){
+        if (transactionRecord.status == TransactionStatus.Failed) {
             image = R.drawable.ic_attention_red_20
         }
 
@@ -295,7 +337,7 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
     }
 
     private fun setProgress(status: TransactionStatus) {
-        when(status){
+        when (status) {
             TransactionStatus.Pending -> {
                 iconProgress.isVisible = true
                 iconProgress.setProgressColored(15, getColor(R.color.grey_50), true)
@@ -313,9 +355,11 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
         return TransactionViewHelper.truncated(string, 75f)
     }
 
-    private fun getString(@StringRes id: Int, vararg params: Any) = containerView.context.getString(id, *params)
+    private fun getString(@StringRes id: Int, vararg params: Any) =
+        containerView.context.getString(id, *params)
 
-    private fun getColor(primaryValueTextColor: Int) = containerView.context.getColor(primaryValueTextColor)
+    private fun getColor(primaryValueTextColor: Int) =
+        containerView.context.getColor(primaryValueTextColor)
 
     fun bindUpdate(current: TransactionViewItem, prev: TransactionViewItem) {
 //        if (current.currencyValue != prev.currencyValue) {
@@ -367,9 +411,11 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
 
 }
 
-class ViewHolderEmptyScreen(override val containerView: View) : ViewHolder(containerView), LayoutContainer
+class ViewHolderEmptyScreen(override val containerView: View) : ViewHolder(containerView),
+    LayoutContainer
 
-class FilterAdapter(private var listener: Listener) : Adapter<ViewHolder>(), ViewHolderFilter.ClickListener {
+class FilterAdapter(private var listener: Listener) : Adapter<ViewHolder>(),
+    ViewHolderFilter.ClickListener {
 
     interface Listener {
         fun onFilterItemClick(item: FilterItem?, itemPosition: Int, itemWidth: Int)
@@ -400,7 +446,10 @@ class FilterAdapter(private var listener: Listener) : Adapter<ViewHolder>(), Vie
     override fun getItemCount() = filters.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
-            ViewHolderFilter(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_filter, parent, false), this)
+        ViewHolderFilter(
+            LayoutInflater.from(parent.context).inflate(R.layout.view_holder_filter, parent, false),
+            this
+        )
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         when (holder) {
@@ -419,7 +468,8 @@ class FilterAdapter(private var listener: Listener) : Adapter<ViewHolder>(), Vie
     }
 }
 
-class ViewHolderFilter(override val containerView: View, private val l: ClickListener) : ViewHolder(containerView), LayoutContainer {
+class ViewHolderFilter(override val containerView: View, private val l: ClickListener) :
+    ViewHolder(containerView), LayoutContainer {
 
     interface ClickListener {
         fun onClickItem(position: Int, width: Int)
@@ -427,8 +477,13 @@ class ViewHolderFilter(override val containerView: View, private val l: ClickLis
 
     fun bind(filterId: String?, active: Boolean) {
         buttonFilter.text = filterId
-                ?: containerView.context.getString(R.string.Transactions_FilterAll)
+            ?: containerView.context.getString(R.string.Transactions_FilterAll)
         buttonFilter.isActivated = active
-        buttonFilter.setOnClickListener { l.onClickItem(bindingAdapterPosition, containerView.width) }
+        buttonFilter.setOnClickListener {
+            l.onClickItem(
+                bindingAdapterPosition,
+                containerView.width
+            )
+        }
     }
 }

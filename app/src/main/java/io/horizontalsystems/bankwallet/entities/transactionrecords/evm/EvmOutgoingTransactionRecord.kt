@@ -8,18 +8,19 @@ import io.horizontalsystems.ethereumkit.models.FullTransaction
 import java.math.BigDecimal
 
 class EvmOutgoingTransactionRecord(
-        fullTransaction: FullTransaction,
-        val amount: BigDecimal,
-        val to: String,
-        val token: Coin,
-        val sentToSelf: Boolean
-): EvmTransactionRecord(fullTransaction) {
+    fullTransaction: FullTransaction,
+    baseCoin: Coin,
+    amount: BigDecimal,
+    val to: String,
+    val token: Coin,
+    val sentToSelf: Boolean
+) : EvmTransactionRecord(fullTransaction, baseCoin) {
 
-    override val mainCoin: Coin = token
-    override val mainAmount: BigDecimal = amount
+    val value: CoinValue = CoinValue(token, amount)
+
+    override val mainValue: CoinValue = value
 
     override fun getType(lastBlockInfo: LastBlockInfo?): TransactionType {
-        val coinValue = CoinValue(token, amount)
-        return TransactionType.Outgoing(to, coinValue, null, null, sentToSelf)
+        return TransactionType.Outgoing(to, value, null, null, sentToSelf)
     }
 }

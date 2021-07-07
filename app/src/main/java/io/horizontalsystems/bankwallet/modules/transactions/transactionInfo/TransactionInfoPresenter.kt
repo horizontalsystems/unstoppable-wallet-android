@@ -12,15 +12,16 @@ import java.math.BigDecimal
 import java.util.*
 
 class TransactionInfoPresenter(
-        private val interactor: TransactionInfoModule.Interactor,
-        private val router: TransactionInfoModule.Router,
-        private val transaction: TransactionRecord,
-        private val wallet: Wallet,
-        private val transactionInfoAddressMapper: TransactionInfoAddressMapper
+    private val interactor: TransactionInfoModule.Interactor,
+    private val router: TransactionInfoModule.Router,
+    private val transaction: TransactionRecord,
+    private val wallet: Wallet,
+    private val transactionInfoAddressMapper: TransactionInfoAddressMapper
 ) : TransactionInfoModule.ViewDelegate, TransactionInfoModule.InteractorDelegate {
 
     var view: TransactionInfoModule.View? = null
-    private var explorerData: TransactionInfoModule.ExplorerData = getExplorerData(transaction.transactionHash, interactor.testMode, wallet.coin.type)
+    private var explorerData: TransactionInfoModule.ExplorerData =
+        getExplorerData(transaction.transactionHash, interactor.testMode, wallet.coin.type)
 
     // IViewDelegate methods
 
@@ -37,10 +38,15 @@ class TransactionInfoPresenter(
         val primaryAmountInfo: SendModule.AmountInfo
         val secondaryAmountInfo: SendModule.AmountInfo?
 
-        val amount = transaction.mainAmount ?: BigDecimal.ZERO
-        val coinValue = CoinValue(coin, transaction.mainAmount ?: BigDecimal.ZERO)
+        val amount = transaction.mainValue?.value ?: BigDecimal.ZERO
+        val coinValue = CoinValue(coin, transaction.mainValue?.value ?: BigDecimal.ZERO)
         if (rate != null) {
-            primaryAmountInfo = SendModule.AmountInfo.CurrencyValueInfo(CurrencyValue(rate.currency, rate.value * amount))
+            primaryAmountInfo = SendModule.AmountInfo.CurrencyValueInfo(
+                CurrencyValue(
+                    rate.currency,
+                    rate.value * amount
+                )
+            )
             secondaryAmountInfo = SendModule.AmountInfo.CoinValueInfo(coinValue)
         } else {
             primaryAmountInfo = SendModule.AmountInfo.CoinValueInfo(coinValue)
@@ -49,20 +55,33 @@ class TransactionInfoPresenter(
 
         val date = if (transaction.timestamp == 0L) null else Date(transaction.timestamp * 1000)
 
-        view?.showTitle(TitleViewItem(date, primaryAmountInfo, secondaryAmountInfo, transactionType, lockState))
+        view?.showTitle(
+            TitleViewItem(
+                date,
+                primaryAmountInfo,
+                secondaryAmountInfo,
+                transactionType,
+                lockState
+            )
+        )
 
         val viewItems = mutableListOf<TransactionDetailViewItem>()
 
-        viewItems.add(TransactionDetailViewItem.Status(status, transactionType is TransactionType.Incoming))
+        viewItems.add(
+            TransactionDetailViewItem.Status(
+                status,
+                transactionType is TransactionType.Incoming
+            )
+        )
 
         rate?.let {
             viewItems.add(TransactionDetailViewItem.Rate(rate, wallet.coin.code))
         }
 
-        transaction.fee?.let { fee ->
-            val feeCoin = interactor.feeCoin(coin) ?: coin
-            viewItems.add(TransactionDetailViewItem.Fee(CoinValue(feeCoin, fee), rate?.let { CurrencyValue(it.currency, it.value * fee) }))
-        }
+//        transaction.fee?.let { fee ->
+//            val feeCoin = interactor.feeCoin(coin) ?: coin
+//            viewItems.add(TransactionDetailViewItem.Fee(CoinValue(feeCoin, fee), rate?.let { CurrencyValue(it.currency, it.value * fee) }))
+//        }
 
 //        transaction.from?.let { from ->
 //            if (showFromAddress(wallet.coin.type)) {
@@ -87,7 +106,7 @@ class TransactionInfoPresenter(
 //        if (transaction.showRawTransaction) {
 //            viewItems.add(TransactionDetailViewItem.RawTransaction())
 //        } else {
-            viewItems.add(TransactionDetailViewItem.Id(transaction.transactionHash))
+        viewItems.add(TransactionDetailViewItem.Id(transaction.transactionHash))
 //        }
 //
 //        if (transaction.conflictingTxHash != null) {
@@ -164,12 +183,28 @@ class TransactionInfoPresenter(
         }
     }
 
-    private fun getExplorerData(hash: String, testMode: Boolean, coinType: CoinType): TransactionInfoModule.ExplorerData {
+    private fun getExplorerData(
+        hash: String,
+        testMode: Boolean,
+        coinType: CoinType
+    ): TransactionInfoModule.ExplorerData {
         return when (coinType) {
-            is CoinType.Bitcoin -> TransactionInfoModule.ExplorerData("blockchair.com", if (testMode) null else "https://blockchair.com/bitcoin/transaction/$hash")
-            is CoinType.BitcoinCash -> TransactionInfoModule.ExplorerData("btc.com", if (testMode) null else "https://bch.btc.com/$hash")
-            is CoinType.Litecoin -> TransactionInfoModule.ExplorerData("blockchair.com", if (testMode) null else "https://blockchair.com/litecoin/transaction/$hash")
-            is CoinType.Dash -> TransactionInfoModule.ExplorerData("dash.org", if (testMode) null else "https://insight.dash.org/insight/tx/$hash")
+            is CoinType.Bitcoin -> TransactionInfoModule.ExplorerData(
+                "blockchair.com",
+                if (testMode) null else "https://blockchair.com/bitcoin/transaction/$hash"
+            )
+            is CoinType.BitcoinCash -> TransactionInfoModule.ExplorerData(
+                "btc.com",
+                if (testMode) null else "https://bch.btc.com/$hash"
+            )
+            is CoinType.Litecoin -> TransactionInfoModule.ExplorerData(
+                "blockchair.com",
+                if (testMode) null else "https://blockchair.com/litecoin/transaction/$hash"
+            )
+            is CoinType.Dash -> TransactionInfoModule.ExplorerData(
+                "dash.org",
+                if (testMode) null else "https://insight.dash.org/insight/tx/$hash"
+            )
             is CoinType.Ethereum,
             is CoinType.Erc20 -> {
                 val domain = when (interactor.ethereumNetworkType(wallet.account)) {
@@ -182,11 +217,20 @@ class TransactionInfoPresenter(
                 }
                 TransactionInfoModule.ExplorerData("etherscan.io", "https://$domain/tx/$hash")
             }
-            is CoinType.Bep2 -> TransactionInfoModule.ExplorerData("binance.org", if (testMode) "https://testnet-explorer.binance.org/tx/$hash" else "https://explorer.binance.org/tx/$hash")
+            is CoinType.Bep2 -> TransactionInfoModule.ExplorerData(
+                "binance.org",
+                if (testMode) "https://testnet-explorer.binance.org/tx/$hash" else "https://explorer.binance.org/tx/$hash"
+            )
             is CoinType.BinanceSmartChain,
-            is CoinType.Bep20 -> TransactionInfoModule.ExplorerData("bscscan.com", "https://bscscan.com/tx/$hash")
-            is CoinType.Zcash -> TransactionInfoModule.ExplorerData("blockchair.com", if (testMode) null else "https://blockchair.com/zcash/transaction/$hash")
-            is CoinType.Unsupported ->  throw IllegalArgumentException()
+            is CoinType.Bep20 -> TransactionInfoModule.ExplorerData(
+                "bscscan.com",
+                "https://bscscan.com/tx/$hash"
+            )
+            is CoinType.Zcash -> TransactionInfoModule.ExplorerData(
+                "blockchair.com",
+                if (testMode) null else "https://blockchair.com/zcash/transaction/$hash"
+            )
+            is CoinType.Unsupported -> throw IllegalArgumentException()
         }
     }
 
