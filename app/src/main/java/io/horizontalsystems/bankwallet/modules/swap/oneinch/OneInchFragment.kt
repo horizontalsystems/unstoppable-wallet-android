@@ -56,6 +56,18 @@ class OneInchFragment : SwapBaseFragment() {
         return inflater.inflate(R.layout.fragment_1inch, container, false)
     }
 
+    override fun onStart() {
+        super.onStart()
+
+        oneInchViewModel.onStart()
+    }
+
+    override fun onStop() {
+        super.onStop()
+
+        oneInchViewModel.onStop()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 

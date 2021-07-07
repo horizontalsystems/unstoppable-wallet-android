@@ -17,8 +17,8 @@ import java.util.*
 
 
 class OneInchTradeService(
-        evmKit: EthereumKit,
-        private val oneInchKitHelper: OneInchKitHelper
+    private val evmKit: EthereumKit,
+    private val oneInchKitHelper: OneInchKitHelper
 ) : SwapMainModule.ISwapTradeService {
 
     private var quoteDisposable: Disposable? = null
@@ -32,14 +32,6 @@ class OneInchTradeService(
     private val amountToSubject = PublishSubject.create<Optional<BigDecimal>>()
     private val stateSubject = PublishSubject.create<State>()
     //endregion
-
-    init {
-        lastBlockDisposable = evmKit.lastBlockHeightFlowable
-                .subscribeOn(Schedulers.io())
-                .subscribe {
-                    syncQuote()
-                }
-    }
 
     //region outputs
     override var coinFrom: Coin? = null
@@ -172,10 +164,30 @@ class OneInchTradeService(
         syncQuote()
     }
 
+    fun start() {
+        lastBlockDisposable = evmKit.lastBlockHeightFlowable
+            .subscribeOn(Schedulers.io())
+            .subscribe {
+                syncQuote()
+            }
+    }
+
+    fun stop() {
+        clearDisposables()
+    }
+
     fun onCleared() {
-        lastBlockDisposable?.dispose()
+        clearDisposables()
     }
     //endregion
+
+    private fun clearDisposables() {
+        lastBlockDisposable?.dispose()
+        lastBlockDisposable = null
+
+        quoteDisposable?.dispose()
+        quoteDisposable = null
+    }
 
     private fun syncQuote() {
         quoteDisposable?.dispose()
@@ -193,19 +205,28 @@ class OneInchTradeService(
         state = State.Loading
 
         quoteDisposable = oneInchKitHelper.getQuoteAsync(coinFrom, coinTo, amountFrom)
-                .subscribeIO({ quote ->
-                    handle(quote, coinFrom, coinTo, amountFrom)
-                }, { error ->
-                    state = State.NotReady(listOf(error))
-                })
+            .subscribeIO({ quote ->
+                handle(quote, coinFrom, coinTo, amountFrom)
+            }, { error ->
+                state = State.NotReady(listOf(error))
+            })
     }
 
     private fun handle(quote: Quote, coinFrom: Coin, coinTo: Coin, amountFrom: BigDecimal) {
-        val amountToBigDecimal = quote.toTokenAmount.abs().toBigDecimal().movePointLeft(quote.toToken.decimals).stripTrailingZeros()
+        val amountToBigDecimal =
+            quote.toTokenAmount.abs().toBigDecimal().movePointLeft(quote.toToken.decimals)
+                .stripTrailingZeros()
 
         amountTo = amountToBigDecimal
 
-        val parameters = OneInchSwapParameters(coinFrom, coinTo, amountFrom, amountToBigDecimal, swapSettings.slippage, swapSettings.recipient)
+        val parameters = OneInchSwapParameters(
+            coinFrom,
+            coinTo,
+            amountFrom,
+            amountToBigDecimal,
+            swapSettings.slippage,
+            swapSettings.recipient
+        )
 
         state = State.Ready(parameters)
     }

@@ -113,6 +113,16 @@ class UniswapService(
                 .let { disposables.add(it) }
     }
 
+    override fun start() {
+        allowanceService.start()
+        tradeService.start()
+    }
+
+    override fun stop() {
+        allowanceService.stop()
+        tradeService.stop()
+    }
+
     fun onCleared() {
         disposables.clear()
         tradeService.onCleared()

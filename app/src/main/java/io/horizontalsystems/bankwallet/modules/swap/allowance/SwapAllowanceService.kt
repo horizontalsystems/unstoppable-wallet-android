@@ -21,7 +21,7 @@ import java.util.*
 class SwapAllowanceService(
         private val spenderAddress: Address,
         private val adapterManager: IAdapterManager,
-        ethereumKit: EthereumKit
+        private val ethereumKit: EthereumKit
 ) {
 
     private var coin: Coin? = null
@@ -39,15 +39,6 @@ class SwapAllowanceService(
     private val disposables = CompositeDisposable()
     private var allowanceDisposable: Disposable? = null
 
-    init {
-        ethereumKit.lastBlockHeightFlowable
-                .subscribeOn(Schedulers.io())
-                .subscribe {
-                    sync()
-                }
-                .let { disposables.add(it) }
-    }
-
     fun set(coin: Coin?) {
         this.coin = coin
         sync()
@@ -62,6 +53,22 @@ class SwapAllowanceService(
             }
         }
 
+    }
+
+    fun start() {
+        ethereumKit.lastBlockHeightFlowable
+            .subscribeOn(Schedulers.io())
+            .subscribe {
+                sync()
+            }
+            .let { disposables.add(it) }
+    }
+
+    fun stop() {
+        disposables.clear()
+
+        allowanceDisposable?.dispose()
+        allowanceDisposable = null
     }
 
     fun onCleared() {

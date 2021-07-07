@@ -163,6 +163,9 @@ object SwapMainModule {
 
         val errors: List<Throwable>
         val errorsObservable: Observable<List<Throwable>>
+
+        fun start()
+        fun stop()
     }
 
     sealed class SwapError : Throwable() {
