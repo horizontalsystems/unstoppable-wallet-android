@@ -14,7 +14,7 @@ import io.horizontalsystems.core.IBuildConfigProvider
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 
-class TransactionInfoInteractor(
+class TransactionInfoService(
     private var clipboardManager: IClipboardManager,
     private val adapter: ITransactionsAdapter,
     private val xRateManager: IRateManager,
@@ -22,15 +22,14 @@ class TransactionInfoInteractor(
     private val feeCoinProvider: FeeCoinProvider,
     buildConfigProvider: IBuildConfigProvider,
     private val accountSettingManager: AccountSettingManager
-) : TransactionInfoModule.Interactor {
-    var delegate: TransactionInfoModule.InteractorDelegate? = null
+) {
 
-    override val lastBlockInfo: LastBlockInfo?
+    val lastBlockInfo: LastBlockInfo?
         get() = adapter.lastBlockInfo
 
-    override val testMode = buildConfigProvider.testMode
+    val testMode = buildConfigProvider.testMode
 
-    override fun getRate(coinType: CoinType, timestamp: Long): CurrencyValue? {
+    fun getRate(coinType: CoinType, timestamp: Long): CurrencyValue? {
         val baseCurrency = currencyManager.baseCurrency
 
         return xRateManager.historicalRateCached(coinType, baseCurrency.code, timestamp)?.let {
@@ -38,23 +37,20 @@ class TransactionInfoInteractor(
         }
     }
 
-    override fun copyToClipboard(value: String) {
+    fun copyToClipboard(value: String) {
         clipboardManager.copyText(value)
     }
 
-    override fun feeCoin(coin: Coin): Coin? {
+    fun feeCoin(coin: Coin): Coin? {
         return feeCoinProvider.feeCoinData(coin)?.first
     }
 
-    override fun getRaw(transactionHash: String): String? {
+    fun getRaw(transactionHash: String): String? {
         return adapter.getRawTransaction(transactionHash)
     }
 
-    override fun ethereumNetworkType(account: Account): EthereumKit.NetworkType {
+    fun ethereumNetworkType(account: Account): EthereumKit.NetworkType {
         return accountSettingManager.ethereumNetwork(account).networkType
     }
 
-    override fun binanceSmartChainNetworkType(account: Account): EthereumKit.NetworkType {
-        return accountSettingManager.binanceSmartChainNetwork(account).networkType
-    }
 }
