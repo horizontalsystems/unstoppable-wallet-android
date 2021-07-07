@@ -42,7 +42,7 @@ abstract class BaseSwapConfirmationFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
-                R.id.menuCancel -> {
+                R.id.menuClose -> {
                     findNavController().popBackStack()
                     true
                 }

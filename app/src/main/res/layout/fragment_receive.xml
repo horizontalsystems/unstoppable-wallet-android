@@ -14,7 +14,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="spread_inside"
         app:layout_constraintVertical_weight="1"
-        app:menu="@menu/receive_menu"
+        app:menu="@menu/close_menu"
         app:titleTextAppearance="@style/Title3"
         tools:navigationIcon="@drawable/bitcoin"
         tools:title="@string/Deposit_Title" />

@@ -10,7 +10,7 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        app:menu="@menu/swap_settings_menu"
+        app:menu="@menu/close_menu"
         app:navigationIcon="@drawable/ic_back"
         app:title="@string/ManageAccounts_Title"
         app:titleTextAppearance="@style/Title3" />

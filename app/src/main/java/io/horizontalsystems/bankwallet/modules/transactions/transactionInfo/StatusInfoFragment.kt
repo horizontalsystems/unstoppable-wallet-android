@@ -20,7 +20,7 @@ class StatusInfoFragment : BaseDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        toolbar.inflateMenu(R.menu.status_info_menu)
+        toolbar.inflateMenu(R.menu.close_menu)
         toolbar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.menuClose -> {

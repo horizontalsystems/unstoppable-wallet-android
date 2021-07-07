@@ -36,7 +36,7 @@ class ManageAccountsFragment : BaseFragment(), AccountViewHolder.Listener {
         toolbar.menu.findItem(R.id.menuCancel)?.isVisible = viewModel.isCloseButtonVisible
         toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
-                R.id.menuCancel -> {
+                R.id.menuClose -> {
                     findNavController().popBackStack()
                     true
                 }
