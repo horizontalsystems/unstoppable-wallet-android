@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.transactions.transactionInfo
+package io.horizontalsystems.bankwallet.modules.transactionInfo
 
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue

@@ -86,7 +86,7 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="June 6" />
 
-    <io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoStatusView
+    <io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoStatusView
         android:id="@+id/transactionStatusView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

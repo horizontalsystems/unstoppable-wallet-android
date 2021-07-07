@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.transactions.transactionInfo
+package io.horizontalsystems.bankwallet.modules.transactionInfo
 
 import android.content.DialogInterface
 import android.content.Intent

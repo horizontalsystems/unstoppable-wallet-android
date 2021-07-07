@@ -446,15 +446,15 @@
     <!--  Dialogs/BottomSheets  -->
     <dialog
         android:id="@+id/transactionInfoDialog"
-        android:name="io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.TransactionInfoFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoFragment"
         tools:layout="@layout/fragment_transaction_info" />
     <dialog
         android:id="@+id/infoFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.InfoFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.transactionInfo.InfoFragment"
         tools:layout="@layout/fragment_info" />
     <dialog
         android:id="@+id/statusInfoDialog"
-        android:name="io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.StatusInfoFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.transactionInfo.StatusInfoFragment"
         tools:layout="@layout/fragment_status_info" />
 
     <dialog
