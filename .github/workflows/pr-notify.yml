@@ -1,0 +1,23 @@
+name: Telegram pull request notification
+
+on:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Notify Telegrem PR open
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{secrets.TELEGRAM_TO}}
+          token: ${{secrets.TELEGRAM_TOKEN}}
+          args: |
+            ${{ github.event.pull_request.html_url }}
+
+            Title: ${{github.event.pull_request.title}}
+            Author: ${{github.actor}}
+            Event: ${{ github.event_name }}
