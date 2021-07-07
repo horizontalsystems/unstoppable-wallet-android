@@ -1,0 +1,31 @@
+name: Android CI (release)
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-ruby@v1
+        with:
+          ruby-version: '2.6'
+
+      - name: Set Build Number
+        env:
+          APPCENTER_NUMBER: 147
+        run: |
+          echo "BUILD_NUMBER_NEW=$(($APPCENTER_NUMBER+$GITHUB_RUN_NUMBER))" >> $GITHUB_ENV
+
+      - name: Fastlane Build
+        uses: maierj/fastlane-action@v2.0.1
+        with:
+          lane: 'app_build'
+          options: '{ "app_name": "Unstoppable-Release", "api_token": "${{secrets.API_TOKEN_RELEASE}}" }'
+        env:
+          BUILD_NUMBER: ${{env.BUILD_NUMBER_NEW}}

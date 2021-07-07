@@ -1,0 +1,32 @@
+name: Android CI (version branch)
+
+on:
+  push:
+    branches: [ version/* ]
+  pull_request:
+    branches: [ version/* ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-ruby@v1
+        with:
+          ruby-version: '2.6'
+
+      - name: Set Build Number
+        env:
+          APPCENTER_NUMBER: 1210
+        run: |
+          echo "BUILD_NUMBER_NEW=$(($APPCENTER_NUMBER+$GITHUB_RUN_NUMBER))" >> $GITHUB_ENV
+
+      - name: Fastlane Build
+        uses: maierj/fastlane-action@v2.0.1
+        with:
+          lane: 'app_build'
+          options: '{ "app_name": "Unstoppable-Dev", "api_token": "${{secrets.API_TOKEN_DEV}}" }'
+        env:
+          BUILD_NUMBER: ${{env.BUILD_NUMBER_NEW}}
+
