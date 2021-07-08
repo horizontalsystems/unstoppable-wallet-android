@@ -43,9 +43,9 @@ class MarketDiscoveryService(
             MarketCategory.Privacy, MarketCategory.ExchangeTokens, MarketCategory.Wallets, MarketCategory.FiatStablecoins,
             MarketCategory.RebaseTokens, MarketCategory.AlgoStablecoins, MarketCategory.NFT, MarketCategory.TokenizedBitcoin,
             MarketCategory.StablecoinIssuers, MarketCategory.RiskManagement, MarketCategory.FanTokens,
-            MarketCategory.Synthetics, MarketCategory.IndexFunds, MarketCategory.FundRaising,
-            MarketCategory.Prediction, MarketCategory.B2B, MarketCategory.Infrastructure, MarketCategory.Staking,
-            MarketCategory.CrossChain, MarketCategory.Computing
+            MarketCategory.Synthetics, MarketCategory.IndexFunds, MarketCategory.FundRaising, MarketCategory.Prediction,
+            MarketCategory.B2B, MarketCategory.Infrastructure, MarketCategory.Staking, MarketCategory.CrossChain,
+            MarketCategory.Computing, MarketCategory.DataStorage, MarketCategory.DecentralizedIdentity
     )
 
     init {
