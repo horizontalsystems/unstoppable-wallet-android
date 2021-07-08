@@ -50,6 +50,7 @@ class CreateAccountFragment : BaseFragment() {
 
         viewModel.finishLiveEvent.observe(viewLifecycleOwner) {
             findNavController().popBackStack()
+            HudHelper.showSuccessMessage(requireView(), getString(R.string.Hud_Text_Created))
         }
 
         viewModel.showErrorLiveEvent.observe(viewLifecycleOwner) {

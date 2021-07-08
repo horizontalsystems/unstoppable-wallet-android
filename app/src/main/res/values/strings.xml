@@ -666,7 +666,11 @@
     <string name="Hud_Text_Success">Success</string>
     <string name="Hud_Text_NoInternet">No Internet</string>
     <string name="Hud_Text_Copied">Copied</string>
+    <string name="Hud_Text_Created">Created</string>
+    <string name="Hud_Text_Done">Done</string>
     <string name="Hud_Text_EmailAddressCopied">Email address copied</string>
+    <string name="Hud_Added_To_Watchlist">Hud Added To Watchlist</string>
+    <string name="Hud_Removed_from_Watchlist">Removed from Watchlist</string>
     <string name="Hud_UnknownError">%s</string>
 
     <!--Manage Coins-->
