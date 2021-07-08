@@ -256,14 +256,17 @@ object SwapMainModule {
                         FiatService(switchService, App.currencyManager, App.xRateManager)
                     val coinCardService: ISwapCoinCardService
                     var maxButtonEnabled = false
+                    val resetAmountOnCoinSelect: Boolean
 
                     if (key == coinCardTypeFrom) {
                         coinCardService = fromCoinCardService
                         switchService.fromListener = fiatService
                         maxButtonEnabled = true
+                        resetAmountOnCoinSelect = true
                     } else {
                         coinCardService = toCoinCardService
                         switchService.toListener = fiatService
+                        resetAmountOnCoinSelect = false
                     }
                     val formatter = SwapViewItemHelper(App.numberFormatter)
                     SwapCoinCardViewModel(
@@ -271,7 +274,8 @@ object SwapMainModule {
                         fiatService,
                         switchService,
                         maxButtonEnabled,
-                        formatter
+                        formatter,
+                        resetAmountOnCoinSelect
                     ) as T
                 }
                 else -> throw IllegalArgumentException()
