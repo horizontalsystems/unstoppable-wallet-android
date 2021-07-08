@@ -22,6 +22,7 @@ import io.reactivex.Single
 import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.runBlocking
+import java.lang.Integer.max
 import java.math.BigDecimal
 import java.util.Date
 
@@ -57,7 +58,9 @@ class ZcashAdapter(
         val isRestored = wallet.account.origin == AccountOrigin.Restored
         val birthdayHeight = when (wallet.account.origin) {
             AccountOrigin.Created -> null
-            AccountOrigin.Restored -> restoreSettings.birthdayHeight
+            AccountOrigin.Restored -> restoreSettings.birthdayHeight?.let {
+                max(network.saplingActivationHeight, it)
+            }
         }
 
         val config = Initializer.Config { config ->
