@@ -152,6 +152,10 @@
     <string name="Market_Category_FanTokens_Description">Цифровые фан-токены, обычно используемые командой или клубом.</string>
     <string name="Market_Category_InvestmentTools">Investment Tools</string>
     <string name="Market_Category_InvestmentTools_Description">Аналитика токенов и инвестиционных инструментов.</string>
+    <string name="Market_Category_DataStorage">Data Storage</string>
+    <string name="Market_Category_DataStorage_Description">Decentralized data-storage solutions.</string>
+    <string name="Market_Category_DecentralizedIdentity">Decentralized Identity</string>
+    <string name="Market_Category_DecentralizedIdentity_Description">Decentralized identity solutions.</string>
     <!--Market Global Metrics-->
     <string name="MarketGlobalMetrics_Chart">График</string>
     <string name="MarketGlobalMetrics_BtcDominance">Доминирование Bitcoin</string>
