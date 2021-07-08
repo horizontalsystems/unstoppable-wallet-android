@@ -9,14 +9,14 @@ class ZcashBirthdayProvider(
         testMode: Boolean
 ) {
     private val network = if (testMode) ZcashNetwork.Testnet else ZcashNetwork.Mainnet
-    fun getNearestBirthdayHeight(birthdayHeight: Long? = null): Long {
-        val walletBirthday = WalletBirthdayTool.loadNearest(context, network, birthdayHeight?.toInt())
-        return walletBirthday.height.toLong()
+    fun getNearestBirthdayHeight(birthdayHeight: Int? = null): Int {
+        val walletBirthday = WalletBirthdayTool.loadNearest(context, network, birthdayHeight)
+        return walletBirthday.height
     }
 
     @Throws
-    fun validateBirthdayHeight(birthdayHeight: Long) {
-        WalletBirthdayTool.loadNearest(context, network, birthdayHeight.toInt())
+    fun validateBirthdayHeight(birthdayHeight: Int) {
+        WalletBirthdayTool.loadNearest(context, network, birthdayHeight)
     }
 
 }
