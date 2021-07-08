@@ -12,7 +12,7 @@ import java.math.BigDecimal
 class TransactionRecordDataSource(
         private val poolRepo: PoolRepo,
         private val itemsDataSource: TransactionItemDataSource,
-        private val limit: Int = 10,
+        private val limit: Int,
         private val viewItemFactory: TransactionViewItemFactory,
         private val metadataDataSource: TransactionMetadataDataSource) {
 

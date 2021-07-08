@@ -127,22 +127,12 @@ object TransactionsModule {
     interface IRouter {
     }
 
-    fun initModule(view: TransactionsViewModel, router: IRouter) {
-        val dataSource = TransactionRecordDataSource(PoolRepo(), TransactionItemDataSource(), 10, TransactionViewItemFactory(), TransactionMetadataDataSource())
-        val interactor = TransactionsInteractor(App.walletManager, App.adapterManager, App.currencyManager, App.xRateManager, App.connectivityManager)
-        val presenter = TransactionsPresenter(interactor, router, dataSource)
-
-        presenter.view = view
-        interactor.delegate = presenter
-        view.delegate = presenter
-    }
-
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val viewAndRouter = TransactionsViewModel()
 
-            val dataSource = TransactionRecordDataSource(PoolRepo(), TransactionItemDataSource(), 10, TransactionViewItemFactory(), TransactionMetadataDataSource())
+            val dataSource = TransactionRecordDataSource(PoolRepo(), TransactionItemDataSource(), 20, TransactionViewItemFactory(), TransactionMetadataDataSource())
             val interactor = TransactionsInteractor(App.walletManager, App.adapterManager, App.currencyManager, App.xRateManager, App.connectivityManager)
             val presenter = TransactionsPresenter(interactor, viewAndRouter, dataSource)
 
