@@ -102,7 +102,7 @@ class MainFragment : BaseFragment(R.layout.fragment_main), RateAppDialogFragment
             bottomNavigation.menu.getItem(2).isEnabled = enabled
         })
 
-        activity?.onBackPressedDispatcher?.addCallback(this) {
+        activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner) {
             if (findNavController().currentDestination?.id == R.id.mainFragment) {
                 when (bottomNavigation.selectedItemId) {
                     R.id.navigation_market -> activity?.finish()
