@@ -553,7 +553,11 @@
     <string name="Hud_Text_Success">موفقيت</string>
     <string name="Hud_Text_NoInternet">اینترنت ندارید</string>
     <string name="Hud_Text_Copied">کپی شد</string>
+    <string name="Hud_Text_Created">Created</string>
+    <string name="Hud_Text_Done">Done</string>
     <string name="Hud_Text_EmailAddressCopied">آدرس ایمیل کپی شد</string>
+    <string name="Hud_Added_To_Watchlist">Added To Watchlist</string>
+    <string name="Hud_Removed_from_Watchlist">Removed from Watchlist</string>
     <string name="Hud_UnknownError">s%</string>
     <!--Manage Coins-->
     <string name="ManageCoins_title">سکه ها را انتخاب کنید</string>
