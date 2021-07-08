@@ -135,6 +135,7 @@ class ManageAccountFragment : BaseFragment(), UnlinkConfirmationDialog.Listener 
 
     override fun onUnlinkConfirm() {
         viewModel.onUnlink()
+        HudHelper.showSuccessMessage(requireView(), getString(R.string.Hud_Text_Done))
     }
 
     override fun onDestroyView() {

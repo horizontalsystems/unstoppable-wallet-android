@@ -25,6 +25,7 @@ import io.horizontalsystems.bankwallet.modules.settings.notifications.bottommenu
 import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.findNavController
+import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.xrateskit.entities.LinkType
 import kotlinx.android.synthetic.main.fragment_coin.*
 
@@ -63,10 +64,12 @@ class CoinFragment : BaseFragment(), CoinChartAdapter.Listener, CoinDataAdapter.
             when (item.itemId) {
                 R.id.menuFavorite -> {
                     viewModel.onFavoriteClick()
+                    HudHelper.showSuccessMessage(requireView(), getString(R.string.Hud_Added_To_Watchlist))
                     true
                 }
                 R.id.menuUnfavorite -> {
                     viewModel.onUnfavoriteClick()
+                    HudHelper.showSuccessMessage(requireView(), getString(R.string.Hud_Removed_from_Watchlist))
                     true
                 }
                 R.id.menuNotification -> {
@@ -187,9 +190,9 @@ class CoinFragment : BaseFragment(), CoinChartAdapter.Listener, CoinDataAdapter.
             BottomNotificationMenu.show(childFragmentManager, NotificationMenuMode.All, coinName, coinType)
         })
 
-        viewModel.isFavorite.observe(viewLifecycleOwner, Observer {
-            toolbar.menu.findItem(R.id.menuFavorite).isVisible = !it
-            toolbar.menu.findItem(R.id.menuUnfavorite).isVisible = it
+        viewModel.isFavorite.observe(viewLifecycleOwner, Observer { isFavorite ->
+            toolbar.menu.findItem(R.id.menuFavorite).isVisible = !isFavorite
+            toolbar.menu.findItem(R.id.menuUnfavorite).isVisible = isFavorite
         })
 
     }
