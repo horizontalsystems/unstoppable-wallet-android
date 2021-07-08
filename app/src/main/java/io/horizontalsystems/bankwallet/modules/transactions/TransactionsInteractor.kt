@@ -88,8 +88,8 @@ class TransactionsInteractor(
                 it.first to it.second
             }.toMap()
         }
-                .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.io())
+                .subscribeOn(Schedulers.computation())
+                .observeOn(Schedulers.computation())
                 .subscribe { records, _ ->
                     delegate?.didFetchRecords(records, initial)
                 }
@@ -107,8 +107,8 @@ class TransactionsInteractor(
             adapterManager.getTransactionsAdapterForWallet(wallet)?.let { adapter ->
                 adapter.lastBlockUpdatedFlowable
                         .throttleLast(3, TimeUnit.SECONDS)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(Schedulers.io())
+                        .subscribeOn(Schedulers.computation())
+                        .observeOn(Schedulers.computation())
                         .subscribe { onUpdateLastBlock(wallet, adapter) }
                         .let { lastBlockHeightDisposables.add(it) }
             }
@@ -125,8 +125,8 @@ class TransactionsInteractor(
         requestedTimestamps[composedKey] = timestamp
 
         rateManager.historicalRate(coin.type, currencyCode, timestamp)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.computation())
+                .observeOn(Schedulers.computation())
                 .subscribe({
                     //kit returns 0 when rate is not available
                     if (it.compareTo(BigDecimal.ZERO) != 0) {
@@ -165,16 +165,16 @@ class TransactionsInteractor(
                 adapterStates[wallet] = adapter.transactionsState
 
                 adapter.transactionRecordsFlowable
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(Schedulers.io())
+                        .subscribeOn(Schedulers.computation())
+                        .observeOn(Schedulers.computation())
                         .subscribe {
                             delegate?.didUpdateRecords(it, wallet)
                         }
                         .let { transactionUpdatesDisposables.add(it) }
 
                 adapter.transactionsStateUpdatedFlowable
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(Schedulers.io())
+                        .subscribeOn(Schedulers.computation())
+                        .observeOn(Schedulers.computation())
                         .subscribe {
                             delegate?.onUpdateAdapterState(adapter.transactionsState, wallet)
                         }
