@@ -553,7 +553,11 @@
     <string name="Hud_Text_Success">성공</string>
     <string name="Hud_Text_NoInternet">인터넷에 연결되지 않음</string>
     <string name="Hud_Text_Copied">복사됨</string>
+    <string name="Hud_Text_Created">Created</string>
+    <string name="Hud_Text_Done">Done</string>
     <string name="Hud_Text_EmailAddressCopied">이메일 주소 복사됨</string>
+    <string name="Hud_Added_To_Watchlist">Added To Watchlist</string>
+    <string name="Hud_Removed_from_Watchlist">Removed from Watchlist</string>
     <string name="Hud_UnknownError">%s</string>
     <!--Manage Coins-->
     <string name="ManageCoins_title">코인 선택하기</string>
