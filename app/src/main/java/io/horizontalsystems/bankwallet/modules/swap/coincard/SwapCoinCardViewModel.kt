@@ -15,7 +15,7 @@ import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.swap.SwapViewItemHelper
 import io.horizontalsystems.bankwallet.ui.extensions.AmountInputView
 import io.horizontalsystems.coinkit.models.Coin
-import io.horizontalsystems.coinkit.models.CoinType
+import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import java.math.BigDecimal
@@ -23,11 +23,12 @@ import java.math.RoundingMode
 import kotlin.math.min
 
 class SwapCoinCardViewModel(
-        private val coinCardService: ISwapCoinCardService,
-        private val fiatService: FiatService,
-        private val switchService: AmountTypeSwitchService,
-        private val maxButtonSupported: Boolean,
-        private val formatter: SwapViewItemHelper
+    private val coinCardService: ISwapCoinCardService,
+    private val fiatService: FiatService,
+    private val switchService: AmountTypeSwitchService,
+    private val maxButtonSupported: Boolean,
+    private val formatter: SwapViewItemHelper,
+    private val resetAmountOnCoinSelect: Boolean
 ) : ViewModel() {
 
     private val disposables = CompositeDisposable()
@@ -42,6 +43,7 @@ class SwapCoinCardViewModel(
         }
 
     private val amountLiveData = MutableLiveData<String?>(null)
+    private val resetAmountLiveEvent = SingleLiveEvent<Unit>()
     private val balanceLiveData = MutableLiveData<String?>(null)
     private val balanceErrorLiveData = MutableLiveData(false)
     private val tokenCodeLiveData = MutableLiveData<Coin?>(null)
@@ -52,6 +54,7 @@ class SwapCoinCardViewModel(
 
     //region outputs
     fun amountLiveData(): LiveData<String?> = amountLiveData
+    fun resetAmountLiveEvent(): LiveData<Unit> = resetAmountLiveEvent
     fun balanceLiveData(): LiveData<String?> = balanceLiveData
     fun balanceErrorLiveData(): LiveData<Boolean> = balanceErrorLiveData
     fun tokenCodeLiveData(): LiveData<Coin?> = tokenCodeLiveData
@@ -66,6 +69,9 @@ class SwapCoinCardViewModel(
     fun onSelectCoin(coin: Coin) {
         coinCardService.onSelectCoin(coin)
         fiatService.set(coin)
+        if (resetAmountOnCoinSelect) {
+            resetAmountLiveEvent.postValue(Unit)
+        }
     }
 
     fun onChangeAmount(amount: String?) {

@@ -80,6 +80,10 @@ class SwapCoinCardView @JvmOverloads constructor(context: Context, attrs: Attrib
             }
         })
 
+        viewModel.resetAmountLiveEvent().observe(lifecycleOwner) {
+            amountInput.setAmount(null, false)
+        }
+
         viewModel.secondaryInfoLiveData().observe(lifecycleOwner, { amountInput.setSecondaryText(it) })
 
         viewModel.inputParamsLiveData().observe(lifecycleOwner, { amountInput.setInputParams(it) })
