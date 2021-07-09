@@ -30,7 +30,12 @@ class SendEvmConfirmationFragment : BaseFragment() {
     private val logger = AppLogger("send-evm")
     private val sendEvmMViewModel by navGraphViewModels<SendEvmViewModel>(R.id.sendEvmFragment)
 
-    private val vmFactory by lazy { SendEvmConfirmationModule.Factory(sendEvmMViewModel.service.adapter.evmKit, SendEvmData(transactionData, additionalInfo)) }
+    private val vmFactory by lazy {
+        SendEvmConfirmationModule.Factory(
+            sendEvmMViewModel.service.adapter.evmKit,
+            SendEvmData(transactionData, additionalInfo)
+        )
+    }
     private val sendViewModel by viewModels<SendEvmTransactionViewModel> { vmFactory }
     private val feeViewModel by viewModels<EthereumFeeViewModel> { vmFactory }
 
@@ -38,17 +43,22 @@ class SendEvmConfirmationFragment : BaseFragment() {
 
     private val transactionData: TransactionData
         get() {
-            val transactionDataParcelable = arguments?.getParcelable<SendEvmModule.TransactionDataParcelable>(SendEvmModule.transactionDataKey)!!
+            val transactionDataParcelable =
+                arguments?.getParcelable<SendEvmModule.TransactionDataParcelable>(SendEvmModule.transactionDataKey)!!
             return TransactionData(
-                    Address(transactionDataParcelable.toAddress),
-                    transactionDataParcelable.value,
-                    transactionDataParcelable.input
+                Address(transactionDataParcelable.toAddress),
+                transactionDataParcelable.value,
+                transactionDataParcelable.input
             )
         }
     private val additionalInfo: SendEvmData.AdditionalInfo?
         get() = arguments?.getParcelable(SendEvmModule.additionalInfoKey)
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.fragment_confirmation_send_evm, container, false)
     }
 
@@ -57,11 +67,14 @@ class SendEvmConfirmationFragment : BaseFragment() {
         toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.menuClose -> {
-                    findNavController().popBackStack()
+                    findNavController().popBackStack(R.id.sendEvmFragment, true)
                     true
                 }
                 else -> false
             }
+        }
+        toolbar.setNavigationOnClickListener {
+            findNavController().popBackStack()
         }
 
         sendViewModel.sendEnabledLiveData.observe(viewLifecycleOwner, { enabled ->
@@ -69,11 +82,18 @@ class SendEvmConfirmationFragment : BaseFragment() {
         })
 
         sendViewModel.sendingLiveData.observe(viewLifecycleOwner, {
-            snackbarInProcess = HudHelper.showInProcessMessage(requireView(), R.string.Send_Sending, SnackbarDuration.INDEFINITE)
+            snackbarInProcess = HudHelper.showInProcessMessage(
+                requireView(),
+                R.string.Send_Sending,
+                SnackbarDuration.INDEFINITE
+            )
         })
 
         sendViewModel.sendSuccessLiveData.observe(viewLifecycleOwner, { transactionHash ->
-            HudHelper.showSuccessMessage(requireActivity().findViewById(android.R.id.content), R.string.Hud_Text_Success)
+            HudHelper.showSuccessMessage(
+                requireActivity().findViewById(android.R.id.content),
+                R.string.Hud_Text_Success
+            )
             Handler(Looper.getMainLooper()).postDelayed({
                 findNavController().popBackStack(R.id.sendEvmFragment, true)
             }, 1200)
@@ -86,13 +106,17 @@ class SendEvmConfirmationFragment : BaseFragment() {
         })
 
         sendEvmTransactionView.init(
-                sendViewModel,
-                feeViewModel,
-                viewLifecycleOwner,
-                parentFragmentManager,
-                showSpeedInfoListener = {
-                    findNavController().navigate(R.id.sendEvmConfirmationFragment_to_feeSpeedInfo, null, navOptions())
-                }
+            sendViewModel,
+            feeViewModel,
+            viewLifecycleOwner,
+            parentFragmentManager,
+            showSpeedInfoListener = {
+                findNavController().navigate(
+                    R.id.sendEvmConfirmationFragment_to_feeSpeedInfo,
+                    null,
+                    navOptions()
+                )
+            }
         )
 
         sendButton.setOnSingleClickListener {
