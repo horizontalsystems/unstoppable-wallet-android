@@ -34,17 +34,21 @@ class SwapApproveConfirmationFragment : BaseFragment() {
     private val logger = AppLogger("swap-approve")
     private val mainViewModel by navGraphViewModels<SwapApproveViewModel>(R.id.swapApproveFragment)
     private val vmFactory by lazy {
-        SwapApproveConfirmationModule.Factory(SendEvmData(transactionData, additionalItems), mainViewModel.dex.blockchain)
+        SwapApproveConfirmationModule.Factory(
+            SendEvmData(transactionData, additionalItems),
+            mainViewModel.dex.blockchain
+        )
     }
     private val sendViewModel by viewModels<SendEvmTransactionViewModel> { vmFactory }
     private val feeViewModel by viewModels<EthereumFeeViewModel> { vmFactory }
     private val transactionData: TransactionData
         get() {
-            val transactionDataParcelable = arguments?.getParcelable<SendEvmModule.TransactionDataParcelable>(transactionDataKey)!!
+            val transactionDataParcelable =
+                arguments?.getParcelable<SendEvmModule.TransactionDataParcelable>(transactionDataKey)!!
             return TransactionData(
-                    Address(transactionDataParcelable.toAddress),
-                    transactionDataParcelable.value,
-                    transactionDataParcelable.input
+                Address(transactionDataParcelable.toAddress),
+                transactionDataParcelable.value,
+                transactionDataParcelable.input
             )
         }
     private val additionalItems: SendEvmData.AdditionalInfo?
@@ -52,7 +56,11 @@ class SwapApproveConfirmationFragment : BaseFragment() {
 
     private var snackbarInProcess: CustomSnackbar? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.fragment_confirmation_approve_swap, container, false)
     }
 
@@ -61,11 +69,14 @@ class SwapApproveConfirmationFragment : BaseFragment() {
         toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.menuClose -> {
-                    findNavController().popBackStack()
+                    findNavController().popBackStack(R.id.swapApproveFragment, true)
                     true
                 }
                 else -> false
             }
+        }
+        toolbar.setNavigationOnClickListener {
+            findNavController().popBackStack()
         }
 
         sendViewModel.sendEnabledLiveData.observe(viewLifecycleOwner, { enabled ->
@@ -73,13 +84,23 @@ class SwapApproveConfirmationFragment : BaseFragment() {
         })
 
         sendViewModel.sendingLiveData.observe(viewLifecycleOwner, {
-            snackbarInProcess = HudHelper.showInProcessMessage(requireView(), R.string.Swap_Approving, SnackbarDuration.INDEFINITE)
+            snackbarInProcess = HudHelper.showInProcessMessage(
+                requireView(),
+                R.string.Swap_Approving,
+                SnackbarDuration.INDEFINITE
+            )
         })
 
         sendViewModel.sendSuccessLiveData.observe(viewLifecycleOwner, {
-            HudHelper.showSuccessMessage(requireActivity().findViewById(android.R.id.content), R.string.Hud_Text_Success)
+            HudHelper.showSuccessMessage(
+                requireActivity().findViewById(android.R.id.content),
+                R.string.Hud_Text_Success
+            )
             Handler(Looper.getMainLooper()).postDelayed({
-                setNavigationResult(SwapApproveModule.requestKey, bundleOf(SwapApproveModule.resultKey to true))
+                setNavigationResult(
+                    SwapApproveModule.requestKey,
+                    bundleOf(SwapApproveModule.resultKey to true)
+                )
                 findNavController().popBackStack(R.id.swapApproveFragment, false)
             }, 1200)
         })
@@ -91,13 +112,17 @@ class SwapApproveConfirmationFragment : BaseFragment() {
         })
 
         sendEvmTransactionView.init(
-                sendViewModel,
-                feeViewModel,
-                viewLifecycleOwner,
-                parentFragmentManager,
-                showSpeedInfoListener = {
-                    findNavController().navigate(R.id.swapApproveConfirmationFragment_to_feeSpeedInfo, null, navOptions())
-                }
+            sendViewModel,
+            feeViewModel,
+            viewLifecycleOwner,
+            parentFragmentManager,
+            showSpeedInfoListener = {
+                findNavController().navigate(
+                    R.id.swapApproveConfirmationFragment_to_feeSpeedInfo,
+                    null,
+                    navOptions()
+                )
+            }
         )
 
         approveButton.setOnSingleClickListener {

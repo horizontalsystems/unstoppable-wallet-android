@@ -321,7 +321,11 @@
         tools:layout="@layout/fragment_swap">
         <action
             android:id="@+id/swapFragment_to_swapApproveFragment"
-            app:destination="@id/swapApproveFragment" />
+            app:destination="@id/swapApproveFragment"
+            app:enterAnim="@anim/slide_from_bottom_long"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@anim/slide_to_bottom_long" />
         <action
             android:id="@+id/swapFragment_to_uniswapConfirmationFragment"
             app:destination="@id/uniswapConfirmationFragment" />
