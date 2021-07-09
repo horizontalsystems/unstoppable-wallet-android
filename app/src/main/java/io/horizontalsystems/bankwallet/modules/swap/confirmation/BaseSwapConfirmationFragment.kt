@@ -34,7 +34,11 @@ abstract class BaseSwapConfirmationFragment : BaseFragment() {
 
     private var snackbarInProcess: CustomSnackbar? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.fragment_confirmation_swap, container, false)
     }
 
@@ -43,11 +47,14 @@ abstract class BaseSwapConfirmationFragment : BaseFragment() {
         toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.menuClose -> {
-                    findNavController().popBackStack()
+                    findNavController().popBackStack(R.id.swapFragment, true)
                     true
                 }
                 else -> false
             }
+        }
+        toolbar.setNavigationOnClickListener {
+            findNavController().popBackStack()
         }
 
         sendViewModel.sendEnabledLiveData.observe(viewLifecycleOwner, { enabled ->
@@ -55,11 +62,18 @@ abstract class BaseSwapConfirmationFragment : BaseFragment() {
         })
 
         sendViewModel.sendingLiveData.observe(viewLifecycleOwner, {
-            snackbarInProcess = HudHelper.showInProcessMessage(requireView(), R.string.Swap_Swapping, SnackbarDuration.INDEFINITE)
+            snackbarInProcess = HudHelper.showInProcessMessage(
+                requireView(),
+                R.string.Swap_Swapping,
+                SnackbarDuration.INDEFINITE
+            )
         })
 
         sendViewModel.sendSuccessLiveData.observe(viewLifecycleOwner, { transactionHash ->
-            HudHelper.showSuccessMessage(requireActivity().findViewById(android.R.id.content), R.string.Hud_Text_Success)
+            HudHelper.showSuccessMessage(
+                requireActivity().findViewById(android.R.id.content),
+                R.string.Hud_Text_Success
+            )
             Handler(Looper.getMainLooper()).postDelayed({
                 findNavController().popBackStack(R.id.swapFragment, true)
             }, 1200)
@@ -72,13 +86,13 @@ abstract class BaseSwapConfirmationFragment : BaseFragment() {
         })
 
         sendEvmTransactionView.init(
-                sendViewModel,
-                feeViewModel,
-                viewLifecycleOwner,
-                parentFragmentManager,
-                showSpeedInfoListener = {
-                    navigateToFeeInfo()
-                }
+            sendViewModel,
+            feeViewModel,
+            viewLifecycleOwner,
+            parentFragmentManager,
+            showSpeedInfoListener = {
+                navigateToFeeInfo()
+            }
         )
 
         swapButton.setOnSingleClickListener {

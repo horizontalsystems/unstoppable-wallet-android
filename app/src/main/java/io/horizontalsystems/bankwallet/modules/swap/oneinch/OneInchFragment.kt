@@ -133,7 +133,6 @@ class OneInchFragment : SwapBaseFragment() {
             SwapApproveModule.start(
                 this,
                 R.id.swapFragment_to_swapApproveFragment,
-                navOptions(),
                 approveData
             )
         })
