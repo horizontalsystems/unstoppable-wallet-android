@@ -49,7 +49,7 @@ class SwapDeadlineViewModel(
         }
 
     override val inputFieldPlaceholder = toMinutes(service.defaultDeadline)
-    override val setTextLiveData = MutableLiveData<String?>(null)
+    override val setTextLiveData = MutableLiveData<String?>()
     override val cautionLiveData = MutableLiveData<Caution?>(null)
     override val initialValue: String?
         get() = service.initialDeadline?.let { toMinutes(it) }
