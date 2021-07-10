@@ -4,10 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.Toolbar
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseDialogFragment
 import io.horizontalsystems.core.dismissOnBackPressed
-import kotlinx.android.synthetic.main.fragment_status_info.*
 
 class StatusInfoFragment : BaseDialogFragment() {
 
@@ -19,6 +19,8 @@ class StatusInfoFragment : BaseDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val toolbar = view.findViewById<Toolbar>(R.id.toolbar)
 
         toolbar.inflateMenu(R.menu.status_info_menu)
         toolbar.setOnMenuItemClickListener { menuItem ->

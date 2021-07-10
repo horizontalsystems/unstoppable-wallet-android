@@ -10,6 +10,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Transformations
 import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.ConcatAdapter
+import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
@@ -26,7 +28,6 @@ import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartFragment
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartType
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
-import kotlinx.android.synthetic.main.fragment_overview.*
 
 class MarketOverviewFragment : BaseFragment(), ViewHolderMarketOverviewItem.Listener, ViewHolderMarketPostItem.Listener {
 
@@ -83,6 +84,8 @@ class MarketOverviewFragment : BaseFragment(), ViewHolderMarketOverviewItem.List
 
 
         val poweredByAdapter = PoweredByAdapter(marketOverviewViewModel.showPoweredByLiveData, viewLifecycleOwner)
+        val coinRatesRecyclerView = view.findViewById<RecyclerView>(R.id.coinRatesRecyclerView)
+        val pullToRefresh = view.findViewById<SwipeRefreshLayout>(R.id.pullToRefresh)
 
         coinRatesRecyclerView.adapter = ConcatAdapter(
                 marketMetricsAdapter,

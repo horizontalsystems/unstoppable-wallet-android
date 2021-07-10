@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.swap.coincard
 import android.content.Context
 import android.util.AttributeSet
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -10,21 +11,34 @@ import androidx.lifecycle.LifecycleOwner
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.swap.SwapModule
 import io.horizontalsystems.bankwallet.modules.swap.coinselect.SelectSwapCoinDialogFragment
+import io.horizontalsystems.bankwallet.ui.extensions.AmountInputView
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.getNavigationLiveData
 import io.horizontalsystems.core.setOnSingleClickListener
 import io.horizontalsystems.views.helpers.LayoutHelper
-import kotlinx.android.synthetic.main.view_card_swap.view.*
 import java.math.BigDecimal
 
 class SwapCoinCardView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
     : CardView(context, attrs, defStyleAttr) {
 
+    private var titleTextView: TextView
+    private var selectedToken: TextView
+    private var amountInput: AmountInputView
+    private var balanceValue: TextView
+    private var balanceTitle: TextView
+    private var estimatedLabel: TextView
+
     init {
         radius = LayoutHelper.dpToPx(16f, context)
         layoutParams = LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         cardElevation = 0f
-        inflate(context, R.layout.view_card_swap, this)
+        val rootView = inflate(context, R.layout.view_card_swap, this)
+        titleTextView = rootView.findViewById(R.id.titleTextView)
+        selectedToken = rootView.findViewById(R.id.selectedToken)
+        amountInput = rootView.findViewById(R.id.amountInput)
+        balanceValue = rootView.findViewById(R.id.balanceValue)
+        balanceTitle = rootView.findViewById(R.id.balanceTitle)
+        estimatedLabel = rootView.findViewById(R.id.estimatedLabel)
     }
 
     fun initialize(title: String, viewModel: SwapCoinCardViewModel, fragment: Fragment, lifecycleOwner: LifecycleOwner) {

@@ -6,12 +6,16 @@ import android.text.TextWatcher
 import android.util.AttributeSet
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.EditorInfo
+import android.widget.Button
+import android.widget.EditText
+import android.widget.ImageButton
+import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import androidx.lifecycle.LifecycleOwner
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.IVerifiedInputViewModel
-import kotlinx.android.synthetic.main.view_input_with_buttons.view.*
+import io.horizontalsystems.views.ViewState
 
 class InputWithButtonsView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
     : ConstraintLayout(context, attrs, defStyleAttr) {
@@ -32,8 +36,25 @@ class InputWithButtonsView @JvmOverloads constructor(context: Context, attrs: At
         }
     }
 
+    private var title: TextView
+    private var description: TextView
+    private var input: EditText
+    private var deleteButton: ImageButton
+    private var error: TextView
+    private var inputBackground: ViewState
+    private var inputButtonLeft: Button
+    private var inputButtonRight: Button
+
     init {
-        inflate(context, R.layout.view_input_with_buttons, this)
+        val rootView = inflate(context, R.layout.view_input_with_buttons, this)
+        title = rootView.findViewById(R.id.title)
+        description = rootView.findViewById(R.id.description)
+        input = rootView.findViewById(R.id.input)
+        deleteButton = rootView.findViewById(R.id.deleteButton)
+        error = rootView.findViewById(R.id.error)
+        inputBackground = rootView.findViewById(R.id.inputBackground)
+        inputButtonLeft = rootView.findViewById(R.id.inputButtonLeft)
+        inputButtonRight = rootView.findViewById(R.id.inputButtonRight)
 
         val ta = context.obtainStyledAttributes(attrs, R.styleable.InputWithButtonsView)
         try {

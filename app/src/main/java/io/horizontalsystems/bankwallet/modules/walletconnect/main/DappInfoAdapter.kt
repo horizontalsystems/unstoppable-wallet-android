@@ -3,10 +3,10 @@ package io.horizontalsystems.bankwallet.modules.walletconnect.main
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.view_holder_dapp_item.*
 
 class DappInfoAdapter : RecyclerView.Adapter<DappInfoAdapter.ViewHolder>() {
 
@@ -18,6 +18,9 @@ class DappInfoAdapter : RecyclerView.Adapter<DappInfoAdapter.ViewHolder>() {
     }
 
     class ViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+
+        private val title = containerView.findViewById<TextView>(R.id.title)
+        private val value = containerView.findViewById<TextView>(R.id.value)
 
         fun bind(dappItemData: DappItemData) {
             title.text = containerView.context.getString(dappItemData.titleStringResId)

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import io.horizontalsystems.bankwallet.R
@@ -12,7 +13,6 @@ import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.SendSubmoduleFragment
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorDialog
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorItem
-import kotlinx.android.synthetic.main.view_hodler_input.*
 
 class SendHodlerFragment(
         private val hodlerModuleDelegate: SendHodlerModule.IHodlerModuleDelegate,
@@ -29,6 +29,7 @@ class SendHodlerFragment(
         super.onViewCreated(view, savedInstanceState)
 
         val presenterView = presenter.view as SendHodlerView
+        val lockTimeMenu = view.findViewById<TextView>(R.id.lockTimeMenu)
 
         view.setOnClickListener {
             presenter.onClickLockTimeInterval()

@@ -4,12 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.Toolbar
 import androidx.navigation.navGraphViewModels
+import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.coin.CoinViewModel
 import io.horizontalsystems.core.findNavController
-import kotlinx.android.synthetic.main.fragment_coin_markets.*
 
 class CoinMarketsFragment : BaseFragment() {
 
@@ -22,6 +23,8 @@ class CoinMarketsFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val toolbar = view.findViewById<Toolbar>(R.id.toolbar)
+
         toolbar.title = getString(R.string.CoinMarket_Title, coinViewModel.coinCode)
         toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
@@ -29,7 +32,7 @@ class CoinMarketsFragment : BaseFragment() {
 
         val marketItemsAdapter = CoinMarketItemAdapter()
 
-        recyclerView.adapter = marketItemsAdapter
+        view.findViewById<RecyclerView>(R.id.recyclerView).adapter = marketItemsAdapter
 
         coinViewModel.coinMarkets.observe(viewLifecycleOwner, {
             marketItemsAdapter.submitList(it)

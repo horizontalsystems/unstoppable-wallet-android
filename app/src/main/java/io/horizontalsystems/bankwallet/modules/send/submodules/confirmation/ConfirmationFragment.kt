@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import io.horizontalsystems.bankwallet.R
@@ -17,7 +19,6 @@ import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.subv
 import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.subviews.ConfirmationSecondaryView
 import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.subviews.ConfirmationSendButtonView
 import io.horizontalsystems.core.helpers.HudHelper
-import kotlinx.android.synthetic.main.fragment_confirmation.*
 import java.net.UnknownHostException
 
 class ConfirmationFragment(private var sendPresenter: SendPresenter?) : BaseFragment() {
@@ -34,6 +35,10 @@ class ConfirmationFragment(private var sendPresenter: SendPresenter?) : BaseFrag
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val toolbar = view.findViewById<Toolbar>(R.id.toolbar)
+        val confirmationLinearLayout = view.findViewById<LinearLayout>(R.id.confirmationLinearLayout)
+
         toolbar.setNavigationOnClickListener {
             parentFragmentManager.popBackStack()
         }

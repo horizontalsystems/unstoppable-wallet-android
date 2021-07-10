@@ -7,6 +7,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
+import android.widget.Button
+import android.widget.EditText
+import android.widget.TextView
+import androidx.appcompat.widget.Toolbar
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.navigation.navGraphViewModels
@@ -21,7 +25,6 @@ import io.horizontalsystems.bankwallet.modules.swap.approve.confirmation.SwapApp
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.getNavigationResult
 import io.horizontalsystems.core.setNavigationResult
-import kotlinx.android.synthetic.main.fragment_swap_approve.*
 
 class SwapApproveFragment : BaseFragment() {
 
@@ -31,7 +34,7 @@ class SwapApproveFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        toolbar.setOnMenuItemClickListener { item ->
+        view.findViewById<Toolbar>(R.id.toolbar).setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.menuClose -> {
                     findNavController().popBackStack()
@@ -45,6 +48,9 @@ class SwapApproveFragment : BaseFragment() {
 
         val vmFactory = SwapApproveModule.Factory(approveData)
         val viewModel by navGraphViewModels<SwapApproveViewModel>(R.id.swapApproveFragment) { vmFactory }
+        val amount = view.findViewById<EditText>(R.id.amount)
+        val btnProceed = view.findViewById<Button>(R.id.btnProceed)
+        val amountError = view.findViewById<TextView>(R.id.amountError)
 
         amount.setText(viewModel.amount)
 

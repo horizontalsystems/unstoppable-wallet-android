@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.ui
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
+import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
@@ -16,7 +17,6 @@ import io.horizontalsystems.bankwallet.core.ethereum.SendPriorityViewItem
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorDialog
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorItem
 import io.horizontalsystems.seekbar.FeeSeekBar
-import kotlinx.android.synthetic.main.view_fee_selector.view.*
 
 class FeeSelectorView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
     : ConstraintLayout(context, attrs, defStyleAttr) {
@@ -25,8 +25,27 @@ class FeeSelectorView @JvmOverloads constructor(context: Context, attrs: Attribu
     var prioritySelectListener: (position: Int) -> Unit = { }
     var customFeeSeekBarListener: (value: Int) -> Unit = { }
 
+    private var txSpeedMenuClickArea: View
+    private var customFeeSeekBar: FeeSeekBar
+    private var txEstimatedFeeValue: TextView
+    private var txFeeValue: TextView
+    private var txSpeedMenu: TextView
+    private var feeInfoImageClickArea: View
+    private var txEstimatedFeeTitle: TextView
+    private var txFeeTitle: TextView
+    private var warningOfStuck: TextView
+
     init {
-        inflate(context, R.layout.view_fee_selector, this)
+        val rootView = inflate(context, R.layout.view_fee_selector, this)
+        txSpeedMenuClickArea = rootView.findViewById(R.id.txSpeedMenuClickArea)
+        customFeeSeekBar = rootView.findViewById(R.id.customFeeSeekBar)
+        txEstimatedFeeValue = rootView.findViewById(R.id.txEstimatedFeeValue)
+        txFeeValue = rootView.findViewById(R.id.txFeeValue)
+        txSpeedMenu = rootView.findViewById(R.id.txSpeedMenu)
+        feeInfoImageClickArea = rootView.findViewById(R.id.feeInfoImageClickArea)
+        txEstimatedFeeTitle = rootView.findViewById(R.id.txEstimatedFeeTitle)
+        txFeeTitle = rootView.findViewById(R.id.txFeeTitle)
+        warningOfStuck = rootView.findViewById(R.id.warningOfStuck)
 
         txSpeedMenuClickArea.setOnClickListener {
             onTxSpeedClickListener(it)

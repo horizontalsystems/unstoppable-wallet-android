@@ -2,10 +2,11 @@ package io.horizontalsystems.bankwallet.modules.enablecoins
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
+import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.extensions.BaseBottomSheetDialogFragment
-import kotlinx.android.synthetic.main.fragment_enable_coins.*
 
 class EnableCoinsDialog(private val listener: Listener, private val tokenType: String) : BaseBottomSheetDialogFragment() {
 
@@ -19,13 +20,13 @@ class EnableCoinsDialog(private val listener: Listener, private val tokenType: S
 
         setTitle(activity?.getString(R.string.EnalbeToken_Title))
         setSubtitle(tokenType)
-        alertText.text = getString(R.string.EnalbeToken_Description, tokenType)
+        view.findViewById<TextView>(R.id.alertText).text = getString(R.string.EnalbeToken_Description, tokenType)
 
         val icon = getIcon(tokenType)
 
         setHeaderIcon(icon)
 
-        enableBtn.setOnClickListener {
+        view.findViewById<Button>(R.id.enableBtn).setOnClickListener {
             listener.onClickEnable()
             dismiss()
         }

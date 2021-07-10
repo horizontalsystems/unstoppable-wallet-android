@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.CheckBox
 import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,8 +15,6 @@ import io.horizontalsystems.bankwallet.ui.extensions.BaseBottomSheetDialogFragme
 import io.horizontalsystems.views.inflate
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.parcel.Parcelize
-import kotlinx.android.synthetic.main.fragment_bottom_confirm_unlink.*
-import kotlinx.android.synthetic.main.view_holder_confirmation.*
 
 class UnlinkConfirmationDialog : BaseBottomSheetDialogFragment(), ConfirmationsAdapter.Listener {
 
@@ -24,6 +24,7 @@ class UnlinkConfirmationDialog : BaseBottomSheetDialogFragment(), ConfirmationsA
 
     private var listener: Listener? = null
     private var checkboxItems = listOf<CheckBoxItem>()
+    private lateinit var confirmButton: Button
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -32,6 +33,9 @@ class UnlinkConfirmationDialog : BaseBottomSheetDialogFragment(), ConfirmationsA
         setTitle(getString(R.string.ManageKeys_Delete_Title))
         setSubtitle(requireArguments().getString(ACCOUNT_NAME))
         setHeaderIcon(R.drawable.ic_attention_red_24)
+
+        confirmButton = view.findViewById<Button>(R.id.confirmButton)
+        val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)
 
         confirmButton.setOnClickListener {
             listener?.onUnlinkConfirm()
@@ -104,6 +108,8 @@ class ConfirmationsAdapter(private var listener: Listener, private val confirmat
 class ViewHolderConfirmation(
         override val containerView: View, private val listener: ConfirmationsAdapter.Listener
 ) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+
+    private val confirmationCheckBox: CheckBox = containerView.findViewById(R.id.confirmationCheckBox)
 
     init {
         confirmationCheckBox.setOnCheckedChangeListener { _, isChecked ->

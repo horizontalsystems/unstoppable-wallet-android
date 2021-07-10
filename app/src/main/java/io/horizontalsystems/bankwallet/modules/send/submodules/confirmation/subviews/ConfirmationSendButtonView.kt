@@ -2,16 +2,25 @@ package io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.sub
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.View
+import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.SendConfirmationModule
-import kotlinx.android.synthetic.main.view_button_with_progressbar.view.*
 
 class ConfirmationSendButtonView : ConstraintLayout {
 
+    private var buttonTextView: TextView
+    private var progressBar: ProgressBar
+    private var buttonWrapper: View
+
     init {
-        inflate(context, R.layout.view_button_with_progressbar, this)
+        val rootView = inflate(context, R.layout.view_button_with_progressbar, this)
+        buttonTextView = rootView.findViewById(R.id.buttonTextView)
+        progressBar = rootView.findViewById(R.id.progressBar)
+        buttonWrapper = rootView.findViewById(R.id.buttonWrapper)
     }
 
     constructor(context: Context) : super(context)

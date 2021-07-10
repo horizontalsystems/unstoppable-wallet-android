@@ -11,6 +11,9 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
+import android.widget.TextView
+import androidx.appcompat.widget.Toolbar
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
@@ -19,21 +22,20 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.utils.Utils
 import io.horizontalsystems.bankwallet.modules.restore.restoreselectcoins.RestoreSelectCoinsFragment.Companion.ACCOUNT_TYPE_KEY
+import io.horizontalsystems.bankwallet.ui.extensions.InputView
 import io.horizontalsystems.core.CoreApp
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.core.helpers.KeyboardHelper
 import io.horizontalsystems.hdwalletkit.Mnemonic
-import kotlinx.android.synthetic.main.fragment_create_account.*
-import kotlinx.android.synthetic.main.fragment_restore_mnemonic.*
-import kotlinx.android.synthetic.main.fragment_restore_mnemonic.passphrase
-import kotlinx.android.synthetic.main.fragment_restore_mnemonic.passphraseDescription
-import kotlinx.android.synthetic.main.fragment_restore_mnemonic.passphraseToggle
-import kotlinx.android.synthetic.main.fragment_restore_mnemonic.toolbar
-import kotlinx.android.synthetic.main.view_input_address.view.*
+import io.horizontalsystems.views.SettingsViewSwitch
 
 class RestoreMnemonicFragment : BaseFragment() {
     private val viewModel by viewModels<RestoreMnemonicViewModel> { RestoreMnemonicModule.Factory() }
+    private lateinit var wordsInput: EditText
+    private lateinit var passphrase: InputView
+    private lateinit var passphraseDescription: TextView
+    private lateinit var passphraseToggle: SettingsViewSwitch
 
     private val textWatcher = object : TextWatcher {
         override fun afterTextChanged(s: Editable) {
@@ -56,6 +58,13 @@ class RestoreMnemonicFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        wordsInput = view.findViewById(R.id.wordsInput)
+        val toolbar = view.findViewById<Toolbar>(R.id.toolbar)
+        passphrase = view.findViewById(R.id.passphrase)
+        passphraseDescription = view.findViewById(R.id.passphraseDescription)
+        passphraseToggle = view.findViewById(R.id.passphraseToggle)
+
         toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }

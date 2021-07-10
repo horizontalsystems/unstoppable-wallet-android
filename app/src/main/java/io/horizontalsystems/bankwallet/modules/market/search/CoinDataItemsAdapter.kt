@@ -2,6 +2,8 @@ package io.horizontalsystems.bankwallet.modules.market.search
 
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -13,12 +15,15 @@ import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
 import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.views.inflate
 import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.view_holder_market_item.*
 
 class CoinDataItemsAdapter(private val onItemClick: (CoinDataViewItem) -> Unit) : ListAdapter<CoinDataViewItem, CoinDataItemsAdapter.ViewHolder>(diffCallback) {
 
     class ViewHolder(override val containerView: View, onItemClick: (CoinDataViewItem) -> Unit) : RecyclerView.ViewHolder(containerView), LayoutContainer {
         private var item: CoinDataViewItem? = null
+        private val icon = containerView.findViewById<ImageView>(R.id.icon)
+        private val title = containerView.findViewById<TextView>(R.id.title)
+        private val subtitle = containerView.findViewById<TextView>(R.id.subtitle)
+        private val rank = containerView.findViewById<TextView>(R.id.rank)
 
         init {
             itemView.setOnSingleClickListener {

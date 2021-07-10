@@ -6,12 +6,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.TextView
+import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.swap.SwapModule
 import io.horizontalsystems.core.findNavController
-import kotlinx.android.synthetic.main.fragment_swap_info.*
 
 class SwapInfoFragment : BaseFragment() {
 
@@ -21,6 +23,10 @@ class SwapInfoFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val toolbar = view.findViewById<Toolbar>(R.id.toolbar)
+        val btnLink = view.findViewById<Button>(R.id.btnLink)
+
         toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.menuClose -> {
@@ -35,9 +41,9 @@ class SwapInfoFragment : BaseFragment() {
         val viewModel = ViewModelProvider(this, SwapInfoModule.Factory(dex)).get(SwapInfoViewModel::class.java)
 
         toolbar.title = viewModel.title
-        description.text = viewModel.description
-        headerRelated.text = viewModel.dexRelated
-        transactionFeeDescription.text = viewModel.transactionFeeDescription
+        view.findViewById<TextView>(R.id.description).text = viewModel.description
+        view.findViewById<TextView>(R.id.headerRelated).text = viewModel.dexRelated
+        view.findViewById<TextView>(R.id.transactionFeeDescription).text = viewModel.transactionFeeDescription
         btnLink.text = viewModel.linkText
 
         btnLink.setOnClickListener {

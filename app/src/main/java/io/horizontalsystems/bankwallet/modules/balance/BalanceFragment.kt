@@ -9,12 +9,16 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.TextView
 import androidx.core.app.ShareCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
@@ -35,12 +39,17 @@ import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.views.helpers.LayoutHelper
-import kotlinx.android.synthetic.main.fragment_balance.*
 
 class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener, ReceiveFragment.Listener, BackupRequiredDialog.Listener {
 
     private val viewModel by viewModels<BalanceViewModel> { BalanceModule.Factory() }
     private val balanceItemsAdapter = BalanceItemsAdapter(this)
+
+    private lateinit var recyclerCoins: RecyclerView
+    private lateinit var sortButton: Button
+    private lateinit var pullToRefresh: SwipeRefreshLayout
+    private lateinit var toolbarTitle: TextView
+    private lateinit var balanceText: TextView
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_balance, container, false)
@@ -48,6 +57,12 @@ class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener, ReceiveFra
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        recyclerCoins = view.findViewById(R.id.recyclerCoins)
+        sortButton = view.findViewById(R.id.sortButton)
+        pullToRefresh = view.findViewById(R.id.pullToRefresh)
+        toolbarTitle = view.findViewById(R.id.toolbarTitle)
+        balanceText = view.findViewById(R.id.balanceText)
 
         recyclerCoins.adapter = balanceItemsAdapter
         recyclerCoins.layoutManager = NpaLinearLayoutManager(context)
@@ -70,7 +85,7 @@ class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener, ReceiveFra
             HudHelper.vibrate(requireContext())
         }
 
-        addCoinButton.setOnClickListener {
+        view.findViewById<Button>(R.id.addCoinButton).setOnClickListener {
             viewModel.delegate.onAddCoinClick()
         }
 

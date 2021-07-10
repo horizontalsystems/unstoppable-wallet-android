@@ -7,12 +7,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.navGraphViewModels
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import io.horizontalsystems.bankwallet.R
@@ -27,13 +30,23 @@ import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.core.setOnSingleClickListener
 import io.horizontalsystems.snackbar.CustomSnackbar
 import io.horizontalsystems.snackbar.SnackbarGravity
-import kotlinx.android.synthetic.main.fragment_transaction_info.*
 
 class TransactionInfoFragment : BottomSheetDialogFragment() {
 
     private val viewModelTxs by navGraphViewModels<TransactionsViewModel>(R.id.mainFragment)
     private val viewModel by viewModels<TransactionInfoViewModel>()
     private var snackBar: CustomSnackbar? = null
+    private lateinit var txtViewOnExplorer: TextView
+    private lateinit var closeButton: ImageView
+    private lateinit var rvDetails: RecyclerView
+    private lateinit var txtTitle: TextView
+    private lateinit var txtSubtitle: TextView
+    private lateinit var headerIcon: ImageView
+    private lateinit var sentToSelfIcon: ImageView
+    private lateinit var primaryValue: TextView
+    private lateinit var primaryName: TextView
+    private lateinit var secondaryName: TextView
+    private lateinit var secondaryValue: TextView
 
     override fun getTheme() = R.style.BottomDialog
 
@@ -57,6 +70,18 @@ class TransactionInfoFragment : BottomSheetDialogFragment() {
             viewModel.init(it.record, it.wallet)
             setTransactionInfoDialog()
         }
+
+        txtViewOnExplorer = view.findViewById(R.id.txtViewOnExplorer)
+        closeButton = view.findViewById(R.id.closeButton)
+        rvDetails = view.findViewById(R.id.rvDetails)
+        txtTitle = view.findViewById(R.id.txtTitle)
+        txtSubtitle = view.findViewById(R.id.txtSubtitle)
+        headerIcon = view.findViewById(R.id.headerIcon)
+        sentToSelfIcon = view.findViewById(R.id.sentToSelfIcon)
+        primaryValue = view.findViewById(R.id.primaryValue)
+        primaryName = view.findViewById(R.id.primaryName)
+        secondaryName = view.findViewById(R.id.secondaryName)
+        secondaryValue = view.findViewById(R.id.secondaryValue)
     }
 
     override fun onDismiss(dialog: DialogInterface) {

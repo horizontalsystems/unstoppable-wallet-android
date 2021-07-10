@@ -6,18 +6,27 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.AttributeSet
 import android.view.animation.AnimationUtils
+import android.widget.EditText
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.Caution
+import io.horizontalsystems.views.ViewState
 import io.horizontalsystems.views.helpers.LayoutHelper
-import kotlinx.android.synthetic.main.view_input.view.*
 
 class InputView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
     : ConstraintLayout(context, attrs, defStyleAttr) {
 
     private var onTextChangeCallback: ((prevText: String?, newText: String?) -> Unit)? = null
     private var onPasteCallback: ((text: String?) -> Unit)? = null
+
+    private lateinit var input: EditText
+    private lateinit var actionsLayout: LinearLayout
+    private var error: TextView
+    private var inputBackground: ViewState
+    private var txtPrefix: TextView
 
     private val textWatcher = object : TextWatcher {
         private var prevValue: String? = null
@@ -47,7 +56,12 @@ class InputView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
     }
 
     init {
-        inflate(context, R.layout.view_input, this)
+        val rootView = inflate(context, R.layout.view_input, this)
+        input = rootView.findViewById(R.id.input)
+        actionsLayout = rootView.findViewById(R.id.actionsLayout)
+        error = rootView.findViewById(R.id.error)
+        inputBackground = rootView.findViewById(R.id.inputBackground)
+        txtPrefix = rootView.findViewById(R.id.txtPrefix)
 
         val ta = context.obtainStyledAttributes(attrs, R.styleable.InputView)
         try {

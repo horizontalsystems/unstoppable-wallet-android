@@ -10,7 +10,6 @@ import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.view_holder_item_selector.*
 
 class SelectorDialog : DialogFragment(), SelectorAdapter.Listener {
 
@@ -78,6 +77,9 @@ class SelectorAdapter(private val list: List<SelectorItem>,
 }
 
 class SelectorOptionViewHolder(override val containerView: View, private val listener: SelectorAdapter.Listener) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+
+    private val itemTitle = containerView.findViewById<TextView>(R.id.itemTitle)
+    private val topDivider = containerView.findViewById<View>(R.id.topDivider)
 
     init {
         containerView.setOnClickListener { listener.onClick(bindingAdapterPosition) }

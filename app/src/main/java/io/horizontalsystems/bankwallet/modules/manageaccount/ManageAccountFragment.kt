@@ -7,6 +7,11 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.EditText
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
@@ -23,9 +28,8 @@ import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.views.ListPosition
+import io.horizontalsystems.views.SettingsView
 import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.fragment_manage_account.*
-import kotlinx.android.synthetic.main.view_holder_account_setting_view.*
 
 class ManageAccountFragment : BaseFragment(), UnlinkConfirmationDialog.Listener {
     private val viewModel by viewModels<ManageAccountViewModel> { ManageAccountModule.Factory(arguments?.getString(ACCOUNT_ID_KEY)!!) }
@@ -37,6 +41,11 @@ class ManageAccountFragment : BaseFragment(), UnlinkConfirmationDialog.Listener 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val toolbar = view.findViewById<Toolbar>(R.id.toolbar)
+        val name = view.findViewById<EditText>(R.id.name)
+        val actionButton = view.findViewById<SettingsView>(R.id.actionButton)
+        val additionalInfoItems = view.findViewById<RecyclerView>(R.id.additionalInfoItems)
 
         saveMenuItem = toolbar.menu.findItem(R.id.menuSave)
 
@@ -69,7 +78,7 @@ class ManageAccountFragment : BaseFragment(), UnlinkConfirmationDialog.Listener 
         }
         name.addTextChangedListener(textWatcher)
 
-        unlinkButton.setOnSingleClickListener {
+        view.findViewById<Button>(R.id.unlinkButton).setOnSingleClickListener {
             val confirmationList = listOf(
                     getString(R.string.ManageAccount_Delete_ConfirmationRemove),
                     getString(R.string.ManageAccount_Delete_ConfirmationDisable),
@@ -156,8 +165,11 @@ class AdditionalInfoAdapter(
 
 class AdditionalInfoViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
     fun bind(additionViewItem: ManageAccountViewModel.AdditionalViewItem, position: ListPosition) {
-        icon.setCoinImage(additionViewItem.coinType)
-        title.text = additionViewItem.title
+        containerView.findViewById<ImageView>(R.id.icon).setCoinImage(additionViewItem.coinType)
+        containerView.findViewById<TextView>(R.id.title).text = additionViewItem.title
+
+        val decoratedText = containerView.findViewById<TextView>(R.id.decoratedText)
+
         decoratedText.text = additionViewItem.value
         containerView.setBackgroundResource(position.getBackground())
         decoratedText.setOnClickListener {

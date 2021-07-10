@@ -4,18 +4,22 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.appcompat.widget.Toolbar
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.core.findNavController
-import kotlinx.android.synthetic.main.fragment_markdown.*
 
 class MarkdownFragment : BaseFragment(), MarkdownContentAdapter.Listener {
 
     private lateinit var contentAdapter: MarkdownContentAdapter
+    private lateinit var toolbar: Toolbar
+    private lateinit var error: TextView
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.fragment_markdown, container, false)
@@ -23,6 +27,9 @@ class MarkdownFragment : BaseFragment(), MarkdownContentAdapter.Listener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        toolbar = view.findViewById(R.id.toolbar)
+        error = view.findViewById(R.id.error)
 
         if (arguments?.getBoolean(showAsClosablePopupKey) == true){
             toolbar.inflateMenu(R.menu.markdown_viewer_menu)
@@ -48,7 +55,7 @@ class MarkdownFragment : BaseFragment(), MarkdownContentAdapter.Listener {
         val viewModel by viewModels<MarkdownViewModel> { MarkdownModule.Factory(markdownUrl, gitReleaseUrl) }
 
         contentAdapter = MarkdownContentAdapter(this, handleRelativeUrl)
-        rvBlocks.adapter = contentAdapter
+        view.findViewById<RecyclerView>(R.id.rvBlocks).adapter = contentAdapter
 
         observe(viewModel)
     }

@@ -2,17 +2,37 @@ package io.horizontalsystems.bankwallet.ui.extensions
 
 import android.content.Context
 import android.util.AttributeSet
+import android.widget.LinearLayout
+import android.widget.TextView
+import androidx.constraintlayout.widget.Group
 import androidx.core.view.isVisible
 import androidx.core.widget.NestedScrollView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.views.BackupWordView
-import kotlinx.android.synthetic.main.view_mnemonic_phrase.view.*
 
 class MnemonicPhraseView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
     : NestedScrollView(context, attrs, defStyleAttr) {
 
+    private var topLeft: LinearLayout
+    private var middleLeft: LinearLayout
+    private var topRight: LinearLayout
+    private var middleRight: LinearLayout
+    private var bottomLeft: LinearLayout
+    private var bottomRight: LinearLayout
+    private var passphraseGroup: Group
+    private var passphraseValue: TextView
+
     init {
-        inflate(context, R.layout.view_mnemonic_phrase, this)
+        val rootView = inflate(context, R.layout.view_mnemonic_phrase, this)
+        topLeft = rootView.findViewById(R.id.topLeft)
+        middleLeft = rootView.findViewById(R.id.middleLeft)
+        topRight = rootView.findViewById(R.id.topRight)
+        middleRight = rootView.findViewById(R.id.middleRight)
+        bottomLeft = rootView.findViewById(R.id.bottomLeft)
+        bottomRight = rootView.findViewById(R.id.bottomRight)
+        passphraseGroup = rootView.findViewById(R.id.passphraseGroup)
+        passphraseValue = rootView.findViewById(R.id.passphraseValue)
+
     }
 
     fun populateWords(words: List<String>, passphrase: String) {

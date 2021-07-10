@@ -4,8 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
+import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.ConcatAdapter
+import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseWithSearchFragment
 import io.horizontalsystems.bankwallet.modules.blockchainsettings.BlockchainSettingsModule
@@ -13,12 +16,12 @@ import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorMultiple
 import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
 import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.core.findNavController
-import kotlinx.android.synthetic.main.fragment_manage_wallets.*
 
 abstract class CoinListBaseFragment : BaseWithSearchFragment(), CoinListAdapter.Listener {
 
     private lateinit var featuredItemsAdapter: CoinListAdapter
     private lateinit var itemsAdapter: CoinListAdapter
+    private lateinit var progressLoading: ProgressBar
 
     abstract val title: CharSequence
 
@@ -29,6 +32,10 @@ abstract class CoinListBaseFragment : BaseWithSearchFragment(), CoinListAdapter.
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val toolbar = view.findViewById<Toolbar>(R.id.toolbar)
+        val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)
+
         toolbar.title = title
         toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
@@ -80,7 +87,7 @@ abstract class CoinListBaseFragment : BaseWithSearchFragment(), CoinListAdapter.
                 onItemSelected = { onSelect(it) },
                 onCancelled = { onCancelSelection() },
                 warning = config.description
-                )
+        )
     }
 
 }

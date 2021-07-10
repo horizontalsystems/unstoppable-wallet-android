@@ -2,11 +2,11 @@ package io.horizontalsystems.bankwallet.modules.balance.views
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentActivity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.extensions.BaseBottomSheetDialogFragment
-import kotlinx.android.synthetic.main.fragment_bottom_sync_error.*
 
 class SyncErrorDialog(
         private val listener: Listener,
@@ -19,9 +19,17 @@ class SyncErrorDialog(
         fun onClickReport()
     }
 
+    private lateinit var changeSourceBtn: Button
+    private lateinit var retryBtn: Button
+    private lateinit var reportBtn: Button
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setContentView(R.layout.fragment_bottom_sync_error)
+
+        changeSourceBtn = view.findViewById(R.id.changeSourceBtn)
+        retryBtn = view.findViewById(R.id.retryBtn)
+        reportBtn = view.findViewById(R.id.reportBtn)
 
         setTitle(activity?.getString(R.string.BalanceSyncError_Title))
         setSubtitle(coinName)

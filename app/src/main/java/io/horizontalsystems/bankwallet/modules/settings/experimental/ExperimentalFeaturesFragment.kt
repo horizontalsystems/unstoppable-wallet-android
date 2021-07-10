@@ -4,13 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.core.findNavController
-import kotlinx.android.synthetic.main.fragment_experimental_features.*
+import io.horizontalsystems.views.SettingsView
 
 class ExperimentalFeaturesFragment : BaseFragment() {
 
@@ -22,7 +23,7 @@ class ExperimentalFeaturesFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        toolbar.setNavigationOnClickListener {
+        view.findViewById<Toolbar>(R.id.toolbar).setNavigationOnClickListener {
             findNavController().popBackStack()
         }
 
@@ -32,7 +33,7 @@ class ExperimentalFeaturesFragment : BaseFragment() {
             findNavController().navigate(R.id.experimentalFeaturesFragment_to_bitcoinHodlingFragment, null, navOptions())
         })
 
-        bitcoinHodling.setOnSingleClickListener {
+        view.findViewById<SettingsView>(R.id.bitcoinHodling).setOnSingleClickListener {
             presenter.didTapBitcoinHodling()
         }
     }

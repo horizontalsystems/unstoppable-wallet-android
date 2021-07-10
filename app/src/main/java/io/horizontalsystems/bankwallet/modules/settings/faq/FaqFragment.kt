@@ -4,6 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
+import android.widget.TextView
+import androidx.appcompat.widget.Toolbar
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
@@ -15,19 +18,19 @@ import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.entities.Faq
-import io.horizontalsystems.bankwallet.modules.settings.guides.ErrorAdapter
 import io.horizontalsystems.bankwallet.modules.markdown.MarkdownFragment
+import io.horizontalsystems.bankwallet.modules.settings.guides.ErrorAdapter
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.views.ListPosition
 import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.fragment_faq_list.*
-import kotlinx.android.synthetic.main.view_holder_faq_item.*
 
 class FaqListFragment: BaseFragment(), FaqListAdapter.Listener {
 
     private val viewModel by viewModels<FaqViewModel> { FaqModule.Factory() }
     private val adapter = FaqListAdapter(this)
     private val errorAdapter = ErrorAdapter()
+    private lateinit var faqListRecyclerview: RecyclerView
+    private lateinit var toolbarSpinner: ProgressBar
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_faq_list, container, false)
@@ -36,7 +39,10 @@ class FaqListFragment: BaseFragment(), FaqListAdapter.Listener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        toolbar.setNavigationOnClickListener {
+        faqListRecyclerview = view.findViewById(R.id.faqListRecyclerview)
+        toolbarSpinner = view.findViewById(R.id.toolbarSpinner)
+
+        view.findViewById<Toolbar>(R.id.toolbar).setNavigationOnClickListener {
             findNavController().popBackStack()
         }
 
@@ -102,6 +108,7 @@ class FaqListAdapter(private val listener: Listener) : ListAdapter<FaqItem, View
 
 class ViewHolderFaq(override val containerView: View, listener: FaqListAdapter.Listener) : RecyclerView.ViewHolder(containerView), LayoutContainer {
     private var faqItem: FaqItem? = null
+    private val faqTitleText = containerView.findViewById<TextView>(R.id.faqTitleText)
 
     init {
         containerView.setOnClickListener {

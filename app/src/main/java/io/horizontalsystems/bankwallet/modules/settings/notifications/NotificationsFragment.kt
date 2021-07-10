@@ -5,6 +5,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.FrameLayout
+import android.widget.TextView
+import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -16,10 +20,9 @@ import io.horizontalsystems.bankwallet.modules.settings.notifications.bottommenu
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.views.ListPosition
 import io.horizontalsystems.views.SettingsViewDropdown
+import io.horizontalsystems.views.SettingsViewSwitch
 import io.horizontalsystems.views.inflate
 import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.fragment_notifications.*
-import kotlinx.android.synthetic.main.view_holder_notification_coin_name.*
 
 
 class NotificationsFragment : BaseFragment(), NotificationItemsAdapter.Listener {
@@ -27,6 +30,13 @@ class NotificationsFragment : BaseFragment(), NotificationItemsAdapter.Listener 
     private val viewModel by viewModels<NotificationsViewModel> { NotificationsModule.Factory() }
 
     private lateinit var notificationItemsAdapter: NotificationItemsAdapter
+    private lateinit var buttonAndroidSettings: Button
+    private lateinit var deactivateAll: FrameLayout
+    private lateinit var notifications: RecyclerView
+    private lateinit var switchNotification: SettingsViewSwitch
+    private lateinit var textDescription: TextView
+    private lateinit var textWarning: TextView
+    private lateinit var deactivateAllText: TextView
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_notifications, container, false)
@@ -34,9 +44,17 @@ class NotificationsFragment : BaseFragment(), NotificationItemsAdapter.Listener 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        toolbar.setNavigationOnClickListener {
+        view.findViewById<Toolbar>(R.id.toolbar).setNavigationOnClickListener {
             findNavController().popBackStack()
         }
+
+        buttonAndroidSettings = view.findViewById(R.id.buttonAndroidSettings)
+        deactivateAll = view.findViewById(R.id.deactivateAll)
+        notifications = view.findViewById(R.id.notifications)
+        switchNotification = view.findViewById(R.id.switchNotification)
+        textDescription = view.findViewById(R.id.textDescription)
+        textWarning = view.findViewById(R.id.textWarning)
+        deactivateAllText= view.findViewById(R.id.deactivateAllText)
 
         buttonAndroidSettings.setOnSingleClickListener {
             viewModel.openSettings()
@@ -160,6 +178,8 @@ class NotificationItemsAdapter(private val listener: Listener) : RecyclerView.Ad
 
 class NotificationCoinNameViewHolder(override val containerView: View)
     : RecyclerView.ViewHolder(containerView), LayoutContainer {
+
+    private val coinName = containerView.findViewById<TextView>(R.id.coinName)
 
     fun bind(item: NotificationViewItem) {
         coinName.text = item.coinName

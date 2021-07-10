@@ -3,6 +3,8 @@ package io.horizontalsystems.bankwallet.modules.market
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.annotation.StringRes
 import androidx.core.view.isVisible
 import androidx.lifecycle.LifecycleOwner
@@ -12,7 +14,6 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.view_holder_market_loading.*
 
 class MarketLoadingAdapter(
         loadingLiveData: LiveData<Boolean>,
@@ -95,6 +96,8 @@ sealed class MarketLoadingState {
 class ViewHolderMarketLoading(override val containerView: View, onErrorClick: () -> Unit) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
     private var marketLoadingState: MarketLoadingState? = null
+    private val progressBar = containerView.findViewById<ProgressBar>(R.id.progressBar)
+    private val error = containerView.findViewById<TextView>(R.id.error)
 
     init {
         containerView.setOnClickListener {

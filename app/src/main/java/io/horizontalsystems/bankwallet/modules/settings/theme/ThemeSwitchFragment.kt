@@ -4,7 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DiffUtil
@@ -16,8 +19,6 @@ import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.views.inflate
 import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.fragment_theme_switcher.*
-import kotlinx.android.synthetic.main.view_holder_theme_switch_item.*
 
 class ThemeSwitchFragment : BaseFragment() {
 
@@ -30,12 +31,12 @@ class ThemeSwitchFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        toolbar.setNavigationOnClickListener {
+        view.findViewById<Toolbar>(R.id.toolbar).setNavigationOnClickListener {
             findNavController().popBackStack()
         }
 
         val adapter = ThemeSwitchAdapter(::onItemClick)
-        recyclerView.adapter = adapter
+        view.findViewById<RecyclerView>(R.id.recyclerView).adapter = adapter
 
         viewModel.itemsLiveData.observe(viewLifecycleOwner) {
             adapter.submitList(it)
@@ -63,6 +64,9 @@ class ThemeSwitchAdapter(private val onItemClick: (ThemeViewItem) -> Unit) : Lis
 
     class ViewHolder(override val containerView: View, onItemClick: (ThemeViewItem) -> Unit) : RecyclerView.ViewHolder(containerView), LayoutContainer {
         private var item: ThemeViewItem? = null
+        private val icon = containerView.findViewById<ImageView>(R.id.icon)
+        private val title = containerView.findViewById<TextView>(R.id.title)
+        private val checkmarkIcon = containerView.findViewById<ImageView>(R.id.checkmarkIcon)
 
         init {
             itemView.setOnSingleClickListener {

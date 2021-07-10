@@ -4,6 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.ConcatAdapter
@@ -17,14 +20,10 @@ import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModu
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.views.ListPosition
 import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.fragment_manage_accounts.*
-import kotlinx.android.synthetic.main.view_holder_manage_account_action.*
-import kotlinx.android.synthetic.main.view_holder_manage_account_action.backgroundView
-import kotlinx.android.synthetic.main.view_holder_manage_account_action.title
-import kotlinx.android.synthetic.main.view_holder_manage_account_item.*
 
 class ManageAccountsFragment : BaseFragment(), AccountViewHolder.Listener {
     private val viewModel by viewModels<ManageAccountsViewModel> { ManageAccountsModule.Factory(arguments?.getParcelable(ManageAccountsModule.MODE)!!) }
+    private lateinit var recyclerView: RecyclerView
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_manage_accounts, container, false)
@@ -32,6 +31,9 @@ class ManageAccountsFragment : BaseFragment(), AccountViewHolder.Listener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val toolbar = view.findViewById<Toolbar>(R.id.toolbar)
+        recyclerView = view.findViewById(R.id.recyclerView)
 
         toolbar.menu.findItem(R.id.menuCancel)?.isVisible = viewModel.isCloseButtonVisible
         toolbar.setOnMenuItemClickListener { item ->
@@ -118,13 +120,14 @@ class AccountViewHolder(override val containerView: View, val listener: Listener
     }
 
     fun bind(account: AccountViewItem, position: ListPosition) {
-        title.text = account.title
-        subtitle.text = account.subtitle
+        containerView.findViewById<TextView>(R.id.title).text = account.title
+        containerView.findViewById<TextView>(R.id.subtitle).text = account.subtitle
+        val backgroundView = containerView.findViewById<View>(R.id.backgroundView)
 
         backgroundView.setBackgroundResource(position.getBackground())
-        radioImage.setImageResource(if (account.selected) R.drawable.ic_radion else R.drawable.ic_radioff)
-        attentionIcon.isVisible = account.alert
-        editIcon.setOnClickListener {
+        containerView.findViewById<ImageView>(R.id.radioImage).setImageResource(if (account.selected) R.drawable.ic_radion else R.drawable.ic_radioff)
+        containerView.findViewById<ImageView>(R.id.attentionIcon).isVisible = account.alert
+        containerView.findViewById<ImageView>(R.id.editIcon).setOnClickListener {
             listener.onEdit(account)
         }
 
@@ -179,8 +182,9 @@ class ActionsAdapter(
 
 class ActionViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
     fun bind(action: ActionViewItem, position: ListPosition) {
-        icon.setImageResource(action.icon)
-        title.setText(action.title)
+        containerView.findViewById<ImageView>(R.id.icon).setImageResource(action.icon)
+        containerView.findViewById<TextView>(R.id.title).setText(action.title)
+        val backgroundView = containerView.findViewById<View>(R.id.backgroundView)
         backgroundView.setBackgroundResource(position.getBackground())
         backgroundView.setOnSingleClickListener { action.callback() }
     }

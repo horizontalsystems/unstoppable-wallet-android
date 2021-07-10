@@ -3,14 +3,18 @@ package io.horizontalsystems.bankwallet.modules.settings.security.privacy
 import android.content.res.ColorStateList
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
+import android.widget.ImageView
+import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.switchmaterial.SwitchMaterial
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.managers.TorStatus
 import io.horizontalsystems.views.inflate
 import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.view_holder_tor_control.*
 
 
 class PrivacySettingsTorAdapter(private val listener: Listener) : RecyclerView.Adapter<PrivacySettingsTorAdapter.TorControlViewHolder>() {
@@ -48,6 +52,12 @@ class PrivacySettingsTorAdapter(private val listener: Listener) : RecyclerView.A
             override val containerView: View,
             private val onSwitch: (isChecked: Boolean) -> Unit
     ) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+
+        private val torControlView = containerView.findViewById<FrameLayout>(R.id.torControlView)
+        private val torConnectionSwitch = containerView.findViewById<SwitchMaterial>(R.id.torConnectionSwitch)
+        private val connectionSpinner = containerView.findViewById<ProgressBar>(R.id.connectionSpinner)
+        private val controlIcon = containerView.findViewById<ImageView>(R.id.controlIcon)
+        private val subtitleText = containerView.findViewById<TextView>(R.id.subtitleText)
 
         init {
             torControlView.setOnClickListener {

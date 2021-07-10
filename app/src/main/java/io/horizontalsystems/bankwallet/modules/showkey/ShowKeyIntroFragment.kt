@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import androidx.appcompat.widget.Toolbar
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
@@ -11,7 +13,6 @@ import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.getNavigationResult
 import io.horizontalsystems.pin.PinInteractionType
 import io.horizontalsystems.pin.PinModule
-import kotlinx.android.synthetic.main.fragment_show_key_intro.*
 
 class ShowKeyIntroFragment : BaseFragment() {
     private val viewModel by navGraphViewModels<ShowKeyViewModel>(R.id.showKeyIntroFragment) { ShowKeyModule.Factory(arguments?.getParcelable(ShowKeyModule.ACCOUNT)!!) }
@@ -23,11 +24,11 @@ class ShowKeyIntroFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        toolbar.setNavigationOnClickListener {
+        view.findViewById<Toolbar>(R.id.toolbar).setNavigationOnClickListener {
             findNavController().popBackStack()
         }
 
-        buttonShow.setOnClickListener {
+        view.findViewById<Button>(R.id.buttonShow).setOnClickListener {
             viewModel.onClickShow()
         }
 

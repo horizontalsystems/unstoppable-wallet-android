@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.market.metrics
 
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.lifecycle.LifecycleOwner
@@ -10,9 +11,10 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.ui.extensions.MarketMetricSmallView
+import io.horizontalsystems.bankwallet.ui.extensions.PriceGradientView
 import io.horizontalsystems.views.inflate
 import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.view_holder_market_totals.*
 import java.math.BigDecimal
 
 class MarketMetricsAdapter(private val viewModel: MarketMetricsViewModel, viewLifecycleOwner: LifecycleOwner)
@@ -57,6 +59,17 @@ class MarketMetricsAdapter(private val viewModel: MarketMetricsViewModel, viewLi
 data class MarketMetricsWrapper(val marketMetrics: MarketMetrics?, val loading: Boolean, val showSyncError: Boolean)
 
 class MarketMetricsViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+
+    private val diffCircle = containerView.findViewById<PriceGradientView>(R.id.diffCircle)
+    private val btcDominance = containerView.findViewById<MarketMetricSmallView>(R.id.btcDominance)
+    private val volume24h = containerView.findViewById<MarketMetricSmallView>(R.id.volume24h)
+    private val defiCap = containerView.findViewById<MarketMetricSmallView>(R.id.defiCap)
+    private val defiTvl = containerView.findViewById<MarketMetricSmallView>(R.id.defiTvl)
+    private val marketCapTitle = containerView.findViewById<TextView>(R.id.marketCapTitle)
+    private val diffPercentage = containerView.findViewById<TextView>(R.id.diffPercentage)
+    private val marketCapValue = containerView.findViewById<TextView>(R.id.marketCapValue)
+    private val progressBar = containerView.findViewById<ProgressBar>(R.id.progressBar)
+    private val error = containerView.findViewById<TextView>(R.id.error)
 
     fun bind(
             data: MarketMetricsWrapper?,

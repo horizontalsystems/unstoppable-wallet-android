@@ -2,6 +2,9 @@ package io.horizontalsystems.bankwallet.modules.transactions.transactionInfo
 
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.annotation.DrawableRes
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
@@ -15,7 +18,6 @@ import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.views.helpers.LayoutHelper
 import io.horizontalsystems.views.inflate
 import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.view_transaction_info_item.*
 
 class TransactionDetailsAdapter(private val viewModel: TransactionInfoViewModel) : RecyclerView.Adapter<TransactionDetailsAdapter.DetailViewHolder>() {
 
@@ -39,6 +41,12 @@ class TransactionDetailsAdapter(private val viewModel: TransactionInfoViewModel)
 
     class DetailViewHolder(override val containerView: View, private val viewModel: TransactionInfoViewModel) : RecyclerView.ViewHolder(containerView), LayoutContainer {
         private val context get() = itemView.context
+        private val txtTitle = containerView.findViewById<TextView>(R.id.txtTitle)
+        private val decoratedText = containerView.findViewById<TextView>(R.id.decoratedText)
+        private val btnAction = containerView.findViewById<ImageButton>(R.id.btnAction)
+        private val valueText = containerView.findViewById<TextView>(R.id.valueText)
+        private val statusInfoIcon = containerView.findViewById<ImageView>(R.id.statusInfoIcon)
+        private val transactionStatusView = containerView.findViewById<TransactionInfoStatusView>(R.id.transactionStatusView)
 
         fun bind(detail: TransactionDetailViewItem) {
             itemView.setOnClickListener(null)

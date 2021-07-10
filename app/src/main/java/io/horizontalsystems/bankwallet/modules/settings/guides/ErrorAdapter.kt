@@ -2,12 +2,12 @@ package io.horizontalsystems.bankwallet.modules.settings.guides
 
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.LocalizedException
 import io.horizontalsystems.views.inflate
 import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.view_holder_error.*
 import java.net.UnknownHostException
 
 class ErrorAdapter : RecyclerView.Adapter<ErrorViewHolder>() {
@@ -34,6 +34,8 @@ class ErrorAdapter : RecyclerView.Adapter<ErrorViewHolder>() {
 }
 
 class ErrorViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+    private val message = containerView.findViewById<TextView>(R.id.message)
+
     fun bind(error: Throwable) {
         message.text =  when (error) {
             is UnknownHostException -> containerView.context.getString(R.string.Hud_Text_NoInternet)

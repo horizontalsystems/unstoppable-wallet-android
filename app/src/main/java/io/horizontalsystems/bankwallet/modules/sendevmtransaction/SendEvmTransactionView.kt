@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LifecycleOwner
@@ -11,19 +12,25 @@ import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.ethereum.EthereumFeeViewModel
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
+import io.horizontalsystems.bankwallet.ui.FeeSelectorView
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.views.ListPosition
 import io.horizontalsystems.views.inflate
 import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.view_holder_title_value_hex.*
-import kotlinx.android.synthetic.main.view_send_evm_transaction.view.*
 
 class SendEvmTransactionView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
     : ConstraintLayout(context, attrs, defStyleAttr) {
 
+    private var feeSelectorView: FeeSelectorView
+    private var recyclerView: RecyclerView
+    private var error: TextView
+
     init {
-        inflate(context, R.layout.view_send_evm_transaction, this)
+        val rootView = inflate(context, R.layout.view_send_evm_transaction, this)
+        feeSelectorView = rootView.findViewById(R.id.feeSelectorView)
+        recyclerView = rootView.findViewById(R.id.recyclerView)
+        error = rootView.findViewById(R.id.error)
     }
 
     fun init(
@@ -122,6 +129,11 @@ class SendEvmTransactionAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(
     }
 
     class SubheadViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+
+        private val titleTextView = containerView.findViewById<TextView>(R.id.titleTextView)
+        private val valueTextView = containerView.findViewById<TextView>(R.id.valueTextView)
+        private val backgroundView = containerView.findViewById<View>(R.id.backgroundView)
+
         fun bind(item: ViewItem.Subhead, position: ListPosition) {
             titleTextView.text = item.title
             valueTextView.text = item.value
@@ -135,6 +147,11 @@ class SendEvmTransactionAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(
     }
 
     class TitleValueHexViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+
+        private val titleTextView = containerView.findViewById<TextView>(R.id.titleTextView)
+        private val valueTextView = containerView.findViewById<TextView>(R.id.valueTextView)
+        private val backgroundView = containerView.findViewById<View>(R.id.backgroundView)
+
         fun bind(title: String, valueTitle: String, value: String, position: ListPosition) {
             titleTextView.text = title
             valueTextView.text = valueTitle
@@ -153,6 +170,11 @@ class SendEvmTransactionAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(
     }
 
     class TitleValueViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+
+        private val titleTextView = containerView.findViewById<TextView>(R.id.titleTextView)
+        private val valueTextView = containerView.findViewById<TextView>(R.id.valueTextView)
+        private val backgroundView = containerView.findViewById<View>(R.id.backgroundView)
+
         fun bind(title: String, value: String, type: ValueType, position: ListPosition) {
             titleTextView.text = title
             valueTextView.text = value

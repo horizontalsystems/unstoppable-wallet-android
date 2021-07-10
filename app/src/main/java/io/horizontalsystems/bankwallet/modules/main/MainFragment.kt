@@ -12,8 +12,10 @@ import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.managers.RateAppManager
@@ -22,35 +24,41 @@ import io.horizontalsystems.bankwallet.modules.markdown.MarkdownFragment
 import io.horizontalsystems.bankwallet.modules.rateapp.RateAppDialogFragment
 import io.horizontalsystems.bankwallet.modules.rooteddevice.RootedDeviceActivity
 import io.horizontalsystems.core.findNavController
-import kotlinx.android.synthetic.main.fragment_main.*
-import kotlinx.android.synthetic.main.fragment_main.view.*
 
 class MainFragment : BaseFragment(), RateAppDialogFragment.Listener {
 
     private val viewModel by viewModels<MainViewModel>{ MainModule.Factory() }
     private var bottomBadgeView: View? = null
+    private lateinit var viewPager: ViewPager2
+    private lateinit var screenSecureDim: View
+    private lateinit var bottomNavigation: BottomNavigationView
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_main, container, false)
 
-        view.viewPager.offscreenPageLimit = 1
-        view.viewPager.adapter = MainViewPagerAdapter(childFragmentManager, viewLifecycleOwner.lifecycle)
+        viewPager = view.findViewById(R.id.viewPager)
+        screenSecureDim = view.findViewById(R.id.screenSecureDim)
 
-        view.viewPager.isUserInputEnabled = false
+        viewPager.offscreenPageLimit = 1
+        viewPager.adapter = MainViewPagerAdapter(childFragmentManager, viewLifecycleOwner.lifecycle)
 
-        view.bottomNavigation.setOnNavigationItemSelectedListener {
+        viewPager.isUserInputEnabled = false
+
+        bottomNavigation = view.findViewById(R.id.bottomNavigation)
+
+        bottomNavigation.setOnNavigationItemSelectedListener {
             when (it.itemId) {
-                R.id.navigation_market -> view.viewPager.setCurrentItem(0, false)
-                R.id.navigation_balance -> view.viewPager.setCurrentItem(1, false)
-                R.id.navigation_transactions -> view.viewPager.setCurrentItem(2, false)
-                R.id.navigation_settings -> view.viewPager.setCurrentItem(3, false)
+                R.id.navigation_market -> viewPager.setCurrentItem(0, false)
+                R.id.navigation_balance -> viewPager.setCurrentItem(1, false)
+                R.id.navigation_transactions -> viewPager.setCurrentItem(2, false)
+                R.id.navigation_settings -> viewPager.setCurrentItem(3, false)
             }
             true
         }
 
         arguments?.getInt(ACTIVE_TAB_KEY)?.let { position ->
-            view.bottomNavigation.menu.getItem(position).isChecked = true
-            view.viewPager.setCurrentItem(position, false)
+            bottomNavigation.menu.getItem(position).isChecked = true
+            viewPager.setCurrentItem(position, false)
         }
 
         return view
@@ -77,7 +85,7 @@ class MainFragment : BaseFragment(), RateAppDialogFragment.Listener {
         viewModel.openPlayMarketLiveEvent.observe(viewLifecycleOwner, Observer {
             openAppInPlayMarket()
         })
-6
+
         viewModel.hideContentLiveData.observe(viewLifecycleOwner, Observer { hide ->
             screenSecureDim.isVisible = hide
         })

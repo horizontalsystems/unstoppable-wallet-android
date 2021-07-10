@@ -3,9 +3,9 @@ package io.horizontalsystems.bankwallet.ui.selector
 import android.os.Bundle
 import android.view.View
 import androidx.annotation.DrawableRes
+import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.extensions.BaseBottomSheetDialogFragment
-import kotlinx.android.synthetic.main.dialog_selector.*
 
 class SelectorBottomSheetDialog<ItemClass> : BaseBottomSheetDialogFragment() {
 
@@ -36,7 +36,7 @@ class SelectorBottomSheetDialog<ItemClass> : BaseBottomSheetDialogFragment() {
                 dismiss()
             })
 
-            rvItems.adapter = itemsAdapter
+            view.findViewById<RecyclerView>(R.id.rvItems).adapter = itemsAdapter
         }
     }
 }

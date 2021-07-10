@@ -2,13 +2,12 @@ package io.horizontalsystems.bankwallet.modules.coin.coininvestors
 
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.coin.InvestorItem
 import io.horizontalsystems.views.inflate
 import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.view_holder_coin_investors_section_header.*
-import kotlinx.android.synthetic.main.view_holder_coin_fund_item.*
 
 class CoinInvestorCategoryAdapter(private val items: List<InvestorItem>, private val listener: Listener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -49,9 +48,9 @@ class CoinInvestorCategoryAdapter(private val items: List<InvestorItem>, private
 class ViewHolderCoinInvestorsItem(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
     fun bind(item: InvestorItem.Fund, onClick: () -> Unit) {
-        title.text = item.name
-        subtitle.text = item.cleanedUrl
-        backgroundView.setBackgroundResource(item.position.getBackground())
+        containerView.findViewById<TextView>(R.id.title).text = item.name
+        containerView.findViewById<TextView>(R.id.subtitle).text = item.cleanedUrl
+        containerView.findViewById<View>(R.id.backgroundView).setBackgroundResource(item.position.getBackground())
         containerView.setOnClickListener {
             onClick.invoke()
         }
@@ -62,6 +61,6 @@ class ViewHolderCoinInvestorsSectionHeader(override val containerView: View)
     : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
     fun bind(item: InvestorItem.Header) {
-        sectionTitle.text = item.title
+        containerView.findViewById<TextView>(R.id.sectionTitle).text = item.title
     }
 }

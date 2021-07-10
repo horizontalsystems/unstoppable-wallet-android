@@ -6,27 +6,46 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ProgressBar
+import android.widget.TextView
+import androidx.appcompat.widget.Toolbar
+import androidx.constraintlayout.widget.Group
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceView
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceViewModel
 import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveModule
+import io.horizontalsystems.bankwallet.modules.swap.coincard.SwapCoinCardView
 import io.horizontalsystems.bankwallet.modules.swap.coincard.SwapCoinCardViewModel
 import io.horizontalsystems.bankwallet.modules.swap.confirmation.SwapConfirmationModule
 import io.horizontalsystems.bankwallet.modules.swap.info.SwapInfoFragment.Companion.dexKey
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.getNavigationResult
 import io.horizontalsystems.core.setOnSingleClickListener
-import kotlinx.android.synthetic.main.fragment_swap.*
 
 class SwapFragment : BaseFragment() {
 
     private val vmFactory by lazy { SwapModule.Factory(this, requireArguments().getParcelable(fromCoinKey)!!) }
     private val viewModel by navGraphViewModels<SwapViewModel>(R.id.swapFragment) { vmFactory }
     private val allowanceViewModel by navGraphViewModels<SwapAllowanceViewModel>(R.id.swapFragment) { vmFactory }
+
+    private lateinit var approveButton: Button
+    private lateinit var proceedButton: Button
+    private lateinit var progressBar: ProgressBar
+    private lateinit var commonError: TextView
+    private lateinit var advancedSettingsViews: Group
+    private lateinit var poweredBy: TextView
+    private lateinit var price: TextView
+    private lateinit var priceImpactViews: Group
+    private lateinit var priceImpactValue: TextView
+    private lateinit var guaranteedAmountViews: Group
+    private lateinit var minMaxTitle: TextView
+    private lateinit var minMaxValue: TextView
+    private lateinit var poweredByLine: View
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.fragment_swap, container, false)
@@ -35,7 +54,7 @@ class SwapFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        toolbar.setOnMenuItemClickListener { item ->
+        view.findViewById<Toolbar>(R.id.toolbar).setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.menuCancel -> {
                     findNavController().popBackStack()
@@ -49,15 +68,27 @@ class SwapFragment : BaseFragment() {
             }
         }
 
+        proceedButton = view.findViewById(R.id.proceedButton)
+        progressBar= view.findViewById(R.id.progressBar)
+        commonError= view.findViewById(R.id.commonError)
+        poweredBy = view.findViewById(R.id.poweredBy)
+        price = view.findViewById(R.id.price)
+        priceImpactViews = view.findViewById(R.id.priceImpactViews)
+        priceImpactValue = view.findViewById(R.id.priceImpactValue)
+        guaranteedAmountViews = view.findViewById(R.id.guaranteedAmountViews)
+        minMaxTitle = view.findViewById(R.id.minMaxTitle)
+        minMaxValue = view.findViewById(R.id.minMaxValue)
+        poweredByLine = view.findViewById(R.id.poweredByLine)
+
         val fromCoinCardViewModel = ViewModelProvider(this, vmFactory).get(SwapModule.Factory.coinCardTypeFrom, SwapCoinCardViewModel::class.java)
         val fromCoinCardTitle = getString(R.string.Swap_FromAmountTitle)
-        fromCoinCard.initialize(fromCoinCardTitle, fromCoinCardViewModel, this, viewLifecycleOwner)
+        view.findViewById<SwapCoinCardView>(R.id.fromCoinCard).initialize(fromCoinCardTitle, fromCoinCardViewModel, this, viewLifecycleOwner)
 
         val toCoinCardViewModel = ViewModelProvider(this, vmFactory).get(SwapModule.Factory.coinCardTypeTo, SwapCoinCardViewModel::class.java)
         val toCoinCardTile = getString(R.string.Swap_ToAmountTitle)
-        toCoinCard.initialize(toCoinCardTile, toCoinCardViewModel, this, viewLifecycleOwner)
+        view.findViewById<SwapCoinCardView>(R.id.toCoinCard).initialize(toCoinCardTile, toCoinCardViewModel, this, viewLifecycleOwner)
 
-        allowanceView.initialize(allowanceViewModel, viewLifecycleOwner)
+        view.findViewById<SwapAllowanceView>(R.id.allowanceView).initialize(allowanceViewModel, viewLifecycleOwner)
 
         observeViewModel()
 
@@ -67,11 +98,11 @@ class SwapFragment : BaseFragment() {
             }
         }
 
-        switchButton.setOnClickListener {
+        view.findViewById<Button>(R.id.switchButton).setOnClickListener {
             viewModel.onTapSwitch()
         }
 
-        advancedSettings.setOnSingleClickListener {
+        view.findViewById<TextView>(R.id.advancedSettings).setOnSingleClickListener {
             findNavController().navigate(R.id.swapFragment_to_swapTradeOptionsFragment)
         }
 

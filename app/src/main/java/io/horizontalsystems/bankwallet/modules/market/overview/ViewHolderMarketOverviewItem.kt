@@ -4,6 +4,9 @@ import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
@@ -15,13 +18,20 @@ import io.horizontalsystems.bankwallet.modules.market.getTextColor
 import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
 import io.horizontalsystems.views.ListPosition
 import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.view_holder_market_overview_item.*
 import java.math.BigDecimal
 
 class ViewHolderMarketOverviewItem(override val containerView: View, private val listener: Listener)
     : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
     private var item: MarketViewItem? = null
+    private val icon = containerView.findViewById<ImageView>(R.id.icon)
+    private val rank = containerView.findViewById<TextView>(R.id.rank)
+    private val title = containerView.findViewById<TextView>(R.id.title)
+    private val subtitle = containerView.findViewById<TextView>(R.id.subtitle)
+    private val rate = containerView.findViewById<TextView>(R.id.rate)
+    private val marketFieldCaption = containerView.findViewById<TextView>(R.id.marketFieldCaption)
+    private val marketFieldValue = containerView.findViewById<TextView>(R.id.marketFieldValue)
+    private val rootView = containerView.findViewById<ConstraintLayout>(R.id.rootView)
 
     interface Listener {
         fun onItemClick(marketViewItem: MarketViewItem)

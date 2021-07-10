@@ -6,14 +6,15 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.Toolbar
 import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseWithSearchDialogFragment
 import io.horizontalsystems.bankwallet.modules.swap.SwapModule.CoinBalanceItem
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.setNavigationResult
-import kotlinx.android.synthetic.main.fragment_swap_select_token.*
 
 class SelectSwapCoinDialogFragment : BaseWithSearchDialogFragment() {
 
@@ -27,6 +28,7 @@ class SelectSwapCoinDialogFragment : BaseWithSearchDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val toolbar = view.findViewById<Toolbar>(R.id.toolbar)
         toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }
@@ -44,7 +46,7 @@ class SelectSwapCoinDialogFragment : BaseWithSearchDialogFragment() {
 
         val adapter = SelectSwapCoinAdapter(onClickItem = { closeWithResult(it, requestId) })
 
-        recyclerView.adapter = adapter
+        view.findViewById<RecyclerView>(R.id.recyclerView).adapter = adapter
 
         viewModel?.coinItemsLivedData?.observe(viewLifecycleOwner, { items ->
             adapter.items = items

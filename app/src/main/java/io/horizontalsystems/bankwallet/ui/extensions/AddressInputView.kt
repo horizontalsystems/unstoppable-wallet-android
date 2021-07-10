@@ -4,6 +4,9 @@ import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.AttributeSet
+import android.widget.EditText
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import androidx.lifecycle.LifecycleOwner
@@ -11,8 +14,8 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.Caution
 import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.RecipientAddressViewModel
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
+import io.horizontalsystems.views.ViewState
 import io.horizontalsystems.views.helpers.LayoutHelper
-import kotlinx.android.synthetic.main.view_input_address.view.*
 
 class AddressInputView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
     : ConstraintLayout(context, attrs, defStyleAttr) {
@@ -20,6 +23,13 @@ class AddressInputView @JvmOverloads constructor(context: Context, attrs: Attrib
     private var showQrButton: Boolean = false
     private var onTextChangeCallback: ((text: String?) -> Unit)? = null
     private var onPasteCallback: ((text: String?) -> Unit)? = null
+
+    private lateinit var input: EditText
+    private lateinit var actionsLayout: LinearLayout
+    private var title: TextView
+    private var description: TextView
+    private var error: TextView
+    private var inputBackground: ViewState
 
     private val textWatcher = object : TextWatcher {
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -61,7 +71,13 @@ class AddressInputView @JvmOverloads constructor(context: Context, attrs: Attrib
     }
 
     init {
-        inflate(context, R.layout.view_input_address, this)
+        val rootView = inflate(context, R.layout.view_input_address, this)
+        input = rootView.findViewById(R.id.input)
+        actionsLayout = rootView.findViewById(R.id.actionsLayout)
+        title = rootView.findViewById(R.id.title)
+        description = rootView.findViewById(R.id.description)
+        error = rootView.findViewById(R.id.error)
+        inputBackground = rootView.findViewById(R.id.inputBackground)
 
         val ta = context.obtainStyledAttributes(attrs, R.styleable.AddressInputView)
         try {

@@ -2,12 +2,13 @@ package io.horizontalsystems.bankwallet.ui.extensions
 
 import android.content.Context
 import android.util.AttributeSet
+import android.widget.Button
+import android.widget.RadioGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.modules.market.MarketField
 import io.horizontalsystems.bankwallet.modules.market.SortingField
-import kotlinx.android.synthetic.main.view_market_list_header.view.*
 
 class MarketListHeaderView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
     : ConstraintLayout(context, attrs, defStyleAttr) {
@@ -20,9 +21,13 @@ class MarketListHeaderView @JvmOverloads constructor(context: Context, attrs: At
     var listener: Listener? = null
 
     private var triggerMarketFieldChangeListener = true
+    private var sortingField: Button
+    private var marketFieldSelector: RadioGroup
 
     init {
-        inflate(context, R.layout.view_market_list_header, this)
+        val rootView = inflate(context, R.layout.view_market_list_header, this)
+        sortingField = rootView.findViewById(R.id.sortingField)
+        marketFieldSelector = rootView.findViewById(R.id.marketFieldSelector)
 
         sortingField.setOnSingleClickListener {
             listener?.onClickSortingField()

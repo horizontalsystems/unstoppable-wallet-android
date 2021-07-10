@@ -7,17 +7,19 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.ConcatAdapter
+import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.google.android.material.tabs.TabLayout
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.market.*
 import io.horizontalsystems.bankwallet.modules.market.list.MarketListViewModel
-import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.ui.extensions.MarketListHeaderView
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorDialog
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorItem
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
-import kotlinx.android.synthetic.main.fragment_market_discovery.*
 
 class MarketDiscoveryFragment : BaseFragment(), MarketListHeaderView.Listener, ViewHolderMarketItem.Listener, MarketCategoriesAdapter.Listener {
 
@@ -26,6 +28,7 @@ class MarketDiscoveryFragment : BaseFragment(), MarketListHeaderView.Listener, V
     private val marketDiscoveryViewModel by viewModels<MarketDiscoveryViewModel> { vmFactory }
     private val marketListViewModel by viewModels<MarketListViewModel> { vmFactory }
     private val marketViewModel by navGraphViewModels<MarketViewModel>(R.id.mainFragment)
+    private lateinit var marketListHeader: MarketListHeaderView
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_market_discovery, container, false)
@@ -33,6 +36,11 @@ class MarketDiscoveryFragment : BaseFragment(), MarketListHeaderView.Listener, V
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        marketListHeader = view.findViewById(R.id.marketListHeader)
+        val coinRatesRecyclerView = view.findViewById<RecyclerView>(R.id.coinRatesRecyclerView)
+        val pullToRefresh = view.findViewById<SwipeRefreshLayout>(R.id.pullToRefresh)
+        val tabLayout = view.findViewById<TabLayout>(R.id.tabLayout)
 
         marketListHeader.listener = this
         marketListHeader.setSortingField(marketListViewModel.sortingField)

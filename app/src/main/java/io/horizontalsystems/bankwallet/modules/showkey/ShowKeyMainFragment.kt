@@ -4,14 +4,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import androidx.appcompat.widget.Toolbar
 import androidx.navigation.navGraphViewModels
+import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.showkey.ShowKeyModule.ShowKeyTab
 import io.horizontalsystems.bankwallet.modules.showkey.tabs.ShowKeyTabsAdapter
 import io.horizontalsystems.core.findNavController
-import kotlinx.android.synthetic.main.fragment_show_key_main.*
 
 class ShowKeyMainFragment : BaseFragment() {
     private val viewModel by navGraphViewModels<ShowKeyViewModel>(R.id.showKeyIntroFragment)
@@ -30,9 +33,12 @@ class ShowKeyMainFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        toolbar.setNavigationOnClickListener {
+        view.findViewById<Toolbar>(R.id.toolbar).setNavigationOnClickListener {
             findNavController().popBackStack()
         }
+
+        val viewPager = view.findViewById<ViewPager2>(R.id.viewPager)
+        val tabLayout = view.findViewById<TabLayout>(R.id.tabLayout)
 
         viewPager.adapter = ShowKeyTabsAdapter(showKeyTabs, viewModel.words, viewModel.passphrase, viewModel.privateKeys, childFragmentManager, viewLifecycleOwner.lifecycle)
 
@@ -44,7 +50,7 @@ class ShowKeyMainFragment : BaseFragment() {
             tab.setText(showKeyTabs[position].title)
         }.attach()
 
-        buttonClose.setOnClickListener {
+        view.findViewById<Button>(R.id.buttonClose).setOnClickListener {
             findNavController().popBackStack(R.id.showKeyIntroFragment, true)
         }
     }

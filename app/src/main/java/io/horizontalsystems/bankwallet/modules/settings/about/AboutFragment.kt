@@ -7,15 +7,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.appcompat.widget.Toolbar
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.BaseFragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.BuildConfig
+import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.markdown.MarkdownFragment
 import io.horizontalsystems.bankwallet.modules.settings.main.MainSettingsAdapter
 import io.horizontalsystems.bankwallet.modules.settings.main.SettingsMenuItem
@@ -23,8 +25,6 @@ import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.views.ListPosition
 import io.horizontalsystems.views.inflate
 import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.fragment_about.*
-import kotlinx.android.synthetic.main.view_holder_about_app_header.*
 
 class AboutFragment : BaseFragment() {
 
@@ -37,7 +37,7 @@ class AboutFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        toolbar.setNavigationOnClickListener {
+        view.findViewById<Toolbar>(R.id.toolbar).setNavigationOnClickListener {
             findNavController().popBackStack()
         }
 
@@ -89,7 +89,7 @@ class AboutFragment : BaseFragment() {
 
         val headerAdapter = AboutAppHeaderAdapter(getAppVersion())
 
-        aboutRecyclerview.adapter = ConcatAdapter(headerAdapter, menuItemsAdapter)
+        view.findViewById<RecyclerView>(R.id.aboutRecyclerview).adapter = ConcatAdapter(headerAdapter, menuItemsAdapter)
 
         //observe LiveData
 
@@ -162,6 +162,8 @@ class AboutAppHeaderAdapter(private val appVersion: String) : RecyclerView.Adapt
     }
 
     class HeaderViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+
+        private val versionNameText = containerView.findViewById<TextView>(R.id.versionNameText)
 
         fun bind(version: String) {
             versionNameText.text = version

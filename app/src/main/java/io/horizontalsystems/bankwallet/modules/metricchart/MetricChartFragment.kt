@@ -2,7 +2,10 @@ package io.horizontalsystems.bankwallet.modules.metricchart
 
 import android.os.Bundle
 import android.view.View
+import android.widget.TextView
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.Group
 import androidx.core.os.bundleOf
 import androidx.core.view.isInvisible
 import androidx.fragment.app.FragmentManager
@@ -10,12 +13,12 @@ import androidx.fragment.app.viewModels
 import com.google.android.material.tabs.TabLayout
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.extensions.BaseBottomSheetDialogFragment
+import io.horizontalsystems.bankwallet.ui.extensions.RateDiffView
 import io.horizontalsystems.bankwallet.ui.extensions.createTextView
 import io.horizontalsystems.chartview.Chart
 import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.chartview.models.PointInfo
 import io.horizontalsystems.core.helpers.HudHelper
-import kotlinx.android.synthetic.main.fragment_market_global.*
 
 class MetricChartFragment : BaseBottomSheetDialogFragment(), Chart.Listener, TabLayout.OnTabSelectedListener {
 
@@ -31,17 +34,29 @@ class MetricChartFragment : BaseBottomSheetDialogFragment(), Chart.Listener, Tab
 
     private val viewModel by viewModels<MetricChartViewModel> { MetricChartModule.Factory(metricChartType) }
 
+    private lateinit var tabLayout: TabLayout
+    private lateinit var chartPointsInfo: Group
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         setContentView(R.layout.fragment_market_global)
+
+        val chart = view.findViewById<Chart>(R.id.chart)
+        val topValue = view.findViewById<TextView>(R.id.topValue)
+        val diffValue = view.findViewById<RateDiffView>(R.id.diffValue)
+        val rootView = view.findViewById<ConstraintLayout>(R.id.rootView)
+        val pointInfoDate = view.findViewById<TextView>(R.id.pointInfoDate)
+        val pointInfoValue = view.findViewById<TextView>(R.id.pointInfoValue)
+        tabLayout = view.findViewById(R.id.tabLayout)
+        chartPointsInfo = view.findViewById(R.id.chartPointsInfo)
 
         setTitle(getString(viewModel.title))
         setSubtitle(getString(R.string.MarketGlobalMetrics_Chart))
         setHeaderIconDrawable(context?.let { AppCompatResources.getDrawable(it, R.drawable.ic_chart_24) })
 
         viewModel.description?.let {
-            descriptionText.text = getString(it)
+            view.findViewById<TextView>(R.id.descriptionText).text = getString(it)
         }
         chart.setListener(this)
         setChartTabs()

@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import kotlinx.android.synthetic.main.fragment_show_words_tab.*
+import io.horizontalsystems.bankwallet.ui.extensions.MnemonicPhraseView
 
 class ShowWordsTab : BaseFragment() {
     private val words: List<String>
@@ -23,7 +23,7 @@ class ShowWordsTab : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        mnemonicPhraseView.populateWords(words, passphrase)
+        view.findViewById<MnemonicPhraseView>(R.id.mnemonicPhraseView).populateWords(words, passphrase)
     }
 
     companion object {

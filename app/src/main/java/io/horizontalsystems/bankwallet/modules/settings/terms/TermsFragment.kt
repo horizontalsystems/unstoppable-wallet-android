@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import io.horizontalsystems.bankwallet.R
@@ -12,7 +13,6 @@ import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.managers.Term
 import io.horizontalsystems.bankwallet.core.managers.TermsManager
 import io.horizontalsystems.core.findNavController
-import kotlinx.android.synthetic.main.fragment_terms_settings.*
 
 class TermsFragment : BaseFragment() {
 
@@ -24,9 +24,18 @@ class TermsFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        toolbar.setNavigationOnClickListener {
+        view.findViewById<Toolbar>(R.id.toolbar).setNavigationOnClickListener {
             findNavController().popBackStack()
         }
+
+        val checkboxAcademy = view.findViewById<CheckBox>(R.id.checkboxAcademy)
+        val checkboxBackup = view.findViewById<CheckBox>(R.id.checkboxBackup)
+        val checkboxOwner = view.findViewById<CheckBox>(R.id.checkboxOwner)
+        val checkboxRecover = view.findViewById<CheckBox>(R.id.checkboxRecover)
+        val checkboxPhone = view.findViewById<CheckBox>(R.id.checkboxPhone)
+        val checkboxRoot = view.findViewById<CheckBox>(R.id.checkboxRoot)
+        val checkboxBugs = view.findViewById<CheckBox>(R.id.checkboxBugs)
+        val checkboxPin = view.findViewById<CheckBox>(R.id.checkboxPin)
 
         viewModel.termsLiveData.observe(viewLifecycleOwner, Observer { terms ->
             setCheckbox(checkboxAcademy, TermsManager.termIds[0], terms)

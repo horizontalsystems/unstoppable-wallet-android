@@ -8,21 +8,22 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.market.*
 import io.horizontalsystems.bankwallet.modules.market.list.MarketListViewModel
-import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.ui.extensions.MarketListHeaderView
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorDialog
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorItem
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
-import kotlinx.android.synthetic.main.fragment_market_favorites.*
 
 class MarketFavoritesFragment : BaseFragment(), MarketListHeaderView.Listener, ViewHolderMarketItem.Listener {
 
     private val marketListViewModel by viewModels<MarketListViewModel> { MarketFavoritesModule.Factory() }
+    private lateinit var marketListHeader: MarketListHeaderView
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_market_favorites, container, false)
@@ -30,6 +31,10 @@ class MarketFavoritesFragment : BaseFragment(), MarketListHeaderView.Listener, V
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        marketListHeader = view.findViewById(R.id.marketListHeader)
+        val coinRatesRecyclerView = view.findViewById<RecyclerView>(R.id.coinRatesRecyclerView)
+        val pullToRefresh = view.findViewById<SwipeRefreshLayout>(R.id.pullToRefresh)
 
         marketListHeader.listener = this
         marketListHeader.setSortingField(marketListViewModel.sortingField)

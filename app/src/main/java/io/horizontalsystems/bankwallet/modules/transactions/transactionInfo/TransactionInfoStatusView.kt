@@ -3,15 +3,19 @@ package io.horizontalsystems.bankwallet.modules.transactions.transactionInfo
 import android.content.Context
 import android.graphics.drawable.AnimationDrawable
 import android.util.AttributeSet
+import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionStatus
-import kotlinx.android.synthetic.main.view_transaction_info_status.view.*
-import kotlinx.android.synthetic.main.view_transaction_info_status.view.progressBar
-
 
 open class TransactionInfoStatusView : ConstraintLayout {
+
+    private lateinit var progressBar: ProgressBar
+    private lateinit var confirmedText: TextView
+    private lateinit var progressText: TextView
+    private lateinit var failedText: TextView
 
     constructor(context: Context) : super(context) {
         initializeViews()
@@ -26,7 +30,11 @@ open class TransactionInfoStatusView : ConstraintLayout {
     }
 
     private fun initializeViews() {
-        inflate(context, R.layout.view_transaction_info_status, this)
+        val rootView = inflate(context, R.layout.view_transaction_info_status, this)
+        progressBar = rootView.findViewById(R.id.progressBar)
+        confirmedText = rootView.findViewById(R.id.confirmedText)
+        progressText = rootView.findViewById(R.id.progressText)
+        failedText = rootView.findViewById(R.id.failedText)
     }
 
     fun bind(transactionStatus: TransactionStatus, incoming: Boolean) {

@@ -2,19 +2,29 @@ package io.horizontalsystems.bankwallet.ui.extensions
 
 import android.content.Context
 import android.util.AttributeSet
+import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.chartview.ChartData
+import io.horizontalsystems.chartview.ChartMinimal
 import io.horizontalsystems.views.helpers.LayoutHelper
-import kotlinx.android.synthetic.main.view_market_metric_small.view.*
 import java.math.BigDecimal
 
 class MarketMetricSmallView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
     : ConstraintLayout(context, attrs, defStyleAttr) {
 
+    private var title: TextView
+    private var value: TextView
+    private var chart: ChartMinimal
+    private var diffPercentage: TextView
+
     init {
-        inflate(context, R.layout.view_market_metric_small, this)
+        val rootView = inflate(context, R.layout.view_market_metric_small, this)
+        title = rootView.findViewById(R.id.title)
+        value = rootView.findViewById(R.id.value)
+        chart = rootView.findViewById(R.id.chart)
+        diffPercentage = rootView.findViewById(R.id.diffPercentage)
 
         val ta = context.obtainStyledAttributes(attrs, R.styleable.MarketMetricSmallView)
         try {

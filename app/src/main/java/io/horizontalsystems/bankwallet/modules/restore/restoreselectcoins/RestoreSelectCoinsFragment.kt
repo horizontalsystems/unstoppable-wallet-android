@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.restore.restoreselectcoins
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -17,7 +18,6 @@ import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.snackbar.SnackbarDuration
-import kotlinx.android.synthetic.main.fragment_manage_wallets.*
 
 class RestoreSelectCoinsFragment : CoinListBaseFragment() {
 
@@ -32,6 +32,8 @@ class RestoreSelectCoinsFragment : CoinListBaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val toolbar = view.findViewById<Toolbar>(R.id.toolbar)
 
         toolbar.inflateMenu(R.menu.restore_select_coin_menu)
         toolbar.setOnMenuItemClickListener { item ->

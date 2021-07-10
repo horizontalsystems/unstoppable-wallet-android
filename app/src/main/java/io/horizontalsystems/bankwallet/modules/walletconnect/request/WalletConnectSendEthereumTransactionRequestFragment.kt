@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.activity.addCallback
 import androidx.fragment.app.viewModels
 import androidx.navigation.navGraphViewModels
@@ -12,11 +13,11 @@ import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.ethereum.EthereumFeeViewModel
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
+import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionView
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
 import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectViewModel
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
-import kotlinx.android.synthetic.main.fragment_wallet_connect_request.*
 
 class WalletConnectSendEthereumTransactionRequestFragment : BaseFragment() {
     private val logger = AppLogger("wallet-connect")
@@ -33,6 +34,9 @@ class WalletConnectSendEthereumTransactionRequestFragment : BaseFragment() {
         val viewModel by viewModels<WalletConnectSendEthereumTransactionRequestViewModel> { vmFactory }
         val sendViewModel by viewModels<SendEvmTransactionViewModel> { vmFactory }
         val feeViewModel by viewModels<EthereumFeeViewModel> { vmFactory }
+
+        val btnApprove = view.findViewById<Button>(R.id.btnApprove)
+        val btnReject = view.findViewById<Button>(R.id.btnReject)
 
         btnApprove.setOnSingleClickListener {
             logger.info("click approve button")
@@ -67,7 +71,7 @@ class WalletConnectSendEthereumTransactionRequestFragment : BaseFragment() {
             HudHelper.showErrorMessage(requireActivity().findViewById(android.R.id.content), it)
         })
 
-        sendEvmTransactionView.init(
+        view.findViewById<SendEvmTransactionView>(R.id.sendEvmTransactionView).init(
                 sendViewModel,
                 feeViewModel,
                 viewLifecycleOwner,

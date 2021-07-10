@@ -6,17 +6,25 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.ui.extensions.InputView
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.core.helpers.KeyboardHelper
-import kotlinx.android.synthetic.main.fragment_backup_words_confirm.*
 
 class BackupConfirmKeyFragment : BaseFragment() {
     private val viewModel by viewModels<BackupConfirmKeyViewModel> { BackupConfirmKeyModule.Factory(arguments?.getParcelable(BackupConfirmKeyModule.ACCOUNT)!!) }
+
+    private lateinit var toolbar: Toolbar
+    private lateinit var passphrase: InputView
+    private lateinit var passphraseDescription: TextView
+    private lateinit var wordOne: InputView
+    private lateinit var wordTwo: InputView
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_backup_words_confirm, container, false)
@@ -24,6 +32,13 @@ class BackupConfirmKeyFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        toolbar = view.findViewById(R.id.toolbar)
+        passphrase = view.findViewById(R.id.passphrase)
+        passphraseDescription = view.findViewById(R.id.passphraseDescription)
+        wordOne = view.findViewById(R.id.wordOne)
+        wordTwo = view.findViewById(R.id.wordTwo)
+
         toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }

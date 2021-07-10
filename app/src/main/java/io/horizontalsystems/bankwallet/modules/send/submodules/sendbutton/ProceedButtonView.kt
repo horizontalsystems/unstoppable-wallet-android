@@ -2,15 +2,18 @@ package io.horizontalsystems.bankwallet.modules.send.submodules.sendbutton
 
 import android.content.Context
 import android.util.AttributeSet
+import android.widget.Button
 import androidx.constraintlayout.widget.ConstraintLayout
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
-import kotlinx.android.synthetic.main.view_button_proceed.view.*
 
 class ProceedButtonView : ConstraintLayout {
 
+    private var btnProceed: Button
+
     init {
-        inflate(context, R.layout.view_button_proceed, this)
+        val rootView = inflate(context, R.layout.view_button_proceed, this)
+        btnProceed = rootView.findViewById(R.id.btnProceed)
     }
 
     constructor(context: Context) : super(context)

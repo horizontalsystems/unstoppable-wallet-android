@@ -5,7 +5,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.navGraphViewModels
@@ -18,13 +22,11 @@ import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerActivity
 import io.horizontalsystems.bankwallet.modules.sendevm.confirmation.SendEvmConfirmationModule
 import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.Caution
 import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.RecipientAddressViewModel
+import io.horizontalsystems.bankwallet.ui.extensions.AddressInputView
+import io.horizontalsystems.bankwallet.ui.extensions.AmountInputView
 import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
 import io.horizontalsystems.core.findNavController
-import kotlinx.android.synthetic.main.fragment_send_evm.*
-import kotlinx.android.synthetic.main.fragment_send_evm.amountInput
-import kotlinx.android.synthetic.main.fragment_send_evm.availableBalanceValue
-import kotlinx.android.synthetic.main.fragment_send_evm.background
-import kotlinx.android.synthetic.main.fragment_send_evm.txtHintError
+import io.horizontalsystems.views.ViewState
 
 class SendEvmFragment : BaseFragment() {
 
@@ -34,6 +36,9 @@ class SendEvmFragment : BaseFragment() {
     private val availableBalanceViewModel by viewModels<SendAvailableBalanceViewModel> { vmFactory }
     private val amountViewModel by viewModels<AmountInputViewModel> { vmFactory }
     private val recipientAddressViewModel by viewModels<RecipientAddressViewModel> { vmFactory }
+
+    private lateinit var txtHintError: TextView
+    private lateinit var background: ViewState
 
     private val qrScannerResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         when (result.resultCode) {
@@ -53,6 +58,14 @@ class SendEvmFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val toolbar = view.findViewById<Toolbar>(R.id.toolbar)
+        val availableBalanceSpinner = view.findViewById<ProgressBar>(R.id.availableBalanceSpinner)
+        val availableBalanceValue = view.findViewById<TextView>(R.id.availableBalanceValue)
+        val amountInput = view.findViewById<AmountInputView>(R.id.amountInput)
+        val btnProceed = view.findViewById<Button>(R.id.btnProceed)
+        txtHintError = view.findViewById(R.id.txtHintError)
+        background = view.findViewById(R.id.background)
 
         toolbar.title = getString(R.string.Send_Title, wallet.coin.code)
         toolbar.navigationIcon = AppLayoutHelper.getCoinDrawable(requireContext(), wallet.coin.type)
@@ -102,7 +115,7 @@ class SendEvmFragment : BaseFragment() {
             setAmountInputCaution(caution)
         })
 
-        recipientAddressInputView.setViewModel(recipientAddressViewModel, viewLifecycleOwner, {
+        view.findViewById<AddressInputView>(R.id.recipientAddressInputView).setViewModel(recipientAddressViewModel, viewLifecycleOwner, {
             val intent = QRScannerActivity.getIntentForFragment(this)
             qrScannerResultLauncher.launch(intent)
         })

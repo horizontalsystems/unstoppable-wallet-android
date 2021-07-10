@@ -4,9 +4,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.views.SettingsViewDropdown
 import io.horizontalsystems.views.inflate
 import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.view_holder_transactions_structure.*
 
 
 class PrivacySettingsTransactionsStructureAdapter(private val listener: Listener)
@@ -39,6 +39,8 @@ class PrivacySettingsTransactionsStructureAdapter(private val listener: Listener
             override val containerView: View,
             private val onClick: () -> Unit
     ) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+
+        private val transactionsOrderSetting = containerView.findViewById<SettingsViewDropdown>(R.id.transactionsOrderSetting)
 
         init {
             transactionsOrderSetting.setOnClickListener {

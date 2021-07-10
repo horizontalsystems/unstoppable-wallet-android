@@ -3,15 +3,23 @@ package io.horizontalsystems.bankwallet.ui.extensions
 import android.content.Context
 import android.util.AttributeSet
 import android.widget.FrameLayout
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.core.view.isVisible
 import io.horizontalsystems.bankwallet.R
-import kotlinx.android.synthetic.main.view_item_with_checkmark.view.*
 
 class ItemWithCheckmark @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
     : FrameLayout(context, attrs, defStyleAttr) {
 
+    private var itemTitle: TextView
+    private var itemSubtitle: TextView
+    private var checkMark: ImageView
+
     init {
-        inflate(context, R.layout.view_item_with_checkmark, this)
+        val rootView = inflate(context, R.layout.view_item_with_checkmark, this)
+        itemTitle = rootView.findViewById(R.id.itemTitle)
+        itemSubtitle = rootView.findViewById(R.id.itemSubtitle)
+        checkMark = rootView.findViewById(R.id.checkMark)
     }
 
     fun bind(title: String, subtitle: String, checked: Boolean) {

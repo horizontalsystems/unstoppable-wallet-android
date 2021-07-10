@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -15,7 +17,8 @@ import io.horizontalsystems.core.getNavigationResult
 import io.horizontalsystems.pin.PinInteractionType
 import io.horizontalsystems.pin.PinModule
 import io.horizontalsystems.views.ListPosition
-import kotlinx.android.synthetic.main.fragment_settings_security.*
+import io.horizontalsystems.views.SettingsView
+import io.horizontalsystems.views.SettingsViewSwitch
 
 class SecuritySettingsFragment : BaseFragment() {
 
@@ -27,9 +30,14 @@ class SecuritySettingsFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        toolbar.setNavigationOnClickListener {
+        view.findViewById<Toolbar>(R.id.toolbar).setNavigationOnClickListener {
             findNavController().popBackStack()
         }
+
+        val changePin = view.findViewById<SettingsView>(R.id.changePin)
+        val biometricAuth = view.findViewById<SettingsViewSwitch>(R.id.biometricAuth)
+        val enablePin = view.findViewById<SettingsViewSwitch>(R.id.enablePin)
+        val txtBiometricAuthInfo = view.findViewById<TextView>(R.id.txtBiometricAuthInfo)
 
         viewModel.init()
 
@@ -37,7 +45,7 @@ class SecuritySettingsFragment : BaseFragment() {
             viewModel.delegate.didTapEditPin()
         }
 
-        privacy.setOnSingleClickListener {
+        view.findViewById<SettingsView>(R.id.privacy).setOnSingleClickListener {
             viewModel.delegate.didTapPrivacy()
         }
 

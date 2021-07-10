@@ -4,12 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.Toolbar
 import androidx.navigation.navGraphViewModels
+import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseWithSearchFragment
 import io.horizontalsystems.bankwallet.modules.transactions.FilterAdapter
 import io.horizontalsystems.core.findNavController
-import kotlinx.android.synthetic.main.fragment_market.*
 
 class MarketFragment : BaseWithSearchFragment(), FilterAdapter.Listener {
     private val marketViewModel by navGraphViewModels<MarketViewModel>(R.id.mainFragment) { MarketModule.Factory() }
@@ -20,6 +22,9 @@ class MarketFragment : BaseWithSearchFragment(), FilterAdapter.Listener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val recyclerTags = view.findViewById<RecyclerView>(R.id.recyclerTags)
+        val viewPager = view.findViewById<ViewPager2>(R.id.viewPager)
 
         val filterAdapter = FilterAdapter(this)
         recyclerTags.adapter = filterAdapter
@@ -39,7 +44,7 @@ class MarketFragment : BaseWithSearchFragment(), FilterAdapter.Listener {
             filterAdapter.setFilters(marketViewModel.tabs.map { it.filterItem() }, tab.filterItem())
         }
 
-        toolbar.setOnMenuItemClickListener { item ->
+        view.findViewById<Toolbar>(R.id.toolbar).setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.search -> {
                     findNavController().navigate(R.id.mainFragment_to_marketSearchFragment)

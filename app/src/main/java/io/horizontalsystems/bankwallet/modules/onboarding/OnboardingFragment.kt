@@ -4,10 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.core.findNavController
-import kotlinx.android.synthetic.main.fragment_no_wallet.*
 
 class OnboardingFragment: BaseFragment() {
 
@@ -17,10 +17,10 @@ class OnboardingFragment: BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        btnCreate.setOnClickListener {
+        view.findViewById<Button>(R.id.btnCreate).setOnClickListener {
             findNavController().navigate(R.id.createAccountFragment, null, navOptions())
         }
-        btnRestore.setOnClickListener {
+        view.findViewById<Button>(R.id.btnRestore).setOnClickListener {
             findNavController().navigate(R.id.restoreMnemonicFragment, null, navOptions())
         }
     }

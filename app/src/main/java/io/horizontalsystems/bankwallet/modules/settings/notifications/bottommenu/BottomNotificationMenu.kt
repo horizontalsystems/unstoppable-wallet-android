@@ -3,6 +3,8 @@ package io.horizontalsystems.bankwallet.modules.settings.notifications.bottommen
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
@@ -15,9 +17,6 @@ import io.horizontalsystems.bankwallet.ui.extensions.BaseBottomSheetDialogFragme
 import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.views.inflate
 import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.fragment_bottom_notification_menu.*
-import kotlinx.android.synthetic.main.view_holder_notification_menu_item.*
-import kotlinx.android.synthetic.main.view_holder_notification_menu_section_header.*
 
 class BottomNotificationMenu(
         private val mode: NotificationMenuMode,
@@ -38,7 +37,7 @@ class BottomNotificationMenu(
 
         val itemsAdapter = NotificationMenuItemsAdapter(this)
 
-        menuItems.adapter = itemsAdapter
+        view.findViewById<RecyclerView>(R.id.menuItems).adapter = itemsAdapter
 
         viewModel.menuItemsLiveData.observe(viewLifecycleOwner, Observer { menuItems ->
             itemsAdapter.items = menuItems
@@ -115,6 +114,9 @@ class NotificationMenuItemsAdapter(private val listener: Listener) : RecyclerVie
 class NotificationItemViewHolder(override val containerView: View, val onClick: (position: Int) -> Unit)
     : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
+    private val itemTitle = containerView.findViewById<TextView>(R.id.itemTitle)
+    private val checkMark = containerView.findViewById<ImageView>(R.id.checkMark)
+
     init {
         containerView.setOnClickListener {
             onClick(bindingAdapterPosition)
@@ -129,6 +131,9 @@ class NotificationItemViewHolder(override val containerView: View, val onClick: 
 
 class NotificationBigSectionHeaderViewHolder(override val containerView: View)
     : RecyclerView.ViewHolder(containerView), LayoutContainer {
+
+    private val sectionTitle = containerView.findViewById<TextView>(R.id.sectionTitle)
+    private val bigSectionHeader = containerView.findViewById<View>(R.id.bigSectionHeader)
 
     fun bind(item: NotificationMenuViewItem) {
         sectionTitle.setText(item.title)

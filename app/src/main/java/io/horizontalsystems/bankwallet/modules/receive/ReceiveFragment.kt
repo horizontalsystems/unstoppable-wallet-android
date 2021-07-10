@@ -2,6 +2,9 @@ package io.horizontalsystems.bankwallet.modules.receive
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
@@ -11,11 +14,13 @@ import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.snackbar.SnackbarGravity
-import kotlinx.android.synthetic.main.view_bottom_sheet_receive.*
 
 class ReceiveFragment: BaseBottomSheetDialogFragment() {
 
     private var listener: Listener? = null
+    private lateinit var receiveAddressView: TextView
+    private lateinit var receiverHint: TextView
+    private lateinit var imgQrCode: ImageView
 
     interface Listener {
         fun shareReceiveAddress(address: String)
@@ -31,6 +36,10 @@ class ReceiveFragment: BaseBottomSheetDialogFragment() {
 
         setContentView(R.layout.view_bottom_sheet_receive)
 
+        receiveAddressView = view.findViewById(R.id.receiveAddressView)
+        receiverHint = view.findViewById(R.id.receiverHint)
+        imgQrCode = view.findViewById(R.id.imgQrCode)
+
         val wallet = arguments?.getParcelable<Wallet>(WALLET_KEY) ?: run { dismiss(); return }
 
         setTitle(activity?.getString(R.string.Deposit_Title, wallet.coin.code))
@@ -42,7 +51,7 @@ class ReceiveFragment: BaseBottomSheetDialogFragment() {
         observeRouter(presenter.router as ReceiveRouter)
         presenter.viewDidLoad()
 
-        btnShare.setOnClickListener { presenter.onShareClick() }
+        view.findViewById<Button>(R.id.btnShare).setOnClickListener { presenter.onShareClick() }
         receiveAddressView.setOnClickListener { presenter.onAddressClick() }
     }
 

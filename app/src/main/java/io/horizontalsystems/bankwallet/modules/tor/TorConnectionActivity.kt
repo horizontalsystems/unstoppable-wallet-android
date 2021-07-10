@@ -2,6 +2,10 @@ package io.horizontalsystems.bankwallet.modules.tor
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isInvisible
 import androidx.lifecycle.Observer
@@ -9,17 +13,27 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.managers.TorStatus
 import io.horizontalsystems.bankwallet.modules.launcher.LaunchModule
-import kotlinx.android.synthetic.main.activity_tor_connection.*
 import kotlin.system.exitProcess
 
 @SuppressLint("SetTextI18n")
 class TorConnectionActivity : AppCompatActivity() {
 
     private lateinit var presenter: TorStatusPresenter
+    private lateinit var btnRetry: Button
+    private lateinit var txDisableTor: TextView
+    private lateinit var pgTorStatus: ProgressBar
+    private lateinit var imgTorStatusError: ImageView
+    private lateinit var txTorStatus: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tor_connection)
+
+        btnRetry = findViewById(R.id.btnRetry)
+        txDisableTor = findViewById(R.id.txDisableTor)
+        pgTorStatus = findViewById(R.id.pgTorStatus)
+        imgTorStatusError = findViewById(R.id.imgTorStatusError)
+        txTorStatus = findViewById(R.id.txTorStatus)
 
         presenter = ViewModelProvider(this, TorStatusModule.Factory()).get(TorStatusPresenter::class.java)
         presenter.viewDidLoad()

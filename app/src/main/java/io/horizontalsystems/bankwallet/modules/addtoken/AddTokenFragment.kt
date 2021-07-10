@@ -7,7 +7,11 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -15,12 +19,22 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerActivity
+import io.horizontalsystems.bankwallet.ui.extensions.AddressInputView
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.snackbar.SnackbarDuration
-import kotlinx.android.synthetic.main.fragment_add_token.*
 
 class AddTokenFragment : BaseFragment() {
+
+    private lateinit var addressInputView: AddressInputView
+    private lateinit var btnAddToken: Button
+    private lateinit var progressLoading: ProgressBar
+    private lateinit var coinNameTitle: TextView
+    private lateinit var coinNameValue: TextView
+    private lateinit var symbolTitle: TextView
+    private lateinit var symbolValue: TextView
+    private lateinit var decimalTitle: TextView
+    private lateinit var decimalsValue: TextView
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.fragment_add_token, container, false)
@@ -28,6 +42,17 @@ class AddTokenFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val toolbar = view.findViewById<Toolbar>(R.id.toolbar)
+        btnAddToken = view.findViewById(R.id.btnAddToken)
+        addressInputView = view.findViewById(R.id.addressInputView)
+        progressLoading = view.findViewById(R.id.progressLoading)
+        coinNameTitle = view.findViewById(R.id.coinNameTitle)
+        coinNameValue = view.findViewById(R.id.coinNameValue)
+        symbolTitle = view.findViewById(R.id.symbolTitle)
+        symbolValue = view.findViewById(R.id.symbolValue)
+        decimalTitle = view.findViewById(R.id.decimalTitle)
+        decimalsValue = view.findViewById(R.id.decimalsValue)
+
         toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }

@@ -4,10 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import io.horizontalsystems.bankwallet.R
-import kotlinx.android.synthetic.main.fragment_slide_intro.*
 
 class IntroSlideFragment : Fragment() {
 
@@ -21,11 +21,12 @@ class IntroSlideFragment : Fragment() {
         val titleResId = requireArguments().getInt(TITLE_KEY)
         val descriptionResId = requireArguments().getInt(DESCRIPTION_KEY)
 
+        val title = view.findViewById<TextView>(R.id.title)
         title.isVisible = titleResId != 0
         if (titleResId != 0) {
             title.text = getString(titleResId)
         }
-        description.text = getString(descriptionResId)
+        view.findViewById<TextView>(R.id.description).text = getString(descriptionResId)
     }
 
     companion object {

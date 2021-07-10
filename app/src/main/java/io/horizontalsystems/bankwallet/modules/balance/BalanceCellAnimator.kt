@@ -7,7 +7,6 @@ import androidx.core.animation.doOnEnd
 import androidx.core.animation.doOnStart
 import androidx.core.view.isVisible
 import io.horizontalsystems.core.measureHeight
-import kotlinx.android.synthetic.main.view_holder_balance_item.*
 
 object BalanceCellAnimator {
 

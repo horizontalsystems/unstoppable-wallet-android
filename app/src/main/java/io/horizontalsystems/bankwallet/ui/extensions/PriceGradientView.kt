@@ -10,7 +10,6 @@ import android.widget.ImageView
 import androidx.cardview.widget.CardView
 import androidx.core.graphics.values
 import io.horizontalsystems.bankwallet.R
-import kotlinx.android.synthetic.main.view_price_gradient.view.*
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
@@ -27,8 +26,11 @@ class PriceGradientView @JvmOverloads constructor(context: Context, attrs: Attri
     private val alphaDuration = 600L
     private val translateDuration = 1000L
 
+    private var gradientImage: ImageView
+
     init {
-        inflate(context, R.layout.view_price_gradient, this)
+        val rootView = inflate(context, R.layout.view_price_gradient, this)
+        gradientImage = rootView.findViewById(R.id.gradientImage)
 
         val ta = context.obtainStyledAttributes(attrs, R.styleable.PriceGradientView)
         try {

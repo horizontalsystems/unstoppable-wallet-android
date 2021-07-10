@@ -5,7 +5,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.viewModels
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
@@ -15,9 +17,10 @@ import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerActivity
 import io.horizontalsystems.bankwallet.modules.swap.SwapViewModel
 import io.horizontalsystems.bankwallet.modules.swap.tradeoptions.SwapTradeOptionsViewModel.ActionState
+import io.horizontalsystems.bankwallet.ui.extensions.AddressInputView
+import io.horizontalsystems.bankwallet.ui.extensions.InputWithButtonsView
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
-import kotlinx.android.synthetic.main.fragment_swap_settings.*
 
 class SwapTradeOptionsFragment : BaseFragment() {
     private val swapViewModel by navGraphViewModels<SwapViewModel>(R.id.swapFragment)
@@ -48,7 +51,9 @@ class SwapTradeOptionsFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        toolbar.setOnMenuItemClickListener { item ->
+        val applyButton = view.findViewById<Button>(R.id.applyButton)
+
+        view.findViewById<Toolbar>(R.id.toolbar).setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.menuCancel -> {
                     findNavController().popBackStack()
@@ -79,13 +84,13 @@ class SwapTradeOptionsFragment : BaseFragment() {
             }
         }
 
-        recipientAddressInputView.setViewModel(recipientAddressViewModel, viewLifecycleOwner, {
+        view.findViewById<AddressInputView>(R.id.recipientAddressInputView).setViewModel(recipientAddressViewModel, viewLifecycleOwner, {
             val intent = QRScannerActivity.getIntentForFragment(this)
             qrScannerResultLauncher.launch(intent)
         })
 
-        slippageInputView.setViewModel(slippageViewModel, viewLifecycleOwner)
-        deadlineInputView.setViewModel(deadlineViewModel, viewLifecycleOwner)
+        view.findViewById<InputWithButtonsView>(R.id.slippageInputView).setViewModel(slippageViewModel, viewLifecycleOwner)
+        view.findViewById<InputWithButtonsView>(R.id.deadlineInputView).setViewModel(deadlineViewModel, viewLifecycleOwner)
     }
 
 }

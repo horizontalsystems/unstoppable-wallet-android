@@ -2,6 +2,9 @@ package io.horizontalsystems.bankwallet.ui.extensions.coinlist
 
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.appcompat.widget.SwitchCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -14,7 +17,6 @@ import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.views.ListPosition
 import io.horizontalsystems.views.inflate
 import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.view_holder_coin_manage_item.*
 
 class CoinListAdapter(private val listener: Listener) : ListAdapter<CoinViewItem, CoinWithSwitchViewHolder>(diffCallback) {
 
@@ -82,6 +84,15 @@ class CoinWithSwitchViewHolder(
         private val onSwitch: (isChecked: Boolean, position: Int) -> Unit,
         private val onEdit: (position: Int) -> Unit
 ) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+
+    private val toggleSwitch = containerView.findViewById<SwitchCompat>(R.id.toggleSwitch)
+    private val edit = containerView.findViewById<ImageView>(R.id.edit)
+    private val backgroundView = containerView.findViewById<View>(R.id.backgroundView)
+    private val coinIcon = containerView.findViewById<ImageView>(R.id.coinIcon)
+    private val coinTitle = containerView.findViewById<TextView>(R.id.coinTitle)
+    private val coinSubtitle = containerView.findViewById<TextView>(R.id.coinSubtitle)
+    private val coinTypeLabel = containerView.findViewById<TextView>(R.id.coinTypeLabel)
+    private val dividerView = containerView.findViewById<View>(R.id.dividerView)
 
     init {
         containerView.setOnClickListener {

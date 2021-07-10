@@ -4,6 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
@@ -24,9 +28,6 @@ import io.horizontalsystems.bankwallet.ui.extensions.NpaLinearLayoutManager
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.DateHelper
 import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.fragment_transactions.*
-import kotlinx.android.synthetic.main.view_holder_filter.*
-import kotlinx.android.synthetic.main.view_holder_transaction.*
 
 class TransactionsFragment : Fragment(), TransactionsAdapter.Listener, FilterAdapter.Listener {
 
@@ -34,12 +35,20 @@ class TransactionsFragment : Fragment(), TransactionsAdapter.Listener, FilterAda
     private val transactionsAdapter = TransactionsAdapter(this)
     private val filterAdapter = FilterAdapter(this)
 
+    private lateinit var recyclerTags: RecyclerView
+    private lateinit var recyclerTransactions: RecyclerView
+    private lateinit var toolbarSpinner: ProgressBar
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_transactions, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        recyclerTags = view.findViewById(R.id.recyclerTags)
+        recyclerTransactions = view.findViewById(R.id.recyclerTransactions)
+        toolbarSpinner = view.findViewById(R.id.toolbarSpinner)
 
         val layoutManager = NpaLinearLayoutManager(context)
         transactionsAdapter.viewModel = viewModel
@@ -162,6 +171,18 @@ class TransactionsAdapter(private var listener: Listener) : ListAdapter<Transact
 }
 
 class ViewHolderTransaction(override val containerView: View, private val l: ClickListener) : ViewHolder(containerView), LayoutContainer {
+
+    private val txValueInFiat = containerView.findViewById<TextView>(R.id.txValueInFiat)
+    private val txValueInCoin = containerView.findViewById<TextView>(R.id.txValueInCoin)
+    private val txTypeIcon = containerView.findViewById<ImageView>(R.id.txTypeIcon)
+    private val txDate = containerView.findViewById<TextView>(R.id.txDate)
+    private val txStatusWithTimeView = containerView.findViewById<TransactionStatusWithTimeView>(R.id.txStatusWithTimeView)
+    private val bottomShade = containerView.findViewById<View>(R.id.bottomShade)
+    private val sentToSelfIcon = containerView.findViewById<ImageView>(R.id.sentToSelfIcon)
+    private val doubleSpendIcon = containerView.findViewById<ImageView>(R.id.doubleSpendIcon)
+    private val bottomIcon = containerView.findViewById<ImageView>(R.id.bottomIcon)
+    private val transactionProgressView = containerView.findViewById<TransactionProgressView>(R.id.transactionProgressView)
+    private val lockIcon = containerView.findViewById<ImageView>(R.id.lockIcon)
 
     interface ClickListener {
         fun onClick(position: Int)
@@ -303,6 +324,8 @@ class FilterAdapter(private var listener: Listener) : Adapter<ViewHolder>(), Vie
 }
 
 class ViewHolderFilter(override val containerView: View, private val l: ClickListener) : ViewHolder(containerView), LayoutContainer {
+
+    private val buttonFilter = containerView.findViewById<Button>(R.id.buttonFilter)
 
     interface ClickListener {
         fun onClickItem(position: Int, width: Int)

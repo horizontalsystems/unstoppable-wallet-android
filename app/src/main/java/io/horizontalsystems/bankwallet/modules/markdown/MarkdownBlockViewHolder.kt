@@ -5,21 +5,20 @@ import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.text.style.URLSpan
 import android.view.View
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.constraintlayout.widget.ConstraintSet.TOP
+import androidx.constraintlayout.widget.Group
 import androidx.core.text.getSpans
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.views.helpers.LayoutHelper
 import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.view_holder_markdown_h1.*
-import kotlinx.android.synthetic.main.view_holder_markdown_h2.*
-import kotlinx.android.synthetic.main.view_holder_markdown_h3.*
-import kotlinx.android.synthetic.main.view_holder_markdown_image.*
-import kotlinx.android.synthetic.main.view_holder_markdown_paragraph.*
 import org.apache.commons.io.FilenameUtils
 import java.net.URL
 
@@ -35,7 +34,7 @@ class ViewHolderH1(override val containerView: View) : MarkdownBlockViewHolder(c
     override fun bind(item: MarkdownBlock) {
         if (item !is MarkdownBlock.Heading1) return
 
-        h1.text = item.text
+        containerView.findViewById<TextView>(R.id.h1).text = item.text
     }
 }
 
@@ -43,7 +42,7 @@ class ViewHolderH2(override val containerView: View) : MarkdownBlockViewHolder(c
     override fun bind(item: MarkdownBlock) {
         if (item !is MarkdownBlock.Heading2) return
 
-        h2.text = item.text
+        containerView.findViewById<TextView>(R.id.h2).text = item.text
     }
 }
 
@@ -51,7 +50,7 @@ class ViewHolderH3(override val containerView: View) : MarkdownBlockViewHolder(c
     override fun bind(item: MarkdownBlock) {
         if (item !is MarkdownBlock.Heading3) return
 
-        h3.text = item.text
+        containerView.findViewById<TextView>(R.id.h3).text = item.text
     }
 }
 
@@ -61,6 +60,10 @@ class ViewHolderImage(override val containerView: View) : MarkdownBlockViewHolde
             "p" to "9:16",
             "s" to "1:1"
     )
+
+    private val placeholder = containerView.findViewById<Group>(R.id.placeholder)
+    private val image = containerView.findViewById<ImageView>(R.id.image)
+    private val imageCaption = containerView.findViewById<TextView>(R.id.imageCaption)
 
     override fun bind(item: MarkdownBlock) {
         if (item !is MarkdownBlock.Image) return
@@ -102,6 +105,9 @@ class ViewHolderImage(override val containerView: View) : MarkdownBlockViewHolde
 class ViewHolderParagraph(override val containerView: View, private val listener: MarkdownContentAdapter.Listener, private val handleRelativeUrl: Boolean) : MarkdownBlockViewHolder(containerView), LayoutContainer {
     private val blockQuoteVerticalPadding = LayoutHelper.dp(12f, containerView.context)
     private val listItemIndent = LayoutHelper.dp(24f, containerView.context)
+    private val paragraph = containerView.findViewById<TextView>(R.id.paragraph)
+    private val listItemMarker = containerView.findViewById<TextView>(R.id.listItemMarker)
+    private val quoted = containerView.findViewById<Group>(R.id.quoted)
 
     override fun bind(item: MarkdownBlock) {
         if (item !is MarkdownBlock.Paragraph) return

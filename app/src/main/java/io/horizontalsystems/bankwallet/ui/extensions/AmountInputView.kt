@@ -4,13 +4,16 @@ import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.AttributeSet
+import android.view.View
 import android.view.animation.AnimationUtils
+import android.widget.Button
+import android.widget.EditText
+import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.fiat.AmountTypeSwitchService
 import io.horizontalsystems.core.helpers.KeyboardHelper
-import kotlinx.android.synthetic.main.view_input_amount.view.*
 
 class AmountInputView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
     : ConstraintLayout(context, attrs, defStyleAttr) {
@@ -24,6 +27,12 @@ class AmountInputView @JvmOverloads constructor(context: Context, attrs: Attribu
     var onTextChangeCallback: ((prevText: String?, newText: String?) -> Unit)? = null
     var onTapMaxCallback: (() -> Unit)? = null
     var onTapSecondaryCallback: (() -> Unit)? = null
+
+    private var editTxtAmount: EditText
+    private var btnMax: Button
+    private var topAmountPrefix: TextView
+    private var txtHintInfo: TextView
+    private var secondaryArea: View
 
     private val textWatcher = object : TextWatcher {
         private var prevValue: String? = null
@@ -40,7 +49,12 @@ class AmountInputView @JvmOverloads constructor(context: Context, attrs: Attribu
     }
 
     init {
-        inflate(context, R.layout.view_input_amount, this)
+        val rootView = inflate(context, R.layout.view_input_amount, this)
+        editTxtAmount = rootView.findViewById(R.id.editTxtAmount)
+        btnMax = rootView.findViewById(R.id.btnMax)
+        topAmountPrefix = rootView.findViewById(R.id.topAmountPrefix)
+        txtHintInfo = rootView.findViewById(R.id.txtHintInfo)
+        secondaryArea = rootView.findViewById(R.id.secondaryArea)
 
         editTxtAmount.addTextChangedListener(textWatcher)
 

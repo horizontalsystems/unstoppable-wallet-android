@@ -5,14 +5,14 @@ import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.views.inflate
 import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.fragment_bottom_selector.*
-import kotlinx.android.synthetic.main.view_holder_setting_with_checkmark_wrapper.*
 
 class BottomSheetSelectorMultipleDialog(
         private val title: String,
@@ -31,6 +31,9 @@ class BottomSheetSelectorMultipleDialog(
 
         setContentView(R.layout.fragment_bottom_selector)
 
+        val btnDone = view.findViewById<Button>(R.id.btnDone)
+        val textWarning = view.findViewById<TextView>(R.id.textWarning)
+
         setTitle(title)
         setSubtitle(subtitle)
         setHeaderIconDrawable(icon)
@@ -41,9 +44,9 @@ class BottomSheetSelectorMultipleDialog(
 
         textWarning.text = warning
         textWarning.isVisible = warning != null
-        divider.isVisible = warning != null
+        view.findViewById<View>(R.id.divider).isVisible = warning != null
 
-        rvItems.adapter = itemsAdapter
+        view.findViewById<RecyclerView>(R.id.rvItems).adapter = itemsAdapter
 
         btnDone.setOnClickListener {
             if (notifyUnchanged || !equals(itemsAdapter.selected, selected)) {
@@ -106,6 +109,8 @@ class MultipleSelectorItemsAdapter(private val items: List<BottomSheetSelectorVi
 
 class ItemViewHolderMultiple(override val containerView: View, val onItemClick: (Int) -> Unit)
     : RecyclerView.ViewHolder(containerView), LayoutContainer {
+
+    private val itemWithCheckmark = containerView.findViewById<ItemWithCheckmark>(R.id.itemWithCheckmark)
 
     init {
         containerView.setOnClickListener {

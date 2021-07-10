@@ -3,6 +3,8 @@ package io.horizontalsystems.bankwallet.modules.send
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.widget.LinearLayout
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.commit
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -14,30 +16,32 @@ import io.horizontalsystems.bankwallet.modules.send.submodules.SendSubmoduleFrag
 import io.horizontalsystems.bankwallet.modules.send.submodules.address.SendAddressFragment
 import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmountFragment
 import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.ConfirmationFragment
-import io.horizontalsystems.bankwallet.modules.send.submodules.fee.SendFeeInfoFragment
 import io.horizontalsystems.bankwallet.modules.send.submodules.fee.SendFeeFragment
+import io.horizontalsystems.bankwallet.modules.send.submodules.fee.SendFeeInfoFragment
 import io.horizontalsystems.bankwallet.modules.send.submodules.hodler.SendHodlerFragment
 import io.horizontalsystems.bankwallet.modules.send.submodules.memo.SendMemoFragment
 import io.horizontalsystems.bankwallet.modules.send.submodules.sendbutton.ProceedButtonView
 import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.snackbar.SnackbarDuration
-import kotlinx.android.synthetic.main.activity_send.*
 
 class SendActivity : BaseActivity() {
 
     private lateinit var mainPresenter: SendPresenter
 
     private var proceedButtonView: ProceedButtonView? = null
+    private lateinit var sendLinearLayout: LinearLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         // prevent fragment recreations by passing null to onCreate
         super.onCreate(null)
         setContentView(R.layout.activity_send)
 
-       overridePendingTransition(R.anim.slide_from_bottom, R.anim.slide_to_top)
+        overridePendingTransition(R.anim.slide_from_bottom, R.anim.slide_to_top)
 
         val wallet: Wallet = intent.getParcelableExtra(WALLET) ?: run { finish(); return }
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        sendLinearLayout = findViewById(R.id.sendLinearLayout)
 
         toolbar.title = getString(R.string.Send_Title, wallet.coin.code)
         toolbar.navigationIcon = AppLayoutHelper.getCoinDrawable(this, wallet.coin.type)

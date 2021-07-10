@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.View
 import androidx.activity.addCallback
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import io.horizontalsystems.bankwallet.R
@@ -17,7 +18,6 @@ import io.horizontalsystems.bankwallet.ui.extensions.ZcashBirthdayHeightDialog
 import io.horizontalsystems.bankwallet.ui.extensions.coinlist.CoinListBaseFragment
 import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.core.findNavController
-import kotlinx.android.synthetic.main.fragment_manage_wallets.*
 
 class ManageWalletsFragment : CoinListBaseFragment() {
 
@@ -31,6 +31,8 @@ class ManageWalletsFragment : CoinListBaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val toolbar = view.findViewById<Toolbar>(R.id.toolbar)
 
         toolbar.inflateMenu(R.menu.manage_wallets_menu)
         toolbar.setOnMenuItemClickListener { item ->

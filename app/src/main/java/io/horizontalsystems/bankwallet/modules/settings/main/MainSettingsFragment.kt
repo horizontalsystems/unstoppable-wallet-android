@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
@@ -18,11 +19,11 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectL
 import io.horizontalsystems.core.getNavigationResult
 import io.horizontalsystems.languageswitcher.LanguageSettingsFragment
 import io.horizontalsystems.views.ListPosition
-import kotlinx.android.synthetic.main.fragment_settings.*
 
 class MainSettingsFragment : BaseFragment() {
 
     private val presenter by viewModels<MainSettingsPresenter> { MainSettingsModule.Factory() }
+    private lateinit var settingsRecyclerView: RecyclerView
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_settings, container, false)
@@ -30,6 +31,8 @@ class MainSettingsFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        settingsRecyclerView = view.findViewById(R.id.settingsRecyclerView)
 
         subscribeToRouterEvents(presenter.router as MainSettingsRouter)
 

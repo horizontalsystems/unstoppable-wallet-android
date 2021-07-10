@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.constraintlayout.widget.Group
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
@@ -18,7 +20,6 @@ import io.horizontalsystems.bankwallet.ui.extensions.SelectorItem
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.seekbar.FeeSeekBar
-import kotlinx.android.synthetic.main.view_send_fee.*
 
 class SendFeeFragment(
         private val coin: Coin,
@@ -28,6 +29,16 @@ class SendFeeFragment(
     : SendSubmoduleFragment() {
 
     private val presenter by activityViewModels<SendFeePresenter> { SendFeeModule.Factory(coin, sendHandler, feeModuleDelegate, customPriorityUnit) }
+    private lateinit var txError: TextView
+    private lateinit var txFeeLoading: TextView
+    private lateinit var customFeeSeekBar: FeeSeekBar
+    private lateinit var speedViews: Group
+    private lateinit var txFeePrimary: TextView
+    private lateinit var txFeeSecondary: TextView
+    private lateinit var txSpeedMenu: TextView
+    private lateinit var feeError: TextView
+    private lateinit var lowFeeWarning: TextView
+    private lateinit var txFeeTitle: TextView
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.view_send_fee, container, false)
@@ -38,13 +49,23 @@ class SendFeeFragment(
         super.onViewCreated(view, savedInstanceState)
 
         val presenterView = presenter.view as SendFeeView
+        txError = view.findViewById(R.id.txError)
+        txFeeLoading = view.findViewById(R.id.txFeeLoading)
+        customFeeSeekBar = view.findViewById(R.id.customFeeSeekBar)
+        speedViews = view.findViewById(R.id.speedViews)
+        txFeePrimary = view.findViewById(R.id.txFeePrimary)
+        txFeeSecondary = view.findViewById(R.id.txFeeSecondary)
+        txSpeedMenu = view.findViewById(R.id.txSpeedMenu)
+        feeError = view.findViewById(R.id.feeError)
+        lowFeeWarning = view.findViewById(R.id.lowFeeWarning)
+        txFeeTitle = view.findViewById(R.id.txFeeTitle)
 
         txError.isVisible = false
 
-        txSpeedMenuClickArea.setOnClickListener {
+        view.findViewById<View>(R.id.txSpeedMenuClickArea).setOnClickListener {
             presenter.onClickFeeRatePriority()
         }
-        feeInfoImageClickArea.setOnClickListener {
+        view.findViewById<View>(R.id.feeInfoImageClickArea).setOnClickListener {
             (activity as? SendActivity)?.showFeeInfo()
         }
         txFeeLoading.isVisible = false

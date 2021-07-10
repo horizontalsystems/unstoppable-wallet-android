@@ -6,6 +6,8 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import androidx.appcompat.widget.Toolbar
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.navGraphViewModels
@@ -18,6 +20,7 @@ import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule.additionalInfoKey
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule.transactionDataKey
+import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionView
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
 import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveModule
 import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveViewModel
@@ -28,7 +31,6 @@ import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.snackbar.CustomSnackbar
 import io.horizontalsystems.snackbar.SnackbarDuration
-import kotlinx.android.synthetic.main.fragment_confirmation_approve_swap.*
 
 class SwapApproveConfirmationFragment : BaseFragment() {
     private val logger = AppLogger("swap-approve")
@@ -58,7 +60,7 @@ class SwapApproveConfirmationFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        toolbar.setOnMenuItemClickListener { item ->
+        view.findViewById<Toolbar>(R.id.toolbar).setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.menuCancel -> {
                     findNavController().popBackStack()
@@ -67,6 +69,8 @@ class SwapApproveConfirmationFragment : BaseFragment() {
                 else -> false
             }
         }
+
+        val approveButton = view.findViewById<Button>(R.id.approveButton)
 
         sendViewModel.sendEnabledLiveData.observe(viewLifecycleOwner, { enabled ->
             approveButton.isEnabled = enabled
@@ -90,7 +94,7 @@ class SwapApproveConfirmationFragment : BaseFragment() {
             findNavController().popBackStack()
         })
 
-        sendEvmTransactionView.init(
+        view.findViewById<SendEvmTransactionView>(R.id.sendEvmTransactionView).init(
                 sendViewModel,
                 feeViewModel,
                 viewLifecycleOwner,

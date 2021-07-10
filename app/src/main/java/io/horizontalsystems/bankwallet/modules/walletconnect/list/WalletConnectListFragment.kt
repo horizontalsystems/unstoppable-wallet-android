@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
@@ -11,12 +13,10 @@ import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListViewModel.WalletConnectViewItem
 import io.horizontalsystems.bankwallet.modules.walletconnect.main.WalletConnectMainModule
+import io.horizontalsystems.bankwallet.ui.extensions.PicassoRoundedImageView
 import io.horizontalsystems.core.findNavController
+import io.horizontalsystems.views.SettingsView
 import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.fragment_notifications.toolbar
-import kotlinx.android.synthetic.main.fragment_wallet_connect_list.*
-import kotlinx.android.synthetic.main.view_holder_wallet_connect_account.*
-import kotlinx.android.synthetic.main.view_holder_wallet_connect_session.*
 
 class WalletConnectListFragment : BaseFragment(), SessionViewHolder.Listener {
     private val viewModel by viewModels<WalletConnectListViewModel> { WalletConnectListModule.Factory() }
@@ -28,16 +28,16 @@ class WalletConnectListFragment : BaseFragment(), SessionViewHolder.Listener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        toolbar.setNavigationOnClickListener {
+        view.findViewById<Toolbar>(R.id.toolbar).setNavigationOnClickListener {
             findNavController().popBackStack()
         }
 
-        newConnect.setOnSingleClickListener {
+        view.findViewById<SettingsView>(R.id.newConnect).setOnSingleClickListener {
             startNewConnection()
         }
 
         val walletConnectListAdapter = WalletConnectListAdapter(this)
-        sessionsRecyclerView.adapter = walletConnectListAdapter
+        view.findViewById<RecyclerView>(R.id.sessionsRecyclerView).adapter = walletConnectListAdapter
 
         viewModel.viewItemsLiveData.observe(viewLifecycleOwner, { viewItems ->
             walletConnectListAdapter.items = viewItems
@@ -100,6 +100,8 @@ class WalletConnectListAdapter(
 
 class AccountViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
+    private val accountTextView = containerView.findViewById<TextView>(R.id.accountTextView)
+
     fun bind(account: WalletConnectViewItem.Account) {
         accountTextView.text = account.title
     }
@@ -115,6 +117,11 @@ class SessionViewHolder(
         override val containerView: View,
         private val listener: Listener
 ) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+
+    private val titleTextView = containerView.findViewById<TextView>(R.id.titleTextView)
+    private val subtitleTextView = containerView.findViewById<TextView>(R.id.subtitleTextView)
+    private val backgroundView = containerView.findViewById<View>(R.id.backgroundView)
+    private val iconImageView = containerView.findViewById<PicassoRoundedImageView>(R.id.iconImageView)
 
     interface Listener {
         fun onSessionClick(session: WalletConnectViewItem.Session)

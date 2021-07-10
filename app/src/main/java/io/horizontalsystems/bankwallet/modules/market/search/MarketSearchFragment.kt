@@ -6,7 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.LinearLayout
 import androidx.appcompat.widget.SearchView
+import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.ConcatAdapter
@@ -19,7 +21,6 @@ import io.horizontalsystems.bankwallet.modules.market.favorites.EmptyListAdapter
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.KeyboardHelper
 import io.horizontalsystems.views.inflate
-import kotlinx.android.synthetic.main.fragment_market_search.*
 
 class MarketSearchFragment : BaseFragment() {
 
@@ -30,9 +31,13 @@ class MarketSearchFragment : BaseFragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        toolbar.setNavigationOnClickListener {
+        view.findViewById<Toolbar>(R.id.toolbar).setNavigationOnClickListener {
             findNavController().popBackStack()
         }
+
+        val advancedSearch = view.findViewById<LinearLayout>(R.id.advancedSearch)
+        val searchView = view.findViewById<SearchView>(R.id.searchView)
+        val rvItems = view.findViewById<RecyclerView>(R.id.rvItems)
 
         advancedSearch.setOnSingleClickListener {
             findNavController().navigate(R.id.marketSearchFragment_to_marketAdvancedSearchFragment, null, navOptions())

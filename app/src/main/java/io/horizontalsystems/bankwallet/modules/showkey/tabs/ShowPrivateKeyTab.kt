@@ -4,14 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.showkey.ShowKeyModule
 import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.fragment_show_private_key_tab.*
-import kotlinx.android.synthetic.main.view_holder_private_key.*
 
 class ShowPrivateKeyFragment : BaseFragment() {
 
@@ -25,7 +24,7 @@ class ShowPrivateKeyFragment : BaseFragment() {
         val privateKeys = arguments?.getParcelableArrayList<ShowKeyModule.PrivateKey>(PRIVATE_KEYS)
                 ?: listOf()
 
-        recyclerView.adapter = PrivateKeysAdapter(privateKeys)
+        view.findViewById<RecyclerView>(R.id.recyclerView).adapter = PrivateKeysAdapter(privateKeys)
     }
 
     companion object {
@@ -62,6 +61,9 @@ class PrivateKeysAdapter(
 class PrivateKeyViewHolder(
         override val containerView: View
 ) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+
+    private val blockchain = containerView.findViewById<TextView>(R.id.blockchain)
+    private val value = containerView.findViewById<TextView>(R.id.value)
 
     fun bind(key: ShowKeyModule.PrivateKey) {
         blockchain.text = key.blockchain

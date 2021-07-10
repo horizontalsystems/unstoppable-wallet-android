@@ -5,20 +5,23 @@ import android.util.AttributeSet
 import android.view.Gravity
 import android.widget.CompoundButton
 import android.widget.LinearLayout
+import android.widget.TextView
+import androidx.appcompat.widget.SwitchCompat
 import io.horizontalsystems.bankwallet.R
-import kotlinx.android.synthetic.main.view_market_filter_switch.view.*
 
 class MarketFilterSwitchView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
     : LinearLayout(context, attrs, defStyleAttr), CompoundButton.OnCheckedChangeListener {
 
     private var onCheckedChangeListener: CompoundButton.OnCheckedChangeListener? = null
     private var notifyListener = true
+    private var switchView: SwitchCompat
 
     init {
         orientation = HORIZONTAL
         gravity = Gravity.CENTER_VERTICAL
 
-        inflate(context, R.layout.view_market_filter_switch, this)
+        val rootView = inflate(context, R.layout.view_market_filter_switch, this)
+        switchView = rootView.findViewById(R.id.switchView)
 
         switchView.setOnCheckedChangeListener(this)
 
@@ -26,7 +29,7 @@ class MarketFilterSwitchView @JvmOverloads constructor(context: Context, attrs: 
 
         val ta = context.obtainStyledAttributes(attrs, R.styleable.MarketFilterSwitchView)
         try {
-            title.text = ta.getString(R.styleable.MarketFilterSwitchView_title)
+            rootView.findViewById<TextView>(R.id.title).text = ta.getString(R.styleable.MarketFilterSwitchView_title)
             setChecked(ta.getBoolean(R.styleable.MarketFilterSwitchView_checked, false))
         } finally {
             ta.recycle()

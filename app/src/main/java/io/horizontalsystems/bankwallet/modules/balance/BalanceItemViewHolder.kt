@@ -2,18 +2,45 @@ package io.horizontalsystems.bankwallet.modules.balance
 
 import android.content.res.ColorStateList
 import android.view.View
+import android.widget.Button
+import android.widget.FrameLayout
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.setCoinImage
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
+import io.horizontalsystems.bankwallet.ui.extensions.RotatingCircleProgressView
 import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.view_holder_balance_item.*
 
 class BalanceItemViewHolder(override val containerView: View, private val listener: BalanceItemsAdapter.Listener) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
     private var balanceViewItem: BalanceViewItem? = null
+    private var buttonSend: Button
+    private var buttonReceive: Button
+    private var buttonSwap: Button
+    private var iconNotSynced: ImageView
+    private var iconCoin: ImageView
+    private var coinName: TextView
+    private var coinLabel: TextView
+    private var balanceCoin: TextView
+    private var balanceFiat: TextView
+    var balanceCoinLocked: TextView
+    var balanceFiatLocked: TextView
+    private var exchangeRate: TextView
+    private var rateDiff: TextView
+    private var rateDiffIcon: ImageView
+    private var iconProgress: RotatingCircleProgressView
+    private var textSyncing: TextView
+    private var textSyncedUntil: TextView
+    var balanceWrapper: FrameLayout
+    var lockedBalanceWrapper: FrameLayout
+    var buttonsWrapper: ConstraintLayout
+    var border: FrameLayout
+    var rootWrapper: ConstraintLayout
 
     init {
         containerView.setOnClickListener {
@@ -22,35 +49,58 @@ class BalanceItemViewHolder(override val containerView: View, private val listen
             }
         }
 
-        rateDiffWrapper.setOnSingleClickListener {
+        containerView.findViewById<FrameLayout>(R.id.rateDiffWrapper).setOnSingleClickListener {
             balanceViewItem?.let {
                 listener.onChartClicked(it)
             }
         }
 
+        buttonSend = containerView.findViewById(R.id.buttonSend)
         buttonSend.setOnSingleClickListener {
             balanceViewItem?.let {
                 listener.onSendClicked(it)
             }
         }
 
+        buttonReceive = containerView.findViewById(R.id.buttonReceive)
         buttonReceive.setOnSingleClickListener {
             balanceViewItem?.let {
                 listener.onReceiveClicked(it)
             }
         }
 
+        buttonSwap = containerView.findViewById(R.id.buttonSwap)
         buttonSwap.setOnSingleClickListener {
             balanceViewItem?.let {
                 listener.onSwapClicked(it)
             }
         }
 
+        iconNotSynced = containerView.findViewById(R.id.iconNotSynced)
         iconNotSynced.setOnSingleClickListener {
             balanceViewItem?.let {
                 listener.onSyncErrorClicked(it)
             }
         }
+
+        iconCoin = containerView.findViewById(R.id.iconCoin)
+        coinName = containerView.findViewById(R.id.coinName)
+        coinLabel = containerView.findViewById(R.id.coinLabel)
+        balanceCoin = containerView.findViewById(R.id.balanceCoin)
+        balanceFiat = containerView.findViewById(R.id.balanceFiat)
+        balanceCoinLocked = containerView.findViewById(R.id.balanceCoinLocked)
+        balanceFiatLocked = containerView.findViewById(R.id.balanceFiatLocked)
+        exchangeRate = containerView.findViewById(R.id.exchangeRate)
+        rateDiff = containerView.findViewById(R.id.rateDiff)
+        rateDiffIcon = containerView.findViewById(R.id.rateDiffIcon)
+        iconProgress = containerView.findViewById(R.id.iconProgress)
+        textSyncing = containerView.findViewById(R.id.textSyncing)
+        textSyncedUntil = containerView.findViewById(R.id.textSyncedUntil)
+        balanceWrapper = containerView.findViewById(R.id.balanceWrapper)
+        lockedBalanceWrapper = containerView.findViewById(R.id.lockedBalanceWrapper)
+        buttonsWrapper = containerView.findViewById(R.id.buttonsWrapper)
+        border = containerView.findViewById(R.id.border)
+        rootWrapper = containerView.findViewById(R.id.rootWrapper)
 
         BalanceCellAnimator.measureHeights(this)
     }

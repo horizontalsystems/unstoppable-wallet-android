@@ -5,17 +5,20 @@ import android.util.AttributeSet
 import android.view.Gravity
 import android.view.View
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.lifecycle.LifecycleOwner
 import io.horizontalsystems.bankwallet.R
-import kotlinx.android.synthetic.main.view_swap_allowance.view.*
 
 class SwapAllowanceView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
     : LinearLayout(context, attrs, defStyleAttr) {
 
+    private var allowance: TextView
+
     init {
         orientation = HORIZONTAL
         gravity = Gravity.CENTER_VERTICAL
-        inflate(context, R.layout.view_swap_allowance, this)
+        val rootView = inflate(context, R.layout.view_swap_allowance, this)
+        allowance = rootView.findViewById(R.id.allowance)
     }
 
     fun initialize(viewModel: SwapAllowanceViewModel, lifecycleOwner: LifecycleOwner) {

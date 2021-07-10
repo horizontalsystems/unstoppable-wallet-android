@@ -4,12 +4,14 @@ import android.content.Context
 import android.graphics.drawable.AnimationDrawable
 import android.util.AttributeSet
 import android.widget.FrameLayout
+import android.widget.ProgressBar
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.TransactionType
-import kotlinx.android.synthetic.main.view_transaction_progress.view.*
 
 
 class TransactionProgressView : FrameLayout {
+
+    private lateinit var progressBar: ProgressBar
 
     constructor(context: Context) : super(context) {
         initializeViews()
@@ -24,7 +26,8 @@ class TransactionProgressView : FrameLayout {
     }
 
     private fun initializeViews() {
-        inflate(context, R.layout.view_transaction_progress, this)
+        val rootView = inflate(context, R.layout.view_transaction_progress, this)
+        progressBar = rootView.findViewById(R.id.progressBar)
     }
 
     fun bind(progress: Double = 0.0, type: TransactionType) {

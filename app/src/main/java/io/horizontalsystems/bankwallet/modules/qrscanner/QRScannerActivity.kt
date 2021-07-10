@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.View
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.zxing.MultiFormatReader
@@ -14,17 +15,18 @@ import com.google.zxing.client.android.DecodeHintManager
 import com.google.zxing.client.android.Intents
 import com.google.zxing.integration.android.IntentIntegrator
 import com.journeyapps.barcodescanner.BarcodeCallback
+import com.journeyapps.barcodescanner.BarcodeView
 import com.journeyapps.barcodescanner.DefaultDecoderFactory
 import com.journeyapps.barcodescanner.camera.CameraSettings
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.core.helpers.HudHelper
-import kotlinx.android.synthetic.main.activity_qr_scanner.*
 import pub.devrel.easypermissions.AfterPermissionGranted
 import pub.devrel.easypermissions.EasyPermissions
 
 class QRScannerActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
 
+    private lateinit var barcodeView: BarcodeView
     private val callback = BarcodeCallback {
         barcodeView.pause()
         //slow down fast transition to new window
@@ -38,13 +40,15 @@ class QRScannerActivity : AppCompatActivity(), EasyPermissions.PermissionCallbac
 
         setContentView(R.layout.activity_qr_scanner)
 
-        setSupportActionBar(toolbar)
+        barcodeView = findViewById(R.id.barcodeView)
+
+        setSupportActionBar(findViewById(R.id.toolbar))
         supportActionBar?.title = ""
 
         val oldFlags = window.decorView.systemUiVisibility
         window.decorView.systemUiVisibility = oldFlags or View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
 
-        cancelButton.setOnClickListener {
+        findViewById<Button>(R.id.cancelButton).setOnClickListener {
             onBackPressed()
         }
 

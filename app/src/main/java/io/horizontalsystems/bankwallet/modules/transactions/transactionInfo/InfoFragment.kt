@@ -5,6 +5,8 @@ import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isVisible
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseDialogFragment
@@ -12,7 +14,6 @@ import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.dismissOnBackPressed
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.android.parcel.Parcelize
-import kotlinx.android.synthetic.main.fragment_info.*
 
 class InfoFragment : BaseDialogFragment() {
 
@@ -30,6 +31,8 @@ class InfoFragment : BaseDialogFragment() {
             return
         }
 
+        val toolbar = view.findViewById<Toolbar>(R.id.toolbar)
+
         toolbar.title = infoParams.title
         toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
@@ -41,7 +44,9 @@ class InfoFragment : BaseDialogFragment() {
             }
         }
 
-        textDescription.text = infoParams.description
+        view.findViewById<TextView>(R.id.textDescription).text = infoParams.description
+        val itemTxHash = view.findViewById<TransactionInfoItemView>(R.id.itemTxHash)
+        val itemConflictingTxHash = view.findViewById<TransactionInfoItemView>(R.id.itemConflictingTxHash)
 
         infoParams.txHash?.let { txHash ->
             itemTxHash.bindHashId(getString(R.string.Info_DoubleSpend_ThisTx), txHash)

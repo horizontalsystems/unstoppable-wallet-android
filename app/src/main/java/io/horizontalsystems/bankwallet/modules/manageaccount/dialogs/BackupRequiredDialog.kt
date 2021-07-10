@@ -2,12 +2,12 @@ package io.horizontalsystems.bankwallet.modules.manageaccount.dialogs
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
 import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.ui.extensions.BaseBottomSheetDialogFragment
-import kotlinx.android.synthetic.main.fragment_bottom_backup_required.*
 
 class BackupRequiredDialog : BaseBottomSheetDialogFragment() {
 
@@ -26,7 +26,7 @@ class BackupRequiredDialog : BaseBottomSheetDialogFragment() {
         setSubtitle(account?.name)
         setHeaderIcon(R.drawable.ic_attention_red_24)
 
-        backupButton.setOnClickListener {
+        view.findViewById<Button>(R.id.backupButton).setOnClickListener {
             account?.let { listener?.onClickBackup(account) }
             dismiss()
         }

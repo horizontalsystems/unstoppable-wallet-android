@@ -15,7 +15,11 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.*
 import androidx.activity.addCallback
+import androidx.appcompat.widget.Toolbar
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.Group
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.doOnPreDraw
@@ -33,6 +37,8 @@ import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartType
 import io.horizontalsystems.bankwallet.modules.settings.notifications.bottommenu.BottomNotificationMenu
 import io.horizontalsystems.bankwallet.modules.settings.notifications.bottommenu.NotificationMenuMode
 import io.horizontalsystems.bankwallet.modules.transactions.transactionInfo.CoinInfoItemView
+import io.horizontalsystems.bankwallet.ui.extensions.LockableNestedScrollView
+import io.horizontalsystems.bankwallet.ui.extensions.RateDiffView
 import io.horizontalsystems.bankwallet.ui.extensions.createTextView
 import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
 import io.horizontalsystems.chartview.Chart
@@ -53,8 +59,6 @@ import io.noties.markwon.AbstractMarkwonPlugin
 import io.noties.markwon.Markwon
 import io.noties.markwon.MarkwonSpansFactory
 import io.noties.markwon.core.spans.LastLineSpacingSpan
-import kotlinx.android.synthetic.main.coin_market_details.*
-import kotlinx.android.synthetic.main.fragment_coin.*
 import org.commonmark.node.Heading
 import org.commonmark.node.Paragraph
 import java.math.BigDecimal
@@ -92,12 +96,84 @@ class CoinFragment : BaseFragment(), Chart.Listener, TabLayout.OnTabSelectedList
             Pair(ChartType.MONTHLY24, R.string.CoinPage_TimeDuration_Year2)
     )
 
+    private lateinit var toolbar: Toolbar
+    private lateinit var coinName: TextView
+    private lateinit var coinIcon: ImageView
+    private lateinit var chart: Chart
+    private lateinit var aboutTextToggle: TextView
+    private lateinit var aboutText: TextView
+    private lateinit var scroller: LockableNestedScrollView
+    private lateinit var chartPointsInfo: ConstraintLayout
+    private lateinit var tabLayout: TabLayout
+    private lateinit var marketSpinner: ProgressBar
+    private lateinit var indicatorEMA: CheckBox
+    private lateinit var indicatorMACD: CheckBox
+    private lateinit var indicatorRSI: CheckBox
+    private lateinit var rootView: FrameLayout
+    private lateinit var coinRateDiff: RateDiffView
+    private lateinit var coinRateLast: TextView
+    private lateinit var marketDetails: ConstraintLayout
+    private lateinit var coinRating: ImageButton
+    private lateinit var aboutGroup: Group
+    private lateinit var aboutTitle: TextView
+    private lateinit var pointInfoVolume: TextView
+    private lateinit var pointInfoVolumeTitle: TextView
+    private lateinit var macdHistogram: TextView
+    private lateinit var macdSignal: TextView
+    private lateinit var macdValue: TextView
+    private lateinit var pointInfoDate: TextView
+    private lateinit var pointInfoPrice: TextView
+    private lateinit var coinPerformanceLayout: LinearLayout
+    private lateinit var extraPagesLayout: LinearLayout
+    private lateinit var marketDataLayout: LinearLayout
+    private lateinit var tvlLayout: LinearLayout
+    private lateinit var linksLayout: LinearLayout
+    private lateinit var categoriesText: TextView
+    private lateinit var categoriesGroup: Group
+    private lateinit var platformsLayout: LinearLayout
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.fragment_coin, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        toolbar = view.findViewById(R.id.toolbar)
+        coinName = view.findViewById(R.id.coinName)
+        coinIcon = view.findViewById(R.id.coinIcon)
+        chart = view.findViewById(R.id.chart)
+        aboutTextToggle = view.findViewById(R.id.aboutTextToggle)
+        aboutText = view.findViewById(R.id.aboutText)
+        scroller = view.findViewById(R.id.scroller)
+        chartPointsInfo = view.findViewById(R.id.chartPointsInfo)
+        tabLayout = view.findViewById(R.id.tabLayout)
+        marketSpinner = view.findViewById(R.id.marketSpinner)
+        indicatorEMA = view.findViewById(R.id.indicatorEMA)
+        indicatorMACD = view.findViewById(R.id.indicatorMACD)
+        indicatorRSI = view.findViewById(R.id.indicatorRSI)
+        rootView = view.findViewById(R.id.rootView)
+        coinRateDiff = view.findViewById(R.id.coinRateDiff)
+        coinRateLast = view.findViewById(R.id.coinRateLast)
+        marketDetails = view.findViewById(R.id.marketDetails)
+        coinRating = view.findViewById(R.id.coinRating)
+        aboutGroup = view.findViewById(R.id.aboutGroup)
+        aboutTitle = view.findViewById(R.id.aboutTitle)
+        pointInfoVolume = view.findViewById(R.id.pointInfoVolume)
+        pointInfoVolumeTitle = view.findViewById(R.id.pointInfoVolumeTitle)
+        macdHistogram = view.findViewById(R.id.macdHistogram)
+        macdSignal = view.findViewById(R.id.macdSignal)
+        macdValue = view.findViewById(R.id.macdValue)
+        pointInfoDate = view.findViewById(R.id.pointInfoDate)
+        pointInfoPrice = view.findViewById(R.id.pointInfoPrice)
+        coinPerformanceLayout = view.findViewById(R.id.coinPerformanceLayout)
+        extraPagesLayout = view.findViewById(R.id.extraPagesLayout)
+        marketDataLayout = view.findViewById(R.id.marketDataLayout)
+        tvlLayout = view.findViewById(R.id.tvlLayout)
+        linksLayout = view.findViewById(R.id.linksLayout)
+        categoriesText = view.findViewById(R.id.categoriesText)
+        categoriesGroup = view.findViewById(R.id.categoriesGroup)
+        platformsLayout = view.findViewById(R.id.platformsLayout)
 
         toolbar.title = coinCode
         toolbar.setNavigationOnClickListener {

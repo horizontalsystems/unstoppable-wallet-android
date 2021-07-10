@@ -4,18 +4,22 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.ProgressBar
+import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isVisible
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
+import io.horizontalsystems.bankwallet.ui.extensions.MarketFilterSwitchView
+import io.horizontalsystems.bankwallet.ui.extensions.MarketFilterView
 import io.horizontalsystems.bankwallet.ui.selector.ItemViewHolder
 import io.horizontalsystems.bankwallet.ui.selector.ItemViewHolderFactory
 import io.horizontalsystems.bankwallet.ui.selector.SelectorBottomSheetDialog
 import io.horizontalsystems.bankwallet.ui.selector.SelectorItemViewHolderFactory
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
-import kotlinx.android.synthetic.main.fragment_market_search_filter.*
 
 class MarketAdvancedSearchFragment : BaseFragment() {
 
@@ -23,11 +27,32 @@ class MarketAdvancedSearchFragment : BaseFragment() {
         MarketAdvancedSearchModule.Factory()
     }
 
+    private lateinit var filterCoinList: MarketFilterView
+    private lateinit var filterMarketCap: MarketFilterView
+    private lateinit var filterVolume: MarketFilterView
+    private lateinit var filterPeriod: MarketFilterView
+    private lateinit var filterPriceChange: MarketFilterView
+    private lateinit var filterOutperformedBtc: MarketFilterSwitchView
+    private lateinit var filterOutperformedEth: MarketFilterSwitchView
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_market_search_filter, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val toolbar = view.findViewById<Toolbar>(R.id.toolbar)
+        filterCoinList = view.findViewById(R.id.filterCoinList)
+        filterMarketCap = view.findViewById(R.id.filterMarketCap)
+        filterVolume = view.findViewById(R.id.filterVolume)
+        filterPeriod = view.findViewById(R.id.filterPeriod)
+        filterPriceChange = view.findViewById(R.id.filterPriceChange)
+        filterOutperformedBtc = view.findViewById(R.id.filterOutperformedBtc)
+        filterOutperformedEth = view.findViewById(R.id.filterOutperformedEth)
+        val filterOutperformedBnb = view.findViewById<MarketFilterSwitchView>(R.id.filterOutperformedBnb)
+        val filterPriceCloseToAth = view.findViewById<MarketFilterSwitchView>(R.id.filterPriceCloseToAth)
+        val filterPriceCloseToAtl = view.findViewById<MarketFilterSwitchView>(R.id.filterPriceCloseToAtl)
+        val submit = view.findViewById<Button>(R.id.submit)
+
         toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }
@@ -173,7 +198,7 @@ class MarketAdvancedSearchFragment : BaseFragment() {
         }
 
         marketAdvancedSearchViewModel.loadingLiveData.observe(viewLifecycleOwner) {
-            progressBar.isVisible = it
+            view.findViewById<ProgressBar>(R.id.progressBar).isVisible = it
         }
     }
 

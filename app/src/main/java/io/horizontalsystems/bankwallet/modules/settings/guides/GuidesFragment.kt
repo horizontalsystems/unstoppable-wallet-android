@@ -4,20 +4,21 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
+import androidx.appcompat.widget.Toolbar
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import io.horizontalsystems.core.findNavController
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.entities.Guide
 import io.horizontalsystems.bankwallet.modules.markdown.MarkdownFragment
 import io.horizontalsystems.bankwallet.modules.transactions.FilterAdapter
-import kotlinx.android.synthetic.main.fragment_guides.*
-import kotlinx.android.synthetic.main.fragment_guides.toolbar
+import io.horizontalsystems.core.findNavController
 
 class GuidesFragment : BaseFragment(), GuidesAdapter.Listener, FilterAdapter.Listener {
 
@@ -25,6 +26,9 @@ class GuidesFragment : BaseFragment(), GuidesAdapter.Listener, FilterAdapter.Lis
     private val errorAdapter = ErrorAdapter()
     private val guidesAdapter = GuidesAdapter(this)
     private val filterAdapter = FilterAdapter(this)
+    private lateinit var recyclerTags: RecyclerView
+    private lateinit var recyclerGuides: RecyclerView
+    private lateinit var toolbarSpinner: ProgressBar
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_guides, container, false)
@@ -33,9 +37,13 @@ class GuidesFragment : BaseFragment(), GuidesAdapter.Listener, FilterAdapter.Lis
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        toolbar.setNavigationOnClickListener {
+        view.findViewById<Toolbar>(R.id.toolbar).setNavigationOnClickListener {
             findNavController().popBackStack()
         }
+
+        recyclerTags = view.findViewById(R.id.recyclerTags)
+        recyclerGuides = view.findViewById(R.id.recyclerGuides)
+        toolbarSpinner = view.findViewById(R.id.toolbarSpinner)
 
         recyclerTags.adapter = filterAdapter
         recyclerGuides.adapter = ConcatAdapter(errorAdapter, guidesAdapter)

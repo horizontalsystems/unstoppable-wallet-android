@@ -6,12 +6,18 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.widget.Toolbar
+import androidx.constraintlayout.widget.Group
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
+import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.managers.WalletConnectInteractor
@@ -25,7 +31,7 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectViewMo
 import io.horizontalsystems.bankwallet.modules.walletconnect.scanqr.WalletConnectScanQrModule
 import io.horizontalsystems.bankwallet.modules.walletconnect.scanqr.WalletConnectScanQrViewModel
 import io.horizontalsystems.bankwallet.ui.extensions.ConfirmationDialog
-import kotlinx.android.synthetic.main.fragment_wallet_connect_main.*
+import io.horizontalsystems.bankwallet.ui.extensions.PicassoRoundedImageView
 
 class WalletConnectMainFragment : BaseFragment() {
 
@@ -60,6 +66,17 @@ class WalletConnectMainFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val toolbar = view.findViewById<Toolbar>(R.id.toolbar)
+        val connecting = view.findViewById<ProgressBar>(R.id.connecting)
+        val dappGroup = view.findViewById<Group>(R.id.dappGroup)
+        val dappTitle = view.findViewById<TextView>(R.id.dappTitle)
+        val dappIcon = view.findViewById<PicassoRoundedImageView>(R.id.dappIcon)
+        val cancelButton = view.findViewById<Button>(R.id.cancelButton)
+        val connectButton = view.findViewById<Button>(R.id.connectButton)
+        val disconnectButton = view.findViewById<Button>(R.id.disconnectButton)
+        val dappHint = view.findViewById<TextView>(R.id.dappHint)
+
         toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.menuClose -> {
@@ -100,7 +117,7 @@ class WalletConnectMainFragment : BaseFragment() {
 
 
         val dappInfoAdapter = DappInfoAdapter()
-        dappInfo.adapter = dappInfoAdapter
+        view.findViewById<RecyclerView>(R.id.dappInfo).adapter = dappInfoAdapter
 
         viewModel.connectingLiveData.observe(viewLifecycleOwner, {
             connecting.isVisible = it

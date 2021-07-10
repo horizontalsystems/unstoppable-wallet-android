@@ -6,6 +6,8 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.Toolbar
 import androidx.fragment.app.viewModels
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
@@ -17,6 +19,7 @@ import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule.additionalInfoKey
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule.transactionDataKey
+import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionView
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
 import io.horizontalsystems.bankwallet.modules.swap.SwapViewModel
 import io.horizontalsystems.core.findNavController
@@ -25,7 +28,6 @@ import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.snackbar.CustomSnackbar
 import io.horizontalsystems.snackbar.SnackbarDuration
-import kotlinx.android.synthetic.main.fragment_confirmation_swap.*
 
 class SwapConfirmationFragment : BaseFragment() {
     private val logger = AppLogger("swap")
@@ -54,7 +56,10 @@ class SwapConfirmationFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        toolbar.setOnMenuItemClickListener { item ->
+
+        val swapButton = view.findViewById<Button>(R.id.swapButton)
+
+        view.findViewById<Toolbar>(R.id.toolbar).setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.menuCancel -> {
                     findNavController().popBackStack()
@@ -85,7 +90,7 @@ class SwapConfirmationFragment : BaseFragment() {
             findNavController().popBackStack()
         })
 
-        sendEvmTransactionView.init(
+        view.findViewById<SendEvmTransactionView>(R.id.sendEvmTransactionView).init(
                 sendViewModel,
                 feeViewModel,
                 viewLifecycleOwner,

@@ -3,6 +3,8 @@ package io.horizontalsystems.bankwallet.modules.intro
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Button
+import android.widget.ImageSwitcher
 import android.widget.ImageView
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
@@ -10,16 +12,22 @@ import androidx.viewpager.widget.ViewPager
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.modules.main.MainModule
-import kotlinx.android.synthetic.main.activity_intro.*
+import me.relex.circleindicator.CircleIndicator
 
 class IntroActivity : BaseActivity() {
 
     val viewModel by viewModels<IntroViewModel> { IntroModule.Factory() }
+    private lateinit var viewPager: ViewPager
+    private lateinit var btnNext: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_intro)
+
+        viewPager = findViewById(R.id.viewPager)
+        val imageSwitcher = findViewById<ImageSwitcher>(R.id.imageSwitcher)
+        btnNext = findViewById(R.id.btnNext)
 
         val viewPagerAdapter = IntroViewPagerAdapter(supportFragmentManager)
         val pagesCount = viewPagerAdapter.count
@@ -54,7 +62,7 @@ class IntroActivity : BaseActivity() {
         imageSwitcher.setFactory { ImageView(applicationContext) }
         imageSwitcher.setImageResource(images[0])
 
-        circleIndicator.setViewPager(viewPager)
+        findViewById<CircleIndicator>(R.id.circleIndicator).setViewPager(viewPager)
 
         btnNext.setOnClickListener {
             if (viewPager.currentItem < pagesCount - 1) {

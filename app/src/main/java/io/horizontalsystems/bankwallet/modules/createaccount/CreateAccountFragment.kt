@@ -4,17 +4,21 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
+import io.horizontalsystems.bankwallet.ui.extensions.InputView
 import io.horizontalsystems.bankwallet.ui.selector.SelectorOptionTextViewHolderFactory
 import io.horizontalsystems.bankwallet.ui.selector.SelectorPopupDialog
 import io.horizontalsystems.bankwallet.ui.selector.ViewItemWrapper
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
-import kotlinx.android.synthetic.main.fragment_create_account.*
+import io.horizontalsystems.views.SettingsView
+import io.horizontalsystems.views.SettingsViewSwitch
 
 class CreateAccountFragment : BaseFragment() {
     private val viewModel by viewModels<CreateAccountViewModel> { CreateAccountModule.Factory() }
@@ -25,6 +29,13 @@ class CreateAccountFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val toolbar = view.findViewById<Toolbar>(R.id.toolbar)
+        val kind = view.findViewById<SettingsView>(R.id.kind)
+        val passphrase = view.findViewById<InputView>(R.id.passphrase)
+        val passphraseConfirm = view.findViewById<InputView>(R.id.passphraseConfirm)
+        val passphraseDescription = view.findViewById<TextView>(R.id.passphraseDescription)
+
         toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }
@@ -83,7 +94,7 @@ class CreateAccountFragment : BaseFragment() {
             dialog.show(childFragmentManager, "selector_dialog")
         }
 
-        passphraseToggle.setOnCheckedChangeListenerSingle {
+        view.findViewById<SettingsViewSwitch>(R.id.passphraseToggle).setOnCheckedChangeListenerSingle {
             viewModel.onTogglePassphrase(it)
         }
 

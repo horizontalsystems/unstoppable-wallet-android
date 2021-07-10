@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.ConcatAdapter
@@ -17,12 +18,13 @@ import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.views.helpers.LayoutHelper
 import io.horizontalsystems.views.inflate
 import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.fragment_base_currency_settings.*
 import java.util.*
 
 class BaseCurrencySettingsFragment : BaseFragment(), RVAdapter.ViewHolder.Listener {
 
     private val viewModel by viewModels<BaseCurrencySettingsViewModel> { BaseCurrencySettingsModule.Factory() }
+    private lateinit var toolbar: Toolbar
+    private lateinit var recyclerView: RecyclerView
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_base_currency_settings, container, false)
@@ -30,6 +32,10 @@ class BaseCurrencySettingsFragment : BaseFragment(), RVAdapter.ViewHolder.Listen
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        toolbar = view.findViewById(R.id.toolbar)
+        recyclerView = view.findViewById(R.id.recyclerView)
+
         toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }

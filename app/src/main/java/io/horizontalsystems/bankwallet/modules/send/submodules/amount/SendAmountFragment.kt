@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
@@ -13,7 +15,8 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.SendSubmoduleFragment
-import kotlinx.android.synthetic.main.view_amount_input.*
+import io.horizontalsystems.bankwallet.ui.extensions.AmountInputView
+import io.horizontalsystems.views.ViewState
 
 class SendAmountFragment(
         private val wallet: Wallet,
@@ -22,6 +25,10 @@ class SendAmountFragment(
     : SendSubmoduleFragment() {
 
     private val presenter by activityViewModels<SendAmountPresenter> { SendAmountModule.Factory(wallet, sendHandler) }
+    private lateinit var availableBalanceValue: TextView
+    private lateinit var processSpinner: ProgressBar
+    private lateinit var txtHintError: TextView
+    private lateinit var background: ViewState
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.view_amount_input, container, false)
@@ -33,6 +40,12 @@ class SendAmountFragment(
 
         val presenterView = presenter.view as SendAmountView
         presenter.moduleDelegate = amountModuleDelegate
+
+        val amountInput = view.findViewById<AmountInputView>(R.id.amountInput)
+        availableBalanceValue = view.findViewById(R.id.availableBalanceValue)
+        processSpinner = view.findViewById(R.id.processSpinner)
+        txtHintError = view.findViewById(R.id.txtHintError)
+        background = view.findViewById(R.id.background)
 
         amountInput.onTextChangeCallback = { _, new -> presenter.onAmountChange(new ?: "") }
         amountInput.onTapSecondaryCallback = { presenter.onSwitchClick() }

@@ -2,14 +2,17 @@ package io.horizontalsystems.bankwallet.modules.transactions
 
 import android.content.Context
 import android.util.AttributeSet
+import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.TransactionType
-import kotlinx.android.synthetic.main.view_transaction_status.view.*
 
 
 class TransactionStatusWithTimeView : ConstraintLayout {
+
+    private lateinit var txTime: TextView
+    private lateinit var statusText: TextView
 
     constructor(context: Context) : super(context) {
         initializeViews()
@@ -24,7 +27,9 @@ class TransactionStatusWithTimeView : ConstraintLayout {
     }
 
     private fun initializeViews() {
-        inflate(context, R.layout.view_transaction_status, this)
+        val rootView = inflate(context, R.layout.view_transaction_status, this)
+        txTime = rootView.findViewById(R.id.txTime)
+        statusText = rootView.findViewById(R.id.statusText)
     }
 
     fun bind(transactionStatus: TransactionStatus, type: TransactionType, time: String?) {
