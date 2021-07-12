@@ -86,7 +86,6 @@ class CoinViewModel(
     private val rateDiffCoinCodes: List<String> = mutableListOf(service.currency.code).apply {
         if (service.coinType != CoinType.Bitcoin) add("BTC")
         if (service.coinType != CoinType.Ethereum) add("ETH")
-        if (service.coinType != CoinType.BinanceSmartChain) add("BNB")
     }
 
     init {
