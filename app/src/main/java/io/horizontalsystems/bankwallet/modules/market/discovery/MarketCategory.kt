@@ -39,6 +39,8 @@ sealed class MarketCategory(
     object RebaseTokens : MarketCategory("rebase_tokens", R.string.Market_Category_RebaseTokens, R.drawable.ic_rebase, R.string.Market_Category_RebaseTokens_Description)
     object FanTokens : MarketCategory("fan_tokens", R.string.Market_Category_FanTokens, R.drawable.ic_heart, R.string.Market_Category_FanTokens_Description)
     object InvestmentTools : MarketCategory("investment_tools", R.string.Market_Category_InvestmentTools, R.drawable.ic_markets, R.string.Market_Category_InvestmentTools_Description)
-    object DataStorage : MarketCategory("data_storage", R.string.Market_Category_DataStorage, R.drawable.ic_data_storage, R.string.Market_Category_DataStorage_Description)
-    object DecentralizedIdentity : MarketCategory("decentralized_identity", R.string.Market_Category_DecentralizedIdentity, R.drawable.ic_decentralized_identity, R.string.Market_Category_DecentralizedIdentity_Description)
+    object Storage : MarketCategory("storage", R.string.Market_Category_Storage, R.drawable.ic_storage, R.string.Market_Category_Storage_Description)
+    object Identity : MarketCategory("identity", R.string.Market_Category_Identity, R.drawable.ic_identity, R.string.Market_Category_Identity_Description)
+    object YieldTokens : MarketCategory("yield_tokens", R.string.Market_Category_YieldTokens, R.drawable.ic_yield, R.string.Market_Category_YieldTokens_Description)
+
 }

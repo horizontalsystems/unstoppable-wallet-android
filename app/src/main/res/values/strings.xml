@@ -158,7 +158,7 @@
     <string name="Market_Category_IndexFunds">Index Funds</string>
     <string name="Market_Category_IndexFunds_Description">Assets that pegged in price to a set of tokens.</string>
     <string name="Market_Category_NFT">NFT</string>
-    <string name="Market_Category_NFT_Description">Marketplaces for trading NFT tokens.</string>
+    <string name="Market_Category_NFT_Description">NFT projects.</string>
     <string name="Market_Category_Fundraising">Fundraising</string>
     <string name="Market_Category_Fundraising_Description">Fundraising and token sale platforms.</string>
     <string name="Market_Category_Gaming">Gaming</string>
@@ -179,10 +179,12 @@
     <string name="Market_Category_FanTokens_Description">Digital fan tokens, typically specific to a team or club.</string>
     <string name="Market_Category_InvestmentTools">Investment Tools</string>
     <string name="Market_Category_InvestmentTools_Description">Token-powered analytics and investment instruments.</string>
-    <string name="Market_Category_DataStorage">Data Storage</string>
-    <string name="Market_Category_DataStorage_Description">Decentralized data-storage solutions.</string>
-    <string name="Market_Category_DecentralizedIdentity">Decentralized Identity</string>
-    <string name="Market_Category_DecentralizedIdentity_Description">Decentralized identity solutions.</string>
+    <string name="Market_Category_Storage">Storage</string>
+    <string name="Market_Category_Storage_Description">Decentralized data-storage.</string>
+    <string name="Market_Category_Identity">Identity</string>
+    <string name="Market_Category_Identity_Description">Decentralized identity.</string>
+    <string name="Market_Category_YieldTokens">Yield Tokens</string>
+    <string name="Market_Category_YieldTokens_Description">Interesting Bearing Tokens.</string>
 
     <!--Market Global Metrics-->
     <string name="MarketGlobalMetrics_Chart">Chart</string>

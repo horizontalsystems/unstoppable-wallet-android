@@ -45,7 +45,7 @@ class MarketDiscoveryService(
             MarketCategory.StablecoinIssuers, MarketCategory.RiskManagement, MarketCategory.FanTokens,
             MarketCategory.Synthetics, MarketCategory.IndexFunds, MarketCategory.FundRaising, MarketCategory.Prediction,
             MarketCategory.B2B, MarketCategory.Infrastructure, MarketCategory.Staking, MarketCategory.CrossChain,
-            MarketCategory.Computing, MarketCategory.DataStorage, MarketCategory.DecentralizedIdentity
+            MarketCategory.Computing, MarketCategory.Storage, MarketCategory.Identity, MarketCategory.YieldTokens
     )
 
     init {
