@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
-import android.util.Log
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
 import io.horizontalsystems.bankwallet.entities.LastBlockInfo
@@ -169,7 +168,6 @@ class TransactionsInteractor(
                         .subscribeOn(Schedulers.computation())
                         .observeOn(Schedulers.computation())
                         .subscribe {
-                            Log.e("TAG", "transactionRecordsFlowable: ${it.size}", )
                             delegate?.didUpdateRecords(it, wallet)
                         }
                         .let { transactionUpdatesDisposables.add(it) }

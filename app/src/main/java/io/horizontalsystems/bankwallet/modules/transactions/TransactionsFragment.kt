@@ -9,6 +9,7 @@ import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.navigation.NavOptions
 import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
@@ -105,7 +106,11 @@ class TransactionsFragment : Fragment(), TransactionsAdapter.Listener, FilterAda
     }
 
     override fun onItemClick(item: TransactionViewItem) {
-        findNavController().navigate(R.id.mainFragment_to_transactionInfoDialog)
+        findNavController().navigate(
+            R.id.mainFragment_to_transactionInfoFragment,
+            null,
+            navOptionsFromBottom()
+        )
     }
 
     override fun onFilterItemClick(
@@ -121,6 +126,15 @@ class TransactionsFragment : Fragment(), TransactionsAdapter.Listener, FilterAda
             itemPosition,
             leftOffset
         )
+    }
+
+    private fun navOptionsFromBottom(): NavOptions {
+        return NavOptions.Builder()
+            .setEnterAnim(R.anim.slide_from_bottom)
+            .setExitAnim(R.anim.slide_to_top)
+            .setPopEnterAnim(R.anim.slide_from_top)
+            .setPopExitAnim(R.anim.slide_to_bottom)
+            .build()
     }
 
 }
@@ -211,7 +225,7 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
             is TransactionType.Incoming -> {
                 image = R.drawable.ic_incoming_20
                 val text =
-                    if (transactionRecord.status == TransactionStatus.Completed) R.string.Transactions_Received else R.string.Transactions_Receiving
+                    if (transactionRecord.status is TransactionStatus.Completed) R.string.Transactions_Received else R.string.Transactions_Receiving
                 topText = getString(text)
                 bottomText = transactionRecord.type.from?.let {
                     getString(
@@ -236,7 +250,7 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
             is TransactionType.Outgoing -> {
                 image = R.drawable.ic_outgoing_20
                 val text =
-                    if (transactionRecord.status == TransactionStatus.Completed) R.string.Transactions_Sent else R.string.Transactions_Sending
+                    if (transactionRecord.status is TransactionStatus.Completed) R.string.Transactions_Sent else R.string.Transactions_Sending
                 topText = getString(text)
                 bottomText = transactionRecord.type.to?.let {
                     getString(
@@ -262,7 +276,7 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
             is TransactionType.Approve -> {
                 image = R.drawable.ic_tx_checkmark_20
                 val text =
-                    if (transactionRecord.status == TransactionStatus.Completed) R.string.Transactions_Approved else R.string.Transactions_Approving
+                    if (transactionRecord.status is TransactionStatus.Completed) R.string.Transactions_Approved else R.string.Transactions_Approving
                 topText = getString(text)
                 bottomText =
                     getString(R.string.Transactions_From, truncated(transactionRecord.type.spender))
@@ -280,7 +294,7 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
             is TransactionType.Swap -> {
                 image = R.drawable.ic_tx_swap_20
                 val text =
-                    if (transactionRecord.status == TransactionStatus.Completed) R.string.Transactions_Swapped else R.string.Transactions_Swapping
+                    if (transactionRecord.status is TransactionStatus.Completed) R.string.Transactions_Swapped else R.string.Transactions_Swapping
                 topText = getString(text)
                 bottomText = getString(
                     R.string.Transactions_From,
@@ -338,7 +352,7 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
 
     private fun setProgress(status: TransactionStatus) {
         when (status) {
-            TransactionStatus.Pending -> {
+            is TransactionStatus.Pending -> {
                 iconProgress.isVisible = true
                 iconProgress.setProgressColored(15, getColor(R.color.grey_50), true)
             }

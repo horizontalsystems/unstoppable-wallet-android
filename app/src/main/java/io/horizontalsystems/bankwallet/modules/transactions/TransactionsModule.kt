@@ -17,13 +17,13 @@ import java.util.*
 typealias CoinCode = String
 
 data class TransactionViewItem(
-        val wallet: Wallet,
-        val record: TransactionRecord,
-        val type: TransactionType,
-        val date: Date?,
-        val status: TransactionStatus,
-        var mainAmountCurrencyValue: CurrencyValue?
-        ) : Comparable<TransactionViewItem> {
+    val wallet: Wallet,
+    val record: TransactionRecord,
+    val type: TransactionType,
+    val date: Date?,
+    val status: TransactionStatus,
+    var mainAmountCurrencyValue: CurrencyValue?
+) : Comparable<TransactionViewItem> {
 
     override fun compareTo(other: TransactionViewItem): Int {
         return record.compareTo(other.record)
@@ -58,7 +58,11 @@ data class TransactionViewItem(
 }
 
 
-data class TransactionLockInfo(val lockedUntil: Date, val originalAddress: String, val amount: BigDecimal?)
+data class TransactionLockInfo(
+    val lockedUntil: Date,
+    val originalAddress: String,
+    val amount: BigDecimal?
+)
 
 sealed class TransactionStatus {
     object Pending : TransactionStatus()

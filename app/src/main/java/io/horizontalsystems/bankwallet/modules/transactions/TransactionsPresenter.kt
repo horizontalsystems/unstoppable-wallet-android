@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
-import android.util.Log
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.entities.LastBlockInfo
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
@@ -70,9 +69,7 @@ class TransactionsPresenter(
     }
 
     override fun didFetchRecords(records: Map<Wallet, List<TransactionRecord>>, initial: Boolean) {
-        Log.e("TAG", "didFetchRecords: ${records.size}")
         dataSource.handleNextRecords(records)
-        Log.e("TAG", "didFetchRecords dataSource.increasePage(): ${dataSource.increasePage()}")
         if (dataSource.increasePage()) {
             view?.showTransactions(dataSource.itemsCopy)
         } else if (initial) {
