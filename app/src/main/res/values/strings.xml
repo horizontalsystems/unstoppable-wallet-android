@@ -488,9 +488,20 @@
     <!--Transaction Info-->
 
     <string name="TransactionInfo_Transaction">Transaction</string>
+    <string name="TransactionInfo_Title">Transaction Info</string>
     <string name="TransactionInfo_Approval">Swap Approval</string>
     <string name="TransactionInfo_Status">Status</string>
     <string name="TransactionInfo_Status_Confirmed">Confirmed</string>
+    <string name="TransactionInfo_Status_Received">Received</string>
+    <string name="TransactionInfo_Status_Approved">Approved</string>
+    <string name="TransactionInfo_Status_Sent">Sent</string>
+    <string name="TransactionInfo_Status_Swapped">Swapped</string>
+    <string name="TransactionInfo_Status_Pending">Pending</string>
+    <string name="TransactionInfo_Status_Receiving">Receiving</string>
+    <string name="TransactionInfo_Status_Sending">Sending</string>
+    <string name="TransactionInfo_Status_Swapping">Swapping</string>
+    <string name="TransactionInfo_Status_Approving">Approving</string>
+    <string name="TransactionInfo_Date">Date</string>
     <string name="TransactionInfo_Id">ID</string>
     <string name="TransactionInfo_RawTransaction">Raw Transaction</string>
     <string name="TransactionInfo_To">To</string>
@@ -504,6 +515,12 @@
     <string name="TransactionInfo_SentToSelfNote">The transaction sent to own address</string>
     <string name="TransactionInfo_DoubleSpendNote">Double Spend Risk!</string>
     <string name="TransactionInfo_ButtonViewOnExplorerName">View on %s</string>
+    <string name="TransactionInfo_ContractCall">Contract Call</string>
+    <string name="TransactionInfo_Price">Price</string>
+    <string name="TransactionInfo_YouPaid">You Paid</string>
+    <string name="TransactionInfo_YouGot">You Got</string>
+    <string name="TransactionInfo_Resend">Resend</string>
+    <string name="TransactionInfo_RevokeApproval">Revoke Approval</string>
 
     <string name="StatusInfo_Pending">Pending</string>
     <string name="StatusInfo_SendingReceiving">Sending/Receiving</string>

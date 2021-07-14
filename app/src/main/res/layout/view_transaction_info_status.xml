@@ -2,20 +2,8 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout">
-
-    <TextView
-        android:id="@+id/confirmedText"
-        style="@style/Subhead2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:drawablePadding="8dp"
-        android:text="@string/TransactionInfo_Status_Confirmed"
-        android:textColor="?TextColorBarsToDark"
-        app:drawableEndCompat="@drawable/ic_checkmark_20"
-        app:drawableTint="@color/remus"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout"
+    >
 
     <TextView
         android:id="@+id/failedText"
@@ -24,28 +12,51 @@
         android:layout_height="wrap_content"
         android:text="@string/Transactions_Failed"
         android:textColor="@color/lucian"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/progressText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="11dp"
-        android:textColor="@color/grey"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/progressBar"
+        app:layout_constraintEnd_toStartOf="@+id/rightSideBarrier"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="@string/Transactions_Sending" />
+        />
+
+    <TextView
+        android:id="@+id/statusText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="6dp"
+        android:textColor="@color/bran"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/rightSideBarrier"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/Transactions_Sending"
+        />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/rightSideBarrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="start"
+        app:constraint_referenced_ids="iconCheckmark,progressSpinner"
+        />
 
     <ImageView
-        android:id="@+id/progressBar"
+        android:id="@+id/iconCheckmark"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:src="@drawable/ic_info_20"
+        android:src="@drawable/ic_checkmark_20"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/remus"
+        />
+
+    <io.horizontalsystems.bankwallet.ui.extensions.RotatingCircleProgressView
+        android:id="@+id/progressSpinner"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
 
 </merge>

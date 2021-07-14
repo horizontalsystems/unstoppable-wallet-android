@@ -65,8 +65,8 @@
             android:id="@+id/mainFragment_to_walletConnect"
             app:destination="@id/wallet_connect_graph" />
         <action
-            android:id="@+id/mainFragment_to_transactionInfoDialog"
-            app:destination="@id/transactionInfoDialog" />
+            android:id="@+id/mainFragment_to_transactionInfoFragment"
+            app:destination="@id/transactionInfoFragment" />
         <action
             android:id="@+id/mainFragment_to_marketSearchFragment"
             app:destination="@id/marketSearchFragment" />
@@ -96,6 +96,10 @@
             android:id="@+id/sendEvmConfirmationFragment_to_feeSpeedInfo"
             app:destination="@id/feeSpeedInfoFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/transactionInfoFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoFragment"
+        tools:layout="@layout/fragment_transaction_info" />
     <fragment
         android:id="@+id/manageWalletsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.managewallets.view.ManageWalletsFragment"
@@ -444,10 +448,10 @@
         android:label="EvmNetworkFragment" />
 
     <!--  Dialogs/BottomSheets  -->
-    <dialog
-        android:id="@+id/transactionInfoDialog"
-        android:name="io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoFragment"
-        tools:layout="@layout/fragment_transaction_info" />
+<!--    <dialog-->
+<!--        android:id="@+id/transactionInfoDialog"-->
+<!--        android:name="io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoFragment"-->
+<!--        tools:layout="@layout/fragment_transaction_info" />-->
     <dialog
         android:id="@+id/infoFragment"
         android:name="io.horizontalsystems.bankwallet.modules.transactionInfo.InfoFragment"
