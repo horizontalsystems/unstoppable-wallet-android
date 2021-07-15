@@ -149,6 +149,11 @@ class WalletConnectMainFragment : BaseFragment() {
             dappHint.text = hint?.let { getString(it) }
         })
 
+        viewModel.errorLiveData.observe(viewLifecycleOwner, { hint ->
+            errorText.isVisible = hint != null
+            errorText.text = hint
+        })
+
         viewModel.statusLiveData.observe(viewLifecycleOwner, { status ->
             dappInfoAdapter.status = status
         })

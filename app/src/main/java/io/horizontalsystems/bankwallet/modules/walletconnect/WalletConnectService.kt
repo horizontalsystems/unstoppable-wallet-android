@@ -38,9 +38,9 @@ class WalletConnectService(
             val evmKit: EthereumKit
     )
 
-    open class SessionError : Throwable() {
-        object UnsupportedChainId : SessionError()
-        object NoSuitableAccount : SessionError()
+    open class SessionError(message: String) : Throwable(message) {
+        object UnsupportedChainId : SessionError("Unsupported chain id")
+        object NoSuitableAccount : SessionError("No suitable account")
     }
 
     private var interactor: WalletConnectInteractor? = null
