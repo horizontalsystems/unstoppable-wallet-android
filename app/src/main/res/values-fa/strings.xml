@@ -451,13 +451,13 @@
     <string name="TransactionInfo_Resend">Resend</string>
     <string name="TransactionInfo_RevokeApproval">Revoke Approval</string>
     <string name="StatusInfo_Pending">در حالت انتظار</string>
-    <string name="StatusInfo_SendingReceiving">ارسال/دریافت</string>
-    <string name="StatusInfo_Confirmed">تاييد شد</string>
+    <string name="StatusInfo_SendingReceiving">Sending/Receiving/Swapping</string>
+    <string name="StatusInfo_Confirmed">Sent/Received/Swapped</string>
     <string name="StatusInfo_Failed">ناموفق</string>
-    <string name="StatusInfo_PendingDescription">معامله هنوز در بلاکچین تأیید نشده است. این مرحله بسته به هزینه معامله ممکن است از چند دقیقه تا چند ساعت طول بکشد. معاملات ارسال شده با هزینه بسیار کم معمولاً طی چند روز انجام می شوند یا توسط شبکه رد می شوند ، یعنی هیچ معامله ای انجام نشده است.</string>
-    <string name="StatusInfo_SendingReceivingDescription">معامله در زنجیره بلوکی گنجانده شده است اما هنوز به مرحله نهایی نرسیده است. در این مرحله ، در نظر گرفتن معامله انجام شده برای پرداخت های کمتر ، بی خطر است. برای پرداختهای بیشتر توصیه می شود صبر کنید تا وضعیت به پایان برسد.</string>
-    <string name="StatusInfo_ConfirmedDescription">معامله نهایی و برگشت ناپذیر است.</string>
-    <string name="StatusInfo_FailedDescription">معامله همانطور که در نظر گرفته شده بود پردازش نشد و هیچ انتقال ارزش رمز انجام نشد. در بلاکچین اتریوم معاملات ناموفق هزینه های معامله را مصرف می کنند.</string>
+    <string name="StatusInfo_PendingDescription">Transaction has not been confirmed on the blockchain yet. Transaction may remain from a few minutes to hours depending on the transaction fee. Transactions sent with a low fee usually get processed within a few hours or even days, and can also be rejected entirely.</string>
+    <string name="StatusInfo_SendingReceivingDescription">Transaction has been already included in the blockchain but has not reached permanent finality yet.  At this point, it\'s safe to consider transaction completed for smaller payments. For larger payments better to wait until status changes to sent / received / swapped / approved, depending on transaction type.</string>
+    <string name="StatusInfo_ConfirmedDescription">Transaction is completed and considered permanent and irreversible.</string>
+    <string name="StatusInfo_FailedDescription">Transaction did not get processed as intended and no value transfer took place. Failed transactions do consume transaction fees.</string>
     <!-- Info -->
     <string name="Info_LockTime_Title">قفل زمان</string>
     <string name="Info_LockTime_Description">فرستنده این مبالغ را با یک قفل هزینه ارسال می کند که در %sمنقضی می شود. \n\n نگران نباشید، بیت کوین دریافتی در حال حاضر متعلق به شماست اما تا پایان دوره قفل شما نمی توانید آن را در شبکه بیت کوین هزینه کنید.</string>
@@ -479,7 +479,7 @@
     <string name="Settings_Title">تنظيمات</string>
     <string name="Settings_SecurityCenter">مركز امنيتي</string>
     <string name="Settings_Notifications">اطلاعیه ها</string>
-    <string name="Settings_ExperimentalFeatures">ویژگی های تجربی</string>
+    <string name="Settings_ExperimentalFeatures">Experimental</string>
     <string name="Settings_BaseCurrency">ارز مرجع</string>
     <string name="Settings_Language">زبان</string>
     <string name="Settings_Theme">زمینه</string>
