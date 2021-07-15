@@ -430,6 +430,7 @@
     <string name="Swap_Confirmation_Estimated">Estimated</string>
 
     <!--Swap Coin Select-->
+    <string name="Swap_CoinSelect_Title">Choose Crypto</string>
 
     <!--Approve-->
 

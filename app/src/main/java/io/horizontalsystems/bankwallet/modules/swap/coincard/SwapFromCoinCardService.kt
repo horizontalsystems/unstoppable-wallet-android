@@ -28,7 +28,7 @@ class SwapFromCoinCardService(
         get() = service.balanceFrom
 
     override val tokensForSelection: List<SwapMainModule.CoinBalanceItem>
-        get() = coinProvider.coins(enabledCoins = false)
+        get() = coinProvider.getCoins()
 
     override val isEstimatedObservable: Observable<Boolean>
         get() = tradeService.amountTypeObservable.map { it != amountType }
