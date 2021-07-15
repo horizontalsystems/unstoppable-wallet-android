@@ -368,6 +368,7 @@
     <string name="Swap_Confirmation_Maximum">حداکثر</string>
     <string name="Swap_Confirmation_Estimated">تخمین زده شده</string>
     <!--Swap Coin Select-->
+    <string name="Swap_CoinSelect_Title">Choose Crypto</string>
     <!--Approve-->
     <string name="Approve_Title">تایید کنید</string>
     <string name="Approve_Info">شما باید به یک قرارداد هوشمند اجازه بدهید که به تعویض رمز داده شده از طرف شما اقدام کند. این مجوز مبلغی را تعیین می کند که می تواند در یک قرارداد هوشمند استفاده شود. این باقیمانده موجودی شما را تحت تأثیر قرار نمی دهد اما برای تأیید معامله به هزینه کمی نیاز دارد. \n\nاگرچه ممکن است قبل از هر معامله بر اساس تقاضا انجام شود ، تصویب مبلغ بالاتر برای ما در معاملات آینده ارزان تر است.</string>
