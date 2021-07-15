@@ -479,7 +479,7 @@ interface IAppNumberFormatter {
 
     fun getSignificantDecimalFiat(value: BigDecimal): Int
     fun getSignificantDecimalCoin(value: BigDecimal): Int
-    fun shortenValue(number: Number): Pair<BigDecimal, String>
+    fun shortenValue(number: BigDecimal): Pair<BigDecimal, String>
 }
 
 interface IFeeRateProvider {

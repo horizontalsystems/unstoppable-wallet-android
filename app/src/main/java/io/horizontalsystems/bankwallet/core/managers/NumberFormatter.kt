@@ -98,7 +98,17 @@ class NumberFormatter(
         return formatters[formatterId] ?: throw Exception("No formatter")
     }
 
-    override fun shortenValue(number: Number): Pair<BigDecimal, String> {
+    override fun shortenValue(number: BigDecimal): Pair<BigDecimal, String> {
+        if (number <= BigDecimal("100")) {
+            val roundedNumber = if (number < BigDecimal.TEN) {
+                number.setScale(2, RoundingMode.HALF_EVEN)
+            } else {
+                number.setScale(1, RoundingMode.HALF_EVEN)
+            }
+
+            return Pair(roundedNumber, "")
+        }
+
         val suffix = arrayOf(
                 " ",
                 Translator.getString(R.string.CoinPage_MarketCap_Thousand),
@@ -117,13 +127,7 @@ class NumberFormatter(
             returnSuffix = suffix[base]
         }
 
-        val roundedDecimalValue = if (valueDecimal < BigDecimal.TEN) {
-            valueDecimal.setScale(2, RoundingMode.HALF_EVEN)
-        } else {
-            valueDecimal.setScale(1, RoundingMode.HALF_EVEN)
-        }
-
-        return Pair(roundedDecimalValue, returnSuffix)
+        return Pair(valueDecimal.setScale(1, RoundingMode.HALF_EVEN), returnSuffix)
     }
 
 }
