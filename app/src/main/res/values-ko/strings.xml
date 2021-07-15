@@ -451,13 +451,13 @@
     <string name="TransactionInfo_Resend">Resend</string>
     <string name="TransactionInfo_RevokeApproval">Revoke Approval</string>
     <string name="StatusInfo_Pending">보류 중</string>
-    <string name="StatusInfo_SendingReceiving">보내는 중 / 받는 중</string>
-    <string name="StatusInfo_Confirmed">확인</string>
+    <string name="StatusInfo_SendingReceiving">Sending/Receiving/Swapping</string>
+    <string name="StatusInfo_Confirmed">Sent/Received/Swapped</string>
     <string name="StatusInfo_Failed">실패</string>
-    <string name="StatusInfo_PendingDescription">거래가 아직 블록체인에서 확인되지 않았습니다. 거래 수수료에 따라 거래 확인에 수 분에서 수 시간까지 소요될 수 있습니다. 거래 수수료가 매우 적은 경우에는 거래 확인에 수 일이 소요되거나 네트워크에 의해 거래가 거절될 수도 있습니다. 예시: 거래가 완료되지 않았습니다.</string>
-    <string name="StatusInfo_SendingReceivingDescription">거래는 블록체인에 포함됐지만 아직 영구적인 완성도에 도달하지 못했습니다. 이 시점에서는 소액결제에 대해 완료된 거래를 고려하는 것이 안전합니다. 더 큰 결제의 경우 상태가 완료로 변경될 때까지 기다리는 것이 좋습니다.</string>
-    <string name="StatusInfo_ConfirmedDescription">거래가 완료되었으며 취소할 수 없습니다.</string>
-    <string name="StatusInfo_FailedDescription">거래가 의도한 대로 처리되지 않았으며 전송된 토큰 값이 없습니다. 이더리움 블록체인에서는 실패한 거래에도 거래 수수료가 부과됩니다.</string>
+    <string name="StatusInfo_PendingDescription">Transaction has not been confirmed on the blockchain yet. Transaction may remain from a few minutes to hours depending on the transaction fee. Transactions sent with a low fee usually get processed within a few hours or even days, and can also be rejected entirely.</string>
+    <string name="StatusInfo_SendingReceivingDescription">Transaction has been already included in the blockchain but has not reached permanent finality yet.  At this point, it\'s safe to consider transaction completed for smaller payments. For larger payments better to wait until status changes to sent / received / swapped / approved, depending on transaction type.</string>
+    <string name="StatusInfo_ConfirmedDescription">Transaction is completed and considered permanent and irreversible.</string>
+    <string name="StatusInfo_FailedDescription">Transaction did not get processed as intended and no value transfer took place. Failed transactions do consume transaction fees.</string>
     <!-- Info -->
     <string name="Info_LockTime_Title">시간 자물쇠</string>
     <string name="Info_LockTime_Description">발송자는 이러한 자금들을 %s 날짜에 만료가 되는 잠금 지출과 함께 보냈습니다. \n\n걱정 하지마십시오, 수신된 비트코인은 이미 귀하의 것입니다 하지만 잠금 기간이 만료될때 까지 비트코인 네트워크에서 사용하실 수 없습니다.</string>
@@ -479,7 +479,7 @@
     <string name="Settings_Title">설정</string>
     <string name="Settings_SecurityCenter">보안 센터</string>
     <string name="Settings_Notifications">알림</string>
-    <string name="Settings_ExperimentalFeatures">실험적 기능</string>
+    <string name="Settings_ExperimentalFeatures">Experimental</string>
     <string name="Settings_BaseCurrency">기초 통화</string>
     <string name="Settings_Language">언어</string>
     <string name="Settings_Theme">테마</string>
