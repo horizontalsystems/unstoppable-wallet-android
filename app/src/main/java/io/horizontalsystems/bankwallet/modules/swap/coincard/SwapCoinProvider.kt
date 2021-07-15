@@ -15,33 +15,29 @@ import java.math.BigDecimal
 import java.util.*
 
 class SwapCoinProvider(
-        private val dex: Dex,
-        private val coinManager: ICoinManager,
-        private val walletManager: IWalletManager,
-        private val adapterManager: IAdapterManager,
-        private val currencyManager: ICurrencyManager,
-        private val xRateManager: IRateManager
+    private val dex: Dex,
+    private val coinManager: ICoinManager,
+    private val walletManager: IWalletManager,
+    private val adapterManager: IAdapterManager,
+    private val currencyManager: ICurrencyManager,
+    private val xRateManager: IRateManager
 ) {
 
-    fun coins(enabledCoins: Boolean, exclude: List<Coin> = listOf()): List<CoinBalanceItem> {
+    fun getCoins(): List<CoinBalanceItem> {
         val enabledCoinItems = walletItems.filter { item ->
             val zeroBalance = item.balance == BigDecimal.ZERO
-            dexSupportsCoin(item.coin) && !exclude.contains(item.coin) && !zeroBalance
+            dexSupportsCoin(item.coin) && !zeroBalance
         }.sortedBy { it.coin.title.toLowerCase(Locale.ENGLISH) }
 
-        return if (enabledCoins) {
-            enabledCoinItems
-        } else {
-            val disabledCoinItems = coinManager.coins.filter { coin ->
-                dexSupportsCoin(coin) && !exclude.contains(coin) && !enabledCoinItems.any { it.coin == coin }
-            }.map { coin ->
-                val balance = balance(coin)
+        val disabledCoinItems = coinManager.coins.filter { coin ->
+            dexSupportsCoin(coin) && !enabledCoinItems.any { it.coin == coin }
+        }.map { coin ->
+            val balance = balance(coin)
 
-                CoinBalanceItem(coin, balance, getFiatValue(coin, balance))
-            }.sortedBy { it.coin.title.toLowerCase(Locale.ENGLISH) }
+            CoinBalanceItem(coin, balance, getFiatValue(coin, balance))
+        }.sortedBy { it.coin.title.toLowerCase(Locale.ENGLISH) }
 
-            enabledCoinItems + disabledCoinItems
-        }
+        return enabledCoinItems + disabledCoinItems
     }
 
     private fun dexSupportsCoin(coin: Coin) = when (coin.type) {
