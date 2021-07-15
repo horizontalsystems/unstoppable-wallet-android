@@ -27,11 +27,13 @@ class WalletConnectInteractor(
         fun didRequestSignMessage(id: Long, message: WCEthereumSignMessage)
     }
 
-    enum class State {
-        Connecting, Connected, Disconnected
+    sealed class State {
+        object Connecting : State()
+        object Connected : State()
+        class Disconnected(val error: Throwable = Error("Disconnected")) : State()
     }
 
-    var state: State = State.Disconnected
+    var state: State = State.Disconnected()
         private set(value) {
             field = value
 
@@ -52,7 +54,7 @@ class WalletConnectInteractor(
             }
 
             override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
-                state = State.Disconnected
+                state = State.Disconnected(SessionError.SocketDisconnected(t))
             }
         })
 
@@ -69,7 +71,7 @@ class WalletConnectInteractor(
         client.onFailure = { }
 
         client.onDisconnect = { _: Int, _: String ->
-            state = State.Disconnected
+            state = State.Disconnected()
         }
 
         client.onEthSendTransaction = { id: Long, transaction: WCEthereumTransaction ->
@@ -127,6 +129,9 @@ class WalletConnectInteractor(
 
     sealed class SessionError : Error() {
         object InvalidUri : SessionError()
+        class SocketDisconnected(override val cause: Throwable) : SessionError() {
+            override val message = "Socket connection could not be established. ${cause.message}"
+        }
     }
 }
 
