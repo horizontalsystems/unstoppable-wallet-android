@@ -11,7 +11,7 @@ class SwapTransactionRecord(
     fullTransaction: FullTransaction,
     baseCoin: Coin,
     tokenIn: Coin,
-    tokenOut: Coin,
+    tokenOut: Coin?,
     amountIn: BigDecimal,
     amountOut: BigDecimal?,
     val exchangeAddress: String
@@ -21,7 +21,7 @@ class SwapTransactionRecord(
     val valueIn = CoinValue(tokenIn, amountIn)
 
     // valueOut stores amountOutMin in cases when exact valueOut amount is not known
-    val valueOut: CoinValue? = amountOut?.let { CoinValue(tokenOut, it) }
+    val valueOut: CoinValue? = amountOut?.let { tokenOut?.let { CoinValue(tokenOut, amountOut) } }
 
     override fun getType(lastBlockInfo: LastBlockInfo?): TransactionType {
         return TransactionType.Swap(exchangeAddress, valueIn, valueOut)

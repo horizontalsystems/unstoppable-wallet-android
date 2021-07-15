@@ -14,6 +14,9 @@ import io.horizontalsystems.ethereumkit.decorations.RecognizedMethodDecoration
 import io.horizontalsystems.ethereumkit.decorations.UnknownMethodDecoration
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.FullTransaction
+import io.horizontalsystems.oneinchkit.decorations.OneInchMethodDecoration
+import io.horizontalsystems.oneinchkit.decorations.OneInchSwapMethodDecoration
+import io.horizontalsystems.oneinchkit.decorations.OneInchUnoswapMethodDecoration
 import io.horizontalsystems.uniswapkit.decorations.SwapMethodDecoration
 import java.math.BigDecimal
 import java.math.BigInteger
@@ -142,6 +145,24 @@ class EvmTransactionConverter(
         }
     }
 
+    private fun convertToCoin(token: OneInchMethodDecoration.Token): Coin {
+        return when (token) {
+            OneInchMethodDecoration.Token.EvmCoin -> {
+                baseCoin
+            }
+            is OneInchMethodDecoration.Token.Eip20 -> {
+                when (evmKit.networkType) {
+                    EthereumKit.NetworkType.BscMainNet -> coinManager.getCoinOrStub(
+                        CoinType.Bep20(
+                            token.address.hex
+                        )
+                    )
+                    else -> coinManager.getCoinOrStub(CoinType.Erc20(token.address.hex))
+                }
+            }
+        }
+    }
+
     private fun convertMyCall(
         methodDecoration: ContractMethodDecoration,
         fullTransaction: FullTransaction,
@@ -202,6 +223,52 @@ class EvmTransactionConverter(
                     ) else null
                 )
             }
+            is OneInchUnoswapMethodDecoration -> {
+                val tokenIn = convertToCoin(methodDecoration.fromToken)
+                val tokenOut = methodDecoration.toToken?.let { convertToCoin(it) }
+
+                return SwapTransactionRecord(
+                    fullTransaction = fullTransaction,
+                    baseCoin = baseCoin,
+                    exchangeAddress = to.eip55,
+                    tokenIn = tokenIn,
+                    tokenOut = tokenOut,
+                    amountIn = convertAmount(
+                        methodDecoration.fromAmount,
+                        tokenIn.decimal,
+                        true
+                    ),
+                    amountOut = tokenOut?.let {
+                        convertAmount(
+                            methodDecoration.toAmount,
+                            tokenOut.decimal,
+                            false
+                        )
+                    }
+                )
+            }
+            is OneInchSwapMethodDecoration -> {
+                val tokenIn = convertToCoin(methodDecoration.fromToken)
+                val tokenOut = convertToCoin(methodDecoration.toToken)
+
+                return SwapTransactionRecord(
+                    fullTransaction = fullTransaction,
+                    baseCoin = baseCoin,
+                    exchangeAddress = to.eip55,
+                    tokenIn = tokenIn,
+                    tokenOut = tokenOut,
+                    amountIn = convertAmount(
+                        methodDecoration.fromAmount,
+                        tokenIn.decimal,
+                        true
+                    ),
+                    amountOut = convertAmount(
+                        methodDecoration.toAmount,
+                        tokenOut.decimal,
+                        false
+                    )
+                )
+            }
             is RecognizedMethodDecoration -> {
                 ContractCallTransactionRecord(
                     fullTransaction,
@@ -231,24 +298,6 @@ class EvmTransactionConverter(
                         baseCoin = baseCoin,
                         amount = convertAmount(methodDecoration.value, token.decimal, false),
                         from = methodDecoration.to.eip55,
-                        token = token
-                    )
-                }
-            }
-            is SwapMethodDecoration -> {
-                if (methodDecoration.to == evmKit.receiveAddress) {
-                    val resolvedAmountOut: BigInteger = when (val trade = methodDecoration.trade) {
-                        is SwapMethodDecoration.Trade.ExactIn -> trade.amountOut
-                            ?: trade.amountOutMin
-                        is SwapMethodDecoration.Trade.ExactOut -> trade.amountOut
-                    }
-
-                    val token = convertToCoin(methodDecoration.tokenOut)
-                    return EvmIncomingTransactionRecord(
-                        fullTransaction = fullTransaction,
-                        baseCoin = baseCoin,
-                        amount = convertAmount(resolvedAmountOut, token.decimal, false),
-                        from = fullTransaction.transaction.from.eip55,
                         token = token
                     )
                 }
