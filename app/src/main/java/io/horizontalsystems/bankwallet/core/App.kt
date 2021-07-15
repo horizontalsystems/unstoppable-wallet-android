@@ -220,7 +220,7 @@ class App : CoreApp() {
 
         rateAppManager = RateAppManager(walletManager, adapterManager, localStorage)
         walletConnectSessionStorage = WalletConnectSessionStorage(appDatabase)
-        walletConnectSessionManager = WalletConnectSessionManager(walletConnectSessionStorage, accountManager)
+        walletConnectSessionManager = WalletConnectSessionManager(walletConnectSessionStorage, accountManager, accountSettingManager)
         walletConnectRequestManager = WalletConnectRequestManager()
         walletConnectManager = WalletConnectManager(accountManager, ethereumKitManager, binanceSmartChainKitManager)
 

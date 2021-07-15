@@ -27,7 +27,11 @@ class WalletConnectListService(private val sessionManager: WalletConnectSessionM
 
     enum class Chain(val value: Int) {
         Ethereum(1),
-        BinanceSmartChain(56)
+        BinanceSmartChain(56),
+        Ropsten(3),
+        Rinkeby(4),
+        Kovan(42),
+        Goerli(5),
     }
 
     data class Item(

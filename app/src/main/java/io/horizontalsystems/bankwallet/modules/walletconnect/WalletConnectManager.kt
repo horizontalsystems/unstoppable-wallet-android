@@ -14,10 +14,22 @@ class WalletConnectManager(
     val activeAccount: Account?
         get() = accountManager.activeAccount
 
-    fun evmKit(chainId: Int, account: Account): EthereumKit? = when (chainId) {
-        1 -> ethereumKitManager.evmKit(account)
-        56 -> binanceSmartChainKitManager.evmKit(account)
-        else -> null
+    fun evmKit(chainId: Int, account: Account): EthereumKit? {
+        val ethKit = ethereumKitManager.evmKit(account)
+        if (ethKit.networkType.chainId == chainId) {
+            return ethKit
+        } else {
+            ethereumKitManager.unlink(account)
+        }
+        
+        val bscKit = binanceSmartChainKitManager.evmKit(account)
+        if (bscKit.networkType.chainId == chainId) {
+            return bscKit
+        } else {
+            binanceSmartChainKitManager.unlink(account)
+        }
+        
+        return null
     }
 
 }

@@ -8,8 +8,8 @@ class WalletConnectSessionStorage(appDatabase: AppDatabase) {
         appDatabase.walletConnectSessionDao()
     }
 
-    fun getSessions(accountId: String): List<WalletConnectSession> {
-        return dao.getByAccountId(accountId)
+    fun getSessions(accountId: String, chainIds: List<Int>): List<WalletConnectSession> {
+        return dao.getByAccountId(accountId, chainIds)
     }
 
     fun save(session: WalletConnectSession) {

@@ -53,7 +53,11 @@ class WalletConnectListViewModel(
     }
 
     private fun getTitle(chain: WalletConnectListService.Chain) = when (chain) {
-        WalletConnectListService.Chain.Ethereum -> "Ethereum"
+        WalletConnectListService.Chain.Ethereum,
+        WalletConnectListService.Chain.Ropsten,
+        WalletConnectListService.Chain.Rinkeby,
+        WalletConnectListService.Chain.Kovan,
+        WalletConnectListService.Chain.Goerli -> "Ethereum"
         WalletConnectListService.Chain.BinanceSmartChain -> "Binance Smart Chain"
     }
 

@@ -9,8 +9,8 @@ import io.horizontalsystems.bankwallet.entities.WalletConnectSession
 @Dao
 interface WalletConnectSessionDao {
 
-    @Query("SELECT * FROM WalletConnectSession WHERE accountId = :accountId")
-    fun getByAccountId(accountId: String): List<WalletConnectSession>
+    @Query("SELECT * FROM WalletConnectSession WHERE accountId = :accountId AND chainId IN(:chainIds)")
+    fun getByAccountId(accountId: String, chainIds: List<Int>): List<WalletConnectSession>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(session: WalletConnectSession)
