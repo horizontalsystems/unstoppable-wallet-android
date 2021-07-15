@@ -9,6 +9,7 @@ import io.horizontalsystems.bankwallet.entities.EvmNetwork
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.erc20kit.core.Erc20Kit
 import io.horizontalsystems.ethereumkit.core.EthereumKit
+import io.horizontalsystems.oneinchkit.OneInchKit
 import io.horizontalsystems.uniswapkit.UniswapKit
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
@@ -109,6 +110,7 @@ class EvmKitManager(
 
         kit.addDecorator(Erc20Kit.decorator(kit))
         kit.addDecorator(UniswapKit.decorator(kit))
+        kit.addDecorator(OneInchKit.decorator(kit))
 
         kit.addTransactionSyncer(Erc20Kit.getTransactionSyncer(kit))
 
