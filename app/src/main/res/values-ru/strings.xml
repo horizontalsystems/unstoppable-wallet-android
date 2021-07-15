@@ -368,6 +368,7 @@
     <string name="Swap_Confirmation_Maximum">Максимум</string>
     <string name="Swap_Confirmation_Estimated">Ориентировочно</string>
     <!--Swap Coin Select-->
+    <string name="Swap_CoinSelect_Title">Choose Crypto</string>
     <!--Approve-->
     <string name="Approve_Title">Разрешить Обмен</string>
     <string name="Approve_Info">Вы должны предоставить разрешение на смарт-контракт, чтобы обменять этот токен от своего имени. С помощью этого разрешения задается сумма, которая может быть использована в рамках смарт-контракта. Это не повлияет на ваш баланс, но вам придется заплатить небольшой сбор за исполнение транзакции.\n\nРазрешение может быть запрошено перед каждой сделкой, но дешевле заранее задать более высокую сумму для будущих сделок.</string>
