@@ -78,7 +78,7 @@ data class CoinDataItem(
 
 sealed class CoinDataClickType {
     object MetricChart : CoinDataClickType()
-    object TradingVolume : CoinDataClickType()
+    object Markets : CoinDataClickType()
     object TvlRank : CoinDataClickType()
     object TradingVolumeMetricChart : CoinDataClickType()
     object MajorHolders : CoinDataClickType()
@@ -311,9 +311,9 @@ class CoinViewFactory(
         if (coinDetails.tickers.isNotEmpty()) {
             items.add(
                 CoinDataItem(
-                    Translator.getString(R.string.CoinPage_Markets),
+                    title = Translator.getString(R.string.CoinPage_Markets),
                     icon = R.drawable.ic_arrow_right,
-                    clickType = CoinDataClickType.TradingVolume
+                    clickType = CoinDataClickType.Markets
                 )
             )
         }
@@ -332,7 +332,7 @@ class CoinViewFactory(
         if (topTokenHolders.isNotEmpty()) {
             items.add(
                 CoinDataItem(
-                    Translator.getString(R.string.CoinPage_MajorHolders),
+                    title = Translator.getString(R.string.CoinPage_MajorHolders),
                     icon = R.drawable.ic_arrow_right,
                     clickType = CoinDataClickType.MajorHolders
                 )
@@ -342,7 +342,7 @@ class CoinViewFactory(
         if (coinDetails.meta.fundCategories.isNotEmpty()) {
             items.add(
                 CoinDataItem(
-                    Translator.getString(R.string.CoinPage_FundsInvested),
+                    title = Translator.getString(R.string.CoinPage_FundsInvested),
                     icon = R.drawable.ic_arrow_right,
                     clickType = CoinDataClickType.FundsInvested
                 )

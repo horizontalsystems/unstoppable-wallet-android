@@ -19,7 +19,9 @@ import kotlinx.android.synthetic.main.fragment_coin_markets.marketListHeader
 class CoinMarketsFragment : BaseFragment(), MarketListHeaderView.Listener {
 
     private val coinViewModel by navGraphViewModels<CoinViewModel>(R.id.coinFragment)
-    private val viewModel by viewModels<CoinMarketsViewModel>{ CoinMarketsModule.Factory(coinViewModel.coinCode) }
+    private val viewModel by viewModels<CoinMarketsViewModel>{
+        CoinMarketsModule.Factory(coinViewModel.coinCode, coinViewModel.coinType)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_coin_markets, container, false)
@@ -46,8 +48,12 @@ class CoinMarketsFragment : BaseFragment(), MarketListHeaderView.Listener {
             viewModel.marketTickers = it
         })
 
-        viewModel.coinMarketItems.observe(viewLifecycleOwner, {
-            marketItemsAdapter.submitList(it)
+        viewModel.coinMarketItems.observe(viewLifecycleOwner, { (items, scrollToTop) ->
+            marketItemsAdapter.submitList(items) {
+                if (scrollToTop) {
+                    recyclerView.scrollToPosition(0)
+                }
+            }
         })
     }
 
@@ -61,12 +67,12 @@ class CoinMarketsFragment : BaseFragment(), MarketListHeaderView.Listener {
                     val selectedSortingField = viewModel.sortingFields[position]
 
                     marketListHeader.setSortingField(selectedSortingField)
-                    viewModel.update(selectedSortingField)
+                    viewModel.update(selectedSortingField, scrollToTop = true)
                 }
                 .show(childFragmentManager, "sorting_field_selector")
     }
 
     override fun onSelectFieldViewOption(fieldViewOptionId: Int) {
-        viewModel.update(fieldViewOptionId = fieldViewOptionId)
+        viewModel.update(fieldViewOptionId = fieldViewOptionId, scrollToTop = false)
     }
 }
