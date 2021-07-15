@@ -451,13 +451,13 @@
     <string name="TransactionInfo_Resend">Resend</string>
     <string name="TransactionInfo_RevokeApproval">Revoke Approval</string>
     <string name="StatusInfo_Pending">В обработке</string>
-    <string name="StatusInfo_SendingReceiving">Отправка / Получение</string>
-    <string name="StatusInfo_Confirmed">Подтверждено</string>
+    <string name="StatusInfo_SendingReceiving">Sending/Receiving/Swapping</string>
+    <string name="StatusInfo_Confirmed">Sent/Received/Swapped</string>
     <string name="StatusInfo_Failed">Не удалось</string>
-    <string name="StatusInfo_PendingDescription">Транзакция еще не подтверждена в блокчейне. Эта процедура может занять от нескольких минут до нескольких часов в зависимости от комиссии за транзакцию. Отправляемые с очень низкой комиссией транзакции обычно обрабатываются в течение нескольких дней или же могут быть отклонены сетью, отменяя это действие.</string>
-    <string name="StatusInfo_SendingReceivingDescription">Транзакция была включена в блокчейн, но пока не обработана до конца. На данном этапе до конца обработаны только транзакции для небольших платежей. Что касается более крупных транзакций, стоит дождаться смены статуса.</string>
-    <string name="StatusInfo_ConfirmedDescription">Транзакция окончательна и необратима.</string>
-    <string name="StatusInfo_FailedDescription">Транзакция не была обработана как планировалось, и передача токена не состоялась. На Ethereum за отклонённые транзакции взимают комиссионные сборы.</string>
+    <string name="StatusInfo_PendingDescription">Transaction has not been confirmed on the blockchain yet. Transaction may remain from a few minutes to hours depending on the transaction fee. Transactions sent with a low fee usually get processed within a few hours or even days, and can also be rejected entirely.</string>
+    <string name="StatusInfo_SendingReceivingDescription">Transaction has been already included in the blockchain but has not reached permanent finality yet.  At this point, it\'s safe to consider transaction completed for smaller payments. For larger payments better to wait until status changes to sent / received / swapped / approved, depending on transaction type.</string>
+    <string name="StatusInfo_ConfirmedDescription">Transaction is completed and considered permanent and irreversible.</string>
+    <string name="StatusInfo_FailedDescription">Transaction did not get processed as intended and no value transfer took place. Failed transactions do consume transaction fees.</string>
     <!-- Info -->
     <string name="Info_LockTime_Title">TimeLock</string>
     <string name="Info_LockTime_Description">Эти средства были отправлены с временной блокировкой, которая истекает %s.\n\nНе волнуйтесь, полученные биткойны уже ваши, но до истечения периода блокировки, вы не сможете потратить их.</string>
@@ -479,7 +479,7 @@
     <string name="Settings_Title">Настройки</string>
     <string name="Settings_SecurityCenter">Центр Безопасности</string>
     <string name="Settings_Notifications">Уведомления </string>
-    <string name="Settings_ExperimentalFeatures">Экспериментальные Функции</string>
+    <string name="Settings_ExperimentalFeatures">Experimental</string>
     <string name="Settings_BaseCurrency">Базовая Валюта</string>
     <string name="Settings_Language">Язык</string>
     <string name="Settings_Theme">Тема</string>
