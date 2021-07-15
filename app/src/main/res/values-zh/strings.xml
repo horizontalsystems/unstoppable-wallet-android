@@ -451,13 +451,13 @@
     <string name="TransactionInfo_Resend">Resend</string>
     <string name="TransactionInfo_RevokeApproval">Revoke Approval</string>
     <string name="StatusInfo_Pending">待处理</string>
-    <string name="StatusInfo_SendingReceiving">发送 / 接收</string>
-    <string name="StatusInfo_Confirmed">已确认</string>
+    <string name="StatusInfo_SendingReceiving">Sending/Receiving/Swapping</string>
+    <string name="StatusInfo_Confirmed">Sent/Received/Swapped</string>
     <string name="StatusInfo_Failed">失败</string>
-    <string name="StatusInfo_PendingDescription">交易尚未在区块链上确认。 根据交易费用的不同，此步骤可能需要几分钟到几个小时。通过极低费用发送的交易通常会在几天内得到处理或被网络拒绝，即没有进行交易。</string>
-    <string name="StatusInfo_SendingReceivingDescription">交易已包括在区块链中，但尚未达到永久终结。此时，可以安全地考虑以较小金额完成的交易。对于较大的金额，建议等待状态变更的完成。</string>
-    <string name="StatusInfo_ConfirmedDescription">交易是最终且不可逆的。</string>
-    <string name="StatusInfo_FailedDescription">交易没有按预定方式处理，也没有进行代币价值转移。在Etherum区块链中，失败的交易会消耗交易费用。</string>
+    <string name="StatusInfo_PendingDescription">Transaction has not been confirmed on the blockchain yet. Transaction may remain from a few minutes to hours depending on the transaction fee. Transactions sent with a low fee usually get processed within a few hours or even days, and can also be rejected entirely.</string>
+    <string name="StatusInfo_SendingReceivingDescription">Transaction has been already included in the blockchain but has not reached permanent finality yet.  At this point, it\'s safe to consider transaction completed for smaller payments. For larger payments better to wait until status changes to sent / received / swapped / approved, depending on transaction type.</string>
+    <string name="StatusInfo_ConfirmedDescription">Transaction is completed and considered permanent and irreversible.</string>
+    <string name="StatusInfo_FailedDescription">Transaction did not get processed as intended and no value transfer took place. Failed transactions do consume transaction fees.</string>
     <!-- Info -->
     <string name="Info_LockTime_Title">时间锁定</string>
     <string name="Info_LockTime_Description">汇款人通过将在%s失效的消费锁定汇出这些资金。\n\n无需担心，收到的比特币已经属于您，但在锁定期限结束前，您无法在比特币网络上消费它们。</string>
@@ -479,7 +479,7 @@
     <string name="Settings_Title">设置</string>
     <string name="Settings_SecurityCenter">安全中心</string>
     <string name="Settings_Notifications">通知</string>
-    <string name="Settings_ExperimentalFeatures">实验性功能</string>
+    <string name="Settings_ExperimentalFeatures">Experimental</string>
     <string name="Settings_BaseCurrency">基础货币</string>
     <string name="Settings_Language">语言</string>
     <string name="Settings_Theme">主题</string>
