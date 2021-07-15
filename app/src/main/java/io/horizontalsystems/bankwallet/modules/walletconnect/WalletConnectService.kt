@@ -72,7 +72,7 @@ class WalletConnectService(
         get() = connectionStateSubject.toFlowable(BackpressureStrategy.BUFFER)
 
     val connectionState: WalletConnectInteractor.State
-        get() = interactor?.state ?: WalletConnectInteractor.State.Disconnected
+        get() = interactor?.state ?: WalletConnectInteractor.State.Disconnected()
 
     private val requestSubject = PublishSubject.create<WalletConnectRequest>()
     val requestObservable: Flowable<WalletConnectRequest>
@@ -88,7 +88,7 @@ class WalletConnectService(
 
         connectivityManager.networkAvailabilitySignal
                 .subscribeIO {
-                    if (connectivityManager.isConnected && interactor?.state == WalletConnectInteractor.State.Disconnected) {
+                    if (connectivityManager.isConnected && interactor?.state is WalletConnectInteractor.State.Disconnected) {
                         interactor?.connect()
                     }
                 }
@@ -200,6 +200,8 @@ class WalletConnectService(
 
         if (state == WalletConnectInteractor.State.Connected) {
             processNextRequest()
+        } else if (state is WalletConnectInteractor.State.Disconnected) {
+            this.state = State.Invalid(state.error)
         }
     }
 

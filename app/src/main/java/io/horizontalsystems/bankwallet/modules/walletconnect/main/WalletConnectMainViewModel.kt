@@ -122,7 +122,7 @@ class WalletConnectMainViewModel(private val service: WalletConnectService) : Vi
             when (connectionState) {
                 WalletConnectInteractor.State.Connecting -> Status.CONNECTING
                 WalletConnectInteractor.State.Connected -> Status.ONLINE
-                WalletConnectInteractor.State.Disconnected -> Status.OFFLINE
+                is WalletConnectInteractor.State.Disconnected -> Status.OFFLINE
             }
         }
     }
