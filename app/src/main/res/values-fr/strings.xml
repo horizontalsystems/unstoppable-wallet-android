@@ -451,13 +451,13 @@
     <string name="TransactionInfo_Resend">Resend</string>
     <string name="TransactionInfo_RevokeApproval">Revoke Approval</string>
     <string name="StatusInfo_Pending">En attente</string>
-    <string name="StatusInfo_SendingReceiving">Envoi/Réception</string>
-    <string name="StatusInfo_Confirmed">Confirmé</string>
+    <string name="StatusInfo_SendingReceiving">Sending/Receiving/Swapping</string>
+    <string name="StatusInfo_Confirmed">Sent/Received/Swapped</string>
     <string name="StatusInfo_Failed">Échec</string>
-    <string name="StatusInfo_PendingDescription">La transaction n\'a pas encore été confirmée sur la blockchain. Cette étape peut prendre de quelques minutes à quelques heures selon les frais de transaction. Les transactions envoyées avec des frais très bas sont généralement traitées en quelques jours ou peuvent être rejetées par le réseau, ce qui signifie que la transaction n\'a pas eu lieu.</string>
-    <string name="StatusInfo_SendingReceivingDescription">La transaction a été incluse dans la blockchain mais n\'a pas encore atteint sa finalité permanente. À ce stade, pour les petits paiements, il est prudent de considérer que la transaction est terminée. Pour les paiements plus importants, il est recommandé d\'attendre que le statut passe à \"complété\".</string>
-    <string name="StatusInfo_ConfirmedDescription">La transaction est définitive et irréversible.</string>
-    <string name="StatusInfo_FailedDescription">La transaction n\'a pas été traitée comme prévu et aucun transfert de token n\'a eu lieu. Sur la blockchain Ethereum, les transactions qui échouent entraînent des frais de transaction.</string>
+    <string name="StatusInfo_PendingDescription">Transaction has not been confirmed on the blockchain yet. Transaction may remain from a few minutes to hours depending on the transaction fee. Transactions sent with a low fee usually get processed within a few hours or even days, and can also be rejected entirely.</string>
+    <string name="StatusInfo_SendingReceivingDescription">Transaction has been already included in the blockchain but has not reached permanent finality yet.  At this point, it\'s safe to consider transaction completed for smaller payments. For larger payments better to wait until status changes to sent / received / swapped / approved, depending on transaction type.</string>
+    <string name="StatusInfo_ConfirmedDescription">Transaction is completed and considered permanent and irreversible.</string>
+    <string name="StatusInfo_FailedDescription">Transaction did not get processed as intended and no value transfer took place. Failed transactions do consume transaction fees.</string>
     <!-- Info -->
     <string name="Info_LockTime_Title">TimeLock</string>
     <string name="Info_LockTime_Description">L\'expéditeur a envoyé ces fonds avec un délai prédéfini qui se terminera %s.\n\nPas de soucis, les Bitcoins reçues sont déjà à vous mais vous devez attendre l\'expiration de la période de verrouillage pour les dépenser sur le réseau Bitcoin.</string>
@@ -479,7 +479,7 @@
     <string name="Settings_Title">Paramètres</string>
     <string name="Settings_SecurityCenter">Centre de Sécurité</string>
     <string name="Settings_Notifications">Notifications</string>
-    <string name="Settings_ExperimentalFeatures">Fonctionnalités expérimentales</string>
+    <string name="Settings_ExperimentalFeatures">Experimental</string>
     <string name="Settings_BaseCurrency">Devise de Base</string>
     <string name="Settings_Language">Langue</string>
     <string name="Settings_Theme">Thème</string>
