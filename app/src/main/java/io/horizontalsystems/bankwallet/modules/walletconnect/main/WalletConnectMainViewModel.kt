@@ -19,6 +19,7 @@ class WalletConnectMainViewModel(private val service: WalletConnectService) : Vi
     val closeVisibleLiveData = MutableLiveData<Boolean>()
     val signedTransactionsVisibleLiveData = MutableLiveData<Boolean>(false)
     val hintLiveData = MutableLiveData<Int?>()
+    val errorLiveData = MutableLiveData<String?>()
     val statusLiveData = MutableLiveData<Status?>()
     val closeLiveEvent = SingleLiveEvent<Unit>()
     val openRequestLiveEvent = SingleLiveEvent<WalletConnectRequest>()
@@ -79,7 +80,7 @@ class WalletConnectMainViewModel(private val service: WalletConnectService) : Vi
     }
 
     private fun sync(state: WalletConnectService.State, connectionState: WalletConnectInteractor.State) {
-        if (state == WalletConnectService.State.Killed || state is WalletConnectService.State.Invalid) {
+        if (state == WalletConnectService.State.Killed) {
             closeLiveEvent.postValue(Unit)
             return
         }
@@ -105,6 +106,13 @@ class WalletConnectMainViewModel(private val service: WalletConnectService) : Vi
         }
 
         hintLiveData.postValue(hint)
+
+        val error = if (state is WalletConnectService.State.Invalid) {
+            state.error.message ?: state.error.javaClass.simpleName
+        } else {
+            null
+        }
+        errorLiveData.postValue(error)
     }
 
     private fun getStatus(connectionState: WalletConnectInteractor.State): Status? {

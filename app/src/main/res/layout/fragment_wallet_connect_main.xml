@@ -69,6 +69,18 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/dappInfo" />
 
+        <TextView
+            android:id="@+id/errorText"
+            style="@style/ImportantText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="12dp"
+            android:text="@string/Error"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/dappHint" />
+
         <androidx.constraintlayout.widget.Group
             android:id="@+id/dappGroup"
             android:layout_width="wrap_content"
