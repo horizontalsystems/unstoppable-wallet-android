@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.market.overview
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.DiffUtil
@@ -12,7 +13,8 @@ import io.horizontalsystems.bankwallet.R
 
 class PoweredByAdapter(
         showPoweredBy: LiveData<Boolean>,
-        viewLifecycleOwner: LifecycleOwner
+        viewLifecycleOwner: LifecycleOwner,
+        private val poweredByText: String
 ) : ListAdapter<Boolean, PoweredByAdapter.ViewHolder>(diffCallback) {
 
     init {
@@ -21,7 +23,9 @@ class PoweredByAdapter(
         })
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) = Unit
+    override fun onBindViewHolder(holder: ViewHolder, position: Int){
+        holder.bind(poweredByText)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder.create(parent)
@@ -39,7 +43,12 @@ class PoweredByAdapter(
         }
     }
 
-    class ViewHolder(containerView: View) : RecyclerView.ViewHolder(containerView) {
+    class ViewHolder(private val containerView: View) : RecyclerView.ViewHolder(containerView) {
+
+        fun bind(text: String) {
+            containerView.findViewById<TextView>(R.id.txtViewPoweredBy).text = text
+        }
+
         companion object {
             fun create(parent: ViewGroup): ViewHolder {
                 return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_market_powered_by, parent, false))
