@@ -227,13 +227,7 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
         when (transactionRecord.type) {
             is TransactionViewItem.TransactionType.Incoming -> {
                 image = R.drawable.ic_incoming_20
-                val text = when (transactionRecord.status) {
-                    is TransactionStatus.Completed -> R.string.Transactions_Received
-                    is TransactionStatus.Pending -> R.string.Transactions_Pending
-                    is TransactionStatus.Processing -> R.string.Transactions_Receiving
-                    is TransactionStatus.Failed -> R.string.Transactions_Failed
-                }
-                topText = getString(text)
+                topText = getString(R.string.Transactions_Receive)
                 bottomText = transactionRecord.type.from?.let {
                     getString(
                         R.string.Transactions_From,
@@ -254,13 +248,7 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
             }
             is TransactionViewItem.TransactionType.Outgoing -> {
                 image = R.drawable.ic_outgoing_20
-                val text = when (transactionRecord.status) {
-                    is TransactionStatus.Completed -> R.string.Transactions_Sent
-                    is TransactionStatus.Pending -> R.string.Transactions_Pending
-                    is TransactionStatus.Processing -> R.string.Transactions_Sending
-                    is TransactionStatus.Failed -> R.string.Transactions_Failed
-                }
-                topText = getString(text)
+                topText = getString(R.string.Transactions_Send)
                 bottomText = transactionRecord.type.to?.let {
                     getString(
                         R.string.Transactions_To,
@@ -281,13 +269,7 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
             }
             is TransactionViewItem.TransactionType.Approve -> {
                 image = R.drawable.ic_tx_checkmark_20
-                val text = when (transactionRecord.status) {
-                    is TransactionStatus.Completed -> R.string.Transactions_Approved
-                    is TransactionStatus.Pending -> R.string.Transactions_Pending
-                    is TransactionStatus.Processing -> R.string.Transactions_Approving
-                    is TransactionStatus.Failed -> R.string.Transactions_Failed
-                }
-                topText = getString(text)
+                topText = getString(R.string.Transactions_Approve)
                 bottomText =
                     getString(R.string.Transactions_From, truncated(transactionRecord.type.spender))
 
@@ -302,13 +284,7 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
             }
             is TransactionViewItem.TransactionType.Swap -> {
                 image = R.drawable.ic_tx_swap_20
-                val text = when (transactionRecord.status) {
-                    is TransactionStatus.Completed -> R.string.Transactions_Swapped
-                    is TransactionStatus.Pending -> R.string.Transactions_Pending
-                    is TransactionStatus.Processing -> R.string.Transactions_Swapping
-                    is TransactionStatus.Failed -> R.string.Transactions_Failed
-                }
-                topText = getString(text)
+                topText = getString(R.string.Transactions_Swap)
                 bottomText = getString(
                     R.string.Transactions_From,
                     truncated(transactionRecord.type.exchangeAddress)
@@ -323,13 +299,7 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
             }
             is TransactionViewItem.TransactionType.ContractCall -> {
                 image = R.drawable.ic_tx_unordered
-                val text = when (transactionRecord.status) {
-                    is TransactionStatus.Completed -> transactionRecord.type.method?.uppercase()
-                        ?: getString(R.string.Transactions_ContractCall)
-                    is TransactionStatus.Pending, is TransactionStatus.Processing -> getString(R.string.Transactions_Pending)
-                    is TransactionStatus.Failed -> getString(R.string.Transactions_Failed)
-                }
-                topText = text
+                topText = getString(R.string.Transactions_ContractCall)
                 bottomText = getString(
                     R.string.Transactions_From,
                     truncated(transactionRecord.type.contractAddress)
@@ -337,12 +307,7 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
             }
             is TransactionViewItem.TransactionType.ContractCreation -> {
                 image = R.drawable.ic_tx_unordered
-                val text = when (transactionRecord.status) {
-                    is TransactionStatus.Completed -> R.string.Transactions_ContractCreation
-                    is TransactionStatus.Pending, is TransactionStatus.Processing -> R.string.Transactions_Pending
-                    is TransactionStatus.Failed -> R.string.Transactions_Failed
-                }
-                topText = getString(text)
+                topText = getString(R.string.Transactions_ContractCreation)
                 bottomText = "---"
             }
         }
