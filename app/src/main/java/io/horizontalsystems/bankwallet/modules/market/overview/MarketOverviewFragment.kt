@@ -82,7 +82,7 @@ class MarketOverviewFragment : BaseFragment(), ViewHolderMarketOverviewItem.List
                 viewLifecycleOwner)
 
 
-        val poweredByAdapter = PoweredByAdapter(marketOverviewViewModel.showPoweredByLiveData, viewLifecycleOwner)
+        val poweredByAdapter = PoweredByAdapter(marketOverviewViewModel.showPoweredByLiveData, viewLifecycleOwner, getString(R.string.Market_PoweredByApi))
 
         coinRatesRecyclerView.adapter = ConcatAdapter(
                 marketMetricsAdapter,

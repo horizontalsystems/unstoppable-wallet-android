@@ -93,7 +93,7 @@ class CoinFragment : BaseFragment(), CoinChartAdapter.Listener, CoinDataAdapter.
         val contractInfoAdapter = CoinDataAdapter(viewModel.contractInfoLiveData, viewLifecycleOwner, this)
         val aboutAdapter = CoinAboutAdapter(viewModel.aboutTextLiveData, viewLifecycleOwner)
         val linksAdapter = CoinLinksAdapter(viewModel.linksLiveData, viewLifecycleOwner, this)
-        val footerAdapter = PoweredByAdapter(viewModel.showFooterLiveData, viewLifecycleOwner)
+        val footerAdapter = PoweredByAdapter(viewModel.showFooterLiveData, viewLifecycleOwner, getString(R.string.Market_PoweredByApi))
 
         val loadingAdapter = CoinLoadingAdapter(viewModel.loadingLiveData, viewLifecycleOwner)
         val errorAdapter = CoinInfoErrorAdapter(viewModel.coinInfoErrorLiveData, viewLifecycleOwner)
