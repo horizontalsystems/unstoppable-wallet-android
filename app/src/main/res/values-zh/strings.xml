@@ -403,14 +403,12 @@
     <string name="Transactions_FilterAll">全部</string>
     <string name="Transactions_EmptyList">您还没有任何待定或成功的交易</string>
     <string name="Transactions_Pending">待处理</string>
-    <string name="Transactions_Received">Received</string>
-    <string name="Transactions_Receiving">正在接收</string>
-    <string name="Transactions_Sent">Sent</string>
-    <string name="Transactions_Sending">正在发送</string>
-    <string name="Transactions_Approved">Approved</string>
-    <string name="Transactions_Approving">Approving</string>
-    <string name="Transactions_Swapped">Swapped</string>
-    <string name="Transactions_Swapping">Swapping</string>
+    <string name="Transactions_Receive">Receive</string>
+    <string name="Transactions_Completed">Completed</string>
+    <string name="Transactions_Processing">Processing</string>
+    <string name="Transactions_Send">Send</string>
+    <string name="Transactions_Approve">Approve</string>
+    <string name="Transactions_Swap">Swap</string>
     <string name="Transactions_Failed">失败</string>
     <string name="Transactions_ContractCall">Contract Call</string>
     <string name="Transactions_ContractCreation">Contract Creation</string>
@@ -436,7 +434,6 @@
     <string name="TransactionInfo_SentToSelfNote">交易已发送至自有地址</string>
     <string name="TransactionInfo_DoubleSpendNote">双重支付风险！</string>
     <string name="TransactionInfo_ButtonViewOnExplorerName">查看于%s</string>
-    <string name="TransactionInfo_ContractCall">Contract Call</string>
     <string name="TransactionInfo_Price">Price</string>
     <string name="TransactionInfo_YouPaid">You Paid</string>
     <string name="TransactionInfo_YouGot">You Got</string>
@@ -444,13 +441,13 @@
     <string name="TransactionInfo_RevokeApproval">Revoke Approval</string>
     <string name="TransactionInfo_Unlimited">unlimited</string>
     <string name="StatusInfo_Pending">待处理</string>
-    <string name="StatusInfo_SendingReceiving">Sending/Receiving/Swapping</string>
-    <string name="StatusInfo_Confirmed">Sent/Received/Swapped</string>
+    <string name="StatusInfo_Processing">Processing</string>
+    <string name="StatusInfo_Confirmed">Completed</string>
     <string name="StatusInfo_Failed">失败</string>
-    <string name="StatusInfo_PendingDescription">Transaction has not been confirmed on the blockchain yet. Transaction may remain from a few minutes to hours depending on the transaction fee. Transactions sent with a low fee usually get processed within a few hours or even days, and can also be rejected entirely.</string>
-    <string name="StatusInfo_SendingReceivingDescription">Transaction has been already included in the blockchain but has not reached permanent finality yet.  At this point, it\'s safe to consider transaction completed for smaller payments. For larger payments better to wait until status changes to sent / received / swapped / approved, depending on transaction type.</string>
+    <string name="StatusInfo_PendingDescription">Transaction has not been confirmed on the blockchain yet. Transaction may remain from a few minutes to hours depending on the transaction fee amount. Transactions sent with a low fee usually get processed within a few hours or even days, and can also be rejected entirely.</string>
+    <string name="StatusInfo_ProcessingDescription">Transaction has been already included in the blockchain but has not reached permanent finality yet. At this point, it\'s safe to consider transaction completed for smaller payments. For larger payments better to wait until status changes to completed.</string>
     <string name="StatusInfo_ConfirmedDescription">Transaction is completed and considered permanent and irreversible.</string>
-    <string name="StatusInfo_FailedDescription">Transaction did not get processed as intended and no value transfer took place. Failed transactions do consume transaction fees.</string>
+    <string name="StatusInfo_FailedDescription">Transaction did not get processed as intended and no value transfer took place. Failed transactions are written to the blockchain and consume transaction fees.</string>
     <!-- Info -->
     <string name="Info_LockTime_Title">时间锁定</string>
     <string name="Info_LockTime_Description">汇款人通过将在%s失效的消费锁定汇出这些资金。\n\n无需担心，收到的比特币已经属于您，但在锁定期限结束前，您无法在比特币网络上消费它们。</string>
