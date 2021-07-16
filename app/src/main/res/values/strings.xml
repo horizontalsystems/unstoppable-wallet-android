@@ -514,13 +514,13 @@
     <string name="TransactionInfo_Unlimited">unlimited</string>
 
     <string name="StatusInfo_Pending">Pending</string>
-    <string name="StatusInfo_SendingReceiving">Sending/Receiving/Swapping</string>
-    <string name="StatusInfo_Confirmed">Sent/Received/Swapped</string>
+    <string name="StatusInfo_Processing">Processing</string>
+    <string name="StatusInfo_Confirmed">Completed</string>
     <string name="StatusInfo_Failed">Failed</string>
-    <string name="StatusInfo_PendingDescription">Transaction has not been confirmed on the blockchain yet. Transaction may remain from a few minutes to hours depending on the transaction fee. Transactions sent with a low fee usually get processed within a few hours or even days, and can also be rejected entirely.</string>
-    <string name="StatusInfo_SendingReceivingDescription">Transaction has been already included in the blockchain but has not reached permanent finality yet.  At this point, it\'s safe to consider transaction completed for smaller payments. For larger payments better to wait until status changes to sent / received / swapped / approved, depending on transaction type.</string>
+    <string name="StatusInfo_PendingDescription">Transaction has not been confirmed on the blockchain yet. Transaction may remain from a few minutes to hours depending on the transaction fee amount. Transactions sent with a low fee usually get processed within a few hours or even days, and can also be rejected entirely.</string>
+    <string name="StatusInfo_ProcessingDescription">Transaction has been already included in the blockchain but has not reached permanent finality yet. At this point, it\'s safe to consider transaction completed for smaller payments. For larger payments better to wait until status changes to completed.</string>
     <string name="StatusInfo_ConfirmedDescription">Transaction is completed and considered permanent and irreversible.</string>
-    <string name="StatusInfo_FailedDescription">Transaction did not get processed as intended and no value transfer took place. Failed transactions do consume transaction fees.</string>
+    <string name="StatusInfo_FailedDescription">Transaction did not get processed as intended and no value transfer took place. Failed transactions are written to the blockchain and consume transaction fees.</string>
 
     <!-- Info -->
 
