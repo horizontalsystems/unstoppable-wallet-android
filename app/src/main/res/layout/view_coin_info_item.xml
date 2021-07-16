@@ -51,7 +51,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="48dp"
         android:maxWidth="130dp"
-        android:visibility="visible"
+        android:visibility="gone"
         app:layout_constrainedWidth="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/valueText"
@@ -81,6 +81,19 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_goneMarginEnd="16dp"
         tools:text="Here we can have very very very very very long text" />
+
+    <TextView
+        android:id="@+id/labeledText"
+        style="@style/TextLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:textColor="@color/tyler"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/iconView"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="High" />
 
     <ImageView
         android:id="@+id/iconView"

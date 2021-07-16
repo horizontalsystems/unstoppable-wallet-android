@@ -36,6 +36,7 @@ class CoinViewModel(
     val tvlDataLiveData = MutableLiveData<List<CoinDataItem>>()
     val tradingVolumeLiveData = MutableLiveData<List<CoinDataItem>>()
     val investorDataLiveData = MutableLiveData<List<CoinDataItem>>()
+    val securityParamsLiveData = MutableLiveData<List<CoinDataItem>>()
     val categoriesLiveData = MutableLiveData<String>()
     val contractInfoLiveData = MutableLiveData<List<CoinDataItem>>()
     val aboutTextLiveData = MutableLiveData<AboutText>()
@@ -290,6 +291,10 @@ class CoinViewModel(
         val coinDetails = service.coinMarketDetails ?: return
         coinMajorHolders.postValue(factory.getCoinMajorHolders(service.topTokenHolders))
         investorDataLiveData.postValue(factory.getInvestorData(coinDetails, service.topTokenHolders))
+
+        coinDetails.meta.securityParameter?.let {
+            securityParamsLiveData.postValue(factory.getSecurityParams(it))
+        }
     }
 
     private fun getContractInfo(coinDetails: CoinMarketDetails): ContractInfo? =

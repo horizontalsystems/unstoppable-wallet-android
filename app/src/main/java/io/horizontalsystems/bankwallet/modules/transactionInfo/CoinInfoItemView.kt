@@ -24,19 +24,19 @@ class CoinInfoItemView : ConstraintLayout {
     fun bind(
             title: String,
             value: String? = null,
+            valueLabeled: String? = null,
             icon: Int? = null,
             valueDecorated: Boolean = false,
             rank: String? = null,
             listPosition: ListPosition
     ) {
         txtTitle.text = title
-        decoratedText.isVisible = valueDecorated
-        valueText.isVisible = !valueDecorated
 
         txtRank.isVisible = rank != null
         txtRank.text = rank
 
         if (valueDecorated) {
+            decoratedText.isVisible = valueDecorated
             decoratedText.text = value
             value?.let { decoratedValue ->
                 decoratedText.setOnSingleClickListener {
@@ -44,8 +44,12 @@ class CoinInfoItemView : ConstraintLayout {
                     HudHelper.showSuccessMessage(this, R.string.Hud_Text_Copied)
                 }
             }
-        } else {
+        } else if (value != null) {
+            valueText.isVisible = true
             valueText.text = value
+        } else if (valueLabeled != null) {
+            labeledText.isVisible = true
+            labeledText.text = valueLabeled
         }
 
         iconView.isVisible = icon != null
@@ -61,13 +65,17 @@ class CoinInfoItemView : ConstraintLayout {
 
     fun bindItem(item: CoinDataItem) {
         bind(
-                title = item.title,
-                value = item.value,
-                valueDecorated = item.valueDecorated,
-                listPosition = item.listPosition ?: ListPosition.Middle,
-                icon = item.icon,
-                rank = item.rankLabel
+            title = item.title,
+            value = item.value,
+            valueLabeled = item.valueLabeled,
+            valueDecorated = item.valueDecorated,
+            listPosition = item.listPosition ?: ListPosition.Middle,
+            icon = item.icon,
+            rank = item.rankLabel
         )
-    }
 
+        item.valueLabeledBackground?.let { color ->
+            labeledText.setBackgroundResource(color)
+        }
+    }
 }
