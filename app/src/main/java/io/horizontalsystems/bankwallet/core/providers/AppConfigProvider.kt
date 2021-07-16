@@ -24,6 +24,9 @@ class AppConfigProvider : IAppConfigProvider, ILanguageConfigProvider, IBuildCon
     override val cryptoCompareApiKey by lazy {
         Translator.getString(R.string.cryptoCompareApiKey)
     }
+    override val defiyieldProviderApiKey by lazy {
+        Translator.getString(R.string.defiyieldProviderApiKey)
+    }
     override val infuraProjectId by lazy {
         Translator.getString(R.string.infuraProjectId)
     }
