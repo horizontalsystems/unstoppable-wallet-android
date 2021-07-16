@@ -51,7 +51,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="36dp"
-                android:text="@string/StatusInfo_SendingReceiving"
+                android:text="@string/StatusInfo_Processing"
                 android:textColor="@color/jacob" />
 
             <TextView
@@ -59,7 +59,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                android:text="@string/StatusInfo_SendingReceivingDescription"
+                android:text="@string/StatusInfo_ProcessingDescription"
                 android:textColor="@color/bran" />
 
             <TextView
