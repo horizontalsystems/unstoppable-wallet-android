@@ -19,6 +19,7 @@ class RateManager(
                 context,
                 rateExpirationInterval = 60 * 10,
                 cryptoCompareApiKey = appConfigProvider.cryptoCompareApiKey,
+                defiyieldProviderApiKey = appConfigProvider.defiyieldProviderApiKey,
                 coinsRemoteUrl = appConfigProvider.coinsJsonUrl,
                 providerCoinsRemoteUrl = appConfigProvider.providerCoinsJsonUrl,
         )

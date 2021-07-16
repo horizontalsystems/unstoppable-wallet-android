@@ -303,6 +303,7 @@ interface IAppConfigProvider {
     val appRedditLink: String
     val reportEmail: String
     val cryptoCompareApiKey: String
+    val defiyieldProviderApiKey: String
     val infuraProjectId: String
     val infuraProjectSecret: String
     val btcCoreRpcUrl: String
