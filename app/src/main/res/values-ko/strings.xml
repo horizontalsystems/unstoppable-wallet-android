@@ -403,14 +403,12 @@
     <string name="Transactions_FilterAll">전부</string>
     <string name="Transactions_EmptyList">당신은 아직 보류 중 또는 과거에 완료된 거래가 없습니다</string>
     <string name="Transactions_Pending">보류 중</string>
-    <string name="Transactions_Received">Received</string>
-    <string name="Transactions_Receiving">수신 중</string>
-    <string name="Transactions_Sent">Sent</string>
-    <string name="Transactions_Sending">전송중</string>
-    <string name="Transactions_Approved">Approved</string>
-    <string name="Transactions_Approving">Approving</string>
-    <string name="Transactions_Swapped">Swapped</string>
-    <string name="Transactions_Swapping">Swapping</string>
+    <string name="Transactions_Receive">Receive</string>
+    <string name="Transactions_Completed">Completed</string>
+    <string name="Transactions_Processing">Processing</string>
+    <string name="Transactions_Send">Send</string>
+    <string name="Transactions_Approve">Approve</string>
+    <string name="Transactions_Swap">Swap</string>
     <string name="Transactions_Failed">실패</string>
     <string name="Transactions_ContractCall">Contract Call</string>
     <string name="Transactions_ContractCreation">Contract Creation</string>
@@ -436,7 +434,6 @@
     <string name="TransactionInfo_SentToSelfNote">이 거래는 귀하의 주소로 전송이 되었습니다</string>
     <string name="TransactionInfo_DoubleSpendNote">이중 지출 위험!</string>
     <string name="TransactionInfo_ButtonViewOnExplorerName">%s에서 보기</string>
-    <string name="TransactionInfo_ContractCall">Contract Call</string>
     <string name="TransactionInfo_Price">Price</string>
     <string name="TransactionInfo_YouPaid">You Paid</string>
     <string name="TransactionInfo_YouGot">You Got</string>
@@ -444,13 +441,13 @@
     <string name="TransactionInfo_RevokeApproval">Revoke Approval</string>
     <string name="TransactionInfo_Unlimited">unlimited</string>
     <string name="StatusInfo_Pending">보류 중</string>
-    <string name="StatusInfo_SendingReceiving">Sending/Receiving/Swapping</string>
-    <string name="StatusInfo_Confirmed">Sent/Received/Swapped</string>
+    <string name="StatusInfo_Processing">Processing</string>
+    <string name="StatusInfo_Confirmed">Completed</string>
     <string name="StatusInfo_Failed">실패</string>
-    <string name="StatusInfo_PendingDescription">Transaction has not been confirmed on the blockchain yet. Transaction may remain from a few minutes to hours depending on the transaction fee. Transactions sent with a low fee usually get processed within a few hours or even days, and can also be rejected entirely.</string>
-    <string name="StatusInfo_SendingReceivingDescription">Transaction has been already included in the blockchain but has not reached permanent finality yet.  At this point, it\'s safe to consider transaction completed for smaller payments. For larger payments better to wait until status changes to sent / received / swapped / approved, depending on transaction type.</string>
+    <string name="StatusInfo_PendingDescription">Transaction has not been confirmed on the blockchain yet. Transaction may remain from a few minutes to hours depending on the transaction fee amount. Transactions sent with a low fee usually get processed within a few hours or even days, and can also be rejected entirely.</string>
+    <string name="StatusInfo_ProcessingDescription">Transaction has been already included in the blockchain but has not reached permanent finality yet. At this point, it\'s safe to consider transaction completed for smaller payments. For larger payments better to wait until status changes to completed.</string>
     <string name="StatusInfo_ConfirmedDescription">Transaction is completed and considered permanent and irreversible.</string>
-    <string name="StatusInfo_FailedDescription">Transaction did not get processed as intended and no value transfer took place. Failed transactions do consume transaction fees.</string>
+    <string name="StatusInfo_FailedDescription">Transaction did not get processed as intended and no value transfer took place. Failed transactions are written to the blockchain and consume transaction fees.</string>
     <!-- Info -->
     <string name="Info_LockTime_Title">시간 자물쇠</string>
     <string name="Info_LockTime_Description">발송자는 이러한 자금들을 %s 날짜에 만료가 되는 잠금 지출과 함께 보냈습니다. \n\n걱정 하지마십시오, 수신된 비트코인은 이미 귀하의 것입니다 하지만 잠금 기간이 만료될때 까지 비트코인 네트워크에서 사용하실 수 없습니다.</string>
