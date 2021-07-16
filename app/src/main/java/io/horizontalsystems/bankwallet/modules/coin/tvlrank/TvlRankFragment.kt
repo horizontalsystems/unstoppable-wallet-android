@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.ConcatAdapter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.coin.adapters.CoinInfoErrorAdapter
+import io.horizontalsystems.bankwallet.modules.market.overview.PoweredByAdapter
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorDialog
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorItem
 import io.horizontalsystems.bankwallet.ui.extensions.TvlRankListHeaderView
@@ -45,8 +46,9 @@ class TvlRankFragment : BaseFragment(), TvlRankListHeaderView.Listener {
             viewLifecycleOwner
         )
         val errorAdapter = CoinInfoErrorAdapter(viewModel.coinInfoErrorLiveData, viewLifecycleOwner)
+        val poweredByAdapter = PoweredByAdapter(viewModel.showPoweredByLiveData, viewLifecycleOwner, getString(R.string.Market_PoweredByDefiLlamaApi))
 
-        recyclerView.adapter = ConcatAdapter(loadingAdapter, errorAdapter, adapter)
+        recyclerView.adapter = ConcatAdapter(loadingAdapter, errorAdapter, adapter, poweredByAdapter)
         recyclerView.itemAnimator = null
 
         viewModel.coinList.observe(viewLifecycleOwner, {

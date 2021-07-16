@@ -253,11 +253,11 @@
     <string name="TvlRank_Field_HighestTvl">Highest TVL</string>
     <string name="TvlRank_Field_LowestTvl">Lowest TVL</string>
     <string name="TvlRank_Field_All">All</string>
-    <string name="TvlRank_Field_Eth">Ethereum (ETH)</string>
-    <string name="TvlRank_Field_Bsc">Binance Smart Chain (BSC)</string>
-    <string name="TvlRank_Field_Sol">Solana (Sol)</string>
-    <string name="TvlRank_Field_Ava">Avalanche (Ava)</string>
-    <string name="TvlRank_Field_Others">Others</string>
+    <string name="TvlRank_Field_Eth">Ethereum</string>
+    <string name="TvlRank_Field_Bsc">Binance</string>
+    <string name="TvlRank_Field_Sol">Solana</string>
+    <string name="TvlRank_Field_Ava">Avalanche</string>
+    <string name="TvlRank_Field_Mat">Polygon</string>
     <string name="TvlRank_Filters_PopupTitle">Filters</string>
 
     <!--Balance-->

@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.coin.tvlrank
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
@@ -23,6 +22,7 @@ class TvlRankViewModel(
     val coinList = MutableLiveData<List<TvlRankViewItem>>()
     val loadingLiveData = MutableLiveData(true)
     val coinInfoErrorLiveData = MutableLiveData<String>()
+    val showPoweredByLiveData = MutableLiveData(false)
 
     val sortFields: Array<TvlRankSortField> =
         arrayOf(TvlRankSortField.HighestTvl, TvlRankSortField.LowestTvl)
@@ -33,11 +33,11 @@ class TvlRankViewModel(
     val filterFields: Array<TvlRankFilterField> =
         arrayOf(
             TvlRankFilterField.All,
-            TvlRankFilterField.Eth,
-            TvlRankFilterField.Bsc,
-            TvlRankFilterField.Sol,
-            TvlRankFilterField.Ava,
-            TvlRankFilterField.Others
+            TvlRankFilterField.Ethereum,
+            TvlRankFilterField.Binance,
+            TvlRankFilterField.Solana,
+            TvlRankFilterField.Avalanche,
+            TvlRankFilterField.Polygon
         )
 
     var filterField: TvlRankFilterField = filterFields.first()
@@ -66,8 +66,11 @@ class TvlRankViewModel(
     }
 
     private fun getCoinList() {
-        //todo, after Kit changes add filter option to request
-        xRateManager.getTopDefiTvlAsync(usdCurrency.code)
+        coinList.postValue(emptyList())
+        loadingLiveData.postValue(true)
+        showPoweredByLiveData.postValue(false)
+
+        xRateManager.getTopDefiTvlAsync(currencyCode = usdCurrency.code, chain = this.filterField.name.lowercase())
             .subscribeIO({ tvlRankList ->
                 loadingLiveData.postValue(false)
                 rawItemList = tvlRankList
@@ -83,6 +86,7 @@ class TvlRankViewModel(
     private fun syncViewItems() {
         val sorted = rawItemList.sort(sortField)
         coinList.postValue(sorted.map { getViewItem(it) })
+        showPoweredByLiveData.postValue(!sorted.isEmpty())
     }
 
     private fun getViewItem(defiTvl: DefiTvl): TvlRankViewItem {
@@ -114,6 +118,6 @@ class TvlRankViewModel(
     private fun List<DefiTvl>.sort(sortField: TvlRankSortField) = when (sortField) {
         TvlRankSortField.HighestTvl -> sortedByDescendingNullLast { it.tvl }
         TvlRankSortField.LowestTvl -> sortedByNullLast { it.tvl }
-        else -> throw IllegalArgumentException()
+        //else -> throw IllegalArgumentException()
     }
 }

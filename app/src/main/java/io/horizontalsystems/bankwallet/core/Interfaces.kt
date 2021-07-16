@@ -363,7 +363,8 @@ interface IRateManager {
     fun getTopDefiTvlAsync(
         currencyCode: String,
         fetchDiffPeriod: TimePeriod = TimePeriod.HOUR_24,
-        itemsCount: Int = 200
+        itemsCount: Int = 200,
+        chain: String? = null
     ): Single<List<DefiTvl>>
 
     fun getCoinMarketList(coinTypes: List<CoinType>, currency: String): Single<List<CoinMarket>>

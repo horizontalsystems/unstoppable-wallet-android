@@ -81,8 +81,8 @@ class RateManager(
         return kit.getTopCoinMarketsAsync(currency, itemsCount = itemsCount, fetchDiffPeriod = diffPeriod)
     }
 
-    override fun getTopDefiTvlAsync(currencyCode: String, fetchDiffPeriod: TimePeriod, itemsCount: Int): Single<List<DefiTvl>> {
-        return kit.getTopDefiTvlAsync(currencyCode, fetchDiffPeriod, itemsCount)
+    override fun getTopDefiTvlAsync(currencyCode: String, fetchDiffPeriod: TimePeriod, itemsCount: Int, chain: String?): Single<List<DefiTvl>> {
+        return kit.getTopDefiTvlAsync(currencyCode, fetchDiffPeriod, itemsCount, chain)
     }
 
     override fun getCoinMarketList(coinTypes: List<CoinType>, currency: String): Single<List<CoinMarket>> {
