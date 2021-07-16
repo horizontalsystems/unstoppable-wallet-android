@@ -39,9 +39,9 @@ enum class TvlRankSortField(@StringRes val titleResId: Int) {
 
 enum class TvlRankFilterField(@StringRes val titleResId: Int) {
     All(R.string.TvlRank_Field_All),
-    Eth(R.string.TvlRank_Field_Eth),
-    Bsc(R.string.TvlRank_Field_Bsc),
-    Sol(R.string.TvlRank_Field_Sol),
-    Ava(R.string.TvlRank_Field_Ava),
-    Others(R.string.TvlRank_Field_Others),
+    Ethereum(R.string.TvlRank_Field_Eth),
+    Binance(R.string.TvlRank_Field_Bsc),
+    Solana(R.string.TvlRank_Field_Sol),
+    Avalanche(R.string.TvlRank_Field_Ava),
+    Polygon(R.string.TvlRank_Field_Mat)
 }
