@@ -403,14 +403,12 @@
     <string name="Transactions_FilterAll">HEPSI</string>
     <string name="Transactions_EmptyList">Henüz herhangi bir bekleyen veya geçmiş işlem yok</string>
     <string name="Transactions_Pending">Devam ediyor</string>
-    <string name="Transactions_Received">Received</string>
-    <string name="Transactions_Receiving">Alınıyor</string>
-    <string name="Transactions_Sent">Sent</string>
-    <string name="Transactions_Sending">Gönderiliyor</string>
-    <string name="Transactions_Approved">Approved</string>
-    <string name="Transactions_Approving">Approving</string>
-    <string name="Transactions_Swapped">Swapped</string>
-    <string name="Transactions_Swapping">Swapping</string>
+    <string name="Transactions_Receive">Receive</string>
+    <string name="Transactions_Completed">Completed</string>
+    <string name="Transactions_Processing">Processing</string>
+    <string name="Transactions_Send">Send</string>
+    <string name="Transactions_Approve">Approve</string>
+    <string name="Transactions_Swap">Swap</string>
     <string name="Transactions_Failed">Başarısız</string>
     <string name="Transactions_ContractCall">Contract Call</string>
     <string name="Transactions_ContractCreation">Contract Creation</string>
@@ -436,7 +434,6 @@
     <string name="TransactionInfo_SentToSelfNote">Bu işlem kendi adresine gönderildi</string>
     <string name="TransactionInfo_DoubleSpendNote">Çifte Harcama Riski Var!</string>
     <string name="TransactionInfo_ButtonViewOnExplorerName">%s göre görüntüleme</string>
-    <string name="TransactionInfo_ContractCall">Contract Call</string>
     <string name="TransactionInfo_Price">Price</string>
     <string name="TransactionInfo_YouPaid">You Paid</string>
     <string name="TransactionInfo_YouGot">You Got</string>
@@ -444,13 +441,13 @@
     <string name="TransactionInfo_RevokeApproval">Revoke Approval</string>
     <string name="TransactionInfo_Unlimited">unlimited</string>
     <string name="StatusInfo_Pending">Devam ediyor</string>
-    <string name="StatusInfo_SendingReceiving">Sending/Receiving/Swapping</string>
-    <string name="StatusInfo_Confirmed">Sent/Received/Swapped</string>
+    <string name="StatusInfo_Processing">Processing</string>
+    <string name="StatusInfo_Confirmed">Completed</string>
     <string name="StatusInfo_Failed">Başarısız</string>
-    <string name="StatusInfo_PendingDescription">Transaction has not been confirmed on the blockchain yet. Transaction may remain from a few minutes to hours depending on the transaction fee. Transactions sent with a low fee usually get processed within a few hours or even days, and can also be rejected entirely.</string>
-    <string name="StatusInfo_SendingReceivingDescription">Transaction has been already included in the blockchain but has not reached permanent finality yet.  At this point, it\'s safe to consider transaction completed for smaller payments. For larger payments better to wait until status changes to sent / received / swapped / approved, depending on transaction type.</string>
+    <string name="StatusInfo_PendingDescription">Transaction has not been confirmed on the blockchain yet. Transaction may remain from a few minutes to hours depending on the transaction fee amount. Transactions sent with a low fee usually get processed within a few hours or even days, and can also be rejected entirely.</string>
+    <string name="StatusInfo_ProcessingDescription">Transaction has been already included in the blockchain but has not reached permanent finality yet. At this point, it\'s safe to consider transaction completed for smaller payments. For larger payments better to wait until status changes to completed.</string>
     <string name="StatusInfo_ConfirmedDescription">Transaction is completed and considered permanent and irreversible.</string>
-    <string name="StatusInfo_FailedDescription">Transaction did not get processed as intended and no value transfer took place. Failed transactions do consume transaction fees.</string>
+    <string name="StatusInfo_FailedDescription">Transaction did not get processed as intended and no value transfer took place. Failed transactions are written to the blockchain and consume transaction fees.</string>
     <!-- Info -->
     <string name="Info_LockTime_Title">TimeLock</string>
     <string name="Info_LockTime_Description">Gönderici bu fonları %s.\n\n tarihte sona erecek şekilde bir harcama kilidiyle gönderdi. Endişelenmeyin, alınan Bitcoin\'ler zaten sizindir ancak kilitleme süresi sona erene kadar bunları harcayamazsınız.</string>
