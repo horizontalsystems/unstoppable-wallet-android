@@ -37,7 +37,6 @@
     <color name="steel_20">#336E7899</color>
     <color name="steel_dark_pressed">#353842</color>
     <color name="red_50">#80ff4820</color>
-    <color name="issykBlue">#3372FF</color>
 
     <!--Paired Colors-->
     <color name="jacob">@color/yellow_l</color>

@@ -124,7 +124,7 @@ fun Score.getBackgroundTintColor(context: Context): Int {
         is Score.Rating -> {
             when (rating.toUpperCase(Locale.ENGLISH)) {
                 "A" -> R.color.jacob
-                "B" -> R.color.issykBlue
+                "B" -> R.color.issyk_blue
                 "C" -> R.color.grey
                 else -> R.color.light_grey
             }
