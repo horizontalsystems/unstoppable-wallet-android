@@ -220,7 +220,8 @@ class EvmTransactionConverter(
                         resolvedAmountOut,
                         tokenOut.decimal,
                         false
-                    ) else null
+                    ) else null,
+                    foreignRecipient = methodDecoration.to != evmKit.receiveAddress
                 )
             }
             is OneInchUnoswapMethodDecoration -> {
@@ -244,7 +245,8 @@ class EvmTransactionConverter(
                             tokenOut.decimal,
                             false
                         )
-                    }
+                    },
+                    foreignRecipient = false
                 )
             }
             is OneInchSwapMethodDecoration -> {
@@ -266,7 +268,8 @@ class EvmTransactionConverter(
                         methodDecoration.toAmount,
                         tokenOut.decimal,
                         false
-                    )
+                    ),
+                    foreignRecipient = methodDecoration.recipient != evmKit.receiveAddress
                 )
             }
             is RecognizedMethodDecoration -> {
@@ -274,7 +277,8 @@ class EvmTransactionConverter(
                     fullTransaction,
                     baseCoin,
                     to.eip55,
-                    methodDecoration.method
+                    methodDecoration.method,
+                    foreignTransaction = true
                 )
             }
             is UnknownMethodDecoration -> {
@@ -298,7 +302,8 @@ class EvmTransactionConverter(
                         baseCoin = baseCoin,
                         amount = convertAmount(methodDecoration.value, token.decimal, false),
                         from = methodDecoration.to.eip55,
-                        token = token
+                        token = token,
+                        foreignTransaction = true
                     )
                 }
             }
@@ -311,7 +316,13 @@ class EvmTransactionConverter(
                 )
             }
             is UnknownMethodDecoration -> {
-                return ContractCallTransactionRecord(fullTransaction, baseCoin, to.eip55, null)
+                return ContractCallTransactionRecord(
+                    fullTransaction,
+                    baseCoin,
+                    to.eip55,
+                    null,
+                    foreignTransaction = true
+                )
             }
         }
 

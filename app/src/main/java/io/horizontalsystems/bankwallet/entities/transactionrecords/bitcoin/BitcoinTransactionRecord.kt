@@ -29,10 +29,8 @@ abstract class BitcoinTransactionRecord(
 ) {
 
     override fun changedBy(oldBlockInfo: LastBlockInfo?, newBlockInfo: LastBlockInfo?): Boolean {
-        return super.changedBy(
-            oldBlockInfo,
-            newBlockInfo
-        ) || becomesUnlocked(oldBlockInfo?.timestamp, newBlockInfo?.timestamp)
+        return super.changedBy(oldBlockInfo, newBlockInfo)
+                || becomesUnlocked(oldBlockInfo?.timestamp, newBlockInfo?.timestamp)
     }
 
     fun lockState(lastBlockTimestamp: Long?): TransactionLockState? {
@@ -41,7 +39,7 @@ abstract class BitcoinTransactionRecord(
         var locked = true
 
         lastBlockTimestamp?.let {
-            locked = it < lockInfo.lockedUntil.time
+            locked = it < lockInfo.lockedUntil.time / 1000
         }
 
         return TransactionLockState(locked, lockInfo.lockedUntil)

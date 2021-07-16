@@ -7,7 +7,11 @@ import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.LastBlockInfo
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
+import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.BitcoinIncomingTransactionRecord
+import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.BitcoinOutgoingTransactionRecord
+import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.TransactionLockState
 import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.*
+import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoActionButton.*
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoButtonType.*
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoItemType.*
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionStatusViewItem.*
@@ -15,7 +19,6 @@ import io.horizontalsystems.bankwallet.modules.transactionInfo.adapters.Transact
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionStatus
 import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.core.helpers.DateHelper
-import io.horizontalsystems.views.ListPosition
 import io.horizontalsystems.views.ListPosition.*
 import java.math.BigDecimal
 import java.util.*
@@ -34,134 +37,131 @@ class TransactionInfoViewItemFactory(
         explorerData: TransactionInfoModule.ExplorerData
     ): List<TransactionInfoViewItem?> {
 
-        val status = getStatusViewItem(transaction, lastBlockInfo?.height)
-        val statusViewItem =
-            TransactionInfoViewItem(Status(getString(R.string.TransactionInfo_Status), status))
-        val date = dateHelper.getFullDate(Date(transaction.timestamp * 1000))
-        val items = mutableListOf<TransactionInfoViewItem?>()
-
-        items.add(
-            TransactionInfoViewItem(
-                Value(getString(R.string.TransactionInfo_Date), date),
-                First
-            )
+        val statusType = Status(
+            getString(R.string.TransactionInfo_Status),
+            getStatusViewItem(transaction, lastBlockInfo?.height)
         )
+        val date = Value(
+            getString(R.string.TransactionInfo_Date),
+            dateHelper.getFullDate(Date(transaction.timestamp * 1000))
+        )
+        val items = mutableListOf<TransactionInfoViewItem?>()
 
         when (transaction) {
             is EvmIncomingTransactionRecord -> {
-                items.add(statusViewItem)
+                val middleSectionTypes = mutableListOf<TransactionInfoItemType>()
+
+                middleSectionTypes.add(statusType)
+                middleSectionTypes.add(date)
 
                 rates[transaction.value.coin]?.let {
-                    items.add(getHistoricalRateViewItem(it, transaction.value))
+                    middleSectionTypes.add(getHistoricalRate(it, transaction.value))
                 }
 
-                items.add(
-                    TransactionInfoViewItem(
-                        Decorated(
-                            getString(R.string.TransactionInfo_From),
-                            transaction.from
-                        )
+                middleSectionTypes.add(
+                    Decorated(
+                        getString(R.string.TransactionInfo_From),
+                        transaction.from
                     )
                 )
-                items.add(
-                    TransactionInfoViewItem(
-                        Decorated(
-                            getString(R.string.TransactionInfo_Id),
-                            transaction.transactionHash,
-                            true
-                        ), Last
+                middleSectionTypes.add(
+                    Decorated(
+                        getString(R.string.TransactionInfo_Id),
+                        transaction.transactionHash,
+                        ShareButton(transaction.transactionHash)
                     )
                 )
 
+                //Top section
                 items.addAll(
-                    0,
                     getActionsSection(
-                        getString(R.string.TransactionInfo_Status_Received),
+                        getString(R.string.Transactions_Received),
                         transaction.value,
                         rates[transaction.value.coin],
                         true
                     )
                 )
 
+                //Middle section
+                items.addAll(getViewItems(middleSectionTypes))
                 items.add(null)
                 items.addAll(getAdditionalButtons(explorerData))
 
                 return items
             }
-            is EvmOutgoingTransactionRecord -> {
-                items.add(statusViewItem)
 
-                items.add(getFeeViewItem(rates[transaction.value.coin], transaction.fee))
+            is EvmOutgoingTransactionRecord -> {
+                val middleSectionTypes = mutableListOf<TransactionInfoItemType>()
+
+                middleSectionTypes.add(statusType)
+                middleSectionTypes.add(date)
+                middleSectionTypes.add(getFee(rates[transaction.value.coin], transaction.fee))
 
                 rates[transaction.value.coin]?.let {
-                    items.add(getHistoricalRateViewItem(it, transaction.value))
+                    middleSectionTypes.add(getHistoricalRate(it, transaction.value))
                 }
 
-                items.add(
-                    TransactionInfoViewItem(
-                        Decorated(
-                            getString(R.string.TransactionInfo_To),
-                            transaction.to
-                        )
+                middleSectionTypes.add(
+                    Decorated(
+                        getString(R.string.TransactionInfo_To),
+                        transaction.to
                     )
                 )
-                items.add(
-                    TransactionInfoViewItem(
-                        Decorated(
-                            getString(R.string.TransactionInfo_Id),
-                            transaction.transactionHash,
-                            true
-                        ), Last
+                middleSectionTypes.add(
+                    Decorated(
+                        getString(R.string.TransactionInfo_Id),
+                        transaction.transactionHash,
+                        ShareButton(transaction.transactionHash)
                     )
                 )
 
+                //Top section
                 items.addAll(
-                    0,
                     getActionsSection(
-                        getString(R.string.TransactionInfo_Status_Sent),
+                        getString(R.string.Transactions_Sent),
                         transaction.value,
                         rates[transaction.value.coin],
                         false
                     )
                 )
 
+                //Middle section
+                items.addAll(getViewItems(middleSectionTypes))
                 items.add(null)
                 items.addAll(getAdditionalButtons(explorerData))
 
                 return items
             }
-            is SwapTransactionRecord -> {
-                items.add(statusViewItem)
 
-                items.add(getFeeViewItem(rates[transaction.fee.coin], transaction.fee))
+            is SwapTransactionRecord -> {
+                val middleSectionTypes = mutableListOf<TransactionInfoItemType>()
+
+                middleSectionTypes.add(statusType)
+                middleSectionTypes.add(date)
+                middleSectionTypes.add(getFee(rates[transaction.fee.coin], transaction.fee))
 
                 transaction.valueOut?.let { out ->
                     if (out.value > BigDecimal.ZERO) {
                         val price = transaction.valueIn.value / out.value
                         val priceValue = numberFormatter.formatCoin(price, out.coin.code, 0, 8)
-                        items.add(
-                            TransactionInfoViewItem(
-                                Value(
-                                    getString(R.string.TransactionInfo_Price),
-                                    "${transaction.valueIn.coin.code} = $priceValue"
-                                )
+                        middleSectionTypes.add(
+                            Value(
+                                getString(R.string.TransactionInfo_Price),
+                                "${transaction.valueIn.coin.code} = $priceValue"
                             )
                         )
                     }
                 }
 
-                items.add(
-                    TransactionInfoViewItem(
-                        Decorated(
-                            getString(R.string.TransactionInfo_Id),
-                            transaction.transactionHash,
-                            true
-                        ), Last
+                middleSectionTypes.add(
+                    Decorated(
+                        getString(R.string.TransactionInfo_Id),
+                        transaction.transactionHash,
+                        ShareButton(transaction.transactionHash)
                     )
                 )
 
                 items.addAll(
-                    0,
                     getActionsSection(
                         getString(R.string.TransactionInfo_YouPaid),
                         transaction.valueIn,
@@ -170,9 +170,9 @@ class TransactionInfoViewItemFactory(
                     )
                 )
 
+                //Top section
                 transaction.valueOut?.let {
                     items.addAll(
-                        0,
                         getActionsSection(
                             getString(R.string.TransactionInfo_YouGot),
                             transaction.valueOut,
@@ -182,58 +182,88 @@ class TransactionInfoViewItemFactory(
                     )
                 }
 
+                //Middle section
+                items.addAll(getViewItems(middleSectionTypes))
                 items.add(null)
                 items.addAll(getAdditionalButtons(explorerData))
 
                 return items
             }
-            is ApproveTransactionRecord -> {
-                val rate = rates[transaction.value.coin]
-                items.add(statusViewItem)
 
-                items.add(getFeeViewItem(rates[transaction.fee.coin], transaction.fee))
+            is ApproveTransactionRecord -> {
+
+                val middleSectionTypes = mutableListOf<TransactionInfoItemType>()
+                val rate = rates[transaction.value.coin]
+
+                middleSectionTypes.add(date)
+                middleSectionTypes.add(statusType)
+                middleSectionTypes.add(getFee(rates[transaction.fee.coin], transaction.fee))
 
                 rate?.let {
-                    items.add(getHistoricalRateViewItem(it, transaction.value))
+                    middleSectionTypes.add(getHistoricalRate(it, transaction.value))
                 }
 
+                middleSectionTypes.add(
+                    Decorated(getString(R.string.TransactionInfo_To), transaction.spender)
+                )
+
+                middleSectionTypes.add(
+                    Decorated(
+                        getString(R.string.TransactionInfo_Id),
+                        transaction.transactionHash,
+                        ShareButton(transaction.transactionHash)
+                    )
+                )
+
+                val valueInFiat = rate?.let {
+                    numberFormatter.formatFiat(
+                        (it.value * transaction.value.value).abs(),
+                        it.currency.symbol,
+                        0,
+                        2
+                    )
+                } ?: "---"
+
+                val coinValueFormatted =
+                    numberFormatter.formatCoin(
+                        transaction.value.value,
+                        transaction.value.coin.code,
+                        0,
+                        8
+                    )
+                val coinValueColored = ColoredValue(coinValueFormatted, getAmountColor(null))
+
+                val isMaxValue = transaction.value.isMaxValue
+                val currencyAmount = if (isMaxValue) "∞" else valueInFiat
+                val coinAmountColored = if (isMaxValue) ColoredValue(
+                    getString(R.string.TransactionInfo_Unlimited),
+                    getAmountColor(null)
+                ) else coinValueColored
+
+                //Top Section
                 items.add(
                     TransactionInfoViewItem(
-                        Decorated(
-                            getString(R.string.TransactionInfo_To),
-                            transaction.spender
-                        )
+                        TransactionType(
+                            getString(R.string.Transactions_Approved),
+                            transaction.value.coin.title
+                        ), First
                     )
                 )
+                items.add(TransactionInfoViewItem(Amount(currencyAmount, coinAmountColored), Last))
+                items.add(null)
 
-                items.add(
-                    TransactionInfoViewItem(
-                        Decorated(
-                            getString(R.string.TransactionInfo_Id),
-                            transaction.transactionHash,
-                            true
-                        ), Last
-                    )
-                )
-
-                items.addAll(
-                    0,
-                    getActionsSection(
-                        getString(R.string.TransactionInfo_Status_Approved),
-                        transaction.value,
-                        rate,
-                        null
-                    )
-                )
-
+                //Middle section
+                items.addAll(getViewItems(middleSectionTypes))
                 items.add(null)
                 items.addAll(getAdditionalButtons(explorerData, isApproval = true))
 
                 return items
             }
+
             is ContractCallTransactionRecord -> {
-                val topSectionItems = mutableListOf<TransactionInfoViewItem?>()
-                topSectionItems.add(
+                val middleSectionTypes = mutableListOf<TransactionInfoItemType>()
+
+                items.add(
                     TransactionInfoViewItem(
                         TransactionType(
                             getString(R.string.TransactionInfo_ContractCall),
@@ -241,39 +271,37 @@ class TransactionInfoViewItemFactory(
                         ), Single
                     )
                 )
-                topSectionItems.add(null)
+                items.add(null)
 
                 if (transaction.outgoingEip20Events.size > 0) {
-                    topSectionItems.add(
-                        TransactionInfoViewItem(
-                            TransactionType(
-                                getString(R.string.TransactionInfo_YouPaid),
-                                null
-                            ), First
+                    val youPaidSection = mutableListOf<TransactionInfoItemType>()
+                    youPaidSection.add(
+                        TransactionType(
+                            getString(R.string.TransactionInfo_YouPaid),
+                            null
                         )
                     )
 
                     transaction.outgoingEip20Events.forEachIndexed { index, (_, eventCoinValue) ->
-                        topSectionItems.add(
-                            getAmountViewItem(
+                        youPaidSection.add(
+                            getAmount(
                                 rates[eventCoinValue.coin],
                                 eventCoinValue,
-                                false,
-                                if (index == transaction.outgoingEip20Events.size - 1) Last else Middle
+                                false
                             )
                         )
                     }
 
-                    topSectionItems.add(null)
+                    items.addAll(getViewItems(youPaidSection))
+                    items.add(null)
                 }
 
                 if (transaction.incomingEip20Events.size > 0 || transaction.incomingInternalETHs.size > 0) {
-                    topSectionItems.add(
-                        TransactionInfoViewItem(
-                            TransactionType(
-                                getString(R.string.TransactionInfo_YouGot),
-                                null
-                            ), First
+                    val youGotSection = mutableListOf<TransactionInfoItemType>()
+                    youGotSection.add(
+                        TransactionType(
+                            getString(R.string.TransactionInfo_YouGot),
+                            null
                         )
                     )
 
@@ -282,8 +310,8 @@ class TransactionInfoViewItemFactory(
                         val ethSum =
                             transaction.incomingInternalETHs.sumOf { (_, eventCoinValue) -> eventCoinValue.value }
 
-                        topSectionItems.add(
-                            getAmountViewItem(
+                        youGotSection.add(
+                            getAmount(
                                 rates[ethCoin],
                                 CoinValue(ethCoin, ethSum),
                                 true
@@ -292,8 +320,8 @@ class TransactionInfoViewItemFactory(
                     }
 
                     transaction.incomingEip20Events.forEach { (_, eventCoinValue) ->
-                        topSectionItems.add(
-                            getAmountViewItem(
+                        youGotSection.add(
+                            getAmount(
                                 rates[eventCoinValue.coin],
                                 eventCoinValue,
                                 true
@@ -301,29 +329,140 @@ class TransactionInfoViewItemFactory(
                         )
                     }
 
-                    if (topSectionItems.size > 1) {
-                        topSectionItems[topSectionItems.size - 1]?.listPosition = Last
-                    }
-
-                    topSectionItems.add(null)
+                    items.addAll(getViewItems(youGotSection))
+                    items.add(null)
                 }
 
-                items.addAll(0, topSectionItems)
+                middleSectionTypes.add(date)
+                middleSectionTypes.add(statusType)
+                middleSectionTypes.add(getFee(rates[transaction.fee.coin], transaction.fee))
 
-                items.add(statusViewItem)
-
-                items.add(getFeeViewItem(rates[transaction.fee.coin], transaction.fee))
-
-                items.add(
-                    TransactionInfoViewItem(
-                        Decorated(
-                            getString(R.string.TransactionInfo_Id),
-                            transaction.transactionHash,
-                            true
-                        ), Last
+                middleSectionTypes.add(
+                    Decorated(
+                        getString(R.string.TransactionInfo_Id),
+                        transaction.transactionHash,
+                        ShareButton(transaction.transactionHash)
                     )
                 )
 
+                //Middle section
+                items.addAll(getViewItems(middleSectionTypes))
+                items.add(null)
+                items.addAll(getAdditionalButtons(explorerData))
+
+                return items
+            }
+
+            is BitcoinIncomingTransactionRecord -> {
+
+                val middleSectionTypes = mutableListOf<TransactionInfoItemType>()
+
+                middleSectionTypes.add(date)
+                middleSectionTypes.add(statusType)
+
+                rates[transaction.value.coin]?.let {
+                    middleSectionTypes.add(getHistoricalRate(it, transaction.value))
+                }
+
+                transaction.from?.let {
+                    middleSectionTypes.add(Decorated(getString(R.string.TransactionInfo_From), it))
+                }
+
+                val lockState = transaction.lockState(lastBlockInfo?.timestamp)
+
+                middleSectionTypes.add(
+                    Decorated(
+                        getString(R.string.TransactionInfo_Id),
+                        transaction.transactionHash,
+                        ShareButton(transaction.transactionHash)
+                    )
+                )
+
+                if (transaction.showRawTransaction) {
+                    middleSectionTypes.add(
+                        RawTransaction(
+                            getString(R.string.TransactionInfo_RawTransaction),
+                            CopyButton
+                        )
+                    )
+                }
+
+                getLockStateItem(lockState)?.let {
+                    middleSectionTypes.add(it)
+                }
+
+                //Top section
+                items.addAll(
+                    getActionsSection(
+                        getString(R.string.Transactions_Received),
+                        transaction.value,
+                        rates[transaction.value.coin],
+                        true
+                    )
+                )
+
+                //Middle section
+                items.addAll(getViewItems(middleSectionTypes))
+                items.add(null)
+                items.addAll(getAdditionalButtons(explorerData))
+
+                return items
+            }
+
+            is BitcoinOutgoingTransactionRecord -> {
+
+                val middleSectionTypes = mutableListOf<TransactionInfoItemType>()
+
+                middleSectionTypes.add(date)
+                middleSectionTypes.add(statusType)
+
+                transaction.fee?.let {
+                    middleSectionTypes.add(getFee(rates[transaction.value.coin], it))
+                }
+
+                rates[transaction.value.coin]?.let {
+                    middleSectionTypes.add(getHistoricalRate(it, transaction.value))
+                }
+
+                transaction.to?.let {
+                    middleSectionTypes.add(Decorated(getString(R.string.TransactionInfo_To), it))
+                }
+
+                val lockState = transaction.lockState(lastBlockInfo?.timestamp)
+
+                middleSectionTypes.add(
+                    Decorated(
+                        getString(R.string.TransactionInfo_Id),
+                        transaction.transactionHash,
+                        ShareButton(transaction.transactionHash)
+                    )
+                )
+
+                getLockStateItem(lockState)?.let {
+                    middleSectionTypes.add(it)
+                }
+
+                if (transaction.showRawTransaction) {
+                    middleSectionTypes.add(
+                        RawTransaction(
+                            getString(R.string.TransactionInfo_RawTransaction),
+                            CopyButton
+                        )
+                    )
+                }
+
+                //Top section
+                items.addAll(
+                    getActionsSection(
+                        getString(R.string.Transactions_Sent),
+                        transaction.value,
+                        rates[transaction.value.coin],
+                        false
+                    )
+                )
+
+                //Middle section
+                items.addAll(getViewItems(middleSectionTypes))
                 items.add(null)
                 items.addAll(getAdditionalButtons(explorerData))
 
@@ -331,6 +470,24 @@ class TransactionInfoViewItemFactory(
             }
 
             else -> return emptyList()
+        }
+    }
+
+    private fun getViewItems(viewItemTypes: MutableList<TransactionInfoItemType>): List<TransactionInfoViewItem> {
+        return viewItemTypes.mapIndexed { index, itemType ->
+            TransactionInfoViewItem(itemType, Companion.getListPosition(viewItemTypes.size, index))
+        }
+    }
+
+    private fun getLockStateItem(lockState: TransactionLockState?): TransactionInfoItemType? {
+        return lockState?.let {
+            val leftIcon = if (it.locked) R.drawable.ic_lock_20 else R.drawable.ic_unlock_20
+            val date = DateHelper.getFullDate(it.date)
+            val title = translator.getString(
+                if (it.locked) R.string.TransactionInfo_LockedUntil else R.string.TransactionInfo_UnlockedAt,
+                date
+            )
+            LockState(title, leftIcon, it.date, it.locked)
         }
     }
 
@@ -402,7 +559,7 @@ class TransactionInfoViewItemFactory(
 
         items.add(TransactionInfoViewItem(TransactionType(title, coinValue.coin.title), First))
 
-        items.add(getAmountViewItem(rate, coinValue, incoming, Last))
+        items.add(TransactionInfoViewItem(getAmount(rate, coinValue, incoming), Last))
 
         items.add(null) //add divider
 
@@ -428,7 +585,7 @@ class TransactionInfoViewItemFactory(
 
         return when (val status = transaction.status(lastBlockHeight)) {
             TransactionStatus.Failed -> Failed
-            TransactionStatus.Pending -> Pending(getString(R.string.TransactionInfo_Status_Pending))
+            TransactionStatus.Pending -> Pending(getString(R.string.Transactions_Pending))
             TransactionStatus.Completed -> Completed(getCompletedStatusName(transaction))
             is TransactionStatus.Processing -> Processing(
                 status.progress,
@@ -439,10 +596,10 @@ class TransactionInfoViewItemFactory(
 
     private fun getCompletedStatusName(transaction: TransactionRecord): String {
         return when (transaction) {
-            is EvmIncomingTransactionRecord -> getString(R.string.TransactionInfo_Status_Received)
-            is EvmOutgoingTransactionRecord -> getString(R.string.TransactionInfo_Status_Sent)
-            is SwapTransactionRecord -> getString(R.string.TransactionInfo_Status_Swapped)
-            is ApproveTransactionRecord -> getString(R.string.TransactionInfo_Status_Approved)
+            is EvmIncomingTransactionRecord -> getString(R.string.Transactions_Received)
+            is EvmOutgoingTransactionRecord -> getString(R.string.Transactions_Sent)
+            is SwapTransactionRecord -> getString(R.string.Transactions_Swapped)
+            is ApproveTransactionRecord -> getString(R.string.Transactions_Approved)
             is ContractCallTransactionRecord -> getString(R.string.TransactionInfo_Status_Confirmed)
             else -> ""
         }
@@ -450,21 +607,20 @@ class TransactionInfoViewItemFactory(
 
     private fun getProcessingStatusName(transaction: TransactionRecord): String {
         return when (transaction) {
-            is EvmIncomingTransactionRecord -> getString(R.string.TransactionInfo_Status_Receiving)
-            is EvmOutgoingTransactionRecord -> getString(R.string.TransactionInfo_Status_Sending)
-            is SwapTransactionRecord -> getString(R.string.TransactionInfo_Status_Swapping)
-            is ApproveTransactionRecord -> getString(R.string.TransactionInfo_Status_Approving)
-            is ContractCallTransactionRecord -> getString(R.string.TransactionInfo_Status_Pending)
+            is EvmIncomingTransactionRecord -> getString(R.string.Transactions_Receiving)
+            is EvmOutgoingTransactionRecord -> getString(R.string.Transactions_Sending)
+            is SwapTransactionRecord -> getString(R.string.Transactions_Swapping)
+            is ApproveTransactionRecord -> getString(R.string.Transactions_Approving)
+            is ContractCallTransactionRecord -> getString(R.string.Transactions_Pending)
             else -> ""
         }
     }
 
-    private fun getAmountViewItem(
+    private fun getAmount(
         rate: CurrencyValue?,
         coinValue: CoinValue,
-        incoming: Boolean?,
-        listPosition: ListPosition = Middle
-    ): TransactionInfoViewItem {
+        incoming: Boolean?
+    ): TransactionInfoItemType {
         val valueInFiat = rate?.let {
             numberFormatter.formatFiat(
                 (it.value * coinValue.value).abs(),
@@ -477,13 +633,13 @@ class TransactionInfoViewItemFactory(
             numberFormatter.formatCoin(coinValue.value, coinValue.coin.code, 0, 8)
         val coinValueColored = ColoredValue(coinValueFormatted, getAmountColor(incoming))
 
-        return TransactionInfoViewItem(Amount(valueInFiat, coinValueColored), listPosition)
+        return Amount(valueInFiat, coinValueColored)
     }
 
-    private fun getHistoricalRateViewItem(
+    private fun getHistoricalRate(
         rate: CurrencyValue,
         coinValue: CoinValue,
-    ): TransactionInfoViewItem {
+    ): TransactionInfoItemType {
         val rateFormatted =
             numberFormatter.formatFiat(rate.value, rate.currency.symbol, 2, 4)
         val rateValue = translator.getString(
@@ -491,19 +647,10 @@ class TransactionInfoViewItemFactory(
             rateFormatted,
             coinValue.coin.code
         )
-        return TransactionInfoViewItem(
-            Value(
-                getString(R.string.TransactionInfo_HistoricalRate),
-                rateValue
-            )
-        )
+        return Value(getString(R.string.TransactionInfo_HistoricalRate), rateValue)
     }
 
-    private fun getFeeViewItem(
-        rate: CurrencyValue?,
-        coinValue: CoinValue
-    ): TransactionInfoViewItem {
-
+    private fun getFee(rate: CurrencyValue?, coinValue: CoinValue): TransactionInfoItemType {
         val feeInFiat = rate?.let {
             numberFormatter.formatFiat(
                 it.value * coinValue.value,
@@ -517,7 +664,7 @@ class TransactionInfoViewItemFactory(
 
         val feeText = feeInCoin + (if (feeInFiat != null) " | $feeInFiat" else "")
 
-        return TransactionInfoViewItem(Value(getString(R.string.TransactionInfo_Fee), feeText))
+        return Value(getString(R.string.TransactionInfo_Fee), feeText)
     }
 
 }

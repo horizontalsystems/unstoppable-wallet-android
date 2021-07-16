@@ -477,12 +477,13 @@
     <string name="Transactions_Receiving">Receiving</string>
     <string name="Transactions_Sent">Sent</string>
     <string name="Transactions_Sending">Sending</string>
-    <string name="Transactions_Approved">Swap approved</string>
-    <string name="Transactions_Approving">Swap approval</string>
+    <string name="Transactions_Approved">Approved</string>
+    <string name="Transactions_Approving">Approving</string>
     <string name="Transactions_Swapped">Swapped</string>
     <string name="Transactions_Swapping">Swapping</string>
     <string name="Transactions_Failed">Failed</string>
     <string name="Transactions_ContractCall">Contract Call</string>
+    <string name="Transactions_ContractCreation">Contract Creation</string>
     <string name="Transactions_To">to %s</string>
     <string name="Transactions_From">from %s</string>
 
@@ -493,15 +494,6 @@
     <string name="TransactionInfo_Approval">Swap Approval</string>
     <string name="TransactionInfo_Status">Status</string>
     <string name="TransactionInfo_Status_Confirmed">Confirmed</string>
-    <string name="TransactionInfo_Status_Received">Received</string>
-    <string name="TransactionInfo_Status_Approved">Approved</string>
-    <string name="TransactionInfo_Status_Sent">Sent</string>
-    <string name="TransactionInfo_Status_Swapped">Swapped</string>
-    <string name="TransactionInfo_Status_Pending">Pending</string>
-    <string name="TransactionInfo_Status_Receiving">Receiving</string>
-    <string name="TransactionInfo_Status_Sending">Sending</string>
-    <string name="TransactionInfo_Status_Swapping">Swapping</string>
-    <string name="TransactionInfo_Status_Approving">Approving</string>
     <string name="TransactionInfo_Date">Date</string>
     <string name="TransactionInfo_Id">ID</string>
     <string name="TransactionInfo_RawTransaction">Raw Transaction</string>
@@ -522,6 +514,7 @@
     <string name="TransactionInfo_YouGot">You Got</string>
     <string name="TransactionInfo_Resend">Resend</string>
     <string name="TransactionInfo_RevokeApproval">Revoke Approval</string>
+    <string name="TransactionInfo_Unlimited">unlimited</string>
 
     <string name="StatusInfo_Pending">Pending</string>
     <string name="StatusInfo_SendingReceiving">Sending/Receiving/Swapping</string>

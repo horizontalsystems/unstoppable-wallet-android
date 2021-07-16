@@ -1,9 +1,7 @@
 package io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin
 
 import io.horizontalsystems.bankwallet.entities.CoinValue
-import io.horizontalsystems.bankwallet.entities.LastBlockInfo
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionLockInfo
-import io.horizontalsystems.bankwallet.modules.transactions.TransactionType
 import io.horizontalsystems.coinkit.models.Coin
 import java.math.BigDecimal
 import java.util.*
@@ -41,8 +39,4 @@ class BitcoinOutgoingTransactionRecord(
 
     override val mainValue: CoinValue = value
 
-    override fun getType(lastBlockInfo: LastBlockInfo?): TransactionType {
-        val lockState = lockState(lastBlockInfo?.timestamp)
-        return TransactionType.Outgoing(to, value, lockState, conflictingHash, sentToSelf)
-    }
 }

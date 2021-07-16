@@ -9,6 +9,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoActionButton
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoButtonType
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoItemType
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoItemType.*
@@ -18,6 +19,7 @@ import io.horizontalsystems.views.inflate
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_coin_page_section_header.*
 import kotlinx.android.synthetic.main.view_holder_transaction_info_item.*
+import java.util.*
 
 class TransactionInfoAdapter(
     viewItems: MutableLiveData<List<TransactionInfoViewItem?>>,
@@ -27,10 +29,11 @@ class TransactionInfoAdapter(
 
     interface Listener {
         fun onAddressClick(address: String)
-        fun onShareClick(address: String)
+        fun onActionButtonClick(actionButton: TransactionInfoActionButton)
         fun onAdditionalButtonClick(buttonType: TransactionInfoButtonType)
         fun closeClick()
         fun onClickStatusInfo()
+        fun onLockInfoClick(lockDate: Date)
     }
 
     private var items = listOf<TransactionInfoViewItem?>()
@@ -125,6 +128,8 @@ class TransactionInfoAdapter(
             transactionStatusView.isVisible = false
             valueText.isVisible = false
             btnAction.isVisible = false
+            statusInfoIcon.isVisible = false
+            rightInfoIcon.isVisible = false
 
             txViewBackground.setBackgroundResource(item.listPosition.getBackground())
 
@@ -160,10 +165,11 @@ class TransactionInfoAdapter(
                     decoratedText.text = type.value
                     decoratedText.isVisible = true
 
-                    if (type.showShare) {
+                    type.actionButton?.let { actionButton ->
+                        btnAction.setImageResource(actionButton.getIcon())
                         btnAction.isVisible = true
                         btnAction.setOnClickListener {
-                            listener.onShareClick(type.value)
+                            listener.onActionButtonClick(actionButton)
                         }
                     }
 
@@ -180,6 +186,31 @@ class TransactionInfoAdapter(
                     }
                     transactionStatusView.isVisible = true
                     transactionStatusView.bind(type.status)
+                }
+                is RawTransaction -> {
+                    setDefaultStyle()
+
+                    txtTitle.text = type.title
+
+                    type.actionButton?.let { actionButton ->
+                        btnAction.setImageResource(actionButton.getIcon())
+                        btnAction.isVisible = true
+                        btnAction.setOnClickListener {
+                            listener.onActionButtonClick(actionButton)
+                        }
+                    }
+                }
+                is LockState -> {
+                    setDefaultStyle()
+
+                    txtTitle.text = type.title
+
+                    if (type.showLockInfo) {
+                        rightInfoIcon.isVisible = true
+                        containerView.setOnClickListener {
+                            listener.onLockInfoClick(type.date)
+                        }
+                    }
                 }
             }
         }

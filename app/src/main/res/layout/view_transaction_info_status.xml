@@ -51,8 +51,8 @@
 
     <io.horizontalsystems.bankwallet.ui.extensions.RotatingCircleProgressView
         android:id="@+id/progressSpinner"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
