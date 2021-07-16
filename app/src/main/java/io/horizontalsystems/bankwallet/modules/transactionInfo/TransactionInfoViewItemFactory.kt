@@ -75,7 +75,7 @@ class TransactionInfoViewItemFactory(
                 //Top section
                 items.addAll(
                     getActionsSection(
-                        getString(R.string.Transactions_Received),
+                        getString(R.string.Transactions_Receive),
                         transaction.value,
                         rates[transaction.value.coin],
                         true
@@ -118,7 +118,7 @@ class TransactionInfoViewItemFactory(
                 //Top section
                 items.addAll(
                     getActionsSection(
-                        getString(R.string.Transactions_Sent),
+                        getString(R.string.Transactions_Send),
                         transaction.value,
                         rates[transaction.value.coin],
                         false
@@ -244,7 +244,7 @@ class TransactionInfoViewItemFactory(
                 items.add(
                     TransactionInfoViewItem(
                         TransactionType(
-                            getString(R.string.Transactions_Approved),
+                            getString(R.string.Transactions_Approve),
                             transaction.value.coin.title
                         ), First
                     )
@@ -266,7 +266,7 @@ class TransactionInfoViewItemFactory(
                 items.add(
                     TransactionInfoViewItem(
                         TransactionType(
-                            getString(R.string.TransactionInfo_ContractCall),
+                            getString(R.string.Transactions_ContractCall),
                             getNameOrAddress(transaction.contractAddress)
                         ), Single
                     )
@@ -394,7 +394,7 @@ class TransactionInfoViewItemFactory(
                 //Top section
                 items.addAll(
                     getActionsSection(
-                        getString(R.string.Transactions_Received),
+                        getString(R.string.Transactions_Receive),
                         transaction.value,
                         rates[transaction.value.coin],
                         true
@@ -454,7 +454,7 @@ class TransactionInfoViewItemFactory(
                 //Top section
                 items.addAll(
                     getActionsSection(
-                        getString(R.string.Transactions_Sent),
+                        getString(R.string.Transactions_Send),
                         transaction.value,
                         rates[transaction.value.coin],
                         false
@@ -586,33 +586,11 @@ class TransactionInfoViewItemFactory(
         return when (val status = transaction.status(lastBlockHeight)) {
             TransactionStatus.Failed -> Failed
             TransactionStatus.Pending -> Pending(getString(R.string.Transactions_Pending))
-            TransactionStatus.Completed -> Completed(getCompletedStatusName(transaction))
+            TransactionStatus.Completed -> Completed(getString(R.string.Transactions_Completed))
             is TransactionStatus.Processing -> Processing(
                 status.progress,
-                getProcessingStatusName(transaction)
+                getString(R.string.Transactions_Processing)
             )
-        }
-    }
-
-    private fun getCompletedStatusName(transaction: TransactionRecord): String {
-        return when (transaction) {
-            is EvmIncomingTransactionRecord -> getString(R.string.Transactions_Received)
-            is EvmOutgoingTransactionRecord -> getString(R.string.Transactions_Sent)
-            is SwapTransactionRecord -> getString(R.string.Transactions_Swapped)
-            is ApproveTransactionRecord -> getString(R.string.Transactions_Approved)
-            is ContractCallTransactionRecord -> getString(R.string.TransactionInfo_Status_Confirmed)
-            else -> ""
-        }
-    }
-
-    private fun getProcessingStatusName(transaction: TransactionRecord): String {
-        return when (transaction) {
-            is EvmIncomingTransactionRecord -> getString(R.string.Transactions_Receiving)
-            is EvmOutgoingTransactionRecord -> getString(R.string.Transactions_Sending)
-            is SwapTransactionRecord -> getString(R.string.Transactions_Swapping)
-            is ApproveTransactionRecord -> getString(R.string.Transactions_Approving)
-            is ContractCallTransactionRecord -> getString(R.string.Transactions_Pending)
-            else -> ""
         }
     }
 
