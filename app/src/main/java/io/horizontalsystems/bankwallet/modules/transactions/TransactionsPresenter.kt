@@ -38,7 +38,7 @@ class TransactionsPresenter(
     override fun willShow(transactionViewItem: TransactionViewItem) {
         val coin = transactionViewItem.record.mainValue?.coin ?: return
         val date = transactionViewItem.date ?: return
-        if (transactionViewItem.mainAmountCurrencyValue == null) {
+        if (transactionViewItem.mainAmountCurrencyString == null) {
             interactor.fetchRate(coin, date.time / 1000)
         }
     }

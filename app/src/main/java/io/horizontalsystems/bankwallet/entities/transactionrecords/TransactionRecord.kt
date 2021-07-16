@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.entities.transactionrecords
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.LastBlockInfo
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionStatus
-import io.horizontalsystems.bankwallet.modules.transactions.TransactionType
 
 abstract class TransactionRecord(
     val uid: String,
@@ -19,8 +18,6 @@ abstract class TransactionRecord(
 
     open fun changedBy(oldBlockInfo: LastBlockInfo?, newBlockInfo: LastBlockInfo?): Boolean =
         status(oldBlockInfo?.height) != status(newBlockInfo?.height)
-
-    abstract fun getType(lastBlockInfo: LastBlockInfo?): TransactionType
 
     override fun compareTo(other: TransactionRecord): Int {
         return when {

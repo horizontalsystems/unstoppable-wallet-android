@@ -22,6 +22,7 @@ import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.android.synthetic.main.fragment_transaction_info.*
+import java.util.*
 
 class TransactionInfoFragment : BaseFragment(), TransactionInfoAdapter.Listener {
 
@@ -55,22 +56,6 @@ class TransactionInfoFragment : BaseFragment(), TransactionInfoAdapter.Listener 
             findNavController().popBackStack()
         }
 
-        viewModel.showLockInfo.observe(this, Observer { lockDate ->
-            context?.let {
-                val title = it.getString(R.string.Info_LockTime_Title)
-                val description = it.getString(
-                    R.string.Info_LockTime_Description,
-                    DateHelper.getFullDate(lockDate)
-                )
-                val infoParameters = InfoParameters(title, description)
-
-                findNavController().navigate(
-                    R.id.infoFragment,
-                    InfoFragment.arguments(infoParameters)
-                )
-            }
-        })
-
         viewModel.showTransactionLiveEvent.observe(this, Observer { url ->
             openUrlInCustomTabs(url)
         })
@@ -87,23 +72,43 @@ class TransactionInfoFragment : BaseFragment(), TransactionInfoAdapter.Listener 
                 )
             }
         })
+
+        viewModel.showShareLiveEvent.observe(viewLifecycleOwner, { value ->
+            context?.startActivity(Intent().apply {
+                action = Intent.ACTION_SEND
+                putExtra(Intent.EXTRA_TEXT, value)
+                type = "text/plain"
+            })
+        })
+
+        viewModel.copyRawTransactionLiveEvent.observe(viewLifecycleOwner, { rawTransaction ->
+            copyText(rawTransaction)
+        })
     }
 
     override fun onAddressClick(address: String) {
-        TextHelper.copyText(address)
-        HudHelper.showSuccessMessage(requireView(), R.string.Hud_Text_Copied)
+        copyText(address)
     }
 
-    override fun onShareClick(address: String) {
-        context?.startActivity(Intent().apply {
-            action = Intent.ACTION_SEND
-            putExtra(Intent.EXTRA_TEXT, address)
-            type = "text/plain"
-        })
+    override fun onActionButtonClick(actionButton: TransactionInfoActionButton) {
+        viewModel.onActionButtonClick(actionButton)
     }
 
     override fun onAdditionalButtonClick(buttonType: TransactionInfoButtonType) {
         viewModel.onAdditionalButtonClick(buttonType)
+    }
+
+    override fun onLockInfoClick(lockDate: Date) {
+        context?.let {
+            val title = it.getString(R.string.Info_LockTime_Title)
+            val description = it.getString(
+                R.string.Info_LockTime_Description,
+                DateHelper.getFullDate(lockDate)
+            )
+            val infoParameters = InfoParameters(title, description)
+
+            findNavController().navigate(R.id.infoFragment, InfoFragment.arguments(infoParameters))
+        }
     }
 
     override fun closeClick() {
@@ -112,6 +117,11 @@ class TransactionInfoFragment : BaseFragment(), TransactionInfoAdapter.Listener 
 
     override fun onClickStatusInfo() {
         findNavController().navigate(R.id.statusInfoDialog)
+    }
+
+    private fun copyText(address: String) {
+        TextHelper.copyText(address)
+        HudHelper.showSuccessMessage(requireView(), R.string.Hud_Text_Copied)
     }
 
     private fun openUrlInCustomTabs(url: String) {

@@ -17,7 +17,6 @@ import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.reactivex.disposables.CompositeDisposable
-import java.util.*
 
 class TransactionInfoViewModel(
     private val service: TransactionInfoService,
@@ -28,10 +27,10 @@ class TransactionInfoViewModel(
 ) : ViewModel() {
 
     val titleLiveData = MutableLiveData<TransactionInfoModule.TitleViewItem>()
-    val showLockInfo = SingleLiveEvent<Date>()
     val showDoubleSpendInfo = SingleLiveEvent<Pair<String, String>>()
     val showShareLiveEvent = SingleLiveEvent<String>()
     val showTransactionLiveEvent = SingleLiveEvent<String>()
+    val copyRawTransactionLiveEvent = SingleLiveEvent<String>()
     val explorerButton = MutableLiveData<Pair<String, Boolean>>()
 
     val viewItemsLiveData = MutableLiveData<List<TransactionInfoViewItem?>>()
@@ -74,20 +73,10 @@ class TransactionInfoViewModel(
         }
     }
 
-    fun onClickLockInfo() {
-//        transaction.lockInfo?.lockedUntil?.let {
-//        showLockInfo.postValue(it)
-//        }
-    }
-
     fun onClickDoubleSpendInfo() {
 //        transaction.conflictingTxHash?.let { conflictingTxHash ->
 //        showDoubleSpendInfo.postValue(Pair(transaction.transactionHash, conflictingTxHash))
 //        }
-    }
-
-    fun onRawTransaction() {
-//        onCopy(service.getRaw(transaction.transactionHash))
     }
 
     fun onAdditionalButtonClick(buttonType: TransactionInfoButtonType) {
@@ -101,6 +90,17 @@ class TransactionInfoViewModel(
             is Resend -> {
                 TODO("Not yet implemented")
             }
+        }
+    }
+
+    fun onActionButtonClick(actionButton: TransactionInfoActionButton) {
+        when (actionButton) {
+            is TransactionInfoActionButton.ShareButton -> showShareLiveEvent.postValue(actionButton.value)
+            TransactionInfoActionButton.CopyButton -> copyRawTransactionLiveEvent.postValue(
+                service.getRaw(
+                    transaction.transactionHash
+                )
+            )
         }
     }
 

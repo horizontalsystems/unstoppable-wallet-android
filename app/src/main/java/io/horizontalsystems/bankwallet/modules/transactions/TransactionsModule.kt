@@ -5,10 +5,11 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.factories.TransactionViewItemFactory
-import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.LastBlockInfo
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
+import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.TransactionLockState
+import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoAddressMapper
 import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.core.entities.Currency
 import java.math.BigDecimal
@@ -22,7 +23,7 @@ data class TransactionViewItem(
     val type: TransactionType,
     val date: Date?,
     val status: TransactionStatus,
-    var mainAmountCurrencyValue: CurrencyValue?
+    var mainAmountCurrencyString: String?
 ) : Comparable<TransactionViewItem> {
 
     override fun compareTo(other: TransactionViewItem): Int {
@@ -45,14 +46,56 @@ data class TransactionViewItem(
     }
 
     fun contentTheSame(other: TransactionViewItem): Boolean {
-        return mainAmountCurrencyValue == other.mainAmountCurrencyValue
+        return mainAmountCurrencyString == other.mainAmountCurrencyString
                 && date == other.date
                 && status == other.status
                 && type == other.type
     }
 
     fun clearRates() {
-        mainAmountCurrencyValue = null
+        mainAmountCurrencyString = null
+    }
+
+    sealed class TransactionType {
+        class Incoming(
+            val from: String?,
+            val amount: String,
+            val lockState: TransactionLockState?,
+            val conflictingTxHash: String?
+        ) : TransactionType()
+
+        class Outgoing(
+            val to: String?,
+            val amount: String,
+            val lockState: TransactionLockState?,
+            val conflictingTxHash: String?,
+            val sentToSelf: Boolean
+        ) : TransactionType()
+
+        class Approve(val spender: String, val amount: String, val isMaxAmount: Boolean) :
+            TransactionType()
+
+        class Swap(
+            val exchangeAddress: String,
+            val amountIn: String,
+            val amountOut: String?,
+            val foreignRecipient: Boolean
+        ) : TransactionType()
+
+        class ContractCall(val contractAddress: String, val method: String?) : TransactionType()
+        object ContractCreation : TransactionType()
+
+        override fun equals(other: Any?): Boolean {
+            return when {
+                other is Incoming && this is Incoming -> other.lockState == this.lockState && other.conflictingTxHash == this.conflictingTxHash
+                other is Outgoing && this is Outgoing -> other.lockState == this.lockState && other.conflictingTxHash == this.conflictingTxHash
+                other is Approve && this is Approve -> true
+                other is Swap && this is Swap -> true
+                other is ContractCall && this is ContractCall -> true
+                other is ContractCreation && this is ContractCreation -> true
+                else -> false
+            }
+        }
     }
 
 }
@@ -124,7 +167,9 @@ object TransactionsModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val viewAndRouter = TransactionsViewModel()
 
-            val dataSource = TransactionRecordDataSource(PoolRepo(), TransactionItemDataSource(), 20, TransactionViewItemFactory(), TransactionMetadataDataSource())
+            val dataSource = TransactionRecordDataSource(PoolRepo(), TransactionItemDataSource(), 20, TransactionViewItemFactory(
+                TransactionInfoAddressMapper, App.numberFormatter
+            ), TransactionMetadataDataSource())
             val interactor = TransactionsInteractor(App.walletManager, App.adapterManager, App.currencyManager, App.xRateManager, App.connectivityManager)
             val presenter = TransactionsPresenter(interactor, viewAndRouter, dataSource)
 
