@@ -28,6 +28,7 @@ import kotlinx.android.synthetic.main.fragment_transactions.*
 import kotlinx.android.synthetic.main.view_holder_filter.*
 import kotlinx.android.synthetic.main.view_holder_transaction.*
 import kotlinx.android.synthetic.main.view_holder_transaction.iconProgress
+import java.util.*
 
 class TransactionsFragment : Fragment(), TransactionsAdapter.Listener, FilterAdapter.Listener {
 
@@ -78,11 +79,15 @@ class TransactionsFragment : Fragment(), TransactionsAdapter.Listener, FilterAda
             }
         })
 
+        val transactionSectionHeader = TransactionSectionHeader()
+        recyclerTransactions.addItemDecoration(transactionSectionHeader.itemDecoration)
+
         viewModel.filterItems.observe(viewLifecycleOwner, Observer { filters ->
             filterAdapter.setFilters(filters)
         })
 
         viewModel.items.observe(viewLifecycleOwner, Observer {
+            transactionSectionHeader.updateList(it)
             transactionsAdapter.submitList(it)
         })
 
