@@ -218,11 +218,11 @@
     <string name="TvlRank_Field_HighestTvl">Highest TVL</string>
     <string name="TvlRank_Field_LowestTvl">Lowest TVL</string>
     <string name="TvlRank_Field_All">All</string>
-    <string name="TvlRank_Field_Eth">Ethereum (ETH)</string>
-    <string name="TvlRank_Field_Bsc">Binance Smart Chain (BSC)</string>
-    <string name="TvlRank_Field_Sol">Solana (Sol)</string>
-    <string name="TvlRank_Field_Ava">Avalanche (Ava)</string>
-    <string name="TvlRank_Field_Others">Others</string>
+    <string name="TvlRank_Field_Eth">Ethereum</string>
+    <string name="TvlRank_Field_Bsc">Binance</string>
+    <string name="TvlRank_Field_Sol">Solana</string>
+    <string name="TvlRank_Field_Ava">Avalanche</string>
+    <string name="TvlRank_Field_Mat">Polygon</string>
     <string name="TvlRank_Filters_PopupTitle">Filters</string>
     <!--Balance-->
     <string name="Balance_Title">잔액</string>
@@ -407,12 +407,13 @@
     <string name="Transactions_Receiving">수신 중</string>
     <string name="Transactions_Sent">Sent</string>
     <string name="Transactions_Sending">전송중</string>
-    <string name="Transactions_Approved">Swap approved</string>
-    <string name="Transactions_Approving">스왑 승인</string>
+    <string name="Transactions_Approved">Approved</string>
+    <string name="Transactions_Approving">Approving</string>
     <string name="Transactions_Swapped">Swapped</string>
     <string name="Transactions_Swapping">Swapping</string>
     <string name="Transactions_Failed">실패</string>
     <string name="Transactions_ContractCall">Contract Call</string>
+    <string name="Transactions_ContractCreation">Contract Creation</string>
     <string name="Transactions_To">to %s</string>
     <string name="Transactions_From">from %s</string>
     <!--Transaction Info-->
@@ -421,15 +422,6 @@
     <string name="TransactionInfo_Approval">스왑 승인</string>
     <string name="TransactionInfo_Status">상태</string>
     <string name="TransactionInfo_Status_Confirmed">확인</string>
-    <string name="TransactionInfo_Status_Received">Received</string>
-    <string name="TransactionInfo_Status_Approved">Approved</string>
-    <string name="TransactionInfo_Status_Sent">Sent</string>
-    <string name="TransactionInfo_Status_Swapped">Swapped</string>
-    <string name="TransactionInfo_Status_Pending">Pending</string>
-    <string name="TransactionInfo_Status_Receiving">Receiving</string>
-    <string name="TransactionInfo_Status_Sending">Sending</string>
-    <string name="TransactionInfo_Status_Swapping">Swapping</string>
-    <string name="TransactionInfo_Status_Approving">Approving</string>
     <string name="TransactionInfo_Date">Date</string>
     <string name="TransactionInfo_Id">거래 ID</string>
     <string name="TransactionInfo_RawTransaction">로우 트랜잭션</string>
@@ -450,6 +442,7 @@
     <string name="TransactionInfo_YouGot">You Got</string>
     <string name="TransactionInfo_Resend">Resend</string>
     <string name="TransactionInfo_RevokeApproval">Revoke Approval</string>
+    <string name="TransactionInfo_Unlimited">unlimited</string>
     <string name="StatusInfo_Pending">보류 중</string>
     <string name="StatusInfo_SendingReceiving">Sending/Receiving/Swapping</string>
     <string name="StatusInfo_Confirmed">Sent/Received/Swapped</string>
