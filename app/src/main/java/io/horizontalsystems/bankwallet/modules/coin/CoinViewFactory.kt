@@ -1,10 +1,12 @@
 package io.horizontalsystems.bankwallet.modules.coin
 
+import android.os.Parcelable
 import androidx.annotation.DrawableRes
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import io.horizontalsystems.bankwallet.modules.coin.CoinDataClickType.SecurityInfo
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.chartview.ChartData
 import io.horizontalsystems.chartview.ChartDataFactory
@@ -15,6 +17,7 @@ import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.views.ListPosition
 import io.horizontalsystems.xrateskit.entities.*
+import kotlinx.android.parcel.Parcelize
 import java.lang.Long.max
 import java.math.BigDecimal
 import java.math.RoundingMode
@@ -69,6 +72,8 @@ data class ContractInfo(val title: String, val value: String)
 data class CoinDataItem(
     val title: String,
     val value: String? = null,
+    val valueLabeled: String? = null,
+    val valueLabeledBackground: Int? = null,
     val valueDecorated: Boolean = false,
     @DrawableRes val icon: Int? = null,
     var listPosition: ListPosition? = null,
@@ -76,13 +81,27 @@ data class CoinDataItem(
     val rankLabel: String? = null
 )
 
-sealed class CoinDataClickType {
+sealed class CoinDataClickType: Parcelable {
+    @Parcelize
     object MetricChart : CoinDataClickType()
+    @Parcelize
     object Markets : CoinDataClickType()
+    @Parcelize
     object TvlRank : CoinDataClickType()
+    @Parcelize
     object TradingVolumeMetricChart : CoinDataClickType()
+    @Parcelize
     object MajorHolders : CoinDataClickType()
+    @Parcelize
     object FundsInvested : CoinDataClickType()
+    @Parcelize
+    object SecurityAudits : CoinDataClickType()
+
+    @Parcelize
+    class SecurityInfo(val title: Int, val items: List<Item>) : CoinDataClickType() {
+        @Parcelize
+        class Item(val title: Int, val color: Int, val info: Int): Parcelable
+    }
 }
 
 sealed class InvestorItem {
@@ -323,10 +342,7 @@ class CoinViewFactory(
         return items
     }
 
-    fun getInvestorData(
-        coinDetails: CoinMarketDetails,
-        topTokenHolders: List<TokenHolder>
-    ): List<CoinDataItem> {
+    fun getInvestorData(coinDetails: CoinMarketDetails, topTokenHolders: List<TokenHolder>): List<CoinDataItem> {
         val items = mutableListOf<CoinDataItem>()
 
         if (topTokenHolders.isNotEmpty()) {
@@ -348,6 +364,115 @@ class CoinViewFactory(
                 )
             )
         }
+
+        setListPosition(items)
+
+        return items
+    }
+
+    fun getSecurityParams(security: SecurityParameter): List<CoinDataItem> {
+        val bgColorGreen = R.drawable.label_green_background
+        val bgColorRed = R.drawable.label_red_background
+        val bgColorBlue = R.drawable.label_blue_background
+
+        val items = mutableListOf<CoinDataItem>()
+
+        val (securityText, securityBgColor) = when (security.privacy) {
+            Level.LOW -> Pair(R.string.CoinPage_SecurityParams_Low, bgColorRed)
+            Level.MEDIUM -> Pair(R.string.CoinPage_SecurityParams_Medium, bgColorBlue)
+            Level.HIGH -> Pair(R.string.CoinPage_SecurityParams_High, bgColorGreen)
+        }
+
+        items.add(
+            CoinDataItem(
+                title = Translator.getString(R.string.CoinPage_SecurityParams_Security),
+                valueLabeled = Translator.getString(securityText),
+                valueLabeledBackground = securityBgColor,
+                icon = R.drawable.ic_info_20,
+                clickType = SecurityInfo(
+                    title = R.string.CoinPage_SecurityParams_Security,
+                    items = listOf(
+                        SecurityInfo.Item(R.string.CoinPage_SecurityParams_High, R.color.remus, R.string.CoinPage_SecurityParams_Privacy_High),
+                        SecurityInfo.Item(R.string.CoinPage_SecurityParams_Medium, R.color.issyk_blue, R.string.CoinPage_SecurityParams_Privacy_Medium),
+                        SecurityInfo.Item(R.string.CoinPage_SecurityParams_Low, R.color.lucian, R.string.CoinPage_SecurityParams_Privacy_Low)
+                    )
+                )
+            )
+        )
+
+        val (issuance, issuanceColor) = if (security.decentralized) {
+            Pair(R.string.CoinPage_SecurityParams_Decentralized, bgColorGreen)
+        } else {
+            Pair(R.string.CoinPage_SecurityParams_Centralized, bgColorRed)
+        }
+
+        items.add(
+            CoinDataItem(
+                title = Translator.getString(R.string.CoinPage_SecurityParams_Issuance),
+                valueLabeled = Translator.getString(issuance),
+                valueLabeledBackground = issuanceColor,
+                icon = R.drawable.ic_info_20,
+                clickType = SecurityInfo(
+                    title = R.string.CoinPage_SecurityParams_Issuance,
+                    items = listOf(
+                        SecurityInfo.Item(R.string.CoinPage_SecurityParams_Decentralized, R.color.remus, R.string.CoinPage_SecurityParams_Issuance_Decentralized),
+                        SecurityInfo.Item(R.string.CoinPage_SecurityParams_Centralized, R.color.lucian, R.string.CoinPage_SecurityParams_Issuance_Centralized)
+                    )
+                )
+            )
+        )
+
+        val (confiscationResistance, confiscationColor) = if (security.confiscationResistance) {
+            Pair(R.string.CoinPage_SecurityParams_Yes, bgColorGreen)
+        } else {
+            Pair(R.string.CoinPage_SecurityParams_No, bgColorRed)
+        }
+
+        items.add(
+            CoinDataItem(
+                title = Translator.getString(R.string.CoinPage_SecurityParams_ConfiscationResistance),
+                valueLabeled = Translator.getString(confiscationResistance),
+                valueLabeledBackground = confiscationColor,
+                icon = R.drawable.ic_info_20,
+                clickType = SecurityInfo(
+                    title = R.string.CoinPage_SecurityParams_ConfiscationResistance,
+                    items = listOf(
+                        SecurityInfo.Item(R.string.CoinPage_SecurityParams_Yes, R.color.remus, R.string.CoinPage_SecurityParams_ConfiscationResistance_Yes),
+                        SecurityInfo.Item(R.string.CoinPage_SecurityParams_No, R.color.lucian, R.string.CoinPage_SecurityParams_ConfiscationResistance_No)
+                    )
+                )
+            )
+        )
+
+        val (censorshipResistance, censorshipColor) = if (security.censorshipResistance) {
+            Pair(R.string.CoinPage_SecurityParams_Yes, bgColorGreen)
+        } else {
+            Pair(R.string.CoinPage_SecurityParams_No, bgColorRed)
+        }
+
+        items.add(
+            CoinDataItem(
+                title = Translator.getString(R.string.CoinPage_SecurityParams_CensorshipResistance),
+                valueLabeled = Translator.getString(censorshipResistance),
+                valueLabeledBackground = censorshipColor,
+                icon = R.drawable.ic_info_20,
+                clickType = SecurityInfo(
+                    title = R.string.CoinPage_SecurityParams_CensorshipResistance,
+                    items = listOf(
+                        SecurityInfo.Item(R.string.CoinPage_SecurityParams_Yes, R.color.remus, R.string.CoinPage_SecurityParams_CensorshipResistance_Yes),
+                        SecurityInfo.Item(R.string.CoinPage_SecurityParams_No, R.color.lucian, R.string.CoinPage_SecurityParams_CensorshipResistance_No)
+                    )
+                )
+            )
+        )
+
+        items.add(
+            CoinDataItem(
+                title = Translator.getString(R.string.CoinPage_SecurityParams_Audits),
+                icon = R.drawable.ic_arrow_right,
+                clickType = CoinDataClickType.SecurityAudits
+            )
+        )
 
         setListPosition(items)
 

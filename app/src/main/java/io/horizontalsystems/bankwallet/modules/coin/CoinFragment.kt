@@ -89,6 +89,7 @@ class CoinFragment : BaseFragment(), CoinChartAdapter.Listener, CoinDataAdapter.
         val tradingVolumeAdapter = CoinDataAdapter(viewModel.tradingVolumeLiveData, viewLifecycleOwner, this)
         val tvlDataAdapter = CoinDataAdapter(viewModel.tvlDataLiveData, viewLifecycleOwner, this)
         val investorDataAdapter = CoinDataAdapter(viewModel.investorDataLiveData, viewLifecycleOwner, this, R.string.CoinPage_InvestorData)
+        val securityParamsAdapter = CoinDataAdapter(viewModel.securityParamsLiveData, viewLifecycleOwner, this, R.string.CoinPage_SecurityParams)
         val categoriesAdapter = CoinCategoryAdapter(viewModel.categoriesLiveData, viewLifecycleOwner)
         val contractInfoAdapter = CoinDataAdapter(viewModel.contractInfoLiveData, viewLifecycleOwner, this)
         val aboutAdapter = CoinAboutAdapter(viewModel.aboutTextLiveData, viewLifecycleOwner)
@@ -106,6 +107,7 @@ class CoinFragment : BaseFragment(), CoinChartAdapter.Listener, CoinDataAdapter.
                 tradingVolumeAdapter,
                 tvlDataAdapter,
                 investorDataAdapter,
+                securityParamsAdapter,
                 categoriesAdapter,
                 contractInfoAdapter,
                 aboutAdapter,
@@ -166,16 +168,18 @@ class CoinFragment : BaseFragment(), CoinChartAdapter.Listener, CoinDataAdapter.
         }
     }
 
-    //CoinDataAdapter.Listener
+    //  CoinDataAdapter.Listener
 
     override fun onClick(clickType: CoinDataClickType) {
-        when(clickType){
+        when (clickType){
             CoinDataClickType.MetricChart -> MetricChartFragment.show(childFragmentManager, MetricChartType.Coin(viewModel.coinType))
             CoinDataClickType.TradingVolumeMetricChart -> MetricChartFragment.show(childFragmentManager, MetricChartType.TradingVolume(viewModel.coinType))
             CoinDataClickType.Markets -> findNavController().navigate(R.id.coinFragment_to_coinMarketsFragment, null, navOptions())
             CoinDataClickType.TvlRank -> findNavController().navigate(R.id.coinFragment_to_tvlRankFragment, null, navOptions())
             CoinDataClickType.FundsInvested -> findNavController().navigate(R.id.coinFragment_to_coinInvestorsFragment, null, navOptions())
             CoinDataClickType.MajorHolders -> findNavController().navigate(R.id.coinFragment_to_coinMajorHoldersFragment, null, navOptions())
+            CoinDataClickType.SecurityAudits -> {}
+            is CoinDataClickType.SecurityInfo -> findNavController().navigate(R.id.coinFragment_to_coinSecurityInfoFragment, bundleOf("info" to clickType), navOptions())
         }
     }
 
