@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="Timestamp_Today">Тoday</string>
+    <string name="Timestamp_Yesterday">Yesterday</string>
     <string name="Duration_instant">즉시</string>
     <string name="Duration_Within">%s 안에</string>
     <string name="Duration_Hours">%d 시</string>
