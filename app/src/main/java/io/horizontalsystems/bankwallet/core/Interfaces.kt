@@ -354,6 +354,7 @@ interface IRateManager {
     ): Single<CoinMarketDetails>
 
     fun getTopTokenHoldersAsync(coinType: CoinType): Single<List<TokenHolder>>
+    fun getAuditsAsync(coinType: CoinType): Single<List<Auditor>>
     fun getTopMarketList(
         currency: String,
         itemsCount: Int,

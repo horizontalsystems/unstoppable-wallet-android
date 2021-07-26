@@ -13,6 +13,7 @@ import io.horizontalsystems.chartview.ChartDataFactory
 import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.chartview.models.ChartPoint
 import io.horizontalsystems.chartview.models.MacdInfo
+import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.views.ListPosition
@@ -22,6 +23,7 @@ import java.lang.Long.max
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.net.URI
+import java.util.*
 
 data class ChartInfoData(
     val chartData: ChartData,
@@ -116,10 +118,20 @@ sealed class InvestorItem {
 
 sealed class MajorHolderItem {
     object Header : MajorHolderItem()
-    class Item(val address: String, val share: String, val position: ListPosition) :
-        MajorHolderItem()
+    class Item(val address: String, val share: String, val position: ListPosition) : MajorHolderItem()
 
     object Description : MajorHolderItem()
+}
+
+sealed class CoinAuditItem {
+    class Header(val name: String) : CoinAuditItem()
+    class Report(
+        val name: String,
+        val date: Date,
+        val issues: Int = 0,
+        val link: String,
+        val position: ListPosition
+    ) : CoinAuditItem()
 }
 
 data class AboutText(val value: String, val type: CoinMeta.DescriptionType)
@@ -370,7 +382,7 @@ class CoinViewFactory(
         return items
     }
 
-    fun getSecurityParams(security: SecurityParameter): List<CoinDataItem> {
+    fun getSecurityParams(security: SecurityParameter): MutableList<CoinDataItem> {
         val bgColorGreen = R.drawable.label_green_background
         val bgColorRed = R.drawable.label_red_background
         val bgColorBlue = R.drawable.label_blue_background
@@ -466,17 +478,23 @@ class CoinViewFactory(
             )
         )
 
-        items.add(
-            CoinDataItem(
-                title = Translator.getString(R.string.CoinPage_SecurityParams_Audits),
-                icon = R.drawable.ic_arrow_right,
-                clickType = CoinDataClickType.SecurityAudits
-            )
-        )
-
-        setListPosition(items)
-
         return items
+    }
+
+    fun getCoinAudits(coinAudits: List<Auditor>, coinType: CoinType): CoinDataItem? {
+        if (coinAudits.isEmpty()) {
+            return null
+        }
+
+        if (coinType !is CoinType.Erc20 && coinType !is CoinType.Bep20) {
+            return null
+        }
+
+        return CoinDataItem(
+            title = Translator.getString(R.string.CoinPage_SecurityParams_Audits),
+            icon = R.drawable.ic_arrow_right,
+            clickType = CoinDataClickType.SecurityAudits
+        )
     }
 
     fun getCoinInvestorItems(fundCategories: List<CoinFundCategory>): List<InvestorItem> {
@@ -521,8 +539,39 @@ class CoinViewFactory(
         return list
     }
 
+    fun getCoinAudits(audits: List<Auditor>): List<CoinAuditItem> {
+        if (audits.isEmpty()) {
+            return emptyList()
+        }
+
+        val list = mutableListOf<CoinAuditItem>(    )
+        audits.forEach { auditor ->
+            list.add(CoinAuditItem.Header(auditor.name))
+
+            auditor.reports.forEachIndexed { index, report ->
+                list.add(
+                    CoinAuditItem.Report(
+                        report.name,
+                        Date(report.timestamp * 1000),
+                        report.issues,
+                        report.link,
+                        ListPosition.Companion.getListPosition(auditor.reports.size, index)
+                    )
+                )
+            }
+        }
+
+        return list
+    }
+
     fun getFormattedLatestRate(currencyValue: CurrencyValue): String {
         return numberFormatter.formatFiat(currencyValue.value, currencyValue.currency.symbol, 2, 4)
+    }
+
+    fun setListPosition(list: MutableList<CoinDataItem>) {
+        list.forEachIndexed { index, coinDataItem ->
+            coinDataItem.listPosition = ListPosition.getListPosition(list.size, index)
+        }
     }
 
     private fun getIcon(linkType: LinkType): Int {
@@ -554,12 +603,6 @@ class CoinViewFactory(
             LinkType.REDDIT -> Translator.getString(R.string.CoinPage_Reddit)
             LinkType.GITHUB -> Translator.getString(R.string.CoinPage_Github)
             LinkType.YOUTUBE -> Translator.getString(R.string.CoinPage_Youtube)
-        }
-    }
-
-    private fun setListPosition(list: MutableList<CoinDataItem>) {
-        list.forEachIndexed { index, coinDataItem ->
-            coinDataItem.listPosition = ListPosition.getListPosition(list.size, index)
         }
     }
 

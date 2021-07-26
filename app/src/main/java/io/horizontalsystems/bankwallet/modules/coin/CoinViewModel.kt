@@ -47,6 +47,7 @@ class CoinViewModel(
     val showNotificationMenu = SingleLiveEvent<Pair<CoinType, String>>()
     val isFavorite = MutableLiveData<Boolean>()
     val coinMajorHolders = MutableLiveData<List<MajorHolderItem>>()
+    val coinAudits = MutableLiveData<List<CoinAuditItem>>()
     val coinMarketTickers = MutableLiveData<List<MarketTicker>>()
     val coinInvestors = MutableLiveData<List<InvestorItem>>()
 
@@ -94,6 +95,7 @@ class CoinViewModel(
 
         service.getCoinDetails(rateDiffCoinCodes, rateDiffPeriods)
         service.getTopTokenHolders()
+        service.getCoinAudits()
 
         fetchChartInfo()
 
@@ -135,6 +137,15 @@ class CoinViewModel(
 
         service.topTokenHoldersStateObservable
                 .subscribeIO {
+                    syncTopTokenHoldersState(it)
+                }
+                .let {
+                    disposable.add(it)
+                }
+
+        service.coinAuditsStateObservable
+                .subscribeIO {
+                    coinAudits.postValue(factory.getCoinAudits(service.coinAudits))
                     syncTopTokenHoldersState(it)
                 }
                 .let {
@@ -242,7 +253,7 @@ class CoinViewModel(
 
     private fun syncTopTokenHoldersState(state: CoinService.CoinDetailsState) {
         if (state is CoinService.CoinDetailsState.Loaded) {
-            updateInvestorDataBlock()
+            updateCoinDataBlock()
         }
     }
 
@@ -267,7 +278,7 @@ class CoinViewModel(
 
         tvlDataLiveData.postValue(factory.getTvlInfo(coinDetails, service.currency))
 
-        updateInvestorDataBlock()
+        updateCoinDataBlock()
 
         categoriesLiveData.postValue(coinDetails.meta.categories.joinToString(", ") { it.name })
 
@@ -287,14 +298,25 @@ class CoinViewModel(
         coinInvestors.postValue(factory.getCoinInvestorItems(coinDetails.meta.fundCategories))
     }
 
-    private fun updateInvestorDataBlock() {
+    private fun updateCoinDataBlock() {
         val coinDetails = service.coinMarketDetails ?: return
         coinMajorHolders.postValue(factory.getCoinMajorHolders(service.topTokenHolders))
         investorDataLiveData.postValue(factory.getInvestorData(coinDetails, service.topTokenHolders))
 
-        coinDetails.meta.securityParameter?.let {
-            securityParamsLiveData.postValue(factory.getSecurityParams(it))
+        updateSecurityParams()
+    }
+
+    private fun updateSecurityParams() {
+        var securityParams = mutableListOf<CoinDataItem>()
+
+        service.coinMarketDetails?.meta?.securityParameter?.let { securityParameter ->
+            securityParams = factory.getSecurityParams(securityParameter)
         }
+
+        factory.getCoinAudits(service.coinAudits, coinType)?.let { securityParams.add(it) }
+        factory.setListPosition(securityParams)
+
+        securityParamsLiveData.postValue(securityParams)
     }
 
     private fun getContractInfo(coinDetails: CoinMarketDetails): ContractInfo? =

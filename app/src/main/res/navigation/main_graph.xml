@@ -275,6 +275,9 @@
             android:id="@+id/coinFragment_to_coinMajorHoldersFragment"
             app:destination="@id/coinMajorHoldersFragment" />
         <action
+            android:id="@+id/coinFragment_to_coinAuditsFragment"
+            app:destination="@id/coinAuditsFragment" />
+        <action
             android:id="@+id/coinFragment_to_coinSecurityInfoFragment"
             app:destination="@id/coinSecurityInfoFragment" />
         <action
@@ -296,6 +299,10 @@
     <fragment
         android:id="@+id/coinMajorHoldersFragment"
         android:name="io.horizontalsystems.bankwallet.modules.coin.majorholders.CoinMajorHoldersFragment"
+        tools:layout="@layout/fragment_recyclerview" />
+    <fragment
+        android:id="@+id/coinAuditsFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.coin.audits.CoinAuditsFragment"
         tools:layout="@layout/fragment_recyclerview" />
     <fragment
         android:id="@+id/coinSecurityInfoFragment"

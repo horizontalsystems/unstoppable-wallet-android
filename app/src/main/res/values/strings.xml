@@ -847,6 +847,9 @@
     <string name="CoinPage_Markets">Markets</string>
     <string name="CoinPage_TradingVolume">Trading Volume</string>
     <string name="CoinPage_MajorHolders">Major Holders</string>
+    <string name="CoinPage_Audits">Audits</string>
+    <string name="CoinPage_Audits_PoweredBy">Powered by Defiyield.app</string>
+    <string name="CoinPage_Audits_Issues">issues: %d</string>
     <string name="CoinPage_InvestorData">Investor Data</string>
     <string name="CoinPage_FundsInvested">Funds Invested</string>
     <string name="CoinPage_SecurityParams">Security Parameters</string>
