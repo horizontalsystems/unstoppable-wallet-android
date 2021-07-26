@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="Timestamp_Today">Тoday</string>
+    <string name="Timestamp_Yesterday">Yesterday</string>
     <string name="Duration_instant">Sofort</string>
     <string name="Duration_Within">Innerhalb %s</string>
     <string name="Duration_Hours">%d Std.</string>
