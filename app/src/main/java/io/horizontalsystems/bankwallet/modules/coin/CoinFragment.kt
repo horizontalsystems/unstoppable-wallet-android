@@ -178,8 +178,10 @@ class CoinFragment : BaseFragment(), CoinChartAdapter.Listener, CoinDataAdapter.
             CoinDataClickType.TvlRank -> findNavController().navigate(R.id.coinFragment_to_tvlRankFragment, null, navOptions())
             CoinDataClickType.FundsInvested -> findNavController().navigate(R.id.coinFragment_to_coinInvestorsFragment, null, navOptions())
             CoinDataClickType.MajorHolders -> findNavController().navigate(R.id.coinFragment_to_coinMajorHoldersFragment, null, navOptions())
-            CoinDataClickType.SecurityAudits -> {}
-            is CoinDataClickType.SecurityInfo -> findNavController().navigate(R.id.coinFragment_to_coinSecurityInfoFragment, bundleOf("info" to clickType), navOptions())
+            CoinDataClickType.SecurityAudits -> findNavController().navigate(R.id.coinFragment_to_coinAuditsFragment, null, navOptions())
+            is CoinDataClickType.SecurityInfo -> {
+                findNavController().navigate(R.id.coinFragment_to_coinSecurityInfoFragment, bundleOf("info" to clickType), navOptions())
+            }
         }
     }
 

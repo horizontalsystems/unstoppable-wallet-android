@@ -77,6 +77,10 @@ class RateManager(
         return kit.getTopTokenHoldersAsync(coinType)
     }
 
+    override fun getAuditsAsync(coinType: CoinType): Single<List<Auditor>> {
+        return kit.getAuditReportsAsync(coinType)
+    }
+
     override fun getTopMarketList(currency: String, itemsCount: Int, diffPeriod: TimePeriod): Single<List<CoinMarket>> {
         return kit.getTopCoinMarketsAsync(currency, itemsCount = itemsCount, fetchDiffPeriod = diffPeriod)
     }
