@@ -4,7 +4,6 @@ import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionLockInfo
 import io.horizontalsystems.coinkit.models.Coin
 import java.math.BigDecimal
-import java.util.*
 
 class BitcoinOutgoingTransactionRecord(
     coin: Coin,
@@ -13,7 +12,7 @@ class BitcoinOutgoingTransactionRecord(
     transactionIndex: Int,
     blockHeight: Int?,
     confirmationsThreshold: Int?,
-    date: Date,
+    timestamp: Long,
     fee: BigDecimal?,
     failed: Boolean,
     lockInfo: TransactionLockInfo?,
@@ -28,7 +27,7 @@ class BitcoinOutgoingTransactionRecord(
     transactionIndex = transactionIndex,
     blockHeight = blockHeight,
     confirmationsThreshold = confirmationsThreshold,
-    date = date,
+    timestamp = timestamp,
     fee = fee?.let { CoinValue(coin, it) },
     failed = failed,
     lockInfo = lockInfo,

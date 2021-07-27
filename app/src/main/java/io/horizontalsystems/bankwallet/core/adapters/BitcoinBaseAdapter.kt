@@ -1,7 +1,10 @@
 package io.horizontalsystems.bankwallet.core.adapters
 
 import io.horizontalsystems.bankwallet.core.*
-import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.bankwallet.entities.AccountType
+import io.horizontalsystems.bankwallet.entities.LastBlockInfo
+import io.horizontalsystems.bankwallet.entities.SyncMode
+import io.horizontalsystems.bankwallet.entities.TransactionDataSortingType
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.BitcoinIncomingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.BitcoinOutgoingTransactionRecord
@@ -252,7 +255,7 @@ abstract class BitcoinBaseAdapter(
                         transactionIndex = transaction.transactionIndex,
                         blockHeight = transaction.blockHeight,
                         confirmationsThreshold = confirmationsThreshold,
-                        date = Date(transaction.timestamp),
+                        timestamp = transaction.timestamp,
                         fee = satoshiToBTC(transaction.fee),
                         failed = transaction.status == TransactionStatus.INVALID,
                         lockInfo = transactionLockInfo,
@@ -270,7 +273,7 @@ abstract class BitcoinBaseAdapter(
                         transactionIndex = transaction.transactionIndex,
                         blockHeight = transaction.blockHeight,
                         confirmationsThreshold = confirmationsThreshold,
-                        date = Date(transaction.timestamp),
+                        timestamp = transaction.timestamp,
                         fee = satoshiToBTC(transaction.fee),
                         failed = transaction.status == TransactionStatus.INVALID,
                         lockInfo = transactionLockInfo,
@@ -290,7 +293,7 @@ abstract class BitcoinBaseAdapter(
                         transactionIndex = transaction.transactionIndex,
                         blockHeight = transaction.blockHeight,
                         confirmationsThreshold = confirmationsThreshold,
-                        date = Date(transaction.timestamp),
+                        timestamp = transaction.timestamp,
                         fee = satoshiToBTC(transaction.fee),
                         failed = transaction.status == TransactionStatus.INVALID,
                         lockInfo = transactionLockInfo,
