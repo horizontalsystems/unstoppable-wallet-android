@@ -4,27 +4,59 @@ import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.entities.LastBlockInfo
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource.*
 import io.horizontalsystems.coinkit.models.Coin
+import io.horizontalsystems.coinkit.models.CoinType.*
 import io.horizontalsystems.core.entities.Currency
 import java.math.BigDecimal
 
 class TransactionsPresenter(
     private val interactor: TransactionsModule.IInteractor,
-    private val router: TransactionsModule.IRouter,
     private val dataSource: TransactionRecordDataSource
 ) : TransactionsModule.IViewDelegate, TransactionsModule.IInteractorDelegate {
 
     var view: TransactionsModule.IView? = null
     var itemDetails: TransactionViewItem? = null
+    var wallets = emptyList<Wallet>()
 
-    private var adapterStates: MutableMap<Wallet, AdapterState> = mutableMapOf()
+    val allTransactionWallets: List<TransactionWallet>
+        get() {
+            val transactionWallets = wallets.map { transactionWallet(it) }
+            val mergedWallets = mutableListOf<TransactionWallet>()
+
+            transactionWallets.forEach { wallet ->
+                when (wallet.source.blockchain) {
+                    Blockchain.Bitcoin,
+                    Blockchain.BitcoinCash,
+                    Blockchain.Litecoin,
+                    Blockchain.Dash,
+                    Blockchain.Zcash,
+                    is Blockchain.Bep2 -> mergedWallets.add(wallet)
+                    Blockchain.Ethereum,
+                    Blockchain.BinanceSmartChain -> {
+                        if (mergedWallets.firstOrNull { it.source == wallet.source } == null) {
+                            mergedWallets.add(TransactionWallet(null, wallet.source))
+                        }
+                    }
+                }
+            }
+            return mergedWallets
+        }
+
+    private var adapterStates: MutableMap<TransactionWallet, AdapterState> = mutableMapOf()
+    private var loading: Boolean = false
 
     override fun viewDidLoad() {
         interactor.initialFetch()
     }
 
     override fun onFilterSelect(wallet: Wallet?) {
-        interactor.setSelectedWallets(wallet?.let { listOf(wallet) } ?: listOf())
+        val selectedWallets: List<TransactionWallet> = when (wallet) {
+            null -> allTransactionWallets
+            else -> listOf(transactionWallet(wallet))
+        }
+        dataSource.setWallets(selectedWallets)
+        loadNext(true)
     }
 
     override fun onClear() {
@@ -47,28 +79,10 @@ class TransactionsPresenter(
         itemDetails = item
     }
 
-    override fun onUpdateWalletsData(allWalletsData: List<Pair<Wallet, LastBlockInfo?>>) {
-        dataSource.onUpdateWalletsData(allWalletsData)
-
-        interactor.fetchLastBlockHeights()
-
-        val wallets = allWalletsData.map { it.first }
-        val filters = when {
-            wallets.size < 2 -> listOf()
-            else -> listOf(null).plus(getOrderedList(wallets))
-        }
-
-        view?.showFilters(filters)
-
-        loadNext(true)
-    }
-
-    override fun onUpdateSelectedWallets(selectedWallets: List<Wallet>) {
-        dataSource.setWallets(selectedWallets)
-        loadNext(true)
-    }
-
-    override fun didFetchRecords(records: Map<Wallet, List<TransactionRecord>>, initial: Boolean) {
+    override fun didFetchRecords(
+        records: Map<TransactionWallet, List<TransactionRecord>>,
+        initial: Boolean
+    ) {
         dataSource.handleNextRecords(records)
         if (dataSource.increasePage()) {
             view?.showTransactions(dataSource.itemsCopy)
@@ -78,7 +92,7 @@ class TransactionsPresenter(
         loading = false
     }
 
-    override fun onUpdateLastBlock(wallet: Wallet, lastBlockInfo: LastBlockInfo) {
+    override fun onUpdateLastBlock(wallet: TransactionWallet, lastBlockInfo: LastBlockInfo) {
         if (dataSource.setLastBlock(wallet, lastBlockInfo)) {
             view?.showTransactions(dataSource.itemsCopy)
         }
@@ -100,7 +114,7 @@ class TransactionsPresenter(
         }
     }
 
-    override fun didUpdateRecords(records: List<TransactionRecord>, wallet: Wallet) {
+    override fun didUpdateRecords(records: List<TransactionRecord>, wallet: TransactionWallet) {
         if (dataSource.handleUpdatedRecords(records, wallet)) {
             view?.showTransactions(dataSource.itemsCopy)
         }
@@ -110,14 +124,35 @@ class TransactionsPresenter(
         view?.reloadTransactions()
     }
 
-    override fun initialAdapterStates(states: Map<Wallet, AdapterState>) {
+    override fun onUpdateAdapterStates(states: Map<TransactionWallet, AdapterState>) {
         adapterStates = states.toMutableMap()
         syncState()
     }
 
-    override fun onUpdateAdapterState(state: AdapterState, wallet: Wallet) {
+    override fun onUpdateAdapterState(state: AdapterState, wallet: TransactionWallet) {
         adapterStates[wallet] = state
         syncState()
+    }
+
+    override fun onUpdateWallets(wallets: List<Wallet>) {
+        this.wallets = wallets.sortedBy { it.coin.code }
+        val filters = when {
+            wallets.size < 2 -> listOf()
+            else -> listOf(null).plus(this.wallets)
+        }
+
+        view?.showFilters(filters)
+
+        val transactionWallets = allTransactionWallets
+        dataSource.handleUpdatedWallets(transactionWallets)
+        interactor.fetchLastBlockHeights(transactionWallets)
+
+        interactor.observe(transactionWallets)
+    }
+
+    override fun onUpdateLastBlockInfos(lastBlockInfos: MutableList<Pair<TransactionWallet, LastBlockInfo?>>) {
+        dataSource.handleUpdatedLastBlockInfos(lastBlockInfos)
+        loadNext(true)
     }
 
     private fun syncState() {
@@ -127,14 +162,6 @@ class TransactionsPresenter(
             view?.hideSyncing()
         }
     }
-
-    private fun getOrderedList(wallets: List<Wallet>): MutableList<Wallet> {
-        val walletList = wallets.toMutableList()
-        walletList.sortBy { it.coin.code }
-        return walletList
-    }
-
-    private var loading: Boolean = false
 
     private fun loadNext(initial: Boolean = false) {
         if (loading) return
@@ -149,6 +176,55 @@ class TransactionsPresenter(
         }
 
         interactor.fetchRecords(dataSource.getFetchDataList(), initial)
+    }
+
+    private fun transactionWallet(wallet: Wallet): TransactionWallet {
+        val coinSettings = wallet.configuredCoin.settings
+        val coin = wallet.coin
+
+        return when (val type = coin.type) {
+            Bitcoin -> TransactionWallet(
+                coin,
+                TransactionSource(Blockchain.Bitcoin, wallet.account, coinSettings)
+            )
+            BitcoinCash -> TransactionWallet(
+                coin,
+                TransactionSource(Blockchain.BitcoinCash, wallet.account, coinSettings)
+            )
+            Dash -> TransactionWallet(
+                coin,
+                TransactionSource(Blockchain.Dash, wallet.account, coinSettings)
+            )
+            Litecoin -> TransactionWallet(
+                coin,
+                TransactionSource(Blockchain.Litecoin, wallet.account, coinSettings)
+            )
+            Ethereum -> TransactionWallet(
+                coin,
+                TransactionSource(Blockchain.Ethereum, wallet.account, coinSettings)
+            )
+            BinanceSmartChain -> TransactionWallet(
+                coin,
+                TransactionSource(Blockchain.BinanceSmartChain, wallet.account, coinSettings)
+            )
+            Zcash -> TransactionWallet(
+                coin,
+                TransactionSource(Blockchain.Zcash, wallet.account, coinSettings)
+            )
+            is Bep2 -> TransactionWallet(
+                coin,
+                TransactionSource(Blockchain.Bep2(type.symbol), wallet.account, coinSettings)
+            )
+            is Erc20 -> TransactionWallet(
+                coin,
+                TransactionSource(Blockchain.Ethereum, wallet.account, coinSettings)
+            )
+            is Bep20 -> TransactionWallet(
+                coin,
+                TransactionSource(Blockchain.BinanceSmartChain, wallet.account, coinSettings)
+            )
+            is Unsupported -> throw IllegalArgumentException("Unsupported coin may not have transactions to show")
+        }
     }
 
 }

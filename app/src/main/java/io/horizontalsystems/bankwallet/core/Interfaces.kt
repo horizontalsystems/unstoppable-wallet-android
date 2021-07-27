@@ -13,6 +13,7 @@ import io.horizontalsystems.bankwallet.modules.market.MarketModule
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.settings.theme.ThemeType
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
+import io.horizontalsystems.bankwallet.modules.transactions.TransactionWallet
 import io.horizontalsystems.binancechainkit.BinanceChainKit
 import io.horizontalsystems.bitcoincore.core.IPluginData
 import io.horizontalsystems.coinkit.models.Coin
@@ -38,7 +39,7 @@ interface IAdapterManager {
     fun refresh()
     fun getAdapterForWallet(wallet: Wallet): IAdapter?
     fun getAdapterForCoin(coin: Coin): IAdapter?
-    fun getTransactionsAdapterForWallet(wallet: Wallet): ITransactionsAdapter?
+    fun getTransactionsAdapterForWallet(wallet: TransactionWallet): ITransactionsAdapter?
     fun getBalanceAdapterForWallet(wallet: Wallet): IBalanceAdapter?
     fun getReceiveAdapterForWallet(wallet: Wallet): IReceiveAdapter?
     fun refreshAdapters(wallets: List<Wallet>)
@@ -188,10 +189,10 @@ interface ITransactionsAdapter {
     val lastBlockInfo: LastBlockInfo?
     val lastBlockUpdatedFlowable: Flowable<Unit>
 
-    fun getTransactions(from: TransactionRecord?, limit: Int): Single<List<TransactionRecord>>
+    fun getTransactionsAsync(from: TransactionRecord?, coin: Coin?, limit: Int): Single<List<TransactionRecord>>
     fun getRawTransaction(transactionHash: String): String? = null
 
-    val transactionRecordsFlowable: Flowable<List<TransactionRecord>>
+    fun getTransactionRecordsFlowable(coin: Coin?): Flowable<List<TransactionRecord>>
 }
 
 interface IBalanceAdapter {

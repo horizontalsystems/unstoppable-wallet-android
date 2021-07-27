@@ -6,7 +6,6 @@ import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRe
 import io.horizontalsystems.erc20kit.core.Erc20Kit
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.core.EthereumKit.SyncState
-import io.horizontalsystems.ethereumkit.core.hexStringToByteArray
 import io.horizontalsystems.ethereumkit.models.*
 import io.reactivex.Flowable
 import io.reactivex.Single
@@ -57,27 +56,6 @@ class Eip20Adapter(
 
     override val balanceUpdatedFlowable: Flowable<Unit>
         get() = eip20Kit.balanceFlowable.map { Unit }
-
-    // ITransactionsAdapter
-
-    override val transactionsState: AdapterState
-        get() = convertToAdapterState(eip20Kit.transactionsSyncState)
-
-    override val transactionsStateUpdatedFlowable: Flowable<Unit>
-        get() = eip20Kit.transactionsSyncStateFlowable.map { }
-
-    override fun getTransactions(from: TransactionRecord?, limit: Int): Single<List<TransactionRecord>> {
-        val fromHash = from?.transactionHash?.hexStringToByteArray()
-        return eip20Kit.getTransactionsAsync(fromHash, limit)
-                .flatMap { fullTransactionList ->
-                    return@flatMap Single.just(fullTransactionList.map { transactionConverter.transactionRecord(it) })
-                }
-    }
-
-    override val transactionRecordsFlowable: Flowable<List<TransactionRecord>>
-        get() = eip20Kit.transactionsFlowable.map {
-            it.map { tx -> transactionConverter.transactionRecord(tx) }
-        }
 
     // ISendEthereumAdapter
 

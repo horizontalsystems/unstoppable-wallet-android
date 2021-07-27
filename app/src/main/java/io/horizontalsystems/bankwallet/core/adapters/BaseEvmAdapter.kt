@@ -14,7 +14,7 @@ abstract class BaseEvmAdapter(
         final override val evmKit: EthereumKit,
         val decimal: Int,
         val coinManager: ICoinManager
-) : IAdapter, ISendEthereumAdapter, ITransactionsAdapter, IBalanceAdapter, IReceiveAdapter {
+) : IAdapter, ISendEthereumAdapter, IBalanceAdapter, IReceiveAdapter {
 
     override val transactionConverter = EvmTransactionConverter(coinManager, evmKit)
 
@@ -23,10 +23,10 @@ abstract class BaseEvmAdapter(
 
     // ITransactionsAdapter
 
-    override val lastBlockInfo: LastBlockInfo?
+    val lastBlockInfo: LastBlockInfo?
         get() = evmKit.lastBlockHeight?.toInt()?.let { LastBlockInfo(it) }
 
-    override val lastBlockUpdatedFlowable: Flowable<Unit>
+    val lastBlockUpdatedFlowable: Flowable<Unit>
         get() = evmKit.lastBlockHeightFlowable.map { Unit }
 
     // ISendEthereumAdapter

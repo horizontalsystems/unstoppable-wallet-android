@@ -6,7 +6,10 @@ import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.adapters.BaseEvmAdapter
 import io.horizontalsystems.bankwallet.core.adapters.BinanceAdapter
 import io.horizontalsystems.bankwallet.core.factories.AdapterFactory
+import io.horizontalsystems.bankwallet.entities.ConfiguredCoin
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource.*
+import io.horizontalsystems.bankwallet.modules.transactions.TransactionWallet
 import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.coinkit.models.CoinType
 import io.reactivex.BackpressureStrategy
@@ -28,6 +31,9 @@ class AdapterManager(
     private val disposables = CompositeDisposable()
     private val adaptersReadySubject = PublishSubject.create<Unit>()
     private val adaptersMap = ConcurrentHashMap<Wallet, IAdapter>()
+    private var ethereumTransactionsAdapter: ITransactionsAdapter? = null
+    private var bscTransactionsAdapter: ITransactionsAdapter? = null
+
 
     override val adaptersReadyObservable: Flowable<Unit> = adaptersReadySubject.toFlowable(BackpressureStrategy.BUFFER)
 
@@ -103,6 +109,9 @@ class AdapterManager(
 
     @Synchronized
     private fun initAdapters(wallets: List<Wallet>) {
+        ethereumTransactionsAdapter = evmTransactionAdapter(wallets, Blockchain.Ethereum)
+        bscTransactionsAdapter = evmTransactionAdapter(wallets, Blockchain.BinanceSmartChain)
+
         val disabledWallets = adaptersMap.keys.subtract(wallets)
 
         wallets.forEach { wallet ->
@@ -124,6 +133,29 @@ class AdapterManager(
             }
         }
 
+    }
+
+    private fun evmTransactionAdapter(
+        wallets: List<Wallet>,
+        blockchain: Blockchain
+    ): ITransactionsAdapter? {
+        wallets.forEach { wallet ->
+            when (wallet.coin.type) {
+                CoinType.Ethereum, is CoinType.Erc20 -> {
+                    if (blockchain == Blockchain.Ethereum) {
+                        return adapterFactory.ethereumTransactionsAdapter(wallet.account)
+                    }
+                }
+                CoinType.BinanceSmartChain, is CoinType.Bep20 -> {
+                    if (blockchain == Blockchain.BinanceSmartChain) {
+                        return adapterFactory.bscTransactionsAdapter(wallet.account)
+                    }
+                }
+                else -> {
+                }
+            }
+        }
+        return null
     }
 
     /**
@@ -184,8 +216,20 @@ class AdapterManager(
         }
     }
 
-    override fun getTransactionsAdapterForWallet(wallet: Wallet): ITransactionsAdapter? {
-        return adaptersMap[wallet]?.let { it as? ITransactionsAdapter }
+    override fun getTransactionsAdapterForWallet(wallet: TransactionWallet): ITransactionsAdapter? {
+        return when (wallet.source.blockchain) {
+            Blockchain.Ethereum -> ethereumTransactionsAdapter
+            Blockchain.BinanceSmartChain -> bscTransactionsAdapter
+            else -> {
+                wallet.coin?.let { coin ->
+                    val configuredCoin = ConfiguredCoin(coin, wallet.source.coinSettings)
+                    adaptersMap[Wallet(
+                        configuredCoin,
+                        wallet.source.account
+                    )]?.let { it as? ITransactionsAdapter }
+                }
+            }
+        }
     }
 
     override fun getBalanceAdapterForWallet(wallet: Wallet): IBalanceAdapter? {

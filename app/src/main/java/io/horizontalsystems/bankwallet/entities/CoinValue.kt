@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.entities
 
-import android.util.Log
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.coinkit.models.Coin
 import java.math.BigDecimal
@@ -15,8 +14,6 @@ data class CoinValue(val coin: Coin, val value: BigDecimal) {
                 "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
                 16
             ).toBigDecimal().movePointLeft(coin.decimal).stripTrailingZeros()
-            Log.e("TAG", "max: $max256BitsNumber ")
-            Log.e("TAG", "val: $value ")
             return value == max256BitsNumber
         }
 

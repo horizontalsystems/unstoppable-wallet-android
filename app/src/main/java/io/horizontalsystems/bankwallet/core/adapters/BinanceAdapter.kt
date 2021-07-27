@@ -74,10 +74,11 @@ class BinanceAdapter(
     override val lastBlockUpdatedFlowable: Flowable<Unit>
         get() = binanceKit.latestBlockFlowable.map { }
 
-    override val transactionRecordsFlowable: Flowable<List<TransactionRecord>>
-        get() = asset.transactionsFlowable.map { it.map { tx -> transactionRecord(tx) } }
+    override fun getTransactionRecordsFlowable(coin: Coin?): Flowable<List<TransactionRecord>> {
+        return asset.transactionsFlowable.map { it.map { tx -> transactionRecord(tx) } }
+    }
 
-    override fun getTransactions(from: TransactionRecord?, limit: Int): Single<List<TransactionRecord>> {
+    override fun getTransactionsAsync(from: TransactionRecord?, coin: Coin?, limit: Int): Single<List<TransactionRecord>> {
         return binanceKit.transactions(asset, from?.transactionHash, limit).map { list ->
             list.map { transactionRecord(it) }
         }

@@ -4,7 +4,6 @@ import io.horizontalsystems.bankwallet.core.factories.TransactionViewItemFactory
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.LastBlockInfo
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
-import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionsModule.FetchData
 import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.core.entities.Currency
@@ -27,13 +26,13 @@ class TransactionRecordDataSource(
         it.getFetchData(limit)
     }
 
-    fun handleNextRecords(records: Map<Wallet, List<TransactionRecord>>) {
+    fun handleNextRecords(records: Map<TransactionWallet, List<TransactionRecord>>) {
         records.forEach { (wallet, transactionRecords) ->
             poolRepo.getPool(wallet)?.add(transactionRecords)
         }
     }
 
-    fun handleUpdatedRecords(records: List<TransactionRecord>, wallet: Wallet): Boolean {
+    fun handleUpdatedRecords(records: List<TransactionRecord>, wallet: TransactionWallet): Boolean {
         val pool = poolRepo.getPool(wallet) ?: return false
 
         val updatedRecords = mutableListOf<TransactionRecord>()
@@ -89,10 +88,10 @@ class TransactionRecordDataSource(
     }
 
     private fun transactionViewItem(
-        wallet: Wallet,
+        wallet: TransactionWallet,
         record: TransactionRecord
     ): TransactionViewItem {
-        val lastBlockInfo = metadataDataSource.getLastBlockInfo(wallet)
+        val lastBlockInfo = metadataDataSource.getLastBlockInfo(wallet.source)
         val mainAmountCurrencyValue = record.mainValue?.let { mainValue ->
             metadataDataSource.getRate(mainValue.coin, record.timestamp)?.let {
                 CurrencyValue(it.currency, mainValue.value)
@@ -101,7 +100,7 @@ class TransactionRecordDataSource(
         return viewItemFactory.item(wallet, record, lastBlockInfo, mainAmountCurrencyValue)
     }
 
-    fun setWallets(wallets: List<Wallet>) {
+    fun setWallets(wallets: List<TransactionWallet>) {
         poolRepo.allPools.forEach {
             it.resetFirstUnusedIndex()
         }
@@ -109,7 +108,7 @@ class TransactionRecordDataSource(
         itemsDataSource.clear()
     }
 
-    private fun handleUpdatedWallets(wallets: List<Wallet>) {
+    fun handleUpdatedWallets(wallets: List<TransactionWallet>) {
         poolRepo.deactivateAllPools()
 
         setWallets(wallets)
@@ -130,9 +129,11 @@ class TransactionRecordDataSource(
         return hasUpdate
     }
 
-    fun setLastBlock(wallet: Wallet, lastBlockInfo: LastBlockInfo): Boolean {
-        val oldBlockInfo = metadataDataSource.getLastBlockInfo(wallet)
-        metadataDataSource.setLastBlockInfo(lastBlockInfo, wallet)
+    fun setLastBlock(wallet: TransactionWallet, lastBlockInfo: LastBlockInfo?): Boolean {
+        lastBlockInfo ?: return false
+
+        val oldBlockInfo = metadataDataSource.getLastBlockInfo(wallet.source)
+        metadataDataSource.setLastBlockInfo(lastBlockInfo, wallet.source)
 
         if (oldBlockInfo == null) {
             itemsDataSource.items.forEachIndexed { index, item ->
@@ -156,20 +157,14 @@ class TransactionRecordDataSource(
         return hasUpdate
     }
 
-    fun onUpdateWalletsData(allWalletsData: List<Pair<Wallet, LastBlockInfo?>>) {
-        allWalletsData.forEach { (wallet, lastBlockHeight) ->
-            lastBlockHeight?.let {
-                metadataDataSource.setLastBlockInfo(it, wallet)
-            }
-        }
-
-        val wallets = allWalletsData.map { it.first }
-
-        handleUpdatedWallets(wallets)
-    }
-
     fun clearRates() {
         metadataDataSource.clearRates()
         itemsDataSource.items.forEach { it.clearRates() }
+    }
+
+    fun handleUpdatedLastBlockInfos(lastBlockInfos: MutableList<Pair<TransactionWallet, LastBlockInfo?>>) {
+        lastBlockInfos.forEach { (wallet, lastBlockInfo) ->
+            setLastBlock(wallet, lastBlockInfo)
+        }
     }
 }

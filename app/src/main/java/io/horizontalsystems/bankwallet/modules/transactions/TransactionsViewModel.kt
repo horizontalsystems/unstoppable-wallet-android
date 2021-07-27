@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.core.SingleLiveEvent
 
-class TransactionsViewModel : ViewModel(), TransactionsModule.IView, TransactionsModule.IRouter {
+class TransactionsViewModel : ViewModel(), TransactionsModule.IView {
 
     lateinit var delegate: TransactionsModule.IViewDelegate
 

@@ -172,14 +172,16 @@ class TransactionInfoViewItemFactory(
 
                 //Top section
                 transaction.valueOut?.let {
-                    items.addAll(
-                        getActionsSection(
-                            getString(R.string.TransactionInfo_YouGot),
-                            transaction.valueOut,
-                            rates[transaction.valueOut.coin],
-                            true
+                    if (!transaction.foreignRecipient) {
+                        items.addAll(
+                            getActionsSection(
+                                getString(R.string.TransactionInfo_YouGot),
+                                transaction.valueOut,
+                                rates[transaction.valueOut.coin],
+                                true
+                            )
                         )
-                    )
+                    }
                 }
 
                 //Middle section

@@ -5,6 +5,7 @@ import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.adapters.*
 import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
 import io.horizontalsystems.bankwallet.core.managers.*
+import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.BackgroundManager
@@ -21,6 +22,14 @@ class AdapterFactory(
 
     var initialSyncModeSettingsManager: IInitialSyncModeSettingsManager? = null
     var ethereumRpcModeSettingsManager: IEthereumRpcModeSettingsManager? = null
+
+    fun ethereumTransactionsAdapter(account: Account): ITransactionsAdapter {
+        return EvmTransactionsAdapter(ethereumKitManager.evmKit(account), coinManager)
+    }
+
+    fun bscTransactionsAdapter(account: Account): ITransactionsAdapter {
+        return EvmTransactionsAdapter(binanceSmartChainKitManager.evmKit(account), coinManager)
+    }
 
     fun adapter(wallet: Wallet): IAdapter? {
         val syncMode = initialSyncModeSettingsManager?.setting(wallet.coin.type, wallet.account.origin)?.syncMode

@@ -4,16 +4,17 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.subscribeIO
+import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
-import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.BitcoinIncomingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.BitcoinOutgoingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.*
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoButtonType.*
 import io.horizontalsystems.bankwallet.modules.transactionInfo.adapters.TransactionInfoViewItem
+import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource.*
+import io.horizontalsystems.bankwallet.modules.transactions.TransactionWallet
 import io.horizontalsystems.coinkit.models.Coin
-import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.reactivex.disposables.CompositeDisposable
@@ -22,7 +23,7 @@ class TransactionInfoViewModel(
     private val service: TransactionInfoService,
     private val factory: TransactionInfoViewItemFactory,
     private val transaction: TransactionRecord,
-    private val wallet: Wallet,
+    transactionWallet: TransactionWallet,
     private val clearables: List<Clearable>
 ) : ViewModel() {
 
@@ -32,11 +33,13 @@ class TransactionInfoViewModel(
     val showTransactionLiveEvent = SingleLiveEvent<String>()
     val copyRawTransactionLiveEvent = SingleLiveEvent<String>()
     val explorerButton = MutableLiveData<Pair<String, Boolean>>()
+    val blockchain = transactionWallet.source.blockchain
+    val account = transactionWallet.source.account
 
     val viewItemsLiveData = MutableLiveData<List<TransactionInfoViewItem?>>()
 
     private var explorerData: TransactionInfoModule.ExplorerData =
-        getExplorerData(transaction.transactionHash, service.testMode, wallet.coin.type)
+        getExplorerData(transaction.transactionHash, service.testMode, blockchain, account)
 
     private val disposables = CompositeDisposable()
     private var rates: Map<Coin, CurrencyValue> = mutableMapOf()
@@ -133,28 +136,28 @@ class TransactionInfoViewModel(
     private fun getExplorerData(
         hash: String,
         testMode: Boolean,
-        coinType: CoinType
+        blockchain: Blockchain,
+        account: Account
     ): TransactionInfoModule.ExplorerData {
-        return when (coinType) {
-            is CoinType.Bitcoin -> TransactionInfoModule.ExplorerData(
+        return when (blockchain) {
+            is Blockchain.Bitcoin -> TransactionInfoModule.ExplorerData(
                 "blockchair.com",
                 if (testMode) null else "https://blockchair.com/bitcoin/transaction/$hash"
             )
-            is CoinType.BitcoinCash -> TransactionInfoModule.ExplorerData(
+            is Blockchain.BitcoinCash -> TransactionInfoModule.ExplorerData(
                 "btc.com",
                 if (testMode) null else "https://bch.btc.com/$hash"
             )
-            is CoinType.Litecoin -> TransactionInfoModule.ExplorerData(
+            is Blockchain.Litecoin -> TransactionInfoModule.ExplorerData(
                 "blockchair.com",
                 if (testMode) null else "https://blockchair.com/litecoin/transaction/$hash"
             )
-            is CoinType.Dash -> TransactionInfoModule.ExplorerData(
+            is Blockchain.Dash -> TransactionInfoModule.ExplorerData(
                 "dash.org",
                 if (testMode) null else "https://insight.dash.org/insight/tx/$hash"
             )
-            is CoinType.Ethereum,
-            is CoinType.Erc20 -> {
-                val domain = when (service.ethereumNetworkType(wallet.account)) {
+            is Blockchain.Ethereum -> {
+                val domain = when (service.ethereumNetworkType(account)) {
                     EthereumKit.NetworkType.EthMainNet -> "etherscan.io"
                     EthereumKit.NetworkType.EthRopsten -> "ropsten.etherscan.io"
                     EthereumKit.NetworkType.EthKovan -> "kovan.etherscan.io"
@@ -164,20 +167,18 @@ class TransactionInfoViewModel(
                 }
                 TransactionInfoModule.ExplorerData("etherscan.io", "https://$domain/tx/0x$hash")
             }
-            is CoinType.Bep2 -> TransactionInfoModule.ExplorerData(
+            is Blockchain.Bep2 -> TransactionInfoModule.ExplorerData(
                 "binance.org",
                 if (testMode) "https://testnet-explorer.binance.org/tx/$hash" else "https://explorer.binance.org/tx/$hash"
             )
-            is CoinType.BinanceSmartChain,
-            is CoinType.Bep20 -> TransactionInfoModule.ExplorerData(
+            is Blockchain.BinanceSmartChain -> TransactionInfoModule.ExplorerData(
                 "bscscan.com",
                 "https://bscscan.com/tx/$hash"
             )
-            is CoinType.Zcash -> TransactionInfoModule.ExplorerData(
+            is Blockchain.Zcash -> TransactionInfoModule.ExplorerData(
                 "blockchair.com",
                 if (testMode) null else "https://blockchair.com/zcash/transaction/$hash"
             )
-            is CoinType.Unsupported -> throw IllegalArgumentException()
         }
     }
 

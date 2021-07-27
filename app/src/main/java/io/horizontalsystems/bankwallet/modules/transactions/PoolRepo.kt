@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
-import io.horizontalsystems.bankwallet.entities.Wallet
 
 class PoolRepo {
 
@@ -10,10 +9,10 @@ class PoolRepo {
     val allPools: List<Pool>
         get() = pools.values.toList()
 
-    private var pools = mutableMapOf<Wallet, Pool>()
-    private var activePoolWallets = listOf<Wallet>()
+    private var pools = mutableMapOf<TransactionWallet, Pool>()
+    private var activePoolWallets = listOf<TransactionWallet>()
 
-    fun activatePools(wallets: List<Wallet>) {
+    fun activatePools(wallets: List<TransactionWallet>) {
         wallets.forEach { wallet ->
             if (!pools.containsKey(wallet)) {
                 pools[wallet] = Pool(Pool.State(wallet))
@@ -27,11 +26,11 @@ class PoolRepo {
         pools.clear()
     }
 
-    fun getPool(wallet: Wallet): Pool? {
+    fun getPool(wallet: TransactionWallet): Pool? {
         return pools[wallet]
     }
 
-    fun isPoolActiveByWallet(wallet: Wallet): Boolean {
+    fun isPoolActiveByWallet(wallet: TransactionWallet): Boolean {
         return activePoolWallets.contains(wallet)
     }
 

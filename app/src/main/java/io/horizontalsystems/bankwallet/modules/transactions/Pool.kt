@@ -1,12 +1,11 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
-import io.horizontalsystems.bankwallet.entities.Wallet
 import java.util.concurrent.CopyOnWriteArrayList
 
 class Pool(val state: State) {
 
-    class State(val wallet: Wallet) {
+    class State(val wallet: TransactionWallet) {
         val records: MutableList<TransactionRecord> = CopyOnWriteArrayList<TransactionRecord>()
 
         var firstUnusedIndex = 0
@@ -51,7 +50,7 @@ class Pool(val state: State) {
     val unusedRecords: List<TransactionRecord>
         get() = state.unusedRecords
 
-    val wallet: Wallet
+    val wallet: TransactionWallet
         get() = state.wallet
 
     fun increaseFirstUnusedIndex() {
