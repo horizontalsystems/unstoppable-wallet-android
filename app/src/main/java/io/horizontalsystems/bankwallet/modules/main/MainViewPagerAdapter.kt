@@ -10,7 +10,7 @@ import io.horizontalsystems.bankwallet.modules.onboarding.OnboardingFragment
 import io.horizontalsystems.bankwallet.modules.settings.main.MainSettingsFragment
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionsFragment
 
-class MainViewPagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
+class MainViewPagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment.getChildFragmentManager(), fragment.viewLifecycleOwner.lifecycle) {
 
     private val itemIds = mutableListOf(0, getBalancePageId(BalanceViewType.Balance), 2, 3)
 

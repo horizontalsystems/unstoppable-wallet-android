@@ -118,7 +118,6 @@ class MainFragment : BaseFragment(R.layout.fragment_main), RateAppDialogFragment
     }
 
     override fun onDestroyView() {
-        viewPager.adapter = null
         bottomBadgeView = null
 
         super.onDestroyView()
