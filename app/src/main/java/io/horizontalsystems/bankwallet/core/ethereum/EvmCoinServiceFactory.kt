@@ -15,7 +15,9 @@ class EvmCoinServiceFactory(
 ) {
     val baseCoinService = EvmCoinService(baseCoin, currencyManager, rateManager)
 
-    fun getCoinService(contractAddress: Address) = getCoin(contractAddress.hex)?.let { coin ->
+    fun getCoinService(contractAddress: Address) = getCoinService(contractAddress.hex)
+
+    fun getCoinService(contractAddress: String ) = getCoin(contractAddress)?.let { coin ->
         EvmCoinService(coin, currencyManager, rateManager)
     }
 

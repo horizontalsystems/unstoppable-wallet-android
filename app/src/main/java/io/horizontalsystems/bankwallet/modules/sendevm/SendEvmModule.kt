@@ -31,11 +31,17 @@ data class SendEvmData(
         @Parcelize
         class Swap(val info: SwapInfo) : AdditionalInfo()
 
+        @Parcelize
+        class OneInchSwap(val info: OneInchSwapInfo): AdditionalInfo()
+
         val sendInfo: SendInfo?
             get() = (this as? Send)?.info
 
         val swapInfo: SwapInfo?
             get() = (this as? Swap)?.info
+
+        val oneInchSwapInfo: OneInchSwapInfo?
+            get() = (this as? OneInchSwap)?.info
     }
 
     @Parcelize
@@ -54,6 +60,14 @@ data class SendEvmData(
             val priceImpact: String? = null,
             val gasPrice: String? = null
     ) : Parcelable
+
+    @Parcelize
+    data class OneInchSwapInfo(
+        val coinTo: Coin,
+        val estimatedAmountTo: BigDecimal,
+        val slippage: String? = null,
+        val recipientDomain: String? = null
+    ): Parcelable
 }
 
 object SendEvmModule {

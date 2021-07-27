@@ -71,7 +71,7 @@ class SwapViewItemHelper(private val numberFormatter: IAppNumberFormatter) {
         return if (ttl == defaultTradeOptions.ttl) {
             null
         } else {
-            Translator.getString(R.string.Duration_Minutes, ttl)
+            Translator.getString(R.string.Duration_Minutes, ttl / 60)
         }
     }
 
