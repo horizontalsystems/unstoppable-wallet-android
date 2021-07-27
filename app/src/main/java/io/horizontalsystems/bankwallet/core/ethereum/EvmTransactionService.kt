@@ -176,11 +176,11 @@ class EvmTransactionService(
     }
 
     data class Transaction(
-            val data: TransactionData,
-            val gasData: GasData
+        val transactionData: TransactionData,
+        val gasData: GasData
     ) {
         val totalAmount: BigInteger
-            get() = data.value + gasData.fee
+            get() = transactionData.value + gasData.fee
     }
 
     sealed class GasPriceType {

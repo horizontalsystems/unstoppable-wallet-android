@@ -90,7 +90,7 @@ class SendEvmTransactionService(
         sendState = SendState.Sending
         logger.info("sending tx")
 
-        evmKit.send(transaction.data, transaction.gasData.gasPrice, transaction.gasData.gasLimit)
+        evmKit.send(transaction.transactionData, transaction.gasData.gasPrice, transaction.gasData.gasLimit)
                 .subscribeIO({ fullTransaction ->
                     handlePostSendActions()
                     sendState = SendState.Sent(fullTransaction.transaction.hash)
@@ -127,7 +127,7 @@ class SendEvmTransactionService(
     }
 
     private fun syncTxDataState(transactionDataState: DataState<EvmTransactionService.Transaction>) {
-        val transactionData = transactionDataState.dataOrNull?.data ?: sendEvmData.transactionData
+        val transactionData = transactionDataState.dataOrNull?.transactionData ?: sendEvmData.transactionData
         txDataState = DataState.Success(TxDataState(transactionData, sendEvmData.additionalInfo, evmKit.decorate(transactionData)))
     }
 
