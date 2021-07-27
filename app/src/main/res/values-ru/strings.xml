@@ -444,10 +444,10 @@
     <string name="StatusInfo_Processing">Processing</string>
     <string name="StatusInfo_Confirmed">Completed</string>
     <string name="StatusInfo_Failed">Не удалось</string>
-    <string name="StatusInfo_PendingDescription">Transaction has not been confirmed on the blockchain yet. Transaction may remain from a few minutes to hours depending on the transaction fee amount. Transactions sent with a low fee usually get processed within a few hours or even days, and can also be rejected entirely.</string>
-    <string name="StatusInfo_ProcessingDescription">Transaction has been already included in the blockchain but has not reached permanent finality yet. At this point, it\'s safe to consider transaction completed for smaller payments. For larger payments better to wait until status changes to completed.</string>
+    <string name="StatusInfo_PendingDescription">Transaction has not been confirmed on the blockchain yet. Transactions sent with recommended or higher fee setting are generally processed within 10 minutes. Transactions sent with a low fee may remain pending for a few hours or even days, and can even be rejected entirely.</string>
+    <string name="StatusInfo_ProcessingDescription">Transaction has been already included in the blockchain but has not reached permanent finality. At this point, it\'s safe to consider transaction completed for smaller payments. For larger payments it\'s recommended to wait until transacction status changes to completed.</string>
     <string name="StatusInfo_ConfirmedDescription">Transaction is completed and considered permanent and irreversible.</string>
-    <string name="StatusInfo_FailedDescription">Transaction did not get processed as intended and no value transfer took place. Failed transactions are written to the blockchain and consume transaction fees.</string>
+    <string name="StatusInfo_FailedDescription">Transaction did not get processed and no value transfer took place. Transactions with fail status are still written to the blockchain and consume transaction fees. Unstoppable app is unable to show the fail reason for such transactions but users are able to look it up themselves on a public block exlorer i.e. etherscan.io.</string>
     <!-- Info -->
     <string name="Info_LockTime_Title">TimeLock</string>
     <string name="Info_LockTime_Description">Эти средства были отправлены с временной блокировкой, которая истекает %s.\n\nНе волнуйтесь, полученные биткойны уже ваши, но до истечения периода блокировки, вы не сможете потратить их.</string>
@@ -482,7 +482,7 @@
     <string name="SettingsAboutApp_Title">О приложении</string>
     <string name="SettingsAboutApp_Site">Веб-сайт</string>
     <string name="SettingsAboutApp_WhatsNew">Что Нового</string>
-    <string name="SettingsPrivacy_Info">Это приложение не передает ваши данные, но, поскольку оно связывается с блокчейнами, возможна потенциальная утечка некоторых общедоступных данных, таких как IP-адрес. Используйте кнопку \"Информация\" в правом верхнем углу для получения более подробной информации о каждом разделе.</string>
+    <string name="SettingsPrivacy_Info">This app doesn\'t collect any data about you.</string>
     <string name="SettingsPrivacy_ConnectionSettingsTitle">Доступ в Интернет</string>
     <string name="SettingsPrivacy_WalletRestore">Восстановить Блокчейн</string>
     <string name="SettingsPrivacy_WalletRestoreDescription">Выберите источник данных для восстановления кошелька с транзакциями.</string>
@@ -516,7 +516,7 @@
     <string name="SettingsSecurity_EditPin">Изменить Код</string>
     <string name="SettingsSecurity_ManageKeys">Управление Кошельками</string>
     <string name="SettingsSecurity_AppRestartWarning">Это действие перезапустит Unstoppable Кошелек.</string>
-    <string name="SettingsSecurity_TorConnectionDescription">Полностью анонимизируйте интернет трафик этого приложения. Может замедлить работу</string>
+    <string name="SettingsSecurity_TorConnectionDescription">Fully anonymize your internet while using this app. Note, in some cases WalletConnect feature for DeFi apps may be very slow or not work at all.</string>
     <string name="SettingsSecurity_NotificationsDisabledWarning">Уведомления для Unstoppable Кошелька отключены. Для работы Tor необходимо включить их.</string>
     <string name="SettingsSecurity_SortingShuffle">Перемешать</string>
     <string name="SettingsSecurity_SortingShuffleDescription">Случайное Индексирование</string>
@@ -710,7 +710,7 @@
     <string name="CoinPage_InvestorData">Investor Data</string>
     <string name="CoinPage_FundsInvested">Средства Инвестированы</string>
     <string name="CoinPage_SecurityParams">Security Parameters</string>
-    <string name="CoinPage_SecurityParams_Security">Security</string>
+    <string name="CoinPage_SecurityParams_Privacy">Privacy</string>
     <string name="CoinPage_SecurityParams_Low">Low</string>
     <string name="CoinPage_SecurityParams_Medium">Medium</string>
     <string name="CoinPage_SecurityParams_High">High</string>
