@@ -397,16 +397,17 @@ class CoinViewFactory(
 
         items.add(
             CoinDataItem(
-                title = Translator.getString(R.string.CoinPage_SecurityParams_Security),
+                title = Translator.getString(R.string.CoinPage_SecurityParams_Privacy),
                 valueLabeled = Translator.getString(securityText),
                 valueLabeledBackground = securityBgColor,
                 icon = R.drawable.ic_info_20,
                 clickType = SecurityInfo(
-                    title = R.string.CoinPage_SecurityParams_Security,
+                    title = R.string.CoinPage_SecurityParams_Privacy,
                     items = listOf(
-                        SecurityInfo.Item(R.string.CoinPage_SecurityParams_High, R.color.remus, R.string.CoinPage_SecurityParams_Privacy_High),
+                        SecurityInfo.Item(R.string.CoinPage_SecurityParams_Low, R.color.lucian, R.string.CoinPage_SecurityParams_Privacy_Low),
                         SecurityInfo.Item(R.string.CoinPage_SecurityParams_Medium, R.color.issyk_blue, R.string.CoinPage_SecurityParams_Privacy_Medium),
-                        SecurityInfo.Item(R.string.CoinPage_SecurityParams_Low, R.color.lucian, R.string.CoinPage_SecurityParams_Privacy_Low)
+                        SecurityInfo.Item(R.string.CoinPage_SecurityParams_High, R.color.remus, R.string.CoinPage_SecurityParams_Privacy_High)
+
                     )
                 )
             )
