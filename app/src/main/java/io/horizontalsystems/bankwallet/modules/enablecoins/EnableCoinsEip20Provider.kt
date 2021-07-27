@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.enablecoins
 
-import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import io.horizontalsystems.bankwallet.core.IAppConfigProvider
@@ -56,7 +55,6 @@ class EnableCoinsEip20Provider(
         val gson = Gson()
 
         return networkManager.getEvmInfo(url, params)
-                .doOnError { Log.e("TAG", "getCoinsAsync: ", it) }
                 .map { jsonObject ->
                     if (jsonObject.get("status").asString == "1" && jsonObject.has("result")) {
                         val type = object : TypeToken<ArrayList<Transaction>>() {}.type

@@ -9,6 +9,7 @@ import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.*
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoAddressMapper
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItem
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItem.*
+import io.horizontalsystems.bankwallet.modules.transactions.TransactionWallet
 import java.lang.IllegalArgumentException
 import java.util.*
 
@@ -18,7 +19,7 @@ class TransactionViewItemFactory(
 ) {
 
     fun item(
-        wallet: Wallet,
+        wallet: TransactionWallet,
         record: TransactionRecord,
         lastBlockInfo: LastBlockInfo?,
         mainAmountCurrencyValue: CurrencyValue? = null
@@ -82,7 +83,7 @@ class TransactionViewItemFactory(
                 val lockState = record.lockState(lastBlockInfo?.timestamp)
 
                 TransactionType.Incoming(
-                    record.from,
+                    record.from?.let{ getNameOrAddress(it)},
                     getCoinString(record.value),
                     lockState,
                     record.conflictingHash
@@ -93,7 +94,7 @@ class TransactionViewItemFactory(
                 val lockState = record.lockState(lastBlockInfo?.timestamp)
 
                 TransactionType.Outgoing(
-                    record.to,
+                    record.to?.let{ getNameOrAddress(it)},
                     getCoinString(record.value),
                     lockState,
                     record.conflictingHash,

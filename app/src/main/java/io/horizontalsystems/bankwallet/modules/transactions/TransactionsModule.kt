@@ -5,6 +5,8 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.factories.TransactionViewItemFactory
+import io.horizontalsystems.bankwallet.entities.Account
+import io.horizontalsystems.bankwallet.entities.CoinSettings
 import io.horizontalsystems.bankwallet.entities.LastBlockInfo
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
@@ -18,7 +20,7 @@ import java.util.*
 typealias CoinCode = String
 
 data class TransactionViewItem(
-    val wallet: Wallet,
+    val wallet: TransactionWallet,
     val record: TransactionRecord,
     val type: TransactionType,
     val date: Date?,
@@ -114,9 +116,51 @@ sealed class TransactionStatus {
     object Failed : TransactionStatus()
 }
 
+data class TransactionWallet(
+    val coin: Coin?,
+    val source: TransactionSource
+)
+
+data class TransactionSource(
+    val blockchain: Blockchain,
+    val account: Account,
+    val coinSettings: CoinSettings
+) {
+
+    sealed class Blockchain {
+        object Bitcoin : Blockchain()
+        object Litecoin : Blockchain()
+        object BitcoinCash : Blockchain()
+        object Dash : Blockchain()
+        object Ethereum : Blockchain()
+        object Zcash : Blockchain()
+        object BinanceSmartChain : Blockchain()
+        class Bep2(val symbol: String) : Blockchain()
+
+//        override fun hashCode(): Int {
+//            return this.hashCode()
+//        }
+//
+//        override fun equals(other: Any?): Boolean {
+//            return when {
+//                other == Bitcoin && this == Bitcoin -> true
+//                other == Litecoin && this == Litecoin -> true
+//                other == BitcoinCash && this == BitcoinCash -> true
+//                other == Dash && this == Dash -> true
+//                other == Ethereum && this == Ethereum -> true
+//                other == Zcash && this == Zcash -> true
+//                other == BinanceSmartChain && this == BinanceSmartChain -> true
+//                other is Bep2 && this is Bep2 -> other.symbol == this.symbol
+//                else -> false
+//            }
+//        }
+    }
+
+}
+
 object TransactionsModule {
 
-    data class FetchData(val wallet: Wallet, val from: TransactionRecord?, val limit: Int)
+    data class FetchData(val wallet: TransactionWallet, val from: TransactionRecord?, val limit: Int)
 
     interface IView {
         fun showSyncing()
@@ -141,45 +185,42 @@ object TransactionsModule {
         fun initialFetch()
         fun clear()
         fun fetchRecords(fetchDataList: List<FetchData>, initial: Boolean)
-        fun setSelectedWallets(selectedWallets: List<Wallet>)
-        fun fetchLastBlockHeights()
+        fun fetchLastBlockHeights(transactionWallets: List<TransactionWallet>)
         fun fetchRate(coin: Coin, timestamp: Long)
+        fun observe(wallets: List<TransactionWallet>)
     }
 
     interface IInteractorDelegate {
-        fun onUpdateWalletsData(allWalletsData: List<Pair<Wallet, LastBlockInfo?>>)
-        fun onUpdateSelectedWallets(selectedWallets: List<Wallet>)
-        fun didFetchRecords(records: Map<Wallet, List<TransactionRecord>>, initial: Boolean)
-        fun onUpdateLastBlock(wallet: Wallet, lastBlockInfo: LastBlockInfo)
+        fun didFetchRecords(records: Map<TransactionWallet, List<TransactionRecord>>, initial: Boolean)
+        fun onUpdateLastBlock(wallet: TransactionWallet, lastBlockInfo: LastBlockInfo)
         fun onUpdateBaseCurrency()
         fun didFetchRate(rateValue: BigDecimal, coin: Coin, currency: Currency, timestamp: Long)
-        fun didUpdateRecords(records: List<TransactionRecord>, wallet: Wallet)
+        fun didUpdateRecords(records: List<TransactionRecord>, wallet: TransactionWallet)
         fun onConnectionRestore()
-        fun initialAdapterStates(states: Map<Wallet, AdapterState>)
-        fun onUpdateAdapterState(state: AdapterState, wallet: Wallet)
-    }
-
-    interface IRouter {
+        fun onUpdateAdapterStates(states: Map<TransactionWallet, AdapterState>)
+        fun onUpdateAdapterState(state: AdapterState, wallet: TransactionWallet)
+        fun onUpdateWallets(wallets: List<Wallet>)
+        fun onUpdateLastBlockInfos(lastBlockInfos: MutableList<Pair<TransactionWallet, LastBlockInfo?>>)
     }
 
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val viewAndRouter = TransactionsViewModel()
+            val view = TransactionsViewModel()
 
             val dataSource = TransactionRecordDataSource(PoolRepo(), TransactionItemDataSource(), 20, TransactionViewItemFactory(
                 TransactionInfoAddressMapper, App.numberFormatter
             ), TransactionMetadataDataSource())
             val interactor = TransactionsInteractor(App.walletManager, App.adapterManager, App.currencyManager, App.xRateManager, App.connectivityManager)
-            val presenter = TransactionsPresenter(interactor, viewAndRouter, dataSource)
+            val presenter = TransactionsPresenter(interactor, dataSource)
 
-            presenter.view = viewAndRouter
+            presenter.view = view
             interactor.delegate = presenter
-            viewAndRouter.delegate = presenter
+            view.delegate = presenter
 
             presenter.viewDidLoad()
 
-            return viewAndRouter as T
+            return view as T
         }
     }
 

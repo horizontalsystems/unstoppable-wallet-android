@@ -93,8 +93,9 @@ abstract class BitcoinBaseAdapter(
     override val balanceStateUpdatedFlowable: Flowable<Unit>
         get() = adapterStateUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
 
-    override val transactionRecordsFlowable: Flowable<List<TransactionRecord>>
-        get() = transactionRecordsSubject.toFlowable(BackpressureStrategy.BUFFER)
+    override fun getTransactionRecordsFlowable(coin: Coin?): Flowable<List<TransactionRecord>> {
+        return transactionRecordsSubject.toFlowable(BackpressureStrategy.BUFFER)
+    }
 
     override val debugInfo: String = ""
 
@@ -119,7 +120,7 @@ abstract class BitcoinBaseAdapter(
         kit.refresh()
     }
 
-    override fun getTransactions(from: TransactionRecord?, limit: Int): Single<List<TransactionRecord>> {
+    override fun getTransactionsAsync(from: TransactionRecord?, coin: Coin?, limit: Int): Single<List<TransactionRecord>> {
         return kit.transactions(from?.uid, limit).map { it.map { tx -> transactionRecord(tx) } }
     }
 

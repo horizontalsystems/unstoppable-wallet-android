@@ -1,14 +1,13 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
+import android.util.Log
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
 import io.horizontalsystems.bankwallet.entities.LastBlockInfo
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
-import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.core.ICurrencyManager
 import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import java.math.BigDecimal
@@ -31,13 +30,13 @@ class TransactionsInteractor(
     private var requestedTimestamps = hashMapOf<String, Long>()
 
     override fun initialFetch() {
-        onUpdateWallets()
+        delegate?.onUpdateWallets(walletManager.activeWallets)
 
         adapterManager.adaptersReadyObservable
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .subscribe {
-                    onUpdateWallets()
+                    delegate?.onUpdateWallets(walletManager.activeWallets)
                 }
                 .let { disposables.add(it) }
 
@@ -69,14 +68,12 @@ class TransactionsInteractor(
             return
         }
 
-        val flowables: List<Single<Pair<Wallet, List<TransactionRecord>>>> = fetchDataList.map { fetchData ->
-            val adapter = walletManager.activeWallets.find { it == fetchData.wallet }?.let {
-                adapterManager.getTransactionsAdapterForWallet(it)
-            }
+        val flowables: List<Single<Pair<TransactionWallet, List<TransactionRecord>>>> = fetchDataList.map { fetchData ->
+            val adapter = adapterManager.getTransactionsAdapterForWallet(fetchData.wallet)
 
             when (adapter) {
                 null -> Single.just(listOf())
-                else -> adapter.getTransactions(fetchData.from, fetchData.limit)
+                else -> adapter.getTransactionsAsync(fetchData.from, fetchData.wallet.coin, fetchData.limit)
             }.map {
                 Pair(fetchData.wallet, it)
             }
@@ -84,32 +81,34 @@ class TransactionsInteractor(
 
         Single.zip(flowables) {
             it.map {
-                it as Pair<Wallet, List<TransactionRecord>>
+                it as Pair<TransactionWallet, List<TransactionRecord>>
                 it.first to it.second
             }.toMap()
         }
                 .subscribeOn(Schedulers.computation())
                 .observeOn(Schedulers.computation())
-                .subscribe { records, _ ->
+                .subscribe ({ records ->
                     delegate?.didFetchRecords(records, initial)
-                }
+                },{
+                    Log.e("TransactionsInteractor", "fetchRecords error: ", it)
+                })
                 .let { disposables.add(it) }
     }
 
-    override fun setSelectedWallets(selectedWallets: List<Wallet>) {
-        delegate?.onUpdateSelectedWallets(if (selectedWallets.isEmpty()) walletManager.activeWallets else selectedWallets)
-    }
-
-    override fun fetchLastBlockHeights() {
+    override fun fetchLastBlockHeights(wallets: List<TransactionWallet>) {
         lastBlockHeightDisposables.clear()
 
-        walletManager.activeWallets.forEach { wallet ->
+        wallets.forEach { wallet ->
             adapterManager.getTransactionsAdapterForWallet(wallet)?.let { adapter ->
                 adapter.lastBlockUpdatedFlowable
                         .throttleLast(3, TimeUnit.SECONDS)
                         .subscribeOn(Schedulers.computation())
                         .observeOn(Schedulers.computation())
-                        .subscribe { onUpdateLastBlock(wallet, adapter) }
+                        .subscribe {
+                            adapter.lastBlockInfo?.let { lastBlockInfo ->
+                                delegate?.onUpdateLastBlock(wallet, lastBlockInfo)
+                            }
+                        }
                         .let { lastBlockHeightDisposables.add(it) }
             }
         }
@@ -138,53 +137,43 @@ class TransactionsInteractor(
                 .let { ratesDisposables.add(it) }
     }
 
+    override fun observe(wallets: List<TransactionWallet>) {
+        transactionUpdatesDisposables.clear()
+        adapterStateUpdatesDisposables.clear()
+
+        val lastBlockInfos = mutableListOf<Pair<TransactionWallet, LastBlockInfo?>>()
+        val states = mutableMapOf<TransactionWallet, AdapterState>()
+
+        wallets.forEach { wallet ->
+            adapterManager.getTransactionsAdapterForWallet(wallet)?.let { adapter ->
+                lastBlockInfos.add(Pair(wallet, adapter.lastBlockInfo))
+                states[wallet] = adapter.transactionsState
+
+                adapter.getTransactionRecordsFlowable(wallet.coin)
+                    .subscribeIO { records ->
+                        delegate?.didUpdateRecords(records, wallet)
+                    }
+                    .let { transactionUpdatesDisposables.add(it) }
+
+
+                adapter.transactionsStateUpdatedFlowable
+                    .subscribeIO {
+                        delegate?.onUpdateAdapterState(adapter.transactionsState, wallet)
+                    }
+                    .let { adapterStateUpdatesDisposables.add(it) }
+            }
+        }
+
+        delegate?.onUpdateLastBlockInfos(lastBlockInfos)
+        delegate?.onUpdateAdapterStates(states)
+    }
+
     override fun clear() {
         disposables.clear()
         lastBlockHeightDisposables.clear()
         ratesDisposables.clear()
         transactionUpdatesDisposables.clear()
         adapterStateUpdatesDisposables.clear()
-    }
-
-    private fun onUpdateLastBlock(wallet: Wallet, adapter: ITransactionsAdapter) {
-        adapter.lastBlockInfo?.let { lastBlockInfo ->
-            delegate?.onUpdateLastBlock(wallet, lastBlockInfo)
-        }
-    }
-
-    private fun onUpdateWallets() {
-        transactionUpdatesDisposables.clear()
-        adapterStateUpdatesDisposables.clear()
-
-        val walletsData = mutableListOf<Pair<Wallet, LastBlockInfo?>>()
-        val adapterStates = mutableMapOf<Wallet, AdapterState>()
-
-        walletManager.activeWallets.forEach { wallet ->
-            adapterManager.getTransactionsAdapterForWallet(wallet)?.let { adapter ->
-                walletsData.add(Pair(wallet, adapter.lastBlockInfo))
-                adapterStates[wallet] = adapter.transactionsState
-
-                adapter.transactionRecordsFlowable
-                        .subscribeOn(Schedulers.computation())
-                        .observeOn(Schedulers.computation())
-                        .subscribe {
-                            delegate?.didUpdateRecords(it, wallet)
-                        }
-                        .let { transactionUpdatesDisposables.add(it) }
-
-                adapter.transactionsStateUpdatedFlowable
-                        .subscribeOn(Schedulers.computation())
-                        .observeOn(Schedulers.computation())
-                        .subscribe {
-                            delegate?.onUpdateAdapterState(adapter.transactionsState, wallet)
-                        }
-                        .let { adapterStateUpdatesDisposables.add(it) }
-            }
-        }
-
-        delegate?.onUpdateWalletsData(walletsData)
-        delegate?.initialAdapterStates(adapterStates)
-
     }
 
 }

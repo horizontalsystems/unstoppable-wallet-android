@@ -1,9 +1,7 @@
 package io.horizontalsystems.bankwallet.core.adapters
 
 import io.horizontalsystems.bankwallet.core.*
-import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.ethereumkit.core.EthereumKit
-import io.horizontalsystems.ethereumkit.core.hexStringToByteArray
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.reactivex.Flowable
@@ -58,23 +56,6 @@ class EvmAdapter(kit: EthereumKit, coinManager: ICoinManager) : BaseEvmAdapter(k
 
     override val balanceUpdatedFlowable: Flowable<Unit>
         get() = evmKit.accountStateFlowable.map { }
-
-    // ITransactionsAdapter
-
-    override val transactionsState: AdapterState
-        get() = convertToAdapterState(evmKit.transactionsSyncState)
-
-    override val transactionsStateUpdatedFlowable: Flowable<Unit>
-        get() = evmKit.transactionsSyncStateFlowable.map {}
-
-    override fun getTransactions(from: TransactionRecord?, limit: Int): Single<List<TransactionRecord>> {
-        return evmKit.etherTransactions(from?.transactionHash?.hexStringToByteArray(), limit).map {
-            it.map { tx -> transactionConverter.transactionRecord(tx) }
-        }
-    }
-
-    override val transactionRecordsFlowable: Flowable<List<TransactionRecord>>
-        get() = evmKit.etherTransactionsFlowable.map { it.map { tx -> transactionConverter.transactionRecord(tx) } }
 
     private fun convertToAdapterState(syncState: EthereumKit.SyncState): AdapterState = when (syncState) {
         is EthereumKit.SyncState.Synced -> AdapterState.Synced

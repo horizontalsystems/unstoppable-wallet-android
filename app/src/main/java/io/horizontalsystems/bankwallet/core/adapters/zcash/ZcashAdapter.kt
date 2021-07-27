@@ -21,6 +21,7 @@ import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.BitcoinIncomingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.BitcoinOutgoingTransactionRecord
+import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.hdwalletkit.Mnemonic
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
@@ -163,7 +164,7 @@ class ZcashAdapter(
     override val lastBlockUpdatedFlowable: Flowable<Unit>
         get() = lastBlockUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
 
-    override fun getTransactions(from: TransactionRecord?, limit: Int): Single<List<TransactionRecord>> {
+    override fun getTransactionsAsync(from: TransactionRecord?, coin: Coin?, limit: Int): Single<List<TransactionRecord>> {
         val fromParams = from?.let {
             val transactionHash = it.transactionHash.fromHex().reversedArray()
             Triple(transactionHash, it.timestamp, it.transactionIndex)
@@ -177,8 +178,11 @@ class ZcashAdapter(
                 }
     }
 
-    override val transactionRecordsFlowable: Flowable<List<TransactionRecord>>
-        get() = transactionsProvider.newTransactionsFlowable.map { transactions -> transactions.map { getTransactionRecord(it) } }
+    override fun getTransactionRecordsFlowable(coin: Coin?): Flowable<List<TransactionRecord>> {
+        return transactionsProvider.newTransactionsFlowable.map { transactions ->
+            transactions.map { getTransactionRecord(it) }
+        }
+    }
     //endregion
 
     //region ISendZcashAdapter
