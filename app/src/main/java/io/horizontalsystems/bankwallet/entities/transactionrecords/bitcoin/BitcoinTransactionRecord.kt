@@ -12,7 +12,7 @@ abstract class BitcoinTransactionRecord(
     transactionIndex: Int,
     blockHeight: Int?,
     confirmationsThreshold: Int?,
-    date: Date,
+    timestamp: Long,
     val fee: CoinValue?,
     failed: Boolean,
     val lockInfo: TransactionLockInfo?,
@@ -24,7 +24,7 @@ abstract class BitcoinTransactionRecord(
     transactionIndex = transactionIndex,
     blockHeight = blockHeight,
     confirmationsThreshold = confirmationsThreshold,
-    timestamp = date.time,
+    timestamp = timestamp,
     failed = failed
 ) {
 

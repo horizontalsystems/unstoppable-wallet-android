@@ -14,7 +14,10 @@ import cash.z.ecc.android.sdk.type.WalletBalance
 import cash.z.ecc.android.sdk.type.ZcashNetwork
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.managers.RestoreSettings
-import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.bankwallet.entities.AccountOrigin
+import io.horizontalsystems.bankwallet.entities.AccountType
+import io.horizontalsystems.bankwallet.entities.LastBlockInfo
+import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.BitcoinIncomingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.BitcoinOutgoingTransactionRecord
@@ -27,7 +30,7 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.runBlocking
 import java.lang.Integer.max
 import java.math.BigDecimal
-import java.util.Date
+import java.util.*
 
 class ZcashAdapter(
         context: Context,
@@ -311,7 +314,7 @@ class ZcashAdapter(
                     transactionIndex = transaction.transactionIndex,
                     blockHeight = transaction.minedHeight,
                     confirmationsThreshold = confirmationsThreshold,
-                    date = Date(transaction.timestamp),
+                    timestamp = transaction.timestamp,
                     fee = defaultFee(transaction.minedHeight.toLong()).convertZatoshiToZec(),
                     failed = transaction.failed,
                     lockInfo = null,
@@ -328,7 +331,7 @@ class ZcashAdapter(
                     transactionIndex = transaction.transactionIndex,
                     blockHeight = transaction.minedHeight,
                     confirmationsThreshold = confirmationsThreshold,
-                    date = Date(transaction.timestamp),
+                    timestamp = transaction.timestamp,
                     fee = defaultFee(transaction.minedHeight.toLong()).convertZatoshiToZec(),
                     failed = transaction.failed,
                     lockInfo = null,
