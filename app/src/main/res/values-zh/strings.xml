@@ -444,10 +444,10 @@
     <string name="StatusInfo_Processing">Processing</string>
     <string name="StatusInfo_Confirmed">Completed</string>
     <string name="StatusInfo_Failed">失败</string>
-    <string name="StatusInfo_PendingDescription">Transaction has not been confirmed on the blockchain yet. Transaction may remain from a few minutes to hours depending on the transaction fee amount. Transactions sent with a low fee usually get processed within a few hours or even days, and can also be rejected entirely.</string>
-    <string name="StatusInfo_ProcessingDescription">Transaction has been already included in the blockchain but has not reached permanent finality yet. At this point, it\'s safe to consider transaction completed for smaller payments. For larger payments better to wait until status changes to completed.</string>
+    <string name="StatusInfo_PendingDescription">Transaction has not been confirmed on the blockchain yet. Transactions sent with recommended or higher fee setting are generally processed within 10 minutes. Transactions sent with a low fee may remain pending for a few hours or even days, and can even be rejected entirely.</string>
+    <string name="StatusInfo_ProcessingDescription">Transaction has been already included in the blockchain but has not reached permanent finality. At this point, it\'s safe to consider transaction completed for smaller payments. For larger payments it\'s recommended to wait until transacction status changes to completed.</string>
     <string name="StatusInfo_ConfirmedDescription">Transaction is completed and considered permanent and irreversible.</string>
-    <string name="StatusInfo_FailedDescription">Transaction did not get processed as intended and no value transfer took place. Failed transactions are written to the blockchain and consume transaction fees.</string>
+    <string name="StatusInfo_FailedDescription">Transaction did not get processed and no value transfer took place. Transactions with fail status are still written to the blockchain and consume transaction fees. Unstoppable app is unable to show the fail reason for such transactions but users are able to look it up themselves on a public block exlorer i.e. etherscan.io.</string>
     <!-- Info -->
     <string name="Info_LockTime_Title">时间锁定</string>
     <string name="Info_LockTime_Description">汇款人通过将在%s失效的消费锁定汇出这些资金。\n\n无需担心，收到的比特币已经属于您，但在锁定期限结束前，您无法在比特币网络上消费它们。</string>
@@ -482,7 +482,7 @@
     <string name="SettingsAboutApp_Title">关于应用</string>
     <string name="SettingsAboutApp_Site">网站</string>
     <string name="SettingsAboutApp_WhatsNew">更新说明</string>
-    <string name="SettingsPrivacy_Info">虽然此APP不会将您的个人数据提供给任何第三方，但您的某些个人数据（例如IP地址）在与区块链通信时可能会泄漏。单击右上角的“信息”按钮以获取更多详细信息。</string>
+    <string name="SettingsPrivacy_Info">This app doesn\'t collect any data about you.</string>
     <string name="SettingsPrivacy_ConnectionSettingsTitle">互联网</string>
     <string name="SettingsPrivacy_WalletRestore">区块链恢复</string>
     <string name="SettingsPrivacy_WalletRestoreDescription">通过交易为恢复钱包选择数据源。</string>
@@ -513,7 +513,7 @@
     <string name="SettingsSecurity_EditPin">编辑密码</string>
     <string name="SettingsSecurity_ManageKeys">管理钱包</string>
     <string name="SettingsSecurity_AppRestartWarning">此操作将重新启动Unstoppable钱包。</string>
-    <string name="SettingsSecurity_TorConnectionDescription">Tor可以保护您钱包上的浏览活动。在设置中启用权限以使用tor浏览器。</string>
+    <string name="SettingsSecurity_TorConnectionDescription">Fully anonymize your internet while using this app. Note, in some cases WalletConnect feature for DeFi apps may be very slow or not work at all.</string>
     <string name="SettingsSecurity_NotificationsDisabledWarning">已禁用Unstoppable钱包应用通知。您必须开启通知，Tor才能运作。</string>
     <string name="SettingsSecurity_SortingShuffle">随机排序</string>
     <string name="SettingsSecurity_SortingShuffleDescription">随机索引</string>
@@ -707,7 +707,7 @@
     <string name="CoinPage_InvestorData">Investor Data</string>
     <string name="CoinPage_FundsInvested">Funds Invested</string>
     <string name="CoinPage_SecurityParams">Security Parameters</string>
-    <string name="CoinPage_SecurityParams_Security">Security</string>
+    <string name="CoinPage_SecurityParams_Privacy">Privacy</string>
     <string name="CoinPage_SecurityParams_Low">Low</string>
     <string name="CoinPage_SecurityParams_Medium">Medium</string>
     <string name="CoinPage_SecurityParams_High">High</string>
