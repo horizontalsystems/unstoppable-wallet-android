@@ -72,7 +72,7 @@ class UniswapViewModel(
         val serviceState = service.state
         if (serviceState is UniswapService.State.Ready) {
             val trade = (tradeService.state as? UniswapTradeService.State.Ready)?.trade
-            val swapInfo = SendEvmData.SwapInfo(
+            val swapInfo = SendEvmData.UniswapInfo(
                 estimatedIn = tradeService.amountFrom ?: BigDecimal.ZERO,
                 estimatedOut = tradeService.amountTo ?: BigDecimal.ZERO,
                 slippage = formatter.slippage(tradeService.tradeOptions.allowedSlippage),
@@ -88,7 +88,7 @@ class UniswapViewModel(
             openConfirmationLiveEvent.postValue(
                 SendEvmData(
                     serviceState.transactionData,
-                    SendEvmData.AdditionalInfo.Swap(swapInfo)
+                    SendEvmData.AdditionalInfo.Uniswap(swapInfo)
                 )
             )
         }

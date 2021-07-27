@@ -29,7 +29,7 @@ data class SendEvmData(
         class Send(val info: SendInfo) : AdditionalInfo()
 
         @Parcelize
-        class Swap(val info: SwapInfo) : AdditionalInfo()
+        class Uniswap(val info: UniswapInfo) : AdditionalInfo()
 
         @Parcelize
         class OneInchSwap(val info: OneInchSwapInfo): AdditionalInfo()
@@ -37,8 +37,8 @@ data class SendEvmData(
         val sendInfo: SendInfo?
             get() = (this as? Send)?.info
 
-        val swapInfo: SwapInfo?
-            get() = (this as? Swap)?.info
+        val swapInfo: UniswapInfo?
+            get() = (this as? Uniswap)?.info
 
         val oneInchSwapInfo: OneInchSwapInfo?
             get() = (this as? OneInchSwap)?.info
@@ -50,7 +50,7 @@ data class SendEvmData(
     ) : Parcelable
 
     @Parcelize
-    data class SwapInfo(
+    data class UniswapInfo(
             val estimatedOut: BigDecimal,
             val estimatedIn: BigDecimal,
             val slippage: String? = null,
