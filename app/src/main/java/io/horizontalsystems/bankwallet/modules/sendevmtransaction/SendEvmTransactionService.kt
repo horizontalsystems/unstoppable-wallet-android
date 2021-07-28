@@ -14,6 +14,9 @@ import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.decorations.ContractMethodDecoration
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.TransactionData
+import io.horizontalsystems.oneinchkit.decorations.OneInchMethodDecoration
+import io.horizontalsystems.oneinchkit.decorations.OneInchSwapMethodDecoration
+import io.horizontalsystems.oneinchkit.decorations.OneInchUnoswapMethodDecoration
 import io.horizontalsystems.uniswapkit.decorations.SwapMethodDecoration
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
@@ -132,36 +135,85 @@ class SendEvmTransactionService(
     }
 
     private fun handlePostSendActions() {
-        (txDataState.dataOrNull?.decoration as? SwapMethodDecoration)?.let { swapDecoration ->
-            activateSwapCoinOut(swapDecoration.tokenOut)
+        (txDataState.dataOrNull?.decoration as? SwapMethodDecoration)?.let { swapMethodDecoration ->
+            activateUniswapCoins(swapMethodDecoration)
+        }
+        (txDataState.dataOrNull?.decoration as? OneInchMethodDecoration)?.let { oneInchMethodDecoration ->
+            activateOneInchSwapCoins(oneInchMethodDecoration, txDataState.dataOrNull?.additionalInfo)
         }
     }
 
-    private fun activateSwapCoinOut(tokenOut: SwapMethodDecoration.Token) {
-        val coinType = when (tokenOut) {
-            SwapMethodDecoration.Token.EvmCoin -> {
-                when (evmKit.networkType) {
-                    EthereumKit.NetworkType.EthMainNet,
-                    EthereumKit.NetworkType.EthRopsten,
-                    EthereumKit.NetworkType.EthKovan,
-                    EthereumKit.NetworkType.EthGoerli,
-                    EthereumKit.NetworkType.EthRinkeby -> CoinType.Ethereum
-                    EthereumKit.NetworkType.BscMainNet -> CoinType.BinanceSmartChain
-                }
+    private fun activateUniswapCoins(swapMethodDecoration: SwapMethodDecoration) {
+        val fromCoinType = mapUniswapTokenToCoinType(swapMethodDecoration.tokenIn)
+        val toCoinType = mapUniswapTokenToCoinType(swapMethodDecoration.tokenOut)
+
+        activateCoinManager.activate(fromCoinType)
+        activateCoinManager.activate(toCoinType)
+    }
+
+    private fun activateOneInchSwapCoins(decoration: OneInchMethodDecoration, additionalInfo: SendEvmData.AdditionalInfo?) {
+        val fromCoinType: CoinType? = when(decoration) {
+            is OneInchSwapMethodDecoration -> {
+                mapOneInchTokenToCoinType(decoration.fromToken)
             }
-            is SwapMethodDecoration.Token.Eip20Coin -> {
-                when (evmKit.networkType) {
-                    EthereumKit.NetworkType.EthMainNet,
-                    EthereumKit.NetworkType.EthRopsten,
-                    EthereumKit.NetworkType.EthKovan,
-                    EthereumKit.NetworkType.EthGoerli,
-                    EthereumKit.NetworkType.EthRinkeby -> CoinType.Erc20(tokenOut.address.hex)
-                    EthereumKit.NetworkType.BscMainNet -> CoinType.Bep20(tokenOut.address.hex)
-                }
+            is OneInchUnoswapMethodDecoration -> {
+                mapOneInchTokenToCoinType(decoration.fromToken)
             }
+            else -> null
         }
 
-        activateCoinManager.activate(coinType)
+        val toCoinType: CoinType? = when (decoration) {
+            is OneInchSwapMethodDecoration -> {
+                mapOneInchTokenToCoinType(decoration.toToken)
+            }
+            is OneInchUnoswapMethodDecoration -> {
+                val coinType = decoration.toToken?.let {
+                    mapOneInchTokenToCoinType(it)
+                }
+                coinType ?: additionalInfo?.oneInchSwapInfo?.coinTo?.type
+            }
+            else -> null
+        }
+
+        fromCoinType?.let { activateCoinManager.activate(it) }
+        toCoinType?.let { activateCoinManager.activate(it) }
+    }
+
+    private fun mapOneInchTokenToCoinType(token: OneInchMethodDecoration.Token) = when (token) {
+        OneInchMethodDecoration.Token.EvmCoin -> {
+            getEvmCoinType()
+        }
+        is OneInchMethodDecoration.Token.Eip20 -> {
+            getEip20CoinType(token.address.hex)
+        }
+    }
+
+    private fun mapUniswapTokenToCoinType(token: SwapMethodDecoration.Token) = when (token) {
+        SwapMethodDecoration.Token.EvmCoin -> {
+            getEvmCoinType()
+        }
+        is SwapMethodDecoration.Token.Eip20Coin-> {
+            getEip20CoinType(token.address.hex)
+        }
+    }
+
+    private fun getEip20CoinType(contractAddress: String) =
+        when (evmKit.networkType) {
+            EthereumKit.NetworkType.EthMainNet,
+            EthereumKit.NetworkType.EthRopsten,
+            EthereumKit.NetworkType.EthKovan,
+            EthereumKit.NetworkType.EthGoerli,
+            EthereumKit.NetworkType.EthRinkeby -> CoinType.Erc20(contractAddress)
+            EthereumKit.NetworkType.BscMainNet -> CoinType.Bep20(contractAddress)
+        }
+
+    private fun getEvmCoinType() = when (evmKit.networkType) {
+        EthereumKit.NetworkType.EthMainNet,
+        EthereumKit.NetworkType.EthRopsten,
+        EthereumKit.NetworkType.EthKovan,
+        EthereumKit.NetworkType.EthGoerli,
+        EthereumKit.NetworkType.EthRinkeby -> CoinType.Ethereum
+        EthereumKit.NetworkType.BscMainNet -> CoinType.BinanceSmartChain
     }
 
     sealed class State {
