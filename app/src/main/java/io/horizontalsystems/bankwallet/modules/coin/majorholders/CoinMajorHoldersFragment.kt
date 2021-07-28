@@ -5,9 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.navGraphViewModels
+import androidx.recyclerview.widget.ConcatAdapter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.coin.CoinViewModel
+import io.horizontalsystems.bankwallet.modules.coin.MajorHolderItem
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
@@ -29,9 +31,12 @@ class CoinMajorHoldersFragment : BaseFragment(), CoinMajorHoldersAdapter.Listene
             findNavController().popBackStack()
         }
 
-        coinViewModel.coinMajorHolders.observe(viewLifecycleOwner, {
-            val adapter = CoinMajorHoldersAdapter(it, this)
-            recyclerView.adapter = adapter
+        coinViewModel.coinMajorHolders.observe(viewLifecycleOwner, { holders ->
+            val adapterChart = CoinMajorHoldersPieAdapter(holders.mapNotNull {
+                if (it is MajorHolderItem.Item) it else null
+            })
+            val adapterItems = CoinMajorHoldersAdapter(holders, this)
+            recyclerView.adapter = ConcatAdapter(adapterChart, adapterItems)
         })
     }
 

@@ -118,7 +118,13 @@ sealed class InvestorItem {
 
 sealed class MajorHolderItem {
     object Header : MajorHolderItem()
-    class Item(val address: String, val share: String, val position: ListPosition) : MajorHolderItem()
+
+    class Item(
+        val address: String,
+        val share: BigDecimal,
+        val sharePercent: String,
+        val position: ListPosition
+    ) : MajorHolderItem()
 
     object Description : MajorHolderItem()
 }
@@ -530,6 +536,7 @@ class CoinViewFactory(
                 list.add(
                     MajorHolderItem.Item(
                         holder.address,
+                        holder.share,
                         shareFormatted,
                         ListPosition.Companion.getListPosition(topTokenHolders.size, index)
                     )

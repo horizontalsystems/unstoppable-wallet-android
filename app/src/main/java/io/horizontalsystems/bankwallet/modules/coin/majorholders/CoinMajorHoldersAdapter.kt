@@ -10,11 +10,11 @@ import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_coin_major_holders_item.*
 
 class CoinMajorHoldersAdapter(
-        private val items: List<MajorHolderItem>,
-        private val listener: Listener
-        ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    private val items: List<MajorHolderItem>,
+    private val listener: Listener
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    interface Listener{
+    interface Listener {
         fun onItemClick(address: String)
     }
 
@@ -40,8 +40,8 @@ class CoinMajorHoldersAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val item = items[position]
-        when(holder){
-            is ViewHolderItem -> holder.bind(item as MajorHolderItem.Item){
+        when (holder) {
+            is ViewHolderItem -> holder.bind(item as MajorHolderItem.Item) {
                 listener.onItemClick(item.address)
             }
         }
@@ -54,7 +54,7 @@ class CoinMajorHoldersAdapter(
     class ViewHolderItem(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
         fun bind(item: MajorHolderItem.Item, onClick: () -> Unit) {
             txtHolderAddress.text = item.address
-            txtHolderRate.text = item.share
+            txtHolderRate.text = item.sharePercent
             viewBackground.setBackgroundResource(item.position.getBackground())
             containerView.setOnClickListener {
                 onClick.invoke()
