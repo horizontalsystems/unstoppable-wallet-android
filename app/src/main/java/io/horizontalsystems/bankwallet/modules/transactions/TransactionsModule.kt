@@ -135,25 +135,17 @@ data class TransactionSource(
         object Ethereum : Blockchain()
         object Zcash : Blockchain()
         object BinanceSmartChain : Blockchain()
-        class Bep2(val symbol: String) : Blockchain()
-
-//        override fun hashCode(): Int {
-//            return this.hashCode()
-//        }
-//
-//        override fun equals(other: Any?): Boolean {
-//            return when {
-//                other == Bitcoin && this == Bitcoin -> true
-//                other == Litecoin && this == Litecoin -> true
-//                other == BitcoinCash && this == BitcoinCash -> true
-//                other == Dash && this == Dash -> true
-//                other == Ethereum && this == Ethereum -> true
-//                other == Zcash && this == Zcash -> true
-//                other == BinanceSmartChain && this == BinanceSmartChain -> true
-//                other is Bep2 && this is Bep2 -> other.symbol == this.symbol
-//                else -> false
-//            }
-//        }
+        class Bep2(val symbol: String) : Blockchain(){
+            override fun hashCode(): Int {
+                return this.symbol.hashCode()
+            }
+            override fun equals(other: Any?): Boolean {
+                return when(other){
+                    is Bep2 -> this.symbol == other.symbol
+                    else -> false
+                }
+            }
+        }
     }
 
 }
