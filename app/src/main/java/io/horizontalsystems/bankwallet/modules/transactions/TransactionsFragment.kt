@@ -28,7 +28,6 @@ import kotlinx.android.synthetic.main.fragment_transactions.*
 import kotlinx.android.synthetic.main.view_holder_filter.*
 import kotlinx.android.synthetic.main.view_holder_transaction.*
 import kotlinx.android.synthetic.main.view_holder_transaction.iconProgress
-import java.util.*
 
 class TransactionsFragment : Fragment(), TransactionsAdapter.Listener, FilterAdapter.Listener {
 
@@ -225,7 +224,7 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
         var showSentToSelf = false
 
         when (transactionRecord.type) {
-            is TransactionViewItem.TransactionType.Incoming -> {
+            is TransactionType.Incoming -> {
                 image = R.drawable.ic_incoming_20
                 topText = getString(R.string.Transactions_Receive)
                 bottomText = transactionRecord.type.from?.let {
@@ -246,7 +245,7 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
                 secondaryValueTextColor = R.color.grey
 
             }
-            is TransactionViewItem.TransactionType.Outgoing -> {
+            is TransactionType.Outgoing -> {
                 image = R.drawable.ic_outgoing_20
                 topText = getString(R.string.Transactions_Send)
                 bottomText = transactionRecord.type.to?.let {
@@ -267,7 +266,7 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
                 secondaryValueText = transactionRecord.type.amount
                 secondaryValueTextColor = R.color.grey
             }
-            is TransactionViewItem.TransactionType.Approve -> {
+            is TransactionType.Approve -> {
                 image = R.drawable.ic_tx_checkmark_20
                 topText = getString(R.string.Transactions_Approve)
                 bottomText =
@@ -282,7 +281,7 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
                     if (transactionRecord.type.isMaxAmount) getString(R.string.TransactionInfo_Unlimited) else transactionRecord.type.amount
                 secondaryValueTextColor = R.color.grey
             }
-            is TransactionViewItem.TransactionType.Swap -> {
+            is TransactionType.Swap -> {
                 image = R.drawable.ic_tx_swap_20
                 topText = getString(R.string.Transactions_Swap)
                 bottomText = getString(
@@ -297,7 +296,7 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
                 secondaryValueTextColor =
                     if (transactionRecord.type.foreignRecipient) R.color.grey else R.color.remus
             }
-            is TransactionViewItem.TransactionType.ContractCall -> {
+            is TransactionType.ContractCall -> {
                 image = R.drawable.ic_tx_unordered
                 topText = getString(R.string.Transactions_ContractCall)
                 bottomText = getString(
@@ -305,7 +304,7 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
                     truncated(transactionRecord.type.contractAddress)
                 )
             }
-            is TransactionViewItem.TransactionType.ContractCreation -> {
+            is TransactionType.ContractCreation -> {
                 image = R.drawable.ic_tx_unordered
                 topText = getString(R.string.Transactions_ContractCreation)
                 bottomText = "---"

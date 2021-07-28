@@ -1,27 +1,32 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
-import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.TransactionLockState
 
 sealed class TransactionType {
     class Incoming(
         val from: String?,
-        val coinValue: CoinValue,
+        val amount: String,
         val lockState: TransactionLockState?,
         val conflictingTxHash: String?
     ) : TransactionType()
 
     class Outgoing(
         val to: String?,
-        val coinValue: CoinValue,
+        val amount: String,
         val lockState: TransactionLockState?,
         val conflictingTxHash: String?,
         val sentToSelf: Boolean
     ) : TransactionType()
 
-    class Approve(val spender: String, val coinValue: CoinValue) : TransactionType()
-    class Swap(val exchangeAddress: String, val valueIn: CoinValue, val valueOut: CoinValue?) :
+    class Approve(val spender: String, val amount: String, val isMaxAmount: Boolean) :
         TransactionType()
+
+    class Swap(
+        val exchangeAddress: String,
+        val amountIn: String,
+        val amountOut: String?,
+        val foreignRecipient: Boolean
+    ) : TransactionType()
 
     class ContractCall(val contractAddress: String, val method: String?) : TransactionType()
     object ContractCreation : TransactionType()
@@ -42,3 +47,4 @@ sealed class TransactionType {
         return javaClass.hashCode()
     }
 }
+
