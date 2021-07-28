@@ -18,6 +18,7 @@ class TransactionsPresenter(
     var view: TransactionsModule.IView? = null
     var itemDetails: TransactionViewItem? = null
     var wallets = emptyList<Wallet>()
+    var selectedFilter : Wallet? = null
 
     val allTransactionWallets: List<TransactionWallet>
         get() {
@@ -51,12 +52,15 @@ class TransactionsPresenter(
     }
 
     override fun onFilterSelect(wallet: Wallet?) {
+        selectedFilter = wallet
+
         val selectedWallets: List<TransactionWallet> = when (wallet) {
             null -> allTransactionWallets
             else -> listOf(transactionWallet(wallet))
         }
         dataSource.setWallets(selectedWallets)
         loadNext(true)
+        setFilters()
     }
 
     override fun onClear() {
@@ -136,12 +140,7 @@ class TransactionsPresenter(
 
     override fun onUpdateWallets(wallets: List<Wallet>) {
         this.wallets = wallets.sortedBy { it.coin.code }
-        val filters = when {
-            wallets.size < 2 -> listOf()
-            else -> listOf(null).plus(this.wallets)
-        }
-
-        view?.showFilters(filters)
+        setFilters()
 
         val transactionWallets = allTransactionWallets
         dataSource.handleUpdatedWallets(transactionWallets)
@@ -153,6 +152,15 @@ class TransactionsPresenter(
     override fun onUpdateLastBlockInfos(lastBlockInfos: MutableList<Pair<TransactionWallet, LastBlockInfo?>>) {
         dataSource.handleUpdatedLastBlockInfos(lastBlockInfos)
         loadNext(true)
+    }
+
+    private fun setFilters() {
+        val filters = when {
+            wallets.size < 2 -> listOf()
+            else -> listOf(null).plus(wallets)
+        }
+
+        view?.showFilters(filters, selectedFilter)
     }
 
     private fun syncState() {

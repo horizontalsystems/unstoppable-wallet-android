@@ -157,7 +157,7 @@ object TransactionsModule {
     interface IView {
         fun showSyncing()
         fun hideSyncing()
-        fun showFilters(filters: List<Wallet?>)
+        fun showFilters(filters: List<Wallet?>, selectedFilter: Wallet?)
         fun showTransactions(items: List<TransactionViewItem>)
         fun showNoTransactions()
         fun reloadTransactions()

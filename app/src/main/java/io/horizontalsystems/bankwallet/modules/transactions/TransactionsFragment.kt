@@ -82,8 +82,8 @@ class TransactionsFragment : Fragment(), TransactionsAdapter.Listener, FilterAda
         val transactionSectionHeader = TransactionSectionHeader()
         recyclerTransactions.addItemDecoration(transactionSectionHeader.itemDecoration)
 
-        viewModel.filterItems.observe(viewLifecycleOwner, Observer { filters ->
-            filterAdapter.setFilters(filters)
+        viewModel.filterItems.observe(viewLifecycleOwner, Observer { (filters, selected) ->
+            filterAdapter.setFilters(filters, selected)
         })
 
         viewModel.items.observe(viewLifecycleOwner, Observer {
