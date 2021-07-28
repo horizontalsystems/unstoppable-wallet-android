@@ -35,7 +35,7 @@ class TransactionsPresenter(
                     is Blockchain.Bep2 -> mergedWallets.add(wallet)
                     Blockchain.Ethereum,
                     Blockchain.BinanceSmartChain -> {
-                        if (mergedWallets.firstOrNull { it.source == wallet.source } == null) {
+                        if (mergedWallets.none { it.source == wallet.source }) {
                             mergedWallets.add(TransactionWallet(null, wallet.source))
                         }
                     }
