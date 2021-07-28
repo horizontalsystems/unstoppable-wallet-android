@@ -58,9 +58,9 @@ class EnableCoinsService(
     private fun resolveTokenType(coinType: CoinType, accountType: AccountType): TokenType? {
         return when {
             accountType !is AccountType.Mnemonic -> null
-            coinType is CoinType.Ethereum && accountType.words.size == 12 -> TokenType.Erc20(accountType.words, accountType.passphrase)
-            coinType is CoinType.BinanceSmartChain && accountType.words.size == 24 -> TokenType.Bep20(accountType.words, accountType.passphrase)
-            coinType is CoinType.Bep2 && coinType.symbol == "BNB" && accountType.words.size == 24 -> TokenType.Bep2(accountType.words, accountType.passphrase)
+            coinType is CoinType.Ethereum -> TokenType.Erc20(accountType.words, accountType.passphrase)
+            coinType is CoinType.BinanceSmartChain -> TokenType.Bep20(accountType.words, accountType.passphrase)
+            coinType is CoinType.Bep2 && coinType.symbol == "BNB" -> TokenType.Bep2(accountType.words, accountType.passphrase)
             else -> null
         }
     }
