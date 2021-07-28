@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.core.factories
+package io.horizontalsystems.bankwallet.modules.transactions
 
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.entities.*
@@ -7,9 +7,6 @@ import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.Bitco
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.BitcoinOutgoingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.*
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoAddressMapper
-import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItem
-import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItem.*
-import io.horizontalsystems.bankwallet.modules.transactions.TransactionWallet
 import java.lang.IllegalArgumentException
 import java.util.*
 
