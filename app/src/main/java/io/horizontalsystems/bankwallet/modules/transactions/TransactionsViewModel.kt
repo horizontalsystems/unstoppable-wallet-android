@@ -9,13 +9,13 @@ class TransactionsViewModel : ViewModel(), TransactionsModule.IView {
 
     lateinit var delegate: TransactionsModule.IViewDelegate
 
-    val filterItems = MutableLiveData<List<Wallet?>>()
+    val filterItems = MutableLiveData<Pair<List<Wallet?>, Wallet?>>()
     val items = MutableLiveData<List<TransactionViewItem>>()
     val reloadTransactions = SingleLiveEvent<Unit>()
     val showSyncing = MutableLiveData<Boolean>()
 
-    override fun showFilters(filters: List<Wallet?>) {
-        filterItems.postValue(filters)
+    override fun showFilters(filters: List<Wallet?>, selectedFilter: Wallet?) {
+        filterItems.postValue(Pair(filters, selectedFilter))
     }
 
     override fun showTransactions(items: List<TransactionViewItem>) {
