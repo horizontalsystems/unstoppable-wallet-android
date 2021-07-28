@@ -106,7 +106,7 @@ class TransactionViewItemFactory(
     private fun getCoinString(coinValue: CoinValue): String {
         val significantDecimal = numberFormatter.getSignificantDecimalCoin(coinValue.value)
         return numberFormatter.formatCoin(
-            coinValue.value,
+            coinValue.value.abs(),
             coinValue.coin.code,
             0,
             significantDecimal
@@ -114,7 +114,7 @@ class TransactionViewItemFactory(
     }
 
     private fun getCurrencyString(currencyValue: CurrencyValue): String {
-        return numberFormatter.formatFiat(currencyValue.value, currencyValue.currency.symbol, 0, 2)
+        return numberFormatter.formatFiat(currencyValue.value.abs(), currencyValue.currency.symbol, 0, 2)
     }
 
     private fun getNameOrAddress(address: String): String {
