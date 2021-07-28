@@ -74,14 +74,18 @@ class SendEvmTransactionViewModel(
         val decoration = txDataState.dataOrNull?.decoration
         val transactionData = txDataState.dataOrNull?.transactionData
 
-        val viewItems = if (decoration is SwapMethodDecoration || decoration is OneInchMethodDecoration) {
-            getSwapViewItems(decoration, txDataState.dataOrNull?.additionalInfo)
-        } else if (decoration != null && transactionData != null) {
-            getViewItems(decoration, transactionData, txDataState.dataOrNull?.additionalInfo)
-        } else if (transactionData != null) {
-            getFallbackViewItems(transactionData)
-        } else {
-            return
+        var viewItems = when {
+            decoration is SwapMethodDecoration || decoration is OneInchMethodDecoration -> {
+                getSwapViewItems(decoration, txDataState.dataOrNull?.additionalInfo)
+            }
+            decoration != null && transactionData != null -> {
+                getViewItems(decoration, transactionData, txDataState.dataOrNull?.additionalInfo)
+            }
+            else -> null
+        }
+
+        if (viewItems == null && transactionData != null) {
+            viewItems = getFallbackViewItems(transactionData)
         }
 
         viewItems?.let {
@@ -273,7 +277,7 @@ class SendEvmTransactionViewModel(
         val coinServiceIn = getCoinService(tokenIn) ?: return null
         val coinServiceOut = getCoinService(tokenOut) ?: return null
 
-        val info = additionalInfo?.swapInfo
+        val info = additionalInfo?.uniswapInfo
         val sections = mutableListOf<SectionViewItem>()
 
         when (trade) {

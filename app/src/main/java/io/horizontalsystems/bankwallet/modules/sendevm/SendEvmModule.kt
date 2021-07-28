@@ -37,7 +37,7 @@ data class SendEvmData(
         val sendInfo: SendInfo?
             get() = (this as? Send)?.info
 
-        val swapInfo: UniswapInfo?
+        val uniswapInfo: UniswapInfo?
             get() = (this as? Uniswap)?.info
 
         val oneInchSwapInfo: OneInchSwapInfo?
