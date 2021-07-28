@@ -37,9 +37,11 @@ class TransactionInfoViewItemFactory(
         explorerData: TransactionInfoModule.ExplorerData
     ): List<TransactionInfoViewItem?> {
 
+        val status = transaction.status(lastBlockInfo?.height)
+
         val statusType = Status(
             getString(R.string.TransactionInfo_Status),
-            getStatusViewItem(transaction, lastBlockInfo?.height)
+            getStatusViewItem(status)
         )
         val date = Value(
             getString(R.string.TransactionInfo_Date),
@@ -163,7 +165,7 @@ class TransactionInfoViewItemFactory(
 
                 items.addAll(
                     getActionsSection(
-                        getString(R.string.TransactionInfo_YouPaid),
+                        getYouPayText(status),
                         transaction.valueIn,
                         rates[transaction.valueIn.coin],
                         false
@@ -175,7 +177,7 @@ class TransactionInfoViewItemFactory(
                     if (!transaction.foreignRecipient) {
                         items.addAll(
                             getActionsSection(
-                                getString(R.string.TransactionInfo_YouGot),
+                                getYouGetText(status),
                                 transaction.valueOut,
                                 rates[transaction.valueOut.coin],
                                 true
@@ -279,7 +281,7 @@ class TransactionInfoViewItemFactory(
                     val youPaidSection = mutableListOf<TransactionInfoItemType>()
                     youPaidSection.add(
                         TransactionType(
-                            getString(R.string.TransactionInfo_YouPaid),
+                            getYouPayText(status),
                             null
                         )
                     )
@@ -302,7 +304,7 @@ class TransactionInfoViewItemFactory(
                     val youGotSection = mutableListOf<TransactionInfoItemType>()
                     youGotSection.add(
                         TransactionType(
-                            getString(R.string.TransactionInfo_YouGot),
+                            getYouGetText(status),
                             null
                         )
                     )
@@ -475,6 +477,22 @@ class TransactionInfoViewItemFactory(
         }
     }
 
+    private fun getYouPayText(status: TransactionStatus): String{
+        return if (status == TransactionStatus.Completed){
+            getString(R.string.TransactionInfo_YouPaid)
+        } else {
+            getString(R.string.TransactionInfo_YouPay)
+        }
+    }
+
+    private fun getYouGetText(status: TransactionStatus): String{
+        return if (status == TransactionStatus.Completed){
+            getString(R.string.TransactionInfo_YouGot)
+        } else {
+            getString(R.string.TransactionInfo_YouGet)
+        }
+    }
+
     private fun getViewItems(viewItemTypes: MutableList<TransactionInfoItemType>): List<TransactionInfoViewItem> {
         return viewItemTypes.mapIndexed { index, itemType ->
             TransactionInfoViewItem(itemType, Companion.getListPosition(viewItemTypes.size, index))
@@ -581,11 +599,10 @@ class TransactionInfoViewItemFactory(
     }
 
     private fun getStatusViewItem(
-        transaction: TransactionRecord,
-        lastBlockHeight: Int?
+        status: TransactionStatus
     ): TransactionStatusViewItem {
 
-        return when (val status = transaction.status(lastBlockHeight)) {
+        return when (status) {
             TransactionStatus.Failed -> Failed
             TransactionStatus.Pending -> Pending(getString(R.string.Transactions_Pending))
             TransactionStatus.Completed -> Completed(getString(R.string.Transactions_Completed))
