@@ -74,7 +74,7 @@ class RateManager(
     }
 
     override fun getTopTokenHoldersAsync(coinType: CoinType): Single<List<TokenHolder>> {
-        return kit.getTopTokenHoldersAsync(coinType)
+        return kit.getTopTokenHoldersAsync(coinType, itemsCount = 10)
     }
 
     override fun getAuditsAsync(coinType: CoinType): Single<List<Auditor>> {
