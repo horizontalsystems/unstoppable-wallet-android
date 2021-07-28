@@ -507,7 +507,9 @@
     <string name="TransactionInfo_DoubleSpendNote">Double Spend Risk!</string>
     <string name="TransactionInfo_ButtonViewOnExplorerName">View on %s</string>
     <string name="TransactionInfo_Price">Price</string>
+    <string name="TransactionInfo_YouPay">You Pay</string>
     <string name="TransactionInfo_YouPaid">You Paid</string>
+    <string name="TransactionInfo_YouGet">You Get</string>
     <string name="TransactionInfo_YouGot">You Got</string>
     <string name="TransactionInfo_Resend">Resend</string>
     <string name="TransactionInfo_RevokeApproval">Revoke Approval</string>
