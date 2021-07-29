@@ -19,7 +19,8 @@ class BitcoinIncomingTransactionRecord(
     conflictingHash: String?,
     showRawTransaction: Boolean,
     amount: BigDecimal,
-    val from: String?
+    val from: String?,
+    memo: String? = null
 ) : BitcoinTransactionRecord(
     uid = uid,
     transactionHash = transactionHash,
@@ -31,7 +32,8 @@ class BitcoinIncomingTransactionRecord(
     failed = failed,
     lockInfo = lockInfo,
     conflictingHash = conflictingHash,
-    showRawTransaction = showRawTransaction
+    showRawTransaction = showRawTransaction,
+    memo = memo
 ) {
 
     val value: CoinValue = CoinValue(coin, amount)

@@ -20,7 +20,8 @@ class BitcoinOutgoingTransactionRecord(
     showRawTransaction: Boolean,
     amount: BigDecimal,
     val to: String?,
-    val sentToSelf: Boolean
+    val sentToSelf: Boolean,
+    memo: String? = null
 ) : BitcoinTransactionRecord(
     uid = uid,
     transactionHash = transactionHash,
@@ -32,7 +33,8 @@ class BitcoinOutgoingTransactionRecord(
     failed = failed,
     lockInfo = lockInfo,
     conflictingHash = conflictingHash,
-    showRawTransaction = showRawTransaction
+    showRawTransaction = showRawTransaction,
+    memo = memo
 ) {
     val value: CoinValue = CoinValue(coin, amount)
 

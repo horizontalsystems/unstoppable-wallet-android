@@ -19,9 +19,6 @@ abstract class EvmTransactionRecord(fullTransaction: FullTransaction, baseCoin: 
         failed = fullTransaction.isFailed()
     ) {
 
-    var incomingInternalETHs = mutableListOf<Pair<String, CoinValue>>()
-    var incomingEip20Events = mutableListOf<Pair<String, CoinValue>>()
-    var outgoingEip20Events = mutableListOf<Pair<String, CoinValue>>()
     val fee: CoinValue
     open val foreignTransaction: Boolean = false
 

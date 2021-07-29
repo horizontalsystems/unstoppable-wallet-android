@@ -3,6 +3,8 @@ package io.horizontalsystems.bankwallet.modules.transactions
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
+import io.horizontalsystems.bankwallet.entities.transactionrecords.binancechain.BinanceChainIncomingTransactionRecord
+import io.horizontalsystems.bankwallet.entities.transactionrecords.binancechain.BinanceChainOutgoingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.BitcoinIncomingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.BitcoinOutgoingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.*
@@ -95,6 +97,25 @@ class TransactionViewItemFactory(
                     getCoinString(record.value),
                     lockState,
                     record.conflictingHash,
+                    record.sentToSelf
+                )
+            }
+
+            is BinanceChainIncomingTransactionRecord -> {
+                TransactionType.Incoming(
+                    getNameOrAddress(record.from),
+                    getCoinString(record.value),
+                    null,
+                    null
+                )
+            }
+
+            is BinanceChainOutgoingTransactionRecord -> {
+                TransactionType.Outgoing(
+                    getNameOrAddress(record.to),
+                    getCoinString(record.value),
+                    null,
+                    null,
                     record.sentToSelf
                 )
             }
