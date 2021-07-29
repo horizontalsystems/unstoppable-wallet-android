@@ -3,61 +3,62 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="48dp">
-
-    <View
-        android:id="@+id/viewBackground"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:background="@drawable/rounded_lawrence_background_single"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/iconView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:src="@drawable/ic_copy_20"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/viewBackground"
-        app:layout_constraintTop_toTopOf="parent"
-        app:tint="@color/grey" />
+    android:layout_height="48dp"
+    android:background="@drawable/border_steel10_top">
 
     <TextView
-        android:id="@+id/txtHolderAddress"
-        style="@style/Subhead2"
-        android:layout_width="wrap_content"
+        android:id="@+id/txtIndex"
+        style="@style/CaptionSB"
+        android:layout_width="24dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:ellipsize="middle"
-        android:includeFontPadding="false"
-        android:maxWidth="100dp"
-        android:singleLine="true"
-        android:textColor="@color/bran"
-        app:layout_constrainedWidth="true"
+        android:textColor="@color/grey"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/txtHolderRate"
-        app:layout_constraintHorizontal_bias="0"
-        app:layout_constraintStart_toEndOf="@+id/iconView"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="ere we can have very very very very very address" />
+        tools:text="1" />
 
     <TextView
         android:id="@+id/txtHolderRate"
-        style="@style/Subhead2"
-        android:layout_width="wrap_content"
+        style="@style/Body"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:textColor="@color/oz"
+        android:layout_marginStart="12dp"
+        android:textColor="@color/jacob"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/viewBackground"
+        app:layout_constraintStart_toEndOf="@+id/txtIndex"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="2.01%" />
+
+    <Button
+        android:id="@+id/btnHolderAddress"
+        style="@style/ButtonSecondary"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="38dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/btnDetails"
+        app:layout_constraintStart_toEndOf="@+id/txtHolderRate"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="ere we can have very very very very very address" />
+
+    <ImageButton
+        android:id="@+id/btnDetails"
+        style="@style/ButtonSecondary"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="16dp"
+        android:paddingStart="6dp"
+        android:paddingTop="6dp"
+        android:paddingEnd="6dp"
+        android:paddingBottom="6dp"
+        android:src="@drawable/ic_globe_20"
+        app:layout_constraintBottom_toBottomOf="@id/btnHolderAddress"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/btnHolderAddress"
+        app:layout_constraintTop_toTopOf="@id/btnHolderAddress"
+        app:tint="@color/button_secondary_text_color_selector"
+        tools:text="ere we can have very very very very very address" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

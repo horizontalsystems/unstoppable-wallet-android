@@ -1,5 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.coin.majorholders
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -32,16 +34,18 @@ class CoinMajorHoldersFragment : BaseFragment(), CoinMajorHoldersAdapter.Listene
         }
 
         coinViewModel.coinMajorHolders.observe(viewLifecycleOwner, { holders ->
-            val adapterChart = CoinMajorHoldersPieAdapter(holders.mapNotNull {
-                if (it is MajorHolderItem.Item) it else null
-            })
+            val adapterChart = CoinMajorHoldersPieAdapter(holders.filterIsInstance(MajorHolderItem.Item::class.java))
             val adapterItems = CoinMajorHoldersAdapter(holders, this)
             recyclerView.adapter = ConcatAdapter(adapterChart, adapterItems)
         })
     }
 
-    override fun onItemClick(address: String) {
+    override fun onAddressClick(address: String) {
         TextHelper.copyText(address)
         HudHelper.showSuccessMessage(requireView(), R.string.Hud_Text_Copied)
+    }
+
+    override fun onDetailsClick(address: String) {
+        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://etherscan.io/address/$address")))
     }
 }

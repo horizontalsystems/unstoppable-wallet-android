@@ -120,13 +120,11 @@ sealed class MajorHolderItem {
     object Header : MajorHolderItem()
 
     class Item(
+        val index: Int,
         val address: String,
         val share: BigDecimal,
-        val sharePercent: String,
-        val position: ListPosition
+        val sharePercent: String
     ) : MajorHolderItem()
-
-    object Description : MajorHolderItem()
 }
 
 sealed class CoinAuditItem {
@@ -535,14 +533,13 @@ class CoinViewFactory(
                 val shareFormatted = numberFormatter.format(holder.share, 0, 2, suffix = "%")
                 list.add(
                     MajorHolderItem.Item(
+                        index + 1,
                         holder.address,
                         holder.share,
-                        shareFormatted,
-                        ListPosition.Companion.getListPosition(topTokenHolders.size, index)
+                        shareFormatted
                     )
                 )
             }
-        list.add(MajorHolderItem.Description)
 
         return list
     }
