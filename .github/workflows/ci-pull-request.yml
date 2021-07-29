@@ -13,11 +13,6 @@ jobs:
         with:
           ruby-version: '2.6'
 
-      - name: Fastlane Build
-        uses: maierj/fastlane-action@v2.0.1
-        with:
-            lane: 'app_assemble'
-
       - name: Notify to Telegrem
         uses: appleboy/telegram-action@master
         with:
