@@ -325,7 +325,8 @@ class ZcashAdapter(
                     conflictingHash = null,
                     showRawTransaction = false,
                     amount = transaction.value.convertZatoshiToZec(),
-                    from = null
+                    from = null,
+                    memo = transaction.memo
             )
         } else {
             BitcoinOutgoingTransactionRecord(
@@ -343,7 +344,8 @@ class ZcashAdapter(
                     showRawTransaction = false,
                     amount = transaction.value.convertZatoshiToZec(),
                     to = transaction.toAddress,
-                    sentToSelf = false
+                    sentToSelf = false,
+                    memo = transaction.memo
             )
         }
     }

@@ -7,6 +7,8 @@ import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
+import io.horizontalsystems.bankwallet.entities.transactionrecords.binancechain.BinanceChainIncomingTransactionRecord
+import io.horizontalsystems.bankwallet.entities.transactionrecords.binancechain.BinanceChainOutgoingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.BitcoinIncomingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.BitcoinOutgoingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.*
@@ -18,6 +20,7 @@ import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.reactivex.disposables.CompositeDisposable
+import java.math.BigDecimal
 
 class TransactionInfoViewModel(
     private val service: TransactionInfoService,
@@ -109,7 +112,9 @@ class TransactionInfoViewModel(
 
     private val coinsForRates: List<Coin>
         get() {
-            return when (val tx = transaction) {
+            val coins = mutableListOf<Coin>()
+
+            val txCoins = when (val tx = transaction) {
                 is EvmIncomingTransactionRecord -> listOf(tx.value.coin)
                 is EvmOutgoingTransactionRecord -> listOf(tx.fee.coin, tx.value.coin)
                 is SwapTransactionRecord -> listOf(
@@ -119,18 +124,35 @@ class TransactionInfoViewModel(
                 ).mapNotNull { it?.coin }
                 is ApproveTransactionRecord -> listOf(tx.fee.coin, tx.value.coin)
                 is ContractCallTransactionRecord -> {
-                    val internalEth: List<Coin> = tx.incomingInternalETHs.map { it.second.coin }
-                    val incomingTokens: List<Coin> = tx.incomingEip20Events.map { it.second.coin }
-                    val outgoingTokens: List<Coin> = tx.outgoingEip20Events.map { it.second.coin }
-                    internalEth + incomingTokens + outgoingTokens
+                    val tempCoinList = mutableListOf<Coin>()
+                    if (tx.value.value != BigDecimal.ZERO) {
+                        tempCoinList.add(tx.value.coin)
+                    }
+                    tempCoinList.addAll(tx.incomingInternalETHs.map { it.second.coin })
+                    tempCoinList.addAll(tx.incomingEip20Events.map { it.second.coin })
+                    tempCoinList.addAll(tx.outgoingEip20Events.map { it.second.coin })
+                    tempCoinList
                 }
                 is BitcoinIncomingTransactionRecord -> listOf(tx.value.coin)
                 is BitcoinOutgoingTransactionRecord -> listOf(
                     tx.fee,
                     tx.value
-                ).mapNotNull { it?.coin }.distinctBy { it.type }
+                ).mapNotNull { it?.coin }
+                is BinanceChainIncomingTransactionRecord -> listOf(tx.value.coin)
+                is BinanceChainOutgoingTransactionRecord -> listOf(
+                    tx.fee,
+                    tx.value
+                ).map { it.coin }
                 else -> emptyList()
             }
+
+            if (transaction is EvmTransactionRecord && !transaction.foreignTransaction) {
+                coins.add(transaction.fee.coin)
+            }
+
+            coins.addAll(txCoins)
+
+            return coins.distinctBy { it.type }
         }
 
     private fun getExplorerData(

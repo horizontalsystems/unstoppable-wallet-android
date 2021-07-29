@@ -7,6 +7,8 @@ import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.LastBlockInfo
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
+import io.horizontalsystems.bankwallet.entities.transactionrecords.binancechain.BinanceChainIncomingTransactionRecord
+import io.horizontalsystems.bankwallet.entities.transactionrecords.binancechain.BinanceChainOutgoingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.BitcoinIncomingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.BitcoinOutgoingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.TransactionLockState
@@ -165,7 +167,7 @@ class TransactionInfoViewItemFactory(
 
                 items.addAll(
                     getActionsSection(
-                        getYouPayText(status),
+                        getYouPayString(status),
                         transaction.valueIn,
                         rates[transaction.valueIn.coin],
                         false
@@ -177,7 +179,7 @@ class TransactionInfoViewItemFactory(
                     if (!transaction.foreignRecipient) {
                         items.addAll(
                             getActionsSection(
-                                getYouGetText(status),
+                                getYouGetString(status),
                                 transaction.valueOut,
                                 rates[transaction.valueOut.coin],
                                 true
@@ -277,17 +279,29 @@ class TransactionInfoViewItemFactory(
                 )
                 items.add(null)
 
-                if (transaction.outgoingEip20Events.size > 0) {
-                    val youPaidSection = mutableListOf<TransactionInfoItemType>()
-                    youPaidSection.add(
+                val transactionValue = transaction.value
+
+                if (transaction.outgoingEip20Events.isNotEmpty() || (transactionValue.value != BigDecimal.ZERO && !transaction.foreignTransaction) ) {
+                    val youPaySection = mutableListOf<TransactionInfoItemType>()
+                    youPaySection.add(
                         TransactionType(
-                            getYouPayText(status),
+                            getYouPayString(status),
                             null
                         )
                     )
 
+                    if (transactionValue.value != BigDecimal.ZERO && !transaction.foreignTransaction) {
+                        youPaySection.add(
+                            getAmount(
+                                rates[transaction.value.coin],
+                                transactionValue,
+                                false
+                            )
+                        )
+                    }
+
                     transaction.outgoingEip20Events.forEachIndexed { index, (_, eventCoinValue) ->
-                        youPaidSection.add(
+                        youPaySection.add(
                             getAmount(
                                 rates[eventCoinValue.coin],
                                 eventCoinValue,
@@ -296,15 +310,15 @@ class TransactionInfoViewItemFactory(
                         )
                     }
 
-                    items.addAll(getViewItems(youPaidSection))
+                    items.addAll(getViewItems(youPaySection))
                     items.add(null)
                 }
 
-                if (transaction.incomingEip20Events.size > 0 || transaction.incomingInternalETHs.size > 0) {
+                if (transaction.incomingEip20Events.isNotEmpty() || transaction.incomingInternalETHs.isNotEmpty()) {
                     val youGotSection = mutableListOf<TransactionInfoItemType>()
                     youGotSection.add(
                         TransactionType(
-                            getYouGetText(status),
+                            getYouGetString(status),
                             null
                         )
                     )
@@ -395,6 +409,10 @@ class TransactionInfoViewItemFactory(
                     middleSectionTypes.add(it)
                 }
 
+                transaction.memo?.let {
+                    middleSectionTypes.add(Value(getString(R.string.TransactionInfo_Memo), it))
+                }
+
                 //Top section
                 items.addAll(
                     getActionsSection(
@@ -455,6 +473,96 @@ class TransactionInfoViewItemFactory(
                     )
                 }
 
+                transaction.memo?.let {
+                    middleSectionTypes.add(Value(getString(R.string.TransactionInfo_Memo), it))
+                }
+
+                //Top section
+                items.addAll(
+                    getActionsSection(
+                        getString(R.string.Transactions_Send),
+                        transaction.value,
+                        rates[transaction.value.coin],
+                        false
+                    )
+                )
+
+                //Middle section
+                items.addAll(getViewItems(middleSectionTypes))
+                items.add(null)
+                items.addAll(getAdditionalButtons(explorerData))
+
+                return items
+            }
+
+            is BinanceChainIncomingTransactionRecord -> {
+                val middleSectionTypes = mutableListOf<TransactionInfoItemType>()
+
+                middleSectionTypes.add(date)
+                middleSectionTypes.add(statusType)
+
+                rates[transaction.value.coin]?.let {
+                    middleSectionTypes.add(getHistoricalRate(it, transaction.value))
+                }
+
+                middleSectionTypes.add(Decorated(getString(R.string.TransactionInfo_From), transaction.from))
+
+                middleSectionTypes.add(
+                    Decorated(
+                        getString(R.string.TransactionInfo_Id),
+                        transaction.transactionHash,
+                        ShareButton(transaction.transactionHash)
+                    )
+                )
+
+                transaction.memo?.let {
+                    middleSectionTypes.add(Value(getString(R.string.TransactionInfo_Memo), it))
+                }
+
+                //Top section
+                items.addAll(
+                    getActionsSection(
+                        getString(R.string.Transactions_Receive),
+                        transaction.value,
+                        rates[transaction.value.coin],
+                        true
+                    )
+                )
+
+                //Middle section
+                items.addAll(getViewItems(middleSectionTypes))
+                items.add(null)
+                items.addAll(getAdditionalButtons(explorerData))
+
+                return items
+            }
+
+            is BinanceChainOutgoingTransactionRecord -> {
+                val middleSectionTypes = mutableListOf<TransactionInfoItemType>()
+
+                middleSectionTypes.add(date)
+                middleSectionTypes.add(statusType)
+
+                middleSectionTypes.add(getFee(rates[transaction.value.coin], transaction.fee))
+
+                rates[transaction.value.coin]?.let {
+                    middleSectionTypes.add(getHistoricalRate(it, transaction.value))
+                }
+
+                middleSectionTypes.add(Decorated(getString(R.string.TransactionInfo_To), transaction.to))
+
+                middleSectionTypes.add(
+                    Decorated(
+                        getString(R.string.TransactionInfo_Id),
+                        transaction.transactionHash,
+                        ShareButton(transaction.transactionHash)
+                    )
+                )
+
+                transaction.memo?.let {
+                    middleSectionTypes.add(Value(getString(R.string.TransactionInfo_Memo), it))
+                }
+
                 //Top section
                 items.addAll(
                     getActionsSection(
@@ -477,7 +585,7 @@ class TransactionInfoViewItemFactory(
         }
     }
 
-    private fun getYouPayText(status: TransactionStatus): String{
+    private fun getYouPayString(status: TransactionStatus): String{
         return if (status == TransactionStatus.Completed){
             getString(R.string.TransactionInfo_YouPaid)
         } else {
@@ -485,7 +593,7 @@ class TransactionInfoViewItemFactory(
         }
     }
 
-    private fun getYouGetText(status: TransactionStatus): String{
+    private fun getYouGetString(status: TransactionStatus): String{
         return if (status == TransactionStatus.Completed){
             getString(R.string.TransactionInfo_YouGot)
         } else {

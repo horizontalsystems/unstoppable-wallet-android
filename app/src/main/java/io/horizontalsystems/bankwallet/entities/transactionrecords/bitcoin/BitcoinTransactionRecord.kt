@@ -17,7 +17,8 @@ abstract class BitcoinTransactionRecord(
     failed: Boolean,
     val lockInfo: TransactionLockInfo?,
     val conflictingHash: String?,
-    val showRawTransaction: Boolean
+    val showRawTransaction: Boolean,
+    val memo: String?
 ) : TransactionRecord(
     uid = uid,
     transactionHash = transactionHash,

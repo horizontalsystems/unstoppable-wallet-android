@@ -65,42 +65,6 @@ class EvmTransactionConverter(
             }
         }
 
-        if (record is ContractCallTransactionRecord) {
-            fullTransaction.internalTransactions.forEach { internalTransaction ->
-                if (internalTransaction.to == evmKit.receiveAddress) {
-                    val amount = convertAmount(internalTransaction.value, baseCoin.decimal, false)
-                    record.incomingInternalETHs.add(
-                        Pair(
-                            internalTransaction.from.eip55,
-                            CoinValue(baseCoin, amount)
-                        )
-                    )
-                }
-            }
-            fullTransaction.eventDecorations.forEach { event ->
-                if (event is TransferEventDecoration) {
-                    val token = getEip20Coin(event.contractAddress)
-                    if (event.from == evmKit.receiveAddress) {
-                        val amount = convertAmount(event.value, token.decimal, true)
-                        record.outgoingEip20Events.add(
-                            Pair(
-                                event.to.eip55,
-                                CoinValue(baseCoin, amount)
-                            )
-                        )
-                    } else if (event.to == evmKit.receiveAddress) {
-                        val amount = convertAmount(event.value, token.decimal, false)
-                        record.incomingEip20Events.add(
-                            Pair(
-                                event.from.eip55,
-                                CoinValue(baseCoin, amount)
-                            )
-                        )
-                    }
-                }
-            }
-        }
-
         return record
     }
 
@@ -278,11 +242,23 @@ class EvmTransactionConverter(
                     baseCoin,
                     to.eip55,
                     methodDecoration.method,
-                    foreignTransaction = true
+                    convertAmount(fullTransaction.transaction.value, baseCoin.decimal, true),
+                    getInternalTransactions(fullTransaction),
+                    getIncomingEip20Events(fullTransaction),
+                    getOutgoingEip20Events(fullTransaction)
                 )
             }
             is UnknownMethodDecoration -> {
-                ContractCallTransactionRecord(fullTransaction, baseCoin, to.eip55, null)
+                ContractCallTransactionRecord(
+                    fullTransaction,
+                    baseCoin,
+                    to.eip55,
+                    null,
+                    convertAmount(fullTransaction.transaction.value, baseCoin.decimal, true),
+                    getInternalTransactions(fullTransaction),
+                    getIncomingEip20Events(fullTransaction),
+                    getOutgoingEip20Events(fullTransaction)
+                    )
             }
             else -> throw IllegalArgumentException()
         }
@@ -312,7 +288,11 @@ class EvmTransactionConverter(
                     fullTransaction,
                     baseCoin,
                     to.eip55,
-                    methodDecoration.method
+                    methodDecoration.method,
+                    convertAmount(fullTransaction.transaction.value, baseCoin.decimal, true),
+                    getInternalTransactions(fullTransaction),
+                    getIncomingEip20Events(fullTransaction),
+                    getOutgoingEip20Events(fullTransaction)
                 )
             }
             is UnknownMethodDecoration -> {
@@ -321,11 +301,53 @@ class EvmTransactionConverter(
                     baseCoin,
                     to.eip55,
                     null,
-                    foreignTransaction = true
+                    convertAmount(fullTransaction.transaction.value, baseCoin.decimal, true),
+                    getInternalTransactions(fullTransaction),
+                    getIncomingEip20Events(fullTransaction),
+                    getOutgoingEip20Events(fullTransaction)
                 )
             }
         }
 
         throw IllegalArgumentException()
+    }
+
+    private fun getInternalTransactions(fullTransaction: FullTransaction) : List<Pair<String, CoinValue>> {
+        return fullTransaction.internalTransactions.mapNotNull { internalTransaction ->
+            if (internalTransaction.to != evmKit.receiveAddress){
+                return@mapNotNull null
+            }
+
+            val amount = convertAmount(internalTransaction.value, baseCoin.decimal, false)
+            Pair(internalTransaction.from.eip55, CoinValue(baseCoin, amount))
+        }
+    }
+
+    private fun getIncomingEip20Events(fullTransaction: FullTransaction) : List<Pair<String, CoinValue>> {
+        return fullTransaction.eventDecorations.mapNotNull { event ->
+            (event as? TransferEventDecoration)?.let { decoration ->
+                if (decoration.to == evmKit.receiveAddress){
+                    val token = getEip20Coin(decoration.contractAddress)
+                    val amount = convertAmount(decoration.value, token.decimal, false)
+                    return@mapNotNull Pair(decoration.from.eip55, CoinValue(token, amount))
+                }
+            }
+
+            return@mapNotNull null
+        }
+    }
+
+    private fun getOutgoingEip20Events(fullTransaction: FullTransaction) : List<Pair<String, CoinValue>> {
+        return fullTransaction.eventDecorations.mapNotNull { event ->
+            (event as? TransferEventDecoration)?.let { decoration ->
+                if (decoration.from == evmKit.receiveAddress){
+                    val token = getEip20Coin(decoration.contractAddress)
+                    val amount = convertAmount(decoration.value, token.decimal, true)
+                    return@mapNotNull Pair(decoration.to.eip55, CoinValue(token, amount))
+                }
+            }
+
+            return@mapNotNull null
+        }
     }
 }

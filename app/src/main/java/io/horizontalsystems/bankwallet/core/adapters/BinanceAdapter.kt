@@ -4,8 +4,8 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.LastBlockInfo
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
-import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.BitcoinIncomingTransactionRecord
-import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.BitcoinOutgoingTransactionRecord
+import io.horizontalsystems.bankwallet.entities.transactionrecords.binancechain.BinanceChainIncomingTransactionRecord
+import io.horizontalsystems.bankwallet.entities.transactionrecords.binancechain.BinanceChainOutgoingTransactionRecord
 import io.horizontalsystems.binancechainkit.BinanceChainKit
 import io.horizontalsystems.binancechainkit.core.api.BinanceError
 import io.horizontalsystems.binancechainkit.models.TransactionInfo
@@ -15,10 +15,11 @@ import io.reactivex.Single
 import java.math.BigDecimal
 
 class BinanceAdapter(
-        private val binanceKit: BinanceChainKit,
-        private val symbol: String,
-        private val coin: Coin)
-    : IAdapter, ITransactionsAdapter, IBalanceAdapter, IReceiveAdapter, ISendBinanceAdapter {
+    private val binanceKit: BinanceChainKit,
+    private val symbol: String,
+    private val coin: Coin,
+    private val feeCoin: Coin
+) : IAdapter, ITransactionsAdapter, IBalanceAdapter, IReceiveAdapter, ISendBinanceAdapter {
 
     private val asset = binanceKit.register(symbol)
 
@@ -78,7 +79,11 @@ class BinanceAdapter(
         return asset.transactionsFlowable.map { it.map { tx -> transactionRecord(tx) } }
     }
 
-    override fun getTransactionsAsync(from: TransactionRecord?, coin: Coin?, limit: Int): Single<List<TransactionRecord>> {
+    override fun getTransactionsAsync(
+        from: TransactionRecord?,
+        coin: Coin?,
+        limit: Int
+    ): Single<List<TransactionRecord>> {
         return binanceKit.transactions(asset, from?.transactionHash, limit).map { list ->
             list.map { transactionRecord(it) }
         }
@@ -90,62 +95,23 @@ class BinanceAdapter(
         val toMine = transaction.to == myAddress
 
         return when {
-            fromMine && !toMine -> {
-                BitcoinOutgoingTransactionRecord(
-                        coin = coin,
-                        uid = transaction.hash,
-                        transactionHash = transaction.hash,
-                        transactionIndex = 0,
-                        blockHeight = transaction.blockNumber,
-                        confirmationsThreshold = confirmationsThreshold,
-                        timestamp = transaction.date.time / 1000,
-                        fee = transferFee,
-                        failed = false,
-                        lockInfo = null,
-                        conflictingHash = null,
-                        showRawTransaction = false,
-                        amount = transaction.amount.toBigDecimal(),
-                        to = transaction.to,
-                        sentToSelf = false
-                )
-            }
-            !fromMine && toMine -> {
-                BitcoinIncomingTransactionRecord(
-                        coin = coin,
-                        uid = transaction.hash,
-                        transactionHash = transaction.hash,
-                        transactionIndex = 0,
-                        blockHeight = transaction.blockNumber,
-                        confirmationsThreshold = confirmationsThreshold,
-                        timestamp = transaction.date.time / 1000,
-                        fee = transferFee,
-                        failed = false,
-                        lockInfo = null,
-                        conflictingHash = null,
-                        showRawTransaction = false,
-                        amount = transaction.amount.toBigDecimal(),
-                        from = transaction.from
-                )
-            }
-            else -> {
-                BitcoinOutgoingTransactionRecord(
-                        coin = coin,
-                        uid = transaction.hash,
-                        transactionHash = transaction.hash,
-                        transactionIndex = 0,
-                        blockHeight = transaction.blockNumber,
-                        confirmationsThreshold = confirmationsThreshold,
-                        timestamp = transaction.date.time / 1000,
-                        fee = transferFee,
-                        failed = false,
-                        lockInfo = null,
-                        conflictingHash = null,
-                        showRawTransaction = false,
-                        amount = transaction.amount.toBigDecimal(),
-                        to = transaction.to,
-                        sentToSelf = true
-                )
-            }
+            fromMine && !toMine -> BinanceChainOutgoingTransactionRecord(
+                transaction,
+                feeCoin,
+                coin,
+                false
+            )
+            !fromMine && toMine -> BinanceChainIncomingTransactionRecord(
+                transaction,
+                feeCoin,
+                coin
+            )
+            else -> BinanceChainOutgoingTransactionRecord(
+                transaction,
+                feeCoin,
+                coin,
+                true
+            )
         }
     }
 
@@ -166,13 +132,18 @@ class BinanceAdapter(
     override val fee: BigDecimal
         get() = transferFee
 
-    override fun send(amount: BigDecimal, address: String, memo: String?, logger: AppLogger): Single<Unit> {
+    override fun send(
+        amount: BigDecimal,
+        address: String,
+        memo: String?,
+        logger: AppLogger
+    ): Single<Unit> {
         return binanceKit.send(symbol, address, amount, memo ?: "")
-                .doOnSubscribe {
-                    logger.info("call binanceKit.send")
-                }
-                .onErrorResumeNext { Single.error(getException(it)) }
-                .map { Unit }
+            .doOnSubscribe {
+                logger.info("call binanceKit.send")
+            }
+            .onErrorResumeNext { Single.error(getException(it)) }
+            .map { Unit }
     }
 
     private fun getException(error: Throwable): Exception {
@@ -199,11 +170,12 @@ class BinanceAdapter(
 
 
     companion object {
-        private const val confirmationsThreshold = 1
+        const val confirmationsThreshold = 1
         val transferFee = BigDecimal.valueOf(0.000375)
 
         fun clear(walletId: String, testMode: Boolean) {
-            val networkType = if (testMode) BinanceChainKit.NetworkType.TestNet else BinanceChainKit.NetworkType.MainNet
+            val networkType =
+                if (testMode) BinanceChainKit.NetworkType.TestNet else BinanceChainKit.NetworkType.MainNet
             BinanceChainKit.clear(App.instance, networkType, walletId)
         }
 
