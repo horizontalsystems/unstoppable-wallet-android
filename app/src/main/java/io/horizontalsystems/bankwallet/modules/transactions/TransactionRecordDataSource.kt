@@ -92,8 +92,11 @@ class TransactionRecordDataSource(
     ): TransactionViewItem {
         val lastBlockInfo = metadataDataSource.getLastBlockInfo(wallet.source)
         val mainAmountCurrencyValue = record.mainValue?.let { mainValue ->
-            metadataDataSource.getRate(mainValue.coin, record.timestamp)?.let {
-                CurrencyValue(it.currency, mainValue.value)
+            metadataDataSource.getRate(mainValue.coin, record.timestamp)?.let { rateCurrencyValue ->
+                CurrencyValue(
+                    rateCurrencyValue.currency,
+                    mainValue.value * rateCurrencyValue.value
+                )
             }
         }
         return viewItemFactory.item(wallet, record, lastBlockInfo, mainAmountCurrencyValue)
