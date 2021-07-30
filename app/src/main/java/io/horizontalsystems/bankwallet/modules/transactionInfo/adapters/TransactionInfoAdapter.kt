@@ -34,6 +34,7 @@ class TransactionInfoAdapter(
         fun closeClick()
         fun onClickStatusInfo()
         fun onLockInfoClick(lockDate: Date)
+        fun onDoubleSpendInfoClick(transactionHash: String, conflictingHash: String)
     }
 
     private var items = listOf<TransactionInfoViewItem?>()
@@ -180,6 +181,7 @@ class TransactionInfoAdapter(
                 is Status -> {
                     setDefaultStyle()
                     txtTitle.text = type.title
+                    statusInfoIcon.setImageResource(type.leftIcon)
                     statusInfoIcon.isVisible = type.status !is TransactionStatusViewItem.Completed
                     if (type.status !is TransactionStatusViewItem.Completed) {
                         statusInfoIcon.setOnClickListener { listener.onClickStatusInfo() }
@@ -204,12 +206,23 @@ class TransactionInfoAdapter(
                     setDefaultStyle()
 
                     txtTitle.text = type.title
+                    statusInfoIcon.setImageResource(type.leftIcon)
+                    statusInfoIcon.isVisible = true
 
                     if (type.showLockInfo) {
                         rightInfoIcon.isVisible = true
                         containerView.setOnClickListener {
                             listener.onLockInfoClick(type.date)
                         }
+                    }
+                }
+                is DoubleSpend -> {
+                    txtTitle.text = type.title
+                    statusInfoIcon.setImageResource(type.leftIcon)
+                    statusInfoIcon.isVisible = true
+                    rightInfoIcon.isVisible = true
+                    containerView.setOnClickListener {
+                        listener.onDoubleSpendInfoClick(type.transactionHash, type.conflictingHash)
                     }
                 }
             }

@@ -494,6 +494,7 @@
     <string name="TransactionInfo_Status_Confirmed">Confirmed</string>
     <string name="TransactionInfo_Date">Date</string>
     <string name="TransactionInfo_Id">ID</string>
+    <string name="TransactionInfo_Service">Service</string>
     <string name="TransactionInfo_RawTransaction">Raw Transaction</string>
     <string name="TransactionInfo_To">To</string>
     <string name="TransactionInfo_From">From</string>
@@ -503,6 +504,7 @@
     <string name="TransactionInfo_RecipientHash">Recipient</string>
     <string name="TransactionInfo_HistoricalRate">Historical Rate</string>
     <string name="TransactionInfo_Fee">Fee</string>
+    <string name="TransactionInfo_FeeEstimated">Fee (est.)</string>
     <string name="TransactionInfo_SentToSelfNote">The transaction sent to own address</string>
     <string name="TransactionInfo_DoubleSpendNote">Double Spend Risk!</string>
     <string name="TransactionInfo_ButtonViewOnExplorerName">View on %s</string>

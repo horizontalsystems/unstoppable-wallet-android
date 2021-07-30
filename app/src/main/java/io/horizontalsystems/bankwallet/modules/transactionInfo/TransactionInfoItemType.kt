@@ -19,7 +19,7 @@ sealed class TransactionInfoItemType {
     class Button(val title: String, val leftIcon: Int, val type: TransactionInfoButtonType) :
         TransactionInfoItemType()
 
-    class Status(val title: String, val status: TransactionStatusViewItem) :
+    class Status(val title: String, val leftIcon: Int, val status: TransactionStatusViewItem) :
         TransactionInfoItemType()
 
     class RawTransaction(val title: String, val actionButton: TransactionInfoActionButton? = null) :
@@ -30,8 +30,14 @@ sealed class TransactionInfoItemType {
         val leftIcon: Int,
         val date: Date,
         val showLockInfo: Boolean
-    ) :
-        TransactionInfoItemType()
+    ) : TransactionInfoItemType()
+
+    class DoubleSpend(
+        val title: String,
+        val leftIcon: Int,
+        val transactionHash: String,
+        val conflictingHash: String
+    ) : TransactionInfoItemType()
 }
 
 sealed class TransactionInfoButtonType {
