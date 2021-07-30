@@ -11,12 +11,17 @@ import io.horizontalsystems.bankwallet.core.BaseDialogFragment
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.dismissOnBackPressed
 import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.views.ListPosition
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_info.*
 
 class InfoFragment : BaseDialogFragment() {
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         dialog?.window?.setWindowAnimations(R.style.BottomDialogLargeAnimation)
         dialog?.dismissOnBackPressed { dismiss() }
         return inflater.inflate(R.layout.fragment_info, container, false)
@@ -43,18 +48,20 @@ class InfoFragment : BaseDialogFragment() {
 
         textDescription.text = infoParams.description
 
-        infoParams.txHash?.let { txHash ->
-            itemTxHash.bindHashId(getString(R.string.Info_DoubleSpend_ThisTx), txHash)
+        if (infoParams.txHash != null && infoParams.conflictingTxHash != null) {
+            itemTxHash.bind(
+                getString(R.string.Info_DoubleSpend_ThisTx),
+                infoParams.txHash,
+                ListPosition.First
+            ) { copyText(infoParams.txHash) }
             itemTxHash.isVisible = true
 
-            itemTxHash.setOnClickListener { copyText(txHash) }
-        }
-
-        infoParams.conflictingTxHash?.let { conflictingTxHash ->
-            itemConflictingTxHash.bindHashId(getString(R.string.Info_DoubleSpend_ConflictingTx), conflictingTxHash)
+            itemConflictingTxHash.bind(
+                getString(R.string.Info_DoubleSpend_ConflictingTx),
+                infoParams.conflictingTxHash,
+                ListPosition.Last
+            ) { copyText(infoParams.conflictingTxHash) }
             itemConflictingTxHash.isVisible = true
-
-            itemConflictingTxHash.setOnClickListener { copyText(conflictingTxHash) }
         }
     }
 
@@ -74,8 +81,8 @@ class InfoFragment : BaseDialogFragment() {
 
 @Parcelize
 data class InfoParameters(
-        val title: String,
-        val description: String,
-        val txHash: String? = null,
-        val conflictingTxHash: String? = null
+    val title: String,
+    val description: String,
+    val txHash: String? = null,
+    val conflictingTxHash: String? = null
 ) : Parcelable
