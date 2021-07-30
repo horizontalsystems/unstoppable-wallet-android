@@ -422,6 +422,7 @@
     <string name="TransactionInfo_Status_Confirmed">Подтверждено</string>
     <string name="TransactionInfo_Date">Date</string>
     <string name="TransactionInfo_Id">ID Транзакции</string>
+    <string name="TransactionInfo_Service">Service</string>
     <string name="TransactionInfo_RawTransaction">Неподтвержденная Транзакция</string>
     <string name="TransactionInfo_To">Кому</string>
     <string name="TransactionInfo_From">От</string>
@@ -431,6 +432,7 @@
     <string name="TransactionInfo_RecipientHash">Получатель</string>
     <string name="TransactionInfo_HistoricalRate">Исторический Курс</string>
     <string name="TransactionInfo_Fee">Комиссия</string>
+    <string name="TransactionInfo_FeeEstimated">Fee (est.)</string>
     <string name="TransactionInfo_SentToSelfNote">Данная транзакция отправлена на собственный адрес</string>
     <string name="TransactionInfo_DoubleSpendNote">Риск Двойной Траты!</string>
     <string name="TransactionInfo_ButtonViewOnExplorerName">Посмотреть на %s</string>
