@@ -171,7 +171,7 @@ class BinanceAdapter(
 
     companion object {
         const val confirmationsThreshold = 1
-        val transferFee = BigDecimal.valueOf(0.000375)
+        val transferFee = BigDecimal.valueOf(0.000075)
 
         fun clear(walletId: String, testMode: Boolean) {
             val networkType =
