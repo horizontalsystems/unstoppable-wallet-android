@@ -3,8 +3,8 @@ package io.horizontalsystems.bankwallet.modules.transactionInfo
 import android.content.Context
 import android.util.AttributeSet
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.view.isVisible
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.views.ListPosition
 import kotlinx.android.synthetic.main.view_transaction_info_item.view.*
 
 class TransactionInfoItemView : ConstraintLayout {
@@ -16,13 +16,14 @@ class TransactionInfoItemView : ConstraintLayout {
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
-    fun bindHashId(title: String, address: String) {
+    fun bind(title: String, address: String, listPosition: ListPosition, onHashClick: () -> Unit) {
         txtTitle.text = title
         decoratedText.text = address
-        decoratedText.isVisible = true
+        txViewBackground.setBackgroundResource(listPosition.getBackground())
 
-        btnAction.isVisible = false
-        transactionStatusView.isVisible = false
+        decoratedText.setOnClickListener {
+            onHashClick.invoke()
+        }
 
         invalidate()
     }

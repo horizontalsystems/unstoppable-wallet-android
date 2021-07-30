@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?android:windowBackground"
-    android:clickable="true">
+    android:clickable="true"
+    >
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -17,7 +18,8 @@
         app:menu="@menu/close_menu"
         app:titleTextAppearance="@style/Title3"
         app:titleTextColor="?TitleColor"
-        tools:title="@string/Info_DoubleSpend_Title" />
+        tools:title="@string/Info_DoubleSpend_Title"
+        />
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="0dp"
@@ -25,12 +27,14 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar">
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            >
 
             <TextView
                 android:id="@+id/textDescription"
@@ -41,26 +45,31 @@
                 android:layout_marginTop="12dp"
                 android:layout_marginEnd="24dp"
                 android:textColor="@color/grey"
-                tools:text="Info description" />
+                tools:text="Info description"
+                />
 
             <io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoItemView
                 android:id="@+id/itemTxHash"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
+                android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="24dp"
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textDescription" />
+                app:layout_constraintTop_toBottomOf="@+id/textDescription"
+                />
 
             <io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoItemView
                 android:id="@+id/itemConflictingTxHash"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
+                android:layout_marginHorizontal="16dp"
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/itemTxHash" />
+                app:layout_constraintTop_toBottomOf="@+id/itemTxHash"
+                />
 
         </LinearLayout>
 
