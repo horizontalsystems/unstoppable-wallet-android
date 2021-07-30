@@ -422,6 +422,7 @@
     <string name="TransactionInfo_Status_Confirmed">Onaylandı</string>
     <string name="TransactionInfo_Date">Date</string>
     <string name="TransactionInfo_Id">Kimlik</string>
+    <string name="TransactionInfo_Service">Service</string>
     <string name="TransactionInfo_RawTransaction">Ham işlem</string>
     <string name="TransactionInfo_To">Alan</string>
     <string name="TransactionInfo_From">Gönderen</string>
@@ -431,6 +432,7 @@
     <string name="TransactionInfo_RecipientHash">Alıcı</string>
     <string name="TransactionInfo_HistoricalRate">Geçmiş Kur</string>
     <string name="TransactionInfo_Fee">Masraf</string>
+    <string name="TransactionInfo_FeeEstimated">Fee (est.)</string>
     <string name="TransactionInfo_SentToSelfNote">Bu işlem kendi adresine gönderildi</string>
     <string name="TransactionInfo_DoubleSpendNote">Çifte Harcama Riski Var!</string>
     <string name="TransactionInfo_ButtonViewOnExplorerName">%s göre görüntüleme</string>
