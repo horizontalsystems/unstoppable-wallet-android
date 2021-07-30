@@ -422,6 +422,7 @@
     <string name="TransactionInfo_Status_Confirmed">Confirmé</string>
     <string name="TransactionInfo_Date">Date</string>
     <string name="TransactionInfo_Id">Identifiant</string>
+    <string name="TransactionInfo_Service">Service</string>
     <string name="TransactionInfo_RawTransaction">Transaction brute</string>
     <string name="TransactionInfo_To">À</string>
     <string name="TransactionInfo_From">De</string>
@@ -431,6 +432,7 @@
     <string name="TransactionInfo_RecipientHash">Destinataire</string>
     <string name="TransactionInfo_HistoricalRate">Taux historique</string>
     <string name="TransactionInfo_Fee">Frais</string>
+    <string name="TransactionInfo_FeeEstimated">Fee (est.)</string>
     <string name="TransactionInfo_SentToSelfNote">Cette transaction a été envoyée à votre propre adresse</string>
     <string name="TransactionInfo_DoubleSpendNote">Risque de double dépense !</string>
     <string name="TransactionInfo_ButtonViewOnExplorerName">Afficher sur %s</string>
