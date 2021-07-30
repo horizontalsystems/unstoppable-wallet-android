@@ -159,14 +159,20 @@ class EvmTransactionConverter(
                 val resolvedAmountIn: BigInteger
                 val resolvedAmountOut: BigInteger
 
-                when (val trade = methodDecoration.trade) {
-                    is SwapMethodDecoration.Trade.ExactIn -> {
-                        resolvedAmountIn = trade.amountIn
-                        resolvedAmountOut = trade.amountOut ?: trade.amountOutMin
-                    }
-                    is SwapMethodDecoration.Trade.ExactOut -> {
-                        resolvedAmountIn = trade.amountIn ?: trade.amountInMax
-                        resolvedAmountOut = trade.amountOut
+                if (fullTransaction.isFailed()) {
+                    resolvedAmountIn = BigInteger.ZERO
+                    resolvedAmountOut = BigInteger.ZERO
+                }
+                else {
+                    when (val trade = methodDecoration.trade) {
+                        is SwapMethodDecoration.Trade.ExactIn -> {
+                            resolvedAmountIn = trade.amountIn
+                            resolvedAmountOut = trade.amountOut ?: trade.amountOutMin
+                        }
+                        is SwapMethodDecoration.Trade.ExactOut -> {
+                            resolvedAmountIn = trade.amountIn ?: trade.amountInMax
+                            resolvedAmountOut = trade.amountOut
+                        }
                     }
                 }
 
@@ -189,8 +195,29 @@ class EvmTransactionConverter(
                 )
             }
             is OneInchUnoswapMethodDecoration -> {
+                val resolvedFromAmount: BigDecimal
+                val resolvedToAmount: BigDecimal?
+
                 val tokenIn = convertToCoin(methodDecoration.fromToken)
                 val tokenOut = methodDecoration.toToken?.let { convertToCoin(it) }
+
+                if (fullTransaction.isFailed()) {
+                    resolvedFromAmount = BigDecimal.ZERO
+                    resolvedToAmount = BigDecimal.ZERO
+                } else {
+                    resolvedFromAmount = convertAmount(
+                        methodDecoration.fromAmount,
+                        tokenIn.decimal,
+                        true
+                    )
+                    resolvedToAmount = tokenOut?.let {
+                        convertAmount(
+                            methodDecoration.toAmount ?: methodDecoration.toAmountMin,
+                            tokenOut.decimal,
+                            false
+                        )
+                    }
+                }
 
                 return SwapTransactionRecord(
                     fullTransaction = fullTransaction,
@@ -198,24 +225,41 @@ class EvmTransactionConverter(
                     exchangeAddress = to.eip55,
                     tokenIn = tokenIn,
                     tokenOut = tokenOut,
-                    amountIn = convertAmount(
-                        methodDecoration.fromAmount,
-                        tokenIn.decimal,
-                        true
-                    ),
-                    amountOut = tokenOut?.let {
-                        convertAmount(
-                            methodDecoration.toAmount,
-                            tokenOut.decimal,
-                            false
-                        )
-                    },
+                    amountIn = resolvedFromAmount,
+                    amountOut = resolvedToAmount,
                     foreignRecipient = false
                 )
             }
             is OneInchSwapMethodDecoration -> {
                 val tokenIn = convertToCoin(methodDecoration.fromToken)
-                val tokenOut = convertToCoin(methodDecoration.toToken)
+                var tokenOut = convertToCoin(methodDecoration.toToken)
+
+                var resolvedAmountIn = convertAmount(methodDecoration.fromAmount, tokenIn.decimal, true)
+                var resolvedAmountOut = convertAmount( methodDecoration.toAmount ?: methodDecoration.toAmountMin, tokenOut.decimal, false)
+
+                if (fullTransaction.isFailed()) {
+                    resolvedAmountIn = BigDecimal.ZERO
+                    resolvedAmountOut = BigDecimal.ZERO
+                } else if (fullTransaction.receiptWithLogs != null && methodDecoration.toAmount == null) {
+                    // transaction can be reverted
+
+                    for(event in getIncomingEip20Events(fullTransaction)) {
+                        if (event.second.value > BigDecimal.ZERO) {
+                            tokenOut = event.second.coin
+                            resolvedAmountOut = event.second.value
+                        }
+                    }
+
+                    var internalETHs = BigDecimal.ZERO
+                    for(tx in getInternalTransactions(fullTransaction)) {
+                        internalETHs += tx.second.value
+                    }
+
+                    if (internalETHs > BigDecimal.ZERO) {
+                        tokenOut = baseCoin
+                        resolvedAmountOut = internalETHs
+                    }
+                }
 
                 return SwapTransactionRecord(
                     fullTransaction = fullTransaction,
@@ -223,16 +267,8 @@ class EvmTransactionConverter(
                     exchangeAddress = to.eip55,
                     tokenIn = tokenIn,
                     tokenOut = tokenOut,
-                    amountIn = convertAmount(
-                        methodDecoration.fromAmount,
-                        tokenIn.decimal,
-                        true
-                    ),
-                    amountOut = convertAmount(
-                        methodDecoration.toAmount,
-                        tokenOut.decimal,
-                        false
-                    ),
+                    amountIn = resolvedAmountIn,
+                    amountOut = resolvedAmountOut,
                     foreignRecipient = methodDecoration.recipient != evmKit.receiveAddress
                 )
             }

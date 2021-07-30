@@ -108,11 +108,14 @@ class EvmKitManager(
                 account.id
         )
 
-        kit.addDecorator(Erc20Kit.decorator(kit))
-        kit.addDecorator(UniswapKit.decorator(kit))
-        kit.addDecorator(OneInchKit.decorator(kit))
+        Erc20Kit.addTransactionSyncer(kit)
+        Erc20Kit.addDecorator(kit)
 
-        kit.addTransactionSyncer(Erc20Kit.getTransactionSyncer(kit))
+        UniswapKit.addDecorator(kit)
+        UniswapKit.addTransactionWatcher(kit)
+
+        OneInchKit.addDecorator(kit)
+        OneInchKit.addTransactionWatcher(kit)
 
         kit.start()
 
