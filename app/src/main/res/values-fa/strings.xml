@@ -422,6 +422,7 @@
     <string name="TransactionInfo_Status_Confirmed">تاييد شد</string>
     <string name="TransactionInfo_Date">Date</string>
     <string name="TransactionInfo_Id">شناسه</string>
+    <string name="TransactionInfo_Service">Service</string>
     <string name="TransactionInfo_RawTransaction">تراکنش خام</string>
     <string name="TransactionInfo_To">به</string>
     <string name="TransactionInfo_From">از</string>
@@ -431,6 +432,7 @@
     <string name="TransactionInfo_RecipientHash">گیرنده</string>
     <string name="TransactionInfo_HistoricalRate">نرخ تاريخي</string>
     <string name="TransactionInfo_Fee">قیمت</string>
+    <string name="TransactionInfo_FeeEstimated">Fee (est.)</string>
     <string name="TransactionInfo_SentToSelfNote">تراکنش ارسال شده به آدرس خود</string>
     <string name="TransactionInfo_DoubleSpendNote">خطر دو برابر هزینه کردن!</string>
     <string name="TransactionInfo_ButtonViewOnExplorerName">مشاهده در %s</string>
