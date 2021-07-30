@@ -422,6 +422,7 @@
     <string name="TransactionInfo_Status_Confirmed">확인</string>
     <string name="TransactionInfo_Date">Date</string>
     <string name="TransactionInfo_Id">거래 ID</string>
+    <string name="TransactionInfo_Service">Service</string>
     <string name="TransactionInfo_RawTransaction">로우 트랜잭션</string>
     <string name="TransactionInfo_To">에게</string>
     <string name="TransactionInfo_From">로 부터</string>
@@ -431,6 +432,7 @@
     <string name="TransactionInfo_RecipientHash">수령인</string>
     <string name="TransactionInfo_HistoricalRate">과거 환율</string>
     <string name="TransactionInfo_Fee">수수료</string>
+    <string name="TransactionInfo_FeeEstimated">Fee (est.)</string>
     <string name="TransactionInfo_SentToSelfNote">이 거래는 귀하의 주소로 전송이 되었습니다</string>
     <string name="TransactionInfo_DoubleSpendNote">이중 지출 위험!</string>
     <string name="TransactionInfo_ButtonViewOnExplorerName">%s에서 보기</string>
