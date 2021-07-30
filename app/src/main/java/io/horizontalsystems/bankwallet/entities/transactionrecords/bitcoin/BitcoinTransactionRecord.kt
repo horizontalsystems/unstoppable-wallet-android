@@ -47,7 +47,6 @@ abstract class BitcoinTransactionRecord(
     }
 
     private fun becomesUnlocked(oldTimestamp: Long?, newTimestamp: Long?): Boolean {
-        //todo check this division by 1000
         val lockTime = lockInfo?.lockedUntil?.time?.div(1000) ?: return false
         newTimestamp ?: return false
 

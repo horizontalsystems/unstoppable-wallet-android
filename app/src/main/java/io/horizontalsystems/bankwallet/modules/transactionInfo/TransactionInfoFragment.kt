@@ -60,19 +60,6 @@ class TransactionInfoFragment : BaseFragment(), TransactionInfoAdapter.Listener 
             openUrlInCustomTabs(url)
         })
 
-        viewModel.showDoubleSpendInfo.observe(this, Observer { (txHash, conflictingTxHash) ->
-            context?.let {
-                val title = it.getString(R.string.Info_DoubleSpend_Title)
-                val description = it.getString(R.string.Info_DoubleSpend_Description)
-                val infoParameters = InfoParameters(title, description, txHash, conflictingTxHash)
-
-                findNavController().navigate(
-                    R.id.infoFragment,
-                    InfoFragment.arguments(infoParameters)
-                )
-            }
-        })
-
         viewModel.showShareLiveEvent.observe(viewLifecycleOwner, { value ->
             context?.startActivity(Intent().apply {
                 action = Intent.ACTION_SEND
@@ -108,6 +95,19 @@ class TransactionInfoFragment : BaseFragment(), TransactionInfoAdapter.Listener 
             val infoParameters = InfoParameters(title, description)
 
             findNavController().navigate(R.id.infoFragment, InfoFragment.arguments(infoParameters))
+        }
+    }
+
+    override fun onDoubleSpendInfoClick(transactionHash: String, conflictingHash: String) {
+        context?.let {
+            val title = it.getString(R.string.Info_DoubleSpend_Title)
+            val description = it.getString(R.string.Info_DoubleSpend_Description)
+            val infoParameters = InfoParameters(title, description, transactionHash, conflictingHash)
+
+            findNavController().navigate(
+                R.id.infoFragment,
+                InfoFragment.arguments(infoParameters)
+            )
         }
     }
 

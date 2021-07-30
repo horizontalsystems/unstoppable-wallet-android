@@ -43,8 +43,10 @@ class TransactionInfoViewItemFactory(
 
         val statusType = Status(
             getString(R.string.TransactionInfo_Status),
+            R.drawable.ic_info_24,
             getStatusViewItem(status)
         )
+
         val date = Value(
             getString(R.string.TransactionInfo_Date),
             dateHelper.getFullDate(Date(transaction.timestamp * 1000))
@@ -99,7 +101,7 @@ class TransactionInfoViewItemFactory(
 
                 middleSectionTypes.add(statusType)
                 middleSectionTypes.add(date)
-                middleSectionTypes.add(getFee(rates[transaction.value.coin], transaction.fee))
+                middleSectionTypes.add(getEvmFeeItem(transaction.fee, rates[transaction.value.coin], status))
 
                 rates[transaction.value.coin]?.let {
                     middleSectionTypes.add(getHistoricalRate(it, transaction.value))
@@ -142,7 +144,7 @@ class TransactionInfoViewItemFactory(
 
                 middleSectionTypes.add(statusType)
                 middleSectionTypes.add(date)
-                middleSectionTypes.add(getFee(rates[transaction.fee.coin], transaction.fee))
+                middleSectionTypes.add(getEvmFeeItem(transaction.fee, rates[transaction.fee.coin], status))
 
                 transaction.valueOut?.let { out ->
                     if (out.value > BigDecimal.ZERO) {
@@ -156,6 +158,13 @@ class TransactionInfoViewItemFactory(
                         )
                     }
                 }
+
+                middleSectionTypes.add(
+                    Value(
+                        getString(R.string.TransactionInfo_Service),
+                        TransactionInfoAddressMapper.map(transaction.exchangeAddress)
+                    )
+                )
 
                 middleSectionTypes.add(
                     Decorated(
@@ -203,7 +212,7 @@ class TransactionInfoViewItemFactory(
 
                 middleSectionTypes.add(date)
                 middleSectionTypes.add(statusType)
-                middleSectionTypes.add(getFee(rates[transaction.fee.coin], transaction.fee))
+                middleSectionTypes.add(getEvmFeeItem(transaction.fee, rates[transaction.fee.coin], status))
 
                 rate?.let {
                     middleSectionTypes.add(getHistoricalRate(it, transaction.value))
@@ -353,7 +362,7 @@ class TransactionInfoViewItemFactory(
 
                 middleSectionTypes.add(date)
                 middleSectionTypes.add(statusType)
-                middleSectionTypes.add(getFee(rates[transaction.fee.coin], transaction.fee))
+                middleSectionTypes.add(getEvmFeeItem(transaction.fee, rates[transaction.fee.coin], status))
 
                 middleSectionTypes.add(
                     Decorated(
@@ -386,8 +395,6 @@ class TransactionInfoViewItemFactory(
                     middleSectionTypes.add(Decorated(getString(R.string.TransactionInfo_From), it))
                 }
 
-                val lockState = transaction.lockState(lastBlockInfo?.timestamp)
-
                 middleSectionTypes.add(
                     Decorated(
                         getString(R.string.TransactionInfo_Id),
@@ -395,6 +402,15 @@ class TransactionInfoViewItemFactory(
                         ShareButton(transaction.transactionHash)
                     )
                 )
+
+                transaction.conflictingHash?.let { conflictingHash ->
+                    middleSectionTypes.add(
+                        getDoubleSpendViewItem(
+                            transaction.transactionHash,
+                            conflictingHash
+                        )
+                    )
+                }
 
                 if (transaction.showRawTransaction) {
                     middleSectionTypes.add(
@@ -404,6 +420,8 @@ class TransactionInfoViewItemFactory(
                         )
                     )
                 }
+
+                val lockState = transaction.lockState(lastBlockInfo?.timestamp)
 
                 getLockStateItem(lockState)?.let {
                     middleSectionTypes.add(it)
@@ -448,6 +466,15 @@ class TransactionInfoViewItemFactory(
 
                 transaction.to?.let {
                     middleSectionTypes.add(Decorated(getString(R.string.TransactionInfo_To), it))
+                }
+
+                transaction.conflictingHash?.let { conflictingHash ->
+                    middleSectionTypes.add(
+                        getDoubleSpendViewItem(
+                            transaction.transactionHash,
+                            conflictingHash
+                        )
+                    )
                 }
 
                 val lockState = transaction.lockState(lastBlockInfo?.timestamp)
@@ -584,6 +611,13 @@ class TransactionInfoViewItemFactory(
             else -> return emptyList()
         }
     }
+
+    private fun getDoubleSpendViewItem(transactionHash: String, conflictingHash: String) = DoubleSpend(
+        getString(R.string.TransactionInfo_DoubleSpendNote),
+        R.drawable.ic_double_spend_20,
+        transactionHash,
+        conflictingHash
+    )
 
     private fun getYouPayString(status: TransactionStatus): String{
         return if (status == TransactionStatus.Completed){
@@ -756,6 +790,28 @@ class TransactionInfoViewItemFactory(
     }
 
     private fun getFee(rate: CurrencyValue?, coinValue: CoinValue): TransactionInfoItemType {
+        val feeAmountString = getFeeAmountString(rate, coinValue)
+
+        return Value(getString(R.string.TransactionInfo_Fee), feeAmountString)
+    }
+
+    private fun getEvmFeeItem(
+        coinValue: CoinValue,
+        rate: CurrencyValue?,
+        status: TransactionStatus
+    ): TransactionInfoItemType {
+        val feeAmountString = getFeeAmountString(rate, coinValue)
+        val feeTitle: String = when (status) {
+            TransactionStatus.Pending -> getString(R.string.TransactionInfo_FeeEstimated)
+            is TransactionStatus.Processing,
+            TransactionStatus.Failed,
+            TransactionStatus.Completed -> getString(R.string.TransactionInfo_Fee)
+        }
+
+        return Value(feeTitle, feeAmountString)
+    }
+
+    private fun getFeeAmountString(rate: CurrencyValue?, coinValue: CoinValue): String {
         val feeInFiat = rate?.let {
             numberFormatter.formatFiat(
                 it.value * coinValue.value,
@@ -767,9 +823,7 @@ class TransactionInfoViewItemFactory(
         val feeInCoin =
             numberFormatter.formatCoin(coinValue.value, coinValue.coin.code, 0, 8)
 
-        val feeText = feeInCoin + (if (feeInFiat != null) " | $feeInFiat" else "")
-
-        return Value(getString(R.string.TransactionInfo_Fee), feeText)
+        return feeInCoin + (if (feeInFiat != null) " | $feeInFiat" else "")
     }
 
 }

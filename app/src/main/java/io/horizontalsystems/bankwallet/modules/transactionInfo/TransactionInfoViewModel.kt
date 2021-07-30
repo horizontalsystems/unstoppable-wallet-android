@@ -31,7 +31,6 @@ class TransactionInfoViewModel(
 ) : ViewModel() {
 
     val titleLiveData = MutableLiveData<TransactionInfoModule.TitleViewItem>()
-    val showDoubleSpendInfo = SingleLiveEvent<Pair<String, String>>()
     val showShareLiveEvent = SingleLiveEvent<String>()
     val showTransactionLiveEvent = SingleLiveEvent<String>()
     val copyRawTransactionLiveEvent = SingleLiveEvent<String>()
@@ -77,12 +76,6 @@ class TransactionInfoViewModel(
         clearables.forEach {
             it.clear()
         }
-    }
-
-    fun onClickDoubleSpendInfo() {
-//        transaction.conflictingTxHash?.let { conflictingTxHash ->
-//        showDoubleSpendInfo.postValue(Pair(transaction.transactionHash, conflictingTxHash))
-//        }
     }
 
     fun onAdditionalButtonClick(buttonType: TransactionInfoButtonType) {
