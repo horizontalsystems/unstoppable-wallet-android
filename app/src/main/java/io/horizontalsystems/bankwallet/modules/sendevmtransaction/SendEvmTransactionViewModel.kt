@@ -137,7 +137,7 @@ class SendEvmTransactionViewModel(
         var fromToken: OneInchMethodDecoration.Token? = null
         var toToken: OneInchMethodDecoration.Token? = null
         var fromAmount = BigInteger.ZERO
-        var toAmount = BigInteger.ZERO
+        var toAmountMin = BigInteger.ZERO
         var recipient: Address? = null
 
         when (decoration) {
@@ -145,13 +145,13 @@ class SendEvmTransactionViewModel(
                 fromToken = decoration.fromToken
                 toToken = decoration.toToken
                 fromAmount = decoration.fromAmount
-                toAmount = decoration.toAmount
+                toAmountMin = decoration.toAmountMin
             }
             is OneInchSwapMethodDecoration -> {
                 fromToken = decoration.fromToken
                 toToken = decoration.toToken
                 fromAmount = decoration.fromAmount
-                toAmount = decoration.toAmount
+                toAmountMin = decoration.toAmountMin
                 recipient = decoration.recipient
             }
         }
@@ -197,7 +197,7 @@ class SendEvmTransactionViewModel(
                     ),
                     ViewItem.Value(
                         Translator.getString(R.string.Swap_Confirmation_Guaranteed),
-                        toCoinService.amountData(toAmount).getFormatted(),
+                        toCoinService.amountData(toAmountMin).getFormatted(),
                         ValueType.Regular
                     )
                 )

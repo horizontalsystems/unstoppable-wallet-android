@@ -155,7 +155,7 @@ class OneInchSendEvmTransactionService(
         val toToken = getSwapToken(parameters.coinTo)
         val fromAmount = parameters.amountFrom.scaleUp(parameters.coinFrom.decimal)
         val minReturnAmount = parameters.amountTo - parameters.amountTo / BigDecimal("100") * parameters.slippage
-        val toAmount = minReturnAmount.scaleUp(parameters.coinTo.decimal)
+        val toAmountMin = minReturnAmount.scaleUp(parameters.coinTo.decimal)
 
         return parameters.let {
             if (parameters.recipient == null) {
@@ -163,15 +163,17 @@ class OneInchSendEvmTransactionService(
                     fromToken = fromToken,
                     toToken = toToken,
                     fromAmount = fromAmount,
-                    toAmount = toAmount,
-                    Bytes32Array(arrayOf())
+                    toAmountMin = toAmountMin,
+                    toAmount = null,
+                    params = Bytes32Array(arrayOf())
                 )
             } else
                 OneInchSwapMethodDecoration(
                     fromToken = fromToken,
                     toToken = toToken,
                     fromAmount = fromAmount,
-                    toAmount = toAmount,
+                    toAmountMin = toAmountMin,
+                    toAmount = null,
                     flags = BigInteger.ZERO,
                     permit = byteArrayOf(),
                     data = byteArrayOf(),

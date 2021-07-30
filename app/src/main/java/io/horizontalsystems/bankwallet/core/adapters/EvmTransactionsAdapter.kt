@@ -127,7 +127,7 @@ class EvmTransactionsAdapter(kit: EthereumKit, coinManager: ICoinManager) :
 
         coin?.let {
             when (val type = coin.type) {
-                CoinType.Ethereum, CoinType.BinanceSmartChain -> coinFilter.add(listOf("ETH"))
+                CoinType.Ethereum, CoinType.BinanceSmartChain -> coinFilter.add(listOf(TransactionTag.EVM_COIN))
                 is CoinType.Erc20 -> coinFilter.add(listOf(type.address))
                 is CoinType.Bep20 -> coinFilter.add(listOf(type.address))
                 else -> {
