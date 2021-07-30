@@ -188,7 +188,7 @@ class TransactionInfoViewModel(
             )
             is Blockchain.BinanceSmartChain -> TransactionInfoModule.ExplorerData(
                 "bscscan.com",
-                "https://bscscan.com/tx/$hash"
+                "https://bscscan.com/tx/0x$hash"
             )
             is Blockchain.Zcash -> TransactionInfoModule.ExplorerData(
                 "blockchair.com",
