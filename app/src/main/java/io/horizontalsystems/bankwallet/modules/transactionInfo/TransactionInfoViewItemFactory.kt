@@ -251,7 +251,10 @@ class TransactionInfoViewItemFactory(
                 val isMaxValue = transaction.value.isMaxValue
                 val currencyAmount = if (isMaxValue) "∞" else valueInFiat
                 val coinAmountColored = if (isMaxValue) ColoredValue(
-                    getString(R.string.TransactionInfo_Unlimited),
+                    translator.getString(
+                        R.string.Transaction_Unlimited,
+                        transaction.value.coin.code
+                    ),
                     getAmountColor(null)
                 ) else coinValueColored
 

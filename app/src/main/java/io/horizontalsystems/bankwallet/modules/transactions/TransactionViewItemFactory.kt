@@ -67,6 +67,7 @@ class TransactionViewItemFactory(
                 TransactionType.Approve(
                     getNameOrAddress(record.spender),
                     getCoinString(record.value),
+                    record.value.coin.code,
                     record.value.isMaxValue
                 )
 

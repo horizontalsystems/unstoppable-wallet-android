@@ -18,7 +18,12 @@ sealed class TransactionType {
         val sentToSelf: Boolean
     ) : TransactionType()
 
-    class Approve(val spender: String, val amount: String, val isMaxAmount: Boolean) :
+    class Approve(
+        val spender: String,
+        val amount: String,
+        val coinCode: String,
+        val isMaxAmount: Boolean
+    ) :
         TransactionType()
 
     class Swap(
