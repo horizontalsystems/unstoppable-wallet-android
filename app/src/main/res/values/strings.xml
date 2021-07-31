@@ -484,6 +484,7 @@
     <string name="Transactions_ContractCreation">Contract Creation</string>
     <string name="Transactions_To">to %s</string>
     <string name="Transactions_From">from %s</string>
+    <string name="Transaction_Unlimited">unlimited %s</string>
 
     <!--Transaction Info-->
 
@@ -515,7 +516,6 @@
     <string name="TransactionInfo_YouGot">You Got</string>
     <string name="TransactionInfo_Resend">Resend</string>
     <string name="TransactionInfo_RevokeApproval">Revoke Approval</string>
-    <string name="TransactionInfo_Unlimited">unlimited</string>
 
     <string name="StatusInfo_Pending">Pending</string>
     <string name="StatusInfo_Processing">Processing</string>

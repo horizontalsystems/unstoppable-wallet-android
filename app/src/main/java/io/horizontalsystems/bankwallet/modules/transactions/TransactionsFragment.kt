@@ -278,7 +278,10 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
                 }
 
                 secondaryValueText =
-                    if (transactionRecord.type.isMaxAmount) getString(R.string.TransactionInfo_Unlimited) else transactionRecord.type.amount
+                    if (transactionRecord.type.isMaxAmount) getString(
+                        R.string.Transaction_Unlimited,
+                        transactionRecord.type.coinCode
+                    ) else transactionRecord.type.amount
                 secondaryValueTextColor = R.color.grey
             }
             is TransactionType.Swap -> {
