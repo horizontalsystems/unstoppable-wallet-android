@@ -769,7 +769,7 @@ class TransactionInfoViewItemFactory(
             )
         } ?: "---"
         val coinValueFormatted =
-            numberFormatter.formatCoin(coinValue.value, coinValue.coin.code, 0, 8)
+            numberFormatter.formatCoin(coinValue.value.abs(), coinValue.coin.code, 0, 8)
         val coinValueColored = ColoredValue(coinValueFormatted, getAmountColor(incoming))
 
         return Amount(valueInFiat, coinValueColored)
