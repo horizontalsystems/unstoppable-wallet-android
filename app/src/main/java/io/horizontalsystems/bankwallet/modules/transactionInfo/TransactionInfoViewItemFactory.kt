@@ -230,7 +230,7 @@ class TransactionInfoViewItemFactory(
                     )
                 )
 
-                val valueInFiat = rate?.let {
+                val fiatAmountFormatted = rate?.let {
                     numberFormatter.formatFiat(
                         (it.value * transaction.value.value).abs(),
                         it.currency.symbol,
@@ -239,24 +239,23 @@ class TransactionInfoViewItemFactory(
                     )
                 } ?: "---"
 
-                val coinValueFormatted =
+                val coinAmountFormatted =
                     numberFormatter.formatCoin(
                         transaction.value.value,
                         transaction.value.coin.code,
                         0,
                         8
                     )
-                val coinValueColored = ColoredValue(coinValueFormatted, getAmountColor(null))
 
-                val isMaxValue = transaction.value.isMaxValue
-                val currencyAmount = if (isMaxValue) "∞" else valueInFiat
-                val coinAmountColored = if (isMaxValue) ColoredValue(
-                    translator.getString(
-                        R.string.Transaction_Unlimited,
-                        transaction.value.coin.code
-                    ),
+                val coinAmountString = if (transaction.value.isMaxValue) translator.getString(
+                    R.string.Transaction_Unlimited,
+                    transaction.value.coin.code
+                ) else coinAmountFormatted
+
+                val fiatAmountColoredValue = ColoredValue(
+                    if (transaction.value.isMaxValue) "∞" else fiatAmountFormatted,
                     getAmountColor(null)
-                ) else coinValueColored
+                )
 
                 //Top Section
                 items.add(
@@ -267,7 +266,7 @@ class TransactionInfoViewItemFactory(
                         ), First
                     )
                 )
-                items.add(TransactionInfoViewItem(Amount(currencyAmount, coinAmountColored), Last))
+                items.add(TransactionInfoViewItem(Amount(coinAmountString, fiatAmountColoredValue), Last))
                 items.add(null)
 
                 //Middle section
@@ -771,11 +770,11 @@ class TransactionInfoViewItemFactory(
                 2
             )
         } ?: "---"
+        val fiatValueColored = ColoredValue(valueInFiat, getAmountColor(incoming))
         val coinValueFormatted =
             numberFormatter.formatCoin(coinValue.value.abs(), coinValue.coin.code, 0, 8)
-        val coinValueColored = ColoredValue(coinValueFormatted, getAmountColor(incoming))
 
-        return Amount(valueInFiat, coinValueColored)
+        return Amount(coinValueFormatted, fiatValueColored)
     }
 
     private fun getHistoricalRate(
