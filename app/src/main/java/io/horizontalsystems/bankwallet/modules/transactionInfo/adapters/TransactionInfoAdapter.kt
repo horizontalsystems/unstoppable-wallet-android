@@ -108,9 +108,11 @@ class TransactionInfoAdapter(
             containerView.findViewById<ImageView>(R.id.leftIcon)?.let {
                 it.setImageResource(button.leftIcon)
             }
-            containerView.findViewById<TextView>(R.id.txtTitle)?.let {
-                it.text = button.title
+            containerView.findViewById<TextView>(R.id.txtTitle)?.apply {
+                text = button.title
+                alpha = if (button.enabled) 1f else 0.5f
             }
+            containerView.isEnabled = button.enabled
             containerView.setOnClickListener { listener.onAdditionalButtonClick(button.type) }
         }
     }

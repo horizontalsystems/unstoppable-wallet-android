@@ -688,7 +688,8 @@ class TransactionInfoViewItemFactory(
                     Button(
                         getString(R.string.TransactionInfo_RevokeApproval),
                         R.drawable.ic_close_20,
-                        RevokeApproval
+                        RevokeApproval,
+                        false
                     ),
                     Single
                 )
