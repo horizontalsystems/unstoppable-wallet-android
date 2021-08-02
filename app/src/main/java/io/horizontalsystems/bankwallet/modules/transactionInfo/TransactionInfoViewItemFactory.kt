@@ -272,7 +272,7 @@ class TransactionInfoViewItemFactory(
                 //Middle section
                 items.addAll(getViewItems(middleSectionTypes))
                 items.add(null)
-                items.addAll(getAdditionalButtons(explorerData, isApproval = true))
+                items.addAll(getAdditionalButtons(explorerData))
 
                 return items
             }
@@ -662,7 +662,6 @@ class TransactionInfoViewItemFactory(
 
     private fun getAdditionalButtons(
         explorerData: TransactionInfoModule.ExplorerData,
-        isApproval: Boolean = false,
         isResend: Boolean = false
     ): List<TransactionInfoViewItem?> {
         val items = mutableListOf<TransactionInfoViewItem?>()
@@ -681,20 +680,6 @@ class TransactionInfoViewItemFactory(
             )
         )
         items.add(null)
-
-        if (isApproval) {
-            items.add(
-                TransactionInfoViewItem(
-                    Button(
-                        getString(R.string.TransactionInfo_RevokeApproval),
-                        R.drawable.ic_close_20,
-                        RevokeApproval
-                    ),
-                    Single
-                )
-            )
-            items.add(null)
-        }
 
         if (isResend) {
             items.add(
