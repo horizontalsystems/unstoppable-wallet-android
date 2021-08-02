@@ -26,7 +26,7 @@ class TransactionViewItemFactory(
         return TransactionViewItem(
             wallet,
             record,
-            getTransactionType(record, lastBlockInfo),
+            getTransactionType(record, lastBlockInfo, wallet.source),
             Date(record.timestamp * 1000),
             record.status(lastBlockInfo?.height),
             mainAmountCurrencyValue?.let { getCurrencyString(it) }
@@ -35,7 +35,8 @@ class TransactionViewItemFactory(
 
     private fun getTransactionType(
         record: TransactionRecord,
-        lastBlockInfo: LastBlockInfo?
+        lastBlockInfo: LastBlockInfo?,
+        source: TransactionSource
     ): TransactionType {
         return when (record) {
             is EvmIncomingTransactionRecord ->
@@ -73,6 +74,7 @@ class TransactionViewItemFactory(
 
             is ContractCallTransactionRecord ->
                 TransactionType.ContractCall(
+                    source.blockchain.getTitle(),
                     getNameOrAddress(record.contractAddress),
                     record.method
                 )

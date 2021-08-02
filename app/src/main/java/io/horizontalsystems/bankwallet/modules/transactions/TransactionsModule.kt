@@ -100,6 +100,19 @@ data class TransactionSource(
                 }
             }
         }
+
+        fun getTitle(): String {
+            return when(this){
+                Bitcoin -> "Bitcoin"
+                Litecoin -> "Litecoin"
+                BitcoinCash -> "BitcoinCash"
+                Dash -> "Dash"
+                Ethereum -> "Ethereum"
+                Zcash -> "Zcash"
+                BinanceSmartChain -> "Binance Smart Chain"
+                is Bep2 -> "Binance Chain"
+            }
+        }
     }
 
 }

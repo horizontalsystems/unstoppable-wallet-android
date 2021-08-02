@@ -301,7 +301,9 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
             }
             is TransactionType.ContractCall -> {
                 image = R.drawable.ic_tx_unordered
-                topText = getString(R.string.Transactions_ContractCall)
+                val blockchainName =
+                    if (transactionRecord.type.blockchainTitle.isNotEmpty()) "${transactionRecord.type.blockchainTitle} " else ""
+                topText = blockchainName + getString(R.string.Transactions_ContractCall)
                 bottomText = getString(
                     R.string.Transactions_From,
                     truncated(transactionRecord.type.contractAddress)
