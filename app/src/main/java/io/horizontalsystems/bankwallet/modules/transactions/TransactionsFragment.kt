@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.StringRes
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -16,9 +15,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.*
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
-import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.TransactionLockState
 import io.horizontalsystems.bankwallet.ui.extensions.NpaLinearLayoutManager
@@ -27,7 +24,6 @@ import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_transactions.*
 import kotlinx.android.synthetic.main.view_holder_filter.*
 import kotlinx.android.synthetic.main.view_holder_transaction.*
-import kotlinx.android.synthetic.main.view_holder_transaction.iconProgress
 
 class TransactionsFragment : Fragment(), TransactionsAdapter.Listener, FilterAdapter.Listener {
 
@@ -183,13 +179,13 @@ class TransactionsAdapter(private var listener: Listener) :
         val item = getItem(position)
         viewModel.delegate.willShow(item)
 
-//        val prev = payloads.lastOrNull() as? TransactionViewItem
+        val prev = payloads.lastOrNull() as? TransactionViewItem
 
-//        if (prev == null) {
+        if (prev == null) {
             holder.bind(item, showBottomShade = (position == itemCount - 1))
-//        } else {
-//            holder.bindUpdate(item, prev)
-//        }
+        } else {
+            holder.bindUpdate(item, prev)
+        }
     }
 
     override fun onClick(position: Int) {
@@ -211,132 +207,67 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
     }
 
     fun bind(transactionRecord: TransactionViewItem, showBottomShade: Boolean) {
+        txIcon.setImageResource(transactionRecord.image)
+        txTopText.text = transactionRecord.topText
+        txBottomText.text = transactionRecord.bottomText
+        txPrimaryText.text = transactionRecord.primaryValueText
+        txSecondaryText.text = transactionRecord.secondaryValueText
 
-        var image: Int? = null
-        val topText: String
-        val bottomText: String?
-        var primaryValueText: String? = null
-        var primaryValueTextColor: Int = R.color.jacob
-        var secondaryValueText: String? = null
-        var secondaryValueTextColor: Int = R.color.remus
-        var showDoubleSpend = false
-        var lockState: TransactionLockState? = null
-        var showSentToSelf = false
-
-        when (transactionRecord.type) {
-            is TransactionType.Incoming -> {
-                image = R.drawable.ic_incoming_20
-                topText = getString(R.string.Transactions_Receive)
-                bottomText = transactionRecord.type.from?.let {
-                    getString(
-                        R.string.Transactions_From,
-                        truncated(it)
-                    )
-                } ?: "---"
-                lockState = transactionRecord.type.lockState
-                showDoubleSpend = transactionRecord.type.conflictingTxHash != null
-
-                transactionRecord.mainAmountCurrencyString?.let {
-                    primaryValueText = it
-                    primaryValueTextColor = R.color.remus
-                }
-
-                secondaryValueText = transactionRecord.type.amount
-                secondaryValueTextColor = R.color.grey
-
-            }
-            is TransactionType.Outgoing -> {
-                image = R.drawable.ic_outgoing_20
-                topText = getString(R.string.Transactions_Send)
-                bottomText = transactionRecord.type.to?.let {
-                    getString(
-                        R.string.Transactions_To,
-                        truncated(it)
-                    )
-                } ?: "---"
-                showSentToSelf = transactionRecord.type.sentToSelf
-                lockState = transactionRecord.type.lockState
-                showDoubleSpend = transactionRecord.type.conflictingTxHash != null
-
-                transactionRecord.mainAmountCurrencyString?.let {
-                    primaryValueText = it
-                    primaryValueTextColor = R.color.jacob
-                }
-
-                secondaryValueText = transactionRecord.type.amount
-                secondaryValueTextColor = R.color.grey
-            }
-            is TransactionType.Approve -> {
-                image = R.drawable.ic_tx_checkmark_20
-                topText = getString(R.string.Transactions_Approve)
-                bottomText =
-                    getString(R.string.Transactions_From, truncated(transactionRecord.type.spender))
-
-                transactionRecord.mainAmountCurrencyString?.let {
-                    primaryValueText = if (transactionRecord.type.isMaxAmount) "∞" else it
-                    primaryValueTextColor = R.color.leah
-                }
-
-                secondaryValueText =
-                    if (transactionRecord.type.isMaxAmount) getString(
-                        R.string.Transaction_Unlimited,
-                        transactionRecord.type.coinCode
-                    ) else transactionRecord.type.amount
-                secondaryValueTextColor = R.color.grey
-            }
-            is TransactionType.Swap -> {
-                image = R.drawable.ic_tx_swap_20
-                topText = getString(R.string.Transactions_Swap)
-                bottomText = getString(
-                    R.string.Transactions_From,
-                    truncated(transactionRecord.type.exchangeAddress)
-                )
-
-                primaryValueText = transactionRecord.type.amountIn
-                primaryValueTextColor = R.color.jacob
-
-                secondaryValueText = transactionRecord.type.amountOut
-                secondaryValueTextColor =
-                    if (transactionRecord.type.foreignRecipient) R.color.grey else R.color.remus
-            }
-            is TransactionType.ContractCall -> {
-                image = R.drawable.ic_tx_unordered
-                val blockchainName =
-                    if (transactionRecord.type.blockchainTitle.isNotEmpty()) "${transactionRecord.type.blockchainTitle} " else ""
-                topText = blockchainName + getString(R.string.Transactions_ContractCall)
-                bottomText = getString(
-                    R.string.Transactions_From,
-                    truncated(transactionRecord.type.contractAddress)
-                )
-            }
-            is TransactionType.ContractCreation -> {
-                image = R.drawable.ic_tx_unordered
-                topText = getString(R.string.Transactions_ContractCreation)
-                bottomText = "---"
-            }
-        }
-
-        if (transactionRecord.status == TransactionStatus.Failed) {
-            image = R.drawable.ic_attention_red_20
-        }
-
-        image?.let {
-            txIcon.setImageResource(it)
-        }
-        txTopText.text = topText
-        txBottomText.text = bottomText
-        txPrimaryText.text = primaryValueText
-        txSecondaryText.text = secondaryValueText
-
-        txPrimaryText.setTextColor(getColor(primaryValueTextColor))
-        txSecondaryText.setTextColor(getColor(secondaryValueTextColor))
+        txPrimaryText.setTextColor(getColor(transactionRecord.primaryValueTextColor))
+        txSecondaryText.setTextColor(getColor(transactionRecord.secondaryValueTextColor))
 
         setProgress(transactionRecord.status)
 
-        doubleSpendIcon.isVisible = showDoubleSpend
-        sentToSelfIcon.isVisible = showSentToSelf
+        doubleSpendIcon.isVisible = transactionRecord.showDoubleSpend
+        sentToSelfIcon.isVisible = transactionRecord.showSentToSelf
         bottomShade.isVisible = showBottomShade
-        setLockIcon(lockState)
+        setLockIcon(transactionRecord.lockState)
+    }
+
+    fun bindUpdate(current: TransactionViewItem, prev: TransactionViewItem) {
+        if (current.image != prev.image) {
+            txIcon.setImageResource(current.image)
+        }
+
+        if (current.topText != prev.topText) {
+            txTopText.text = current.topText
+        }
+
+        if (current.bottomText != prev.bottomText) {
+            txBottomText.text = current.bottomText
+        }
+
+        if (current.primaryValueText != prev.primaryValueText) {
+            txPrimaryText.text = current.primaryValueText
+        }
+
+        if (current.secondaryValueText != prev.secondaryValueText) {
+            txSecondaryText.text = current.secondaryValueText
+        }
+
+        if (current.primaryValueTextColor != prev.primaryValueTextColor) {
+            txPrimaryText.setTextColor(getColor(current.primaryValueTextColor))
+        }
+
+        if (current.secondaryValueTextColor != prev.secondaryValueTextColor) {
+            txSecondaryText.setTextColor(getColor(current.secondaryValueTextColor))
+        }
+
+        if (current.status != prev.status) {
+            setProgress(current.status)
+        }
+
+        if (current.showDoubleSpend != prev.showDoubleSpend) {
+            doubleSpendIcon.isVisible = current.showDoubleSpend
+        }
+
+        if (current.showSentToSelf != prev.showSentToSelf) {
+            sentToSelfIcon.isVisible = current.showSentToSelf
+        }
+
+        if (current.lockState != prev.lockState) {
+            setLockIcon(current.lockState)
+        }
     }
 
     private fun setProgress(status: TransactionStatus) {
@@ -354,51 +285,8 @@ class ViewHolderTransaction(override val containerView: View, private val l: Cli
         }
     }
 
-    private fun truncated(string: String): CharSequence {
-        return TransactionViewHelper.truncated(string, 75f)
-    }
-
-    private fun getString(@StringRes id: Int, vararg params: Any) =
-        containerView.context.getString(id, *params)
-
     private fun getColor(primaryValueTextColor: Int) =
         containerView.context.getColor(primaryValueTextColor)
-
-    fun bindUpdate(current: TransactionViewItem, prev: TransactionViewItem) {
-//        if (current.currencyValue != prev.currencyValue) {
-//            txValueInFiat.text = current.currencyValue?.let {
-//                App.numberFormatter.formatFiat(it.value, it.currency.symbol, 0, 2)
-//            }
-//            txValueInFiat.setTextColor(TransactionViewHelper.getAmountColor(current.type, itemView.context))
-//        }
-//
-//        if (current.lockState != prev.lockState) {
-//            setLockIcon(current.lockState)
-//        }
-//
-//        if (current.coinValue != prev.coinValue) {
-//            val significantDecimal = App.numberFormatter.getSignificantDecimalCoin(current.coinValue.value)
-//            txValueInCoin.text = App.numberFormatter.formatCoin(current.coinValue.value, current.coinValue.coin.code, 0, significantDecimal)
-//        }
-//
-//        if (current.status != prev.status || current.date != prev.date) {
-//            txDate.text = current.date?.let { DateHelper.shortDate(it) }
-//            val time = current.date?.let { DateHelper.getOnlyTime(it) }
-//            txStatusWithTimeView.bind(current.status, current.type, time)
-//            setBottomIcon(current.status, current.type)
-//        }
-//
-//        if (current.doubleSpend != prev.doubleSpend) {
-//            doubleSpendIcon.isVisible = current.doubleSpend
-//        }
-    }
-
-    private fun formatCoin(coinValue: CoinValue?): String? {
-        return coinValue?.let {
-            val significantDecimal = App.numberFormatter.getSignificantDecimalCoin(it.value)
-            App.numberFormatter.formatCoin(it.value, it.coin.code, 0, significantDecimal)
-        }
-    }
 
     private fun setLockIcon(lockState: TransactionLockState?) {
         val imgRes = TransactionViewHelper.getLockIcon(lockState)

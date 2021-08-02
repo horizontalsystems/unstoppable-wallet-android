@@ -2,13 +2,16 @@ package io.horizontalsystems.bankwallet.modules.transactions
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.CoinSettings
 import io.horizontalsystems.bankwallet.entities.LastBlockInfo
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
+import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.TransactionLockState
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoAddressMapper
 import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.core.entities.Currency
@@ -25,6 +28,120 @@ data class TransactionViewItem(
     val status: TransactionStatus,
     var mainAmountCurrencyString: String?
 ) : Comparable<TransactionViewItem> {
+
+    var image: Int
+    val topText: String
+    val bottomText: String
+    var primaryValueText: String? = null
+    var primaryValueTextColor: Int = R.color.jacob
+    var secondaryValueText: String? = null
+    var secondaryValueTextColor: Int = R.color.remus
+    var showDoubleSpend = false
+    var lockState: TransactionLockState? = null
+    var showSentToSelf = false
+
+    init {
+        when (type) {
+            is TransactionType.Incoming -> {
+                image = R.drawable.ic_incoming_20
+                topText = Translator.getString(R.string.Transactions_Receive)
+                bottomText = type.from?.let {
+                    Translator.getString(
+                        R.string.Transactions_From,
+                        truncated(it)
+                    )
+                } ?: "---"
+                lockState = type.lockState
+                showDoubleSpend = type.conflictingTxHash != null
+
+                mainAmountCurrencyString?.let {
+                    primaryValueText = it
+                    primaryValueTextColor = R.color.remus
+                }
+
+                secondaryValueText = type.amount
+                secondaryValueTextColor = R.color.grey
+
+            }
+            is TransactionType.Outgoing -> {
+                image = R.drawable.ic_outgoing_20
+                topText = Translator.getString(R.string.Transactions_Send)
+                bottomText = type.to?.let {
+                    Translator.getString(
+                        R.string.Transactions_To,
+                        truncated(it)
+                    )
+                } ?: "---"
+                showSentToSelf = type.sentToSelf
+                lockState = type.lockState
+                showDoubleSpend = type.conflictingTxHash != null
+
+                mainAmountCurrencyString?.let {
+                    primaryValueText = it
+                    primaryValueTextColor = R.color.jacob
+                }
+
+                secondaryValueText = type.amount
+                secondaryValueTextColor = R.color.grey
+            }
+            is TransactionType.Approve -> {
+                image = R.drawable.ic_tx_checkmark_20
+                topText = Translator.getString(R.string.Transactions_Approve)
+                bottomText =
+                    Translator.getString(R.string.Transactions_From, truncated(type.spender))
+
+                mainAmountCurrencyString?.let {
+                    primaryValueText = if (type.isMaxAmount) "∞" else it
+                    primaryValueTextColor = R.color.leah
+                }
+
+                secondaryValueText = when {
+                    type.isMaxAmount -> Translator.getString(
+                        R.string.Transaction_Unlimited,
+                        type.coinCode
+                    )
+                    else -> type.amount
+                }
+                secondaryValueTextColor = R.color.grey
+            }
+            is TransactionType.Swap -> {
+                image = R.drawable.ic_tx_swap_20
+                topText = Translator.getString(R.string.Transactions_Swap)
+                bottomText = Translator.getString(
+                    R.string.Transactions_From,
+                    truncated(type.exchangeAddress)
+                )
+
+                primaryValueText = type.amountIn
+                primaryValueTextColor = R.color.jacob
+
+                secondaryValueText = type.amountOut
+                secondaryValueTextColor = if (type.foreignRecipient) R.color.grey else R.color.remus
+            }
+            is TransactionType.ContractCall -> {
+                image = R.drawable.ic_tx_unordered
+                val blockchainName = if (type.blockchainTitle.isNotEmpty()) "${type.blockchainTitle} " else ""
+                topText = blockchainName + Translator.getString(R.string.Transactions_ContractCall)
+                bottomText = Translator.getString(
+                    R.string.Transactions_From,
+                    truncated(type.contractAddress)
+                )
+            }
+            is TransactionType.ContractCreation -> {
+                image = R.drawable.ic_tx_unordered
+                topText = Translator.getString(R.string.Transactions_ContractCreation)
+                bottomText = "---"
+            }
+        }
+
+        if (status == TransactionStatus.Failed) {
+            image = R.drawable.ic_attention_red_20
+        }
+    }
+
+    private fun truncated(string: String): CharSequence {
+        return TransactionViewHelper.truncated(string, 75f)
+    }
 
     override fun compareTo(other: TransactionViewItem): Int {
         return record.compareTo(other.record)
