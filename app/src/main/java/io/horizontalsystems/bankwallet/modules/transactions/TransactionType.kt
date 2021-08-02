@@ -33,7 +33,12 @@ sealed class TransactionType {
         val foreignRecipient: Boolean
     ) : TransactionType()
 
-    class ContractCall(val contractAddress: String, val method: String?) : TransactionType()
+    class ContractCall(
+        val blockchainTitle: String,
+        val contractAddress: String,
+        val method: String?
+    ) : TransactionType()
+
     object ContractCreation : TransactionType()
 
     override fun equals(other: Any?): Boolean {
