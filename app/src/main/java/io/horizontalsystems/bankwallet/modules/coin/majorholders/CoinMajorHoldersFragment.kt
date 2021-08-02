@@ -1,7 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.coin.majorholders
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +10,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.coin.CoinViewModel
 import io.horizontalsystems.bankwallet.modules.coin.MajorHolderItem
+import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
@@ -46,6 +45,8 @@ class CoinMajorHoldersFragment : BaseFragment(), CoinMajorHoldersAdapter.Listene
     }
 
     override fun onDetailsClick(address: String) {
-        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://etherscan.io/address/$address")))
+        context?.let { ctx ->
+            LinkHelper.openLinkInAppBrowser(ctx, "https://etherscan.io/address/$address")
+        }
     }
 }

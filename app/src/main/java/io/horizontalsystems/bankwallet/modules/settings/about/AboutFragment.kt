@@ -17,6 +17,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.settings.main.MainSettingsAdapter
 import io.horizontalsystems.bankwallet.modules.settings.main.SettingsMenuItem
+import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.views.ListPosition
 import io.horizontalsystems.views.inflate
@@ -92,9 +93,9 @@ class AboutFragment : BaseFragment() {
         //observe LiveData
 
         viewModel.openLinkLiveData.observe(viewLifecycleOwner, Observer { link ->
-            val uri = Uri.parse(link)
-            val intent = Intent(Intent.ACTION_VIEW, uri)
-            activity?.startActivity(intent)
+            context?.let { ctx ->
+                LinkHelper.openLinkInAppBrowser(ctx, link)
+            }
         })
 
         viewModel.showShareAppLiveData.observe(viewLifecycleOwner, Observer { appWebPageLink ->
