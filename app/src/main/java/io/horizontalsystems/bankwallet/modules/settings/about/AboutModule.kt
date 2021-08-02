@@ -9,7 +9,7 @@ object AboutModule {
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return AboutViewModel(App.appConfigProvider, TextHelper, App.rateAppManager, App.termsManager, App.systemInfoManager) as T
+            return AboutViewModel(App.appConfigProvider, TextHelper, App.termsManager, App.systemInfoManager) as T
         }
     }
 }

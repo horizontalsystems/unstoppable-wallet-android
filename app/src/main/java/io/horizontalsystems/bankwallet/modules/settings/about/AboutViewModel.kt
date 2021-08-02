@@ -4,7 +4,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.IAppConfigProvider
 import io.horizontalsystems.bankwallet.core.IClipboardManager
-import io.horizontalsystems.bankwallet.core.IRateAppManager
 import io.horizontalsystems.bankwallet.core.ITermsManager
 import io.horizontalsystems.core.ISystemInfoManager
 import io.horizontalsystems.core.SingleLiveEvent
@@ -13,7 +12,6 @@ import io.reactivex.disposables.Disposable
 class AboutViewModel(
         private val appConfigProvider: IAppConfigProvider,
         private val clipboardManager: IClipboardManager,
-        private val rateAppManager: IRateAppManager,
         termsManager: ITermsManager,
         systemInfoManager: ISystemInfoManager
 ) : ViewModel() {
@@ -57,10 +55,6 @@ class AboutViewModel(
     fun didFailSendMail() {
         clipboardManager.copyText(reportEmail)
         showCopiedLiveEvent.call()
-    }
-
-    fun onRateUsClicked() {
-        rateAppManager.forceShow()
     }
 
 }

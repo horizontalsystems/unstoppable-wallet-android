@@ -1,12 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.main
 
-import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import androidx.activity.addCallback
-import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
@@ -131,11 +129,7 @@ class MainFragment : BaseFragment(R.layout.fragment_main), RateAppDialogFragment
 
     private fun openAppInPlayMarket() {
         context?.let { context ->
-            try {
-                ContextCompat.startActivity(context, RateAppManager.getPlayMarketAppIntent(), null)
-            } catch (e: ActivityNotFoundException) {
-                ContextCompat.startActivity(context, RateAppManager.getPlayMarketSiteIntent(), null)
-            }
+            RateAppManager.openPlayMarket(context)
         }
     }
 

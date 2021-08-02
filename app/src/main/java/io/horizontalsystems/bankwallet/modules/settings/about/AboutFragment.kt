@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.managers.RateAppManager
 import io.horizontalsystems.bankwallet.modules.settings.main.MainSettingsAdapter
 import io.horizontalsystems.bankwallet.modules.settings.main.SettingsMenuItem
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
@@ -60,7 +61,9 @@ class AboutFragment : BaseFragment() {
         }
 
         val rateUsItem = SettingsMenuItem(R.string.Settings_RateUs, R.drawable.ic_star_20, listPosition = ListPosition.First) {
-            viewModel.onRateUsClicked()
+            context?.let {
+                RateAppManager.openPlayMarket(it)
+            }
         }
 
         val shareAppItem = SettingsMenuItem(R.string.Settings_ShareThisWallet, R.drawable.ic_share_20, listPosition = ListPosition.Last) {
