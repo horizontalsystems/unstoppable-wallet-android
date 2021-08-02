@@ -19,9 +19,9 @@ class TransactionSectionHeader {
         var prevSectionHeader: String? = null
         items.forEachIndexed { index, transactionViewItem ->
             transactionViewItem.date?.let { date ->
-                val sectionHeader = formatDate(date)?.uppercase()
+                val sectionHeader = formatDate(date).uppercase()
 
-                if (sectionHeader != null && sectionHeader != prevSectionHeader) {
+                if (sectionHeader != prevSectionHeader) {
                     headers[index] = sectionHeader
                     prevSectionHeader = sectionHeader
                 }
@@ -29,13 +29,13 @@ class TransactionSectionHeader {
         }
     }
 
-    private fun formatDate(date: Date): String? {
+    private fun formatDate(date: Date): String {
         val calendar = Calendar.getInstance()
         calendar.time = date
 
         val today = Calendar.getInstance()
         if (calendar[Calendar.YEAR] == today[Calendar.YEAR] && calendar[Calendar.DAY_OF_YEAR] == today[Calendar.DAY_OF_YEAR]) {
-            return null
+            return Translator.getString(R.string.Timestamp_Today)
         }
 
         val yesterday = Calendar.getInstance()
