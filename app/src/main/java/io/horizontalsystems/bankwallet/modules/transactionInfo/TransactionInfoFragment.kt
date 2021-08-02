@@ -1,13 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.transactionInfo
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.browser.customtabs.CustomTabColorSchemeParams
-import androidx.browser.customtabs.CustomTabsIntent
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.navGraphViewModels
@@ -17,6 +14,7 @@ import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.transactionInfo.adapters.TransactionInfoAdapter
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionsPresenter
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionsViewModel
+import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.DateHelper
@@ -126,27 +124,7 @@ class TransactionInfoFragment : BaseFragment(), TransactionInfoAdapter.Listener 
 
     private fun openUrlInCustomTabs(url: String) {
         context?.let { ctx ->
-            val builder = CustomTabsIntent.Builder()
-
-            val color = ctx.getColor(R.color.tyler)
-
-            val params = CustomTabColorSchemeParams.Builder()
-                .setNavigationBarColor(color)
-                .setToolbarColor(color)
-                .build()
-
-            builder.setColorSchemeParams(CustomTabsIntent.COLOR_SCHEME_DARK, params)
-            builder.setColorSchemeParams(CustomTabsIntent.COLOR_SCHEME_LIGHT, params)
-            builder.setStartAnimations(ctx, R.anim.slide_from_right, R.anim.slide_to_left)
-            builder.setExitAnimations(
-                ctx,
-                android.R.anim.slide_in_left,
-                android.R.anim.slide_out_right
-            )
-
-            val customTabsIntent = builder.build()
-
-            customTabsIntent.launchUrl(ctx, Uri.parse(url))
+            LinkHelper.openLinkInAppBrowser(ctx, url)
         }
     }
 

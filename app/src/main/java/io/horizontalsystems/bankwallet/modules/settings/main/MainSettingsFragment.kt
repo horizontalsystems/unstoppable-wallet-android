@@ -1,7 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.settings.main
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +13,7 @@ import io.horizontalsystems.bankwallet.modules.main.MainActivity
 import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListModule
+import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.core.getNavigationResult
 import io.horizontalsystems.languageswitcher.LanguageSettingsFragment
 import io.horizontalsystems.views.ListPosition
@@ -194,9 +193,9 @@ class MainSettingsFragment : BaseFragment() {
         })
 
         router.openLinkLiveEvent.observe(viewLifecycleOwner, { link ->
-            val uri = Uri.parse(link)
-            val intent = Intent(Intent.ACTION_VIEW, uri)
-            activity?.startActivity(intent)
+            context?.let { ctx ->
+                LinkHelper.openLinkInAppBrowser(ctx, link)
+            }
         })
 
         router.openWalletConnectLiveEvent.observe(viewLifecycleOwner, {

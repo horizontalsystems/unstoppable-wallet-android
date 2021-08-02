@@ -1,7 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.releasenotes
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +9,7 @@ import androidx.fragment.app.viewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.markdown.MarkdownFragment
+import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import kotlinx.android.synthetic.main.fragment_release_notes.*
 
 class ReleaseNotesFragment : BaseFragment() {
@@ -53,9 +52,9 @@ class ReleaseNotesFragment : BaseFragment() {
     }
 
     private fun openLink(link: String) {
-        val uri = Uri.parse(link)
-        val intent = Intent(Intent.ACTION_VIEW, uri)
-        activity?.startActivity(intent)
+        context?.let { ctx ->
+            LinkHelper.openLinkInAppBrowser(ctx, link)
+        }
     }
 
     companion object {

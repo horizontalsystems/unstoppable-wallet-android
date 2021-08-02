@@ -1,7 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.coin
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -22,6 +20,7 @@ import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartFragment
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartType
 import io.horizontalsystems.bankwallet.modules.settings.notifications.bottommenu.BottomNotificationMenu
 import io.horizontalsystems.bankwallet.modules.settings.notifications.bottommenu.NotificationMenuMode
+import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.findNavController
@@ -163,7 +162,9 @@ class CoinFragment : BaseFragment(), CoinChartAdapter.Listener, CoinDataAdapter.
                 findNavController().navigate(R.id.coinFragment_to_markdownFragment, arguments, navOptions())
             }
             else -> {
-                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(coinLink.url.trim())))
+                context?.let { ctx ->
+                    LinkHelper.openLinkInAppBrowser(ctx, coinLink.url.trim())
+                }
             }
         }
     }

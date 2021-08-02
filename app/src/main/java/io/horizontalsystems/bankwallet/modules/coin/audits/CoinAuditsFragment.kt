@@ -1,7 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.coin.audits
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +11,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.coin.CoinViewModel
 import io.horizontalsystems.bankwallet.modules.market.overview.PoweredByAdapter
+import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.core.findNavController
 import kotlinx.android.synthetic.main.fragment_recyclerview.*
 
@@ -41,6 +40,8 @@ class CoinAuditsFragment : BaseFragment(), CoinAuditsAdapter.Listener {
     }
 
     override fun onItemClick(url: String) {
-        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+        context?.let { ctx ->
+            LinkHelper.openLinkInAppBrowser(ctx, url)
+        }
     }
 }
