@@ -16,12 +16,7 @@ sealed class TransactionInfoItemType {
     ) :
         TransactionInfoItemType()
 
-    class Button(
-        val title: String,
-        val leftIcon: Int,
-        val type: TransactionInfoButtonType,
-        val enabled: Boolean = true
-    ) :
+    class Button(val title: String, val leftIcon: Int, val type: TransactionInfoButtonType) :
         TransactionInfoItemType()
 
     class Status(val title: String, val leftIcon: Int, val status: TransactionStatusViewItem) :
