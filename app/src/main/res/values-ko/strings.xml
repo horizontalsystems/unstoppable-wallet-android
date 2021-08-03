@@ -598,7 +598,7 @@
     <string name="ManageAccounts_Title">지갑 관리하기</string>
     <string name="ManageAccounts_CreateNewWallet">만들기</string>
     <string name="ManageAccounts_ImportWallet">다음에서 복원하기</string>
-    <string name="ManageAccounts_Hint">팁! 기존 지갑을 복원하지만 새 암호를 사용하면 새로운 지갑이 생성됩니다. 여러 지갑에 대해 하나의 12-24 단어 니모닉 복구 문구를 사용하려는 경우 편리합니다.</string>
+    <string name="ManageAccounts_Hint">Tip! Restoring an existing wallet but with a new passphrase will generate a brand new wallet. Handy if you want to use a single 12-24 word mnemonic recovery phrase for multiple wallets.</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">이름</string>
     <string name="ManageAccount_Save">저장</string>
