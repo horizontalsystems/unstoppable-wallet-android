@@ -597,7 +597,7 @@
     <string name="ManageAccounts_Title">Cüzdanları yönet</string>
     <string name="ManageAccounts_CreateNewWallet">Oluştur</string>
     <string name="ManageAccounts_ImportWallet">Geri Yükle</string>
-    <string name="ManageAccounts_Hint">İpucu! Mevcut bir cüzdanı geri yüklemek, ancak yeni bir parola ile yepyeni bir cüzdan oluşturacaktır. Birden fazla cüzdan için 12-24 kelimelik tek bir anımsatıcı kurtarma ifadesi kullanmak istiyorsanız kullanışlı.</string>
+    <string name="ManageAccounts_Hint">Tip! Restoring an existing wallet but with a new passphrase will generate a brand new wallet. Handy if you want to use a single 12-24 word mnemonic recovery phrase for multiple wallets.</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">İsim</string>
     <string name="ManageAccount_Save">Kaydet</string>
