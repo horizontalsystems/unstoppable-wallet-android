@@ -597,7 +597,7 @@
     <string name="ManageAccounts_Title">Portefeuilles</string>
     <string name="ManageAccounts_CreateNewWallet">Créer</string>
     <string name="ManageAccounts_ImportWallet">Restaurer</string>
-    <string name="ManageAccounts_Hint">Astuce ! La restauration d\'un portefeuille existant, mais avec une nouvelle phrase d\'authentification, génère un tout nouveau portefeuille. Pratique si vous souhaitez utiliser une seule phrase de réinitialisation mnémonique de 12 à 24 mots pour plusieurs portefeuilles.</string>
+    <string name="ManageAccounts_Hint">Tip! Restoring an existing wallet but with a new passphrase will generate a brand new wallet. Handy if you want to use a single 12-24 word mnemonic recovery phrase for multiple wallets.</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">Nom</string>
     <string name="ManageAccount_Save">Sauvegarder</string>
