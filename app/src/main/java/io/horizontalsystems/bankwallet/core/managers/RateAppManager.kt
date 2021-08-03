@@ -35,7 +35,6 @@ class RateAppManager(
     private var isOnBalancePage = false
 
     private fun onCountdownPass() {
-
         var balance: BigDecimal = BigDecimal.ZERO
 
         for (wallet in walletManager.activeWallets) {
@@ -64,7 +63,6 @@ class RateAppManager(
     }
 
     override fun onAppLaunch() {
-
         val launchCount = localStorage.appLaunchCount
         if (launchCount < MIN_LAUNCH_COUNT) {
             localStorage.appLaunchCount = launchCount + 1
@@ -72,14 +70,11 @@ class RateAppManager(
         }
 
         val lastRequestTime = localStorage.rateAppLastRequestTime
-        if ((Instant.now().epochSecond - lastRequestTime) < REQUEST_TIME_INTERVAL) {
+        if (lastRequestTime > 0 && (Instant.now().epochSecond - lastRequestTime) < REQUEST_TIME_INTERVAL) {
             return
         }
-
         isCountdownAllowed = true
-    }
 
-    override fun onAppBecomeActive() {
         if(isCountdownAllowed && !isCountdownPassed){
             startCountdownChecker()
         }

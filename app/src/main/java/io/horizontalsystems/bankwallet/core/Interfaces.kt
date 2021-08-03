@@ -545,7 +545,6 @@ interface IRateAppManager {
     fun onBalancePageActive()
     fun onBalancePageInactive()
     fun onAppLaunch()
-    fun onAppBecomeActive()
     fun forceShow()
 }
 
