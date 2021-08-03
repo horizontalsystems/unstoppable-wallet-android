@@ -600,7 +600,7 @@
     <string name="ManageAccounts_Title">Кошельки</string>
     <string name="ManageAccounts_CreateNewWallet">Создать</string>
     <string name="ManageAccounts_ImportWallet">Восстановить</string>
-    <string name="ManageAccounts_Hint">Совет: Восстановление существующего кошелька с другой кодовой фразой приведет к созданию нового кошелька. Это очень удобно, когда вы хотите использовать одну мнемоническую восстановительную фразу длиной от 12 до 24 слов для нескольких кошельков.</string>
+    <string name="ManageAccounts_Hint">Tip! Restoring an existing wallet but with a new passphrase will generate a brand new wallet. Handy if you want to use a single 12-24 word mnemonic recovery phrase for multiple wallets.</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">Названию</string>
     <string name="ManageAccount_Save">Сохранить</string>
