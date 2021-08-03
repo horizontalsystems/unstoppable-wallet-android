@@ -598,7 +598,7 @@ poner en peligro la seguridad de mis fondos.</string>
     <string name="ManageAccounts_Title">Monederos</string>
     <string name="ManageAccounts_CreateNewWallet">Crear</string>
     <string name="ManageAccounts_ImportWallet">Restaurar desde</string>
-    <string name="ManageAccounts_Hint">¡Sugerencia! Restaurar una cartera existente pero con una nueva contraseña generará una nueva cartera. Maneja si quieres usar una sola frase de recuperación mnemónica de 12-24 palabras para múltiples carteras.</string>
+    <string name="ManageAccounts_Hint">Tip! Restoring an existing wallet but with a new passphrase will generate a brand new wallet. Handy if you want to use a single 12-24 word mnemonic recovery phrase for multiple wallets.</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">Nombre</string>
     <string name="ManageAccount_Save">Guardar</string>
