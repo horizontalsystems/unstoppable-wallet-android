@@ -303,7 +303,5 @@ class App : CoreApp() {
             AppVersionManager(systemInfoManager, localStorage).apply { storeAppVersion() }
 
         }).start()
-
-        rateAppManager.onAppBecomeActive()
     }
 }
