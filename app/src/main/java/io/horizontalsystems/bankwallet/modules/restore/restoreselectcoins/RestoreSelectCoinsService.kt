@@ -29,6 +29,7 @@ class RestoreSelectCoinsService(
     val enabledCoins = mutableListOf<ConfiguredCoin>()
 
     private var restoreSettingsMap = mutableMapOf<Coin, RestoreSettings>()
+    private var enableCoinServiceIsBusy = false
 
     val cancelEnableCoinAsync = PublishSubject.create<Coin>()
 
@@ -41,6 +42,14 @@ class RestoreSelectCoinsService(
         }
 
     init {
+        enableCoinsService.stateAsync
+            .subscribe {
+                enableCoinServiceIsBusy = it == EnableCoinsService.State.Loading
+                syncCanRestore()
+            }.let {
+                disposables.add(it)
+            }
+
         enableCoinsService.enableCoinsAsync
                 .subscribeIO { coins ->
                     handleEnable(coins)
@@ -119,7 +128,7 @@ class RestoreSelectCoinsService(
     }
 
     private fun syncCanRestore() {
-        canRestore.onNext(enabledCoins.isNotEmpty())
+        canRestore.onNext(enabledCoins.isNotEmpty() && !enableCoinServiceIsBusy)
     }
 
     private fun configuredCoins(coin: Coin, settingsList: List<CoinSettings>) = when {
