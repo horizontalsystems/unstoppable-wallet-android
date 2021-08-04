@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.send
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
@@ -109,7 +110,7 @@ object SendModule {
         val availableBalance: BigDecimal
         val fee: BigDecimal
 
-        fun validate(address: String)
+        fun validate(address: String): ZcashAdapter.ZCashAddressType
         fun send(amount: BigDecimal, address: String, memo: String?, logger: AppLogger): Single<Unit>
     }
 
@@ -271,7 +272,7 @@ object SendModule {
         object Amount : Input()
         class Address(val editable: Boolean = false) : Input()
         object Fee : Input()
-        class Memo(val maxLength: Int) : Input()
+        class Memo(val maxLength: Int, val hidden: Boolean = false) : Input()
         object ProceedButton : Input()
         object Hodler : Input()
     }
