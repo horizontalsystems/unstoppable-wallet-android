@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.core
 
 import com.google.gson.JsonObject
 import io.horizontalsystems.bankwallet.core.adapters.EvmTransactionConverter
+import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
 import io.horizontalsystems.bankwallet.core.managers.RateUsType
 import io.horizontalsystems.bankwallet.core.managers.Term
 import io.horizontalsystems.bankwallet.core.managers.TorManager
@@ -283,7 +284,7 @@ interface ISendZcashAdapter {
     val availableBalance: BigDecimal
     val fee: BigDecimal
 
-    fun validate(address: String)
+    fun validate(address: String): ZcashAdapter.ZCashAddressType
     fun send(amount: BigDecimal, address: String, memo: String, logger: AppLogger): Single<Unit>
 }
 

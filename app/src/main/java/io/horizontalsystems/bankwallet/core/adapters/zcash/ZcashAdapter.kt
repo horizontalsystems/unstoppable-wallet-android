@@ -192,15 +192,16 @@ class ZcashAdapter(
     override val fee: BigDecimal
         get() = defaultFee().convertZatoshiToZec()
 
-    override fun validate(address: String) {
-        runBlocking {
+    override fun validate(address: String): ZCashAddressType {
+        return runBlocking {
             when (synchronizer.validateAddress(address)) {
                 is AddressType.Invalid -> throw ZcashError.InvalidAddress
-                is AddressType.Transparent -> throw ZcashError.TransparentAddressNotAllowed
+                is AddressType.Transparent -> ZCashAddressType.Transparent
                 is AddressType.Shielded -> {
                     if (address == receiveAddress) {
                         throw ZcashError.SendToSelfNotAllowed
                     }
+                    ZCashAddressType.Shielded
                 }
             }
         }
@@ -348,6 +349,10 @@ class ZcashAdapter(
                     memo = transaction.memo
             )
         }
+    }
+
+    enum class ZCashAddressType{
+        Shielded, Transparent
     }
 
     sealed class ZcashError : Exception() {

@@ -7,6 +7,7 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import io.horizontalsystems.bankwallet.R
@@ -15,9 +16,9 @@ import io.horizontalsystems.bankwallet.modules.send.submodules.SendSubmoduleFrag
 import kotlinx.android.synthetic.main.view_send_memo.*
 
 
-class SendMemoFragment(private val maxLength: Int,
+class SendMemoFragment(private val maxLength: Int, hidden: Boolean,
                        private val handler: SendModule.ISendHandler) : SendSubmoduleFragment() {
-    private val presenter by activityViewModels<SendMemoPresenter> { SendMemoModule.Factory(maxLength, handler) }
+    private val presenter by activityViewModels<SendMemoPresenter> { SendMemoModule.Factory(maxLength, hidden, handler) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.view_send_memo, container, false)
@@ -41,6 +42,10 @@ class SendMemoFragment(private val maxLength: Int,
 
         presenterView.maxLength.observe(viewLifecycleOwner, Observer { maxLength ->
             memoInput.filters = arrayOf(InputFilter.LengthFilter(maxLength))
+        })
+
+        presenterView.hidden.observe(viewLifecycleOwner, { hidden ->
+            memoWrapper.isVisible = !hidden
         })
     }
 

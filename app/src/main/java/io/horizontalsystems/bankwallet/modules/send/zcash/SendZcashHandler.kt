@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.send.zcash
 
 import io.horizontalsystems.bankwallet.core.AppLogger
+import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.address.SendAddressModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmountModule
@@ -28,6 +29,9 @@ class SendZcashHandler(
             addressModule.validateAddress()
         } catch (e: Exception) {
             addressError = e
+            if (addressError is SendAddressModule.ValidationError.EmptyValue){
+                memoModule.setHidden(true)
+            }
         }
 
         delegate.onChange(amountError == null && addressError == null && feeModule.isValid, amountError, addressError)
@@ -50,7 +54,7 @@ class SendZcashHandler(
     override val inputItems: List<SendModule.Input> = listOf(
             SendModule.Input.Amount,
             SendModule.Input.Address(true),
-            SendModule.Input.Memo(120),
+            SendModule.Input.Memo(120, true),
             SendModule.Input.Fee,
             SendModule.Input.ProceedButton
     )
@@ -90,7 +94,13 @@ class SendZcashHandler(
 
     //region SendAddressModule.IAddressModuleDelegate
     override fun validate(address: String) {
-        interactor.validate(address)
+        try {
+            val addressType = interactor.validate(address)
+            memoModule.setHidden(addressType == ZcashAdapter.ZCashAddressType.Transparent)
+        }catch (e: Exception){
+            memoModule.setHidden(true)
+            throw e
+        }
     }
 
     override fun onUpdateAddress() {
