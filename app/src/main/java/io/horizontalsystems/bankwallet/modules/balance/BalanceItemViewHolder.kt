@@ -73,6 +73,8 @@ class BalanceItemViewHolder(override val containerView: View, private val listen
             balanceFiat.text = fiatValue.text
             balanceCoinLocked.text = coinValueLocked.text
             balanceFiatLocked.text = fiatValueLocked.text
+            textSyncing.text = syncingTextValue.text
+            textSyncedUntil.text = syncedUntilTextValue.text
 
             exchangeRate.text = exchangeValue.text
             exchangeRate.setTextColor(containerView.context.getColor(if (exchangeValue.dimmed) R.color.grey_50 else R.color.grey))
@@ -90,6 +92,8 @@ class BalanceItemViewHolder(override val containerView: View, private val listen
             balanceCoinLocked.isVisible = coinValueLocked.visible
             balanceFiatLocked.isVisible = fiatValueLocked.visible
             lockedBorder.isVisible = coinValueLocked.visible
+            textSyncing.isVisible = syncingTextValue.visible
+            textSyncedUntil.isVisible = syncedUntilTextValue.visible
 
             balanceCoin.dimIf(coinValue.dimmed)
             balanceFiat.dimIf(fiatValue.dimmed)
