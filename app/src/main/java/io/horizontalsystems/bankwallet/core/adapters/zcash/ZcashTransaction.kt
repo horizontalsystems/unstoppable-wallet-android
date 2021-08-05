@@ -66,7 +66,7 @@ class ZcashTransaction : Comparable<ZcashTransaction> {
             // trim empty and "replacement characters" for codes that can't be represented in unicode
             String(this, charset("UTF-8")).trim('\u0000', '\uFFFD')
         } catch (t: Throwable) {
-            "Unable to parse memo."
+            null
         }
     }
 

@@ -429,8 +429,8 @@ class TransactionInfoViewItemFactory(
                     middleSectionTypes.add(it)
                 }
 
-                transaction.memo?.let {
-                    middleSectionTypes.add(Value(getString(R.string.TransactionInfo_Memo), it))
+                if (!transaction.memo.isNullOrBlank()){
+                    middleSectionTypes.add(Value(getString(R.string.TransactionInfo_Memo), transaction.memo))
                 }
 
                 //Top section
@@ -502,8 +502,8 @@ class TransactionInfoViewItemFactory(
                     )
                 }
 
-                transaction.memo?.let {
-                    middleSectionTypes.add(Value(getString(R.string.TransactionInfo_Memo), it))
+                if (!transaction.memo.isNullOrBlank()){
+                    middleSectionTypes.add(Value(getString(R.string.TransactionInfo_Memo), transaction.memo))
                 }
 
                 //Top section
@@ -544,8 +544,8 @@ class TransactionInfoViewItemFactory(
                     )
                 )
 
-                transaction.memo?.let {
-                    middleSectionTypes.add(Value(getString(R.string.TransactionInfo_Memo), it))
+                if (!transaction.memo.isNullOrBlank()){
+                    middleSectionTypes.add(Value(getString(R.string.TransactionInfo_Memo), transaction.memo))
                 }
 
                 //Top section
@@ -588,8 +588,8 @@ class TransactionInfoViewItemFactory(
                     )
                 )
 
-                transaction.memo?.let {
-                    middleSectionTypes.add(Value(getString(R.string.TransactionInfo_Memo), it))
+                if (!transaction.memo.isNullOrBlank()){
+                    middleSectionTypes.add(Value(getString(R.string.TransactionInfo_Memo), transaction.memo))
                 }
 
                 //Top section
