@@ -39,13 +39,12 @@ class MarketDiscoveryService(
 
     val marketCategories = listOf(
             MarketCategory.Blockchains, MarketCategory.Dexes, MarketCategory.Lending, MarketCategory.YieldAggregators,
-            MarketCategory.InvestmentTools, MarketCategory.Oracles, MarketCategory.Gaming, MarketCategory.Scaling,
-            MarketCategory.Privacy, MarketCategory.ExchangeTokens, MarketCategory.Wallets, MarketCategory.FiatStablecoins,
-            MarketCategory.RebaseTokens, MarketCategory.AlgoStablecoins, MarketCategory.NFT, MarketCategory.TokenizedBitcoin,
-            MarketCategory.StablecoinIssuers, MarketCategory.RiskManagement, MarketCategory.FanTokens,
-            MarketCategory.Synthetics, MarketCategory.IndexFunds, MarketCategory.FundRaising, MarketCategory.Prediction,
-            MarketCategory.B2B, MarketCategory.Infrastructure, MarketCategory.Staking, MarketCategory.CrossChain,
-            MarketCategory.Computing, MarketCategory.Storage, MarketCategory.Identity, MarketCategory.YieldTokens
+            MarketCategory.Gaming, MarketCategory.Oracles, MarketCategory.NFT, MarketCategory.Privacy, MarketCategory.Storage,
+            MarketCategory.Wallets, MarketCategory.Identity, MarketCategory.Scaling, MarketCategory.Analytics,
+            MarketCategory.YieldTokens, MarketCategory.ExchangeTokens, MarketCategory.FiatStablecoins,
+            MarketCategory.TokenizedBitcoin, MarketCategory.RiskManagement, MarketCategory.Synthetics,
+            MarketCategory.IndexFunds, MarketCategory.Prediction, MarketCategory.FundRaising,  MarketCategory.Infrastructure,
+
     )
 
     init {
