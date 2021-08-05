@@ -26,7 +26,7 @@ class ZcashTransaction : Comparable<ZcashTransaction> {
             minedHeight = it.minedHeight
             timestamp = it.blockTimeInSeconds
             value = it.value
-            memo = it.memo?.toString(Charsets.UTF_8)
+            memo = it.memo.toUtf8Memo()
             failed = false
         }
     }
@@ -41,7 +41,7 @@ class ZcashTransaction : Comparable<ZcashTransaction> {
             minedHeight = it.minedHeight
             timestamp = it.createTime / 1000
             value = it.value
-            memo = it.memo?.toString(Charsets.UTF_8)
+            memo = it.memo.toUtf8Memo()
             failed = it.isFailure()
         }
     }
@@ -59,6 +59,15 @@ class ZcashTransaction : Comparable<ZcashTransaction> {
         transactionHash.contentEquals(other.transactionHash) -> 0
         timestamp == other.timestamp -> transactionIndex.compareTo(other.transactionIndex)
         else -> timestamp.compareTo(other.timestamp)
+    }
+
+    private fun ByteArray?.toUtf8Memo(): String? {
+        return if (this == null || this.isEmpty() || this[0] >= 0xF5) null else try {
+            // trim empty and "replacement characters" for codes that can't be represented in unicode
+            String(this, charset("UTF-8")).trim('\u0000', '\uFFFD')
+        } catch (t: Throwable) {
+            "Unable to parse memo."
+        }
     }
 
 }
