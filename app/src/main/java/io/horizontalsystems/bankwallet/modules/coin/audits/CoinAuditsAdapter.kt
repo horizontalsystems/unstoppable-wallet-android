@@ -5,21 +5,19 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.providers.Translator
-import io.horizontalsystems.bankwallet.modules.coin.CoinAuditItem
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.views.inflate
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_coin_audit_item.*
 import kotlinx.android.synthetic.main.view_holder_coin_investors_section_header.*
 
-class CoinAuditsAdapter(
-    private val items: List<CoinAuditItem>,
-    private val listener: Listener
-) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class CoinAuditsAdapter(private val listener: Listener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     interface Listener {
         fun onItemClick(url: String)
     }
+
+    var items: List<CoinAuditItem> = listOf()
 
     private val viewTypeHeader = 0
     private val viewTypeItem = 1
@@ -42,7 +40,9 @@ class CoinAuditsAdapter(
         val item = items[position]
         when (holder) {
             is ViewHolderAuditReport -> holder.bind(item as CoinAuditItem.Report) {
-                listener.onItemClick(item.link)
+                item.link?.let {
+                    listener.onItemClick(it)
+                }
             }
             is ViewHolderAuditSectionHeader -> holder.bind(item as CoinAuditItem.Header)
         }

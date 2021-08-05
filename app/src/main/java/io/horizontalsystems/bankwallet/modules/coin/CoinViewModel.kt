@@ -47,7 +47,6 @@ class CoinViewModel(
     val showNotificationMenu = SingleLiveEvent<Pair<CoinType, String>>()
     val isFavorite = MutableLiveData<Boolean>()
     val coinMajorHolders = MutableLiveData<List<MajorHolderItem>>()
-    val coinAudits = MutableLiveData<List<CoinAuditItem>>()
     val coinMarketTickers = MutableLiveData<List<MarketTicker>>()
     val coinInvestors = MutableLiveData<List<InvestorItem>>()
 
@@ -95,7 +94,6 @@ class CoinViewModel(
 
         service.getCoinDetails(rateDiffCoinCodes, rateDiffPeriods)
         service.getTopTokenHolders()
-        service.getCoinAudits()
 
         fetchChartInfo()
 
@@ -137,15 +135,6 @@ class CoinViewModel(
 
         service.topTokenHoldersStateObservable
                 .subscribeIO {
-                    syncTopTokenHoldersState(it)
-                }
-                .let {
-                    disposable.add(it)
-                }
-
-        service.coinAuditsStateObservable
-                .subscribeIO {
-                    coinAudits.postValue(factory.getCoinAudits(service.coinAudits))
                     syncTopTokenHoldersState(it)
                 }
                 .let {
@@ -313,7 +302,7 @@ class CoinViewModel(
             securityParams = factory.getSecurityParams(securityParameter)
         }
 
-        factory.getCoinAudits(service.coinAudits, coinType)?.let { securityParams.add(it) }
+        factory.getCoinAudits(coinType)?.let { securityParams.add(it) }
         factory.setListPosition(securityParams)
 
         securityParamsLiveData.postValue(securityParams)
