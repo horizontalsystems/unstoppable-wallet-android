@@ -11,7 +11,8 @@ abstract class TransactionRecord(
     val blockHeight: Int?,
     val confirmationsThreshold: Int?,
     val timestamp: Long,
-    val failed: Boolean = false
+    val failed: Boolean = false,
+    val blockchainTitle: String = ""
 ) : Comparable<TransactionRecord> {
 
     open val mainValue: CoinValue? = null

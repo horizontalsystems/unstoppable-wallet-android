@@ -62,6 +62,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:itemCount="4"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:listitem="@layout/view_holder_transaction" />
 
 </LinearLayout>
