@@ -7,6 +7,7 @@ import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.coin.CoinDataClickType.SecurityInfo
+import io.horizontalsystems.bankwallet.modules.coin.audits.CoinAuditItem
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.chartview.ChartData
 import io.horizontalsystems.chartview.ChartDataFactory
@@ -96,8 +97,9 @@ sealed class CoinDataClickType: Parcelable {
     object MajorHolders : CoinDataClickType()
     @Parcelize
     object FundsInvested : CoinDataClickType()
+
     @Parcelize
-    object SecurityAudits : CoinDataClickType()
+    class SecurityAudits(val coinType: CoinType) : CoinDataClickType()
 
     @Parcelize
     class SecurityInfo(val title: Int, val items: List<Item>) : CoinDataClickType() {
@@ -125,17 +127,6 @@ sealed class MajorHolderItem {
         val share: BigDecimal,
         val sharePercent: String
     ) : MajorHolderItem()
-}
-
-sealed class CoinAuditItem {
-    class Header(val name: String) : CoinAuditItem()
-    class Report(
-        val name: String,
-        val date: Date,
-        val issues: Int = 0,
-        val link: String,
-        val position: ListPosition
-    ) : CoinAuditItem()
 }
 
 data class AboutText(val value: String, val type: CoinMeta.DescriptionType)
@@ -486,11 +477,7 @@ class CoinViewFactory(
         return items
     }
 
-    fun getCoinAudits(coinAudits: List<Auditor>, coinType: CoinType): CoinDataItem? {
-        if (coinAudits.isEmpty()) {
-            return null
-        }
-
+    fun getCoinAudits(coinType: CoinType): CoinDataItem? {
         if (coinType !is CoinType.Erc20 && coinType !is CoinType.Bep20) {
             return null
         }
@@ -498,7 +485,7 @@ class CoinViewFactory(
         return CoinDataItem(
             title = Translator.getString(R.string.CoinPage_SecurityParams_Audits),
             icon = R.drawable.ic_arrow_right,
-            clickType = CoinDataClickType.SecurityAudits
+            clickType = CoinDataClickType.SecurityAudits(coinType)
         )
     }
 
