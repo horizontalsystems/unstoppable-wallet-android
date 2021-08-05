@@ -43,7 +43,7 @@ class TransactionsFragment : Fragment(), TransactionsAdapter.Listener, FilterAda
         super.onViewCreated(view, savedInstanceState)
 
         val layoutManager = NpaLinearLayoutManager(context)
-        transactionsAdapter.viewModel = viewModel
+//        transactionsAdapter.viewModel = viewModel
         transactionsAdapter.registerAdapterDataObserver(object :
             RecyclerView.AdapterDataObserver() {
             override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
@@ -148,7 +148,7 @@ class TransactionsAdapter(private var listener: Listener) :
         fun onItemClick(item: TransactionViewItem)
     }
 
-    lateinit var viewModel: TransactionsViewModel
+//    lateinit var viewModel: TransactionsViewModel
 
     override fun getItemCount(): Int {
         return if (super.getItemCount() == 0) 1 else super.getItemCount()
@@ -177,7 +177,7 @@ class TransactionsAdapter(private var listener: Listener) :
         if (holder !is ViewHolderTransaction) return
 
         val item = getItem(position)
-        viewModel.delegate.willShow(item)
+//        viewModel.delegate.willShow(item)
 
         val prev = payloads.lastOrNull() as? TransactionViewItem
 
@@ -190,7 +190,7 @@ class TransactionsAdapter(private var listener: Listener) :
 
     override fun onClick(position: Int) {
         val item = getItem(position)
-        viewModel.delegate.showDetails(item)
+//        viewModel.delegate.showDetails(item)
         listener.onItemClick(item)
     }
 }
