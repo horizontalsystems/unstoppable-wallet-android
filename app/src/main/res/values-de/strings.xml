@@ -302,6 +302,7 @@
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Error_InsufficientBalance">Die Transaktion erfordert %s zum Senden</string>
     <string name="EthereumTransaction_Error_InsufficientBalanceForFee">Das aktuelle %s-Guthaben liegt unter dem für die Abwicklung dieser Transaktion erforderlichen Betrag einschließlich der Transaktionsgebühr.</string>
+    <string name="EthereumTransaction_Error_LowerThanBaseGasLimit">Gas price can\'t be lower than base</string>
     <!--Swap-->
     <string name="Swap">Tauschen</string>
     <string name="Swap_FromAmountTitle">Sie bezahlen</string>
