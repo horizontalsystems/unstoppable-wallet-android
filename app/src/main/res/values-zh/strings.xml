@@ -6,7 +6,7 @@
     <string name="Alert_Close">关闭</string>
     <string name="Alert_Loading">正在加载...</string>
     <string name="Alert_Restart">重新启动</string>
-    <string name="Action_Undo">UNDO</string>
+    <string name="Action_Undo">撤消</string>
     <string name="Button_Cancel">取消</string>
     <string name="Button_Next">继续</string>
     <string name="Button_Enable">启用</string>
@@ -219,12 +219,12 @@
     <string name="Balance_Syncing_WithProgress">正在同步... %s%%</string>
     <string name="Balance_AddCoins">添加代币</string>
     <string name="Balance_AddCoin">添加代币</string>
-    <string name="Balance_CoinDisabled">Disabled coin %s</string>
+    <string name="Balance_CoinDisabled">已禁用代币%s</string>
     <string name="Balance_Sort_Balance">余额</string>
     <string name="Balance_Sort_PopupTitle">排序方式</string>
     <string name="Balance_Sort_Az">名称</string>
     <string name="Balance_Sort_24hPriceChange">24小时变更 (%)</string>
-    <string name="Balance_Hidden">hidden</string>
+    <string name="Balance_Hidden">隱藏</string>
     <string name="Balance_Backup_Alert">您必须在接收%s之前先备份%s钱包。</string>
     <string name="Balance_NoWalletAlert">您还没有任何钱包。创建新钱包或恢复已有钱包 </string>
     <string name="Balance_NoCoinsAlert">您还没有添加任何代币到此钱包中。</string>
@@ -239,7 +239,7 @@
     <string name="Send_Confirmation_YouSend">您发送</string>
     <string name="Send_Confirmation_Amount">金额</string>
     <string name="Send_Confirmation_To">接收人</string>
-    <string name="Send_Confirmation_Method">Method</string>
+    <string name="Send_Confirmation_Method">方法</string>
     <string name="Send_Confirmation_Receiver">接收器</string>
     <string name="Send_Confirmation_EstimateTime">预计时间：</string>
     <string name="Send_Confirmation_Send_Button">发送​​</string>
@@ -302,6 +302,7 @@
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Error_InsufficientBalance">交易要求%s用于发送。</string>
     <string name="EthereumTransaction_Error_InsufficientBalanceForFee">當前%s餘額低於處理此交易所需的金額，包括交易費用。</string>
+    <string name="EthereumTransaction_Error_LowerThanBaseGasLimit">Gas price can\'t be lower than base</string>
     <!--Swap-->
     <string name="Swap">掉期交易</string>
     <string name="Swap_FromAmountTitle">您支付</string>
@@ -326,7 +327,7 @@
     <string name="Swap_Swapping">交换文件</string>
     <string name="Swap_MaximumPaid">最大支付金额</string>
     <string name="Swap_MinimumGot">保证金额</string>
-    <string name="Swap_PoweredBy">Powered by</string>
+    <string name="Swap_PoweredBy">技术支持：</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">高级设置</string>
     <string name="SwapSettings_Service">服务</string>
@@ -501,7 +502,7 @@
     <string name="SettingsSecurity_EditPin">编辑密码</string>
     <string name="SettingsSecurity_ManageKeys">管理钱包</string>
     <string name="SettingsSecurity_AppRestartWarning">此操作将重新启动Unstoppable钱包。</string>
-    <string name="SettingsSecurity_TorConnectionDescription">Fully anonymize your internet while using this app. Note, in some cases WalletConnect feature for DeFi apps may be very slow or not work at all.</string>
+    <string name="SettingsSecurity_TorConnectionDescription">使用此应用的同时让您的网络完全匿名化。请注意，在某些情况下，DeFi应用的WalletConnect功能可能非常慢或根本不起作用。</string>
     <string name="SettingsSecurity_NotificationsDisabledWarning">已禁用Unstoppable钱包应用通知。您必须开启通知，Tor才能运作。</string>
     <string name="SettingsSecurity_SortingShuffle">随机排序</string>
     <string name="SettingsSecurity_SortingShuffleDescription">随机索引</string>
@@ -599,7 +600,7 @@
     <string name="ManageAccount_NWordsWithPassphrase">%s 个单词的密码</string>
     <!--Network Settings-->
     <string name="NetworkSettings_Title">网络设置</string>
-    <string name="NetworkSettings_TestNetDisclaimer">Please do not select Testnet options unless you understand what that is and how it works.\n\nTestnet is a parallel blockchain for testing purposes with its own currency. If someone sends a regular payment to your Testnet address, it will be lost.</string>
+    <string name="NetworkSettings_TestNetDisclaimer">除非您了解什么是Testnet选项以及其工作原理，否则请不要选择该选项。\n\nTestnet是一个使用自己的货币进行测试的并行区块链。如果有人向您的Testnet地址发送定期付款，付款将会丢失。</string>
     <!-- Show Key -->
     <string name="ShowKey_Title">密钥</string>
     <string name="ShowKey_Description">如果您的手机出现丢失、被盗或损坏等情况，那么在下一步显示的恢复码将是恢复您资金的唯一方法。\n\n确保不会有任何人看到您的屏幕。</string>
@@ -692,7 +693,7 @@
     <string name="CoinPage_Audits">Audits</string>
     <string name="CoinPage_Audits_Empty">No audit reports</string>
     <string name="CoinPage_Audits_FetchError">Fetch Error</string>
-    <string name="CoinPage_Audits_PoweredBy">Powered by Defiyield.app</string>
+    <string name="CoinPage_Audits_PoweredBy">由 Defiyield.app 提供支持</string>
     <string name="CoinPage_Audits_Issues">issues： %d</string>
     <string name="CoinPage_InvestorData">Investor Data</string>
     <string name="CoinPage_FundsInvested">Funds Invested</string>
