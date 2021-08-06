@@ -61,13 +61,17 @@ class ZcashTransaction : Comparable<ZcashTransaction> {
         else -> timestamp.compareTo(other.timestamp)
     }
 
-    private fun ByteArray?.toUtf8Memo(): String? {
-        return if (this == null || this.isEmpty() || this[0] >= 0xF5) null else try {
-            // trim empty and "replacement characters" for codes that can't be represented in unicode
-            String(this, charset("UTF-8")).trim('\u0000', '\uFFFD')
-        } catch (t: Throwable) {
-            null
-        }
+    //taken from here
+    //https://github.com/zcash/zcash-android-wallet/blob/371c5ef36517cab868e5345dcc8ac7517560987f/app/src/main/java/cash/z/ecc/android/ui/util/MemoUtil.kt#L24-L33
+    private fun ByteArray?.toUtf8Memo(): String {
+        return if (this == null || this.isEmpty() || this[0] >= 0xF5) ""
+        else
+            try {
+                // trim empty and "replacement characters" for codes that can't be represented in unicode
+                String(this, charset("UTF-8")).trim('\u0000', '\uFFFD')
+            } catch (t: Throwable) {
+                "Unable to parse memo."
+            }
     }
 
 }
