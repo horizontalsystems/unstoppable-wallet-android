@@ -398,6 +398,7 @@ class SendEvmTransactionViewModel(
                 is EvmError.ExecutionReverted -> {
                     Translator.getString(R.string.EthereumTransaction_Error_InsufficientBalanceForFee, coinServiceFactory.baseCoinService.coin.code)
                 }
+                is EvmError.LowerThanBaseGasLimit -> Translator.getString(R.string.EthereumTransaction_Error_LowerThanBaseGasLimit)
                 else -> convertedError.message ?: convertedError.javaClass.simpleName
             }
 }

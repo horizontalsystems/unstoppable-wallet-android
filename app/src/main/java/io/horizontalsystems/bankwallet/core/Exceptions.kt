@@ -20,6 +20,7 @@ class FailedTransaction(errorMessage: String?) : RuntimeException(errorMessage) 
 
 sealed class EvmError(message: String? = null) : Throwable(message) {
     object InsufficientBalanceWithFee : EvmError()
+    object LowerThanBaseGasLimit : EvmError()
     class ExecutionReverted(message: String?) : EvmError(message)
     class RpcError(message: String?) : EvmError(message)
 }
@@ -40,6 +41,8 @@ val Throwable.convertedError: Throwable
                 )
             ) {
                 EvmError.InsufficientBalanceWithFee
+            } else if (error.message.contains("max fee per gas less than block base fee")) {
+                EvmError.LowerThanBaseGasLimit
             } else if (error.message.contains("execution reverted")) {
                 EvmError.ExecutionReverted(error.message)
             } else {
