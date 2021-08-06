@@ -273,13 +273,13 @@
     <string name="Send_Warning_LowFee">¡Advertencia! Riesgo de atascarse</string>
     <!--Fee Info -->
     <string name="FeeInfo_Title">Velocidad de transacción</string>
-    <string name="FeeInfo_Description">Las blockchains de Ethereum y Bitcoin requieren que los usuarios paguen tarifas de uso mientras envian transaciones en la blockchain \n\n Unstoppable utiliza tarifas de servicios publicos estimados para ayudar al usuario a determinar tarifas de transación apropiadas para el momento. Las tarifas son altas cuando hay muchas transacciones ocurriendo al mismo tiempo y menos cuando la blockchain se encuentra menos ocupada. </string>
+    <string name="FeeInfo_Description">Both Bitcoin and Ethereum blockchains require users to pay network fees when sending transactions. The fees are higher when a lot of transactions are taking place on the network and lower when the blockchain is less busy.</string>
     <string name="FeeInfo_Slow">Lento</string>
-    <string name="FeeInfo_SlowDescription">Seleccionar un valor de este rango puede resultar en que la transacción esté pendiente por horas o sea rechazada por completo. Cuanto más bajo sea el valor, más tardará en confirmar la transacción.</string>
+    <string name="FeeInfo_SlowDescription">Selecting a value from this range may result in transaction being pending for hours or being rejected. The lower the value the longer it will take for the transaction to confirm.</string>
     <string name="FeeInfo_Average">Promedio</string>
-    <string name="FeeInfo_AverageDescription">Por lo general, este rango de honorarios debería ser suficiente para que la transacción sea procesada entre un minuto/hora para Bitcoin y dentro de minutos para Ethereum.</string>
+    <string name="FeeInfo_AverageDescription">Typically, recommended fee value should be sufficient for transaction to be processed within minutes/hour for Bitcoin and within minutes for Ethereum.</string>
     <string name="FeeInfo_Fast">Rápido</string>
-    <string name="FeeInfo_FastDescription">Para las transacciones en las que la prioridad es importante, recomendamos utilizar la configuración de alta tarifa. Se espera que la selección de un ajuste de alta tarifa sea suficiente para que la transacción se complete dentro de 10 minutos para Bitcoin y dentro de unos minutos para Ethereum.\n\nEl monedero imparable hace una conjetura educada basada en la actividad de la red y no puede garantizar que los valores de las comisiones sugeridas siempre resulten en un comportamiento esperado.</string>
+    <string name="FeeInfo_FastDescription">For transactions where priority is important we recommend using the high fee value. It\'s expected to be sufficient for a transaction to be completed within 10 minutes for Bitcoin and within 1-2 minutes for Ethereum.</string>
     <!--Wallet Connect-->
     <string name="WalletConnect_Title">Wallet Connect</string>
     <string name="WalletConnect_Request">Pedido</string>
@@ -302,7 +302,7 @@
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Error_InsufficientBalance">La transacción requiere %s para enviar</string>
     <string name="EthereumTransaction_Error_InsufficientBalanceForFee">El saldo actual de %s es inferior al monto requerido para procesar esta transacción, incluida la tarifa de transacción.</string>
-    <string name="EthereumTransaction_Error_LowerThanBaseGasLimit">Gas price can\'t be lower than base</string>
+    <string name="EthereumTransaction_Error_LowerThanBaseGasLimit">The selected fee value is too low and will be rejected!</string>
     <!--Swap-->
     <string name="Swap">Permutar</string>
     <string name="Swap_FromAmountTitle">Usted paga</string>
