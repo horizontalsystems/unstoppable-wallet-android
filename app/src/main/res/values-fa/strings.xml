@@ -302,6 +302,7 @@
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Error_InsufficientBalance">تراکنش برای ارسال به %s نیاز دارد</string>
     <string name="EthereumTransaction_Error_InsufficientBalanceForFee">موجودی %s فعلی زیر مقدار مورد نیاز برای تراکنش این معامله از جمله هزینه معامله است.</string>
+    <string name="EthereumTransaction_Error_LowerThanBaseGasLimit">Gas price can\'t be lower than base</string>
     <!--Swap-->
     <string name="Swap">جایگزینی</string>
     <string name="Swap_FromAmountTitle">شما می پردازید</string>
