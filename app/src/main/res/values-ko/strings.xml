@@ -273,13 +273,13 @@
     <string name="Send_Warning_LowFee">경고! 갇힐 위험</string>
     <!--Fee Info -->
     <string name="FeeInfo_Title">거래 속도</string>
-    <string name="FeeInfo_Description">비트코인과 이더리움 블록체인 모두 사용자가 블록체인으로 거래를 전송하면서 사용료를 내야 합니다.\n\n언스타퍼블 사용자가 현재 적절한 거래 수수료를 결정하는 데 도움이 되도록 공공 요금 추정 서비스를 사용합니다. 수수료는 거래가 많을 때 더 비싸고 블록체인이 덜 바쁠 때 더 낮아집니다.</string>
+    <string name="FeeInfo_Description">Both Bitcoin and Ethereum blockchains require users to pay network fees when sending transactions. The fees are higher when a lot of transactions are taking place on the network and lower when the blockchain is less busy.</string>
     <string name="FeeInfo_Slow">느리게</string>
-    <string name="FeeInfo_SlowDescription">이 범위에서 값을 선택하면 거래가 몇 시간 동안 보류되거나 완전히 거부될 수 있습니다. 값이 낮을수록 거래를 확인하는 데 시간이 더 오래 걸립니다.</string>
+    <string name="FeeInfo_SlowDescription">Selecting a value from this range may result in transaction being pending for hours or being rejected. The lower the value the longer it will take for the transaction to confirm.</string>
     <string name="FeeInfo_Average">평균</string>
-    <string name="FeeInfo_AverageDescription">일반적으로 이 수수료 범위는 비트코인의 경우 시간당 몇 분 이내, 이더리움의 경우 몇 분 이내에 거래가 처리되기에 충분해야 합니다.</string>
+    <string name="FeeInfo_AverageDescription">Typically, recommended fee value should be sufficient for transaction to be processed within minutes/hour for Bitcoin and within minutes for Ethereum.</string>
     <string name="FeeInfo_Fast">빠르게</string>
-    <string name="FeeInfo_FastDescription">우선 순위가 중요한 거래의 경우 높은 수수료 설정을 사용하는 것이 좋습니다. 비트코인은 10분 이내, 이더리움은 몇 분 이내 거래가 완료되기에 고액 수수료 설정 선택만으로도 충분할 것으로 예상됩니다.</string>
+    <string name="FeeInfo_FastDescription">For transactions where priority is important we recommend using the high fee value. It\'s expected to be sufficient for a transaction to be completed within 10 minutes for Bitcoin and within 1-2 minutes for Ethereum.</string>
     <!--Wallet Connect-->
     <string name="WalletConnect_Title">Wallet Connect</string>
     <string name="WalletConnect_Request">요청</string>
@@ -302,7 +302,7 @@
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Error_InsufficientBalance">거래에서 전송하려면 %s가 필요합니다</string>
     <string name="EthereumTransaction_Error_InsufficientBalanceForFee">현재 %s 잔액은 거래 수수료를 포함하여이 거래를 처리하는 데 필요한 금액보다 적습니다.</string>
-    <string name="EthereumTransaction_Error_LowerThanBaseGasLimit">Gas price can\'t be lower than base</string>
+    <string name="EthereumTransaction_Error_LowerThanBaseGasLimit">The selected fee value is too low and will be rejected!</string>
     <!--Swap-->
     <string name="Swap">스왑</string>
     <string name="Swap_FromAmountTitle">지불하기</string>
