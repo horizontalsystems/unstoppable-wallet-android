@@ -202,7 +202,7 @@
     <string name="TvlRank_Field_HighestTvl">Highest TVL</string>
     <string name="TvlRank_Field_LowestTvl">Lowest TVL</string>
     <string name="TvlRank_Field_All">All</string>
-    <string name="TvlRank_Field_Eth">Ethereum</string>
+    <string name="TvlRank_Field_Eth">Bitcoin Cash</string>
     <string name="TvlRank_Field_Bsc">Binance</string>
     <string name="TvlRank_Field_Sol">Solana</string>
     <string name="TvlRank_Field_Ava">Avalanche</string>
@@ -224,7 +224,7 @@
     <string name="Balance_Sort_PopupTitle">정렬 기준</string>
     <string name="Balance_Sort_Az">이름</string>
     <string name="Balance_Sort_24hPriceChange">24시간 가격 (%)</string>
-    <string name="Balance_Hidden">hidden</string>
+    <string name="Balance_Hidden">숨겨짐</string>
     <string name="Balance_Backup_Alert">귀하께서 %s를 받기전에 %s 지갑의 백업이 필요합니다.</string>
     <string name="Balance_NoWalletAlert">귀하께서는 아직 지갑이 없습니다. 새 생성 또는 기존 복원 해주십시오 </string>
     <string name="Balance_NoCoinsAlert">이 지갑에 코인을 넣지 않았습니다</string>
@@ -239,7 +239,7 @@
     <string name="Send_Confirmation_YouSend">보냅니다</string>
     <string name="Send_Confirmation_Amount">양</string>
     <string name="Send_Confirmation_To">에게</string>
-    <string name="Send_Confirmation_Method">Method</string>
+    <string name="Send_Confirmation_Method">메소드</string>
     <string name="Send_Confirmation_Receiver">받는 사람</string>
     <string name="Send_Confirmation_EstimateTime">예상 소요시간:</string>
     <string name="Send_Confirmation_Send_Button">전송</string>
@@ -273,13 +273,13 @@
     <string name="Send_Warning_LowFee">경고! 갇힐 위험</string>
     <!--Fee Info -->
     <string name="FeeInfo_Title">거래 속도</string>
-    <string name="FeeInfo_Description">Both Bitcoin and Ethereum blockchains require users to pay network fees when sending transactions. The fees are higher when a lot of transactions are taking place on the network and lower when the blockchain is less busy.</string>
+    <string name="FeeInfo_Description">비트코인과 이더리움 블록체인 모두 사용자가 거래를 보낼 때 네트워크 수수료를 지불해야 합니다. 수수료는 네트워크에서 많은 거래가 발생할 때 더 높고 블록체인이 적으면 더 낮습니다.</string>
     <string name="FeeInfo_Slow">느리게</string>
-    <string name="FeeInfo_SlowDescription">Selecting a value from this range may result in transaction being pending for hours or being rejected. The lower the value the longer it will take for the transaction to confirm.</string>
+    <string name="FeeInfo_SlowDescription">이 범위에서 값을 선택하면 거래가 몇 시간 동안 보류되거나 거부될 수 있습니다. 값이 낮을수록 거래가 확인되는 데 더 오래 걸립니다.</string>
     <string name="FeeInfo_Average">평균</string>
-    <string name="FeeInfo_AverageDescription">Typically, recommended fee value should be sufficient for transaction to be processed within minutes/hour for Bitcoin and within minutes for Ethereum.</string>
+    <string name="FeeInfo_AverageDescription">일반적으로 권장 수수료 값은 비트코인의 경우 분/시간 이내, 이더리움의 경우 몇 분 이내로 거래를 처리하기에 충분해야 합니다.</string>
     <string name="FeeInfo_Fast">빠르게</string>
-    <string name="FeeInfo_FastDescription">For transactions where priority is important we recommend using the high fee value. It\'s expected to be sufficient for a transaction to be completed within 10 minutes for Bitcoin and within 1-2 minutes for Ethereum.</string>
+    <string name="FeeInfo_FastDescription">우선 순위가 중요한 거래의 경우 높은 수수료 값을 사용하는 것이 좋습니다. 비트코인의 경우 10분 이내, 이더리움의 경우 1~2분 이내에 거래가 완료될 것으로 예상됩니다.</string>
     <!--Wallet Connect-->
     <string name="WalletConnect_Title">Wallet Connect</string>
     <string name="WalletConnect_Request">요청</string>
@@ -294,15 +294,15 @@
     <string name="WalletConnect_Status_Online">온라인</string>
     <string name="WalletConnect_Status_Connecting">연결중...</string>
     <string name="WalletConnect_NewConnect">새로운 연결</string>
-    <string name="WalletConnect_SignMessageRequest_Title">Sign Request</string>
-    <string name="WalletConnect_SignMessageRequest_Domain">Domain</string>
-    <string name="WalletConnect_SignMessageRequest_ShowMessageTitle">Message to sign</string>
-    <string name="WalletConnect_SignMessageRequest_SignMessageHint">Please sign a message to authenticate</string>
-    <string name="WalletConnect_SignMessageRequest_ButtonSign">Sign</string>
+    <string name="WalletConnect_SignMessageRequest_Title">서명 요청</string>
+    <string name="WalletConnect_SignMessageRequest_Domain">도메인</string>
+    <string name="WalletConnect_SignMessageRequest_ShowMessageTitle">서명할 메시지</string>
+    <string name="WalletConnect_SignMessageRequest_SignMessageHint">인증을 위해 메시지에 서명하십시오</string>
+    <string name="WalletConnect_SignMessageRequest_ButtonSign">가입</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Error_InsufficientBalance">거래에서 전송하려면 %s가 필요합니다</string>
     <string name="EthereumTransaction_Error_InsufficientBalanceForFee">현재 %s 잔액은 거래 수수료를 포함하여이 거래를 처리하는 데 필요한 금액보다 적습니다.</string>
-    <string name="EthereumTransaction_Error_LowerThanBaseGasLimit">The selected fee value is too low and will be rejected!</string>
+    <string name="EthereumTransaction_Error_LowerThanBaseGasLimit">선택한 수수료 값이 너무 낮아 거부됩니다!</string>
     <!--Swap-->
     <string name="Swap">스왑</string>
     <string name="Swap_FromAmountTitle">지불하기</string>
@@ -327,11 +327,11 @@
     <string name="Swap_Swapping">스와핑</string>
     <string name="Swap_MaximumPaid">최대 지불액</string>
     <string name="Swap_MinimumGot">보증 금액</string>
-    <string name="Swap_PoweredBy">Powered by</string>
+    <string name="Swap_PoweredBy">제공</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">고급 설정</string>
-    <string name="SwapSettings_Service">Service</string>
-    <string name="SwapSettings_SlippageTitle">Slippage Tolerance</string>
+    <string name="SwapSettings_Service">서비스</string>
+    <string name="SwapSettings_SlippageTitle">토큰 범위 설정</string>
     <string name="SwapSettings_SlippageDescription">가격이 이 퍼센트보다 높게 불리한 조건으로 변경될 경우 귀하의 거래가 원상 복구됩니다.</string>
     <string name="SwapSettings_DeadlineTitle">거래 마감 시간</string>
     <string name="SwapSettings_DeadlineDescription">귀하의 거래가 이 시간 이상 보류되면 원상 복귀됩니다</string>
@@ -353,7 +353,7 @@
     <string name="Swap_Confirmation_Maximum">최대</string>
     <string name="Swap_Confirmation_Estimated">예상</string>
     <!--Swap Coin Select-->
-    <string name="Swap_CoinSelect_Title">Choose Crypto</string>
+    <string name="Swap_CoinSelect_Title">암호 선택하기</string>
     <!--Approve-->
     <string name="Approve_Title">스왑 승인</string>
     <string name="Approve_Info">스마트 계약에 사용자 대신 지정된 토큰을 교환할 수 있는 권한을 부여해야 합니다. 이 권한은 스마트 계약에서 사용할 수 있는 금액을 설정합니다. 잔액에는 영향을 미치지 않지만 승인 거래를 실행하려면 소액의 수수료가 필요합니다.\n\n매 거래 전에 요청 시 이루어질 수 있지만, 향후 거래를 위해 사전에 더 많은 금액을 승인하는 것이 더 저렴합니다.</string>
@@ -388,27 +388,27 @@
     <string name="Transactions_FilterAll">전부</string>
     <string name="Transactions_EmptyList">당신은 아직 보류 중 또는 과거에 완료된 거래가 없습니다</string>
     <string name="Transactions_Pending">보류 중</string>
-    <string name="Transactions_Receive">Receive</string>
-    <string name="Transactions_Completed">Completed</string>
-    <string name="Transactions_Processing">Processing</string>
-    <string name="Transactions_Send">Send</string>
-    <string name="Transactions_Approve">Approve</string>
-    <string name="Transactions_Swap">Swap</string>
+    <string name="Transactions_Receive">수신</string>
+    <string name="Transactions_Completed">완료</string>
+    <string name="Transactions_Processing">처리 중</string>
+    <string name="Transactions_Send">전송</string>
+    <string name="Transactions_Approve">승인</string>
+    <string name="Transactions_Swap">스왑</string>
     <string name="Transactions_Failed">실패</string>
-    <string name="Transactions_ContractCall">Contract Call</string>
-    <string name="Transactions_ContractCreation">Contract Creation</string>
-    <string name="Transactions_To">to %s</string>
-    <string name="Transactions_From">from %s</string>
-    <string name="Transaction_Unlimited">unlimited %s</string>
+    <string name="Transactions_ContractCall">계약 콜</string>
+    <string name="Transactions_ContractCreation">계약 생성</string>
+    <string name="Transactions_To">%s에게</string>
+    <string name="Transactions_From">%s부터</string>
+    <string name="Transaction_Unlimited">무제한 %s</string>
     <!--Transaction Info-->
     <string name="TransactionInfo_Transaction">거래기록</string>
-    <string name="TransactionInfo_Title">Transaction Info</string>
+    <string name="TransactionInfo_Title">거래 정보</string>
     <string name="TransactionInfo_Approval">스왑 승인</string>
     <string name="TransactionInfo_Status">상태</string>
     <string name="TransactionInfo_Status_Confirmed">확인</string>
-    <string name="TransactionInfo_Date">Date</string>
+    <string name="TransactionInfo_Date">날짜</string>
     <string name="TransactionInfo_Id">거래 ID</string>
-    <string name="TransactionInfo_Service">Service</string>
+    <string name="TransactionInfo_Service">서비스</string>
     <string name="TransactionInfo_RawTransaction">로우 트랜잭션</string>
     <string name="TransactionInfo_To">에게</string>
     <string name="TransactionInfo_From">로 부터</string>
@@ -418,25 +418,25 @@
     <string name="TransactionInfo_RecipientHash">수령인</string>
     <string name="TransactionInfo_HistoricalRate">과거 환율</string>
     <string name="TransactionInfo_Fee">수수료</string>
-    <string name="TransactionInfo_FeeEstimated">Fee (est.)</string>
+    <string name="TransactionInfo_FeeEstimated">수수료 (추정)</string>
     <string name="TransactionInfo_SentToSelfNote">이 거래는 귀하의 주소로 전송이 되었습니다</string>
     <string name="TransactionInfo_DoubleSpendNote">이중 지출 위험!</string>
     <string name="TransactionInfo_ButtonViewOnExplorerName">%s에서 보기</string>
-    <string name="TransactionInfo_Price">Price</string>
-    <string name="TransactionInfo_YouPay">You Pay</string>
-    <string name="TransactionInfo_YouPaid">You Paid</string>
-    <string name="TransactionInfo_YouGet">You Get</string>
-    <string name="TransactionInfo_YouGot">You Got</string>
-    <string name="TransactionInfo_Resend">Resend</string>
+    <string name="TransactionInfo_Price">금액</string>
+    <string name="TransactionInfo_YouPay">지불하기</string>
+    <string name="TransactionInfo_YouPaid">지불한 금액</string>
+    <string name="TransactionInfo_YouGet">얻기</string>
+    <string name="TransactionInfo_YouGot">받았던 금액</string>
+    <string name="TransactionInfo_Resend">재전송</string>
     <string name="TransactionInfo_RevokeApproval">Revoke Approval</string>
     <string name="StatusInfo_Pending">보류 중</string>
-    <string name="StatusInfo_Processing">Processing</string>
-    <string name="StatusInfo_Confirmed">Completed</string>
+    <string name="StatusInfo_Processing">처리 중</string>
+    <string name="StatusInfo_Confirmed">완료</string>
     <string name="StatusInfo_Failed">실패</string>
-    <string name="StatusInfo_PendingDescription">Transaction has not been confirmed on the blockchain yet. Transactions sent with recommended or higher fee setting are generally processed within 10 minutes. Transactions sent with a low fee may remain pending for a few hours or even days, and can even be rejected entirely.</string>
-    <string name="StatusInfo_ProcessingDescription">Transaction has been already included in the blockchain but has not reached permanent finality. At this point, it\'s safe to consider transaction completed for smaller payments. For larger payments it\'s recommended to wait until transacction status changes to completed.</string>
-    <string name="StatusInfo_ConfirmedDescription">Transaction is completed and considered permanent and irreversible.</string>
-    <string name="StatusInfo_FailedDescription">Transaction did not get processed and no value transfer took place. Transactions with fail status are still written to the blockchain and consume transaction fees. Unstoppable app is unable to show the fail reason for such transactions but users are able to look it up themselves on a public block exlorer i.e. etherscan.io.</string>
+    <string name="StatusInfo_PendingDescription">아직 블록체인에서 거래가 확인되지 않았습니다. 권장 또는 더 높은 수수료 설정으로 전송된 거래는 일반적으로 10분 이내에 처리됩니다. 낮은 수수료로 전송된 거래는 몇 시간 또는 며칠 동안 보류 상태로 남아 있을 수 있으며 완전히 거부될 수도 있습니다.</string>
+    <string name="StatusInfo_ProcessingDescription">거래는 이미 블록체인에 포함되었지만 영구적인 완결성에 도달하지 않았습니다. 이 시점에서 소액 결제를 위해 완료된 거래로 간주하는 것이 안전합니다. 더 큰 지불의 경우 거래 상태가 완료로 변경될 때까지 기다리는 것이 좋습니다.</string>
+    <string name="StatusInfo_ConfirmedDescription">거래가 완료되고 영구적이고 되돌릴 수 없는 것으로 간주됩니다.</string>
+    <string name="StatusInfo_FailedDescription">거래가 처리되지 않았으며 가치 이전이 발생하지 않았습니다. 실패 상태의 거래는 여전히 블록체인에 기록되고 거래 수수료가 소비됩니다. Unstoppable 앱은 이러한 거래에 대한 실패 이유를 표시할 수 없지만 사용자는 etherscan.io와 같은 공개 블록 탐색기에서 직접 찾을 수 있습니다.</string>
     <!-- Info -->
     <string name="Info_LockTime_Title">시간 자물쇠</string>
     <string name="Info_LockTime_Description">발송자는 이러한 자금들을 %s 날짜에 만료가 되는 잠금 지출과 함께 보냈습니다. \n\n걱정 하지마십시오, 수신된 비트코인은 이미 귀하의 것입니다 하지만 잠금 기간이 만료될때 까지 비트코인 네트워크에서 사용하실 수 없습니다.</string>
@@ -458,7 +458,7 @@
     <string name="Settings_Title">설정</string>
     <string name="Settings_SecurityCenter">보안 센터</string>
     <string name="Settings_Notifications">알림</string>
-    <string name="Settings_ExperimentalFeatures">Experimental</string>
+    <string name="Settings_ExperimentalFeatures">실험적인</string>
     <string name="Settings_BaseCurrency">기초 통화</string>
     <string name="Settings_Language">언어</string>
     <string name="Settings_Theme">테마</string>
@@ -471,7 +471,7 @@
     <string name="SettingsAboutApp_Title">앱 정보</string>
     <string name="SettingsAboutApp_Site">웹사이트</string>
     <string name="SettingsAboutApp_WhatsNew">새로운 기능</string>
-    <string name="SettingsPrivacy_Info">This app doesn\'t collect any data about you.</string>
+    <string name="SettingsPrivacy_Info">이 앱은 귀하의 데이터를 공유하지 않습니다. 하지만 앱이 블록체인과 통신할 때 IP 주소와 같은 일부 공개 데이터가 유출 될 수도 있습니다. 각 섹션에 대한 자세한 정보를 확인하려면 오른쪽 상단의 정보 버튼을 누르십시오.</string>
     <string name="SettingsPrivacy_ConnectionSettingsTitle">인터넷</string>
     <string name="SettingsPrivacy_WalletRestore">블록체인 복원</string>
     <string name="SettingsPrivacy_WalletRestoreDescription">매매거래로 지갑을 복원 할 데이터 소스를 선택하세요.</string>
@@ -561,8 +561,8 @@
     <string name="Hud_Text_Success">성공</string>
     <string name="Hud_Text_NoInternet">인터넷에 연결되지 않음</string>
     <string name="Hud_Text_Copied">복사됨</string>
-    <string name="Hud_Text_Created">Created</string>
-    <string name="Hud_Text_Done">Done</string>
+    <string name="Hud_Text_Created">생성됨</string>
+    <string name="Hud_Text_Done">완료</string>
     <string name="Hud_Text_EmailAddressCopied">이메일 주소 복사됨</string>
     <string name="Hud_Added_To_Watchlist">Added To Watchlist</string>
     <string name="Hud_Removed_from_Watchlist">Removed from Watchlist</string>
@@ -583,24 +583,24 @@
     <string name="ManageAccounts_Title">지갑 관리하기</string>
     <string name="ManageAccounts_CreateNewWallet">만들기</string>
     <string name="ManageAccounts_ImportWallet">다음에서 복원하기</string>
-    <string name="ManageAccounts_Hint">Tip! Restoring an existing wallet but with a new passphrase will generate a brand new wallet. Handy if you want to use a single 12-24 word mnemonic recovery phrase for multiple wallets.</string>
+    <string name="ManageAccounts_Hint">중요! 기존 지갑을 복원하지만 새로운 암호를 사용하면 완전히 새로운 지갑이 생성됩니다. 여러 지갑에 대해 단일 12-24 단어 니모닉 복구 구문을 사용하려는 경우 편리합니다.</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">이름</string>
     <string name="ManageAccount_Save">저장</string>
     <string name="ManageAccount_RecoveryPhraseBackup">백업 문구</string>
     <string name="ManageAccount_RecoveryPhraseShow">문구 표시</string>
-    <string name="ManageAccount_NetworkSettings">Network Settings</string>
+    <string name="ManageAccount_NetworkSettings">네트워크 설정</string>
     <string name="ManageAccount_Unlink">연결되지 않은</string>
     <string name="ManageAccount_BackupRequired_Title">백업이 필요합니다</string>
     <string name="ManageAccount_BackupRequired_Description">개인 암호가 휴대폰에서 지워질 수 있기 전에 귀하께서는 개인 암호를 백업 하셔야 합니다.</string>
     <string name="ManageAccount_Delete_ConfirmationRemove">장치에서 이 지갑을 삭제합니다.</string>
     <string name="ManageAccount_Delete_ConfirmationDisable">이 지갑에 속한 모든 코인은 잔액 탭에서 비활성화됩니다.</string>
     <string name="ManageAccount_Delete_ConfirmationLose">지갑에서 개인 암호를 백업 시키지 않으셨을 경우, 귀하께서는 자금 접근에 제한이 있을 것 입니다.</string>
-    <string name="ManageAccount_BirthdayHeight">%s Birthday Height</string>
+    <string name="ManageAccount_BirthdayHeight">생일 높이 %s</string>
     <string name="ManageAccount_NWords">%s 단어</string>
     <string name="ManageAccount_NWordsWithPassphrase">암호 문구로 이루어진 %s 단어</string>
     <!--Network Settings-->
-    <string name="NetworkSettings_Title">Network Settings</string>
+    <string name="NetworkSettings_Title">네트워크 설정</string>
     <string name="NetworkSettings_TestNetDisclaimer">Please do not select Testnet options unless you understand what that is and how it works.\n\nTestnet is a parallel blockchain for testing purposes with its own currency. If someone sends a regular payment to your Testnet address, it will be lost.</string>
     <!-- Show Key -->
     <string name="ShowKey_Title">키</string>
@@ -642,17 +642,17 @@
     <string name="EnalbeToken_NoCoins">잔액이 있는 코인을 찾을 수 없습니다</string>
     <string name="EnalbeToken_EnableKey">활성화</string>
     <!-- Add Token -->
-    <string name="AddToken_Title">Add Token</string>
+    <string name="AddToken_Title">토큰 추가</string>
     <string name="AddToken_CoinName">코인 이름</string>
     <string name="AddToken_Symbol">심볼</string>
     <string name="AddToken_Decimals">소수점</string>
     <string name="AddToken_Dots">…</string>
-    <string name="AddToken_CoinType">Coin Type</string>
+    <string name="AddToken_CoinType">코인 유형</string>
     <string name="AddToken_CoinAlreadyInListWarning">이 토큰은 이미 코인 매니저 리스트에 있습니다.</string>
-    <string name="AddToken_InvalidAddressError">Invalid contract address or BEP2 symbol</string>
+    <string name="AddToken_InvalidAddressError">잘못된 계약 주소 또는 BEP2 기호</string>
     <string name="AddToken_ApiLimitExceeded">Api limit exceeded. Try again later.</string>
     <string name="AddEvmToken_ContractNotFound">거래 발견되지 않음</string>
-    <string name="AddBep2Token_SymbolNotFound">Symbol not found</string>
+    <string name="AddBep2Token_SymbolNotFound">기호 발견되지 않음</string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Title">주소 형식</string>
     <string name="AddressFormatSettings_Description">귀하의 %s 지갑의 주소 형식을 선택하십시오. 선택한 각 형식은 앱의 잔고 탭에 있는 다른 지갑을 나타냅니다.</string>
@@ -713,7 +713,7 @@
     <string name="CoinPage_SecurityParams_No">No</string>
     <string name="CoinPage_SecurityParams_Privacy_Low">Transactions with this token are fully public allowing 3rd party services to link different transactions to the same entity, see amounts transacted and view user balances.</string>
     <string name="CoinPage_SecurityParams_Privacy_Medium">Transactions with this token are semi-anonymous. A 3rd party service is able to see the amounts transacted and partially link different transactions to the same entity.</string>
-    <string name="CoinPage_SecurityParams_Privacy_High">Transactions with this token are anonymous by default or provide such capabilities. No entiyt is able to link different transactions to the same individual or see the amounts transacted.</string>
+    <string name="CoinPage_SecurityParams_Privacy_High">Transactions with this token are anonymous by default or provide such capabilities. No entity is able to link different transactions to the same individual or see the amounts transacted.</string>
     <string name="CoinPage_SecurityParams_Issuance_Centralized">The amount of tokens in circulation can potentially be increased or decreased by a centralized entity at will.</string>
     <string name="CoinPage_SecurityParams_Issuance_Decentralized">The amount of tokens in circulation controlled by an algorithm and works in a deterministic manner outside of centralized influence.</string>
     <string name="CoinPage_SecurityParams_ConfiscationResistance_Yes">The tokens can not be confiscated when kept in non-custodial wallet.</string>
@@ -772,5 +772,5 @@
     <string name="BalanceSyncError_ButtonChangeSource">출처를 변경하다</string>
     <string name="BalanceSyncError_ButtonReport">보고</string>
     <!--Release notes-->
-    <string name="ReleaseNotes_FollowUs">Follow Us</string>
+    <string name="ReleaseNotes_FollowUs">팔로우</string>
 </resources>
