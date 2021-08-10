@@ -273,13 +273,13 @@
     <string name="Send_Warning_LowFee">Attention ! Risque de blocage</string>
     <!--Fee Info -->
     <string name="FeeInfo_Title">Vitesse de transaction </string>
-    <string name="FeeInfo_Description">Both Bitcoin and Ethereum blockchains require users to pay network fees when sending transactions. The fees are higher when a lot of transactions are taking place on the network and lower when the blockchain is less busy.</string>
+    <string name="FeeInfo_Description">Les blockchains Bitcoin et Ethereum exigent que les utilisateurs paient des frais de réseau lors de l\'envoi de transactions. Les frais sont plus élevés lorsque de nombreuses transactions sont effectuées sur le réseau et inférieurs lorsque la blockchain est moins occupée.</string>
     <string name="FeeInfo_Slow">Lente</string>
-    <string name="FeeInfo_SlowDescription">Selecting a value from this range may result in transaction being pending for hours or being rejected. The lower the value the longer it will take for the transaction to confirm.</string>
+    <string name="FeeInfo_SlowDescription">La sélection d\'une valeur dans cette fourchette peut entraîner une transaction en attente pendant des heures ou un rejet total. Plus la valeur est faible, plus il faudra de temps pour que la transaction soit confirmée.</string>
     <string name="FeeInfo_Average">Moyen</string>
-    <string name="FeeInfo_AverageDescription">Typically, recommended fee value should be sufficient for transaction to be processed within minutes/hour for Bitcoin and within minutes for Ethereum.</string>
+    <string name="FeeInfo_AverageDescription">Généralement, cette fourchette de frais devrait être suffisante pour que la transaction soit traitée en quelques minutes/heure pour Bitcoin et en quelques minutes pour Ethereum.</string>
     <string name="FeeInfo_Fast">Rapide</string>
-    <string name="FeeInfo_FastDescription">For transactions where priority is important we recommend using the high fee value. It\'s expected to be sufficient for a transaction to be completed within 10 minutes for Bitcoin and within 1-2 minutes for Ethereum.</string>
+    <string name="FeeInfo_FastDescription">Pour les transactions où la priorité est importante, nous vous recommandons d\'utiliser la valeur élevée des frais. Cela devrait suffire pour qu\'une transaction soit effectuée dans les 10 minutes pour Bitcoin et dans les 1-2 minutes pour Ethereum.</string>
     <!--Wallet Connect-->
     <string name="WalletConnect_Title">Wallet Connect</string>
     <string name="WalletConnect_Request">Requête</string>
@@ -302,7 +302,7 @@
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Error_InsufficientBalance">La transaction nécessite %s pour l\'envoi</string>
     <string name="EthereumTransaction_Error_InsufficientBalanceForFee">Le solde actuel des %s est inférieur au montant requis pour traiter cette transaction, frais de transaction compris.</string>
-    <string name="EthereumTransaction_Error_LowerThanBaseGasLimit">The selected fee value is too low and will be rejected!</string>
+    <string name="EthereumTransaction_Error_LowerThanBaseGasLimit">La valeur de frais sélectionnée est trop faible et sera rejetée !</string>
     <!--Swap-->
     <string name="Swap">Echanger</string>
     <string name="Swap_FromAmountTitle">Vous payez</string>
