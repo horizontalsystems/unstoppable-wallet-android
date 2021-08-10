@@ -6,7 +6,7 @@
     <string name="Alert_Close">Закрыть</string>
     <string name="Alert_Loading">Загрузка...</string>
     <string name="Alert_Restart">Перезапустить</string>
-    <string name="Action_Undo">UNDO</string>
+    <string name="Action_Undo">Отмена</string>
     <string name="Button_Cancel">Отменить</string>
     <string name="Button_Next">Далее</string>
     <string name="Button_Enable">Активировать</string>
@@ -30,12 +30,12 @@
     <string name="Any">Any</string>
     <!--Intro-->
     <string name="Intro_Wallet_Screen1Description">Be Unstoppable</string>
-    <string name="Intro_Wallet_Screen2Title">Unchain Assets</string>
-    <string name="Intro_Wallet_Screen2Description">Don\'t lock yourself in and don\'t let others do that to you.</string>
+    <string name="Intro_Wallet_Screen2Title">Освободите Активы</string>
+    <string name="Intro_Wallet_Screen2Description">Распоряжайтесь активами свободно и без ограничений.</string>
     <string name="Intro_Wallet_Screen3Title">Go Borderless</string>
-    <string name="Intro_Wallet_Screen3Description">Bypass conditional barriers and access markets globally.</string>
-    <string name="Intro_Wallet_Screen4Title">Stay Private</string>
-    <string name="Intro_Wallet_Screen4Description">Do not leak your private and financial data to the world.</string>
+    <string name="Intro_Wallet_Screen3Description">Преодолейте барьеры и получите доступ к рынкам.</string>
+    <string name="Intro_Wallet_Screen4Title">Сохраняйте Конфиденциальность</string>
+    <string name="Intro_Wallet_Screen4Description">Не допускайте утечку личных и финансовых данных.</string>
     <!--Rooted Device-->
     <string name="RootedDevice_Button_Understand">Я Понимаю</string>
     <!--Welcome-->
@@ -66,7 +66,7 @@
     <string name="Restore_PassphraseDescription">Введите свою кодовую фразу, которую вы использовали при создании этой мнемонической фразы.</string>
     <string name="Select_Coins">Выберите Валюту</string>
     <string name="Restore_ZCash_BirthdayHeight">Блок Создания</string>
-    <string name="Restore_ZCash_BirthdayHeight_Hint">If you know a birthday height for your Zcash wallet, add it below to speed up the syncing process.</string>
+    <string name="Restore_ZCash_BirthdayHeight_Hint">Если вы знаете блок создания вашего Zcash кошелька, добавьте его ниже для ускорения процесса синхронизации.</string>
     <!--Backup-->
     <string name="Backup_Confirmation_CheckTitle">Проверка…</string>
     <!--Market-->
@@ -77,12 +77,12 @@
     <string name="Market_Search">Поиск</string>
     <string name="Market_FilterSection_MarketParameters">MARKET PARAMETERS</string>
     <string name="Market_FilterSection_PriceParameters">PRICE PARAMETERS</string>
-    <string name="Market_Field_HighestCap">Highest Cap</string>
-    <string name="Market_Field_LowestCap">Lowest Cap</string>
-    <string name="Market_Field_HighestVolume">Highest Volume</string>
-    <string name="Market_Field_LowestVolume">Lowest Volume</string>
-    <string name="Market_Field_HighestPrice">Highest Price</string>
-    <string name="Market_Field_LowestPrice">Lowest Price</string>
+    <string name="Market_Field_HighestCap">Наивысшей Кап.</string>
+    <string name="Market_Field_LowestCap">Наименьшей Кап.</string>
+    <string name="Market_Field_HighestVolume">Наивысшему Обьему</string>
+    <string name="Market_Field_LowestVolume">Наименьшему Объему</string>
+    <string name="Market_Field_HighestPrice">Самая высокая цена</string>
+    <string name="Market_Field_LowestPrice">Самая низкая цена</string>
     <string name="Market_Sort_PopupTitle">Сортировать по</string>
     <string name="Market_TotalMarketCap">Полная Рыночная Капитализация</string>
     <string name="Market_BtcDominance">Доминирование BTC</string>
@@ -91,11 +91,11 @@
     <string name="Market_DeFiCap">Капитализация DeFi</string>
     <string name="Market_SeeAll">Посмотреть Всё</string>
     <string name="Market_Tab_Overview">Обзор</string>
-    <string name="Market_Tab_Discovery">Discovery</string>
-    <string name="Market_Tab_Watchlist">Watchlist</string>
+    <string name="Market_Tab_Discovery">Токены</string>
+    <string name="Market_Tab_Watchlist">Избранное</string>
     <string name="Market_Tab_Watchlist_EmptyList">You don\’t have any favorite assets.\nYou can add the favorites by clicking on star icon in the asset page</string>
     <string name="Market_Category_Rated">Rated</string>
-    <string name="Market_Category_Rated_Description">Token ratings based on project security and market liquidity.</string>
+    <string name="Market_Category_Rated_Description">Рейтинги токенов, основанные на безопасности проекта и ликвидности рынка.</string>
     <string name="Market_Category_Blockchains">Blockchains</string>
     <string name="Market_Category_Blockchains_Description">Нативные криптовалюты в основных блокчейнах. </string>
     <string name="Market_Category_Dexes">DEXes</string>
@@ -127,7 +127,7 @@
     <string name="Market_Category_IndexFunds">Index Funds</string>
     <string name="Market_Category_IndexFunds_Description">Активы, привязанные по цене к ряду токенов.</string>
     <string name="Market_Category_NFT">NFT</string>
-    <string name="Market_Category_NFT_Description">NFT projects.</string>
+    <string name="Market_Category_NFT_Description">NFT проекты.</string>
     <string name="Market_Category_Fundraising">Fundraising</string>
     <string name="Market_Category_Fundraising_Description">Платформы для фандрайзинга и продажи токенов.</string>
     <string name="Market_Category_Gaming">Gaming</string>
@@ -135,13 +135,13 @@
     <string name="Market_Category_Infrastructure">Infrastructure</string>
     <string name="Market_Category_Infrastructure_Description">Проекты по созданию инфраструктурных решений.</string>
     <string name="Market_Category_Analytics">Analytics</string>
-    <string name="Market_Category_Analytics_Description">Token-powered analytics and investment instruments.</string>
+    <string name="Market_Category_Analytics_Description">Аналитика токенов и инвестиционных инструментов.</string>
     <string name="Market_Category_Storage">Storage</string>
-    <string name="Market_Category_Storage_Description">Decentralized data-storage.</string>
+    <string name="Market_Category_Storage_Description">Децентрализованное хранилище данных.</string>
     <string name="Market_Category_Identity">Identity</string>
-    <string name="Market_Category_Identity_Description">Decentralized identity.</string>
+    <string name="Market_Category_Identity_Description">Децентрализованная идентификация.</string>
     <string name="Market_Category_YieldTokens">Yield Tokens</string>
-    <string name="Market_Category_YieldTokens_Description">Interesting Bearing Tokens.</string>
+    <string name="Market_Category_YieldTokens_Description">Прибыльные токены.</string>
     <!--Market Global Metrics-->
     <string name="MarketGlobalMetrics_Chart">График</string>
     <string name="MarketGlobalMetrics_BtcDominance">Доминирование Bitcoin</string>
@@ -197,17 +197,17 @@
     <!--Coin Markets-->
     <string name="CoinMarket_Title">%s Рынки</string>
     <!--TVL Rank-->
-    <string name="TvlRank_Title">TVL Rank</string>
-    <string name="TvlRank_MultiChain">Multi-Chain</string>
-    <string name="TvlRank_Field_HighestTvl">Highest TVL</string>
-    <string name="TvlRank_Field_LowestTvl">Lowest TVL</string>
-    <string name="TvlRank_Field_All">All</string>
+    <string name="TvlRank_Title">Рейтинг TVL</string>
+    <string name="TvlRank_MultiChain">Мультичейн</string>
+    <string name="TvlRank_Field_HighestTvl">Наивысшему TVL</string>
+    <string name="TvlRank_Field_LowestTvl">Наименьшему TVL</string>
+    <string name="TvlRank_Field_All">Все</string>
     <string name="TvlRank_Field_Eth">Ethereum</string>
     <string name="TvlRank_Field_Bsc">Binance</string>
     <string name="TvlRank_Field_Sol">Solana</string>
     <string name="TvlRank_Field_Ava">Avalanche</string>
     <string name="TvlRank_Field_Mat">Polygon</string>
-    <string name="TvlRank_Filters_PopupTitle">Filters</string>
+    <string name="TvlRank_Filters_PopupTitle">Фильтры</string>
     <!--Balance-->
     <string name="Balance_Title">Баланс</string>
     <string name="Balance_Send">Отправить</string>
@@ -219,7 +219,7 @@
     <string name="Balance_Syncing_WithProgress">Синхронизация… %s%%</string>
     <string name="Balance_AddCoins">Добавить Токен</string>
     <string name="Balance_AddCoin">Добавить Токен</string>
-    <string name="Balance_CoinDisabled">Disabled coin %s</string>
+    <string name="Balance_CoinDisabled">Отключена монета %s</string>
     <string name="Balance_Sort_Balance">Балансу</string>
     <string name="Balance_Sort_PopupTitle">Сортировать по</string>
     <string name="Balance_Sort_Az">Названию</string>
@@ -239,7 +239,7 @@
     <string name="Send_Confirmation_YouSend">Вы Отправляете</string>
     <string name="Send_Confirmation_Amount">Сумма</string>
     <string name="Send_Confirmation_To">Кому</string>
-    <string name="Send_Confirmation_Method">Method</string>
+    <string name="Send_Confirmation_Method">Метод </string>
     <string name="Send_Confirmation_Receiver">Получатель</string>
     <string name="Send_Confirmation_EstimateTime">Приблизительное Время:</string>
     <string name="Send_Confirmation_Send_Button">Отправить</string>
@@ -273,13 +273,13 @@
     <string name="Send_Warning_LowFee">Внимание! Транзакция может застрять в сети</string>
     <!--Fee Info -->
     <string name="FeeInfo_Title">Скорость Транзакции</string>
-    <string name="FeeInfo_Description">Both Bitcoin and Ethereum blockchains require users to pay network fees when sending transactions. The fees are higher when a lot of transactions are taking place on the network and lower when the blockchain is less busy.</string>
+    <string name="FeeInfo_Description">Пользователи блокчейнов для Bitcoin и Ethereum должны оплачивать сетевые комиссии при отправке транзакций. Комиссии обычно выше при обработке большего количества транзакций в сети и ниже при меньшей занятости блокчейна.</string>
     <string name="FeeInfo_Slow">Медленно</string>
-    <string name="FeeInfo_SlowDescription">Selecting a value from this range may result in transaction being pending for hours or being rejected. The lower the value the longer it will take for the transaction to confirm.</string>
+    <string name="FeeInfo_SlowDescription">Выбор значения из этого диапазона может привести к откладыванию обработки транзакции на некоторое время или ее полному отклонению. Чем меньше размер транзакции, тем дольше займет процесс ее подтверждения.</string>
     <string name="FeeInfo_Average">Умеренно</string>
-    <string name="FeeInfo_AverageDescription">Typically, recommended fee value should be sufficient for transaction to be processed within minutes/hour for Bitcoin and within minutes for Ethereum.</string>
+    <string name="FeeInfo_AverageDescription">Обычно для этого диапазона комиссий характерна обработка транзакций в течение нескольких минут/часа для Bitcoin и в течение нескольких минут для Ethereum.</string>
     <string name="FeeInfo_Fast">Быстро</string>
-    <string name="FeeInfo_FastDescription">For transactions where priority is important we recommend using the high fee value. It\'s expected to be sufficient for a transaction to be completed within 10 minutes for Bitcoin and within 1-2 minutes for Ethereum.</string>
+    <string name="FeeInfo_FastDescription">В случае с приоритетными транзакциями лучше всего использовать настройку высокой комиссии. При выборе этой настройки транзакция Bitcoin будет обработана в течение 10 минут, ну а обработка транзакции Ethereum займет всего лишь 1-2 минуты.</string>
     <!--Wallet Connect-->
     <string name="WalletConnect_Title">Wallet Connect</string>
     <string name="WalletConnect_Request">Запрос</string>
@@ -294,10 +294,10 @@
     <string name="WalletConnect_Status_Online">Доступен</string>
     <string name="WalletConnect_Status_Connecting">Подключение…</string>
     <string name="WalletConnect_NewConnect">Новое Подключение</string>
-    <string name="WalletConnect_SignMessageRequest_Title">Sign Request</string>
+    <string name="WalletConnect_SignMessageRequest_Title">Запрос на подпись</string>
     <string name="WalletConnect_SignMessageRequest_Domain">Домен</string>
-    <string name="WalletConnect_SignMessageRequest_ShowMessageTitle">Message to sign</string>
-    <string name="WalletConnect_SignMessageRequest_SignMessageHint">Please sign a message to authenticate</string>
+    <string name="WalletConnect_SignMessageRequest_ShowMessageTitle">Сообщение для подписи</string>
+    <string name="WalletConnect_SignMessageRequest_SignMessageHint">Пожалуйста, подпишите сообщение для аутентификации</string>
     <string name="WalletConnect_SignMessageRequest_ButtonSign">Sign</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Error_InsufficientBalance">Для отправки транзакции требуется %s</string>
@@ -651,10 +651,10 @@
     <string name="AddToken_Dots">…</string>
     <string name="AddToken_CoinType">Coin Type</string>
     <string name="AddToken_CoinAlreadyInListWarning">Этот токен уже есть в списке поддерживаемых токенов</string>
-    <string name="AddToken_InvalidAddressError">Invalid contract address or BEP2 symbol</string>
+    <string name="AddToken_InvalidAddressError">Неверный адрес контракта или символ BEP2</string>
     <string name="AddToken_ApiLimitExceeded">Превышен лимит Api. Повторите попытку позже.</string>
     <string name="AddEvmToken_ContractNotFound">Контракт не найден</string>
-    <string name="AddBep2Token_SymbolNotFound">Symbol not found</string>
+    <string name="AddBep2Token_SymbolNotFound">Символ не найден</string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Title">Формат Адреса</string>
     <string name="AddressFormatSettings_Description">Выберите формат адреса для вашего %s кошелька. Каждый выбранный формат представляет отдельный кошелек во вкладке приложения для отображения баланса.</string>
@@ -692,16 +692,16 @@
     <string name="CoinPage_TimeDuration_Year2">2Г</string>
     <string name="CoinPage_Markets">Рынки</string>
     <string name="CoinPage_TradingVolume">Объем Торговли</string>
-    <string name="CoinPage_MajorHolders">Major Holders</string>
-    <string name="CoinPage_Audits">Audits</string>
-    <string name="CoinPage_Audits_Empty">No audit reports</string>
-    <string name="CoinPage_Audits_FetchError">Fetch Error</string>
+    <string name="CoinPage_MajorHolders">Основные Владельцы</string>
+    <string name="CoinPage_Audits">Аудиты</string>
+    <string name="CoinPage_Audits_Empty">Нет аудиторских отчетов</string>
+    <string name="CoinPage_Audits_FetchError">Ошибка Выборки</string>
     <string name="CoinPage_Audits_PoweredBy">Powered by Defiyield.app</string>
     <string name="CoinPage_Audits_Issues">issues: %d</string>
-    <string name="CoinPage_InvestorData">Investor Data</string>
+    <string name="CoinPage_InvestorData">Данные Инвестора</string>
     <string name="CoinPage_FundsInvested">Средства Инвестированы</string>
-    <string name="CoinPage_SecurityParams">Security Parameters</string>
-    <string name="CoinPage_SecurityParams_Privacy">Privacy</string>
+    <string name="CoinPage_SecurityParams">Параметры Безопасности</string>
+    <string name="CoinPage_SecurityParams_Privacy">Приватность</string>
     <string name="CoinPage_SecurityParams_Low">Low</string>
     <string name="CoinPage_SecurityParams_Medium">Medium</string>
     <string name="CoinPage_SecurityParams_High">High</string>
