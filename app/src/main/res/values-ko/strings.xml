@@ -6,9 +6,9 @@
     <string name="Alert_Close">가까운, 닫힌</string>
     <string name="Alert_Loading">로딩중...</string>
     <string name="Alert_Restart">재시작</string>
-    <string name="Action_Undo">UNDO</string>
+    <string name="Action_Undo">실행 취소</string>
     <string name="Button_Cancel">취소</string>
-    <string name="Button_Next">Next</string>
+    <string name="Button_Next">다음</string>
     <string name="Button_Enable">활성화</string>
     <string name="Button_Disable">비활성화</string>
     <string name="Button_Close">가까운, 닫힌</string>
@@ -30,12 +30,12 @@
     <string name="Any">Any</string>
     <!--Intro-->
     <string name="Intro_Wallet_Screen1Description">Be Unstoppable</string>
-    <string name="Intro_Wallet_Screen2Title">Unchain Assets</string>
-    <string name="Intro_Wallet_Screen2Description">Don\'t lock yourself in and don\'t let others do that to you.</string>
-    <string name="Intro_Wallet_Screen3Title">Go Borderless</string>
-    <string name="Intro_Wallet_Screen3Description">Bypass conditional barriers and access markets globally.</string>
-    <string name="Intro_Wallet_Screen4Title">Stay Private</string>
-    <string name="Intro_Wallet_Screen4Description">Do not leak your private and financial data to the world.</string>
+    <string name="Intro_Wallet_Screen2Title">풀린 자산</string>
+    <string name="Intro_Wallet_Screen2Description">자신을 잠금하지 말고 다른 사람들이 귀하에게 그렇게 하도록 두지 마십시오.</string>
+    <string name="Intro_Wallet_Screen3Title">무경계로</string>
+    <string name="Intro_Wallet_Screen3Description">조건부 장벽을 우회하고 전 세계적으로 시장에 접근.</string>
+    <string name="Intro_Wallet_Screen4Title">개인 정보 유지</string>
+    <string name="Intro_Wallet_Screen4Description">개인 및 금융 데이터를 세상에 유출하지 마십시오.</string>
     <!--Rooted Device-->
     <string name="RootedDevice_Button_Understand">이해합니다</string>
     <!--Welcome-->
@@ -66,7 +66,7 @@
     <string name="Restore_PassphraseDescription">이 연상 부호를 만들 때 사용한 암호 문구 입력.</string>
     <string name="Select_Coins">암호화를 선택해 주세요</string>
     <string name="Restore_ZCash_BirthdayHeight">생일 신장</string>
-    <string name="Restore_ZCash_BirthdayHeight_Hint">If you know a birthday height for your Zcash wallet, add it below to speed up the syncing process.</string>
+    <string name="Restore_ZCash_BirthdayHeight_Hint">Zcash 지갑의 birthday height를 알고 있다면 아래에 추가하여 동기화 속도를 높입니다.</string>
     <!--Backup-->
     <string name="Backup_Confirmation_CheckTitle">확인 중…</string>
     <!--Market-->
