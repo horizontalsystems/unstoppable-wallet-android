@@ -81,6 +81,9 @@ class SendEvmTransactionViewModel(
             decoration != null && transactionData != null -> {
                 getViewItems(decoration, transactionData, txDataState.dataOrNull?.additionalInfo)
             }
+            decoration == null && transactionData != null -> {
+                getSendEvmCoinViewItems(transactionData, txDataState.dataOrNull?.additionalInfo)
+            }
             else -> null
         }
 
@@ -377,6 +380,30 @@ class SendEvmTransactionViewModel(
         is CoinType.Erc20 -> coinServiceFactory.getCoinService(coinType.address)
         is CoinType.Bep20 -> coinServiceFactory.getCoinService(coinType.address)
         else -> null
+    }
+
+    private fun getSendEvmCoinViewItems(transactionData: TransactionData, additionalInfo: SendEvmData.AdditionalInfo?): List<SectionViewItem> {
+        val viewItems = mutableListOf(
+            ViewItem.Subhead(
+                Translator.getString(R.string.Send_Confirmation_YouSend),
+                coinServiceFactory.baseCoinService.coin.title
+            ),
+            ViewItem.Value(
+                Translator.getString(R.string.Send_Confirmation_Amount),
+                coinServiceFactory.baseCoinService.amountData(transactionData.value).primary.getFormatted(), ValueType.Outgoing
+            )
+        )
+        val addressValue = transactionData.to.eip55
+        val addressTitle = additionalInfo?.sendInfo?.domain ?: TransactionInfoAddressMapper.map(addressValue)
+        viewItems.add(
+            ViewItem.Address(
+                Translator.getString(R.string.Send_Confirmation_To),
+                addressTitle,
+                value = addressValue
+            )
+        )
+
+        return listOf(SectionViewItem(viewItems))
     }
 
     private fun getFallbackViewItems(transactionData: TransactionData): List<SectionViewItem> {
