@@ -8,7 +8,7 @@
     <string name="Alert_Restart">Reiniciar</string>
     <string name="Action_Undo">UNDO</string>
     <string name="Button_Cancel">Cancelar</string>
-    <string name="Button_Next">Next</string>
+    <string name="Button_Next">Siguiente</string>
     <string name="Button_Enable">Habilitar</string>
     <string name="Button_Disable">Desactivar</string>
     <string name="Button_Close">Cerrar</string>
@@ -30,12 +30,12 @@
     <string name="Any">Any</string>
     <!--Intro-->
     <string name="Intro_Wallet_Screen1Description">Be Unstoppable</string>
-    <string name="Intro_Wallet_Screen2Title">Unchain Assets</string>
-    <string name="Intro_Wallet_Screen2Description">Don\'t lock yourself in and don\'t let others do that to you.</string>
-    <string name="Intro_Wallet_Screen3Title">Go Borderless</string>
-    <string name="Intro_Wallet_Screen3Description">Bypass conditional barriers and access markets globally.</string>
-    <string name="Intro_Wallet_Screen4Title">Stay Private</string>
-    <string name="Intro_Wallet_Screen4Description">Do not leak your private and financial data to the world.</string>
+    <string name="Intro_Wallet_Screen2Title">Desencadenar Activos</string>
+    <string name="Intro_Wallet_Screen2Description">No te encierres y no dejes que otros te hagan eso.</string>
+    <string name="Intro_Wallet_Screen3Title">Actúa sin Fronteras</string>
+    <string name="Intro_Wallet_Screen3Description">Supere las barreras condicionales y acceda a los mercados a nivel mundial.</string>
+    <string name="Intro_Wallet_Screen4Title">Permanezca en privado</string>
+    <string name="Intro_Wallet_Screen4Description">No filtre sus datos privados y financieros al resto del mundo.</string>
     <!--Rooted Device-->
     <string name="RootedDevice_Button_Understand">Entiendo</string>
     <!--Welcome-->
@@ -66,28 +66,28 @@
     <string name="Restore_PassphraseDescription">Introduzca su frase de contraseña que utilizó al crear esta frase mnemotécnica.</string>
     <string name="Select_Coins">Elegir Cripto</string>
     <string name="Restore_ZCash_BirthdayHeight">Altura de Cumpleaños</string>
-    <string name="Restore_ZCash_BirthdayHeight_Hint">If you know a birthday height for your Zcash wallet, add it below to speed up the syncing process.</string>
+    <string name="Restore_ZCash_BirthdayHeight_Hint">Si conoce una altura de cumpleaños para su monedero Zcash añádela abajo para acelerar el proceso de sincronización.</string>
     <!--Backup-->
     <string name="Backup_Confirmation_CheckTitle">Comprobar…</string>
     <!--Market-->
-    <string name="Market_Field_MarketCap">MCap</string>
-    <string name="Market_Field_Volume">Volume</string>
-    <string name="Market_Field_PriceDiff">Price</string>
-    <string name="Market_Title">Markets</string>
-    <string name="Market_Search">Search</string>
+    <string name="Market_Field_MarketCap">Cap. de Mercado</string>
+    <string name="Market_Field_Volume">Volumen</string>
+    <string name="Market_Field_PriceDiff">Precio</string>
+    <string name="Market_Title">Mercados</string>
+    <string name="Market_Search">Buscar</string>
     <string name="Market_FilterSection_MarketParameters">MARKET PARAMETERS</string>
     <string name="Market_FilterSection_PriceParameters">PRICE PARAMETERS</string>
-    <string name="Market_Field_HighestCap">Highest Cap</string>
-    <string name="Market_Field_LowestCap">Lowest Cap</string>
-    <string name="Market_Field_HighestVolume">Highest Volume</string>
-    <string name="Market_Field_LowestVolume">Lowest Volume</string>
+    <string name="Market_Field_HighestCap">Capitalización Mayor</string>
+    <string name="Market_Field_LowestCap">Capitalización Menor</string>
+    <string name="Market_Field_HighestVolume">Mayor Volumen</string>
+    <string name="Market_Field_LowestVolume">Menor Volumen</string>
     <string name="Market_Field_HighestPrice">Highest Price</string>
     <string name="Market_Field_LowestPrice">Lowest Price</string>
-    <string name="Market_Sort_PopupTitle">Sort by</string>
-    <string name="Market_TotalMarketCap">Total Market Cap</string>
-    <string name="Market_BtcDominance">BTC Dominance</string>
-    <string name="Market_Volume24h">24h Volume</string>
-    <string name="Market_TvlDeFi">TVL in DeFi</string>
+    <string name="Market_Sort_PopupTitle">Ordenar por</string>
+    <string name="Market_TotalMarketCap">Cap.Total del Mercado</string>
+    <string name="Market_BtcDominance">Dominio de BTC</string>
+    <string name="Market_Volume24h">Volumen de 24 horas</string>
+    <string name="Market_TvlDeFi">TVL en DeFi</string>
     <string name="Market_DeFiCap">DeFi Cap</string>
     <string name="Market_SeeAll">See All</string>
     <string name="Market_Tab_Overview">Overview</string>
