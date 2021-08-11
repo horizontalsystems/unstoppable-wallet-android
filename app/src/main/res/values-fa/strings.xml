@@ -6,9 +6,9 @@
     <string name="Alert_Close">بستن</string>
     <string name="Alert_Loading">درحال بارگذاری...</string>
     <string name="Alert_Restart">راه اندازی مجدد</string>
-    <string name="Action_Undo">UNDO</string>
+    <string name="Action_Undo">بازگرد</string>
     <string name="Button_Cancel">کنسل</string>
-    <string name="Button_Next">Next</string>
+    <string name="Button_Next">بعدي</string>
     <string name="Button_Enable">فعال کردن</string>
     <string name="Button_Disable">غیرفعال</string>
     <string name="Button_Close">بستن</string>
@@ -24,18 +24,18 @@
     <string name="Button_Start">شروع</string>
     <string name="Button_Create">به وجود آوردن</string>
     <string name="Button_Restore">بازگرداني</string>
-    <string name="Button_Reset">Reset</string>
+    <string name="Button_Reset">تنظیم مجدد</string>
     <string name="Error">خطا</string>
     <string name="NotAvailable">مربوط نیست</string>
     <string name="Any">هرکدام</string>
     <!--Intro-->
     <string name="Intro_Wallet_Screen1Description">Be Unstoppable</string>
     <string name="Intro_Wallet_Screen2Title">Unchain Assets</string>
-    <string name="Intro_Wallet_Screen2Description">Don\'t lock yourself in and don\'t let others do that to you.</string>
+    <string name="Intro_Wallet_Screen2Description">Don\'t lock yourself in and don\'t let others do that to you</string>
     <string name="Intro_Wallet_Screen3Title">Go Borderless</string>
-    <string name="Intro_Wallet_Screen3Description">Bypass conditional barriers and access markets globally.</string>
+    <string name="Intro_Wallet_Screen3Description">Bypass conditional barriers and access markets globally</string>
     <string name="Intro_Wallet_Screen4Title">Stay Private</string>
-    <string name="Intro_Wallet_Screen4Description">Do not leak your private and financial data to the world.</string>
+    <string name="Intro_Wallet_Screen4Description">Do not leak your private and financial data to the world</string>
     <!--Rooted Device-->
     <string name="RootedDevice_Button_Understand">می فهمم</string>
     <!--Welcome-->
@@ -66,7 +66,7 @@
     <string name="Restore_PassphraseDescription">Enter your passphrase that you used when creating this mnemonic phrase.</string>
     <string name="Select_Coins">کیف پول جدید</string>
     <string name="Restore_ZCash_BirthdayHeight">قد تولد</string>
-    <string name="Restore_ZCash_BirthdayHeight_Hint">If you know a birthday height for your Zcash wallet, add it below to speed up the syncing process.</string>
+    <string name="Restore_ZCash_BirthdayHeight_Hint">If you know a birthday height for your Zcash wallet add it below to speedup syncing process.</string>
     <!--Backup-->
     <string name="Backup_Confirmation_CheckTitle">بررسي…</string>
     <!--Market-->
@@ -224,7 +224,7 @@
     <string name="Balance_Sort_PopupTitle">مرتب‌ کردن بر اساس</string>
     <string name="Balance_Sort_Az">نام</string>
     <string name="Balance_Sort_24hPriceChange">قیمت ۲۴ ساعت (%)</string>
-    <string name="Balance_Hidden">hidden</string>
+    <string name="Balance_Hidden">پنهان</string>
     <string name="Balance_Backup_Alert">قبل از اینکه %s را دریافت کنید به نسخه پشتیبان از کیف پول %s نیاز دارید.</string>
     <string name="Balance_NoWalletAlert">هنوز کیف پول ندارید. کیف جدید ایجاد کنید یا کیف موجود را بازیابی کنید </string>
     <string name="Balance_NoCoinsAlert">You haven\'t added any coins to this wallet</string>
@@ -239,7 +239,7 @@
     <string name="Send_Confirmation_YouSend">شما فرستادید</string>
     <string name="Send_Confirmation_Amount">مقدار</string>
     <string name="Send_Confirmation_To">به</string>
-    <string name="Send_Confirmation_Method">Method</string>
+    <string name="Send_Confirmation_Method">روش</string>
     <string name="Send_Confirmation_Receiver">گیرنده</string>
     <string name="Send_Confirmation_EstimateTime">برآورد زمان:</string>
     <string name="Send_Confirmation_Send_Button">ارسال</string>
@@ -275,7 +275,7 @@
     <string name="FeeInfo_Title">سرعت تراکنش</string>
     <string name="FeeInfo_Description">Both Bitcoin and Ethereum blockchains require users to pay network fees when sending transactions. The fees are higher when a lot of transactions are taking place on the network and lower when the blockchain is less busy.</string>
     <string name="FeeInfo_Slow">Slow</string>
-    <string name="FeeInfo_SlowDescription">Selecting a value from this range may result in transaction being pending for hours or being rejected. The lower the value the longer it will take for the transaction to confirm.</string>
+    <string name="FeeInfo_SlowDescription">انتخاب مقداری از این محدوده ممکن است باعث شود تراکنش ها ساعتها معلق باشد یا کاملا رد شود. هرچه این مقدار کمتر باشد ، تأیید تراکنش بیشتر طول می کشد.</string>
     <string name="FeeInfo_Average">Average</string>
     <string name="FeeInfo_AverageDescription">Typically, recommended fee value should be sufficient for transaction to be processed within minutes/hour for Bitcoin and within minutes for Ethereum.</string>
     <string name="FeeInfo_Fast">Fast</string>
@@ -295,7 +295,7 @@
     <string name="WalletConnect_Status_Connecting">در حال اتصال…</string>
     <string name="WalletConnect_NewConnect">New Connection</string>
     <string name="WalletConnect_SignMessageRequest_Title">Sign Request</string>
-    <string name="WalletConnect_SignMessageRequest_Domain">Domain</string>
+    <string name="WalletConnect_SignMessageRequest_Domain">دامنه</string>
     <string name="WalletConnect_SignMessageRequest_ShowMessageTitle">Message to sign</string>
     <string name="WalletConnect_SignMessageRequest_SignMessageHint">Please sign a message to authenticate</string>
     <string name="WalletConnect_SignMessageRequest_ButtonSign">Sign</string>
@@ -330,7 +330,7 @@
     <string name="Swap_PoweredBy">Powered by</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">تنظیمات پیشرفته</string>
-    <string name="SwapSettings_Service">Service</string>
+    <string name="SwapSettings_Service">خدمات</string>
     <string name="SwapSettings_SlippageTitle">تحمل لغزش</string>
     <string name="SwapSettings_SlippageDescription">در صورت تغییر نامطلوب قیمت بیش از این درصد، معامله شما برگردانده خواهد شد</string>
     <string name="SwapSettings_DeadlineTitle">مهلت تراکنش</string>
@@ -353,7 +353,7 @@
     <string name="Swap_Confirmation_Maximum">حداکثر</string>
     <string name="Swap_Confirmation_Estimated">تخمین زده شده</string>
     <!--Swap Coin Select-->
-    <string name="Swap_CoinSelect_Title">Choose Crypto</string>
+    <string name="Swap_CoinSelect_Title">کیف پول جدید</string>
     <!--Approve-->
     <string name="Approve_Title">تایید کنید</string>
     <string name="Approve_Info">شما باید به یک قرارداد هوشمند اجازه بدهید که به تعویض رمز داده شده از طرف شما اقدام کند. این مجوز مبلغی را تعیین می کند که می تواند در یک قرارداد هوشمند استفاده شود. این باقیمانده موجودی شما را تحت تأثیر قرار نمی دهد اما برای تأیید معامله به هزینه کمی نیاز دارد. \n\nاگرچه ممکن است قبل از هر معامله بر اساس تقاضا انجام شود ، تصویب مبلغ بالاتر برای ما در معاملات آینده ارزان تر است.</string>
@@ -388,17 +388,17 @@
     <string name="Transactions_FilterAll">همه</string>
     <string name="Transactions_EmptyList">شما هيچ گونه معاملات يا قرارداد نداريد تا هنوز</string>
     <string name="Transactions_Pending">در حالت معلق</string>
-    <string name="Transactions_Receive">Receive</string>
-    <string name="Transactions_Completed">Completed</string>
-    <string name="Transactions_Processing">Processing</string>
-    <string name="Transactions_Send">Send</string>
-    <string name="Transactions_Approve">Approve</string>
-    <string name="Transactions_Swap">Swap</string>
+    <string name="Transactions_Receive">دريافت</string>
+    <string name="Transactions_Completed">انجام شد</string>
+    <string name="Transactions_Processing">پردازش</string>
+    <string name="Transactions_Send">ارسال</string>
+    <string name="Transactions_Approve">تایید</string>
+    <string name="Transactions_Swap">جابجایی</string>
     <string name="Transactions_Failed">ناموفق</string>
     <string name="Transactions_ContractCall">Contract Call</string>
     <string name="Transactions_ContractCreation">Contract Creation</string>
-    <string name="Transactions_To">to %s</string>
-    <string name="Transactions_From">from %s</string>
+    <string name="Transactions_To">به %s</string>
+    <string name="Transactions_From">از %s</string>
     <string name="Transaction_Unlimited">unlimited %s</string>
     <!--Transaction Info-->
     <string name="TransactionInfo_Transaction">معاملات</string>
@@ -406,9 +406,9 @@
     <string name="TransactionInfo_Approval">تأیید مبادله</string>
     <string name="TransactionInfo_Status">وضعیت</string>
     <string name="TransactionInfo_Status_Confirmed">تاييد شد</string>
-    <string name="TransactionInfo_Date">Date</string>
+    <string name="TransactionInfo_Date">تاریخ</string>
     <string name="TransactionInfo_Id">شناسه</string>
-    <string name="TransactionInfo_Service">Service</string>
+    <string name="TransactionInfo_Service">خدمات</string>
     <string name="TransactionInfo_RawTransaction">تراکنش خام</string>
     <string name="TransactionInfo_To">به</string>
     <string name="TransactionInfo_From">از</string>
@@ -422,16 +422,16 @@
     <string name="TransactionInfo_SentToSelfNote">تراکنش ارسال شده به آدرس خود</string>
     <string name="TransactionInfo_DoubleSpendNote">خطر دو برابر هزینه کردن!</string>
     <string name="TransactionInfo_ButtonViewOnExplorerName">مشاهده در %s</string>
-    <string name="TransactionInfo_Price">Price</string>
-    <string name="TransactionInfo_YouPay">You Pay</string>
-    <string name="TransactionInfo_YouPaid">You Paid</string>
-    <string name="TransactionInfo_YouGet">You Get</string>
-    <string name="TransactionInfo_YouGot">You Got</string>
-    <string name="TransactionInfo_Resend">Resend</string>
-    <string name="TransactionInfo_RevokeApproval">Revoke Approval</string>
+    <string name="TransactionInfo_Price">قیمت</string>
+    <string name="TransactionInfo_YouPay">شما می پردازید</string>
+    <string name="TransactionInfo_YouPaid">شما پرداخت کردید</string>
+    <string name="TransactionInfo_YouGet">شما دریافت می کنید</string>
+    <string name="TransactionInfo_YouGot">شما دریافت می کنید</string>
+    <string name="TransactionInfo_Resend">ارسال مجدد</string>
+    <string name="TransactionInfo_RevokeApproval">لغو تصویب</string>
     <string name="StatusInfo_Pending">در حالت انتظار</string>
-    <string name="StatusInfo_Processing">Processing</string>
-    <string name="StatusInfo_Confirmed">Completed</string>
+    <string name="StatusInfo_Processing">پردازش</string>
+    <string name="StatusInfo_Confirmed">انجام شد</string>
     <string name="StatusInfo_Failed">ناموفق</string>
     <string name="StatusInfo_PendingDescription">Transaction has not been confirmed on the blockchain yet. Transactions sent with recommended or higher fee setting are generally processed within 10 minutes. Transactions sent with a low fee may remain pending for a few hours or even days, and can even be rejected entirely.</string>
     <string name="StatusInfo_ProcessingDescription">Transaction has been already included in the blockchain but has not reached permanent finality. At this point, it\'s safe to consider transaction completed for smaller payments. For larger payments it\'s recommended to wait until transacction status changes to completed.</string>
@@ -458,7 +458,7 @@
     <string name="Settings_Title">تنظيمات</string>
     <string name="Settings_SecurityCenter">مركز امنيتي</string>
     <string name="Settings_Notifications">اطلاعیه ها</string>
-    <string name="Settings_ExperimentalFeatures">Experimental</string>
+    <string name="Settings_ExperimentalFeatures">آزمایشی</string>
     <string name="Settings_BaseCurrency">ارز مرجع</string>
     <string name="Settings_Language">زبان</string>
     <string name="Settings_Theme">زمینه</string>
@@ -561,11 +561,11 @@
     <string name="Hud_Text_Success">موفقيت</string>
     <string name="Hud_Text_NoInternet">اینترنت ندارید</string>
     <string name="Hud_Text_Copied">کپی شد</string>
-    <string name="Hud_Text_Created">Created</string>
-    <string name="Hud_Text_Done">Done</string>
+    <string name="Hud_Text_Created">ایجاد شد</string>
+    <string name="Hud_Text_Done">انجام شد</string>
     <string name="Hud_Text_EmailAddressCopied">آدرس ایمیل کپی شد</string>
-    <string name="Hud_Added_To_Watchlist">Added To Watchlist</string>
-    <string name="Hud_Removed_from_Watchlist">Removed from Watchlist</string>
+    <string name="Hud_Added_To_Watchlist">به فهرست تماشا افزوده شد</string>
+    <string name="Hud_Removed_from_Watchlist">از فهرست تماشا برداشته شد</string>
     <string name="Hud_UnknownError">s%</string>
     <!--Manage Coins-->
     <string name="ManageCoins_title">سکه ها را انتخاب کنید</string>
@@ -582,13 +582,13 @@
     <string name="ManageAccounts_Title">مدیریت کیف پول ها</string>
     <string name="ManageAccounts_CreateNewWallet">به وجود آوردن</string>
     <string name="ManageAccounts_ImportWallet">بازگرداني</string>
-    <string name="ManageAccounts_Hint">Tip! Restoring an existing wallet but with a new passphrase will generate a brand new wallet. Handy if you want to use a single 12-24 word mnemonic recovery phrase for multiple wallets.</string>
+    <string name="ManageAccounts_Hint">Tip! Restoring an existing wallet but with a new passphrase will a generate a brand new wallet. Handy if you want to use a single 12-24 word mnemonic recovery phrase for multiple wallets.</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">نام</string>
     <string name="ManageAccount_Save">ذخیره</string>
     <string name="ManageAccount_RecoveryPhraseBackup">Backup Phrase</string>
     <string name="ManageAccount_RecoveryPhraseShow">Show Phrase</string>
-    <string name="ManageAccount_NetworkSettings">Network Settings</string>
+    <string name="ManageAccount_NetworkSettings">تنظیمات شبکه</string>
     <string name="ManageAccount_Unlink">جدا کردن</string>
     <string name="ManageAccount_BackupRequired_Title">تهیه نسخه پشتیبان لازم است</string>
     <string name="ManageAccount_BackupRequired_Description">قبل از اینکه بتوانید آن را از این تلفن حذف کنید ، باید از کلید خصوصی نسخه پشتیبان تهیه کنید.</string>
@@ -599,7 +599,7 @@
     <string name="ManageAccount_NWords">%s words</string>
     <string name="ManageAccount_NWordsWithPassphrase">%s words with passphrase</string>
     <!--Network Settings-->
-    <string name="NetworkSettings_Title">Network Settings</string>
+    <string name="NetworkSettings_Title">تنظیمات شبکه</string>
     <string name="NetworkSettings_TestNetDisclaimer">Please do not select Testnet options unless you understand what that is and how it works.\n\nTestnet is a parallel blockchain for testing purposes with its own currency. If someone sends a regular payment to your Testnet address, it will be lost.</string>
     <!-- Show Key -->
     <string name="ShowKey_Title">کلید</string>
@@ -641,7 +641,7 @@
     <string name="EnalbeToken_NoCoins">No coins found with balance</string>
     <string name="EnalbeToken_EnableKey">فعال کردن</string>
     <!-- Add Token -->
-    <string name="AddToken_Title">Add Token</string>
+    <string name="AddToken_Title">اضافه کردن نشان</string>
     <string name="AddToken_CoinName">نام سکه</string>
     <string name="AddToken_Symbol">نماد</string>
     <string name="AddToken_Decimals">اعشارها</string>
