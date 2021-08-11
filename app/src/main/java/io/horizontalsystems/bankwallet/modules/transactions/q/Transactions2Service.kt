@@ -2,17 +2,21 @@ package io.horizontalsystems.bankwallet.modules.transactions.q
 
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.subscribeIO
+import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.modules.balance.BalanceActiveWalletRepository
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
 import java.util.*
+import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.Executors
 
 class Transactions2Service(
     private val balanceActiveWalletRepository: BalanceActiveWalletRepository,
-    private val transactionRecordRepository: TransactionRecordRepository
+    private val transactionRecordRepository: TransactionRecordRepository,
+    private val xRateRepository: TransactionsXRateRepository
 ) : Clearable {
 
     private val filterCoinsSubject = BehaviorSubject.create<List<Wallet>>()
@@ -27,6 +31,7 @@ class Transactions2Service(
     val syncingObservable: Observable<Boolean> = Observable.just(true)
 
     private val disposables = CompositeDisposable()
+    private val transactionItems = CopyOnWriteArrayList<TransactionItem>()
 
     init {
         balanceActiveWalletRepository.itemsObservable
@@ -39,15 +44,60 @@ class Transactions2Service(
 
         transactionRecordRepository.itemsObservable
             .subscribeIO {
-                itemsSubject.onNext(it.map {
-                    TransactionItem(it, null, null)
-                })
+                handleUpdatedRecords(it)
+            }
+            .let {
+                disposables.add(it)
+            }
+
+        xRateRepository.itemsUpdatedObservable
+            .subscribeIO {
+                handleCurrencyValues()
             }
             .let {
                 disposables.add(it)
             }
     }
 
+    @Synchronized
+    private fun handleCurrencyValues() {
+        for (i in 0 until transactionItems.size) {
+            val item = transactionItems[i]
+
+            val currencyValue = item.record.mainValue?.let { mainValue ->
+                xRateRepository.getHistoricalRate(mainValue.coin.type, item.record.timestamp)?.let { rate ->
+                    CurrencyValue(xRateRepository.baseCurrency, mainValue.value * rate)
+                }
+            }
+
+            transactionItems[i] = item.copy(xxxCurrencyValue = currencyValue)
+        }
+
+        itemsSubject.onNext(transactionItems)
+    }
+
+    @Synchronized
+    private fun handleUpdatedRecords(transactionRecords: List<TransactionRecord>) {
+        xRateRepository.setRecords(transactionRecords)
+
+        transactionItems.clear()
+
+        transactionRecords.forEach { record ->
+            val currencyValue = record.mainValue?.let { mainValue ->
+                xRateRepository.getHistoricalRate(mainValue.coin.type, record.timestamp)?.let { rate ->
+                    CurrencyValue(xRateRepository.baseCurrency, mainValue.value * rate)
+                }
+            }
+
+            transactionItems.add(TransactionItem(record, currencyValue, null))
+        }
+
+        itemsSubject.onNext(transactionItems)
+
+        xRateRepository.xxx()
+    }
+
+    @Synchronized
     private fun handleUpdatedWallets(wallets: List<Wallet>) {
         filterCoinsSubject.onNext(wallets)
         transactionRecordRepository.setWallets(wallets)

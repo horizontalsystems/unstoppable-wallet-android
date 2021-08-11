@@ -14,7 +14,8 @@ object Transactions2Module {
             return Transactions2ViewModel(
                 Transactions2Service(
                     BalanceActiveWalletRepository(App.walletManager, App.accountSettingManager),
-                    TransactionRecordRepository(App.adapterManager)
+                    TransactionRecordRepository(App.adapterManager),
+                    TransactionsXRateRepository(App.currencyManager, App.xRateManager)
                 ),
                 TransactionViewItem2Factory()
             ) as T
