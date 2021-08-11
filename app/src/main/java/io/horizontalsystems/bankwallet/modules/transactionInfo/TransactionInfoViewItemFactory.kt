@@ -23,7 +23,9 @@ import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.views.ListPosition.*
 import java.math.BigDecimal
+import java.math.RoundingMode
 import java.util.*
+import kotlin.math.min
 
 class TransactionInfoViewItemFactory(
     private val numberFormatter: IAppNumberFormatter,
@@ -146,17 +148,16 @@ class TransactionInfoViewItemFactory(
                 middleSectionTypes.add(date)
                 middleSectionTypes.add(getEvmFeeItem(transaction.fee, rates[transaction.fee.coin], status))
 
-                transaction.valueOut?.let { out ->
-                    if (out.value > BigDecimal.ZERO) {
-                        val price = transaction.valueIn.value / out.value
-                        val priceValue = numberFormatter.formatCoin(price, out.coin.code, 0, 8)
-                        middleSectionTypes.add(
-                            Value(
-                                getString(R.string.TransactionInfo_Price),
-                                "${transaction.valueIn.coin.code} = $priceValue"
-                            )
+                transaction.valueOut?.let { valueOut ->
+                    val valueIn = transaction.valueIn
+                    val price = valueIn.value.divide(valueOut.value, min(valueOut.coin.decimal, valueIn.coin.decimal), RoundingMode.HALF_EVEN).abs()
+                    val priceValue = numberFormatter.formatCoin(price, transaction.valueIn.coin.code, 0, 8)
+                    middleSectionTypes.add(
+                        Value(
+                            getString(R.string.TransactionInfo_Price),
+                            "${valueOut.coin.code} = $priceValue"
                         )
-                    }
+                    )
                 }
 
                 middleSectionTypes.add(
