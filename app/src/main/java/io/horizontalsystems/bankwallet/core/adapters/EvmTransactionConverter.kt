@@ -186,11 +186,7 @@ class EvmTransactionConverter(
                     tokenIn = tokenIn,
                     tokenOut = tokenOut,
                     amountIn = convertAmount(resolvedAmountIn, tokenIn.decimal, true),
-                    amountOut = if (methodDecoration.to == evmKit.receiveAddress) convertAmount(
-                        resolvedAmountOut,
-                        tokenOut.decimal,
-                        false
-                    ) else null,
+                    amountOut = convertAmount(resolvedAmountOut, tokenOut.decimal, false),
                     foreignRecipient = methodDecoration.to != evmKit.receiveAddress
                 )
             }
