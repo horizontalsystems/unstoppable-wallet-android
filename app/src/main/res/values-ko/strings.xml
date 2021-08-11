@@ -219,7 +219,7 @@
     <string name="Balance_Syncing_WithProgress">동기화 중입니다...%s%%</string>
     <string name="Balance_AddCoins">코인 추가</string>
     <string name="Balance_AddCoin">코인 추가</string>
-    <string name="Balance_CoinDisabled">Disabled coin %s</string>
+    <string name="Balance_CoinDisabled">비활성화된 코인 %s</string>
     <string name="Balance_Sort_Balance">잔액</string>
     <string name="Balance_Sort_PopupTitle">정렬 기준</string>
     <string name="Balance_Sort_Az">이름</string>
@@ -428,7 +428,7 @@
     <string name="TransactionInfo_YouGet">얻기</string>
     <string name="TransactionInfo_YouGot">받았던 금액</string>
     <string name="TransactionInfo_Resend">재전송</string>
-    <string name="TransactionInfo_RevokeApproval">Revoke Approval</string>
+    <string name="TransactionInfo_RevokeApproval">승인 취소</string>
     <string name="StatusInfo_Pending">보류 중</string>
     <string name="StatusInfo_Processing">처리 중</string>
     <string name="StatusInfo_Confirmed">완료</string>
@@ -502,7 +502,7 @@
     <string name="SettingsSecurity_EditPin">비밀번호 변경</string>
     <string name="SettingsSecurity_ManageKeys">지갑 관리하기</string>
     <string name="SettingsSecurity_AppRestartWarning">이 작업을 수행하면 Unstoppable Wallet 이 다시 시작됩니다.</string>
-    <string name="SettingsSecurity_TorConnectionDescription">Fully anonymize your internet while using this app. Note, in some cases WalletConnect feature for DeFi apps may be very slow or not work at all.</string>
+    <string name="SettingsSecurity_TorConnectionDescription">이 앱을 사용하는 동안 인터넷을 완전히 익명화하십시오. 경우에 따라 DeFi 앱용 WalletConnect 기능이 매우 느리거나 전혀 작동하지 않을 수 있습니다.</string>
     <string name="SettingsSecurity_NotificationsDisabledWarning">Unstoppable Wallet 앱에 대한 알림이 비활성화 되었습니다. 토르를 작동하려면 알림을 켜야합니다.</string>
     <string name="SettingsSecurity_SortingShuffle">셔플</string>
     <string name="SettingsSecurity_SortingShuffleDescription">랜덤 인덱싱</string>
@@ -601,7 +601,7 @@
     <string name="ManageAccount_NWordsWithPassphrase">암호 문구로 이루어진 %s 단어</string>
     <!--Network Settings-->
     <string name="NetworkSettings_Title">네트워크 설정</string>
-    <string name="NetworkSettings_TestNetDisclaimer">Please do not select Testnet options unless you understand what that is and how it works.\n\nTestnet is a parallel blockchain for testing purposes with its own currency. If someone sends a regular payment to your Testnet address, it will be lost.</string>
+    <string name="NetworkSettings_TestNetDisclaimer">그것이 무엇이며 어떻게 작동하는지 이해하지 못하는 한 테스트넷 옵션을 선택하지 마십시오.\n\n테스트넷은 자체 통화로 테스트 목적을 위한 병렬 블록체인입니다. 누군가가 귀하의 Testnet 주소로 정기 결제를 보내면 손실됩니다.</string>
     <!-- Show Key -->
     <string name="ShowKey_Title">키</string>
     <string name="ShowKey_Description">다음에 표시될 복구 문구는 휴대폰을 분실, 도난, 파손된 경우 자금을 복구할 수 있는 유일한 방법입니다.\n\n아무도 화면을 보고 있지 않은지 확인합니다.</string>
