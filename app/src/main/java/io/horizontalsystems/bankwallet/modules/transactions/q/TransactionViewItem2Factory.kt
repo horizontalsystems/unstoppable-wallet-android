@@ -44,6 +44,7 @@ class TransactionViewItem2Factory {
         }
 
         return TransactionViewItem2(
+            record.uid,
             R.drawable.ic_tx_swap_20,
             null,
             Translator.getString(R.string.Transactions_Swap),
@@ -73,6 +74,7 @@ class TransactionViewItem2Factory {
         val secondaryValue = ColoredValue(getCoinString(record.value), R.color.grey)
 
         return TransactionViewItem2(
+            record.uid,
             R.drawable.ic_outgoing_20,
             null,
             Translator.getString(R.string.Transactions_Send),
@@ -99,6 +101,7 @@ class TransactionViewItem2Factory {
         val secondaryValue = ColoredValue(getCoinString(record.value), R.color.grey)
 
         return TransactionViewItem2(
+            record.uid,
             R.drawable.ic_incoming_20,
             null,
             Translator.getString(R.string.Transactions_Receive),
@@ -120,6 +123,7 @@ class TransactionViewItem2Factory {
         lockState: TransactionLockState?
     ): TransactionViewItem2 {
         return TransactionViewItem2(
+            record.uid,
             R.drawable.ic_tx_unordered,
             null,
             Translator.getString(R.string.Transactions_ContractCreation),
@@ -138,6 +142,7 @@ class TransactionViewItem2Factory {
         lockState: TransactionLockState?
     ): TransactionViewItem2 {
         return TransactionViewItem2(
+            record.uid,
             R.drawable.ic_tx_unordered,
             null,
             record.blockchainTitle + " " + Translator.getString(R.string.Transactions_ContractCall),
@@ -174,6 +179,7 @@ class TransactionViewItem2Factory {
         val secondaryValue = ColoredValue(getCoinString(record.value), R.color.grey)
 
         return TransactionViewItem2(
+            record.uid,
             R.drawable.ic_outgoing_20,
             null,
             Translator.getString(R.string.Transactions_Send),
@@ -207,6 +213,7 @@ class TransactionViewItem2Factory {
         val secondaryValue = ColoredValue(getCoinString(record.value), R.color.grey)
 
         return TransactionViewItem2(
+            record.uid,
             R.drawable.ic_incoming_20,
             null,
             Translator.getString(R.string.Transactions_Receive),
@@ -233,6 +240,7 @@ class TransactionViewItem2Factory {
         val secondaryValue = ColoredValue(getCoinString(record.value), R.color.grey)
 
         return TransactionViewItem2(
+            record.uid,
             R.drawable.ic_outgoing_20,
             null,
             Translator.getString(R.string.Transactions_Send),
@@ -259,6 +267,7 @@ class TransactionViewItem2Factory {
         val secondaryValue = ColoredValue(getCoinString(record.value), R.color.grey)
 
         return TransactionViewItem2(
+            record.uid,
             R.drawable.ic_incoming_20,
             null,
             Translator.getString(R.string.Transactions_Receive),
@@ -295,6 +304,7 @@ class TransactionViewItem2Factory {
         val secondaryValue = ColoredValue(secondaryValueText, R.color.grey)
 
         return TransactionViewItem2(
+            record.uid,
             R.drawable.ic_tx_checkmark_20,
             null,
             Translator.getString(R.string.Transactions_Approve),

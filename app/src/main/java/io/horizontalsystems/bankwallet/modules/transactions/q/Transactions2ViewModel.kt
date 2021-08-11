@@ -4,14 +4,15 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.toLiveData
 import io.horizontalsystems.bankwallet.core.subscribeIO
-import io.horizontalsystems.bankwallet.entities.ConfiguredCoin
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.TransactionLockState
 import io.horizontalsystems.bankwallet.modules.transactionInfo.ColoredValue
-import io.horizontalsystems.coinkit.models.Coin
 import io.reactivex.BackpressureStrategy
+import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
+import java.util.*
 
 class Transactions2ViewModel(
     private val service: Transactions2Service,
@@ -20,12 +21,10 @@ class Transactions2ViewModel(
 
     val syncingLiveData =
         service.syncingObservable.toFlowable(BackpressureStrategy.DROP).toLiveData()
+    val filterCoinsLiveData = MutableLiveData<List<Filter<Wallet>>>()
 
     val filterTypes = FilterTransactionType.values()
-    val selectedFilterLiveData = MutableLiveData(filterTypes.first())
-
-    val filterCoinsLiveData = MutableLiveData<List<ConfiguredCoin>>()
-    val selectedFilterCoinLiveData = MutableLiveData<Coin?>(null)
+    val selectedFilterLiveData = MutableLiveData(FilterTransactionType.All)
 
     val transactionList = MutableLiveData<ItemsList>()
 
@@ -41,15 +40,31 @@ class Transactions2ViewModel(
             .let {
                 disposables.add(it)
             }
-    }
 
+        Observable.combineLatest(
+            service.filterCoinsObservable,
+            service.filterCoinObservable
+        ) { coins: List<Wallet>, selected: Optional<Wallet> ->
+            coins.map { Filter(it, it == selected.orElse(null)) }
+        }
+            .subscribeIO {
+                filterCoinsLiveData.postValue(it)
+            }
+            .let {
+                disposables.add(it)
+            }
+    }
 
     fun setFilterTransactionType(f: FilterTransactionType) {
         TODO()
     }
 
-    fun setFilterCoin(f: ConfiguredCoin?) {
-        TODO()
+    fun setFilterCoin(w: Wallet?) {
+        service.setFilterCoin(w)
+    }
+
+    fun onBottomReached() {
+        service.loadNext()
     }
 
     sealed class ItemsList {
@@ -65,6 +80,7 @@ data class TransactionItem(
 )
 
 data class TransactionViewItem2(
+    val uid: String,
     val typeIcon: Int,
     val progress: Int?,
     val title: String,
@@ -75,12 +91,10 @@ data class TransactionViewItem2(
     val sentToSelf: Boolean,
     val doubleSpend: Boolean
 ) {
-    fun itemTheSame(newItem: TransactionViewItem2): Boolean {
-        return false
-    }
+    fun itemTheSame(newItem: TransactionViewItem2) = uid == newItem.uid
 
     fun contentTheSame(newItem: TransactionViewItem2): Boolean {
-        return false
+        return this == newItem
     }
 }
 

@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
@@ -14,10 +15,8 @@ import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.TransactionLockState
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionStatus
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewHelper
-import io.horizontalsystems.views.inflate
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_transactions.*
-import kotlinx.android.synthetic.main.view_holder_filter.*
 import kotlinx.android.synthetic.main.view_holder_transaction.*
 
 class TransactionsFragment2 : BaseFragment(R.layout.fragment_transactions) {
@@ -28,12 +27,35 @@ class TransactionsFragment2 : BaseFragment(R.layout.fragment_transactions) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val tagsAdapter = TagsAdapter()
+        val tagsAdapter = TagsAdapter {
+            viewModel.setFilterCoin(it)
+        }
 
         recyclerTags.adapter = tagsAdapter
 
         val transactionsAdapter = TransactionsAdapter2()
+        val layoutManager = LinearLayoutManager(context)
         recyclerTransactions.adapter = transactionsAdapter
+        recyclerTransactions.layoutManager = layoutManager
+        recyclerTransactions.itemAnimator = null
+        recyclerTransactions.setHasFixedSize(true)
+
+        recyclerTransactions.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+//            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+//                filterAdapter.filterChangeable = newState == RecyclerView.SCROLL_STATE_IDLE
+//            }
+
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                val visibleItemCount = layoutManager.childCount
+                val totalItemCount = layoutManager.itemCount
+                val pastVisibleItems = layoutManager.findFirstVisibleItemPosition()
+                val diff = 9
+                if (diff + pastVisibleItems + visibleItemCount >= totalItemCount) { //End of list
+                    viewModel.onBottomReached()
+                }
+            }
+        })
+
 
         viewModel.transactionList.observe(viewLifecycleOwner) { itemsList ->
             when (itemsList) {
@@ -44,11 +66,13 @@ class TransactionsFragment2 : BaseFragment(R.layout.fragment_transactions) {
             }
         }
 
-//        viewModel.filtersLiveData.observe(viewLifecycleOwner) {
-//            tagsAdapter.submitList(it)
-//        }
+        viewModel.filterCoinsLiveData.observe(viewLifecycleOwner) {
+            tagsAdapter.submitList(it)
+        }
     }
 }
+
+data class Filter<T>(val item: T, val selected: Boolean)
 
 class TransactionViewItemDiff2 : DiffUtil.ItemCallback<TransactionViewItem2>() {
 
@@ -195,25 +219,3 @@ class ViewHolderTransaction2(override val containerView: View) :
 }
 
 
-class TagsAdapter : ListAdapter<Transactions2Module.Filter, ViewHolderFilter>(
-    object : DiffUtil.ItemCallback<Transactions2Module.Filter>() {
-        override fun areItemsTheSame(oldItem: Transactions2Module.Filter, newItem: Transactions2Module.Filter) = oldItem == newItem
-        override fun areContentsTheSame(oldItem: Transactions2Module.Filter, newItem: Transactions2Module.Filter) = oldItem == newItem
-    }
-) {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderFilter {
-        return ViewHolderFilter(inflate(parent, R.layout.view_holder_filter))
-    }
-
-    override fun onBindViewHolder(holder: ViewHolderFilter, position: Int) {
-        holder.bind(getItem(position))
-    }
-
-}
-
-class ViewHolderFilter(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
-    fun bind(filter: Transactions2Module.Filter) {
-        buttonFilter.text = filter.coin?.code ?: "All"
-    }
-
-}
