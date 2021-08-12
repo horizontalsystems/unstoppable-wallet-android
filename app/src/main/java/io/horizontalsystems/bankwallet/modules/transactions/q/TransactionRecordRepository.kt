@@ -58,11 +58,61 @@ class TransactionRecordRepository(
     fun setWallets(wallets: List<Wallet>) {
         this.wallets = wallets
 
+        val transactionWallets = wallets.map { transactionWallet(it) }.toMutableList()
+
+        getAllEthTransactionWallet(wallets)?.let {
+            transactionWallets.add(it)
+        }
+
+        getAllBscTransactionWallet(wallets)?.let {
+            transactionWallets.add(it)
+        }
+
+        transactionWallets.forEach { transactionWallet ->
+            if (adaptersMap[transactionWallet] == null) {
+                adapterManager.getTransactionsAdapterForWallet(transactionWallet)?.let {
+                    val transactionAdapterWrapperXxx = TransactionAdapterWrapperXxx(it, transactionWallet)
+                    adaptersMap[transactionWallet] = transactionAdapterWrapperXxx
+                }
+            }
+        }
+
+
         items.clear()
         adaptersMap.forEach { t, u ->
             u.markUsed(null)
         }
         loadNext()
+    }
+
+    private fun getAllEthTransactionWallet(wallets: List<Wallet>): TransactionWallet? {
+        return wallets.firstOrNull {
+            it.coin.type is CoinType.Ethereum || it.coin.type is CoinType.Erc20
+        }?.let { wallet ->
+            TransactionWallet(
+                null,
+                TransactionSource(
+                    TransactionSource.Blockchain.Ethereum,
+                    wallet.account,
+                    wallet.configuredCoin.settings
+                )
+            )
+        }
+    }
+
+    private fun getAllBscTransactionWallet(wallets: List<Wallet>): TransactionWallet? {
+        return wallets.firstOrNull {
+            it.coin.type is CoinType.BinanceSmartChain || it.coin.type is CoinType.Bep20
+        }?.let { wallet ->
+            TransactionWallet(
+                null,
+                TransactionSource(
+                    TransactionSource.Blockchain.BinanceSmartChain,
+                    wallet.account,
+                    wallet.configuredCoin.settings
+                )
+            )
+        }
     }
 
     fun setSelectedWallet(wallet: Wallet?) {
@@ -87,12 +137,6 @@ class TransactionRecordRepository(
             }
 
         val map: List<Single<List<Pair<TransactionWallet, TransactionRecord>>>> = activeWallets.mapNotNull { transactionWallet ->
-            if (adaptersMap[transactionWallet] == null) {
-                adapterManager.getTransactionsAdapterForWallet(transactionWallet)?.let {
-                    adaptersMap[transactionWallet] = TransactionAdapterWrapperXxx(it, transactionWallet)
-                }
-            }
-
             adaptersMap[transactionWallet]?.let { transactionAdapterWrapperXxx ->
                 transactionAdapterWrapperXxx
                     .getNext(itemsPerPage)
