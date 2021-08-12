@@ -67,6 +67,10 @@ class Transactions2ViewModel(
         service.loadNext()
     }
 
+    fun willShow(viewItem: TransactionViewItem2) {
+        service.fetchRateIfNeeded(viewItem.uid)
+    }
+
     sealed class ItemsList {
         object Blank : ItemsList()
         class Filled(val items: List<TransactionViewItem2>) : ItemsList()

@@ -11,7 +11,6 @@ import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
 import java.math.BigDecimal
-import java.util.concurrent.Executors
 
 class TransactionsXRateRepository(
     private val currencyManager: ICurrencyManager,
@@ -40,7 +39,6 @@ class TransactionsXRateRepository(
             historicalRates[key] = xRateManager.historicalRateCached(key.coinType, baseCurrency.code, key.timestamp)
         }
         itemsUpdatedSubject.onNext(Unit)
-        xxx()
     }
 
     fun setRecords(transactionRecords: List<TransactionRecord>) {
@@ -60,26 +58,29 @@ class TransactionsXRateRepository(
         return historicalRates[HistoricalRateKey(coinType, timestamp)]
     }
 
-    private val executorService = Executors.newCachedThreadPool()
+    val requestedXRates = mutableMapOf<HistoricalRateKey, Unit>()
 
-    fun xxx() {
-        executorService.submit {
-            historicalRates.filterValues { it == null }.map { (key, _) ->
-                xRateManager.historicalRate(key.coinType, baseCurrency.code, key.timestamp)
-                    .subscribeIO({ rate ->
-                        historicalRates[key] = if (rate.compareTo(BigDecimal.ZERO) == 0) null else rate
+    fun fetchHistoricalRate(coinType: CoinType, timestamp: Long) {
+        val historicalRateKey = HistoricalRateKey(coinType, timestamp)
+        if (requestedXRates.containsKey(historicalRateKey)) return
 
-                        itemsUpdatedSubject.onNext(Unit)
-                    }, {
-                        Log.e("AAA", "Could not fetch xrate for ${key.coinType}:${key.timestamp}, ${it.javaClass.simpleName}:${it.message}")
-                    })
-                    .let {
-                        disposables.add(it)
-                    }
+        requestedXRates[historicalRateKey] = Unit
+
+        xRateManager.historicalRate(coinType, baseCurrency.code, timestamp)
+            .doFinally {
+                requestedXRates.remove(historicalRateKey)
             }
-        }
-    }
+            .subscribeIO({ rate ->
+                historicalRates[historicalRateKey] = if (rate.compareTo(BigDecimal.ZERO) == 0) null else rate
 
+                itemsUpdatedSubject.onNext(Unit)
+            }, {
+                Log.e("AAA", "Could not fetch xrate for ${coinType}:${timestamp}, ${it.javaClass.simpleName}:${it.message}")
+            })
+            .let {
+                disposables.add(it)
+            }
+    }
 
     data class HistoricalRateKey(val coinType: CoinType, val timestamp: Long)
 

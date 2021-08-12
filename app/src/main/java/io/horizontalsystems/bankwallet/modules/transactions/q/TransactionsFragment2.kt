@@ -33,7 +33,10 @@ class TransactionsFragment2 : BaseFragment(R.layout.fragment_transactions) {
 
         recyclerTags.adapter = tagsAdapter
 
-        val transactionsAdapter = TransactionsAdapter2()
+        val transactionsAdapter = TransactionsAdapter2 {
+            viewModel.willShow(it)
+        }
+
         val layoutManager = LinearLayoutManager(context)
         recyclerTransactions.adapter = transactionsAdapter
         recyclerTransactions.layoutManager = layoutManager
@@ -90,7 +93,7 @@ class TransactionViewItemDiff2 : DiffUtil.ItemCallback<TransactionViewItem2>() {
 
 }
 
-class TransactionsAdapter2 : ListAdapter<TransactionViewItem2, ViewHolderTransaction2>(TransactionViewItemDiff2()) {
+class TransactionsAdapter2(private val onItemDisplay: (TransactionViewItem2) -> Unit) : ListAdapter<TransactionViewItem2, ViewHolderTransaction2>(TransactionViewItemDiff2()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderTransaction2 {
         return ViewHolderTransaction2(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_transaction, parent, false))
@@ -101,7 +104,7 @@ class TransactionsAdapter2 : ListAdapter<TransactionViewItem2, ViewHolderTransac
     override fun onBindViewHolder(holder: ViewHolderTransaction2, position: Int, payloads: MutableList<Any>) {
 
         val item = getItem(position)
-//        viewModel.delegate.willShow(item)
+        onItemDisplay(item)
 
 //        val prev = payloads.lastOrNull() as? TransactionViewItem
 
