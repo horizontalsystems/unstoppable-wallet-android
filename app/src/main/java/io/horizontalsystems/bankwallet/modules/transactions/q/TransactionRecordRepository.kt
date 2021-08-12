@@ -171,8 +171,6 @@ class TransactionRecordRepository(
     }
 
     private fun handleRecords(records: List<Pair<TransactionWallet, TransactionRecord>>) {
-        if (records.isEmpty()) return
-
         records
             .sortedByDescending { it.second }
             .take(itemsPerPage)
