@@ -24,11 +24,11 @@ class TransactionRecordRepository(
     private val itemsSubject = PublishSubject.create<List<TransactionRecord>>()
     val itemsObservable: Observable<List<TransactionRecord>> get() = itemsSubject
 
-    private val disposables = CompositeDisposable()
+    private val items = CopyOnWriteArrayList<TransactionRecord>()
+    private val loading = AtomicBoolean(false)
+    private val adaptersMap = mutableMapOf<TransactionWallet, TransactionAdapterWrapperXxx>()
 
-    override fun clear() {
-        disposables.clear()
-    }
+    private val disposables = CompositeDisposable()
 
     private var wallets = emptyList<Wallet>()
     private val allTransactionWallets: List<TransactionWallet>
@@ -55,37 +55,28 @@ class TransactionRecordRepository(
             return mergedWallets
         }
 
-
-    private val xxxRepos = mutableMapOf<TransactionWallet, TransactionAdapterWrapperXxx>()
-
     fun setWallets(wallets: List<Wallet>) {
         this.wallets = wallets
 
         items.clear()
-        xxxRepos.forEach { t, u ->
+        adaptersMap.forEach { t, u ->
             u.markUsed(null)
         }
-        xxx()
+        loadNext()
     }
 
     fun setSelectedWallet(wallet: Wallet?) {
         selectedWallet = wallet
 
         items.clear()
-        xxxRepos.forEach { t, u ->
+        adaptersMap.forEach { t, u ->
             u.markUsed(null)
         }
-        xxx()
+        loadNext()
     }
-
-    fun loadNext() {
-        xxx()
-    }
-
-    var loading = AtomicBoolean(false)
 
     @Synchronized
-    private fun xxx() {
+    fun loadNext() {
         if (loading.get()) return
         loading.set(true)
 
@@ -96,13 +87,13 @@ class TransactionRecordRepository(
             }
 
         val map: List<Single<List<Pair<TransactionWallet, TransactionRecord>>>> = activeWallets.mapNotNull { transactionWallet ->
-            if (xxxRepos[transactionWallet] == null) {
+            if (adaptersMap[transactionWallet] == null) {
                 adapterManager.getTransactionsAdapterForWallet(transactionWallet)?.let {
-                    xxxRepos[transactionWallet] = TransactionAdapterWrapperXxx(it, transactionWallet)
+                    adaptersMap[transactionWallet] = TransactionAdapterWrapperXxx(it, transactionWallet)
                 }
             }
 
-            xxxRepos[transactionWallet]?.let { transactionAdapterWrapperXxx ->
+            adaptersMap[transactionWallet]?.let { transactionAdapterWrapperXxx ->
                 transactionAdapterWrapperXxx
                     .getNext(itemsPerPage)
                     .map { transactionRecords: List<TransactionRecord> ->
@@ -120,6 +111,9 @@ class TransactionRecordRepository(
             }
             .subscribeOn(Schedulers.computation())
             .observeOn(Schedulers.computation())
+            .doFinally {
+                loading.set(false)
+            }
             .subscribe { records ->
                 handleRecords(records)
             }
@@ -128,24 +122,21 @@ class TransactionRecordRepository(
             }
     }
 
-    private val items = CopyOnWriteArrayList<TransactionRecord>()
+    override fun clear() {
+        disposables.clear()
+    }
 
     private fun handleRecords(records: List<Pair<TransactionWallet, TransactionRecord>>) {
-        if (records.isEmpty()) {
-            loading.set(false)
-            return
-        }
+        if (records.isEmpty()) return
 
         records
             .sortedByDescending { it.second }
             .take(itemsPerPage)
             .forEach {
-                xxxRepos[it.first]?.markUsed(it.second)
+                adaptersMap[it.first]?.markUsed(it.second)
 
                 items.add(it.second)
             }
-
-        loading.set(false)
 
         itemsSubject.onNext(items)
     }
