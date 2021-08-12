@@ -111,8 +111,7 @@ class MarketAdvancedSearchViewModel(
     val liquidityViewItemLiveData = MutableLiveData(liquidityViewItem)
     val periodViewItemLiveData = MutableLiveData(periodViewItem)
     val priceChangeViewItemLiveData = MutableLiveData(priceChangeViewItem)
-    val showResultsTitleLiveData = MutableLiveData<String>()
-    val showResultsEnabledLiveData = MutableLiveData(false)
+    val updateResultButton = MutableLiveData<Pair<String, Boolean>>()
     val errorLiveEvent = SingleLiveEvent<String>()
     val loadingLiveData = MutableLiveData(false)
     val outperformedBtcOnFilter = MutableLiveData(false)
@@ -131,9 +130,9 @@ class MarketAdvancedSearchViewModel(
                         is DataState.Error -> Translator.getString(R.string.Market_Filter_ShowResults)
                         is DataState.Loading -> ""
                     }
-                    showResultsTitleLiveData.postValue(title)
+                    val enabled = it is DataState.Success && it.data > 0
+                    updateResultButton.postValue(Pair(title, enabled))
 
-                    showResultsEnabledLiveData.postValue(it is DataState.Success && it.data > 0)
                     loadingLiveData.postValue(it is DataState.Loading)
 
                     it.errorOrNull?.let {
