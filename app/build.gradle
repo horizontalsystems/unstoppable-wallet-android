@@ -30,6 +30,11 @@ android {
         }
     }
 
+    buildFeatures {
+        // Enables Jetpack Compose for this module
+        compose true
+    }
+
     signingConfigs {
         appCenter {
             storeFile file("./test.keystore")
@@ -97,14 +102,20 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
+
     packagingOptions {
         pickFirst("META-INF/atomicfu.kotlin_module")
     }
+
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "11"
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion '1.0.0'
     }
 }
 
@@ -217,8 +228,25 @@ dependencies {
     implementation project(':components:pin')
     implementation project(':components:seekbar')
 
-    androidTestImplementation 'androidx.test:runner:1.4.0-alpha06'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0-alpha06'
+    // Integration with activities
+    implementation 'androidx.activity:activity-compose:1.3.1'
+    // Compose Material Design
+    implementation 'androidx.compose.material:material:1.0.1'
+    // Animations
+    implementation 'androidx.compose.animation:animation:1.0.1'
+    // Tooling support (Previews, etc.)
+    implementation 'androidx.compose.ui:ui-tooling:1.0.1'
+    // Integration with ViewModels
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha07'
+
+    // When using a AppCompat theme
+    implementation "com.google.accompanist:accompanist-appcompat-theme:0.15.0"
+
+    // UI Tests
+    androidTestImplementation 'androidx.compose.ui:ui-test-junit4:1.0.1'
+
+    androidTestImplementation 'androidx.test:runner:1.4.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
     // optional - Test helpers for LiveData
     testImplementation "junit:junit:$junit_version"
