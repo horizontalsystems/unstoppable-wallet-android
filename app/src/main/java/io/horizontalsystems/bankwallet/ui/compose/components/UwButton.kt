@@ -22,7 +22,7 @@ import io.horizontalsystems.bankwallet.ui.compose.YellowD
 fun UwButtonPrimaryDefault(title: String, onClick: () -> Unit, enabled: Boolean = true) {
     UwButtonPrimary(
         onClick = onClick,
-        colors = UnButtonDefaults.textButtonColors(
+        colors = UwButtonDefaults.textButtonColors(
             backgroundColor = UnstoppableComponentsAppTheme.colors.leah,
         ),
         content = { Text(title) },
@@ -34,7 +34,7 @@ fun UwButtonPrimaryDefault(title: String, onClick: () -> Unit, enabled: Boolean 
 fun UwButtonPrimaryYellow(title: String, onClick: () -> Unit, enabled: Boolean = true) {
     UwButtonPrimary(
         onClick = onClick,
-        colors = UnButtonDefaults.textButtonColors(
+        colors = UwButtonDefaults.textButtonColors(
             backgroundColor = YellowD,
         ),
         content = { Text(title) },
@@ -51,8 +51,8 @@ fun UwButtonPrimary(
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     shape: Shape = RoundedCornerShape(25.dp),
     border: BorderStroke? = null,
-    colors: ButtonColors = UnButtonDefaults.textButtonColors(),
-    contentPadding: PaddingValues = UnButtonDefaults.ContentPadding,
+    colors: ButtonColors = UwButtonDefaults.textButtonColors(),
+    contentPadding: PaddingValues = UwButtonDefaults.ContentPadding,
     content: @Composable RowScope.() -> Unit
 ) {
     val contentColor by colors.contentColor(enabled)
@@ -76,8 +76,8 @@ fun UwButtonPrimary(
                 Row(
                     Modifier
                         .defaultMinSize(
-                            minWidth = UnButtonDefaults.MinWidth,
-                            minHeight = UnButtonDefaults.MinHeight
+                            minWidth = UwButtonDefaults.MinWidth,
+                            minHeight = UwButtonDefaults.MinHeight
                         )
                         .padding(contentPadding),
                     horizontalArrangement = Arrangement.Center,
@@ -89,7 +89,7 @@ fun UwButtonPrimary(
     }
 }
 
-object UnButtonDefaults {
+object UwButtonDefaults {
     private val ButtonHorizontalPadding = 16.dp
     private val ButtonVerticalPadding = 16.dp
 

@@ -4,11 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.view.isVisible
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.UwButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.selector.ItemViewHolder
 import io.horizontalsystems.bankwallet.ui.selector.ItemViewHolderFactory
 import io.horizontalsystems.bankwallet.ui.selector.SelectorBottomSheetDialog
@@ -156,17 +159,9 @@ class MarketAdvancedSearchFragment : BaseFragment() {
             marketAdvancedSearchViewModel.priceCloseToAtl = checked
         }
 
-        submit.setOnSingleClickListener {
-            findNavController().navigate(R.id.marketAdvancedSearchFragment_to_marketAdvancedSearchFragmentResults, null, navOptions())
-        }
-
-        marketAdvancedSearchViewModel.showResultsTitleLiveData.observe(viewLifecycleOwner) {
-            submit.text = it
-        }
-
-        marketAdvancedSearchViewModel.showResultsEnabledLiveData.observe(viewLifecycleOwner) {
-            submit.isEnabled = it
-        }
+        marketAdvancedSearchViewModel.updateResultButton.observe(viewLifecycleOwner, { (title, enabled) ->
+            setButton(title, enabled)
+        })
 
         marketAdvancedSearchViewModel.errorLiveEvent.observe(viewLifecycleOwner) {
             HudHelper.showErrorMessage(requireView(), it)
@@ -174,6 +169,34 @@ class MarketAdvancedSearchFragment : BaseFragment() {
 
         marketAdvancedSearchViewModel.loadingLiveData.observe(viewLifecycleOwner) {
             progressBar.isVisible = it
+        }
+
+        // Dispose the Composition when viewLifecycleOwner is destroyed
+        submitButtonCompose.setViewCompositionStrategy(
+                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+            )
+        setButton()
+    }
+
+    private fun setButton(
+        title: String = getString(R.string.Market_Filter_ShowResults),
+        enabled: Boolean = false
+    ) {
+        submitButtonCompose.setContent {
+            ComposeAppTheme {
+                UwButtonPrimaryYellow(
+                    title = title,
+                    onClick = {
+                        findNavController().navigate(
+                            R.id.marketAdvancedSearchFragment_to_marketAdvancedSearchFragmentResults,
+                            null,
+                            navOptions()
+                        )
+                    },
+                    enabled = enabled
+
+                )
+            }
         }
     }
 
