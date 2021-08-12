@@ -52,7 +52,7 @@ class Transactions2Service(
 
         xRateRepository.itemsUpdatedObservable
             .subscribeIO {
-                handleCurrencyValues()
+                handleUpdatedXRates()
             }
             .let {
                 disposables.add(it)
@@ -60,7 +60,7 @@ class Transactions2Service(
     }
 
     @Synchronized
-    private fun handleCurrencyValues() {
+    private fun handleUpdatedXRates() {
         for (i in 0 until transactionItems.size) {
             val item = transactionItems[i]
 
@@ -93,8 +93,6 @@ class Transactions2Service(
         }
 
         itemsSubject.onNext(transactionItems)
-
-        xRateRepository.xxx()
     }
 
     @Synchronized
@@ -119,6 +117,18 @@ class Transactions2Service(
     fun loadNext() {
         executorService.submit {
             transactionRecordRepository.loadNext()
+        }
+    }
+
+    fun fetchRateIfNeeded(recordUid: String) {
+        executorService.submit {
+            transactionItems.find { it.record.uid == recordUid }?.let { transactionItem ->
+                if (transactionItem.xxxCurrencyValue == null) {
+                    transactionItem.record.mainValue?.let { mainValue ->
+                        xRateRepository.fetchHistoricalRate(mainValue.coin.type, transactionItem.record.timestamp)
+                    }
+                }
+            }
         }
     }
 }
