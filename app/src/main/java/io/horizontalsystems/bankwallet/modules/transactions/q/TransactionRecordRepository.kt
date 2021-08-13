@@ -26,7 +26,8 @@ class TransactionRecordRepository(
 
     private val items = CopyOnWriteArrayList<TransactionRecord>()
     private val loading = AtomicBoolean(false)
-    private val adaptersMap = mutableMapOf<TransactionWallet, TransactionAdapterWrapperXxx>()
+    private var itemsUpdated = false
+    private val adaptersMap = mutableMapOf<TransactionWallet, TransactionAdapterWrapper>()
 
     private val disposables = CompositeDisposable()
 
@@ -71,7 +72,7 @@ class TransactionRecordRepository(
         transactionWallets.forEach { transactionWallet ->
             if (adaptersMap[transactionWallet] == null) {
                 adapterManager.getTransactionsAdapterForWallet(transactionWallet)?.let {
-                    val transactionAdapterWrapperXxx = TransactionAdapterWrapperXxx(it, transactionWallet)
+                    val transactionAdapterWrapperXxx = TransactionAdapterWrapper(it, transactionWallet)
                     adaptersMap[transactionWallet] = transactionAdapterWrapperXxx
                 }
             }
@@ -79,6 +80,7 @@ class TransactionRecordRepository(
 
 
         items.clear()
+        itemsUpdated = true
         adaptersMap.forEach { t, u ->
             u.markUsed(null)
         }
@@ -119,13 +121,13 @@ class TransactionRecordRepository(
         selectedWallet = wallet
 
         items.clear()
+        itemsUpdated = true
         adaptersMap.forEach { t, u ->
             u.markUsed(null)
         }
         loadNext()
     }
 
-    @Synchronized
     fun loadNext() {
         if (loading.get()) return
         loading.set(true)
@@ -178,9 +180,13 @@ class TransactionRecordRepository(
                 adaptersMap[it.first]?.markUsed(it.second)
 
                 items.add(it.second)
+                itemsUpdated = true
             }
 
-        itemsSubject.onNext(items)
+        if (itemsUpdated) {
+            itemsSubject.onNext(items)
+            itemsUpdated = false
+        }
     }
 
     private fun transactionWallet(wallet: Wallet): TransactionWallet {
