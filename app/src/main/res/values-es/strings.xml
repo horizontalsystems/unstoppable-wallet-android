@@ -90,9 +90,9 @@
     <string name="Market_TvlDeFi">TVL en DeFi</string>
     <string name="Market_DeFiCap">Cap. DeFi</string>
     <string name="Market_SeeAll">Ver Todos</string>
-    <string name="Market_Tab_Overview">Resumen</string>
-    <string name="Market_Tab_Discovery">Descubrimiento</string>
-    <string name="Market_Tab_Watchlist">Lista de Seguimiento</string>
+    <string name="Market_Tab_Overview">Overview</string>
+    <string name="Market_Tab_Discovery">Discovery</string>
+    <string name="Market_Tab_Watchlist">Watchlist</string>
     <string name="Market_Tab_Watchlist_EmptyList">You don\’t have any favorite assets.\nYou can add the favorites by clicking on star icon in the asset page</string>
     <string name="Market_Category_Rated">Rated</string>
     <string name="Market_Category_Rated_Description">Token ratings based on project security and market liquidity.</string>
