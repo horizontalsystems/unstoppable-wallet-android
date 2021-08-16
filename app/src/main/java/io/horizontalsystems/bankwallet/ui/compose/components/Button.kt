@@ -15,15 +15,15 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.ui.compose.Grey50
 import io.horizontalsystems.bankwallet.ui.compose.Steel20
-import io.horizontalsystems.bankwallet.ui.compose.UnstoppableComponentsAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.YellowD
 
 @Composable
-fun UwButtonPrimaryDefault(title: String, onClick: () -> Unit, enabled: Boolean = true) {
-    UwButtonPrimary(
+fun ButtonPrimaryDefault(title: String, onClick: () -> Unit, enabled: Boolean = true) {
+    ButtonPrimary(
         onClick = onClick,
-        colors = UwButtonDefaults.textButtonColors(
-            backgroundColor = UnstoppableComponentsAppTheme.colors.leah,
+        colors = ButtonDefaults.textButtonColors(
+            backgroundColor = ComposeAppTheme.colors.leah,
         ),
         content = { Text(title) },
         enabled = enabled
@@ -31,10 +31,10 @@ fun UwButtonPrimaryDefault(title: String, onClick: () -> Unit, enabled: Boolean 
 }
 
 @Composable
-fun UwButtonPrimaryYellow(title: String, onClick: () -> Unit, enabled: Boolean = true) {
-    UwButtonPrimary(
+fun ButtonPrimaryYellow(title: String, onClick: () -> Unit, enabled: Boolean = true) {
+    ButtonPrimary(
         onClick = onClick,
-        colors = UwButtonDefaults.textButtonColors(
+        colors = ButtonDefaults.textButtonColors(
             backgroundColor = YellowD,
         ),
         content = { Text(title) },
@@ -44,15 +44,15 @@ fun UwButtonPrimaryYellow(title: String, onClick: () -> Unit, enabled: Boolean =
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun UwButtonPrimary(
+fun ButtonPrimary(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     shape: Shape = RoundedCornerShape(25.dp),
     border: BorderStroke? = null,
-    colors: ButtonColors = UwButtonDefaults.textButtonColors(),
-    contentPadding: PaddingValues = UwButtonDefaults.ContentPadding,
+    colors: ButtonColors = ButtonDefaults.textButtonColors(),
+    contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
     content: @Composable RowScope.() -> Unit
 ) {
     val contentColor by colors.contentColor(enabled)
@@ -71,13 +71,13 @@ fun UwButtonPrimary(
     ) {
         CompositionLocalProvider(LocalContentAlpha provides contentColor.alpha) {
             ProvideTextStyle(
-                value = UnstoppableComponentsAppTheme.typography.headline2
+                value = ComposeAppTheme.typography.headline2
             ) {
                 Row(
                     Modifier
                         .defaultMinSize(
-                            minWidth = UwButtonDefaults.MinWidth,
-                            minHeight = UwButtonDefaults.MinHeight
+                            minWidth = ButtonDefaults.MinWidth,
+                            minHeight = ButtonDefaults.MinHeight
                         )
                         .padding(contentPadding),
                     horizontalArrangement = Arrangement.Center,
@@ -89,7 +89,7 @@ fun UwButtonPrimary(
     }
 }
 
-object UwButtonDefaults {
+object ButtonDefaults {
     private val ButtonHorizontalPadding = 16.dp
     private val ButtonVerticalPadding = 16.dp
 
@@ -116,7 +116,7 @@ object UwButtonDefaults {
     @Composable
     fun textButtonColors(
         backgroundColor: Color = Color.Transparent,
-        contentColor: Color = UnstoppableComponentsAppTheme.colors.claude,
+        contentColor: Color = ComposeAppTheme.colors.claude,
         disabledBackgroundColor: Color = Steel20,
         disabledContentColor: Color = Grey50,
     ): ButtonColors = UwDefaultButtonColors(

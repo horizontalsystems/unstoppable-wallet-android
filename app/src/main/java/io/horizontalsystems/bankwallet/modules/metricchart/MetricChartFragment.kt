@@ -13,7 +13,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.UwTabRounded
+import io.horizontalsystems.bankwallet.ui.compose.components.TabRounded
 import io.horizontalsystems.bankwallet.ui.extensions.BaseBottomSheetDialogFragment
 import io.horizontalsystems.chartview.Chart
 import io.horizontalsystems.chartview.ChartView
@@ -101,7 +101,7 @@ class MetricChartFragment : BaseBottomSheetDialogFragment(), Chart.Listener {
         LazyRow {
             itemsIndexed(tabTitles) { index, title ->
                 val selected = tabIndex == index
-                UwTabRounded(
+                TabRounded(
                     title = title,
                     onSelect = {
                         tabIndex = index

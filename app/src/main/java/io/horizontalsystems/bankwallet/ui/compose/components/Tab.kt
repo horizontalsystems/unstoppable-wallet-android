@@ -10,13 +10,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.dp
-import io.horizontalsystems.bankwallet.ui.compose.UnstoppableComponentsAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.YellowD
 
 @Composable
-fun UwTabRounded(title: String, onSelect: () -> Unit, selected: Boolean = false) {
-    UwTabBox(
-        colors = UwTabDefaults.textButtonColors(),
+fun TabRounded(title: String, onSelect: () -> Unit, selected: Boolean = false) {
+    TabBox(
+        colors = TabDefaults.textButtonColors(),
         content = { Text(title) },
         selected = selected,
         onSelect = onSelect
@@ -24,11 +24,11 @@ fun UwTabRounded(title: String, onSelect: () -> Unit, selected: Boolean = false)
 }
 
 @Composable
-fun UwTabBox(
+fun TabBox(
     selected: Boolean = false,
     shape: Shape = RoundedCornerShape(14.dp),
-    colors: ButtonColors = UwTabDefaults.textButtonColors(),
-    contentPadding: PaddingValues = UwTabDefaults.ContentPadding,
+    colors: ButtonColors = TabDefaults.textButtonColors(),
+    contentPadding: PaddingValues = TabDefaults.ContentPadding,
     content: @Composable RowScope.() -> Unit,
     onSelect: () -> Unit,
 ) {
@@ -50,13 +50,13 @@ fun UwTabBox(
             // style property.
             CompositionLocalProvider(LocalContentAlpha provides contentColor.alpha) {
                 ProvideTextStyle(
-                    value = UnstoppableComponentsAppTheme.typography.subhead1
+                    value = ComposeAppTheme.typography.subhead1
                 ) {
                     Row(
                         Modifier
                             .defaultMinSize(
-                                minWidth = UwTabDefaults.MinWidth,
-                                minHeight = UwTabDefaults.MinHeight
+                                minWidth = TabDefaults.MinWidth,
+                                minHeight = TabDefaults.MinHeight
                             )
                             .padding(contentPadding),
                         horizontalArrangement = Arrangement.Center,
@@ -69,7 +69,7 @@ fun UwTabBox(
     }
 }
 
-object UwTabDefaults {
+object TabDefaults {
     private val ButtonHorizontalPadding = 16.dp
     private val ButtonVerticalPadding = 6.dp
 
@@ -96,10 +96,10 @@ object UwTabDefaults {
     @Composable
     fun textButtonColors(
         backgroundColor: Color = Color.Transparent,
-        contentColor: Color = UnstoppableComponentsAppTheme.colors.oz,
+        contentColor: Color = ComposeAppTheme.colors.oz,
         activeBackgroundColor: Color = YellowD,
-        activeContentColor: Color = UnstoppableComponentsAppTheme.colors.claude,
-    ): ButtonColors = UwDefaultTabColors(
+        activeContentColor: Color = ComposeAppTheme.colors.claude,
+    ): ButtonColors = DefaultTabColors(
         backgroundColor = backgroundColor,
         contentColor = contentColor,
         activeBackgroundColor = activeBackgroundColor,
@@ -108,7 +108,7 @@ object UwTabDefaults {
 }
 
 @Immutable
-private class UwDefaultTabColors(
+private class DefaultTabColors(
     private val backgroundColor: Color,
     private val contentColor: Color,
     private val activeBackgroundColor: Color,
@@ -128,7 +128,7 @@ private class UwDefaultTabColors(
         if (this === other) return true
         if (other == null || this::class != other::class) return false
 
-        other as UwDefaultTabColors
+        other as DefaultTabColors
 
         if (backgroundColor != other.backgroundColor) return false
         if (contentColor != other.contentColor) return false

@@ -55,7 +55,7 @@ fun ComposeAppTheme(
 
 }
 
-object UnstoppableComponentsAppTheme {
+object ComposeAppTheme {
     val colors: Colors
         @Composable
         get() = LocalColors.current

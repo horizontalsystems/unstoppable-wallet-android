@@ -11,11 +11,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import io.horizontalsystems.bankwallet.ui.compose.UnstoppableComponentsAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.R
 
 @Composable
-fun UwCircleButton(
+fun CircleButton(
     @DrawableRes icon: Int = R.drawable.ic_arrow_down_left_24,
     onClick: () -> Unit,
 ) {
@@ -25,12 +25,12 @@ fun UwCircleButton(
         modifier = Modifier
             .size(50.dp)
             .clip(shape)
-            .background(UnstoppableComponentsAppTheme.colors.leah)
+            .background(ComposeAppTheme.colors.leah)
     ) {
         Icon(
             painter = painterResource(id = icon),
             contentDescription = null,
-            tint = UnstoppableComponentsAppTheme.colors.claude
+            tint = ComposeAppTheme.colors.claude
         )
     }
 }
