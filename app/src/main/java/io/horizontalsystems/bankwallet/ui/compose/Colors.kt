@@ -4,7 +4,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
 
 @Stable
-class UwColors(
+class Colors(
     jacob: Color,
     remus: Color,
     lucian: Color,
@@ -13,6 +13,7 @@ class UwColors(
     bran: Color,
     leah: Color,
     claude: Color,
+    lawrence: Color
 ) {
     var jacob by mutableStateOf(jacob)
         private set
@@ -30,8 +31,10 @@ class UwColors(
         private set
     var claude by mutableStateOf(claude)
         private set
+    var lawrence by mutableStateOf(claude)
+        private set
 
-    fun update(other: UwColors) {
+    fun update(other: Colors) {
         jacob = other.jacob
         remus = other.remus
         lucian = other.lucian
@@ -40,9 +43,10 @@ class UwColors(
         bran = other.bran
         leah = other.leah
         claude = other.claude
+        lawrence = other.lawrence
     }
 
-    fun copy(): UwColors = UwColors(
+    fun copy(): Colors = Colors(
         jacob = jacob,
         remus = remus,
         lucian = lucian,
@@ -51,5 +55,6 @@ class UwColors(
         bran = bran,
         leah = leah,
         claude = claude,
+        lawrence = lawrence
     )
 }
