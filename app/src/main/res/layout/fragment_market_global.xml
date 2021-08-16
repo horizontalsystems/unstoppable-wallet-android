@@ -63,22 +63,17 @@
 
     <!--EndOf Price and Date info-->
 
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tabLayout"
+    <androidx.compose.ui.platform.ComposeView
+        android:id="@+id/tabLayoutCompose"
         android:layout_width="0dp"
-        android:layout_height="40dp"
+        android:layout_height="44dp"
         android:layout_marginTop="8dp"
-        android:clipToPadding="false"
-        android:paddingStart="12dp"
-        android:paddingEnd="12dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/topValue"
-        app:tabGravity="start"
-        app:tabMinWidth="0dp"
-        app:tabMode="scrollable"
-        app:tabPaddingEnd="4dp"
-        app:tabPaddingStart="4dp" />
+        />
 
     <io.horizontalsystems.chartview.Chart
         android:id="@+id/chart"
@@ -90,7 +85,7 @@
         app:gridTextColor="@color/nina"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tabLayout"
+        app:layout_constraintTop_toBottomOf="@+id/tabLayoutCompose"
         app:partialChartColor="@color/grey_50"
         app:timelineTextColor="@color/nina" />
 

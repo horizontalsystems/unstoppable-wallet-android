@@ -119,7 +119,7 @@ object UwButtonDefaults {
         contentColor: Color = UnstoppableComponentsAppTheme.colors.claude,
         disabledBackgroundColor: Color = Steel20,
         disabledContentColor: Color = Grey50,
-    ): ButtonColors = DefaultButtonColors(
+    ): ButtonColors = UwDefaultButtonColors(
         backgroundColor = backgroundColor,
         contentColor = contentColor,
         disabledBackgroundColor = disabledBackgroundColor,
@@ -128,7 +128,7 @@ object UwButtonDefaults {
 }
 
 @Immutable
-private class DefaultButtonColors(
+private class UwDefaultButtonColors(
     private val backgroundColor: Color,
     private val contentColor: Color,
     private val disabledBackgroundColor: Color,
@@ -148,7 +148,7 @@ private class DefaultButtonColors(
         if (this === other) return true
         if (other == null || this::class != other::class) return false
 
-        other as DefaultButtonColors
+        other as UwDefaultButtonColors
 
         if (backgroundColor != other.backgroundColor) return false
         if (contentColor != other.contentColor) return false

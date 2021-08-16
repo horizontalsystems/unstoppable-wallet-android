@@ -3,21 +3,25 @@ package io.horizontalsystems.bankwallet.modules.metricchart
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.runtime.*
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.os.bundleOf
 import androidx.core.view.isInvisible
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
-import com.google.android.material.tabs.TabLayout
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.UwTabRounded
 import io.horizontalsystems.bankwallet.ui.extensions.BaseBottomSheetDialogFragment
-import io.horizontalsystems.bankwallet.ui.extensions.createTextView
 import io.horizontalsystems.chartview.Chart
 import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.chartview.models.PointInfo
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.android.synthetic.main.fragment_market_global.*
 
-class MetricChartFragment : BaseBottomSheetDialogFragment(), Chart.Listener, TabLayout.OnTabSelectedListener {
+class MetricChartFragment : BaseBottomSheetDialogFragment(), Chart.Listener {
 
     private val metricChartType by lazy {
         requireArguments().getParcelable<MetricChartType>(METRICS_CHART_TYPE_KEY)
@@ -79,58 +83,50 @@ class MetricChartFragment : BaseBottomSheetDialogFragment(), Chart.Listener, Tab
     }
 
     private fun setChartTabs() {
-        actions.forEach { (_, textId) ->
-            tabLayout.newTab()
-                    .setCustomView(createTextView(requireContext(), R.style.TabComponent).apply {
-                        id = android.R.id.text1
-                    })
-                    .setText(requireContext().getString(textId))
-                    .let {
-                        tabLayout.addTab(it, false)
-                    }
+        tabLayoutCompose.setViewCompositionStrategy(
+            ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+        )
+        tabLayoutCompose.setContent {
+            ComposeAppTheme {
+                CustomTab(actions.map { getString(it.second) })
+            }
         }
 
-        tabLayout.tabRippleColor = null
-        tabLayout.setSelectedTabIndicator(null)
-        tabLayout.addOnTabSelectedListener(this)
-
-        setChartType(viewModel.chartType)
     }
 
-    private fun setChartType(type: ChartView.ChartType) {
-        val indexOf = actions.indexOfFirst { it.first == type }
-        if (indexOf > -1) {
-            tabLayout.removeOnTabSelectedListener(this)
-            tabLayout.selectTab(tabLayout.getTabAt(indexOf))
-            tabLayout.addOnTabSelectedListener(this)
+    @Composable
+    fun CustomTab(tabTitles: List<String>) {
+        var tabIndex by remember { mutableStateOf(0) }
+
+        LazyRow {
+            itemsIndexed(tabTitles) { index, title ->
+                val selected = tabIndex == index
+                UwTabRounded(
+                    title = title,
+                    onSelect = {
+                        tabIndex = index
+                        val chartType = actions[index].first
+                        viewModel.onChartTypeSelect(chartType)
+                    },
+                    selected = selected
+                )
+            }
         }
     }
 
-    //TabLayout.OnTabSelectedListener
-
-    override fun onTabSelected(tab: TabLayout.Tab) {
-        val chartType = actions[tab.position].first
-        viewModel.onChartTypeSelect(chartType)
-    }
-
-    override fun onTabUnselected(tab: TabLayout.Tab?) {
-    }
-
-    override fun onTabReselected(tab: TabLayout.Tab?) {
-    }
 
     //Chart.Listener
 
     override fun onTouchDown() {
         draggable = false
         chartPointsInfo.isInvisible = false
-        tabLayout.isInvisible = true
+        tabLayoutCompose.isInvisible = true
     }
 
     override fun onTouchUp() {
         draggable = true
         chartPointsInfo.isInvisible = true
-        tabLayout.isInvisible = false
+        tabLayoutCompose.isInvisible = false
     }
 
     override fun onTouchSelect(point: PointInfo) {
