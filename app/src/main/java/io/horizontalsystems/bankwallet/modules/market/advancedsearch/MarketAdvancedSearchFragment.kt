@@ -11,7 +11,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.UwButtonPrimaryYellow
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.selector.ItemViewHolder
 import io.horizontalsystems.bankwallet.ui.selector.ItemViewHolderFactory
 import io.horizontalsystems.bankwallet.ui.selector.SelectorBottomSheetDialog
@@ -184,7 +184,7 @@ class MarketAdvancedSearchFragment : BaseFragment() {
     ) {
         submitButtonCompose.setContent {
             ComposeAppTheme {
-                UwButtonPrimaryYellow(
+                ButtonPrimaryYellow(
                     title = title,
                     onClick = {
                         findNavController().navigate(
