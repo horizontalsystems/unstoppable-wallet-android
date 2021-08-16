@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavOptions
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.ICustomRangedFeeProvider
 import io.horizontalsystems.bankwallet.core.ethereum.EthereumFeeViewModel
 import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinServiceFactory
 import io.horizontalsystems.bankwallet.core.ethereum.EvmTransactionService
@@ -27,7 +28,7 @@ object SwapApproveConfirmationModule {
         private val coin by lazy { blockchain.coin }
         private val evmKit by lazy { blockchain.evmKit!! }
         private val transactionService by lazy {
-            val feeRateProvider = FeeRateProviderFactory.provider(coin)!!
+            val feeRateProvider = FeeRateProviderFactory.provider(coin) as ICustomRangedFeeProvider
             EvmTransactionService(evmKit, feeRateProvider, 20)
         }
         private val coinServiceFactory by lazy { EvmCoinServiceFactory(coin!!, App.coinKit, App.currencyManager, App.xRateManager) }

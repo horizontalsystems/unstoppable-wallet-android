@@ -11,14 +11,14 @@ sealed class CustomPriorityUnit {
         }
     }
 
-    fun getConvertedValue(value: Long): Long {
+    fun convertToBaseUnit(value: Long): Long {
         return when(this){
             Satoshi -> value
             Gwei -> value * 1_000_000_000
         }
     }
 
-    fun getUnits(value: Long): Long {
+    fun fromBaseUnit(value: Long): Long {
         return when(this){
             Satoshi -> value
             Gwei -> value / 1_000_000_000

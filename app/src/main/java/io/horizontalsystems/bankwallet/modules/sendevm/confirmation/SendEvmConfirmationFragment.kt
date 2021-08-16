@@ -28,15 +28,15 @@ import kotlinx.android.synthetic.main.fragment_confirmation_send_evm.*
 class SendEvmConfirmationFragment : BaseFragment() {
 
     private val logger = AppLogger("send-evm")
-    private val sendEvmMViewModel by navGraphViewModels<SendEvmViewModel>(R.id.sendEvmFragment)
+    private val sendEvmViewModel by navGraphViewModels<SendEvmViewModel>(R.id.sendEvmFragment)
 
     private val vmFactory by lazy {
         SendEvmConfirmationModule.Factory(
-            sendEvmMViewModel.service.adapter.evmKit,
+            sendEvmViewModel.service.adapter.evmKit,
             SendEvmData(transactionData, additionalInfo)
         )
     }
-    private val sendViewModel by viewModels<SendEvmTransactionViewModel> { vmFactory }
+    private val sendEvmTransactionViewModel by viewModels<SendEvmTransactionViewModel> { vmFactory }
     private val feeViewModel by viewModels<EthereumFeeViewModel> { vmFactory }
 
     private var snackbarInProcess: CustomSnackbar? = null
@@ -77,11 +77,11 @@ class SendEvmConfirmationFragment : BaseFragment() {
             findNavController().popBackStack()
         }
 
-        sendViewModel.sendEnabledLiveData.observe(viewLifecycleOwner, { enabled ->
+        sendEvmTransactionViewModel.sendEnabledLiveData.observe(viewLifecycleOwner, { enabled ->
             sendButton.isEnabled = enabled
         })
 
-        sendViewModel.sendingLiveData.observe(viewLifecycleOwner, {
+        sendEvmTransactionViewModel.sendingLiveData.observe(viewLifecycleOwner, {
             snackbarInProcess = HudHelper.showInProcessMessage(
                 requireView(),
                 R.string.Send_Sending,
@@ -89,7 +89,7 @@ class SendEvmConfirmationFragment : BaseFragment() {
             )
         })
 
-        sendViewModel.sendSuccessLiveData.observe(viewLifecycleOwner, { transactionHash ->
+        sendEvmTransactionViewModel.sendSuccessLiveData.observe(viewLifecycleOwner, { transactionHash ->
             HudHelper.showSuccessMessage(
                 requireActivity().findViewById(android.R.id.content),
                 R.string.Hud_Text_Success
@@ -99,14 +99,14 @@ class SendEvmConfirmationFragment : BaseFragment() {
             }, 1200)
         })
 
-        sendViewModel.sendFailedLiveData.observe(viewLifecycleOwner, {
+        sendEvmTransactionViewModel.sendFailedLiveData.observe(viewLifecycleOwner, {
             HudHelper.showErrorMessage(requireActivity().findViewById(android.R.id.content), it)
 
             findNavController().popBackStack()
         })
 
         sendEvmTransactionView.init(
-            sendViewModel,
+            sendEvmTransactionViewModel,
             feeViewModel,
             viewLifecycleOwner,
             parentFragmentManager,
@@ -121,7 +121,7 @@ class SendEvmConfirmationFragment : BaseFragment() {
 
         sendButton.setOnSingleClickListener {
             logger.info("click send button")
-            sendViewModel.send(logger)
+            sendEvmTransactionViewModel.send(logger)
         }
     }
 

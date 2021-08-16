@@ -58,8 +58,8 @@ class FeeSelectorView @JvmOverloads constructor(context: Context, attrs: Attribu
         customFeeSeekBar.isVisible = viewItem != null
 
         viewItem?.let {
-            customFeeSeekBar.min = it.range.lower.toInt()
-            customFeeSeekBar.max = it.range.upper.toInt()
+            customFeeSeekBar.min = it.range.first.toInt()
+            customFeeSeekBar.max = it.range.last.toInt()
             customFeeSeekBar.progress = it.initialValue.toInt()
             customFeeSeekBar.setBubbleHint(it.unit)
         }
