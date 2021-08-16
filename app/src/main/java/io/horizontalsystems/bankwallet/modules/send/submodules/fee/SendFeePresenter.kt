@@ -92,12 +92,12 @@ class SendFeePresenter(
     private fun updateCustomFeeParams(priority: FeeRatePriority.Custom) {
         customPriorityUnit ?: return
 
-        val units = feeRate?.let { customPriorityUnit.getUnits(it).toInt() } ?: priority.value
-        val minValue = units.coerceAtMost(priority.range.last)   // value can't be more than slider upper range
-        val converted = customPriorityUnit.getConvertedValue(minValue.toLong())
-        this.customFeeRate = converted.toBigInteger()
+        val range = IntRange(customPriorityUnit.fromBaseUnit(priority.range.first).toInt(), customPriorityUnit.fromBaseUnit(priority.range.last).toInt())
+        val feeRateValue = (feeRate ?: priority.value).let { customPriorityUnit.fromBaseUnit(it) }
+        val adjustedFeeRateValue = feeRateValue.coerceAtMost(customPriorityUnit.fromBaseUnit(priority.range.last)).toInt()   // value can't be more than slider upper range
+        this.customFeeRate = adjustedFeeRateValue.toBigInteger()
 
-        view.setCustomFeeParams(units, priority.range, customPriorityUnit.getLabel())
+        view.setCustomFeeParams(adjustedFeeRateValue, range, customPriorityUnit.getLabel())
     }
 
     private fun getSmartFee(): Long? {
@@ -240,7 +240,7 @@ class SendFeePresenter(
     override fun onChangeFeeRateValue(value: Int) {
         customPriorityUnit ?: return
 
-        val converted = customPriorityUnit.getConvertedValue(value.toLong())
+        val converted = customPriorityUnit.convertToBaseUnit(value.toLong())
         this.customFeeRate = converted.toBigInteger()
         moduleDelegate?.onUpdateFeeRate()
     }

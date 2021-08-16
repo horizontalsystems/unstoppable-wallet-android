@@ -2,11 +2,13 @@ package io.horizontalsystems.bankwallet.core.providers
 
 import io.horizontalsystems.bankwallet.core.FeeRatePriority
 import io.horizontalsystems.bankwallet.core.IAppConfigProvider
+import io.horizontalsystems.bankwallet.core.ICustomRangedFeeProvider
 import io.horizontalsystems.bankwallet.core.IFeeRateProvider
 import io.horizontalsystems.feeratekit.FeeRateKit
 import io.horizontalsystems.feeratekit.model.FeeProviderConfig
 import io.reactivex.Single
 import java.math.BigInteger
+import kotlin.math.ceil
 
 class FeeRateProvider(appConfig: IAppConfigProvider) {
 
@@ -56,7 +58,7 @@ class BitcoinFeeRateProvider(private val feeRateProvider: FeeRateProvider) : IFe
             FeeRatePriority.LOW,
             FeeRatePriority.RECOMMENDED,
             FeeRatePriority.HIGH,
-            FeeRatePriority.Custom(1, IntRange(1, 200))
+            FeeRatePriority.Custom(1, LongRange(1, 200))
     )
 
     override val recommendedFeeRate: Single<BigInteger> = feeRateProvider.bitcoinFeeRate(mediumPriorityBlockCount)
@@ -83,27 +85,52 @@ class BitcoinCashFeeRateProvider(feeRateProvider: FeeRateProvider) : IFeeRatePro
     override val recommendedFeeRate: Single<BigInteger> = feeRateProvider.bitcoinCashFeeRate()
 }
 
-class EthereumFeeRateProvider(feeRateProvider: FeeRateProvider) : IFeeRateProvider {
+class EthereumFeeRateProvider(
+    feeRateProvider: FeeRateProvider,
+    override val customFeeRange: LongRange = Companion.customFeeRange,
+    multiply: Double? = null
+) : ICustomRangedFeeProvider {
 
     override val feeRatePriorityList: List<FeeRatePriority> = listOf(
-            FeeRatePriority.RECOMMENDED,
-            FeeRatePriority.Custom(1, IntRange(1, 400))
+        FeeRatePriority.RECOMMENDED,
+        FeeRatePriority.Custom(1, customFeeRange)
     )
 
-    override val recommendedFeeRate: Single<BigInteger> = feeRateProvider.ethereumGasPrice()
+    override val recommendedFeeRate: Single<BigInteger> =
+        feeRateProvider.ethereumGasPrice()
+            .map { getAdjustedGasPrice(maxOf(it.toLong(), customFeeRange.first), multiply) }
+
+    companion object {
+        private val customFeeRange = LongRange(1_000_000_000, 400_000_000_000)
+    }
 }
 
-class BinanceSmartChainFeeRateProvider(feeRateProvider: FeeRateProvider) : IFeeRateProvider {
+class BinanceSmartChainFeeRateProvider(
+    feeRateProvider: FeeRateProvider,
+    override val customFeeRange: LongRange = Companion.customFeeRange,
+    multiply: Double? = null
+) : ICustomRangedFeeProvider {
 
     override val feeRatePriorityList: List<FeeRatePriority> = listOf(
             FeeRatePriority.RECOMMENDED,
-            FeeRatePriority.Custom(1, IntRange(1, 400))
+            FeeRatePriority.Custom(1, customFeeRange)
     )
 
-    override val recommendedFeeRate: Single<BigInteger> = feeRateProvider.binanceSmartChainGasPrice()
+    override val recommendedFeeRate: Single<BigInteger> =
+        feeRateProvider.ethereumGasPrice()
+            .map { getAdjustedGasPrice(maxOf(it.toLong(), customFeeRange.first), multiply) }
+
+    companion object {
+        private val customFeeRange = LongRange(1_000_000_000, 400_000_000_000)
+    }
 }
 
 class DashFeeRateProvider(feeRateProvider: FeeRateProvider) : IFeeRateProvider {
     override val feeRatePriorityList: List<FeeRatePriority> = listOf()
     override val recommendedFeeRate: Single<BigInteger> = feeRateProvider.dashFeeRate()
+}
+
+private fun getAdjustedGasPrice(recommendedGasPrice: Long, multiply: Double?): BigInteger {
+    val adjustedGasPrice = recommendedGasPrice.toDouble() * (multiply ?: 1.0)
+    return ceil(adjustedGasPrice).toBigDecimal().toBigInteger()
 }

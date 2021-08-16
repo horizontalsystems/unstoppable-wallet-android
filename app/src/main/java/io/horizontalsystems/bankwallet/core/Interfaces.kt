@@ -501,6 +501,10 @@ interface IFeeRateProvider {
     }
 }
 
+interface ICustomRangedFeeProvider: IFeeRateProvider {
+    val customFeeRange: LongRange
+}
+
 interface IAddressParser {
     fun parse(paymentAddress: String): AddressData
 }
@@ -600,7 +604,7 @@ sealed class FeeRatePriority {
     object RECOMMENDED : FeeRatePriority()
     object HIGH : FeeRatePriority()
 
-    class Custom(val value: Int, val range: IntRange) : FeeRatePriority()
+    class Custom(val value: Long, val range: LongRange) : FeeRatePriority()
 }
 
 interface Clearable {

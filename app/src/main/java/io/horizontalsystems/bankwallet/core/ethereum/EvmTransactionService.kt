@@ -1,9 +1,10 @@
 package io.horizontalsystems.bankwallet.core.ethereum
 
 import io.horizontalsystems.bankwallet.core.FeeRatePriority
-import io.horizontalsystems.bankwallet.core.IFeeRateProvider
+import io.horizontalsystems.bankwallet.core.ICustomRangedFeeProvider
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
+import io.horizontalsystems.bankwallet.modules.send.submodules.fee.CustomPriorityUnit
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.reactivex.BackpressureStrategy
@@ -15,6 +16,7 @@ import io.reactivex.subjects.PublishSubject
 import java.math.BigInteger
 
 interface IEvmTransactionFeeService {
+    val customFeeRange: LongRange
     val hasEstimatedFee: Boolean
 
     val transactionStatus: DataState<EvmTransactionService.Transaction>
@@ -28,7 +30,7 @@ interface IEvmTransactionFeeService {
 
 class EvmTransactionService(
         private val evmKit: EthereumKit,
-        private val feeRateProvider: IFeeRateProvider,
+        private val feeRateProvider: ICustomRangedFeeProvider,
         private val gasLimitSurchargePercent: Int
 ) : IEvmTransactionFeeService {
 
@@ -63,6 +65,9 @@ class EvmTransactionService(
 
     private val evmBalance: BigInteger
         get() = evmKit.accountState?.balance ?: BigInteger.ZERO
+
+    override val customFeeRange: LongRange
+        get() = feeRateProvider.customFeeRange
 
     fun setTransactionData(transactionData: TransactionData) {
         this.transactionData = transactionData
@@ -146,7 +151,11 @@ class EvmTransactionService(
                 }
                 recommendedGasPriceSingle.map { recommended ->
                     val customGasPrice = gasPriceType.gasPrice.toBigInteger()
-                    warningOfStuckSubject.onNext(customGasPrice < recommended)
+
+                    val customGasPriceInGwei = CustomPriorityUnit.Gwei.fromBaseUnit(gasPriceType.gasPrice)
+                    val recommendedInGwei = CustomPriorityUnit.Gwei.fromBaseUnit(recommended.toLong())
+                    warningOfStuckSubject.onNext(customGasPriceInGwei < recommendedInGwei)
+
                     customGasPrice
                 }
             }

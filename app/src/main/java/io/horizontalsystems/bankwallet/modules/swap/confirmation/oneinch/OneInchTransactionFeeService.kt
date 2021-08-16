@@ -2,7 +2,7 @@ package io.horizontalsystems.bankwallet.modules.swap.confirmation.oneinch
 
 import android.os.Parcelable
 import io.horizontalsystems.bankwallet.core.FeeRatePriority
-import io.horizontalsystems.bankwallet.core.IFeeRateProvider
+import io.horizontalsystems.bankwallet.core.ICustomRangedFeeProvider
 import io.horizontalsystems.bankwallet.core.ethereum.EvmTransactionService.*
 import io.horizontalsystems.bankwallet.core.ethereum.IEvmTransactionFeeService
 import io.horizontalsystems.bankwallet.core.subscribeIO
@@ -35,7 +35,7 @@ data class OneInchSwapParameters(
 class OneInchTransactionFeeService(
         private val oneInchKitHelper: OneInchKitHelper,
         parameters: OneInchSwapParameters,
-        private val feeRateProvider: IFeeRateProvider
+        private val feeRateProvider: ICustomRangedFeeProvider
 ) : IEvmTransactionFeeService {
 
     private val gasLimitSurchargePercent: Int = 25
@@ -66,6 +66,9 @@ class OneInchTransactionFeeService(
 
     var parameters: OneInchSwapParameters = parameters
         private set
+
+    override val customFeeRange: LongRange
+        get() = feeRateProvider.customFeeRange
 
     private var disposable: Disposable? = null
 
