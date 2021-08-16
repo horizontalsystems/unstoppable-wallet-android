@@ -2,11 +2,6 @@ package io.horizontalsystems.bankwallet.ui.compose
 
 import androidx.compose.ui.graphics.Color
 
-val Purple200 = Color(0xFFBB86FC)
-val Purple500 = Color(0xFF6200EE)
-val Purple700 = Color(0xFF3700B3)
-val Teal200 = Color(0xFF03DAC5)
-
 val Dark = Color(0xFF13151A)
 val Light = Color(0xFFF0F0F0)
 val LightGrey = Color(0xFFC8C7CC)
@@ -21,15 +16,3 @@ val GreenD = Color(0xFF05C46B)
 val GreenL = Color(0xFF04AD5F)
 val RedD = Color(0xFFFF4820)
 val RedL = Color(0xFFED402E)
-val OzD = Light
-val OzL = Dark
-val TylerD = Dark
-val TylerL = Light
-val BranD = LightGrey
-val BranL = Dark
-val ClaudeD = Dark
-val ClaudeL = Color.White
-val LeahD = SteelLight
-val LeahL = SteelDark
-val LawrenceD = SteelDark
-val LawrenceL = Color.White

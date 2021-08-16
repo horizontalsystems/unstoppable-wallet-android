@@ -2,54 +2,35 @@ package io.horizontalsystems.bankwallet.ui.compose
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.darkColors
-import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.graphics.Color
 
-private val DarkColorPalette = darkColors(
-    primary = Purple200,
-    primaryVariant = Purple700,
-    secondary = Teal200
-)
 
-private val LightColorPalette = lightColors(
-    primary = Purple500,
-    primaryVariant = Purple700,
-    secondary = Teal200
-
-    /* Other default colors to override
-    background = Color.White,
-    surface = Color.White,
-    onPrimary = Color.White,
-    onSecondary = Color.Black,
-    onBackground = Color.Black,
-    onSurface = Color.Black,
-    */
-)
-
-val lightPalette = UwColors(
+val lightPalette = Colors(
     jacob = YellowL,
     remus = GreenL,
     lucian = RedL,
-    oz = OzL,
-    tyler = TylerL,
-    bran = BranL,
-    leah = LeahL,
-    claude = ClaudeL,
+    oz = Dark,
+    tyler = Light,
+    bran = Dark,
+    leah = SteelDark,
+    claude = Color.White,
+    lawrence = Color.White
 )
 
-val darkPalette = UwColors(
+val darkPalette = Colors(
     jacob = YellowD,
     remus = GreenD,
     lucian = RedD,
-    oz = OzD,
-    tyler = TylerD,
-    bran = BranD,
-    leah = LeahD,
-    claude = ClaudeD,
+    oz = Light,
+    tyler = Dark,
+    bran = LightGrey,
+    leah = SteelLight,
+    claude = Dark,
+    lawrence = SteelDark
 )
 
 @Composable
@@ -57,25 +38,17 @@ fun ComposeAppTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable() () -> Unit
 ) {
-    val colors = if (darkTheme) {
-        DarkColorPalette
-    } else {
-        LightColorPalette
-    }
 
-    val unColors = if (darkTheme) {
+    val colors = if (darkTheme) {
         darkPalette
     } else {
         lightPalette
     }
 
     //custom styles
-    ProvideLocalAssets(colors = unColors, typography = UnTypography()) {
+    ProvideLocalAssets(colors = colors, typography = Typography()) {
         //material styles
         MaterialTheme(
-            colors = colors,
-            typography = Typography,
-            shapes = Shapes,
             content = content
         )
     }
@@ -83,19 +56,19 @@ fun ComposeAppTheme(
 }
 
 object UnstoppableComponentsAppTheme {
-    val colors: UwColors
+    val colors: Colors
         @Composable
-        get() = LocalUnColors.current
+        get() = LocalColors.current
 
-    val typography: UnTypography
+    val typography: Typography
         @Composable
-        get() = LocalUnTypography.current
+        get() = LocalTypography.current
 }
 
 @Composable
 fun ProvideLocalAssets(
-    colors: UwColors,
-    typography: UnTypography,
+    colors: Colors,
+    typography: Typography,
     content: @Composable () -> Unit
 ) {
     val colorPalette = remember {
@@ -105,12 +78,12 @@ fun ProvideLocalAssets(
     }
     colorPalette.update(colors)
     CompositionLocalProvider(
-        LocalUnColors provides colorPalette,
-        LocalUnTypography provides typography,
+        LocalColors provides colorPalette,
+        LocalTypography provides typography,
         content = content
     )
 }
 
-val LocalUnColors = compositionLocalOf<UwColors> {
-    error("No UnColors provided")
+val LocalColors = compositionLocalOf<Colors> {
+    error("No Colors provided")
 }
