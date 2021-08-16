@@ -3,10 +3,13 @@ package io.horizontalsystems.bankwallet.modules.metricchart
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import androidx.core.view.isInvisible
 import androidx.fragment.app.FragmentManager
@@ -98,7 +101,7 @@ class MetricChartFragment : BaseBottomSheetDialogFragment(), Chart.Listener {
     fun CustomTab(tabTitles: List<String>) {
         var tabIndex by remember { mutableStateOf(0) }
 
-        LazyRow {
+        LazyRow(modifier = Modifier.padding(start = 16.dp, top = 8.dp, end = 16.dp)) {
             itemsIndexed(tabTitles) { index, title ->
                 val selected = tabIndex == index
                 TabRounded(

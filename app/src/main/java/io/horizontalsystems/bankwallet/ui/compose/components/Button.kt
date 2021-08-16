@@ -19,8 +19,14 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.YellowD
 
 @Composable
-fun ButtonPrimaryDefault(title: String, onClick: () -> Unit, enabled: Boolean = true) {
+fun ButtonPrimaryDefault(
+    modifier: Modifier = Modifier,
+    title: String,
+    onClick: () -> Unit,
+    enabled: Boolean = true
+) {
     ButtonPrimary(
+        modifier = Modifier,
         onClick = onClick,
         colors = ButtonDefaults.textButtonColors(
             backgroundColor = ComposeAppTheme.colors.leah,
@@ -31,8 +37,14 @@ fun ButtonPrimaryDefault(title: String, onClick: () -> Unit, enabled: Boolean = 
 }
 
 @Composable
-fun ButtonPrimaryYellow(title: String, onClick: () -> Unit, enabled: Boolean = true) {
+fun ButtonPrimaryYellow(
+    modifier: Modifier = Modifier,
+    title: String,
+    onClick: () -> Unit,
+    enabled: Boolean = true
+) {
     ButtonPrimary(
+        modifier = modifier,
         onClick = onClick,
         colors = ButtonDefaults.textButtonColors(
             backgroundColor = YellowD,
