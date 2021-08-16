@@ -180,19 +180,4 @@
         tools:layout_marginBottom="24dp"
         />
 
-    <ProgressBar
-        android:id="@+id/progressBar"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:backgroundTint="@color/grey"
-        android:indeterminate="true"
-        android:indeterminateTint="@color/grey"
-        android:indeterminateTintMode="src_atop"
-        app:layout_constraintBottom_toBottomOf="@id/submitButtonCompose"
-        app:layout_constraintEnd_toEndOf="@id/submitButtonCompose"
-        app:layout_constraintStart_toStartOf="@id/submitButtonCompose"
-        app:layout_constraintTop_toTopOf="@id/submitButtonCompose"
-        />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

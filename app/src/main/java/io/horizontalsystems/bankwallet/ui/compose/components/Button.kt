@@ -13,10 +13,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
+import io.horizontalsystems.bankwallet.ui.compose.*
 import io.horizontalsystems.bankwallet.ui.compose.Grey50
-import io.horizontalsystems.bankwallet.ui.compose.Steel20
-import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.YellowD
 
 @Composable
 fun ButtonPrimaryDefault(
@@ -50,6 +48,36 @@ fun ButtonPrimaryYellow(
             backgroundColor = YellowD,
         ),
         content = { Text(title) },
+        enabled = enabled
+    )
+}
+
+@Composable
+fun ButtonPrimaryYellowWithSpinner(
+    modifier: Modifier = Modifier,
+    title: String,
+    onClick: () -> Unit,
+    showSpinner: Boolean = false,
+    enabled: Boolean = true
+) {
+
+    ButtonPrimary(
+        modifier = modifier,
+        onClick = onClick,
+        colors = ButtonDefaults.textButtonColors(
+            backgroundColor = YellowD,
+        ),
+        content = {
+            if (showSpinner) {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(16.dp),
+                    color = Grey,
+                    strokeWidth = 2.dp
+                )
+            } else {
+                Text(title)
+            }
+        },
         enabled = enabled
     )
 }
@@ -103,13 +131,10 @@ fun ButtonPrimary(
 
 object ButtonDefaults {
     private val ButtonHorizontalPadding = 16.dp
-    private val ButtonVerticalPadding = 16.dp
 
     val ContentPadding = PaddingValues(
         start = ButtonHorizontalPadding,
-        top = ButtonVerticalPadding,
-        end = ButtonHorizontalPadding,
-        bottom = ButtonVerticalPadding
+        end = ButtonHorizontalPadding
     )
 
 
@@ -117,13 +142,13 @@ object ButtonDefaults {
      * The default min width applied for the [Button].
      * Note that you can override it by applying Modifier.widthIn directly on [Button].
      */
-    val MinWidth = 64.dp
+    val MinWidth = 50.dp
 
     /**
      * The default min width applied for the [Button].
      * Note that you can override it by applying Modifier.heightIn directly on [Button].
      */
-    val MinHeight = 36.dp
+    val MinHeight = 50.dp
 
     @Composable
     fun textButtonColors(
@@ -157,17 +182,13 @@ private class DefaultButtonColors(
     }
 
     override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other == null || this::class != other::class) return false
 
-        other as DefaultButtonColors
+        if (other !is DefaultButtonColors) return false
 
-        if (backgroundColor != other.backgroundColor) return false
-        if (contentColor != other.contentColor) return false
-        if (disabledBackgroundColor != other.disabledBackgroundColor) return false
-        if (disabledContentColor != other.disabledContentColor) return false
-
-        return true
+        return backgroundColor != other.backgroundColor
+                && contentColor != other.contentColor
+                && disabledBackgroundColor != other.disabledBackgroundColor
+                && disabledContentColor != other.disabledContentColor
     }
 
     override fun hashCode(): Int {
