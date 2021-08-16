@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.ui.compose.components
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -23,6 +22,7 @@ fun TabRounded(title: String, onSelect: () -> Unit, selected: Boolean = false) {
     )
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun TabBox(
     selected: Boolean = false,
@@ -35,12 +35,10 @@ fun TabBox(
     Box(
         modifier = Modifier
             .padding(horizontal = 4.dp)
-            .clickable(
-                onClick = onSelect
-            )
     ) {
         val contentColor by colors.contentColor(selected)
         Surface(
+            onClick = onSelect,
             color = colors.backgroundColor(selected).value,
             shape = shape,
             contentColor = contentColor,
