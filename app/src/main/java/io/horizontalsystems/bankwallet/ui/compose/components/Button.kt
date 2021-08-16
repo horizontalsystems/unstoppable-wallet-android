@@ -119,7 +119,7 @@ object ButtonDefaults {
         contentColor: Color = ComposeAppTheme.colors.claude,
         disabledBackgroundColor: Color = Steel20,
         disabledContentColor: Color = Grey50,
-    ): ButtonColors = UwDefaultButtonColors(
+    ): ButtonColors = DefaultButtonColors(
         backgroundColor = backgroundColor,
         contentColor = contentColor,
         disabledBackgroundColor = disabledBackgroundColor,
@@ -128,7 +128,7 @@ object ButtonDefaults {
 }
 
 @Immutable
-private class UwDefaultButtonColors(
+private class DefaultButtonColors(
     private val backgroundColor: Color,
     private val contentColor: Color,
     private val disabledBackgroundColor: Color,
@@ -148,7 +148,7 @@ private class UwDefaultButtonColors(
         if (this === other) return true
         if (other == null || this::class != other::class) return false
 
-        other as UwDefaultButtonColors
+        other as DefaultButtonColors
 
         if (backgroundColor != other.backgroundColor) return false
         if (contentColor != other.contentColor) return false
