@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?android:windowBackground"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    >
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -31,21 +33,19 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginBottom="24dp"
-        app:layout_constraintBottom_toTopOf="@id/buttonClose"
+        app:layout_constraintBottom_toTopOf="@id/buttonCloseCompose"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tabLayout" />
 
-    <Button
-        android:id="@+id/buttonClose"
-        style="@style/ButtonPrimaryYellow"
+    <androidx.compose.ui.platform.ComposeView
+        android:id="@+id/buttonCloseCompose"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="38dp"
-        android:text="@string/ShowKey_ButtonClose"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_height="50dp"
+        tools:layout_marginBottom="38dp"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
