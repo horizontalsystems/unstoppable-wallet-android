@@ -4,14 +4,20 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.foundation.layout.padding
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.getNavigationResult
 import io.horizontalsystems.pin.PinInteractionType
 import io.horizontalsystems.pin.PinModule
 import kotlinx.android.synthetic.main.fragment_show_key_intro.*
+import kotlinx.android.synthetic.main.fragment_show_key_intro.toolbar
 
 class ShowKeyIntroFragment : BaseFragment() {
     private val viewModel by navGraphViewModels<ShowKeyViewModel>(R.id.showKeyIntroFragment) { ShowKeyModule.Factory(arguments?.getParcelable(ShowKeyModule.ACCOUNT)!!) }
@@ -27,10 +33,6 @@ class ShowKeyIntroFragment : BaseFragment() {
             findNavController().popBackStack()
         }
 
-        buttonShow.setOnClickListener {
-            viewModel.onClickShow()
-        }
-
         viewModel.showKeyLiveEvent.observe(viewLifecycleOwner, {
             findNavController().navigate(R.id.showKeyIntroFragment_to_showKeyMainFragment, null, navOptions())
         })
@@ -38,6 +40,18 @@ class ShowKeyIntroFragment : BaseFragment() {
         viewModel.openUnlockLiveEvent.observe(viewLifecycleOwner, {
             findNavController().navigate(R.id.showKeyIntroFragment_to_pinFragment, PinModule.forUnlock(), navOptions())
         })
+
+        buttonShowCompose.setContent {
+            ComposeAppTheme {
+                ButtonPrimaryYellow(
+                    modifier = Modifier.padding(start = 24.dp, end = 24.dp, bottom = 38.dp),
+                    title = getString(R.string.ShowKey_ButtonShow),
+                    onClick = {
+                        viewModel.onClickShow()
+                    }
+                )
+            }
+        }
 
         subscribeFragmentResults()
     }

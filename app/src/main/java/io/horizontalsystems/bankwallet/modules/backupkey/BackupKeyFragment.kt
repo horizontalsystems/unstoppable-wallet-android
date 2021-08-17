@@ -4,9 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.foundation.layout.padding
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.getNavigationResult
 import io.horizontalsystems.pin.PinInteractionType
@@ -27,10 +32,6 @@ class BackupKeyFragment : BaseFragment() {
             findNavController().popBackStack()
         }
 
-        buttonShow.setOnClickListener {
-            viewModel.onClickShow()
-        }
-
         viewModel.showKeyLiveEvent.observe(viewLifecycleOwner, {
             findNavController().navigate(R.id.backupKeyFragment_to_showBackupWordsFragment, null, navOptions())
         })
@@ -40,6 +41,18 @@ class BackupKeyFragment : BaseFragment() {
         })
 
         subscribeFragmentResults()
+
+        buttonShowCompose.setContent {
+            ComposeAppTheme {
+                ButtonPrimaryYellow(
+                    modifier = Modifier.padding(start = 24.dp, end = 24.dp, bottom = 38.dp),
+                    title = getString(R.string.BackupKey_ButtonBackup),
+                    onClick = {
+                        viewModel.onClickShow()
+                    }
+                )
+            }
+        }
     }
 
     private fun subscribeFragmentResults() {
