@@ -173,6 +173,7 @@ class MarketAdvancedSearchFragment : BaseFragment() {
         submitButtonCompose.setViewCompositionStrategy(
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
+
         setButton()
     }
 

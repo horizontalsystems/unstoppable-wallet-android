@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.layout.padding
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.unit.dp
 import androidx.navigation.navGraphViewModels
 import com.google.android.material.tabs.TabLayoutMediator
@@ -49,6 +50,10 @@ class ShowKeyMainFragment : BaseFragment() {
             tab.setCustomView(R.layout.view_show_key_tab)
             tab.setText(showKeyTabs[position].title)
         }.attach()
+
+        buttonCloseCompose.setViewCompositionStrategy(
+            ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+        )
 
         buttonCloseCompose.setContent {
             ComposeAppTheme {

@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.layout.padding
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.unit.dp
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
@@ -40,6 +41,10 @@ class ShowKeyIntroFragment : BaseFragment() {
         viewModel.openUnlockLiveEvent.observe(viewLifecycleOwner, {
             findNavController().navigate(R.id.showKeyIntroFragment_to_pinFragment, PinModule.forUnlock(), navOptions())
         })
+
+        buttonShowCompose.setViewCompositionStrategy(
+            ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+        )
 
         buttonShowCompose.setContent {
             ComposeAppTheme {

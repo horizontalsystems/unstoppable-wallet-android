@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.layout.padding
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
@@ -37,6 +38,10 @@ class UnlinkConfirmationDialog : BaseBottomSheetDialogFragment(), ConfirmationsA
         setTitle(getString(R.string.ManageKeys_Delete_Title))
         setSubtitle(requireArguments().getString(ACCOUNT_NAME))
         setHeaderIcon(R.drawable.ic_attention_red_24)
+
+        confirmButtonCompose.setViewCompositionStrategy(
+            ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+        )
 
         setButton()
 
