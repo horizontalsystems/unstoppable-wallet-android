@@ -6,6 +6,8 @@ import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.modules.balance.BalanceActiveWalletRepository
+import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
+import io.horizontalsystems.bankwallet.modules.transactions.TransactionWallet
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
@@ -32,6 +34,8 @@ class Transactions2Service(
 
     private val disposables = CompositeDisposable()
     private val transactionItems = CopyOnWriteArrayList<TransactionItem>()
+
+    private var transactionWallets = listOf<TransactionWallet>()
 
     init {
         balanceActiveWalletRepository.itemsObservable
@@ -121,7 +125,36 @@ class Transactions2Service(
     @Synchronized
     private fun handleUpdatedWallets(wallets: List<Wallet>) {
         filterCoinsSubject.onNext(wallets)
-        transactionRecordRepository.setWallets(wallets)
+
+        transactionWallets = wallets.map {
+            TransactionWallet(it.coin, it.transactionSource)
+        }
+
+        val walletsGroupedBySource = groupWalletsBySource(transactionWallets)
+        transactionRecordRepository.setWallets(transactionWallets, walletsGroupedBySource)
+    }
+
+    private fun groupWalletsBySource(transactionWallets: List<TransactionWallet>): List<TransactionWallet> {
+        val mergedWallets = mutableListOf<TransactionWallet>()
+
+        transactionWallets.forEach { wallet ->
+            when (wallet.source.blockchain) {
+                TransactionSource.Blockchain.Bitcoin,
+                TransactionSource.Blockchain.BitcoinCash,
+                TransactionSource.Blockchain.Litecoin,
+                TransactionSource.Blockchain.Dash,
+                TransactionSource.Blockchain.Zcash,
+                is TransactionSource.Blockchain.Bep2 -> mergedWallets.add(wallet)
+                TransactionSource.Blockchain.Ethereum,
+                TransactionSource.Blockchain.BinanceSmartChain -> {
+                    if (mergedWallets.none { it.source == wallet.source }) {
+                        mergedWallets.add(TransactionWallet(null, wallet.source))
+                    }
+                }
+            }
+        }
+        return mergedWallets
+
     }
 
     override fun clear() {
@@ -133,7 +166,7 @@ class Transactions2Service(
     fun setFilterCoin(w: Wallet?) {
         executorService.submit {
             filterCoinSubject.onNext(w?.let { Optional.of(it) } ?: Optional.empty())
-            transactionRecordRepository.setSelectedWallet(w)
+            transactionRecordRepository.setSelectedWallet(w?.let { TransactionWallet(it.coin, it.transactionSource) })
         }
     }
 
