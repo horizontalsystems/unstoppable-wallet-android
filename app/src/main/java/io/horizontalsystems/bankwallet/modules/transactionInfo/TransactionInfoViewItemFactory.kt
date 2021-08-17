@@ -13,8 +13,10 @@ import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.Bitco
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.BitcoinOutgoingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.TransactionLockState
 import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.*
-import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoActionButton.*
-import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoButtonType.*
+import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoActionButton.CopyButton
+import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoActionButton.ShareButton
+import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoButtonType.OpenExplorer
+import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoButtonType.Resend
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoItemType.*
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionStatusViewItem.*
 import io.horizontalsystems.bankwallet.modules.transactionInfo.adapters.TransactionInfoViewItem
@@ -102,6 +104,9 @@ class TransactionInfoViewItemFactory(
                 val middleSectionTypes = mutableListOf<TransactionInfoItemType>()
 
                 middleSectionTypes.add(statusType)
+                getOptionsItem(status)?.let {
+                    middleSectionTypes.add(it)
+                }
                 middleSectionTypes.add(date)
                 middleSectionTypes.add(getEvmFeeItem(transaction.fee, rates[transaction.value.coin], status))
 
@@ -213,6 +218,9 @@ class TransactionInfoViewItemFactory(
 
                 middleSectionTypes.add(date)
                 middleSectionTypes.add(statusType)
+                getOptionsItem(status)?.let {
+                    middleSectionTypes.add(it)
+                }
                 middleSectionTypes.add(getEvmFeeItem(transaction.fee, rates[transaction.fee.coin], status))
 
                 rate?.let {
@@ -813,5 +821,22 @@ class TransactionInfoViewItemFactory(
 
         return feeInCoin + (if (feeInFiat != null) " | $feeInFiat" else "")
     }
+
+    private fun getOptionsItem(status: TransactionStatus): TransactionInfoItemType? =
+        if (status == TransactionStatus.Pending) {
+            Options(
+                Translator.getString(R.string.TransactionInfo_Options),
+                TransactionInfoOption(
+                    Translator.getString(R.string.TransactionInfo_SpeedUp),
+                    TransactionInfoOption.Type.SpeedUp
+                ),
+                TransactionInfoOption(
+                    Translator.getString(R.string.TransactionInfo_Cancel),
+                    TransactionInfoOption.Type.Cancel
+                )
+            )
+        } else {
+            null
+        }
 
 }

@@ -31,7 +31,7 @@ interface IEvmTransactionFeeService {
 class EvmTransactionService(
         private val evmKit: EthereumKit,
         private val feeRateProvider: ICustomRangedFeeProvider,
-        private val gasLimitSurchargePercent: Int
+        private val gasLimitSurchargePercent: Int = 0
 ) : IEvmTransactionFeeService {
 
     private var recommendedGasPrice: BigInteger? = null

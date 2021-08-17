@@ -44,14 +44,6 @@ object TransactionInfoModule {
 
     }
 
-    data class TitleViewItem(
-        val date: Date?,
-        val primaryAmountInfo: SendModule.AmountInfo,
-        val secondaryAmountInfo: SendModule.AmountInfo?,
-        val type: TransactionType,
-        val lockState: TransactionLockState?
-    )
-
     data class ExplorerData(val title: String, val url: String?)
 }
 
