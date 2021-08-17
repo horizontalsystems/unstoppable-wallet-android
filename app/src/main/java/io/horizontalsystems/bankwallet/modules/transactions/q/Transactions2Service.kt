@@ -15,7 +15,7 @@ import java.util.concurrent.Executors
 
 class Transactions2Service(
     private val balanceActiveWalletRepository: BalanceActiveWalletRepository,
-    private val transactionRecordRepository: TransactionRecordRepository,
+    private val transactionRecordRepository: ITransactionRecordRepository,
     private val xRateRepository: TransactionsXRateRepository
 ) : Clearable {
 
