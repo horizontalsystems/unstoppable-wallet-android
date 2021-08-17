@@ -23,7 +23,7 @@
         android:id="@+id/middleGroup"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@id/btnClose"
+        app:layout_constraintBottom_toTopOf="@+id/buttonCloseCompose"
         app:layout_constraintTop_toBottomOf="@id/toolbar">
 
         <View
@@ -121,19 +121,17 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-    <Button
-        android:id="@+id/btnClose"
-        style="@style/ButtonPrimaryYellow"
+    <androidx.compose.ui.platform.ComposeView
+        android:id="@+id/buttonCloseCompose"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="24dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginBottom="38dp"
-        android:text="@string/Button_Close"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/middleGroup" />
+        app:layout_constraintTop_toBottomOf="@id/middleGroup"
+        tools:layout_height="50dp"
+        tools:layout_marginBottom="44dp"
+        />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
