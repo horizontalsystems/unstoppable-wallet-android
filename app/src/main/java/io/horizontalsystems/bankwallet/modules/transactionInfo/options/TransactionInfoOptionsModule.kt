@@ -1,0 +1,103 @@
+package io.horizontalsystems.bankwallet.modules.transactionInfo.options
+
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.ICustomRangedFeeProvider
+import io.horizontalsystems.bankwallet.core.adapters.EvmTransactionsAdapter
+import io.horizontalsystems.bankwallet.core.ethereum.EthereumFeeViewModel
+import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinServiceFactory
+import io.horizontalsystems.bankwallet.core.ethereum.EvmTransactionService
+import io.horizontalsystems.bankwallet.core.factories.FeeRateProviderFactory
+import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData
+import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionService
+import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
+import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoOption
+import io.horizontalsystems.bankwallet.modules.transactions.TransactionWallet
+import io.horizontalsystems.coinkit.models.CoinType
+import io.horizontalsystems.ethereumkit.core.EthereumKit
+import io.horizontalsystems.ethereumkit.core.hexStringToByteArray
+import io.horizontalsystems.ethereumkit.models.TransactionData
+import java.math.BigInteger
+
+object TransactionInfoOptionsModule {
+
+    class Factory(
+        private val optionType: TransactionInfoOption.Type,
+        private val transactionHash: String,
+        private val transactionWallet: TransactionWallet
+    ) : ViewModelProvider.Factory {
+
+        private val adapter by lazy {
+            App.adapterManager.getTransactionsAdapterForWallet(transactionWallet) as EvmTransactionsAdapter
+        }
+
+        private val evmKit by lazy {
+            adapter.evmKit
+        }
+
+        private val feeCoin by lazy {
+            when (evmKit.networkType) {
+                EthereumKit.NetworkType.EthMainNet,
+                EthereumKit.NetworkType.EthRopsten,
+                EthereumKit.NetworkType.EthKovan,
+                EthereumKit.NetworkType.EthGoerli,
+                EthereumKit.NetworkType.EthRinkeby -> App.coinKit.getCoin(CoinType.Ethereum)!!
+                EthereumKit.NetworkType.BscMainNet -> App.coinKit.getCoin(CoinType.BinanceSmartChain)!!
+            }
+        }
+
+        private val transaction by lazy {
+            evmKit.getFullTransactions(listOf(transactionHash.hexStringToByteArray())).first().transaction
+        }
+
+        private val transactionService by lazy {
+            val feeRateProvider = FeeRateProviderFactory.customRangedFeeProvider(
+                coin = feeCoin,
+                customLowerBound = transaction.gasPrice,
+                customUpperBound = null,
+                multiply = 1.2
+            ) as ICustomRangedFeeProvider
+            EvmTransactionService(evmKit, feeRateProvider)
+        }
+
+        private val coinServiceFactory by lazy {
+            EvmCoinServiceFactory(
+                feeCoin,
+                App.coinKit,
+                App.currencyManager,
+                App.xRateManager
+            )
+        }
+
+        private val sendService by lazy {
+            val transactionData = when (optionType) {
+                TransactionInfoOption.Type.SpeedUp -> {
+                    TransactionData(transaction.to!!, transaction.value, transaction.input, transaction.nonce)
+                }
+                TransactionInfoOption.Type.Cancel -> {
+                    TransactionData(evmKit.receiveAddress, BigInteger.ZERO, byteArrayOf(), transaction.nonce)
+                }
+            }
+
+            SendEvmTransactionService(SendEvmData(transactionData), evmKit, transactionService, App.activateCoinManager)
+        }
+
+        @Suppress("UNCHECKED_CAST")
+        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+            return when (modelClass) {
+                SendEvmTransactionViewModel::class.java -> {
+                    SendEvmTransactionViewModel(sendService, coinServiceFactory) as T
+                }
+                EthereumFeeViewModel::class.java -> {
+                    EthereumFeeViewModel(transactionService, coinServiceFactory.baseCoinService) as T
+                }
+                TransactionSpeedUpCancelViewModel::class.java -> {
+                    TransactionSpeedUpCancelViewModel(optionType) as T
+                }
+                else -> throw IllegalArgumentException()
+            }
+        }
+    }
+
+}

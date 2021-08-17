@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.ConcatAdapter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.transactionInfo.adapters.TransactionInfoAdapter
+import io.horizontalsystems.bankwallet.modules.transactionInfo.options.TransactionSpeedUpCancelFragment
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionsPresenter
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionsViewModel
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
@@ -25,7 +26,7 @@ import java.util.*
 class TransactionInfoFragment : BaseFragment(), TransactionInfoAdapter.Listener {
 
     private val viewModelTxs by navGraphViewModels<TransactionsViewModel>(R.id.mainFragment)
-    private val viewModel by viewModels<TransactionInfoViewModel> { TransactionInfoModule.Factory((viewModelTxs.delegate as TransactionsPresenter).itemDetails!!) }
+    private val viewModel by navGraphViewModels<TransactionInfoViewModel>(R.id.transactionInfoFragment) { TransactionInfoModule.Factory((viewModelTxs.delegate as TransactionsPresenter).itemDetails!!) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -68,6 +69,11 @@ class TransactionInfoFragment : BaseFragment(), TransactionInfoAdapter.Listener 
 
         viewModel.copyRawTransactionLiveEvent.observe(viewLifecycleOwner, { rawTransaction ->
             copyText(rawTransaction)
+        })
+
+        viewModel.openTransactionOptionsModule.observe(viewLifecycleOwner, { (optionType, txHash) ->
+            val params = TransactionSpeedUpCancelFragment.prepareParams(optionType, txHash)
+            findNavController().navigate(R.id.transactionInfoFragment_to_transactionSpeedUpCancelFragment, params, navOptions())
         })
     }
 
@@ -115,6 +121,10 @@ class TransactionInfoFragment : BaseFragment(), TransactionInfoAdapter.Listener 
 
     override fun onClickStatusInfo() {
         findNavController().navigate(R.id.statusInfoDialog)
+    }
+
+    override fun onOptionButtonClick(optionType: TransactionInfoOption.Type) {
+        viewModel.onOptionButtonClick(optionType)
     }
 
     private fun copyText(address: String) {

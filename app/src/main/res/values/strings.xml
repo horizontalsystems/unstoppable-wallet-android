@@ -282,6 +282,7 @@
     <string name="Send_Confirmation_Amount">Amount</string>
     <string name="Send_Confirmation_To">To</string>
     <string name="Send_Confirmation_Method">Method</string>
+    <string name="Send_Confirmation_Nonce">Nonce</string>
     <string name="Send_Confirmation_Receiver">Receiver</string>
     <string name="Send_Confirmation_HintMemo" translatable="false">Memo</string>
     <string name="Send_Confirmation_EstimateTime">Duration</string>
@@ -501,6 +502,9 @@
     <string name="TransactionInfo_YouGot">You Got</string>
     <string name="TransactionInfo_Resend">Resend</string>
     <string name="TransactionInfo_RevokeApproval">Revoke Approval</string>
+    <string name="TransactionInfo_Options">Options</string>
+    <string name="TransactionInfo_SpeedUp">Speed Up</string>
+    <string name="TransactionInfo_Cancel">Cancel</string>
 
     <string name="StatusInfo_Pending">Pending</string>
     <string name="StatusInfo_Processing">Processing</string>
@@ -510,6 +514,15 @@
     <string name="StatusInfo_ProcessingDescription">Transaction has been already included in the blockchain but has not reached permanent finality. At this point, it\'s safe to consider transaction completed for smaller payments. For larger payments it\'s recommended to wait until transacction status changes to completed.</string>
     <string name="StatusInfo_ConfirmedDescription">Transaction is completed and considered permanent and irreversible.</string>
     <string name="StatusInfo_FailedDescription">Transaction did not get processed and no value transfer took place. Transactions with fail status are still written to the blockchain and consume transaction fees. Unstoppable app is unable to show the fail reason for such transactions but users are able to look it up themselves on a public block exlorer i.e. etherscan.io.</string>
+
+    <!-- Transaction Info Options -->
+
+    <string name="TransactionInfoOptions_SpeedUp_Title">Speed Up</string>
+    <string name="TransactionInfoOptions_SpeedUp_Description">[ Transaction Speed Up Description ]</string>
+    <string name="TransactionInfoOptions_SpeedUp_Button">Resend</string>
+    <string name="TransactionInfoOptions_Cancel_Title">Cancel</string>
+    <string name="TransactionInfoOptions_Cancel_Description">[ Transaction Cancel Description ]</string>
+    <string name="TransactionInfoOptions_Cancel_Button">Cancel Transaction</string>
 
     <!-- Info -->
 

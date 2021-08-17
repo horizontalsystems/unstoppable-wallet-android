@@ -109,8 +109,8 @@ class SendEvmTransactionViewModel(
 
     private fun getViewItems(decoration: ContractMethodDecoration, transactionData: TransactionData, additionalInfo: SendEvmData.AdditionalInfo?): List<SectionViewItem>? =
             when (decoration) {
-                is TransferMethodDecoration -> getEip20TransferViewItems(decoration.to, decoration.value, transactionData.to, additionalInfo)
-                is ApproveMethodDecoration -> getEip20ApproveViewItems(decoration.spender, decoration.value, transactionData.to)
+                is TransferMethodDecoration -> getEip20TransferViewItems(decoration.to, decoration.value, transactionData.to, transactionData.nonce, additionalInfo)
+                is ApproveMethodDecoration -> getEip20ApproveViewItems(decoration.spender, decoration.value, transactionData.to, transactionData.nonce)
                 is RecognizedMethodDecoration -> getRecognizedMethodItems(transactionData, decoration.method, decoration.arguments)
                 is UnknownMethodDecoration -> getUnknownMethodItems(transactionData)
                 else -> null
@@ -237,7 +237,7 @@ class SendEvmTransactionViewModel(
         return sections
     }
 
-    private fun getEip20TransferViewItems(to: Address, value: BigInteger, contractAddress: Address, additionalInfo: SendEvmData.AdditionalInfo?): List<SectionViewItem>? {
+    private fun getEip20TransferViewItems(to: Address, value: BigInteger, contractAddress: Address, nonce: Long?, additionalInfo: SendEvmData.AdditionalInfo?): List<SectionViewItem>? {
         val coinService = coinServiceFactory.getCoinService(contractAddress) ?: return null
 
         val viewItems = mutableListOf(
@@ -249,21 +249,31 @@ class SendEvmTransactionViewModel(
         viewItems.add(
                 ViewItem.Address(Translator.getString(R.string.Send_Confirmation_To), addressTitle, value = addressValue)
         )
+        nonce?.let {
+            viewItems.add(
+                ViewItem.Value(Translator.getString(R.string.Send_Confirmation_Nonce), "$it", ValueType.Regular),
+            )
+        }
 
         return listOf(SectionViewItem(viewItems))
     }
 
-    private fun getEip20ApproveViewItems(spender: Address, value: BigInteger, contractAddress: Address): List<SectionViewItem>? {
+    private fun getEip20ApproveViewItems(spender: Address, value: BigInteger, contractAddress: Address, nonce: Long?): List<SectionViewItem>? {
         val coinService = coinServiceFactory.getCoinService(contractAddress) ?: return null
 
         val addressValue = spender.eip55
         val addressTitle = TransactionInfoAddressMapper.map(addressValue)
 
-        val viewItems = listOf(
+        val viewItems = mutableListOf(
                 ViewItem.Subhead(Translator.getString(R.string.Approve_YouApprove), coinService.coin.title),
                 ViewItem.Value(Translator.getString(R.string.Send_Confirmation_Amount), coinService.amountData(value).getFormatted(), ValueType.Regular),
                 ViewItem.Address(Translator.getString(R.string.Approve_Spender), addressTitle, addressValue)
         )
+        nonce?.let {
+            viewItems.add(
+                ViewItem.Value(Translator.getString(R.string.Send_Confirmation_Nonce), "$it", ValueType.Regular),
+            )
+        }
 
         return listOf(SectionViewItem(viewItems))
     }
@@ -402,17 +412,27 @@ class SendEvmTransactionViewModel(
                 value = addressValue
             )
         )
+        transactionData.nonce?.let {
+            viewItems.add(
+                ViewItem.Value(Translator.getString(R.string.Send_Confirmation_Nonce), "$it", ValueType.Regular),
+            )
+        }
 
         return listOf(SectionViewItem(viewItems))
     }
 
     private fun getFallbackViewItems(transactionData: TransactionData): List<SectionViewItem> {
         val addressValue = transactionData.to.eip55
-        val viewItems = listOf(
+        val viewItems = mutableListOf(
                 ViewItem.Value(Translator.getString(R.string.Send_Confirmation_Amount), coinServiceFactory.baseCoinService.amountData(transactionData.value).getFormatted(), ValueType.Outgoing),
                 ViewItem.Address(Translator.getString(R.string.Send_Confirmation_To), addressValue, addressValue),
                 ViewItem.Input(transactionData.input.toHexString())
         )
+        transactionData.nonce?.let {
+            viewItems.add(
+                ViewItem.Value(Translator.getString(R.string.Send_Confirmation_Nonce), "$it", ValueType.Regular),
+            )
+        }
         return listOf(SectionViewItem(viewItems))
     }
 

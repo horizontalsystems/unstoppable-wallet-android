@@ -64,6 +64,22 @@
         tools:text="address"
         />
 
+    <TextView
+        android:id="@+id/decoratedTextLeft"
+        style="@style/ButtonSecondary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="48dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/decoratedText"
+        app:layout_constraintHorizontal_bias="1"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toEndOf="@+id/txtTitle"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="address2" />
+
     <ImageButton
         android:id="@+id/btnAction"
         style="@style/ImageButtonSecondary"

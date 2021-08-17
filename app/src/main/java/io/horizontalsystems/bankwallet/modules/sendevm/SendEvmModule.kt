@@ -80,9 +80,10 @@ object SendEvmModule {
     data class TransactionDataParcelable(
             val toAddress: String,
             val value: BigInteger,
-            val input: ByteArray
+            val input: ByteArray,
+            val nonce: Long? = null
     ) : Parcelable {
-        constructor(transactionData: TransactionData) : this(transactionData.to.hex, transactionData.value, transactionData.input)
+        constructor(transactionData: TransactionData) : this(transactionData.to.hex, transactionData.value, transactionData.input, transactionData.nonce)
     }
 
 

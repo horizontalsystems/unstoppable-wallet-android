@@ -26,17 +26,16 @@ class TransactionInfoViewModel(
     private val service: TransactionInfoService,
     private val factory: TransactionInfoViewItemFactory,
     private val transaction: TransactionRecord,
-    transactionWallet: TransactionWallet,
+    val transactionWallet: TransactionWallet,
     private val clearables: List<Clearable>
 ) : ViewModel() {
 
-    val titleLiveData = MutableLiveData<TransactionInfoModule.TitleViewItem>()
     val showShareLiveEvent = SingleLiveEvent<String>()
     val showTransactionLiveEvent = SingleLiveEvent<String>()
     val copyRawTransactionLiveEvent = SingleLiveEvent<String>()
-    val explorerButton = MutableLiveData<Pair<String, Boolean>>()
     val blockchain = transactionWallet.source.blockchain
     val account = transactionWallet.source.account
+    val openTransactionOptionsModule = SingleLiveEvent<Pair<TransactionInfoOption.Type, String>>()
 
     val viewItemsLiveData = MutableLiveData<List<TransactionInfoViewItem?>>()
 
@@ -195,6 +194,10 @@ class TransactionInfoViewModel(
                 if (testMode) null else "https://blockchair.com/zcash/transaction/$hash"
             )
         }
+    }
+
+    fun onOptionButtonClick(optionType: TransactionInfoOption.Type) {
+        openTransactionOptionsModule.postValue(Pair(optionType, transaction.transactionHash))
     }
 
 }

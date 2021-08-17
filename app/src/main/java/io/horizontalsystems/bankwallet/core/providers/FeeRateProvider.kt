@@ -87,9 +87,12 @@ class BitcoinCashFeeRateProvider(feeRateProvider: FeeRateProvider) : IFeeRatePro
 
 class EthereumFeeRateProvider(
     feeRateProvider: FeeRateProvider,
-    override val customFeeRange: LongRange = Companion.customFeeRange,
+    feeLowerBound: Long? = null,
+    feeUpperBound: Long? = null,
     multiply: Double? = null
 ) : ICustomRangedFeeProvider {
+
+    override val customFeeRange = LongRange(feeLowerBound ?: defaultLowerBound, feeUpperBound ?: defaultUpperBound)
 
     override val feeRatePriorityList: List<FeeRatePriority> = listOf(
         FeeRatePriority.RECOMMENDED,
@@ -101,19 +104,23 @@ class EthereumFeeRateProvider(
             .map { getAdjustedGasPrice(maxOf(it.toLong(), customFeeRange.first), multiply) }
 
     companion object {
-        private val customFeeRange = LongRange(1_000_000_000, 400_000_000_000)
+        private const val defaultLowerBound: Long = 1_000_000_000
+        private const val defaultUpperBound: Long = 400_000_000_000
     }
 }
 
 class BinanceSmartChainFeeRateProvider(
     feeRateProvider: FeeRateProvider,
-    override val customFeeRange: LongRange = Companion.customFeeRange,
+    feeLowerBound: Long? = null,
+    feeUpperBound: Long? = null,
     multiply: Double? = null
 ) : ICustomRangedFeeProvider {
 
+    override val customFeeRange = LongRange(feeLowerBound ?: defaultLowerBound, feeUpperBound ?: defaultUpperBound)
+
     override val feeRatePriorityList: List<FeeRatePriority> = listOf(
-            FeeRatePriority.RECOMMENDED,
-            FeeRatePriority.Custom(1, customFeeRange)
+        FeeRatePriority.RECOMMENDED,
+        FeeRatePriority.Custom(1, customFeeRange)
     )
 
     override val recommendedFeeRate: Single<BigInteger> =
@@ -121,7 +128,8 @@ class BinanceSmartChainFeeRateProvider(
             .map { getAdjustedGasPrice(maxOf(it.toLong(), customFeeRange.first), multiply) }
 
     companion object {
-        private val customFeeRange = LongRange(1_000_000_000, 400_000_000_000)
+        private const val defaultLowerBound: Long = 1_000_000_000
+        private const val defaultUpperBound: Long = 400_000_000_000
     }
 }
 

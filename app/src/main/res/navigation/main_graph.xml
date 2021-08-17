@@ -99,7 +99,20 @@
     <fragment
         android:id="@+id/transactionInfoFragment"
         android:name="io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoFragment"
-        tools:layout="@layout/fragment_transaction_info" />
+        tools:layout="@layout/fragment_transaction_info" >
+        <action
+            android:id="@+id/transactionInfoFragment_to_transactionSpeedUpCancelFragment"
+            app:destination="@id/transactionSpeedUpCancelFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/transactionSpeedUpCancelFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.transactionInfo.options.TransactionSpeedUpCancelFragment"
+        tools:layout="@layout/fragment_transaction_speedup_cancel"
+        >
+        <action
+            android:id="@+id/transactionSpeedUpCancelFragment_to_feeSpeedInfo"
+            app:destination="@id/feeSpeedInfoFragment" />
+    </fragment>
     <fragment
         android:id="@+id/manageWalletsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.managewallets.view.ManageWalletsFragment"

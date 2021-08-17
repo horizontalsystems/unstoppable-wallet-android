@@ -9,11 +9,8 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoActionButton
-import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoButtonType
-import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoItemType
+import io.horizontalsystems.bankwallet.modules.transactionInfo.*
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoItemType.*
-import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionStatusViewItem
 import io.horizontalsystems.views.ListPosition
 import io.horizontalsystems.views.inflate
 import kotlinx.android.extensions.LayoutContainer
@@ -35,6 +32,7 @@ class TransactionInfoAdapter(
         fun onClickStatusInfo()
         fun onLockInfoClick(lockDate: Date)
         fun onDoubleSpendInfoClick(transactionHash: String, conflictingHash: String)
+        fun onOptionButtonClick(optionType: TransactionInfoOption.Type)
     }
 
     private var items = listOf<TransactionInfoViewItem?>()
@@ -126,6 +124,7 @@ class TransactionInfoAdapter(
         fun bind(item: TransactionInfoViewItem) {
             btnAction.isVisible = false
             decoratedText.isVisible = false
+            decoratedTextLeft.isVisible = false
             transactionStatusView.isVisible = false
             valueText.isVisible = false
             btnAction.isVisible = false
@@ -223,6 +222,21 @@ class TransactionInfoAdapter(
                     rightInfoIcon.isVisible = true
                     containerView.setOnClickListener {
                         listener.onDoubleSpendInfoClick(type.transactionHash, type.conflictingHash)
+                    }
+                }
+                is Options -> {
+                    txtTitle.text = type.title
+
+                    decoratedTextLeft.text = type.optionButtonOne.title
+                    decoratedTextLeft.isVisible = true
+                    decoratedTextLeft.setOnClickListener {
+                        listener.onOptionButtonClick(type.optionButtonOne.type)
+                    }
+
+                    decoratedText.text = type.optionButtonTwo.title
+                    decoratedText.isVisible = true
+                    decoratedText.setOnClickListener {
+                        listener.onOptionButtonClick(type.optionButtonTwo.type)
                     }
                 }
             }
