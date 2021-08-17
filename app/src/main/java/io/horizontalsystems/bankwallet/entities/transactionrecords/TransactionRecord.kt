@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.entities.transactionrecords
 
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.LastBlockInfo
+import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionStatus
 
 abstract class TransactionRecord(
@@ -15,6 +16,7 @@ abstract class TransactionRecord(
     val blockchainTitle: String = ""
 ) : Comparable<TransactionRecord> {
 
+    val source: TransactionSource get() = TODO()
     open val mainValue: CoinValue? = null
 
     open fun changedBy(oldBlockInfo: LastBlockInfo?, newBlockInfo: LastBlockInfo?): Boolean =

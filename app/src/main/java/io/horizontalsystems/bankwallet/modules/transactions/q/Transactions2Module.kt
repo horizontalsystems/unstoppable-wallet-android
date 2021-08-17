@@ -15,7 +15,8 @@ object Transactions2Module {
                 Transactions2Service(
                     BalanceActiveWalletRepository(App.walletManager, App.accountSettingManager),
                     TransactionRecordRepository(App.adapterManager),
-                    TransactionsXRateRepository(App.currencyManager, App.xRateManager)
+                    TransactionsXRateRepository(App.currencyManager, App.xRateManager),
+                    TransactionSyncStateRepository(App.transactionAdapterManager)
                 ),
                 TransactionViewItem2Factory()
             ) as T

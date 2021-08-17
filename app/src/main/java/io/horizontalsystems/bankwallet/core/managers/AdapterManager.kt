@@ -8,7 +8,7 @@ import io.horizontalsystems.bankwallet.core.adapters.BinanceAdapter
 import io.horizontalsystems.bankwallet.core.factories.AdapterFactory
 import io.horizontalsystems.bankwallet.entities.ConfiguredCoin
 import io.horizontalsystems.bankwallet.entities.Wallet
-import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource.*
+import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource.Blockchain
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionWallet
 import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.coinkit.models.CoinType
@@ -29,13 +29,13 @@ class AdapterManager(
 
     private val handler: Handler
     private val disposables = CompositeDisposable()
-    private val adaptersReadySubject = PublishSubject.create<Unit>()
+    private val adaptersReadySubject = PublishSubject.create<Map<Wallet, IAdapter>>()
     private val adaptersMap = ConcurrentHashMap<Wallet, IAdapter>()
     private var ethereumTransactionsAdapter: ITransactionsAdapter? = null
     private var bscTransactionsAdapter: ITransactionsAdapter? = null
 
 
-    override val adaptersReadyObservable: Flowable<Unit> = adaptersReadySubject.toFlowable(BackpressureStrategy.BUFFER)
+    override val adaptersReadyObservable: Flowable<Map<Wallet, IAdapter>> = adaptersReadySubject.toFlowable(BackpressureStrategy.BUFFER)
 
     init {
         start()
@@ -112,27 +112,30 @@ class AdapterManager(
         ethereumTransactionsAdapter = evmTransactionAdapter(wallets, Blockchain.Ethereum)
         bscTransactionsAdapter = evmTransactionAdapter(wallets, Blockchain.BinanceSmartChain)
 
-        val disabledWallets = adaptersMap.keys.subtract(wallets)
+        val currentAdapters = adaptersMap.toMutableMap()
+        adaptersMap.clear()
 
         wallets.forEach { wallet ->
-            if (!adaptersMap.containsKey(wallet)) {
-                adapterFactory.adapter(wallet)?.let { adapter ->
-                    adaptersMap[wallet] = adapter
+            var adapter = currentAdapters.remove(wallet)
+            if (adapter == null) {
+                adapterFactory.adapter(wallet)?.let {
+                    it.start()
 
-                    adapter.start()
+                    adapter = it
                 }
             }
-        }
 
-        adaptersReadySubject.onNext(Unit)
-
-        disabledWallets.forEach { wallet ->
-            adaptersMap.remove(wallet)?.let { disabledAdapter ->
-                disabledAdapter.stop()
-                adapterFactory.unlinkAdapter(wallet)
+            adapter?.let {
+                adaptersMap[wallet] = it
             }
         }
 
+        adaptersReadySubject.onNext(adaptersMap)
+
+        currentAdapters.forEach { (wallet, adapter) ->
+            adapter.stop()
+            adapterFactory.unlinkAdapter(wallet)
+        }
     }
 
     private fun evmTransactionAdapter(
@@ -186,7 +189,7 @@ class AdapterManager(
                 }
             }
 
-            adaptersReadySubject.onNext(Unit)
+            adaptersReadySubject.onNext(adaptersMap)
         }
     }
 

@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.transactions.q
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import io.horizontalsystems.bankwallet.entities.LastBlockInfo
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.modules.balance.BalanceActiveWalletRepository
@@ -18,7 +19,8 @@ import java.util.concurrent.Executors
 class Transactions2Service(
     private val balanceActiveWalletRepository: BalanceActiveWalletRepository,
     private val transactionRecordRepository: ITransactionRecordRepository,
-    private val xRateRepository: TransactionsXRateRepository
+    private val xRateRepository: TransactionsXRateRepository,
+    private val transactionSyncStateRepository: TransactionSyncStateRepository
 ) : Clearable {
 
     private val filterCoinsSubject = BehaviorSubject.create<List<Wallet>>()
@@ -30,7 +32,7 @@ class Transactions2Service(
     private val itemsSubject = BehaviorSubject.create<List<TransactionItem>>()
     val itemsObservable: Observable<List<TransactionItem>> get() = itemsSubject
 
-    val syncingObservable: Observable<Boolean> = Observable.just(true)
+    val syncingObservable get() = transactionSyncStateRepository.syncingObservable
 
     private val disposables = CompositeDisposable()
     private val transactionItems = CopyOnWriteArrayList<TransactionItem>()
@@ -69,6 +71,24 @@ class Transactions2Service(
             .let {
                 disposables.add(it)
             }
+
+        transactionSyncStateRepository.lastBlockInfoObservable
+            .subscribeIO { (source, lastBlockInfo) ->
+                handleLastBlockInfo(source, lastBlockInfo)
+            }
+            .let {
+                disposables.add(it)
+            }
+    }
+
+    private fun handleLastBlockInfo(source: TransactionSource, lastBlockInfo: LastBlockInfo) {
+        transactionItems.forEachIndexed { index, item ->
+            if (item.record.source == source && item.record.changedBy(item.lastBlockInfo, lastBlockInfo)) {
+                transactionItems[index] = item.copy(lastBlockInfo = lastBlockInfo)
+            }
+        }
+
+        itemsSubject.onNext(transactionItems)
     }
 
     @Synchronized
@@ -110,13 +130,14 @@ class Transactions2Service(
         transactionItems.clear()
 
         transactionRecords.forEach { record ->
+            val lastBlockInfo = transactionSyncStateRepository.getLastBlockInfo(record.source)
             val currencyValue = record.mainValue?.let { mainValue ->
                 xRateRepository.getHistoricalRate(HistoricalRateKey(mainValue.coin.type, record.timestamp))?.let { rate ->
                     CurrencyValue(rate.currency, mainValue.value * rate.value)
                 }
             }
 
-            transactionItems.add(TransactionItem(record, currencyValue, null))
+            transactionItems.add(TransactionItem(record, currencyValue, null, lastBlockInfo))
         }
 
         itemsSubject.onNext(transactionItems)
@@ -131,6 +152,7 @@ class Transactions2Service(
         }
 
         val walletsGroupedBySource = groupWalletsBySource(transactionWallets)
+        transactionSyncStateRepository.setTransactionSources(walletsGroupedBySource.map { it.source })
         transactionRecordRepository.setWallets(transactionWallets, walletsGroupedBySource)
     }
 

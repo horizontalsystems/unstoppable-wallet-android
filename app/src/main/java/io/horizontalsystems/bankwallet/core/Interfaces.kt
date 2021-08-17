@@ -35,7 +35,7 @@ import java.math.BigInteger
 import java.util.*
 
 interface IAdapterManager {
-    val adaptersReadyObservable: Flowable<Unit>
+    val adaptersReadyObservable: Flowable<Map<Wallet, IAdapter>>
     fun preloadAdapters()
     fun refresh()
     fun getAdapterForWallet(wallet: Wallet): IAdapter?
