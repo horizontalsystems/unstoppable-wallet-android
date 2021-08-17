@@ -50,9 +50,17 @@ class Transactions2Service(
                 disposables.add(it)
             }
 
-        xRateRepository.itemsUpdatedObservable
+        xRateRepository.dataExpiredObservable
             .subscribeIO {
-                handleUpdatedXRates()
+                handleUpdatedHistoricalRates()
+            }
+            .let {
+                disposables.add(it)
+            }
+
+        xRateRepository.historicalRateObservable
+            .subscribeIO {
+                handleUpdatedHistoricalRate(it.first, it.second)
             }
             .let {
                 disposables.add(it)
@@ -60,13 +68,30 @@ class Transactions2Service(
     }
 
     @Synchronized
-    private fun handleUpdatedXRates() {
+    private fun handleUpdatedHistoricalRate(key: HistoricalRateKey, rate: CurrencyValue) {
+        for (i in 0 until transactionItems.size) {
+            val item = transactionItems[i]
+
+            item.record.mainValue?.let { mainValue ->
+                if (mainValue.coin.type == key.coinType && item.record.timestamp == key.timestamp) {
+                    val currencyValue = CurrencyValue(rate.currency, mainValue.value * rate.value)
+
+                    transactionItems[i] = item.copy(xxxCurrencyValue = currencyValue)
+                }
+            }
+        }
+
+        itemsSubject.onNext(transactionItems)
+    }
+
+    @Synchronized
+    private fun handleUpdatedHistoricalRates() {
         for (i in 0 until transactionItems.size) {
             val item = transactionItems[i]
 
             val currencyValue = item.record.mainValue?.let { mainValue ->
-                xRateRepository.getHistoricalRate(mainValue.coin.type, item.record.timestamp)?.let { rate ->
-                    CurrencyValue(xRateRepository.baseCurrency, mainValue.value * rate)
+                xRateRepository.getHistoricalRate(HistoricalRateKey(mainValue.coin.type, item.record.timestamp))?.let { rate ->
+                    CurrencyValue(rate.currency, mainValue.value * rate.value)
                 }
             }
 
@@ -78,14 +103,12 @@ class Transactions2Service(
 
     @Synchronized
     private fun handleUpdatedRecords(transactionRecords: List<TransactionRecord>) {
-        xRateRepository.setRecords(transactionRecords)
-
         transactionItems.clear()
 
         transactionRecords.forEach { record ->
             val currencyValue = record.mainValue?.let { mainValue ->
-                xRateRepository.getHistoricalRate(mainValue.coin.type, record.timestamp)?.let { rate ->
-                    CurrencyValue(xRateRepository.baseCurrency, mainValue.value * rate)
+                xRateRepository.getHistoricalRate(HistoricalRateKey(mainValue.coin.type, record.timestamp))?.let { rate ->
+                    CurrencyValue(rate.currency, mainValue.value * rate.value)
                 }
             }
 
@@ -125,7 +148,7 @@ class Transactions2Service(
             transactionItems.find { it.record.uid == recordUid }?.let { transactionItem ->
                 if (transactionItem.xxxCurrencyValue == null) {
                     transactionItem.record.mainValue?.let { mainValue ->
-                        xRateRepository.fetchHistoricalRate(mainValue.coin.type, transactionItem.record.timestamp)
+                        xRateRepository.fetchHistoricalRate(HistoricalRateKey(mainValue.coin.type, transactionItem.record.timestamp))
                     }
                 }
             }
