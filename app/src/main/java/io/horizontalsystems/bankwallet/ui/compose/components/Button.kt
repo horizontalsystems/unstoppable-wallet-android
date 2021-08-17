@@ -24,7 +24,7 @@ fun ButtonPrimaryDefault(
     enabled: Boolean = true
 ) {
     ButtonPrimary(
-        modifier = Modifier,
+        modifier = modifier,
         onClick = onClick,
         colors = ButtonDefaults.textButtonColors(
             backgroundColor = ComposeAppTheme.colors.leah,
