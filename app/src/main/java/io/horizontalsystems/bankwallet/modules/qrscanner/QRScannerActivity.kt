@@ -7,6 +7,9 @@ import android.os.Handler
 import android.os.Looper
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.layout.padding
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import com.google.zxing.MultiFormatReader
 import com.google.zxing.client.android.DecodeFormatManager
@@ -18,6 +21,8 @@ import com.journeyapps.barcodescanner.DefaultDecoderFactory
 import com.journeyapps.barcodescanner.camera.CameraSettings
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.android.synthetic.main.activity_qr_scanner.*
 import pub.devrel.easypermissions.AfterPermissionGranted
@@ -44,8 +49,16 @@ class QRScannerActivity : AppCompatActivity(), EasyPermissions.PermissionCallbac
         val oldFlags = window.decorView.systemUiVisibility
         window.decorView.systemUiVisibility = oldFlags or View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
 
-        cancelButton.setOnClickListener {
-            onBackPressed()
+        buttonCancelCompose.setContent {
+            ComposeAppTheme {
+                ButtonPrimaryDefault(
+                    modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 24.dp),
+                    title = getString(R.string.Button_Cancel),
+                    onClick = {
+                        onBackPressed()
+                    }
+                )
+            }
         }
 
         barcodeView.decodeSingle(callback)
