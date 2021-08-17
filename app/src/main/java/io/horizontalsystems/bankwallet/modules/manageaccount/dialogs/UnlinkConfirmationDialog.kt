@@ -4,11 +4,16 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.foundation.layout.padding
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryRed
 import io.horizontalsystems.bankwallet.ui.extensions.BaseBottomSheetDialogFragment
 import io.horizontalsystems.views.inflate
 import kotlinx.android.extensions.LayoutContainer
@@ -33,10 +38,7 @@ class UnlinkConfirmationDialog : BaseBottomSheetDialogFragment(), ConfirmationsA
         setSubtitle(requireArguments().getString(ACCOUNT_NAME))
         setHeaderIcon(R.drawable.ic_attention_red_24)
 
-        confirmButton.setOnClickListener {
-            listener?.onUnlinkConfirm()
-            dismiss()
-        }
+        setButton()
 
         checkboxItems = requireArguments().getParcelableArrayList<CheckBoxItem>(CHECKBOX_ITEMS)?.toList()
                 ?: listOf()
@@ -46,6 +48,23 @@ class UnlinkConfirmationDialog : BaseBottomSheetDialogFragment(), ConfirmationsA
         recyclerView.layoutManager = LinearLayoutManager(context)
 
         adapter.notifyDataSetChanged()
+    }
+
+    private fun setButton(enabled: Boolean = false) {
+        confirmButtonCompose.setContent {
+            ComposeAppTheme {
+                ButtonPrimaryRed(
+                    modifier = Modifier.padding(16.dp),
+                    title = getString(R.string.ManageKeys_Delete_FromPhone),
+                    onClick = {
+                        listener?.onUnlinkConfirm()
+                        dismiss()
+                    },
+                    enabled = enabled
+
+                )
+            }
+        }
     }
 
     fun setListener(listener: Listener) {
@@ -58,9 +77,8 @@ class UnlinkConfirmationDialog : BaseBottomSheetDialogFragment(), ConfirmationsA
     }
 
     private fun checkConfirmations() {
-        val allChecked = checkboxItems.all { it.checked }
-
-        confirmButton.isEnabled = allChecked
+        val enabled = checkboxItems.all { it.checked }
+        setButton(enabled)
     }
 
     companion object {
