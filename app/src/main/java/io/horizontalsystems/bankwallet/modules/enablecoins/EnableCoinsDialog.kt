@@ -2,8 +2,14 @@ package io.horizontalsystems.bankwallet.modules.enablecoins
 
 import android.os.Bundle
 import android.view.View
+import androidx.compose.foundation.layout.padding
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.unit.dp
 import androidx.fragment.app.FragmentActivity
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.extensions.BaseBottomSheetDialogFragment
 import kotlinx.android.synthetic.main.fragment_enable_coins.*
 
@@ -25,9 +31,26 @@ class EnableCoinsDialog(private val listener: Listener, private val tokenType: S
 
         setHeaderIcon(icon)
 
-        enableBtn.setOnClickListener {
-            listener.onClickEnable()
-            dismiss()
+        buttonEnableCompose.setViewCompositionStrategy(
+            ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+        )
+
+        buttonEnableCompose.setContent {
+            ComposeAppTheme {
+                ButtonPrimaryYellow(
+                    modifier = Modifier.padding(
+                        start = 16.dp,
+                        top = 29.dp,
+                        end = 16.dp,
+                        bottom = 16.dp
+                    ),
+                    title = getString(R.string.EnalbeToken_EnableKey),
+                    onClick = {
+                        listener.onClickEnable()
+                        dismiss()
+                    }
+                )
+            }
         }
     }
 
