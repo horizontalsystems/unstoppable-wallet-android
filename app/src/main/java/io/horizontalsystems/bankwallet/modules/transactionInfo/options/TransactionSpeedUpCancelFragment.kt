@@ -72,10 +72,6 @@ class TransactionSpeedUpCancelFragment : BaseFragment() {
             findNavController().popBackStack()
         }
 
-        sendEvmTransactionViewModel.sendEnabledLiveData.observe(viewLifecycleOwner, { enabled ->
-            sendButton.isEnabled = enabled
-        })
-
         sendEvmTransactionViewModel.sendingLiveData.observe(viewLifecycleOwner, {
             snackbarInProcess = HudHelper.showInProcessMessage(
                 requireView(),
@@ -97,7 +93,9 @@ class TransactionSpeedUpCancelFragment : BaseFragment() {
         sendEvmTransactionViewModel.sendFailedLiveData.observe(viewLifecycleOwner, {
             HudHelper.showErrorMessage(requireActivity().findViewById(android.R.id.content), it)
 
-            findNavController().popBackStack()
+            Handler(Looper.getMainLooper()).postDelayed({
+                findNavController().popBackStack()
+            }, 1200)
         })
 
         sendEvmTransactionView.init(
@@ -118,6 +116,19 @@ class TransactionSpeedUpCancelFragment : BaseFragment() {
             logger.info("click send button")
             sendEvmTransactionViewModel.send(logger)
         }
+
+        if (speedUpCancelViewModel.isTransactionPending) {
+            sendEvmTransactionViewModel.sendEnabledLiveData.observe(viewLifecycleOwner, { enabled ->
+                sendButton.isEnabled = enabled
+            })
+        } else {
+            sendButton.isEnabled = false
+            HudHelper.showErrorMessage(requireActivity().findViewById(android.R.id.content), R.string.TransactionInfoOptions_Warning_TransactionInBlock)
+            Handler(Looper.getMainLooper()).postDelayed({
+                findNavController().popBackStack(R.id.transactionInfoFragment, true)
+            }, 1500)
+        }
+
     }
 
     override fun onDestroyView() {

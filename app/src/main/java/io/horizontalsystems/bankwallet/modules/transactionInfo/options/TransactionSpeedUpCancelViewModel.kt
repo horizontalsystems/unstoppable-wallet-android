@@ -6,7 +6,8 @@ import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoOption
 
 class TransactionSpeedUpCancelViewModel(
-    optionType: TransactionInfoOption.Type
+    optionType: TransactionInfoOption.Type,
+    val isTransactionPending: Boolean
 ) : ViewModel() {
 
     val title: String = when (optionType) {
