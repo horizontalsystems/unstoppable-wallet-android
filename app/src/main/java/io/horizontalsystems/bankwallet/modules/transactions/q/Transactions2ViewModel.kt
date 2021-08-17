@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.toLiveData
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import io.horizontalsystems.bankwallet.entities.LastBlockInfo
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.TransactionLockState
@@ -80,7 +81,8 @@ class Transactions2ViewModel(
 data class TransactionItem(
     val record: TransactionRecord,
     val xxxCurrencyValue: CurrencyValue?,
-    val lockState: TransactionLockState?
+    val lockState: TransactionLockState?,
+    val lastBlockInfo: LastBlockInfo?
 )
 
 data class TransactionViewItem2(

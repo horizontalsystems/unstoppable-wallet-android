@@ -54,6 +54,7 @@ class App : CoreApp() {
         lateinit var backgroundStateChangeListener: BackgroundStateChangeListener
         lateinit var appConfigProvider: IAppConfigProvider
         lateinit var adapterManager: IAdapterManager
+        lateinit var transactionAdapterManager: TransactionAdapterManager
         lateinit var walletManager: IWalletManager
         lateinit var walletStorage: IWalletStorage
         lateinit var accountManager: IAccountManager
@@ -182,6 +183,7 @@ class App : CoreApp() {
 
         val adapterFactory = AdapterFactory(instance, buildConfigProvider.testMode, ethereumKitManager, binanceSmartChainKitManager, binanceKitManager, backgroundManager, restoreSettingsManager, coinManager)
         adapterManager = AdapterManager(walletManager, adapterFactory, ethereumKitManager, binanceSmartChainKitManager, binanceKitManager)
+        transactionAdapterManager = TransactionAdapterManager(adapterManager, adapterFactory)
 
         initialSyncModeSettingsManager = InitialSyncSettingsManager(coinManager, blockchainSettingsStorage, adapterManager, walletManager)
         derivationSettingsManager = DerivationSettingsManager(blockchainSettingsStorage, adapterManager, walletManager)
