@@ -17,12 +17,12 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 class TransactionRecordRepository(
     private val adapterManager: IAdapterManager,
-) : Clearable {
+) : Clearable, ITransactionRecordRepository {
 
     private var selectedWallet: Wallet? = null
 
     private val itemsSubject = PublishSubject.create<List<TransactionRecord>>()
-    val itemsObservable: Observable<List<TransactionRecord>> get() = itemsSubject
+    override val itemsObservable: Observable<List<TransactionRecord>> get() = itemsSubject
 
     private val items = CopyOnWriteArrayList<TransactionRecord>()
     private val loading = AtomicBoolean(false)
@@ -56,7 +56,7 @@ class TransactionRecordRepository(
             return mergedWallets
         }
 
-    fun setWallets(wallets: List<Wallet>) {
+    override fun setWallets(wallets: List<Wallet>) {
         this.wallets = wallets
 
         val transactionWallets = wallets.map { transactionWallet(it) }.toMutableList()
@@ -117,7 +117,7 @@ class TransactionRecordRepository(
         }
     }
 
-    fun setSelectedWallet(wallet: Wallet?) {
+    override fun setSelectedWallet(wallet: Wallet?) {
         selectedWallet = wallet
 
         items.clear()
@@ -128,7 +128,7 @@ class TransactionRecordRepository(
         loadNext()
     }
 
-    fun loadNext() {
+    override fun loadNext() {
         if (loading.get()) return
         loading.set(true)
 
