@@ -53,6 +53,24 @@ fun ButtonPrimaryYellow(
 }
 
 @Composable
+fun ButtonPrimaryRed(
+    modifier: Modifier = Modifier,
+    title: String,
+    onClick: () -> Unit,
+    enabled: Boolean = true
+) {
+    ButtonPrimary(
+        modifier = modifier,
+        onClick = onClick,
+        colors = ButtonDefaults.textButtonColors(
+            backgroundColor = RedD,
+        ),
+        content = { Text(title) },
+        enabled = enabled
+    )
+}
+
+@Composable
 fun ButtonPrimaryYellowWithSpinner(
     modifier: Modifier = Modifier,
     title: String,
