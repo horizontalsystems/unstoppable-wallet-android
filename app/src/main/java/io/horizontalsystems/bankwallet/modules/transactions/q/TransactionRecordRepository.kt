@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.transactions.q
 
 import io.horizontalsystems.bankwallet.core.Clearable
-import io.horizontalsystems.bankwallet.core.IAdapterManager
+import io.horizontalsystems.bankwallet.core.managers.TransactionAdapterManager
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionWallet
 import io.reactivex.Observable
@@ -13,7 +13,7 @@ import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.atomic.AtomicBoolean
 
 class TransactionRecordRepository(
-    private val adapterManager: IAdapterManager,
+    private val adapterManager: TransactionAdapterManager,
 ) : Clearable, ITransactionRecordRepository {
 
     private var selectedWallet: TransactionWallet? = null
@@ -35,7 +35,7 @@ class TransactionRecordRepository(
 
         transactionWallets.forEach { transactionWallet ->
             if (adaptersMap[transactionWallet] == null) {
-                adapterManager.getTransactionsAdapterForWallet(transactionWallet)?.let {
+                adapterManager.getAdapter(transactionWallet.source)?.let {
                     val transactionAdapterWrapperXxx = TransactionAdapterWrapper(it, transactionWallet)
                     adaptersMap[transactionWallet] = transactionAdapterWrapperXxx
                 }
@@ -44,7 +44,7 @@ class TransactionRecordRepository(
 
         walletsGroupedBySource.forEach { transactionWallet ->
             if (adaptersMap[transactionWallet] == null) {
-                adapterManager.getTransactionsAdapterForWallet(transactionWallet)?.let {
+                adapterManager.getAdapter(transactionWallet.source)?.let {
                     val transactionAdapterWrapperXxx = TransactionAdapterWrapper(it, transactionWallet)
                     adaptersMap[transactionWallet] = transactionAdapterWrapperXxx
                 }
