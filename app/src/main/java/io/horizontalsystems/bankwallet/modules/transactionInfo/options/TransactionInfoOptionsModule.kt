@@ -47,8 +47,11 @@ object TransactionInfoOptionsModule {
             }
         }
 
+        private val fullTransaction by lazy {
+            evmKit.getFullTransactions(listOf(transactionHash.hexStringToByteArray())).first()
+        }
         private val transaction by lazy {
-            evmKit.getFullTransactions(listOf(transactionHash.hexStringToByteArray())).first().transaction
+            fullTransaction.transaction
         }
 
         private val transactionService by lazy {
@@ -93,7 +96,7 @@ object TransactionInfoOptionsModule {
                     EthereumFeeViewModel(transactionService, coinServiceFactory.baseCoinService) as T
                 }
                 TransactionSpeedUpCancelViewModel::class.java -> {
-                    TransactionSpeedUpCancelViewModel(optionType) as T
+                    TransactionSpeedUpCancelViewModel(optionType, fullTransaction.receiptWithLogs == null) as T
                 }
                 else -> throw IllegalArgumentException()
             }

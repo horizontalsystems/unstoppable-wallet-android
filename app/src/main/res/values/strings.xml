@@ -524,6 +524,8 @@
     <string name="TransactionInfoOptions_Cancel_Description">[ Transaction Cancel Description ]</string>
     <string name="TransactionInfoOptions_Cancel_Button">Cancel Transaction</string>
 
+    <string name="TransactionInfoOptions_Warning_TransactionInBlock">Transaction already in block</string>
+
     <!-- Info -->
 
     <string name="Info_LockTime_Title">TimeLock</string>
