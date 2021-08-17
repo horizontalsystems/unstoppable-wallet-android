@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.transactionInfo
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.ITransactionsAdapter
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.TransactionLockState
 import io.horizontalsystems.bankwallet.modules.send.SendModule
@@ -18,8 +19,7 @@ object TransactionInfoModule {
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            val adapter =
-                App.adapterManager.getTransactionsAdapterForWallet(transactionViewItem.wallet)!!
+            val adapter: ITransactionsAdapter = TODO()
             val service = TransactionInfoService(
                 adapter,
                 App.xRateManager,

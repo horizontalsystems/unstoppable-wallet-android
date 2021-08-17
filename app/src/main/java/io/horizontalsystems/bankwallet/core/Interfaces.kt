@@ -14,7 +14,6 @@ import io.horizontalsystems.bankwallet.modules.market.MarketModule
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.settings.theme.ThemeType
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
-import io.horizontalsystems.bankwallet.modules.transactions.TransactionWallet
 import io.horizontalsystems.binancechainkit.BinanceChainKit
 import io.horizontalsystems.bitcoincore.core.IPluginData
 import io.horizontalsystems.coinkit.models.Coin
@@ -40,7 +39,6 @@ interface IAdapterManager {
     fun refresh()
     fun getAdapterForWallet(wallet: Wallet): IAdapter?
     fun getAdapterForCoin(coin: Coin): IAdapter?
-    fun getTransactionsAdapterForWallet(wallet: TransactionWallet): ITransactionsAdapter?
     fun getBalanceAdapterForWallet(wallet: Wallet): IBalanceAdapter?
     fun getReceiveAdapterForWallet(wallet: Wallet): IReceiveAdapter?
     fun refreshAdapters(wallets: List<Wallet>)
