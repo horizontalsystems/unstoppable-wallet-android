@@ -5,6 +5,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.foundation.layout.padding
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.navGraphViewModels
@@ -15,12 +19,15 @@ import io.horizontalsystems.bankwallet.modules.transactionInfo.adapters.Transact
 import io.horizontalsystems.bankwallet.modules.transactionInfo.options.TransactionSpeedUpCancelFragment
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionsPresenter
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionsViewModel
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.android.synthetic.main.fragment_transaction_info.*
+import kotlinx.android.synthetic.main.fragment_transaction_info.toolbar
 import java.util.*
 
 class TransactionInfoFragment : BaseFragment(), TransactionInfoAdapter.Listener {
@@ -51,10 +58,6 @@ class TransactionInfoFragment : BaseFragment(), TransactionInfoAdapter.Listener 
             TransactionInfoAdapter(viewModel.viewItemsLiveData, viewLifecycleOwner, this)
         recyclerView.adapter = ConcatAdapter(itemsAdapter)
 
-        btnClose.setOnClickListener {
-            findNavController().popBackStack()
-        }
-
         viewModel.showTransactionLiveEvent.observe(this, Observer { url ->
             openUrlInCustomTabs(url)
         })
@@ -75,6 +78,22 @@ class TransactionInfoFragment : BaseFragment(), TransactionInfoAdapter.Listener 
             val params = TransactionSpeedUpCancelFragment.prepareParams(optionType, txHash)
             findNavController().navigate(R.id.transactionInfoFragment_to_transactionSpeedUpCancelFragment, params, navOptions())
         })
+
+        buttonCloseCompose.setViewCompositionStrategy(
+            ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+        )
+
+        buttonCloseCompose.setContent {
+            ComposeAppTheme {
+                ButtonPrimaryYellow(
+                    modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 24.dp),
+                    title = getString(R.string.Button_Close),
+                    onClick = {
+                        findNavController().popBackStack()
+                    }
+                )
+            }
+        }
     }
 
     override fun onAddressClick(address: String) {
