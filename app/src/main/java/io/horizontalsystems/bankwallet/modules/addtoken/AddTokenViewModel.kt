@@ -10,7 +10,6 @@ import io.horizontalsystems.bankwallet.entities.blockchainType
 import io.horizontalsystems.bankwallet.modules.swap.settings.Caution
 import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.core.SingleLiveEvent
-import io.horizontalsystems.ethereumkit.core.AddressValidator
 import io.reactivex.disposables.CompositeDisposable
 
 class AddTokenViewModel(private val addTokenService: AddTokenService) : ViewModel() {
@@ -18,7 +17,7 @@ class AddTokenViewModel(private val addTokenService: AddTokenService) : ViewMode
     val loadingLiveData = MutableLiveData<Boolean>()
     val cautionLiveData = MutableLiveData<Caution?>()
     val viewItemLiveData = MutableLiveData<AddTokenModule.ViewItem?>()
-    val showAddButton = MutableLiveData<Boolean>()
+    val buttonEnabledLiveData = MutableLiveData<Boolean>()
     val showSuccess = SingleLiveEvent<Unit>()
 
     private var disposables = CompositeDisposable()
@@ -57,7 +56,7 @@ class AddTokenViewModel(private val addTokenService: AddTokenService) : ViewMode
 
         viewItemLiveData.postValue(getViewItemByState(state))
 
-        showAddButton.postValue(state is AddTokenModule.State.Fetched)
+        buttonEnabledLiveData.postValue(state is AddTokenModule.State.Fetched)
 
         val caution = when (state) {
             is AddTokenModule.State.Failed -> {
