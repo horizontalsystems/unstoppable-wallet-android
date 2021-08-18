@@ -8,19 +8,28 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.layout.padding
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerActivity
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.snackbar.SnackbarDuration
 import io.horizontalsystems.views.ListPosition
 import kotlinx.android.synthetic.main.fragment_add_token.*
+import kotlinx.android.synthetic.main.fragment_add_token.toolbar
 
 class AddTokenFragment : BaseFragment() {
+
+    private val viewModel: AddTokenViewModel by viewModels { AddTokenModule.Factory() }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.fragment_add_token, container, false)
@@ -32,29 +41,23 @@ class AddTokenFragment : BaseFragment() {
             findNavController().popBackStack()
         }
 
-        val model: AddTokenViewModel by viewModels { AddTokenModule.Factory() }
 
         addressInputView.setEditable(false)
         addressInputView.setHint("ERC20 / BEP20 / BEP2")
 
-        btnAddToken.isEnabled = false
-        btnAddToken.setOnClickListener {
-            model.onAddClick()
-        }
-
         addressInputView.onTextChange {
-            model.onTextChange(it)
+            viewModel.onTextChange(it)
         }
 
         addressInputView.onPasteText {
-            model.onTextChange(it)
+            viewModel.onTextChange(it)
             addressInputView.setText(it)
         }
 
         val qrScannerResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 result.data?.getStringExtra(ModuleField.SCAN_ADDRESS)?.let {
-                    model.onTextChange(it)
+                    viewModel.onTextChange(it)
                     addressInputView.setText(it)
                 }
             }
@@ -66,7 +69,13 @@ class AddTokenFragment : BaseFragment() {
         }
 
         setCoinDetails(null)
-        observeViewModel(model)
+        observeViewModel(viewModel)
+
+        buttonAddTokenCompose.setViewCompositionStrategy(
+            ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+        )
+
+        setButton()
     }
 
     private fun observeViewModel(model: AddTokenViewModel) {
@@ -89,9 +98,24 @@ class AddTokenFragment : BaseFragment() {
             addressInputView.setError(caution)
         })
 
-        model.showAddButton.observe(viewLifecycleOwner, Observer { visible ->
-            btnAddToken.isEnabled = visible
+        model.buttonEnabledLiveData.observe(viewLifecycleOwner, Observer { enabled ->
+            setButton(enabled)
         })
+    }
+
+    private fun setButton(enabled: Boolean = false) {
+        buttonAddTokenCompose.setContent {
+            ComposeAppTheme {
+                ButtonPrimaryYellow(
+                    modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 32.dp),
+                    title = getString(R.string.Button_Add),
+                    onClick = {
+                        viewModel.onAddClick()
+                    },
+                    enabled = enabled
+                )
+            }
+        }
     }
 
     private fun setCoinDetails(viewItem: AddTokenModule.ViewItem?) {
