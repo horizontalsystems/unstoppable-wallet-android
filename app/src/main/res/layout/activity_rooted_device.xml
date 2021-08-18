@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    >
 
     <androidx.constraintlayout.widget.Group
         android:id="@+id/warningView"
@@ -32,23 +34,21 @@
         android:text="@string/Alert_DeviceIsRootedWarning"
         android:textAlignment="center"
         android:textColor="@color/grey"
-        app:layout_constraintBottom_toTopOf="@+id/understandButton"
+        app:layout_constraintBottom_toTopOf="@+id/buttonUnderstandCompose"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/attention" />
 
-    <Button
-        android:id="@+id/understandButton"
-        style="@style/ButtonPrimaryYellow"
+    <androidx.compose.ui.platform.ComposeView
+        android:id="@+id/buttonUnderstandCompose"
         android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:layout_marginHorizontal="24dp"
-        android:layout_marginBottom="50dp"
-        android:text="@string/RootedDevice_Button_Understand"
-        android:visibility="visible"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintVertical_bias="1" />
+        app:layout_constraintVertical_bias="1"
+        tools:layout_height="50dp"
+        tools:layout_marginBottom="50dp"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
