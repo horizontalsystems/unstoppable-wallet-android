@@ -5,10 +5,16 @@ import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.foundation.layout.padding
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.unit.dp
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.views.inflate
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_bottom_selector.*
@@ -26,6 +32,8 @@ class BottomSheetSelectorMultipleDialog(
         private val notifyUnchanged: Boolean
 ) : BaseBottomSheetDialogFragment() {
 
+    private lateinit var itemsAdapter : MultipleSelectorItemsAdapter
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -35,8 +43,10 @@ class BottomSheetSelectorMultipleDialog(
         setSubtitle(subtitle)
         setHeaderIconDrawable(icon)
 
-        val itemsAdapter = MultipleSelectorItemsAdapter(items, selected.toMutableList()) {
-            btnDone.isEnabled = it.isNotEmpty()
+        setButton(selected.isNotEmpty())
+
+        itemsAdapter = MultipleSelectorItemsAdapter(items, selected.toMutableList()) {
+            setButton(it.isNotEmpty())
         }
 
         textWarning.text = warning
@@ -45,11 +55,26 @@ class BottomSheetSelectorMultipleDialog(
 
         rvItems.adapter = itemsAdapter
 
-        btnDone.setOnClickListener {
-            if (notifyUnchanged || !equals(itemsAdapter.selected, selected)) {
-                onItemsSelected(itemsAdapter.selected)
+        buttonDoneCompose.setViewCompositionStrategy(
+            ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+        )
+    }
+
+    private fun setButton(enabled: Boolean = false) {
+        buttonDoneCompose.setContent {
+            ComposeAppTheme {
+                ButtonPrimaryYellow(
+                    modifier = Modifier.padding(16.dp),
+                    title = getString(R.string.Button_Done),
+                    onClick = {
+                        if (notifyUnchanged || !equals(itemsAdapter.selected, selected)) {
+                            onItemsSelected(itemsAdapter.selected)
+                        }
+                        dismiss()
+                    },
+                    enabled = enabled
+                )
             }
-            dismiss()
         }
     }
 
