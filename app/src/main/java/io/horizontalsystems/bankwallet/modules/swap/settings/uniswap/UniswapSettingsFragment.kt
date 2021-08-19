@@ -6,10 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.layout.padding
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerActivity
 import io.horizontalsystems.bankwallet.modules.swap.settings.RecipientAddressViewModel
@@ -19,6 +21,8 @@ import io.horizontalsystems.bankwallet.modules.swap.settings.SwapSlippageViewMod
 import io.horizontalsystems.bankwallet.modules.swap.settings.uniswap.UniswapSettingsViewModel.ActionState
 import io.horizontalsystems.bankwallet.modules.swap.uniswap.UniswapModule
 import io.horizontalsystems.bankwallet.modules.swap.uniswap.UniswapViewModel
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.android.synthetic.main.fragment_swap_settings_uniswap.*
@@ -55,21 +59,11 @@ class UniswapSettingsFragment : SwapSettingsBaseFragment() {
         uniswapSettingsViewModel.actionStateLiveData.observe(viewLifecycleOwner) { actionState ->
             when (actionState) {
                 is ActionState.Enabled -> {
-                    applyButton.isEnabled = true
-                    applyButton.text = getString(R.string.SwapSettings_Apply)
+                    setButton(getString(R.string.SwapSettings_Apply), true)
                 }
                 is ActionState.Disabled -> {
-                    applyButton.isEnabled = false
-                    applyButton.text = actionState.title
+                    setButton(actionState.title, false)
                 }
-            }
-        }
-
-        applyButton.setOnSingleClickListener {
-            if (uniswapSettingsViewModel.onDoneClick()) {
-                findNavController().popBackStack()
-            } else {
-                HudHelper.showErrorMessage(this.requireView(), getString(R.string.default_error_msg))
             }
         }
 
@@ -80,6 +74,31 @@ class UniswapSettingsFragment : SwapSettingsBaseFragment() {
 
         slippageInputView.setViewModel(slippageViewModel, viewLifecycleOwner)
         deadlineInputView.setViewModel(deadlineViewModel, viewLifecycleOwner)
+    }
+
+    private fun setButton(title: String, enabled: Boolean = false) {
+        buttonApplyCompose.setContent {
+            ComposeAppTheme {
+                ButtonPrimaryYellow(
+                    modifier = Modifier.padding(
+                        top = 28.dp,
+                        bottom = 24.dp
+                    ),
+                    title = title,
+                    onClick = {
+                        if (uniswapSettingsViewModel.onDoneClick()) {
+                            findNavController().popBackStack()
+                        } else {
+                            HudHelper.showErrorMessage(
+                                this.requireView(),
+                                getString(R.string.default_error_msg)
+                            )
+                        }
+                    },
+                    enabled = enabled
+                )
+            }
+        }
     }
 
 }
