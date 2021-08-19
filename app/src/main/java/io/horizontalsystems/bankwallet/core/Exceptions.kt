@@ -20,6 +20,7 @@ class FailedTransaction(errorMessage: String?) : RuntimeException(errorMessage) 
 
 sealed class EvmError(message: String? = null) : Throwable(message) {
     object InsufficientBalanceWithFee : EvmError()
+    object CannotEstimateSwap : EvmError()
     object LowerThanBaseGasLimit : EvmError()
     class ExecutionReverted(message: String?) : EvmError(message)
     class RpcError(message: String?) : EvmError(message)
@@ -58,6 +59,8 @@ val Throwable.convertedError: Throwable
                 errorBody?.contains("you may not have enough ETH balance for gas fee") == true
             ) {
                 EvmError.InsufficientBalanceWithFee
+            } else if(errorBody?.contains("cannot estimate") == true) {
+                EvmError.CannotEstimateSwap
             } else {
                 this
             }
