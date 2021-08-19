@@ -6,10 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.layout.padding
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerActivity
 import io.horizontalsystems.bankwallet.modules.swap.oneinch.OneInchModule
@@ -17,6 +19,8 @@ import io.horizontalsystems.bankwallet.modules.swap.oneinch.OneInchSwapViewModel
 import io.horizontalsystems.bankwallet.modules.swap.settings.RecipientAddressViewModel
 import io.horizontalsystems.bankwallet.modules.swap.settings.SwapSettingsBaseFragment
 import io.horizontalsystems.bankwallet.modules.swap.settings.SwapSlippageViewModel
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.android.synthetic.main.fragment_swap_settings_1inch.*
@@ -53,21 +57,11 @@ class OneInchSettingsFragment : SwapSettingsBaseFragment() {
         oneInchSettingsViewModel.actionStateLiveData.observe(viewLifecycleOwner) { actionState ->
             when (actionState) {
                 is OneInchSettingsViewModel.ActionState.Enabled -> {
-                    applyButton.isEnabled = true
-                    applyButton.text = getString(R.string.SwapSettings_Apply)
+                    setButton(getString(R.string.SwapSettings_Apply), true)
                 }
                 is OneInchSettingsViewModel.ActionState.Disabled -> {
-                    applyButton.isEnabled = false
-                    applyButton.text = actionState.title
+                    setButton(actionState.title, false)
                 }
-            }
-        }
-
-        applyButton.setOnSingleClickListener {
-            if (oneInchSettingsViewModel.onDoneClick()) {
-                findNavController().popBackStack()
-            } else {
-                HudHelper.showErrorMessage(this.requireView(), getString(R.string.default_error_msg))
             }
         }
 
@@ -77,7 +71,31 @@ class OneInchSettingsFragment : SwapSettingsBaseFragment() {
         })
 
         slippageInputView.setViewModel(slippageViewModel, viewLifecycleOwner)
+    }
 
+    private fun setButton(title: String, enabled: Boolean = false) {
+        buttonApplyCompose.setContent {
+            ComposeAppTheme {
+                ButtonPrimaryYellow(
+                    modifier = Modifier.padding(
+                        top = 28.dp,
+                        bottom = 24.dp
+                    ),
+                    title = title,
+                    onClick = {
+                        if (oneInchSettingsViewModel.onDoneClick()) {
+                            findNavController().popBackStack()
+                        } else {
+                            HudHelper.showErrorMessage(
+                                this.requireView(),
+                                getString(R.string.default_error_msg)
+                            )
+                        }
+                    },
+                    enabled = enabled
+                )
+            }
+        }
     }
 
 }
