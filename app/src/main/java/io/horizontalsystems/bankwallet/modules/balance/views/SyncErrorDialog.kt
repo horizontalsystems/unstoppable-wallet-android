@@ -2,16 +2,22 @@ package io.horizontalsystems.bankwallet.modules.balance.views
 
 import android.os.Bundle
 import android.view.View
-import androidx.core.view.isVisible
+import androidx.compose.foundation.layout.*
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.fragment.app.FragmentActivity
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.extensions.BaseBottomSheetDialogFragment
 import kotlinx.android.synthetic.main.fragment_bottom_sync_error.*
 
 class SyncErrorDialog(
-        private val listener: Listener,
-        private val coinName: String,
-        private val sourceChangeable: Boolean) : BaseBottomSheetDialogFragment() {
+    private val listener: Listener,
+    private val coinName: String,
+    private val sourceChangeable: Boolean
+) : BaseBottomSheetDialogFragment() {
 
     interface Listener {
         fun onClickRetry()
@@ -27,32 +33,57 @@ class SyncErrorDialog(
         setSubtitle(coinName)
         setHeaderIcon(R.drawable.ic_attention_red_24)
 
-        changeSourceBtn.isVisible = sourceChangeable
-
-        bindActions()
+        setButtons()
     }
 
-    private fun bindActions() {
-        retryBtn.setOnClickListener {
-            listener.onClickRetry()
-            dismiss()
-        }
-
-        if (sourceChangeable) {
-            changeSourceBtn.setOnClickListener {
-                listener.onClickChangeSource()
-                dismiss()
+    private fun setButtons() {
+        buttonsCompose.setContent {
+            ComposeAppTheme {
+                Column(modifier = Modifier.width(IntrinsicSize.Max)) {
+                    ButtonPrimaryYellow(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 16.dp, top = 16.dp, end = 16.dp),
+                        title = getString(R.string.BalanceSyncError_ButtonRetry),
+                        onClick = {
+                            listener.onClickRetry()
+                            dismiss()
+                        }
+                    )
+                    if (sourceChangeable) {
+                        ButtonPrimaryDefault(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(start = 16.dp, top = 16.dp, end = 16.dp),
+                            title = getString(R.string.BalanceSyncError_ButtonChangeSource),
+                            onClick = {
+                                listener.onClickChangeSource()
+                                dismiss()
+                            }
+                        )
+                    }
+                    ButtonPrimaryDefault(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 16.dp, top = 16.dp, end = 16.dp),
+                        title = getString(R.string.BalanceSyncError_ButtonReport),
+                        onClick = {
+                            listener.onClickReport()
+                            dismiss()
+                        }
+                    )
+                }
             }
-        }
-
-        reportBtn.setOnClickListener {
-            listener.onClickReport()
-            dismiss()
         }
     }
 
     companion object {
-        fun show(activity: FragmentActivity, coinName: String, sourceChangeable: Boolean, listener: Listener) {
+        fun show(
+            activity: FragmentActivity,
+            coinName: String,
+            sourceChangeable: Boolean,
+            listener: Listener
+        ) {
             val fragment = SyncErrorDialog(listener, coinName, sourceChangeable)
             val transaction = activity.supportFragmentManager.beginTransaction()
 
