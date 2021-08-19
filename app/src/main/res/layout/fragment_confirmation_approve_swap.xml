@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?android:windowBackground">
+    android:background="?android:windowBackground"
+    >
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -31,16 +33,14 @@
                 android:layout_marginTop="12dp"
                 android:layout_marginEnd="16dp" />
 
-            <Button
-                android:id="@+id/approveButton"
-                style="@style/ButtonPrimaryYellow"
+            <androidx.compose.ui.platform.ComposeView
+                android:id="@+id/buttonApproveCompose"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="24dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="24dp"
-                android:text="@string/Swap_Approve" />
+                tools:layout_height="50dp"
+                tools:layout_marginBottom="24dp"
+                tools:layout_marginTop="24dp"
+                />
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>

@@ -6,6 +6,10 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.foundation.layout.padding
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.navGraphViewModels
@@ -13,7 +17,6 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.ethereum.EthereumFeeViewModel
-import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule.additionalInfoKey
@@ -21,6 +24,8 @@ import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule.transaction
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
 import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveModule
 import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveViewModel
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.core.setNavigationResult
@@ -80,7 +85,7 @@ class SwapApproveConfirmationFragment : BaseFragment() {
         }
 
         sendViewModel.sendEnabledLiveData.observe(viewLifecycleOwner, { enabled ->
-            approveButton.isEnabled = enabled
+            setButton(enabled)
         })
 
         sendViewModel.sendingLiveData.observe(viewLifecycleOwner, {
@@ -125,9 +130,31 @@ class SwapApproveConfirmationFragment : BaseFragment() {
             }
         )
 
-        approveButton.setOnSingleClickListener {
-            logger.info("click approve button")
-            sendViewModel.send(logger)
+        buttonApproveCompose.setViewCompositionStrategy(
+            ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+        )
+
+        setButton()
+    }
+
+    private fun setButton(enabled: Boolean = false) {
+        buttonApproveCompose.setContent {
+            ComposeAppTheme {
+                ButtonPrimaryYellow(
+                    modifier = Modifier.padding(
+                        start = 16.dp,
+                        top = 24.dp,
+                        end = 16.dp,
+                        bottom = 24.dp
+                    ),
+                    title = getString(R.string.Swap_Approve),
+                    onClick = {
+                        logger.info("click approve button")
+                        sendViewModel.send(logger)
+                    },
+                    enabled = enabled
+                )
+            }
         }
     }
 
