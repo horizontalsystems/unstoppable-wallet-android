@@ -2,11 +2,15 @@ package io.horizontalsystems.bankwallet.modules.walletconnect
 
 import android.os.Bundle
 import android.view.View
-import androidx.core.os.bundleOf
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
 import kotlinx.android.synthetic.main.fragment_wallet_connect_error.*
 
 class WalletConnectErrorFragment : Fragment(R.layout.fragment_wallet_connect_error) {
@@ -16,8 +20,18 @@ class WalletConnectErrorFragment : Fragment(R.layout.fragment_wallet_connect_err
 
         message.text = arguments?.getString(MESSAGE_KEY)
 
-        cancelButton.setOnSingleClickListener {
-            findNavController().popBackStack()
+        buttonCancelCompose.setContent {
+            ComposeAppTheme {
+                ButtonPrimaryDefault(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
+                    title = getString(R.string.Button_Cancel),
+                    onClick = {
+                        findNavController().popBackStack()
+                    }
+                )
+            }
         }
     }
 
