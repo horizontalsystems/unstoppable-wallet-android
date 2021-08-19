@@ -13,9 +13,7 @@ class WalletConnectMainViewModel(private val service: WalletConnectService) : Vi
 
     val connectingLiveData = MutableLiveData<Boolean>()
     val peerMetaLiveData = MutableLiveData<PeerMetaViewItem?>()
-    val cancelVisibleLiveData = MutableLiveData<Boolean>()
-    val connectButtonLiveData = MutableLiveData<ButtonState>()
-    val disconnectButtonLiveData = MutableLiveData<ButtonState>()
+    val buttonStatesLiveData = MutableLiveData<ButtonStates>()
     val closeVisibleLiveData = MutableLiveData<Boolean>()
     val signedTransactionsVisibleLiveData = MutableLiveData<Boolean>(false)
     val hintLiveData = MutableLiveData<Int?>()
@@ -31,6 +29,8 @@ class WalletConnectMainViewModel(private val service: WalletConnectService) : Vi
     enum class ButtonState(val visible: Boolean, val enabled: Boolean) {
         Enabled(true, true), Disabled(true, false), Hidden(false, true)
     }
+
+    data class ButtonStates(val connect: ButtonState, val disconnect: ButtonState, val cancel: ButtonState)
 
     private val disposables = CompositeDisposable()
 
@@ -91,10 +91,13 @@ class WalletConnectMainViewModel(private val service: WalletConnectService) : Vi
         peerMetaLiveData.postValue(peerMetaViewItem)
 
         connectingLiveData.postValue(state == WalletConnectService.State.Idle)
-        cancelVisibleLiveData.postValue(state != WalletConnectService.State.Ready)
-        connectButtonLiveData.postValue(getConnectButtonState(state, connectionState))
-        disconnectButtonLiveData.postValue(getDisconnectButtonState(state, connectionState))
         closeVisibleLiveData.postValue(state == WalletConnectService.State.Ready)
+
+        val cancelBtnState = getCancelButtonState(state)
+        val connectBtnState = getConnectButtonState(state, connectionState)
+        val disconnectBtnState = getDisconnectButtonState(state, connectionState)
+
+        buttonStatesLiveData.postValue(ButtonStates(connectBtnState, disconnectBtnState, cancelBtnState))
 
         statusLiveData.postValue(getStatus(connectionState))
 
@@ -124,6 +127,14 @@ class WalletConnectMainViewModel(private val service: WalletConnectService) : Vi
                 WalletConnectInteractor.State.Connected -> Status.ONLINE
                 is WalletConnectInteractor.State.Disconnected -> Status.OFFLINE
             }
+        }
+    }
+
+    private fun getCancelButtonState(state: WalletConnectService.State): ButtonState {
+        return if (state != WalletConnectService.State.Ready){
+            ButtonState.Enabled
+        } else {
+            ButtonState.Hidden
         }
     }
 

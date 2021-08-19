@@ -5,19 +5,26 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.addCallback
+import androidx.compose.foundation.layout.*
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectViewModel
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.WalletConnectRequestModule.TYPED_MESSAGE
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.signmessage.WalletConnectSignMessageRequestService.SignMessage
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.views.ListPosition
 import kotlinx.android.synthetic.main.fragment_wallet_connect_sign_message_request.*
+import kotlinx.android.synthetic.main.fragment_wallet_connect_sign_message_request.buttonsCompose
 
 class WalletConnectSignMessageRequestFragment : BaseFragment() {
 
@@ -59,14 +66,6 @@ class WalletConnectSignMessageRequestFragment : BaseFragment() {
             }
         }
 
-        btnReject.setOnSingleClickListener {
-            viewModel.reject()
-        }
-
-        btnSign.setOnSingleClickListener {
-            viewModel.sign()
-        }
-
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
             viewModel.reject()
         }
@@ -75,6 +74,35 @@ class WalletConnectSignMessageRequestFragment : BaseFragment() {
             baseViewModel.sharedSignMessageRequest = null
             findNavController().popBackStack()
         })
+
+        buttonsCompose.setViewCompositionStrategy(
+            ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+        )
+
+        buttonsCompose.setContent {
+            ComposeAppTheme {
+                Column(modifier = Modifier.width(IntrinsicSize.Max)) {
+                    ButtonPrimaryYellow(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
+                        title = getString(R.string.WalletConnect_SignMessageRequest_ButtonSign),
+                        onClick = {
+                            viewModel.sign()
+                        }
+                    )
+                    ButtonPrimaryDefault(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 16.dp, end = 16.dp, bottom = 24.dp),
+                        title = getString(R.string.Button_Reject),
+                        onClick = {
+                            viewModel.reject()
+                        }
+                    )
+                }
+            }
+        }
     }
 
     private fun formatJson(text: String): String {
