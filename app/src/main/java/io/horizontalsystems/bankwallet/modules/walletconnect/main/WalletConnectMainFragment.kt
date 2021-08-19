@@ -7,6 +7,10 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.layout.*
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
@@ -15,12 +19,14 @@ import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.managers.WalletConnectInteractor
-import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerActivity
 import io.horizontalsystems.bankwallet.modules.walletconnect.*
 import io.horizontalsystems.bankwallet.modules.walletconnect.scanqr.WalletConnectScanQrModule
 import io.horizontalsystems.bankwallet.modules.walletconnect.scanqr.WalletConnectScanQrViewModel
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.extensions.ConfirmationDialog
 import kotlinx.android.synthetic.main.fragment_wallet_connect_main.*
 
@@ -123,18 +129,8 @@ class WalletConnectMainFragment : BaseFragment() {
             }
         })
 
-        viewModel.cancelVisibleLiveData.observe(viewLifecycleOwner, {
-            cancelButton.isVisible = it
-        })
-
-        viewModel.connectButtonLiveData.observe(viewLifecycleOwner, {
-            connectButton.isVisible = it.visible
-            connectButton.isEnabled = it.enabled
-        })
-
-        viewModel.disconnectButtonLiveData.observe(viewLifecycleOwner, {
-            disconnectButton.isVisible = it.visible
-            disconnectButton.isEnabled = it.enabled
+        viewModel.buttonStatesLiveData.observe(viewLifecycleOwner, { buttonsStates ->
+            setButtons(buttonsStates)
         })
 
         viewModel.closeVisibleLiveData.observe(viewLifecycleOwner, {
@@ -177,31 +173,72 @@ class WalletConnectMainFragment : BaseFragment() {
             }
         })
 
-        connectButton.setOnSingleClickListener {
-            viewModel.connect()
-        }
+        buttonsCompose.setViewCompositionStrategy(
+            ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+        )
 
-        disconnectButton.setOnSingleClickListener {
-            ConfirmationDialog.show(
-                    icon = R.drawable.ic_wallet_connect_24,
-                    title = getString(R.string.Button_Disconnect),
-                    subtitle = dappTitle.text.toString(),
-                    contentText = null,
-                    actionButtonTitle = null,
-                    destructiveButtonTitle = getString(R.string.Button_Disconnect),
-                    cancelButtonTitle = getString(R.string.Button_Cancel),
-                    activity = requireActivity(),
-                    listener = object : ConfirmationDialog.Listener {
-                        override fun onDestructiveButtonClick() {
-                            viewModel.disconnect()
-                        }
+    }
+
+    private fun setButtons(buttonsStates: WalletConnectMainViewModel.ButtonStates) {
+        buttonsCompose.setContent {
+            ComposeAppTheme {
+                Column(modifier = Modifier.width(IntrinsicSize.Max)) {
+                    if (buttonsStates.connect.visible) {
+                        ButtonPrimaryYellow(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(start = 16.dp, end = 16.dp),
+                            title = getString(R.string.Button_Connect),
+                            onClick = {
+                                viewModel.connect()
+                            },
+                            enabled = buttonsStates.connect.enabled
+                        )
                     }
-            )
+                    if (buttonsStates.disconnect.visible) {
+                        ButtonPrimaryDefault(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(start = 16.dp, top = 16.dp, end = 16.dp),
+                            title = getString(R.string.Button_Disconnect),
+                            onClick = {
+                                showDisconnectDialog()
+                            },
+                            enabled = buttonsStates.disconnect.enabled
+                        )
+                    }
+                    if (buttonsStates.cancel.visible) {
+                        ButtonPrimaryDefault(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(start = 16.dp, top = 16.dp, end = 16.dp),
+                            title = getString(R.string.Button_Cancel),
+                            onClick = {
+                                viewModel.cancel()
+                            }
+                        )
+                    }
+                }
+            }
         }
+    }
 
-        cancelButton.setOnSingleClickListener {
-            viewModel.cancel()
-        }
+    private fun showDisconnectDialog() {
+        ConfirmationDialog.show(
+            icon = R.drawable.ic_wallet_connect_24,
+            title = getString(R.string.Button_Disconnect),
+            subtitle = dappTitle.text.toString(),
+            contentText = null,
+            actionButtonTitle = null,
+            destructiveButtonTitle = getString(R.string.Button_Disconnect),
+            cancelButtonTitle = getString(R.string.Button_Cancel),
+            activity = requireActivity(),
+            listener = object : ConfirmationDialog.Listener {
+                override fun onDestructiveButtonClick() {
+                    viewModel.disconnect()
+                }
+            }
+        )
     }
 
     override fun onDestroyView() {
