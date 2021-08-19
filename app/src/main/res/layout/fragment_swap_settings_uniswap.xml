@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?android:windowBackground"
-    android:clickable="true">
+    android:clickable="true"
+    >
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -62,17 +64,17 @@
                 app:layout_constraintTop_toBottomOf="@id/slippageInputView"
                 app:title="@string/SwapSettings_DeadlineTitle" />
 
-            <Button
-                android:id="@+id/applyButton"
-                style="@style/ButtonPrimaryYellow"
+            <androidx.compose.ui.platform.ComposeView
+                android:id="@+id/buttonApplyCompose"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="28dp"
-                android:layout_marginBottom="12dp"
-                android:text="@string/SwapSettings_Apply"
                 app:layout_constraintEnd_toEndOf="@id/endBorder"
                 app:layout_constraintStart_toStartOf="@id/startBorder"
-                app:layout_constraintTop_toBottomOf="@+id/deadlineInputView" />
+                app:layout_constraintTop_toBottomOf="@+id/deadlineInputView"
+                tools:layout_height="50dp"
+                tools:layout_marginBottom="12dp"
+                tools:layout_marginTop="28dp"
+                />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
