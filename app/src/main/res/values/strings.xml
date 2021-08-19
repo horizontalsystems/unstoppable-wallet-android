@@ -359,6 +359,7 @@
     <string name="EthereumTransaction_Error_InsufficientBalance">Transaction requires %s for sending</string>
     <string name="EthereumTransaction_Error_InsufficientBalanceForFee">Current %s balance is below amount required to process this transaction including transaction fee.</string>
     <string name="EthereumTransaction_Error_LowerThanBaseGasLimit">The selected fee value is too low and will be rejected!</string>
+    <string name="EthereumTransaction_Error_CannotEstimate">Error! Check balance and ensure there is enough ETH to cover fee. Or try increasing price slippage amount and try again.</string>
 
     <!--Swap-->
 
