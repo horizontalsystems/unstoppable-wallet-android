@@ -2,16 +2,20 @@ package io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.sub
 
 import android.content.Context
 import android.util.AttributeSet
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.view.isVisible
+import android.widget.FrameLayout
+import androidx.compose.foundation.layout.padding
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.SendConfirmationModule
-import kotlinx.android.synthetic.main.view_button_with_progressbar.view.*
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
+import kotlinx.android.synthetic.main.view_send_button.view.*
 
-class ConfirmationSendButtonView : ConstraintLayout {
+class ConfirmationSendButtonView : FrameLayout {
 
     init {
-        inflate(context, R.layout.view_button_with_progressbar, this)
+        inflate(context, R.layout.view_send_button, this)
     }
 
     constructor(context: Context) : super(context)
@@ -20,22 +24,33 @@ class ConfirmationSendButtonView : ConstraintLayout {
 
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
-    fun bind(state: SendConfirmationModule.SendButtonState) {
-        when(state) {
+    fun bind(state: SendConfirmationModule.SendButtonState, onClick: () -> Unit) {
+        when (state) {
             SendConfirmationModule.SendButtonState.ACTIVE -> {
-                buttonTextView.text = context.getString(R.string.Send_Confirmation_Send_Button)
-                progressBar.isVisible = false
-                buttonTextView.isEnabled = true
-                buttonWrapper.isEnabled = true
+                updateButton(context.getString(R.string.Send_Confirmation_Send_Button), true, onClick)
             }
             SendConfirmationModule.SendButtonState.SENDING -> {
-                buttonTextView.text = context.getString(R.string.Send_Sending)
-                progressBar.isVisible = true
-                buttonTextView.isEnabled = false
-                buttonWrapper.isEnabled = false
+                updateButton(context.getString(R.string.Send_Sending), false, onClick)
             }
         }
-        invalidate()
+    }
+
+    private fun updateButton(title: String, enabled: Boolean, onClick: () -> Unit) {
+        buttonSendCompose.setContent {
+            ComposeAppTheme {
+                ButtonPrimaryYellow(
+                    modifier = Modifier.padding(
+                        start = 16.dp,
+                        top = 24.dp,
+                        end = 16.dp,
+                        bottom = 24.dp
+                    ),
+                    title = title,
+                    onClick = onClick,
+                    enabled = enabled
+                )
+            }
+        }
     }
 
 }

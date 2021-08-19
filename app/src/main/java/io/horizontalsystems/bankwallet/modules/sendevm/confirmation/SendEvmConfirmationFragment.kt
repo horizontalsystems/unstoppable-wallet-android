@@ -6,17 +6,22 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.foundation.layout.padding
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.ethereum.EthereumFeeViewModel
-import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmViewModel
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.ethereumkit.models.Address
@@ -78,7 +83,7 @@ class SendEvmConfirmationFragment : BaseFragment() {
         }
 
         sendEvmTransactionViewModel.sendEnabledLiveData.observe(viewLifecycleOwner, { enabled ->
-            sendButton.isEnabled = enabled
+            setSendButton(enabled)
         })
 
         sendEvmTransactionViewModel.sendingLiveData.observe(viewLifecycleOwner, {
@@ -119,9 +124,26 @@ class SendEvmConfirmationFragment : BaseFragment() {
             }
         )
 
-        sendButton.setOnSingleClickListener {
-            logger.info("click send button")
-            sendEvmTransactionViewModel.send(logger)
+        buttonSendCompose.setViewCompositionStrategy(
+            ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+        )
+
+        setSendButton()
+    }
+
+    private fun setSendButton(enabled: Boolean = false) {
+        buttonSendCompose.setContent {
+            ComposeAppTheme {
+                ButtonPrimaryYellow(
+                    modifier = Modifier.padding(start = 16.dp, top = 24.dp, end = 16.dp, bottom = 24.dp),
+                    title = getString(R.string.Send_Confirmation_Send_Button),
+                    onClick = {
+                        logger.info("click send button")
+                        sendEvmTransactionViewModel.send(logger)
+                    },
+                    enabled = enabled
+                )
+            }
         }
     }
 
