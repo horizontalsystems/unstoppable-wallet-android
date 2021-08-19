@@ -6,6 +6,10 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.navGraphViewModels
@@ -13,10 +17,11 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.ethereum.EthereumFeeViewModel
-import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoOption
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoViewModel
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.snackbar.CustomSnackbar
@@ -65,7 +70,6 @@ class TransactionSpeedUpCancelFragment : BaseFragment() {
         }
 
         toolbar.title = speedUpCancelViewModel.title
-        sendButton.text = speedUpCancelViewModel.buttonTitle
         description.text = speedUpCancelViewModel.description
 
         toolbar.setNavigationOnClickListener {
@@ -112,23 +116,37 @@ class TransactionSpeedUpCancelFragment : BaseFragment() {
             }
         )
 
-        sendButton.setOnSingleClickListener {
-            logger.info("click send button")
-            sendEvmTransactionViewModel.send(logger)
-        }
-
         if (speedUpCancelViewModel.isTransactionPending) {
             sendEvmTransactionViewModel.sendEnabledLiveData.observe(viewLifecycleOwner, { enabled ->
-                sendButton.isEnabled = enabled
+                setButton(enabled)
             })
         } else {
-            sendButton.isEnabled = false
+            setButton(false)
             HudHelper.showErrorMessage(requireActivity().findViewById(android.R.id.content), R.string.TransactionInfoOptions_Warning_TransactionInBlock)
             Handler(Looper.getMainLooper()).postDelayed({
                 findNavController().popBackStack(R.id.transactionInfoFragment, true)
             }, 1500)
         }
 
+        setButton()
+    }
+
+    private fun setButton(enabled: Boolean = false) {
+        buttonSendCompose.setContent {
+            ComposeAppTheme {
+                ButtonPrimaryYellow(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 16.dp, top = 24.dp, end = 16.dp),
+                    title = speedUpCancelViewModel.buttonTitle,
+                    onClick = {
+                        logger.info("click send button")
+                        sendEvmTransactionViewModel.send(logger)
+                    },
+                    enabled = enabled
+                )
+            }
+        }
     }
 
     override fun onDestroyView() {
