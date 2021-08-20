@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import androidx.compose.foundation.layout.padding
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
@@ -91,6 +92,10 @@ class SwapApproveFragment : BaseFragment() {
                 findNavController().popBackStack(R.id.swapFragment, false)
             }
         }
+
+        buttonProceedCompose.setViewCompositionStrategy(
+            ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+        )
     }
 
     private fun setButton(enabled: Boolean, onClick: () -> Unit) {

@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
@@ -127,6 +128,10 @@ class TransactionSpeedUpCancelFragment : BaseFragment() {
                 findNavController().popBackStack(R.id.transactionInfoFragment, true)
             }, 1500)
         }
+
+        buttonSendCompose.setViewCompositionStrategy(
+            ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+        )
 
         setButton()
     }

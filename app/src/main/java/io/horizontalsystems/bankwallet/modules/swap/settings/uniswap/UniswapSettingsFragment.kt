@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.padding
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.navigation.navGraphViewModels
@@ -74,6 +75,10 @@ class UniswapSettingsFragment : SwapSettingsBaseFragment() {
 
         slippageInputView.setViewModel(slippageViewModel, viewLifecycleOwner)
         deadlineInputView.setViewModel(deadlineViewModel, viewLifecycleOwner)
+
+        buttonApplyCompose.setViewCompositionStrategy(
+            ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+        )
     }
 
     private fun setButton(title: String, enabled: Boolean = false) {
