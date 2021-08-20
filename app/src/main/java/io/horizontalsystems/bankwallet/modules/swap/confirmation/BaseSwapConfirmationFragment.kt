@@ -6,20 +6,26 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.foundation.layout.padding
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.unit.dp
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.ethereum.EthereumFeeViewModel
-import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainViewModel
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.snackbar.CustomSnackbar
 import io.horizontalsystems.snackbar.SnackbarDuration
 import kotlinx.android.synthetic.main.fragment_confirmation_swap.*
+import kotlinx.android.synthetic.main.fragment_confirmation_swap.toolbar
 
 abstract class BaseSwapConfirmationFragment : BaseFragment() {
 
@@ -58,7 +64,7 @@ abstract class BaseSwapConfirmationFragment : BaseFragment() {
         }
 
         sendViewModel.sendEnabledLiveData.observe(viewLifecycleOwner, { enabled ->
-            swapButton.isEnabled = enabled
+            setButton(enabled)
         })
 
         sendViewModel.sendingLiveData.observe(viewLifecycleOwner, {
@@ -95,15 +101,35 @@ abstract class BaseSwapConfirmationFragment : BaseFragment() {
             }
         )
 
-        swapButton.setOnSingleClickListener {
-            logger.info("click swap button")
-            sendViewModel.send(logger)
-        }
+        buttonSwapCompose.setViewCompositionStrategy(
+            ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+        )
     }
 
     override fun onDestroyView() {
         snackbarInProcess?.dismiss()
         super.onDestroyView()
+    }
+
+    private fun setButton(enabled: Boolean) {
+        buttonSwapCompose.setContent {
+            ComposeAppTheme {
+                ButtonPrimaryYellow(
+                    modifier = Modifier.padding(
+                        start = 16.dp,
+                        top = 24.dp,
+                        end = 16.dp,
+                        bottom = 24.dp
+                    ),
+                    title = getString(R.string.Swap),
+                    onClick = {
+                        logger.info("click swap button")
+                        sendViewModel.send(logger)
+                    },
+                    enabled = enabled
+                )
+            }
+        }
     }
 
 }
