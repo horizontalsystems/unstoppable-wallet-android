@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.TextView
 import androidx.compose.foundation.layout.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.unit.dp
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentActivity
@@ -61,6 +62,10 @@ class ConfirmationDialog(
 
         contentTextView.isVisible = contentText != null
         contentTextView.text = contentText
+
+        buttonsCompose.setViewCompositionStrategy(
+            ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+        )
 
         setButtons()
     }

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.compose.foundation.layout.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.FragmentActivity
 import io.horizontalsystems.bankwallet.R
@@ -32,6 +33,10 @@ class SyncErrorDialog(
         setTitle(activity?.getString(R.string.BalanceSyncError_Title))
         setSubtitle(coinName)
         setHeaderIcon(R.drawable.ic_attention_red_24)
+
+        buttonsCompose.setViewCompositionStrategy(
+            ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+        )
 
         setButtons()
     }

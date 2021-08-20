@@ -5,6 +5,7 @@ import android.view.View
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -19,6 +20,10 @@ class WalletConnectErrorFragment : Fragment(R.layout.fragment_wallet_connect_err
         super.onViewCreated(view, savedInstanceState)
 
         message.text = arguments?.getString(MESSAGE_KEY)
+
+        buttonCancelCompose.setViewCompositionStrategy(
+            ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+        )
 
         buttonCancelCompose.setContent {
             ComposeAppTheme {

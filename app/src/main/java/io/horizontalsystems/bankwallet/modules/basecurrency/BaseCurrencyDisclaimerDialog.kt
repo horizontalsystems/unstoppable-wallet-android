@@ -9,6 +9,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.compose.foundation.layout.padding
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.DialogFragment
 import io.horizontalsystems.bankwallet.R
@@ -30,6 +31,10 @@ class BaseCurrencyDisclaimerDialog(val popularCurrencies: String) : DialogFragme
         mDialog?.setCanceledOnTouchOutside(true)
 
         rootView.findViewById<ComposeView>(R.id.buttonConfirmCompose)?.let {
+            it.setViewCompositionStrategy(
+                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+            )
+
             it.setContent {
                 ComposeAppTheme {
                     ButtonPrimaryYellow(
