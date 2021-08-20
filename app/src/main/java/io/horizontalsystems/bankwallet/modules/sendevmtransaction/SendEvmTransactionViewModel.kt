@@ -35,7 +35,7 @@ class SendEvmTransactionViewModel(
 ) : ViewModel() {
     private val disposable = CompositeDisposable()
 
-    val sendEnabledLiveData = MutableLiveData<Boolean>()
+    val sendEnabledLiveData = MutableLiveData(false)
     val errorLiveData = MutableLiveData<String?>()
 
     val sendingLiveData = MutableLiveData<Unit>()
