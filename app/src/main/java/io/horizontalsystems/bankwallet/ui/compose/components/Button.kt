@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.ui.compose.*
 import io.horizontalsystems.bankwallet.ui.compose.Grey50
@@ -29,7 +30,7 @@ fun ButtonPrimaryDefault(
         colors = ButtonDefaults.textButtonColors(
             backgroundColor = ComposeAppTheme.colors.leah,
         ),
-        content = { Text(title) },
+        content = { Text(title, maxLines = 1, overflow = TextOverflow.Ellipsis) },
         enabled = enabled
     )
 }
@@ -47,7 +48,7 @@ fun ButtonPrimaryYellow(
         colors = ButtonDefaults.textButtonColors(
             backgroundColor = YellowD,
         ),
-        content = { Text(title) },
+        content = { Text(title, maxLines = 1, overflow = TextOverflow.Ellipsis) },
         enabled = enabled
     )
 }
@@ -65,7 +66,7 @@ fun ButtonPrimaryRed(
         colors = ButtonDefaults.textButtonColors(
             backgroundColor = RedD,
         ),
-        content = { Text(title) },
+        content = { Text(title, maxLines = 1, overflow = TextOverflow.Ellipsis) },
         enabled = enabled
     )
 }

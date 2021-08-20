@@ -198,42 +198,28 @@
                 android:visibility="visible"
                 app:constraint_referenced_ids="minMaxTitle,minMaxValue" />
 
-            <Button
-                android:id="@+id/approveButton"
-                style="@style/ButtonPrimarySteel"
+            <androidx.compose.ui.platform.ComposeView
+                android:id="@+id/buttonsCompose"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="28dp"
-                android:layout_marginEnd="4dp"
-                android:layout_marginBottom="12dp"
-                android:text="@string/Swap_Approve"
-                android:visibility="gone"
-                app:layout_constraintEnd_toStartOf="@id/proceedButton"
-                app:layout_constraintStart_toStartOf="@id/startBorder"
-                app:layout_constraintTop_toBottomOf="@+id/commonError" />
-
-            <Button
-                android:id="@+id/proceedButton"
-                style="@style/ButtonPrimaryYellow"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:layout_marginTop="28dp"
-                android:layout_marginBottom="12dp"
-                android:text="@string/Swap_Proceed"
                 app:layout_constraintEnd_toEndOf="@id/endBorder"
-                app:layout_constraintStart_toEndOf="@id/approveButton"
-                app:layout_constraintTop_toBottomOf="@+id/commonError" />
+                app:layout_constraintStart_toStartOf="@id/startBorder"
+                app:layout_constraintTop_toBottomOf="@+id/commonError"
+                tools:layout_height="50dp"
+                tools:layout_marginTop="28dp"
+                />
 
             <io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceStepsView
                 android:id="@+id/approveStepsView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                android:layout_marginBottom="38dp"
                 android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@id/endBorder"
                 app:layout_constraintStart_toEndOf="@id/startBorder"
-                app:layout_constraintTop_toBottomOf="@id/proceedButton" />
+                app:layout_constraintTop_toBottomOf="@id/buttonsCompose"
+                />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

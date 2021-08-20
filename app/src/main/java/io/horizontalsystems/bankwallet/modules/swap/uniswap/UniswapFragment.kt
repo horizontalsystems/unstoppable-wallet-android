@@ -5,7 +5,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
+import androidx.compose.foundation.layout.*
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.unit.dp
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
@@ -18,8 +21,10 @@ import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceViewM
 import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveModule
 import io.horizontalsystems.bankwallet.modules.swap.coincard.SwapCoinCardViewModel
 import io.horizontalsystems.bankwallet.modules.swap.confirmation.uniswap.UniswapConfirmationModule
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.core.getNavigationResult
-import io.horizontalsystems.core.setOnSingleClickListener
 import kotlinx.android.synthetic.main.fragment_uniswap.*
 
 class UniswapFragment : SwapBaseFragment() {
@@ -100,15 +105,11 @@ class UniswapFragment : SwapBaseFragment() {
             uniswapViewModel.onTapSwitch()
         }
 
-        approveButton.setOnSingleClickListener {
-            uniswapViewModel.onTapApprove()
-        }
-
-        proceedButton.setOnSingleClickListener {
-            uniswapViewModel.onTapProceed()
-        }
-
         poweredBy.text = dex.provider.title
+
+        buttonsCompose.setViewCompositionStrategy(
+            ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+        )
     }
 
     private fun observeViewModel() {
@@ -125,12 +126,8 @@ class UniswapFragment : SwapBaseFragment() {
             setTradeViewItem(tradeViewItem)
         })
 
-        uniswapViewModel.proceedActionLiveData().observe(viewLifecycleOwner, { action ->
-            handleButtonAction(proceedButton, action)
-        })
-
-        uniswapViewModel.approveActionLiveData().observe(viewLifecycleOwner, { approveActionState ->
-            handleButtonAction(approveButton, approveActionState)
+        uniswapViewModel.buttonsLiveData().observe(viewLifecycleOwner, { buttons ->
+            setButtons(buttons)
         })
 
         uniswapViewModel.openApproveLiveEvent().observe(viewLifecycleOwner, { approveData ->
@@ -165,21 +162,54 @@ class UniswapFragment : SwapBaseFragment() {
         })
     }
 
-    private fun handleButtonAction(button: Button, action: UniswapViewModel.ActionState?) {
-        when (action) {
-            UniswapViewModel.ActionState.Hidden -> {
-                button.isVisible = false
+    private fun setButtons(buttons: UniswapViewModel.Buttons) {
+        val approveButtonVisible = buttons.approve != UniswapViewModel.ActionState.Hidden
+        buttonsCompose.setContent {
+            ComposeAppTheme {
+                Row(
+                    modifier = Modifier.width(IntrinsicSize.Max)
+                        .padding(top = 28.dp, bottom = 24.dp)
+                ) {
+                    if (approveButtonVisible) {
+                        ButtonPrimaryDefault(
+                            modifier = Modifier
+                                .weight(1f)
+                                .padding(end = 4.dp),
+                            title = getTitle(buttons.approve),
+                            onClick = {
+                                uniswapViewModel.onTapApprove()
+                            },
+                            enabled = buttons.approve is UniswapViewModel.ActionState.Enabled
+                        )
+                    }
+                    ButtonPrimaryYellow(
+                        modifier = Modifier
+                            .weight(1f)
+                            .then(getProceedButtonModifier(approveButtonVisible)),
+                        title = getTitle(buttons.proceed),
+                        onClick = {
+                            uniswapViewModel.onTapProceed()
+                        },
+                        enabled = buttons.proceed is UniswapViewModel.ActionState.Enabled
+                    )
+                }
             }
-            is UniswapViewModel.ActionState.Enabled -> {
-                button.isVisible = true
-                button.isEnabled = true
-                button.text = action.title
-            }
-            is UniswapViewModel.ActionState.Disabled -> {
-                button.isVisible = true
-                button.isEnabled = false
-                button.text = action.title
-            }
+        }
+    }
+
+    private fun getProceedButtonModifier(approveButtonVisible: Boolean): Modifier {
+        return if (approveButtonVisible) {
+            Modifier.padding(start = 4.dp)
+        } else {
+            Modifier.fillMaxWidth()
+        }
+    }
+
+    private fun getTitle(action: UniswapViewModel.ActionState?): String {
+        return when (action) {
+            is UniswapViewModel.ActionState.Enabled -> action.title
+            is UniswapViewModel.ActionState.Disabled -> action.title
+            else -> ""
         }
     }
 
