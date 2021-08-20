@@ -33,7 +33,7 @@ class SwapApproveViewModel(
 
     private val disposables = CompositeDisposable()
 
-    val approveAllowedLiveData = MutableLiveData<Boolean>()
+    val approveAllowedLiveData = MutableLiveData(false)
     val openConfirmationLiveEvent = SingleLiveEvent<SendEvmData>()
     val amountErrorLiveData = MutableLiveData<String?>(null)
 

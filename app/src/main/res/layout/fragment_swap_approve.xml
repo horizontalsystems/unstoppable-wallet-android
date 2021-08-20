@@ -77,19 +77,17 @@
                     tools:text="You already have an allowance for this amount" />
             </LinearLayout>
 
-            <Button
-                android:id="@+id/btnProceed"
-                style="@style/ButtonPrimaryYellow"
+            <androidx.compose.ui.platform.ComposeView
+                android:id="@+id/buttonProceedCompose"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="28dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="16dp"
-                android:text="@string/Swap_Proceed"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/amountWrapper" />
+                app:layout_constraintTop_toBottomOf="@+id/amountWrapper"
+                tools:layout_height="50dp"
+                tools:layout_marginBottom="16dp"
+                tools:layout_marginTop="28dp"
+                />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
