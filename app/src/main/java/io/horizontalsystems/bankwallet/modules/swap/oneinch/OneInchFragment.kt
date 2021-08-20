@@ -4,7 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
+import androidx.compose.foundation.layout.*
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.unit.dp
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
@@ -17,8 +20,12 @@ import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceViewM
 import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveModule
 import io.horizontalsystems.bankwallet.modules.swap.coincard.SwapCoinCardViewModel
 import io.horizontalsystems.bankwallet.modules.swap.confirmation.oneinch.OneInchConfirmationModule
+import io.horizontalsystems.bankwallet.modules.swap.oneinch.OneInchSwapViewModel.ActionState
+import io.horizontalsystems.bankwallet.modules.swap.oneinch.OneInchSwapViewModel.Buttons
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.core.getNavigationResult
-import io.horizontalsystems.core.setOnSingleClickListener
 import kotlinx.android.synthetic.main.fragment_1inch.*
 
 class OneInchFragment : SwapBaseFragment() {
@@ -100,15 +107,11 @@ class OneInchFragment : SwapBaseFragment() {
             oneInchViewModel.onTapSwitch()
         }
 
-        approveButton.setOnSingleClickListener {
-            oneInchViewModel.onTapApprove()
-        }
-
-        proceedButton.setOnSingleClickListener {
-            oneInchViewModel.onTapProceed()
-        }
-
         poweredBy.text = dex.provider.title
+
+        buttonsCompose.setViewCompositionStrategy(
+            ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+        )
     }
 
     private fun observeViewModel() {
@@ -121,12 +124,8 @@ class OneInchFragment : SwapBaseFragment() {
             commonError.isVisible = error != null
         })
 
-        oneInchViewModel.proceedActionLiveData().observe(viewLifecycleOwner, { action ->
-            handleButtonAction(proceedButton, action)
-        })
-
-        oneInchViewModel.approveActionLiveData().observe(viewLifecycleOwner, { approveActionState ->
-            handleButtonAction(approveButton, approveActionState)
+        oneInchViewModel.buttonsLiveData().observe(viewLifecycleOwner, { buttons ->
+            setButtons(buttons)
         })
 
         oneInchViewModel.openApproveLiveEvent().observe(viewLifecycleOwner, { approveData ->
@@ -162,21 +161,54 @@ class OneInchFragment : SwapBaseFragment() {
         })
     }
 
-    private fun handleButtonAction(button: Button, action: OneInchSwapViewModel.ActionState?) {
-        when (action) {
-            OneInchSwapViewModel.ActionState.Hidden -> {
-                button.isVisible = false
+    private fun setButtons(buttons: Buttons) {
+        val approveButtonVisible = buttons.approve != ActionState.Hidden
+        buttonsCompose.setContent {
+            ComposeAppTheme {
+                Row(
+                    modifier = Modifier.width(IntrinsicSize.Max)
+                        .padding(top = 28.dp, bottom = 24.dp)
+                ) {
+                    if (approveButtonVisible) {
+                        ButtonPrimaryDefault(
+                            modifier = Modifier
+                                .weight(1f)
+                                .padding(end = 4.dp),
+                            title = getTitle(buttons.approve),
+                            onClick = {
+                                oneInchViewModel.onTapApprove()
+                            },
+                            enabled = buttons.approve is ActionState.Enabled
+                        )
+                    }
+                    ButtonPrimaryYellow(
+                        modifier = Modifier
+                            .weight(1f)
+                            .then(getProceedButtonModifier(approveButtonVisible)),
+                        title = getTitle(buttons.proceed),
+                        onClick = {
+                            oneInchViewModel.onTapProceed()
+                        },
+                        enabled = buttons.proceed is ActionState.Enabled
+                    )
+                }
             }
-            is OneInchSwapViewModel.ActionState.Enabled -> {
-                button.isVisible = true
-                button.isEnabled = true
-                button.text = action.title
-            }
-            is OneInchSwapViewModel.ActionState.Disabled -> {
-                button.isVisible = true
-                button.isEnabled = false
-                button.text = action.title
-            }
+        }
+    }
+
+    private fun getProceedButtonModifier(approveButtonVisible: Boolean): Modifier {
+        return if (approveButtonVisible) {
+            Modifier.padding(start = 4.dp)
+        } else {
+            Modifier.fillMaxWidth()
+        }
+    }
+
+    private fun getTitle(action: ActionState?): String {
+        return when (action) {
+            is ActionState.Enabled -> action.title
+            is ActionState.Disabled -> action.title
+            else -> ""
         }
     }
 
