@@ -35,7 +35,7 @@ import java.util.*
 
 class ZcashAdapter(
         context: Context,
-        wallet: Wallet,
+        private val wallet: Wallet,
         restoreSettings: RestoreSettings,
         testMode: Boolean
 ) : IAdapter, IBalanceAdapter, IReceiveAdapter, ITransactionsAdapter, ISendZcashAdapter {
@@ -45,7 +45,6 @@ class ZcashAdapter(
     private val feeChangeHeight: Long = if (testMode) 1_028_500 else 1_077_550
     private val lightWalletDHost = if (testMode) network.defaultHost else "zcash.horizontalsystems.xyz"
     private val lightWalletDPort = 9067
-    private val coin = wallet.coin
 
     private val synchronizer: Synchronizer
     private val seed: ByteArray
@@ -313,40 +312,42 @@ class ZcashAdapter(
 
         return if (incoming) {
             BitcoinIncomingTransactionRecord(
-                    coin = coin,
-                    uid = transactionHashHex,
-                    transactionHash = transactionHashHex,
-                    transactionIndex = transaction.transactionIndex,
-                    blockHeight = transaction.minedHeight,
-                    confirmationsThreshold = confirmationsThreshold,
-                    timestamp = transaction.timestamp,
-                    fee = defaultFee(transaction.minedHeight.toLong()).convertZatoshiToZec(),
-                    failed = transaction.failed,
-                    lockInfo = null,
-                    conflictingHash = null,
-                    showRawTransaction = false,
-                    amount = transaction.value.convertZatoshiToZec(),
-                    from = null,
-                    memo = transaction.memo
+                coin = wallet.coin,
+                uid = transactionHashHex,
+                transactionHash = transactionHashHex,
+                transactionIndex = transaction.transactionIndex,
+                blockHeight = transaction.minedHeight,
+                confirmationsThreshold = confirmationsThreshold,
+                timestamp = transaction.timestamp,
+                fee = defaultFee(transaction.minedHeight.toLong()).convertZatoshiToZec(),
+                failed = transaction.failed,
+                lockInfo = null,
+                conflictingHash = null,
+                showRawTransaction = false,
+                amount = transaction.value.convertZatoshiToZec(),
+                from = null,
+                memo = transaction.memo,
+                source = wallet.transactionSource
             )
         } else {
             BitcoinOutgoingTransactionRecord(
-                    coin = coin,
-                    uid = transactionHashHex,
-                    transactionHash = transactionHashHex,
-                    transactionIndex = transaction.transactionIndex,
-                    blockHeight = transaction.minedHeight,
-                    confirmationsThreshold = confirmationsThreshold,
-                    timestamp = transaction.timestamp,
-                    fee = defaultFee(transaction.minedHeight.toLong()).convertZatoshiToZec(),
-                    failed = transaction.failed,
-                    lockInfo = null,
-                    conflictingHash = null,
-                    showRawTransaction = false,
-                    amount = transaction.value.convertZatoshiToZec(),
-                    to = transaction.toAddress,
-                    sentToSelf = false,
-                    memo = transaction.memo
+                coin = wallet.coin,
+                uid = transactionHashHex,
+                transactionHash = transactionHashHex,
+                transactionIndex = transaction.transactionIndex,
+                blockHeight = transaction.minedHeight,
+                confirmationsThreshold = confirmationsThreshold,
+                timestamp = transaction.timestamp,
+                fee = defaultFee(transaction.minedHeight.toLong()).convertZatoshiToZec(),
+                failed = transaction.failed,
+                lockInfo = null,
+                conflictingHash = null,
+                showRawTransaction = false,
+                amount = transaction.value.convertZatoshiToZec(),
+                to = transaction.toAddress,
+                sentToSelf = false,
+                memo = transaction.memo,
+                source = wallet.transactionSource
             )
         }
     }

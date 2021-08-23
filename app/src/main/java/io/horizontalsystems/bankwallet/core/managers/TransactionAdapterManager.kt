@@ -40,14 +40,14 @@ class TransactionAdapterManager(
         when (wallet.coin.type) {
             CoinType.Ethereum, is CoinType.Erc20 -> {
                 if (blockchain == TransactionSource.Blockchain.Ethereum) {
-                    adapterFactory.ethereumTransactionsAdapter(wallet.account)
+                    adapterFactory.ethereumTransactionsAdapter(wallet.transactionSource)
                 } else {
                     null
                 }
             }
             CoinType.BinanceSmartChain, is CoinType.Bep20 -> {
                 if (blockchain == TransactionSource.Blockchain.BinanceSmartChain) {
-                    adapterFactory.bscTransactionsAdapter(wallet.account)
+                    adapterFactory.bscTransactionsAdapter(wallet.transactionSource)
                 } else {
                     null
                 }

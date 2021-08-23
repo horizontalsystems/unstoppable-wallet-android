@@ -4,6 +4,7 @@ import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.LastBlockInfo
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionLockInfo
+import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
 import java.util.*
 
 abstract class BitcoinTransactionRecord(
@@ -18,7 +19,8 @@ abstract class BitcoinTransactionRecord(
     val lockInfo: TransactionLockInfo?,
     val conflictingHash: String?,
     val showRawTransaction: Boolean,
-    val memo: String?
+    val memo: String?,
+    source: TransactionSource
 ) : TransactionRecord(
     uid = uid,
     transactionHash = transactionHash,
@@ -26,7 +28,8 @@ abstract class BitcoinTransactionRecord(
     blockHeight = blockHeight,
     confirmationsThreshold = confirmationsThreshold,
     timestamp = timestamp,
-    failed = failed
+    failed = failed,
+    source = source
 ) {
 
     override fun changedBy(oldBlockInfo: LastBlockInfo?, newBlockInfo: LastBlockInfo?): Boolean {

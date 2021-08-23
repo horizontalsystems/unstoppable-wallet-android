@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.core.adapters
 import io.horizontalsystems.bankwallet.core.ICoinManager
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.*
+import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
 import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.erc20kit.decorations.ApproveMethodDecoration
@@ -23,7 +24,8 @@ import java.math.BigInteger
 
 class EvmTransactionConverter(
     private val coinManager: ICoinManager,
-    private val evmKit: EthereumKit
+    private val evmKit: EthereumKit,
+    private val source: TransactionSource
 ) {
 
     val baseCoin: Coin = when (evmKit.networkType) {
@@ -35,7 +37,7 @@ class EvmTransactionConverter(
         val transaction = fullTransaction.transaction
 
         val to =
-            transaction.to ?: return ContractCreationTransactionRecord(fullTransaction, baseCoin)
+            transaction.to ?: return ContractCreationTransactionRecord(fullTransaction, baseCoin, source)
 
         val methodDecoration = fullTransaction.mainDecoration
 
@@ -52,14 +54,16 @@ class EvmTransactionConverter(
                     amount = convertAmount(transaction.value, baseCoin.decimal, true),
                     to = to.eip55,
                     token = baseCoin,
-                    sentToSelf = to == transaction.from
+                    sentToSelf = to == transaction.from,
+                    source = source
                 )
                 to == evmKit.receiveAddress -> EvmIncomingTransactionRecord(
                     fullTransaction = fullTransaction,
                     baseCoin = baseCoin,
                     amount = convertAmount(transaction.value, baseCoin.decimal, false),
                     from = transaction.from.eip55,
-                    token = baseCoin
+                    token = baseCoin,
+                    source = source
                 )
                 else -> throw IllegalArgumentException()
             }
@@ -142,7 +146,8 @@ class EvmTransactionConverter(
                     amount = convertAmount(methodDecoration.value, token.decimal, true),
                     to = methodDecoration.to.eip55,
                     token = token,
-                    sentToSelf = methodDecoration.to == fullTransaction.transaction.from
+                    sentToSelf = methodDecoration.to == fullTransaction.transaction.from,
+                    source = source
                 )
             }
             is ApproveMethodDecoration -> {
@@ -153,6 +158,7 @@ class EvmTransactionConverter(
                     amount = convertAmount(methodDecoration.value, token.decimal, false),
                     spender = methodDecoration.spender.eip55,
                     token = token,
+                    source = source
                 )
             }
             is SwapMethodDecoration -> {
@@ -187,7 +193,8 @@ class EvmTransactionConverter(
                     tokenOut = tokenOut,
                     amountIn = convertAmount(resolvedAmountIn, tokenIn.decimal, true),
                     amountOut = convertAmount(resolvedAmountOut, tokenOut.decimal, false),
-                    foreignRecipient = methodDecoration.to != evmKit.receiveAddress
+                    foreignRecipient = methodDecoration.to != evmKit.receiveAddress,
+                    source = source
                 )
             }
             is OneInchUnoswapMethodDecoration -> {
@@ -223,7 +230,8 @@ class EvmTransactionConverter(
                     tokenOut = tokenOut,
                     amountIn = resolvedFromAmount,
                     amountOut = resolvedToAmount,
-                    foreignRecipient = false
+                    foreignRecipient = false,
+                    source = source
                 )
             }
             is OneInchSwapMethodDecoration -> {
@@ -265,7 +273,8 @@ class EvmTransactionConverter(
                     tokenOut = tokenOut,
                     amountIn = resolvedAmountIn,
                     amountOut = resolvedAmountOut,
-                    foreignRecipient = methodDecoration.recipient != evmKit.receiveAddress
+                    foreignRecipient = methodDecoration.recipient != evmKit.receiveAddress,
+                    source = source
                 )
             }
             is RecognizedMethodDecoration -> {
@@ -277,7 +286,8 @@ class EvmTransactionConverter(
                     convertAmount(fullTransaction.transaction.value, baseCoin.decimal, true),
                     getInternalTransactions(fullTransaction),
                     getIncomingEip20Events(fullTransaction),
-                    getOutgoingEip20Events(fullTransaction)
+                    getOutgoingEip20Events(fullTransaction),
+                    source
                 )
             }
             is UnknownMethodDecoration -> {
@@ -289,8 +299,9 @@ class EvmTransactionConverter(
                     convertAmount(fullTransaction.transaction.value, baseCoin.decimal, true),
                     getInternalTransactions(fullTransaction),
                     getIncomingEip20Events(fullTransaction),
-                    getOutgoingEip20Events(fullTransaction)
-                    )
+                    getOutgoingEip20Events(fullTransaction),
+                    source
+                )
             }
             else -> throw IllegalArgumentException()
         }
@@ -311,7 +322,8 @@ class EvmTransactionConverter(
                         amount = convertAmount(methodDecoration.value, token.decimal, false),
                         from = methodDecoration.to.eip55,
                         token = token,
-                        foreignTransaction = true
+                        foreignTransaction = true,
+                        source = source
                     )
                 }
             }
@@ -324,7 +336,8 @@ class EvmTransactionConverter(
                     convertAmount(fullTransaction.transaction.value, baseCoin.decimal, true),
                     getInternalTransactions(fullTransaction),
                     getIncomingEip20Events(fullTransaction),
-                    getOutgoingEip20Events(fullTransaction)
+                    getOutgoingEip20Events(fullTransaction),
+                    source
                 )
             }
             is UnknownMethodDecoration -> {
@@ -336,7 +349,8 @@ class EvmTransactionConverter(
                     convertAmount(fullTransaction.transaction.value, baseCoin.decimal, true),
                     getInternalTransactions(fullTransaction),
                     getIncomingEip20Events(fullTransaction),
-                    getOutgoingEip20Events(fullTransaction)
+                    getOutgoingEip20Events(fullTransaction),
+                    source
                 )
             }
         }

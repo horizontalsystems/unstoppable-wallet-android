@@ -13,10 +13,10 @@ abstract class TransactionRecord(
     val confirmationsThreshold: Int?,
     val timestamp: Long,
     val failed: Boolean = false,
-    val blockchainTitle: String = ""
+    val blockchainTitle: String = "",
+    val source: TransactionSource
 ) : Comparable<TransactionRecord> {
 
-    val source: TransactionSource get() = TODO()
     open val mainValue: CoinValue? = null
 
     open fun changedBy(oldBlockInfo: LastBlockInfo?, newBlockInfo: LastBlockInfo?): Boolean =

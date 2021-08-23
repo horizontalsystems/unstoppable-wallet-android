@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin
 
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionLockInfo
+import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
 import io.horizontalsystems.coinkit.models.Coin
 import java.math.BigDecimal
 
@@ -21,7 +22,8 @@ class BitcoinOutgoingTransactionRecord(
     amount: BigDecimal,
     val to: String?,
     val sentToSelf: Boolean,
-    memo: String? = null
+    memo: String? = null,
+    source: TransactionSource
 ) : BitcoinTransactionRecord(
     uid = uid,
     transactionHash = transactionHash,
@@ -34,7 +36,8 @@ class BitcoinOutgoingTransactionRecord(
     lockInfo = lockInfo,
     conflictingHash = conflictingHash,
     showRawTransaction = showRawTransaction,
-    memo = memo
+    memo = memo,
+    source = source
 ) {
     val value: CoinValue = CoinValue(coin, amount)
 

@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.entities.transactionrecords.evm
 
 import io.horizontalsystems.bankwallet.entities.CoinValue
+import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
 import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.ethereumkit.models.FullTransaction
 import java.math.BigDecimal
@@ -11,8 +12,9 @@ class EvmIncomingTransactionRecord(
     amount: BigDecimal,
     val from: String,
     token: Coin,
-    override val foreignTransaction: Boolean = false
-) : EvmTransactionRecord(fullTransaction, baseCoin) {
+    override val foreignTransaction: Boolean = false,
+    source: TransactionSource
+) : EvmTransactionRecord(fullTransaction, baseCoin, source) {
 
     val value: CoinValue = CoinValue(token, amount)
 

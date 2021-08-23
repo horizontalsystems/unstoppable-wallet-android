@@ -4,9 +4,11 @@ import android.content.Context
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.adapters.*
 import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
-import io.horizontalsystems.bankwallet.core.managers.*
-import io.horizontalsystems.bankwallet.entities.Account
+import io.horizontalsystems.bankwallet.core.managers.BinanceKitManager
+import io.horizontalsystems.bankwallet.core.managers.EvmKitManager
+import io.horizontalsystems.bankwallet.core.managers.RestoreSettingsManager
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
 import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.BackgroundManager
 
@@ -23,12 +25,12 @@ class AdapterFactory(
     var initialSyncModeSettingsManager: IInitialSyncModeSettingsManager? = null
     var ethereumRpcModeSettingsManager: IEthereumRpcModeSettingsManager? = null
 
-    fun ethereumTransactionsAdapter(account: Account): ITransactionsAdapter {
-        return EvmTransactionsAdapter(ethereumKitManager.evmKit(account), coinManager)
+    fun ethereumTransactionsAdapter(source: TransactionSource): ITransactionsAdapter {
+        return EvmTransactionsAdapter(ethereumKitManager.evmKit(source.account), coinManager, source)
     }
 
-    fun bscTransactionsAdapter(account: Account): ITransactionsAdapter {
-        return EvmTransactionsAdapter(binanceSmartChainKitManager.evmKit(account), coinManager)
+    fun bscTransactionsAdapter(source: TransactionSource): ITransactionsAdapter {
+        return EvmTransactionsAdapter(binanceSmartChainKitManager.evmKit(source.account), coinManager, source)
     }
 
     fun adapter(wallet: Wallet): IAdapter? {
@@ -40,11 +42,11 @@ class AdapterFactory(
             is CoinType.Litecoin -> LitecoinAdapter(wallet, syncMode, testMode, backgroundManager)
             is CoinType.BitcoinCash -> BitcoinCashAdapter(wallet, syncMode, testMode, backgroundManager)
             is CoinType.Dash -> DashAdapter(wallet, syncMode, testMode, backgroundManager)
-            is CoinType.Bep2 -> BinanceAdapter(binanceKitManager.binanceKit(wallet), coinType.symbol, wallet.coin, coinManager.getCoinOrStub(CoinType.Bep2("BNB")))
+            is CoinType.Bep2 -> BinanceAdapter(binanceKitManager.binanceKit(wallet), coinType.symbol, coinManager.getCoinOrStub(CoinType.Bep2("BNB")), wallet)
             is CoinType.Ethereum -> EvmAdapter(ethereumKitManager.evmKit(wallet.account), coinManager)
-            is CoinType.Erc20 -> Eip20Adapter(context, ethereumKitManager.evmKit(wallet.account), wallet.coin.decimal, coinType.address, coinManager)
+            is CoinType.Erc20 -> Eip20Adapter(context, ethereumKitManager.evmKit(wallet.account), coinType.address, coinManager, wallet)
             is CoinType.BinanceSmartChain -> EvmAdapter(binanceSmartChainKitManager.evmKit(wallet.account), coinManager)
-            is CoinType.Bep20 -> Eip20Adapter(context, binanceSmartChainKitManager.evmKit(wallet.account), wallet.coin.decimal, coinType.address, coinManager)
+            is CoinType.Bep20 -> Eip20Adapter(context, binanceSmartChainKitManager.evmKit(wallet.account), coinType.address, coinManager, wallet)
             is CoinType.Unsupported -> null
         }
     }
