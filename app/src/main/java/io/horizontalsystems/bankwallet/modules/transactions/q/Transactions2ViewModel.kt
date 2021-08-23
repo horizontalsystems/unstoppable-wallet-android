@@ -8,7 +8,6 @@ import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.LastBlockInfo
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
-import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.TransactionLockState
 import io.horizontalsystems.bankwallet.modules.transactionInfo.ColoredValue
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Observable
@@ -85,7 +84,6 @@ class Transactions2ViewModel(
 data class TransactionItem(
     val record: TransactionRecord,
     val xxxCurrencyValue: CurrencyValue?,
-    val lockState: TransactionLockState?,
     val lastBlockInfo: LastBlockInfo?
 )
 
@@ -97,9 +95,9 @@ data class TransactionViewItem2(
     val subtitle: String,
     val primaryValue: ColoredValue?,
     val secondaryValue: ColoredValue?,
-    val locked: Boolean?,
     val sentToSelf: Boolean,
-    val doubleSpend: Boolean
+    val doubleSpend: Boolean,
+    val locked: Boolean? = null
 ) {
     fun itemTheSame(newItem: TransactionViewItem2) = uid == newItem.uid
 
