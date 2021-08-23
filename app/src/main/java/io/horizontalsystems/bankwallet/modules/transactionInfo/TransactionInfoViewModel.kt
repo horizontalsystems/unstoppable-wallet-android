@@ -14,8 +14,8 @@ import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.Bitco
 import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.*
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoButtonType.*
 import io.horizontalsystems.bankwallet.modules.transactionInfo.adapters.TransactionInfoViewItem
-import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource.*
-import io.horizontalsystems.bankwallet.modules.transactions.TransactionWallet
+import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
+import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource.Blockchain
 import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.ethereumkit.core.EthereumKit
@@ -26,15 +26,15 @@ class TransactionInfoViewModel(
     private val service: TransactionInfoService,
     private val factory: TransactionInfoViewItemFactory,
     private val transaction: TransactionRecord,
-    val transactionWallet: TransactionWallet,
+    source: TransactionSource,
     private val clearables: List<Clearable>
 ) : ViewModel() {
 
     val showShareLiveEvent = SingleLiveEvent<String>()
     val showTransactionLiveEvent = SingleLiveEvent<String>()
     val copyRawTransactionLiveEvent = SingleLiveEvent<String>()
-    val blockchain = transactionWallet.source.blockchain
-    val account = transactionWallet.source.account
+    val blockchain = source.blockchain
+    val account = source.account
     val openTransactionOptionsModule = SingleLiveEvent<Pair<TransactionInfoOption.Type, String>>()
 
     val viewItemsLiveData = MutableLiveData<List<TransactionInfoViewItem?>>()

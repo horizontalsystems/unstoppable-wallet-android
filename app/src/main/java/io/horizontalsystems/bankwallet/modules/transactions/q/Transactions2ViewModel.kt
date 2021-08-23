@@ -19,6 +19,8 @@ class Transactions2ViewModel(
     private val transactionViewItem2Factory: TransactionViewItem2Factory
 ) : ViewModel() {
 
+    lateinit var tmpItemToShow: TransactionItem
+
     val syncingLiveData =
         service.syncingObservable.toFlowable(BackpressureStrategy.DROP).toLiveData()
     val filterCoinsLiveData = MutableLiveData<List<Filter<Wallet>>>()
@@ -79,6 +81,8 @@ class Transactions2ViewModel(
     override fun onCleared() {
         service.clear()
     }
+
+    fun getTransactionItem(viewItem: TransactionViewItem2) = service.getTransactionItem(viewItem.uid)
 }
 
 data class TransactionItem(

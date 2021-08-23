@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.unit.dp
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.ConcatAdapter
@@ -17,8 +16,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.transactionInfo.adapters.TransactionInfoAdapter
 import io.horizontalsystems.bankwallet.modules.transactionInfo.options.TransactionSpeedUpCancelFragment
-import io.horizontalsystems.bankwallet.modules.transactions.TransactionsPresenter
-import io.horizontalsystems.bankwallet.modules.transactions.TransactionsViewModel
+import io.horizontalsystems.bankwallet.modules.transactions.q.Transactions2ViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
@@ -27,13 +25,12 @@ import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.android.synthetic.main.fragment_transaction_info.*
-import kotlinx.android.synthetic.main.fragment_transaction_info.toolbar
 import java.util.*
 
 class TransactionInfoFragment : BaseFragment(), TransactionInfoAdapter.Listener {
 
-    private val viewModelTxs by navGraphViewModels<TransactionsViewModel>(R.id.mainFragment)
-    private val viewModel by navGraphViewModels<TransactionInfoViewModel>(R.id.transactionInfoFragment) { TransactionInfoModule.Factory((viewModelTxs.delegate as TransactionsPresenter).itemDetails!!) }
+    private val viewModelTxs by navGraphViewModels<Transactions2ViewModel>(R.id.mainFragment)
+    private val viewModel by navGraphViewModels<TransactionInfoViewModel>(R.id.transactionInfoFragment) { TransactionInfoModule.Factory(viewModelTxs.tmpItemToShow) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
