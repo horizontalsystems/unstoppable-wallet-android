@@ -13,27 +13,34 @@ import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.Trans
 import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.*
 import io.horizontalsystems.bankwallet.modules.transactionInfo.ColoredValue
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoAddressMapper
+import io.horizontalsystems.bankwallet.modules.transactions.TransactionStatus
 
 class TransactionViewItem2Factory {
 
-    fun convertToViewItem(transactionItem: TransactionItem): TransactionViewItem2 = when (val record = transactionItem.record) {
-        is ApproveTransactionRecord -> createViewItemFromApproveTransactionRecord(record, transactionItem.xxxCurrencyValue, transactionItem.lockState)
-        is BinanceChainIncomingTransactionRecord -> createViewItemFromBinanceChainIncomingTransactionRecord(record, transactionItem.xxxCurrencyValue, transactionItem.lockState)
-        is BinanceChainOutgoingTransactionRecord -> createViewItemFromBinanceChainOutgoingTransactionRecord(record, transactionItem.xxxCurrencyValue, transactionItem.lockState)
-        is BitcoinIncomingTransactionRecord -> createViewItemFromBitcoinIncomingTransactionRecord(record, transactionItem.xxxCurrencyValue, transactionItem.lockState)
-        is BitcoinOutgoingTransactionRecord -> createViewItemFromBitcoinOutgoingTransactionRecord(record, transactionItem.xxxCurrencyValue, transactionItem.lockState)
-        is ContractCallTransactionRecord -> createViewItemFromContractCallTransactionRecord(record, transactionItem.xxxCurrencyValue, transactionItem.lockState)
-        is ContractCreationTransactionRecord -> createViewItemFromContractCreationTransactionRecord(record, transactionItem.xxxCurrencyValue, transactionItem.lockState)
-        is EvmIncomingTransactionRecord -> createViewItemFromEvmIncomingTransactionRecord(record, transactionItem.xxxCurrencyValue, transactionItem.lockState)
-        is EvmOutgoingTransactionRecord -> createViewItemFromEvmOutgoingTransactionRecord(record, transactionItem.xxxCurrencyValue, transactionItem.lockState)
-        is SwapTransactionRecord -> createViewItemFromSwapTransactionRecord(record, transactionItem.xxxCurrencyValue, transactionItem.lockState)
-        else -> throw IllegalArgumentException("Undefined record type ${record.javaClass.name}")
+    fun convertToViewItem(transactionItem: TransactionItem): TransactionViewItem2 {
+        val record = transactionItem.record
+        val status = record.status(transactionItem.lastBlockInfo?.height)
+
+        return when (record) {
+            is ApproveTransactionRecord -> createViewItemFromApproveTransactionRecord(record, transactionItem.xxxCurrencyValue, transactionItem.lockState, status)
+            is BinanceChainIncomingTransactionRecord -> createViewItemFromBinanceChainIncomingTransactionRecord(record, transactionItem.xxxCurrencyValue, transactionItem.lockState, status)
+            is BinanceChainOutgoingTransactionRecord -> createViewItemFromBinanceChainOutgoingTransactionRecord(record, transactionItem.xxxCurrencyValue, transactionItem.lockState, status)
+            is BitcoinIncomingTransactionRecord -> createViewItemFromBitcoinIncomingTransactionRecord(record, transactionItem.xxxCurrencyValue, transactionItem.lockState, status)
+            is BitcoinOutgoingTransactionRecord -> createViewItemFromBitcoinOutgoingTransactionRecord(record, transactionItem.xxxCurrencyValue, transactionItem.lockState, status)
+            is ContractCallTransactionRecord -> createViewItemFromContractCallTransactionRecord(record, transactionItem.xxxCurrencyValue, transactionItem.lockState, status)
+            is ContractCreationTransactionRecord -> createViewItemFromContractCreationTransactionRecord(record, transactionItem.xxxCurrencyValue, transactionItem.lockState, status)
+            is EvmIncomingTransactionRecord -> createViewItemFromEvmIncomingTransactionRecord(record, transactionItem.xxxCurrencyValue, transactionItem.lockState, status)
+            is EvmOutgoingTransactionRecord -> createViewItemFromEvmOutgoingTransactionRecord(record, transactionItem.xxxCurrencyValue, transactionItem.lockState, status)
+            is SwapTransactionRecord -> createViewItemFromSwapTransactionRecord(record, transactionItem.xxxCurrencyValue, transactionItem.lockState, status)
+            else -> throw IllegalArgumentException("Undefined record type ${record.javaClass.name}")
+        }
     }
 
     private fun createViewItemFromSwapTransactionRecord(
         record: SwapTransactionRecord,
         xxxCurrencyValue: CurrencyValue?,
-        lockState: TransactionLockState?
+        lockState: TransactionLockState?,
+        status: TransactionStatus
     ): TransactionViewItem2 {
         val primaryValue = ColoredValue(getCoinString(record.valueIn), R.color.jacob)
         val secondaryValue = record.valueOut?.let {
@@ -56,14 +63,16 @@ class TransactionViewItem2Factory {
             secondaryValue,
             null,
             false,
-            false
+            false,
+            status
         )
     }
 
     private fun createViewItemFromEvmOutgoingTransactionRecord(
         record: EvmOutgoingTransactionRecord,
         xxxCurrencyValue: CurrencyValue?,
-        lockState: TransactionLockState?
+        lockState: TransactionLockState?,
+        status: TransactionStatus
     ): TransactionViewItem2 {
         val primaryValue = xxxCurrencyValue?.let {
             ColoredValue(
@@ -83,14 +92,16 @@ class TransactionViewItem2Factory {
             secondaryValue,
             null,
             record.sentToSelf,
-            false
+            false,
+            status
         )
     }
 
     private fun createViewItemFromEvmIncomingTransactionRecord(
         record: EvmIncomingTransactionRecord,
         xxxCurrencyValue: CurrencyValue?,
-        lockState: TransactionLockState?
+        lockState: TransactionLockState?,
+        status: TransactionStatus
     ): TransactionViewItem2 {
         val primaryValue = xxxCurrencyValue?.let {
             ColoredValue(
@@ -113,14 +124,16 @@ class TransactionViewItem2Factory {
             secondaryValue,
             null,
             false,
-            false
+            false,
+            status
         )
     }
 
     private fun createViewItemFromContractCreationTransactionRecord(
         record: ContractCreationTransactionRecord,
         xxxCurrencyValue: CurrencyValue?,
-        lockState: TransactionLockState?
+        lockState: TransactionLockState?,
+        status: TransactionStatus
     ): TransactionViewItem2 {
         return TransactionViewItem2(
             record.uid,
@@ -132,14 +145,16 @@ class TransactionViewItem2Factory {
             null,
             null,
             false,
-            false
+            false,
+            status
         )
     }
 
     private fun createViewItemFromContractCallTransactionRecord(
         record: ContractCallTransactionRecord,
         xxxCurrencyValue: CurrencyValue?,
-        lockState: TransactionLockState?
+        lockState: TransactionLockState?,
+        status: TransactionStatus
     ): TransactionViewItem2 {
         return TransactionViewItem2(
             record.uid,
@@ -154,14 +169,16 @@ class TransactionViewItem2Factory {
             null,
             false,
             false,
-            false
+            false,
+            status
         )
     }
 
     private fun createViewItemFromBitcoinOutgoingTransactionRecord(
         record: BitcoinOutgoingTransactionRecord,
         xxxCurrencyValue: CurrencyValue?,
-        lockState: TransactionLockState?
+        lockState: TransactionLockState?,
+        status: TransactionStatus
     ): TransactionViewItem2 {
         val subtitle = record.to?.let {
             Translator.getString(
@@ -188,14 +205,16 @@ class TransactionViewItem2Factory {
             secondaryValue,
             lockState?.locked,
             record.sentToSelf,
-            record.conflictingHash != null
+            record.conflictingHash != null,
+            status
         )
     }
 
     private fun createViewItemFromBitcoinIncomingTransactionRecord(
         record: BitcoinIncomingTransactionRecord,
         xxxCurrencyValue: CurrencyValue?,
-        lockState: TransactionLockState?
+        lockState: TransactionLockState?,
+        status: TransactionStatus
     ): TransactionViewItem2 {
         val subtitle = record.from?.let {
             Translator.getString(
@@ -222,14 +241,16 @@ class TransactionViewItem2Factory {
             secondaryValue,
             lockState?.locked,
             false,
-            record.conflictingHash != null
+            record.conflictingHash != null,
+            status
         )
     }
 
     private fun createViewItemFromBinanceChainOutgoingTransactionRecord(
         record: BinanceChainOutgoingTransactionRecord,
         xxxCurrencyValue: CurrencyValue?,
-        lockState: TransactionLockState?
+        lockState: TransactionLockState?,
+        status: TransactionStatus
     ): TransactionViewItem2 {
         val primaryValue = xxxCurrencyValue?.let {
             ColoredValue(
@@ -249,14 +270,16 @@ class TransactionViewItem2Factory {
             secondaryValue,
             false,
             record.sentToSelf,
-            false
+            false,
+            status
         )
     }
 
     private fun createViewItemFromBinanceChainIncomingTransactionRecord(
         record: BinanceChainIncomingTransactionRecord,
         xxxCurrencyValue: CurrencyValue?,
-        lockState: TransactionLockState?
+        lockState: TransactionLockState?,
+        status: TransactionStatus
     ): TransactionViewItem2 {
         val primaryValue = xxxCurrencyValue?.let {
             ColoredValue(
@@ -279,14 +302,16 @@ class TransactionViewItem2Factory {
             secondaryValue,
             false,
             false,
-            false
+            false,
+            status
         )
     }
 
     private fun createViewItemFromApproveTransactionRecord(
         record: ApproveTransactionRecord,
         xxxCurrencyValue: CurrencyValue?,
-        lockState: TransactionLockState?
+        lockState: TransactionLockState?,
+        status: TransactionStatus
     ): TransactionViewItem2 {
         val primaryValueText: String?
         val secondaryValueText: String
@@ -316,7 +341,8 @@ class TransactionViewItem2Factory {
             secondaryValue,
             false,
             false,
-            false
+            false,
+            status
         )
     }
 
