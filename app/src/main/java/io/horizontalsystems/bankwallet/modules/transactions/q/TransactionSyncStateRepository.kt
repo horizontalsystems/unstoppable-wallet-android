@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.transactions.q
 
 import io.horizontalsystems.bankwallet.core.AdapterState
+import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.ITransactionsAdapter
 import io.horizontalsystems.bankwallet.core.managers.TransactionAdapterManager
 import io.horizontalsystems.bankwallet.core.subscribeIO
@@ -10,7 +11,9 @@ import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
 
-class TransactionSyncStateRepository(private val adapterManager: TransactionAdapterManager) {
+class TransactionSyncStateRepository(
+    private val adapterManager: TransactionAdapterManager
+) : Clearable {
     private val adapters = mutableMapOf<TransactionSource, ITransactionsAdapter>()
 
     private val syncingSubject = PublishSubject.create<Boolean>()
@@ -63,4 +66,7 @@ class TransactionSyncStateRepository(private val adapterManager: TransactionAdap
         syncingSubject.onNext(syncing)
     }
 
+    override fun clear() {
+        disposables.clear()
+    }
 }

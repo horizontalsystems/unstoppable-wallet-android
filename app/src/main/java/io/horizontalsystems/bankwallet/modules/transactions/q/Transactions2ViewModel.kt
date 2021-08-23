@@ -76,6 +76,10 @@ class Transactions2ViewModel(
         object Blank : ItemsList()
         class Filled(val items: List<TransactionViewItem2>) : ItemsList()
     }
+
+    override fun onCleared() {
+        service.clear()
+    }
 }
 
 data class TransactionItem(

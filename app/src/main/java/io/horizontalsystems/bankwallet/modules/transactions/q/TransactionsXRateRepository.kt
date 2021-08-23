@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.transactions.q
 
 import android.util.Log
+import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.IRateManager
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
@@ -14,7 +15,7 @@ import java.math.BigDecimal
 class TransactionsXRateRepository(
     private val currencyManager: ICurrencyManager,
     private val xRateManager: IRateManager,
-) {
+) : Clearable {
     private val baseCurrency get() = currencyManager.baseCurrency
 
     private val disposables = CompositeDisposable()
@@ -62,6 +63,10 @@ class TransactionsXRateRepository(
             .let {
                 disposables.add(it)
             }
+    }
+
+    override fun clear() {
+        disposables.clear()
     }
 }
 

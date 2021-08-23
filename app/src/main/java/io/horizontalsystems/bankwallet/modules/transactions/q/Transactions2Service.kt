@@ -181,6 +181,10 @@ class Transactions2Service(
 
     override fun clear() {
         disposables.clear()
+
+        transactionRecordRepository.clear()
+        xRateRepository.clear()
+        transactionSyncStateRepository.clear()
     }
 
     private val executorService = Executors.newCachedThreadPool()
