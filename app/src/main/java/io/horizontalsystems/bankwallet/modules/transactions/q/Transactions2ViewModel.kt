@@ -95,7 +95,7 @@ data class TransactionViewItem2(
     val subtitle: String,
     val primaryValue: ColoredValue?,
     val secondaryValue: ColoredValue?,
-    val sentToSelf: Boolean,
+    val sentToSelf: Boolean = false,
     val doubleSpend: Boolean = false,
     val locked: Boolean? = null
 ) {
