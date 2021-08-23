@@ -96,7 +96,7 @@ data class TransactionViewItem2(
     val primaryValue: ColoredValue?,
     val secondaryValue: ColoredValue?,
     val sentToSelf: Boolean,
-    val doubleSpend: Boolean,
+    val doubleSpend: Boolean = false,
     val locked: Boolean? = null
 ) {
     fun itemTheSame(newItem: TransactionViewItem2) = uid == newItem.uid

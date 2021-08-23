@@ -68,7 +68,6 @@ class TransactionViewItem2Factory {
             ),
             primaryValue,
             secondaryValue,
-            false,
             false
         )
     }
@@ -96,8 +95,7 @@ class TransactionViewItem2Factory {
             Translator.getString(R.string.Transactions_To, getNameOrAddressTruncated(record.to)),
             primaryValue,
             secondaryValue,
-            record.sentToSelf,
-            false
+            record.sentToSelf
         )
     }
 
@@ -127,7 +125,6 @@ class TransactionViewItem2Factory {
             ),
             primaryValue,
             secondaryValue,
-            false,
             false
         )
     }
@@ -147,7 +144,6 @@ class TransactionViewItem2Factory {
             "---",
             null,
             null,
-            false,
             false
         )
     }
@@ -170,7 +166,6 @@ class TransactionViewItem2Factory {
             ),
             null,
             null,
-            false,
             false
         )
     }
@@ -284,8 +279,7 @@ class TransactionViewItem2Factory {
             Translator.getString(R.string.Transactions_To, getNameOrAddressTruncated(record.to)),
             primaryValue,
             secondaryValue,
-            record.sentToSelf,
-            false
+            record.sentToSelf
         )
     }
 
@@ -315,7 +309,6 @@ class TransactionViewItem2Factory {
             ),
             primaryValue,
             secondaryValue,
-            false,
             false
         )
     }
@@ -353,7 +346,6 @@ class TransactionViewItem2Factory {
             ),
             primaryValue,
             secondaryValue,
-            false,
             false
         )
     }
