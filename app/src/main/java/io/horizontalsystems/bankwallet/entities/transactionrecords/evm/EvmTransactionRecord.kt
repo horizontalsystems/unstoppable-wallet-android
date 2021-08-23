@@ -4,11 +4,12 @@ import io.horizontalsystems.bankwallet.core.adapters.BaseEvmAdapter
 import io.horizontalsystems.bankwallet.core.adapters.EvmAdapter
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
+import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
 import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.core.toHexString
 import io.horizontalsystems.ethereumkit.models.FullTransaction
 
-abstract class EvmTransactionRecord(fullTransaction: FullTransaction, baseCoin: Coin) :
+abstract class EvmTransactionRecord(fullTransaction: FullTransaction, baseCoin: Coin, source: TransactionSource) :
     TransactionRecord(
         uid = fullTransaction.transaction.hash.toHexString(),
         transactionHash = fullTransaction.transaction.hash.toHexString(),
@@ -16,7 +17,8 @@ abstract class EvmTransactionRecord(fullTransaction: FullTransaction, baseCoin: 
         blockHeight = fullTransaction.receiptWithLogs?.receipt?.blockNumber?.toInt(),
         confirmationsThreshold = BaseEvmAdapter.confirmationsThreshold,
         timestamp = fullTransaction.transaction.timestamp,
-        failed = fullTransaction.isFailed()
+        failed = fullTransaction.isFailed(),
+        source = source
     ) {
 
     val fee: CoinValue

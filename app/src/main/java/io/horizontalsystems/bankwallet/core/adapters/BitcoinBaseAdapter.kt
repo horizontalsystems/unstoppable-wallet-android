@@ -1,10 +1,7 @@
 package io.horizontalsystems.bankwallet.core.adapters
 
 import io.horizontalsystems.bankwallet.core.*
-import io.horizontalsystems.bankwallet.entities.AccountType
-import io.horizontalsystems.bankwallet.entities.LastBlockInfo
-import io.horizontalsystems.bankwallet.entities.SyncMode
-import io.horizontalsystems.bankwallet.entities.TransactionDataSortingType
+import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.BitcoinIncomingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.BitcoinOutgoingTransactionRecord
@@ -30,10 +27,10 @@ import java.util.*
 import kotlin.math.absoluteValue
 
 abstract class BitcoinBaseAdapter(
-        open val kit: AbstractKit,
-        open val syncMode: SyncMode? = null,
-        backgroundManager: BackgroundManager,
-        val coin: Coin
+    open val kit: AbstractKit,
+    open val syncMode: SyncMode? = null,
+    backgroundManager: BackgroundManager,
+    val wallet: Wallet
 ) : IAdapter, ITransactionsAdapter, IBalanceAdapter, IReceiveAdapter, BackgroundManager.Listener {
 
     init {
@@ -250,7 +247,8 @@ abstract class BitcoinBaseAdapter(
         return when {
             amount > 0 -> {
                 BitcoinIncomingTransactionRecord(
-                        coin = coin,
+                        source = wallet.transactionSource,
+                        coin = wallet.coin,
                         uid = transaction.uid,
                         transactionHash = transaction.transactionHash,
                         transactionIndex = transaction.transactionIndex,
@@ -268,7 +266,8 @@ abstract class BitcoinBaseAdapter(
             }
             amount < 0 -> {
                 BitcoinOutgoingTransactionRecord(
-                        coin = coin,
+                        source = wallet.transactionSource,
+                        coin = wallet.coin,
                         uid = transaction.uid,
                         transactionHash = transaction.transactionHash,
                         transactionIndex = transaction.transactionIndex,
@@ -288,7 +287,8 @@ abstract class BitcoinBaseAdapter(
             else -> {
                 amount = myOutputsTotalValue - myChangeOutputsTotalValue
                 BitcoinOutgoingTransactionRecord(
-                        coin = coin,
+                        source = wallet.transactionSource,
+                        coin = wallet.coin,
                         uid = transaction.uid,
                         transactionHash = transaction.transactionHash,
                         transactionIndex = transaction.transactionIndex,

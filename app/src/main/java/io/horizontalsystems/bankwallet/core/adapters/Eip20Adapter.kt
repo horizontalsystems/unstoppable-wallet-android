@@ -2,26 +2,31 @@ package io.horizontalsystems.bankwallet.core.adapters
 
 import android.content.Context
 import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.erc20kit.core.Erc20Kit
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.core.EthereumKit.SyncState
-import io.horizontalsystems.ethereumkit.models.*
+import io.horizontalsystems.ethereumkit.models.Address
+import io.horizontalsystems.ethereumkit.models.DefaultBlockParameter
+import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.reactivex.Flowable
 import io.reactivex.Single
 import java.math.BigDecimal
 import java.math.BigInteger
 
 class Eip20Adapter(
-        context: Context,
-        evmKit: EthereumKit,
-        decimal: Int,
-        contractAddress: String,
-        coinManager: ICoinManager,
-        private val fee: BigDecimal = BigDecimal.ZERO,
-        override val minimumRequiredBalance: BigDecimal = BigDecimal.ZERO,
-        override val minimumSendAmount: BigDecimal = BigDecimal.ZERO
-) : BaseEvmAdapter(evmKit, decimal, coinManager) {
+    context: Context,
+    evmKit: EthereumKit,
+    contractAddress: String,
+    coinManager: ICoinManager,
+    wallet: Wallet,
+    private val fee: BigDecimal = BigDecimal.ZERO,
+    override val minimumRequiredBalance: BigDecimal = BigDecimal.ZERO,
+    override val minimumSendAmount: BigDecimal = BigDecimal.ZERO
+) : BaseEvmAdapter(evmKit, wallet.coin.decimal, coinManager) {
+
+    private val transactionConverter = EvmTransactionConverter(coinManager, evmKit, wallet.transactionSource)
 
     private val contractAddress: Address = Address(contractAddress)
     val eip20Kit: Erc20Kit = Erc20Kit.getInstance(context, this.evmKit, this.contractAddress)

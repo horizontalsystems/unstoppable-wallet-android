@@ -16,8 +16,6 @@ abstract class BaseEvmAdapter(
         val coinManager: ICoinManager
 ) : IAdapter, ISendEthereumAdapter, IBalanceAdapter, IReceiveAdapter {
 
-    override val transactionConverter = EvmTransactionConverter(coinManager, evmKit)
-
     override val debugInfo: String
         get() = evmKit.debugInfo()
 

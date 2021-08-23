@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.core
 
 import com.google.gson.JsonObject
-import io.horizontalsystems.bankwallet.core.adapters.EvmTransactionConverter
 import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
 import io.horizontalsystems.bankwallet.core.managers.RateUsType
 import io.horizontalsystems.bankwallet.core.managers.Term
@@ -252,7 +251,6 @@ interface ISendEthereumAdapter {
     val ethereumBalance: BigDecimal
     val minimumRequiredBalance: BigDecimal
     val minimumSendAmount: BigDecimal
-    val transactionConverter: EvmTransactionConverter
 
     fun availableBalance(gasPrice: Long, gasLimit: Long): BigDecimal
     fun fee(gasPrice: Long, gasLimit: Long): BigDecimal

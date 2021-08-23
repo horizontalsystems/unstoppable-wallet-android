@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.core.adapters
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.LastBlockInfo
+import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.binancechain.BinanceChainIncomingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.binancechain.BinanceChainOutgoingTransactionRecord
@@ -17,8 +18,8 @@ import java.math.BigDecimal
 class BinanceAdapter(
     private val binanceKit: BinanceChainKit,
     private val symbol: String,
-    private val coin: Coin,
-    private val feeCoin: Coin
+    private val feeCoin: Coin,
+    private val wallet: Wallet,
 ) : IAdapter, ITransactionsAdapter, IBalanceAdapter, IReceiveAdapter, ISendBinanceAdapter {
 
     private val asset = binanceKit.register(symbol)
@@ -98,19 +99,22 @@ class BinanceAdapter(
             fromMine && !toMine -> BinanceChainOutgoingTransactionRecord(
                 transaction,
                 feeCoin,
-                coin,
-                false
+                wallet.coin,
+                false,
+                wallet.transactionSource
             )
             !fromMine && toMine -> BinanceChainIncomingTransactionRecord(
                 transaction,
                 feeCoin,
-                coin
+                wallet.coin,
+                wallet.transactionSource
             )
             else -> BinanceChainOutgoingTransactionRecord(
                 transaction,
                 feeCoin,
-                coin,
-                true
+                wallet.coin,
+                true,
+                wallet.transactionSource
             )
         }
     }

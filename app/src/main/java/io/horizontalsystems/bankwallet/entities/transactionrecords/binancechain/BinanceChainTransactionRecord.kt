@@ -3,12 +3,14 @@ package io.horizontalsystems.bankwallet.entities.transactionrecords.binancechain
 import io.horizontalsystems.bankwallet.core.adapters.BinanceAdapter
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
+import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
 import io.horizontalsystems.binancechainkit.models.TransactionInfo
 import io.horizontalsystems.coinkit.models.Coin
 
 abstract class BinanceChainTransactionRecord(
     transaction: TransactionInfo,
-    feeCoin: Coin
+    feeCoin: Coin,
+    source: TransactionSource
 ) : TransactionRecord(
     uid = transaction.hash,
     transactionHash = transaction.hash,
@@ -16,7 +18,8 @@ abstract class BinanceChainTransactionRecord(
     blockHeight = transaction.blockNumber,
     confirmationsThreshold = BinanceAdapter.confirmationsThreshold,
     timestamp = transaction.date.time / 1000,
-    failed = false
+    failed = false,
+    source = source
 ) {
 
     val fee = CoinValue(feeCoin, BinanceAdapter.transferFee)

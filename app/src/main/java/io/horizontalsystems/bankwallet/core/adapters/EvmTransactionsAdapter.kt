@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.core.adapters
 
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
+import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
 import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.ethereumkit.core.EthereumKit
@@ -14,10 +15,12 @@ import io.reactivex.Single
 import java.math.BigDecimal
 import java.math.BigInteger
 
-class EvmTransactionsAdapter(kit: EthereumKit, coinManager: ICoinManager) :
+class EvmTransactionsAdapter(kit: EthereumKit, coinManager: ICoinManager, source: TransactionSource) :
     BaseEvmAdapter(kit, EvmAdapter.decimal, coinManager), ITransactionsAdapter {
 
     // IAdapter
+
+    private val transactionConverter = EvmTransactionConverter(coinManager, evmKit, source)
 
     override fun start() {
         // started via EthereumKitManager
