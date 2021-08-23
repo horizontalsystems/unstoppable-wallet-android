@@ -5,6 +5,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Text
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -13,6 +19,9 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.modules.settings.notifications.bottommenu.BottomNotificationMenu
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.Grey
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.views.ListPosition
 import io.horizontalsystems.views.SettingsViewDropdown
@@ -38,10 +47,6 @@ class NotificationsFragment : BaseFragment(), NotificationItemsAdapter.Listener 
             findNavController().popBackStack()
         }
 
-        buttonAndroidSettings.setOnSingleClickListener {
-            viewModel.openSettings()
-        }
-
         deactivateAll.setOnSingleClickListener {
             viewModel.deactivateAll()
         }
@@ -56,6 +61,8 @@ class NotificationsFragment : BaseFragment(), NotificationItemsAdapter.Listener 
         }
 
         observeViewModel()
+
+        setWarning()
     }
 
     override fun onResume() {
@@ -88,11 +95,10 @@ class NotificationsFragment : BaseFragment(), NotificationItemsAdapter.Listener 
         })
 
         viewModel.setWarningVisible.observe(viewLifecycleOwner, Observer { showWarning ->
+            setWarning(showWarning)
+
             switchNotification.isVisible = !showWarning
             textDescription.isVisible = !showWarning
-
-            textWarning.isVisible = showWarning
-            buttonAndroidSettings.isVisible = showWarning
         })
 
         viewModel.notificationIsOnLiveData.observe(viewLifecycleOwner, Observer { enabled ->
@@ -112,6 +118,32 @@ class NotificationsFragment : BaseFragment(), NotificationItemsAdapter.Listener 
             deactivateAll.isEnabled = enabled
         })
 
+    }
+
+    private fun setWarning(visible: Boolean = false) {
+        warningCompose.setContent {
+            ComposeAppTheme {
+                if (visible) {
+                    Column(
+                        modifier = Modifier.padding(start = 24.dp, top = 24.dp, end = 24.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = getString(R.string.SettingsNotifications_NotificationsDisabledWarning),
+                            style = ComposeAppTheme.typography.subhead2,
+                            color = Grey
+                        )
+                        ButtonSecondaryDefault(
+                            modifier = Modifier.padding(top = 32.dp),
+                            title = getString(R.string.SettingsNotifications_TurnOn),
+                            onClick = {
+                                viewModel.openSettings()
+                            }
+                        )
+                    }
+                }
+            }
+        }
     }
 }
 
