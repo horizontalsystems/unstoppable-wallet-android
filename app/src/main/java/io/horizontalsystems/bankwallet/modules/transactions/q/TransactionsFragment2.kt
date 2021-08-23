@@ -145,7 +145,7 @@ class ViewHolderTransaction2(override val containerView: View) :
             txSecondaryText.setTextColor(getColor(it))
         }
 
-//        setProgress(transactionRecord.status)
+        setProgress(transactionRecord.status)
 
         doubleSpendIcon.isVisible = transactionRecord.doubleSpend
         sentToSelfIcon.isVisible = transactionRecord.sentToSelf
