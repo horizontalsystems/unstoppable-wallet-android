@@ -3,12 +3,17 @@ package io.horizontalsystems.bankwallet.modules.tor
 import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.layout.padding
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.core.view.isInvisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.managers.TorStatus
 import io.horizontalsystems.bankwallet.modules.launcher.LaunchModule
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
 import kotlinx.android.synthetic.main.activity_tor_connection.*
 import kotlin.system.exitProcess
 
@@ -26,10 +31,6 @@ class TorConnectionActivity : AppCompatActivity() {
 
         observeView(presenter.view)
         observeRouter(presenter.router)
-
-        btnRetry.setOnClickListener {
-            presenter.restartTor()
-        }
 
         txDisableTor.setOnClickListener {
             presenter.disableTor()
@@ -71,6 +72,21 @@ class TorConnectionActivity : AppCompatActivity() {
         imgTorStatusError.isInvisible = !isError
         txTorStatus.text = statusText
 
-        btnRetry.isEnabled = isError
+        setRetryButton(isError)
+    }
+
+    private fun setRetryButton(enabled: Boolean) {
+        btnRetryCompose.setContent {
+            ComposeAppTheme {
+                ButtonSecondaryDefault(
+                    modifier = Modifier.padding(top = 40.dp),
+                    title = getString(R.string.Button_Retry),
+                    onClick = {
+                        presenter.restartTor()
+                    },
+                    enabled = enabled
+                )
+            }
+        }
     }
 }

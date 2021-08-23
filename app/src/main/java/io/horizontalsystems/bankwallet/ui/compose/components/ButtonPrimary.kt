@@ -182,39 +182,3 @@ object ButtonDefaults {
         disabledContentColor = disabledContentColor
     )
 }
-
-@Immutable
-private class DefaultButtonColors(
-    private val backgroundColor: Color,
-    private val contentColor: Color,
-    private val disabledBackgroundColor: Color,
-    private val disabledContentColor: Color
-) : ButtonColors {
-    @Composable
-    override fun backgroundColor(enabled: Boolean): State<Color> {
-        return rememberUpdatedState(if (enabled) backgroundColor else disabledBackgroundColor)
-    }
-
-    @Composable
-    override fun contentColor(enabled: Boolean): State<Color> {
-        return rememberUpdatedState(if (enabled) contentColor else disabledContentColor)
-    }
-
-    override fun equals(other: Any?): Boolean {
-
-        if (other !is DefaultButtonColors) return false
-
-        return backgroundColor != other.backgroundColor
-                && contentColor != other.contentColor
-                && disabledBackgroundColor != other.disabledBackgroundColor
-                && disabledContentColor != other.disabledContentColor
-    }
-
-    override fun hashCode(): Int {
-        var result = backgroundColor.hashCode()
-        result = 31 * result + contentColor.hashCode()
-        result = 31 * result + disabledBackgroundColor.hashCode()
-        result = 31 * result + disabledContentColor.hashCode()
-        return result
-    }
-}

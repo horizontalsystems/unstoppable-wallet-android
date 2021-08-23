@@ -37,22 +37,23 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="@string/Tor_Status_Starting"
-        app:layout_constraintBottom_toTopOf="@+id/btnRetry"
+        app:layout_constraintBottom_toTopOf="@+id/btnRetryCompose"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imgTorStatusError" />
 
-    <Button
-        android:id="@+id/btnRetry"
-        style="@style/ButtonSecondary"
+    <androidx.compose.ui.platform.ComposeView
+        android:id="@+id/btnRetryCompose"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:text="@string/Button_Retry"
         app:layout_constraintBottom_toTopOf="@+id/txDisableTor"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txTorStatus" />
+        app:layout_constraintTop_toBottomOf="@+id/txTorStatus"
+        tools:layout_height="27dp"
+        tools:layout_marginTop="40dp"
+        tools:layout_width="50dp"
+        />
 
     <TextView
         android:id="@+id/txDisableTor"
@@ -68,6 +69,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnRetry" />
+        app:layout_constraintTop_toBottomOf="@+id/btnRetryCompose" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
