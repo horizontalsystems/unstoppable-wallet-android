@@ -213,4 +213,8 @@ class Transactions2Service(
             }
         }
     }
+
+    fun getTransactionItem(recordUid: String): TransactionItem? {
+        return transactionItems.find { it.record.uid == recordUid }
+    }
 }

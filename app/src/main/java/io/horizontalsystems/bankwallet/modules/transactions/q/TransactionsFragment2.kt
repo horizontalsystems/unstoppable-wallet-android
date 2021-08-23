@@ -5,20 +5,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
-import androidx.fragment.app.viewModels
+import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
+import io.horizontalsystems.core.findNavController
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_transactions.*
 import kotlinx.android.synthetic.main.view_holder_transaction.*
 
 class TransactionsFragment2 : BaseFragment(R.layout.fragment_transactions) {
 
-    private val viewModel by viewModels<Transactions2ViewModel> { Transactions2Module.Factory() }
+    private val viewModel by navGraphViewModels<Transactions2ViewModel>(R.id.mainFragment) { Transactions2Module.Factory() }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -30,9 +32,22 @@ class TransactionsFragment2 : BaseFragment(R.layout.fragment_transactions) {
 
         recyclerTags.adapter = tagsAdapter
 
-        val transactionsAdapter = TransactionsAdapter2 {
-            viewModel.willShow(it)
-        }
+        val transactionsAdapter = TransactionsAdapter2(
+            {
+                viewModel.willShow(it)
+            },
+            {
+
+                viewModel.getTransactionItem(it)?.let {
+                    viewModel.tmpItemToShow = it
+
+                    findNavController().navigate(
+                        R.id.mainFragment_to_transactionInfoFragment,
+                        null,
+                        navOptionsFromBottom()
+                    )
+                }
+            })
 
         val layoutManager = LinearLayoutManager(context)
         recyclerTransactions.adapter = transactionsAdapter
@@ -94,10 +109,10 @@ class TransactionViewItemDiff2 : DiffUtil.ItemCallback<TransactionViewItem2>() {
 
 }
 
-class TransactionsAdapter2(private val onItemDisplay: (TransactionViewItem2) -> Unit) : ListAdapter<TransactionViewItem2, ViewHolderTransaction2>(TransactionViewItemDiff2()) {
+class TransactionsAdapter2(private val onItemDisplay: (TransactionViewItem2) -> Unit, private val onItemClick: (TransactionViewItem2) -> Unit) : ListAdapter<TransactionViewItem2, ViewHolderTransaction2>(TransactionViewItemDiff2()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderTransaction2 {
-        return ViewHolderTransaction2(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_transaction, parent, false))
+        return ViewHolderTransaction2(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_transaction, parent, false), onItemClick)
     }
 
     override fun onBindViewHolder(holder: ViewHolderTransaction2, position: Int) = Unit
@@ -117,41 +132,47 @@ class TransactionsAdapter2(private val onItemDisplay: (TransactionViewItem2) -> 
     }
 }
 
-class ViewHolderTransaction2(override val containerView: View) :
-    RecyclerView.ViewHolder(containerView), LayoutContainer {
+class ViewHolderTransaction2(
+    override val containerView: View,
+    private val onItemClick: (TransactionViewItem2) -> Unit
+) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
-    interface ClickListener {
-        fun onClick(position: Int)
-    }
+    private var item: TransactionViewItem2? = null
 
     init {
-//        containerView.setOnSingleClickListener { l.onClick(bindingAdapterPosition) }
+        containerView.setOnSingleClickListener {
+            item?.let {
+                onItemClick(it)
+            }
+        }
     }
 
-    fun bind(transactionRecord: TransactionViewItem2, showBottomShade: Boolean) {
-        txIcon.setImageResource(transactionRecord.typeIcon)
-        txTopText.text = transactionRecord.title
-        txBottomText.text = transactionRecord.subtitle
-        txPrimaryText.text = transactionRecord.primaryValue?.value
-        txSecondaryText.text = transactionRecord.secondaryValue?.value
+    fun bind(item: TransactionViewItem2, showBottomShade: Boolean) {
+        this.item = item
 
-        transactionRecord.primaryValue?.color?.let {
+        txIcon.setImageResource(item.typeIcon)
+        txTopText.text = item.title
+        txBottomText.text = item.subtitle
+        txPrimaryText.text = item.primaryValue?.value
+        txSecondaryText.text = item.secondaryValue?.value
+
+        item.primaryValue?.color?.let {
             txPrimaryText.setTextColor(getColor(it))
         }
-        transactionRecord.secondaryValue?.color?.let {
+        item.secondaryValue?.color?.let {
             txSecondaryText.setTextColor(getColor(it))
         }
 
-        iconProgress.isVisible = transactionRecord.progress != null
-        transactionRecord.progress?.let { progress ->
+        iconProgress.isVisible = item.progress != null
+        item.progress?.let { progress ->
             iconProgress.setProgressColored(progress, getColor(R.color.grey_50), true)
         }
 
-        doubleSpendIcon.isVisible = transactionRecord.doubleSpend
-        sentToSelfIcon.isVisible = transactionRecord.sentToSelf
+        doubleSpendIcon.isVisible = item.doubleSpend
+        sentToSelfIcon.isVisible = item.sentToSelf
         bottomShade.isVisible = showBottomShade
 
-        val imgRes = when (transactionRecord.locked) {
+        val imgRes = when (item.locked) {
             true -> R.drawable.ic_lock_20
             false -> R.drawable.ic_unlock_20
             null -> 0

@@ -8,18 +8,18 @@ import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.TransactionLockState
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionType
-import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItem
+import io.horizontalsystems.bankwallet.modules.transactions.q.TransactionItem
 import io.horizontalsystems.core.helpers.DateHelper
 import java.util.*
 
 object TransactionInfoModule {
 
-    class Factory(private val transactionViewItem: TransactionViewItem) :
+    class Factory(private val transactionItem: TransactionItem) :
         ViewModelProvider.Factory {
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            val adapter: ITransactionsAdapter = TODO()
+            val adapter: ITransactionsAdapter = App.transactionAdapterManager.getAdapter(transactionItem.record.source)!!
             val service = TransactionInfoService(
                 adapter,
                 App.xRateManager,
@@ -36,8 +36,8 @@ object TransactionInfoModule {
             return TransactionInfoViewModel(
                 service,
                 factory,
-                transactionViewItem.record,
-                transactionViewItem.wallet,
+                transactionItem.record,
+                transactionItem.record.source,
                 listOf(service)
             ) as T
         }
