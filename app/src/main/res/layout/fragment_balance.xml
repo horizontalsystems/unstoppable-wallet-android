@@ -61,25 +61,14 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
-            android:id="@+id/sortButton"
-            style="@style/ButtonSecondaryTransparentEndIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <androidx.compose.ui.platform.ComposeView
+            android:id="@+id/buttonsCompose"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:drawableEnd="@drawable/ic_down_arrow_20"
             android:text="@string/Balance_Sort_PopupTitle"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <Button
-            android:id="@+id/addCoinButton"
-            style="@style/ButtonThird"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:text="@string/Balance_AddCoin"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
