@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.TransactionLockState
-import io.horizontalsystems.bankwallet.modules.transactions.TransactionStatus
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewHelper
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_transactions.*
@@ -145,7 +144,10 @@ class ViewHolderTransaction2(override val containerView: View) :
             txSecondaryText.setTextColor(getColor(it))
         }
 
-        setProgress(transactionRecord.status)
+        iconProgress.isVisible = transactionRecord.progress != null
+        transactionRecord.progress?.let { progress ->
+            iconProgress.setProgressColored(progress, getColor(R.color.grey_50), true)
+        }
 
         doubleSpendIcon.isVisible = transactionRecord.doubleSpend
         sentToSelfIcon.isVisible = transactionRecord.sentToSelf
@@ -198,21 +200,6 @@ class ViewHolderTransaction2(override val containerView: View) :
 //            setLockIcon(current.lockState)
 //        }
 //    }
-
-    private fun setProgress(status: TransactionStatus) {
-        when (status) {
-            is TransactionStatus.Pending -> {
-                iconProgress.isVisible = true
-                iconProgress.setProgressColored(15, getColor(R.color.grey_50), true)
-            }
-            is TransactionStatus.Processing -> {
-                iconProgress.isVisible = true
-                val progressValue = (status.progress * 100).toInt()
-                iconProgress.setProgressColored(progressValue, getColor(R.color.grey_50), true)
-            }
-            else -> iconProgress.isVisible = false
-        }
-    }
 
     private fun getColor(primaryValueTextColor: Int) =
         containerView.context.getColor(primaryValueTextColor)
