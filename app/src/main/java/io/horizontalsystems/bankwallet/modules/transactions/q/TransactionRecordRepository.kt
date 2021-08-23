@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.transactions.q
 
-import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.managers.TransactionAdapterManager
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionWallet
@@ -14,7 +13,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 class TransactionRecordRepository(
     private val adapterManager: TransactionAdapterManager,
-) : Clearable, ITransactionRecordRepository {
+) : ITransactionRecordRepository {
 
     private var selectedWallet: TransactionWallet? = null
 
