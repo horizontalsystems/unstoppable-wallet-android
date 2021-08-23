@@ -72,6 +72,10 @@ class TransactionsFragment2 : BaseFragment(R.layout.fragment_transactions) {
         viewModel.filterCoinsLiveData.observe(viewLifecycleOwner) {
             tagsAdapter.submitList(it)
         }
+
+        viewModel.syncingLiveData.observe(viewLifecycleOwner) {
+            toolbarSpinner.isVisible = it
+        }
     }
 }
 
