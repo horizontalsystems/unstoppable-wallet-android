@@ -122,13 +122,13 @@ class TransactionsAdapter2(private val onItemDisplay: (TransactionViewItem2) -> 
         val item = getItem(position)
         onItemDisplay(item)
 
-//        val prev = payloads.lastOrNull() as? TransactionViewItem
+        val prev = payloads.lastOrNull() as? TransactionViewItem2
 
-//        if (prev == null) {
+        if (prev == null) {
             holder.bind(item, showBottomShade = (position == itemCount - 1))
-//        } else {
-//            holder.bindUpdate(item, prev)
-//        }
+        } else {
+            holder.bindUpdate(item, prev)
+        }
     }
 }
 
@@ -182,51 +182,61 @@ class ViewHolderTransaction2(
         lockIcon.setImageResource(imgRes)
     }
 
-//    fun bindUpdate(current: TransactionViewItem2, prev: TransactionViewItem2) {
-//        if (current.image != prev.image) {
-//            txIcon.setImageResource(current.image)
-//        }
-//
-//        if (current.topText != prev.topText) {
-//            txTopText.text = current.topText
-//        }
-//
-//        if (current.bottomText != prev.bottomText) {
-//            txBottomText.text = current.bottomText
-//        }
-//
-//        if (current.primaryValueText != prev.primaryValueText) {
-//            txPrimaryText.text = current.primaryValueText
-//        }
-//
-//        if (current.secondaryValueText != prev.secondaryValueText) {
-//            txSecondaryText.text = current.secondaryValueText
-//        }
-//
-//        if (current.primaryValueTextColor != prev.primaryValueTextColor) {
-//            txPrimaryText.setTextColor(getColor(current.primaryValueTextColor))
-//        }
-//
-//        if (current.secondaryValueTextColor != prev.secondaryValueTextColor) {
-//            txSecondaryText.setTextColor(getColor(current.secondaryValueTextColor))
-//        }
-//
-//        if (current.status != prev.status) {
-//            setProgress(current.status)
-//        }
-//
-//        if (current.showDoubleSpend != prev.showDoubleSpend) {
-//            doubleSpendIcon.isVisible = current.showDoubleSpend
-//        }
-//
-//        if (current.showSentToSelf != prev.showSentToSelf) {
-//            sentToSelfIcon.isVisible = current.showSentToSelf
-//        }
-//
-//        if (current.lockState != prev.lockState) {
-//            setLockIcon(current.lockState)
-//        }
-//    }
+    fun bindUpdate(current: TransactionViewItem2, prev: TransactionViewItem2, ) {
+        this.item = current
+
+        if (current.typeIcon != prev.typeIcon) {
+            txIcon.setImageResource(current.typeIcon)
+        }
+
+        if (current.title != prev.title) {
+            txTopText.text = current.title
+        }
+
+        if (current.subtitle != prev.subtitle) {
+            txBottomText.text = current.subtitle
+        }
+
+        if (current.primaryValue != prev.primaryValue) {
+            txPrimaryText.text = current.primaryValue?.value
+            current.primaryValue?.color?.let {
+                txPrimaryText.setTextColor(getColor(it))
+            }
+        }
+
+        if (current.secondaryValue != prev.secondaryValue) {
+            txSecondaryText.text = current.secondaryValue?.value
+            current.secondaryValue?.color?.let {
+                txSecondaryText.setTextColor(getColor(it))
+            }
+        }
+
+        if (current.progress != prev.progress) {
+            iconProgress.isVisible = current.progress != null
+            current.progress?.let { progress ->
+                iconProgress.setProgressColored(progress, getColor(R.color.grey_50), true)
+            }
+        }
+
+        if (current.doubleSpend != prev.doubleSpend) {
+            doubleSpendIcon.isVisible = current.doubleSpend
+        }
+
+        if (current.sentToSelf != prev.sentToSelf) {
+            sentToSelfIcon.isVisible = current.sentToSelf
+        }
+
+        if (current.locked != prev.locked) {
+            val imgRes = when (current.locked) {
+                true -> R.drawable.ic_lock_20
+                false -> R.drawable.ic_unlock_20
+                null -> 0
+            }
+
+            lockIcon.isVisible = imgRes != 0
+            lockIcon.setImageResource(imgRes)
+        }
+    }
 
     private fun getColor(primaryValueTextColor: Int) =
         containerView.context.getColor(primaryValueTextColor)

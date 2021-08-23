@@ -76,4 +76,4 @@ sealed class TransactionInfoActionButton {
     }
 }
 
-class ColoredValue(val value: String, val color: Int)
+data class ColoredValue(val value: String, val color: Int)
