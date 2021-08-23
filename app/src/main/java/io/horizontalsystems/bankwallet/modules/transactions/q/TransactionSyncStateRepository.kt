@@ -30,29 +30,37 @@ class TransactionSyncStateRepository(private val adapterManager: TransactionAdap
         sources.forEach { source ->
             adapterManager.getAdapter(source)?.let { adapter ->
                 adapters[source] = adapter
-
-                adapter.lastBlockUpdatedFlowable
-                    .subscribeIO {
-                        adapter.lastBlockInfo?.let { lastBlockInfo ->
-                            lastBlockInfoSubject.onNext(Pair(source, lastBlockInfo))
-                        }
-                    }
-                    .let {
-                        disposables.add(it)
-                    }
-
-                adapter.transactionsStateUpdatedFlowable
-                    .subscribeIO {
-                        val syncing = adapters.any {
-                            it.value.transactionsState is AdapterState.Syncing
-                        }
-                        syncingSubject.onNext(syncing)
-                    }
-                    .let {
-                        disposables.add(it)
-                    }
             }
         }
+
+        emitSyncing()
+
+        adapters.forEach { (source, adapter) ->
+            adapter.lastBlockUpdatedFlowable
+                .subscribeIO {
+                    adapter.lastBlockInfo?.let { lastBlockInfo ->
+                        lastBlockInfoSubject.onNext(Pair(source, lastBlockInfo))
+                    }
+                }
+                .let {
+                    disposables.add(it)
+                }
+
+            adapter.transactionsStateUpdatedFlowable
+                .subscribeIO {
+                    emitSyncing()
+                }
+                .let {
+                    disposables.add(it)
+                }
+        }
+    }
+
+    private fun emitSyncing() {
+        val syncing = adapters.any {
+            it.value.transactionsState is AdapterState.Syncing
+        }
+        syncingSubject.onNext(syncing)
     }
 
 }
