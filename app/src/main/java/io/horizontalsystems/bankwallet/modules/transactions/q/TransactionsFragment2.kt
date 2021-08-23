@@ -12,8 +12,6 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.TransactionLockState
-import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewHelper
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_transactions.*
 import kotlinx.android.synthetic.main.view_holder_transaction.*
@@ -152,7 +150,15 @@ class ViewHolderTransaction2(override val containerView: View) :
         doubleSpendIcon.isVisible = transactionRecord.doubleSpend
         sentToSelfIcon.isVisible = transactionRecord.sentToSelf
         bottomShade.isVisible = showBottomShade
-//        setLockIcon(transactionRecord.lockState)
+
+        val imgRes = when (transactionRecord.locked) {
+            true -> R.drawable.ic_lock_20
+            false -> R.drawable.ic_unlock_20
+            null -> 0
+        }
+
+        lockIcon.isVisible = imgRes != 0
+        lockIcon.setImageResource(imgRes)
     }
 
 //    fun bindUpdate(current: TransactionViewItem2, prev: TransactionViewItem2) {
@@ -203,12 +209,6 @@ class ViewHolderTransaction2(override val containerView: View) :
 
     private fun getColor(primaryValueTextColor: Int) =
         containerView.context.getColor(primaryValueTextColor)
-
-    private fun setLockIcon(lockState: TransactionLockState?) {
-        val imgRes = TransactionViewHelper.getLockIcon(lockState)
-        lockIcon.isVisible = imgRes > 0
-        lockIcon.setImageResource(imgRes)
-    }
 
 }
 

@@ -137,7 +137,7 @@ class Transactions2Service(
                 }
             }
 
-            transactionItems.add(TransactionItem(record, currencyValue, null, lastBlockInfo))
+            transactionItems.add(TransactionItem(record, currencyValue, lastBlockInfo))
         }
 
         itemsSubject.onNext(transactionItems)
