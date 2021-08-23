@@ -1,7 +1,10 @@
 package io.horizontalsystems.bankwallet.ui.compose.components
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Indication
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -14,10 +17,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.Grey
 import io.horizontalsystems.bankwallet.ui.compose.Grey50
 import io.horizontalsystems.bankwallet.ui.compose.Steel20
 
@@ -40,6 +45,45 @@ fun ButtonSecondaryDefault(
     )
 }
 
+@Composable
+fun ButtonSecondaryTransparent(
+    modifier: Modifier = Modifier,
+    title: String,
+    @DrawableRes iconRight: Int? = null,
+    onClick: () -> Unit,
+    enabled: Boolean = true
+) {
+    val interactionSource = remember { MutableInteractionSource() }
+    val isPressed by interactionSource.collectIsPressedAsState()
+    val textColor = if (isPressed) Grey else ComposeAppTheme.colors.oz
+
+    ButtonSecondary(
+        modifier = modifier,
+        onClick = onClick,
+        colors = ButtonDefaults.textButtonColors(
+            contentColor = textColor
+        ),
+        content = {
+            if (iconRight != null){
+                Row{
+                    Text(title, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                    Icon(
+                        modifier = Modifier.padding(start = 4.dp),
+                        painter = painterResource(id = iconRight),
+                        contentDescription = null,
+                        tint = Grey
+                    )
+                }
+            } else {
+                Text(title, maxLines = 1, overflow = TextOverflow.Ellipsis)
+            }
+        },
+        interactionSource = interactionSource,
+        indication = null,
+        enabled = enabled
+    )
+}
+
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ButtonSecondary(
@@ -47,6 +91,7 @@ fun ButtonSecondary(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+    indication: Indication? = rememberRipple(),
     shape: Shape = RoundedCornerShape(14.dp),
     border: BorderStroke? = null,
     colors: ButtonColors = SecondaryButtonDefaults.textButtonColors(),
@@ -65,7 +110,7 @@ fun ButtonSecondary(
         enabled = enabled,
         role = Role.Button,
         interactionSource = interactionSource,
-        indication = rememberRipple()
+        indication = indication
     ) {
         CompositionLocalProvider(LocalContentAlpha provides contentColor.alpha) {
             ProvideTextStyle(

@@ -10,6 +10,9 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.foundation.layout.*
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -31,6 +34,9 @@ import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModu
 import io.horizontalsystems.bankwallet.modules.receive.ReceiveFragment
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryTransparent
 import io.horizontalsystems.bankwallet.ui.extensions.NpaLinearLayoutManager
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorDialog
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorItem
@@ -60,18 +66,6 @@ class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener, BackupRequ
         val itemTouchHelper = ItemTouchHelper(SwipeBalanceItemView())
         itemTouchHelper.attachToRecyclerView(recyclerCoins)
 
-        sortButton.setOnClickListener {
-            val sortTypes = listOf(BalanceSortType.Name, BalanceSortType.Value, BalanceSortType.PercentGrowth)
-            val selectorItems = sortTypes.map {
-                SelectorItem(getString(it.getTitleRes()), it == viewModel.sortType)
-            }
-            SelectorDialog
-                .newInstance(selectorItems, getString(R.string.Balance_Sort_PopupTitle)) { position ->
-                    viewModel.sortType = sortTypes[position]
-                }
-                .show(parentFragmentManager, "balance_sort_type_selector")
-        }
-
         pullToRefresh.setOnRefreshListener {
             viewModel.onRefresh()
 
@@ -89,12 +83,10 @@ class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener, BackupRequ
             HudHelper.vibrate(requireContext())
         }
 
-        addCoinButton.setOnClickListener {
-            findNavController().navigate(R.id.mainFragment_to_manageWalletsFragment, null, navOptions())
-        }
-
         observeLiveData()
         setSwipeBackground()
+
+        setTopButtons()
     }
 
     override fun onDestroyView() {
@@ -238,6 +230,50 @@ class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener, BackupRequ
         viewModel.headerViewItemLiveData.observe(viewLifecycleOwner) {
             setHeaderViewItem(it)
         }
+    }
+
+    private fun setTopButtons() {
+        buttonsCompose.setContent {
+            ComposeAppTheme {
+                Row(
+                    modifier = Modifier.width(IntrinsicSize.Max)
+                        .padding(top = 8.dp, end = 16.dp, bottom = 8.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    ButtonSecondaryTransparent(
+                        title = getString(viewModel.sortType.getTitleRes()),
+                        iconRight = R.drawable.ic_down_arrow_20,
+                        onClick = {
+                            onSortButtonClick()
+                        }
+                    )
+                    ButtonSecondaryDefault(
+                        title = getString(R.string.Balance_AddCoin),
+                        onClick = {
+                            findNavController().navigate(
+                                R.id.mainFragment_to_manageWalletsFragment,
+                                null,
+                                navOptions()
+                            )
+                        }
+                    )
+                }
+            }
+        }
+    }
+
+    private fun onSortButtonClick() {
+        val sortTypes =
+            listOf(BalanceSortType.Name, BalanceSortType.Value, BalanceSortType.PercentGrowth)
+        val selectorItems = sortTypes.map {
+            SelectorItem(getString(it.getTitleRes()), it == viewModel.sortType)
+        }
+        SelectorDialog
+            .newInstance(selectorItems, getString(R.string.Balance_Sort_PopupTitle)) { position ->
+                viewModel.sortType = sortTypes[position]
+                setTopButtons()
+            }
+            .show(parentFragmentManager, "balance_sort_type_selector")
     }
 
     private fun sendEmail(email: String, report: String) {
