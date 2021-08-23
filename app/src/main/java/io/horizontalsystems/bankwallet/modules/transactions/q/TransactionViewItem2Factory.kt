@@ -67,8 +67,7 @@ class TransactionViewItem2Factory {
                 getNameOrAddressTruncated(record.exchangeAddress)
             ),
             primaryValue,
-            secondaryValue,
-            false
+            secondaryValue
         )
     }
 
@@ -124,8 +123,7 @@ class TransactionViewItem2Factory {
                 getNameOrAddressTruncated(record.from)
             ),
             primaryValue,
-            secondaryValue,
-            false
+            secondaryValue
         )
     }
 
@@ -143,8 +141,7 @@ class TransactionViewItem2Factory {
             Translator.getString(R.string.Transactions_ContractCreation),
             "---",
             null,
-            null,
-            false
+            null
         )
     }
 
@@ -165,8 +162,7 @@ class TransactionViewItem2Factory {
                 getNameOrAddressTruncated(record.contractAddress)
             ),
             null,
-            null,
-            false
+            null
         )
     }
 
@@ -308,8 +304,7 @@ class TransactionViewItem2Factory {
                 getNameOrAddressTruncated(record.from)
             ),
             primaryValue,
-            secondaryValue,
-            false
+            secondaryValue
         )
     }
 
@@ -345,8 +340,7 @@ class TransactionViewItem2Factory {
                 getNameOrAddressTruncated(record.spender)
             ),
             primaryValue,
-            secondaryValue,
-            false
+            secondaryValue
         )
     }
 
