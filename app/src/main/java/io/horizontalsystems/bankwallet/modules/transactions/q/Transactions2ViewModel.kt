@@ -2,14 +2,12 @@ package io.horizontalsystems.bankwallet.modules.transactions.q
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.toLiveData
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.LastBlockInfo
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.modules.transactionInfo.ColoredValue
-import io.reactivex.BackpressureStrategy
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import java.util.*
@@ -21,8 +19,7 @@ class Transactions2ViewModel(
 
     lateinit var tmpItemToShow: TransactionItem
 
-    val syncingLiveData =
-        service.syncingObservable.toFlowable(BackpressureStrategy.DROP).toLiveData()
+    val syncingLiveData = MutableLiveData<Boolean>()
     val filterCoinsLiveData = MutableLiveData<List<Filter<Wallet>>>()
 
     val filterTypes = FilterTransactionType.values()
@@ -33,6 +30,14 @@ class Transactions2ViewModel(
     private val disposables = CompositeDisposable()
 
     init {
+        service.syncingObservable
+            .subscribeIO {
+                syncingLiveData.postValue(it)
+            }
+            .let {
+                disposables.add(it)
+            }
+
         service.itemsObservable
             .subscribeIO {
                 transactionList.postValue(ItemsList.Filled(it.map {
