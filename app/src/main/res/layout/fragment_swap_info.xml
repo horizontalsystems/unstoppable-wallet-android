@@ -181,18 +181,19 @@
                 android:text="@string/SwapInfo_TransactionSpeedDescription"
                 android:textColor="@color/bran" />
 
-            <Button
-                android:id="@+id/btnLink"
-                style="@style/ButtonSecondary"
+            <androidx.compose.ui.platform.ComposeView
+                android:id="@+id/btnLinkCompose"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="44dp"
-                android:layout_marginBottom="32dp"
-                android:text="@string/SwapInfo_Site"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/textWarning" />
+                app:layout_constraintTop_toBottomOf="@id/textWarning"
+                tools:layout_height="27dp"
+                tools:layout_marginBottom="32dp"
+                tools:layout_marginTop="44dp"
+                tools:layout_width="50dp"
+                />
 
         </LinearLayout>
 
