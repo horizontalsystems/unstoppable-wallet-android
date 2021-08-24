@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.transactions.q
 
 import io.horizontalsystems.bankwallet.core.managers.TransactionAdapterManager
+import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionWallet
 import io.reactivex.Observable
@@ -26,6 +27,7 @@ class TransactionRecordRepository(
     private val adaptersMap = mutableMapOf<TransactionWallet, TransactionAdapterWrapper>()
 
     private val disposables = CompositeDisposable()
+    private val disposablesTxsUpdates = CompositeDisposable()
 
     private var walletsGroupedBySource: List<TransactionWallet> = listOf()
 
@@ -34,13 +36,13 @@ class TransactionRecordRepository(
 
         val currentAdapters = adaptersMap.toMutableMap()
         adaptersMap.clear()
+        disposablesTxsUpdates.clear()
 
         (transactionWallets + walletsGroupedBySource).distinct().forEach { transactionWallet ->
             var adapter = currentAdapters.remove(transactionWallet)
             if (adapter == null) {
                 adapterManager.getAdapter(transactionWallet.source)?.let {
                     adapter = TransactionAdapterWrapper(it, transactionWallet)
-                    adapter?.start()
                 }
             }
 
@@ -49,9 +51,17 @@ class TransactionRecordRepository(
             }
         }
 
-        currentAdapters.forEach { (_, adapter) ->
-            adapter.stop()
+        adaptersMap.forEach { (transactionWallet, adapterWrapper) ->
+            adapterWrapper.updatedObservable
+                .subscribeIO {
+                    handleUpdatedRecords(transactionWallet, it)
+                }
+                .let {
+                    disposablesTxsUpdates.add(it)
+                }
         }
+
+        currentAdapters.clear()
 
         selectedWallet?.let {
             if (!adaptersMap.containsKey(it)) {
@@ -116,6 +126,7 @@ class TransactionRecordRepository(
 
     override fun clear() {
         disposables.clear()
+        disposablesTxsUpdates.clear()
     }
 
     private fun handleRecords(records: List<Pair<TransactionWallet, TransactionRecord>>) {
@@ -134,6 +145,45 @@ class TransactionRecordRepository(
             itemsUpdated = false
         }
     }
+
+    @Synchronized
+    private fun handleUpdatedRecords(transactionWallet: TransactionWallet, list: List<TransactionRecord>) {
+        val transactionAdapterWrapper = adaptersMap[transactionWallet]
+        list.forEach { updatedRecord ->
+            val indexOfUpdated = items.indexOf(updatedRecord)
+            val indexToInsert = items.indexOfFirst { it < updatedRecord }
+
+            when {
+                // record should be updated
+                indexOfUpdated != -1 -> {
+                    items[indexOfUpdated] = updatedRecord
+                    itemsUpdated = true
+                    transactionAdapterWrapper?.markUpdated(updatedRecord)
+                }
+                // record should be inserted
+                indexToInsert != -1 -> {
+                    items.add(indexToInsert, updatedRecord)
+                    itemsUpdated = true
+                    transactionAdapterWrapper?.markInserted(updatedRecord)
+                }
+                // if current items empty insert a record
+                items.isEmpty() -> {
+                    items.add(updatedRecord)
+                    itemsUpdated = true
+                    transactionAdapterWrapper?.markInserted(updatedRecord)
+                }
+                else -> {
+                    transactionAdapterWrapper?.markIgnored(updatedRecord)
+                }
+            }
+        }
+
+        if (itemsUpdated) {
+            itemsSubject.onNext(items)
+            itemsUpdated = false
+        }
+    }
+
 
     companion object {
         const val itemsPerPage = 20
