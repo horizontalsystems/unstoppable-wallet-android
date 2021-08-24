@@ -1,12 +1,13 @@
 package io.horizontalsystems.bankwallet.modules.transactions.q
 
 import io.horizontalsystems.bankwallet.core.Clearable
+import io.horizontalsystems.bankwallet.core.IWalletManager
+import io.horizontalsystems.bankwallet.core.managers.TransactionAdapterManager
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.LastBlockInfo
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
-import io.horizontalsystems.bankwallet.modules.balance.BalanceActiveWalletRepository
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionWallet
 import io.reactivex.Observable
@@ -17,10 +18,11 @@ import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.Executors
 
 class Transactions2Service(
-    private val balanceActiveWalletRepository: BalanceActiveWalletRepository,
     private val transactionRecordRepository: ITransactionRecordRepository,
     private val xRateRepository: TransactionsXRateRepository,
-    private val transactionSyncStateRepository: TransactionSyncStateRepository
+    private val transactionSyncStateRepository: TransactionSyncStateRepository,
+    private val transactionAdapterManager: TransactionAdapterManager,
+    private val walletManager: IWalletManager
 ) : Clearable {
 
     private val filterCoinsSubject = BehaviorSubject.create<List<Wallet>>()
@@ -40,9 +42,11 @@ class Transactions2Service(
     private var transactionWallets = listOf<TransactionWallet>()
 
     init {
-        balanceActiveWalletRepository.itemsObservable
-            .subscribeIO { wallets ->
-                handleUpdatedWallets(wallets)
+        handleUpdatedWallets(walletManager.activeWallets)
+
+        transactionAdapterManager.adaptersReadyObservable
+            .subscribeIO {
+                handleUpdatedWallets(walletManager.activeWallets)
             }
             .let {
                 disposables.add(it)
