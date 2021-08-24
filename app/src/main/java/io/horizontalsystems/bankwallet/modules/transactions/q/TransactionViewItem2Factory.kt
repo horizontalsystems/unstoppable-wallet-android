@@ -13,6 +13,7 @@ import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.*
 import io.horizontalsystems.bankwallet.modules.transactionInfo.ColoredValue
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoAddressMapper
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionStatus
+import java.util.*
 
 class TransactionViewItem2Factory {
 
@@ -67,7 +68,8 @@ class TransactionViewItem2Factory {
                 getNameOrAddressTruncated(record.exchangeAddress)
             ),
             primaryValue,
-            secondaryValue
+            secondaryValue,
+            Date(record.timestamp * 1000)
         )
     }
 
@@ -94,6 +96,7 @@ class TransactionViewItem2Factory {
             Translator.getString(R.string.Transactions_To, getNameOrAddressTruncated(record.to)),
             primaryValue,
             secondaryValue,
+            Date(record.timestamp * 1000),
             record.sentToSelf
         )
     }
@@ -123,7 +126,8 @@ class TransactionViewItem2Factory {
                 getNameOrAddressTruncated(record.from)
             ),
             primaryValue,
-            secondaryValue
+            secondaryValue,
+            Date(record.timestamp * 1000)
         )
     }
 
@@ -141,7 +145,8 @@ class TransactionViewItem2Factory {
             Translator.getString(R.string.Transactions_ContractCreation),
             "---",
             null,
-            null
+            null,
+            Date(record.timestamp * 1000)
         )
     }
 
@@ -162,7 +167,8 @@ class TransactionViewItem2Factory {
                 getNameOrAddressTruncated(record.contractAddress)
             ),
             null,
-            null
+            null,
+            Date(record.timestamp * 1000)
         )
     }
 
@@ -203,6 +209,7 @@ class TransactionViewItem2Factory {
             subtitle,
             primaryValue,
             secondaryValue,
+            Date(record.timestamp * 1000),
             record.sentToSelf,
             record.conflictingHash != null,
             locked
@@ -246,6 +253,7 @@ class TransactionViewItem2Factory {
             subtitle,
             primaryValue,
             secondaryValue,
+            Date(record.timestamp * 1000),
             false,
             record.conflictingHash != null,
             locked
@@ -275,6 +283,7 @@ class TransactionViewItem2Factory {
             Translator.getString(R.string.Transactions_To, getNameOrAddressTruncated(record.to)),
             primaryValue,
             secondaryValue,
+            Date(record.timestamp * 1000),
             record.sentToSelf
         )
     }
@@ -304,7 +313,8 @@ class TransactionViewItem2Factory {
                 getNameOrAddressTruncated(record.from)
             ),
             primaryValue,
-            secondaryValue
+            secondaryValue,
+            Date(record.timestamp * 1000)
         )
     }
 
@@ -340,7 +350,8 @@ class TransactionViewItem2Factory {
                 getNameOrAddressTruncated(record.spender)
             ),
             primaryValue,
-            secondaryValue
+            secondaryValue,
+            Date(record.timestamp * 1000)
         )
     }
 

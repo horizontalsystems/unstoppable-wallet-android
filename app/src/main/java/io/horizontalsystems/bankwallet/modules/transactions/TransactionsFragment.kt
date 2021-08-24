@@ -74,15 +74,15 @@ class TransactionsFragment : Fragment(), TransactionsAdapter.Listener, FilterAda
             }
         })
 
-        val transactionSectionHeader = TransactionSectionHeader()
-        recyclerTransactions.addItemDecoration(transactionSectionHeader.itemDecoration)
+//        val transactionSectionHeader = TransactionSectionHeader()
+//        recyclerTransactions.addItemDecoration(transactionSectionHeader.itemDecoration)
 
         viewModel.filterItems.observe(viewLifecycleOwner, Observer { (filters, selected) ->
             filterAdapter.setFilters(filters, selected)
         })
 
         viewModel.items.observe(viewLifecycleOwner, Observer {
-            transactionSectionHeader.updateList(it)
+//            transactionSectionHeader.updateList(it)
             transactionsAdapter.submitList(it)
         })
 
