@@ -20,11 +20,12 @@ class WalletConnectInteractor(
 ) {
 
     interface Delegate {
-        fun didUpdateState(state: State)
-        fun didRequestSession(remotePeerId: String, remotePeerMeta: WCPeerMeta, chainId: Int?)
-        fun didKillSession()
-        fun didRequestSendEthTransaction(id: Long, transaction: WCEthereumTransaction)
-        fun didRequestSignMessage(id: Long, message: WCEthereumSignMessage)
+        fun didUpdateState(state: State) {}
+        fun didRequestSession(remotePeerId: String, remotePeerMeta: WCPeerMeta, chainId: Int?) {}
+        fun didKillSession() {}
+        fun didRequestSendEthTransaction(id: Long, transaction: WCEthereumTransaction) {}
+        fun didRequestSignMessage(id: Long, message: WCEthereumSignMessage) {}
+        fun didReceiveError(error: Throwable) {}
     }
 
     sealed class State {
@@ -68,7 +69,9 @@ class WalletConnectInteractor(
             }
         }
 
-        client.onFailure = { }
+        client.onFailure = {
+            delegate?.didReceiveError(it)
+        }
 
         client.onDisconnect = { _: Int, _: String ->
             state = State.Disconnected()
