@@ -20,7 +20,7 @@ data class Wallet(
             CoinType.Dash -> TransactionSource.Blockchain.Dash
             CoinType.Litecoin -> TransactionSource.Blockchain.Litecoin
             CoinType.Ethereum -> TransactionSource.Blockchain.Ethereum
-            CoinType.BinanceSmartChain -> TransactionSource.Blockchain.Ethereum
+            CoinType.BinanceSmartChain -> TransactionSource.Blockchain.BinanceSmartChain
             CoinType.Zcash -> TransactionSource.Blockchain.Zcash
             is CoinType.Bep2 -> TransactionSource.Blockchain.Bep2(type.symbol)
             is CoinType.Erc20 -> TransactionSource.Blockchain.Ethereum
