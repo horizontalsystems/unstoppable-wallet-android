@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
+import io.horizontalsystems.bankwallet.modules.transactions.TransactionSectionHeader
 import io.horizontalsystems.core.findNavController
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_transactions.*
@@ -71,11 +72,14 @@ class TransactionsFragment2 : BaseFragment(R.layout.fragment_transactions) {
             }
         })
 
+        val transactionSectionHeader = TransactionSectionHeader()
+        recyclerTransactions.addItemDecoration(transactionSectionHeader.itemDecoration)
 
         viewModel.transactionList.observe(viewLifecycleOwner) { itemsList ->
             when (itemsList) {
                 Transactions2ViewModel.ItemsList.Blank -> TODO()
                 is Transactions2ViewModel.ItemsList.Filled -> {
+                    transactionSectionHeader.updateList(itemsList.items)
                     transactionsAdapter.submitList(itemsList.items)
                 }
             }

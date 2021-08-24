@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.transactions
 
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.providers.Translator
+import io.horizontalsystems.bankwallet.modules.transactions.q.TransactionViewItem2
 import io.horizontalsystems.core.helpers.DateHelper
 import java.util.*
 
@@ -13,18 +14,16 @@ class TransactionSectionHeader {
         override fun getSectionHeader(position: Int) = headers[position] ?: ""
     })
 
-    fun updateList(items: List<TransactionViewItem>) {
+    fun updateList(items: List<TransactionViewItem2>) {
         headers.clear()
 
         var prevSectionHeader: String? = null
         items.forEachIndexed { index, transactionViewItem ->
-            transactionViewItem.date?.let { date ->
-                val sectionHeader = formatDate(date).uppercase()
+            val sectionHeader = formatDate(transactionViewItem.date).uppercase()
 
-                if (sectionHeader != prevSectionHeader) {
-                    headers[index] = sectionHeader
-                    prevSectionHeader = sectionHeader
-                }
+            if (sectionHeader != prevSectionHeader) {
+                headers[index] = sectionHeader
+                prevSectionHeader = sectionHeader
             }
         }
     }
