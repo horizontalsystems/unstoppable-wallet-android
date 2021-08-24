@@ -16,23 +16,14 @@
         app:title="@string/SwapSettings_Title"
         app:titleTextAppearance="@style/Title3" />
 
-    <io.horizontalsystems.views.SettingsView
-        android:id="@+id/providerButton"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_marginTop="12dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar"
-        app:title="@string/SwapSettings_Service" />
-
     <LinearLayout
         android:id="@+id/fragment_placeholder"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="38dp"
+        android:layout_marginTop="12dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/providerButton" />
+        app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

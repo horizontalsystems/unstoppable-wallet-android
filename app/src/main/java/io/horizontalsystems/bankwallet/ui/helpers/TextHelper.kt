@@ -4,6 +4,8 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.graphics.Bitmap
+import android.text.SpannableString
+import android.text.style.UnderlineSpan
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.EncodeHintType
 import com.google.zxing.MultiFormatWriter
@@ -61,6 +63,12 @@ object TextHelper : IClipboardManager {
             cleanedUrl = cleanedUrl.substring(0, cleanedUrl.length - 1)
         }
         return cleanedUrl
+    }
+
+    fun underlineText(text: String): SpannableString {
+        val textSpannable = SpannableString(text)
+        textSpannable.setSpan(UnderlineSpan(), 0, text.length, 0)
+        return textSpannable
     }
 
     private val clipboard: ClipboardManager?

@@ -46,7 +46,7 @@ class SwapCoinCardViewModel(
     private val resetAmountLiveEvent = SingleLiveEvent<Unit>()
     private val balanceLiveData = MutableLiveData<String?>(null)
     private val balanceErrorLiveData = MutableLiveData(false)
-    private val tokenCodeLiveData = MutableLiveData<Coin?>(null)
+    private val tokenCodeLiveData = MutableLiveData<Coin?>()
     private val isEstimatedLiveData = MutableLiveData(false)
     private val inputParamsLiveData = MutableLiveData<AmountInputView.InputParams>()
     private val secondaryInfoLiveData = MutableLiveData<String?>(null)
