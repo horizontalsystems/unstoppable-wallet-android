@@ -5,13 +5,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListViewModel.WalletConnectViewItem
 import io.horizontalsystems.bankwallet.modules.walletconnect.main.WalletConnectMainModule
+import io.horizontalsystems.core.dp
 import io.horizontalsystems.core.findNavController
+import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.snackbar.CustomSnackbar
+import io.horizontalsystems.snackbar.SnackbarDuration
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_notifications.toolbar
 import kotlinx.android.synthetic.main.fragment_wallet_connect_list.*
@@ -20,6 +25,8 @@ import kotlinx.android.synthetic.main.view_holder_wallet_connect_session.*
 
 class WalletConnectListFragment : BaseFragment(), SessionViewHolder.Listener {
     private val viewModel by viewModels<WalletConnectListViewModel> { WalletConnectListModule.Factory() }
+
+    private var snackbarInProcess: CustomSnackbar? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_wallet_connect_list, container, false)
@@ -39,6 +46,20 @@ class WalletConnectListFragment : BaseFragment(), SessionViewHolder.Listener {
         val walletConnectListAdapter = WalletConnectListAdapter(this)
         sessionsRecyclerView.adapter = walletConnectListAdapter
 
+        val swipeHelper = SwipeHelper(sessionsRecyclerView) { position ->
+            val sessionViewItem = walletConnectListAdapter.items.getOrNull(position) as? WalletConnectViewItem.Session
+            if (sessionViewItem != null) {
+                listOf(SwipeHelper.UnderlayButton(requireContext(), R.drawable.ic_trash_24, 16.dp, 32.dp, 17.dp) {
+                    viewModel.onClickDelete(sessionViewItem)
+                })
+            } else {
+                listOf()
+            }
+        }
+
+        val itemTouchHelper = ItemTouchHelper(swipeHelper)
+        itemTouchHelper.attachToRecyclerView(sessionsRecyclerView)
+
         viewModel.viewItemsLiveData.observe(viewLifecycleOwner, { viewItems ->
             walletConnectListAdapter.items = viewItems
             walletConnectListAdapter.notifyDataSetChanged()
@@ -47,19 +68,56 @@ class WalletConnectListFragment : BaseFragment(), SessionViewHolder.Listener {
         viewModel.startNewConnectionEvent.observe(viewLifecycleOwner, {
             startNewConnection()
         })
+
+        viewModel.killingSessionInProcessLiveEvent.observe(viewLifecycleOwner, {
+            snackbarInProcess = HudHelper.showInProcessMessage(
+                requireView(),
+                R.string.StatusInfo_Processing,
+                SnackbarDuration.INDEFINITE
+            )
+        })
+
+        viewModel.killingSessionFailedLiveEvent.observe(viewLifecycleOwner, {
+            snackbarInProcess?.dismiss()
+
+            HudHelper.showErrorMessage(
+                requireActivity().findViewById(android.R.id.content),
+                it
+            )
+        })
+
+        viewModel.killingSessionCompletedLiveEvent.observe(viewLifecycleOwner, {
+            snackbarInProcess?.dismiss()
+
+            HudHelper.showSuccessMessage(
+                requireActivity().findViewById(android.R.id.content),
+                R.string.Hud_Text_Success
+            )
+        })
     }
 
     private fun startNewConnection() {
-        WalletConnectMainModule.start(this, R.id.walletConnectListFragment_to_walletConnectMainFragment, navOptions(), viewModel.getSessionsCount())
+        WalletConnectMainModule.start(
+            this,
+            R.id.walletConnectListFragment_to_walletConnectMainFragment,
+            navOptions(),
+            viewModel.getSessionsCount()
+        )
     }
 
     override fun onSessionClick(session: WalletConnectViewItem.Session) {
-        WalletConnectMainModule.start(this, R.id.walletConnectListFragment_to_walletConnectMainFragment, navOptions(), remotePeerId = session.session.remotePeerId)
+        WalletConnectMainModule.start(
+            this,
+            R.id.walletConnectListFragment_to_walletConnectMainFragment,
+            navOptions(),
+            remotePeerId = session.session.remotePeerId
+        )
     }
+
 }
 
 class WalletConnectListAdapter(
-        private val listener: SessionViewHolder.Listener
+    private val listener: SessionViewHolder.Listener
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     var items = listOf<WalletConnectViewItem>()
 
@@ -106,14 +164,16 @@ class AccountViewHolder(override val containerView: View) : RecyclerView.ViewHol
 
     companion object {
         fun create(parent: ViewGroup): AccountViewHolder {
-            return AccountViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_wallet_connect_account, parent, false))
+            return AccountViewHolder(
+                LayoutInflater.from(parent.context).inflate(R.layout.view_holder_wallet_connect_account, parent, false)
+            )
         }
     }
 }
 
 class SessionViewHolder(
-        override val containerView: View,
-        private val listener: Listener
+    override val containerView: View,
+    private val listener: Listener
 ) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
     interface Listener {
@@ -133,7 +193,10 @@ class SessionViewHolder(
 
     companion object {
         fun create(parent: ViewGroup, listener: Listener): SessionViewHolder {
-            return SessionViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_wallet_connect_session, parent, false), listener)
+            return SessionViewHolder(
+                LayoutInflater.from(parent.context).inflate(R.layout.view_holder_wallet_connect_session, parent, false),
+                listener
+            )
         }
     }
 }
