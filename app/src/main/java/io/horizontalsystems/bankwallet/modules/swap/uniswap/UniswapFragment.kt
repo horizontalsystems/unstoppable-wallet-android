@@ -24,6 +24,8 @@ import io.horizontalsystems.bankwallet.modules.swap.confirmation.uniswap.Uniswap
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
+import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
+import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.getNavigationResult
 import kotlinx.android.synthetic.main.fragment_uniswap.*
 
@@ -105,7 +107,11 @@ class UniswapFragment : SwapBaseFragment() {
             uniswapViewModel.onTapSwitch()
         }
 
-        poweredBy.text = dex.provider.title
+        poweredBy.text = TextHelper.underlineText(dex.provider.title)
+
+        poweredBy.setOnClickListener {
+            findNavController().navigate(R.id.selectSwapProviderDialog)
+        }
 
         buttonsCompose.setViewCompositionStrategy(
             ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)

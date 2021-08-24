@@ -2,37 +2,21 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/manage_wallets"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="?android:windowBackground"
-    android:clickable="true">
-
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="0dp"
-        android:layout_height="?attr/actionBarSize"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:navigationIcon="@drawable/ic_back"
-        app:title="@string/SwapSettings_Service"
-        app:titleTextAppearance="@style/Title3" />
+    android:layout_height="match_parent">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:paddingTop="12dp"
+        android:layout_width="328dp"
+        android:layout_height="wrap_content"
         android:clipToPadding="false"
-        android:paddingBottom="32dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintTop_toTopOf="parent"
         tools:itemCount="4"
-        tools:listitem="@layout/view_holder_coin_manage_item" />
+        tools:listitem="@layout/view_holder_item_with_checkmark" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

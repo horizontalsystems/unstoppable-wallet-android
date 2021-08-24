@@ -43,10 +43,10 @@
         android:layout_marginEnd="16dp"
         android:drawableEnd="@drawable/ic_down_arrow_20"
         android:drawablePadding="8dp"
-        android:text="@string/Swap_TokenSelectorTitle"
         android:textColor="@color/jacob"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/Swap_TokenSelectorTitle" />
 
     <View
         android:id="@+id/background"

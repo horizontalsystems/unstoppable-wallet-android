@@ -2,18 +2,16 @@ package io.horizontalsystems.bankwallet.modules.swap.providerselect
 
 import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.view.isVisible
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.BaseDialogFragment
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainViewModel
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.setOnSingleClickListener
@@ -21,22 +19,21 @@ import io.horizontalsystems.views.ListPosition
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_swap_select_token.*
 
-class SelectSwapProviderDialogFragment : BaseDialogFragment() {
+class SelectSwapProviderDialogFragment : DialogFragment() {
 
     private val mainViewModel by navGraphViewModels<SwapMainViewModel>(R.id.swapFragment)
     private val viewModel by viewModels<SelectSwapProviderViewModel> { SelectSwapProviderModule.Factory(mainViewModel.service) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        dialog?.window?.setWindowAnimations(R.style.RightDialogAnimations)
+        dialog?.window?.requestFeature(Window.FEATURE_NO_TITLE)
+        dialog?.window?.setBackgroundDrawableResource(R.drawable.alert_background_themed)
+        dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_UNCHANGED)
+
         return inflater.inflate(R.layout.fragment_swap_select_provider, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        toolbar.setNavigationOnClickListener {
-            findNavController().popBackStack()
-        }
 
         val adapter = SelectSwapProviderAdapter { position ->
             viewModel.onClick(position)
@@ -82,10 +79,10 @@ data class SwapProviderViewItem(
 class ViewHolderSwapProvider(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
     fun bind(item: SwapProviderViewItem, onClick: () -> (Unit)) {
-        val image = containerView.findViewById<ImageView>(io.horizontalsystems.languageswitcher.R.id.image)
-        val title = containerView.findViewById<TextView>(io.horizontalsystems.languageswitcher.R.id.title)
-        val subtitle = containerView.findViewById<TextView>(io.horizontalsystems.languageswitcher.R.id.subtitle)
-        val checkmarkIcon = containerView.findViewById<ImageView>(io.horizontalsystems.languageswitcher.R.id.checkmarkIcon)
+        val image = containerView.findViewById<ImageView>(R.id.image)
+        val title = containerView.findViewById<TextView>(R.id.title)
+        val subtitle = containerView.findViewById<TextView>(R.id.subtitle)
+        val checkmarkIcon = containerView.findViewById<ImageView>(R.id.checkmarkIcon)
 
         containerView.setOnSingleClickListener { onClick.invoke() }
         image.setImageResource(getDrawableResource(containerView.context, item.iconName))
@@ -94,6 +91,11 @@ class ViewHolderSwapProvider(override val containerView: View) : RecyclerView.Vi
         subtitle.isVisible = false
         checkmarkIcon.isVisible = item.isSelected
         containerView.setBackgroundResource(item.listPosition.getBackground())
+
+        (containerView.layoutParams as? ViewGroup.MarginLayoutParams)?.let {
+            it.marginStart = 0
+            it.marginEnd = 0
+        }
     }
 
     private fun getDrawableResource(context: Context, providerId: String): Int {

@@ -87,10 +87,12 @@
                 style="@style/Subhead2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/grey"
-                app:layout_constraintEnd_toStartOf="@+id/endBorder"
-                app:layout_constraintTop_toTopOf="@+id/poweredByTitle"
-                tools:text="0.112 Token" />
+                android:drawablePadding="6dp"
+                android:textColor="@color/jacob"
+                app:drawableEndCompat="@drawable/ic_swap_20"
+                app:layout_constraintEnd_toStartOf="@id/endBorder"
+                app:layout_constraintTop_toTopOf="@id/poweredByTitle"
+                tools:text="Uniswap" />
 
             <io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceView
                 android:id="@+id/allowanceView"
@@ -206,8 +208,7 @@
                 app:layout_constraintStart_toStartOf="@id/startBorder"
                 app:layout_constraintTop_toBottomOf="@+id/commonError"
                 tools:layout_height="50dp"
-                tools:layout_marginTop="28dp"
-                />
+                tools:layout_marginTop="28dp" />
 
             <io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceStepsView
                 android:id="@+id/approveStepsView"
@@ -218,8 +219,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@id/endBorder"
                 app:layout_constraintStart_toEndOf="@id/startBorder"
-                app:layout_constraintTop_toBottomOf="@id/buttonsCompose"
-                />
+                app:layout_constraintTop_toBottomOf="@id/buttonsCompose" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

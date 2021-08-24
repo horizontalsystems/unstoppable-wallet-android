@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.ISwapProvider
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainViewModel
 import io.horizontalsystems.bankwallet.modules.swap.info.SwapInfoModule
 import io.horizontalsystems.core.findNavController
@@ -37,28 +36,9 @@ class SwapSettingsMainFragment : BaseFragment() {
             }
         }
 
-        providerButton.setOnClickListener {
-            findNavController().navigate(R.id.selectSwapProviderDialog)
-        }
-
-        setProviderButtonTitle(mainViewModel.provider.title)
-        setProviderView(mainViewModel.provider)
-
-        mainViewModel.providerLiveData.observe(viewLifecycleOwner, { provider ->
-            setProviderButtonTitle(provider.title)
-            setProviderView(provider)
-        })
-
-    }
-
-    private fun setProviderButtonTitle(title: String) {
-        providerButton.showValueWithColor(title, R.color.leah)
-    }
-
-    private fun setProviderView(provider: ISwapProvider) {
         childFragmentManager
-                .beginTransaction()
-                .replace(R.id.fragment_placeholder, provider.settingsFragment)
-                .commitNow()
+            .beginTransaction()
+            .replace(R.id.fragment_placeholder, mainViewModel.provider.settingsFragment)
+            .commitNow()
     }
 }
