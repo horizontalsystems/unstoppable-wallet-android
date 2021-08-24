@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.unit.dp
@@ -13,10 +13,10 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
 import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.findNavController
@@ -72,42 +72,68 @@ class ReceiveFragment : BaseFragment() {
             val hintColor = if (viewModel.testNet) R.color.lucian else R.color.grey
             receiverHint.setTextColor(view.context.getColor(hintColor))
 
-            btnShare.setOnSingleClickListener {
-                context?.let {
-                    ShareCompat.IntentBuilder(it)
-                            .setType("text/plain")
-                            .setText(viewModel.receiveAddress)
-                            .startChooser()
-                }
-            }
-
-            btnCopy.setOnSingleClickListener {
-                copyAddress(viewModel.receiveAddress)
-            }
-
             buttonCloseCompose.setViewCompositionStrategy(
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
 
-            buttonCloseCompose.setContent {
-                ComposeAppTheme {
-                    ButtonPrimaryYellow(
-                        modifier = Modifier.padding(
-                            start = 24.dp,
-                            top = 24.dp,
-                            end = 24.dp,
-                            bottom = 44.dp
-                        ),
-                        title = getString(R.string.Button_Close),
+            setCloseButton()
+
+            setCopyShareButtons(viewModel)
+        } catch (t: Throwable) {
+            HudHelper.showErrorMessage(this.requireView(), t.message ?: t.javaClass.simpleName)
+            findNavController().popBackStack()
+        }
+
+    }
+
+    private fun setCopyShareButtons(viewModel: ReceiveViewModel) {
+        btnsCopyShareCompose.setContent {
+            ComposeAppTheme {
+                Row(
+                    modifier = Modifier.width(IntrinsicSize.Max)
+                        .padding(top = 23.dp, bottom = 23.dp),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    ButtonSecondaryDefault(
+                        modifier = Modifier.padding(end = 6.dp),
+                        title = getString(R.string.Alert_Copy),
                         onClick = {
-                            findNavController().popBackStack()
+                            copyAddress(viewModel.receiveAddress)
+                        }
+                    )
+                    ButtonSecondaryDefault(
+                        modifier = Modifier.padding(start = 6.dp),
+                        title = getString(R.string.Deposit_Share),
+                        onClick = {
+                            context?.let {
+                                ShareCompat.IntentBuilder(it)
+                                    .setType("text/plain")
+                                    .setText(viewModel.receiveAddress)
+                                    .startChooser()
+                            }
                         }
                     )
                 }
             }
-        } catch (t: Throwable) {
-            HudHelper.showErrorMessage(this.requireView(), t.message ?: t.javaClass.simpleName)
-            findNavController().popBackStack()
+        }
+    }
+
+    private fun setCloseButton() {
+        buttonCloseCompose.setContent {
+            ComposeAppTheme {
+                ButtonPrimaryYellow(
+                    modifier = Modifier.padding(
+                        start = 24.dp,
+                        top = 24.dp,
+                        end = 24.dp,
+                        bottom = 44.dp
+                    ),
+                    title = getString(R.string.Button_Close),
+                    onClick = {
+                        findNavController().popBackStack()
+                    }
+                )
+            }
         }
     }
 
