@@ -32,21 +32,30 @@ class TransactionRecordRepository(
     override fun setWallets(transactionWallets: List<TransactionWallet>, walletsGroupedBySource: List<TransactionWallet>) {
         this.walletsGroupedBySource = walletsGroupedBySource
 
-        transactionWallets.forEach { transactionWallet ->
-            if (adaptersMap[transactionWallet] == null) {
+        val currentAdapters = adaptersMap.toMutableMap()
+        adaptersMap.clear()
+
+        (transactionWallets + walletsGroupedBySource).distinct().forEach { transactionWallet ->
+            var adapter = currentAdapters.remove(transactionWallet)
+            if (adapter == null) {
                 adapterManager.getAdapter(transactionWallet.source)?.let {
-                    val transactionAdapterWrapperXxx = TransactionAdapterWrapper(it, transactionWallet)
-                    adaptersMap[transactionWallet] = transactionAdapterWrapperXxx
+                    adapter = TransactionAdapterWrapper(it, transactionWallet)
+                    adapter?.start()
                 }
+            }
+
+            adapter?.let {
+                adaptersMap[transactionWallet] = it
             }
         }
 
-        walletsGroupedBySource.forEach { transactionWallet ->
-            if (adaptersMap[transactionWallet] == null) {
-                adapterManager.getAdapter(transactionWallet.source)?.let {
-                    val transactionAdapterWrapperXxx = TransactionAdapterWrapper(it, transactionWallet)
-                    adaptersMap[transactionWallet] = transactionAdapterWrapperXxx
-                }
+        currentAdapters.forEach { (_, adapter) ->
+            adapter.stop()
+        }
+
+        selectedWallet?.let {
+            if (!adaptersMap.containsKey(it)) {
+                selectedWallet = null
             }
         }
 
@@ -60,7 +69,6 @@ class TransactionRecordRepository(
 
     override fun setSelectedWallet(transactionWallet: TransactionWallet?) {
         selectedWallet = transactionWallet
-        val activeWallets = transactionWallet?.let { listOf(it) } ?: walletsGroupedBySource
 
         items.clear()
         itemsUpdated = true
