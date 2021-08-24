@@ -10,6 +10,8 @@ import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.modules.market.sortedByDescendingNullLast
 import io.horizontalsystems.bankwallet.modules.market.sortedByNullLast
+import io.horizontalsystems.bankwallet.ui.extensions.SelectorItem
+import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.xrateskit.entities.DefiTvl
 import io.reactivex.disposables.Disposable
 
@@ -19,18 +21,8 @@ class TvlRankViewModel(
     appConfigProvider: IAppConfigProvider
 ) : ViewModel() {
 
-    val coinList = MutableLiveData<List<TvlRankViewItem>>()
-    val loadingLiveData = MutableLiveData(true)
-    val coinInfoErrorLiveData = MutableLiveData<String>()
-    val showPoweredByLiveData = MutableLiveData(false)
-
-    val sortFields: Array<TvlRankSortField> =
-        arrayOf(TvlRankSortField.HighestTvl, TvlRankSortField.LowestTvl)
-
-    var sortField: TvlRankSortField = sortFields.first()
-        private set
-
-    val filterFields: Array<TvlRankFilterField> =
+    private var sortDesc = true
+    private val filterFields: Array<TvlRankFilterField> =
         arrayOf(
             TvlRankFilterField.All,
             TvlRankFilterField.Ethereum,
@@ -40,8 +32,15 @@ class TvlRankViewModel(
             TvlRankFilterField.Polygon
         )
 
-    var filterField: TvlRankFilterField = filterFields.first()
-        private set
+    private var filterField: TvlRankFilterField = filterFields.first()
+
+    val coinList = MutableLiveData<List<TvlRankViewItem>>()
+    val loadingLiveData = MutableLiveData(true)
+    val coinInfoErrorLiveData = MutableLiveData<String>()
+    val showPoweredByLiveData = MutableLiveData(false)
+    val sortDescLiveData = MutableLiveData(sortDesc)
+    val filterLiveData = MutableLiveData(filterField)
+    val showFilterSelectDialogLiveData = SingleLiveEvent<List<SelectorItem>>()
 
     private var rawItemList: List<DefiTvl> = listOf()
     private val usdCurrency = appConfigProvider.currencies.first { it.code == "USD" }
@@ -53,16 +52,6 @@ class TvlRankViewModel(
 
     override fun onCleared() {
         disposable?.dispose()
-    }
-
-    fun changeSorting(sortField: TvlRankSortField) {
-        this.sortField = sortField
-        syncViewItems()
-    }
-
-    fun changeFilter(filterField: TvlRankFilterField) {
-        this.filterField = filterField
-        getCoinList()
     }
 
     private fun getCoinList() {
@@ -84,9 +73,9 @@ class TvlRankViewModel(
     }
 
     private fun syncViewItems() {
-        val sorted = rawItemList.sort(sortField)
+        val sorted = rawItemList.sort(sortDesc)
         coinList.postValue(sorted.map { getViewItem(it) })
-        showPoweredByLiveData.postValue(!sorted.isEmpty())
+        showPoweredByLiveData.postValue(sorted.isNotEmpty())
     }
 
     private fun getViewItem(defiTvl: DefiTvl): TvlRankViewItem {
@@ -107,6 +96,26 @@ class TvlRankViewModel(
         )
     }
 
+    fun onChangeSorting() {
+        sortDesc = !sortDesc
+        syncViewItems()
+        sortDescLiveData.postValue(sortDesc)
+    }
+
+    fun onFilterMenuClick() {
+        val items = filterFields.map {
+            SelectorItem(Translator.getString(it.titleResId), it == filterField)
+        }
+        showFilterSelectDialogLiveData.postValue(items)
+    }
+
+    fun onFilterSelect(position: Int) {
+        val selectedField = filterFields[position]
+        filterField = selectedField
+        filterLiveData.postValue(filterField)
+        getCoinList()
+    }
+
     private fun getChains(chains: List<String>?): String {
         return when {
             chains.isNullOrEmpty() -> ""
@@ -115,9 +124,10 @@ class TvlRankViewModel(
         }
     }
 
-    private fun List<DefiTvl>.sort(sortField: TvlRankSortField) = when (sortField) {
-        TvlRankSortField.HighestTvl -> sortedByDescendingNullLast { it.tvl }
-        TvlRankSortField.LowestTvl -> sortedByNullLast { it.tvl }
-        //else -> throw IllegalArgumentException()
-    }
+    private fun List<DefiTvl>.sort(sortDesc: Boolean) =
+        if (sortDesc) {
+            sortedByDescendingNullLast { it.tvl }
+        } else {
+            sortedByNullLast { it.tvl }
+        }
 }

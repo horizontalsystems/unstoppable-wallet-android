@@ -11,7 +11,6 @@ import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.coin.adapters.CoinInfoErrorAdapter
 import io.horizontalsystems.bankwallet.modules.market.overview.PoweredByAdapter
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorDialog
-import io.horizontalsystems.bankwallet.ui.extensions.SelectorItem
 import io.horizontalsystems.bankwallet.ui.extensions.TvlRankListHeaderView
 import io.horizontalsystems.core.findNavController
 import kotlinx.android.synthetic.main.fragment_tvl_rank.*
@@ -37,8 +36,6 @@ class TvlRankFragment : BaseFragment(), TvlRankListHeaderView.Listener {
         }
 
         listHeader.listener = this
-        listHeader.setLeftField(viewModel.filterField.titleResId)
-        listHeader.setRightField(viewModel.sortField.titleResId)
 
         val adapter = TvlRankItemAdapter()
         val loadingAdapter = TvlRankLoadingAdapter(
@@ -54,36 +51,30 @@ class TvlRankFragment : BaseFragment(), TvlRankListHeaderView.Listener {
         viewModel.coinList.observe(viewLifecycleOwner, {
             adapter.submitList(it)
         })
+
+        viewModel.sortDescLiveData.observe(viewLifecycleOwner, { sortDesc ->
+            listHeader.setSortDescending(sortDesc)
+        })
+
+        viewModel.filterLiveData.observe(viewLifecycleOwner, { filterField ->
+            listHeader.setLeftField(filterField.titleResId)
+        })
+
+        viewModel.showFilterSelectDialogLiveData.observe(viewLifecycleOwner, { filters ->
+            SelectorDialog
+                .newInstance(filters, getString(R.string.TvlRank_Filters_PopupTitle)) { position ->
+                    viewModel.onFilterSelect(position)
+                }
+                .show(childFragmentManager, "filter_field_selector")
+        })
     }
 
-    override fun onClickLeftMenu() {
-        val items = viewModel.filterFields.map {
-            SelectorItem(getString(it.titleResId), it == viewModel.filterField)
-        }
-
-        SelectorDialog
-            .newInstance(items, getString(R.string.TvlRank_Filters_PopupTitle)) { position ->
-                val selectedField = viewModel.filterFields[position]
-
-                listHeader.setLeftField(selectedField.titleResId)
-                viewModel.changeFilter(selectedField)
-            }
-            .show(childFragmentManager, "filter_field_selector")
+    override fun onFilterClick() {
+        viewModel.onFilterMenuClick()
     }
 
-    override fun onClickRightMenu() {
-        val items = viewModel.sortFields.map {
-            SelectorItem(getString(it.titleResId), it == viewModel.sortField)
-        }
-
-        SelectorDialog
-            .newInstance(items, getString(R.string.Market_Sort_PopupTitle)) { position ->
-                val selectedField = viewModel.sortFields[position]
-
-                listHeader.setRightField(selectedField.titleResId)
-                viewModel.changeSorting(selectedField)
-            }
-            .show(childFragmentManager, "sort_field_selector")
+    override fun onChangeSortingClick() {
+        viewModel.onChangeSorting()
     }
 
 }

@@ -13,9 +13,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.ui.compose.Steel20
+import io.horizontalsystems.bankwallet.ui.compose.SteelLight
 
 @Composable
-fun CircleButton(
+fun CircleButtonPrimary(
     @DrawableRes icon: Int = R.drawable.ic_arrow_down_left_24,
     onClick: () -> Unit,
 ) {
@@ -31,6 +33,27 @@ fun CircleButton(
             painter = painterResource(id = icon),
             contentDescription = null,
             tint = ComposeAppTheme.colors.claude
+        )
+    }
+}
+
+@Composable
+fun CircleButtonSecondary(
+    @DrawableRes icon: Int = R.drawable.ic_arrow_down_20,
+    onClick: () -> Unit,
+) {
+    val shape = CircleShape
+    IconButton(
+        onClick = { onClick() },
+        modifier = Modifier
+            .size(28.dp)
+            .clip(shape)
+            .background(Steel20)
+    ) {
+        Icon(
+            painter = painterResource(id = icon),
+            contentDescription = null,
+            tint = SteelLight
         )
     }
 }
