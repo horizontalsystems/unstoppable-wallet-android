@@ -32,11 +32,6 @@ data class TvlRankViewItem(
     val chains: String
 )
 
-enum class TvlRankSortField(@StringRes val titleResId: Int) {
-    HighestTvl(R.string.TvlRank_Field_HighestTvl),
-    LowestTvl(R.string.TvlRank_Field_LowestTvl)
-}
-
 enum class TvlRankFilterField(@StringRes val titleResId: Int) {
     All(R.string.TvlRank_Field_All),
     Ethereum(R.string.TvlRank_Field_Eth),
