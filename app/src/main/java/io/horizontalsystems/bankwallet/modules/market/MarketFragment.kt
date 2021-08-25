@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseWithSearchFragment
-import io.horizontalsystems.bankwallet.modules.transactions.FilterAdapter
+import io.horizontalsystems.bankwallet.ui.FilterAdapter
 import io.horizontalsystems.core.findNavController
 import kotlinx.android.synthetic.main.fragment_market.*
 
