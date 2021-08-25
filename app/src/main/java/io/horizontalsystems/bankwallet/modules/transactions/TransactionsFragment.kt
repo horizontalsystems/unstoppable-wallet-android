@@ -22,12 +22,13 @@ class TransactionsFragment : BaseFragment(R.layout.fragment_transactions) {
 
     private val viewModel by navGraphViewModels<TransactionsViewModel>(R.id.mainFragment) { TransactionsModule.Factory() }
 
-
+    private var scrollToTopAfterUpdate = false
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         val tagsAdapter = TagsAdapter {
             viewModel.setFilterCoin(it)
+            scrollToTopAfterUpdate = true
         }
 
         recyclerTags.adapter = tagsAdapter
@@ -79,7 +80,12 @@ class TransactionsFragment : BaseFragment(R.layout.fragment_transactions) {
             recyclerTransactions.isVisible = itemsList is TransactionsViewModel.ItemsList.Filled
 
             transactionSectionHeader.updateList(itemsList.items)
-            transactionsAdapter.submitList(itemsList.items)
+            transactionsAdapter.submitList(itemsList.items) {
+                if (layoutManager.findFirstVisibleItemPosition() == 0 || scrollToTopAfterUpdate) {
+                    recyclerTransactions.scrollToPosition(0)
+                    scrollToTopAfterUpdate = false
+                }
+            }
         }
 
         viewModel.filterCoinsLiveData.observe(viewLifecycleOwner) {
