@@ -84,17 +84,22 @@ class TransactionsService(
     }
 
     private fun handleLastBlockInfo(source: TransactionSource, lastBlockInfo: LastBlockInfo) {
+        var updated = false
         transactionItems.forEachIndexed { index, item ->
             if (item.record.source == source && item.record.changedBy(item.lastBlockInfo, lastBlockInfo)) {
                 transactionItems[index] = item.copy(lastBlockInfo = lastBlockInfo)
+                updated = true
             }
         }
 
-        itemsSubject.onNext(transactionItems)
+        if (updated) {
+            itemsSubject.onNext(transactionItems)
+        }
     }
 
     @Synchronized
     private fun handleUpdatedHistoricalRate(key: HistoricalRateKey, rate: CurrencyValue) {
+        var updated = false
         for (i in 0 until transactionItems.size) {
             val item = transactionItems[i]
 
@@ -103,11 +108,14 @@ class TransactionsService(
                     val currencyValue = CurrencyValue(rate.currency, mainValue.value * rate.value)
 
                     transactionItems[i] = item.copy(currencyValue = currencyValue)
+                    updated = true
                 }
             }
         }
 
-        itemsSubject.onNext(transactionItems)
+        if (updated) {
+            itemsSubject.onNext(transactionItems)
+        }
     }
 
     @Synchronized
