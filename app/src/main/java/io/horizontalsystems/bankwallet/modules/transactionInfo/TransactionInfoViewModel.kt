@@ -26,7 +26,7 @@ class TransactionInfoViewModel(
     private val service: TransactionInfoService,
     private val factory: TransactionInfoViewItemFactory,
     private val transaction: TransactionRecord,
-    source: TransactionSource,
+    val source: TransactionSource,
     private val clearables: List<Clearable>
 ) : ViewModel() {
 

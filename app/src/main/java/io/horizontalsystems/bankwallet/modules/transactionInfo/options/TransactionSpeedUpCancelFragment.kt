@@ -40,7 +40,7 @@ class TransactionSpeedUpCancelFragment : BaseFragment() {
         TransactionInfoOptionsModule.Factory(
             optionType,
             transactionHash,
-            transactionInfoViewModel.transactionWallet
+            transactionInfoViewModel.source
         )
     }
     private val speedUpCancelViewModel by viewModels<TransactionSpeedUpCancelViewModel> { vmFactory }

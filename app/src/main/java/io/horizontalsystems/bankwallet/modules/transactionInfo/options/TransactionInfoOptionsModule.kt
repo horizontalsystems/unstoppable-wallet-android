@@ -13,7 +13,7 @@ import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionService
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoOption
-import io.horizontalsystems.bankwallet.modules.transactions.TransactionWallet
+import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
 import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.core.hexStringToByteArray
@@ -25,11 +25,11 @@ object TransactionInfoOptionsModule {
     class Factory(
         private val optionType: TransactionInfoOption.Type,
         private val transactionHash: String,
-        private val transactionWallet: TransactionWallet
+        private val source: TransactionSource
     ) : ViewModelProvider.Factory {
 
         private val adapter by lazy {
-            App.adapterManager.getTransactionsAdapterForWallet(transactionWallet) as EvmTransactionsAdapter
+            App.transactionAdapterManager.getAdapter(source) as EvmTransactionsAdapter
         }
 
         private val evmKit by lazy {
