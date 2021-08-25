@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.modules.transactions
 
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.providers.Translator
-import io.horizontalsystems.bankwallet.modules.transactions.q.TransactionViewItem2
 import io.horizontalsystems.bankwallet.ui.RecyclerSectionItemDecoration
 import io.horizontalsystems.core.helpers.DateHelper
 import java.util.*

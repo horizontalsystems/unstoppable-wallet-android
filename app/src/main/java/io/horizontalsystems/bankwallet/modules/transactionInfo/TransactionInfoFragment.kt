@@ -16,7 +16,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.transactionInfo.adapters.TransactionInfoAdapter
 import io.horizontalsystems.bankwallet.modules.transactionInfo.options.TransactionSpeedUpCancelFragment
-import io.horizontalsystems.bankwallet.modules.transactions.q.Transactions2ViewModel
+import io.horizontalsystems.bankwallet.modules.transactions.Transactions2ViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
