@@ -1,11 +1,11 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
 import io.horizontalsystems.bankwallet.core.managers.TransactionAdapterManager
-import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import java.util.concurrent.CopyOnWriteArrayList
@@ -26,7 +26,7 @@ class TransactionRecordRepository(
     private val adaptersMap = mutableMapOf<TransactionWallet, TransactionAdapterWrapper>()
 
     private val disposables = CompositeDisposable()
-    private val disposablesTxsUpdates = CompositeDisposable()
+    private var disposableUpdates: Disposable? = null
 
     private var walletsGroupedBySource: List<TransactionWallet> = listOf()
 
@@ -35,7 +35,7 @@ class TransactionRecordRepository(
 
         val currentAdapters = adaptersMap.toMutableMap()
         adaptersMap.clear()
-        disposablesTxsUpdates.clear()
+        disposableUpdates?.dispose()
 
         (transactionWallets + walletsGroupedBySource).distinct().forEach { transactionWallet ->
             var adapter = currentAdapters.remove(transactionWallet)
@@ -50,15 +50,18 @@ class TransactionRecordRepository(
             }
         }
 
-        adaptersMap.forEach { (transactionWallet, adapterWrapper) ->
+        val updateObservables = adaptersMap.map { (transactionWallet, adapterWrapper) ->
             adapterWrapper.updatedObservable
-                .subscribeIO {
-                    handleUpdatedRecords(transactionWallet, it)
-                }
-                .let {
-                    disposablesTxsUpdates.add(it)
+                .map {
+                    Pair(transactionWallet, it)
                 }
         }
+
+        disposableUpdates = Observable
+            .merge(updateObservables)
+            .subscribe { (transactionWallet, records) ->
+                handleUpdatedRecords(transactionWallet, records)
+            }
 
         currentAdapters.clear()
 
@@ -125,7 +128,7 @@ class TransactionRecordRepository(
 
     override fun clear() {
         disposables.clear()
-        disposablesTxsUpdates.clear()
+        disposableUpdates?.dispose()
     }
 
     private fun handleRecords(records: List<Pair<TransactionWallet, TransactionRecord>>) {
