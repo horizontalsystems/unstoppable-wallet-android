@@ -93,6 +93,10 @@ class WalletConnectSendEthereumTransactionRequestFragment : BaseFragment() {
             }
         )
 
+        sendViewModel.transactionTitleLiveData.observe(viewLifecycleOwner, {
+            toolbar.title = it
+        })
+
         setButtons()
     }
 
@@ -104,9 +108,9 @@ class WalletConnectSendEthereumTransactionRequestFragment : BaseFragment() {
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
-                        title = getString(R.string.Button_Approve),
+                        title = getString(R.string.Button_Confirm),
                         onClick = {
-                            logger.info("click approve button")
+                            logger.info("click confirm button")
                             sendViewModel.send(logger)
                         },
                         enabled = approveEnabled
