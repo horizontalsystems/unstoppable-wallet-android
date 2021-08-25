@@ -4,10 +4,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.managers.WalletConnectInteractor
+import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectRequest
 import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectService
 import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
+import java.net.UnknownHostException
 
 class WalletConnectMainViewModel(private val service: WalletConnectService) : ViewModel() {
 
@@ -111,7 +113,10 @@ class WalletConnectMainViewModel(private val service: WalletConnectService) : Vi
         hintLiveData.postValue(hint)
 
         val error = if (state is WalletConnectService.State.Invalid) {
-            state.error.message ?: state.error.javaClass.simpleName
+            if (state.error is UnknownHostException || (state.error is WalletConnectInteractor.SessionError.SocketDisconnected) && state.error.cause is UnknownHostException)
+                Translator.getString(R.string.Hud_Text_NoInternet)
+            else
+                state.error.message ?: state.error::class.java.simpleName
         } else {
             null
         }
