@@ -11,7 +11,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.Steel10
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryTransparent
-import io.horizontalsystems.bankwallet.ui.compose.components.CircleButtonSecondary
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
 import kotlinx.android.synthetic.main.view_tvlrank_list_header.view.*
 
 class TvlRankListHeaderView @JvmOverloads constructor(
@@ -62,7 +62,7 @@ class TvlRankListHeaderView @JvmOverloads constructor(
                                 listener?.onFilterClick()
                             }
                         )
-                        CircleButtonSecondary(
+                        ButtonSecondaryCircle(
                             icon = if (sortDesc) R.drawable.ic_arrow_down_20 else R.drawable.ic_arrow_up_20,
                             onClick = {
                                 listener?.onChangeSortingClick()
