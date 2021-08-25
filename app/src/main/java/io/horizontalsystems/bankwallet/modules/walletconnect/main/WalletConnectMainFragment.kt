@@ -28,6 +28,7 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.extensions.ConfirmationDialog
+import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.android.synthetic.main.fragment_wallet_connect_main.*
 
 class WalletConnectMainFragment : BaseFragment() {
@@ -143,11 +144,11 @@ class WalletConnectMainFragment : BaseFragment() {
 
         viewModel.hintLiveData.observe(viewLifecycleOwner, { hint ->
             dappHint.text = hint?.let { getString(it) }
+            dappHint.isVisible = hint != null
         })
 
-        viewModel.errorLiveData.observe(viewLifecycleOwner, { hint ->
-            errorText.isVisible = hint != null
-            errorText.text = hint
+        viewModel.errorLiveData.observe(viewLifecycleOwner, { error ->
+            error?.let { HudHelper.showErrorMessage(requireView(), it) }
         })
 
         viewModel.statusLiveData.observe(viewLifecycleOwner, { status ->
