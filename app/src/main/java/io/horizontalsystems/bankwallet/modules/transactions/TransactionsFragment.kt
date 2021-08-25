@@ -75,13 +75,11 @@ class TransactionsFragment : BaseFragment(R.layout.fragment_transactions) {
         recyclerTransactions.addItemDecoration(transactionSectionHeader.itemDecoration)
 
         viewModel.transactionList.observe(viewLifecycleOwner) { itemsList ->
-            when (itemsList) {
-                TransactionsViewModel.ItemsList.Blank -> TODO()
-                is TransactionsViewModel.ItemsList.Filled -> {
-                    transactionSectionHeader.updateList(itemsList.items)
-                    transactionsAdapter.submitList(itemsList.items)
-                }
-            }
+            emptyListText.isVisible = itemsList is TransactionsViewModel.ItemsList.Blank
+            recyclerTransactions.isVisible = itemsList is TransactionsViewModel.ItemsList.Filled
+
+            transactionSectionHeader.updateList(itemsList.items)
+            transactionsAdapter.submitList(itemsList.items)
         }
 
         viewModel.filterCoinsLiveData.observe(viewLifecycleOwner) {

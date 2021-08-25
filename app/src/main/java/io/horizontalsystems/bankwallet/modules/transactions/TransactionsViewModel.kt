@@ -40,9 +40,15 @@ class TransactionsViewModel(
 
         service.itemsObservable
             .subscribeIO {
-                transactionList.postValue(ItemsList.Filled(it.map {
-                    transactionViewItem2Factory.convertToViewItem(it)
-                }))
+                val transactionList = when {
+                    it.isNotEmpty() -> {
+                        ItemsList.Filled(it.map {
+                            transactionViewItem2Factory.convertToViewItem(it)
+                        })
+                    }
+                    else -> ItemsList.Blank
+                }
+                this.transactionList.postValue(transactionList)
             }
             .let {
                 disposables.add(it)
@@ -78,9 +84,9 @@ class TransactionsViewModel(
         service.fetchRateIfNeeded(viewItem.uid)
     }
 
-    sealed class ItemsList {
-        object Blank : ItemsList()
-        class Filled(val items: List<TransactionViewItem>) : ItemsList()
+    sealed class ItemsList(val items: List<TransactionViewItem>) {
+        object Blank : ItemsList(listOf())
+        class Filled(items: List<TransactionViewItem>) : ItemsList(items)
     }
 
     override fun onCleared() {

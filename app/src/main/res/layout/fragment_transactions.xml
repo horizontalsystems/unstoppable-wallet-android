@@ -65,4 +65,19 @@
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:listitem="@layout/view_holder_transaction" />
 
+    <TextView
+        android:id="@+id/emptyListText"
+        style="@style/Subhead2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="100dp"
+        android:gravity="center"
+        android:paddingStart="48dp"
+        android:paddingTop="48dp"
+        android:paddingEnd="48dp"
+        android:paddingBottom="48dp"
+        android:text="@string/Transactions_EmptyList"
+        android:textColor="@color/grey" />
+
+
 </LinearLayout>
