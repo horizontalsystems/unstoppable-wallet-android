@@ -15,7 +15,7 @@ import java.util.*
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.Executors
 
-class Transactions2Service(
+class TransactionsService(
     private val transactionRecordRepository: ITransactionRecordRepository,
     private val xRateRepository: TransactionsXRateRepository,
     private val transactionSyncStateRepository: TransactionSyncStateRepository,
@@ -102,7 +102,7 @@ class Transactions2Service(
                 if (mainValue.coin.type == key.coinType && item.record.timestamp == key.timestamp) {
                     val currencyValue = CurrencyValue(rate.currency, mainValue.value * rate.value)
 
-                    transactionItems[i] = item.copy(xxxCurrencyValue = currencyValue)
+                    transactionItems[i] = item.copy(currencyValue = currencyValue)
                 }
             }
         }
@@ -121,7 +121,7 @@ class Transactions2Service(
                 }
             }
 
-            transactionItems[i] = item.copy(xxxCurrencyValue = currencyValue)
+            transactionItems[i] = item.copy(currencyValue = currencyValue)
         }
 
         itemsSubject.onNext(transactionItems)
@@ -207,7 +207,7 @@ class Transactions2Service(
     fun fetchRateIfNeeded(recordUid: String) {
         executorService.submit {
             transactionItems.find { it.record.uid == recordUid }?.let { transactionItem ->
-                if (transactionItem.xxxCurrencyValue == null) {
+                if (transactionItem.currencyValue == null) {
                     transactionItem.record.mainValue?.let { mainValue ->
                         xRateRepository.fetchHistoricalRate(HistoricalRateKey(mainValue.coin.type, transactionItem.record.timestamp))
                     }

@@ -18,9 +18,9 @@ import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_transactions.*
 import kotlinx.android.synthetic.main.view_holder_transaction.*
 
-class TransactionsFragment2 : BaseFragment(R.layout.fragment_transactions) {
+class TransactionsFragment : BaseFragment(R.layout.fragment_transactions) {
 
-    private val viewModel by navGraphViewModels<Transactions2ViewModel>(R.id.mainFragment) { Transactions2Module.Factory() }
+    private val viewModel by navGraphViewModels<TransactionsViewModel>(R.id.mainFragment) { TransactionsModule.Factory() }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -32,7 +32,7 @@ class TransactionsFragment2 : BaseFragment(R.layout.fragment_transactions) {
 
         recyclerTags.adapter = tagsAdapter
 
-        val transactionsAdapter = TransactionsAdapter2(
+        val transactionsAdapter = TransactionsAdapter(
             {
                 viewModel.willShow(it)
             },
@@ -76,8 +76,8 @@ class TransactionsFragment2 : BaseFragment(R.layout.fragment_transactions) {
 
         viewModel.transactionList.observe(viewLifecycleOwner) { itemsList ->
             when (itemsList) {
-                Transactions2ViewModel.ItemsList.Blank -> TODO()
-                is Transactions2ViewModel.ItemsList.Filled -> {
+                TransactionsViewModel.ItemsList.Blank -> TODO()
+                is TransactionsViewModel.ItemsList.Filled -> {
                     transactionSectionHeader.updateList(itemsList.items)
                     transactionsAdapter.submitList(itemsList.items)
                 }
@@ -96,38 +96,38 @@ class TransactionsFragment2 : BaseFragment(R.layout.fragment_transactions) {
 
 data class Filter<T>(val item: T, val selected: Boolean)
 
-class TransactionViewItemDiff2 : DiffUtil.ItemCallback<TransactionViewItem2>() {
+class TransactionViewItemDiff : DiffUtil.ItemCallback<TransactionViewItem>() {
 
-    override fun areItemsTheSame(oldItem: TransactionViewItem2, newItem: TransactionViewItem2): Boolean {
+    override fun areItemsTheSame(oldItem: TransactionViewItem, newItem: TransactionViewItem): Boolean {
         return oldItem.itemTheSame(newItem)
     }
 
-    override fun areContentsTheSame(oldItem: TransactionViewItem2, newItem: TransactionViewItem2): Boolean {
+    override fun areContentsTheSame(oldItem: TransactionViewItem, newItem: TransactionViewItem): Boolean {
         return oldItem.contentTheSame(newItem)
     }
 
-    override fun getChangePayload(oldItem: TransactionViewItem2, newItem: TransactionViewItem2): Any {
+    override fun getChangePayload(oldItem: TransactionViewItem, newItem: TransactionViewItem): Any {
         return oldItem
     }
 
 }
 
-class TransactionsAdapter2(private val onItemDisplay: (TransactionViewItem2) -> Unit, private val onItemClick: (TransactionViewItem2) -> Unit) : ListAdapter<TransactionViewItem2, ViewHolderTransaction2>(
-    TransactionViewItemDiff2()
+class TransactionsAdapter(private val onItemDisplay: (TransactionViewItem) -> Unit, private val onItemClick: (TransactionViewItem) -> Unit) : ListAdapter<TransactionViewItem, ViewHolderTransaction>(
+    TransactionViewItemDiff()
 ) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderTransaction2 {
-        return ViewHolderTransaction2(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_transaction, parent, false), onItemClick)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderTransaction {
+        return ViewHolderTransaction(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_transaction, parent, false), onItemClick)
     }
 
-    override fun onBindViewHolder(holder: ViewHolderTransaction2, position: Int) = Unit
+    override fun onBindViewHolder(holder: ViewHolderTransaction, position: Int) = Unit
 
-    override fun onBindViewHolder(holder: ViewHolderTransaction2, position: Int, payloads: MutableList<Any>) {
+    override fun onBindViewHolder(holder: ViewHolderTransaction, position: Int, payloads: MutableList<Any>) {
 
         val item = getItem(position)
         onItemDisplay(item)
 
-        val prev = payloads.lastOrNull() as? TransactionViewItem2
+        val prev = payloads.lastOrNull() as? TransactionViewItem
 
         if (prev == null) {
             holder.bind(item, showBottomShade = (position == itemCount - 1))
@@ -137,12 +137,12 @@ class TransactionsAdapter2(private val onItemDisplay: (TransactionViewItem2) -> 
     }
 }
 
-class ViewHolderTransaction2(
+class ViewHolderTransaction(
     override val containerView: View,
-    private val onItemClick: (TransactionViewItem2) -> Unit
+    private val onItemClick: (TransactionViewItem) -> Unit
 ) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
-    private var item: TransactionViewItem2? = null
+    private var item: TransactionViewItem? = null
 
     init {
         containerView.setOnSingleClickListener {
@@ -152,7 +152,7 @@ class ViewHolderTransaction2(
         }
     }
 
-    fun bind(item: TransactionViewItem2, showBottomShade: Boolean) {
+    fun bind(item: TransactionViewItem, showBottomShade: Boolean) {
         this.item = item
 
         txIcon.setImageResource(item.typeIcon)
@@ -187,7 +187,7 @@ class ViewHolderTransaction2(
         lockIcon.setImageResource(imgRes)
     }
 
-    fun bindUpdate(current: TransactionViewItem2, prev: TransactionViewItem2, ) {
+    fun bindUpdate(current: TransactionViewItem, prev: TransactionViewItem, ) {
         this.item = current
 
         if (current.typeIcon != prev.typeIcon) {

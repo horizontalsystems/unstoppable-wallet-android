@@ -16,7 +16,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.transactionInfo.adapters.TransactionInfoAdapter
 import io.horizontalsystems.bankwallet.modules.transactionInfo.options.TransactionSpeedUpCancelFragment
-import io.horizontalsystems.bankwallet.modules.transactions.Transactions2ViewModel
+import io.horizontalsystems.bankwallet.modules.transactions.TransactionsViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
@@ -29,7 +29,7 @@ import java.util.*
 
 class TransactionInfoFragment : BaseFragment(), TransactionInfoAdapter.Listener {
 
-    private val viewModelTxs by navGraphViewModels<Transactions2ViewModel>(R.id.mainFragment)
+    private val viewModelTxs by navGraphViewModels<TransactionsViewModel>(R.id.mainFragment)
     private val viewModel by navGraphViewModels<TransactionInfoViewModel>(R.id.transactionInfoFragment) { TransactionInfoModule.Factory(viewModelTxs.tmpItemToShow) }
 
     override fun onCreateView(
