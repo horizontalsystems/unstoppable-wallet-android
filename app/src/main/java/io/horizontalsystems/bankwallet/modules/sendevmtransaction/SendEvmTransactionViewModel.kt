@@ -43,6 +43,7 @@ class SendEvmTransactionViewModel(
     val sendFailedLiveData = MutableLiveData<String>()
 
     val viewItemsLiveData = MutableLiveData<List<SectionViewItem>>()
+    val transactionTitleLiveData = MutableLiveData<String>()
 
     init {
         service.stateObservable.subscribeIO { sync(it) }.let { disposable.add(it) }
@@ -74,6 +75,8 @@ class SendEvmTransactionViewModel(
         val decoration = txDataState.dataOrNull?.decoration
         val transactionData = txDataState.dataOrNull?.transactionData
 
+        transactionTitleLiveData.postValue(getTransactionTitle(decoration, transactionData))
+
         var viewItems = when {
             decoration is SwapMethodDecoration || decoration is OneInchMethodDecoration -> {
                 getSwapViewItems(decoration, txDataState.dataOrNull?.additionalInfo)
@@ -95,6 +98,19 @@ class SendEvmTransactionViewModel(
             viewItemsLiveData.postValue(it)
         }
     }
+
+    private fun getTransactionTitle(decoration: ContractMethodDecoration?, transactionData: TransactionData?) =
+        if (decoration == null && transactionData?.input?.isEmpty() == true) {
+            Translator.getString(R.string.WalletConnect_SendRequest_Title)
+        } else {
+            when (decoration) {
+                is TransferMethodDecoration -> Translator.getString(R.string.WalletConnect_SendRequest_Title)
+                is ApproveMethodDecoration -> Translator.getString(R.string.WalletConnect_ApproveRequest_Title)
+                is SwapMethodDecoration,
+                is OneInchMethodDecoration -> Translator.getString(R.string.WalletConnect_SwapRequest_Title)
+                else -> Translator.getString(R.string.WalletConnect_UnknownRequest_Title)
+            }
+        }
 
     private fun sync(sendState: SendEvmTransactionService.SendState) =
             when (sendState) {
