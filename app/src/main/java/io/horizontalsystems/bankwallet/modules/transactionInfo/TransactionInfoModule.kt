@@ -5,12 +5,8 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ITransactionsAdapter
 import io.horizontalsystems.bankwallet.core.providers.Translator
-import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.TransactionLockState
-import io.horizontalsystems.bankwallet.modules.send.SendModule
-import io.horizontalsystems.bankwallet.modules.transactions.TransactionType
 import io.horizontalsystems.bankwallet.modules.transactions.q.TransactionItem
 import io.horizontalsystems.core.helpers.DateHelper
-import java.util.*
 
 object TransactionInfoModule {
 

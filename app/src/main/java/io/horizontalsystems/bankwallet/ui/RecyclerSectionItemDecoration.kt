@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.transactions
+package io.horizontalsystems.bankwallet.ui
 
 import android.graphics.Canvas
 import android.graphics.Rect

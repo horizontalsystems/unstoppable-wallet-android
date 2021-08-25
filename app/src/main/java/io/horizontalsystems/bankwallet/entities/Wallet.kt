@@ -1,8 +1,8 @@
 package io.horizontalsystems.bankwallet.entities
 
 import android.os.Parcelable
-import io.horizontalsystems.bankwallet.modules.transactions.FilterAdapter
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
+import io.horizontalsystems.bankwallet.ui.FilterAdapter
 import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.coinkit.models.CoinType
 import kotlinx.android.parcel.Parcelize

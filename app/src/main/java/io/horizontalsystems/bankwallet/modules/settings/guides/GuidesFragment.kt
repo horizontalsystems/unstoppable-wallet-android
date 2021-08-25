@@ -8,16 +8,15 @@ import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import io.horizontalsystems.core.findNavController
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.entities.Guide
 import io.horizontalsystems.bankwallet.modules.markdown.MarkdownFragment
-import io.horizontalsystems.bankwallet.modules.transactions.FilterAdapter
+import io.horizontalsystems.bankwallet.ui.FilterAdapter
+import io.horizontalsystems.core.findNavController
 import kotlinx.android.synthetic.main.fragment_guides.*
-import kotlinx.android.synthetic.main.fragment_guides.toolbar
 
 class GuidesFragment : BaseFragment(), GuidesAdapter.Listener, FilterAdapter.Listener {
 
