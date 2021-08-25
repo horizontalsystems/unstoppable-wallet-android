@@ -9,20 +9,20 @@ import io.horizontalsystems.coinkit.models.Coin
 import java.math.BigDecimal
 import java.util.*
 
-object Transactions2Module {
+object TransactionsModule {
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
 
-            return Transactions2ViewModel(
-                Transactions2Service(
+            return TransactionsViewModel(
+                TransactionsService(
                     TransactionRecordRepository(App.transactionAdapterManager),
                     TransactionsXRateRepository(App.currencyManager, App.xRateManager),
                     TransactionSyncStateRepository(App.transactionAdapterManager),
                     App.transactionAdapterManager,
                     App.walletManager
                 ),
-                TransactionViewItem2Factory()
+                TransactionViewItemFactory()
             ) as T
         }
     }

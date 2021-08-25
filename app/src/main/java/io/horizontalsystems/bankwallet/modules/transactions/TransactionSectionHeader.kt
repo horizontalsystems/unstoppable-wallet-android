@@ -14,7 +14,7 @@ class TransactionSectionHeader {
         override fun getSectionHeader(position: Int) = headers[position] ?: ""
     })
 
-    fun updateList(items: List<TransactionViewItem2>) {
+    fun updateList(items: List<TransactionViewItem>) {
         headers.clear()
 
         var prevSectionHeader: String? = null

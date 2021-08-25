@@ -94,8 +94,8 @@ class TransactionRecordRepository(
         val activeWallets = selectedWallet?.let { listOf(it) } ?: walletsGroupedBySource
 
         val map: List<Single<List<Pair<TransactionWallet, TransactionRecord>>>> = activeWallets.mapNotNull { transactionWallet ->
-            adaptersMap[transactionWallet]?.let { transactionAdapterWrapperXxx ->
-                transactionAdapterWrapperXxx
+            adaptersMap[transactionWallet]?.let { transactionAdapterWrapper ->
+                transactionAdapterWrapper
                     .getNext(itemsPerPage)
                     .map { transactionRecords: List<TransactionRecord> ->
                         transactionRecords.map {

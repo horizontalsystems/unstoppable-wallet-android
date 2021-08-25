@@ -12,9 +12,9 @@ import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import java.util.*
 
-class Transactions2ViewModel(
-    private val service: Transactions2Service,
-    private val transactionViewItem2Factory: TransactionViewItem2Factory
+class TransactionsViewModel(
+    private val service: TransactionsService,
+    private val transactionViewItem2Factory: TransactionViewItemFactory
 ) : ViewModel() {
 
     lateinit var tmpItemToShow: TransactionItem
@@ -74,29 +74,29 @@ class Transactions2ViewModel(
         service.loadNext()
     }
 
-    fun willShow(viewItem: TransactionViewItem2) {
+    fun willShow(viewItem: TransactionViewItem) {
         service.fetchRateIfNeeded(viewItem.uid)
     }
 
     sealed class ItemsList {
         object Blank : ItemsList()
-        class Filled(val items: List<TransactionViewItem2>) : ItemsList()
+        class Filled(val items: List<TransactionViewItem>) : ItemsList()
     }
 
     override fun onCleared() {
         service.clear()
     }
 
-    fun getTransactionItem(viewItem: TransactionViewItem2) = service.getTransactionItem(viewItem.uid)
+    fun getTransactionItem(viewItem: TransactionViewItem) = service.getTransactionItem(viewItem.uid)
 }
 
 data class TransactionItem(
     val record: TransactionRecord,
-    val xxxCurrencyValue: CurrencyValue?,
+    val currencyValue: CurrencyValue?,
     val lastBlockInfo: LastBlockInfo?
 )
 
-data class TransactionViewItem2(
+data class TransactionViewItem(
     val uid: String,
     val typeIcon: Int,
     val progress: Int?,
@@ -109,9 +109,9 @@ data class TransactionViewItem2(
     val doubleSpend: Boolean = false,
     val locked: Boolean? = null
 ) {
-    fun itemTheSame(newItem: TransactionViewItem2) = uid == newItem.uid
+    fun itemTheSame(newItem: TransactionViewItem) = uid == newItem.uid
 
-    fun contentTheSame(newItem: TransactionViewItem2): Boolean {
+    fun contentTheSame(newItem: TransactionViewItem): Boolean {
         return this == newItem
     }
 }
