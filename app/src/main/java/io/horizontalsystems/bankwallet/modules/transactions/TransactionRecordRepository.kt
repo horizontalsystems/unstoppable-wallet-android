@@ -1,9 +1,8 @@
-package io.horizontalsystems.bankwallet.modules.transactions.q
+package io.horizontalsystems.bankwallet.modules.transactions
 
 import io.horizontalsystems.bankwallet.core.managers.TransactionAdapterManager
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
-import io.horizontalsystems.bankwallet.modules.transactions.TransactionWallet
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable

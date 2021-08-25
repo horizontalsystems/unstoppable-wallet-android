@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.transactions.q
+package io.horizontalsystems.bankwallet.modules.transactions
 
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
@@ -12,7 +12,6 @@ import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.Bitco
 import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.*
 import io.horizontalsystems.bankwallet.modules.transactionInfo.ColoredValue
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoAddressMapper
-import io.horizontalsystems.bankwallet.modules.transactions.TransactionStatus
 import java.util.*
 
 class TransactionViewItem2Factory {

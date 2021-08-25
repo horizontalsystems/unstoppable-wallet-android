@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.transactions.q
+package io.horizontalsystems.bankwallet.modules.transactions
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

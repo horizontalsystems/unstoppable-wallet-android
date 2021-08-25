@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.transactions.q
+package io.horizontalsystems.bankwallet.modules.transactions
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
-import io.horizontalsystems.bankwallet.modules.transactions.TransactionSectionHeader
 import io.horizontalsystems.core.findNavController
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_transactions.*
@@ -113,7 +112,9 @@ class TransactionViewItemDiff2 : DiffUtil.ItemCallback<TransactionViewItem2>() {
 
 }
 
-class TransactionsAdapter2(private val onItemDisplay: (TransactionViewItem2) -> Unit, private val onItemClick: (TransactionViewItem2) -> Unit) : ListAdapter<TransactionViewItem2, ViewHolderTransaction2>(TransactionViewItemDiff2()) {
+class TransactionsAdapter2(private val onItemDisplay: (TransactionViewItem2) -> Unit, private val onItemClick: (TransactionViewItem2) -> Unit) : ListAdapter<TransactionViewItem2, ViewHolderTransaction2>(
+    TransactionViewItemDiff2()
+) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderTransaction2 {
         return ViewHolderTransaction2(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_transaction, parent, false), onItemClick)

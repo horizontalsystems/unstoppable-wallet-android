@@ -8,7 +8,7 @@ import io.horizontalsystems.bankwallet.modules.balanceonboarding.BalanceOnboardi
 import io.horizontalsystems.bankwallet.modules.market.MarketFragment
 import io.horizontalsystems.bankwallet.modules.onboarding.OnboardingFragment
 import io.horizontalsystems.bankwallet.modules.settings.main.MainSettingsFragment
-import io.horizontalsystems.bankwallet.modules.transactions.q.TransactionsFragment2
+import io.horizontalsystems.bankwallet.modules.transactions.TransactionsFragment2
 
 class MainViewPagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment.getChildFragmentManager(), fragment.viewLifecycleOwner.lifecycle) {
 

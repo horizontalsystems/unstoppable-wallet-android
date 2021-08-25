@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.transactions.q
+package io.horizontalsystems.bankwallet.modules.transactions
 
 import android.util.Log
 import io.horizontalsystems.bankwallet.core.Clearable

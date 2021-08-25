@@ -1,8 +1,7 @@
-package io.horizontalsystems.bankwallet.modules.transactions.q
+package io.horizontalsystems.bankwallet.modules.transactions
 
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
-import io.horizontalsystems.bankwallet.modules.transactions.TransactionWallet
 import io.reactivex.Observable
 
 interface ITransactionRecordRepository : Clearable {
