@@ -2,63 +2,97 @@ package io.horizontalsystems.bankwallet.ui.extensions
 
 import android.content.Context
 import android.util.AttributeSet
-import android.widget.RadioButton
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.Divider
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.widget.ConstraintLayout
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
-import io.horizontalsystems.bankwallet.modules.market.SortingField
-import io.horizontalsystems.views.helpers.LayoutHelper
-import kotlinx.android.synthetic.main.view_market_list_header.view.*
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.Steel10
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryToggle
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryTransparent
+import io.horizontalsystems.bankwallet.ui.compose.components.ToggleIndicator
+import kotlinx.android.synthetic.main.view_market_list_header.view.composeView
 
-class MarketListHeaderView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
-    : ConstraintLayout(context, attrs, defStyleAttr) {
+class MarketListHeaderView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : ConstraintLayout(context, attrs, defStyleAttr) {
 
     interface Listener {
-        fun onClickSortingField()
-        fun onSelectFieldViewOption(fieldViewOptionId: Int)
+        fun onSortingClick()
+        fun onToggleButtonClick()
     }
 
     var listener: Listener? = null
 
     init {
         inflate(context, R.layout.view_market_list_header, this)
-
-        sortingField.setOnSingleClickListener {
-            listener?.onClickSortingField()
-        }
     }
 
-    fun setFieldViewOptions(items: List<FieldViewOption>){
-        val buttonParams = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT).apply {
-            setMargins(LayoutHelper.dp(8f, context), 0, 0, 0)
-        }
-
-        marketFieldSelector.removeAllViews()
-
-        items.forEach { item ->
-            val button = RadioButton(context, null, 0, R.style.RadioButtonThird).apply {
-                id = item.index
-                text = item.title
-                isChecked = item.selected
-                isClickable = true
-                layoutParams = buttonParams
+    fun setMenu(sortMenu: SortMenu, toggleButton: ToggleButton) {
+        composeView.setContent {
+            ComposeAppTheme {
+                Column(modifier = Modifier.width(IntrinsicSize.Max)) {
+                    Divider(thickness = 1.dp, color = Steel10)
+                    Row(
+                        modifier = Modifier.fillMaxWidth()
+                            .padding(top = 8.dp, end = 16.dp, bottom = 8.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        sortMenu(sortMenu)
+                        toggleMenu(toggleButton)
+                    }
+                }
             }
-
-            marketFieldSelector.addView(button)
-        }
-
-        marketFieldSelector.setOnCheckedChangeListener { _, checkedId ->
-            listener?.onSelectFieldViewOption(checkedId)
-        }
-
-    }
-
-    fun setSortingField(fieldToSort: SortingField) {
-        val sortingFieldText = context.getString(fieldToSort.titleResId)
-        if (sortingField.text != sortingFieldText) {
-            sortingField.text = sortingFieldText
         }
     }
 
-    data class FieldViewOption(val index: Int, val title: String, var selected: Boolean)
+    @Composable
+    private fun toggleMenu(toggleButton: ToggleButton) {
+        ButtonSecondaryToggle(
+            toggleIndicators = toggleButton.indicators,
+            title = toggleButton.title,
+            onClick = { listener?.onToggleButtonClick() }
+        )
+    }
+
+    @Composable
+    private fun sortMenu(sortMenu: SortMenu) {
+        when (sortMenu) {
+            is SortMenu.DuoOption -> {
+                ButtonSecondaryCircle(
+                    modifier = Modifier.padding(start = 16.dp),
+                    icon = if (sortMenu.direction == Direction.Down) R.drawable.ic_arrow_down_20 else R.drawable.ic_arrow_up_20,
+                    onClick = {
+                        listener?.onSortingClick()
+                    }
+                )
+            }
+            is SortMenu.MultiOption -> {
+                ButtonSecondaryTransparent(
+                    title = sortMenu.title,
+                    iconRight = R.drawable.ic_down_arrow_20,
+                    onClick = {
+                        listener?.onSortingClick()
+                    }
+                )
+            }
+        }
+    }
+
+    data class ToggleButton(val title: String, val indicators: List<ToggleIndicator>)
+
+    sealed class SortMenu {
+        class DuoOption(val direction: Direction) : SortMenu()
+        class MultiOption(val title: String) : SortMenu()
+    }
+
+    enum class Direction {
+        Up, Down
+    }
 }

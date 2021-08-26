@@ -21,7 +21,9 @@ import io.horizontalsystems.bankwallet.ui.extensions.SelectorDialog
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorItem
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
-import kotlinx.android.synthetic.main.fragment_market_favorites.*
+import kotlinx.android.synthetic.main.fragment_market_favorites.coinRatesRecyclerView
+import kotlinx.android.synthetic.main.fragment_market_favorites.marketListHeader
+import kotlinx.android.synthetic.main.fragment_market_favorites.pullToRefresh
 
 class MarketFavoritesFragment : BaseFragment(), MarketListHeaderView.Listener, ViewHolderMarketItem.Listener {
 
@@ -35,8 +37,6 @@ class MarketFavoritesFragment : BaseFragment(), MarketListHeaderView.Listener, V
         super.onViewCreated(view, savedInstanceState)
 
         marketListHeader.listener = this
-        marketListHeader.setSortingField(marketListViewModel.sortingField)
-        marketListHeader.setFieldViewOptions(marketListViewModel.marketFields)
         marketListHeader.isVisible = false
         marketListViewModel.marketViewItemsLiveData.observe(viewLifecycleOwner, { (list, _) ->
             marketListHeader.isVisible = list.isNotEmpty()
@@ -67,9 +67,13 @@ class MarketFavoritesFragment : BaseFragment(), MarketListHeaderView.Listener, V
         marketListViewModel.networkNotAvailable.observe(viewLifecycleOwner, {
             HudHelper.showErrorMessage(requireView(), R.string.Hud_Text_NoInternet)
         })
+
+        marketListViewModel.topMenuLiveData.observe(viewLifecycleOwner) { (sortMenu, toggleButton) ->
+            marketListHeader.setMenu(sortMenu, toggleButton)
+        }
     }
 
-    override fun onClickSortingField() {
+    override fun onSortingClick() {
         val items = marketListViewModel.sortingFields.map {
             SelectorItem(getString(it.titleResId), it == marketListViewModel.sortingField)
         }
@@ -77,15 +81,13 @@ class MarketFavoritesFragment : BaseFragment(), MarketListHeaderView.Listener, V
         SelectorDialog
                 .newInstance(items, getString(R.string.Market_Sort_PopupTitle)) { position ->
                     val selectedSortingField = marketListViewModel.sortingFields[position]
-
-                    marketListHeader.setSortingField(selectedSortingField)
-                    marketListViewModel.update(sortingField = selectedSortingField)
+                    marketListViewModel.updateSorting(sortingField = selectedSortingField)
                 }
                 .show(childFragmentManager, "sorting_field_selector")
     }
 
-    override fun onSelectFieldViewOption(fieldViewOptionId: Int) {
-        marketListViewModel.update(marketFieldIndex = fieldViewOptionId)
+    override fun onToggleButtonClick() {
+        marketListViewModel.onToggleButtonClick()
     }
 
     override fun onItemClick(marketViewItem: MarketViewItem) {

@@ -18,6 +18,9 @@ import io.horizontalsystems.bankwallet.ui.extensions.SelectorItem
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.android.synthetic.main.fragment_market_discovery.*
+import kotlinx.android.synthetic.main.fragment_market_discovery.coinRatesRecyclerView
+import kotlinx.android.synthetic.main.fragment_market_discovery.marketListHeader
+import kotlinx.android.synthetic.main.fragment_market_discovery.pullToRefresh
 
 class MarketDiscoveryFragment : BaseFragment(), MarketListHeaderView.Listener, ViewHolderMarketItem.Listener, MarketCategoriesAdapter.Listener {
 
@@ -35,8 +38,6 @@ class MarketDiscoveryFragment : BaseFragment(), MarketListHeaderView.Listener, V
         super.onViewCreated(view, savedInstanceState)
 
         marketListHeader.listener = this
-        marketListHeader.setSortingField(marketListViewModel.sortingField)
-        marketListHeader.setFieldViewOptions(marketListViewModel.marketFields)
 
         val marketItemsAdapter = MarketItemsAdapter(
                 this,
@@ -69,15 +70,16 @@ class MarketDiscoveryFragment : BaseFragment(), MarketListHeaderView.Listener, V
         marketCategoriesAdapter.selectCategory(marketDiscoveryViewModel.marketCategory)
 
         marketViewModel.discoveryListTypeLiveEvent.observe(viewLifecycleOwner) {
-            marketListHeader.setSortingField(it.sortingField)
-
-            marketListViewModel.update(sortingField = it.sortingField, marketFieldIndex = it.marketField.ordinal)
-
+            marketListViewModel.updateSorting(it.sortingField)
             marketCategoriesAdapter.selectCategory(null)
+        }
+
+        marketListViewModel.topMenuLiveData.observe(viewLifecycleOwner) { (sortMenu, toggleButton) ->
+            marketListHeader.setMenu(sortMenu, toggleButton)
         }
     }
 
-    override fun onClickSortingField() {
+    override fun onSortingClick() {
         val items = marketListViewModel.sortingFields.map {
             SelectorItem(getString(it.titleResId), it == marketListViewModel.sortingField)
         }
@@ -85,15 +87,13 @@ class MarketDiscoveryFragment : BaseFragment(), MarketListHeaderView.Listener, V
         SelectorDialog
                 .newInstance(items, getString(R.string.Market_Sort_PopupTitle)) { position ->
                     val selectedSortingField = marketListViewModel.sortingFields[position]
-
-                    marketListHeader.setSortingField(selectedSortingField)
-                    marketListViewModel.update(sortingField = selectedSortingField)
+                    marketListViewModel.updateSorting(sortingField = selectedSortingField)
                 }
                 .show(childFragmentManager, "sorting_field_selector")
     }
 
-    override fun onSelectFieldViewOption(fieldViewOptionId: Int) {
-        marketListViewModel.update(marketFieldIndex = fieldViewOptionId)
+    override fun onToggleButtonClick() {
+        marketListViewModel.onToggleButtonClick()
     }
 
     override fun onItemClick(marketViewItem: MarketViewItem) {

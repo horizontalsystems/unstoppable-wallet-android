@@ -3,9 +3,11 @@ package io.horizontalsystems.bankwallet.ui.compose.components
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Indication
+import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.ripple.rememberRipple
@@ -15,16 +17,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.Grey
-import io.horizontalsystems.bankwallet.ui.compose.Grey50
-import io.horizontalsystems.bankwallet.ui.compose.Steel20
+import io.horizontalsystems.bankwallet.ui.compose.*
 
 @Composable
 fun ButtonSecondaryDefault(
@@ -64,8 +64,8 @@ fun ButtonSecondaryTransparent(
             contentColor = textColor
         ),
         content = {
-            if (iconRight != null){
-                Row{
+            if (iconRight != null) {
+                Row {
                     Text(title, maxLines = 1, overflow = TextOverflow.Ellipsis)
                     Icon(
                         modifier = Modifier.padding(start = 4.dp),
@@ -80,6 +80,46 @@ fun ButtonSecondaryTransparent(
         },
         interactionSource = interactionSource,
         indication = null,
+        enabled = enabled
+    )
+}
+
+@Composable
+fun ButtonSecondaryToggle(
+    toggleIndicators: List<ToggleIndicator>,
+    modifier: Modifier = Modifier,
+    title: String,
+    onClick: () -> Unit,
+    enabled: Boolean = true
+) {
+    ButtonSecondary(
+        modifier = modifier,
+        onClick = onClick,
+        colors = ButtonDefaults.textButtonColors(
+            backgroundColor = Steel20,
+            contentColor = ComposeAppTheme.colors.oz
+        ),
+        content = {
+            Row(
+                modifier = Modifier.height(IntrinsicSize.Max),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(title, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                Column(
+                    modifier = Modifier.height(16.dp).padding(start = 12.dp),
+                    verticalArrangement = Arrangement.SpaceEvenly
+                ) {
+                    toggleIndicators.forEach { indicator ->
+                        Box(
+                            modifier = Modifier
+                                .size(3.dp)
+                                .clip(CircleShape)
+                                .background(if (indicator.enabled) ComposeAppTheme.colors.jacob else Grey)
+                        )
+                    }
+                }
+            }
+        },
         enabled = enabled
     )
 }
@@ -166,3 +206,5 @@ object SecondaryButtonDefaults {
         disabledContentColor = disabledContentColor
     )
 }
+
+class ToggleIndicator(val enabled: Boolean)
