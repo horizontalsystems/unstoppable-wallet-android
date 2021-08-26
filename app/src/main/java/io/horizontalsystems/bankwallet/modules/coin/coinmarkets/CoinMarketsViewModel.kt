@@ -5,9 +5,9 @@ import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.core.IRateManager
 import io.horizontalsystems.bankwallet.modules.coin.MarketTickerViewItem
-import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.market.sortedByDescendingNullLast
 import io.horizontalsystems.bankwallet.modules.market.sortedByNullLast
+import io.horizontalsystems.bankwallet.ui.compose.components.ToggleIndicator
 import io.horizontalsystems.bankwallet.ui.extensions.MarketListHeaderView
 import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.ICurrencyManager
@@ -15,29 +15,35 @@ import io.horizontalsystems.xrateskit.entities.MarketTicker
 import java.math.BigDecimal
 
 class CoinMarketsViewModel(
-    coinCode: String,
+    private val coinCode: String,
     coinType: CoinType,
     currencyManager: ICurrencyManager,
     rateManager: IRateManager,
     private val numberFormatter: IAppNumberFormatter
 ) : ViewModel() {
 
-    val coinMarketItems = MutableLiveData<Pair<List<MarketTickerViewItem>, Boolean>>()
-
-    val sortingFields: Array<SortingField> = arrayOf(SortingField.HighestVolume, SortingField.LowestVolume)
-    var sortingField: SortingField = sortingFields.first()
-        private set
-
     private val baseCurrency = currencyManager.baseCurrency
-    private val viewOptions = listOf(coinCode, baseCurrency.code)
-    private var selectedViewOptionId: Int = 0
-    private val marketRate = rateManager.getLatestRate(coinType, baseCurrency.code) ?: BigDecimal.ONE
-    private val showInFiat: Boolean
-        get() = selectedViewOptionId == 1
+    private val marketRate =
+        rateManager.getLatestRate(coinType, baseCurrency.code) ?: BigDecimal.ONE
+    private var showInFiat = false
+    private var sortDesc = true
+    private val toggleButton: MarketListHeaderView.ToggleButton
+        get() {
+            return MarketListHeaderView.ToggleButton(
+                title = if (showInFiat) baseCurrency.code else coinCode,
+                indicators = listOf(ToggleIndicator(!showInFiat), ToggleIndicator(showInFiat))
+            )
+        }
 
-    val fieldViewOptions = viewOptions.mapIndexed { index, title ->
-        MarketListHeaderView.FieldViewOption(index, title, index == selectedViewOptionId)
-    }
+    private val sortMenu: MarketListHeaderView.SortMenu
+        get() {
+            val direction =
+                if (sortDesc) MarketListHeaderView.Direction.Down else MarketListHeaderView.Direction.Up
+            return MarketListHeaderView.SortMenu.DuoOption(direction)
+        }
+
+    val topMenuLiveData = MutableLiveData(Pair(sortMenu, toggleButton))
+    val coinMarketItems = MutableLiveData<Pair<List<MarketTickerViewItem>, Boolean>>()
 
     var marketTickers: List<MarketTicker> = listOf()
         set(value) {
@@ -45,25 +51,32 @@ class CoinMarketsViewModel(
             syncCoinMarketItems(false)
         }
 
-    fun update(sortField: SortingField? = null, fieldViewOptionId: Int? = null, scrollToTop: Boolean) {
-        sortField?.let {
-            sortingField = it
-        }
+    fun onChangeSorting() {
+        sortDesc = !sortDesc
+        syncCoinMarketItems(true)
+        updateTopMenu()
+    }
 
-        fieldViewOptionId?.let {
-            selectedViewOptionId = it
-        }
+    fun onToggleButtonClick() {
+        showInFiat = !showInFiat
+        syncCoinMarketItems(false)
+        updateTopMenu()
+    }
 
-        syncCoinMarketItems(scrollToTop)
+    private fun updateTopMenu(){
+        topMenuLiveData.postValue(Pair(sortMenu, toggleButton))
     }
 
     private fun syncCoinMarketItems(scrollToTop: Boolean) {
-        val marketTickersSorted = marketTickers.sort(sortingField)
+        val marketTickersSorted = marketTickers.sort(sortDesc)
         val viewItems = getCoinMarketItems(marketTickersSorted, showInFiat)
         coinMarketItems.postValue(Pair(viewItems, scrollToTop))
     }
 
-    private fun getCoinMarketItems(tickers: List<MarketTicker>, showInFiat: Boolean): List<MarketTickerViewItem> {
+    private fun getCoinMarketItems(
+        tickers: List<MarketTicker>,
+        showInFiat: Boolean
+    ): List<MarketTickerViewItem> {
         return tickers.map { ticker ->
             val subValue = if (showInFiat) {
                 formatFiatShortened(ticker.volume.multiply(marketRate), baseCurrency.symbol)
@@ -82,14 +95,20 @@ class CoinMarketsViewModel(
         }
     }
 
-    private fun List<MarketTicker>.sort(sortingField: SortingField) = when (sortingField) {
-        SortingField.HighestVolume -> sortedByDescendingNullLast { it.volume }
-        SortingField.LowestVolume -> sortedByNullLast { it.volume }
-        else -> throw IllegalArgumentException()
-    }
+    private fun List<MarketTicker>.sort(sortDesc: Boolean) =
+        if (sortDesc) {
+            sortedByDescendingNullLast { it.volume }
+        } else {
+            sortedByNullLast { it.volume }
+        }
 
     private fun formatFiatShortened(value: BigDecimal, symbol: String): String {
         val shortCapValue = numberFormatter.shortenValue(value)
-        return numberFormatter.formatFiat(shortCapValue.first, symbol, 0, 2) + " " + shortCapValue.second
+        return numberFormatter.formatFiat(
+            shortCapValue.first,
+            symbol,
+            0,
+            2
+        ) + " " + shortCapValue.second
     }
 }

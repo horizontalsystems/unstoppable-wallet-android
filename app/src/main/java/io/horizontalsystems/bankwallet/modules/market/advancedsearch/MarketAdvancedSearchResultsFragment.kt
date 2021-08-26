@@ -18,12 +18,13 @@ import io.horizontalsystems.bankwallet.ui.extensions.SelectorDialog
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorItem
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
-import kotlinx.android.synthetic.main.fragment_market_advanced_search_results.*
 import kotlinx.android.synthetic.main.fragment_market_advanced_search_results.coinRatesRecyclerView
 import kotlinx.android.synthetic.main.fragment_market_advanced_search_results.marketListHeader
 import kotlinx.android.synthetic.main.fragment_market_advanced_search_results.pullToRefresh
+import kotlinx.android.synthetic.main.fragment_market_advanced_search_results.toolbar
 
-class MarketAdvancedSearchResultsFragment : BaseFragment(), MarketListHeaderView.Listener, ViewHolderMarketItem.Listener {
+class MarketAdvancedSearchResultsFragment : BaseFragment(), MarketListHeaderView.Listener,
+    ViewHolderMarketItem.Listener {
 
     private val marketSearchFilterViewModel by navGraphViewModels<MarketAdvancedSearchViewModel>(R.id.marketAdvancedSearchFragment)
     private val marketListViewModel by viewModels<MarketListViewModel> { MarketAdvancedSearchResultsModule.Factory(marketSearchFilterViewModel.service) }
@@ -40,8 +41,6 @@ class MarketAdvancedSearchResultsFragment : BaseFragment(), MarketListHeaderView
         }
 
         marketListHeader.listener = this
-        marketListHeader.setSortingField(marketListViewModel.sortingField)
-        marketListHeader.setFieldViewOptions(marketListViewModel.marketFields)
         marketListHeader.isVisible = false
         marketListViewModel.marketViewItemsLiveData.observe(viewLifecycleOwner, { (list, _) ->
             marketListHeader.isVisible = list.isNotEmpty()
@@ -68,29 +67,33 @@ class MarketAdvancedSearchResultsFragment : BaseFragment(), MarketListHeaderView
         marketListViewModel.networkNotAvailable.observe(viewLifecycleOwner, {
             HudHelper.showErrorMessage(requireView(), R.string.Hud_Text_NoInternet)
         })
+
+        marketListViewModel.topMenuLiveData.observe(viewLifecycleOwner) { (sortMenu, toggleButton) ->
+            marketListHeader.setMenu(sortMenu, toggleButton)
+        }
+
     }
 
-    override fun onClickSortingField() {
+    override fun onSortingClick() {
         val items = marketListViewModel.sortingFields.map {
             SelectorItem(getString(it.titleResId), it == marketListViewModel.sortingField)
         }
 
         SelectorDialog
-                .newInstance(items, getString(R.string.Market_Sort_PopupTitle)) { position ->
-                    val selectedSortingField = marketListViewModel.sortingFields[position]
-
-                    marketListHeader.setSortingField(selectedSortingField)
-                    marketListViewModel.update(sortingField = selectedSortingField)
-                }
-                .show(childFragmentManager, "sorting_field_selector")
+            .newInstance(items, getString(R.string.Market_Sort_PopupTitle)) { position ->
+                val selectedSortingField = marketListViewModel.sortingFields[position]
+                marketListViewModel.updateSorting(selectedSortingField)
+            }
+            .show(childFragmentManager, "sorting_field_selector")
     }
 
-    override fun onSelectFieldViewOption(fieldViewOptionId: Int) {
-        marketListViewModel.update(marketFieldIndex = fieldViewOptionId)
+    override fun onToggleButtonClick() {
+        marketListViewModel.onToggleButtonClick()
     }
 
     override fun onItemClick(marketViewItem: MarketViewItem) {
         val arguments = CoinFragment.prepareParams(marketViewItem.coinType, marketViewItem.coinCode, marketViewItem.coinName)
 
         findNavController().navigate(R.id.coinFragment, arguments, navOptions())
-    }}
+    }
+}

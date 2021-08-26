@@ -10,11 +10,10 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.coin.CoinViewModel
 import io.horizontalsystems.bankwallet.ui.extensions.MarketListHeaderView
-import io.horizontalsystems.bankwallet.ui.extensions.SelectorDialog
-import io.horizontalsystems.bankwallet.ui.extensions.SelectorItem
 import io.horizontalsystems.core.findNavController
 import kotlinx.android.synthetic.main.fragment_coin_markets.*
-import kotlinx.android.synthetic.main.fragment_coin_markets.marketListHeader
+import kotlinx.android.synthetic.main.fragment_coin_markets.recyclerView
+import kotlinx.android.synthetic.main.fragment_coin_markets.toolbar
 
 class CoinMarketsFragment : BaseFragment(), MarketListHeaderView.Listener {
 
@@ -36,8 +35,6 @@ class CoinMarketsFragment : BaseFragment(), MarketListHeaderView.Listener {
         }
 
         marketListHeader.listener = this
-        marketListHeader.setSortingField(viewModel.sortingField)
-        marketListHeader.setFieldViewOptions(viewModel.fieldViewOptions)
 
         val marketItemsAdapter = CoinMarketItemAdapter()
 
@@ -55,24 +52,18 @@ class CoinMarketsFragment : BaseFragment(), MarketListHeaderView.Listener {
                 }
             }
         })
+
+        viewModel.topMenuLiveData.observe(viewLifecycleOwner, { (sortMenu, toggleButton) ->
+            marketListHeader.setMenu(sortMenu, toggleButton)
+        })
     }
 
-    override fun onClickSortingField() {
-        val items = viewModel.sortingFields.map {
-            SelectorItem(getString(it.titleResId), it == viewModel.sortingField)
-        }
-
-        SelectorDialog
-                .newInstance(items, getString(R.string.Market_Sort_PopupTitle)) { position ->
-                    val selectedSortingField = viewModel.sortingFields[position]
-
-                    marketListHeader.setSortingField(selectedSortingField)
-                    viewModel.update(selectedSortingField, scrollToTop = true)
-                }
-                .show(childFragmentManager, "sorting_field_selector")
+    override fun onSortingClick() {
+        viewModel.onChangeSorting()
     }
 
-    override fun onSelectFieldViewOption(fieldViewOptionId: Int) {
-        viewModel.update(fieldViewOptionId = fieldViewOptionId, scrollToTop = false)
+    override fun onToggleButtonClick() {
+        viewModel.onToggleButtonClick()
     }
+
 }

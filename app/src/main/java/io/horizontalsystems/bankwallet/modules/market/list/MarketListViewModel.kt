@@ -10,6 +10,7 @@ import io.horizontalsystems.bankwallet.modules.market.MarketField
 import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
 import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.market.sort
+import io.horizontalsystems.bankwallet.ui.compose.components.ToggleIndicator
 import io.horizontalsystems.bankwallet.ui.extensions.MarketListHeaderView
 import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
@@ -27,25 +28,12 @@ class MarketListViewModel(
 
     private var marketFieldIndex: Int = MarketField.values().indexOf(MarketField.PriceDiff)
 
-    val marketFields: List<MarketListHeaderView.FieldViewOption> = MarketField.values().mapIndexed { index, marketField ->
-        MarketListHeaderView.FieldViewOption(index, Translator.getString(marketField.titleResId), index == marketFieldIndex)
-    }
-
-    fun update(sortingField: SortingField? = null, marketFieldIndex: Int? = null) {
-        sortingField?.let {
-            this.sortingField = it
-        }
-        marketFieldIndex?.let {
-            this.marketFieldIndex = it
-        }
-        syncViewItemsBySortingField(sortingField != null)
-    }
-
     val marketViewItemsLiveData = MutableLiveData<Pair<List<MarketViewItem>,Boolean>>()
     val loadingLiveData = MutableLiveData(false)
     val errorLiveData = MutableLiveData<String?>(null)
     val networkNotAvailable = SingleLiveEvent<Unit>()
     val showEmptyListTextLiveData = MutableLiveData(false)
+    val topMenuLiveData = MutableLiveData(Pair(getSortMenu(), getToggleButton()))
 
     private val disposable = CompositeDisposable()
 
@@ -57,6 +45,20 @@ class MarketListViewModel(
                 .let {
                     disposable.add(it)
                 }
+    }
+
+    private fun getToggleButton(): MarketListHeaderView.ToggleButton {
+        val marketFields: List<String> =
+            MarketField.values().map { Translator.getString(it.titleResId) }
+
+        return MarketListHeaderView.ToggleButton(
+            title = marketFields[marketFieldIndex],
+            indicators = marketFields.mapIndexed { index, _ -> ToggleIndicator(index == marketFieldIndex) }
+        )
+    }
+
+    private fun getSortMenu(): MarketListHeaderView.SortMenu {
+        return MarketListHeaderView.SortMenu.MultiOption(sortingField.name)
     }
 
     private fun syncState(state: MarketListService.State) {
@@ -91,10 +93,19 @@ class MarketListViewModel(
         return it.message ?: it.javaClass.simpleName
     }
 
+    private fun updateTopMenu(){
+        topMenuLiveData.postValue(Pair(getSortMenu(), getToggleButton()))
+    }
 
     override fun onCleared() {
         clearables.forEach(Clearable::clear)
         disposable.clear()
+    }
+
+    fun updateSorting(sortingField: SortingField) {
+        this.sortingField = sortingField
+        syncViewItemsBySortingField(true)
+        updateTopMenu()
     }
 
     fun refresh() {
@@ -103,6 +114,16 @@ class MarketListViewModel(
 
     fun onErrorClick() {
         service.refresh()
+    }
+
+    fun onToggleButtonClick() {
+        var newIndex = marketFieldIndex + 1
+        if (newIndex >= MarketField.values().size){
+            newIndex = 0
+        }
+        marketFieldIndex = newIndex
+        syncViewItemsBySortingField(false)
+        updateTopMenu()
     }
 
 }
