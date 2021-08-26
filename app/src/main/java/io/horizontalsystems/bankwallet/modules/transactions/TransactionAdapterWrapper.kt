@@ -1,69 +1,56 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
+import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.ITransactionsAdapter
+import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.reactivex.Observable
 import io.reactivex.Single
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.subjects.PublishSubject
+import java.util.concurrent.CopyOnWriteArrayList
 
 class TransactionAdapterWrapper(
     private val transactionsAdapter: ITransactionsAdapter,
     private val transactionWallet: TransactionWallet
-) {
-    val updatedObservable: Observable<List<TransactionRecord>> get() = transactionsAdapter.getTransactionRecordsFlowable(transactionWallet.coin).toObservable()
+) : Clearable {
+    private val updatedSubject = PublishSubject.create<Unit>()
+    val updatedObservable: Observable<Unit> get() = updatedSubject
 
-    private var lastUsed: TransactionRecord? = null
-    private val transactionRecords = mutableListOf<TransactionRecord>()
-    private var allLoaded = false
+    private val transactionRecords = CopyOnWriteArrayList<TransactionRecord>()
 
-    private fun getRecordsUnused(): List<TransactionRecord> {
-        val fromIndex = when {
-            lastUsed == null -> 0
-            else -> transactionRecords.indexOf(lastUsed) + 1
-        }
+    private val disposables = CompositeDisposable()
 
-        return transactionRecords.subList(fromIndex, transactionRecords.size)
+    init {
+        transactionsAdapter.getTransactionRecordsFlowable(transactionWallet.coin)
+            .subscribeIO {
+                transactionRecords.clear()
+                updatedSubject.onNext(Unit)
+            }
+            .let {
+                disposables.add(it)
+            }
     }
 
-    fun getNext(limit: Int): Single<List<TransactionRecord>> {
-        val recordsUnused = getRecordsUnused()
-
-        return if (recordsUnused.size >= limit || allLoaded) {
-            Single.just(recordsUnused.take(limit))
-        } else {
-            val numberOfRecordsToRequest = limit - recordsUnused.size
-
-            transactionsAdapter.getTransactionsAsync(transactionRecords.lastOrNull(), transactionWallet.coin, numberOfRecordsToRequest)
+    fun get(limit: Int): Single<List<TransactionRecord>> = when {
+        transactionRecords.size >= limit -> Single.just(transactionRecords.take(limit))
+        else -> {
+            val numberOfRecordsToRequest = limit - transactionRecords.size
+            transactionsAdapter
+                .getTransactionsAsync(
+                    transactionRecords.lastOrNull(),
+                    transactionWallet.coin,
+                    numberOfRecordsToRequest
+                )
                 .map {
-                    allLoaded = it.size < numberOfRecordsToRequest
                     transactionRecords.addAll(it)
 
-                    getRecordsUnused().take(limit)
+                    transactionRecords
                 }
         }
     }
 
-    fun markUsed(record: TransactionRecord?) {
-        lastUsed = record
-    }
-
-    fun markUpdated(updatedRecord: TransactionRecord) {
-        val indexOfUpdated = transactionRecords.indexOf(updatedRecord)
-        if (indexOfUpdated != -1) {
-            transactionRecords[indexOfUpdated] = updatedRecord
-        }
-    }
-
-    fun markInserted(updatedRecord: TransactionRecord) {
-        val indexToInsert = transactionRecords.indexOfFirst { it < updatedRecord }
-        if (indexToInsert != -1) {
-            transactionRecords.add(indexToInsert, updatedRecord)
-        } else {
-            transactionRecords.add(updatedRecord)
-            lastUsed = updatedRecord
-        }
-    }
-
-    fun markIgnored(updatedRecord: TransactionRecord) {
-        allLoaded = false
+    override fun clear() {
+        disposables.clear()
     }
 }
