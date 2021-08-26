@@ -58,7 +58,7 @@ class TransactionsXRateRepository(
                     historicalRateSubject.onNext(Pair(key, CurrencyValue(baseCurrency, rate)))
                 }
             }, {
-                Log.e("AAA", "Could not fetch xrate for ${key.coinType}:${key.timestamp}, ${it.javaClass.simpleName}:${it.message}")
+                Log.w("XRate", "Could not fetch xrate for ${key.coinType}:${key.timestamp}, ${it.javaClass.simpleName}:${it.message}")
             })
             .let {
                 disposables.add(it)
