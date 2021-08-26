@@ -83,6 +83,7 @@ class TransactionsService(
             }
     }
 
+    @Synchronized
     private fun handleLastBlockInfo(source: TransactionSource, lastBlockInfo: LastBlockInfo) {
         var updated = false
         transactionItems.forEachIndexed { index, item ->
