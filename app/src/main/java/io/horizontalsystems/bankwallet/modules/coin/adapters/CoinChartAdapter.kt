@@ -2,20 +2,29 @@ package io.horizontalsystems.bankwallet.modules.coin.adapters
 
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.tabs.TabLayout
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.coin.ChartInfoData
 import io.horizontalsystems.bankwallet.modules.coin.ChartPointViewItem
 import io.horizontalsystems.bankwallet.modules.coin.CoinViewModel
-import io.horizontalsystems.bankwallet.ui.extensions.createTextView
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.TabRounded
 import io.horizontalsystems.chartview.Chart
 import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.chartview.models.ChartIndicator
@@ -26,6 +35,7 @@ import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.views.inflate
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_coin_chart.*
+import kotlinx.coroutines.launch
 import java.math.BigDecimal
 import java.util.*
 
@@ -91,11 +101,11 @@ class CoinChartAdapter(
 }
 
 class ChartViewHolder(override val containerView: View, private val listener: CoinChartAdapter.Listener, private val currency: Currency)
-    : RecyclerView.ViewHolder(containerView), LayoutContainer, Chart.Listener, TabLayout.OnTabSelectedListener {
+    : RecyclerView.ViewHolder(containerView), LayoutContainer, Chart.Listener {
 
     init {
         chart.setListener(this)
-        bindActions()
+        setIndicators()
         pointInfoVolumeTitle.isInvisible = true
         pointInfoVolume.isInvisible = true
     }
@@ -104,7 +114,6 @@ class ChartViewHolder(override val containerView: View, private val listener: Co
     private var enabledIndicator: ChartIndicator? = null
 
     fun bind(item: CoinChartAdapter.ViewItemWrapper) {
-
         if (item.showError) {
             chart.showError(containerView.context.getString(R.string.CoinPage_NoData))
             chart.hideSpinner()
@@ -121,11 +130,19 @@ class ChartViewHolder(override val containerView: View, private val listener: Co
                 chart.setData(data.chartData, data.chartType, data.maxValue, data.minValue)
             }
 
-            updateTabSelection(data.chartType)
+            bindTabs(getSelectedTabIndex(data.chartType), true)
 
             updateIndicatorsState(data.chartType)
         }
 
+    }
+
+    private fun getSelectedTabIndex(chartType: ChartView.ChartType): Int {
+        var selectedIndex = actions.indexOfFirst { it.first == chartType }
+        if (selectedIndex < 0) {
+            selectedIndex = 0
+        }
+        return selectedIndex
     }
 
     fun bindUpdate(current: CoinChartAdapter.ViewItemWrapper, prev: CoinChartAdapter.ViewItemWrapper) {
@@ -145,7 +162,8 @@ class ChartViewHolder(override val containerView: View, private val listener: Co
                 data?.let { data ->
                     chart.setData(data.chartData, data.chartType, data.maxValue, data.minValue)
 
-                    updateTabSelection(data.chartType)
+                    val shouldScroll = prev.data == null
+                    bindTabs(getSelectedTabIndex(data.chartType), shouldScroll)
 
                     updateIndicatorsState(data.chartType)
                 }
@@ -153,26 +171,16 @@ class ChartViewHolder(override val containerView: View, private val listener: Co
         }
     }
 
-    override fun onTabSelected(tab: TabLayout.Tab) {
-        listener.onTabSelect(actions[tab.position].first)
-    }
-
-    override fun onTabUnselected(tab: TabLayout.Tab?) {
-    }
-
-    override fun onTabReselected(tab: TabLayout.Tab?) {
-    }
-
     override fun onTouchDown() {
         listener.onChartTouchDown()
         chartPointsInfo.isInvisible = false
-        tabLayout.isInvisible = true
+        tabCompose.isInvisible = true
     }
 
     override fun onTouchUp() {
         listener.onChartTouchUp()
         chartPointsInfo.isInvisible = true
-        tabLayout.isInvisible = false
+        tabCompose.isInvisible = false
     }
 
     override fun onTouchSelect(point: PointInfo) {
@@ -190,15 +198,6 @@ class ChartViewHolder(override val containerView: View, private val listener: Co
         HudHelper.vibrate(containerView.context)
     }
 
-    private fun updateTabSelection(chartType: ChartView.ChartType) {
-        val indexOf = actions.indexOfFirst { it.first == chartType }
-        if (indexOf > -1) {
-            tabLayout.removeOnTabSelectedListener(this@ChartViewHolder)
-            tabLayout.selectTab(tabLayout.getTabAt(indexOf))
-            tabLayout.addOnTabSelectedListener(this@ChartViewHolder)
-        }
-    }
-
     private fun updateIndicatorsState(chartType: ChartView.ChartType) {
         val enabled = chartType != ChartView.ChartType.DAILY && chartType != ChartView.ChartType.TODAY
 
@@ -211,22 +210,47 @@ class ChartViewHolder(override val containerView: View, private val listener: Co
         indicatorRSI.isEnabled = enabled
     }
 
-    private fun bindActions() {
-        actions.forEach { (_, textId) ->
-            tabLayout.newTab()
-                    .setCustomView(createTextView(containerView.context, R.style.TabComponent).apply {
-                        id = android.R.id.text1
-                    })
-                    .setText(containerView.context.getString(textId))
-                    .let {
-                        tabLayout.addTab(it, false)
-                    }
+    private fun bindTabs(selectedIndex: Int = 0, shouldScroll: Boolean) {
+        tabCompose.setContent {
+            val coroutineScope = rememberCoroutineScope()
+            val listState = rememberLazyListState()
+
+            ComposeAppTheme {
+                CustomTab(actions.map { containerView.context.getString(it.second) }, selectedIndex, listState)
+            }
+
+            if (shouldScroll) {
+                coroutineScope.launch {
+                    listState.scrollToItem(index = selectedIndex)
+                }
+            }
         }
+    }
 
-        tabLayout.tabRippleColor = null
-        tabLayout.setSelectedTabIndicator(null)
-        tabLayout.addOnTabSelectedListener(this)
+    @Composable
+    private fun CustomTab(tabTitles: List<String>, selectedIndex: Int, listState: LazyListState) {
+        var tabIndex by remember { mutableStateOf(selectedIndex) }
 
+        LazyRow(
+            state = listState,
+            contentPadding = PaddingValues(horizontal = 16.dp),
+            modifier = Modifier.padding(top = 8.dp)
+        ) {
+            itemsIndexed(tabTitles) { index, title ->
+                val selected = tabIndex == index
+                TabRounded(
+                    title = title,
+                    onSelect = {
+                        tabIndex = index
+                        listener.onTabSelect(actions[index].first)
+                    },
+                    selected = selected
+                )
+            }
+        }
+    }
+
+    private fun setIndicators() {
         indicatorEMA.setOnClickListener {
             onIndicatorChanged(ChartIndicator.Ema, indicatorEMA.isChecked)
         }
@@ -238,7 +262,6 @@ class ChartViewHolder(override val containerView: View, private val listener: Co
         indicatorRSI.setOnClickListener {
             onIndicatorChanged(ChartIndicator.Rsi, indicatorRSI.isChecked)
         }
-
     }
 
     private fun onIndicatorChanged(indicator: ChartIndicator, checked: Boolean) {
