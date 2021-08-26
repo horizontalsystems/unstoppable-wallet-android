@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
 import io.horizontalsystems.bankwallet.core.managers.TransactionAdapterManager
+import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -20,9 +21,10 @@ class TransactionRecordRepository(
     private val itemsSubject = PublishSubject.create<List<TransactionRecord>>()
     override val itemsObservable: Observable<List<TransactionRecord>> get() = itemsSubject
 
+    private var pageNumber = 0
     private val items = CopyOnWriteArrayList<TransactionRecord>()
     private val loading = AtomicBoolean(false)
-    private var itemsUpdated = false
+    private var allLoaded = AtomicBoolean(false)
     private val adaptersMap = mutableMapOf<TransactionWallet, TransactionAdapterWrapper>()
 
     private val disposables = CompositeDisposable()
@@ -30,13 +32,18 @@ class TransactionRecordRepository(
 
     private var walletsGroupedBySource: List<TransactionWallet> = listOf()
 
+    private val activeAdapters: List<TransactionAdapterWrapper>
+        get() {
+            val activeWallets = selectedWallet?.let { listOf(it) } ?: walletsGroupedBySource
+            return activeWallets.mapNotNull { adaptersMap[it] }
+        }
+
     override fun setWallets(transactionWallets: List<TransactionWallet>, walletsGroupedBySource: List<TransactionWallet>) {
         this.walletsGroupedBySource = walletsGroupedBySource
 
+        // update list of adapters based on wallets
         val currentAdapters = adaptersMap.toMutableMap()
         adaptersMap.clear()
-        disposableUpdates?.dispose()
-
         (transactionWallets + walletsGroupedBySource).distinct().forEach { transactionWallet ->
             var adapter = currentAdapters.remove(transactionWallet)
             if (adapter == null) {
@@ -49,68 +56,69 @@ class TransactionRecordRepository(
                 adaptersMap[transactionWallet] = it
             }
         }
-
-        val updateObservables = adaptersMap.map { (transactionWallet, adapterWrapper) ->
-            adapterWrapper.updatedObservable
-                .map {
-                    Pair(transactionWallet, it)
-                }
-        }
-
-        disposableUpdates = Observable
-            .merge(updateObservables)
-            .subscribe { (transactionWallet, records) ->
-                handleUpdatedRecords(transactionWallet, records)
-            }
-
+        currentAdapters.values.forEach(TransactionAdapterWrapper::clear)
         currentAdapters.clear()
 
+        // Reset selectedWallet if it does not exist in the new wallets list or leave it if it does
+        // When there is a coin added or removed then the selectedWallet should be left
+        // When the whole wallets list is changed (switch account) it should be reset
         selectedWallet?.let {
             if (!adaptersMap.containsKey(it)) {
                 selectedWallet = null
             }
         }
 
-        items.clear()
-        itemsUpdated = true
-        adaptersMap.forEach { t, u ->
-            u.markUsed(null)
-        }
-        loadNext()
+        unsubscribeFromUpdates()
+        allLoaded.set(false)
+        pageNumber = 1
+        loadItems()
+        subscribeForUpdates()
     }
 
     override fun setSelectedWallet(transactionWallet: TransactionWallet?) {
         selectedWallet = transactionWallet
 
-        items.clear()
-        itemsUpdated = true
-        adaptersMap.forEach { t, u ->
-            u.markUsed(null)
-        }
-        loadNext()
+        unsubscribeFromUpdates()
+        allLoaded.set(false)
+        pageNumber = 1
+        loadItems()
+        subscribeForUpdates()
     }
 
     override fun loadNext() {
+        if (!allLoaded.get()) {
+            pageNumber++
+            loadItems()
+        }
+    }
+
+    private fun unsubscribeFromUpdates() {
+        disposableUpdates?.dispose()
+    }
+
+    private fun subscribeForUpdates() {
+        disposableUpdates = Observable
+            .merge(activeAdapters.map { it.updatedObservable })
+            .subscribeIO {
+                handleUpdates()
+            }
+    }
+
+    @Synchronized
+    private fun handleUpdates() {
+        allLoaded.set(false)
+        loadItems()
+    }
+
+    private fun loadItems() {
         if (loading.get()) return
         loading.set(true)
 
-        val activeWallets = selectedWallet?.let { listOf(it) } ?: walletsGroupedBySource
-
-        val map: List<Single<List<Pair<TransactionWallet, TransactionRecord>>>> = activeWallets.mapNotNull { transactionWallet ->
-            adaptersMap[transactionWallet]?.let { transactionAdapterWrapper ->
-                transactionAdapterWrapper
-                    .getNext(itemsPerPage)
-                    .map { transactionRecords: List<TransactionRecord> ->
-                        transactionRecords.map {
-                            Pair(transactionWallet, it)
-                        }
-                    }
-            }
-        }
+        val itemsCount = pageNumber * itemsPerPage
 
         Single
-            .zip(map) {
-                it as Array<List<Pair<TransactionWallet, TransactionRecord>>>
+            .zip(activeAdapters.map { it.get(itemsCount) }) {
+                it as Array<List<TransactionRecord>>
                 it.toList().flatten()
             }
             .subscribeOn(Schedulers.computation())
@@ -127,65 +135,27 @@ class TransactionRecordRepository(
     }
 
     override fun clear() {
+        adaptersMap.values.forEach(TransactionAdapterWrapper::clear)
+        adaptersMap.clear()
         disposables.clear()
         disposableUpdates?.dispose()
     }
 
-    private fun handleRecords(records: List<Pair<TransactionWallet, TransactionRecord>>) {
-        records
-            .sortedByDescending { it.second }
-            .take(itemsPerPage)
-            .forEach {
-                adaptersMap[it.first]?.markUsed(it.second)
-
-                items.add(it.second)
-                itemsUpdated = true
-            }
-
-        if (itemsUpdated) {
-            itemsSubject.onNext(items)
-            itemsUpdated = false
-        }
-    }
-
     @Synchronized
-    private fun handleUpdatedRecords(transactionWallet: TransactionWallet, list: List<TransactionRecord>) {
-        val transactionAdapterWrapper = adaptersMap[transactionWallet]
-        list.forEach { updatedRecord ->
-            val indexOfUpdated = items.indexOf(updatedRecord)
-            val indexToInsert = items.indexOfFirst { it < updatedRecord }
+    private fun handleRecords(records: List<TransactionRecord>) {
+        records
+            .sortedDescending()
+            .take(pageNumber * itemsPerPage)
+            .let {
+                if (it.size < pageNumber * itemsPerPage) {
+                    allLoaded.set(true)
+                }
 
-            when {
-                // record should be updated
-                indexOfUpdated != -1 -> {
-                    items[indexOfUpdated] = updatedRecord
-                    itemsUpdated = true
-                    transactionAdapterWrapper?.markUpdated(updatedRecord)
-                }
-                // record should be inserted
-                indexToInsert != -1 -> {
-                    items.add(indexToInsert, updatedRecord)
-                    itemsUpdated = true
-                    transactionAdapterWrapper?.markInserted(updatedRecord)
-                }
-                // if current items empty insert a record
-                items.isEmpty() -> {
-                    items.add(updatedRecord)
-                    itemsUpdated = true
-                    transactionAdapterWrapper?.markInserted(updatedRecord)
-                }
-                else -> {
-                    transactionAdapterWrapper?.markIgnored(updatedRecord)
-                }
+                items.clear()
+                items.addAll(it)
+                itemsSubject.onNext(items)
             }
-        }
-
-        if (itemsUpdated) {
-            itemsSubject.onNext(items)
-            itemsUpdated = false
-        }
     }
-
 
     companion object {
         const val itemsPerPage = 20
