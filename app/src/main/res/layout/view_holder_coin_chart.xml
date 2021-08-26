@@ -99,21 +99,14 @@
             tools:text="-286.61" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tabLayout"
+    <androidx.compose.ui.platform.ComposeView
+        android:id="@+id/tabCompose"
         android:layout_width="0dp"
-        android:layout_height="40dp"
-        android:clipToPadding="false"
-        android:paddingStart="12dp"
-        android:paddingEnd="12dp"
+        android:layout_height="44dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tabGravity="start"
-        app:tabMinWidth="0dp"
-        app:tabMode="scrollable"
-        app:tabPaddingEnd="4dp"
-        app:tabPaddingStart="4dp" />
+        />
 
     <io.horizontalsystems.chartview.Chart
         android:id="@+id/chart"
