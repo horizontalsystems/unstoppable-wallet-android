@@ -5,6 +5,7 @@ import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.BitcoinIncomingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.BitcoinOutgoingTransactionRecord
+import io.horizontalsystems.bankwallet.modules.transactions.FilterTransactionType
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionLockInfo
 import io.horizontalsystems.bitcoincore.AbstractKit
 import io.horizontalsystems.bitcoincore.BitcoinCore
@@ -90,7 +91,7 @@ abstract class BitcoinBaseAdapter(
     override val balanceStateUpdatedFlowable: Flowable<Unit>
         get() = adapterStateUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
 
-    override fun getTransactionRecordsFlowable(coin: Coin?): Flowable<List<TransactionRecord>> {
+    override fun getTransactionRecordsFlowable(coin: Coin?, transactionType: FilterTransactionType): Flowable<List<TransactionRecord>> {
         return transactionRecordsSubject.toFlowable(BackpressureStrategy.BUFFER)
     }
 
@@ -117,7 +118,12 @@ abstract class BitcoinBaseAdapter(
         kit.refresh()
     }
 
-    override fun getTransactionsAsync(from: TransactionRecord?, coin: Coin?, limit: Int): Single<List<TransactionRecord>> {
+    override fun getTransactionsAsync(
+        from: TransactionRecord?,
+        coin: Coin?,
+        limit: Int,
+        transactionType: FilterTransactionType
+    ): Single<List<TransactionRecord>> {
         return kit.transactions(from?.uid, limit).map { it.map { tx -> transactionRecord(tx) } }
     }
 

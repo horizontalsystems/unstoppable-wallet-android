@@ -69,7 +69,7 @@ class TransactionsViewModel(
     }
 
     fun setFilterTransactionType(f: FilterTransactionType) {
-        TODO()
+        service.setFilterType(f)
     }
 
     fun setFilterCoin(w: Wallet?) {

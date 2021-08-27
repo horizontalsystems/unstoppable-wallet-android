@@ -18,11 +18,23 @@ class TransactionAdapterWrapper(
     val updatedObservable: Observable<Unit> get() = updatedSubject
 
     private val transactionRecords = CopyOnWriteArrayList<TransactionRecord>()
-
+    private var transactionType: FilterTransactionType = FilterTransactionType.All
     private val disposables = CompositeDisposable()
 
     init {
-        transactionsAdapter.getTransactionRecordsFlowable(transactionWallet.coin)
+        subscribeForUpdates()
+    }
+
+    fun setTransactionType(transactionType: FilterTransactionType) {
+        unsubscribeFromUpdates()
+
+        this.transactionType = transactionType
+        transactionRecords.clear()
+        subscribeForUpdates()
+    }
+
+    private fun subscribeForUpdates() {
+        transactionsAdapter.getTransactionRecordsFlowable(transactionWallet.coin, transactionType)
             .subscribeIO {
                 transactionRecords.clear()
                 updatedSubject.onNext(Unit)
@@ -30,6 +42,10 @@ class TransactionAdapterWrapper(
             .let {
                 disposables.add(it)
             }
+    }
+
+    private fun unsubscribeFromUpdates() {
+        disposables.clear()
     }
 
     fun get(limit: Int): Single<List<TransactionRecord>> = when {
@@ -40,7 +56,8 @@ class TransactionAdapterWrapper(
                 .getTransactionsAsync(
                     transactionRecords.lastOrNull(),
                     transactionWallet.coin,
-                    numberOfRecordsToRequest
+                    numberOfRecordsToRequest,
+                    transactionType
                 )
                 .map {
                     transactionRecords.addAll(it)
@@ -51,6 +68,6 @@ class TransactionAdapterWrapper(
     }
 
     override fun clear() {
-        disposables.clear()
+        unsubscribeFromUpdates()
     }
 }

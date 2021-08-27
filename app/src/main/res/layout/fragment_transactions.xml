@@ -35,6 +35,12 @@
                 android:visibility="invisible" />
         </androidx.appcompat.widget.Toolbar>
 
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/transactionTypeFilterTab"
+            app:tabMode="scrollable"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
         <io.horizontalsystems.bankwallet.ui.extensions.NestedScrollableHost
             android:layout_width="match_parent"
             android:layout_height="wrap_content">

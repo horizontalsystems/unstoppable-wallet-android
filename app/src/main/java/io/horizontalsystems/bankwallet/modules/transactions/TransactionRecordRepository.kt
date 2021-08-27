@@ -85,6 +85,18 @@ class TransactionRecordRepository(
         subscribeForUpdates()
     }
 
+    override fun setTransactionType(transactionType: FilterTransactionType) {
+        adaptersMap.forEach { (_, transactionAdapterWrapper) ->
+            transactionAdapterWrapper.setTransactionType(transactionType)
+        }
+
+        unsubscribeFromUpdates()
+        allLoaded.set(false)
+        pageNumber = 1
+        loadItems()
+        subscribeForUpdates()
+    }
+
     override fun loadNext() {
         if (!allLoaded.get()) {
             pageNumber++
