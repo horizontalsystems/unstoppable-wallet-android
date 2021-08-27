@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.tabs.TabLayout
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
@@ -95,6 +96,37 @@ class TransactionsFragment : BaseFragment(R.layout.fragment_transactions) {
         viewModel.syncingLiveData.observe(viewLifecycleOwner) {
             toolbarSpinner.isVisible = it
         }
+
+        viewModel.filterTypes.map {
+            val text: TabLayout.Tab = transactionTypeFilterTab
+                .newTab()
+                .setText(it.name)
+
+            text to it
+        }
+        viewModel.filterTypes.forEach {
+            val tab = transactionTypeFilterTab
+                .newTab()
+                .setText(it.name)
+                .setId(it.ordinal)
+
+            transactionTypeFilterTab.addTab(tab)
+        }
+
+        transactionTypeFilterTab.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab) {
+                FilterTransactionType.values().find {
+                    it.ordinal == tab.id
+                }?.let {
+                    viewModel.setFilterTransactionType(it)
+                }
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab) = Unit
+
+            override fun onTabReselected(tab: TabLayout.Tab) = Unit
+
+        })
     }
 }
 

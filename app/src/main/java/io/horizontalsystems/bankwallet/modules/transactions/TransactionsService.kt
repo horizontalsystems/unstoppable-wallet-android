@@ -200,6 +200,12 @@ class TransactionsService(
 
     private val executorService = Executors.newCachedThreadPool()
 
+    fun setFilterType(f: FilterTransactionType) {
+        executorService.submit {
+            transactionRecordRepository.setTransactionType(f)
+        }
+    }
+
     fun setFilterCoin(w: Wallet?) {
         executorService.submit {
             filterCoinSubject.onNext(w?.let { Optional.of(it) } ?: Optional.empty())

@@ -9,5 +9,6 @@ interface ITransactionRecordRepository : Clearable {
 
     fun setWallets(transactionWallets: List<TransactionWallet>, walletsGroupedBySource: List<TransactionWallet>)
     fun setSelectedWallet(transactionWallet: TransactionWallet?)
+    fun setTransactionType(transactionType: FilterTransactionType)
     fun loadNext()
 }

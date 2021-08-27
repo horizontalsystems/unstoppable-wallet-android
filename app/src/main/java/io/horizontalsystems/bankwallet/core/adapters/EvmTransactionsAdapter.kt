@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.core.adapters
 
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
+import io.horizontalsystems.bankwallet.modules.transactions.FilterTransactionType
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
 import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.coinkit.models.CoinType
@@ -87,10 +88,11 @@ class EvmTransactionsAdapter(kit: EthereumKit, coinManager: ICoinManager, source
     override fun getTransactionsAsync(
         from: TransactionRecord?,
         coin: Coin?,
-        limit: Int
+        limit: Int,
+        transactionType: FilterTransactionType
     ): Single<List<TransactionRecord>> {
         return evmKit.getTransactionsAsync(
-            getFilters(coin),
+            getFilters(coin, transactionType),
             from?.transactionHash?.hexStringToByteArray(),
             limit
         ).map {
@@ -98,8 +100,8 @@ class EvmTransactionsAdapter(kit: EthereumKit, coinManager: ICoinManager, source
         }
     }
 
-    override fun getTransactionRecordsFlowable(coin: Coin?): Flowable<List<TransactionRecord>> {
-        return evmKit.getTransactionsFlowable(getFilters(coin)).map {
+    override fun getTransactionRecordsFlowable(coin: Coin?, transactionType: FilterTransactionType): Flowable<List<TransactionRecord>> {
+        return evmKit.getTransactionsFlowable(getFilters(coin, transactionType)).map {
             it.map { tx -> transactionConverter.transactionRecord(tx) }
         }
     }
@@ -124,21 +126,33 @@ class EvmTransactionsAdapter(kit: EthereumKit, coinManager: ICoinManager, source
         return TransactionData(address, amount, byteArrayOf())
     }
 
+    private fun coinTagName(coin: Coin) = when (val type = coin.type) {
+        CoinType.Ethereum, CoinType.BinanceSmartChain -> TransactionTag.EVM_COIN
+        is CoinType.Erc20 -> type.address
+        is CoinType.Bep20 -> type.address
+        else -> throw IllegalArgumentException()
+    }
 
-    private fun getFilters(coin: Coin?): List<List<String>> {
-        val coinFilter = mutableListOf<List<String>>()
-
-        coin?.let {
-            when (val type = coin.type) {
-                CoinType.Ethereum, CoinType.BinanceSmartChain -> coinFilter.add(listOf(TransactionTag.EVM_COIN))
-                is CoinType.Erc20 -> coinFilter.add(listOf(type.address))
-                is CoinType.Bep20 -> coinFilter.add(listOf(type.address))
-                else -> {
-                }
-            }
+    private fun getFilters(coin: Coin?, filter: FilterTransactionType): List<List<String>> {
+        val filterCoin = coin?.let {
+            coinTagName(it)
         }
 
-        return coinFilter
+        val filterTag = when (filter) {
+            FilterTransactionType.All -> null
+            FilterTransactionType.Incoming -> when {
+                coin != null -> TransactionTag.eip20Incoming(coinTagName(coin))
+                else -> TransactionTag.INCOMING
+            }
+            FilterTransactionType.Outgoing -> when {
+                coin != null -> TransactionTag.eip20Outgoing(coinTagName(coin))
+                else -> TransactionTag.OUTGOING
+            }
+            FilterTransactionType.Swap -> TransactionTag.SWAP
+            FilterTransactionType.Approve -> TransactionTag.EIP20_APPROVE
+        }
+
+        return listOfNotNull(filterCoin, filterTag).map { listOf(it) }
     }
 
     companion object {
