@@ -26,19 +26,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerTags"
+            <androidx.compose.ui.platform.ComposeView
+                android:id="@+id/tabsCompose"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clipToPadding="false"
-                android:orientation="horizontal"
-                android:paddingStart="12dp"
-                android:paddingEnd="12dp"
-                android:paddingTop="6dp"
-                android:paddingBottom="6dp"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:itemCount="2"
-                tools:listitem="@layout/view_holder_filter" />
+                android:layout_height="44dp"
+                />
 
         </io.horizontalsystems.bankwallet.ui.extensions.NestedScrollableHost>
     </com.google.android.material.appbar.AppBarLayout>
