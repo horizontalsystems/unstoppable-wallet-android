@@ -18,15 +18,13 @@
         app:title="@string/ShowKey_Title"
         app:titleTextAppearance="@style/Title3" />
 
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tabLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+    <androidx.compose.ui.platform.ComposeView
+        android:id="@+id/tabsCompose"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar"
-        app:tabGravity="start"
-        app:tabPaddingStart="0dp" />
+        />
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager"
@@ -35,7 +33,7 @@
         android:layout_marginBottom="24dp"
         app:layout_constraintBottom_toTopOf="@id/buttonCloseCompose"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tabLayout" />
+        app:layout_constraintTop_toBottomOf="@id/tabsCompose" />
 
     <androidx.compose.ui.platform.ComposeView
         android:id="@+id/buttonCloseCompose"
