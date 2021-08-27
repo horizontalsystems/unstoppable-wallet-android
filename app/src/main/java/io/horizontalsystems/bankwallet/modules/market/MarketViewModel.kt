@@ -10,14 +10,15 @@ class MarketViewModel(private val service: MarketService) : ViewModel() {
     var currentTabLiveData = MutableLiveData(service.currentTab ?: MarketModule.Tab.Overview)
     val discoveryListTypeLiveEvent = SingleLiveEvent<MarketModule.ListType>()
 
-    fun onSelect(tab: MarketModule.Tab) {
-        service.currentTab = tab
-        currentTabLiveData.value = tab
+    fun onSelect(tabIndex: Int) {
+        val selectedTab = tabs[tabIndex]
+        service.currentTab = selectedTab
+        currentTabLiveData.value = selectedTab
     }
 
     fun onClickSeeAll(listType: MarketModule.ListType) {
         discoveryListTypeLiveEvent.value = listType
-        onSelect(MarketModule.Tab.Discovery)
+        onSelect(tabs.indexOfFirst { it == MarketModule.Tab.Discovery })
     }
 
 }
