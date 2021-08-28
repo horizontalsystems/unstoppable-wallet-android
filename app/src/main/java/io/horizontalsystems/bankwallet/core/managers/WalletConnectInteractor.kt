@@ -98,7 +98,7 @@ class WalletConnectInteractor(
     fun connect() {
         state = State.Connecting
 
-        client.connect(session, clientMeta, peerId, remotePeerId)
+        client.connect(session, clientMeta, peerId, remotePeerId ?: client.remotePeerId)
     }
 
     fun approveSession(address: String, chainId: Int) {
