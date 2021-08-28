@@ -354,6 +354,7 @@
     <string name="WalletConnect_Status_Online">Online</string>
     <string name="WalletConnect_Status_Connecting">Connecting…</string>
     <string name="WalletConnect_NewConnect">New Connection</string>
+    <string name="WalletConnect_Disconnecting">Disconnecting</string>
     <string name="WalletConnect_SignMessageRequest_Title">Sign</string>
     <string name="WalletConnect_SignMessageRequest_Domain">Domain</string>
     <string name="WalletConnect_SignMessageRequest_ShowMessageTitle">Message to sign</string>

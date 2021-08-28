@@ -72,7 +72,7 @@ class WalletConnectListFragment : BaseFragment(), SessionViewHolder.Listener {
         viewModel.killingSessionInProcessLiveEvent.observe(viewLifecycleOwner, {
             snackbarInProcess = HudHelper.showInProcessMessage(
                 requireView(),
-                R.string.StatusInfo_Processing,
+                R.string.WalletConnect_Disconnecting,
                 SnackbarDuration.INDEFINITE
             )
         })
