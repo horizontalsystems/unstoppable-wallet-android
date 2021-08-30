@@ -107,7 +107,7 @@ class UniswapFragment : SwapBaseFragment() {
             uniswapViewModel.onTapSwitch()
         }
 
-        poweredBy.text = TextHelper.underlineText(dex.provider.title)
+        poweredBy.text = dex.provider.title
 
         poweredBy.setOnClickListener {
             findNavController().navigate(R.id.selectSwapProviderDialog)
