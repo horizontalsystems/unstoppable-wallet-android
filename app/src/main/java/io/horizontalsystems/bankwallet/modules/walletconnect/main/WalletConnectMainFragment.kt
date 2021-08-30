@@ -215,7 +215,7 @@ class WalletConnectMainFragment : BaseFragment() {
                                 .padding(start = 16.dp, top = 16.dp, end = 16.dp),
                             title = getString(R.string.Button_Disconnect),
                             onClick = {
-                                showDisconnectDialog()
+                                viewModel.disconnect()
                             },
                             enabled = buttonsStates.disconnect.enabled
                         )
@@ -234,24 +234,6 @@ class WalletConnectMainFragment : BaseFragment() {
                 }
             }
         }
-    }
-
-    private fun showDisconnectDialog() {
-        ConfirmationDialog.show(
-            icon = R.drawable.ic_wallet_connect_24,
-            title = getString(R.string.Button_Disconnect),
-            subtitle = dappTitle.text.toString(),
-            contentText = null,
-            actionButtonTitle = null,
-            destructiveButtonTitle = getString(R.string.Button_Disconnect),
-            cancelButtonTitle = getString(R.string.Button_Cancel),
-            activity = requireActivity(),
-            listener = object : ConfirmationDialog.Listener {
-                override fun onDestructiveButtonClick() {
-                    viewModel.disconnect()
-                }
-            }
-        )
     }
 
     override fun onDestroyView() {
