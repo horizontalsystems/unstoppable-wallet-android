@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.layout.padding
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import io.horizontalsystems.bankwallet.R
@@ -41,6 +42,10 @@ class SwapInfoFragment : BaseFragment() {
         description.text = viewModel.description
         headerRelated.text = viewModel.dexRelated
         transactionFeeDescription.text = viewModel.transactionFeeDescription
+
+        btnLinkCompose.setViewCompositionStrategy(
+            ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+        )
 
         btnLinkCompose.setContent {
             ComposeAppTheme {

@@ -70,6 +70,10 @@ class ShowKeyMainFragment : BaseFragment() {
             ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
         )
 
+        tabsCompose.setViewCompositionStrategy(
+            ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+        )
+
         buttonCloseCompose.setContent {
             ComposeAppTheme {
                 ButtonPrimaryYellow(

@@ -76,6 +76,10 @@ class ReceiveFragment : BaseFragment() {
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
 
+            btnsCopyShareCompose.setViewCompositionStrategy(
+                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+            )
+
             setCloseButton()
 
             setCopyShareButtons(viewModel)
