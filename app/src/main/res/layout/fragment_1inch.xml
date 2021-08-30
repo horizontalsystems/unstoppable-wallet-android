@@ -84,12 +84,12 @@
 
             <TextView
                 android:id="@+id/poweredBy"
-                style="@style/Subhead2"
+                style="@style/ButtonSecondary"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:drawablePadding="6dp"
-                android:textColor="@color/jacob"
-                app:drawableEndCompat="@drawable/ic_swap_20"
+                android:layout_height="28dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="8dp"
+                app:drawableEndCompat="@drawable/ic_down_arrow_20"
                 app:layout_constraintEnd_toStartOf="@id/endBorder"
                 app:layout_constraintTop_toTopOf="@id/poweredByTitle"
                 tools:text="1inch" />

@@ -65,12 +65,6 @@ object TextHelper : IClipboardManager {
         return cleanedUrl
     }
 
-    fun underlineText(text: String): SpannableString {
-        val textSpannable = SpannableString(text)
-        textSpannable.setSpan(UnderlineSpan(), 0, text.length, 0)
-        return textSpannable
-    }
-
     private val clipboard: ClipboardManager?
         get() = App.instance.getSystemService(Context.CLIPBOARD_SERVICE) as? ClipboardManager
 
