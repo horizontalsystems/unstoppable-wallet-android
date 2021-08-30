@@ -72,7 +72,7 @@ class WalletConnectService(
         get() = connectionStateSubject.toFlowable(BackpressureStrategy.BUFFER)
 
     val connectionState: WalletConnectInteractor.State
-        get() = interactor?.state ?: WalletConnectInteractor.State.Disconnected()
+        get() = interactor?.state ?: WalletConnectInteractor.State.Idle
 
     private val requestSubject = PublishSubject.create<WalletConnectRequest>()
     val requestObservable: Flowable<WalletConnectRequest>
@@ -195,14 +195,12 @@ class WalletConnectService(
         processNextRequest()
     }
 
+    fun reconnect() {
+        interactor?.connect()
+    }
+
     override fun didUpdateState(state: WalletConnectInteractor.State) {
         connectionStateSubject.onNext(state)
-
-        if (state == WalletConnectInteractor.State.Connected) {
-            processNextRequest()
-        } else if (state is WalletConnectInteractor.State.Disconnected) {
-            this.state = State.Invalid(state.error)
-        }
     }
 
     override fun didKillSession() {

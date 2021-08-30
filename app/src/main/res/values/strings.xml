@@ -32,6 +32,7 @@
     <string name="Button_Create">Create</string>
     <string name="Button_Restore">Restore</string>
     <string name="Button_Reset">Reset</string>
+    <string name="Button_Reconnect">Reconnect</string>
 
     <string name="Error">Error</string>
     <string name="NotAvailable">N/A</string>

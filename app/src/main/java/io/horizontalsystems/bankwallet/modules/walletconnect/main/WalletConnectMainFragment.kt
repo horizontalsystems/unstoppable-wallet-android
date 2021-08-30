@@ -188,12 +188,24 @@ class WalletConnectMainFragment : BaseFragment() {
                         ButtonPrimaryYellow(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(start = 16.dp, end = 16.dp),
+                                .padding(start = 16.dp, top = 16.dp, end = 16.dp),
                             title = getString(R.string.Button_Connect),
                             onClick = {
                                 viewModel.connect()
                             },
                             enabled = buttonsStates.connect.enabled
+                        )
+                    }
+                    if (buttonsStates.reconnect.visible) {
+                        ButtonPrimaryYellow(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(start = 16.dp, top = 16.dp, end = 16.dp),
+                            title = getString(R.string.Button_Reconnect),
+                            onClick = {
+                                viewModel.reconnect()
+                            },
+                            enabled = buttonsStates.reconnect.enabled
                         )
                     }
                     if (buttonsStates.disconnect.visible) {
