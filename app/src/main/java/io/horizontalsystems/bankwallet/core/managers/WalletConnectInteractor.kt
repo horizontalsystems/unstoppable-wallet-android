@@ -29,12 +29,13 @@ class WalletConnectInteractor(
     }
 
     sealed class State {
+        object Idle: State()
         object Connecting : State()
         object Connected : State()
         class Disconnected(val error: Throwable = Error("Disconnected")) : State()
     }
 
-    var state: State = State.Disconnected()
+    var state: State = State.Idle
         private set(value) {
             field = value
 
