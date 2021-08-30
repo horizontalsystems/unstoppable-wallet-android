@@ -24,7 +24,7 @@ class WalletConnectSessionKillManager(
     }
 
     fun kill() {
-        if (interactor.state is WalletConnectInteractor.State.Disconnected) {
+        if (interactor.state is WalletConnectInteractor.State.Idle) {
             interactor.connect()
         }
     }
@@ -34,6 +34,7 @@ class WalletConnectSessionKillManager(
             WalletConnectInteractor.State.Connected -> {
                 interactor.killSession()
             }
+            WalletConnectInteractor.State.Idle,
             WalletConnectInteractor.State.Connecting -> {
                 this.state = State.Processing
             }
