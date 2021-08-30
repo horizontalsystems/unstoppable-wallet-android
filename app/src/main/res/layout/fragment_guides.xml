@@ -39,7 +39,8 @@
         <androidx.compose.ui.platform.ComposeView
             android:id="@+id/tabsCompose"
             android:layout_width="match_parent"
-            android:layout_height="45dp"/>
+            android:layout_height="45dp"
+            />
 
     </com.google.android.material.appbar.AppBarLayout>
 

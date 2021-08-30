@@ -6,16 +6,15 @@ import io.horizontalsystems.bankwallet.entities.Guide
 import io.horizontalsystems.bankwallet.entities.GuideCategory
 import io.reactivex.disposables.CompositeDisposable
 
-class GuidesViewModel(val repository: GuidesRepository) : ViewModel() {
+class GuidesViewModel(private val repository: GuidesRepository) : ViewModel() {
 
     val guides = MutableLiveData<List<Guide>>()
-    val loading = MutableLiveData<Boolean>(false)
-    val filters = MutableLiveData<List<String>>()
+    val loading = MutableLiveData(false)
+    val categories = MutableLiveData<List<String>>()
     val error = MutableLiveData<Throwable?>()
-    var selectedFilter: String? = null
+    var selectedCategoryIndex = 0
 
     private var guideCategories: Array<GuideCategory> = arrayOf()
-    private var currentCategoryIndex = 0
     private var disposables = CompositeDisposable()
 
     init {
@@ -34,12 +33,8 @@ class GuidesViewModel(val repository: GuidesRepository) : ViewModel() {
                 }
     }
 
-    fun onSelectFilter(filterId: String) {
-        currentCategoryIndex = guideCategories.indexOfFirst {
-            it.category == filterId
-        }
-
-        selectedFilter = filterId
+    fun onSelectFilter(selectedFilterIndex: Int) {
+        selectedCategoryIndex = selectedFilterIndex
         syncViewItems()
     }
 
@@ -52,12 +47,12 @@ class GuidesViewModel(val repository: GuidesRepository) : ViewModel() {
     private fun didFetchGuideCategories(guideCategories: Array<GuideCategory>) {
         this.guideCategories = guideCategories
 
-        filters.postValue(guideCategories.map { it.category })
+        categories.postValue(guideCategories.map { it.category })
 
         syncViewItems()
     }
 
     private fun syncViewItems() {
-        guides.postValue(guideCategories[currentCategoryIndex].guides)
+        guides.postValue(guideCategories[selectedCategoryIndex].guides)
     }
 }
