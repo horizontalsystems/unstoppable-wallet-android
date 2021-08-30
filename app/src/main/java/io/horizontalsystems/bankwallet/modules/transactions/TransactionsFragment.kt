@@ -4,19 +4,22 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.view.isVisible
 import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.tabs.TabLayout
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.ScrollableTabs
 import io.horizontalsystems.core.findNavController
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_transactions.*
+import kotlinx.android.synthetic.main.fragment_transactions.toolbarSpinner
 import kotlinx.android.synthetic.main.view_holder_transaction.*
 
 class TransactionsFragment : BaseFragment(R.layout.fragment_transactions) {
@@ -97,36 +100,23 @@ class TransactionsFragment : BaseFragment(R.layout.fragment_transactions) {
             toolbarSpinner.isVisible = it
         }
 
-        viewModel.filterTypes.map {
-            val text: TabLayout.Tab = transactionTypeFilterTab
-                .newTab()
-                .setText(it.name)
+        setTabs(viewModel.filterTypes.map { it.name }, 0)
 
-            text to it
-        }
-        viewModel.filterTypes.forEach {
-            val tab = transactionTypeFilterTab
-                .newTab()
-                .setText(it.name)
-                .setId(it.ordinal)
+        transactionTypeFilterTabCompose.setViewCompositionStrategy(
+            ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+        )
+    }
 
-            transactionTypeFilterTab.addTab(tab)
-        }
-
-        transactionTypeFilterTab.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabSelected(tab: TabLayout.Tab) {
-                FilterTransactionType.values().find {
-                    it.ordinal == tab.id
-                }?.let {
-                    viewModel.setFilterTransactionType(it)
+    private fun setTabs(tabs: List<String>, selectedIndex: Int) {
+        transactionTypeFilterTabCompose.setContent {
+            ComposeAppTheme {
+                ScrollableTabs(tabs, selectedIndex) { index ->
+                    viewModel.setFilterTransactionType(
+                        index
+                    )
                 }
             }
-
-            override fun onTabUnselected(tab: TabLayout.Tab) = Unit
-
-            override fun onTabReselected(tab: TabLayout.Tab) = Unit
-
-        })
+        }
     }
 }
 

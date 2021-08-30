@@ -68,8 +68,9 @@ class TransactionsViewModel(
             }
     }
 
-    fun setFilterTransactionType(f: FilterTransactionType) {
-        service.setFilterType(f)
+    fun setFilterTransactionType(filterIndex: Int) {
+        val filterType = filterTypes[filterIndex]
+        service.setFilterType(filterType)
     }
 
     fun setFilterCoin(w: Wallet?) {
