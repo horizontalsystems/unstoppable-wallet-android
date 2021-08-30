@@ -10,6 +10,7 @@ import androidx.compose.material.*
 import androidx.compose.material.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
@@ -53,6 +54,10 @@ class GuidesFragment : BaseFragment(), GuidesAdapter.Listener {
         recyclerGuides.adapter = ConcatAdapter(errorAdapter, guidesAdapter)
 
         observeLiveData()
+
+        tabsCompose.setViewCompositionStrategy(
+            ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+        )
     }
 
     override fun onDestroyView() {
