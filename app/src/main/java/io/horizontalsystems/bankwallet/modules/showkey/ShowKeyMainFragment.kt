@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material.TabRowDefaults.tabIndicatorOffset
@@ -20,6 +22,7 @@ import io.horizontalsystems.bankwallet.modules.showkey.ShowKeyModule.ShowKeyTab
 import io.horizontalsystems.bankwallet.modules.showkey.tabs.ShowKeyTabsAdapter
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.Grey
+import io.horizontalsystems.bankwallet.ui.compose.Steel10
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.core.findNavController
 import kotlinx.android.synthetic.main.fragment_show_key_main.*
@@ -87,40 +90,42 @@ class ShowKeyMainFragment : BaseFragment() {
         tabsCompose.setContent {
             var tabIndex by remember { mutableStateOf(0) }
             ComposeAppTheme {
-                TabRow(
-                    modifier = Modifier.padding(start = 16.dp, end = 16.dp),
-                    selectedTabIndex = tabIndex,
-                    backgroundColor = ComposeAppTheme.colors.tyler,
-                    contentColor = ComposeAppTheme.colors.tyler,
-                    indicator = @Composable { tabPositions ->
-                        TabRowDefaults.Indicator(
-                            modifier = Modifier.tabIndicatorOffset(tabPositions[tabIndex]),
-                            color = ComposeAppTheme.colors.jacob
-                        )
+                Column {
+                    TabRow(
+                        modifier = Modifier.height(44.dp).padding(start = 16.dp, end = 16.dp),
+                        selectedTabIndex = tabIndex,
+                        backgroundColor = ComposeAppTheme.colors.tyler,
+                        contentColor = ComposeAppTheme.colors.tyler,
+                        indicator = @Composable { tabPositions ->
+                            TabRowDefaults.Indicator(
+                                modifier = Modifier.tabIndicatorOffset(tabPositions[tabIndex]),
+                                color = ComposeAppTheme.colors.jacob
+                            )
+                        }
+                    ) {
+                        tabs.forEachIndexed { index, tab ->
+                            Tab(
+                                selected = tabIndex == index,
+                                onClick = {
+                                    tabIndex = index
+                                    viewPager.currentItem = index
+                                },
+                                text = {
+                                    ProvideTextStyle(
+                                        ComposeAppTheme.typography.subhead1.copy(
+                                            textAlign = TextAlign.Center
+                                        )
+                                    ) {
+                                        Text(
+                                            text = tab,
+                                            color = if (tabIndex == index) ComposeAppTheme.colors.oz else Grey
+                                        )
+                                    }
+                                })
+                        }
                     }
-                ) {
-                    tabs.forEachIndexed { index, tab ->
-                        Tab(
-                            selected = tabIndex == index,
-                            onClick = {
-                                tabIndex = index
-                                viewPager.currentItem = index
-                            },
-                            text = {
-                                ProvideTextStyle(
-                                    ComposeAppTheme.typography.subhead1.copy(
-                                        textAlign = TextAlign.Center
-                                    )
-                                ) {
-                                    Text(
-                                        text = tab,
-                                        color = if (tabIndex == index) ComposeAppTheme.colors.oz else Grey
-                                    )
-                                }
-                            })
-                    }
+                    Divider(thickness = 1.dp, color = Steel10)
                 }
-
             }
         }
     }
