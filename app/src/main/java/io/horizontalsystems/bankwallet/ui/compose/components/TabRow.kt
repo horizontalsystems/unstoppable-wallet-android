@@ -65,6 +65,7 @@ fun ScrollableTabs(tabs: List<String>, selectedIndex: Int, onClick: (Int) -> Uni
             selectedTabIndex = tabIndex,
             backgroundColor = ComposeAppTheme.colors.tyler,
             contentColor = ComposeAppTheme.colors.tyler,
+            edgePadding = 0.dp,
             indicator = @Composable { tabPositions ->
                 TabRowDefaults.Indicator(
                     modifier = Modifier.tabIndicatorOffset(tabPositions[tabIndex]),
