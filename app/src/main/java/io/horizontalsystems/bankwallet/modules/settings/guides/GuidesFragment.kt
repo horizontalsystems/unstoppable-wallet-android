@@ -4,15 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.height
-import androidx.compose.material.*
-import androidx.compose.material.TabRowDefaults.tabIndicatorOffset
-import androidx.compose.runtime.*
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ViewCompositionStrategy
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
@@ -23,8 +15,7 @@ import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.entities.Guide
 import io.horizontalsystems.bankwallet.modules.markdown.MarkdownFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.Grey
-import io.horizontalsystems.bankwallet.ui.compose.Steel10
+import io.horizontalsystems.bankwallet.ui.compose.components.ScrollableTabs
 import io.horizontalsystems.core.findNavController
 import kotlinx.android.synthetic.main.fragment_guides.*
 import kotlinx.android.synthetic.main.fragment_guides.tabsCompose
@@ -83,8 +74,8 @@ class GuidesFragment : BaseFragment(), GuidesAdapter.Listener {
             guidesAdapter.notifyDataSetChanged()
         })
 
-        viewModel.filters.observe(viewLifecycleOwner, Observer {
-            setTabs(it, viewModel.selectedFilter)
+        viewModel.categories.observe(viewLifecycleOwner, Observer {
+            setTabs(it, viewModel.selectedCategoryIndex)
         })
 
         viewModel.loading.observe(viewLifecycleOwner, Observer {
@@ -96,52 +87,10 @@ class GuidesFragment : BaseFragment(), GuidesAdapter.Listener {
         })
     }
 
-    private fun setTabs(tabs: List<String>, selectedFilter: String?) {
-        var selectedIndex = tabs.indexOf(selectedFilter)
-        if (selectedIndex < 0) {
-            selectedIndex = 0
-        }
-
+    private fun setTabs(tabs: List<String>, selectedCategoryIndex: Int) {
         tabsCompose.setContent {
-            var tabIndex by remember { mutableStateOf(selectedIndex) }
             ComposeAppTheme {
-                Column {
-                    ScrollableTabRow(
-                        modifier = Modifier.height(44.dp),
-                        selectedTabIndex = tabIndex,
-                        backgroundColor = ComposeAppTheme.colors.tyler,
-                        contentColor = ComposeAppTheme.colors.tyler,
-                        indicator = @Composable { tabPositions ->
-                            TabRowDefaults.Indicator(
-                                modifier = Modifier.tabIndicatorOffset(tabPositions[tabIndex]),
-                                color = ComposeAppTheme.colors.jacob
-                            )
-                        }
-                    ) {
-                        tabs.forEachIndexed { index, tab ->
-                            Tab(
-                                selected = tabIndex == index,
-                                onClick = {
-                                    tabIndex = index
-                                    viewModel.onSelectFilter(tab)
-                                },
-                                text = {
-                                    ProvideTextStyle(
-                                        ComposeAppTheme.typography.subhead1.copy(
-                                            textAlign = TextAlign.Center
-                                        )
-                                    ) {
-                                        Text(
-                                            text = tab,
-                                            color = if (tabIndex == index) ComposeAppTheme.colors.oz else Grey
-                                        )
-                                    }
-                                }
-                            )
-                        }
-                    }
-                    Divider(thickness = 1.dp, color = Steel10)
-                }
+                ScrollableTabs(tabs, selectedCategoryIndex) { tab -> viewModel.onSelectFilter(tab) }
             }
         }
     }
