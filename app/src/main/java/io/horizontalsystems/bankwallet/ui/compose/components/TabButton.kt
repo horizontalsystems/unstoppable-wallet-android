@@ -10,14 +10,43 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.Grey50
+import io.horizontalsystems.bankwallet.ui.compose.Steel20
 import io.horizontalsystems.bankwallet.ui.compose.YellowD
 
 @Composable
-fun TabButtonSecondary(title: String, onSelect: () -> Unit, selected: Boolean = false) {
+fun TabButtonSecondary(
+    title: String,
+    onSelect: () -> Unit,
+    selected: Boolean = false,
+    enabled: Boolean = true
+) {
+    TabBox(
+        colors = TabDefaults.textButtonColors(
+            backgroundColor = Steel20,
+            contentColor = ComposeAppTheme.colors.oz,
+            selectedBackgroundColor = YellowD,
+            selectedContentColor = ComposeAppTheme.colors.claude
+        ),
+        content = { Text(title) },
+        selected = selected,
+        enabled = enabled,
+        onSelect = onSelect
+    )
+}
+
+@Composable
+fun TabButtonSecondaryTransparent(
+    title: String,
+    onSelect: () -> Unit,
+    selected: Boolean = false,
+    enabled: Boolean = true
+) {
     TabBox(
         colors = TabDefaults.textButtonColors(),
         content = { Text(title) },
         selected = selected,
+        enabled = enabled,
         onSelect = onSelect
     )
 }
@@ -27,7 +56,8 @@ fun TabButtonSecondary(title: String, onSelect: () -> Unit, selected: Boolean = 
 fun TabBox(
     selected: Boolean = false,
     shape: Shape = RoundedCornerShape(14.dp),
-    colors: ButtonColors = TabDefaults.textButtonColors(),
+    enabled: Boolean = true,
+    colors: DefaultTabColors = TabDefaults.textButtonColors(),
     contentPadding: PaddingValues = TabDefaults.ContentPadding,
     content: @Composable RowScope.() -> Unit,
     onSelect: () -> Unit,
@@ -36,12 +66,14 @@ fun TabBox(
         modifier = Modifier
             .padding(horizontal = 4.dp)
     ) {
-        val contentColor by colors.contentColor(selected)
+        val contentColor by if (enabled) colors.contentColor(selected) else colors.contentColorDisabled()
+        val backgroundColor by if (enabled) colors.backgroundColor(selected) else colors.backgroundColor(false)
         Surface(
             onClick = onSelect,
-            color = colors.backgroundColor(selected).value,
+            color = backgroundColor,
             shape = shape,
             contentColor = contentColor,
+            enabled = enabled
         ) {
             // Text is a predefined composable that does exactly what you'd expect it to -
             // display text on the screen. It allows you to customize its appearance using the
@@ -95,31 +127,39 @@ object TabDefaults {
     fun textButtonColors(
         backgroundColor: Color = Color.Transparent,
         contentColor: Color = ComposeAppTheme.colors.oz,
-        activeBackgroundColor: Color = YellowD,
-        activeContentColor: Color = ComposeAppTheme.colors.claude,
-    ): ButtonColors = DefaultTabColors(
+        selectedBackgroundColor: Color = YellowD,
+        selectedContentColor: Color = ComposeAppTheme.colors.claude,
+        disabledContentColor: Color = Grey50,
+    ): DefaultTabColors = DefaultTabColors(
         backgroundColor = backgroundColor,
         contentColor = contentColor,
-        activeBackgroundColor = activeBackgroundColor,
-        activeContentColor = activeContentColor
+        selectedBackgroundColor = selectedBackgroundColor,
+        selectedContentColor = selectedContentColor,
+        disabledContentColor = disabledContentColor
     )
 }
 
 @Immutable
-private class DefaultTabColors(
+class DefaultTabColors(
     private val backgroundColor: Color,
     private val contentColor: Color,
-    private val activeBackgroundColor: Color,
-    private val activeContentColor: Color
-) : ButtonColors {
+    private val selectedBackgroundColor: Color,
+    private val selectedContentColor: Color,
+    private val disabledContentColor: Color
+) {
     @Composable
-    override fun backgroundColor(enabled: Boolean): State<Color> {
-        return rememberUpdatedState(if (enabled) activeBackgroundColor else backgroundColor)
+    fun backgroundColor(enabled: Boolean): State<Color> {
+        return rememberUpdatedState(if (enabled) selectedBackgroundColor else backgroundColor)
     }
 
     @Composable
-    override fun contentColor(enabled: Boolean): State<Color> {
-        return rememberUpdatedState(if (enabled) activeContentColor else contentColor)
+    fun contentColor(enabled: Boolean): State<Color> {
+        return rememberUpdatedState(if (enabled) selectedContentColor else contentColor)
+    }
+
+    @Composable
+    fun contentColorDisabled(): State<Color> {
+        return rememberUpdatedState(disabledContentColor)
     }
 
     override fun equals(other: Any?): Boolean {
@@ -130,8 +170,9 @@ private class DefaultTabColors(
 
         if (backgroundColor != other.backgroundColor) return false
         if (contentColor != other.contentColor) return false
-        if (activeBackgroundColor != other.activeBackgroundColor) return false
-        if (activeContentColor != other.activeContentColor) return false
+        if (selectedBackgroundColor != other.selectedBackgroundColor) return false
+        if (selectedContentColor != other.selectedContentColor) return false
+        if (disabledContentColor != other.disabledContentColor) return false
 
         return true
     }
@@ -139,8 +180,9 @@ private class DefaultTabColors(
     override fun hashCode(): Int {
         var result = backgroundColor.hashCode()
         result = 31 * result + contentColor.hashCode()
-        result = 31 * result + activeBackgroundColor.hashCode()
-        result = 31 * result + activeContentColor.hashCode()
+        result = 31 * result + selectedBackgroundColor.hashCode()
+        result = 31 * result + selectedContentColor.hashCode()
+        result = 31 * result + disabledContentColor.hashCode()
         return result
     }
 }
