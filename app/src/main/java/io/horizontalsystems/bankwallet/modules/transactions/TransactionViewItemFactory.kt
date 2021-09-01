@@ -24,20 +24,21 @@ class TransactionViewItemFactory {
             is TransactionStatus.Processing -> (status.progress * 100).toInt()
             else -> null
         }
+        val icon = if (status is TransactionStatus.Failed) R.drawable.ic_attention_red_20 else null
 
         val lastBlockTimestamp = transactionItem.lastBlockInfo?.timestamp
 
         return when (record) {
-            is ApproveTransactionRecord -> createViewItemFromApproveTransactionRecord(record, transactionItem.currencyValue, status, progress, lastBlockTimestamp)
-            is BinanceChainIncomingTransactionRecord -> createViewItemFromBinanceChainIncomingTransactionRecord(record, transactionItem.currencyValue, status, progress, lastBlockTimestamp)
-            is BinanceChainOutgoingTransactionRecord -> createViewItemFromBinanceChainOutgoingTransactionRecord(record, transactionItem.currencyValue, status, progress, lastBlockTimestamp)
-            is BitcoinIncomingTransactionRecord -> createViewItemFromBitcoinIncomingTransactionRecord(record, transactionItem.currencyValue, status, progress, lastBlockTimestamp)
-            is BitcoinOutgoingTransactionRecord -> createViewItemFromBitcoinOutgoingTransactionRecord(record, transactionItem.currencyValue, status, progress, lastBlockTimestamp)
-            is ContractCallTransactionRecord -> createViewItemFromContractCallTransactionRecord(record, transactionItem.currencyValue, status, progress, lastBlockTimestamp)
-            is ContractCreationTransactionRecord -> createViewItemFromContractCreationTransactionRecord(record, transactionItem.currencyValue, status, progress, lastBlockTimestamp)
-            is EvmIncomingTransactionRecord -> createViewItemFromEvmIncomingTransactionRecord(record, transactionItem.currencyValue, status, progress, lastBlockTimestamp)
-            is EvmOutgoingTransactionRecord -> createViewItemFromEvmOutgoingTransactionRecord(record, transactionItem.currencyValue, status, progress, lastBlockTimestamp)
-            is SwapTransactionRecord -> createViewItemFromSwapTransactionRecord(record, transactionItem.currencyValue, status, progress, lastBlockTimestamp)
+            is ApproveTransactionRecord -> createViewItemFromApproveTransactionRecord(record, transactionItem.currencyValue, status, progress, lastBlockTimestamp, icon)
+            is BinanceChainIncomingTransactionRecord -> createViewItemFromBinanceChainIncomingTransactionRecord(record, transactionItem.currencyValue, status, progress, lastBlockTimestamp, icon)
+            is BinanceChainOutgoingTransactionRecord -> createViewItemFromBinanceChainOutgoingTransactionRecord(record, transactionItem.currencyValue, status, progress, lastBlockTimestamp, icon)
+            is BitcoinIncomingTransactionRecord -> createViewItemFromBitcoinIncomingTransactionRecord(record, transactionItem.currencyValue, status, progress, lastBlockTimestamp, icon)
+            is BitcoinOutgoingTransactionRecord -> createViewItemFromBitcoinOutgoingTransactionRecord(record, transactionItem.currencyValue, status, progress, lastBlockTimestamp, icon)
+            is ContractCallTransactionRecord -> createViewItemFromContractCallTransactionRecord(record, transactionItem.currencyValue, status, progress, lastBlockTimestamp, icon)
+            is ContractCreationTransactionRecord -> createViewItemFromContractCreationTransactionRecord(record, transactionItem.currencyValue, status, progress, lastBlockTimestamp, icon)
+            is EvmIncomingTransactionRecord -> createViewItemFromEvmIncomingTransactionRecord(record, transactionItem.currencyValue, status, progress, lastBlockTimestamp, icon)
+            is EvmOutgoingTransactionRecord -> createViewItemFromEvmOutgoingTransactionRecord(record, transactionItem.currencyValue, status, progress, lastBlockTimestamp, icon)
+            is SwapTransactionRecord -> createViewItemFromSwapTransactionRecord(record, transactionItem.currencyValue, status, progress, lastBlockTimestamp, icon)
             else -> throw IllegalArgumentException("Undefined record type ${record.javaClass.name}")
         }
     }
@@ -47,7 +48,8 @@ class TransactionViewItemFactory {
         currencyValue: CurrencyValue?,
         status: TransactionStatus,
         progress: Int?,
-        lastBlockTimestamp: Long?
+        lastBlockTimestamp: Long?,
+        icon: Int?
     ): TransactionViewItem {
         val primaryValue = ColoredValue(getCoinString(record.valueIn), R.color.jacob)
         val secondaryValue = record.valueOut?.let {
@@ -59,7 +61,7 @@ class TransactionViewItemFactory {
 
         return TransactionViewItem(
             record.uid,
-            R.drawable.ic_tx_swap_20,
+            icon ?: R.drawable.ic_tx_swap_20,
             progress,
             Translator.getString(R.string.Transactions_Swap),
             Translator.getString(
@@ -77,7 +79,8 @@ class TransactionViewItemFactory {
         currencyValue: CurrencyValue?,
         status: TransactionStatus,
         progress: Int?,
-        lastBlockTimestamp: Long?
+        lastBlockTimestamp: Long?,
+        icon: Int?
     ): TransactionViewItem {
         val primaryValue = currencyValue?.let {
             ColoredValue(
@@ -89,7 +92,7 @@ class TransactionViewItemFactory {
 
         return TransactionViewItem(
             record.uid,
-            R.drawable.ic_outgoing_20,
+            icon ?: R.drawable.ic_outgoing_20,
             progress,
             Translator.getString(R.string.Transactions_Send),
             Translator.getString(R.string.Transactions_To, getNameOrAddressTruncated(record.to)),
@@ -105,7 +108,8 @@ class TransactionViewItemFactory {
         currencyValue: CurrencyValue?,
         status: TransactionStatus,
         progress: Int?,
-        lastBlockTimestamp: Long?
+        lastBlockTimestamp: Long?,
+        icon: Int?
     ): TransactionViewItem {
         val primaryValue = currencyValue?.let {
             ColoredValue(
@@ -117,7 +121,7 @@ class TransactionViewItemFactory {
 
         return TransactionViewItem(
             record.uid,
-            R.drawable.ic_incoming_20,
+            icon ?: R.drawable.ic_incoming_20,
             progress,
             Translator.getString(R.string.Transactions_Receive),
             Translator.getString(
@@ -135,11 +139,12 @@ class TransactionViewItemFactory {
         currencyValue: CurrencyValue?,
         status: TransactionStatus,
         progress: Int?,
-        lastBlockTimestamp: Long?
+        lastBlockTimestamp: Long?,
+        icon: Int?
     ): TransactionViewItem {
         return TransactionViewItem(
             record.uid,
-            R.drawable.ic_tx_unordered,
+            icon ?: R.drawable.ic_tx_unordered,
             progress,
             Translator.getString(R.string.Transactions_ContractCreation),
             "---",
@@ -154,11 +159,12 @@ class TransactionViewItemFactory {
         currencyValue: CurrencyValue?,
         status: TransactionStatus,
         progress: Int?,
-        lastBlockTimestamp: Long?
+        lastBlockTimestamp: Long?,
+        icon: Int?
     ): TransactionViewItem {
         return TransactionViewItem(
             record.uid,
-            R.drawable.ic_tx_unordered,
+            icon ?: R.drawable.ic_tx_unordered,
             progress,
             record.blockchainTitle + " " + Translator.getString(R.string.Transactions_ContractCall),
             Translator.getString(
@@ -176,7 +182,8 @@ class TransactionViewItemFactory {
         currencyValue: CurrencyValue?,
         status: TransactionStatus,
         progress: Int?,
-        lastBlockTimestamp: Long?
+        lastBlockTimestamp: Long?,
+        icon: Int?
     ): TransactionViewItem {
         val subtitle = record.to?.let {
             Translator.getString(
@@ -202,7 +209,7 @@ class TransactionViewItemFactory {
 
         return TransactionViewItem(
             record.uid,
-            R.drawable.ic_outgoing_20,
+            icon ?: R.drawable.ic_outgoing_20,
             progress,
             Translator.getString(R.string.Transactions_Send),
             subtitle,
@@ -220,7 +227,8 @@ class TransactionViewItemFactory {
         currencyValue: CurrencyValue?,
         status: TransactionStatus,
         progress: Int?,
-        lastBlockTimestamp: Long?
+        lastBlockTimestamp: Long?,
+        icon: Int?
     ): TransactionViewItem {
         val subtitle = record.from?.let {
             Translator.getString(
@@ -246,7 +254,7 @@ class TransactionViewItemFactory {
 
         return TransactionViewItem(
             record.uid,
-            R.drawable.ic_incoming_20,
+            icon ?: R.drawable.ic_incoming_20,
             progress,
             Translator.getString(R.string.Transactions_Receive),
             subtitle,
@@ -264,7 +272,8 @@ class TransactionViewItemFactory {
         currencyValue: CurrencyValue?,
         status: TransactionStatus,
         progress: Int?,
-        lastBlockTimestamp: Long?
+        lastBlockTimestamp: Long?,
+        icon: Int?
     ): TransactionViewItem {
         val primaryValue = currencyValue?.let {
             ColoredValue(
@@ -276,7 +285,7 @@ class TransactionViewItemFactory {
 
         return TransactionViewItem(
             record.uid,
-            R.drawable.ic_outgoing_20,
+            icon ?: R.drawable.ic_outgoing_20,
             progress,
             Translator.getString(R.string.Transactions_Send),
             Translator.getString(R.string.Transactions_To, getNameOrAddressTruncated(record.to)),
@@ -292,7 +301,8 @@ class TransactionViewItemFactory {
         currencyValue: CurrencyValue?,
         status: TransactionStatus,
         progress: Int?,
-        lastBlockTimestamp: Long?
+        lastBlockTimestamp: Long?,
+        icon: Int?
     ): TransactionViewItem {
         val primaryValue = currencyValue?.let {
             ColoredValue(
@@ -304,7 +314,7 @@ class TransactionViewItemFactory {
 
         return TransactionViewItem(
             record.uid,
-            R.drawable.ic_incoming_20,
+            icon ?: R.drawable.ic_incoming_20,
             progress,
             Translator.getString(R.string.Transactions_Receive),
             Translator.getString(
@@ -322,7 +332,8 @@ class TransactionViewItemFactory {
         currencyValue: CurrencyValue?,
         status: TransactionStatus,
         progress: Int?,
-        lastBlockTimestamp: Long?
+        lastBlockTimestamp: Long?,
+        icon: Int?
     ): TransactionViewItem {
         val primaryValueText: String?
         val secondaryValueText: String
@@ -341,7 +352,7 @@ class TransactionViewItemFactory {
 
         return TransactionViewItem(
             record.uid,
-            R.drawable.ic_tx_checkmark_20,
+            icon ?: R.drawable.ic_tx_checkmark_20,
             progress,
             Translator.getString(R.string.Transactions_Approve),
             Translator.getString(
