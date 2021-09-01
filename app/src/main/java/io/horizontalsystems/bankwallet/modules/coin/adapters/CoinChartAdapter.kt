@@ -24,7 +24,7 @@ import io.horizontalsystems.bankwallet.modules.coin.ChartInfoData
 import io.horizontalsystems.bankwallet.modules.coin.ChartPointViewItem
 import io.horizontalsystems.bankwallet.modules.coin.CoinViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.TabRounded
+import io.horizontalsystems.bankwallet.ui.compose.components.TabButtonSecondary
 import io.horizontalsystems.chartview.Chart
 import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.chartview.models.ChartIndicator
@@ -238,7 +238,7 @@ class ChartViewHolder(override val containerView: View, private val listener: Co
         ) {
             itemsIndexed(tabTitles) { index, title ->
                 val selected = tabIndex == index
-                TabRounded(
+                TabButtonSecondary(
                     title = title,
                     onSelect = {
                         tabIndex = index

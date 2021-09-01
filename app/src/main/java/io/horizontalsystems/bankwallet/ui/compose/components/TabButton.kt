@@ -13,7 +13,7 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.YellowD
 
 @Composable
-fun TabRounded(title: String, onSelect: () -> Unit, selected: Boolean = false) {
+fun TabButtonSecondary(title: String, onSelect: () -> Unit, selected: Boolean = false) {
     TabBox(
         colors = TabDefaults.textButtonColors(),
         content = { Text(title) },
