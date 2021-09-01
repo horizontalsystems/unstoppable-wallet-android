@@ -18,6 +18,7 @@ class TransactionAdapterWrapper(
     val updatedObservable: Observable<Unit> get() = updatedSubject
 
     private val transactionRecords = CopyOnWriteArrayList<TransactionRecord>()
+    private var allLoaded = false
     private var transactionType: FilterTransactionType = FilterTransactionType.All
     private val disposables = CompositeDisposable()
 
@@ -30,6 +31,7 @@ class TransactionAdapterWrapper(
 
         this.transactionType = transactionType
         transactionRecords.clear()
+        allLoaded = false
         subscribeForUpdates()
     }
 
@@ -49,7 +51,7 @@ class TransactionAdapterWrapper(
     }
 
     fun get(limit: Int): Single<List<TransactionRecord>> = when {
-        transactionRecords.size >= limit -> Single.just(transactionRecords.take(limit))
+        transactionRecords.size >= limit || allLoaded -> Single.just(transactionRecords.take(limit))
         else -> {
             val numberOfRecordsToRequest = limit - transactionRecords.size
             transactionsAdapter
@@ -60,6 +62,7 @@ class TransactionAdapterWrapper(
                     transactionType
                 )
                 .map {
+                    allLoaded = it.size < numberOfRecordsToRequest
                     transactionRecords.addAll(it)
 
                     transactionRecords
