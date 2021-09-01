@@ -141,14 +141,20 @@ class TransactionsService(
         val tmpList = mutableListOf<TransactionItem>()
 
         transactionRecords.forEach { record ->
-            val lastBlockInfo = transactionSyncStateRepository.getLastBlockInfo(record.source)
-            val currencyValue = record.mainValue?.let { mainValue ->
-                xRateRepository.getHistoricalRate(HistoricalRateKey(mainValue.coin.type, record.timestamp))?.let { rate ->
-                    CurrencyValue(rate.currency, mainValue.value * rate.value)
+            var transactionItem = transactionItems.find { it.record == record }
+
+            if (transactionItem == null) {
+                val lastBlockInfo = transactionSyncStateRepository.getLastBlockInfo(record.source)
+                val currencyValue = record.mainValue?.let { mainValue ->
+                    xRateRepository.getHistoricalRate(HistoricalRateKey(mainValue.coin.type, record.timestamp))?.let { rate ->
+                        CurrencyValue(rate.currency, mainValue.value * rate.value)
+                    }
                 }
+
+                transactionItem = TransactionItem(record, currencyValue, lastBlockInfo)
             }
 
-            tmpList.add(TransactionItem(record, currencyValue, lastBlockInfo))
+            tmpList.add(transactionItem)
         }
 
         transactionItems.clear()

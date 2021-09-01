@@ -2,12 +2,15 @@ package io.horizontalsystems.bankwallet.modules.transactions
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.LastBlockInfo
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.modules.transactionInfo.ColoredValue
+import io.horizontalsystems.core.helpers.DateHelper
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import java.util.*
@@ -42,9 +45,8 @@ class TransactionsViewModel(
             .subscribeIO {
                 val transactionList = when {
                     it.isNotEmpty() -> {
-                        ItemsList.Filled(it.map {
-                            transactionViewItem2Factory.convertToViewItem(it)
-                        })
+                        val viewItems = it.map { transactionViewItem2Factory.convertToViewItemCached(it) }
+                        ItemsList.Filled(viewItems, generateHeaders(viewItems))
                     }
                     else -> ItemsList.Blank
                 }
@@ -68,6 +70,22 @@ class TransactionsViewModel(
             }
     }
 
+    private fun generateHeaders(viewItems: List<TransactionViewItem>): Map<Int, String> {
+        val headers = mutableMapOf<Int, String>()
+
+        var prevSectionHeader: String? = null
+        viewItems.forEachIndexed { index, transactionViewItem ->
+            val sectionHeader = transactionViewItem.formattedDate
+
+            if (sectionHeader != prevSectionHeader) {
+                headers[index] = sectionHeader
+                prevSectionHeader = sectionHeader
+            }
+        }
+
+        return headers
+    }
+
     fun setFilterTransactionType(filterIndex: Int) {
         val filterType = filterTypes[filterIndex]
         service.setFilterType(filterType)
@@ -85,9 +103,9 @@ class TransactionsViewModel(
         service.fetchRateIfNeeded(viewItem.uid)
     }
 
-    sealed class ItemsList(val items: List<TransactionViewItem>) {
-        object Blank : ItemsList(listOf())
-        class Filled(items: List<TransactionViewItem>) : ItemsList(items)
+    sealed class ItemsList(val items: List<TransactionViewItem>, val headers: Map<Int, String>) {
+        object Blank : ItemsList(listOf(), mapOf())
+        class Filled(items: List<TransactionViewItem>, headers: Map<Int, String>) : ItemsList(items, headers)
     }
 
     override fun onCleared() {
@@ -101,7 +119,9 @@ data class TransactionItem(
     val record: TransactionRecord,
     val currencyValue: CurrencyValue?,
     val lastBlockInfo: LastBlockInfo?
-)
+) {
+    val createdAt = System.currentTimeMillis()
+}
 
 data class TransactionViewItem(
     val uid: String,
@@ -116,10 +136,30 @@ data class TransactionViewItem(
     val doubleSpend: Boolean = false,
     val locked: Boolean? = null
 ) {
+    val formattedDate = formatDate(date)
+
     fun itemTheSame(newItem: TransactionViewItem) = uid == newItem.uid
 
     fun contentTheSame(newItem: TransactionViewItem): Boolean {
         return this == newItem
+    }
+
+    private fun formatDate(date: Date): String {
+        val calendar = Calendar.getInstance()
+        calendar.time = date
+
+        val today = Calendar.getInstance()
+        if (calendar[Calendar.YEAR] == today[Calendar.YEAR] && calendar[Calendar.DAY_OF_YEAR] == today[Calendar.DAY_OF_YEAR]) {
+            return Translator.getString(R.string.Timestamp_Today)
+        }
+
+        val yesterday = Calendar.getInstance()
+        yesterday.add(Calendar.DAY_OF_MONTH, -1)
+        if (calendar[Calendar.YEAR] == yesterday[Calendar.YEAR] && calendar[Calendar.DAY_OF_YEAR] == yesterday[Calendar.DAY_OF_YEAR]) {
+            return Translator.getString(R.string.Timestamp_Yesterday)
+        }
+
+        return DateHelper.shortDate(date, "MMMM d", "MMMM d, yyyy")
     }
 }
 
