@@ -138,7 +138,7 @@ class TransactionsService(
 
     @Synchronized
     private fun handleUpdatedRecords(transactionRecords: List<TransactionRecord>) {
-        transactionItems.clear()
+        val tmpList = mutableListOf<TransactionItem>()
 
         transactionRecords.forEach { record ->
             val lastBlockInfo = transactionSyncStateRepository.getLastBlockInfo(record.source)
@@ -148,9 +148,11 @@ class TransactionsService(
                 }
             }
 
-            transactionItems.add(TransactionItem(record, currencyValue, lastBlockInfo))
+            tmpList.add(TransactionItem(record, currencyValue, lastBlockInfo))
         }
 
+        transactionItems.clear()
+        transactionItems.addAll(tmpList)
         itemsSubject.onNext(transactionItems)
     }
 
