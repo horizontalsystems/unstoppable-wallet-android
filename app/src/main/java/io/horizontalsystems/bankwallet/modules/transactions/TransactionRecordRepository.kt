@@ -21,7 +21,7 @@ class TransactionRecordRepository(
     private val itemsSubject = PublishSubject.create<List<TransactionRecord>>()
     override val itemsObservable: Observable<List<TransactionRecord>> get() = itemsSubject
 
-    private var pageNumber = 0
+    private var loadedPageNumber = 0
     private val items = CopyOnWriteArrayList<TransactionRecord>()
     private val loading = AtomicBoolean(false)
     private var allLoaded = AtomicBoolean(false)
@@ -70,8 +70,7 @@ class TransactionRecordRepository(
 
         unsubscribeFromUpdates()
         allLoaded.set(false)
-        pageNumber = 1
-        loadItems()
+        loadItems(1)
         subscribeForUpdates()
     }
 
@@ -80,8 +79,7 @@ class TransactionRecordRepository(
 
         unsubscribeFromUpdates()
         allLoaded.set(false)
-        pageNumber = 1
-        loadItems()
+        loadItems(1)
         subscribeForUpdates()
     }
 
@@ -92,15 +90,13 @@ class TransactionRecordRepository(
 
         unsubscribeFromUpdates()
         allLoaded.set(false)
-        pageNumber = 1
-        loadItems()
+        loadItems(1)
         subscribeForUpdates()
     }
 
     override fun loadNext() {
         if (!allLoaded.get()) {
-            pageNumber++
-            loadItems()
+            loadItems(loadedPageNumber + 1)
         }
     }
 
@@ -119,14 +115,14 @@ class TransactionRecordRepository(
     @Synchronized
     private fun handleUpdates() {
         allLoaded.set(false)
-        loadItems()
+        loadItems(loadedPageNumber)
     }
 
-    private fun loadItems() {
+    private fun loadItems(page: Int) {
         if (loading.get()) return
         loading.set(true)
 
-        val itemsCount = pageNumber * itemsPerPage
+        val itemsCount = page * itemsPerPage
 
         Single
             .zip(activeAdapters.map { it.get(itemsCount) }) {
@@ -139,7 +135,7 @@ class TransactionRecordRepository(
                 loading.set(false)
             }
             .subscribe { records ->
-                handleRecords(records)
+                handleRecords(records, page)
             }
             .let {
                 disposables.add(it)
@@ -154,18 +150,22 @@ class TransactionRecordRepository(
     }
 
     @Synchronized
-    private fun handleRecords(records: List<TransactionRecord>) {
+    private fun handleRecords(records: List<TransactionRecord>, page: Int) {
+        val expectedItemsCount = page * itemsPerPage
+
         records
             .sortedDescending()
-            .take(pageNumber * itemsPerPage)
+            .take(expectedItemsCount)
             .let {
-                if (it.size < pageNumber * itemsPerPage) {
+                if (it.size < expectedItemsCount) {
                     allLoaded.set(true)
                 }
 
                 items.clear()
                 items.addAll(it)
                 itemsSubject.onNext(items)
+
+                loadedPageNumber = page
             }
     }
 
