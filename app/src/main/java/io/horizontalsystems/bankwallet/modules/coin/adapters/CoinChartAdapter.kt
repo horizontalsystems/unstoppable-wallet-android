@@ -4,10 +4,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.lazy.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -25,6 +22,7 @@ import io.horizontalsystems.bankwallet.modules.coin.ChartPointViewItem
 import io.horizontalsystems.bankwallet.modules.coin.CoinViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.TabButtonSecondary
+import io.horizontalsystems.bankwallet.ui.compose.components.TabButtonSecondaryTransparent
 import io.horizontalsystems.chartview.Chart
 import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.chartview.models.ChartIndicator
@@ -105,7 +103,6 @@ class ChartViewHolder(override val containerView: View, private val listener: Co
 
     init {
         chart.setListener(this)
-        setIndicators()
         pointInfoVolumeTitle.isInvisible = true
         pointInfoVolume.isInvisible = true
     }
@@ -205,9 +202,7 @@ class ChartViewHolder(override val containerView: View, private val listener: Co
             chart.setIndicator(it, enabled)
         }
 
-        indicatorEMA.isEnabled = enabled
-        indicatorMACD.isEnabled = enabled
-        indicatorRSI.isEnabled = enabled
+        setIndicators(enabled)
     }
 
     private fun bindTabs(selectedIndex: Int = 0, shouldScroll: Boolean) {
@@ -238,7 +233,7 @@ class ChartViewHolder(override val containerView: View, private val listener: Co
         ) {
             itemsIndexed(tabTitles) { index, title ->
                 val selected = tabIndex == index
-                TabButtonSecondary(
+                TabButtonSecondaryTransparent(
                     title = title,
                     onSelect = {
                         tabIndex = index
@@ -250,17 +245,42 @@ class ChartViewHolder(override val containerView: View, private val listener: Co
         }
     }
 
-    private fun setIndicators() {
-        indicatorEMA.setOnClickListener {
-            onIndicatorChanged(ChartIndicator.Ema, indicatorEMA.isChecked)
+    private fun setIndicators(enabled: Boolean) {
+        indicatorsCompose.setContent {
+            ComposeAppTheme {
+                LazyRow(
+                    contentPadding = PaddingValues(horizontal = 16.dp),
+                    modifier = Modifier.padding(top = 8.dp, end = 8.dp, bottom = 8.dp)
+                ) {
+                    items(getIndicators(enabled)) { item ->
+                        TabButtonSecondary(
+                            title = getIndicatorTitle(item.indicator),
+                            onSelect = {
+                                onIndicatorChanged(item.indicator, !item.checked)
+                                setIndicators(enabled)
+                            },
+                            selected = item.checked,
+                            enabled = item.enabled
+                        )
+                    }
+                }
+            }
         }
+    }
 
-        indicatorMACD.setOnClickListener {
-            onIndicatorChanged(ChartIndicator.Macd, indicatorMACD.isChecked)
-        }
+    private fun getIndicators(enabled: Boolean) : List<IndicatorViewItem> {
+        return listOf(
+            IndicatorViewItem(ChartIndicator.Ema, enabledIndicator == ChartIndicator.Ema, enabled),
+            IndicatorViewItem(ChartIndicator.Macd, enabledIndicator == ChartIndicator.Macd, enabled),
+            IndicatorViewItem(ChartIndicator.Rsi, enabledIndicator == ChartIndicator.Rsi, enabled)
+        )
+    }
 
-        indicatorRSI.setOnClickListener {
-            onIndicatorChanged(ChartIndicator.Rsi, indicatorRSI.isChecked)
+    private fun getIndicatorTitle(indicator: ChartIndicator): String {
+        return when(indicator){
+            ChartIndicator.Ema -> containerView.context.getString(R.string.CoinPage_IndicatorEMA)
+            ChartIndicator.Macd -> containerView.context.getString(R.string.CoinPage_IndicatorMACD)
+            ChartIndicator.Rsi -> containerView.context.getString(R.string.CoinPage_IndicatorRSI)
         }
     }
 
@@ -269,22 +289,7 @@ class ChartViewHolder(override val containerView: View, private val listener: Co
 
         chart.setIndicator(indicator, checked)
 
-        if (checked) {
-            uncheckOtherIndicators(indicator)
-        }
-
         macdIsEnabled = indicator == ChartIndicator.Macd && checked
-    }
-
-    private fun uncheckOtherIndicators(indicator: ChartIndicator) {
-        val indicatorsToUncheck = ChartIndicator.values().filter { it != indicator }
-        indicatorsToUncheck.forEach {
-            when (it) {
-                ChartIndicator.Ema -> indicatorEMA.isChecked = false
-                ChartIndicator.Macd -> indicatorMACD.isChecked = false
-                ChartIndicator.Rsi -> indicatorRSI.isChecked = false
-            }
-        }
     }
 
     private fun setSelectedPoint(item: ChartPointViewItem) {
@@ -330,6 +335,8 @@ class ChartViewHolder(override val containerView: View, private val listener: Co
         val textColor = if (value > 0) R.color.green_d else R.color.red_d
         return containerView.context.getColor(textColor)
     }
+
+    data class IndicatorViewItem(val indicator: ChartIndicator, val checked: Boolean, val enabled: Boolean)
 
     companion object {
         private val actions = listOf(
