@@ -16,7 +16,20 @@ import java.util.*
 
 class TransactionViewItemFactory {
 
-    fun convertToViewItem(transactionItem: TransactionItem): TransactionViewItem {
+    private val cache = mutableMapOf<String, Map<Long, TransactionViewItem>>()
+
+    fun convertToViewItemCached(transactionItem: TransactionItem): TransactionViewItem {
+        cache.get(transactionItem.record.uid)?.get(transactionItem.createdAt)?.let {
+            return it
+        }
+
+        val transactionViewItem = convertToViewItem(transactionItem)
+        cache[transactionItem.record.uid] = mapOf(transactionItem.createdAt to transactionViewItem)
+
+        return transactionViewItem
+    }
+
+    private fun convertToViewItem(transactionItem: TransactionItem): TransactionViewItem {
         val record = transactionItem.record
         val status = record.status(transactionItem.lastBlockInfo?.height)
         val progress = when (status) {

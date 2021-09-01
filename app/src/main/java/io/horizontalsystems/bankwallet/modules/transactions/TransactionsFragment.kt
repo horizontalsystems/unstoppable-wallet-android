@@ -4,22 +4,20 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.view.isVisible
 import androidx.navigation.navGraphViewModels
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.*
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ScrollableTabs
 import io.horizontalsystems.core.findNavController
+import io.horizontalsystems.views.helpers.LayoutHelper
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_transactions.*
-import kotlinx.android.synthetic.main.fragment_transactions.toolbarSpinner
 import kotlinx.android.synthetic.main.view_holder_transaction.*
 
 class TransactionsFragment : BaseFragment(R.layout.fragment_transactions) {
@@ -55,7 +53,7 @@ class TransactionsFragment : BaseFragment(R.layout.fragment_transactions) {
             })
 
         val layoutManager = LinearLayoutManager(context)
-        recyclerTransactions.adapter = transactionsAdapter
+        recyclerTransactions.adapter = ConcatAdapter(transactionsAdapter, LoadingAdapter())
         recyclerTransactions.layoutManager = layoutManager
         recyclerTransactions.itemAnimator = null
         recyclerTransactions.setHasFixedSize(true)
@@ -69,7 +67,7 @@ class TransactionsFragment : BaseFragment(R.layout.fragment_transactions) {
                 val visibleItemCount = layoutManager.childCount
                 val totalItemCount = layoutManager.itemCount
                 val pastVisibleItems = layoutManager.findFirstVisibleItemPosition()
-                val diff = 9
+                val diff = 15
                 if (diff + pastVisibleItems + visibleItemCount >= totalItemCount) { //End of list
                     viewModel.onBottomReached()
                 }
@@ -83,7 +81,7 @@ class TransactionsFragment : BaseFragment(R.layout.fragment_transactions) {
             emptyListText.isVisible = itemsList is TransactionsViewModel.ItemsList.Blank
             recyclerTransactions.isVisible = itemsList is TransactionsViewModel.ItemsList.Filled
 
-            transactionSectionHeader.updateList(itemsList.items)
+            transactionSectionHeader.setHeaders(itemsList.headers)
             transactionsAdapter.submitList(itemsList.items) {
                 if (layoutManager.findFirstVisibleItemPosition() == 0 || scrollToTopAfterUpdate) {
                     recyclerTransactions.scrollToPosition(0)
@@ -118,6 +116,23 @@ class TransactionsFragment : BaseFragment(R.layout.fragment_transactions) {
             }
         }
     }
+}
+
+class LoadingAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        return ViewHolder(View(parent.context).apply {
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LayoutHelper.dp(60f, context)
+            )
+        })
+    }
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) = Unit
+
+    override fun getItemCount() = 1
+
+    class ViewHolder(containerView: View) : RecyclerView.ViewHolder(containerView)
 }
 
 data class Filter<T>(val item: T, val selected: Boolean)
