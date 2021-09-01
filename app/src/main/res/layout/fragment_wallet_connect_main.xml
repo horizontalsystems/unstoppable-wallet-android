@@ -73,7 +73,7 @@
             android:id="@+id/dappGroup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:constraint_referenced_ids="dappIcon,dappTitle,dappInfo,dappHint" />
+            app:constraint_referenced_ids="dappIcon,dappTitle,dappInfo" />
 
         <ProgressBar
             android:id="@+id/connecting"
