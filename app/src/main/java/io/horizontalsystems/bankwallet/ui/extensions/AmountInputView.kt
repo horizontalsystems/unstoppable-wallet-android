@@ -11,6 +11,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.fiat.AmountTypeSwitchService
 import io.horizontalsystems.core.helpers.KeyboardHelper
 import kotlinx.android.synthetic.main.view_input_amount.view.*
+import kotlinx.android.synthetic.main.view_input_amount.view.btnDelete
 
 class AmountInputView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
     : ConstraintLayout(context, attrs, defStyleAttr) {
@@ -46,6 +47,9 @@ class AmountInputView @JvmOverloads constructor(context: Context, attrs: Attribu
 
         btnMax.setOnClickListener {
             onTapMaxCallback?.invoke()
+        }
+        btnDelete.setOnClickListener {
+            editTxtAmount.text = null
         }
     }
 
@@ -119,6 +123,7 @@ class AmountInputView @JvmOverloads constructor(context: Context, attrs: Attribu
 
     fun setEstimated(visible: Boolean) {
         estimatedLabel.isVisible = visible
+        syncButtonStates()
     }
 
     fun setAmountEnabled(enabled: Boolean) {
@@ -127,6 +132,7 @@ class AmountInputView @JvmOverloads constructor(context: Context, attrs: Attribu
 
     private fun syncButtonStates() {
         btnMax.isVisible = maxButtonVisible && editTxtAmount.text.isNullOrBlank()
+        btnDelete.isVisible = !estimatedLabel.isVisible && !editTxtAmount.text.isNullOrBlank()
     }
 
     class InputParams(val amountType: AmountTypeSwitchService.AmountType, val primaryPrefix: String?, val switchEnabled: Boolean)
