@@ -136,7 +136,7 @@ data class TransactionViewItem(
     val doubleSpend: Boolean = false,
     val locked: Boolean? = null
 ) {
-    val formattedDate = formatDate(date)
+    val formattedDate = formatDate(date).uppercase()
 
     fun itemTheSame(newItem: TransactionViewItem) = uid == newItem.uid
 
