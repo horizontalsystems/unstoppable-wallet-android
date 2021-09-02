@@ -38,7 +38,7 @@ abstract class SwapBaseFragment : BaseFragment() {
     protected fun showSwapProviderSelectorDialog() {
         val dialog = SelectorBottomSheetDialog<ViewItemWrapper<SwapMainModule.ISwapProvider>>()
         dialog.titleText = getString(R.string.Swap_SelectSwapProvider_Title)
-        dialog.subtitleText = "----------"
+        dialog.subtitleText = getString(R.string.Swap_SelectSwapProvider_Subtitle)
         dialog.headerIconResourceId = R.drawable.ic_swap
         dialog.items = selectSwapProviderViewModel.viewItems
         dialog.selectedItem = selectSwapProviderViewModel.selectedItem
