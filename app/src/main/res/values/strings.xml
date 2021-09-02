@@ -380,6 +380,8 @@
     <string name="Swap_Balance">Balance</string>
     <string name="Swap_Allowance">Allowance</string>
     <string name="Swap_Price">Price</string>
+    <string name="Swap_SellPrice">Sell Price</string>
+    <string name="Swap_BuyPrice">Buy Price</string>
     <string name="Swap_PriceImpact">Price Impact</string>
     <string name="Swap_MinimumReceived">Guaranteed Amount</string>
     <string name="Swap_EstimatedFee">Estimated Fee</string>

@@ -105,24 +105,45 @@
                 app:layout_constraintTop_toBottomOf="@id/poweredByTitle" />
 
             <TextView
-                android:id="@+id/priceTitle"
+                android:id="@+id/buyPriceTitle"
                 style="@style/Subhead2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:text="@string/Swap_Price"
+                android:text="@string/Swap_BuyPrice"
                 android:textColor="@color/grey"
                 app:layout_constraintStart_toStartOf="@+id/startBorder"
                 app:layout_constraintTop_toBottomOf="@+id/allowanceView" />
 
             <TextView
-                android:id="@+id/priceValue"
+                android:id="@+id/buyPriceValue"
                 style="@style/Subhead2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/grey"
                 app:layout_constraintEnd_toStartOf="@+id/endBorder"
-                app:layout_constraintTop_toTopOf="@+id/priceTitle"
+                app:layout_constraintTop_toTopOf="@+id/buyPriceTitle"
+                tools:text="ETH = 2,000 USDT" />
+
+            <TextView
+                android:id="@+id/sellPriceTitle"
+                style="@style/Subhead2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="@string/Swap_SellPrice"
+                android:textColor="@color/grey"
+                app:layout_constraintStart_toStartOf="@+id/startBorder"
+                app:layout_constraintTop_toBottomOf="@+id/buyPriceTitle" />
+
+            <TextView
+                android:id="@+id/sellPriceValue"
+                style="@style/Subhead2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/grey"
+                app:layout_constraintEnd_toStartOf="@+id/endBorder"
+                app:layout_constraintTop_toTopOf="@+id/sellPriceTitle"
                 tools:text="ETH = 2,000 USDT" />
 
             <TextView
@@ -134,7 +155,7 @@
                 android:text="@string/Swap_PriceImpact"
                 android:textColor="@color/grey"
                 app:layout_constraintStart_toStartOf="@+id/startBorder"
-                app:layout_constraintTop_toBottomOf="@+id/priceTitle" />
+                app:layout_constraintTop_toBottomOf="@+id/sellPriceTitle" />
 
             <TextView
                 android:id="@+id/priceImpactValue"
@@ -185,7 +206,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="visible"
-                app:constraint_referenced_ids="priceTitle,priceValue" />
+                app:constraint_referenced_ids="buyPriceTitle,buyPriceValue,sellPriceTitle,sellPriceValue" />
 
             <androidx.constraintlayout.widget.Group
                 android:id="@+id/priceImpactViews"

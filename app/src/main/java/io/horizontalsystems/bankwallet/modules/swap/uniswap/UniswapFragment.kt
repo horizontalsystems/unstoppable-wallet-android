@@ -221,9 +221,10 @@ class UniswapFragment : SwapBaseFragment() {
     }
 
     private fun setTradeViewItem(tradeViewItem: UniswapViewModel.TradeViewItem?) {
-        if (tradeViewItem?.price != null) {
+        if (tradeViewItem?.buyPrice != null && tradeViewItem.sellPrice != null) {
             priceViews.isVisible = true
-            priceValue.text = tradeViewItem.price
+            buyPriceValue.text = tradeViewItem.buyPrice
+            sellPriceValue.text = tradeViewItem.sellPrice
         } else {
             priceViews.isVisible = false
         }
