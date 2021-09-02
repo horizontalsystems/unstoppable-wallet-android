@@ -25,8 +25,6 @@ import io.horizontalsystems.bankwallet.modules.swap.oneinch.OneInchSwapViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
-import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.getNavigationResult
 import kotlinx.android.synthetic.main.fragment_1inch.*
 
@@ -84,15 +82,18 @@ class OneInchFragment : SwapBaseFragment() {
             SwapMainModule.coinCardTypeFrom,
             SwapCoinCardViewModel::class.java
         )
-        val fromCoinCardTitle = getString(R.string.Swap_FromAmountTitle)
-        fromCoinCard.initialize(fromCoinCardTitle, fromCoinCardViewModel, this, viewLifecycleOwner)
+        fromCoinCard.initialize(
+            getString(R.string.Swap_FromAmountTitle),
+            fromCoinCardViewModel,
+            this,
+            viewLifecycleOwner
+        )
 
         val toCoinCardViewModel = ViewModelProvider(this, coinCardViewModelFactory).get(
             SwapMainModule.coinCardTypeTo,
             SwapCoinCardViewModel::class.java
         )
-        val toCoinCardTile = getString(R.string.Swap_ToAmountTitle)
-        toCoinCard.initialize(toCoinCardTile, toCoinCardViewModel, this, viewLifecycleOwner)
+        toCoinCard.initialize(getString(R.string.Swap_ToAmountTitle), toCoinCardViewModel, this, viewLifecycleOwner)
         toCoinCard.setAmountEnabled(false)
 
         allowanceView.initialize(allowanceViewModel, viewLifecycleOwner)
@@ -112,7 +113,7 @@ class OneInchFragment : SwapBaseFragment() {
         poweredBy.text = dex.provider.title
 
         poweredBy.setOnClickListener {
-            findNavController().navigate(R.id.selectSwapProviderDialog)
+            showSwapProviderSelectorDialog()
         }
 
         buttonsCompose.setViewCompositionStrategy(

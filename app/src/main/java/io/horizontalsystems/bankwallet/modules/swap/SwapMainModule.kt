@@ -218,6 +218,20 @@ object SwapMainModule {
 
     }
 
+    class SelectSwapProviderViewModelFactory(private val mainService: SwapMainService) : ViewModelProvider.Factory {
+
+        @Suppress("UNCHECKED_CAST")
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            return when (modelClass) {
+                SelectSwapProviderViewModel::class.java -> {
+                    SelectSwapProviderViewModel(mainService) as T
+                }
+                else -> throw IllegalArgumentException()
+            }
+        }
+
+    }
+
     class CoinCardViewModelFactory(
         owner: SavedStateRegistryOwner,
         private val dex: Dex,
