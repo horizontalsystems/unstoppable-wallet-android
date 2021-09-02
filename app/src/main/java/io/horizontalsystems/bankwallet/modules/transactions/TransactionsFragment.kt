@@ -98,7 +98,7 @@ class TransactionsFragment : BaseFragment(R.layout.fragment_transactions) {
             toolbarSpinner.isVisible = it
         }
 
-        setTabs(viewModel.filterTypes.map { it.name }, 0)
+        setTabs(viewModel.filterTypes.map { it.name }, viewModel.filterTypes.indexOf(viewModel.selectedFilterType))
 
         transactionTypeFilterTabCompose.setViewCompositionStrategy(
             ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)

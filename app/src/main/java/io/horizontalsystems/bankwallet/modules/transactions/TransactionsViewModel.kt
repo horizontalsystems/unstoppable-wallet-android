@@ -26,7 +26,7 @@ class TransactionsViewModel(
     val filterCoinsLiveData = MutableLiveData<List<Filter<Wallet>>>()
 
     val filterTypes = FilterTransactionType.values()
-    val selectedFilterLiveData = MutableLiveData(FilterTransactionType.All)
+    var selectedFilterType = filterTypes.first()
 
     val transactionList = MutableLiveData<ItemsList>()
 
@@ -88,6 +88,7 @@ class TransactionsViewModel(
 
     fun setFilterTransactionType(filterIndex: Int) {
         val filterType = filterTypes[filterIndex]
+        selectedFilterType = filterType
         service.setFilterType(filterType)
     }
 
