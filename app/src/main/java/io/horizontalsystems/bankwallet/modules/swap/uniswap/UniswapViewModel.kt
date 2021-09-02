@@ -18,6 +18,7 @@ import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapPendingAllowan
 import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.ethereumkit.api.jsonrpc.JsonRpc
 import io.horizontalsystems.uniswapkit.TradeError
+import io.horizontalsystems.uniswapkit.models.Price
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import java.math.BigDecimal
@@ -264,13 +265,21 @@ class UniswapViewModel(
 
     private fun tradeViewItem(trade: UniswapTradeService.Trade): TradeViewItem {
         return TradeViewItem(
-            formatter.price(
+            buyPrice = formatter.price(
                 trade.tradeData.executionPrice,
-                tradeService.coinFrom,
-                tradeService.coinTo
+                quoteCoin = tradeService.coinFrom,
+                baseCoin = tradeService.coinTo
             ),
-            formatter.priceImpactViewItem(trade, UniswapTradeService.PriceImpactLevel.Warning),
-            formatter.guaranteedAmountViewItem(
+            sellPrice = formatter.price(
+                Price(
+                    baseTokenAmount = trade.tradeData.trade.tokenAmountOut,
+                    quoteTokenAmount = trade.tradeData.trade.tokenAmountIn
+                ).decimalValue,
+                quoteCoin = tradeService.coinTo,
+                baseCoin = tradeService.coinFrom
+            ),
+            priceImpact = formatter.priceImpactViewItem(trade, UniswapTradeService.PriceImpactLevel.Warning),
+            guaranteedAmount = formatter.guaranteedAmountViewItem(
                 trade.tradeData,
                 tradeService.coinFrom,
                 tradeService.coinTo
@@ -280,7 +289,8 @@ class UniswapViewModel(
 
     //region models
     data class TradeViewItem(
-        val price: String? = null,
+        val buyPrice: String? = null,
+        val sellPrice: String? = null,
         val priceImpact: UniswapModule.PriceImpactViewItem? = null,
         val guaranteedAmount: UniswapModule.GuaranteedAmountViewItem? = null
     )

@@ -14,8 +14,8 @@ import java.math.RoundingMode
 
 class SwapViewItemHelper(private val numberFormatter: IAppNumberFormatter) {
 
-    fun price(price: BigDecimal?, coinFrom: Coin?, coinTo: Coin?): String? {
-        if (price == null || coinFrom == null || coinTo == null)
+    fun price(price: BigDecimal?, quoteCoin: Coin?, baseCoin: Coin?): String? {
+        if (price == null || quoteCoin == null || baseCoin == null)
             return null
 
         val inversePrice = if (price.compareTo(BigDecimal.ZERO) == 0)
@@ -23,7 +23,7 @@ class SwapViewItemHelper(private val numberFormatter: IAppNumberFormatter) {
         else
             BigDecimal.ONE.divide(price, price.scale(), RoundingMode.HALF_UP)
 
-        return "${coinTo.code} = ${coinAmount(inversePrice, coinFrom)} "
+        return "${baseCoin.code} = ${coinAmount(inversePrice, quoteCoin)} "
     }
 
     fun priceImpactViewItem(
