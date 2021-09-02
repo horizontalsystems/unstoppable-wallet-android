@@ -42,16 +42,16 @@ class TransactionViewItemFactory {
         val lastBlockTimestamp = transactionItem.lastBlockInfo?.timestamp
 
         return when (record) {
-            is ApproveTransactionRecord -> createViewItemFromApproveTransactionRecord(record, transactionItem.currencyValue, status, progress, lastBlockTimestamp, icon)
-            is BinanceChainIncomingTransactionRecord -> createViewItemFromBinanceChainIncomingTransactionRecord(record, transactionItem.currencyValue, status, progress, lastBlockTimestamp, icon)
-            is BinanceChainOutgoingTransactionRecord -> createViewItemFromBinanceChainOutgoingTransactionRecord(record, transactionItem.currencyValue, status, progress, lastBlockTimestamp, icon)
-            is BitcoinIncomingTransactionRecord -> createViewItemFromBitcoinIncomingTransactionRecord(record, transactionItem.currencyValue, status, progress, lastBlockTimestamp, icon)
-            is BitcoinOutgoingTransactionRecord -> createViewItemFromBitcoinOutgoingTransactionRecord(record, transactionItem.currencyValue, status, progress, lastBlockTimestamp, icon)
-            is ContractCallTransactionRecord -> createViewItemFromContractCallTransactionRecord(record, transactionItem.currencyValue, status, progress, lastBlockTimestamp, icon)
-            is ContractCreationTransactionRecord -> createViewItemFromContractCreationTransactionRecord(record, transactionItem.currencyValue, status, progress, lastBlockTimestamp, icon)
-            is EvmIncomingTransactionRecord -> createViewItemFromEvmIncomingTransactionRecord(record, transactionItem.currencyValue, status, progress, lastBlockTimestamp, icon)
-            is EvmOutgoingTransactionRecord -> createViewItemFromEvmOutgoingTransactionRecord(record, transactionItem.currencyValue, status, progress, lastBlockTimestamp, icon)
-            is SwapTransactionRecord -> createViewItemFromSwapTransactionRecord(record, transactionItem.currencyValue, status, progress, lastBlockTimestamp, icon)
+            is ApproveTransactionRecord -> createViewItemFromApproveTransactionRecord(record, transactionItem.currencyValue, progress, lastBlockTimestamp, icon)
+            is BinanceChainIncomingTransactionRecord -> createViewItemFromBinanceChainIncomingTransactionRecord(record, transactionItem.currencyValue, progress, lastBlockTimestamp, icon)
+            is BinanceChainOutgoingTransactionRecord -> createViewItemFromBinanceChainOutgoingTransactionRecord(record, transactionItem.currencyValue, progress, lastBlockTimestamp, icon)
+            is BitcoinIncomingTransactionRecord -> createViewItemFromBitcoinIncomingTransactionRecord(record, transactionItem.currencyValue, progress, lastBlockTimestamp, icon)
+            is BitcoinOutgoingTransactionRecord -> createViewItemFromBitcoinOutgoingTransactionRecord(record, transactionItem.currencyValue, progress, lastBlockTimestamp, icon)
+            is ContractCallTransactionRecord -> createViewItemFromContractCallTransactionRecord(record, transactionItem.currencyValue, progress, lastBlockTimestamp, icon)
+            is ContractCreationTransactionRecord -> createViewItemFromContractCreationTransactionRecord(record, transactionItem.currencyValue, progress, lastBlockTimestamp, icon)
+            is EvmIncomingTransactionRecord -> createViewItemFromEvmIncomingTransactionRecord(record, transactionItem.currencyValue, progress, lastBlockTimestamp, icon)
+            is EvmOutgoingTransactionRecord -> createViewItemFromEvmOutgoingTransactionRecord(record, transactionItem.currencyValue, progress, lastBlockTimestamp, icon)
+            is SwapTransactionRecord -> createViewItemFromSwapTransactionRecord(record, transactionItem.currencyValue, progress, lastBlockTimestamp, icon)
             else -> throw IllegalArgumentException("Undefined record type ${record.javaClass.name}")
         }
     }
@@ -59,7 +59,6 @@ class TransactionViewItemFactory {
     private fun createViewItemFromSwapTransactionRecord(
         record: SwapTransactionRecord,
         currencyValue: CurrencyValue?,
-        status: TransactionStatus,
         progress: Int?,
         lastBlockTimestamp: Long?,
         icon: Int?
@@ -90,7 +89,6 @@ class TransactionViewItemFactory {
     private fun createViewItemFromEvmOutgoingTransactionRecord(
         record: EvmOutgoingTransactionRecord,
         currencyValue: CurrencyValue?,
-        status: TransactionStatus,
         progress: Int?,
         lastBlockTimestamp: Long?,
         icon: Int?
@@ -119,7 +117,6 @@ class TransactionViewItemFactory {
     private fun createViewItemFromEvmIncomingTransactionRecord(
         record: EvmIncomingTransactionRecord,
         currencyValue: CurrencyValue?,
-        status: TransactionStatus,
         progress: Int?,
         lastBlockTimestamp: Long?,
         icon: Int?
@@ -150,7 +147,6 @@ class TransactionViewItemFactory {
     private fun createViewItemFromContractCreationTransactionRecord(
         record: ContractCreationTransactionRecord,
         currencyValue: CurrencyValue?,
-        status: TransactionStatus,
         progress: Int?,
         lastBlockTimestamp: Long?,
         icon: Int?
@@ -170,7 +166,6 @@ class TransactionViewItemFactory {
     private fun createViewItemFromContractCallTransactionRecord(
         record: ContractCallTransactionRecord,
         currencyValue: CurrencyValue?,
-        status: TransactionStatus,
         progress: Int?,
         lastBlockTimestamp: Long?,
         icon: Int?
@@ -193,7 +188,6 @@ class TransactionViewItemFactory {
     private fun createViewItemFromBitcoinOutgoingTransactionRecord(
         record: BitcoinOutgoingTransactionRecord,
         currencyValue: CurrencyValue?,
-        status: TransactionStatus,
         progress: Int?,
         lastBlockTimestamp: Long?,
         icon: Int?
@@ -238,7 +232,6 @@ class TransactionViewItemFactory {
     private fun createViewItemFromBitcoinIncomingTransactionRecord(
         record: BitcoinIncomingTransactionRecord,
         currencyValue: CurrencyValue?,
-        status: TransactionStatus,
         progress: Int?,
         lastBlockTimestamp: Long?,
         icon: Int?
@@ -283,7 +276,6 @@ class TransactionViewItemFactory {
     private fun createViewItemFromBinanceChainOutgoingTransactionRecord(
         record: BinanceChainOutgoingTransactionRecord,
         currencyValue: CurrencyValue?,
-        status: TransactionStatus,
         progress: Int?,
         lastBlockTimestamp: Long?,
         icon: Int?
@@ -312,7 +304,6 @@ class TransactionViewItemFactory {
     private fun createViewItemFromBinanceChainIncomingTransactionRecord(
         record: BinanceChainIncomingTransactionRecord,
         currencyValue: CurrencyValue?,
-        status: TransactionStatus,
         progress: Int?,
         lastBlockTimestamp: Long?,
         icon: Int?
@@ -343,7 +334,6 @@ class TransactionViewItemFactory {
     private fun createViewItemFromApproveTransactionRecord(
         record: ApproveTransactionRecord,
         currencyValue: CurrencyValue?,
-        status: TransactionStatus,
         progress: Int?,
         lastBlockTimestamp: Long?,
         icon: Int?
