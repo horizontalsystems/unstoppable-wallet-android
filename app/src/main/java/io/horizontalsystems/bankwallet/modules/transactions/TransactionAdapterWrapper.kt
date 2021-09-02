@@ -39,6 +39,7 @@ class TransactionAdapterWrapper(
         transactionsAdapter.getTransactionRecordsFlowable(transactionWallet.coin, transactionType)
             .subscribeIO {
                 transactionRecords.clear()
+                allLoaded = false
                 updatedSubject.onNext(Unit)
             }
             .let {
