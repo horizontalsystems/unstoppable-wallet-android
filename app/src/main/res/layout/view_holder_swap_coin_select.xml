@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="60dp"
-    android:background="@drawable/clickable_background_color_lawrence">
+    android:layout_height="60dp">
 
     <View
         android:id="@+id/topShade"
