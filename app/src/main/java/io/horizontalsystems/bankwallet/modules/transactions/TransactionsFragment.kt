@@ -112,6 +112,7 @@ class TransactionsFragment : BaseFragment(R.layout.fragment_transactions) {
                     viewModel.setFilterTransactionType(
                         index
                     )
+                    scrollToTopAfterUpdate = true
                 }
             }
         }
