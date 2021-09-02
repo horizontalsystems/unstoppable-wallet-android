@@ -27,7 +27,6 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.scanqr.WalletConnec
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
-import io.horizontalsystems.bankwallet.ui.extensions.ConfirmationDialog
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.android.synthetic.main.fragment_wallet_connect_main.*
 
@@ -156,6 +155,10 @@ class WalletConnectMainFragment : BaseFragment() {
         })
 
         viewModel.closeLiveEvent.observe(viewLifecycleOwner, {
+            HudHelper.showSuccessMessage(
+                requireActivity().findViewById(android.R.id.content),
+                R.string.Hud_Text_Done
+            )
             findNavController().popBackStack()
         })
 
