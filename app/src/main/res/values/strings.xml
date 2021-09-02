@@ -395,6 +395,8 @@
     <string name="Swap_MaximumPaid">Maximum Amount</string>
     <string name="Swap_MinimumGot">Guaranteed Amount</string>
     <string name="Swap_PoweredBy">Powered by</string>
+    <string name="Swap_SelectSwapProvider_Title">Swap Provider</string>
+    <string name="Swap_SelectSwapProvider_Subtitle">----------</string>
 
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">Advanced Settings</string>
