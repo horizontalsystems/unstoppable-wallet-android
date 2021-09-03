@@ -115,6 +115,7 @@ class WalletConnectMainViewModel(private val service: WalletConnectService) : Vi
 
 
         val hint = when {
+            connectionState is WalletConnectInteractor.State.Disconnected -> R.string.WalletConnect_Reconnect_Hint
             connectionState != WalletConnectInteractor.State.Connected -> null
             state == WalletConnectService.State.WaitingForApproveSession -> R.string.WalletConnect_Approve_Hint
             state == WalletConnectService.State.Ready -> R.string.WalletConnect_Ready_Hint
