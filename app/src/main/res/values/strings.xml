@@ -531,10 +531,10 @@
     <!-- Transaction Info Options -->
 
     <string name="TransactionInfoOptions_SpeedUp_Title">Speed Up</string>
-    <string name="TransactionInfoOptions_SpeedUp_Description">[ Transaction Speed Up Description ]</string>
+    <string name="TransactionInfoOptions_SpeedUp_Description">This action will attempt to invalidate previous transaction by resending it with a higher fee. If the original transaction remains pending when a new one sent there is s a high chance (not guaranteed) that it will be invalidated and replaced. Only one of these two transactions will be included in the blockchain.</string>
     <string name="TransactionInfoOptions_SpeedUp_Button">Resend</string>
     <string name="TransactionInfoOptions_Cancel_Title">Cancel</string>
-    <string name="TransactionInfoOptions_Cancel_Description">[ Transaction Cancel Description ]</string>
+    <string name="TransactionInfoOptions_Cancel_Description">This action will attempt to invalidate previous transaction by resending as a new 0 ETH transaction to self. If the original transaction remains pending when a new one sent there is s a high chance (not guaranteed) that it will be invalidated and replaced. Only one of these two transactions will be included in the blockchain.</string>
     <string name="TransactionInfoOptions_Cancel_Button">Cancel Transaction</string>
 
     <string name="TransactionInfoOptions_Warning_TransactionInBlock">Transaction already in block</string>
