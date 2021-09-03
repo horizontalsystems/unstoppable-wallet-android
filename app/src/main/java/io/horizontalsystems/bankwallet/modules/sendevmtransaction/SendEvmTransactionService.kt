@@ -97,7 +97,7 @@ class SendEvmTransactionService(
                 .subscribeIO({ fullTransaction ->
                     handlePostSendActions()
                     sendState = SendState.Sent(fullTransaction.transaction.hash)
-                    logger.info("success txHash: ${fullTransaction.transaction.hash.toHexString()}")
+                    logger.info("success")
                 }, { error ->
                     sendState = SendState.Failed(error)
                     logger.warning("failed", error)
