@@ -26,6 +26,7 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.scanqr.WalletConnec
 import io.horizontalsystems.bankwallet.modules.walletconnect.scanqr.WalletConnectScanQrViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryRed
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.android.synthetic.main.fragment_wallet_connect_main.*
@@ -212,7 +213,7 @@ class WalletConnectMainFragment : BaseFragment() {
                         )
                     }
                     if (buttonsStates.disconnect.visible) {
-                        ButtonPrimaryDefault(
+                        ButtonPrimaryRed(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(start = 16.dp, top = 16.dp, end = 16.dp),
