@@ -6,7 +6,6 @@ import androidx.compose.material.*
 import androidx.compose.material.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.Grey
@@ -32,16 +31,15 @@ fun Tabs(tabs: List<String>, selectedIndex: Int, onClick: (Int) -> Unit) {
         ) {
             tabs.forEachIndexed { index, tab ->
                 Tab(
+                    modifier = Modifier.height(43.dp),
                     selected = tabIndex == index,
                     onClick = {
                         tabIndex = index
                         onClick.invoke(index)
                     },
-                    text = {
+                    content = {
                         ProvideTextStyle(
-                            ComposeAppTheme.typography.subhead1.copy(
-                                textAlign = TextAlign.Center
-                            )
+                            ComposeAppTheme.typography.subhead1
                         ) {
                             Text(
                                 text = tab,
@@ -75,16 +73,15 @@ fun ScrollableTabs(tabs: List<String>, selectedIndex: Int, onClick: (Int) -> Uni
         ) {
             tabs.forEachIndexed { index, tab ->
                 Tab(
+                    modifier = Modifier.height(43.dp),
                     selected = tabIndex == index,
                     onClick = {
                         tabIndex = index
                         onClick.invoke(index)
                     },
-                    text = {
+                    content = {
                         ProvideTextStyle(
-                            ComposeAppTheme.typography.subhead1.copy(
-                                textAlign = TextAlign.Center
-                            )
+                            ComposeAppTheme.typography.subhead1
                         ) {
                             Text(
                                 text = tab,
