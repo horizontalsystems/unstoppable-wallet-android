@@ -10,7 +10,6 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.widget.ConstraintLayout
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.Steel10
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryToggle
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryTransparent
@@ -38,7 +37,7 @@ class MarketListHeaderView @JvmOverloads constructor(
         composeView.setContent {
             ComposeAppTheme {
                 Column(modifier = Modifier.width(IntrinsicSize.Max)) {
-                    Divider(thickness = 1.dp, color = Steel10)
+                    Divider(thickness = 1.dp, color = ComposeAppTheme.colors.steel10)
                     Row(
                         modifier = Modifier.fillMaxWidth()
                             .padding(top = 8.dp, end = 16.dp, bottom = 8.dp),

@@ -15,6 +15,27 @@ class Colors(
     claude: Color,
     lawrence: Color
 ) {
+
+    //base colors
+    val transparent = Color.Transparent
+    val dark = Dark
+    val light = Light
+    val lightGrey = LightGrey
+    val steelLight = SteelLight
+    val steelDark = SteelDark
+    val steel10 = Steel10
+    val steel20 = Steel20
+    val grey = Grey
+    val grey50 = Grey50
+
+    val yellowD = YellowD
+    val yellowL = YellowL
+    val greenD = GreenD
+    val greenL = GreenL
+    val redD = RedD
+    val redL = RedL
+
+    //themed colors
     var jacob by mutableStateOf(jacob)
         private set
     var remus by mutableStateOf(remus)

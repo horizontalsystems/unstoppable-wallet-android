@@ -37,7 +37,7 @@ fun ButtonSecondaryDefault(
         modifier = modifier,
         onClick = onClick,
         colors = ButtonDefaults.textButtonColors(
-            backgroundColor = Steel20,
+            backgroundColor = ComposeAppTheme.colors.steel20,
             contentColor = ComposeAppTheme.colors.oz
         ),
         content = { Text(title, maxLines = 1, overflow = TextOverflow.Ellipsis) },
@@ -55,7 +55,7 @@ fun ButtonSecondaryTransparent(
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed by interactionSource.collectIsPressedAsState()
-    val textColor = if (isPressed) Grey else ComposeAppTheme.colors.oz
+    val textColor = if (isPressed) ComposeAppTheme.colors.grey else ComposeAppTheme.colors.oz
 
     ButtonSecondary(
         modifier = modifier,
@@ -71,7 +71,7 @@ fun ButtonSecondaryTransparent(
                         modifier = Modifier.padding(start = 4.dp),
                         painter = painterResource(id = iconRight),
                         contentDescription = null,
-                        tint = Grey
+                        tint = ComposeAppTheme.colors.grey
                     )
                 }
             } else {
@@ -96,7 +96,7 @@ fun ButtonSecondaryToggle(
         modifier = modifier,
         onClick = onClick,
         colors = ButtonDefaults.textButtonColors(
-            backgroundColor = Steel20,
+            backgroundColor = ComposeAppTheme.colors.steel20,
             contentColor = ComposeAppTheme.colors.oz
         ),
         content = {
@@ -114,7 +114,7 @@ fun ButtonSecondaryToggle(
                             modifier = Modifier
                                 .size(3.dp)
                                 .clip(CircleShape)
-                                .background(if (indicator.enabled) ComposeAppTheme.colors.jacob else Grey)
+                                .background(if (indicator.enabled) ComposeAppTheme.colors.jacob else ComposeAppTheme.colors.grey)
                         )
                     }
                 }
@@ -195,10 +195,10 @@ object SecondaryButtonDefaults {
 
     @Composable
     fun textButtonColors(
-        backgroundColor: Color = Color.Transparent,
+        backgroundColor: Color = ComposeAppTheme.colors.transparent,
         contentColor: Color = ComposeAppTheme.colors.claude,
-        disabledBackgroundColor: Color = Steel20,
-        disabledContentColor: Color = Grey50,
+        disabledBackgroundColor: Color = ComposeAppTheme.colors.steel20,
+        disabledContentColor: Color = ComposeAppTheme.colors.grey50,
     ): ButtonColors = DefaultButtonColors(
         backgroundColor = backgroundColor,
         contentColor = contentColor,
