@@ -13,7 +13,7 @@ import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.TransactionData
 
 class UniswapConfirmationFragment : BaseSwapConfirmationFragment() {
-    override val logger = AppLogger("swap_1inch")
+    override val logger = AppLogger("swap_uniswap")
 
     private val transactionData: TransactionData
         get() {
