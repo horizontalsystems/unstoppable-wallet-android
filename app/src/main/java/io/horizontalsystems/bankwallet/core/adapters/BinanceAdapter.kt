@@ -10,6 +10,7 @@ import io.horizontalsystems.bankwallet.entities.transactionrecords.binancechain.
 import io.horizontalsystems.bankwallet.modules.transactions.FilterTransactionType
 import io.horizontalsystems.binancechainkit.BinanceChainKit
 import io.horizontalsystems.binancechainkit.core.api.BinanceError
+import io.horizontalsystems.binancechainkit.models.TransactionFilterType
 import io.horizontalsystems.binancechainkit.models.TransactionInfo
 import io.horizontalsystems.coinkit.models.Coin
 import io.reactivex.Flowable
@@ -78,17 +79,31 @@ class BinanceAdapter(
         get() = binanceKit.latestBlockFlowable.map { }
 
     override fun getTransactionRecordsFlowable(coin: Coin?, transactionType: FilterTransactionType): Flowable<List<TransactionRecord>> {
-        return asset.transactionsFlowable.map { it.map { tx -> transactionRecord(tx) } }
+        return try {
+            val filter = getBinanceTransactionTypeFilter(transactionType)
+            asset.getTransactionsFlowable(filter).map { it.map { transactionRecord(it) } }
+        } catch (e: UnsupportedFilterException) {
+            Flowable.empty()
+        }
     }
 
-    override fun getTransactionsAsync(
-        from: TransactionRecord?,
-        coin: Coin?,
-        limit: Int,
-        transactionType: FilterTransactionType
-    ): Single<List<TransactionRecord>> {
-        return binanceKit.transactions(asset, from?.transactionHash, limit).map { list ->
-            list.map { transactionRecord(it) }
+    override fun getTransactionsAsync(from: TransactionRecord?, coin: Coin?, limit: Int, transactionType: FilterTransactionType): Single<List<TransactionRecord>> {
+        return try {
+            val filter = getBinanceTransactionTypeFilter(transactionType)
+            binanceKit
+                .transactions(asset, filter, from?.transactionHash, limit)
+                .map { it.map { transactionRecord(it) } }
+        } catch (e: UnsupportedFilterException) {
+            Single.just(listOf())
+        }
+    }
+
+    private fun getBinanceTransactionTypeFilter(transactionType: FilterTransactionType): TransactionFilterType? {
+        return when (transactionType) {
+            FilterTransactionType.All -> null
+            FilterTransactionType.Incoming -> TransactionFilterType.Incoming
+            FilterTransactionType.Outgoing -> TransactionFilterType.Outgoing
+            else -> throw UnsupportedFilterException()
         }
     }
 
@@ -186,4 +201,6 @@ class BinanceAdapter(
         }
 
     }
+
+    class UnsupportedFilterException: Exception()
 }
