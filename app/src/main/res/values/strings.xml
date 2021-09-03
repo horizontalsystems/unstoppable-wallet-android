@@ -349,6 +349,7 @@
     <string name="WalletConnect_SignedTransactions">Signed Transactions</string>
     <string name="WalletConnect_Approve_Hint">By clicking connect, you allow this app to view your public address. This is important security step to protect your data from potential phishing risks.</string>
     <string name="WalletConnect_Ready_Hint">You can go to the browser. Do not close this page while interacting in the browser.</string>
+    <string name="WalletConnect_Reconnect_Hint">Failed to establish connection. Try reconnecting again.</string>
     <string name="WalletConnect_Error_InvalidUrl">Invalid URL Address</string>
     <string name="WalletConnect_Requirement">Requirement</string>
     <string name="WalletConnect_Status_Offline">Offline</string>
