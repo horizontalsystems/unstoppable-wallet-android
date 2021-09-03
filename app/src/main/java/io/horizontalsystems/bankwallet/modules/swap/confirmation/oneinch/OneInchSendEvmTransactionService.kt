@@ -197,7 +197,7 @@ class OneInchSendEvmTransactionService(
                 .subscribeIO({ fullTransaction ->
                     activateSwapCoinOut()
                     sendState = SendEvmTransactionService.SendState.Sent(fullTransaction.transaction.hash)
-                    logger.info("success txHash: ${fullTransaction.transaction.hash.toHexString()}")
+                    logger.info("success")
                 }, { error ->
                     sendState = SendEvmTransactionService.SendState.Failed(error)
                     logger.warning("failed", error)
