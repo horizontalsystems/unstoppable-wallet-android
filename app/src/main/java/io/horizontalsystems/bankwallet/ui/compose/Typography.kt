@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.ui.compose
 
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
@@ -102,6 +103,15 @@ class Typography internal constructor(
         microSB = microSB.withFontFamily(defaultFontFamily),
     )
 
+}
+
+fun ColoredTextStyle(textStyle: TextStyle, color: Color): TextStyle {
+    return TextStyle(
+        color = color,
+        fontWeight = textStyle.fontWeight,
+        fontSize = textStyle.fontSize,
+        fontStyle = textStyle.fontStyle
+    )
 }
 
 private fun TextStyle.withFontFamily(default: FontFamily): TextStyle {
