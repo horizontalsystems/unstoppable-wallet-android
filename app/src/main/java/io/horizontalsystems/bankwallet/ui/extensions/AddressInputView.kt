@@ -28,8 +28,6 @@ import io.horizontalsystems.bankwallet.modules.swap.settings.Caution
 import io.horizontalsystems.bankwallet.modules.swap.settings.RecipientAddressViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.Grey
-import io.horizontalsystems.bankwallet.ui.compose.Grey50
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
@@ -115,7 +113,7 @@ class AddressInputView @JvmOverloads constructor(
                                 if (inputText.isEmpty()) {
                                     Text(
                                         hintText ?: "",
-                                        color = Grey50,
+                                        color = ComposeAppTheme.colors.grey50,
                                         style = ComposeAppTheme.typography.body
                                     )
                                 }
@@ -131,7 +129,7 @@ class AddressInputView @JvmOverloads constructor(
                         if (showSpinner) {
                             CircularProgressIndicator(
                                 modifier = Modifier.size(28.dp).padding(top = 4.dp, end = 8.dp),
-                                color = Grey,
+                                color = ComposeAppTheme.colors.grey,
                                 strokeWidth = 2.dp
                             )
                         }

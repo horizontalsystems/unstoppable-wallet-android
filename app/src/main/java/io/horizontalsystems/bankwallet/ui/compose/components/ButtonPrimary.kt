@@ -15,7 +15,6 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.ui.compose.*
-import io.horizontalsystems.bankwallet.ui.compose.Grey50
 
 @Composable
 fun ButtonPrimaryDefault(
@@ -46,7 +45,7 @@ fun ButtonPrimaryYellow(
         modifier = modifier,
         onClick = onClick,
         colors = ButtonDefaults.textButtonColors(
-            backgroundColor = YellowD,
+            backgroundColor = ComposeAppTheme.colors.yellowD,
         ),
         content = { Text(title, maxLines = 1, overflow = TextOverflow.Ellipsis) },
         enabled = enabled
@@ -64,7 +63,7 @@ fun ButtonPrimaryRed(
         modifier = modifier,
         onClick = onClick,
         colors = ButtonDefaults.textButtonColors(
-            backgroundColor = RedD,
+            backgroundColor = ComposeAppTheme.colors.redD,
         ),
         content = { Text(title, maxLines = 1, overflow = TextOverflow.Ellipsis) },
         enabled = enabled
@@ -84,13 +83,13 @@ fun ButtonPrimaryYellowWithSpinner(
         modifier = modifier,
         onClick = onClick,
         colors = ButtonDefaults.textButtonColors(
-            backgroundColor = YellowD,
+            backgroundColor = ComposeAppTheme.colors.yellowD,
         ),
         content = {
             if (showSpinner) {
                 CircularProgressIndicator(
                     modifier = Modifier.size(16.dp),
-                    color = Grey,
+                    color = ComposeAppTheme.colors.grey,
                     strokeWidth = 2.dp
                 )
             } else {
@@ -171,10 +170,10 @@ object ButtonDefaults {
 
     @Composable
     fun textButtonColors(
-        backgroundColor: Color = Color.Transparent,
+        backgroundColor: Color = ComposeAppTheme.colors.transparent,
         contentColor: Color = ComposeAppTheme.colors.claude,
-        disabledBackgroundColor: Color = Steel20,
-        disabledContentColor: Color = Grey50,
+        disabledBackgroundColor: Color = ComposeAppTheme.colors.steel20,
+        disabledContentColor: Color = ComposeAppTheme.colors.grey50,
     ): ButtonColors = DefaultButtonColors(
         backgroundColor = backgroundColor,
         contentColor = contentColor,

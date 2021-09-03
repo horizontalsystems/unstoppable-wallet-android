@@ -14,7 +14,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.Steel20
 
 @Composable
 fun ButtonPrimaryCircle(
@@ -50,7 +49,7 @@ fun ButtonSecondaryCircle(
             modifier = Modifier
                 .size(28.dp)
                 .clip(shape)
-                .background(Steel20)
+                .background(ComposeAppTheme.colors.steel20)
         ) {
             Icon(
                 painter = painterResource(id = icon),

@@ -21,7 +21,6 @@ import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.modules.settings.notifications.bottommenu.BottomNotificationMenu
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.Grey
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.views.ListPosition
@@ -136,7 +135,7 @@ class NotificationsFragment : BaseFragment(), NotificationItemsAdapter.Listener 
                         Text(
                             text = getString(R.string.SettingsNotifications_NotificationsDisabledWarning),
                             style = ComposeAppTheme.typography.subhead2,
-                            color = Grey
+                            color = ComposeAppTheme.colors.grey
                         )
                         ButtonSecondaryDefault(
                             modifier = Modifier.padding(top = 32.dp),

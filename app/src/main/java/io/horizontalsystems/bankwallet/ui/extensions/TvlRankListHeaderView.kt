@@ -9,7 +9,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.Steel10
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryTransparent
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
 import kotlinx.android.synthetic.main.view_tvlrank_list_header.view.*
@@ -49,7 +48,7 @@ class TvlRankListHeaderView @JvmOverloads constructor(
         composeView.setContent {
             ComposeAppTheme {
                 Column(modifier = Modifier.width(IntrinsicSize.Max)) {
-                    Divider(thickness = 1.dp, color = Steel10)
+                    Divider(thickness = 1.dp, color = ComposeAppTheme.colors.steel10)
                     Row(
                         modifier = Modifier.fillMaxWidth()
                             .padding(top = 8.dp, end = 16.dp, bottom = 8.dp),

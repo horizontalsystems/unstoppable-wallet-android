@@ -8,8 +8,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.Grey
-import io.horizontalsystems.bankwallet.ui.compose.Steel10
 
 @Composable
 fun Tabs(tabs: List<String>, selectedIndex: Int, onClick: (Int) -> Unit) {
@@ -43,13 +41,13 @@ fun Tabs(tabs: List<String>, selectedIndex: Int, onClick: (Int) -> Unit) {
                         ) {
                             Text(
                                 text = tab,
-                                color = if (tabIndex == index) ComposeAppTheme.colors.oz else Grey
+                                color = if (tabIndex == index) ComposeAppTheme.colors.oz else ComposeAppTheme.colors.grey
                             )
                         }
                     })
             }
         }
-        Divider(thickness = 1.dp, color = Steel10)
+        Divider(thickness = 1.dp, color = ComposeAppTheme.colors.steel10)
     }
 }
 
@@ -85,13 +83,13 @@ fun ScrollableTabs(tabs: List<String>, selectedIndex: Int, onClick: (Int) -> Uni
                         ) {
                             Text(
                                 text = tab,
-                                color = if (tabIndex == index) ComposeAppTheme.colors.oz else Grey
+                                color = if (tabIndex == index) ComposeAppTheme.colors.oz else ComposeAppTheme.colors.grey
                             )
                         }
                     }
                 )
             }
         }
-        Divider(thickness = 1.dp, color = Steel10)
+        Divider(thickness = 1.dp, color = ComposeAppTheme.colors.steel10)
     }
 }
