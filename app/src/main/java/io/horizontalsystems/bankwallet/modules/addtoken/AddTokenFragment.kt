@@ -51,7 +51,6 @@ class AddTokenFragment : BaseFragment() {
 
         addressInputView.onPasteText {
             viewModel.onTextChange(it)
-            addressInputView.setText(it)
         }
 
         val qrScannerResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->

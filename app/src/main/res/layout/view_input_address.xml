@@ -2,7 +2,8 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout">
+    tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout"
+    >
 
     <TextView
         android:id="@+id/title"
@@ -13,45 +14,30 @@
         android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="Recipient Address" />
+        tools:text="Recipient Address"
+        />
 
     <io.horizontalsystems.views.ViewState
         android:id="@+id/inputBackground"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@drawable/input_background_stateful"
-        app:layout_constraintBottom_toBottomOf="@id/input"
+        app:layout_constraintBottom_toBottomOf="@id/actionsCompose"
+        app:layout_constraintEnd_toEndOf="@id/actionsCompose"
+        app:layout_constraintStart_toStartOf="@id/actionsCompose"
+        app:layout_constraintTop_toTopOf="@id/actionsCompose"
+        />
+
+    <androidx.compose.ui.platform.ComposeView
+        android:id="@+id/actionsCompose"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:minHeight="43dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/title"
-        android:layout_marginTop="7dp"
-        app:layout_goneMarginTop="12dp" />
-
-    <EditText
-        android:id="@+id/input"
-        style="@style/Body"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@color/transparent"
-        android:hint="@string/Send_Hint_Address"
-        android:includeFontPadding="false"
-        android:inputType="textMultiLine"
-        android:padding="12dp"
-        android:textColor="?attr/TextColorBarsToDark"
-        android:textColorHint="@color/grey_50"
-        app:layout_constraintEnd_toStartOf="@+id/actionsLayout"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/inputBackground" />
-
-    <LinearLayout
-        android:id="@+id/actionsLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="28dp"
-        android:gravity="center"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="@id/inputBackground"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/inputBackground" />
+        />
 
     <TextView
         android:id="@+id/error"
@@ -64,8 +50,9 @@
         android:textColor="@color/lucian"
         android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/inputBackground"
-        tools:text="Invalid address or unstoppable domain" />
+        app:layout_constraintTop_toBottomOf="@id/actionsCompose"
+        tools:text="Invalid address or unstoppable domain"
+        />
 
     <TextView
         android:id="@+id/description"
@@ -79,6 +66,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/error"
-        tools:text="After the exchange operation, the amount will be transferred to the specified address" />
+        tools:text="After the exchange operation, the amount will be transferred to the specified address"
+        />
 
 </merge>
