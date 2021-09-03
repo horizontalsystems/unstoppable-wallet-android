@@ -154,13 +154,23 @@ class TransactionInfoViewItemFactory(
                 middleSectionTypes.add(getEvmFeeItem(transaction.fee, rates[transaction.fee.coin], status))
 
                 transaction.valueOut?.let { valueOut ->
-                    val valueIn = transaction.valueIn
-                    val price = valueIn.value.divide(valueOut.value, min(valueOut.coin.decimal, valueIn.coin.decimal), RoundingMode.HALF_EVEN).abs()
-                    val priceValue = numberFormatter.formatCoin(price, transaction.valueIn.coin.code, 0, 8)
+                    val priceValue = if (valueOut.value.compareTo(BigDecimal.ZERO) == 0) {
+                        Translator.getString(R.string.NotAvailable)
+                    } else {
+                        val valueIn = transaction.valueIn
+                        val price = valueIn.value.divide(
+                            valueOut.value,
+                            min(valueOut.coin.decimal, valueIn.coin.decimal),
+                            RoundingMode.HALF_EVEN
+                        ).abs()
+                        val formattedPrice = numberFormatter.formatCoin(price, transaction.valueIn.coin.code, 0, 8)
+                        "${valueOut.coin.code} = $formattedPrice"
+                    }
+
                     middleSectionTypes.add(
                         Value(
                             getString(R.string.TransactionInfo_Price),
-                            "${valueOut.coin.code} = $priceValue"
+                            priceValue
                         )
                     )
                 }
