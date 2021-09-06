@@ -5,21 +5,32 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.AttributeSet
 import android.view.animation.AnimationUtils
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.fiat.AmountTypeSwitchService
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
 import io.horizontalsystems.core.helpers.KeyboardHelper
 import kotlinx.android.synthetic.main.view_input_amount.view.*
-import kotlinx.android.synthetic.main.view_input_amount.view.btnDelete
 
-class AmountInputView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
-    : ConstraintLayout(context, attrs, defStyleAttr) {
+class AmountInputView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : ConstraintLayout(context, attrs, defStyleAttr) {
 
     var maxButtonVisible: Boolean = false
         set(value) {
             field = value
-            syncButtonStates()
+            updateButtons()
         }
 
     var onTextChangeCallback: ((prevText: String?, newText: String?) -> Unit)? = null
@@ -31,7 +42,7 @@ class AmountInputView @JvmOverloads constructor(context: Context, attrs: Attribu
 
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
             onTextChangeCallback?.invoke(prevValue, s?.toString())
-            syncButtonStates()
+            updateButtons()
         }
 
         override fun afterTextChanged(s: Editable?) {}
@@ -44,12 +55,36 @@ class AmountInputView @JvmOverloads constructor(context: Context, attrs: Attribu
         inflate(context, R.layout.view_input_amount, this)
 
         editTxtAmount.addTextChangedListener(textWatcher)
+    }
 
-        btnMax.setOnClickListener {
-            onTapMaxCallback?.invoke()
-        }
-        btnDelete.setOnClickListener {
-            editTxtAmount.text = null
+    private fun updateButtons() {
+        amountInputButtonsCompose.setContent {
+            ComposeAppTheme {
+                Row(
+                    horizontalArrangement = Arrangement.End,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    if (editTxtAmount.text.isEmpty()) {
+                        if (maxButtonVisible) {
+                            ButtonSecondaryDefault(
+                                modifier = Modifier.padding(end = 8.dp),
+                                title = context.getString(R.string.Send_Button_Max),
+                                onClick = { onTapMaxCallback?.invoke() }
+                            )
+                        }
+                    } else {
+                        if (!estimatedLabel.isVisible) {
+                            ButtonSecondaryCircle(
+                                modifier = Modifier.padding(end = 8.dp),
+                                icon = R.drawable.ic_delete_20,
+                                onClick = {
+                                    editTxtAmount.text = null
+                                }
+                            )
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -65,7 +100,7 @@ class AmountInputView @JvmOverloads constructor(context: Context, attrs: Attribu
 
             setText(text)
             editTxtAmount.setSelection(text?.length ?: 0)
-            syncButtonStates()
+            updateButtons()
 
             if (skipChangeEvent) {
                 addTextChangedListener(textWatcher)
@@ -97,7 +132,10 @@ class AmountInputView @JvmOverloads constructor(context: Context, attrs: Attribu
         }
     }
 
-    private fun getSecondaryTextColor(type: AmountTypeSwitchService.AmountType, switchEnabled: Boolean): Int {
+    private fun getSecondaryTextColor(
+        type: AmountTypeSwitchService.AmountType,
+        switchEnabled: Boolean
+    ): Int {
         return when {
             !switchEnabled -> R.color.grey_50
             type == AmountTypeSwitchService.AmountType.Coin -> R.color.jacob
@@ -123,17 +161,16 @@ class AmountInputView @JvmOverloads constructor(context: Context, attrs: Attribu
 
     fun setEstimated(visible: Boolean) {
         estimatedLabel.isVisible = visible
-        syncButtonStates()
+        updateButtons()
     }
 
     fun setAmountEnabled(enabled: Boolean) {
         editTxtAmount.isEnabled = enabled
     }
 
-    private fun syncButtonStates() {
-        btnMax.isVisible = maxButtonVisible && editTxtAmount.text.isNullOrBlank()
-        btnDelete.isVisible = !estimatedLabel.isVisible && !editTxtAmount.text.isNullOrBlank()
-    }
-
-    class InputParams(val amountType: AmountTypeSwitchService.AmountType, val primaryPrefix: String?, val switchEnabled: Boolean)
+    class InputParams(
+        val amountType: AmountTypeSwitchService.AmountType,
+        val primaryPrefix: String?,
+        val switchEnabled: Boolean
+    )
 }
