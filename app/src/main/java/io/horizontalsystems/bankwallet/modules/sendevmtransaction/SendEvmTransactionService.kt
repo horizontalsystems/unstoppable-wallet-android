@@ -2,11 +2,10 @@ package io.horizontalsystems.bankwallet.modules.sendevmtransaction
 
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.Clearable
-import io.horizontalsystems.bankwallet.core.ethereum.EvmTransactionService
-import io.horizontalsystems.bankwallet.core.ethereum.EvmTransactionService.GasPriceType
+import io.horizontalsystems.bankwallet.core.ethereum.EvmTransactionFeeService
+import io.horizontalsystems.bankwallet.core.ethereum.EvmTransactionFeeService.GasPriceType
 import io.horizontalsystems.bankwallet.core.managers.ActivateCoinManager
 import io.horizontalsystems.bankwallet.core.subscribeIO
-import io.horizontalsystems.bankwallet.core.toHexString
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData
 import io.horizontalsystems.coinkit.models.CoinType
@@ -40,11 +39,11 @@ interface ISendEvmTransactionService {
 }
 
 class SendEvmTransactionService(
-        private val sendEvmData: SendEvmData,
-        private val evmKit: EthereumKit,
-        private val transactionService: EvmTransactionService,
-        private val activateCoinManager: ActivateCoinManager,
-        gasPrice: Long? = null
+    private val sendEvmData: SendEvmData,
+    private val evmKit: EthereumKit,
+    private val transactionFeeService: EvmTransactionFeeService,
+    private val activateCoinManager: ActivateCoinManager,
+    gasPrice: Long? = null
 ) : Clearable, ISendEvmTransactionService {
     private val disposable = CompositeDisposable()
 
@@ -78,9 +77,9 @@ class SendEvmTransactionService(
     override val ownAddress: Address = evmKit.receiveAddress
 
     init {
-        transactionService.transactionStatusObservable.subscribeIO { syncState() }.let { disposable.add(it) }
-        transactionService.setTransactionData(sendEvmData.transactionData)
-        gasPrice?.let { transactionService.gasPriceType = GasPriceType.Custom(it) }
+        transactionFeeService.transactionStatusObservable.subscribeIO { syncState() }.let { disposable.add(it) }
+        transactionFeeService.setTransactionData(sendEvmData.transactionData)
+        gasPrice?.let { transactionFeeService.gasPriceType = GasPriceType.Custom(it) }
     }
 
     override fun send(logger: AppLogger) {
@@ -88,7 +87,7 @@ class SendEvmTransactionService(
             logger.info("state is not Ready: ${state.javaClass.simpleName}")
             return
         }
-        val transaction = transactionService.transactionStatus.dataOrNull ?: return
+        val transaction = transactionFeeService.transactionStatus.dataOrNull ?: return
 
         sendState = SendState.Sending
         logger.info("sending tx")
@@ -110,7 +109,7 @@ class SendEvmTransactionService(
     }
 
     private fun syncState() {
-        when (val status = transactionService.transactionStatus) {
+        when (val status = transactionFeeService.transactionStatus) {
             is DataState.Error -> {
                 state = State.NotReady(listOf(status.error))
             }
@@ -126,10 +125,10 @@ class SendEvmTransactionService(
                 }
             }
         }
-        syncTxDataState(transactionService.transactionStatus)
+        syncTxDataState(transactionFeeService.transactionStatus)
     }
 
-    private fun syncTxDataState(transactionDataState: DataState<EvmTransactionService.Transaction>) {
+    private fun syncTxDataState(transactionDataState: DataState<EvmTransactionFeeService.Transaction>) {
         val transactionData = transactionDataState.dataOrNull?.transactionData ?: sendEvmData.transactionData
         txDataState = DataState.Success(TxDataState(transactionData, sendEvmData.additionalInfo, evmKit.decorate(transactionData)))
     }

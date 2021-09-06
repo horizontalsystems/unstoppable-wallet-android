@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.core.ethereum
 
+import android.util.Log
 import io.horizontalsystems.bankwallet.core.FeeRatePriority
 import io.horizontalsystems.bankwallet.core.ICustomRangedFeeProvider
 import io.horizontalsystems.bankwallet.core.subscribeIO
@@ -19,16 +20,16 @@ interface IEvmTransactionFeeService {
     val customFeeRange: LongRange
     val hasEstimatedFee: Boolean
 
-    val transactionStatus: DataState<EvmTransactionService.Transaction>
-    val transactionStatusObservable: Observable<DataState<EvmTransactionService.Transaction>>
+    val transactionStatus: DataState<EvmTransactionFeeService.Transaction>
+    val transactionStatusObservable: Observable<DataState<EvmTransactionFeeService.Transaction>>
 
-    var gasPriceType: EvmTransactionService.GasPriceType
-    val gasPriceTypeObservable: Observable<EvmTransactionService.GasPriceType>
+    var gasPriceType: EvmTransactionFeeService.GasPriceType
+    val gasPriceTypeObservable: Observable<EvmTransactionFeeService.GasPriceType>
 
     val warningOfStuckObservable: Flowable<Boolean>
 }
 
-class EvmTransactionService(
+class EvmTransactionFeeService(
         private val evmKit: EthereumKit,
         private val feeRateProvider: ICustomRangedFeeProvider,
         private val gasLimitSurchargePercent: Int = 0
@@ -137,6 +138,7 @@ class EvmTransactionService(
     private fun getGasPriceAsync(gasPriceType: GasPriceType): Single<BigInteger> {
         var recommendedGasPriceSingle = feeRateProvider.feeRate(FeeRatePriority.RECOMMENDED)
                 .doOnSuccess { gasPrice ->
+                    Log.e("AAA", "recommendedGasPrice: $gasPrice")
                     recommendedGasPrice = gasPrice
                 }
 

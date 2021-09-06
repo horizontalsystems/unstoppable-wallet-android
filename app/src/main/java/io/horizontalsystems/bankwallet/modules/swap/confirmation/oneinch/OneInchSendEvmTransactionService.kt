@@ -2,10 +2,9 @@ package io.horizontalsystems.bankwallet.modules.swap.confirmation.oneinch
 
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.Clearable
-import io.horizontalsystems.bankwallet.core.ethereum.EvmTransactionService
+import io.horizontalsystems.bankwallet.core.ethereum.EvmTransactionFeeService
 import io.horizontalsystems.bankwallet.core.managers.ActivateCoinManager
 import io.horizontalsystems.bankwallet.core.subscribeIO
-import io.horizontalsystems.bankwallet.core.toHexString
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.ISendEvmTransactionService
@@ -70,7 +69,7 @@ class OneInchSendEvmTransactionService(
                 .subscribeIO { syncState() }
                 .let { disposable.add(it) }
 
-        transactionFeeService.gasPriceType = EvmTransactionService.GasPriceType.Recommended
+        transactionFeeService.gasPriceType = EvmTransactionFeeService.GasPriceType.Recommended
 
     }
 

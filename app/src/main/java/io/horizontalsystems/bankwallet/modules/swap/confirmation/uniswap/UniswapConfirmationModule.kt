@@ -9,7 +9,7 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ICustomRangedFeeProvider
 import io.horizontalsystems.bankwallet.core.ethereum.EthereumFeeViewModel
 import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinServiceFactory
-import io.horizontalsystems.bankwallet.core.ethereum.EvmTransactionService
+import io.horizontalsystems.bankwallet.core.ethereum.EvmTransactionFeeService
 import io.horizontalsystems.bankwallet.core.factories.FeeRateProviderFactory
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule
@@ -27,9 +27,9 @@ object UniswapConfirmationModule {
 
         private val evmKit by lazy { blockchain.evmKit!! }
         private val coin by lazy { blockchain.coin!! }
-        private val transactionService by lazy {
+        private val transactionFeeService by lazy {
             val feeRateProvider = FeeRateProviderFactory.provider(coin) as ICustomRangedFeeProvider
-            EvmTransactionService(evmKit, feeRateProvider, 20)
+            EvmTransactionFeeService(evmKit, feeRateProvider, 20)
         }
         private val coinServiceFactory by lazy {
             EvmCoinServiceFactory(
@@ -43,7 +43,7 @@ object UniswapConfirmationModule {
             SendEvmTransactionService(
                 sendEvmData,
                 evmKit,
-                transactionService,
+                transactionFeeService,
                 App.activateCoinManager
             )
         }
@@ -56,7 +56,7 @@ object UniswapConfirmationModule {
                 }
                 EthereumFeeViewModel::class.java -> {
                     EthereumFeeViewModel(
-                        transactionService,
+                        transactionFeeService,
                         coinServiceFactory.baseCoinService
                     ) as T
                 }
