@@ -2,10 +2,12 @@ package io.horizontalsystems.bankwallet.ui.compose.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 
@@ -29,7 +31,7 @@ fun Tabs(tabs: List<String>, selectedIndex: Int, onClick: (Int) -> Unit) {
         ) {
             tabs.forEachIndexed { index, tab ->
                 Tab(
-                    modifier = Modifier.height(43.dp),
+                    modifier = Modifier.height(43.dp).padding(horizontal = 16.dp),
                     selected = tabIndex == index,
                     onClick = {
                         tabIndex = index
@@ -41,7 +43,9 @@ fun Tabs(tabs: List<String>, selectedIndex: Int, onClick: (Int) -> Unit) {
                         ) {
                             Text(
                                 text = tab,
-                                color = if (tabIndex == index) ComposeAppTheme.colors.oz else ComposeAppTheme.colors.grey
+                                color = if (tabIndex == index) ComposeAppTheme.colors.oz else ComposeAppTheme.colors.grey,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis
                             )
                         }
                     })
