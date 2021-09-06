@@ -164,7 +164,12 @@ class TransactionInfoViewItemFactory(
                             RoundingMode.HALF_EVEN
                         ).abs()
                         val formattedPrice = numberFormatter.formatCoin(price, transaction.valueIn.coin.code, 0, 8)
-                        "${valueOut.coin.code} = $formattedPrice"
+                        val formattedFiatPrice = rates[transaction.valueIn.coin]?.let { rate ->
+                            numberFormatter.formatFiat(price * rate.value, rate.currency.symbol, 0, 2).let {
+                                " ($it)"
+                            }
+                        } ?: ""
+                        "${valueOut.coin.code} = $formattedPrice$formattedFiatPrice"
                     }
 
                     middleSectionTypes.add(
