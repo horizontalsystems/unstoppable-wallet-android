@@ -30,14 +30,10 @@
         app:layout_constraintTop_toTopOf="@id/backgroundView"
         tools:text="Recipient" />
 
-    <TextView
-        android:id="@+id/valueTextView"
-        style="@style/ButtonSecondary"
+    <androidx.compose.ui.platform.ComposeView
+        android:id="@+id/valueCompose"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:ellipsize="middle"
         app:layout_constraintHorizontal_bias="1"
         app:layout_constrainedWidth="true"
         app:layout_constraintBottom_toBottomOf="@id/backgroundView"

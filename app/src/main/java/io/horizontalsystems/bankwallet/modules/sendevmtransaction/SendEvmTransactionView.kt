@@ -4,19 +4,27 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.foundation.layout.padding
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.ethereum.EthereumFeeViewModel
-import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
+import io.horizontalsystems.bankwallet.ui.compose.components.Ellipsis
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.views.ListPosition
 import io.horizontalsystems.views.inflate
 import kotlinx.android.extensions.LayoutContainer
+import kotlinx.android.synthetic.main.view_holder_evm_confirmation_subhead.*
 import kotlinx.android.synthetic.main.view_holder_title_value_hex.*
+import kotlinx.android.synthetic.main.view_holder_title_value_hex.backgroundView
+import kotlinx.android.synthetic.main.view_holder_title_value_hex.titleTextView
 import kotlinx.android.synthetic.main.view_send_evm_transaction.view.*
 
 class SendEvmTransactionView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
@@ -137,14 +145,21 @@ class SendEvmTransactionAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(
     class TitleValueHexViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
         fun bind(title: String, valueTitle: String, value: String, position: ListPosition) {
             titleTextView.text = title
-            valueTextView.text = valueTitle
+            valueCompose.setContent {
+                ComposeAppTheme {
+                    ButtonSecondaryDefault(
+                        modifier = Modifier.padding(horizontal = 16.dp),
+                        title = valueTitle,
+                        onClick = {
+                            TextHelper.copyText(value)
+                            HudHelper.showSuccessMessage(containerView, R.string.Hud_Text_Copied)
+                        },
+                        ellipsis = Ellipsis.Middle
+                    )
+                }
+            }
 
             backgroundView.setBackgroundResource(position.getBackground())
-
-            valueTextView.setOnSingleClickListener {
-                TextHelper.copyText(value)
-                HudHelper.showSuccessMessage(containerView, R.string.Hud_Text_Copied)
-            }
         }
 
         companion object {
