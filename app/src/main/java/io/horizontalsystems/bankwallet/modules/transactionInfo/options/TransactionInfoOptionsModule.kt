@@ -36,7 +36,7 @@ object TransactionInfoOptionsModule {
             adapter.evmKit
         }
 
-        private val feeCoin by lazy {
+        private val baseCoin by lazy {
             when (evmKit.networkType) {
                 EthereumKit.NetworkType.EthMainNet,
                 EthereumKit.NetworkType.EthRopsten,
@@ -56,7 +56,7 @@ object TransactionInfoOptionsModule {
 
         private val transactionService by lazy {
             val feeRateProvider = FeeRateProviderFactory.customRangedFeeProvider(
-                coin = feeCoin,
+                coin = baseCoin,
                 customLowerBound = transaction.gasPrice,
                 customUpperBound = null,
                 multiply = 1.2
@@ -66,7 +66,7 @@ object TransactionInfoOptionsModule {
 
         private val coinServiceFactory by lazy {
             EvmCoinServiceFactory(
-                feeCoin,
+                baseCoin,
                 App.coinKit,
                 App.currencyManager,
                 App.xRateManager
@@ -96,7 +96,7 @@ object TransactionInfoOptionsModule {
                     EthereumFeeViewModel(transactionService, coinServiceFactory.baseCoinService) as T
                 }
                 TransactionSpeedUpCancelViewModel::class.java -> {
-                    TransactionSpeedUpCancelViewModel(optionType, fullTransaction.receiptWithLogs == null) as T
+                    TransactionSpeedUpCancelViewModel(baseCoin, optionType, fullTransaction.receiptWithLogs == null) as T
                 }
                 else -> throw IllegalArgumentException()
             }
