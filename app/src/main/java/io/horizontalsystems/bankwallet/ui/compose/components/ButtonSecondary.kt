@@ -32,7 +32,8 @@ fun ButtonSecondaryDefault(
     modifier: Modifier = Modifier,
     title: String,
     onClick: () -> Unit,
-    enabled: Boolean = true
+    enabled: Boolean = true,
+    ellipsis: Ellipsis = Ellipsis.End
 ) {
     ButtonSecondary(
         modifier = modifier,
@@ -41,7 +42,13 @@ fun ButtonSecondaryDefault(
             backgroundColor = ComposeAppTheme.colors.steel20,
             contentColor = ComposeAppTheme.colors.oz
         ),
-        content = { Text(title, maxLines = 1, overflow = TextOverflow.Ellipsis) },
+        content = {
+            if (ellipsis == Ellipsis.End) {
+                Text(title, maxLines = 1, overflow = TextOverflow.Ellipsis)
+            } else {
+                Text(truncateIfNeeded(title), maxLines = 1, overflow = TextOverflow.Visible)
+            }
+        },
         enabled = enabled
     )
 }
@@ -193,6 +200,14 @@ fun ButtonSecondary(
     }
 }
 
+private fun truncateIfNeeded(title: String): String {
+    return if (title.length > 20) {
+        "${title.take(10)}...${title.takeLast(10)}"
+    } else {
+        title
+    }
+}
+
 object SecondaryButtonDefaults {
     private val ButtonHorizontalPadding = 16.dp
 
@@ -229,3 +244,5 @@ object SecondaryButtonDefaults {
 }
 
 class ToggleIndicator(val enabled: Boolean)
+
+enum class Ellipsis { End, Middle }
