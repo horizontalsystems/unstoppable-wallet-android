@@ -22,7 +22,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.ui.compose.*
@@ -50,26 +49,6 @@ fun ButtonSecondaryDefault(
             }
         },
         enabled = enabled
-    )
-}
-
-@Composable
-fun ButtonSecondaryMultiline(
-    modifier: Modifier = Modifier,
-    title: String,
-    onClick: () -> Unit,
-    enabled: Boolean = true
-) {
-    ButtonSecondary(
-        modifier = modifier,
-        onClick = onClick,
-        colors = ButtonDefaults.textButtonColors(
-            backgroundColor = ComposeAppTheme.colors.steel20,
-            contentColor = ComposeAppTheme.colors.oz
-        ),
-        content = { Text(title, textAlign = TextAlign.Center) },
-        enabled = enabled,
-        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 6.dp)
     )
 }
 
