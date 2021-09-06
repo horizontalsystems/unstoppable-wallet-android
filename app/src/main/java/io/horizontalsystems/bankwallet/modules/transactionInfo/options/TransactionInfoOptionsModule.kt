@@ -7,7 +7,7 @@ import io.horizontalsystems.bankwallet.core.ICustomRangedFeeProvider
 import io.horizontalsystems.bankwallet.core.adapters.EvmTransactionsAdapter
 import io.horizontalsystems.bankwallet.core.ethereum.EthereumFeeViewModel
 import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinServiceFactory
-import io.horizontalsystems.bankwallet.core.ethereum.EvmTransactionService
+import io.horizontalsystems.bankwallet.core.ethereum.EvmTransactionFeeService
 import io.horizontalsystems.bankwallet.core.factories.FeeRateProviderFactory
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionService
@@ -61,7 +61,7 @@ object TransactionInfoOptionsModule {
                 customUpperBound = null,
                 multiply = 1.2
             ) as ICustomRangedFeeProvider
-            EvmTransactionService(evmKit, feeRateProvider)
+            EvmTransactionFeeService(evmKit, feeRateProvider)
         }
 
         private val coinServiceFactory by lazy {

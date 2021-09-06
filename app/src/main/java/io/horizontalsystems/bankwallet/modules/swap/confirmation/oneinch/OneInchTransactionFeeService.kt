@@ -2,7 +2,7 @@ package io.horizontalsystems.bankwallet.modules.swap.confirmation.oneinch
 
 import android.os.Parcelable
 import io.horizontalsystems.bankwallet.core.*
-import io.horizontalsystems.bankwallet.core.ethereum.EvmTransactionService.*
+import io.horizontalsystems.bankwallet.core.ethereum.EvmTransactionFeeService.*
 import io.horizontalsystems.bankwallet.core.ethereum.IEvmTransactionFeeService
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.DataState
