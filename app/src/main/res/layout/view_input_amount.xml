@@ -14,38 +14,16 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
 
-    <Button
-        android:id="@+id/btnMax"
-        style="@style/ButtonSecondary"
+    <androidx.compose.ui.platform.ComposeView
+        android:id="@+id/amountInputButtonsCompose"
         android:layout_width="wrap_content"
-        android:layout_height="28dp"
-        android:layout_marginEnd="8dp"
+        android:layout_height="wrap_content"
         android:text="@string/Send_Button_Max"
-        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@id/amountDivider"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:visibility="visible" />
-
-    <ImageButton
-        android:id="@+id/btnDelete"
-        style="@style/ImageButtonSecondary"
-        android:layout_width="28dp"
-        android:layout_height="28dp"
-        android:layout_marginEnd="8dp"
-        android:src="@drawable/ic_delete_20"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@id/amountDivider"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <androidx.constraintlayout.widget.Barrier
-        android:id="@+id/buttonsBarrier"
-        android:layout_width="1dp"
-        android:layout_height="wrap_content"
-        app:barrierDirection="left"
-        app:constraint_referenced_ids="btnMax,btnDelete"
-        app:layout_constraintTop_toTopOf="parent" />
+        tools:layout_height="28dp"
+        />
 
     <TextView
         android:id="@+id/estimatedLabel"
@@ -53,15 +31,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
-        android:layout_marginEnd="10dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
         android:ellipsize="end"
         android:lines="1"
         android:text="@string/Swap_Estimated"
         android:visibility="gone"
         app:layout_constrainedWidth="true"
-        app:layout_constraintBottom_toTopOf="@id/amountDivider"
-        app:layout_constraintEnd_toStartOf="@id/buttonsBarrier"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toStartOf="@id/amountInputButtonsCompose"
+        app:layout_constraintTop_toTopOf="parent"
+        />
 
     <TextView
         android:id="@+id/topAmountPrefix"
