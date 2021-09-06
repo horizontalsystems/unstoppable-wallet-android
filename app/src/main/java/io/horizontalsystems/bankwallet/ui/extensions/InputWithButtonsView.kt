@@ -6,26 +6,40 @@ import android.text.TextWatcher
 import android.util.AttributeSet
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.EditorInfo
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import androidx.lifecycle.LifecycleOwner
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.swap.settings.IVerifiedInputViewModel
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
 import kotlinx.android.synthetic.main.view_input_with_buttons.view.*
+import kotlinx.android.synthetic.main.view_input_with_buttons.view.title
 
-class InputWithButtonsView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
-    : ConstraintLayout(context, attrs, defStyleAttr) {
+class InputWithButtonsView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : ConstraintLayout(context, attrs, defStyleAttr) {
 
     private var onTextChangeCallback: ((old: String?, new: String?) -> Unit)? = null
+    private var buttons: List<Button> = emptyList()
 
     private val textWatcher = object : TextWatcher {
         private var prevValue: String? = null
 
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
             onTextChangeCallback?.invoke(prevValue, s?.toString())
-
-            setDeleteButtonVisibility(!s.isNullOrBlank())
+            updateButtons()
         }
+
         override fun afterTextChanged(s: Editable?) {}
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             prevValue = s?.toString()
@@ -39,13 +53,44 @@ class InputWithButtonsView @JvmOverloads constructor(context: Context, attrs: At
         try {
             title.text = ta.getString(R.styleable.InputWithButtonsView_title)
             description.text = ta.getString(R.styleable.InputWithButtonsView_description)
-            input.inputType = ta.getInt(R.styleable.InputWithButtonsView_android_inputType, EditorInfo.TYPE_TEXT_VARIATION_NORMAL)
+            input.inputType = ta.getInt(
+                R.styleable.InputWithButtonsView_android_inputType,
+                EditorInfo.TYPE_TEXT_VARIATION_NORMAL
+            )
         } finally {
             ta.recycle()
         }
 
         input.addTextChangedListener(textWatcher)
-        deleteButton.setOnClickListener { input.text = null }
+    }
+
+    private fun updateButtons() {
+        actionsCompose.setContent {
+            ComposeAppTheme {
+                Row(
+                    horizontalArrangement = Arrangement.End,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    if (input.text.isEmpty()) {
+                        buttons.forEach { button ->
+                            ButtonSecondaryDefault(
+                                modifier = Modifier.padding(end = 8.dp),
+                                title = button.title,
+                                onClick = button.onClick
+                            )
+                        }
+                    } else {
+                        ButtonSecondaryCircle(
+                            modifier = Modifier.padding(end = 8.dp),
+                            icon = R.drawable.ic_delete_20,
+                            onClick = {
+                                input.text = null
+                            }
+                        )
+                    }
+                }
+            }
+        }
     }
 
     fun setText(text: String?, skipChangeEvent: Boolean = true, shakeAnimate: Boolean = false) {
@@ -68,11 +113,17 @@ class InputWithButtonsView @JvmOverloads constructor(context: Context, attrs: At
                 startAnimation(AnimationUtils.loadAnimation(context, R.anim.shake_edittext))
             }
         }
-        setDeleteButtonVisibility(!text.isNullOrBlank())
+
+        updateButtons()
     }
 
     fun setHint(text: String?) {
         input.hint = text
+    }
+
+    fun bind(buttons: List<Button>) {
+        this.buttons = buttons
+        updateButtons()
     }
 
     fun setError(text: String?) {
@@ -84,32 +135,6 @@ class InputWithButtonsView @JvmOverloads constructor(context: Context, attrs: At
 
     fun onTextChange(callback: (old: String?, new: String?) -> Unit) {
         onTextChangeCallback = callback
-    }
-
-    fun setLeftButtonTitle(text: String) {
-        inputButtonLeft.text = text
-    }
-
-    fun onLeftButtonClick(callback: () -> Unit) {
-        inputButtonLeft.setOnClickListener {
-            callback()
-        }
-    }
-
-    fun setRightButtonTitle(text: String) {
-        inputButtonRight.text = text
-    }
-
-    fun onRightButtonClick(callback: () -> Unit) {
-        inputButtonRight.setOnClickListener {
-            callback()
-        }
-    }
-
-    private fun setDeleteButtonVisibility(visible: Boolean) {
-        deleteButton.isVisible = visible
-        inputButtonLeft.isVisible = !visible
-        inputButtonRight.isVisible = !visible
     }
 
     fun setViewModel(viewModel: IVerifiedInputViewModel, lifecycleOwner: LifecycleOwner) {
@@ -136,16 +161,9 @@ class InputWithButtonsView @JvmOverloads constructor(context: Context, attrs: At
             }
         }
 
-        // todo: it should work with any number of buttons
-        viewModel.inputFieldButtonItems.getOrNull(0)?.let { button ->
-            setLeftButtonTitle(button.title)
-            onLeftButtonClick(button.onClick)
-        }
-
-        viewModel.inputFieldButtonItems.getOrNull(1)?.let { button ->
-            setRightButtonTitle(button.title)
-            onRightButtonClick(button.onClick)
-        }
+        bind(viewModel.inputFieldButtonItems.map { Button(it.title, it.onClick) })
     }
+
+    data class Button(val title: String, val onClick: () -> Unit)
 
 }
