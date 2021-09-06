@@ -56,7 +56,8 @@ val Throwable.convertedError: Throwable
         is HttpException -> {
             val errorBody = response()?.errorBody()?.string()
             if (errorBody?.contains("Try to leave the buffer of ETH for gas") == true ||
-                errorBody?.contains("you may not have enough ETH balance for gas fee") == true
+                errorBody?.contains("you may not have enough ETH balance for gas fee") == true ||
+                errorBody?.contains("Not enough ETH balance") == true
             ) {
                 EvmError.InsufficientBalanceWithFee
             } else if(errorBody?.contains("cannot estimate") == true) {
