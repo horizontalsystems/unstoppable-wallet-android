@@ -18,6 +18,7 @@ import io.horizontalsystems.hodler.HodlerOutputData
 import io.horizontalsystems.hodler.HodlerPlugin
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
+import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.subjects.PublishSubject
 import java.math.BigDecimal
@@ -89,7 +90,39 @@ abstract class BitcoinBaseAdapter(
         get() = adapterStateUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
 
     override fun getTransactionRecordsFlowable(coin: Coin?, transactionType: FilterTransactionType): Flowable<List<TransactionRecord>> {
-        return transactionRecordsSubject.toFlowable(BackpressureStrategy.BUFFER)
+        val observable: Observable<List<TransactionRecord>> = when (transactionType) {
+            FilterTransactionType.All -> {
+                transactionRecordsSubject
+            }
+            FilterTransactionType.Incoming -> {
+                transactionRecordsSubject
+                    .map { records ->
+                        records.filter {
+                            it is BitcoinIncomingTransactionRecord ||
+                                    (it is BitcoinOutgoingTransactionRecord && it.sentToSelf)
+                        }
+                    }
+                    .filter {
+                        it.isNotEmpty()
+                    }
+            }
+            FilterTransactionType.Outgoing -> {
+                transactionRecordsSubject
+                    .map { records ->
+                        records.filter { it is BitcoinOutgoingTransactionRecord }
+                    }
+                    .filter {
+                        it.isNotEmpty()
+                    }
+
+            }
+            FilterTransactionType.Swap,
+            FilterTransactionType.Approve -> {
+                Observable.empty()
+            }
+        }
+
+        return observable.toFlowable(BackpressureStrategy.BUFFER)
     }
 
     override val debugInfo: String = ""
