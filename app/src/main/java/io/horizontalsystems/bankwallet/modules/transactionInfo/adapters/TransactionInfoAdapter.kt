@@ -4,6 +4,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.compose.foundation.layout.*
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.core.view.isVisible
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
@@ -11,6 +14,10 @@ import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.transactionInfo.*
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoItemType.*
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
+import io.horizontalsystems.bankwallet.ui.compose.components.Ellipsis
 import io.horizontalsystems.views.ListPosition
 import io.horizontalsystems.views.inflate
 import kotlinx.android.extensions.LayoutContainer
@@ -122,12 +129,9 @@ class TransactionInfoAdapter(
         private val ozColor = getColor(R.color.oz)
 
         fun bind(item: TransactionInfoViewItem) {
-            btnAction.isVisible = false
-            decoratedText.isVisible = false
-            decoratedTextLeft.isVisible = false
+            setButtons(item)
             transactionStatusView.isVisible = false
             valueText.isVisible = false
-            btnAction.isVisible = false
             statusInfoIcon.isVisible = false
             rightInfoIcon.isVisible = false
 
@@ -160,22 +164,7 @@ class TransactionInfoAdapter(
                 }
                 is Decorated -> {
                     setDefaultStyle()
-
                     txtTitle.text = type.title
-                    decoratedText.text = type.value
-                    decoratedText.isVisible = true
-
-                    type.actionButton?.let { actionButton ->
-                        btnAction.setImageResource(actionButton.getIcon())
-                        btnAction.isVisible = true
-                        btnAction.setOnClickListener {
-                            listener.onActionButtonClick(actionButton)
-                        }
-                    }
-
-                    decoratedText.setOnClickListener {
-                        listener.onAddressClick(type.value)
-                    }
                 }
                 is Status -> {
                     setDefaultStyle()
@@ -190,16 +179,7 @@ class TransactionInfoAdapter(
                 }
                 is RawTransaction -> {
                     setDefaultStyle()
-
                     txtTitle.text = type.title
-
-                    type.actionButton?.let { actionButton ->
-                        btnAction.setImageResource(actionButton.getIcon())
-                        btnAction.isVisible = true
-                        btnAction.setOnClickListener {
-                            listener.onActionButtonClick(actionButton)
-                        }
-                    }
                 }
                 is LockState -> {
                     setDefaultStyle()
@@ -226,17 +206,60 @@ class TransactionInfoAdapter(
                 }
                 is Options -> {
                     txtTitle.text = type.title
+                }
+            }
+        }
 
-                    decoratedTextLeft.text = type.optionButtonOne.title
-                    decoratedTextLeft.isVisible = true
-                    decoratedTextLeft.setOnClickListener {
-                        listener.onOptionButtonClick(type.optionButtonOne.type)
-                    }
-
-                    decoratedText.text = type.optionButtonTwo.title
-                    decoratedText.isVisible = true
-                    decoratedText.setOnClickListener {
-                        listener.onOptionButtonClick(type.optionButtonTwo.type)
+        private fun setButtons(item: TransactionInfoViewItem) {
+            buttonsCompose.setContent {
+                ComposeAppTheme {
+                    Row(modifier = Modifier.padding(start = 16.dp)) {
+                        if (item.type is Decorated) {
+                            val endPadding = if (item.type.actionButton != null) 8.dp else 0.dp
+                            ButtonSecondaryDefault(
+                                modifier = Modifier.padding(end = endPadding),
+                                title = item.type.value,
+                                onClick = {
+                                    listener.onAddressClick(item.type.value)
+                                },
+                                ellipsis = Ellipsis.Middle(if (item.type.actionButton != null) 5 else 10)
+                            )
+                            item.type.actionButton?.let { button ->
+                                ButtonSecondaryCircle(
+                                    icon = button.getIcon(),
+                                    onClick = {
+                                        listener.onActionButtonClick(button)
+                                    }
+                                )
+                            }
+                        }
+                        if (item.type is RawTransaction) {
+                            item.type.actionButton?.let { button ->
+                                ButtonSecondaryCircle(
+                                    icon = button.getIcon(),
+                                    onClick = {
+                                        listener.onActionButtonClick(button)
+                                    }
+                                )
+                            }
+                        }
+                        if (item.type is Options) {
+                            ButtonSecondaryDefault(
+                                modifier = Modifier.padding(end = 8.dp),
+                                title = item.type.optionButtonOne.title,
+                                onClick = {
+                                    listener.onOptionButtonClick(item.type.optionButtonOne.type)
+                                },
+                                ellipsis = Ellipsis.End
+                            )
+                            ButtonSecondaryDefault(
+                                title = item.type.optionButtonTwo.title,
+                                onClick = {
+                                    listener.onOptionButtonClick(item.type.optionButtonTwo.type)
+                                },
+                                ellipsis = Ellipsis.End
+                            )
+                        }
                     }
                 }
             }
