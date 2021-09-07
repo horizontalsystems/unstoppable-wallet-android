@@ -18,6 +18,7 @@
     <string name="Button_Change">更改</string>
     <string name="Button_Add">添加</string>
     <string name="Button_Approve">批准</string>
+    <string name="Button_Confirm">Confirm</string>
     <string name="Button_Connect">连接</string>
     <string name="Button_Reject">拒绝</string>
     <string name="Button_Disconnect">断开连接</string>
@@ -25,6 +26,7 @@
     <string name="Button_Create">创建</string>
     <string name="Button_Restore">恢复</string>
     <string name="Button_Reset">Reset</string>
+    <string name="Button_Reconnect">Reconnect</string>
     <string name="Error">出错</string>
     <string name="NotAvailable">不可用</string>
     <string name="Any">Any</string>
@@ -240,6 +242,7 @@
     <string name="Send_Confirmation_Amount">金额</string>
     <string name="Send_Confirmation_To">接收人</string>
     <string name="Send_Confirmation_Method">方法</string>
+    <string name="Send_Confirmation_Nonce">Nonce</string>
     <string name="Send_Confirmation_Receiver">接收器</string>
     <string name="Send_Confirmation_EstimateTime">预计时间：</string>
     <string name="Send_Confirmation_Send_Button">发送​​</string>
@@ -283,17 +286,23 @@
     <!--Wallet Connect-->
     <string name="WalletConnect_Title">Wallet Connect</string>
     <string name="WalletConnect_Request">请求</string>
+    <string name="WalletConnect_SendRequest_Title">Send</string>
+    <string name="WalletConnect_ApproveRequest_Title">Approve</string>
+    <string name="WalletConnect_SwapRequest_Title">Swap</string>
+    <string name="WalletConnect_UnknownRequest_Title">Contract Call</string>
     <string name="WalletConnect_Url">URL</string>
     <string name="WalletConnect_Status">状态</string>
     <string name="WalletConnect_SignedTransactions">已签署的交易</string>
     <string name="WalletConnect_Approve_Hint">点击批准，表示您允许此应用查看您的公开地址。这是保护您的数据免受潜在钓鱼风险威胁的重要安全步骤。</string>
     <string name="WalletConnect_Ready_Hint">您可以前往浏览器。在浏览器中进行交互时不要关闭此页面。</string>
+    <string name="WalletConnect_Reconnect_Hint">Failed to establish connection. Try reconnecting again.</string>
     <string name="WalletConnect_Error_InvalidUrl">无效的URL地址</string>
     <string name="WalletConnect_Requirement">要求</string>
     <string name="WalletConnect_Status_Offline">离线</string>
     <string name="WalletConnect_Status_Online">在线</string>
     <string name="WalletConnect_Status_Connecting">正在连接...</string>
     <string name="WalletConnect_NewConnect">新连接</string>
+    <string name="WalletConnect_Disconnecting">Disconnecting</string>
     <string name="WalletConnect_SignMessageRequest_Title">签名请求</string>
     <string name="WalletConnect_SignMessageRequest_Domain">域名</string>
     <string name="WalletConnect_SignMessageRequest_ShowMessageTitle">待签名消息</string>
@@ -303,6 +312,7 @@
     <string name="EthereumTransaction_Error_InsufficientBalance">交易要求%s用于发送。</string>
     <string name="EthereumTransaction_Error_InsufficientBalanceForFee">當前%s餘額低於處理此交易所需的金額，包括交易費用。</string>
     <string name="EthereumTransaction_Error_LowerThanBaseGasLimit">选定的费用值太低，将被拒绝！</string>
+    <string name="EthereumTransaction_Error_CannotEstimate">Error! Check balance and ensure there is enough %s to cover fee. Or try increasing price slippage amount and try again. Will retry in 3 sec…</string>
     <!--Swap-->
     <string name="Swap">掉期交易</string>
     <string name="Swap_FromAmountTitle">您支付</string>
@@ -313,6 +323,8 @@
     <string name="Swap_Balance">余额</string>
     <string name="Swap_Allowance">补贴</string>
     <string name="Swap_Price">价格</string>
+    <string name="Swap_SellPrice">Sell Price</string>
+    <string name="Swap_BuyPrice">Buy Price</string>
     <string name="Swap_PriceImpact">价格影响</string>
     <string name="Swap_MinimumReceived">保证金额</string>
     <string name="Swap_EstimatedFee">预估费用</string>
@@ -328,6 +340,8 @@
     <string name="Swap_MaximumPaid">最大支付金额</string>
     <string name="Swap_MinimumGot">保证金额</string>
     <string name="Swap_PoweredBy">技术支持：</string>
+    <string name="Swap_SelectSwapProvider_Title">Swap Provider</string>
+    <string name="Swap_SelectSwapProvider_Subtitle">----------</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">高级设置</string>
     <string name="SwapSettings_Service">服务</string>
@@ -429,6 +443,9 @@
     <string name="TransactionInfo_YouGot">您已获得</string>
     <string name="TransactionInfo_Resend">重新发送</string>
     <string name="TransactionInfo_RevokeApproval">撤销批准</string>
+    <string name="TransactionInfo_Options">Options</string>
+    <string name="TransactionInfo_SpeedUp">Speed Up</string>
+    <string name="TransactionInfo_Cancel">Cancel</string>
     <string name="StatusInfo_Pending">待处理</string>
     <string name="StatusInfo_Processing">正在处理</string>
     <string name="StatusInfo_Confirmed">已完成</string>
@@ -437,6 +454,14 @@
     <string name="StatusInfo_ProcessingDescription">交易已包括在区块链中，但尚未达到永久终结状态。此时，可以安全地考虑以较小金额完成的交易。对于大额支付，建议等待直至交易状态变为已完成。</string>
     <string name="StatusInfo_ConfirmedDescription">交易已完成并被视为永久和不可逆。</string>
     <string name="StatusInfo_FailedDescription">交易未得到处理，也未发生价值转移。状态为失败的交易仍然被写入区块链，并耗费交易费用。Unstoppable应用无法显示此类交易失败的原因，但用户可以自己在公共区块资源管理器上查找，如etherscan.io。</string>
+    <!-- Transaction Info Options -->
+    <string name="TransactionInfoOptions_SpeedUp_Title">Speed Up</string>
+    <string name="TransactionInfoOptions_SpeedUp_Description">This action will attempt to invalidate previous transaction by resending it with a higher fee. If the original transaction remains pending when a new one sent there is s a high chance (not guaranteed) that it will be invalidated and replaced. Only one of these two transactions will be included in the blockchain.</string>
+    <string name="TransactionInfoOptions_SpeedUp_Button">Resend</string>
+    <string name="TransactionInfoOptions_Cancel_Title">Cancel</string>
+    <string name="TransactionInfoOptions_Cancel_Description">This action will attempt to invalidate previous transaction by resending as a new 0 %s transaction to self. If the original transaction remains pending when a new one sent there is s a high chance (not guaranteed) that it will be invalidated and replaced. Only one of these two transactions will be included in the blockchain.</string>
+    <string name="TransactionInfoOptions_Cancel_Button">Cancel Transaction</string>
+    <string name="TransactionInfoOptions_Warning_TransactionInBlock">Transaction already in block</string>
     <!-- Info -->
     <string name="Info_LockTime_Title">时间锁定</string>
     <string name="Info_LockTime_Description">汇款人通过将在%s失效的消费锁定汇出这些资金。\n\n无需担心，收到的比特币已经属于您，但在锁定期限结束前，您无法在比特币网络上消费它们。</string>
@@ -558,7 +583,6 @@
     <string name="Binance_Backend_Error_MemoRequired">收款人要求在转账交易中包含非空的备注</string>
     <string name="Binance_Backend_Error_RequiresDigits">要求备注仅包含数字</string>
     <!--Hud texts-->
-    <string name="Hud_Text_Success">成功</string>
     <string name="Hud_Text_NoInternet">没有网络</string>
     <string name="Hud_Text_Copied">已复制</string>
     <string name="Hud_Text_Created">已创建</string>
