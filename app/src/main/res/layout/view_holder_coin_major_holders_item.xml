@@ -30,35 +30,15 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="2.01%" />
 
-    <Button
-        android:id="@+id/btnHolderAddress"
-        style="@style/ButtonSecondary"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="38dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/btnDetails"
-        app:layout_constraintStart_toEndOf="@+id/txtHolderRate"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="ere we can have very very very very very address" />
-
-    <ImageButton
-        android:id="@+id/btnDetails"
-        style="@style/ButtonSecondary"
+    <androidx.compose.ui.platform.ComposeView
+        android:id="@+id/buttonsCompose"
         android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="16dp"
-        android:paddingStart="6dp"
-        android:paddingTop="6dp"
-        android:paddingEnd="6dp"
-        android:paddingBottom="6dp"
-        android:src="@drawable/ic_globe_20"
-        app:layout_constraintBottom_toBottomOf="@id/btnHolderAddress"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/btnHolderAddress"
-        app:layout_constraintTop_toTopOf="@id/btnHolderAddress"
-        app:tint="@color/button_secondary_text_color_selector"
-        tools:text="ere we can have very very very very very address" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_height="28dp"
+        tools:layout_width="50dp"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
