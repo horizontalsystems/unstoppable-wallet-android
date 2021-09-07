@@ -11,9 +11,7 @@ import io.horizontalsystems.bitcoincore.AbstractKit
 import io.horizontalsystems.bitcoincore.BitcoinCore
 import io.horizontalsystems.bitcoincore.core.Bip
 import io.horizontalsystems.bitcoincore.core.IPluginData
-import io.horizontalsystems.bitcoincore.models.TransactionDataSortType
-import io.horizontalsystems.bitcoincore.models.TransactionInfo
-import io.horizontalsystems.bitcoincore.models.TransactionStatus
+import io.horizontalsystems.bitcoincore.models.*
 import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.hodler.HodlerOutputData
@@ -25,7 +23,6 @@ import io.reactivex.subjects.PublishSubject
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.util.*
-import kotlin.math.absoluteValue
 
 abstract class BitcoinBaseAdapter(
     open val kit: AbstractKit,
@@ -124,7 +121,20 @@ abstract class BitcoinBaseAdapter(
         limit: Int,
         transactionType: FilterTransactionType
     ): Single<List<TransactionRecord>> {
-        return kit.transactions(from?.uid, limit).map { it.map { tx -> transactionRecord(tx) } }
+        return try {
+            kit.transactions(from?.uid, getBitcoinTransactionTypeFilter(transactionType), limit).map { it.map { tx -> transactionRecord(tx) } }
+        } catch (e: UnsupportedFilterException) {
+            Single.just(listOf())
+        }
+    }
+
+    private fun getBitcoinTransactionTypeFilter(transactionType: FilterTransactionType): TransactionFilterType? {
+        return when (transactionType) {
+            FilterTransactionType.All -> null
+            FilterTransactionType.Incoming -> TransactionFilterType.Incoming
+            FilterTransactionType.Outgoing -> TransactionFilterType.Outgoing
+            else -> throw UnsupportedFilterException()
+        }
     }
 
     override fun getRawTransaction(transactionHash: String): String? {
@@ -201,44 +211,13 @@ abstract class BitcoinBaseAdapter(
     }
 
     fun transactionRecord(transaction: TransactionInfo): TransactionRecord {
-        var myInputsTotalValue = 0L
-        var allInputsMine = true
-        var from: String? = null
-        var to: String? = null
+        val from = transaction.inputs.find { input ->
+            input.address != null
+        }?.address
 
-        transaction.inputs.forEach { input ->
-            if (input.mine) {
-                myInputsTotalValue += input.value ?: 0
-            } else {
-                allInputsMine = false
-            }
-
-            if (from == null && input.address != null) {
-                from = input.address
-            }
-        }
-
-        var myOutputsTotalValue = 0L
-        var myChangeOutputsTotalValue = 0L
-        transaction.outputs.filter { it.value > 0 }.forEach { output ->
-            if (output.mine) {
-                myOutputsTotalValue += output.value
-
-                if (output.changeOutput) {
-                    myChangeOutputsTotalValue += output.value
-                }
-            }
-
-            if (to == null && output.address != null && !output.mine) {
-                to = output.address
-            }
-        }
-
-        var amount = myOutputsTotalValue - myInputsTotalValue
-
-        if (allInputsMine) {
-            amount += transaction.fee ?: 0
-        }
+        val to = transaction.outputs.find { output ->
+            output.value > 0 && output.address != null && !output.mine
+        }?.address
 
         var transactionLockInfo: TransactionLockInfo? = null
         val lockedOutput = transaction.outputs.firstOrNull { it.pluginId == HodlerPlugin.id }
@@ -250,8 +229,8 @@ abstract class BitcoinBaseAdapter(
             }
         }
 
-        return when {
-            amount > 0 -> {
+        return when (transaction.type) {
+            TransactionType.Incoming -> {
                 BitcoinIncomingTransactionRecord(
                         source = wallet.transactionSource,
                         coin = wallet.coin,
@@ -266,11 +245,11 @@ abstract class BitcoinBaseAdapter(
                         lockInfo = transactionLockInfo,
                         conflictingHash = transaction.conflictingTxHash,
                         showRawTransaction = transaction.status == TransactionStatus.NEW || transaction.status == TransactionStatus.INVALID,
-                        amount = satoshiToBTC(amount.absoluteValue),
+                        amount = satoshiToBTC(transaction.amount),
                         from = from
                 )
             }
-            amount < 0 -> {
+            TransactionType.Outgoing -> {
                 BitcoinOutgoingTransactionRecord(
                         source = wallet.transactionSource,
                         coin = wallet.coin,
@@ -285,13 +264,12 @@ abstract class BitcoinBaseAdapter(
                         lockInfo = transactionLockInfo,
                         conflictingHash = transaction.conflictingTxHash,
                         showRawTransaction = transaction.status == TransactionStatus.NEW || transaction.status == TransactionStatus.INVALID,
-                        amount = satoshiToBTC(amount.absoluteValue),
+                        amount = satoshiToBTC(transaction.amount),
                         to = to,
                         sentToSelf = false
                 )
             }
-            else -> {
-                amount = myOutputsTotalValue - myChangeOutputsTotalValue
+            TransactionType.SentToSelf -> {
                 BitcoinOutgoingTransactionRecord(
                         source = wallet.transactionSource,
                         coin = wallet.coin,
@@ -306,7 +284,7 @@ abstract class BitcoinBaseAdapter(
                         lockInfo = transactionLockInfo,
                         conflictingHash = transaction.conflictingTxHash,
                         showRawTransaction = transaction.status == TransactionStatus.NEW || transaction.status == TransactionStatus.INVALID,
-                        amount = satoshiToBTC(amount.absoluteValue),
+                        amount = satoshiToBTC(transaction.amount),
                         to = to,
                         sentToSelf = true
                 )

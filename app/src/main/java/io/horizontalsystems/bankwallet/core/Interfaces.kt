@@ -194,6 +194,8 @@ interface ITransactionsAdapter {
     fun getTransactionRecordsFlowable(coin: Coin?, transactionType: FilterTransactionType): Flowable<List<TransactionRecord>>
 }
 
+class UnsupportedFilterException: Exception()
+
 interface IBalanceAdapter {
     val balanceState: AdapterState
     val balanceStateUpdatedFlowable: Flowable<Unit>
