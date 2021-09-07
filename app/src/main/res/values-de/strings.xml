@@ -18,6 +18,7 @@
     <string name="Button_Change">Ändern</string>
     <string name="Button_Add">Hinzufügen</string>
     <string name="Button_Approve">Genehmigen</string>
+    <string name="Button_Confirm">Confirm</string>
     <string name="Button_Connect">Verbinden</string>
     <string name="Button_Reject">Verwerfen</string>
     <string name="Button_Disconnect">Verbindung trennen</string>
@@ -25,6 +26,7 @@
     <string name="Button_Create">Erstellen</string>
     <string name="Button_Restore">Wiederherstellen</string>
     <string name="Button_Reset">Reset</string>
+    <string name="Button_Reconnect">Reconnect</string>
     <string name="Error">Fehler</string>
     <string name="NotAvailable">N/A</string>
     <string name="Any">Any</string>
@@ -240,6 +242,7 @@
     <string name="Send_Confirmation_Amount">Betrag</string>
     <string name="Send_Confirmation_To">An</string>
     <string name="Send_Confirmation_Method">Methode</string>
+    <string name="Send_Confirmation_Nonce">Nonce</string>
     <string name="Send_Confirmation_Receiver">Empfänger</string>
     <string name="Send_Confirmation_EstimateTime">Geschätzte Zeit:</string>
     <string name="Send_Confirmation_Send_Button">Senden</string>
@@ -283,17 +286,23 @@
     <!--Wallet Connect-->
     <string name="WalletConnect_Title">Wallet Connect</string>
     <string name="WalletConnect_Request">Anforderung</string>
+    <string name="WalletConnect_SendRequest_Title">Send</string>
+    <string name="WalletConnect_ApproveRequest_Title">Approve</string>
+    <string name="WalletConnect_SwapRequest_Title">Swap</string>
+    <string name="WalletConnect_UnknownRequest_Title">Contract Call</string>
     <string name="WalletConnect_Url">URL</string>
     <string name="WalletConnect_Status">Status</string>
     <string name="WalletConnect_SignedTransactions">Signierte Transaktion</string>
     <string name="WalletConnect_Approve_Hint">Indem Sie auf \"Genehmigen\" klicken, erlauben Sie dieser App, Ihre öffentliche Adresse anzuzeigen. Dies ist ein wichtiger Sicherheitsschritt, um Ihre Daten vor potenziellen Phishing-Risiken zu schützen.</string>
     <string name="WalletConnect_Ready_Hint">Sie können den Browser aufrufen. Schließen Sie diese Seite nicht, während Sie im Browser interagieren.</string>
+    <string name="WalletConnect_Reconnect_Hint">Failed to establish connection. Try reconnecting again.</string>
     <string name="WalletConnect_Error_InvalidUrl">Ungültige URL-Adresse</string>
     <string name="WalletConnect_Requirement">Anforderung</string>
     <string name="WalletConnect_Status_Offline">Offline</string>
     <string name="WalletConnect_Status_Online">Online</string>
     <string name="WalletConnect_Status_Connecting">Verbinde…</string>
     <string name="WalletConnect_NewConnect">Neue Verbindung</string>
+    <string name="WalletConnect_Disconnecting">Disconnecting</string>
     <string name="WalletConnect_SignMessageRequest_Title">Signaturanfrage</string>
     <string name="WalletConnect_SignMessageRequest_Domain">Domain</string>
     <string name="WalletConnect_SignMessageRequest_ShowMessageTitle">Zu unterzeichnende Nachricht</string>
@@ -303,6 +312,7 @@
     <string name="EthereumTransaction_Error_InsufficientBalance">Die Transaktion erfordert %s zum Senden</string>
     <string name="EthereumTransaction_Error_InsufficientBalanceForFee">Das aktuelle %s-Guthaben liegt unter dem für die Abwicklung dieser Transaktion erforderlichen Betrag einschließlich der Transaktionsgebühr.</string>
     <string name="EthereumTransaction_Error_LowerThanBaseGasLimit">Der gewählte Gebührenwert ist zu niedrig und wird abgelehnt!</string>
+    <string name="EthereumTransaction_Error_CannotEstimate">Error! Check balance and ensure there is enough %s to cover fee. Or try increasing price slippage amount and try again. Will retry in 3 sec…</string>
     <!--Swap-->
     <string name="Swap">Tauschen</string>
     <string name="Swap_FromAmountTitle">Sie bezahlen</string>
@@ -313,6 +323,8 @@
     <string name="Swap_Balance">Guthaben</string>
     <string name="Swap_Allowance">Vergütung</string>
     <string name="Swap_Price">Preis</string>
+    <string name="Swap_SellPrice">Sell Price</string>
+    <string name="Swap_BuyPrice">Buy Price</string>
     <string name="Swap_PriceImpact">Preisauswirkungen</string>
     <string name="Swap_MinimumReceived">Garantierter Betrag</string>
     <string name="Swap_EstimatedFee">Geschätzte Gebühren</string>
@@ -328,6 +340,8 @@
     <string name="Swap_MaximumPaid">Maximal bezahlt</string>
     <string name="Swap_MinimumGot">Garantierter Betrag</string>
     <string name="Swap_PoweredBy">Betrieben durch</string>
+    <string name="Swap_SelectSwapProvider_Title">Swap Provider</string>
+    <string name="Swap_SelectSwapProvider_Subtitle">----------</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">Erweiterte Einstellungen</string>
     <string name="SwapSettings_Service">Dienst</string>
@@ -429,6 +443,9 @@
     <string name="TransactionInfo_YouGot">Du bekommst</string>
     <string name="TransactionInfo_Resend">Nochmal senden</string>
     <string name="TransactionInfo_RevokeApproval">Genehmigung widerrufen</string>
+    <string name="TransactionInfo_Options">Options</string>
+    <string name="TransactionInfo_SpeedUp">Speed Up</string>
+    <string name="TransactionInfo_Cancel">Cancel</string>
     <string name="StatusInfo_Pending">Anstehend</string>
     <string name="StatusInfo_Processing">In Bearbeitung</string>
     <string name="StatusInfo_Confirmed">Abgeschlossen</string>
@@ -437,6 +454,14 @@
     <string name="StatusInfo_ProcessingDescription">Die Transaktion wurde bereits in die Blockchain aufgenommen, ist aber noch nicht endgültig abgeschlossen. Zu diesem Zeitpunkt kann die Transaktion für kleinere Zahlungen als abgeschlossen betrachtet werden. Bei größeren Zahlungen wird empfohlen, zu warten, bis der Transaktionsstatus auf abgeschlossen wechselt.</string>
     <string name="StatusInfo_ConfirmedDescription">Die Transaktion ist abgeschlossen und gilt als dauerhaft und unumkehrbar.</string>
     <string name="StatusInfo_FailedDescription">Die Transaktion wurde nicht verarbeitet und es fand keine Wertübertragung statt. Transaktionen mit Fail-Status werden weiterhin in die Blockchain geschrieben und verbrauchen Transaktionsgebühren. Die Unstoppable-App kann den Grund für das Fehlschlagen solcher Transaktionen nicht anzeigen, aber Benutzer können ihn selbst auf einem öffentlichen Block-Exlorer, z. B. etherscan.io, nachschlagen.</string>
+    <!-- Transaction Info Options -->
+    <string name="TransactionInfoOptions_SpeedUp_Title">Speed Up</string>
+    <string name="TransactionInfoOptions_SpeedUp_Description">This action will attempt to invalidate previous transaction by resending it with a higher fee. If the original transaction remains pending when a new one sent there is s a high chance (not guaranteed) that it will be invalidated and replaced. Only one of these two transactions will be included in the blockchain.</string>
+    <string name="TransactionInfoOptions_SpeedUp_Button">Resend</string>
+    <string name="TransactionInfoOptions_Cancel_Title">Cancel</string>
+    <string name="TransactionInfoOptions_Cancel_Description">This action will attempt to invalidate previous transaction by resending as a new 0 %s transaction to self. If the original transaction remains pending when a new one sent there is s a high chance (not guaranteed) that it will be invalidated and replaced. Only one of these two transactions will be included in the blockchain.</string>
+    <string name="TransactionInfoOptions_Cancel_Button">Cancel Transaction</string>
+    <string name="TransactionInfoOptions_Warning_TransactionInBlock">Transaction already in block</string>
     <!-- Info -->
     <string name="Info_LockTime_Title">TimeLock</string>
     <string name="Info_LockTime_Description">Der Sender hat dieses Guthaben mit einer Ausgabesperre versehen, die zu dem %s abläuft.\n\nKeine Sorge, die erhaltenen Bitcoin sind bereits Ihre. Aber bis zum Ablauf der Sperrzeit können Sie sie nicht im Bitcoin-Netzwerk ausgeben.</string>
@@ -558,7 +583,6 @@
     <string name="Binance_Backend_Error_MemoRequired">Empfänger benötigt nicht-leeren Vermerk bei Transfer einer Transaktion</string>
     <string name="Binance_Backend_Error_RequiresDigits">Der Vermerk darf nur Zahlen enthalten</string>
     <!--Hud texts-->
-    <string name="Hud_Text_Success">Erfolgreich</string>
     <string name="Hud_Text_NoInternet">Kein Internet</string>
     <string name="Hud_Text_Copied">Kopiert</string>
     <string name="Hud_Text_Created">Erstellt</string>
