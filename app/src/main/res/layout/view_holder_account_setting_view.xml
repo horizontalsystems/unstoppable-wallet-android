@@ -31,20 +31,19 @@
         android:textAlignment="textStart"
         android:textColor="@color/oz"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/decoratedText"
+        app:layout_constraintEnd_toStartOf="@id/decoratedTextCompose"
         app:layout_constraintStart_toEndOf="@id/icon"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="ZEC Birthday Height" />
 
-    <TextView
-        android:id="@+id/decoratedText"
-        style="@style/ButtonSecondary"
+    <androidx.compose.ui.platform.ComposeView
+        android:id="@+id/decoratedTextCompose"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="12345678" />
+        tools:layout_width="50dp"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
