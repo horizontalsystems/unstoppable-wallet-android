@@ -42,10 +42,13 @@ fun ButtonSecondaryDefault(
             contentColor = ComposeAppTheme.colors.oz
         ),
         content = {
-            if (ellipsis == Ellipsis.End) {
-                Text(title, maxLines = 1, overflow = TextOverflow.Ellipsis)
-            } else {
-                Text(truncateIfNeeded(title), maxLines = 1, overflow = TextOverflow.Visible)
+            when (ellipsis) {
+                Ellipsis.End -> Text(title, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                is Ellipsis.Middle -> Text(
+                    truncateIfNeeded(title, ellipsis.characterCount),
+                    maxLines = 1,
+                    overflow = TextOverflow.Visible
+                )
             }
         },
         enabled = enabled
@@ -179,9 +182,9 @@ fun ButtonSecondary(
     }
 }
 
-private fun truncateIfNeeded(title: String): String {
-    return if (title.length > 20) {
-        "${title.take(10)}...${title.takeLast(10)}"
+private fun truncateIfNeeded(title: String, characterCount: Int): String {
+    return if (title.length > characterCount * 2) {
+        "${title.take(characterCount)}...${title.takeLast(characterCount)}"
     } else {
         title
     }
@@ -224,4 +227,7 @@ object SecondaryButtonDefaults {
 
 class ToggleIndicator(val enabled: Boolean)
 
-enum class Ellipsis { End, Middle }
+sealed class Ellipsis {
+    object End : Ellipsis()
+    class Middle(val characterCount: Int = 5) : Ellipsis()
+}

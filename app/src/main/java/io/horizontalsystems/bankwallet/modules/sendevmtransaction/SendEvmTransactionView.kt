@@ -154,7 +154,7 @@ class SendEvmTransactionAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(
                             TextHelper.copyText(value)
                             HudHelper.showSuccessMessage(containerView, R.string.Hud_Text_Copied)
                         },
-                        ellipsis = Ellipsis.Middle
+                        ellipsis = Ellipsis.Middle(10)
                     )
                 }
             }
