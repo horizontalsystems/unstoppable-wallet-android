@@ -18,6 +18,7 @@
     <string name="Button_Change">Изменить</string>
     <string name="Button_Add">Добавить</string>
     <string name="Button_Approve">Разрешить</string>
+    <string name="Button_Confirm">Confirm</string>
     <string name="Button_Connect">Подключиться</string>
     <string name="Button_Reject">Отклонить</string>
     <string name="Button_Disconnect">Отсоединить</string>
@@ -25,6 +26,7 @@
     <string name="Button_Create">Создать</string>
     <string name="Button_Restore">Восстановить</string>
     <string name="Button_Reset">Reset</string>
+    <string name="Button_Reconnect">Reconnect</string>
     <string name="Error">Ошибка</string>
     <string name="NotAvailable">Нет данных</string>
     <string name="Any">Any</string>
@@ -240,6 +242,7 @@
     <string name="Send_Confirmation_Amount">Сумма</string>
     <string name="Send_Confirmation_To">Кому</string>
     <string name="Send_Confirmation_Method">Метод </string>
+    <string name="Send_Confirmation_Nonce">Nonce</string>
     <string name="Send_Confirmation_Receiver">Получатель</string>
     <string name="Send_Confirmation_EstimateTime">Приблизительное Время:</string>
     <string name="Send_Confirmation_Send_Button">Отправить</string>
@@ -283,17 +286,23 @@
     <!--Wallet Connect-->
     <string name="WalletConnect_Title">Wallet Connect</string>
     <string name="WalletConnect_Request">Запрос</string>
+    <string name="WalletConnect_SendRequest_Title">Send</string>
+    <string name="WalletConnect_ApproveRequest_Title">Approve</string>
+    <string name="WalletConnect_SwapRequest_Title">Swap</string>
+    <string name="WalletConnect_UnknownRequest_Title">Contract Call</string>
     <string name="WalletConnect_Url">URL</string>
     <string name="WalletConnect_Status">Статус</string>
     <string name="WalletConnect_SignedTransactions">Подписанные Транзакции</string>
     <string name="WalletConnect_Approve_Hint">Нажимая \"Подтвердить\", вы разрешаете этому приложению просматривать ваш общедоступный адрес. Это важный шаг для защиты ваших данных от потенциальных рисков фишинга.</string>
     <string name="WalletConnect_Ready_Hint">Вы можете перейти в браузер. Не закрывайте эту страницу во время использования браузера.</string>
+    <string name="WalletConnect_Reconnect_Hint">Failed to establish connection. Try reconnecting again.</string>
     <string name="WalletConnect_Error_InvalidUrl">Неверный URL-адрес</string>
     <string name="WalletConnect_Requirement">Требования</string>
     <string name="WalletConnect_Status_Offline">Не доступен</string>
     <string name="WalletConnect_Status_Online">Доступен</string>
     <string name="WalletConnect_Status_Connecting">Подключение…</string>
     <string name="WalletConnect_NewConnect">Новое Подключение</string>
+    <string name="WalletConnect_Disconnecting">Disconnecting</string>
     <string name="WalletConnect_SignMessageRequest_Title">Запрос на подпись</string>
     <string name="WalletConnect_SignMessageRequest_Domain">Домен</string>
     <string name="WalletConnect_SignMessageRequest_ShowMessageTitle">Сообщение для подписи</string>
@@ -303,6 +312,7 @@
     <string name="EthereumTransaction_Error_InsufficientBalance">Для отправки транзакции требуется %s</string>
     <string name="EthereumTransaction_Error_InsufficientBalanceForFee">Текущий баланс %s ниже суммы, необходимой для обработки этой транзакции, включая комиссию за транзакцию.</string>
     <string name="EthereumTransaction_Error_LowerThanBaseGasLimit">Выбранное значение комиссии слишком низкое и будет отклонено!</string>
+    <string name="EthereumTransaction_Error_CannotEstimate">Error! Check balance and ensure there is enough %s to cover fee. Or try increasing price slippage amount and try again. Will retry in 3 sec…</string>
     <!--Swap-->
     <string name="Swap">Обменять</string>
     <string name="Swap_FromAmountTitle">Вы платите</string>
@@ -313,6 +323,8 @@
     <string name="Swap_Balance">Баланс</string>
     <string name="Swap_Allowance">Разрешение</string>
     <string name="Swap_Price">Цена</string>
+    <string name="Swap_SellPrice">Sell Price</string>
+    <string name="Swap_BuyPrice">Buy Price</string>
     <string name="Swap_PriceImpact">Колебание Цен</string>
     <string name="Swap_MinimumReceived">Гарантированная Сумма</string>
     <string name="Swap_EstimatedFee">Предполагаемая Комиссия</string>
@@ -328,6 +340,8 @@
     <string name="Swap_MaximumPaid">Максимальная Выплата</string>
     <string name="Swap_MinimumGot">Гарантированная Сумма</string>
     <string name="Swap_PoweredBy">При поддержке</string>
+    <string name="Swap_SelectSwapProvider_Title">Swap Provider</string>
+    <string name="Swap_SelectSwapProvider_Subtitle">----------</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">Дополнительные Настройки</string>
     <string name="SwapSettings_Service">Сервис</string>
@@ -429,6 +443,9 @@
     <string name="TransactionInfo_YouGot">Вы Получили</string>
     <string name="TransactionInfo_Resend">Отправить Повторно</string>
     <string name="TransactionInfo_RevokeApproval">Отозвать Подтверждение</string>
+    <string name="TransactionInfo_Options">Options</string>
+    <string name="TransactionInfo_SpeedUp">Speed Up</string>
+    <string name="TransactionInfo_Cancel">Cancel</string>
     <string name="StatusInfo_Pending">В обработке</string>
     <string name="StatusInfo_Processing">В Процессе</string>
     <string name="StatusInfo_Confirmed">Завершено</string>
@@ -437,6 +454,14 @@
     <string name="StatusInfo_ProcessingDescription">Транзакция уже включена в блокчейн, но пока не обработана. На данном этапе транзакции считаются завершенными для небольших платежей. Что касается завершения обработки более крупных транзакций, стоит дождаться смены статуса.</string>
     <string name="StatusInfo_ConfirmedDescription">Транзакция завершена и считается постоянной и необратимой.</string>
     <string name="StatusInfo_FailedDescription">Транзакция не была обработана, и передача заданной суммы не произошла. Транзакции со статусом отказа также записываются в блокчейн и за них взимаются комиссии. Приложение Unstoppable не может показать причину ошибочной обработки таких транзакций, но пользователи могут найти эту информацию на сайте block explorer, т.e. etherscan.io.</string>
+    <!-- Transaction Info Options -->
+    <string name="TransactionInfoOptions_SpeedUp_Title">Speed Up</string>
+    <string name="TransactionInfoOptions_SpeedUp_Description">This action will attempt to invalidate previous transaction by resending it with a higher fee. If the original transaction remains pending when a new one sent there is s a high chance (not guaranteed) that it will be invalidated and replaced. Only one of these two transactions will be included in the blockchain.</string>
+    <string name="TransactionInfoOptions_SpeedUp_Button">Resend</string>
+    <string name="TransactionInfoOptions_Cancel_Title">Cancel</string>
+    <string name="TransactionInfoOptions_Cancel_Description">This action will attempt to invalidate previous transaction by resending as a new 0 %s transaction to self. If the original transaction remains pending when a new one sent there is s a high chance (not guaranteed) that it will be invalidated and replaced. Only one of these two transactions will be included in the blockchain.</string>
+    <string name="TransactionInfoOptions_Cancel_Button">Cancel Transaction</string>
+    <string name="TransactionInfoOptions_Warning_TransactionInBlock">Transaction already in block</string>
     <!-- Info -->
     <string name="Info_LockTime_Title">TimeLock</string>
     <string name="Info_LockTime_Description">Эти средства были отправлены с временной блокировкой, которая истекает %s.\n\nНе волнуйтесь, полученные биткойны уже ваши, но до истечения периода блокировки, вы не сможете потратить их.</string>
@@ -561,7 +586,6 @@
     <string name="Binance_Backend_Error_MemoRequired">При отправке транзакции получателю необходимо заполнить поле мемо</string>
     <string name="Binance_Backend_Error_RequiresDigits">Поле мемо должно содержать только цифры</string>
     <!--Hud texts-->
-    <string name="Hud_Text_Success">Успешно</string>
     <string name="Hud_Text_NoInternet">Нет Интернета</string>
     <string name="Hud_Text_Copied">Скопировано</string>
     <string name="Hud_Text_Created">Создан</string>
