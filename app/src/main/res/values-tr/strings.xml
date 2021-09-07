@@ -18,6 +18,7 @@
     <string name="Button_Change">Değiştir</string>
     <string name="Button_Add">Ekle</string>
     <string name="Button_Approve">Onayla</string>
+    <string name="Button_Confirm">Confirm</string>
     <string name="Button_Connect">Bağlan</string>
     <string name="Button_Reject">Reddet</string>
     <string name="Button_Disconnect">Bağlantıyı Kes</string>
@@ -25,6 +26,7 @@
     <string name="Button_Create">Oluştur</string>
     <string name="Button_Restore">Geri Yükle</string>
     <string name="Button_Reset">Sıfırla</string>
+    <string name="Button_Reconnect">Reconnect</string>
     <string name="Error">Hata</string>
     <string name="NotAvailable">N/A</string>
     <string name="Any">Any</string>
@@ -240,6 +242,7 @@
     <string name="Send_Confirmation_Amount">Tutar</string>
     <string name="Send_Confirmation_To">Alan</string>
     <string name="Send_Confirmation_Method">Yöntem</string>
+    <string name="Send_Confirmation_Nonce">Nonce</string>
     <string name="Send_Confirmation_Receiver">Fatura</string>
     <string name="Send_Confirmation_EstimateTime">Tahmini süre:</string>
     <string name="Send_Confirmation_Send_Button">Gönder</string>
@@ -283,17 +286,23 @@
     <!--Wallet Connect-->
     <string name="WalletConnect_Title">Wallet Connect</string>
     <string name="WalletConnect_Request">İstek</string>
+    <string name="WalletConnect_SendRequest_Title">Send</string>
+    <string name="WalletConnect_ApproveRequest_Title">Approve</string>
+    <string name="WalletConnect_SwapRequest_Title">Swap</string>
+    <string name="WalletConnect_UnknownRequest_Title">Contract Call</string>
     <string name="WalletConnect_Url">URL</string>
     <string name="WalletConnect_Status">Durum</string>
     <string name="WalletConnect_SignedTransactions">İmzalanan İşlemler</string>
     <string name="WalletConnect_Approve_Hint">Onayla butonunu tıklayarak, bu uygulamanın açık adresinizi görüntülemesine izin vermiş olursunuz. Bu, verilerinizi olası kimlik hırsızlığı risklerinden korumak için önemli bir güvenlik adımıdır.</string>
     <string name="WalletConnect_Ready_Hint">Tarayıcıya gidebilirsiniz. Tarayıcıda etkileşim içindeyken bu sayfayı kapatmayın.</string>
+    <string name="WalletConnect_Reconnect_Hint">Failed to establish connection. Try reconnecting again.</string>
     <string name="WalletConnect_Error_InvalidUrl">Geçersiz URL Adresi</string>
     <string name="WalletConnect_Requirement">Gereksinim</string>
     <string name="WalletConnect_Status_Offline">Çevrimdışı</string>
     <string name="WalletConnect_Status_Online">Çevrimiçi</string>
     <string name="WalletConnect_Status_Connecting">Bağlanıyor…</string>
     <string name="WalletConnect_NewConnect">Yeni bağlantı</string>
+    <string name="WalletConnect_Disconnecting">Disconnecting</string>
     <string name="WalletConnect_SignMessageRequest_Title">İmza Talebi</string>
     <string name="WalletConnect_SignMessageRequest_Domain">Domain</string>
     <string name="WalletConnect_SignMessageRequest_ShowMessageTitle">İmza için mesaj</string>
@@ -303,6 +312,7 @@
     <string name="EthereumTransaction_Error_InsufficientBalance">İşlem, göndermek için %s gerektirir</string>
     <string name="EthereumTransaction_Error_InsufficientBalanceForFee">Mevcut %s bakiyesi, işlem ücreti dahil bu işlemi gerçekleştirmek için gereken miktarın altında.</string>
     <string name="EthereumTransaction_Error_LowerThanBaseGasLimit">Seçilen ücret tutarı çok düşüktür ve reddedilecektir!</string>
+    <string name="EthereumTransaction_Error_CannotEstimate">Error! Check balance and ensure there is enough %s to cover fee. Or try increasing price slippage amount and try again. Will retry in 3 sec…</string>
     <!--Swap-->
     <string name="Swap">Takas</string>
     <string name="Swap_FromAmountTitle">Ödediğiniz</string>
@@ -313,6 +323,8 @@
     <string name="Swap_Balance">Bakiye</string>
     <string name="Swap_Allowance">Ödenek</string>
     <string name="Swap_Price">Fiyat</string>
+    <string name="Swap_SellPrice">Sell Price</string>
+    <string name="Swap_BuyPrice">Buy Price</string>
     <string name="Swap_PriceImpact">Fiyat Etkisi</string>
     <string name="Swap_MinimumReceived">Garantili Tutar</string>
     <string name="Swap_EstimatedFee">Tahmini Ücret</string>
@@ -328,6 +340,8 @@
     <string name="Swap_MaximumPaid">Maksimum Ödenen</string>
     <string name="Swap_MinimumGot">Garantili Tutar</string>
     <string name="Swap_PoweredBy">İle çalışır</string>
+    <string name="Swap_SelectSwapProvider_Title">Swap Provider</string>
+    <string name="Swap_SelectSwapProvider_Subtitle">----------</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">Gelişmiş Ayarlar</string>
     <string name="SwapSettings_Service">Hizmet</string>
@@ -429,6 +443,9 @@
     <string name="TransactionInfo_YouGot">Aldığınız Tutar</string>
     <string name="TransactionInfo_Resend">Yeniden Gönder</string>
     <string name="TransactionInfo_RevokeApproval">Onayı İptal Et</string>
+    <string name="TransactionInfo_Options">Options</string>
+    <string name="TransactionInfo_SpeedUp">Speed Up</string>
+    <string name="TransactionInfo_Cancel">Cancel</string>
     <string name="StatusInfo_Pending">Devam ediyor</string>
     <string name="StatusInfo_Processing">İşleniyor</string>
     <string name="StatusInfo_Confirmed">Tamamlandı</string>
@@ -437,6 +454,14 @@
     <string name="StatusInfo_ProcessingDescription">İşlem blok zincirine dahil edildi ama kalıcı bir sonuca ulaşmadı. Bu noktada, küçük ödemeler için işlemin tamamlandığını düşünebilirsiniz. Daha büyük ödemeler için ise, işlem durumu tamamlandı olarak değişene kadar beklemeniz önerilir.</string>
     <string name="StatusInfo_ConfirmedDescription">İşlem tamamlandı ve bunun kalıcı ve tersine çevrilemez olduğu kabul edilir.</string>
     <string name="StatusInfo_FailedDescription">İşlem gerçekleşmedi ve hiçbir değer transfer edilmedi. Başarısız durumdaki işlemler yine de blok zincirine yazılır ve işlem ücretlerini tüketir. Unstoppable uygulaması, bu tür işlemlerin başarısız olma nedenini gösteremez, ama kullanıcılar, etherscan.io gibi açık bir blok gezgininde bunu kontrol edebilirler.</string>
+    <!-- Transaction Info Options -->
+    <string name="TransactionInfoOptions_SpeedUp_Title">Speed Up</string>
+    <string name="TransactionInfoOptions_SpeedUp_Description">This action will attempt to invalidate previous transaction by resending it with a higher fee. If the original transaction remains pending when a new one sent there is s a high chance (not guaranteed) that it will be invalidated and replaced. Only one of these two transactions will be included in the blockchain.</string>
+    <string name="TransactionInfoOptions_SpeedUp_Button">Resend</string>
+    <string name="TransactionInfoOptions_Cancel_Title">Cancel</string>
+    <string name="TransactionInfoOptions_Cancel_Description">This action will attempt to invalidate previous transaction by resending as a new 0 %s transaction to self. If the original transaction remains pending when a new one sent there is s a high chance (not guaranteed) that it will be invalidated and replaced. Only one of these two transactions will be included in the blockchain.</string>
+    <string name="TransactionInfoOptions_Cancel_Button">Cancel Transaction</string>
+    <string name="TransactionInfoOptions_Warning_TransactionInBlock">Transaction already in block</string>
     <!-- Info -->
     <string name="Info_LockTime_Title">TimeLock</string>
     <string name="Info_LockTime_Description">Gönderici bu fonları %s.\n\n tarihte sona erecek şekilde bir harcama kilidiyle gönderdi. Endişelenmeyin, alınan Bitcoin\'ler zaten sizindir ancak kilitleme süresi sona erene kadar bunları harcayamazsınız.</string>
@@ -558,7 +583,6 @@
     <string name="Binance_Backend_Error_MemoRequired">Aktarım işleminde alıcı boş olmayan not istiyor</string>
     <string name="Binance_Backend_Error_RequiresDigits">Notun yalnızca rakam içermesini gerektirir</string>
     <!--Hud texts-->
-    <string name="Hud_Text_Success">Başarılı</string>
     <string name="Hud_Text_NoInternet">Internet Bağlantısı Yok</string>
     <string name="Hud_Text_Copied">Kopyalandı</string>
     <string name="Hud_Text_Created">Oluşturuldu</string>
