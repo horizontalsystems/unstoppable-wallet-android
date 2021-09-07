@@ -18,6 +18,7 @@
     <string name="Button_Change">변경하기</string>
     <string name="Button_Add">추가</string>
     <string name="Button_Approve">승인</string>
+    <string name="Button_Confirm">Confirm</string>
     <string name="Button_Connect">연결</string>
     <string name="Button_Reject">거절</string>
     <string name="Button_Disconnect">연결 해제</string>
@@ -25,6 +26,7 @@
     <string name="Button_Create">생성하기</string>
     <string name="Button_Restore">복구</string>
     <string name="Button_Reset">Reset</string>
+    <string name="Button_Reconnect">Reconnect</string>
     <string name="Error">오류</string>
     <string name="NotAvailable">해당 없음 </string>
     <string name="Any">Any</string>
@@ -240,6 +242,7 @@
     <string name="Send_Confirmation_Amount">양</string>
     <string name="Send_Confirmation_To">에게</string>
     <string name="Send_Confirmation_Method">메소드</string>
+    <string name="Send_Confirmation_Nonce">Nonce</string>
     <string name="Send_Confirmation_Receiver">받는 사람</string>
     <string name="Send_Confirmation_EstimateTime">예상 소요시간:</string>
     <string name="Send_Confirmation_Send_Button">전송</string>
@@ -283,17 +286,23 @@
     <!--Wallet Connect-->
     <string name="WalletConnect_Title">Wallet Connect</string>
     <string name="WalletConnect_Request">요청</string>
+    <string name="WalletConnect_SendRequest_Title">Send</string>
+    <string name="WalletConnect_ApproveRequest_Title">Approve</string>
+    <string name="WalletConnect_SwapRequest_Title">Swap</string>
+    <string name="WalletConnect_UnknownRequest_Title">Contract Call</string>
     <string name="WalletConnect_Url">URL 주소</string>
     <string name="WalletConnect_Status">상태</string>
     <string name="WalletConnect_SignedTransactions">서명한 트랜잭션</string>
     <string name="WalletConnect_Approve_Hint">승인을 눌러 이 앱이 귀하의 공공 주소를 볼 수 있도록 허용하십시오. 이것은 잠재적인 피싱 위험으로부터 데이터를 보호하기 위한 중요한 보안 단계 입니다.</string>
     <string name="WalletConnect_Ready_Hint">브라우저로 이동하십시오. 브라우저에서 상호 작용하는 동안에는 이 페이지를 닫지 마십시오.</string>
+    <string name="WalletConnect_Reconnect_Hint">Failed to establish connection. Try reconnecting again.</string>
     <string name="WalletConnect_Error_InvalidUrl">잘못된 주소</string>
     <string name="WalletConnect_Requirement">요구 사항</string>
     <string name="WalletConnect_Status_Offline">오프라인</string>
     <string name="WalletConnect_Status_Online">온라인</string>
     <string name="WalletConnect_Status_Connecting">연결중...</string>
     <string name="WalletConnect_NewConnect">새로운 연결</string>
+    <string name="WalletConnect_Disconnecting">Disconnecting</string>
     <string name="WalletConnect_SignMessageRequest_Title">서명 요청</string>
     <string name="WalletConnect_SignMessageRequest_Domain">도메인</string>
     <string name="WalletConnect_SignMessageRequest_ShowMessageTitle">서명할 메시지</string>
@@ -303,6 +312,7 @@
     <string name="EthereumTransaction_Error_InsufficientBalance">거래에서 전송하려면 %s가 필요합니다</string>
     <string name="EthereumTransaction_Error_InsufficientBalanceForFee">현재 %s 잔액은 거래 수수료를 포함하여이 거래를 처리하는 데 필요한 금액보다 적습니다.</string>
     <string name="EthereumTransaction_Error_LowerThanBaseGasLimit">선택한 수수료 값이 너무 낮아 거부됩니다!</string>
+    <string name="EthereumTransaction_Error_CannotEstimate">Error! Check balance and ensure there is enough %s to cover fee. Or try increasing price slippage amount and try again. Will retry in 3 sec…</string>
     <!--Swap-->
     <string name="Swap">스왑</string>
     <string name="Swap_FromAmountTitle">지불하기</string>
@@ -313,6 +323,8 @@
     <string name="Swap_Balance">잔액</string>
     <string name="Swap_Allowance">허용량</string>
     <string name="Swap_Price">금액</string>
+    <string name="Swap_SellPrice">Sell Price</string>
+    <string name="Swap_BuyPrice">Buy Price</string>
     <string name="Swap_PriceImpact">가격 영향</string>
     <string name="Swap_MinimumReceived">보증 금액</string>
     <string name="Swap_EstimatedFee">예상 수수료</string>
@@ -328,6 +340,8 @@
     <string name="Swap_MaximumPaid">최대 지불액</string>
     <string name="Swap_MinimumGot">보증 금액</string>
     <string name="Swap_PoweredBy">제공</string>
+    <string name="Swap_SelectSwapProvider_Title">Swap Provider</string>
+    <string name="Swap_SelectSwapProvider_Subtitle">----------</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">고급 설정</string>
     <string name="SwapSettings_Service">서비스</string>
@@ -429,6 +443,9 @@
     <string name="TransactionInfo_YouGot">받았던 금액</string>
     <string name="TransactionInfo_Resend">재전송</string>
     <string name="TransactionInfo_RevokeApproval">승인 취소</string>
+    <string name="TransactionInfo_Options">Options</string>
+    <string name="TransactionInfo_SpeedUp">Speed Up</string>
+    <string name="TransactionInfo_Cancel">Cancel</string>
     <string name="StatusInfo_Pending">보류 중</string>
     <string name="StatusInfo_Processing">처리 중</string>
     <string name="StatusInfo_Confirmed">완료</string>
@@ -437,6 +454,14 @@
     <string name="StatusInfo_ProcessingDescription">거래는 이미 블록체인에 포함되었지만 영구적인 완결성에 도달하지 않았습니다. 이 시점에서 소액 결제를 위해 완료된 거래로 간주하는 것이 안전합니다. 더 큰 지불의 경우 거래 상태가 완료로 변경될 때까지 기다리는 것이 좋습니다.</string>
     <string name="StatusInfo_ConfirmedDescription">거래가 완료되고 영구적이고 되돌릴 수 없는 것으로 간주됩니다.</string>
     <string name="StatusInfo_FailedDescription">거래가 처리되지 않았으며 가치 이전이 발생하지 않았습니다. 실패 상태의 거래는 여전히 블록체인에 기록되고 거래 수수료가 소비됩니다. Unstoppable 앱은 이러한 거래에 대한 실패 이유를 표시할 수 없지만 사용자는 etherscan.io와 같은 공개 블록 탐색기에서 직접 찾을 수 있습니다.</string>
+    <!-- Transaction Info Options -->
+    <string name="TransactionInfoOptions_SpeedUp_Title">Speed Up</string>
+    <string name="TransactionInfoOptions_SpeedUp_Description">This action will attempt to invalidate previous transaction by resending it with a higher fee. If the original transaction remains pending when a new one sent there is s a high chance (not guaranteed) that it will be invalidated and replaced. Only one of these two transactions will be included in the blockchain.</string>
+    <string name="TransactionInfoOptions_SpeedUp_Button">Resend</string>
+    <string name="TransactionInfoOptions_Cancel_Title">Cancel</string>
+    <string name="TransactionInfoOptions_Cancel_Description">This action will attempt to invalidate previous transaction by resending as a new 0 %s transaction to self. If the original transaction remains pending when a new one sent there is s a high chance (not guaranteed) that it will be invalidated and replaced. Only one of these two transactions will be included in the blockchain.</string>
+    <string name="TransactionInfoOptions_Cancel_Button">Cancel Transaction</string>
+    <string name="TransactionInfoOptions_Warning_TransactionInBlock">Transaction already in block</string>
     <!-- Info -->
     <string name="Info_LockTime_Title">시간 자물쇠</string>
     <string name="Info_LockTime_Description">발송자는 이러한 자금들을 %s 날짜에 만료가 되는 잠금 지출과 함께 보냈습니다. \n\n걱정 하지마십시오, 수신된 비트코인은 이미 귀하의 것입니다 하지만 잠금 기간이 만료될때 까지 비트코인 네트워크에서 사용하실 수 없습니다.</string>
@@ -558,7 +583,6 @@
     <string name="Binance_Backend_Error_MemoRequired">수신자는 송금 내역에 메모 기록을 필요로 합니다</string>
     <string name="Binance_Backend_Error_RequiresDigits">메모에는 숫자만 포함하셔야 합니다</string>
     <!--Hud texts-->
-    <string name="Hud_Text_Success">성공</string>
     <string name="Hud_Text_NoInternet">인터넷에 연결되지 않음</string>
     <string name="Hud_Text_Copied">복사됨</string>
     <string name="Hud_Text_Created">생성됨</string>
