@@ -91,7 +91,7 @@ class WalletConnectListFragment : BaseFragment(), SessionViewHolder.Listener {
 
             HudHelper.showSuccessMessage(
                 requireActivity().findViewById(android.R.id.content),
-                R.string.Hud_Text_Success
+                R.string.Hud_Text_Done
             )
         })
     }
