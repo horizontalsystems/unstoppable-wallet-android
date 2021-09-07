@@ -201,6 +201,4 @@ class BinanceAdapter(
         }
 
     }
-
-    class UnsupportedFilterException: Exception()
 }
