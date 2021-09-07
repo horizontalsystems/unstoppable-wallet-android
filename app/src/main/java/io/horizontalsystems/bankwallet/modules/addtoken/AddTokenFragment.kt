@@ -84,7 +84,7 @@ class AddTokenFragment : BaseFragment() {
         })
 
         model.showSuccess.observe(viewLifecycleOwner, Observer {
-            HudHelper.showSuccessMessage(requireView(), R.string.Hud_Text_Success, SnackbarDuration.LONG)
+            HudHelper.showSuccessMessage(requireView(), R.string.Hud_Text_Done, SnackbarDuration.LONG)
             Handler(Looper.getMainLooper()).postDelayed({
                 findNavController().popBackStack()
             }, 1500)

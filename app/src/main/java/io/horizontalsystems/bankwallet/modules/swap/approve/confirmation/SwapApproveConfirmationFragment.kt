@@ -99,7 +99,7 @@ class SwapApproveConfirmationFragment : BaseFragment() {
         sendViewModel.sendSuccessLiveData.observe(viewLifecycleOwner, {
             HudHelper.showSuccessMessage(
                 requireActivity().findViewById(android.R.id.content),
-                R.string.Hud_Text_Success
+                R.string.Hud_Text_Done
             )
             Handler(Looper.getMainLooper()).postDelayed({
                 setNavigationResult(

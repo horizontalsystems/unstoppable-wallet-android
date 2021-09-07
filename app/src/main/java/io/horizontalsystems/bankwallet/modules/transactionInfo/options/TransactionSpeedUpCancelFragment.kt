@@ -88,7 +88,7 @@ class TransactionSpeedUpCancelFragment : BaseFragment() {
         sendEvmTransactionViewModel.sendSuccessLiveData.observe(viewLifecycleOwner, { transactionHash ->
             HudHelper.showSuccessMessage(
                 requireActivity().findViewById(android.R.id.content),
-                R.string.Hud_Text_Success
+                R.string.Hud_Text_Done
             )
             Handler(Looper.getMainLooper()).postDelayed({
                 findNavController().popBackStack(R.id.transactionInfoFragment, true)
