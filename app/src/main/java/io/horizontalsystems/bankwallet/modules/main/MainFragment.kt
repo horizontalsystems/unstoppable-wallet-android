@@ -54,18 +54,10 @@ class MainFragment : BaseFragment(R.layout.fragment_main), RateAppDialogFragment
             true
         }
 
-        bottomNavigation.findViewById<View>(R.id.navigation_balance)?.setOnTouchListener(object : View.OnTouchListener {
-            val gestureDetector = GestureDetector(requireContext(), object : GestureDetector.SimpleOnGestureListener() {
-                override fun onDoubleTap(e: MotionEvent?): Boolean {
-                    viewModel.onBalanceTabDoubleTap()
-                    return false
-                }
-            })
-            override fun onTouch(v: View, event: MotionEvent?): Boolean {
-                gestureDetector.onTouchEvent(event)
-                return false
-            }
-        })
+        bottomNavigation.findViewById<View>(R.id.navigation_balance)?.setOnLongClickListener {
+            viewModel.onLongPressBalanceTab()
+            true
+        }
 
         viewModel.openWalletSwitcherLiveEvent.observe(viewLifecycleOwner, { (wallets, selectedWallet) ->
             openWalletSwitchDialog(wallets, selectedWallet) {
