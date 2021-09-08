@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.entities
 
 import android.os.Parcelable
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.coinkit.models.CoinType
 import kotlinx.android.parcel.Parcelize
 
@@ -62,6 +63,20 @@ open class AccountType : Parcelable {
             fun fromString(value: String?): Derivation? = map[value]
         }
     }
+
+    val description: String
+        get() = when (this) {
+            is Mnemonic -> {
+                val count = words.size
+
+                if (passphrase.isNotBlank()) {
+                    Translator.getString(R.string.ManageAccount_NWordsWithPassphrase, count)
+                } else {
+                    Translator.getString(R.string.ManageAccount_NWords, count)
+                }
+            }
+            else -> ""
+        }
 }
 
 fun AccountType.Derivation.addressType(): String = when (this) {
