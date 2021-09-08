@@ -341,7 +341,7 @@
     <string name="Swap_MinimumGot">Garantierter Betrag</string>
     <string name="Swap_PoweredBy">Betrieben durch</string>
     <string name="Swap_SelectSwapProvider_Title">Swap Provider</string>
-    <string name="Swap_SelectSwapProvider_Subtitle">----------</string>
+    <string name="Swap_SelectSwapProvider_Subtitle">Switcher</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">Erweiterte Einstellungen</string>
     <string name="SwapSettings_Service">Dienst</string>
@@ -622,6 +622,8 @@
     <string name="ManageAccount_BirthdayHeight">%s Geburtstagshöhe</string>
     <string name="ManageAccount_NWords">%s Wörter</string>
     <string name="ManageAccount_NWordsWithPassphrase">%s Wörter mit Passphrase</string>
+    <string name="ManageAccount_SwitchWallet_Title">Switch Wallet</string>
+    <string name="ManageAccount_SwitchWallet_Subtitle">Select wallet for quick switch</string>
     <!--Network Settings-->
     <string name="NetworkSettings_Title">Netzwerkeinstellungen</string>
     <string name="NetworkSettings_TestNetDisclaimer">Bitte wählen Sie keine Testnet-Optionen aus, wenn Sie nicht verstehen, was das ist und wie es funktioniert.\n\nTestnet ist eine parallele Blockchain zum Testen mit eigener Währung. Wenn jemand eine reguläre Zahlung an Ihre Testnet-Adresse sendet, geht diese verloren.</string>
