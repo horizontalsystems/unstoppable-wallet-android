@@ -59,9 +59,14 @@ class ZcashAdapter(
     private var downloadProgress: Int = 0
     private val today: Date = Date()
 
+    //region IReceiveAdapter
+    override val receiveAddress: String
+    //endregion
+
     init {
         val accountType = (wallet.account.type as? AccountType.Mnemonic) ?: throw UnsupportedAccountException()
         seed = Mnemonic().toSeed(accountType.words)
+        receiveAddress = DerivationTool.deriveShieldedAddress(seed, network)
 
         val isRestored = wallet.account.origin == AccountOrigin.Restored
         val birthdayHeight = when (wallet.account.origin) {
@@ -78,7 +83,7 @@ class ZcashAdapter(
             config.setSeed(seed, network)
         }
 
-        transactionsProvider = ZcashTransactionsProvider()
+        transactionsProvider = ZcashTransactionsProvider(receiveAddress)
         synchronizer = Synchronizer(Initializer(context, config))
         synchronizer.onProcessorErrorHandler = ::onProcessorError
         synchronizer.onChainErrorHandler = ::onChainError
@@ -146,10 +151,6 @@ class ZcashAdapter(
         get() = balanceUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
     //endregion
 
-    //region IReceiveAdapter
-    override val receiveAddress = DerivationTool.deriveShieldedAddress(seed, network)
-    //endregion
-
     //region ITransactionsAdapter
 
     override val transactionsState: AdapterState
@@ -175,7 +176,7 @@ class ZcashAdapter(
             Triple(transactionHash, it.timestamp, it.transactionIndex)
         }
 
-        return transactionsProvider.getTransactions(fromParams, limit)
+        return transactionsProvider.getTransactions(fromParams, transactionType, limit)
                 .map { transactions ->
                     transactions.map {
                         getTransactionRecord(it)
@@ -184,7 +185,7 @@ class ZcashAdapter(
     }
 
     override fun getTransactionRecordsFlowable(coin: Coin?, transactionType: FilterTransactionType): Flowable<List<TransactionRecord>> {
-        return transactionsProvider.newTransactionsFlowable.map { transactions ->
+        return transactionsProvider.getNewTransactionsFlowable(transactionType).map { transactions ->
             transactions.map { getTransactionRecord(it) }
         }
     }
@@ -310,13 +311,8 @@ class ZcashAdapter(
 
     private fun getTransactionRecord(transaction: ZcashTransaction): TransactionRecord {
         val transactionHashHex = transaction.transactionHash.toHexReversed()
-        var incoming = true
 
-        if (!transaction.toAddress.isNullOrEmpty() && transaction.toAddress != receiveAddress) {
-            incoming = false
-        }
-
-        return if (incoming) {
+        return if (transaction.isIncoming) {
             BitcoinIncomingTransactionRecord(
                 coin = wallet.coin,
                 uid = transactionHashHex,
