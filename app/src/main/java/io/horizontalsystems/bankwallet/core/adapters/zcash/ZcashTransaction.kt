@@ -15,8 +15,9 @@ class ZcashTransaction : Comparable<ZcashTransaction> {
     val value: Long
     val memo: String?
     val failed: Boolean
+    val isIncoming: Boolean
 
-    constructor(confirmedTransaction: ConfirmedTransaction) {
+    constructor(confirmedTransaction: ConfirmedTransaction, receiveAddress: String) {
         confirmedTransaction.let {
             id = it.id
             transactionHash = it.rawTransactionId
@@ -29,9 +30,10 @@ class ZcashTransaction : Comparable<ZcashTransaction> {
             memo = it.memo.toUtf8Memo()
             failed = false
         }
+        isIncoming = toAddress.isNullOrBlank() || toAddress == receiveAddress
     }
 
-    constructor(pendingTransaction: PendingTransaction) {
+    constructor(pendingTransaction: PendingTransaction, receiveAddress: String) {
         pendingTransaction.let {
             id = it.id
             transactionHash = it.rawTransactionId ?: byteArrayOf()
@@ -44,6 +46,7 @@ class ZcashTransaction : Comparable<ZcashTransaction> {
             memo = it.memo.toUtf8Memo()
             failed = it.isFailure()
         }
+        isIncoming = toAddress.isNullOrBlank() || toAddress == receiveAddress
     }
 
     override fun equals(other: Any?): Boolean {
