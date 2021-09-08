@@ -341,7 +341,7 @@
     <string name="Swap_MinimumGot">مقدار تضمین شده</string>
     <string name="Swap_PoweredBy">Powered by</string>
     <string name="Swap_SelectSwapProvider_Title">Swap Provider</string>
-    <string name="Swap_SelectSwapProvider_Subtitle">----------</string>
+    <string name="Swap_SelectSwapProvider_Subtitle">Switcher</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">تنظیمات پیشرفته</string>
     <string name="SwapSettings_Service">خدمات</string>
@@ -622,6 +622,8 @@
     <string name="ManageAccount_BirthdayHeight">%s Birthday Height</string>
     <string name="ManageAccount_NWords">%s words</string>
     <string name="ManageAccount_NWordsWithPassphrase">%s words with passphrase</string>
+    <string name="ManageAccount_SwitchWallet_Title">Switch Wallet</string>
+    <string name="ManageAccount_SwitchWallet_Subtitle">Select wallet for quick switch</string>
     <!--Network Settings-->
     <string name="NetworkSettings_Title">تنظیمات شبکه</string>
     <string name="NetworkSettings_TestNetDisclaimer">Please do not select Testnet options unless you understand what that is and how it works.\n\nTestnet is a parallel blockchain for testing purposes with its own currency. If someone sends a regular payment to your Testnet address, it will be lost.</string>
