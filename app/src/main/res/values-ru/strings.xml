@@ -341,7 +341,7 @@
     <string name="Swap_MinimumGot">Гарантированная Сумма</string>
     <string name="Swap_PoweredBy">При поддержке</string>
     <string name="Swap_SelectSwapProvider_Title">Swap Provider</string>
-    <string name="Swap_SelectSwapProvider_Subtitle">----------</string>
+    <string name="Swap_SelectSwapProvider_Subtitle">Switcher</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">Дополнительные Настройки</string>
     <string name="SwapSettings_Service">Сервис</string>
@@ -625,6 +625,8 @@
     <string name="ManageAccount_BirthdayHeight">%s Блок Создания</string>
     <string name="ManageAccount_NWords">%s слов</string>
     <string name="ManageAccount_NWordsWithPassphrase">%s слов с кодовой фразой</string>
+    <string name="ManageAccount_SwitchWallet_Title">Switch Wallet</string>
+    <string name="ManageAccount_SwitchWallet_Subtitle">Select wallet for quick switch</string>
     <!--Network Settings-->
     <string name="NetworkSettings_Title">Настройки Сети</string>
     <string name="NetworkSettings_TestNetDisclaimer">Пожалуйста, не выбирайте опции Testnet, если вы не понимаете, что такое и как это работает.\n\nTestnet является параллельным блокчейном для тестирования целей в своей собственной валюте. Если кто-то отправляет регулярный платеж на ваш Testnet адрес, он будет утерян.</string>
