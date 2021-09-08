@@ -341,7 +341,7 @@
     <string name="Swap_MinimumGot">보증 금액</string>
     <string name="Swap_PoweredBy">제공</string>
     <string name="Swap_SelectSwapProvider_Title">Swap Provider</string>
-    <string name="Swap_SelectSwapProvider_Subtitle">----------</string>
+    <string name="Swap_SelectSwapProvider_Subtitle">Switcher</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">고급 설정</string>
     <string name="SwapSettings_Service">서비스</string>
@@ -623,6 +623,8 @@
     <string name="ManageAccount_BirthdayHeight">생일 높이 %s</string>
     <string name="ManageAccount_NWords">%s 단어</string>
     <string name="ManageAccount_NWordsWithPassphrase">암호 문구로 이루어진 %s 단어</string>
+    <string name="ManageAccount_SwitchWallet_Title">Switch Wallet</string>
+    <string name="ManageAccount_SwitchWallet_Subtitle">Select wallet for quick switch</string>
     <!--Network Settings-->
     <string name="NetworkSettings_Title">네트워크 설정</string>
     <string name="NetworkSettings_TestNetDisclaimer">그것이 무엇이며 어떻게 작동하는지 이해하지 못하는 한 테스트넷 옵션을 선택하지 마십시오.\n\n테스트넷은 자체 통화로 테스트 목적을 위한 병렬 블록체인입니다. 누군가가 귀하의 Testnet 주소로 정기 결제를 보내면 손실됩니다.</string>
