@@ -82,18 +82,15 @@
                 app:layout_constraintStart_toStartOf="@+id/startBorder"
                 app:layout_constraintTop_toBottomOf="@+id/toCoinCard" />
 
-            <TextView
-                android:id="@+id/poweredBy"
-                style="@style/ButtonSecondary"
+            <androidx.compose.ui.platform.ComposeView
+                android:id="@+id/poweredByCompose"
                 android:layout_width="wrap_content"
-                android:layout_height="28dp"
-                android:includeFontPadding="false"
-                android:paddingStart="16dp"
-                android:paddingEnd="8dp"
-                app:drawableEndCompat="@drawable/ic_down_arrow_20"
+                android:layout_height="wrap_content"
                 app:layout_constraintEnd_toStartOf="@id/endBorder"
                 app:layout_constraintTop_toTopOf="@id/poweredByTitle"
-                tools:text="Uniswap" />
+                tools:layout_height="28dp"
+                tools:layout_width="30dp"
+                />
 
             <io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceView
                 android:id="@+id/allowanceView"

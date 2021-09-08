@@ -56,6 +56,40 @@ fun ButtonSecondaryDefault(
 }
 
 @Composable
+fun ButtonSecondaryWithIcon(
+    modifier: Modifier = Modifier,
+    title: String,
+    @DrawableRes iconRight: Int? = null,
+    onClick: () -> Unit,
+    enabled: Boolean = true
+) {
+    ButtonSecondary(
+        modifier = modifier,
+        onClick = onClick,
+        colors = ButtonDefaults.textButtonColors(
+            backgroundColor = ComposeAppTheme.colors.steel20,
+            contentColor = ComposeAppTheme.colors.oz
+        ),
+        content = {
+            if (iconRight != null) {
+                Row {
+                    Text(title, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                    Icon(
+                        modifier = Modifier.padding(start = 4.dp),
+                        painter = painterResource(id = iconRight),
+                        contentDescription = null,
+                        tint = ComposeAppTheme.colors.grey
+                    )
+                }
+            } else {
+                Text(title, maxLines = 1, overflow = TextOverflow.Ellipsis)
+            }
+        },
+        enabled = enabled
+    )
+}
+
+@Composable
 fun ButtonSecondaryTransparent(
     modifier: Modifier = Modifier,
     title: String,
