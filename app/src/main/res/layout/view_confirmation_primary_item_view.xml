@@ -82,85 +82,25 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/secondaryAmount" />
 
-    <TextView
-        android:id="@+id/domainTitle"
-        style="@style/Subhead1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="12dp"
-        android:includeFontPadding="false"
-        android:text="@string/Send_Confirmation_Domain"
-        android:textColor="@color/grey"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/domainValue"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/border2" />
-
-    <TextView
-        android:id="@+id/domainValue"
-        style="@style/ButtonSecondary"
+    <androidx.compose.ui.platform.ComposeView
+        android:id="@+id/valuesCompose"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="8dp"
-        android:singleLine="true"
-        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/border2"
-        tools:text="horizontalsystems.crypto" />
-
-    <View
-        android:id="@+id/borderDomain"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:layout_marginTop="8dp"
-        android:visibility="gone"
-        android:background="@color/steel_10"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/domainValue" />
-
-    <TextView
-        android:id="@+id/receiverTitle"
-        style="@style/Subhead1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginBottom="12dp"
-        android:includeFontPadding="false"
-        android:text="@string/Send_Confirmation_Receiver"
-        android:textColor="@color/grey"
-        app:layout_constraintBottom_toBottomOf="@id/borderMemo"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/borderDomain" />
-
-    <TextView
-        android:id="@+id/receiverValue"
-        style="@style/ButtonSecondary"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:ellipsize="middle"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/receiverTitle"
-        app:layout_constraintTop_toBottomOf="@+id/borderDomain"
-        tools:text="KBKJBHJBBJ898BHB865BHBKN" />
+        tools:layout_height="48dp"
+        />
 
     <View
         android:id="@+id/borderMemo"
         android:layout_width="0dp"
         android:layout_height="1dp"
-        android:layout_marginTop="8dp"
         android:visibility="invisible"
         android:background="@color/steel_10"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/receiverValue" />
+        app:layout_constraintTop_toBottomOf="@id/valuesCompose" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/memoLayout"
