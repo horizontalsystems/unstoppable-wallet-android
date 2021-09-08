@@ -80,7 +80,7 @@ class MainViewModel(
         disposables.clear()
     }
 
-    fun onBalanceTabDoubleTap() {
+    fun onLongPressBalanceTab() {
         val accounts = accountManager.accounts.map { account ->
             ViewItemWrapper(account.name, account, subtitle = account.type.description)
         }
