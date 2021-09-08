@@ -24,8 +24,18 @@ import io.horizontalsystems.bankwallet.modules.swap.confirmation.uniswap.Uniswap
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryWithIcon
 import io.horizontalsystems.core.getNavigationResult
 import kotlinx.android.synthetic.main.fragment_uniswap.*
+import kotlinx.android.synthetic.main.fragment_uniswap.allowanceView
+import kotlinx.android.synthetic.main.fragment_uniswap.approveStepsView
+import kotlinx.android.synthetic.main.fragment_uniswap.buttonsCompose
+import kotlinx.android.synthetic.main.fragment_uniswap.commonError
+import kotlinx.android.synthetic.main.fragment_uniswap.fromCoinCard
+import kotlinx.android.synthetic.main.fragment_uniswap.poweredByCompose
+import kotlinx.android.synthetic.main.fragment_uniswap.progressBar
+import kotlinx.android.synthetic.main.fragment_uniswap.switchButton
+import kotlinx.android.synthetic.main.fragment_uniswap.toCoinCard
 
 class UniswapFragment : SwapBaseFragment() {
 
@@ -108,10 +118,14 @@ class UniswapFragment : SwapBaseFragment() {
             uniswapViewModel.onTapSwitch()
         }
 
-        poweredBy.text = dex.provider.title
-
-        poweredBy.setOnClickListener {
-            showSwapProviderSelectorDialog()
+        poweredByCompose.setContent {
+            ComposeAppTheme {
+                ButtonSecondaryWithIcon(
+                    title = dex.provider.title,
+                    iconRight = R.drawable.ic_down_arrow_20,
+                    onClick = { showSwapProviderSelectorDialog() }
+                )
+            }
         }
 
         buttonsCompose.setViewCompositionStrategy(
