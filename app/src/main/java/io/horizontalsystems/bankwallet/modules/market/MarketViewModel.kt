@@ -6,19 +6,20 @@ import io.horizontalsystems.core.SingleLiveEvent
 
 class MarketViewModel(private val service: MarketService) : ViewModel() {
 
-    val tabs = MarketModule.Tab.values()
-    var currentTabLiveData = MutableLiveData(service.currentTab ?: MarketModule.Tab.Overview)
+    private var currentTab = service.currentTab ?: MarketModule.Tab.Overview
+
+    val tabs = MutableLiveData(Pair(MarketModule.Tab.values(), currentTab))
     val discoveryListTypeLiveEvent = SingleLiveEvent<MarketModule.ListType>()
 
-    fun onSelect(tabIndex: Int) {
-        val selectedTab = tabs[tabIndex]
-        service.currentTab = selectedTab
-        currentTabLiveData.value = selectedTab
+    fun onSelect(tab: MarketModule.Tab) {
+        service.currentTab = tab
+        currentTab = tab
+        tabs.postValue(Pair(MarketModule.Tab.values(), currentTab))
     }
 
     fun onClickSeeAll(listType: MarketModule.ListType) {
         discoveryListTypeLiveEvent.value = listType
-        onSelect(tabs.indexOfFirst { it == MarketModule.Tab.Discovery })
+        onSelect(MarketModule.Tab.Discovery)
     }
 
 }
