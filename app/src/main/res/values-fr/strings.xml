@@ -341,7 +341,7 @@
     <string name="Swap_MinimumGot">Montant garanti</string>
     <string name="Swap_PoweredBy">Propulsé par</string>
     <string name="Swap_SelectSwapProvider_Title">Swap Provider</string>
-    <string name="Swap_SelectSwapProvider_Subtitle">----------</string>
+    <string name="Swap_SelectSwapProvider_Subtitle">Switcher</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">Configuration avancée</string>
     <string name="SwapSettings_Service">Service</string>
@@ -622,6 +622,8 @@
     <string name="ManageAccount_BirthdayHeight">Hauteur de l\'anniversaire %s</string>
     <string name="ManageAccount_NWords">%s mots</string>
     <string name="ManageAccount_NWordsWithPassphrase">%s mots avec phrase d\'authentification</string>
+    <string name="ManageAccount_SwitchWallet_Title">Switch Wallet</string>
+    <string name="ManageAccount_SwitchWallet_Subtitle">Select wallet for quick switch</string>
     <!--Network Settings-->
     <string name="NetworkSettings_Title">Paramètres réseau</string>
     <string name="NetworkSettings_TestNetDisclaimer">Veuillez ne pas sélectionner les options Testnet si vous ne comprenez pas ce que c\'est et comment cela fonctionne.\n\nTestnet est une blockchain parallèle réservée aux tests et dotée de sa propre monnaie. Si quelqu\'un envoie un paiement standard à votre adresse Testnet, celui-ci sera perdu.</string>
