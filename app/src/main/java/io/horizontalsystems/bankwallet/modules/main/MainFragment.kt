@@ -2,7 +2,9 @@ package io.horizontalsystems.bankwallet.modules.main
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.GestureDetector
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import androidx.activity.addCallback
 import androidx.core.os.bundleOf
@@ -14,12 +16,16 @@ import com.google.android.material.bottomnavigation.BottomNavigationMenuView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.managers.RateAppManager
+import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.balanceonboarding.BalanceOnboardingModule
 import io.horizontalsystems.bankwallet.modules.balanceonboarding.BalanceOnboardingViewModel
 import io.horizontalsystems.bankwallet.modules.main.MainActivity.Companion.ACTIVE_TAB_KEY
 import io.horizontalsystems.bankwallet.modules.rateapp.RateAppDialogFragment
 import io.horizontalsystems.bankwallet.modules.releasenotes.ReleaseNotesFragment
 import io.horizontalsystems.bankwallet.modules.rooteddevice.RootedDeviceActivity
+import io.horizontalsystems.bankwallet.ui.selector.SelectorBottomSheetDialog
+import io.horizontalsystems.bankwallet.ui.selector.SelectorRadioItemViewHolderFactory
+import io.horizontalsystems.bankwallet.ui.selector.ViewItemWrapper
 import io.horizontalsystems.core.findNavController
 import kotlinx.android.synthetic.main.fragment_main.*
 
@@ -47,6 +53,25 @@ class MainFragment : BaseFragment(R.layout.fragment_main), RateAppDialogFragment
             }
             true
         }
+
+        bottomNavigation.findViewById<View>(R.id.navigation_balance)?.setOnTouchListener(object : View.OnTouchListener {
+            val gestureDetector = GestureDetector(requireContext(), object : GestureDetector.SimpleOnGestureListener() {
+                override fun onDoubleTap(e: MotionEvent?): Boolean {
+                    viewModel.onBalanceTabDoubleTap()
+                    return false
+                }
+            })
+            override fun onTouch(v: View, event: MotionEvent?): Boolean {
+                gestureDetector.onTouchEvent(event)
+                return false
+            }
+        })
+
+        viewModel.openWalletSwitcherLiveEvent.observe(viewLifecycleOwner, { (wallets, selectedWallet) ->
+            openWalletSwitchDialog(wallets, selectedWallet) {
+                viewModel.onSelect(it)
+            }
+        })
 
         arguments?.getInt(ACTIVE_TAB_KEY)?.let { position ->
             bottomNavigation.menu.getItem(position).isChecked = true
@@ -108,6 +133,23 @@ class MainFragment : BaseFragment(R.layout.fragment_main), RateAppDialogFragment
                 }
             }
         }
+    }
+
+    private fun openWalletSwitchDialog(
+        items: List<ViewItemWrapper<Account>>,
+        selectedItem: ViewItemWrapper<Account>?,
+        onSelectListener: (account: Account) -> Unit
+    ) {
+        val dialog = SelectorBottomSheetDialog<ViewItemWrapper<Account>>()
+        dialog.titleText = getString(R.string.ManageAccount_SwitchWallet_Title)
+        dialog.subtitleText = getString(R.string.ManageAccount_SwitchWallet_Subtitle)
+        dialog.headerIconResourceId = R.drawable.ic_switch_wallet
+        dialog.items = items
+        dialog.selectedItem = selectedItem
+        dialog.onSelectListener = { onSelectListener(it.item) }
+        dialog.itemViewHolderFactory = SelectorRadioItemViewHolderFactory()
+
+        dialog.show(childFragmentManager, "selector_dialog")
     }
 
     override fun onResume() {

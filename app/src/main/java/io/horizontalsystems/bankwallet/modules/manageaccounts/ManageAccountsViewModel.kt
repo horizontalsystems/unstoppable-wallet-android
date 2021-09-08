@@ -2,11 +2,8 @@ package io.horizontalsystems.bankwallet.modules.manageaccounts
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.Clearable
-import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
-import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule.AccountViewItem
 import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
@@ -38,22 +35,7 @@ class ManageAccountsViewModel(
 
     private fun getViewItem(item: ManageAccountsService.Item): AccountViewItem {
         val account = item.account
-        return AccountViewItem(account.id, account.name, getDescription(account.type), item.isActive, !account.isBackedUp)
-    }
-
-    private fun getDescription(accountType: AccountType): String {
-        return when (accountType) {
-            is AccountType.Mnemonic -> {
-                val count = accountType.words.size
-
-                if (accountType.passphrase.isNotBlank()) {
-                    Translator.getString(R.string.ManageAccount_NWordsWithPassphrase, count)
-                } else {
-                    Translator.getString(R.string.ManageAccount_NWords, count)
-                }
-            }
-            else -> ""
-        }
+        return AccountViewItem(account.id, account.name, account.type.description, item.isActive, !account.isBackedUp)
     }
 
     fun onSelect(accountViewItem: AccountViewItem) {

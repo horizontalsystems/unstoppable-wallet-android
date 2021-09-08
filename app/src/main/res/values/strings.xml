@@ -747,6 +747,8 @@
     <string name="ManageAccount_BirthdayHeight">%s Birthday Height</string>
     <string name="ManageAccount_NWords">%s words</string>
     <string name="ManageAccount_NWordsWithPassphrase">%s words with passphrase</string>
+    <string name="ManageAccount_SwitchWallet_Title">Switch Wallet</string>
+    <string name="ManageAccount_SwitchWallet_Subtitle">Select wallet for quick switch</string>
 
     <!--Network Settings-->
     <string name="NetworkSettings_Title">Network Settings</string>
