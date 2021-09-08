@@ -72,22 +72,6 @@
         <item name="android:fontFamily">sans-serif-medium</item>
     </style>
 
-    <style name="ButtonSecondary">
-        <item name="android:background">@drawable/button_secondary_background</item>
-        <item name="android:fontFamily">sans-serif-medium</item>
-        <item name="android:includeFontPadding">false</item>
-        <item name="android:minHeight">0dp</item>
-        <item name="android:minWidth">0dp</item>
-        <item name="android:paddingStart">16dp</item>
-        <item name="android:paddingEnd">16dp</item>
-        <item name="android:paddingTop">5.5dp</item>
-        <item name="android:paddingBottom">5.5dp</item>
-        <item name="android:textColor">@color/button_secondary_text_color_selector</item>
-        <item name="android:textSize">14sp</item>
-        <item name="android:ellipsize">middle</item>
-        <item name="android:maxLines">1</item>
-    </style>
-
     <style name="ButtonSecondaryTransparent" parent="Subhead1">
         <item name="android:background">@color/transparent</item>
         <item name="android:textColor">@color/button_secondary_transparent</item>
@@ -103,15 +87,6 @@
         <item name="android:drawableTint">@color/button_secondary_transparent</item>
         <item name="android:drawablePadding">4dp</item>
         <item name="android:paddingEnd">8dp</item>
-    </style>
-
-    <style name="ButtonTransparent" parent="ButtonSecondary">
-        <item name="android:background">@drawable/button_transparent_background</item>
-        <item name="android:textColor">@color/button_transparent_text_color</item>
-        <item name="android:paddingStart">12dp</item>
-        <item name="android:paddingEnd">12dp</item>
-        <item name="android:paddingTop">4.5dp</item>
-        <item name="android:paddingBottom">4.5dp</item>
     </style>
 
     <style name="TabComponent">
