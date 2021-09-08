@@ -14,17 +14,15 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 @Composable
 fun Tabs(tabs: List<String>, selectedIndex: Int, onClick: (Int) -> Unit) {
 
-    var tabIndex by remember { mutableStateOf(selectedIndex) }
-
     Column(modifier = Modifier.height(45.dp)) {
         TabRow(
             modifier = Modifier.height(44.dp),
-            selectedTabIndex = tabIndex,
+            selectedTabIndex = selectedIndex,
             backgroundColor = ComposeAppTheme.colors.tyler,
             contentColor = ComposeAppTheme.colors.tyler,
             indicator = @Composable { tabPositions ->
                 TabRowDefaults.Indicator(
-                    modifier = Modifier.tabIndicatorOffset(tabPositions[tabIndex]),
+                    modifier = Modifier.tabIndicatorOffset(tabPositions[selectedIndex]),
                     color = ComposeAppTheme.colors.jacob
                 )
             }
@@ -32,9 +30,8 @@ fun Tabs(tabs: List<String>, selectedIndex: Int, onClick: (Int) -> Unit) {
             tabs.forEachIndexed { index, tab ->
                 Tab(
                     modifier = Modifier.height(43.dp).padding(horizontal = 16.dp),
-                    selected = tabIndex == index,
+                    selected = selectedIndex == index,
                     onClick = {
-                        tabIndex = index
                         onClick.invoke(index)
                     },
                     content = {
@@ -43,7 +40,7 @@ fun Tabs(tabs: List<String>, selectedIndex: Int, onClick: (Int) -> Unit) {
                         ) {
                             Text(
                                 text = tab,
-                                color = if (tabIndex == index) ComposeAppTheme.colors.oz else ComposeAppTheme.colors.grey,
+                                color = if (selectedIndex == index) ComposeAppTheme.colors.oz else ComposeAppTheme.colors.grey,
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis
                             )
