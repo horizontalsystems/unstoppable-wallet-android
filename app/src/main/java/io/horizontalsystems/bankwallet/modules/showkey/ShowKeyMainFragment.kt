@@ -16,6 +16,7 @@ import io.horizontalsystems.bankwallet.modules.showkey.ShowKeyModule.ShowKeyTab
 import io.horizontalsystems.bankwallet.modules.showkey.tabs.ShowKeyTabsAdapter
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
+import io.horizontalsystems.bankwallet.ui.compose.components.TabItem
 import io.horizontalsystems.bankwallet.ui.compose.components.Tabs
 import io.horizontalsystems.core.findNavController
 import kotlinx.android.synthetic.main.fragment_show_key_main.*
@@ -54,7 +55,11 @@ class ShowKeyMainFragment : BaseFragment() {
             viewLifecycleOwner.lifecycle
         )
 
-        viewPager.isUserInputEnabled = false
+        viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback(){
+            override fun onPageSelected(position: Int) {
+                setTabs(showKeyTabs, showKeyTabs[position])
+            }
+        })
 
         buttonCloseCompose.setViewCompositionStrategy(
             ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
@@ -76,14 +81,21 @@ class ShowKeyMainFragment : BaseFragment() {
             }
         }
 
-        setTabs(viewPager)
+        selectTab(ShowKeyTab.MnemonicPhrase)
     }
 
-    private fun setTabs(viewPager: ViewPager2) {
-        val tabs = showKeyTabs.map { getString(it.title) }
+    private fun selectTab(item: ShowKeyTab) {
+        viewPager.currentItem = showKeyTabs.indexOf(item)
+        setTabs(showKeyTabs, item)
+    }
+
+    private fun setTabs(tabs: List<ShowKeyTab>, selectedTab: ShowKeyTab) {
+        val tabItems = tabs.map { showKeyTab ->
+             TabItem(getString(showKeyTab.title), showKeyTab == selectedTab, showKeyTab)
+        }
         tabsCompose.setContent {
             ComposeAppTheme {
-                Tabs(tabs, 0) { index -> viewPager.currentItem = index }
+                Tabs(tabItems) { selectTab(it) }
             }
         }
     }

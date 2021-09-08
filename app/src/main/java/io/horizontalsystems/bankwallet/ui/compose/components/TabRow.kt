@@ -11,8 +11,11 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 
+data class TabItem<T>(val title: String, val selected: Boolean, val item: T)
+
 @Composable
-fun Tabs(tabs: List<String>, selectedIndex: Int, onClick: (Int) -> Unit) {
+fun <T>Tabs(tabs: List<TabItem<T>>, onClick: (T) -> Unit) {
+    val selectedIndex = tabs.indexOfFirst { it.selected }
 
     Column(modifier = Modifier.height(45.dp)) {
         TabRow(
@@ -30,16 +33,16 @@ fun Tabs(tabs: List<String>, selectedIndex: Int, onClick: (Int) -> Unit) {
             tabs.forEachIndexed { index, tab ->
                 Tab(
                     modifier = Modifier.height(43.dp).padding(horizontal = 16.dp),
-                    selected = selectedIndex == index,
+                    selected = tab.selected,
                     onClick = {
-                        onClick.invoke(index)
+                        onClick.invoke(tab.item)
                     },
                     content = {
                         ProvideTextStyle(
                             ComposeAppTheme.typography.subhead1
                         ) {
                             Text(
-                                text = tab,
+                                text = tab.title,
                                 color = if (selectedIndex == index) ComposeAppTheme.colors.oz else ComposeAppTheme.colors.grey,
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis

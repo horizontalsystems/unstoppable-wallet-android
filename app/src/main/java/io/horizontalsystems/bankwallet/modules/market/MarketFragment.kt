@@ -9,6 +9,7 @@ import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseWithSearchFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.TabItem
 import io.horizontalsystems.bankwallet.ui.compose.components.Tabs
 import io.horizontalsystems.core.findNavController
 import kotlinx.android.synthetic.main.fragment_market.*
@@ -30,15 +31,9 @@ class MarketFragment : BaseWithSearchFragment() {
         viewPager.adapter = MarketTabsAdapter(childFragmentManager, viewLifecycleOwner.lifecycle)
         viewPager.isUserInputEnabled = false
 
-        marketViewModel.currentTabLiveData.observe(viewLifecycleOwner) { tab: MarketModule.Tab ->
-            val currentItemIndex = when (tab) {
-                MarketModule.Tab.Overview -> 0
-                MarketModule.Tab.Discovery -> 1
-                MarketModule.Tab.Watchlist -> 2
-            }
-
-            setTabs(currentItemIndex)
-            viewPager.setCurrentItem(currentItemIndex, false)
+        marketViewModel.tabs.observe(viewLifecycleOwner) { (tabs, selectedTab) ->
+            setTabs(tabs, selectedTab)
+            viewPager.setCurrentItem(tabs.indexOf(selectedTab), false)
         }
 
         toolbar.setOnMenuItemClickListener { item ->
@@ -56,11 +51,13 @@ class MarketFragment : BaseWithSearchFragment() {
         )
     }
 
-    private fun setTabs(currentItemIndex: Int) {
-        val tabs = marketViewModel.tabs.map { getString(it.titleResId) }
+    private fun setTabs(tabs: Array<MarketModule.Tab>, selectedTab: MarketModule.Tab) {
+        val tabItems = tabs.map {
+            TabItem(getString(it.titleResId), it == selectedTab, it)
+        }
         tabsCompose.setContent {
             ComposeAppTheme {
-                Tabs(tabs, currentItemIndex) { index -> marketViewModel.onSelect(index) }
+                Tabs(tabItems) { item -> marketViewModel.onSelect(item) }
             }
         }
     }
