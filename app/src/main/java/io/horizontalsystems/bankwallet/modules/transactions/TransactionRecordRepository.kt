@@ -16,6 +16,7 @@ class TransactionRecordRepository(
     private val adapterManager: TransactionAdapterManager,
 ) : ITransactionRecordRepository {
 
+    private var transactionType: FilterTransactionType = FilterTransactionType.All
     private var selectedWallet: TransactionWallet? = null
 
     private val itemsSubject = PublishSubject.create<List<TransactionRecord>>()
@@ -48,7 +49,7 @@ class TransactionRecordRepository(
             var adapter = currentAdapters.remove(transactionWallet)
             if (adapter == null) {
                 adapterManager.getAdapter(transactionWallet.source)?.let {
-                    adapter = TransactionAdapterWrapper(it, transactionWallet)
+                    adapter = TransactionAdapterWrapper(it, transactionWallet, transactionType)
                 }
             }
 
@@ -84,6 +85,7 @@ class TransactionRecordRepository(
     }
 
     override fun setTransactionType(transactionType: FilterTransactionType) {
+        this.transactionType = transactionType
         adaptersMap.forEach { (_, transactionAdapterWrapper) ->
             transactionAdapterWrapper.setTransactionType(transactionType)
         }

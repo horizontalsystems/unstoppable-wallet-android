@@ -12,14 +12,14 @@ import java.util.concurrent.CopyOnWriteArrayList
 
 class TransactionAdapterWrapper(
     private val transactionsAdapter: ITransactionsAdapter,
-    private val transactionWallet: TransactionWallet
+    private val transactionWallet: TransactionWallet,
+    private var transactionType: FilterTransactionType
 ) : Clearable {
     private val updatedSubject = PublishSubject.create<Unit>()
     val updatedObservable: Observable<Unit> get() = updatedSubject
 
     private val transactionRecords = CopyOnWriteArrayList<TransactionRecord>()
     private var allLoaded = false
-    private var transactionType: FilterTransactionType = FilterTransactionType.All
     private val disposables = CompositeDisposable()
 
     init {
