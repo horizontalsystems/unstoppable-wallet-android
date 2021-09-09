@@ -636,6 +636,10 @@
     <string name="ShowKey_ButtonClose">가까운, 닫힌</string>
     <string name="ShowKey_TabMnemonicPhrase">복구 문구</string>
     <string name="ShowKey_TabPrivateKey">개인 암호</string>
+    <string name="ShowKey_PrivateKeyCopyWarning_Title">Warning</string>
+    <string name="ShowKey_PrivateKeyCopyWarning_Subtitle">Risk of Private Key copy</string>
+    <string name="ShowKey_PrivateKeyCopyWarning_Text">As a security measure we recommend not to use copy action on private key.</string>
+    <string name="ShowKey_PrivateKeyCopyWarning_Proceed">I will risk it</string>
     <!-- Backup Key -->
     <string name="BackupKey_Title">백업</string>
     <string name="BackupKey_Description">다음에 표시될 복구 문구는 휴대폰을 분실, 도난, 파손된 경우 자금을 복구할 수 있는 유일한 방법입니다.\n\n아무도 화면을 보고 있지 않은지 확인합니다.</string>
