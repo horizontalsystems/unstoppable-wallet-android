@@ -69,10 +69,14 @@ class TransactionRecordRepository(
             }
         }
 
-        unsubscribeFromUpdates()
-        allLoaded.set(false)
-        loadItems(1)
-        subscribeForUpdates()
+        // When the coin is enabled or disabled we need to reload txs list only for All coins.
+        // If the selected coin filter is not All then there is no need to reload
+        if (selectedWallet == null) {
+            unsubscribeFromUpdates()
+            allLoaded.set(false)
+            loadItems(1)
+            subscribeForUpdates()
+        }
     }
 
     override fun setSelectedWallet(transactionWallet: TransactionWallet?) {
