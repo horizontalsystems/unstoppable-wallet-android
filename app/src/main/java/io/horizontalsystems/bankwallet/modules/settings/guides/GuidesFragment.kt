@@ -13,9 +13,11 @@ import androidx.recyclerview.widget.ConcatAdapter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.entities.Guide
+import io.horizontalsystems.bankwallet.entities.GuideCategory
 import io.horizontalsystems.bankwallet.modules.markdown.MarkdownFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ScrollableTabs
+import io.horizontalsystems.bankwallet.ui.compose.components.TabItem
 import io.horizontalsystems.core.findNavController
 import kotlinx.android.synthetic.main.fragment_guides.*
 import kotlinx.android.synthetic.main.fragment_guides.tabsCompose
@@ -74,8 +76,8 @@ class GuidesFragment : BaseFragment(), GuidesAdapter.Listener {
             guidesAdapter.notifyDataSetChanged()
         })
 
-        viewModel.categories.observe(viewLifecycleOwner, Observer {
-            setTabs(it, viewModel.selectedCategoryIndex)
+        viewModel.categories.observe(viewLifecycleOwner, Observer { (categories, selectedCategory) ->
+            setTabs(categories, selectedCategory)
         })
 
         viewModel.loading.observe(viewLifecycleOwner, Observer {
@@ -87,10 +89,11 @@ class GuidesFragment : BaseFragment(), GuidesAdapter.Listener {
         })
     }
 
-    private fun setTabs(tabs: List<String>, selectedCategoryIndex: Int) {
+    private fun setTabs(categories: Array<GuideCategory>, selectedCategory: GuideCategory) {
+        val tabItems = categories.map { TabItem(it.category, it == selectedCategory, it) }
         tabsCompose.setContent {
             ComposeAppTheme {
-                ScrollableTabs(tabs, selectedCategoryIndex) { tab -> viewModel.onSelectFilter(tab) }
+                ScrollableTabs(tabItems) { tab -> viewModel.onSelectCategory(tab) }
             }
         }
     }
