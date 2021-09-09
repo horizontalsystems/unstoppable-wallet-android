@@ -52,7 +52,7 @@ abstract class BitcoinBaseAdapter(
     // Adapter implementation
     //
 
-    private var syncState: AdapterState = AdapterState.Syncing(0, null)
+    private var syncState: AdapterState = AdapterState.Syncing()
         set(value) {
             if (value != field) {
                 field = value

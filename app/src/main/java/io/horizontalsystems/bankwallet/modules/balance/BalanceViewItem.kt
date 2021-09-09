@@ -100,7 +100,7 @@ class BalanceViewItemFactory {
 
         val text = when (state) {
             is AdapterState.Syncing -> {
-                if (state.lastBlockDate != null) {
+                if (state.progress != null) {
                     Translator.getString(R.string.Balance_Syncing_WithProgress, state.progress.toString())
                 } else {
                     Translator.getString(R.string.Balance_Syncing)

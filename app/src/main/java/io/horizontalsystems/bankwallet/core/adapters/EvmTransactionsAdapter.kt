@@ -110,7 +110,7 @@ class EvmTransactionsAdapter(kit: EthereumKit, coinManager: ICoinManager, source
         when (syncState) {
             is EthereumKit.SyncState.Synced -> AdapterState.Synced
             is EthereumKit.SyncState.NotSynced -> AdapterState.NotSynced(syncState.error)
-            is EthereumKit.SyncState.Syncing -> AdapterState.Syncing(50, null)
+            is EthereumKit.SyncState.Syncing -> AdapterState.Syncing()
         }
 
     // ISendEthereumAdapter

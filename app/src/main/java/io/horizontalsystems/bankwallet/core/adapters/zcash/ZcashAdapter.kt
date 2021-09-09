@@ -93,7 +93,7 @@ class ZcashAdapter(
         return if (height == null || height > feeChangeHeight) 1_000 else 10_000
     }
 
-    private var syncState: AdapterState = AdapterState.Syncing(0, null)
+    private var syncState: AdapterState = AdapterState.Syncing()
         set(value) {
             if (value != field) {
                 field = value
@@ -302,10 +302,7 @@ class ZcashAdapter(
         val totalProgress = (downloadProgress + scanProgress) / 2
 
         if (totalProgress < 100) {
-            // Workaround: progress doesn't show unless date exists
-            // for Zcash, it's probably better to show progress percentage with a placeholder date
-            // rather than no percentage, because scanning can take a long time
-            syncState = AdapterState.Syncing(totalProgress, today)
+            syncState = AdapterState.Syncing(totalProgress)
         }
     }
 

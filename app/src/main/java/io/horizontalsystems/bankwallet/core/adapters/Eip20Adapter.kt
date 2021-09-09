@@ -98,7 +98,7 @@ class Eip20Adapter(
     private fun convertToAdapterState(syncState: SyncState): AdapterState = when (syncState) {
         is SyncState.Synced -> AdapterState.Synced
         is SyncState.NotSynced -> AdapterState.NotSynced(syncState.error)
-        is SyncState.Syncing -> AdapterState.Syncing(50, null)
+        is SyncState.Syncing -> AdapterState.Syncing()
     }
 
     fun allowance(spenderAddress: Address, defaultBlockParameter: DefaultBlockParameter): Single<BigDecimal> {
