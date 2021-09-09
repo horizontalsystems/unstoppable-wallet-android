@@ -31,9 +31,9 @@ class MarketFragment : BaseWithSearchFragment() {
         viewPager.adapter = MarketTabsAdapter(childFragmentManager, viewLifecycleOwner.lifecycle)
         viewPager.isUserInputEnabled = false
 
-        marketViewModel.tabs.observe(viewLifecycleOwner) { (tabs, selectedTab) ->
-            setTabs(tabs, selectedTab)
-            viewPager.setCurrentItem(tabs.indexOf(selectedTab), false)
+        marketViewModel.selectedTab.observe(viewLifecycleOwner) { selectedTab ->
+            setTabs(selectedTab)
+            viewPager.setCurrentItem(marketViewModel.tabs.indexOf(selectedTab), false)
         }
 
         toolbar.setOnMenuItemClickListener { item ->
@@ -51,13 +51,15 @@ class MarketFragment : BaseWithSearchFragment() {
         )
     }
 
-    private fun setTabs(tabs: Array<MarketModule.Tab>, selectedTab: MarketModule.Tab) {
-        val tabItems = tabs.map {
+    private fun setTabs(selectedTab: MarketModule.Tab) {
+        val tabItems = marketViewModel.tabs.map {
             TabItem(getString(it.titleResId), it == selectedTab, it)
         }
         tabsCompose.setContent {
             ComposeAppTheme {
-                Tabs(tabItems) { item -> marketViewModel.onSelect(item) }
+                Tabs(tabItems) { item ->
+                    marketViewModel.onSelect(item)
+                }
             }
         }
     }
