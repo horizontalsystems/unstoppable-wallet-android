@@ -29,7 +29,7 @@ class BinanceAdapter(
     private val syncState: AdapterState
         get() = when (val kitSyncState = binanceKit.syncState) {
             BinanceChainKit.SyncState.Synced -> AdapterState.Synced
-            BinanceChainKit.SyncState.Syncing -> AdapterState.Syncing(50, null)
+            BinanceChainKit.SyncState.Syncing -> AdapterState.Syncing()
             is BinanceChainKit.SyncState.NotSynced -> AdapterState.NotSynced(kitSyncState.error)
         }
 
