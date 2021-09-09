@@ -25,7 +25,6 @@ import io.horizontalsystems.bankwallet.modules.swap.oneinch.OneInchSwapViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryWithIcon
 import io.horizontalsystems.core.getNavigationResult
 import kotlinx.android.synthetic.main.fragment_1inch.*
 
@@ -111,16 +110,6 @@ class OneInchFragment : SwapBaseFragment() {
             oneInchViewModel.onTapSwitch()
         }
 
-        poweredByCompose.setContent {
-            ComposeAppTheme {
-                ButtonSecondaryWithIcon(
-                    title = dex.provider.title,
-                    iconRight = R.drawable.ic_down_arrow_20,
-                    onClick = { showSwapProviderSelectorDialog() }
-                )
-            }
-        }
-
         buttonsCompose.setViewCompositionStrategy(
             ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
         )
@@ -178,7 +167,8 @@ class OneInchFragment : SwapBaseFragment() {
         buttonsCompose.setContent {
             ComposeAppTheme {
                 Row(
-                    modifier = Modifier.width(IntrinsicSize.Max)
+                    modifier = Modifier
+                        .width(IntrinsicSize.Max)
                         .padding(top = 28.dp, bottom = 24.dp)
                 ) {
                     if (approveButtonVisible) {

@@ -71,27 +71,6 @@
                 app:layout_constraintStart_toStartOf="@id/startBorder"
                 app:layout_constraintTop_toBottomOf="@id/fromCoinCard" />
 
-            <TextView
-                android:id="@+id/poweredByTitle"
-                style="@style/Subhead2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="@string/Swap_PoweredBy"
-                android:textColor="@color/grey"
-                app:layout_constraintStart_toStartOf="@+id/startBorder"
-                app:layout_constraintTop_toBottomOf="@+id/toCoinCard" />
-
-            <androidx.compose.ui.platform.ComposeView
-                android:id="@+id/poweredByCompose"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toStartOf="@id/endBorder"
-                app:layout_constraintTop_toTopOf="@id/poweredByTitle"
-                tools:layout_height="28dp"
-                tools:layout_width="30dp"
-                />
-
             <io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceView
                 android:id="@+id/allowanceView"
                 android:layout_width="0dp"
@@ -99,7 +78,7 @@
                 android:layout_marginTop="12dp"
                 app:layout_constraintEnd_toStartOf="@id/endBorder"
                 app:layout_constraintStart_toStartOf="@id/startBorder"
-                app:layout_constraintTop_toBottomOf="@id/poweredByTitle" />
+                app:layout_constraintTop_toBottomOf="@id/toCoinCard" />
 
             <TextView
                 android:id="@+id/priceTitle"

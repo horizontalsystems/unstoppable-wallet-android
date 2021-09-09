@@ -2,13 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/menuSettings"
-        android:icon="@drawable/ic_settings_2"
-        android:title="@string/Settings_Title"
-        app:iconTint="@color/jacob"
-        app:showAsAction="ifRoom" />
-
-    <item
         android:id="@+id/menuCancel"
         android:icon="@drawable/ic_close"
         android:title="@string/Button_Cancel"
