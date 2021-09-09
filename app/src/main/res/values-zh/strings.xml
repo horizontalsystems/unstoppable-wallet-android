@@ -635,6 +635,10 @@
     <string name="ShowKey_ButtonClose">关闭</string>
     <string name="ShowKey_TabMnemonicPhrase">恢复码</string>
     <string name="ShowKey_TabPrivateKey">私钥</string>
+    <string name="ShowKey_PrivateKeyCopyWarning_Title">Warning</string>
+    <string name="ShowKey_PrivateKeyCopyWarning_Subtitle">Risk of Private Key copy</string>
+    <string name="ShowKey_PrivateKeyCopyWarning_Text">As a security measure we recommend not to use copy action on private key.</string>
+    <string name="ShowKey_PrivateKeyCopyWarning_Proceed">I will risk it</string>
     <!-- Backup Key -->
     <string name="BackupKey_Title">备份</string>
     <string name="BackupKey_Description">如果您的手机出现丢失、被盗或损坏等情况，那么在下一步显示的恢复码将是恢复您资金的唯一方法。\n\n确保不会有任何人看到您的屏幕。</string>
