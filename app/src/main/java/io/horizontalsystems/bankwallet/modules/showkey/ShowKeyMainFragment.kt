@@ -23,7 +23,6 @@ import kotlinx.android.synthetic.main.fragment_show_key_main.*
 
 class ShowKeyMainFragment : BaseFragment() {
     private val viewModel by navGraphViewModels<ShowKeyViewModel>(R.id.showKeyIntroFragment)
-    private val showKeyTabs = listOf(ShowKeyTab.MnemonicPhrase, ShowKeyTab.PrivateKey)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,7 +46,7 @@ class ShowKeyMainFragment : BaseFragment() {
         }
 
         viewPager.adapter = ShowKeyTabsAdapter(
-            showKeyTabs,
+            viewModel.showKeyTabs,
             viewModel.words,
             viewModel.passphrase,
             viewModel.privateKeys,
@@ -57,7 +56,7 @@ class ShowKeyMainFragment : BaseFragment() {
 
         viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback(){
             override fun onPageSelected(position: Int) {
-                setTabs(showKeyTabs, showKeyTabs[position])
+                setTabs(viewModel.showKeyTabs[position])
             }
         })
 
@@ -81,21 +80,24 @@ class ShowKeyMainFragment : BaseFragment() {
             }
         }
 
-        selectTab(ShowKeyTab.MnemonicPhrase)
+        viewModel.selectedTab.observe(viewLifecycleOwner, { tab ->
+            selectTab(tab)
+        })
+
     }
 
     private fun selectTab(item: ShowKeyTab) {
-        viewPager.currentItem = showKeyTabs.indexOf(item)
-        setTabs(showKeyTabs, item)
+        viewPager.currentItem = viewModel.showKeyTabs.indexOf(item)
+        setTabs(item)
     }
 
-    private fun setTabs(tabs: List<ShowKeyTab>, selectedTab: ShowKeyTab) {
-        val tabItems = tabs.map { showKeyTab ->
+    private fun setTabs(selectedTab: ShowKeyTab) {
+        val tabItems = viewModel.showKeyTabs.map { showKeyTab ->
              TabItem(getString(showKeyTab.title), showKeyTab == selectedTab, showKeyTab)
         }
         tabsCompose.setContent {
             ComposeAppTheme {
-                Tabs(tabItems) { selectTab(it) }
+                Tabs(tabItems) { viewModel.onSelectTab(it) }
             }
         }
     }
