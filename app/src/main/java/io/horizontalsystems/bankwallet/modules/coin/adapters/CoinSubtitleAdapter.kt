@@ -1,10 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.coin.adapters
 
-import android.graphics.drawable.Drawable
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
-import androidx.core.view.isVisible
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.DiffUtil
@@ -12,12 +10,13 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.setCoinImage
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
 import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.views.inflate
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_coin_subtitle.*
 import java.math.BigDecimal
-import java.util.*
 
 class CoinSubtitleAdapter(
         viewItemLiveData: MutableLiveData<ViewItemWrapper>,
@@ -77,21 +76,42 @@ class CoinSubtitleAdapter(
             coinRateLast.text = item.rate
             coinRateDiff.setDiff(item.rateDiff)
 
-            // Coin Rating
-            coinRating.isVisible = !item.rating.isNullOrBlank()
-            coinRating.setImageDrawable(getRatingIcon(item.rating))
-            coinRating.isEnabled = false
+            setRatingIcon(item.rating)
         }
 
-        private fun getRatingIcon(rating: String?): Drawable? {
-            val icon = when (rating?.toLowerCase(Locale.ENGLISH)) {
+        private fun setRatingIcon(rating: String?) {
+            coinRatingCompose.setContent {
+                if(!rating.isNullOrBlank()){
+                    ComposeAppTheme {
+                        ButtonSecondaryCircle(
+                            icon = getRatingIcon(rating),
+                            onClick = { },
+                            enabled = false,
+                            tint = getTintColor(rating)
+                        )
+                    }
+                }
+            }
+        }
+
+        private fun getRatingIcon(rating: String): Int {
+            return when (rating.lowercase()) {
                 "a" -> R.drawable.ic_rating_a
                 "b" -> R.drawable.ic_rating_b
                 "c" -> R.drawable.ic_rating_c
                 "d" -> R.drawable.ic_rating_d
-                else -> return null
+                else -> throw IllegalArgumentException("Argument supplied: $rating")
             }
-            return ContextCompat.getDrawable(containerView.context, icon)
+        }
+
+        private fun getTintColor(rating: String): Color {
+            return when (rating.lowercase()) {
+                "a" -> Color(0xFFFFA800)
+                "b" -> Color(0xFF3372FF)
+                "c" -> Color(0xFF808085)
+                "d" -> Color(0xFFC8C7CC)
+                else -> throw IllegalArgumentException("Argument supplied: $rating")
+            }
         }
 
         fun bindUpdate(current: ViewItemWrapper, prev: ViewItemWrapper) {
@@ -109,11 +129,8 @@ class CoinSubtitleAdapter(
                     coinRateDiff.setDiff(rateDiff)
                 }
                 if (rating != prev.rating) {
-                    coinRating.isVisible = !rating.isNullOrBlank()
-                    coinRating.setImageDrawable(getRatingIcon(rating))
-                    coinRating.isEnabled = false
+                    setRatingIcon(rating)
                 }
-
             }
         }
 

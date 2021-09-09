@@ -66,16 +66,15 @@
         app:layout_constraintTop_toTopOf="@+id/coinRateLast"
         tools:text="+18%" />
 
-    <ImageButton
-        android:id="@+id/coinRating"
-        style="@style/ImageButtonSecondary"
-        android:layout_width="28dp"
-        android:layout_height="28dp"
-        android:src="@drawable/ic_rating_a"
-        android:visibility="invisible"
+    <androidx.compose.ui.platform.ComposeView
+        android:id="@+id/coinRatingCompose"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="@+id/coinRateLast"
         app:layout_constraintEnd_toEndOf="@+id/endGuideline"
         app:layout_constraintTop_toTopOf="@+id/coinRateLast"
-        tools:visibility="visible" />
+        tools:layout_height="28dp"
+        tools:layout_width="28dp"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
