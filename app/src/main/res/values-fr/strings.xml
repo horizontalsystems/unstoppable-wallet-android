@@ -635,6 +635,10 @@
     <string name="ShowKey_ButtonClose">Fermer</string>
     <string name="ShowKey_TabMnemonicPhrase">Phrase de réinitialisation</string>
     <string name="ShowKey_TabPrivateKey">Clé privée</string>
+    <string name="ShowKey_PrivateKeyCopyWarning_Title">Warning</string>
+    <string name="ShowKey_PrivateKeyCopyWarning_Subtitle">Risk of Private Key copy</string>
+    <string name="ShowKey_PrivateKeyCopyWarning_Text">As a security measure we recommend not to use copy action on private key.</string>
+    <string name="ShowKey_PrivateKeyCopyWarning_Proceed">I will risk it</string>
     <!-- Backup Key -->
     <string name="BackupKey_Title">Sauvegarde</string>
     <string name="BackupKey_Description">Les phrases de réinitialisation qui vont suivre sont le seul moyen de restaurer vos fonds si votre téléphone est perdu, volé, endommagé, etc.\n\nVeuillez vous assurer que personne ne regarde votre écran.</string>
