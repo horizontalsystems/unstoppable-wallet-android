@@ -76,8 +76,8 @@ class GuidesFragment : BaseFragment(), GuidesAdapter.Listener {
             guidesAdapter.notifyDataSetChanged()
         })
 
-        viewModel.categories.observe(viewLifecycleOwner, Observer { (categories, selectedCategory) ->
-            setTabs(categories, selectedCategory)
+        viewModel.selectedCategory.observe(viewLifecycleOwner, Observer { selectedCategory ->
+            setTabs(selectedCategory)
         })
 
         viewModel.loading.observe(viewLifecycleOwner, Observer {
@@ -89,8 +89,8 @@ class GuidesFragment : BaseFragment(), GuidesAdapter.Listener {
         })
     }
 
-    private fun setTabs(categories: Array<GuideCategory>, selectedCategory: GuideCategory) {
-        val tabItems = categories.map { TabItem(it.category, it == selectedCategory, it) }
+    private fun setTabs(selectedCategory: GuideCategory) {
+        val tabItems = viewModel.categories.map { TabItem(it.category, it == selectedCategory, it) }
         tabsCompose.setContent {
             ComposeAppTheme {
                 ScrollableTabs(tabItems) { tab -> viewModel.onSelectCategory(tab) }

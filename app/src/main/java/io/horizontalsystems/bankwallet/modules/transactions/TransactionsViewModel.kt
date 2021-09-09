@@ -22,11 +22,13 @@ class TransactionsViewModel(
 
     lateinit var tmpItemToShow: TransactionItem
 
+    val filterTypes = FilterTransactionType.values()
+
     val syncingLiveData = MutableLiveData<Boolean>()
 
     val filterCoinsLiveData = MutableLiveData<List<Filter<Wallet>>>()
 
-    val filterTypesLiveData = MutableLiveData(Pair(FilterTransactionType.values(), FilterTransactionType.All))
+    val selectedFilterTypeLiveData = MutableLiveData(FilterTransactionType.All)
 
     val transactionList = MutableLiveData<ItemsList>()
 
@@ -88,6 +90,7 @@ class TransactionsViewModel(
 
     fun setFilterTransactionType(filterType: FilterTransactionType) {
         service.setFilterType(filterType)
+        selectedFilterTypeLiveData.postValue(filterType)
     }
 
     fun setFilterCoin(w: Wallet?) {
