@@ -72,23 +72,6 @@
         <item name="android:fontFamily">sans-serif-medium</item>
     </style>
 
-    <style name="ButtonSecondaryTransparent" parent="Subhead1">
-        <item name="android:background">@color/transparent</item>
-        <item name="android:textColor">@color/button_secondary_transparent</item>
-        <item name="android:minWidth">0dp</item>
-        <item name="android:minHeight">0dp</item>
-        <item name="android:paddingTop">6dp</item>
-        <item name="android:paddingBottom">6dp</item>
-        <item name="android:paddingStart">16dp</item>
-        <item name="android:paddingEnd">16dp</item>
-    </style>
-
-    <style name="ButtonSecondaryTransparentEndIcon" parent="ButtonSecondaryTransparent">
-        <item name="android:drawableTint">@color/button_secondary_transparent</item>
-        <item name="android:drawablePadding">4dp</item>
-        <item name="android:paddingEnd">8dp</item>
-    </style>
-
     <style name="TabComponent">
         <item name="android:background">@drawable/tab_rounded_background</item>
         <item name="android:textColor">@color/stateful_tab_text_color</item>
@@ -102,20 +85,6 @@
         <item name="android:paddingEnd">12dp</item>
         <item name="android:textSize">14sp</item>
         <item name="android:textAlignment">center</item>
-    </style>
-
-    <style name="ButtonPrivacySettings">
-        <item name="android:background">@drawable/button_privacy_settings_background</item>
-        <item name="android:textColor">@color/button_transparent_text_color</item>
-        <item name="android:fontFamily">sans-serif-medium</item>
-        <item name="android:includeFontPadding">false</item>
-        <item name="android:minHeight">0dp</item>
-        <item name="android:minWidth">0dp</item>
-        <item name="android:paddingStart">11dp</item>
-        <item name="android:paddingEnd">11dp</item>
-        <item name="android:paddingTop">2dp</item>
-        <item name="android:paddingBottom">3dp</item>
-        <item name="android:textSize">14sp</item>
     </style>
 
     <style name="ImageButtonSecondary" parent="Widget.AppCompat.Button.Borderless">
