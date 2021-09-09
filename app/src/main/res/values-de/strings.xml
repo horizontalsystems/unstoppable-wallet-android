@@ -635,6 +635,10 @@
     <string name="ShowKey_ButtonClose">Schließen</string>
     <string name="ShowKey_TabMnemonicPhrase">Wiederherstellungsphrase</string>
     <string name="ShowKey_TabPrivateKey">Privater Schlüssel</string>
+    <string name="ShowKey_PrivateKeyCopyWarning_Title">Warning</string>
+    <string name="ShowKey_PrivateKeyCopyWarning_Subtitle">Risk of Private Key copy</string>
+    <string name="ShowKey_PrivateKeyCopyWarning_Text">As a security measure we recommend not to use copy action on private key.</string>
+    <string name="ShowKey_PrivateKeyCopyWarning_Proceed">I will risk it</string>
     <!-- Backup Key -->
     <string name="BackupKey_Title">Sicherung</string>
     <string name="BackupKey_Description">Die Wiederherstellungsphrasen, die als nächstes gezeigt werden, sind die einzige Möglichkeit, Ihr Guthaben wiederherzustellen, falls Ihr Mobiltelefon jemals verloren geht, gestohlen wird, kaputt geht usw.\n\nStellen Sie sicher, dass niemand Ihren Bildschirm beobachtet.</string>
