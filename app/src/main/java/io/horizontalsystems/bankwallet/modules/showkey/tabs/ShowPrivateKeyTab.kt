@@ -18,6 +18,9 @@ import io.horizontalsystems.bankwallet.modules.showkey.ShowKeyModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonDefaults
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondary
+import io.horizontalsystems.bankwallet.ui.extensions.ConfirmationDialog
+import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
+import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_show_private_key_tab.*
 import kotlinx.android.synthetic.main.view_holder_private_key.*
@@ -32,9 +35,29 @@ class ShowPrivateKeyFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val privateKeys = arguments?.getParcelableArrayList<ShowKeyModule.PrivateKey>(PRIVATE_KEYS)
-                ?: listOf()
+            ?: listOf()
 
-        recyclerView.adapter = PrivateKeysAdapter(privateKeys)
+        recyclerView.adapter = PrivateKeysAdapter(privateKeys, onClick = { key ->
+            showPrivateKeyCopyWarning(key)
+        })
+    }
+
+    private fun showPrivateKeyCopyWarning(key: ShowKeyModule.PrivateKey) {
+        ConfirmationDialog.show(
+            title = getString(R.string.ShowKey_PrivateKeyCopyWarning_Title),
+            subtitle = getString(R.string.ShowKey_PrivateKeyCopyWarning_Subtitle),
+            contentText = getString(R.string.ShowKey_PrivateKeyCopyWarning_Text),
+            destructiveButtonTitle = getString(R.string.ShowKey_PrivateKeyCopyWarning_Proceed),
+            actionButtonTitle = null,
+            cancelButtonTitle = null,
+            fragmentManager = childFragmentManager,
+            listener = object : ConfirmationDialog.Listener {
+                override fun onDestructiveButtonClick() {
+                    TextHelper.copyText(key.value)
+                    HudHelper.showSuccessMessage(requireView(), R.string.Hud_Text_Copied)
+                }
+            }
+        )
     }
 
     companion object {
@@ -52,11 +75,12 @@ class ShowPrivateKeyFragment : BaseFragment() {
 }
 
 class PrivateKeysAdapter(
-        private val privateKeys: List<ShowKeyModule.PrivateKey>
+    private val privateKeys: List<ShowKeyModule.PrivateKey>,
+    private val onClick: (ShowKeyModule.PrivateKey) -> Unit
 ) : RecyclerView.Adapter<PrivateKeyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PrivateKeyViewHolder {
-        return PrivateKeyViewHolder.create(parent)
+        return PrivateKeyViewHolder.create(parent, onClick)
     }
 
     override fun onBindViewHolder(holder: PrivateKeyViewHolder, position: Int) {
@@ -69,7 +93,8 @@ class PrivateKeysAdapter(
 }
 
 class PrivateKeyViewHolder(
-        override val containerView: View
+    override val containerView: View,
+    private val onClick: (ShowKeyModule.PrivateKey) -> Unit
 ) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
     fun bind(key: ShowKeyModule.PrivateKey) {
@@ -86,7 +111,7 @@ class PrivateKeyViewHolder(
                     content = { Text(key.value, textAlign = TextAlign.Center) },
                     contentPadding = PaddingValues(horizontal = 16.dp, vertical = 6.dp),
                     onClick = {
-
+                        onClick(key)
                     }
                 )
             }
@@ -94,8 +119,11 @@ class PrivateKeyViewHolder(
     }
 
     companion object {
-        fun create(parent: ViewGroup): PrivateKeyViewHolder {
-            return PrivateKeyViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_private_key, parent, false))
+        fun create(parent: ViewGroup, onClick: (ShowKeyModule.PrivateKey) -> Unit): PrivateKeyViewHolder {
+            return PrivateKeyViewHolder(
+                LayoutInflater.from(parent.context).inflate(R.layout.view_holder_private_key, parent, false),
+                onClick
+            )
         }
     }
 }

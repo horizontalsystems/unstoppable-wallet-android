@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.unit.dp
 import androidx.core.view.isVisible
-import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentManager
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
@@ -124,13 +124,13 @@ class ConfirmationDialog(
                 contentText: String?,
                 actionButtonTitle: String? = "",
                 cancelButtonTitle: String? = "",
-                activity: FragmentActivity,
+                fragmentManager: FragmentManager,
                 listener: Listener,
                 destructiveButtonTitle: String? = null
         ) {
 
             val fragment = ConfirmationDialog(listener, title, subtitle, icon, contentText, actionButtonTitle, cancelButtonTitle, destructiveButtonTitle)
-            val transaction = activity.supportFragmentManager.beginTransaction()
+            val transaction = fragmentManager.beginTransaction()
 
             transaction.add(fragment, "bottom_coin_settings_alert_dialog")
             transaction.commitAllowingStateLoss()
