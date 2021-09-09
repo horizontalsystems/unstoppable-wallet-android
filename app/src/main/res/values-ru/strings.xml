@@ -638,6 +638,10 @@
     <string name="ShowKey_ButtonClose">Закрыть</string>
     <string name="ShowKey_TabMnemonicPhrase">Фраза для восстановления</string>
     <string name="ShowKey_TabPrivateKey">Приватный Ключ</string>
+    <string name="ShowKey_PrivateKeyCopyWarning_Title">Warning</string>
+    <string name="ShowKey_PrivateKeyCopyWarning_Subtitle">Risk of Private Key copy</string>
+    <string name="ShowKey_PrivateKeyCopyWarning_Text">As a security measure we recommend not to use copy action on private key.</string>
+    <string name="ShowKey_PrivateKeyCopyWarning_Proceed">I will risk it</string>
     <!-- Backup Key -->
     <string name="BackupKey_Title">Резервная Копия</string>
     <string name="BackupKey_Description">Показанные далее фразы для восстановления являются единственным способом восстановления ваших средств в случае потери, кражи или поломки вашего телефона.\n\nУбедитесь, что никто не смотрит на ваш экран.</string>
