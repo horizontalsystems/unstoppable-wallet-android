@@ -36,7 +36,7 @@ import io.horizontalsystems.bankwallet.modules.receive.ReceiveFragment
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryTransparent
 import io.horizontalsystems.bankwallet.ui.extensions.NpaLinearLayoutManager
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorDialog
@@ -252,13 +252,11 @@ class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener, BackupRequ
                             onSortButtonClick()
                         }
                     )
-                    ButtonSecondaryDefault(
-                        title = getString(R.string.Balance_AddCoin),
+                    ButtonSecondaryCircle(
+                        icon = R.drawable.ic_manage_2,
                         onClick = {
                             findNavController().navigate(
-                                R.id.mainFragment_to_manageWalletsFragment,
-                                null,
-                                navOptions()
+                                R.id.mainFragment_to_manageWalletsFragment, null, navOptions()
                             )
                         }
                     )
