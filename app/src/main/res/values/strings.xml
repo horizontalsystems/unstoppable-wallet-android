@@ -262,7 +262,7 @@
     <string name="Balance_Sort_Balance">Balance</string>
     <string name="Balance_Sort_PopupTitle">Sort by</string>
     <string name="Balance_Sort_Az">Name</string>
-    <string name="Balance_Sort_24hPriceChange">24h Price (%)</string>
+    <string name="Balance_Sort_24hPriceChange">Price Change</string>
     <string name="Balance_Hidden">hidden</string>
     <string name="Balance_Backup_Alert">You need to backup the %1$s Wallet before you may receive %2$s.</string>
     <string name="Balance_NoWalletAlert">You don\’t have any wallets yet. Create new or restore existing </string>
