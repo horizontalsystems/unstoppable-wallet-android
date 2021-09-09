@@ -38,20 +38,21 @@
         android:padding="12dp"
         android:textColor="?attr/TextColorBarsToDark"
         android:textColorHint="@color/grey_50"
-        app:layout_constraintEnd_toStartOf="@+id/actionsLayout"
+        app:layout_constraintEnd_toStartOf="@+id/buttonDeleteCompose"
         app:layout_constraintStart_toEndOf="@id/txtPrefix"
         app:layout_constraintTop_toTopOf="@id/inputBackground"
         tools:hint="Hint" />
 
-    <LinearLayout
-        android:id="@+id/actionsLayout"
+    <androidx.compose.ui.platform.ComposeView
+        android:id="@+id/buttonDeleteCompose"
         android:layout_width="wrap_content"
-        android:layout_height="28dp"
-        android:gravity="center"
-        android:orientation="horizontal"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="@id/inputBackground"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/inputBackground" />
+        app:layout_constraintTop_toTopOf="@id/inputBackground"
+        tools:layout_height="28dp"
+        tools:layout_width="28dp"
+        />
 
     <TextView
         android:id="@+id/error"
