@@ -762,6 +762,10 @@
     <string name="ShowKey_ButtonClose">Close</string>
     <string name="ShowKey_TabMnemonicPhrase">Recovery Phrase</string>
     <string name="ShowKey_TabPrivateKey">Private Key</string>
+    <string name="ShowKey_PrivateKeyCopyWarning_Title">Warning</string>
+    <string name="ShowKey_PrivateKeyCopyWarning_Subtitle">Risk of Private Key copy</string>
+    <string name="ShowKey_PrivateKeyCopyWarning_Text">As a security measure we recommend not to use copy action on private key.</string>
+    <string name="ShowKey_PrivateKeyCopyWarning_Proceed">I will risk it</string>
 
     <!-- Backup Key -->
     <string name="BackupKey_Title">Backup</string>
