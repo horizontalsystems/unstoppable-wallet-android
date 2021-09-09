@@ -56,7 +56,8 @@ fun <T>Tabs(tabs: List<TabItem<T>>, onClick: (T) -> Unit) {
 }
 
 @Composable
-fun ScrollableTabs(tabs: List<String>, selectedIndex: Int, onClick: (Int) -> Unit) {
+fun <T>ScrollableTabs(tabs: List<TabItem<T>>, onClick: (T) -> Unit) {
+    val selectedIndex = tabs.indexOfFirst { it.selected }
     var tabIndex by remember { mutableStateOf(selectedIndex) }
 
     Column(modifier = Modifier.height(45.dp)) {
@@ -79,14 +80,14 @@ fun ScrollableTabs(tabs: List<String>, selectedIndex: Int, onClick: (Int) -> Uni
                     selected = tabIndex == index,
                     onClick = {
                         tabIndex = index
-                        onClick.invoke(index)
+                        onClick.invoke(tab.item)
                     },
                     content = {
                         ProvideTextStyle(
                             ComposeAppTheme.typography.subhead1
                         ) {
                             Text(
-                                text = tab,
+                                text = tab.title,
                                 color = if (tabIndex == index) ComposeAppTheme.colors.oz else ComposeAppTheme.colors.grey
                             )
                         }

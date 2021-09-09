@@ -10,11 +10,9 @@ class GuidesViewModel(private val repository: GuidesRepository) : ViewModel() {
 
     val guides = MutableLiveData<List<Guide>>()
     val loading = MutableLiveData(false)
-    val categories = MutableLiveData<List<String>>()
+    val categories = MutableLiveData<Pair<Array<GuideCategory>, GuideCategory>>()
     val error = MutableLiveData<Throwable?>()
-    var selectedCategoryIndex = 0
 
-    private var guideCategories: Array<GuideCategory> = arrayOf()
     private var disposables = CompositeDisposable()
 
     init {
@@ -33,9 +31,8 @@ class GuidesViewModel(private val repository: GuidesRepository) : ViewModel() {
                 }
     }
 
-    fun onSelectFilter(selectedFilterIndex: Int) {
-        selectedCategoryIndex = selectedFilterIndex
-        syncViewItems()
+    fun onSelectCategory(category: GuideCategory) {
+        guides.postValue(category.guides)
     }
 
     override fun onCleared() {
@@ -45,14 +42,10 @@ class GuidesViewModel(private val repository: GuidesRepository) : ViewModel() {
     }
 
     private fun didFetchGuideCategories(guideCategories: Array<GuideCategory>) {
-        this.guideCategories = guideCategories
+        val selectedCategory = guideCategories.first()
 
-        categories.postValue(guideCategories.map { it.category })
-
-        syncViewItems()
+        categories.postValue(Pair(guideCategories, selectedCategory))
+        guides.postValue(selectedCategory.guides)
     }
 
-    private fun syncViewItems() {
-        guides.postValue(guideCategories[selectedCategoryIndex].guides)
-    }
 }

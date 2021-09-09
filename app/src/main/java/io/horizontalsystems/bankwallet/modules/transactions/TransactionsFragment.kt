@@ -14,6 +14,7 @@ import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ScrollableTabs
+import io.horizontalsystems.bankwallet.ui.compose.components.TabItem
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.views.helpers.LayoutHelper
 import kotlinx.android.extensions.LayoutContainer
@@ -98,20 +99,23 @@ class TransactionsFragment : BaseFragment(R.layout.fragment_transactions) {
             toolbarSpinner.isVisible = it
         }
 
-        setTabs(viewModel.filterTypes.map { it.name }, viewModel.filterTypes.indexOf(viewModel.selectedFilterType))
+        viewModel.filterTypesLiveData.observe(viewLifecycleOwner, { (filterTypes, selectedFilterType) ->
+            setTabs(filterTypes, selectedFilterType)
+        })
 
         transactionTypeFilterTabCompose.setViewCompositionStrategy(
             ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
         )
     }
 
-    private fun setTabs(tabs: List<String>, selectedIndex: Int) {
+    private fun setTabs(filterTypes: Array<FilterTransactionType>, selected: FilterTransactionType) {
+        val tabItems = filterTypes.map{
+            TabItem(it.name, it == selected, it)
+        }
         transactionTypeFilterTabCompose.setContent {
             ComposeAppTheme {
-                ScrollableTabs(tabs, selectedIndex) { index ->
-                    viewModel.setFilterTransactionType(
-                        index
-                    )
+                ScrollableTabs(tabItems) { index ->
+                    viewModel.setFilterTransactionType(index)
                     scrollToTopAfterUpdate = true
                 }
             }
