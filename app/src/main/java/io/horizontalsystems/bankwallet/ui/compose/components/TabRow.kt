@@ -58,18 +58,17 @@ fun <T>Tabs(tabs: List<TabItem<T>>, onClick: (T) -> Unit) {
 @Composable
 fun <T>ScrollableTabs(tabs: List<TabItem<T>>, onClick: (T) -> Unit) {
     val selectedIndex = tabs.indexOfFirst { it.selected }
-    var tabIndex by remember { mutableStateOf(selectedIndex) }
 
     Column(modifier = Modifier.height(45.dp)) {
         ScrollableTabRow(
             modifier = Modifier.height(44.dp),
-            selectedTabIndex = tabIndex,
+            selectedTabIndex = selectedIndex,
             backgroundColor = ComposeAppTheme.colors.tyler,
             contentColor = ComposeAppTheme.colors.tyler,
             edgePadding = 0.dp,
             indicator = @Composable { tabPositions ->
                 TabRowDefaults.Indicator(
-                    modifier = Modifier.tabIndicatorOffset(tabPositions[tabIndex]),
+                    modifier = Modifier.tabIndicatorOffset(tabPositions[selectedIndex]),
                     color = ComposeAppTheme.colors.jacob
                 )
             }
@@ -77,9 +76,8 @@ fun <T>ScrollableTabs(tabs: List<TabItem<T>>, onClick: (T) -> Unit) {
             tabs.forEachIndexed { index, tab ->
                 Tab(
                     modifier = Modifier.height(43.dp),
-                    selected = tabIndex == index,
+                    selected = tab.selected,
                     onClick = {
-                        tabIndex = index
                         onClick.invoke(tab.item)
                     },
                     content = {
@@ -88,7 +86,7 @@ fun <T>ScrollableTabs(tabs: List<TabItem<T>>, onClick: (T) -> Unit) {
                         ) {
                             Text(
                                 text = tab.title,
-                                color = if (tabIndex == index) ComposeAppTheme.colors.oz else ComposeAppTheme.colors.grey
+                                color = if (tab.selected) ComposeAppTheme.colors.oz else ComposeAppTheme.colors.grey
                             )
                         }
                     }

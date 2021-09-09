@@ -99,8 +99,8 @@ class TransactionsFragment : BaseFragment(R.layout.fragment_transactions) {
             toolbarSpinner.isVisible = it
         }
 
-        viewModel.filterTypesLiveData.observe(viewLifecycleOwner, { (filterTypes, selectedFilterType) ->
-            setTabs(filterTypes, selectedFilterType)
+        viewModel.selectedFilterTypeLiveData.observe(viewLifecycleOwner, { selectedFilterType ->
+            setTabs(selectedFilterType)
         })
 
         transactionTypeFilterTabCompose.setViewCompositionStrategy(
@@ -108,8 +108,8 @@ class TransactionsFragment : BaseFragment(R.layout.fragment_transactions) {
         )
     }
 
-    private fun setTabs(filterTypes: Array<FilterTransactionType>, selected: FilterTransactionType) {
-        val tabItems = filterTypes.map{
+    private fun setTabs(selected: FilterTransactionType) {
+        val tabItems = viewModel.filterTypes.map{
             TabItem(it.name, it == selected, it)
         }
         transactionTypeFilterTabCompose.setContent {

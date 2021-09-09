@@ -8,9 +8,10 @@ import io.reactivex.disposables.CompositeDisposable
 
 class GuidesViewModel(private val repository: GuidesRepository) : ViewModel() {
 
+    var categories = listOf<GuideCategory>()
     val guides = MutableLiveData<List<Guide>>()
     val loading = MutableLiveData(false)
-    val categories = MutableLiveData<Pair<Array<GuideCategory>, GuideCategory>>()
+    val selectedCategory = MutableLiveData<GuideCategory>()
     val error = MutableLiveData<Throwable?>()
 
     private var disposables = CompositeDisposable()
@@ -32,6 +33,7 @@ class GuidesViewModel(private val repository: GuidesRepository) : ViewModel() {
     }
 
     fun onSelectCategory(category: GuideCategory) {
+        selectedCategory.postValue(category)
         guides.postValue(category.guides)
     }
 
@@ -42,10 +44,8 @@ class GuidesViewModel(private val repository: GuidesRepository) : ViewModel() {
     }
 
     private fun didFetchGuideCategories(guideCategories: Array<GuideCategory>) {
-        val selectedCategory = guideCategories.first()
-
-        categories.postValue(Pair(guideCategories, selectedCategory))
-        guides.postValue(selectedCategory.guides)
+        categories = guideCategories.toList()
+        onSelectCategory(guideCategories.first())
     }
 
 }
