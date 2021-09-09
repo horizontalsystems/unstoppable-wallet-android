@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.ISwapProvider
-import io.horizontalsystems.bankwallet.ui.selector.ViewItemWrapper
+import io.horizontalsystems.bankwallet.ui.selector.ViewItemWithIconWrapper
 import io.reactivex.disposables.Disposable
 
 class SwapMainViewModel(
@@ -23,13 +23,13 @@ class SwapMainViewModel(
 
     var providerState by service::providerState
 
-    val providerItems: List<ViewItemWrapper<ISwapProvider>>
+    val providerItems: List<ViewItemWithIconWrapper<ISwapProvider>>
         get() = service.availableProviders.map { provider ->
-            ViewItemWrapper(provider.title, provider)
+            ViewItemWithIconWrapper(provider.title, provider, provider.id)
         }
 
-    val selectedProviderItem: ViewItemWrapper<ISwapProvider>
-        get() = service.currentProvider.let { ViewItemWrapper(it.title, it) }
+    val selectedProviderItem: ViewItemWithIconWrapper<ISwapProvider>
+        get() = service.currentProvider.let { ViewItemWithIconWrapper(it.title, it, it.id) }
 
 
     init {
