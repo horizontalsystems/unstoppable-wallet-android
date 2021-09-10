@@ -1,6 +1,9 @@
 package io.horizontalsystems.bankwallet.ui.compose
 
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Stable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 
 @Stable
@@ -52,7 +55,7 @@ class Colors(
         private set
     var claude by mutableStateOf(claude)
         private set
-    var lawrence by mutableStateOf(claude)
+    var lawrence by mutableStateOf(lawrence)
         private set
 
     fun update(other: Colors) {

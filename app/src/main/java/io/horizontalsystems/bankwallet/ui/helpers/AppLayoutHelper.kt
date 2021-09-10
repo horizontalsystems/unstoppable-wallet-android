@@ -9,6 +9,10 @@ import java.util.*
 
 object AppLayoutHelper {
     fun getCoinDrawable(context: Context, coinType: CoinType): Drawable? {
+        return ContextCompat.getDrawable(context, getCoinDrawableOrDefaultResId(context, coinType))
+    }
+
+    fun getCoinDrawableOrDefaultResId(context: Context, coinType: CoinType): Int {
         val coinDrawableResId = getCoinDrawableResId(context, coinType)
 
         val resId = when {
@@ -18,8 +22,7 @@ object AppLayoutHelper {
             coinType is CoinType.Bep20 -> R.drawable.bep20
             else -> R.drawable.place_holder
         }
-
-        return ContextCompat.getDrawable(context, resId)
+        return resId
     }
 
     private fun getCoinDrawableResId(context: Context, coinType: CoinType): Int? {
