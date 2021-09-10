@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.ui.compose.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -50,31 +51,31 @@ fun <T>CardTabs(
                     },
                     modifier = Modifier.padding(end = if (lastElement) 0.dp else 12.dp)
                 ) {
+                    val modifier = if (selected) {
+                        Modifier.border(1.dp, ComposeAppTheme.colors.jacob, RoundedCornerShape(12.dp))
+                    } else {
+                        Modifier
+                    }
+
                     Column(
-                        modifier = Modifier
+                        modifier = modifier
                             .width(98.dp)
                             .fillMaxHeight()
                             .clip(RoundedCornerShape(12.dp))
-                            .background(if (selected) ComposeAppTheme.colors.yellowD else ComposeAppTheme.colors.lawrence)
+                            .background(ComposeAppTheme.colors.lawrence)
                             .padding(12.dp),
                         verticalArrangement = Arrangement.SpaceBetween
                     ) {
                         if (tabItem.iconResId != null) {
-                            Box(
-                                Modifier
-                                    .clip(RoundedCornerShape(100))
-                                    .background(ComposeAppTheme.colors.lawrence)
-                            ) {
-                                Image(
-                                    painter = painterResource(id = tabItem.iconResId),
-                                    contentDescription = ""
-                                )
-                            }
+                            Image(
+                                painter = painterResource(id = tabItem.iconResId),
+                                contentDescription = ""
+                            )
                         }
                         Text(
                             text = tabItem.title,
                             style = ComposeAppTheme.typography.subhead1,
-                            color = if (selected) Color.Black else ComposeAppTheme.colors.oz
+                            color = ComposeAppTheme.colors.oz
                         )
                     }
                 }
