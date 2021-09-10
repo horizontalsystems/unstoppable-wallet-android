@@ -85,11 +85,19 @@ class BalanceViewItemFactory {
         return DeemedValue(value, dimmed = dimmed, visible = !showSyncing)
     }
 
-    private fun getSyncingProgress(state: AdapterState?): SyncingProgress {
+    private fun getSyncingProgress(state: AdapterState?, coinType: CoinType): SyncingProgress {
         return when (state) {
-            is AdapterState.Syncing -> SyncingProgress(state.progress, false)
+            is AdapterState.Syncing -> SyncingProgress(state.progress ?: getDefaultSyncingProgress(coinType), false)
             is AdapterState.SearchingTxs -> SyncingProgress(10, true)
             else -> SyncingProgress(null, false)
+        }
+    }
+
+    private fun getDefaultSyncingProgress(coinType: CoinType): Int {
+        return when (coinType) {
+            CoinType.Bitcoin, CoinType.Litecoin, CoinType.BitcoinCash, CoinType.Dash, CoinType.Zcash -> 10
+            CoinType.Ethereum, CoinType.BinanceSmartChain, is CoinType.Erc20, is CoinType.Bep2, is CoinType.Bep20 -> 50
+            is CoinType.Unsupported -> 0
         }
     }
 
@@ -190,7 +198,7 @@ class BalanceViewItemFactory {
                 expanded = expanded,
                 sendEnabled = state is AdapterState.Synced,
                 receiveEnabled = state != null,
-                syncingProgress = getSyncingProgress(state),
+                syncingProgress = getSyncingProgress(state, coin.type),
                 syncingTextValue = getSyncingText(state, expanded),
                 syncedUntilTextValue = getSyncedUntilText(state, expanded),
                 failedIconVisible = state is AdapterState.NotSynced,
