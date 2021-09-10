@@ -42,25 +42,12 @@
             tools:layout_height="45dp"
             />
 
-        <io.horizontalsystems.bankwallet.ui.extensions.NestedScrollableHost
+        <androidx.compose.ui.platform.ComposeView
+            android:id="@+id/transactionCoinFilterTabCompose"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerTags"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clipToPadding="false"
-                android:orientation="horizontal"
-                android:paddingStart="12dp"
-                android:paddingTop="6dp"
-                android:paddingEnd="12dp"
-                android:paddingBottom="6dp"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:itemCount="3"
-                tools:listitem="@layout/view_holder_filter" />
-
-        </io.horizontalsystems.bankwallet.ui.extensions.NestedScrollableHost>
+            android:layout_height="wrap_content"
+            tools:layout_height="94dp"
+            />
 
     </com.google.android.material.appbar.AppBarLayout>
 

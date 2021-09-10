@@ -5,7 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.unit.dp
 import androidx.core.view.isVisible
 import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.*
@@ -13,8 +16,10 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.CardTabs
 import io.horizontalsystems.bankwallet.ui.compose.components.ScrollableTabs
 import io.horizontalsystems.bankwallet.ui.compose.components.TabItem
+import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.views.helpers.LayoutHelper
 import kotlinx.android.extensions.LayoutContainer
@@ -28,13 +33,6 @@ class TransactionsFragment : BaseFragment(R.layout.fragment_transactions) {
     private var scrollToTopAfterUpdate = false
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        val tagsAdapter = TagsAdapter {
-            viewModel.setFilterCoin(it)
-            scrollToTopAfterUpdate = true
-        }
-
-        recyclerTags.adapter = tagsAdapter
 
         val transactionsAdapter = TransactionsAdapter(
             {
@@ -91,10 +89,6 @@ class TransactionsFragment : BaseFragment(R.layout.fragment_transactions) {
             }
         }
 
-        viewModel.filterCoinsLiveData.observe(viewLifecycleOwner) {
-            tagsAdapter.submitList(it)
-        }
-
         viewModel.syncingLiveData.observe(viewLifecycleOwner) {
             toolbarSpinner.isVisible = it
         }
@@ -104,6 +98,26 @@ class TransactionsFragment : BaseFragment(R.layout.fragment_transactions) {
         })
 
         transactionTypeFilterTabCompose.setViewCompositionStrategy(
+            ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+        )
+
+        transactionCoinFilterTabCompose.setContent {
+            val filterCoins by viewModel.filterCoinsLiveData.observeAsState(listOf())
+
+            val tabItems = filterCoins.map {
+                TabItem(it.item.coin.code, it.selected, it.item, AppLayoutHelper.getCoinDrawableOrDefaultResId(requireContext(), it.item.coin.type))
+            }
+
+            CardTabs(
+                tabItems = tabItems,
+                edgePadding = 16.dp
+            ) {
+                viewModel.setFilterCoin(it)
+                scrollToTopAfterUpdate = true
+            }
+        }
+
+        transactionCoinFilterTabCompose.setViewCompositionStrategy(
             ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
         )
     }

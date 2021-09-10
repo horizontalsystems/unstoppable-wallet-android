@@ -239,6 +239,8 @@ dependencies {
     // Integration with ViewModels
     implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha07'
 
+    implementation "androidx.compose.runtime:runtime-livedata:1.0.2"
+
     // When using a AppCompat theme
     implementation "com.google.accompanist:accompanist-appcompat-theme:0.15.0"
 
