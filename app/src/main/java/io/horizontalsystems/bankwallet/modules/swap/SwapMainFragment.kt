@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.compose.foundation.layout.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.unit.dp
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
@@ -46,6 +47,10 @@ class SwapMainFragment : BaseFragment() {
         mainViewModel.providerLiveData.observe(viewLifecycleOwner, { provider ->
             setProviderView(provider)
         })
+
+        topMenuCompose.setViewCompositionStrategy(
+            ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+        )
     }
 
     private fun setProviderView(provider: ISwapProvider) {
