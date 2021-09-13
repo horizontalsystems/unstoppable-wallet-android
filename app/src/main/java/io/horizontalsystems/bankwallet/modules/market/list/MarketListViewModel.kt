@@ -58,7 +58,7 @@ class MarketListViewModel(
     }
 
     private fun getSortMenu(): MarketListHeaderView.SortMenu {
-        return MarketListHeaderView.SortMenu.MultiOption(sortingField.name)
+        return MarketListHeaderView.SortMenu.MultiOption(Translator.getString(sortingField.titleResId))
     }
 
     private fun syncState(state: MarketListService.State) {
