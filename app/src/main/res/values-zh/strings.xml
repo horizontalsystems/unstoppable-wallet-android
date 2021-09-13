@@ -66,7 +66,7 @@
     <string name="Restore_Error_EmptyPassphrase">助记词不能为空</string>
     <string name="Restore_InvalidChecksum">校验和无效</string>
     <string name="Restore_PassphraseDescription">输入您在创建此助记词时使用的密码.</string>
-    <string name="Select_Coins">选择加密货币</string>
+    <string name="Select_Coins">Choose Coins</string>
     <string name="Restore_ZCash_BirthdayHeight">生日高度</string>
     <string name="Restore_ZCash_BirthdayHeight_Hint">如果您知道您Zcash钱包的生日高度，请将其添加至下方以加速同步过程。</string>
     <!--Backup-->
@@ -366,8 +366,6 @@
     <string name="Swap_Confirmation_Guaranteed">保证</string>
     <string name="Swap_Confirmation_Maximum">最大金额</string>
     <string name="Swap_Confirmation_Estimated">估计</string>
-    <!--Swap Coin Select-->
-    <string name="Swap_CoinSelect_Title">选择加密货币</string>
     <!--Approve-->
     <string name="Approve_Title">互兑批准</string>
     <string name="Approve_Info">您应为智能合约授予权限，以代表您互兑给定的代币。此权限设定了智能合约可以使用的金额。它不会影响您的余额，但需要小额费用以执行批准交易。\n\n虽然这可以在每一次交易之前按需完成，但是预先对将来的交易批准较大的金额将使成本更低。</string>
@@ -592,7 +590,7 @@
     <string name="Hud_Removed_from_Watchlist">Removed from Watchlist</string>
     <string name="Hud_UnknownError">%s</string>
     <!--Manage Coins-->
-    <string name="ManageCoins_title">选择代币</string>
+    <string name="ManageCoins_title">Coin Manager</string>
     <string name="ManageCoins_Search">搜索​​​​</string>
     <string name="ManageCoins_AddToken">添加代币</string>
     <!-- Experimental Feature -->
