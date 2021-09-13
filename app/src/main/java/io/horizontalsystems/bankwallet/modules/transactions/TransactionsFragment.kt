@@ -102,18 +102,20 @@ class TransactionsFragment : BaseFragment(R.layout.fragment_transactions) {
         )
 
         transactionCoinFilterTabCompose.setContent {
-            val filterCoins by viewModel.filterCoinsLiveData.observeAsState(listOf())
+            val filterCoins by viewModel.filterCoinsLiveData.observeAsState()
 
-            val tabItems = filterCoins.map {
-                TabItem(it.item.coin.code, it.selected, it.item, AppLayoutHelper.getCoinDrawableOrDefaultResId(requireContext(), it.item.coin.type))
-            }
+            filterCoins?.let {
+                val tabItems = it.map {
+                    TabItem(it.item.coin.code, it.selected, it.item, AppLayoutHelper.getCoinDrawableOrDefaultResId(requireContext(), it.item.coin.type))
+                }
 
-            CardTabs(
-                tabItems = tabItems,
-                edgePadding = 16.dp
-            ) {
-                viewModel.setFilterCoin(it)
-                scrollToTopAfterUpdate = true
+                CardTabs(
+                    tabItems = tabItems,
+                    edgePadding = 16.dp
+                ) {
+                    viewModel.setFilterCoin(it)
+                    scrollToTopAfterUpdate = true
+                }
             }
         }
 
