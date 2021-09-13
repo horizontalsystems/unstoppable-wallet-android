@@ -66,7 +66,7 @@
     <string name="Restore_Error_EmptyPassphrase">Passphrase cannot be empty</string>
     <string name="Restore_InvalidChecksum">Invalid Checksum</string>
     <string name="Restore_PassphraseDescription">Enter your passphrase that you used when creating this mnemonic phrase.</string>
-    <string name="Select_Coins">Choose Crypto</string>
+    <string name="Select_Coins">Choose Coins</string>
     <string name="Restore_ZCash_BirthdayHeight">Birthday Height</string>
     <string name="Restore_ZCash_BirthdayHeight_Hint">If you know a birthday height for your Zcash wallet, add it below to speed up the syncing process.</string>
     <!--Backup-->
@@ -366,8 +366,6 @@
     <string name="Swap_Confirmation_Guaranteed">Guaranteed</string>
     <string name="Swap_Confirmation_Maximum">Maximum</string>
     <string name="Swap_Confirmation_Estimated">Estimated</string>
-    <!--Swap Coin Select-->
-    <string name="Swap_CoinSelect_Title">Choose Crypto</string>
     <!--Approve-->
     <string name="Approve_Title">Swap Approve</string>
     <string name="Approve_Info">You should grant permission to a smart contract to swap given token on your behalf. This permission sets amount that can be used by a smart contract. It doesn\'t affect your balance but requires a small fee to execute approval transaction. \n\nWhile it may be done on demand before each trade, it\'s cheaper to approve higher amount in advance for future trades.</string>
@@ -592,7 +590,7 @@
     <string name="Hud_Removed_from_Watchlist">Removed from Watchlist</string>
     <string name="Hud_UnknownError">%s</string>
     <!--Manage Coins-->
-    <string name="ManageCoins_title">Choose Coins</string>
+    <string name="ManageCoins_title">Coin Manager</string>
     <string name="ManageCoins_Search">Search</string>
     <string name="ManageCoins_AddToken">Add Token</string>
     <!-- Experimental Feature -->
