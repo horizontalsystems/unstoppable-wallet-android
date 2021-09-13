@@ -66,7 +66,7 @@
     <string name="Restore_Error_EmptyPassphrase">La phrase d\'authentification ne peut pas être laissée en blanc</string>
     <string name="Restore_InvalidChecksum">Somme de contrôle invalide</string>
     <string name="Restore_PassphraseDescription">Entrez la phrase d\'authentification que vous avez utilisée pour créer cette phrase mnémonique.</string>
-    <string name="Select_Coins">Choisissez la Crypto</string>
+    <string name="Select_Coins">Choose Coins</string>
     <string name="Restore_ZCash_BirthdayHeight">Hauteur de l\'anniversaire</string>
     <string name="Restore_ZCash_BirthdayHeight_Hint">Si vous savez quelle est la hauteur de l\'anniversaire de votre portefeuille Zcash, ajoutez-la ci-dessous pour accélérer le processus de synchronisation.</string>
     <!--Backup-->
@@ -366,8 +366,6 @@
     <string name="Swap_Confirmation_Guaranteed">Garanti</string>
     <string name="Swap_Confirmation_Maximum">Maximum</string>
     <string name="Swap_Confirmation_Estimated">Estimé</string>
-    <!--Swap Coin Select-->
-    <string name="Swap_CoinSelect_Title">Choisissez la Crypto</string>
     <!--Approve-->
     <string name="Approve_Title">Swap approuvé</string>
     <string name="Approve_Info">Vous devriez donner la permission à un contrat intelligent d\'échanger un token donné en votre nom. Cette permission fixe le montant qui peut être utilisé par un contrat intelligent. Cela n\'affecte pas votre solde mais nécessite des frais minimes pour exécuter la transaction d\'approbation.\n\nBien que cela puisse être fait au cas par cas avant chaque transaction, il est plus économique d\'approuver un montant plus élevé à l\'avance pour les transactions futures.</string>
@@ -592,7 +590,7 @@
     <string name="Hud_Removed_from_Watchlist">Retirer de la liste de suivi</string>
     <string name="Hud_UnknownError">%s</string>
     <!--Manage Coins-->
-    <string name="ManageCoins_title">Crypto Monnaie</string>
+    <string name="ManageCoins_title">Coin Manager</string>
     <string name="ManageCoins_Search">Chercher</string>
     <string name="ManageCoins_AddToken">Ajouter le token</string>
     <!-- Experimental Feature -->
