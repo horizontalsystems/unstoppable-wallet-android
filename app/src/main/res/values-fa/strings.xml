@@ -66,7 +66,7 @@
     <string name="Restore_Error_EmptyPassphrase">رمز عبور نمی تواند خالی باشد</string>
     <string name="Restore_InvalidChecksum">Checksum نامعتبر است</string>
     <string name="Restore_PassphraseDescription">Enter your passphrase that you used when creating this mnemonic phrase.</string>
-    <string name="Select_Coins">کیف پول جدید</string>
+    <string name="Select_Coins">Choose Coins</string>
     <string name="Restore_ZCash_BirthdayHeight">قد تولد</string>
     <string name="Restore_ZCash_BirthdayHeight_Hint">If you know a birthday height for your Zcash wallet add it below to speedup syncing process.</string>
     <!--Backup-->
@@ -366,8 +366,6 @@
     <string name="Swap_Confirmation_Guaranteed">تضمین شده</string>
     <string name="Swap_Confirmation_Maximum">حداکثر</string>
     <string name="Swap_Confirmation_Estimated">تخمین زده شده</string>
-    <!--Swap Coin Select-->
-    <string name="Swap_CoinSelect_Title">کیف پول جدید</string>
     <!--Approve-->
     <string name="Approve_Title">تایید کنید</string>
     <string name="Approve_Info">شما باید به یک قرارداد هوشمند اجازه بدهید که به تعویض رمز داده شده از طرف شما اقدام کند. این مجوز مبلغی را تعیین می کند که می تواند در یک قرارداد هوشمند استفاده شود. این باقیمانده موجودی شما را تحت تأثیر قرار نمی دهد اما برای تأیید معامله به هزینه کمی نیاز دارد. \n\nاگرچه ممکن است قبل از هر معامله بر اساس تقاضا انجام شود ، تصویب مبلغ بالاتر برای ما در معاملات آینده ارزان تر است.</string>
@@ -592,7 +590,7 @@
     <string name="Hud_Removed_from_Watchlist">از فهرست تماشا برداشته شد</string>
     <string name="Hud_UnknownError">s%</string>
     <!--Manage Coins-->
-    <string name="ManageCoins_title">سکه ها را انتخاب کنید</string>
+    <string name="ManageCoins_title">Coin Manager</string>
     <string name="ManageCoins_Search">جستجو</string>
     <string name="ManageCoins_AddToken">اضافه کردن نشان</string>
     <!-- Experimental Feature -->
