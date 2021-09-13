@@ -66,7 +66,7 @@
     <string name="Restore_Error_EmptyPassphrase">Parola boş olamaz</string>
     <string name="Restore_InvalidChecksum">Geçersiz sağlama toplamı</string>
     <string name="Restore_PassphraseDescription">Bu anımsatıcı ifadeyi oluştururken kullandığınız parolanızı girin.</string>
-    <string name="Select_Coins">Kripto Parayi Seç</string>
+    <string name="Select_Coins">Choose Coins</string>
     <string name="Restore_ZCash_BirthdayHeight">Oluşturulma Günü Üst Sınırı</string>
     <string name="Restore_ZCash_BirthdayHeight_Hint">Zcash cüzdanınız için bir doğum günü yüksekliği biliyorsanız, senkronizasyon işlemini hızlandırmak için aşağıya ekleyin.</string>
     <!--Backup-->
@@ -366,8 +366,6 @@
     <string name="Swap_Confirmation_Guaranteed">Garanti</string>
     <string name="Swap_Confirmation_Maximum">Maksimum</string>
     <string name="Swap_Confirmation_Estimated">Tahmini</string>
-    <!--Swap Coin Select-->
-    <string name="Swap_CoinSelect_Title">Yeni Cüzdan</string>
     <!--Approve-->
     <string name="Approve_Title">Takas Onayı</string>
     <string name="Approve_Info">Verilen jetonu sizin adınıza swap yapmak için bir akıllı sözleşmeye izin vermelisiniz. Bu izin, akıllı sözleşme tarafından kullanılabilecek tutarı belirler. Bakiyenizi etkilemez ancak onay işlemini gerçekleştirmek için küçük bir ücret gerekir.\n\nHer alım satımdan önce talep üzerine yapılabilirken, ileriki alım satımlarda bizim için önceden daha yüksek tutarı onaylamanız durumunda çok daha ucuz olur.</string>
@@ -592,7 +590,7 @@
     <string name="Hud_Removed_from_Watchlist">Removed from Watchlist</string>
     <string name="Hud_UnknownError">%s</string>
     <!--Manage Coins-->
-    <string name="ManageCoins_title">Kripto Parayı Seç</string>
+    <string name="ManageCoins_title">Coin Manager</string>
     <string name="ManageCoins_Search">Ara</string>
     <string name="ManageCoins_AddToken">Token Ekle</string>
     <!-- Experimental Feature -->
