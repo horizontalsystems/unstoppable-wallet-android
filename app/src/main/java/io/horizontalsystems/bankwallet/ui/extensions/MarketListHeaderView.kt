@@ -5,6 +5,7 @@ import android.util.AttributeSet
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -61,7 +62,7 @@ class MarketListHeaderView @JvmOverloads constructor(
     }
 
     @Composable
-    private fun sortMenu(sortMenu: SortMenu) {
+    private fun RowScope.sortMenu(sortMenu: SortMenu) {
         when (sortMenu) {
             is SortMenu.DuoOption -> {
                 ButtonSecondaryCircle(
@@ -74,6 +75,7 @@ class MarketListHeaderView @JvmOverloads constructor(
             }
             is SortMenu.MultiOption -> {
                 ButtonSecondaryTransparent(
+                    modifier = Modifier.weight(1f),
                     title = sortMenu.title,
                     iconRight = R.drawable.ic_down_arrow_20,
                     onClick = {
