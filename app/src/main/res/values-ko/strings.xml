@@ -66,7 +66,7 @@
     <string name="Restore_Error_EmptyPassphrase">암호 문구는 필수 입력 사항입니다</string>
     <string name="Restore_InvalidChecksum">유효하지 않은 체크섬</string>
     <string name="Restore_PassphraseDescription">이 연상 부호를 만들 때 사용한 암호 문구 입력.</string>
-    <string name="Select_Coins">암호화를 선택해 주세요</string>
+    <string name="Select_Coins">Choose Coins</string>
     <string name="Restore_ZCash_BirthdayHeight">생일 신장</string>
     <string name="Restore_ZCash_BirthdayHeight_Hint">Zcash 지갑의 birthday height를 알고 있다면 아래에 추가하여 동기화 속도를 높입니다.</string>
     <!--Backup-->
@@ -366,8 +366,6 @@
     <string name="Swap_Confirmation_Guaranteed">보증됨</string>
     <string name="Swap_Confirmation_Maximum">최대</string>
     <string name="Swap_Confirmation_Estimated">예상</string>
-    <!--Swap Coin Select-->
-    <string name="Swap_CoinSelect_Title">암호 선택하기</string>
     <!--Approve-->
     <string name="Approve_Title">스왑 승인</string>
     <string name="Approve_Info">스마트 계약에 사용자 대신 지정된 토큰을 교환할 수 있는 권한을 부여해야 합니다. 이 권한은 스마트 계약에서 사용할 수 있는 금액을 설정합니다. 잔액에는 영향을 미치지 않지만 승인 거래를 실행하려면 소액의 수수료가 필요합니다.\n\n매 거래 전에 요청 시 이루어질 수 있지만, 향후 거래를 위해 사전에 더 많은 금액을 승인하는 것이 더 저렴합니다.</string>
@@ -592,7 +590,7 @@
     <string name="Hud_Removed_from_Watchlist">Removed from Watchlist</string>
     <string name="Hud_UnknownError">%s</string>
     <!--Manage Coins-->
-    <string name="ManageCoins_title">코인 선택하기</string>
+    <string name="ManageCoins_title">Coin Manager</string>
     <string name="ManageCoins_Search">검색</string>
     <string name="ManageCoins_AddToken">토큰 추가</string>
     <!-- Experimental Feature -->
