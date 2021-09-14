@@ -16,7 +16,8 @@ class Colors(
     bran: Color,
     leah: Color,
     claude: Color,
-    lawrence: Color
+    lawrence: Color,
+    jeremy: Color
 ) {
 
     //base colors
@@ -30,6 +31,7 @@ class Colors(
     val steel20 = Steel20
     val grey = Grey
     val grey50 = Grey50
+    val yellow50 = Yellow50
 
     val yellowD = YellowD
     val yellowL = YellowL
@@ -57,6 +59,8 @@ class Colors(
         private set
     var lawrence by mutableStateOf(lawrence)
         private set
+    var jeremy by mutableStateOf(jeremy)
+        private set
 
     fun update(other: Colors) {
         jacob = other.jacob
@@ -68,6 +72,7 @@ class Colors(
         leah = other.leah
         claude = other.claude
         lawrence = other.lawrence
+        jeremy = other.jeremy
     }
 
     fun copy(): Colors = Colors(
@@ -79,6 +84,7 @@ class Colors(
         bran = bran,
         leah = leah,
         claude = claude,
-        lawrence = lawrence
+        lawrence = lawrence,
+        jeremy = jeremy
     )
 }

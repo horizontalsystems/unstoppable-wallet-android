@@ -20,6 +20,7 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 fun ButtonPrimaryCircle(
     @DrawableRes icon: Int = R.drawable.ic_arrow_down_left_24,
     onClick: () -> Unit,
+    enabled: Boolean = true
 ) {
     val shape = CircleShape
     IconButton(
@@ -27,12 +28,13 @@ fun ButtonPrimaryCircle(
         modifier = Modifier
             .size(50.dp)
             .clip(shape)
-            .background(ComposeAppTheme.colors.leah)
+            .background(if (enabled) ComposeAppTheme.colors.leah else ComposeAppTheme.colors.steel20),
+        enabled = enabled
     ) {
         Icon(
             painter = painterResource(id = icon),
             contentDescription = null,
-            tint = ComposeAppTheme.colors.claude
+            tint = if (enabled) ComposeAppTheme.colors.claude else ComposeAppTheme.colors.grey50
         )
     }
 }

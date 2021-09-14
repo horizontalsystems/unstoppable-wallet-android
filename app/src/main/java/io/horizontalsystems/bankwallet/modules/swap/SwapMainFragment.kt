@@ -95,7 +95,7 @@ class SwapMainFragment : BaseFragment() {
         val dialog = SelectorBottomSheetDialog<ViewItemWithIconWrapper<ISwapProvider>>()
         dialog.titleText = getString(R.string.Swap_SelectSwapProvider_Title)
         dialog.subtitleText = getString(R.string.Swap_SelectSwapProvider_Subtitle)
-        dialog.headerIconResourceId = R.drawable.ic_swap
+        dialog.headerIconResourceId = R.drawable.ic_swap_24
         dialog.items = mainViewModel.providerItems
         dialog.selectedItem = mainViewModel.selectedProviderItem
         dialog.onSelectListener = { providerWrapper -> mainViewModel.setProvider(providerWrapper.item) }
