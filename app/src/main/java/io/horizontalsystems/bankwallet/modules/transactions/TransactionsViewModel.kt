@@ -22,14 +22,9 @@ class TransactionsViewModel(
 
     lateinit var tmpItemToShow: TransactionItem
 
-    val filterTypes = FilterTransactionType.values()
-
     val syncingLiveData = MutableLiveData<Boolean>()
-
     val filterCoinsLiveData = MutableLiveData<List<Filter<Wallet>>>()
-
-    val selectedFilterTypeLiveData = MutableLiveData(FilterTransactionType.All)
-
+    val filterTypesLiveData = MutableLiveData<List<Filter<FilterTransactionType>>>()
     val transactionList = MutableLiveData<ItemsList>()
 
     private val disposables = CompositeDisposable()
@@ -38,6 +33,17 @@ class TransactionsViewModel(
         service.syncingObservable
             .subscribeIO {
                 syncingLiveData.postValue(it)
+            }
+            .let {
+                disposables.add(it)
+            }
+
+        service.typesObservable
+            .subscribeIO { (types, selectedType) ->
+                val filterTypes = types.map {
+                    Filter(it, it == selectedType)
+                }
+                filterTypesLiveData.postValue(filterTypes)
             }
             .let {
                 disposables.add(it)
@@ -90,7 +96,6 @@ class TransactionsViewModel(
 
     fun setFilterTransactionType(filterType: FilterTransactionType) {
         service.setFilterType(filterType)
-        selectedFilterTypeLiveData.postValue(filterType)
     }
 
     fun setFilterCoin(w: Wallet?) {

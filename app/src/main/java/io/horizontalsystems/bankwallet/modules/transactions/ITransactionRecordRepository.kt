@@ -5,6 +5,7 @@ import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRe
 import io.reactivex.Observable
 
 interface ITransactionRecordRepository : Clearable {
+    val typesObservable: Observable<Pair<List<FilterTransactionType>, FilterTransactionType>>
     val itemsObservable: Observable<List<TransactionRecord>>
 
     fun setWallets(transactionWallets: List<TransactionWallet>, walletsGroupedBySource: List<TransactionWallet>)

@@ -93,9 +93,22 @@ class TransactionsFragment : BaseFragment(R.layout.fragment_transactions) {
             toolbarSpinner.isVisible = it
         }
 
-        viewModel.selectedFilterTypeLiveData.observe(viewLifecycleOwner, { selectedFilterType ->
-            setTabs(selectedFilterType)
-        })
+        transactionTypeFilterTabCompose.setContent {
+            val filterTypes by viewModel.filterTypesLiveData.observeAsState()
+
+            filterTypes?.let {
+                val tabItems = it.map {
+                    TabItem(it.item.name, it.selected, it.item)
+                }
+
+                ComposeAppTheme {
+                    ScrollableTabs(tabItems) { index ->
+                        viewModel.setFilterTransactionType(index)
+                        scrollToTopAfterUpdate = true
+                    }
+                }
+            }
+        }
 
         transactionTypeFilterTabCompose.setViewCompositionStrategy(
             ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
@@ -122,20 +135,6 @@ class TransactionsFragment : BaseFragment(R.layout.fragment_transactions) {
         transactionCoinFilterTabCompose.setViewCompositionStrategy(
             ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
         )
-    }
-
-    private fun setTabs(selected: FilterTransactionType) {
-        val tabItems = viewModel.filterTypes.map{
-            TabItem(it.name, it == selected, it)
-        }
-        transactionTypeFilterTabCompose.setContent {
-            ComposeAppTheme {
-                ScrollableTabs(tabItems) { index ->
-                    viewModel.setFilterTransactionType(index)
-                    scrollToTopAfterUpdate = true
-                }
-            }
-        }
     }
 }
 
