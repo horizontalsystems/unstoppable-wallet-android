@@ -5,7 +5,11 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ITransactionsAdapter
 import io.horizontalsystems.bankwallet.core.providers.Translator
+import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import io.horizontalsystems.bankwallet.entities.LastBlockInfo
+import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionItem
+import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.core.helpers.DateHelper
 
 object TransactionInfoModule {
@@ -17,6 +21,7 @@ object TransactionInfoModule {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             val adapter: ITransactionsAdapter = App.transactionAdapterManager.getAdapter(transactionItem.record.source)!!
             val service = TransactionInfoService(
+                transactionItem.record,
                 adapter,
                 App.xRateManager,
                 App.currencyManager,
@@ -32,8 +37,6 @@ object TransactionInfoModule {
             return TransactionInfoViewModel(
                 service,
                 factory,
-                transactionItem.record,
-                transactionItem.record.source,
                 listOf(service)
             ) as T
         }
@@ -51,3 +54,10 @@ sealed class TransactionStatusViewItem {
     class Completed(val name: String) : TransactionStatusViewItem()
     object Failed : TransactionStatusViewItem()
 }
+
+data class TransactionInfoItem(
+    val record: TransactionRecord,
+    val lastBlockInfo: LastBlockInfo?,
+    val explorerData: TransactionInfoModule.ExplorerData,
+    val rates: Map<Coin, CurrencyValue>
+)

@@ -99,3 +99,11 @@ fun <T> Single<T>.subscribeIO(onSuccess: (t: T) -> Unit, onError: (e: Throwable)
             .observeOn(Schedulers.io())
             .subscribe(onSuccess, onError)
 }
+
+@CheckResult
+fun <T> Single<T>.subscribeIO(onSuccess: (t: T) -> Unit): Disposable {
+    return this
+            .subscribeOn(Schedulers.io())
+            .observeOn(Schedulers.io())
+            .subscribe(onSuccess)
+}
