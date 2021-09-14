@@ -12,7 +12,7 @@ sealed class MarketCategory(
 ) {
     object Rated : MarketCategory("rated", R.string.Market_Category_Rated, R.drawable.ic_chart_24, R.string.Market_Category_Rated_Description)
     object Blockchains : MarketCategory("blockchain", R.string.Market_Category_Blockchains, R.drawable.ic_blocks, R.string.Market_Category_Blockchains_Description)
-    object Dexes : MarketCategory("dexes", R.string.Market_Category_Dexes, R.drawable.ic_swap, R.string.Market_Category_Dexes_Description)
+    object Dexes : MarketCategory("dexes", R.string.Market_Category_Dexes, R.drawable.ic_swap_24, R.string.Market_Category_Dexes_Description)
     object Lending : MarketCategory("lending", R.string.Market_Category_Lending, R.drawable.ic_swap_approval_4, R.string.Market_Category_Lending_Description)
     object Privacy : MarketCategory("privacy", R.string.Market_Category_Privacy, R.drawable.ic_shield, R.string.Market_Category_Privacy_Description)
     object Scaling : MarketCategory("scaling", R.string.Market_Category_Scaling, R.drawable.ic_scale, R.string.Market_Category_Scaling_Description)

@@ -1,13 +1,20 @@
 package io.horizontalsystems.bankwallet.modules.balance
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
 class BalanceViewModel(
     private val service: BalanceService2,
@@ -19,8 +26,14 @@ class BalanceViewModel(
 
     val titleLiveData = MutableLiveData<String>()
     val headerViewItemLiveData = MutableLiveData<BalanceHeaderViewItem>()
-    val balanceViewItemsLiveData = MutableLiveData<List<BalanceViewItem>>()
     val disabledWalletLiveData = SingleLiveEvent<Wallet>()
+
+    private val _balanceViewItemsLiveData = MutableLiveData<List<BalanceViewItem>>()
+    val balanceViewItems: LiveData<List<BalanceViewItem>> = _balanceViewItemsLiveData
+
+    private val _isRefreshing = MutableStateFlow(false)
+    val isRefreshing: StateFlow<Boolean>
+        get() = _isRefreshing.asStateFlow()
 
     private var disposables = CompositeDisposable()
 
@@ -56,7 +69,7 @@ class BalanceViewModel(
     }
 
     private fun refreshViewItems() {
-        balanceViewItemsLiveData.postValue(service.balanceItems.map { balanceItem ->
+        _balanceViewItemsLiveData.postValue(service.balanceItems.map { balanceItem ->
             balanceViewItemFactory.viewItem(
                 balanceItem,
                 service.baseCurrency,
@@ -77,7 +90,17 @@ class BalanceViewModel(
     }
 
     fun onRefresh() {
-        service.refresh()
+        if (_isRefreshing.value) {
+            return
+        }
+
+        viewModelScope.launch {
+            service.refresh()
+            // A fake 2 second 'refresh'
+            _isRefreshing.emit(true)
+            delay(1800)
+            _isRefreshing.emit(false)
+        }
     }
 
     fun onBalanceClick() {

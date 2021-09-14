@@ -250,6 +250,7 @@
 
     <string name="Balance_Title">Balance</string>
     <string name="Balance_Send">Send</string>
+    <string name="Balance_Receive">Receive</string>
     <string name="Balance_RatePerCoin">%1$s per %2$s</string>
     <string name="Balance_SyncedUntil">until %s</string>
     <string name="Balance_Syncing">Syncing…</string>

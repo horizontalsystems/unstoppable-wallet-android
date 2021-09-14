@@ -265,7 +265,7 @@
                 android:layout_height="50dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="10dp"
-                android:drawableTop="@drawable/ic_down_left"
+                android:drawableTop="@drawable/ic_arrow_down_left_24"
                 android:drawableTint="@color/button_text_color_selector"
                 app:layout_constraintEnd_toStartOf="@+id/swapButtonWrapper"
                 app:layout_constraintStart_toEndOf="@+id/buttonSend"
@@ -285,7 +285,7 @@
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_marginStart="8dp"
-                    android:drawableTop="@drawable/ic_swap"
+                    android:drawableTop="@drawable/ic_swap_24"
                     android:drawableTint="@color/button_text_color_selector"
                     android:visibility="gone" />
             </FrameLayout>

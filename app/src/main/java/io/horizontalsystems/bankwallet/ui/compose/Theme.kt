@@ -18,7 +18,8 @@ val lightPalette = Colors(
     bran = Dark,
     leah = SteelDark,
     claude = Color.White,
-    lawrence = Color.White
+    lawrence = Color.White,
+    jeremy = SteelLight
 )
 
 val darkPalette = Colors(
@@ -30,7 +31,8 @@ val darkPalette = Colors(
     bran = LightGrey,
     leah = SteelLight,
     claude = Dark,
-    lawrence = SteelDark
+    lawrence = SteelDark,
+    jeremy = Steel20
 )
 
 @Composable
