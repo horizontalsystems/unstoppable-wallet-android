@@ -109,7 +109,7 @@ fun ButtonSecondaryTransparent(
         ),
         content = {
             if (iconRight != null) {
-                Row(modifier = Modifier.fillMaxWidth()) {
+                Row {
                     Text(title, maxLines = 1, overflow = TextOverflow.Ellipsis)
                     Icon(
                         modifier = Modifier.padding(start = 4.dp),

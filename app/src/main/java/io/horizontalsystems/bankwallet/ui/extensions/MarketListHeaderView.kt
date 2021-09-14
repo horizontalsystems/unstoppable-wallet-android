@@ -5,7 +5,6 @@ import android.util.AttributeSet
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -15,7 +14,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCirc
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryToggle
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryTransparent
 import io.horizontalsystems.bankwallet.ui.compose.components.ToggleIndicator
-import kotlinx.android.synthetic.main.view_market_list_header.view.composeView
+import kotlinx.android.synthetic.main.view_market_list_header.view.*
 
 class MarketListHeaderView @JvmOverloads constructor(
     context: Context,
@@ -40,12 +39,17 @@ class MarketListHeaderView @JvmOverloads constructor(
                 Column(modifier = Modifier.width(IntrinsicSize.Max)) {
                     Divider(thickness = 1.dp, color = ComposeAppTheme.colors.steel10)
                     Row(
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier
+                            .fillMaxWidth()
                             .padding(top = 8.dp, end = 16.dp, bottom = 8.dp),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        sortMenu(sortMenu)
-                        toggleMenu(toggleButton)
+                        Box(modifier = Modifier.weight(1f)) {
+                            sortMenu(sortMenu)
+                        }
+                        Box(modifier = Modifier.padding(start = 16.dp)) {
+                            toggleMenu(toggleButton)
+                        }
                     }
                 }
             }
@@ -62,7 +66,7 @@ class MarketListHeaderView @JvmOverloads constructor(
     }
 
     @Composable
-    private fun RowScope.sortMenu(sortMenu: SortMenu) {
+    private fun sortMenu(sortMenu: SortMenu) {
         when (sortMenu) {
             is SortMenu.DuoOption -> {
                 ButtonSecondaryCircle(
@@ -75,7 +79,6 @@ class MarketListHeaderView @JvmOverloads constructor(
             }
             is SortMenu.MultiOption -> {
                 ButtonSecondaryTransparent(
-                    modifier = Modifier.weight(1f),
                     title = sortMenu.title,
                     iconRight = R.drawable.ic_down_arrow_20,
                     onClick = {
