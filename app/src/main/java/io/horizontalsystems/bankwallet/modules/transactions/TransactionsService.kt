@@ -33,6 +33,7 @@ class TransactionsService(
     val itemsObservable: Observable<List<TransactionItem>> get() = itemsSubject
 
     val syncingObservable get() = transactionSyncStateRepository.syncingObservable
+    val typesObservable get() = transactionRecordRepository.typesObservable
 
     private val disposables = CompositeDisposable()
     private val transactionItems = CopyOnWriteArrayList<TransactionItem>()

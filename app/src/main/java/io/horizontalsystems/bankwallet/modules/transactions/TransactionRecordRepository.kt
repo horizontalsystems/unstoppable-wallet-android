@@ -8,6 +8,7 @@ import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.atomic.AtomicBoolean
@@ -16,11 +17,15 @@ class TransactionRecordRepository(
     private val adapterManager: TransactionAdapterManager,
 ) : ITransactionRecordRepository {
 
-    private var transactionType: FilterTransactionType = FilterTransactionType.All
+    private val allFilterTransactionTypes = FilterTransactionType.values().toList()
+    private var selectedFilterTransactionType: FilterTransactionType = FilterTransactionType.All
+
     private var selectedWallet: TransactionWallet? = null
 
     private val itemsSubject = PublishSubject.create<List<TransactionRecord>>()
     override val itemsObservable: Observable<List<TransactionRecord>> get() = itemsSubject
+
+    override val typesObservable = BehaviorSubject.createDefault(Pair(allFilterTransactionTypes, selectedFilterTransactionType))
 
     private var loadedPageNumber = 0
     private val items = CopyOnWriteArrayList<TransactionRecord>()
@@ -49,7 +54,7 @@ class TransactionRecordRepository(
             var adapter = currentAdapters.remove(transactionWallet)
             if (adapter == null) {
                 adapterManager.getAdapter(transactionWallet.source)?.let {
-                    adapter = TransactionAdapterWrapper(it, transactionWallet, transactionType)
+                    adapter = TransactionAdapterWrapper(it, transactionWallet, selectedFilterTransactionType)
                 }
             }
 
@@ -66,6 +71,9 @@ class TransactionRecordRepository(
         selectedWallet?.let {
             if (!adaptersMap.containsKey(it)) {
                 selectedWallet = null
+
+                selectedFilterTransactionType = FilterTransactionType.All
+                typesObservable.onNext(Pair(allFilterTransactionTypes, selectedFilterTransactionType))
             }
         }
 
@@ -89,7 +97,9 @@ class TransactionRecordRepository(
     }
 
     override fun setTransactionType(transactionType: FilterTransactionType) {
-        this.transactionType = transactionType
+        selectedFilterTransactionType = transactionType
+        typesObservable.onNext(Pair(allFilterTransactionTypes, transactionType))
+
         adaptersMap.forEach { (_, transactionAdapterWrapper) ->
             transactionAdapterWrapper.setTransactionType(transactionType)
         }
