@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.modules.transactionInfo.adapters
 
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.compose.foundation.layout.*
 import androidx.compose.ui.Modifier
@@ -34,7 +33,7 @@ class TransactionInfoAdapter(
     interface Listener {
         fun onAddressClick(address: String)
         fun onActionButtonClick(actionButton: TransactionInfoActionButton)
-        fun onAdditionalButtonClick(buttonType: TransactionInfoButtonType)
+        fun onUrlClick(url: String)
         fun closeClick()
         fun onClickStatusInfo()
         fun onLockInfoClick(lockDate: Date)
@@ -45,7 +44,7 @@ class TransactionInfoAdapter(
     private var items = listOf<TransactionInfoViewItem?>()
     private val viewTypeItem = 0
     private val viewTypeDivider = 1
-    private val viewTypeButton = 2
+    private val viewTypeExplorer = 2
 
     init {
         viewItems.observe(viewLifecycleOwner) { list ->
@@ -65,7 +64,7 @@ class TransactionInfoAdapter(
     override fun getItemViewType(position: Int): Int {
         return when {
             items[position] == null -> viewTypeDivider
-            items[position]?.type is Button -> viewTypeButton
+            items[position]?.type is Explorer -> viewTypeExplorer
             else -> viewTypeItem
         }
     }
@@ -87,10 +86,10 @@ class TransactionInfoAdapter(
                     false
                 )
             )
-            viewTypeButton -> ButtonViewHolder(
+            viewTypeExplorer -> ExplorerViewHolder(
                 inflate(
                     parent,
-                    R.layout.view_holder_transaction_info_additional_button,
+                    R.layout.view_holder_transaction_info_explorer,
                     false
                 ),
                 listener
@@ -102,21 +101,18 @@ class TransactionInfoAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is ItemViewHolder -> items[position]?.let { holder.bind(it) }
-            is ButtonViewHolder -> (items[position]?.type as? Button)?.let { holder.bind(it) }
+            is ExplorerViewHolder -> (items[position]?.type as? Explorer)?.let { holder.bind(it) }
         }
     }
 
-    class ButtonViewHolder(override val containerView: View, private val listener: Listener) :
+    class ExplorerViewHolder(override val containerView: View, private val listener: Listener) :
         RecyclerView.ViewHolder(containerView), LayoutContainer {
 
-        fun bind(button: Button) {
-            containerView.findViewById<ImageView>(R.id.leftIcon)?.let {
-                it.setImageResource(button.leftIcon)
-            }
+        fun bind(explorer: Explorer) {
             containerView.findViewById<TextView>(R.id.txtTitle)?.let {
-                it.text = button.title
+                it.text = explorer.title
             }
-            containerView.setOnClickListener { listener.onAdditionalButtonClick(button.type) }
+            containerView.setOnClickListener { explorer.url?.let { listener.onUrlClick(it) } }
         }
     }
 

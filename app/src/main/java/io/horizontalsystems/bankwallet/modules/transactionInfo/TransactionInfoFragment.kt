@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.Observer
 import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.ConcatAdapter
 import io.horizontalsystems.bankwallet.R
@@ -30,7 +29,9 @@ import java.util.*
 class TransactionInfoFragment : BaseFragment(), TransactionInfoAdapter.Listener {
 
     private val viewModelTxs by navGraphViewModels<TransactionsViewModel>(R.id.mainFragment)
-    private val viewModel by navGraphViewModels<TransactionInfoViewModel>(R.id.transactionInfoFragment) { TransactionInfoModule.Factory(viewModelTxs.tmpItemToShow) }
+    private val viewModel by navGraphViewModels<TransactionInfoViewModel>(R.id.transactionInfoFragment) {
+        TransactionInfoModule.Factory(viewModelTxs.tmpItemToShow)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -54,10 +55,6 @@ class TransactionInfoFragment : BaseFragment(), TransactionInfoAdapter.Listener 
         val itemsAdapter =
             TransactionInfoAdapter(viewModel.viewItemsLiveData, viewLifecycleOwner, this)
         recyclerView.adapter = ConcatAdapter(itemsAdapter)
-
-        viewModel.showTransactionLiveEvent.observe(this, Observer { url ->
-            openUrlInCustomTabs(url)
-        })
 
         viewModel.showShareLiveEvent.observe(viewLifecycleOwner, { value ->
             context?.startActivity(Intent().apply {
@@ -101,8 +98,10 @@ class TransactionInfoFragment : BaseFragment(), TransactionInfoAdapter.Listener 
         viewModel.onActionButtonClick(actionButton)
     }
 
-    override fun onAdditionalButtonClick(buttonType: TransactionInfoButtonType) {
-        viewModel.onAdditionalButtonClick(buttonType)
+    override fun onUrlClick(url: String) {
+        context?.let { ctx ->
+            LinkHelper.openLinkInAppBrowser(ctx, url)
+        }
     }
 
     override fun onLockInfoClick(lockDate: Date) {
@@ -146,12 +145,6 @@ class TransactionInfoFragment : BaseFragment(), TransactionInfoAdapter.Listener 
     private fun copyText(address: String) {
         TextHelper.copyText(address)
         HudHelper.showSuccessMessage(requireView(), R.string.Hud_Text_Copied)
-    }
-
-    private fun openUrlInCustomTabs(url: String) {
-        context?.let { ctx ->
-            LinkHelper.openLinkInAppBrowser(ctx, url)
-        }
     }
 
     override fun onDestroyView() {

@@ -18,8 +18,7 @@ sealed class TransactionInfoItemType {
     ) :
         TransactionInfoItemType()
 
-    class Button(val title: String, val leftIcon: Int, val type: TransactionInfoButtonType) :
-        TransactionInfoItemType()
+    class Explorer(val title: String, val url: String?) : TransactionInfoItemType()
 
     class Status(val title: String, val leftIcon: Int, val status: TransactionStatusViewItem) :
         TransactionInfoItemType()
@@ -56,12 +55,6 @@ data class TransactionInfoOption(
     enum class Type: Parcelable {
         SpeedUp, Cancel
     }
-}
-
-sealed class TransactionInfoButtonType {
-    class OpenExplorer(val url: String?) : TransactionInfoButtonType()
-    object RevokeApproval : TransactionInfoButtonType()
-    object Resend : TransactionInfoButtonType()
 }
 
 sealed class TransactionInfoActionButton {
