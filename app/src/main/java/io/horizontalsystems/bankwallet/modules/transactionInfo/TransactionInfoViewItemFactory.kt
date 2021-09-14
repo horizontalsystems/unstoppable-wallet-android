@@ -15,8 +15,6 @@ import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.Trans
 import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.*
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoActionButton.CopyButton
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoActionButton.ShareButton
-import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoButtonType.OpenExplorer
-import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoButtonType.Resend
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoItemType.*
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionStatusViewItem.*
 import io.horizontalsystems.bankwallet.modules.transactionInfo.adapters.TransactionInfoViewItem
@@ -685,41 +683,14 @@ class TransactionInfoViewItemFactory(
     }
 
     private fun getAdditionalButtons(
-        explorerData: TransactionInfoModule.ExplorerData,
-        isResend: Boolean = false
+        explorerData: TransactionInfoModule.ExplorerData
     ): List<TransactionInfoViewItem?> {
-        val items = mutableListOf<TransactionInfoViewItem?>()
-        val title = translator.getString(
+        val type = Explorer(translator.getString(
             R.string.TransactionInfo_ButtonViewOnExplorerName,
             explorerData.title
-        )
-        items.add(
-            TransactionInfoViewItem(
-                Button(
-                    title,
-                    R.drawable.ic_language,
-                    OpenExplorer(explorerData.url)
-                ),
-                Single
-            )
-        )
-        items.add(null)
+        ), explorerData.url)
 
-        if (isResend) {
-            items.add(
-                TransactionInfoViewItem(
-                    Button(
-                        getString(R.string.TransactionInfo_Resend),
-                        R.drawable.ic_resend_20,
-                        Resend
-                    ),
-                    Single
-                )
-            )
-            items.add(null)
-        }
-
-        return items
+        return listOf(TransactionInfoViewItem(type, Single), null)
     }
 
     private fun getActionsSection(

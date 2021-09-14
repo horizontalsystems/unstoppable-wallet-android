@@ -4,7 +4,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.subscribeIO
-import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoButtonType.*
 import io.horizontalsystems.bankwallet.modules.transactionInfo.adapters.TransactionInfoViewItem
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
 import io.horizontalsystems.core.SingleLiveEvent
@@ -18,7 +17,6 @@ class TransactionInfoViewModel(
     val source: TransactionSource by service::source
 
     val showShareLiveEvent = SingleLiveEvent<String>()
-    val showTransactionLiveEvent = SingleLiveEvent<String>()
     val copyRawTransactionLiveEvent = SingleLiveEvent<String>()
     val openTransactionOptionsModule = SingleLiveEvent<Pair<TransactionInfoOption.Type, String>>()
 
@@ -43,20 +41,6 @@ class TransactionInfoViewModel(
 
     override fun onCleared() {
         clearables.forEach(Clearable::clear)
-    }
-
-    fun onAdditionalButtonClick(buttonType: TransactionInfoButtonType) {
-        when (buttonType) {
-            is OpenExplorer -> buttonType.url?.let {
-                showTransactionLiveEvent.postValue(it)
-            }
-            is RevokeApproval -> {
-                TODO("Not yet implemented")
-            }
-            is Resend -> {
-                TODO("Not yet implemented")
-            }
-        }
     }
 
     fun onActionButtonClick(actionButton: TransactionInfoActionButton) {
