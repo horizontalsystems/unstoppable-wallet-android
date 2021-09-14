@@ -227,10 +227,7 @@ class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener,
             } else {
                 Image(
                     painter = painterResource(
-                        id = AppLayoutHelper.getCoinResource(
-                            ctx,
-                            viewItem.coinType
-                        )
+                        id = AppLayoutHelper.getCoinDrawableOrDefaultResId(ctx, viewItem.coinType)
                     ),
                     contentDescription = "coin icon",
                     modifier = Modifier.size(24.dp)
