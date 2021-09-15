@@ -213,6 +213,7 @@
     <!--Balance-->
     <string name="Balance_Title">Баланс</string>
     <string name="Balance_Send">Отправить</string>
+    <string name="Balance_Receive">Receive</string>
     <string name="Balance_RatePerCoin">%s за %s</string>
     <string name="Balance_SyncedUntil">до %s</string>
     <string name="Balance_Syncing">Синхронизация…</string>
@@ -225,7 +226,7 @@
     <string name="Balance_Sort_Balance">Балансу</string>
     <string name="Balance_Sort_PopupTitle">Сортировать по</string>
     <string name="Balance_Sort_Az">Названию</string>
-    <string name="Balance_Sort_24hPriceChange">Цене(%) за 24 ч</string>
+    <string name="Balance_Sort_24hPriceChange">Price Change</string>
     <string name="Balance_Hidden">скрытое</string>
     <string name="Balance_Backup_Alert">Вам нужно сделать резервную копию %s Кошелька, прежде чем вы сможете получать %s.</string>
     <string name="Balance_NoWalletAlert">У вас пока нет кошельков. Создайте новый или восстановите существующий </string>
