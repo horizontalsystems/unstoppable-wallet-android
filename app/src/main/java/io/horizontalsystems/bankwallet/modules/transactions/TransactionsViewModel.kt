@@ -7,11 +7,9 @@ import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.LastBlockInfo
-import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.modules.transactionInfo.ColoredValue
 import io.horizontalsystems.core.helpers.DateHelper
-import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import java.util.*
 
@@ -23,7 +21,7 @@ class TransactionsViewModel(
     lateinit var tmpItemToShow: TransactionItem
 
     val syncingLiveData = MutableLiveData<Boolean>()
-    val filterCoinsLiveData = MutableLiveData<List<Filter<Wallet>>>()
+    val filterCoinsLiveData = MutableLiveData<List<Filter<TransactionWallet>>>()
     val filterTypesLiveData = MutableLiveData<List<Filter<FilterTransactionType>>>()
     val transactionList = MutableLiveData<ItemsList>()
 
@@ -49,6 +47,17 @@ class TransactionsViewModel(
                 disposables.add(it)
             }
 
+        service.walletsObservable
+            .subscribeIO { (wallets, selected) ->
+                val filterCoins = wallets.map {
+                    Filter(it, it == selected)
+                }
+                filterCoinsLiveData.postValue(filterCoins)
+            }
+            .let {
+                disposables.add(it)
+            }
+
         service.itemsObservable
             .subscribeIO {
                 val transactionList = when {
@@ -59,19 +68,6 @@ class TransactionsViewModel(
                     else -> ItemsList.Blank
                 }
                 this.transactionList.postValue(transactionList)
-            }
-            .let {
-                disposables.add(it)
-            }
-
-        Observable.combineLatest(
-            service.filterCoinsObservable,
-            service.filterCoinObservable
-        ) { coins: List<Wallet>, selected: Optional<Wallet> ->
-            coins.map { Filter(it, it == selected.orElse(null)) }
-        }
-            .subscribeIO {
-                filterCoinsLiveData.postValue(it)
             }
             .let {
                 disposables.add(it)
@@ -98,7 +94,7 @@ class TransactionsViewModel(
         service.setFilterType(filterType)
     }
 
-    fun setFilterCoin(w: Wallet?) {
+    fun setFilterCoin(w: TransactionWallet?) {
         service.setFilterCoin(w)
     }
 
