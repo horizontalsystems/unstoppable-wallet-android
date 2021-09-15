@@ -213,6 +213,7 @@
     <!--Balance-->
     <string name="Balance_Title">余额</string>
     <string name="Balance_Send">发送​​</string>
+    <string name="Balance_Receive">Receive</string>
     <string name="Balance_RatePerCoin">%s / %s</string>
     <string name="Balance_SyncedUntil">直到 %s</string>
     <string name="Balance_Syncing">正在同步...</string>
@@ -225,7 +226,7 @@
     <string name="Balance_Sort_Balance">余额</string>
     <string name="Balance_Sort_PopupTitle">排序方式</string>
     <string name="Balance_Sort_Az">名称</string>
-    <string name="Balance_Sort_24hPriceChange">24小时变更 (%)</string>
+    <string name="Balance_Sort_24hPriceChange">Price Change</string>
     <string name="Balance_Hidden">隱藏</string>
     <string name="Balance_Backup_Alert">您必须在接收%s之前先备份%s钱包。</string>
     <string name="Balance_NoWalletAlert">您还没有任何钱包。创建新钱包或恢复已有钱包 </string>
