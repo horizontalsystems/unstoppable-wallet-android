@@ -24,6 +24,7 @@ class BalanceViewModel(
     val titleLiveData = MutableLiveData<String>()
     val headerViewItemLiveData = MutableLiveData<BalanceHeaderViewItem>()
     val disabledWalletLiveData = SingleLiveEvent<Wallet>()
+    val sortTypeUpdatedLiveData = MutableLiveData(service.sortType)
 
     private val _balanceViewItemsLiveData = MutableLiveData<List<BalanceViewItem>>()
     val balanceViewItems: LiveData<List<BalanceViewItem>> = _balanceViewItemsLiveData
@@ -32,8 +33,6 @@ class BalanceViewModel(
     val isRefreshing: LiveData<Boolean> = _isRefreshing
 
     private var disposables = CompositeDisposable()
-
-    var sortType: BalanceSortType by service::sortType
 
     private var expandedWallet: Wallet? = null
 
@@ -121,6 +120,11 @@ class BalanceViewModel(
 
     fun onPause() {
         rateAppService.onBalancePageInactive()
+    }
+
+    fun setSortType(value: BalanceSortType) {
+        service.sortType = value
+        sortTypeUpdatedLiveData.postValue(value)
     }
 
     fun getSyncErrorDetails(viewItem: BalanceViewItem): SyncError = when {
