@@ -193,24 +193,14 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
             backgroundColor = ComposeAppTheme.colors.lawrence,
         ) {
             Column(modifier = Modifier.clickable { onWalletClick.invoke() }) {
-                Row(modifier = Modifier.height(14.dp)) {
-                    if (!viewItem.mainNet) {
-                        Image(
-                            modifier = Modifier.padding(start = 20.dp),
-                            painter = painterResource(R.drawable.testnet),
-                            contentDescription = "Testnet"
-                        )
-                    }
-                }
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(54.dp)
-                        .padding(start = 16.dp, end = 16.dp, bottom = 14.dp),
+                        .height(68.dp)
+                        .padding(end = 16.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     LeftIcon(viewItem, ctx)
-                    Spacer(modifier = Modifier.width(16.dp))
                     Column {
                         FirstRow(viewItem)
                         SecondRow(viewItem)
@@ -224,19 +214,25 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
     @Composable
     private fun LeftIcon(viewItem: BalanceViewItem, ctx: Context) {
         Box(
-            modifier = Modifier.size(31.dp),
-            contentAlignment = Alignment.Center
+            modifier = Modifier.width(56.dp).fillMaxHeight(),
         ) {
+            if (!viewItem.mainNet) {
+                Image(
+                    modifier = Modifier.align(Alignment.TopCenter),
+                    painter = painterResource(R.drawable.testnet),
+                    contentDescription = "Testnet"
+                )
+            }
             viewItem.syncingProgress.progress?.let {
                 CircularProgressIndicator(
-                    modifier = Modifier.size(31.dp),
+                    modifier = Modifier.align(Alignment.Center).size(31.dp),
                     color = ComposeAppTheme.colors.grey,
-                    strokeWidth = 2.dp
+                    strokeWidth = 2.dp,
                 )
             }
             if (viewItem.failedIconVisible) {
                 Image(
-                    modifier = Modifier.size(24.dp)
+                    modifier = Modifier.align(Alignment.Center).size(24.dp)
                         .clickable { onSyncErrorClicked(viewItem) },
                     painter = painterResource(id = R.drawable.ic_attention_24),
                     contentDescription = "coin icon",
@@ -248,7 +244,7 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
                         id = AppLayoutHelper.getCoinDrawableOrDefaultResId(ctx, viewItem.coinType)
                     ),
                     contentDescription = "coin icon",
-                    modifier = Modifier.size(24.dp)
+                    modifier = Modifier.align(Alignment.Center).size(24.dp)
                 )
             }
         }
@@ -263,23 +259,21 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
             Text(
                 text = viewItem.coinCode,
                 color = ComposeAppTheme.colors.oz,
-                style = ComposeAppTheme.typography.headline2
+                style = ComposeAppTheme.typography.headline2,
+                maxLines = 1,
             )
-            if (!viewItem.coinTypeLabel.isNullOrBlank()){
+            if (!viewItem.coinTypeLabel.isNullOrBlank()) {
                 Box(
                     modifier = Modifier.padding(start = 8.dp, end = 16.dp)
                         .clip(RoundedCornerShape(4.dp))
                         .background(ComposeAppTheme.colors.jeremy)
                 ) {
                     Text(
-                        modifier = Modifier.padding(
-                            start = 4.dp,
-                            end = 4.dp,
-                            bottom = 1.dp
-                        ),
+                        modifier = Modifier.padding(start = 4.dp, end = 4.dp, bottom = 1.dp),
                         text = viewItem.coinTypeLabel,
                         color = ComposeAppTheme.colors.bran,
-                        style = ComposeAppTheme.typography.microSB
+                        style = ComposeAppTheme.typography.microSB,
+                        maxLines = 1,
                     )
                 }
             }
@@ -288,7 +282,8 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
                 Text(
                     text = viewItem.fiatValue.text ?: "",
                     color = if (viewItem.fiatValue.dimmed) ComposeAppTheme.colors.yellow50 else ComposeAppTheme.colors.jacob,
-                    style = ComposeAppTheme.typography.headline2
+                    style = ComposeAppTheme.typography.headline2,
+                    maxLines = 1,
                 )
             }
         }
@@ -306,7 +301,8 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
                     Text(
                         text = viewItem.syncingTextValue.text ?: "",
                         color = ComposeAppTheme.colors.grey,
-                        style = ComposeAppTheme.typography.subhead2
+                        style = ComposeAppTheme.typography.subhead2,
+                        maxLines = 1,
                     )
                 }
                 if (viewItem.exchangeValue.visible) {
@@ -314,13 +310,15 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
                         Text(
                             text = viewItem.exchangeValue.text ?: "",
                             color = if (viewItem.exchangeValue.dimmed) ComposeAppTheme.colors.grey50 else ComposeAppTheme.colors.grey,
-                            style = ComposeAppTheme.typography.subhead2
+                            style = ComposeAppTheme.typography.subhead2,
+                            maxLines = 1,
                         )
                         Text(
                             modifier = Modifier.padding(start = 4.dp),
                             text = getDiffText(viewItem.diff),
                             color = getDiffColor(viewItem.diff),
-                            style = ComposeAppTheme.typography.subhead2
+                            style = ComposeAppTheme.typography.subhead2,
+                            maxLines = 1,
                         )
                     }
                 }
@@ -332,7 +330,8 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
                     Text(
                         text = viewItem.syncedUntilTextValue.text ?: "",
                         color = ComposeAppTheme.colors.grey,
-                        style = ComposeAppTheme.typography.subhead2
+                        style = ComposeAppTheme.typography.subhead2,
+                        maxLines = 1,
                     )
                 }
                 if (viewItem.coinValue.visible) {
@@ -340,6 +339,7 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
                         text = viewItem.coinValue.text ?: "",
                         color = if (viewItem.coinValue.dimmed) ComposeAppTheme.colors.grey50 else ComposeAppTheme.colors.grey,
                         style = ComposeAppTheme.typography.subhead2,
+                        maxLines = 1,
                     )
                 }
             }
@@ -398,13 +398,15 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
                     modifier = Modifier.padding(start = 6.dp),
                     text = viewItem.coinValueLocked.text ?: "",
                     color = if (viewItem.coinValueLocked.dimmed) ComposeAppTheme.colors.grey50 else ComposeAppTheme.colors.grey,
-                    style = ComposeAppTheme.typography.subhead2
+                    style = ComposeAppTheme.typography.subhead2,
+                    maxLines = 1,
                 )
                 Spacer(modifier = Modifier.weight(1f))
                 Text(
                     text = viewItem.fiatValueLocked.text ?: "",
                     color = if (viewItem.fiatValueLocked.dimmed) ComposeAppTheme.colors.yellow50 else ComposeAppTheme.colors.jacob,
-                    style = ComposeAppTheme.typography.subhead2
+                    style = ComposeAppTheme.typography.subhead2,
+                    maxLines = 1,
                 )
             }
         }
@@ -413,8 +415,8 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
     @Composable
     private fun ButtonsRow(viewItem: BalanceViewItem) {
         Row(
-            modifier = Modifier.height(72.dp)
-                .padding(start = 12.dp, top = 10.dp, bottom = 12.dp, end = 12.dp)
+            modifier = Modifier.padding(start = 12.dp, end = 12.dp, bottom = 2.dp).height(70.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
             ButtonPrimaryYellow(
                 modifier = Modifier.weight(1f),
