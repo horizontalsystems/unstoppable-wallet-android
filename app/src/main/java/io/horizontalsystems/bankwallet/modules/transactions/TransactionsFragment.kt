@@ -118,8 +118,10 @@ class TransactionsFragment : BaseFragment(R.layout.fragment_transactions) {
             val filterCoins by viewModel.filterCoinsLiveData.observeAsState()
 
             filterCoins?.let {
-                val tabItems = it.map {
-                    TabItem(it.item.coin.code, it.selected, it.item, AppLayoutHelper.getCoinDrawableOrDefaultResId(requireContext(), it.item.coin.type))
+                val tabItems = it.mapNotNull {
+                    it.item.coin?.let { coin ->
+                        TabItem(coin.code, it.selected, it.item, AppLayoutHelper.getCoinDrawableOrDefaultResId(requireContext(), coin.type))
+                    }
                 }
 
                 CardTabs(

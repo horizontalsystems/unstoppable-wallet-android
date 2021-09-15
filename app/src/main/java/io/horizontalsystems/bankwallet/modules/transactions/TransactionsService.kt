@@ -11,7 +11,6 @@ import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRe
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
-import java.util.*
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.Executors
 
@@ -23,17 +22,12 @@ class TransactionsService(
     private val walletManager: IWalletManager
 ) : Clearable {
 
-    private val filterCoinsSubject = BehaviorSubject.create<List<Wallet>>()
-    val filterCoinsObservable: Observable<List<Wallet>> = filterCoinsSubject
-
-    private val filterCoinSubject = BehaviorSubject.createDefault<Optional<Wallet>>(Optional.empty())
-    val filterCoinObservable: Observable<Optional<Wallet>> = filterCoinSubject
-
     private val itemsSubject = BehaviorSubject.create<List<TransactionItem>>()
     val itemsObservable: Observable<List<TransactionItem>> get() = itemsSubject
 
     val syncingObservable get() = transactionSyncStateRepository.syncingObservable
     val typesObservable get() = transactionRecordRepository.typesObservable
+    val walletsObservable get() = transactionRecordRepository.walletsObservable
 
     private val disposables = CompositeDisposable()
     private val transactionItems = CopyOnWriteArrayList<TransactionItem>()
@@ -165,8 +159,6 @@ class TransactionsService(
 
     @Synchronized
     private fun handleUpdatedWallets(wallets: List<Wallet>) {
-        filterCoinsSubject.onNext(wallets)
-
         transactionWallets = wallets.map {
             TransactionWallet(it.coin, it.transactionSource)
         }
@@ -215,10 +207,9 @@ class TransactionsService(
         }
     }
 
-    fun setFilterCoin(w: Wallet?) {
+    fun setFilterCoin(w: TransactionWallet?) {
         executorService.submit {
-            filterCoinSubject.onNext(w?.let { Optional.of(it) } ?: Optional.empty())
-            transactionRecordRepository.setSelectedWallet(w?.let { TransactionWallet(it.coin, it.transactionSource) })
+            transactionRecordRepository.setSelectedWallet(w)
         }
     }
 

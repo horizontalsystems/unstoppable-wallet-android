@@ -26,6 +26,7 @@ class TransactionRecordRepository(
     override val itemsObservable: Observable<List<TransactionRecord>> get() = itemsSubject
 
     override val typesObservable = BehaviorSubject.createDefault(Pair(allFilterTransactionTypes, selectedFilterTransactionType))
+    override val walletsObservable = BehaviorSubject.createDefault<Pair<List<TransactionWallet>, TransactionWallet?>>(Pair(listOf(), null))
 
     private var loadedPageNumber = 0
     private val items = CopyOnWriteArrayList<TransactionRecord>()
@@ -36,6 +37,7 @@ class TransactionRecordRepository(
     private val disposables = CompositeDisposable()
     private var disposableUpdates: Disposable? = null
 
+    private var wallets: List<TransactionWallet> = listOf()
     private var walletsGroupedBySource: List<TransactionWallet> = listOf()
 
     private val activeAdapters: List<TransactionAdapterWrapper>
@@ -45,7 +47,9 @@ class TransactionRecordRepository(
         }
 
     override fun setWallets(transactionWallets: List<TransactionWallet>, walletsGroupedBySource: List<TransactionWallet>) {
+        this.wallets = transactionWallets
         this.walletsGroupedBySource = walletsGroupedBySource
+        walletsObservable.onNext(Pair(this.wallets, selectedWallet))
 
         // update list of adapters based on wallets
         val currentAdapters = adaptersMap.toMutableMap()
@@ -71,6 +75,7 @@ class TransactionRecordRepository(
         selectedWallet?.let {
             if (!adaptersMap.containsKey(it)) {
                 selectedWallet = null
+                walletsObservable.onNext(Pair(this.wallets, selectedWallet))
 
                 selectedFilterTransactionType = FilterTransactionType.All
                 typesObservable.onNext(Pair(allFilterTransactionTypes, selectedFilterTransactionType))
@@ -89,6 +94,7 @@ class TransactionRecordRepository(
 
     override fun setSelectedWallet(transactionWallet: TransactionWallet?) {
         selectedWallet = transactionWallet
+        walletsObservable.onNext(Pair(this.wallets, selectedWallet))
 
         unsubscribeFromUpdates()
         allLoaded.set(false)
