@@ -49,7 +49,9 @@ class TvlRankFragment : BaseFragment(), TvlRankListHeaderView.Listener {
         recyclerView.itemAnimator = null
 
         viewModel.coinList.observe(viewLifecycleOwner, {
-            adapter.submitList(it)
+            adapter.submitList(it){
+                recyclerView.scrollToPosition(0)
+            }
         })
 
         viewModel.sortDescLiveData.observe(viewLifecycleOwner, { sortDesc ->
