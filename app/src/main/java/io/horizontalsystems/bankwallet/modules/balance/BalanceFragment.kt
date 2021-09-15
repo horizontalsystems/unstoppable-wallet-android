@@ -69,8 +69,7 @@ import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.android.synthetic.main.fragment_balance.*
 import java.math.BigDecimal
 
-class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener,
-    BackupRequiredDialog.Listener {
+class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
 
     private val viewModel by viewModels<BalanceViewModel> { BalanceModule.Factory() }
 
@@ -116,6 +115,28 @@ class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener,
         setWallets()
     }
 
+    override fun onAttachFragment(childFragment: Fragment) {
+        if (childFragment is BackupRequiredDialog) {
+            childFragment.setListener(this)
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.onResume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        viewModel.onPause()
+    }
+
+    //  BackupRequiredDialog Listener
+
+    override fun onClickBackup(account: Account) {
+        BackupKeyModule.start(this, R.id.mainFragment_to_backupKeyFragment, navOptions(), account)
+    }
+
     @ExperimentalAnimationApi
     private fun setWallets() {
         walletListCompose.setContent {
@@ -125,8 +146,6 @@ class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener,
             }
         }
     }
-
-    data class Message(val author: String, val body: String)
 
     @ExperimentalAnimationApi
     @Composable
@@ -445,15 +464,7 @@ class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener,
         return App.numberFormatter.format(diff.abs(), 0, 2, sign, "%")
     }
 
-    //  BackupRequiredDialog Listener
-
-    override fun onClickBackup(account: Account) {
-        BackupKeyModule.start(this, R.id.mainFragment_to_backupKeyFragment, navOptions(), account)
-    }
-
-    // BalanceAdapter listener
-
-    override fun onSendClicked(viewItem: BalanceViewItem) {
+    private fun onSendClicked(viewItem: BalanceViewItem) {
         when (viewItem.wallet.coin.type) {
             CoinType.Ethereum, is CoinType.Erc20,
             CoinType.BinanceSmartChain, is CoinType.Bep20 -> {
@@ -469,7 +480,7 @@ class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener,
         }
     }
 
-    override fun onReceiveClicked(viewItem: BalanceViewItem) {
+    private fun onReceiveClicked(viewItem: BalanceViewItem) {
         try {
             findNavController().navigate(
                 R.id.mainFragment_to_receiveFragment,
@@ -481,22 +492,18 @@ class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener,
         }
     }
 
-    override fun onSwapClicked(viewItem: BalanceViewItem) {
+    private fun onSwapClicked(viewItem: BalanceViewItem) {
         SwapMainModule.start(this, navOptionsFromBottom(), viewItem.wallet.coin)
     }
 
-    override fun onItemClicked(viewItem: BalanceViewItem) {
-        viewModel.onItem(viewItem)
-    }
-
-    override fun onChartClicked(viewItem: BalanceViewItem) {
+    private fun onChartClicked(viewItem: BalanceViewItem) {
         val coin = viewItem.wallet.coin
         val arguments = CoinFragment.prepareParams(coin.type, coin.code, coin.title)
 
         findNavController().navigate(R.id.mainFragment_to_coinFragment, arguments, navOptions())
     }
 
-    override fun onSyncErrorClicked(viewItem: BalanceViewItem) {
+    private fun onSyncErrorClicked(viewItem: BalanceViewItem) {
         when (val syncErrorDetails = viewModel.getSyncErrorDetails(viewItem)) {
             is BalanceViewModel.SyncError.Dialog -> {
 
@@ -534,25 +541,9 @@ class BalanceFragment : BaseFragment(), BalanceItemsAdapter.Listener,
         }
     }
 
-    override fun onSwiped(viewItem: BalanceViewItem) {
-        viewModel.disable(viewItem)
-    }
-
-    override fun onAttachFragment(childFragment: Fragment) {
-        if (childFragment is BackupRequiredDialog) {
-            childFragment.setListener(this)
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        viewModel.onResume()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        viewModel.onPause()
-    }
+//    fun onSwiped(viewItem: BalanceViewItem) {
+//        viewModel.disable(viewItem)
+//    }
 
     // LiveData
 
