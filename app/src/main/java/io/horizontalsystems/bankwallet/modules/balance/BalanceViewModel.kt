@@ -11,9 +11,6 @@ import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class BalanceViewModel(
@@ -31,9 +28,8 @@ class BalanceViewModel(
     private val _balanceViewItemsLiveData = MutableLiveData<List<BalanceViewItem>>()
     val balanceViewItems: LiveData<List<BalanceViewItem>> = _balanceViewItemsLiveData
 
-    private val _isRefreshing = MutableStateFlow(false)
-    val isRefreshing: StateFlow<Boolean>
-        get() = _isRefreshing.asStateFlow()
+    private val _isRefreshing = MutableLiveData(false)
+    val isRefreshing: LiveData<Boolean> = _isRefreshing
 
     private var disposables = CompositeDisposable()
 
@@ -90,16 +86,16 @@ class BalanceViewModel(
     }
 
     fun onRefresh() {
-        if (_isRefreshing.value) {
+        if (_isRefreshing.value != null && _isRefreshing.value == true) {
             return
         }
 
         viewModelScope.launch {
             service.refresh()
-            // A fake 2 second 'refresh'
-            _isRefreshing.emit(true)
-            delay(1800)
-            _isRefreshing.emit(false)
+            // A fake 2 seconds 'refresh'
+            _isRefreshing.postValue(true)
+            delay(2300)
+            _isRefreshing.postValue(false)
         }
     }
 
