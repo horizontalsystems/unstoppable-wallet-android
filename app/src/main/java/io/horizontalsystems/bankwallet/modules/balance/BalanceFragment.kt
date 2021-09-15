@@ -25,7 +25,6 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
@@ -150,10 +149,10 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
     @ExperimentalAnimationApi
     @Composable
     fun Wallets(balanceViewItems: List<BalanceViewItem>?) {
-        val isRefreshing by viewModel.isRefreshing.collectAsState()
+        val isRefreshing by viewModel.isRefreshing.observeAsState()
 
         SwipeRefresh(
-            state = rememberSwipeRefreshState(isRefreshing),
+            state = rememberSwipeRefreshState(isRefreshing ?: false),
             onRefresh = { viewModel.onRefresh() },
             indicator = { state, trigger ->
                 SwipeRefreshIndicator(
