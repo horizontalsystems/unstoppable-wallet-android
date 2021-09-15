@@ -101,8 +101,6 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
         observeLiveData()
         //setSwipeBackground()
 
-        setTopButtons()
-
         buttonsCompose.setViewCompositionStrategy(
             ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
         )
@@ -568,9 +566,13 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
         viewModel.headerViewItemLiveData.observe(viewLifecycleOwner) {
             setHeaderViewItem(it)
         }
+
+        viewModel.sortTypeUpdatedLiveData.observe(viewLifecycleOwner, { sortType ->
+            setTopButtons(sortType)
+        })
     }
 
-    private fun setTopButtons() {
+    private fun setTopButtons(sortType: BalanceSortType) {
         buttonsCompose.setContent {
             ComposeAppTheme {
                 Row(
@@ -579,10 +581,10 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     ButtonSecondaryTransparent(
-                        title = getString(viewModel.sortType.getTitleRes()),
+                        title = getString(sortType.getTitleRes()),
                         iconRight = R.drawable.ic_down_arrow_20,
                         onClick = {
-                            onSortButtonClick()
+                            onSortButtonClick(sortType)
                         }
                     )
                     ButtonSecondaryCircle(
@@ -598,16 +600,15 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
         }
     }
 
-    private fun onSortButtonClick() {
+    private fun onSortButtonClick(currentSortType: BalanceSortType) {
         val sortTypes =
             listOf(BalanceSortType.Name, BalanceSortType.Value, BalanceSortType.PercentGrowth)
         val selectorItems = sortTypes.map {
-            SelectorItem(getString(it.getTitleRes()), it == viewModel.sortType)
+            SelectorItem(getString(it.getTitleRes()), it == currentSortType)
         }
         SelectorDialog
             .newInstance(selectorItems, getString(R.string.Balance_Sort_PopupTitle)) { position ->
-                viewModel.sortType = sortTypes[position]
-                setTopButtons()
+                viewModel.setSortType(sortTypes[position])
             }
             .show(parentFragmentManager, "balance_sort_type_selector")
     }
