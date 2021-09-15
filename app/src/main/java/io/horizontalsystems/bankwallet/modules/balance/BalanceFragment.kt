@@ -576,9 +576,9 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
         buttonsCompose.setContent {
             ComposeAppTheme {
                 Row(
-                    modifier = Modifier.width(IntrinsicSize.Max)
-                        .padding(top = 8.dp, end = 16.dp, bottom = 8.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween
+                    modifier = Modifier.width(IntrinsicSize.Max).padding(end = 16.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
                     ButtonSecondaryTransparent(
                         title = getString(sortType.getTitleRes()),
