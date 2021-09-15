@@ -16,6 +16,7 @@ import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -180,17 +181,20 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
     @Composable
     fun WalletCard(viewItem: BalanceViewItem, onWalletClick: () -> Unit, expanded: Boolean) {
         val ctx = context ?: return
+        val interactionSource = remember { MutableInteractionSource() }
 
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 4.dp)
-                .clickable { },
+                .padding(horizontal = 16.dp, vertical = 4.dp),
             elevation = 0.dp,
             shape = RoundedCornerShape(16.dp),
             backgroundColor = ComposeAppTheme.colors.lawrence,
         ) {
-            Column(modifier = Modifier.clickable { onWalletClick.invoke() }) {
+            Column(modifier = Modifier.clickable(
+                interactionSource = interactionSource,
+                indication = null
+            ) { onWalletClick.invoke() }) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
