@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.balance
 
 import android.content.Context
+import androidx.compose.runtime.Immutable
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
@@ -16,6 +17,7 @@ import io.horizontalsystems.xrateskit.entities.LatestRate
 import java.math.BigDecimal
 import java.util.*
 
+@Immutable
 data class BalanceViewItem(
     val wallet: Wallet,
     val coinCode: String,

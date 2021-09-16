@@ -168,8 +168,6 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
                     items(it) { item ->
                         WalletCard(
                             viewItem = item,
-                            onWalletClick = { viewModel.onItem(item) },
-                            expanded = item.expanded
                         )
                     }
                 }
@@ -179,7 +177,7 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
 
     @ExperimentalAnimationApi
     @Composable
-    fun WalletCard(viewItem: BalanceViewItem, onWalletClick: () -> Unit, expanded: Boolean) {
+    fun WalletCard(viewItem: BalanceViewItem) {
         val ctx = context ?: return
         val interactionSource = remember { MutableInteractionSource() }
 
@@ -191,10 +189,12 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
             shape = RoundedCornerShape(16.dp),
             backgroundColor = ComposeAppTheme.colors.lawrence,
         ) {
-            Column(modifier = Modifier.clickable(
-                interactionSource = interactionSource,
-                indication = null
-            ) { onWalletClick.invoke() }) {
+            Column(
+                modifier = Modifier.clickable(
+                    interactionSource = interactionSource,
+                    indication = null
+                ) { viewModel.onItem(viewItem) }
+            ) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -208,7 +208,7 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
                         SecondRow(viewItem)
                     }
                 }
-                ExpandableContent(viewItem = viewItem, visible = expanded)
+                ExpandableContent(viewItem = viewItem)
             }
         }
     }
@@ -350,10 +350,7 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
 
     @ExperimentalAnimationApi
     @Composable
-    private fun ExpandableContent(
-        viewItem: BalanceViewItem,
-        visible: Boolean = true
-    ) {
+    private fun ExpandableContent(viewItem: BalanceViewItem) {
 
         val enterExpand = remember {
             expandVertically(animationSpec = tween(EXPAND_ANIMATION_DURATION))
@@ -364,7 +361,7 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
         }
 
         AnimatedVisibility(
-            visible = visible,
+            visible = viewItem.expanded,
             enter = enterExpand,
             exit = exitCollapse
         ) {
