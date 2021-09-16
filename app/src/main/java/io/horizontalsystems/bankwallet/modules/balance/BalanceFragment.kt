@@ -541,10 +541,6 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
         }
     }
 
-//    fun onSwiped(viewItem: BalanceViewItem) {
-//        viewModel.disable(viewItem)
-//    }
-
     // LiveData
 
     private fun observeLiveData() {
@@ -641,41 +637,3 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
         const val COLLAPSE_ANIMATION_DURATION = 250
     }
 }
-
-//class SwipeBalanceItemView : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
-//
-//    override fun onMove(
-//        recyclerView: RecyclerView,
-//        viewHolder: RecyclerView.ViewHolder,
-//        target: RecyclerView.ViewHolder
-//    ) = false
-//
-//    override fun onSwiped(viewHolder: RecyclerView.ViewHolder, swipeDir: Int) {
-//        (viewHolder as? BalanceItemViewHolder)?.swipe()
-//    }
-//
-//    override fun onChildDraw(
-//        c: Canvas,
-//        recyclerView: RecyclerView,
-//        viewHolder: RecyclerView.ViewHolder,
-//        dX: Float,
-//        dY: Float,
-//        actionState: Int,
-//        isCurrentlyActive: Boolean
-//    ) {
-//        super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
-//
-//        val itemView = viewHolder.itemView
-//        val icon = ContextCompat.getDrawable(itemView.context, R.drawable.ic_circle_minus_24)!!
-//
-//        val verticalMargin = ((itemView.height - icon.intrinsicHeight) / 2.0).toInt()
-//        val rightMargin = LayoutHelper.dp(32f, itemView.context)
-//        icon.setBounds(
-//            itemView.right - rightMargin - icon.intrinsicWidth,
-//            itemView.top + verticalMargin,
-//            itemView.right - rightMargin,
-//            itemView.top + verticalMargin + icon.intrinsicHeight
-//        )
-//        icon.draw(c)
-//    }
-//}
