@@ -5,17 +5,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_market_post.*
 
 class ViewHolderMarketPostItem(override val containerView: View, private val listener: Listener)
     : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
-    private var item: MarketOverviewModule.PostViewItem? = null
+    private var item: MarketPostsModule.PostViewItem? = null
 
     interface Listener {
-        fun onPostClick(postViewItem: MarketOverviewModule.PostViewItem)
+        fun onPostClick(postViewItem: MarketPostsModule.PostViewItem)
     }
 
     init {
@@ -26,7 +25,7 @@ class ViewHolderMarketPostItem(override val containerView: View, private val lis
         }
     }
 
-    fun bind(item: MarketOverviewModule.PostViewItem, prev: MarketOverviewModule.PostViewItem?) {
+    fun bind(item: MarketPostsModule.PostViewItem, prev: MarketPostsModule.PostViewItem?) {
         this.item = item
 
         if (item.title != prev?.title) {

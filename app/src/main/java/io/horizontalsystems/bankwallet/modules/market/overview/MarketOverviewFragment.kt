@@ -1,11 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.market.overview
 
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.browser.customtabs.CustomTabsIntent
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Transformations
 import androidx.navigation.navGraphViewModels
@@ -20,15 +18,13 @@ import io.horizontalsystems.bankwallet.modules.market.MarketViewModel
 import io.horizontalsystems.bankwallet.modules.market.metrics.MarketMetricsAdapter
 import io.horizontalsystems.bankwallet.modules.market.metrics.MarketMetricsModule
 import io.horizontalsystems.bankwallet.modules.market.metrics.MarketMetricsViewModel
-import io.horizontalsystems.bankwallet.modules.market.posts.MarketPostItemsAdapter
-import io.horizontalsystems.bankwallet.modules.market.posts.ViewHolderMarketPostItem
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartFragment
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartType
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.android.synthetic.main.fragment_overview.*
 
-class MarketOverviewFragment : BaseFragment(), ViewHolderMarketOverviewItem.Listener, ViewHolderMarketPostItem.Listener {
+class MarketOverviewFragment : BaseFragment(), ViewHolderMarketOverviewItem.Listener {
 
     private val marketMetricsViewModel by viewModels<MarketMetricsViewModel> { MarketMetricsModule.Factory() }
     private val marketOverviewViewModel by viewModels<MarketOverviewViewModel> { MarketOverviewModule.Factory() }
@@ -70,18 +66,6 @@ class MarketOverviewFragment : BaseFragment(), ViewHolderMarketOverviewItem.List
                 marketOverviewViewModel.topLosersViewItemsLiveData,
                 viewLifecycleOwner)
 
-        val postsHeaderAdapter = MarketOverviewSectionHeaderAdapter(
-                hasItemsLiveData = Transformations.map(marketOverviewViewModel.postsViewItemsLiveData) { it.isNotEmpty() },
-                viewLifecycleOwner = viewLifecycleOwner,
-                settingsHeaderItem = MarketOverviewSectionHeaderAdapter.SectionHeaderItem(R.string.RateList_Posts, R.drawable.ic_post_20)
-        )
-
-        val postsAdapter = MarketPostItemsAdapter(
-                this,
-                marketOverviewViewModel.postsViewItemsLiveData,
-                viewLifecycleOwner)
-
-
         val poweredByAdapter = PoweredByAdapter(marketOverviewViewModel.showPoweredByLiveData, viewLifecycleOwner, getString(R.string.Market_PoweredByApi))
 
         coinRatesRecyclerView.adapter = ConcatAdapter(
@@ -91,8 +75,6 @@ class MarketOverviewFragment : BaseFragment(), ViewHolderMarketOverviewItem.List
                 topGainersAdapter,
                 topLosersHeaderAdapter,
                 topLosersAdapter,
-                postsHeaderAdapter,
-                postsAdapter,
                 poweredByAdapter
         )
         coinRatesRecyclerView.itemAnimator = null
@@ -121,13 +103,6 @@ class MarketOverviewFragment : BaseFragment(), ViewHolderMarketOverviewItem.List
         val arguments = CoinFragment.prepareParams(marketViewItem.coinType, marketViewItem.coinCode, marketViewItem.coinName)
 
         findNavController().navigate(R.id.coinFragment, arguments, navOptions())
-    }
-
-    override fun onPostClick(postViewItem: MarketOverviewModule.PostViewItem) {
-        val customTabsIntent = CustomTabsIntent.Builder().build()
-        context?.let {
-            customTabsIntent.launchUrl(it, Uri.parse(postViewItem.url))
-        }
     }
 
 }
