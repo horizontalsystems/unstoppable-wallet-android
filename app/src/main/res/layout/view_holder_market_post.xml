@@ -8,7 +8,8 @@
     android:layout_marginBottom="12dp"
     android:background="@drawable/news_rounded_lawrence_background"
     android:clickable="true"
-    android:padding="16dp">
+    android:padding="16dp"
+    >
 
     <TextView
         android:id="@+id/postSource"
@@ -19,11 +20,12 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="Decrypt" />
+        tools:text="Decrypt"
+        />
 
     <TextView
         android:id="@+id/postTitle"
-        style="@style/Subhead1"
+        style="@style/Headline2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -33,11 +35,12 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/postSource"
-        tools:text="In what seems to be another episode in a long-running campaign, the Russian telecom regulator has restricted access to at least six websites posting content related to cryptocurrencies" />
+        tools:text="In what seems to be another episode in a long-running campaign, the Russian telecom regulator has restricted access to at least six websites posting content related to cryptocurrencies"
+        />
 
     <TextView
         android:id="@+id/postBody"
-        style="@style/Caption"
+        style="@style/Subhead2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -47,18 +50,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/postTitle"
-        tools:text="Uniper has implemented a blockchain platform built by Wipro to streamline its liquefied natural gas trade process. The Russian telecom regulator has restricted access to at least six websites posting content related to cryptocurrencies" />
+        tools:text="Uniper has implemented a blockchain platform built by Wipro to streamline its liquefied natural gas trade process. The Russian telecom regulator has restricted access to at least six websites posting content related to cryptocurrencies"
+        />
 
     <TextView
         android:id="@+id/postTime"
         style="@style/Micro"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/grey"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="8dp"
+        android:textColor="@color/grey_50"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/postBody"
-        tools:text="12h ago" />
+        tools:text="12h ago"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -55,7 +55,7 @@ class MarketPostsViewModel(
                         MarketPostsModule.PostViewItem(
                             getTimeAgo(it.timestamp),
                             it.imageUrl,
-                            it.source,
+                            it.source.replaceFirstChar(Char::titlecase),
                             it.title,
                             it.url,
                             it.body
