@@ -17,7 +17,7 @@ class MarketViewModel(private val service: MarketService) : ViewModel() {
 
     fun onClickSeeAll(listType: MarketModule.ListType) {
         discoveryListTypeLiveEvent.value = listType
-        onSelect(MarketModule.Tab.Discovery)
+//        onSelect(MarketModule.Tab.Posts)
     }
 
 }

@@ -5,12 +5,12 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.PostViewItem
+import io.horizontalsystems.bankwallet.modules.market.posts.MarketPostsModule.PostViewItem
 
 class MarketPostItemsAdapter(
-        private val listener: ViewHolderMarketPostItem.Listener,
-        itemsLiveData: LiveData<List<PostViewItem>>,
-        viewLifecycleOwner: LifecycleOwner
+    private val listener: ViewHolderMarketPostItem.Listener,
+    itemsLiveData: LiveData<List<PostViewItem>>,
+    viewLifecycleOwner: LifecycleOwner
 ) : ListAdapter<PostViewItem, ViewHolderMarketPostItem>(coinRateDiff) {
 
     init {

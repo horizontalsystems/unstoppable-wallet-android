@@ -28,7 +28,7 @@ object MarketModule {
 
     enum class Tab(@StringRes val titleResId: Int) {
         Overview(R.string.Market_Tab_Overview),
-        Discovery(R.string.Market_Tab_Discovery),
+        Posts(R.string.Market_Tab_Posts),
         Watchlist(R.string.Market_Tab_Watchlist);
 
         companion object {

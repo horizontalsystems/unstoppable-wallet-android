@@ -38,7 +38,7 @@ class MarketPostService(
                     newsItems = it
                     stateObservable.onNext(State.Loaded)
                 }, {
-                    stateObservable.onError(it)
+                    stateObservable.onNext(State.Failed(it))
                 })
     }
 
