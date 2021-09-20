@@ -8,7 +8,6 @@ import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.atomic.AtomicBoolean
@@ -17,16 +16,12 @@ class TransactionRecordRepository(
     private val adapterManager: TransactionAdapterManager,
 ) : ITransactionRecordRepository {
 
-    private val allFilterTransactionTypes = FilterTransactionType.values().toList()
     private var selectedFilterTransactionType: FilterTransactionType = FilterTransactionType.All
 
     private var selectedWallet: TransactionWallet? = null
 
     private val itemsSubject = PublishSubject.create<List<TransactionRecord>>()
     override val itemsObservable: Observable<List<TransactionRecord>> get() = itemsSubject
-
-    override val typesObservable = BehaviorSubject.createDefault(Pair(allFilterTransactionTypes, selectedFilterTransactionType))
-    override val walletsObservable = BehaviorSubject.createDefault<Pair<List<TransactionWallet>, TransactionWallet?>>(Pair(listOf(), null))
 
     private var loadedPageNumber = 0
     private val items = CopyOnWriteArrayList<TransactionRecord>()
@@ -37,7 +32,6 @@ class TransactionRecordRepository(
     private val disposables = CompositeDisposable()
     private var disposableUpdates: Disposable? = null
 
-    private var wallets: List<TransactionWallet> = listOf()
     private var walletsGroupedBySource: List<TransactionWallet> = listOf()
 
     private val activeAdapters: List<TransactionAdapterWrapper>
@@ -46,15 +40,40 @@ class TransactionRecordRepository(
             return activeWallets.mapNotNull { adaptersMap[it] }
         }
 
-    override fun setWallets(transactionWallets: List<TransactionWallet>, walletsGroupedBySource: List<TransactionWallet>) {
-        this.wallets = transactionWallets
-        this.walletsGroupedBySource = walletsGroupedBySource
-        walletsObservable.onNext(Pair(this.wallets, selectedWallet))
+    private fun groupWalletsBySource(transactionWallets: List<TransactionWallet>): List<TransactionWallet> {
+        val mergedWallets = mutableListOf<TransactionWallet>()
+
+        transactionWallets.forEach { wallet ->
+            when (wallet.source.blockchain) {
+                TransactionSource.Blockchain.Bitcoin,
+                TransactionSource.Blockchain.BitcoinCash,
+                TransactionSource.Blockchain.Litecoin,
+                TransactionSource.Blockchain.Dash,
+                TransactionSource.Blockchain.Zcash,
+                is TransactionSource.Blockchain.Bep2 -> mergedWallets.add(wallet)
+                TransactionSource.Blockchain.Ethereum,
+                TransactionSource.Blockchain.BinanceSmartChain -> {
+                    if (mergedWallets.none { it.source == wallet.source }) {
+                        mergedWallets.add(TransactionWallet(null, wallet.source))
+                    }
+                }
+            }
+        }
+        return mergedWallets
+
+    }
+
+    override fun setWallets(
+        transactionWallets: List<TransactionWallet>,
+        wallet: TransactionWallet?,
+        transactionType: FilterTransactionType,
+    ) {
+        this.walletsGroupedBySource = groupWalletsBySource(transactionWallets)
 
         // update list of adapters based on wallets
         val currentAdapters = adaptersMap.toMutableMap()
         adaptersMap.clear()
-        (transactionWallets + walletsGroupedBySource).distinct().forEach { transactionWallet ->
+        (transactionWallets + this.walletsGroupedBySource).distinct().forEach { transactionWallet ->
             var adapter = currentAdapters.remove(transactionWallet)
             if (adapter == null) {
                 adapterManager.getAdapter(transactionWallet.source)?.let {
@@ -69,22 +88,23 @@ class TransactionRecordRepository(
         currentAdapters.values.forEach(TransactionAdapterWrapper::clear)
         currentAdapters.clear()
 
-        // Reset selectedWallet if it does not exist in the new wallets list or leave it if it does
-        // When there is a coin added or removed then the selectedWallet should be left
-        // When the whole wallets list is changed (switch account) it should be reset
-        selectedWallet?.let {
-            if (!adaptersMap.containsKey(it)) {
-                selectedWallet = null
-                walletsObservable.onNext(Pair(this.wallets, selectedWallet))
+        var reload = false
 
-                selectedFilterTransactionType = FilterTransactionType.All
-                typesObservable.onNext(Pair(allFilterTransactionTypes, selectedFilterTransactionType))
-            }
+        if (selectedWallet != wallet || wallet == null) {
+            selectedWallet = wallet
+            reload = true
         }
 
-        // When the coin is enabled or disabled we need to reload txs list only for All coins.
-        // If the selected coin filter is not All then there is no need to reload
-        if (selectedWallet == null) {
+        if (transactionType != selectedFilterTransactionType) {
+            selectedFilterTransactionType = transactionType
+
+            adaptersMap.forEach { (_, transactionAdapterWrapper) ->
+                transactionAdapterWrapper.setTransactionType(transactionType)
+            }
+            reload = true
+        }
+
+        if (reload) {
             unsubscribeFromUpdates()
             allLoaded.set(false)
             loadItems(1)
@@ -94,7 +114,6 @@ class TransactionRecordRepository(
 
     override fun setSelectedWallet(transactionWallet: TransactionWallet?) {
         selectedWallet = transactionWallet
-        walletsObservable.onNext(Pair(this.wallets, selectedWallet))
 
         unsubscribeFromUpdates()
         allLoaded.set(false)
@@ -104,7 +123,6 @@ class TransactionRecordRepository(
 
     override fun setTransactionType(transactionType: FilterTransactionType) {
         selectedFilterTransactionType = transactionType
-        typesObservable.onNext(Pair(allFilterTransactionTypes, transactionType))
 
         adaptersMap.forEach { (_, transactionAdapterWrapper) ->
             transactionAdapterWrapper.setTransactionType(transactionType)

@@ -25,11 +25,12 @@ class TransactionSyncStateRepository(
 
     fun getLastBlockInfo(source: TransactionSource): LastBlockInfo? = adapters[source]?.lastBlockInfo
 
-    fun setTransactionSources(sources: List<TransactionSource>) {
+    fun setTransactionWallets(transactionWallets: List<TransactionWallet>) {
         disposables.clear()
         adapters.clear()
 
-        sources.forEach { source ->
+        transactionWallets.distinctBy { it.source }.forEach {
+            val source = it.source
             adapterManager.getAdapter(source)?.let { adapter ->
                 adapters[source] = adapter
             }
