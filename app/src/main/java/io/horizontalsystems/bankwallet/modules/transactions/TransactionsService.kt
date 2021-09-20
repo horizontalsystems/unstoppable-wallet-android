@@ -19,20 +19,23 @@ class TransactionsService(
     private val xRateRepository: TransactionsXRateRepository,
     private val transactionSyncStateRepository: TransactionSyncStateRepository,
     private val transactionAdapterManager: TransactionAdapterManager,
-    private val walletManager: IWalletManager
+    private val walletManager: IWalletManager,
+    private val transactionFilterService: TransactionFilterService
 ) : Clearable {
 
     private val itemsSubject = BehaviorSubject.create<List<TransactionItem>>()
     val itemsObservable: Observable<List<TransactionItem>> get() = itemsSubject
 
     val syncingObservable get() = transactionSyncStateRepository.syncingObservable
-    val typesObservable get() = transactionRecordRepository.typesObservable
-    val walletsObservable get() = transactionRecordRepository.walletsObservable
+
+    private val typesSubject = BehaviorSubject.create<Pair<List<FilterTransactionType>, FilterTransactionType>>()
+    val typesObservable get() = typesSubject
+
+    private val walletsSubject = BehaviorSubject.create<Pair<List<TransactionWallet>, TransactionWallet?>>()
+    val walletsObservable get() = walletsSubject
 
     private val disposables = CompositeDisposable()
     private val transactionItems = CopyOnWriteArrayList<TransactionItem>()
-
-    private var transactionWallets = listOf<TransactionWallet>()
 
     init {
         handleUpdatedWallets(walletManager.activeWallets)
@@ -159,36 +162,15 @@ class TransactionsService(
 
     @Synchronized
     private fun handleUpdatedWallets(wallets: List<Wallet>) {
-        transactionWallets = wallets.map {
-            TransactionWallet(it.coin, it.transactionSource)
-        }
+        transactionFilterService.setWallets(wallets)
 
-        val walletsGroupedBySource = groupWalletsBySource(transactionWallets)
-        transactionSyncStateRepository.setTransactionSources(walletsGroupedBySource.map { it.source })
-        transactionRecordRepository.setWallets(transactionWallets, walletsGroupedBySource)
-    }
+        val transactionWallets = transactionFilterService.getTransactionWallets()
 
-    private fun groupWalletsBySource(transactionWallets: List<TransactionWallet>): List<TransactionWallet> {
-        val mergedWallets = mutableListOf<TransactionWallet>()
+        transactionSyncStateRepository.setTransactionWallets(transactionWallets)
+        transactionRecordRepository.setWallets(transactionWallets, transactionFilterService.selectedWallet, transactionFilterService.selectedTransactionType)
 
-        transactionWallets.forEach { wallet ->
-            when (wallet.source.blockchain) {
-                TransactionSource.Blockchain.Bitcoin,
-                TransactionSource.Blockchain.BitcoinCash,
-                TransactionSource.Blockchain.Litecoin,
-                TransactionSource.Blockchain.Dash,
-                TransactionSource.Blockchain.Zcash,
-                is TransactionSource.Blockchain.Bep2 -> mergedWallets.add(wallet)
-                TransactionSource.Blockchain.Ethereum,
-                TransactionSource.Blockchain.BinanceSmartChain -> {
-                    if (mergedWallets.none { it.source == wallet.source }) {
-                        mergedWallets.add(TransactionWallet(null, wallet.source))
-                    }
-                }
-            }
-        }
-        return mergedWallets
-
+        walletsSubject.onNext(Pair(transactionWallets, transactionFilterService.selectedWallet))
+        typesSubject.onNext(Pair(transactionFilterService.getFilterTypes(), transactionFilterService.selectedTransactionType))
     }
 
     override fun clear() {
@@ -203,12 +185,16 @@ class TransactionsService(
 
     fun setFilterType(f: FilterTransactionType) {
         executorService.submit {
+            typesSubject.onNext(Pair(transactionFilterService.getFilterTypes(), f))
+            transactionFilterService.selectedTransactionType = f
             transactionRecordRepository.setTransactionType(f)
         }
     }
 
     fun setFilterCoin(w: TransactionWallet?) {
         executorService.submit {
+            walletsSubject.onNext(Pair(transactionFilterService.getTransactionWallets(), w))
+            transactionFilterService.selectedWallet = w
             transactionRecordRepository.setSelectedWallet(w)
         }
     }

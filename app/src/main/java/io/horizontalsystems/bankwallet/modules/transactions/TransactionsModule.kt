@@ -20,7 +20,8 @@ object TransactionsModule {
                     TransactionsXRateRepository(App.currencyManager, App.xRateManager),
                     TransactionSyncStateRepository(App.transactionAdapterManager),
                     App.transactionAdapterManager,
-                    App.walletManager
+                    App.walletManager,
+                    TransactionFilterService()
                 ),
                 TransactionViewItemFactory()
             ) as T
