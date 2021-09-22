@@ -24,15 +24,15 @@ class BalanceCache(private val dao: EnabledWalletsCacheDao) {
     }
 
     fun getCache(wallet: Wallet): BalanceData? {
-        val key = listOf(wallet.coin.id, wallet.configuredCoin.settings.id, wallet.account.id).joinToString()
+        val key = listOf(wallet.coinType.id, wallet.coinSettings.id, wallet.account.id).joinToString()
         return cacheMap[key]
     }
 
     fun setCache(balancesData: Map<Wallet, BalanceData>) {
         val list = balancesData.map { (wallet, balanceData) ->
             EnabledWalletCache(
-                wallet.coin.id,
-                wallet.configuredCoin.settings.id,
+                wallet.coinType.id,
+                wallet.coinSettings.id,
                 wallet.account.id,
                 balanceData.available,
                 balanceData.locked
