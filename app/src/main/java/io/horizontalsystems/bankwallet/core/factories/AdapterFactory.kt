@@ -42,7 +42,7 @@ class AdapterFactory(
             is CoinType.Litecoin -> LitecoinAdapter(wallet, syncMode, testMode, backgroundManager)
             is CoinType.BitcoinCash -> BitcoinCashAdapter(wallet, syncMode, testMode, backgroundManager)
             is CoinType.Dash -> DashAdapter(wallet, syncMode, testMode, backgroundManager)
-            is CoinType.Bep2 -> BinanceAdapter(binanceKitManager.binanceKit(wallet), coinType.symbol, coinManager.getCoinOrStub(CoinType.Bep2("BNB")), wallet)
+            is CoinType.Bep2 -> BinanceAdapter(binanceKitManager.binanceKit(wallet), coinType.symbol, coinManager.getCoinOrStub(CoinType.Bep2("BNB")), wallet, testMode)
             is CoinType.Ethereum -> EvmAdapter(ethereumKitManager.evmKit(wallet.account), coinManager)
             is CoinType.Erc20 -> Eip20Adapter(context, ethereumKitManager.evmKit(wallet.account), coinType.address, coinManager, wallet)
             is CoinType.BinanceSmartChain -> EvmAdapter(binanceSmartChainKitManager.evmKit(wallet.account), coinManager)
