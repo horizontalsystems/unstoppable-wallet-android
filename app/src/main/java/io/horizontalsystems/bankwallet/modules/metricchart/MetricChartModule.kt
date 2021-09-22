@@ -76,10 +76,11 @@ data class ChartViewItem(
 
 @Parcelize
 enum class MetricsType: Parcelable  {
-    BtcDominance,  Volume24h, DefiCap, TvlInDefi;
+    TotalMarketCap, BtcDominance,  Volume24h, DefiCap, TvlInDefi;
 
     val title: Int
         get() = when (this) {
+            TotalMarketCap -> R.string.MarketGlobalMetrics_TotalMarketCap
             BtcDominance -> R.string.MarketGlobalMetrics_BtcDominance
             Volume24h -> R.string.MarketGlobalMetrics_Volume
             DefiCap -> R.string.MarketGlobalMetrics_DefiCap
@@ -88,6 +89,7 @@ enum class MetricsType: Parcelable  {
 
     val description: Int
         get() = when (this) {
+            TotalMarketCap -> R.string.MarketGlobalMetrics_TotalMarketCapDescription
             BtcDominance -> R.string.MarketGlobalMetrics_BtcDominanceDescription
             Volume24h -> R.string.MarketGlobalMetrics_VolumeDescription
             DefiCap -> R.string.MarketGlobalMetrics_DefiCapDescription

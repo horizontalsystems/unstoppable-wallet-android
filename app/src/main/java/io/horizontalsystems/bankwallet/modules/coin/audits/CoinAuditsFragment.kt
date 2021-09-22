@@ -10,7 +10,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.coin.adapters.CoinInfoErrorAdapter
 import io.horizontalsystems.bankwallet.modules.coin.tvlrank.TvlRankLoadingAdapter
-import io.horizontalsystems.bankwallet.modules.market.overview.PoweredByAdapter
+import io.horizontalsystems.bankwallet.modules.coin.PoweredByAdapter
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.findNavController

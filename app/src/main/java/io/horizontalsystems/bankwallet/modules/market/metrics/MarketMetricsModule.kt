@@ -19,6 +19,11 @@ object MarketMetricsModule {
 
     }
 
+    sealed class State {
+        object Loading : State()
+        object SyncError : State()
+        data class Data(val marketMetrics: MarketMetrics) : State()
+    }
 }
 
 data class MarketMetricsItem (
@@ -33,6 +38,7 @@ data class MarketMetricsItem (
         var defiMarketCapDiff24h: BigDecimal = BigDecimal.ZERO,
         var defiTvl: CurrencyValue,
         var defiTvlDiff24h: BigDecimal = BigDecimal.ZERO,
+        val totalMarketCapPoints: List<MarketMetricsPoint>,
         val btcDominancePoints: List<MarketMetricsPoint>,
         val volume24Points: List<MarketMetricsPoint>,
         val defiMarketCapPoints: List<MarketMetricsPoint>,
@@ -52,6 +58,7 @@ data class MarketMetricsItem (
                     globalCoinMarket.defiMarketCapDiff24h,
                     CurrencyValue(currency, globalCoinMarket.defiTvl),
                     globalCoinMarket.defiTvlDiff24h,
+                    totalMarketCapPoints = globalCoinMarket.globalCoinMarketPoints.map { MarketMetricsPoint(it.marketCap, it.timestamp) },
                     btcDominancePoints = globalCoinMarket.globalCoinMarketPoints.map { MarketMetricsPoint(it.btcDominance, it.timestamp) },
                     volume24Points = globalCoinMarket.globalCoinMarketPoints.map { MarketMetricsPoint(it.volume24h, it.timestamp) },
                     defiMarketCapPoints = globalCoinMarket.globalCoinMarketPoints.map { MarketMetricsPoint(it.defiMarketCap, it.timestamp) },

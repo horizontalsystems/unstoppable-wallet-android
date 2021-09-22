@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.ConcatAdapter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.coin.adapters.CoinInfoErrorAdapter
-import io.horizontalsystems.bankwallet.modules.market.overview.PoweredByAdapter
+import io.horizontalsystems.bankwallet.modules.coin.PoweredByAdapter
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorDialog
 import io.horizontalsystems.bankwallet.ui.extensions.TvlRankListHeaderView
 import io.horizontalsystems.core.findNavController

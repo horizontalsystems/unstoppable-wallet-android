@@ -26,6 +26,7 @@ class MarketGlobalFetcher(
                 .map { list ->
                     list.map { point ->
                         val value = when (metricsType) {
+                            MetricsType.TotalMarketCap -> point.marketCap
                             MetricsType.BtcDominance -> point.btcDominance
                             MetricsType.Volume24h -> point.volume24h
                             MetricsType.DefiCap -> point.defiMarketCap

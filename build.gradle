@@ -2,7 +2,7 @@
 
 buildscript {
     ext {
-        compile_sdk_version = 30
+        compile_sdk_version = 31
         min_sdk_version = 26
         lifecycle_version = '2.3.1'
 
