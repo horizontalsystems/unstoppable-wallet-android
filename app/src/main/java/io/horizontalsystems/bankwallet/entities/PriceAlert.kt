@@ -2,7 +2,7 @@ package io.horizontalsystems.bankwallet.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import io.horizontalsystems.coinkit.models.CoinType
+import io.horizontalsystems.marketkit.models.CoinType
 
 
 @Entity
