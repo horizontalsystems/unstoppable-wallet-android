@@ -20,15 +20,10 @@ class MarketMetricsViewModel(
         private val clearables: List<Clearable>
 ) : ViewModel() {
 
-    val marketMetricsLiveData = MutableLiveData<MarketMetricsWrapper?>(null)
     val toastLiveData = SingleLiveEvent<String>()
-    val showGlobalMarketMetricsPage = SingleLiveEvent<MetricsType>()
+    val stateLiveData = MutableLiveData<MarketMetricsModule.State>()
 
-    private var metricsWrapper: MarketMetricsWrapper? = null
-        set(value) {
-            field = value
-            marketMetricsLiveData.postValue(value)
-        }
+    private var marketMetrics: MarketMetrics? = null
 
     private val disposables = CompositeDisposable()
 
@@ -47,39 +42,59 @@ class MarketMetricsViewModel(
     }
 
     private fun syncMarketMetrics(dataState: DataState<MarketMetricsItem>) {
-        var loading = false
-        val metricsNotSet = metricsWrapper?.marketMetrics == null
+        val metricsNotSet = marketMetrics == null
         if (metricsNotSet) {
-            loading = dataState.loading
+            stateLiveData.postValue(MarketMetricsModule.State.Loading)
         }
 
-        var showSyncError = false
         if (dataState is DataState.Error) {
             if (metricsNotSet) {
-                showSyncError = true
+                stateLiveData.postValue(MarketMetricsModule.State.SyncError)
             } else {
                 toastLiveData.postValue(convertErrorMessage(dataState.error))
             }
         }
 
-        var metrics = metricsWrapper?.marketMetrics
-
         if (dataState is DataState.Success) {
             val marketMetricsItem = dataState.data
 
             val btcDominanceFormatted = App.numberFormatter.format(marketMetricsItem.btcDominance, 0, 2, suffix = "%")
-            val marketMetrics = MarketMetrics(
-                    totalMarketCap = MetricData(formatFiatShortened(marketMetricsItem.marketCap.value, marketMetricsItem.marketCap.currency.symbol), marketMetricsItem.marketCapDiff24h, null),
-                    btcDominance = MetricData(btcDominanceFormatted, marketMetricsItem.btcDominanceDiff24h, getChartData(marketMetricsItem.btcDominancePoints)),
-                    volume24h = MetricData(formatFiatShortened(marketMetricsItem.volume24h.value, marketMetricsItem.volume24h.currency.symbol), marketMetricsItem.volume24hDiff24h, getChartData(marketMetricsItem.volume24Points)),
-                    defiCap = MetricData(formatFiatShortened(marketMetricsItem.defiMarketCap.value, marketMetricsItem.defiMarketCap.currency.symbol), marketMetricsItem.defiMarketCapDiff24h, getChartData(marketMetricsItem.defiMarketCapPoints)),
-                    defiTvl = MetricData(formatFiatShortened(marketMetricsItem.defiTvl.value, marketMetricsItem.defiTvl.currency.symbol), marketMetricsItem.defiTvlDiff24h, getChartData(marketMetricsItem.defiTvlPoints)),
+            val metrics = MarketMetrics(
+                    totalMarketCap = MetricData(
+                        formatFiatShortened(marketMetricsItem.marketCap.value, marketMetricsItem.marketCap.currency.symbol),
+                        marketMetricsItem.marketCapDiff24h,
+                        getChartData(marketMetricsItem.totalMarketCapPoints),
+                        MetricsType.TotalMarketCap
+                    ),
+                    btcDominance = MetricData(
+                        btcDominanceFormatted,
+                        marketMetricsItem.btcDominanceDiff24h,
+                        getChartData(marketMetricsItem.btcDominancePoints),
+                        MetricsType.BtcDominance
+                    ),
+                    volume24h = MetricData(
+                        formatFiatShortened(marketMetricsItem.volume24h.value, marketMetricsItem.volume24h.currency.symbol),
+                        marketMetricsItem.volume24hDiff24h,
+                        getChartData(marketMetricsItem.volume24Points),
+                        MetricsType.Volume24h
+                    ),
+                    defiCap = MetricData(
+                        formatFiatShortened(marketMetricsItem.defiMarketCap.value, marketMetricsItem.defiMarketCap.currency.symbol),
+                        marketMetricsItem.defiMarketCapDiff24h,
+                        getChartData(marketMetricsItem.defiMarketCapPoints),
+                        MetricsType.DefiCap
+                    ),
+                    defiTvl = MetricData(
+                        formatFiatShortened(marketMetricsItem.defiTvl.value, marketMetricsItem.defiTvl.currency.symbol),
+                        marketMetricsItem.defiTvlDiff24h,
+                        getChartData(marketMetricsItem.defiTvlPoints),
+                        MetricsType.TvlInDefi
+                    ),
             )
 
-            metrics = marketMetrics
+            marketMetrics = metrics
+            stateLiveData.postValue(MarketMetricsModule.State.Data(metrics))
         }
-
-        metricsWrapper = MarketMetricsWrapper(metrics, loading, showSyncError)
     }
 
     private fun getChartData(marketMetricsPoints: List<MarketMetricsPoint>): ChartData {
@@ -101,22 +116,6 @@ class MarketMetricsViewModel(
     override fun onCleared() {
         clearables.forEach(Clearable::clear)
         disposables.clear()
-    }
-
-    fun onBtcDominanceClick() {
-        showGlobalMarketMetricsPage.postValue(MetricsType.BtcDominance)
-    }
-
-    fun on24VolumeClick() {
-        showGlobalMarketMetricsPage.postValue(MetricsType.Volume24h)
-    }
-
-    fun onDefiCapClick() {
-        showGlobalMarketMetricsPage.postValue(MetricsType.DefiCap)
-    }
-
-    fun onTvlInDefiClick() {
-        showGlobalMarketMetricsPage.postValue(MetricsType.TvlInDefi)
     }
 
 }

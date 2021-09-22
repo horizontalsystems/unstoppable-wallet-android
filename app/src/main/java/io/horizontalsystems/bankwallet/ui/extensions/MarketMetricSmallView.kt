@@ -3,10 +3,11 @@ package io.horizontalsystems.bankwallet.ui.extensions
 import android.content.Context
 import android.util.AttributeSet
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.isVisible
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
 import io.horizontalsystems.chartview.ChartData
-import io.horizontalsystems.views.helpers.LayoutHelper
 import kotlinx.android.synthetic.main.view_market_metric_small.view.*
 import java.math.BigDecimal
 
@@ -25,20 +26,15 @@ class MarketMetricSmallView @JvmOverloads constructor(context: Context, attrs: A
         }
     }
 
-    fun setMetricData(data: MetricData?) {
-        if (data == null) {
-            title.alpha = 0.5f
-            setValueText(null, false)
-            setDiff(null, false)
-        } else {
-            title.alpha = 1f
-            setValueText(data.value, true)
-            setDiff(data.diff, true)
+    fun setMetricData(data: MetricData) {
+        title.text = context.getString(data.type.title)
+        title.isVisible = true
+        setValueText(data.value, true)
+        setDiff(data.diff, true)
 
-            data.chartData?.let {
-                post {
-                    chart.setData(it)
-                }
+        data.chartData?.let {
+            post {
+                chart.setData(it)
             }
         }
     }
@@ -78,4 +74,4 @@ class MarketMetricSmallView @JvmOverloads constructor(context: Context, attrs: A
     }
 }
 
-data class MetricData(val value: String?, val diff: BigDecimal?, val chartData: ChartData?)
+data class MetricData(val value: String?, val diff: BigDecimal?, val chartData: ChartData?, val type: MetricsType)

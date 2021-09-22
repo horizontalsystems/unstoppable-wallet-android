@@ -44,7 +44,6 @@ import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.google.android.material.snackbar.Snackbar
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.entities.Account
@@ -58,6 +57,8 @@ import io.horizontalsystems.bankwallet.modules.receive.ReceiveFragment
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.RateColor
+import io.horizontalsystems.bankwallet.ui.compose.RateText
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorDialog
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorItem
@@ -67,7 +68,6 @@ import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.android.synthetic.main.fragment_balance.*
-import java.math.BigDecimal
 
 class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
 
@@ -317,8 +317,8 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
                         )
                         Text(
                             modifier = Modifier.padding(start = 4.dp),
-                            text = getDiffText(viewItem.diff),
-                            color = getDiffColor(viewItem.diff),
+                            text = RateText(viewItem.diff),
+                            color = RateColor(viewItem.diff),
                             style = ComposeAppTheme.typography.subhead2,
                             maxLines = 1,
                         )
@@ -451,17 +451,6 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
                 enabled = viewItem.exchangeValue.text != null
             )
         }
-    }
-
-    @Composable
-    private fun getDiffColor(diff: BigDecimal?) =
-        if (diff ?: BigDecimal.ZERO >= BigDecimal.ZERO) ComposeAppTheme.colors.remus else ComposeAppTheme.colors.lucian
-
-    @Composable
-    private fun getDiffText(diff: BigDecimal?): String {
-        if (diff == null) return ""
-        val sign = if (diff >= BigDecimal.ZERO) "+" else "-"
-        return App.numberFormatter.format(diff.abs(), 0, 2, sign, "%")
     }
 
     private fun onSendClicked(viewItem: BalanceViewItem) {
