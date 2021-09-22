@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin
 
-import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.LastBlockInfo
+import io.horizontalsystems.bankwallet.entities.TransactionValue
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionLockInfo
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
@@ -14,7 +14,7 @@ abstract class BitcoinTransactionRecord(
     blockHeight: Int?,
     confirmationsThreshold: Int?,
     timestamp: Long,
-    val fee: CoinValue?,
+    val fee: TransactionValue?,
     failed: Boolean,
     val lockInfo: TransactionLockInfo?,
     val conflictingHash: String?,
