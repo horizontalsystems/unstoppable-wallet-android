@@ -1,15 +1,14 @@
 package io.horizontalsystems.bankwallet.entities.transactionrecords.evm
 
 import io.horizontalsystems.bankwallet.core.adapters.BaseEvmAdapter
-import io.horizontalsystems.bankwallet.core.adapters.EvmAdapter
-import io.horizontalsystems.bankwallet.entities.CoinValue
+import io.horizontalsystems.bankwallet.entities.TransactionValue
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
-import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.core.toHexString
 import io.horizontalsystems.ethereumkit.models.FullTransaction
+import io.horizontalsystems.marketkit.models.PlatformCoin
 
-abstract class EvmTransactionRecord(fullTransaction: FullTransaction, baseCoin: Coin, source: TransactionSource) :
+abstract class EvmTransactionRecord(fullTransaction: FullTransaction, baseCoin: PlatformCoin, source: TransactionSource) :
     TransactionRecord(
         uid = fullTransaction.transaction.hash.toHexString(),
         transactionHash = fullTransaction.transaction.hash.toHexString(),
@@ -21,7 +20,7 @@ abstract class EvmTransactionRecord(fullTransaction: FullTransaction, baseCoin: 
         source = source
     ) {
 
-    val fee: CoinValue
+    val fee: TransactionValue
     open val foreignTransaction: Boolean = false
 
     init {
@@ -30,9 +29,9 @@ abstract class EvmTransactionRecord(fullTransaction: FullTransaction, baseCoin: 
 
         val feeDecimal = feeAmount.toBigDecimal()
             .multiply(fullTransaction.transaction.gasPrice.toBigDecimal())
-            .movePointLeft(EvmAdapter.decimal).stripTrailingZeros()
+            .movePointLeft(baseCoin.decimal).stripTrailingZeros()
 
-        fee = CoinValue(baseCoin, feeDecimal)
+        fee = TransactionValue.CoinValue(baseCoin, feeDecimal)
     }
 
 }

@@ -1,22 +1,19 @@
 package io.horizontalsystems.bankwallet.entities.transactionrecords.evm
 
-import io.horizontalsystems.bankwallet.entities.CoinValue
+import io.horizontalsystems.bankwallet.entities.TransactionValue
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
-import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.ethereumkit.models.FullTransaction
-import java.math.BigDecimal
+import io.horizontalsystems.marketkit.models.PlatformCoin
 
 class EvmIncomingTransactionRecord(
     fullTransaction: FullTransaction,
-    baseCoin: Coin,
-    amount: BigDecimal,
+    baseCoin: PlatformCoin,
+    val value: TransactionValue,
     val from: String,
-    token: Coin,
     override val foreignTransaction: Boolean = false,
     source: TransactionSource
 ) : EvmTransactionRecord(fullTransaction, baseCoin, source) {
 
-    val value: CoinValue = CoinValue(token, amount)
-
     override val mainValue = value
+
 }
