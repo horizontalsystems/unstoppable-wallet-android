@@ -23,6 +23,7 @@ import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.TransactionData
+import io.horizontalsystems.marketkit.models.PlatformCoin
 import io.horizontalsystems.xrateskit.entities.*
 import io.reactivex.Flowable
 import io.reactivex.Observable
@@ -188,10 +189,13 @@ interface ITransactionsAdapter {
     val lastBlockInfo: LastBlockInfo?
     val lastBlockUpdatedFlowable: Flowable<Unit>
 
-    fun getTransactionsAsync(from: TransactionRecord?, coin: Coin?, limit: Int, transactionType: FilterTransactionType): Single<List<TransactionRecord>>
+    val explorerTitle: String
+    fun explorerUrl(transactionHash: String): String?
+
+    fun getTransactionsAsync(from: TransactionRecord?, coin: PlatformCoin?, limit: Int, transactionType: FilterTransactionType): Single<List<TransactionRecord>>
     fun getRawTransaction(transactionHash: String): String? = null
 
-    fun getTransactionRecordsFlowable(coin: Coin?, transactionType: FilterTransactionType): Flowable<List<TransactionRecord>>
+    fun getTransactionRecordsFlowable(coin: PlatformCoin?, transactionType: FilterTransactionType): Flowable<List<TransactionRecord>>
 }
 
 class UnsupportedFilterException: Exception()

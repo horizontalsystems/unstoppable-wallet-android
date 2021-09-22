@@ -12,7 +12,7 @@ import io.horizontalsystems.binancechainkit.BinanceChainKit
 import io.horizontalsystems.binancechainkit.core.api.BinanceError
 import io.horizontalsystems.binancechainkit.models.TransactionFilterType
 import io.horizontalsystems.binancechainkit.models.TransactionInfo
-import io.horizontalsystems.coinkit.models.Coin
+import io.horizontalsystems.marketkit.models.PlatformCoin
 import io.reactivex.Flowable
 import io.reactivex.Single
 import java.math.BigDecimal
@@ -20,11 +20,13 @@ import java.math.BigDecimal
 class BinanceAdapter(
     private val binanceKit: BinanceChainKit,
     private val symbol: String,
-    private val feeCoin: Coin,
+    private val feeCoin: PlatformCoin,
     private val wallet: Wallet,
+    private val testMode: Boolean
 ) : IAdapter, ITransactionsAdapter, IBalanceAdapter, IReceiveAdapter, ISendBinanceAdapter {
 
     private val asset = binanceKit.register(symbol)
+    private val coin = wallet.platformCoin
 
     private val syncState: AdapterState
         get() = when (val kitSyncState = binanceKit.syncState) {
@@ -78,7 +80,15 @@ class BinanceAdapter(
     override val lastBlockUpdatedFlowable: Flowable<Unit>
         get() = binanceKit.latestBlockFlowable.map { }
 
-    override fun getTransactionRecordsFlowable(coin: Coin?, transactionType: FilterTransactionType): Flowable<List<TransactionRecord>> {
+    override val explorerTitle: String = "binance.org"
+
+    override fun explorerUrl(transactionHash: String) = if (testMode) {
+        "https://testnet-explorer.binance.org/tx/$transactionHash"
+    } else {
+        "https://explorer.binance.org/tx/$transactionHash"
+    }
+
+    override fun getTransactionRecordsFlowable(coin: PlatformCoin?, transactionType: FilterTransactionType): Flowable<List<TransactionRecord>> {
         return try {
             val filter = getBinanceTransactionTypeFilter(transactionType)
             asset.getTransactionsFlowable(filter).map { it.map { transactionRecord(it) } }
@@ -87,7 +97,7 @@ class BinanceAdapter(
         }
     }
 
-    override fun getTransactionsAsync(from: TransactionRecord?, coin: Coin?, limit: Int, transactionType: FilterTransactionType): Single<List<TransactionRecord>> {
+    override fun getTransactionsAsync(from: TransactionRecord?, coin: PlatformCoin?, limit: Int, transactionType: FilterTransactionType): Single<List<TransactionRecord>> {
         return try {
             val filter = getBinanceTransactionTypeFilter(transactionType)
             binanceKit
@@ -116,20 +126,20 @@ class BinanceAdapter(
             fromMine && !toMine -> BinanceChainOutgoingTransactionRecord(
                 transaction,
                 feeCoin,
-                wallet.coin,
+                coin,
                 false,
                 wallet.transactionSource
             )
             !fromMine && toMine -> BinanceChainIncomingTransactionRecord(
                 transaction,
                 feeCoin,
-                wallet.coin,
+                coin,
                 wallet.transactionSource
             )
             else -> BinanceChainOutgoingTransactionRecord(
                 transaction,
                 feeCoin,
-                wallet.coin,
+                coin,
                 true,
                 wallet.transactionSource
             )
