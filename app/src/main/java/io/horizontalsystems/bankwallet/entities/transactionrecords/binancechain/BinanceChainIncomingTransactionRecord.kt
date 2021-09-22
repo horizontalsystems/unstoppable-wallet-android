@@ -1,19 +1,19 @@
 package io.horizontalsystems.bankwallet.entities.transactionrecords.binancechain
 
-import io.horizontalsystems.bankwallet.entities.CoinValue
+import io.horizontalsystems.bankwallet.entities.TransactionValue
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
 import io.horizontalsystems.binancechainkit.models.TransactionInfo
-import io.horizontalsystems.coinkit.models.Coin
+import io.horizontalsystems.marketkit.models.PlatformCoin
 
 class BinanceChainIncomingTransactionRecord(
     transaction: TransactionInfo,
-    feeCoin: Coin,
-    coin: Coin,
+    feeCoin: PlatformCoin,
+    coin: PlatformCoin,
     source: TransactionSource
 ) : BinanceChainTransactionRecord(transaction, feeCoin, source) {
-    val value = CoinValue(coin, transaction.amount.toBigDecimal())
+    val value = TransactionValue.CoinValue(coin, transaction.amount.toBigDecimal())
     val from = transaction.from
 
-    override val mainValue: CoinValue = value
+    override val mainValue = value
 
 }
