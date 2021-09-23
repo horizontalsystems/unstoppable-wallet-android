@@ -12,7 +12,7 @@ class RestoreSettingsManager(
         private val storage: IRestoreSettingsStorage,
         private val zcashBirthdayProvider: ZcashBirthdayProvider
 ) {
-    fun settings(account: Account, coin: Coin): RestoreSettings {
+    fun settings(account: Account, coin: io.horizontalsystems.marketkit.models.CoinType): RestoreSettings {
         val records = storage.restoreSettings(account.id, coin.id)
 
         val settings = RestoreSettings()
