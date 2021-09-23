@@ -8,7 +8,9 @@ object NotificationsModule {
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val viewModel = NotificationsViewModel(App.priceAlertManager, App.walletManager, App.notificationManager, App.localStorage)
+            val viewModel = NotificationsViewModel(App.priceAlertManager,
+                App.notificationManager,
+                App.localStorage)
             return viewModel as T
         }
     }

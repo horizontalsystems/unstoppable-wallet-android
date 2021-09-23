@@ -14,12 +14,10 @@ import io.reactivex.schedulers.Schedulers
 
 class NotificationsViewModel(
         private val priceAlertManager: IPriceAlertManager,
-        walletManager: IWalletManager,
         private val notificationManager: INotificationManager,
         private val localStorage: ILocalStorage) : ViewModel() {
 
     private val viewItems = mutableListOf<NotificationViewItem>()
-    private val portfolioCoins = walletManager.wallets.map { it.coin }.distinct()
     private var disposable: Disposable? = null
 
     val itemsLiveData = MutableLiveData<List<NotificationViewItem>>()
@@ -90,16 +88,6 @@ class NotificationsViewModel(
 
         val priceAlerts = priceAlertManager.getPriceAlerts().toMutableList()
 
-        //list portfolio coins with Notification support
-        portfolioCoins
-                .sortedBy { it.title }
-                .forEach { coin ->
-                    val priceAlert = priceAlerts.firstOrNull { it.coinType == coin.type }
-                    priceAlerts.removeIf { it.coinType == coin.type }
-                    viewItems.addAll(getPriceAlertViewItems(coin.title, coin.type, priceAlert))
-                }
-
-        //price alerts for Non portfolio coins
         priceAlerts
                 .sortedBy { it.coinName }
                 .forEach { priceAlert ->
