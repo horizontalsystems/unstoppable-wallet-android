@@ -437,12 +437,12 @@ interface IEnabledWalletStorage {
 
 interface IBlockchainSettingsStorage {
     var bitcoinCashCoinType: BitcoinCashCoinType?
-    fun derivationSetting(coinType: CoinType): DerivationSetting?
+    fun derivationSetting(coinType: io.horizontalsystems.marketkit.models.CoinType): DerivationSetting?
     fun saveDerivationSetting(derivationSetting: DerivationSetting)
     fun deleteDerivationSettings()
-    fun initialSyncSetting(coinType: CoinType): InitialSyncSetting?
+    fun initialSyncSetting(coinType: io.horizontalsystems.marketkit.models.CoinType): InitialSyncSetting?
     fun saveInitialSyncSetting(initialSyncSetting: InitialSyncSetting)
-    fun ethereumRpcModeSetting(coinType: CoinType): EthereumRpcMode?
+    fun ethereumRpcModeSetting(coinType: io.horizontalsystems.marketkit.models.CoinType): EthereumRpcMode?
     fun saveEthereumRpcModeSetting(ethereumRpcModeSetting: EthereumRpcMode)
 }
 
@@ -573,14 +573,14 @@ interface IPriceAlertManager {
     val notificationChangedFlowable: Flowable<Unit>
     fun getPriceAlerts(): List<PriceAlert>
     fun savePriceAlert(
-        coinType: CoinType,
+        coinType: io.horizontalsystems.marketkit.models.CoinType,
         coinName: String,
         changeState: PriceAlert.ChangeState,
         trendState: PriceAlert.TrendState
     )
 
-    fun getAlertStates(coinType: CoinType): Pair<PriceAlert.ChangeState, PriceAlert.TrendState>
-    fun hasPriceAlert(coinType: CoinType): Boolean
+    fun getAlertStates(coinType: io.horizontalsystems.marketkit.models.CoinType): Pair<PriceAlert.ChangeState, PriceAlert.TrendState>
+    fun hasPriceAlert(coinType: io.horizontalsystems.marketkit.models.CoinType): Boolean
     fun deactivateAllNotifications()
     fun enablePriceAlerts()
     fun disablePriceAlerts()

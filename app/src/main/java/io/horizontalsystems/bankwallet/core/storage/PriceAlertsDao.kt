@@ -2,7 +2,7 @@ package io.horizontalsystems.bankwallet.core.storage
 
 import androidx.room.*
 import io.horizontalsystems.bankwallet.entities.PriceAlert
-import io.horizontalsystems.coinkit.models.CoinType
+import io.horizontalsystems.marketkit.models.CoinType
 
 @Dao
 interface PriceAlertsDao {

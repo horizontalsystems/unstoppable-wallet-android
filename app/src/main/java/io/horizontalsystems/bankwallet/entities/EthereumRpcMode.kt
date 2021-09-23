@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.entities
 
 import android.os.Parcelable
-import io.horizontalsystems.coinkit.models.CoinType
+import io.horizontalsystems.marketkit.models.CoinType
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize

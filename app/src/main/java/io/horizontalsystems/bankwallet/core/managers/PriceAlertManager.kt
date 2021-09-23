@@ -8,11 +8,10 @@ import io.horizontalsystems.bankwallet.core.IPriceAlertManager
 import io.horizontalsystems.bankwallet.core.notifications.NotificationFactory
 import io.horizontalsystems.bankwallet.core.notifications.NotificationNetworkWrapper
 import io.horizontalsystems.bankwallet.core.storage.AppDatabase
-import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.PriceAlert
 import io.horizontalsystems.bankwallet.entities.SubscriptionJob
-import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.BackgroundManager
+import io.horizontalsystems.marketkit.models.CoinType
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.subjects.PublishSubject
@@ -178,14 +177,14 @@ class PriceAlertManager(
 
     companion object {
         fun getChangeSubscriptionJob(coinType: CoinType, changeState: PriceAlert.ChangeState, subscribeType: SubscriptionJob.JobType): SubscriptionJob {
-            val data = hashMapOf("coin_id" to coinType.ID, "percent" to changeState.getIntValue(), "period" to "24h")
+            val data = hashMapOf("coin_id" to coinType.id, "percent" to changeState.getIntValue(), "period" to "24h")
             val bodyMap = hashMapOf("type" to "PRICE", "data" to data)
             val body = Gson().toJson(bodyMap)
             return SubscriptionJob(coinType, body, SubscriptionJob.StateType.Change, subscribeType)
         }
 
         fun getTrendSubscriptionJob(coinType: CoinType, trendState: PriceAlert.TrendState, subscribeType: SubscriptionJob.JobType): SubscriptionJob {
-            val data = hashMapOf("coin_id" to coinType.ID, "term" to trendState.value)
+            val data = hashMapOf("coin_id" to coinType.id, "term" to trendState.value)
             val bodyMap = hashMapOf("type" to "TRENDS", "data" to data)
             val body = Gson().toJson(bodyMap)
             return SubscriptionJob(coinType, body, SubscriptionJob.StateType.Trend, subscribeType)
