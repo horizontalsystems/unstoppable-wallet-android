@@ -12,10 +12,10 @@ import io.horizontalsystems.bitcoincore.BitcoinCore
 import io.horizontalsystems.bitcoincore.core.Bip
 import io.horizontalsystems.bitcoincore.core.IPluginData
 import io.horizontalsystems.bitcoincore.models.*
-import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.hodler.HodlerOutputData
 import io.horizontalsystems.hodler.HodlerPlugin
+import io.horizontalsystems.marketkit.models.PlatformCoin
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.Observable
@@ -29,7 +29,8 @@ abstract class BitcoinBaseAdapter(
     open val kit: AbstractKit,
     open val syncMode: SyncMode? = null,
     backgroundManager: BackgroundManager,
-    val wallet: Wallet
+    val wallet: Wallet,
+    protected val testMode: Boolean
 ) : IAdapter, ITransactionsAdapter, IBalanceAdapter, IReceiveAdapter, BackgroundManager.Listener {
 
     init {
@@ -89,7 +90,7 @@ abstract class BitcoinBaseAdapter(
     override val balanceStateUpdatedFlowable: Flowable<Unit>
         get() = adapterStateUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
 
-    override fun getTransactionRecordsFlowable(coin: Coin?, transactionType: FilterTransactionType): Flowable<List<TransactionRecord>> {
+    override fun getTransactionRecordsFlowable(coin: PlatformCoin?, transactionType: FilterTransactionType): Flowable<List<TransactionRecord>> {
         val observable: Observable<List<TransactionRecord>> = when (transactionType) {
             FilterTransactionType.All -> {
                 transactionRecordsSubject
@@ -150,7 +151,7 @@ abstract class BitcoinBaseAdapter(
 
     override fun getTransactionsAsync(
         from: TransactionRecord?,
-        coin: Coin?,
+        coin: PlatformCoin?,
         limit: Int,
         transactionType: FilterTransactionType
     ): Single<List<TransactionRecord>> {
@@ -266,7 +267,7 @@ abstract class BitcoinBaseAdapter(
             TransactionType.Incoming -> {
                 BitcoinIncomingTransactionRecord(
                         source = wallet.transactionSource,
-                        coin = wallet.coin,
+                        coin = wallet.platformCoin,
                         uid = transaction.uid,
                         transactionHash = transaction.transactionHash,
                         transactionIndex = transaction.transactionIndex,
@@ -285,7 +286,7 @@ abstract class BitcoinBaseAdapter(
             TransactionType.Outgoing -> {
                 BitcoinOutgoingTransactionRecord(
                         source = wallet.transactionSource,
-                        coin = wallet.coin,
+                        coin = wallet.platformCoin,
                         uid = transaction.uid,
                         transactionHash = transaction.transactionHash,
                         transactionIndex = transaction.transactionIndex,
@@ -305,7 +306,7 @@ abstract class BitcoinBaseAdapter(
             TransactionType.SentToSelf -> {
                 BitcoinOutgoingTransactionRecord(
                         source = wallet.transactionSource,
-                        coin = wallet.coin,
+                        coin = wallet.platformCoin,
                         uid = transaction.uid,
                         transactionHash = transaction.transactionHash,
                         transactionIndex = transaction.transactionIndex,

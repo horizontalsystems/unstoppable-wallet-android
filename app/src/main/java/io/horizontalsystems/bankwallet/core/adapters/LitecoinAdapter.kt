@@ -21,10 +21,11 @@ class LitecoinAdapter(
         override val kit: LitecoinKit,
         syncMode: SyncMode?,
         backgroundManager: BackgroundManager,
-        wallet: Wallet
-) : BitcoinBaseAdapter(kit, syncMode, backgroundManager, wallet), LitecoinKit.Listener, ISendBitcoinAdapter {
+        wallet: Wallet,
+        testMode: Boolean
+) : BitcoinBaseAdapter(kit, syncMode, backgroundManager, wallet, testMode), LitecoinKit.Listener, ISendBitcoinAdapter {
 
-    constructor(wallet: Wallet, syncMode: SyncMode?, testMode: Boolean, backgroundManager: BackgroundManager) : this(createKit(wallet, syncMode, testMode), syncMode, backgroundManager, wallet)
+    constructor(wallet: Wallet, syncMode: SyncMode?, testMode: Boolean, backgroundManager: BackgroundManager) : this(createKit(wallet, syncMode, testMode), syncMode, backgroundManager, wallet, testMode)
 
     init {
         kit.listener = this
@@ -35,6 +36,14 @@ class LitecoinAdapter(
     //
 
     override val satoshisInBitcoin: BigDecimal = BigDecimal.valueOf(Math.pow(10.0, decimal.toDouble()))
+
+    // ITransactionsAdapter
+
+    override val explorerTitle: String = "blockchair.com"
+
+    override fun explorerUrl(transactionHash: String): String? {
+        return if (testMode) null else "https://blockchair.com/litecoin/transaction/$transactionHash"
+    }
 
     //
     // LitecoinKit Listener
@@ -78,7 +87,7 @@ class LitecoinAdapter(
         private fun createKit(wallet: Wallet, syncMode: SyncMode?, testMode: Boolean): LitecoinKit {
             val account = wallet.account
             val accountType = (account.type as? AccountType.Mnemonic) ?: throw UnsupportedAccountException()
-            val derivation = wallet.configuredCoin.settings.derivation ?: throw AdapterErrorWrongParameters("Derivation not set")
+            val derivation = wallet.coinSettings.derivation ?: throw AdapterErrorWrongParameters("Derivation not set")
 
             return LitecoinKit(context = App.instance,
                     words = accountType.words,

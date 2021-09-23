@@ -22,8 +22,8 @@ import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRe
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.BitcoinIncomingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.BitcoinOutgoingTransactionRecord
 import io.horizontalsystems.bankwallet.modules.transactions.FilterTransactionType
-import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.hdwalletkit.Mnemonic
+import io.horizontalsystems.marketkit.models.PlatformCoin
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.Single
@@ -38,7 +38,7 @@ class ZcashAdapter(
         context: Context,
         private val wallet: Wallet,
         restoreSettings: RestoreSettings,
-        testMode: Boolean
+        private val testMode: Boolean
 ) : IAdapter, IBalanceAdapter, IReceiveAdapter, ITransactionsAdapter, ISendZcashAdapter {
 
     private val confirmationsThreshold = 10
@@ -165,9 +165,15 @@ class ZcashAdapter(
     override val lastBlockUpdatedFlowable: Flowable<Unit>
         get() = lastBlockUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
 
+    override val explorerTitle: String = "blockchair.com"
+
+    override fun explorerUrl(transactionHash: String): String? {
+        return if (testMode) null else "https://blockchair.com/zcash/transaction/$transactionHash"
+    }
+
     override fun getTransactionsAsync(
         from: TransactionRecord?,
-        coin: Coin?,
+        coin: PlatformCoin?,
         limit: Int,
         transactionType: FilterTransactionType
     ): Single<List<TransactionRecord>> {
@@ -184,7 +190,7 @@ class ZcashAdapter(
                 }
     }
 
-    override fun getTransactionRecordsFlowable(coin: Coin?, transactionType: FilterTransactionType): Flowable<List<TransactionRecord>> {
+    override fun getTransactionRecordsFlowable(coin: PlatformCoin?, transactionType: FilterTransactionType): Flowable<List<TransactionRecord>> {
         return transactionsProvider.getNewTransactionsFlowable(transactionType).map { transactions ->
             transactions.map { getTransactionRecord(it) }
         }
@@ -311,7 +317,7 @@ class ZcashAdapter(
 
         return if (transaction.isIncoming) {
             BitcoinIncomingTransactionRecord(
-                coin = wallet.coin,
+                coin = wallet.platformCoin,
                 uid = transactionHashHex,
                 transactionHash = transactionHashHex,
                 transactionIndex = transaction.transactionIndex,
@@ -330,7 +336,7 @@ class ZcashAdapter(
             )
         } else {
             BitcoinOutgoingTransactionRecord(
-                coin = wallet.coin,
+                coin = wallet.platformCoin,
                 uid = transactionHashHex,
                 transactionHash = transactionHashHex,
                 transactionIndex = transaction.transactionIndex,
