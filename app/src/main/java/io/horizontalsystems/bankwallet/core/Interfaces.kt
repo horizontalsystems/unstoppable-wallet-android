@@ -126,7 +126,6 @@ interface IAccountFactory {
 }
 
 interface IWalletStorage {
-    fun wallets(accounts: List<Account>): List<Wallet>
     fun wallets(account: Account): List<Wallet>
     fun save(wallets: List<Wallet>)
     fun delete(wallets: List<Wallet>)
@@ -564,6 +563,7 @@ interface ICoinManager {
     fun getCoinOrStub(coinType: CoinType): Coin
     fun save(coins: List<Coin>)
     fun getPlatformCoin(coinType: io.horizontalsystems.marketkit.models.CoinType): PlatformCoin?
+    fun getPlatformCoins(coinTypeIds: List<String>): List<PlatformCoin>
 }
 
 interface IAddTokenBlockchainService {

@@ -60,4 +60,8 @@ class CoinManager(
     override fun getPlatformCoin(coinType: io.horizontalsystems.marketkit.models.CoinType) : PlatformCoin? {
         TODO("Not yet implemented")
     }
+
+    override fun getPlatformCoins(coinTypeIds: List<String>): List<PlatformCoin> {
+        TODO("Not yet implemented")
+    }
 }
