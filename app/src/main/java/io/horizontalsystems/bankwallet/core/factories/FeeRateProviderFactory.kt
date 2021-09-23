@@ -4,14 +4,13 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ICustomRangedFeeProvider
 import io.horizontalsystems.bankwallet.core.IFeeRateProvider
 import io.horizontalsystems.bankwallet.core.providers.*
-import io.horizontalsystems.coinkit.models.Coin
-import io.horizontalsystems.coinkit.models.CoinType
+import io.horizontalsystems.marketkit.models.CoinType
 
 object FeeRateProviderFactory {
     private val feeRateProvider = App.feeRateProvider
 
-    fun provider(coin: Coin?): IFeeRateProvider? {
-        return when (coin?.type) {
+    fun provider(coinType: CoinType): IFeeRateProvider? {
+        return when (coinType) {
             is CoinType.Bitcoin -> BitcoinFeeRateProvider(feeRateProvider)
             is CoinType.Litecoin -> LitecoinFeeRateProvider(feeRateProvider)
             is CoinType.BitcoinCash -> BitcoinCashFeeRateProvider(feeRateProvider)
@@ -22,8 +21,8 @@ object FeeRateProviderFactory {
         }
     }
 
-    fun customRangedFeeProvider(coin: Coin?, customLowerBound: Long?, customUpperBound: Long?, multiply: Double): ICustomRangedFeeProvider? {
-        return when(coin?.type) {
+    fun customRangedFeeProvider(coinType: CoinType, customLowerBound: Long?, customUpperBound: Long?, multiply: Double): ICustomRangedFeeProvider? {
+        return when(coinType) {
             is CoinType.BinanceSmartChain, is CoinType.Bep20 -> BinanceSmartChainFeeRateProvider(feeRateProvider, customLowerBound, customUpperBound, multiply)
             is CoinType.Ethereum, is CoinType.Erc20 -> EthereumFeeRateProvider(feeRateProvider, customLowerBound, customUpperBound, multiply)
             else -> null
