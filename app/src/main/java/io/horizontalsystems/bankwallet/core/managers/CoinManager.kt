@@ -5,6 +5,7 @@ import io.horizontalsystems.bankwallet.core.ICoinManager
 import io.horizontalsystems.coinkit.CoinKit
 import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.coinkit.models.CoinType
+import io.horizontalsystems.marketkit.models.PlatformCoin
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.subjects.PublishSubject
@@ -54,5 +55,9 @@ class CoinManager(
     override fun save(coins: List<Coin>) {
         coinKit.saveCoins(coins)
         coinAddedSubject.onNext(coins)
+    }
+
+    override fun getPlatformCoin(coinType: io.horizontalsystems.marketkit.models.CoinType) : PlatformCoin? {
+        TODO("Not yet implemented")
     }
 }

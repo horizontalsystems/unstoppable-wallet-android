@@ -22,11 +22,12 @@ class DashAdapter(
         override val kit: DashKit,
         syncMode: SyncMode?,
         backgroundManager: BackgroundManager,
-        wallet: Wallet
-) : BitcoinBaseAdapter(kit, syncMode = syncMode, backgroundManager = backgroundManager, wallet = wallet), DashKit.Listener, ISendDashAdapter {
+        wallet: Wallet,
+        testMode: Boolean
+) : BitcoinBaseAdapter(kit, syncMode, backgroundManager, wallet, testMode), DashKit.Listener, ISendDashAdapter {
 
     constructor(wallet: Wallet, syncMode: SyncMode?, testMode: Boolean, backgroundManager: BackgroundManager) :
-            this(createKit(wallet, syncMode, testMode), syncMode, backgroundManager, wallet)
+            this(createKit(wallet, syncMode, testMode), syncMode, backgroundManager, wallet, testMode)
 
     init {
         kit.listener = this
@@ -37,6 +38,14 @@ class DashAdapter(
     //
 
     override val satoshisInBitcoin: BigDecimal = BigDecimal.valueOf(Math.pow(10.0, decimal.toDouble()))
+
+    // ITransactionsAdapter
+
+    override val explorerTitle: String = "dash.org"
+
+    override fun explorerUrl(transactionHash: String): String? {
+        return if (testMode) null else "https://insight.dash.org/insight/tx/$transactionHash"
+    }
 
     //
     // DashKit Listener

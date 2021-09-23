@@ -563,6 +563,7 @@ interface ICoinManager {
     fun getCoin(coinType: CoinType): Coin?
     fun getCoinOrStub(coinType: CoinType): Coin
     fun save(coins: List<Coin>)
+    fun getPlatformCoin(coinType: io.horizontalsystems.marketkit.models.CoinType): PlatformCoin?
 }
 
 interface IAddTokenBlockchainService {

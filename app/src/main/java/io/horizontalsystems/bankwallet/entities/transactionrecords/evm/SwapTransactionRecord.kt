@@ -11,7 +11,7 @@ class SwapTransactionRecord(
     // valueIn stores amountInMax in cases when exact valueIn amount is not known
     val valueIn: TransactionValue,
     // valueOut stores amountOutMin in cases when exact valueOut amount is not known
-    val valueOut: TransactionValue,
+    val valueOut: TransactionValue?,
     val exchangeAddress: String,
     val foreignRecipient: Boolean,
     source: TransactionSource
