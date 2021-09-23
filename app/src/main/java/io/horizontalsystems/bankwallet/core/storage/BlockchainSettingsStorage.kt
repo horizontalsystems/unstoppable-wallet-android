@@ -2,7 +2,7 @@ package io.horizontalsystems.bankwallet.core.storage
 
 import io.horizontalsystems.bankwallet.core.IBlockchainSettingsStorage
 import io.horizontalsystems.bankwallet.entities.*
-import io.horizontalsystems.coinkit.models.CoinType
+import io.horizontalsystems.marketkit.models.CoinType
 
 class BlockchainSettingsStorage(private val appDatabase: AppDatabase) : IBlockchainSettingsStorage {
 
