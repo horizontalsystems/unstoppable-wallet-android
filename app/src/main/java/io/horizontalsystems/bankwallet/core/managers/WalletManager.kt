@@ -17,10 +17,6 @@ class WalletManager(
     override val activeWallets get() = cachedActiveWallets.walletsSet.toList()
     override val activeWalletsUpdatedObservable = PublishSubject.create<List<Wallet>>()
 
-    override val wallets get() = cachedWallets.walletsSet.toList()
-    override val walletsUpdatedObservable = PublishSubject.create<List<Wallet>>()
-
-    private val cachedWallets = WalletsCache()
     private val cachedActiveWallets = WalletsCache()
 
     private val disposables = CompositeDisposable()
@@ -45,20 +41,10 @@ class WalletManager(
     }
 
     override fun loadWallets() {
-        val wallets = storage.wallets(accountManager.accounts)
         val activeWallets = accountManager.activeAccount?.let { storage.wallets(it) } ?: listOf()
-
-        cachedWallets.set(wallets)
-        notifyChange()
 
         cachedActiveWallets.set(activeWallets)
         notifyActiveWallets()
-    }
-
-    override fun enable(wallets: List<Wallet>) {
-        storage.save(wallets)
-        cachedWallets.set(wallets)
-        notifyChange()
     }
 
     override fun save(wallets: List<Wallet>) {
@@ -73,10 +59,6 @@ class WalletManager(
         storage.save(newWallets)
         storage.delete(deletedWallets)
 
-        cachedWallets.add(newWallets)
-        cachedWallets.remove(deletedWallets)
-        notifyChange()
-
         val activeAccount = accountManager.activeAccount
         cachedActiveWallets.add(newWallets.filter { it.account == activeAccount })
         cachedActiveWallets.remove(deletedWallets)
@@ -88,12 +70,10 @@ class WalletManager(
     }
 
     override fun clear() {
-        cachedWallets.clear()
+        storage.clear()
+        cachedActiveWallets.clear()
+        notifyActiveWallets()
         disposables.dispose()
-    }
-
-    private fun notifyChange() {
-        walletsUpdatedObservable.onNext(cachedWallets.walletsSet.toList())
     }
 
     private fun notifyActiveWallets() {

@@ -24,7 +24,6 @@ class AdapterFactory(
         private val coinManager: ICoinManager) {
 
     var initialSyncModeSettingsManager: IInitialSyncModeSettingsManager? = null
-    var ethereumRpcModeSettingsManager: IEthereumRpcModeSettingsManager? = null
 
     fun ethereumTransactionsAdapter(source: TransactionSource): ITransactionsAdapter? {
         return coinManager.getPlatformCoin(CoinType.Ethereum)?.let { baseCoin ->

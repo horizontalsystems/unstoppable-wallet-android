@@ -42,6 +42,10 @@ class WalletStorage(
         storage.delete(wallets.map { enabledWallet(it) })
     }
 
+    override fun clear() {
+        storage.deleteAll()
+    }
+
     private fun enabledWallet(wallet: Wallet, index: Int? = null): EnabledWallet {
         return EnabledWallet(
             wallet.platform.coinType.id,

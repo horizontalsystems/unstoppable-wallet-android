@@ -32,6 +32,7 @@ import io.horizontalsystems.core.ICoreApp
 import io.horizontalsystems.core.security.EncryptionManager
 import io.horizontalsystems.core.security.KeyStoreManager
 import io.horizontalsystems.ethereumkit.core.EthereumKit
+import io.horizontalsystems.marketkit.MarketKit
 import io.horizontalsystems.pin.PinComponent
 import io.reactivex.plugins.RxJavaPlugins
 import java.util.logging.Level
@@ -76,10 +77,7 @@ class App : CoreApp() {
         lateinit var feeCoinProvider: FeeCoinProvider
         lateinit var notificationNetworkWrapper: NotificationNetworkWrapper
         lateinit var notificationManager: INotificationManager
-        lateinit var ethereumRpcModeSettingsManager: IEthereumRpcModeSettingsManager
         lateinit var initialSyncModeSettingsManager: IInitialSyncModeSettingsManager
-        lateinit var derivationSettingsManager: IDerivationSettingsManager
-        lateinit var bitcoinCashCoinTypeManager: BitcoinCashCoinTypeManager
         lateinit var accountCleaner: IAccountCleaner
         lateinit var rateAppManager: IRateAppManager
         lateinit var coinManager: ICoinManager
@@ -91,6 +89,7 @@ class App : CoreApp() {
         lateinit var termsManager: ITermsManager
         lateinit var marketFavoritesManager: MarketFavoritesManager
         lateinit var coinKit: CoinKit
+        lateinit var marketKit: MarketKit
         lateinit var activateCoinManager: ActivateCoinManager
         lateinit var releaseNotesManager: ReleaseNotesManager
         lateinit var restoreSettingsManager: RestoreSettingsManager
@@ -121,6 +120,7 @@ class App : CoreApp() {
         languageConfigProvider = appConfig
 
         coinKit = CoinKit.create(this, buildConfigProvider.testMode)
+        marketKit = MarketKit.getInstance(this)
 
         feeRateProvider = FeeRateProvider(appConfigProvider)
         backgroundManager = BackgroundManager(this)
@@ -186,14 +186,10 @@ class App : CoreApp() {
         transactionAdapterManager = TransactionAdapterManager(adapterManager, adapterFactory)
 
         initialSyncModeSettingsManager = InitialSyncSettingsManager(coinManager, blockchainSettingsStorage, adapterManager, walletManager)
-        derivationSettingsManager = DerivationSettingsManager(blockchainSettingsStorage, adapterManager, walletManager)
-        ethereumRpcModeSettingsManager = EthereumRpcModeSettingsManager(blockchainSettingsStorage, adapterManager, walletManager)
-        bitcoinCashCoinTypeManager = BitcoinCashCoinTypeManager(walletManager, adapterManager, blockchainSettingsStorage)
 
         adapterFactory.initialSyncModeSettingsManager = initialSyncModeSettingsManager
-        adapterFactory.ethereumRpcModeSettingsManager = ethereumRpcModeSettingsManager
 
-        feeCoinProvider = FeeCoinProvider(coinKit)
+        feeCoinProvider = FeeCoinProvider(marketKit)
         xRateManager = RateManager(this, appConfigProvider)
 
         addressParserFactory = AddressParserFactory()

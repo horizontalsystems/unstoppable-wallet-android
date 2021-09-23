@@ -129,6 +129,7 @@ interface IWalletStorage {
     fun wallets(account: Account): List<Wallet>
     fun save(wallets: List<Wallet>)
     fun delete(wallets: List<Wallet>)
+    fun clear()
 }
 
 interface IRandomProvider {
@@ -449,11 +450,7 @@ interface IWalletManager {
     val activeWallets: List<Wallet>
     val activeWalletsUpdatedObservable: Observable<List<Wallet>>
 
-    val wallets: List<Wallet>
-    val walletsUpdatedObservable: Observable<List<Wallet>>
-
     fun loadWallets()
-    fun enable(wallets: List<Wallet>)
     fun save(wallets: List<Wallet>)
     fun delete(wallets: List<Wallet>)
     fun clear()
