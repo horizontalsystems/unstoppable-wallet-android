@@ -28,7 +28,7 @@ class InitialSyncSettingsManager(
         }
     }
 
-    override fun setting(coinType: CoinType, origin: AccountOrigin?): InitialSyncSetting? {
+    override fun setting(coinType: io.horizontalsystems.marketkit.models.CoinType, origin: AccountOrigin?): InitialSyncSetting? {
         val supportedCoinType = supportedCoinTypes.firstOrNull{ it.coinType == coinType } ?: return null
 
         if (origin == AccountOrigin.Created){

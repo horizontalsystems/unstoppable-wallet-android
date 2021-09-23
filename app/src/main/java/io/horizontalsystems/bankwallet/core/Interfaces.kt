@@ -522,7 +522,7 @@ interface IDerivationSettingsManager {
 
 interface IInitialSyncModeSettingsManager {
     fun allSettings(): List<Triple<InitialSyncSetting, Coin, Boolean>>
-    fun setting(coinType: CoinType, origin: AccountOrigin? = null): InitialSyncSetting?
+    fun setting(coinType: io.horizontalsystems.marketkit.models.CoinType, origin: AccountOrigin? = null): InitialSyncSetting?
     fun save(setting: InitialSyncSetting)
 }
 
