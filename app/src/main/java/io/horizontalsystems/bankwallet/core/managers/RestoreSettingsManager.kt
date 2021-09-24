@@ -5,14 +5,14 @@ import io.horizontalsystems.bankwallet.core.IRestoreSettingsStorage
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.RestoreSettingRecord
-import io.horizontalsystems.marketkit.models.Coin
 import io.horizontalsystems.marketkit.models.CoinType
+import io.horizontalsystems.marketkit.models.PlatformCoin
 
 class RestoreSettingsManager(
         private val storage: IRestoreSettingsStorage,
         private val zcashBirthdayProvider: ZcashBirthdayProvider
 ) {
-    fun settings(account: Account, coin: io.horizontalsystems.marketkit.models.CoinType): RestoreSettings {
+    fun settings(account: Account, coin: CoinType): RestoreSettings {
         val records = storage.restoreSettings(account.id, coin.id)
 
         val settings = RestoreSettings()
@@ -55,9 +55,9 @@ class RestoreSettingsManager(
         }
     }
 
-    fun getSettingsTitle(settingType: RestoreSettingType, coin: Coin): String {
+    fun getSettingsTitle(settingType: RestoreSettingType, platformCoin: PlatformCoin): String {
         return when (settingType) {
-            RestoreSettingType.BirthdayHeight -> Translator.getString(R.string.ManageAccount_BirthdayHeight, coin.code)
+            RestoreSettingType.BirthdayHeight -> Translator.getString(R.string.ManageAccount_BirthdayHeight, platformCoin.code)
         }
     }
 
