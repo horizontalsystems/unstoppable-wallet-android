@@ -2,14 +2,16 @@ package io.horizontalsystems.bankwallet.core.managers
 
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.*
-import io.horizontalsystems.coinkit.models.Coin
-import io.horizontalsystems.coinkit.models.CoinType
+import io.horizontalsystems.marketkit.MarketKit
+import io.horizontalsystems.marketkit.models.CoinType
+import io.horizontalsystems.marketkit.models.PlatformCoin
 
 class InitialSyncSettingsManager(
         private val coinManager: ICoinManager,
         private val blockchainSettingsStorage: IBlockchainSettingsStorage,
         private val adapterManager: IAdapterManager,
-        private val walletManager: IWalletManager
+        private val walletManager: IWalletManager,
+        private val marketKit: MarketKit
 ) : IInitialSyncModeSettingsManager {
 
     private val supportedCoinTypes = listOf(
@@ -19,16 +21,19 @@ class InitialSyncSettingsManager(
             SupportedCoinType(CoinType.Litecoin, SyncMode.Fast, true)
     )
 
-    override fun allSettings(): List<Triple<InitialSyncSetting, Coin, Boolean>> {
+    override fun allSettings(): List<Triple<InitialSyncSetting, PlatformCoin, Boolean>> {
+        val platformCoins = marketKit.platformCoins()
+
         return supportedCoinTypes.mapNotNull { supportedCoinType ->
-            val coin = coinManager.getCoin(supportedCoinType.coinType) ?: return@mapNotNull null
+            val coinTypePlatformCoin = platformCoins.find { it.coinType == supportedCoinType.coinType } ?: return@mapNotNull null
+
             val setting = setting(supportedCoinType.coinType) ?: return@mapNotNull null
 
-            Triple(setting, coin, supportedCoinType.changeable)
+            Triple(setting, coinTypePlatformCoin, supportedCoinType.changeable)
         }
     }
 
-    override fun setting(coinType: io.horizontalsystems.marketkit.models.CoinType, origin: AccountOrigin?): InitialSyncSetting? {
+    override fun setting(coinType: CoinType, origin: AccountOrigin?): InitialSyncSetting? {
         val supportedCoinType = supportedCoinTypes.firstOrNull{ it.coinType == coinType } ?: return null
 
         if (origin == AccountOrigin.Created){
@@ -47,7 +52,7 @@ class InitialSyncSettingsManager(
     override fun save(setting: InitialSyncSetting) {
         blockchainSettingsStorage.saveInitialSyncSetting(setting)
 
-        val walletsForUpdate = walletManager.activeWallets.filter { it.coin.type == setting.coinType && it.account.origin == AccountOrigin.Restored }
+        val walletsForUpdate = walletManager.activeWallets.filter { it.coinType == setting.coinType && it.account.origin == AccountOrigin.Restored }
 
         if (walletsForUpdate.isNotEmpty()) {
             adapterManager.refreshAdapters(walletsForUpdate)

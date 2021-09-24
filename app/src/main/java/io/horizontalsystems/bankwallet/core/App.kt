@@ -139,7 +139,7 @@ class App : CoreApp() {
 
         AppLog.logsDao = appDatabase.logsDao()
 
-        coinManager = CoinManager(coinKit, appConfigProvider)
+        coinManager = CoinManager(marketKit, CustomTokenStorage(appDatabase))
 
         enabledWalletsStorage = EnabledWalletsStorage(appDatabase)
         blockchainSettingsStorage = BlockchainSettingsStorage(appDatabase)
@@ -185,7 +185,7 @@ class App : CoreApp() {
         adapterManager = AdapterManager(walletManager, adapterFactory, ethereumKitManager, binanceSmartChainKitManager, binanceKitManager)
         transactionAdapterManager = TransactionAdapterManager(adapterManager, adapterFactory)
 
-        initialSyncModeSettingsManager = InitialSyncSettingsManager(coinManager, blockchainSettingsStorage, adapterManager, walletManager)
+        initialSyncModeSettingsManager = InitialSyncSettingsManager(coinManager, blockchainSettingsStorage, adapterManager, walletManager, marketKit)
 
         adapterFactory.initialSyncModeSettingsManager = initialSyncModeSettingsManager
 
@@ -226,7 +226,7 @@ class App : CoreApp() {
 
         marketFavoritesManager = MarketFavoritesManager(appDatabase)
 
-        activateCoinManager = ActivateCoinManager(coinKit, walletManager, accountManager)
+        activateCoinManager = ActivateCoinManager(marketKit, walletManager, accountManager)
 
         releaseNotesManager = ReleaseNotesManager(systemInfoManager, localStorage, appConfigProvider)
 

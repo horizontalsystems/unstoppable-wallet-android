@@ -7,8 +7,8 @@ import io.horizontalsystems.bankwallet.core.adapters.BaseEvmAdapter
 import io.horizontalsystems.bankwallet.core.adapters.BinanceAdapter
 import io.horizontalsystems.bankwallet.core.factories.AdapterFactory
 import io.horizontalsystems.bankwallet.entities.Wallet
-import io.horizontalsystems.coinkit.models.Coin
-import io.horizontalsystems.coinkit.models.CoinType
+import io.horizontalsystems.marketkit.models.CoinType
+import io.horizontalsystems.marketkit.models.PlatformCoin
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
@@ -62,13 +62,13 @@ class AdapterManager(
 
     private fun handleUpdatedEthereumKit() {
         handleUpdatedKit {
-            it.coin.type is CoinType.Ethereum || it.coin.type is CoinType.Erc20
+            it.coinType is CoinType.Ethereum || it.coinType is CoinType.Erc20
         }
     }
 
     private fun handleUpdatedBinanceSmartChainKit() {
         handleUpdatedKit {
-            it.coin.type is CoinType.BinanceSmartChain || it.coin.type is CoinType.Bep20
+            it.coinType is CoinType.BinanceSmartChain || it.coinType is CoinType.Bep20
         }
     }
 
@@ -167,7 +167,7 @@ class AdapterManager(
         when (adapter) {
             is BinanceAdapter -> binanceKitManager.binanceKit?.refresh()
             is BaseEvmAdapter -> {
-                when (wallet.coin.type) {
+                when (wallet.coinType) {
                     CoinType.Ethereum, is CoinType.Erc20 -> ethereumKitManager.evmKit?.refresh()
                     CoinType.BinanceSmartChain, is CoinType.Bep20 -> binanceSmartChainKitManager.evmKit?.refresh()
                 }
@@ -181,8 +181,8 @@ class AdapterManager(
         return adaptersMap[wallet]
     }
 
-    override fun getAdapterForCoin(coin: Coin): IAdapter? {
-        return walletManager.activeWallets.firstOrNull { it.coin == coin }?.let { wallet ->
+    override fun getAdapterForPlatformCoin(platformCoin: PlatformCoin): IAdapter? {
+        return walletManager.activeWallets.firstOrNull { it.platformCoin == platformCoin }?.let { wallet ->
             adaptersMap[wallet]
         }
     }

@@ -1,67 +1,83 @@
 package io.horizontalsystems.bankwallet.core.managers
 
-import io.horizontalsystems.bankwallet.core.IAppConfigProvider
 import io.horizontalsystems.bankwallet.core.ICoinManager
-import io.horizontalsystems.coinkit.CoinKit
-import io.horizontalsystems.coinkit.models.Coin
-import io.horizontalsystems.coinkit.models.CoinType
+import io.horizontalsystems.bankwallet.core.ICustomTokenStorage
+import io.horizontalsystems.bankwallet.entities.CustomToken
+import io.horizontalsystems.marketkit.MarketKit
+import io.horizontalsystems.marketkit.models.CoinType
+import io.horizontalsystems.marketkit.models.MarketCoin
 import io.horizontalsystems.marketkit.models.PlatformCoin
-import io.reactivex.BackpressureStrategy
-import io.reactivex.Flowable
-import io.reactivex.subjects.PublishSubject
 
 class CoinManager(
-    private val coinKit: CoinKit,
-    private val appConfigProvider: IAppConfigProvider
+    private val marketKit: MarketKit,
+    private val storage: ICustomTokenStorage
 ) : ICoinManager {
+    private val featuredCoinTypes: List<CoinType> = listOf(CoinType.Bitcoin, CoinType.Ethereum, CoinType.BinanceSmartChain)
 
-    private val coinAddedSubject = PublishSubject.create<List<Coin>>()
+    override fun featuredMarketCoins(enabledCoinTypes: List<CoinType>): List<MarketCoin> {
+        val appMarketCoins = customMarketCoins(enabledCoinTypes)
+        val kitMarketCoins = marketKit.marketCoinsByCoinTypes(featuredCoinTypes + enabledCoinTypes)
 
-    override val coinAddedObservable: Flowable<List<Coin>>
-        get() = coinAddedSubject.toFlowable(BackpressureStrategy.BUFFER)
-
-    override val coins: List<Coin>
-        get() = coinKit.getCoins()
-
-    override val groupedCoins: Pair<List<Coin>, List<Coin>>
-        get() {
-            val featured = mutableListOf<Coin>()
-            val coins = coinKit.getCoins().toMutableList()
-
-            appConfigProvider.featuredCoinTypes.forEach { coinType ->
-                coins.indexOfFirst { it.type == coinType }.let { index ->
-                    if (index != -1) {
-                        featured.add(coins[index])
-                        coins.removeAt(index)
-                    }
-                }
-            }
-            return Pair(featured, coins)
-        }
-
-    override fun getCoin(coinType: CoinType): Coin? {
-        return coinKit.getCoin(coinType)
+        return appMarketCoins + kitMarketCoins
     }
 
-    override fun getCoinOrStub(coinType: CoinType): Coin {
-        return coinKit.getCoin(coinType) ?: Coin(
-            title = "",
-            code = "",
-            decimal = 18,
-            type = coinType
-        )
+    override fun marketCoins(filter: String, limit: Int): List<MarketCoin> {
+        val appMarketCoins = customMarketCoins(filter)
+        val kitMarketCoins = marketKit.marketCoins(filter, limit)
+
+        return appMarketCoins + kitMarketCoins
     }
 
-    override fun save(coins: List<Coin>) {
-        coinKit.saveCoins(coins)
-        coinAddedSubject.onNext(coins)
+    override fun getPlatformCoin(coinType: CoinType): PlatformCoin? {
+        return marketKit.platformCoin(coinType) ?: customPlatformCoin(coinType)
     }
 
-    override fun getPlatformCoin(coinType: io.horizontalsystems.marketkit.models.CoinType) : PlatformCoin? {
-        TODO("Not yet implemented")
+    override fun getPlatformCoins(): List<PlatformCoin> {
+        return marketKit.platformCoins() + customPlatformCoins()
     }
 
-    override fun getPlatformCoins(coinTypeIds: List<String>): List<PlatformCoin> {
-        TODO("Not yet implemented")
+    override fun getPlatformCoins(coinTypes: List<CoinType>): List<PlatformCoin> {
+        return marketKit.platformCoins(coinTypes)
     }
+
+    override fun getPlatformCoinsByCoinTypeIds(coinTypeIds: List<String>): List<PlatformCoin> {
+        val kitPlatformCoins = marketKit.platformCoinsByCoinTypeIds(coinTypeIds)
+        val appPlatformCoins = customPlatformCoins(coinTypeIds)
+
+        return kitPlatformCoins + appPlatformCoins
+    }
+
+    override fun save(customTokens: List<CustomToken>) {
+        storage.save(customTokens)
+    }
+
+    private fun adjustedCustomTokens(customTokens: List<CustomToken>): List<CustomToken> {
+        val existingPlatformCoins = marketKit.platformCoins(customTokens.map { it.coinType })
+        return customTokens.filter { customToken -> !existingPlatformCoins.any { it.coinType == customToken.coinType } }
+    }
+
+    private fun customMarketCoins(filter: String): List<MarketCoin> {
+        val customTokens = storage.customTokens(filter)
+        return adjustedCustomTokens(customTokens).map { it.platformCoin.marketCoin }
+    }
+
+    private fun customMarketCoins(coinTypes: List<CoinType>): List<MarketCoin> {
+        val customTokens = storage.customTokens(coinTypes.map { it.id })
+        return adjustedCustomTokens(customTokens).map { it.platformCoin.marketCoin }
+    }
+
+    private fun customPlatformCoins(): List<PlatformCoin> {
+        val customTokens = storage.customTokens()
+        return adjustedCustomTokens(customTokens).map { it.platformCoin }
+    }
+
+    private fun customPlatformCoins(coinTypeIds: List<String>): List<PlatformCoin> {
+        val customTokens = storage.customTokens(coinTypeIds)
+        return adjustedCustomTokens(customTokens).map { it.platformCoin }
+    }
+
+    private fun customPlatformCoin(coinType: CoinType): PlatformCoin? {
+        return storage.customToken(coinType)?.platformCoin
+    }
+
 }

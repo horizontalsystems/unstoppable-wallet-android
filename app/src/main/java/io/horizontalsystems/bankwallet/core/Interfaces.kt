@@ -23,6 +23,7 @@ import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.TransactionData
+import io.horizontalsystems.marketkit.models.MarketCoin
 import io.horizontalsystems.marketkit.models.PlatformCoin
 import io.horizontalsystems.xrateskit.entities.*
 import io.reactivex.Flowable
@@ -39,7 +40,7 @@ interface IAdapterManager {
     fun preloadAdapters()
     fun refresh()
     fun getAdapterForWallet(wallet: Wallet): IAdapter?
-    fun getAdapterForCoin(coin: Coin): IAdapter?
+    fun getAdapterForPlatformCoin(platformCoin: PlatformCoin): IAdapter?
     fun getBalanceAdapterForWallet(wallet: Wallet): IBalanceAdapter?
     fun getReceiveAdapterForWallet(wallet: Wallet): IReceiveAdapter?
     fun refreshAdapters(wallets: List<Wallet>)
@@ -446,6 +447,14 @@ interface IBlockchainSettingsStorage {
     fun saveEthereumRpcModeSetting(ethereumRpcModeSetting: EthereumRpcMode)
 }
 
+interface ICustomTokenStorage {
+    fun customTokens(): List<CustomToken>
+    fun customTokens(filter: String): List<CustomToken>
+    fun customTokens(coinTypeIds: List<String>): List<CustomToken>
+    fun customToken(coinType: io.horizontalsystems.marketkit.models.CoinType): CustomToken?
+    fun save(customTokens: List<CustomToken>)
+}
+
 interface IWalletManager {
     val activeWallets: List<Wallet>
     val activeWalletsUpdatedObservable: Observable<List<Wallet>>
@@ -517,7 +526,7 @@ interface IDerivationSettingsManager {
 }
 
 interface IInitialSyncModeSettingsManager {
-    fun allSettings(): List<Triple<InitialSyncSetting, Coin, Boolean>>
+    fun allSettings(): List<Triple<InitialSyncSetting, PlatformCoin, Boolean>>
     fun setting(coinType: io.horizontalsystems.marketkit.models.CoinType, origin: AccountOrigin? = null): InitialSyncSetting?
     fun save(setting: InitialSyncSetting)
 }
@@ -553,14 +562,13 @@ interface IRateAppManager {
 }
 
 interface ICoinManager {
-    val coinAddedObservable: Flowable<List<Coin>>
-    val coins: List<Coin>
-    val groupedCoins: Pair<List<Coin>, List<Coin>>
-    fun getCoin(coinType: CoinType): Coin?
-    fun getCoinOrStub(coinType: CoinType): Coin
-    fun save(coins: List<Coin>)
+    fun save(customTokens: List<CustomToken>)
     fun getPlatformCoin(coinType: io.horizontalsystems.marketkit.models.CoinType): PlatformCoin?
-    fun getPlatformCoins(coinTypeIds: List<String>): List<PlatformCoin>
+    fun getPlatformCoinsByCoinTypeIds(coinTypeIds: List<String>): List<PlatformCoin>
+    fun getPlatformCoins(): List<PlatformCoin>
+    fun getPlatformCoins(coinTypes: List<io.horizontalsystems.marketkit.models.CoinType>): List<PlatformCoin>
+    fun featuredMarketCoins(enabledCoinTypes: List<io.horizontalsystems.marketkit.models.CoinType>): List<MarketCoin>
+    fun marketCoins(filter: String = "", limit: Int = 20): List<MarketCoin>
 }
 
 interface IAddTokenBlockchainService {

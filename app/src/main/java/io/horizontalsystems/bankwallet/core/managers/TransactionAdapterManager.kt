@@ -7,7 +7,7 @@ import io.horizontalsystems.bankwallet.core.factories.AdapterFactory
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
-import io.horizontalsystems.coinkit.models.CoinType
+import io.horizontalsystems.marketkit.models.CoinType
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
@@ -37,7 +37,7 @@ class TransactionAdapterManager(
     fun getAdapter(source: TransactionSource): ITransactionsAdapter? = adaptersMap[source]
 
     private fun evmTransactionAdapter(wallet: Wallet, blockchain: TransactionSource.Blockchain) =
-        when (wallet.coin.type) {
+        when (wallet.coinType) {
             CoinType.Ethereum, is CoinType.Erc20 -> {
                 if (blockchain == TransactionSource.Blockchain.Ethereum) {
                     adapterFactory.ethereumTransactionsAdapter(wallet.transactionSource)
