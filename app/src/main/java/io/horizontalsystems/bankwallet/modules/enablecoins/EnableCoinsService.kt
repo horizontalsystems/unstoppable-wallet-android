@@ -1,25 +1,23 @@
 package io.horizontalsystems.bankwallet.modules.enablecoins
 
-import io.horizontalsystems.bankwallet.core.ICoinManager
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.AccountType
-import io.horizontalsystems.coinkit.models.Coin
-import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.IBuildConfigProvider
 import io.horizontalsystems.ethereumkit.core.EthereumKit
+import io.horizontalsystems.marketkit.models.CoinType
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 
 class EnableCoinsService(
-        appConfigProvider: IBuildConfigProvider,
-        private val coinManager: ICoinManager,
-        private val bep2Provider: EnableCoinsBep2Provider,
-        private val erc20Provider: EnableCoinsEip20Provider,
-        private val bep20Provider: EnableCoinsEip20Provider) {
+    appConfigProvider: IBuildConfigProvider,
+    private val bep2Provider: EnableCoinsBep2Provider,
+    private val erc20Provider: EnableCoinsEip20Provider,
+    private val bep20Provider: EnableCoinsEip20Provider
+) {
 
     val testMode = appConfigProvider.testMode
-    val enableCoinsAsync = PublishSubject.create<List<Coin>>()
+    val enableCoinTypesAsync = PublishSubject.create<List<CoinType>>()
     val stateAsync = BehaviorSubject.createDefault<State>(State.Idle)
 
     var state: State = State.Idle
@@ -68,10 +66,10 @@ class EnableCoinsService(
     private fun fetchBep20Tokens(bep20: TokenType.Bep20) {
         val address = EthereumKit.address(bep20.words, bep20.passphrase, EthereumKit.NetworkType.BscMainNet)
 
-        bep20Provider.getCoinsAsync(address.hex)
-                .subscribeIO({ coins ->
-                    state = State.Success(coins)
-                    enableCoinsAsync.onNext(coins)
+        bep20Provider.getCoinTypesAsync(address.hex)
+                .subscribeIO({ coinTypes ->
+                    state = State.Success(coinTypes)
+                    enableCoinTypesAsync.onNext(coinTypes)
                 }, {
                     state = State.Failure(it)
                 })
@@ -82,10 +80,10 @@ class EnableCoinsService(
         val networkType = if (testMode) EthereumKit.NetworkType.EthRopsten else EthereumKit.NetworkType.EthMainNet
         val address = EthereumKit.address(erc20.words, erc20.passphrase, networkType)
 
-        erc20Provider.getCoinsAsync(address.hex)
+        erc20Provider.getCoinTypesAsync(address.hex)
                 .subscribeIO({ coins ->
                     state = State.Success(coins)
-                    enableCoinsAsync.onNext(coins)
+                    enableCoinTypesAsync.onNext(coins)
                 }, {
                     state = State.Failure(it)
                 })
@@ -103,25 +101,23 @@ class EnableCoinsService(
     }
 
     private fun handleFetchBep2(tokenSymbols: List<String>) {
-        val allCoins = coinManager.coins
-
-        val coins = tokenSymbols.mapNotNull { symbol ->
-            if (symbol.equals("BNB", ignoreCase = true)) {
-                allCoins.firstOrNull { it.type is CoinType.Bep2 && (it.type as CoinType.Bep2).symbol.equals(symbol, ignoreCase = true) }
-            } else {
+        val coinTypes = tokenSymbols.mapNotNull { tokenSymbol ->
+            if (tokenSymbol == "BNB") {
                 null
+            } else {
+                CoinType.Bep2(tokenSymbol)
             }
         }
 
-        state = State.Success(coins)
-        enableCoinsAsync.onNext(coins)
+        state = State.Success(coinTypes)
+        enableCoinTypesAsync.onNext(coinTypes)
     }
 
     sealed class State {
         object Idle : State()
         class WaitingForApprove(val tokenType: TokenType) : State()
         object Loading : State()
-        class Success(val coins: List<Coin>) : State()
+        class Success(val coinTypes: List<CoinType>) : State()
         class Failure(val error: Throwable) : State()
     }
 
