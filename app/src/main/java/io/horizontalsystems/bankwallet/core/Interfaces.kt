@@ -2,10 +2,7 @@ package io.horizontalsystems.bankwallet.core
 
 import com.google.gson.JsonObject
 import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
-import io.horizontalsystems.bankwallet.core.managers.RateUsType
-import io.horizontalsystems.bankwallet.core.managers.Term
-import io.horizontalsystems.bankwallet.core.managers.TorManager
-import io.horizontalsystems.bankwallet.core.managers.TorStatus
+import io.horizontalsystems.bankwallet.core.managers.*
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
@@ -23,6 +20,8 @@ import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.TransactionData
+import io.horizontalsystems.marketkit.models.CoinPrice
+import io.horizontalsystems.marketkit.models.CoinType
 import io.horizontalsystems.marketkit.models.MarketCoin
 import io.horizontalsystems.marketkit.models.PlatformCoin
 import io.horizontalsystems.xrateskit.entities.*
@@ -329,14 +328,14 @@ interface IAppConfigProvider {
 }
 
 interface IRateManager {
-    fun latestRate(coinType: CoinType, currencyCode: String): LatestRate?
-    fun latestRate(coinTypes: List<CoinType>, currencyCode: String): Map<CoinType, LatestRate>
-    fun getLatestRate(coinType: CoinType, currencyCode: String): BigDecimal?
-    fun latestRateObservable(coinType: CoinType, currencyCode: String): Observable<LatestRate>
+    fun latestRate(coinType: CoinType, currencyCode: String): CoinPrice?
+    fun latestRate(coinTypes: List<CoinType>, currencyCode: String): Map<CoinType, CoinPrice>
+    fun getCoinPrice(coinType: CoinType, currencyCode: String): BigDecimal?
+    fun latestRateObservable(coinType: CoinType, currencyCode: String): Observable<CoinPrice>
     fun latestRateObservable(
         coinTypes: List<CoinType>,
         currencyCode: String
-    ): Observable<Map<CoinType, LatestRate>>
+    ): Observable<Map<CoinType, CoinPrice>>
 
     fun historicalRateCached(coinType: CoinType, currencyCode: String, timestamp: Long): BigDecimal?
     fun historicalRate(
