@@ -7,8 +7,8 @@ import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.bankwallet.core.managers.PassphraseValidator
 import io.horizontalsystems.bankwallet.core.managers.WordsManager
 import io.horizontalsystems.bankwallet.entities.*
-import io.horizontalsystems.coinkit.CoinKit
-import io.horizontalsystems.coinkit.models.CoinType
+import io.horizontalsystems.marketkit.MarketKit
+import io.horizontalsystems.marketkit.models.CoinType
 import io.reactivex.subjects.BehaviorSubject
 
 class CreateAccountService(
@@ -17,7 +17,7 @@ class CreateAccountService(
         private val accountManager: IAccountManager,
         private val walletManager: IWalletManager,
         private val passphraseValidator: PassphraseValidator,
-        private val coinKit: CoinKit
+        private val marketKit: MarketKit
 ) : Clearable {
 
     val allKinds: Array<CreateAccountModule.Kind> = CreateAccountModule.Kind.values()
@@ -60,16 +60,16 @@ class CreateAccountService(
         val wallets = mutableListOf<Wallet>()
 
         for (coinType in defaultCoinTypes) {
-            val coin = coinKit.getCoin(coinType) ?: continue
+            val platformCoin = marketKit.platformCoin(coinType) ?: continue
 
             val defaultSettingsArray = coinType.defaultSettingsArray
 
             if (defaultSettingsArray.isEmpty()) {
-                wallets.add(Wallet(coin, account))
+                wallets.add(Wallet(platformCoin, account))
             } else {
                 defaultSettingsArray.forEach { coinSettings ->
-                    val configuredCoin = ConfiguredCoin(coin, coinSettings)
-                    wallets.add(Wallet(configuredCoin, account))
+                    val configuredPlatformCoin = ConfiguredPlatformCoin(platformCoin, coinSettings)
+                    wallets.add(Wallet(configuredPlatformCoin, account))
                 }
             }
         }
