@@ -8,8 +8,8 @@ import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.ApiError
 import io.horizontalsystems.bankwallet.entities.blockchainType
 import io.horizontalsystems.bankwallet.modules.swap.settings.Caution
-import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.core.SingleLiveEvent
+import io.horizontalsystems.marketkit.models.PlatformCoin
 import io.reactivex.disposables.CompositeDisposable
 
 class AddTokenViewModel(private val addTokenService: AddTokenService) : ViewModel() {
@@ -73,14 +73,15 @@ class AddTokenViewModel(private val addTokenService: AddTokenService) : ViewMode
 
     private fun getViewItemByState(state: AddTokenModule.State): AddTokenModule.ViewItem? {
         return when (state) {
-            is AddTokenModule.State.AlreadyExists -> getViewItem(state.coin)
-            is AddTokenModule.State.Fetched -> getViewItem(state.coin)
+            is AddTokenModule.State.AlreadyExists -> getViewItem(state.platformCoin)
+            is AddTokenModule.State.Fetched -> getViewItem(state.customToken.platformCoin)
             else -> null
         }
     }
 
-    private fun getViewItem(coin: Coin) =
-            AddTokenModule.ViewItem(coin.type.blockchainType, coin.title, coin.code, coin.decimal)
+    private fun getViewItem(platformCoin: PlatformCoin): AddTokenModule.ViewItem {
+        return AddTokenModule.ViewItem(platformCoin.coinType.blockchainType, platformCoin.name, platformCoin.code, platformCoin.decimals)
+    }
 
     private fun getErrorText(error: Throwable): String {
         val errorKey = when (error) {

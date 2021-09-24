@@ -2,11 +2,11 @@ package io.horizontalsystems.bankwallet.modules.addtoken
 
 import io.horizontalsystems.bankwallet.core.IAddTokenBlockchainService
 import io.horizontalsystems.bankwallet.entities.ApiError
+import io.horizontalsystems.bankwallet.entities.CustomToken
 import io.horizontalsystems.binancechainkit.BinanceChainKit
 import io.horizontalsystems.binancechainkit.core.api.BinanceChainApi
-import io.horizontalsystems.coinkit.models.Coin
-import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.IBuildConfigProvider
+import io.horizontalsystems.marketkit.models.CoinType
 import io.reactivex.Single
 
 class AddBep2TokenBlockchainService(
@@ -29,22 +29,23 @@ class AddBep2TokenBlockchainService(
         return CoinType.Bep2(reference)
     }
 
-    override fun coinAsync(reference: String) : Single<Coin>{
+    override fun customTokenAsync(reference: String): Single<CustomToken> {
         return binanceApi.getTokens()
-                .flatMap {tokens ->
-                    val token = tokens.firstOrNull { it.symbol.equals(reference, ignoreCase = true) }
-                    if (token != null){
-                        val coin = Coin(
-                                title = token.name,
-                                code = token.code,
-                                decimal = 8,
-                                type = CoinType.Bep2(token.symbol)
-                        )
-                        Single.just(coin)
-                    } else {
-                        Single.error(ApiError.Bep2SymbolNotFound)
-                    }
+            .flatMap { tokens ->
+                val token = tokens.firstOrNull { it.symbol.equals(reference, ignoreCase = true) }
+                if (token != null) {
+                    val customToken = CustomToken(
+                        token.name,
+                        token.code,
+                        CoinType.Bep2(token.symbol),
+                        8
+                    )
+
+                    Single.just(customToken)
+                } else {
+                    Single.error(ApiError.Bep2SymbolNotFound)
                 }
+            }
     }
 
 }
