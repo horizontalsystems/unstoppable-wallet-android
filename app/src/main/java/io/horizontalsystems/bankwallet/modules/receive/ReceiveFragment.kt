@@ -43,7 +43,7 @@ class ReceiveFragment : BaseFragment() {
             val viewModel by viewModels<ReceiveViewModel> { ReceiveModule.Factory(wallet) }
 
             toolbar.title = getString(R.string.Deposit_Title, wallet.coin.code)
-            toolbar.navigationIcon = AppLayoutHelper.getCoinDrawable(requireContext(), wallet.coin.type)
+            toolbar.navigationIcon = AppLayoutHelper.getCoinDrawable(requireContext(), wallet.coinType)
             toolbar.setOnMenuItemClickListener { item ->
                 when (item.itemId) {
                     R.id.menuClose -> {
