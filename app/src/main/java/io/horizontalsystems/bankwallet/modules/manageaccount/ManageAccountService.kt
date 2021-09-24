@@ -7,7 +7,7 @@ import io.horizontalsystems.bankwallet.core.managers.RestoreSettingType
 import io.horizontalsystems.bankwallet.core.managers.RestoreSettingsManager
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Account
-import io.horizontalsystems.coinkit.models.Coin
+import io.horizontalsystems.marketkit.models.PlatformCoin
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
@@ -42,15 +42,15 @@ class ManageAccountService(
     private val accountDeletedSubject = PublishSubject.create<Unit>()
     val accountDeletedObservable: Flowable<Unit> = accountDeletedSubject.toFlowable(BackpressureStrategy.BUFFER)
 
-    val accountSettingsInfo: List<Triple<Coin, RestoreSettingType, String>>
+    val accountSettingsInfo: List<Triple<PlatformCoin, RestoreSettingType, String>>
         get() {
             val accountWallets = walletManager.getWallets(account)
             return restoreSettingsManager.accountSettingsInfo(account).mapNotNull { (coinType, restoreSettingType, value) ->
-                val wallet = accountWallets.find { it.coin.type == coinType }
+                val wallet = accountWallets.find { it.coinType == coinType }
                 if (wallet == null || (restoreSettingType == RestoreSettingType.BirthdayHeight && value.isEmpty())) {
                     null
                 } else {
-                    Triple(wallet.coin, restoreSettingType, value)
+                    Triple(wallet.platformCoin, restoreSettingType, value)
                 }
             }
         }
@@ -89,8 +89,8 @@ class ManageAccountService(
         accountManager.update(account)
     }
 
-    fun getSettingsTitle(settingType: RestoreSettingType, coin: Coin): String {
-        return restoreSettingsManager.getSettingsTitle(settingType, coin)
+    fun getSettingsTitle(settingType: RestoreSettingType, platformCoin: PlatformCoin): String {
+        return restoreSettingsManager.getSettingsTitle(settingType, platformCoin)
     }
 
     override fun clear() {

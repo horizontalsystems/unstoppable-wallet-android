@@ -5,8 +5,8 @@ import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Account
-import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.SingleLiveEvent
+import io.horizontalsystems.marketkit.models.CoinType
 import io.reactivex.disposables.CompositeDisposable
 
 class ManageAccountViewModel(
@@ -51,8 +51,8 @@ class ManageAccountViewModel(
     }
 
     private fun syncAccountSettings() {
-        val additionalViewItems = service.accountSettingsInfo.map { (coin, restoreSettingType, value) ->
-            AdditionalViewItem(coin.type, service.getSettingsTitle(restoreSettingType, coin), value)
+        val additionalViewItems = service.accountSettingsInfo.map { (platformCoin, restoreSettingType, value) ->
+            AdditionalViewItem(platformCoin.coinType, service.getSettingsTitle(restoreSettingType, platformCoin), value)
         }
         additionalViewItemsLiveData.postValue(additionalViewItems)
     }
@@ -80,9 +80,9 @@ class ManageAccountViewModel(
     }
 
     data class AdditionalViewItem(
-            val coinType: CoinType,
-            val title: String,
-            val value: String
+        val coinType: CoinType,
+        val title: String,
+        val value: String
     )
 
 }
