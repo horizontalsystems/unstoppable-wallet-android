@@ -8,8 +8,8 @@ import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.modules.restore.restoreselectcoins.CoinSettingsService
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorViewItem
-import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.core.SingleLiveEvent
+import io.horizontalsystems.marketkit.models.PlatformCoin
 import io.reactivex.disposables.CompositeDisposable
 
 class CoinSettingsViewModel(
@@ -45,27 +45,27 @@ class CoinSettingsViewModel(
         openBottomSelectorLiveEvent.postValue(config)
     }
 
-    private fun derivationConfig(coin: Coin, allDerivations: List<AccountType.Derivation>, current: List<AccountType.Derivation>): BlockchainSettingsModule.Config {
+    private fun derivationConfig(platformCoin: PlatformCoin, allDerivations: List<AccountType.Derivation>, current: List<AccountType.Derivation>): BlockchainSettingsModule.Config {
         return BlockchainSettingsModule.Config(
-                coin = coin,
+                platformCoin = platformCoin,
                 title = Translator.getString(R.string.AddressFormatSettings_Title),
-                subtitle = coin.title,
+                subtitle = platformCoin.name,
                 selectedIndexes = current.map { allDerivations.indexOf(it) }.filter { it > -1 },
                 viewItems = allDerivations.map { derivation ->
                     BottomSheetSelectorViewItem(
                             title = derivation.longTitle(),
-                            subtitle = Translator.getString(derivation.description(), (derivation.addressPrefix(coin.type) ?: ""))
+                            subtitle = Translator.getString(derivation.description(), (derivation.addressPrefix(platformCoin.coinType) ?: ""))
                     )
                 },
-                description = Translator.getString(R.string.AddressFormatSettings_Description, coin.title)
+                description = Translator.getString(R.string.AddressFormatSettings_Description, platformCoin.name)
         )
     }
 
-    private fun bitcoinCashCoinTypeConfig(coin: Coin, types: List<BitcoinCashCoinType>, current: List<BitcoinCashCoinType>): BlockchainSettingsModule.Config {
+    private fun bitcoinCashCoinTypeConfig(platformCoin: PlatformCoin, types: List<BitcoinCashCoinType>, current: List<BitcoinCashCoinType>): BlockchainSettingsModule.Config {
         return BlockchainSettingsModule.Config(
-                coin = coin,
+                platformCoin = platformCoin,
                 title = Translator.getString(R.string.AddressFormatSettings_Title),
-                subtitle = coin.title,
+                subtitle = platformCoin.name,
                 selectedIndexes = current.map { types.indexOf(it) }.filter { it > -1 },
                 viewItems = types.map { type ->
                     BottomSheetSelectorViewItem(
@@ -73,7 +73,7 @@ class CoinSettingsViewModel(
                             subtitle = Translator.getString(type.description)
                     )
                 },
-                description = Translator.getString(R.string.AddressFormatSettings_Description, coin.title)
+                description = Translator.getString(R.string.AddressFormatSettings_Description, platformCoin.name)
         )
     }
 
