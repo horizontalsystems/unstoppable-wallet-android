@@ -4,10 +4,10 @@ import io.horizontalsystems.bankwallet.core.IAddTokenBlockchainService
 import io.horizontalsystems.bankwallet.core.IAppConfigProvider
 import io.horizontalsystems.bankwallet.core.INetworkManager
 import io.horizontalsystems.bankwallet.entities.ApiError
-import io.horizontalsystems.coinkit.models.Coin
-import io.horizontalsystems.coinkit.models.CoinType
+import io.horizontalsystems.bankwallet.entities.CustomToken
 import io.horizontalsystems.ethereumkit.core.AddressValidator
 import io.horizontalsystems.ethereumkit.core.EthereumKit
+import io.horizontalsystems.marketkit.models.CoinType
 import io.reactivex.Single
 import java.util.*
 
@@ -49,7 +49,7 @@ class AddEvmTokenBlockchainService(
     }
 
     override fun coinType(reference: String): CoinType {
-        val address = reference.toLowerCase(Locale.ENGLISH)
+        val address = reference.lowercase()
 
         return when (networkType) {
             EthereumKit.NetworkType.EthMainNet,
@@ -61,14 +61,14 @@ class AddEvmTokenBlockchainService(
         }
     }
 
-    override fun coinAsync(reference: String): Single<Coin> {
+    override fun customTokenAsync(reference: String): Single<CustomToken> {
         val request = "api?module=account&action=tokentx&contractaddress=$reference&page=1&offset=1&sort=asc&apikey=${getExplorerKey(networkType)}"
 
         return networkManager.getEvmInfo(getApiUrl(networkType), request)
                 .map { response ->
                     if (response.get("status").asString == "0") {
                         try {
-                            if (response.get("result").asString.toLowerCase(Locale.ENGLISH).contains("limit reached")) {
+                            if (response.get("result").asString.lowercase().contains("limit reached")) {
                                 throw ApiError.ApiLimitExceeded
                             }
                         } catch (e: Exception) {
@@ -89,7 +89,7 @@ class AddEvmTokenBlockchainService(
                     val tokenDecimal = result.get("tokenDecimal")?.asString?.toInt()
                             ?: throw ApiError.InvalidResponse
 
-                    return@map Coin(title = tokenName, code = tokenSymbol, decimal = tokenDecimal, type = coinType(reference))
+                    return@map CustomToken(tokenName, tokenSymbol, coinType(reference), tokenDecimal)
                 }
     }
 

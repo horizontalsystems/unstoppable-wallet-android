@@ -559,7 +559,7 @@ interface ICoinManager {
 interface IAddTokenBlockchainService {
     fun isValid(reference: String): Boolean
     fun coinType(reference: String): CoinType
-    fun coinAsync(reference: String): Single<Coin>
+    fun customTokenAsync(reference: String): Single<CustomToken>
 }
 
 interface IPriceAlertManager {

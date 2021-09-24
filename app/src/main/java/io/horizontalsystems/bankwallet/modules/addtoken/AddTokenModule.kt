@@ -4,7 +4,8 @@ import android.os.Parcelable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.coinkit.models.Coin
+import io.horizontalsystems.bankwallet.entities.CustomToken
+import io.horizontalsystems.marketkit.models.PlatformCoin
 import kotlinx.android.parcel.Parcelize
 
 object AddTokenModule {
@@ -29,13 +30,13 @@ object AddTokenModule {
         }
     }
 
-    data class ViewItem(val coinType: String?, val coinName: String, val symbol: String, val decimal: Int)
+    data class ViewItem(val coinType: String?, val coinName: String, val symbol: String, val decimals: Int)
 
     sealed class State {
         object Idle : State()
         object Loading : State()
-        class AlreadyExists(val coin: Coin) : State()
-        class Fetched(val coin: Coin) : State()
+        class AlreadyExists(val platformCoin: PlatformCoin) : State()
+        class Fetched(val customToken: CustomToken) : State()
         class Failed(val error: Throwable) : State()
     }
 }

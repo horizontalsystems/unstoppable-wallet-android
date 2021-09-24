@@ -1,8 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.addtoken
 
 import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.entities.CustomToken
 import io.horizontalsystems.bankwallet.entities.Wallet
-import io.horizontalsystems.coinkit.models.Coin
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.disposables.Disposable
@@ -46,7 +46,7 @@ class AddTokenService(
 
         validServices.forEach { service ->
             val coinType = service.coinType(referenceNonNull)
-            coinManager.getCoin(coinType)?.let {
+            coinManager.getPlatformCoin(coinType)?.let {
                 state = AddTokenModule.State.AlreadyExists(it)
                 return
             }
@@ -64,11 +64,11 @@ class AddTokenService(
     }
 
     fun save() {
-        val coin = (state as? AddTokenModule.State.Fetched)?.coin ?: return
-        coinManager.save(listOf(coin))
+        val customToken = (state as? AddTokenModule.State.Fetched)?.customToken ?: return
+        coinManager.save(listOf(customToken))
 
         val account = accountManager.activeAccount ?: return
-        val wallet = Wallet(coin, account)
+        val wallet = Wallet(customToken.platformCoin, account)
 
         walletManager.save(listOf(wallet))
     }
@@ -77,8 +77,8 @@ class AddTokenService(
         disposable?.dispose()
     }
 
-    private fun chainedCoinAsync(services: List<IAddTokenBlockchainService>, reference: String): Single<Coin> {
-        val single = services[0].coinAsync(reference)
+    private fun chainedCoinAsync(services: List<IAddTokenBlockchainService>, reference: String): Single<CustomToken> {
+        val single = services[0].customTokenAsync(reference)
 
         return if (services.size == 1) {
             single

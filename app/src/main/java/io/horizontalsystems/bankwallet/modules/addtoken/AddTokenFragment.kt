@@ -122,7 +122,7 @@ class AddTokenFragment : BaseFragment() {
         coinTypeView.bind(getString(R.string.AddToken_CoinType), viewItem?.coinType ?: dots, listPosition = ListPosition.First)
         coinNameView.bind(getString(R.string.AddToken_CoinName), viewItem?.coinName ?: dots, listPosition = ListPosition.Middle)
         coinSymbolView.bind(getString(R.string.AddToken_Symbol), viewItem?.symbol ?: dots, listPosition = ListPosition.Middle)
-        coinDecimalsView.bind(getString(R.string.AddToken_Decimals), viewItem?.decimal?.toString() ?: dots, listPosition = ListPosition.Last)
+        coinDecimalsView.bind(getString(R.string.AddToken_Decimals), viewItem?.decimals?.toString() ?: dots, listPosition = ListPosition.Last)
     }
 
 }
