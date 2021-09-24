@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.ConcatAdapter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.coin.adapters.*
+import io.horizontalsystems.bankwallet.modules.coin.adapters.CoinChartAdapter.ChartViewType
 import io.horizontalsystems.bankwallet.modules.markdown.MarkdownFragment
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartFragment
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartType
@@ -81,7 +82,13 @@ class CoinFragment : BaseFragment(), CoinChartAdapter.Listener, CoinDataAdapter.
         updateNotificationMenuItem()
 
         val subtitleAdapter = CoinSubtitleAdapter(viewModel.subtitleLiveData, viewLifecycleOwner)
-        val chartAdapter = CoinChartAdapter(viewModel, viewLifecycleOwner, this)
+        val chartAdapter = CoinChartAdapter(
+            viewModel.chartInfoLiveData,
+            viewModel.currency,
+            ChartViewType.CoinChart,
+            this,
+            viewLifecycleOwner
+        )
         val coinRoiAdapter = CoinRoiAdapter(viewModel.roiLiveData, viewLifecycleOwner)
         val marketDataAdapter = CoinDataAdapter(viewModel.marketDataLiveData, viewLifecycleOwner, this)
         val tradingVolumeAdapter = CoinDataAdapter(viewModel.tradingVolumeLiveData, viewLifecycleOwner, this)

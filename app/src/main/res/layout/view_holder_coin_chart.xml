@@ -4,18 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/clear_clickable_background">
+    android:background="@drawable/clear_clickable_background"
+    >
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/chartPointsInfo"
         android:layout_width="0dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="7dp"
-        android:layout_marginEnd="16dp"
+        android:layout_height="44dp"
+        android:layout_marginHorizontal="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/coinRateLast">
+        app:layout_constraintTop_toTopOf="parent"
+        >
 
         <!--Price and Date info-->
 
@@ -25,19 +25,25 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/oz"
+            app:layout_constraintBottom_toTopOf="@+id/pointInfoDate"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="$9530.12" />
+            app:layout_constraintVertical_chainStyle="packed"
+            tools:text="$9530.12"
+            />
 
         <TextView
             android:id="@+id/pointInfoDate"
             style="@style/Caption"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
             android:textColor="@color/grey"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            tools:text="Jun 12, 12:30" />
+            app:layout_constraintTop_toBottomOf="@+id/pointInfoPrice"
+            tools:text="Jun 12, 12:30"
+            />
 
         <!--Volume info-->
 
@@ -49,21 +55,27 @@
             android:text="@string/CoinPage_Volume"
             android:textColor="@color/grey"
             android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/pointInfoVolume"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/pointInfoPrice" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"
+            />
 
         <TextView
             android:id="@+id/pointInfoVolume"
             style="@style/Caption"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textColor="@color/grey"
+            android:layout_marginTop="4dp"
             android:textAlignment="textEnd"
-            app:layout_constraintHorizontal_bias="1"
-            app:layout_constraintStart_toEndOf="@+id/pointInfoPrice"
+            android:textColor="@color/grey"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            tools:text="$36,166B" />
+            app:layout_constraintHorizontal_bias="1"
+            app:layout_constraintStart_toEndOf="@+id/pointInfoPrice"
+            app:layout_constraintTop_toBottomOf="@+id/pointInfoVolumeTitle"
+            tools:text="$36,166B"
+            />
 
         <!--MACD info-->
 
@@ -73,19 +85,25 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/lucian"
+            app:layout_constraintBottom_toTopOf="@+id/macdSignal"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/pointInfoPrice"
-            tools:text="-163.24" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"
+            tools:text="-163.24"
+            />
 
         <TextView
             android:id="@+id/macdSignal"
             style="@style/Caption"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
             android:textColor="@color/jacob"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            tools:text="-123" />
+            app:layout_constraintTop_toBottomOf="@+id/macdHistogram"
+            tools:text="-123"
+            />
 
         <TextView
             android:id="@+id/macdValue"
@@ -94,9 +112,10 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="4dp"
             android:textColor="@color/issyk_blue"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/macdSignal"
             app:layout_constraintEnd_toStartOf="@+id/macdSignal"
-            tools:text="-286.61" />
+            tools:text="-286.61"
+            />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.compose.ui.platform.ComposeView
@@ -120,7 +139,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/chartPointsInfo"
         app:partialChartColor="@color/grey_50"
-        app:timelineTextColor="@color/nina" />
+        app:timelineTextColor="@color/nina"
+        />
 
     <View
         android:id="@+id/border3"
@@ -129,25 +149,17 @@
         android:background="@color/steel_10"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/chart" />
+        app:layout_constraintTop_toBottomOf="@+id/chart"
+        />
 
     <androidx.compose.ui.platform.ComposeView
         android:id="@+id/indicatorsCompose"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/border3"
-        tools:layout_height="44dp"/>
-
-    <View
-        android:id="@+id/border4"
-        android:layout_width="0dp"
-        android:layout_height="0.5dp"
-        android:layout_marginTop="7dp"
-        android:background="@color/steel_20"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/indicatorsCompose" />
+        tools:layout_height="44dp"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
