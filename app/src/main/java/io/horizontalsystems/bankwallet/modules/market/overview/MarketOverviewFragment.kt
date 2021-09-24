@@ -41,8 +41,8 @@ import io.horizontalsystems.bankwallet.modules.market.getText
 import io.horizontalsystems.bankwallet.modules.market.metrics.MarketMetrics
 import io.horizontalsystems.bankwallet.modules.market.metrics.MarketMetricsModule
 import io.horizontalsystems.bankwallet.modules.market.metrics.MarketMetricsViewModel
-import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartFragment
-import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartType
+import io.horizontalsystems.bankwallet.modules.market.metricspage.MetricsPageFragment
+import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.RateColor
 import io.horizontalsystems.bankwallet.ui.compose.RateText
@@ -93,6 +93,11 @@ class MarketOverviewFragment : BaseFragment() {
         )
 
         findNavController().navigate(R.id.coinFragment, arguments, navOptions())
+    }
+
+    private fun openMetricsPage(metricsType: MetricsType){
+        val arguments = MetricsPageFragment.prepareParams(metricsType)
+        findNavController().navigate(R.id.mainFragment_to_metricPageFragment, arguments, navOptions())
     }
 
     @Composable
@@ -175,10 +180,7 @@ class MarketOverviewFragment : BaseFragment() {
                 .weight(1f)
                 .height(104.dp)
                 .clickable {
-                    MetricChartFragment.show(
-                        childFragmentManager,
-                        MetricChartType.MarketGlobal(metricsData.type)
-                    )
+                    openMetricsPage(metricsData.type)
                 },
             factory = { context ->
                 MarketMetricSmallView(context).apply {

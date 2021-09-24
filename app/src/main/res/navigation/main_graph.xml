@@ -55,6 +55,9 @@
             android:id="@+id/mainFragment_to_coinFragment"
             app:destination="@id/coinFragment" />
         <action
+            android:id="@+id/mainFragment_to_metricPageFragment"
+            app:destination="@id/metricsPageFragment" />
+        <action
             android:id="@+id/mainFragment_to_swapFragment"
             app:destination="@id/swapFragment"
             app:enterAnim="@anim/slide_from_bottom_long"
@@ -271,6 +274,10 @@
             android:id="@+id/experimentalFeaturesFragment_to_bitcoinHodlingFragment"
             app:destination="@id/bitcoinHodlingFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/metricsPageFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.market.metricspage.MetricsPageFragment"
+        tools:layout="@layout/fragment_metrics_page"/>
     <fragment
         android:id="@+id/coinFragment"
         android:name="io.horizontalsystems.bankwallet.modules.coin.CoinFragment"

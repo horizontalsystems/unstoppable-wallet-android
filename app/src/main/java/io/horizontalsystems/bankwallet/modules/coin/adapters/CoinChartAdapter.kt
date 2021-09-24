@@ -2,15 +2,18 @@ package io.horizontalsystems.bankwallet.modules.coin.adapters
 
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.*
+import androidx.compose.material.Divider
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -19,7 +22,7 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.coin.ChartInfoData
 import io.horizontalsystems.bankwallet.modules.coin.ChartPointViewItem
-import io.horizontalsystems.bankwallet.modules.coin.CoinViewModel
+import io.horizontalsystems.bankwallet.modules.coin.adapters.CoinChartAdapter.ChartViewType
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.TabButtonSecondary
 import io.horizontalsystems.bankwallet.ui.compose.components.TabButtonSecondaryTransparent
@@ -38,18 +41,18 @@ import java.math.BigDecimal
 import java.util.*
 
 class CoinChartAdapter(
-        viewModel: CoinViewModel,
-        viewLifecycleOwner: LifecycleOwner,
-        private val listener: Listener
+    viewItem: MutableLiveData<ViewItemWrapper>,
+    private val currency: Currency,
+    private val chartViewType: ChartViewType,
+    private val listener: Listener,
+    viewLifecycleOwner: LifecycleOwner
 ) : ListAdapter<CoinChartAdapter.ViewItemWrapper, ChartViewHolder>(diff) {
 
     init {
-        viewModel.chartInfoLiveData.observe(viewLifecycleOwner) {
+        viewItem.observe(viewLifecycleOwner) {
             submitList(listOf(it))
         }
     }
-
-    private val currency = viewModel.currency
 
     interface Listener {
         fun onChartTouchDown()
@@ -58,7 +61,12 @@ class CoinChartAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChartViewHolder {
-        return ChartViewHolder(inflate(parent, R.layout.view_holder_coin_chart, false), listener, currency)
+        return ChartViewHolder(
+            inflate(parent, R.layout.view_holder_coin_chart, false),
+            listener,
+            currency,
+            chartViewType
+        )
     }
 
     override fun onBindViewHolder(holder: ChartViewHolder, position: Int) {}
@@ -96,9 +104,18 @@ class CoinChartAdapter(
             val showError: Boolean
     )
 
+    enum class ChartViewType{
+        CoinChart, MarketMetricChart
+    }
+
 }
 
-class ChartViewHolder(override val containerView: View, private val listener: CoinChartAdapter.Listener, private val currency: Currency)
+class ChartViewHolder(
+    override val containerView: View,
+    private val listener: CoinChartAdapter.Listener,
+    private val currency: Currency,
+    private val chartViewType: ChartViewType
+)
     : RecyclerView.ViewHolder(containerView), LayoutContainer, Chart.Listener {
 
     init {
@@ -127,7 +144,7 @@ class ChartViewHolder(override val containerView: View, private val listener: Co
                 chart.setData(data.chartData, data.chartType, data.maxValue, data.minValue)
             }
 
-            bindTabs(getSelectedTabIndex(data.chartType), true)
+            bindTabs(getSelectedTabIndex(data.chartType), chartViewType, true)
 
             updateIndicatorsState(data.chartType)
         }
@@ -135,7 +152,7 @@ class ChartViewHolder(override val containerView: View, private val listener: Co
     }
 
     private fun getSelectedTabIndex(chartType: ChartView.ChartType): Int {
-        var selectedIndex = actions.indexOfFirst { it.first == chartType }
+        var selectedIndex = getActions(chartViewType).indexOfFirst { it.first == chartType }
         if (selectedIndex < 0) {
             selectedIndex = 0
         }
@@ -160,7 +177,7 @@ class ChartViewHolder(override val containerView: View, private val listener: Co
                     chart.setData(data.chartData, data.chartType, data.maxValue, data.minValue)
 
                     val shouldScroll = prev.data == null
-                    bindTabs(getSelectedTabIndex(data.chartType), shouldScroll)
+                    bindTabs(getSelectedTabIndex(data.chartType), chartViewType, shouldScroll)
 
                     updateIndicatorsState(data.chartType)
                 }
@@ -205,13 +222,23 @@ class ChartViewHolder(override val containerView: View, private val listener: Co
         setIndicators(enabled)
     }
 
-    private fun bindTabs(selectedIndex: Int = 0, shouldScroll: Boolean) {
+    private fun bindTabs(
+        selectedIndex: Int = 0,
+        chartViewType: ChartViewType,
+        shouldScroll: Boolean
+    ) {
+        val tabs = getActions(chartViewType)
+
         tabCompose.setContent {
             val coroutineScope = rememberCoroutineScope()
             val listState = rememberLazyListState()
 
             ComposeAppTheme {
-                CustomTab(actions.map { containerView.context.getString(it.second) }, selectedIndex, listState)
+                CustomTab(
+                    tabs.map { containerView.context.getString(it.second) },
+                    selectedIndex,
+                    listState
+                )
             }
 
             if (shouldScroll) {
@@ -237,7 +264,7 @@ class ChartViewHolder(override val containerView: View, private val listener: Co
                     title = title,
                     onSelect = {
                         tabIndex = index
-                        listener.onTabSelect(actions[index].first)
+                        listener.onTabSelect(getActions(chartViewType)[index].first)
                     },
                     selected = selected
                 )
@@ -246,23 +273,35 @@ class ChartViewHolder(override val containerView: View, private val listener: Co
     }
 
     private fun setIndicators(enabled: Boolean) {
+        if (chartViewType == ChartViewType.MarketMetricChart){
+            indicatorsCompose.isVisible = false
+            return
+        }
+
         indicatorsCompose.setContent {
             ComposeAppTheme {
-                LazyRow(
-                    contentPadding = PaddingValues(horizontal = 16.dp),
-                    modifier = Modifier.padding(top = 8.dp, end = 8.dp, bottom = 8.dp)
-                ) {
-                    items(getIndicators(enabled)) { item ->
-                        TabButtonSecondary(
-                            title = getIndicatorTitle(item.indicator),
-                            onSelect = {
-                                onIndicatorChanged(item.indicator, !item.checked)
-                                setIndicators(enabled)
-                            },
-                            selected = item.checked,
-                            enabled = item.enabled
-                        )
+                Column {
+                    LazyRow(
+                        contentPadding = PaddingValues(horizontal = 16.dp),
+                        modifier = Modifier.padding(top = 7.dp)
+                    ) {
+                        items(getIndicators(enabled)) { item ->
+                            TabButtonSecondary(
+                                title = getIndicatorTitle(item.indicator),
+                                onSelect = {
+                                    onIndicatorChanged(item.indicator, !item.checked)
+                                    setIndicators(enabled)
+                                },
+                                selected = item.checked,
+                                enabled = item.enabled
+                            )
+                        }
                     }
+                    Divider(
+                        modifier = Modifier.padding(top = 7.dp),
+                        thickness = 1.dp,
+                        color = ComposeAppTheme.colors.steel10
+                    )
                 }
             }
         }
@@ -301,7 +340,8 @@ class ChartViewHolder(override val containerView: View, private val listener: Co
         macdValue.isInvisible = true
 
         pointInfoDate.text = DateHelper.getDayAndTime(Date(item.date * 1000))
-        pointInfoPrice.text = App.numberFormatter.formatFiat(item.price.value, item.price.currency.symbol, 2, 4)
+        pointInfoPrice.text =
+            getFormattedPointValue(item.price.value, item.price.currency.symbol, chartViewType)
 
         item.volume?.let {
             pointInfoVolumeTitle.isInvisible = false
@@ -326,6 +366,21 @@ class ChartViewHolder(override val containerView: View, private val listener: Co
         }
     }
 
+    private fun getFormattedPointValue(
+        value: BigDecimal, symbol: String,
+        chartViewType: ChartViewType
+    ): String {
+        return when (chartViewType) {
+            ChartViewType.CoinChart -> {
+                App.numberFormatter.formatFiat(value, symbol, 2, 4)
+            }
+            ChartViewType.MarketMetricChart -> {
+                val (shortenValue, suffix) = App.numberFormatter.shortenValue(value)
+                App.numberFormatter.formatFiat(shortenValue, symbol, 0, 2) + " $suffix"
+            }
+        }
+    }
+
     private fun formatFiatShortened(value: BigDecimal, symbol: String): String {
         val shortCapValue = App.numberFormatter.shortenValue(value)
         return App.numberFormatter.formatFiat(shortCapValue.first, symbol, 0, 2) + " " + shortCapValue.second
@@ -339,16 +394,30 @@ class ChartViewHolder(override val containerView: View, private val listener: Co
     data class IndicatorViewItem(val indicator: ChartIndicator, val checked: Boolean, val enabled: Boolean)
 
     companion object {
-        private val actions = listOf(
-                Pair(ChartView.ChartType.TODAY, R.string.CoinPage_TimeDuration_Today),
-                Pair(ChartView.ChartType.DAILY, R.string.CoinPage_TimeDuration_Day),
-                Pair(ChartView.ChartType.WEEKLY, R.string.CoinPage_TimeDuration_Week),
-                Pair(ChartView.ChartType.WEEKLY2, R.string.CoinPage_TimeDuration_TwoWeeks),
-                Pair(ChartView.ChartType.MONTHLY, R.string.CoinPage_TimeDuration_Month),
-                Pair(ChartView.ChartType.MONTHLY3, R.string.CoinPage_TimeDuration_Month3),
-                Pair(ChartView.ChartType.MONTHLY6, R.string.CoinPage_TimeDuration_HalfYear),
-                Pair(ChartView.ChartType.MONTHLY12, R.string.CoinPage_TimeDuration_Year),
-                Pair(ChartView.ChartType.MONTHLY24, R.string.CoinPage_TimeDuration_Year2)
-        )
+
+        private fun getActions(chartViewType: ChartViewType): List<Pair<ChartView.ChartType, Int>> {
+            return when (chartViewType) {
+                ChartViewType.MarketMetricChart -> {
+                    listOf(
+                        Pair(ChartView.ChartType.DAILY, R.string.CoinPage_TimeDuration_Day),
+                        Pair(ChartView.ChartType.WEEKLY, R.string.CoinPage_TimeDuration_Week),
+                        Pair(ChartView.ChartType.MONTHLY, R.string.CoinPage_TimeDuration_Month)
+                    )
+                }
+                ChartViewType.CoinChart -> {
+                    listOf(
+                        Pair(ChartView.ChartType.TODAY, R.string.CoinPage_TimeDuration_Today),
+                        Pair(ChartView.ChartType.DAILY, R.string.CoinPage_TimeDuration_Day),
+                        Pair(ChartView.ChartType.WEEKLY, R.string.CoinPage_TimeDuration_Week),
+                        Pair(ChartView.ChartType.WEEKLY2, R.string.CoinPage_TimeDuration_TwoWeeks),
+                        Pair(ChartView.ChartType.MONTHLY, R.string.CoinPage_TimeDuration_Month),
+                        Pair(ChartView.ChartType.MONTHLY3, R.string.CoinPage_TimeDuration_Month3),
+                        Pair(ChartView.ChartType.MONTHLY6, R.string.CoinPage_TimeDuration_HalfYear),
+                        Pair(ChartView.ChartType.MONTHLY12, R.string.CoinPage_TimeDuration_Year),
+                        Pair(ChartView.ChartType.MONTHLY24, R.string.CoinPage_TimeDuration_Year2)
+                    )
+                }
+            }
+        }
     }
 }
