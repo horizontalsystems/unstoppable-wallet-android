@@ -5,8 +5,8 @@ import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Wallet
-import io.horizontalsystems.coinkit.models.CoinType
-import io.horizontalsystems.xrateskit.entities.LatestRate
+import io.horizontalsystems.marketkit.models.CoinPrice
+import io.horizontalsystems.marketkit.models.CoinType
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
@@ -114,12 +114,12 @@ class BalanceService2(
     }
 
     @Synchronized
-    private fun handleXRateUpdate(latestRates: Map<CoinType, LatestRate?>) {
+    private fun handleXRateUpdate(latestRates: Map<CoinType, CoinPrice?>) {
         for (i in 0 until balanceItems.size) {
             val balanceItem = balanceItems[i]
 
-            if (latestRates.containsKey(balanceItem.wallet.coin.type)) {
-                balanceItems[i] = balanceItem.copy(latestRate = latestRates[balanceItem.wallet.coin.type])
+            if (latestRates.containsKey(balanceItem.wallet.coinType)) {
+                balanceItems[i] = balanceItem.copy(coinPrice = latestRates[balanceItem.wallet.coinType])
             }
         }
 
@@ -129,7 +129,7 @@ class BalanceService2(
     @Synchronized
     private fun handleWalletsUpdate(wallets: List<Wallet>) {
         adapterRepository.setWallet(wallets)
-        xRateRepository.setCoinTypes(wallets.map { it.coin.type })
+        xRateRepository.setCoinTypes(wallets.map { it.coinType })
         val latestRates = xRateRepository.getLatestRates()
 
         val balanceItems = wallets.map { wallet ->
@@ -138,7 +138,7 @@ class BalanceService2(
                 networkTypeChecker.isMainNet(wallet),
                 adapterRepository.balanceData(wallet),
                 adapterRepository.state(wallet),
-                latestRates[wallet.coin.type]
+                latestRates[wallet.coinType]
             )
         }
 

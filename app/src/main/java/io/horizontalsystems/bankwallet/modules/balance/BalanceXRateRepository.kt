@@ -2,9 +2,9 @@ package io.horizontalsystems.bankwallet.modules.balance
 
 import io.horizontalsystems.bankwallet.core.IRateManager
 import io.horizontalsystems.bankwallet.core.subscribeIO
-import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.ICurrencyManager
-import io.horizontalsystems.xrateskit.entities.LatestRate
+import io.horizontalsystems.marketkit.models.CoinPrice
+import io.horizontalsystems.marketkit.models.CoinType
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.PublishSubject
@@ -19,8 +19,8 @@ class BalanceXRateRepository(
     private var latestRateDisposable: Disposable? = null
     private var baseCurrencyDisposable: Disposable? = null
 
-    private val itemSubject = PublishSubject.create<Map<CoinType, LatestRate?>>()
-    val itemObservable: Observable<Map<CoinType, LatestRate?>> get() = itemSubject
+    private val itemSubject = PublishSubject.create<Map<CoinType, CoinPrice?>>()
+    val itemObservable: Observable<Map<CoinType, CoinPrice?>> get() = itemSubject
         .doOnSubscribe {
             subscribeForBaseCurrencyUpdate()
             subscribeForLatestRateUpdates()
@@ -49,7 +49,7 @@ class BalanceXRateRepository(
         subscribeForLatestRateUpdates()
     }
 
-    fun getLatestRates(): Map<CoinType, LatestRate?> {
+    fun getLatestRates(): Map<CoinType, CoinPrice?> {
         return coinTypes.map { it to null }.toMap() + xRateManager.latestRate(coinTypes, baseCurrency.code)
     }
 
