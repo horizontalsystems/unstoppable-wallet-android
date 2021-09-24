@@ -290,7 +290,7 @@ class App : CoreApp() {
     }
 
     private fun startTasks() {
-        Thread(Runnable {
+        Thread {
             rateAppManager.onAppLaunch()
             accountManager.loadAccounts()
             walletManager.loadWallets()
@@ -300,6 +300,6 @@ class App : CoreApp() {
 
             AppVersionManager(systemInfoManager, localStorage).apply { storeAppVersion() }
 
-        }).start()
+        }.start()
     }
 }
