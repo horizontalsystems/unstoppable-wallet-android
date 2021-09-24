@@ -517,24 +517,10 @@ interface IAddressParser {
     fun parse(paymentAddress: String): AddressData
 }
 
-interface IDerivationSettingsManager {
-    fun allActiveSettings(): List<Pair<DerivationSetting, CoinType>>
-    fun defaultSetting(coinType: CoinType): DerivationSetting?
-    fun setting(coinType: CoinType): DerivationSetting?
-    fun save(setting: DerivationSetting)
-    fun resetStandardSettings()
-}
-
 interface IInitialSyncModeSettingsManager {
     fun allSettings(): List<Triple<InitialSyncSetting, PlatformCoin, Boolean>>
     fun setting(coinType: io.horizontalsystems.marketkit.models.CoinType, origin: AccountOrigin? = null): InitialSyncSetting?
     fun save(setting: InitialSyncSetting)
-}
-
-interface IEthereumRpcModeSettingsManager {
-    val communicationModes: List<CommunicationMode>
-    fun rpcMode(): EthereumRpcMode
-    fun save(setting: EthereumRpcMode)
 }
 
 interface IAccountCleaner {
