@@ -5,8 +5,8 @@ import io.horizontalsystems.bankwallet.core.adapters.BitcoinBaseAdapter
 import io.horizontalsystems.bankwallet.core.managers.EvmKitManager
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
-import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.ISystemInfoManager
+import io.horizontalsystems.marketkit.models.CoinType
 import java.util.*
 import kotlin.collections.LinkedHashMap
 
@@ -93,14 +93,14 @@ class AppStatusService(
         val coinTypesToDisplay = listOf(CoinType.Bitcoin, CoinType.BitcoinCash, CoinType.Dash, CoinType.Litecoin)
 
         walletManager.activeWallets
-                .filter { coinTypesToDisplay.contains(it.coin.type) }
-                .sortedBy { it.coin.title }
+                .filter { coinTypesToDisplay.contains(it.coinType) }
+                .sortedBy { it.platformCoin.name }
                 .forEach { wallet ->
                     (adapterManager.getAdapterForWallet(wallet) as? BitcoinBaseAdapter)?.let { adapter ->
-                        val settings = wallet.configuredCoin.settings
+                        val settings = wallet.configuredPlatformCoin.coinSettings
                         val settingsValue = settings.derivation?.value
                                 ?: settings.bitcoinCashCoinType?.value
-                        val statusTitle = "${wallet.coin.title}${settingsValue?.let { "-$it" } ?: ""}"
+                        val statusTitle = "${wallet.platformCoin.name}${settingsValue?.let { "-$it" } ?: ""}"
                         bitcoinChainStatus[statusTitle] = adapter.statusInfo
                     }
                 }

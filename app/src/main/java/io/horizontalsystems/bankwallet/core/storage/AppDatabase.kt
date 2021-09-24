@@ -33,6 +33,7 @@ import java.util.*
     RestoreSettingRecord::class,
     ActiveAccount::class,
     AccountSettingRecord::class,
+    CustomToken::class
 ])
 
 @TypeConverters(DatabaseConverters::class)
@@ -49,6 +50,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun marketFavoritesDao(): MarketFavoritesDao
     abstract fun walletConnectSessionDao(): WalletConnectSessionDao
     abstract fun accountSettingDao(): AccountSettingDao
+    abstract fun customTokenDao(): CustomTokenDao
 
     companion object {
 

@@ -14,7 +14,7 @@ class WalletStorage(
         val enabledWallets = storage.enabledWallets(account.id)
 
         val coinTypeIds = enabledWallets.map { it.coinId }
-        val platformCoins = coinManager.getPlatformCoins(coinTypeIds)
+        val platformCoins = coinManager.getPlatformCoinsByCoinTypeIds(coinTypeIds)
 
         return enabledWallets.mapNotNull { enabledWallet ->
             val platformCoin = platformCoins.find { it.coinType.id == enabledWallet.coinId } ?: return@mapNotNull null

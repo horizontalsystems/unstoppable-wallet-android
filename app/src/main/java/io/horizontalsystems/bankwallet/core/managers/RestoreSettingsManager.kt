@@ -5,8 +5,8 @@ import io.horizontalsystems.bankwallet.core.IRestoreSettingsStorage
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.RestoreSettingRecord
-import io.horizontalsystems.coinkit.models.Coin
-import io.horizontalsystems.coinkit.models.CoinType
+import io.horizontalsystems.marketkit.models.Coin
+import io.horizontalsystems.marketkit.models.CoinType
 
 class RestoreSettingsManager(
         private val storage: IRestoreSettingsStorage,
@@ -28,15 +28,15 @@ class RestoreSettingsManager(
     fun accountSettingsInfo(account: Account): List<Triple<CoinType, RestoreSettingType, String>> {
         return storage.restoreSettings(account.id).mapNotNull { record ->
             RestoreSettingType.fromString(record.key)?.let { settingType ->
-                val coinType = CoinType.fromString(record.coinId)
+                val coinType = CoinType.fromId(record.coinId)
                 Triple(coinType, settingType, record.value)
             }
         }
     }
 
-    fun save(settings: RestoreSettings, account: Account, coin: Coin) {
+    fun save(settings: RestoreSettings, account: Account, coinType: CoinType) {
         val records = settings.values.map { (type, value) ->
-            RestoreSettingRecord(account.id, coin.id, type.name, value)
+            RestoreSettingRecord(account.id, coinType.id, type.name, value)
         }
 
         storage.save(records)
