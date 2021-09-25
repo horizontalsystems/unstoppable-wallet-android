@@ -28,13 +28,13 @@ object UniswapConfirmationModule {
         private val evmKit by lazy { blockchain.evmKit!! }
         private val coin by lazy { blockchain.coin!! }
         private val transactionFeeService by lazy {
-            val feeRateProvider = FeeRateProviderFactory.provider(coin) as ICustomRangedFeeProvider
+            val feeRateProvider = FeeRateProviderFactory.provider(coin.coinType) as ICustomRangedFeeProvider
             EvmTransactionFeeService(evmKit, feeRateProvider, 20)
         }
         private val coinServiceFactory by lazy {
             EvmCoinServiceFactory(
                 coin,
-                App.coinKit,
+                App.marketKit,
                 App.currencyManager,
                 App.xRateManager
             )

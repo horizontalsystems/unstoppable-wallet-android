@@ -13,8 +13,6 @@ import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.transactions.FilterTransactionType
 import io.horizontalsystems.binancechainkit.BinanceChainKit
 import io.horizontalsystems.bitcoincore.core.IPluginData
-import io.horizontalsystems.coinkit.models.Coin
-import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.entities.AppVersion
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.ethereumkit.core.EthereumKit
@@ -24,7 +22,6 @@ import io.horizontalsystems.marketkit.models.CoinPrice
 import io.horizontalsystems.marketkit.models.CoinType
 import io.horizontalsystems.marketkit.models.MarketCoin
 import io.horizontalsystems.marketkit.models.PlatformCoin
-import io.horizontalsystems.xrateskit.entities.*
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -437,12 +434,12 @@ interface IEnabledWalletStorage {
 
 interface IBlockchainSettingsStorage {
     var bitcoinCashCoinType: BitcoinCashCoinType?
-    fun derivationSetting(coinType: io.horizontalsystems.marketkit.models.CoinType): DerivationSetting?
+    fun derivationSetting(coinType: CoinType): DerivationSetting?
     fun saveDerivationSetting(derivationSetting: DerivationSetting)
     fun deleteDerivationSettings()
-    fun initialSyncSetting(coinType: io.horizontalsystems.marketkit.models.CoinType): InitialSyncSetting?
+    fun initialSyncSetting(coinType: CoinType): InitialSyncSetting?
     fun saveInitialSyncSetting(initialSyncSetting: InitialSyncSetting)
-    fun ethereumRpcModeSetting(coinType: io.horizontalsystems.marketkit.models.CoinType): EthereumRpcMode?
+    fun ethereumRpcModeSetting(coinType: CoinType): EthereumRpcMode?
     fun saveEthereumRpcModeSetting(ethereumRpcModeSetting: EthereumRpcMode)
 }
 
@@ -450,7 +447,7 @@ interface ICustomTokenStorage {
     fun customTokens(): List<CustomToken>
     fun customTokens(filter: String): List<CustomToken>
     fun customTokens(coinTypeIds: List<String>): List<CustomToken>
-    fun customToken(coinType: io.horizontalsystems.marketkit.models.CoinType): CustomToken?
+    fun customToken(coinType: CoinType): CustomToken?
     fun save(customTokens: List<CustomToken>)
 }
 
@@ -518,7 +515,7 @@ interface IAddressParser {
 
 interface IInitialSyncModeSettingsManager {
     fun allSettings(): List<Triple<InitialSyncSetting, PlatformCoin, Boolean>>
-    fun setting(coinType: io.horizontalsystems.marketkit.models.CoinType, origin: AccountOrigin? = null): InitialSyncSetting?
+    fun setting(coinType: CoinType, origin: AccountOrigin? = null): InitialSyncSetting?
     fun save(setting: InitialSyncSetting)
 }
 
@@ -548,11 +545,11 @@ interface IRateAppManager {
 
 interface ICoinManager {
     fun save(customTokens: List<CustomToken>)
-    fun getPlatformCoin(coinType: io.horizontalsystems.marketkit.models.CoinType): PlatformCoin?
+    fun getPlatformCoin(coinType: CoinType): PlatformCoin?
     fun getPlatformCoinsByCoinTypeIds(coinTypeIds: List<String>): List<PlatformCoin>
     fun getPlatformCoins(): List<PlatformCoin>
-    fun getPlatformCoins(coinTypes: List<io.horizontalsystems.marketkit.models.CoinType>): List<PlatformCoin>
-    fun featuredMarketCoins(enabledCoinTypes: List<io.horizontalsystems.marketkit.models.CoinType>): List<MarketCoin>
+    fun getPlatformCoins(coinTypes: List<CoinType>): List<PlatformCoin>
+    fun featuredMarketCoins(enabledCoinTypes: List<CoinType>): List<MarketCoin>
     fun marketCoins(filter: String = "", limit: Int = 20): List<MarketCoin>
 }
 
@@ -566,14 +563,14 @@ interface IPriceAlertManager {
     val notificationChangedFlowable: Flowable<Unit>
     fun getPriceAlerts(): List<PriceAlert>
     fun savePriceAlert(
-        coinType: io.horizontalsystems.marketkit.models.CoinType,
+        coinType: CoinType,
         coinName: String,
         changeState: PriceAlert.ChangeState,
         trendState: PriceAlert.TrendState
     )
 
-    fun getAlertStates(coinType: io.horizontalsystems.marketkit.models.CoinType): Pair<PriceAlert.ChangeState, PriceAlert.TrendState>
-    fun hasPriceAlert(coinType: io.horizontalsystems.marketkit.models.CoinType): Boolean
+    fun getAlertStates(coinType: CoinType): Pair<PriceAlert.ChangeState, PriceAlert.TrendState>
+    fun hasPriceAlert(coinType: CoinType): Boolean
     fun deactivateAllNotifications()
     fun enablePriceAlerts()
     fun disablePriceAlerts()

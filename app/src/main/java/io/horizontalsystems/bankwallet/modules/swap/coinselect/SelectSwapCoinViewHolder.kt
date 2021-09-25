@@ -11,8 +11,8 @@ import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_swap_coin_select.*
 
 class SelectSwapCoinViewHolder(
-        override val containerView: View,
-        val onClick: (item: CoinBalanceItem) -> Unit
+    override val containerView: View,
+    val onClick: (item: CoinBalanceItem) -> Unit
 ) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
     private var coinItem: CoinBalanceItem? = null
@@ -30,8 +30,8 @@ class SelectSwapCoinViewHolder(
         bottomShade.isVisible = showBottomBorder
 
         coinItem.apply {
-            coinIcon.setCoinImage(coin.type)
-            coinTitle.text = coin.title
+            coinIcon.setCoinImage(coin.coinType)
+            coinTitle.text = coin.name
             coinSubtitle.text = coin.code
 
             coinBalance.text = balance?.let {

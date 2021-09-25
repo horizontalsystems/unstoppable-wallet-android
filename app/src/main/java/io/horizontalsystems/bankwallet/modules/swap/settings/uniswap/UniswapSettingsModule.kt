@@ -35,7 +35,7 @@ object UniswapSettingsModule {
                 SwapDeadlineViewModel::class.java -> SwapDeadlineViewModel(service) as T
                 SwapSlippageViewModel::class.java -> SwapSlippageViewModel(service) as T
                 RecipientAddressViewModel::class.java -> {
-                    val addressParser = App.addressParserFactory.parser(evmCoin)
+                    val addressParser = App.addressParserFactory.parser(evmCoin.coinType)
                     val resolutionService = AddressResolutionService(evmCoin.code, true)
                     val placeholder = Translator.getString(R.string.SwapSettings_RecipientPlaceholder)
                     RecipientAddressViewModel(service, resolutionService, addressParser, placeholder, listOf(service, resolutionService)) as T

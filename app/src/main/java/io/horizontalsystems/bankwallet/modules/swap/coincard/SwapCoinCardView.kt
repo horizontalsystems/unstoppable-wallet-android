@@ -10,10 +10,10 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.setCoinImage
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.swap.coinselect.SelectSwapCoinDialogFragment
-import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.getNavigationLiveData
 import io.horizontalsystems.core.setOnSingleClickListener
+import io.horizontalsystems.marketkit.models.PlatformCoin
 import io.horizontalsystems.views.helpers.LayoutHelper
 import kotlinx.android.synthetic.main.view_card_swap.view.*
 import java.math.BigDecimal
@@ -104,9 +104,9 @@ class SwapCoinCardView @JvmOverloads constructor(context: Context, attrs: Attrib
         }
     }
 
-    private fun setCoin(coin: Coin?) {
+    private fun setCoin(coin: PlatformCoin?) {
         if (coin != null) {
-            iconCoin.setCoinImage(coin.type)
+            iconCoin.setCoinImage(coin.coinType)
             selectedToken.text = coin.code
             selectedToken.setTextColor(context.getColor(R.color.leah))
         } else {

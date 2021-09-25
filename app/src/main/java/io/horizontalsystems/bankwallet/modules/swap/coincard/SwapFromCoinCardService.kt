@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.swap.coincard
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.AmountType
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.SwapError
-import io.horizontalsystems.coinkit.models.Coin
+import io.horizontalsystems.marketkit.models.PlatformCoin
 import io.reactivex.Observable
 import java.math.BigDecimal
 import java.util.*
@@ -21,7 +21,7 @@ class SwapFromCoinCardService(
     override val amount: BigDecimal?
         get() = tradeService.amountFrom
 
-    override val coin: Coin?
+    override val coin: PlatformCoin?
         get() = tradeService.coinFrom
 
     override val balance: BigDecimal?
@@ -36,7 +36,7 @@ class SwapFromCoinCardService(
     override val amountObservable: Observable<Optional<BigDecimal>>
         get() = tradeService.amountFromObservable
 
-    override val coinObservable: Observable<Optional<Coin>>
+    override val coinObservable: Observable<Optional<PlatformCoin>>
         get() = tradeService.coinFromObservable
 
     override val balanceObservable: Observable<Optional<BigDecimal>>
@@ -49,7 +49,7 @@ class SwapFromCoinCardService(
         tradeService.enterAmountFrom(amount)
     }
 
-    override fun onSelectCoin(coin: Coin) {
+    override fun onSelectCoin(coin: PlatformCoin) {
         tradeService.enterCoinFrom(coin)
     }
 

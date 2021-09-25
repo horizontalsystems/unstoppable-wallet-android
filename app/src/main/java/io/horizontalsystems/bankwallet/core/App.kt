@@ -25,7 +25,6 @@ import io.horizontalsystems.bankwallet.modules.tor.TorConnectionActivity
 import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectRequestManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectSessionManager
-import io.horizontalsystems.coinkit.CoinKit
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.CoreApp
 import io.horizontalsystems.core.ICoreApp
@@ -88,7 +87,6 @@ class App : CoreApp() {
         lateinit var notificationSubscriptionManager: INotificationSubscriptionManager
         lateinit var termsManager: ITermsManager
         lateinit var marketFavoritesManager: MarketFavoritesManager
-        lateinit var coinKit: CoinKit
         lateinit var marketKit: MarketKit
         lateinit var activateCoinManager: ActivateCoinManager
         lateinit var releaseNotesManager: ReleaseNotesManager
@@ -119,7 +117,6 @@ class App : CoreApp() {
         buildConfigProvider = appConfig
         languageConfigProvider = appConfig
 
-        coinKit = CoinKit.create(this, buildConfigProvider.testMode)
         marketKit = MarketKit.getInstance(this)
 
         feeRateProvider = FeeRateProvider(appConfigProvider)
@@ -190,7 +187,7 @@ class App : CoreApp() {
         adapterFactory.initialSyncModeSettingsManager = initialSyncModeSettingsManager
 
         feeCoinProvider = FeeCoinProvider(marketKit)
-        xRateManager = RateManager(this, appConfigProvider)
+        xRateManager = RateManager(this, appConfigProvider, marketKit)
 
         addressParserFactory = AddressParserFactory()
 
