@@ -7,8 +7,8 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.PriceAlert
 import io.horizontalsystems.bankwallet.modules.settings.notifications.bottommenu.NotificationMenuMode
-import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.SingleLiveEvent
+import io.horizontalsystems.marketkit.models.CoinType
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 

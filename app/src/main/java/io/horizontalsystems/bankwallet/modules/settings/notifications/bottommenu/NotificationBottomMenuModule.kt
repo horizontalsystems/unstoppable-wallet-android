@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.settings.notifications.bottommen
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.coinkit.models.CoinType
+import io.horizontalsystems.marketkit.models.CoinType
 
 object NotificationBottomMenuModule {
 

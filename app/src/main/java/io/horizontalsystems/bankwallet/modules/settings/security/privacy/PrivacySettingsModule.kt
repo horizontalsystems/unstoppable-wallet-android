@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.settings.security.privacy
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.managers.TorStatus
 import io.horizontalsystems.bankwallet.entities.*
-import io.horizontalsystems.coinkit.models.Coin
+import io.horizontalsystems.marketkit.models.PlatformCoin
 import io.horizontalsystems.views.ListPosition
 
 object PrivacySettingsModule {
@@ -15,7 +15,7 @@ object PrivacySettingsModule {
         fun showRestartAlert(checked: Boolean)
         fun toggleTorEnabled(torEnabled: Boolean)
         fun setRestoreWalletSettingsViewItems(items: List<PrivacySettingsViewItem>)
-        fun showSyncModeSelectorDialog(syncModeOptions: List<SyncMode>, selected: SyncMode, coin: Coin)
+        fun showSyncModeSelectorDialog(syncModeOptions: List<SyncMode>, selected: SyncMode, coin: PlatformCoin)
         fun setTransactionsOrdering(transactionsOrdering: TransactionDataSortingType)
         fun showTransactionsSortingOptions(items: List<TransactionDataSortingType>, selectedItem: TransactionDataSortingType)
         fun setTorConnectionStatus(connectionStatus: TorStatus)
@@ -45,7 +45,7 @@ object PrivacySettingsModule {
         fun disableTor()
         fun subscribeToTorStatus()
 
-        fun syncSettings(): List<Triple<InitialSyncSetting, Coin, Boolean>>
+        fun syncSettings(): List<Triple<InitialSyncSetting, PlatformCoin, Boolean>>
         fun saveSyncModeSetting(syncModeSetting: InitialSyncSetting)
 
         fun clear()
@@ -87,7 +87,7 @@ sealed class PrivacySettingsType {
 
 data class PrivacySettingsViewItem(
         val title: String,
-        val coin: Coin,
+        val coin: PlatformCoin,
         val settingType: PrivacySettingsType,
         var enabled: Boolean = true,
         val listPosition: ListPosition

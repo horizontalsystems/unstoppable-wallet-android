@@ -3,12 +3,12 @@ package io.horizontalsystems.bankwallet.modules.settings.security.privacy
 import io.horizontalsystems.bankwallet.core.managers.TorStatus
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.modules.settings.security.privacy.PrivacySettingsType.RestoreModeSettingType
-import io.horizontalsystems.coinkit.models.Coin
+import io.horizontalsystems.marketkit.models.PlatformCoin
 import io.horizontalsystems.views.ListPosition
 
 class PrivacySettingsPresenter(
-        private val interactor: PrivacySettingsModule.IPrivacySettingsInteractor,
-        private val router: PrivacySettingsModule.IPrivacySettingsRouter
+    private val interactor: PrivacySettingsModule.IPrivacySettingsInteractor,
+    private val router: PrivacySettingsModule.IPrivacySettingsRouter
 ) : PrivacySettingsModule.IPrivacySettingsViewDelegate, PrivacySettingsModule.IPrivacySettingsInteractorDelegate {
 
     var view: PrivacySettingsModule.IPrivacySettingsView? = null
@@ -21,15 +21,15 @@ class PrivacySettingsPresenter(
         get() = interactor.activeAccount?.origin == AccountOrigin.Created
 
     private val syncItems: List<PrivacySettingsViewItem> =
-            interactor.syncSettings().mapIndexed { index, (initialSyncSetting, coin, changeable) ->
-                PrivacySettingsViewItem(
-                        coin.title,
-                        coin,
-                        RestoreModeSettingType(initialSyncSetting.syncMode),
-                        changeable,
-                        listPosition = ListPosition.getListPosition(interactor.syncSettings().size, index)
-                )
-            }
+        interactor.syncSettings().mapIndexed { index, (initialSyncSetting, coin, changeable) ->
+            PrivacySettingsViewItem(
+                coin.name,
+                coin,
+                RestoreModeSettingType(initialSyncSetting.syncMode),
+                changeable,
+                listPosition = ListPosition.getListPosition(interactor.syncSettings().size, index)
+            )
+        }
 
     private val syncModeOptions = listOf(SyncMode.Fast, SyncMode.Slow)
 
@@ -130,10 +130,10 @@ class PrivacySettingsPresenter(
         }
     }
 
-    private fun updateSyncMode(coin: Coin, syncMode: SyncMode) {
+    private fun updateSyncMode(coin: PlatformCoin, syncMode: SyncMode) {
         (openedPrivacySettings?.settingType as? RestoreModeSettingType)?.selected = syncMode
 
-        interactor.saveSyncModeSetting(InitialSyncSetting(coin.type, syncMode))
+        interactor.saveSyncModeSetting(InitialSyncSetting(coin.coinType, syncMode))
         view?.setRestoreWalletSettingsViewItems(syncItems)
 
         openedPrivacySettings = null
