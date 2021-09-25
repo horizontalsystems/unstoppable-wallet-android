@@ -89,7 +89,7 @@ object SendEvmModule {
 
     class Factory(private val wallet: Wallet) : ViewModelProvider.Factory {
         private val adapter by lazy { App.adapterManager.getAdapterForWallet(wallet) as ISendEthereumAdapter }
-        private val service by lazy { SendEvmService(wallet.coin, adapter) }
+        private val service by lazy { SendEvmService(wallet.platformCoin, adapter) }
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {

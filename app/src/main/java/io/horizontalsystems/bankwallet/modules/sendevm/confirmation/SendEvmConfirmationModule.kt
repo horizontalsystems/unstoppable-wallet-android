@@ -15,10 +15,10 @@ import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionService
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
-import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.core.EthereumKit.NetworkType
+import io.horizontalsystems.marketkit.models.CoinType
 
 object SendEvmConfirmationModule {
 
@@ -33,15 +33,15 @@ object SendEvmConfirmationModule {
                 NetworkType.EthRopsten,
                 NetworkType.EthKovan,
                 NetworkType.EthGoerli,
-                NetworkType.EthRinkeby -> App.coinKit.getCoin(CoinType.Ethereum)!!
-                NetworkType.BscMainNet -> App.coinKit.getCoin(CoinType.BinanceSmartChain)!!
+                NetworkType.EthRinkeby -> App.marketKit.platformCoin(CoinType.Ethereum)!!
+                NetworkType.BscMainNet -> App.marketKit.platformCoin(CoinType.BinanceSmartChain)!!
             }
         }
         private val transactionService by lazy {
-            val feeRateProvider = FeeRateProviderFactory.provider(feeCoin) as ICustomRangedFeeProvider
+            val feeRateProvider = FeeRateProviderFactory.provider(feeCoin.coinType) as ICustomRangedFeeProvider
             EvmTransactionFeeService(evmKit, feeRateProvider, 20)
         }
-        private val coinServiceFactory by lazy { EvmCoinServiceFactory(feeCoin, App.coinKit, App.currencyManager, App.xRateManager) }
+        private val coinServiceFactory by lazy { EvmCoinServiceFactory(feeCoin, App.marketKit, App.currencyManager, App.xRateManager) }
         private val sendService by lazy { SendEvmTransactionService(sendEvmData, evmKit, transactionService, App.activateCoinManager) }
 
         @Suppress("UNCHECKED_CAST")
