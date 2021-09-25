@@ -8,7 +8,6 @@ import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinService
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import java.math.BigDecimal
 
-
 interface IAvailableBalanceService {
     val availableBalance: BigDecimal
 }
@@ -26,7 +25,7 @@ class SendAvailableBalanceViewModel(
     }
 
     private fun sync() {
-        val coinValue = CoinValue(coinService.coin, service.availableBalance)
+        val coinValue = CoinValue(CoinValue.Kind.PlatformCoin(coinService.platformCoin), service.availableBalance)
         viewStateSubject.postValue(ViewState.Loaded(coinValue.getFormatted()))
     }
 

@@ -56,7 +56,7 @@ class SendEvmFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         toolbar.title = getString(R.string.Send_Title, wallet.coin.code)
-        toolbar.navigationIcon = AppLayoutHelper.getCoinDrawable(requireContext(), wallet.coin.type)
+        toolbar.navigationIcon = AppLayoutHelper.getCoinDrawable(requireContext(), wallet.coinType)
         toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.menuClose -> {
