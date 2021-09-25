@@ -8,11 +8,11 @@ import io.horizontalsystems.bankwallet.core.managers.ActivateCoinManager
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData
-import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.decorations.ContractMethodDecoration
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.TransactionData
+import io.horizontalsystems.marketkit.models.CoinType
 import io.horizontalsystems.oneinchkit.decorations.OneInchMethodDecoration
 import io.horizontalsystems.oneinchkit.decorations.OneInchSwapMethodDecoration
 import io.horizontalsystems.oneinchkit.decorations.OneInchUnoswapMethodDecoration
@@ -169,7 +169,7 @@ class SendEvmTransactionService(
                 val coinType = decoration.toToken?.let {
                     mapOneInchTokenToCoinType(it)
                 }
-                coinType ?: additionalInfo?.oneInchSwapInfo?.coinTo?.type
+                coinType ?: additionalInfo?.oneInchSwapInfo?.coinTo?.coinType
             }
             else -> null
         }

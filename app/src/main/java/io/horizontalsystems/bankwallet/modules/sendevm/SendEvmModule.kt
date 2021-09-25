@@ -13,8 +13,8 @@ import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.swap.settings.AddressResolutionService
 import io.horizontalsystems.bankwallet.modules.swap.settings.RecipientAddressViewModel
-import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.ethereumkit.models.TransactionData
+import io.horizontalsystems.marketkit.models.PlatformCoin
 import kotlinx.android.parcel.Parcelize
 import java.math.BigDecimal
 import java.math.BigInteger
@@ -63,7 +63,7 @@ data class SendEvmData(
 
     @Parcelize
     data class OneInchSwapInfo(
-        val coinTo: Coin,
+        val coinTo: PlatformCoin,
         val estimatedAmountTo: BigDecimal,
         val slippage: String? = null,
         val recipientDomain: String? = null
@@ -105,11 +105,11 @@ object SendEvmModule {
                     AmountInputViewModel(service, fiatService, switchService, clearables = listOf(service, fiatService, switchService)) as T
                 }
                 SendAvailableBalanceViewModel::class.java -> {
-                    val coinService = EvmCoinService(wallet.coin, App.currencyManager, App.xRateManager)
+                    val coinService = EvmCoinService(wallet.platformCoin, App.currencyManager, App.xRateManager)
                     SendAvailableBalanceViewModel(service, coinService, listOf(service, coinService)) as T
                 }
                 RecipientAddressViewModel::class.java -> {
-                    val addressParser = App.addressParserFactory.parser(wallet.coin)
+                    val addressParser = App.addressParserFactory.parser(wallet.coinType)
                     val resolutionService = AddressResolutionService(wallet.coin.code, true)
                     val placeholder = Translator.getString(R.string.SwapSettings_RecipientPlaceholder)
                     RecipientAddressViewModel(service, resolutionService, addressParser, placeholder, listOf(service, resolutionService)) as T
