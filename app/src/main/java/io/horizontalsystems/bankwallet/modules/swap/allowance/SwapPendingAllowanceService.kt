@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.swap.allowance
 import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.adapters.Eip20Adapter
 import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.ApproveTransactionRecord
-import io.horizontalsystems.coinkit.models.Coin
+import io.horizontalsystems.marketkit.models.PlatformCoin
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -18,7 +18,7 @@ class SwapPendingAllowanceService(
     private val adapterManager: IAdapterManager,
     private val allowanceService: SwapAllowanceService
 ) {
-    private var coin: Coin? = null
+    private var coin: PlatformCoin? = null
     private var pendingAllowance: BigDecimal? = null
 
     private val disposables = CompositeDisposable()
@@ -42,7 +42,7 @@ class SwapPendingAllowanceService(
             .let { disposables.add(it) }
     }
 
-    fun set(coin: Coin?) {
+    fun set(coin: PlatformCoin?) {
         this.coin = coin
         pendingAllowance = null
 
@@ -51,11 +51,11 @@ class SwapPendingAllowanceService(
 
     fun syncAllowance() {
         val coin = coin ?: return
-        val adapter = adapterManager.getAdapterForCoin(coin) as? Eip20Adapter ?: return
+        val adapter = adapterManager.getAdapterForPlatformCoin(coin) as? Eip20Adapter ?: return
 
         adapter.pendingTransactions.forEach { transaction ->
             if (transaction is ApproveTransactionRecord) {
-                pendingAllowance = transaction.value.value
+                pendingAllowance = transaction.value.decimalValue
             }
         }
 

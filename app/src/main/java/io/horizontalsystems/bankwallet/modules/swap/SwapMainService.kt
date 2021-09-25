@@ -1,12 +1,12 @@
 package io.horizontalsystems.bankwallet.modules.swap
 
 import io.horizontalsystems.bankwallet.core.ILocalStorage
-import io.horizontalsystems.coinkit.models.Coin
-import io.horizontalsystems.coinkit.models.CoinType
+import io.horizontalsystems.marketkit.models.CoinType
+import io.horizontalsystems.marketkit.models.PlatformCoin
 import io.reactivex.subjects.PublishSubject
 
 class SwapMainService(
-    coinFrom: Coin?,
+    coinFrom: PlatformCoin?,
     private val providers: List<SwapMainModule.ISwapProvider>,
     private val localStorage: ILocalStorage
 ) {
@@ -31,7 +31,7 @@ class SwapMainService(
         }
     }
 
-    private fun getDex(coinFrom: Coin?): SwapMainModule.Dex {
+    private fun getDex(coinFrom: PlatformCoin?): SwapMainModule.Dex {
         val blockchain = getBlockchainForCoin(coinFrom)
         val provider = getSwapProvider(blockchain)
             ?: throw IllegalStateException("No provider found for ${blockchain.title}")
@@ -52,11 +52,11 @@ class SwapMainService(
         else
             SwapMainModule.UniswapProvider.id
 
-    private fun getBlockchainForCoin(coin: Coin?) =
-        when (coin?.type) {
+    private fun getBlockchainForCoin(coin: PlatformCoin?) =
+        when (coin?.coinType) {
             CoinType.Ethereum, is CoinType.Erc20, null -> SwapMainModule.Blockchain.Ethereum
             CoinType.BinanceSmartChain, is CoinType.Bep20 -> SwapMainModule.Blockchain.BinanceSmartChain
-            else -> throw IllegalStateException("Swap not supported for ${coin.type}")
+            else -> throw IllegalStateException("Swap not supported for ${coin.coinType}")
         }
 
 }

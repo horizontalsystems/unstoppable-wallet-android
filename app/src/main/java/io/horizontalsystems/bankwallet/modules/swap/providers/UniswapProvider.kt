@@ -1,9 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.swap.providers
 
-import io.horizontalsystems.coinkit.models.Coin
-import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.TransactionData
+import io.horizontalsystems.marketkit.models.CoinType
+import io.horizontalsystems.marketkit.models.PlatformCoin
 import io.horizontalsystems.uniswapkit.UniswapKit
 import io.horizontalsystems.uniswapkit.models.*
 import io.reactivex.Single
@@ -14,7 +14,7 @@ class UniswapProvider(private val uniswapKit: UniswapKit) {
     val routerAddress: Address
         get() = uniswapKit.routerAddress
 
-    fun swapDataSingle(coinIn: Coin, coinOut: Coin): Single<SwapData> {
+    fun swapDataSingle(coinIn: PlatformCoin, coinOut: PlatformCoin): Single<SwapData> {
         return try {
             val tokenIn = uniswapToken(coinIn)
             val tokenOut = uniswapToken(coinOut)
@@ -41,13 +41,13 @@ class UniswapProvider(private val uniswapKit: UniswapKit) {
     }
 
     @Throws
-    private fun uniswapToken(coin: Coin): Token {
-        return when (val coinType = coin.type) {
+    private fun uniswapToken(coin: PlatformCoin): Token {
+        return when (val coinType = coin.coinType) {
             is CoinType.Erc20 -> {
-                uniswapKit.token(Address(coinType.address), coin.decimal)
+                uniswapKit.token(Address(coinType.address), coin.decimals)
             }
             is CoinType.Bep20 -> {
-                uniswapKit.token(Address(coinType.address), coin.decimal)
+                uniswapKit.token(Address(coinType.address), coin.decimals)
             }
             CoinType.Ethereum, CoinType.BinanceSmartChain -> {
                 uniswapKit.etherToken()

@@ -21,10 +21,10 @@ import io.horizontalsystems.bankwallet.modules.swap.settings.SwapSettingsBaseFra
 import io.horizontalsystems.bankwallet.modules.swap.settings.oneinch.OneInchSettingsFragment
 import io.horizontalsystems.bankwallet.modules.swap.settings.uniswap.UniswapSettingsFragment
 import io.horizontalsystems.bankwallet.modules.swap.uniswap.UniswapFragment
-import io.horizontalsystems.coinkit.models.Coin
-import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.ethereumkit.core.EthereumKit
+import io.horizontalsystems.marketkit.models.CoinType
+import io.horizontalsystems.marketkit.models.PlatformCoin
 import io.reactivex.Observable
 import kotlinx.android.parcel.Parcelize
 import java.math.BigDecimal
@@ -37,7 +37,7 @@ object SwapMainModule {
 
     private const val coinFromKey = "coinFromKey"
 
-    fun start(fragment: Fragment, navOptions: NavOptions, coinFrom: Coin) {
+    fun start(fragment: Fragment, navOptions: NavOptions, coinFrom: PlatformCoin) {
         fragment.findNavController().navigate(
             R.id.mainFragment_to_swapFragment,
             bundleOf(coinFromKey to coinFrom),
@@ -114,10 +114,10 @@ object SwapMainModule {
         val mainNet: Boolean
             get() = evmKit?.networkType?.isMainNet ?: false
 
-        val coin: Coin?
+        val coin: PlatformCoin?
             get() = when (this) {
-                Ethereum -> App.coinKit.getCoin(CoinType.Ethereum)
-                BinanceSmartChain -> App.coinKit.getCoin(CoinType.BinanceSmartChain)
+                Ethereum -> App.marketKit.platformCoin(CoinType.Ethereum)
+                BinanceSmartChain -> App.marketKit.platformCoin(CoinType.BinanceSmartChain)
             }
     }
 
@@ -130,23 +130,23 @@ object SwapMainModule {
     }
 
     interface ISwapTradeService {
-        val coinFrom: Coin?
-        val coinFromObservable: Observable<Optional<Coin>>
+        val coinFrom: PlatformCoin?
+        val coinFromObservable: Observable<Optional<PlatformCoin>>
         val amountFrom: BigDecimal?
         val amountFromObservable: Observable<Optional<BigDecimal>>
 
-        val coinTo: Coin?
-        val coinToObservable: Observable<Optional<Coin>>
+        val coinTo: PlatformCoin?
+        val coinToObservable: Observable<Optional<PlatformCoin>>
         val amountTo: BigDecimal?
         val amountToObservable: Observable<Optional<BigDecimal>>
 
         val amountType: AmountType
         val amountTypeObservable: Observable<AmountType>
 
-        fun enterCoinFrom(coin: Coin?)
+        fun enterCoinFrom(coin: PlatformCoin?)
         fun enterAmountFrom(amount: BigDecimal?)
 
-        fun enterCoinTo(coin: Coin?)
+        fun enterCoinTo(coin: PlatformCoin?)
         fun enterAmountTo(amount: BigDecimal?)
 
         fun restoreState(swapProviderState: SwapProviderState)
@@ -176,7 +176,7 @@ object SwapMainModule {
 
     @Parcelize
     data class CoinBalanceItem(
-        val coin: Coin,
+        val coin: PlatformCoin,
         val balance: BigDecimal?,
         val fiatBalanceValue: CurrencyValue?,
     ) : Parcelable
@@ -187,15 +187,15 @@ object SwapMainModule {
 
     @Parcelize
     data class SwapProviderState(
-        val coinFrom: Coin? = null,
-        val coinTo: Coin? = null,
+        val coinFrom: PlatformCoin? = null,
+        val coinTo: PlatformCoin? = null,
         val amountFrom: BigDecimal? = null,
         val amountTo: BigDecimal? = null,
         val amountType: AmountType = AmountType.ExactFrom
     ) : Parcelable
 
     class Factory(arguments: Bundle) : ViewModelProvider.Factory {
-        private val coinFrom: Coin? = arguments.getParcelable(coinFromKey)
+        private val coinFrom: PlatformCoin? = arguments.getParcelable(coinFromKey)
         private val swapProviders: List<ISwapProvider> =
             listOf(UniswapProvider, PancakeSwapProvider, OneInchProvider)
 

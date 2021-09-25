@@ -1,14 +1,17 @@
 package io.horizontalsystems.bankwallet.modules.swap.confirmation.oneinch
 
 import android.os.Parcelable
-import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.core.EvmError
+import io.horizontalsystems.bankwallet.core.FeeRatePriority
+import io.horizontalsystems.bankwallet.core.ICustomRangedFeeProvider
 import io.horizontalsystems.bankwallet.core.ethereum.EvmTransactionFeeService.*
 import io.horizontalsystems.bankwallet.core.ethereum.IEvmTransactionFeeService
+import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.swap.oneinch.OneInchKitHelper
-import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.ethereumkit.models.TransactionData
+import io.horizontalsystems.marketkit.models.PlatformCoin
 import io.horizontalsystems.oneinchkit.Swap
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
@@ -24,8 +27,8 @@ import java.util.concurrent.TimeUnit
 
 @Parcelize
 data class OneInchSwapParameters(
-    val coinFrom: Coin,
-    val coinTo: Coin,
+    val coinFrom: PlatformCoin,
+    val coinTo: PlatformCoin,
     val amountFrom: BigDecimal,
     val amountTo: BigDecimal,
     val slippage: BigDecimal,

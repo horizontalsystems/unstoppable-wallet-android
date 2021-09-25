@@ -1,10 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.swap.oneinch
 
 import io.horizontalsystems.bankwallet.core.convertedError
-import io.horizontalsystems.coinkit.models.Coin
-import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.models.Address
+import io.horizontalsystems.marketkit.models.CoinType
+import io.horizontalsystems.marketkit.models.PlatformCoin
 import io.horizontalsystems.oneinchkit.OneInchKit
 import io.horizontalsystems.oneinchkit.Quote
 import io.horizontalsystems.oneinchkit.Swap
@@ -21,8 +21,8 @@ class OneInchKitHelper(
     // TODO take evmCoinAddress from oneInchKit
     private val evmCoinAddress = Address("0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
 
-    private fun getCoinAddress(coin: Coin): Address {
-        return when (val coinType = coin.type) {
+    private fun getCoinAddress(coin: PlatformCoin): Address {
+        return when (val coinType = coin.coinType) {
             CoinType.Ethereum, CoinType.BinanceSmartChain -> evmCoinAddress
             is CoinType.Erc20 -> Address(coinType.address)
             is CoinType.Bep20 -> Address(coinType.address)
@@ -34,20 +34,20 @@ class OneInchKitHelper(
         get() = oneInchKit.smartContractAddress
 
     fun getQuoteAsync(
-        fromCoin: Coin,
-        toCoin: Coin,
+        fromCoin: PlatformCoin,
+        toCoin: PlatformCoin,
         fromAmount: BigDecimal
     ): Single<Quote> {
         return oneInchKit.getQuoteAsync(
             fromToken = getCoinAddress(fromCoin),
             toToken = getCoinAddress(toCoin),
-            amount = fromAmount.scaleUp(fromCoin.decimal)
+            amount = fromAmount.scaleUp(fromCoin.decimals)
         )
     }
 
     fun getSwapAsync(
-        fromCoin: Coin,
-        toCoin: Coin,
+        fromCoin: PlatformCoin,
+        toCoin: PlatformCoin,
         fromAmount: BigDecimal,
         slippagePercentage: Float,
         recipient: String? = null,
@@ -56,7 +56,7 @@ class OneInchKitHelper(
         return oneInchKit.getSwapAsync(
             fromToken = getCoinAddress(fromCoin),
             toToken = getCoinAddress(toCoin),
-            amount = fromAmount.scaleUp(fromCoin.decimal),
+            amount = fromAmount.scaleUp(fromCoin.decimals),
             slippagePercentage = slippagePercentage,
             recipient = recipient?.let { Address(it) },
             gasPrice = gasPrice

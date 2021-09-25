@@ -25,13 +25,13 @@ object SwapApproveConfirmationModule {
             private val blockchain: SwapMainModule.Blockchain
     ) : ViewModelProvider.Factory {
 
-        private val coin by lazy { blockchain.coin }
+        private val platformCoin by lazy { blockchain.coin!! }
         private val evmKit by lazy { blockchain.evmKit!! }
         private val transactionService by lazy {
-            val feeRateProvider = FeeRateProviderFactory.provider(coin) as ICustomRangedFeeProvider
+            val feeRateProvider = FeeRateProviderFactory.provider(platformCoin.coinType) as ICustomRangedFeeProvider
             EvmTransactionFeeService(evmKit, feeRateProvider, 20)
         }
-        private val coinServiceFactory by lazy { EvmCoinServiceFactory(coin!!, App.coinKit, App.currencyManager, App.xRateManager) }
+        private val coinServiceFactory by lazy { EvmCoinServiceFactory(platformCoin, App.marketKit, App.currencyManager, App.xRateManager) }
         private val sendService by lazy { SendEvmTransactionService(sendEvmData, evmKit, transactionService, App.activateCoinManager) }
 
         @Suppress("UNCHECKED_CAST")

@@ -5,8 +5,8 @@ import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.AmountType
 import io.horizontalsystems.bankwallet.modules.swap.confirmation.oneinch.OneInchSwapParameters
 import io.horizontalsystems.bankwallet.modules.swap.settings.oneinch.OneInchSwapSettingsModule.OneInchSwapSettings
-import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.ethereumkit.core.EthereumKit
+import io.horizontalsystems.marketkit.models.PlatformCoin
 import io.horizontalsystems.oneinchkit.Quote
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
@@ -26,27 +26,27 @@ class OneInchTradeService(
 
     //region internal subjects
     private val amountTypeSubject = PublishSubject.create<AmountType>()
-    private val coinFromSubject = PublishSubject.create<Optional<Coin>>()
-    private val coinToSubject = PublishSubject.create<Optional<Coin>>()
+    private val coinFromSubject = PublishSubject.create<Optional<PlatformCoin>>()
+    private val coinToSubject = PublishSubject.create<Optional<PlatformCoin>>()
     private val amountFromSubject = PublishSubject.create<Optional<BigDecimal>>()
     private val amountToSubject = PublishSubject.create<Optional<BigDecimal>>()
     private val stateSubject = PublishSubject.create<State>()
     //endregion
 
     //region outputs
-    override var coinFrom: Coin? = null
+    override var coinFrom: PlatformCoin? = null
         private set(value) {
             field = value
             coinFromSubject.onNext(Optional.ofNullable(value))
         }
-    override val coinFromObservable: Observable<Optional<Coin>> = coinFromSubject
+    override val coinFromObservable: Observable<Optional<PlatformCoin>> = coinFromSubject
 
-    override var coinTo: Coin? = null
+    override var coinTo: PlatformCoin? = null
         private set(value) {
             field = value
             coinToSubject.onNext(Optional.ofNullable(value))
         }
-    override val coinToObservable: Observable<Optional<Coin>> = coinToSubject
+    override val coinToObservable: Observable<Optional<PlatformCoin>> = coinToSubject
 
     override var amountFrom: BigDecimal? = null
         private set(value) {
@@ -82,7 +82,7 @@ class OneInchTradeService(
             syncQuote()
         }
 
-    override fun enterCoinFrom(coin: Coin?) {
+    override fun enterCoinFrom(coin: PlatformCoin?) {
         if (coinFrom == coin) return
 
         coinFrom = coin
@@ -99,7 +99,7 @@ class OneInchTradeService(
         syncQuote()
     }
 
-    override fun enterCoinTo(coin: Coin?) {
+    override fun enterCoinTo(coin: PlatformCoin?) {
         if (coinTo == coin) return
 
         coinTo = coin
@@ -212,7 +212,7 @@ class OneInchTradeService(
             })
     }
 
-    private fun handle(quote: Quote, coinFrom: Coin, coinTo: Coin, amountFrom: BigDecimal) {
+    private fun handle(quote: Quote, coinFrom: PlatformCoin, coinTo: PlatformCoin, amountFrom: BigDecimal) {
         val amountToBigDecimal =
             quote.toTokenAmount.abs().toBigDecimal().movePointLeft(quote.toToken.decimals)
                 .stripTrailingZeros()

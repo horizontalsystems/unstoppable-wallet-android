@@ -43,7 +43,7 @@ data class Wallet(
         get() = platformCoin.coinType
 
     val decimal
-        get() = platform.decimal
+        get() = platform.decimals
 
     val transactionSource get() = TransactionSource(blockchain, account, coinSettings)
 

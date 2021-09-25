@@ -5,10 +5,10 @@ import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.adapters.Eip20Adapter
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
-import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.DefaultBlockParameter
+import io.horizontalsystems.marketkit.models.PlatformCoin
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -19,12 +19,12 @@ import java.math.BigDecimal
 import java.util.*
 
 class SwapAllowanceService(
-        private val spenderAddress: Address,
-        private val adapterManager: IAdapterManager,
-        private val ethereumKit: EthereumKit
+    private val spenderAddress: Address,
+    private val adapterManager: IAdapterManager,
+    private val ethereumKit: EthereumKit
 ) {
 
-    private var coin: Coin? = null
+    private var coin: PlatformCoin? = null
     private val stateSubject = PublishSubject.create<Optional<State>>()
 
     var state: State? = null
@@ -39,7 +39,7 @@ class SwapAllowanceService(
     private val disposables = CompositeDisposable()
     private var allowanceDisposable: Disposable? = null
 
-    fun set(coin: Coin?) {
+    fun set(coin: PlatformCoin?) {
         this.coin = coin
         sync()
     }
@@ -81,7 +81,7 @@ class SwapAllowanceService(
         allowanceDisposable = null
 
         val coin = coin
-        val adapter = coin?.let { adapterManager.getAdapterForCoin(it) } as? Eip20Adapter
+        val adapter = coin?.let { adapterManager.getAdapterForPlatformCoin(it) } as? Eip20Adapter
 
         if (coin == null || adapter == null) {
             state = null
@@ -95,12 +95,12 @@ class SwapAllowanceService(
         }
 
         allowanceDisposable = adapter.allowance(spenderAddress, DefaultBlockParameter.Latest)
-                .subscribeOn(Schedulers.io())
-                .subscribe({ allowance ->
-                    state = State.Ready(CoinValue(coin, allowance))
-                }, { error ->
-                    state = State.NotReady(error)
-                })
+            .subscribeOn(Schedulers.io())
+            .subscribe({ allowance ->
+                state = State.Ready(CoinValue(CoinValue.Kind.PlatformCoin(coin), allowance))
+            }, { error ->
+                state = State.NotReady(error)
+            })
     }
 
     //region models
@@ -128,11 +128,11 @@ class SwapAllowanceService(
 
     @Parcelize
     data class ApproveData(
-            val dex: SwapMainModule.Dex,
-            val coin: Coin,
-            val spenderAddress: String,
-            val amount: BigDecimal,
-            val allowance: BigDecimal
+        val dex: SwapMainModule.Dex,
+        val coin: PlatformCoin,
+        val spenderAddress: String,
+        val amount: BigDecimal,
+        val allowance: BigDecimal
     ) : Parcelable
 
     //endregion

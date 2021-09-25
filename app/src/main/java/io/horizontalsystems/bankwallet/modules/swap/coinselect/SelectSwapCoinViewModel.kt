@@ -44,8 +44,8 @@ class SelectSwapCoinViewModel(
         val filter = filter ?: return items
 
         return items.filter {
-            it.coin.title.toLowerCase(Locale.ENGLISH).contains(filter.toLowerCase(Locale.ENGLISH))
-                    || it.coin.code.toLowerCase(Locale.ENGLISH).contains(filter.toLowerCase(Locale.ENGLISH))
+            it.coin.name.lowercase(Locale.ENGLISH).contains(filter.lowercase(Locale.ENGLISH))
+                    || it.coin.code.lowercase(Locale.ENGLISH).contains(filter.lowercase(Locale.ENGLISH))
         }
     }
 
