@@ -5,8 +5,8 @@ import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.managers.TorStatus
 import io.horizontalsystems.bankwallet.entities.SyncMode
 import io.horizontalsystems.bankwallet.entities.TransactionDataSortingType
-import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.core.SingleLiveEvent
+import io.horizontalsystems.marketkit.models.PlatformCoin
 
 class PrivacySettingsViewModel : ViewModel(), PrivacySettingsModule.IPrivacySettingsView, PrivacySettingsModule.IPrivacySettingsRouter {
     lateinit var delegate: PrivacySettingsModule.IPrivacySettingsViewDelegate
@@ -17,7 +17,7 @@ class PrivacySettingsViewModel : ViewModel(), PrivacySettingsModule.IPrivacySett
     val showAppRestartAlertForTor = SingleLiveEvent<Boolean>()
     val showNotificationsNotEnabledAlert = SingleLiveEvent<Unit>()
     val restoreWalletSettingsViewItems = SingleLiveEvent<List<PrivacySettingsViewItem>>()
-    val showSyncModeSelectorDialog = SingleLiveEvent<Triple<List<SyncMode>, SyncMode, Coin>>()
+    val showSyncModeSelectorDialog = SingleLiveEvent<Triple<List<SyncMode>, SyncMode, PlatformCoin>>()
     val showTransactionsSortingSelectorDialog = SingleLiveEvent<Pair<List<TransactionDataSortingType>, TransactionDataSortingType>>()
     val setTorConnectionStatus = SingleLiveEvent<TorStatus>()
 
@@ -61,7 +61,7 @@ class PrivacySettingsViewModel : ViewModel(), PrivacySettingsModule.IPrivacySett
         restoreWalletSettingsViewItems.postValue(items)
     }
 
-    override fun showSyncModeSelectorDialog(syncModeOptions: List<SyncMode>, selected: SyncMode, coin: Coin) {
+    override fun showSyncModeSelectorDialog(syncModeOptions: List<SyncMode>, selected: SyncMode, coin: PlatformCoin) {
         showSyncModeSelectorDialog.postValue(Triple(syncModeOptions, selected, coin))
     }
 
