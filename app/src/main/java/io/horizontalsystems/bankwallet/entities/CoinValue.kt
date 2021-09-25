@@ -15,7 +15,7 @@ data class CoinValue(
 
         data class PlatformCoin(val platformCoin: io.horizontalsystems.marketkit.models.PlatformCoin) : Kind() {
             override val decimal: Int
-                get() = platformCoin.platform.decimal
+                get() = platformCoin.platform.decimals
             override val coin: io.horizontalsystems.marketkit.models.Coin
                 get() = platformCoin.coin
         }

@@ -15,9 +15,9 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectSendEt
 import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectService
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.sendtransaction.WalletConnectSendEthereumTransactionRequestService
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.sendtransaction.WalletConnectSendEthereumTransactionRequestViewModel
-import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.ethereumkit.core.EthereumKit.NetworkType
 import io.horizontalsystems.ethereumkit.models.Address
+import io.horizontalsystems.marketkit.models.CoinType
 import java.math.BigInteger
 
 object WalletConnectRequestModule {
@@ -34,14 +34,14 @@ object WalletConnectRequestModule {
                 NetworkType.EthRopsten,
                 NetworkType.EthKovan,
                 NetworkType.EthGoerli,
-                NetworkType.EthRinkeby -> App.coinManager.getCoin(CoinType.Ethereum)!!
-                NetworkType.BscMainNet -> App.coinManager.getCoin(CoinType.BinanceSmartChain)!!
+                NetworkType.EthRinkeby -> App.coinManager.getPlatformCoin(CoinType.Ethereum)!!
+                NetworkType.BscMainNet -> App.coinManager.getPlatformCoin(CoinType.BinanceSmartChain)!!
             }
         }
         private val service by lazy { WalletConnectSendEthereumTransactionRequestService(request, baseService) }
         private val coinServiceFactory by lazy { EvmCoinServiceFactory(coin, App.coinKit, App.currencyManager, App.xRateManager) }
         private val transactionService by lazy {
-            val feeRateProvider = FeeRateProviderFactory.provider(coin) as ICustomRangedFeeProvider
+            val feeRateProvider = FeeRateProviderFactory.provider(coin.coinType) as ICustomRangedFeeProvider
             EvmTransactionFeeService(evmKit, feeRateProvider, 10)
         }
         private val sendService by lazy { SendEvmTransactionService(SendEvmData(service.transactionData), evmKit, transactionService, App.activateCoinManager, service.gasPrice) }

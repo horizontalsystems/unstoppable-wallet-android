@@ -45,7 +45,7 @@ class EvmTransactionConverter(
         } else {
             when {
                 transaction.from == evmKit.receiveAddress -> {
-                    val amount = convertAmount(transaction.value, baseCoin.decimal, true)
+                    val amount = convertAmount(transaction.value, baseCoin.decimals, true)
 
                     EvmOutgoingTransactionRecord(
                         fullTransaction = fullTransaction,
@@ -57,7 +57,7 @@ class EvmTransactionConverter(
                     )
                 }
                 to == evmKit.receiveAddress -> {
-                    val amount = convertAmount(transaction.value, baseCoin.decimal, false)
+                    val amount = convertAmount(transaction.value, baseCoin.decimals, false)
 
                     EvmIncomingTransactionRecord(
                         fullTransaction = fullTransaction,
@@ -97,7 +97,7 @@ class EvmTransactionConverter(
         val platformCoin = coinManager.getPlatformCoin(coinType)
 
         return if (platformCoin != null) {
-            TransactionValue.CoinValue(platformCoin, convertAmount(amount, platformCoin.decimal, negative))
+            TransactionValue.CoinValue(platformCoin, convertAmount(amount, platformCoin.decimals, negative))
         } else {
             TransactionValue.RawValue(coinType, amount)
         }
@@ -106,7 +106,7 @@ class EvmTransactionConverter(
     private fun convertToTransactionValue(token: SwapMethodDecoration.Token, amount: BigInteger, negative: Boolean): TransactionValue {
         return when (token) {
             SwapMethodDecoration.Token.EvmCoin -> {
-                val value = convertAmount(amount, baseCoin.decimal, negative)
+                val value = convertAmount(amount, baseCoin.decimals, negative)
                 TransactionValue.CoinValue(baseCoin, value)
             }
             is SwapMethodDecoration.Token.Eip20Coin -> {
@@ -118,7 +118,7 @@ class EvmTransactionConverter(
     private fun convertToTransactionValue(token: OneInchMethodDecoration.Token, amount: BigInteger, negative: Boolean): TransactionValue {
         return when (token) {
             OneInchMethodDecoration.Token.EvmCoin -> {
-                val value = convertAmount(amount, baseCoin.decimal, negative)
+                val value = convertAmount(amount, baseCoin.decimals, negative)
                 TransactionValue.CoinValue(baseCoin, value)
             }
             is OneInchMethodDecoration.Token.Eip20 -> {
@@ -261,7 +261,7 @@ class EvmTransactionConverter(
                     baseCoin,
                     to.eip55,
                     methodDecoration.method,
-                    convertAmount(fullTransaction.transaction.value, baseCoin.decimal, true),
+                    convertAmount(fullTransaction.transaction.value, baseCoin.decimals, true),
                     getInternalTransactions(fullTransaction),
                     getIncomingEip20Events(fullTransaction),
                     getOutgoingEip20Events(fullTransaction),
@@ -274,7 +274,7 @@ class EvmTransactionConverter(
                     baseCoin,
                     to.eip55,
                     null,
-                    convertAmount(fullTransaction.transaction.value, baseCoin.decimal, true),
+                    convertAmount(fullTransaction.transaction.value, baseCoin.decimals, true),
                     getInternalTransactions(fullTransaction),
                     getIncomingEip20Events(fullTransaction),
                     getOutgoingEip20Events(fullTransaction),
@@ -309,7 +309,7 @@ class EvmTransactionConverter(
                     baseCoin,
                     to.eip55,
                     methodDecoration.method,
-                    convertAmount(fullTransaction.transaction.value, baseCoin.decimal, true),
+                    convertAmount(fullTransaction.transaction.value, baseCoin.decimals, true),
                     getInternalTransactions(fullTransaction),
                     getIncomingEip20Events(fullTransaction),
                     getOutgoingEip20Events(fullTransaction),
@@ -322,7 +322,7 @@ class EvmTransactionConverter(
                     baseCoin,
                     to.eip55,
                     null,
-                    convertAmount(fullTransaction.transaction.value, baseCoin.decimal, true),
+                    convertAmount(fullTransaction.transaction.value, baseCoin.decimals, true),
                     getInternalTransactions(fullTransaction),
                     getIncomingEip20Events(fullTransaction),
                     getOutgoingEip20Events(fullTransaction),
@@ -337,7 +337,7 @@ class EvmTransactionConverter(
     private fun getInternalTransactions(fullTransaction: FullTransaction) : List<AddressTransactionValue> {
         return fullTransaction.internalTransactions.mapNotNull { internalTransaction ->
             if (internalTransaction.to == evmKit.receiveAddress) {
-                val amount = convertAmount(internalTransaction.value, baseCoin.decimal, false)
+                val amount = convertAmount(internalTransaction.value, baseCoin.decimals, false)
                 AddressTransactionValue(internalTransaction.from.eip55, TransactionValue.CoinValue(baseCoin, amount))
             } else {
                 null
