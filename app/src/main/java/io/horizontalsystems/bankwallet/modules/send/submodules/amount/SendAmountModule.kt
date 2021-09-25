@@ -90,15 +90,15 @@ object SendAmountModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
 
             val view = SendAmountView()
-            val coinDecimal = min(wallet.coin.decimal, App.appConfigProvider.maxDecimal)
+            val coinDecimal = min(wallet.decimal, App.appConfigProvider.maxDecimal)
             val currencyDecimal = App.appConfigProvider.fiatDecimal
             val baseCurrency = App.currencyManager.baseCurrency
 
-            val interactor = SendAmountInteractor(baseCurrency, App.xRateManager, App.localStorage, wallet.coin, App.backgroundManager)
+            val interactor = SendAmountInteractor(baseCurrency, App.xRateManager, App.localStorage, wallet.platformCoin, App.backgroundManager)
             val sendAmountPresenterHelper =
-                    SendAmountPresenterHelper(App.numberFormatter, wallet.coin, baseCurrency, coinDecimal,
+                    SendAmountPresenterHelper(App.numberFormatter, wallet.platformCoin, baseCurrency, coinDecimal,
                             currencyDecimal)
-            val presenter = SendAmountPresenter(view, interactor, sendAmountPresenterHelper, wallet.coin, baseCurrency)
+            val presenter = SendAmountPresenter(view, interactor, sendAmountPresenterHelper, wallet.platformCoin, baseCurrency)
 
             sendHandler.amountModule = presenter
             interactor.delegate = presenter

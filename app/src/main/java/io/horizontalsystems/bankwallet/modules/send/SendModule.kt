@@ -189,7 +189,7 @@ object SendModule {
             val handler: ISendHandler = when (val adapter = App.adapterManager.getAdapterForWallet(wallet)) {
                 is ISendBitcoinAdapter -> {
                     val bitcoinInteractor = SendBitcoinInteractor(adapter, App.localStorage)
-                    val handler = SendBitcoinHandler(bitcoinInteractor, wallet.coin.type)
+                    val handler = SendBitcoinHandler(bitcoinInteractor, wallet.coinType)
 
                     bitcoinInteractor.delegate = handler
 
@@ -301,12 +301,12 @@ object SendModule {
 
         val decimal: Int
             get() = when (this) {
-                is CoinValueInfo -> coinValue.coin.decimal
+                is CoinValueInfo -> coinValue.decimal
                 is CurrencyValueInfo -> currencyValue.currency.decimal
             }
 
         fun getAmountName(): String = when (this) {
-            is CoinValueInfo -> coinValue.coin.title
+            is CoinValueInfo -> coinValue.coin.name
             is CurrencyValueInfo -> currencyValue.currency.code
         }
 
