@@ -12,8 +12,6 @@ import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoAddressMapper
-import io.horizontalsystems.coinkit.models.Coin
-import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.toHexString
 import io.horizontalsystems.erc20kit.decorations.ApproveMethodDecoration
 import io.horizontalsystems.erc20kit.decorations.TransferMethodDecoration
@@ -22,6 +20,8 @@ import io.horizontalsystems.ethereumkit.decorations.RecognizedMethodDecoration
 import io.horizontalsystems.ethereumkit.decorations.UnknownMethodDecoration
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.TransactionData
+import io.horizontalsystems.marketkit.models.CoinType
+import io.horizontalsystems.marketkit.models.PlatformCoin
 import io.horizontalsystems.oneinchkit.decorations.OneInchMethodDecoration
 import io.horizontalsystems.oneinchkit.decorations.OneInchSwapMethodDecoration
 import io.horizontalsystems.oneinchkit.decorations.OneInchUnoswapMethodDecoration
@@ -192,7 +192,7 @@ class SendEvmTransactionViewModel(
                 listOf(
                     ViewItem.Subhead(
                         Translator.getString(R.string.Swap_FromAmountTitle),
-                        fromCoinService.coin.title
+                        fromCoinService.platformCoin.name
                     ),
                     ViewItem.Value(
                         Translator.getString(R.string.Send_Confirmation_Amount),
@@ -208,7 +208,7 @@ class SendEvmTransactionViewModel(
                 listOf(
                     ViewItem.Subhead(
                         Translator.getString(R.string.Swap_ToAmountTitle),
-                        toCoinService.coin.title
+                        toCoinService.platformCoin.name
                     ),
                     getEstimatedSwapAmount(
                         info?.let { toCoinService.amountData(it.estimatedAmountTo).getFormatted() },
@@ -257,7 +257,7 @@ class SendEvmTransactionViewModel(
         val coinService = coinServiceFactory.getCoinService(contractAddress) ?: return null
 
         val viewItems = mutableListOf(
-                ViewItem.Subhead(Translator.getString(R.string.Send_Confirmation_YouSend), coinService.coin.title),
+                ViewItem.Subhead(Translator.getString(R.string.Send_Confirmation_YouSend), coinService.platformCoin.name),
                 ViewItem.Value(Translator.getString(R.string.Send_Confirmation_Amount), coinService.amountData(value).getFormatted(), ValueType.Outgoing)
         )
         val addressValue = to.eip55
@@ -281,7 +281,7 @@ class SendEvmTransactionViewModel(
         val addressTitle = TransactionInfoAddressMapper.map(addressValue)
 
         val viewItems = mutableListOf(
-                ViewItem.Subhead(Translator.getString(R.string.Approve_YouApprove), coinService.coin.title),
+                ViewItem.Subhead(Translator.getString(R.string.Approve_YouApprove), coinService.platformCoin.name),
                 ViewItem.Value(Translator.getString(R.string.Send_Confirmation_Amount), coinService.amountData(value).getFormatted(), ValueType.Regular),
                 ViewItem.Address(Translator.getString(R.string.Approve_Spender), addressTitle, addressValue)
         )
@@ -312,23 +312,23 @@ class SendEvmTransactionViewModel(
         when (trade) {
             is SwapMethodDecoration.Trade.ExactIn -> {
                 sections.add(SectionViewItem(listOf(
-                        ViewItem.Subhead(Translator.getString(R.string.Swap_FromAmountTitle), coinServiceIn.coin.title),
+                        ViewItem.Subhead(Translator.getString(R.string.Swap_FromAmountTitle), coinServiceIn.platformCoin.name),
                         ViewItem.Value(Translator.getString(R.string.Send_Confirmation_Amount), coinServiceIn.amountData(trade.amountIn).getFormatted(), ValueType.Outgoing)
                 )))
                 sections.add(SectionViewItem(listOf(
-                        ViewItem.Subhead(Translator.getString(R.string.Swap_ToAmountTitle), coinServiceOut.coin.title),
+                        ViewItem.Subhead(Translator.getString(R.string.Swap_ToAmountTitle), coinServiceOut.platformCoin.name),
                         getEstimatedSwapAmount(info?.let { coinServiceOut.amountData(it.estimatedOut).getFormatted() }, ValueType.Incoming),
                         ViewItem.Value(Translator.getString(R.string.Swap_Confirmation_Guaranteed), coinServiceOut.amountData(trade.amountOutMin).getFormatted(), ValueType.Regular)
                 )))
             }
             is SwapMethodDecoration.Trade.ExactOut -> {
                 sections.add(SectionViewItem(listOf(
-                        ViewItem.Subhead(Translator.getString(R.string.Swap_FromAmountTitle), coinServiceIn.coin.title),
+                        ViewItem.Subhead(Translator.getString(R.string.Swap_FromAmountTitle), coinServiceIn.platformCoin.name),
                         getEstimatedSwapAmount(info?.let { coinServiceOut.amountData(it.estimatedIn).getFormatted() }, ValueType.Outgoing),
                         ViewItem.Value(Translator.getString(R.string.Swap_Confirmation_Maximum), coinServiceIn.amountData(trade.amountInMax).getFormatted(), ValueType.Regular)
                 )))
                 sections.add(SectionViewItem(listOf(
-                        ViewItem.Subhead(Translator.getString(R.string.Swap_ToAmountTitle), coinServiceOut.coin.title),
+                        ViewItem.Subhead(Translator.getString(R.string.Swap_ToAmountTitle), coinServiceOut.platformCoin.name),
                         ViewItem.Value(Translator.getString(R.string.Swap_Confirmation_Guaranteed), coinServiceOut.amountData(trade.amountOut).getFormatted(), ValueType.Regular)
                 )))
             }
@@ -401,7 +401,7 @@ class SendEvmTransactionViewModel(
         is OneInchMethodDecoration.Token.Eip20 -> coinServiceFactory.getCoinService(token.address)
     }
 
-    private fun getCoinService(coin: Coin) = when (val coinType = coin.type) {
+    private fun getCoinService(coin: PlatformCoin) = when (val coinType = coin.coinType) {
         CoinType.Ethereum, CoinType.BinanceSmartChain -> coinServiceFactory.baseCoinService
         is CoinType.Erc20 -> coinServiceFactory.getCoinService(coinType.address)
         is CoinType.Bep20 -> coinServiceFactory.getCoinService(coinType.address)
@@ -412,7 +412,7 @@ class SendEvmTransactionViewModel(
         val viewItems = mutableListOf(
             ViewItem.Subhead(
                 Translator.getString(R.string.Send_Confirmation_YouSend),
-                coinServiceFactory.baseCoinService.coin.title
+                coinServiceFactory.baseCoinService.platformCoin.name
             ),
             ViewItem.Value(
                 Translator.getString(R.string.Send_Confirmation_Amount),
@@ -459,10 +459,10 @@ class SendEvmTransactionViewModel(
                 }
                 is EvmError.InsufficientBalanceWithFee,
                 is EvmError.ExecutionReverted -> {
-                    Translator.getString(R.string.EthereumTransaction_Error_InsufficientBalanceForFee, coinServiceFactory.baseCoinService.coin.code)
+                    Translator.getString(R.string.EthereumTransaction_Error_InsufficientBalanceForFee, coinServiceFactory.baseCoinService.platformCoin.code)
                 }
                 is EvmError.CannotEstimateSwap -> {
-                    Translator.getString(R.string.EthereumTransaction_Error_CannotEstimate, coinServiceFactory.baseCoinService.coin.code)
+                    Translator.getString(R.string.EthereumTransaction_Error_CannotEstimate, coinServiceFactory.baseCoinService.platformCoin.code)
                 }
                 is EvmError.LowerThanBaseGasLimit -> Translator.getString(R.string.EthereumTransaction_Error_LowerThanBaseGasLimit)
                 else -> convertedError.message ?: convertedError.javaClass.simpleName
