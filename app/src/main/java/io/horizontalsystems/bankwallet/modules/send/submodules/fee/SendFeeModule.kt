@@ -10,16 +10,16 @@ import io.horizontalsystems.bankwallet.entities.FeeRateState
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.SendModule.AmountInfo
 import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmountInfo
-import io.horizontalsystems.coinkit.models.Coin
-import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.entities.Currency
+import io.horizontalsystems.marketkit.models.CoinType
+import io.horizontalsystems.marketkit.models.PlatformCoin
 import java.math.BigDecimal
 import java.math.BigInteger
 
 
 object SendFeeModule {
 
-    class InsufficientFeeBalance(val coin: Coin, val coinProtocol: String, val feeCoin: Coin, val fee: CoinValue) :
+    class InsufficientFeeBalance(val coin: PlatformCoin, val coinProtocol: String, val feeCoin: PlatformCoin, val fee: CoinValue) :
             Exception()
 
     interface IView {
@@ -86,7 +86,7 @@ object SendFeeModule {
 
 
     class Factory(
-            private val coin: Coin,
+            private val coin: PlatformCoin,
             private val sendHandler: SendModule.ISendHandler,
             private val feeModuleDelegate: IFeeModuleDelegate,
             private val customPriorityUnit: CustomPriorityUnit?
@@ -95,8 +95,8 @@ object SendFeeModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
 
             val view = SendFeeView()
-            val feeRateProvider = FeeRateProviderFactory.provider(coin)
-            val feeCoinData = App.feeCoinProvider.feeCoinData(coin)
+            val feeRateProvider = FeeRateProviderFactory.provider(coin.coinType)
+            val feeCoinData = App.feeCoinProvider.feeCoinData(coin.coinType)
             val feeCoin = feeCoinData?.first ?: coin
 
             val baseCurrency = App.currencyManager.baseCurrency

@@ -12,8 +12,8 @@ import io.horizontalsystems.bankwallet.modules.send.SendModule.AmountInfo.Curren
 import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmountModule.ValidationError.InsufficientBalance
 import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmountModule.ValidationError.TooFewAmount
 import io.horizontalsystems.bankwallet.ui.extensions.AmountInputView
-import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.core.entities.Currency
+import io.horizontalsystems.marketkit.models.PlatformCoin
 import java.math.BigDecimal
 import java.math.RoundingMode
 
@@ -21,7 +21,7 @@ class SendAmountPresenter(
         val view: SendAmountModule.IView,
         private val interactor: SendAmountModule.IInteractor,
         private val presenterHelper: SendAmountPresenterHelper,
-        private val coin: Coin,
+        private val coin: PlatformCoin,
         private val baseCurrency: Currency)
     : ViewModel(), SendAmountModule.IViewDelegate, SendAmountModule.IInteractorDelegate, SendAmountModule.IAmountModule {
 
@@ -41,7 +41,7 @@ class SendAmountPresenter(
         private set
 
     override val coinAmount: CoinValue
-        get() = CoinValue(coin, amount ?: BigDecimal.ZERO)
+        get() = CoinValue(CoinValue.Kind.PlatformCoin(coin), amount ?: BigDecimal.ZERO)
 
     override val fiatAmount: CurrencyValue?
         get() {
@@ -56,7 +56,7 @@ class SendAmountPresenter(
     @Throws
     override fun primaryAmountInfo(): SendModule.AmountInfo {
         return when (inputType) {
-            SendModule.InputType.COIN -> CoinValueInfo(CoinValue(coin, validAmount()))
+            SendModule.InputType.COIN -> CoinValueInfo(CoinValue(CoinValue.Kind.PlatformCoin(coin), validAmount()))
             SendModule.InputType.CURRENCY -> {
                 this.xRate?.let { xRate ->
                     CurrencyValueInfo(CurrencyValue(baseCurrency, validAmount() * xRate))
@@ -67,7 +67,7 @@ class SendAmountPresenter(
 
     override fun secondaryAmountInfo(): SendModule.AmountInfo? {
         return when (inputType.reversed()) {
-            SendModule.InputType.COIN -> CoinValueInfo(CoinValue(coin, validAmount()))
+            SendModule.InputType.COIN -> CoinValueInfo(CoinValue(CoinValue.Kind.PlatformCoin(coin), validAmount()))
             SendModule.InputType.CURRENCY -> {
                 this.xRate?.let { xRate ->
                     CurrencyValueInfo(CurrencyValue(baseCurrency, validAmount() * xRate))
@@ -276,7 +276,7 @@ class SendAmountPresenter(
             if (amount > it) throw InsufficientBalance(amountInfo(it))
 
             if (it - amount < minimumRequiredBalance)
-                throw SendAmountModule.ValidationError.NotEnoughForMinimumRequiredBalance(CoinValue(coin, minimumRequiredBalance))
+                throw SendAmountModule.ValidationError.NotEnoughForMinimumRequiredBalance(CoinValue(CoinValue.Kind.PlatformCoin(coin), minimumRequiredBalance))
         }
 
         maximumAmount?.let {
@@ -287,7 +287,7 @@ class SendAmountPresenter(
     private fun amountInfo(coinValue: BigDecimal): SendModule.AmountInfo? {
         return when (inputType) {
             SendModule.InputType.COIN -> {
-                CoinValueInfo(CoinValue(coin, coinValue))
+                CoinValueInfo(CoinValue(CoinValue.Kind.PlatformCoin(coin), coinValue))
             }
             SendModule.InputType.CURRENCY -> {
                 xRate?.let { rate ->

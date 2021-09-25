@@ -7,7 +7,7 @@ import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.swap.settings.AddressResolutionService
 import io.horizontalsystems.bankwallet.modules.swap.settings.RecipientAddressViewModel
-import io.horizontalsystems.coinkit.models.Coin
+import io.horizontalsystems.marketkit.models.PlatformCoin
 import java.math.BigDecimal
 
 object SendAddressModule {
@@ -52,7 +52,7 @@ object SendAddressModule {
     }
 
     class Factory(
-            private val coin: Coin,
+            private val coin: PlatformCoin,
             private val sendHandler: SendModule.ISendHandler,
             private val addressModuleDelete: IAddressModuleDelegate,
             private val isResolutionEnabled: Boolean = true,
@@ -62,7 +62,7 @@ object SendAddressModule {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
 
-            val addressParser = App.addressParserFactory.parser(coin)
+            val addressParser = App.addressParserFactory.parser(coin.coinType)
             val presenter = SendAddressPresenter(addressModuleDelete)
 
             val resolutionService = AddressResolutionService(coin.code, isResolutionEnabled)

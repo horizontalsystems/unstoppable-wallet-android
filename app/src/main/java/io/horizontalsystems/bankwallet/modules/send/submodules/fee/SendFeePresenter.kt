@@ -10,8 +10,8 @@ import io.horizontalsystems.bankwallet.modules.send.SendModule.AmountInfo
 import io.horizontalsystems.bankwallet.modules.send.SendModule.AmountInfo.CoinValueInfo
 import io.horizontalsystems.bankwallet.modules.send.SendModule.AmountInfo.CurrencyValueInfo
 import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmountInfo
-import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.core.entities.Currency
+import io.horizontalsystems.marketkit.models.PlatformCoin
 import java.math.BigDecimal
 import java.math.BigInteger
 
@@ -19,9 +19,9 @@ class SendFeePresenter(
         val view: SendFeeModule.IView,
         private val interactor: SendFeeModule.IInteractor,
         private val helper: SendFeePresenterHelper,
-        private val baseCoin: Coin,
+        private val baseCoin: PlatformCoin,
         private val baseCurrency: Currency,
-        private val feeCoinData: Pair<Coin, String>?,
+        private val feeCoinData: Pair<PlatformCoin, String>?,
         private val customPriorityUnit: CustomPriorityUnit?,
         private val feeRateAdjustmentHelper: FeeRateAdjustmentHelper)
     : ViewModel(), SendFeeModule.IViewDelegate, SendFeeModule.IFeeModule, SendFeeModule.IInteractorDelegate {
@@ -49,7 +49,7 @@ class SendFeePresenter(
     private var feeRateAdjustmentInfo: FeeRateAdjustmentInfo = FeeRateAdjustmentInfo(SendAmountInfo.NotEntered, null, baseCurrency, null)
     private var recommendedFeeRate: BigInteger? = null
 
-    private val coin: Coin
+    private val coin: PlatformCoin
         get() = feeCoinData?.first ?: baseCoin
 
     private fun syncError() {
@@ -85,7 +85,7 @@ class SendFeePresenter(
         val availableFeeBalance = availableFeeBalance ?: return
 
         if (availableFeeBalance < fee) {
-            throw SendFeeModule.InsufficientFeeBalance(baseCoin, coinProtocol, feeCoin, CoinValue(feeCoin, fee))
+            throw SendFeeModule.InsufficientFeeBalance(baseCoin, coinProtocol, feeCoin, CoinValue(CoinValue.Kind.PlatformCoin(coin), fee))
         }
     }
 
@@ -102,7 +102,7 @@ class SendFeePresenter(
 
     private fun getSmartFee(): Long? {
         return fetchedFeeRate?.let {
-            feeRateAdjustmentHelper.applyRule(coin.type, feeRateAdjustmentInfo, it.toLong())
+            feeRateAdjustmentHelper.applyRule(coin.coinType, feeRateAdjustmentInfo, it.toLong())
         }
     }
 
@@ -132,7 +132,7 @@ class SendFeePresenter(
     override val primaryAmountInfo: AmountInfo
         get() {
             return when (inputType) {
-                SendModule.InputType.COIN -> CoinValueInfo(CoinValue(coin, fee))
+                SendModule.InputType.COIN -> CoinValueInfo(CoinValue(CoinValue.Kind.PlatformCoin(coin), fee))
                 SendModule.InputType.CURRENCY -> {
                     this.xRate?.let { xRate ->
                         CurrencyValueInfo(CurrencyValue(baseCurrency, fee * xRate))
@@ -144,7 +144,7 @@ class SendFeePresenter(
     override val secondaryAmountInfo: AmountInfo?
         get() {
             return when (inputType.reversed()) {
-                SendModule.InputType.COIN -> CoinValueInfo(CoinValue(coin, fee))
+                SendModule.InputType.COIN -> CoinValueInfo(CoinValue(CoinValue.Kind.PlatformCoin(coin), fee))
                 SendModule.InputType.CURRENCY -> {
                     this.xRate?.let { xRate ->
                         CurrencyValueInfo(CurrencyValue(baseCurrency, fee * xRate))
@@ -205,7 +205,7 @@ class SendFeePresenter(
     // SendFeeModule.IViewDelegate
 
     override fun onViewDidLoad() {
-        xRate = interactor.getRate(coin.type)
+        xRate = interactor.getRate(coin.coinType)
 
         syncFeeRateLabels()
         syncFees()

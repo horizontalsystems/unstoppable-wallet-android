@@ -16,12 +16,12 @@ import io.horizontalsystems.bankwallet.modules.send.submodules.SendSubmoduleFrag
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorDialog
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorItem
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
-import io.horizontalsystems.coinkit.models.Coin
+import io.horizontalsystems.marketkit.models.PlatformCoin
 import io.horizontalsystems.seekbar.FeeSeekBar
 import kotlinx.android.synthetic.main.view_send_fee.*
 
 class SendFeeFragment(
-        private val coin: Coin,
+        private val coin: PlatformCoin,
         private val feeModuleDelegate: SendFeeModule.IFeeModuleDelegate,
         private val sendHandler: SendModule.ISendHandler,
         private val customPriorityUnit: CustomPriorityUnit?)
@@ -107,7 +107,7 @@ class SendFeeFragment(
             if (error != null) {
                 val coinCode = error.coin.code
                 val tokenProtocol = error.coinProtocol
-                val feeCoinTitle = error.feeCoin.title
+                val feeCoinTitle = error.feeCoin.name
                 val formattedFee = App.numberFormatter.formatCoin(error.fee.value, error.fee.coin.code, 0, 8)
 
                 feeError.text = context?.getString(R.string.Send_Token_InsufficientFeeAlert, coinCode, tokenProtocol,
