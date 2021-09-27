@@ -5,10 +5,10 @@ import io.horizontalsystems.bankwallet.core.fiat.AmountTypeSwitchService.AmountT
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.send.SendModule.AmountInfo
-import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.core.entities.Currency
-import io.horizontalsystems.xrateskit.entities.LatestRate
+import io.horizontalsystems.marketkit.models.CoinPrice
+import io.horizontalsystems.marketkit.models.PlatformCoin
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -27,7 +27,7 @@ class FiatService(
     private val disposables = CompositeDisposable()
     private var latestRateDisposable: Disposable? = null
 
-    private var coin: Coin? = null
+    private var coin: PlatformCoin? = null
     private var coinAmount: BigDecimal? = null
     private var currencyAmount: BigDecimal? = null
 
@@ -66,17 +66,17 @@ class FiatService(
 
         val coin = coin ?: return
 
-        syncLatestRate(rateManager.latestRate(coin.type, currency.code))
-        latestRateDisposable = rateManager.latestRateObservable(coin.type, currency.code)
+        syncLatestRate(rateManager.latestRate(coin.coinType, currency.code))
+        latestRateDisposable = rateManager.latestRateObservable(coin.coinType, currency.code)
                 .subscribeOn(Schedulers.io())
                 .subscribe {
                     syncLatestRate(it)
                 }
     }
 
-    private fun syncLatestRate(latestRate: LatestRate?) {
-        rate = if (latestRate != null && !latestRate.isExpired()) {
-            latestRate.rate
+    private fun syncLatestRate(latestRate: CoinPrice?) {
+        rate = if (latestRate != null && !latestRate.expired) {
+            latestRate.value
         } else {
             null
         }
@@ -92,7 +92,7 @@ class FiatService(
 
         return when (switchService.amountType) {
             AmountType.Coin -> {
-                val primary = CoinValue(coin, coinAmount)
+                val primary = CoinValue(CoinValue.Kind.PlatformCoin(coin), coinAmount)
                 val secondary = currencyAmount?.let { CurrencyValue(currency, it) }
                 FullAmountInfo(
                         primaryInfo = AmountInfo.CoinValueInfo(primary),
@@ -104,7 +104,7 @@ class FiatService(
                 val currencyAmount = currencyAmount ?: return null
 
                 val primary = CurrencyValue(currency, currencyAmount)
-                val secondary = CoinValue(coin, coinAmount)
+                val secondary = CoinValue(CoinValue.Kind.PlatformCoin(coin), coinAmount)
                 FullAmountInfo(
                         primaryInfo = AmountInfo.CurrencyValueInfo(primary),
                         secondaryInfo = AmountInfo.CoinValueInfo(secondary),
@@ -140,7 +140,7 @@ class FiatService(
                 if (rate.compareTo(BigDecimal.ZERO) == 0)
                     BigDecimal.ZERO
                 else
-                    currencyAmount.divide(rate, coin.decimal, RoundingMode.FLOOR)
+                    currencyAmount.divide(rate, coin.decimals, RoundingMode.FLOOR)
             }
         }
         return fullAmountInfo()
@@ -152,7 +152,7 @@ class FiatService(
                 AmountType.Currency -> buildForCurrency(amount)
             }
 
-    fun set(coin: Coin?) {
+    fun set(coin: PlatformCoin?) {
         this.coin = coin
 
         rate = null
@@ -177,7 +177,7 @@ class FiatService(
 
         val primaryDecimal: Int
             get() = when (primaryInfo) {
-                is AmountInfo.CoinValueInfo -> primaryInfo.coinValue.coin.decimal
+                is AmountInfo.CoinValueInfo -> primaryInfo.coinValue.decimal
                 is AmountInfo.CurrencyValueInfo -> primaryInfo.currencyValue.currency.decimal
             }
     }

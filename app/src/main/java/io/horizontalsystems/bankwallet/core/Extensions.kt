@@ -7,9 +7,9 @@ import android.widget.ImageView
 import androidx.annotation.CheckResult
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
-import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.ethereumkit.core.toRawHexString
 import io.horizontalsystems.hodler.LockTimeInterval
+import io.horizontalsystems.marketkit.models.CoinType
 import io.horizontalsystems.views.SingleClickListener
 import io.reactivex.Flowable
 import io.reactivex.Observable
