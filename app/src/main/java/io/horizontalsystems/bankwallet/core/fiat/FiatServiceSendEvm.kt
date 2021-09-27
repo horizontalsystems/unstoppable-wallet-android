@@ -7,9 +7,9 @@ import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.send.SendModule
-import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.core.ICurrencyManager
-import io.horizontalsystems.xrateskit.entities.LatestRate
+import io.horizontalsystems.marketkit.models.CoinPrice
+import io.horizontalsystems.marketkit.models.PlatformCoin
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
@@ -28,7 +28,7 @@ class FiatServiceSendEvm(
     private val disposable = CompositeDisposable()
     private var marketInfoDisposable: Disposable? = null
 
-    private var coin: Coin? = null
+    private var coin: PlatformCoin? = null
 
     private var toggleAvailableSubject = PublishSubject.create<Boolean>()
     val toggleAvailableObservable: Flowable<Boolean>
@@ -81,9 +81,9 @@ class FiatServiceSendEvm(
         sync()
     }
 
-    private fun syncLatestRate(latestRate: LatestRate?) {
-        if (latestRate != null && !latestRate.isExpired()) {
-            rate = latestRate.rate
+    private fun syncLatestRate(latestRate: CoinPrice?) {
+        if (latestRate != null && !latestRate.expired) {
+            rate = latestRate.value
             if (coinAmountLocked) {
                 syncCurrencyAmount()
             } else {
@@ -102,7 +102,7 @@ class FiatServiceSendEvm(
     private fun sync() {
         val coin = coin
         if (coin != null) {
-            val coinAmountInfo = SendModule.AmountInfo.CoinValueInfo(CoinValue(coin, coinAmount))
+            val coinAmountInfo = SendModule.AmountInfo.CoinValueInfo(CoinValue(CoinValue.Kind.PlatformCoin(coin), coinAmount))
             val currencyAmountInfo = currencyAmount?.let { SendModule.AmountInfo.CurrencyValueInfo(CurrencyValue(currency, it)) }
 
             when (switchService.amountType) {
@@ -128,7 +128,7 @@ class FiatServiceSendEvm(
         val coin = coin
 
         _coinAmount = if (coin != null && currencyAmount != null && rate != null && rate > BigDecimal.ZERO) {
-            currencyAmount.divide(rate, coin.decimal, RoundingMode.FLOOR)
+            currencyAmount.divide(rate, coin.decimals, RoundingMode.FLOOR)
         } else {
             BigDecimal.ZERO
         }
@@ -138,16 +138,16 @@ class FiatServiceSendEvm(
         currencyAmount = rate?.let { coinAmount * it }
     }
 
-    fun setCoin(coin: Coin?) {
+    fun setCoin(coin: PlatformCoin?) {
         this.coin = coin
 
         marketInfoDisposable?.dispose()
         marketInfoDisposable = null
 
         if (coin != null) {
-            syncLatestRate(rateManager.latestRate(coin.type, currency.code))
+            syncLatestRate(rateManager.latestRate(coin.coinType, currency.code))
 
-            rateManager.latestRateObservable(coin.type, currency.code)
+            rateManager.latestRateObservable(coin.coinType, currency.code)
                     .subscribeIO { latestRate ->
                         syncLatestRate(latestRate)
                     }.let { disposable.add(it) }
