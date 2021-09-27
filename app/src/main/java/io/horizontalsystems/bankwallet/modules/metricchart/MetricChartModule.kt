@@ -5,13 +5,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.managers.TimePeriod
 import io.horizontalsystems.bankwallet.modules.coin.metricchart.CoinTradingVolumeFetcher
 import io.horizontalsystems.bankwallet.modules.coin.metricchart.CoinTvlFetcher
 import io.horizontalsystems.bankwallet.modules.market.marketglobal.MarketGlobalFetcher
 import io.horizontalsystems.chartview.ChartData
 import io.horizontalsystems.chartview.ChartView
-import io.horizontalsystems.coinkit.models.CoinType
-import io.horizontalsystems.xrateskit.entities.TimePeriod
+import io.horizontalsystems.marketkit.models.CoinType
 import io.reactivex.Single
 import kotlinx.android.parcel.Parcelize
 import java.math.BigDecimal
