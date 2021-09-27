@@ -3,9 +3,9 @@ package io.horizontalsystems.bankwallet.modules.transactionInfo
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.core.providers.Translator
-import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.LastBlockInfo
+import io.horizontalsystems.bankwallet.entities.TransactionValue
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.binancechain.BinanceChainIncomingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.binancechain.BinanceChainOutgoingTransactionRecord
@@ -19,8 +19,8 @@ import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoIt
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionStatusViewItem.*
 import io.horizontalsystems.bankwallet.modules.transactionInfo.adapters.TransactionInfoViewItem
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionStatus
-import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.core.helpers.DateHelper
+import io.horizontalsystems.marketkit.models.CoinType
 import io.horizontalsystems.views.ListPosition.*
 import java.math.BigDecimal
 import java.math.RoundingMode
@@ -36,7 +36,7 @@ class TransactionInfoViewItemFactory(
 
     fun getMiddleSectionItems(
         transaction: TransactionRecord,
-        rates: Map<Coin, CurrencyValue>,
+        rates: Map<CoinType, CurrencyValue>,
         lastBlockInfo: LastBlockInfo?,
         explorerData: TransactionInfoModule.ExplorerData
     ): List<TransactionInfoViewItem?> {
@@ -62,7 +62,7 @@ class TransactionInfoViewItemFactory(
                 middleSectionTypes.add(statusType)
                 middleSectionTypes.add(date)
 
-                rates[transaction.value.coin]?.let {
+                rates[transaction.value.coinType]?.let {
                     middleSectionTypes.add(getHistoricalRate(it, transaction.value))
                 }
 
@@ -85,7 +85,7 @@ class TransactionInfoViewItemFactory(
                     getActionsSection(
                         getString(R.string.Transactions_Receive),
                         transaction.value,
-                        rates[transaction.value.coin],
+                        rates[transaction.value.coinType],
                         true
                     )
                 )
@@ -106,9 +106,9 @@ class TransactionInfoViewItemFactory(
                     middleSectionTypes.add(it)
                 }
                 middleSectionTypes.add(date)
-                middleSectionTypes.add(getEvmFeeItem(transaction.fee, rates[transaction.value.coin], status))
+                middleSectionTypes.add(getEvmFeeItem(transaction.fee, rates[transaction.value.coinType], status))
 
-                rates[transaction.value.coin]?.let {
+                rates[transaction.value.coinType]?.let {
                     middleSectionTypes.add(getHistoricalRate(it, transaction.value))
                 }
 
@@ -131,7 +131,7 @@ class TransactionInfoViewItemFactory(
                     getActionsSection(
                         getString(R.string.Transactions_Send),
                         transaction.value,
-                        rates[transaction.value.coin],
+                        rates[transaction.value.coinType],
                         false
                     )
                 )
@@ -149,25 +149,26 @@ class TransactionInfoViewItemFactory(
 
                 middleSectionTypes.add(statusType)
                 middleSectionTypes.add(date)
-                middleSectionTypes.add(getEvmFeeItem(transaction.fee, rates[transaction.fee.coin], status))
+                middleSectionTypes.add(getEvmFeeItem(transaction.fee, rates[transaction.fee.coinType], status))
 
-                transaction.valueOut?.let { valueOut ->
-                    val priceValue = if (valueOut.value.compareTo(BigDecimal.ZERO) == 0) {
+                val valueOut = transaction.valueOut
+                val valueIn = transaction.valueIn
+                if (valueOut is TransactionValue.CoinValue && valueIn is TransactionValue.CoinValue) {
+                    val priceValue = if (valueOut.decimalValue.compareTo(BigDecimal.ZERO) == 0) {
                         Translator.getString(R.string.NotAvailable)
                     } else {
-                        val valueIn = transaction.valueIn
-                        val price = valueIn.value.divide(
-                            valueOut.value,
-                            min(valueOut.coin.decimal, valueIn.coin.decimal),
+                        val price = valueIn.decimalValue.divide(
+                            valueOut.decimalValue,
+                            min(valueOut.platformCoin.decimals, valueIn.platformCoin.decimals),
                             RoundingMode.HALF_EVEN
                         ).abs()
-                        val formattedPrice = numberFormatter.formatCoin(price, transaction.valueIn.coin.code, 0, 8)
-                        val formattedFiatPrice = rates[transaction.valueIn.coin]?.let { rate ->
+                        val formattedPrice = numberFormatter.formatCoin(price, valueIn.coinCode, 0, 8)
+                        val formattedFiatPrice = rates[valueIn.coinType]?.let { rate ->
                             numberFormatter.formatFiat(price * rate.value, rate.currency.symbol, 0, 2).let {
                                 " ($it)"
                             }
                         } ?: ""
-                        "${valueOut.coin.code} = $formattedPrice$formattedFiatPrice"
+                        "${valueOut.coinCode} = $formattedPrice$formattedFiatPrice"
                     }
 
                     middleSectionTypes.add(
@@ -196,20 +197,20 @@ class TransactionInfoViewItemFactory(
                 items.addAll(
                     getActionsSection(
                         getYouPayString(status),
-                        transaction.valueIn,
-                        rates[transaction.valueIn.coin],
+                        valueIn,
+                        rates[valueIn.coinType],
                         false
                     )
                 )
 
                 //Top section
-                transaction.valueOut?.let {
+                valueOut?.let {
                     if (!transaction.foreignRecipient) {
                         items.addAll(
                             getActionsSection(
                                 getYouGetString(status),
-                                transaction.valueOut,
-                                rates[transaction.valueOut.coin],
+                                valueOut,
+                                rates[valueOut.coinType],
                                 true
                             )
                         )
@@ -227,14 +228,14 @@ class TransactionInfoViewItemFactory(
             is ApproveTransactionRecord -> {
 
                 val middleSectionTypes = mutableListOf<TransactionInfoItemType>()
-                val rate = rates[transaction.value.coin]
+                val rate = rates[transaction.value.coinType]
 
                 middleSectionTypes.add(date)
                 middleSectionTypes.add(statusType)
                 getOptionsItem(status)?.let {
                     middleSectionTypes.add(it)
                 }
-                middleSectionTypes.add(getEvmFeeItem(transaction.fee, rates[transaction.fee.coin], status))
+                middleSectionTypes.add(getEvmFeeItem(transaction.fee, rates[transaction.fee.coinType], status))
 
                 rate?.let {
                     middleSectionTypes.add(getHistoricalRate(it, transaction.value))
@@ -253,25 +254,28 @@ class TransactionInfoViewItemFactory(
                 )
 
                 val fiatAmountFormatted = rate?.let {
-                    numberFormatter.formatFiat(
-                        (it.value * transaction.value.value).abs(),
-                        it.currency.symbol,
-                        0,
-                        2
-                    )
+                    transaction.value.decimalValue?.let { decimalValue ->
+                        numberFormatter.formatFiat(
+                            (it.value * decimalValue).abs(),
+                            it.currency.symbol,
+                            0,
+                            2
+                        )
+                    }
                 } ?: "---"
 
-                val coinAmountFormatted =
+                val coinAmountFormatted = transaction.value.decimalValue?.let { decimalValue ->
                     numberFormatter.formatCoin(
-                        transaction.value.value,
-                        transaction.value.coin.code,
+                        decimalValue,
+                        transaction.value.coinCode,
                         0,
                         8
                     )
+                } ?: ""
 
                 val coinAmountString = if (transaction.value.isMaxValue) translator.getString(
                     R.string.Transaction_Unlimited,
-                    transaction.value.coin.code
+                    transaction.value.coinCode
                 ) else coinAmountFormatted
 
                 val fiatAmountColoredValue = ColoredValue(
@@ -284,7 +288,7 @@ class TransactionInfoViewItemFactory(
                     TransactionInfoViewItem(
                         TransactionType(
                             getString(R.string.Transactions_Approve),
-                            transaction.value.coin.title
+                            transaction.value.coinName
                         ), First
                     )
                 )
@@ -326,7 +330,7 @@ class TransactionInfoViewItemFactory(
                     if (transactionValue.value != BigDecimal.ZERO && !transaction.foreignTransaction) {
                         youPaySection.add(
                             getAmount(
-                                rates[transaction.value.coin],
+                                rates[transaction.value.coinType],
                                 transactionValue,
                                 false
                             )
@@ -336,7 +340,7 @@ class TransactionInfoViewItemFactory(
                     transaction.outgoingEip20Events.forEachIndexed { index, (_, eventCoinValue) ->
                         youPaySection.add(
                             getAmount(
-                                rates[eventCoinValue.coin],
+                                rates[eventCoinValue.coinType],
                                 eventCoinValue,
                                 false
                             )
@@ -357,14 +361,16 @@ class TransactionInfoViewItemFactory(
                     )
 
                     transaction.incomingInternalETHs.firstOrNull()?.let { (_, coinValue) ->
-                        val ethCoin = coinValue.coin
+                        coinValue as TransactionValue.CoinValue
+
+                        val ethCoin = coinValue.coinType
                         val ethSum =
-                            transaction.incomingInternalETHs.sumOf { (_, eventCoinValue) -> eventCoinValue.value }
+                            transaction.incomingInternalETHs.sumOf { (_, eventCoinValue) -> eventCoinValue.decimalValue ?: BigDecimal.ZERO }
 
                         youGotSection.add(
                             getAmount(
                                 rates[ethCoin],
-                                CoinValue(ethCoin, ethSum),
+                                TransactionValue.CoinValue(coinValue.platformCoin, ethSum),
                                 true
                             )
                         )
@@ -373,7 +379,7 @@ class TransactionInfoViewItemFactory(
                     transaction.incomingEip20Events.forEach { (_, eventCoinValue) ->
                         youGotSection.add(
                             getAmount(
-                                rates[eventCoinValue.coin],
+                                rates[eventCoinValue.coinType],
                                 eventCoinValue,
                                 true
                             )
@@ -386,7 +392,7 @@ class TransactionInfoViewItemFactory(
 
                 middleSectionTypes.add(date)
                 middleSectionTypes.add(statusType)
-                middleSectionTypes.add(getEvmFeeItem(transaction.fee, rates[transaction.fee.coin], status))
+                middleSectionTypes.add(getEvmFeeItem(transaction.fee, rates[transaction.fee.coinType], status))
 
                 middleSectionTypes.add(
                     Decorated(
@@ -411,7 +417,7 @@ class TransactionInfoViewItemFactory(
                 middleSectionTypes.add(date)
                 middleSectionTypes.add(statusType)
 
-                rates[transaction.value.coin]?.let {
+                rates[transaction.value.coinType]?.let {
                     middleSectionTypes.add(getHistoricalRate(it, transaction.value))
                 }
 
@@ -460,7 +466,7 @@ class TransactionInfoViewItemFactory(
                     getActionsSection(
                         getString(R.string.Transactions_Receive),
                         transaction.value,
-                        rates[transaction.value.coin],
+                        rates[transaction.value.coinType],
                         true
                     )
                 )
@@ -481,10 +487,10 @@ class TransactionInfoViewItemFactory(
                 middleSectionTypes.add(statusType)
 
                 transaction.fee?.let {
-                    middleSectionTypes.add(getFee(rates[transaction.value.coin], it))
+                    middleSectionTypes.add(getFee(rates[transaction.value.coinType], it))
                 }
 
-                rates[transaction.value.coin]?.let {
+                rates[transaction.value.coinType]?.let {
                     middleSectionTypes.add(getHistoricalRate(it, transaction.value))
                 }
 
@@ -533,7 +539,7 @@ class TransactionInfoViewItemFactory(
                     getActionsSection(
                         getString(R.string.Transactions_Send),
                         transaction.value,
-                        rates[transaction.value.coin],
+                        rates[transaction.value.coinType],
                         false
                     )
                 )
@@ -552,7 +558,7 @@ class TransactionInfoViewItemFactory(
                 middleSectionTypes.add(date)
                 middleSectionTypes.add(statusType)
 
-                rates[transaction.value.coin]?.let {
+                rates[transaction.value.coinType]?.let {
                     middleSectionTypes.add(getHistoricalRate(it, transaction.value))
                 }
 
@@ -575,7 +581,7 @@ class TransactionInfoViewItemFactory(
                     getActionsSection(
                         getString(R.string.Transactions_Receive),
                         transaction.value,
-                        rates[transaction.value.coin],
+                        rates[transaction.value.coinType],
                         true
                     )
                 )
@@ -594,9 +600,9 @@ class TransactionInfoViewItemFactory(
                 middleSectionTypes.add(date)
                 middleSectionTypes.add(statusType)
 
-                middleSectionTypes.add(getFee(rates[transaction.value.coin], transaction.fee))
+                middleSectionTypes.add(getFee(rates[transaction.value.coinType], transaction.fee))
 
-                rates[transaction.value.coin]?.let {
+                rates[transaction.value.coinType]?.let {
                     middleSectionTypes.add(getHistoricalRate(it, transaction.value))
                 }
 
@@ -619,7 +625,7 @@ class TransactionInfoViewItemFactory(
                     getActionsSection(
                         getString(R.string.Transactions_Send),
                         transaction.value,
-                        rates[transaction.value.coin],
+                        rates[transaction.value.coinType],
                         false
                     )
                 )
@@ -695,15 +701,15 @@ class TransactionInfoViewItemFactory(
 
     private fun getActionsSection(
         title: String,
-        coinValue: CoinValue,
+        transactionValue: TransactionValue,
         rate: CurrencyValue?,
         incoming: Boolean?
     ): List<TransactionInfoViewItem?> {
         val items = mutableListOf<TransactionInfoViewItem?>()
 
-        items.add(TransactionInfoViewItem(TransactionType(title, coinValue.coin.title), First))
+        items.add(TransactionInfoViewItem(TransactionType(title, transactionValue.coinName), First))
 
-        items.add(TransactionInfoViewItem(getAmount(rate, coinValue, incoming), Last))
+        items.add(TransactionInfoViewItem(getAmount(rate, transactionValue, incoming), Last))
 
         items.add(null) //add divider
 
@@ -739,50 +745,53 @@ class TransactionInfoViewItemFactory(
 
     private fun getAmount(
         rate: CurrencyValue?,
-        coinValue: CoinValue,
+        transactionValue: TransactionValue,
         incoming: Boolean?
     ): TransactionInfoItemType {
         val valueInFiat = rate?.let {
-            numberFormatter.formatFiat(
-                (it.value * coinValue.value).abs(),
-                it.currency.symbol,
-                0,
-                2
-            )
+            transactionValue.decimalValue?.let { decimalValue ->
+                numberFormatter.formatFiat(
+                    (it.value * decimalValue).abs(),
+                    it.currency.symbol,
+                    0,
+                    2
+                )
+            }
         } ?: "---"
         val fiatValueColored = ColoredValue(valueInFiat, getAmountColor(incoming))
-        val coinValueFormatted =
-            numberFormatter.formatCoin(coinValue.value.abs(), coinValue.coin.code, 0, 8)
+        val coinValueFormatted =transactionValue.decimalValue?.let { decimalValue ->
+            numberFormatter.formatCoin(decimalValue.abs(), transactionValue.coinCode, 0, 8)
+        } ?: "---"
 
         return Amount(coinValueFormatted, fiatValueColored)
     }
 
     private fun getHistoricalRate(
         rate: CurrencyValue,
-        coinValue: CoinValue,
+        transactionValue: TransactionValue,
     ): TransactionInfoItemType {
         val rateFormatted =
             numberFormatter.formatFiat(rate.value, rate.currency.symbol, 2, 4)
         val rateValue = translator.getString(
             R.string.Balance_RatePerCoin,
             rateFormatted,
-            coinValue.coin.code
+            transactionValue.coinCode
         )
         return Value(getString(R.string.TransactionInfo_HistoricalRate), rateValue)
     }
 
-    private fun getFee(rate: CurrencyValue?, coinValue: CoinValue): TransactionInfoItemType {
-        val feeAmountString = getFeeAmountString(rate, coinValue)
+    private fun getFee(rate: CurrencyValue?, transactionValue: TransactionValue): TransactionInfoItemType {
+        val feeAmountString = getFeeAmountString(rate, transactionValue)
 
         return Value(getString(R.string.TransactionInfo_Fee), feeAmountString)
     }
 
     private fun getEvmFeeItem(
-        coinValue: CoinValue,
+        transactionValue: TransactionValue,
         rate: CurrencyValue?,
         status: TransactionStatus
     ): TransactionInfoItemType {
-        val feeAmountString = getFeeAmountString(rate, coinValue)
+        val feeAmountString = getFeeAmountString(rate, transactionValue)
         val feeTitle: String = when (status) {
             TransactionStatus.Pending -> getString(R.string.TransactionInfo_FeeEstimated)
             is TransactionStatus.Processing,
@@ -793,17 +802,20 @@ class TransactionInfoViewItemFactory(
         return Value(feeTitle, feeAmountString)
     }
 
-    private fun getFeeAmountString(rate: CurrencyValue?, coinValue: CoinValue): String {
+    private fun getFeeAmountString(rate: CurrencyValue?, transactionValue: TransactionValue): String {
         val feeInFiat = rate?.let {
-            numberFormatter.formatFiat(
-                it.value * coinValue.value,
-                it.currency.symbol,
-                2,
-                4
-            )
+            transactionValue.decimalValue?.let { decimalValue ->
+                numberFormatter.formatFiat(
+                    it.value * decimalValue,
+                    it.currency.symbol,
+                    2,
+                    4
+                )
+            }
         }
-        val feeInCoin =
-            numberFormatter.formatCoin(coinValue.value, coinValue.coin.code, 0, 8)
+        val feeInCoin = transactionValue.decimalValue?.let { decimalValue ->
+            numberFormatter.formatCoin(decimalValue, transactionValue.coinCode, 0, 8)
+        } ?: ""
 
         return feeInCoin + (if (feeInFiat != null) " | $feeInFiat" else "")
     }

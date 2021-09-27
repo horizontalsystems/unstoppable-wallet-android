@@ -9,8 +9,8 @@ import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.LastBlockInfo
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionItem
-import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.core.helpers.DateHelper
+import io.horizontalsystems.marketkit.models.CoinType
 
 object TransactionInfoModule {
 
@@ -59,5 +59,5 @@ data class TransactionInfoItem(
     val record: TransactionRecord,
     val lastBlockInfo: LastBlockInfo?,
     val explorerData: TransactionInfoModule.ExplorerData,
-    val rates: Map<Coin, CurrencyValue>
+    val rates: Map<CoinType, CurrencyValue>
 )
