@@ -4,26 +4,26 @@ import io.horizontalsystems.bankwallet.core.ICustomTokenStorage
 import io.horizontalsystems.bankwallet.entities.CustomToken
 import io.horizontalsystems.marketkit.models.CoinType
 
-class CustomTokenStorage(private val appDatabase: AppDatabase) : ICustomTokenStorage {
+class CustomTokenStorage(appDatabase: AppDatabase) : ICustomTokenStorage {
     private val dao = appDatabase.customTokenDao()
 
     override fun customTokens(): List<CustomToken> {
-        TODO("Not yet implemented")
+        return dao.getCustomTokens()
     }
 
     override fun customTokens(filter: String): List<CustomToken> {
-        TODO("Not yet implemented")
+        return dao.getCustomTokens("%$filter%")
     }
 
     override fun customTokens(coinTypeIds: List<String>): List<CustomToken> {
-        TODO("Not yet implemented")
+        return dao.getCustomTokens(coinTypeIds)
     }
 
     override fun customToken(coinType: CoinType): CustomToken? {
-        TODO("Not yet implemented")
+        return dao.getCustomToken(coinType)
     }
 
     override fun save(customTokens: List<CustomToken>) {
-        TODO("Not yet implemented")
+        dao.insert(customTokens)
     }
 }

@@ -7,7 +7,7 @@ import com.trustwallet.walletconnect.models.session.WCSession
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.PriceAlert
 import io.horizontalsystems.bankwallet.entities.SubscriptionJob
-import io.horizontalsystems.coinkit.models.CoinType
+import io.horizontalsystems.marketkit.models.CoinType
 import java.math.BigDecimal
 import java.util.*
 
@@ -69,12 +69,12 @@ class DatabaseConverters {
 
     @TypeConverter
     fun fromCoinType(coinType: CoinType?): String {
-        return coinType?.getCoinId() ?: ""
+        return coinType?.id ?: ""
     }
 
     @TypeConverter
     fun toCoinType(value: String): CoinType {
-        return CoinType.fromString(value)
+        return CoinType.fromId(value)
     }
 
     @TypeConverter
