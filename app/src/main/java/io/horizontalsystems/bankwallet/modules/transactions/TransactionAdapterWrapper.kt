@@ -36,7 +36,7 @@ class TransactionAdapterWrapper(
     }
 
     private fun subscribeForUpdates() {
-        transactionsAdapter.getTransactionRecordsFlowable(transactionWallet.coin, transactionType)
+        transactionsAdapter.getTransactionRecordsFlowable(transactionWallet.platformCoin, transactionType)
             .subscribeIO {
                 transactionRecords.clear()
                 allLoaded = false
@@ -58,7 +58,7 @@ class TransactionAdapterWrapper(
             transactionsAdapter
                 .getTransactionsAsync(
                     transactionRecords.lastOrNull(),
-                    transactionWallet.coin,
+                    transactionWallet.platformCoin,
                     numberOfRecordsToRequest,
                     transactionType
                 )

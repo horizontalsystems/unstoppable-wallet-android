@@ -9,7 +9,7 @@ class TransactionFilterService {
 
     fun setWallets(wallets: List<Wallet>) {
         transactionWallets = wallets.map {
-            TransactionWallet(it.coin, it.transactionSource)
+            TransactionWallet(it.platformCoin, it.transactionSource)
         }
 
         // Reset selectedWallet if it does not exist in the new wallets list or leave it if it does

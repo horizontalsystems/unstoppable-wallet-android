@@ -8,6 +8,7 @@ import java.math.BigInteger
 
 sealed class TransactionValue {
     abstract val coinName: String
+    abstract val coinType: CoinType
     abstract val coinCode: String
     abstract val coin: Coin?
     abstract val decimalValue: BigDecimal?
@@ -18,6 +19,7 @@ sealed class TransactionValue {
 
     data class CoinValue(val platformCoin: PlatformCoin, val value: BigDecimal) : TransactionValue() {
         override val coin: Coin = platformCoin.coin
+        override val coinType: CoinType = platformCoin.coinType
         override val coinName: String = coin.name ?: ""
         override val coinCode: String = coin.code ?: ""
         override val decimalValue: BigDecimal = value
@@ -32,7 +34,7 @@ sealed class TransactionValue {
 
     }
 
-    data class RawValue(val coinType: CoinType, val value: BigInteger) : TransactionValue() {
+    data class RawValue(override val coinType: CoinType, val value: BigInteger) : TransactionValue() {
         override val coin: Coin? = null
         override val coinName: String = ""
         override val coinCode: String = ""
