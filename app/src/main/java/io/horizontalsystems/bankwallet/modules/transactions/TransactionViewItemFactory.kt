@@ -3,8 +3,8 @@ package io.horizontalsystems.bankwallet.modules.transactions
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.providers.Translator
-import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import io.horizontalsystems.bankwallet.entities.TransactionValue
 import io.horizontalsystems.bankwallet.entities.transactionrecords.binancechain.BinanceChainIncomingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.binancechain.BinanceChainOutgoingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.BitcoinIncomingTransactionRecord
@@ -343,8 +343,9 @@ class TransactionViewItemFactory {
 
         if (record.value.isMaxValue) {
             primaryValueText = "∞"
-            secondaryValueText =
-                Translator.getString(R.string.Transaction_Unlimited, record.value.coin.code)
+            secondaryValueText = record.value.coin?.let {
+                Translator.getString(R.string.Transaction_Unlimited, it.code)
+            } ?: ""
         } else {
             primaryValueText = currencyValue?.let { getCurrencyString(it) }
             secondaryValueText = getCoinString(record.value)
@@ -372,14 +373,16 @@ class TransactionViewItemFactory {
         return App.numberFormatter.formatFiat(currencyValue.value.abs(), currencyValue.currency.symbol, 0, 2)
     }
 
-    private fun getCoinString(coinValue: CoinValue): String {
-        val significantDecimal = App.numberFormatter.getSignificantDecimalCoin(coinValue.value)
-        return App.numberFormatter.formatCoin(
-            coinValue.value.abs(),
-            coinValue.coin.code,
-            0,
-            significantDecimal
-        )
+    private fun getCoinString(transactionValue: TransactionValue): String {
+        return transactionValue.decimalValue?.let { decimalValue ->
+            val significantDecimal = App.numberFormatter.getSignificantDecimalCoin(decimalValue)
+            App.numberFormatter.formatCoin(
+                decimalValue.abs(),
+                transactionValue.coin?.code ?: "",
+                0,
+                significantDecimal
+            )
+        } ?: ""
     }
 
     private fun getNameOrAddressTruncated(address: String): String {

@@ -119,8 +119,8 @@ class TransactionsFragment : BaseFragment(R.layout.fragment_transactions) {
 
             filterCoins?.let {
                 val tabItems = it.mapNotNull {
-                    it.item.coin?.let { coin ->
-                        TabItem(coin.code, it.selected, it.item, AppLayoutHelper.getCoinDrawableOrDefaultResId(requireContext(), coin.type))
+                    it.item.platformCoin?.let { platformCoin ->
+                        TabItem(platformCoin.code, it.selected, it.item, AppLayoutHelper.getCoinDrawableOrDefaultResId(requireContext(), platformCoin.coinType))
                     }
                 }
 

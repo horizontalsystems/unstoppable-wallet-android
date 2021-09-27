@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.CoinSettings
-import io.horizontalsystems.coinkit.models.Coin
+import io.horizontalsystems.marketkit.models.PlatformCoin
 import java.math.BigDecimal
 import java.util.*
 
@@ -27,8 +27,6 @@ object TransactionsModule {
             ) as T
         }
     }
-
-    data class Filter(val coin: Coin?)
 }
 
 data class TransactionLockInfo(
@@ -45,7 +43,7 @@ sealed class TransactionStatus {
 }
 
 data class TransactionWallet(
-    val coin: Coin?,
+    val platformCoin: PlatformCoin?,
     val source: TransactionSource
 )
 
