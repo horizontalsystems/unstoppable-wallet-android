@@ -14,10 +14,10 @@ import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransac
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoOption
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
-import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.core.hexStringToByteArray
 import io.horizontalsystems.ethereumkit.models.TransactionData
+import io.horizontalsystems.marketkit.models.CoinType
 import java.math.BigInteger
 
 object TransactionInfoOptionsModule {
@@ -42,8 +42,8 @@ object TransactionInfoOptionsModule {
                 EthereumKit.NetworkType.EthRopsten,
                 EthereumKit.NetworkType.EthKovan,
                 EthereumKit.NetworkType.EthGoerli,
-                EthereumKit.NetworkType.EthRinkeby -> App.coinKit.getCoin(CoinType.Ethereum)!!
-                EthereumKit.NetworkType.BscMainNet -> App.coinKit.getCoin(CoinType.BinanceSmartChain)!!
+                EthereumKit.NetworkType.EthRinkeby -> App.marketKit.platformCoin(CoinType.Ethereum)!!
+                EthereumKit.NetworkType.BscMainNet -> App.marketKit.platformCoin(CoinType.BinanceSmartChain)!!
             }
         }
 
@@ -56,7 +56,7 @@ object TransactionInfoOptionsModule {
 
         private val transactionService by lazy {
             val feeRateProvider = FeeRateProviderFactory.customRangedFeeProvider(
-                coin = baseCoin,
+                coinType = baseCoin.coinType,
                 customLowerBound = transaction.gasPrice,
                 customUpperBound = null,
                 multiply = 1.2
@@ -67,7 +67,7 @@ object TransactionInfoOptionsModule {
         private val coinServiceFactory by lazy {
             EvmCoinServiceFactory(
                 baseCoin,
-                App.coinKit,
+                App.marketKit,
                 App.currencyManager,
                 App.xRateManager
             )
