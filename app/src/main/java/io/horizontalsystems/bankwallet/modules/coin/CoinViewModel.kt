@@ -4,17 +4,23 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.Clearable
+import io.horizontalsystems.bankwallet.core.managers.ChartType
+import io.horizontalsystems.bankwallet.core.managers.CoinMarketDetails
+import io.horizontalsystems.bankwallet.core.managers.MarketTicker
+import io.horizontalsystems.bankwallet.core.managers.TimePeriod
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.coin.adapters.CoinChartAdapter
 import io.horizontalsystems.bankwallet.modules.coin.adapters.CoinSubtitleAdapter
-import io.horizontalsystems.bankwallet.modules.market.*
+import io.horizontalsystems.bankwallet.modules.market.SortingField
+import io.horizontalsystems.bankwallet.modules.market.sortedByDescendingNullLast
+import io.horizontalsystems.bankwallet.modules.market.sortedByNullLast
 import io.horizontalsystems.chartview.ChartView
-import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.SingleLiveEvent
+import io.horizontalsystems.marketkit.models.CoinPrice
+import io.horizontalsystems.marketkit.models.CoinType
 import io.horizontalsystems.views.ListPosition
-import io.horizontalsystems.xrateskit.entities.*
 import io.reactivex.disposables.CompositeDisposable
 import retrofit2.HttpException
 import java.math.BigDecimal
@@ -101,7 +107,7 @@ class CoinViewModel(
 
         updateFavoriteNotificationItemState()
 
-        service.latestRateAsync
+        service.coinPriceAsync
                 .subscribeIO {
                     updateLatestRate(it)
                 }
@@ -159,8 +165,8 @@ class CoinViewModel(
                 }
     }
 
-    private fun updateLatestRate(latestRate: LatestRate) {
-        val currencyValue = CurrencyValue(service.currency, latestRate.rate)
+    private fun updateLatestRate(latestRate: CoinPrice) {
+        val currencyValue = CurrencyValue(service.currency, latestRate.value)
         latestRateText = factory.getFormattedLatestRate(currencyValue)
     }
 
