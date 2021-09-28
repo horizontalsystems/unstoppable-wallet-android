@@ -4,6 +4,7 @@ import android.os.Parcelable
 import androidx.annotation.DrawableRes
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
+import io.horizontalsystems.bankwallet.core.managers.*
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.coin.CoinDataClickType.SecurityInfo
@@ -14,11 +15,10 @@ import io.horizontalsystems.chartview.ChartDataFactory
 import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.chartview.models.ChartPoint
 import io.horizontalsystems.chartview.models.MacdInfo
-import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.core.helpers.DateHelper
+import io.horizontalsystems.marketkit.models.CoinType
 import io.horizontalsystems.views.ListPosition
-import io.horizontalsystems.xrateskit.entities.*
 import kotlinx.android.parcel.Parcelize
 import java.lang.Long.max
 import java.math.BigDecimal

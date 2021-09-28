@@ -4,14 +4,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.core.IRateManager
+import io.horizontalsystems.bankwallet.core.managers.MarketTicker
 import io.horizontalsystems.bankwallet.modules.coin.MarketTickerViewItem
 import io.horizontalsystems.bankwallet.modules.market.sortedByDescendingNullLast
 import io.horizontalsystems.bankwallet.modules.market.sortedByNullLast
 import io.horizontalsystems.bankwallet.ui.compose.components.ToggleIndicator
 import io.horizontalsystems.bankwallet.ui.extensions.MarketListHeaderView
-import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.ICurrencyManager
-import io.horizontalsystems.xrateskit.entities.MarketTicker
+import io.horizontalsystems.marketkit.models.CoinType
 import java.math.BigDecimal
 
 class CoinMarketsViewModel(
@@ -24,7 +24,7 @@ class CoinMarketsViewModel(
 
     private val baseCurrency = currencyManager.baseCurrency
     private val marketRate =
-        rateManager.getLatestRate(coinType, baseCurrency.code) ?: BigDecimal.ONE
+        rateManager.getCoinPrice(coinType, baseCurrency.code) ?: BigDecimal.ONE
     private var showInFiat = false
     private var sortDesc = true
     private val toggleButton: MarketListHeaderView.ToggleButton

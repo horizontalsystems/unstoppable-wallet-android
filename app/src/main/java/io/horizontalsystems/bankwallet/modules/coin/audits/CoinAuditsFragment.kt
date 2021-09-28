@@ -12,8 +12,8 @@ import io.horizontalsystems.bankwallet.modules.coin.adapters.CoinInfoErrorAdapte
 import io.horizontalsystems.bankwallet.modules.coin.tvlrank.TvlRankLoadingAdapter
 import io.horizontalsystems.bankwallet.modules.coin.PoweredByAdapter
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
-import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.findNavController
+import io.horizontalsystems.marketkit.models.CoinType
 import kotlinx.android.synthetic.main.fragment_recyclerview.*
 
 class CoinAuditsFragment : BaseFragment(), CoinAuditsAdapter.Listener {

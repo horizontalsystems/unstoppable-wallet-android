@@ -1,26 +1,25 @@
 package io.horizontalsystems.bankwallet.modules.coin
 
 import io.horizontalsystems.bankwallet.core.*
-import io.horizontalsystems.bankwallet.core.managers.MarketFavoritesManager
-import io.horizontalsystems.coinkit.models.CoinType
+import io.horizontalsystems.bankwallet.core.managers.*
 import io.horizontalsystems.core.entities.Currency
-import io.horizontalsystems.xrateskit.entities.*
+import io.horizontalsystems.marketkit.models.CoinPrice
+import io.horizontalsystems.marketkit.models.CoinType
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
-import java.math.BigDecimal
 import java.net.URL
 
 class CoinService(
-        val coinType: CoinType,
-        val currency: Currency,
-        private val xRateManager: IRateManager,
-        private val chartTypeStorage: IChartTypeStorage,
-        private val priceAlertManager: IPriceAlertManager,
-        private val notificationManager: INotificationManager,
-        private val marketFavoritesManager: MarketFavoritesManager,
-        guidesBaseUrl: String
+    val coinType: CoinType,
+    val currency: Currency,
+    private val xRateManager: IRateManager,
+    private val chartTypeStorage: IChartTypeStorage,
+    private val priceAlertManager: IPriceAlertManager,
+    private val notificationManager: INotificationManager,
+    private val marketFavoritesManager: MarketFavoritesManager,
+    guidesBaseUrl: String
 ) : Clearable {
 
     sealed class CoinDetailsState {
@@ -29,7 +28,7 @@ class CoinService(
         data class Error(val error: Throwable) : CoinDetailsState()
     }
 
-    val latestRateAsync = BehaviorSubject.create<LatestRate>()
+    val coinPriceAsync = BehaviorSubject.create<CoinPrice>()
     val chartInfoUpdatedObservable: BehaviorSubject<Unit> = BehaviorSubject.create()
     val chartSpinnerObservable: BehaviorSubject<Unit> = BehaviorSubject.create()
     val chartInfoErrorObservable: BehaviorSubject<Throwable> = BehaviorSubject.create()
@@ -48,7 +47,7 @@ class CoinService(
     var coinMarketDetails: CoinMarketDetails? = null
     var topTokenHolders: List<TokenHolder> = listOf()
 
-    var lastPoint: LastPoint? = xRateManager.latestRate(coinType, currency.code)?.let { LastPoint(it.rate, it.timestamp, it.rateDiff24h ?: BigDecimal.ZERO) }
+    var lastPoint: LastPoint? = xRateManager.latestRate(coinType, currency.code)?.let { LastPoint(it.value, it.timestamp, it.diff) }
         set(value) {
             field = value
             triggerChartUpdateIfEnoughData()
@@ -80,18 +79,18 @@ class CoinService(
                 }
 
         xRateManager.latestRate(coinType, currency.code)?.let {
-            latestRateAsync.onNext(it)
+            coinPriceAsync.onNext(it)
         }
         xRateManager.latestRateObservable(coinType, currency.code)
                 .subscribeIO {
-                    latestRateAsync.onNext(it)
+                    coinPriceAsync.onNext(it)
                 }
                 .let {
                     disposables.add(it)
                 }
         xRateManager.latestRateObservable(coinType, currency.code)
                 .subscribeIO({ marketInfo ->
-                    lastPoint = LastPoint(marketInfo.rate, marketInfo.timestamp, marketInfo.rateDiff24h ?: BigDecimal.ZERO)
+                    lastPoint = LastPoint(marketInfo.value, marketInfo.timestamp, marketInfo.diff)
                 }, {
                     //ignore
                 }).let {

@@ -12,7 +12,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.setCoinImage
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
-import io.horizontalsystems.coinkit.models.CoinType
+import io.horizontalsystems.marketkit.models.CoinType
 import io.horizontalsystems.views.inflate
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_coin_subtitle.*
@@ -61,12 +61,12 @@ class CoinSubtitleAdapter(
     }
 
     data class ViewItemWrapper(
-            val coinName: String,
-            val coinType: CoinType,
-            val rating: String?,
-            val rate: String?,
-            val rateDiff: BigDecimal?,
-            val grade: String?
+        val coinName: String,
+        val coinType: CoinType,
+        val rating: String?,
+        val rate: String?,
+        val rateDiff: BigDecimal?,
+        val grade: String?
     )
 
     class ViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {

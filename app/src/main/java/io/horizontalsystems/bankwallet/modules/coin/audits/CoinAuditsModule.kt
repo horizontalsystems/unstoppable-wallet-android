@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.coin.audits
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.coinkit.models.CoinType
+import io.horizontalsystems.marketkit.models.CoinType
 import io.horizontalsystems.views.ListPosition
 import java.util.*
 
