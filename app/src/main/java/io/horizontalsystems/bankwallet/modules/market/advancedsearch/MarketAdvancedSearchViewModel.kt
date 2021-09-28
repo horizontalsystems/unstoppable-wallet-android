@@ -64,7 +64,7 @@ class MarketAdvancedSearchViewModel(
             field = value
             periodViewItemLiveData.postValue(value)
 
-            service.filterPeriod = value.item.xRatesKitTimePeriod
+            service.filterPeriod = value.item.xRatesTimePeriod
         }
     var priceChangeViewItem: ViewItemWrapper<PriceChange?> = ViewItemWrapper.getAny()
         set(value) {

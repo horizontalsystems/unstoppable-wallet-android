@@ -6,11 +6,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.managers.CoinMarket
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.entities.Currency
-import io.horizontalsystems.xrateskit.entities.CoinMarket
+import io.horizontalsystems.marketkit.models.CoinType
 import java.math.BigDecimal
 import java.util.*
 
@@ -46,14 +46,14 @@ object MarketModule {
 }
 
 data class MarketItem(
-        val score: Score?,
-        val coinType: CoinType,
-        val coinCode: String,
-        val coinName: String,
-        val volume: CurrencyValue,
-        val rate: CurrencyValue,
-        val diff: BigDecimal?,
-        val marketCap: CurrencyValue?
+    val score: Score?,
+    val coinType: CoinType,
+    val coinCode: String,
+    val coinName: String,
+    val volume: CurrencyValue,
+    val rate: CurrencyValue,
+    val diff: BigDecimal?,
+    val marketCap: CurrencyValue?
 ) {
     companion object {
         fun createFromCoinMarket(coinMarket: CoinMarket, currency: Currency, score: Score?): MarketItem {

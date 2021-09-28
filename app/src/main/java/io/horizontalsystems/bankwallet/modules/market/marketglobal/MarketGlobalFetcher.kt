@@ -1,9 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.market.marketglobal
 
 import io.horizontalsystems.bankwallet.core.IRateManager
+import io.horizontalsystems.bankwallet.core.managers.TimePeriod
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartModule
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
-import io.horizontalsystems.xrateskit.entities.TimePeriod
 import io.reactivex.Single
 
 class MarketGlobalFetcher(

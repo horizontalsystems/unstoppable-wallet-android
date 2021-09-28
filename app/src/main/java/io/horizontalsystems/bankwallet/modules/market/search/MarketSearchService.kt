@@ -2,7 +2,7 @@ package io.horizontalsystems.bankwallet.modules.market.search
 
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.IRateManager
-import io.horizontalsystems.xrateskit.entities.CoinData
+import io.horizontalsystems.bankwallet.core.managers.CoinData
 import io.reactivex.subjects.BehaviorSubject
 import java.util.*
 

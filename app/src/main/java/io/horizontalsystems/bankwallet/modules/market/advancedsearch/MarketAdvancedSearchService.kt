@@ -2,22 +2,23 @@ package io.horizontalsystems.bankwallet.modules.market.advancedsearch
 
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.IRateManager
+import io.horizontalsystems.bankwallet.core.managers.CoinMarket
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.bankwallet.modules.market.Score
 import io.horizontalsystems.bankwallet.modules.market.list.IMarketListFetcher
-import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.core.entities.Currency
-import io.horizontalsystems.xrateskit.entities.CoinMarket
+import io.horizontalsystems.marketkit.models.CoinType
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.BehaviorSubject
 import java.math.BigDecimal
-import io.horizontalsystems.xrateskit.entities.TimePeriod as XRatesKitTimePeriod
+import io.horizontalsystems.bankwallet.core.managers.TimePeriod as XRatesTimePeriod
+
 
 class MarketAdvancedSearchService(
         private val xRateManager: IRateManager,
@@ -51,7 +52,7 @@ class MarketAdvancedSearchService(
 
             refreshCounter()
         }
-    var filterPeriod: XRatesKitTimePeriod = XRatesKitTimePeriod.HOUR_24
+    var filterPeriod: XRatesTimePeriod = XRatesTimePeriod.HOUR_24
         set(value) {
             field = value
             cache = null

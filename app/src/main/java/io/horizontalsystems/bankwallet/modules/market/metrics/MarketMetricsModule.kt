@@ -3,9 +3,9 @@ package io.horizontalsystems.bankwallet.modules.market.metrics
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.managers.GlobalCoinMarket
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.core.entities.Currency
-import io.horizontalsystems.xrateskit.entities.GlobalCoinMarket
 import java.math.BigDecimal
 
 object MarketMetricsModule {

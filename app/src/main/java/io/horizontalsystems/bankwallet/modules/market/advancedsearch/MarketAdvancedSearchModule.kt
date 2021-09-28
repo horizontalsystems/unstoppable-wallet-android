@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.xrateskit.entities.TimePeriod as XRatesKitTimePeriod
+import io.horizontalsystems.bankwallet.core.managers.TimePeriod as XRatesTimePeriod
 
 object MarketAdvancedSearchModule {
     class Factory : ViewModelProvider.Factory {
@@ -37,13 +37,13 @@ enum class Range(@StringRes val titleResId: Int, val values: Pair<Long?, Long?>)
     Range_5B_More(R.string.Market_Filter_Range_5B_More, Pair(5_000_000_000, null)),
 }
 
-enum class TimePeriod(@StringRes val titleResId: Int, val xRatesKitTimePeriod: XRatesKitTimePeriod) {
-    TimePeriod_1D(R.string.Market_Filter_TimePeriod_1D, XRatesKitTimePeriod.HOUR_24),
-    TimePeriod_1W(R.string.Market_Filter_TimePeriod_1W, XRatesKitTimePeriod.DAY_7),
-    TimePeriod_2W(R.string.Market_Filter_TimePeriod_2W, XRatesKitTimePeriod.DAY_14),
-    TimePeriod_1M(R.string.Market_Filter_TimePeriod_1M, XRatesKitTimePeriod.DAY_30),
-    TimePeriod_6M(R.string.Market_Filter_TimePeriod_6M, XRatesKitTimePeriod.DAY_200),
-    TimePeriod_1Y(R.string.Market_Filter_TimePeriod_1Y, XRatesKitTimePeriod.YEAR_1),
+enum class TimePeriod(@StringRes val titleResId: Int, val xRatesTimePeriod: XRatesTimePeriod) {
+    TimePeriod_1D(R.string.Market_Filter_TimePeriod_1D, XRatesTimePeriod.HOUR_24),
+    TimePeriod_1W(R.string.Market_Filter_TimePeriod_1W, XRatesTimePeriod.DAY_7),
+    TimePeriod_2W(R.string.Market_Filter_TimePeriod_2W, XRatesTimePeriod.DAY_14),
+    TimePeriod_1M(R.string.Market_Filter_TimePeriod_1M, XRatesTimePeriod.DAY_30),
+    TimePeriod_6M(R.string.Market_Filter_TimePeriod_6M, XRatesTimePeriod.DAY_200),
+    TimePeriod_1Y(R.string.Market_Filter_TimePeriod_1Y, XRatesTimePeriod.YEAR_1),
 }
 
 enum class PriceChange(@StringRes val titleResId: Int, @ColorRes val colorResId: Int, val values: Pair<Long?, Long?>) {
