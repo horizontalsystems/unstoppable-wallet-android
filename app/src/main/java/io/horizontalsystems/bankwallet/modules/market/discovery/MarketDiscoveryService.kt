@@ -2,12 +2,12 @@ package io.horizontalsystems.bankwallet.modules.market.discovery
 
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.IRateManager
+import io.horizontalsystems.bankwallet.core.managers.TimePeriod
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.bankwallet.modules.market.Score
 import io.horizontalsystems.bankwallet.modules.market.list.IMarketListFetcher
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.entities.Currency
-import io.horizontalsystems.xrateskit.entities.TimePeriod
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.subjects.PublishSubject

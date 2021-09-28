@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.core.managers
 import io.horizontalsystems.bankwallet.core.storage.AppDatabase
 import io.horizontalsystems.bankwallet.core.storage.FavoriteCoin
 import io.horizontalsystems.bankwallet.core.storage.MarketFavoritesDao
-import io.horizontalsystems.coinkit.models.CoinType
+import io.horizontalsystems.marketkit.models.CoinType
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 
