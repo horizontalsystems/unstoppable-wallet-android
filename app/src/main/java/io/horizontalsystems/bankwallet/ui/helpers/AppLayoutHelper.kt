@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.ui.helpers
 import android.content.Context
 import android.graphics.drawable.Drawable
 import androidx.core.content.ContextCompat
-import io.horizontalsystems.coinkit.models.CoinType
+import io.horizontalsystems.marketkit.models.CoinType
 import io.horizontalsystems.views.R
 import java.util.*
 
@@ -26,7 +26,7 @@ object AppLayoutHelper {
     }
 
     private fun getCoinDrawableResId(context: Context, coinType: CoinType): Int? {
-        val coinResourceName = coinType.ID.replace("[|-]".toRegex(), "_").toLowerCase(Locale.ENGLISH)
+        val coinResourceName = coinType.id.replace("[|-]".toRegex(), "_").toLowerCase(Locale.ENGLISH)
         val imgRes = context.resources.getIdentifier(coinResourceName, "drawable", context.packageName)
 
         return when {
