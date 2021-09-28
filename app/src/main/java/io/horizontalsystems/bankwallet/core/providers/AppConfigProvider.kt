@@ -3,10 +3,10 @@ package io.horizontalsystems.bankwallet.core.providers
 import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IAppConfigProvider
-import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.IBuildConfigProvider
 import io.horizontalsystems.core.ILanguageConfigProvider
 import io.horizontalsystems.core.entities.Currency
+import io.horizontalsystems.marketkit.models.CoinType
 
 class AppConfigProvider : IAppConfigProvider, ILanguageConfigProvider, IBuildConfigProvider {
 

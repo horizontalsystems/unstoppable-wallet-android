@@ -171,7 +171,7 @@ class SwapCoinCardViewModel(
         val formattedBalance = when {
             coin == null -> Translator.getString(R.string.NotAvailable)
             balance == null -> null
-            else -> formatter.coinAmount(balance, coin)
+            else -> formatter.coinAmount(balance, coin.code)
         }
         balanceLiveData.postValue(formattedBalance)
         val balanceNonNull = balance ?: BigDecimal.ZERO

@@ -167,9 +167,9 @@ class OneInchSendEvmTransactionService(
     private fun buildDecorationFromParameters(parameters: OneInchSwapParameters): OneInchMethodDecoration {
         val fromToken = getSwapToken(parameters.coinFrom)
         val toToken = getSwapToken(parameters.coinTo)
-        val fromAmount = parameters.amountFrom.scaleUp(parameters.coinFrom.decimal)
+        val fromAmount = parameters.amountFrom.scaleUp(parameters.coinFrom.decimals)
         val minReturnAmount = parameters.amountTo - parameters.amountTo / BigDecimal("100") * parameters.slippage
-        val toAmountMin = minReturnAmount.scaleUp(parameters.coinTo.decimal)
+        val toAmountMin = minReturnAmount.scaleUp(parameters.coinTo.decimals)
 
         return parameters.let {
             if (parameters.recipient == null) {
@@ -220,7 +220,7 @@ class OneInchSendEvmTransactionService(
     }
 
     private fun activateSwapCoinOut() {
-        activateCoinManager.activate(transactionFeeService.parameters.coinTo.type)
+        activateCoinManager.activate(transactionFeeService.parameters.coinTo.coinType)
     }
 
     override fun clear() {

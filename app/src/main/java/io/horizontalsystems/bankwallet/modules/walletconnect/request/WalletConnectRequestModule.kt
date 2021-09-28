@@ -39,7 +39,7 @@ object WalletConnectRequestModule {
             }
         }
         private val service by lazy { WalletConnectSendEthereumTransactionRequestService(request, baseService) }
-        private val coinServiceFactory by lazy { EvmCoinServiceFactory(coin, App.coinKit, App.currencyManager, App.xRateManager) }
+        private val coinServiceFactory by lazy { EvmCoinServiceFactory(coin, App.marketKit, App.currencyManager, App.xRateManager) }
         private val transactionService by lazy {
             val feeRateProvider = FeeRateProviderFactory.provider(coin.coinType) as ICustomRangedFeeProvider
             EvmTransactionFeeService(evmKit, feeRateProvider, 10)

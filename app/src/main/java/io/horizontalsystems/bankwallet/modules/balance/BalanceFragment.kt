@@ -64,9 +64,9 @@ import io.horizontalsystems.bankwallet.ui.extensions.SelectorDialog
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorItem
 import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
-import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.marketkit.models.CoinType
 import kotlinx.android.synthetic.main.fragment_balance.*
 
 class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
@@ -454,7 +454,7 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
     }
 
     private fun onSendClicked(viewItem: BalanceViewItem) {
-        when (viewItem.wallet.coin.type) {
+        when (viewItem.wallet.coinType) {
             CoinType.Ethereum, is CoinType.Erc20,
             CoinType.BinanceSmartChain, is CoinType.Bep20 -> {
                 findNavController().navigate(
@@ -482,12 +482,12 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
     }
 
     private fun onSwapClicked(viewItem: BalanceViewItem) {
-        SwapMainModule.start(this, navOptionsFromBottom(), viewItem.wallet.coin)
+        SwapMainModule.start(this, navOptionsFromBottom(), viewItem.wallet.platformCoin)
     }
 
     private fun onChartClicked(viewItem: BalanceViewItem) {
-        val coin = viewItem.wallet.coin
-        val arguments = CoinFragment.prepareParams(coin.type, coin.code, coin.title)
+        val platformCoin = viewItem.wallet.platformCoin
+        val arguments = CoinFragment.prepareParams(platformCoin.coinType, platformCoin.code, platformCoin.name)
 
         findNavController().navigate(R.id.mainFragment_to_coinFragment, arguments, navOptions())
     }
@@ -503,7 +503,7 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
                 activity?.let { fragmentActivity ->
                     SyncErrorDialog.show(
                         fragmentActivity,
-                        wallet.coin.title,
+                        wallet.coin.name,
                         sourceChangeable,
                         object : SyncErrorDialog.Listener {
                             override fun onClickRetry() {
@@ -540,7 +540,7 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
         viewModel.disabledWalletLiveData.observe(viewLifecycleOwner) { wallet ->
             Snackbar.make(
                 requireView(),
-                getString(R.string.Balance_CoinDisabled, wallet.coin.title),
+                getString(R.string.Balance_CoinDisabled, wallet.coin.name),
                 Snackbar.LENGTH_LONG
             )
                 .setAction(R.string.Action_Undo) {
