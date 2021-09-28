@@ -18,7 +18,7 @@ object CreateAccountModule {
                     App.accountManager,
                     App.walletManager,
                     PassphraseValidator(),
-                    App.coinKit
+                    App.marketKit
             )
 
             return CreateAccountViewModel(service, listOf(service)) as T

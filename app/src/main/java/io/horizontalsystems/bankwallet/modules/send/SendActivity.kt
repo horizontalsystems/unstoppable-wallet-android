@@ -40,7 +40,7 @@ class SendActivity : BaseActivity() {
         val wallet: Wallet = intent.getParcelableExtra(WALLET) ?: run { finish(); return }
 
         toolbar.title = getString(R.string.Send_Title, wallet.coin.code)
-        toolbar.navigationIcon = AppLayoutHelper.getCoinDrawable(this, wallet.coin.type)
+        toolbar.navigationIcon = AppLayoutHelper.getCoinDrawable(this, wallet.coinType)
         toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.menuClose -> {
@@ -126,7 +126,7 @@ class SendActivity : BaseActivity() {
                 is SendModule.Input.Address -> {
                     //add address view
                     mainPresenter.addressModuleDelegate?.let {
-                        val sendAddressFragment = SendAddressFragment(wallet.coin, it, mainPresenter.handler)
+                        val sendAddressFragment = SendAddressFragment(wallet.platformCoin, it, mainPresenter.handler)
                         fragments.add(sendAddressFragment)
                         supportFragmentManager.beginTransaction().add(R.id.sendLinearLayout, sendAddressFragment)
                                 .commitNow()
@@ -143,7 +143,7 @@ class SendActivity : BaseActivity() {
                 is SendModule.Input.Fee -> {
                     //add fee view
                     mainPresenter.feeModuleDelegate?.let {
-                        val sendFeeFragment = SendFeeFragment(wallet.coin, it, mainPresenter.handler, mainPresenter.customPriorityUnit)
+                        val sendFeeFragment = SendFeeFragment(wallet.platformCoin, it, mainPresenter.handler, mainPresenter.customPriorityUnit)
                         fragments.add(sendFeeFragment)
                         supportFragmentManager.beginTransaction().add(R.id.sendLinearLayout, sendFeeFragment)
                                 .commitNow()

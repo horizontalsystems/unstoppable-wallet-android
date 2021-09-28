@@ -123,14 +123,14 @@ class PrivacySettingsFragment :
             BottomSheetSelectorDialog.show(
                     childFragmentManager,
                     getString(R.string.BlockchainSettings_SyncModeChangeAlert_Title),
-                    coin.title,
-                    context?.let { AppLayoutHelper.getCoinDrawable(it, coin.type) },
+                    coin.name,
+                    context?.let { AppLayoutHelper.getCoinDrawable(it, coin.coinType) },
                     items.map { getSyncModeInfo(it) },
                     items.indexOf(selected),
                     onItemSelected = { position ->
                         viewModel.delegate.onSelectSetting(position)
                     },
-                    warning = getString(R.string.BlockchainSettings_SyncModeChangeAlert_Content, coin.title)
+                    warning = getString(R.string.BlockchainSettings_SyncModeChangeAlert_Content, coin.name)
             )
         })
 

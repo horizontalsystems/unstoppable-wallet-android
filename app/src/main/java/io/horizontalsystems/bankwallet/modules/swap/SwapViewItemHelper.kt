@@ -23,7 +23,7 @@ class SwapViewItemHelper(private val numberFormatter: IAppNumberFormatter) {
         else
             BigDecimal.ONE.divide(price, price.scale(), RoundingMode.HALF_UP)
 
-        return "${baseCoin.code} = ${coinAmount(inversePrice, quoteCoin)} "
+        return "${baseCoin.code} = ${coinAmount(inversePrice, quoteCoin.code)} "
     }
 
     fun priceImpactViewItem(
@@ -52,7 +52,7 @@ class SwapViewItemHelper(private val numberFormatter: IAppNumberFormatter) {
 
                 return UniswapModule.GuaranteedAmountViewItem(
                     Translator.getString(R.string.Swap_MinimumGot),
-                    coinAmount(amount, coin)
+                    coinAmount(amount, coin.code)
                 )
             }
             TradeType.ExactOut -> {
@@ -61,7 +61,7 @@ class SwapViewItemHelper(private val numberFormatter: IAppNumberFormatter) {
 
                 return UniswapModule.GuaranteedAmountViewItem(
                     Translator.getString(R.string.Swap_MaximumPaid),
-                    coinAmount(amount, coin)
+                    coinAmount(amount, coin.code)
                 )
             }
         }
@@ -85,9 +85,9 @@ class SwapViewItemHelper(private val numberFormatter: IAppNumberFormatter) {
         }
     }
 
-    fun coinAmount(amount: BigDecimal, coin: PlatformCoin, maxFraction: Int? = null): String {
+    fun coinAmount(amount: BigDecimal, coinCode: String, maxFraction: Int? = null): String {
         val fraction = maxFraction ?: numberFormatter.getSignificantDecimalCoin(amount)
-        return numberFormatter.formatCoin(amount, coin.code, 0, fraction)
+        return numberFormatter.formatCoin(amount, coinCode, 0, fraction)
     }
 
 }
