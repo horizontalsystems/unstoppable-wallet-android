@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.entities
 import io.horizontalsystems.bankwallet.core.managers.RestoreSettingType
 import io.horizontalsystems.marketkit.models.Coin
 import io.horizontalsystems.marketkit.models.CoinType
-import io.horizontalsystems.coinkit.models.CoinType as CoinKitCoinType
 
 val CoinType.blockchainType: String?
     get() {
@@ -77,36 +76,5 @@ val CoinType.restoreSettingTypes: List<RestoreSettingType>
         else -> listOf()
     }
 
-val CoinType.coinType: CoinKitCoinType
-    get() = when (this) {
-        CoinType.Bitcoin -> CoinKitCoinType.Bitcoin
-        CoinType.BitcoinCash -> CoinKitCoinType.BitcoinCash
-        CoinType.Litecoin -> CoinKitCoinType.Litecoin
-        CoinType.Dash -> CoinKitCoinType.Dash
-        CoinType.Zcash -> CoinKitCoinType.Zcash
-        CoinType.Ethereum -> CoinKitCoinType.Ethereum
-        CoinType.BinanceSmartChain -> CoinKitCoinType.BinanceSmartChain
-        is CoinType.Erc20 -> CoinKitCoinType.Erc20(address)
-        is CoinType.Bep20 -> CoinKitCoinType.Bep20(address)
-        is CoinType.Bep2 -> CoinKitCoinType.Bep2(symbol)
-        is CoinType.Sol20 -> CoinKitCoinType.Unsupported(address)
-        is CoinType.Unsupported -> CoinKitCoinType.Unsupported(type)
-    }
-
 val Coin.imageUrl: String
     get() = "https://markets.nyc3.digitaloceanspaces.com/coin-icons/ios/${uid}@2x.png"
-
-val CoinKitCoinType.coinType: CoinType
-    get() = when (this) {
-        CoinKitCoinType.Bitcoin -> CoinType.Bitcoin
-        CoinKitCoinType.Litecoin -> CoinType.Litecoin
-        CoinKitCoinType.BitcoinCash -> CoinType.BitcoinCash
-        CoinKitCoinType.Dash -> CoinType.Dash
-        CoinKitCoinType.Ethereum -> CoinType.Ethereum
-        CoinKitCoinType.BinanceSmartChain -> CoinType.BinanceSmartChain
-        CoinKitCoinType.Zcash -> CoinType.Zcash
-        is CoinKitCoinType.Erc20 -> CoinType.Erc20(address)
-        is CoinKitCoinType.Bep2 -> CoinType.Bep2(symbol)
-        is CoinKitCoinType.Bep20 -> CoinType.Bep20(address)
-        is CoinKitCoinType.Unsupported -> CoinType.Unsupported(id)
-    }

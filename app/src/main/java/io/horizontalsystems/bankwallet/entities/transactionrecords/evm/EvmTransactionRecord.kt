@@ -29,7 +29,7 @@ abstract class EvmTransactionRecord(fullTransaction: FullTransaction, baseCoin: 
 
         val feeDecimal = feeAmount.toBigDecimal()
             .multiply(fullTransaction.transaction.gasPrice.toBigDecimal())
-            .movePointLeft(baseCoin.decimal).stripTrailingZeros()
+            .movePointLeft(baseCoin.decimals).stripTrailingZeros()
 
         fee = TransactionValue.CoinValue(baseCoin, feeDecimal)
     }
