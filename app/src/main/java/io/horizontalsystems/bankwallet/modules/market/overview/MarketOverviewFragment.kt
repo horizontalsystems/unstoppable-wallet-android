@@ -213,7 +213,7 @@ class MarketOverviewFragment : BaseFragment() {
     private fun LoadingView() {
         Box(modifier = Modifier.height(240.dp).fillMaxWidth()) {
             CircularProgressIndicator(
-                modifier = Modifier.align(Alignment.Center).size(31.dp),
+                modifier = Modifier.align(Alignment.Center).size(24.dp),
                 color = ComposeAppTheme.colors.grey,
                 strokeWidth = 2.dp,
             )

@@ -9,8 +9,8 @@
     <ProgressBar
         android:id="@+id/pgTorStatus"
         style="?android:attr/progressBarStyle"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
         android:backgroundTint="@color/grey"
         android:indeterminate="true"
         android:indeterminateTint="@color/grey"
