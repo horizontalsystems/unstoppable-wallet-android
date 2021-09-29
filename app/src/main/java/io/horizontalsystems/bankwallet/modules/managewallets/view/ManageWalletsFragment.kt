@@ -5,16 +5,15 @@ import android.view.Menu
 import android.view.View
 import androidx.activity.addCallback
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.modules.blockchainsettings.CoinSettingsViewModel
+import io.horizontalsystems.bankwallet.modules.enablecoin.coinsettings.CoinSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsModule
 import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsViewModel
-import io.horizontalsystems.bankwallet.modules.restore.restoreselectcoins.RestoreSettingsViewModel
+import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.RestoreSettingsViewModel
 import io.horizontalsystems.bankwallet.ui.extensions.ZcashBirthdayHeightDialog
 import io.horizontalsystems.bankwallet.ui.extensions.coinlist.CoinListBaseFragment
-import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.core.findNavController
+import io.horizontalsystems.marketkit.models.MarketCoin
 import kotlinx.android.synthetic.main.fragment_manage_wallets.*
 
 class ManageWalletsFragment : CoinListBaseFragment() {
@@ -60,16 +59,16 @@ class ManageWalletsFragment : CoinListBaseFragment() {
 
     // ManageWalletItemsAdapter.Listener
 
-    override fun enable(coin: Coin) {
-        viewModel.enable(coin)
+    override fun enable(marketCoin: MarketCoin) {
+        viewModel.enable(marketCoin)
     }
 
-    override fun disable(coin: Coin) {
-        viewModel.disable(coin)
+    override fun disable(marketCoin: MarketCoin) {
+        viewModel.disable(marketCoin)
     }
 
-    override fun edit(coin: Coin) {
-        viewModel.onClickSettings(coin)
+    override fun edit(marketCoin: MarketCoin) {
+        viewModel.onClickSettings(marketCoin)
     }
 
     // CoinListBaseFragment
@@ -87,18 +86,19 @@ class ManageWalletsFragment : CoinListBaseFragment() {
     }
 
     private fun observe() {
-        viewModel.viewStateLiveData.observe(viewLifecycleOwner, Observer { state ->
-            setViewState(state)
-        })
+
+        viewModel.viewItemsLiveData.observe(viewLifecycleOwner) { viewItems ->
+            setViewItems(viewItems)
+        }
 
         viewModel.disableCoinLiveData.observe(viewLifecycleOwner) {
             disableCoin(it)
         }
 
-        coinSettingsViewModel.openBottomSelectorLiveEvent.observe(viewLifecycleOwner, Observer { config ->
+        coinSettingsViewModel.openBottomSelectorLiveEvent.observe(viewLifecycleOwner) { config ->
             hideKeyboard()
             showBottomSelectorDialog(config)
-        })
+        }
 
         restoreSettingsViewModel.openBirthdayAlertSignal.observe(viewLifecycleOwner) {
             val zcashBirhdayHeightDialog = ZcashBirthdayHeightDialog()

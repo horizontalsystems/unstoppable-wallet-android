@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.restoremnemonic
+package io.horizontalsystems.bankwallet.modules.restore.restoremnemonic
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

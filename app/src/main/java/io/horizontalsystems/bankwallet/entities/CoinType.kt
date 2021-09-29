@@ -76,5 +76,21 @@ val CoinType.restoreSettingTypes: List<RestoreSettingType>
         else -> listOf()
     }
 
+val CoinType.isSupported: Boolean
+    get() = when (this) {
+        CoinType.Bitcoin,
+        CoinType.BitcoinCash,
+        CoinType.Litecoin,
+        CoinType.Dash,
+        CoinType.Zcash,
+        CoinType.Ethereum,
+        CoinType.BinanceSmartChain,
+        is CoinType.Erc20,
+        is CoinType.Bep20,
+        is CoinType.Bep2 -> true
+        is CoinType.Sol20,
+        is CoinType.Unsupported -> false
+    }
+
 val Coin.imageUrl: String
     get() = "https://markets.nyc3.digitaloceanspaces.com/coin-icons/ios/${uid}@2x.png"

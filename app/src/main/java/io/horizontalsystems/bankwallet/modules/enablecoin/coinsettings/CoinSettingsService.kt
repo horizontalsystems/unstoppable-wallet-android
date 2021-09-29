@@ -1,8 +1,9 @@
-package io.horizontalsystems.bankwallet.modules.restore.restoreselectcoins
+package io.horizontalsystems.bankwallet.modules.enablecoin.coinsettings
 
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.entities.*
-import io.horizontalsystems.coinkit.models.Coin
+import io.horizontalsystems.marketkit.models.Coin
+import io.horizontalsystems.marketkit.models.PlatformCoin
 import io.reactivex.subjects.PublishSubject
 
 class CoinSettingsService : Clearable {
@@ -10,37 +11,35 @@ class CoinSettingsService : Clearable {
     val rejectApproveSettingsObservable = PublishSubject.create<Coin>()
     val requestObservable = PublishSubject.create<Request>()
 
-    fun approveSettings(coin: Coin, settings: List<CoinSettings>) {
-        if (coin.type.coinSettingTypes.contains(CoinSettingType.derivation)) {
+    fun approveSettings(platformCoin: PlatformCoin, settings: List<CoinSettings>) {
+        if (platformCoin.coinType.coinSettingTypes.contains(CoinSettingType.derivation)) {
             val currentDerivations = settings.mapNotNull {
                 it.settings[CoinSettingType.derivation]?.let {
                     AccountType.Derivation.fromString(it)
                 }
             }
-
-            val request = Request(coin, RequestType.Derivation(AccountType.Derivation.values().toList(), currentDerivations))
-
+            val type = RequestType.Derivation(AccountType.Derivation.values().toList(), currentDerivations)
+            val request = Request(platformCoin, type)
             requestObservable.onNext(request)
             return
         }
 
-        if (coin.type.coinSettingTypes.contains(CoinSettingType.bitcoinCashCoinType)) {
+        if (platformCoin.coinType.coinSettingTypes.contains(CoinSettingType.bitcoinCashCoinType)) {
             val currentTypes = settings.mapNotNull {
                 it.settings[CoinSettingType.bitcoinCashCoinType]?.let {
                     BitcoinCashCoinType.fromString(it)
                 }
             }
-
-            val request = Request(coin, RequestType.BCHCoinType(BitcoinCashCoinType.values().toList(), currentTypes))
-
+            val type = RequestType.BCHCoinType(BitcoinCashCoinType.values().toList(), currentTypes)
+            val request = Request(platformCoin, type)
             requestObservable.onNext(request)
             return
         }
 
-        approveSettingsObservable.onNext(CoinWithSettings(coin))
+        approveSettingsObservable.onNext(CoinWithSettings(platformCoin))
     }
 
-    fun selectDerivations(derivations: List<AccountType.Derivation>, coin: Coin) {
+    fun selectDerivations(derivations: List<AccountType.Derivation>, coin: PlatformCoin) {
         val settingsList: List<CoinSettings> = derivations.map {
             CoinSettings(mapOf(CoinSettingType.derivation to it.value))
         }
@@ -48,7 +47,7 @@ class CoinSettingsService : Clearable {
         approveSettingsObservable.onNext(coinWithSettings)
     }
 
-    fun selectBchCoinTypes(bchCoinTypes: List<BitcoinCashCoinType>, coin: Coin) {
+    fun selectBchCoinTypes(bchCoinTypes: List<BitcoinCashCoinType>, coin: PlatformCoin) {
         val settingsList: List<CoinSettings> = bchCoinTypes.map {
             CoinSettings(mapOf(CoinSettingType.bitcoinCashCoinType to it.value))
         }
@@ -62,11 +61,18 @@ class CoinSettingsService : Clearable {
 
     override fun clear() = Unit
 
-    data class CoinWithSettings(val coin: Coin, val settingsList: List<CoinSettings> = listOf())
-    data class Request(val coin: Coin, val type: RequestType)
+    data class CoinWithSettings(val coin: PlatformCoin, val settingsList: List<CoinSettings> = listOf())
+    data class Request(val platformCoin: PlatformCoin, val type: RequestType)
     sealed class RequestType {
-        class Derivation(val allDerivations: List<AccountType.Derivation>, val current: List<AccountType.Derivation>) : RequestType()
-        class BCHCoinType(val allTypes: List<BitcoinCashCoinType>, val current: List<BitcoinCashCoinType>) : RequestType()
+        class Derivation(
+            val allDerivations: List<AccountType.Derivation>,
+            val current: List<AccountType.Derivation>
+        ) : RequestType()
+
+        class BCHCoinType(
+            val allTypes: List<BitcoinCashCoinType>,
+            val current: List<BitcoinCashCoinType>
+        ) : RequestType()
     }
 
 }

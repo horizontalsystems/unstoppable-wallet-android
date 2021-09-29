@@ -4,8 +4,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.AccountType
-import io.horizontalsystems.bankwallet.modules.blockchainsettings.CoinSettingsViewModel
-import io.horizontalsystems.bankwallet.modules.enablecoins.*
+import io.horizontalsystems.bankwallet.modules.enablecoin.coinsettings.CoinSettingsViewModel
+import io.horizontalsystems.bankwallet.modules.enablecoin.EnableCoinService
+import io.horizontalsystems.bankwallet.modules.enablecoin.coinplatforms.CoinPlatformsService
+import io.horizontalsystems.bankwallet.modules.enablecoin.coinsettings.CoinSettingsService
+import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.RestoreSettingsService
+import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.RestoreSettingsViewModel
+import io.horizontalsystems.bankwallet.modules.enablecoins.EnableCoinsBep2Provider
+import io.horizontalsystems.bankwallet.modules.enablecoins.EnableCoinsEip20Provider
+import io.horizontalsystems.bankwallet.modules.enablecoins.EnableCoinsService
+import io.horizontalsystems.bankwallet.modules.enablecoins.EnableCoinsViewModel
 
 object RestoreSelectCoinsModule {
 
@@ -13,11 +21,18 @@ object RestoreSelectCoinsModule {
 
         private val enableCoinsService by lazy {
             EnableCoinsService(
-                    App.buildConfigProvider,
-                    App.coinManager,
-                    EnableCoinsBep2Provider(App.buildConfigProvider),
-                    EnableCoinsEip20Provider(App.networkManager, App.appConfigProvider, EnableCoinsEip20Provider.EnableCoinMode.Erc20),
-                    EnableCoinsEip20Provider(App.networkManager, App.appConfigProvider, EnableCoinsEip20Provider.EnableCoinMode.Bep20)
+                App.buildConfigProvider,
+                EnableCoinsBep2Provider(App.buildConfigProvider),
+                EnableCoinsEip20Provider(
+                    App.networkManager,
+                    App.appConfigProvider,
+                    EnableCoinsEip20Provider.EnableCoinMode.Erc20
+                ),
+                EnableCoinsEip20Provider(
+                    App.networkManager,
+                    App.appConfigProvider,
+                    EnableCoinsEip20Provider.EnableCoinMode.Bep20
+                )
             )
         }
 
@@ -27,17 +42,24 @@ object RestoreSelectCoinsModule {
         private val coinSettingsService by lazy {
             CoinSettingsService()
         }
+        private val coinPlatformsService by lazy {
+            CoinPlatformsService()
+        }
+
+        private val enableCoinService by lazy {
+            EnableCoinService(coinPlatformsService, restoreSettingsService, coinSettingsService)
+        }
 
         private val restoreSelectCoinsService by lazy {
             RestoreSelectCoinsService(
-                    accountType,
-                    App.accountFactory,
-                    App.accountManager,
-                    App.walletManager,
-                    App.coinManager,
-                    enableCoinsService,
-                    restoreSettingsService,
-                    coinSettingsService)
+                accountType,
+                App.accountFactory,
+                App.accountManager,
+                App.walletManager,
+                App.coinManager,
+                enableCoinsService,
+                enableCoinService
+            )
         }
 
         @Suppress("UNCHECKED_CAST")

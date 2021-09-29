@@ -5,73 +5,69 @@ import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.ui.extensions.coinlist.CoinViewItem
-import io.horizontalsystems.bankwallet.ui.extensions.coinlist.CoinViewState
-import io.horizontalsystems.coinkit.models.Coin
+import io.horizontalsystems.bankwallet.ui.extensions.coinlist.CoinViewItemState
+import io.horizontalsystems.marketkit.models.Coin
+import io.horizontalsystems.marketkit.models.MarketCoin
 import io.horizontalsystems.views.ListPosition
 import io.reactivex.disposables.CompositeDisposable
 
 class ManageWalletsViewModel(
-        private val service: ManageWalletsService,
-        private val clearables: List<Clearable>
+    private val service: ManageWalletsService,
+    private val clearables: List<Clearable>
 ) : ViewModel() {
 
-    val viewStateLiveData = MutableLiveData<CoinViewState>()
+    val viewItemsLiveData = MutableLiveData<List<CoinViewItem>>()
     val disableCoinLiveData = MutableLiveData<Coin>()
 
     private var disposables = CompositeDisposable()
 
     init {
-        service.stateAsync
-                .subscribeIO {
-                    syncViewState(it)
-                }
-                .let {
-                    disposables.add(it)
-                }
+        service.itemsObservable
+            .subscribeIO { sync(it) }
+            .let { disposables.add(it) }
 
-        service.cancelEnableCoinAsync
-                .subscribeIO {
-                    disableCoinLiveData.postValue(it)
-                }.let {
-                    disposables.add(it)
-                }
+        service.cancelEnableCoinObservable
+            .subscribeIO { disableCoinLiveData.postValue(it) }
+            .let { disposables.add(it) }
 
-        syncViewState()
+        sync(service.items)
+    }
+
+    private fun sync(items: List<ManageWalletsService.Item>) {
+        val itemsSize = items.size
+        val viewItems = items.mapIndexed { index, item -> viewItem(item, ListPosition.getListPosition(itemsSize, index)) }
+        viewItemsLiveData.postValue(viewItems)
     }
 
     private fun viewItem(item: ManageWalletsService.Item, listPosition: ListPosition): CoinViewItem {
-        return CoinViewItem(item.coin, item.hasSettings, item.enabled, listPosition)
+        return when (item.state) {
+            is ManageWalletsService.ItemState.Supported -> {
+                CoinViewItem(
+                    item.marketCoin,
+                    CoinViewItemState.ToggleVisible(item.state.enabled, item.state.hasSettings),
+                    listPosition
+                )
+            }
+            ManageWalletsService.ItemState.Unsupported -> {
+                CoinViewItem(item.marketCoin, CoinViewItemState.ToggleHidden, listPosition)
+            }
+        }
     }
 
-    private fun syncViewState(serviceState: ManageWalletsService.State? = null) {
-        val state = serviceState ?: service.state
-
-        val viewState = CoinViewState(
-                state.featuredItems.mapIndexed { index, item ->
-                    viewItem(item, ListPosition.getListPosition(state.featuredItems.size, index))
-                },
-                state.items.mapIndexed { index, item ->
-                    viewItem(item, ListPosition.getListPosition(state.items.size, index))
-                },
-        )
-
-        viewStateLiveData.postValue(viewState)
+    fun enable(marketCoin: MarketCoin) {
+        service.enable(marketCoin)
     }
 
-    fun enable(coin: Coin) {
-        service.enable(coin)
+    fun disable(marketCoin: MarketCoin) {
+        service.disable(marketCoin)
     }
 
-    fun disable(coin: Coin) {
-        service.disable(coin)
+    fun onClickSettings(marketCoin: MarketCoin) {
+        service.configure(marketCoin)
     }
 
-    fun onClickSettings(coin: Coin) {
-        service.configure(coin)
-    }
-
-    fun updateFilter(v: String) {
-        service.setFilter(v)
+    fun updateFilter(filter: String) {
+        service.setFilter(filter)
     }
 
     override fun onCleared() {

@@ -3,135 +3,118 @@ package io.horizontalsystems.bankwallet.modules.managewallets
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.managers.RestoreSettings
 import io.horizontalsystems.bankwallet.entities.*
-import io.horizontalsystems.bankwallet.modules.restore.restoreselectcoins.CoinSettingsService
-import io.horizontalsystems.bankwallet.modules.restore.restoreselectcoins.RestoreSettingsService
-import io.horizontalsystems.coinkit.models.Coin
+import io.horizontalsystems.bankwallet.modules.enablecoin.EnableCoinService
+import io.horizontalsystems.marketkit.models.Coin
+import io.horizontalsystems.marketkit.models.MarketCoin
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
 import java.util.*
 
 class ManageWalletsService(
-        private val coinManager: ICoinManager,
-        private val walletManager: IWalletManager,
-        accountManager: IAccountManager,
-        private val restoreSettingsService: RestoreSettingsService,
-        private val coinSettingsService: CoinSettingsService)
-    : Clearable {
+    private val coinManager: ICoinManager,
+    private val walletManager: IWalletManager,
+    accountManager: IAccountManager,
+    private val enableCoinService: EnableCoinService
+) : Clearable {
 
-    val stateAsync = PublishSubject.create<State>()
-    var state = State(listOf(), listOf())
+    val itemsObservable = PublishSubject.create<List<Item>>()
+    var items: List<Item> = listOf()
         private set(value) {
             field = value
-            stateAsync.onNext(value)
+            itemsObservable.onNext(value)
         }
-    val cancelEnableCoinAsync = PublishSubject.create<Coin>()
+
+    val cancelEnableCoinObservable = PublishSubject.create<Coin>()
 
     private val account: Account = accountManager.activeAccount!!
     private var wallets = setOf<Wallet>()
-    private var featuredCoins = listOf<Coin>()
-    private var coins = listOf<Coin>()
-    private var addedCoins = mutableListOf<Coin>()
+    private var marketCoins = mutableListOf<MarketCoin>()
 
     private val disposables = CompositeDisposable()
 
-    private var filter: String? = null
+    private var filter: String = ""
 
     init {
         walletManager.activeWalletsUpdatedObservable
-                .subscribeIO {
-                    handleUpdated(it)
-                }
-                .let {
-                    disposables.add(it)
-                }
+            .subscribeIO {
+                handleUpdated(it)
+            }
+            .let {
+                disposables.add(it)
+            }
 
-        coinManager.coinAddedObservable
-                .subscribeIO {
-                    handleAdded(it)
-                }
-                .let {
-                    disposables.add(it)
-                }
+        enableCoinService.enableCoinObservable
+            .subscribeIO { (configuredPlatformCoins, settings) ->
+                handleEnableCoin(configuredPlatformCoins, settings)
+            }.let {
+                disposables.add(it)
+            }
 
-        restoreSettingsService.approveSettingsObservable
-                .subscribeIO { coinWithSettings ->
-                    handleApproveRestoreSettings(coinWithSettings.coin, coinWithSettings.settings)
-                }
-                .let {
-                    disposables.add(it)
-                }
+        enableCoinService.cancelEnableCoinObservable
+            .subscribeIO { coin ->
+                handleCancelEnable(coin)
+            }.let { disposables.add(it) }
 
-        restoreSettingsService.rejectApproveSettingsObservable
-                .subscribeIO { coin ->
-                    handleRejectApproveRestoreSettings(coin)
-                }
-                .let {
-                    disposables.add(it)
-                }
 
-        coinSettingsService.approveSettingsObservable
-                .subscribeIO { coinWithSettings ->
-                    handleApproveCoinSettings(coinWithSettings.coin, coinWithSettings.settingsList)
-                }
-                .let {
-                    disposables.add(it)
-                }
-
-        coinSettingsService.rejectApproveSettingsObservable
-                .subscribeIO { coin ->
-                    handleRejectApproveCoinSettings(coin)
-                }
-                .let {
-                    disposables.add(it)
-                }
-
-        syncCoins()
         sync(walletManager.activeWallets)
-        sortCoins()
+        syncMarketCoins()
+        sortMarketCoins()
         syncState()
-    }
-
-    private fun syncCoins() {
-        featuredCoins = coinManager.groupedCoins.first
-        coins = coinManager.groupedCoins.second
     }
 
     private fun isEnabled(coin: Coin): Boolean {
         return wallets.any { it.coin == coin }
     }
 
-    private fun sortCoins() {
-        coins = coins.sortedWith(compareByDescending<Coin> {
-            addedCoins.contains(it)
-        }.thenByDescending {
-            isEnabled(it)
-        }.thenBy {
-            it.title.toLowerCase(Locale.ENGLISH)
-        })
-    }
-
     private fun sync(walletList: List<Wallet>) {
         wallets = walletList.toSet()
     }
 
-    private fun item(coin: Coin): Item {
-        val enabled = isEnabled(coin)
-        return Item(coin, enabled && coin.type.coinSettingTypes.isNotEmpty(), enabled)
+    private fun syncMarketCoins() {
+        marketCoins = if (filter.isNotBlank()) {
+            coinManager.featuredMarketCoins(wallets.map { it.coinType }).toMutableList()
+        } else {
+            coinManager.marketCoins(filter, 20).toMutableList()
+        }
     }
 
-    private fun filtered(coins: List<Coin>): List<Coin> {
-        return filter?.let { filter ->
-            coins.filter { coin ->
-                coin.title.contains(filter, true) || coin.code.contains(filter, true)
-            }
-        } ?: coins
+    private fun sortMarketCoins() {
+        marketCoins.sortWith(compareByDescending<MarketCoin> {
+            isEnabled(it.coin)
+        }.thenBy {
+            it.coin.marketCapRank
+        }.thenBy {
+            it.coin.name.lowercase(Locale.ENGLISH)
+        })
     }
+
+    private fun item(marketCoin: MarketCoin): Item {
+        val supportedPlatforms = marketCoin.platforms.filter { it.coinType.isSupported }
+        val marketCoin = MarketCoin(marketCoin.coin, supportedPlatforms)
+
+        val itemState = if (marketCoin.platforms.isEmpty()) {
+            ItemState.Unsupported
+        } else {
+            val enabled = isEnabled(marketCoin.coin)
+            ItemState.Supported(
+                enabled = enabled,
+                hasSettings = enabled && hasSettingsOrPlatforms(marketCoin)
+            )
+        }
+
+        return Item(marketCoin, itemState)
+    }
+
+    private fun hasSettingsOrPlatforms(marketCoin: MarketCoin) =
+        if (marketCoin.platforms.size == 1) {
+            val platform = marketCoin.platforms[0]
+            platform.coinType.coinSettingTypes.isNotEmpty()
+        } else {
+            true
+        }
 
     private fun syncState() {
-        val filteredFeaturedCoins = filtered(featuredCoins)
-        val filteredCoins = filtered(coins)
-
-        state = State(filteredFeaturedCoins.map { item(it) }, filteredCoins.map { item(it) })
+        items = marketCoins.map { item(it) }
     }
 
     private fun handleUpdated(wallets: List<Wallet>) {
@@ -139,97 +122,66 @@ class ManageWalletsService(
         syncState()
     }
 
-    private fun configuredCoins(coin: Coin, settingsList: List<CoinSettings>) = when {
-        settingsList.isEmpty() -> listOf(ConfiguredCoin(coin))
-        else -> settingsList.map { ConfiguredCoin(coin, it) }
-    }
+    private fun handleEnableCoin(
+        configuredPlatformCoins: List<ConfiguredPlatformCoin>, restoreSettings: RestoreSettings
+    ) {
+        val coin = configuredPlatformCoins.firstOrNull()?.platformCoin?.coin ?: return
 
-    private fun handleApproveRestoreSettings(coin: Coin, settings: RestoreSettings = RestoreSettings()) {
-        restoreSettingsService.save(settings, account, coin)
-
-        if (coin.type.coinSettingTypes.isEmpty()) {
-            handleApproveCoinSettings(coin)
-        } else {
-            coinSettingsService.approveSettings(coin, coin.type.defaultSettingsArray)
+        if (restoreSettings.isNotEmpty() && configuredPlatformCoins.size == 1) {
+            enableCoinService.save(restoreSettings, account, configuredPlatformCoins.first().platformCoin.coinType)
         }
-    }
 
-    private fun handleRejectApproveRestoreSettings(coin: Coin) {
-        cancelEnableCoinAsync.onNext(coin)
-    }
-
-    private fun handleApproveCoinSettings(coin: Coin, settingsList: List<CoinSettings> = listOf()) {
-        val configuredCoins = configuredCoins(coin, settingsList)
-
-        if (isEnabled(coin)) {
-            applySettings(coin, configuredCoins)
-        } else {
-            val wallets = configuredCoins.map { Wallet(it, account) }
-            walletManager.save(wallets)
-        }
-    }
-
-    private fun handleRejectApproveCoinSettings(coin: Coin) {
-        if (!isEnabled(coin)) {
-            cancelEnableCoinAsync.onNext(coin)
-        }
-    }
-
-    private fun applySettings(coin: Coin, configuredCoins: List<ConfiguredCoin>) {
         val existingWallets = wallets.filter { it.coin == coin }
-        val existingConfiguredCoins = existingWallets.map { it.configuredCoin }
+        val existingConfiguredPlatformCoins = existingWallets.map { it.configuredPlatformCoin }
+        val newConfiguredPlatformCoins = configuredPlatformCoins.minus(existingConfiguredPlatformCoins)
 
-        val newConfiguredCoins = configuredCoins.minus(existingConfiguredCoins)
-        val removedWallets = existingWallets.filter { !configuredCoins.contains(it.configuredCoin) }
-
-        val newWallets = newConfiguredCoins.map { Wallet(it, account) }
+        val removedWallets = existingWallets.filter { !configuredPlatformCoins.contains(it.configuredPlatformCoin) }
+        val newWallets = newConfiguredPlatformCoins.map { Wallet(it, account) }
 
         if (newWallets.isNotEmpty() || removedWallets.isNotEmpty()) {
             walletManager.handle(newWallets, removedWallets)
         }
     }
 
-    private fun handleAdded(coins: List<Coin>) {
-        addedCoins.addAll(coins)
-
-        syncCoins()
-        sortCoins()
-        syncState()
-    }
-
-    fun setFilter(v: String?) {
-        filter = v
-
-        sortCoins()
-        syncState()
-    }
-
-    fun enable(coin: Coin) {
-        if (coin.type.restoreSettingTypes.isEmpty()) {
-            handleApproveRestoreSettings(coin)
-        } else {
-            restoreSettingsService.approveSettings(coin, account)
+    private fun handleCancelEnable(coin: Coin) {
+        if (!isEnabled(coin)) {
+            cancelEnableCoinObservable.onNext(coin)
         }
     }
 
-    fun disable(coin: Coin) {
-        val walletsToDelete = wallets.filter { it.coin == coin }
+    fun setFilter(v: String) {
+        filter = v
+
+        syncMarketCoins()
+        sortMarketCoins()
+        syncState()
+    }
+
+    fun enable(marketCoin: MarketCoin) {
+        enableCoinService.enable(marketCoin, account)
+    }
+
+    fun disable(marketCoin: MarketCoin) {
+        val walletsToDelete = wallets.filter { it.coin == marketCoin.coin }
         walletManager.delete(walletsToDelete)
     }
 
-    fun configure(coin: Coin) {
-        if (coin.type.coinSettingTypes.isEmpty()) return
-
-        val coinWallets = wallets.filter { it.coin == coin }
-        val settingsList = coinWallets.map { it.configuredCoin.settings }
-
-        coinSettingsService.approveSettings(coin, settingsList)
+    fun configure(marketCoin: MarketCoin) {
+        val coinWallets = wallets.filter { it.coin == marketCoin.coin }
+        enableCoinService.configure(marketCoin, coinWallets.map { it.configuredPlatformCoin })
     }
 
     override fun clear() {
         disposables.clear()
     }
 
-    data class Item(val coin: Coin, val hasSettings: Boolean, val enabled: Boolean)
-    data class State(val featuredItems: List<Item>, val items: List<Item>)
+    data class Item(
+        val marketCoin: MarketCoin,
+        val state: ItemState
+    )
+
+    sealed class ItemState {
+        object Unsupported : ItemState()
+        class Supported(val enabled: Boolean, val hasSettings: Boolean) : ItemState()
+    }
 }

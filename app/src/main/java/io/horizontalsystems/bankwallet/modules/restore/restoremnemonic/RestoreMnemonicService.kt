@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.restoremnemonic
+package io.horizontalsystems.bankwallet.modules.restore.restoremnemonic
 
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.managers.PassphraseValidator

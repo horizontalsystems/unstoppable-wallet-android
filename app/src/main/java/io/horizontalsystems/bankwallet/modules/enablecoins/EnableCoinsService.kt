@@ -28,9 +28,12 @@ class EnableCoinsService(
 
     private var disposables = CompositeDisposable()
 
-    fun handle(coinType: CoinType, accountType: AccountType) {
-        val tokenType = resolveTokenType(coinType, accountType) ?: return
-        state = State.WaitingForApprove(tokenType)
+    fun handle(coinTypes: List<CoinType>, accountType: AccountType) {
+        val tokenTypes = coinTypes.mapNotNull { resolveTokenType(it, accountType) }
+
+        if (tokenTypes.isNotEmpty()) {
+            state = State.WaitingForApprove(tokenTypes.first())
+        }
     }
 
     fun approveEnable() {
@@ -58,7 +61,10 @@ class EnableCoinsService(
             accountType !is AccountType.Mnemonic -> null
             coinType is CoinType.Ethereum -> TokenType.Erc20(accountType.words, accountType.passphrase)
             coinType is CoinType.BinanceSmartChain -> TokenType.Bep20(accountType.words, accountType.passphrase)
-            coinType is CoinType.Bep2 && coinType.symbol == "BNB" -> TokenType.Bep2(accountType.words, accountType.passphrase)
+            coinType is CoinType.Bep2 && coinType.symbol == "BNB" -> TokenType.Bep2(
+                accountType.words,
+                accountType.passphrase
+            )
             else -> null
         }
     }
@@ -67,13 +73,13 @@ class EnableCoinsService(
         val address = EthereumKit.address(bep20.words, bep20.passphrase, EthereumKit.NetworkType.BscMainNet)
 
         bep20Provider.getCoinTypesAsync(address.hex)
-                .subscribeIO({ coinTypes ->
-                    state = State.Success(coinTypes)
-                    enableCoinTypesAsync.onNext(coinTypes)
-                }, {
-                    state = State.Failure(it)
-                })
-                .let { disposables.add(it) }
+            .subscribeIO({ coinTypes ->
+                state = State.Success(coinTypes)
+                enableCoinTypesAsync.onNext(coinTypes)
+            }, {
+                state = State.Failure(it)
+            })
+            .let { disposables.add(it) }
     }
 
     private fun fetchErc20Tokens(erc20: TokenType.Erc20) {
@@ -81,23 +87,23 @@ class EnableCoinsService(
         val address = EthereumKit.address(erc20.words, erc20.passphrase, networkType)
 
         erc20Provider.getCoinTypesAsync(address.hex)
-                .subscribeIO({ coins ->
-                    state = State.Success(coins)
-                    enableCoinTypesAsync.onNext(coins)
-                }, {
-                    state = State.Failure(it)
-                })
-                .let { disposables.add(it) }
+            .subscribeIO({ coins ->
+                state = State.Success(coins)
+                enableCoinTypesAsync.onNext(coins)
+            }, {
+                state = State.Failure(it)
+            })
+            .let { disposables.add(it) }
     }
 
     private fun fetchBep2Tokens(bep2: TokenType.Bep2) {
         bep2Provider.getTokenSymbolsAsync(bep2.words, bep2.passphrase)
-                .subscribeIO({ coins ->
-                    handleFetchBep2(coins)
-                }, {
-                    state = State.Failure(it)
-                })
-                .let { disposables.add(it) }
+            .subscribeIO({ coins ->
+                handleFetchBep2(coins)
+            }, {
+                state = State.Failure(it)
+            })
+            .let { disposables.add(it) }
     }
 
     private fun handleFetchBep2(tokenSymbols: List<String>) {
