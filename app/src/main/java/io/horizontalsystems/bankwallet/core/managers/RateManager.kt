@@ -18,32 +18,32 @@ class RateManager(
 ) : IRateManager
 {
     override fun latestRate(coinType: CoinType, currencyCode: String): CoinPrice? {
-        TODO("Not yet implemented")
+        return null
     }
 
     override fun latestRate(
         coinTypes: List<CoinType>,
         currencyCode: String,
     ): Map<CoinType, CoinPrice> {
-        TODO("Not yet implemented")
+        return mapOf()
     }
 
     override fun getCoinPrice(coinType: CoinType, currencyCode: String): BigDecimal? {
-        TODO("Not yet implemented")
+        return null
     }
 
     override fun latestRateObservable(
         coinType: CoinType,
         currencyCode: String,
     ): Observable<CoinPrice> {
-        TODO("Not yet implemented")
+        return Observable.error(NotImplementedError())
     }
 
     override fun latestRateObservable(
         coinTypes: List<CoinType>,
         currencyCode: String,
     ): Observable<Map<CoinType, CoinPrice>> {
-        TODO("Not yet implemented")
+        return Observable.error(NotImplementedError())
     }
 
     override fun historicalRateCached(
@@ -51,7 +51,7 @@ class RateManager(
         currencyCode: String,
         timestamp: Long,
     ): BigDecimal? {
-        TODO("Not yet implemented")
+        return null
     }
 
     override fun historicalRate(
@@ -59,7 +59,7 @@ class RateManager(
         currencyCode: String,
         timestamp: Long,
     ): Single<BigDecimal> {
-        TODO("Not yet implemented")
+        return Single.error(NotImplementedError())
     }
 
     override fun chartInfo(
@@ -67,7 +67,7 @@ class RateManager(
         currencyCode: String,
         chartType: ChartType,
     ): ChartInfo? {
-        TODO("Not yet implemented")
+        return null
     }
 
     override fun chartInfoObservable(
@@ -75,7 +75,7 @@ class RateManager(
         currencyCode: String,
         chartType: ChartType,
     ): Observable<ChartInfo> {
-        TODO("Not yet implemented")
+        return Observable.error(NotImplementedError())
     }
 
     override fun coinMarketDetailsAsync(
@@ -84,15 +84,15 @@ class RateManager(
         rateDiffCoinCodes: List<String>,
         rateDiffPeriods: List<TimePeriod>,
     ): Single<CoinMarketDetails> {
-        TODO("Not yet implemented")
+        return Single.error(NotImplementedError())
     }
 
     override fun getTopTokenHoldersAsync(coinType: CoinType): Single<List<TokenHolder>> {
-        TODO("Not yet implemented")
+        return Single.error(NotImplementedError())
     }
 
     override fun getAuditsAsync(coinType: CoinType): Single<List<Auditor>> {
-        TODO("Not yet implemented")
+        return Single.error(NotImplementedError())
     }
 
     override fun getTopMarketList(
@@ -100,7 +100,7 @@ class RateManager(
         itemsCount: Int,
         diffPeriod: TimePeriod,
     ): Single<List<CoinMarket>> {
-        TODO("Not yet implemented")
+        return Single.error(NotImplementedError())
     }
 
     override fun getTopDefiTvlAsync(
@@ -109,44 +109,44 @@ class RateManager(
         itemsCount: Int,
         chain: String?,
     ): Single<List<DefiTvl>> {
-        TODO("Not yet implemented")
+        return Single.error(NotImplementedError())
     }
 
     override fun getCoinMarketList(
         coinTypes: List<CoinType>,
         currency: String,
     ): Single<List<CoinMarket>> {
-        TODO("Not yet implemented")
+        return Single.error(NotImplementedError())
     }
 
     override fun getCoinMarketListByCategory(
         categoryId: String,
         currency: String,
     ): Single<List<CoinMarket>> {
-        TODO("Not yet implemented")
+        return Single.error(NotImplementedError())
     }
 
     override fun getCoinRatingsAsync(): Single<Map<CoinType, String>> {
-        TODO("Not yet implemented")
+        return Single.error(NotImplementedError())
     }
 
     override fun getGlobalMarketInfoAsync(currency: String): Single<GlobalCoinMarket> {
-        TODO("Not yet implemented")
+        return Single.error(NotImplementedError())
     }
 
     override fun getGlobalCoinMarketPointsAsync(
         currencyCode: String,
         timePeriod: TimePeriod,
     ): Single<List<GlobalCoinMarketPoint>> {
-        TODO("Not yet implemented")
+        return Single.error(NotImplementedError())
     }
 
     override fun searchCoins(searchText: String): List<CoinData> {
-        TODO("Not yet implemented")
+        return listOf()
     }
 
     override fun getNotificationCoinCode(coinType: CoinType): String? {
-        TODO("Not yet implemented")
+        return null
     }
 
     override fun topDefiTvl(
@@ -154,7 +154,7 @@ class RateManager(
         fetchDiffPeriod: TimePeriod,
         itemsCount: Int,
     ): Single<List<DefiTvl>> {
-        TODO("Not yet implemented")
+        return Single.error(NotImplementedError())
     }
 
     override fun defiTvlPoints(
@@ -162,7 +162,7 @@ class RateManager(
         currencyCode: String,
         fetchDiffPeriod: TimePeriod,
     ): Single<List<DefiTvlPoint>> {
-        TODO("Not yet implemented")
+        return Single.error(NotImplementedError())
     }
 
     override fun getCoinMarketVolumePointsAsync(
@@ -170,16 +170,14 @@ class RateManager(
         currencyCode: String,
         fetchDiffPeriod: TimePeriod,
     ): Single<List<CoinMarketPoint>> {
-        TODO("Not yet implemented")
+        return Single.error(NotImplementedError())
     }
 
     override fun getCryptoNews(timestamp: Long?): Single<List<CryptoNews>> {
-        TODO("Not yet implemented")
+        return Single.error(NotImplementedError())
     }
 
-    override fun refresh(currencyCode: String) {
-        TODO("Not yet implemented")
-    }
+    override fun refresh(currencyCode: String) = Unit
 
 }
 
