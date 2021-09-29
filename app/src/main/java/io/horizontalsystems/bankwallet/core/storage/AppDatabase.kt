@@ -16,8 +16,8 @@ import io.horizontalsystems.bankwallet.core.storage.migrations.Migration_32_33
 import io.horizontalsystems.bankwallet.core.storage.migrations.Migration_33_34
 import io.horizontalsystems.bankwallet.core.storage.migrations.Migration_34_35
 import io.horizontalsystems.bankwallet.entities.*
-import io.horizontalsystems.coinkit.models.Coin
-import io.horizontalsystems.coinkit.models.CoinType
+import io.horizontalsystems.marketkit.models.Coin
+import io.horizontalsystems.marketkit.models.CoinType
 import java.util.*
 
 @Database(version = 35, exportSchema = false, entities = [
@@ -516,7 +516,7 @@ abstract class AppDatabase : RoomDatabase() {
             override fun migrate(database: SupportSQLiteDatabase) {
                 // extract custom coins
                 val customCoins = extractCustomCoins(database)
-                App.coinKit.saveCoins(customCoins)
+                // TODO App.coinKit.saveCoins(customCoins)
 
                 // change coinIds in enabled wallets
                 updateCoinIdInEnabledWallets(customCoins, database)
@@ -662,8 +662,8 @@ abstract class AppDatabase : RoomDatabase() {
                 if (erc20AddressColumn >= 0) {
                     val erc20Address = coinRecordCursor.getString(erc20AddressColumn)
                     if (erc20Address.isNotBlank()) {
-                        val coin = Coin(CoinType.Erc20(erc20Address), code, title, decimal)
-                        coins.add(coin)
+                        // TODO val coin = Coin(CoinType.Erc20(erc20Address), code, title, decimal)
+                        // coins.add(coin)
                         continue
                     }
                 }
@@ -671,8 +671,8 @@ abstract class AppDatabase : RoomDatabase() {
                 if (bep2SymbolColumn >= 0) {
                     val bep2Symbol = coinRecordCursor.getString(bep2SymbolColumn)
                     if (bep2Symbol.isNotBlank()) {
-                        val coin = Coin(CoinType.Bep2(bep2Symbol), code, title, decimal)
-                        coins.add(coin)
+                        // TODO val coin = Coin(CoinType.Bep2(bep2Symbol), code, title, decimal)
+                        // coins.add(coin)
                     }
                 }
             }
@@ -680,7 +680,7 @@ abstract class AppDatabase : RoomDatabase() {
         }
 
         private fun updateCoinIdInEnabledWallets(customCoins: List<Coin>, database: SupportSQLiteDatabase) {
-            val allCoins = App.coinKit.getDefaultCoins() + customCoins
+            val allCoins = listOf<Coin>()// TODO App.coinKit.getDefaultCoins() + customCoins
             val walletsCursor = database.query("SELECT * FROM EnabledWallet")
             while (walletsCursor.moveToNext()) {
                 val coinIdColumnIndex = walletsCursor.getColumnIndex("coinId")
@@ -709,19 +709,20 @@ abstract class AppDatabase : RoomDatabase() {
         }
 
         private fun newCoinId(old: String, coins: List<Coin>): String? {
-            oldTypeIds[old]?.let {
-                return it.ID
-            }
-
-            coins.firstOrNull { it.code == old }?.let {
-                return it.id
-            }
-
-            coins.firstOrNull { coin ->
-                (coin.type as? CoinType.Bep2)?.symbol == old
-            }?.let {
-                return it.id
-            }
+            // TODO
+//            oldTypeIds[old]?.let {
+//                return it.id
+//            }
+//
+//            coins.firstOrNull { it.code == old }?.let {
+//                return it.uid
+//            }
+//
+//            coins.firstOrNull { coin ->
+//                (coin.type as? CoinType.Bep2)?.symbol == old
+//            }?.let {
+//                return it.id
+//            }
 
             return null
         }
