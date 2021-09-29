@@ -1,8 +1,14 @@
 package io.horizontalsystems.bankwallet.entities
 
+import android.os.Parcelable
 import io.horizontalsystems.marketkit.models.PlatformCoin
+import kotlinx.android.parcel.Parcelize
 
-data class ConfiguredPlatformCoin(val platformCoin: PlatformCoin, val coinSettings: CoinSettings = CoinSettings()) {
+@Parcelize
+data class ConfiguredPlatformCoin(
+    val platformCoin: PlatformCoin,
+    val coinSettings: CoinSettings = CoinSettings()
+): Parcelable {
     override fun hashCode(): Int {
         return platformCoin.hashCode()
     }
