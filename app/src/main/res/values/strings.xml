@@ -826,6 +826,13 @@
     <string name="AddressFormatSettings_Title">Address Format</string>
     <string name="AddressFormatSettings_Description">Choose the address format for your %s wallet. Each selected format represents a different wallet on app\'s balance tab.</string>
 
+    <!-- Coin Platforms -->
+
+    <string name="CoinPlatforms_Native">Native</string>
+
+    <string name="CoinPlatformsSelector_Title">Coin Type</string>
+    <string name="CoinPlatformsSelector_Description">This token exists on multiple blockchains. Select version(s) you would like to use.</string>
+
     <!-- Blockchain Settings -->
 
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">Restore Source</string>

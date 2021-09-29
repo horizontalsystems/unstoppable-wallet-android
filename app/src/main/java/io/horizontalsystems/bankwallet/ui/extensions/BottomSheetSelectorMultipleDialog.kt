@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
+import io.horizontalsystems.marketkit.models.PlatformCoin
 import io.horizontalsystems.views.inflate
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_bottom_selector.*
@@ -98,6 +99,15 @@ class BottomSheetSelectorMultipleDialog(
                     .show(fragmentManager, "selector_dialog")
         }
     }
+
+    data class Config(
+        val platformCoin: PlatformCoin?,
+        val title: String,
+        val subtitle: String,
+        val selectedIndexes: List<Int>,
+        val viewItems: List<BottomSheetSelectorViewItem>,
+        val description: String
+    )
 }
 
 class MultipleSelectorItemsAdapter(private val items: List<BottomSheetSelectorViewItem>, val selected: MutableList<Int>, val onSelectedItemsChanged: (List<Int>) -> Unit) : RecyclerView.Adapter<ItemViewHolderMultiple>() {

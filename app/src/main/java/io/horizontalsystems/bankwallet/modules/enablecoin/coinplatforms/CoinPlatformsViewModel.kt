@@ -1,14 +1,20 @@
 package io.horizontalsystems.bankwallet.modules.enablecoin.coinplatforms
 
+import androidx.lifecycle.ViewModel
+import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
+import io.horizontalsystems.bankwallet.entities.platformCoinType
+import io.horizontalsystems.bankwallet.entities.platformType
+import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorMultipleDialog
+import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorViewItem
 import io.horizontalsystems.core.SingleLiveEvent
-import io.horizontalsystems.marketkit.models.Platform
 import io.reactivex.disposables.Disposable
 
 class CoinPlatformsViewModel(
     private val service: CoinPlatformsService
-) {
-    val openPlatformsSelectorEvent = SingleLiveEvent<List<PlatformViewItem>>()
+) : ViewModel() {
+    val openPlatformsSelectorEvent = SingleLiveEvent<BottomSheetSelectorMultipleDialog.Config>()
 
     private var currentRequest: CoinPlatformsService.Request? = null
     private val disposable: Disposable
@@ -22,15 +28,27 @@ class CoinPlatformsViewModel(
 
     private fun handle(request: CoinPlatformsService.Request) {
         currentRequest = request
-        val viewItems = request.marketCoin.platforms.map {
-            PlatformViewItem(it, request.currentPlatforms.contains(it))
-        }
-        openPlatformsSelectorEvent.postValue(viewItems)
+        val marketCoin = request.marketCoin
+        val config = BottomSheetSelectorMultipleDialog.Config(
+            platformCoin = null,
+            title = Translator.getString(R.string.CoinPlatformsSelector_Title),
+            subtitle = marketCoin.coin.name,
+            description = Translator.getString(R.string.CoinPlatformsSelector_Description),
+            selectedIndexes = request.currentPlatforms.map { marketCoin.platforms.indexOf(it) },
+            viewItems = marketCoin.platforms.map { platform ->
+                BottomSheetSelectorViewItem(
+                    title = platform.coinType.platformType,
+                    subtitle = platform.coinType.platformCoinType
+                )
+            }
+        )
+        openPlatformsSelectorEvent.postValue(config)
     }
 
-    fun onSelect(viewItems: List<PlatformViewItem>) {
+    fun onSelect(indexes: List<Int>) {
         currentRequest?.let { currentRequest ->
-            service.select(viewItems.map { it.platform }, currentRequest.marketCoin.coin)
+            val platforms = currentRequest.marketCoin.platforms
+            service.select(indexes.map { platforms[it] }, currentRequest.marketCoin.coin)
         }
     }
 
@@ -39,10 +57,5 @@ class CoinPlatformsViewModel(
             service.cancel(currentRequest.marketCoin.coin)
         }
     }
-
-    data class PlatformViewItem(
-        val platform: Platform,
-        val selected: Boolean
-    )
 
 }

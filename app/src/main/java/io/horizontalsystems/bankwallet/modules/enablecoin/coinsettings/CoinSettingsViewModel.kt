@@ -6,6 +6,7 @@ import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorMultipleDialog
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorViewItem
 import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.marketkit.models.PlatformCoin
@@ -18,7 +19,7 @@ class CoinSettingsViewModel(
 
     private var disposables = CompositeDisposable()
 
-    val openBottomSelectorLiveEvent = SingleLiveEvent<Config>()
+    val openBottomSelectorLiveEvent = SingleLiveEvent<BottomSheetSelectorMultipleDialog.Config>()
 
     private var currentRequest: CoinSettingsService.Request? = null
 
@@ -44,8 +45,8 @@ class CoinSettingsViewModel(
         openBottomSelectorLiveEvent.postValue(config)
     }
 
-    private fun derivationConfig(platformCoin: PlatformCoin, allDerivations: List<AccountType.Derivation>, current: List<AccountType.Derivation>): Config {
-        return Config(
+    private fun derivationConfig(platformCoin: PlatformCoin, allDerivations: List<AccountType.Derivation>, current: List<AccountType.Derivation>): BottomSheetSelectorMultipleDialog.Config {
+        return BottomSheetSelectorMultipleDialog.Config(
             platformCoin = platformCoin,
             title = Translator.getString(R.string.AddressFormatSettings_Title),
             subtitle = platformCoin.name,
@@ -63,8 +64,8 @@ class CoinSettingsViewModel(
         )
     }
 
-    private fun bitcoinCashCoinTypeConfig(platformCoin: PlatformCoin, types: List<BitcoinCashCoinType>, current: List<BitcoinCashCoinType>): Config {
-        return Config(
+    private fun bitcoinCashCoinTypeConfig(platformCoin: PlatformCoin, types: List<BitcoinCashCoinType>, current: List<BitcoinCashCoinType>): BottomSheetSelectorMultipleDialog.Config {
+        return BottomSheetSelectorMultipleDialog.Config(
             platformCoin = platformCoin,
             title = Translator.getString(R.string.AddressFormatSettings_Title),
             subtitle = platformCoin.name,
@@ -102,14 +103,5 @@ class CoinSettingsViewModel(
         clearables.forEach(Clearable::clear)
         disposables.clear()
     }
-
-    data class Config(
-        val platformCoin: PlatformCoin,
-        val title: String,
-        val subtitle: String,
-        val selectedIndexes: List<Int>,
-        val viewItems: List<BottomSheetSelectorViewItem>,
-        val description: String
-    )
 
 }

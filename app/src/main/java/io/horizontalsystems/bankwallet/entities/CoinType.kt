@@ -1,6 +1,8 @@
 package io.horizontalsystems.bankwallet.entities
 
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.managers.RestoreSettingType
+import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.marketkit.models.Coin
 import io.horizontalsystems.marketkit.models.CoinType
 
@@ -25,7 +27,7 @@ val CoinType.platformType: String
 
 val CoinType.platformCoinType: String
     get() = when (this) {
-        CoinType.Ethereum, CoinType.BinanceSmartChain -> "Native"
+        CoinType.Ethereum, CoinType.BinanceSmartChain -> Translator.getString(R.string.CoinPlatforms_Native)
         is CoinType.Erc20 -> "ERC20"
         is CoinType.Bep20 -> "BEP20"
         is CoinType.Bep2 -> "BEP2"

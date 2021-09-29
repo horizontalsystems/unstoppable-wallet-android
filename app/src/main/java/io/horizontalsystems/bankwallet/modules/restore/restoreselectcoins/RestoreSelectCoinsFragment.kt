@@ -8,6 +8,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.AccountType
+import io.horizontalsystems.bankwallet.modules.enablecoin.coinplatforms.CoinPlatformsViewModel
 import io.horizontalsystems.bankwallet.modules.enablecoin.coinsettings.CoinSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.RestoreSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.enablecoins.EnableCoinsDialog
@@ -28,6 +29,7 @@ class RestoreSelectCoinsFragment : CoinListBaseFragment() {
     private lateinit var viewModel: RestoreSelectCoinsViewModel
     private lateinit var coinSettingsViewModel: CoinSettingsViewModel
     private lateinit var restoreSettingsViewModel: RestoreSettingsViewModel
+    private lateinit var coinPlatformsViewModel: CoinPlatformsViewModel
 
     private var doneMenuButton: MenuItem? = null
 
@@ -56,6 +58,7 @@ class RestoreSelectCoinsFragment : CoinListBaseFragment() {
         viewModel = ViewModelProvider(this, vmFactory).get(RestoreSelectCoinsViewModel::class.java)
         coinSettingsViewModel = ViewModelProvider(this, vmFactory).get(CoinSettingsViewModel::class.java)
         restoreSettingsViewModel = ViewModelProvider(this, vmFactory).get(RestoreSettingsViewModel::class.java)
+        coinPlatformsViewModel = ViewModelProvider(this, vmFactory).get(CoinPlatformsViewModel::class.java)
 
         val enableCoinsViewModel by viewModels<EnableCoinsViewModel> { vmFactory }
 
@@ -119,14 +122,6 @@ class RestoreSelectCoinsFragment : CoinListBaseFragment() {
         viewModel.updateFilter(query)
     }
 
-    override fun onCancelSelection() {
-        coinSettingsViewModel.onCancelSelect()
-    }
-
-    override fun onSelect(indexes: List<Int>) {
-        coinSettingsViewModel.onSelect(indexes)
-    }
-
     private fun observe() {
         viewModel.viewItemsLiveData.observe(viewLifecycleOwner) { viewItems ->
             setViewItems(viewItems)
@@ -140,16 +135,20 @@ class RestoreSelectCoinsFragment : CoinListBaseFragment() {
             findNavController().popBackStack(R.id.restoreMnemonicFragment, true)
         }
 
-        viewModel.restoreEnabledLiveData.observe(viewLifecycleOwner, Observer { enabled ->
+        viewModel.restoreEnabledLiveData.observe(viewLifecycleOwner) { enabled ->
             doneMenuButton?.let { menuItem ->
                 setMenuItemEnabled(menuItem, enabled)
             }
-        })
+        }
 
-        coinSettingsViewModel.openBottomSelectorLiveEvent.observe(viewLifecycleOwner, Observer { config ->
+        coinSettingsViewModel.openBottomSelectorLiveEvent.observe(viewLifecycleOwner) { config ->
             hideKeyboard()
-            showBottomSelectorDialog(config)
-        })
+            showBottomSelectorDialog(
+                config,
+                onSelect = { indexes -> coinSettingsViewModel.onSelect(indexes) },
+                onCancel = { coinSettingsViewModel.onCancelSelect() }
+            )
+        }
 
         restoreSettingsViewModel.openBirthdayAlertSignal.observe(viewLifecycleOwner) {
             val zcashBirthdayHeightDialog = ZcashBirthdayHeightDialog()
@@ -161,6 +160,14 @@ class RestoreSelectCoinsFragment : CoinListBaseFragment() {
             }
 
             zcashBirthdayHeightDialog.show(requireActivity().supportFragmentManager, "ZcashBirthdayHeightDialog")
+        }
+
+        coinPlatformsViewModel.openPlatformsSelectorEvent.observe(viewLifecycleOwner) { config ->
+            showBottomSelectorDialog(
+                config,
+                onSelect = { indexes -> coinPlatformsViewModel.onSelect(indexes) },
+                onCancel = { coinPlatformsViewModel.onCancelSelect() }
+            )
         }
     }
 
