@@ -28,14 +28,14 @@ class CoinPlatformsViewModel(
 
     private fun handle(request: CoinPlatformsService.Request) {
         currentRequest = request
-        val marketCoin = request.marketCoin
+        val fullCoin = request.fullCoin
         val config = BottomSheetSelectorMultipleDialog.Config(
             platformCoin = null,
             title = Translator.getString(R.string.CoinPlatformsSelector_Title),
-            subtitle = marketCoin.coin.name,
+            subtitle = fullCoin.coin.name,
             description = Translator.getString(R.string.CoinPlatformsSelector_Description),
-            selectedIndexes = request.currentPlatforms.map { marketCoin.platforms.indexOf(it) },
-            viewItems = marketCoin.platforms.map { platform ->
+            selectedIndexes = request.currentPlatforms.map { fullCoin.platforms.indexOf(it) },
+            viewItems = fullCoin.platforms.map { platform ->
                 BottomSheetSelectorViewItem(
                     title = platform.coinType.platformType,
                     subtitle = platform.coinType.platformCoinType
@@ -47,14 +47,14 @@ class CoinPlatformsViewModel(
 
     fun onSelect(indexes: List<Int>) {
         currentRequest?.let { currentRequest ->
-            val platforms = currentRequest.marketCoin.platforms
-            service.select(indexes.map { platforms[it] }, currentRequest.marketCoin.coin)
+            val platforms = currentRequest.fullCoin.platforms
+            service.select(indexes.map { platforms[it] }, currentRequest.fullCoin.coin)
         }
     }
 
     fun onCancelSelect() {
         currentRequest?.let { currentRequest ->
-            service.cancel(currentRequest.marketCoin.coin)
+            service.cancel(currentRequest.fullCoin.coin)
         }
     }
 

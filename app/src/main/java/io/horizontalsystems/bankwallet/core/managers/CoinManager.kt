@@ -5,7 +5,7 @@ import io.horizontalsystems.bankwallet.core.ICustomTokenStorage
 import io.horizontalsystems.bankwallet.entities.CustomToken
 import io.horizontalsystems.marketkit.MarketKit
 import io.horizontalsystems.marketkit.models.CoinType
-import io.horizontalsystems.marketkit.models.MarketCoin
+import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.marketkit.models.PlatformCoin
 
 class CoinManager(
@@ -14,18 +14,18 @@ class CoinManager(
 ) : ICoinManager {
     private val featuredCoinTypes: List<CoinType> = listOf(CoinType.Bitcoin, CoinType.Ethereum, CoinType.BinanceSmartChain)
 
-    override fun featuredMarketCoins(enabledCoinTypes: List<CoinType>): List<MarketCoin> {
-        val appMarketCoins = customMarketCoins(enabledCoinTypes)
-        val kitMarketCoins = marketKit.marketCoinsByCoinTypes(featuredCoinTypes + enabledCoinTypes)
+    override fun featuredFullCoins(enabledCoinTypes: List<CoinType>): List<FullCoin> {
+        val appFullCoins = customFullCoins(enabledCoinTypes)
+        val kitFullCoins = marketKit.fullCoinsByCoinTypes(featuredCoinTypes + enabledCoinTypes)
 
-        return appMarketCoins + kitMarketCoins
+        return appFullCoins + kitFullCoins
     }
 
-    override fun marketCoins(filter: String, limit: Int): List<MarketCoin> {
-        val appMarketCoins = customMarketCoins(filter)
-        val kitMarketCoins = marketKit.marketCoins(filter, limit)
+    override fun fullCoins(filter: String, limit: Int): List<FullCoin> {
+        val appFullCoins = customFullCoins(filter)
+        val kitFullCoins = marketKit.fullCoins(filter, limit)
 
-        return appMarketCoins + kitMarketCoins
+        return appFullCoins + kitFullCoins
     }
 
     override fun getPlatformCoin(coinType: CoinType): PlatformCoin? {
@@ -56,14 +56,14 @@ class CoinManager(
         return customTokens.filter { customToken -> !existingPlatformCoins.any { it.coinType == customToken.coinType } }
     }
 
-    private fun customMarketCoins(filter: String): List<MarketCoin> {
+    private fun customFullCoins(filter: String): List<FullCoin> {
         val customTokens = storage.customTokens(filter)
-        return adjustedCustomTokens(customTokens).map { it.platformCoin.marketCoin }
+        return adjustedCustomTokens(customTokens).map { it.platformCoin.fullCoin }
     }
 
-    private fun customMarketCoins(coinTypes: List<CoinType>): List<MarketCoin> {
+    private fun customFullCoins(coinTypes: List<CoinType>): List<FullCoin> {
         val customTokens = storage.customTokens(coinTypes.map { it.id })
-        return adjustedCustomTokens(customTokens).map { it.platformCoin.marketCoin }
+        return adjustedCustomTokens(customTokens).map { it.platformCoin.fullCoin }
     }
 
     private fun customPlatformCoins(): List<PlatformCoin> {

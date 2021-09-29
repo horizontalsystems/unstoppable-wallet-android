@@ -75,9 +75,9 @@ class EnableCoinService(
         cancelEnableCoinObservable.onNext(coin)
     }
 
-    fun enable(marketCoin: MarketCoin, account: Account? = null) {
-        if (marketCoin.platforms.size == 1) {
-            val platformCoin = PlatformCoin(marketCoin.platforms.first(), marketCoin.coin)
+    fun enable(fullCoin: FullCoin, account: Account? = null) {
+        if (fullCoin.platforms.size == 1) {
+            val platformCoin = PlatformCoin(fullCoin.platforms.first(), fullCoin.coin)
             when {
                 platformCoin.coinType.restoreSettingTypes.isNotEmpty() -> {
                     restoreSettingsService.approveSettings(platformCoin, account)
@@ -90,21 +90,21 @@ class EnableCoinService(
                 }
             }
         } else {
-            coinPlatformsService.approvePlatforms(marketCoin)
+            coinPlatformsService.approvePlatforms(fullCoin)
         }
     }
 
-    fun configure(marketCoin: MarketCoin, configuredPlatformCoins: List<ConfiguredPlatformCoin>) {
-        if (marketCoin.platforms.size == 1) {
-            val platform = marketCoin.platforms.first()
+    fun configure(fullCoin: FullCoin, configuredPlatformCoins: List<ConfiguredPlatformCoin>) {
+        if (fullCoin.platforms.size == 1) {
+            val platform = fullCoin.platforms.first()
             if (platform.coinType.coinSettingTypes.isNotEmpty()) {
                 val settings = configuredPlatformCoins.map { it.coinSettings }
-                val platformCoin = PlatformCoin(platform, marketCoin.coin)
+                val platformCoin = PlatformCoin(platform, fullCoin.coin)
                 coinSettingsService.approveSettings(platformCoin, settings)
             }
         } else {
             val currentPlatforms = configuredPlatformCoins.map { it.platformCoin.platform }
-            coinPlatformsService.approvePlatforms(marketCoin, currentPlatforms)
+            coinPlatformsService.approvePlatforms(fullCoin, currentPlatforms)
         }
     }
 

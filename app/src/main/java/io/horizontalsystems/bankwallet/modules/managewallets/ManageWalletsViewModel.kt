@@ -7,7 +7,7 @@ import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.ui.extensions.coinlist.CoinViewItem
 import io.horizontalsystems.bankwallet.ui.extensions.coinlist.CoinViewItemState
 import io.horizontalsystems.marketkit.models.Coin
-import io.horizontalsystems.marketkit.models.MarketCoin
+import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.views.ListPosition
 import io.reactivex.disposables.CompositeDisposable
 
@@ -43,27 +43,27 @@ class ManageWalletsViewModel(
         return when (item.state) {
             is ManageWalletsService.ItemState.Supported -> {
                 CoinViewItem(
-                    item.marketCoin,
+                    item.fullCoin,
                     CoinViewItemState.ToggleVisible(item.state.enabled, item.state.hasSettings),
                     listPosition
                 )
             }
             ManageWalletsService.ItemState.Unsupported -> {
-                CoinViewItem(item.marketCoin, CoinViewItemState.ToggleHidden, listPosition)
+                CoinViewItem(item.fullCoin, CoinViewItemState.ToggleHidden, listPosition)
             }
         }
     }
 
-    fun enable(marketCoin: MarketCoin) {
-        service.enable(marketCoin)
+    fun enable(fullCoin: FullCoin) {
+        service.enable(fullCoin)
     }
 
-    fun disable(marketCoin: MarketCoin) {
-        service.disable(marketCoin)
+    fun disable(fullCoin: FullCoin) {
+        service.disable(fullCoin)
     }
 
-    fun onClickSettings(marketCoin: MarketCoin) {
-        service.configure(marketCoin)
+    fun onClickSettings(fullCoin: FullCoin) {
+        service.configure(fullCoin)
     }
 
     fun updateFilter(filter: String) {

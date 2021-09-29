@@ -5,7 +5,7 @@ import io.horizontalsystems.bankwallet.core.managers.RestoreSettings
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.modules.enablecoin.EnableCoinService
 import io.horizontalsystems.marketkit.models.Coin
-import io.horizontalsystems.marketkit.models.MarketCoin
+import io.horizontalsystems.marketkit.models.FullCoin
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
 import java.util.*
@@ -28,7 +28,7 @@ class ManageWalletsService(
 
     private val account: Account = accountManager.activeAccount!!
     private var wallets = setOf<Wallet>()
-    private var marketCoins = mutableListOf<MarketCoin>()
+    private var fullCoins = mutableListOf<FullCoin>()
 
     private val disposables = CompositeDisposable()
 
@@ -57,8 +57,8 @@ class ManageWalletsService(
 
 
         sync(walletManager.activeWallets)
-        syncMarketCoins()
-        sortMarketCoins()
+        syncFullCoins()
+        sortFullCoins()
         syncState()
     }
 
@@ -70,16 +70,16 @@ class ManageWalletsService(
         wallets = walletList.toSet()
     }
 
-    private fun syncMarketCoins() {
-        marketCoins = if (filter.isNotBlank()) {
-            coinManager.featuredMarketCoins(wallets.map { it.coinType }).toMutableList()
+    private fun syncFullCoins() {
+        fullCoins = if (filter.isNotBlank()) {
+            coinManager.featuredFullCoins(wallets.map { it.coinType }).toMutableList()
         } else {
-            coinManager.marketCoins(filter, 20).toMutableList()
+            coinManager.fullCoins(filter, 20).toMutableList()
         }
     }
 
-    private fun sortMarketCoins() {
-        marketCoins.sortWith(compareByDescending<MarketCoin> {
+    private fun sortFullCoins() {
+        fullCoins.sortWith(compareByDescending<FullCoin> {
             isEnabled(it.coin)
         }.thenBy {
             it.coin.marketCapRank
@@ -88,33 +88,33 @@ class ManageWalletsService(
         })
     }
 
-    private fun item(marketCoin: MarketCoin): Item {
-        val supportedPlatforms = marketCoin.platforms.filter { it.coinType.isSupported }
-        val marketCoin = MarketCoin(marketCoin.coin, supportedPlatforms)
+    private fun item(fullCoin: FullCoin): Item {
+        val supportedPlatforms = fullCoin.platforms.filter { it.coinType.isSupported }
+        val fullCoin = FullCoin(fullCoin.coin, supportedPlatforms)
 
-        val itemState = if (marketCoin.platforms.isEmpty()) {
+        val itemState = if (fullCoin.platforms.isEmpty()) {
             ItemState.Unsupported
         } else {
-            val enabled = isEnabled(marketCoin.coin)
+            val enabled = isEnabled(fullCoin.coin)
             ItemState.Supported(
                 enabled = enabled,
-                hasSettings = enabled && hasSettingsOrPlatforms(marketCoin)
+                hasSettings = enabled && hasSettingsOrPlatforms(fullCoin)
             )
         }
 
-        return Item(marketCoin, itemState)
+        return Item(fullCoin, itemState)
     }
 
-    private fun hasSettingsOrPlatforms(marketCoin: MarketCoin) =
-        if (marketCoin.platforms.size == 1) {
-            val platform = marketCoin.platforms[0]
+    private fun hasSettingsOrPlatforms(fullCoin: FullCoin) =
+        if (fullCoin.platforms.size == 1) {
+            val platform = fullCoin.platforms[0]
             platform.coinType.coinSettingTypes.isNotEmpty()
         } else {
             true
         }
 
     private fun syncState() {
-        items = marketCoins.map { item(it) }
+        items = fullCoins.map { item(it) }
     }
 
     private fun handleUpdated(wallets: List<Wallet>) {
@@ -152,23 +152,23 @@ class ManageWalletsService(
     fun setFilter(v: String) {
         filter = v
 
-        syncMarketCoins()
-        sortMarketCoins()
+        syncFullCoins()
+        sortFullCoins()
         syncState()
     }
 
-    fun enable(marketCoin: MarketCoin) {
-        enableCoinService.enable(marketCoin, account)
+    fun enable(fullCoin: FullCoin) {
+        enableCoinService.enable(fullCoin, account)
     }
 
-    fun disable(marketCoin: MarketCoin) {
-        val walletsToDelete = wallets.filter { it.coin == marketCoin.coin }
+    fun disable(fullCoin: FullCoin) {
+        val walletsToDelete = wallets.filter { it.coin == fullCoin.coin }
         walletManager.delete(walletsToDelete)
     }
 
-    fun configure(marketCoin: MarketCoin) {
-        val coinWallets = wallets.filter { it.coin == marketCoin.coin }
-        enableCoinService.configure(marketCoin, coinWallets.map { it.configuredPlatformCoin })
+    fun configure(fullCoin: FullCoin) {
+        val coinWallets = wallets.filter { it.coin == fullCoin.coin }
+        enableCoinService.configure(fullCoin, coinWallets.map { it.configuredPlatformCoin })
     }
 
     override fun clear() {
@@ -176,7 +176,7 @@ class ManageWalletsService(
     }
 
     data class Item(
-        val marketCoin: MarketCoin,
+        val fullCoin: FullCoin,
         val state: ItemState
     )
 

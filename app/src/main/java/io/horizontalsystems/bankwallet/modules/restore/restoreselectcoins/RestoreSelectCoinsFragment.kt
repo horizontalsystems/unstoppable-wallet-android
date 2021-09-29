@@ -17,7 +17,7 @@ import io.horizontalsystems.bankwallet.ui.extensions.ZcashBirthdayHeightDialog
 import io.horizontalsystems.bankwallet.ui.extensions.coinlist.CoinListBaseFragment
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
-import io.horizontalsystems.marketkit.models.MarketCoin
+import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.snackbar.SnackbarDuration
 import kotlinx.android.synthetic.main.fragment_manage_wallets.*
 
@@ -104,16 +104,16 @@ class RestoreSelectCoinsFragment : CoinListBaseFragment() {
 
     // ManageWalletItemsAdapter.Listener
 
-    override fun enable(marketCoin: MarketCoin) {
-        viewModel.enable(marketCoin)
+    override fun enable(fullCoin: FullCoin) {
+        viewModel.enable(fullCoin)
     }
 
-    override fun disable(marketCoin: MarketCoin) {
-        viewModel.disable(marketCoin)
+    override fun disable(fullCoin: FullCoin) {
+        viewModel.disable(fullCoin)
     }
 
-    override fun edit(marketCoin: MarketCoin) {
-        viewModel.onClickSettings(marketCoin)
+    override fun edit(fullCoin: FullCoin) {
+        viewModel.onClickSettings(fullCoin)
     }
 
     // CoinListBaseFragment

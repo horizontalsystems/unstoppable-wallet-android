@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.enablecoin.coinplatforms
 
 import io.horizontalsystems.marketkit.models.Coin
-import io.horizontalsystems.marketkit.models.MarketCoin
+import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.marketkit.models.Platform
 import io.reactivex.subjects.PublishSubject
 
@@ -10,11 +10,11 @@ class CoinPlatformsService {
     val rejectApprovePlatformsObservable = PublishSubject.create<Coin>()
     val requestObservable = PublishSubject.create<Request>()
 
-    fun approvePlatforms(marketCoin: MarketCoin, currentPlatforms: List<Platform> = listOf()) {
-        if (marketCoin.platforms.size == 1) {
-            approvePlatformsObservable.onNext(CoinWithPlatforms(marketCoin.coin, marketCoin.platforms))
+    fun approvePlatforms(fullCoin: FullCoin, currentPlatforms: List<Platform> = listOf()) {
+        if (fullCoin.platforms.size == 1) {
+            approvePlatformsObservable.onNext(CoinWithPlatforms(fullCoin.coin, fullCoin.platforms))
         } else {
-            requestObservable.onNext(Request(marketCoin, currentPlatforms))
+            requestObservable.onNext(Request(fullCoin, currentPlatforms))
         }
     }
 
@@ -32,7 +32,7 @@ class CoinPlatformsService {
     )
 
     data class Request(
-        val marketCoin: MarketCoin,
+        val fullCoin: FullCoin,
         val currentPlatforms: List<Platform>
     )
 }
