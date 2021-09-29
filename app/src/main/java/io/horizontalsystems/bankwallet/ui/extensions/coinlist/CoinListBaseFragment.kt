@@ -5,25 +5,26 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
-import androidx.recyclerview.widget.ConcatAdapter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseWithSearchFragment
-import io.horizontalsystems.bankwallet.modules.blockchainsettings.BlockchainSettingsModule
+import io.horizontalsystems.bankwallet.modules.enablecoin.coinsettings.CoinSettingsViewModel
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorMultipleDialog
 import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
-import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.core.findNavController
+import io.horizontalsystems.marketkit.models.Coin
+import io.horizontalsystems.marketkit.models.MarketCoin
 import kotlinx.android.synthetic.main.fragment_manage_wallets.*
 
 abstract class CoinListBaseFragment : BaseWithSearchFragment(), CoinListAdapter.Listener {
 
-    private lateinit var featuredItemsAdapter: CoinListAdapter
     private lateinit var itemsAdapter: CoinListAdapter
 
     abstract val title: CharSequence
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         return inflater.inflate(R.layout.fragment_manage_wallets, container, false)
     }
 
@@ -34,31 +35,25 @@ abstract class CoinListBaseFragment : BaseWithSearchFragment(), CoinListAdapter.
             findNavController().popBackStack()
         }
 
-        featuredItemsAdapter = CoinListAdapter(this)
-        itemsAdapter = CoinListAdapter(this)
         recyclerView.itemAnimator = null
-        recyclerView.adapter = ConcatAdapter(featuredItemsAdapter, itemsAdapter)
-
+        recyclerView.adapter = CoinListAdapter(this)
     }
 
     // ManageWalletItemsAdapter.Listener
 
-    override fun enable(coin: Coin) {}
+    override fun enable(marketCoin: MarketCoin) {}
 
-    override fun disable(coin: Coin) {}
+    override fun disable(marketCoin: MarketCoin) {}
 
 
     // CoinListBaseFragment
 
-    protected fun setViewState(viewState: CoinViewState) {
-        featuredItemsAdapter.submitList(viewState.featuredViewItems)
-        itemsAdapter.submitList(viewState.viewItems)
-
+    protected fun setViewItems(viewItems: List<CoinViewItem>) {
+        itemsAdapter.submitList(viewItems)
         progressLoading.isVisible = false
     }
 
     protected fun disableCoin(coin: Coin) {
-        featuredItemsAdapter.disableCoin(coin)
         itemsAdapter.disableCoin(coin)
     }
 
@@ -66,21 +61,21 @@ abstract class CoinListBaseFragment : BaseWithSearchFragment(), CoinListAdapter.
 
     open fun onSelect(indexes: List<Int>) {}
 
-    protected fun showBottomSelectorDialog(config: BlockchainSettingsModule.Config) {
-        val coinDrawable = context?.let { AppLayoutHelper.getCoinDrawable(it, config.coin.type) }
+    protected fun showBottomSelectorDialog(config: CoinSettingsViewModel.Config) {
+        val coinDrawable = context?.let { AppLayoutHelper.getCoinDrawable(it, config.platformCoin.coinType) }
 
         BottomSheetSelectorMultipleDialog.show(
-                fragmentManager = childFragmentManager,
-                title = config.title,
-                subtitle = config.subtitle,
-                icon = coinDrawable,
-                items = config.viewItems,
-                selected = config.selectedIndexes,
-                notifyUnchanged = true,
-                onItemSelected = { onSelect(it) },
-                onCancelled = { onCancelSelection() },
-                warning = config.description
-                )
+            fragmentManager = childFragmentManager,
+            title = config.title,
+            subtitle = config.subtitle,
+            icon = coinDrawable,
+            items = config.viewItems,
+            selected = config.selectedIndexes,
+            notifyUnchanged = true,
+            onItemSelected = { onSelect(it) },
+            onCancelled = { onCancelSelection() },
+            warning = config.description
+        )
     }
 
 }

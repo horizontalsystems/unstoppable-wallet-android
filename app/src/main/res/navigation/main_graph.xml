@@ -458,7 +458,7 @@
         tools:layout="@layout/fragment_create_account" />
     <fragment
         android:id="@+id/restoreMnemonicFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.restoremnemonic.RestoreMnemonicFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.restore.restoremnemonic.RestoreMnemonicFragment"
         tools:layout="@layout/fragment_restore_mnemonic" />
     <fragment
         android:id="@+id/restoreSelectCoinsFragment"

@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.restoremnemonic
+package io.horizontalsystems.bankwallet.modules.restore.restoremnemonic
 
 import android.annotation.SuppressLint
 import android.os.Bundle
