@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.marketkit.models.Coin
-import io.horizontalsystems.marketkit.models.MarketCoin
+import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.views.ListPosition
 import io.horizontalsystems.views.inflate
 import kotlinx.android.extensions.LayoutContainer
@@ -19,9 +19,9 @@ class CoinListAdapter(private val listener: Listener) :
     ListAdapter<CoinViewItem, CoinWithSwitchViewHolder>(diffCallback) {
 
     interface Listener {
-        fun enable(marketCoin: MarketCoin)
-        fun disable(marketCoin: MarketCoin)
-        fun edit(marketCoin: MarketCoin) = Unit
+        fun enable(fullCoin: FullCoin)
+        fun disable(fullCoin: FullCoin)
+        fun edit(fullCoin: FullCoin) = Unit
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CoinWithSwitchViewHolder {
@@ -29,13 +29,13 @@ class CoinListAdapter(private val listener: Listener) :
             inflate(parent, R.layout.view_holder_coin_manage_item, false),
             { isChecked, index ->
                 val item = getItem(index)
-                onSwitchToggle(isChecked, item.marketCoin)
+                onSwitchToggle(isChecked, item.fullCoin)
                 //update state in adapter item list: coins
 //                item.enabled = isChecked
             },
             { index ->
                 val item = getItem(index)
-                listener.edit(item.marketCoin)
+                listener.edit(item.fullCoin)
             }
         )
     }
@@ -44,17 +44,17 @@ class CoinListAdapter(private val listener: Listener) :
         holder.bind(getItem(position))
     }
 
-    private fun onSwitchToggle(isChecked: Boolean, marketCoin: MarketCoin) {
+    private fun onSwitchToggle(isChecked: Boolean, fullCoin: FullCoin) {
         if (isChecked) {
-            listener.enable(marketCoin)
+            listener.enable(fullCoin)
         } else {
-            listener.disable(marketCoin)
+            listener.disable(fullCoin)
         }
     }
 
     fun disableCoin(coin: Coin): Boolean {
         for (i in 0 until itemCount) {
-            if (getItem(i).marketCoin.coin == coin) {
+            if (getItem(i).fullCoin.coin == coin) {
 //                getItem(i).enabled = false
                 notifyItemChanged(i)
                 return true
@@ -90,7 +90,7 @@ class CoinWithSwitchViewHolder(
     }
 
     fun bind(viewItem: CoinViewItem) {
-        set(viewItem.marketCoin, viewItem.listPosition)
+        set(viewItem.fullCoin, viewItem.listPosition)
 
         when (viewItem.state) {
             CoinViewItemState.ToggleHidden -> {
@@ -115,13 +115,13 @@ class CoinWithSwitchViewHolder(
         }
     }
 
-    private fun set(marketCoin: MarketCoin, listPosition: ListPosition) {
+    private fun set(fullCoin: FullCoin, listPosition: ListPosition) {
         backgroundView.setBackgroundResource(getBackground(listPosition))
-//        coinIcon.setCoinImage(marketCoin.type) TODO
-        coinTitle.text = marketCoin.coin.name
-        coinSubtitle.text = marketCoin.coin.code
-//        coinTypeLabel.text = marketCoin.type.label TODO
-        coinTypeLabel.isVisible = false // marketCoin.type.label != null TODO
+//        coinIcon.setCoinImage(fullCoin.type) TODO
+        coinTitle.text = fullCoin.coin.name
+        coinSubtitle.text = fullCoin.coin.code
+//        coinTypeLabel.text = fullCoin.type.label TODO
+        coinTypeLabel.isVisible = false // fullCoin.type.label != null TODO
         dividerView.isVisible = listPosition == ListPosition.Last || listPosition == ListPosition.Single
     }
 
@@ -136,7 +136,7 @@ class CoinWithSwitchViewHolder(
 
 }
 
-data class CoinViewItem(val marketCoin: MarketCoin, val state: CoinViewItemState, val listPosition: ListPosition)
+data class CoinViewItem(val fullCoin: FullCoin, val state: CoinViewItemState, val listPosition: ListPosition)
 
 sealed class CoinViewItemState {
     class ToggleVisible(val enabled: Boolean, val hasSettings: Boolean) : CoinViewItemState()

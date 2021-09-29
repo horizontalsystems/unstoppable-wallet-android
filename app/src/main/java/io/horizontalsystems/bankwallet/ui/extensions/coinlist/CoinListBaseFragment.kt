@@ -11,7 +11,7 @@ import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorMultiple
 import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.marketkit.models.Coin
-import io.horizontalsystems.marketkit.models.MarketCoin
+import io.horizontalsystems.marketkit.models.FullCoin
 import kotlinx.android.synthetic.main.fragment_manage_wallets.*
 
 abstract class CoinListBaseFragment : BaseWithSearchFragment(), CoinListAdapter.Listener {
@@ -40,9 +40,9 @@ abstract class CoinListBaseFragment : BaseWithSearchFragment(), CoinListAdapter.
 
     // ManageWalletItemsAdapter.Listener
 
-    override fun enable(marketCoin: MarketCoin) {}
+    override fun enable(fullCoin: FullCoin) {}
 
-    override fun disable(marketCoin: MarketCoin) {}
+    override fun disable(fullCoin: FullCoin) {}
 
 
     // CoinListBaseFragment

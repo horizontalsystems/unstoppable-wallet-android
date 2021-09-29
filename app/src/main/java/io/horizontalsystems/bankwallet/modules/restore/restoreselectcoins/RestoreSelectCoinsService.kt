@@ -7,7 +7,7 @@ import io.horizontalsystems.bankwallet.modules.enablecoin.EnableCoinService
 import io.horizontalsystems.bankwallet.modules.enablecoins.EnableCoinsService
 import io.horizontalsystems.marketkit.models.Coin
 import io.horizontalsystems.marketkit.models.CoinType
-import io.horizontalsystems.marketkit.models.MarketCoin
+import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.marketkit.models.PlatformCoin
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
@@ -27,7 +27,7 @@ class RestoreSelectCoinsService(
     private var filter: String = ""
     private val disposables = CompositeDisposable()
 
-    private var marketCoins: MutableList<MarketCoin> = mutableListOf()
+    private var fullCoins: MutableList<FullCoin> = mutableListOf()
     val enabledCoins = mutableListOf<ConfiguredPlatformCoin>()
 
     private var restoreSettingsMap = mutableMapOf<PlatformCoin, RestoreSettings>()
@@ -71,16 +71,16 @@ class RestoreSelectCoinsService(
                 handleCancelEnable(coin)
             }.let { disposables.add(it) }
 
-        syncMarketCoins()
-        sortMarketCoins()
+        syncFullCoins()
+        sortFullCoins()
         syncState()
     }
 
-    private fun syncMarketCoins() {
-        marketCoins = if (filter.isNotBlank()) {
-            coinManager.featuredMarketCoins(enabledCoins.map { it.platformCoin.coinType }).toMutableList()
+    private fun syncFullCoins() {
+        fullCoins = if (filter.isNotBlank()) {
+            coinManager.featuredFullCoins(enabledCoins.map { it.platformCoin.coinType }).toMutableList()
         } else {
-            coinManager.marketCoins(filter, 20).toMutableList()
+            coinManager.fullCoins(filter, 20).toMutableList()
         }
     }
 
@@ -116,33 +116,33 @@ class RestoreSelectCoinsService(
         return enabledCoins.any { it.platformCoin.coin == coin }
     }
 
-    private fun item(marketCoin: MarketCoin): Item {
-        val supportedPlatforms = marketCoin.platforms.filter { it.coinType.isSupported }
-        val marketCoin = MarketCoin(marketCoin.coin, supportedPlatforms)
+    private fun item(fullCoin: FullCoin): Item {
+        val supportedPlatforms = fullCoin.platforms.filter { it.coinType.isSupported }
+        val fullCoin = FullCoin(fullCoin.coin, supportedPlatforms)
 
-        val itemState = if (marketCoin.platforms.isEmpty()) {
+        val itemState = if (fullCoin.platforms.isEmpty()) {
             ItemState.Unsupported
         } else {
-            val enabled = isEnabled(marketCoin.coin)
+            val enabled = isEnabled(fullCoin.coin)
             ItemState.Supported(
                 enabled = enabled,
-                hasSettings = enabled && hasSettingsOrPlatforms(marketCoin)
+                hasSettings = enabled && hasSettingsOrPlatforms(fullCoin)
             )
         }
 
-        return Item(marketCoin, itemState)
+        return Item(fullCoin, itemState)
     }
 
-    private fun hasSettingsOrPlatforms(marketCoin: MarketCoin) =
-        if (marketCoin.platforms.size == 1) {
-            val platform = marketCoin.platforms[0]
+    private fun hasSettingsOrPlatforms(fullCoin: FullCoin) =
+        if (fullCoin.platforms.size == 1) {
+            val platform = fullCoin.platforms[0]
             platform.coinType.coinSettingTypes.isNotEmpty()
         } else {
             true
         }
 
-    private fun sortMarketCoins() {
-        marketCoins.sortWith(compareByDescending<MarketCoin> {
+    private fun sortFullCoins() {
+        fullCoins.sortWith(compareByDescending<FullCoin> {
             isEnabled(it.coin)
         }.thenBy {
             it.coin.marketCapRank
@@ -152,7 +152,7 @@ class RestoreSelectCoinsService(
     }
 
     private fun syncState() {
-        items = marketCoins.map { item(it) }
+        items = fullCoins.map { item(it) }
     }
 
     private fun syncCanRestore() {
@@ -164,32 +164,32 @@ class RestoreSelectCoinsService(
         val configuredPlatformCoins = platformCoins.map { ConfiguredPlatformCoin(it) }
         enabledCoins.addAll(configuredPlatformCoins)
 
-        syncMarketCoins()
-        sortMarketCoins()
+        syncFullCoins()
+        sortFullCoins()
         syncState()
     }
 
     fun setFilter(filter: String) {
         this.filter = filter
 
-        syncMarketCoins()
-        sortMarketCoins()
+        syncFullCoins()
+        sortFullCoins()
         syncState()
     }
 
-    fun enable(marketCoin: MarketCoin) {
-        enableCoinService.enable(marketCoin)
+    fun enable(fullCoin: FullCoin) {
+        enableCoinService.enable(fullCoin)
     }
 
-    fun disable(marketCoin: MarketCoin) {
-        enabledCoins.removeIf { it.platformCoin.coin == marketCoin.coin }
+    fun disable(fullCoin: FullCoin) {
+        enabledCoins.removeIf { it.platformCoin.coin == fullCoin.coin }
 
         syncState()
         syncCanRestore()
     }
 
-    fun configure(marketCoin: MarketCoin) {
-        enableCoinService.configure(marketCoin, enabledCoins.filter { it.platformCoin.coin == marketCoin.coin })
+    fun configure(fullCoin: FullCoin) {
+        enableCoinService.configure(fullCoin, enabledCoins.filter { it.platformCoin.coin == fullCoin.coin })
     }
 
     fun restore() {
@@ -209,7 +209,7 @@ class RestoreSelectCoinsService(
     override fun clear() = disposables.clear()
 
     data class Item(
-        val marketCoin: MarketCoin,
+        val fullCoin: FullCoin,
         val state: ItemState
     )
 

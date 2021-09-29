@@ -20,7 +20,7 @@ import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.CoinPrice
 import io.horizontalsystems.marketkit.models.CoinType
-import io.horizontalsystems.marketkit.models.MarketCoin
+import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.marketkit.models.PlatformCoin
 import io.reactivex.Flowable
 import io.reactivex.Observable
@@ -549,8 +549,8 @@ interface ICoinManager {
     fun getPlatformCoinsByCoinTypeIds(coinTypeIds: List<String>): List<PlatformCoin>
     fun getPlatformCoins(): List<PlatformCoin>
     fun getPlatformCoins(coinTypes: List<CoinType>): List<PlatformCoin>
-    fun featuredMarketCoins(enabledCoinTypes: List<CoinType>): List<MarketCoin>
-    fun marketCoins(filter: String = "", limit: Int = 20): List<MarketCoin>
+    fun featuredFullCoins(enabledCoinTypes: List<CoinType>): List<FullCoin>
+    fun fullCoins(filter: String = "", limit: Int = 20): List<FullCoin>
 }
 
 interface IAddTokenBlockchainService {
