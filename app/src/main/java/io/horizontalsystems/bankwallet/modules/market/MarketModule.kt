@@ -48,6 +48,7 @@ object MarketModule {
 data class MarketItem(
     val score: Score?,
     val coinType: CoinType,
+    val coinUid: String,
     val coinCode: String,
     val coinName: String,
     val volume: CurrencyValue,
@@ -60,6 +61,7 @@ data class MarketItem(
             return MarketItem(
                     score,
                     coinMarket.data.type,
+                    coinMarket.data.uid,
                     coinMarket.data.code,
                     coinMarket.data.title,
                     CurrencyValue(currency, coinMarket.marketInfo.volume),
@@ -140,6 +142,7 @@ fun Score.getBackgroundTintColor(context: Context): Int {
 data class MarketViewItem(
         val score: Score?,
         val coinType: CoinType,
+        val coinUid: String,
         val coinCode: String,
         val coinName: String,
         val rate: String,
@@ -185,6 +188,7 @@ data class MarketViewItem(
             return MarketViewItem(
                     marketItem.score,
                     marketItem.coinType,
+                    marketItem.coinUid,
                     marketItem.coinCode,
                     marketItem.coinName,
                     formattedRate,

@@ -49,7 +49,7 @@ class SendFeePresenter(
     private var feeRateAdjustmentInfo: FeeRateAdjustmentInfo = FeeRateAdjustmentInfo(SendAmountInfo.NotEntered, null, baseCurrency, null)
     private var recommendedFeeRate: BigInteger? = null
 
-    private val coin: PlatformCoin
+    private val platformCoin: PlatformCoin
         get() = feeCoinData?.first ?: baseCoin
 
     private fun syncError() {
@@ -85,7 +85,7 @@ class SendFeePresenter(
         val availableFeeBalance = availableFeeBalance ?: return
 
         if (availableFeeBalance < fee) {
-            throw SendFeeModule.InsufficientFeeBalance(baseCoin, coinProtocol, feeCoin, CoinValue(CoinValue.Kind.PlatformCoin(coin), fee))
+            throw SendFeeModule.InsufficientFeeBalance(baseCoin, coinProtocol, feeCoin, CoinValue(CoinValue.Kind.PlatformCoin(platformCoin), fee))
         }
     }
 
@@ -102,7 +102,7 @@ class SendFeePresenter(
 
     private fun getSmartFee(): Long? {
         return fetchedFeeRate?.let {
-            feeRateAdjustmentHelper.applyRule(coin.coinType, feeRateAdjustmentInfo, it.toLong())
+            feeRateAdjustmentHelper.applyRule(platformCoin.coinType, feeRateAdjustmentInfo, it.toLong())
         }
     }
 
@@ -132,7 +132,7 @@ class SendFeePresenter(
     override val primaryAmountInfo: AmountInfo
         get() {
             return when (inputType) {
-                SendModule.InputType.COIN -> CoinValueInfo(CoinValue(CoinValue.Kind.PlatformCoin(coin), fee))
+                SendModule.InputType.COIN -> CoinValueInfo(CoinValue(CoinValue.Kind.PlatformCoin(platformCoin), fee))
                 SendModule.InputType.CURRENCY -> {
                     this.xRate?.let { xRate ->
                         CurrencyValueInfo(CurrencyValue(baseCurrency, fee * xRate))
@@ -144,7 +144,7 @@ class SendFeePresenter(
     override val secondaryAmountInfo: AmountInfo?
         get() {
             return when (inputType.reversed()) {
-                SendModule.InputType.COIN -> CoinValueInfo(CoinValue(CoinValue.Kind.PlatformCoin(coin), fee))
+                SendModule.InputType.COIN -> CoinValueInfo(CoinValue(CoinValue.Kind.PlatformCoin(platformCoin), fee))
                 SendModule.InputType.CURRENCY -> {
                     this.xRate?.let { xRate ->
                         CurrencyValueInfo(CurrencyValue(baseCurrency, fee * xRate))
@@ -205,7 +205,7 @@ class SendFeePresenter(
     // SendFeeModule.IViewDelegate
 
     override fun onViewDidLoad() {
-        xRate = interactor.getRate(coin.coinType)
+        xRate = interactor.getRate(platformCoin.coin.uid)
 
         syncFeeRateLabels()
         syncFees()

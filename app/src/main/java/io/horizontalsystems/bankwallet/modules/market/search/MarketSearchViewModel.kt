@@ -30,7 +30,7 @@ class MarketSearchViewModel(private val service: MarketSearchService, private va
                     emptyResultsLiveData.postValue(coinData.isPresent && coinData.get().isEmpty())
                     advancedSearchButtonVisibleLiveDataViewItem.postValue(service.query.isBlank())
 
-                    itemsLiveData.postValue(coinData.orElse(listOf()).map { CoinDataViewItem(it.code.toUpperCase(Locale.US), it.title, it.type) })
+                    itemsLiveData.postValue(coinData.orElse(listOf()).map { CoinDataViewItem(it.code.toUpperCase(Locale.US), it.title, it.type, it.uid) })
                 }.let {
                     disposable.add(it)
                 }

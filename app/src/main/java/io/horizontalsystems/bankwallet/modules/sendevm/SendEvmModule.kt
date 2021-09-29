@@ -99,13 +99,13 @@ object SendEvmModule {
                 }
                 AmountInputViewModel::class.java -> {
                     val switchService = AmountTypeSwitchServiceSendEvm()
-                    val fiatService = FiatServiceSendEvm(switchService, App.currencyManager, App.xRateManager)
+                    val fiatService = FiatServiceSendEvm(switchService, App.currencyManager, App.marketKit)
                     switchService.add(fiatService.toggleAvailableObservable)
 
                     AmountInputViewModel(service, fiatService, switchService, clearables = listOf(service, fiatService, switchService)) as T
                 }
                 SendAvailableBalanceViewModel::class.java -> {
-                    val coinService = EvmCoinService(wallet.platformCoin, App.currencyManager, App.xRateManager)
+                    val coinService = EvmCoinService(wallet.platformCoin, App.currencyManager, App.marketKit)
                     SendAvailableBalanceViewModel(service, coinService, listOf(service, coinService)) as T
                 }
                 RecipientAddressViewModel::class.java -> {

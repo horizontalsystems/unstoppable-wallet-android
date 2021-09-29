@@ -325,15 +325,6 @@ interface IAppConfigProvider {
 }
 
 interface IRateManager {
-    fun latestRate(coinType: CoinType, currencyCode: String): CoinPrice?
-    fun latestRate(coinTypes: List<CoinType>, currencyCode: String): Map<CoinType, CoinPrice>
-    fun getCoinPrice(coinType: CoinType, currencyCode: String): BigDecimal?
-    fun latestRateObservable(coinType: CoinType, currencyCode: String): Observable<CoinPrice>
-    fun latestRateObservable(
-        coinTypes: List<CoinType>,
-        currencyCode: String
-    ): Observable<Map<CoinType, CoinPrice>>
-
     fun historicalRateCached(coinType: CoinType, currencyCode: String, timestamp: Long): BigDecimal?
     fun historicalRate(
         coinType: CoinType,

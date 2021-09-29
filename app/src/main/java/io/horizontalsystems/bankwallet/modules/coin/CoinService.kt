@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.coin
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.managers.*
 import io.horizontalsystems.core.entities.Currency
+import io.horizontalsystems.marketkit.MarketKit
 import io.horizontalsystems.marketkit.models.CoinPrice
 import io.horizontalsystems.marketkit.models.CoinType
 import io.reactivex.disposables.CompositeDisposable
@@ -13,13 +14,15 @@ import java.net.URL
 
 class CoinService(
     val coinType: CoinType,
+    val coinUid: String,
     val currency: Currency,
     private val xRateManager: IRateManager,
+    private val marketKit: MarketKit,
     private val chartTypeStorage: IChartTypeStorage,
     private val priceAlertManager: IPriceAlertManager,
     private val notificationManager: INotificationManager,
     private val marketFavoritesManager: MarketFavoritesManager,
-    guidesBaseUrl: String
+    guidesBaseUrl: String,
 ) : Clearable {
 
     sealed class CoinDetailsState {
@@ -47,7 +50,7 @@ class CoinService(
     var coinMarketDetails: CoinMarketDetails? = null
     var topTokenHolders: List<TokenHolder> = listOf()
 
-    var lastPoint: LastPoint? = xRateManager.latestRate(coinType, currency.code)?.let { LastPoint(it.value, it.timestamp, it.diff) }
+    var lastPoint: LastPoint? = marketKit.coinPrice(coinUid, currency.code)?.let { LastPoint(it.value, it.timestamp, it.diff) }
         set(value) {
             field = value
             triggerChartUpdateIfEnoughData()
@@ -78,17 +81,17 @@ class CoinService(
                     disposables.add(it)
                 }
 
-        xRateManager.latestRate(coinType, currency.code)?.let {
+        marketKit.coinPrice(coinUid, currency.code)?.let {
             coinPriceAsync.onNext(it)
         }
-        xRateManager.latestRateObservable(coinType, currency.code)
+        marketKit.coinPriceObservable(coinUid, currency.code)
                 .subscribeIO {
                     coinPriceAsync.onNext(it)
                 }
                 .let {
                     disposables.add(it)
                 }
-        xRateManager.latestRateObservable(coinType, currency.code)
+        marketKit.coinPriceObservable(coinUid, currency.code)
                 .subscribeIO({ marketInfo ->
                     lastPoint = LastPoint(marketInfo.value, marketInfo.timestamp, marketInfo.diff)
                 }, {

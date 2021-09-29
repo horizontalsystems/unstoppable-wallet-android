@@ -87,6 +87,8 @@ class CoinViewModel(
     val coinType: CoinType
         get() = service.coinType
 
+    val coinUid by service::coinUid
+
     private val disposable = CompositeDisposable()
     private val rateDiffPeriods = listOf(TimePeriod.DAY_7, TimePeriod.DAY_30)
 

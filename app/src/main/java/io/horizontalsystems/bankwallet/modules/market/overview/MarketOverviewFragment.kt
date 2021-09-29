@@ -86,11 +86,7 @@ class MarketOverviewFragment : BaseFragment() {
     }
 
     private fun onItemClick(marketViewItem: MarketViewItem) {
-        val arguments = CoinFragment.prepareParams(
-            marketViewItem.coinType,
-            marketViewItem.coinCode,
-            marketViewItem.coinName
-        )
+        val arguments = CoinFragment.prepareParams(marketViewItem.coinType, marketViewItem.coinUid, marketViewItem.coinCode, marketViewItem.coinName)
 
         findNavController().navigate(R.id.coinFragment, arguments, navOptions())
     }
