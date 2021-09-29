@@ -94,7 +94,7 @@ object SendAmountModule {
             val currencyDecimal = App.appConfigProvider.fiatDecimal
             val baseCurrency = App.currencyManager.baseCurrency
 
-            val interactor = SendAmountInteractor(baseCurrency, App.xRateManager, App.localStorage, wallet.platformCoin, App.backgroundManager)
+            val interactor = SendAmountInteractor(baseCurrency, App.marketKit, App.localStorage, wallet.platformCoin, App.backgroundManager)
             val sendAmountPresenterHelper =
                     SendAmountPresenterHelper(App.numberFormatter, wallet.platformCoin, baseCurrency, coinDecimal,
                             currencyDecimal)

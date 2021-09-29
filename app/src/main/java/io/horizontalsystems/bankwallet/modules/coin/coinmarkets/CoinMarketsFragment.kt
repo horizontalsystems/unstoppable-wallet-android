@@ -19,7 +19,7 @@ class CoinMarketsFragment : BaseFragment(), MarketListHeaderView.Listener {
 
     private val coinViewModel by navGraphViewModels<CoinViewModel>(R.id.coinFragment)
     private val viewModel by viewModels<CoinMarketsViewModel>{
-        CoinMarketsModule.Factory(coinViewModel.coinCode, coinViewModel.coinType)
+        CoinMarketsModule.Factory(coinViewModel.coinCode, coinViewModel.coinUid)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

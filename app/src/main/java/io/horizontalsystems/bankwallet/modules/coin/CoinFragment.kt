@@ -40,6 +40,7 @@ class CoinFragment : BaseFragment(), CoinChartAdapter.Listener, CoinDataAdapter.
         CoinModule.Factory(
                 coinTitle,
                 requireArguments().getParcelable(COIN_TYPE_KEY)!!,
+                requireArguments().getString(COIN_UID_KEY) ?: "",
                 coinCode
         )
     }
@@ -214,12 +215,14 @@ class CoinFragment : BaseFragment(), CoinChartAdapter.Listener, CoinDataAdapter.
 
     companion object {
         private const val COIN_TYPE_KEY = "coin_type_key"
+        private const val COIN_UID_KEY = "coin_uid_key"
         private const val COIN_CODE_KEY = "coin_code_key"
         private const val COIN_TITLE_KEY = "coin_title_key"
 
-        fun prepareParams(coinType: CoinType, coinCode: String, coinTitle: String): Bundle {
+        fun prepareParams(coinType: CoinType, coinUid: String, coinCode: String, coinTitle: String): Bundle {
             return bundleOf(
                     COIN_TYPE_KEY to coinType,
+                    COIN_UID_KEY to coinUid,
                     COIN_CODE_KEY to coinCode,
                     COIN_TITLE_KEY to coinTitle
             )

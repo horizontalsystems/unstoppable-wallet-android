@@ -2,9 +2,8 @@ package io.horizontalsystems.bankwallet.modules.send.submodules.fee
 
 import io.horizontalsystems.bankwallet.core.FeeRatePriority
 import io.horizontalsystems.bankwallet.core.IFeeRateProvider
-import io.horizontalsystems.bankwallet.core.IRateManager
 import io.horizontalsystems.core.entities.Currency
-import io.horizontalsystems.marketkit.models.CoinType
+import io.horizontalsystems.marketkit.MarketKit
 import io.horizontalsystems.marketkit.models.PlatformCoin
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -12,16 +11,16 @@ import java.math.BigDecimal
 
 class SendFeeInteractor(
         private val baseCurrency: Currency,
-        private val rateManager: IRateManager,
+        private val marketKit: MarketKit,
         private val feeRateProvider: IFeeRateProvider?,
-        private val coin: PlatformCoin)
+        private val platformCoin: PlatformCoin)
     : SendFeeModule.IInteractor {
 
     var delegate: SendFeeModule.IInteractorDelegate? = null
     private val disposables = CompositeDisposable()
 
     init {
-        rateManager.latestRateObservable(coin.coinType, baseCurrency.code)
+        marketKit.coinPriceObservable(platformCoin.coin.uid, baseCurrency.code)
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .subscribe { marketInfo ->
@@ -36,8 +35,8 @@ class SendFeeInteractor(
 
     override val defaultFeeRatePriority: FeeRatePriority? = feeRateProvider?.defaultFeeRatePriority
 
-    override fun getRate(coinType: CoinType): BigDecimal? {
-        return rateManager.getCoinPrice(coinType, baseCurrency.code)
+    override fun getRate(coinUid: String): BigDecimal? {
+        return marketKit.coinPrice(coinUid, baseCurrency.code)?.value
     }
 
     override fun syncFeeRate(feeRatePriority: FeeRatePriority) {

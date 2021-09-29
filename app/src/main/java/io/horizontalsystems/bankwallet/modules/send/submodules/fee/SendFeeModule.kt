@@ -11,7 +11,6 @@ import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.SendModule.AmountInfo
 import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmountInfo
 import io.horizontalsystems.core.entities.Currency
-import io.horizontalsystems.marketkit.models.CoinType
 import io.horizontalsystems.marketkit.models.PlatformCoin
 import java.math.BigDecimal
 import java.math.BigInteger
@@ -49,7 +48,7 @@ object SendFeeModule {
     interface IInteractor {
         val feeRatePriorityList: List<FeeRatePriority>
         val defaultFeeRatePriority: FeeRatePriority?
-        fun getRate(coinType: CoinType): BigDecimal?
+        fun getRate(coinUid: String): BigDecimal?
         fun syncFeeRate(feeRatePriority: FeeRatePriority)
         fun onClear()
     }
@@ -101,7 +100,7 @@ object SendFeeModule {
 
             val baseCurrency = App.currencyManager.baseCurrency
             val helper = SendFeePresenterHelper(App.numberFormatter, feeCoin, baseCurrency)
-            val interactor = SendFeeInteractor(baseCurrency, App.xRateManager, feeRateProvider, feeCoin)
+            val interactor = SendFeeInteractor(baseCurrency, App.marketKit, feeRateProvider, feeCoin)
 
             val presenter = SendFeePresenter(view, interactor, helper, coin, baseCurrency, feeCoinData, customPriorityUnit, FeeRateAdjustmentHelper(App.appConfigProvider))
 

@@ -1,13 +1,13 @@
 package io.horizontalsystems.bankwallet.core.fiat
 
 import io.horizontalsystems.bankwallet.core.Clearable
-import io.horizontalsystems.bankwallet.core.IRateManager
 import io.horizontalsystems.bankwallet.core.fiat.AmountTypeSwitchServiceSendEvm.AmountType
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.core.ICurrencyManager
+import io.horizontalsystems.marketkit.MarketKit
 import io.horizontalsystems.marketkit.models.CoinPrice
 import io.horizontalsystems.marketkit.models.PlatformCoin
 import io.reactivex.BackpressureStrategy
@@ -17,12 +17,11 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.PublishSubject
 import java.math.BigDecimal
 import java.math.RoundingMode
-import java.util.*
 
 class FiatServiceSendEvm(
         private val switchService: AmountTypeSwitchServiceSendEvm,
         private val currencyManager: ICurrencyManager,
-        private val rateManager: IRateManager
+        private val marketKit: MarketKit
 ) : Clearable {
 
     private val disposable = CompositeDisposable()
@@ -138,16 +137,16 @@ class FiatServiceSendEvm(
         currencyAmount = rate?.let { coinAmount * it }
     }
 
-    fun setCoin(coin: PlatformCoin?) {
-        this.coin = coin
+    fun setCoin(platformCoin: PlatformCoin?) {
+        this.coin = platformCoin
 
         marketInfoDisposable?.dispose()
         marketInfoDisposable = null
 
-        if (coin != null) {
-            syncLatestRate(rateManager.latestRate(coin.coinType, currency.code))
+        if (platformCoin != null) {
+            syncLatestRate(marketKit.coinPrice(platformCoin.coin.uid, currency.code))
 
-            rateManager.latestRateObservable(coin.coinType, currency.code)
+            marketKit.coinPriceObservable(platformCoin.coin.uid, currency.code)
                     .subscribeIO { latestRate ->
                         syncLatestRate(latestRate)
                     }.let { disposable.add(it) }

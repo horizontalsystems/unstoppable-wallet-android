@@ -17,35 +17,6 @@ class RateManager(
     private val marketKit: MarketKit
 ) : IRateManager
 {
-    override fun latestRate(coinType: CoinType, currencyCode: String): CoinPrice? {
-        return null
-    }
-
-    override fun latestRate(
-        coinTypes: List<CoinType>,
-        currencyCode: String,
-    ): Map<CoinType, CoinPrice> {
-        return mapOf()
-    }
-
-    override fun getCoinPrice(coinType: CoinType, currencyCode: String): BigDecimal? {
-        return null
-    }
-
-    override fun latestRateObservable(
-        coinType: CoinType,
-        currencyCode: String,
-    ): Observable<CoinPrice> {
-        return Observable.error(NotImplementedError())
-    }
-
-    override fun latestRateObservable(
-        coinTypes: List<CoinType>,
-        currencyCode: String,
-    ): Observable<Map<CoinType, CoinPrice>> {
-        return Observable.error(NotImplementedError())
-    }
-
     override fun historicalRateCached(
         coinType: CoinType,
         currencyCode: String,
@@ -418,6 +389,7 @@ data class GlobalCoinMarketPoint(
 
 data class CoinData(
     var type: CoinType,
+    var uid: String,
     val code: String,
     val title: String
 )

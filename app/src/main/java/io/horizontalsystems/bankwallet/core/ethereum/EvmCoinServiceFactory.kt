@@ -13,12 +13,12 @@ class EvmCoinServiceFactory(
     private val currencyManager: ICurrencyManager,
     private val rateManager: IRateManager
 ) {
-    val baseCoinService = EvmCoinService(basePlatformCoin, currencyManager, rateManager)
+    val baseCoinService = EvmCoinService(basePlatformCoin, currencyManager, marketKit)
 
     fun getCoinService(contractAddress: Address) = getCoinService(contractAddress.hex)
 
     fun getCoinService(contractAddress: String) = getPlatformCoin(contractAddress)?.let { coin ->
-        EvmCoinService(coin, currencyManager, rateManager)
+        EvmCoinService(coin, currencyManager, marketKit)
     }
 
     private fun getPlatformCoin(contractAddress: String) = when (basePlatformCoin.coinType) {

@@ -1,12 +1,12 @@
 package io.horizontalsystems.bankwallet.core.fiat
 
-import io.horizontalsystems.bankwallet.core.IRateManager
 import io.horizontalsystems.bankwallet.core.fiat.AmountTypeSwitchService.AmountType
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.send.SendModule.AmountInfo
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.core.entities.Currency
+import io.horizontalsystems.marketkit.MarketKit
 import io.horizontalsystems.marketkit.models.CoinPrice
 import io.horizontalsystems.marketkit.models.PlatformCoin
 import io.reactivex.Observable
@@ -19,15 +19,15 @@ import java.math.RoundingMode
 import java.util.*
 
 class FiatService(
-        private val switchService: AmountTypeSwitchService,
-        private val currencyManager: ICurrencyManager,
-        private val rateManager: IRateManager
+    private val switchService: AmountTypeSwitchService,
+    private val currencyManager: ICurrencyManager,
+    private val marketKit: MarketKit
 ) : AmountTypeSwitchService.IToggleAvailableListener {
 
     private val disposables = CompositeDisposable()
     private var latestRateDisposable: Disposable? = null
 
-    private var coin: PlatformCoin? = null
+    private var platformCoin: PlatformCoin? = null
     private var coinAmount: BigDecimal? = null
     private var currencyAmount: BigDecimal? = null
 
@@ -64,19 +64,19 @@ class FiatService(
 
         toggleAvailable = false
 
-        val coin = coin ?: return
+        val coin = platformCoin ?: return
 
-        syncLatestRate(rateManager.latestRate(coin.coinType, currency.code))
-        latestRateDisposable = rateManager.latestRateObservable(coin.coinType, currency.code)
+        syncLatestRate(marketKit.coinPrice(coin.coin.uid, currency.code))
+        latestRateDisposable = marketKit.coinPriceObservable(coin.coin.uid, currency.code)
                 .subscribeOn(Schedulers.io())
                 .subscribe {
                     syncLatestRate(it)
                 }
     }
 
-    private fun syncLatestRate(latestRate: CoinPrice?) {
-        rate = if (latestRate != null && !latestRate.expired) {
-            latestRate.value
+    private fun syncLatestRate(coinPrice: CoinPrice?) {
+        rate = if (coinPrice != null && !coinPrice.expired) {
+            coinPrice.value
         } else {
             null
         }
@@ -87,7 +87,7 @@ class FiatService(
     }
 
     private fun fullAmountInfo(): FullAmountInfo? {
-        val coin = coin ?: return null
+        val coin = platformCoin ?: return null
         val coinAmount = coinAmount ?: return null
 
         return when (switchService.amountType) {
@@ -131,7 +131,7 @@ class FiatService(
     }
 
     fun buildForCurrency(amount: BigDecimal?): FullAmountInfo? {
-        val coin = coin ?: return null
+        val coin = platformCoin ?: return null
 
         currencyAmount = amount
 
@@ -153,7 +153,7 @@ class FiatService(
             }
 
     fun set(coin: PlatformCoin?) {
-        this.coin = coin
+        this.platformCoin = coin
 
         rate = null
         subscribeToLatestRate()

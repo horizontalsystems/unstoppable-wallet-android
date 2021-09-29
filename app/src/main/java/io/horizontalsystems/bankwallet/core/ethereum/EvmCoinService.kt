@@ -1,11 +1,11 @@
 package io.horizontalsystems.bankwallet.core.ethereum
 
 import io.horizontalsystems.bankwallet.core.Clearable
-import io.horizontalsystems.bankwallet.core.IRateManager
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.core.ICurrencyManager
+import io.horizontalsystems.marketkit.MarketKit
 import io.horizontalsystems.marketkit.models.PlatformCoin
 import java.math.BigDecimal
 import java.math.BigInteger
@@ -13,13 +13,13 @@ import java.math.BigInteger
 class EvmCoinService(
     val platformCoin: PlatformCoin,
     private val currencyManager: ICurrencyManager,
-    private val xRateManager: IRateManager
+    private val marketKit: MarketKit
 ) : Clearable {
 
     val rate: CurrencyValue?
         get() {
             val baseCurrency = currencyManager.baseCurrency
-            return xRateManager.latestRate(platformCoin.coinType, baseCurrency.code)?.let {
+            return marketKit.coinPrice(platformCoin.coin.uid, baseCurrency.code)?.let {
                 CurrencyValue(baseCurrency, it.value)
             }
         }

@@ -2,13 +2,13 @@ package io.horizontalsystems.bankwallet.modules.swap.coincard
 
 import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.ICoinManager
-import io.horizontalsystems.bankwallet.core.IRateManager
 import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.Blockchain
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.CoinBalanceItem
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.Dex
 import io.horizontalsystems.core.ICurrencyManager
+import io.horizontalsystems.marketkit.MarketKit
 import io.horizontalsystems.marketkit.models.CoinType
 import io.horizontalsystems.marketkit.models.PlatformCoin
 import java.math.BigDecimal
@@ -20,7 +20,7 @@ class SwapCoinProvider(
     private val walletManager: IWalletManager,
     private val adapterManager: IAdapterManager,
     private val currencyManager: ICurrencyManager,
-    private val xRateManager: IRateManager
+    private val marketKit: MarketKit
 ) {
 
     fun getCoins(): List<CoinBalanceItem> {
@@ -61,9 +61,9 @@ class SwapCoinProvider(
         }
     }
 
-    private fun getXRate(coin: PlatformCoin): BigDecimal? {
+    private fun getXRate(platformCoin: PlatformCoin): BigDecimal? {
         val currency = currencyManager.baseCurrency
-        return xRateManager.latestRate(coin.coinType, currency.code)?.let {
+        return marketKit.coinPrice(platformCoin.coin.uid, currency.code)?.let {
             if (it.expired) {
                 null
             } else {

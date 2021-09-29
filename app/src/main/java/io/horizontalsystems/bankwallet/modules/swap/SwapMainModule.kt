@@ -234,7 +234,7 @@ object SwapMainModule {
                 App.walletManager,
                 App.adapterManager,
                 App.currencyManager,
-                App.xRateManager
+                App.marketKit
             )
         }
         private val fromCoinCardService by lazy {
@@ -252,8 +252,7 @@ object SwapMainModule {
         ): T {
             return when (modelClass) {
                 SwapCoinCardViewModel::class.java -> {
-                    val fiatService =
-                        FiatService(switchService, App.currencyManager, App.xRateManager)
+                    val fiatService = FiatService(switchService, App.currencyManager, App.marketKit)
                     val coinCardService: ISwapCoinCardService
                     var maxButtonEnabled = false
                     val resetAmountOnCoinSelect: Boolean

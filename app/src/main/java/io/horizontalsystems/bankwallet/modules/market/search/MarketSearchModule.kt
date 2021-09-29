@@ -17,4 +17,4 @@ object MarketSearchModule {
 
 }
 
-data class CoinDataViewItem(val code: String, val name: String, val type: CoinType)
+data class CoinDataViewItem(val code: String, val name: String, val type: CoinType, val uid: String)
