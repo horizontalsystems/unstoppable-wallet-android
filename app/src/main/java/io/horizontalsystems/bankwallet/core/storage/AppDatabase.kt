@@ -20,7 +20,7 @@ import io.horizontalsystems.marketkit.models.Coin
 import io.horizontalsystems.marketkit.models.CoinType
 import java.util.*
 
-@Database(version = 35, exportSchema = false, entities = [
+@Database(version = 36, exportSchema = false, entities = [
     EnabledWallet::class,
     EnabledWalletCache::class,
     PriceAlert::class,
