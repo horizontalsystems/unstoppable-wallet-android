@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseWithSearchFragment
-import io.horizontalsystems.bankwallet.modules.enablecoin.coinsettings.CoinSettingsViewModel
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorMultipleDialog
 import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
 import io.horizontalsystems.core.findNavController
@@ -57,12 +56,19 @@ abstract class CoinListBaseFragment : BaseWithSearchFragment(), CoinListAdapter.
         itemsAdapter.disableCoin(coin)
     }
 
-    open fun onCancelSelection() {}
-
-    open fun onSelect(indexes: List<Int>) {}
-
-    protected fun showBottomSelectorDialog(config: CoinSettingsViewModel.Config) {
-        val coinDrawable = context?.let { AppLayoutHelper.getCoinDrawable(it, config.platformCoin.coinType) }
+    protected fun showBottomSelectorDialog(
+        config: BottomSheetSelectorMultipleDialog.Config,
+        onSelect: (indexes: List<Int>) -> Unit,
+        onCancel: () -> Unit
+    ) {
+        val coinDrawable = context?.let {
+            config.platformCoin?.coinType?.let { coinType ->
+                AppLayoutHelper.getCoinDrawable(
+                    it,
+                    coinType
+                )
+            }
+        }
 
         BottomSheetSelectorMultipleDialog.show(
             fragmentManager = childFragmentManager,
@@ -73,7 +79,7 @@ abstract class CoinListBaseFragment : BaseWithSearchFragment(), CoinListAdapter.
             selected = config.selectedIndexes,
             notifyUnchanged = true,
             onItemSelected = { onSelect(it) },
-            onCancelled = { onCancelSelection() },
+            onCancelled = { onCancel() },
             warning = config.description
         )
     }

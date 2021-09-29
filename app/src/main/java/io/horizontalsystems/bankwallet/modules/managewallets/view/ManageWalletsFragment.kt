@@ -6,10 +6,11 @@ import android.view.View
 import androidx.activity.addCallback
 import androidx.fragment.app.viewModels
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.modules.enablecoin.coinplatforms.CoinPlatformsViewModel
 import io.horizontalsystems.bankwallet.modules.enablecoin.coinsettings.CoinSettingsViewModel
+import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.RestoreSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsModule
 import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsViewModel
-import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.RestoreSettingsViewModel
 import io.horizontalsystems.bankwallet.ui.extensions.ZcashBirthdayHeightDialog
 import io.horizontalsystems.bankwallet.ui.extensions.coinlist.CoinListBaseFragment
 import io.horizontalsystems.core.findNavController
@@ -25,6 +26,7 @@ class ManageWalletsFragment : CoinListBaseFragment() {
     private val viewModel by viewModels<ManageWalletsViewModel> { vmFactory }
     private val coinSettingsViewModel by viewModels<CoinSettingsViewModel> { vmFactory }
     private val restoreSettingsViewModel by viewModels<RestoreSettingsViewModel> { vmFactory }
+    private val coinPlatformsViewModel by viewModels<CoinPlatformsViewModel> { vmFactory }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -77,13 +79,6 @@ class ManageWalletsFragment : CoinListBaseFragment() {
         viewModel.updateFilter(query)
     }
 
-    override fun onCancelSelection() {
-        coinSettingsViewModel.onCancelSelect()
-    }
-
-    override fun onSelect(indexes: List<Int>) {
-        coinSettingsViewModel.onSelect(indexes)
-    }
 
     private fun observe() {
 
@@ -97,7 +92,11 @@ class ManageWalletsFragment : CoinListBaseFragment() {
 
         coinSettingsViewModel.openBottomSelectorLiveEvent.observe(viewLifecycleOwner) { config ->
             hideKeyboard()
-            showBottomSelectorDialog(config)
+            showBottomSelectorDialog(
+                config,
+                onSelect = { indexes -> coinSettingsViewModel.onSelect(indexes) },
+                onCancel = { coinSettingsViewModel.onCancelSelect() }
+            )
         }
 
         restoreSettingsViewModel.openBirthdayAlertSignal.observe(viewLifecycleOwner) {
@@ -109,7 +108,15 @@ class ManageWalletsFragment : CoinListBaseFragment() {
                 restoreSettingsViewModel.onCancelEnterBirthdayHeight()
             }
 
-            zcashBirhdayHeightDialog.show(requireActivity().supportFragmentManager, "ZcashBirhdayHeightDialog")
+            zcashBirhdayHeightDialog.show(requireActivity().supportFragmentManager, "ZcashBirthdayHeightDialog")
+        }
+
+        coinPlatformsViewModel.openPlatformsSelectorEvent.observe(viewLifecycleOwner) { config ->
+            showBottomSelectorDialog(
+                config,
+                onSelect = { indexes -> coinPlatformsViewModel.onSelect(indexes) },
+                onCancel = { coinPlatformsViewModel.onCancelSelect() }
+            )
         }
     }
 
