@@ -351,11 +351,6 @@ interface IRateManager {
 
     fun getTopTokenHoldersAsync(coinType: CoinType): Single<List<TokenHolder>>
     fun getAuditsAsync(coinType: CoinType): Single<List<Auditor>>
-    fun getTopMarketList(
-        currency: String,
-        itemsCount: Int,
-        diffPeriod: TimePeriod
-    ): Single<List<CoinMarket>>
 
     fun getTopDefiTvlAsync(
         currencyCode: String,
@@ -364,9 +359,6 @@ interface IRateManager {
         chain: String? = null
     ): Single<List<DefiTvl>>
 
-    fun getCoinMarketList(coinTypes: List<CoinType>, currency: String): Single<List<CoinMarket>>
-    fun getCoinMarketListByCategory(categoryId: String, currency: String): Single<List<CoinMarket>>
-    fun getCoinRatingsAsync(): Single<Map<CoinType, String>>
     fun getGlobalMarketInfoAsync(currency: String): Single<GlobalCoinMarket>
     fun getGlobalCoinMarketPointsAsync(
         currencyCode: String,
@@ -374,13 +366,6 @@ interface IRateManager {
     ): Single<List<GlobalCoinMarketPoint>>
 
     fun searchCoins(searchText: String): List<CoinData>
-    fun getNotificationCoinCode(coinType: CoinType): String?
-    fun topDefiTvl(
-        currencyCode: String,
-        fetchDiffPeriod: TimePeriod,
-        itemsCount: Int
-    ): Single<List<DefiTvl>>
-
     fun defiTvlPoints(
         coinType: CoinType,
         currencyCode: String,
@@ -394,7 +379,6 @@ interface IRateManager {
     ): Single<List<CoinMarketPoint>>
 
     fun getCryptoNews(timestamp: Long? = null): Single<List<CryptoNews>>
-    fun refresh(currencyCode: String)
 }
 
 interface IAccountsStorage {
