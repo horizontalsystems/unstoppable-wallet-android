@@ -1,20 +1,21 @@
 package io.horizontalsystems.bankwallet.modules.market.favorites
 
 import io.horizontalsystems.bankwallet.core.Clearable
-import io.horizontalsystems.bankwallet.core.IRateManager
 import io.horizontalsystems.bankwallet.core.managers.MarketFavoritesManager
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.bankwallet.modules.market.list.IMarketListFetcher
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.entities.Currency
+import io.horizontalsystems.marketkit.MarketKit
+import io.horizontalsystems.marketkit.models.MarketInfo
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.subjects.PublishSubject
 
 class MarketFavoritesService(
-        private val rateManager: IRateManager,
-        private val marketFavoritesManager: MarketFavoritesManager,
-        private val backgroundManager: BackgroundManager
+    private val marketKit: MarketKit,
+    private val marketFavoritesManager: MarketFavoritesManager,
+    private val backgroundManager: BackgroundManager,
 ) : IMarketListFetcher, BackgroundManager.Listener, Clearable {
 
     private val dataUpdatedSubject = PublishSubject.create<Unit>()
@@ -38,13 +39,15 @@ class MarketFavoritesService(
         return Single.fromCallable {
             marketFavoritesManager.getAll().map { it.coinType }
         }
-                .flatMap { coinTypes ->
-                    rateManager.getCoinMarketList(coinTypes, currency.code)
+            .flatMap { coinTypes ->
+//                todo: implement it
+//                marketKit.marketInfosByCoinUidsSingle()
+                Single.just(listOf<MarketInfo>())
+            }
+            .map {
+                it.map {
+                    MarketItem.createFromCoinMarket(it, currency, null)
                 }
-                .map {
-                    it.map{ topMarket ->
-                        MarketItem.createFromCoinMarket(topMarket, currency, null)
-                    }
-                }
+            }
     }
 }

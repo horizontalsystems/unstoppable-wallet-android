@@ -108,7 +108,6 @@ class MetricsPageFragment : BaseFragment(), CoinChartAdapter.Listener,
 
     override fun onItemClick(marketViewItem: MarketViewItem) {
         val arguments = CoinFragment.prepareParams(
-            marketViewItem.coinType,
             marketViewItem.coinUid,
             marketViewItem.coinCode,
             marketViewItem.coinName

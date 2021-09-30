@@ -1,19 +1,18 @@
 package io.horizontalsystems.bankwallet.modules.market.overview
 
 import io.horizontalsystems.bankwallet.core.Clearable
-import io.horizontalsystems.bankwallet.core.IRateManager
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.bankwallet.modules.market.Score
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.ICurrencyManager
-import io.horizontalsystems.xrateskit.entities.TimePeriod
+import io.horizontalsystems.marketkit.MarketKit
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.BehaviorSubject
 
 class MarketOverviewService(
-        private val rateManager: IRateManager,
+        private val marketKit: MarketKit,
         private val backgroundManager: BackgroundManager,
         private val currencyManager: ICurrencyManager
 ) : Clearable, BackgroundManager.Listener {
@@ -56,10 +55,10 @@ class MarketOverviewService(
 
         stateObservable.onNext(State.Loading)
 
-        topItemsDisposable = rateManager.getTopMarketList(currencyManager.baseCurrency.code, 250, TimePeriod.HOUR_24)
+        topItemsDisposable = marketKit.marketInfosSingle(250, 250, null)
                 .subscribeIO({
-                    marketItems = it.mapIndexed { index, topMarket ->
-                        MarketItem.createFromCoinMarket(topMarket, currencyManager.baseCurrency, Score.Rank(index + 1))
+                    marketItems = it.mapIndexed { index, marketInfo ->
+                        MarketItem.createFromCoinMarket(marketInfo, currencyManager.baseCurrency, Score.Rank(index + 1))
                     }
 
                     stateObservable.onNext(State.Loaded)

@@ -24,7 +24,7 @@ object MetricsPageModule {
             }
             MetricsPageListViewModel::class.java -> {
                 val service by lazy {
-                    MetricsPageListService(App.xRateManager, App.currencyManager)
+                    MetricsPageListService(App.marketKit, App.currencyManager)
                 }
                 MetricsPageListViewModel(service, App.connectivityManager, listOf(service)) as T
             }

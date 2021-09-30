@@ -97,7 +97,8 @@ class ViewHolderMarketItem(override val containerView: View, private val listene
         this.item = item
 
         if (item.coinCode != prev?.coinCode) {
-            icon.setCoinImage(item.coinType)
+//            TODO set coin icon
+//            icon.setCoinImage
         }
 
         if (prev == null || item.score != prev.score) {

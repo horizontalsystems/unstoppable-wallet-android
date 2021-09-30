@@ -1,14 +1,13 @@
 package io.horizontalsystems.bankwallet.modules.market.metricspage
 
 import io.horizontalsystems.bankwallet.core.Clearable
-import io.horizontalsystems.bankwallet.core.IRateManager
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.bankwallet.modules.market.Score
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.core.entities.Currency
-import io.horizontalsystems.xrateskit.entities.TimePeriod
+import io.horizontalsystems.marketkit.MarketKit
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
@@ -17,7 +16,7 @@ import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 
 class MetricsPageListService(
-    private val xRateManager: IRateManager,
+    private val marketKit: MarketKit,
     private val currencyManager: ICurrencyManager
 ) : BackgroundManager.Listener, Clearable {
 
@@ -80,7 +79,7 @@ class MetricsPageListService(
     }
 
     private fun getAllMarketItemsAsync(currency: Currency): Single<List<MarketItem>> {
-        return xRateManager.getTopMarketList(currency.code, 250, TimePeriod.HOUR_24)
+        return marketKit.marketInfosSingle(250, 250)
             .map { coinMarkets ->
                 coinMarkets.mapIndexed { index, coinMarket ->
                     MarketItem.createFromCoinMarket(coinMarket, currency, Score.Rank(index + 1))
