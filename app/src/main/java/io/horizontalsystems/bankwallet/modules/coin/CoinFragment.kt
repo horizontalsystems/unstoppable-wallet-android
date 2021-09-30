@@ -24,7 +24,6 @@ import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
-import io.horizontalsystems.marketkit.models.CoinType
 import io.horizontalsystems.xrateskit.entities.LinkType
 import kotlinx.android.synthetic.main.fragment_coin.*
 
@@ -39,7 +38,6 @@ class CoinFragment : BaseFragment(), CoinChartAdapter.Listener, CoinDataAdapter.
     private val vmFactory by lazy {
         CoinModule.Factory(
                 coinTitle,
-                requireArguments().getParcelable(COIN_TYPE_KEY)!!,
                 requireArguments().getString(COIN_UID_KEY) ?: "",
                 coinCode
         )
@@ -214,14 +212,12 @@ class CoinFragment : BaseFragment(), CoinChartAdapter.Listener, CoinDataAdapter.
     }
 
     companion object {
-        private const val COIN_TYPE_KEY = "coin_type_key"
         private const val COIN_UID_KEY = "coin_uid_key"
         private const val COIN_CODE_KEY = "coin_code_key"
         private const val COIN_TITLE_KEY = "coin_title_key"
 
-        fun prepareParams(coinType: CoinType, coinUid: String, coinCode: String, coinTitle: String): Bundle {
+        fun prepareParams(coinUid: String, coinCode: String, coinTitle: String): Bundle {
             return bundleOf(
-                    COIN_TYPE_KEY to coinType,
                     COIN_UID_KEY to coinUid,
                     COIN_CODE_KEY to coinCode,
                     COIN_TITLE_KEY to coinTitle

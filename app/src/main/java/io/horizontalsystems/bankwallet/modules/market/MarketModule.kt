@@ -6,13 +6,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.managers.toMarketKitCoinType
-import io.horizontalsystems.bankwallet.core.managers.uid
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.core.entities.Currency
-import io.horizontalsystems.marketkit.models.CoinType
-import io.horizontalsystems.xrateskit.entities.CoinMarket
+import io.horizontalsystems.marketkit.models.MarketInfo
 import java.math.BigDecimal
 import java.util.*
 
@@ -49,7 +46,6 @@ object MarketModule {
 
 data class MarketItem(
     val score: Score?,
-    val coinType: CoinType,
     val coinUid: String,
     val coinCode: String,
     val coinName: String,
@@ -59,17 +55,16 @@ data class MarketItem(
     val marketCap: CurrencyValue?
 ) {
     companion object {
-        fun createFromCoinMarket(coinMarket: CoinMarket, currency: Currency, score: Score?): MarketItem {
+        fun createFromCoinMarket(marketInfo: MarketInfo, currency: Currency, score: Score?): MarketItem {
             return MarketItem(
-                    score,
-                    coinMarket.data.type.toMarketKitCoinType(),
-                    coinMarket.data.uid(),
-                    coinMarket.data.code,
-                    coinMarket.data.title,
-                    CurrencyValue(currency, coinMarket.marketInfo.volume),
-                    CurrencyValue(currency, coinMarket.marketInfo.rate),
-                    coinMarket.marketInfo.rateDiffPeriod,
-                    coinMarket.marketInfo.marketCap?.let { CurrencyValue(currency, it) }
+                score,
+                marketInfo.coin.uid,
+                marketInfo.coin.code,
+                marketInfo.coin.name,
+                CurrencyValue(currency, marketInfo.totalVolume),
+                CurrencyValue(currency, marketInfo.price),
+                marketInfo.priceChange,
+                CurrencyValue(currency, marketInfo.marketCap)
             )
         }
     }
@@ -143,7 +138,6 @@ fun Score.getBackgroundTintColor(context: Context): Int {
 
 data class MarketViewItem(
         val score: Score?,
-        val coinType: CoinType,
         val coinUid: String,
         val coinCode: String,
         val coinName: String,
@@ -189,7 +183,6 @@ data class MarketViewItem(
 
             return MarketViewItem(
                     marketItem.score,
-                    marketItem.coinType,
                     marketItem.coinUid,
                     marketItem.coinCode,
                     marketItem.coinName,

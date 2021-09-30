@@ -49,7 +49,6 @@ import io.horizontalsystems.bankwallet.ui.compose.RateText
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryToggle
 import io.horizontalsystems.bankwallet.ui.extensions.MarketMetricSmallView
 import io.horizontalsystems.bankwallet.ui.extensions.MetricData
-import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 
@@ -86,7 +85,7 @@ class MarketOverviewFragment : BaseFragment() {
     }
 
     private fun onItemClick(marketViewItem: MarketViewItem) {
-        val arguments = CoinFragment.prepareParams(marketViewItem.coinType, marketViewItem.coinUid, marketViewItem.coinCode, marketViewItem.coinName)
+        val arguments = CoinFragment.prepareParams(marketViewItem.coinUid, marketViewItem.coinCode, marketViewItem.coinName)
 
         findNavController().navigate(R.id.coinFragment, arguments, navOptions())
     }
@@ -300,12 +299,8 @@ class MarketOverviewFragment : BaseFragment() {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Image(
-                    painter = painterResource(
-                        id = AppLayoutHelper.getCoinDrawableOrDefaultResId(
-                            ctx,
-                            marketViewItem.coinType
-                        )
-                    ),
+                    // todo implement it
+                    painter = painterResource(R.drawable.place_holder),
                     contentDescription = "coin icon",
                     modifier = Modifier.padding(horizontal = 16.dp).size(24.dp)
                 )

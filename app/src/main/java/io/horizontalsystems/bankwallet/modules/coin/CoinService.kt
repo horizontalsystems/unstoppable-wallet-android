@@ -14,7 +14,6 @@ import io.reactivex.subjects.BehaviorSubject
 import java.net.URL
 
 class CoinService(
-    val coinType: CoinType,
     val coinUid: String,
     val currency: Currency,
     private val xRateManager: IRateManager,
@@ -31,6 +30,8 @@ class CoinService(
         object Loaded : CoinDetailsState()
         data class Error(val error: Throwable) : CoinDetailsState()
     }
+
+    lateinit var coinType: CoinType
 
     val coinPriceAsync = BehaviorSubject.create<CoinPrice>()
     val chartInfoUpdatedObservable: BehaviorSubject<Unit> = BehaviorSubject.create()
@@ -112,7 +113,7 @@ class CoinService(
 
     val guideUrl: String?
         get() {
-            val guideRelativeUrl = when (coinType) {
+            val guideRelativeUrl = when (val coinType = coinType) {
                 CoinType.Bitcoin -> "guides/token_guides/en/bitcoin.md"
                 CoinType.Ethereum -> "guides/token_guides/en/ethereum.md"
                 CoinType.BitcoinCash -> "guides/token_guides/en/bitcoin-cash.md"
