@@ -55,29 +55,8 @@ class RateManager(
         return kit.getAuditReportsAsync(coinType.toCoinKitCoinType())
     }
 
-    override fun getTopMarketList(currency: String, itemsCount: Int, diffPeriod: TimePeriod): Single<List<CoinMarket>> {
-        return kit.getTopCoinMarketsAsync(currency, itemsCount = itemsCount, fetchDiffPeriod = diffPeriod)
-    }
-
     override fun getTopDefiTvlAsync(currencyCode: String, fetchDiffPeriod: TimePeriod, itemsCount: Int, chain: String?): Single<List<DefiTvl>> {
         return kit.getTopDefiTvlAsync(currencyCode, fetchDiffPeriod, itemsCount, chain)
-    }
-
-    override fun getCoinMarketList(coinTypes: List<CoinType>, currency: String): Single<List<CoinMarket>> {
-        return kit.getCoinMarketsAsync(coinTypes.map { it.toCoinKitCoinType() }, currency)
-    }
-
-    override fun getCoinMarketListByCategory(categoryId: String, currency: String): Single<List<CoinMarket>>{
-        return kit.getCoinMarketsByCategoryAsync(categoryId, currency)
-    }
-
-    override fun getCoinRatingsAsync(): Single<Map<CoinType, String>> {
-        return kit.getCoinRatingsAsync()
-            .map {
-                it.map {
-                    it.key.toMarketKitCoinType() to it.value
-                }.toMap()
-            }
     }
 
     override fun getGlobalMarketInfoAsync(currency: String): Single<GlobalCoinMarket> {
@@ -92,24 +71,12 @@ class RateManager(
         return kit.searchCoins(searchText)
     }
 
-    override fun getNotificationCoinCode(coinType: CoinType): String? {
-        return kit.getNotificationCoinCode(coinType.toCoinKitCoinType())
-    }
-
-    override fun topDefiTvl(currencyCode: String, fetchDiffPeriod: TimePeriod, itemsCount: Int) : Single<List<DefiTvl>> {
-        return kit.getTopDefiTvlAsync(currencyCode, fetchDiffPeriod, itemsCount)
-    }
-
     override fun defiTvlPoints(coinType: CoinType, currencyCode: String, fetchDiffPeriod: TimePeriod) : Single<List<DefiTvlPoint>> {
         return kit.getDefiTvlPointsAsync(coinType.toCoinKitCoinType(), currencyCode, fetchDiffPeriod)
     }
 
     override fun getCoinMarketVolumePointsAsync(coinType: CoinType, currencyCode: String, fetchDiffPeriod: TimePeriod): Single<List<CoinMarketPoint>> {
         return kit.getCoinMarketPointsAsync(coinType.toCoinKitCoinType(), currencyCode, fetchDiffPeriod)
-    }
-
-    override fun refresh(currencyCode: String) {
-        kit.refresh(currencyCode)
     }
 
     override fun getCryptoNews(timestamp: Long?): Single<List<CryptoNews>> {
