@@ -26,7 +26,7 @@ sealed class TransactionValue {
         override val zeroValue: Boolean
             get() = value.compareTo(BigDecimal.ZERO) == 0
         override val isMaxValue: Boolean
-            get() = io.horizontalsystems.bankwallet.entities.CoinValue(TODO(), value).isMaxValue
+            get() = CoinValue(io.horizontalsystems.bankwallet.entities.CoinValue.Kind.PlatformCoin(platformCoin), value).isMaxValue
         override val abs: TransactionValue
             get() = copy(value = value.abs())
         override val formattedString: String
