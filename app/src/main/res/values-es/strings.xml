@@ -93,7 +93,7 @@
     <string name="Market_DeFiCap">Cap. DeFi</string>
     <string name="Market_SeeAll">Ver Todos</string>
     <string name="Market_Tab_Overview">Overview</string>
-    <string name="Market_Tab_Discovery">Discovery</string>
+    <string name="Market_Tab_Posts">News</string>
     <string name="Market_Tab_Watchlist">Watchlist</string>
     <string name="Market_Tab_Watchlist_EmptyList">You don\’t have any favorite assets.\nYou can add the favorites by clicking on star icon in the asset page</string>
     <string name="Market_Category_Rated">Rated</string>
@@ -146,10 +146,12 @@
     <string name="Market_Category_YieldTokens_Description">Tokens Interesantes.</string>
     <!--Market Global Metrics-->
     <string name="MarketGlobalMetrics_Chart">Diagrama</string>
+    <string name="MarketGlobalMetrics_TotalMarketCap">Total M.Cap</string>
     <string name="MarketGlobalMetrics_BtcDominance">Dominio Bitcoin</string>
     <string name="MarketGlobalMetrics_Volume">Volumen</string>
     <string name="MarketGlobalMetrics_DefiCap">Cap. DeFi</string>
     <string name="MarketGlobalMetrics_TvlInDefi">TVL en DeFi</string>
+    <string name="MarketGlobalMetrics_TotalMarketCapDescription">Total M.Cap description</string>
     <string name="MarketGlobalMetrics_BtcDominanceDescription">El cambio histórico en la relación entre el límite de mercado de Bitcoin y el resto de los mercados de criptomonedas. \n\nPor lo general, cuando el dominio de Bitcoin tiende a ser más alto, el resto de las tendencias del mercado de criptomonedas disminuye y viceversa.</string>
     <string name="MarketGlobalMetrics_VolumeDescription">El cambio histórico en el volumen diario del mercado de operaciones agregadas para todas las criptomonedas.</string>
     <string name="MarketGlobalMetrics_DefiCapDescription">El cambio histórico en el valor acumulado del mercado de los tokens en el sector de las finanzas descentralizadas.</string>
@@ -685,6 +687,10 @@ poner en peligro la seguridad de mis fondos.</string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Title">Formato de dirección</string>
     <string name="AddressFormatSettings_Description">Elija el formato de dirección para su monedero %s. Cada formato seleccionado representa un monedero diferente en la pestaña de saldo de la aplicación.</string>
+    <!-- Coin Platforms -->
+    <string name="CoinPlatforms_Native">Native</string>
+    <string name="CoinPlatformsSelector_Title">Coin Type</string>
+    <string name="CoinPlatformsSelector_Description">This token exists on multiple blockchains. Select version(s) you would like to use.</string>
     <!-- Blockchain Settings -->
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">Restaurar Fuente</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">Después de este cambio, el monedero tendrá que resincronizarse con el blockchain %s.</string>
