@@ -6,11 +6,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.managers.CoinMarket
+import io.horizontalsystems.bankwallet.core.managers.toMarketKitCoinType
+import io.horizontalsystems.bankwallet.core.managers.uid
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.marketkit.models.CoinType
+import io.horizontalsystems.xrateskit.entities.CoinMarket
 import java.math.BigDecimal
 import java.util.*
 
@@ -60,8 +62,8 @@ data class MarketItem(
         fun createFromCoinMarket(coinMarket: CoinMarket, currency: Currency, score: Score?): MarketItem {
             return MarketItem(
                     score,
-                    coinMarket.data.type,
-                    coinMarket.data.uid,
+                    coinMarket.data.type.toMarketKitCoinType(),
+                    coinMarket.data.uid(),
                     coinMarket.data.code,
                     coinMarket.data.title,
                     CurrencyValue(currency, coinMarket.marketInfo.volume),

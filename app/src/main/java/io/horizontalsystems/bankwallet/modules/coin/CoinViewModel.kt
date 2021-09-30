@@ -4,10 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.Clearable
-import io.horizontalsystems.bankwallet.core.managers.ChartType
-import io.horizontalsystems.bankwallet.core.managers.CoinMarketDetails
-import io.horizontalsystems.bankwallet.core.managers.MarketTicker
-import io.horizontalsystems.bankwallet.core.managers.TimePeriod
+import io.horizontalsystems.bankwallet.core.managers.*
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
@@ -21,6 +18,10 @@ import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.marketkit.models.CoinPrice
 import io.horizontalsystems.marketkit.models.CoinType
 import io.horizontalsystems.views.ListPosition
+import io.horizontalsystems.xrateskit.entities.ChartType
+import io.horizontalsystems.xrateskit.entities.CoinMarketDetails
+import io.horizontalsystems.xrateskit.entities.MarketTicker
+import io.horizontalsystems.xrateskit.entities.TimePeriod
 import io.reactivex.disposables.CompositeDisposable
 import retrofit2.HttpException
 import java.math.BigDecimal
@@ -317,7 +318,7 @@ class CoinViewModel(
     }
 
     private fun getContractInfo(coinDetails: CoinMarketDetails): ContractInfo? =
-            when (val coinType = coinDetails.data.type) {
+            when (val coinType = coinDetails.data.type.toMarketKitCoinType()) {
                 is CoinType.Erc20 -> ContractInfo(Translator.getString(R.string.CoinPage_Contract, "ETH"), coinType.address)
                 is CoinType.Bep20 -> ContractInfo(Translator.getString(R.string.CoinPage_Contract, "BSC"), coinType.address)
                 is CoinType.Bep2 -> ContractInfo(Translator.getString(R.string.CoinPage_Bep2Symbol), coinType.symbol)

@@ -13,7 +13,6 @@ import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.ConcatAdapter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.core.managers.LinkType
 import io.horizontalsystems.bankwallet.modules.coin.adapters.*
 import io.horizontalsystems.bankwallet.modules.coin.adapters.CoinChartAdapter.ChartViewType
 import io.horizontalsystems.bankwallet.modules.markdown.MarkdownFragment
@@ -26,6 +25,7 @@ import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.CoinType
+import io.horizontalsystems.xrateskit.entities.LinkType
 import kotlinx.android.synthetic.main.fragment_coin.*
 
 class CoinFragment : BaseFragment(), CoinChartAdapter.Listener, CoinDataAdapter.Listener, CoinLinksAdapter.Listener {

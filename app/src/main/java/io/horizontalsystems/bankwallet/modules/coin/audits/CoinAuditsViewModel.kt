@@ -4,11 +4,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IRateManager
-import io.horizontalsystems.bankwallet.core.managers.Auditor
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.marketkit.models.CoinType
 import io.horizontalsystems.views.ListPosition
+import io.horizontalsystems.xrateskit.entities.Auditor
 import io.reactivex.disposables.Disposable
 import java.util.*
 

@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.managers.TimePeriod as XRatesTimePeriod
+import io.horizontalsystems.xrateskit.entities.TimePeriod as XRatesTimePeriod
 
 object MarketAdvancedSearchModule {
     class Factory : ViewModelProvider.Factory {

@@ -9,9 +9,9 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.managers.TimePeriod
 import io.horizontalsystems.views.ListPosition
 import io.horizontalsystems.views.helpers.LayoutHelper
+import io.horizontalsystems.xrateskit.entities.TimePeriod
 import java.math.BigDecimal
 
 class CoinPerformanceRowView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)

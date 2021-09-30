@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.managers.CoinData
+import io.horizontalsystems.xrateskit.entities.CoinData
 import java.math.BigDecimal
 
 object TvlRankModule {

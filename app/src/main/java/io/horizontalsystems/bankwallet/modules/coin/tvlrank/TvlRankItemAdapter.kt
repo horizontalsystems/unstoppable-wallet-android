@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.managers.toMarketKitCoinType
 import io.horizontalsystems.bankwallet.core.setCoinImage
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_market_item.*
@@ -62,7 +63,7 @@ class ViewHolderTvlRank(override val containerView: View) : RecyclerView.ViewHol
 
     fun bind(item: TvlRankViewItem, prev: TvlRankViewItem?) {
         if (item.data.type != prev?.data?.type) {
-            icon.setCoinImage(item.data.type)
+            icon.setCoinImage(item.data.type.toMarketKitCoinType())
         }
 
         if (item.data.title != prev?.data?.title) {
