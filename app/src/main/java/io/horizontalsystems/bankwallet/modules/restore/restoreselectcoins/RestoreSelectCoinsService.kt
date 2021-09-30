@@ -77,7 +77,7 @@ class RestoreSelectCoinsService(
     }
 
     private fun syncFullCoins() {
-        fullCoins = if (filter.isNotBlank()) {
+        fullCoins = if (filter.isBlank()) {
             coinManager.featuredFullCoins(enabledCoins.map { it.platformCoin.coinType }).toMutableList()
         } else {
             coinManager.fullCoins(filter, 20).toMutableList()

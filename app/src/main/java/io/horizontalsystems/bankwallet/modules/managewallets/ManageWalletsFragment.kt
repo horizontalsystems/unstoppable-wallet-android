@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.managewallets.view
+package io.horizontalsystems.bankwallet.modules.managewallets
 
 import android.os.Bundle
 import android.view.Menu
@@ -79,9 +79,7 @@ class ManageWalletsFragment : CoinListBaseFragment() {
         viewModel.updateFilter(query)
     }
 
-
     private fun observe() {
-
         viewModel.viewItemsLiveData.observe(viewLifecycleOwner) { viewItems ->
             setViewItems(viewItems)
         }

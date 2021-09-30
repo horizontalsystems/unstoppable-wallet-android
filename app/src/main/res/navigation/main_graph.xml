@@ -118,7 +118,7 @@
     </fragment>
     <fragment
         android:id="@+id/manageWalletsFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.managewallets.view.ManageWalletsFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsFragment"
         tools:layout="@layout/fragment_manage_wallets">
         <action
             android:id="@+id/manageWalletsFragment_to_addToken"

@@ -71,7 +71,7 @@ class ManageWalletsService(
     }
 
     private fun syncFullCoins() {
-        fullCoins = if (filter.isNotBlank()) {
+        fullCoins = if (filter.isBlank()) {
             coinManager.featuredFullCoins(wallets.map { it.coinType }).toMutableList()
         } else {
             coinManager.fullCoins(filter, 20).toMutableList()
@@ -149,8 +149,8 @@ class ManageWalletsService(
         }
     }
 
-    fun setFilter(v: String) {
-        filter = v
+    fun setFilter(filter: String) {
+        this.filter = filter
 
         syncFullCoins()
         sortFullCoins()
