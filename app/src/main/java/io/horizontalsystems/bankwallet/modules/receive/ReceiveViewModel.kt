@@ -20,7 +20,7 @@ class ReceiveViewModel(
 
         testNet = !networkTypeChecker.isMainNet(wallet)
         receiveAddress = receiveAdapter.receiveAddress
-        addressType = wallet.coinSettings.derivation?.addressType()
+        addressType = wallet.coinSettings.derivation?.addressType
     }
 
     class NoReceiverAdapter : Error("No Receiver Adapter")
