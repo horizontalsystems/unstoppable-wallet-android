@@ -6,13 +6,13 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IAppConfigProvider
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.core.IRateManager
-import io.horizontalsystems.bankwallet.core.managers.DefiTvl
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.modules.market.sortedByDescendingNullLast
 import io.horizontalsystems.bankwallet.modules.market.sortedByNullLast
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorItem
 import io.horizontalsystems.core.SingleLiveEvent
+import io.horizontalsystems.xrateskit.entities.DefiTvl
 import io.reactivex.disposables.Disposable
 
 class TvlRankViewModel(

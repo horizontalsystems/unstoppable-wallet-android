@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.modules.coin.coinmarkets
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
-import io.horizontalsystems.bankwallet.core.managers.MarketTicker
 import io.horizontalsystems.bankwallet.modules.coin.MarketTickerViewItem
 import io.horizontalsystems.bankwallet.modules.market.sortedByDescendingNullLast
 import io.horizontalsystems.bankwallet.modules.market.sortedByNullLast
@@ -11,6 +10,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ToggleIndicator
 import io.horizontalsystems.bankwallet.ui.extensions.MarketListHeaderView
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.marketkit.MarketKit
+import io.horizontalsystems.xrateskit.entities.MarketTicker
 import java.math.BigDecimal
 
 class CoinMarketsViewModel(

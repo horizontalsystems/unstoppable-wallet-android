@@ -17,10 +17,10 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.managers.CoinMeta
 import io.horizontalsystems.bankwallet.modules.coin.AboutText
 import io.horizontalsystems.views.helpers.LayoutHelper
 import io.horizontalsystems.views.inflate
+import io.horizontalsystems.xrateskit.entities.CoinMeta
 import io.noties.markwon.AbstractMarkwonPlugin
 import io.noties.markwon.Markwon
 import io.noties.markwon.MarkwonSpansFactory

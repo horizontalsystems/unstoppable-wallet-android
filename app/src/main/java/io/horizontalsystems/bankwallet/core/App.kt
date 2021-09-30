@@ -187,7 +187,7 @@ class App : CoreApp() {
         adapterFactory.initialSyncModeSettingsManager = initialSyncModeSettingsManager
 
         feeCoinProvider = FeeCoinProvider(marketKit)
-        xRateManager = RateManager(this, appConfigProvider, marketKit)
+        xRateManager = RateManager(this, appConfigProvider)
 
         addressParserFactory = AddressParserFactory()
 

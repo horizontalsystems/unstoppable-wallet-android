@@ -3,6 +3,8 @@ package io.horizontalsystems.bankwallet.modules.market.search
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.Clearable
+import io.horizontalsystems.bankwallet.core.managers.toMarketKitCoinType
+import io.horizontalsystems.bankwallet.core.managers.uid
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
@@ -30,7 +32,7 @@ class MarketSearchViewModel(private val service: MarketSearchService, private va
                     emptyResultsLiveData.postValue(coinData.isPresent && coinData.get().isEmpty())
                     advancedSearchButtonVisibleLiveDataViewItem.postValue(service.query.isBlank())
 
-                    itemsLiveData.postValue(coinData.orElse(listOf()).map { CoinDataViewItem(it.code.toUpperCase(Locale.US), it.title, it.type, it.uid) })
+                    itemsLiveData.postValue(coinData.orElse(listOf()).map { CoinDataViewItem(it.code.toUpperCase(Locale.US), it.title, it.type.toMarketKitCoinType(), it.uid()) })
                 }.let {
                     disposable.add(it)
                 }
