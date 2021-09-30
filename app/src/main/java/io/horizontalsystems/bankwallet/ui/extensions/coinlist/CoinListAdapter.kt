@@ -110,7 +110,6 @@ class CoinWithSwitchViewHolder(
                 edit.setOnSingleClickListener {
                     onEdit(bindingAdapterPosition)
                 }
-                edit.isVisible = true
             }
         }
     }

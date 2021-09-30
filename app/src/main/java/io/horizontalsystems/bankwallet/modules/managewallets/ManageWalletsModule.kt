@@ -6,6 +6,7 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.enablecoin.coinsettings.CoinSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.enablecoin.EnableCoinService
 import io.horizontalsystems.bankwallet.modules.enablecoin.coinplatforms.CoinPlatformsService
+import io.horizontalsystems.bankwallet.modules.enablecoin.coinplatforms.CoinPlatformsViewModel
 import io.horizontalsystems.bankwallet.modules.enablecoin.coinsettings.CoinSettingsService
 import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.RestoreSettingsService
 import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.RestoreSettingsViewModel
@@ -45,6 +46,9 @@ object ManageWalletsModule {
                 }
                 ManageWalletsViewModel::class.java -> {
                     ManageWalletsViewModel(manageWalletsService, listOf(manageWalletsService)) as T
+                }
+                CoinPlatformsViewModel::class.java -> {
+                    CoinPlatformsViewModel(coinPlatformsService) as T
                 }
                 else -> throw IllegalArgumentException()
             }

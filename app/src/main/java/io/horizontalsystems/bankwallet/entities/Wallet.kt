@@ -51,13 +51,13 @@ data class Wallet(
 
     override fun equals(other: Any?): Boolean {
         if (other is Wallet) {
-            return platformCoin == other.platformCoin && account == other.account
+            return configuredPlatformCoin == other.configuredPlatformCoin && account == other.account
         }
 
         return super.equals(other)
     }
 
     override fun hashCode(): Int {
-        return Objects.hash(platformCoin, account)
+        return Objects.hash(configuredPlatformCoin, account)
     }
 }

@@ -118,6 +118,7 @@ class App : CoreApp() {
         languageConfigProvider = appConfig
 
         marketKit = MarketKit.getInstance(this)
+        marketKit.sync()
 
         feeRateProvider = FeeRateProvider(appConfigProvider)
         backgroundManager = BackgroundManager(this)

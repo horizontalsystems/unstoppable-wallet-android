@@ -34,8 +34,9 @@ abstract class CoinListBaseFragment : BaseWithSearchFragment(), CoinListAdapter.
             findNavController().popBackStack()
         }
 
+        itemsAdapter = CoinListAdapter(this)
         recyclerView.itemAnimator = null
-        recyclerView.adapter = CoinListAdapter(this)
+        recyclerView.adapter = itemsAdapter
     }
 
     // ManageWalletItemsAdapter.Listener

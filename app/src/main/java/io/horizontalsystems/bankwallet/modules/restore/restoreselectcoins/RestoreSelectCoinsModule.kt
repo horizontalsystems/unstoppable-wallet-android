@@ -7,6 +7,7 @@ import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.modules.enablecoin.coinsettings.CoinSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.enablecoin.EnableCoinService
 import io.horizontalsystems.bankwallet.modules.enablecoin.coinplatforms.CoinPlatformsService
+import io.horizontalsystems.bankwallet.modules.enablecoin.coinplatforms.CoinPlatformsViewModel
 import io.horizontalsystems.bankwallet.modules.enablecoin.coinsettings.CoinSettingsService
 import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.RestoreSettingsService
 import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.RestoreSettingsViewModel
@@ -45,7 +46,6 @@ object RestoreSelectCoinsModule {
         private val coinPlatformsService by lazy {
             CoinPlatformsService()
         }
-
         private val enableCoinService by lazy {
             EnableCoinService(coinPlatformsService, restoreSettingsService, coinSettingsService)
         }
@@ -76,6 +76,9 @@ object RestoreSelectCoinsModule {
                 }
                 RestoreSelectCoinsViewModel::class.java -> {
                     RestoreSelectCoinsViewModel(restoreSelectCoinsService, listOf(restoreSelectCoinsService)) as T
+                }
+                CoinPlatformsViewModel::class.java -> {
+                    CoinPlatformsViewModel(coinPlatformsService) as T
                 }
                 else -> throw IllegalArgumentException()
             }
