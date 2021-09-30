@@ -829,7 +829,7 @@
     <!-- Address Format Settings List -->
 
     <string name="AddressFormatSettings_Title">Address Format</string>
-    <string name="AddressFormatSettings_Description">Choose the address format for your %s wallet. Each selected format represents a different wallet on app\'s balance tab.</string>
+    <string name="AddressFormatSettings_Description">Select address format for the coin. Proceed with recommended option if unsure. A correct format should be chosen when restoring an existing wallet.</string>
 
     <!-- Coin Platforms -->
 
@@ -844,9 +844,9 @@
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">After this change the wallet will have to resync itself with the %s blockchain.</string>
     <string name="BlockchainSettings_CommunicationModeChangeAlert_Title">Communication</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type0_Title">Legacy</string>
-    <string name="CoinSettings_BitcoinCashCoinType_Type145_Title">New</string>
-    <string name="CoinSettings_BitcoinCashCoinType_Type0_Description">Older wallets (before Aug 2017)</string>
-    <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">Newer wallets</string>
+    <string name="CoinSettings_BitcoinCashCoinType_Type145_Title">CashAddress (recommended)</string>
+    <string name="CoinSettings_BitcoinCashCoinType_Type0_Description">Common before 2018</string>
+    <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">Common after 2018</string>
 
     <!-- Tor -->
 
@@ -862,9 +862,9 @@
 
     <!--Coin Option-->
 
-    <string name="CoinOption_bip44_Subtitle">Older (starts with %s...)</string>
-    <string name="CoinOption_bip49_Subtitle">Popular (starts with %s...)</string>
-    <string name="CoinOption_bip84_Subtitle">Newest (starts with %s...)</string>
+    <string name="CoinOption_bip44_Title">Legacy</string>
+    <string name="CoinOption_bip49_Title">Newer (recommended)</string>
+    <string name="CoinOption_bip84_Title">Newest</string>
 
     <!--Coin Page-->
 

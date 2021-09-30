@@ -53,11 +53,8 @@ class CoinSettingsViewModel(
             selectedIndexes = current.map { allDerivations.indexOf(it) }.filter { it > -1 },
             viewItems = allDerivations.map { derivation ->
                 BottomSheetSelectorViewItem(
-                    title = derivation.longTitle(),
-                    subtitle = Translator.getString(
-                        derivation.description(),
-                        (derivation.addressPrefix(platformCoin.coinType) ?: "")
-                    )
+                    title = derivation.title,
+                    subtitle = derivation.description
                 )
             },
             description = Translator.getString(R.string.AddressFormatSettings_Description, platformCoin.name)
