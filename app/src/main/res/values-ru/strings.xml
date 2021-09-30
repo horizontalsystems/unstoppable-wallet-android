@@ -93,7 +93,7 @@
     <string name="Market_DeFiCap">Капитализация DeFi</string>
     <string name="Market_SeeAll">Посмотреть Всё</string>
     <string name="Market_Tab_Overview">Overview</string>
-    <string name="Market_Tab_Discovery">Discovery</string>
+    <string name="Market_Tab_Posts">News</string>
     <string name="Market_Tab_Watchlist">Watchlist</string>
     <string name="Market_Tab_Watchlist_EmptyList">You don\’t have any favorite assets.\nYou can add the favorites by clicking on star icon in the asset page</string>
     <string name="Market_Category_Rated">Rated</string>
@@ -146,10 +146,12 @@
     <string name="Market_Category_YieldTokens_Description">Прибыльные токены.</string>
     <!--Market Global Metrics-->
     <string name="MarketGlobalMetrics_Chart">График</string>
+    <string name="MarketGlobalMetrics_TotalMarketCap">Total M.Cap</string>
     <string name="MarketGlobalMetrics_BtcDominance">Доминирование Bitcoin</string>
     <string name="MarketGlobalMetrics_Volume">Объём</string>
     <string name="MarketGlobalMetrics_DefiCap">Капитализация DeFi</string>
     <string name="MarketGlobalMetrics_TvlInDefi">TVL в DeFi</string>
+    <string name="MarketGlobalMetrics_TotalMarketCapDescription">Total M.Cap description</string>
     <string name="MarketGlobalMetrics_BtcDominanceDescription">Историческое изменение соотношения рыночной капитализации биткойнов к остальным криптовалютным рынкам. \n\nОбычно, в этом случае биткойны доминируют над остальными тенденциями криптовалютного рынка наоборот.</string>
     <string name="MarketGlobalMetrics_VolumeDescription">Историческое изменение в ежедневном совокупном объеме торговли для всех криптовалют.</string>
     <string name="MarketGlobalMetrics_DefiCapDescription">Историческое изменение в совокупной рыночной стоимости токенов в Децентрализованном финансовом секторе.</string>
@@ -687,6 +689,10 @@
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Title">Формат Адреса</string>
     <string name="AddressFormatSettings_Description">Выберите формат адреса для вашего %s кошелька. Каждый выбранный формат представляет отдельный кошелек во вкладке приложения для отображения баланса.</string>
+    <!-- Coin Platforms -->
+    <string name="CoinPlatforms_Native">Native</string>
+    <string name="CoinPlatformsSelector_Title">Coin Type</string>
+    <string name="CoinPlatformsSelector_Description">This token exists on multiple blockchains. Select version(s) you would like to use.</string>
     <!-- Blockchain Settings -->
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">Источник Восстановления</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">После вступления данного изменения в силу кошелек должен будет повторно синхронизироваться с блокчейном %s.</string>
