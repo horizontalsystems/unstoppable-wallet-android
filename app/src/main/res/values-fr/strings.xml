@@ -93,7 +93,7 @@
     <string name="Market_DeFiCap">Cap DeFi</string>
     <string name="Market_SeeAll">Tout Afficher</string>
     <string name="Market_Tab_Overview">Overview</string>
-    <string name="Market_Tab_Discovery">Discovery</string>
+    <string name="Market_Tab_Posts">News</string>
     <string name="Market_Tab_Watchlist">Watchlist</string>
     <string name="Market_Tab_Watchlist_EmptyList">You don\’t have any favorite assets.\nYou can add the favorites by clicking on star icon in the asset page</string>
     <string name="Market_Category_Rated">Évaluation</string>
@@ -146,10 +146,12 @@
     <string name="Market_Category_YieldTokens_Description">Bearing tokens intéressants.</string>
     <!--Market Global Metrics-->
     <string name="MarketGlobalMetrics_Chart">Graphique</string>
+    <string name="MarketGlobalMetrics_TotalMarketCap">Total M.Cap</string>
     <string name="MarketGlobalMetrics_BtcDominance">Bitcoin Dominance</string>
     <string name="MarketGlobalMetrics_Volume">Volume</string>
     <string name="MarketGlobalMetrics_DefiCap">Cap DeFi</string>
     <string name="MarketGlobalMetrics_TvlInDefi">TVL en DeFi</string>
+    <string name="MarketGlobalMetrics_TotalMarketCapDescription">Total M.Cap description</string>
     <string name="MarketGlobalMetrics_BtcDominanceDescription">Le changement historique du ratio entre la capitalisation boursière du Bitcoin et le reste des marchés de cryptomonnaies. \n\nGénéralement, lorsque la domination du Bitcoin tend à la hausse, le reste du marché des cryptomonnaies a une tendance à la baisse et vice versa.</string>
     <string name="MarketGlobalMetrics_VolumeDescription">La variation historique du volume global quotidien du marché des transactions pour toutes les cryptomonnaies.</string>
     <string name="MarketGlobalMetrics_DefiCapDescription">L\'évolution historique de la valeur de marché cumulée des tokens dans le secteur de la finance décentralisée.</string>
@@ -684,6 +686,10 @@
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Title">Format de l\'adresse</string>
     <string name="AddressFormatSettings_Description">Choisissez le format d\'adresse de votre portefeuille %s. Chaque format sélectionné représente un portefeuille différent dans l\'onglet du solde de l\'application.</string>
+    <!-- Coin Platforms -->
+    <string name="CoinPlatforms_Native">Native</string>
+    <string name="CoinPlatformsSelector_Title">Coin Type</string>
+    <string name="CoinPlatformsSelector_Description">This token exists on multiple blockchains. Select version(s) you would like to use.</string>
     <!-- Blockchain Settings -->
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">Restaurer la source</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">Après cette modification, le portefeuille devra se resynchroniser avec la blockchain %s.</string>
