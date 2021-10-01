@@ -68,7 +68,7 @@
     <string name="Restore_PassphraseDescription">输入您在创建此助记词时使用的密码.</string>
     <string name="Select_Coins">Choose Coins</string>
     <string name="Restore_ZCash_BirthdayHeight">生日高度</string>
-    <string name="Restore_ZCash_BirthdayHeight_Hint">如果您知道您Zcash钱包的生日高度，请将其添加至下方以加速同步过程。</string>
+    <string name="Restore_ZCash_BirthdayHeight_Hint">If you know your birthday height of wallet enter it for quick syncing.</string>
     <!--Backup-->
     <string name="Backup_Confirmation_CheckTitle">检查...</string>
     <!--Market-->
@@ -690,7 +690,7 @@
     <string name="AddBep2Token_SymbolNotFound">找不到符号</string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Title">地址格式</string>
-    <string name="AddressFormatSettings_Description">选择您 %s 钱包的地址格式。每个选中的格式代表应用的余额选项卡上不同的钱包。</string>
+    <string name="AddressFormatSettings_Description">Select address format for the coin. Proceed with recommended option if unsure. A correct format should be chosen when restoring an existing wallet.</string>
     <!-- Coin Platforms -->
     <string name="CoinPlatforms_Native">Native</string>
     <string name="CoinPlatformsSelector_Title">Coin Type</string>
@@ -700,9 +700,9 @@
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">此更改后，钱包将必须与 %s 区块链重新同步。</string>
     <string name="BlockchainSettings_CommunicationModeChangeAlert_Title">通信</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type0_Title">Legacy</string>
-    <string name="CoinSettings_BitcoinCashCoinType_Type145_Title">新</string>
-    <string name="CoinSettings_BitcoinCashCoinType_Type0_Description">旧钱包（2017年之前）</string>
-    <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">较新的钱包</string>
+    <string name="CoinSettings_BitcoinCashCoinType_Type145_Title">CashAddress (recommended)</string>
+    <string name="CoinSettings_BitcoinCashCoinType_Type0_Description">Common before 2018</string>
+    <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">Common after 2018</string>
     <!-- Tor -->
     <string name="Tor_Title">Tor</string>
     <string name="Tor_Connection_Title">连接</string>
@@ -714,9 +714,9 @@
     <string name="TorPage_ConnectionClosed">已断开</string>
     <string name="Tor_PrerequisitesAlert_Content">如果激活了TOR，Ethereum区块链将重置为Infura</string>
     <!--Coin Option-->
-    <string name="CoinOption_bip44_Subtitle">更旧（以%s...开头）</string>
-    <string name="CoinOption_bip49_Subtitle">流行（以%s...开头）</string>
-    <string name="CoinOption_bip84_Subtitle">最新（以%s...开头）</string>
+    <string name="CoinOption_bip44_Title">Legacy</string>
+    <string name="CoinOption_bip49_Title">Newer (recommended)</string>
+    <string name="CoinOption_bip84_Title">Newest</string>
     <!--Coin Page-->
     <string name="CoinPage_TimeDuration_Today">TDY</string>
     <string name="CoinPage_TimeDuration_Day">24H</string>
