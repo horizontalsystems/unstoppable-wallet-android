@@ -68,7 +68,7 @@
     <string name="Restore_PassphraseDescription">Introduzca su frase de contraseña que utilizó al crear esta frase mnemotécnica.</string>
     <string name="Select_Coins">Choose Coins</string>
     <string name="Restore_ZCash_BirthdayHeight">Altura de Cumpleaños</string>
-    <string name="Restore_ZCash_BirthdayHeight_Hint">Si conoce una altura de cumpleaños para su monedero Zcash añádela abajo para acelerar el proceso de sincronización.</string>
+    <string name="Restore_ZCash_BirthdayHeight_Hint">If you know your birthday height of wallet enter it for quick syncing.</string>
     <!--Backup-->
     <string name="Backup_Confirmation_CheckTitle">Comprobar…</string>
     <!--Market-->
@@ -691,7 +691,7 @@ poner en peligro la seguridad de mis fondos.</string>
     <string name="AddBep2Token_SymbolNotFound">No encontrámos tu símbolo</string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Title">Formato de dirección</string>
-    <string name="AddressFormatSettings_Description">Elija el formato de dirección para su monedero %s. Cada formato seleccionado representa un monedero diferente en la pestaña de saldo de la aplicación.</string>
+    <string name="AddressFormatSettings_Description">Select address format for the coin. Proceed with recommended option if unsure. A correct format should be chosen when restoring an existing wallet.</string>
     <!-- Coin Platforms -->
     <string name="CoinPlatforms_Native">Native</string>
     <string name="CoinPlatformsSelector_Title">Coin Type</string>
@@ -701,9 +701,9 @@ poner en peligro la seguridad de mis fondos.</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">Después de este cambio, el monedero tendrá que resincronizarse con el blockchain %s.</string>
     <string name="BlockchainSettings_CommunicationModeChangeAlert_Title">Comunicación</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type0_Title">Legacy</string>
-    <string name="CoinSettings_BitcoinCashCoinType_Type145_Title">Nuevo</string>
-    <string name="CoinSettings_BitcoinCashCoinType_Type0_Description">Monederos antiguos (antes de Agosto 2017)</string>
-    <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">Monederos más nuevos</string>
+    <string name="CoinSettings_BitcoinCashCoinType_Type145_Title">CashAddress (recommended)</string>
+    <string name="CoinSettings_BitcoinCashCoinType_Type0_Description">Common before 2018</string>
+    <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">Common after 2018</string>
     <!-- Tor -->
     <string name="Tor_Title">Tor</string>
     <string name="Tor_Connection_Title">Conexión</string>
@@ -715,9 +715,9 @@ poner en peligro la seguridad de mis fondos.</string>
     <string name="TorPage_ConnectionClosed">Desconectado</string>
     <string name="Tor_PrerequisitesAlert_Content">Activar TOR restablecerá la conexión del Blockchain de Ethereum de vuelta a Infura.</string>
     <!--Coin Option-->
-    <string name="CoinOption_bip44_Subtitle">Más antiguo (comenzar con %s...)</string>
-    <string name="CoinOption_bip49_Subtitle">Popular (comenzar con %s...)</string>
-    <string name="CoinOption_bip84_Subtitle">Más nuevo (comenzar con %s...)</string>
+    <string name="CoinOption_bip44_Title">Legacy</string>
+    <string name="CoinOption_bip49_Title">Newer (recommended)</string>
+    <string name="CoinOption_bip84_Title">Newest</string>
     <!--Coin Page-->
     <string name="CoinPage_TimeDuration_Today">TDY</string>
     <string name="CoinPage_TimeDuration_Day">24H</string>
