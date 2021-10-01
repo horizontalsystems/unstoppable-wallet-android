@@ -8,7 +8,6 @@ import androidx.core.view.isVisible
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseWithSearchFragment
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorMultipleDialog
-import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.marketkit.models.Coin
 import io.horizontalsystems.marketkit.models.FullCoin
@@ -62,20 +61,11 @@ abstract class CoinListBaseFragment : BaseWithSearchFragment(), CoinListAdapter.
         onSelect: (indexes: List<Int>) -> Unit,
         onCancel: () -> Unit
     ) {
-        val coinDrawable = context?.let {
-            config.platformCoin?.coinType?.let { coinType ->
-                AppLayoutHelper.getCoinDrawable(
-                    it,
-                    coinType
-                )
-            }
-        }
-
         BottomSheetSelectorMultipleDialog.show(
             fragmentManager = childFragmentManager,
             title = config.title,
             subtitle = config.subtitle,
-            icon = coinDrawable,
+            coinUid = config.coin.uid,
             items = config.viewItems,
             selected = config.selectedIndexes,
             notifyUnchanged = true,

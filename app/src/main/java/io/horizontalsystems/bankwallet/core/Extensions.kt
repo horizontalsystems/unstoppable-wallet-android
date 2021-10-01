@@ -5,6 +5,7 @@ import android.os.Parcelable
 import android.view.View
 import android.widget.ImageView
 import androidx.annotation.CheckResult
+import androidx.core.content.ContextCompat
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
 import io.horizontalsystems.ethereumkit.core.toRawHexString
@@ -21,6 +22,11 @@ import io.reactivex.schedulers.Schedulers
 
 fun ImageView.setCoinImage(coinType: CoinType) {
     setImageDrawable(AppLayoutHelper.getCoinDrawable(context, coinType))
+}
+
+fun ImageView.setCoinImage(coinUid: String) {
+    // TODO: set image using coinUid
+    setImageDrawable(ContextCompat.getDrawable(context, R.drawable.place_holder))
 }
 
 fun View.setOnSingleClickListener(l: ((v: View) -> Unit)) {
