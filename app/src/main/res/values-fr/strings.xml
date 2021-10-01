@@ -98,6 +98,8 @@
     <string name="Market_Tab_Watchlist_EmptyList">You don\’t have any favorite assets.\nYou can add the favorites by clicking on star icon in the asset page</string>
     <string name="Market_Category_Rated">Évaluation</string>
     <string name="Market_Category_Rated_Description">Classement des tokens en fonction de la sécurité du projet et de la liquidité du marché.</string>
+    <string name="Market_Category_TopCoins">Top Coins</string>
+    <string name="Market_Category_TopCoins_Description">Top Coins Description</string>
     <string name="Market_Category_Blockchains">Blockchains</string>
     <string name="Market_Category_Blockchains_Description">Cryptomonnaies natives sur les principales blockchains. </string>
     <string name="Market_Category_Dexes">DEXes</string>
@@ -160,6 +162,9 @@
     <string name="EmptyResults">Aucun résultat</string>
     <string name="Market_AdvancedSearch">Recherche avancée</string>
     <string name="Market_AdvancedSearch_Results">Résultat</string>
+    <string name="Market_Search_Hint">Search</string>
+    <string name="Market_Search_BrowseCategories">Browse categories</string>
+    <string name="Market_Filter">Filter</string>
     <string name="Market_Filter_ChooseSet">Choisissez le set</string>
     <string name="Market_Filter_MarketCap">Cap. marché</string>
     <string name="Market_Filter_Volume">Volume de trading</string>
