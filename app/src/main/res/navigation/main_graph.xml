@@ -74,6 +74,9 @@
             android:id="@+id/mainFragment_to_marketSearchFragment"
             app:destination="@id/marketSearchFragment" />
         <action
+            android:id="@+id/mainFragment_to_MarketSearchFragment"
+            app:destination="@id/marketSearchFragment" />
+        <action
             android:id="@+id/mainFragment_to_sendEvmFragment"
             app:destination="@id/sendEvmFragment" />
         <action
@@ -430,8 +433,7 @@
     </fragment>
     <fragment
         android:id="@+id/marketSearchFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.market.search.MarketSearchFragment"
-        tools:layout="@layout/fragment_market_search">
+        android:name="io.horizontalsystems.bankwallet.modules.market.search.MarketSearchFragment">
         <action
             android:id="@+id/marketSearchFragment_to_marketAdvancedSearchFragment"
             app:destination="@id/marketAdvancedSearchFragment" />

@@ -1,30 +1,13 @@
 package io.horizontalsystems.bankwallet.modules.market.search
 
 import io.horizontalsystems.bankwallet.core.Clearable
-import io.horizontalsystems.bankwallet.core.IRateManager
-import io.horizontalsystems.xrateskit.entities.CoinData
-import io.reactivex.subjects.BehaviorSubject
-import java.util.*
+import io.horizontalsystems.bankwallet.core.ICoinManager
+import io.horizontalsystems.marketkit.models.FullCoin
 
-class MarketSearchService(private val xRateManager: IRateManager) : Clearable {
+class MarketSearchService(private val coinManager: ICoinManager) : Clearable {
 
-    var query: String = ""
-        set(value) {
-            field = value
-
-            fetch()
-        }
-
-    val itemsAsync = BehaviorSubject.createDefault(Optional.empty<List<CoinData>>())
-
-    private fun fetch() {
-        val queryTrimmed = query.trim()
-
-        if (queryTrimmed.count() < 2) {
-            itemsAsync.onNext(Optional.empty())
-        } else {
-            itemsAsync.onNext(Optional.of(xRateManager.searchCoins(queryTrimmed)))
-        }
+    fun getCoinsByQuery(query: String): List<FullCoin> {
+        return coinManager.fullCoins(query, 100)
     }
 
     override fun clear() = Unit
