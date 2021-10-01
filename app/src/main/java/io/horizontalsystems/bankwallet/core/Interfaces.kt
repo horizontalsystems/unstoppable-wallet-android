@@ -527,7 +527,7 @@ interface ICoinManager {
     fun getPlatformCoinsByCoinTypeIds(coinTypeIds: List<String>): List<PlatformCoin>
     fun getPlatformCoins(): List<PlatformCoin>
     fun getPlatformCoins(coinTypes: List<CoinType>): List<PlatformCoin>
-    fun featuredFullCoins(enabledCoinTypes: List<CoinType>): List<FullCoin>
+    fun featuredFullCoins(enabledPlatformCoins: List<PlatformCoin>): List<FullCoin>
     fun fullCoins(filter: String = "", limit: Int = 20): List<FullCoin>
 }
 

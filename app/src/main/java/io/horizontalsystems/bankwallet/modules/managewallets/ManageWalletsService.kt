@@ -70,12 +70,16 @@ class ManageWalletsService(
         wallets = walletList.toSet()
     }
 
-    private fun syncFullCoins() {
-        fullCoins = if (filter.isBlank()) {
-            coinManager.featuredFullCoins(wallets.map { it.coinType }).toMutableList()
+    private fun fetchFullCoins(): MutableList<FullCoin> {
+        return if (filter.isBlank()) {
+            coinManager.featuredFullCoins(wallets.map { it.platformCoin }).toMutableList()
         } else {
             coinManager.fullCoins(filter, 20).toMutableList()
         }
+    }
+
+    private fun syncFullCoins() {
+        fullCoins = fetchFullCoins()
     }
 
     private fun sortFullCoins() {
@@ -119,6 +123,13 @@ class ManageWalletsService(
 
     private fun handleUpdated(wallets: List<Wallet>) {
         sync(wallets)
+
+        val newFullCons = fetchFullCoins()
+        if (newFullCons.size > fullCoins.size) {
+            fullCoins = newFullCons
+            sortFullCoins()
+        }
+
         syncState()
     }
 

@@ -12,11 +12,40 @@ class CoinManager(
     private val marketKit: MarketKit,
     private val storage: ICustomTokenStorage
 ) : ICoinManager {
-    private val featuredCoinTypes: List<CoinType> = listOf(CoinType.Bitcoin, CoinType.Ethereum, CoinType.BinanceSmartChain)
 
-    override fun featuredFullCoins(enabledCoinTypes: List<CoinType>): List<FullCoin> {
-        val appFullCoins = customFullCoins(enabledCoinTypes)
-        val kitFullCoins = marketKit.fullCoinsByCoinTypes(featuredCoinTypes + enabledCoinTypes)
+    private val featuredCoinUids = listOf(
+        "bitcoin",
+        "ethereum",
+        "bitcoin-cash",
+        "zcash",
+        "binancecoin",
+        "dash",
+        "litecoin",
+        "uniswap",
+        "sushi",
+        "pancakeswap-token",
+        "havven",
+        "1inch",
+        "curve-dao-token",
+        "0x",
+        "bancor",
+        "balancer",
+        "republic-protocol",
+        "tether",
+        "usd-coin",
+        "binance-usd",
+        "dai",
+        "aave",
+        "maker",
+        "compound-governance-token",
+        "yearn-finance",
+        "badger-dao",
+        "chainlink"
+    )
+
+    override fun featuredFullCoins(enabledPlatformCoins: List<PlatformCoin>): List<FullCoin> {
+        val appFullCoins = customFullCoins(enabledPlatformCoins.map { it.coinType })
+        val kitFullCoins = marketKit.fullCoins(featuredCoinUids + enabledPlatformCoins.map { it.coin.uid })
 
         return appFullCoins + kitFullCoins
     }
