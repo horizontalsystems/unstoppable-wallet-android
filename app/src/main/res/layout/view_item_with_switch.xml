@@ -1,18 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:layout_height="60dp"
-    tools:layout_width="match_parent"
-    tools:parentTag="android.widget.FrameLayout">
+    android:layout_width="match_parent"
+    android:layout_height="60dp">
 
     <View
         android:id="@+id/backgroundView"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:background="@drawable/rounded_lawrence_background_single" />
+        android:background="@color/lawrence" />
 
     <TextView
         android:id="@+id/itemTitle"
@@ -20,7 +17,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="top"
-        android:layout_marginStart="32dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:textColor="?TextColorBarsToDark"
         app:layout_constraintVertical_chainStyle="packed"
@@ -32,25 +29,27 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:layout_marginStart="32dp"
+        android:layout_marginStart="16dp"
         android:layout_marginBottom="8dp"
         android:ellipsize="end"
         android:maxLines="1"
         android:textColor="@color/grey"
         tools:text="@string/CoinOption_bip44_Subtitle" />
 
-    <ImageView
-        android:id="@+id/checkMark"
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/toggleSwitch"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="34dp"
         android:layout_gravity="end|center_vertical"
-        android:layout_marginStart="5dp"
-        android:layout_marginEnd="32dp"
-        android:ellipsize="end"
-        android:maxLines="1"
-        android:src="@drawable/ic_checkmark_20"
-        android:visibility="invisible"
-        app:tint="@color/jacob"
-        tools:visibility="visible" />
+        android:layout_marginEnd="8dp"
+        android:clickable="true"
+        android:theme="@style/SwitchTheme" />
 
-</merge>
+
+    <View
+        android:id="@+id/bottomBorderView"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_gravity="bottom"
+        android:background="@color/steel_10" />
+</FrameLayout>

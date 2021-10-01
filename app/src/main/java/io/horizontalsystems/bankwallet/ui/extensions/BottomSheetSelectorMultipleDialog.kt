@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.ui.extensions
 
 import android.content.DialogInterface
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
@@ -19,21 +18,21 @@ import io.horizontalsystems.marketkit.models.Coin
 import io.horizontalsystems.views.inflate
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_bottom_selector.*
-import kotlinx.android.synthetic.main.view_holder_setting_with_checkmark_wrapper.*
+import kotlinx.android.synthetic.main.view_item_with_switch.*
 
 class BottomSheetSelectorMultipleDialog(
-        private val title: String,
-        private val subtitle: String,
-        private val coinUid: String,
-        private val items: List<BottomSheetSelectorViewItem>,
-        private val selected: List<Int>,
-        private val onItemsSelected: (List<Int>) -> Unit,
-        private val onCancelled: (() -> Unit)?,
-        private val warning: String?,
-        private val notifyUnchanged: Boolean
+    private val title: String,
+    private val subtitle: String,
+    private val coinUid: String,
+    private val items: List<BottomSheetSelectorViewItem>,
+    private val selected: List<Int>,
+    private val onItemsSelected: (List<Int>) -> Unit,
+    private val onCancelled: (() -> Unit)?,
+    private val warning: String?,
+    private val notifyUnchanged: Boolean
 ) : BaseBottomSheetDialogFragment() {
 
-    private lateinit var itemsAdapter : MultipleSelectorItemsAdapter
+    private lateinit var itemsAdapter: MultipleSelectorItemsAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -94,9 +93,30 @@ class BottomSheetSelectorMultipleDialog(
     }
 
     companion object {
-        fun show(fragmentManager: FragmentManager, title: String, subtitle: String, coinUid: String, items: List<BottomSheetSelectorViewItem>, selected: List<Int>, onItemSelected: (List<Int>) -> Unit, onCancelled: (() -> Unit)? = null, warning: String? = null, notifyUnchanged: Boolean = false) {
-            BottomSheetSelectorMultipleDialog(title, subtitle, coinUid, items, selected, onItemSelected, onCancelled, warning, notifyUnchanged)
-                    .show(fragmentManager, "selector_dialog")
+        fun show(
+            fragmentManager: FragmentManager,
+            title: String,
+            subtitle: String,
+            coinUid: String,
+            items: List<BottomSheetSelectorViewItem>,
+            selected: List<Int>,
+            onItemSelected: (List<Int>) -> Unit,
+            onCancelled: (() -> Unit)? = null,
+            warning: String? = null,
+            notifyUnchanged: Boolean = false
+        ) {
+            BottomSheetSelectorMultipleDialog(
+                title,
+                subtitle,
+                coinUid,
+                items,
+                selected,
+                onItemSelected,
+                onCancelled,
+                warning,
+                notifyUnchanged
+            )
+                .show(fragmentManager, "selector_dialog")
         }
     }
 
@@ -110,49 +130,52 @@ class BottomSheetSelectorMultipleDialog(
     )
 }
 
-class MultipleSelectorItemsAdapter(private val items: List<BottomSheetSelectorViewItem>, val selected: MutableList<Int>, val onSelectedItemsChanged: (List<Int>) -> Unit) : RecyclerView.Adapter<ItemViewHolderMultiple>() {
+class MultipleSelectorItemsAdapter(
+    private val items: List<BottomSheetSelectorViewItem>,
+    val selected: MutableList<Int>,
+    val onSelectedItemsChanged: (List<Int>) -> Unit
+) : RecyclerView.Adapter<ItemViewHolderMultiple>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolderMultiple {
-        return ItemViewHolderMultiple(inflate(parent, R.layout.view_holder_setting_with_checkmark_wrapper, false)) { position ->
-            if (selected.contains(position)) {
-                selected.remove(position)
+        return ItemViewHolderMultiple(inflate(parent, R.layout.view_item_with_switch, false)) { isChecked, position ->
+            if (isChecked) {
+                if (position !in selected) {
+                    selected.add(position)
+                }
             } else {
-                selected.add(position)
+                selected.remove(position)
             }
-
-            onSelectedItemsChanged(selected)
-            notifyItemChanged(position, true)
+            onSelectedItemsChanged(selected.toList())
         }
     }
 
     override fun getItemCount() = items.size
 
-    override fun onBindViewHolder(holder: ItemViewHolderMultiple, position: Int) = Unit
-
-    override fun onBindViewHolder(holder: ItemViewHolderMultiple, position: Int, payloads: MutableList<Any>) {
-        if (payloads.isEmpty()) {
-            holder.bind(items[position].title, items[position].subtitle, selected.contains(position))
-        } else {
-            holder.bindSelected(selected.contains(position))
-        }
+    override fun onBindViewHolder(holder: ItemViewHolderMultiple, position: Int) {
+        holder.bind(items[position].title, items[position].subtitle, selected.contains(position))
     }
-
 }
 
-class ItemViewHolderMultiple(override val containerView: View, val onItemClick: (Int) -> Unit)
-    : RecyclerView.ViewHolder(containerView), LayoutContainer {
+class ItemViewHolderMultiple(
+    override val containerView: View,
+    val onSwitch: (isChecked: Boolean, position: Int) -> Unit
+) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
     init {
         containerView.setOnClickListener {
-            onItemClick(bindingAdapterPosition)
+            toggleSwitch.isChecked = !toggleSwitch.isChecked
         }
     }
 
     fun bind(title: String, subtitle: String, selected: Boolean) {
-        itemWithCheckmark.bind(title, subtitle, selected)
+        itemTitle.text = title
+        itemSubtitle.text = subtitle
+
+        toggleSwitch.setOnCheckedChangeListener(null)
+        toggleSwitch.isChecked = selected
+        toggleSwitch.setOnCheckedChangeListener { _, isChecked ->
+            onSwitch(isChecked, bindingAdapterPosition)
+        }
     }
 
-    fun bindSelected(selected: Boolean) {
-        itemWithCheckmark.setChecked(selected)
-    }
 }
