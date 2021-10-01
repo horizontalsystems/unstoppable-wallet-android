@@ -30,7 +30,7 @@ class CoinPlatformsViewModel(
         currentRequest = request
         val fullCoin = request.fullCoin
         val config = BottomSheetSelectorMultipleDialog.Config(
-            platformCoin = null,
+            coin = fullCoin.coin,
             title = Translator.getString(R.string.CoinPlatformsSelector_Title),
             subtitle = fullCoin.coin.name,
             description = Translator.getString(R.string.CoinPlatformsSelector_Description),

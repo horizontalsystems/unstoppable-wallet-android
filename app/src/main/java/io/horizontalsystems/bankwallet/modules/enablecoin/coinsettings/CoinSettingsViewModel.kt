@@ -47,7 +47,7 @@ class CoinSettingsViewModel(
 
     private fun derivationConfig(platformCoin: PlatformCoin, allDerivations: List<AccountType.Derivation>, current: List<AccountType.Derivation>): BottomSheetSelectorMultipleDialog.Config {
         return BottomSheetSelectorMultipleDialog.Config(
-            platformCoin = platformCoin,
+            coin = platformCoin.coin,
             title = Translator.getString(R.string.AddressFormatSettings_Title),
             subtitle = platformCoin.name,
             selectedIndexes = current.map { allDerivations.indexOf(it) }.filter { it > -1 },
@@ -63,7 +63,7 @@ class CoinSettingsViewModel(
 
     private fun bitcoinCashCoinTypeConfig(platformCoin: PlatformCoin, types: List<BitcoinCashCoinType>, current: List<BitcoinCashCoinType>): BottomSheetSelectorMultipleDialog.Config {
         return BottomSheetSelectorMultipleDialog.Config(
-            platformCoin = platformCoin,
+            coin = platformCoin.coin,
             title = Translator.getString(R.string.AddressFormatSettings_Title),
             subtitle = platformCoin.name,
             selectedIndexes = current.map { types.indexOf(it) }.filter { it > -1 },

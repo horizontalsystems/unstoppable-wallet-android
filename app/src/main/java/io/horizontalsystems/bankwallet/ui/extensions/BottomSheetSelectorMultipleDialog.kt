@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
-import io.horizontalsystems.marketkit.models.PlatformCoin
+import io.horizontalsystems.marketkit.models.Coin
 import io.horizontalsystems.views.inflate
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_bottom_selector.*
@@ -24,7 +24,7 @@ import kotlinx.android.synthetic.main.view_holder_setting_with_checkmark_wrapper
 class BottomSheetSelectorMultipleDialog(
         private val title: String,
         private val subtitle: String,
-        private val icon: Drawable?,
+        private val coinUid: String,
         private val items: List<BottomSheetSelectorViewItem>,
         private val selected: List<Int>,
         private val onItemsSelected: (List<Int>) -> Unit,
@@ -42,7 +42,7 @@ class BottomSheetSelectorMultipleDialog(
 
         setTitle(title)
         setSubtitle(subtitle)
-        setHeaderIconDrawable(icon)
+        setHeaderIcon(coinUid)
 
         setButton(selected.isNotEmpty())
 
@@ -94,14 +94,14 @@ class BottomSheetSelectorMultipleDialog(
     }
 
     companion object {
-        fun show(fragmentManager: FragmentManager, title: String, subtitle: String, icon: Drawable?, items: List<BottomSheetSelectorViewItem>, selected: List<Int>, onItemSelected: (List<Int>) -> Unit, onCancelled: (() -> Unit)? = null, warning: String? = null, notifyUnchanged: Boolean = false) {
-            BottomSheetSelectorMultipleDialog(title, subtitle, icon, items, selected, onItemSelected, onCancelled, warning, notifyUnchanged)
+        fun show(fragmentManager: FragmentManager, title: String, subtitle: String, coinUid: String, items: List<BottomSheetSelectorViewItem>, selected: List<Int>, onItemSelected: (List<Int>) -> Unit, onCancelled: (() -> Unit)? = null, warning: String? = null, notifyUnchanged: Boolean = false) {
+            BottomSheetSelectorMultipleDialog(title, subtitle, coinUid, items, selected, onItemSelected, onCancelled, warning, notifyUnchanged)
                     .show(fragmentManager, "selector_dialog")
         }
     }
 
     data class Config(
-        val platformCoin: PlatformCoin?,
+        val coin: Coin,
         val title: String,
         val subtitle: String,
         val selectedIndexes: List<Int>,

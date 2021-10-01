@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.setCoinImage
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.marketkit.models.Coin
 import io.horizontalsystems.marketkit.models.FullCoin
@@ -55,7 +56,6 @@ class CoinListAdapter(private val listener: Listener) :
     fun disableCoin(coin: Coin): Boolean {
         for (i in 0 until itemCount) {
             if (getItem(i).fullCoin.coin == coin) {
-//                getItem(i).enabled = false
                 notifyItemChanged(i)
                 return true
             }
@@ -116,11 +116,9 @@ class CoinWithSwitchViewHolder(
 
     private fun set(fullCoin: FullCoin, listPosition: ListPosition) {
         backgroundView.setBackgroundResource(getBackground(listPosition))
-//        coinIcon.setCoinImage(fullCoin.type) TODO
+        coinIcon.setCoinImage(fullCoin.coin.uid)
         coinTitle.text = fullCoin.coin.name
         coinSubtitle.text = fullCoin.coin.code
-//        coinTypeLabel.text = fullCoin.type.label TODO
-        coinTypeLabel.isVisible = false // fullCoin.type.label != null TODO
         dividerView.isVisible = listPosition == ListPosition.Last || listPosition == ListPosition.Single
     }
 
