@@ -1,13 +1,13 @@
 package io.horizontalsystems.bankwallet.modules.market.search
 
 import io.horizontalsystems.bankwallet.core.Clearable
-import io.horizontalsystems.bankwallet.core.ICoinManager
+import io.horizontalsystems.marketkit.MarketKit
 import io.horizontalsystems.marketkit.models.FullCoin
 
-class MarketSearchService(private val coinManager: ICoinManager) : Clearable {
+class MarketSearchService(private val marketKit: MarketKit) : Clearable {
 
     fun getCoinsByQuery(query: String): List<FullCoin> {
-        return coinManager.fullCoins(query, 100)
+        return marketKit.fullCoins(query)
     }
 
     override fun clear() = Unit

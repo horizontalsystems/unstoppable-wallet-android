@@ -9,7 +9,7 @@ object MarketSearchModule {
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            val service = MarketSearchService(App.coinManager)
+            val service = MarketSearchService(App.marketKit)
             return MarketSearchViewModel(service, listOf(service)) as T
         }
     }
