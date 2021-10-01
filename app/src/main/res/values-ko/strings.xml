@@ -68,7 +68,7 @@
     <string name="Restore_PassphraseDescription">이 연상 부호를 만들 때 사용한 암호 문구 입력.</string>
     <string name="Select_Coins">Choose Coins</string>
     <string name="Restore_ZCash_BirthdayHeight">생일 신장</string>
-    <string name="Restore_ZCash_BirthdayHeight_Hint">Zcash 지갑의 birthday height를 알고 있다면 아래에 추가하여 동기화 속도를 높입니다.</string>
+    <string name="Restore_ZCash_BirthdayHeight_Hint">If you know your birthday height of wallet enter it for quick syncing.</string>
     <!--Backup-->
     <string name="Backup_Confirmation_CheckTitle">확인 중…</string>
     <!--Market-->
@@ -691,7 +691,7 @@
     <string name="AddBep2Token_SymbolNotFound">기호 발견되지 않음</string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Title">주소 형식</string>
-    <string name="AddressFormatSettings_Description">귀하의 %s 지갑의 주소 형식을 선택하십시오. 선택한 각 형식은 앱의 잔고 탭에 있는 다른 지갑을 나타냅니다.</string>
+    <string name="AddressFormatSettings_Description">Select address format for the coin. Proceed with recommended option if unsure. A correct format should be chosen when restoring an existing wallet.</string>
     <!-- Coin Platforms -->
     <string name="CoinPlatforms_Native">Native</string>
     <string name="CoinPlatformsSelector_Title">Coin Type</string>
@@ -701,9 +701,9 @@
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">이 변경 후에 지갑은 %s 블록체인과 다시 동기화 되어야합니다.</string>
     <string name="BlockchainSettings_CommunicationModeChangeAlert_Title">통신</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type0_Title">Legacy</string>
-    <string name="CoinSettings_BitcoinCashCoinType_Type145_Title">신규</string>
-    <string name="CoinSettings_BitcoinCashCoinType_Type0_Description">오래된 지갑 (2017년 8월 이전)</string>
-    <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">새로운 지갑</string>
+    <string name="CoinSettings_BitcoinCashCoinType_Type145_Title">CashAddress (recommended)</string>
+    <string name="CoinSettings_BitcoinCashCoinType_Type0_Description">Common before 2018</string>
+    <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">Common after 2018</string>
     <!-- Tor -->
     <string name="Tor_Title">Tor</string>
     <string name="Tor_Connection_Title">연결로</string>
@@ -715,9 +715,9 @@
     <string name="TorPage_ConnectionClosed">연결 해제</string>
     <string name="Tor_PrerequisitesAlert_Content">토르를 활성화하면 Infura의 이더리움 블록체인 연결이 초기화됩니다.</string>
     <!--Coin Option-->
-    <string name="CoinOption_bip44_Subtitle">더 오래된 (%s부터 시작...)</string>
-    <string name="CoinOption_bip49_Subtitle">인기있는 (%s부터 시작...)</string>
-    <string name="CoinOption_bip84_Subtitle">최신 (%s부터 시작...)</string>
+    <string name="CoinOption_bip44_Title">Legacy</string>
+    <string name="CoinOption_bip49_Title">Newer (recommended)</string>
+    <string name="CoinOption_bip84_Title">Newest</string>
     <!--Coin Page-->
     <string name="CoinPage_TimeDuration_Today">TDY</string>
     <string name="CoinPage_TimeDuration_Day">24H</string>
