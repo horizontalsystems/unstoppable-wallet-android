@@ -359,6 +359,8 @@ interface IRateManager {
         chain: String? = null
     ): Single<List<DefiTvl>>
 
+    fun getCoinMarketList(coinTypes: List<CoinType>, currency: String): Single<List<CoinMarket>>
+    fun getCoinMarketListByCategory(categoryId: String, currency: String): Single<List<CoinMarket>>
     fun getGlobalMarketInfoAsync(currency: String): Single<GlobalCoinMarket>
     fun getGlobalCoinMarketPointsAsync(
         currencyCode: String,
