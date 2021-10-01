@@ -68,7 +68,7 @@
     <string name="Restore_PassphraseDescription">Geben Sie Ihre Passphrase ein, die Sie beim Erstellen dieser Eselsbrücke verwendet haben.</string>
     <string name="Select_Coins">Choose Coins</string>
     <string name="Restore_ZCash_BirthdayHeight">Geburtstagshöhe</string>
-    <string name="Restore_ZCash_BirthdayHeight_Hint">Wenn Sie eine Geburtstagshöhe für Ihr Zcash Wallet kennen, fügen Sie diese unten hinzu, um den Synchronisierungsprozess zu beschleunigen.</string>
+    <string name="Restore_ZCash_BirthdayHeight_Hint">If you know your birthday height of wallet enter it for quick syncing.</string>
     <!--Backup-->
     <string name="Backup_Confirmation_CheckTitle">Prüfen…</string>
     <!--Market-->
@@ -690,7 +690,7 @@
     <string name="AddBep2Token_SymbolNotFound">Symbol nicht gefunden</string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Title">Adressformat</string>
-    <string name="AddressFormatSettings_Description">Wählen Sie das Adressformat für Ihr %s Wallet. Jedes ausgewählte Format repräsentiert ein anderes Wallet auf der Registerkarte \"Kontostand\" der App.</string>
+    <string name="AddressFormatSettings_Description">Select address format for the coin. Proceed with recommended option if unsure. A correct format should be chosen when restoring an existing wallet.</string>
     <!-- Coin Platforms -->
     <string name="CoinPlatforms_Native">Native</string>
     <string name="CoinPlatformsSelector_Title">Coin Type</string>
@@ -700,9 +700,9 @@
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">Nach dieser Änderung muss sich das Wallet mit der %s Blockchain neu synchronisieren.</string>
     <string name="BlockchainSettings_CommunicationModeChangeAlert_Title">Kommunikation</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type0_Title">Legacy</string>
-    <string name="CoinSettings_BitcoinCashCoinType_Type145_Title">Neu</string>
-    <string name="CoinSettings_BitcoinCashCoinType_Type0_Description">Ältere Wallets (vor August 2017)</string>
-    <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">Neuere Wallets</string>
+    <string name="CoinSettings_BitcoinCashCoinType_Type145_Title">CashAddress (recommended)</string>
+    <string name="CoinSettings_BitcoinCashCoinType_Type0_Description">Common before 2018</string>
+    <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">Common after 2018</string>
     <!-- Tor -->
     <string name="Tor_Title">Tor</string>
     <string name="Tor_Connection_Title">Verbinde</string>
@@ -714,9 +714,9 @@
     <string name="TorPage_ConnectionClosed">Verbindung getrennt</string>
     <string name="Tor_PrerequisitesAlert_Content">Durch die Aktivierung von TOR wird die Ethereum-Blockchain-Verbindung wieder auf Infura zurückgesetzt.</string>
     <!--Coin Option-->
-    <string name="CoinOption_bip44_Subtitle">Älter (beginnt mit %s...)</string>
-    <string name="CoinOption_bip49_Subtitle">Beliebt (beginnt mit %s...)</string>
-    <string name="CoinOption_bip84_Subtitle">Am neuesten (beginnt mit %s...)</string>
+    <string name="CoinOption_bip44_Title">Legacy</string>
+    <string name="CoinOption_bip49_Title">Newer (recommended)</string>
+    <string name="CoinOption_bip84_Title">Newest</string>
     <!--Coin Page-->
     <string name="CoinPage_TimeDuration_Today">TDY</string>
     <string name="CoinPage_TimeDuration_Day">24H</string>
