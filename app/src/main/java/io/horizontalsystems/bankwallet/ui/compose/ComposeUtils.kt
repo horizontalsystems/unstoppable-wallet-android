@@ -5,10 +5,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import coil.compose.rememberImagePainter
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.getIconUrl
-import io.horizontalsystems.bankwallet.core.getPlaceHolder
-import io.horizontalsystems.marketkit.models.FullCoin
 import java.math.BigDecimal
 
 @Composable
@@ -24,15 +22,16 @@ fun RateText(diff: BigDecimal?): String {
 
 @Composable
 fun CoinImage(
-    fullCoin: FullCoin,
+    iconUrl: String,
+    placeholder: Int = R.drawable.place_holder,
     modifier: Modifier,
     colorFilter: ColorFilter? = null
 ) {
     Image(
         painter = rememberImagePainter(
-            data = fullCoin.coin.getIconUrl(),
+            data = iconUrl,
             builder = {
-                error(fullCoin.getPlaceHolder())
+                error(placeholder)
             }
         ),
         contentDescription = "coin icon",

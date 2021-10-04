@@ -34,6 +34,8 @@ import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.getIconUrl
+import io.horizontalsystems.bankwallet.core.getPlaceholder
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.ui.compose.CoinImage
@@ -327,7 +329,8 @@ private fun MarketCoin(fullCoin: FullCoin, onCoinClick: (Coin) -> Unit) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             CoinImage(
-                fullCoin = fullCoin,
+                iconUrl = fullCoin.coin.getIconUrl(),
+                placeholder = fullCoin.getPlaceholder(),
                 modifier = Modifier.padding(horizontal = 16.dp).size(24.dp)
             )
             Column(

@@ -30,7 +30,7 @@ fun CoinCategory.imageUrl(): String {
     return "https://markets.nyc3.digitaloceanspaces.com/category-icons/ios/$uid@3x.png"
 }
 
-fun FullCoin.getPlaceHolder(): Int {
+fun FullCoin.getPlaceholder(): Int {
     return if(platforms.size == 1) platforms[0].coinType.getPlaceholder() else R.drawable.place_holder
 }
 

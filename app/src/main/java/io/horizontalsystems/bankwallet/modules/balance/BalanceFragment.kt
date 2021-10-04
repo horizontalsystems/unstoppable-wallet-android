@@ -56,13 +56,13 @@ import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModu
 import io.horizontalsystems.bankwallet.modules.receive.ReceiveFragment
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
+import io.horizontalsystems.bankwallet.ui.compose.CoinImage
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.RateColor
 import io.horizontalsystems.bankwallet.ui.compose.RateText
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorDialog
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorItem
-import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
@@ -241,11 +241,9 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
                     colorFilter = ColorFilter.tint(ComposeAppTheme.colors.lucian)
                 )
             } else {
-                Image(
-                    painter = painterResource(
-                        id = AppLayoutHelper.getCoinDrawableOrDefaultResId(ctx, viewItem.coinType)
-                    ),
-                    contentDescription = "coin icon",
+                CoinImage(
+                    iconUrl = viewItem.coinIconUrl,
+                    placeholder = viewItem.coinIconPlaceholder,
                     modifier = Modifier.align(Alignment.Center).size(24.dp)
                 )
             }
