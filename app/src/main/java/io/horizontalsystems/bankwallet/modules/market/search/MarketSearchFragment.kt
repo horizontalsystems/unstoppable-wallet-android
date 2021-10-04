@@ -30,16 +30,18 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
+import coil.annotation.ExperimentalCoilApi
+import coil.compose.rememberImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
-import io.horizontalsystems.bankwallet.modules.market.discovery.MarketCategory
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.marketkit.models.Coin
+import io.horizontalsystems.marketkit.models.CoinCategory
 import io.horizontalsystems.marketkit.models.CoinType
 import io.horizontalsystems.marketkit.models.FullCoin
 
@@ -63,7 +65,7 @@ class MarketSearchFragment : BaseFragment() {
 
                 MarketSearchScreen(
                     coinResult = coinResult,
-                    marketCategories = viewModel.marketCategories,
+                    coinCategories = viewModel.coinCategories,
                     onBackButtonClick = { findNavController().popBackStack() },
                     onFilterButtonClick = {
                         findNavController().navigate(
@@ -88,7 +90,7 @@ class MarketSearchFragment : BaseFragment() {
 @Composable
 fun MarketSearchScreen(
     coinResult: List<FullCoin>,
-    marketCategories: List<MarketCategory>,
+    coinCategories: List<CoinCategory>,
     onBackButtonClick: () -> Unit,
     onFilterButtonClick: () -> Unit,
     onCoinClick: (Coin) -> Unit,
@@ -109,7 +111,7 @@ fun MarketSearchScreen(
                 onBackButtonClick = onBackButtonClick
             )
             if (searchTextState.value.text.isEmpty()) {
-                CardsGrid(marketCategories)
+                CardsGrid(coinCategories)
             } else {
                 if (searchTextState.value.text.length > 1 && coinResult.isEmpty()) {
                     NoResults()
@@ -237,7 +239,7 @@ fun SearchView(
 @ExperimentalMaterialApi
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun CardsGrid(categories: List<MarketCategory>) {
+fun CardsGrid(categories: List<CoinCategory>) {
     LazyColumn {
         item {
             Divider(
@@ -258,9 +260,9 @@ fun CardsGrid(categories: List<MarketCategory>) {
         // Turning the list in a list of lists of two elements each
         items(categories.windowed(2, 2, true)) { chunk ->
             Row(modifier = Modifier.padding(horizontal = 10.dp)) {
-                CategoryCard(chunk[0].titleResId, chunk[0].imageResId, {})
+                CategoryCard(chunk[0].name, chunk[0].imageUrl()) {}
                 if (chunk.size > 1) {
-                    CategoryCard(chunk[1].titleResId, chunk[1].imageResId, {})
+                    CategoryCard(chunk[1].name, chunk[1].imageUrl()) {}
                 } else {
                     Spacer(modifier = Modifier.weight(1f))
                 }
@@ -273,11 +275,12 @@ fun CardsGrid(categories: List<MarketCategory>) {
     }
 }
 
+@ExperimentalCoilApi
 @ExperimentalMaterialApi
 @Composable
 private fun RowScope.CategoryCard(
-    titleRes: Int,
-    imageRes: Int,
+    title: String,
+    imageUrl: String,
     onClick: () -> Unit
 ) {
     Card(
@@ -292,10 +295,11 @@ private fun RowScope.CategoryCard(
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
             Image(
-                painter = painterResource(id = imageRes),
+                painter = rememberImagePainter(imageUrl),
                 contentDescription = "category image",
                 modifier = Modifier
                     .height(108.dp)
+                    .width(76.dp)
                     .align(Alignment.TopEnd),
             )
             Column(
@@ -303,7 +307,7 @@ private fun RowScope.CategoryCard(
             ) {
                 Spacer(modifier = Modifier.weight(1f))
                 Text(
-                    text = stringResource(titleRes),
+                    text = title,
                     style = ComposeAppTheme.typography.subhead1,
                     color = ComposeAppTheme.colors.oz,
                     maxLines = 1
@@ -413,10 +417,9 @@ fun CardPreview() {
     ComposeAppTheme {
         Row {
             CategoryCard(
-                R.string.Market_Category_TopCoins,
-                R.drawable.ic_category_top_coins,
-                { }
-            )
+                "Top Coins",
+                ""
+            ) { }
         }
     }
 }
