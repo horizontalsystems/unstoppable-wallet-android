@@ -50,6 +50,7 @@ abstract class CoinListBaseFragment : BaseWithSearchFragment(), CoinListAdapter.
     protected fun setViewItems(viewItems: List<CoinViewItem>) {
         itemsAdapter.submitList(viewItems)
         progressLoading.isVisible = false
+        noResultsText.isVisible = viewItems.isEmpty()
     }
 
     protected fun disableCoin(coin: Coin) {
