@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.core.managers
 import android.annotation.SuppressLint
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
+import com.google.gson.annotations.SerializedName
 import io.horizontalsystems.bankwallet.core.INetworkManager
 import io.reactivex.Flowable
 import io.reactivex.Single
@@ -39,7 +40,7 @@ class NetworkManager : INetworkManager {
 
     override fun getTransactionWithPost(host: String, path: String, body: Map<String, Any>): Flowable<JsonObject> {
         return ServiceFullTransaction.service(host)
-                .getFullTransactionWithPost(path, body.mapValues { it.value.toString() })
+            .getFullTransactionWithPost(path, body.mapValues { it.value.toString() })
     }
 
     override fun ping(host: String, url: String, isSafeCall: Boolean): Flowable<Any> {
@@ -48,6 +49,14 @@ class NetworkManager : INetworkManager {
 
     override fun getEvmInfo(host: String, path: String): Single<JsonObject> {
         return ServiceEvmContractInfo.service(host).getTokenInfo(path)
+    }
+
+    override fun getBep2TokeInfo(symbol: String): Single<TokenInfoService.Bep2TokenInfo> {
+        return TokenInfoService.service().getBep2TokenInfo(symbol)
+    }
+
+    override fun getEvmTokeInfo(tokenType: String, address: String): Single<TokenInfoService.EvmTokenInfo> {
+        return TokenInfoService.service().getTokenInfo(tokenType, address)
     }
 
     override suspend fun subscribe(host: String, path: String, body: String): JsonObject {
@@ -66,7 +75,7 @@ class NetworkManager : INetworkManager {
 object ServiceFullTransaction {
     fun service(apiURL: String, isSafeCall: Boolean = true): FullTransactionAPI {
         return APIClient.retrofit(apiURL, 60, isSafeCall)
-                .create(FullTransactionAPI::class.java)
+            .create(FullTransactionAPI::class.java)
     }
 
     interface FullTransactionAPI {
@@ -95,7 +104,7 @@ object ServicePing {
 object ServiceEvmContractInfo {
     fun service(apiURL: String): EvmContractInfoAPI {
         return APIClient.retrofit(apiURL, 60)
-                .create(EvmContractInfoAPI::class.java)
+            .create(EvmContractInfoAPI::class.java)
     }
 
     interface EvmContractInfoAPI {
@@ -104,6 +113,40 @@ object ServiceEvmContractInfo {
         fun getTokenInfo(@Url path: String): Single<JsonObject>
     }
 
+}
+
+object TokenInfoService {
+    private const val apiUrl = "https://markets-dev.horizontalsystems.xyz/v1/token_info/"
+
+    fun service(): TokenInfoAPI {
+        return APIClient.retrofit(apiUrl, 60)
+            .create(TokenInfoAPI::class.java)
+    }
+
+    data class Bep2TokenInfo(
+        val name: String,
+        @SerializedName("original_symbol")
+        val originalSymbol: String,
+        @SerializedName("contract_decimals")
+        val decimals: Int
+    )
+
+    data class EvmTokenInfo(
+        val name: String,
+        val symbol: String,
+        val decimals: Int
+    )
+
+    interface TokenInfoAPI {
+        @GET("bep2")
+        fun getBep2TokenInfo(@Query("symbol") symbol: String): Single<Bep2TokenInfo>
+
+        @GET("{tokenType}")
+        fun getTokenInfo(
+            @Path("tokenType") tokenType: String,
+            @Query("address") address: String
+        ): Single<EvmTokenInfo>
+    }
 }
 
 object ServiceGuide {
@@ -120,7 +163,7 @@ object ServiceGuide {
 object ServiceNotifications {
     fun service(apiURL: String): NotificationsAPI {
         return APIClient.retrofit(apiURL, 60)
-                .create(NotificationsAPI::class.java)
+            .create(NotificationsAPI::class.java)
     }
 
     interface NotificationsAPI {
@@ -142,7 +185,7 @@ object ServiceNotifications {
 object ServiceChangeLogs {
     fun service(apiURL: String): ChangeLogsAPI {
         return APIClient.retrofit(apiURL, 60)
-                .create(ChangeLogsAPI::class.java)
+            .create(ChangeLogsAPI::class.java)
     }
 
     interface ChangeLogsAPI {
@@ -161,14 +204,14 @@ object APIClient {
 
     //share OkHttpClient
     val okHttpClient: OkHttpClient = OkHttpClient.Builder()
-            .addInterceptor(logger)
-            .build()
+        .addInterceptor(logger)
+        .build()
 
     fun retrofit(apiURL: String, timeout: Long = 60, isSafeCall: Boolean = true): Retrofit {
 
         val httpClient = okHttpClient.newBuilder()
-                .connectTimeout(timeout, TimeUnit.SECONDS)
-                .readTimeout(timeout, TimeUnit.SECONDS)
+            .connectTimeout(timeout, TimeUnit.SECONDS)
+            .readTimeout(timeout, TimeUnit.SECONDS)
 
         //TODO Replace this implementation with Manifest file settings when support for SDK 26 removed
         if (!isSafeCall) // if host name cannot be verified, has no or self signed certificate, do unsafe request
@@ -177,33 +220,37 @@ object APIClient {
         val gsonBuilder = GsonBuilder().setLenient()
 
         return Retrofit.Builder()
-                .baseUrl(apiURL)
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create(gsonBuilder.create()))
-                .client(httpClient.build())
-                .build()
+            .baseUrl(apiURL)
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .addConverterFactory(ScalarsConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create(gsonBuilder.create()))
+            .client(httpClient.build())
+            .build()
     }
 
     @SuppressLint("TrustAllX509TrustManager", "BadHostnameVerifier")
     private fun setUnsafeSocketFactory(builder: OkHttpClient.Builder) {
         try {
             val trustAllCerts = arrayOf<TrustManager>(
-                    object : X509TrustManager {
-                        @Throws(CertificateException::class)
-                        override fun checkClientTrusted(chain: Array<X509Certificate>,
-                                                        authType: String) {
-                        }
-
-                        @Throws(CertificateException::class)
-                        override fun checkServerTrusted(chain: Array<X509Certificate>,
-                                                        authType: String) {
-                        }
-
-                        override fun getAcceptedIssuers(): Array<X509Certificate> {
-                            return arrayOf()
-                        }
+                object : X509TrustManager {
+                    @Throws(CertificateException::class)
+                    override fun checkClientTrusted(
+                        chain: Array<X509Certificate>,
+                        authType: String
+                    ) {
                     }
+
+                    @Throws(CertificateException::class)
+                    override fun checkServerTrusted(
+                        chain: Array<X509Certificate>,
+                        authType: String
+                    ) {
+                    }
+
+                    override fun getAcceptedIssuers(): Array<X509Certificate> {
+                        return arrayOf()
+                    }
+                }
             )
             val sslContext = SSLContext.getInstance("SSL")
             sslContext.init(null, trustAllCerts, SecureRandom())

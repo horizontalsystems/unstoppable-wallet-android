@@ -167,7 +167,6 @@ class AddressInputView @JvmOverloads constructor(
             }
         }
 
-        onTextChangeCallback?.invoke(inputText)
     }
 
     fun setText(text: String?) {

@@ -818,14 +818,12 @@
     <string name="AddToken_Symbol">Symbol</string>
     <string name="AddToken_Decimals">Decimals</string>
     <string name="AddToken_Dots">…</string>
-    <string name="AddToken_CoinType">Coin Type</string>
+    <string name="AddToken_CoinTypes">Coin Type(s)</string>
 
     <string name="AddToken_CoinAlreadyInListWarning">This token is already in the coin manager list</string>
     <string name="AddToken_InvalidAddressError">Invalid contract address or BEP2 symbol</string>
     <string name="AddToken_ApiLimitExceeded">Api limit exceeded. Try again later.</string>
-
-    <string name="AddEvmToken_ContractNotFound">Contract not found</string>
-    <string name="AddBep2Token_SymbolNotFound">Symbol not found</string>
+    <string name="AddEvmToken_TokenNotFound">Token not found</string>
 
     <!-- Address Format Settings List -->
 

@@ -80,6 +80,15 @@ class CoinManager(
         storage.save(customTokens)
     }
 
+    private fun customFullCoinsFromCustomTokens(customTokens: List<CustomToken>): List<FullCoin> {
+        val platformCoins = customTokens.map { it.platformCoin }
+        val groupedPlatformCoins = platformCoins.groupBy { it.coin }
+
+        return groupedPlatformCoins.map { (coin, platformCoins) ->
+            FullCoin(coin, platformCoins.map { it.platform })
+        }
+    }
+
     private fun adjustedCustomTokens(customTokens: List<CustomToken>): List<CustomToken> {
         val existingPlatformCoins = marketKit.platformCoins(customTokens.map { it.coinType })
         return customTokens.filter { customToken -> !existingPlatformCoins.any { it.coinType == customToken.coinType } }
@@ -87,12 +96,14 @@ class CoinManager(
 
     private fun customFullCoins(filter: String): List<FullCoin> {
         val customTokens = storage.customTokens(filter)
-        return adjustedCustomTokens(customTokens).map { it.platformCoin.fullCoin }
+        val adjustedCustomTokens = adjustedCustomTokens(customTokens)
+        return customFullCoinsFromCustomTokens(adjustedCustomTokens)
     }
 
     private fun customFullCoins(coinTypes: List<CoinType>): List<FullCoin> {
         val customTokens = storage.customTokens(coinTypes.map { it.id })
-        return adjustedCustomTokens(customTokens).map { it.platformCoin.fullCoin }
+        val adjustedCustomTokens = adjustedCustomTokens(customTokens)
+        return customFullCoinsFromCustomTokens(adjustedCustomTokens)
     }
 
     private fun customPlatformCoins(): List<PlatformCoin> {

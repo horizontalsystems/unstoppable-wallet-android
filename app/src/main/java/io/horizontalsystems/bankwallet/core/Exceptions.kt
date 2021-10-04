@@ -7,13 +7,9 @@ import io.horizontalsystems.ethereumkit.core.AddressValidator
 import retrofit2.adapter.rxjava2.HttpException
 
 class UnsupportedAccountException : Exception()
-class WrongAccountTypeForThisProvider : Exception()
 class LocalizedException(val errorTextRes: Int) : Exception()
 class AdapterErrorWrongParameters(override val message: String) : Exception()
-class EthereumKitNotCreated() : Exception()
-class NoFeeSendTransactionError() : Exception()
-class InvalidBep2Address : Exception()
-class InvalidContractAddress : Exception()
+class NoFeeSendTransactionError : Exception()
 class FailedTransaction(errorMessage: String?) : RuntimeException(errorMessage) {
     override fun toString() = message ?: "Transaction failed."
 }
@@ -60,7 +56,7 @@ val Throwable.convertedError: Throwable
                 errorBody?.contains("Not enough ETH balance") == true
             ) {
                 EvmError.InsufficientBalanceWithFee
-            } else if(errorBody?.contains("cannot estimate") == true) {
+            } else if (errorBody?.contains("cannot estimate") == true) {
                 EvmError.CannotEstimateSwap
             } else {
                 this
