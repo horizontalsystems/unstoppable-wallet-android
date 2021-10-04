@@ -10,13 +10,38 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
 import io.horizontalsystems.ethereumkit.core.toRawHexString
 import io.horizontalsystems.hodler.LockTimeInterval
+import io.horizontalsystems.marketkit.models.Coin
+import io.horizontalsystems.marketkit.models.CoinCategory
 import io.horizontalsystems.marketkit.models.CoinType
+import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.views.SingleClickListener
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+
+
+fun Coin.getIconUrl() : String {
+    return "https://markets.nyc3.digitaloceanspaces.com/coin-icons/ios/$uid@3x.png"
+}
+
+fun CoinCategory.imageUrl(): String {
+    return "https://markets.nyc3.digitaloceanspaces.com/category-icons/ios/$uid@3x.png"
+}
+
+fun FullCoin.getPlaceHolder(): Int {
+    return if(platforms.size == 1) platforms[0].coinType.getPlaceholder() else R.drawable.place_holder
+}
+
+fun CoinType.getPlaceholder(): Int {
+    return when (this) {
+        is CoinType.Erc20 -> R.drawable.erc20
+        is CoinType.Bep2 -> R.drawable.bep2
+        is CoinType.Bep20 -> R.drawable.bep20
+        else -> R.drawable.place_holder
+    }
+}
 
 //View
 

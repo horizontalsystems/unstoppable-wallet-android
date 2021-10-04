@@ -33,17 +33,14 @@ import androidx.fragment.app.viewModels
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
+import io.horizontalsystems.bankwallet.ui.compose.CoinImage
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
 import io.horizontalsystems.core.findNavController
-import io.horizontalsystems.marketkit.models.Coin
-import io.horizontalsystems.marketkit.models.CoinCategory
-import io.horizontalsystems.marketkit.models.CoinType
-import io.horizontalsystems.marketkit.models.FullCoin
+import io.horizontalsystems.marketkit.models.*
 
 class MarketSearchFragment : BaseFragment() {
 
@@ -139,7 +136,6 @@ private fun NoResults() {
 
 @Composable
 fun MarketSearchResults(coinResult: List<FullCoin>, onCoinClick: (Coin) -> Unit) {
-    val ctx = App.instance
     LazyColumn {
         item {
             Divider(
@@ -149,10 +145,7 @@ fun MarketSearchResults(coinResult: List<FullCoin>, onCoinClick: (Coin) -> Unit)
             )
         }
         items(coinResult) { fullCoin ->
-            val coinIcon = AppLayoutHelper.getCoinDrawableOrDefaultResId(
-                ctx, CoinType.fromId("ethereum")
-            )
-            MarketCoin(fullCoin.coin, coinIcon, onCoinClick)
+            MarketCoin(fullCoin, onCoinClick)
         }
         item {
             Spacer(modifier = Modifier.height(16.dp))
@@ -318,30 +311,30 @@ private fun RowScope.CategoryCard(
 }
 
 @Composable
-private fun MarketCoin(coin: Coin, coinIcon: Int, onCoinClick: (Coin) -> Unit) {
+private fun MarketCoin(fullCoin: FullCoin, onCoinClick: (Coin) -> Unit) {
     val favedState = remember { mutableStateOf(false) }
     val interactionSource = remember { MutableInteractionSource() }
+
     Box(
         modifier = Modifier
             .height(60.dp)
             .clickable {
-                onCoinClick.invoke(coin)
+                onCoinClick.invoke(fullCoin.coin)
             }
     ) {
         Row(
             modifier = Modifier.fillMaxHeight(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Image(
-                painter = painterResource(id = coinIcon),
-                contentDescription = "coin icon",
+            CoinImage(
+                fullCoin = fullCoin,
                 modifier = Modifier.padding(horizontal = 16.dp).size(24.dp)
             )
             Column(
                 modifier = Modifier.padding(end = 16.dp).weight(1f)
             ) {
                 Text(
-                    text = coin.name,
+                    text = fullCoin.coin.name,
                     color = ComposeAppTheme.colors.oz,
                     style = ComposeAppTheme.typography.body,
                     maxLines = 1,
@@ -370,7 +363,7 @@ private fun MarketCoin(coin: Coin, coinIcon: Int, onCoinClick: (Coin) -> Unit) {
                         }
                     }
                     Text(
-                        text = coin.code,
+                        text = fullCoin.coin.code,
                         color = ComposeAppTheme.colors.grey,
                         style = ComposeAppTheme.typography.subhead2,
                         maxLines = 1,
@@ -405,8 +398,12 @@ private fun MarketCoin(coin: Coin, coinIcon: Int, onCoinClick: (Coin) -> Unit) {
 @Composable
 fun MarketCoinPreview() {
     val coin = Coin("ether", "Ethereum", "ETH")
+    val fullCoin = FullCoin(
+        coin = coin,
+        platforms = listOf(Platform(CoinType.fromId("ethereum"), 18, "ethereum"))
+    )
     ComposeAppTheme {
-        MarketCoin(coin, R.drawable.bitcoin, { })
+        MarketCoin(fullCoin) { }
     }
 }
 
