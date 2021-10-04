@@ -46,7 +46,22 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+
+    <TextView
+        style="@style/Subhead2"
+        android:textColor="@color/grey"
+        android:id="@+id/noResultsText"
+        android:layout_width="0dp"
+        android:singleLine="false"
+        android:textAlignment="center"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginEnd="40dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
-        />
+        android:text="@string/ManageCoins_NoResults" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

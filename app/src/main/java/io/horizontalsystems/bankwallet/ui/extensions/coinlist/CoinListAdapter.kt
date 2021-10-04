@@ -31,8 +31,6 @@ class CoinListAdapter(private val listener: Listener) :
             { isChecked, index ->
                 val item = getItem(index)
                 onSwitchToggle(isChecked, item.fullCoin)
-                //update state in adapter item list: coins
-//                item.enabled = isChecked
             },
             { index ->
                 val item = getItem(index)

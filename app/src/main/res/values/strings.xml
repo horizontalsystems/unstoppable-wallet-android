@@ -718,6 +718,7 @@
     <string name="ManageCoins_title">Coin Manager</string>
     <string name="ManageCoins_Search">Search</string>
     <string name="ManageCoins_AddToken">Add Token</string>
+    <string name="ManageCoins_NoResults">No results found. Try to add token manually if you know its smart contract address.</string>
 
     <!-- Experimental Feature -->
 
