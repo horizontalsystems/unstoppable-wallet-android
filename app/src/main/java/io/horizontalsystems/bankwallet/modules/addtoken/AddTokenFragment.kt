@@ -119,7 +119,7 @@ class AddTokenFragment : BaseFragment() {
 
     private fun setCoinDetails(viewItem: AddTokenModule.ViewItem?) {
         val dots = getString(R.string.AddToken_Dots)
-        coinTypeView.bind(getString(R.string.AddToken_CoinType), viewItem?.coinType ?: dots, listPosition = ListPosition.First)
+        coinTypeView.bind(getString(R.string.AddToken_CoinTypes), viewItem?.coinType ?: dots, listPosition = ListPosition.First)
         coinNameView.bind(getString(R.string.AddToken_CoinName), viewItem?.coinName ?: dots, listPosition = ListPosition.Middle)
         coinSymbolView.bind(getString(R.string.AddToken_Symbol), viewItem?.symbol ?: dots, listPosition = ListPosition.Middle)
         coinDecimalsView.bind(getString(R.string.AddToken_Decimals), viewItem?.decimals?.toString() ?: dots, listPosition = ListPosition.Last)

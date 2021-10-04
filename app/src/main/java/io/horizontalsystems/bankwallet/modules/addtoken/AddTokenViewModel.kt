@@ -3,9 +3,8 @@ package io.horizontalsystems.bankwallet.modules.addtoken
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.InvalidContractAddress
 import io.horizontalsystems.bankwallet.core.providers.Translator
-import io.horizontalsystems.bankwallet.entities.ApiError
+import io.horizontalsystems.bankwallet.entities.CustomToken
 import io.horizontalsystems.bankwallet.entities.blockchainType
 import io.horizontalsystems.bankwallet.modules.swap.settings.Caution
 import io.horizontalsystems.core.SingleLiveEvent
@@ -28,11 +27,11 @@ class AddTokenViewModel(private val addTokenService: AddTokenService) : ViewMode
 
     private fun observeState() {
         addTokenService.stateObservable
-                .subscribe {
-                    sync(it)
-                }.let {
-                    disposables.add(it)
-                }
+            .subscribe {
+                sync(it)
+            }.let {
+                disposables.add(it)
+            }
     }
 
     fun onTextChange(text: CharSequence?) {
@@ -73,22 +72,34 @@ class AddTokenViewModel(private val addTokenService: AddTokenService) : ViewMode
 
     private fun getViewItemByState(state: AddTokenModule.State): AddTokenModule.ViewItem? {
         return when (state) {
-            is AddTokenModule.State.AlreadyExists -> getViewItem(state.platformCoin)
-            is AddTokenModule.State.Fetched -> getViewItem(state.customToken.platformCoin)
+            is AddTokenModule.State.AlreadyExists -> getPlatformCoinsViewItem(state.platformCoins)
+            is AddTokenModule.State.Fetched -> getCustomTokensViewItem(state.customTokens)
             else -> null
         }
     }
 
-    private fun getViewItem(platformCoin: PlatformCoin): AddTokenModule.ViewItem {
-        return AddTokenModule.ViewItem(platformCoin.coinType.blockchainType, platformCoin.name, platformCoin.code, platformCoin.decimals)
+    private fun getPlatformCoinsViewItem(platformCoins: List<PlatformCoin>): AddTokenModule.ViewItem {
+        return AddTokenModule.ViewItem(
+            coinType = platformCoins.mapNotNull { it.coinType.blockchainType }.joinToString(separator = " / "),
+            coinName = platformCoins.firstOrNull()?.name,
+            symbol = platformCoins.firstOrNull()?.code,
+            decimals = platformCoins.firstOrNull()?.decimals
+        )
+    }
+
+    private fun getCustomTokensViewItem(customTokens: List<CustomToken>): AddTokenModule.ViewItem {
+        return AddTokenModule.ViewItem(
+            coinType = customTokens.mapNotNull { it.coinType.blockchainType }.joinToString(separator = " / "),
+            coinName = customTokens.firstOrNull()?.coinName,
+            symbol = customTokens.firstOrNull()?.coinCode,
+            decimals = customTokens.firstOrNull()?.decimal
+        )
     }
 
     private fun getErrorText(error: Throwable): String {
         val errorKey = when (error) {
-            is InvalidContractAddress -> R.string.AddToken_InvalidAddressError
-            is ApiError.ContractNotFound -> R.string.AddEvmToken_ContractNotFound
-            is ApiError.Bep2SymbolNotFound -> R.string.AddBep2Token_SymbolNotFound
-            is ApiError.ApiLimitExceeded -> R.string.AddToken_ApiLimitExceeded
+            is AddTokenService.TokenError.NotFound -> R.string.AddEvmToken_TokenNotFound
+            is AddTokenService.TokenError.InvalidReference -> R.string.AddToken_InvalidAddressError
             else -> R.string.Error
         }
 

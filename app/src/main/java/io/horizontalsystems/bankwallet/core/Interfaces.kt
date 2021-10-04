@@ -2,10 +2,7 @@ package io.horizontalsystems.bankwallet.core
 
 import com.google.gson.JsonObject
 import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
-import io.horizontalsystems.bankwallet.core.managers.RateUsType
-import io.horizontalsystems.bankwallet.core.managers.Term
-import io.horizontalsystems.bankwallet.core.managers.TorManager
-import io.horizontalsystems.bankwallet.core.managers.TorStatus
+import io.horizontalsystems.bankwallet.core.managers.*
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
@@ -148,6 +145,8 @@ interface INetworkManager {
 
     fun ping(host: String, url: String, isSafeCall: Boolean): Flowable<Any>
     fun getEvmInfo(host: String, path: String): Single<JsonObject>
+    fun getBep2TokeInfo(symbol: String): Single<TokenInfoService.Bep2TokenInfo>
+    fun getEvmTokeInfo(tokenType: String, address: String): Single<TokenInfoService.EvmTokenInfo>
 
     suspend fun subscribe(host: String, path: String, body: String): JsonObject
     suspend fun unsubscribe(host: String, path: String, body: String): JsonObject
