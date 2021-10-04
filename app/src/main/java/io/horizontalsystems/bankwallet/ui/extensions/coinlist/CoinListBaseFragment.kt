@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.ui.extensions.coinlist
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
@@ -12,6 +13,7 @@ import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.marketkit.models.Coin
 import io.horizontalsystems.marketkit.models.FullCoin
 import kotlinx.android.synthetic.main.fragment_manage_wallets.*
+import java.util.concurrent.atomic.AtomicBoolean
 
 abstract class CoinListBaseFragment : BaseWithSearchFragment(), CoinListAdapter.Listener {
 
@@ -45,9 +47,24 @@ abstract class CoinListBaseFragment : BaseWithSearchFragment(), CoinListAdapter.
     override fun disable(fullCoin: FullCoin) {}
 
 
+    // ManageWalletItemsAdapter.Listener
+
+    private var searchExpanded = AtomicBoolean(false)
+
+    override fun searchExpanded(menu: Menu) {
+        searchExpanded.set(true)
+    }
+
+    override fun searchCollapsed(menu: Menu) {
+        searchExpanded.set(false)
+    }
+
+
     // CoinListBaseFragment
 
     protected fun setViewItems(viewItems: List<CoinViewItem>) {
+        toolbar.menu.findItem(R.id.menuAddToken)?.isVisible = !searchExpanded.get() || searchExpanded.get() && viewItems.isEmpty()
+
         itemsAdapter.submitList(viewItems)
         progressLoading.isVisible = false
         noResultsText.isVisible = viewItems.isEmpty()
