@@ -19,12 +19,12 @@
         android:layout_height="24dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:src="@drawable/bitcoin"
-        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="@+id/backgroundView"
         app:layout_constraintEnd_toStartOf="@id/coinTitle"
         app:layout_constraintStart_toStartOf="@+id/backgroundView"
-        app:layout_constraintTop_toTopOf="@+id/backgroundView" />
+        app:layout_constraintTop_toTopOf="@+id/backgroundView"
+        tools:src="@drawable/ic_coin_placeholder"
+        />
 
     <TextView
         android:id="@+id/coinTitle"
