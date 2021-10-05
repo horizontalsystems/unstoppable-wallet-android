@@ -117,8 +117,8 @@ open class BaseBottomSheetDialogFragment : BottomSheetDialogFragment() {
         headerIcon?.setImageDrawable(drawable)
     }
 
-    fun setHeaderIcon(coinUid: String) {
-        headerIcon?.setCoinImage(coinUid)
+    fun setHeaderIcon(coinUid: String, placeholder: Int) {
+        headerIcon?.setCoinImage(coinUid, placeholder)
     }
 
 }
