@@ -3,9 +3,13 @@ package io.horizontalsystems.bankwallet.modules.enablecoin.coinsettings
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.Clearable
+import io.horizontalsystems.bankwallet.core.getPlaceholder
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
-import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.bankwallet.entities.AccountType
+import io.horizontalsystems.bankwallet.entities.BitcoinCashCoinType
+import io.horizontalsystems.bankwallet.entities.description
+import io.horizontalsystems.bankwallet.entities.title
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorMultipleDialog
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorViewItem
 import io.horizontalsystems.core.SingleLiveEvent
@@ -47,7 +51,8 @@ class CoinSettingsViewModel(
 
     private fun derivationConfig(platformCoin: PlatformCoin, allDerivations: List<AccountType.Derivation>, current: List<AccountType.Derivation>): BottomSheetSelectorMultipleDialog.Config {
         return BottomSheetSelectorMultipleDialog.Config(
-            coin = platformCoin.coin,
+            coinUid = platformCoin.coin.uid,
+            iconPlaceholder = platformCoin.coinType.getPlaceholder(),
             title = Translator.getString(R.string.AddressFormatSettings_Title),
             subtitle = platformCoin.name,
             selectedIndexes = current.map { allDerivations.indexOf(it) }.filter { it > -1 },
@@ -63,7 +68,8 @@ class CoinSettingsViewModel(
 
     private fun bitcoinCashCoinTypeConfig(platformCoin: PlatformCoin, types: List<BitcoinCashCoinType>, current: List<BitcoinCashCoinType>): BottomSheetSelectorMultipleDialog.Config {
         return BottomSheetSelectorMultipleDialog.Config(
-            coin = platformCoin.coin,
+            coinUid = platformCoin.coin.uid,
+            iconPlaceholder = platformCoin.coinType.getPlaceholder(),
             title = Translator.getString(R.string.AddressFormatSettings_Title),
             subtitle = platformCoin.name,
             selectedIndexes = current.map { types.indexOf(it) }.filter { it > -1 },

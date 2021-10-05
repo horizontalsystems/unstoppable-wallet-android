@@ -5,7 +5,7 @@ import android.os.Parcelable
 import android.view.View
 import android.widget.ImageView
 import androidx.annotation.CheckResult
-import androidx.core.content.ContextCompat
+import coil.load
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
 import io.horizontalsystems.ethereumkit.core.toRawHexString
@@ -49,9 +49,10 @@ fun ImageView.setCoinImage(coinType: CoinType) {
     setImageDrawable(AppLayoutHelper.getCoinDrawable(context, coinType))
 }
 
-fun ImageView.setCoinImage(coinUid: String) {
-    // TODO: set image using coinUid
-    setImageDrawable(ContextCompat.getDrawable(context, R.drawable.place_holder))
+fun ImageView.setCoinImage(coinUid: String, placeholder: Int = R.drawable.place_holder) {
+    load("https://markets.nyc3.digitaloceanspaces.com/coin-icons/ios/$coinUid@3x.png"){
+        error(placeholder)
+    }
 }
 
 fun View.setOnSingleClickListener(l: ((v: View) -> Unit)) {

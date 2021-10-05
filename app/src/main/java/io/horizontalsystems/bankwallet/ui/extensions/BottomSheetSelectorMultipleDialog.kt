@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
-import io.horizontalsystems.marketkit.models.Coin
 import io.horizontalsystems.views.inflate
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_bottom_selector.*
@@ -24,6 +23,7 @@ class BottomSheetSelectorMultipleDialog(
     private val title: String,
     private val subtitle: String,
     private val coinUid: String,
+    private val iconPlaceholder: Int,
     private val items: List<BottomSheetSelectorViewItem>,
     private val selected: List<Int>,
     private val onItemsSelected: (List<Int>) -> Unit,
@@ -41,7 +41,7 @@ class BottomSheetSelectorMultipleDialog(
 
         setTitle(title)
         setSubtitle(subtitle)
-        setHeaderIcon(coinUid)
+        setHeaderIcon(coinUid, iconPlaceholder)
 
         setButton(selected.isNotEmpty())
 
@@ -98,6 +98,7 @@ class BottomSheetSelectorMultipleDialog(
             title: String,
             subtitle: String,
             coinUid: String,
+            iconPlaceholder: Int,
             items: List<BottomSheetSelectorViewItem>,
             selected: List<Int>,
             onItemSelected: (List<Int>) -> Unit,
@@ -109,6 +110,7 @@ class BottomSheetSelectorMultipleDialog(
                 title,
                 subtitle,
                 coinUid,
+                iconPlaceholder,
                 items,
                 selected,
                 onItemSelected,
@@ -121,7 +123,8 @@ class BottomSheetSelectorMultipleDialog(
     }
 
     data class Config(
-        val coin: Coin,
+        val coinUid: String,
+        val iconPlaceholder: Int,
         val title: String,
         val subtitle: String,
         val selectedIndexes: List<Int>,

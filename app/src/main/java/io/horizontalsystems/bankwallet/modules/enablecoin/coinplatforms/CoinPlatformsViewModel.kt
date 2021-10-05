@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.enablecoin.coinplatforms
 
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.getPlaceholder
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.platformCoinType
@@ -30,7 +31,8 @@ class CoinPlatformsViewModel(
         currentRequest = request
         val fullCoin = request.fullCoin
         val config = BottomSheetSelectorMultipleDialog.Config(
-            coin = fullCoin.coin,
+            coinUid = fullCoin.coin.uid,
+            iconPlaceholder = fullCoin.getPlaceholder(),
             title = Translator.getString(R.string.CoinPlatformsSelector_Title),
             subtitle = fullCoin.coin.name,
             description = Translator.getString(R.string.CoinPlatformsSelector_Description),
