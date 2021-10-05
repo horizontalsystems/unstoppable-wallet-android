@@ -42,8 +42,8 @@ class NetworkSettingsViewModel(private val service: NetworkSettingsService): Vie
     }
 
     private fun iconResource(blockchain: NetworkSettingsService.Blockchain) = when (blockchain) {
-        NetworkSettingsService.Blockchain.Ethereum -> R.drawable.ic_coin_placeholder
-        NetworkSettingsService.Blockchain.BinanceSmartChain -> R.drawable.ic_coin_placeholder
+        NetworkSettingsService.Blockchain.Ethereum -> R.drawable.coin_placeholder
+        NetworkSettingsService.Blockchain.BinanceSmartChain -> R.drawable.coin_placeholder
     }
 
     private fun title(blockchain: NetworkSettingsService.Blockchain) = when (blockchain) {

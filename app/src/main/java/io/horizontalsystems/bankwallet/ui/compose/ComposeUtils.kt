@@ -23,7 +23,7 @@ fun RateText(diff: BigDecimal?): String {
 @Composable
 fun CoinImage(
     iconUrl: String,
-    placeholder: Int = R.drawable.place_holder,
+    placeholder: Int = R.drawable.coin_placeholder,
     modifier: Modifier,
     colorFilter: ColorFilter? = null
 ) {

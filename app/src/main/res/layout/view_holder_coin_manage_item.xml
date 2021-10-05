@@ -23,7 +23,7 @@
         app:layout_constraintEnd_toStartOf="@id/coinTitle"
         app:layout_constraintStart_toStartOf="@+id/backgroundView"
         app:layout_constraintTop_toTopOf="@+id/backgroundView"
-        tools:src="@drawable/ic_coin_placeholder"
+        tools:src="@drawable/coin_placeholder"
         />
 
     <TextView
