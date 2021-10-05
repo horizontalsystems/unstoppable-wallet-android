@@ -110,7 +110,7 @@ class SwapCoinCardView @JvmOverloads constructor(context: Context, attrs: Attrib
             selectedToken.text = coin.code
             selectedToken.setTextColor(context.getColor(R.color.leah))
         } else {
-            iconCoin.setImageResource(R.drawable.ic_coin_placeholder)
+            iconCoin.setImageResource(R.drawable.coin_placeholder)
             selectedToken.text = context.getString(R.string.Swap_TokenSelectorTitle)
             selectedToken.setTextColor(context.getColor(R.color.jacob))
         }

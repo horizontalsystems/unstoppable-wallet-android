@@ -90,10 +90,10 @@ fun <T>CardTabs(
 fun PreviewCardTabs() {
     var selectedIndex by remember { mutableStateOf(0) }
     val map = mapOf(
-        "BTC" to R.drawable.ic_coin_placeholder,
-        "ETH" to R.drawable.ic_coin_placeholder,
-        "BNB" to R.drawable.ic_coin_placeholder,
-        "ZCASH" to R.drawable.ic_coin_placeholder
+        "BTC" to R.drawable.coin_placeholder,
+        "ETH" to R.drawable.coin_placeholder,
+        "BNB" to R.drawable.coin_placeholder,
+        "ZCASH" to R.drawable.coin_placeholder
     )
 
     val tabItems = map.toList().mapIndexed { index, (title, icon) ->

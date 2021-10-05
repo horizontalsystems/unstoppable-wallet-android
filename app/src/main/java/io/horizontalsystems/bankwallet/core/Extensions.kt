@@ -32,7 +32,7 @@ val FullCoin.iconPlaceholder: Int
     get() = if (platforms.size == 1) {
         platforms.first().coinType.iconPlaceholder
     } else {
-        R.drawable.place_holder
+        R.drawable.coin_placeholder
     }
 
 val CoinType.iconPlaceholder: Int
@@ -40,7 +40,7 @@ val CoinType.iconPlaceholder: Int
         is CoinType.Erc20 -> R.drawable.erc20
         is CoinType.Bep2 -> R.drawable.bep2
         is CoinType.Bep20 -> R.drawable.bep20
-        else -> R.drawable.place_holder
+        else -> R.drawable.coin_placeholder
     }
 
 //View
@@ -49,7 +49,7 @@ fun ImageView.setCoinImage(coinType: CoinType) {
     setImageDrawable(AppLayoutHelper.getCoinDrawable(context, coinType))
 }
 
-fun ImageView.setCoinImage(coinUid: String, placeholder: Int = R.drawable.place_holder) {
+fun ImageView.setCoinImage(coinUid: String, placeholder: Int = R.drawable.coin_placeholder) {
     load("https://markets.nyc3.digitaloceanspaces.com/coin-icons/ios/$coinUid@3x.png"){
         error(placeholder)
     }

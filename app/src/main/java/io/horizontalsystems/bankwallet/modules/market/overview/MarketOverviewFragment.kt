@@ -300,7 +300,7 @@ class MarketOverviewFragment : BaseFragment() {
             ) {
                 Image(
                     // todo implement it
-                    painter = painterResource(R.drawable.place_holder),
+                    painter = painterResource(R.drawable.coin_placeholder),
                     contentDescription = "coin icon",
                     modifier = Modifier.padding(horizontal = 16.dp).size(24.dp)
                 )

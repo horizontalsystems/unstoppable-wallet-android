@@ -20,7 +20,7 @@ object AppLayoutHelper {
             coinType is CoinType.Erc20 -> R.drawable.erc20
             coinType is CoinType.Bep2 -> R.drawable.bep2
             coinType is CoinType.Bep20 -> R.drawable.bep20
-            else -> R.drawable.place_holder
+            else -> R.drawable.coin_placeholder
         }
         return resId
     }
