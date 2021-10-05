@@ -92,6 +92,7 @@ class CoinWithSwitchViewHolder(
 
         when (viewItem.state) {
             CoinViewItemState.ToggleHidden -> {
+                toggleSwitch.setOnCheckedChangeListener { _, _ -> }
                 toggleSwitch.isVisible = false
                 edit.isVisible = false
             }
