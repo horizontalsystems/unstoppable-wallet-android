@@ -601,6 +601,7 @@
     <string name="ManageCoins_title">Coin Manager</string>
     <string name="ManageCoins_Search">جستجو</string>
     <string name="ManageCoins_AddToken">اضافه کردن نشان</string>
+    <string name="ManageCoins_NoResults">No results found. Try to add token manually if you know its smart contract address.</string>
     <!-- Experimental Feature -->
     <string name="ExperimentalFeatures_Title">تجربی</string>
     <string name="ExperimentalFeatures_Description">ویژگی های زیر تجربی است و باید با احتیاط استفاده شود. در حالی که ما این ویژگی ها را با استفاده از وجوه رمزنگاری شده خودمان به طور آزمایشی آزمایش کرده ایم ، اما نمی توانیم تضمین کنیم که آنها مطابق آنچه انتظار می رود عمل کنند.</string>
@@ -682,12 +683,11 @@
     <string name="AddToken_Symbol">نماد</string>
     <string name="AddToken_Decimals">اعشارها</string>
     <string name="AddToken_Dots">…</string>
-    <string name="AddToken_CoinType">Coin Type</string>
+    <string name="AddToken_CoinTypes">Coin Type(s)</string>
     <string name="AddToken_CoinAlreadyInListWarning">این نشان در حال حاضر در لیست مدیریت سکه قرار دارد</string>
     <string name="AddToken_InvalidAddressError">Invalid contract address or BEP2 symbol</string>
     <string name="AddToken_ApiLimitExceeded">از محدوده اپی فراتر رفت. بعدا دوباره تلاش کنید.</string>
-    <string name="AddEvmToken_ContractNotFound">قرارداد یافت نشد</string>
-    <string name="AddBep2Token_SymbolNotFound">Symbol not found</string>
+    <string name="AddEvmToken_TokenNotFound">Token not found</string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Title">ساختار آدرس</string>
     <string name="AddressFormatSettings_Description">Select address format for the coin. Proceed with recommended option if unsure. A correct format should be chosen when restoring an existing wallet.</string>
