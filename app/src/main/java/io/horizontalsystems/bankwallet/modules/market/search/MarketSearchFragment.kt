@@ -34,8 +34,8 @@ import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.core.getIconUrl
-import io.horizontalsystems.bankwallet.core.getPlaceholder
+import io.horizontalsystems.bankwallet.core.iconPlaceholder
+import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.ui.compose.CoinImage
@@ -255,9 +255,9 @@ fun CardsGrid(categories: List<CoinCategory>) {
         // Turning the list in a list of lists of two elements each
         items(categories.windowed(2, 2, true)) { chunk ->
             Row(modifier = Modifier.padding(horizontal = 10.dp)) {
-                CategoryCard(chunk[0].name, chunk[0].imageUrl()) {}
+                CategoryCard(chunk[0].name, chunk[0].imageUrl) {}
                 if (chunk.size > 1) {
-                    CategoryCard(chunk[1].name, chunk[1].imageUrl()) {}
+                    CategoryCard(chunk[1].name, chunk[1].imageUrl) {}
                 } else {
                     Spacer(modifier = Modifier.weight(1f))
                 }
@@ -329,8 +329,8 @@ private fun MarketCoin(fullCoin: FullCoin, onCoinClick: (Coin) -> Unit) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             CoinImage(
-                iconUrl = fullCoin.coin.getIconUrl(),
-                placeholder = fullCoin.getPlaceholder(),
+                iconUrl = fullCoin.coin.iconUrl,
+                placeholder = fullCoin.iconPlaceholder,
                 modifier = Modifier.padding(horizontal = 16.dp).size(24.dp)
             )
             Column(
