@@ -5,8 +5,8 @@ import androidx.compose.runtime.Immutable
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.getIconUrl
-import io.horizontalsystems.bankwallet.core.getPlaceholder
+import io.horizontalsystems.bankwallet.core.iconPlaceholder
+import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.entities.blockchainType
@@ -191,8 +191,8 @@ class BalanceViewItemFactory {
                 wallet = item.wallet,
                 coinCode = coin.code,
                 coinTitle = coin.name,
-                coinIconUrl = coin.getIconUrl(),
-                coinIconPlaceholder = wallet.coinType.getPlaceholder(),
+                coinIconUrl = coin.iconUrl,
+                coinIconPlaceholder = wallet.coinType.iconPlaceholder,
                 coinValue = coinValue(state, item.balanceData.total, balanceTotalVisibility),
                 fiatValue = currencyValue(state, item.balanceData.total, currency, latestRate, balanceTotalVisibility),
                 coinValueLocked = lockedCoinValue(state, item.balanceData.locked, coin.code, hideBalance),
