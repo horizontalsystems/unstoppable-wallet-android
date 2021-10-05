@@ -601,6 +601,7 @@
     <string name="ManageCoins_title">Coin Manager</string>
     <string name="ManageCoins_Search">Ara</string>
     <string name="ManageCoins_AddToken">Token Ekle</string>
+    <string name="ManageCoins_NoResults">No results found. Try to add token manually if you know its smart contract address.</string>
     <!-- Experimental Feature -->
     <string name="ExperimentalFeatures_Title">Deneysel</string>
     <string name="ExperimentalFeatures_Description">Aşağıdaki özellikler deneyseldir ve dikkatli kullanılmalıdır. Bu özellikleri kendi kripto fonlarımızı kullanarak baştan sona test etmemize rağmen, olası tüm durumlarda beklendiği gibi çalışmalarını garanti edemeyiz.</string>
@@ -682,12 +683,11 @@
     <string name="AddToken_Symbol">Sembol</string>
     <string name="AddToken_Decimals">Ondalıklar</string>
     <string name="AddToken_Dots">…</string>
-    <string name="AddToken_CoinType">Coin Tipi</string>
+    <string name="AddToken_CoinTypes">Coin Type(s)</string>
     <string name="AddToken_CoinAlreadyInListWarning">Bu token zaten kripto para yöneticisi listesindedir</string>
     <string name="AddToken_InvalidAddressError">Geçersiz sözleşme adresi veya BEP2 sembolü</string>
     <string name="AddToken_ApiLimitExceeded">Api limit exceeded. Try again later.</string>
-    <string name="AddEvmToken_ContractNotFound">Sözleşme bulunamadı</string>
-    <string name="AddBep2Token_SymbolNotFound">Sembol bulunamadı</string>
+    <string name="AddEvmToken_TokenNotFound">Token not found</string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Title">Adres Formatı</string>
     <string name="AddressFormatSettings_Description">Select address format for the coin. Proceed with recommended option if unsure. A correct format should be chosen when restoring an existing wallet.</string>
