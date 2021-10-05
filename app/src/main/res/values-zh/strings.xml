@@ -601,6 +601,7 @@
     <string name="ManageCoins_title">Coin Manager</string>
     <string name="ManageCoins_Search">搜索​​​​</string>
     <string name="ManageCoins_AddToken">添加代币</string>
+    <string name="ManageCoins_NoResults">No results found. Try to add token manually if you know its smart contract address.</string>
     <!-- Experimental Feature -->
     <string name="ExperimentalFeatures_Title">实验性</string>
     <string name="ExperimentalFeatures_Description">以下功能为实验性，应谨慎使用。虽然我们已使用自己的加密货币资金对这些功能进行了彻底测试，但是我们不保证它们在所有情况下都能如常工作。</string>
@@ -682,12 +683,11 @@
     <string name="AddToken_Symbol">标志</string>
     <string name="AddToken_Decimals">小数</string>
     <string name="AddToken_Dots">…</string>
-    <string name="AddToken_CoinType">代币类型</string>
+    <string name="AddToken_CoinTypes">Coin Type(s)</string>
     <string name="AddToken_CoinAlreadyInListWarning">该代币已在代币管理列表中</string>
     <string name="AddToken_InvalidAddressError">无效的合约地址或BEP2符号</string>
     <string name="AddToken_ApiLimitExceeded">超过Api限制。请稍后再试。</string>
-    <string name="AddEvmToken_ContractNotFound">没找到合同</string>
-    <string name="AddBep2Token_SymbolNotFound">找不到符号</string>
+    <string name="AddEvmToken_TokenNotFound">Token not found</string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Title">地址格式</string>
     <string name="AddressFormatSettings_Description">Select address format for the coin. Proceed with recommended option if unsure. A correct format should be chosen when restoring an existing wallet.</string>
