@@ -601,6 +601,7 @@
     <string name="ManageCoins_title">Coin Manager</string>
     <string name="ManageCoins_Search">검색</string>
     <string name="ManageCoins_AddToken">토큰 추가</string>
+    <string name="ManageCoins_NoResults">No results found. Try to add token manually if you know its smart contract address.</string>
     <!-- Experimental Feature -->
     <string name="ExperimentalFeatures_Title">실험적인</string>
     <string name="ExperimentalFeatures_Description">아래 기능은 실험용이므로 주의해서 사용해 주세요. 자체 암호화된 자금을 사용하여 이러한 기능을 철저히 실험하였지만 가능한 모든 경우에 예상대로 작독한다고 보장 드릴 수는 없습니다.</string>
@@ -683,12 +684,11 @@
     <string name="AddToken_Symbol">심볼</string>
     <string name="AddToken_Decimals">소수점</string>
     <string name="AddToken_Dots">…</string>
-    <string name="AddToken_CoinType">코인 유형</string>
+    <string name="AddToken_CoinTypes">Coin Type(s)</string>
     <string name="AddToken_CoinAlreadyInListWarning">이 토큰은 이미 코인 매니저 리스트에 있습니다.</string>
     <string name="AddToken_InvalidAddressError">잘못된 계약 주소 또는 BEP2 기호</string>
     <string name="AddToken_ApiLimitExceeded">Api limit exceeded. Try again later.</string>
-    <string name="AddEvmToken_ContractNotFound">거래 발견되지 않음</string>
-    <string name="AddBep2Token_SymbolNotFound">기호 발견되지 않음</string>
+    <string name="AddEvmToken_TokenNotFound">Token not found</string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Title">주소 형식</string>
     <string name="AddressFormatSettings_Description">Select address format for the coin. Proceed with recommended option if unsure. A correct format should be chosen when restoring an existing wallet.</string>
