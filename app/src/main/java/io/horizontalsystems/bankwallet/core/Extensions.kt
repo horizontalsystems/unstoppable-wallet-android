@@ -23,28 +23,24 @@ import io.reactivex.schedulers.Schedulers
 
 
 val Coin.iconUrl: String
-    get() {
-        return "https://markets.nyc3.digitaloceanspaces.com/coin-icons/ios/$uid@3x.png"
-    }
+    get() = "https://markets.nyc3.digitaloceanspaces.com/coin-icons/ios/$uid@3x.png"
 
 val CoinCategory.imageUrl: String
-    get() {
-        return "https://markets.nyc3.digitaloceanspaces.com/category-icons/ios/$uid@3x.png"
-    }
+    get() = "https://markets.nyc3.digitaloceanspaces.com/category-icons/ios/$uid@3x.png"
 
 val FullCoin.iconPlaceholder: Int
-    get() {
-        return if (platforms.size == 1) platforms[0].coinType.iconPlaceholder else R.drawable.place_holder
+    get() = if (platforms.size == 1) {
+        platforms.first().coinType.iconPlaceholder
+    } else {
+        R.drawable.place_holder
     }
 
 val CoinType.iconPlaceholder: Int
-    get() {
-        return when (this) {
-            is CoinType.Erc20 -> R.drawable.erc20
-            is CoinType.Bep2 -> R.drawable.bep2
-            is CoinType.Bep20 -> R.drawable.bep20
-            else -> R.drawable.place_holder
-        }
+    get() = when (this) {
+        is CoinType.Erc20 -> R.drawable.erc20
+        is CoinType.Bep2 -> R.drawable.bep2
+        is CoinType.Bep20 -> R.drawable.bep20
+        else -> R.drawable.place_holder
     }
 
 //View
