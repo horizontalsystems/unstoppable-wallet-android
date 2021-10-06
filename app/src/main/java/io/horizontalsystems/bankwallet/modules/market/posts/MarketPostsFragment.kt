@@ -2,18 +2,15 @@ package io.horizontalsystems.bankwallet.modules.market.posts
 
 import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.browser.customtabs.CustomTabsIntent
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.ConcatAdapter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.modules.market.MarketLoadingAdapter
-import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import kotlinx.android.synthetic.main.fragment_market_posts.*
 
 class MarketPostsFragment : BaseFragment(), ViewHolderMarketPostItem.Listener {
@@ -31,31 +28,32 @@ class MarketPostsFragment : BaseFragment(), ViewHolderMarketPostItem.Listener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val loadingAdapter = MarketLoadingAdapter(
-            viewModel.loadingLiveData,
-            viewModel.errorLiveData,
-            viewModel::onErrorClick,
-            viewLifecycleOwner
-        )
-
-        val postsAdapter = MarketPostItemsAdapter(
+        marketPostsRecyclerView.adapter = MarketPostItemsAdapter(
             this,
             viewModel.postsViewItemsLiveData,
             viewLifecycleOwner
         )
 
-        marketPostsRecyclerView.adapter = ConcatAdapter(loadingAdapter, postsAdapter)
-
         pullToRefresh.setOnRefreshListener {
             viewModel.refresh()
+        }
+        pullToRefresh.setProgressBackgroundColorSchemeResource(R.color.claude)
+        pullToRefresh.setColorSchemeResources(R.color.oz)
 
-            Handler(Looper.getMainLooper()).postDelayed({
-                pullToRefresh.isRefreshing = false
-            }, 1500)
+        viewModel.loadingLiveData.observe(viewLifecycleOwner) {
+            pullToRefresh.isRefreshing = it
         }
 
-        viewModel.toastLiveData.observe(viewLifecycleOwner) {
-            HudHelper.showErrorMessage(requireActivity().findViewById(android.R.id.content), it)
+        viewModel.errorLiveData.observe(viewLifecycleOwner) {
+            error.isVisible = it != null
+            error.text = it
+        }
+        error.setOnSingleClickListener {
+            viewModel.onErrorClick()
+        }
+
+        viewModel.postsViewItemsLiveData.observe(viewLifecycleOwner) {
+            marketPostsRecyclerView.isVisible = it.isNotEmpty()
         }
     }
 

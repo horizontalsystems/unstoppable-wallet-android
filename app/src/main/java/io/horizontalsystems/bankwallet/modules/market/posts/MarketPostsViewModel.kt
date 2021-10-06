@@ -6,7 +6,6 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
-import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.core.helpers.DateHelper
 import io.reactivex.disposables.CompositeDisposable
 
@@ -16,7 +15,6 @@ class MarketPostsViewModel(
 ) : ViewModel() {
 
     val postsViewItemsLiveData = MutableLiveData<List<MarketPostsModule.PostViewItem>>()
-    val toastLiveData = SingleLiveEvent<String>()
     val loadingLiveData = MutableLiveData(false)
     val errorLiveData = MutableLiveData<String?>(null)
 
@@ -42,23 +40,20 @@ class MarketPostsViewModel(
     }
 
     private fun syncPostsState(state: MarketPostService.State) {
-        val itemsEmpty = service.newsItems.isEmpty()
-
         when (state) {
             MarketPostService.State.Loading -> {
                 errorLiveData.postValue(null)
-                loadingLiveData.postValue(itemsEmpty)
+                loadingLiveData.postValue(true)
             }
-            MarketPostService.State.Loaded -> {
-                if (service.newsItems.isNotEmpty()) {
-                    val postViewItems = service.newsItems.map {
+            is MarketPostService.State.Loaded -> {
+                if (state.posts.isNotEmpty()) {
+                    val postViewItems = state.posts.map {
                         MarketPostsModule.PostViewItem(
-                            getTimeAgo(it.timestamp),
-                            it.imageUrl,
-                            it.source.replaceFirstChar(Char::titlecase),
-                            it.title,
-                            it.url,
-                            it.body
+                            source = it.source.replaceFirstChar(Char::titlecase),
+                            title = it.title,
+                            body = it.body,
+                            timeAgo = getTimeAgo(it.timestamp),
+                            url = it.url
                         )
                     }
                     errorLiveData.postValue(null)
@@ -68,11 +63,8 @@ class MarketPostsViewModel(
             }
             is MarketPostService.State.Failed -> {
                 loadingLiveData.postValue(false)
-                if (itemsEmpty) {
-                    errorLiveData.postValue(convertErrorMessage(state.error))
-                } else {
-                    toastLiveData.postValue(convertErrorMessage(state.error))
-                }
+                errorLiveData.postValue(Translator.getString(R.string.Market_News_SyncError))
+                postsViewItemsLiveData.postValue(listOf())
             }
         }
     }
@@ -91,10 +83,6 @@ class MarketPostsViewModel(
                 Translator.getString(R.string.Market_DaysAgo, daysAgo)
             }
         }
-    }
-
-    private fun convertErrorMessage(it: Throwable): String {
-        return it.message ?: it.javaClass.simpleName
     }
 
     fun refresh() {
