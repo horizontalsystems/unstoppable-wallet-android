@@ -4,13 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Divider
@@ -106,6 +101,7 @@ class MarketOverviewFragment : BaseFragment() {
         val isRefreshing by marketOverviewViewModel.isRefreshing.observeAsState()
         val topBoardsState by marketOverviewViewModel.stateLiveData.observeAsState()
         val metricsData by marketMetricsViewModel.stateLiveData.observeAsState()
+        val scrollState = rememberScrollState()
 
         SwipeRefresh(
             state = rememberSwipeRefreshState(isRefreshing ?: false),
@@ -123,7 +119,7 @@ class MarketOverviewFragment : BaseFragment() {
                 )
             }
         ) {
-            LazyColumn {
+            Column(modifier = Modifier.verticalScroll(scrollState)) {
                 MetricCharts(metricsData)
                 TopBoards(topBoardsState)
             }
@@ -131,24 +127,19 @@ class MarketOverviewFragment : BaseFragment() {
 
     }
 
-    private fun LazyListScope.MetricCharts(state: MarketMetricsModule.State?) {
+    @Composable
+    private fun MetricCharts(state: MarketMetricsModule.State?) {
         state?.let {
             when (it) {
                 MarketMetricsModule.State.Loading -> {
-                    item {
-                        LoadingView()
-                    }
+                    LoadingView()
                 }
                 MarketMetricsModule.State.SyncError -> {
-                    item {
-                        ErrorView()
-                    }
+                    ErrorView()
                 }
                 is MarketMetricsModule.State.Data -> {
-                    item {
-                        Box(modifier = Modifier.height(240.dp).fillMaxWidth()) {
-                            MetricChartsView(it.marketMetrics)
-                        }
+                    Box(modifier = Modifier.height(240.dp).fillMaxWidth()) {
+                        MetricChartsView(it.marketMetrics)
                     }
                 }
             }
@@ -192,18 +183,15 @@ class MarketOverviewFragment : BaseFragment() {
         )
     }
 
-    private fun LazyListScope.TopBoards(topBoardsState: MarketOverviewModule.State?) {
+    @Composable
+    private fun TopBoards(topBoardsState: MarketOverviewModule.State?) {
         topBoardsState?.let { state ->
             when (state) {
                 MarketOverviewModule.State.Loading -> {
-                    item {
-                        LoadingView()
-                    }
+                    LoadingView()
                 }
                 is MarketOverviewModule.State.Error -> {
-                    item {
-                        ErrorView()
-                    }
+                    ErrorView()
                 }
                 is MarketOverviewModule.State.Data -> BoardsView(state.boards)
             }
@@ -238,19 +226,16 @@ class MarketOverviewFragment : BaseFragment() {
         }
     }
 
-    private fun LazyListScope.BoardsView(boardItems: List<MarketOverviewModule.BoardItem>) {
+    @Composable
+    private fun BoardsView(boardItems: List<MarketOverviewModule.BoardItem>) {
         boardItems.forEach { boardItem ->
-            item {
-                TopBoardHeader(boardItem)
-            }
+            TopBoardHeader(boardItem)
 
-            itemsIndexed(boardItem.boardContent.marketViewItems) { index, coin ->
+            boardItem.boardContent.marketViewItems.forEachIndexed { index, coin ->
                 MarketCoin(coin, index == 0)
             }
 
-            item {
-                SeeAllButton(boardItem.type)
-            }
+            SeeAllButton(boardItem.type)
         }
     }
 
