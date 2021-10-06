@@ -146,6 +146,7 @@
     <string name="Market_Category_Identity_Description">Децентрализованная идентификация.</string>
     <string name="Market_Category_YieldTokens">Yield Tokens</string>
     <string name="Market_Category_YieldTokens_Description">Прибыльные токены.</string>
+    <string name="Market_News_SyncError">Sync Error</string>
     <!--Market Global Metrics-->
     <string name="MarketGlobalMetrics_Chart">График</string>
     <string name="MarketGlobalMetrics_TotalMarketCap">Total M.Cap</string>
