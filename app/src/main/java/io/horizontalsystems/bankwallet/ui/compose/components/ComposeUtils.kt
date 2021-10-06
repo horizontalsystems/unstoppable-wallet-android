@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.ui.compose
+package io.horizontalsystems.bankwallet.ui.compose.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.runtime.Composable
@@ -7,6 +7,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import coil.compose.rememberImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import java.math.BigDecimal
 
 @Composable

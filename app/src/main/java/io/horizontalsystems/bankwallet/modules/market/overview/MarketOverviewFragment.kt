@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.market.overview
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -44,9 +43,8 @@ import io.horizontalsystems.bankwallet.modules.market.metrics.MarketMetricsViewM
 import io.horizontalsystems.bankwallet.modules.market.metricspage.MetricsPageFragment
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.RateColor
-import io.horizontalsystems.bankwallet.ui.compose.RateText
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryToggle
+import io.horizontalsystems.bankwallet.ui.compose.components.MarketListCoin
 import io.horizontalsystems.bankwallet.ui.extensions.MarketMetricSmallView
 import io.horizontalsystems.bankwallet.ui.extensions.MetricData
 import io.horizontalsystems.core.findNavController
@@ -85,14 +83,22 @@ class MarketOverviewFragment : BaseFragment() {
     }
 
     private fun onItemClick(marketViewItem: MarketViewItem) {
-        val arguments = CoinFragment.prepareParams(marketViewItem.coinUid, marketViewItem.coinCode, marketViewItem.coinName)
+        val arguments = CoinFragment.prepareParams(
+            marketViewItem.coinUid,
+            marketViewItem.coinCode,
+            marketViewItem.coinName
+        )
 
         findNavController().navigate(R.id.coinFragment, arguments, navOptions())
     }
 
-    private fun openMetricsPage(metricsType: MetricsType){
+    private fun openMetricsPage(metricsType: MetricsType) {
         val arguments = MetricsPageFragment.prepareParams(metricsType)
-        findNavController().navigate(R.id.mainFragment_to_metricPageFragment, arguments, navOptions())
+        findNavController().navigate(
+            R.id.mainFragment_to_metricPageFragment,
+            arguments,
+            navOptions()
+        )
     }
 
     @Composable
@@ -233,15 +239,13 @@ class MarketOverviewFragment : BaseFragment() {
     }
 
     private fun LazyListScope.BoardsView(boardItems: List<MarketOverviewModule.BoardItem>) {
-        val ctx = context ?: return
-
         boardItems.forEach { boardItem ->
             item {
                 TopBoardHeader(boardItem)
             }
 
             itemsIndexed(boardItem.boardContent.marketViewItems) { index, coin ->
-                MarketCoin(coin, index == 0, ctx)
+                MarketCoin(coin, index == 0)
             }
 
             item {
@@ -285,7 +289,7 @@ class MarketOverviewFragment : BaseFragment() {
     }
 
     @Composable
-    private fun MarketCoin(marketViewItem: MarketViewItem, firstItem: Boolean, ctx: Context) {
+    private fun MarketCoin(marketViewItem: MarketViewItem, firstItem: Boolean) {
         Box(
             modifier = Modifier
                 .padding(horizontal = 16.dp)
@@ -294,28 +298,14 @@ class MarketOverviewFragment : BaseFragment() {
                 .background(ComposeAppTheme.colors.lawrence)
                 .clickable { onItemClick(marketViewItem) }
         ) {
-            Row(
-                modifier = Modifier.fillMaxHeight(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Image(
-                    // todo implement it
-                    painter = painterResource(R.drawable.coin_placeholder),
-                    contentDescription = "coin icon",
-                    modifier = Modifier.padding(horizontal = 16.dp).size(24.dp)
-                )
-                Column(
-                    modifier = Modifier.padding(end = 16.dp)
-                ) {
-                    FirstRow(marketViewItem)
-                    Spacer(modifier = Modifier.height(3.dp))
-                    SecondRow(marketViewItem)
-                }
-            }
-            Divider(
-                thickness = 1.dp,
-                color = ComposeAppTheme.colors.steel10,
-                modifier = Modifier.align(Alignment.BottomCenter)
+            MarketListCoin(
+                marketViewItem.coinName,
+                marketViewItem.coinCode,
+                marketViewItem.rate,
+                "coinIconUrl", //todo implement coin icon
+                R.drawable.coin_placeholder,
+                marketViewItem.diff,
+                marketViewItem.score?.getText(),
             )
         }
     }
@@ -354,65 +344,6 @@ class MarketOverviewFragment : BaseFragment() {
             RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp)
         } else {
             RoundedCornerShape(0.dp)
-        }
-    }
-
-    @Composable
-    private fun FirstRow(viewItem: MarketViewItem) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = viewItem.coinName,
-                color = ComposeAppTheme.colors.oz,
-                style = ComposeAppTheme.typography.body,
-                maxLines = 1,
-            )
-            Spacer(modifier = Modifier.weight(1f))
-            Text(
-                text = viewItem.rate,
-                color = ComposeAppTheme.colors.leah,
-                style = ComposeAppTheme.typography.body,
-                maxLines = 1,
-            )
-        }
-    }
-
-    @Composable
-    private fun SecondRow(viewItem: MarketViewItem) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            viewItem.score?.let { score ->
-                Box(
-                    modifier = Modifier.padding(end = 8.dp)
-                        .clip(RoundedCornerShape(4.dp))
-                        .background(ComposeAppTheme.colors.jeremy)
-                ) {
-                    Text(
-                        modifier = Modifier.padding(start = 4.dp, end = 4.dp, bottom = 1.dp),
-                        text = score.getText(),
-                        color = ComposeAppTheme.colors.bran,
-                        style = ComposeAppTheme.typography.microSB,
-                        maxLines = 1,
-                    )
-                }
-            }
-            Text(
-                text = viewItem.coinName,
-                color = ComposeAppTheme.colors.grey,
-                style = ComposeAppTheme.typography.subhead2,
-                maxLines = 1,
-            )
-            Spacer(modifier = Modifier.weight(1f))
-            Text(
-                text = RateText(viewItem.diff),
-                color = RateColor(viewItem.diff),
-                style = ComposeAppTheme.typography.subhead2,
-                maxLines = 1,
-            )
         }
     }
 

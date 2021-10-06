@@ -56,10 +56,10 @@ import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModu
 import io.horizontalsystems.bankwallet.modules.receive.ReceiveFragment
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
-import io.horizontalsystems.bankwallet.ui.compose.CoinImage
+import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.RateColor
-import io.horizontalsystems.bankwallet.ui.compose.RateText
+import io.horizontalsystems.bankwallet.ui.compose.components.RateColor
+import io.horizontalsystems.bankwallet.ui.compose.components.RateText
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorDialog
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorItem
