@@ -65,11 +65,11 @@ class CoinListAdapter(private val listener: Listener) :
     companion object {
         private val diffCallback = object : DiffUtil.ItemCallback<CoinViewItem>() {
             override fun areItemsTheSame(oldItem: CoinViewItem, newItem: CoinViewItem): Boolean {
-                return oldItem == newItem
+                return oldItem.fullCoin.coin == newItem.fullCoin.coin
             }
 
             override fun areContentsTheSame(oldItem: CoinViewItem, newItem: CoinViewItem): Boolean {
-                return oldItem == newItem
+                return oldItem.fullCoin.coin == newItem.fullCoin.coin && oldItem.state == newItem.state && oldItem.listPosition == newItem.listPosition
             }
         }
     }
@@ -136,6 +136,6 @@ class CoinWithSwitchViewHolder(
 data class CoinViewItem(val fullCoin: FullCoin, val state: CoinViewItemState, val listPosition: ListPosition)
 
 sealed class CoinViewItemState {
-    class ToggleVisible(val enabled: Boolean, val hasSettings: Boolean) : CoinViewItemState()
+    data class ToggleVisible(val enabled: Boolean, val hasSettings: Boolean) : CoinViewItemState()
     object ToggleHidden : CoinViewItemState()
 }
