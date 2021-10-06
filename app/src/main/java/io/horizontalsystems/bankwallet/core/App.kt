@@ -117,7 +117,7 @@ class App : CoreApp() {
         buildConfigProvider = appConfig
         languageConfigProvider = appConfig
 
-        marketKit = MarketKit.getInstance(this)
+        marketKit = MarketKit.getInstance(this, appConfig.marketApiBaseUrl)
         marketKit.sync()
 
         feeRateProvider = FeeRateProvider(appConfigProvider)

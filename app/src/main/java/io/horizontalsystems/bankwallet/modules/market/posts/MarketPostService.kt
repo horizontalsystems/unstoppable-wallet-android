@@ -1,29 +1,32 @@
 package io.horizontalsystems.bankwallet.modules.market.posts
 
 import io.horizontalsystems.bankwallet.core.Clearable
-import io.horizontalsystems.bankwallet.core.IRateManager
 import io.horizontalsystems.core.BackgroundManager
-import io.horizontalsystems.xrateskit.entities.CryptoNews
+import io.horizontalsystems.marketkit.MarketKit
+import io.horizontalsystems.marketkit.models.Post
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 
 class MarketPostService(
-        private val postManager: IRateManager,
-        private val backgroundManager: BackgroundManager,
+    private val marketKit: MarketKit,
+    private val backgroundManager: BackgroundManager,
 ) : Clearable, BackgroundManager.Listener {
 
     sealed class State {
-        object Loaded : State()
         object Loading : State()
+        class Loaded(val posts: List<Post>) : State()
         class Failed(val error: Throwable) : State()
     }
 
-    val stateObservable: BehaviorSubject<State> = BehaviorSubject.createDefault(State.Loading)
-
-    var newsItems: List<CryptoNews> = listOf()
-
     private var disposable: Disposable? = null
+
+    var state: State = State.Loading
+        private set(value) {
+            field = value
+            stateObservable.onNext(value)
+        }
+    val stateObservable: BehaviorSubject<State> = BehaviorSubject.createDefault(State.Loading)
 
     init {
         backgroundManager.registerListener(this)
@@ -31,15 +34,16 @@ class MarketPostService(
     }
 
     private fun fetchPosts() {
+        state = State.Loading
+
         disposable?.dispose()
-        disposable = postManager.getCryptoNews()
-                .subscribeOn(Schedulers.io())
-                .subscribe({
-                    newsItems = it
-                    stateObservable.onNext(State.Loaded)
-                }, {
-                    stateObservable.onNext(State.Failed(it))
-                })
+        disposable = marketKit.postsSingle()
+            .subscribeOn(Schedulers.io())
+            .subscribe({
+                state = State.Loaded(it)
+            }, {
+                state = State.Failed(it)
+            })
     }
 
     override fun clear() {

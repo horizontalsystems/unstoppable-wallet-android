@@ -52,6 +52,10 @@ class AppConfigProvider : IAppConfigProvider, ILanguageConfigProvider, IBuildCon
         Translator.getString(R.string.providerCoinsJsonUrl)
     }
 
+    override val marketApiBaseUrl by lazy {
+        Translator.getString(R.string.marketApiBaseUrl)
+    }
+
     override val fiatDecimal: Int = 2
     override val maxDecimal: Int = 8
     override val feeRateAdjustForCurrencies: List<String> = listOf("USD", "EUR")
