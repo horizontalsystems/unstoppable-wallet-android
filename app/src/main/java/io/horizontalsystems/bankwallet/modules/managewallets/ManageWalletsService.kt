@@ -83,10 +83,10 @@ class ManageWalletsService(
     }
 
     private fun sortFullCoins() {
-        fullCoins.sortWith(compareByDescending<FullCoin> {
-            isEnabled(it.coin)
+        fullCoins.sortWith(compareBy<FullCoin> {
+            if (isEnabled(it.coin)) 0 else 1
         }.thenBy {
-            it.coin.marketCapRank
+            it.coin.marketCapRank ?: Int.MAX_VALUE
         }.thenBy {
             it.coin.name.lowercase(Locale.ENGLISH)
         })
