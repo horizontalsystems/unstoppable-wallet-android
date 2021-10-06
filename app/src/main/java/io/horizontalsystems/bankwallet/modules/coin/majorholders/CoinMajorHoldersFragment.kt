@@ -8,7 +8,7 @@ import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.ConcatAdapter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.modules.coin.CoinViewModel
+import io.horizontalsystems.bankwallet.modules.coin.overview.CoinOverviewViewModel
 import io.horizontalsystems.bankwallet.modules.coin.MajorHolderItem
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
@@ -18,7 +18,7 @@ import kotlinx.android.synthetic.main.fragment_recyclerview.*
 
 class CoinMajorHoldersFragment : BaseFragment(), CoinMajorHoldersAdapter.Listener {
 
-    private val coinViewModel by navGraphViewModels<CoinViewModel>(R.id.coinFragment)
+    private val coinViewModel by navGraphViewModels<CoinOverviewViewModel>(R.id.coinFragment)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_recyclerview, container, false)

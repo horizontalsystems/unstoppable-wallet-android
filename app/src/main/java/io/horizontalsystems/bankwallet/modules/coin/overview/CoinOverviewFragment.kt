@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.coin
+package io.horizontalsystems.bankwallet.modules.coin.overview
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -13,6 +13,9 @@ import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.ConcatAdapter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.modules.coin.CoinDataClickType
+import io.horizontalsystems.bankwallet.modules.coin.CoinLink
+import io.horizontalsystems.bankwallet.modules.coin.PoweredByAdapter
 import io.horizontalsystems.bankwallet.modules.coin.adapters.*
 import io.horizontalsystems.bankwallet.modules.coin.adapters.CoinChartAdapter.ChartViewType
 import io.horizontalsystems.bankwallet.modules.markdown.MarkdownFragment
@@ -25,9 +28,9 @@ import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.xrateskit.entities.LinkType
-import kotlinx.android.synthetic.main.fragment_coin.*
+import kotlinx.android.synthetic.main.fragment_coin_overview.*
 
-class CoinFragment : BaseFragment(), CoinChartAdapter.Listener, CoinDataAdapter.Listener, CoinLinksAdapter.Listener {
+class CoinOverviewFragment : BaseFragment(), CoinChartAdapter.Listener, CoinDataAdapter.Listener, CoinLinksAdapter.Listener {
 
     private val coinTitle by lazy {
         requireArguments().getString(COIN_TITLE_KEY) ?: ""
@@ -36,19 +39,19 @@ class CoinFragment : BaseFragment(), CoinChartAdapter.Listener, CoinDataAdapter.
         requireArguments().getString(COIN_CODE_KEY) ?: ""
     }
     private val vmFactory by lazy {
-        CoinModule.Factory(
-                coinTitle,
-                requireArguments().getString(COIN_UID_KEY) ?: "",
-                coinCode
+        CoinOverviewModule.Factory(
+            coinTitle,
+            requireArguments().getString(COIN_UID_KEY) ?: "",
+            coinCode
         )
     }
 
-    private val viewModel by navGraphViewModels<CoinViewModel>(R.id.coinFragment) { vmFactory }
+    private val viewModel by navGraphViewModels<CoinOverviewViewModel>(R.id.coinFragment) { vmFactory }
 
     private var notificationMenuItem: MenuItem? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.fragment_coin, container, false)
+        return inflater.inflate(R.layout.fragment_coin_overview, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

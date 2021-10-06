@@ -49,7 +49,7 @@ import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.backupkey.BackupKeyModule
 import io.horizontalsystems.bankwallet.modules.balance.views.SyncErrorDialog
-import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
+import io.horizontalsystems.bankwallet.modules.coin.overview.CoinOverviewFragment
 import io.horizontalsystems.bankwallet.modules.main.MainActivity
 import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
@@ -485,7 +485,7 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
 
     private fun onChartClicked(viewItem: BalanceViewItem) {
         val platformCoin = viewItem.wallet.platformCoin
-        val arguments = CoinFragment.prepareParams(platformCoin.coin.uid, platformCoin.code, platformCoin.name)
+        val arguments = CoinOverviewFragment.prepareParams(platformCoin.coin.uid, platformCoin.code, platformCoin.name)
 
         findNavController().navigate(R.id.mainFragment_to_coinFragment, arguments, navOptions())
     }
