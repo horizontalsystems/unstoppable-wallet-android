@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.coin
+package io.horizontalsystems.bankwallet.modules.coin.overview
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,6 +8,7 @@ import io.horizontalsystems.bankwallet.core.managers.*
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import io.horizontalsystems.bankwallet.modules.coin.*
 import io.horizontalsystems.bankwallet.modules.coin.adapters.CoinChartAdapter
 import io.horizontalsystems.bankwallet.modules.coin.adapters.CoinSubtitleAdapter
 import io.horizontalsystems.bankwallet.modules.market.SortingField
@@ -26,12 +27,12 @@ import io.reactivex.disposables.CompositeDisposable
 import retrofit2.HttpException
 import java.math.BigDecimal
 
-class CoinViewModel(
-        private val service: CoinService,
-        val coinCode: String,
-        private val coinTitle: String,
-        private val factory: CoinViewFactory,
-        private val clearables: List<Clearable>
+class CoinOverviewViewModel(
+    private val service: CoinOverviewService,
+    val coinCode: String,
+    private val coinTitle: String,
+    private val factory: CoinViewFactory,
+    private val clearables: List<Clearable>
 ) : ViewModel() {
 
     val loadingLiveData = MutableLiveData<Boolean>()
@@ -227,18 +228,18 @@ class CoinViewModel(
         service.updateChartInfo()
     }
 
-    private fun syncCoinDetailsState(state: CoinService.CoinDetailsState) {
-        loadingLiveData.postValue(state is CoinService.CoinDetailsState.Loading)
-        if (state is CoinService.CoinDetailsState.Loaded) {
+    private fun syncCoinDetailsState(state: CoinOverviewService.CoinDetailsState) {
+        loadingLiveData.postValue(state is CoinOverviewService.CoinDetailsState.Loading)
+        if (state is CoinOverviewService.CoinDetailsState.Loaded) {
             updateCoinDetails()
         }
 
         coinInfoErrorLiveData.postValue(getError(state))
-        showFooterLiveData.postValue(state !is CoinService.CoinDetailsState.Loading)
+        showFooterLiveData.postValue(state !is CoinOverviewService.CoinDetailsState.Loading)
     }
 
-    private fun getError(state: CoinService.CoinDetailsState): String {
-        if (state !is CoinService.CoinDetailsState.Error) {
+    private fun getError(state: CoinOverviewService.CoinDetailsState): String {
+        if (state !is CoinOverviewService.CoinDetailsState.Error) {
             return ""
         }
 
@@ -249,8 +250,8 @@ class CoinViewModel(
         }
     }
 
-    private fun syncTopTokenHoldersState(state: CoinService.CoinDetailsState) {
-        if (state is CoinService.CoinDetailsState.Loaded) {
+    private fun syncTopTokenHoldersState(state: CoinOverviewService.CoinDetailsState) {
+        if (state is CoinOverviewService.CoinDetailsState.Loaded) {
             updateCoinDataBlock()
         }
     }

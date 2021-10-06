@@ -1,7 +1,8 @@
-package io.horizontalsystems.bankwallet.modules.coin
+package io.horizontalsystems.bankwallet.modules.coin.overview
 
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.managers.*
+import io.horizontalsystems.bankwallet.modules.coin.LastPoint
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.marketkit.MarketKit
 import io.horizontalsystems.marketkit.models.CoinPrice
@@ -13,7 +14,7 @@ import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 import java.net.URL
 
-class CoinService(
+class CoinOverviewService(
     val coinUid: String,
     val currency: Currency,
     private val xRateManager: IRateManager,
@@ -37,8 +38,10 @@ class CoinService(
     val chartInfoUpdatedObservable: BehaviorSubject<Unit> = BehaviorSubject.create()
     val chartSpinnerObservable: BehaviorSubject<Unit> = BehaviorSubject.create()
     val chartInfoErrorObservable: BehaviorSubject<Throwable> = BehaviorSubject.create()
-    val coinDetailsStateObservable: BehaviorSubject<CoinDetailsState> = BehaviorSubject.createDefault(CoinDetailsState.Loading)
-    val topTokenHoldersStateObservable: BehaviorSubject<CoinDetailsState> = BehaviorSubject.createDefault(CoinDetailsState.Loading)
+    val coinDetailsStateObservable: BehaviorSubject<CoinDetailsState> = BehaviorSubject.createDefault(
+        CoinDetailsState.Loading)
+    val topTokenHoldersStateObservable: BehaviorSubject<CoinDetailsState> = BehaviorSubject.createDefault(
+        CoinDetailsState.Loading)
     val alertNotificationUpdatedObservable: BehaviorSubject<Unit> = BehaviorSubject.createDefault(Unit)
 
     val hasPriceAlert: Boolean
