@@ -1,28 +1,27 @@
 package io.horizontalsystems.bankwallet.modules.coin.overview
 
-import io.horizontalsystems.bankwallet.core.*
-import io.horizontalsystems.bankwallet.core.managers.*
+import io.horizontalsystems.bankwallet.core.Clearable
+import io.horizontalsystems.bankwallet.core.IChartTypeStorage
+import io.horizontalsystems.bankwallet.core.IRateManager
+import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.modules.coin.LastPoint
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.marketkit.MarketKit
 import io.horizontalsystems.marketkit.models.CoinPrice
 import io.horizontalsystems.marketkit.models.CoinType
+import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.xrateskit.entities.*
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 import java.net.URL
 
 class CoinOverviewService(
-    val coinUid: String,
+    private val fullCoin: FullCoin,
     val currency: Currency,
     private val xRateManager: IRateManager,
     private val marketKit: MarketKit,
     private val chartTypeStorage: IChartTypeStorage,
-    private val priceAlertManager: IPriceAlertManager,
-    private val notificationManager: INotificationManager,
-    private val marketFavoritesManager: MarketFavoritesManager,
     guidesBaseUrl: String,
 ) : Clearable {
 
@@ -32,7 +31,8 @@ class CoinOverviewService(
         data class Error(val error: Throwable) : CoinDetailsState()
     }
 
-    lateinit var coinType: CoinType
+    val coinUid get() = fullCoin.coin.uid
+    var coinType: CoinType = fullCoin.platforms.first().coinType
 
     val coinPriceAsync = BehaviorSubject.create<CoinPrice>()
     val chartInfoUpdatedObservable: BehaviorSubject<Unit> = BehaviorSubject.create()
@@ -42,20 +42,11 @@ class CoinOverviewService(
         CoinDetailsState.Loading)
     val topTokenHoldersStateObservable: BehaviorSubject<CoinDetailsState> = BehaviorSubject.createDefault(
         CoinDetailsState.Loading)
-    val alertNotificationUpdatedObservable: BehaviorSubject<Unit> = BehaviorSubject.createDefault(Unit)
-
-    val hasPriceAlert: Boolean
-        get() {
-            return priceAlertManager.hasPriceAlert(coinType)
-        }
-
-    val notificationsAreEnabled: Boolean
-        get() = notificationManager.enabled
 
     var coinMarketDetails: CoinMarketDetails? = null
     var topTokenHolders: List<TokenHolder> = listOf()
 
-    var lastPoint: LastPoint? = marketKit.coinPrice(coinUid, currency.code)?.let { LastPoint(it.value, it.timestamp, it.diff) }
+    var lastPoint: LastPoint? = marketKit.coinPrice(fullCoin.coin.uid, currency.code)?.let { LastPoint(it.value, it.timestamp, it.diff) }
         set(value) {
             field = value
             triggerChartUpdateIfEnoughData()
@@ -77,26 +68,17 @@ class CoinOverviewService(
     private var chartInfoDisposable: Disposable? = null
 
     init {
-        priceAlertManager.notificationChangedFlowable
-                .subscribeOn(Schedulers.io())
-                .subscribe {
-                    alertNotificationUpdatedObservable.onNext(Unit)
-                }
-                .let {
-                    disposables.add(it)
-                }
-
-        marketKit.coinPrice(coinUid, currency.code)?.let {
+        marketKit.coinPrice(fullCoin.coin.uid, currency.code)?.let {
             coinPriceAsync.onNext(it)
         }
-        marketKit.coinPriceObservable(coinUid, currency.code)
+        marketKit.coinPriceObservable(fullCoin.coin.uid, currency.code)
                 .subscribeIO {
                     coinPriceAsync.onNext(it)
                 }
                 .let {
                     disposables.add(it)
                 }
-        marketKit.coinPriceObservable(coinUid, currency.code)
+        marketKit.coinPriceObservable(fullCoin.coin.uid, currency.code)
                 .subscribeIO({ marketInfo ->
                     lastPoint = LastPoint(marketInfo.value, marketInfo.timestamp, marketInfo.diff)
                 }, {
@@ -184,18 +166,6 @@ class CoinOverviewService(
                 }).let {
                     chartInfoDisposable = it
                 }
-    }
-
-    fun isCoinFavorite(): Boolean {
-        return marketFavoritesManager.isCoinInFavorites(coinType)
-    }
-
-    fun favorite() {
-        marketFavoritesManager.add(coinType)
-    }
-
-    fun unfavorite() {
-        marketFavoritesManager.remove(coinType)
     }
 
     override fun clear() {

@@ -283,8 +283,8 @@
         tools:layout="@layout/fragment_metrics_page"/>
     <fragment
         android:id="@+id/coinFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.coin.overview.CoinOverviewFragment"
-        tools:layout="@layout/fragment_coin_overview">
+        android:name="io.horizontalsystems.bankwallet.modules.coin.CoinFragment"
+        tools:layout="@layout/fragment_coin">
         <action
             android:id="@+id/coinFragment_to_coinMarketsFragment"
             app:destination="@id/coinMarketsFragment" />

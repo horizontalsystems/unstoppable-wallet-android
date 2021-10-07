@@ -529,6 +529,7 @@ interface ICoinManager {
     fun getPlatformCoins(coinTypes: List<CoinType>): List<PlatformCoin>
     fun featuredFullCoins(enabledPlatformCoins: List<PlatformCoin>): List<FullCoin>
     fun fullCoins(filter: String = "", limit: Int = 20): List<FullCoin>
+    fun getFullCoin(coinUid: String) : FullCoin?
 }
 
 interface IAddTokenBlockchainService {

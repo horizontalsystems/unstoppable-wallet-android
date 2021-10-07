@@ -10,7 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.ConcatAdapter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.modules.coin.overview.CoinOverviewFragment
+import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.coin.adapters.CoinChartAdapter
 import io.horizontalsystems.bankwallet.modules.coin.adapters.CoinChartAdapter.ChartViewType
 import io.horizontalsystems.bankwallet.modules.market.MarketItemsAdapter
@@ -107,7 +107,7 @@ class MetricsPageFragment : BaseFragment(), CoinChartAdapter.Listener,
     //ViewHolderMarketItem.Listener
 
     override fun onItemClick(marketViewItem: MarketViewItem) {
-        val arguments = CoinOverviewFragment.prepareParams(
+        val arguments = CoinFragment.prepareParams(
             marketViewItem.coinUid,
             marketViewItem.coinCode,
             marketViewItem.coinName

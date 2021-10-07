@@ -27,7 +27,7 @@ import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.modules.coin.overview.CoinOverviewFragment
+import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.market.MarketModule
 import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
 import io.horizontalsystems.bankwallet.modules.market.MarketViewModel
@@ -80,7 +80,7 @@ class MarketOverviewFragment : BaseFragment() {
     }
 
     private fun onItemClick(marketViewItem: MarketViewItem) {
-        val arguments = CoinOverviewFragment.prepareParams(marketViewItem.coinUid, marketViewItem.coinCode, marketViewItem.coinName)
+        val arguments = CoinFragment.prepareParams(marketViewItem.coinUid, marketViewItem.coinCode, marketViewItem.coinName)
 
         findNavController().navigate(R.id.coinFragment, arguments, navOptions())
     }

@@ -4,18 +4,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.Clearable
-import io.horizontalsystems.bankwallet.core.managers.*
+import io.horizontalsystems.bankwallet.core.managers.toMarketKitCoinType
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.coin.*
 import io.horizontalsystems.bankwallet.modules.coin.adapters.CoinChartAdapter
 import io.horizontalsystems.bankwallet.modules.coin.adapters.CoinSubtitleAdapter
-import io.horizontalsystems.bankwallet.modules.market.SortingField
-import io.horizontalsystems.bankwallet.modules.market.sortedByDescendingNullLast
-import io.horizontalsystems.bankwallet.modules.market.sortedByNullLast
 import io.horizontalsystems.chartview.ChartView
-import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.marketkit.models.CoinPrice
 import io.horizontalsystems.marketkit.models.CoinType
 import io.horizontalsystems.views.ListPosition
@@ -30,7 +26,6 @@ import java.math.BigDecimal
 class CoinOverviewViewModel(
     private val service: CoinOverviewService,
     val coinCode: String,
-    private val coinTitle: String,
     private val factory: CoinViewFactory,
     private val clearables: List<Clearable>
 ) : ViewModel() {
@@ -51,9 +46,6 @@ class CoinOverviewViewModel(
     val linksLiveData = MutableLiveData<List<CoinLink>>()
     val showFooterLiveData = MutableLiveData(false)
 
-    val alertNotificationUpdated = MutableLiveData<Unit>()
-    val showNotificationMenu = SingleLiveEvent<Pair<CoinType, String>>()
-    val isFavorite = MutableLiveData<Boolean>()
     val coinMajorHolders = MutableLiveData<List<MajorHolderItem>>()
     val coinMarketTickers = MutableLiveData<List<MarketTicker>>()
     val coinInvestors = MutableLiveData<List<InvestorItem>>()
@@ -72,19 +64,9 @@ class CoinOverviewViewModel(
             syncSubtitle()
         }
 
-    private var ratingValue: String? = null
-        set(value) {
-            field = value
-            syncSubtitle()
-        }
-
     private var chartInfoData: ChartInfoData? = null
     private var showChartSpinner: Boolean = false
     private var showChartError: Boolean = false
-
-
-    var notificationIconVisible = service.notificationsAreEnabled
-    var notificationIconActive = false
 
     val coinType: CoinType
         get() = service.coinType
@@ -106,10 +88,6 @@ class CoinOverviewViewModel(
         service.getTopTokenHolders()
 
         fetchChartInfo()
-
-        updateAlertNotificationIconState()
-
-        updateFavoriteNotificationItemState()
 
         service.coinPriceAsync
                 .subscribeIO {
@@ -151,14 +129,6 @@ class CoinOverviewViewModel(
                     disposable.add(it)
                 }
 
-        service.alertNotificationUpdatedObservable
-                .subscribeIO {
-                    updateAlertNotificationIconState()
-                }
-                .let {
-                    disposable.add(it)
-                }
-
         service.chartSpinnerObservable
                 .subscribeIO {
                     showChartSpinner = true
@@ -175,14 +145,7 @@ class CoinOverviewViewModel(
     }
 
     private fun syncSubtitle() {
-        val subtitle = CoinSubtitleAdapter.ViewItemWrapper(
-                coinTitle,
-                coinType,
-                ratingValue,
-                latestRateText,
-                rateDiffValue,
-                null
-        )
+        val subtitle = CoinSubtitleAdapter.ViewItemWrapper(latestRateText, rateDiffValue)
         subtitleLiveData.postValue(subtitle)
     }
 
@@ -195,26 +158,6 @@ class CoinOverviewViewModel(
         service.chartType = convertedChartType
 
         fetchChartInfo()
-    }
-
-    fun onNotificationClick() {
-        showNotificationMenu.postValue(Pair(service.coinType, coinTitle))
-    }
-
-    fun onFavoriteClick() {
-        service.favorite()
-        updateFavoriteNotificationItemState()
-    }
-
-    fun onUnfavoriteClick() {
-        service.unfavorite()
-        updateFavoriteNotificationItemState()
-    }
-
-    private fun List<MarketTicker>.sort(sortingField: SortingField) = when (sortingField) {
-        SortingField.HighestVolume -> sortedByDescendingNullLast { it.volume }
-        SortingField.LowestVolume -> sortedByNullLast { it.volume }
-        else -> throw IllegalArgumentException()
     }
 
     private fun onChartError(error: Throwable?) {
@@ -256,18 +199,8 @@ class CoinOverviewViewModel(
         }
     }
 
-    private fun updateAlertNotificationIconState() {
-        notificationIconActive = service.hasPriceAlert
-        alertNotificationUpdated.postValue(Unit)
-    }
-
-    private fun updateFavoriteNotificationItemState() {
-        isFavorite.postValue(service.isCoinFavorite())
-    }
-
     private fun updateCoinDetails() {
         val coinDetails = service.coinMarketDetails ?: return
-        coinDetails.meta.rating?.let { ratingValue = it }
 
         roiLiveData.postValue(factory.getRoi(coinDetails.rateDiffs, rateDiffCoinCodes, rateDiffPeriods))
 

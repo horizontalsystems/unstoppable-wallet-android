@@ -37,7 +37,7 @@ import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.bankwallet.core.imageUrl
-import io.horizontalsystems.bankwallet.modules.coin.overview.CoinOverviewFragment
+import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.ui.compose.CoinImage
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
@@ -76,7 +76,7 @@ class MarketSearchFragment : BaseFragment() {
                         )
                     },
                     onCoinClick = { coin ->
-                        val arguments = CoinOverviewFragment.prepareParams(coin.uid, coin.code, coin.name)
+                        val arguments = CoinFragment.prepareParams(coin.uid, coin.code, coin.name)
                         findNavController().navigate(R.id.coinFragment, arguments, navOptions())
                     },
                     onSearchQueryChange = { query -> viewModel.searchByQuery(query) }

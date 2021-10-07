@@ -10,18 +10,18 @@ import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.ConcatAdapter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.modules.market.*
+import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
+import io.horizontalsystems.bankwallet.modules.market.MarketItemsAdapter
+import io.horizontalsystems.bankwallet.modules.market.MarketLoadingAdapter
+import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
+import io.horizontalsystems.bankwallet.modules.market.ViewHolderMarketItem
 import io.horizontalsystems.bankwallet.modules.market.list.MarketListViewModel
-import io.horizontalsystems.bankwallet.modules.coin.overview.CoinOverviewFragment
 import io.horizontalsystems.bankwallet.ui.extensions.MarketListHeaderView
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorDialog
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorItem
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
-import kotlinx.android.synthetic.main.fragment_market_advanced_search_results.coinRatesRecyclerView
-import kotlinx.android.synthetic.main.fragment_market_advanced_search_results.marketListHeader
-import kotlinx.android.synthetic.main.fragment_market_advanced_search_results.pullToRefresh
-import kotlinx.android.synthetic.main.fragment_market_advanced_search_results.toolbar
+import kotlinx.android.synthetic.main.fragment_market_advanced_search_results.*
 
 class MarketAdvancedSearchResultsFragment : BaseFragment(), MarketListHeaderView.Listener,
     ViewHolderMarketItem.Listener {
@@ -92,7 +92,7 @@ class MarketAdvancedSearchResultsFragment : BaseFragment(), MarketListHeaderView
     }
 
     override fun onItemClick(marketViewItem: MarketViewItem) {
-        val arguments = CoinOverviewFragment.prepareParams(marketViewItem.coinUid, marketViewItem.coinCode, marketViewItem.coinName)
+        val arguments = CoinFragment.prepareParams(marketViewItem.coinUid, marketViewItem.coinCode, marketViewItem.coinName)
 
         findNavController().navigate(R.id.coinFragment, arguments, navOptions())
     }

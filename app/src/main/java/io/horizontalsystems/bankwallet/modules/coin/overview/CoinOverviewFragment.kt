@@ -2,53 +2,35 @@ package io.horizontalsystems.bankwallet.modules.coin.overview
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.addCallback
-import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
-import androidx.lifecycle.Observer
 import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.ConcatAdapter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.coin.CoinDataClickType
 import io.horizontalsystems.bankwallet.modules.coin.CoinLink
+import io.horizontalsystems.bankwallet.modules.coin.CoinViewModel
 import io.horizontalsystems.bankwallet.modules.coin.PoweredByAdapter
 import io.horizontalsystems.bankwallet.modules.coin.adapters.*
 import io.horizontalsystems.bankwallet.modules.coin.adapters.CoinChartAdapter.ChartViewType
 import io.horizontalsystems.bankwallet.modules.markdown.MarkdownFragment
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartFragment
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartType
-import io.horizontalsystems.bankwallet.modules.settings.notifications.bottommenu.BottomNotificationMenu
-import io.horizontalsystems.bankwallet.modules.settings.notifications.bottommenu.NotificationMenuMode
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.core.findNavController
-import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.xrateskit.entities.LinkType
 import kotlinx.android.synthetic.main.fragment_coin_overview.*
 
 class CoinOverviewFragment : BaseFragment(), CoinChartAdapter.Listener, CoinDataAdapter.Listener, CoinLinksAdapter.Listener {
 
-    private val coinTitle by lazy {
-        requireArguments().getString(COIN_TITLE_KEY) ?: ""
-    }
-    private val coinCode by lazy {
-        requireArguments().getString(COIN_CODE_KEY) ?: ""
-    }
-    private val vmFactory by lazy {
-        CoinOverviewModule.Factory(
-            coinTitle,
-            requireArguments().getString(COIN_UID_KEY) ?: "",
-            coinCode
-        )
-    }
+    private val vmFactory by lazy { CoinOverviewModule.Factory(coinViewModel.fullCoin) }
 
+    private val coinViewModel by navGraphViewModels<CoinViewModel>(R.id.coinFragment)
     private val viewModel by navGraphViewModels<CoinOverviewViewModel>(R.id.coinFragment) { vmFactory }
-
-    private var notificationMenuItem: MenuItem? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.fragment_coin_overview, container, false)
@@ -56,32 +38,6 @@ class CoinOverviewFragment : BaseFragment(), CoinChartAdapter.Listener, CoinData
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        toolbar.title = coinCode
-        toolbar.setNavigationOnClickListener {
-            findNavController().popBackStack()
-        }
-        toolbar.setOnMenuItemClickListener { item ->
-            when (item.itemId) {
-                R.id.menuFavorite -> {
-                    viewModel.onFavoriteClick()
-                    HudHelper.showSuccessMessage(requireView(), getString(R.string.Hud_Added_To_Watchlist))
-                    true
-                }
-                R.id.menuUnfavorite -> {
-                    viewModel.onUnfavoriteClick()
-                    HudHelper.showSuccessMessage(requireView(), getString(R.string.Hud_Removed_from_Watchlist))
-                    true
-                }
-                R.id.menuNotification -> {
-                    viewModel.onNotificationClick()
-                    true
-                }
-                else -> false
-            }
-        }
-        notificationMenuItem = toolbar.menu.findItem(R.id.menuNotification)
-        updateNotificationMenuItem()
 
         val subtitleAdapter = CoinSubtitleAdapter(viewModel.subtitleLiveData, viewLifecycleOwner)
         val chartAdapter = CoinChartAdapter(
@@ -126,22 +82,10 @@ class CoinOverviewFragment : BaseFragment(), CoinChartAdapter.Listener, CoinData
 
         controlledRecyclerView.adapter = concatAdapter
 
-        observeData()
-
         activity?.onBackPressedDispatcher?.addCallback(this) {
             findNavController().popBackStack()
         }
 
-    }
-
-    private fun updateNotificationMenuItem() {
-        notificationMenuItem?.apply {
-            isVisible = viewModel.notificationIconVisible
-            icon = context?.let {
-                val iconRes = if (viewModel.notificationIconActive) R.drawable.ic_notification_24 else R.drawable.ic_notification_disabled
-                ContextCompat.getDrawable(it, iconRes)
-            }
-        }
     }
 
     //  CoinChartAdapter Listener
@@ -196,35 +140,4 @@ class CoinOverviewFragment : BaseFragment(), CoinChartAdapter.Listener, CoinData
         }
     }
 
-    //  Private
-
-    private fun observeData() {
-        viewModel.alertNotificationUpdated.observe(viewLifecycleOwner, Observer {
-            updateNotificationMenuItem()
-        })
-
-        viewModel.showNotificationMenu.observe(viewLifecycleOwner, Observer { (coinType, coinName) ->
-            BottomNotificationMenu.show(childFragmentManager, NotificationMenuMode.All, coinName, coinType)
-        })
-
-        viewModel.isFavorite.observe(viewLifecycleOwner, Observer { isFavorite ->
-            toolbar.menu.findItem(R.id.menuFavorite).isVisible = !isFavorite
-            toolbar.menu.findItem(R.id.menuUnfavorite).isVisible = isFavorite
-        })
-
-    }
-
-    companion object {
-        private const val COIN_UID_KEY = "coin_uid_key"
-        private const val COIN_CODE_KEY = "coin_code_key"
-        private const val COIN_TITLE_KEY = "coin_title_key"
-
-        fun prepareParams(coinUid: String, coinCode: String, coinTitle: String): Bundle {
-            return bundleOf(
-                    COIN_UID_KEY to coinUid,
-                    COIN_CODE_KEY to coinCode,
-                    COIN_TITLE_KEY to coinTitle
-            )
-        }
-    }
 }
