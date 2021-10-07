@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -110,6 +111,37 @@ fun MarketCoinSecondRow(coinCode: String, rateDiff: BigDecimal?, rank: String?) 
             color = RateColor(rateDiff),
             style = ComposeAppTheme.typography.subhead2,
             maxLines = 1,
+        )
+    }
+}
+
+@Composable
+fun ListLoadingView() {
+    Box(modifier = Modifier.height(240.dp).fillMaxWidth()) {
+        CircularProgressIndicator(
+            modifier = Modifier.align(Alignment.Center).size(24.dp),
+            color = ComposeAppTheme.colors.grey,
+            strokeWidth = 2.dp,
+        )
+    }
+}
+
+@Composable
+fun ListErrorView(
+    errorText: String,
+    onClick: (() -> Unit)? = null
+) {
+    Box(modifier = Modifier.height(240.dp).fillMaxWidth()) {
+        Text(
+            modifier = Modifier
+                .align(Alignment.Center)
+                .padding(horizontal = 16.dp)
+                .clickable {
+                    onClick?.invoke()
+                },
+            text = errorText,
+            color = ComposeAppTheme.colors.grey,
+            style = ComposeAppTheme.typography.subhead2,
         )
     }
 }

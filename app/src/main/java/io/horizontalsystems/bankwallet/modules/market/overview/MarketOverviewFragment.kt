@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -18,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.fragment.app.viewModels
@@ -39,6 +39,8 @@ import io.horizontalsystems.bankwallet.modules.market.metricspage.MetricsPageFra
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryToggle
+import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
+import io.horizontalsystems.bankwallet.ui.compose.components.ListLoadingView
 import io.horizontalsystems.bankwallet.ui.compose.components.MarketListCoin
 import io.horizontalsystems.bankwallet.ui.extensions.MarketMetricSmallView
 import io.horizontalsystems.bankwallet.ui.extensions.MetricData
@@ -132,10 +134,12 @@ class MarketOverviewFragment : BaseFragment() {
         state?.let {
             when (it) {
                 MarketMetricsModule.State.Loading -> {
-                    LoadingView()
+                    ListLoadingView()
                 }
                 MarketMetricsModule.State.SyncError -> {
-                    ErrorView()
+                    ListErrorView(
+                        stringResource(R.string.BalanceSyncError_Title)
+                    ) { marketOverviewViewModel.onErrorClick() }
                 }
                 is MarketMetricsModule.State.Data -> {
                     Box(modifier = Modifier.height(240.dp).fillMaxWidth()) {
@@ -188,41 +192,15 @@ class MarketOverviewFragment : BaseFragment() {
         topBoardsState?.let { state ->
             when (state) {
                 MarketOverviewModule.State.Loading -> {
-                    LoadingView()
+                    ListLoadingView()
                 }
                 is MarketOverviewModule.State.Error -> {
-                    ErrorView()
+                    ListErrorView(
+                        stringResource(R.string.BalanceSyncError_Title)
+                    ) { marketOverviewViewModel.onErrorClick() }
                 }
                 is MarketOverviewModule.State.Data -> BoardsView(state.boards)
             }
-        }
-    }
-
-    @Composable
-    private fun LoadingView() {
-        Box(modifier = Modifier.height(240.dp).fillMaxWidth()) {
-            CircularProgressIndicator(
-                modifier = Modifier.align(Alignment.Center).size(24.dp),
-                color = ComposeAppTheme.colors.grey,
-                strokeWidth = 2.dp,
-            )
-        }
-    }
-
-    @Composable
-    private fun ErrorView() {
-        Box(modifier = Modifier.height(240.dp).fillMaxWidth()) {
-            Text(
-                modifier = Modifier
-                    .align(Alignment.Center)
-                    .padding(horizontal = 16.dp)
-                    .clickable {
-                        marketOverviewViewModel.onErrorClick()
-                    },
-                text = getString(R.string.BalanceSyncError_Title),
-                color = ComposeAppTheme.colors.grey,
-                style = ComposeAppTheme.typography.subhead2,
-            )
         }
     }
 
