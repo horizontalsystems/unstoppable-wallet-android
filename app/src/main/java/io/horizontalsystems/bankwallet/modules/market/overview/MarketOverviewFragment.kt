@@ -26,7 +26,7 @@ import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.market.MarketModule
 import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
@@ -57,7 +57,7 @@ class MarketOverviewFragment : BaseFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         return ComposeView(requireContext()).apply {
             setContent {
                 ComposeAppTheme {
@@ -265,8 +265,8 @@ class MarketOverviewFragment : BaseFragment() {
                 marketViewItem.coinName,
                 marketViewItem.coinCode,
                 marketViewItem.rate,
-                "coinIconUrl", //todo implement coin icon
-                R.drawable.coin_placeholder,
+                marketViewItem.iconUrl,
+                marketViewItem.iconPlaceHolder,
                 marketViewItem.diff,
                 marketViewItem.score?.getText(),
             )
