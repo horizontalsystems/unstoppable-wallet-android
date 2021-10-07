@@ -22,7 +22,7 @@ class CoinOverviewService(
     private val xRateManager: IRateManager,
     private val marketKit: MarketKit,
     private val chartTypeStorage: IChartTypeStorage,
-    guidesBaseUrl: String,
+    private val guidesBaseUrl: String,
 ) : Clearable {
 
     sealed class CoinDetailsState {
@@ -94,35 +94,25 @@ class CoinOverviewService(
             chartTypeStorage.chartType = value
         }
 
-    private val guidesBaseUrl = URL(guidesBaseUrl)
+    private val guideUrls = mapOf(
+        "bitcoin" to "guides/token_guides/en/bitcoin.md",
+        "ethereum" to "guides/token_guides/en/ethereum.md",
+        "bitcoin-cash" to "guides/token_guides/en/bitcoin-cash.md",
+        "zcash" to "guides/token_guides/en/zcash.md",
+        "uniswap" to "guides/token_guides/en/uniswap.md",
+        "curve-dao-token" to "guides/token_guides/en/curve-finance.md",
+        "balancer" to "guides/token_guides/en/balancer-dex.md",
+        "synthetix-network-token" to "guides/token_guides/en/synthetix.md",
+        "tether" to "guides/token_guides/en/tether.md",
+        "maker" to "guides/token_guides/en/makerdao.md",
+        "dai" to "guides/token_guides/en/makerdao.md",
+        "aave" to "guides/token_guides/en/aave.md",
+        "compound" to "guides/token_guides/en/compound.md",
+    )
 
     val guideUrl: String?
-        get() {
-            val guideRelativeUrl = when (val coinType = coinType) {
-                CoinType.Bitcoin -> "guides/token_guides/en/bitcoin.md"
-                CoinType.Ethereum -> "guides/token_guides/en/ethereum.md"
-                CoinType.BitcoinCash -> "guides/token_guides/en/bitcoin-cash.md"
-                CoinType.Zcash -> "guides/token_guides/en/zcash.md"
-                is CoinType.Erc20 -> {
-                    when (coinType.address) {
-                        "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984" -> "guides/token_guides/en/uniswap.md"
-                        "0xd533a949740bb3306d119cc777fa900ba034cd52" -> "guides/token_guides/en/curve-finance.md"
-                        "0xba100000625a3754423978a60c9317c58a424e3d" -> "guides/token_guides/en/balancer-dex.md"
-                        "0xc011a73ee8576fb46f5e1c5751ca3b9fe0af2a6f" -> "guides/token_guides/en/synthetix.md"
-                        "0xdac17f958d2ee523a2206206994597c13d831ec7" -> "guides/token_guides/en/tether.md"
-                        "0x9f8f72aa9304c8b593d555f12ef6589cc3a579a2" -> "guides/token_guides/en/makerdao.md"
-                        "0x6b175474e89094c44da98b954eedeac495271d0f" -> "guides/token_guides/en/makerdao.md"
-                        "0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9" -> "guides/token_guides/en/aave.md"
-                        "0xc00e94cb662c3520282e6f5717214004a7f26888" -> "guides/token_guides/en/compound.md"
-                        else -> null
-                    }
-                }
-                else -> null
-            }
-            return guideRelativeUrl?.let {
-                URL(guidesBaseUrl, it).toString()
-            }
-        }
+        get() = guideUrls[fullCoin.coin.uid]?.let { URL(URL(guidesBaseUrl), it).toString() }
+
 
     fun getCoinDetails(rateDiffCoinCodes: List<String>, rateDiffPeriods: List<TimePeriod>) {
         coinDetailsStateObservable.onNext(CoinDetailsState.Loading)
