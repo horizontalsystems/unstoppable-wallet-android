@@ -4,26 +4,27 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.coin.CoinViewFactory
+import io.horizontalsystems.marketkit.models.FullCoin
 
 object CoinOverviewModule {
 
-    class Factory(private val coinTitle: String, private val coinUid: String, private val coinCode: String) : ViewModelProvider.Factory {
+    class Factory(private val fullCoin: FullCoin) : ViewModelProvider.Factory {
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             val currency = App.currencyManager.baseCurrency
             val service = CoinOverviewService(
-                    coinUid,
-                    currency,
-                    App.xRateManager,
-                    App.marketKit,
-                    App.chartTypeStorage,
-                    App.priceAlertManager,
-                    App.notificationManager,
-                    App.marketFavoritesManager,
-                    App.appConfigProvider.guidesUrl
+                fullCoin,
+                currency,
+                App.xRateManager,
+                App.marketKit,
+                App.chartTypeStorage,
+                App.appConfigProvider.guidesUrl
             )
-            return CoinOverviewViewModel(service, coinCode, coinTitle, CoinViewFactory(currency, App.numberFormatter), listOf(service)) as T
+            return CoinOverviewViewModel(service,
+                fullCoin.coin.code,
+                CoinViewFactory(currency, App.numberFormatter),
+                listOf(service)) as T
         }
 
     }

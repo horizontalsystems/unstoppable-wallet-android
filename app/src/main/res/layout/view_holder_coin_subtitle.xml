@@ -3,45 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="85dp">
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/startGuideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_begin="16dp" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/endGuideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_end="16dp" />
-
-    <ImageView
-        android:id="@+id/coinIcon"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_marginTop="9dp"
-        app:layout_constraintStart_toStartOf="@id/startGuideline"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:src="@drawable/bitcoin" />
-
-    <TextView
-        android:id="@+id/coinNameTextView"
-        style="@style/Body"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:ellipsize="end"
-        android:singleLine="true"
-        android:textColor="@color/grey"
-        app:layout_constraintBottom_toBottomOf="@+id/coinIcon"
-        app:layout_constraintEnd_toEndOf="@+id/endGuideline"
-        app:layout_constraintStart_toEndOf="@+id/coinIcon"
-        app:layout_constraintTop_toTopOf="@+id/coinIcon"
-        tools:text="Coin Name" />
+    android:layout_height="40dp">
 
     <TextView
         android:id="@+id/coinRateLast"
@@ -49,11 +11,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="20dp"
         android:textColor="@color/leah"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/coinIcon"
-        tools:text="3,979.87" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="$3,979.87" />
 
     <io.horizontalsystems.bankwallet.ui.extensions.RateDiffView
         android:id="@+id/coinRateDiff"
@@ -61,20 +23,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/coinRateLast"
-        app:layout_constraintStart_toEndOf="@+id/coinRateLast"
-        app:layout_constraintTop_toTopOf="@+id/coinRateLast"
-        tools:text="+18%" />
-
-    <androidx.compose.ui.platform.ComposeView
-        android:id="@+id/coinRatingCompose"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/coinRateLast"
-        app:layout_constraintEnd_toEndOf="@+id/endGuideline"
-        app:layout_constraintTop_toTopOf="@+id/coinRateLast"
-        tools:layout_height="28dp"
-        tools:layout_width="28dp"
-        />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/coinRateLast"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="+18%"
+        tools:textColor="@color/remus" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -23,6 +23,14 @@ class MarketFavoritesManager(appDatabase: AppDatabase) {
         dataUpdatedSubject.onNext(Unit)
     }
 
+    fun add(coinUid: String) {
+        // todo
+    }
+
+    fun remove(coinUid: String) {
+        // todo
+    }
+
     fun remove(coinType: CoinType) {
         dao.delete(coinType)
         dataUpdatedSubject.onNext(Unit)
@@ -34,6 +42,11 @@ class MarketFavoritesManager(appDatabase: AppDatabase) {
 
     fun isCoinInFavorites(coinType: CoinType): Boolean {
         return dao.getCount(coinType) > 0
+    }
+
+    fun isCoinInFavorites(coinUid: String): Boolean {
+        // todo
+        return true
     }
 
 

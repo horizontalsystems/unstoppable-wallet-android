@@ -868,6 +868,11 @@
 
     <!--Coin Page-->
 
+    <string name="Coin_Tab_Overview">Overview</string>
+    <string name="Coin_Tab_Market">Market</string>
+    <string name="Coin_Tab_Details">Details</string>
+    <string name="Coin_Tab_Tweets">Tweets</string>
+
     <string name="CoinPage_TimeDuration_Today">TDY</string>
     <string name="CoinPage_TimeDuration_Day">24H</string>
     <string name="CoinPage_TimeDuration_Week">7D</string>

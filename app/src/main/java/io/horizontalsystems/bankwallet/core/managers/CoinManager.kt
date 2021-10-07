@@ -57,6 +57,10 @@ class CoinManager(
         return appFullCoins + kitFullCoins
     }
 
+    override fun getFullCoin(coinUid: String): FullCoin? {
+        return marketKit.fullCoins(listOf(coinUid)).firstOrNull()
+    }
+
     override fun getPlatformCoin(coinType: CoinType): PlatformCoin? {
         return marketKit.platformCoin(coinType) ?: customPlatformCoin(coinType)
     }
