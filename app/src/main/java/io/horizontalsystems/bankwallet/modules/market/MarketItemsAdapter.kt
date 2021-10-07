@@ -95,7 +95,7 @@ class ViewHolderMarketItem(override val containerView: View, private val listene
     fun bind(item: MarketViewItem, prev: MarketViewItem?) {
         this.item = item
 
-        if (item.coinCode != prev?.coinCode) {
+        if (item.coinUid != prev?.coinUid) {
             icon.setCoinImage(item.coinUid, item.iconPlaceHolder)
         }
 

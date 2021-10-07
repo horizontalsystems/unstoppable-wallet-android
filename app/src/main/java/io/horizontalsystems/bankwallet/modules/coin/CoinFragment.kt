@@ -118,16 +118,8 @@ class CoinFragment : BaseFragment(R.layout.fragment_coin) {
 
     companion object {
         private const val COIN_UID_KEY = "coin_uid_key"
-        private const val COIN_CODE_KEY = "coin_code_key"
-        private const val COIN_TITLE_KEY = "coin_title_key"
 
-        fun prepareParams(coinUid: String, coinCode: String, coinTitle: String): Bundle {
-            return bundleOf(
-                COIN_UID_KEY to coinUid,
-                COIN_CODE_KEY to coinCode,
-                COIN_TITLE_KEY to coinTitle
-            )
-        }
+        fun prepareParams(coinUid: String) = bundleOf(COIN_UID_KEY to coinUid)
     }
 }
 

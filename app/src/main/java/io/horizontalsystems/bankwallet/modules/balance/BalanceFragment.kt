@@ -485,7 +485,7 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
 
     private fun onChartClicked(viewItem: BalanceViewItem) {
         val platformCoin = viewItem.wallet.platformCoin
-        val arguments = CoinFragment.prepareParams(platformCoin.coin.uid, platformCoin.code, platformCoin.name)
+        val arguments = CoinFragment.prepareParams(platformCoin.coin.uid)
 
         findNavController().navigate(R.id.mainFragment_to_coinFragment, arguments, navOptions())
     }

@@ -107,11 +107,7 @@ class MetricsPageFragment : BaseFragment(), CoinChartAdapter.Listener,
     //ViewHolderMarketItem.Listener
 
     override fun onItemClick(marketViewItem: MarketViewItem) {
-        val arguments = CoinFragment.prepareParams(
-            marketViewItem.coinUid,
-            marketViewItem.coinCode,
-            marketViewItem.coinName
-        )
+        val arguments = CoinFragment.prepareParams(marketViewItem.coinUid)
 
         findNavController().navigate(R.id.coinFragment, arguments, navOptions())
     }
