@@ -76,7 +76,7 @@ class MarketSearchFragment : BaseFragment() {
                         )
                     },
                     onCoinClick = { coin ->
-                        val arguments = CoinFragment.prepareParams(coin.uid, coin.code, coin.name)
+                        val arguments = CoinFragment.prepareParams(coin.uid)
                         findNavController().navigate(R.id.coinFragment, arguments, navOptions())
                     },
                     onSearchQueryChange = { query -> viewModel.searchByQuery(query) }
