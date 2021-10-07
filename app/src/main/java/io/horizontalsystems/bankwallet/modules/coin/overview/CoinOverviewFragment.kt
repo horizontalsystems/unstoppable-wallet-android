@@ -65,8 +65,8 @@ class CoinOverviewFragment : BaseFragment(), CoinChartAdapter.Listener, CoinData
         val concatAdapter = ConcatAdapter(
                 subtitleAdapter,
                 chartAdapter,
-                coinRoiAdapter,
                 marketDataAdapter,
+                coinRoiAdapter,
                 tradingVolumeAdapter,
                 tvlDataAdapter,
                 investorDataAdapter,
