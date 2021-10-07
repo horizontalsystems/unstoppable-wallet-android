@@ -3,7 +3,11 @@ package io.horizontalsystems.bankwallet.modules.coin
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
+import androidx.compose.foundation.layout.Column
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.res.stringResource
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -14,7 +18,9 @@ import androidx.navigation.navGraphViewModels
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.bankwallet.modules.coin.overview.CoinOverviewFragment
+import io.horizontalsystems.bankwallet.modules.coin.ui.CoinScreenTitle
 import io.horizontalsystems.bankwallet.modules.settings.notifications.bottommenu.BottomNotificationMenu
 import io.horizontalsystems.bankwallet.modules.settings.notifications.bottommenu.NotificationMenuMode
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -42,8 +48,24 @@ class CoinFragment : BaseFragment(R.layout.fragment_coin) {
         updateNotificationMenuItem()
 
         viewModel.selectedTab.observe(viewLifecycleOwner) { selectedTab ->
-            setTabs(selectedTab)
             viewPager.setCurrentItem(viewModel.tabs.indexOf(selectedTab), false)
+        }
+
+        tabsCompose.setContent {
+            ComposeAppTheme {
+                Column {
+                    CoinScreenTitle(viewModel.fullCoin.coin.name, viewModel.fullCoin.coin.marketCapRank, viewModel.fullCoin.coin.iconUrl)
+
+                    val selectedTab by viewModel.selectedTab.observeAsState()
+                    val tabItems = viewModel.tabs.map {
+                        TabItem(stringResource(id = it.titleResId), it == selectedTab, it)
+                    }
+
+                    Tabs(tabItems, onClick = {
+                        viewModel.onSelect(it)
+                    })
+                }
+            }
         }
 
         viewModel.titleLiveData.observe(viewLifecycleOwner) {
@@ -91,19 +113,6 @@ class CoinFragment : BaseFragment(R.layout.fragment_coin) {
         tabsCompose.setViewCompositionStrategy(
             ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
         )
-    }
-
-    private fun setTabs(selectedTab: CoinModule.Tab) {
-        val tabItems = viewModel.tabs.map {
-            TabItem(getString(it.titleResId), it == selectedTab, it)
-        }
-        tabsCompose.setContent {
-            ComposeAppTheme {
-                Tabs(tabItems) { item ->
-                    viewModel.onSelect(item)
-                }
-            }
-        }
     }
 
     private fun updateNotificationMenuItem() {

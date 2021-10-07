@@ -93,6 +93,3 @@ val CoinType.isSupported: Boolean
         is CoinType.Sol20,
         is CoinType.Unsupported -> false
     }
-
-val Coin.imageUrl: String
-    get() = "https://markets.nyc3.digitaloceanspaces.com/coin-icons/ios/${uid}@2x.png"
