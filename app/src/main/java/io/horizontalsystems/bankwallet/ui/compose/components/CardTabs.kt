@@ -105,6 +105,6 @@ fun PreviewCardTabs() {
         edgePadding = 0.dp,
         darkTheme = true,
     ) { selected ->
-        selectedIndex = tabItems.indexOfFirst { it.title == selected }
+        selectedIndex = tabItems.indexOfFirst { it.item == selected }
     }
 }

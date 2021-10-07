@@ -257,7 +257,6 @@ class MarketOverviewFragment : BaseFragment() {
                 .height(61.dp)
                 .clip(getRoundedCornerShape(firstItem))
                 .background(ComposeAppTheme.colors.lawrence)
-                .clickable { onItemClick(marketViewItem) }
         ) {
             MarketListCoin(
                 marketViewItem.coinName,
@@ -266,8 +265,10 @@ class MarketOverviewFragment : BaseFragment() {
                 marketViewItem.iconUrl,
                 marketViewItem.iconPlaceHolder,
                 marketViewItem.diff,
-                marketViewItem.score?.getText(),
-            )
+                marketViewItem.score?.getText()
+            ) {
+                onItemClick(marketViewItem)
+            }
         }
     }
 

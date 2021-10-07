@@ -20,7 +20,7 @@ class CoinViewModel(
 
     val fullCoin by service::fullCoin
 
-    val titleLiveData = MutableLiveData(fullCoin.coin.name)
+    val titleLiveData = MutableLiveData(fullCoin.coin.code)
     val isFavoriteLiveData = LiveDataReactiveStreams.fromPublisher(service.isFavorite.toFlowable(BackpressureStrategy.LATEST))
 
     var notificationIconVisible = service.notificationsAreEnabled
