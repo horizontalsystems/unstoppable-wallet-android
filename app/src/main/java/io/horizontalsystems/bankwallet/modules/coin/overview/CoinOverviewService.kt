@@ -5,11 +5,13 @@ import io.horizontalsystems.bankwallet.core.IChartTypeStorage
 import io.horizontalsystems.bankwallet.core.IRateManager
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.modules.coin.LastPoint
+import io.horizontalsystems.core.ILanguageManager
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.marketkit.MarketKit
 import io.horizontalsystems.marketkit.models.CoinPrice
 import io.horizontalsystems.marketkit.models.CoinType
 import io.horizontalsystems.marketkit.models.FullCoin
+import io.horizontalsystems.marketkit.models.MarketInfoOverview
 import io.horizontalsystems.xrateskit.entities.*
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -17,18 +19,19 @@ import io.reactivex.subjects.BehaviorSubject
 import java.net.URL
 
 class CoinOverviewService(
-    private val fullCoin: FullCoin,
+    val fullCoin: FullCoin,
     val currency: Currency,
     private val xRateManager: IRateManager,
     private val marketKit: MarketKit,
     private val chartTypeStorage: IChartTypeStorage,
     private val guidesBaseUrl: String,
+    private val languageManager: ILanguageManager,
 ) : Clearable {
 
-    sealed class CoinDetailsState {
-        object Loading : CoinDetailsState()
-        object Loaded : CoinDetailsState()
-        data class Error(val error: Throwable) : CoinDetailsState()
+    sealed class MarketInfoOverviewState {
+        object Loading : MarketInfoOverviewState()
+        object Loaded : MarketInfoOverviewState()
+        data class Error(val error: Throwable) : MarketInfoOverviewState()
     }
 
     val coinUid get() = fullCoin.coin.uid
@@ -38,13 +41,10 @@ class CoinOverviewService(
     val chartInfoUpdatedObservable: BehaviorSubject<Unit> = BehaviorSubject.create()
     val chartSpinnerObservable: BehaviorSubject<Unit> = BehaviorSubject.create()
     val chartInfoErrorObservable: BehaviorSubject<Throwable> = BehaviorSubject.create()
-    val coinDetailsStateObservable: BehaviorSubject<CoinDetailsState> = BehaviorSubject.createDefault(
-        CoinDetailsState.Loading)
-    val topTokenHoldersStateObservable: BehaviorSubject<CoinDetailsState> = BehaviorSubject.createDefault(
-        CoinDetailsState.Loading)
+    val marketInfoOverviewStateObservable: BehaviorSubject<MarketInfoOverviewState> = BehaviorSubject.createDefault(
+        MarketInfoOverviewState.Loading)
 
-    var coinMarketDetails: CoinMarketDetails? = null
-    var topTokenHolders: List<TokenHolder> = listOf()
+    var marketInfoOverview: MarketInfoOverview? = null
 
     var lastPoint: LastPoint? = marketKit.coinPrice(fullCoin.coin.uid, currency.code)?.let { LastPoint(it.value, it.timestamp, it.diff) }
         set(value) {
@@ -115,25 +115,13 @@ class CoinOverviewService(
 
 
     fun getCoinDetails(rateDiffCoinCodes: List<String>, rateDiffPeriods: List<TimePeriod>) {
-        coinDetailsStateObservable.onNext(CoinDetailsState.Loading)
-        xRateManager.coinMarketDetailsAsync(coinType, currency.code, rateDiffCoinCodes, rateDiffPeriods)
-                .subscribeIO({ coinMarketDetails ->
-                    this.coinMarketDetails = coinMarketDetails
-                    coinDetailsStateObservable.onNext(CoinDetailsState.Loaded)
+        marketInfoOverviewStateObservable.onNext(MarketInfoOverviewState.Loading)
+        marketKit.marketInfoOverviewSingle(coinUid, currency.code, languageManager.currentLanguage)
+                .subscribeIO({ marketInfoOverview ->
+                    this.marketInfoOverview = marketInfoOverview
+                    marketInfoOverviewStateObservable.onNext(MarketInfoOverviewState.Loaded)
                 }, {
-                    coinDetailsStateObservable.onNext(CoinDetailsState.Error(it))
-                }).let {
-                    disposables.add(it)
-                }
-    }
-
-    fun getTopTokenHolders(){
-        xRateManager.getTopTokenHoldersAsync(coinType)
-                .subscribeIO({ topTokenHolders ->
-                    this.topTokenHolders = topTokenHolders
-                    topTokenHoldersStateObservable.onNext(CoinDetailsState.Loaded)
-                }, {
-                    topTokenHoldersStateObservable.onNext(CoinDetailsState.Error(it))
+                    marketInfoOverviewStateObservable.onNext(MarketInfoOverviewState.Error(it))
                 }).let {
                     disposables.add(it)
                 }

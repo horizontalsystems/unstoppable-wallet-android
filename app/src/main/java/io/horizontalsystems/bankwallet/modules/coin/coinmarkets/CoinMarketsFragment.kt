@@ -41,9 +41,9 @@ class CoinMarketsFragment : BaseFragment(), MarketListHeaderView.Listener {
         recyclerView.adapter = marketItemsAdapter
         recyclerView.itemAnimator = null
 
-        coinViewModel.coinMarketTickers.observe(viewLifecycleOwner, {
-            viewModel.marketTickers = it
-        })
+//        coinViewModel.coinMarketTickers.observe(viewLifecycleOwner, {
+//            viewModel.marketTickers = it
+//        })
 
         viewModel.coinMarketItems.observe(viewLifecycleOwner, { (items, scrollToTop) ->
             marketItemsAdapter.submitList(items) {

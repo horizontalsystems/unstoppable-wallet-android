@@ -13,15 +13,19 @@ object CoinOverviewModule {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             val currency = App.currencyManager.baseCurrency
+
             val service = CoinOverviewService(
                 fullCoin,
                 currency,
                 App.xRateManager,
                 App.marketKit,
                 App.chartTypeStorage,
-                App.appConfigProvider.guidesUrl
+                App.appConfigProvider.guidesUrl,
+                App.languageManager
             )
-            return CoinOverviewViewModel(service,
+
+            return CoinOverviewViewModel(
+                service,
                 fullCoin.coin.code,
                 CoinViewFactory(currency, App.numberFormatter),
                 listOf(service)) as T

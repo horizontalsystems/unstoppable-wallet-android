@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.coin.adapters
 
-import android.text.Html
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.Spanned
@@ -17,10 +16,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.modules.coin.AboutText
 import io.horizontalsystems.views.helpers.LayoutHelper
 import io.horizontalsystems.views.inflate
-import io.horizontalsystems.xrateskit.entities.CoinMeta
 import io.noties.markwon.AbstractMarkwonPlugin
 import io.noties.markwon.Markwon
 import io.noties.markwon.MarkwonSpansFactory
@@ -31,9 +28,9 @@ import org.commonmark.node.Heading
 import org.commonmark.node.Paragraph
 
 class CoinAboutAdapter(
-        viewItemLiveData: MutableLiveData<AboutText>,
+        viewItemLiveData: MutableLiveData<String>,
         viewLifecycleOwner: LifecycleOwner
-) : ListAdapter<AboutText, CoinAboutAdapter.ViewHolder>(diff) {
+) : ListAdapter<String, CoinAboutAdapter.ViewHolder>(diff) {
 
     init {
         viewItemLiveData.observe(viewLifecycleOwner) {
@@ -50,10 +47,10 @@ class CoinAboutAdapter(
     }
 
     companion object {
-        private val diff = object : DiffUtil.ItemCallback<AboutText>() {
-            override fun areItemsTheSame(oldItem: AboutText, newItem: AboutText): Boolean = true
+        private val diff = object : DiffUtil.ItemCallback<String>() {
+            override fun areItemsTheSame(oldItem: String, newItem: String): Boolean = true
 
-            override fun areContentsTheSame(oldItem: AboutText, newItem: AboutText): Boolean {
+            override fun areContentsTheSame(oldItem: String, newItem: String): Boolean {
                 return oldItem == newItem
             }
         }
@@ -72,10 +69,11 @@ class CoinAboutAdapter(
             }
         }
 
-        fun bind(about: AboutText) {
+        fun bind(about: String) {
             val aboutTextSpanned = getText(about)
 
-            aboutTitle.isVisible = about.type == CoinMeta.DescriptionType.HTML
+//            aboutTitle.isVisible = about.type == CoinMeta.DescriptionType.HTML
+            aboutTitle.isVisible = false
             aboutText.text = removeLinkSpans(aboutTextSpanned)
             aboutText.maxLines = Integer.MAX_VALUE
             aboutText.doOnPreDraw {
@@ -88,36 +86,29 @@ class CoinAboutAdapter(
             }
         }
 
-        private fun getText(aboutText: AboutText): Spanned {
-            return when (aboutText.type) {
-                CoinMeta.DescriptionType.HTML -> {
-                    Html.fromHtml(aboutText.value.replace("\n", "<br />"), Html.FROM_HTML_MODE_COMPACT)
-                }
-                CoinMeta.DescriptionType.MARKDOWN -> {
-                    val markwon = Markwon.builder(containerView.context)
-                            .usePlugin(object : AbstractMarkwonPlugin() {
+        private fun getText(aboutText: String): Spanned {
+            val markwon = Markwon.builder(containerView.context)
+                .usePlugin(object : AbstractMarkwonPlugin() {
 
-                                override fun configureSpansFactory(builder: MarkwonSpansFactory.Builder) {
-                                    builder.setFactory(Heading::class.java) { _, _ ->
-                                        arrayOf(
-                                                TextAppearanceSpan(containerView.context, R.style.Headline2),
-                                                ForegroundColorSpan(containerView.context.getColor(R.color.bran))
-                                        )
-                                    }
-                                    builder.setFactory(Paragraph::class.java) { _, _ ->
-                                        arrayOf(
-                                                LastLineSpacingSpan(LayoutHelper.dp(24f, containerView.context)),
-                                                TextAppearanceSpan(containerView.context, R.style.Subhead2),
-                                                ForegroundColorSpan(containerView.context.getColor(R.color.grey))
-                                        )
-                                    }
-                                }
-                            })
-                            .build()
+                    override fun configureSpansFactory(builder: MarkwonSpansFactory.Builder) {
+                        builder.setFactory(Heading::class.java) { _, _ ->
+                            arrayOf(
+                                TextAppearanceSpan(containerView.context, R.style.Headline2),
+                                ForegroundColorSpan(containerView.context.getColor(R.color.bran))
+                            )
+                        }
+                        builder.setFactory(Paragraph::class.java) { _, _ ->
+                            arrayOf(
+                                LastLineSpacingSpan(LayoutHelper.dp(24f, containerView.context)),
+                                TextAppearanceSpan(containerView.context, R.style.Subhead2),
+                                ForegroundColorSpan(containerView.context.getColor(R.color.grey))
+                            )
+                        }
+                    }
+                })
+                .build()
 
-                    markwon.toMarkdown(aboutText.value)
-                }
-            }
+            return markwon.toMarkdown(aboutText)
         }
 
         private fun removeLinkSpans(spanned: Spanned): Spannable {

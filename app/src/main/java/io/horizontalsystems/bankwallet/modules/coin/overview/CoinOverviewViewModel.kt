@@ -4,7 +4,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.Clearable
-import io.horizontalsystems.bankwallet.core.managers.toMarketKitCoinType
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
@@ -16,8 +15,6 @@ import io.horizontalsystems.marketkit.models.CoinPrice
 import io.horizontalsystems.marketkit.models.CoinType
 import io.horizontalsystems.views.ListPosition
 import io.horizontalsystems.xrateskit.entities.ChartType
-import io.horizontalsystems.xrateskit.entities.CoinMarketDetails
-import io.horizontalsystems.xrateskit.entities.MarketTicker
 import io.horizontalsystems.xrateskit.entities.TimePeriod
 import io.reactivex.disposables.CompositeDisposable
 import retrofit2.HttpException
@@ -36,19 +33,13 @@ class CoinOverviewViewModel(
     val chartInfoLiveData = MutableLiveData<CoinChartAdapter.ViewItemWrapper>()
     val roiLiveData = MutableLiveData<List<RoiViewItem>>()
     val marketDataLiveData = MutableLiveData<List<CoinDataItem>>()
-    val tvlDataLiveData = MutableLiveData<List<CoinDataItem>>()
-    val tradingVolumeLiveData = MutableLiveData<List<CoinDataItem>>()
     val investorDataLiveData = MutableLiveData<List<CoinDataItem>>()
     val securityParamsLiveData = MutableLiveData<List<CoinDataItem>>()
-    val categoriesLiveData = MutableLiveData<String>()
+    val categoriesLiveData = MutableLiveData<List<String>>()
     val contractInfoLiveData = MutableLiveData<List<CoinDataItem>>()
-    val aboutTextLiveData = MutableLiveData<AboutText>()
+    val aboutTextLiveData = MutableLiveData<String>()
     val linksLiveData = MutableLiveData<List<CoinLink>>()
     val showFooterLiveData = MutableLiveData(false)
-
-    val coinMajorHolders = MutableLiveData<List<MajorHolderItem>>()
-    val coinMarketTickers = MutableLiveData<List<MarketTicker>>()
-    val coinInvestors = MutableLiveData<List<InvestorItem>>()
 
     val currency = service.currency
 
@@ -85,7 +76,6 @@ class CoinOverviewViewModel(
         syncSubtitle()
 
         service.getCoinDetails(rateDiffCoinCodes, rateDiffPeriods)
-        service.getTopTokenHolders()
 
         fetchChartInfo()
 
@@ -113,17 +103,9 @@ class CoinOverviewViewModel(
                     disposable.add(it)
                 }
 
-        service.coinDetailsStateObservable
+        service.marketInfoOverviewStateObservable
                 .subscribeIO {
                     syncCoinDetailsState(it)
-                }
-                .let {
-                    disposable.add(it)
-                }
-
-        service.topTokenHoldersStateObservable
-                .subscribeIO {
-                    syncTopTokenHoldersState(it)
                 }
                 .let {
                     disposable.add(it)
@@ -171,18 +153,18 @@ class CoinOverviewViewModel(
         service.updateChartInfo()
     }
 
-    private fun syncCoinDetailsState(state: CoinOverviewService.CoinDetailsState) {
-        loadingLiveData.postValue(state is CoinOverviewService.CoinDetailsState.Loading)
-        if (state is CoinOverviewService.CoinDetailsState.Loaded) {
+    private fun syncCoinDetailsState(state: CoinOverviewService.MarketInfoOverviewState) {
+        loadingLiveData.postValue(state is CoinOverviewService.MarketInfoOverviewState.Loading)
+        if (state is CoinOverviewService.MarketInfoOverviewState.Loaded) {
             updateCoinDetails()
         }
 
         coinInfoErrorLiveData.postValue(getError(state))
-        showFooterLiveData.postValue(state !is CoinOverviewService.CoinDetailsState.Loading)
+        showFooterLiveData.postValue(state !is CoinOverviewService.MarketInfoOverviewState.Loading)
     }
 
-    private fun getError(state: CoinOverviewService.CoinDetailsState): String {
-        if (state !is CoinOverviewService.CoinDetailsState.Error) {
+    private fun getError(state: CoinOverviewService.MarketInfoOverviewState): String {
+        if (state !is CoinOverviewService.MarketInfoOverviewState.Error) {
             return ""
         }
 
@@ -193,71 +175,66 @@ class CoinOverviewViewModel(
         }
     }
 
-    private fun syncTopTokenHoldersState(state: CoinOverviewService.CoinDetailsState) {
-        if (state is CoinOverviewService.CoinDetailsState.Loaded) {
-            updateCoinDataBlock()
-        }
-    }
-
     private fun updateCoinDetails() {
-        val coinDetails = service.coinMarketDetails ?: return
+        val marketInfoOverview = service.marketInfoOverview ?: return
 
-        roiLiveData.postValue(factory.getRoi(coinDetails.rateDiffs, rateDiffCoinCodes, rateDiffPeriods))
+        roiLiveData.postValue(factory.getRoi(marketInfoOverview.performance))
+        categoriesLiveData.postValue(marketInfoOverview.categories.map { it.name })
+        contractInfoLiveData.postValue(getContractInfo().map {
+            CoinDataItem(
+                it.title,
+                it.value,
+                valueDecorated = true,
+                listPosition = ListPosition.Single
+            )
+        })
+        linksLiveData.postValue(factory.getLinks(marketInfoOverview, service.guideUrl))
 
-        marketDataLiveData.postValue(factory.getMarketData(coinDetails, service.currency, coinCode))
+        val marketData = factory.getMarketData(marketInfoOverview, service.currency, coinCode)
+        marketData.apply {
+            val items = mutableListOf<CoinDataItem>()
+            marketCap?.let {
+                items.add(CoinDataItem(Translator.getString(R.string.CoinPage_MarketCap), marketCap, rankLabel = marketCapRank))
+            }
+            totalSupply?.let {
+                items.add(CoinDataItem(Translator.getString(R.string.CoinPage_TotalSupply), totalSupply))
+            }
+            circulatingSupply?.let {
+                items.add(CoinDataItem(Translator.getString(R.string.CoinPage_inCirculation), circulatingSupply))
+            }
+            volume24h?.let {
+                items.add(CoinDataItem(Translator.getString(R.string.CoinPage_TradingVolume), volume24h))
+            }
+            dilutedMarketCap?.let {
+                items.add(CoinDataItem(Translator.getString(R.string.CoinPage_DilutedMarketCap), dilutedMarketCap))
+            }
+            tvl?.let {
+                items.add(CoinDataItem(Translator.getString(R.string.CoinPage_Tvl), tvl))
+            }
+            genesisDate?.let {
+                items.add(CoinDataItem(Translator.getString(R.string.CoinPage_LaunchDate), genesisDate))
+            }
 
-        tradingVolumeLiveData.postValue(factory.getTradingVolume(coinDetails, service.currency))
-
-        tvlDataLiveData.postValue(factory.getTvlInfo(coinDetails, service.currency))
-
-        updateCoinDataBlock()
-
-        categoriesLiveData.postValue(coinDetails.meta.categories.joinToString(", ") { it.name })
-
-        getContractInfo(coinDetails)?.let {
-            contractInfoLiveData.postValue(listOf(CoinDataItem(it.title, it.value, valueDecorated = true, listPosition = ListPosition.Single)))
+            marketDataLiveData.postValue(items)
         }
 
-        if (coinDetails.meta.description.isNotBlank()) {
-            aboutTextLiveData.postValue(AboutText(coinDetails.meta.description, coinDetails.meta.descriptionType))
+        if (marketInfoOverview.description.isNotBlank()) {
+            aboutTextLiveData.postValue(marketInfoOverview.description)
         }
 
-        linksLiveData.postValue(factory.getLinks(coinDetails, service.guideUrl))
-
-        coinMarketTickers.postValue(coinDetails.tickers)
         showFooterLiveData.postValue(true)
-
-        coinInvestors.postValue(factory.getCoinInvestorItems(coinDetails.meta.fundCategories))
     }
 
-    private fun updateCoinDataBlock() {
-        val coinDetails = service.coinMarketDetails ?: return
-        coinMajorHolders.postValue(factory.getCoinMajorHolders(service.topTokenHolders))
-        investorDataLiveData.postValue(factory.getInvestorData(coinDetails, service.topTokenHolders))
-
-        updateSecurityParams()
-    }
-
-    private fun updateSecurityParams() {
-        var securityParams = mutableListOf<CoinDataItem>()
-
-        service.coinMarketDetails?.meta?.securityParameter?.let { securityParameter ->
-            securityParams = factory.getSecurityParams(securityParameter)
-        }
-
-        factory.getCoinAudits(coinType)?.let { securityParams.add(it) }
-        factory.setListPosition(securityParams)
-
-        securityParamsLiveData.postValue(securityParams)
-    }
-
-    private fun getContractInfo(coinDetails: CoinMarketDetails): ContractInfo? =
-            when (val coinType = coinDetails.data.type.toMarketKitCoinType()) {
+    private fun getContractInfo(): List<ContractInfo> {
+        return service.fullCoin.platforms.mapNotNull { platform ->
+            when (val coinType = platform.coinType) {
                 is CoinType.Erc20 -> ContractInfo(Translator.getString(R.string.CoinPage_Contract, "ETH"), coinType.address)
                 is CoinType.Bep20 -> ContractInfo(Translator.getString(R.string.CoinPage_Contract, "BSC"), coinType.address)
                 is CoinType.Bep2 -> ContractInfo(Translator.getString(R.string.CoinPage_Bep2Symbol), coinType.symbol)
                 else -> null
             }
+        }
+    }
 
     private fun updateChartInfo() {
         val info = service.chartInfo ?: return

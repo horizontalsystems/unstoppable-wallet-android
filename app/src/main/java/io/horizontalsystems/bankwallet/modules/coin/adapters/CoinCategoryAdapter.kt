@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.coin.adapters
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -13,14 +14,14 @@ import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_coin_category.*
 
 class CoinCategoryAdapter(
-        viewItemLiveData: MutableLiveData<String>,
+        viewItemLiveData: LiveData<List<String>>,
         viewLifecycleOwner: LifecycleOwner
 ) : ListAdapter<String, CoinCategoryAdapter.ViewHolder>(diff) {
 
     init {
-        viewItemLiveData.observe(viewLifecycleOwner) { categoriesString ->
-            if (categoriesString.isNotEmpty()) {
-                submitList(listOf(categoriesString))
+        viewItemLiveData.observe(viewLifecycleOwner) { categories ->
+            if (categories.isNotEmpty()) {
+                submitList(listOf(categories.joinToString(", ")))
             }
         }
     }

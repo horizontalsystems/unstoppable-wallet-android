@@ -14,7 +14,7 @@ import kotlinx.android.synthetic.main.fragment_recyclerview.*
 
 class CoinInvestorsFragment : BaseFragment(), CoinInvestorCategoryAdapter.Listener {
 
-    private val coinViewModel by navGraphViewModels<CoinOverviewViewModel>(R.id.coinFragment)
+//    private val coinViewModel by navGraphViewModels<CoinOverviewViewModel>(R.id.coinFragment)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_recyclerview, container, false)
@@ -28,10 +28,10 @@ class CoinInvestorsFragment : BaseFragment(), CoinInvestorCategoryAdapter.Listen
             findNavController().popBackStack()
         }
 
-        coinViewModel.coinInvestors.observe(viewLifecycleOwner, {
-            val investorsAdapter = CoinInvestorCategoryAdapter(it, this)
-            recyclerView.adapter = investorsAdapter
-        })
+//        coinViewModel.coinInvestors.observe(viewLifecycleOwner, {
+//            val investorsAdapter = CoinInvestorCategoryAdapter(it, this)
+//            recyclerView.adapter = investorsAdapter
+//        })
     }
 
     override fun onItemClick(url: String) {

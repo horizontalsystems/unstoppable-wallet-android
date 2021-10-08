@@ -1,9 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.coin.overview
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.activity.addCallback
 import androidx.core.os.bundleOf
 import androidx.navigation.navGraphViewModels
@@ -22,19 +20,15 @@ import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartType
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.core.findNavController
-import io.horizontalsystems.xrateskit.entities.LinkType
+import io.horizontalsystems.marketkit.models.LinkType
 import kotlinx.android.synthetic.main.fragment_coin_overview.*
 
-class CoinOverviewFragment : BaseFragment(), CoinChartAdapter.Listener, CoinDataAdapter.Listener, CoinLinksAdapter.Listener {
+class CoinOverviewFragment : BaseFragment(R.layout.fragment_coin_overview), CoinChartAdapter.Listener, CoinDataAdapter.Listener, CoinLinksAdapter.Listener {
 
     private val vmFactory by lazy { CoinOverviewModule.Factory(coinViewModel.fullCoin) }
 
     private val coinViewModel by navGraphViewModels<CoinViewModel>(R.id.coinFragment)
     private val viewModel by navGraphViewModels<CoinOverviewViewModel>(R.id.coinFragment) { vmFactory }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.fragment_coin_overview, container, false)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -49,8 +43,6 @@ class CoinOverviewFragment : BaseFragment(), CoinChartAdapter.Listener, CoinData
         )
         val coinRoiAdapter = CoinRoiAdapter(viewModel.roiLiveData, viewLifecycleOwner)
         val marketDataAdapter = CoinDataAdapter(viewModel.marketDataLiveData, viewLifecycleOwner, this)
-        val tradingVolumeAdapter = CoinDataAdapter(viewModel.tradingVolumeLiveData, viewLifecycleOwner, this)
-        val tvlDataAdapter = CoinDataAdapter(viewModel.tvlDataLiveData, viewLifecycleOwner, this)
         val investorDataAdapter = CoinDataAdapter(viewModel.investorDataLiveData, viewLifecycleOwner, this, R.string.CoinPage_InvestorData)
         val securityParamsAdapter = CoinDataAdapter(viewModel.securityParamsLiveData, viewLifecycleOwner, this, R.string.CoinPage_SecurityParams)
         val categoriesAdapter = CoinCategoryAdapter(viewModel.categoriesLiveData, viewLifecycleOwner)
@@ -67,8 +59,6 @@ class CoinOverviewFragment : BaseFragment(), CoinChartAdapter.Listener, CoinData
                 chartAdapter,
                 marketDataAdapter,
                 coinRoiAdapter,
-                tradingVolumeAdapter,
-                tvlDataAdapter,
                 investorDataAdapter,
                 securityParamsAdapter,
                 categoriesAdapter,
@@ -106,7 +96,7 @@ class CoinOverviewFragment : BaseFragment(), CoinChartAdapter.Listener, CoinData
 
     override fun onClick(coinLink: CoinLink) {
         when(coinLink.linkType){
-            LinkType.GUIDE -> {
+            LinkType.Guide -> {
                 val arguments = bundleOf(
                         MarkdownFragment.markdownUrlKey to coinLink.url,
                         MarkdownFragment.handleRelativeUrlKey to true
