@@ -65,17 +65,11 @@ class CoinOverviewViewModel(
     val coinUid by service::coinUid
 
     private val disposable = CompositeDisposable()
-    private val rateDiffPeriods = listOf(TimePeriod.DAY_7, TimePeriod.DAY_30)
-
-    private val rateDiffCoinCodes: List<String> = mutableListOf(service.currency.code).apply {
-        if (service.coinType != CoinType.Bitcoin) add("BTC")
-        if (service.coinType != CoinType.Ethereum) add("ETH")
-    }
 
     init {
         syncSubtitle()
 
-        service.getCoinDetails(rateDiffCoinCodes, rateDiffPeriods)
+        service.getCoinDetails()
 
         fetchChartInfo()
 
