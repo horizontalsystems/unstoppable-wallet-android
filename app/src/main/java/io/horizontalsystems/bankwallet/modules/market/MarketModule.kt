@@ -40,6 +40,12 @@ object MarketModule {
         }
     }
 
+    enum class TopMarket(val value: Int) {
+        Top250(250), Top500(500), Top1000(1000);
+
+        fun next() = values()[if (ordinal == values().size - 1) 0 else ordinal + 1]
+    }
+
     enum class ListType(val sortingField: SortingField, val marketField: MarketField) {
         TopGainers(SortingField.TopGainers, MarketField.PriceDiff),
         TopLosers(SortingField.TopLosers, MarketField.PriceDiff),
@@ -59,8 +65,8 @@ data class MarketItem(
         fun createFromCoinMarket(marketInfo: MarketInfo, currency: Currency, score: Score?): MarketItem {
             return MarketItem(
                 score,
-                FullCoin(marketInfo.coin, listOf()), // TODO replace with fullCoin from MarketInfo
-                CurrencyValue(currency, marketInfo.totalVolume),
+                marketInfo.fullCoin,
+                CurrencyValue(currency, marketInfo.totalVolume ?: BigDecimal.ZERO),
                 CurrencyValue(currency, marketInfo.price),
                 marketInfo.priceChange,
                 CurrencyValue(currency, marketInfo.marketCap)

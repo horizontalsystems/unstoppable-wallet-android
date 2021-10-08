@@ -171,8 +171,8 @@ class MarketAdvancedSearchService(
         val bnbUid = App.coinManager.getPlatformCoin(CoinType.Bep2("BNB"))!!.coin.uid
 
         return filterByRange(filterMarketCap, marketInfo.marketCap.toLong())
-                && filterByRange(filterVolume, marketInfo.totalVolume.toLong())
-                && filterByRange(filterPriceChange, marketInfo.priceChange.toLong())
+                && filterByRange(filterVolume, marketInfo.totalVolume?.toLong())
+                && filterByRange(filterPriceChange, marketInfo.priceChange?.toLong())
 //                todo: implement it
 //                && (!filterPriceCloseToAth || closeToAllTime(marketInfo.athChangePercentage))
 //                && (!filterPriceCloseToAtl || closeToAllTime(marketInfo.atlChangePercentage))
@@ -199,13 +199,13 @@ class MarketAdvancedSearchService(
         return true
     }
 
-    private fun marketInfo(coinUid: String): MarketInfo? = cache?.firstOrNull { it.coin.uid == coinUid }
+    private fun marketInfo(coinUid: String): MarketInfo? = cache?.firstOrNull { it.fullCoin.coin.uid == coinUid }
 
     private fun outperformed(value: BigDecimal?, coinUid: String): Boolean {
         if (value == null) return false
         val coinMarket = marketInfo(coinUid) ?: return false
 
-        return coinMarket.priceChange < value
+        return coinMarket.priceChange ?: BigDecimal.ZERO < value
     }
 
     private fun closeToAllTime(value: BigDecimal?): Boolean {
