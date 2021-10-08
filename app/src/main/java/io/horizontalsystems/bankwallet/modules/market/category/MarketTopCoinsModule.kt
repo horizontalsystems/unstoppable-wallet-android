@@ -4,10 +4,9 @@ import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.iconPlaceholder
-import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.bankwallet.modules.market.MarketField
 import io.horizontalsystems.core.entities.Currency
+import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.marketkit.models.MarketInfo
 import java.math.BigDecimal
 
@@ -29,11 +28,8 @@ object MarketTopCoinsModule {
 
     @Immutable
     data class ViewItem(
-        val coinName: String,
-        val coinCode: String,
+        val fullCoin: FullCoin,
         val coinRate: String,
-        val coinIconUrl: String,
-        val coinIconPlaceholder: Int,
         val marketDataValue: MarketDataValue,
         val rank: String?,
     ) {
@@ -70,11 +66,8 @@ object MarketTopCoinsModule {
                     MarketField.PriceDiff -> MarketDataValue.Diff(marketInfo.priceChange)
                 }
                 return ViewItem(
-                    marketInfo.fullCoin.coin.name,
-                    marketInfo.fullCoin.coin.code,
+                    marketInfo.fullCoin,
                     App.numberFormatter.formatFiat(marketInfo.price, currency.symbol, 0, 6),
-                    marketInfo.fullCoin.coin.iconUrl,
-                    marketInfo.fullCoin.iconPlaceholder,
                     marketDataValue,
                     marketInfo.fullCoin.coin.marketCapRank.toString()
                 )
