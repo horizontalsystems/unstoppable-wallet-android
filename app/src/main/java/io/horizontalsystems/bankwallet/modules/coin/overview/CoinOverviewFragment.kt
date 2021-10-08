@@ -95,20 +95,26 @@ class CoinOverviewFragment : BaseFragment(R.layout.fragment_coin_overview), Coin
     //  CoinLinksAdapter Listener
 
     override fun onClick(coinLink: CoinLink) {
-        when(coinLink.linkType){
+        val absoluteUrl = getAbsoluteUrl(coinLink)
+
+        when (coinLink.linkType) {
             LinkType.Guide -> {
                 val arguments = bundleOf(
-                        MarkdownFragment.markdownUrlKey to coinLink.url,
-                        MarkdownFragment.handleRelativeUrlKey to true
+                    MarkdownFragment.markdownUrlKey to absoluteUrl,
+                    MarkdownFragment.handleRelativeUrlKey to true
                 )
-                findNavController().navigate(R.id.coinFragment_to_markdownFragment, arguments, navOptions())
+                findNavController().navigate(R.id.coinFragment_to_markdownFragment,
+                    arguments,
+                    navOptions())
             }
-            else -> {
-                context?.let { ctx ->
-                    LinkHelper.openLinkInAppBrowser(ctx, coinLink.url.trim())
-                }
-            }
+            else -> LinkHelper.openLinkInAppBrowser(requireContext(), absoluteUrl)
         }
+    }
+
+    private fun getAbsoluteUrl(coinLink: CoinLink) = when (coinLink.linkType) {
+        LinkType.Twitter -> "https://twitter.com/${coinLink.url}"
+        LinkType.Telegram -> "https://t.me/${coinLink.url}"
+        else -> coinLink.url
     }
 
     //  CoinDataAdapter.Listener
