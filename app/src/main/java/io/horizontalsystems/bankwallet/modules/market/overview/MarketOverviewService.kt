@@ -55,7 +55,7 @@ class MarketOverviewService(
 
         stateObservable.onNext(State.Loading)
 
-        topItemsDisposable = marketKit.marketInfosSingle(250, 250, null)
+        topItemsDisposable = marketKit.marketInfosSingle(1000, 1000, null)
                 .subscribeIO({
                     marketItems = it.mapIndexed { index, marketInfo ->
                         MarketItem.createFromCoinMarket(marketInfo, currencyManager.baseCurrency, Score.Rank(index + 1))

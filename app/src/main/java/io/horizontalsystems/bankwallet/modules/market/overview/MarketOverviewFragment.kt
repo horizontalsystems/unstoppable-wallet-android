@@ -26,7 +26,7 @@ import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.market.MarketModule
 import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
@@ -142,7 +142,9 @@ class MarketOverviewFragment : BaseFragment() {
                     ) { marketOverviewViewModel.onErrorClick() }
                 }
                 is MarketMetricsModule.State.Data -> {
-                    Box(modifier = Modifier.height(240.dp).fillMaxWidth()) {
+                    Box(modifier = Modifier
+                        .height(240.dp)
+                        .fillMaxWidth()) {
                         MetricChartsView(it.marketMetrics)
                     }
                 }
@@ -244,7 +246,7 @@ class MarketOverviewFragment : BaseFragment() {
                     modifier = Modifier.padding(end = 16.dp),
                     toggleIndicators = boardItem.boardHeader.toggleButton.indicators,
                     title = boardItem.boardHeader.toggleButton.title,
-                    onClick = { }
+                    onClick = { marketOverviewViewModel.onToggleTopBoardSize(boardItem.type) }
                 )
             }
             Spacer(modifier = Modifier.height(12.dp))
@@ -284,7 +286,9 @@ class MarketOverviewFragment : BaseFragment() {
                 .clickable { marketViewModel.onClickSeeAll(listType) }
         ) {
             Row(
-                modifier = Modifier.fillMaxHeight().padding(horizontal = 16.dp),
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .padding(horizontal = 16.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(

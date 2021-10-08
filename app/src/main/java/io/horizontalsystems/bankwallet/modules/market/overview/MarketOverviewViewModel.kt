@@ -7,20 +7,25 @@ import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.subscribeIO
-import io.horizontalsystems.bankwallet.modules.market.*
+import io.horizontalsystems.bankwallet.modules.market.MarketItem
+import io.horizontalsystems.bankwallet.modules.market.MarketModule
+import io.horizontalsystems.bankwallet.modules.market.MarketModule.TopMarket
+import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
 import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.BoardContent
 import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.BoardHeader
 import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.BoardItem
+import io.horizontalsystems.bankwallet.modules.market.sort
 import io.horizontalsystems.bankwallet.ui.compose.components.ToggleIndicator
 import io.horizontalsystems.bankwallet.ui.extensions.MarketListHeaderView
 import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.math.min
 
 class MarketOverviewViewModel(
-        private val service: MarketOverviewService,
-        private val clearables: List<Clearable>
+    private val service: MarketOverviewService,
+    private val clearables: List<Clearable>
 ) : ViewModel() {
 
     val stateLiveData = MutableLiveData<MarketOverviewModule.State>()
@@ -32,14 +37,17 @@ class MarketOverviewViewModel(
 
     private val disposable = CompositeDisposable()
 
+    private var topGainersMarket = TopMarket.Top250
+    private var topLosersMarket = TopMarket.Top250
+
     init {
         service.stateObservable
-                .subscribeIO {
-                    syncState(it)
-                }
-                .let {
-                    disposable.add(it)
-                }
+            .subscribeIO {
+                syncState(it)
+            }
+            .let {
+                disposable.add(it)
+            }
     }
 
     private fun syncState(state: MarketOverviewService.State) {
@@ -64,54 +72,67 @@ class MarketOverviewViewModel(
         }
     }
 
+    fun onToggleTopBoardSize(listType: MarketModule.ListType) {
+        when (listType) {
+            MarketModule.ListType.TopGainers -> {
+                topGainersMarket = topGainersMarket.next()
+            }
+            MarketModule.ListType.TopLosers -> {
+                topLosersMarket = topLosersMarket.next()
+            }
+        }
+        stateLiveData.postValue(MarketOverviewModule.State.Data(getBoardsData()))
+    }
+
     private fun getBoardsData(): List<BoardItem> {
-        val topGainersBoard = getBoardItem(MarketModule.ListType.TopGainers)
-        val topLosersBoard = getBoardItem(MarketModule.ListType.TopLosers)
+        val marketItems = service.marketItems
+
+        if (marketItems.isEmpty()) return listOf()
+
+        val topGainersBoard = getBoardItem(MarketModule.ListType.TopGainers, marketItems)
+        val topLosersBoard = getBoardItem(MarketModule.ListType.TopLosers, marketItems)
 
         return listOf(topGainersBoard, topLosersBoard)
     }
 
-    private fun getBoardItem(type: MarketModule.ListType): BoardItem {
-        val sortingField: SortingField = getSortingField(type)
-
-        val topGainersList = service.marketItems
-            .sort(sortingField).subList(0, 5)
-            .map { MarketViewItem.create(it, MarketField.PriceDiff) }
+    private fun getBoardItem(type: MarketModule.ListType, marketItems: List<MarketItem>): BoardItem {
+        val topMarket = when (type) {
+            MarketModule.ListType.TopGainers -> topGainersMarket
+            MarketModule.ListType.TopLosers -> topLosersMarket
+        }
+        val topList = marketItems
+            .subList(0, min(marketItems.size, topMarket.value))
+            .sort(type.sortingField)
+            .subList(0, min(marketItems.size, 5))
+            .map { MarketViewItem.create(it, type.marketField) }
 
         val topGainersHeader = BoardHeader(
             getSectionTitle(type),
             getSectionIcon(type),
-            getToggleButton(0)
+            getToggleButton(topMarket)
         )
-        val topGainersBoardList = BoardContent(topGainersList, type)
-        return BoardItem(topGainersHeader, topGainersBoardList, type)
+        val topBoardList = BoardContent(topList, type)
+        return BoardItem(topGainersHeader, topBoardList, type)
     }
 
-    private fun getSortingField(type: MarketModule.ListType): SortingField {
-        return when(type){
-            MarketModule.ListType.TopGainers -> SortingField.TopGainers
-            MarketModule.ListType.TopLosers -> SortingField.TopLosers
-        }
-    }
-
-    private fun getToggleButton(selectedIndex: Int): MarketListHeaderView.ToggleButton {
-        val options = listOf("250", "500", "1000")
+    private fun getToggleButton(topMarket: TopMarket): MarketListHeaderView.ToggleButton {
+        val options = TopMarket.values().map { "${it.value}" }
 
         return MarketListHeaderView.ToggleButton(
-            title = options[selectedIndex],
-            indicators = options.mapIndexed { index, _ -> ToggleIndicator(index == selectedIndex) }
+            title = options[topMarket.ordinal],
+            indicators = options.mapIndexed { index, _ -> ToggleIndicator(index == topMarket.ordinal) }
         )
     }
 
-    private fun getSectionTitle(type: MarketModule.ListType): Int{
-        return when(type){
+    private fun getSectionTitle(type: MarketModule.ListType): Int {
+        return when (type) {
             MarketModule.ListType.TopGainers -> R.string.RateList_TopGainers
             MarketModule.ListType.TopLosers -> R.string.RateList_TopLosers
         }
     }
 
-    private fun getSectionIcon(type: MarketModule.ListType): Int{
-        return when(type){
+    private fun getSectionIcon(type: MarketModule.ListType): Int {
+        return when (type) {
             MarketModule.ListType.TopGainers -> R.drawable.ic_circle_up_20
             MarketModule.ListType.TopLosers -> R.drawable.ic_circle_down_20
         }
