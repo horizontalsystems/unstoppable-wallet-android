@@ -8,22 +8,19 @@ import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.ConcatAdapter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.modules.coin.CoinDataClickType
 import io.horizontalsystems.bankwallet.modules.coin.CoinLink
 import io.horizontalsystems.bankwallet.modules.coin.CoinViewModel
 import io.horizontalsystems.bankwallet.modules.coin.PoweredByAdapter
 import io.horizontalsystems.bankwallet.modules.coin.adapters.*
 import io.horizontalsystems.bankwallet.modules.coin.adapters.CoinChartAdapter.ChartViewType
 import io.horizontalsystems.bankwallet.modules.markdown.MarkdownFragment
-import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartFragment
-import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartType
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.marketkit.models.LinkType
 import kotlinx.android.synthetic.main.fragment_coin_overview.*
 
-class CoinOverviewFragment : BaseFragment(R.layout.fragment_coin_overview), CoinChartAdapter.Listener, CoinDataAdapter.Listener, CoinLinksAdapter.Listener {
+class CoinOverviewFragment : BaseFragment(R.layout.fragment_coin_overview), CoinChartAdapter.Listener, CoinLinksAdapter.Listener {
 
     private val vmFactory by lazy { CoinOverviewModule.Factory(coinViewModel.fullCoin) }
 
@@ -42,11 +39,11 @@ class CoinOverviewFragment : BaseFragment(R.layout.fragment_coin_overview), Coin
             viewLifecycleOwner
         )
         val coinRoiAdapter = CoinRoiAdapter(viewModel.roiLiveData, viewLifecycleOwner)
-        val marketDataAdapter = CoinDataAdapter(viewModel.marketDataLiveData, viewLifecycleOwner, this)
-        val investorDataAdapter = CoinDataAdapter(viewModel.investorDataLiveData, viewLifecycleOwner, this, R.string.CoinPage_InvestorData)
-        val securityParamsAdapter = CoinDataAdapter(viewModel.securityParamsLiveData, viewLifecycleOwner, this, R.string.CoinPage_SecurityParams)
+        val marketDataAdapter = CoinDataAdapter(viewModel.marketDataLiveData, viewLifecycleOwner)
+        val investorDataAdapter = CoinDataAdapter(viewModel.investorDataLiveData, viewLifecycleOwner, R.string.CoinPage_InvestorData)
+        val securityParamsAdapter = CoinDataAdapter(viewModel.securityParamsLiveData, viewLifecycleOwner, R.string.CoinPage_SecurityParams)
         val categoriesAdapter = CoinCategoryAdapter(viewModel.categoriesLiveData, viewLifecycleOwner)
-        val contractInfoAdapter = CoinDataAdapter(viewModel.contractInfoLiveData, viewLifecycleOwner, this)
+        val contractInfoAdapter = CoinDataAdapter(viewModel.contractInfoLiveData, viewLifecycleOwner)
         val aboutAdapter = CoinAboutAdapter(viewModel.aboutTextLiveData, viewLifecycleOwner)
         val linksAdapter = CoinLinksAdapter(viewModel.linksLiveData, viewLifecycleOwner, this)
         val footerAdapter = PoweredByAdapter(viewModel.showFooterLiveData, viewLifecycleOwner, getString(R.string.Market_PoweredByApi))
@@ -115,25 +112,6 @@ class CoinOverviewFragment : BaseFragment(R.layout.fragment_coin_overview), Coin
         LinkType.Twitter -> "https://twitter.com/${coinLink.url}"
         LinkType.Telegram -> "https://t.me/${coinLink.url}"
         else -> coinLink.url
-    }
-
-    //  CoinDataAdapter.Listener
-
-    override fun onClick(clickType: CoinDataClickType) {
-        when (clickType){
-            CoinDataClickType.MetricChart -> MetricChartFragment.show(childFragmentManager, MetricChartType.Coin(viewModel.coinType))
-            CoinDataClickType.TradingVolumeMetricChart -> MetricChartFragment.show(childFragmentManager, MetricChartType.TradingVolume(viewModel.coinType))
-            CoinDataClickType.Markets -> findNavController().navigate(R.id.coinFragment_to_coinMarketsFragment, null, navOptions())
-            CoinDataClickType.TvlRank -> findNavController().navigate(R.id.coinFragment_to_tvlRankFragment, null, navOptions())
-            CoinDataClickType.FundsInvested -> findNavController().navigate(R.id.coinFragment_to_coinInvestorsFragment, null, navOptions())
-            CoinDataClickType.MajorHolders -> findNavController().navigate(R.id.coinFragment_to_coinMajorHoldersFragment, null, navOptions())
-            is CoinDataClickType.SecurityAudits -> {
-                findNavController().navigate(R.id.coinFragment_to_coinAuditsFragment, bundleOf("coinType" to clickType.coinType), navOptions())
-            }
-            is CoinDataClickType.SecurityInfo -> {
-                findNavController().navigate(R.id.coinFragment_to_coinSecurityInfoFragment, bundleOf("info" to clickType), navOptions())
-            }
-        }
     }
 
 }

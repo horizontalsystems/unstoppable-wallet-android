@@ -8,7 +8,6 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.modules.coin.CoinDataClickType
 import io.horizontalsystems.bankwallet.modules.coin.CoinDataItem
 import io.horizontalsystems.views.inflate
 import kotlinx.android.extensions.LayoutContainer
@@ -18,7 +17,6 @@ import kotlinx.android.synthetic.main.view_holder_coin_page_section_header.*
 class CoinDataAdapter(
         rateDiffsLiveData: MutableLiveData<List<CoinDataItem>>,
         viewLifecycleOwner: LifecycleOwner,
-        private val listener: Listener,
         @StringRes private val sectionHeader: Int? = null
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -42,10 +40,6 @@ class CoinDataAdapter(
     private val viewTypeItem = 0
     private val viewTypeHeader = 1
 
-    interface Listener {
-        fun onClick(clickType: CoinDataClickType)
-    }
-
     override fun getItemCount(): Int {
         return if (items.isNotEmpty()) items.size + 1 else 0
     }
@@ -59,7 +53,7 @@ class CoinDataAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
-            viewTypeItem -> ViewHolder(inflate(parent, R.layout.view_holder_coin_market_info, false), listener)
+            viewTypeItem -> ViewHolder(inflate(parent, R.layout.view_holder_coin_market_info, false))
             viewTypeHeader -> ViewHolderSectionHeader(inflate(parent, R.layout.view_holder_coin_page_section_header, false))
             else -> throw  IllegalArgumentException("No such viewType $viewType")
         }
@@ -72,12 +66,9 @@ class CoinDataAdapter(
         }
     }
 
-    class ViewHolder(override val containerView: View, private val listener: Listener) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+    class ViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
         fun bind(item: CoinDataItem) {
             coinMarketInfoLine.bindItem(item)
-            item.clickType?.let { clickType ->
-                coinMarketInfoLine.setOnClickListener { listener.onClick(clickType) }
-            }
         }
     }
 

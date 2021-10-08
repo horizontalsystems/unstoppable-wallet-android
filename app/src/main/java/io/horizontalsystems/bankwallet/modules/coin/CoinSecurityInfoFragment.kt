@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.coin
 
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +12,7 @@ import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.views.inflate
 import kotlinx.android.extensions.LayoutContainer
+import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_coin_security_info.*
 import kotlinx.android.synthetic.main.view_holder_coin_security_info.*
 import kotlinx.android.synthetic.main.view_holder_coin_security_info_header.*
@@ -95,3 +97,10 @@ class DataAdapter(private val header: Int, private val items: List<CoinDataClick
     }
 }
 
+sealed class CoinDataClickType: Parcelable {
+    @Parcelize
+    class SecurityInfo(val title: Int, val items: List<Item>) : CoinDataClickType() {
+        @Parcelize
+        class Item(val title: Int, val color: Int, val info: Int): Parcelable
+    }
+}

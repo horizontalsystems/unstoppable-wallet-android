@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.coin
 
-import android.os.Parcelable
 import androidx.annotation.DrawableRes
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
@@ -15,7 +14,6 @@ import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.marketkit.models.*
 import io.horizontalsystems.views.ListPosition
-import kotlinx.android.parcel.Parcelize
 import java.lang.Long.max
 import java.math.BigDecimal
 import java.net.URI
@@ -75,33 +73,8 @@ data class CoinDataItem(
     val valueDecorated: Boolean = false,
     @DrawableRes val icon: Int? = null,
     var listPosition: ListPosition? = null,
-    val clickType: CoinDataClickType? = null,
     val rankLabel: String? = null
 )
-
-sealed class CoinDataClickType: Parcelable {
-    @Parcelize
-    object MetricChart : CoinDataClickType()
-    @Parcelize
-    object Markets : CoinDataClickType()
-    @Parcelize
-    object TvlRank : CoinDataClickType()
-    @Parcelize
-    object TradingVolumeMetricChart : CoinDataClickType()
-    @Parcelize
-    object MajorHolders : CoinDataClickType()
-    @Parcelize
-    object FundsInvested : CoinDataClickType()
-
-    @Parcelize
-    class SecurityAudits(val coinType: CoinType) : CoinDataClickType()
-
-    @Parcelize
-    class SecurityInfo(val title: Int, val items: List<Item>) : CoinDataClickType() {
-        @Parcelize
-        class Item(val title: Int, val color: Int, val info: Int): Parcelable
-    }
-}
 
 sealed class InvestorItem {
     data class Header(val title: String) : InvestorItem()
@@ -265,12 +238,6 @@ class CoinViewFactory(
         return numberFormatter.formatFiat(currencyValue.value, currencyValue.currency.symbol, 2, 4)
     }
 
-    fun setListPosition(list: MutableList<CoinDataItem>) {
-        list.forEachIndexed { index, coinDataItem ->
-            coinDataItem.listPosition = ListPosition.getListPosition(list.size, index)
-        }
-    }
-
     private fun getIcon(linkType: LinkType): Int {
         return when (linkType) {
             LinkType.Guide -> R.drawable.ic_academy_20
@@ -349,10 +316,6 @@ class CoinViewFactory(
             0,
             2
         ) + " " + shortCapValue.second
-    }
-
-    companion object {
-        const val SCALE_UP_TO_BILLIONTH = 9
     }
 
 }
