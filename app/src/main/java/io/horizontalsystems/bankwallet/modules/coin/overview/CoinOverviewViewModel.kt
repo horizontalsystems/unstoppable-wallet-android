@@ -59,9 +59,6 @@ class CoinOverviewViewModel(
     private var showChartSpinner: Boolean = false
     private var showChartError: Boolean = false
 
-    val coinType: CoinType
-        get() = service.coinType
-
     val coinUid by service::coinUid
 
     private val disposable = CompositeDisposable()
