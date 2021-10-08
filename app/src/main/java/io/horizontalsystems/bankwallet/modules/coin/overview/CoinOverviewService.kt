@@ -30,7 +30,6 @@ class CoinOverviewService(
     }
 
     val coinUid get() = fullCoin.coin.uid
-    var coinType: CoinType = fullCoin.platforms.first().coinType
 
     val coinPriceAsync = BehaviorSubject.create<CoinPrice>()
     val chartInfoUpdatedObservable: BehaviorSubject<Unit> = BehaviorSubject.create()
