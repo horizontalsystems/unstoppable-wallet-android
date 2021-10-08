@@ -33,24 +33,19 @@ import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
 import io.horizontalsystems.bankwallet.modules.market.MarketViewModel
 import io.horizontalsystems.bankwallet.modules.market.category.MarketDataValue
 import io.horizontalsystems.bankwallet.modules.market.getText
-import io.horizontalsystems.bankwallet.modules.market.metrics.MarketMetrics
-import io.horizontalsystems.bankwallet.modules.market.metrics.MarketMetricsModule
-import io.horizontalsystems.bankwallet.modules.market.metrics.MarketMetricsViewModel
 import io.horizontalsystems.bankwallet.modules.market.metricspage.MetricsPageFragment
+import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.MarketMetrics
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryToggle
 import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
-import io.horizontalsystems.bankwallet.ui.compose.components.ListLoadingView
 import io.horizontalsystems.bankwallet.ui.compose.components.MarketListCoin
 import io.horizontalsystems.bankwallet.ui.extensions.MarketMetricSmallView
 import io.horizontalsystems.bankwallet.ui.extensions.MetricData
 import io.horizontalsystems.core.findNavController
-import io.horizontalsystems.core.helpers.HudHelper
 
 class MarketOverviewFragment : BaseFragment() {
 
-    private val marketMetricsViewModel by viewModels<MarketMetricsViewModel> { MarketMetricsModule.Factory() }
     private val marketOverviewViewModel by viewModels<MarketOverviewViewModel> { MarketOverviewModule.Factory() }
     private val marketViewModel by navGraphViewModels<MarketViewModel>(R.id.mainFragment)
 
@@ -65,18 +60,6 @@ class MarketOverviewFragment : BaseFragment() {
                     MarketOverviewScreen()
                 }
             }
-        }
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        marketMetricsViewModel.toastLiveData.observe(viewLifecycleOwner) {
-            HudHelper.showErrorMessage(requireActivity().findViewById(android.R.id.content), it)
-        }
-
-        marketOverviewViewModel.toastLiveData.observe(viewLifecycleOwner) {
-            HudHelper.showErrorMessage(requireActivity().findViewById(android.R.id.content), it)
         }
     }
 
@@ -97,16 +80,15 @@ class MarketOverviewFragment : BaseFragment() {
 
     @Composable
     private fun MarketOverviewScreen() {
-        val isRefreshing by marketOverviewViewModel.isRefreshing.observeAsState()
-        val topBoardsState by marketOverviewViewModel.stateLiveData.observeAsState()
-        val metricsData by marketMetricsViewModel.stateLiveData.observeAsState()
+        val loading by marketOverviewViewModel.loadingLiveData.observeAsState()
+        val viewItem by marketOverviewViewModel.viewItemLiveData.observeAsState()
+        val error by marketOverviewViewModel.errorLiveData.observeAsState()
         val scrollState = rememberScrollState()
 
         SwipeRefresh(
-            state = rememberSwipeRefreshState(isRefreshing ?: false),
+            state = rememberSwipeRefreshState(loading ?: false),
             onRefresh = {
                 marketOverviewViewModel.refresh()
-                marketMetricsViewModel.refresh()
             },
             indicator = { state, trigger ->
                 SwipeRefreshIndicator(
@@ -119,31 +101,20 @@ class MarketOverviewFragment : BaseFragment() {
             }
         ) {
             Column(modifier = Modifier.verticalScroll(scrollState)) {
-                MetricCharts(metricsData)
-                TopBoards(topBoardsState)
-            }
-        }
-
-    }
-
-    @Composable
-    private fun MetricCharts(state: MarketMetricsModule.State?) {
-        state?.let {
-            when (it) {
-                MarketMetricsModule.State.Loading -> {
-                    ListLoadingView()
+                viewItem?.let {
+                    Box(
+                        modifier = Modifier
+                            .height(240.dp)
+                            .fillMaxWidth()
+                    ) {
+                        MetricChartsView(it.marketMetrics)
+                    }
+                    BoardsView(it.boardItems)
                 }
-                MarketMetricsModule.State.SyncError -> {
+                error?.let {
                     ListErrorView(
                         stringResource(R.string.BalanceSyncError_Title)
                     ) { marketOverviewViewModel.onErrorClick() }
-                }
-                is MarketMetricsModule.State.Data -> {
-                    Box(modifier = Modifier
-                        .height(240.dp)
-                        .fillMaxWidth()) {
-                        MetricChartsView(it.marketMetrics)
-                    }
                 }
             }
         }
@@ -184,23 +155,6 @@ class MarketOverviewFragment : BaseFragment() {
             },
             update = { it.setMetricData(metricsData) }
         )
-    }
-
-    @Composable
-    private fun TopBoards(topBoardsState: MarketOverviewModule.State?) {
-        topBoardsState?.let { state ->
-            when (state) {
-                MarketOverviewModule.State.Loading -> {
-                    ListLoadingView()
-                }
-                is MarketOverviewModule.State.Error -> {
-                    ListErrorView(
-                        stringResource(R.string.BalanceSyncError_Title)
-                    ) { marketOverviewViewModel.onErrorClick() }
-                }
-                is MarketOverviewModule.State.Data -> BoardsView(state.boards)
-            }
-        }
     }
 
     @Composable
