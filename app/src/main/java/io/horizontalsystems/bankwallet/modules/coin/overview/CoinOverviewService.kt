@@ -109,7 +109,7 @@ class CoinOverviewService(
         get() = guideUrls[fullCoin.coin.uid]?.let { URL(URL(guidesBaseUrl), it).toString() }
 
 
-    fun getCoinDetails(rateDiffCoinCodes: List<String>, rateDiffPeriods: List<TimePeriod>) {
+    fun getCoinDetails() {
         marketInfoOverviewStateObservable.onNext(MarketInfoOverviewState.Loading)
         marketKit.marketInfoOverviewSingle(coinUid, currency.code, languageManager.currentLanguage)
                 .subscribeIO({ marketInfoOverview ->
