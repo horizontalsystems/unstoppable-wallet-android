@@ -12,8 +12,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import io.horizontalsystems.bankwallet.modules.market.category.MarketDataValue
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import java.math.BigDecimal
 
 @Composable
 fun MarketListCoin(
@@ -22,7 +22,7 @@ fun MarketListCoin(
     coinRate: String,
     coinIconUrl: String,
     coinIconPlaceholder: Int,
-    rateDiff: BigDecimal?,
+    marketDataValue: MarketDataValue,
     rank: String?,
     onClick: (() -> Unit)? = null
 ) {
@@ -45,7 +45,7 @@ fun MarketListCoin(
             ) {
                 MarketCoinFirstRow(coinName, coinRate)
                 Spacer(modifier = Modifier.height(3.dp))
-                MarketCoinSecondRow(coinCode, rateDiff, rank)
+                MarketCoinSecondRow(coinCode, marketDataValue, rank)
             }
         }
         Divider(
@@ -79,7 +79,7 @@ fun MarketCoinFirstRow(coinName: String, rate: String) {
 }
 
 @Composable
-fun MarketCoinSecondRow(coinCode: String, rateDiff: BigDecimal?, rank: String?) {
+fun MarketCoinSecondRow(coinCode: String, marketDataValue: MarketDataValue, rank: String?) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
@@ -106,12 +106,55 @@ fun MarketCoinSecondRow(coinCode: String, rateDiff: BigDecimal?, rank: String?) 
             maxLines = 1,
         )
         Spacer(modifier = Modifier.weight(1f))
-        Text(
-            text = RateText(rateDiff),
-            color = RateColor(rateDiff),
-            style = ComposeAppTheme.typography.subhead2,
-            maxLines = 1,
-        )
+        MarketDataValueComponent(marketDataValue)
+    }
+}
+
+@Composable
+fun MarketDataValueComponent(marketDataValue: MarketDataValue){
+    when(marketDataValue){
+        is MarketDataValue.MarketCap -> {
+            Row{
+                Text(
+                    text = "MCap",
+                    color = ComposeAppTheme.colors.jacob,
+                    style = ComposeAppTheme.typography.subhead2,
+                    maxLines = 1,
+                )
+                Spacer(modifier = Modifier.width(4.dp))
+                Text(
+                    text = marketDataValue.value,
+                    color = ComposeAppTheme.colors.grey,
+                    style = ComposeAppTheme.typography.subhead2,
+                    maxLines = 1,
+                )
+            }
+        }
+        is MarketDataValue.Volume -> {
+            Row{
+                Text(
+                    text = "Vol",
+                    color = ComposeAppTheme.colors.jacob,
+                    style = ComposeAppTheme.typography.subhead2,
+                    maxLines = 1,
+                )
+                Spacer(modifier = Modifier.width(4.dp))
+                Text(
+                    text = marketDataValue.value,
+                    color = ComposeAppTheme.colors.grey,
+                    style = ComposeAppTheme.typography.subhead2,
+                    maxLines = 1,
+                )
+            }
+        }
+        is MarketDataValue.Diff -> {
+            Text(
+                text = RateText(marketDataValue.value),
+                color = RateColor(marketDataValue.value),
+                style = ComposeAppTheme.typography.subhead2,
+                maxLines = 1,
+            )
+        }
     }
 }
 

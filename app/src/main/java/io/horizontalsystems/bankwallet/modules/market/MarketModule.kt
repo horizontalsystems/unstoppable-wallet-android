@@ -40,12 +40,6 @@ object MarketModule {
         }
     }
 
-    enum class TopMarket(val value: Int) {
-        Top250(250), Top500(500), Top1000(1000);
-
-        fun next() = values()[if (ordinal == values().size - 1) 0 else ordinal + 1]
-    }
-
     enum class ListType(val sortingField: SortingField, val marketField: MarketField) {
         TopGainers(SortingField.TopGainers, MarketField.PriceDiff),
         TopLosers(SortingField.TopLosers, MarketField.PriceDiff),
@@ -80,8 +74,6 @@ fun List<MarketItem>.sort(sortingField: SortingField) = when (sortingField) {
     SortingField.LowestCap -> sortedByNullLast { it.marketCap?.value }
     SortingField.HighestVolume -> sortedByDescendingNullLast { it.volume.value }
     SortingField.LowestVolume -> sortedByNullLast { it.volume.value }
-    SortingField.HighestPrice -> sortedByDescendingNullLast { it.rate.value }
-    SortingField.LowestPrice -> sortedByNullLast { it.rate.value }
     SortingField.TopGainers -> sortedByDescendingNullLast { it.diff }
     SortingField.TopLosers -> sortedByNullLast { it.diff }
 }
@@ -89,7 +81,6 @@ fun List<MarketItem>.sort(sortingField: SortingField) = when (sortingField) {
 enum class SortingField(@StringRes val titleResId: Int) {
     HighestCap(R.string.Market_Field_HighestCap), LowestCap(R.string.Market_Field_LowestCap),
     HighestVolume(R.string.Market_Field_HighestVolume), LowestVolume(R.string.Market_Field_LowestVolume),
-    HighestPrice(R.string.Market_Field_HighestPrice), LowestPrice(R.string.Market_Field_LowestPrice),
     TopGainers(R.string.RateList_TopGainers), TopLosers(R.string.RateList_TopLosers),
 }
 
@@ -98,10 +89,18 @@ enum class MarketField(@StringRes val titleResId: Int) {
     Volume(R.string.Market_Field_Volume),
     PriceDiff(R.string.Market_Field_PriceDiff);
 
+    fun next() = values()[if (ordinal == values().size - 1) 0 else ordinal + 1]
+
     companion object {
         val map = values().associateBy(MarketField::ordinal)
         fun fromIndex(id: Int): MarketField? = map[id]
     }
+}
+
+enum class TopMarket(val value: Int) {
+    Top250(250), Top500(500), Top1000(1000);
+
+    fun next() = values()[if (ordinal == values().size - 1) 0 else ordinal + 1]
 }
 
 sealed class Score {

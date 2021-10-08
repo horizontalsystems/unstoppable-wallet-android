@@ -7,14 +7,10 @@ import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.subscribeIO
-import io.horizontalsystems.bankwallet.modules.market.MarketItem
-import io.horizontalsystems.bankwallet.modules.market.MarketModule
-import io.horizontalsystems.bankwallet.modules.market.MarketModule.TopMarket
-import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
+import io.horizontalsystems.bankwallet.modules.market.*
 import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.BoardContent
 import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.BoardHeader
 import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.BoardItem
-import io.horizontalsystems.bankwallet.modules.market.sort
 import io.horizontalsystems.bankwallet.ui.compose.components.ToggleIndicator
 import io.horizontalsystems.bankwallet.ui.extensions.MarketListHeaderView
 import io.horizontalsystems.core.SingleLiveEvent
