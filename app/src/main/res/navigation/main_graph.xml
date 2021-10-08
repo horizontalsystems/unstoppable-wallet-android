@@ -437,6 +437,9 @@
         <action
             android:id="@+id/marketSearchFragment_to_marketAdvancedSearchFragment"
             app:destination="@id/marketAdvancedSearchFragment" />
+        <action
+            android:id="@+id/marketSearchFragment_to_marketTopCoinsFragment"
+            app:destination="@id/marketTopCoinsFragment" />
     </fragment>
     <fragment
         android:id="@+id/marketAdvancedSearchFragment"
@@ -445,6 +448,10 @@
         <action
             android:id="@+id/marketAdvancedSearchFragment_to_marketAdvancedSearchFragmentResults"
             app:destination="@id/marketAdvancedSearchResultsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/marketTopCoinsFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.market.category.MarketTopCoinsFragment">
     </fragment>
     <fragment
         android:id="@+id/marketAdvancedSearchResultsFragment"

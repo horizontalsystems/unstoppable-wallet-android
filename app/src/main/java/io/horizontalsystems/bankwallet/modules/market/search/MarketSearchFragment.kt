@@ -38,6 +38,7 @@ import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
+import io.horizontalsystems.bankwallet.modules.market.category.MarketTopCoinsFragment
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
@@ -77,6 +78,10 @@ class MarketSearchFragment : BaseFragment() {
                         val arguments = CoinFragment.prepareParams(coin.uid)
                         findNavController().navigate(R.id.coinFragment, arguments, navOptions())
                     },
+                    onCategoryClick = { coinCategoryUid ->
+                        val arguments = MarketTopCoinsFragment.prepareParams(coinCategoryUid)
+                        findNavController().navigate(R.id.marketSearchFragment_to_marketTopCoinsFragment, arguments, navOptionsFromBottom())
+                    },
                     onSearchQueryChange = { query -> viewModel.searchByQuery(query) }
                 )
             }
@@ -93,6 +98,7 @@ fun MarketSearchScreen(
     onBackButtonClick: () -> Unit,
     onFilterButtonClick: () -> Unit,
     onCoinClick: (Coin) -> Unit,
+    onCategoryClick: (String?) -> Unit,
     onSearchQueryChange: (String) -> Unit
 ) {
     val searchTextState = remember { mutableStateOf(TextFieldValue("")) }
@@ -110,7 +116,7 @@ fun MarketSearchScreen(
                 onBackButtonClick = onBackButtonClick
             )
             if (searchTextState.value.text.isEmpty()) {
-                CardsGrid(coinCategories)
+                CardsGrid(coinCategories, onCategoryClick)
             } else {
                 if (searchTextState.value.text.length > 1 && coinResult.isEmpty()) {
                     NoResults()
@@ -234,7 +240,7 @@ fun SearchView(
 @ExperimentalMaterialApi
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun CardsGrid(categories: List<CoinCategory>) {
+fun CardsGrid(categories: List<CoinCategory>, onCategoryClick: (String?) -> Unit) {
     LazyColumn {
         item {
             Divider(
@@ -255,9 +261,9 @@ fun CardsGrid(categories: List<CoinCategory>) {
         // Turning the list in a list of lists of two elements each
         items(categories.windowed(2, 2, true)) { chunk ->
             Row(modifier = Modifier.padding(horizontal = 10.dp)) {
-                CategoryCard(chunk[0].name, chunk[0].imageUrl) {}
+                CategoryCard(chunk[0].name, chunk[0].imageUrl) { onCategoryClick.invoke(chunk[0].uid) }
                 if (chunk.size > 1) {
-                    CategoryCard(chunk[1].name, chunk[1].imageUrl) {}
+                    CategoryCard(chunk[1].name, chunk[1].imageUrl) { onCategoryClick.invoke(chunk[1].uid) }
                 } else {
                     Spacer(modifier = Modifier.weight(1f))
                 }
