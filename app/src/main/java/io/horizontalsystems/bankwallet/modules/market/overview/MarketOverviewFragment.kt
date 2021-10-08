@@ -32,7 +32,6 @@ import io.horizontalsystems.bankwallet.modules.market.MarketModule
 import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
 import io.horizontalsystems.bankwallet.modules.market.MarketViewModel
 import io.horizontalsystems.bankwallet.modules.market.category.MarketDataValue
-import io.horizontalsystems.bankwallet.modules.market.category.MarketDataValue
 import io.horizontalsystems.bankwallet.modules.market.getText
 import io.horizontalsystems.bankwallet.modules.market.metrics.MarketMetrics
 import io.horizontalsystems.bankwallet.modules.market.metrics.MarketMetricsModule

@@ -32,7 +32,10 @@ import androidx.fragment.app.viewModels
 import coil.compose.rememberImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.iconPlaceholder
+import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.bankwallet.core.imageUrl
+import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.market.category.MarketTopCoinsModule.ViewState
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -69,6 +72,7 @@ class MarketTopCoinsFragment : BaseFragment() {
                     viewModel,
                     { findNavController().popBackStack() },
                     { onSortingClick() },
+                    { coinUid -> onCoinClick(coinUid) }
                 )
             }
         }
@@ -89,6 +93,12 @@ class MarketTopCoinsFragment : BaseFragment() {
             .show(childFragmentManager, "sorting_field_selector")
     }
 
+    private fun onCoinClick(coinUid: String) {
+        val arguments = CoinFragment.prepareParams(coinUid)
+
+        findNavController().navigate(R.id.coinFragment, arguments, navOptions())
+    }
+
     companion object {
         private const val CATEGORY_UID_KEY = "category_uid_key"
 
@@ -106,6 +116,7 @@ fun CategoryScreen(
     viewModel: MarketTopCoinsViewModel,
     onCloseButtonClick: () -> Unit,
     onSortMenuClick: () -> Unit,
+    onCoinClick: (String) -> Unit,
 ) {
 
     val state by viewModel.stateLiveData.observeAsState()
@@ -131,7 +142,7 @@ fun CategoryScreen(
                         topMarketButton,
                         { viewModel.onTopMarketButtonClick() }
                     )
-                    ListView(state)
+                    ListView(state, onCoinClick)
                 }
             }
         }
@@ -265,7 +276,7 @@ private fun SortMenu(titleRes: Int, onClick: () -> Unit) {
     )
 }
 
-fun LazyListScope.ListView(state: ViewState?) {
+fun LazyListScope.ListView(state: ViewState?, onCoinClick: (String) -> Unit) {
     when (state) {
         ViewState.Loading -> {
             item { ListLoadingView() }
@@ -273,20 +284,23 @@ fun LazyListScope.ListView(state: ViewState?) {
         is ViewState.Error -> {
             item { ListErrorView(state.errorText) { } }
         }
-        is ViewState.Data -> CoinList(state.items)
+        is ViewState.Data -> CoinList(state.items, onCoinClick)
     }
 }
 
-fun LazyListScope.CoinList(items: List<MarketTopCoinsModule.ViewItem>) {
+fun LazyListScope.CoinList(
+    items: List<MarketTopCoinsModule.ViewItem>,
+    onCoinClick: (String) -> Unit
+) {
     items(items) { item ->
         MarketListCoin(
-            item.coinName,
-            item.coinCode,
+            item.fullCoin.coin.name,
+            item.fullCoin.coin.code,
             item.coinRate,
-            item.coinIconUrl,
-            item.coinIconPlaceholder,
+            item.fullCoin.coin.iconUrl,
+            item.fullCoin.iconPlaceholder,
             item.marketDataValue,
             item.rank
-        ) { }
+        ) { onCoinClick.invoke(item.fullCoin.coin.uid)}
     }
 }
