@@ -6,22 +6,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?android:windowBackground"
-    android:orientation="vertical"
-    >
-
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        app:navigationIcon="@drawable/ic_back"
-        app:titleTextAppearance="@style/Title3"
-        />
+    android:orientation="vertical">
 
     <io.horizontalsystems.bankwallet.ui.extensions.MarketListHeaderView
         android:id="@+id/marketListHeader"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        />
+        android:layout_height="wrap_content" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
@@ -31,6 +21,6 @@
         android:paddingBottom="16dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:itemCount="3"
-        tools:listitem="@layout/view_holder_coin_rate"
-        />
+        tools:listitem="@layout/view_holder_coin_rate" />
+
 </LinearLayout>

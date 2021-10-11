@@ -19,6 +19,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.iconUrl
+import io.horizontalsystems.bankwallet.modules.coin.coinmarkets.CoinMarketsFragment
 import io.horizontalsystems.bankwallet.modules.coin.overview.CoinOverviewFragment
 import io.horizontalsystems.bankwallet.modules.coin.ui.CoinScreenTitle
 import io.horizontalsystems.bankwallet.modules.settings.notifications.bottommenu.BottomNotificationMenu
@@ -135,11 +136,12 @@ class CoinFragment : BaseFragment(R.layout.fragment_coin) {
 class CoinTabsAdapter(fm: FragmentManager, lifecycle: Lifecycle) :
     FragmentStateAdapter(fm, lifecycle) {
 
-    override fun getItemCount() = 1
+    override fun getItemCount() = 2
 
     override fun createFragment(position: Int): Fragment {
         return when (position) {
             0 -> CoinOverviewFragment()
+            1 -> CoinMarketsFragment()
             else -> throw IllegalStateException()
         }
     }
