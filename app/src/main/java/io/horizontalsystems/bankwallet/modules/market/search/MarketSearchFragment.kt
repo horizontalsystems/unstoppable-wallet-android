@@ -36,14 +36,16 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.iconUrl
-import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.market.category.MarketTopCoinsFragment
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
 import io.horizontalsystems.core.findNavController
-import io.horizontalsystems.marketkit.models.*
+import io.horizontalsystems.marketkit.models.Coin
+import io.horizontalsystems.marketkit.models.CoinType
+import io.horizontalsystems.marketkit.models.FullCoin
+import io.horizontalsystems.marketkit.models.Platform
 
 class MarketSearchFragment : BaseFragment() {
 
@@ -65,7 +67,7 @@ class MarketSearchFragment : BaseFragment() {
 
                 MarketSearchScreen(
                     coinResult = coinResult,
-                    coinCategories = viewModel.coinCategories,
+                    viewItems = viewModel.viewItems,
                     onBackButtonClick = { findNavController().popBackStack() },
                     onFilterButtonClick = {
                         findNavController().navigate(
@@ -78,10 +80,19 @@ class MarketSearchFragment : BaseFragment() {
                         val arguments = CoinFragment.prepareParams(coin.uid)
                         findNavController().navigate(R.id.coinFragment, arguments, navOptions())
                     },
-                    onCategoryClick = { coinCategoryUid ->
-                        val arguments = MarketTopCoinsFragment.prepareParams(coinCategoryUid)
-                        findNavController().navigate(R.id.marketSearchFragment_to_marketTopCoinsFragment, arguments, navOptionsFromBottom())
-                    },
+                    onCategoryClick = { viewItemType ->
+                        when(viewItemType){
+                            //todo differentiate opening of CoinCategory and TopCoins
+                            MarketSearchModule.ViewType.TopCoinsType -> {
+                                val arguments = MarketTopCoinsFragment.prepareParams("top_coins")
+                                findNavController().navigate(R.id.marketSearchFragment_to_marketTopCoinsFragment, arguments, navOptionsFromBottom())
+                            }
+                            is MarketSearchModule.ViewType.CoinCategoryType -> {
+                                val arguments = MarketTopCoinsFragment.prepareParams(viewItemType.coinCategory.uid)
+                                findNavController().navigate(R.id.marketSearchFragment_to_marketTopCoinsFragment, arguments, navOptionsFromBottom())
+                            }
+                        }
+                         },
                     onSearchQueryChange = { query -> viewModel.searchByQuery(query) }
                 )
             }
@@ -94,11 +105,11 @@ class MarketSearchFragment : BaseFragment() {
 @Composable
 fun MarketSearchScreen(
     coinResult: List<FullCoin>,
-    coinCategories: List<CoinCategory>,
+    viewItems: List<MarketSearchModule.ViewItem>,
     onBackButtonClick: () -> Unit,
     onFilterButtonClick: () -> Unit,
     onCoinClick: (Coin) -> Unit,
-    onCategoryClick: (String?) -> Unit,
+    onCategoryClick: (MarketSearchModule.ViewType) -> Unit,
     onSearchQueryChange: (String) -> Unit
 ) {
     val searchTextState = remember { mutableStateOf(TextFieldValue("")) }
@@ -116,7 +127,7 @@ fun MarketSearchScreen(
                 onBackButtonClick = onBackButtonClick
             )
             if (searchTextState.value.text.isEmpty()) {
-                CardsGrid(coinCategories, onCategoryClick)
+                CardsGrid(viewItems, onCategoryClick)
             } else {
                 if (searchTextState.value.text.length > 1 && coinResult.isEmpty()) {
                     NoResults()
@@ -240,7 +251,7 @@ fun SearchView(
 @ExperimentalMaterialApi
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun CardsGrid(categories: List<CoinCategory>, onCategoryClick: (String?) -> Unit) {
+fun CardsGrid(viewItems: List<MarketSearchModule.ViewItem>, onCategoryClick: (MarketSearchModule.ViewType) -> Unit) {
     LazyColumn {
         item {
             Divider(
@@ -259,11 +270,11 @@ fun CardsGrid(categories: List<CoinCategory>, onCategoryClick: (String?) -> Unit
             )
         }
         // Turning the list in a list of lists of two elements each
-        items(categories.windowed(2, 2, true)) { chunk ->
+        items(viewItems.windowed(2, 2, true)) { chunk ->
             Row(modifier = Modifier.padding(horizontal = 10.dp)) {
-                CategoryCard(chunk[0].name, chunk[0].imageUrl) { onCategoryClick.invoke(chunk[0].uid) }
+                CategoryCard(chunk[0].name, chunk[0].imageUrl) { onCategoryClick.invoke(chunk[0].type) }
                 if (chunk.size > 1) {
-                    CategoryCard(chunk[1].name, chunk[1].imageUrl) { onCategoryClick.invoke(chunk[1].uid) }
+                    CategoryCard(chunk[1].name, chunk[1].imageUrl) { onCategoryClick.invoke(chunk[1].type) }
                 } else {
                     Spacer(modifier = Modifier.weight(1f))
                 }
