@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.ui.compose.components
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -11,7 +12,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.market.category.MarketDataValue
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 
@@ -38,7 +44,9 @@ fun MarketListCoin(
             CoinImage(
                 iconUrl = coinIconUrl,
                 placeholder = coinIconPlaceholder,
-                modifier = Modifier.padding(horizontal = 16.dp).size(24.dp)
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .size(24.dp)
             )
             Column(
                 modifier = Modifier.padding(end = 16.dp)
@@ -86,7 +94,8 @@ fun MarketCoinSecondRow(coinCode: String, marketDataValue: MarketDataValue, rank
     ) {
         rank?.let { rank ->
             Box(
-                modifier = Modifier.padding(end = 8.dp)
+                modifier = Modifier
+                    .padding(end = 8.dp)
                     .clip(RoundedCornerShape(4.dp))
                     .background(ComposeAppTheme.colors.jeremy)
             ) {
@@ -111,10 +120,10 @@ fun MarketCoinSecondRow(coinCode: String, marketDataValue: MarketDataValue, rank
 }
 
 @Composable
-fun MarketDataValueComponent(marketDataValue: MarketDataValue){
-    when(marketDataValue){
+fun MarketDataValueComponent(marketDataValue: MarketDataValue) {
+    when (marketDataValue) {
         is MarketDataValue.MarketCap -> {
-            Row{
+            Row {
                 Text(
                     text = "MCap",
                     color = ComposeAppTheme.colors.jacob,
@@ -131,7 +140,7 @@ fun MarketDataValueComponent(marketDataValue: MarketDataValue){
             }
         }
         is MarketDataValue.Volume -> {
-            Row{
+            Row {
                 Text(
                     text = "Vol",
                     color = ComposeAppTheme.colors.jacob,
@@ -160,9 +169,15 @@ fun MarketDataValueComponent(marketDataValue: MarketDataValue){
 
 @Composable
 fun ListLoadingView() {
-    Box(modifier = Modifier.height(240.dp).fillMaxWidth()) {
+    Box(
+        modifier = Modifier
+            .height(240.dp)
+            .fillMaxWidth()
+    ) {
         CircularProgressIndicator(
-            modifier = Modifier.align(Alignment.Center).size(24.dp),
+            modifier = Modifier
+                .align(Alignment.Center)
+                .size(24.dp),
             color = ComposeAppTheme.colors.grey,
             strokeWidth = 2.dp,
         )
@@ -174,17 +189,41 @@ fun ListErrorView(
     errorText: String,
     onClick: (() -> Unit)? = null
 ) {
-    Box(modifier = Modifier.height(240.dp).fillMaxWidth()) {
-        Text(
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Image(
             modifier = Modifier
-                .align(Alignment.Center)
-                .padding(horizontal = 16.dp)
-                .clickable {
-                    onClick?.invoke()
-                },
+                .size(48.dp),
+            painter = painterResource(id = R.drawable.ic_attention_24),
+            contentDescription = errorText,
+            colorFilter = ColorFilter.tint(ComposeAppTheme.colors.grey)
+        )
+        Spacer(Modifier.height(20.dp))
+        Text(
             text = errorText,
             color = ComposeAppTheme.colors.grey,
             style = ComposeAppTheme.typography.subhead2,
         )
+        Spacer(Modifier.height(24.dp))
+        ButtonSecondaryDefault(
+            modifier = Modifier
+                .width(145.dp)
+                .height(28.dp),
+            title = stringResource(id = R.string.Button_Retry),
+            onClick = {
+                onClick?.invoke()
+            }
+        )
+    }
+}
+
+@Preview
+@Composable
+fun PreviewListErrorView() {
+    ComposeAppTheme {
+        ListErrorView(errorText = "Sync Error 123")
     }
 }

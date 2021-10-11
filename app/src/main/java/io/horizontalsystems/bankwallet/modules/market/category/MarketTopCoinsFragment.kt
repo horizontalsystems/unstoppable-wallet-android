@@ -282,7 +282,12 @@ fun LazyListScope.ListView(state: ViewState?, onCoinClick: (String) -> Unit) {
             item { ListLoadingView() }
         }
         is ViewState.Error -> {
-            item { ListErrorView(state.errorText) { } }
+            item {
+                Box(modifier = Modifier.padding(top = 140.dp)) {
+                    ListErrorView(stringResource(R.string.Market_SyncError))
+                }
+
+            }
         }
         is ViewState.Data -> CoinList(state.items, onCoinClick)
     }

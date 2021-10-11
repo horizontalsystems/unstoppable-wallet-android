@@ -63,7 +63,7 @@ class MarketPostsViewModel(
             }
             is MarketPostService.State.Failed -> {
                 loadingLiveData.postValue(false)
-                errorLiveData.postValue(Translator.getString(R.string.Market_News_SyncError))
+                errorLiveData.postValue(Translator.getString(R.string.Market_SyncError))
                 postsViewItemsLiveData.postValue(listOf())
             }
         }

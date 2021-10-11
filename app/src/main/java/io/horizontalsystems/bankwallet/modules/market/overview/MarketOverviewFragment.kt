@@ -100,21 +100,25 @@ class MarketOverviewFragment : BaseFragment() {
                 )
             }
         ) {
-            Column(modifier = Modifier.verticalScroll(scrollState)) {
-                viewItem?.let {
+            viewItem?.let {
+                Column(
+                    modifier = Modifier
+                        .verticalScroll(scrollState)
+                ) {
                     Box(
                         modifier = Modifier
                             .height(240.dp)
-                            .fillMaxWidth()
                     ) {
                         MetricChartsView(it.marketMetrics)
                     }
                     BoardsView(it.boardItems)
                 }
-                error?.let {
-                    ListErrorView(
-                        stringResource(R.string.BalanceSyncError_Title)
-                    ) { marketOverviewViewModel.onErrorClick() }
+            }
+            error?.let {
+                ListErrorView(
+                    stringResource(R.string.Market_SyncError)
+                ) {
+                    marketOverviewViewModel.onErrorClick()
                 }
             }
         }
