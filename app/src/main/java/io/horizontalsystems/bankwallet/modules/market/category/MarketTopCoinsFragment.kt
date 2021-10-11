@@ -34,6 +34,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.iconUrl
+import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.market.category.MarketTopCoinsModule.ViewState
@@ -42,7 +43,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.bankwallet.ui.extensions.MarketListHeaderView
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorDialog
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorItem
-import io.horizontalsystems.bankwallet.ui.helpers.ImageWebHelper
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.marketkit.models.CoinCategory
 
@@ -208,7 +208,7 @@ fun LazyListScope.CategoryInfo(coinCategory: CoinCategory?) {
                     )
                 }
                 Image(
-                    painter = rememberImagePainter(ImageWebHelper.getCoinCategoryImageUrl(category.uid)),
+                    painter = rememberImagePainter(category.imageUrl),
                     contentDescription = "category image",
                     modifier = Modifier
                         .fillMaxHeight()
@@ -301,6 +301,6 @@ fun LazyListScope.CoinList(
             item.fullCoin.iconPlaceholder,
             item.marketDataValue,
             item.rank
-        ) { onCoinClick.invoke(item.fullCoin.coin.uid) }
+        ) { onCoinClick.invoke(item.fullCoin.coin.uid)}
     }
 }

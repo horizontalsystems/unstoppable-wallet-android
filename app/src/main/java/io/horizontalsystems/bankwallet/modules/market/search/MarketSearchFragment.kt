@@ -36,6 +36,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.iconUrl
+import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.market.category.MarketTopCoinsFragment
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
@@ -81,18 +82,27 @@ class MarketSearchFragment : BaseFragment() {
                         findNavController().navigate(R.id.coinFragment, arguments, navOptions())
                     },
                     onCategoryClick = { viewItemType ->
-                        when(viewItemType){
+                        when (viewItemType) {
                             //todo differentiate opening of CoinCategory and TopCoins
-                            MarketSearchModule.ViewType.TopCoinsType -> {
+                            MarketSearchModule.ViewItem.MarketTopCoins -> {
                                 val arguments = MarketTopCoinsFragment.prepareParams("top_coins")
-                                findNavController().navigate(R.id.marketSearchFragment_to_marketTopCoinsFragment, arguments, navOptionsFromBottom())
+                                findNavController().navigate(
+                                    R.id.marketSearchFragment_to_marketTopCoinsFragment,
+                                    arguments,
+                                    navOptionsFromBottom()
+                                )
                             }
-                            is MarketSearchModule.ViewType.CoinCategoryType -> {
-                                val arguments = MarketTopCoinsFragment.prepareParams(viewItemType.coinCategory.uid)
-                                findNavController().navigate(R.id.marketSearchFragment_to_marketTopCoinsFragment, arguments, navOptionsFromBottom())
+                            is MarketSearchModule.ViewItem.MarketCoinCategory -> {
+                                val arguments =
+                                    MarketTopCoinsFragment.prepareParams(viewItemType.coinCategory.uid)
+                                findNavController().navigate(
+                                    R.id.marketSearchFragment_to_marketTopCoinsFragment,
+                                    arguments,
+                                    navOptionsFromBottom()
+                                )
                             }
                         }
-                         },
+                    },
                     onSearchQueryChange = { query -> viewModel.searchByQuery(query) }
                 )
             }
@@ -109,7 +119,7 @@ fun MarketSearchScreen(
     onBackButtonClick: () -> Unit,
     onFilterButtonClick: () -> Unit,
     onCoinClick: (Coin) -> Unit,
-    onCategoryClick: (MarketSearchModule.ViewType) -> Unit,
+    onCategoryClick: (MarketSearchModule.ViewItem) -> Unit,
     onSearchQueryChange: (String) -> Unit
 ) {
     val searchTextState = remember { mutableStateOf(TextFieldValue("")) }
@@ -128,12 +138,10 @@ fun MarketSearchScreen(
             )
             if (searchTextState.value.text.isEmpty()) {
                 CardsGrid(viewItems, onCategoryClick)
+            } else if (searchTextState.value.text.length > 1 && coinResult.isEmpty()) {
+                NoResults()
             } else {
-                if (searchTextState.value.text.length > 1 && coinResult.isEmpty()) {
-                    NoResults()
-                } else {
-                    MarketSearchResults(coinResult, onCoinClick)
-                }
+                MarketSearchResults(coinResult, onCoinClick)
             }
         }
     }
@@ -251,7 +259,10 @@ fun SearchView(
 @ExperimentalMaterialApi
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun CardsGrid(viewItems: List<MarketSearchModule.ViewItem>, onCategoryClick: (MarketSearchModule.ViewType) -> Unit) {
+fun CardsGrid(
+    viewItems: List<MarketSearchModule.ViewItem>,
+    onCategoryClick: (MarketSearchModule.ViewItem) -> Unit
+) {
     LazyColumn {
         item {
             Divider(
@@ -272,9 +283,9 @@ fun CardsGrid(viewItems: List<MarketSearchModule.ViewItem>, onCategoryClick: (Ma
         // Turning the list in a list of lists of two elements each
         items(viewItems.windowed(2, 2, true)) { chunk ->
             Row(modifier = Modifier.padding(horizontal = 10.dp)) {
-                CategoryCard(chunk[0].name, chunk[0].imageUrl) { onCategoryClick.invoke(chunk[0].type) }
+                CategoryCard(chunk[0], onCategoryClick)
                 if (chunk.size > 1) {
-                    CategoryCard(chunk[1].name, chunk[1].imageUrl) { onCategoryClick.invoke(chunk[1].type) }
+                    CategoryCard(chunk[1], onCategoryClick)
                 } else {
                     Spacer(modifier = Modifier.weight(1f))
                 }
@@ -291,9 +302,8 @@ fun CardsGrid(viewItems: List<MarketSearchModule.ViewItem>, onCategoryClick: (Ma
 @ExperimentalMaterialApi
 @Composable
 private fun RowScope.CategoryCard(
-    title: String,
-    imageUrl: String,
-    onClick: () -> Unit
+    type: MarketSearchModule.ViewItem,
+    onClick: (MarketSearchModule.ViewItem) -> Unit
 ) {
     Card(
         modifier = Modifier
@@ -303,27 +313,54 @@ private fun RowScope.CategoryCard(
         shape = RoundedCornerShape(12.dp),
         elevation = 0.dp,
         backgroundColor = ComposeAppTheme.colors.lawrence,
-        onClick = onClick
+        onClick = {
+            onClick.invoke(type)
+        }
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
-            Image(
-                painter = rememberImagePainter(imageUrl),
-                contentDescription = "category image",
-                modifier = Modifier
-                    .height(108.dp)
-                    .width(76.dp)
-                    .align(Alignment.TopEnd),
-            )
-            Column(
-                modifier = Modifier.padding(12.dp),
-            ) {
-                Spacer(modifier = Modifier.weight(1f))
-                Text(
-                    text = title,
-                    style = ComposeAppTheme.typography.subhead1,
-                    color = ComposeAppTheme.colors.oz,
-                    maxLines = 1
-                )
+            when (type) {
+                MarketSearchModule.ViewItem.MarketTopCoins -> {
+                    Image(
+                        painter = painterResource(R.drawable.ic_top_coins),
+                        contentDescription = "category image",
+                        modifier = Modifier
+                            .height(108.dp)
+                            .width(76.dp)
+                            .align(Alignment.TopEnd),
+                    )
+                    Column(
+                        modifier = Modifier.padding(12.dp),
+                    ) {
+                        Spacer(modifier = Modifier.weight(1f))
+                        Text(
+                            text = stringResource(R.string.Market_Category_TopCoins),
+                            style = ComposeAppTheme.typography.subhead1,
+                            color = ComposeAppTheme.colors.oz,
+                            maxLines = 1
+                        )
+                    }
+                }
+                is MarketSearchModule.ViewItem.MarketCoinCategory -> {
+                    Image(
+                        painter = rememberImagePainter(type.coinCategory.imageUrl),
+                        contentDescription = "category image",
+                        modifier = Modifier
+                            .height(108.dp)
+                            .width(76.dp)
+                            .align(Alignment.TopEnd),
+                    )
+                    Column(
+                        modifier = Modifier.padding(12.dp),
+                    ) {
+                        Spacer(modifier = Modifier.weight(1f))
+                        Text(
+                            text = type.coinCategory.name,
+                            style = ComposeAppTheme.typography.subhead1,
+                            color = ComposeAppTheme.colors.oz,
+                            maxLines = 1
+                        )
+                    }
+                }
             }
         }
     }
@@ -433,10 +470,7 @@ fun MarketCoinPreview() {
 fun CardPreview() {
     ComposeAppTheme {
         Row {
-            CategoryCard(
-                "Top Coins",
-                ""
-            ) { }
+            CategoryCard(MarketSearchModule.ViewItem.MarketTopCoins, { })
         }
     }
 }

@@ -11,6 +11,7 @@ import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
 import io.horizontalsystems.ethereumkit.core.toRawHexString
 import io.horizontalsystems.hodler.LockTimeInterval
 import io.horizontalsystems.marketkit.models.Coin
+import io.horizontalsystems.marketkit.models.CoinCategory
 import io.horizontalsystems.marketkit.models.CoinType
 import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.views.SingleClickListener
@@ -23,6 +24,9 @@ import io.reactivex.schedulers.Schedulers
 
 val Coin.iconUrl: String
     get() = "https://markets.nyc3.digitaloceanspaces.com/coin-icons/ios/$uid@3x.png"
+
+val CoinCategory.imageUrl: String
+    get() = "https://markets.nyc3.digitaloceanspaces.com/category-icons/ios/$uid@3x.png"
 
 val FullCoin.iconPlaceholder: Int
     get() = if (platforms.size == 1) {
