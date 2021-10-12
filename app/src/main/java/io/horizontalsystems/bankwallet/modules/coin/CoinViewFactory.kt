@@ -13,13 +13,8 @@ import io.horizontalsystems.chartview.models.ChartPoint
 import io.horizontalsystems.chartview.models.MacdInfo
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.core.helpers.DateHelper
-import io.horizontalsystems.marketkit.models.CoinType
-import io.horizontalsystems.marketkit.models.LinkType
-import io.horizontalsystems.marketkit.models.MarketInfoOverview
-import io.horizontalsystems.marketkit.models.TimePeriod
+import io.horizontalsystems.marketkit.models.*
 import io.horizontalsystems.views.ListPosition
-import io.horizontalsystems.xrateskit.entities.ChartInfo
-import io.horizontalsystems.xrateskit.entities.ChartType
 import kotlinx.android.parcel.Parcelize
 import java.lang.Long.max
 import java.math.BigDecimal

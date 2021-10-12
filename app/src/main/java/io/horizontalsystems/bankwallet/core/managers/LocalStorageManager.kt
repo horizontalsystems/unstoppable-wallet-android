@@ -18,7 +18,7 @@ import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.core.IPinStorage
 import io.horizontalsystems.core.IThirdKeyboard
 import io.horizontalsystems.core.entities.AppVersion
-import io.horizontalsystems.xrateskit.entities.ChartType
+import io.horizontalsystems.marketkit.models.ChartType
 
 class LocalStorageManager(private val preferences: SharedPreferences)
     : ILocalStorage, IPinStorage, IChartTypeStorage, IThirdKeyboard, IMarketStorage {
