@@ -535,7 +535,7 @@
     <string name="SettingsSecurity_ManageKeys">Wallets verwalten</string>
     <string name="SettingsSecurity_AppRestartWarning">Diese Aktion wird das Unstoppable Wallet neu starten.</string>
     <string name="SettingsSecurity_TorConnectionDescription">Vollständig anonymisieren Sie Ihr Internet während Sie diese App verwenden. Beachten Sie, dass in einigen Fällen die WalletConnect-Funktion für DeFi-Apps sehr langsam oder gar nicht funktionieren kann.</string>
-    <string name="SettingsSecurity_NotificationsDisabledWarning">The notifications for the Unstoppable Wallet app are disabled. You need to turn on Notifications and allow \'background app refresh\' in order to be able to receive price change alerts.</string>
+    <string name="SettingsSecurity_NotificationsDisabledWarning">The notifications for the Unstoppable Wallet app are disabled. You need to turn on Notifications and allow background app refresh in order to be able to receive price change alerts.</string>
     <string name="SettingsSecurity_SortingShuffle">Zufällig</string>
     <string name="SettingsSecurity_SortingShuffleDescription">Zufällige Indizierung</string>
     <string name="SettingsSecurity_SortingBip69">Deterministic BIP69</string>
