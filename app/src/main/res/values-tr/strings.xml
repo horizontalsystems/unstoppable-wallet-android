@@ -52,7 +52,7 @@
     <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Parola için lütfen yalnızca latin harfleri ve rakamları kullanın</string>
     <string name="CreateWallet_Error_InvalidConfirmation">Parola onayı eşleşmiyor</string>
     <string name="EnterPassphrase">Parola</string>
-    <string name="CreateWallet_PassphraseDescription">Parolalar cüzdanlara ek güvenlik katmanı ekleyerek kullanıcıların tek bir anımsatıcı kurtarma ifadesi kullanarak ancak farklı parolalarla ilişkilendirilmiş birden çok bağımsız çoklu para cüzdanı oluşturmasına olanak tanır. \n\nBu cüzdanları geri yüklemek için bir kullanıcı mnemonic kurtarma ifadesinin yanı sıra bir parola gerektirecektir. her biri geri yüklenecek cüzdan.</string>
+    <string name="CreateWallet_PassphraseDescription">Passphrases add an additional security layer to the wallets, enabling users to create multiple independent multi-coin wallets using a single mnemonic recovery phrase, but associated with different passwords. \n\nTo restore these wallets, a user will require a mnemonic recovery phrase as well as a password for each to be restored wallet.</string>
     <!--Rate App-->
     <string name="RateApp_Title_Rate_This_App">Uygulamayı Değerlendirin</string>
     <string name="RateApp_Description_Rate_This_App">Unstoppable Cüzdandan Yararlanıyor musunuz? Lütfen bu uygulamayı değerlendirmek için bir dakikanızı ayırın</string>
@@ -60,12 +60,12 @@
     <string name="RateApp_Button_NotNow">Şimdi değil</string>
     <!--Restore-->
     <string name="Restore_Enter_Key_Title">Anahtarı girin</string>
-    <string name="Restore_Mnemonic_Description">12 veya 24 kelimeden oluşan anımsatıcınızı girin. Kelimelerin doğru sırada girilmesi ve boşluklarla ayrılması gerekir.</string>
+    <string name="Restore_Mnemonic_Description">Enter your mnemonic which consists of between 12 and 24 words. The words need to be entered in the correct order and separated by spaces.</string>
     <string name="Restore_ValidationFailed">Yanlış Anahtar</string>
-    <string name="Restore_Error_MnemonicWordCount">Yanlış sözcük sayısı. 12-24 olmalıdır. Sizin girdiğiniz:%d</string>
+    <string name="Restore_Error_MnemonicWordCount">Wrong words count. It must be between 12 and 24 words. You entered: %d</string>
     <string name="Restore_Error_EmptyPassphrase">Parola boş olamaz</string>
     <string name="Restore_InvalidChecksum">Geçersiz sağlama toplamı</string>
-    <string name="Restore_PassphraseDescription">Bu anımsatıcı ifadeyi oluştururken kullandığınız parolanızı girin.</string>
+    <string name="Restore_PassphraseDescription">Enter the passphrase you used when creating this mnemonic phrase.</string>
     <string name="Select_Coins">Choose Coins</string>
     <string name="Restore_ZCash_BirthdayHeight">Oluşturulma Günü Üst Sınırı</string>
     <string name="Restore_ZCash_BirthdayHeight_Hint">If you know your birthday height of wallet enter it for quick syncing.</string>
@@ -95,7 +95,7 @@
     <string name="Market_Tab_Overview">Overview</string>
     <string name="Market_Tab_Posts">News</string>
     <string name="Market_Tab_Watchlist">Watchlist</string>
-    <string name="Market_Tab_Watchlist_EmptyList">You don\’t have any favorite assets.\nYou can add the favorites by clicking on star icon in the asset page</string>
+    <string name="Market_Tab_Watchlist_EmptyList">Watchlist is empty. \nYou may add coins to your watchlist using the star icon on a coin page.</string>
     <string name="Market_Category_Rated">Rated</string>
     <string name="Market_Category_Rated_Description">Token ratings based on project security and market liquidity.</string>
     <string name="Market_Category_TopCoins">Top Coins</string>
@@ -155,7 +155,7 @@
     <string name="MarketGlobalMetrics_DefiCap">DeFi Cap</string>
     <string name="MarketGlobalMetrics_TvlInDefi">TVL in DeFi</string>
     <string name="MarketGlobalMetrics_TotalMarketCapDescription">Total M.Cap description</string>
-    <string name="MarketGlobalMetrics_BtcDominanceDescription">The historical change in ratio between the market cap of Bitcoin to the rest of the cryptocurrency markets. \n\nTypically, when Bitcoin dominance trending higher the rest of the crypto market trends down and vice versa.</string>
+    <string name="MarketGlobalMetrics_BtcDominanceDescription">The historical change in ratio between the market cap of Bitcoin to the rest of the cryptocurrency markets. \n\nTypically, when Bitcoin dominance is trending higher, the rest of the crypto market trends downwards and vice versa.</string>
     <string name="MarketGlobalMetrics_VolumeDescription">The historical change in daily aggregate trading market volume for all cryptocurrencies.</string>
     <string name="MarketGlobalMetrics_DefiCapDescription">The historical change in cumulative market value of tokens in Decentralized Finance sector.</string>
     <string name="MarketGlobalMetrics_TvlInDefiDescription">The historical change in cumulative value of all cryptocurrency managed by decentralized protocols.</string>
@@ -265,7 +265,7 @@
     <string name="Send_Error_MaximumAmount">Maksimum miktar %s</string>
     <string name="Send_Error_MinRequiredBalance">Min. gerekli bakiye %s</string>
     <string name="Send_Error_TransparentAddress">Unstoppable, bir transparan adrese yapılan ödemeleri desteklemez</string>
-    <string name="Send_Error_SendToSelf">Kendine gönderme desteklenmiyor</string>
+    <string name="Send_Error_SendToSelf">Sending to yourself is not supported</string>
     <string name="Send_DialogAvailableBalance">Mevcut Bakiye</string>
     <string name="Send_DialogSpeed">İşlem hızı</string>
     <string name="Send_TxSpeed_Low">Yavaş</string>
@@ -287,11 +287,11 @@
     <string name="FeeInfo_Title">İşlem hızı</string>
     <string name="FeeInfo_Description">Hem Bitcoin hem de Ethereum blok zincirleri, kullanıcıların işlem yaparken ağ ücreti ödemesini gerektirir. Ağda çok sayıda işlem gerçekleştiğinde ücretler daha yüksek ve blok zincir daha az meşgul olduğunda ücretler daha düşüktür.</string>
     <string name="FeeInfo_Slow">Yavaş</string>
-    <string name="FeeInfo_SlowDescription">Bu aralıktan bir değer seçmek, işlemin saatlerce beklemesine veya reddedilmesine neden olabilir. Değer ne kadar düşükse işlemin onaylanması o kadar uzun sürer.</string>
+    <string name="FeeInfo_SlowDescription">Selecting a value from this range may result in a transaction being held as pending for hours, or being rejected. The lower the value, the longer it will take for the transaction to confirm.</string>
     <string name="FeeInfo_Average">Ortalama</string>
-    <string name="FeeInfo_AverageDescription">Genellikle bu ücret, işlemin Bitcoin için dakikalar/saatler içinde ve Ethereum için dakikalar içinde işleme alınması için yeterli olacaktır.</string>
+    <string name="FeeInfo_AverageDescription">Typically, the recommended fee value should be sufficient for a transaction to be processed within minutes or an hour for Bitcoin and within minutes for Ethereum.</string>
     <string name="FeeInfo_Fast">Hızlı</string>
-    <string name="FeeInfo_FastDescription">Önceliğin önemli olduğu işlemler için yüksek ücret değeri kullanmanızı öneririz. Bir işlemin Bitcoin için 10 dakika, Ethereum için 1-2 dakika içerisinde tamamlanması için yeterli olacaktır.</string>
+    <string name="FeeInfo_FastDescription">For transactions where priority is important, we recommend using the high fee value. It\'s expected to be sufficient for a transaction to be completed within 10 minutes for Bitcoin and within 1-2 minutes for Ethereum.</string>
     <!--Wallet Connect-->
     <string name="WalletConnect_Title">Wallet Connect</string>
     <string name="WalletConnect_Request">İstek</string>
@@ -318,8 +318,8 @@
     <string name="WalletConnect_SignMessageRequest_SignMessageHint">Lütfen doğrulamak için bir mesajı imzalayın</string>
     <string name="WalletConnect_SignMessageRequest_ButtonSign">kaydol</string>
     <!--EthereumTransaction-->
-    <string name="EthereumTransaction_Error_InsufficientBalance">İşlem, göndermek için %s gerektirir</string>
-    <string name="EthereumTransaction_Error_InsufficientBalanceForFee">Mevcut %s bakiyesi, işlem ücreti dahil bu işlemi gerçekleştirmek için gereken miktarın altında.</string>
+    <string name="EthereumTransaction_Error_InsufficientBalance">The transaction requires %s for sending</string>
+    <string name="EthereumTransaction_Error_InsufficientBalanceForFee">The current %s balance is below the amount required to process this transaction, including the transaction fee.</string>
     <string name="EthereumTransaction_Error_LowerThanBaseGasLimit">Seçilen ücret tutarı çok düşüktür ve reddedilecektir!</string>
     <string name="EthereumTransaction_Error_CannotEstimate">Error! Check balance and ensure there is enough %s to cover fee. Or try increasing price slippage amount and try again. Will retry in 3 sec…</string>
     <!--Swap-->
@@ -355,9 +355,9 @@
     <string name="SwapSettings_Title">Gelişmiş Ayarlar</string>
     <string name="SwapSettings_Service">Hizmet</string>
     <string name="SwapSettings_SlippageTitle">Slipaj Toleransı</string>
-    <string name="SwapSettings_SlippageDescription">Fiyat bu yüzde oranından daha fazla olumsuz olarak değişirse, İşleminiz geri alınacaktır</string>
+    <string name="SwapSettings_SlippageDescription">Your transaction will revert if the price changes unfavorably by more than this percentage</string>
     <string name="SwapSettings_DeadlineTitle">İşlem Son Günü</string>
-    <string name="SwapSettings_DeadlineDescription">Bundan daha uzun süre beklemede olursa, İşleminiz geri alınacaktır</string>
+    <string name="SwapSettings_DeadlineDescription">Your transaction will revert if it is pending for more than this long.</string>
     <string name="SwapSettings_RecipientAddressTitle">Alıcı Adresi</string>
     <string name="SwapSettings_RecipientAddressDescription">Takas etme işleminden sonra, tutar belirtilen adrese transfer edilecektir</string>
     <string name="SwapSettings_Apply">Uygula</string>
@@ -382,14 +382,14 @@
     <string name="Approve_Spender">Harcayan</string>
     <string name="Approve_YouApprove">Sen Onaylıyorsun</string>
     <!--Uniswap Info -->
-    <string name="SwapInfo_Description">Bu takas etme hizmeti, Ethereum blok zinciri üzerine inşa edilmiş ve merkezi olmayan jeton takas etme protokolü olan Uniswap tarafından desteklenmektedir.\n\nUniswap, tamamen otomatiktir ve hile yapmadan jeton takaslarını güvenilir bir şekilde kolaylaştıran akıllı sözleşmelerle yönetilir.</string>
+    <string name="SwapInfo_Description">This exchange service is powered by %s, a decentralized token exchange protocol built on the %s blockchain. \n\n%s is fully automated and managed by smart contracts that facilitate token exchanges in a reliable manner without any means to cheat.</string>
     <string name="SwapInfo_DexRelated">Uniswap Bağlantılı</string>
     <string name="SwapInfo_AllowanceTitle">Ödenek</string>
-    <string name="SwapInfo_AllowanceDescription">Uniswap\'ın jeton swaplarını gerçekleştirirken sizin adınıza harcayabileceği bazı para birimlerindeki tutar. Swap işleminin gerçekleşebilmesi için yeterli ödeme miktarı gereklidir</string>
+    <string name="SwapInfo_AllowanceDescription">The amount of currency that service can spend on your behalf when executing token swaps. A sufficient allowance is required before a swap action can take place.</string>
     <string name="SwapInfo_PriceImpactTitle">Fiyat Etkisi</string>
-    <string name="SwapInfo_PriceImpactDescription">Gösterilen bir fiyattan beklenen fiyat sapması, tipik olarak swap tutarı ile artar.</string>
+    <string name="SwapInfo_PriceImpactDescription">The expected price deviation from a shown price, typically increases with the swap amount.</string>
     <string name="SwapInfo_SwapFeeTitle">Swap Ücreti</string>
-    <string name="SwapInfo_SwapFeeDescription">Uniswap platformunda swap işlemi için kullanıcının sattığı para biriminde gösterilen bir hizmet ücreti. Çoğu talimatlar için % 0.3 veya % 0.6 olmalıdır.</string>
+    <string name="SwapInfo_SwapFeeDescription">A service fee for the swap action on the platform, shown in the currency the user sells. For most orders it should be either 0.3 % or 0.6 %.</string>
     <string name="SwapInfo_GuaranteedAmountTitle">Garantili Tutar</string>
     <string name="SwapInfo_GuaranteedAmountDescription">Bir swap işlemi sonucunda bir kullanıcının alacağı minimum tutar.</string>
     <string name="SwapInfo_MaxSpendTitle">Maksimum Harcama</string>
@@ -398,7 +398,7 @@
     <string name="SwapInfo_TransactionFeeTitle">İşlem Ücreti</string>
     <string name="SwapInfo_TransactionFeeDescription">%s blok zincirinde verilen işlemin tahmini işleme maliyeti. %s bağlantılı işlemler genellikle eşdeğer jeton transfer işlemlerinden daha pahalı olur.</string>
     <string name="SwapInfo_TransactionSpeedTitle">İşlem hızı</string>
-    <string name="SwapInfo_TransactionSpeedDescription">Daha yüksek işlem ücretli işlemler, daha hızlı işleme hızlarıyla sonuçlanacaktır. Elbette bunun tersi de doğrudur.</string>
+    <string name="SwapInfo_TransactionSpeedDescription">Transactions with a higher transaction fee will result in faster processing speeds. The opposite is true as well.</string>
     <string name="SwapInfo_Site">%s Site</string>
     <!--Deposit-->
     <string name="Deposit_Title">%s al</string>
@@ -457,10 +457,10 @@
     <string name="StatusInfo_Processing">İşleniyor</string>
     <string name="StatusInfo_Confirmed">Tamamlandı</string>
     <string name="StatusInfo_Failed">Başarısız</string>
-    <string name="StatusInfo_PendingDescription">İşlem henüz blok zincirinde onaylanmadı. Tavsiye edilen veya daha yüksek ücret ayarı ile gönderilen işlemler genellikle 10 dakika içerisinde işlenir. Düşük bir ücretle gönderilen işlemler birkaç saat hatta günlerce beklemede kalabilir ve hatta tamamen reddedilebilir.</string>
-    <string name="StatusInfo_ProcessingDescription">İşlem blok zincirine dahil edildi ama kalıcı bir sonuca ulaşmadı. Bu noktada, küçük ödemeler için işlemin tamamlandığını düşünebilirsiniz. Daha büyük ödemeler için ise, işlem durumu tamamlandı olarak değişene kadar beklemeniz önerilir.</string>
+    <string name="StatusInfo_PendingDescription">The transaction has not been confirmed on the blockchain yet. Transactions sent with a recommended or higher fee setting are generally processed within 10 minutes. Transactions sent with a low fee may remain pending for a few hours or even days, and can even be rejected entirely.</string>
+    <string name="StatusInfo_ProcessingDescription">The transaction has been already included in the blockchain but has not reached permanent finality. At this point, it\'s safe to consider the transaction as completed for smaller payments. For larger payments, it\'s recommended to wait until the transaction status changes to completed.</string>
     <string name="StatusInfo_ConfirmedDescription">İşlem tamamlandı ve bunun kalıcı ve tersine çevrilemez olduğu kabul edilir.</string>
-    <string name="StatusInfo_FailedDescription">İşlem gerçekleşmedi ve hiçbir değer transfer edilmedi. Başarısız durumdaki işlemler yine de blok zincirine yazılır ve işlem ücretlerini tüketir. Unstoppable uygulaması, bu tür işlemlerin başarısız olma nedenini gösteremez, ama kullanıcılar, etherscan.io gibi açık bir blok gezgininde bunu kontrol edebilirler.</string>
+    <string name="StatusInfo_FailedDescription">The transaction did not get processed and no value transfer took place. Transactions with a fail status are still written to the blockchain and consume transaction fees. The Unstoppable app is unable to show the fail reason for such transactions, but users are able to look it up themselves on a public block explorer i.e. etherscan.io.</string>
     <!-- Transaction Info Options -->
     <string name="TransactionInfoOptions_SpeedUp_Title">Speed Up</string>
     <string name="TransactionInfoOptions_SpeedUp_Description">This action will attempt to invalidate previous transaction by resending it with a higher fee. If the original transaction remains pending when a new one sent there is s a high chance (not guaranteed) that it will be invalidated and replaced. Only one of these two transactions will be included in the blockchain.</string>
@@ -471,9 +471,9 @@
     <string name="TransactionInfoOptions_Warning_TransactionInBlock">Transaction already in block</string>
     <!-- Info -->
     <string name="Info_LockTime_Title">TimeLock</string>
-    <string name="Info_LockTime_Description">Gönderici bu fonları %s.\n\n tarihte sona erecek şekilde bir harcama kilidiyle gönderdi. Endişelenmeyin, alınan Bitcoin\'ler zaten sizindir ancak kilitleme süresi sona erene kadar bunları harcayamazsınız.</string>
+    <string name="Info_LockTime_Description">The sender sent these funds with a spending lock that will expire on %s.\n\nNo worries, the received Bitcoins are already yours, but until the lock period expires you can not spend them on the Bitcoin network.</string>
     <string name="Info_DoubleSpend_Title">Çifte Harcama</string>
-    <string name="Info_DoubleSpend_Description">Çifte Harcama Riski! Blockchain\'de, bu işlemde kullanılan girdileri harcamaya çalışan başka bir işlem var. Ağ tarafından yalnızca bir işlem kabul edilecektir.</string>
+    <string name="Info_DoubleSpend_Description">Double Spend Risk! There is another transaction on the blockchain that is trying to spend inputs used in this transaction. Only one transaction will be accepted by the network</string>
     <string name="Info_DoubleSpend_ThisTx">Bu Tx</string>
     <string name="Info_DoubleSpend_ConflictingTx">Çakışan Tx</string>
     <!--Guides-->
@@ -484,7 +484,7 @@
     <string name="SettingsCurrency_Title">Para birimi</string>
     <string name="SettingsCurrency_Other">DİĞER</string>
     <string name="SettingsCurrency_DisclaimerTitle">Uyarı</string>
-    <string name="SettingsCurrency_DisclaimerText">Üçüncü taraf bir hizmet olan Coingecko.com tarafından sağlanan döviz kuru verileri.\n\nDurdurulamaz cüzdan uygulaması, bu değerlerin her zaman doğru olduğunu ve piyasa verileriyle eşleştiğini garanti etmez. %s Dışında herhangi bir temel para birimi seçerseniz tutarsızlık olasılığı daha yüksektir.</string>
+    <string name="SettingsCurrency_DisclaimerText">The exchange rate data is provided by a third party service - Coingecko.com.\n\nThe Unstoppable wallet app doesn\'t guarantee these values are always correct and matches market data. The chance for inconsistency is higher if you select any base currency other than %s.</string>
     <string name="SettingsCurrency_Understand">Anlıyorum</string>
     <!--Settings-->
     <string name="Settings_Title">Ayarlar</string>
@@ -506,11 +506,11 @@
     <string name="SettingsPrivacy_Info">Bu uygulama sizin hiçbir veriyi paylaşmıyor. Bununla birlikte, blok zincirlerle iletişim kurduğundan, IP adresi gibi bazı genel veriler potansiyel olarak sızdırılabilir. Her bölüm hakkında ayrıntılı bilgi almak için sağ üstteki bilgi düğmesini kullanın.</string>
     <string name="SettingsPrivacy_ConnectionSettingsTitle">İnternet</string>
     <string name="SettingsPrivacy_WalletRestore">Blockchain Geri Yükleme</string>
-    <string name="SettingsPrivacy_WalletRestoreDescription">Cüzdanı işlemlerle geri yüklemek için veri kaynağını seçin.</string>
+    <string name="SettingsPrivacy_WalletRestoreDescription">Select a data source for restoring a wallet with transactions</string>
     <string name="SettingsPrivacy_Transactions">Blockchain İşlemleri</string>
     <string name="SettingsPrivacy_TransactionsSettingText">Giriş/Çıkış</string>
     <string name="SettingsPrivacy_TransactionsDescription">İşlemlerin yapılandırılma şeklini değiştirerek BTC, LTC, BCH işlemlerinizin izlenilmesini zorlaştırın.</string>
-    <string name="SettingsPrivacy_Info_Details">Below you will find detailed explanation of the privacy settings that are available in the app. It\'s safe to consider them as settings for those that require extensive privacy.</string>
+    <string name="SettingsPrivacy_Info_Details">Below you will find a detailed explanation of the privacy settings that are available in the app. It\'s safe to consider them as settings for those that require extensive privacy.</string>
     <string name="SettingsPrivacy_Info_BlockchainTx_Title">Blockchain Transactions</string>
     <string name="SettingsPrivacy_Info_BlockchainTx_Description">This setting controls the privacy level of user\'s transactions on Bitcoin, Bitcoin Cash and Litecoin blockchains.
         \n\nMost Bitcoin transactions generate two outputs. One output is the amount that goes to the receiver and the other is the change output that is returned to the sender. The way most wallets construct transactions makes it easy for a third party monitoring Bitcoin blockchain to understand which of the outputs went to the receiving party and which one was the change amount returned to the sender. The output returned to the sender can then be used in future transactions and further reveal the details to the monitoring party.
@@ -518,9 +518,9 @@
         \n\n1. Shuffle : The order of transaction outputs are randomized on every transaction. Sometimes change can be the first output, sometimes it can be the second. If a user trusts the developer of the app, than consider this a recommended option.
         \n\n2. Deterministic : There is a commonly agreed standard for ordering transaction outputs (known as BIP69). In open source wallets that standard ensures that wallet users do not need to trust how developers of the app implement the ordering of the outputs. As this standard is new, not many wallets have implemented it yet. As a result, it\'s somewhat possible to see on the blockchain whether transaction was sent from the wallet that uses that standard or not.</string>
     <string name="SettingsPrivacy_Info_BlockchainConnection_Title">Blockchain Sync</string>
-    <string name="SettingsPrivacy_Info_BlockchainConnection_Description">This setting controls how this app interacts with blockchains (sending/receiving transactions). In case of Bitcoin, Bitcoin Cash, Litecoin and Dash it is fully peer to peer. The app pings many nodes and communicates with them. Potentially these nodes can record IP address and data requested but since they are chosen randomly, each time the app connects to a different node.
-        \n\nIn case of Ethereum, there is no alternative for mobile wallets to interact with blockchain other than via third party providers (i.e. Infura.io) or personal Ethereum nodes. Third party services can potentially record IP addresses and the requests made. That info can reveal location, balance, transactions etc. Moreover, the wallet has to trust that information returned is correct. There is a an alternative known as Incubed which in essence is a network of special Ethereum nodes. These nodes can also record IP addresses and requests made, but they are chosen randomly each time. While being slightly slower than Infura, the way Incubed works pretty much guarantees that the information returned is correct (not fake).
-        \n\nWhen it comes to other blockchains like EOSIO and Binance Chain, at this point they only provide centralized means of connecting, without viable alternatives. Potentially they can be recording IP addresses and requests made.</string>
+    <string name="SettingsPrivacy_Info_BlockchainConnection_Description">This setting controls how this app interacts with blockchains when sending or receiving transactions.
+        \n\nIn the case of Bitcoin, Bitcoin Cash, Litecoin, and Dash, the communication with blockchain network nodes is fully peer-to-peer. Unstoppable pings many nodes and communicates with one of them. Each time the app connects to a different node.
+        \n\nIn the case of Ethereum and Binance Smart Chain, there are no alternatives for mobile wallets to interact with respective blockchains other than via third-party RPC service providers (i.e. Infura.io) or personal Ethereum nodes. That essentially means your communication with that blockchain is not decentralized. This doesn\'t impact your funds in any way, only the ability to connect to the blockchain network.</string>
     <string name="SettingsPrivacy_Info_BlockchainRestore_Title">Blockchain Geri Yükleme</string>
     <string name="SettingsPrivacy_Info_BlockchainRestore_Description">This setting is only relevant when restoring an existing wallet. It is a process of getting transactions history for a given coin so that the wallet app is able to display past transactions and calculate user\'s balance. This needs to happen only once, when user restores previously created wallet. At this point there are two potential ways for a mobile wallet like Unstoppable to do this:
         \n\n1. from API Server : There is a third-party predefined server which hosts the entire blockchain and has all the data processed and ready to provide it in a fast manner. This method is fast but can potentially keep track of the IP addresses and the data requested. This option is recommended due to its speed of getting data (5-10 minutes). The risks are minimal. If the user restoring from his own server then no privacy risks at all.
@@ -535,7 +535,7 @@
     <string name="SettingsSecurity_ManageKeys">Cüzdanları yönet</string>
     <string name="SettingsSecurity_AppRestartWarning">Bu eylem, Unstoppable Cüzdan\'ı yeniden başlatacak.</string>
     <string name="SettingsSecurity_TorConnectionDescription">Bu uygulamayı kullanırken internetinizi tamamen anonimleştirin. Bazı durumlarda DeFi uygulamaları için WalletConnect özelliğinin çok yavaş olabileceğini veya hiç çalışmayabileceğini unutmayın.</string>
-    <string name="SettingsSecurity_NotificationsDisabledWarning">Unstoppable Cüzdan uygulaması için bildirimler devre dışı bırakılmış. Tor\'un çalışması için onları etkinleştirmeniz gerekir.</string>
+    <string name="SettingsSecurity_NotificationsDisabledWarning">The notifications for the Unstoppable Wallet app are disabled. You need to turn on Notifications and allow \'background app refresh\' in order to be able to receive price change alerts.</string>
     <string name="SettingsSecurity_SortingShuffle">Karıştır</string>
     <string name="SettingsSecurity_SortingShuffleDescription">Rastgele Dizinleme</string>
     <string name="SettingsSecurity_SortingBip69">Deterministic BIP69</string>
@@ -545,18 +545,18 @@
     <string name="SettingsSecurity_SyncModeBlockchain">Blockchain çıkışlı</string>
     <string name="SettingsSecurity_SyncModeBlockchainDescription">Daha Gizli</string>
     <!--Setting_Terms-->
-    <string name="SettingsTerms_Text">Durdurulamaz cüzdan, kripto para birimlerine özel ve bağımsız bir şekilde yatırım yapmak ve biriktirmek isteyenler için üretilmiştir.
-\n\n Bu, yalnızca kullanıcının fonlar üzerinde kontrol sahibi olduğu, gözetim dışı, uçtan uca bir cüzdandır. Herhangi bir veri toplamaz ve kullanıcının cüzdanını belirli bir cüzdan uygulamasına bağlamadan kullanıcıyı bağımsız tutar.
-\n\nDurdurulamaz cüzdan tamamen açık kaynaklıdır ve herkes uygulamanın tam olarak iddia edildiği gibi çalıştığını doğrulayabilir.
-\n\nMevcut çözümler yeterli olmadığından kendimiz için Durdurulamaz\'ı geliştirdik. Hem mühendislik hem de kullanılabilirlik açısından bu cüzdanın alternatif ürünlerin çok önünde olduğuna inanıyoruz.</string>
+    <string name="SettingsTerms_Text">The Unstoppable wallet is built for those looking to invest and store cryptocurrencies in a private and independent manner.
+\n\nIt\'s a non-custodial, peer-to-peer wallet where only the user has control over the funds. It doesn\'t collect any data and keeps the user independent by not locking the user\'s funds to a specific wallet app.
+\n\nThe Unstoppable wallet is fully open-source and anyone can confirm the app works exactly as it claims to.
+\n\nWe built Unstoppable for ourselves as the other available solutions were not up to par. Both from an engineering and usability perspective, we believe this wallet to be significantly ahead of alternative products.</string>
     <string name="SettingsTerms_TermAcademy">Bu uygulamanın Akademi kısmını inceledim ve kripto para birimlerini biriktirmenin temel hususlarına aşina oldum.</string>
     <string name="SettingsTerms_TermBackup">Bana 12-24 sözcük şeklinde gösterilen cüzdanlarım için özel anahtar(lar) ın yedeğini aldım. Bu özel anahtarların başka bir yerde değil akıllı telefonumda kaydedileceğini anladım.</string>
-    <string name="SettingsTerms_TermOwner">Telefonumu güvenilmeyen kişilere vermenin veya cüzdan uygulamasından güvenli PIN kilidi olmadan çıkmanın fonlarımın güvenliğini potansiyel olarak tehlikeye atabileceğini anladım.</string>
-    <string name="SettingsTerms_TermRecover">Telefonumun yazılımını kırmanın (rootlama), bilinmeyen kaynaklardan üçüncü taraf uygulamaları yüklemenin, işletim sistemini güncel tutmamanın fonlarımın güvenliğini potansiyel olarak tehlikeye atabileceğini anladım.</string>
-    <string name="SettingsTerms_TermPhone">Bu cüzdan uygulamasını çalıştıran kodda beklenmeyen durumlara veya uygulamanın hatalı çalışmasına neden olabilecek keşfedilmemiş yazılım sorunları olabileceğini anladım.</string>
-    <string name="SettingsTerms_TermRoot">Telefonumu kaybedersem veya uygulama kullanım dışı kalırsa fonlarıma tekrar erişim sağlamak için özel anahtarlarıma ihtiyacım olacağını anladım. Özel anahtarlarım olmadan cüzdanıma erişimi kurtarmak imkansız olacaktır.</string>
-    <string name="SettingsTerms_TermBugs">Android ayarlarında telefon kilit açma şifresini devre dışı bırakmanın, cihazımdaki cüzdan özel anahtarlarını sileceğini anlıyorum. Cüzdanıma yeniden erişmek için özel anahtarlarıma ihtiyacım olacak.</string>
-    <string name="Settings_TermsPin"> Fonlarımın güvenliğinden yalnızca benim sorumlu olduğumu ve başka hiçbir kuruluşun sorumlu olmadığını anlıyorum.</string>
+    <string name="SettingsTerms_TermOwner">I understand that passing my phone to untrusted entities and leaving the wallet app without a safe PIN lock may potentially endanger the safety of my funds.</string>
+    <string name="SettingsTerms_TermRecover">I understand that jail breaking (rooting) my phone, installing third party apps from unknown sources, and keeping the operating system outdated can potentially endanger the safety of my funds.</string>
+    <string name="SettingsTerms_TermPhone">I understand there may be undiscovered software issues in the code powering this wallet app, which may potentially lead to unexpected behavior or the app malfunctioning.</string>
+    <string name="SettingsTerms_TermRoot">I understand that I will need my private keys in order to restore access to my funds should I lose my phone or if the app malfunctions. Without my private keys, it will be impossible to recover access to my wallet.</string>
+    <string name="SettingsTerms_TermBugs">I understand that disabling the phone unlock PIN(or its equivalent) in Settings of Android OS will erase the wallet\'s private keys from my device. I will need my private keys to regain access to my funds.</string>
+    <string name="Settings_TermsPin"> I understand that only I myself am responsible for the safety of my funds, and no other entity.</string>
     <string name="SettingsTerms_BottomThankYou">Bu cüzdanı \nseçtiğiniz için \n teşekkür ederiz!</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Paylaş</string>
@@ -564,7 +564,7 @@
     <!--Setting_Contact-->
     <string name="SettingsContact_Title">Iletişim</string>
     <!--Setting_Notifications-->
-    <string name="SettingsNotifications_Description">İzlemek istediğiniz paralar için fiyat değişikliği uyarılarını ayarlayın\n\nSon 24 saatteki fiyat değişikliği seçilen eşiği aştığında uyarı alırsınız. \n\nFiyat Trendi Uyarısı, 6 ay boyunca, 1 haftalık kısa bir süre için bir trend değişikliği durumunu uyarır.</string>
+    <string name="SettingsNotifications_Description">Set price change alerts for the coins you would like to watch.\n\nYou will be alerted when the change in price for the last 24 hours exceeds the selected threshold.\n\nPrice Trend Alert warns of a trend change for the short 1 week, for the long 6 month.</string>
     <string name="SettingsNotifications_NotificationsDisabledWarning">Unstoppable Cüzdan uygulaması için bildirimler devre dışı bırakıldı. Fiyat değişikliği uyarıları alabilmek için Bildirimler\'i açmanız ve arka plan uygulaması yenilemesine izin vermeniz gerekir.</string>
     <string name="SettingsNotifications_TurnOn">Ayarlardan aç</string>
     <string name="SettingsNotifications_Off">Kapat</string>
@@ -605,16 +605,16 @@
     <string name="ManageCoins_NoResults">No results found. Try to add token manually if you know its smart contract address.</string>
     <!-- Experimental Feature -->
     <string name="ExperimentalFeatures_Title">Deneysel</string>
-    <string name="ExperimentalFeatures_Description">Aşağıdaki özellikler deneyseldir ve dikkatli kullanılmalıdır. Bu özellikleri kendi kripto fonlarımızı kullanarak baştan sona test etmemize rağmen, olası tüm durumlarda beklendiği gibi çalışmalarını garanti edemeyiz.</string>
+    <string name="ExperimentalFeatures_Description">The features below are experimental and should be used with caution. While we have thoroughly tested these features using our own crypto funds, we cannot guarantee they will work as expected in all possible cases.</string>
     <string name="ExperimentalFeatures_BitcoinHodling">TimeLock</string>
     <!-- Bitcoin Hodling -->
     <string name="BitcoinHodling_Title">TimeLock</string>
-    <string name="BitcoinHodling_Description">Belirtilen tarihe kadar harcanmamış Bitcoin\'leri göndermenize olanak verir.\n\nBu tür bir işlemin alıcısı Unstoppable cüzdan kullanmalıdır.\n\nSadece Unstoppable cüzdan, Bitcoin ağındaki bu tür işlemleri doğru bir şekilde tanımlayabilir ve kilitleme süresi dolduktan sonra da alıcının bu Bitcoin\'leri harcamasını sağlayabilir.\n\nEğer bir HODLer iseniz, kendinize böyle bir işlem göndererek, bu özelliği Bitcoin\'lerinizi zarar etmeden uzun süre elinizde tutmaya zorlamak için kullanabilirsiniz.\n\nDeneysel bir özellik olduğundan, işlem başına maksimum tutar 0.5 BTC ile sınırlandırılmıştır.</string>
+    <string name="BitcoinHodling_Description">This enables you to send Bitcoins that cannot be spent until a specified date. \n\nThe receiver of such transactions should use the Unstoppable wallet app version 0.10 or newer, with the BIP44 address format for Bitcoin. \n\nOnly the Unstoppable wallet can correctly identify such transactions on the Bitcoin network, as well as enable the receiver to spend those Bitcoins after the lock period expires. \n\nIf you’re a HODLer, you may use this feature to force yourself into hodling your Bitcoins by sending such transactions to yourself. \n\nBeing an experimental feature, the maximum amount per transaction is limited to 0.5 BTC.</string>
     <!--Manage Accounts-->
     <string name="ManageAccounts_Title">Cüzdanları yönet</string>
     <string name="ManageAccounts_CreateNewWallet">Oluştur</string>
     <string name="ManageAccounts_ImportWallet">Geri Yükle</string>
-    <string name="ManageAccounts_Hint">İpucu! Mevcut bir cüzdanı geri yüklemek, yeni bir şifre ile en baştan bir cüzdan oluşturur. Birden fazla cüzdan için 12-24 kelimelik tek bir hatırlatıcı kurtarma öbeği kullanmak istiyorsanız kullanışlıdır.</string>
+    <string name="ManageAccounts_Hint">Tip! Restoring an existing wallet but with a new passphrase will generate a brand new wallet. This is handy if you want to use a single 12-24 word mnemonic recovery phrase for multiple wallets.</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">İsim</string>
     <string name="ManageAccount_Save">Kaydet</string>
@@ -626,7 +626,7 @@
     <string name="ManageAccount_BackupRequired_Description">Bu cüzdanın özel anahtarını, bu telefondan silinmeden önce yedeklemeniz gerekir.</string>
     <string name="ManageAccount_Delete_ConfirmationRemove">Bu işlem Cüzdanını bu cihazdan kaldıracak.</string>
     <string name="ManageAccount_Delete_ConfirmationDisable">Bu cüzdana ait tüm paralar bakiye sekmesinde devre dışı bırakılacaktır.</string>
-    <string name="ManageAccount_Delete_ConfirmationLose">Bu cüzdanın özel anahtarını yedeklemediyseniz, fonlarınıza erişiminizi kaybedersiniz.</string>
+    <string name="ManageAccount_Delete_ConfirmationLose">If you didn\'t backup the private key for this wallet, you will lose access to your funds.</string>
     <string name="ManageAccount_BirthdayHeight">%s Oluşturulma Günü Üst Sınırı</string>
     <string name="ManageAccount_NWords">%s kelime</string>
     <string name="ManageAccount_NWordsWithPassphrase">%s parolalı kelime</string>
@@ -637,7 +637,7 @@
     <string name="NetworkSettings_TestNetDisclaimer">Please do not select Testnet options unless you understand what that is and how it works.\n\nTestnet is a parallel blockchain for testing purposes with its own currency. If someone sends a regular payment to your Testnet address, it will be lost.</string>
     <!-- Show Key -->
     <string name="ShowKey_Title">Anahtar</string>
-    <string name="ShowKey_Description">Telefonunuzun kaybolması, çalınması, kırılması vb. Durumunda, aşağıda gösterilecek olan kurtarma ifadeleri paranızı geri yüklemenin tek yoludur. \n\nKimsenin ekranınızı izlemediğinden emin olun.</string>
+    <string name="ShowKey_Description">The recovery phrases that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken, etc.\n\nMake sure no one is watching your screen.</string>
     <string name="ShowKey_ButtonShow">Göster</string>
     <string name="ShowKey_Passphrase">Parola</string>
     <string name="ShowKey_ButtonClose">Kapat</string>
@@ -649,9 +649,9 @@
     <string name="ShowKey_PrivateKeyCopyWarning_Proceed">I will risk it</string>
     <!-- Backup Key -->
     <string name="BackupKey_Title">Yedekle</string>
-    <string name="BackupKey_Description">Telefonunuzun kaybolması, çalınması, kırılması vb. Durumunda, aşağıda gösterilecek olan kurtarma ifadeleri paranızı geri yüklemenin tek yoludur. \n\nKimsenin ekranınızı izlemediğinden emin olun.</string>
+    <string name="BackupKey_Description">The recovery phrases that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken, etc.\n\nMake sure no one is watching your screen.</string>
     <string name="BackupKey_ButtonBackup">Yedekle</string>
-    <string name="BackupConfirmKey_Description">Onaylamak için kurtarma ifadelerini doğru sırayla girin</string>
+    <string name="BackupConfirmKey_Description">Enter the recovery phrases in the correct order to confirm</string>
     <string name="BackupConfirmKey_EmptyOrInvalidWords">Girilen kelimeler boş veya geçersiz</string>
     <string name="BackupConfirmKey_Error_EmptyWord">Boş kelime</string>
     <string name="BackupConfirmKey_Error_InvalidWord">Geçersiz kelime</string>
@@ -659,10 +659,10 @@
     <string name="BackupConfirmKey_Error_InvalidPassphrase">Geçersiz parola</string>
     <!--Manage Keys Delete Alert-->
     <string name="ManageKeys_Delete_Title">Cüzdanı Sil</string>
-    <string name="ManageKeys_Delete_ConfirmationRemove">Bu işlem %s Cüzdanını bu cihazdan kaldıracak.</string>
+    <string name="ManageKeys_Delete_ConfirmationRemove">This action will delete the %s Wallet from the device.</string>
     <string name="ManageKeys_Delete_FromPhone">Cihazdan sil</string>
     <!-- Manage Keys Alert -->
-    <string name="AddCoin_Description">Öncelikle %1$s cüzdanınızı yedeklemeniz gerekiyor daha sonra %2$s kripto parasını alabilirsiniz.\n\nYeni bir %3$s cüzdanı oluşturmak için aşağıdaki Oluştur düğmesini veya mevcut olanı geri yükleme için Geri Yükle düğmesini kullanın.\n\nBu cüzdanı %4$s için kullanabilirsiniz.</string>
+    <string name="AddCoin_Description">You need to set up %1$s wallet to be able to send or receive %2$s.\n\nUse the Create button below to set up a new %3$s wallet, or the Restore button to import an existing one.\n\nYou will be able to use this wallet for: %4$s.</string>
     <string name="AddCoin_CreateKey">Oluştur</string>
     <string name="AddCoin_RestoreKey">Geri Yükle</string>
     <!-- Add Token Dialog-->
@@ -760,9 +760,9 @@
     <string name="CoinPage_SecurityParams_Privacy_High">Transactions with this token are anonymous by default or provide such capabilities. No entity is able to link different transactions to the same individual or see the amounts transacted.</string>
     <string name="CoinPage_SecurityParams_Issuance_Centralized">The amount of tokens in circulation can potentially be increased or decreased by a centralized entity at will.</string>
     <string name="CoinPage_SecurityParams_Issuance_Decentralized">The amount of tokens in circulation controlled by an algorithm and works in a deterministic manner outside of centralized influence.</string>
-    <string name="CoinPage_SecurityParams_ConfiscationResistance_Yes">The tokens can not be confiscated when kept in non-custodial wallet.</string>
+    <string name="CoinPage_SecurityParams_ConfiscationResistance_Yes">The tokens can\'t be confiscated when kept in a non-custodial wallet.</string>
     <string name="CoinPage_SecurityParams_ConfiscationResistance_No">The tokens can be confiscated or tampered with by an issuing entity.</string>
-    <string name="CoinPage_SecurityParams_CensorshipResistance_Yes">The token holder can not be censored from transacting.</string>
+    <string name="CoinPage_SecurityParams_CensorshipResistance_Yes">The token holder can\'t be censored from transacting.</string>
     <string name="CoinPage_SecurityParams_CensorshipResistance_No">The token holder can be censored from transacting.</string>
     <string name="CoinPage_SecurityParams_Audited_Yes">The project had its code audited from external entity, either fully or partially. The presence of the audit doesn\'t mean that project is risk free and not doesn\'t have any exploits risks.</string>
     <string name="CoinPage_SecurityParams_Audited_No">There are no publicly announced audits for the code powering the project behind the token. Non audited projects are more likely to have security issues in the code.</string>
@@ -801,7 +801,7 @@
     <string name="CoinPage_Contract">%s Contract</string>
     <string name="CoinPage_Bep2Symbol">BEP2 Symbol</string>
     <string name="CoinPage_MajorHolders_TopWallets">Top Wallets</string>
-    <string name="CoinPage_MajorHolders_Description">Chart above shows the % of all tokens in circulation held by top 10 wallets. The lower the % the more distributed the coin is.</string>
+    <string name="CoinPage_MajorHolders_Description">The chart above shows the % of all tokens in circulation held by the top 10 wallets. The lower the % the more distributed the coin is.</string>
     <string name="CoinPage_MajorHolders_InTopWallets">in top 10 wallets</string>
     <!--Rate list-->
     <string name="RateList_TopGainers">Top Gainers</string>
