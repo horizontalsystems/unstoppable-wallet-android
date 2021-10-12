@@ -18,6 +18,7 @@ import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.TransactionData
+import io.horizontalsystems.marketkit.models.ChartType
 import io.horizontalsystems.marketkit.models.CoinType
 import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.marketkit.models.PlatformCoin
@@ -334,13 +335,6 @@ interface IRateManager {
         currencyCode: String,
         timestamp: Long
     ): Single<BigDecimal>
-
-    fun chartInfo(coinType: CoinType, currencyCode: String, chartType: ChartType): ChartInfo?
-    fun chartInfoObservable(
-        coinType: CoinType,
-        currencyCode: String,
-        chartType: ChartType
-    ): Observable<ChartInfo>
 
     fun coinMarketDetailsAsync(
         coinType: CoinType,

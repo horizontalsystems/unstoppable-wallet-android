@@ -17,7 +17,6 @@ object CoinOverviewModule {
             val service = CoinOverviewService(
                 fullCoin,
                 currency,
-                App.xRateManager,
                 App.marketKit,
                 App.chartTypeStorage,
                 App.appConfigProvider.guidesUrl,

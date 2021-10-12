@@ -4,12 +4,11 @@ import android.content.Context
 import io.horizontalsystems.bankwallet.core.IAppConfigProvider
 import io.horizontalsystems.bankwallet.core.IRateManager
 import io.horizontalsystems.marketkit.models.CoinType
-import io.horizontalsystems.coinkit.models.CoinType as CoinKitCoinType
 import io.horizontalsystems.xrateskit.XRatesKit
 import io.horizontalsystems.xrateskit.entities.*
-import io.reactivex.Observable
 import io.reactivex.Single
 import java.math.BigDecimal
+import io.horizontalsystems.coinkit.models.CoinType as CoinKitCoinType
 
 class RateManager(
         context: Context,
@@ -33,14 +32,6 @@ class RateManager(
     override fun historicalRate(coinType: CoinType, currencyCode: String, timestamp: Long): Single<BigDecimal> {
         return kit.getHistoricalRate(coinType.toCoinKitCoinType(), currencyCode, timestamp)?.let { Single.just(it) }
                 ?: kit.getHistoricalRateAsync(coinType.toCoinKitCoinType(), currencyCode, timestamp)
-    }
-
-    override fun chartInfo(coinType: CoinType, currencyCode: String, chartType: ChartType): ChartInfo? {
-        return kit.getChartInfo(coinType.toCoinKitCoinType(), currencyCode, chartType)
-    }
-
-    override fun chartInfoObservable(coinType: CoinType, currencyCode: String, chartType: ChartType): Observable<ChartInfo> {
-        return kit.chartInfoObservable(coinType.toCoinKitCoinType(), currencyCode, chartType)
     }
 
     override fun coinMarketDetailsAsync(coinType: CoinType, currencyCode: String, rateDiffCoinCodes: List<String>, rateDiffPeriods: List<TimePeriod>): Single<CoinMarketDetails> {
