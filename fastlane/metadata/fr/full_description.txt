@@ -29,7 +29,7 @@ WALLET FEATURES:
 
 - Wallet for Privacy Coins >> Fully supports major privacy coins (ZCash, DASH) in an SPV manner. One of the very few wallets capable of supporting fully shielded Zcash transactions.
 
-- Decentralized Wallet >> Designed to work with most major blockchains in a decentralized manner where an app doesn't depend on some server of a wallet provider to send/receive transactions but interacts with blockchain networks directly.
+- Decentralized Wallet >> Designed to work with most major blockchains in a decentralized manner where an app doesn\'t depend on some server of a wallet provider to send/receive transactions but interacts with blockchain networks directly.
 
 - Privacy Focused >>  Designed to allow for privacy even in the most privacy breaching scenarios. There are no user accounts keeping your records, no identity checks that risk exposing your financials to the world, and no interaction with traditional finance layer. The app is partially TOR enabled and VPN support coming soon.
 
