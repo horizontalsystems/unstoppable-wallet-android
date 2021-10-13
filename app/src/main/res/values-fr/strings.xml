@@ -146,7 +146,7 @@
     <string name="Market_Category_Identity_Description">Identité décentralisée.</string>
     <string name="Market_Category_YieldTokens">Yield Tokens</string>
     <string name="Market_Category_YieldTokens_Description">Bearing tokens intéressants.</string>
-    <string name="Market_News_SyncError">Sync Error</string>
+    <string name="Market_SyncError">Sync Error</string>
     <!--Market Global Metrics-->
     <string name="MarketGlobalMetrics_Chart">Graphique</string>
     <string name="MarketGlobalMetrics_TotalMarketCap">Total M.Cap</string>
