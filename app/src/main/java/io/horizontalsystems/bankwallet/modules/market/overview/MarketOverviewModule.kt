@@ -19,17 +19,28 @@ object MarketOverviewModule {
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            val service =
-                MarketOverviewService(App.marketKit, App.xRateManager, App.backgroundManager, App.currencyManager)
-            return MarketOverviewViewModel(service, listOf(service)) as T
+            val topMarketsRepository = TopMarketsRepository(App.marketKit)
+            val marketMetricsRepository = MarketMetricsRepository(App.xRateManager)
+            val service = MarketOverviewService(
+                topMarketsRepository,
+                marketMetricsRepository,
+                App.backgroundManager,
+                App.currencyManager
+            )
+            return MarketOverviewViewModel(service) as T
         }
 
+    }
+
+    sealed class ViewItemState {
+        class Error(val error: String) : ViewItemState()
+        class Loaded(val viewItem: ViewItem) : ViewItemState()
     }
 
     @Immutable
     data class ViewItem(
         val marketMetrics: MarketMetrics,
-        val boardItems: List<BoardItem>
+        val boards: List<Board>
     )
 
     data class MarketMetrics(
@@ -109,13 +120,12 @@ object MarketOverviewModule {
         }
     }
 
-    data class BoardItem(
+    data class Board(
         val boardHeader: BoardHeader,
-        val boardContent: BoardContent,
+        val marketViewItems: List<MarketViewItem>,
         val type: MarketModule.ListType
     )
 
     data class BoardHeader(val title: Int, val iconRes: Int, val toggleButton: MarketListHeaderView.ToggleButton)
-    data class BoardContent(val marketViewItems: List<MarketViewItem>, val showAllClick: MarketModule.ListType)
 
 }

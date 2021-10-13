@@ -42,7 +42,7 @@ object MarketTopCoinsModule {
             ): ViewItem {
                 val marketDataValue = when (marketField) {
                     MarketField.MarketCap -> {
-                        val (shortenValue, suffix) = App.numberFormatter.shortenValue(marketInfo.marketCap)
+                        val (shortenValue, suffix) = App.numberFormatter.shortenValue(marketInfo.marketCap ?: BigDecimal.ZERO)
                         val marketCapFormatted = App.numberFormatter.formatFiat(
                             shortenValue,
                             currency.symbol,
@@ -67,7 +67,7 @@ object MarketTopCoinsModule {
                 }
                 return ViewItem(
                     marketInfo.fullCoin,
-                    App.numberFormatter.formatFiat(marketInfo.price, currency.symbol, 0, 6),
+                    App.numberFormatter.formatFiat(marketInfo.price ?: BigDecimal.ZERO, currency.symbol, 0, 6),
                     marketDataValue,
                     marketInfo.fullCoin.coin.marketCapRank.toString()
                 )

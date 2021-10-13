@@ -2,21 +2,21 @@ package io.horizontalsystems.bankwallet.modules.market.overview
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.bankwallet.modules.market.MarketModule.ListType
 import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
 import io.horizontalsystems.bankwallet.modules.market.TopMarket
-import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.BoardContent
+import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.Board
 import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.BoardHeader
-import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.BoardItem
 import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.MarketMetrics
+import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.MarketMetricsItem
 import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.MarketMetricsPoint
-import io.horizontalsystems.bankwallet.modules.market.sort
+import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.ViewItemState
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
 import io.horizontalsystems.bankwallet.ui.compose.components.ToggleIndicator
 import io.horizontalsystems.bankwallet.ui.extensions.MarketListHeaderView
@@ -24,92 +24,99 @@ import io.horizontalsystems.bankwallet.ui.extensions.MetricData
 import io.horizontalsystems.chartview.ChartData
 import io.horizontalsystems.chartview.ChartDataFactory
 import io.horizontalsystems.chartview.models.ChartPoint
+import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.math.BigDecimal
-import kotlin.math.min
 
 class MarketOverviewViewModel(
     private val service: MarketOverviewService,
-    private val clearables: List<Clearable>
 ) : ViewModel() {
 
-    val viewItemLiveData = MutableLiveData<MarketOverviewModule.ViewItem?>()
+    private val disposables = CompositeDisposable()
+
     val loadingLiveData = MutableLiveData<Boolean>()
-    val errorLiveData = MutableLiveData<String?>()
-
-    private val disposable = CompositeDisposable()
-
-    private var topGainersMarket = TopMarket.Top250
-    private var topLosersMarket = TopMarket.Top250
+    val viewItemStateLiveData = MutableLiveData<ViewItemState>()
+    val isRefreshingLiveData = MutableLiveData<Boolean>()
 
     init {
-        service.stateObservable
-            .subscribeIO {
-                syncState(it)
+        Observable.combineLatest(
+            listOf(
+                service.topGainersObservable.map { it is DataState.Loading },
+                service.topLosersObservable.map { it is DataState.Loading },
+                service.marketMetricsObservable.map { it is DataState.Loading }
+            )
+        ) { array -> array.map { it as Boolean } }
+            .map { loadingArray ->
+                loadingArray.any { it }
             }
-            .let {
-                disposable.add(it)
+            .subscribeIO { loading ->
+                loadingLiveData.postValue(loading)
             }
+            .let { disposables.add(it) }
+
+        Observable.combineLatest(
+            listOf(
+                service.topGainersObservable,
+                service.topLosersObservable,
+                service.marketMetricsObservable
+            )
+        ) { it }.subscribeIO { array ->
+            val errorDataState = array.firstOrNull { it is DataState.Error } as? DataState.Error
+
+            val viewItemState: ViewItemState? = if (errorDataState != null) {
+                ViewItemState.Error(errorDataState.error.message ?: errorDataState.error.javaClass.simpleName)
+            } else {
+                val topGainerMarketItems = (array[0] as DataState<List<MarketItem>>).dataOrNull
+                val topLoserMarketItems = (array[1] as DataState<List<MarketItem>>).dataOrNull
+                val marketMetrics = (array[2] as DataState<MarketMetricsItem>).dataOrNull
+
+                if (topGainerMarketItems != null && topLoserMarketItems != null && marketMetrics != null) {
+                    ViewItemState.Loaded(getViewItem(topGainerMarketItems, topLoserMarketItems, marketMetrics))
+                } else {
+                    null
+                }
+            }
+            viewItemState?.let {
+                viewItemStateLiveData.postValue(it)
+            }
+        }.let { disposables.add(it) }
+
+        service.start()
     }
 
-    private fun syncState(state: DataState<Unit>) {
-        when (state) {
-            DataState.Loading -> {
-                loadingLiveData.postValue(true)
-            }
-            is DataState.Success -> {
-                viewItemLiveData.postValue(getViewItem())
-                errorLiveData.postValue(null)
-                loadingLiveData.postValue(false)
-            }
-            is DataState.Error -> {
-                viewItemLiveData.postValue(null)
-                errorLiveData.postValue(state.error.message ?: state.error.javaClass.simpleName)
-                loadingLiveData.postValue(false)
-            }
-        }
-    }
+    private fun getViewItem(
+        topGainerMarketItems: List<MarketItem>,
+        topLoserMarketItems: List<MarketItem>,
+        marketMetricsItem: MarketMetricsItem
+    ): MarketOverviewModule.ViewItem {
+        val topGainersBoard = getBoard(ListType.TopGainers, topGainerMarketItems)
+        val topLosersBoard = getBoard(ListType.TopLosers, topLoserMarketItems)
 
-    private fun getViewItem(): MarketOverviewModule.ViewItem? {
-        val boardItems = getBoardsData()
-        val marketMetrics = getMarketMetrics()
-        return if (boardItems.isNotEmpty() && marketMetrics != null) {
-            MarketOverviewModule.ViewItem(marketMetrics, boardItems)
-        } else {
-            null
-        }
+        val boardItems = listOf(topGainersBoard, topLosersBoard)
+        val marketMetrics = getMarketMetrics(marketMetricsItem)
+
+        return MarketOverviewModule.ViewItem(marketMetrics, boardItems)
     }
 
     fun onToggleTopBoardSize(listType: ListType) {
         when (listType) {
             ListType.TopGainers -> {
-                topGainersMarket = topGainersMarket.next()
+                service.onToggleTopGainersBoard()
             }
             ListType.TopLosers -> {
-                topLosersMarket = topLosersMarket.next()
+                service.onToggleTopLosersBoard()
             }
         }
-        viewItemLiveData.postValue(getViewItem())
     }
 
-    private fun getBoardsData(): List<BoardItem> {
-        val marketOverviewItem = service.marketOverviewItem ?: return listOf()
-
-        val topGainersBoard = getBoardItem(ListType.TopGainers, marketOverviewItem.marketItems)
-        val topLosersBoard = getBoardItem(ListType.TopLosers, marketOverviewItem.marketItems)
-
-        return listOf(topGainersBoard, topLosersBoard)
-    }
-
-    private fun getBoardItem(type: ListType, marketItems: List<MarketItem>): BoardItem {
+    private fun getBoard(type: ListType, marketItems: List<MarketItem>): Board {
         val topMarket = when (type) {
-            ListType.TopGainers -> topGainersMarket
-            ListType.TopLosers -> topLosersMarket
+            ListType.TopGainers -> service.gainersTopMarket
+            ListType.TopLosers -> service.losersTopMarket
         }
         val topList = marketItems
-            .subList(0, min(marketItems.size, topMarket.value))
-            .sort(type.sortingField)
-            .subList(0, min(marketItems.size, 5))
             .map { MarketViewItem.create(it, type.marketField) }
 
         val topGainersHeader = BoardHeader(
@@ -117,14 +124,10 @@ class MarketOverviewViewModel(
             getSectionIcon(type),
             getToggleButton(topMarket)
         )
-        val topBoardList = BoardContent(topList, type)
-        return BoardItem(topGainersHeader, topBoardList, type)
+        return Board(topGainersHeader, topList, type)
     }
 
-    private fun getMarketMetrics(): MarketMetrics? {
-        val marketOverviewItem = service.marketOverviewItem ?: return null
-
-        val marketMetricsItem = marketOverviewItem.marketMetrics
+    private fun getMarketMetrics(marketMetricsItem: MarketMetricsItem): MarketMetrics {
         val btcDominanceFormatted = App.numberFormatter.format(marketMetricsItem.btcDominance, 0, 2, suffix = "%")
 
         return MarketMetrics(
@@ -199,16 +202,25 @@ class MarketOverviewViewModel(
         }
     }
 
-    fun onErrorClick() {
+    private fun refreshWithMinLoadingSpinnerPeriod() {
         service.refresh()
+        viewModelScope.launch {
+            isRefreshingLiveData.postValue(true)
+            delay(1000)
+            isRefreshingLiveData.postValue(false)
+        }
+    }
+
+    fun onErrorClick() {
+        refreshWithMinLoadingSpinnerPeriod()
     }
 
     override fun onCleared() {
-        clearables.forEach(Clearable::clear)
-        disposable.clear()
+        service.stop()
+        disposables.clear()
     }
 
     fun refresh() {
-        service.refresh()
+        refreshWithMinLoadingSpinnerPeriod()
     }
 }

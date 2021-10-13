@@ -61,9 +61,9 @@ data class MarketItem(
                 score,
                 marketInfo.fullCoin,
                 CurrencyValue(currency, marketInfo.totalVolume ?: BigDecimal.ZERO),
-                CurrencyValue(currency, marketInfo.price),
+                CurrencyValue(currency, marketInfo.price ?: BigDecimal.ZERO),
                 marketInfo.priceChange,
-                CurrencyValue(currency, marketInfo.marketCap)
+                CurrencyValue(currency, marketInfo.marketCap?: BigDecimal.ZERO)
             )
         }
     }

@@ -170,7 +170,7 @@ class MarketAdvancedSearchService(
         val ethUid = App.coinManager.getPlatformCoin(CoinType.Ethereum)!!.coin.uid
         val bnbUid = App.coinManager.getPlatformCoin(CoinType.Bep2("BNB"))!!.coin.uid
 
-        return filterByRange(filterMarketCap, marketInfo.marketCap.toLong())
+        return filterByRange(filterMarketCap, marketInfo.marketCap?.toLong())
                 && filterByRange(filterVolume, marketInfo.totalVolume?.toLong())
                 && filterByRange(filterPriceChange, marketInfo.priceChange?.toLong())
 //                todo: implement it
