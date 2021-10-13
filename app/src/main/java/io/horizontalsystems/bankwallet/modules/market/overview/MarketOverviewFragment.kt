@@ -35,6 +35,7 @@ import io.horizontalsystems.bankwallet.modules.market.category.MarketDataValue
 import io.horizontalsystems.bankwallet.modules.market.getText
 import io.horizontalsystems.bankwallet.modules.market.metricspage.MetricsPageFragment
 import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.MarketMetrics
+import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.ViewItemState
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryToggle
@@ -81,12 +82,12 @@ class MarketOverviewFragment : BaseFragment() {
     @Composable
     private fun MarketOverviewScreen() {
         val loading by marketOverviewViewModel.loadingLiveData.observeAsState()
-        val viewItem by marketOverviewViewModel.viewItemLiveData.observeAsState()
-        val error by marketOverviewViewModel.errorLiveData.observeAsState()
+        val isRefreshing by marketOverviewViewModel.isRefreshingLiveData.observeAsState()
+        val viewItemState by marketOverviewViewModel.viewItemStateLiveData.observeAsState()
         val scrollState = rememberScrollState()
 
         SwipeRefresh(
-            state = rememberSwipeRefreshState(loading ?: false),
+            state = rememberSwipeRefreshState(isRefreshing ?: false || loading ?: false),
             onRefresh = {
                 marketOverviewViewModel.refresh()
             },
@@ -100,25 +101,27 @@ class MarketOverviewFragment : BaseFragment() {
                 )
             }
         ) {
-            viewItem?.let {
-                Column(
-                    modifier = Modifier
-                        .verticalScroll(scrollState)
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .height(240.dp)
+            when (val state = viewItemState) {
+                is ViewItemState.Error -> {
+                    ListErrorView(
+                        stringResource(R.string.Market_SyncError)
                     ) {
-                        MetricChartsView(it.marketMetrics)
+                        marketOverviewViewModel.onErrorClick()
                     }
-                    BoardsView(it.boardItems)
                 }
-            }
-            error?.let {
-                ListErrorView(
-                    stringResource(R.string.Market_SyncError)
-                ) {
-                    marketOverviewViewModel.onErrorClick()
+                is ViewItemState.Loaded -> {
+                    Column(
+                        modifier = Modifier
+                            .verticalScroll(scrollState)
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .height(240.dp)
+                        ) {
+                            MetricChartsView(state.viewItem.marketMetrics)
+                        }
+                        BoardsView(state.viewItem.boards)
+                    }
                 }
             }
         }
@@ -162,11 +165,11 @@ class MarketOverviewFragment : BaseFragment() {
     }
 
     @Composable
-    private fun BoardsView(boardItems: List<MarketOverviewModule.BoardItem>) {
-        boardItems.forEach { boardItem ->
+    private fun BoardsView(boards: List<MarketOverviewModule.Board>) {
+        boards.forEach { boardItem ->
             TopBoardHeader(boardItem)
 
-            boardItem.boardContent.marketViewItems.forEachIndexed { index, coin ->
+            boardItem.marketViewItems.forEachIndexed { index, coin ->
                 MarketCoin(coin, index == 0)
             }
 
@@ -175,7 +178,7 @@ class MarketOverviewFragment : BaseFragment() {
     }
 
     @Composable
-    private fun TopBoardHeader(boardItem: MarketOverviewModule.BoardItem) {
+    private fun TopBoardHeader(board: MarketOverviewModule.Board) {
         Column {
             Divider(
                 thickness = 1.dp,
@@ -187,11 +190,11 @@ class MarketOverviewFragment : BaseFragment() {
             ) {
                 Image(
                     modifier = Modifier.padding(horizontal = 16.dp),
-                    painter = painterResource(boardItem.boardHeader.iconRes),
+                    painter = painterResource(board.boardHeader.iconRes),
                     contentDescription = "Section Header Icon"
                 )
                 Text(
-                    text = getString(boardItem.boardHeader.title),
+                    text = getString(board.boardHeader.title),
                     color = ComposeAppTheme.colors.oz,
                     style = ComposeAppTheme.typography.body,
                     maxLines = 1,
@@ -199,9 +202,9 @@ class MarketOverviewFragment : BaseFragment() {
                 Spacer(Modifier.weight(1f))
                 ButtonSecondaryToggle(
                     modifier = Modifier.padding(end = 16.dp),
-                    toggleIndicators = boardItem.boardHeader.toggleButton.indicators,
-                    title = boardItem.boardHeader.toggleButton.title,
-                    onClick = { marketOverviewViewModel.onToggleTopBoardSize(boardItem.type) }
+                    toggleIndicators = board.boardHeader.toggleButton.indicators,
+                    title = board.boardHeader.toggleButton.title,
+                    onClick = { marketOverviewViewModel.onToggleTopBoardSize(board.type) }
                 )
             }
             Spacer(modifier = Modifier.height(12.dp))
