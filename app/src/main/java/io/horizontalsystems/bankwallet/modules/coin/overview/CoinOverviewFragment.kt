@@ -1,13 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.coin.overview
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.activity.addCallback
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
@@ -17,7 +14,6 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.coin.CoinLink
 import io.horizontalsystems.bankwallet.modules.coin.CoinViewModel
-import io.horizontalsystems.bankwallet.modules.coin.PoweredByAdapter
 import io.horizontalsystems.bankwallet.modules.coin.adapters.*
 import io.horizontalsystems.bankwallet.modules.coin.adapters.CoinChartAdapter.ChartViewType
 import io.horizontalsystems.bankwallet.modules.markdown.MarkdownFragment
@@ -52,11 +48,22 @@ class CoinOverviewFragment : BaseFragment(R.layout.fragment_coin_overview), Coin
                 val aboutText by viewModel.aboutTextLiveData.observeAsState("")
                 val links by viewModel.linksLiveData.observeAsState(listOf())
                 val showFooter by viewModel.showFooterLiveData.observeAsState(false)
+                val loading by viewModel.loadingLiveData.observeAsState(false)
+                val coinInfoError by viewModel.coinInfoErrorLiveData.observeAsState("")
 
-                CoinOverviewScreen(subtitle, marketData, roi, categories, contractInfo, aboutText, links,
+                CoinOverviewScreen(subtitle,
+                    marketData,
+                    roi,
+                    categories,
+                    contractInfo,
+                    aboutText,
+                    links,
                     {
                         onClick(it)
-                    }, showFooter)
+                    },
+                    showFooter,
+                    loading,
+                    coinInfoError)
             }
         }
 
@@ -68,12 +75,8 @@ class CoinOverviewFragment : BaseFragment(R.layout.fragment_coin_overview), Coin
             viewLifecycleOwner
         )
         val aboutAdapter = CoinAboutAdapter(viewModel.aboutTextLiveData, viewLifecycleOwner)
-        val loadingAdapter = CoinLoadingAdapter(viewModel.loadingLiveData, viewLifecycleOwner)
-        val errorAdapter = CoinInfoErrorAdapter(viewModel.coinInfoErrorLiveData, viewLifecycleOwner)
 
         val concatAdapter = ConcatAdapter(
-                loadingAdapter,
-                errorAdapter,
                 chartAdapter,
                 aboutAdapter,
         )
