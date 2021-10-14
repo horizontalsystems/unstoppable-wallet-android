@@ -68,6 +68,18 @@ fun CellSingleLineLawrence(
 
 
 @Composable
+fun CellData2(content: @Composable () -> Unit) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(48.dp)
+    ) {
+        content.invoke()
+    }
+
+}
+
+@Composable
 fun CellSingleLineClear(
     borderTop: Boolean = false,
     borderBottom: Boolean = false,

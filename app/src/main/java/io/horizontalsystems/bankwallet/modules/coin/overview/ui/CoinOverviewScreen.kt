@@ -64,10 +64,10 @@ fun CoinOverviewScreen(
                 Contracts(contractInfo)
             }
 
-//        if (aboutText.isNotBlank()) {
-//            Spacer(modifier = Modifier.height(24.dp))
-//            About(aboutText)
-//        }
+            if (aboutText.isNotBlank()) {
+                Spacer(modifier = Modifier.height(24.dp))
+                About(aboutText)
+            }
 
             if (links.isNotEmpty()) {
                 Spacer(modifier = Modifier.height(24.dp))

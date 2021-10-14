@@ -1,8 +1,20 @@
 package io.horizontalsystems.bankwallet.modules.coin.overview.ui
 
-import androidx.compose.runtime.Composable
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.Text
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.CellData2
+import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineClear
 import io.horizontalsystems.bankwallet.ui.compose.components.Description
 
 @Preview
@@ -15,5 +27,57 @@ fun AboutPreview() {
 
 @Composable
 fun About(text: String) {
-    Description(text = text)
+    Column {
+        CellSingleLineClear(borderTop = true) {
+            Row(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 16.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = stringResource(id = R.string.CoinPage_About),
+                    style = ComposeAppTheme.typography.body,
+                    color = ComposeAppTheme.colors.oz,
+                )
+            }
+        }
+
+        val textMaxLines = 8
+        val toggleLines = 2
+
+        var showReadMoreToggle by remember { mutableStateOf(false)}
+        var expanded by remember { mutableStateOf(false)}
+
+        val maxLines = if (showReadMoreToggle) textMaxLines else textMaxLines + toggleLines
+
+        Description(
+            text = text,
+            maxLines = if (!expanded) maxLines else Int.MAX_VALUE,
+            overflow = TextOverflow.Ellipsis
+        ) {
+            showReadMoreToggle = showReadMoreToggle || it.hasVisualOverflow
+        }
+
+        if (showReadMoreToggle) {
+            CellData2 {
+                Row(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalArrangement = Arrangement.End,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    val stringId = if (expanded) R.string.CoinPage_ReadLess else R.string.CoinPage_ReadMore
+                    Text(
+                        modifier = Modifier
+                            .clickable { expanded = !expanded }
+                            .padding(horizontal = 16.dp),
+                        text = stringResource(id = stringId),
+                        style = ComposeAppTheme.typography.subhead2,
+                        color = ComposeAppTheme.colors.jacob,
+                        textAlign = TextAlign.End,
+                    )
+                }
+            }
+        }
+    }
 }
