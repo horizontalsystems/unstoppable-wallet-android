@@ -63,7 +63,19 @@ sealed class RoiViewItem {
     ) : RoiViewItem()
 }
 
-data class ContractInfo(val title: String, val value: String)
+sealed class ContractInfo(val uid: String, @DrawableRes val logoResId: Int) {
+    class Erc20(address: String) : ContractInfo(shortenAddress(address), R.drawable.logo_ethereum_24)
+    class Bep20(address: String) : ContractInfo(shortenAddress(address), R.drawable.logo_binancesmartchain_24)
+    class Bep2(val symbol: String) : ContractInfo(symbol, R.drawable.logo_bep2_24)
+
+    companion object {
+        private fun shortenAddress(address: String) = if (address.length >= 20) {
+            address.take(8) + "..." + address.takeLast(8)
+        } else {
+            address
+        }
+    }
+}
 
 data class CoinDataItem(
     val title: String,
@@ -241,13 +253,12 @@ class CoinViewFactory(
     private fun getIcon(linkType: LinkType): Int {
         return when (linkType) {
             LinkType.Guide -> R.drawable.ic_academy_20
-            LinkType.Website -> R.drawable.ic_globe
-            LinkType.Whitepaper -> R.drawable.ic_clipboard
-            LinkType.Twitter -> R.drawable.ic_twitter
-            LinkType.Telegram -> R.drawable.ic_telegram
-            LinkType.Reddit -> R.drawable.ic_reddit
-            LinkType.Github -> R.drawable.ic_github
-//            LinkType.Youtube -> R.drawable.ic_globe
+            LinkType.Website -> R.drawable.ic_globe_20
+            LinkType.Whitepaper -> R.drawable.ic_clipboard_20
+            LinkType.Twitter -> R.drawable.ic_twitter_20
+            LinkType.Telegram -> R.drawable.ic_telegram_20
+            LinkType.Reddit -> R.drawable.ic_reddit_20
+            LinkType.Github -> R.drawable.ic_github_20
         }
     }
 

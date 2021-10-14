@@ -6,6 +6,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <androidx.compose.ui.platform.ComposeView
+        android:id="@+id/compose"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+
     <io.horizontalsystems.bankwallet.ui.extensions.ControlledRecyclerView
         android:id="@+id/controlledRecyclerView"
         android:layout_width="match_parent"

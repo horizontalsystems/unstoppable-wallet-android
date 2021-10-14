@@ -1,9 +1,16 @@
 package io.horizontalsystems.bankwallet.modules.coin.overview
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.activity.addCallback
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.ConcatAdapter
 import io.horizontalsystems.bankwallet.R
@@ -14,6 +21,7 @@ import io.horizontalsystems.bankwallet.modules.coin.PoweredByAdapter
 import io.horizontalsystems.bankwallet.modules.coin.adapters.*
 import io.horizontalsystems.bankwallet.modules.coin.adapters.CoinChartAdapter.ChartViewType
 import io.horizontalsystems.bankwallet.modules.markdown.MarkdownFragment
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.core.findNavController
@@ -30,7 +38,28 @@ class CoinOverviewFragment : BaseFragment(R.layout.fragment_coin_overview), Coin
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val subtitleAdapter = CoinSubtitleAdapter(viewModel.subtitleLiveData, viewLifecycleOwner)
+        compose.setViewCompositionStrategy(
+            ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+        )
+
+        compose.setContent {
+            ComposeAppTheme {
+                val subtitle by viewModel.subtitleLiveData.observeAsState(CoinSubtitleAdapter.ViewItemWrapper(null, null))
+                val marketData by viewModel.marketDataLiveData.observeAsState(listOf())
+                val roi by viewModel.roiLiveData.observeAsState(listOf())
+                val categories by viewModel.categoriesLiveData.observeAsState(listOf())
+                val contractInfo by viewModel.contractInfoLiveData.observeAsState(listOf())
+                val aboutText by viewModel.aboutTextLiveData.observeAsState("")
+                val links by viewModel.linksLiveData.observeAsState(listOf())
+                val showFooter by viewModel.showFooterLiveData.observeAsState(false)
+
+                CoinOverviewScreen(subtitle, marketData, roi, categories, contractInfo, aboutText, links,
+                    {
+                        onClick(it)
+                    }, showFooter)
+            }
+        }
+
         val chartAdapter = CoinChartAdapter(
             viewModel.chartInfoLiveData,
             viewModel.currency,
@@ -38,36 +67,19 @@ class CoinOverviewFragment : BaseFragment(R.layout.fragment_coin_overview), Coin
             this,
             viewLifecycleOwner
         )
-        val coinRoiAdapter = CoinRoiAdapter(viewModel.roiLiveData, viewLifecycleOwner)
-        val marketDataAdapter = CoinDataAdapter(viewModel.marketDataLiveData, viewLifecycleOwner)
-        val investorDataAdapter = CoinDataAdapter(viewModel.investorDataLiveData, viewLifecycleOwner, R.string.CoinPage_InvestorData)
-        val securityParamsAdapter = CoinDataAdapter(viewModel.securityParamsLiveData, viewLifecycleOwner, R.string.CoinPage_SecurityParams)
-        val categoriesAdapter = CoinCategoryAdapter(viewModel.categoriesLiveData, viewLifecycleOwner)
-        val contractInfoAdapter = CoinDataAdapter(viewModel.contractInfoLiveData, viewLifecycleOwner)
         val aboutAdapter = CoinAboutAdapter(viewModel.aboutTextLiveData, viewLifecycleOwner)
-        val linksAdapter = CoinLinksAdapter(viewModel.linksLiveData, viewLifecycleOwner, this)
-        val footerAdapter = PoweredByAdapter(viewModel.showFooterLiveData, viewLifecycleOwner, getString(R.string.Market_PoweredByApi))
-
         val loadingAdapter = CoinLoadingAdapter(viewModel.loadingLiveData, viewLifecycleOwner)
         val errorAdapter = CoinInfoErrorAdapter(viewModel.coinInfoErrorLiveData, viewLifecycleOwner)
 
         val concatAdapter = ConcatAdapter(
-                subtitleAdapter,
-                chartAdapter,
-                marketDataAdapter,
-                coinRoiAdapter,
-                investorDataAdapter,
-                securityParamsAdapter,
-                categoriesAdapter,
-                contractInfoAdapter,
-                aboutAdapter,
-                linksAdapter,
                 loadingAdapter,
                 errorAdapter,
-                footerAdapter
+                chartAdapter,
+                aboutAdapter,
         )
 
-        controlledRecyclerView.adapter = concatAdapter
+//        controlledRecyclerView.adapter = concatAdapter
+        controlledRecyclerView.isVisible = false
 
         activity?.onBackPressedDispatcher?.addCallback(this) {
             findNavController().popBackStack()
