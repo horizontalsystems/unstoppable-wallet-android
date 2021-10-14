@@ -20,7 +20,7 @@ object MarketOverviewModule {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             val topMarketsRepository = TopMarketsRepository(App.marketKit)
-            val marketMetricsRepository = MarketMetricsRepository(App.xRateManager)
+            val marketMetricsRepository = MarketMetricsRepository(App.marketKit)
             val service = MarketOverviewService(
                 topMarketsRepository,
                 marketMetricsRepository,

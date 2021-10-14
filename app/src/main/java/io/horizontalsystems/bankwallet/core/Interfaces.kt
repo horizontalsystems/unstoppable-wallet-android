@@ -321,6 +321,7 @@ interface IAppConfigProvider {
     val coinsJsonUrl: String
     val providerCoinsJsonUrl: String
     val marketApiBaseUrl: String
+    val oldMarketApiBaseUrl: String
     val fiatDecimal: Int
     val maxDecimal: Int
     val feeRateAdjustForCurrencies: List<String>
