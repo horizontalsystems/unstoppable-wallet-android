@@ -52,7 +52,7 @@ class AboutFragment : BaseFragment() {
             findNavController().navigate(R.id.aboutAppFragment_to_termsFragment, null, navOptions())
         }
 
-        val githubItem = SettingsMenuItem(R.string.SettingsAboutApp_Github, R.drawable.ic_github, listPosition = ListPosition.First) {
+        val githubItem = SettingsMenuItem(R.string.SettingsAboutApp_Github, R.drawable.ic_github_20, listPosition = ListPosition.First) {
             viewModel.onGithubLinkTap()
         }
 

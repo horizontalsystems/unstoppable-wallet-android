@@ -14,8 +14,6 @@ import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.marketkit.models.ChartType
 import io.horizontalsystems.marketkit.models.CoinPrice
 import io.horizontalsystems.marketkit.models.CoinType
-import io.horizontalsystems.views.ListPosition
-import io.horizontalsystems.xrateskit.entities.TimePeriod
 import io.reactivex.disposables.CompositeDisposable
 import retrofit2.HttpException
 import java.math.BigDecimal
@@ -33,10 +31,8 @@ class CoinOverviewViewModel(
     val chartInfoLiveData = MutableLiveData<CoinChartAdapter.ViewItemWrapper>()
     val roiLiveData = MutableLiveData<List<RoiViewItem>>()
     val marketDataLiveData = MutableLiveData<List<CoinDataItem>>()
-    val investorDataLiveData = MutableLiveData<List<CoinDataItem>>()
-    val securityParamsLiveData = MutableLiveData<List<CoinDataItem>>()
     val categoriesLiveData = MutableLiveData<List<String>>()
-    val contractInfoLiveData = MutableLiveData<List<CoinDataItem>>()
+    val contractInfoLiveData = MutableLiveData<List<ContractInfo>>()
     val aboutTextLiveData = MutableLiveData<String>()
     val linksLiveData = MutableLiveData<List<CoinLink>>()
     val showFooterLiveData = MutableLiveData(false)
@@ -171,14 +167,7 @@ class CoinOverviewViewModel(
 
         roiLiveData.postValue(factory.getRoi(marketInfoOverview.performance))
         categoriesLiveData.postValue(marketInfoOverview.categories.map { it.name })
-        contractInfoLiveData.postValue(getContractInfo().map {
-            CoinDataItem(
-                it.title,
-                it.value,
-                valueDecorated = true,
-                listPosition = ListPosition.Single
-            )
-        })
+        contractInfoLiveData.postValue(getContractInfo())
         linksLiveData.postValue(factory.getLinks(marketInfoOverview, service.guideUrl))
 
         val marketData = factory.getMarketData(marketInfoOverview, service.currency, coinCode)
@@ -219,9 +208,9 @@ class CoinOverviewViewModel(
     private fun getContractInfo(): List<ContractInfo> {
         return service.fullCoin.platforms.mapNotNull { platform ->
             when (val coinType = platform.coinType) {
-                is CoinType.Erc20 -> ContractInfo(Translator.getString(R.string.CoinPage_Contract, "ETH"), coinType.address)
-                is CoinType.Bep20 -> ContractInfo(Translator.getString(R.string.CoinPage_Contract, "BSC"), coinType.address)
-                is CoinType.Bep2 -> ContractInfo(Translator.getString(R.string.CoinPage_Bep2Symbol), coinType.symbol)
+                is CoinType.Erc20 -> ContractInfo.Erc20(coinType.address)
+                is CoinType.Bep20 -> ContractInfo.Bep20(coinType.address)
+                is CoinType.Bep2 -> ContractInfo.Bep2(coinType.symbol)
                 else -> null
             }
         }
