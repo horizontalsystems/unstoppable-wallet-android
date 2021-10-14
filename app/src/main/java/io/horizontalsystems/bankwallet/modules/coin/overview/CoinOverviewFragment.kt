@@ -50,6 +50,7 @@ class CoinOverviewFragment : BaseFragment(R.layout.fragment_coin_overview), Coin
                 val showFooter by viewModel.showFooterLiveData.observeAsState(false)
                 val loading by viewModel.loadingLiveData.observeAsState(false)
                 val coinInfoError by viewModel.coinInfoErrorLiveData.observeAsState("")
+                val chartInfo by viewModel.chartInfoLiveData.observeAsState()
 
                 CoinOverviewScreen(subtitle,
                     marketData,
@@ -63,7 +64,11 @@ class CoinOverviewFragment : BaseFragment(R.layout.fragment_coin_overview), Coin
                     },
                     showFooter,
                     loading,
-                    coinInfoError)
+                    coinInfoError,
+                    chartInfo,
+                    viewModel.currency,
+                    this
+                )
             }
         }
 
