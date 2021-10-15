@@ -772,6 +772,9 @@
     <string name="CoinPage_Range24">Диапазон за 24 ч</string>
     <string name="CoinPage_About">О программе</string>
     <string name="CoinPage_Category">Категория</string>
+    <string name="CoinPage_Categories">Categories</string>
+    <string name="CoinPage_Contracts">Contracts</string>
+    <string name="CoinPage_Links">Links</string>
     <string name="CoinPage_Guide">Руководство</string>
     <string name="CoinPage_Website">Веб-сайт</string>
     <string name="CoinPage_Whitepaper">Документ</string>
