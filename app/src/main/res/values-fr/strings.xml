@@ -770,6 +770,9 @@
     <string name="CoinPage_Range24">Plage de 24h</string>
     <string name="CoinPage_About">À propos de</string>
     <string name="CoinPage_Category">Catégorie</string>
+    <string name="CoinPage_Categories">Categories</string>
+    <string name="CoinPage_Contracts">Contracts</string>
+    <string name="CoinPage_Links">Links</string>
     <string name="CoinPage_Guide">Guide</string>
     <string name="CoinPage_Website">Site Web</string>
     <string name="CoinPage_Whitepaper">Livre blanc</string>
