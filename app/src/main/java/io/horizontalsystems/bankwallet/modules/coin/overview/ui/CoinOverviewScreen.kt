@@ -17,7 +17,6 @@ import io.horizontalsystems.bankwallet.modules.coin.CoinLink
 import io.horizontalsystems.bankwallet.modules.coin.ContractInfo
 import io.horizontalsystems.bankwallet.modules.coin.RoiViewItem
 import io.horizontalsystems.bankwallet.modules.coin.adapters.CoinChartAdapter
-import io.horizontalsystems.bankwallet.modules.coin.adapters.CoinSubtitleAdapter
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.*
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.CellFooter
@@ -26,7 +25,7 @@ import io.horizontalsystems.core.entities.Currency
 
 @Composable
 fun CoinOverviewScreen(
-    subtitle: CoinSubtitleAdapter.ViewItemWrapper,
+    title: TitleViewItem,
     marketData: List<CoinDataItem>,
     roi: List<RoiViewItem>,
     categories: List<String>,
@@ -50,7 +49,7 @@ fun CoinOverviewScreen(
 
         Column(modifier = Modifier.verticalScroll(rememberScrollState(), enabled = scrollingEnabled)) {
 
-            Title(subtitle)
+            Title(title)
 
             if (chartInfo != null) {
                 ChartInfo(chartInfo, currency, object : CoinChartAdapter.Listener {

@@ -10,12 +10,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.modules.coin.adapters.CoinSubtitleAdapter
+import io.horizontalsystems.bankwallet.modules.coin.overview.TitleViewItem
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import java.math.BigDecimal
 
 @Composable
-fun Title(subtitle: CoinSubtitleAdapter.ViewItemWrapper) {
+fun Title(subtitle: TitleViewItem) {
     Row(
         modifier = Modifier
             .height(40.dp)
