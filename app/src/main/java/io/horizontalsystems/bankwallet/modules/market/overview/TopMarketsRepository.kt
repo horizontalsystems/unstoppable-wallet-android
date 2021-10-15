@@ -3,9 +3,6 @@ package io.horizontalsystems.bankwallet.modules.market.overview
 import io.horizontalsystems.bankwallet.modules.market.*
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.marketkit.MarketKit
-import io.horizontalsystems.marketkit.models.MarketInfo
-import io.horizontalsystems.marketkit.models.MarketInfo.OrderDirection
-import io.horizontalsystems.marketkit.models.MarketInfo.OrderField
 import io.reactivex.Single
 import kotlin.math.min
 
@@ -26,8 +23,6 @@ class TopMarketsRepository(
         if (forceRefresh && (cacheTimestamp + cacheValidPeriodInMillis < System.currentTimeMillis()) || cache.isEmpty()) {
             val marketInfoList = marketKit.marketInfosSingle(
                 maxTopMarketSize,
-                maxTopMarketSize,
-                MarketInfo.Order(OrderField.MarketCap, OrderDirection.Descending)
             ).blockingGet()
 
             val marketItems = marketInfoList.mapIndexed { index, marketInfo ->
