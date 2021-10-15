@@ -770,6 +770,9 @@
     <string name="CoinPage_Range24">24h Range</string>
     <string name="CoinPage_About">Acerca de</string>
     <string name="CoinPage_Category">Categoría</string>
+    <string name="CoinPage_Categories">Categories</string>
+    <string name="CoinPage_Contracts">Contracts</string>
+    <string name="CoinPage_Links">Links</string>
     <string name="CoinPage_Guide">Instructivos</string>
     <string name="CoinPage_Website">Sitio Web</string>
     <string name="CoinPage_Whitepaper">Whitepaper</string>
