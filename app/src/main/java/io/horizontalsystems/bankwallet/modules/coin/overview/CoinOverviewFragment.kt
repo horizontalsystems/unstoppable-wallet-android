@@ -14,7 +14,6 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.coin.CoinLink
 import io.horizontalsystems.bankwallet.modules.coin.CoinViewModel
-import io.horizontalsystems.bankwallet.modules.coin.adapters.CoinSubtitleAdapter
 import io.horizontalsystems.bankwallet.modules.markdown.MarkdownFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
@@ -35,7 +34,7 @@ class CoinOverviewFragment : BaseFragment() {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 ComposeAppTheme {
-                    val subtitle by viewModel.subtitleLiveData.observeAsState(CoinSubtitleAdapter.ViewItemWrapper(null, null))
+                    val title by viewModel.titleLiveData.observeAsState(TitleViewItem(null, null))
                     val marketData by viewModel.marketDataLiveData.observeAsState(listOf())
                     val roi by viewModel.roiLiveData.observeAsState(listOf())
                     val categories by viewModel.categoriesLiveData.observeAsState(listOf())
@@ -48,7 +47,7 @@ class CoinOverviewFragment : BaseFragment() {
                     val chartInfo by viewModel.chartInfoLiveData.observeAsState()
 
                     CoinOverviewScreen(
-                        subtitle,
+                        title,
                         marketData,
                         roi,
                         categories,

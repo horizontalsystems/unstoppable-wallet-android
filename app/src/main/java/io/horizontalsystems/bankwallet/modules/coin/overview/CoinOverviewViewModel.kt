@@ -9,7 +9,6 @@ import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.coin.*
 import io.horizontalsystems.bankwallet.modules.coin.adapters.CoinChartAdapter
-import io.horizontalsystems.bankwallet.modules.coin.adapters.CoinSubtitleAdapter
 import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.marketkit.models.ChartType
 import io.horizontalsystems.marketkit.models.CoinPrice
@@ -27,7 +26,7 @@ class CoinOverviewViewModel(
 
     val loadingLiveData = MutableLiveData<Boolean>()
     val coinInfoErrorLiveData = MutableLiveData<String>()
-    val subtitleLiveData = MutableLiveData<CoinSubtitleAdapter.ViewItemWrapper>()
+    val titleLiveData = MutableLiveData<TitleViewItem>()
     val chartInfoLiveData = MutableLiveData<CoinChartAdapter.ViewItemWrapper>()
     val roiLiveData = MutableLiveData<List<RoiViewItem>>()
     val marketDataLiveData = MutableLiveData<List<CoinDataItem>>()
@@ -114,8 +113,7 @@ class CoinOverviewViewModel(
     }
 
     private fun syncSubtitle() {
-        val subtitle = CoinSubtitleAdapter.ViewItemWrapper(latestRateText, rateDiffValue)
-        subtitleLiveData.postValue(subtitle)
+        titleLiveData.postValue(TitleViewItem(latestRateText, rateDiffValue))
     }
 
     fun onSelect(type: ChartView.ChartType) {

@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.coin.CoinViewFactory
 import io.horizontalsystems.marketkit.models.FullCoin
+import java.math.BigDecimal
 
 object CoinOverviewModule {
 
@@ -32,3 +33,8 @@ object CoinOverviewModule {
 
     }
 }
+
+data class TitleViewItem(
+    val rate: String?,
+    val rateDiff: BigDecimal?
+)
