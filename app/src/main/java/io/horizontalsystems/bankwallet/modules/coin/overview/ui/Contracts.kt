@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.modules.coin.overview.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -35,18 +34,11 @@ fun ContractsPreview() {
 fun Contracts(contracts: List<ContractInfo>) {
     Column {
         CellSingleLineClear(borderTop = true) {
-            Row(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 16.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = stringResource(id = R.string.CoinPage_Contracts),
-                    style = ComposeAppTheme.typography.body,
-                    color = ComposeAppTheme.colors.oz,
-                )
-            }
+            Text(
+                text = stringResource(id = R.string.CoinPage_Contracts),
+                style = ComposeAppTheme.typography.body,
+                color = ComposeAppTheme.colors.oz,
+            )
         }
 
         CellSingleLineLawrenceSection(contracts) { contractInfo ->

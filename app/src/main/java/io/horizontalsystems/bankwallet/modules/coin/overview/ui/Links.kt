@@ -59,18 +59,11 @@ fun LinksPreview() {
 fun Links(links: List<CoinLink>, onCoinLinkClick: (CoinLink) -> Unit) {
     Column {
         CellSingleLineClear(borderTop = true) {
-            Row(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 16.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = stringResource(id = R.string.CoinPage_Links),
-                    style = ComposeAppTheme.typography.body,
-                    color = ComposeAppTheme.colors.oz,
-                )
-            }
+            Text(
+                text = stringResource(id = R.string.CoinPage_Links),
+                style = ComposeAppTheme.typography.body,
+                color = ComposeAppTheme.colors.oz,
+            )
         }
 
         CellSingleLineLawrenceSection(links) { link ->

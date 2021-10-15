@@ -106,7 +106,14 @@ fun CellSingleLineClear(
             )
         }
 
-        content.invoke()
+        Row(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            content.invoke()
+        }
     }
 }
 
