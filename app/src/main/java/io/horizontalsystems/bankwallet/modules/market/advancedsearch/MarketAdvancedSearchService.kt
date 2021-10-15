@@ -149,7 +149,7 @@ class MarketAdvancedSearchService(
             Single.just(cache)
         } else {
             // todo: add support for currency and filterPeriod
-            marketKit.marketInfosSingle(coinCount, coinCount, null)
+            marketKit.marketInfosSingle(coinCount)
                     .doOnSuccess {
                         cache = it
                     }

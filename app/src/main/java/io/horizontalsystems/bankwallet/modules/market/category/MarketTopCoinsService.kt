@@ -27,9 +27,9 @@ class MarketTopCoinsService(
     var marketInfoItems: List<MarketInfo> = listOf()
     private var disposable: Disposable? = null
 
-    fun fetchCoinList(top: Int, limit: Int?, order: MarketInfo.Order) {
+    fun fetchCoinList(top: Int) {
         disposable?.dispose()
-        disposable = marketKit.marketInfosSingle(top, limit, order)
+        disposable = marketKit.marketInfosSingle(top)
             .subscribeIO({
                 marketInfoItems = it
                 stateObservable.onNext(State.Loaded)

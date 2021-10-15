@@ -14,7 +14,6 @@ import io.horizontalsystems.bankwallet.modules.market.category.MarketTopCoinsSer
 import io.horizontalsystems.bankwallet.ui.compose.components.ToggleIndicator
 import io.horizontalsystems.bankwallet.ui.extensions.MarketListHeaderView
 import io.horizontalsystems.marketkit.models.CoinCategory
-import io.horizontalsystems.marketkit.models.MarketInfo
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -60,40 +59,40 @@ class MarketTopCoinsViewModel(
 
     private fun fetchCoins() {
         val nonNullSortingField = _sortingField.value ?: return
-        val sortOrder = getSortOrder(nonNullSortingField)
+//        val sortOrder = getSortOrder(nonNullSortingField)
         val top = topMarket.value
 
-        service.fetchCoinList(top, null, order = sortOrder)
+        service.fetchCoinList(top)
     }
 
-    private fun getSortOrder(sortingField: SortingField): MarketInfo.Order {
-        return when (sortingField) {
-            SortingField.HighestCap -> MarketInfo.Order(
-                MarketInfo.OrderField.MarketCap,
-                MarketInfo.OrderDirection.Descending
-            )
-            SortingField.LowestCap -> MarketInfo.Order(
-                MarketInfo.OrderField.MarketCap,
-                MarketInfo.OrderDirection.Ascending
-            )
-            SortingField.TopGainers -> MarketInfo.Order(
-                MarketInfo.OrderField.PriceChange,
-                MarketInfo.OrderDirection.Descending
-            )
-            SortingField.TopLosers -> MarketInfo.Order(
-                MarketInfo.OrderField.PriceChange,
-                MarketInfo.OrderDirection.Ascending
-            )
-            SortingField.HighestVolume -> MarketInfo.Order(
-                MarketInfo.OrderField.TotalVolume,
-                MarketInfo.OrderDirection.Descending
-            )
-            SortingField.LowestVolume -> MarketInfo.Order(
-                MarketInfo.OrderField.TotalVolume,
-                MarketInfo.OrderDirection.Ascending
-            )
-        }
-    }
+//    private fun getSortOrder(sortingField: SortingField): MarketInfo.Order {
+//        return when (sortingField) {
+//            SortingField.HighestCap -> MarketInfo.Order(
+//                MarketInfo.OrderField.MarketCap,
+//                MarketInfo.OrderDirection.Descending
+//            )
+//            SortingField.LowestCap -> MarketInfo.Order(
+//                MarketInfo.OrderField.MarketCap,
+//                MarketInfo.OrderDirection.Ascending
+//            )
+//            SortingField.TopGainers -> MarketInfo.Order(
+//                MarketInfo.OrderField.PriceChange,
+//                MarketInfo.OrderDirection.Descending
+//            )
+//            SortingField.TopLosers -> MarketInfo.Order(
+//                MarketInfo.OrderField.PriceChange,
+//                MarketInfo.OrderDirection.Ascending
+//            )
+//            SortingField.HighestVolume -> MarketInfo.Order(
+//                MarketInfo.OrderField.TotalVolume,
+//                MarketInfo.OrderDirection.Descending
+//            )
+//            SortingField.LowestVolume -> MarketInfo.Order(
+//                MarketInfo.OrderField.TotalVolume,
+//                MarketInfo.OrderDirection.Ascending
+//            )
+//        }
+//    }
 
     private fun syncState(state: State) {
         when (state) {
