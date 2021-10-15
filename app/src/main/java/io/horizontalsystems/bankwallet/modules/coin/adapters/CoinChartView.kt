@@ -62,8 +62,17 @@ class CoinChartView @JvmOverloads constructor(context: Context, attrs: Attribute
 
     private var macdIsEnabled = false
     private var enabledIndicator: ChartIndicator? = null
+    private var item: CoinChartAdapter.ViewItemWrapper? = null
+
+    fun bindNew(item: CoinChartAdapter.ViewItemWrapper) {
+        this.item?.let { prevItem ->
+            bindUpdate(item, prevItem)
+        } ?: bind(item)
+    }
 
     fun bind(item: CoinChartAdapter.ViewItemWrapper) {
+        this.item = item
+
         if (item.showError) {
             chart.showError(context.getString(R.string.CoinPage_NoData))
             chart.hideSpinner()
@@ -99,6 +108,8 @@ class CoinChartView @JvmOverloads constructor(context: Context, attrs: Attribute
         current: CoinChartAdapter.ViewItemWrapper,
         prev: CoinChartAdapter.ViewItemWrapper,
     ) {
+        this.item = current
+
         current.apply {
             if (showSpinner != prev.showSpinner) {
                 if (showSpinner) {

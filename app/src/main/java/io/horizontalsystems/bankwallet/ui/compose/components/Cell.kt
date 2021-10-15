@@ -28,7 +28,8 @@ fun <T>CellSingleLineLawrenceSection(
     ) {
         items.forEachIndexed { index, marketDataLine ->
             CellSingleLineLawrence(borderTop = index != 0) {
-                itemContent(marketDataLine) }
+                itemContent(marketDataLine)
+            }
         }
     }
 
