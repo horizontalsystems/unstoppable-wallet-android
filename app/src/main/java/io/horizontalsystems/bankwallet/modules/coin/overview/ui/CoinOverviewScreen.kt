@@ -5,7 +5,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -21,6 +21,7 @@ import io.horizontalsystems.bankwallet.modules.coin.adapters.CoinSubtitleAdapter
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.*
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.CellFooter
+import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.core.entities.Currency
 
 @Composable
@@ -38,19 +39,34 @@ fun CoinOverviewScreen(
     coinInfoError: String,
     chartInfo: CoinChartAdapter.ViewItemWrapper?,
     currency: Currency,
-    listener: CoinChartAdapter.Listener
+    onTabSelect: (chartType: ChartView.ChartType) -> Unit
 ) {
     if (loading) {
         Loading()
     } else if (coinInfoError.isNotEmpty()) {
         Error(coinInfoError)
     } else {
-        Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+        var scrollingEnabled by remember { mutableStateOf(true) }
+
+        Column(modifier = Modifier.verticalScroll(rememberScrollState(), enabled = scrollingEnabled)) {
 
             Title(subtitle)
 
             if (chartInfo != null) {
-                ChartInfo(chartInfo, currency, listener)
+                ChartInfo(chartInfo, currency, object : CoinChartAdapter.Listener {
+                    override fun onChartTouchDown() {
+                        scrollingEnabled = false
+                    }
+
+                    override fun onChartTouchUp() {
+                        scrollingEnabled = true
+                    }
+
+                    override fun onTabSelect(chartType: ChartView.ChartType) {
+                        onTabSelect.invoke(chartType)
+                    }
+
+                })
             }
 
             if (marketData.isNotEmpty()) {
