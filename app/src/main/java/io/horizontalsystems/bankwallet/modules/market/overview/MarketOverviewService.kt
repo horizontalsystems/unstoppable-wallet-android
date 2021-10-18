@@ -8,7 +8,6 @@ import io.horizontalsystems.bankwallet.modules.market.TopMarket
 import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.MarketMetricsItem
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.ICurrencyManager
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.BehaviorSubject
 
@@ -20,14 +19,17 @@ class MarketOverviewService(
 ) : BackgroundManager.Listener {
 
     private val topListSize = 5
+    private var currencyManagerDisposable: Disposable? = null
+    private var gainersDisposable: Disposable? = null
+    private var losersDisposable: Disposable? = null
+    private var metricsDisposable: Disposable? = null
 
     var gainersTopMarket: TopMarket = TopMarket.Top250
         private set
     var losersTopMarket: TopMarket = TopMarket.Top250
         private set
 
-    private val disposables = CompositeDisposable()
-    private var currencyManagerDisposable: Disposable? = null
+    val topMarketOptions: Array<TopMarket> = TopMarket.values()
 
     val topGainersObservable: BehaviorSubject<DataState<List<MarketItem>>> =
         BehaviorSubject.createDefault(DataState.Loading)
@@ -38,9 +40,11 @@ class MarketOverviewService(
     val marketMetricsObservable: BehaviorSubject<DataState<MarketMetricsItem>> =
         BehaviorSubject.createDefault(DataState.Loading)
 
-    private fun fetch(forceRefresh: Boolean = true) {
+    private fun updateGainers(forceRefresh: Boolean) {
+        gainersDisposable?.dispose()
+
         topMarketsRepository.get(
-            gainersTopMarket,
+            gainersTopMarket.value,
             SortingField.TopGainers,
             topListSize,
             currencyManager.baseCurrency,
@@ -51,10 +55,14 @@ class MarketOverviewService(
                 { topGainersObservable.onNext(DataState.Success(it)) },
                 { topGainersObservable.onNext(DataState.Error(it)) }
             )
-            .let { disposables.add(it) }
+            .let { gainersDisposable = it }
+    }
+
+    private fun updateLosers(forceRefresh: Boolean) {
+        losersDisposable?.dispose()
 
         topMarketsRepository.get(
-            losersTopMarket,
+            losersTopMarket.value,
             SortingField.TopLosers,
             topListSize,
             currencyManager.baseCurrency,
@@ -65,48 +73,59 @@ class MarketOverviewService(
                 { topLosersObservable.onNext(DataState.Success(it)) },
                 { topLosersObservable.onNext(DataState.Error(it)) }
             )
-            .let { disposables.add(it) }
+            .let { losersDisposable = it }
+    }
 
-        marketMetricsRepository.get(currencyManager.baseCurrency, forceRefresh)
+    private fun updateMarketMetrics() {
+        metricsDisposable?.dispose()
+
+        marketMetricsRepository.get(currencyManager.baseCurrency, true)
             .doOnSubscribe { marketMetricsObservable.onNext(DataState.Loading) }
             .subscribeIO(
                 { marketMetricsObservable.onNext(DataState.Success(it)) },
                 { marketMetricsObservable.onNext(DataState.Error(it)) }
             )
-            .let { disposables.add(it) }
+            .let { metricsDisposable = it }
+    }
+
+    private fun forceRefresh() {
+        updateGainers(true)
+        updateLosers(true)
+        updateMarketMetrics()
     }
 
     fun start() {
         backgroundManager.registerListener(this)
         currencyManager.baseCurrencyUpdatedSignal
-            .subscribeIO { fetch() }
+            .subscribeIO { forceRefresh() }
             .let { currencyManagerDisposable = it }
 
-        fetch()
+        forceRefresh()
     }
 
     fun stop() {
         currencyManagerDisposable?.dispose()
-        disposables.dispose()
+        gainersDisposable?.dispose()
+        losersDisposable?.dispose()
+        metricsDisposable?.dispose()
         backgroundManager.unregisterListener(this)
     }
 
     override fun willEnterForeground() {
-        fetch()
+        forceRefresh()
     }
 
     fun refresh() {
-        fetch()
+        forceRefresh()
     }
 
-    fun onToggleTopGainersBoard() {
+    fun setNextGainersTopMarket() {
         gainersTopMarket = gainersTopMarket.next()
-        fetch(forceRefresh = false)
+        updateGainers(false)
     }
 
-    fun onToggleTopLosersBoard() {
+    fun setNextLosersTopMarket() {
         losersTopMarket = losersTopMarket.next()
-        fetch(forceRefresh = false)
+        updateLosers(false)
     }
-
 }

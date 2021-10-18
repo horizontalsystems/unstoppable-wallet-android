@@ -21,9 +21,7 @@ class TopMarketsRepository(
     @Synchronized
     private fun getMarketItems(forceRefresh: Boolean, baseCurrency: Currency): List<MarketItem> =
         if (forceRefresh && (cacheTimestamp + cacheValidPeriodInMillis < System.currentTimeMillis()) || cache.isEmpty()) {
-            val marketInfoList = marketKit.marketInfosSingle(
-                maxTopMarketSize,
-            ).blockingGet()
+            val marketInfoList = marketKit.marketInfosSingle(maxTopMarketSize).blockingGet()
 
             val marketItems = marketInfoList.mapIndexed { index, marketInfo ->
                 MarketItem.createFromCoinMarket(marketInfo, baseCurrency, Score.Rank(index + 1))
@@ -37,7 +35,7 @@ class TopMarketsRepository(
         }
 
     fun get(
-        topMarketType: TopMarket,
+        size: Int,
         sortingField: SortingField,
         limit: Int,
         baseCurrency: Currency,
@@ -47,7 +45,7 @@ class TopMarketsRepository(
             try {
                 val marketItems = getMarketItems(forceRefresh, baseCurrency)
                 val sortedMarketItems = marketItems
-                    .subList(0, min(marketItems.size, topMarketType.value))
+                    .subList(0, min(marketItems.size, size))
                     .sort(sortingField)
                     .subList(0, min(marketItems.size, limit))
 

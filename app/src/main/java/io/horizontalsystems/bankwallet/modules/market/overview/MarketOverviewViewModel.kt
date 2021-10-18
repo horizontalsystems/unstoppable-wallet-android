@@ -103,10 +103,10 @@ class MarketOverviewViewModel(
     fun onToggleTopBoardSize(listType: ListType) {
         when (listType) {
             ListType.TopGainers -> {
-                service.onToggleTopGainersBoard()
+                service.setNextGainersTopMarket()
             }
             ListType.TopLosers -> {
-                service.onToggleTopLosersBoard()
+                service.setNextLosersTopMarket()
             }
         }
     }
@@ -122,7 +122,7 @@ class MarketOverviewViewModel(
         val topGainersHeader = BoardHeader(
             getSectionTitle(type),
             getSectionIcon(type),
-            getToggleButton(topMarket)
+            getToggleButton(topMarket, service.topMarketOptions)
         )
         return Board(topGainersHeader, topList, type)
     }
@@ -179,8 +179,11 @@ class MarketOverviewViewModel(
         return App.numberFormatter.formatFiat(shortenValue, symbol, 0, 2) + " $suffix"
     }
 
-    private fun getToggleButton(topMarket: TopMarket): MarketListHeaderView.ToggleButton {
-        val options = TopMarket.values().map { "${it.value}" }
+    private fun getToggleButton(
+        topMarket: TopMarket,
+        topMarketOptions: Array<TopMarket>
+    ): MarketListHeaderView.ToggleButton {
+        val options = topMarketOptions.map { "${it.value}" }
 
         return MarketListHeaderView.ToggleButton(
             title = options[topMarket.ordinal],
