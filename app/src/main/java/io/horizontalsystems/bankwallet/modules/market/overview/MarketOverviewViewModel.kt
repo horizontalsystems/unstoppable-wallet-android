@@ -7,10 +7,8 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
-import io.horizontalsystems.bankwallet.modules.market.MarketItem
+import io.horizontalsystems.bankwallet.modules.market.*
 import io.horizontalsystems.bankwallet.modules.market.MarketModule.ListType
-import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
-import io.horizontalsystems.bankwallet.modules.market.TopMarket
 import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.Board
 import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.BoardHeader
 import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.MarketMetrics
@@ -225,5 +223,16 @@ class MarketOverviewViewModel(
 
     fun refresh() {
         refreshWithMinLoadingSpinnerPeriod()
+    }
+
+    fun getTopCoinsParams(listType: ListType): Triple<SortingField, TopMarket, MarketField> {
+        return when(listType) {
+            ListType.TopGainers -> {
+                Triple(SortingField.TopGainers, service.gainersTopMarket, MarketField.PriceDiff)
+            }
+            ListType.TopLosers -> {
+                Triple(SortingField.TopLosers, service.losersTopMarket, MarketField.PriceDiff)
+            }
+        }
     }
 }

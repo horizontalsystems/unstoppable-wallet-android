@@ -38,7 +38,7 @@ import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
-import io.horizontalsystems.bankwallet.modules.market.category.MarketTopCoinsFragment
+import io.horizontalsystems.bankwallet.modules.market.topcoins.MarketTopCoinsFragment
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
@@ -85,21 +85,20 @@ class MarketSearchFragment : BaseFragment() {
                         when (viewItemType) {
                             //todo differentiate opening of CoinCategory and TopCoins
                             MarketSearchModule.ViewItem.MarketTopCoins -> {
-                                val arguments = MarketTopCoinsFragment.prepareParams("top_coins")
                                 findNavController().navigate(
                                     R.id.marketSearchFragment_to_marketTopCoinsFragment,
-                                    arguments,
+                                    null,
                                     navOptionsFromBottom()
                                 )
                             }
                             is MarketSearchModule.ViewItem.MarketCoinCategory -> {
-                                val arguments =
-                                    MarketTopCoinsFragment.prepareParams(viewItemType.coinCategory.uid)
-                                findNavController().navigate(
-                                    R.id.marketSearchFragment_to_marketTopCoinsFragment,
-                                    arguments,
-                                    navOptionsFromBottom()
-                                )
+//                                val arguments =
+//                                    MarketTopCoinsFragment.prepareParams(viewItemType.coinCategory.uid)
+//                                findNavController().navigate(
+//                                    R.id.marketSearchFragment_to_marketTopCoinsFragment,
+//                                    arguments,
+//                                    navOptionsFromBottom()
+//                                )
                             }
                         }
                     },

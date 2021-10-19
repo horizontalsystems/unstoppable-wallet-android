@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.market
 
 import android.content.Context
+import android.os.Parcelable
 import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -10,9 +11,12 @@ import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
+import io.horizontalsystems.bankwallet.ui.compose.WithTranslatableTitle
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.marketkit.models.MarketInfo
+import kotlinx.android.parcel.Parcelize
 import java.math.BigDecimal
 import java.util.*
 
@@ -53,7 +57,7 @@ data class MarketItem(
     val volume: CurrencyValue,
     val rate: CurrencyValue,
     val diff: BigDecimal?,
-    val marketCap: CurrencyValue?
+    val marketCap: CurrencyValue
 ) {
     companion object {
         fun createFromCoinMarket(marketInfo: MarketInfo, currency: Currency, score: Score?): MarketItem {
@@ -70,26 +74,34 @@ data class MarketItem(
 }
 
 fun List<MarketItem>.sort(sortingField: SortingField) = when (sortingField) {
-    SortingField.HighestCap -> sortedByDescendingNullLast { it.marketCap?.value }
-    SortingField.LowestCap -> sortedByNullLast { it.marketCap?.value }
+    SortingField.HighestCap -> sortedByDescendingNullLast { it.marketCap.value }
+    SortingField.LowestCap -> sortedByNullLast { it.marketCap.value }
     SortingField.HighestVolume -> sortedByDescendingNullLast { it.volume.value }
     SortingField.LowestVolume -> sortedByNullLast { it.volume.value }
     SortingField.TopGainers -> sortedByDescendingNullLast { it.diff }
     SortingField.TopLosers -> sortedByNullLast { it.diff }
 }
 
-enum class SortingField(@StringRes val titleResId: Int) {
+@Parcelize
+enum class SortingField(@StringRes val titleResId: Int): WithTranslatableTitle, Parcelable {
     HighestCap(R.string.Market_Field_HighestCap), LowestCap(R.string.Market_Field_LowestCap),
     HighestVolume(R.string.Market_Field_HighestVolume), LowestVolume(R.string.Market_Field_LowestVolume),
-    TopGainers(R.string.RateList_TopGainers), TopLosers(R.string.RateList_TopLosers),
+    TopGainers(R.string.RateList_TopGainers), TopLosers(R.string.RateList_TopLosers);
+
+    override val title: TranslatableString
+        get() = TranslatableString.ResString(titleResId)
 }
 
-enum class MarketField(@StringRes val titleResId: Int) {
+@Parcelize
+enum class MarketField(@StringRes val titleResId: Int): WithTranslatableTitle, Parcelable {
     MarketCap(R.string.Market_Field_MarketCap),
     Volume(R.string.Market_Field_Volume),
     PriceDiff(R.string.Market_Field_PriceDiff);
 
     fun next() = values()[if (ordinal == values().size - 1) 0 else ordinal + 1]
+
+    override val title: TranslatableString
+        get() = TranslatableString.ResString(titleResId)
 
     companion object {
         val map = values().associateBy(MarketField::ordinal)
@@ -97,10 +109,14 @@ enum class MarketField(@StringRes val titleResId: Int) {
     }
 }
 
-enum class TopMarket(val value: Int) {
+@Parcelize
+enum class TopMarket(val value: Int): WithTranslatableTitle, Parcelable {
     Top250(250), Top500(500), Top1000(1000);
 
     fun next() = values()[if (ordinal == values().size - 1) 0 else ordinal + 1]
+
+    override val title: TranslatableString
+        get() = TranslatableString.PlainString(value.toString())
 }
 
 sealed class Score {

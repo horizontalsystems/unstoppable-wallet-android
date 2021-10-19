@@ -74,9 +74,6 @@
             android:id="@+id/mainFragment_to_marketSearchFragment"
             app:destination="@id/marketSearchFragment" />
         <action
-            android:id="@+id/mainFragment_to_MarketSearchFragment"
-            app:destination="@id/marketSearchFragment" />
-        <action
             android:id="@+id/mainFragment_to_sendEvmFragment"
             app:destination="@id/sendEvmFragment" />
         <action
@@ -451,7 +448,7 @@
     </fragment>
     <fragment
         android:id="@+id/marketTopCoinsFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.market.category.MarketTopCoinsFragment">
+        android:name="io.horizontalsystems.bankwallet.modules.market.topcoins.MarketTopCoinsFragment">
     </fragment>
     <fragment
         android:id="@+id/marketAdvancedSearchResultsFragment"

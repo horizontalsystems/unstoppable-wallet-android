@@ -21,7 +21,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.fragment.app.viewModels
-import androidx.navigation.navGraphViewModels
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
@@ -30,12 +29,12 @@ import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.market.MarketModule
 import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
-import io.horizontalsystems.bankwallet.modules.market.MarketViewModel
-import io.horizontalsystems.bankwallet.modules.market.topcoins.MarketDataValue
 import io.horizontalsystems.bankwallet.modules.market.getText
 import io.horizontalsystems.bankwallet.modules.market.metricspage.MetricsPageFragment
 import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.MarketMetrics
 import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.ViewItemState
+import io.horizontalsystems.bankwallet.modules.market.topcoins.MarketDataValue
+import io.horizontalsystems.bankwallet.modules.market.topcoins.MarketTopCoinsFragment
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryToggle
@@ -47,8 +46,7 @@ import io.horizontalsystems.core.findNavController
 
 class MarketOverviewFragment : BaseFragment() {
 
-    private val marketOverviewViewModel by viewModels<MarketOverviewViewModel> { MarketOverviewModule.Factory() }
-    private val marketViewModel by navGraphViewModels<MarketViewModel>(R.id.mainFragment)
+    private val viewModel by viewModels<MarketOverviewViewModel> { MarketOverviewModule.Factory() }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -81,15 +79,15 @@ class MarketOverviewFragment : BaseFragment() {
 
     @Composable
     private fun MarketOverviewScreen() {
-        val loading by marketOverviewViewModel.loadingLiveData.observeAsState()
-        val isRefreshing by marketOverviewViewModel.isRefreshingLiveData.observeAsState()
-        val viewItemState by marketOverviewViewModel.viewItemStateLiveData.observeAsState()
+        val loading by viewModel.loadingLiveData.observeAsState()
+        val isRefreshing by viewModel.isRefreshingLiveData.observeAsState()
+        val viewItemState by viewModel.viewItemStateLiveData.observeAsState()
         val scrollState = rememberScrollState()
 
         SwipeRefresh(
             state = rememberSwipeRefreshState(isRefreshing ?: false || loading ?: false),
             onRefresh = {
-                marketOverviewViewModel.refresh()
+                viewModel.refresh()
             },
             indicator = { state, trigger ->
                 SwipeRefreshIndicator(
@@ -106,7 +104,7 @@ class MarketOverviewFragment : BaseFragment() {
                     ListErrorView(
                         stringResource(R.string.Market_SyncError)
                     ) {
-                        marketOverviewViewModel.onErrorClick()
+                        viewModel.onErrorClick()
                     }
                 }
                 is ViewItemState.Loaded -> {
@@ -120,7 +118,12 @@ class MarketOverviewFragment : BaseFragment() {
                         ) {
                             MetricChartsView(state.viewItem.marketMetrics)
                         }
-                        BoardsView(state.viewItem.boards)
+                        BoardsView(state.viewItem.boards) {
+                            val (sortingField, topMarket, marketField) = viewModel.getTopCoinsParams(it)
+                            val args = MarketTopCoinsFragment.prepareParams(sortingField, topMarket, marketField)
+
+                            findNavController().navigate(R.id.marketTopCoinsFragment, args, navOptions())
+                        }
                     }
                 }
             }
@@ -165,7 +168,7 @@ class MarketOverviewFragment : BaseFragment() {
     }
 
     @Composable
-    private fun BoardsView(boards: List<MarketOverviewModule.Board>) {
+    private fun BoardsView(boards: List<MarketOverviewModule.Board>, onClickSeeAll: (MarketModule.ListType) -> Unit) {
         boards.forEach { boardItem ->
             TopBoardHeader(boardItem)
 
@@ -173,7 +176,9 @@ class MarketOverviewFragment : BaseFragment() {
                 MarketCoin(coin, index == 0)
             }
 
-            SeeAllButton(boardItem.type)
+            SeeAllButton {
+                onClickSeeAll(boardItem.type)
+            }
         }
     }
 
@@ -204,7 +209,7 @@ class MarketOverviewFragment : BaseFragment() {
                     modifier = Modifier.padding(end = 16.dp),
                     toggleIndicators = board.boardHeader.toggleButton.indicators,
                     title = board.boardHeader.toggleButton.title,
-                    onClick = { marketOverviewViewModel.onToggleTopBoardSize(board.type) }
+                    onClick = { viewModel.onToggleTopBoardSize(board.type) }
                 )
             }
             Spacer(modifier = Modifier.height(12.dp))
@@ -235,14 +240,14 @@ class MarketOverviewFragment : BaseFragment() {
     }
 
     @Composable
-    private fun SeeAllButton(listType: MarketModule.ListType) {
+    private fun SeeAllButton(onClick: () -> Unit) {
         Box(
             modifier = Modifier
                 .padding(start = 16.dp, end = 16.dp, bottom = 24.dp)
                 .height(48.dp)
                 .clip(RoundedCornerShape(bottomStart = 12.dp, bottomEnd = 12.dp))
                 .background(ComposeAppTheme.colors.lawrence)
-                .clickable { marketViewModel.onClickSeeAll(listType) }
+                .clickable(onClick = onClick)
         ) {
             Row(
                 modifier = Modifier
