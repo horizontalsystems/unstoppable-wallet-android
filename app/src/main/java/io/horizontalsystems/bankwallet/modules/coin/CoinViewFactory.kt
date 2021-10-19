@@ -190,13 +190,11 @@ class CoinViewFactory(
         }
 
         val supplyString = overview.circulatingSupply?.let {
-            val (shortenValue, suffix) = numberFormatter.shortenValue(it)
-            "$shortenValue $suffix $coinCode"
+            numberFormatter.formatCoin(it, coinCode, 0, numberFormatter.getSignificantDecimalCoin(it))
         }
 
         val totalSupplyString = overview.totalSupply?.let {
-            val (shortenValue, suffix) = numberFormatter.shortenValue(it)
-            "$shortenValue $suffix $coinCode"
+            numberFormatter.formatCoin(it, coinCode, 0, numberFormatter.getSignificantDecimalCoin(it))
         }
 
         return MarketDataViewItem(
