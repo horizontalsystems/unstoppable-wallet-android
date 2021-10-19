@@ -2,111 +2,103 @@ package io.horizontalsystems.bankwallet.modules.coin.coinmarkets
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
+import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.modules.coin.MarketTickerViewItem
-import io.horizontalsystems.bankwallet.modules.market.sortedByDescendingNullLast
-import io.horizontalsystems.bankwallet.modules.market.sortedByNullLast
 import io.horizontalsystems.bankwallet.ui.compose.components.ToggleIndicator
 import io.horizontalsystems.bankwallet.ui.extensions.MarketListHeaderView
-import io.horizontalsystems.core.ICurrencyManager
-import io.horizontalsystems.marketkit.MarketKit
-import io.horizontalsystems.xrateskit.entities.MarketTicker
-import java.math.BigDecimal
+import io.reactivex.Observable
+import io.reactivex.disposables.CompositeDisposable
 
-class CoinMarketsViewModel(
-    private val coinCode: String,
-    coinUid: String,
-    currencyManager: ICurrencyManager,
-    marketKit: MarketKit,
-    private val numberFormatter: IAppNumberFormatter
-) : ViewModel() {
+class CoinMarketsViewModel(private val service: CoinMarketsService) : ViewModel() {
+    val tickersLiveData = MutableLiveData<List<MarketTickerViewItem>>()
+    val topMenuLiveData = MutableLiveData<Pair<MarketListHeaderView.SortMenu, MarketListHeaderView.ToggleButton>>()
 
-    private val baseCurrency = currencyManager.baseCurrency
-    private val marketRate = marketKit.coinPrice(coinUid, baseCurrency.code)?.value ?: BigDecimal.ONE
-    private var showInFiat = false
-    private var sortDesc = true
-    private val toggleButton: MarketListHeaderView.ToggleButton
-        get() {
-            return MarketListHeaderView.ToggleButton(
-                title = if (showInFiat) baseCurrency.code else coinCode,
-                indicators = listOf(ToggleIndicator(!showInFiat), ToggleIndicator(showInFiat))
-            )
-        }
+    private val disposables = CompositeDisposable()
 
-    private val sortMenu: MarketListHeaderView.SortMenu
-        get() {
-            val direction =
-                if (sortDesc) MarketListHeaderView.Direction.Down else MarketListHeaderView.Direction.Up
-            return MarketListHeaderView.SortMenu.DuoOption(direction)
-        }
-
-    val topMenuLiveData = MutableLiveData(Pair(sortMenu, toggleButton))
-    val coinMarketItems = MutableLiveData<Pair<List<MarketTickerViewItem>, Boolean>>()
-
-    var marketTickers: List<MarketTicker> = listOf()
-        set(value) {
-            field = value
-            syncCoinMarketItems(false)
-        }
-
-    fun onChangeSorting() {
-        sortDesc = !sortDesc
-        syncCoinMarketItems(true)
-        updateTopMenu()
-    }
-
-    fun onToggleButtonClick() {
-        showInFiat = !showInFiat
-        syncCoinMarketItems(false)
-        updateTopMenu()
-    }
-
-    private fun updateTopMenu(){
-        topMenuLiveData.postValue(Pair(sortMenu, toggleButton))
-    }
-
-    private fun syncCoinMarketItems(scrollToTop: Boolean) {
-        val marketTickersSorted = marketTickers.sort(sortDesc)
-        val viewItems = getCoinMarketItems(marketTickersSorted, showInFiat)
-        coinMarketItems.postValue(Pair(viewItems, scrollToTop))
-    }
-
-    private fun getCoinMarketItems(
-        tickers: List<MarketTicker>,
-        showInFiat: Boolean
-    ): List<MarketTickerViewItem> {
-        return tickers.map { ticker ->
-            val subValue = if (showInFiat) {
-                formatFiatShortened(ticker.volume.multiply(marketRate), baseCurrency.symbol)
-            } else {
-                val (shortenValue, suffix) = numberFormatter.shortenValue(ticker.volume)
-                "$shortenValue $suffix ${ticker.base}"
+    init {
+        service.itemsObservable
+            .subscribeIO {
+                tickersLiveData.postValue(it.map { createViewItem(it) })
+            }
+            .let {
+                disposables.add(it)
             }
 
-            MarketTickerViewItem(
-                ticker.marketName,
-                "${ticker.base}/${ticker.target}",
-                numberFormatter.formatCoin(ticker.rate, ticker.target, 0, 8),
-                subValue,
-                ticker.imageUrl
+        Observable
+            .combineLatest(
+                service.sortTypeObservable,
+                service.volumeTypeObservable,
+                { sortType, volumeType ->
+                    Pair(sortType, volumeType)
+                }
             )
+            .subscribeIO { (sortType, volumeType) ->
+                val direction = when (sortType) {
+                    SortType.HighestVolume -> MarketListHeaderView.Direction.Down
+                    SortType.LowestVolume -> MarketListHeaderView.Direction.Up
+                }
+
+                val title = when (volumeType) {
+                    VolumeType.Coin -> service.fullCoin.coin.code
+                    VolumeType.Currency -> service.currency.code
+                }
+                val indicators = listOf(ToggleIndicator(volumeType == VolumeType.Coin), ToggleIndicator(volumeType == VolumeType.Currency))
+
+                topMenuLiveData.postValue(Pair(
+                    MarketListHeaderView.SortMenu.DuoOption(direction),
+                    MarketListHeaderView.ToggleButton(title, indicators)
+                ))
+            }
+            .let {
+                disposables.add(it)
+            }
+
+        service.start()
+    }
+
+    fun onSwitchSortType() {
+        service.setSortType(when (service.sortType) {
+            SortType.HighestVolume -> SortType.LowestVolume
+            SortType.LowestVolume -> SortType.HighestVolume
+        })
+    }
+
+    fun onSwitchVolumeType() {
+        service.setVolumeType(when (service.volumeType) {
+            VolumeType.Coin -> VolumeType.Currency
+            VolumeType.Currency -> VolumeType.Coin
+        })
+    }
+
+    private fun createViewItem(item: MarketTickerItem): MarketTickerViewItem {
+        return MarketTickerViewItem(
+            item.market,
+            item.marketImageUrl,
+            "${item.baseCoinCode}/${item.targetCoinCode}",
+            App.numberFormatter.formatCoin(item.rate, item.targetCoinCode, 0, 8),
+            getVolume(item)
+        )
+    }
+
+    private fun getVolume(item: MarketTickerItem): String {
+        val (shortenValue, suffix) = App.numberFormatter.shortenValue(item.volume)
+
+        return when (item.volumeType) {
+            VolumeType.Coin -> {
+                "$shortenValue $suffix ${item.baseCoinCode}"
+            }
+            VolumeType.Currency -> {
+                App.numberFormatter.formatFiat(shortenValue,
+                    service.currency.symbol,
+                    0,
+                    2) + " " + suffix
+            }
         }
     }
 
-    private fun List<MarketTicker>.sort(sortDesc: Boolean) =
-        if (sortDesc) {
-            sortedByDescendingNullLast { it.volume }
-        } else {
-            sortedByNullLast { it.volume }
-        }
-
-    private fun formatFiatShortened(value: BigDecimal, symbol: String): String {
-        val shortCapValue = numberFormatter.shortenValue(value)
-        return numberFormatter.formatFiat(
-            shortCapValue.first,
-            symbol,
-            0,
-            2
-        ) + " " + shortCapValue.second
+    override fun onCleared() {
+        disposables.clear()
+        service.stop()
     }
 }
