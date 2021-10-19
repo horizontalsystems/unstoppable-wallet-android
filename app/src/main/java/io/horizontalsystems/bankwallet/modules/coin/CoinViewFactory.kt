@@ -33,18 +33,18 @@ data class ChartPointViewItem(
 )
 
 data class MarketTickerViewItem(
-    val title: String,
-    val subtitle: String,
-    val value: String,
-    val subvalue: String,
-    val imageUrl: String?,
+    val market: String,
+    val marketImageUrl: String?,
+    val pair: String,
+    val rate: String,
+    val volume: String,
 ) {
     fun areItemsTheSame(other: MarketTickerViewItem): Boolean {
-        return title == other.title && subtitle == other.subtitle
+        return market == other.market && pair == other.pair
     }
 
     fun areContentsTheSame(other: MarketTickerViewItem): Boolean {
-        return value == other.value && subvalue == other.subvalue && imageUrl == other.imageUrl
+        return rate == other.rate && volume == other.volume && marketImageUrl == other.marketImageUrl
     }
 }
 

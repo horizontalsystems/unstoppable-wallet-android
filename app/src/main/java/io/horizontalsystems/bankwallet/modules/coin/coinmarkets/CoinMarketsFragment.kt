@@ -1,9 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.coin.coinmarkets
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
@@ -20,6 +18,8 @@ class CoinMarketsFragment : BaseFragment(R.layout.fragment_coin_markets), Market
         CoinMarketsModule.Factory(coinViewModel.fullCoin)
     }
 
+    private var scrollToTopAfterUpdate = false
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -30,14 +30,11 @@ class CoinMarketsFragment : BaseFragment(R.layout.fragment_coin_markets), Market
         recyclerView.adapter = marketItemsAdapter
         recyclerView.itemAnimator = null
 
-//        coinViewModel.coinMarketTickers.observe(viewLifecycleOwner, {
-//            viewModel.marketTickers = it
-//        })
-
-        viewModel.coinMarketItems.observe(viewLifecycleOwner, { (items, scrollToTop) ->
+        viewModel.tickersLiveData.observe(viewLifecycleOwner, { items ->
             marketItemsAdapter.submitList(items) {
-                if (scrollToTop) {
+                if (scrollToTopAfterUpdate) {
                     recyclerView.scrollToPosition(0)
+                    scrollToTopAfterUpdate = false
                 }
             }
         })
@@ -48,11 +45,12 @@ class CoinMarketsFragment : BaseFragment(R.layout.fragment_coin_markets), Market
     }
 
     override fun onSortingClick() {
-        viewModel.onChangeSorting()
+        scrollToTopAfterUpdate = true
+        viewModel.onSwitchSortType()
     }
 
     override fun onToggleButtonClick() {
-        viewModel.onToggleButtonClick()
+        viewModel.onSwitchVolumeType()
     }
 
 }
