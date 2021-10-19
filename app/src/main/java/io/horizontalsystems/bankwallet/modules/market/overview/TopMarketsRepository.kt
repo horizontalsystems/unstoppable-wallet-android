@@ -23,8 +23,12 @@ class TopMarketsRepository(
         if (forceRefresh && (cacheTimestamp + cacheValidPeriodInMillis < System.currentTimeMillis()) || cache.isEmpty()) {
             val marketInfoList = marketKit.marketInfosSingle(maxTopMarketSize).blockingGet()
 
-            val marketItems = marketInfoList.mapIndexed { index, marketInfo ->
-                MarketItem.createFromCoinMarket(marketInfo, baseCurrency, Score.Rank(index + 1))
+            val marketItems = marketInfoList.map { marketInfo ->
+                MarketItem.createFromCoinMarket(
+                    marketInfo,
+                    baseCurrency,
+                    marketInfo.fullCoin.coin.marketCapRank?.let { Score.Rank(it) }
+                )
             }
             cache = marketItems
             cacheTimestamp = System.currentTimeMillis()
@@ -42,6 +46,7 @@ class TopMarketsRepository(
         forceRefresh: Boolean
     ): Single<List<MarketItem>> =
         Single.create { emitter ->
+
             try {
                 val marketItems = getMarketItems(forceRefresh, baseCurrency)
                 val sortedMarketItems = marketItems

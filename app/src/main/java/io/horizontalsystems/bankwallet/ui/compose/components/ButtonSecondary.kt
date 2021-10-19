@@ -24,6 +24,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import io.horizontalsystems.bankwallet.ui.compose.WithTranslatableTitle
+import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 
 @Composable
@@ -155,7 +157,9 @@ fun ButtonSecondaryToggle(
             ) {
                 Text(title, maxLines = 1, overflow = TextOverflow.Ellipsis)
                 Column(
-                    modifier = Modifier.height(16.dp).padding(start = 12.dp),
+                    modifier = Modifier
+                        .height(16.dp)
+                        .padding(start = 12.dp),
                     verticalArrangement = Arrangement.SpaceEvenly
                 ) {
                     toggleIndicators.forEach { indicator ->
@@ -172,6 +176,55 @@ fun ButtonSecondaryToggle(
         enabled = enabled
     )
 }
+
+
+@Composable
+fun <T : WithTranslatableTitle> ButtonSecondaryToggle(
+    select: Select<T>,
+    modifier: Modifier = Modifier,
+    onSelect: (T) -> Unit,
+    enabled: Boolean = true
+) {
+    ButtonSecondary(
+        modifier = modifier,
+        onClick = {
+            val options = select.options
+            val selectedItemIndex = options.indexOf(select.selected)
+            val nextSelectedItemIndex = if (selectedItemIndex == options.size - 1) 0 else selectedItemIndex + 1
+
+            onSelect(options[nextSelectedItemIndex])
+        },
+        colors = ButtonDefaults.textButtonColors(
+            backgroundColor = ComposeAppTheme.colors.steel20,
+            contentColor = ComposeAppTheme.colors.oz
+        ),
+        content = {
+            Row(
+                modifier = Modifier.height(IntrinsicSize.Max),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(select.selected.title.getString(), maxLines = 1, overflow = TextOverflow.Ellipsis)
+                Column(
+                    modifier = Modifier
+                        .height(16.dp)
+                        .padding(start = 12.dp),
+                    verticalArrangement = Arrangement.SpaceEvenly
+                ) {
+                    select.options.forEach {
+                        Box(
+                            modifier = Modifier
+                                .size(3.dp)
+                                .clip(CircleShape)
+                                .background(if (select.selected == it) ComposeAppTheme.colors.jacob else ComposeAppTheme.colors.grey)
+                        )
+                    }
+                }
+            }
+        },
+        enabled = enabled
+    )
+}
+
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
