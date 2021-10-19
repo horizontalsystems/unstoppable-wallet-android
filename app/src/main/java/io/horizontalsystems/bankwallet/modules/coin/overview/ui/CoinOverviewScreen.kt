@@ -30,6 +30,7 @@ fun CoinOverviewScreen(
     roi: List<RoiViewItem>,
     categories: List<String>,
     contractInfo: List<ContractInfo>,
+    onClickContractCopy: (ContractInfo) -> Unit,
     aboutText: String,
     links: List<CoinLink>,
     onCoinLinkClick: (CoinLink) -> Unit,
@@ -85,7 +86,7 @@ fun CoinOverviewScreen(
 
             if (contractInfo.isNotEmpty()) {
                 Spacer(modifier = Modifier.height(24.dp))
-                Contracts(contractInfo)
+                Contracts(contracts = contractInfo, onClickCopy = onClickContractCopy)
             }
 
             if (aboutText.isNotBlank()) {

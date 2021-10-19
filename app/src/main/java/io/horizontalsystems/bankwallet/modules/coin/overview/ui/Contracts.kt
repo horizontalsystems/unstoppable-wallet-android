@@ -27,11 +27,11 @@ fun ContractsPreview() {
             ContractInfo.Bep20("0x34290098asd8asdasd98asd8asdasd9098asd098as9"),
             ContractInfo.Bep2("BNB"),
         )
-        Contracts(contracts = contracts)
+        Contracts(contracts = contracts, {})
     }
 }
 @Composable
-fun Contracts(contracts: List<ContractInfo>) {
+fun Contracts(contracts: List<ContractInfo>, onClickCopy: (ContractInfo) -> Unit) {
     Column {
         CellSingleLineClear(borderTop = true) {
             Text(
@@ -51,7 +51,7 @@ fun Contracts(contracts: List<ContractInfo>) {
             ) {
                 Image(painter = painterResource(id = contractInfo.logoResId), contentDescription = "platform")
                 Text(
-                    text = contractInfo.uid,
+                    text = contractInfo.shortened,
                     modifier = Modifier
                         .weight(1f)
                         .padding(horizontal = 16.dp),
@@ -62,7 +62,9 @@ fun Contracts(contracts: List<ContractInfo>) {
                 )
                 ButtonSecondaryCircle(
                     icon = R.drawable.ic_copy_20,
-                    onClick = { }
+                    onClick = {
+                        onClickCopy.invoke(contractInfo)
+                    }
                 )
                 ButtonSecondaryCircle(
                     modifier = Modifier.padding(start = 8.dp),

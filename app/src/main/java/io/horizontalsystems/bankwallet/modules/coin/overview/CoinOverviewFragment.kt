@@ -17,7 +17,9 @@ import io.horizontalsystems.bankwallet.modules.coin.CoinViewModel
 import io.horizontalsystems.bankwallet.modules.markdown.MarkdownFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
+import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.findNavController
+import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.LinkType
 
 class CoinOverviewFragment : BaseFragment() {
@@ -52,6 +54,10 @@ class CoinOverviewFragment : BaseFragment() {
                         roi,
                         categories,
                         contractInfo,
+                        {
+                            TextHelper.copyText(it.rawValue)
+                            HudHelper.showSuccessMessage(requireView(), R.string.Hud_Text_Copied)
+                        },
                         aboutText,
                         links,
                         {
