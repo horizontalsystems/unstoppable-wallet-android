@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.modules.coin.CoinDataItem
@@ -19,7 +20,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineLawre
 fun MarketDataPreview() {
     val marketData = listOf(
         CoinDataItem(title = "Market Cap", value = "$123.34 B"),
-        CoinDataItem(title = "Trading Volume", value = "112.9 M ETH"),
+        CoinDataItem(title = "Trading Volume", value = "112,112,112,112,112,112,112,112,112,112,112,112,112,112,112,112 ETH"),
         CoinDataItem(title = "Inception Date", value = "Jul 23, 2012"),
     )
 
@@ -45,11 +46,15 @@ fun MarketData(marketData: List<CoinDataItem>) {
 
             marketDataLine.value?.let { value ->
                 Text(
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(start = 16.dp),
                     text = value,
                     style = ComposeAppTheme.typography.subhead1,
                     color = ComposeAppTheme.colors.oz,
-                    textAlign = TextAlign.End
+                    textAlign = TextAlign.End,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
                 )
             }
         }
