@@ -7,7 +7,8 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.market.MarketModule
 import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
-import io.horizontalsystems.bankwallet.ui.extensions.MarketListHeaderView
+import io.horizontalsystems.bankwallet.modules.market.TopMarket
+import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.extensions.MetricData
 import java.math.BigDecimal
 
@@ -80,7 +81,7 @@ object MarketOverviewModule {
     data class BoardHeader(
         val title: Int,
         val iconRes: Int,
-        val toggleButton: MarketListHeaderView.ToggleButton
+        val topMarketSelect: Select<TopMarket>
     )
 
 }
