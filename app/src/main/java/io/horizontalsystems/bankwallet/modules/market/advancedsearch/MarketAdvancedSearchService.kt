@@ -134,10 +134,9 @@ class MarketAdvancedSearchService(
         return getTopMarketList(currency)
                 .map { coinMarkets ->
                     coinMarkets.map {
-                        val index = it.key
                         val coinMarket = it.value
 
-                        MarketItem.createFromCoinMarket(coinMarket, currency, Score.Rank(index + 1), filterPeriod)
+                        MarketItem.createFromCoinMarket(coinMarket, currency, filterPeriod)
                     }
                 }
     }

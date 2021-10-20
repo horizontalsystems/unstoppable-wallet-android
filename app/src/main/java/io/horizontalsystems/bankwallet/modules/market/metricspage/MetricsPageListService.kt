@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.modules.market.metricspage
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
-import io.horizontalsystems.bankwallet.modules.market.Score
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.core.entities.Currency
@@ -31,6 +30,9 @@ class MetricsPageListService(
     val stateObservable: BehaviorSubject<State> = BehaviorSubject.createDefault(State.Loading)
 
     var marketItems: List<MarketItem> = listOf()
+
+    val baseCurrency: Currency
+        get() = currencyManager.baseCurrency
 
     private var topItemsDisposable: Disposable? = null
     private val disposable = CompositeDisposable()
@@ -81,9 +83,7 @@ class MetricsPageListService(
     private fun getAllMarketItemsAsync(currency: Currency): Single<List<MarketItem>> {
         return marketKit.marketInfosSingle(250)
             .map { coinMarkets ->
-                coinMarkets.mapIndexed { index, coinMarket ->
-                    MarketItem.createFromCoinMarket(coinMarket, currency, Score.Rank(index + 1))
-                }
+                coinMarkets.map { MarketItem.createFromCoinMarket(it, currency) }
             }
     }
 

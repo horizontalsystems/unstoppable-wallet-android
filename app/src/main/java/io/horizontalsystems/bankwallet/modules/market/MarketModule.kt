@@ -1,15 +1,15 @@
 package io.horizontalsystems.bankwallet.modules.market
 
-import android.content.Context
 import android.os.Parcelable
+import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.iconUrl
-import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.market.advancedsearch.TimePeriod
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -19,7 +19,6 @@ import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.marketkit.models.MarketInfo
 import kotlinx.android.parcel.Parcelize
 import java.math.BigDecimal
-import java.util.*
 
 object MarketModule {
 
@@ -50,10 +49,20 @@ object MarketModule {
         TopLosers(SortingField.TopLosers, MarketField.PriceDiff),
     }
 
+    data class Header(
+        val title: String,
+        val description: String,
+        val icon: ImageSource,
+    )
+
+    sealed class ViewItemState {
+        class Error(val error: String) : ViewItemState()
+        class Data(val items: List<MarketViewItem>) : ViewItemState()
+    }
+
 }
 
 data class MarketItem(
-    val score: Score?,
     val fullCoin: FullCoin,
     val volume: CurrencyValue,
     val rate: CurrencyValue,
@@ -61,9 +70,8 @@ data class MarketItem(
     val marketCap: CurrencyValue
 ) {
     companion object {
-        fun createFromCoinMarket(marketInfo: MarketInfo, currency: Currency, score: Score?, pricePeriod: TimePeriod = TimePeriod.TimePeriod_1D): MarketItem {
+        fun createFromCoinMarket(marketInfo: MarketInfo, currency: Currency, pricePeriod: TimePeriod = TimePeriod.TimePeriod_1D): MarketItem {
             return MarketItem(
-                score,
                 marketInfo.fullCoin,
                 CurrencyValue(currency, marketInfo.totalVolume ?: BigDecimal.ZERO),
                 CurrencyValue(currency, marketInfo.price ?: BigDecimal.ZERO),
@@ -120,50 +128,25 @@ enum class TopMarket(val value: Int): WithTranslatableTitle, Parcelable {
         get() = TranslatableString.PlainString(value.toString())
 }
 
-sealed class Score {
-    class Rank(val rank: Int) : Score()
-    class Rating(val rating: String) : Score()
+sealed class ImageSource {
+    class Local(@DrawableRes val resId: Int) : ImageSource()
+    class Remote(val url: String) : ImageSource()
 }
 
-fun Score.getText(): String {
-    return when (this) {
-        is Score.Rank -> this.rank.toString()
-        is Score.Rating -> this.rating
-    }
+sealed class MarketDataValue {
+    class MarketCap(val value: String) : MarketDataValue()
+    class Volume(val value: String) : MarketDataValue()
+    class Diff(val value: BigDecimal?) : MarketDataValue()
 }
 
-fun Score.getTextColor(context: Context): Int {
-    return when (this) {
-        is Score.Rating -> context.getColor(R.color.dark)
-        is Score.Rank -> context.getColor(R.color.grey)
-    }
-}
-
-fun Score.getBackgroundTintColor(context: Context): Int {
-    val color = when (this) {
-        is Score.Rating -> {
-            when (rating.toUpperCase(Locale.ENGLISH)) {
-                "A" -> R.color.jacob
-                "B" -> R.color.issyk_blue
-                "C" -> R.color.grey
-                else -> R.color.light_grey
-            }
-        }
-        is Score.Rank -> {
-            R.color.jeremy
-        }
-    }
-
-    return context.getColor(color)
-}
-
+@Immutable
 data class MarketViewItem(
-    val score: Score?,
     val fullCoin: FullCoin,
-    val rate: String,
-    val diff: BigDecimal?,
-    val marketDataValue: MarketDataValue
+    val coinRate: String,
+    val marketDataValue: MarketDataValue,
+    val rank: String?,
 ) {
+
     val coinUid: String
         get() = fullCoin.coin.uid
 
@@ -179,12 +162,6 @@ data class MarketViewItem(
     val iconPlaceHolder: Int
         get() = fullCoin.iconPlaceholder
 
-    sealed class MarketDataValue {
-        class MarketCap(val value: String) : MarketDataValue()
-        class Volume(val value: String) : MarketDataValue()
-        class Diff(val value: BigDecimal?) : MarketDataValue()
-    }
-
     fun areItemsTheSame(other: MarketViewItem): Boolean {
         return fullCoin.coin == other.fullCoin.coin
     }
@@ -194,33 +171,45 @@ data class MarketViewItem(
     }
 
     companion object {
-        fun create(marketItem: MarketItem, marketField: MarketField): MarketViewItem {
-            val formattedRate = App.numberFormatter.formatFiat(marketItem.rate.value, marketItem.rate.currency.symbol, 0, 6)
-
+        fun create(
+            marketItem: MarketItem,
+            currency: Currency,
+            marketField: MarketField
+        ): MarketViewItem {
             val marketDataValue = when (marketField) {
                 MarketField.MarketCap -> {
-                    val marketCapFormatted = marketItem.marketCap?.let { marketCap ->
-                        val (shortenValue, suffix) = App.numberFormatter.shortenValue(marketCap.value)
-                        App.numberFormatter.formatFiat(shortenValue, marketCap.currency.symbol, 0, 2) + " $suffix"
-                    }
+                    val (shortenValue, suffix) = App.numberFormatter.shortenValue(
+                        marketItem.marketCap.value
+                    )
+                    val marketCapFormatted = App.numberFormatter.formatFiat(
+                        shortenValue,
+                        currency.symbol,
+                        0,
+                        2
+                    ) + " $suffix"
 
-                    MarketDataValue.MarketCap(marketCapFormatted ?: Translator.getString(R.string.NotAvailable))
+                    MarketDataValue.MarketCap(marketCapFormatted)
                 }
                 MarketField.Volume -> {
-                    val (shortenValue, suffix) = App.numberFormatter.shortenValue(marketItem.volume.value)
-                    val volumeFormatted = App.numberFormatter.formatFiat(shortenValue, marketItem.volume.currency.symbol, 0, 2) + " $suffix"
+                    val (shortenValue, suffix) = App.numberFormatter.shortenValue(
+                        marketItem.volume.value
+                    )
+                    val volumeFormatted = App.numberFormatter.formatFiat(
+                        shortenValue,
+                        currency.symbol,
+                        0,
+                        2
+                    ) + " $suffix"
 
                     MarketDataValue.Volume(volumeFormatted)
                 }
                 MarketField.PriceDiff -> MarketDataValue.Diff(marketItem.diff)
             }
-
             return MarketViewItem(
-                marketItem.score,
                 marketItem.fullCoin,
-                formattedRate,
-                marketItem.diff,
-                marketDataValue
+                App.numberFormatter.formatFiat(marketItem.rate.value, currency.symbol, 0, 6),
+                marketDataValue,
+                marketItem.fullCoin.coin.marketCapRank.toString()
             )
         }
     }

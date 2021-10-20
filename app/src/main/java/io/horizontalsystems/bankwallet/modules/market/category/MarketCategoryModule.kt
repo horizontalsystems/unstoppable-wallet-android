@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.market.topcoins
+package io.horizontalsystems.bankwallet.modules.market.category
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -6,38 +6,37 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.market.MarketField
 import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.market.TopMarket
-import io.horizontalsystems.bankwallet.modules.market.overview.TopMarketsRepository
 import io.horizontalsystems.bankwallet.ui.compose.Select
 
-object MarketTopCoinsModule {
+object MarketCategoryModule {
 
     class Factory(
-        private val topMarket: TopMarket? = null,
-        private val sortingField: SortingField? = null,
-        private val marketField: MarketField? = null
+        private val categoryUid: String,
+        private val categoryName: String,
+        private val categoryDescription: String,
+        private val categoryImageUrl: String,
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            val topMarketsRepository = TopMarketsRepository(App.marketKit)
-            val service = MarketTopCoinsService(
-                topMarketsRepository,
+            val marketCategoryRepository = MarketCategoryRepository(App.marketKit)
+            val service = MarketCategoryService(
+                marketCategoryRepository,
                 App.currencyManager,
-                topMarket ?: defaultTopMarket,
-                sortingField ?: defaultSortingField
+                categoryUid,
+                defaultTopMarket,
+                defaultSortingField
             )
-            return MarketTopCoinsViewModel(service, marketField ?: defaultMarketField) as T
+            return MarketCategoryViewModel(service, categoryName, categoryDescription, categoryImageUrl) as T
         }
 
         companion object {
             val defaultSortingField = SortingField.HighestCap
             val defaultTopMarket = TopMarket.Top250
-            val defaultMarketField = MarketField.MarketCap
         }
     }
 
     data class Menu(
         val sortingFieldSelect: Select<SortingField>,
-        val topMarketSelect: Select<TopMarket>?,
         val marketFieldSelect: Select<MarketField>
     )
 

@@ -7,7 +7,6 @@ import io.horizontalsystems.bankwallet.modules.market.list.IMarketListFetcher
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.marketkit.MarketKit
-import io.horizontalsystems.marketkit.models.MarketInfo
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.subjects.PublishSubject
@@ -43,7 +42,7 @@ class MarketFavoritesService(
             else -> marketKit.marketInfosSingle(coinUids)
                 .map {
                     it.map { marketInfo ->
-                        MarketItem.createFromCoinMarket(marketInfo, currency, null)
+                        MarketItem.createFromCoinMarket(marketInfo, currency)
                     }
                 }
         }

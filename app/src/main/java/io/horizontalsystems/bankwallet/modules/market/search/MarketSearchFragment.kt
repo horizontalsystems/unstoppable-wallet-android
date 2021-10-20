@@ -38,7 +38,7 @@ import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
-import io.horizontalsystems.bankwallet.modules.market.topcoins.MarketTopCoinsFragment
+import io.horizontalsystems.bankwallet.modules.market.category.MarketCategoryFragment
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
@@ -83,7 +83,6 @@ class MarketSearchFragment : BaseFragment() {
                     },
                     onCategoryClick = { viewItemType ->
                         when (viewItemType) {
-                            //todo differentiate opening of CoinCategory and TopCoins
                             MarketSearchModule.ViewItem.MarketTopCoins -> {
                                 findNavController().navigate(
                                     R.id.marketSearchFragment_to_marketTopCoinsFragment,
@@ -92,13 +91,8 @@ class MarketSearchFragment : BaseFragment() {
                                 )
                             }
                             is MarketSearchModule.ViewItem.MarketCoinCategory -> {
-//                                val arguments =
-//                                    MarketTopCoinsFragment.prepareParams(viewItemType.coinCategory.uid)
-//                                findNavController().navigate(
-//                                    R.id.marketSearchFragment_to_marketTopCoinsFragment,
-//                                    arguments,
-//                                    navOptionsFromBottom()
-//                                )
+                                val args = MarketCategoryFragment.prepareParams(viewItemType.coinCategory)
+                                findNavController().navigate(R.id.marketCategoryFragment, args, navOptions())
                             }
                         }
                     },
