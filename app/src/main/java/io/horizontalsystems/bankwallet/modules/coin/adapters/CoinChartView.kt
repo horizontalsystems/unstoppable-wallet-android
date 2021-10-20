@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.*
 import androidx.compose.material.Divider
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -21,6 +22,7 @@ import io.horizontalsystems.bankwallet.modules.coin.ChartPointViewItem
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.TabButtonSecondary
 import io.horizontalsystems.bankwallet.ui.compose.components.TabButtonSecondaryTransparent
+import io.horizontalsystems.bankwallet.ui.compose.components.TabPeriod
 import io.horizontalsystems.chartview.Chart
 import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.chartview.models.ChartIndicator
@@ -205,21 +207,23 @@ class CoinChartView @JvmOverloads constructor(context: Context, attrs: Attribute
     private fun CustomTab(tabTitles: List<String>, selectedIndex: Int, listState: LazyListState) {
         var tabIndex by remember { mutableStateOf(selectedIndex) }
 
-        LazyRow(
-            state = listState,
-            contentPadding = PaddingValues(horizontal = 16.dp),
-            modifier = Modifier.padding(top = 8.dp)
-        ) {
-            itemsIndexed(tabTitles) { index, title ->
-                val selected = tabIndex == index
-                TabButtonSecondaryTransparent(
-                    title = title,
-                    onSelect = {
-                        tabIndex = index
-                        listener.onTabSelect(getActions(chartViewType)[index].first)
-                    },
-                    selected = selected
-                )
+        TabPeriod {
+            LazyRow(
+                state = listState,
+                contentPadding = PaddingValues(horizontal = 16.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                itemsIndexed(tabTitles) { index, title ->
+                    val selected = tabIndex == index
+                    TabButtonSecondaryTransparent(
+                        title = title,
+                        onSelect = {
+                            tabIndex = index
+                            listener.onTabSelect(getActions(chartViewType)[index].first)
+                        },
+                        selected = selected
+                    )
+                }
             }
         }
     }
