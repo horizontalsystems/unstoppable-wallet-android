@@ -4,6 +4,7 @@ import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.core.ICurrencyManager
+import io.horizontalsystems.core.entities.Currency
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -23,6 +24,9 @@ class MarketListService(
     val stateObservable: BehaviorSubject<State> = BehaviorSubject.createDefault(State.Loading)
 
     var marketItems: List<MarketItem> = listOf()
+
+    val baseCurrency: Currency
+        get() = currencyManager.baseCurrency
 
     private var topItemsDisposable: Disposable? = null
     private val disposable = CompositeDisposable()

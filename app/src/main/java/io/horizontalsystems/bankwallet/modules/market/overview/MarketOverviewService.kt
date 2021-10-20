@@ -8,6 +8,7 @@ import io.horizontalsystems.bankwallet.modules.market.TopMarket
 import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.MarketMetricsItem
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.ICurrencyManager
+import io.horizontalsystems.core.entities.Currency
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.BehaviorSubject
 
@@ -23,6 +24,9 @@ class MarketOverviewService(
     private var gainersDisposable: Disposable? = null
     private var losersDisposable: Disposable? = null
     private var metricsDisposable: Disposable? = null
+
+    val baseCurrency: Currency
+        get() = currencyManager.baseCurrency
 
     var gainersTopMarket: TopMarket = TopMarket.Top250
         private set

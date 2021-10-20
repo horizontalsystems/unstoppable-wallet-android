@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.market.topcoins
+package io.horizontalsystems.bankwallet.modules.market.category
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -25,32 +25,40 @@ import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
-import io.horizontalsystems.bankwallet.modules.market.MarketField
 import io.horizontalsystems.bankwallet.modules.market.MarketModule.ViewItemState
 import io.horizontalsystems.bankwallet.modules.market.SortingField
-import io.horizontalsystems.bankwallet.modules.market.TopMarket
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorDialog
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorItem
 import io.horizontalsystems.core.findNavController
+import io.horizontalsystems.marketkit.models.CoinCategory
 
-class MarketTopCoinsFragment : BaseFragment() {
+class MarketCategoryFragment : BaseFragment() {
 
-    private val sortingField by lazy {
-        arguments?.getParcelable<SortingField>(sortingFieldKey)
+    private val categoryUid by lazy {
+        arguments?.getString(categoryUidKey)
     }
-    private val topMarket by lazy {
-        arguments?.getParcelable<TopMarket>(topMarketKey)
+    private val categoryName by lazy {
+        arguments?.getString(categoryNameKey)
     }
-    private val marketField by lazy {
-        arguments?.getParcelable<MarketField>(marketFieldKey)
+    private val categoryDescription by lazy {
+        arguments?.getString(categoryDescriptionKey)
+    }
+    private val categoryImageUrl by lazy {
+        arguments?.getString(categoryImageUrlKey)
     }
 
-    val viewModel by viewModels<MarketTopCoinsViewModel> {
-        MarketTopCoinsModule.Factory(topMarket, sortingField, marketField)
+    val viewModel by viewModels<MarketCategoryViewModel> {
+        MarketCategoryModule.Factory(
+            categoryUid!!,
+            categoryName!!,
+            categoryDescription!!,
+            categoryImageUrl!!
+        )
     }
 
     @ExperimentalCoilApi
@@ -65,7 +73,7 @@ class MarketTopCoinsFragment : BaseFragment() {
             )
             setContent {
                 ComposeAppTheme {
-                    TopCoinsScreen(
+                    CategoryScreen(
                         viewModel,
                         { findNavController().popBackStack() },
                         { sortingFieldSelect, onSelectSortingField ->
@@ -78,7 +86,10 @@ class MarketTopCoinsFragment : BaseFragment() {
         }
     }
 
-    private fun onSortingClick(sortingFieldSelect: Select<SortingField>, onSelectSortingField: (SortingField) -> Unit) {
+    private fun onSortingClick(
+        sortingFieldSelect: Select<SortingField>,
+        onSelectSortingField: (SortingField) -> Unit
+    ) {
         val items = sortingFieldSelect.options.map {
             SelectorItem(getString(it.titleResId), it == sortingFieldSelect.selected)
         }
@@ -98,15 +109,17 @@ class MarketTopCoinsFragment : BaseFragment() {
     }
 
     companion object {
-        private const val sortingFieldKey = "sorting_field"
-        private const val topMarketKey = "top_market"
-        private const val marketFieldKey = "market_field"
+        private const val categoryUidKey = "category_uid_field"
+        private const val categoryNameKey = "category_name_field"
+        private const val categoryDescriptionKey = "category_description_field"
+        private const val categoryImageUrlKey = "category_image_url_field"
 
-        fun prepareParams(sortingField: SortingField, topMarket: TopMarket, marketField: MarketField): Bundle {
+        fun prepareParams(coinCategory: CoinCategory): Bundle {
             return bundleOf(
-                sortingFieldKey to sortingField,
-                topMarketKey to topMarket,
-                marketFieldKey to marketField
+                categoryUidKey to coinCategory.uid,
+                categoryNameKey to coinCategory.name,
+                categoryDescriptionKey to coinCategory.description["en"],
+                categoryImageUrlKey to coinCategory.imageUrl,
             )
         }
     }
@@ -115,8 +128,8 @@ class MarketTopCoinsFragment : BaseFragment() {
 
 @ExperimentalCoilApi
 @Composable
-fun TopCoinsScreen(
-    viewModel: MarketTopCoinsViewModel,
+fun CategoryScreen(
+    viewModel: MarketCategoryViewModel,
     onCloseButtonClick: () -> Unit,
     onSortMenuClick: (select: Select<SortingField>, onSelect: ((SortingField) -> Unit)) -> Unit,
     onCoinClick: (String) -> Unit,
@@ -138,7 +151,7 @@ fun TopCoinsScreen(
             menu?.let { menu ->
                 CoinListHeader(
                     menu.sortingFieldSelect, viewModel::onSelectSortingField,
-                    menu.topMarketSelect, viewModel::onSelectTopMarket,
+                    null, null,
                     menu.marketFieldSelect, viewModel::onSelectMarketField,
                     onSortMenuClick
                 )

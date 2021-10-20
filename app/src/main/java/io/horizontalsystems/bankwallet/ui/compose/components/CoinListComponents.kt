@@ -3,10 +3,14 @@ package io.horizontalsystems.bankwallet.ui.compose.components
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Divider
+import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -15,11 +19,17 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.annotation.ExperimentalCoilApi
+import coil.compose.rememberImagePainter
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.modules.market.topcoins.MarketDataValue
+import io.horizontalsystems.bankwallet.core.iconPlaceholder
+import io.horizontalsystems.bankwallet.core.iconUrl
+import io.horizontalsystems.bankwallet.modules.market.*
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.Select
 
 @Composable
 fun MarketListCoin(
@@ -217,6 +227,142 @@ fun ListErrorView(
                 onClick?.invoke()
             }
         )
+    }
+}
+
+@Composable
+fun SortMenu(titleRes: Int, onClick: () -> Unit) {
+    ButtonSecondaryTransparent(
+        title = stringResource(titleRes),
+        iconRight = R.drawable.ic_down_arrow_20,
+        onClick = onClick
+    )
+}
+
+fun LazyListScope.coinList(
+    items: List<MarketViewItem>,
+    onCoinClick: (String) -> Unit
+) {
+    items(items) { item ->
+        MarketListCoin(
+            item.fullCoin.coin.name,
+            item.fullCoin.coin.code,
+            item.coinRate,
+            item.fullCoin.coin.iconUrl,
+            item.fullCoin.iconPlaceholder,
+            item.marketDataValue,
+            item.rank
+        ) { onCoinClick.invoke(item.fullCoin.coin.uid) }
+    }
+}
+
+@Composable
+fun CoinListHeader(
+    sortingFieldSelect: Select<SortingField>,
+    onSelectSortingField: (SortingField) -> Unit,
+    topMarketSelect: Select<TopMarket>?,
+    onSelectTopMarket: ((TopMarket) -> Unit)?,
+    marketFieldSelect: Select<MarketField>,
+    onSelectMarketField: (MarketField) -> Unit,
+    onSortMenuClick: (select: Select<SortingField>, onSelect: ((SortingField) -> Unit)) -> Unit,
+) {
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Divider(thickness = 1.dp, color = ComposeAppTheme.colors.steel10)
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(end = 16.dp)
+                .height(44.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Box(modifier = Modifier.weight(1f)) {
+                SortMenu(sortingFieldSelect.selected.titleResId) {
+                    onSortMenuClick(sortingFieldSelect, onSelectSortingField)
+                }
+            }
+            topMarketSelect?.let {
+                Box(modifier = Modifier.padding(start = 8.dp)) {
+                    ButtonSecondaryToggle(select = topMarketSelect, onSelect = onSelectTopMarket ?: {}) //TODO
+                }
+            }
+
+            Box(modifier = Modifier.padding(start = 8.dp)) {
+                ButtonSecondaryToggle(select = marketFieldSelect, onSelect = onSelectMarketField)
+            }
+        }
+        Divider(thickness = 1.dp, color = ComposeAppTheme.colors.steel10)
+    }
+}
+
+@Composable
+fun TopCloseButton(
+    interactionSource: MutableInteractionSource,
+    onCloseButtonClick: () -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(56.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Spacer(modifier = Modifier.weight(1f))
+        Box(
+            modifier = Modifier.clickable(
+                interactionSource = interactionSource,
+                indication = null
+            ) {
+                onCloseButtonClick.invoke()
+            }
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_close),
+                contentDescription = "close icon",
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .size(24.dp),
+                tint = ComposeAppTheme.colors.jacob
+            )
+        }
+    }
+}
+
+@ExperimentalCoilApi
+@Composable
+fun CategoryInfo(title: String, description: String, image: ImageSource) {
+    Column {
+        Row(
+            modifier = Modifier.height(108.dp)
+        ) {
+            Column(
+                modifier = Modifier
+                    .padding(start = 16.dp, top = 12.dp, end = 8.dp)
+                    .weight(1f)
+            ) {
+                Text(
+                    text = title,
+                    style = ComposeAppTheme.typography.headline1,
+                    color = ComposeAppTheme.colors.oz,
+                )
+                Text(
+                    text = description,
+                    modifier = Modifier.padding(top = 6.dp),
+                    style = ComposeAppTheme.typography.subhead2,
+                    color = ComposeAppTheme.colors.grey,
+                    maxLines = 3,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+            Image(
+                painter = when (image) {
+                    is ImageSource.Local -> painterResource(image.resId)
+                    is ImageSource.Remote -> rememberImagePainter(image.url)
+                },
+                contentDescription = "category image",
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .width(76.dp),
+            )
+        }
     }
 }
 

@@ -451,6 +451,10 @@
         android:name="io.horizontalsystems.bankwallet.modules.market.topcoins.MarketTopCoinsFragment">
     </fragment>
     <fragment
+        android:id="@+id/marketCategoryFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.market.category.MarketCategoryFragment">
+    </fragment>
+    <fragment
         android:id="@+id/marketAdvancedSearchResultsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.market.advancedsearch.MarketAdvancedSearchResultsFragment"
         tools:layout="@layout/fragment_market_advanced_search_results" />

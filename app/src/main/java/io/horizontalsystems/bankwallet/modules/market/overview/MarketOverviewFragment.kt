@@ -30,11 +30,9 @@ import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.market.MarketModule
 import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
 import io.horizontalsystems.bankwallet.modules.market.TopMarket
-import io.horizontalsystems.bankwallet.modules.market.getText
 import io.horizontalsystems.bankwallet.modules.market.metricspage.MetricsPageFragment
 import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.MarketMetrics
 import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.ViewItemState
-import io.horizontalsystems.bankwallet.modules.market.topcoins.MarketDataValue
 import io.horizontalsystems.bankwallet.modules.market.topcoins.MarketTopCoinsFragment
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -241,11 +239,11 @@ class MarketOverviewFragment : BaseFragment() {
             MarketListCoin(
                 marketViewItem.coinName,
                 marketViewItem.coinCode,
-                marketViewItem.rate,
+                marketViewItem.coinRate,
                 marketViewItem.iconUrl,
                 marketViewItem.iconPlaceHolder,
-                MarketDataValue.Diff(marketViewItem.diff),
-                marketViewItem.score?.getText()
+                marketViewItem.marketDataValue,
+                marketViewItem.rank
             ) {
                 onItemClick(marketViewItem)
             }
