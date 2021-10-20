@@ -29,6 +29,7 @@ import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.market.MarketModule
 import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
+import io.horizontalsystems.bankwallet.modules.market.TopMarket
 import io.horizontalsystems.bankwallet.modules.market.getText
 import io.horizontalsystems.bankwallet.modules.market.metricspage.MetricsPageFragment
 import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.MarketMetrics
@@ -118,12 +119,17 @@ class MarketOverviewFragment : BaseFragment() {
                         ) {
                             MetricChartsView(state.viewItem.marketMetrics)
                         }
-                        BoardsView(state.viewItem.boards) {
-                            val (sortingField, topMarket, marketField) = viewModel.getTopCoinsParams(it)
-                            val args = MarketTopCoinsFragment.prepareParams(sortingField, topMarket, marketField)
+                        BoardsView(
+                            boards = state.viewItem.boards,
+                            onClickSeeAll = { listType ->
+                                val (sortingField, topMarket, marketField) = viewModel.getTopCoinsParams(listType)
+                                val args = MarketTopCoinsFragment.prepareParams(sortingField, topMarket, marketField)
 
-                            findNavController().navigate(R.id.marketTopCoinsFragment, args, navOptions())
-                        }
+                                findNavController().navigate(R.id.marketTopCoinsFragment, args, navOptions())
+                            },
+                            onSelectTopMarket = { topMarket, listType ->
+                                viewModel.onSelectTopMarket(topMarket, listType)
+                            })
                     }
                 }
             }
@@ -168,9 +174,13 @@ class MarketOverviewFragment : BaseFragment() {
     }
 
     @Composable
-    private fun BoardsView(boards: List<MarketOverviewModule.Board>, onClickSeeAll: (MarketModule.ListType) -> Unit) {
+    private fun BoardsView(
+        boards: List<MarketOverviewModule.Board>,
+        onClickSeeAll: (MarketModule.ListType) -> Unit,
+        onSelectTopMarket: (TopMarket, MarketModule.ListType) -> Unit
+    ) {
         boards.forEach { boardItem ->
-            TopBoardHeader(boardItem)
+            TopBoardHeader(boardItem, onSelectTopMarket)
 
             boardItem.marketViewItems.forEachIndexed { index, coin ->
                 MarketCoin(coin, index == 0)
@@ -183,7 +193,10 @@ class MarketOverviewFragment : BaseFragment() {
     }
 
     @Composable
-    private fun TopBoardHeader(board: MarketOverviewModule.Board) {
+    private fun TopBoardHeader(
+        board: MarketOverviewModule.Board,
+        onSelectTopMarket: (TopMarket, MarketModule.ListType) -> Unit
+    ) {
         Column {
             Divider(
                 thickness = 1.dp,
@@ -207,10 +220,10 @@ class MarketOverviewFragment : BaseFragment() {
                 Spacer(Modifier.weight(1f))
                 ButtonSecondaryToggle(
                     modifier = Modifier.padding(end = 16.dp),
-                    toggleIndicators = board.boardHeader.toggleButton.indicators,
-                    title = board.boardHeader.toggleButton.title,
-                    onClick = { viewModel.onToggleTopBoardSize(board.type) }
-                )
+                    select = board.boardHeader.topMarketSelect,
+                    onSelect = { topMarket ->
+                        onSelectTopMarket(topMarket, board.type)
+                    })
             }
             Spacer(modifier = Modifier.height(12.dp))
         }

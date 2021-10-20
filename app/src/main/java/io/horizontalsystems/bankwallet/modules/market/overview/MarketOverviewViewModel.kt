@@ -16,8 +16,7 @@ import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewMod
 import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.MarketMetricsPoint
 import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.ViewItemState
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
-import io.horizontalsystems.bankwallet.ui.compose.components.ToggleIndicator
-import io.horizontalsystems.bankwallet.ui.extensions.MarketListHeaderView
+import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.extensions.MetricData
 import io.horizontalsystems.chartview.ChartData
 import io.horizontalsystems.chartview.ChartDataFactory
@@ -98,17 +97,6 @@ class MarketOverviewViewModel(
         return MarketOverviewModule.ViewItem(marketMetrics, boardItems)
     }
 
-    fun onToggleTopBoardSize(listType: ListType) {
-        when (listType) {
-            ListType.TopGainers -> {
-                service.setNextGainersTopMarket()
-            }
-            ListType.TopLosers -> {
-                service.setNextLosersTopMarket()
-            }
-        }
-    }
-
     private fun getBoard(type: ListType, marketItems: List<MarketItem>): Board {
         val topMarket = when (type) {
             ListType.TopGainers -> service.gainersTopMarket
@@ -117,12 +105,12 @@ class MarketOverviewViewModel(
         val topList = marketItems
             .map { MarketViewItem.create(it, type.marketField) }
 
-        val topGainersHeader = BoardHeader(
+        val boardHeader = BoardHeader(
             getSectionTitle(type),
             getSectionIcon(type),
-            getToggleButton(topMarket, service.topMarketOptions)
+            Select(topMarket, service.topMarketOptions)
         )
-        return Board(topGainersHeader, topList, type)
+        return Board(boardHeader, topList, type)
     }
 
     private fun getMarketMetrics(marketMetricsItem: MarketMetricsItem): MarketMetrics {
@@ -177,18 +165,6 @@ class MarketOverviewViewModel(
         return App.numberFormatter.formatFiat(shortenValue, symbol, 0, 2) + " $suffix"
     }
 
-    private fun getToggleButton(
-        topMarket: TopMarket,
-        topMarketOptions: Array<TopMarket>
-    ): MarketListHeaderView.ToggleButton {
-        val options = topMarketOptions.map { "${it.value}" }
-
-        return MarketListHeaderView.ToggleButton(
-            title = options[topMarket.ordinal],
-            indicators = options.mapIndexed { index, _ -> ToggleIndicator(index == topMarket.ordinal) }
-        )
-    }
-
     private fun getSectionTitle(type: ListType): Int {
         return when (type) {
             ListType.TopGainers -> R.string.RateList_TopGainers
@@ -212,13 +188,15 @@ class MarketOverviewViewModel(
         }
     }
 
-    fun onErrorClick() {
-        refreshWithMinLoadingSpinnerPeriod()
+    fun onSelectTopMarket(topMarket: TopMarket, listType: ListType) {
+        when(listType) {
+            ListType.TopGainers -> service.setGainersTopMarket(topMarket)
+            ListType.TopLosers -> service.setLosersTopMarket(topMarket)
+        }
     }
 
-    override fun onCleared() {
-        service.stop()
-        disposables.clear()
+    fun onErrorClick() {
+        refreshWithMinLoadingSpinnerPeriod()
     }
 
     fun refresh() {
@@ -226,7 +204,7 @@ class MarketOverviewViewModel(
     }
 
     fun getTopCoinsParams(listType: ListType): Triple<SortingField, TopMarket, MarketField> {
-        return when(listType) {
+        return when (listType) {
             ListType.TopGainers -> {
                 Triple(SortingField.TopGainers, service.gainersTopMarket, MarketField.PriceDiff)
             }
@@ -234,5 +212,10 @@ class MarketOverviewViewModel(
                 Triple(SortingField.TopLosers, service.losersTopMarket, MarketField.PriceDiff)
             }
         }
+    }
+
+    override fun onCleared() {
+        service.stop()
+        disposables.clear()
     }
 }

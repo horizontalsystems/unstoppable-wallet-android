@@ -29,7 +29,7 @@ class MarketOverviewService(
     var losersTopMarket: TopMarket = TopMarket.Top250
         private set
 
-    val topMarketOptions: Array<TopMarket> = TopMarket.values()
+    val topMarketOptions: List<TopMarket> = TopMarket.values().toList()
 
     val topGainersObservable: BehaviorSubject<DataState<List<MarketItem>>> =
         BehaviorSubject.createDefault(DataState.Loading)
@@ -119,13 +119,13 @@ class MarketOverviewService(
         forceRefresh()
     }
 
-    fun setNextGainersTopMarket() {
-        gainersTopMarket = gainersTopMarket.next()
+    fun setGainersTopMarket(topMarket: TopMarket) {
+        gainersTopMarket = topMarket
         updateGainers(false)
     }
 
-    fun setNextLosersTopMarket() {
-        losersTopMarket = losersTopMarket.next()
+    fun setLosersTopMarket(topMarket: TopMarket) {
+        losersTopMarket = topMarket
         updateLosers(false)
     }
 }
