@@ -11,6 +11,7 @@ import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import io.horizontalsystems.bankwallet.modules.market.advancedsearch.TimePeriod
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.WithTranslatableTitle
 import io.horizontalsystems.core.entities.Currency
@@ -60,13 +61,13 @@ data class MarketItem(
     val marketCap: CurrencyValue
 ) {
     companion object {
-        fun createFromCoinMarket(marketInfo: MarketInfo, currency: Currency, score: Score?): MarketItem {
+        fun createFromCoinMarket(marketInfo: MarketInfo, currency: Currency, score: Score?, pricePeriod: TimePeriod = TimePeriod.TimePeriod_1D): MarketItem {
             return MarketItem(
                 score,
                 marketInfo.fullCoin,
                 CurrencyValue(currency, marketInfo.totalVolume ?: BigDecimal.ZERO),
                 CurrencyValue(currency, marketInfo.price ?: BigDecimal.ZERO),
-                marketInfo.priceChange,
+                marketInfo.priceChangeValue(pricePeriod),
                 CurrencyValue(currency, marketInfo.marketCap?: BigDecimal.ZERO)
             )
         }
@@ -231,4 +232,13 @@ inline fun <T, R : Comparable<R>> Iterable<T>.sortedByDescendingNullLast(crossin
 
 inline fun <T, R : Comparable<R>> Iterable<T>.sortedByNullLast(crossinline selector: (T) -> R?): List<T> {
     return sortedWith(compareBy(nullsLast(), selector))
+}
+
+fun MarketInfo.priceChangeValue(period: TimePeriod) = when (period) {
+    TimePeriod.TimePeriod_1D -> priceChange24h
+    TimePeriod.TimePeriod_1W -> priceChange7d
+    TimePeriod.TimePeriod_2W -> priceChange14d
+    TimePeriod.TimePeriod_1M -> priceChange30d
+    TimePeriod.TimePeriod_6M -> priceChange200d
+    TimePeriod.TimePeriod_1Y -> priceChange1y
 }
