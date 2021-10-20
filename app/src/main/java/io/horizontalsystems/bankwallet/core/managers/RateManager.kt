@@ -34,14 +34,6 @@ class RateManager(
                 ?: kit.getHistoricalRateAsync(coinType.toCoinKitCoinType(), currencyCode, timestamp)
     }
 
-    override fun coinMarketDetailsAsync(coinType: CoinType, currencyCode: String, rateDiffCoinCodes: List<String>, rateDiffPeriods: List<TimePeriod>): Single<CoinMarketDetails> {
-        return kit.getCoinMarketDetailsAsync(coinType.toCoinKitCoinType(), currencyCode, rateDiffCoinCodes, rateDiffPeriods)
-    }
-
-    override fun getTopTokenHoldersAsync(coinType: CoinType): Single<List<TokenHolder>> {
-        return kit.getTopTokenHoldersAsync(coinType.toCoinKitCoinType(), itemsCount = 10)
-    }
-
     override fun getAuditsAsync(coinType: CoinType): Single<List<Auditor>> {
         return kit.getAuditReportsAsync(coinType.toCoinKitCoinType())
     }
@@ -50,16 +42,8 @@ class RateManager(
         return kit.getTopDefiTvlAsync(currencyCode, fetchDiffPeriod, itemsCount, chain)
     }
 
-    override fun getGlobalMarketInfoAsync(currency: String): Single<GlobalCoinMarket> {
-        return kit.getGlobalCoinMarketsAsync(currency)
-    }
-
     override fun getGlobalCoinMarketPointsAsync(currencyCode: String, timePeriod: TimePeriod): Single<List<GlobalCoinMarketPoint>> {
         return kit.getGlobalCoinMarketPointsAsync(currencyCode, timePeriod)
-    }
-
-    override fun searchCoins(searchText: String): List<CoinData> {
-        return kit.searchCoins(searchText)
     }
 
     override fun defiTvlPoints(coinType: CoinType, currencyCode: String, fetchDiffPeriod: TimePeriod) : Single<List<DefiTvlPoint>> {
@@ -68,10 +52,6 @@ class RateManager(
 
     override fun getCoinMarketVolumePointsAsync(coinType: CoinType, currencyCode: String, fetchDiffPeriod: TimePeriod): Single<List<CoinMarketPoint>> {
         return kit.getCoinMarketPointsAsync(coinType.toCoinKitCoinType(), currencyCode, fetchDiffPeriod)
-    }
-
-    override fun getCryptoNews(timestamp: Long?): Single<List<CryptoNews>> {
-        return kit.cryptoNewsAsync(timestamp)
     }
 
 }
