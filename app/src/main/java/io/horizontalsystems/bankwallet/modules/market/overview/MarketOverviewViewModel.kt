@@ -103,7 +103,7 @@ class MarketOverviewViewModel(
             ListType.TopLosers -> service.losersTopMarket
         }
         val topList = marketItems
-            .map { MarketViewItem.create(it, service.baseCurrency, type.marketField) }
+            .map { MarketViewItem.create(it, type.marketField) }
 
         val boardHeader = BoardHeader(
             getSectionTitle(type),

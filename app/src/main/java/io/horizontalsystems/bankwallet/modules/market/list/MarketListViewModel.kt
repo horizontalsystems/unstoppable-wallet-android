@@ -80,7 +80,7 @@ class MarketListViewModel(
                 .sort(sortingField)
                 .mapNotNull { marketItem ->
                     MarketField.fromIndex(marketFieldIndex)?.let { marketField ->
-                        MarketViewItem.create(marketItem, service.baseCurrency, marketField)
+                        MarketViewItem.create(marketItem, marketField)
                     }
                 }
 
