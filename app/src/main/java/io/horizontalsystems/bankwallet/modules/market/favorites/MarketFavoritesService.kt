@@ -36,18 +36,16 @@ class MarketFavoritesService(
     }
 
     override fun fetchAsync(currency: Currency): Single<List<MarketItem>> {
-        return Single.fromCallable {
-            marketFavoritesManager.getAll().map { it.coinType }
-        }
-            .flatMap { coinTypes ->
-//                todo: implement it
-//                marketKit.marketInfosByCoinUidsSingle()
-                Single.just(listOf<MarketInfo>())
-            }
-            .map {
-                it.map {
-                    MarketItem.createFromCoinMarket(it, currency, null)
+        val coinUids = marketFavoritesManager.getAll().map { it.coinUid }
+
+        return when {
+            coinUids.isEmpty() -> Single.just(listOf())
+            else -> marketKit.marketInfosSingle(coinUids)
+                .map {
+                    it.map { marketInfo ->
+                        MarketItem.createFromCoinMarket(marketInfo, currency, null)
+                    }
                 }
-            }
+        }
     }
 }
