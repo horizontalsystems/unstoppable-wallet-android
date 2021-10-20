@@ -104,6 +104,3 @@ fun CoinKitCoinType.toMarketKitCoinType(): CoinType = when (this) {
     is CoinKitCoinType.Bep2 -> CoinType.Bep2(symbol)
     is CoinKitCoinType.Unsupported -> CoinType.Unsupported(id)
 }
-
-// todo should be replaced with real coin UID
-fun CoinData.uid(): String = "uid"
