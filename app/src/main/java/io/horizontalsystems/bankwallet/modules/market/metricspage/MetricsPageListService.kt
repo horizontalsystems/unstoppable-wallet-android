@@ -31,9 +31,6 @@ class MetricsPageListService(
 
     var marketItems: List<MarketItem> = listOf()
 
-    val baseCurrency: Currency
-        get() = currencyManager.baseCurrency
-
     private var topItemsDisposable: Disposable? = null
     private val disposable = CompositeDisposable()
 

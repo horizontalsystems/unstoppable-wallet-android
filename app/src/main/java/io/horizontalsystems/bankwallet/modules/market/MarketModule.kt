@@ -92,7 +92,7 @@ fun List<MarketItem>.sort(sortingField: SortingField) = when (sortingField) {
 }
 
 @Parcelize
-enum class SortingField(@StringRes val titleResId: Int): WithTranslatableTitle, Parcelable {
+enum class SortingField(@StringRes val titleResId: Int) : WithTranslatableTitle, Parcelable {
     HighestCap(R.string.Market_Field_HighestCap), LowestCap(R.string.Market_Field_LowestCap),
     HighestVolume(R.string.Market_Field_HighestVolume), LowestVolume(R.string.Market_Field_LowestVolume),
     TopGainers(R.string.RateList_TopGainers), TopLosers(R.string.RateList_TopLosers);
@@ -102,7 +102,7 @@ enum class SortingField(@StringRes val titleResId: Int): WithTranslatableTitle, 
 }
 
 @Parcelize
-enum class MarketField(@StringRes val titleResId: Int): WithTranslatableTitle, Parcelable {
+enum class MarketField(@StringRes val titleResId: Int) : WithTranslatableTitle, Parcelable {
     MarketCap(R.string.Market_Field_MarketCap),
     Volume(R.string.Market_Field_Volume),
     PriceDiff(R.string.Market_Field_PriceDiff);
@@ -119,7 +119,7 @@ enum class MarketField(@StringRes val titleResId: Int): WithTranslatableTitle, P
 }
 
 @Parcelize
-enum class TopMarket(val value: Int): WithTranslatableTitle, Parcelable {
+enum class TopMarket(val value: Int) : WithTranslatableTitle, Parcelable {
     Top250(250), Top500(500), Top1000(1000);
 
     fun next() = values()[if (ordinal == values().size - 1) 0 else ordinal + 1]
@@ -173,7 +173,6 @@ data class MarketViewItem(
     companion object {
         fun create(
             marketItem: MarketItem,
-            currency: Currency,
             marketField: MarketField
         ): MarketViewItem {
             val marketDataValue = when (marketField) {
@@ -183,7 +182,7 @@ data class MarketViewItem(
                     )
                     val marketCapFormatted = App.numberFormatter.formatFiat(
                         shortenValue,
-                        currency.symbol,
+                        marketItem.marketCap.currency.symbol,
                         0,
                         2
                     ) + " $suffix"
@@ -196,7 +195,7 @@ data class MarketViewItem(
                     )
                     val volumeFormatted = App.numberFormatter.formatFiat(
                         shortenValue,
-                        currency.symbol,
+                        marketItem.volume.currency.symbol,
                         0,
                         2
                     ) + " $suffix"
@@ -207,7 +206,12 @@ data class MarketViewItem(
             }
             return MarketViewItem(
                 marketItem.fullCoin,
-                App.numberFormatter.formatFiat(marketItem.rate.value, currency.symbol, 0, 6),
+                App.numberFormatter.formatFiat(
+                    marketItem.rate.value,
+                    marketItem.rate.currency.symbol,
+                    0,
+                    6
+                ),
                 marketDataValue,
                 marketItem.fullCoin.coin.marketCapRank.toString()
             )

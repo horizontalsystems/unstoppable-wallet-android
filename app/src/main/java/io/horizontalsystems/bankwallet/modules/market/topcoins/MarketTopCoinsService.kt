@@ -7,7 +7,6 @@ import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.market.TopMarket
 import io.horizontalsystems.bankwallet.modules.market.overview.TopMarketsRepository
 import io.horizontalsystems.core.ICurrencyManager
-import io.horizontalsystems.core.entities.Currency
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.BehaviorSubject
 
@@ -20,9 +19,6 @@ class MarketTopCoinsService(
     private var disposable: Disposable? = null
 
     val stateObservable: BehaviorSubject<DataState<List<MarketItem>>> = BehaviorSubject.createDefault(DataState.Loading)
-
-    val baseCurrency: Currency
-        get() = currencyManager.baseCurrency
 
     val topMarkets = TopMarket.values().toList()
     var topMarket: TopMarket = topMarket
@@ -49,7 +45,7 @@ class MarketTopCoinsService(
             topMarket.value,
             sortingField,
             topMarket.value,
-            baseCurrency,
+            currencyManager.baseCurrency,
             forceRefresh
         )
             .doOnSubscribe { stateObservable.onNext(DataState.Loading) }

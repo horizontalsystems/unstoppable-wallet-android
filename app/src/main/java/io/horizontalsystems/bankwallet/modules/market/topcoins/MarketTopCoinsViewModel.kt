@@ -82,7 +82,7 @@ class MarketTopCoinsViewModel(
         viewStateLiveData.postValue(
             MarketModule.ViewItemState.Data(
                 marketItems.map {
-                    MarketViewItem.create(it, service.baseCurrency, marketField)
+                    MarketViewItem.create(it, marketField)
                 }
             )
         )
