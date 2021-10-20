@@ -21,9 +21,7 @@ import java.math.BigDecimal
 fun Roi(roi: List<RoiViewItem>) {
     CellSingleLineLawrenceSection(roi) { item ->
         Row(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 16.dp),
+            modifier = Modifier.fillMaxSize(),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             when (item) {
