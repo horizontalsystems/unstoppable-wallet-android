@@ -146,10 +146,10 @@ fun CategoryScreen(
         Column {
             TopCloseButton(interactionSource, onCloseButtonClick)
             header?.let { header ->
-                CategoryInfo(header.title, header.description, header.icon)
+                DescriptionCard(header.title, header.description, header.icon)
             }
             menu?.let { menu ->
-                CoinListHeader(
+                HeaderWithSorting(
                     menu.sortingFieldSelect, viewModel::onSelectSortingField,
                     null, null,
                     menu.marketFieldSelect, viewModel::onSelectMarketField,

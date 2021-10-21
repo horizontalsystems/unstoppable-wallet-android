@@ -38,7 +38,7 @@ import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryToggle
 import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
-import io.horizontalsystems.bankwallet.ui.compose.components.MarketListCoin
+import io.horizontalsystems.bankwallet.ui.compose.components.MultilineClear
 import io.horizontalsystems.bankwallet.ui.extensions.MarketMetricSmallView
 import io.horizontalsystems.bankwallet.ui.extensions.MetricData
 import io.horizontalsystems.core.findNavController
@@ -120,10 +120,20 @@ class MarketOverviewFragment : BaseFragment() {
                         BoardsView(
                             boards = state.viewItem.boards,
                             onClickSeeAll = { listType ->
-                                val (sortingField, topMarket, marketField) = viewModel.getTopCoinsParams(listType)
-                                val args = MarketTopCoinsFragment.prepareParams(sortingField, topMarket, marketField)
+                                val (sortingField, topMarket, marketField) = viewModel.getTopCoinsParams(
+                                    listType
+                                )
+                                val args = MarketTopCoinsFragment.prepareParams(
+                                    sortingField,
+                                    topMarket,
+                                    marketField
+                                )
 
-                                findNavController().navigate(R.id.marketTopCoinsFragment, args, navOptions())
+                                findNavController().navigate(
+                                    R.id.marketTopCoinsFragment,
+                                    args,
+                                    navOptions()
+                                )
                             },
                             onSelectTopMarket = { topMarket, listType ->
                                 viewModel.onSelectTopMarket(topMarket, listType)
@@ -236,12 +246,12 @@ class MarketOverviewFragment : BaseFragment() {
                 .clip(getRoundedCornerShape(firstItem))
                 .background(ComposeAppTheme.colors.lawrence)
         ) {
-            MarketListCoin(
+            MultilineClear(
                 marketViewItem.coinName,
                 marketViewItem.coinCode,
-                marketViewItem.coinRate,
                 marketViewItem.iconUrl,
                 marketViewItem.iconPlaceHolder,
+                marketViewItem.coinRate,
                 marketViewItem.marketDataValue,
                 marketViewItem.rank
             ) {

@@ -5,22 +5,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.material.*
+import androidx.compose.material.Divider
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.Icon
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
@@ -30,18 +28,18 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
-import coil.annotation.ExperimentalCoilApi
-import coil.compose.rememberImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.iconUrl
-import io.horizontalsystems.bankwallet.core.imageUrl
+import io.horizontalsystems.bankwallet.core.typeLabel
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.market.category.MarketCategoryFragment
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
+import io.horizontalsystems.bankwallet.ui.compose.components.CategoryCard
+import io.horizontalsystems.bankwallet.ui.compose.components.FavedButton
+import io.horizontalsystems.bankwallet.ui.compose.components.MultilineClear
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.marketkit.models.Coin
 import io.horizontalsystems.marketkit.models.CoinType
@@ -91,8 +89,13 @@ class MarketSearchFragment : BaseFragment() {
                                 )
                             }
                             is MarketSearchModule.ViewItem.MarketCoinCategory -> {
-                                val args = MarketCategoryFragment.prepareParams(viewItemType.coinCategory)
-                                findNavController().navigate(R.id.marketCategoryFragment, args, navOptions())
+                                val args =
+                                    MarketCategoryFragment.prepareParams(viewItemType.coinCategory)
+                                findNavController().navigate(
+                                    R.id.marketCategoryFragment,
+                                    args,
+                                    navOptions()
+                                )
                             }
                         }
                     },
@@ -165,7 +168,17 @@ fun MarketSearchResults(coinResult: List<FullCoin>, onCoinClick: (Coin) -> Unit)
             )
         }
         items(coinResult) { fullCoin ->
-            MarketCoin(fullCoin, onCoinClick)
+            MultilineClear(
+                fullCoin.coin.name,
+                fullCoin.coin.code,
+                fullCoin.coin.iconUrl,
+                fullCoin.iconPlaceholder,
+                label = fullCoin.typeLabel,
+                favedButton = FavedButton(
+                    false,
+                    { }
+                )
+            ) { onCoinClick(fullCoin.coin) }
         }
         item {
             Spacer(modifier = Modifier.height(16.dp))
@@ -291,159 +304,6 @@ fun CardsGrid(
     }
 }
 
-@ExperimentalCoilApi
-@ExperimentalMaterialApi
-@Composable
-private fun RowScope.CategoryCard(
-    type: MarketSearchModule.ViewItem,
-    onClick: (MarketSearchModule.ViewItem) -> Unit
-) {
-    Card(
-        modifier = Modifier
-            .padding(6.dp)
-            .height(128.dp)
-            .weight(1f),
-        shape = RoundedCornerShape(12.dp),
-        elevation = 0.dp,
-        backgroundColor = ComposeAppTheme.colors.lawrence,
-        onClick = {
-            onClick.invoke(type)
-        }
-    ) {
-        Box(modifier = Modifier.fillMaxSize()) {
-            when (type) {
-                MarketSearchModule.ViewItem.MarketTopCoins -> {
-                    Image(
-                        painter = painterResource(R.drawable.ic_top_coins),
-                        contentDescription = "category image",
-                        modifier = Modifier
-                            .height(108.dp)
-                            .width(76.dp)
-                            .align(Alignment.TopEnd),
-                    )
-                    Column(
-                        modifier = Modifier.padding(12.dp),
-                    ) {
-                        Spacer(modifier = Modifier.weight(1f))
-                        Text(
-                            text = stringResource(R.string.Market_Category_TopCoins),
-                            style = ComposeAppTheme.typography.subhead1,
-                            color = ComposeAppTheme.colors.oz,
-                            maxLines = 1
-                        )
-                    }
-                }
-                is MarketSearchModule.ViewItem.MarketCoinCategory -> {
-                    Image(
-                        painter = rememberImagePainter(type.coinCategory.imageUrl),
-                        contentDescription = "category image",
-                        modifier = Modifier
-                            .height(108.dp)
-                            .width(76.dp)
-                            .align(Alignment.TopEnd),
-                    )
-                    Column(
-                        modifier = Modifier.padding(12.dp),
-                    ) {
-                        Spacer(modifier = Modifier.weight(1f))
-                        Text(
-                            text = type.coinCategory.name,
-                            style = ComposeAppTheme.typography.subhead1,
-                            color = ComposeAppTheme.colors.oz,
-                            maxLines = 1
-                        )
-                    }
-                }
-            }
-        }
-    }
-}
-
-@Composable
-private fun MarketCoin(fullCoin: FullCoin, onCoinClick: (Coin) -> Unit) {
-    val favedState = remember { mutableStateOf(false) }
-    val interactionSource = remember { MutableInteractionSource() }
-
-    Box(
-        modifier = Modifier
-            .height(60.dp)
-            .clickable {
-                onCoinClick.invoke(fullCoin.coin)
-            }
-    ) {
-        Row(
-            modifier = Modifier.fillMaxHeight(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            CoinImage(
-                iconUrl = fullCoin.coin.iconUrl,
-                placeholder = fullCoin.iconPlaceholder,
-                modifier = Modifier.padding(horizontal = 16.dp).size(24.dp)
-            )
-            Column(
-                modifier = Modifier.padding(end = 16.dp).weight(1f)
-            ) {
-                Text(
-                    text = fullCoin.coin.name,
-                    color = ComposeAppTheme.colors.oz,
-                    style = ComposeAppTheme.typography.body,
-                    maxLines = 1,
-                )
-                Spacer(modifier = Modifier.height(3.dp))
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    if (true) {
-                        Box(
-                            modifier = Modifier.padding(end = 8.dp)
-                                .clip(RoundedCornerShape(4.dp))
-                                .background(ComposeAppTheme.colors.jeremy)
-                        ) {
-                            Text(
-                                modifier = Modifier.padding(
-                                    start = 4.dp,
-                                    end = 4.dp,
-                                    bottom = 1.dp
-                                ),
-                                text = "label",
-                                color = ComposeAppTheme.colors.bran,
-                                style = ComposeAppTheme.typography.microSB,
-                                maxLines = 1,
-                            )
-                        }
-                    }
-                    Text(
-                        text = fullCoin.coin.code,
-                        color = ComposeAppTheme.colors.grey,
-                        style = ComposeAppTheme.typography.subhead2,
-                        maxLines = 1,
-                    )
-                }
-            }
-            Box(
-                modifier = Modifier.clickable(
-                    interactionSource = interactionSource,
-                    indication = null
-                ) {
-                    favedState.value = !favedState.value
-                }
-            ) {
-                Image(
-                    modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp),
-                    painter = painterResource(R.drawable.ic_star_20),
-                    contentDescription = "coin icon",
-                    colorFilter = ColorFilter.tint(if (favedState.value) ComposeAppTheme.colors.jacob else ComposeAppTheme.colors.grey),
-                )
-            }
-        }
-        Divider(
-            thickness = 1.dp,
-            color = ComposeAppTheme.colors.steel10,
-            modifier = Modifier.align(Alignment.BottomCenter)
-        )
-    }
-}
-
 @Preview(showBackground = true)
 @Composable
 fun MarketCoinPreview() {
@@ -453,18 +313,17 @@ fun MarketCoinPreview() {
         platforms = listOf(Platform(CoinType.fromId("ethereum"), 18, "ethereum"))
     )
     ComposeAppTheme {
-        MarketCoin(fullCoin) { }
-    }
-}
-
-@ExperimentalMaterialApi
-@Preview(showBackground = true)
-@Composable
-fun CardPreview() {
-    ComposeAppTheme {
-        Row {
-            CategoryCard(MarketSearchModule.ViewItem.MarketTopCoins, { })
-        }
+        MultilineClear(
+            fullCoin.coin.name,
+            fullCoin.coin.code,
+            fullCoin.coin.iconUrl,
+            fullCoin.iconPlaceholder,
+            label = fullCoin.typeLabel,
+            favedButton = FavedButton(
+                false,
+                { }
+            )
+        )
     }
 }
 
