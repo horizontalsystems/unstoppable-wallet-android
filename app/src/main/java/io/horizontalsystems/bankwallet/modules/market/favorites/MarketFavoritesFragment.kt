@@ -35,7 +35,6 @@ class MarketFavoritesFragment : BaseFragment(), MarketListHeaderView.Listener, V
         super.onViewCreated(view, savedInstanceState)
 
         marketListHeader.listener = this
-        marketListHeader.isVisible = false
         marketListViewModel.marketViewItemsLiveData.observe(viewLifecycleOwner, { (list, _) ->
             marketListHeader.isVisible = list.isNotEmpty()
         })
