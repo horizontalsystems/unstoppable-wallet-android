@@ -6,7 +6,7 @@ import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.CoinBalanceIt
 import java.util.*
 
 class SelectSwapCoinViewModel(
-        private val coins: List<CoinBalanceItem>
+    private val coins: List<CoinBalanceItem>
 ) : ViewModel() {
 
     val coinItemsLivedData = MutableLiveData<List<CoinBalanceItem>>()
@@ -44,8 +44,8 @@ class SelectSwapCoinViewModel(
         val filter = filter ?: return items
 
         return items.filter {
-            it.coin.name.lowercase(Locale.ENGLISH).contains(filter.lowercase(Locale.ENGLISH))
-                    || it.coin.code.lowercase(Locale.ENGLISH).contains(filter.lowercase(Locale.ENGLISH))
+            it.platformCoin.name.lowercase(Locale.ENGLISH).contains(filter.lowercase(Locale.ENGLISH))
+                    || it.platformCoin.code.lowercase(Locale.ENGLISH).contains(filter.lowercase(Locale.ENGLISH))
         }
     }
 

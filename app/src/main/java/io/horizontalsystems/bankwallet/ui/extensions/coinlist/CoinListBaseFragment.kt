@@ -63,7 +63,8 @@ abstract class CoinListBaseFragment : BaseWithSearchFragment(), CoinListAdapter.
     // CoinListBaseFragment
 
     protected fun setViewItems(viewItems: List<CoinViewItem>) {
-        toolbar.menu.findItem(R.id.menuAddToken)?.isVisible = !searchExpanded.get() || searchExpanded.get() && viewItems.isEmpty()
+        toolbar.menu.findItem(R.id.menuAddToken)?.isVisible =
+            !searchExpanded.get() || searchExpanded.get() && viewItems.isEmpty()
 
         itemsAdapter.submitList(viewItems)
         progressLoading.isVisible = false
@@ -83,8 +84,7 @@ abstract class CoinListBaseFragment : BaseWithSearchFragment(), CoinListAdapter.
             fragmentManager = childFragmentManager,
             title = config.title,
             subtitle = config.subtitle,
-            coinUid = config.coinUid,
-            iconPlaceholder = config.iconPlaceholder,
+            icon = config.icon,
             items = config.viewItems,
             selected = config.selectedIndexes,
             notifyUnchanged = true,

@@ -11,17 +11,17 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.setCoinImage
+import io.horizontalsystems.bankwallet.core.setRemoteImage
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_market_item.*
 import java.math.BigDecimal
 
 class MarketItemsAdapter(
-        private val listener: ViewHolderMarketItem.Listener,
-        itemsLiveData: LiveData<Pair<List<MarketViewItem>, Boolean>>,
-        loadingLiveData: LiveData<Boolean>,
-        errorLiveData: LiveData<String?>,
-        viewLifecycleOwner: LifecycleOwner
+    private val listener: ViewHolderMarketItem.Listener,
+    itemsLiveData: LiveData<Pair<List<MarketViewItem>, Boolean>>,
+    loadingLiveData: LiveData<Boolean>,
+    errorLiveData: LiveData<String?>,
+    viewLifecycleOwner: LifecycleOwner
 ) : ListAdapter<MarketViewItem, ViewHolderMarketItem>(coinRateDiff) {
 
     init {
@@ -77,7 +77,8 @@ class MarketItemsAdapter(
     }
 }
 
-class ViewHolderMarketItem(override val containerView: View, private val listener: Listener) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+class ViewHolderMarketItem(override val containerView: View, private val listener: Listener) :
+    RecyclerView.ViewHolder(containerView), LayoutContainer {
     private var item: MarketViewItem? = null
 
     interface Listener {
@@ -96,7 +97,7 @@ class ViewHolderMarketItem(override val containerView: View, private val listene
         this.item = item
 
         if (item.coinUid != prev?.coinUid) {
-            icon.setCoinImage(item.coinUid, item.iconPlaceHolder)
+            icon.setRemoteImage(item.iconUrl, item.iconPlaceHolder)
         }
 
         if (prev == null || item.rank != prev.rank) {
@@ -132,15 +133,25 @@ class ViewHolderMarketItem(override val containerView: View, private val listene
             when (marketField) {
                 is MarketDataValue.MarketCap -> {
                     marketFieldValue.text = marketField.value
-                    marketFieldValue.setTextColor(containerView.resources.getColor(R.color.grey, containerView.context.theme))
+                    marketFieldValue.setTextColor(
+                        containerView.resources.getColor(
+                            R.color.grey,
+                            containerView.context.theme
+                        )
+                    )
                 }
                 is MarketDataValue.Volume -> {
                     marketFieldValue.text = marketField.value
-                    marketFieldValue.setTextColor(containerView.resources.getColor(R.color.grey, containerView.context.theme))
+                    marketFieldValue.setTextColor(
+                        containerView.resources.getColor(
+                            R.color.grey,
+                            containerView.context.theme
+                        )
+                    )
                 }
                 is MarketDataValue.Diff -> {
                     val v = marketField.value
-                    if (v != null){
+                    if (v != null) {
                         val sign = if (v >= BigDecimal.ZERO) "+" else "-"
                         marketFieldValue.text = App.numberFormatter.format(v.abs(), 0, 2, sign, "%")
 
@@ -159,7 +170,9 @@ class ViewHolderMarketItem(override val containerView: View, private val listene
 
     companion object {
         fun create(parent: ViewGroup, listener: Listener): ViewHolderMarketItem {
-            return ViewHolderMarketItem(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_market_item, parent, false), listener)
+            return ViewHolderMarketItem(
+                LayoutInflater.from(parent.context).inflate(R.layout.view_holder_market_item, parent, false), listener
+            )
         }
     }
 }

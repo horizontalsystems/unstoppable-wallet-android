@@ -2,11 +2,12 @@ package io.horizontalsystems.bankwallet.modules.networksettings
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.blockchainLogo
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.evmnetwork.EvmNetworkModule
 import io.horizontalsystems.core.SingleLiveEvent
+import io.horizontalsystems.marketkit.models.CoinType
 import io.reactivex.disposables.CompositeDisposable
 
 class NetworkSettingsViewModel(private val service: NetworkSettingsService): ViewModel() {
@@ -42,8 +43,8 @@ class NetworkSettingsViewModel(private val service: NetworkSettingsService): Vie
     }
 
     private fun iconResource(blockchain: NetworkSettingsService.Blockchain) = when (blockchain) {
-        NetworkSettingsService.Blockchain.Ethereum -> R.drawable.coin_placeholder
-        NetworkSettingsService.Blockchain.BinanceSmartChain -> R.drawable.coin_placeholder
+        NetworkSettingsService.Blockchain.Ethereum -> CoinType.Ethereum.blockchainLogo
+        NetworkSettingsService.Blockchain.BinanceSmartChain -> CoinType.BinanceSmartChain.blockchainLogo
     }
 
     private fun title(blockchain: NetworkSettingsService.Blockchain) = when (blockchain) {

@@ -8,8 +8,9 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
-import io.horizontalsystems.bankwallet.core.setCoinImage
+import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
+import io.horizontalsystems.bankwallet.core.setRemoteImage
 import io.horizontalsystems.marketkit.models.Coin
 import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.views.ListPosition
@@ -116,7 +117,7 @@ class CoinWithSwitchViewHolder(
 
     private fun set(fullCoin: FullCoin, listPosition: ListPosition) {
         backgroundView.setBackgroundResource(getBackground(listPosition))
-        coinIcon.setCoinImage(fullCoin.coin.uid, fullCoin.iconPlaceholder)
+        coinIcon.setRemoteImage(fullCoin.coin.iconUrl, fullCoin.iconPlaceholder)
         coinTitle.text = fullCoin.coin.name
         coinSubtitle.text = fullCoin.coin.code
         dividerView.isVisible = listPosition == ListPosition.Last || listPosition == ListPosition.Single
