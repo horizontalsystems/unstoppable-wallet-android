@@ -6,25 +6,21 @@
     android:layout_height="match_parent"
     android:background="?android:windowBackground">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
+    <androidx.compose.ui.platform.ComposeView
+        android:id="@+id/toolbarCompose"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         app:layout_constraintBottom_toTopOf="@id/middleGroup"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="spread_inside"
-        app:layout_constraintVertical_weight="1"
-        app:menu="@menu/close_menu"
-        app:titleTextAppearance="@style/Title3"
-        tools:navigationIcon="@drawable/bitcoin"
-        tools:title="@string/Deposit_Title" />
+        app:layout_constraintVertical_weight="1" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/middleGroup"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/buttonCloseCompose"
-        app:layout_constraintTop_toBottomOf="@id/toolbar">
+        app:layout_constraintTop_toBottomOf="@id/toolbarCompose">
 
         <View
             android:id="@+id/imgBg"
