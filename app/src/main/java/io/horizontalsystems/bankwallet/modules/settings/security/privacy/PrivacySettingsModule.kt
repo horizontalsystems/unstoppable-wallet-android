@@ -86,9 +86,9 @@ sealed class PrivacySettingsType {
 }
 
 data class PrivacySettingsViewItem(
-        val title: String,
-        val coin: PlatformCoin,
-        val settingType: PrivacySettingsType,
-        var enabled: Boolean = true,
-        val listPosition: ListPosition
+    val title: String,
+    val platformCoin: PlatformCoin,
+    val settingType: PrivacySettingsType,
+    var enabled: Boolean = true,
+    val listPosition: ListPosition
 )

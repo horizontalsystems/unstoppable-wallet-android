@@ -51,6 +51,18 @@ val FullCoin.typeLabel: String?
         null
     }
 
+val CoinType.blockchainLogo: Int
+    get() = when (this) {
+        CoinType.Bitcoin -> R.drawable.logo_bitcoin_24
+        CoinType.Ethereum -> R.drawable.logo_ethereum_24
+        CoinType.BitcoinCash -> R.drawable.logo_bitcoincash_24
+        CoinType.Dash -> R.drawable.logo_dash_24
+        CoinType.BinanceSmartChain -> R.drawable.logo_binancesmartchain_24
+        is CoinType.Bep2 -> R.drawable.logo_bep2_24
+        CoinType.Litecoin -> R.drawable.logo_litecoin_24
+        else -> R.drawable.coin_placeholder
+    }
+
 //View
 
 fun ImageView.setCoinImage(coinType: CoinType) {

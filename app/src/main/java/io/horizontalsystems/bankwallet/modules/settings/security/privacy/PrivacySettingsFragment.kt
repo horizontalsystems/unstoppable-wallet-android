@@ -5,13 +5,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ConcatAdapter
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.SyncMode
 import io.horizontalsystems.bankwallet.entities.TransactionDataSortingType
 import io.horizontalsystems.bankwallet.modules.main.MainModule
@@ -19,7 +17,6 @@ import io.horizontalsystems.bankwallet.modules.tor.TorConnectionActivity
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorDialog
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorViewItem
 import io.horizontalsystems.bankwallet.ui.extensions.ConfirmationDialog
-import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.views.AlertDialogFragment
 import kotlinx.android.synthetic.main.fragment_settings_privacy.*
@@ -105,7 +102,7 @@ class PrivacySettingsFragment :
                     childFragmentManager,
                     getString(R.string.SettingsPrivacy_Transactions),
                     getString(R.string.SettingsPrivacy_TransactionsSettingText),
-                    context?.let { ContextCompat.getDrawable(it, R.drawable.ic_transactions) },
+                    R.drawable.ic_transactions,
                     items.map { getSortingInfo(it) },
                     items.indexOf(selected),
                     onItemSelected = { position ->
@@ -119,18 +116,18 @@ class PrivacySettingsFragment :
             walletRestoreSettingsAdapter.notifyDataSetChanged()
         })
 
-        viewModel.showSyncModeSelectorDialog.observe(this, Observer { (items, selected, coin) ->
+        viewModel.showSyncModeSelectorDialog.observe(this, Observer { (items, selected, platformCoin) ->
             BottomSheetSelectorDialog.show(
                     childFragmentManager,
                     getString(R.string.BlockchainSettings_SyncModeChangeAlert_Title),
-                    coin.name,
-                    context?.let { AppLayoutHelper.getCoinDrawable(it, coin.coinType) },
+                    platformCoin.name,
+                    platformCoin.coinType.blockchainLogo,
                     items.map { getSyncModeInfo(it) },
                     items.indexOf(selected),
                     onItemSelected = { position ->
                         viewModel.delegate.onSelectSetting(position)
                     },
-                    warning = getString(R.string.BlockchainSettings_SyncModeChangeAlert_Content, coin.name)
+                    warning = getString(R.string.BlockchainSettings_SyncModeChangeAlert_Content, platformCoin.name)
             )
         })
 

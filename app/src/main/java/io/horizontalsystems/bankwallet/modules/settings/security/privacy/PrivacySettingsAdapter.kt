@@ -5,8 +5,8 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.blockchainLogo
 import io.horizontalsystems.bankwallet.modules.settings.security.privacy.PrivacySettingsModule.IPrivacySettingsViewDelegate
-import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
 import io.horizontalsystems.views.SettingsViewDropdown
 import io.horizontalsystems.views.inflate
 import kotlinx.android.extensions.LayoutContainer
@@ -90,7 +90,7 @@ class PrivacySettingsAdapter(
 
         fun bind(viewItem: PrivacySettingsViewItem) {
             dropdownView.apply {
-                showIcon(AppLayoutHelper.getCoinDrawable(containerView.context, viewItem.coin.coinType))
+                showIcon(viewItem.platformCoin.coinType.blockchainLogo)
                 showTitle(viewItem.title)
                 showDropdownValue(viewItem.settingType.selectedTitle)
                 showDropdownIcon(viewItem.enabled)
