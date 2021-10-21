@@ -13,9 +13,7 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.core.setCoinImage
-import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
+import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.backupkey.BackupKeyModule
 import io.horizontalsystems.bankwallet.modules.manageaccount.ManageAccountModule.ACCOUNT_ID_KEY
@@ -199,7 +197,8 @@ class AdditionalInfoAdapter(
 class AdditionalInfoViewHolder(override val containerView: View) :
     RecyclerView.ViewHolder(containerView), LayoutContainer {
     fun bind(additionViewItem: ManageAccountViewModel.AdditionalViewItem, position: ListPosition) {
-        icon.setCoinImage(additionViewItem.coinType)
+        val platformCoin = additionViewItem.platformCoin
+        icon.setRemoteImage(platformCoin.coin.iconUrl, platformCoin.coinType.iconPlaceholder)
         title.text = additionViewItem.title
         containerView.setBackgroundResource(position.getBackground())
 
