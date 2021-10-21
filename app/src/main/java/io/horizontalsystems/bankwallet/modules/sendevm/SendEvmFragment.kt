@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.unit.dp
@@ -15,6 +16,8 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.iconPlaceholder
+import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerActivity
@@ -22,10 +25,15 @@ import io.horizontalsystems.bankwallet.modules.sendevm.confirmation.SendEvmConfi
 import io.horizontalsystems.bankwallet.modules.swap.settings.Caution
 import io.horizontalsystems.bankwallet.modules.swap.settings.RecipientAddressViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
+import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
-import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
+import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
+import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.core.findNavController
+import io.horizontalsystems.marketkit.models.FullCoin
 import kotlinx.android.synthetic.main.fragment_send_evm.*
+import kotlinx.android.synthetic.main.fragment_send_evm.toolbarCompose
 
 class SendEvmFragment : BaseFragment() {
 
@@ -55,17 +63,7 @@ class SendEvmFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        toolbar.title = getString(R.string.Send_Title, wallet.coin.code)
-        toolbar.navigationIcon = AppLayoutHelper.getCoinDrawable(requireContext(), wallet.coinType)
-        toolbar.setOnMenuItemClickListener { item ->
-            when (item.itemId) {
-                R.id.menuClose -> {
-                    findNavController().popBackStack()
-                    true
-                }
-                else -> false
-            }
-        }
+        setToolbar(wallet.platformCoin.fullCoin)
 
         availableBalanceViewModel.viewStateLiveData.observe(viewLifecycleOwner, { state ->
             availableBalanceSpinner.isVisible = state is SendAvailableBalanceViewModel.ViewState.Loading
@@ -121,6 +119,35 @@ class SendEvmFragment : BaseFragment() {
         )
 
         setProceedButton()
+    }
+
+    private fun setToolbar(fullCoin: FullCoin) {
+        toolbarCompose.setViewCompositionStrategy(
+            ViewCompositionStrategy.DisposeOnLifecycleDestroyed(this)
+        )
+        toolbarCompose.setContent {
+            ComposeAppTheme {
+                AppBar(
+                    title = TranslatableString.ResString(R.string.Send_Title, fullCoin.coin.code),
+                    navigationIcon = {
+                        CoinImage(
+                            iconUrl = fullCoin.coin.iconUrl,
+                            placeholder = fullCoin.iconPlaceholder,
+                            modifier = Modifier.size(24.dp)
+                        )
+                    },
+                    menuItems = listOf(
+                        MenuItem(
+                            title = TranslatableString.ResString(R.string.Button_Close),
+                            icon = R.drawable.ic_close,
+                            onClick = {
+                                findNavController().popBackStack()
+                            }
+                        )
+                    )
+                )
+            }
+        }
     }
 
     private fun setAmountInputCaution(caution: Caution?) {

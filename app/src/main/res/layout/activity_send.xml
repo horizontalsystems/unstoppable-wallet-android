@@ -8,14 +8,10 @@
     android:background="?android:windowBackground"
     android:clickable="true">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
+    <androidx.compose.ui.platform.ComposeView
+        android:id="@+id/toolbarCompose"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        app:menu="@menu/close_menu"
-        app:titleTextAppearance="@style/Title3"
-        tools:navigationIcon="@drawable/bitcoin"
-        tools:title="Send BTC" />
+        android:layout_height="?attr/actionBarSize" />
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/scrollView"
