@@ -13,16 +13,17 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.iconPlaceholder
+import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
-import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
+import io.horizontalsystems.bankwallet.ui.compose.TranslatableString.ResString
+import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.marketkit.models.FullCoin
 import kotlinx.android.synthetic.main.fragment_receive.*
-import kotlinx.android.synthetic.main.fragment_receive.toolbar
 
 class ReceiveFragment : BaseFragment() {
 
@@ -42,17 +43,7 @@ class ReceiveFragment : BaseFragment() {
                     ?: run { findNavController().popBackStack(); return }
             val viewModel by viewModels<ReceiveViewModel> { ReceiveModule.Factory(wallet) }
 
-            toolbar.title = getString(R.string.Deposit_Title, wallet.coin.code)
-            toolbar.navigationIcon = AppLayoutHelper.getCoinDrawable(requireContext(), wallet.coinType)
-            toolbar.setOnMenuItemClickListener { item ->
-                when (item.itemId) {
-                    R.id.menuClose -> {
-                        findNavController().popBackStack()
-                        true
-                    }
-                    else -> false
-                }
-            }
+            setToolbar(wallet.platformCoin.fullCoin)
 
             receiveAddressView.text = viewModel.receiveAddress
             receiveAddressView.setOnClickListener {
@@ -88,6 +79,36 @@ class ReceiveFragment : BaseFragment() {
             findNavController().popBackStack()
         }
 
+    }
+
+    private fun setToolbar(fullCoin: FullCoin) {
+        toolbarCompose.setViewCompositionStrategy(
+            ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+        )
+
+        toolbarCompose.setContent {
+            ComposeAppTheme {
+                AppBar(
+                    title = ResString(R.string.Deposit_Title, fullCoin.coin.code),
+                    navigationIcon = {
+                        CoinImage(
+                            iconUrl = fullCoin.coin.iconUrl,
+                            placeholder = fullCoin.iconPlaceholder,
+                            modifier = Modifier.size(24.dp)
+                        )
+                    },
+                    menuItems = listOf(
+                        MenuItem(
+                            title = ResString(R.string.Button_Close),
+                            icon = R.drawable.ic_close,
+                            onClick = {
+                                findNavController().popBackStack()
+                            }
+                        )
+                    )
+                )
+            }
+        }
     }
 
     private fun setCopyShareButtons(viewModel: ReceiveViewModel) {
