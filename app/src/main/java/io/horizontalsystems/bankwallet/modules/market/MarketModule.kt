@@ -3,9 +3,14 @@ package io.horizontalsystems.bankwallet.modules.market
 import android.os.Parcelable
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.res.painterResource
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import coil.annotation.ExperimentalCoilApi
+import coil.compose.rememberImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
@@ -70,13 +75,17 @@ data class MarketItem(
     val marketCap: CurrencyValue
 ) {
     companion object {
-        fun createFromCoinMarket(marketInfo: MarketInfo, currency: Currency, pricePeriod: TimePeriod = TimePeriod.TimePeriod_1D): MarketItem {
+        fun createFromCoinMarket(
+            marketInfo: MarketInfo,
+            currency: Currency,
+            pricePeriod: TimePeriod = TimePeriod.TimePeriod_1D
+        ): MarketItem {
             return MarketItem(
                 marketInfo.fullCoin,
                 CurrencyValue(currency, marketInfo.totalVolume ?: BigDecimal.ZERO),
                 CurrencyValue(currency, marketInfo.price ?: BigDecimal.ZERO),
                 marketInfo.priceChangeValue(pricePeriod),
-                CurrencyValue(currency, marketInfo.marketCap?: BigDecimal.ZERO)
+                CurrencyValue(currency, marketInfo.marketCap ?: BigDecimal.ZERO)
             )
         }
     }
@@ -130,7 +139,14 @@ enum class TopMarket(val value: Int) : WithTranslatableTitle, Parcelable {
 
 sealed class ImageSource {
     class Local(@DrawableRes val resId: Int) : ImageSource()
-    class Remote(val url: String) : ImageSource()
+    class Remote(val url: String, @DrawableRes val placeholder: Int = R.drawable.ic_placeholder) : ImageSource()
+
+    @ExperimentalCoilApi
+    @Composable
+    fun painter(): Painter = when (this) {
+        is Local -> painterResource(resId)
+        is Remote -> rememberImagePainter(url)
+    }
 }
 
 sealed class MarketDataValue {

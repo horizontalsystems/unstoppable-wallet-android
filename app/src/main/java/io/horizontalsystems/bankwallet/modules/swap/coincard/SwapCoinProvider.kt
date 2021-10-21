@@ -26,16 +26,16 @@ class SwapCoinProvider(
     fun getCoins(): List<CoinBalanceItem> {
         val enabledCoinItems = walletItems.filter { item ->
             val zeroBalance = item.balance == BigDecimal.ZERO
-            dexSupportsCoin(item.coin) && !zeroBalance
-        }.sortedBy { it.coin.name.lowercase(Locale.ENGLISH) }
+            dexSupportsCoin(item.platformCoin) && !zeroBalance
+        }.sortedBy { it.platformCoin.name.lowercase(Locale.ENGLISH) }
 
         val disabledCoinItems = coinManager.getPlatformCoins().filter { coin ->
-            dexSupportsCoin(coin) && !enabledCoinItems.any { it.coin == coin }
+            dexSupportsCoin(coin) && !enabledCoinItems.any { it.platformCoin == coin }
         }.map { coin ->
             val balance = balance(coin)
 
             CoinBalanceItem(coin, balance, getFiatValue(coin, balance))
-        }.sortedBy { it.coin.name.lowercase(Locale.ENGLISH) }
+        }.sortedBy { it.platformCoin.name.lowercase(Locale.ENGLISH) }
 
         return enabledCoinItems + disabledCoinItems
     }

@@ -8,7 +8,7 @@ import androidx.annotation.CheckResult
 import coil.load
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.label
-import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
+import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import io.horizontalsystems.ethereumkit.core.toRawHexString
 import io.horizontalsystems.hodler.LockTimeInterval
 import io.horizontalsystems.marketkit.models.Coin
@@ -21,7 +21,6 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-
 
 val Coin.iconUrl: String
     get() = "https://markets.nyc3.digitaloceanspaces.com/coin-icons/ios/$uid@3x.png"
@@ -63,23 +62,22 @@ val CoinType.blockchainLogo: Int
         else -> R.drawable.coin_placeholder
     }
 
-//View
-
-fun ImageView.setCoinImage(coinType: CoinType) {
-    setImageDrawable(AppLayoutHelper.getCoinDrawable(context, coinType))
-}
-
-fun ImageView.setCoinImage(coinUid: String, placeholder: Int = R.drawable.coin_placeholder) {
-    load("https://markets.nyc3.digitaloceanspaces.com/coin-icons/ios/$coinUid@3x.png"){
-        error(placeholder)
-    }
-}
+// ImageView
 
 fun ImageView.setRemoteImage(url: String, placeholder: Int = R.drawable.ic_placeholder) {
     load(url) {
         error(placeholder)
     }
 }
+
+fun ImageView.setImage(imageSource: ImageSource) {
+    when (imageSource) {
+        is ImageSource.Local -> setImageResource(imageSource.resId)
+        is ImageSource.Remote -> setRemoteImage(imageSource.url, imageSource.placeholder)
+    }
+}
+
+// View
 
 fun View.setOnSingleClickListener(l: ((v: View) -> Unit)) {
     this.setOnClickListener(

@@ -14,12 +14,14 @@ import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.*
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.iconPlaceholder
+import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
+import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.CardTabs
 import io.horizontalsystems.bankwallet.ui.compose.components.ScrollableTabs
 import io.horizontalsystems.bankwallet.ui.compose.components.TabItem
-import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.views.helpers.LayoutHelper
 import kotlinx.android.extensions.LayoutContainer
@@ -120,7 +122,7 @@ class TransactionsFragment : BaseFragment(R.layout.fragment_transactions) {
             filterCoins?.let {
                 val tabItems = it.mapNotNull {
                     it.item.platformCoin?.let { platformCoin ->
-                        TabItem(platformCoin.code, it.selected, it.item, AppLayoutHelper.getCoinDrawableOrDefaultResId(requireContext(), platformCoin.coinType))
+                        TabItem(platformCoin.code, it.selected, it.item, ImageSource.Remote(platformCoin.coin.iconUrl, platformCoin.coinType.iconPlaceholder))
                     }
                 }
 

@@ -176,7 +176,7 @@ object SwapMainModule {
 
     @Parcelize
     data class CoinBalanceItem(
-        val coin: PlatformCoin,
+        val platformCoin: PlatformCoin,
         val balance: BigDecimal?,
         val fiatBalanceValue: CurrencyValue?,
     ) : Parcelable

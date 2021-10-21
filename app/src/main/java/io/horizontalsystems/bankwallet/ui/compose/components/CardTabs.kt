@@ -18,11 +18,15 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import coil.annotation.ExperimentalCoilApi
+import coil.compose.rememberImagePainter
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 
+@ExperimentalCoilApi
 @Composable
-fun <T>CardTabs(
+fun <T> CardTabs(
     tabItems: List<TabItem<T>>,
     edgePadding: Dp = TabRowDefaults.ScrollableTabRowPadding,
     darkTheme: Boolean = isSystemInDarkTheme(),
@@ -34,8 +38,7 @@ fun <T>CardTabs(
             selectedTabIndex = tabIndex,
             modifier = Modifier
                 .padding(vertical = 12.dp)
-                .height(94.dp)
-            ,
+                .height(94.dp),
             backgroundColor = Color.Transparent,
             edgePadding = edgePadding,
             indicator = {},
@@ -66,9 +69,9 @@ fun <T>CardTabs(
                             .padding(12.dp),
                         verticalArrangement = Arrangement.SpaceBetween
                     ) {
-                        if (tabItem.iconResId != null) {
+                        tabItem.icon?.let { icon ->
                             Image(
-                                painter = painterResource(id = tabItem.iconResId),
+                                painter = icon.painter(),
                                 contentDescription = ""
                             )
                         }
@@ -90,10 +93,10 @@ fun <T>CardTabs(
 fun PreviewCardTabs() {
     var selectedIndex by remember { mutableStateOf(0) }
     val map = mapOf(
-        "BTC" to R.drawable.coin_placeholder,
-        "ETH" to R.drawable.coin_placeholder,
-        "BNB" to R.drawable.coin_placeholder,
-        "ZCASH" to R.drawable.coin_placeholder
+        "BTC" to ImageSource.Local(R.drawable.coin_placeholder),
+        "ETH" to ImageSource.Local(R.drawable.coin_placeholder),
+        "BNB" to ImageSource.Local(R.drawable.coin_placeholder),
+        "ZCASH" to ImageSource.Local(R.drawable.coin_placeholder)
     )
 
     val tabItems = map.toList().mapIndexed { index, (title, icon) ->

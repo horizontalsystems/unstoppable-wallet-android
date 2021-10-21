@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.ui.compose.components
 
-import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -10,9 +9,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 
-data class TabItem<T>(val title: String, val selected: Boolean, val item: T, @DrawableRes val iconResId: Int? = null)
+data class TabItem<T>(val title: String, val selected: Boolean, val item: T, val icon: ImageSource? = null)
 
 @Composable
 fun <T>Tabs(tabs: List<TabItem<T>>, onClick: (T) -> Unit) {

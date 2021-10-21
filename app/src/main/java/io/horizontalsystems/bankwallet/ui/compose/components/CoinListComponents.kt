@@ -386,10 +386,7 @@ fun DescriptionCard(title: String, description: String, image: ImageSource) {
                 )
             }
             Image(
-                painter = when (image) {
-                    is ImageSource.Local -> painterResource(image.resId)
-                    is ImageSource.Remote -> rememberImagePainter(image.url)
-                },
+                painter = image.painter(),
                 contentDescription = "category image",
                 modifier = Modifier
                     .fillMaxHeight()

@@ -12,6 +12,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.views.inflate
@@ -22,8 +23,7 @@ import kotlinx.android.synthetic.main.view_item_with_switch.*
 class BottomSheetSelectorMultipleDialog(
     private val title: String,
     private val subtitle: String,
-    private val coinUid: String,
-    private val iconPlaceholder: Int,
+    private val icon: ImageSource,
     private val items: List<BottomSheetSelectorViewItem>,
     private val selected: List<Int>,
     private val onItemsSelected: (List<Int>) -> Unit,
@@ -41,7 +41,7 @@ class BottomSheetSelectorMultipleDialog(
 
         setTitle(title)
         setSubtitle(subtitle)
-        setHeaderIcon(coinUid, iconPlaceholder)
+        setHeaderIcon(icon)
 
         setButton(selected.isNotEmpty())
 
@@ -97,8 +97,7 @@ class BottomSheetSelectorMultipleDialog(
             fragmentManager: FragmentManager,
             title: String,
             subtitle: String,
-            coinUid: String,
-            iconPlaceholder: Int,
+            icon: ImageSource,
             items: List<BottomSheetSelectorViewItem>,
             selected: List<Int>,
             onItemSelected: (List<Int>) -> Unit,
@@ -109,8 +108,7 @@ class BottomSheetSelectorMultipleDialog(
             BottomSheetSelectorMultipleDialog(
                 title,
                 subtitle,
-                coinUid,
-                iconPlaceholder,
+                icon,
                 items,
                 selected,
                 onItemSelected,
@@ -123,8 +121,7 @@ class BottomSheetSelectorMultipleDialog(
     }
 
     data class Config(
-        val coinUid: String,
-        val iconPlaceholder: Int,
+        val icon: ImageSource,
         val title: String,
         val subtitle: String,
         val selectedIndexes: List<Int>,
