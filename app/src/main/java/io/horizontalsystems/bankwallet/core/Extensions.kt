@@ -75,6 +75,12 @@ fun ImageView.setCoinImage(coinUid: String, placeholder: Int = R.drawable.coin_p
     }
 }
 
+fun ImageView.setRemoteImage(url: String, placeholder: Int = R.drawable.ic_placeholder) {
+    load(url) {
+        error(placeholder)
+    }
+}
+
 fun View.setOnSingleClickListener(l: ((v: View) -> Unit)) {
     this.setOnClickListener(
             object : SingleClickListener() {
