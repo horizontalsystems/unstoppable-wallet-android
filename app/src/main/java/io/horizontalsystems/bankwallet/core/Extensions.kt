@@ -7,6 +7,7 @@ import android.widget.ImageView
 import androidx.annotation.CheckResult
 import coil.load
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.entities.label
 import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
 import io.horizontalsystems.ethereumkit.core.toRawHexString
 import io.horizontalsystems.hodler.LockTimeInterval
@@ -41,6 +42,13 @@ val CoinType.iconPlaceholder: Int
         is CoinType.Bep2 -> R.drawable.bep2
         is CoinType.Bep20 -> R.drawable.bep20
         else -> R.drawable.coin_placeholder
+    }
+
+val FullCoin.typeLabel: String?
+    get() = if (platforms.size == 1) {
+        platforms.first().coinType.label
+    } else {
+        null
     }
 
 //View

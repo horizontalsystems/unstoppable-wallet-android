@@ -8,11 +8,9 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Divider
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -27,19 +25,27 @@ import coil.compose.rememberImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.iconUrl
+import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.modules.market.*
+import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.Select
 
+class FavedButton(
+    val selected: Boolean,
+    val onClick: () -> Unit
+)
+
 @Composable
-fun MarketListCoin(
+fun MultilineClear(
     coinName: String,
     coinCode: String,
-    coinRate: String,
     coinIconUrl: String,
     coinIconPlaceholder: Int,
-    marketDataValue: MarketDataValue,
-    rank: String?,
+    coinRate: String? = null,
+    marketDataValue: MarketDataValue? = null,
+    label: String? = null,
+    favedButton: FavedButton? = null,
     onClick: (() -> Unit)? = null
 ) {
     Box(
@@ -59,11 +65,30 @@ fun MarketListCoin(
                     .size(24.dp)
             )
             Column(
-                modifier = Modifier.padding(end = 16.dp)
+                modifier = Modifier.padding(end = 16.dp).weight(1f)
             ) {
                 MarketCoinFirstRow(coinName, coinRate)
                 Spacer(modifier = Modifier.height(3.dp))
-                MarketCoinSecondRow(coinCode, marketDataValue, rank)
+                MarketCoinSecondRow(coinCode, marketDataValue, label)
+            }
+            favedButton?.let {
+                val interactionSource = remember { MutableInteractionSource() }
+
+                Box(
+                    modifier = Modifier.clickable(
+                        interactionSource = interactionSource,
+                        indication = null
+                    ) {
+                        favedButton.onClick()
+                    }
+                ) {
+                    Image(
+                        modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp),
+                        painter = painterResource(R.drawable.ic_star_20),
+                        contentDescription = "coin icon",
+                        colorFilter = ColorFilter.tint(if (favedButton.selected) ComposeAppTheme.colors.jacob else ComposeAppTheme.colors.grey),
+                    )
+                }
             }
         }
         Divider(
@@ -75,9 +100,8 @@ fun MarketListCoin(
 }
 
 @Composable
-fun MarketCoinFirstRow(coinName: String, rate: String) {
+private fun MarketCoinFirstRow(coinName: String, rate: String?) {
     Row(
-        modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
@@ -86,23 +110,28 @@ fun MarketCoinFirstRow(coinName: String, rate: String) {
             style = ComposeAppTheme.typography.body,
             maxLines = 1,
         )
-        Spacer(modifier = Modifier.weight(1f))
-        Text(
-            text = rate,
-            color = ComposeAppTheme.colors.leah,
-            style = ComposeAppTheme.typography.body,
-            maxLines = 1,
-        )
+        rate?.let {
+            Spacer(modifier = Modifier.weight(1f))
+            Text(
+                text = rate,
+                color = ComposeAppTheme.colors.leah,
+                style = ComposeAppTheme.typography.body,
+                maxLines = 1,
+            )
+        }
     }
 }
 
 @Composable
-fun MarketCoinSecondRow(coinCode: String, marketDataValue: MarketDataValue, rank: String?) {
+private fun MarketCoinSecondRow(
+    coinCode: String,
+    marketDataValue: MarketDataValue?,
+    label: String?
+) {
     Row(
-        modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        rank?.let { rank ->
+        label?.let { labelText ->
             Box(
                 modifier = Modifier
                     .padding(end = 8.dp)
@@ -111,7 +140,7 @@ fun MarketCoinSecondRow(coinCode: String, marketDataValue: MarketDataValue, rank
             ) {
                 Text(
                     modifier = Modifier.padding(start = 4.dp, end = 4.dp, bottom = 1.dp),
-                    text = rank,
+                    text = labelText,
                     color = ComposeAppTheme.colors.bran,
                     style = ComposeAppTheme.typography.microSB,
                     maxLines = 1,
@@ -124,13 +153,15 @@ fun MarketCoinSecondRow(coinCode: String, marketDataValue: MarketDataValue, rank
             style = ComposeAppTheme.typography.subhead2,
             maxLines = 1,
         )
-        Spacer(modifier = Modifier.weight(1f))
-        MarketDataValueComponent(marketDataValue)
+        marketDataValue?.let {
+            Spacer(modifier = Modifier.weight(1f))
+            MarketDataValueComponent(marketDataValue)
+        }
     }
 }
 
 @Composable
-fun MarketDataValueComponent(marketDataValue: MarketDataValue) {
+private fun MarketDataValueComponent(marketDataValue: MarketDataValue) {
     when (marketDataValue) {
         is MarketDataValue.MarketCap -> {
             Row {
@@ -244,12 +275,12 @@ fun LazyListScope.coinList(
     onCoinClick: (String) -> Unit
 ) {
     items(items) { item ->
-        MarketListCoin(
+        MultilineClear(
             item.fullCoin.coin.name,
             item.fullCoin.coin.code,
-            item.coinRate,
             item.fullCoin.coin.iconUrl,
             item.fullCoin.iconPlaceholder,
+            item.coinRate,
             item.marketDataValue,
             item.rank
         ) { onCoinClick.invoke(item.fullCoin.coin.uid) }
@@ -257,7 +288,7 @@ fun LazyListScope.coinList(
 }
 
 @Composable
-fun CoinListHeader(
+fun HeaderWithSorting(
     sortingFieldSelect: Select<SortingField>,
     onSelectSortingField: (SortingField) -> Unit,
     topMarketSelect: Select<TopMarket>?,
@@ -282,7 +313,9 @@ fun CoinListHeader(
             }
             topMarketSelect?.let {
                 Box(modifier = Modifier.padding(start = 8.dp)) {
-                    ButtonSecondaryToggle(select = topMarketSelect, onSelect = onSelectTopMarket ?: {}) //TODO
+                    ButtonSecondaryToggle(
+                        select = topMarketSelect,
+                        onSelect = onSelectTopMarket ?: {}) //TODO
                 }
             }
 
@@ -328,10 +361,10 @@ fun TopCloseButton(
 
 @ExperimentalCoilApi
 @Composable
-fun CategoryInfo(title: String, description: String, image: ImageSource) {
+fun DescriptionCard(title: String, description: String, image: ImageSource) {
     Column {
         Row(
-            modifier = Modifier.height(108.dp)
+            modifier = Modifier.height(108.dp).background(ComposeAppTheme.colors.tyler)
         ) {
             Column(
                 modifier = Modifier
@@ -366,10 +399,89 @@ fun CategoryInfo(title: String, description: String, image: ImageSource) {
     }
 }
 
+@ExperimentalCoilApi
+@ExperimentalMaterialApi
+@Composable
+fun RowScope.CategoryCard(
+    type: MarketSearchModule.ViewItem,
+    onClick: (MarketSearchModule.ViewItem) -> Unit
+) {
+    Card(
+        modifier = Modifier
+            .padding(6.dp)
+            .height(128.dp)
+            .weight(1f),
+        shape = RoundedCornerShape(12.dp),
+        elevation = 0.dp,
+        backgroundColor = ComposeAppTheme.colors.lawrence,
+        onClick = {
+            onClick.invoke(type)
+        }
+    ) {
+        Box(modifier = Modifier.fillMaxSize()) {
+            when (type) {
+                MarketSearchModule.ViewItem.MarketTopCoins -> {
+                    Image(
+                        painter = painterResource(R.drawable.ic_top_coins),
+                        contentDescription = "category image",
+                        modifier = Modifier
+                            .height(108.dp)
+                            .width(76.dp)
+                            .align(Alignment.TopEnd),
+                    )
+                    Column(
+                        modifier = Modifier.padding(12.dp),
+                    ) {
+                        Spacer(modifier = Modifier.weight(1f))
+                        Text(
+                            text = stringResource(R.string.Market_Category_TopCoins),
+                            style = ComposeAppTheme.typography.subhead1,
+                            color = ComposeAppTheme.colors.oz,
+                            maxLines = 1
+                        )
+                    }
+                }
+                is MarketSearchModule.ViewItem.MarketCoinCategory -> {
+                    Image(
+                        painter = rememberImagePainter(type.coinCategory.imageUrl),
+                        contentDescription = "category image",
+                        modifier = Modifier
+                            .height(108.dp)
+                            .width(76.dp)
+                            .align(Alignment.TopEnd),
+                    )
+                    Column(
+                        modifier = Modifier.padding(12.dp),
+                    ) {
+                        Spacer(modifier = Modifier.weight(1f))
+                        Text(
+                            text = type.coinCategory.name,
+                            style = ComposeAppTheme.typography.subhead1,
+                            color = ComposeAppTheme.colors.oz,
+                            maxLines = 1
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
 @Preview
 @Composable
 fun PreviewListErrorView() {
     ComposeAppTheme {
         ListErrorView(errorText = "Sync Error 123")
+    }
+}
+
+@ExperimentalMaterialApi
+@Preview(showBackground = true)
+@Composable
+fun CardPreview() {
+    ComposeAppTheme {
+        Row {
+            CategoryCard(MarketSearchModule.ViewItem.MarketTopCoins, { })
+        }
     }
 }
