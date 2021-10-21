@@ -13,13 +13,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.modules.coin.CoinDataItem
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.Badge
 import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineLawrenceSection
 
 @Preview
 @Composable
 fun MarketDataPreview() {
     val marketData = listOf(
-        CoinDataItem(title = "Market Cap", value = "$123.34 B"),
+        CoinDataItem(title = "Market Cap", value = "$123.34 B", rankLabel = "#555"),
         CoinDataItem(title = "Trading Volume", value = "112,112,112,112,112,112,112,112,112,112,112,112,112,112,112,112 ETH"),
         CoinDataItem(title = "Inception Date", value = "Jul 23, 2012"),
     )
@@ -44,11 +45,15 @@ fun MarketData(marketData: List<CoinDataItem>) {
                 color = ComposeAppTheme.colors.grey
             )
 
+            marketDataLine.rankLabel?.let {
+                Badge(modifier = Modifier.padding(start = 8.dp), it)
+            }
+
             marketDataLine.value?.let { value ->
                 Text(
                     modifier = Modifier
                         .weight(1f)
-                        .padding(start = 16.dp),
+                        .padding(start = 8.dp),
                     text = value,
                     style = ComposeAppTheme.typography.subhead1,
                     color = ComposeAppTheme.colors.oz,
