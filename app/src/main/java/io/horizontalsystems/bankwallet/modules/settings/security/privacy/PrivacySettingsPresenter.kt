@@ -21,10 +21,10 @@ class PrivacySettingsPresenter(
         get() = interactor.activeAccount?.origin == AccountOrigin.Created
 
     private val syncItems: List<PrivacySettingsViewItem> =
-        interactor.syncSettings().mapIndexed { index, (initialSyncSetting, coin, changeable) ->
+        interactor.syncSettings().mapIndexed { index, (initialSyncSetting, platformCoin, changeable) ->
             PrivacySettingsViewItem(
-                coin.name,
-                coin,
+                platformCoin.name,
+                platformCoin,
                 RestoreModeSettingType(initialSyncSetting.syncMode),
                 changeable,
                 listPosition = ListPosition.getListPosition(interactor.syncSettings().size, index)
@@ -83,7 +83,7 @@ class PrivacySettingsPresenter(
         if (settingType is RestoreModeSettingType) {
             val item = syncItems[position]
             openedPrivacySettings = item
-            view?.showSyncModeSelectorDialog(syncModeOptions, settingType.selected, item.coin)
+            view?.showSyncModeSelectorDialog(syncModeOptions, settingType.selected, item.platformCoin)
         }
     }
 
@@ -97,7 +97,7 @@ class PrivacySettingsPresenter(
         openedPrivacySettings?.let {
             if (it.settingType is RestoreModeSettingType) {
                 val syncMode = syncModeOptions[position]
-                updateSyncMode(it.coin, syncMode)
+                updateSyncMode(it.platformCoin, syncMode)
             }
         }
     }
