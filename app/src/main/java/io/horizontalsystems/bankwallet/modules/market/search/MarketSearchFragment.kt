@@ -39,6 +39,7 @@ import io.horizontalsystems.bankwallet.core.typeLabel
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.market.MarketDataValue
 import io.horizontalsystems.bankwallet.modules.market.category.MarketCategoryFragment
+import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchModule.CoinViewItem
 import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchModule.ScreenState
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -104,8 +105,8 @@ class MarketSearchFragment : BaseFragment() {
                         }
                     },
                     onSearchQueryChange = { query -> viewModel.searchByQuery(query) },
-                    onFavoriteClick = {
-
+                    onFavoriteClick = { favorited, coinUid ->
+                        viewModel.onFavoriteClick(favorited, coinUid)
                     }
                 )
             }
@@ -122,7 +123,7 @@ fun MarketSearchScreen(
     onBackButtonClick: () -> Unit,
     onFilterButtonClick: () -> Unit,
     onCoinClick: (Coin) -> Unit,
-    onFavoriteClick: (FavouriteButton) -> Unit,
+    onFavoriteClick: (Boolean, String) -> Unit,
     onCategoryClick: (MarketSearchModule.CardViewItem) -> Unit,
     onSearchQueryChange: (String) -> Unit
 ) {
@@ -139,13 +140,19 @@ fun MarketSearchScreen(
                 onBackButtonClick = onBackButtonClick
             )
             when (screenState) {
-                is ScreenState.CardsList -> CardsGrid(screenState.cards, onCategoryClick)
-                ScreenState.EmptySearchResult -> NoResults()
-                is ScreenState.SearchResult -> MarketSearchResults(
-                    screenState.coins,
-                    onCoinClick,
-                    onFavoriteClick
-                )
+                is ScreenState.CardsList -> {
+                    CardsGrid(screenState.cards, onCategoryClick)
+                }
+                ScreenState.EmptySearchResult -> {
+                    NoResults()
+                }
+                is ScreenState.SearchResult -> {
+                    MarketSearchResults(
+                        screenState.coins,
+                        onCoinClick,
+                        onFavoriteClick
+                    )
+                }
             }
         }
     }
@@ -167,9 +174,9 @@ private fun NoResults() {
 
 @Composable
 fun MarketSearchResults(
-    coinResult: List<FullCoin>,
+    coinResult: List<CoinViewItem>,
     onCoinClick: (Coin) -> Unit,
-    onFavoriteClick: (FavouriteButton) -> Unit
+    onFavoriteClick: (Boolean, String) -> Unit
 ) {
     LazyColumn {
         item {
@@ -179,18 +186,22 @@ fun MarketSearchResults(
                 color = ComposeAppTheme.colors.steel10,
             )
         }
-        items(coinResult) { fullCoin ->
+        items(coinResult) { coinViewItem ->
             MarketCoin(
-                fullCoin.coin.name,
-                fullCoin.coin.code,
-                fullCoin.coin.iconUrl,
-                fullCoin.iconPlaceholder,
-                label = fullCoin.typeLabel,
-                favedButton = FavouriteButton(
-                    false, {}
-//                    onFavoriteClick(FavouriteButton())
-                )
-            ) { onCoinClick(fullCoin.coin) }
+                coinViewItem.fullCoin.coin.name,
+                coinViewItem.fullCoin.coin.code,
+                coinViewItem.fullCoin.coin.iconUrl,
+                coinViewItem.fullCoin.iconPlaceholder,
+                favorited = coinViewItem.favorited,
+                label = coinViewItem.fullCoin.typeLabel,
+                onClick = { onCoinClick(coinViewItem.fullCoin.coin) },
+                onFavoriteClick = {
+                    onFavoriteClick(
+                        coinViewItem.favorited,
+                        coinViewItem.fullCoin.coin.uid
+                    )
+                }
+            )
         }
         item {
             Spacer(modifier = Modifier.height(16.dp))
@@ -322,12 +333,15 @@ private fun MarketCoin(
     coinCode: String,
     coinIconUrl: String,
     coinIconPlaceholder: Int,
+    favorited: Boolean,
+    onFavoriteClick: () -> Unit,
+    onClick: () -> Unit,
     coinRate: String? = null,
     marketDataValue: MarketDataValue? = null,
     label: String? = null,
-    favedButton: FavouriteButton? = null,
-    onClick: (() -> Unit)? = null
 ) {
+    val interactionSource = remember { MutableInteractionSource() }
+
     MultilineClear(
         borderBottom = true,
         onClick = onClick
@@ -340,30 +354,26 @@ private fun MarketCoin(
                 .size(24.dp)
         )
         Column(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.weight(1f)
         ) {
             MarketCoinFirstRow(coinName, coinRate)
             Spacer(modifier = Modifier.height(3.dp))
             MarketCoinSecondRow(coinCode, marketDataValue, label)
         }
-        favedButton?.let { favedBtn ->
-            val interactionSource = remember { MutableInteractionSource() }
-
-            Box(
-                modifier = Modifier.clickable(
-                    interactionSource = interactionSource,
-                    indication = null
-                ) {
-                    favedBtn.onClick()
-                }
+        Box(
+            modifier = Modifier.clickable(
+                interactionSource = interactionSource,
+                indication = null
             ) {
-                Image(
-                    modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp),
-                    painter = painterResource(R.drawable.ic_star_20),
-                    contentDescription = "coin icon",
-                    colorFilter = ColorFilter.tint(if (favedButton.selected) ComposeAppTheme.colors.jacob else ComposeAppTheme.colors.grey),
-                )
+                onFavoriteClick()
             }
+        ) {
+            Image(
+                modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp),
+                painter = painterResource(R.drawable.ic_star_20),
+                contentDescription = "coin icon",
+                colorFilter = ColorFilter.tint(if (favorited) ComposeAppTheme.colors.jacob else ComposeAppTheme.colors.grey),
+            )
         }
     }
 }
@@ -382,11 +392,10 @@ fun MarketCoinPreview() {
             fullCoin.coin.code,
             fullCoin.coin.iconUrl,
             fullCoin.iconPlaceholder,
+            false,
+            {},
+            {},
             label = fullCoin.typeLabel,
-            favedButton = FavouriteButton(
-                false,
-                { }
-            )
         )
     }
 }

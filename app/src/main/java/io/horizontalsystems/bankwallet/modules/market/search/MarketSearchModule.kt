@@ -11,7 +11,7 @@ object MarketSearchModule {
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            val service = MarketSearchService(App.marketKit)
+            val service = MarketSearchService(App.marketKit, App.marketFavoritesManager)
             return MarketSearchViewModel(service) as T
         }
     }
@@ -23,12 +23,9 @@ object MarketSearchModule {
 
     sealed class ScreenState {
         class CardsList(val cards: List<CardViewItem>) : ScreenState()
-        class SearchResult(val coins: List<FullCoin>) : ScreenState()
+        class SearchResult(val coins: List<CoinViewItem>) : ScreenState()
         object EmptySearchResult : ScreenState()
     }
-}
 
-class FavouriteButton(
-    val selected: Boolean,
-    val onClick: () -> Unit
-)
+    class CoinViewItem(val fullCoin: FullCoin, val favorited: Boolean)
+}
