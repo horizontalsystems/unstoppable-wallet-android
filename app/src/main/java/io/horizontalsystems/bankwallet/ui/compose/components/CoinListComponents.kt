@@ -400,8 +400,8 @@ fun DescriptionCard(title: String, description: String, image: ImageSource) {
 @ExperimentalMaterialApi
 @Composable
 fun RowScope.CategoryCard(
-    type: MarketSearchModule.ViewItem,
-    onClick: (MarketSearchModule.ViewItem) -> Unit
+    type: MarketSearchModule.CardViewItem,
+    onClick: (MarketSearchModule.CardViewItem) -> Unit
 ) {
     Card(
         modifier = Modifier
@@ -417,7 +417,7 @@ fun RowScope.CategoryCard(
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
             when (type) {
-                MarketSearchModule.ViewItem.MarketTopCoins -> {
+                MarketSearchModule.CardViewItem.MarketTopCoins -> {
                     Image(
                         painter = painterResource(R.drawable.ic_top_coins),
                         contentDescription = "category image",
@@ -438,7 +438,7 @@ fun RowScope.CategoryCard(
                         )
                     }
                 }
-                is MarketSearchModule.ViewItem.MarketCoinCategory -> {
+                is MarketSearchModule.CardViewItem.MarketCoinCategory -> {
                     Image(
                         painter = rememberImagePainter(type.coinCategory.imageUrl),
                         contentDescription = "category image",
@@ -478,7 +478,7 @@ fun PreviewListErrorView() {
 fun CardPreview() {
     ComposeAppTheme {
         Row {
-            CategoryCard(MarketSearchModule.ViewItem.MarketTopCoins, { })
+            CategoryCard(MarketSearchModule.CardViewItem.MarketTopCoins, { })
         }
     }
 }

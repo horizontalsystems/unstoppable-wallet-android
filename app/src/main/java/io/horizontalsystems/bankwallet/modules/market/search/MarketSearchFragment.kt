@@ -15,8 +15,10 @@ import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
@@ -24,7 +26,6 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
@@ -35,6 +36,7 @@ import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.bankwallet.core.typeLabel
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.market.category.MarketCategoryFragment
+import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchModule.ScreenState
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.CategoryCard
@@ -62,11 +64,12 @@ class MarketSearchFragment : BaseFragment() {
             )
 
             setContent {
-                val coinResult: List<FullCoin> by viewModel.coinResult.observeAsState(listOf())
+                val screenState by viewModel.screenStateLiveData.observeAsState()
+                val searchText: String by viewModel.searchTextLiveData.observeAsState("")
 
                 MarketSearchScreen(
-                    coinResult = coinResult,
-                    viewItems = viewModel.viewItems,
+                    searchText = searchText,
+                    screenState = screenState,
                     onBackButtonClick = { findNavController().popBackStack() },
                     onFilterButtonClick = {
                         findNavController().navigate(
@@ -81,14 +84,14 @@ class MarketSearchFragment : BaseFragment() {
                     },
                     onCategoryClick = { viewItemType ->
                         when (viewItemType) {
-                            MarketSearchModule.ViewItem.MarketTopCoins -> {
+                            MarketSearchModule.CardViewItem.MarketTopCoins -> {
                                 findNavController().navigate(
                                     R.id.marketSearchFragment_to_marketTopCoinsFragment,
                                     null,
                                     navOptionsFromBottom()
                                 )
                             }
-                            is MarketSearchModule.ViewItem.MarketCoinCategory -> {
+                            is MarketSearchModule.CardViewItem.MarketCoinCategory -> {
                                 val args =
                                     MarketCategoryFragment.prepareParams(viewItemType.coinCategory)
                                 findNavController().navigate(
@@ -110,34 +113,30 @@ class MarketSearchFragment : BaseFragment() {
 @ExperimentalMaterialApi
 @Composable
 fun MarketSearchScreen(
-    coinResult: List<FullCoin>,
-    viewItems: List<MarketSearchModule.ViewItem>,
+    searchText: String,
+    screenState: ScreenState?,
     onBackButtonClick: () -> Unit,
     onFilterButtonClick: () -> Unit,
     onCoinClick: (Coin) -> Unit,
-    onCategoryClick: (MarketSearchModule.ViewItem) -> Unit,
+    onCategoryClick: (MarketSearchModule.CardViewItem) -> Unit,
     onSearchQueryChange: (String) -> Unit
 ) {
-    val searchTextState = remember { mutableStateOf(TextFieldValue("")) }
 
     ComposeAppTheme {
         Column {
             SearchView(
-                searchText = searchTextState,
+                searchText = searchText,
                 onSearchTextChange = {
-                    searchTextState.value = it
-                    onSearchQueryChange.invoke(it.text)
+                    onSearchQueryChange.invoke(it)
                 },
                 onRightTextButtonClick = onFilterButtonClick,
                 leftIcon = R.drawable.ic_back,
                 onBackButtonClick = onBackButtonClick
             )
-            if (searchTextState.value.text.isEmpty()) {
-                CardsGrid(viewItems, onCategoryClick)
-            } else if (searchTextState.value.text.length > 1 && coinResult.isEmpty()) {
-                NoResults()
-            } else {
-                MarketSearchResults(coinResult, onCoinClick)
+            when (screenState) {
+                is ScreenState.CardsList -> CardsGrid(screenState.cards, onCategoryClick)
+                ScreenState.EmptySearchResult -> NoResults()
+                is ScreenState.SearchResult -> MarketSearchResults(screenState.coins, onCoinClick)
             }
         }
     }
@@ -188,8 +187,8 @@ fun MarketSearchResults(coinResult: List<FullCoin>, onCoinClick: (Coin) -> Unit)
 
 @Composable
 fun SearchView(
-    searchText: MutableState<TextFieldValue>,
-    onSearchTextChange: (TextFieldValue) -> Unit,
+    searchText: String,
+    onSearchTextChange: (String) -> Unit,
     onRightTextButtonClick: () -> Unit,
     leftIcon: Int,
     onBackButtonClick: () -> Unit
@@ -220,7 +219,7 @@ fun SearchView(
             )
         }
         BasicTextField(
-            value = searchText.value,
+            value = searchText,
             onValueChange = { value ->
                 onSearchTextChange(value)
             },
@@ -232,7 +231,7 @@ fun SearchView(
                 textStyle = ComposeAppTheme.typography.body
             ),
             decorationBox = { innerTextField ->
-                if (searchText.value.text.isEmpty()) {
+                if (searchText.isEmpty()) {
                     Text(
                         stringResource(R.string.Market_Search_Hint),
                         color = ComposeAppTheme.colors.grey50,
@@ -266,8 +265,8 @@ fun SearchView(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun CardsGrid(
-    viewItems: List<MarketSearchModule.ViewItem>,
-    onCategoryClick: (MarketSearchModule.ViewItem) -> Unit
+    viewItems: List<MarketSearchModule.CardViewItem>,
+    onCategoryClick: (MarketSearchModule.CardViewItem) -> Unit
 ) {
     LazyColumn {
         item {
@@ -331,11 +330,11 @@ fun MarketCoinPreview() {
 @Composable
 fun SearchViewPreview() {
     ComposeAppTheme {
-        val textState = remember { mutableStateOf(TextFieldValue("")) }
+        var textState = remember { "" }
         SearchView(
             searchText = textState,
             onSearchTextChange = {
-                textState.value = it
+                textState = it
             },
             onRightTextButtonClick = { },
             leftIcon = R.drawable.ic_back,
