@@ -168,10 +168,6 @@ class MainSettingsFragment : BaseFragment() {
             findNavController().navigate(R.id.mainFragment_to_aboutAppFragment, null, navOptions())
         })
 
-        router.showNotificationsLiveEvent.observe(viewLifecycleOwner, {
-            findNavController().navigate(R.id.mainFragment_to_notificationsFragment, null, navOptions())
-        })
-
         router.openFaqLiveEvent.observe(viewLifecycleOwner, {
             findNavController().navigate(R.id.mainFragment_to_faqListFragment, null, navOptions())
         })

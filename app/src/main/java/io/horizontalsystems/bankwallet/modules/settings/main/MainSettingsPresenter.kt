@@ -74,10 +74,6 @@ class MainSettingsPresenter(
         router.openLink(interactor.companyWebPageLink)
     }
 
-    override fun didTapNotifications() {
-        router.showNotifications()
-    }
-
     // IMainSettingsInteractorDelegate
 
     override fun didUpdateAllBackedUp(allBackedUp: Boolean) {
