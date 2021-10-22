@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
@@ -178,9 +177,7 @@ fun TopCoinsScreen(
                         }
                     }
                     is ViewItemState.Data -> {
-                        LazyColumn {
-                            coinList(state.items, onCoinClick)
-                        }
+                        CoinList(state.items, onCoinClick)
                     }
                 }
             }
@@ -188,20 +185,23 @@ fun TopCoinsScreen(
     }
 }
 
-private fun LazyListScope.coinList(
+@Composable
+private fun CoinList(
     items: List<MarketViewItem>,
     onCoinClick: (String) -> Unit
 ) {
-    items(items) { item ->
-        MarketCoin(
-            item.fullCoin.coin.name,
-            item.fullCoin.coin.code,
-            item.fullCoin.coin.iconUrl,
-            item.fullCoin.iconPlaceholder,
-            item.coinRate,
-            item.marketDataValue,
-            item.rank
-        ) { onCoinClick.invoke(item.fullCoin.coin.uid) }
+    LazyColumn {
+        items(items) { item ->
+            MarketCoin(
+                item.fullCoin.coin.name,
+                item.fullCoin.coin.code,
+                item.fullCoin.coin.iconUrl,
+                item.fullCoin.iconPlaceholder,
+                item.coinRate,
+                item.marketDataValue,
+                item.rank
+            ) { onCoinClick.invoke(item.fullCoin.coin.uid) }
+        }
     }
 }
 
