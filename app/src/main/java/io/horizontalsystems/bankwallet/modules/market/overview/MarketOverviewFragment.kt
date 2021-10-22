@@ -27,6 +27,7 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
+import io.horizontalsystems.bankwallet.modules.market.MarketDataValue
 import io.horizontalsystems.bankwallet.modules.market.MarketModule
 import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
 import io.horizontalsystems.bankwallet.modules.market.TopMarket
@@ -36,9 +37,7 @@ import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewMod
 import io.horizontalsystems.bankwallet.modules.market.topcoins.MarketTopCoinsFragment
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryToggle
-import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
-import io.horizontalsystems.bankwallet.ui.compose.components.MultilineClear
+import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.bankwallet.ui.extensions.MarketMetricSmallView
 import io.horizontalsystems.bankwallet.ui.extensions.MetricData
 import io.horizontalsystems.core.findNavController
@@ -191,7 +190,7 @@ class MarketOverviewFragment : BaseFragment() {
             TopBoardHeader(boardItem, onSelectTopMarket)
 
             boardItem.marketViewItems.forEachIndexed { index, coin ->
-                MarketCoin(coin, index == 0)
+                MarketCoinWithBackground(coin, index == 0)
             }
 
             SeeAllButton {
@@ -238,15 +237,14 @@ class MarketOverviewFragment : BaseFragment() {
     }
 
     @Composable
-    private fun MarketCoin(marketViewItem: MarketViewItem, firstItem: Boolean) {
+    private fun MarketCoinWithBackground(marketViewItem: MarketViewItem, firstItem: Boolean) {
         Box(
             modifier = Modifier
                 .padding(horizontal = 16.dp)
-                .height(61.dp)
                 .clip(getRoundedCornerShape(firstItem))
                 .background(ComposeAppTheme.colors.lawrence)
         ) {
-            MultilineClear(
+            MarketCoin(
                 marketViewItem.coinName,
                 marketViewItem.coinCode,
                 marketViewItem.iconUrl,
@@ -299,4 +297,36 @@ class MarketOverviewFragment : BaseFragment() {
         }
     }
 
+}
+
+@Composable
+private fun MarketCoin(
+    coinName: String,
+    coinCode: String,
+    coinIconUrl: String,
+    coinIconPlaceholder: Int,
+    coinRate: String? = null,
+    marketDataValue: MarketDataValue? = null,
+    label: String? = null,
+    onClick: (() -> Unit)? = null
+) {
+    MultilineClear(
+        onClick = onClick,
+        borderBottom = true
+    ) {
+        CoinImage(
+            iconUrl = coinIconUrl,
+            placeholder = coinIconPlaceholder,
+            modifier = Modifier
+                .padding(end = 16.dp)
+                .size(24.dp)
+        )
+        Column(
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            MarketCoinFirstRow(coinName, coinRate)
+            Spacer(modifier = Modifier.height(3.dp))
+            MarketCoinSecondRow(coinCode, marketDataValue, label)
+        }
+    }
 }

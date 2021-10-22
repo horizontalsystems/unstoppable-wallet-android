@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
@@ -21,6 +22,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
@@ -35,13 +37,12 @@ import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.bankwallet.core.typeLabel
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
+import io.horizontalsystems.bankwallet.modules.market.MarketDataValue
 import io.horizontalsystems.bankwallet.modules.market.category.MarketCategoryFragment
 import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchModule.ScreenState
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.CategoryCard
-import io.horizontalsystems.bankwallet.ui.compose.components.FavedButton
-import io.horizontalsystems.bankwallet.ui.compose.components.MultilineClear
+import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.marketkit.models.Coin
 import io.horizontalsystems.marketkit.models.CoinType
@@ -102,7 +103,10 @@ class MarketSearchFragment : BaseFragment() {
                             }
                         }
                     },
-                    onSearchQueryChange = { query -> viewModel.searchByQuery(query) }
+                    onSearchQueryChange = { query -> viewModel.searchByQuery(query) },
+                    onFavoriteClick = {
+
+                    }
                 )
             }
         }
@@ -118,6 +122,7 @@ fun MarketSearchScreen(
     onBackButtonClick: () -> Unit,
     onFilterButtonClick: () -> Unit,
     onCoinClick: (Coin) -> Unit,
+    onFavoriteClick: (FavouriteButton) -> Unit,
     onCategoryClick: (MarketSearchModule.CardViewItem) -> Unit,
     onSearchQueryChange: (String) -> Unit
 ) {
@@ -136,7 +141,11 @@ fun MarketSearchScreen(
             when (screenState) {
                 is ScreenState.CardsList -> CardsGrid(screenState.cards, onCategoryClick)
                 ScreenState.EmptySearchResult -> NoResults()
-                is ScreenState.SearchResult -> MarketSearchResults(screenState.coins, onCoinClick)
+                is ScreenState.SearchResult -> MarketSearchResults(
+                    screenState.coins,
+                    onCoinClick,
+                    onFavoriteClick
+                )
             }
         }
     }
@@ -157,7 +166,11 @@ private fun NoResults() {
 }
 
 @Composable
-fun MarketSearchResults(coinResult: List<FullCoin>, onCoinClick: (Coin) -> Unit) {
+fun MarketSearchResults(
+    coinResult: List<FullCoin>,
+    onCoinClick: (Coin) -> Unit,
+    onFavoriteClick: (FavouriteButton) -> Unit
+) {
     LazyColumn {
         item {
             Divider(
@@ -167,15 +180,15 @@ fun MarketSearchResults(coinResult: List<FullCoin>, onCoinClick: (Coin) -> Unit)
             )
         }
         items(coinResult) { fullCoin ->
-            MultilineClear(
+            MarketCoin(
                 fullCoin.coin.name,
                 fullCoin.coin.code,
                 fullCoin.coin.iconUrl,
                 fullCoin.iconPlaceholder,
                 label = fullCoin.typeLabel,
-                favedButton = FavedButton(
-                    false,
-                    { }
+                favedButton = FavouriteButton(
+                    false, {}
+//                    onFavoriteClick(FavouriteButton())
                 )
             ) { onCoinClick(fullCoin.coin) }
         }
@@ -303,6 +316,58 @@ fun CardsGrid(
     }
 }
 
+@Composable
+private fun MarketCoin(
+    coinName: String,
+    coinCode: String,
+    coinIconUrl: String,
+    coinIconPlaceholder: Int,
+    coinRate: String? = null,
+    marketDataValue: MarketDataValue? = null,
+    label: String? = null,
+    favedButton: FavouriteButton? = null,
+    onClick: (() -> Unit)? = null
+) {
+    MultilineClear(
+        borderBottom = true,
+        onClick = onClick
+    ) {
+        CoinImage(
+            iconUrl = coinIconUrl,
+            placeholder = coinIconPlaceholder,
+            modifier = Modifier
+                .padding(end = 16.dp)
+                .size(24.dp)
+        )
+        Column(
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            MarketCoinFirstRow(coinName, coinRate)
+            Spacer(modifier = Modifier.height(3.dp))
+            MarketCoinSecondRow(coinCode, marketDataValue, label)
+        }
+        favedButton?.let { favedBtn ->
+            val interactionSource = remember { MutableInteractionSource() }
+
+            Box(
+                modifier = Modifier.clickable(
+                    interactionSource = interactionSource,
+                    indication = null
+                ) {
+                    favedBtn.onClick()
+                }
+            ) {
+                Image(
+                    modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp),
+                    painter = painterResource(R.drawable.ic_star_20),
+                    contentDescription = "coin icon",
+                    colorFilter = ColorFilter.tint(if (favedButton.selected) ComposeAppTheme.colors.jacob else ComposeAppTheme.colors.grey),
+                )
+            }
+        }
+    }
+}
+
 @Preview(showBackground = true)
 @Composable
 fun MarketCoinPreview() {
@@ -312,13 +377,13 @@ fun MarketCoinPreview() {
         platforms = listOf(Platform(CoinType.fromId("ethereum"), 18, "ethereum"))
     )
     ComposeAppTheme {
-        MultilineClear(
+        MarketCoin(
             fullCoin.coin.name,
             fullCoin.coin.code,
             fullCoin.coin.iconUrl,
             fullCoin.iconPlaceholder,
             label = fullCoin.typeLabel,
-            favedButton = FavedButton(
+            favedButton = FavouriteButton(
                 false,
                 { }
             )

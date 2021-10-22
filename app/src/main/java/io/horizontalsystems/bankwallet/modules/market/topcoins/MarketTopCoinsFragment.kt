@@ -5,9 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -17,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import coil.annotation.ExperimentalCoilApi
@@ -25,11 +27,11 @@ import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.iconPlaceholder
+import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
-import io.horizontalsystems.bankwallet.modules.market.MarketField
+import io.horizontalsystems.bankwallet.modules.market.*
 import io.horizontalsystems.bankwallet.modules.market.MarketModule.ViewItemState
-import io.horizontalsystems.bankwallet.modules.market.SortingField
-import io.horizontalsystems.bankwallet.modules.market.TopMarket
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.components.*
@@ -78,7 +80,10 @@ class MarketTopCoinsFragment : BaseFragment() {
         }
     }
 
-    private fun onSortingClick(sortingFieldSelect: Select<SortingField>, onSelectSortingField: (SortingField) -> Unit) {
+    private fun onSortingClick(
+        sortingFieldSelect: Select<SortingField>,
+        onSelectSortingField: (SortingField) -> Unit
+    ) {
         val items = sortingFieldSelect.options.map {
             SelectorItem(getString(it.titleResId), it == sortingFieldSelect.selected)
         }
@@ -102,7 +107,11 @@ class MarketTopCoinsFragment : BaseFragment() {
         private const val topMarketKey = "top_market"
         private const val marketFieldKey = "market_field"
 
-        fun prepareParams(sortingField: SortingField, topMarket: TopMarket, marketField: MarketField): Bundle {
+        fun prepareParams(
+            sortingField: SortingField,
+            topMarket: TopMarket,
+            marketField: MarketField
+        ): Bundle {
             return bundleOf(
                 sortingFieldKey to sortingField,
                 topMarketKey to topMarket,
@@ -175,6 +184,55 @@ fun TopCoinsScreen(
                     }
                 }
             }
+        }
+    }
+}
+
+private fun LazyListScope.coinList(
+    items: List<MarketViewItem>,
+    onCoinClick: (String) -> Unit
+) {
+    items(items) { item ->
+        MarketCoin(
+            item.fullCoin.coin.name,
+            item.fullCoin.coin.code,
+            item.fullCoin.coin.iconUrl,
+            item.fullCoin.iconPlaceholder,
+            item.coinRate,
+            item.marketDataValue,
+            item.rank
+        ) { onCoinClick.invoke(item.fullCoin.coin.uid) }
+    }
+}
+
+@Composable
+private fun MarketCoin(
+    coinName: String,
+    coinCode: String,
+    coinIconUrl: String,
+    coinIconPlaceholder: Int,
+    coinRate: String? = null,
+    marketDataValue: MarketDataValue? = null,
+    label: String? = null,
+    onClick: (() -> Unit)? = null
+) {
+    MultilineClear(
+        onClick = onClick,
+        borderBottom = true
+    ) {
+        CoinImage(
+            iconUrl = coinIconUrl,
+            placeholder = coinIconPlaceholder,
+            modifier = Modifier
+                .padding(end = 16.dp)
+                .size(24.dp)
+        )
+        Column(
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            MarketCoinFirstRow(coinName, coinRate)
+            Spacer(modifier = Modifier.height(3.dp))
+            MarketCoinSecondRow(coinCode, marketDataValue, label)
         }
     }
 }

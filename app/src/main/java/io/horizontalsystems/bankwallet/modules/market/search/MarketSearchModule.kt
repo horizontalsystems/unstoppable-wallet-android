@@ -27,3 +27,8 @@ object MarketSearchModule {
         object EmptySearchResult : ScreenState()
     }
 }
+
+class FavouriteButton(
+    val selected: Boolean,
+    val onClick: () -> Unit
+)
