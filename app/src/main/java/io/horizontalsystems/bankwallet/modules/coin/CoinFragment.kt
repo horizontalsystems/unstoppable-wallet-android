@@ -1,19 +1,16 @@
 package io.horizontalsystems.bankwallet.modules.coin
 
 import android.os.Bundle
-import android.view.MenuItem
 import android.view.View
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.stringResource
-import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.Observer
 import androidx.navigation.navGraphViewModels
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import io.horizontalsystems.bankwallet.R
@@ -22,8 +19,6 @@ import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.bankwallet.modules.coin.coinmarkets.CoinMarketsFragment
 import io.horizontalsystems.bankwallet.modules.coin.overview.CoinOverviewFragment
 import io.horizontalsystems.bankwallet.modules.coin.ui.CoinScreenTitle
-import io.horizontalsystems.bankwallet.modules.settings.notifications.bottommenu.BottomNotificationMenu
-import io.horizontalsystems.bankwallet.modules.settings.notifications.bottommenu.NotificationMenuMode
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.TabItem
 import io.horizontalsystems.bankwallet.ui.compose.components.Tabs
@@ -36,17 +31,12 @@ class CoinFragment : BaseFragment(R.layout.fragment_coin) {
         CoinModule.Factory(requireArguments().getString(COIN_UID_KEY)!!)
     }
 
-    private var notificationMenuItem: MenuItem? = null
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         viewPager.adapter =
             CoinTabsAdapter(childFragmentManager, viewLifecycleOwner.lifecycle)
         viewPager.isUserInputEnabled = false
-
-        notificationMenuItem = toolbar.menu.findItem(R.id.menuNotification)
-        updateNotificationMenuItem()
 
         viewModel.selectedTab.observe(viewLifecycleOwner) { selectedTab ->
             viewPager.setCurrentItem(viewModel.tabs.indexOf(selectedTab), false)
@@ -78,14 +68,6 @@ class CoinFragment : BaseFragment(R.layout.fragment_coin) {
             toolbar.menu.findItem(R.id.menuUnfavorite).isVisible = isFavorite
         }
 
-        viewModel.alertNotificationUpdated.observe(viewLifecycleOwner) {
-            updateNotificationMenuItem()
-        }
-
-        viewModel.showNotificationMenu.observe(viewLifecycleOwner, Observer { (coinType, coinName) ->
-            BottomNotificationMenu.show(childFragmentManager, NotificationMenuMode.All, coinName, coinType)
-        })
-
         toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }
@@ -103,10 +85,6 @@ class CoinFragment : BaseFragment(R.layout.fragment_coin) {
                         getString(R.string.Hud_Removed_from_Watchlist))
                     true
                 }
-                R.id.menuNotification -> {
-                    viewModel.onNotificationClick()
-                    true
-                }
                 else -> false
             }
         }
@@ -114,16 +92,6 @@ class CoinFragment : BaseFragment(R.layout.fragment_coin) {
         tabsCompose.setViewCompositionStrategy(
             ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
         )
-    }
-
-    private fun updateNotificationMenuItem() {
-        notificationMenuItem?.apply {
-            isVisible = viewModel.notificationIconVisible
-            icon = context?.let {
-                val iconRes = if (viewModel.notificationIconActive) R.drawable.ic_notification_24 else R.drawable.ic_notification_disabled
-                ContextCompat.getDrawable(it, iconRes)
-            }
-        }
     }
 
     companion object {

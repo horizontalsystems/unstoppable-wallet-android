@@ -23,7 +23,6 @@ import java.util.*
 @Database(version = 37, exportSchema = false, entities = [
     EnabledWallet::class,
     EnabledWalletCache::class,
-    PriceAlert::class,
     AccountRecord::class,
     BlockchainSetting::class,
     SubscriptionJob::class,
@@ -42,7 +41,6 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun walletsDao(): EnabledWalletsDao
     abstract fun enabledWalletsCacheDao(): EnabledWalletsCacheDao
     abstract fun accountsDao(): AccountsDao
-    abstract fun priceAlertsDao(): PriceAlertsDao
     abstract fun blockchainSettingDao(): BlockchainSettingDao
     abstract fun restoreSettingDao(): RestoreSettingDao
     abstract fun subscriptionJobDao(): SubscriptionJobDao

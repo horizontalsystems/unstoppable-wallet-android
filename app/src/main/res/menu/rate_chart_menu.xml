@@ -16,10 +16,4 @@
         android:title="@string/CoinPage_Unfavorite"
         app:showAsAction="always" />
 
-    <item
-        android:id="@+id/menuNotification"
-        android:icon="@drawable/ic_notification_24"
-        android:title="@string/Settings_Notifications"
-        app:showAsAction="always" />
-
 </menu>
