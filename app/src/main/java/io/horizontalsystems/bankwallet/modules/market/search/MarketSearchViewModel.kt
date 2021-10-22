@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.market.search
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchModule.ScreenState
-import io.reactivex.disposables.CompositeDisposable
+import io.horizontalsystems.marketkit.models.FullCoin
 
 class MarketSearchViewModel(
     private val service: MarketSearchService
@@ -18,7 +18,8 @@ class MarketSearchViewModel(
         listOf(topCoins) + items
     }
 
-    private val disposable = CompositeDisposable()
+    private var coinItems = listOf<FullCoin>()
+    private val favoritedCoinUids = service.favoritedCoinUids.toMutableList()
 
     val searchTextLiveData = MutableLiveData<String>()
     val screenStateLiveData = MutableLiveData<ScreenState>(ScreenState.CardsList(cards))
@@ -27,6 +28,7 @@ class MarketSearchViewModel(
     fun searchByQuery(query: String) {
         searchTextLiveData.postValue(query)
 
+        coinItems = emptyList()
         val queryTrimmed = query.trim()
         if (queryTrimmed.count() == 1) {
             screenStateLiveData.postValue(ScreenState.SearchResult(emptyList()))
@@ -35,14 +37,31 @@ class MarketSearchViewModel(
             if (results.isEmpty()) {
                 screenStateLiveData.postValue(ScreenState.EmptySearchResult)
             } else {
-                screenStateLiveData.postValue(ScreenState.SearchResult(results))
+                coinItems = results
+                screenStateLiveData.postValue(ScreenState.SearchResult(getCoinViewItems()))
             }
         } else {
             screenStateLiveData.postValue(ScreenState.CardsList(cards))
         }
     }
 
-    override fun onCleared() {
-        disposable.clear()
+    fun onFavoriteClick(favourited: Boolean, coinUid: String) {
+        if (favourited) {
+            favoritedCoinUids.remove(coinUid)
+            service.unFavorite(coinUid)
+        } else {
+            favoritedCoinUids.add(coinUid)
+            service.favorite(coinUid)
+        }
+        screenStateLiveData.postValue(ScreenState.SearchResult(getCoinViewItems()))
     }
+
+    private fun getCoinViewItems() =
+        coinItems.map {
+            MarketSearchModule.CoinViewItem(
+                it,
+                favoritedCoinUids.contains(it.coin.uid)
+            )
+        }
+
 }
