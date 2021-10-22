@@ -1,42 +1,48 @@
 package io.horizontalsystems.bankwallet.modules.market.search
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import io.horizontalsystems.bankwallet.core.Clearable
-import io.horizontalsystems.marketkit.models.FullCoin
+import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchModule.ScreenState
 import io.reactivex.disposables.CompositeDisposable
 
 class MarketSearchViewModel(
-    private val service: MarketSearchService,
-    private val clearables: List<Clearable>
+    private val service: MarketSearchService
 ) : ViewModel() {
 
-    val viewItems by lazy {
+    private val cards by lazy {
         val coinCategories = service.coinCategories
         val items = coinCategories.map { category ->
-            MarketSearchModule.ViewItem.MarketCoinCategory(category)
+            MarketSearchModule.CardViewItem.MarketCoinCategory(category)
         }
-        val topCoins = MarketSearchModule.ViewItem.MarketTopCoins
+        val topCoins = MarketSearchModule.CardViewItem.MarketTopCoins
         listOf(topCoins) + items
     }
 
     private val disposable = CompositeDisposable()
 
-    private val _coinResult = MutableLiveData<List<FullCoin>>()
-    val coinResult: LiveData<List<FullCoin>> = _coinResult
+    val searchTextLiveData = MutableLiveData<String>()
+    val screenStateLiveData = MutableLiveData<ScreenState>(ScreenState.CardsList(cards))
+
 
     fun searchByQuery(query: String) {
+        searchTextLiveData.postValue(query)
+
         val queryTrimmed = query.trim()
-        if (queryTrimmed.count() >= 2) {
-            _coinResult.value = service.getCoinsByQuery(queryTrimmed)
+        if (queryTrimmed.count() == 1) {
+            screenStateLiveData.postValue(ScreenState.SearchResult(emptyList()))
+        } else if (queryTrimmed.count() >= 2) {
+            val results = service.getCoinsByQuery(queryTrimmed)
+            if (results.isEmpty()) {
+                screenStateLiveData.postValue(ScreenState.EmptySearchResult)
+            } else {
+                screenStateLiveData.postValue(ScreenState.SearchResult(results))
+            }
         } else {
-            _coinResult.value = listOf()
+            screenStateLiveData.postValue(ScreenState.CardsList(cards))
         }
     }
 
     override fun onCleared() {
         disposable.clear()
-        clearables.forEach(Clearable::clear)
     }
 }
