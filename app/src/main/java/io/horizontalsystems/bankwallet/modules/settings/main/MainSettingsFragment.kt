@@ -41,9 +41,6 @@ class MainSettingsFragment : BaseFragment() {
         val walletConnect = SettingsMenuItem(R.string.Settings_WalletConnect, R.drawable.ic_wallet_connect_20, listPosition = ListPosition.Single) {
             presenter.didTapWalletConnect()
         }
-        val notifications = SettingsMenuItem(R.string.Settings_Notifications, R.drawable.ic_notification_20, listPosition = ListPosition.First) {
-            presenter.didTapNotifications()
-        }
         val baseCurrency = SettingsMenuItem(R.string.Settings_BaseCurrency, R.drawable.ic_currency, listPosition = ListPosition.Middle) {
             presenter.didTapBaseCurrency()
         }
@@ -76,7 +73,6 @@ class MainSettingsFragment : BaseFragment() {
                 null,
                 walletConnect,
                 null,
-                notifications,
                 baseCurrency,
                 language,
                 theme,

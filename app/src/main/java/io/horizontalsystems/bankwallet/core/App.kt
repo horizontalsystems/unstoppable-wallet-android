@@ -4,15 +4,12 @@ import android.content.Context
 import android.content.res.Configuration
 import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.app.NotificationManagerCompat
 import androidx.preference.PreferenceManager
 import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.core.factories.AccountFactory
 import io.horizontalsystems.bankwallet.core.factories.AdapterFactory
 import io.horizontalsystems.bankwallet.core.factories.AddressParserFactory
 import io.horizontalsystems.bankwallet.core.managers.*
-import io.horizontalsystems.bankwallet.core.notifications.NotificationNetworkWrapper
-import io.horizontalsystems.bankwallet.core.notifications.NotificationWorker
 import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.bankwallet.core.providers.FeeCoinProvider
 import io.horizontalsystems.bankwallet.core.providers.FeeRateProvider
@@ -65,7 +62,6 @@ class App : CoreApp() {
         lateinit var connectivityManager: ConnectivityManager
         lateinit var appDatabase: AppDatabase
         lateinit var accountsStorage: IAccountsStorage
-        lateinit var priceAlertManager: IPriceAlertManager
         lateinit var enabledWalletsStorage: IEnabledWalletStorage
         lateinit var blockchainSettingsStorage: IBlockchainSettingsStorage
         lateinit var ethereumKitManager: EvmKitManager
@@ -74,8 +70,6 @@ class App : CoreApp() {
         lateinit var numberFormatter: IAppNumberFormatter
         lateinit var addressParserFactory: AddressParserFactory
         lateinit var feeCoinProvider: FeeCoinProvider
-        lateinit var notificationNetworkWrapper: NotificationNetworkWrapper
-        lateinit var notificationManager: INotificationManager
         lateinit var initialSyncModeSettingsManager: IInitialSyncModeSettingsManager
         lateinit var accountCleaner: IAccountCleaner
         lateinit var rateAppManager: IRateAppManager
@@ -84,7 +78,6 @@ class App : CoreApp() {
         lateinit var walletConnectSessionManager: WalletConnectSessionManager
         lateinit var walletConnectRequestManager: WalletConnectRequestManager
         lateinit var walletConnectManager: WalletConnectManager
-        lateinit var notificationSubscriptionManager: INotificationSubscriptionManager
         lateinit var termsManager: ITermsManager
         lateinit var marketFavoritesManager: MarketFavoritesManager
         lateinit var marketKit: MarketKit
@@ -192,13 +185,6 @@ class App : CoreApp() {
 
         addressParserFactory = AddressParserFactory()
 
-        notificationNetworkWrapper = NotificationNetworkWrapper(localStorage, networkManager, appConfigProvider)
-        notificationManager = NotificationManager(NotificationManagerCompat.from(this), localStorage).apply {
-            backgroundManager.registerListener(this)
-        }
-        notificationSubscriptionManager = NotificationSubscriptionManager(appDatabase, notificationNetworkWrapper)
-        priceAlertManager = PriceAlertManager(appDatabase, notificationSubscriptionManager, notificationManager, localStorage, notificationNetworkWrapper, backgroundManager)
-
         pinComponent = PinComponent(
                 pinStorage = pinStorage,
                 encryptionManager = encryptionManager,
@@ -233,8 +219,6 @@ class App : CoreApp() {
         registerActivityLifecycleCallbacks(ActivityLifecycleCallbacks(torKitManager))
 
         startTasks()
-
-        NotificationWorker.startPeriodicWorker(instance)
     }
 
     private fun setAppTheme() {
@@ -294,7 +278,6 @@ class App : CoreApp() {
             walletManager.loadWallets()
             adapterManager.preloadAdapters()
             accountManager.clearAccounts()
-            notificationSubscriptionManager.processJobs()
 
             AppVersionManager(systemInfoManager, localStorage).apply { storeAppVersion() }
 

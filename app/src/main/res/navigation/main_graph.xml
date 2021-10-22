@@ -40,9 +40,6 @@
             android:id="@+id/mainFragment_to_aboutAppFragment"
             app:destination="@id/aboutAppFragment" />
         <action
-            android:id="@+id/mainFragment_to_notificationsFragment"
-            app:destination="@id/notificationsFragment" />
-        <action
             android:id="@+id/mainFragment_to_experimentalFeaturesFragment"
             app:destination="@id/experimentalFeaturesFragment" />
         <action
@@ -262,10 +259,6 @@
             android:id="@+id/aboutAppFragment_to_releaseNotesFragment"
             app:destination="@id/releaseNotesFragment" />
     </fragment>
-    <fragment
-        android:id="@+id/notificationsFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.settings.notifications.NotificationsFragment"
-        tools:layout="@layout/fragment_notifications" />
     <fragment
         android:id="@+id/experimentalFeaturesFragment"
         android:name="io.horizontalsystems.bankwallet.modules.settings.experimental.ExperimentalFeaturesFragment"

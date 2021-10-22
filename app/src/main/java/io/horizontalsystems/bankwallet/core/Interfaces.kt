@@ -379,13 +379,6 @@ interface IAccountsStorage {
     fun clearDeleted()
 }
 
-interface INotificationManager {
-    val enabledInPhone: Boolean
-    val enabled: Boolean
-    fun clear()
-    fun show(notification: AlertNotification)
-}
-
 interface IEnabledWalletStorage {
     val enabledWallets: List<EnabledWallet>
     fun enabledWallets(accountId: String): List<EnabledWallet>
@@ -520,25 +513,6 @@ interface IAddTokenBlockchainService {
     fun isValid(reference: String): Boolean
     fun coinType(reference: String): CoinType
     fun customTokenAsync(reference: String): Single<CustomToken>
-}
-
-interface IPriceAlertManager {
-    val notificationChangedFlowable: Flowable<Unit>
-    fun getPriceAlerts(): List<PriceAlert>
-    fun savePriceAlert(
-        coinType: CoinType,
-        coinName: String,
-        changeState: PriceAlert.ChangeState,
-        trendState: PriceAlert.TrendState
-    )
-
-    fun getAlertStates(coinType: CoinType): Pair<PriceAlert.ChangeState, PriceAlert.TrendState>
-    fun hasPriceAlert(coinType: CoinType): Boolean
-    fun deactivateAllNotifications()
-    fun enablePriceAlerts()
-    fun disablePriceAlerts()
-
-    suspend fun fetchNotifications()
 }
 
 interface INotificationSubscriptionManager {
