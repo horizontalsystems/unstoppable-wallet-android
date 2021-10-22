@@ -5,12 +5,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -23,84 +20,52 @@ import androidx.compose.ui.unit.dp
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.iconPlaceholder
-import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.modules.market.*
 import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.Select
 
-class FavedButton(
-    val selected: Boolean,
-    val onClick: () -> Unit
-)
-
 @Composable
 fun MultilineClear(
-    coinName: String,
-    coinCode: String,
-    coinIconUrl: String,
-    coinIconPlaceholder: Int,
-    coinRate: String? = null,
-    marketDataValue: MarketDataValue? = null,
-    label: String? = null,
-    favedButton: FavedButton? = null,
-    onClick: (() -> Unit)? = null
+    modifier: Modifier = Modifier,
+    onClick: (() -> Unit)? = null,
+    borderTop: Boolean = false,
+    borderBottom: Boolean = false,
+    content: @Composable RowScope.() -> Unit
 ) {
     Box(
-        modifier = Modifier
-            .height(61.dp)
+        modifier = modifier
+            .height(60.dp)
             .clickable { onClick?.invoke() }
     ) {
-        Row(
-            modifier = Modifier.fillMaxHeight(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            CoinImage(
-                iconUrl = coinIconUrl,
-                placeholder = coinIconPlaceholder,
-                modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .size(24.dp)
+        if (borderTop) {
+            Divider(
+                thickness = 1.dp,
+                color = ComposeAppTheme.colors.steel10,
+                modifier = Modifier.align(Alignment.TopCenter)
             )
-            Column(
-                modifier = Modifier.padding(end = 16.dp).weight(1f)
-            ) {
-                MarketCoinFirstRow(coinName, coinRate)
-                Spacer(modifier = Modifier.height(3.dp))
-                MarketCoinSecondRow(coinCode, marketDataValue, label)
-            }
-            favedButton?.let {
-                val interactionSource = remember { MutableInteractionSource() }
-
-                Box(
-                    modifier = Modifier.clickable(
-                        interactionSource = interactionSource,
-                        indication = null
-                    ) {
-                        favedButton.onClick()
-                    }
-                ) {
-                    Image(
-                        modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp),
-                        painter = painterResource(R.drawable.ic_star_20),
-                        contentDescription = "coin icon",
-                        colorFilter = ColorFilter.tint(if (favedButton.selected) ComposeAppTheme.colors.jacob else ComposeAppTheme.colors.grey),
-                    )
-                }
-            }
         }
-        Divider(
-            thickness = 1.dp,
-            color = ComposeAppTheme.colors.steel10,
-            modifier = Modifier.align(Alignment.BottomCenter)
-        )
+        if (borderBottom) {
+            Divider(
+                thickness = 1.dp,
+                color = ComposeAppTheme.colors.steel10,
+                modifier = Modifier.align(Alignment.BottomCenter)
+            )
+        }
+        Row(
+            modifier = Modifier
+                .fillMaxHeight()
+                .padding(horizontal = 16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            content()
+        }
     }
 }
 
 @Composable
-private fun MarketCoinFirstRow(coinName: String, rate: String?) {
+fun MarketCoinFirstRow(coinName: String, rate: String?) {
     Row(
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -123,7 +88,7 @@ private fun MarketCoinFirstRow(coinName: String, rate: String?) {
 }
 
 @Composable
-private fun MarketCoinSecondRow(
+fun MarketCoinSecondRow(
     coinCode: String,
     marketDataValue: MarketDataValue?,
     label: String?
@@ -268,23 +233,6 @@ fun SortMenu(titleRes: Int, onClick: () -> Unit) {
         iconRight = R.drawable.ic_down_arrow_20,
         onClick = onClick
     )
-}
-
-fun LazyListScope.coinList(
-    items: List<MarketViewItem>,
-    onCoinClick: (String) -> Unit
-) {
-    items(items) { item ->
-        MultilineClear(
-            item.fullCoin.coin.name,
-            item.fullCoin.coin.code,
-            item.fullCoin.coin.iconUrl,
-            item.fullCoin.iconPlaceholder,
-            item.coinRate,
-            item.marketDataValue,
-            item.rank
-        ) { onCoinClick.invoke(item.fullCoin.coin.uid) }
-    }
 }
 
 @Composable
