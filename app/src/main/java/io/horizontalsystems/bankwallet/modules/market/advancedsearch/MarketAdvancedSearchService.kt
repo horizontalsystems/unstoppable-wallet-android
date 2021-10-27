@@ -53,7 +53,6 @@ class MarketAdvancedSearchService(
     var filterPeriod: TimePeriod = TimePeriod.TimePeriod_1D
         set(value) {
             field = value
-            cache = null
 
             refreshCounter()
         }
