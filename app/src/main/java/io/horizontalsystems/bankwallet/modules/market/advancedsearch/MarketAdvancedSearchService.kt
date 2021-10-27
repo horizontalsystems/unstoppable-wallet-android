@@ -162,11 +162,13 @@ class MarketAdvancedSearchService(
     }
 
     private fun filterCoinMarket(marketInfo: MarketInfo): Boolean {
-        val priceChangeValue = marketInfo.priceChangeValue(filterPeriod)
+        val marketCap = marketInfo.marketCap ?: return false
+        val totalVolume = marketInfo.totalVolume ?: return false
+        val priceChangeValue = marketInfo.priceChangeValue(filterPeriod) ?: return false
 
-        return filterByRange(filterMarketCap, marketInfo.marketCap?.toLong())
-                && filterByRange(filterVolume, marketInfo.totalVolume?.toLong())
-                && filterByRange(filterPriceChange, priceChangeValue?.toLong())
+        return filterByRange(filterMarketCap, marketCap.toLong())
+                && filterByRange(filterVolume, totalVolume.toLong())
+                && filterByRange(filterPriceChange, priceChangeValue.toLong())
                 && (!filterPriceCloseToAth || closeToAllTime(marketInfo.athPercentage))
                 && (!filterPriceCloseToAtl || closeToAllTime(marketInfo.atlPercentage))
                 && (!filterOutperformedBtcOn || outperformed(priceChangeValue, "bitcoin"))
