@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.market.metricspage
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.modules.market.MarketField
 import io.horizontalsystems.bankwallet.modules.market.marketglobal.MarketGlobalFetcher
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartFactory
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartService
@@ -15,7 +16,7 @@ object MetricsPageModule {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel?> create(modelClass: Class<T>) = when (modelClass) {
             MetricsPageViewModel::class.java -> {
-                val fetcher = MarketGlobalFetcher(App.xRateManager, metricsType)
+                val fetcher = MarketGlobalFetcher(App.marketKit, metricsType)
                 val service = MetricChartService(App.currencyManager.baseCurrency, fetcher)
 
                 val factory = MetricChartFactory(App.numberFormatter)
@@ -26,7 +27,15 @@ object MetricsPageModule {
                 val service by lazy {
                     MetricsPageListService(App.marketKit, App.currencyManager)
                 }
-                MetricsPageListViewModel(service, App.connectivityManager, listOf(service)) as T
+                val marketField = when (metricsType) {
+                    MetricsType.TotalMarketCap,
+                    MetricsType.DefiCap,
+                    MetricsType.TvlInDefi,
+                    MetricsType.BtcDominance -> MarketField.MarketCap
+                    MetricsType.Volume24h -> MarketField.Volume
+                }
+
+                MetricsPageListViewModel(service, App.connectivityManager, marketField, metricsType, listOf(service)) as T
             }
             else -> throw IllegalArgumentException()
         }

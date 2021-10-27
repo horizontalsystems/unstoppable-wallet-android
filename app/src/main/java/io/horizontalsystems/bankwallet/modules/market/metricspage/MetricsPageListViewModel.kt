@@ -12,6 +12,7 @@ import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.market.list.MarketListService
 import io.horizontalsystems.bankwallet.modules.market.metricspage.MetricsPageListService.State
 import io.horizontalsystems.bankwallet.modules.market.sort
+import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
 import io.horizontalsystems.bankwallet.ui.compose.components.ToggleIndicator
 import io.horizontalsystems.bankwallet.ui.extensions.MarketListHeaderView
 import io.horizontalsystems.core.SingleLiveEvent
@@ -20,6 +21,8 @@ import io.reactivex.disposables.CompositeDisposable
 class MetricsPageListViewModel(
     private val service: MetricsPageListService,
     private val connectivityManager: ConnectivityManager,
+    marketField: MarketField,
+    private val metricsType: MetricsType,
     private val clearables: List<Clearable>
 ) : ViewModel() {
 
@@ -29,7 +32,7 @@ class MetricsPageListViewModel(
     val networkNotAvailable = SingleLiveEvent<Unit>()
 
     private var sortDesc = true
-    private var marketFieldIndex: Int = MarketField.values().indexOf(MarketField.PriceDiff)
+    private var marketFieldIndex: Int = MarketField.values().indexOf(marketField)
     private val disposables = CompositeDisposable()
 
     private val sortMenu: MarketListHeaderView.SortMenu
@@ -81,7 +84,10 @@ class MetricsPageListViewModel(
     }
 
     private fun syncViewItemsBySortingField(scrollToTop: Boolean) {
-        val sortingField = if (sortDesc) SortingField.HighestCap else SortingField.LowestCap
+        val sortingField = when (metricsType) {
+            MetricsType.Volume24h -> if (sortDesc) SortingField.HighestVolume else SortingField.LowestVolume
+            else -> if (sortDesc) SortingField.HighestCap else SortingField.LowestCap
+        }
         val viewItems = service.marketItems
             .sort(sortingField)
             .mapNotNull { marketItem ->

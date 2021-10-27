@@ -5,13 +5,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.modules.coin.metricchart.CoinTradingVolumeFetcher
-import io.horizontalsystems.bankwallet.modules.coin.metricchart.CoinTvlFetcher
 import io.horizontalsystems.bankwallet.modules.market.marketglobal.MarketGlobalFetcher
 import io.horizontalsystems.chartview.ChartData
 import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.marketkit.models.CoinType
-import io.horizontalsystems.xrateskit.entities.TimePeriod
+import io.horizontalsystems.marketkit.models.TimePeriod
 import io.reactivex.Single
 import kotlinx.android.parcel.Parcelize
 import java.math.BigDecimal
@@ -23,9 +21,9 @@ object MetricChartModule {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             val fetcher = when (val type = metricsChartType) {
-                is MetricChartType.Coin -> CoinTvlFetcher(App.xRateManager, type.coinType)
-                is MetricChartType.TradingVolume -> CoinTradingVolumeFetcher(App.xRateManager, type.coinType)
-                is MetricChartType.MarketGlobal -> MarketGlobalFetcher(App.xRateManager, type.metricsType)
+//                is MetricChartType.Coin -> CoinTvlFetcher(App.xRateManager, type.coinType)
+//                is MetricChartType.TradingVolume -> CoinTradingVolumeFetcher(App.xRateManager, type.coinType)
+                is MetricChartType.MarketGlobal -> MarketGlobalFetcher(App.marketKit, type.metricsType)
                 else -> throw IllegalArgumentException("Expected type of MetricChartType, but got different value")
             }
 

@@ -177,7 +177,7 @@
 
     <!--Market Global Metrics-->
     <string name="MarketGlobalMetrics_Chart">Chart</string>
-    <string name="MarketGlobalMetrics_TotalMarketCap">Total M.Cap</string>
+    <string name="MarketGlobalMetrics_TotalMarketCap">Total Market Cap</string>
     <string name="MarketGlobalMetrics_BtcDominance">Bitcoin Dominance</string>
     <string name="MarketGlobalMetrics_Volume">Volume</string>
     <string name="MarketGlobalMetrics_DefiCap">DeFi Cap</string>
