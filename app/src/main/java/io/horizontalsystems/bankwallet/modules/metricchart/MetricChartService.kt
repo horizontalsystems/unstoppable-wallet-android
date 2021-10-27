@@ -5,7 +5,7 @@ import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.core.entities.Currency
-import io.horizontalsystems.xrateskit.entities.TimePeriod
+import io.horizontalsystems.marketkit.models.TimePeriod
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.BehaviorSubject
 
@@ -41,9 +41,9 @@ class MetricChartService(
 
     private fun getTimePeriod(chartType: ChartView.ChartType): TimePeriod {
         return when(chartType){
-            ChartView.ChartType.DAILY -> TimePeriod.HOUR_24
-            ChartView.ChartType.WEEKLY -> TimePeriod.DAY_7
-            ChartView.ChartType.MONTHLY -> TimePeriod.DAY_30
+            ChartView.ChartType.DAILY -> TimePeriod.Hour24
+            ChartView.ChartType.WEEKLY -> TimePeriod.Day7
+            ChartView.ChartType.MONTHLY -> TimePeriod.Day30
             else -> throw IllegalArgumentException("Wrong ChartType")
         }
     }

@@ -1,13 +1,13 @@
 package io.horizontalsystems.bankwallet.modules.market.marketglobal
 
-import io.horizontalsystems.bankwallet.core.IRateManager
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartModule
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
-import io.horizontalsystems.xrateskit.entities.TimePeriod
+import io.horizontalsystems.marketkit.MarketKit
+import io.horizontalsystems.marketkit.models.TimePeriod
 import io.reactivex.Single
 
 class MarketGlobalFetcher(
-        private val rateManager: IRateManager,
+        private val marketKit: MarketKit,
         private val metricsType: MetricsType
 ) : MetricChartModule.IMetricChartFetcher, MetricChartModule.IMetricChartConfiguration {
 
@@ -22,15 +22,15 @@ class MarketGlobalFetcher(
         }
 
     override fun fetchSingle(currencyCode: String, timePeriod: TimePeriod): Single<List<MetricChartModule.Item>> {
-        return rateManager.getGlobalCoinMarketPointsAsync(currencyCode, timePeriod)
+        return marketKit.globalMarketPointsSingle(currencyCode, timePeriod)
                 .map { list ->
                     list.map { point ->
                         val value = when (metricsType) {
                             MetricsType.TotalMarketCap -> point.marketCap
-                            MetricsType.BtcDominance -> point.btcDominance
+                            MetricsType.BtcDominance -> point.dominanceBtc
                             MetricsType.Volume24h -> point.volume24h
-                            MetricsType.DefiCap -> point.defiMarketCap
-                            MetricsType.TvlInDefi -> point.defiTvl
+                            MetricsType.DefiCap -> point.marketCapDefi
+                            MetricsType.TvlInDefi -> point.tvl
                         }
                         MetricChartModule.Item(value, point.timestamp)
                     }

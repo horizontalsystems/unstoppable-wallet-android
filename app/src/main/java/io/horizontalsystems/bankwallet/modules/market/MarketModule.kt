@@ -112,9 +112,9 @@ enum class SortingField(@StringRes val titleResId: Int) : WithTranslatableTitle,
 
 @Parcelize
 enum class MarketField(@StringRes val titleResId: Int) : WithTranslatableTitle, Parcelable {
+    PriceDiff(R.string.Market_Field_PriceDiff),
     MarketCap(R.string.Market_Field_MarketCap),
-    Volume(R.string.Market_Field_Volume),
-    PriceDiff(R.string.Market_Field_PriceDiff);
+    Volume(R.string.Market_Field_Volume);
 
     fun next() = values()[if (ordinal == values().size - 1) 0 else ordinal + 1]
 
