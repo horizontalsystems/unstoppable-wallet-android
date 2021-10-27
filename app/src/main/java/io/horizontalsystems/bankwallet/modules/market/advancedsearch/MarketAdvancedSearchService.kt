@@ -143,8 +143,7 @@ class MarketAdvancedSearchService(
         val topMarketListAsync = if (cache != null) {
             Single.just(cache)
         } else {
-            // todo: add support for currency
-            marketKit.advancedMarketInfosSingle(coinCount)
+            marketKit.advancedMarketInfosSingle(coinCount, currencyManager.baseCurrency.code)
                     .doOnSuccess {
                         cache = it
                     }
