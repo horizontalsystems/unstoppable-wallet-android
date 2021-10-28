@@ -24,6 +24,7 @@ class CoinService(
     val coinState: Observable<CoinState>
         get() = _coinState
 
+    private val initialCoinInWallet = walletManager.activeWallets.any { it.coin.uid == coinUid }
     private val disposables = CompositeDisposable()
 
     init {
@@ -43,7 +44,13 @@ class CoinService(
         _coinState.onNext(when {
             accountManager.activeAccount == null -> CoinState.NoActiveAccount
             fullCoin.platforms.none { it.coinType.isSupported } -> CoinState.Unsupported
-            walletManager.activeWallets.any { it.coin.uid == coinUid } -> CoinState.InWallet
+            walletManager.activeWallets.any { it.coin.uid == coinUid } -> {
+                if (initialCoinInWallet) {
+                    CoinState.InWallet
+                } else {
+                    CoinState.AddedToWallet
+                }
+            }
             else -> CoinState.NotInWallet
         })
     }
