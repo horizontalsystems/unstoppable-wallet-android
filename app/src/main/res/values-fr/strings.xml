@@ -596,6 +596,8 @@
     <string name="Hud_Text_Done">Fait</string>
     <string name="Hud_Text_EmailAddressCopied">Adresse email copiée</string>
     <string name="Hud_Added_To_Watchlist">Ajouter à la liste de suivi</string>
+    <string name="Hud_Added_To_Wallet">Added To Wallet</string>
+    <string name="Hud_Already_In_Wallet">Already added to wallet</string>
     <string name="Hud_Removed_from_Watchlist">Retirer de la liste de suivi</string>
     <string name="Hud_UnknownError">%s</string>
     <!--Manage Coins-->
@@ -790,6 +792,8 @@
     <string name="CoinPage_MarketCap_Trillion">T</string>
     <string name="CoinPage_Volume">Vol</string>
     <string name="CoinPage_NoData">Pas de données</string>
+    <string name="CoinPage_AddToWallet">Add To Wallet</string>
+    <string name="CoinPage_InWallet">In Wallet</string>
     <string name="CoinPage_Favorite">Favori</string>
     <string name="CoinPage_Unfavorite">Retirer des Favoris</string>
     <string name="CoinPage_Performance_Week">1 Semaine</string>
