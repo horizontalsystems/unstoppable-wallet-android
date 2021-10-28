@@ -59,7 +59,9 @@ class CoinFragment : BaseFragment(R.layout.fragment_coin) {
         tabsCompose.setContent {
             ComposeAppTheme {
                 Column {
-                    CoinScreenTitle(viewModel.fullCoin.coin.name, viewModel.fullCoin.coin.marketCapRank, viewModel.fullCoin.coin.iconUrl)
+                    CoinScreenTitle(viewModel.fullCoin.coin.name,
+                        viewModel.fullCoin.coin.marketCapRank,
+                        viewModel.fullCoin.coin.iconUrl)
 
                     val selectedTab by viewModel.selectedTab.observeAsState()
                     val tabItems = viewModel.tabs.map {
@@ -92,6 +94,7 @@ class CoinFragment : BaseFragment(R.layout.fragment_coin) {
                     menuAddToWallet = false
                     menuInWallet = false
                 }
+                CoinState.AddedToWallet,
                 CoinState.InWallet -> {
                     menuAddToWallet = false
                     menuInWallet = true
@@ -106,6 +109,14 @@ class CoinFragment : BaseFragment(R.layout.fragment_coin) {
             toolbar.menu.findItem(R.id.menuInWallet).isVisible = menuInWallet
         }
 
+        viewModel.warningMessageLiveEvent.observe(viewLifecycleOwner) {
+            HudHelper.showInProcessMessage(requireView(), it, showProgressBar = false)
+        }
+
+        viewModel.successMessageLiveEvent.observe(viewLifecycleOwner) {
+            HudHelper.showSuccessMessage(requireView(), it)
+        }
+
         toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }
@@ -113,8 +124,6 @@ class CoinFragment : BaseFragment(R.layout.fragment_coin) {
             when (item.itemId) {
                 R.id.menuFavorite -> {
                     viewModel.onFavoriteClick()
-                    HudHelper.showSuccessMessage(requireView(),
-                        getString(R.string.Hud_Added_To_Watchlist))
                     true
                 }
                 R.id.menuAddToWallet -> {
@@ -122,13 +131,11 @@ class CoinFragment : BaseFragment(R.layout.fragment_coin) {
                     true
                 }
                 R.id.menuInWallet -> {
-//                    viewModel.onClickInWallet()
+                    viewModel.onClickInWallet()
                     true
                 }
                 R.id.menuUnfavorite -> {
                     viewModel.onUnfavoriteClick()
-                    HudHelper.showSuccessMessage(requireView(),
-                        getString(R.string.Hud_Removed_from_Watchlist))
                     true
                 }
                 else -> false
@@ -191,7 +198,6 @@ class CoinFragment : BaseFragment(R.layout.fragment_coin) {
             warning = config.description
         )
     }
-
 
 
     companion object {

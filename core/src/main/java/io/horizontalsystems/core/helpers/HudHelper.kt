@@ -11,8 +11,8 @@ import io.horizontalsystems.snackbar.SnackbarGravity
 
 object HudHelper {
 
-    fun showInProcessMessage(contenView: View, resId: Int, duration: SnackbarDuration = SnackbarDuration.SHORT, gravity: SnackbarGravity = SnackbarGravity.BOTTOM): CustomSnackbar? {
-        return showHudNotification(contenView, contenView.context.getString(resId), R.color.grey, duration, gravity, true)
+    fun showInProcessMessage(contenView: View, resId: Int, duration: SnackbarDuration = SnackbarDuration.SHORT, gravity: SnackbarGravity = SnackbarGravity.BOTTOM, showProgressBar: Boolean = true): CustomSnackbar? {
+        return showHudNotification(contenView, contenView.context.getString(resId), R.color.grey, duration, gravity, showProgressBar)
     }
 
     fun showSuccessMessage(contenView: View, resId: Int, duration: SnackbarDuration = SnackbarDuration.SHORT, gravity: SnackbarGravity = SnackbarGravity.BOTTOM): CustomSnackbar? {
