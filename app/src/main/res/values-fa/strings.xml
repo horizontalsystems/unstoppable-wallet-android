@@ -596,6 +596,8 @@
     <string name="Hud_Text_Done">انجام شد</string>
     <string name="Hud_Text_EmailAddressCopied">آدرس ایمیل کپی شد</string>
     <string name="Hud_Added_To_Watchlist">به فهرست تماشا افزوده شد</string>
+    <string name="Hud_Added_To_Wallet">Added To Wallet</string>
+    <string name="Hud_Already_In_Wallet">Already added to wallet</string>
     <string name="Hud_Removed_from_Watchlist">از فهرست تماشا برداشته شد</string>
     <string name="Hud_UnknownError">s%</string>
     <!--Manage Coins-->
@@ -790,6 +792,8 @@
     <string name="CoinPage_MarketCap_Trillion">T</string>
     <string name="CoinPage_Volume">Vol</string>
     <string name="CoinPage_NoData">No Data</string>
+    <string name="CoinPage_AddToWallet">Add To Wallet</string>
+    <string name="CoinPage_InWallet">In Wallet</string>
     <string name="CoinPage_Favorite">Favorite</string>
     <string name="CoinPage_Unfavorite">Unfavorite</string>
     <string name="CoinPage_Performance_Week">1Week</string>
