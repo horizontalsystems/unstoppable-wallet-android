@@ -32,9 +32,9 @@ fun <T : WithTranslatableTitle> AlertGroup(
                 .clip(RoundedCornerShape(16.dp))
         ) {
             AlertHeader(title)
-            select.options.forEachIndexed { index, option ->
+            select.options.forEach { option ->
                 AlertItem(
-                    onClick = { onSelect.invoke(select.options[index]) }
+                    onClick = { onSelect.invoke(option) }
                 ) {
                     Text(
                         option.title.getString(),
