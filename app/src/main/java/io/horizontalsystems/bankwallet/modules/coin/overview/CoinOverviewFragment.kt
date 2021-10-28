@@ -58,6 +58,9 @@ class CoinOverviewFragment : BaseFragment() {
                             TextHelper.copyText(it.rawValue)
                             HudHelper.showSuccessMessage(requireView(), R.string.Hud_Text_Copied)
                         },
+                        {
+                            LinkHelper.openLinkInAppBrowser(requireContext(), it.explorerUrl)
+                        },
                         aboutText,
                         links,
                         {
