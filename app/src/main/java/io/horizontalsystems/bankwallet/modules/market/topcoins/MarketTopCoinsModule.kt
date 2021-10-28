@@ -42,3 +42,8 @@ object MarketTopCoinsModule {
     )
 
 }
+
+sealed class SelectorDialogState() {
+    object Closed : SelectorDialogState()
+    class Opened(val select: Select<SortingField>) : SelectorDialogState()
+}

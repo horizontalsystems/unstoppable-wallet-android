@@ -21,7 +21,10 @@ import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.imageUrl
-import io.horizontalsystems.bankwallet.modules.market.*
+import io.horizontalsystems.bankwallet.modules.market.ImageSource
+import io.horizontalsystems.bankwallet.modules.market.MarketDataValue
+import io.horizontalsystems.bankwallet.modules.market.MarketField
+import io.horizontalsystems.bankwallet.modules.market.TopMarket
 import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.Select
@@ -237,13 +240,12 @@ fun SortMenu(titleRes: Int, onClick: () -> Unit) {
 
 @Composable
 fun HeaderWithSorting(
-    sortingFieldSelect: Select<SortingField>,
-    onSelectSortingField: (SortingField) -> Unit,
+    sortingTitleRes: Int,
     topMarketSelect: Select<TopMarket>?,
     onSelectTopMarket: ((TopMarket) -> Unit)?,
     marketFieldSelect: Select<MarketField>,
     onSelectMarketField: (MarketField) -> Unit,
-    onSortMenuClick: (select: Select<SortingField>, onSelect: ((SortingField) -> Unit)) -> Unit,
+    onSortMenuClick: () -> Unit,
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
         Divider(thickness = 1.dp, color = ComposeAppTheme.colors.steel10)
@@ -255,8 +257,8 @@ fun HeaderWithSorting(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Box(modifier = Modifier.weight(1f)) {
-                SortMenu(sortingFieldSelect.selected.titleResId) {
-                    onSortMenuClick(sortingFieldSelect, onSelectSortingField)
+                SortMenu(sortingTitleRes) {
+                    onSortMenuClick()
                 }
             }
             topMarketSelect?.let {

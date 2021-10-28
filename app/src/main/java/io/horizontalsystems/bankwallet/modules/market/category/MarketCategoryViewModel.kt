@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.market.*
+import io.horizontalsystems.bankwallet.modules.market.topcoins.SelectorDialogState
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.delay
@@ -29,6 +30,7 @@ class MarketCategoryViewModel(
     val loadingLiveData = MutableLiveData<Boolean>()
     val errorLiveData = MutableLiveData<String?>()
     val isRefreshingLiveData = MutableLiveData<Boolean>()
+    val selectorDialogStateLiveData = MutableLiveData<SelectorDialogState>()
 
     init {
         syncHeader()
@@ -102,6 +104,7 @@ class MarketCategoryViewModel(
 
     fun onSelectSortingField(sortingField: SortingField) {
         service.setSortingField(sortingField)
+        selectorDialogStateLiveData.postValue(SelectorDialogState.Closed)
     }
 
     fun onSelectMarketField(marketField: MarketField) {
@@ -109,6 +112,16 @@ class MarketCategoryViewModel(
 
         syncMarketViewItems()
         syncMenu()
+    }
+
+    fun onSelectorDialogDismiss() {
+        selectorDialogStateLiveData.postValue(SelectorDialogState.Closed)
+    }
+
+    fun showSelectorMenu() {
+        selectorDialogStateLiveData.postValue(
+            SelectorDialogState.Opened(Select(service.sortingField, service.sortingFields))
+        )
     }
 
     fun refresh(){
