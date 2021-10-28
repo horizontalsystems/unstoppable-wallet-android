@@ -27,11 +27,15 @@ fun ContractsPreview() {
             ContractInfo.Bep20("0x34290098asd8asdasd98asd8asdasd9098asd098as9"),
             ContractInfo.Bep2("BNB"),
         )
-        Contracts(contracts = contracts, {})
+        Contracts(contracts = contracts, {}, {})
     }
 }
 @Composable
-fun Contracts(contracts: List<ContractInfo>, onClickCopy: (ContractInfo) -> Unit) {
+fun Contracts(
+    contracts: List<ContractInfo>,
+    onClickCopy: (ContractInfo) -> Unit,
+    onClickExplorer: (ContractInfo) -> Unit,
+) {
     Column {
         CellSingleLineClear(borderTop = true) {
             Text(
@@ -68,8 +72,10 @@ fun Contracts(contracts: List<ContractInfo>, onClickCopy: (ContractInfo) -> Unit
                 )
                 ButtonSecondaryCircle(
                     modifier = Modifier.padding(start = 8.dp),
-                    icon = R.drawable.ic_add_to_wallet2_20,
-                    onClick = { }
+                    icon = R.drawable.ic_globe_20,
+                    onClick = {
+                        onClickExplorer.invoke(contractInfo)
+                    }
                 )
             }
         }

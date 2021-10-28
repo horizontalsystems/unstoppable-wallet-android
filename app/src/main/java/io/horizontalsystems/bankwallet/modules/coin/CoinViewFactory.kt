@@ -62,11 +62,10 @@ sealed class RoiViewItem {
         override var listPosition: ListPosition? = null
     ) : RoiViewItem()
 }
-
-sealed class ContractInfo(val shortened: String, val rawValue: String, @DrawableRes val logoResId: Int) {
-    class Erc20(address: String) : ContractInfo(shortenAddress(address), address, R.drawable.logo_ethereum_24)
-    class Bep20(address: String) : ContractInfo(shortenAddress(address), address, R.drawable.logo_binancesmartchain_24)
-    class Bep2(val symbol: String) : ContractInfo(symbol, symbol, R.drawable.logo_bep2_24)
+sealed class ContractInfo(val shortened: String, val rawValue: String, @DrawableRes val logoResId: Int, val explorerUrl: String) {
+    class Erc20(address: String) : ContractInfo(shortenAddress(address), address, R.drawable.logo_ethereum_24, "https://etherscan.io/token/$address")
+    class Bep20(address: String) : ContractInfo(shortenAddress(address), address, R.drawable.logo_binancesmartchain_24, "https://bscscan.com/token/$address")
+    class Bep2(symbol: String) : ContractInfo(symbol, symbol, R.drawable.logo_bep2_24, "https://explorer.binance.org/asset/$symbol")
 
     companion object {
         private fun shortenAddress(address: String) = if (address.length >= 20) {
