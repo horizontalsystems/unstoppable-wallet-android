@@ -18,6 +18,7 @@ class CoinViewModel(
 
     val titleLiveData = MutableLiveData(fullCoin.coin.code)
     val isFavoriteLiveData = LiveDataReactiveStreams.fromPublisher(service.isFavorite.toFlowable(BackpressureStrategy.LATEST))
+    val coinStateLiveData = LiveDataReactiveStreams.fromPublisher(service.coinState.toFlowable(BackpressureStrategy.LATEST))
 
     override fun onCleared() {
         clearables.forEach(Clearable::clear)
