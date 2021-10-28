@@ -36,7 +36,6 @@ import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
 import io.horizontalsystems.bankwallet.modules.market.topcoins.SelectorDialogState
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.*
-import io.horizontalsystems.bankwallet.ui.extensions.SelectorItem
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.marketkit.models.CoinCategory
 
@@ -176,13 +175,10 @@ fun CategoryScreen(
         //Dialog
         when (val option = selectorDialogState) {
             is SelectorDialogState.Opened -> {
-                val items = option.select.options.map {
-                    SelectorItem(stringResource(it.titleResId), option.select.selected == it)
-                }
-                SelectorDialogCompose(
+                AlertGroup(
                     R.string.Market_Sort_PopupTitle,
-                    items,
-                    { viewModel.onSelectSortingField(option.select.options[it]) },
+                    option.select,
+                    { selected -> viewModel.onSelectSortingField(selected) },
                     { viewModel.onSelectorDialogDismiss() }
                 )
             }
