@@ -32,9 +32,7 @@ import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.market.*
 import io.horizontalsystems.bankwallet.modules.market.MarketModule.ViewItemState
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.components.*
-import io.horizontalsystems.bankwallet.ui.extensions.SelectorDialog
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorItem
 import io.horizontalsystems.core.findNavController
 
@@ -69,30 +67,11 @@ class MarketTopCoinsFragment : BaseFragment() {
                     TopCoinsScreen(
                         viewModel,
                         { findNavController().popBackStack() },
-                        { sortingFieldSelect, onSelectSortingField ->
-                            onSortingClick(sortingFieldSelect, onSelectSortingField)
-                        },
                         { coinUid -> onCoinClick(coinUid) }
                     )
                 }
             }
         }
-    }
-
-    private fun onSortingClick(
-        sortingFieldSelect: Select<SortingField>,
-        onSelectSortingField: (SortingField) -> Unit
-    ) {
-        val items = sortingFieldSelect.options.map {
-            SelectorItem(getString(it.titleResId), it == sortingFieldSelect.selected)
-        }
-
-        SelectorDialog
-            .newInstance(items, getString(R.string.Market_Sort_PopupTitle)) { position ->
-                val selectedSortingField = sortingFieldSelect.options[position]
-                onSelectSortingField(selectedSortingField)
-            }
-            .show(childFragmentManager, "sorting_field_selector")
     }
 
     private fun onCoinClick(coinUid: String) {
@@ -126,7 +105,6 @@ class MarketTopCoinsFragment : BaseFragment() {
 fun TopCoinsScreen(
     viewModel: MarketTopCoinsViewModel,
     onCloseButtonClick: () -> Unit,
-    onSortMenuClick: (select: Select<SortingField>, onSelect: ((SortingField) -> Unit)) -> Unit,
     onCoinClick: (String) -> Unit,
 ) {
     val viewItemState by viewModel.viewStateLiveData.observeAsState()
@@ -134,6 +112,7 @@ fun TopCoinsScreen(
     val menu by viewModel.menuLiveData.observeAsState()
     val loading by viewModel.loadingLiveData.observeAsState()
     val isRefreshing by viewModel.isRefreshingLiveData.observeAsState()
+    val selectorDialogState by viewModel.selectorDialogStateLiveData.observeAsState()
 
     val interactionSource = remember { MutableInteractionSource() }
 
@@ -145,10 +124,12 @@ fun TopCoinsScreen(
             }
             menu?.let { menu ->
                 HeaderWithSorting(
-                    menu.sortingFieldSelect, viewModel::onSelectSortingField,
-                    menu.topMarketSelect, viewModel::onSelectTopMarket,
-                    menu.marketFieldSelect, viewModel::onSelectMarketField,
-                    onSortMenuClick
+                    menu.sortingFieldSelect.selected.titleResId,
+                    menu.topMarketSelect,
+                    viewModel::onSelectTopMarket,
+                    menu.marketFieldSelect,
+                    viewModel::onSelectMarketField,
+                    viewModel::showSelectorMenu
                 )
             }
 
@@ -180,6 +161,20 @@ fun TopCoinsScreen(
                         CoinList(state.items, onCoinClick)
                     }
                 }
+            }
+        }
+        //Dialog
+        when (val option = selectorDialogState) {
+            is SelectorDialogState.Opened -> {
+                val items = option.select.options.map {
+                    SelectorItem(stringResource(it.titleResId), option.select.selected == it)
+                }
+                SelectorDialogCompose(
+                    R.string.Market_Sort_PopupTitle,
+                    items,
+                    { viewModel.onSelectSortingField(option.select.options[it]) },
+                    { viewModel.onSelectorDialogDismiss() }
+                )
             }
         }
     }

@@ -33,11 +33,9 @@ import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.market.MarketDataValue
 import io.horizontalsystems.bankwallet.modules.market.MarketModule.ViewItemState
 import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
-import io.horizontalsystems.bankwallet.modules.market.SortingField
+import io.horizontalsystems.bankwallet.modules.market.topcoins.SelectorDialogState
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.components.*
-import io.horizontalsystems.bankwallet.ui.extensions.SelectorDialog
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorItem
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.marketkit.models.CoinCategory
@@ -81,30 +79,11 @@ class MarketCategoryFragment : BaseFragment() {
                     CategoryScreen(
                         viewModel,
                         { findNavController().popBackStack() },
-                        { sortingFieldSelect, onSelectSortingField ->
-                            onSortingClick(sortingFieldSelect, onSelectSortingField)
-                        },
                         { coinUid -> onCoinClick(coinUid) }
                     )
                 }
             }
         }
-    }
-
-    private fun onSortingClick(
-        sortingFieldSelect: Select<SortingField>,
-        onSelectSortingField: (SortingField) -> Unit
-    ) {
-        val items = sortingFieldSelect.options.map {
-            SelectorItem(getString(it.titleResId), it == sortingFieldSelect.selected)
-        }
-
-        SelectorDialog
-            .newInstance(items, getString(R.string.Market_Sort_PopupTitle)) { position ->
-                val selectedSortingField = sortingFieldSelect.options[position]
-                onSelectSortingField(selectedSortingField)
-            }
-            .show(childFragmentManager, "sorting_field_selector")
     }
 
     private fun onCoinClick(coinUid: String) {
@@ -136,7 +115,6 @@ class MarketCategoryFragment : BaseFragment() {
 fun CategoryScreen(
     viewModel: MarketCategoryViewModel,
     onCloseButtonClick: () -> Unit,
-    onSortMenuClick: (select: Select<SortingField>, onSelect: ((SortingField) -> Unit)) -> Unit,
     onCoinClick: (String) -> Unit,
 ) {
     val viewItemState by viewModel.viewStateLiveData.observeAsState()
@@ -144,6 +122,7 @@ fun CategoryScreen(
     val menu by viewModel.menuLiveData.observeAsState()
     val loading by viewModel.loadingLiveData.observeAsState()
     val isRefreshing by viewModel.isRefreshingLiveData.observeAsState()
+    val selectorDialogState by viewModel.selectorDialogStateLiveData.observeAsState()
 
     val interactionSource = remember { MutableInteractionSource() }
 
@@ -155,10 +134,12 @@ fun CategoryScreen(
             }
             menu?.let { menu ->
                 HeaderWithSorting(
-                    menu.sortingFieldSelect, viewModel::onSelectSortingField,
-                    null, null,
-                    menu.marketFieldSelect, viewModel::onSelectMarketField,
-                    onSortMenuClick
+                    menu.sortingFieldSelect.selected.titleResId,
+                    null,
+                    null,
+                    menu.marketFieldSelect,
+                    viewModel::onSelectMarketField,
+                    viewModel::showSelectorMenu
                 )
             }
 
@@ -190,6 +171,20 @@ fun CategoryScreen(
                         CoinList(state.items, onCoinClick)
                     }
                 }
+            }
+        }
+        //Dialog
+        when (val option = selectorDialogState) {
+            is SelectorDialogState.Opened -> {
+                val items = option.select.options.map {
+                    SelectorItem(stringResource(it.titleResId), option.select.selected == it)
+                }
+                SelectorDialogCompose(
+                    R.string.Market_Sort_PopupTitle,
+                    items,
+                    { viewModel.onSelectSortingField(option.select.options[it]) },
+                    { viewModel.onSelectorDialogDismiss() }
+                )
             }
         }
     }

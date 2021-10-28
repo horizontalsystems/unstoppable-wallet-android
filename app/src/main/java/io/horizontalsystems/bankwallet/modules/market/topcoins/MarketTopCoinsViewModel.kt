@@ -29,6 +29,7 @@ class MarketTopCoinsViewModel(
     val loadingLiveData = MutableLiveData<Boolean>()
     val errorLiveData = MutableLiveData<String?>()
     val isRefreshingLiveData = MutableLiveData<Boolean>()
+    val selectorDialogStateLiveData = MutableLiveData<SelectorDialogState>()
 
     init {
         syncHeader()
@@ -103,6 +104,7 @@ class MarketTopCoinsViewModel(
 
     fun onSelectSortingField(sortingField: SortingField) {
         service.setSortingField(sortingField)
+        selectorDialogStateLiveData.postValue(SelectorDialogState.Closed)
     }
 
     fun onSelectTopMarket(topMarket: TopMarket) {
@@ -116,7 +118,7 @@ class MarketTopCoinsViewModel(
         syncMenu()
     }
 
-    fun refresh(){
+    fun refresh() {
         refreshWithMinLoadingSpinnerPeriod()
     }
 
@@ -127,5 +129,15 @@ class MarketTopCoinsViewModel(
     override fun onCleared() {
         service.stop()
         disposables.clear()
+    }
+
+    fun onSelectorDialogDismiss() {
+        selectorDialogStateLiveData.postValue(SelectorDialogState.Closed)
+    }
+
+    fun showSelectorMenu() {
+        selectorDialogStateLiveData.postValue(
+            SelectorDialogState.Opened(Select(service.sortingField, service.sortingFields))
+        )
     }
 }
