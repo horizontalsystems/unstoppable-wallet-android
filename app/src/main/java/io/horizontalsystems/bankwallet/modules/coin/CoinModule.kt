@@ -12,7 +12,7 @@ object CoinModule {
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            val service = CoinService(coinUid, App.coinManager, App.marketFavoritesManager)
+            val service = CoinService(coinUid, App.coinManager, App.marketFavoritesManager, App.walletManager, App.accountManager)
             return CoinViewModel(service, listOf(service)) as T
         }
 
@@ -24,4 +24,8 @@ object CoinModule {
         Details(R.string.Coin_Tab_Details),
         Tweets(R.string.Coin_Tab_Tweets);
     }
+}
+
+enum class CoinState {
+    InWallet, NotInWallet, NoActiveAccount, Unsupported
 }

@@ -1,8 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.coin
 
-import io.horizontalsystems.bankwallet.core.Clearable
-import io.horizontalsystems.bankwallet.core.ICoinManager
+import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.managers.MarketFavoritesManager
+import io.horizontalsystems.bankwallet.entities.isSupported
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
@@ -11,6 +11,8 @@ class CoinService(
     private val coinUid: String,
     private val coinManager: ICoinManager,
     private val marketFavoritesManager: MarketFavoritesManager,
+    private val walletManager: IWalletManager,
+    private val accountManager: IAccountManager,
 ) : Clearable {
     val fullCoin = coinManager.getFullCoin(coinUid)!!
 
@@ -18,11 +20,32 @@ class CoinService(
     val isFavorite: Observable<Boolean>
         get() = _isFavorite
 
+    private val _coinState = BehaviorSubject.create<CoinState>()
+    val coinState: Observable<CoinState>
+        get() = _coinState
+
     private val disposables = CompositeDisposable()
 
     init {
-        _isFavorite.onNext(marketFavoritesManager.isCoinInFavorites(fullCoin.coin.uid))
+        emitCoinState()
+        emitIsFavorite()
 
+        walletManager.activeWalletsUpdatedObservable
+            .subscribeIO {
+                emitCoinState()
+            }
+            .let {
+                disposables.add(it)
+            }
+    }
+
+    private fun emitCoinState() {
+        _coinState.onNext(when {
+            accountManager.activeAccount == null -> CoinState.NoActiveAccount
+            fullCoin.platforms.none { it.coinType.isSupported } -> CoinState.Unsupported
+            walletManager.activeWallets.any { it.coin.uid == coinUid } -> CoinState.InWallet
+            else -> CoinState.NotInWallet
+        })
     }
 
     override fun clear() {
@@ -32,12 +55,16 @@ class CoinService(
     fun favorite() {
         marketFavoritesManager.add(fullCoin.coin.uid)
 
-        _isFavorite.onNext(marketFavoritesManager.isCoinInFavorites(fullCoin.coin.uid))
+        emitIsFavorite()
     }
 
     fun unfavorite() {
         marketFavoritesManager.remove(fullCoin.coin.uid)
 
+        emitIsFavorite()
+    }
+
+    private fun emitIsFavorite() {
         _isFavorite.onNext(marketFavoritesManager.isCoinInFavorites(fullCoin.coin.uid))
     }
 }

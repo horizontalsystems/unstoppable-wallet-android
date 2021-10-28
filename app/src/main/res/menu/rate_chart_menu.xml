@@ -3,6 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/menuAddToWallet"
+        android:icon="@drawable/ic_add_to_wallet_2_24"
+        android:title="@string/CoinPage_AddToWallet"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/menuInWallet"
+        android:icon="@drawable/ic_in_wallet_dark_24"
+        android:title="@string/CoinPage_InWallet"
+        app:showAsAction="always" />
+
+    <item
         android:id="@+id/menuFavorite"
         android:icon="@drawable/ic_rate_24"
         android:iconTint="@color/grey"
