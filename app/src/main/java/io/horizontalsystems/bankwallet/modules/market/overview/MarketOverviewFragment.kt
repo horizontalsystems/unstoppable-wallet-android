@@ -10,6 +10,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -80,7 +81,17 @@ class MarketOverviewFragment : BaseFragment() {
         val loading by viewModel.loadingLiveData.observeAsState()
         val isRefreshing by viewModel.isRefreshingLiveData.observeAsState()
         val viewItemState by viewModel.viewItemStateLiveData.observeAsState()
-        val scrollState = rememberScrollState()
+        val scrollState = rememberScrollState(viewModel.scrollStateValue)
+
+        //get scroll state after scroll has finished
+        // https://stackoverflow.com/a/69129249/2098878
+        if (scrollState.isScrollInProgress) {
+            DisposableEffect(Unit) {
+                onDispose {
+                    viewModel.updateScrollStateValue(scrollState.value)
+                }
+            }
+        }
 
         SwipeRefresh(
             state = rememberSwipeRefreshState(isRefreshing ?: false || loading ?: false),

@@ -36,6 +36,8 @@ class MarketOverviewViewModel(
     val loadingLiveData = MutableLiveData<Boolean>()
     val viewItemStateLiveData = MutableLiveData<ViewItemState>()
     val isRefreshingLiveData = MutableLiveData<Boolean>()
+    var scrollStateValue: Int = 0
+        private set
 
     init {
         Observable.combineLatest(
@@ -217,5 +219,9 @@ class MarketOverviewViewModel(
     override fun onCleared() {
         service.stop()
         disposables.clear()
+    }
+
+    fun updateScrollStateValue(value: Int) {
+        scrollStateValue = value
     }
 }
