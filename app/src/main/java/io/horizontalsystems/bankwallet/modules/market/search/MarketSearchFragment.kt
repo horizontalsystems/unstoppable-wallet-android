@@ -99,7 +99,7 @@ class MarketSearchFragment : BaseFragment() {
                                 findNavController().navigate(
                                     R.id.marketCategoryFragment,
                                     args,
-                                    navOptions()
+                                    navOptionsFromBottom()
                                 )
                             }
                         }
