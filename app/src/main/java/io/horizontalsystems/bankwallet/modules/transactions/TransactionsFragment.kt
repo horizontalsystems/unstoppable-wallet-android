@@ -122,7 +122,13 @@ class TransactionsFragment : BaseFragment(R.layout.fragment_transactions) {
             filterCoins?.let {
                 val tabItems = it.mapNotNull {
                     it.item.platformCoin?.let { platformCoin ->
-                        TabItem(platformCoin.code, it.selected, it.item, ImageSource.Remote(platformCoin.coin.iconUrl, platformCoin.coinType.iconPlaceholder))
+                        TabItem(
+                            platformCoin.code,
+                            it.selected,
+                            it.item,
+                            ImageSource.Remote(platformCoin.coin.iconUrl, platformCoin.coinType.iconPlaceholder),
+                            it.item.badge
+                        )
                     }
                 }
 

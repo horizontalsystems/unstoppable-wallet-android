@@ -56,10 +56,7 @@ import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModu
 import io.horizontalsystems.bankwallet.modules.receive.ReceiveFragment
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
-import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.RateColor
-import io.horizontalsystems.bankwallet.ui.compose.components.RateText
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorDialog
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorItem
@@ -262,7 +259,7 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
                 style = ComposeAppTheme.typography.headline2,
                 maxLines = 1,
             )
-            if (!viewItem.coinTypeLabel.isNullOrBlank()) {
+            if (!viewItem.badge.isNullOrBlank()) {
                 Box(
                     modifier = Modifier.padding(start = 8.dp, end = 16.dp)
                         .clip(RoundedCornerShape(4.dp))
@@ -270,7 +267,7 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
                 ) {
                     Text(
                         modifier = Modifier.padding(start = 4.dp, end = 4.dp, bottom = 1.dp),
-                        text = viewItem.coinTypeLabel,
+                        text = viewItem.badge,
                         color = ComposeAppTheme.colors.bran,
                         style = ComposeAppTheme.typography.microSB,
                         maxLines = 1,
