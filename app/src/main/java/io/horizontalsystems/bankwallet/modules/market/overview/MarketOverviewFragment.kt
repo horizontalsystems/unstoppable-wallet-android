@@ -135,7 +135,7 @@ class MarketOverviewFragment : BaseFragment() {
                                 findNavController().navigate(
                                     R.id.marketTopCoinsFragment,
                                     args,
-                                    navOptions()
+                                    navOptionsFromBottom()
                                 )
                             },
                             onSelectTopMarket = { topMarket, listType ->
