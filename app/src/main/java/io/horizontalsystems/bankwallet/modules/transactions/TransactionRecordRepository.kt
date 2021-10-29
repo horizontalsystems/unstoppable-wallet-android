@@ -54,7 +54,7 @@ class TransactionRecordRepository(
                 TransactionSource.Blockchain.Ethereum,
                 TransactionSource.Blockchain.BinanceSmartChain -> {
                     if (mergedWallets.none { it.source == wallet.source }) {
-                        mergedWallets.add(TransactionWallet(null, wallet.source))
+                        mergedWallets.add(TransactionWallet(null, wallet.source, null))
                     }
                 }
             }

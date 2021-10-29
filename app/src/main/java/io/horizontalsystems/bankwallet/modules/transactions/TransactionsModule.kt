@@ -44,7 +44,8 @@ sealed class TransactionStatus {
 
 data class TransactionWallet(
     val platformCoin: PlatformCoin?,
-    val source: TransactionSource
+    val source: TransactionSource,
+    val badge: String?
 )
 
 data class TransactionSource(

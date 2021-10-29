@@ -45,6 +45,15 @@ data class Wallet(
     val decimal
         get() = platform.decimals
 
+    val badge
+        get() = when (coinType) {
+            CoinType.Bitcoin,
+            CoinType.Litecoin,
+            -> coinSettings.derivation?.value?.uppercase()
+            CoinType.BitcoinCash -> coinSettings.bitcoinCashCoinType?.value?.uppercase()
+            else -> coinType.blockchainType
+        }
+
     val transactionSource get() = TransactionSource(blockchain, account, coinSettings)
 
     constructor(platformCoin: PlatformCoin, account: Account) : this(ConfiguredPlatformCoin(platformCoin), account)

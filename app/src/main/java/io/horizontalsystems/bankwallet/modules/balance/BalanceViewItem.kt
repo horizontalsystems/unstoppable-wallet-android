@@ -9,7 +9,6 @@ import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.Wallet
-import io.horizontalsystems.bankwallet.entities.blockchainType
 import io.horizontalsystems.bankwallet.entities.swappable
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.core.helpers.DateHelper
@@ -38,7 +37,7 @@ data class BalanceViewItem(
     val syncedUntilTextValue: DeemedValue,
     val failedIconVisible: Boolean,
     val coinIconVisible: Boolean,
-    val coinTypeLabel: String?,
+    val badge: String?,
     val swapVisible: Boolean,
     val swapEnabled: Boolean = false,
     val mainNet: Boolean,
@@ -150,19 +149,6 @@ class BalanceViewItemFactory {
         return DeemedValue(text, visible = expanded)
     }
 
-    private fun coinTypeLabel(wallet: Wallet) = when (wallet.coinType) {
-        CoinType.Bitcoin,
-        CoinType.Litecoin -> {
-            wallet.coinSettings.derivation?.value?.uppercase()
-        }
-        CoinType.BitcoinCash -> {
-            wallet.coinSettings.bitcoinCashCoinType?.value?.uppercase()
-        }
-        else -> {
-            wallet.coinType.blockchainType
-        }
-    }
-
     private fun lockedCoinValue(state: AdapterState?, balance: BigDecimal, coinCode: String, hideBalance: Boolean): DeemedValue {
         val visible = balance > BigDecimal.ZERO
         val deemed = state !is AdapterState.Synced
@@ -207,7 +193,7 @@ class BalanceViewItemFactory {
                 syncedUntilTextValue = getSyncedUntilText(state, expanded),
                 failedIconVisible = state is AdapterState.NotSynced,
                 coinIconVisible = state !is AdapterState.NotSynced,
-                coinTypeLabel = coinTypeLabel(wallet),
+                badge = wallet.badge,
                 swapVisible = item.wallet.coinType.swappable,
                 swapEnabled = state is AdapterState.Synced,
                 mainNet = item.mainNet,

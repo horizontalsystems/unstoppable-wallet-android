@@ -14,12 +14,10 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.annotation.ExperimentalCoilApi
-import coil.compose.rememberImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -47,40 +45,47 @@ fun <T> CardTabs(
             tabItems.forEachIndexed { index, tabItem ->
                 val selected = tabIndex == index
                 val lastElement = index == tabItems.lastIndex
+
+                val border = if (selected) {
+                    Modifier.border(1.dp, ComposeAppTheme.colors.jacob, RoundedCornerShape(12.dp))
+                } else {
+                    Modifier
+                }
+
                 Tab(
+                    modifier = Modifier
+                        .padding(end = if (lastElement) 0.dp else 12.dp)
+                        .then(border)
+                        .width(98.dp)
+                        .fillMaxHeight()
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(ComposeAppTheme.colors.lawrence)
+                        .padding(12.dp),
                     selected = selected,
                     onClick = {
                         onClick(if (selected) null else tabItem.item)
                     },
-                    modifier = Modifier.padding(end = if (lastElement) 0.dp else 12.dp)
                 ) {
-                    val modifier = if (selected) {
-                        Modifier.border(1.dp, ComposeAppTheme.colors.jacob, RoundedCornerShape(12.dp))
-                    } else {
-                        Modifier
-                    }
-
-                    Column(
-                        modifier = modifier
-                            .width(98.dp)
-                            .fillMaxHeight()
-                            .clip(RoundedCornerShape(12.dp))
-                            .background(ComposeAppTheme.colors.lawrence)
-                            .padding(12.dp),
-                        verticalArrangement = Arrangement.SpaceBetween
-                    ) {
+                    Row(modifier = Modifier.fillMaxWidth()) {
                         tabItem.icon?.let { icon ->
                             Image(
+                                modifier = Modifier.size(24.dp),
                                 painter = icon.painter(),
                                 contentDescription = ""
                             )
                         }
-                        Text(
-                            text = tabItem.title,
-                            style = ComposeAppTheme.typography.subhead1,
-                            color = ComposeAppTheme.colors.oz
-                        )
+                        Spacer(modifier = Modifier.weight(1f))
+                        tabItem.label?.let {
+                            Badge(text = it)
+                        }
                     }
+                    Spacer(modifier = Modifier.weight(1f))
+                    Text(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = tabItem.title,
+                        style = ComposeAppTheme.typography.subhead1,
+                        color = ComposeAppTheme.colors.oz
+                    )
                 }
             }
         }
@@ -100,7 +105,7 @@ fun PreviewCardTabs() {
     )
 
     val tabItems = map.toList().mapIndexed { index, (title, icon) ->
-        TabItem(title, selectedIndex == index, title, icon)
+        TabItem(title, selectedIndex == index, title, icon, "ERC20")
     }
 
     CardTabs(
