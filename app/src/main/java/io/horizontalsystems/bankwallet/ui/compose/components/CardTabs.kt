@@ -59,33 +59,34 @@ fun <T> CardTabs(
                         .width(98.dp)
                         .fillMaxHeight()
                         .clip(RoundedCornerShape(12.dp))
-                        .background(ComposeAppTheme.colors.lawrence)
-                        .padding(12.dp),
+                        .background(ComposeAppTheme.colors.lawrence),
                     selected = selected,
                     onClick = {
                         onClick(if (selected) null else tabItem.item)
                     },
                 ) {
-                    Row(modifier = Modifier.fillMaxWidth()) {
-                        tabItem.icon?.let { icon ->
-                            Image(
-                                modifier = Modifier.size(24.dp),
-                                painter = icon.painter(),
-                                contentDescription = ""
-                            )
+                    Column(modifier = Modifier.padding(12.dp)) {
+                        Row(modifier = Modifier.fillMaxWidth()) {
+                            tabItem.icon?.let { icon ->
+                                Image(
+                                    modifier = Modifier.size(24.dp),
+                                    painter = icon.painter(),
+                                    contentDescription = ""
+                                )
+                            }
+                            Spacer(modifier = Modifier.weight(1f))
+                            tabItem.label?.let {
+                                Badge(text = it)
+                            }
                         }
                         Spacer(modifier = Modifier.weight(1f))
-                        tabItem.label?.let {
-                            Badge(text = it)
-                        }
+                        Text(
+                            modifier = Modifier.fillMaxWidth(),
+                            text = tabItem.title,
+                            style = ComposeAppTheme.typography.subhead1,
+                            color = ComposeAppTheme.colors.oz
+                        )
                     }
-                    Spacer(modifier = Modifier.weight(1f))
-                    Text(
-                        modifier = Modifier.fillMaxWidth(),
-                        text = tabItem.title,
-                        style = ComposeAppTheme.typography.subhead1,
-                        color = ComposeAppTheme.colors.oz
-                    )
                 }
             }
         }
