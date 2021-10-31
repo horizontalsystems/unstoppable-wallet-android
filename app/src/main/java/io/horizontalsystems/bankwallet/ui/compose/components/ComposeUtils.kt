@@ -7,12 +7,20 @@ import androidx.compose.ui.graphics.ColorFilter
 import coil.compose.rememberImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.modules.market.tvl.TvlModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import java.math.BigDecimal
 
 @Composable
 fun RateColor(diff: BigDecimal?) =
     if (diff ?: BigDecimal.ZERO >= BigDecimal.ZERO) ComposeAppTheme.colors.remus else ComposeAppTheme.colors.lucian
+
+@Composable
+fun diffColor(diff: TvlModule.Diff) = when (diff) {
+    is TvlModule.Diff.Negative -> ComposeAppTheme.colors.lucian
+    is TvlModule.Diff.NoDiff,
+    is TvlModule.Diff.Positive -> ComposeAppTheme.colors.remus
+}
 
 @Composable
 fun RateText(diff: BigDecimal?): String {

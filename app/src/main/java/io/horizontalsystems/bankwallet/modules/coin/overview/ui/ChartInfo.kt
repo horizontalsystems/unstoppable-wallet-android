@@ -12,6 +12,7 @@ import io.horizontalsystems.core.entities.Currency
 fun ChartInfo(
     chartInfo: CoinChartAdapter.ViewItemWrapper,
     currency: Currency,
+    chartViewType: CoinChartAdapter.ChartViewType,
     listener: CoinChartAdapter.Listener
 ) {
     AndroidView(
@@ -19,7 +20,7 @@ fun ChartInfo(
         factory = { context ->
             CoinChartView(context).apply {
                 setCurrency(currency)
-                setChartViewType(CoinChartAdapter.ChartViewType.CoinChart)
+                setChartViewType(chartViewType)
                 setListener(listener)
                 bindNew(chartInfo)
             }

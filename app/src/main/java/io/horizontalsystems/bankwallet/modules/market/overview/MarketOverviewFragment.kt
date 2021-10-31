@@ -71,12 +71,16 @@ class MarketOverviewFragment : BaseFragment() {
     }
 
     private fun openMetricsPage(metricsType: MetricsType) {
-        val arguments = MetricsPageFragment.prepareParams(metricsType)
-        findNavController().navigate(
-            R.id.mainFragment_to_metricPageFragment,
-            arguments,
-            navOptions()
-        )
+        if (metricsType == MetricsType.TvlInDefi) {
+            findNavController().navigate(R.id.tvlFragment)
+        } else {
+            val arguments = MetricsPageFragment.prepareParams(metricsType)
+            findNavController().navigate(
+                R.id.mainFragment_to_metricPageFragment,
+                arguments,
+                navOptions()
+            )
+        }
     }
 
     @Composable

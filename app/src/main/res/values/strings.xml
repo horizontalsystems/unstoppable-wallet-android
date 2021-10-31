@@ -40,6 +40,8 @@
 
     <string name="FooterText" translatable="false">© Horizontal Systems 2021</string>
 
+    <string name="PercentTitle">Percent</string>
+
     <!--Intro-->
 
     <string name="Intro_Wallet_Screen1Description">Be Unstoppable</string>
@@ -187,6 +189,8 @@
     <string name="MarketGlobalMetrics_VolumeDescription">The historical change in daily aggregate trading market volume for all cryptocurrencies.</string>
     <string name="MarketGlobalMetrics_DefiCapDescription">The historical change in cumulative market value of tokens in Decentralized Finance sector.</string>
     <string name="MarketGlobalMetrics_TvlInDefiDescription">The historical change in cumulative value of all cryptocurrency managed by decentralized protocols.</string>
+    <string name="MarketGlobalMetrics_ChainSelectorTitle">Chains</string>
+    <string name="MarketGlobalMetrics_ChainSelectorAll">All</string>
 
     <!--Market Search-->
     <string name="EmptyResults">No results found</string>

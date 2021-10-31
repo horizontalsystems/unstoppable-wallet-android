@@ -17,6 +17,7 @@ import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.market.advancedsearch.TimePeriod
+import io.horizontalsystems.bankwallet.modules.market.tvl.TvlModule
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.WithTranslatableTitle
 import io.horizontalsystems.core.entities.Currency
@@ -153,6 +154,7 @@ sealed class MarketDataValue {
     class MarketCap(val value: String) : MarketDataValue()
     class Volume(val value: String) : MarketDataValue()
     class Diff(val value: BigDecimal?) : MarketDataValue()
+    class DiffNew(val value: TvlModule.Diff) : MarketDataValue()
 }
 
 @Immutable
@@ -218,7 +220,9 @@ data class MarketViewItem(
 
                     MarketDataValue.Volume(volumeFormatted)
                 }
-                MarketField.PriceDiff -> MarketDataValue.Diff(marketItem.diff)
+                MarketField.PriceDiff -> {
+                    MarketDataValue.Diff(marketItem.diff)
+                }
             }
             return MarketViewItem(
                 marketItem.fullCoin,

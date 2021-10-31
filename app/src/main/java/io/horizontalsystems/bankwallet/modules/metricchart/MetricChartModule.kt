@@ -63,10 +63,10 @@ sealed class MetricChartType: Parcelable {
 }
 
 data class SelectedPoint(val value: String, val date: String)
-data class LastValueWithDiff(val value: String, val diff: BigDecimal?)
+data class LastValueWithDiff(val value: String, val diff: BigDecimal)
 data class ChartViewItem(
-        val lastValueWithDiff: LastValueWithDiff?,
-        val chartData: ChartData?,
+        val lastValueWithDiff: LastValueWithDiff,
+        val chartData: ChartData,
         val maxValue: String?,
         val minValue: String?,
         val chartType: ChartView.ChartType

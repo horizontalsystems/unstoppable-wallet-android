@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.ui.compose.components
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon
@@ -49,6 +50,7 @@ fun AppBar(
     menuItems: List<MenuItem>
 ) {
     TopAppBar(
+        modifier = Modifier.height(56.dp),
         title = {
             Text(
                 text = title.getString(),
@@ -59,8 +61,8 @@ fun AppBar(
             )
         },
         backgroundColor = ComposeAppTheme.colors.tyler,
-        navigationIcon = {
-            navigationIcon?.let { navigationIcon ->
+        navigationIcon = navigationIcon?.let {
+            {
                 Box(
                     modifier = Modifier
                         .padding(horizontal = 16.dp)
