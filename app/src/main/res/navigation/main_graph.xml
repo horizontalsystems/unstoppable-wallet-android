@@ -483,6 +483,9 @@
         android:id="@+id/evmNetworkFragment"
         android:name="io.horizontalsystems.bankwallet.modules.evmnetwork.EvmNetworkFragment"
         android:label="EvmNetworkFragment" />
+    <fragment
+        android:id="@+id/tvlFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.market.tvl.TvlFragment"/>
 
     <!--  Dialogs/BottomSheets  -->
 <!--    <dialog-->

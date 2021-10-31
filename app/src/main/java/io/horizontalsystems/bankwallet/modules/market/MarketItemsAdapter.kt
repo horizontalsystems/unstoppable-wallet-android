@@ -127,7 +127,7 @@ class ViewHolderMarketItem(override val containerView: View, private val listene
             marketFieldCaption.text = when (marketField) {
                 is MarketDataValue.MarketCap -> "MCap"
                 is MarketDataValue.Volume -> "Vol"
-                is MarketDataValue.Diff -> ""
+                is MarketDataValue.Diff, is MarketDataValue.DiffNew -> ""
             }
 
             when (marketField) {

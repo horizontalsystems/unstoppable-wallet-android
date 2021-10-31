@@ -84,8 +84,8 @@ class CoinChartAdapter(
 
     data class ViewItemWrapper(
         val data: ChartInfoData?,
-        val showSpinner: Boolean,
-        val showError: Boolean,
+        val showSpinner: Boolean = false,
+        val showError: Boolean = false,
     )
 
     enum class ChartViewType {

@@ -54,7 +54,7 @@ fun CoinOverviewScreen(
             Title(title)
 
             if (chartInfo != null) {
-                ChartInfo(chartInfo, currency, object : CoinChartAdapter.Listener {
+                ChartInfo(chartInfo, currency, CoinChartAdapter.ChartViewType.CoinChart, object : CoinChartAdapter.Listener {
                     override fun onChartTouchDown() {
                         scrollingEnabled = false
                     }

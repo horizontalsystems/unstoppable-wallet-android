@@ -28,6 +28,7 @@ import io.horizontalsystems.bankwallet.modules.market.TopMarket
 import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.Select
+import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 
 @Composable
 fun MultilineClear(
@@ -173,6 +174,14 @@ private fun MarketDataValueComponent(marketDataValue: MarketDataValue) {
                 maxLines = 1,
             )
         }
+        is MarketDataValue.DiffNew -> {
+            Text(
+                text = marketDataValue.value.value,
+                color = diffColor(marketDataValue.value),
+                style = ComposeAppTheme.typography.subhead2,
+                maxLines = 1,
+            )
+        }
     }
 }
 
@@ -230,15 +239,21 @@ fun ListErrorView(
 }
 
 @Composable
-fun SortMenu(titleRes: Int, onClick: () -> Unit) {
+fun SortMenu(title: TranslatableString, onClick: () -> Unit) {
     ButtonSecondaryTransparent(
-        title = stringResource(titleRes),
+        title = title.getString(),
         iconRight = R.drawable.ic_down_arrow_20,
         onClick = onClick
     )
 }
 
 @Composable
+fun SortMenu(titleRes: Int, onClick: () -> Unit) {
+    SortMenu(TranslatableString.ResString(titleRes), onClick)
+}
+
+@Composable
+@Deprecated("Use Header component")
 fun HeaderWithSorting(
     sortingTitleRes: Int,
     topMarketSelect: Select<TopMarket>?,
@@ -314,7 +329,9 @@ fun TopCloseButton(
 fun DescriptionCard(title: String, description: String, image: ImageSource) {
     Column {
         Row(
-            modifier = Modifier.height(108.dp).background(ComposeAppTheme.colors.tyler)
+            modifier = Modifier
+                .height(108.dp)
+                .background(ComposeAppTheme.colors.tyler)
         ) {
             Column(
                 modifier = Modifier
