@@ -7,7 +7,7 @@ class BalanceSorter {
     fun sort(items: Iterable<BalanceModule.BalanceItem>, sortType: BalanceSortType): List<BalanceModule.BalanceItem> {
         return when (sortType) {
             BalanceSortType.Value -> sortByBalance(items)
-            BalanceSortType.Name -> items.sortedBy { it.wallet.coin.name }
+            BalanceSortType.Name -> items.sortedBy { it.wallet.coin.code }
             BalanceSortType.PercentGrowth -> items.sortedByDescending { it.coinPrice?.diff }
         }
     }
