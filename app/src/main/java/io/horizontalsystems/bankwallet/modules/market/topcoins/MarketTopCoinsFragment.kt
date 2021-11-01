@@ -7,12 +7,14 @@ import android.view.ViewGroup
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Surface
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
@@ -34,6 +36,7 @@ import io.horizontalsystems.bankwallet.modules.market.MarketModule.ViewItemState
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.core.findNavController
+import kotlinx.coroutines.launch
 
 class MarketTopCoinsFragment : BaseFragment() {
 
@@ -113,16 +116,7 @@ fun TopCoinsScreen(
     val isRefreshing by viewModel.isRefreshingLiveData.observeAsState()
     val selectorDialogState by viewModel.selectorDialogStateLiveData.observeAsState()
 
-    val coroutineScope = rememberCoroutineScope()
-    val listState = rememberLazyListState()
     val interactionSource = remember { MutableInteractionSource() }
-
-    if ((viewItemState as? ViewItemState.Data)?.reorder == true) {
-        LaunchedEffect(coroutineScope) {
-            listState.scrollToItem(0)
-        }
-        viewModel.scrollToTopDone()
-    }
 
     Surface(color = ComposeAppTheme.colors.tyler) {
         Column {
@@ -166,7 +160,7 @@ fun TopCoinsScreen(
                         }
                     }
                     is ViewItemState.Data -> {
-                        CoinList(state.items, listState, onCoinClick)
+                        CoinList(state.items, state.reorder, onCoinClick)
                     }
                 }
             }
@@ -188,9 +182,12 @@ fun TopCoinsScreen(
 @Composable
 private fun CoinList(
     items: List<MarketViewItem>,
-    listState: LazyListState,
+    reorder: Boolean,
     onCoinClick: (String) -> Unit
 ) {
+    val coroutineScope = rememberCoroutineScope()
+    val listState = rememberLazyListState()
+
     LazyColumn(state = listState) {
         items(items) { item ->
             MarketCoin(
@@ -202,6 +199,11 @@ private fun CoinList(
                 item.marketDataValue,
                 item.rank
             ) { onCoinClick.invoke(item.fullCoin.coin.uid) }
+        }
+        if (reorder) {
+            coroutineScope.launch {
+                listState.scrollToItem(0)
+            }
         }
     }
 }
