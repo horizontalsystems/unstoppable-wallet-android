@@ -79,12 +79,12 @@ class MarketTopCoinsViewModel(
         )
     }
 
-    private fun syncMarketViewItems(reorder: Boolean) {
+    private fun syncMarketViewItems(scrollToTop: Boolean) {
         viewStateLiveData.postValue(
             MarketModule.ViewItemState.Data(
                 marketItems.map {
                     MarketViewItem.create(it, marketField)
-                }, reorder
+                }, scrollToTop
             )
         )
     }

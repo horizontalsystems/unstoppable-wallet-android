@@ -160,7 +160,7 @@ fun TopCoinsScreen(
                         }
                     }
                     is ViewItemState.Data -> {
-                        CoinList(state.items, state.reorder, onCoinClick)
+                        CoinList(state.items, state.scrollToTop, onCoinClick)
                     }
                 }
             }
@@ -182,7 +182,7 @@ fun TopCoinsScreen(
 @Composable
 private fun CoinList(
     items: List<MarketViewItem>,
-    reorder: Boolean,
+    scrollToTop: Boolean,
     onCoinClick: (String) -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -200,7 +200,7 @@ private fun CoinList(
                 item.rank
             ) { onCoinClick.invoke(item.fullCoin.coin.uid) }
         }
-        if (reorder) {
+        if (scrollToTop) {
             coroutineScope.launch {
                 listState.scrollToItem(0)
             }
