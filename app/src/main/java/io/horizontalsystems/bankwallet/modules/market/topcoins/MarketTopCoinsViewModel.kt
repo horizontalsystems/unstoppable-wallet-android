@@ -140,8 +140,4 @@ class MarketTopCoinsViewModel(
             SelectorDialogState.Opened(Select(service.sortingField, service.sortingFields))
         )
     }
-
-    fun scrollToTopDone() {
-        syncMarketViewItems(false)
-    }
 }
