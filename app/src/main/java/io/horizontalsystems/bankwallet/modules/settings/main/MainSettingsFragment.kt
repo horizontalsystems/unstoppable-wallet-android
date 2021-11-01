@@ -41,7 +41,7 @@ class MainSettingsFragment : BaseFragment() {
         val walletConnect = SettingsMenuItem(R.string.Settings_WalletConnect, R.drawable.ic_wallet_connect_20, listPosition = ListPosition.Single) {
             presenter.didTapWalletConnect()
         }
-        val baseCurrency = SettingsMenuItem(R.string.Settings_BaseCurrency, R.drawable.ic_currency, listPosition = ListPosition.Middle) {
+        val baseCurrency = SettingsMenuItem(R.string.Settings_BaseCurrency, R.drawable.ic_currency, listPosition = ListPosition.First) {
             presenter.didTapBaseCurrency()
         }
         val language = SettingsMenuItem(R.string.Settings_Language, R.drawable.ic_language, listPosition = ListPosition.Middle) {
