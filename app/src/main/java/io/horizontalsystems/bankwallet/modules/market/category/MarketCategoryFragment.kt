@@ -8,11 +8,13 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
@@ -38,6 +40,7 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.marketkit.models.CoinCategory
+import kotlinx.coroutines.launch
 
 class MarketCategoryFragment : BaseFragment() {
 
@@ -167,7 +170,7 @@ fun CategoryScreen(
                         }
                     }
                     is ViewItemState.Data -> {
-                        CoinList(state.items, onCoinClick)
+                        CoinList(state.items, state.scrollToTop, onCoinClick)
                     }
                 }
             }
@@ -189,9 +192,13 @@ fun CategoryScreen(
 @Composable
 private fun CoinList(
     items: List<MarketViewItem>,
+    scrollToTop: Boolean,
     onCoinClick: (String) -> Unit
 ) {
-    LazyColumn {
+    val coroutineScope = rememberCoroutineScope()
+    val listState = rememberLazyListState()
+
+    LazyColumn(state = listState) {
         items(items) { item ->
             MarketCoin(
                 item.fullCoin.coin.name,
@@ -202,6 +209,11 @@ private fun CoinList(
                 item.marketDataValue,
                 item.rank
             ) { onCoinClick.invoke(item.fullCoin.coin.uid) }
+        }
+        if (scrollToTop) {
+            coroutineScope.launch {
+                listState.scrollToItem(0)
+            }
         }
     }
 }
