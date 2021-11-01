@@ -51,7 +51,7 @@ class MarketTopCoinsViewModel(
         if (state is DataState.Success) {
             marketItems = state.data
 
-            syncMarketViewItems()
+            syncMarketViewItems(true)
         } else if (state is DataState.Error) {
             viewStateLiveData.postValue(MarketModule.ViewItemState.Error(convertErrorMessage(state.error)))
         }
@@ -79,12 +79,12 @@ class MarketTopCoinsViewModel(
         )
     }
 
-    private fun syncMarketViewItems() {
+    private fun syncMarketViewItems(reorder: Boolean) {
         viewStateLiveData.postValue(
             MarketModule.ViewItemState.Data(
                 marketItems.map {
                     MarketViewItem.create(it, marketField)
-                }
+                }, reorder
             )
         )
     }
@@ -114,7 +114,7 @@ class MarketTopCoinsViewModel(
     fun onSelectMarketField(marketField: MarketField) {
         this.marketField = marketField
 
-        syncMarketViewItems()
+        syncMarketViewItems(false)
         syncMenu()
     }
 
@@ -139,5 +139,9 @@ class MarketTopCoinsViewModel(
         selectorDialogStateLiveData.postValue(
             SelectorDialogState.Opened(Select(service.sortingField, service.sortingFields))
         )
+    }
+
+    fun scrollToTopDone() {
+        syncMarketViewItems(false)
     }
 }

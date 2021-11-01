@@ -7,12 +7,12 @@ import android.view.ViewGroup
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Surface
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
@@ -113,7 +113,16 @@ fun TopCoinsScreen(
     val isRefreshing by viewModel.isRefreshingLiveData.observeAsState()
     val selectorDialogState by viewModel.selectorDialogStateLiveData.observeAsState()
 
+    val coroutineScope = rememberCoroutineScope()
+    val listState = rememberLazyListState()
     val interactionSource = remember { MutableInteractionSource() }
+
+    if ((viewItemState as? ViewItemState.Data)?.reorder == true) {
+        LaunchedEffect(coroutineScope) {
+            listState.scrollToItem(0)
+        }
+        viewModel.scrollToTopDone()
+    }
 
     Surface(color = ComposeAppTheme.colors.tyler) {
         Column {
@@ -157,7 +166,7 @@ fun TopCoinsScreen(
                         }
                     }
                     is ViewItemState.Data -> {
-                        CoinList(state.items, onCoinClick)
+                        CoinList(state.items, listState, onCoinClick)
                     }
                 }
             }
@@ -179,9 +188,10 @@ fun TopCoinsScreen(
 @Composable
 private fun CoinList(
     items: List<MarketViewItem>,
+    listState: LazyListState,
     onCoinClick: (String) -> Unit
 ) {
-    LazyColumn {
+    LazyColumn(state = listState) {
         items(items) { item ->
             MarketCoin(
                 item.fullCoin.coin.name,

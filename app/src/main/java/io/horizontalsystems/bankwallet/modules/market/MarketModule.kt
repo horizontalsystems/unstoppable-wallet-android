@@ -62,7 +62,7 @@ object MarketModule {
 
     sealed class ViewItemState {
         class Error(val error: String) : ViewItemState()
-        class Data(val items: List<MarketViewItem>) : ViewItemState()
+        class Data(val items: List<MarketViewItem>, val reorder: Boolean = false) : ViewItemState()
     }
 
 }
