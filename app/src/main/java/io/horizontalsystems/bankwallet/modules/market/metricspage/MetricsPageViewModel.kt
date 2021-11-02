@@ -72,8 +72,8 @@ class MetricsPageViewModel(
 
         subtitleLiveData.postValue(
             MetricsPageSubtitleAdapter.ViewItemWrapper(
-                chartViewItem.lastValueWithDiff?.value,
-                chartViewItem.lastValueWithDiff?.diff
+                chartViewItem.lastValueWithDiff.value,
+                chartViewItem.lastValueWithDiff.diff
             )
         )
 
