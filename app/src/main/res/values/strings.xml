@@ -592,6 +592,7 @@
     <string name="Settings_AppStatus">App Status</string>
     <string name="Settings_WalletConnect">Wallet Connect</string>
     <string name="Settings_RateUs">Rate Us</string>
+    <string name="Settings_LaunchScreen">Launch Screen</string>
 
     <string name="SettingsAboutApp_Title">About App</string>
     <string name="SettingsAboutApp_Github" translatable="false">Github</string>
@@ -694,6 +695,13 @@
     <string name="NotificationBottomMenu_Short">Short</string>
     <string name="NotificationBottomMenu_LongTerm">Long Term 6M</string>
     <string name="NotificationBottomMenu_Long">Long</string>
+
+    <!-- Settings Launch Screen -->
+
+    <string name="SettingsLaunchScreen_Auto">Auto</string>
+    <string name="SettingsLaunchScreen_Balance">Balance</string>
+    <string name="SettingsLaunchScreen_MarketOverview">Market Overview</string>
+    <string name="SettingsLaunchScreen_Watchlist">Watchlist</string>
 
     <!--Settings-->
 

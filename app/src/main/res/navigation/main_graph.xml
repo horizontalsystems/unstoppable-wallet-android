@@ -230,6 +230,9 @@
             app:destination="@id/markdownFragment" />
     </fragment>
     <fragment
+        android:id="@+id/launchScreenSettingsFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.settings.launch.LaunchPageFragment"/>
+    <fragment
         android:id="@+id/baseCurrencySettingsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.basecurrency.BaseCurrencySettingsFragment"
         tools:layout="@layout/fragment_base_currency_settings" />

@@ -73,6 +73,7 @@ interface ILocalStorage {
     var currentTheme: ThemeType
     var changelogShownForAppVersion: String?
     var ignoreRootedDeviceWarning: Boolean
+    var launchPage: LaunchPage?
 
     fun getSwapProviderId(blockchain: SwapMainModule.Blockchain): String?
     fun setSwapProviderId(blockchain: SwapMainModule.Blockchain, providerId: String)

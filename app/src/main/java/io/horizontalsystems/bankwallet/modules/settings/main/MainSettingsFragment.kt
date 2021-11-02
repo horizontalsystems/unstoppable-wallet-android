@@ -41,7 +41,10 @@ class MainSettingsFragment : BaseFragment() {
         val walletConnect = SettingsMenuItem(R.string.Settings_WalletConnect, R.drawable.ic_wallet_connect_20, listPosition = ListPosition.Single) {
             presenter.didTapWalletConnect()
         }
-        val baseCurrency = SettingsMenuItem(R.string.Settings_BaseCurrency, R.drawable.ic_currency, listPosition = ListPosition.First) {
+        val launchScreen = SettingsMenuItem(R.string.Settings_LaunchScreen, R.drawable.ic_screen_20, listPosition = ListPosition.First) {
+            findNavController().navigate(R.id.launchScreenSettingsFragment, null, navOptions())
+        }
+        val baseCurrency = SettingsMenuItem(R.string.Settings_BaseCurrency, R.drawable.ic_currency, listPosition = ListPosition.Middle) {
             presenter.didTapBaseCurrency()
         }
         val language = SettingsMenuItem(R.string.Settings_Language, R.drawable.ic_language, listPosition = ListPosition.Middle) {
@@ -73,6 +76,7 @@ class MainSettingsFragment : BaseFragment() {
                 null,
                 walletConnect,
                 null,
+                launchScreen,
                 baseCurrency,
                 language,
                 theme,
