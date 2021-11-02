@@ -30,6 +30,7 @@
     <string name="Error">Ошибка</string>
     <string name="NotAvailable">Нет данных</string>
     <string name="Any">Any</string>
+    <string name="PercentTitle">Percent</string>
     <!--Intro-->
     <string name="Intro_Wallet_Screen1Description">Be Unstoppable</string>
     <string name="Intro_Wallet_Screen2Title">Освободите Активы</string>
@@ -149,7 +150,7 @@
     <string name="Market_SyncError">Sync Error</string>
     <!--Market Global Metrics-->
     <string name="MarketGlobalMetrics_Chart">График</string>
-    <string name="MarketGlobalMetrics_TotalMarketCap">Total M.Cap</string>
+    <string name="MarketGlobalMetrics_TotalMarketCap">Total Market Cap</string>
     <string name="MarketGlobalMetrics_BtcDominance">Доминирование Bitcoin</string>
     <string name="MarketGlobalMetrics_Volume">Объём</string>
     <string name="MarketGlobalMetrics_DefiCap">Капитализация DeFi</string>
@@ -159,6 +160,8 @@
     <string name="MarketGlobalMetrics_VolumeDescription">Историческое изменение в ежедневном совокупном объеме торговли для всех криптовалют.</string>
     <string name="MarketGlobalMetrics_DefiCapDescription">Историческое изменение в совокупной рыночной стоимости токенов в Децентрализованном финансовом секторе.</string>
     <string name="MarketGlobalMetrics_TvlInDefiDescription">Историческое изменение в совокупной стоимости всех криптовалют, управляемых децентрализованными протоколами.</string>
+    <string name="MarketGlobalMetrics_ChainSelectorTitle">Chains</string>
+    <string name="MarketGlobalMetrics_ChainSelectorAll">All</string>
     <!--Market Search-->
     <string name="EmptyResults">Ничего не найдено</string>
     <string name="Market_AdvancedSearch">Расширенный Поиск</string>
