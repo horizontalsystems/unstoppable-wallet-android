@@ -7,9 +7,9 @@ import io.horizontalsystems.marketkit.models.TimePeriod
 import io.reactivex.Single
 
 class MarketGlobalFetcher(
-        private val marketKit: MarketKit,
-        private val metricsType: MetricsType
-) : MetricChartModule.IMetricChartFetcher, MetricChartModule.IMetricChartConfiguration {
+    private val marketKit: MarketKit,
+    private val metricsType: MetricsType
+) : MetricChartModule.IMetricChartConfiguration {
 
     override val title = metricsType.title
 
@@ -21,19 +21,19 @@ class MarketGlobalFetcher(
             else -> MetricChartModule.ValueType.CompactCurrencyValue
         }
 
-    override fun fetchSingle(currencyCode: String, timePeriod: TimePeriod): Single<List<MetricChartModule.Item>> {
+    fun fetchSingle(currencyCode: String, timePeriod: TimePeriod): Single<List<MetricChartModule.Item>> {
         return marketKit.globalMarketPointsSingle(currencyCode, timePeriod)
-                .map { list ->
-                    list.map { point ->
-                        val value = when (metricsType) {
-                            MetricsType.TotalMarketCap -> point.marketCap
-                            MetricsType.BtcDominance -> point.dominanceBtc
-                            MetricsType.Volume24h -> point.volume24h
-                            MetricsType.DefiCap -> point.marketCapDefi
-                            MetricsType.TvlInDefi -> point.tvl
-                        }
-                        MetricChartModule.Item(value, point.timestamp)
+            .map { list ->
+                list.map { point ->
+                    val value = when (metricsType) {
+                        MetricsType.TotalMarketCap -> point.marketCap
+                        MetricsType.BtcDominance -> point.dominanceBtc
+                        MetricsType.Volume24h -> point.volume24h
+                        MetricsType.DefiCap -> point.marketCapDefi
+                        MetricsType.TvlInDefi -> point.tvl
                     }
+                    MetricChartModule.Item(value, point.timestamp)
                 }
+            }
     }
 }
