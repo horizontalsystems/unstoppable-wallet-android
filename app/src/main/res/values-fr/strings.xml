@@ -30,6 +30,7 @@
     <string name="Error">Erreur</string>
     <string name="NotAvailable">S. O.</string>
     <string name="Any">N\'importe lequel</string>
+    <string name="PercentTitle">Percent</string>
     <!--Intro-->
     <string name="Intro_Wallet_Screen1Description">Soyez Unstoppable</string>
     <string name="Intro_Wallet_Screen2Title">Désenchaînez les actifs</string>
@@ -149,7 +150,7 @@
     <string name="Market_SyncError">Sync Error</string>
     <!--Market Global Metrics-->
     <string name="MarketGlobalMetrics_Chart">Graphique</string>
-    <string name="MarketGlobalMetrics_TotalMarketCap">Total M.Cap</string>
+    <string name="MarketGlobalMetrics_TotalMarketCap">Total Market Cap</string>
     <string name="MarketGlobalMetrics_BtcDominance">Bitcoin Dominance</string>
     <string name="MarketGlobalMetrics_Volume">Volume</string>
     <string name="MarketGlobalMetrics_DefiCap">Cap DeFi</string>
@@ -159,6 +160,8 @@
     <string name="MarketGlobalMetrics_VolumeDescription">La variation historique du volume global quotidien du marché des transactions pour toutes les cryptomonnaies.</string>
     <string name="MarketGlobalMetrics_DefiCapDescription">L\'évolution historique de la valeur de marché cumulée des tokens dans le secteur de la finance décentralisée.</string>
     <string name="MarketGlobalMetrics_TvlInDefiDescription">L\'évolution historique de la valeur cumulée de toutes les cryptomonnaies gérées par des protocoles décentralisés.</string>
+    <string name="MarketGlobalMetrics_ChainSelectorTitle">Chains</string>
+    <string name="MarketGlobalMetrics_ChainSelectorAll">All</string>
     <!--Market Search-->
     <string name="EmptyResults">Aucun résultat</string>
     <string name="Market_AdvancedSearch">Recherche avancée</string>
