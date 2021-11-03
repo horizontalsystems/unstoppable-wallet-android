@@ -29,8 +29,8 @@ import coil.annotation.ExperimentalCoilApi
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.entities.LaunchPage
-import io.horizontalsystems.bankwallet.modules.settings.launch.LaunchPageModule.LaunchPageViewItem
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineLawrenceSection
 import io.horizontalsystems.core.findNavController
 
@@ -122,33 +122,33 @@ fun TopToolbar(title: Int, onBackButtonClick: () -> Unit) {
 
 @Composable
 private fun ScreenOptionsView(
-    options: List<LaunchPageViewItem>,
+    select: Select<LaunchPage>,
     onClick: ((LaunchPage) -> Unit)? = null
 ) {
-    CellSingleLineLawrenceSection(options) { option ->
+    CellSingleLineLawrenceSection(select.options) { option ->
         Row(
             modifier = Modifier
                 .fillMaxSize()
                 .clickable {
-                    onClick?.invoke(option.launchPage)
+                    onClick?.invoke(option)
                 }
                 .padding(horizontal = 16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
-                painter = painterResource(id = option.launchPage.icon),
+                painter = painterResource(id = option.iconRes),
                 contentDescription = "option icon",
                 colorFilter = ColorFilter.tint(ComposeAppTheme.colors.grey)
             )
             Text(
-                text = stringResource(option.launchPage.title),
+                text = option.title.getString(),
                 modifier = Modifier
                     .weight(1f)
                     .padding(horizontal = 16.dp),
                 style = ComposeAppTheme.typography.body,
                 color = ComposeAppTheme.colors.oz
             )
-            if (option.selected) {
+            if (option == select.selected) {
                 Image(
                     painter = painterResource(id = R.drawable.ic_checkmark_20),
                     contentDescription = "",
@@ -162,12 +162,8 @@ private fun ScreenOptionsView(
 @Preview
 @Composable
 fun ScreenOptionsViewPreview() {
-    val options = listOf(
-        LaunchPageViewItem(LaunchPage.Auto, false),
-        LaunchPageViewItem(LaunchPage.Market, true),
-        LaunchPageViewItem(LaunchPage.Watchlist, false)
-    )
+    val select = Select(LaunchPage.Auto, listOf(LaunchPage.Auto, LaunchPage.Market, LaunchPage.Watchlist))
     ComposeAppTheme {
-        ScreenOptionsView(options)
+        ScreenOptionsView(select)
     }
 }
