@@ -50,7 +50,7 @@ class LocalStorageManager(private val preferences: SharedPreferences)
     private val TRANSACTION_DATA_SORTING_TYPE = "transaction_data_sorting_type"
     private val BALANCE_HIDDEN = "balance_hidden"
     private val CHECKED_TERMS = "checked_terms"
-    private val MARKET_CURRENT_CATEGORY = "market_current_category"
+    private val MARKET_CURRENT_TAB = "market_current_tab"
     private val BIOMETRIC_ENABLED = "biometric_auth_enabled"
     private val PIN = "lock_pin"
     private val MAIN_SHOWED_ONCE = "main_showed_once"
@@ -307,12 +307,12 @@ class LocalStorageManager(private val preferences: SharedPreferences)
             preferences.edit().putString(CHECKED_TERMS, termsString).apply()
         }
 
-    override var currentTab: MarketModule.Tab?
-        get() = preferences.getString(MARKET_CURRENT_CATEGORY, null)?.let {
+    override var currentMarketTab: MarketModule.Tab?
+        get() = preferences.getString(MARKET_CURRENT_TAB, null)?.let {
             MarketModule.Tab.fromString(it)
         }
         set(value) {
-            preferences.edit().putString(MARKET_CURRENT_CATEGORY, value?.name).apply()
+            preferences.edit().putString(MARKET_CURRENT_TAB, value?.name).apply()
         }
 
     override var mainShowedOnce: Boolean
