@@ -503,6 +503,7 @@
     <string name="Settings_AppStatus">Uygulama Durumu</string>
     <string name="Settings_WalletConnect">Wallet Connect</string>
     <string name="Settings_RateUs">Bizi Değerlendirin</string>
+    <string name="Settings_LaunchScreen">Launch Screen</string>
     <string name="SettingsAboutApp_Title">Uygulama Hakkında</string>
     <string name="SettingsAboutApp_Site">Web sitesi</string>
     <string name="SettingsAboutApp_WhatsNew">Neler yeni</string>
@@ -584,6 +585,11 @@
     <string name="NotificationBottomMenu_Short">Kısa</string>
     <string name="NotificationBottomMenu_LongTerm">Uzun Vade 6A</string>
     <string name="NotificationBottomMenu_Long">Uzun</string>
+    <!-- Settings Launch Screen -->
+    <string name="SettingsLaunchScreen_Auto">Auto</string>
+    <string name="SettingsLaunchScreen_Balance">Balance</string>
+    <string name="SettingsLaunchScreen_MarketOverview">Market Overview</string>
+    <string name="SettingsLaunchScreen_Watchlist">Watchlist</string>
     <!--Settings-->
     <string name="SettingsTheme_Title">Tema</string>
     <string name="SettingsTheme_Dark">Karanlık</string>
