@@ -29,7 +29,7 @@ import kotlinx.android.synthetic.main.fragment_main.*
 
 class MainFragment : BaseFragment(R.layout.fragment_main), RateAppDialogFragment.Listener {
 
-    private val viewModel by viewModels<MainViewModel>{ MainModule.Factory(arguments?.getInt(ACTIVE_TAB_KEY)) }
+    private val viewModel by viewModels<MainViewModel>{ MainModule.Factory(arguments?.getParcelable(ACTIVE_TAB_KEY)) }
     private val balanceOnboardingViewModel by viewModels<BalanceOnboardingViewModel> { BalanceOnboardingModule.Factory() }
     private var bottomBadgeView: View? = null
 

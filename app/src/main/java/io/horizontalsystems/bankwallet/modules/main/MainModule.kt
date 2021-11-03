@@ -3,14 +3,17 @@ package io.horizontalsystems.bankwallet.modules.main
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.os.Parcelable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.putParcelableExtra
 import io.horizontalsystems.bankwallet.core.utils.RootUtil
+import kotlinx.android.parcel.Parcelize
 
 object MainModule {
 
-    class Factory(private val activeTab: Int?) : ViewModelProvider.Factory {
+    class Factory(private val activeTab: MainTab?) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val service = MainService(RootUtil, App.localStorage)
@@ -33,17 +36,18 @@ object MainModule {
         context.startActivity(intent)
     }
 
-    fun startAsNewTask(context: Activity, activeTab: Int? = null) {
+    fun startAsNewTask(context: Activity, activeTab: MainTab? = null) {
         val intent = Intent(context, MainActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         activeTab?.let {
-            intent.putExtra(MainActivity.ACTIVE_TAB_KEY, it)
+            intent.putParcelableExtra(MainActivity.ACTIVE_TAB_KEY, it)
         }
         context.startActivity(intent)
         context.overridePendingTransition(0, 0)
     }
 
-    enum class MainTab {
+    @Parcelize
+    enum class MainTab: Parcelable {
         Market,
         Balance,
         Transactions,

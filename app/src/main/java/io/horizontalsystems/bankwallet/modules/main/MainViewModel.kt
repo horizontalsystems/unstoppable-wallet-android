@@ -27,7 +27,7 @@ class MainViewModel(
     private val accountManager: IAccountManager,
     private val releaseNotesManager: ReleaseNotesManager,
     private val service: MainService,
-    private val activeTab: Int?
+    private val activeTab: MainModule.MainTab?
 ) : ViewModel() {
 
     val showRootedDeviceWarningLiveEvent = SingleLiveEvent<Unit>()
@@ -83,7 +83,7 @@ class MainViewModel(
 
     private fun getTabToOpen(): MainModule.MainTab {
         activeTab?.let {
-            return MainModule.MainTab.values()[it]
+            return it
         }
         return when(service.launchPage){
             LaunchPage.Market,
