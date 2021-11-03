@@ -24,6 +24,9 @@ class Colors(
     val transparent = Color.Transparent
     val dark = Dark
     val light = Light
+    val white = Color.White
+    val black50 = Color(0x80000000)
+    val issykBlue = Color(0xFF3372FF)
     val lightGrey = LightGrey
     val steelLight = SteelLight
     val steelDark = SteelDark
