@@ -12,9 +12,9 @@ class MarketService(
         get() = localStorage.launchPage
 
     var currentTab: MarketModule.Tab?
-        get() = storage.currentTab
+        get() = storage.currentMarketTab
         set(value) {
-            storage.currentTab = value
+            storage.currentMarketTab = value
         }
 
 }

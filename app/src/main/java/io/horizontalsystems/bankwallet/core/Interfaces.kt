@@ -95,7 +95,7 @@ interface IRestoreSettingsStorage {
 }
 
 interface IMarketStorage {
-    var currentTab: MarketModule.Tab?
+    var currentMarketTab: MarketModule.Tab?
 }
 
 interface IAccountManager {
