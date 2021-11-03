@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.modules.settings.launch
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.entities.LaunchPage
 
 object LaunchPageModule {
 
@@ -15,5 +14,4 @@ object LaunchPageModule {
         }
     }
 
-    class LaunchPageViewItem(val launchPage: LaunchPage, val selected: Boolean)
 }
