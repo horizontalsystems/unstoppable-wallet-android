@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.settings.main
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.entities.LaunchPage
 import io.horizontalsystems.core.entities.Currency
 
 object MainSettingsModule {
@@ -16,7 +17,7 @@ object MainSettingsModule {
         fun setTermsAccepted(termsAccepted: Boolean)
         fun setPinIsSet(pinSet: Boolean)
         fun setWalletConnectSessionCount(count: String?)
-        fun setLaunchScreen(screenName: Int)
+        fun setLaunchScreen(screen: LaunchPage)
     }
 
     interface IMainSettingsViewDelegate {
@@ -45,7 +46,7 @@ object MainSettingsModule {
         val appVersion: String
         val termsAccepted: Boolean
         val isPinSet: Boolean
-        val launchScreen: Int
+        val launchScreen: LaunchPage
 
         fun clear()
     }

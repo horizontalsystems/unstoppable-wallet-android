@@ -97,8 +97,8 @@ class MainSettingsFragment : BaseFragment() {
             mainSettingsAdapter.notifyChanged(baseCurrency)
         })
 
-        presenterView.launchScreen.observe(viewLifecycleOwner, { screenTitleRes ->
-            launchScreen.value = getString(screenTitleRes)
+        presenterView.launchScreen.observe(viewLifecycleOwner, { screen ->
+            launchScreen.value = getString(screen.titleRes)
             mainSettingsAdapter.notifyChanged(launchScreen)
         })
 

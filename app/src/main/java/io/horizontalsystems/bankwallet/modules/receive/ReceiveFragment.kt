@@ -91,17 +91,11 @@ class ReceiveFragment : BaseFragment() {
                 AppBar(
                     title = ResString(R.string.Deposit_Title, fullCoin.coin.code),
                     navigationIcon = {
-                        Box(
-                            modifier = Modifier
-                                .padding(horizontal = 16.dp)
-                                .size(24.dp)
-                        ) {
-                            CoinImage(
-                                iconUrl = fullCoin.coin.iconUrl,
-                                placeholder = fullCoin.iconPlaceholder,
-                                modifier = Modifier.size(24.dp)
-                            )
-                        }
+                        CoinImage(
+                            iconUrl = fullCoin.coin.iconUrl,
+                            placeholder = fullCoin.iconPlaceholder,
+                            modifier = Modifier.padding(horizontal = 16.dp).size(24.dp)
+                        )
                     },
                     menuItems = listOf(
                         MenuItem(

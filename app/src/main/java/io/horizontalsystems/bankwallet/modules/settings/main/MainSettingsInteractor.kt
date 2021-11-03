@@ -81,8 +81,8 @@ class MainSettingsInteractor(
     override val isPinSet: Boolean
         get() = pinComponent.isPinSet
 
-    override val launchScreen: Int
-        get() = (localStorage.launchPage ?: LaunchPage.Auto).titleRes
+    override val launchScreen: LaunchPage
+        get() = localStorage.launchPage ?: LaunchPage.Auto
 
     override fun clear() {
         disposables.clear()
