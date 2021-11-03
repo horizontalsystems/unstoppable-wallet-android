@@ -13,6 +13,7 @@ class MainSettingsView : MainSettingsModule.IMainSettingsView {
     val currentThemeName = MutableLiveData<Int>()
     val appVersion = MutableLiveData<String>()
     val termsAccepted = MutableLiveData<Boolean>()
+    val launchScreen = MutableLiveData<Int>()
 
     override fun setBackedUp(backedUp: Boolean) {
         this.backedUp.postValue(backedUp)
@@ -44,5 +45,9 @@ class MainSettingsView : MainSettingsModule.IMainSettingsView {
 
     override fun setTermsAccepted(termsAccepted: Boolean) {
         this.termsAccepted.postValue(termsAccepted)
+    }
+
+    override fun setLaunchScreen(@StringRes screenName: Int) {
+        launchScreen.postValue(screenName)
     }
 }

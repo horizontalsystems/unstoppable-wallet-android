@@ -16,6 +16,7 @@ object MainSettingsModule {
         fun setTermsAccepted(termsAccepted: Boolean)
         fun setPinIsSet(pinSet: Boolean)
         fun setWalletConnectSessionCount(count: String?)
+        fun setLaunchScreen(screenName: Int)
     }
 
     interface IMainSettingsViewDelegate {
@@ -44,6 +45,7 @@ object MainSettingsModule {
         val appVersion: String
         val termsAccepted: Boolean
         val isPinSet: Boolean
+        val launchScreen: Int
 
         fun clear()
     }

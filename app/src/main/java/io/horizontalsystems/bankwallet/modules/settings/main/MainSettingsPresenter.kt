@@ -23,6 +23,7 @@ class MainSettingsPresenter(
         view.setAppVersion(interactor.appVersion)
         view.setTermsAccepted(interactor.termsAccepted)
         view.setPinIsSet(interactor.isPinSet)
+        view.setLaunchScreen(interactor.launchScreen)
         setWalletConnectSessionCount(interactor.walletConnectSessionCount)
     }
 

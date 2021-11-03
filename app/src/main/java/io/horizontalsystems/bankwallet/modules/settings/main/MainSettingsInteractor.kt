@@ -4,8 +4,12 @@ import io.horizontalsystems.bankwallet.core.IAppConfigProvider
 import io.horizontalsystems.bankwallet.core.IBackupManager
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.ITermsManager
+import io.horizontalsystems.bankwallet.entities.LaunchPage
 import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectSessionManager
-import io.horizontalsystems.core.*
+import io.horizontalsystems.core.ICurrencyManager
+import io.horizontalsystems.core.ILanguageManager
+import io.horizontalsystems.core.IPinComponent
+import io.horizontalsystems.core.ISystemInfoManager
 import io.horizontalsystems.core.entities.Currency
 import io.reactivex.disposables.CompositeDisposable
 
@@ -76,6 +80,9 @@ class MainSettingsInteractor(
 
     override val isPinSet: Boolean
         get() = pinComponent.isPinSet
+
+    override val launchScreen: Int
+        get() = (localStorage.launchPage ?: LaunchPage.Auto).titleResId
 
     override fun clear() {
         disposables.clear()
