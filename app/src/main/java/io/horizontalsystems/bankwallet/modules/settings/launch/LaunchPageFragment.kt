@@ -6,22 +6,20 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
@@ -31,6 +29,8 @@ import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.entities.LaunchPage
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.Select
+import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
+import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineLawrenceSection
 import io.horizontalsystems.core.findNavController
 
@@ -50,9 +50,7 @@ class LaunchPageFragment : BaseFragment() {
             )
             setContent {
                 ComposeAppTheme {
-                    LaunchScreen(
-                        viewModel,
-                    ) { findNavController().popBackStack() }
+                    LaunchScreen(viewModel) { findNavController().popBackStack() }
                 }
             }
         }
@@ -69,55 +67,26 @@ fun LaunchScreen(
 
     Surface(color = ComposeAppTheme.colors.tyler) {
         Column {
-            TopToolbar(
-                R.string.Settings_LaunchScreen,
-                onCloseButtonClick
+            AppBar(
+                TranslatableString.ResString(R.string.Settings_LaunchScreen),
+                navigationIcon = {
+                    IconButton(onCloseButtonClick) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_back),
+                            contentDescription = "back button",
+                            tint = ComposeAppTheme.colors.jacob
+                        )
+                    }
+                },
+                menuItems = listOf(),
             )
             Spacer(modifier = Modifier.height(12.dp))
             options?.let {
-                ScreenOptionsView(
-                    it
-                ) { launchPage -> viewModel.onLaunchPageSelect(launchPage) }
+                ScreenOptionsView(it) { launchPage -> viewModel.onLaunchPageSelect(launchPage) }
             }
         }
     }
 
-}
-
-@Composable
-fun TopToolbar(title: Int, onBackButtonClick: () -> Unit) {
-    val interactionSource = remember { MutableInteractionSource() }
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(56.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Box(
-            modifier = Modifier.clickable(
-                interactionSource = interactionSource,
-                indication = null
-            ) {
-                onBackButtonClick.invoke()
-            }
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.ic_back),
-                contentDescription = "back button",
-                modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .size(24.dp),
-                tint = ComposeAppTheme.colors.jacob
-            )
-        }
-        Text(
-            text = stringResource(title),
-            color = ComposeAppTheme.colors.oz,
-            style = ComposeAppTheme.typography.title3,
-            maxLines = 1,
-            modifier = Modifier.padding(horizontal = 16.dp)
-        )
-    }
 }
 
 @Composable
@@ -162,7 +131,8 @@ private fun ScreenOptionsView(
 @Preview
 @Composable
 fun ScreenOptionsViewPreview() {
-    val select = Select(LaunchPage.Auto, listOf(LaunchPage.Auto, LaunchPage.Market, LaunchPage.Watchlist))
+    val select =
+        Select(LaunchPage.Auto, listOf(LaunchPage.Auto, LaunchPage.Market, LaunchPage.Watchlist))
     ComposeAppTheme {
         ScreenOptionsView(select)
     }

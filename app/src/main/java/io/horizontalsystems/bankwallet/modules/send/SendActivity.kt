@@ -3,6 +3,8 @@ package io.horizontalsystems.bankwallet.modules.send
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ViewCompositionStrategy
@@ -69,11 +71,17 @@ class SendActivity : BaseActivity() {
                 AppBar(
                     title = TranslatableString.ResString(R.string.Send_Title, fullCoin.coin.code),
                     navigationIcon = {
-                        CoinImage(
-                            iconUrl = fullCoin.coin.iconUrl,
-                            placeholder = fullCoin.iconPlaceholder,
-                            modifier = Modifier.size(24.dp)
-                        )
+                        Box(
+                            modifier = Modifier
+                                .padding(horizontal = 16.dp)
+                                .size(24.dp)
+                        ) {
+                            CoinImage(
+                                iconUrl = fullCoin.coin.iconUrl,
+                                placeholder = fullCoin.iconPlaceholder,
+                                modifier = Modifier.size(24.dp)
+                            )
+                        }
                     },
                     menuItems = listOf(
                         MenuItem(
