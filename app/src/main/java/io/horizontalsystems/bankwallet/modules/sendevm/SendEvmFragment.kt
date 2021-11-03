@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.ui.Modifier
@@ -130,17 +129,11 @@ class SendEvmFragment : BaseFragment() {
                 AppBar(
                     title = TranslatableString.ResString(R.string.Send_Title, fullCoin.coin.code),
                     navigationIcon = {
-                        Box(
-                            modifier = Modifier
-                                .padding(horizontal = 16.dp)
-                                .size(24.dp)
-                        ) {
-                            CoinImage(
-                                iconUrl = fullCoin.coin.iconUrl,
-                                placeholder = fullCoin.iconPlaceholder,
-                                modifier = Modifier.size(24.dp)
-                            )
-                        }
+                        CoinImage(
+                            iconUrl = fullCoin.coin.iconUrl,
+                            placeholder = fullCoin.iconPlaceholder,
+                            modifier = Modifier.padding(horizontal = 16.dp).size(24.dp)
+                        )
                     },
                     menuItems = listOf(
                         MenuItem(

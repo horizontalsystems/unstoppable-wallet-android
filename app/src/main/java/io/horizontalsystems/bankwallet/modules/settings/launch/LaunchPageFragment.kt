@@ -92,14 +92,14 @@ fun LaunchScreen(
 @Composable
 private fun ScreenOptionsView(
     select: Select<LaunchPage>,
-    onClick: ((LaunchPage) -> Unit)? = null
+    onClick: ((LaunchPage) -> Unit)
 ) {
     CellSingleLineLawrenceSection(select.options) { option ->
         Row(
             modifier = Modifier
                 .fillMaxSize()
                 .clickable {
-                    onClick?.invoke(option)
+                    onClick.invoke(option)
                 }
                 .padding(horizontal = 16.dp),
             verticalAlignment = Alignment.CenterVertically
@@ -134,6 +134,6 @@ fun ScreenOptionsViewPreview() {
     val select =
         Select(LaunchPage.Auto, listOf(LaunchPage.Auto, LaunchPage.Market, LaunchPage.Watchlist))
     ComposeAppTheme {
-        ScreenOptionsView(select)
+        ScreenOptionsView(select, { })
     }
 }
