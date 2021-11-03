@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.main
 
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.utils.RootUtil
+import io.horizontalsystems.bankwallet.entities.LaunchPage
 
 class MainService(
         private val rootUtil: RootUtil,
@@ -13,5 +14,14 @@ class MainService(
 
     val ignoreRootCheck: Boolean
         get() = localStorage.ignoreRootedDeviceWarning
+
+    val launchPage: LaunchPage
+        get() = localStorage.launchPage ?: LaunchPage.Auto
+
+    var currentMainTab: MainModule.MainTab?
+        get() = localStorage.mainTab
+        set(value) {
+            localStorage.mainTab = value
+        }
 
 }
