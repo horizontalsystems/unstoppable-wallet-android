@@ -503,6 +503,7 @@
     <string name="Settings_AppStatus">应用状态</string>
     <string name="Settings_WalletConnect">Wallet Connect</string>
     <string name="Settings_RateUs">评价我们</string>
+    <string name="Settings_LaunchScreen">Launch Screen</string>
     <string name="SettingsAboutApp_Title">关于应用</string>
     <string name="SettingsAboutApp_Site">网站</string>
     <string name="SettingsAboutApp_WhatsNew">更新说明</string>
@@ -584,6 +585,11 @@
     <string name="NotificationBottomMenu_Short">做空</string>
     <string name="NotificationBottomMenu_LongTerm">长期6个月</string>
     <string name="NotificationBottomMenu_Long">做多</string>
+    <!-- Settings Launch Screen -->
+    <string name="SettingsLaunchScreen_Auto">Auto</string>
+    <string name="SettingsLaunchScreen_Balance">Balance</string>
+    <string name="SettingsLaunchScreen_MarketOverview">Market Overview</string>
+    <string name="SettingsLaunchScreen_Watchlist">Watchlist</string>
     <!--Settings-->
     <string name="SettingsTheme_Title">主题</string>
     <string name="SettingsTheme_Dark">深色</string>
