@@ -9,7 +9,6 @@ import androidx.navigation.fragment.findNavController
 import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.modules.main.MainActivity
 import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListModule
@@ -206,7 +205,7 @@ class MainSettingsFragment : BaseFragment() {
 
     private fun subscribeFragmentResult() {
         getNavigationResult(LanguageSettingsFragment.LANGUAGE_CHANGE)?.let {
-            activity?.let { MainModule.startAsNewTask(it, MainActivity.SETTINGS_TAB_POSITION) }
+            activity?.let { MainModule.startAsNewTask(it, MainModule.MainTab.Settings) }
         }
     }
 }

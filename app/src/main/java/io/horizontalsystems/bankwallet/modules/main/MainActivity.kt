@@ -57,6 +57,5 @@ class MainActivity : BaseActivity() {
 
     companion object {
         const val ACTIVE_TAB_KEY = "active_tab"
-        const val SETTINGS_TAB_POSITION = 3
     }
 }

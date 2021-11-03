@@ -141,7 +141,7 @@ private fun ScreenOptionsView(
                 colorFilter = ColorFilter.tint(ComposeAppTheme.colors.grey)
             )
             Text(
-                text = stringResource(option.launchPage.titleResId),
+                text = stringResource(option.launchPage.title),
                 modifier = Modifier
                     .weight(1f)
                     .padding(horizontal = 16.dp),
