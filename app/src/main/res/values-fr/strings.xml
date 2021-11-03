@@ -503,6 +503,7 @@
     <string name="Settings_AppStatus">Statut de l\'appli</string>
     <string name="Settings_WalletConnect">Wallet Connect</string>
     <string name="Settings_RateUs">Evaluez-nous</string>
+    <string name="Settings_LaunchScreen">Launch Screen</string>
     <string name="SettingsAboutApp_Title">À propos de l\'application</string>
     <string name="SettingsAboutApp_Site">Website</string>
     <string name="SettingsAboutApp_WhatsNew">Nouveautés</string>
@@ -584,6 +585,11 @@
     <string name="NotificationBottomMenu_Short">Court</string>
     <string name="NotificationBottomMenu_LongTerm">Long terme 6M</string>
     <string name="NotificationBottomMenu_Long">Long</string>
+    <!-- Settings Launch Screen -->
+    <string name="SettingsLaunchScreen_Auto">Auto</string>
+    <string name="SettingsLaunchScreen_Balance">Balance</string>
+    <string name="SettingsLaunchScreen_MarketOverview">Market Overview</string>
+    <string name="SettingsLaunchScreen_Watchlist">Watchlist</string>
     <!--Settings-->
     <string name="SettingsTheme_Title">Thème</string>
     <string name="SettingsTheme_Dark">Sombre</string>
