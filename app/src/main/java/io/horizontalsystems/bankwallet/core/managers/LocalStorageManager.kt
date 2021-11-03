@@ -12,6 +12,7 @@ import io.horizontalsystems.bankwallet.entities.LaunchPage
 import io.horizontalsystems.bankwallet.entities.SyncMode
 import io.horizontalsystems.bankwallet.entities.TransactionDataSortingType
 import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
+import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.market.MarketModule
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.settings.theme.ThemeType
@@ -60,6 +61,7 @@ class LocalStorageManager(private val preferences: SharedPreferences)
     private val IGNORE_ROOTED_DEVICE_WARNING = "ignore_rooted_device_warning"
     private val SWAP_PROVIDER = "swap_provider_"
     private val LAUNCH_PAGE = "launch_page"
+    private val MAIN_TAB = "main_tab"
 
     private val gson by lazy { Gson() }
 
@@ -349,6 +351,14 @@ class LocalStorageManager(private val preferences: SharedPreferences)
         }
         set(value) {
             preferences.edit().putString(LAUNCH_PAGE, value?.name).apply()
+        }
+
+    override var mainTab: MainModule.MainTab?
+        get() = preferences.getString(MAIN_TAB, null)?.let {
+            MainModule.MainTab.fromString(it)
+        }
+        set(value) {
+            preferences.edit().putString(MAIN_TAB, value?.name).apply()
         }
 
     override fun getSwapProviderId(blockchain: SwapMainModule.Blockchain): String? {

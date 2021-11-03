@@ -2,15 +2,13 @@ package io.horizontalsystems.bankwallet.modules.main
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.GestureDetector
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
-import androidx.activity.addCallback
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView
 import io.horizontalsystems.bankwallet.R
@@ -31,7 +29,7 @@ import kotlinx.android.synthetic.main.fragment_main.*
 
 class MainFragment : BaseFragment(R.layout.fragment_main), RateAppDialogFragment.Listener {
 
-    private val viewModel by viewModels<MainViewModel>{ MainModule.Factory() }
+    private val viewModel by viewModels<MainViewModel>{ MainModule.Factory(arguments?.getInt(ACTIVE_TAB_KEY)) }
     private val balanceOnboardingViewModel by viewModels<BalanceOnboardingViewModel> { BalanceOnboardingModule.Factory() }
     private var bottomBadgeView: View? = null
 
@@ -43,6 +41,12 @@ class MainFragment : BaseFragment(R.layout.fragment_main), RateAppDialogFragment
         viewPager.offscreenPageLimit = 1
         viewPager.adapter = mainViewPagerAdapter
         viewPager.isUserInputEnabled = false
+
+        viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback(){
+            override fun onPageSelected(position: Int) {
+                viewModel.onTabSelect(position)
+            }
+        })
 
         bottomNavigation.setOnNavigationItemSelectedListener {
             when (it.itemId) {
@@ -65,10 +69,10 @@ class MainFragment : BaseFragment(R.layout.fragment_main), RateAppDialogFragment
             }
         })
 
-        arguments?.getInt(ACTIVE_TAB_KEY)?.let { position ->
-            bottomNavigation.menu.getItem(position).isChecked = true
-            viewPager.setCurrentItem(position, false)
-        }
+        viewModel.tabToOpenLiveEvent.observe(viewLifecycleOwner, { mainTab ->
+            bottomNavigation.menu.getItem(mainTab.ordinal).isChecked = true
+            viewPager.setCurrentItem(mainTab.ordinal, false)
+        })
 
         balanceOnboardingViewModel.balanceViewTypeLiveData.observe(viewLifecycleOwner) {
             mainViewPagerAdapter.balancePageType = it
@@ -117,14 +121,6 @@ class MainFragment : BaseFragment(R.layout.fragment_main), RateAppDialogFragment
             bottomNavigation.menu.getItem(2).isEnabled = enabled
         })
 
-        activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner) {
-            if (findNavController().currentDestination?.id == R.id.mainFragment) {
-                when (bottomNavigation.selectedItemId) {
-                    R.id.navigation_market -> activity?.finish()
-                    else -> bottomNavigation.selectedItemId = R.id.navigation_market
-                }
-            }
-        }
     }
 
     private fun openWalletSwitchDialog(

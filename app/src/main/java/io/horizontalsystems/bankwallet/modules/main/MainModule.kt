@@ -10,11 +10,20 @@ import io.horizontalsystems.bankwallet.core.utils.RootUtil
 
 object MainModule {
 
-    class Factory : ViewModelProvider.Factory {
+    class Factory(private val activeTab: Int?) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val service = MainService(RootUtil, App.localStorage)
-            return MainViewModel(App.pinComponent, App.rateAppManager, App.backupManager, App.termsManager, App.accountManager, App.releaseNotesManager, service) as T
+            return MainViewModel(
+                App.pinComponent,
+                App.rateAppManager,
+                App.backupManager,
+                App.termsManager,
+                App.accountManager,
+                App.releaseNotesManager,
+                service,
+                activeTab
+            ) as T
         }
     }
 
@@ -32,5 +41,18 @@ object MainModule {
         }
         context.startActivity(intent)
         context.overridePendingTransition(0, 0)
+    }
+
+    enum class MainTab {
+        Market,
+        Balance,
+        Transactions,
+        Settings;
+
+        companion object {
+            private val map = values().associateBy(MainTab::name)
+
+            fun fromString(type: String?): MainTab? = map[type]
+        }
     }
 }

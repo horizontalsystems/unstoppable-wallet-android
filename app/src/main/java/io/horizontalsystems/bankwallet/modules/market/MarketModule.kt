@@ -32,7 +32,7 @@ object MarketModule {
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            val service = MarketService(App.marketStorage)
+            val service = MarketService(App.marketStorage, App.localStorage)
             return MarketViewModel(service) as T
         }
 
