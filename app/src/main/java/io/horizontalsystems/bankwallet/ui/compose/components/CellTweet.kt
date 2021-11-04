@@ -13,18 +13,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import coil.size.OriginalSize
 import coil.size.Scale
+import com.twitter.twittertext.Extractor
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.coin.tweets.Tweet
 import io.horizontalsystems.bankwallet.modules.coin.tweets.TwitterUser
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import java.util.*
 
+@ExperimentalCoilApi
 @Preview
 @Composable
 fun CellTweetPreview() {
@@ -43,104 +47,164 @@ fun CellTweetPreview() {
 @ExperimentalCoilApi
 @Composable
 fun CellTweet(tweet: Tweet) {
-    Box(
+    Column(
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(16.dp))
             .background(ComposeAppTheme.colors.lawrence)
             .padding(16.dp)
     ) {
+        TweetTitle(tweet)
+
+        Spacer(modifier = Modifier.height(12.dp))
+        TweetText(tweet.text, tweet.entities)
+
+        tweet.attachments.forEach { attachment ->
+            Spacer(modifier = Modifier.height(12.dp))
+            when (attachment) {
+                is Tweet.Attachment.Photo -> AttachmentPhoto(attachment)
+                is Tweet.Attachment.Poll -> AttachmentPoll(attachment)
+                is Tweet.Attachment.Video -> AttachmentVideo(attachment)
+            }
+        }
+
+        tweet.referencedTweet?.let { referencedTweet ->
+            Spacer(modifier = Modifier.height(12.dp))
+            TweetReferencedTweet(referencedTweet)
+        }
+
+        Spacer(modifier = Modifier.height(12.dp))
+        TweetDate(tweet)
+    }
+}
+
+@Composable
+private fun TweetDate(tweet: Tweet) {
+    Text(
+        text = tweet.date.toString(),
+        color = ComposeAppTheme.colors.grey,
+        style = ComposeAppTheme.typography.micro
+    )
+}
+
+@Composable
+private fun TweetReferencedTweet(referencedTweet: Tweet.ReferencedTweetXxx) {
+    Column(Modifier
+        .fillMaxWidth()
+        .clip(RoundedCornerShape(16.dp))
+        .background(ComposeAppTheme.colors.steel10)
+        .padding(horizontal = 16.dp, vertical = 12.dp)
+    ) {
+        val typeString = when (referencedTweet.referenceType) {
+            Tweet.ReferenceType.Quoted -> "Quoted"
+            Tweet.ReferenceType.Retweeted -> "Retweeted"
+            Tweet.ReferenceType.Replied -> "Replying to"
+        }
+        val referencedTweetTitle = "$typeString @${referencedTweet.tweet.user.username}"
+        Text(
+            text = referencedTweetTitle,
+            color = ComposeAppTheme.colors.grey,
+            style = ComposeAppTheme.typography.caption
+        )
+        Text(
+            text = referencedTweet.tweet.text,
+            color = ComposeAppTheme.colors.leah,
+            style = ComposeAppTheme.typography.subhead2
+        )
+    }
+}
+
+@Composable
+private fun TweetText(text: String, entities: List<Extractor.Entity>) {
+    val spanStyles = entities.map {
+        AnnotatedString.Range(
+            SpanStyle(color = ComposeAppTheme.colors.issykBlue), it.start, it.end
+        )
+    }
+    Text(
+        text = AnnotatedString(
+            text = text,
+            spanStyles = spanStyles,
+        ),
+        color = ComposeAppTheme.colors.leah,
+        style = ComposeAppTheme.typography.subhead2
+    )
+}
+
+@ExperimentalCoilApi
+@Composable
+private fun TweetTitle(tweet: Tweet) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Image(
+            modifier = Modifier
+                .size(24.dp)
+                .clip(CircleShape),
+            painter = rememberImagePainter(tweet.user.profileImageUrl),
+            contentDescription = ""
+        )
+        Spacer(modifier = Modifier.width(8.dp))
         Column {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Image(
-                    modifier = Modifier
-                        .size(24.dp)
-                        .clip(CircleShape),
-                    painter = rememberImagePainter(tweet.user.profileImageUrl),
-                    contentDescription = ""
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Column {
-                    Text(
-                        text = tweet.user.name,
-                        color = ComposeAppTheme.colors.oz,
-                        style = ComposeAppTheme.typography.body
-                    )
-                    Spacer(modifier = Modifier.height(3.dp))
-                    Text(
-                        text = "@${tweet.user.username}",
-                        color = ComposeAppTheme.colors.grey,
-                        style = ComposeAppTheme.typography.caption
-                    )
-                }
-            }
-            Spacer(modifier = Modifier.height(12.dp))
             Text(
-                text = tweet.text,
-                color = ComposeAppTheme.colors.leah,
-                style = ComposeAppTheme.typography.subhead2
+                text = tweet.user.name,
+                color = ComposeAppTheme.colors.oz,
+                style = ComposeAppTheme.typography.body
             )
-
-            tweet.attachments.forEach { attachment ->
-                Spacer(modifier = Modifier.height(12.dp))
-                when (attachment) {
-                    is Tweet.Attachment.Photo -> {
-                        Image(
-                            modifier = Modifier.fillMaxWidth(),
-                            painter = rememberImagePainter(
-                                attachment.url,
-                                builder = {
-                                    size(OriginalSize)
-                                    scale(Scale.FIT)
-                                },
-                            ),
-                            contentDescription = "",
-                            contentScale = ContentScale.FillWidth
-                        )
-                    }
-                    is Tweet.Attachment.Poll -> {
-                        AttachmentPoll(attachment)
-                    }
-                    is Tweet.Attachment.Video -> {
-                        Box {
-                            Image(
-                                modifier = Modifier.fillMaxSize(),
-                                painter = rememberImagePainter(
-                                    attachment.previewImageUrl,
-                                    builder = {
-                                        size(OriginalSize)
-                                        scale(Scale.FIT)
-                                    },
-                                ),
-                                contentDescription = null,
-                                contentScale = ContentScale.Inside
-                            )
-
-                            Box(
-                                modifier = Modifier
-                                    .matchParentSize()
-                                    .background(ComposeAppTheme.colors.black50)
-                            )
-
-                            Icon(
-                                modifier = Modifier.align(Alignment.Center),
-                                painter = painterResource(id = R.drawable.play_48),
-                                contentDescription = null,
-                                tint = ComposeAppTheme.colors.white,
-                            )
-                        }
-
-                    }
-                }
-            }
-
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(3.dp))
             Text(
-                text = tweet.date.toString(),
+                text = "@${tweet.user.username}",
                 color = ComposeAppTheme.colors.grey,
-                style = ComposeAppTheme.typography.micro
+                style = ComposeAppTheme.typography.caption
             )
         }
+    }
+}
+
+@ExperimentalCoilApi
+@Composable
+private fun AttachmentPhoto(attachment: Tweet.Attachment.Photo) {
+    Image(
+        modifier = Modifier.fillMaxWidth(),
+        painter = rememberImagePainter(
+            attachment.url,
+            builder = {
+                size(OriginalSize)
+                scale(Scale.FIT)
+            },
+        ),
+        contentDescription = "",
+        contentScale = ContentScale.FillWidth
+    )
+}
+
+@ExperimentalCoilApi
+@Composable
+private fun AttachmentVideo(attachment: Tweet.Attachment.Video) {
+    Box {
+        Image(
+            modifier = Modifier.fillMaxSize(),
+            painter = rememberImagePainter(
+                attachment.previewImageUrl,
+                builder = {
+                    size(OriginalSize)
+                    scale(Scale.FIT)
+                },
+            ),
+            contentDescription = null,
+            contentScale = ContentScale.FillWidth
+        )
+
+        Box(
+            modifier = Modifier
+                .matchParentSize()
+                .background(ComposeAppTheme.colors.black50)
+        )
+
+        Icon(
+            modifier = Modifier.align(Alignment.Center),
+            painter = painterResource(id = R.drawable.play_48),
+            contentDescription = null,
+            tint = ComposeAppTheme.colors.white,
+        )
     }
 }
 
@@ -191,9 +255,7 @@ private fun AttachmentPoll(attachment: Tweet.Attachment.Poll) {
                         style = ComposeAppTheme.typography.caption
                     )
                 }
-
             }
         }
-
     }
 }
