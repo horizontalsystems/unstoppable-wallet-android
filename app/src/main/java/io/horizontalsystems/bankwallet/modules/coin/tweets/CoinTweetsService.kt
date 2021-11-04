@@ -21,7 +21,7 @@ class CoinTweetsService(
         get() = stateSubject
 
     val username: String? get() = user?.username
-    var user: TwitterUser? = null
+    private var user: TwitterUser? = null
 
     fun start() {
         fetch()
@@ -36,6 +36,7 @@ class CoinTweetsService(
     }
 
     private fun fetch() {
+        stateSubject.onNext(DataState.Loading)
         val tmpUser = user
 
         val twitterUserSingle = if (tmpUser != null) {

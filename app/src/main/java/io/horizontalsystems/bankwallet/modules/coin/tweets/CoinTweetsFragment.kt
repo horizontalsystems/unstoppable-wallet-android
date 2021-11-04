@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.coin.tweets
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,13 +20,16 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.navigation.navGraphViewModels
 import coil.annotation.ExperimentalCoilApi
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.coin.CoinViewModel
+import io.horizontalsystems.bankwallet.modules.market.tvl.TvlModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.CellTweet
+import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 
 @ExperimentalCoilApi
@@ -56,40 +58,52 @@ class CoinTweetsFragment : BaseFragment() {
 @ExperimentalCoilApi
 @Composable
 fun CoinTweetsScreen(viewModel: CoinTweetsViewModel) {
+    val items by viewModel.itemsLiveData.observeAsState(listOf())
+    val isRefreshing by viewModel.isRefreshingLiveData.observeAsState(false)
+    val viewState by viewModel.viewStateLiveData.observeAsState()
     val context = LocalContext.current
-    val items by viewModel.itemsLiveData.observeAsState()
-    when (val itemsCopy = items) {
-        is DataState.Error -> {
-            Log.e("AAA", "Error", itemsCopy.error)
-        }
-        DataState.Loading -> TODO()
-        is DataState.Success -> {
-            LazyColumn(
-                modifier = Modifier.padding(horizontal = 16.dp),
-            ) {
-                items(itemsCopy.data) { tweet: Tweet ->
-                    Spacer(modifier = Modifier.height(12.dp))
-                    CellTweet(tweet) {
-                        val url = "https://twitter.com/${it.user.username}/status/${it.id}"
-                        LinkHelper.openLinkInAppBrowser(context, url)
+
+    SwipeRefresh(
+        state = rememberSwipeRefreshState(isRefreshing),
+        onRefresh = { viewModel.refresh() },
+    ) {
+        when (viewState) {
+            TvlModule.ViewState.Success -> {
+                LazyColumn(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                ) {
+                    items(items) { tweet: Tweet ->
+                        Spacer(modifier = Modifier.height(12.dp))
+                        CellTweet(tweet) {
+                            val url = "https://twitter.com/${it.user.username}/status/${it.id}"
+                            LinkHelper.openLinkInAppBrowser(context, url)
+                        }
+                    }
+
+                    item {
+                        Box(
+                            modifier = Modifier
+                                .padding(vertical = 32.dp)
+                                .fillMaxWidth(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            ButtonSecondaryDefault(
+                                title = stringResource(id = R.string.CoinPage_Twitter_ShowMore),
+                                onClick = {
+                                    val url = "https://twitter.com/${viewModel.username}"
+                                    LinkHelper.openLinkInAppBrowser(context, url)
+                                }
+                            )
+                        }
                     }
                 }
 
-                item {
-                    Box(
-                        modifier = Modifier
-                            .padding(vertical = 32.dp)
-                            .fillMaxWidth(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        ButtonSecondaryDefault(
-                            title = stringResource(id = R.string.CoinPage_Twitter_ShowMore),
-                            onClick = {
-                                val url = "https://twitter.com/${viewModel.username}"
-                                LinkHelper.openLinkInAppBrowser(context, url)
-                            }
-                        )
-                    }
+            }
+            TvlModule.ViewState.Error -> {
+                ListErrorView(
+                    stringResource(R.string.Market_SyncError)
+                ) {
+                    viewModel.refresh()
                 }
             }
         }
