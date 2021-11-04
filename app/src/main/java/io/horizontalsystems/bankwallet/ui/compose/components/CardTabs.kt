@@ -56,7 +56,6 @@ fun <T> CardTabs(
                     modifier = Modifier
                         .padding(end = if (lastElement) 0.dp else 12.dp)
                         .then(border)
-                        .width(98.dp)
                         .fillMaxHeight()
                         .clip(RoundedCornerShape(12.dp))
                         .background(ComposeAppTheme.colors.lawrence),
@@ -66,7 +65,7 @@ fun <T> CardTabs(
                     },
                 ) {
                     Column(modifier = Modifier.padding(12.dp)) {
-                        Row(modifier = Modifier.fillMaxWidth()) {
+                        Row(modifier = Modifier.widthIn(min = 70.dp)) {
                             tabItem.icon?.let { icon ->
                                 Image(
                                     modifier = Modifier.size(24.dp),
@@ -74,17 +73,17 @@ fun <T> CardTabs(
                                     contentDescription = ""
                                 )
                             }
-                            Spacer(modifier = Modifier.weight(1f))
+                            Spacer(modifier = Modifier.width(10.dp))
                             tabItem.label?.let {
                                 Badge(text = it)
                             }
                         }
                         Spacer(modifier = Modifier.weight(1f))
                         Text(
-                            modifier = Modifier.fillMaxWidth(),
                             text = tabItem.title,
                             style = ComposeAppTheme.typography.subhead1,
-                            color = ComposeAppTheme.colors.oz
+                            color = ComposeAppTheme.colors.oz,
+                            maxLines = 1
                         )
                     }
                 }
@@ -101,12 +100,11 @@ fun PreviewCardTabs() {
     val map = mapOf(
         "BTC" to ImageSource.Local(R.drawable.coin_placeholder),
         "ETH" to ImageSource.Local(R.drawable.coin_placeholder),
-        "BNB" to ImageSource.Local(R.drawable.coin_placeholder),
-        "ZCASH" to ImageSource.Local(R.drawable.coin_placeholder)
+        "ZCASH-LONGNAME" to ImageSource.Local(R.drawable.coin_placeholder)
     )
 
     val tabItems = map.toList().mapIndexed { index, (title, icon) ->
-        TabItem(title, selectedIndex == index, title, icon, "ERC20")
+        TabItem(title, selectedIndex == index, title, icon, if (index == 1) null else "ERC20")
     }
 
     CardTabs(
