@@ -187,7 +187,7 @@ dependencies {
     api 'com.journeyapps:zxing-android-embedded:4.1.0'
 
     // WorkManager Kotlin
-    def work_version = "2.5.0"
+    def work_version = "2.7.0"
     implementation "androidx.work:work-runtime-ktx:$work_version"
     // WorkManager RxJava2 support
     implementation "androidx.work:work-rxjava2:$work_version"

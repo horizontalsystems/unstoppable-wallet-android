@@ -76,6 +76,7 @@ interface ILocalStorage {
     var ignoreRootedDeviceWarning: Boolean
     var launchPage: LaunchPage?
     var mainTab: MainModule.MainTab?
+    var customTokensRestoreCompleted: Boolean
 
     fun getSwapProviderId(blockchain: SwapMainModule.Blockchain): String?
     fun setSwapProviderId(blockchain: SwapMainModule.Blockchain, providerId: String)

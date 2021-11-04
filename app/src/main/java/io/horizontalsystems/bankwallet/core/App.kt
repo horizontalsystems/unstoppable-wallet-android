@@ -5,6 +5,8 @@ import android.content.res.Configuration
 import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.preference.PreferenceManager
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.core.factories.AccountFactory
 import io.horizontalsystems.bankwallet.core.factories.AdapterFactory
@@ -34,8 +36,9 @@ import io.reactivex.plugins.RxJavaPlugins
 import java.util.logging.Level
 import java.util.logging.Logger
 import kotlin.system.exitProcess
+import androidx.work.Configuration as WorkConfiguration
 
-class App : CoreApp() {
+class App : CoreApp(), WorkConfiguration.Provider  {
 
     companion object : ICoreApp by CoreApp {
 
@@ -233,6 +236,11 @@ class App : CoreApp() {
         }
     }
 
+    override fun getWorkManagerConfiguration() =
+        WorkConfiguration.Builder()
+            .setMinimumLoggingLevel(Log.VERBOSE)
+            .build()
+
     override fun onTrimMemory(level: Int) {
         when (level) {
             TRIM_MEMORY_BACKGROUND,
@@ -280,6 +288,11 @@ class App : CoreApp() {
             accountManager.clearAccounts()
 
             AppVersionManager(systemInfoManager, localStorage).apply { storeAppVersion() }
+
+            if (!localStorage.customTokensRestoreCompleted) {
+                val request = OneTimeWorkRequestBuilder<RestoreCustomTokenWorker>().build()
+                WorkManager.getInstance(instance).enqueue(request)
+            }
 
         }.start()
     }
