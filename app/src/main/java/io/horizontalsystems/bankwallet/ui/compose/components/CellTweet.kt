@@ -24,30 +24,35 @@ import coil.size.OriginalSize
 import coil.size.Scale
 import com.twitter.twittertext.Extractor
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.modules.coin.tweets.ReferencedTweetViewItem
 import io.horizontalsystems.bankwallet.modules.coin.tweets.Tweet
-import io.horizontalsystems.bankwallet.modules.coin.tweets.TwitterUser
+import io.horizontalsystems.bankwallet.modules.coin.tweets.TweetViewItem
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import java.util.*
 
 @ExperimentalCoilApi
 @Preview
 @Composable
 fun CellTweetPreview() {
     ComposeAppTheme {
-        CellTweet(Tweet(
-            "123",
-            TwitterUser("325234", "cool", "supercool", ""),
-            "Hello!!! Wazapp....!!! Hello!!! Wazapp....!!! ",
-            Date(),
-            listOf(),
-            null
-        )) {}
+        CellTweet(TweetViewItem(
+            title = "Super",
+            subtitle = "@super",
+            titleImageUrl = "",
+            text = "Some special!!! Unbelievable...",
+            attachments = listOf(),
+            date = "Nov 12, 12:39",
+            referencedTweet = null,
+            entities = listOf(),
+            url = ""
+        )) {
+
+        }
     }
 }
 
 @ExperimentalCoilApi
 @Composable
-fun CellTweet(tweet: Tweet, onClick: (Tweet) -> Unit) {
+fun CellTweet(tweet: TweetViewItem, onClick: (TweetViewItem) -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -83,35 +88,29 @@ fun CellTweet(tweet: Tweet, onClick: (Tweet) -> Unit) {
 }
 
 @Composable
-private fun TweetDate(tweet: Tweet) {
+private fun TweetDate(tweet: TweetViewItem) {
     Text(
-        text = tweet.date.toString(),
+        text = tweet.date,
         color = ComposeAppTheme.colors.grey,
         style = ComposeAppTheme.typography.micro
     )
 }
 
 @Composable
-private fun TweetReferencedTweet(referencedTweet: Tweet.ReferencedTweetXxx) {
+private fun TweetReferencedTweet(referencedTweet: ReferencedTweetViewItem) {
     Column(Modifier
         .fillMaxWidth()
         .clip(RoundedCornerShape(16.dp))
         .background(ComposeAppTheme.colors.steel10)
         .padding(horizontal = 16.dp, vertical = 12.dp)
     ) {
-        val typeString = when (referencedTweet.referenceType) {
-            Tweet.ReferenceType.Quoted -> "Quoted"
-            Tweet.ReferenceType.Retweeted -> "Retweeted"
-            Tweet.ReferenceType.Replied -> "Replying to"
-        }
-        val referencedTweetTitle = "$typeString @${referencedTweet.tweet.user.username}"
         Text(
-            text = referencedTweetTitle,
+            text = referencedTweet.title,
             color = ComposeAppTheme.colors.grey,
             style = ComposeAppTheme.typography.caption
         )
         Text(
-            text = referencedTweet.tweet.text,
+            text = referencedTweet.text,
             color = ComposeAppTheme.colors.leah,
             style = ComposeAppTheme.typography.subhead2
         )
@@ -137,25 +136,25 @@ private fun TweetText(text: String, entities: List<Extractor.Entity>) {
 
 @ExperimentalCoilApi
 @Composable
-private fun TweetTitle(tweet: Tweet) {
+private fun TweetTitle(tweet: TweetViewItem) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         Image(
             modifier = Modifier
                 .size(24.dp)
                 .clip(CircleShape),
-            painter = rememberImagePainter(tweet.user.profileImageUrl),
+            painter = rememberImagePainter(tweet.titleImageUrl),
             contentDescription = ""
         )
         Spacer(modifier = Modifier.width(8.dp))
         Column {
             Text(
-                text = tweet.user.name,
+                text = tweet.title,
                 color = ComposeAppTheme.colors.oz,
                 style = ComposeAppTheme.typography.body
             )
             Spacer(modifier = Modifier.height(3.dp))
             Text(
-                text = "@${tweet.user.username}",
+                text = tweet.subtitle,
                 color = ComposeAppTheme.colors.grey,
                 style = ComposeAppTheme.typography.caption
             )

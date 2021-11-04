@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.coin.tweets
 
-import com.twitter.twittertext.Extractor
 import java.util.*
 
 data class Tweet(
@@ -11,7 +10,6 @@ data class Tweet(
     val attachments: List<Attachment>,
     val referencedTweet: ReferencedTweetXxx?
 ) {
-    val entities = Extractor().extractEntitiesWithIndices(text)
     sealed class Attachment {
         class Photo(val url: String) : Attachment()
         class Video(val previewImageUrl: String) : Attachment()

@@ -72,11 +72,10 @@ fun CoinTweetsScreen(viewModel: CoinTweetsViewModel) {
                 LazyColumn(
                     modifier = Modifier.padding(horizontal = 16.dp),
                 ) {
-                    items(items) { tweet: Tweet ->
+                    items(items) { tweet: TweetViewItem ->
                         Spacer(modifier = Modifier.height(12.dp))
                         CellTweet(tweet) {
-                            val url = "https://twitter.com/${it.user.username}/status/${it.id}"
-                            LinkHelper.openLinkInAppBrowser(context, url)
+                            LinkHelper.openLinkInAppBrowser(context, it.url)
                         }
                     }
 
@@ -90,14 +89,12 @@ fun CoinTweetsScreen(viewModel: CoinTweetsViewModel) {
                             ButtonSecondaryDefault(
                                 title = stringResource(id = R.string.CoinPage_Twitter_ShowMore),
                                 onClick = {
-                                    val url = "https://twitter.com/${viewModel.username}"
-                                    LinkHelper.openLinkInAppBrowser(context, url)
+                                    LinkHelper.openLinkInAppBrowser(context, viewModel.twitterPageUrl)
                                 }
                             )
                         }
                     }
                 }
-
             }
             TvlModule.ViewState.Error -> {
                 ListErrorView(
