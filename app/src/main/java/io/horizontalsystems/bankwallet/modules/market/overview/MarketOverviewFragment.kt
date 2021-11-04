@@ -30,7 +30,7 @@ import io.horizontalsystems.bankwallet.modules.market.MarketDataValue
 import io.horizontalsystems.bankwallet.modules.market.MarketModule
 import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
 import io.horizontalsystems.bankwallet.modules.market.TopMarket
-import io.horizontalsystems.bankwallet.modules.market.metricspage.MetricsPageFragment
+import io.horizontalsystems.bankwallet.modules.market.metricspage_new.MetricsPageFragment
 import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.MarketMetrics
 import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.ViewItemState
 import io.horizontalsystems.bankwallet.modules.market.topcoins.MarketTopCoinsFragment
@@ -71,13 +71,13 @@ class MarketOverviewFragment : BaseFragment() {
 
     private fun openMetricsPage(metricsType: MetricsType) {
         if (metricsType == MetricsType.TvlInDefi) {
-            findNavController().navigate(R.id.tvlFragment)
+            findNavController().navigate(R.id.tvlFragment, null, navOptionsFromBottom())
         } else {
             val arguments = MetricsPageFragment.prepareParams(metricsType)
             findNavController().navigate(
                 R.id.mainFragment_to_metricPageFragment,
                 arguments,
-                navOptions()
+                navOptionsFromBottom()
             )
         }
     }

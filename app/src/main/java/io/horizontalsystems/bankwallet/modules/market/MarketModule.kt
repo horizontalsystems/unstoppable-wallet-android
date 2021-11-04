@@ -17,7 +17,6 @@ import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.market.advancedsearch.TimePeriod
-import io.horizontalsystems.bankwallet.modules.market.tvl.TvlModule
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.WithTranslatableTitle
 import io.horizontalsystems.core.entities.Currency
@@ -155,11 +154,17 @@ sealed class ImageSource {
     }
 }
 
+sealed class DiffValue(val value: String) {
+    class NoDiff(value: String) : DiffValue(value)
+    class Positive(value: String) : DiffValue(value)
+    class Negative(value: String) : DiffValue(value)
+}
+
 sealed class MarketDataValue {
     class MarketCap(val value: String) : MarketDataValue()
     class Volume(val value: String) : MarketDataValue()
     class Diff(val value: BigDecimal?) : MarketDataValue()
-    class DiffNew(val value: TvlModule.Diff) : MarketDataValue()
+    class DiffNew(val value: DiffValue) : MarketDataValue()
 }
 
 @Immutable
