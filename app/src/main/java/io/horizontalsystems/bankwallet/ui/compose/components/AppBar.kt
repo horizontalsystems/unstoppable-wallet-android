@@ -70,7 +70,7 @@ fun AppBar(
                     onClick = menuItem.onClick
                 )
             }
-
-        }
+        },
+        elevation = 0.dp
     )
 }
