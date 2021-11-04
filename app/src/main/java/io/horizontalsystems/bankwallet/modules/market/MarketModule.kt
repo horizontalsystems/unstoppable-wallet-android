@@ -146,7 +146,7 @@ sealed class ImageSource {
     @Composable
     fun painter(): Painter = when (this) {
         is Local -> painterResource(resId)
-        is Remote -> rememberImagePainter(url)
+        is Remote -> rememberImagePainter(url, builder = { error(placeholder) })
     }
 }
 
