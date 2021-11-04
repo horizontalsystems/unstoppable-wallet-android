@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.ui.compose.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -40,18 +41,21 @@ fun CellTweetPreview() {
             Date(),
             listOf(),
             null
-        ))
+        )) {}
     }
 }
 
 @ExperimentalCoilApi
 @Composable
-fun CellTweet(tweet: Tweet) {
+fun CellTweet(tweet: Tweet, onClick: (Tweet) -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(16.dp))
             .background(ComposeAppTheme.colors.lawrence)
+            .clickable {
+                onClick.invoke(tweet)
+            }
             .padding(16.dp)
     ) {
         TweetTitle(tweet)
