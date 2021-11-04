@@ -14,11 +14,13 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.navigation.navGraphViewModels
+import coil.annotation.ExperimentalCoilApi
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.entities.DataState
@@ -26,7 +28,9 @@ import io.horizontalsystems.bankwallet.modules.coin.CoinViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.CellTweet
+import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 
+@ExperimentalCoilApi
 class CoinTweetsFragment : BaseFragment() {
     private val vmFactory by lazy { CoinTweetsModule.Factory(coinViewModel.fullCoin) }
 
@@ -46,13 +50,13 @@ class CoinTweetsFragment : BaseFragment() {
                 }
             }
         }
-
     }
-
 }
 
+@ExperimentalCoilApi
 @Composable
 fun CoinTweetsScreen(viewModel: CoinTweetsViewModel) {
+    val context = LocalContext.current
     val items by viewModel.itemsLiveData.observeAsState()
     when (val itemsCopy = items) {
         is DataState.Error -> {
@@ -65,7 +69,10 @@ fun CoinTweetsScreen(viewModel: CoinTweetsViewModel) {
             ) {
                 items(itemsCopy.data) { tweet: Tweet ->
                     Spacer(modifier = Modifier.height(12.dp))
-                    CellTweet(tweet)
+                    CellTweet(tweet) {
+                        val url = "https://twitter.com/${it.user.username}/status/${it.id}"
+                        LinkHelper.openLinkInAppBrowser(context, url)
+                    }
                 }
 
                 item {
@@ -77,7 +84,10 @@ fun CoinTweetsScreen(viewModel: CoinTweetsViewModel) {
                     ) {
                         ButtonSecondaryDefault(
                             title = stringResource(id = R.string.CoinPage_Twitter_ShowMore),
-                            onClick = { /*TODO*/ }
+                            onClick = {
+                                val url = "https://twitter.com/${viewModel.username}"
+                                LinkHelper.openLinkInAppBrowser(context, url)
+                            }
                         )
                     }
                 }

@@ -20,6 +20,9 @@ class CoinTweetsService(
     val stateObservable: Observable<DataState<List<Tweet>>>
         get() = stateSubject
 
+    val username: String? get() = user?.username
+    var user: TwitterUser? = null
+
     fun start() {
         fetch()
     }
@@ -33,19 +36,28 @@ class CoinTweetsService(
     }
 
     private fun fetch() {
-        val single = marketKit
-            .marketInfoOverviewSingle(coinUid, "USD", "en")
-            .flatMap {
-                val username = it.links[LinkType.Twitter]
+        val tmpUser = user
 
-                if (username != null) {
-                    twitterProvider.userRequestSingle(username)
-                } else {
-                    Single.error(TweetsProvider.UserNotFound())
+        val twitterUserSingle = if (tmpUser != null) {
+            Single.just(tmpUser)
+        } else {
+            marketKit
+                .marketInfoOverviewSingle(coinUid, "USD", "en")
+                .flatMap {
+                    val username = it.links[LinkType.Twitter]
+
+                    if (username != null) {
+                        twitterProvider.userRequestSingle(username)
+                    } else {
+                        Single.error(TweetsProvider.UserNotFound())
+                    }
                 }
-            }
+                .doOnSuccess {
+                    user = it
+                }
+        }
 
-        single
+        twitterUserSingle
             .flatMap {
                 twitterProvider.tweetsSingle(it)
             }

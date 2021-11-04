@@ -12,6 +12,7 @@ class CoinTweetsViewModel(
     private val disposables = CompositeDisposable()
 
     val itemsLiveData = MutableLiveData<DataState<List<Tweet>>>()
+    val username by service::username
 
     init {
         service.stateObservable
