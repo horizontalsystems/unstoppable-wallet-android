@@ -19,7 +19,6 @@ data class TweetsPageResponse(
     )
 
     fun tweets(user: TwitterUser): List<Tweet> {
-//        return listOf()
         return data.map { rawTweet ->
             val attachments = mutableListOf<Tweet.Attachment>()
             rawTweet.attachments?.mediaKeys?.let { mediaKeys ->
@@ -53,11 +52,8 @@ data class TweetsPageResponse(
 
             var referencedTweet: Tweet.ReferencedTweetXxx? = null
             rawTweet.referencedTweets?.firstOrNull()?.let { tweetReference ->
-
                 includes.referencedTweets.find { tweet -> tweet.id == tweetReference.id }?.let { rawReferencedTweet ->
-
                     includes.users.find { user -> user.id == rawReferencedTweet.authorId }?.let { referencedTweetAuthor ->
-
                         val tweet = Tweet(
                             rawReferencedTweet.id,
                             referencedTweetAuthor,
@@ -73,19 +69,17 @@ data class TweetsPageResponse(
                             "replied_to" -> Tweet.ReferencedTweetXxx(Tweet.ReferenceType.Replied, tweet)
                             else -> null
                         }
-
                     }
-
                 }
             }
 
             Tweet(
-                    rawTweet.id,
-                    user,
-                    rawTweet.text,
-                    rawTweet.date,
-                    attachments,
-                    referencedTweet
+                rawTweet.id,
+                user,
+                rawTweet.text,
+                rawTweet.date,
+                attachments,
+                referencedTweet
             )
         }
     }
@@ -99,7 +93,7 @@ data class TweetsPageResponse(
         val text: String,
         val attachments: Attachments?,
         @SerializedName("referenced_tweets")
-        val referencedTweets: List<ReferencedTweet>?,
+        val referencedTweets: List<ReferencedTweet>?
     ) {
         data class Attachments(
             @SerializedName("media_keys")
@@ -108,33 +102,6 @@ data class TweetsPageResponse(
             val pollIds: List<String>?,
         )
     }
-
-    data class RawEntities(
-        val urls: List<URL>,
-        val mentions: List<Mention>,
-        val hashtags: List<Hashtag>,
-
-        )
-
-    data class URL(
-        val start: Int,
-        val end: Int,
-        val url: String,
-        @SerializedName("display_url")
-        val displayUrl: String,
-    )
-
-    data class Mention(
-        val start: Int,
-        val end: Int,
-        val username: String,
-    )
-
-    data class Hashtag(
-        val start: Int,
-        val end: Int,
-        val tag: String,
-    )
 
     data class Media(
         @SerializedName("media_key")
