@@ -518,11 +518,6 @@ interface IAddTokenBlockchainService {
     fun customTokenAsync(reference: String): Single<CustomToken>
 }
 
-interface INotificationSubscriptionManager {
-    fun addNewJobs(jobs: List<SubscriptionJob>)
-    fun processJobs()
-}
-
 interface ITermsManager {
     val termsAcceptedSignal: Subject<Boolean>
     val terms: List<Term>
