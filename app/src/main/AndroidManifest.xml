@@ -69,6 +69,11 @@
             android:name=".modules.rooteddevice.RootedDeviceActivity"
             android:screenOrientation="portrait" />
 
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="${applicationId}.androidx-startup"
+            tools:node="remove">
+        </provider>
     </application>
 
 </manifest>

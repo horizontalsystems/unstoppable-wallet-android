@@ -62,6 +62,7 @@ class LocalStorageManager(private val preferences: SharedPreferences)
     private val SWAP_PROVIDER = "swap_provider_"
     private val LAUNCH_PAGE = "launch_page"
     private val MAIN_TAB = "main_tab"
+    private val CUSTOM_TOKENS_RESTORE_COMPLETED = "custom_tokens_restore_completed"
 
     private val gson by lazy { Gson() }
 
@@ -359,6 +360,12 @@ class LocalStorageManager(private val preferences: SharedPreferences)
         }
         set(value) {
             preferences.edit().putString(MAIN_TAB, value?.name).apply()
+        }
+
+    override var customTokensRestoreCompleted: Boolean
+        get() = preferences.getBoolean(CUSTOM_TOKENS_RESTORE_COMPLETED, false)
+        set(value) {
+            preferences.edit().putBoolean(CUSTOM_TOKENS_RESTORE_COMPLETED, value).apply()
         }
 
     override fun getSwapProviderId(blockchain: SwapMainModule.Blockchain): String? {
