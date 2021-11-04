@@ -1,7 +1,9 @@
-package io.horizontalsystems.bankwallet.modules.market.tvl
+package io.horizontalsystems.bankwallet.modules.market.metricspage_new
 
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
+import io.horizontalsystems.bankwallet.modules.market.MarketItem
+import io.horizontalsystems.bankwallet.modules.market.tvl.GlobalMarketRepository
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartModule
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
 import io.horizontalsystems.chartview.ChartView
@@ -10,13 +12,14 @@ import io.horizontalsystems.core.entities.Currency
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.BehaviorSubject
 
-class TvlService(
+class MetricsPageService(
+    val metricsType: MetricsType,
     private val currencyManager: ICurrencyManager,
     private val globalMarketRepository: GlobalMarketRepository
 ) {
     private var currencyManagerDisposable: Disposable? = null
     private var globalMarketPointsDisposable: Disposable? = null
-    private var tvlDataDisposable: Disposable? = null
+    private var marketDataDisposable: Disposable? = null
 
     val baseCurrency: Currency
         get() = currencyManager.baseCurrency
@@ -24,31 +27,42 @@ class TvlService(
     val chartItemsObservable: BehaviorSubject<DataState<List<MetricChartModule.Item>>> =
         BehaviorSubject.createDefault(DataState.Loading)
 
-    val marketTvlItemsObservable: BehaviorSubject<DataState<List<TvlModule.MarketTvlItem>>> =
+    val marketItemsItemsObservable: BehaviorSubject<DataState<List<MarketItem>>> =
         BehaviorSubject.createDefault(DataState.Loading)
 
     var chartType: ChartView.ChartType = ChartView.ChartType.DAILY
         set(value) {
             field = value
-            sync()
-        }
-
-    val chains: List<TvlModule.Chain> = TvlModule.Chain.values().toList()
-    var chain: TvlModule.Chain = TvlModule.Chain.All
-        set(value) {
-            field = value
-            sync()
+            syncChartItems()
         }
 
     var sortDescending: Boolean = true
         set(value) {
             field = value
-            sync()
+            syncMarketItems()
         }
 
     private fun sync() {
+        syncChartItems()
+
+        syncMarketItems()
+    }
+
+    private fun syncMarketItems() {
+        marketDataDisposable?.dispose()
+        globalMarketRepository.getMarketItems(baseCurrency, sortDescending, metricsType)
+            .doOnSubscribe { marketItemsItemsObservable.onNext(DataState.Loading) }
+            .subscribeIO({
+                marketItemsItemsObservable.onNext(DataState.Success(it))
+            }, {
+                marketItemsItemsObservable.onNext(DataState.Error(it))
+            })
+            .let { marketDataDisposable = it }
+    }
+
+    private fun syncChartItems() {
         globalMarketPointsDisposable?.dispose()
-        globalMarketRepository.getGlobalMarketPoints(baseCurrency.code, chartType, MetricsType.TvlInDefi)
+        globalMarketRepository.getGlobalMarketPoints(baseCurrency.code, chartType, metricsType)
             .doOnSubscribe { chartItemsObservable.onNext(DataState.Loading) }
             .subscribeIO({
                 chartItemsObservable.onNext(DataState.Success(it))
@@ -56,28 +70,14 @@ class TvlService(
                 chartItemsObservable.onNext(DataState.Error(it))
             })
             .let { globalMarketPointsDisposable = it }
-
-
-        tvlDataDisposable?.dispose()
-        globalMarketRepository.getMarketTvlItems(baseCurrency, chain, chartType, sortDescending)
-            .doOnSubscribe { marketTvlItemsObservable.onNext(DataState.Loading) }
-            .subscribeIO({
-                marketTvlItemsObservable.onNext(DataState.Success(it))
-            }, {
-                marketTvlItemsObservable.onNext(DataState.Error(it))
-            })
-            .let { tvlDataDisposable = it }
     }
 
     fun start() {
         currencyManager.baseCurrencyUpdatedSignal
-            .subscribeIO {
-                sync()
-            }
+            .subscribeIO { sync() }
             .let { currencyManagerDisposable = it }
         sync()
     }
-
 
     fun refresh() {
         sync()
@@ -86,7 +86,6 @@ class TvlService(
     fun stop() {
         currencyManagerDisposable?.dispose()
         globalMarketPointsDisposable?.dispose()
-        tvlDataDisposable?.dispose()
+        marketDataDisposable?.dispose()
     }
-
 }

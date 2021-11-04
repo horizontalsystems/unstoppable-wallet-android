@@ -1,7 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.market.tvl
 
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
+import io.horizontalsystems.bankwallet.modules.market.SortingField
+import io.horizontalsystems.bankwallet.modules.market.sort
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartModule
+import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
 import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.marketkit.MarketKit
@@ -15,22 +18,48 @@ class GlobalMarketRepository(
 
     fun getGlobalMarketPoints(
         currencyCode: String,
-        chartType: ChartView.ChartType
+        chartType: ChartView.ChartType,
+        metricsType: MetricsType
     ): Single<List<MetricChartModule.Item>> {
         return marketKit.globalMarketPointsSingle(currencyCode, getTimePeriod(chartType))
             .map { list ->
-                list.map { MetricChartModule.Item(it.tvl, it.timestamp) }
+                list.map { point ->
+                    val value = when (metricsType) {
+                        MetricsType.TotalMarketCap -> point.marketCap
+                        MetricsType.BtcDominance -> point.dominanceBtc
+                        MetricsType.Volume24h -> point.volume24h
+                        MetricsType.DefiCap -> point.marketCapDefi
+                        MetricsType.TvlInDefi -> point.tvl
+                    }
+                    MetricChartModule.Item(value, point.timestamp)
+                }
             }
     }
 
-    fun getTvlData(
+    fun getMarketItems(
+        currency: Currency,
+        sortDescending: Boolean,
+        metricsType: MetricsType
+    ): Single<List<MarketItem>> {
+        return marketKit.marketInfosSingle(250)
+            .map { coinMarkets ->
+                val marketItems = coinMarkets.map { MarketItem.createFromCoinMarket(it, currency) }
+                val sortingField = when (metricsType) {
+                    MetricsType.Volume24h -> if (sortDescending) SortingField.HighestVolume else SortingField.LowestVolume
+                    else -> if (sortDescending) SortingField.HighestCap else SortingField.LowestCap
+                }
+                marketItems.sort(sortingField)
+            }
+    }
+
+    fun getMarketTvlItems(
         currency: Currency,
         chain: TvlModule.Chain,
         chartType: ChartView.ChartType,
         sortDescending: Boolean
-    ): Single<List<TvlModule.CoinTvlItem>> {
+    ): Single<List<TvlModule.MarketTvlItem>> {
         // TODO stub endpoint, need to replace after actual endpoint is ready
-        return marketKit.marketInfosSingle(50)
+        return marketKit.marketInfosSingle(250)
             .map { marketInfoList ->
                 val coinTvlItems = marketInfoList.mapIndexed { index, marketInfo ->
                     MarketItem.createFromCoinMarket(
@@ -38,7 +67,7 @@ class GlobalMarketRepository(
                         currency,
                     ).let {
                         val diffPercent = it.diff ?: BigDecimal.ZERO
-                        TvlModule.CoinTvlItem(
+                        TvlModule.MarketTvlItem(
                             it.fullCoin,
                             it.marketCap,
                             it.marketCap.copy(value = it.marketCap.value * diffPercent.divide(BigDecimal(100))),

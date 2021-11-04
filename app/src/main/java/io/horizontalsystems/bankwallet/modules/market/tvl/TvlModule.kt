@@ -6,6 +6,8 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.coin.ChartInfoData
+import io.horizontalsystems.bankwallet.modules.coin.overview.ui.ChartInfoHeaderItem
+import io.horizontalsystems.bankwallet.modules.market.DiffValue
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartFactory
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -26,7 +28,7 @@ object TvlModule {
         }
     }
 
-    data class CoinTvlItem(
+    data class MarketTvlItem(
         val fullCoin: FullCoin,
         val tvl: CurrencyValue,
         val diff: CurrencyValue,
@@ -36,7 +38,7 @@ object TvlModule {
 
     @Immutable
     data class ChartData(
-        val subtitle: SubtitleViewItem,
+        val subtitle: ChartInfoHeaderItem,
         val currency: Currency,
         val chartInfoData: ChartInfoData
     )
@@ -45,12 +47,6 @@ object TvlModule {
     data class TvlData(
         val menu: Menu,
         val coinTvlViewItems: List<CoinTvlViewItem>
-    )
-
-    @Immutable
-    data class SubtitleViewItem(
-        val value: String?,
-        val diff: Diff?
     )
 
     @Immutable
@@ -64,15 +60,9 @@ object TvlModule {
     data class CoinTvlViewItem(
         val fullCoin: FullCoin,
         val tvl: String,
-        val tvlDiff: Diff,
+        val tvlDiff: DiffValue,
         val rank: String
     )
-
-    sealed class Diff(val value: String) {
-        class NoDiff(value: String) : Diff(value)
-        class Positive(value: String) : Diff(value)
-        class Negative(value: String) : Diff(value)
-    }
 
     enum class Chain : WithTranslatableTitle {
         All, Ethereum, Binance, Solana, Avalanche, Polygon;

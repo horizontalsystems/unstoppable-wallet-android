@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.market.tvl
+package io.horizontalsystems.bankwallet.modules.market.metricspage_new
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -16,6 +16,7 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
@@ -30,22 +31,27 @@ import io.horizontalsystems.bankwallet.modules.coin.adapters.CoinChartAdapter
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.ChartInfo
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.ChartInfoHeader
 import io.horizontalsystems.bankwallet.modules.market.MarketDataValue
-import io.horizontalsystems.bankwallet.modules.market.tvl.TvlModule.SelectorDialogState
+import io.horizontalsystems.bankwallet.modules.market.MarketField
+import io.horizontalsystems.bankwallet.modules.market.tvl.TvlModule
+import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.core.findNavController
 
-class TvlFragment : BaseFragment() {
+class MetricsPageFragment : BaseFragment() {
+
+    private val metricsType by lazy {
+        requireArguments().getParcelable<MetricsType>(METRICS_TYPE_KEY)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
-        val viewModel by viewModels<TvlViewModel> { TvlModule.Factory() }
+        val viewModel by viewModels<MetricsPageViewModel> { MetricsPageModule.Factory(metricsType!!) }
 
         return ComposeView(requireContext()).apply {
             setViewCompositionStrategy(
@@ -53,7 +59,7 @@ class TvlFragment : BaseFragment() {
             )
             setContent {
                 ComposeAppTheme {
-                    TvlScreen(viewModel) { onCoinClick(it) }
+                    MetricsPage(viewModel) { onCoinClick(it) }
                 }
             }
         }
@@ -66,20 +72,16 @@ class TvlFragment : BaseFragment() {
     }
 
     @Composable
-    private fun TvlScreen(
-        viewModel: TvlViewModel,
-        onCoinClick: (String) -> Unit
-    ) {
+    fun MetricsPage(viewModel: MetricsPageViewModel, onCoinClick: (String) -> Unit) {
         val viewState by viewModel.viewStateLiveData.observeAsState()
         val chartData by viewModel.chartLiveData.observeAsState()
-        val tvlData by viewModel.tvlLiveData.observeAsState()
+        val marketData by viewModel.marketLiveData.observeAsState()
         val loading by viewModel.loadingLiveData.observeAsState(false)
         val isRefreshing by viewModel.isRefreshingLiveData.observeAsState(false)
-        val chainSelectorDialogState by viewModel.chainSelectorDialogStateLiveData.observeAsState(SelectorDialogState.Closed)
 
-        Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
+        Column(Modifier.background(color = ComposeAppTheme.colors.tyler)) {
             AppBar(
-                title = TranslatableString.ResString(R.string.MarketGlobalMetrics_TvlInDefi),
+                title = TranslatableString.ResString(viewModel.metricsType.title),
                 menuItems = listOf(
                     MenuItem(
                         title = TranslatableString.ResString(R.string.Button_Close),
@@ -128,48 +130,36 @@ class TvlFragment : BaseFragment() {
                                         CoinChartAdapter.ChartViewType.MarketMetricChart,
                                         object : CoinChartAdapter.Listener {
                                             override fun onChartTouchDown() = Unit
-
                                             override fun onChartTouchUp() = Unit
 
-                                            override fun onTabSelect(chartType: ChartView.ChartType) = Unit
+                                            override fun onTabSelect(chartType: ChartView.ChartType) {
+                                                viewModel.onSelectChartType(chartType)
+                                            }
                                         })
                                 }
                             }
 
-                            tvlData?.let { tvlData ->
+                            marketData?.let { marketData ->
                                 item {
-                                    TvlMenu(
-                                        tvlData.menu,
-                                        viewModel::onClickChainSelector,
+                                    Menu(
+                                        marketData.menu,
                                         viewModel::onToggleSortType,
-                                        viewModel::onToggleTvlDiffType
+                                        viewModel::onSelectMarketField
                                     )
                                 }
-
-                                items(tvlData.coinTvlViewItems) { item ->
+                                items(marketData.marketViewItems) { marketViewItem ->
                                     MarketCoin(
-                                        item.fullCoin.coin.name,
-                                        item.fullCoin.coin.code,
-                                        item.fullCoin.coin.iconUrl,
-                                        item.fullCoin.iconPlaceholder,
-                                        item.tvl,
-                                        MarketDataValue.DiffNew(item.tvlDiff),
-                                        item.rank
-                                    ) { onCoinClick.invoke(item.fullCoin.coin.uid) }
+                                        marketViewItem.fullCoin.coin.name,
+                                        marketViewItem.fullCoin.coin.code,
+                                        marketViewItem.fullCoin.coin.iconUrl,
+                                        marketViewItem.fullCoin.iconPlaceholder,
+                                        marketViewItem.coinRate,
+                                        marketViewItem.marketDataValue,
+                                        marketViewItem.rank,
+                                    ) { onCoinClick(marketViewItem.fullCoin.coin.uid) }
                                 }
                             }
                         }
-                    }
-                }
-                // chain selector dialog
-                when (val option = chainSelectorDialogState) {
-                    is SelectorDialogState.Opened -> {
-                        AlertGroup(
-                            R.string.MarketGlobalMetrics_ChainSelectorTitle,
-                            option.select,
-                            viewModel::onSelectChain,
-                            viewModel::onChainSelectorDialogDismiss
-                        )
                     }
                 }
             }
@@ -177,27 +167,23 @@ class TvlFragment : BaseFragment() {
     }
 
     @Composable
-    private fun TvlMenu(
-        menu: TvlModule.Menu,
-        onClickChainSelector: () -> Unit,
+    private fun Menu(
+        menu: MetricsPageModule.Menu,
         onToggleSortType: () -> Unit,
-        onToggleTvlDiffType: () -> Unit
+        onSelectMarketField: (MarketField) -> Unit
     ) {
         Header(borderBottom = true) {
-            Box(modifier = Modifier.weight(1f)) {
-                SortMenu(menu.chainSelect.selected.title) {
-                    onClickChainSelector()
-                }
-            }
             ButtonSecondaryCircle(
-                modifier = Modifier.padding(end = 16.dp),
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(start = 16.dp),
                 icon = if (menu.sortDescending) R.drawable.ic_arrow_down_20 else R.drawable.ic_arrow_up_20,
                 onClick = { onToggleSortType() }
             )
-            ButtonSecondaryCircle(
+            ButtonSecondaryToggle(
                 modifier = Modifier.padding(end = 16.dp),
-                icon = if (menu.tvlDiffType == TvlModule.TvlDiffType.Percent) R.drawable.ic_percent_20 else R.drawable.ic_usd_20,
-                onClick = { onToggleTvlDiffType() }
+                select = menu.marketFieldSelect,
+                onSelect = onSelectMarketField
             )
         }
     }
@@ -208,7 +194,7 @@ class TvlFragment : BaseFragment() {
         coinCode: String,
         coinIconUrl: String,
         coinIconPlaceholder: Int,
-        tvl: String,
+        coinRate: String? = null,
         marketDataValue: MarketDataValue? = null,
         label: String? = null,
         onClick: (() -> Unit)? = null
@@ -227,11 +213,18 @@ class TvlFragment : BaseFragment() {
             Column(
                 modifier = Modifier.fillMaxWidth()
             ) {
-                MarketCoinFirstRow(coinName, tvl)
+                MarketCoinFirstRow(coinName, coinRate)
                 Spacer(modifier = Modifier.height(3.dp))
                 MarketCoinSecondRow(coinCode, marketDataValue, label)
             }
         }
     }
 
+    companion object {
+        private const val METRICS_TYPE_KEY = "metric_type"
+
+        fun prepareParams(metricType: MetricsType): Bundle {
+            return bundleOf(METRICS_TYPE_KEY to metricType)
+        }
+    }
 }

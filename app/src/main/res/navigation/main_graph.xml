@@ -272,7 +272,7 @@
     </fragment>
     <fragment
         android:id="@+id/metricsPageFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.market.metricspage.MetricsPageFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.market.metricspage_new.MetricsPageFragment"
         tools:layout="@layout/fragment_metrics_page"/>
     <fragment
         android:id="@+id/coinFragment"
