@@ -275,7 +275,7 @@ fun SearchView(
             }
         ) {
             Text(
-                text = stringResource(R.string.Market_Filter),
+                text = stringResource(R.string.Market_Filters),
                 style = ComposeAppTheme.typography.headline2,
                 color = ComposeAppTheme.colors.jacob,
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)

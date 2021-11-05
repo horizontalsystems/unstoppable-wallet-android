@@ -18,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:menu="@menu/market_advanced_search_menu"
         app:navigationIcon="@drawable/ic_back"
-        app:title="@string/Market_AdvancedSearch"
+        app:title="@string/Market_Filters"
         app:titleTextAppearance="@style/Title3" />
 
     <androidx.core.widget.NestedScrollView
