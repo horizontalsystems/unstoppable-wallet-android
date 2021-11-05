@@ -164,11 +164,10 @@
     <string name="MarketGlobalMetrics_ChainSelectorAll">All</string>
     <!--Market Search-->
     <string name="EmptyResults">Ничего не найдено</string>
-    <string name="Market_AdvancedSearch">Расширенный Поиск</string>
+    <string name="Market_Filters">Filters</string>
     <string name="Market_AdvancedSearch_Results">Результат</string>
     <string name="Market_Search_Hint">Search</string>
     <string name="Market_Search_BrowseCategories">Browse categories</string>
-    <string name="Market_Filter">Filter</string>
     <string name="Market_Filter_ChooseSet">Выбрать Набор</string>
     <string name="Market_Filter_MarketCap">Рыночная Капитализация</string>
     <string name="Market_Filter_Volume">Объем Торговли</string>
