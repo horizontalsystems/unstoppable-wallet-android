@@ -18,7 +18,6 @@ import io.horizontalsystems.bankwallet.modules.market.ViewHolderMarketItem
 import io.horizontalsystems.bankwallet.modules.market.list.MarketListViewModel
 import io.horizontalsystems.bankwallet.ui.extensions.MarketListHeaderView
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorDialog
-import io.horizontalsystems.bankwallet.ui.extensions.SelectorItem
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.android.synthetic.main.fragment_market_favorites.*
@@ -71,14 +70,12 @@ class MarketFavoritesFragment : BaseFragment(), MarketListHeaderView.Listener, V
     }
 
     override fun onSortingClick() {
-        val items = marketListViewModel.sortingFields.map {
-            SelectorItem(getString(it.titleResId), it == marketListViewModel.sortingField)
-        }
+        val items = marketListViewModel.getSortingMenuItems()
 
         SelectorDialog
                 .newInstance(items, getString(R.string.Market_Sort_PopupTitle)) { position ->
                     val selectedSortingField = marketListViewModel.sortingFields[position]
-                    marketListViewModel.updateSorting(sortingField = selectedSortingField)
+                    marketListViewModel.updateSorting(selectedSortingField)
                 }
                 .show(childFragmentManager, "sorting_field_selector")
     }
