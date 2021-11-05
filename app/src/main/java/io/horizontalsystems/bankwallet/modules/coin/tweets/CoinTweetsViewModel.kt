@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import com.twitter.twittertext.Extractor
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
-import io.horizontalsystems.bankwallet.modules.market.tvl.TvlModule
+import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.core.helpers.DateHelper
 import io.reactivex.disposables.CompositeDisposable
 
@@ -17,7 +17,7 @@ class CoinTweetsViewModel(
 
     val isRefreshingLiveData = MutableLiveData<Boolean>(false)
     val itemsLiveData = MutableLiveData<List<TweetViewItem>>()
-    val viewStateLiveData = MutableLiveData<TvlModule.ViewState>()
+    val viewStateLiveData = MutableLiveData<ViewState>()
 
     private val disposables = CompositeDisposable()
 
@@ -64,13 +64,6 @@ class CoinTweetsViewModel(
         entities = extractor.extractEntitiesWithIndices(tweet.text),
         url = "https://twitter.com/${tweet.user.username}/status/${tweet.id}"
     )
-
-    val DataState<*>.viewState: TvlModule.ViewState?
-        get() = when (this) {
-            is DataState.Error -> TvlModule.ViewState.Error
-            is DataState.Success -> TvlModule.ViewState.Success
-            else -> null
-        }
 
     fun refresh() {
         isRefreshingLiveData.postValue(true)

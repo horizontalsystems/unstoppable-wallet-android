@@ -23,6 +23,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.iconUrl
+import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.coin.adapters.CoinChartAdapter
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.ChartInfo
@@ -30,7 +31,6 @@ import io.horizontalsystems.bankwallet.modules.market.MarketDataValue
 import io.horizontalsystems.bankwallet.modules.market.tvl.TvlModule.Diff
 import io.horizontalsystems.bankwallet.modules.market.tvl.TvlModule.SelectorDialogState
 import io.horizontalsystems.bankwallet.modules.market.tvl.TvlModule.SubtitleViewItem
-import io.horizontalsystems.bankwallet.modules.market.tvl.TvlModule.ViewState
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*

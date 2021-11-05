@@ -24,8 +24,8 @@ import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.CoinViewModel
-import io.horizontalsystems.bankwallet.modules.market.tvl.TvlModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.CellTweet
@@ -68,7 +68,7 @@ fun CoinTweetsScreen(viewModel: CoinTweetsViewModel) {
         onRefresh = { viewModel.refresh() },
     ) {
         when (viewState) {
-            TvlModule.ViewState.Success -> {
+            ViewState.Success -> {
                 LazyColumn(
                     modifier = Modifier.padding(horizontal = 16.dp),
                 ) {
@@ -96,7 +96,7 @@ fun CoinTweetsScreen(viewModel: CoinTweetsViewModel) {
                     }
                 }
             }
-            TvlModule.ViewState.Error -> {
+            ViewState.Error -> {
                 ListErrorView(
                     stringResource(R.string.Market_SyncError)
                 ) {

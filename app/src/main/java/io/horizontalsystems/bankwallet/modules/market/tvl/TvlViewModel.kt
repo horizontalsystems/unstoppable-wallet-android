@@ -7,10 +7,10 @@ import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.DataState
+import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.ChartInfoData
 import io.horizontalsystems.bankwallet.modules.market.tvl.TvlModule.SelectorDialogState
 import io.horizontalsystems.bankwallet.modules.market.tvl.TvlModule.TvlDiffType
-import io.horizontalsystems.bankwallet.modules.market.tvl.TvlModule.ViewState
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartFactory
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartModule
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartModule.ValueType
