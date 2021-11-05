@@ -22,7 +22,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
-import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -36,6 +35,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -58,6 +58,7 @@ import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.*
+import io.horizontalsystems.bankwallet.ui.extensions.RotatingCircleProgressView
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorDialog
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorItem
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
@@ -222,11 +223,21 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
                     contentDescription = "Testnet"
                 )
             }
-            viewItem.syncingProgress.progress?.let {
-                CircularProgressIndicator(
-                    modifier = Modifier.align(Alignment.Center).size(31.dp),
-                    color = ComposeAppTheme.colors.grey,
-                    strokeWidth = 2.dp,
+            viewItem.syncingProgress.progress?.let { progress ->
+                AndroidView(
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                        .size(41.dp),
+                    factory = { context ->
+                        RotatingCircleProgressView(context)
+                    },
+                    update = { view ->
+                        val color = when (viewItem.syncingProgress.dimmed) {
+                            true -> R.color.grey_50
+                            false -> R.color.grey
+                        }
+                        view.setProgressColored(progress, view.context.getColor(color))
+                    }
                 )
             }
             if (viewItem.failedIconVisible) {
