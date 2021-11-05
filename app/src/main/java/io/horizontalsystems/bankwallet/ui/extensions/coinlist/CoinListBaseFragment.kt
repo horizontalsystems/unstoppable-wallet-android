@@ -20,6 +20,7 @@ abstract class CoinListBaseFragment : BaseWithSearchFragment(), CoinListAdapter.
     private lateinit var itemsAdapter: CoinListAdapter
 
     abstract val title: CharSequence
+    protected var scrollToTopAfterUpdate = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -66,7 +67,12 @@ abstract class CoinListBaseFragment : BaseWithSearchFragment(), CoinListAdapter.
         toolbar.menu.findItem(R.id.menuAddToken)?.isVisible =
             !searchExpanded.get() || searchExpanded.get() && viewItems.isEmpty()
 
-        itemsAdapter.submitList(viewItems)
+        itemsAdapter.submitList(viewItems) {
+            if (scrollToTopAfterUpdate) {
+                recyclerView.scrollToPosition(0)
+                scrollToTopAfterUpdate = false
+            }
+        }
         progressLoading.isVisible = false
         noResultsText.isVisible = viewItems.isEmpty()
     }
