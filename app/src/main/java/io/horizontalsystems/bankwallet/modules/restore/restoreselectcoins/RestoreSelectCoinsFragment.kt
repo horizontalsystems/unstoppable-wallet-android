@@ -66,6 +66,7 @@ class RestoreSelectCoinsFragment : CoinListBaseFragment() {
             activity?.let {
                 EnableCoinsDialog.show(it, tokenType, object : EnableCoinsDialog.Listener {
                     override fun onClickEnable() {
+                        scrollToTopAfterUpdate = true
                         enableCoinsViewModel.onConfirmEnable()
                     }
                 })
