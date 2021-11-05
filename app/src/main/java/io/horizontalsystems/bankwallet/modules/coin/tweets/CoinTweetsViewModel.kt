@@ -13,7 +13,7 @@ class CoinTweetsViewModel(
     private val service: CoinTweetsService,
     private val extractor: Extractor,
 ) : ViewModel() {
-    val twitterPageUrl = "https://twitter.com/${service.username}"
+    val twitterPageUrl get() = "https://twitter.com/${service.username}"
 
     val isRefreshingLiveData = MutableLiveData<Boolean>(false)
     val itemsLiveData = MutableLiveData<List<TweetViewItem>>()
