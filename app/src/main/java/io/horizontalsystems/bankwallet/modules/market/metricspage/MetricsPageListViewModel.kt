@@ -21,7 +21,7 @@ import io.reactivex.disposables.CompositeDisposable
 class MetricsPageListViewModel(
     private val service: MetricsPageListService,
     private val connectivityManager: ConnectivityManager,
-    marketField: MarketField,
+    private var marketField: MarketField,
     private val metricsType: MetricsType,
     private val clearables: List<Clearable>
 ) : ViewModel() {
@@ -32,7 +32,6 @@ class MetricsPageListViewModel(
     val networkNotAvailable = SingleLiveEvent<Unit>()
 
     private var sortDesc = true
-    private var marketFieldIndex: Int = MarketField.values().indexOf(marketField)
     private val disposables = CompositeDisposable()
 
     private val sortMenu: MarketListHeaderView.SortMenu
@@ -90,11 +89,7 @@ class MetricsPageListViewModel(
         }
         val viewItems = service.marketItems
             .sort(sortingField)
-            .mapNotNull { marketItem ->
-                MarketField.fromIndex(marketFieldIndex)?.let { marketField ->
-                    MarketViewItem.create(marketItem, marketField)
-                }
-            }
+            .map { MarketViewItem.create(it, marketField) }
 
         marketViewItemsLiveData.postValue(Pair(viewItems, scrollToTop))
     }
@@ -106,22 +101,16 @@ class MetricsPageListViewModel(
     }
 
     fun onToggleButtonClick() {
-        var newIndex = marketFieldIndex + 1
-        if (newIndex >= MarketField.values().size){
-            newIndex = 0
-        }
-        marketFieldIndex = newIndex
+        marketField = marketField.next()
         syncViewItemsBySortingField(false)
         updateTopMenu()
     }
 
     private fun getToggleButton(): MarketListHeaderView.ToggleButton {
-        val marketFields: List<String> =
-            MarketField.values().map { Translator.getString(it.titleResId) }
-
         return MarketListHeaderView.ToggleButton(
-            title = marketFields[marketFieldIndex],
-            indicators = marketFields.mapIndexed { index, _ -> ToggleIndicator(index == marketFieldIndex) }
+            title = Translator.getString(marketField.titleResId),
+            indicators = MarketField.values()
+                .mapIndexed { index, _ -> ToggleIndicator(index == marketField.ordinal) }
         )
     }
 

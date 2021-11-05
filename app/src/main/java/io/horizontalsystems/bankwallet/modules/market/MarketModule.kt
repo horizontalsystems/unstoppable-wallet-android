@@ -109,6 +109,11 @@ enum class SortingField(@StringRes val titleResId: Int) : WithTranslatableTitle,
 
     override val title: TranslatableString
         get() = TranslatableString.ResString(titleResId)
+
+    companion object {
+        val map = values().associateBy(SortingField::name)
+        fun fromString(type: String?): SortingField? = map[type]
+    }
 }
 
 @Parcelize
@@ -123,8 +128,8 @@ enum class MarketField(@StringRes val titleResId: Int) : WithTranslatableTitle, 
         get() = TranslatableString.ResString(titleResId)
 
     companion object {
-        val map = values().associateBy(MarketField::ordinal)
-        fun fromIndex(id: Int): MarketField? = map[id]
+        val map = values().associateBy(MarketField::name)
+        fun fromString(type: String?): MarketField? = map[type]
     }
 }
 

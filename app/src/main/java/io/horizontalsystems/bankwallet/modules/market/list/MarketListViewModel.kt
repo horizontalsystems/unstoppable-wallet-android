@@ -26,7 +26,7 @@ class MarketListViewModel(
     var sortingField: SortingField = sortingFields.first()
         private set
 
-    private var marketFieldIndex: Int = MarketField.values().indexOf(MarketField.PriceDiff)
+    private var marketField = MarketField.PriceDiff
 
     val marketViewItemsLiveData = MutableLiveData<Pair<List<MarketViewItem>,Boolean>>()
     val loadingLiveData = MutableLiveData(false)
@@ -48,12 +48,10 @@ class MarketListViewModel(
     }
 
     private fun getToggleButton(): MarketListHeaderView.ToggleButton {
-        val marketFields: List<String> =
-            MarketField.values().map { Translator.getString(it.titleResId) }
-
         return MarketListHeaderView.ToggleButton(
-            title = marketFields[marketFieldIndex],
-            indicators = marketFields.mapIndexed { index, _ -> ToggleIndicator(index == marketFieldIndex) }
+            title = Translator.getString(marketField.titleResId),
+            indicators = MarketField.values()
+                .mapIndexed { index, _ -> ToggleIndicator(index == marketField.ordinal) }
         )
     }
 
@@ -78,11 +76,7 @@ class MarketListViewModel(
     private fun syncViewItemsBySortingField(scrollToTop: Boolean) {
         val viewItems = service.marketItems
                 .sort(sortingField)
-                .mapNotNull { marketItem ->
-                    MarketField.fromIndex(marketFieldIndex)?.let { marketField ->
-                        MarketViewItem.create(marketItem, marketField)
-                    }
-                }
+                .map { MarketViewItem.create(it, marketField) }
 
         showEmptyListTextLiveData.postValue(viewItems.isEmpty())
 
@@ -117,11 +111,7 @@ class MarketListViewModel(
     }
 
     fun onToggleButtonClick() {
-        var newIndex = marketFieldIndex + 1
-        if (newIndex >= MarketField.values().size){
-            newIndex = 0
-        }
-        marketFieldIndex = newIndex
+        marketField = marketField.next()
         syncViewItemsBySortingField(false)
         updateTopMenu()
     }
