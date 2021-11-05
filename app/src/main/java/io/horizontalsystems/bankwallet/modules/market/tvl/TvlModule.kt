@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.coin.ChartInfoData
-import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartFactory
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -34,11 +33,6 @@ object TvlModule {
         val diffPercent: BigDecimal,
         val rank: String
     )
-
-    sealed class ViewState {
-        object Error : ViewState()
-        object Success : ViewState()
-    }
 
     @Immutable
     data class ChartData(
