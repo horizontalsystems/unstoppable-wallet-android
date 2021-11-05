@@ -51,6 +51,7 @@ android {
             minifyEnabled false
             applicationIdSuffix ".dev"
             buildConfigField "boolean", "testMode", "false"
+            resValue "string", "twitterBearerToken", "AAAAAAAAAAAAAAAAAAAAAJgeNwEAAAAA6xVpR6xLKTrxIA3kkSyRA92LDpA%3Da6auybDwcymUyh2BcS6zZwicUdxGtrzJC0qvOSdRwKLeqBGhwB"
             resValue "string", "cryptoCompareApiKey", "2b08fe1dba559ca6acf5e1897b6de8749cee0ace6052d7aa7fccf6aa9f1b3255"
             resValue "string", "uniswapGraphUrl", "https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2"
             resValue "string", "infuraProjectId", "2a1306f1d12f4c109a4d4fb9be46b02e"
@@ -87,6 +88,7 @@ android {
             minifyEnabled false
             buildConfigField "boolean", "testMode", "false"
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            resValue "string", "twitterBearerToken", ""
             resValue "string", "cryptoCompareApiKey", ""
             resValue "string", "uniswapGraphUrl", "https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2"
             resValue "string", "infuraProjectId", "5bf760228fcd47bb8d277dba49b7b369"

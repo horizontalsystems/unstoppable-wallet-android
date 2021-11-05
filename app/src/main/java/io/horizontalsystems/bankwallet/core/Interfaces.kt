@@ -310,6 +310,7 @@ interface IAppConfigProvider {
     val appTelegramLink: String
     val appRedditLink: String
     val reportEmail: String
+    val twitterBearerToken: String
     val cryptoCompareApiKey: String
     val defiyieldProviderApiKey: String
     val infuraProjectId: String
