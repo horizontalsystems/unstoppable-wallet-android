@@ -10,8 +10,9 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.BehaviorSubject
 
 class MarketListService(
-        private val fetcher: IMarketListFetcher,
-        private val currencyManager: ICurrencyManager
+    private val fetcher: IMarketListFetcher,
+    private val menuService: IMarketListMenu,
+    private val currencyManager: ICurrencyManager
 ) : Clearable {
 
     sealed class State {
@@ -23,6 +24,9 @@ class MarketListService(
     val stateObservable: BehaviorSubject<State> = BehaviorSubject.createDefault(State.Loading)
 
     var marketItems: List<MarketItem> = listOf()
+
+    var sortingField by menuService::sortingField
+    var marketField by menuService::marketField
 
     private var topItemsDisposable: Disposable? = null
     private val disposable = CompositeDisposable()

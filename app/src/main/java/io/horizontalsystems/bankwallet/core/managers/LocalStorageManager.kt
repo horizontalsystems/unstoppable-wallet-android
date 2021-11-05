@@ -13,7 +13,9 @@ import io.horizontalsystems.bankwallet.entities.SyncMode
 import io.horizontalsystems.bankwallet.entities.TransactionDataSortingType
 import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
 import io.horizontalsystems.bankwallet.modules.main.MainModule
+import io.horizontalsystems.bankwallet.modules.market.MarketField
 import io.horizontalsystems.bankwallet.modules.market.MarketModule
+import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.settings.theme.ThemeType
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
@@ -63,6 +65,8 @@ class LocalStorageManager(private val preferences: SharedPreferences)
     private val LAUNCH_PAGE = "launch_page"
     private val MAIN_TAB = "main_tab"
     private val CUSTOM_TOKENS_RESTORE_COMPLETED = "custom_tokens_restore_completed"
+    private val MARKET_FAVORITES_SORTING_FIELD = "market_favorites_sorting_field"
+    private val MARKET_FAVORITES_MARKET_FIELD = "market_favorites_market_field"
 
     private val gson by lazy { Gson() }
 
@@ -366,6 +370,22 @@ class LocalStorageManager(private val preferences: SharedPreferences)
         get() = preferences.getBoolean(CUSTOM_TOKENS_RESTORE_COMPLETED, false)
         set(value) {
             preferences.edit().putBoolean(CUSTOM_TOKENS_RESTORE_COMPLETED, value).apply()
+        }
+
+    override var marketFavoritesSortingField: SortingField?
+        get() = preferences.getString(MARKET_FAVORITES_SORTING_FIELD, null)?.let {
+            SortingField.fromString(it)
+        }
+        set(value) {
+            preferences.edit().putString(MARKET_FAVORITES_SORTING_FIELD, value?.name).apply()
+        }
+
+    override var marketFavoritesMarketField: MarketField?
+        get() = preferences.getString(MARKET_FAVORITES_MARKET_FIELD, null)?.let {
+            MarketField.fromString(it)
+        }
+        set(value) {
+            preferences.edit().putString(MARKET_FAVORITES_MARKET_FIELD, value?.name).apply()
         }
 
     override fun getSwapProviderId(blockchain: SwapMainModule.Blockchain): String? {

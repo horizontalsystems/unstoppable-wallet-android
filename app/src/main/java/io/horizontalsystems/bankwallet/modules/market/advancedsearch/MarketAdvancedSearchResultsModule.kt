@@ -12,7 +12,8 @@ object MarketAdvancedSearchResultsModule {
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            val listService = MarketListService(service, App.currencyManager)
+            val menuService = MarketAdvancedSearchMenuService()
+            val listService = MarketListService(service, menuService, App.currencyManager)
             return MarketListViewModel(listService, App.connectivityManager, listOf(listService)) as T
         }
 

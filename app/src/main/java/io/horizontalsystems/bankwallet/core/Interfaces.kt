@@ -7,7 +7,9 @@ import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
 import io.horizontalsystems.bankwallet.modules.main.MainModule
+import io.horizontalsystems.bankwallet.modules.market.MarketField
 import io.horizontalsystems.bankwallet.modules.market.MarketModule
+import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.settings.theme.ThemeType
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
@@ -77,6 +79,8 @@ interface ILocalStorage {
     var launchPage: LaunchPage?
     var mainTab: MainModule.MainTab?
     var customTokensRestoreCompleted: Boolean
+    var marketFavoritesSortingField: SortingField?
+    var marketFavoritesMarketField: MarketField?
 
     fun getSwapProviderId(blockchain: SwapMainModule.Blockchain): String?
     fun setSwapProviderId(blockchain: SwapMainModule.Blockchain, providerId: String)
