@@ -8,8 +8,6 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 class TweetsProvider(private val bearerToken: String?) {
-    //    typealias TweetsPage = (tweets: [Tweet], nextToken: String?)
-//
     interface TwitterAPI {
         @GET("users/by")
         fun getUsers(
