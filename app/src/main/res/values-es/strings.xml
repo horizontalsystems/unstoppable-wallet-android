@@ -164,11 +164,10 @@
     <string name="MarketGlobalMetrics_ChainSelectorAll">All</string>
     <!--Market Search-->
     <string name="EmptyResults">No se han encontrado resultados</string>
-    <string name="Market_AdvancedSearch">Búsqueda Avanzada</string>
+    <string name="Market_Filters">Filters</string>
     <string name="Market_AdvancedSearch_Results">Resultados</string>
     <string name="Market_Search_Hint">Search</string>
     <string name="Market_Search_BrowseCategories">Browse categories</string>
-    <string name="Market_Filter">Filter</string>
     <string name="Market_Filter_ChooseSet">Elegir Conjunto</string>
     <string name="Market_Filter_MarketCap">Cap. de Mercado</string>
     <string name="Market_Filter_Volume">Volumen de Comercio</string>
