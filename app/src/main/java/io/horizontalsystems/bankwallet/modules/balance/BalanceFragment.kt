@@ -583,7 +583,7 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
 
     private fun onSortButtonClick(currentSortType: BalanceSortType) {
         val sortTypes =
-            listOf(BalanceSortType.Name, BalanceSortType.Value, BalanceSortType.PercentGrowth)
+            listOf(BalanceSortType.Value, BalanceSortType.Name, BalanceSortType.PercentGrowth)
         val selectorItems = sortTypes.map {
             SelectorItem(getString(it.getTitleRes()), it == currentSortType)
         }

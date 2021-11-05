@@ -127,7 +127,7 @@ class LocalStorageManager(private val preferences: SharedPreferences)
     override var sortType: BalanceSortType
         get() {
             val sortString = preferences.getString(SORT_TYPE, null)
-                    ?: BalanceSortType.Name.getAsString()
+                    ?: BalanceSortType.Value.getAsString()
             return BalanceSortType.getTypeFromString(sortString)
         }
         set(sortType) {
