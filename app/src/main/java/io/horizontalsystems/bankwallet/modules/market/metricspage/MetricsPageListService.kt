@@ -78,7 +78,7 @@ class MetricsPageListService(
     }
 
     private fun getAllMarketItemsAsync(currency: Currency): Single<List<MarketItem>> {
-        return marketKit.marketInfosSingle(250)
+        return marketKit.marketInfosSingle(250, currency.code)
             .map { coinMarkets ->
                 coinMarkets.map { MarketItem.createFromCoinMarket(it, currency) }
             }

@@ -3,7 +3,10 @@ package io.horizontalsystems.bankwallet.modules.market.tvl
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
+import io.horizontalsystems.bankwallet.core.iconPlaceholder
+import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.DataState
@@ -17,6 +20,7 @@ import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartFactory
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartModule
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartModule.ValueType
 import io.horizontalsystems.bankwallet.ui.compose.Select
+import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.chartview.ChartView
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
@@ -147,22 +151,33 @@ class TvlViewModel(
 
     private fun coinTvlViewItem(item: TvlModule.MarketTvlItem) =
         TvlModule.CoinTvlViewItem(
-            item.fullCoin,
+            item.fullCoin?.coin?.uid,
             tvl = formatFiatShortened(item.tvl),
             tvlDiff = when (tvlDiffType) {
                 TvlDiffType.Currency -> {
-                    val (shortValue, suffix) = numberFormatter.shortenValue(item.diff.value.abs())
-                    diff(
-                        if (item.diff.value.signum() < 0) shortValue.negate() else shortValue,
-                        prefix = item.diff.currency.symbol,
-                        suffix = " $suffix"
-                    )
+                    item.diff?.let {
+                        val (shortValue, suffix) = numberFormatter.shortenValue(item.diff.value.abs())
+                        diff(
+                            if (item.diff.value.signum() < 0) shortValue.negate() else shortValue,
+                            prefix = item.diff.currency.symbol,
+                            suffix = " $suffix"
+                        )
+                    }
                 }
                 TvlDiffType.Percent -> {
-                    diff(item.diffPercent, suffix = "%")
+                    item.diffPercent?.let {
+                        diff(item.diffPercent, suffix = "%")
+                    }
                 }
             },
-            rank = item.rank
+            rank = item.rank,
+            name = item.fullCoin?.coin?.name ?: item.name,
+            chain = if (item.chains.size > 1)
+                TranslatableString.ResString(R.string.TvlRank_MultiChain)
+            else
+                TranslatableString.PlainString(item.chains.first()),
+            iconUrl = item.fullCoin?.coin?.iconUrl ?: item.iconUrl,
+            iconPlaceholder = item.fullCoin?.iconPlaceholder
         )
 
     private fun formatFiatShortened(currencyValue: CurrencyValue): String {

@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.market.tvl
 
+import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.market.sort
@@ -8,6 +9,7 @@ import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
 import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.marketkit.MarketKit
+import io.horizontalsystems.marketkit.models.DefiMarketInfo
 import io.horizontalsystems.marketkit.models.TimePeriod
 import io.reactivex.Single
 import java.math.BigDecimal
@@ -15,6 +17,9 @@ import java.math.BigDecimal
 class GlobalMarketRepository(
     private val marketKit: MarketKit
 ) {
+
+    @Volatile
+    private var cache: List<DefiMarketInfo> = listOf()
 
     fun getGlobalMarketPoints(
         currencyCode: String,
@@ -41,7 +46,7 @@ class GlobalMarketRepository(
         sortDescending: Boolean,
         metricsType: MetricsType
     ): Single<List<MarketItem>> {
-        return marketKit.marketInfosSingle(250)
+        return marketKit.marketInfosSingle(250, currency.code, defi = metricsType == MetricsType.DefiCap)
             .map { coinMarkets ->
                 val marketItems = coinMarkets.map { MarketItem.createFromCoinMarket(it, currency) }
                 val sortingField = when (metricsType) {
@@ -56,33 +61,71 @@ class GlobalMarketRepository(
         currency: Currency,
         chain: TvlModule.Chain,
         chartType: ChartView.ChartType,
-        sortDescending: Boolean
-    ): Single<List<TvlModule.MarketTvlItem>> {
-        // TODO stub endpoint, need to replace after actual endpoint is ready
-        return marketKit.marketInfosSingle(250)
-            .map { marketInfoList ->
-                val coinTvlItems = marketInfoList.mapIndexed { index, marketInfo ->
-                    MarketItem.createFromCoinMarket(
-                        marketInfo,
-                        currency,
-                    ).let {
-                        val diffPercent = it.diff ?: BigDecimal.ZERO
-                        TvlModule.MarketTvlItem(
-                            it.fullCoin,
-                            it.marketCap,
-                            it.marketCap.copy(value = it.marketCap.value * diffPercent.divide(BigDecimal(100))),
-                            diffPercent,
-                            (index + 1).toString()
-                        )
-                    }
-
-                }
-                if (sortDescending) {
-                    coinTvlItems.sortedByDescending { it.tvl.value }
-                } else {
-                    coinTvlItems.sortedBy { it.tvl.value }
-                }
+        sortDescending: Boolean,
+        forceRefresh: Boolean
+    ): Single<List<TvlModule.MarketTvlItem>> =
+        Single.create { emitter ->
+            try {
+                val defiMarketInfos = defiMarketInfos(currency.code, forceRefresh)
+                val marketTvlItems = getMarketTvlItems(defiMarketInfos, currency, chain, chartType, sortDescending)
+                emitter.onSuccess(marketTvlItems)
+            } catch (error: Throwable) {
+                emitter.onError(error)
             }
+        }
+
+    private fun defiMarketInfos(currencyCode: String, forceRefresh: Boolean): List<DefiMarketInfo> =
+        if (forceRefresh || cache.isEmpty()) {
+            val defiMarketInfo = marketKit.defiMarketInfosSingle(currencyCode).blockingGet()
+
+            cache = defiMarketInfo
+
+            defiMarketInfo
+        } else {
+            cache
+        }
+
+    private fun getMarketTvlItems(
+        defiMarketInfoList: List<DefiMarketInfo>,
+        currency: Currency,
+        chain: TvlModule.Chain,
+        chartType: ChartView.ChartType,
+        sortDescending: Boolean
+    ): List<TvlModule.MarketTvlItem> {
+        val tvlItems = defiMarketInfoList.map { defiMarketInfo ->
+            val diffPercent: BigDecimal? = when (chartType) {
+                ChartView.ChartType.DAILY -> defiMarketInfo.tvlChange1D
+                ChartView.ChartType.WEEKLY -> defiMarketInfo.tvlChange7D
+                ChartView.ChartType.MONTHLY -> defiMarketInfo.tvlChange30D
+                else -> null
+            }
+            val diff: CurrencyValue? = diffPercent?.let {
+                CurrencyValue(currency, defiMarketInfo.tvl * it.divide(BigDecimal(100)))
+            }
+
+            TvlModule.MarketTvlItem(
+                defiMarketInfo.fullCoin,
+                defiMarketInfo.name,
+                defiMarketInfo.chains,
+                defiMarketInfo.logoUrl,
+                CurrencyValue(currency, defiMarketInfo.tvl),
+                diff,
+                diffPercent,
+                defiMarketInfo.tvlRank.toString()
+            )
+        }
+
+        val chainTvlItems = if (chain == TvlModule.Chain.All) {
+            tvlItems
+        } else {
+            tvlItems.filter { it.chains.contains(chain.name) }
+        }
+
+        return if (sortDescending) {
+            chainTvlItems.sortedByDescending { it.tvl.value }
+        } else {
+            chainTvlItems.sortedBy { it.tvl.value }
+        }
     }
 
     private fun getTimePeriod(chartType: ChartView.ChartType): TimePeriod {

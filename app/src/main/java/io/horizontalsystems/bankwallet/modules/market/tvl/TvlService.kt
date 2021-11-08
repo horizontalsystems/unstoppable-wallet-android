@@ -30,23 +30,24 @@ class TvlService(
     var chartType: ChartView.ChartType = ChartView.ChartType.DAILY
         set(value) {
             field = value
-            sync()
+            updateGlobalMarketPoints()
+            updateTvlData(false)
         }
 
     val chains: List<TvlModule.Chain> = TvlModule.Chain.values().toList()
     var chain: TvlModule.Chain = TvlModule.Chain.All
         set(value) {
             field = value
-            sync()
+            updateTvlData(false)
         }
 
     var sortDescending: Boolean = true
         set(value) {
             field = value
-            sync()
+            updateTvlData(false)
         }
 
-    private fun sync() {
+    private fun updateGlobalMarketPoints() {
         globalMarketPointsDisposable?.dispose()
         globalMarketRepository.getGlobalMarketPoints(baseCurrency.code, chartType, MetricsType.TvlInDefi)
             .doOnSubscribe { chartItemsObservable.onNext(DataState.Loading) }
@@ -56,10 +57,16 @@ class TvlService(
                 chartItemsObservable.onNext(DataState.Error(it))
             })
             .let { globalMarketPointsDisposable = it }
+    }
 
+    private fun forceRefresh() {
+        updateGlobalMarketPoints()
+        updateTvlData(true)
+    }
 
+    private fun updateTvlData(forceRefresh: Boolean) {
         tvlDataDisposable?.dispose()
-        globalMarketRepository.getMarketTvlItems(baseCurrency, chain, chartType, sortDescending)
+        globalMarketRepository.getMarketTvlItems(baseCurrency, chain, chartType, sortDescending, forceRefresh)
             .doOnSubscribe { marketTvlItemsObservable.onNext(DataState.Loading) }
             .subscribeIO({
                 marketTvlItemsObservable.onNext(DataState.Success(it))
@@ -72,15 +79,15 @@ class TvlService(
     fun start() {
         currencyManager.baseCurrencyUpdatedSignal
             .subscribeIO {
-                sync()
+                forceRefresh()
             }
             .let { currencyManagerDisposable = it }
-        sync()
+        forceRefresh()
     }
 
 
     fun refresh() {
-        sync()
+        forceRefresh()
     }
 
     fun stop() {

@@ -1,8 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.market.tvl
 
+import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.coin.ChartInfoData
@@ -29,10 +31,13 @@ object TvlModule {
     }
 
     data class MarketTvlItem(
-        val fullCoin: FullCoin,
+        val fullCoin: FullCoin?,
+        val name: String,
+        val chains: List<String>,
+        val iconUrl: String,
         val tvl: CurrencyValue,
-        val diff: CurrencyValue,
-        val diffPercent: BigDecimal,
+        val diff: CurrencyValue?,
+        val diffPercent: BigDecimal?,
         val rank: String
     )
 
@@ -58,17 +63,25 @@ object TvlModule {
 
     @Immutable
     data class CoinTvlViewItem(
-        val fullCoin: FullCoin,
+        val coinUid: String?,
+        val name: String,
+        val chain: TranslatableString,
+        val iconUrl: String,
+        @DrawableRes
+        val iconPlaceholder: Int?,
         val tvl: String,
-        val tvlDiff: DiffValue,
+        val tvlDiff: DiffValue?,
         val rank: String
     )
 
     enum class Chain : WithTranslatableTitle {
-        All, Ethereum, Binance, Solana, Avalanche, Polygon;
+        All, Ethereum, Solana, Binance, Avalanche, Terra, Fantom, Arbitrum, Polygon;
 
         override val title: TranslatableString
-            get() = TranslatableString.PlainString(name)
+            get() = when (this) {
+                All -> TranslatableString.ResString(R.string.MarketGlobalMetrics_ChainSelectorAll)
+                else -> TranslatableString.PlainString(name)
+            }
     }
 
     enum class TvlDiffType {
