@@ -22,8 +22,6 @@ import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.core.iconPlaceholder
-import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.coin.adapters.CoinChartAdapter
@@ -34,7 +32,7 @@ import io.horizontalsystems.bankwallet.modules.market.tvl.TvlModule.SelectorDial
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
-import io.horizontalsystems.chartview.ChartView
+import io.horizontalsystems.chartview.ChartView.ChartType
 import io.horizontalsystems.core.findNavController
 
 class TvlFragment : BaseFragment() {
@@ -59,16 +57,18 @@ class TvlFragment : BaseFragment() {
         }
     }
 
-    private fun onCoinClick(coinUid: String) {
-        val arguments = CoinFragment.prepareParams(coinUid)
+    private fun onCoinClick(coinUid: String?) {
+        if (coinUid != null) {
+            val arguments = CoinFragment.prepareParams(coinUid)
 
-        findNavController().navigate(R.id.coinFragment, arguments, navOptions())
+            findNavController().navigate(R.id.coinFragment, arguments, navOptions())
+        }
     }
 
     @Composable
     private fun TvlScreen(
         viewModel: TvlViewModel,
-        onCoinClick: (String) -> Unit
+        onCoinClick: (String?) -> Unit
     ) {
         val viewState by viewModel.viewStateLiveData.observeAsState()
         val chartData by viewModel.chartLiveData.observeAsState()
@@ -131,7 +131,9 @@ class TvlFragment : BaseFragment() {
 
                                             override fun onChartTouchUp() = Unit
 
-                                            override fun onTabSelect(chartType: ChartView.ChartType) = Unit
+                                            override fun onTabSelect(chartType: ChartType) {
+                                                viewModel.onSelectChartType(chartType)
+                                            }
                                         })
                                 }
                             }
@@ -147,15 +149,15 @@ class TvlFragment : BaseFragment() {
                                 }
 
                                 items(tvlData.coinTvlViewItems) { item ->
-                                    MarketCoin(
-                                        item.fullCoin.coin.name,
-                                        item.fullCoin.coin.code,
-                                        item.fullCoin.coin.iconUrl,
-                                        item.fullCoin.iconPlaceholder,
+                                    DefiMarket(
+                                        item.name,
+                                        item.chain,
+                                        item.iconUrl,
+                                        item.iconPlaceholder,
                                         item.tvl,
-                                        MarketDataValue.DiffNew(item.tvlDiff),
+                                        item.tvlDiff?.let { MarketDataValue.DiffNew(it) },
                                         item.rank
-                                    ) { onCoinClick.invoke(item.fullCoin.coin.uid) }
+                                    ) { onCoinClick(item.coinUid) }
                                 }
                             }
                         }
@@ -203,13 +205,13 @@ class TvlFragment : BaseFragment() {
     }
 
     @Composable
-    private fun MarketCoin(
-        coinName: String,
-        coinCode: String,
-        coinIconUrl: String,
-        coinIconPlaceholder: Int,
+    private fun DefiMarket(
+        name: String,
+        chain: TranslatableString,
+        iconUrl: String,
+        iconPlaceholder: Int?,
         tvl: String,
-        marketDataValue: MarketDataValue? = null,
+        marketDataValue: MarketDataValue?,
         label: String? = null,
         onClick: (() -> Unit)? = null
     ) {
@@ -218,8 +220,8 @@ class TvlFragment : BaseFragment() {
             borderBottom = true
         ) {
             CoinImage(
-                iconUrl = coinIconUrl,
-                placeholder = coinIconPlaceholder,
+                iconUrl = iconUrl,
+                placeholder = iconPlaceholder,
                 modifier = Modifier
                     .padding(end = 16.dp)
                     .size(24.dp)
@@ -227,9 +229,9 @@ class TvlFragment : BaseFragment() {
             Column(
                 modifier = Modifier.fillMaxWidth()
             ) {
-                MarketCoinFirstRow(coinName, tvl)
+                MarketCoinFirstRow(name, tvl)
                 Spacer(modifier = Modifier.height(3.dp))
-                MarketCoinSecondRow(coinCode, marketDataValue, label)
+                MarketCoinSecondRow(chain.getString(), marketDataValue, label)
             }
         }
     }

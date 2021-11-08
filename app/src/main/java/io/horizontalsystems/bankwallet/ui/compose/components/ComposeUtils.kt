@@ -32,7 +32,7 @@ fun RateText(diff: BigDecimal?): String {
 @Composable
 fun CoinImage(
     iconUrl: String,
-    placeholder: Int = R.drawable.coin_placeholder,
+    placeholder: Int? = null ,
     modifier: Modifier,
     colorFilter: ColorFilter? = null
 ) {
@@ -40,7 +40,7 @@ fun CoinImage(
         painter = rememberImagePainter(
             data = iconUrl,
             builder = {
-                error(placeholder)
+                error(placeholder ?: R.drawable.coin_placeholder)
             }
         ),
         contentDescription = "coin icon",

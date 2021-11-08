@@ -24,7 +24,7 @@ class TopMarketsRepository(
     @Synchronized
     private fun getMarketItems(forceRefresh: Boolean, baseCurrency: Currency): List<MarketItem> =
         if (forceRefresh && (cacheTimestamp + cacheValidPeriodInMillis < System.currentTimeMillis()) || cache.isEmpty()) {
-            val marketInfoList = marketKit.marketInfosSingle(maxTopMarketSize).blockingGet()
+            val marketInfoList = marketKit.marketInfosSingle(maxTopMarketSize, baseCurrency.code).blockingGet()
 
             val marketItems = marketInfoList.map { marketInfo ->
                 MarketItem.createFromCoinMarket(
