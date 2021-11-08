@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.market.metricspage_new
+package io.horizontalsystems.bankwallet.modules.market.metricspage
 
 import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel

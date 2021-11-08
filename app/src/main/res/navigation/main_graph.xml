@@ -99,7 +99,7 @@
     <fragment
         android:id="@+id/transactionInfoFragment"
         android:name="io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoFragment"
-        tools:layout="@layout/fragment_transaction_info" >
+        tools:layout="@layout/fragment_transaction_info">
         <action
             android:id="@+id/transactionInfoFragment_to_transactionSpeedUpCancelFragment"
             app:destination="@id/transactionSpeedUpCancelFragment" />
@@ -107,8 +107,7 @@
     <fragment
         android:id="@+id/transactionSpeedUpCancelFragment"
         android:name="io.horizontalsystems.bankwallet.modules.transactionInfo.options.TransactionSpeedUpCancelFragment"
-        tools:layout="@layout/fragment_transaction_speedup_cancel"
-        >
+        tools:layout="@layout/fragment_transaction_speedup_cancel">
         <action
             android:id="@+id/transactionSpeedUpCancelFragment_to_feeSpeedInfo"
             app:destination="@id/feeSpeedInfoFragment" />
@@ -231,7 +230,7 @@
     </fragment>
     <fragment
         android:id="@+id/launchScreenSettingsFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.settings.launch.LaunchPageFragment"/>
+        android:name="io.horizontalsystems.bankwallet.modules.settings.launch.LaunchPageFragment" />
     <fragment
         android:id="@+id/baseCurrencySettingsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.basecurrency.BaseCurrencySettingsFragment"
@@ -272,8 +271,8 @@
     </fragment>
     <fragment
         android:id="@+id/metricsPageFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.market.metricspage_new.MetricsPageFragment"
-        tools:layout="@layout/fragment_metrics_page"/>
+        android:name="io.horizontalsystems.bankwallet.modules.market.metricspage.MetricsPageFragment"
+        tools:layout="@layout/fragment_metrics_page" />
     <fragment
         android:id="@+id/coinFragment"
         android:name="io.horizontalsystems.bankwallet.modules.coin.CoinFragment"
@@ -444,12 +443,10 @@
     </fragment>
     <fragment
         android:id="@+id/marketTopCoinsFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.market.topcoins.MarketTopCoinsFragment">
-    </fragment>
+        android:name="io.horizontalsystems.bankwallet.modules.market.topcoins.MarketTopCoinsFragment"></fragment>
     <fragment
         android:id="@+id/marketCategoryFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.market.category.MarketCategoryFragment">
-    </fragment>
+        android:name="io.horizontalsystems.bankwallet.modules.market.category.MarketCategoryFragment"></fragment>
     <fragment
         android:id="@+id/marketAdvancedSearchResultsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.market.advancedsearch.MarketAdvancedSearchResultsFragment"
@@ -488,13 +485,13 @@
         android:label="EvmNetworkFragment" />
     <fragment
         android:id="@+id/tvlFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.market.tvl.TvlFragment"/>
+        android:name="io.horizontalsystems.bankwallet.modules.market.tvl.TvlFragment" />
 
     <!--  Dialogs/BottomSheets  -->
-<!--    <dialog-->
-<!--        android:id="@+id/transactionInfoDialog"-->
-<!--        android:name="io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoFragment"-->
-<!--        tools:layout="@layout/fragment_transaction_info" />-->
+    <!--    <dialog-->
+    <!--        android:id="@+id/transactionInfoDialog"-->
+    <!--        android:name="io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoFragment"-->
+    <!--        tools:layout="@layout/fragment_transaction_info" />-->
     <dialog
         android:id="@+id/infoFragment"
         android:name="io.horizontalsystems.bankwallet.modules.transactionInfo.InfoFragment"

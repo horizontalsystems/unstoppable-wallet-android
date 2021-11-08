@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.market.metricspage_new
+package io.horizontalsystems.bankwallet.modules.market.metricspage
 
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState

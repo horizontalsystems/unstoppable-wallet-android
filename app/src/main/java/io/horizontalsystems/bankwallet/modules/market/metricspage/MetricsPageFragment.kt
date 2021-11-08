@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.market.metricspage_new
+package io.horizontalsystems.bankwallet.modules.market.metricspage
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -32,7 +32,6 @@ import io.horizontalsystems.bankwallet.modules.coin.overview.ui.ChartInfo
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.ChartInfoHeader
 import io.horizontalsystems.bankwallet.modules.market.MarketDataValue
 import io.horizontalsystems.bankwallet.modules.market.MarketField
-import io.horizontalsystems.bankwallet.modules.market.tvl.TvlModule
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
