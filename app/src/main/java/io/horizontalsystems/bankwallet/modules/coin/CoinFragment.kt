@@ -16,11 +16,9 @@ import androidx.navigation.navGraphViewModels
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.bankwallet.modules.coin.coinmarkets.CoinMarketsFragment
 import io.horizontalsystems.bankwallet.modules.coin.overview.CoinOverviewFragment
 import io.horizontalsystems.bankwallet.modules.coin.tweets.CoinTweetsFragment
-import io.horizontalsystems.bankwallet.modules.coin.ui.CoinScreenTitle
 import io.horizontalsystems.bankwallet.modules.enablecoin.coinplatforms.CoinPlatformsViewModel
 import io.horizontalsystems.bankwallet.modules.enablecoin.coinsettings.CoinSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.RestoreSettingsViewModel
@@ -60,10 +58,6 @@ class CoinFragment : BaseFragment(R.layout.fragment_coin) {
         tabsCompose.setContent {
             ComposeAppTheme {
                 Column {
-                    CoinScreenTitle(viewModel.fullCoin.coin.name,
-                        viewModel.fullCoin.coin.marketCapRank,
-                        viewModel.fullCoin.coin.iconUrl)
-
                     val selectedTab by viewModel.selectedTab.observeAsState()
                     val tabItems = viewModel.tabs.map {
                         TabItem(stringResource(id = it.titleResId), it == selectedTab, it)

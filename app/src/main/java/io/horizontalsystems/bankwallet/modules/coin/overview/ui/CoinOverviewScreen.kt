@@ -12,19 +12,23 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.bankwallet.modules.coin.CoinDataItem
 import io.horizontalsystems.bankwallet.modules.coin.CoinLink
 import io.horizontalsystems.bankwallet.modules.coin.ContractInfo
 import io.horizontalsystems.bankwallet.modules.coin.RoiViewItem
 import io.horizontalsystems.bankwallet.modules.coin.adapters.CoinChartAdapter
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.*
+import io.horizontalsystems.bankwallet.modules.coin.ui.CoinScreenTitle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.CellFooter
 import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.core.entities.Currency
+import io.horizontalsystems.marketkit.models.FullCoin
 
 @Composable
 fun CoinOverviewScreen(
+    fullCoin: FullCoin,
     title: TitleViewItem,
     marketData: List<CoinDataItem>,
     roi: List<RoiViewItem>,
@@ -50,6 +54,11 @@ fun CoinOverviewScreen(
         var scrollingEnabled by remember { mutableStateOf(true) }
 
         Column(modifier = Modifier.verticalScroll(rememberScrollState(), enabled = scrollingEnabled)) {
+            CoinScreenTitle(
+                fullCoin.coin.name,
+                fullCoin.coin.marketCapRank,
+                fullCoin.coin.iconUrl
+            )
 
             Title(title)
 
