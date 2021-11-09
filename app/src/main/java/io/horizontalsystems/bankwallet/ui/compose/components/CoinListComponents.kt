@@ -226,15 +226,17 @@ fun ListErrorView(
             style = ComposeAppTheme.typography.subhead2,
         )
         Spacer(Modifier.height(24.dp))
-        ButtonSecondaryDefault(
-            modifier = Modifier
-                .width(145.dp)
-                .height(28.dp),
-            title = stringResource(id = R.string.Button_Retry),
-            onClick = {
-                onClick?.invoke()
-            }
-        )
+        onClick?.let {
+            ButtonSecondaryDefault(
+                modifier = Modifier
+                    .width(145.dp)
+                    .height(28.dp),
+                title = stringResource(id = R.string.Button_Retry),
+                onClick = {
+                    it.invoke()
+                }
+            )
+        }
     }
 }
 
