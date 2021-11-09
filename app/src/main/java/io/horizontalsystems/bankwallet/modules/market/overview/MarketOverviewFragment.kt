@@ -22,8 +22,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.fragment.app.viewModels
-import com.google.accompanist.swiperefresh.SwipeRefresh
-import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
@@ -38,6 +36,7 @@ import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewMod
 import io.horizontalsystems.bankwallet.modules.market.topcoins.MarketTopCoinsFragment
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.bankwallet.ui.extensions.MarketMetricSmallView
 import io.horizontalsystems.bankwallet.ui.extensions.MetricData
@@ -90,19 +89,10 @@ class MarketOverviewFragment : BaseFragment() {
         val viewItemState by viewModel.viewItemStateLiveData.observeAsState()
         val scrollState = rememberScrollState()
 
-        SwipeRefresh(
+        HSSwipeRefresh(
             state = rememberSwipeRefreshState(isRefreshing ?: false || loading ?: false),
             onRefresh = {
                 viewModel.refresh()
-            },
-            indicator = { state, trigger ->
-                SwipeRefreshIndicator(
-                    state = state,
-                    refreshTriggerDistance = trigger,
-                    scale = true,
-                    backgroundColor = ComposeAppTheme.colors.claude,
-                    contentColor = ComposeAppTheme.colors.oz,
-                )
             }
         ) {
             when (val state = viewItemState) {
