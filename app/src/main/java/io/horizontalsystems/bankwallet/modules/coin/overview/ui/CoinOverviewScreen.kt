@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.bankwallet.modules.coin.CoinDataItem
@@ -21,7 +22,9 @@ import io.horizontalsystems.bankwallet.modules.coin.adapters.CoinChartAdapter
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.*
 import io.horizontalsystems.bankwallet.modules.coin.ui.CoinScreenTitle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.components.CellFooter
+import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
 import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.marketkit.models.FullCoin
@@ -44,81 +47,88 @@ fun CoinOverviewScreen(
     coinInfoError: String,
     chartInfo: CoinChartAdapter.ViewItemWrapper?,
     currency: Currency,
-    onTabSelect: (chartType: ChartView.ChartType) -> Unit
+    onTabSelect: (chartType: ChartView.ChartType) -> Unit,
 ) {
-    if (loading) {
-        Loading()
-    } else if (coinInfoError.isNotEmpty()) {
-        Error(coinInfoError)
-    } else {
-        var scrollingEnabled by remember { mutableStateOf(true) }
+    HSSwipeRefresh(
+        state = rememberSwipeRefreshState(loading),
+        onRefresh = { },
+        swipeEnabled = false,
+        content = {
+            if (loading) return@HSSwipeRefresh
 
-        Column(modifier = Modifier.verticalScroll(rememberScrollState(), enabled = scrollingEnabled)) {
-            CoinScreenTitle(
-                fullCoin.coin.name,
-                fullCoin.coin.marketCapRank,
-                fullCoin.coin.iconUrl
-            )
+            if (coinInfoError.isNotEmpty()) {
+                ListErrorView(coinInfoError)
+            } else {
+                var scrollingEnabled by remember { mutableStateOf(true) }
 
-            Title(title)
+                Column(modifier = Modifier.verticalScroll(rememberScrollState(), enabled = scrollingEnabled)) {
+                    CoinScreenTitle(
+                        fullCoin.coin.name,
+                        fullCoin.coin.marketCapRank,
+                        fullCoin.coin.iconUrl
+                    )
 
-            if (chartInfo != null) {
-                ChartInfo(chartInfo, currency, CoinChartAdapter.ChartViewType.CoinChart, object : CoinChartAdapter.Listener {
-                    override fun onChartTouchDown() {
-                        scrollingEnabled = false
+                    Title(title)
+
+                    if (chartInfo != null) {
+                        ChartInfo(chartInfo, currency, CoinChartAdapter.ChartViewType.CoinChart, object : CoinChartAdapter.Listener {
+                            override fun onChartTouchDown() {
+                                scrollingEnabled = false
+                            }
+
+                            override fun onChartTouchUp() {
+                                scrollingEnabled = true
+                            }
+
+                            override fun onTabSelect(chartType: ChartView.ChartType) {
+                                onTabSelect.invoke(chartType)
+                            }
+
+                        })
                     }
 
-                    override fun onChartTouchUp() {
-                        scrollingEnabled = true
+                    if (marketData.isNotEmpty()) {
+                        Spacer(modifier = Modifier.height(12.dp))
+                        MarketData(marketData)
                     }
 
-                    override fun onTabSelect(chartType: ChartView.ChartType) {
-                        onTabSelect.invoke(chartType)
+                    if (roi.isNotEmpty()) {
+                        Spacer(modifier = Modifier.height(12.dp))
+                        Roi(roi)
                     }
 
-                })
-            }
+                    if (categories.isNotEmpty()) {
+                        Spacer(modifier = Modifier.height(24.dp))
+                        Categories(categories)
+                    }
 
-            if (marketData.isNotEmpty()) {
-                Spacer(modifier = Modifier.height(12.dp))
-                MarketData(marketData)
-            }
+                    if (contractInfo.isNotEmpty()) {
+                        Spacer(modifier = Modifier.height(24.dp))
+                        Contracts(
+                            contracts = contractInfo,
+                            onClickCopy = onClickCopyContract,
+                            onClickExplorer = onClickExplorerContract,
+                        )
+                    }
 
-            if (roi.isNotEmpty()) {
-                Spacer(modifier = Modifier.height(12.dp))
-                Roi(roi)
-            }
+                    if (aboutText.isNotBlank()) {
+                        Spacer(modifier = Modifier.height(24.dp))
+                        About(aboutText)
+                    }
 
-            if (categories.isNotEmpty()) {
-                Spacer(modifier = Modifier.height(24.dp))
-                Categories(categories)
-            }
+                    if (links.isNotEmpty()) {
+                        Spacer(modifier = Modifier.height(24.dp))
+                        Links(links, onCoinLinkClick)
+                    }
 
-            if (contractInfo.isNotEmpty()) {
-                Spacer(modifier = Modifier.height(24.dp))
-                Contracts(
-                    contracts = contractInfo,
-                    onClickCopy = onClickCopyContract,
-                    onClickExplorer = onClickExplorerContract,
-                )
+                    if (showFooter) {
+                        Spacer(modifier = Modifier.height(32.dp))
+                        CellFooter(text = stringResource(id = R.string.Market_PoweredByApi))
+                    }
+                }
             }
-
-            if (aboutText.isNotBlank()) {
-                Spacer(modifier = Modifier.height(24.dp))
-                About(aboutText)
-            }
-
-            if (links.isNotEmpty()) {
-                Spacer(modifier = Modifier.height(24.dp))
-                Links(links, onCoinLinkClick)
-            }
-
-            if (showFooter) {
-                Spacer(modifier = Modifier.height(32.dp))
-                CellFooter(text = stringResource(id = R.string.Market_PoweredByApi))
-            }
-        }
-    }
+        },
+    )
 }
 
 @Preview
