@@ -1,16 +1,14 @@
 package io.horizontalsystems.bankwallet.core.storage
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
+import androidx.sqlite.db.SupportSQLiteQuery
 import io.horizontalsystems.bankwallet.entities.CustomToken
 import io.horizontalsystems.marketkit.models.CoinType
 
 @Dao
 interface CustomTokenDao {
-    @Query("SELECT * FROM CustomToken")
-    fun getCustomTokens(): List<CustomToken>
+    @RawQuery
+    fun getCustomTokens(query: SupportSQLiteQuery): List<CustomToken>
 
     @Query(
         "SELECT * FROM CustomToken " +

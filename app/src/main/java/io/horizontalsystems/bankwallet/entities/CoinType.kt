@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.entities
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.managers.RestoreSettingType
 import io.horizontalsystems.bankwallet.core.providers.Translator
-import io.horizontalsystems.marketkit.models.Coin
 import io.horizontalsystems.marketkit.models.CoinType
 
 val CoinType.blockchainType: String?
@@ -40,7 +39,8 @@ val CoinType.title: String
         return when (this) {
             is CoinType.Bitcoin -> "Bitcoin"
             is CoinType.Litecoin -> "Litecoin"
-            is CoinType.BitcoinCash -> "BitcoinCash"
+            is CoinType.BitcoinCash -> "Bitcoin Cash"
+            is CoinType.Dash -> "Dash"
             else -> ""
         }
     }

@@ -2,16 +2,12 @@ package io.horizontalsystems.bankwallet.core.managers
 
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.*
-import io.horizontalsystems.marketkit.MarketKit
 import io.horizontalsystems.marketkit.models.CoinType
-import io.horizontalsystems.marketkit.models.PlatformCoin
 
 class InitialSyncSettingsManager(
-        private val coinManager: ICoinManager,
         private val blockchainSettingsStorage: IBlockchainSettingsStorage,
         private val adapterManager: IAdapterManager,
         private val walletManager: IWalletManager,
-        private val marketKit: MarketKit
 ) : IInitialSyncModeSettingsManager {
 
     private val supportedCoinTypes = listOf(
@@ -21,15 +17,11 @@ class InitialSyncSettingsManager(
             SupportedCoinType(CoinType.Litecoin, SyncMode.Fast, true)
     )
 
-    override fun allSettings(): List<Triple<InitialSyncSetting, PlatformCoin, Boolean>> {
-        val platformCoins = marketKit.platformCoins()
-
+    override fun allSettings(): List<Pair<InitialSyncSetting, Boolean>> {
         return supportedCoinTypes.mapNotNull { supportedCoinType ->
-            val coinTypePlatformCoin = platformCoins.find { it.coinType == supportedCoinType.coinType } ?: return@mapNotNull null
-
             val setting = setting(supportedCoinType.coinType) ?: return@mapNotNull null
 
-            Triple(setting, coinTypePlatformCoin, supportedCoinType.changeable)
+            Pair(setting, supportedCoinType.changeable)
         }
     }
 

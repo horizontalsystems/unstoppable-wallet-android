@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.settings.security.privacy
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.managers.TorStatus
 import io.horizontalsystems.bankwallet.entities.*
-import io.horizontalsystems.marketkit.models.PlatformCoin
+import io.horizontalsystems.marketkit.models.CoinType
 import io.horizontalsystems.views.ListPosition
 
 object PrivacySettingsModule {
@@ -15,7 +15,7 @@ object PrivacySettingsModule {
         fun showRestartAlert(checked: Boolean)
         fun toggleTorEnabled(torEnabled: Boolean)
         fun setRestoreWalletSettingsViewItems(items: List<PrivacySettingsViewItem>)
-        fun showSyncModeSelectorDialog(syncModeOptions: List<SyncMode>, selected: SyncMode, coin: PlatformCoin)
+        fun showSyncModeSelectorDialog(syncModeOptions: List<SyncMode>, initialSyncSetting: InitialSyncSetting)
         fun setTransactionsOrdering(transactionsOrdering: TransactionDataSortingType)
         fun showTransactionsSortingOptions(items: List<TransactionDataSortingType>, selectedItem: TransactionDataSortingType)
         fun setTorConnectionStatus(connectionStatus: TorStatus)
@@ -26,8 +26,8 @@ object PrivacySettingsModule {
         fun didSwitchTorEnabled(checked: Boolean)
         fun updateTorState(checked: Boolean)
         fun setTorEnabled(checked: Boolean)
-        fun onItemTap(settingType: PrivacySettingsType, position: Int)
-        fun onSelectSetting(position: Int)
+        fun onItemTap(viewItem: PrivacySettingsViewItem)
+        fun onSelectSyncMode(syncMode: SyncMode, coinType: CoinType)
         fun onTransactionOrderSettingTap()
         fun onSelectTransactionSorting(transactionDataSortingType: TransactionDataSortingType)
         fun onShowPrivacySettingsInfoClick()
@@ -45,7 +45,7 @@ object PrivacySettingsModule {
         fun disableTor()
         fun subscribeToTorStatus()
 
-        fun syncSettings(): List<Triple<InitialSyncSetting, PlatformCoin, Boolean>>
+        fun syncSettings(): List<Pair<InitialSyncSetting, Boolean>>
         fun saveSyncModeSetting(syncModeSetting: InitialSyncSetting)
 
         fun clear()
@@ -76,19 +76,8 @@ object PrivacySettingsModule {
     }
 }
 
-sealed class PrivacySettingsType {
-    open val selectedTitle: String = ""
-
-    class RestoreModeSettingType(var selected: SyncMode) : PrivacySettingsType() {
-        override val selectedTitle: String
-            get() = selected.title
-    }
-}
-
 data class PrivacySettingsViewItem(
-    val title: String,
-    val platformCoin: PlatformCoin,
-    val settingType: PrivacySettingsType,
+    val initialSyncSetting: InitialSyncSetting,
     var enabled: Boolean = true,
     val listPosition: ListPosition
 )

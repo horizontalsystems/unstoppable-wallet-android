@@ -2,9 +2,11 @@ package io.horizontalsystems.bankwallet.modules.settings.security.privacy
 
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.managers.TorStatus
-import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.bankwallet.entities.Account
+import io.horizontalsystems.bankwallet.entities.InitialSyncSetting
+import io.horizontalsystems.bankwallet.entities.TransactionDataSortingType
+import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.core.IPinComponent
-import io.horizontalsystems.marketkit.models.PlatformCoin
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 
@@ -81,7 +83,7 @@ class PrivacySettingsInteractor(
                 }
     }
 
-    override fun syncSettings(): List<Triple<InitialSyncSetting, PlatformCoin, Boolean>> {
+    override fun syncSettings(): List<Pair<InitialSyncSetting, Boolean>> {
         return syncModeSettingsManager.allSettings()
     }
 
