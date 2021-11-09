@@ -11,7 +11,6 @@ import java.util.*
 class SwapFromCoinCardService(
         private val service: SwapMainModule.ISwapService,
         private val tradeService: SwapMainModule.ISwapTradeService,
-        private val coinProvider: SwapCoinProvider
 ) : ISwapCoinCardService {
     private val amountType: AmountType = AmountType.ExactFrom
 
@@ -26,9 +25,6 @@ class SwapFromCoinCardService(
 
     override val balance: BigDecimal?
         get() = service.balanceFrom
-
-    override val tokensForSelection: List<SwapMainModule.CoinBalanceItem>
-        get() = coinProvider.getCoins()
 
     override val isEstimatedObservable: Observable<Boolean>
         get() = tradeService.amountTypeObservable.map { it != amountType }

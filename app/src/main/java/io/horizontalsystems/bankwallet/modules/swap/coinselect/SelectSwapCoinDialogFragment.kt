@@ -10,6 +10,7 @@ import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseWithSearchDialogFragment
+import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.CoinBalanceItem
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.setNavigationResult
@@ -19,7 +20,11 @@ class SelectSwapCoinDialogFragment : BaseWithSearchDialogFragment() {
 
     private var viewModel: SelectSwapCoinViewModel? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         dialog?.window?.setWindowAnimations(R.style.RightDialogAnimations)
         return inflater.inflate(R.layout.fragment_swap_select_token, container, false)
     }
@@ -32,15 +37,15 @@ class SelectSwapCoinDialogFragment : BaseWithSearchDialogFragment() {
         }
         configureSearchMenu(toolbar.menu)
 
-        val coinBalanceItems = arguments?.getParcelableArrayList<CoinBalanceItem>(coinBalanceItemsListKey)
+        val dex = arguments?.getParcelable<SwapMainModule.Dex>(dexKey)
         val requestId = arguments?.getLong(requestIdKey)
-        if (coinBalanceItems == null || requestId == null) {
+        if (dex == null || requestId == null) {
             findNavController().popBackStack()
             return
         }
 
-        viewModel = ViewModelProvider(this, SelectSwapCoinModule.Factory(coinBalanceItems))
-                .get(SelectSwapCoinViewModel::class.java)
+        viewModel = ViewModelProvider(this, SelectSwapCoinModule.Factory(dex))
+            .get(SelectSwapCoinViewModel::class.java)
 
         val adapter = SelectSwapCoinAdapter(onClickItem = { closeWithResult(it, requestId) })
 
@@ -58,10 +63,12 @@ class SelectSwapCoinDialogFragment : BaseWithSearchDialogFragment() {
     }
 
     private fun closeWithResult(coinBalanceItem: CoinBalanceItem, requestId: Long) {
-        setNavigationResult(resultBundleKey, bundleOf(
+        setNavigationResult(
+            resultBundleKey, bundleOf(
                 requestIdKey to requestId,
                 coinBalanceItemResultKey to coinBalanceItem
-        ))
+            )
+        )
         Handler(Looper.getMainLooper()).postDelayed({
             findNavController().popBackStack()
         }, 100)
@@ -69,15 +76,12 @@ class SelectSwapCoinDialogFragment : BaseWithSearchDialogFragment() {
 
     companion object {
         const val resultBundleKey = "selectSwapCoinResultKey"
-        const val coinBalanceItemsListKey = "coinBalanceItemsListKey"
+        const val dexKey = "dexKey"
         const val requestIdKey = "requestIdKey"
         const val coinBalanceItemResultKey = "coinBalanceItemResultKey"
 
-        fun params(requestId: Long, coinBalanceItems: ArrayList<CoinBalanceItem>): Bundle {
-            return bundleOf(
-                    requestIdKey to requestId,
-                    coinBalanceItemsListKey to coinBalanceItems
-            )
+        fun params(requestId: Long, dex: SwapMainModule.Dex): Bundle {
+            return bundleOf(requestIdKey to requestId, dexKey to dex)
         }
     }
 

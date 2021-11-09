@@ -3,28 +3,12 @@ package io.horizontalsystems.bankwallet.modules.swap.coinselect
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.CoinBalanceItem
-import java.util.*
+import io.horizontalsystems.bankwallet.modules.swap.coincard.SwapCoinProvider
 
-class SelectSwapCoinViewModel(
-    private val coins: List<CoinBalanceItem>
-) : ViewModel() {
+class SelectSwapCoinViewModel(private val swapCoinProvider: SwapCoinProvider) : ViewModel() {
 
     val coinItemsLivedData = MutableLiveData<List<CoinBalanceItem>>()
     private var filter: String? = null
-
-//    private val swappableCoins by lazy {
-//        coinManager.coins.mapNotNull { coin ->
-//            val wallet = walletManager.wallet(coin)
-//            val balance = wallet?.let { adapterManager.getBalanceAdapterForWallet(it)?.balance }
-//                    ?: BigDecimal.ZERO
-//
-//            if (!coin.type.swappable || coin == excludedCoin || (hideZeroBalance == true && balance <= BigDecimal.ZERO)) {
-//                null
-//            } else {
-//                SwapCoinItem(coin, if (balance <= BigDecimal.ZERO) null else balance)
-//            }
-//        }
-//    }
 
     init {
         syncViewState()
@@ -36,17 +20,8 @@ class SelectSwapCoinViewModel(
     }
 
     private fun syncViewState() {
-        val filteredItems = filtered(coins)
+        val filteredItems = swapCoinProvider.getCoins(filter ?: "")
         coinItemsLivedData.postValue(filteredItems)
-    }
-
-    private fun filtered(items: List<CoinBalanceItem>): List<CoinBalanceItem> {
-        val filter = filter ?: return items
-
-        return items.filter {
-            it.platformCoin.name.lowercase(Locale.ENGLISH).contains(filter.lowercase(Locale.ENGLISH))
-                    || it.platformCoin.code.lowercase(Locale.ENGLISH).contains(filter.lowercase(Locale.ENGLISH))
-        }
     }
 
 }

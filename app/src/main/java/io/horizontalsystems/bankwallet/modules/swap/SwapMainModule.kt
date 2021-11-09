@@ -15,7 +15,10 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.fiat.AmountTypeSwitchService
 import io.horizontalsystems.bankwallet.core.fiat.FiatService
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.bankwallet.modules.swap.coincard.*
+import io.horizontalsystems.bankwallet.modules.swap.coincard.ISwapCoinCardService
+import io.horizontalsystems.bankwallet.modules.swap.coincard.SwapCoinCardViewModel
+import io.horizontalsystems.bankwallet.modules.swap.coincard.SwapFromCoinCardService
+import io.horizontalsystems.bankwallet.modules.swap.coincard.SwapToCoinCardService
 import io.horizontalsystems.bankwallet.modules.swap.oneinch.OneInchFragment
 import io.horizontalsystems.bankwallet.modules.swap.settings.SwapSettingsBaseFragment
 import io.horizontalsystems.bankwallet.modules.swap.settings.oneinch.OneInchSettingsFragment
@@ -227,21 +230,11 @@ object SwapMainModule {
         private val switchService by lazy {
             AmountTypeSwitchService()
         }
-        private val coinProvider by lazy {
-            SwapCoinProvider(
-                dex,
-                App.coinManager,
-                App.walletManager,
-                App.adapterManager,
-                App.currencyManager,
-                App.marketKit
-            )
-        }
         private val fromCoinCardService by lazy {
-            SwapFromCoinCardService(service, tradeService, coinProvider)
+            SwapFromCoinCardService(service, tradeService)
         }
         private val toCoinCardService by lazy {
-            SwapToCoinCardService(service, tradeService, coinProvider)
+            SwapToCoinCardService(service, tradeService)
         }
 
         @Suppress("UNCHECKED_CAST")
@@ -274,7 +267,8 @@ object SwapMainModule {
                         switchService,
                         maxButtonEnabled,
                         formatter,
-                        resetAmountOnCoinSelect
+                        resetAmountOnCoinSelect,
+                        dex
                     ) as T
                 }
                 else -> throw IllegalArgumentException()
