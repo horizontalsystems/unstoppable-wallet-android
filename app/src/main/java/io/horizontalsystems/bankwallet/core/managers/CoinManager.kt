@@ -7,6 +7,7 @@ import io.horizontalsystems.marketkit.MarketKit
 import io.horizontalsystems.marketkit.models.CoinType
 import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.marketkit.models.PlatformCoin
+import io.horizontalsystems.marketkit.models.PlatformType
 
 class CoinManager(
     private val marketKit: MarketKit,
@@ -65,8 +66,8 @@ class CoinManager(
         return marketKit.platformCoin(coinType) ?: customPlatformCoin(coinType)
     }
 
-    override fun getPlatformCoins(): List<PlatformCoin> {
-        return marketKit.platformCoins() + customPlatformCoins()
+    override fun getPlatformCoins(platformType: PlatformType, filter: String, limit: Int): List<PlatformCoin> {
+        return marketKit.platformCoins(platformType, filter, limit) + customPlatformCoins(platformType, filter)
     }
 
     override fun getPlatformCoins(coinTypes: List<CoinType>): List<PlatformCoin> {
@@ -110,8 +111,8 @@ class CoinManager(
         return customFullCoinsFromCustomTokens(adjustedCustomTokens)
     }
 
-    private fun customPlatformCoins(): List<PlatformCoin> {
-        val customTokens = storage.customTokens()
+    private fun customPlatformCoins(platformType: PlatformType, filter: String): List<PlatformCoin> {
+        val customTokens = storage.customTokens(platformType, filter)
         return adjustedCustomTokens(customTokens).map { it.platformCoin }
     }
 

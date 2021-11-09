@@ -179,7 +179,7 @@ class App : CoreApp(), WorkConfiguration.Provider  {
         adapterManager = AdapterManager(walletManager, adapterFactory, ethereumKitManager, binanceSmartChainKitManager, binanceKitManager)
         transactionAdapterManager = TransactionAdapterManager(adapterManager, adapterFactory)
 
-        initialSyncModeSettingsManager = InitialSyncSettingsManager(coinManager, blockchainSettingsStorage, adapterManager, walletManager, marketKit)
+        initialSyncModeSettingsManager = InitialSyncSettingsManager(blockchainSettingsStorage, adapterManager, walletManager)
 
         adapterFactory.initialSyncModeSettingsManager = initialSyncModeSettingsManager
 

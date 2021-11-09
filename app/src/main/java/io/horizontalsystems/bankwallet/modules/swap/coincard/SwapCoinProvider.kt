@@ -11,8 +11,8 @@ import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.marketkit.MarketKit
 import io.horizontalsystems.marketkit.models.CoinType
 import io.horizontalsystems.marketkit.models.PlatformCoin
+import io.horizontalsystems.marketkit.models.PlatformType
 import java.math.BigDecimal
-import java.util.*
 
 class SwapCoinProvider(
     private val dex: Dex,
@@ -23,21 +23,27 @@ class SwapCoinProvider(
     private val marketKit: MarketKit
 ) {
 
-    fun getCoins(): List<CoinBalanceItem> {
-        val enabledCoinItems = walletItems.filter { item ->
-            val zeroBalance = item.balance == BigDecimal.ZERO
-            dexSupportsCoin(item.platformCoin) && !zeroBalance
-        }.sortedBy { it.platformCoin.name.lowercase(Locale.ENGLISH) }
+    private fun getCoinItems(): List<CoinBalanceItem> {
+        val platformCoins = coinManager.getPlatformCoins(platformType())
 
-        val disabledCoinItems = coinManager.getPlatformCoins().filter { coin ->
-            dexSupportsCoin(coin) && !enabledCoinItems.any { it.platformCoin == coin }
-        }.map { coin ->
-            val balance = balance(coin)
+        return platformCoins.map { CoinBalanceItem(it, null, null) }
+    }
 
-            CoinBalanceItem(coin, balance, getFiatValue(coin, balance))
-        }.sortedBy { it.platformCoin.name.lowercase(Locale.ENGLISH) }
+    private fun getWalletItems(): List<CoinBalanceItem> {
+        val items = walletManager.activeWallets
+            .filter { dexSupportsCoin(it.platformCoin) }
+            .map { wallet ->
+                val balance =
+                    adapterManager.getBalanceAdapterForWallet(wallet)?.balanceData?.available
 
-        return enabledCoinItems + disabledCoinItems
+                CoinBalanceItem(
+                    wallet.platformCoin,
+                    balance,
+                    getFiatValue(wallet.platformCoin, balance)
+                )
+            }
+
+        return items
     }
 
     private fun dexSupportsCoin(coin: PlatformCoin) = when (coin.coinType) {
@@ -45,13 +51,6 @@ class SwapCoinProvider(
         CoinType.BinanceSmartChain, is CoinType.Bep20 -> dex.blockchain == Blockchain.BinanceSmartChain
         else -> false
     }
-
-    private val walletItems: List<CoinBalanceItem>
-        get() = walletManager.activeWallets.map { wallet ->
-            val balance = adapterManager.getBalanceAdapterForWallet(wallet)?.balanceData?.available
-
-            CoinBalanceItem(wallet.platformCoin, balance, getFiatValue(wallet.platformCoin, balance))
-        }
 
     private fun getFiatValue(coin: PlatformCoin, balance: BigDecimal?): CurrencyValue? {
         return balance?.let {
@@ -72,9 +71,23 @@ class SwapCoinProvider(
         }
     }
 
-    private fun balance(coin: PlatformCoin): BigDecimal? {
-        val wallet = walletManager.activeWallets.firstOrNull { it.platformCoin == coin }
-        return wallet?.let { adapterManager.getBalanceAdapterForWallet(it)?.balanceData?.available }
+    private fun platformType(): PlatformType = when (dex.blockchain) {
+        Blockchain.Ethereum -> PlatformType.Ethereum
+        Blockchain.BinanceSmartChain -> PlatformType.BinanceSmartChain
+    }
+
+    fun getCoins(): List<CoinBalanceItem> {
+        val walletItems = getWalletItems()
+        val coinItems = getCoinItems().filter { coinItem ->
+            walletItems.indexOfFirst { it.platformCoin == coinItem.platformCoin } == -1
+        }
+
+        val allItems = walletItems + coinItems
+
+        return allItems.sortedWith(compareByDescending<CoinBalanceItem> { it.balance }
+            .thenBy { it.platformCoin.coin.marketCapRank }
+            .thenBy { it.platformCoin.coin.name }
+        )
     }
 
 }
