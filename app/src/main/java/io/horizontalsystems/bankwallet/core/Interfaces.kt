@@ -510,7 +510,7 @@ interface ICoinManager {
     fun save(customTokens: List<CustomToken>)
     fun getPlatformCoin(coinType: CoinType): PlatformCoin?
     fun getPlatformCoinsByCoinTypeIds(coinTypeIds: List<String>): List<PlatformCoin>
-    fun getPlatformCoins(platformType: PlatformType, filter: String = "", limit: Int = 20): List<PlatformCoin>
+    fun getPlatformCoins(platformType: PlatformType, filter: String, limit: Int = 20): List<PlatformCoin>
     fun getPlatformCoins(coinTypes: List<CoinType>): List<PlatformCoin>
     fun featuredFullCoins(enabledPlatformCoins: List<PlatformCoin>): List<FullCoin>
     fun fullCoins(filter: String = "", limit: Int = 20): List<FullCoin>

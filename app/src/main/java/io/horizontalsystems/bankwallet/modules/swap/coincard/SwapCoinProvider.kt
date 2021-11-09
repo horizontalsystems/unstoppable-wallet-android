@@ -23,14 +23,15 @@ class SwapCoinProvider(
     private val marketKit: MarketKit
 ) {
 
-    private fun getCoinItems(): List<CoinBalanceItem> {
-        val platformCoins = coinManager.getPlatformCoins(platformType())
+    private fun getCoinItems(filter: String): List<CoinBalanceItem> {
+        val platformCoins = coinManager.getPlatformCoins(platformType(), filter)
 
         return platformCoins.map { CoinBalanceItem(it, null, null) }
     }
 
-    private fun getWalletItems(): List<CoinBalanceItem> {
+    private fun getWalletItems(filter: String): List<CoinBalanceItem> {
         val items = walletManager.activeWallets
+            .filter { filter.isEmpty() || it.coin.name.contains(filter, true) || it.coin.code.contains(filter, true) }
             .filter { dexSupportsCoin(it.platformCoin) }
             .map { wallet ->
                 val balance =
@@ -76,9 +77,9 @@ class SwapCoinProvider(
         Blockchain.BinanceSmartChain -> PlatformType.BinanceSmartChain
     }
 
-    fun getCoins(): List<CoinBalanceItem> {
-        val walletItems = getWalletItems()
-        val coinItems = getCoinItems().filter { coinItem ->
+    fun getCoins(filter: String): List<CoinBalanceItem> {
+        val walletItems = getWalletItems(filter)
+        val coinItems = getCoinItems(filter).filter { coinItem ->
             walletItems.indexOfFirst { it.platformCoin == coinItem.platformCoin } == -1
         }
 

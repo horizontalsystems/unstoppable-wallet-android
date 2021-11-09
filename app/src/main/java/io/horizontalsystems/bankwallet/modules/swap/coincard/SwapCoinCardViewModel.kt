@@ -29,7 +29,8 @@ class SwapCoinCardViewModel(
     private val switchService: AmountTypeSwitchService,
     private val maxButtonSupported: Boolean,
     private val formatter: SwapViewItemHelper,
-    private val resetAmountOnCoinSelect: Boolean
+    private val resetAmountOnCoinSelect: Boolean,
+    val dex: SwapMainModule.Dex
 ) : ViewModel() {
 
     private val disposables = CompositeDisposable()
@@ -63,9 +64,6 @@ class SwapCoinCardViewModel(
     fun inputParamsLiveData(): LiveData<AmountInputView.InputParams> = inputParamsLiveData
     fun secondaryInfoLiveData(): LiveData<String?> = secondaryInfoLiveData
     fun maxEnabledLiveData(): LiveData<Boolean> = maxEnabledLiveData
-
-    val tokensForSelection: List<SwapMainModule.CoinBalanceItem>
-        get() = coinCardService.tokensForSelection
 
     fun onSelectCoin(coin: PlatformCoin) {
         coinCardService.onSelectCoin(coin)

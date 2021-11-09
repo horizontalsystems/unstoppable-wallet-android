@@ -20,7 +20,6 @@ import io.horizontalsystems.views.helpers.LayoutHelper
 import kotlinx.android.synthetic.main.view_card_swap.view.*
 import java.math.BigDecimal
 import java.util.*
-import kotlin.collections.ArrayList
 
 class SwapCoinCardView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
     CardView(context, attrs, defStyleAttr) {
@@ -45,7 +44,7 @@ class SwapCoinCardView @JvmOverloads constructor(context: Context, attrs: Attrib
         observe(viewModel, lifecycleOwner)
 
         selectedToken.setOnSingleClickListener {
-            val params = SelectSwapCoinDialogFragment.params(uuid, ArrayList(viewModel.tokensForSelection))
+            val params = SelectSwapCoinDialogFragment.params(uuid, viewModel.dex)
             fragment.findNavController().navigate(R.id.selectSwapCoinDialog, params)
         }
 
