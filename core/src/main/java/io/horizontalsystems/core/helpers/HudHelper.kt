@@ -31,6 +31,22 @@ object HudHelper {
         return showHudNotification(contenView, text, R.color.red_d, SnackbarDuration.LONG, gravity, false)
     }
 
+    fun showWarningMessage(
+        contentView: View,
+        resId: Int,
+        duration: SnackbarDuration = SnackbarDuration.SHORT,
+        gravity: SnackbarGravity = SnackbarGravity.BOTTOM
+    ): CustomSnackbar? {
+        return showHudNotification(
+            contentView,
+            contentView.context.getString(resId),
+            R.color.grey,
+            duration,
+            gravity,
+            showWarningIcon = true
+        )
+    }
+
     fun vibrate(context: Context) {
         val vibratorService = context.getSystemService(Context.VIBRATOR_SERVICE) as? Vibrator
 
@@ -40,15 +56,16 @@ object HudHelper {
     }
 
     private fun showHudNotification(
-            contentView: View,
-            text: String,
-            backgroundColor: Int,
-            duration: SnackbarDuration,
-            gravity: SnackbarGravity,
-            showProgressBar: Boolean = false
+        contentView: View,
+        text: String,
+        backgroundColor: Int,
+        duration: SnackbarDuration,
+        gravity: SnackbarGravity,
+        showWarningIcon: Boolean = false,
+        showProgressBar: Boolean = false
     ): CustomSnackbar? {
 
-        val snackbar = CustomSnackbar.make(contentView, text, backgroundColor, duration, gravity, showProgressBar)
+        val snackbar = CustomSnackbar.make(contentView, text, backgroundColor, duration, gravity, showProgressBar, showWarningIcon)
         snackbar?.show()
 
         return snackbar

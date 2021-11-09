@@ -191,6 +191,7 @@
     <string name="MarketGlobalMetrics_TvlInDefiDescription">The historical change in cumulative value of all cryptocurrency managed by decentralized protocols.</string>
     <string name="MarketGlobalMetrics_ChainSelectorTitle">Filter by chain</string>
     <string name="MarketGlobalMetrics_ChainSelectorAll">All</string>
+    <string name="MarketGlobalMetrics_CoinNotSupported">This coin is not supported yet</string>
 
     <!--Market Search-->
     <string name="EmptyResults">No results found</string>
