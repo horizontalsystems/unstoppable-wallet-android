@@ -39,8 +39,6 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.google.accompanist.swiperefresh.SwipeRefresh
-import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.google.android.material.snackbar.Snackbar
 import io.horizontalsystems.bankwallet.R
@@ -57,6 +55,7 @@ import io.horizontalsystems.bankwallet.modules.receive.ReceiveFragment
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.bankwallet.ui.extensions.RotatingCircleProgressView
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorDialog
@@ -148,18 +147,9 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
     fun Wallets(balanceViewItems: List<BalanceViewItem>?) {
         val isRefreshing by viewModel.isRefreshing.observeAsState()
 
-        SwipeRefresh(
+        HSSwipeRefresh(
             state = rememberSwipeRefreshState(isRefreshing ?: false),
-            onRefresh = { viewModel.onRefresh() },
-            indicator = { state, trigger ->
-                SwipeRefreshIndicator(
-                    state = state,
-                    refreshTriggerDistance = trigger,
-                    scale = true,
-                    backgroundColor = ComposeAppTheme.colors.claude,
-                    contentColor = ComposeAppTheme.colors.oz,
-                )
-            }
+            onRefresh = { viewModel.onRefresh() }
         ) {
             balanceViewItems?.let {
                 LazyColumn(contentPadding = PaddingValues(bottom = 18.dp)) {

@@ -17,8 +17,6 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
-import com.google.accompanist.swiperefresh.SwipeRefresh
-import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
@@ -33,6 +31,7 @@ import io.horizontalsystems.bankwallet.modules.market.Value
 import io.horizontalsystems.bankwallet.modules.market.tvl.TvlModule.SelectorDialogState
 import io.horizontalsystems.bankwallet.modules.market.tvl.TvlModule.TvlDiffType
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
@@ -67,7 +66,7 @@ class TvlFragment : BaseFragment() {
             val arguments = CoinFragment.prepareParams(coinUid)
             findNavController().navigate(R.id.coinFragment, arguments, navOptions())
         } else {
-            HudHelper.showWarningMessage(requireView(), R.string.MarketGlobalMetrics_CoinNotSupported )
+            HudHelper.showWarningMessage(requireView(), R.string.MarketGlobalMetrics_CoinNotSupported)
         }
     }
 
@@ -98,19 +97,10 @@ class TvlFragment : BaseFragment() {
                 )
             )
 
-            SwipeRefresh(
+            HSSwipeRefresh(
                 state = rememberSwipeRefreshState(isRefreshing || loading),
                 onRefresh = {
                     viewModel.refresh()
-                },
-                indicator = { state, trigger ->
-                    SwipeRefreshIndicator(
-                        state = state,
-                        refreshTriggerDistance = trigger,
-                        scale = true,
-                        backgroundColor = ComposeAppTheme.colors.claude,
-                        contentColor = ComposeAppTheme.colors.oz,
-                    )
                 }
             ) {
                 LazyColumn {
