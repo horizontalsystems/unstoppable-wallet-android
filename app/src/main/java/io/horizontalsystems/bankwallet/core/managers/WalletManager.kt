@@ -14,11 +14,10 @@ class WalletManager(
         private val storage: IWalletStorage
 ) : IWalletManager {
 
-    override val activeWallets get() = cachedActiveWallets.walletsSet.toList()
+    override val activeWallets get() = walletsSet.toList()
     override val activeWalletsUpdatedObservable = PublishSubject.create<List<Wallet>>()
 
-    private val cachedActiveWallets = WalletsCache()
-
+    private val walletsSet = mutableSetOf<Wallet>()
     private val disposables = CompositeDisposable()
 
     init {
@@ -34,7 +33,8 @@ class WalletManager(
     override fun loadWallets() {
         val activeWallets = accountManager.activeAccount?.let { storage.wallets(it) } ?: listOf()
 
-        cachedActiveWallets.set(activeWallets)
+        walletsSet.clear()
+        walletsSet.addAll(activeWallets)
         notifyActiveWallets()
     }
 
@@ -52,8 +52,8 @@ class WalletManager(
         storage.delete(deletedWallets)
 
         val activeAccount = accountManager.activeAccount
-        cachedActiveWallets.add(newWallets.filter { it.account == activeAccount })
-        cachedActiveWallets.remove(deletedWallets)
+        walletsSet.addAll(newWallets.filter { it.account == activeAccount })
+        walletsSet.removeAll(deletedWallets)
         notifyActiveWallets()
     }
 
@@ -63,41 +63,21 @@ class WalletManager(
 
     override fun clear() {
         storage.clear()
-        cachedActiveWallets.clear()
+        walletsSet.clear()
         notifyActiveWallets()
         disposables.dispose()
     }
 
     private fun notifyActiveWallets() {
-        activeWalletsUpdatedObservable.onNext(cachedActiveWallets.walletsSet.toList())
+        activeWalletsUpdatedObservable.onNext(walletsSet.toList())
     }
 
     @Synchronized
     private fun handleUpdated(activeAccount: Account?) {
         val activeWallets = activeAccount?.let { storage.wallets(it) } ?: listOf()
 
-        cachedActiveWallets.set(activeWallets)
+        walletsSet.clear()
+        walletsSet.addAll(activeWallets)
         notifyActiveWallets()
-    }
-
-    private class WalletsCache {
-        var walletsSet = mutableSetOf<Wallet>()
-            private set
-
-        fun add(wallets: List<Wallet>) {
-            walletsSet.addAll(wallets)
-        }
-
-        fun remove(wallets: List<Wallet>) {
-            walletsSet.removeAll(wallets)
-        }
-
-        fun set(wallets: List<Wallet>) {
-            walletsSet = wallets.toMutableSet()
-        }
-
-        fun clear() {
-            walletsSet.clear()
-        }
     }
 }
