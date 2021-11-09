@@ -24,7 +24,7 @@ object MetricsPageModule {
             val globalMarketRepository = GlobalMarketRepository(App.marketKit)
             val service = MetricsPageService(metricsType, App.currencyManager, globalMarketRepository)
             val factory = MetricChartFactory(App.numberFormatter)
-            return MetricsPageViewModel(service, factory, App.numberFormatter) as T
+            return MetricsPageViewModel(service, factory) as T
         }
     }
 

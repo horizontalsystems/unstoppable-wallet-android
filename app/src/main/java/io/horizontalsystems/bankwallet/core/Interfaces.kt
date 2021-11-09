@@ -9,6 +9,7 @@ import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
 import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.market.MarketField
 import io.horizontalsystems.bankwallet.modules.market.MarketModule
+import io.horizontalsystems.bankwallet.modules.market.Value
 import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.settings.theme.ThemeType
@@ -452,6 +453,8 @@ interface IAppNumberFormatter {
     fun getSignificantDecimalFiat(value: BigDecimal): Int
     fun getSignificantDecimalCoin(value: BigDecimal): Int
     fun shortenValue(number: BigDecimal): Pair<BigDecimal, String>
+    fun formatCurrencyValueAsShortened(currencyValue: CurrencyValue): String
+    fun formatValueAsDiff(value: Value): String
 }
 
 interface IFeeRateProvider {

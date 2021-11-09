@@ -3,6 +3,8 @@ package io.horizontalsystems.bankwallet.core.managers
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.core.providers.Translator
+import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import io.horizontalsystems.bankwallet.modules.market.Value
 import io.horizontalsystems.core.ILanguageManager
 import java.math.BigDecimal
 import java.math.BigInteger
@@ -128,6 +130,37 @@ class NumberFormatter(
         }
 
         return Pair(valueDecimal.setScale(1, RoundingMode.HALF_EVEN), returnSuffix)
+    }
+
+    override fun formatCurrencyValueAsShortened(currencyValue: CurrencyValue): String {
+        val (shortenValue, suffix) = shortenValue(currencyValue.value)
+        return formatFiat(shortenValue, currencyValue.currency.symbol, 0, 2) + " $suffix"
+    }
+
+    override fun formatValueAsDiff(value: Value): String =
+        when (value) {
+            is Value.Currency -> {
+                val currencyValue = value.currencyValue
+                val (shortValue, suffix) = shortenValue(currencyValue.value.abs())
+                format(
+                    shortValue.abs(),
+                    0,
+                    2,
+                    "${sign(currencyValue.value)}${currencyValue.currency.symbol}",
+                    " $suffix"
+                )
+            }
+            is Value.Percent -> {
+                format(value.percent, 0, 2, sign(value.percent), "%")
+            }
+        }
+
+    private fun sign(value: BigDecimal): String {
+        return when (value.signum()) {
+            1 -> "+"
+            -1 -> "-"
+            else -> ""
+        }
     }
 
 }

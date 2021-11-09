@@ -7,7 +7,8 @@ import androidx.compose.ui.graphics.ColorFilter
 import coil.compose.rememberImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.modules.market.DiffValue
+import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import io.horizontalsystems.bankwallet.modules.market.Value
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import java.math.BigDecimal
 
@@ -16,11 +17,20 @@ fun RateColor(diff: BigDecimal?) =
     if (diff ?: BigDecimal.ZERO >= BigDecimal.ZERO) ComposeAppTheme.colors.remus else ComposeAppTheme.colors.lucian
 
 @Composable
-fun diffColor(diff: DiffValue) = when (diff) {
-    is DiffValue.Negative -> ComposeAppTheme.colors.lucian
-    is DiffValue.NoDiff,
-    is DiffValue.Positive -> ComposeAppTheme.colors.remus
-}
+fun diffColor(value: BigDecimal) =
+    if (value.signum() >= 0) {
+        ComposeAppTheme.colors.remus
+    } else {
+        ComposeAppTheme.colors.lucian
+    }
+
+@Composable
+fun formatValueAsDiff(value: Value): String =
+    App.numberFormatter.formatValueAsDiff(value)
+
+@Composable
+fun formatCurrencyValueAsShortened(currencyValue: CurrencyValue): String =
+    App.numberFormatter.formatCurrencyValueAsShortened(currencyValue)
 
 @Composable
 fun RateText(diff: BigDecimal?): String {
@@ -32,7 +42,7 @@ fun RateText(diff: BigDecimal?): String {
 @Composable
 fun CoinImage(
     iconUrl: String,
-    placeholder: Int? = null ,
+    placeholder: Int? = null,
     modifier: Modifier,
     colorFilter: ColorFilter? = null
 ) {

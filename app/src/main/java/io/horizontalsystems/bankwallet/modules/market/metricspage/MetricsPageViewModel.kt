@@ -9,10 +9,10 @@ import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.ChartInfoData
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.ChartInfoHeaderItem
-import io.horizontalsystems.bankwallet.modules.market.DiffValue
 import io.horizontalsystems.bankwallet.modules.market.MarketField
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
+import io.horizontalsystems.bankwallet.modules.market.Value
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartFactory
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartModule
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
@@ -22,12 +22,10 @@ import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.math.BigDecimal
 
 class MetricsPageViewModel(
     private val service: MetricsPageService,
-    private val factory: MetricChartFactory,
-    private val numberFormatter: IAppNumberFormatter
+    private val factory: MetricChartFactory
 ) : ViewModel() {
 
     private val disposables = CompositeDisposable()
@@ -130,24 +128,14 @@ class MetricsPageViewModel(
             chartViewItem.maxValue,
             chartViewItem.minValue
         )
-
         return MetricsPageModule.ChartData(
             ChartInfoHeaderItem(
                 chartViewItem.lastValueWithDiff.value,
-                diff(chartViewItem.lastValueWithDiff.diff)
+                Value.Percent(chartViewItem.lastValueWithDiff.diff)
             ),
             service.baseCurrency,
             chartInfoData
         )
-    }
-
-    private fun diff(diffValue: BigDecimal): DiffValue {
-        val diff: DiffValue = if (diffValue > BigDecimal.ZERO) {
-            DiffValue.Positive(numberFormatter.format(diffValue.abs(), 0, 2, "+", "%"))
-        } else {
-            DiffValue.Negative(numberFormatter.format(diffValue.abs(), 0, 2, "-", "%"))
-        }
-        return diff
     }
 
     private fun refreshWithMinLoadingSpinnerPeriod() {
