@@ -84,7 +84,7 @@ fun CellData2(content: @Composable () -> Unit) {
 fun CellSingleLineClear(
     borderTop: Boolean = false,
     borderBottom: Boolean = false,
-    content: @Composable () -> Unit,
+    content: @Composable RowScope.() -> Unit,
 ) {
     Box(
         modifier = Modifier
@@ -111,10 +111,9 @@ fun CellSingleLineClear(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(horizontal = 16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            content.invoke()
-        }
+            verticalAlignment = Alignment.CenterVertically,
+            content = content
+        )
     }
 }
 
