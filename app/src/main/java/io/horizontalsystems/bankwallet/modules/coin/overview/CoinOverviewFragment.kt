@@ -36,6 +36,7 @@ class CoinOverviewFragment : BaseFragment() {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 ComposeAppTheme {
+                    val fullCoin = coinViewModel.fullCoin
                     val title by viewModel.titleLiveData.observeAsState(TitleViewItem(null, null))
                     val marketData by viewModel.marketDataLiveData.observeAsState(listOf())
                     val roi by viewModel.roiLiveData.observeAsState(listOf())
@@ -49,6 +50,7 @@ class CoinOverviewFragment : BaseFragment() {
                     val chartInfo by viewModel.chartInfoLiveData.observeAsState()
 
                     CoinOverviewScreen(
+                        fullCoin,
                         title,
                         marketData,
                         roi,
