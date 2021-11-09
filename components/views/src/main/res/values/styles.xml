@@ -21,7 +21,9 @@
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:windowBackground">?ColorWindowBackground</item>
         <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:homeAsUpIndicator">@drawable/ic_back</item>
         <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:editTextColor">?TitleColor</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowIsFloating">false</item>
         <item name="android:windowCloseOnTouchOutside">false</item>
