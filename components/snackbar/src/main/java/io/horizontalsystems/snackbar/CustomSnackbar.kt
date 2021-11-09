@@ -3,10 +3,7 @@ package io.horizontalsystems.snackbar
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
-import android.widget.LinearLayout
-import android.widget.ProgressBar
-import android.widget.TextView
+import android.widget.*
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import com.google.android.material.snackbar.BaseTransientBottomBar
@@ -45,12 +42,15 @@ class CustomSnackbar (
     }
 
     companion object {
-        fun make(contentView: View,
-                 text: String,
-                 backgroundColor: Int,
-                 duration: SnackbarDuration,
-                 gravity: SnackbarGravity,
-                 showProgressBar: Boolean): CustomSnackbar? {
+        fun make(
+            contentView: View,
+            text: String,
+            backgroundColor: Int,
+            duration: SnackbarDuration,
+            gravity: SnackbarGravity,
+            showProgressBar: Boolean,
+            showWarningIcon: Boolean
+        ): CustomSnackbar? {
 
             val parentViewGroup = contentView.findSuitableParent() ?: return null
             val inflater = LayoutInflater.from(contentView.context)
@@ -66,14 +66,19 @@ class CustomSnackbar (
             customSnackbar.duration = duration.value
             customSnackbar.animationMode = ANIMATION_MODE_FADE
 
-            if(showProgressBar){
+            if (showProgressBar) {
                 val progressbar = view.findViewById<ProgressBar>(R.id.snackbarProgressbar)
                 progressbar.visibility = View.VISIBLE
             }
 
+            if (showWarningIcon) {
+                val warningIcon = view.findViewById<ImageView>(R.id.warningIcon)
+                warningIcon.visibility = View.VISIBLE
+            }
+
             contentLayout.background.setTint(ContextCompat.getColor(contentView.context, backgroundColor))
 
-            if(gravity == SnackbarGravity.TOP_OF_VIEW)
+            if (gravity == SnackbarGravity.TOP_OF_VIEW)
                 customSnackbar.anchorView = contentView
 
 

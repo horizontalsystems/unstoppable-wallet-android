@@ -18,7 +18,6 @@ class GlobalMarketRepository(
     private val marketKit: MarketKit
 ) {
 
-    @Volatile
     private var cache: List<DefiMarketInfo> = listOf()
 
     fun getGlobalMarketPoints(

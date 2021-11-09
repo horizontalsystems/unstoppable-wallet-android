@@ -38,6 +38,7 @@ import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.chartview.ChartView.ChartType
 import io.horizontalsystems.core.findNavController
+import io.horizontalsystems.core.helpers.HudHelper
 
 class TvlFragment : BaseFragment() {
 
@@ -64,8 +65,9 @@ class TvlFragment : BaseFragment() {
     private fun onCoinClick(coinUid: String?) {
         if (coinUid != null) {
             val arguments = CoinFragment.prepareParams(coinUid)
-
             findNavController().navigate(R.id.coinFragment, arguments, navOptions())
+        } else {
+            HudHelper.showWarningMessage(requireView(), R.string.MarketGlobalMetrics_CoinNotSupported )
         }
     }
 
