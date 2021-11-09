@@ -176,8 +176,8 @@ private fun MarketDataValueComponent(marketDataValue: MarketDataValue) {
         }
         is MarketDataValue.DiffNew -> {
             Text(
-                text = marketDataValue.value.value,
-                color = diffColor(marketDataValue.value),
+                text = formatValueAsDiff(marketDataValue.value),
+                color = diffColor(marketDataValue.value.raw()),
                 style = ComposeAppTheme.typography.subhead2,
                 maxLines = 1,
             )

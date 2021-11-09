@@ -9,7 +9,6 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.coin.ChartInfoData
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.ChartInfoHeaderItem
-import io.horizontalsystems.bankwallet.modules.market.DiffValue
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartFactory
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -26,7 +25,8 @@ object TvlModule {
             val globalMarketRepository = GlobalMarketRepository(App.marketKit)
             val service = TvlService(App.currencyManager, globalMarketRepository)
             val factory = MetricChartFactory(App.numberFormatter)
-            return TvlViewModel(service, factory, App.numberFormatter) as T
+            val tvlViewItemFactory = TvlViewItemFactory()
+            return TvlViewModel(service, factory, tvlViewItemFactory) as T
         }
     }
 
@@ -50,15 +50,9 @@ object TvlModule {
 
     @Immutable
     data class TvlData(
-        val menu: Menu,
-        val coinTvlViewItems: List<CoinTvlViewItem>
-    )
-
-    @Immutable
-    data class Menu(
         val chainSelect: Select<Chain>,
         val sortDescending: Boolean,
-        val tvlDiffType: TvlDiffType
+        val coinTvlViewItems: List<CoinTvlViewItem>
     )
 
     @Immutable
@@ -69,8 +63,9 @@ object TvlModule {
         val iconUrl: String,
         @DrawableRes
         val iconPlaceholder: Int?,
-        val tvl: String,
-        val tvlDiff: DiffValue?,
+        val tvl: CurrencyValue,
+        val tvlChangePercent: BigDecimal?,
+        val tvlChangeAmount: CurrencyValue?,
         val rank: String
     )
 

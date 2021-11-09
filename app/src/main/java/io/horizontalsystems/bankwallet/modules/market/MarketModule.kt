@@ -154,17 +154,21 @@ sealed class ImageSource {
     }
 }
 
-sealed class DiffValue(val value: String) {
-    class NoDiff(value: String) : DiffValue(value)
-    class Positive(value: String) : DiffValue(value)
-    class Negative(value: String) : DiffValue(value)
+sealed class Value {
+    class Percent(val percent: BigDecimal) : Value()
+    class Currency(val currencyValue: CurrencyValue) : Value()
+
+    fun raw() = when (this) {
+        is Currency -> currencyValue.value
+        is Percent -> percent
+    }
 }
 
 sealed class MarketDataValue {
     class MarketCap(val value: String) : MarketDataValue()
     class Volume(val value: String) : MarketDataValue()
     class Diff(val value: BigDecimal?) : MarketDataValue()
-    class DiffNew(val value: DiffValue) : MarketDataValue()
+    class DiffNew(val value: Value) : MarketDataValue()
 }
 
 @Immutable

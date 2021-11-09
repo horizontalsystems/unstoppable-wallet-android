@@ -10,9 +10,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import io.horizontalsystems.bankwallet.modules.coin.adapters.CoinChartAdapter
 import io.horizontalsystems.bankwallet.modules.coin.adapters.CoinChartView
-import io.horizontalsystems.bankwallet.modules.market.DiffValue
+import io.horizontalsystems.bankwallet.modules.market.Value
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.TabBalance
+import io.horizontalsystems.bankwallet.ui.compose.components.diffColor
+import io.horizontalsystems.bankwallet.ui.compose.components.formatValueAsDiff
 import io.horizontalsystems.core.entities.Currency
 
 @Composable
@@ -41,7 +43,7 @@ fun ChartInfo(
 @Immutable
 data class ChartInfoHeaderItem(
     val value: String?,
-    val diff: DiffValue?
+    val diff: Value?
 )
 
 @Composable
@@ -55,15 +57,10 @@ fun ChartInfoHeader(item: ChartInfoHeaderItem) {
         )
 
         item.diff?.let { diff ->
-            val color = when (diff) {
-                is DiffValue.Positive,
-                is DiffValue.NoDiff -> ComposeAppTheme.colors.remus
-                is DiffValue.Negative -> ComposeAppTheme.colors.lucian
-            }
             Text(
-                text = diff.value,
+                text = formatValueAsDiff(diff),
                 style = ComposeAppTheme.typography.subhead1,
-                color = color
+                color = diffColor(diff.raw())
             )
         }
     }
