@@ -22,18 +22,9 @@ class WalletManager(
     private val disposables = CompositeDisposable()
 
     init {
-        accountManager.accountsDeletedFlowable
-                .subscribeIO {
-                    loadWallets()
-                }
-                .let {
-                    disposables.add(it)
-                }
-
         accountManager.activeAccountObservable
                 .subscribeIO {
-                    val account = it.orElseGet(null)
-                    handleUpdated(account)
+                    handleUpdated(it.orElse(null))
                 }
                 .let {
                     disposables.add(it)
@@ -55,6 +46,7 @@ class WalletManager(
         handle(listOf(), wallets)
     }
 
+    @Synchronized
     override fun handle(newWallets: List<Wallet>, deletedWallets: List<Wallet>) {
         storage.save(newWallets)
         storage.delete(deletedWallets)
@@ -80,6 +72,7 @@ class WalletManager(
         activeWalletsUpdatedObservable.onNext(cachedActiveWallets.walletsSet.toList())
     }
 
+    @Synchronized
     private fun handleUpdated(activeAccount: Account?) {
         val activeWallets = activeAccount?.let { storage.wallets(it) } ?: listOf()
 
