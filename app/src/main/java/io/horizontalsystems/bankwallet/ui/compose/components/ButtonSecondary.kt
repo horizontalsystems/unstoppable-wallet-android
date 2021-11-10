@@ -24,9 +24,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import io.horizontalsystems.bankwallet.ui.compose.WithTranslatableTitle
-import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.Select
+import io.horizontalsystems.bankwallet.ui.compose.WithTranslatableTitle
 
 @Composable
 fun ButtonSecondaryDefault(
@@ -264,6 +264,7 @@ fun ButtonSecondary(
                             minWidth = SecondaryButtonDefaults.MinWidth,
                             minHeight = SecondaryButtonDefaults.MinHeight
                         )
+                        .height(SecondaryButtonDefaults.MinHeight)
                         .padding(contentPadding),
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically,
@@ -301,7 +302,7 @@ object SecondaryButtonDefaults {
      * The default min width applied for the [Button].
      * Note that you can override it by applying Modifier.heightIn directly on [Button].
      */
-    val MinHeight = 27.dp
+    val MinHeight = 28.dp
 
     @Composable
     fun textButtonColors(

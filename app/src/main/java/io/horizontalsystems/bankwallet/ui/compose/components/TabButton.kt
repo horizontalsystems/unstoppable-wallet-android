@@ -85,6 +85,7 @@ fun TabBox(
                                 minWidth = TabDefaults.MinWidth,
                                 minHeight = TabDefaults.MinHeight
                             )
+                            .height(TabDefaults.MinHeight)
                             .padding(contentPadding),
                         horizontalArrangement = Arrangement.Center,
                         verticalAlignment = Alignment.CenterVertically,
@@ -98,13 +99,10 @@ fun TabBox(
 
 object TabDefaults {
     private val ButtonHorizontalPadding = 16.dp
-    private val ButtonVerticalPadding = 6.dp
 
     val ContentPadding = PaddingValues(
         start = ButtonHorizontalPadding,
-        top = ButtonVerticalPadding,
         end = ButtonHorizontalPadding,
-        bottom = ButtonVerticalPadding
     )
 
 
