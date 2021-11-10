@@ -151,7 +151,7 @@ class NumberFormatter(
                 )
             }
             is Value.Percent -> {
-                format(value.percent, 0, 2, sign(value.percent), "%")
+                format(value.percent.abs(), 0, 2, sign(value.percent), "%")
             }
         }
 
