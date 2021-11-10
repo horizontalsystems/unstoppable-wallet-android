@@ -20,6 +20,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Divider
@@ -28,6 +29,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -65,10 +67,12 @@ import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.CoinType
 import kotlinx.android.synthetic.main.fragment_balance.*
+import kotlinx.coroutines.launch
 
 class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
 
     private val viewModel by viewModels<BalanceViewModel> { BalanceModule.Factory() }
+    private var scrollToTopAfterUpdate = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -147,16 +151,25 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
     fun Wallets(balanceViewItems: List<BalanceViewItem>?) {
         val isRefreshing by viewModel.isRefreshing.observeAsState()
 
+        val coroutineScope = rememberCoroutineScope()
+        val listState = rememberLazyListState()
+
         HSSwipeRefresh(
             state = rememberSwipeRefreshState(isRefreshing ?: false),
             onRefresh = { viewModel.onRefresh() }
         ) {
             balanceViewItems?.let {
-                LazyColumn(contentPadding = PaddingValues(bottom = 18.dp)) {
+                LazyColumn(state = listState, contentPadding = PaddingValues(bottom = 18.dp)) {
                     items(it) { item ->
                         WalletCard(
                             viewItem = item,
                         )
+                    }
+                    if (scrollToTopAfterUpdate) {
+                        scrollToTopAfterUpdate = false
+                        coroutineScope.launch {
+                            listState.scrollToItem(0)
+                        }
                     }
                 }
             }
@@ -591,6 +604,7 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
         SelectorDialog
             .newInstance(selectorItems, getString(R.string.Balance_Sort_PopupTitle)) { position ->
                 viewModel.setSortType(sortTypes[position])
+                scrollToTopAfterUpdate = true
             }
             .show(parentFragmentManager, "balance_sort_type_selector")
     }
