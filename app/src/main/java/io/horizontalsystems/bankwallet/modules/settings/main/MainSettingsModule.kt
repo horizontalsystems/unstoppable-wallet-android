@@ -33,6 +33,7 @@ object MainSettingsModule {
         fun didTapWalletConnect()
         fun didTapFaq()
         fun didTapAcademy()
+        fun setAppRelaunchingFromSettings()
     }
 
     interface IMainSettingsInteractor {
@@ -49,6 +50,7 @@ object MainSettingsModule {
         val launchScreen: LaunchPage
 
         fun clear()
+        fun setAppRelaunchingFromSettings()
     }
 
     interface IMainSettingsInteractorDelegate {

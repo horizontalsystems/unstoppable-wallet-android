@@ -88,4 +88,7 @@ class MainSettingsInteractor(
         disposables.clear()
     }
 
+    override fun setAppRelaunchingFromSettings() {
+        localStorage.relaunchBySettingChange = true
+    }
 }

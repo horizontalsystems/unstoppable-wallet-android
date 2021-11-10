@@ -17,7 +17,6 @@ import io.horizontalsystems.bankwallet.core.managers.RateAppManager
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.balanceonboarding.BalanceOnboardingModule
 import io.horizontalsystems.bankwallet.modules.balanceonboarding.BalanceOnboardingViewModel
-import io.horizontalsystems.bankwallet.modules.main.MainActivity.Companion.ACTIVE_TAB_KEY
 import io.horizontalsystems.bankwallet.modules.rateapp.RateAppDialogFragment
 import io.horizontalsystems.bankwallet.modules.releasenotes.ReleaseNotesFragment
 import io.horizontalsystems.bankwallet.modules.rooteddevice.RootedDeviceActivity
@@ -29,7 +28,7 @@ import kotlinx.android.synthetic.main.fragment_main.*
 
 class MainFragment : BaseFragment(R.layout.fragment_main), RateAppDialogFragment.Listener {
 
-    private val viewModel by viewModels<MainViewModel>{ MainModule.Factory(arguments?.getParcelable(ACTIVE_TAB_KEY)) }
+    private val viewModel by viewModels<MainViewModel>{ MainModule.Factory() }
     private val balanceOnboardingViewModel by viewModels<BalanceOnboardingViewModel> { BalanceOnboardingModule.Factory() }
     private var bottomBadgeView: View? = null
 
@@ -41,6 +40,9 @@ class MainFragment : BaseFragment(R.layout.fragment_main), RateAppDialogFragment
         viewPager.offscreenPageLimit = 1
         viewPager.adapter = mainViewPagerAdapter
         viewPager.isUserInputEnabled = false
+
+        viewPager.setCurrentItem(viewModel.initialTab.ordinal, false)
+        bottomNavigation.menu.getItem(viewModel.initialTab.ordinal).isChecked = true
 
         viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback(){
             override fun onPageSelected(position: Int) {
@@ -67,11 +69,6 @@ class MainFragment : BaseFragment(R.layout.fragment_main), RateAppDialogFragment
             openWalletSwitchDialog(wallets, selectedWallet) {
                 viewModel.onSelect(it)
             }
-        })
-
-        viewModel.tabToOpenLiveEvent.observe(viewLifecycleOwner, { mainTab ->
-            bottomNavigation.menu.getItem(mainTab.ordinal).isChecked = true
-            viewPager.setCurrentItem(mainTab.ordinal, false)
         })
 
         balanceOnboardingViewModel.balanceViewTypeLiveData.observe(viewLifecycleOwner) {

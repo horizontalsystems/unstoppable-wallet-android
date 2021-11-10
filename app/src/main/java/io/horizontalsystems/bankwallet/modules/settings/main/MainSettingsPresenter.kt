@@ -75,6 +75,10 @@ class MainSettingsPresenter(
         router.openLink(interactor.companyWebPageLink)
     }
 
+    override fun setAppRelaunchingFromSettings() {
+        interactor.setAppRelaunchingFromSettings()
+    }
+
     // IMainSettingsInteractorDelegate
 
     override fun didUpdateAllBackedUp(allBackedUp: Boolean) {

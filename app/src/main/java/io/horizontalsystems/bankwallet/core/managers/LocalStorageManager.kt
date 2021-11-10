@@ -67,6 +67,7 @@ class LocalStorageManager(private val preferences: SharedPreferences)
     private val CUSTOM_TOKENS_RESTORE_COMPLETED = "custom_tokens_restore_completed"
     private val MARKET_FAVORITES_SORTING_FIELD = "market_favorites_sorting_field"
     private val MARKET_FAVORITES_MARKET_FIELD = "market_favorites_market_field"
+    private val RELAUNCH_BY_SETTING_CHANGE = "relaunch_by_setting_change"
 
     private val gson by lazy { Gson() }
 
@@ -386,6 +387,12 @@ class LocalStorageManager(private val preferences: SharedPreferences)
         }
         set(value) {
             preferences.edit().putString(MARKET_FAVORITES_MARKET_FIELD, value?.name).apply()
+        }
+
+    override var relaunchBySettingChange: Boolean
+        get() = preferences.getBoolean(RELAUNCH_BY_SETTING_CHANGE, false)
+        set(value) {
+            preferences.edit().putBoolean(RELAUNCH_BY_SETTING_CHANGE, value).commit()
         }
 
     override fun getSwapProviderId(blockchain: SwapMainModule.Blockchain): String? {

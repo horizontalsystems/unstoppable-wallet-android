@@ -205,7 +205,8 @@ class MainSettingsFragment : BaseFragment() {
 
     private fun subscribeFragmentResult() {
         getNavigationResult(LanguageSettingsFragment.LANGUAGE_CHANGE)?.let {
-            activity?.let { MainModule.startAsNewTask(it, MainModule.MainTab.Settings) }
+            presenter.setAppRelaunchingFromSettings()
+            activity?.let { MainModule.startAsNewTask(it) }
         }
     }
 }
