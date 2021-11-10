@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.twitter.twittertext.Extractor
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.marketkit.models.FullCoin
 
 object CoinTweetsModule {
@@ -30,4 +31,4 @@ data class TweetViewItem(
     val url: String,
 )
 
-data class ReferencedTweetViewItem(val title: String, val text: String)
+data class ReferencedTweetViewItem(val title: TranslatableString, val text: String)

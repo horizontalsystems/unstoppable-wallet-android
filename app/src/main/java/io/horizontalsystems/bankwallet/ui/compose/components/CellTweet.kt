@@ -100,15 +100,16 @@ private fun TweetDate(tweet: TweetViewItem) {
 private fun TweetReferencedTweet(referencedTweet: ReferencedTweetViewItem) {
     Column(Modifier
         .fillMaxWidth()
-        .clip(RoundedCornerShape(16.dp))
-        .background(ComposeAppTheme.colors.steel10)
-        .padding(horizontal = 16.dp, vertical = 12.dp)
+        .clip(RoundedCornerShape(8.dp))
+        .background(ComposeAppTheme.colors.steel20)
+        .padding(12.dp)
     ) {
         Text(
-            text = referencedTweet.title,
+            text = referencedTweet.title.getString(),
             color = ComposeAppTheme.colors.grey,
-            style = ComposeAppTheme.typography.caption
+            style = ComposeAppTheme.typography.micro
         )
+        Spacer(modifier = Modifier.height(12.dp))
         Text(
             text = referencedTweet.text,
             color = ComposeAppTheme.colors.leah,
