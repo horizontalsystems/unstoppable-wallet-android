@@ -16,25 +16,23 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 
-class BaseCurrencyDisclaimerDialog(val popularCurrencies: String) : DialogFragment() {
+class BaseCurrencyDisclaimerDialog(private val popularCurrencies: String) : DialogFragment() {
 
     var onConfirm: (() -> Unit)? = null
 
     override fun onCreateDialog(bundle: Bundle?): Dialog {
         val rootView = View.inflate(context, R.layout.fragment_disclaimer, null) as ViewGroup
 
-        rootView.findViewById<TextView>(R.id.text)?.text = getString(R.string.SettingsCurrency_DisclaimerText, popularCurrencies)
+        rootView.findViewById<TextView>(R.id.text)?.text =
+            getString(R.string.SettingsCurrency_DisclaimerText, popularCurrencies)
 
-        val builder = activity?.let { AlertDialog.Builder(it, io.horizontalsystems.pin.R.style.AlertDialog) }
+        val builder =
+            activity?.let { AlertDialog.Builder(it, io.horizontalsystems.pin.R.style.AlertDialog) }
         builder?.setView(rootView)
         val mDialog = builder?.create()
         mDialog?.setCanceledOnTouchOutside(true)
 
         rootView.findViewById<ComposeView>(R.id.buttonConfirmCompose)?.let {
-            it.setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-            )
-
             it.setContent {
                 ComposeAppTheme {
                     ButtonPrimaryYellow(
@@ -51,7 +49,13 @@ class BaseCurrencyDisclaimerDialog(val popularCurrencies: String) : DialogFragme
             }
         }
 
-
         return mDialog as Dialog
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        view.findViewById<ComposeView>(R.id.buttonConfirmCompose)?.setViewCompositionStrategy(
+            ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+        )
     }
 }
