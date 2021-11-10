@@ -42,7 +42,6 @@ class MarketPostsViewModel(
     private fun syncPostsState(state: MarketPostService.State) {
         when (state) {
             MarketPostService.State.Loading -> {
-                errorLiveData.postValue(null)
                 loadingLiveData.postValue(true)
             }
             is MarketPostService.State.Loaded -> {

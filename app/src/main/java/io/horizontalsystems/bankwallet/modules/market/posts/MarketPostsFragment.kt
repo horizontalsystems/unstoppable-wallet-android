@@ -6,11 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.browser.customtabs.CustomTabsIntent
+import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.res.stringResource
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
 import kotlinx.android.synthetic.main.fragment_market_posts.*
 
 class MarketPostsFragment : BaseFragment(), ViewHolderMarketPostItem.Listener {
@@ -44,12 +47,20 @@ class MarketPostsFragment : BaseFragment(), ViewHolderMarketPostItem.Listener {
             pullToRefresh.isRefreshing = it
         }
 
-        viewModel.errorLiveData.observe(viewLifecycleOwner) {
-            error.isVisible = it != null
-            error.text = it
+        errorViewCompose.setViewCompositionStrategy(
+            ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+        )
+
+        errorViewCompose.setContent {
+            ComposeAppTheme {
+                ListErrorView(stringResource(R.string.Market_SyncError)) {
+                    viewModel.onErrorClick()
+                }
+            }
         }
-        error.setOnSingleClickListener {
-            viewModel.onErrorClick()
+
+        viewModel.errorLiveData.observe(viewLifecycleOwner) { error ->
+            errorViewCompose.isVisible = error != null
         }
 
         viewModel.postsViewItemsLiveData.observe(viewLifecycleOwner) {
