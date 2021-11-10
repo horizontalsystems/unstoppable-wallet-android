@@ -5,8 +5,8 @@ import io.horizontalsystems.bankwallet.core.utils.RootUtil
 import io.horizontalsystems.bankwallet.entities.LaunchPage
 
 class MainService(
-        private val rootUtil: RootUtil,
-        private val localStorage: ILocalStorage
+    private val rootUtil: RootUtil,
+    private val localStorage: ILocalStorage
 ) {
 
     val isDeviceRooted: Boolean
@@ -22,6 +22,12 @@ class MainService(
         get() = localStorage.mainTab
         set(value) {
             localStorage.mainTab = value
+        }
+
+    var relaunchBySettingChange: Boolean
+        get() = localStorage.relaunchBySettingChange
+        set(value) {
+            localStorage.relaunchBySettingChange = value
         }
 
 }

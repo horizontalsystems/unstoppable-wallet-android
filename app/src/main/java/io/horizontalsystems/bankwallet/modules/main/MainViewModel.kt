@@ -27,7 +27,6 @@ class MainViewModel(
     private val accountManager: IAccountManager,
     private val releaseNotesManager: ReleaseNotesManager,
     private val service: MainService,
-    private val activeTab: MainModule.MainTab?
 ) : ViewModel() {
 
     val showRootedDeviceWarningLiveEvent = SingleLiveEvent<Unit>()
@@ -38,10 +37,11 @@ class MainViewModel(
     val setBadgeVisibleLiveData = MutableLiveData<Boolean>()
     val transactionTabEnabledLiveData = MutableLiveData<Boolean>()
     val openWalletSwitcherLiveEvent = SingleLiveEvent<Pair<List<ViewItemWrapper<Account>>,ViewItemWrapper<Account>?>>()
-    val tabToOpenLiveEvent = SingleLiveEvent<MainModule.MainTab>()
 
     private val disposables = CompositeDisposable()
     private var contentHidden = pinComponent.isLocked
+
+    val initialTab = getTabToOpen()
 
     init {
 
@@ -77,13 +77,12 @@ class MainViewModel(
                 }
 
         showWhatsNew()
-
-        tabToOpenLiveEvent.postValue(getTabToOpen())
     }
 
     private fun getTabToOpen(): MainModule.MainTab {
-        activeTab?.let {
-            return it
+        if(service.relaunchBySettingChange){
+            service.relaunchBySettingChange = false
+            return MainModule.MainTab.Settings
         }
         return when(service.launchPage){
             LaunchPage.Market,
@@ -119,7 +118,9 @@ class MainViewModel(
 
     fun onTabSelect(tabIndex: Int) {
         val mainTab = MainModule.MainTab.values()[tabIndex]
-        service.currentMainTab = if(mainTab == MainModule.MainTab.Settings) null else mainTab
+        if(mainTab != MainModule.MainTab.Settings){
+            service.currentMainTab = mainTab
+        }
     }
 
     fun updateTransactionsTabEnabled() {
