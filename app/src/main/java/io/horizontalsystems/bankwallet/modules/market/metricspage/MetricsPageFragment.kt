@@ -97,18 +97,16 @@ class MetricsPageFragment : BaseFragment() {
                     viewModel.refresh()
                 }
             ) {
-                LazyColumn {
-                    when (viewState) {
-                        ViewState.Error -> {
-                            item {
-                                ListErrorView(
-                                    stringResource(R.string.Market_SyncError)
-                                ) {
-                                    viewModel.onErrorClick()
-                                }
-                            }
+                when (viewState) {
+                    ViewState.Error -> {
+                        ListErrorView(
+                            stringResource(R.string.Market_SyncError)
+                        ) {
+                            viewModel.onErrorClick()
                         }
-                        ViewState.Success -> {
+                    }
+                    ViewState.Success -> {
+                        LazyColumn {
                             chartData?.let { chartData ->
                                 item {
                                     ChartInfoHeader(chartData.subtitle)
