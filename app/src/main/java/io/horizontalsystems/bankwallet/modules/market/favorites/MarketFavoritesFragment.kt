@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.res.stringResource
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.ConcatAdapter
@@ -12,14 +14,14 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.market.MarketItemsAdapter
-import io.horizontalsystems.bankwallet.modules.market.MarketLoadingAdapter
 import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
 import io.horizontalsystems.bankwallet.modules.market.ViewHolderMarketItem
 import io.horizontalsystems.bankwallet.modules.market.list.MarketListViewModel
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
 import io.horizontalsystems.bankwallet.ui.extensions.MarketListHeaderView
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorDialog
 import io.horizontalsystems.core.findNavController
-import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.android.synthetic.main.fragment_market_favorites.*
 
 class MarketFavoritesFragment : BaseFragment(), MarketListHeaderView.Listener, ViewHolderMarketItem.Listener {
@@ -39,30 +41,47 @@ class MarketFavoritesFragment : BaseFragment(), MarketListHeaderView.Listener, V
         })
 
         val marketItemsAdapter = MarketItemsAdapter(
-                this,
-                marketListViewModel.marketViewItemsLiveData,
-                marketListViewModel.loadingLiveData,
-                marketListViewModel.errorLiveData,
-                viewLifecycleOwner
+            this,
+            marketListViewModel.marketViewItemsLiveData,
+            marketListViewModel.loadingLiveData,
+            marketListViewModel.errorLiveData,
+            viewLifecycleOwner
         )
-        val marketLoadingAdapter = MarketLoadingAdapter(marketListViewModel.loadingLiveData, marketListViewModel.errorLiveData, marketListViewModel::onErrorClick, viewLifecycleOwner)
 
-        val emptyListAdapter = EmptyListAdapter(marketListViewModel.showEmptyListTextLiveData, viewLifecycleOwner) { parent, viewType ->
-            EmptyFavoritesViewHolder.create(parent, viewType)
-        }
+        val emptyListAdapter =
+            EmptyListAdapter(marketListViewModel.showEmptyListTextLiveData, viewLifecycleOwner) { parent, viewType ->
+                EmptyFavoritesViewHolder.create(parent, viewType)
+            }
 
-        coinRatesRecyclerView.adapter = ConcatAdapter(marketLoadingAdapter, marketItemsAdapter, emptyListAdapter)
+        coinRatesRecyclerView.adapter = ConcatAdapter(marketItemsAdapter, emptyListAdapter)
         coinRatesRecyclerView.itemAnimator = null
+
+        pullToRefresh.setProgressBackgroundColorSchemeResource(R.color.claude)
+        pullToRefresh.setColorSchemeResources(R.color.oz)
 
         pullToRefresh.setOnRefreshListener {
             marketListViewModel.refresh()
-
-            pullToRefresh.isRefreshing = false
         }
 
-        marketListViewModel.networkNotAvailable.observe(viewLifecycleOwner, {
-            HudHelper.showErrorMessage(requireView(), R.string.Hud_Text_NoInternet)
+        marketListViewModel.loadingLiveData.observe(viewLifecycleOwner, { loading ->
+            pullToRefresh.isRefreshing = loading
         })
+
+        errorViewCompose.setViewCompositionStrategy(
+            ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+        )
+
+        errorViewCompose.setContent {
+            ComposeAppTheme {
+                ListErrorView(stringResource(R.string.Market_SyncError)) {
+                    marketListViewModel.onErrorClick()
+                }
+            }
+        }
+
+        marketListViewModel.errorLiveData.observe(viewLifecycleOwner) { error ->
+            errorViewCompose.isVisible = error != null
+        }
 
         marketListViewModel.topMenuLiveData.observe(viewLifecycleOwner) { (sortMenu, toggleButton) ->
             marketListHeader.setMenu(sortMenu, toggleButton)
