@@ -29,7 +29,7 @@ fun BarSingleLineTyler(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(48.dp)
+            .height(44.dp)
             .background(ComposeAppTheme.colors.tyler)
     ) {
         if (borderTop) {

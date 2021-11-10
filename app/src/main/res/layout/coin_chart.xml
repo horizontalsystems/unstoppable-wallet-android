@@ -11,11 +11,21 @@
         android:id="@+id/chartPointsInfo"
         android:layout_width="0dp"
         android:layout_height="44dp"
-        android:layout_marginHorizontal="16dp"
         android:background="@color/tyler"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        >
+
+        <View
+            android:id="@+id/border4"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="@color/steel_10"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
 
         <!--Price and Date info-->
 
@@ -24,6 +34,7 @@
             style="@style/CaptionSB"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
             android:textColor="@color/oz"
             app:layout_constraintBottom_toTopOf="@+id/pointInfoDate"
             app:layout_constraintStart_toStartOf="parent"
@@ -37,6 +48,7 @@
             style="@style/Caption"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="4dp"
             android:textColor="@color/grey"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -52,6 +64,7 @@
             style="@style/Caption"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
             android:text="@string/CoinPage_Volume"
             android:textColor="@color/grey"
             android:visibility="gone"
@@ -67,6 +80,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
+            android:layout_marginEnd="16dp"
             android:textAlignment="textEnd"
             android:textColor="@color/grey"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -84,6 +98,7 @@
             style="@style/Caption"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
             android:textColor="@color/lucian"
             app:layout_constraintBottom_toTopOf="@+id/macdSignal"
             app:layout_constraintEnd_toEndOf="parent"
@@ -98,6 +113,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
+            android:layout_marginEnd="16dp"
             android:textColor="@color/jacob"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -131,7 +147,6 @@
         android:id="@+id/chart"
         android:layout_width="0dp"
         android:layout_height="180dp"
-        android:layout_marginTop="4dp"
         app:cursorColor="@color/oz"
         app:gridDashColor="@color/steel_10"
         app:gridTextColor="@color/nina"
