@@ -3,9 +3,11 @@ package io.horizontalsystems.bankwallet.modules.coin.tweets
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.twitter.twittertext.Extractor
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.entities.ViewState
+import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.core.helpers.DateHelper
 import io.reactivex.disposables.CompositeDisposable
 
@@ -49,15 +51,15 @@ class CoinTweetsViewModel(
         attachments = tweet.attachments,
         date = DateHelper.getDayAndTime(tweet.date),
         referencedTweet = tweet.referencedTweet?.let { referencedTweet ->
-            val typeString = when (referencedTweet.referenceType) {
-                Tweet.ReferenceType.Quoted -> "Quoted"
-                Tweet.ReferenceType.Retweeted -> "Retweeted"
-                Tweet.ReferenceType.Replied -> "Replying to"
+            val typeStringRes = when (referencedTweet.referenceType) {
+                Tweet.ReferenceType.Quoted -> R.string.CoinPage_Twitter_Quoted
+                Tweet.ReferenceType.Retweeted -> R.string.CoinPage_Twitter_Retweeted
+                Tweet.ReferenceType.Replied -> R.string.CoinPage_Twitter_Replied
             }
-            val referencedTweetTitle = "$typeString @${referencedTweet.tweet.user.username}"
+            val title = TranslatableString.ResString(typeStringRes, "@${referencedTweet.tweet.user.username}")
 
             ReferencedTweetViewItem(
-                title = referencedTweetTitle,
+                title = title,
                 text = referencedTweet.tweet.text
             )
         },
