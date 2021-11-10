@@ -39,7 +39,7 @@ class MarketFavoritesService(
 
         return when {
             coinUids.isEmpty() -> Single.just(listOf())
-            else -> marketKit.marketInfosSingle(coinUids)
+            else -> marketKit.marketInfosSingle(coinUids, currency.code)
                 .map {
                     it.map { marketInfo ->
                         MarketItem.createFromCoinMarket(marketInfo, currency)
