@@ -22,7 +22,7 @@ class MarketCategoryViewModel(
     private val disposables = CompositeDisposable()
     private val marketFields = MarketField.values().toList()
     private var marketItems: List<MarketItem> = listOf()
-    private var marketField = MarketField.MarketCap
+    private var marketField = MarketField.PriceDiff
 
     val headerLiveData = MutableLiveData<MarketModule.Header>()
     val menuLiveData = MutableLiveData<MarketCategoryModule.Menu>()

@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 
 class MarketTopCoinsViewModel(
     private val service: MarketTopCoinsService,
-    private var marketField: MarketField = MarketField.MarketCap
+    private var marketField: MarketField
 ) : ViewModel() {
 
     private val disposables = CompositeDisposable()

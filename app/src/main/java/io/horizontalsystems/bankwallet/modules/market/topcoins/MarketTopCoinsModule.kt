@@ -31,7 +31,7 @@ object MarketTopCoinsModule {
         companion object {
             val defaultSortingField = SortingField.HighestCap
             val defaultTopMarket = TopMarket.Top250
-            val defaultMarketField = MarketField.MarketCap
+            val defaultMarketField = MarketField.PriceDiff
         }
     }
 
