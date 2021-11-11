@@ -10,10 +10,10 @@ class EvmNetworkManager(private val appConfigProvider: IAppConfigProvider) {
         get() = listOfNotNull(
             defaultWebsocketNetwork("MainNet Websocket", EthereumKit.NetworkType.EthMainNet),
             defaultHttpNetwork("MainNet HTTP", EthereumKit.NetworkType.EthMainNet),
-            defaultWebsocketNetwork("Ropsten", EthereumKit.NetworkType.EthRopsten),
-            defaultWebsocketNetwork("Rinkeby", EthereumKit.NetworkType.EthRinkeby),
-            defaultWebsocketNetwork("Kovan", EthereumKit.NetworkType.EthKovan),
-            defaultWebsocketNetwork("Goerli", EthereumKit.NetworkType.EthGoerli)
+//            defaultWebsocketNetwork("Ropsten", EthereumKit.NetworkType.EthRopsten),
+//            defaultWebsocketNetwork("Rinkeby", EthereumKit.NetworkType.EthRinkeby),
+//            defaultWebsocketNetwork("Kovan", EthereumKit.NetworkType.EthKovan),
+//            defaultWebsocketNetwork("Goerli", EthereumKit.NetworkType.EthGoerli)
         )
 
     val binanceSmartChainNetworks: List<EvmNetwork>
