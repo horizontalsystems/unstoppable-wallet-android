@@ -9,6 +9,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.compose.foundation.layout.padding
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.DialogFragment
 import io.horizontalsystems.bankwallet.R
@@ -52,5 +53,12 @@ class TestnetDisclaimerDialog : DialogFragment() {
         }
 
         return mDialog as Dialog
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        view.findViewById<ComposeView>(R.id.buttonConfirmCompose)?.setViewCompositionStrategy(
+            ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+        )
     }
 }

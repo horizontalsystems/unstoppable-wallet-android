@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.compose.foundation.layout.padding
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
@@ -31,6 +32,9 @@ class BackupRequiredDialog : BaseBottomSheetDialogFragment() {
         setSubtitle(account?.name)
         setHeaderIcon(R.drawable.ic_attention_red_24)
 
+        buttonBackupCompose.setViewCompositionStrategy(
+            ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+        )
         buttonBackupCompose.setContent {
             ComposeAppTheme {
                 ButtonPrimaryYellow(
