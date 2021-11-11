@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.coin
 
 import androidx.annotation.DrawableRes
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
@@ -244,7 +245,8 @@ class CoinViewFactory(
     }
 
     fun getFormattedLatestRate(currencyValue: CurrencyValue): String {
-        return numberFormatter.formatFiat(currencyValue.value, currencyValue.currency.symbol, 2, 4)
+        val significantDecimal = App.numberFormatter.getSignificantDecimalFiat(currencyValue.value)
+        return numberFormatter.formatFiat(currencyValue.value, currencyValue.currency.symbol, 2, significantDecimal)
     }
 
     private fun getIcon(linkType: LinkType): Int {
