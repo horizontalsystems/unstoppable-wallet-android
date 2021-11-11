@@ -81,7 +81,8 @@ class BalanceViewItemFactory {
         var dimmed = false
         val value = coinPrice?.let {
             dimmed = coinPrice.expired
-            App.numberFormatter.formatFiat(coinPrice.value, currency.symbol, 2, 4)
+            val significantDecimal = App.numberFormatter.getSignificantDecimalFiat(coinPrice.value)
+            App.numberFormatter.formatFiat(coinPrice.value, currency.symbol, 2, significantDecimal)
         }
 
         return DeemedValue(value, dimmed = dimmed, visible = !showSyncing)
