@@ -3,70 +3,21 @@ package io.horizontalsystems.bankwallet.modules.market.posts
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
+import io.horizontalsystems.bankwallet.entities.DataState
+import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.core.helpers.DateHelper
 import io.reactivex.disposables.CompositeDisposable
 
-class MarketPostsViewModel(
-    private val service: MarketPostService,
-    private val clearables: List<Clearable>
-) : ViewModel() {
+class MarketPostsViewModel(private val service: MarketPostService) : ViewModel() {
 
-    val postsViewItemsLiveData = MutableLiveData<List<MarketPostsModule.PostViewItem>>()
-    val loadingLiveData = MutableLiveData(false)
-    val errorLiveData = MutableLiveData<String?>(null)
+    val itemsLiveData = MutableLiveData<List<MarketPostsModule.PostViewItem>>()
+    val viewStateLiveData = MutableLiveData<ViewState>()
+    val loadingLiveData = MutableLiveData<Boolean>()
+    val isRefreshingLiveData = MutableLiveData<Boolean>()
 
-    private val disposable = CompositeDisposable()
-
-    init {
-        service.stateObservable
-            .subscribeIO {
-                syncPostsState(it)
-            }
-            .let {
-                disposable.add(it)
-            }
-    }
-
-    override fun onCleared() {
-        clearables.forEach(Clearable::clear)
-        disposable.clear()
-    }
-
-    fun onErrorClick() {
-        service.refresh()
-    }
-
-    private fun syncPostsState(state: MarketPostService.State) {
-        when (state) {
-            MarketPostService.State.Loading -> {
-                loadingLiveData.postValue(true)
-            }
-            is MarketPostService.State.Loaded -> {
-                if (state.posts.isNotEmpty()) {
-                    val postViewItems = state.posts.map {
-                        MarketPostsModule.PostViewItem(
-                            source = it.source.replaceFirstChar(Char::titlecase),
-                            title = it.title,
-                            body = it.body,
-                            timeAgo = getTimeAgo(it.timestamp),
-                            url = it.url
-                        )
-                    }
-                    errorLiveData.postValue(null)
-                    loadingLiveData.postValue(false)
-                    postsViewItemsLiveData.postValue(postViewItems)
-                }
-            }
-            is MarketPostService.State.Failed -> {
-                loadingLiveData.postValue(false)
-                errorLiveData.postValue(Translator.getString(R.string.Market_SyncError))
-                postsViewItemsLiveData.postValue(listOf())
-            }
-        }
-    }
+    private val disposables = CompositeDisposable()
 
     private fun getTimeAgo(timestamp: Long): String {
         val secondsAgo = DateHelper.getSecondsAgo(timestamp * 1000)
@@ -84,7 +35,46 @@ class MarketPostsViewModel(
         }
     }
 
+    init {
+        service.stateObservable
+            .subscribeIO { state ->
+                isRefreshingLiveData.postValue(state == DataState.Loading)
+
+                state.dataOrNull?.let { posts ->
+                    val postViewItems = posts.map {
+                        MarketPostsModule.PostViewItem(
+                            source = it.source.replaceFirstChar(Char::titlecase),
+                            title = it.title,
+                            body = it.body,
+                            timeAgo = getTimeAgo(it.timestamp),
+                            url = it.url
+                        )
+                    }
+                    itemsLiveData.postValue(postViewItems)
+                }
+
+                state.viewState?.let {
+                    viewStateLiveData.postValue(it)
+                }
+            }
+            .let {
+                disposables.add(it)
+            }
+
+        service.start()
+    }
+
+    override fun onCleared() {
+        service.stop()
+        disposables.clear()
+    }
+
+    fun onErrorClick() {
+        service.refresh()
+    }
+
     fun refresh() {
+        isRefreshingLiveData.postValue(true)
         service.refresh()
     }
 }
