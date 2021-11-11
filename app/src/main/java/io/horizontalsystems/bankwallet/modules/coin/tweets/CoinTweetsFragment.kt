@@ -87,7 +87,7 @@ fun CoinTweetsScreen(viewModel: CoinTweetsViewModel) {
                             contentAlignment = Alignment.Center
                         ) {
                             ButtonSecondaryDefault(
-                                title = stringResource(id = R.string.CoinPage_Twitter_ShowMore),
+                                title = stringResource(id = R.string.CoinPage_Twitter_SeeOnTwitter),
                                 onClick = {
                                     LinkHelper.openLinkInAppBrowser(context, viewModel.twitterPageUrl)
                                 }
