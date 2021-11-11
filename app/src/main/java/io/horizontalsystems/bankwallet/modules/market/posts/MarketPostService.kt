@@ -1,9 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.market.posts
 
-import io.horizontalsystems.bankwallet.core.Clearable
+import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.marketkit.MarketKit
 import io.horizontalsystems.marketkit.models.Post
+import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
@@ -11,22 +12,13 @@ import io.reactivex.subjects.BehaviorSubject
 class MarketPostService(
     private val marketKit: MarketKit,
     private val backgroundManager: BackgroundManager,
-) : Clearable, BackgroundManager.Listener {
-
-    sealed class State {
-        object Loading : State()
-        class Loaded(val posts: List<Post>) : State()
-        class Failed(val error: Throwable) : State()
-    }
+) : BackgroundManager.Listener {
 
     private var disposable: Disposable? = null
 
-    var state: State = State.Loading
-        private set(value) {
-            field = value
-            stateObservable.onNext(value)
-        }
-    val stateObservable: BehaviorSubject<State> = BehaviorSubject.createDefault(State.Loading)
+    private val stateSubject = BehaviorSubject.create<DataState<List<Post>>>()
+    val stateObservable: Observable<DataState<List<Post>>>
+        get() = stateSubject
 
     init {
         backgroundManager.registerListener(this)
@@ -34,25 +26,29 @@ class MarketPostService(
     }
 
     private fun fetchPosts() {
-        state = State.Loading
+        stateSubject.onNext(DataState.Loading)
 
         disposable?.dispose()
         disposable = marketKit.postsSingle()
             .subscribeOn(Schedulers.io())
             .subscribe({
-                state = State.Loaded(it)
+                stateSubject.onNext(DataState.Success(it))
             }, {
-                state = State.Failed(it)
+                stateSubject.onNext(DataState.Error(it))
             })
-    }
-
-    override fun clear() {
-        disposable?.dispose()
-        backgroundManager.unregisterListener(this)
     }
 
     override fun willEnterForeground() {
         fetchPosts()
+    }
+
+    fun start() {
+        fetchPosts()
+    }
+
+    fun stop() {
+        disposable?.dispose()
+        backgroundManager.unregisterListener(this)
     }
 
     fun refresh() {

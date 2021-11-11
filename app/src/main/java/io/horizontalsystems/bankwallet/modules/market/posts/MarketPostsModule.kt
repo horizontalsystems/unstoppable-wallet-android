@@ -11,7 +11,7 @@ object MarketPostsModule {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             val postsService = MarketPostService(App.marketKit, App.backgroundManager)
-            return MarketPostsViewModel(postsService, listOf(postsService)) as T
+            return MarketPostsViewModel(postsService) as T
         }
 
     }
