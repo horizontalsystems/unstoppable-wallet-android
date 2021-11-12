@@ -141,6 +141,7 @@ class CoinViewFactory(
             ChartType.WEEKLY -> ChartView.ChartType.WEEKLY
             ChartType.WEEKLY2 -> ChartView.ChartType.WEEKLY2
             ChartType.MONTHLY -> ChartView.ChartType.MONTHLY
+            ChartType.MONTHLY_BY_DAY -> ChartView.ChartType.MONTHLY
             ChartType.MONTHLY3 -> ChartView.ChartType.MONTHLY3
             ChartType.MONTHLY6 -> ChartView.ChartType.MONTHLY6
             ChartType.MONTHLY12 -> ChartView.ChartType.MONTHLY12

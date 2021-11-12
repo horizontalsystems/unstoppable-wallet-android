@@ -17,6 +17,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.coin.coinmarkets.CoinMarketsFragment
+import io.horizontalsystems.bankwallet.modules.coin.details.CoinDetailsFragment
 import io.horizontalsystems.bankwallet.modules.coin.overview.CoinOverviewFragment
 import io.horizontalsystems.bankwallet.modules.coin.tweets.CoinTweetsFragment
 import io.horizontalsystems.bankwallet.modules.enablecoin.coinplatforms.CoinPlatformsViewModel
@@ -47,8 +48,7 @@ class CoinFragment : BaseFragment(R.layout.fragment_coin) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewPager.adapter =
-            CoinTabsAdapter(childFragmentManager, viewLifecycleOwner.lifecycle)
+        viewPager.adapter = CoinTabsAdapter(childFragmentManager, viewLifecycleOwner.lifecycle)
         viewPager.isUserInputEnabled = false
 
         viewModel.selectedTab.observe(viewLifecycleOwner) { selectedTab ->
@@ -205,13 +205,14 @@ class CoinFragment : BaseFragment(R.layout.fragment_coin) {
 class CoinTabsAdapter(fm: FragmentManager, lifecycle: Lifecycle) :
     FragmentStateAdapter(fm, lifecycle) {
 
-    override fun getItemCount() = 3
+    override fun getItemCount() = 4
 
     override fun createFragment(position: Int): Fragment {
         return when (position) {
             0 -> CoinOverviewFragment()
             1 -> CoinMarketsFragment()
-            2 -> CoinTweetsFragment()
+            2 -> CoinDetailsFragment()
+            3 -> CoinTweetsFragment()
             else -> throw IllegalStateException()
         }
     }

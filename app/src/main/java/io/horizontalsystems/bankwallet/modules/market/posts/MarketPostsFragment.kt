@@ -66,14 +66,14 @@ private fun MarketPostsScreen(viewModel: MarketPostsViewModel = viewModel(factor
         }
     ) {
         when (viewState) {
-            is ViewState.Error -> {
+            ViewState.Error -> {
                 ListErrorView(
                     stringResource(R.string.Market_SyncError)
                 ) {
                     viewModel.onErrorClick()
                 }
             }
-            is ViewState.Success -> {
+            ViewState.Success -> {
                 LazyColumn {
                     items(items) { postItem ->
                         Spacer(modifier = Modifier.height(12.dp))

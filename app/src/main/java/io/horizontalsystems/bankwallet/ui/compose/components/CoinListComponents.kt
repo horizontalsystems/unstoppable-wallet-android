@@ -186,23 +186,6 @@ private fun MarketDataValueComponent(marketDataValue: MarketDataValue) {
 }
 
 @Composable
-fun ListLoadingView() {
-    Box(
-        modifier = Modifier
-            .height(240.dp)
-            .fillMaxWidth()
-    ) {
-        CircularProgressIndicator(
-            modifier = Modifier
-                .align(Alignment.Center)
-                .size(24.dp),
-            color = ComposeAppTheme.colors.grey,
-            strokeWidth = 2.dp,
-        )
-    }
-}
-
-@Composable
 fun ListErrorView(
     errorText: String,
     onClick: (() -> Unit)? = null
