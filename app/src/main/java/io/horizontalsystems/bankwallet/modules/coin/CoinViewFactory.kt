@@ -6,6 +6,8 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import io.horizontalsystems.bankwallet.modules.coin.overview.CoinOverviewItem
+import io.horizontalsystems.bankwallet.modules.coin.overview.CoinOverviewViewItem
 import io.horizontalsystems.chartview.ChartData
 import io.horizontalsystems.chartview.ChartDataFactory
 import io.horizontalsystems.chartview.ChartView
@@ -166,47 +168,86 @@ class CoinViewFactory(
         return rows
     }
 
-    fun getMarketData(overview: MarketInfoOverview, currency: Currency, coinCode: String): MarketDataViewItem {
-        val marketCapString = overview.marketCap?.let {
-            formatFiatShortened(it, currency.symbol)
-        }
+    fun getXxx(item: CoinOverviewItem, fullCoin: FullCoin): CoinOverviewViewItem {
+        val overview = item.marketInfoOverview
 
-        val marketCapRankString = overview.marketCapRank?.let { "#$it" }
-
-        val volumeString = overview.volume24h?.let {
-            formatFiatShortened(it, currency.symbol)
-        }
-
-        val tvlString = overview.tvl?.let {
-            formatFiatShortened(it, currency.symbol)
-        }
-
-        val dilutedMarketCapString = overview.dilutedMarketCap?.let {
-            formatFiatShortened(it, currency.symbol)
-        }
-
-        val genesisDateString = overview.genesisDate?.let {
-            DateHelper.formatDate(it, "MMM d, yyyy")
-        }
-
-        val supplyString = overview.circulatingSupply?.let {
-            numberFormatter.formatCoin(it, coinCode, 0, numberFormatter.getSignificantDecimalCoin(it))
-        }
-
-        val totalSupplyString = overview.totalSupply?.let {
-            numberFormatter.formatCoin(it, coinCode, 0, numberFormatter.getSignificantDecimalCoin(it))
-        }
-
-        return MarketDataViewItem(
-            marketCap = marketCapString,
-            marketCapRank = marketCapRankString,
-            volume24h = volumeString,
-            tvl = tvlString,
-            genesisDate = genesisDateString,
-            circulatingSupply = supplyString,
-            totalSupply = totalSupplyString,
-            dilutedMarketCap = dilutedMarketCapString
+        return CoinOverviewViewItem(
+            roi = getRoi(overview.performance),
+            categories = overview.categories.map { it.name },
+            contracts = getContractInfo(fullCoin),
+            links = getLinks(overview, item.guideUrl),
+            about = overview.description,
+            marketData = getMarketItems(item)
         )
+    }
+
+    private fun getMarketItems(
+        item: CoinOverviewItem,
+    ): MutableList<CoinDataItem> {
+        val overview = item.marketInfoOverview
+        val items = mutableListOf<CoinDataItem>()
+        overview.marketCap?.let {
+            val marketCapString = formatFiatShortened(it, currency.symbol)
+            val marketCapRankString = overview.marketCapRank?.let { "#$it" }
+            items.add(CoinDataItem(Translator.getString(R.string.CoinPage_MarketCap),
+                marketCapString,
+                rankLabel = marketCapRankString))
+        }
+
+        overview.volume24h?.let {
+            val volumeString = formatFiatShortened(it, currency.symbol)
+            items.add(CoinDataItem(Translator.getString(R.string.CoinPage_TradingVolume),
+                volumeString))
+        }
+
+        overview.tvl?.let {
+            val tvlString = formatFiatShortened(it, currency.symbol)
+            items.add(CoinDataItem(Translator.getString(R.string.CoinPage_Tvl), tvlString))
+        }
+
+        overview.dilutedMarketCap?.let {
+            val dilutedMarketCapString = formatFiatShortened(it, currency.symbol)
+            items.add(CoinDataItem(Translator.getString(R.string.CoinPage_DilutedMarketCap),
+                dilutedMarketCapString))
+        }
+
+        overview.totalSupply?.let {
+            val totalSupplyString = numberFormatter.formatCoin(it,
+                item.coinCode,
+                0,
+                numberFormatter.getSignificantDecimalCoin(it))
+            items.add(CoinDataItem(Translator.getString(R.string.CoinPage_TotalSupply),
+                totalSupplyString))
+        }
+
+        overview.circulatingSupply?.let {
+            val supplyString = numberFormatter.formatCoin(it,
+                item.coinCode,
+                0,
+                numberFormatter.getSignificantDecimalCoin(it))
+            items.add(CoinDataItem(Translator.getString(R.string.CoinPage_inCirculation),
+                supplyString))
+        }
+
+        overview.genesisDate?.let {
+            val genesisDateString = DateHelper.formatDate(it, "MMM d, yyyy")
+            items.add(CoinDataItem(Translator.getString(R.string.CoinPage_LaunchDate),
+                genesisDateString))
+        }
+
+        return items
+    }
+
+
+    private fun getContractInfo(fullCoin: FullCoin): List<ContractInfo> {
+        return fullCoin.platforms.mapNotNull { platform ->
+            when (val coinType = platform.coinType) {
+                is CoinType.Erc20 -> ContractInfo.Erc20(coinType.address)
+                is CoinType.Bep20 -> ContractInfo.Bep20(coinType.address)
+                is CoinType.Bep2 -> ContractInfo.Bep2(coinType.symbol)
+                else -> null
+            }
+        }
     }
 
     fun getLinks(coinMarketDetails: MarketInfoOverview, guideUrl: String?): List<CoinLink> {

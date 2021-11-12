@@ -10,8 +10,12 @@ import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 
 @Composable
-fun TabBalance(content: @Composable() (RowScope.() -> Unit)) {
-    BarSingleLineTyler(Modifier.padding(horizontal = 16.dp), false, false, content)
+fun TabBalance(
+    borderTop: Boolean = false,
+    borderBottom: Boolean = false,
+    content: @Composable() (RowScope.() -> Unit),
+) {
+    BarSingleLineTyler(Modifier.padding(horizontal = 16.dp), borderTop, borderBottom, content)
 }
 
 @Composable

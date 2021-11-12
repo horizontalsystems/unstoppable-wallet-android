@@ -4,11 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.os.bundleOf
+import androidx.fragment.app.viewModels
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
@@ -27,7 +26,7 @@ class CoinOverviewFragment : BaseFragment() {
     private val vmFactory by lazy { CoinOverviewModule.Factory(coinViewModel.fullCoin) }
 
     private val coinViewModel by navGraphViewModels<CoinViewModel>(R.id.coinFragment)
-    private val viewModel by navGraphViewModels<CoinOverviewViewModel>(R.id.coinFragment) { vmFactory }
+    private val viewModel by viewModels<CoinOverviewViewModel> { vmFactory }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?, ): View {
         return ComposeView(requireContext()).apply {
@@ -36,45 +35,17 @@ class CoinOverviewFragment : BaseFragment() {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 ComposeAppTheme {
-                    val fullCoin = coinViewModel.fullCoin
-                    val title by viewModel.titleLiveData.observeAsState(TitleViewItem(null, null))
-                    val marketData by viewModel.marketDataLiveData.observeAsState(listOf())
-                    val roi by viewModel.roiLiveData.observeAsState(listOf())
-                    val categories by viewModel.categoriesLiveData.observeAsState(listOf())
-                    val contractInfo by viewModel.contractInfoLiveData.observeAsState(listOf())
-                    val aboutText by viewModel.aboutTextLiveData.observeAsState("")
-                    val links by viewModel.linksLiveData.observeAsState(listOf())
-                    val showFooter by viewModel.showFooterLiveData.observeAsState(false)
-                    val loading by viewModel.loadingLiveData.observeAsState(false)
-                    val coinInfoError by viewModel.coinInfoErrorLiveData.observeAsState("")
-                    val chartInfo by viewModel.chartInfoLiveData.observeAsState()
-
                     CoinOverviewScreen(
-                        fullCoin,
-                        title,
-                        marketData,
-                        roi,
-                        categories,
-                        contractInfo,
+                        viewModel,
                         {
                             TextHelper.copyText(it.rawValue)
                             HudHelper.showSuccessMessage(requireView(), R.string.Hud_Text_Copied)
                         },
                         {
                             LinkHelper.openLinkInAppBrowser(requireContext(), it.explorerUrl)
-                        },
-                        aboutText,
-                        links,
-                        {
-                            onClick(it)
-                        },
-                        showFooter,
-                        loading,
-                        coinInfoError,
-                        chartInfo,
-                        viewModel.currency
+                        }
                     ) {
-                        viewModel.onSelect(it)
+                        onClick(it)
                     }
                 }
             }

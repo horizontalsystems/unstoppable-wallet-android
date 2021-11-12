@@ -258,12 +258,10 @@ class LocalStorageManager(private val preferences: SharedPreferences)
 
     //  IChartTypeStorage
 
-    override var chartType: ChartType?
-        get() {
-            return ChartType.fromString(preferences.getString(CHART_TYPE, null))
-        }
+    override var chartType: ChartType
+        get() = ChartType.fromString(preferences.getString(CHART_TYPE, null)) ?: ChartType.TODAY
         set(mode) {
-            preferences.edit().putString(CHART_TYPE, mode?.name).apply()
+            preferences.edit().putString(CHART_TYPE, mode.name).apply()
         }
 
     override var torEnabled: Boolean
