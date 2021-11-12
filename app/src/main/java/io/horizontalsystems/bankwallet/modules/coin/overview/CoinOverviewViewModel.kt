@@ -2,250 +2,98 @@ package io.horizontalsystems.bankwallet.modules.coin.overview
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.Clearable
-import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.bankwallet.modules.coin.*
+import io.horizontalsystems.bankwallet.entities.DataState
+import io.horizontalsystems.bankwallet.entities.ViewState
+import io.horizontalsystems.bankwallet.modules.coin.CoinViewFactory
 import io.horizontalsystems.bankwallet.modules.coin.adapters.CoinChartAdapter
 import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.marketkit.models.ChartType
-import io.horizontalsystems.marketkit.models.CoinPrice
-import io.horizontalsystems.marketkit.models.CoinType
 import io.reactivex.disposables.CompositeDisposable
-import retrofit2.HttpException
-import java.math.BigDecimal
 
 class CoinOverviewViewModel(
     private val service: CoinOverviewService,
-    val coinCode: String,
     private val factory: CoinViewFactory,
-    private val clearables: List<Clearable>
 ) : ViewModel() {
 
-    val loadingLiveData = MutableLiveData<Boolean>()
-    val coinInfoErrorLiveData = MutableLiveData<String>()
-    val titleLiveData = MutableLiveData<TitleViewItem>()
+    val fullCoin by service::fullCoin
+    val currency by service::currency
+    val isRefreshingLiveData = MutableLiveData<Boolean>(false)
+    val overviewLiveData = MutableLiveData<CoinOverviewViewItem>()
+    val viewStateLiveData = MutableLiveData<ViewState>()
     val chartInfoLiveData = MutableLiveData<CoinChartAdapter.ViewItemWrapper>()
-    val roiLiveData = MutableLiveData<List<RoiViewItem>>()
-    val marketDataLiveData = MutableLiveData<List<CoinDataItem>>()
-    val categoriesLiveData = MutableLiveData<List<String>>()
-    val contractInfoLiveData = MutableLiveData<List<ContractInfo>>()
-    val aboutTextLiveData = MutableLiveData<String>()
-    val linksLiveData = MutableLiveData<List<CoinLink>>()
-    val showFooterLiveData = MutableLiveData(false)
+    val titleLiveData = MutableLiveData<String>()
 
-    val currency = service.currency
-
-    private var latestRateText: String? = null
-        set(value) {
-            field = value
-            syncSubtitle()
-        }
-
-    private var rateDiffValue: BigDecimal? = null
-        set(value) {
-            field = value
-            syncSubtitle()
-        }
-
-    private var chartInfoData: ChartInfoData? = null
-    private var showChartSpinner: Boolean = false
-    private var showChartError: Boolean = false
-
-    val coinUid by service::coinUid
-
-    private val disposable = CompositeDisposable()
+    private val disposables = CompositeDisposable()
 
     init {
-        syncSubtitle()
+        service.coinOverviewObservable
+            .subscribeIO { coinOverview ->
+                isRefreshingLiveData.postValue(coinOverview == DataState.Loading)
 
-        service.getCoinDetails()
-
-        fetchChartInfo()
-
-        service.coinPriceAsync
-                .subscribeIO {
-                    updateLatestRate(it)
-                }
-                .let {
-                    disposable.add(it)
+                coinOverview.dataOrNull?.let {
+                    overviewLiveData.postValue(factory.getXxx(it, service.fullCoin))
                 }
 
-        service.chartInfoUpdatedObservable
-                .subscribeIO {
-                    updateChartInfo()
+                coinOverview.viewState?.let {
+                    viewStateLiveData.postValue(it)
                 }
-                .let {
-                    disposable.add(it)
-                }
-
-        service.chartInfoErrorObservable
-                .subscribeIO {
-                    onChartError(it)
-                }
-                .let {
-                    disposable.add(it)
-                }
-
-        service.marketInfoOverviewStateObservable
-                .subscribeIO {
-                    syncCoinDetailsState(it)
-                }
-                .let {
-                    disposable.add(it)
-                }
-
-        service.chartSpinnerObservable
-                .subscribeIO {
-                    showChartSpinner = true
-                    syncChartInfo()
-                }
-                .let {
-                    disposable.add(it)
-                }
-    }
-
-    private fun updateLatestRate(latestRate: CoinPrice) {
-        val currencyValue = CurrencyValue(service.currency, latestRate.value)
-        latestRateText = factory.getFormattedLatestRate(currencyValue)
-    }
-
-    private fun syncSubtitle() {
-        titleLiveData.postValue(TitleViewItem(latestRateText, rateDiffValue))
-    }
-
-    fun onSelect(type: ChartView.ChartType) {
-        val convertedChartType = getKitChartType(type)
-
-        if (service.chartType == convertedChartType)
-            return
-
-        service.chartType = convertedChartType
-
-        fetchChartInfo()
-    }
-
-    private fun onChartError(error: Throwable?) {
-        showChartError = true
-        showChartSpinner = false
-        syncChartInfo()
-    }
-
-    private fun fetchChartInfo() {
-        syncChartInfo()
-        service.updateChartInfo()
-    }
-
-    private fun syncCoinDetailsState(state: CoinOverviewService.MarketInfoOverviewState) {
-        loadingLiveData.postValue(state is CoinOverviewService.MarketInfoOverviewState.Loading)
-        if (state is CoinOverviewService.MarketInfoOverviewState.Loaded) {
-            updateCoinDetails()
-        }
-
-        coinInfoErrorLiveData.postValue(getError(state))
-        showFooterLiveData.postValue(state !is CoinOverviewService.MarketInfoOverviewState.Loading)
-    }
-
-    private fun getError(state: CoinOverviewService.MarketInfoOverviewState): String {
-        if (state !is CoinOverviewService.MarketInfoOverviewState.Error) {
-            return ""
-        }
-
-        return if (state.error is HttpException && state.error.code() == 404) {
-            Translator.getString(R.string.CoinPage_NoData)
-        } else {
-            Translator.getString(R.string.BalanceSyncError_Title)
-        }
-    }
-
-    private fun updateCoinDetails() {
-        val marketInfoOverview = service.marketInfoOverview ?: return
-
-        roiLiveData.postValue(factory.getRoi(marketInfoOverview.performance))
-        categoriesLiveData.postValue(marketInfoOverview.categories.map { it.name })
-        contractInfoLiveData.postValue(getContractInfo())
-        linksLiveData.postValue(factory.getLinks(marketInfoOverview, service.guideUrl))
-
-        val marketData = factory.getMarketData(marketInfoOverview, service.currency, coinCode)
-        marketData.apply {
-            val items = mutableListOf<CoinDataItem>()
-            marketCap?.let {
-                items.add(CoinDataItem(Translator.getString(R.string.CoinPage_MarketCap), marketCap, rankLabel = marketCapRank))
             }
-            totalSupply?.let {
-                items.add(CoinDataItem(Translator.getString(R.string.CoinPage_TotalSupply), totalSupply))
-            }
-            circulatingSupply?.let {
-                items.add(CoinDataItem(Translator.getString(R.string.CoinPage_inCirculation), circulatingSupply))
-            }
-            volume24h?.let {
-                items.add(CoinDataItem(Translator.getString(R.string.CoinPage_TradingVolume), volume24h))
-            }
-            dilutedMarketCap?.let {
-                items.add(CoinDataItem(Translator.getString(R.string.CoinPage_DilutedMarketCap), dilutedMarketCap))
-            }
-            tvl?.let {
-                items.add(CoinDataItem(Translator.getString(R.string.CoinPage_Tvl), tvl))
-            }
-            genesisDate?.let {
-                items.add(CoinDataItem(Translator.getString(R.string.CoinPage_LaunchDate), genesisDate))
+            .let {
+                disposables.add(it)
             }
 
-            marketDataLiveData.postValue(items)
-        }
-
-        if (marketInfoOverview.description.isNotBlank()) {
-            aboutTextLiveData.postValue(marketInfoOverview.description)
-        }
-
-        showFooterLiveData.postValue(true)
-    }
-
-    private fun getContractInfo(): List<ContractInfo> {
-        return service.fullCoin.platforms.mapNotNull { platform ->
-            when (val coinType = platform.coinType) {
-                is CoinType.Erc20 -> ContractInfo.Erc20(coinType.address)
-                is CoinType.Bep20 -> ContractInfo.Bep20(coinType.address)
-                is CoinType.Bep2 -> ContractInfo.Bep2(coinType.symbol)
-                else -> null
+        service.coinPriceObservable
+            .subscribeIO { coinPrice ->
+                coinPrice.dataOrNull?.let {
+                    val currencyValue = CurrencyValue(service.currency, it.value)
+                    titleLiveData.postValue(factory.getFormattedLatestRate(currencyValue))
+                }
             }
-        }
+            .let {
+                disposables.add(it)
+            }
+
+        service.chartDataObservable
+            .subscribeIO { chartData ->
+                val chartInfoData = chartData.dataOrNull?.let { (chartInfo, lastPoint, chartType) ->
+                    factory.createChartInfoData(chartType, chartInfo, lastPoint)
+                }
+
+                val chartInfoViewItemWrapper = CoinChartAdapter.ViewItemWrapper(
+                    chartInfoData,
+                    chartData == DataState.Loading,
+                    chartData is DataState.Error
+                )
+
+                chartInfoLiveData.postValue(chartInfoViewItemWrapper)
+            }
+            .let {
+                disposables.add(it)
+            }
+
+        service.start()
     }
 
-    private fun updateChartInfo() {
-        val info = service.chartInfo ?: return
-        showChartSpinner = false
-        chartInfoData = factory.createChartInfoData(service.chartType, info, service.lastPoint)
-        syncChartInfo()
-
-        rateDiffValue = chartInfoData?.chartData?.diff()
+    fun changeChartType(chartType: ChartView.ChartType) {
+        service.changeChartType(getKitChartType(chartType))
     }
 
-    private fun syncChartInfo() {
-        chartInfoLiveData.postValue(CoinChartAdapter.ViewItemWrapper(chartInfoData, showChartSpinner, showChartError))
+    private fun getKitChartType(type: ChartView.ChartType) = when (type) {
+        ChartView.ChartType.TODAY -> ChartType.TODAY
+        ChartView.ChartType.DAILY -> ChartType.DAILY
+        ChartView.ChartType.WEEKLY -> ChartType.WEEKLY
+        ChartView.ChartType.WEEKLY2 -> ChartType.WEEKLY2
+        ChartView.ChartType.MONTHLY -> ChartType.MONTHLY
+        ChartView.ChartType.MONTHLY3 -> ChartType.MONTHLY3
+        ChartView.ChartType.MONTHLY6 -> ChartType.MONTHLY6
+        ChartView.ChartType.MONTHLY12 -> ChartType.MONTHLY12
+        ChartView.ChartType.MONTHLY24 -> ChartType.MONTHLY24
     }
-
-    private fun getKitChartType(type: ChartView.ChartType): ChartType {
-        return when (type) {
-            ChartView.ChartType.TODAY -> ChartType.TODAY
-            ChartView.ChartType.DAILY -> ChartType.DAILY
-            ChartView.ChartType.WEEKLY -> ChartType.WEEKLY
-            ChartView.ChartType.WEEKLY2 -> ChartType.WEEKLY2
-            ChartView.ChartType.MONTHLY -> ChartType.MONTHLY
-            ChartView.ChartType.MONTHLY3 -> ChartType.MONTHLY3
-            ChartView.ChartType.MONTHLY6 -> ChartType.MONTHLY6
-            ChartView.ChartType.MONTHLY12 -> ChartType.MONTHLY12
-            ChartView.ChartType.MONTHLY24 -> ChartType.MONTHLY24
-        }
-    }
-
-    //  ViewModel
 
     override fun onCleared() {
-        disposable.clear()
-        clearables.forEach(Clearable::clear)
+        service.stop()
+        disposables.clear()
     }
-
 }

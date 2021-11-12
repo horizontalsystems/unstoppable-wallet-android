@@ -1,91 +1,38 @@
 package io.horizontalsystems.bankwallet.modules.coin.overview
 
-import io.horizontalsystems.bankwallet.core.Clearable
-import io.horizontalsystems.bankwallet.core.IChartTypeStorage
+import io.horizontalsystems.bankwallet.core.IAppConfigProvider
 import io.horizontalsystems.bankwallet.core.subscribeIO
-import io.horizontalsystems.bankwallet.modules.coin.LastPoint
+import io.horizontalsystems.bankwallet.entities.DataState
+import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.core.ILanguageManager
-import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.marketkit.MarketKit
-import io.horizontalsystems.marketkit.models.*
+import io.horizontalsystems.marketkit.models.ChartType
+import io.horizontalsystems.marketkit.models.CoinPrice
+import io.horizontalsystems.marketkit.models.FullCoin
+import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.BehaviorSubject
 import java.net.URL
 
 class CoinOverviewService(
     val fullCoin: FullCoin,
-    val currency: Currency,
     private val marketKit: MarketKit,
-    private val chartTypeStorage: IChartTypeStorage,
-    private val guidesBaseUrl: String,
+    private val currencyManager: ICurrencyManager,
+    private val appConfigProvider: IAppConfigProvider,
     private val languageManager: ILanguageManager,
-) : Clearable {
+    private val chartRepo: ChartRepo
+) {
+    val currency get() = currencyManager.baseCurrency
 
-    sealed class MarketInfoOverviewState {
-        object Loading : MarketInfoOverviewState()
-        object Loaded : MarketInfoOverviewState()
-        data class Error(val error: Throwable) : MarketInfoOverviewState()
-    }
+    val chartDataObservable by chartRepo::chartDataObservable
 
-    val coinUid get() = fullCoin.coin.uid
+    private val coinPriceSubject = BehaviorSubject.create<DataState<CoinPrice>>()
+    val coinPriceObservable: Observable<DataState<CoinPrice>>
+        get() = coinPriceSubject
 
-    val coinPriceAsync = BehaviorSubject.create<CoinPrice>()
-    val chartInfoUpdatedObservable: BehaviorSubject<Unit> = BehaviorSubject.create()
-    val chartSpinnerObservable: BehaviorSubject<Unit> = BehaviorSubject.create()
-    val chartInfoErrorObservable: BehaviorSubject<Throwable> = BehaviorSubject.create()
-    val marketInfoOverviewStateObservable: BehaviorSubject<MarketInfoOverviewState> = BehaviorSubject.createDefault(
-        MarketInfoOverviewState.Loading)
-
-    var marketInfoOverview: MarketInfoOverview? = null
-
-    var lastPoint: LastPoint? = marketKit.coinPrice(fullCoin.coin.uid, currency.code)?.let { LastPoint(it.value, it.timestamp, it.diff) }
-        set(value) {
-            field = value
-            triggerChartUpdateIfEnoughData()
-        }
-
-    var chartInfo: ChartInfo? = null
-        set(value) {
-            field = value
-            triggerChartUpdateIfEnoughData()
-        }
-
-    private fun triggerChartUpdateIfEnoughData() {
-        if (chartInfo != null && lastPoint != null) {
-            chartInfoUpdatedObservable.onNext(Unit)
-        }
-    }
-
-    private val disposables = CompositeDisposable()
-    private var chartInfoDisposable: Disposable? = null
-
-    init {
-        marketKit.coinPrice(fullCoin.coin.uid, currency.code)?.let {
-            coinPriceAsync.onNext(it)
-        }
-        marketKit.coinPriceObservable(fullCoin.coin.uid, currency.code)
-                .subscribeIO {
-                    coinPriceAsync.onNext(it)
-                }
-                .let {
-                    disposables.add(it)
-                }
-        marketKit.coinPriceObservable(fullCoin.coin.uid, currency.code)
-                .subscribeIO({ marketInfo ->
-                    lastPoint = LastPoint(marketInfo.value, marketInfo.timestamp, marketInfo.diff)
-                }, {
-                    //ignore
-                }).let {
-                    disposables.add(it)
-                }
-    }
-
-    var chartType: ChartType
-        get() = chartTypeStorage.chartType ?: ChartType.TODAY
-        set(value) {
-            chartTypeStorage.chartType = value
-        }
+    private val coinOverviewSubject = BehaviorSubject.create<DataState<CoinOverviewItem>>()
+    val coinOverviewObservable: Observable<DataState<CoinOverviewItem>>
+        get() = coinOverviewSubject
 
     private val guideUrls = mapOf(
         "bitcoin" to "guides/token_guides/en/bitcoin.md",
@@ -103,44 +50,55 @@ class CoinOverviewService(
         "compound" to "guides/token_guides/en/compound.md",
     )
 
-    val guideUrl: String?
-        get() = guideUrls[fullCoin.coin.uid]?.let { URL(URL(guidesBaseUrl), it).toString() }
+    private val guideUrl: String?
+        get() = guideUrls[fullCoin.coin.uid]?.let { URL(URL(appConfigProvider.guidesUrl), it).toString() }
 
+    private val disposables = CompositeDisposable()
 
-    fun getCoinDetails() {
-        marketInfoOverviewStateObservable.onNext(MarketInfoOverviewState.Loading)
-        marketKit.marketInfoOverviewSingle(coinUid, currency.code, languageManager.currentLanguage)
-                .subscribeIO({ marketInfoOverview ->
-                    this.marketInfoOverview = marketInfoOverview
-                    marketInfoOverviewStateObservable.onNext(MarketInfoOverviewState.Loaded)
-                }, {
-                    marketInfoOverviewStateObservable.onNext(MarketInfoOverviewState.Error(it))
-                }).let {
-                    disposables.add(it)
-                }
+    fun start() {
+        chartRepo.start()
+        fetchCoinOverview()
+        fetchCoinPrice()
     }
 
-    fun updateChartInfo() {
-        chartInfoDisposable?.dispose()
+    fun changeChartType(chartType: ChartType) {
+        chartRepo.changeChartType(chartType)
+    }
 
-        chartInfo = marketKit.chartInfo(coinUid, currency.code, chartType)
-        if (chartInfo == null){
-                //show chart spinner only when chart data is not locally cached
-                // and we need to wait for network response for data
-            chartSpinnerObservable.onNext(Unit)
+    private fun fetchCoinOverview() {
+        coinOverviewSubject.onNext(DataState.Loading)
+
+        marketKit.marketInfoOverviewSingle(fullCoin.coin.uid, currencyManager.baseCurrency.code, languageManager.currentLanguage)
+            .subscribeIO({ marketInfoOverview ->
+                coinOverviewSubject.onNext(DataState.Success(CoinOverviewItem(fullCoin.coin.code, marketInfoOverview, guideUrl)))
+            }, {
+                coinOverviewSubject.onNext(DataState.Error(it))
+            }).let {
+                disposables.add(it)
+            }
+    }
+
+    private fun fetchCoinPrice() {
+        val coinPrice = marketKit.coinPrice(fullCoin.coin.uid, currency.code)
+        if (coinPrice != null) {
+            coinPriceSubject.onNext(DataState.Success(coinPrice))
+        } else {
+            coinPriceSubject.onNext(DataState.Loading)
         }
-        marketKit.getChartInfoAsync(coinUid, currency.code, chartType)
-                .subscribeIO({ chartInfo ->
-                    this.chartInfo = chartInfo
-                }, {
-                    chartInfoErrorObservable.onNext(it)
-                }).let {
-                    chartInfoDisposable = it
-                }
+
+        marketKit.coinPriceObservable(fullCoin.coin.uid, currency.code)
+            .subscribeIO({
+                coinPriceSubject.onNext(DataState.Success(it))
+            }, {
+                coinPriceSubject.onNext(DataState.Error(it))
+            })
+            .let {
+                disposables.add(it)
+            }
     }
 
-    override fun clear() {
-        chartInfoDisposable?.dispose()
+    fun stop() {
+        chartRepo.stop()
         disposables.clear()
     }
 }
