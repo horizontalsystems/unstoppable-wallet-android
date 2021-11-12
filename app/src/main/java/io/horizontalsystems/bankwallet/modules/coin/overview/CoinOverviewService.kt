@@ -101,4 +101,9 @@ class CoinOverviewService(
         chartRepo.stop()
         disposables.clear()
     }
+
+    fun refresh() {
+        stop()
+        start()
+    }
 }

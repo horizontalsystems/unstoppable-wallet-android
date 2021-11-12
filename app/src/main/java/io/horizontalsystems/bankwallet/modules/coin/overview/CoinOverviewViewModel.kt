@@ -96,4 +96,14 @@ class CoinOverviewViewModel(
         service.stop()
         disposables.clear()
     }
+
+    fun refresh() {
+        isRefreshingLiveData.postValue(true)
+        service.refresh()
+    }
+
+    fun retry() {
+        isRefreshingLiveData.postValue(true)
+        service.refresh()
+    }
 }

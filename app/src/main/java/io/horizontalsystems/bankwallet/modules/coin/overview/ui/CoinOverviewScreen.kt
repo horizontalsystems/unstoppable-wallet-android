@@ -44,7 +44,9 @@ fun CoinOverviewScreen(
 
     HSSwipeRefresh(
         state = rememberSwipeRefreshState(refreshing),
-        onRefresh = { },
+        onRefresh = {
+            viewModel.refresh()
+        },
         content = {
             when (viewState) {
                 ViewState.Success -> {
@@ -117,7 +119,9 @@ fun CoinOverviewScreen(
 
                 }
                 ViewState.Error -> {
-                    ListErrorView(stringResource(id = R.string.BalanceSyncError_Title))
+                    ListErrorView(stringResource(id = R.string.BalanceSyncError_Title)) {
+                        viewModel.retry()
+                    }
                 }
             }
         },
