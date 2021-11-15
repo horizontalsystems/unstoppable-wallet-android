@@ -5,7 +5,9 @@ import io.horizontalsystems.bankwallet.core.IAppConfigProvider
 import io.horizontalsystems.bankwallet.core.IRateManager
 import io.horizontalsystems.marketkit.models.CoinType
 import io.horizontalsystems.xrateskit.XRatesKit
-import io.horizontalsystems.xrateskit.entities.*
+import io.horizontalsystems.xrateskit.entities.Auditor
+import io.horizontalsystems.xrateskit.entities.DefiTvl
+import io.horizontalsystems.xrateskit.entities.TimePeriod
 import io.reactivex.Single
 import java.math.BigDecimal
 import io.horizontalsystems.coinkit.models.CoinType as CoinKitCoinType
@@ -41,19 +43,6 @@ class RateManager(
     override fun getTopDefiTvlAsync(currencyCode: String, fetchDiffPeriod: TimePeriod, itemsCount: Int, chain: String?): Single<List<DefiTvl>> {
         return kit.getTopDefiTvlAsync(currencyCode, fetchDiffPeriod, itemsCount, chain)
     }
-
-    override fun getGlobalCoinMarketPointsAsync(currencyCode: String, timePeriod: TimePeriod): Single<List<GlobalCoinMarketPoint>> {
-        return kit.getGlobalCoinMarketPointsAsync(currencyCode, timePeriod)
-    }
-
-    override fun defiTvlPoints(coinType: CoinType, currencyCode: String, fetchDiffPeriod: TimePeriod) : Single<List<DefiTvlPoint>> {
-        return kit.getDefiTvlPointsAsync(coinType.toCoinKitCoinType(), currencyCode, fetchDiffPeriod)
-    }
-
-    override fun getCoinMarketVolumePointsAsync(coinType: CoinType, currencyCode: String, fetchDiffPeriod: TimePeriod): Single<List<CoinMarketPoint>> {
-        return kit.getCoinMarketPointsAsync(coinType.toCoinKitCoinType(), currencyCode, fetchDiffPeriod)
-    }
-
 }
 
 private fun CoinType.toCoinKitCoinType(): CoinKitCoinType = when (this) {
@@ -67,20 +56,18 @@ private fun CoinType.toCoinKitCoinType(): CoinKitCoinType = when (this) {
     is CoinType.Erc20 -> CoinKitCoinType.Erc20(address)
     is CoinType.Bep20 -> CoinKitCoinType.Bep20(address)
     is CoinType.Bep2 -> CoinKitCoinType.Bep2(symbol)
-    is CoinType.Sol20 -> CoinKitCoinType.Unsupported("sol20:$address")
+    is CoinType.ArbitrumOne,
+    is CoinType.Avalanche,
+    is CoinType.Fantom,
+    is CoinType.HarmonyShard0,
+    is CoinType.HuobiToken,
+    is CoinType.Iotex,
+    is CoinType.Moonriver,
+    is CoinType.OkexChain,
+    is CoinType.PolygonPos,
+    is CoinType.Solana,
+    is CoinType.Sora,
+    is CoinType.Tomochain,
+    is CoinType.Xdai -> CoinKitCoinType.Unsupported("")
     is CoinType.Unsupported -> CoinKitCoinType.Unsupported(type)
-}
-
-fun CoinKitCoinType.toMarketKitCoinType(): CoinType = when (this) {
-    CoinKitCoinType.Bitcoin -> CoinType.Bitcoin
-    CoinKitCoinType.BitcoinCash -> CoinType.BitcoinCash
-    CoinKitCoinType.Litecoin -> CoinType.Litecoin
-    CoinKitCoinType.Dash -> CoinType.Dash
-    CoinKitCoinType.Zcash -> CoinType.Zcash
-    CoinKitCoinType.Ethereum -> CoinType.Ethereum
-    CoinKitCoinType.BinanceSmartChain -> CoinType.BinanceSmartChain
-    is CoinKitCoinType.Erc20 -> CoinType.Erc20(address)
-    is CoinKitCoinType.Bep20 -> CoinType.Bep20(address)
-    is CoinKitCoinType.Bep2 -> CoinType.Bep2(symbol)
-    is CoinKitCoinType.Unsupported -> CoinType.Unsupported(id)
 }

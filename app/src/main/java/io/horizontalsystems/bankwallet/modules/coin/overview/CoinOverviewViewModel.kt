@@ -33,7 +33,7 @@ class CoinOverviewViewModel(
                 isRefreshingLiveData.postValue(coinOverview == DataState.Loading)
 
                 coinOverview.dataOrNull?.let {
-                    overviewLiveData.postValue(factory.getXxx(it, service.fullCoin))
+                    overviewLiveData.postValue(factory.getOverviewViewItem(it, service.fullCoin))
                 }
 
                 coinOverview.viewState?.let {

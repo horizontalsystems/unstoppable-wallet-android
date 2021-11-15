@@ -23,8 +23,8 @@ import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.*
-import io.horizontalsystems.marketkit.models.ChartType
-import io.horizontalsystems.xrateskit.entities.*
+import io.horizontalsystems.xrateskit.entities.Auditor
+import io.horizontalsystems.xrateskit.entities.DefiTvl
 import io.horizontalsystems.xrateskit.entities.TimePeriod
 import io.reactivex.Flowable
 import io.reactivex.Observable
@@ -356,23 +356,6 @@ interface IRateManager {
         itemsCount: Int = 200,
         chain: String? = null
     ): Single<List<DefiTvl>>
-
-    fun getGlobalCoinMarketPointsAsync(
-        currencyCode: String,
-        timePeriod: TimePeriod
-    ): Single<List<GlobalCoinMarketPoint>>
-
-    fun defiTvlPoints(
-        coinType: CoinType,
-        currencyCode: String,
-        fetchDiffPeriod: TimePeriod
-    ): Single<List<DefiTvlPoint>>
-
-    fun getCoinMarketVolumePointsAsync(
-        coinType: CoinType,
-        currencyCode: String,
-        fetchDiffPeriod: TimePeriod = TimePeriod.HOUR_24
-    ): Single<List<CoinMarketPoint>>
 }
 
 interface IAccountsStorage {
