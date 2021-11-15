@@ -174,7 +174,6 @@ object SwapMainModule {
     sealed class SwapError : Throwable() {
         object InsufficientBalanceFrom : SwapError()
         object InsufficientAllowance : SwapError()
-        object ForbiddenPriceImpactLevel : SwapError()
     }
 
     @Parcelize

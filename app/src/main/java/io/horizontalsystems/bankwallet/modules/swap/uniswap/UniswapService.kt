@@ -7,7 +7,6 @@ import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.SwapError
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceService
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapPendingAllowanceService
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapPendingAllowanceState
-import io.horizontalsystems.bankwallet.modules.swap.uniswap.UniswapTradeService.PriceImpactLevel
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.PlatformCoin
 import io.reactivex.Observable
@@ -162,9 +161,6 @@ class UniswapService(
                 loading = true
             }
             is UniswapTradeService.State.Ready -> {
-                if (state.trade.priceImpactLevel == PriceImpactLevel.Forbidden) {
-                    allErrors.add(SwapError.ForbiddenPriceImpactLevel)
-                }
                 transactionData = try {
                     tradeService.transactionData(state.trade.tradeData)
                 } catch (error: Throwable) {
