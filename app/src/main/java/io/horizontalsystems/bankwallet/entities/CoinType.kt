@@ -20,7 +20,6 @@ val CoinType.platformType: String
         CoinType.Ethereum, is CoinType.Erc20 -> "Ethereum"
         CoinType.BinanceSmartChain, is CoinType.Bep20 -> "Binance Smart Chain"
         is CoinType.Bep2 -> "Binance"
-        is CoinType.Sol20 -> "Solana"
         else -> ""
     }
 
@@ -30,7 +29,6 @@ val CoinType.platformCoinType: String
         is CoinType.Erc20 -> "ERC20"
         is CoinType.Bep20 -> "BEP20"
         is CoinType.Bep2 -> "BEP2"
-        is CoinType.Sol20 -> "SOL20"
         else -> ""
     }
 
@@ -90,6 +88,39 @@ val CoinType.isSupported: Boolean
         is CoinType.Erc20,
         is CoinType.Bep20,
         is CoinType.Bep2 -> true
-        is CoinType.Sol20,
+        is CoinType.ArbitrumOne,
+        is CoinType.Avalanche,
+        is CoinType.Fantom,
+        is CoinType.HarmonyShard0,
+        is CoinType.HuobiToken,
+        is CoinType.Iotex,
+        is CoinType.Moonriver,
+        is CoinType.OkexChain,
+        is CoinType.PolygonPos,
+        is CoinType.Solana,
+        is CoinType.Sora,
+        is CoinType.Tomochain,
+        is CoinType.Xdai,
         is CoinType.Unsupported -> false
+    }
+
+val CoinType.order: Int
+    get() = when (this) {
+        is CoinType.Erc20 -> 1
+        is CoinType.Bep20 -> 2
+        is CoinType.Bep2 -> 3
+        is CoinType.Solana -> 4
+        is CoinType.Avalanche -> 5
+        is CoinType.Fantom -> 6
+        is CoinType.ArbitrumOne -> 7
+        is CoinType.PolygonPos -> 8
+        is CoinType.HuobiToken -> 9
+        is CoinType.HarmonyShard0 -> 10
+        is CoinType.Xdai -> 11
+        is CoinType.Moonriver -> 12
+        is CoinType.OkexChain -> 13
+        is CoinType.Sora -> 14
+        is CoinType.Tomochain -> 15
+        is CoinType.Iotex -> 16
+        else -> Int.MAX_VALUE
     }

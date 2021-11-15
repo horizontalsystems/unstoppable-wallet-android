@@ -24,7 +24,20 @@ data class Wallet(
             is CoinType.Bep2 -> TransactionSource.Blockchain.Bep2(coinType.symbol)
             is CoinType.Erc20 -> TransactionSource.Blockchain.Ethereum
             is CoinType.Bep20 -> TransactionSource.Blockchain.BinanceSmartChain
-            is CoinType.Sol20, is CoinType.Unsupported -> throw IllegalArgumentException("Unsupported coin may not have transactions to show")
+            is CoinType.ArbitrumOne,
+            is CoinType.Avalanche,
+            is CoinType.Fantom,
+            is CoinType.HarmonyShard0,
+            is CoinType.HuobiToken,
+            is CoinType.Iotex,
+            is CoinType.Moonriver,
+            is CoinType.OkexChain,
+            is CoinType.PolygonPos,
+            is CoinType.Solana,
+            is CoinType.Sora,
+            is CoinType.Tomochain,
+            is CoinType.Xdai,
+            is CoinType.Unsupported -> throw IllegalArgumentException("Unsupported coin may not have transactions to show")
         }
 
     val platformCoin

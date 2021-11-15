@@ -6,6 +6,7 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import io.horizontalsystems.bankwallet.entities.order
 import io.horizontalsystems.bankwallet.modules.coin.overview.CoinOverviewItem
 import io.horizontalsystems.bankwallet.modules.coin.overview.CoinOverviewViewItem
 import io.horizontalsystems.chartview.ChartData
@@ -65,17 +66,17 @@ sealed class RoiViewItem {
         override var listPosition: ListPosition? = null
     ) : RoiViewItem()
 }
-sealed class ContractInfo(val shortened: String, val rawValue: String, @DrawableRes val logoResId: Int, val explorerUrl: String) {
-    class Erc20(address: String) : ContractInfo(shortenAddress(address), address, R.drawable.logo_ethereum_24, "https://etherscan.io/token/$address")
-    class Bep20(address: String) : ContractInfo(shortenAddress(address), address, R.drawable.logo_binancesmartchain_24, "https://bscscan.com/token/$address")
-    class Bep2(symbol: String) : ContractInfo(symbol, symbol, R.drawable.logo_bep2_24, "https://explorer.binance.org/asset/$symbol")
+open class ContractInfo(
+    val rawValue: String,
+    @DrawableRes val logoResId: Int,
+    val explorerUrl: String
+) {
+    val shortened = shortenAddress(rawValue)
 
-    companion object {
-        private fun shortenAddress(address: String) = if (address.length >= 20) {
-            address.take(8) + "..." + address.takeLast(8)
-        } else {
-            address
-        }
+    private fun shortenAddress(address: String) = if (address.length >= 20) {
+        address.take(8) + "..." + address.takeLast(8)
+    } else {
+        address
     }
 }
 
@@ -168,13 +169,13 @@ class CoinViewFactory(
         return rows
     }
 
-    fun getXxx(item: CoinOverviewItem, fullCoin: FullCoin): CoinOverviewViewItem {
+    fun getOverviewViewItem(item: CoinOverviewItem, fullCoin: FullCoin): CoinOverviewViewItem {
         val overview = item.marketInfoOverview
 
         return CoinOverviewViewItem(
             roi = getRoi(overview.performance),
             categories = overview.categories.map { it.name },
-            contracts = getContractInfo(fullCoin),
+            contracts = getContractInfo(overview.coinTypes),
             links = getLinks(overview, item.guideUrl),
             about = overview.description,
             marketData = getMarketItems(item)
@@ -239,14 +240,25 @@ class CoinViewFactory(
     }
 
 
-    private fun getContractInfo(fullCoin: FullCoin): List<ContractInfo> {
-        return fullCoin.platforms.mapNotNull { platform ->
-            when (val coinType = platform.coinType) {
-                is CoinType.Erc20 -> ContractInfo.Erc20(coinType.address)
-                is CoinType.Bep20 -> ContractInfo.Bep20(coinType.address)
-                is CoinType.Bep2 -> ContractInfo.Bep2(coinType.symbol)
-                else -> null
-            }
+    private fun getContractInfo(coinTypes: List<CoinType>) = coinTypes.sortedBy { it.order }.mapNotNull { coinType ->
+        when (coinType) {
+            is CoinType.Erc20 -> ContractInfo(coinType.address, R.drawable.logo_ethereum_24,"https://etherscan.io/token/${coinType.address}")
+            is CoinType.Bep20 -> ContractInfo(coinType.address, R.drawable.logo_binancesmartchain_24,"https://bscscan.com/token/${coinType.address}")
+            is CoinType.Bep2 -> ContractInfo(coinType.symbol, R.drawable.logo_bep2_24,"https://explorer.binance.org/asset/${coinType.symbol}")
+            is CoinType.ArbitrumOne -> ContractInfo(coinType.address, R.drawable.logo_arbitrum_24, "https://arbiscan.io/token/${coinType.address}")
+            is CoinType.Avalanche -> ContractInfo(coinType.address, R.drawable.logo_avalanche_24, "https://avascan.info/blockchain/c/token/${coinType.address}")
+            is CoinType.Fantom -> ContractInfo(coinType.address, R.drawable.logo_fantom_24, "https://ftmscan.com/token/${coinType.address}")
+            is CoinType.HarmonyShard0 -> ContractInfo(coinType.address, R.drawable.logo_harmony_24, "https://explorer.harmony.one/address/${coinType.address}")
+            is CoinType.HuobiToken -> ContractInfo(coinType.address, R.drawable.logo_heco_24, "https://hecoinfo.com/token/${coinType.address}")
+            is CoinType.Iotex -> ContractInfo(coinType.address, R.drawable.logo_iotex_24, "https://iotexscan.io/token/${coinType.address}")
+            is CoinType.Moonriver -> ContractInfo(coinType.address, R.drawable.logo_moonriver_24, "https://blockscout.moonriver.moonbeam.network/address/${coinType.address}")
+            is CoinType.OkexChain -> ContractInfo(coinType.address, R.drawable.logo_okex_24, "https://www.oklink.com/oec/address/${coinType.address}")
+            is CoinType.PolygonPos -> ContractInfo(coinType.address, R.drawable.logo_polygon_24, "https://polygonscan.com/token/${coinType.address}")
+            is CoinType.Solana -> ContractInfo(coinType.address, R.drawable.logo_solana_24, "https://explorer.solana.com/address/${coinType.address}")
+            is CoinType.Sora -> ContractInfo(coinType.address, R.drawable.logo_sora_24, "https://sorascan.com/sora-mainnet/asset/${coinType.address}")
+            is CoinType.Tomochain -> ContractInfo(coinType.address, R.drawable.logo_tomochain_24, "https://scan.tomochain.com/tokens/${coinType.address}")
+            is CoinType.Xdai -> ContractInfo(coinType.address, R.drawable.logo_xdai_24, "https://blockscout.com/xdai/mainnet/address/${coinType.address}")
+            else -> null
         }
     }
 

@@ -100,7 +100,20 @@ class BalanceViewItemFactory {
         return when (coinType) {
             CoinType.Bitcoin, CoinType.Litecoin, CoinType.BitcoinCash, CoinType.Dash, CoinType.Zcash -> 10
             CoinType.Ethereum, CoinType.BinanceSmartChain, is CoinType.Erc20, is CoinType.Bep2, is CoinType.Bep20 -> 50
-            is CoinType.Sol20, is CoinType.Unsupported -> 0
+            is CoinType.ArbitrumOne,
+            is CoinType.Avalanche,
+            is CoinType.Fantom,
+            is CoinType.HarmonyShard0,
+            is CoinType.HuobiToken,
+            is CoinType.Iotex,
+            is CoinType.Moonriver,
+            is CoinType.OkexChain,
+            is CoinType.PolygonPos,
+            is CoinType.Solana,
+            is CoinType.Sora,
+            is CoinType.Tomochain,
+            is CoinType.Xdai,
+            is CoinType.Unsupported -> 0
         }
     }
 
