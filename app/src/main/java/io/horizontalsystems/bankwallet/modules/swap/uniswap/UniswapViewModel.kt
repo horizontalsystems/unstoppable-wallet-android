@@ -206,9 +206,6 @@ class UniswapViewModel(
                     service.errors.any { it == SwapError.InsufficientBalanceFrom } -> {
                         ActionState.Disabled(Translator.getString(R.string.Swap_ErrorInsufficientBalance))
                     }
-                    service.errors.any { it == SwapError.ForbiddenPriceImpactLevel } -> {
-                        ActionState.Disabled(Translator.getString(R.string.Swap_ErrorHighPriceImpact))
-                    }
                     pendingAllowanceService.state == SwapPendingAllowanceState.Pending -> {
                         ActionState.Disabled(Translator.getString(R.string.Swap_Proceed))
                     }
@@ -228,7 +225,7 @@ class UniswapViewModel(
             pendingAllowanceService.state == SwapPendingAllowanceState.Pending -> {
                 ActionState.Disabled(Translator.getString(R.string.Swap_Approving))
             }
-            tradeService.state is UniswapTradeService.State.NotReady || service.errors.any { it == SwapError.InsufficientBalanceFrom || it == SwapError.ForbiddenPriceImpactLevel } -> {
+            tradeService.state is UniswapTradeService.State.NotReady || service.errors.any { it == SwapError.InsufficientBalanceFrom } -> {
                 ActionState.Hidden
             }
             service.errors.any { it == SwapError.InsufficientAllowance } -> {
@@ -248,7 +245,7 @@ class UniswapViewModel(
             pendingAllowanceService.state == SwapPendingAllowanceState.Pending -> {
                 ApproveStep.Approving
             }
-            tradeService.state is UniswapTradeService.State.NotReady || service.errors.any { it == SwapError.InsufficientBalanceFrom || it == SwapError.ForbiddenPriceImpactLevel } -> {
+            tradeService.state is UniswapTradeService.State.NotReady || service.errors.any { it == SwapError.InsufficientBalanceFrom } -> {
                 ApproveStep.NA
             }
             service.errors.any { it == SwapError.InsufficientAllowance } -> {

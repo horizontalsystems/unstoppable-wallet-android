@@ -159,9 +159,6 @@ class OneInchSwapViewModel(
                     service.errors.any { it == SwapError.InsufficientBalanceFrom } -> {
                         ActionState.Disabled(Translator.getString(R.string.Swap_ErrorInsufficientBalance))
                     }
-                    service.errors.any { it == SwapError.ForbiddenPriceImpactLevel } -> {
-                        ActionState.Disabled(Translator.getString(R.string.Swap_ErrorHighPriceImpact))
-                    }
                     pendingAllowanceService.state == SwapPendingAllowanceState.Pending -> {
                         ActionState.Disabled(Translator.getString(R.string.Swap_Proceed))
                     }
