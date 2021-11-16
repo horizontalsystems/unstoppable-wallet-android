@@ -370,10 +370,11 @@
     <string name="SwapSettings_Error_DeadlineZero">Délai Zéro</string>
     <string name="SwapSettings_Error_SlippageZero">Zéro Slippage</string>
     <string name="SwapSettings_Error_SlippageTooLow">Votre transaction est susceptible de ne pas aboutir.</string>
-    <string name="SwapSettings_Error_SlippageTooHigh">La valeur maximale autorisée est %s%%</string>
+    <string name="SwapSettings_Error_SlippageTooHigh">Slippage Tolerance can’t be more than %s%%</string>
     <string name="SwapSettings_Error_InvalidAddress">Adresse invalide</string>
     <string name="SwapSettings_Error_InvalidSlippage">Slippage Invalide</string>
     <string name="SwapSettings_Error_InvalidDeadline">Date limite invalide</string>
+    <string name="SwapSettings_Warning_UnusualSlippage">Your transaction may be frontrun</string>
     <!-- Swap Confirmation -->
     <string name="Swap_Confirmation">Confirmation</string>
     <string name="Swap_Confirmation_Guaranteed">Garanti</string>
@@ -753,7 +754,11 @@
     <string name="CoinPage_Audits_PoweredBy">Propulsé par Defiyield.app</string>
     <string name="CoinPage_Audits_Issues">problèmes: %d</string>
     <string name="CoinPage_InvestorData">Données de l\'investisseur</string>
+    <string name="CoinPage_Treasuries">Treasuries</string>
+    <string name="CoinPage_Reports">Reports</string>
     <string name="CoinPage_FundsInvested">Fonds investis</string>
+    <string name="CoinPage_TokenDistribution">Token Distribution</string>
+    <string name="CoinPage_TokenTvl">Token TVL</string>
     <string name="CoinPage_SecurityParams">Paramètres de sécurité</string>
     <string name="CoinPage_SecurityParams_Privacy">Confidentialité</string>
     <string name="CoinPage_SecurityParams_Low">Faible</string>
