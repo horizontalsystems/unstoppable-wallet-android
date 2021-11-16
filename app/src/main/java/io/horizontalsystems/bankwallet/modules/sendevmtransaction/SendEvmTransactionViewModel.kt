@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.sendevmtransaction
 
+import androidx.annotation.DrawableRes
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
@@ -357,6 +358,16 @@ class SendEvmTransactionViewModel(
             sections.add(SectionViewItem(otherViewItems))
         }
 
+        if (info?.priceImpactWarning == true) {
+            sections.add(SectionViewItem(listOf(
+                ViewItem.Warning(
+                    Translator.getString(R.string.Swap_PriceImpact),
+                    Translator.getString(R.string.Swap_PriceImpactTooHigh),
+                    R.drawable.ic_attention_20
+                )
+            )))
+        }
+
         return sections
     }
 
@@ -478,6 +489,7 @@ sealed class ViewItem {
     class Value(val title: String, val value: String, val type: ValueType) : ViewItem()
     class Address(val title: String, val valueTitle: String, val value: String) : ViewItem()
     class Input(val value: String) : ViewItem()
+    class Warning(val title: String, val description: String, @DrawableRes val icon: Int) : ViewItem()
 }
 
 enum class ValueType {

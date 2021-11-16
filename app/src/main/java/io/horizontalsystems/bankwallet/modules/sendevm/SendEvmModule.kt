@@ -51,14 +51,15 @@ data class SendEvmData(
 
     @Parcelize
     data class UniswapInfo(
-            val estimatedOut: BigDecimal,
-            val estimatedIn: BigDecimal,
-            val slippage: String? = null,
-            val deadline: String? = null,
-            val recipientDomain: String? = null,
-            val price: String? = null,
-            val priceImpact: String? = null,
-            val gasPrice: String? = null
+        val estimatedOut: BigDecimal,
+        val estimatedIn: BigDecimal,
+        val slippage: String? = null,
+        val deadline: String? = null,
+        val recipientDomain: String? = null,
+        val price: String? = null,
+        val priceImpact: String? = null,
+        val priceImpactWarning: Boolean,
+        val gasPrice: String? = null,
     ) : Parcelable
 
     @Parcelize

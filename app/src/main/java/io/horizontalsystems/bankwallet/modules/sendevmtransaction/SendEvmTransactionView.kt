@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.layout.padding
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.FragmentManager
@@ -16,6 +18,7 @@ import io.horizontalsystems.bankwallet.core.ethereum.EthereumFeeViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.Ellipsis
+import io.horizontalsystems.bankwallet.ui.compose.components.TextImportant
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.views.ListPosition
@@ -86,7 +89,7 @@ class SendEvmTransactionAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(
     var items: List<ViewItemWithPosition> = listOf()
 
     enum class ViewType {
-        Subhead, Value, Address, Input, Space
+        Subhead, Value, Address, Input, Space, Warning
     }
 
     private val viewTypes = ViewType.values()
@@ -99,6 +102,7 @@ class SendEvmTransactionAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(
             is ViewItem.Address -> ViewType.Address.ordinal
             is ViewItem.Value -> ViewType.Value.ordinal
             is ViewItem.Input -> ViewType.Input.ordinal
+            is ViewItem.Warning -> ViewType.Warning.ordinal
             null -> ViewType.Space.ordinal
         }
     }
@@ -110,6 +114,13 @@ class SendEvmTransactionAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(
             ViewType.Address -> TitleValueHexViewHolder.create(parent)
             ViewType.Value -> TitleValueViewHolder.create(parent)
             ViewType.Input -> TitleValueHexViewHolder.create(parent)
+            ViewType.Warning -> WarningViewHolder.create(parent)
+        }
+    }
+
+    override fun onViewRecycled(holder: RecyclerView.ViewHolder) {
+        if (holder is WarningViewHolder) {
+            holder.composeView.disposeComposition()
         }
     }
 
@@ -120,6 +131,7 @@ class SendEvmTransactionAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(
             is ViewItem.Address -> (holder as? TitleValueHexViewHolder)?.bind(item.title, item.valueTitle, item.value, listPosition)
             is ViewItem.Value -> (holder as? TitleValueViewHolder)?.bind(item.title, item.value, item.type, listPosition)
             is ViewItem.Input -> (holder as? TitleValueHexViewHolder)?.bind("Input", item.value, item.value, listPosition)
+            is ViewItem.Warning -> (holder as? WarningViewHolder)?.bind(item)
         }
     }
 
@@ -139,6 +151,26 @@ class SendEvmTransactionAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(
 
         companion object {
             fun create(parent: ViewGroup) = SubheadViewHolder(inflate(parent, R.layout.view_holder_evm_confirmation_subhead, false))
+        }
+    }
+
+    class WarningViewHolder(val composeView: ComposeView) : RecyclerView.ViewHolder(composeView) {
+        init {
+            composeView.setViewCompositionStrategy(
+                ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed
+            )
+        }
+
+        fun bind(item: ViewItem.Warning) {
+            composeView.setContent {
+                ComposeAppTheme {
+                    TextImportant(text = item.description, title = item.title, icon = item.icon)
+                }
+            }
+        }
+
+        companion object {
+            fun create(parent: ViewGroup) = WarningViewHolder(ComposeView(parent.context))
         }
     }
 
