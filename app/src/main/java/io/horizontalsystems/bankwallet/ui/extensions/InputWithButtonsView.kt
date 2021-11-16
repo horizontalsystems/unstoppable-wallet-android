@@ -16,6 +16,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import androidx.lifecycle.LifecycleOwner
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.modules.swap.settings.Caution
 import io.horizontalsystems.bankwallet.modules.swap.settings.IVerifiedInputViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
@@ -126,11 +127,23 @@ class InputWithButtonsView @JvmOverloads constructor(
         updateButtons()
     }
 
-    fun setError(text: String?) {
-        val isVisible = !text.isNullOrEmpty()
-        error.text = text
-        error.isVisible = isVisible
-        inputBackground.hasError = isVisible
+    private fun setCaution(caution: Caution?) {
+        error.text = caution?.text
+        error.isVisible = !caution?.text.isNullOrEmpty()
+
+        when (caution?.type) {
+            Caution.Type.Error -> {
+                error.setTextColor(context.getColor(R.color.lucian))
+                inputBackground.hasError = true
+            }
+            Caution.Type.Warning -> {
+                error.setTextColor(context.getColor(R.color.jacob))
+                inputBackground.hasWarning = true
+            }
+            null -> {
+                inputBackground.clearStates()
+            }
+        }
     }
 
     fun onTextChange(callback: (old: String?, new: String?) -> Unit) {
@@ -147,7 +160,7 @@ class InputWithButtonsView @JvmOverloads constructor(
         })
 
         viewModel.cautionLiveData.observe(lifecycleOwner, {
-            setError(it?.text)
+            setCaution(it)
         })
 
         setHint(viewModel.inputFieldPlaceholder)

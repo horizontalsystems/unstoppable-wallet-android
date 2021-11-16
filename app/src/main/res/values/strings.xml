@@ -431,10 +431,11 @@
     <string name="SwapSettings_Error_DeadlineZero">Zero Deadline</string>
     <string name="SwapSettings_Error_SlippageZero">Zero Slippage</string>
     <string name="SwapSettings_Error_SlippageTooLow">Your transaction is likely to fail.</string>
-    <string name="SwapSettings_Error_SlippageTooHigh">Max. allowed value is %s%%</string>
+    <string name="SwapSettings_Error_SlippageTooHigh">Slippage Tolerance can’t be more than %s%%</string>
     <string name="SwapSettings_Error_InvalidAddress">Invalid address</string>
     <string name="SwapSettings_Error_InvalidSlippage">Invalid Slippage</string>
     <string name="SwapSettings_Error_InvalidDeadline">Invalid Deadline</string>
+    <string name="SwapSettings_Warning_UnusualSlippage">Your transaction may be frontrun</string>
 
     <!-- Swap Confirmation -->
     <string name="Swap_Confirmation">Confirmation</string>
