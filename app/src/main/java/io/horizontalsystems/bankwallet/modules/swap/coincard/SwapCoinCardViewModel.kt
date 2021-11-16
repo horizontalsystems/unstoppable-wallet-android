@@ -52,6 +52,7 @@ class SwapCoinCardViewModel(
     private val isEstimatedLiveData = MutableLiveData(false)
     private val inputParamsLiveData = MutableLiveData<AmountInputView.InputParams>()
     private val secondaryInfoLiveData = MutableLiveData<String?>(null)
+    private val warningInfoLiveData = MutableLiveData<String?>(null)
     private val maxEnabledLiveData = MutableLiveData(false)
 
     //region outputs
@@ -63,6 +64,7 @@ class SwapCoinCardViewModel(
     fun isEstimatedLiveData(): LiveData<Boolean> = isEstimatedLiveData
     fun inputParamsLiveData(): LiveData<AmountInputView.InputParams> = inputParamsLiveData
     fun secondaryInfoLiveData(): LiveData<String?> = secondaryInfoLiveData
+    fun warningInfoLiveData(): LiveData<String?> = warningInfoLiveData
     fun maxEnabledLiveData(): LiveData<Boolean> = maxEnabledLiveData
 
     fun onSelectCoin(coin: PlatformCoin) {
@@ -117,6 +119,11 @@ class SwapCoinCardViewModel(
             .subscribe { syncEstimated() }
             .let { disposables.add(it) }
 
+        coinCardService.amountWarningObservable
+            .subscribeOn(Schedulers.io())
+            .subscribe { syncAmountWarning(it.orElse(null)) }
+            .let { disposables.add(it) }
+
         coinCardService.amountObservable
             .subscribeOn(Schedulers.io())
             .subscribe { syncAmount(it.orElse(null)) }
@@ -146,6 +153,17 @@ class SwapCoinCardViewModel(
             .subscribeOn(Schedulers.io())
             .subscribe { updateInputFields() }
             .let { disposables.add(it) }
+    }
+
+    private fun syncAmountWarning(warning: AmountWarning?) {
+        warningInfoLiveData.postValue(
+            when (warning) {
+                is AmountWarning.HighPriceImpact -> {
+                    "-" + Translator.getString(R.string.Swap_Percent, warning.priceImpact)
+                }
+                null -> ""
+            }
+        )
     }
 
     private fun syncEstimated() {
