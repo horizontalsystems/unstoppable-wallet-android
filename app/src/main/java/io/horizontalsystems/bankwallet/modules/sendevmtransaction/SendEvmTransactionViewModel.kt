@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.sendevmtransaction
 
+import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,6 +13,7 @@ import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData
+import io.horizontalsystems.bankwallet.modules.swap.uniswap.UniswapTradeService
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoAddressMapper
 import io.horizontalsystems.core.toHexString
 import io.horizontalsystems.erc20kit.decorations.ApproveMethodDecoration
@@ -352,7 +354,13 @@ class SendEvmTransactionViewModel(
             otherViewItems.add(ViewItem.Value(Translator.getString(R.string.Swap_Price), it, ValueType.Regular))
         }
         info?.priceImpact?.let {
-            otherViewItems.add(ViewItem.Value(Translator.getString(R.string.Swap_PriceImpact), it, ValueType.Regular))
+            val color = when (it.level) {
+                UniswapTradeService.PriceImpactLevel.Warning -> R.color.jacob
+                UniswapTradeService.PriceImpactLevel.Forbidden -> R.color.lucian
+                else -> null
+            }
+
+            otherViewItems.add(ViewItem.Value(Translator.getString(R.string.Swap_PriceImpact), it.value, ValueType.Regular, color))
         }
         if (otherViewItems.isNotEmpty()) {
             sections.add(SectionViewItem(otherViewItems))
@@ -486,7 +494,7 @@ data class SectionViewItem(
 
 sealed class ViewItem {
     class Subhead(val title: String, val value: String) : ViewItem()
-    class Value(val title: String, val value: String, val type: ValueType) : ViewItem()
+    class Value(val title: String, val value: String, val type: ValueType, @ColorRes val color: Int? = null) : ViewItem()
     class Address(val title: String, val valueTitle: String, val value: String) : ViewItem()
     class Input(val value: String) : ViewItem()
     class Warning(val title: String, val description: String, @DrawableRes val icon: Int) : ViewItem()

@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.swap.uniswap
 
+import android.os.Parcelable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
@@ -11,12 +12,14 @@ import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapPendingAllowan
 import io.horizontalsystems.bankwallet.modules.swap.providers.UniswapProvider
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.uniswapkit.UniswapKit
+import kotlinx.android.parcel.Parcelize
 
 object UniswapModule {
 
     data class GuaranteedAmountViewItem(val title: String, val value: String)
 
-    data class PriceImpactViewItem(val level: UniswapTradeService.PriceImpactLevel, val value: String)
+    @Parcelize
+    data class PriceImpactViewItem(val level: UniswapTradeService.PriceImpactLevel, val value: String) : Parcelable
 
     class AllowanceViewModelFactory(
             private val service: UniswapService

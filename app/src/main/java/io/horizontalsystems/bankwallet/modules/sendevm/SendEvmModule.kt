@@ -13,6 +13,7 @@ import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.swap.settings.AddressResolutionService
 import io.horizontalsystems.bankwallet.modules.swap.settings.RecipientAddressViewModel
+import io.horizontalsystems.bankwallet.modules.swap.uniswap.UniswapModule
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.PlatformCoin
 import kotlinx.android.parcel.Parcelize
@@ -57,7 +58,7 @@ data class SendEvmData(
         val deadline: String? = null,
         val recipientDomain: String? = null,
         val price: String? = null,
-        val priceImpact: String? = null,
+        val priceImpact: UniswapModule.PriceImpactViewItem? = null,
         val priceImpactWarning: Boolean,
         val gasPrice: String? = null,
     ) : Parcelable

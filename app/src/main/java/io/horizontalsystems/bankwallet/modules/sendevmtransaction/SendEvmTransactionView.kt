@@ -129,7 +129,7 @@ class SendEvmTransactionAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(
         when (val item = items[position].viewItem) {
             is ViewItem.Subhead -> (holder as? SubheadViewHolder)?.bind(item, listPosition)
             is ViewItem.Address -> (holder as? TitleValueHexViewHolder)?.bind(item.title, item.valueTitle, item.value, listPosition)
-            is ViewItem.Value -> (holder as? TitleValueViewHolder)?.bind(item.title, item.value, item.type, listPosition)
+            is ViewItem.Value -> (holder as? TitleValueViewHolder)?.bind(item, listPosition)
             is ViewItem.Input -> (holder as? TitleValueHexViewHolder)?.bind("Input", item.value, item.value, listPosition)
             is ViewItem.Warning -> (holder as? WarningViewHolder)?.bind(item)
         }
@@ -200,12 +200,12 @@ class SendEvmTransactionAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(
     }
 
     class TitleValueViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
-        fun bind(title: String, value: String, type: ValueType, position: ListPosition) {
-            titleTextView.text = title
-            valueTextView.text = value
+        fun bind(item: ViewItem.Value, position: ListPosition) {
+            titleTextView.text = item.title
+            valueTextView.text = item.value
 
-            val textColor = when (type) {
-                ValueType.Regular -> R.color.bran
+            val textColor = when (item.type) {
+                ValueType.Regular -> item.color ?: R.color.bran
                 ValueType.Disabled -> R.color.grey
                 ValueType.Outgoing -> R.color.jacob
                 ValueType.Incoming -> R.color.remus
