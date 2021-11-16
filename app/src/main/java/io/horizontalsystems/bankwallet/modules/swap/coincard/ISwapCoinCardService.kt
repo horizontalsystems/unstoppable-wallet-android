@@ -16,7 +16,13 @@ interface ISwapCoinCardService {
     val coinObservable: Observable<Optional<PlatformCoin>>
     val balanceObservable: Observable<Optional<BigDecimal>>
     val errorObservable: Observable<Optional<Throwable>>
+    val amountWarningObservable: Observable<Optional<AmountWarning>>
+        get() = Observable.empty()
 
     fun onChangeAmount(amount: BigDecimal?)
     fun onSelectCoin(coin: PlatformCoin)
+}
+
+sealed class AmountWarning {
+    class HighPriceImpact(val priceImpact: BigDecimal) : AmountWarning()
 }

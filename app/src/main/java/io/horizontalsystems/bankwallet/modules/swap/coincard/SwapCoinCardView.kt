@@ -93,6 +93,7 @@ class SwapCoinCardView @JvmOverloads constructor(context: Context, attrs: Attrib
         }
 
         viewModel.secondaryInfoLiveData().observe(lifecycleOwner, { amountInput.setSecondaryText(it) })
+        viewModel.warningInfoLiveData().observe(lifecycleOwner, { amountInput.setWarningText(it) })
 
         viewModel.inputParamsLiveData().observe(lifecycleOwner, { amountInput.setInputParams(it) })
 

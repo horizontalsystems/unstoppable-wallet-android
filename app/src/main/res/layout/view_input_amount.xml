@@ -22,8 +22,7 @@
         app:layout_constraintBottom_toTopOf="@id/amountDivider"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:layout_height="28dp"
-        />
+        tools:layout_height="28dp" />
 
     <TextView
         android:id="@+id/estimatedLabel"
@@ -39,8 +38,7 @@
         android:visibility="gone"
         app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toStartOf="@id/amountInputButtonsCompose"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/topAmountPrefix"
@@ -101,13 +99,29 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
         android:layout_marginEnd="12dp"
-        android:layout_marginTop="8dp"
         android:ellipsize="middle"
         android:singleLine="true"
         android:textColor="@color/bran"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/secondaryArea"
+        app:layout_constraintEnd_toStartOf="@id/txtWarningInfo"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/amountDivider"
+        app:layout_constraintTop_toTopOf="@id/secondaryArea"
         tools:text="$ 210" />
+
+    <TextView
+        android:id="@+id/txtWarningInfo"
+        style="@style/Caption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        android:ellipsize="middle"
+        android:singleLine="true"
+        android:textColor="@color/lucian"
+        app:layout_constraintBottom_toBottomOf="@id/secondaryArea"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/txtHintInfo"
+        app:layout_constraintTop_toTopOf="@id/secondaryArea"
+        tools:text="-12%" />
 
 </merge>

@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.swap.coincard
 
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.AmountType
+import io.horizontalsystems.bankwallet.modules.swap.uniswap.UniswapTradeService
 import io.horizontalsystems.marketkit.models.PlatformCoin
 import io.reactivex.Observable
 import java.math.BigDecimal
@@ -39,6 +40,27 @@ class SwapToCoinCardService(
 
     override val errorObservable: Observable<Optional<Throwable>>
         get() = Observable.just(Optional.empty())
+
+    override val amountWarningObservable: Observable<Optional<AmountWarning>>
+        get() = when (tradeService) {
+            is UniswapTradeService -> {
+                tradeService.stateObservable.map { state ->
+                    val highPriceImpact = if (
+                        state is UniswapTradeService.State.Ready &&
+                        state.trade.priceImpactLevel == UniswapTradeService.PriceImpactLevel.Forbidden
+                    ) {
+                        state.trade.tradeData.priceImpact?.let { priceImpact ->
+                            AmountWarning.HighPriceImpact(priceImpact)
+                        }
+                    } else {
+                        null
+                    }
+
+                    Optional.ofNullable(highPriceImpact)
+                }
+            }
+            else -> Observable.just(Optional.ofNullable(null))
+        }
 
     override fun onChangeAmount(amount: BigDecimal?) {
         tradeService.enterAmountTo(amount)

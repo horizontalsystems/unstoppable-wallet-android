@@ -147,6 +147,10 @@ class AmountInputView @JvmOverloads constructor(
         txtHintInfo.text = text
     }
 
+    fun setWarningText(text: String?) {
+        txtWarningInfo.text = text
+    }
+
     fun setFocus() {
         KeyboardHelper.showKeyboard(context, editTxtAmount)
     }
