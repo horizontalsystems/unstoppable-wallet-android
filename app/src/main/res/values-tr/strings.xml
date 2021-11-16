@@ -370,10 +370,11 @@
     <string name="SwapSettings_Error_DeadlineZero">Geçersiz Son Tarih</string>
     <string name="SwapSettings_Error_SlippageZero">Geçersiz Kayma</string>
     <string name="SwapSettings_Error_SlippageTooLow">İşleminizin başarısız olması muhtemeldir.</string>
-    <string name="SwapSettings_Error_SlippageTooHigh">Maksimum izin verilen değer %s%%</string>
+    <string name="SwapSettings_Error_SlippageTooHigh">Slippage Tolerance can’t be more than %s%%</string>
     <string name="SwapSettings_Error_InvalidAddress">Geçersiz adres</string>
     <string name="SwapSettings_Error_InvalidSlippage">Geçersiz Kayma</string>
     <string name="SwapSettings_Error_InvalidDeadline">Geçersiz Son Tarih</string>
+    <string name="SwapSettings_Warning_UnusualSlippage">Your transaction may be frontrun</string>
     <!-- Swap Confirmation -->
     <string name="Swap_Confirmation">Onaylama</string>
     <string name="Swap_Confirmation_Guaranteed">Garanti</string>
@@ -753,7 +754,11 @@
     <string name="CoinPage_Audits_PoweredBy">Powered by Defiyield.app</string>
     <string name="CoinPage_Audits_Issues">issues: %d</string>
     <string name="CoinPage_InvestorData">Investor Data</string>
+    <string name="CoinPage_Treasuries">Treasuries</string>
+    <string name="CoinPage_Reports">Reports</string>
     <string name="CoinPage_FundsInvested">Funds Invested</string>
+    <string name="CoinPage_TokenDistribution">Token Distribution</string>
+    <string name="CoinPage_TokenTvl">Token TVL</string>
     <string name="CoinPage_SecurityParams">Security Parameters</string>
     <string name="CoinPage_SecurityParams_Privacy">Privacy</string>
     <string name="CoinPage_SecurityParams_Low">Low</string>
