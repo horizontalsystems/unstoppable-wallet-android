@@ -397,6 +397,7 @@
     <string name="Swap_SellPrice">Sell Price</string>
     <string name="Swap_BuyPrice">Buy Price</string>
     <string name="Swap_PriceImpact">Price Impact</string>
+    <string name="Swap_PriceImpactTooHigh">The difference between the market price and expected settlement price is too high.</string>
     <string name="Swap_MinimumReceived">Guaranteed Amount</string>
     <string name="Swap_EstimatedFee">Estimated Fee</string>
     <string name="Swap_MaxFee">Max Fee</string>

@@ -82,7 +82,8 @@ class UniswapViewModel(
                     tradeService.coinFrom,
                     tradeService.coinTo
                 ),
-                priceImpact = trade?.let { formatter.priceImpactViewItem(it)?.value }
+                priceImpact = trade?.let { formatter.priceImpactViewItem(it)?.value },
+                priceImpactWarning = trade?.priceImpactLevel  == UniswapTradeService.PriceImpactLevel.Forbidden
             )
             openConfirmationLiveEvent.postValue(
                 SendEvmData(
