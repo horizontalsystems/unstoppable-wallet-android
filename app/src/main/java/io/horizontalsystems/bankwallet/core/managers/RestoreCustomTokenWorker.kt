@@ -12,6 +12,8 @@ import io.horizontalsystems.bankwallet.modules.addtoken.AddEvmTokenBlockchainSer
 import io.horizontalsystems.bankwallet.modules.addtoken.AddEvmTokenBlockchainService.Blockchain.Ethereum
 import io.horizontalsystems.marketkit.models.CoinType
 import io.reactivex.Single
+import java.net.UnknownHostException
+import java.util.*
 
 class RestoreCustomTokenWorker(ctx: Context, params: WorkerParameters) :
     RxWorker(ctx, params) {
@@ -42,7 +44,6 @@ class RestoreCustomTokenWorker(ctx: Context, params: WorkerParameters) :
                 coinManager.save(customTokens)
                 walletManager.loadWallets()
                 localStorage.customTokensRestoreCompleted = true
-
                 Result.success()
             }
     }
@@ -68,12 +69,22 @@ class RestoreCustomTokenWorker(ctx: Context, params: WorkerParameters) :
         coinTypes: List<CoinType>,
         networkManager: INetworkManager
     ): Single<List<CustomToken>> {
-        val singles: List<Single<CustomToken>> = coinTypes.mapNotNull { coinType ->
+        val singles: List<Single<Optional<CustomToken>>> = coinTypes.mapNotNull { coinType ->
             customTokenSingle(coinType, networkManager)
+                ?.map { Optional.of(it) }
+                ?.onErrorReturn {
+                    //throw error when there is no connection
+                    if (it is UnknownHostException){
+                        throw it
+                    } else {
+                        Optional.empty<CustomToken>()
+                    }
+                }
         }
 
         return Single.zip(singles) { array ->
-            array.mapNotNull { it as? CustomToken }
+            val customTokens = array.map { it as? Optional<CustomToken> }
+            customTokens.mapNotNull { it?.orElse(null) }
         }
     }
 

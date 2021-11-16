@@ -65,6 +65,7 @@ class LocalStorageManager(private val preferences: SharedPreferences)
     private val LAUNCH_PAGE = "launch_page"
     private val MAIN_TAB = "main_tab"
     private val CUSTOM_TOKENS_RESTORE_COMPLETED = "custom_tokens_restore_completed"
+    private val FAVORITE_COIN_IDS_MIGRATED = "favorite_coins_ids_migrated"
     private val MARKET_FAVORITES_SORTING_FIELD = "market_favorites_sorting_field"
     private val MARKET_FAVORITES_MARKET_FIELD = "market_favorites_market_field"
     private val RELAUNCH_BY_SETTING_CHANGE = "relaunch_by_setting_change"
@@ -369,6 +370,12 @@ class LocalStorageManager(private val preferences: SharedPreferences)
         get() = preferences.getBoolean(CUSTOM_TOKENS_RESTORE_COMPLETED, false)
         set(value) {
             preferences.edit().putBoolean(CUSTOM_TOKENS_RESTORE_COMPLETED, value).apply()
+        }
+
+    override var favoriteCoinIdsMigrated: Boolean
+        get() = preferences.getBoolean(FAVORITE_COIN_IDS_MIGRATED, false)
+        set(value) {
+            preferences.edit().putBoolean(FAVORITE_COIN_IDS_MIGRATED, value).apply()
         }
 
     override var marketFavoritesSortingField: SortingField?
