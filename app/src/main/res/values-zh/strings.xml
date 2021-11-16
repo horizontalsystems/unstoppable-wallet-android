@@ -338,6 +338,7 @@
     <string name="Swap_SellPrice">Sell Price</string>
     <string name="Swap_BuyPrice">Buy Price</string>
     <string name="Swap_PriceImpact">价格影响</string>
+    <string name="Swap_PriceImpactTooHigh">The difference between the market price and expected settlement price is too high.</string>
     <string name="Swap_MinimumReceived">保证金额</string>
     <string name="Swap_EstimatedFee">预估费用</string>
     <string name="Swap_MaxFee">最大手续费</string>
