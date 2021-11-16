@@ -370,10 +370,11 @@
     <string name="SwapSettings_Error_DeadlineZero">Нулевой Срок</string>
     <string name="SwapSettings_Error_SlippageZero">Нулевое Отклонение</string>
     <string name="SwapSettings_Error_SlippageTooLow">Ваша транзакция, скорее всего, не удастся.</string>
-    <string name="SwapSettings_Error_SlippageTooHigh">Макс. допустимое значение %s%%</string>
+    <string name="SwapSettings_Error_SlippageTooHigh">Slippage Tolerance can’t be more than %s%%</string>
     <string name="SwapSettings_Error_InvalidAddress">Неверный Адрес</string>
     <string name="SwapSettings_Error_InvalidSlippage">Неверное Отклонение</string>
     <string name="SwapSettings_Error_InvalidDeadline">Недопустимый Срок</string>
+    <string name="SwapSettings_Warning_UnusualSlippage">Your transaction may be frontrun</string>
     <!-- Swap Confirmation -->
     <string name="Swap_Confirmation">Подтверждение</string>
     <string name="Swap_Confirmation_Guaranteed">Гарантировано</string>
@@ -755,7 +756,11 @@
     <string name="CoinPage_Audits_PoweredBy">При поддержке Defiyield.app</string>
     <string name="CoinPage_Audits_Issues">Запросы: %d</string>
     <string name="CoinPage_InvestorData">Данные Инвестора</string>
+    <string name="CoinPage_Treasuries">Treasuries</string>
+    <string name="CoinPage_Reports">Reports</string>
     <string name="CoinPage_FundsInvested">Средства Инвестированы</string>
+    <string name="CoinPage_TokenDistribution">Token Distribution</string>
+    <string name="CoinPage_TokenTvl">Token TVL</string>
     <string name="CoinPage_SecurityParams">Параметры Безопасности</string>
     <string name="CoinPage_SecurityParams_Privacy">Приватность</string>
     <string name="CoinPage_SecurityParams_Low">Низкая</string>
