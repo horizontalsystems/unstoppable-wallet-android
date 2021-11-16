@@ -294,6 +294,11 @@ class App : CoreApp(), WorkConfiguration.Provider  {
                 WorkManager.getInstance(instance).enqueue(request)
             }
 
+            if (!localStorage.favoriteCoinIdsMigrated){
+                val request = OneTimeWorkRequestBuilder<MigrateFavoriteCoinIdsWorker>().build()
+                WorkManager.getInstance(instance).enqueue(request)
+            }
+
         }.start()
     }
 }
