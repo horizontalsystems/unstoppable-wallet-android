@@ -11,8 +11,8 @@ import io.horizontalsystems.bankwallet.modules.swap.settings.oneinch.OneInchSwap
 import io.horizontalsystems.bankwallet.modules.swap.settings.oneinch.OneInchSwapSettingsModule.State
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
+import io.reactivex.subjects.PublishSubject
 import java.math.BigDecimal
-import java.util.*
 import io.horizontalsystems.ethereumkit.models.Address as EthAddress
 
 class OneInchSettingsService(
@@ -71,7 +71,8 @@ class OneInchSettingsService(
     //endregion
 
     // region ISwapSlippageService
-    private val limitSlippageBounds = Range(BigDecimal("0.01"), BigDecimal("20"))
+    private val limitSlippageBounds = Range(BigDecimal("0.01"), BigDecimal("50"))
+    private val usualHighestSlippage = BigDecimal(5)
     private var slippage: BigDecimal = swapSettings.slippage
 
     override val initialSlippage: BigDecimal?
@@ -84,17 +85,19 @@ class OneInchSettingsService(
         }
     override val defaultSlippage = OneInchSwapSettingsModule.defaultSlippage
 
-    override val recommendedSlippageBounds = Range(BigDecimal("0.1"), BigDecimal("3"))
+    override val recommendedSlippages = listOf(BigDecimal("0.1"), BigDecimal("3"))
 
     override val slippageError: Throwable?
         get() = getSlippageError(errors)
 
-    override val slippageErrorObservable: Observable<Optional<Throwable>>
-        get() = errorsObservable.map { errors -> Optional.ofNullable(getSlippageError(errors)) }
+    override val unusualSlippage get() = usualHighestSlippage < slippage
+
+    override val slippageChangeObservable = PublishSubject.create<Unit>()
 
     override fun setSlippage(value: BigDecimal) {
         slippage = value
         sync()
+        slippageChangeObservable.onNext(Unit)
     }
 
     private fun getSlippageError(errors: List<Throwable>): Throwable? {
