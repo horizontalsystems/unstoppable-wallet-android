@@ -14,6 +14,7 @@ import io.horizontalsystems.bankwallet.modules.coin.ChartInfoData
 import io.horizontalsystems.bankwallet.modules.coin.CoinViewFactory
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.ChartInfoHeaderItem
 import io.horizontalsystems.core.entities.Currency
+import io.horizontalsystems.marketkit.models.Coin
 import io.horizontalsystems.marketkit.models.MarketInfoDetails
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.delay
@@ -26,6 +27,9 @@ class CoinDetailsViewModel(
 ) : ViewModel() {
 
     private val disposables = CompositeDisposable()
+
+    val coin: Coin
+        get() = service.coin
 
     val viewStateLiveData = MutableLiveData<ViewState>()
     val loadingLiveData = MutableLiveData<Boolean>()

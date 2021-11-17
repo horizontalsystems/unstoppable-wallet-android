@@ -987,7 +987,7 @@
     <string name="CoinPage_Bep2Symbol">BEP2 Symbol</string>
     <string name="CoinPage_MajorHolders_TopWallets">Top Wallets</string>
     <string name="CoinPage_MajorHolders_Description">The chart above shows the % of all tokens in circulation held by the top 10 wallets. The lower the % the more distributed the coin is.</string>
-    <string name="CoinPage_MajorHolders_InTopWallets">in top 10 wallets</string>
+    <string name="CoinPage_MajorHolders_InTopWallets">In top 10 Ethereum wallets</string>
 
 
     <!--Rate list-->
