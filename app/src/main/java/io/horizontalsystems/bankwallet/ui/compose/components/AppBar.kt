@@ -44,7 +44,7 @@ fun AppBarMenuButton(
 fun AppBar(
     title: TranslatableString,
     navigationIcon: @Composable (() -> Unit)? = null,
-    menuItems: List<MenuItem>
+    menuItems: List<MenuItem> = listOf()
 ) {
     TopAppBar(
         modifier = Modifier.height(56.dp),
