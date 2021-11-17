@@ -30,11 +30,13 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.CoinViewModel
+import io.horizontalsystems.bankwallet.modules.coin.majorholders.CoinMajorHoldersFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineClear
 import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
+import io.horizontalsystems.core.findNavController
 
 @ExperimentalCoilApi
 class CoinDetailsFragment : BaseFragment() {
@@ -208,13 +210,17 @@ class CoinDetailsFragment : BaseFragment() {
         distributionItems.add {
             CoinDetailsCell(
                 title = stringResource(R.string.CoinPage_MajorHolders),
-                value = null
-            ) {
-                Log.e("AAA", "onClickMajorHolders")
-            }
+                value = null,
+                onClick = this::openMajorHolders
+            )
         }
 
         CellSingleLineLawrenceSection(distributionItems)
+    }
+
+    private fun openMajorHolders() {
+        val arguments = CoinMajorHoldersFragment.prepareParams(viewModel.coin.uid)
+        findNavController().navigate(R.id.coinMajorHoldersFragment, arguments, navOptions())
     }
 
     @Composable

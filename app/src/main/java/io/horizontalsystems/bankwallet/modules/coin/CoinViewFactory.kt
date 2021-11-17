@@ -184,6 +184,30 @@ class CoinViewFactory(
         )
     }
 
+    fun getCoinMajorHolders(topTokenHolders: List<TokenHolder>): List<MajorHolderItem> {
+        val list = mutableListOf<MajorHolderItem>()
+        if (topTokenHolders.isEmpty()) {
+            return list
+        }
+
+        list.add(MajorHolderItem.Header)
+        topTokenHolders
+            .sortedByDescending { it.share }
+            .forEachIndexed { index, holder ->
+                val shareFormatted = numberFormatter.format(holder.share, 0, 2, suffix = "%")
+                list.add(
+                    MajorHolderItem.Item(
+                        index + 1,
+                        holder.address,
+                        holder.share,
+                        shareFormatted
+                    )
+                )
+            }
+
+        return list
+    }
+
     private fun getMarketItems(
         item: CoinOverviewItem,
     ): MutableList<CoinDataItem> {

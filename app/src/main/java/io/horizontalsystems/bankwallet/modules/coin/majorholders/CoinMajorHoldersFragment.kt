@@ -4,17 +4,31 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.res.stringResource
+import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
+import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.ConcatAdapter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.entities.ViewState
+import io.horizontalsystems.bankwallet.modules.coin.MajorHolderItem
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.android.synthetic.main.fragment_recyclerview.*
+import kotlinx.android.synthetic.main.fragment_recyclerview.errorViewCompose
+import kotlinx.android.synthetic.main.fragment_recyclerview.pullToRefresh
 
 class CoinMajorHoldersFragment : BaseFragment(), CoinMajorHoldersAdapter.Listener {
 
-//    private val coinViewModel by navGraphViewModels<CoinOverviewViewModel>(R.id.coinFragment)
+    private val viewModel by viewModels<CoinMajorHoldersViewModel> {
+        CoinMajorHoldersModule.Factory(requireArguments().getString(COIN_UID_KEY)!!)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_recyclerview, container, false)
@@ -28,11 +42,39 @@ class CoinMajorHoldersFragment : BaseFragment(), CoinMajorHoldersAdapter.Listene
             findNavController().popBackStack()
         }
 
-//        coinViewModel.coinMajorHolders.observe(viewLifecycleOwner, { holders ->
-//            val adapterChart = CoinMajorHoldersPieAdapter(holders.filterIsInstance(MajorHolderItem.Item::class.java))
-//            val adapterItems = CoinMajorHoldersAdapter(holders, this)
-//            recyclerView.adapter = ConcatAdapter(adapterChart, adapterItems)
-//        })
+        pullToRefresh.setProgressBackgroundColorSchemeResource(R.color.claude)
+        pullToRefresh.setColorSchemeResources(R.color.oz)
+
+        pullToRefresh.setOnRefreshListener {
+            viewModel.refresh()
+        }
+
+        viewModel.loadingLiveData.observe(viewLifecycleOwner, { loading ->
+            pullToRefresh.isRefreshing = loading
+        })
+
+        errorViewCompose.setViewCompositionStrategy(
+            ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+        )
+
+        errorViewCompose.setContent {
+            ComposeAppTheme {
+                ListErrorView(stringResource(R.string.Market_SyncError)) {
+                    viewModel.onErrorClick()
+                }
+            }
+        }
+
+        viewModel.viewStateLiveData.observe(viewLifecycleOwner) { viewState ->
+            pullToRefresh.isVisible = viewState == ViewState.Success
+            errorViewCompose.isVisible = viewState == ViewState.Error
+        }
+
+        viewModel.coinMajorHolders.observe(viewLifecycleOwner, { holders ->
+            val adapterChart = CoinMajorHoldersPieAdapter(holders.filterIsInstance(MajorHolderItem.Item::class.java))
+            val adapterItems = CoinMajorHoldersAdapter(holders, this)
+            recyclerView.adapter = ConcatAdapter(adapterChart, adapterItems)
+        })
     }
 
     override fun onAddressClick(address: String) {
@@ -44,5 +86,11 @@ class CoinMajorHoldersFragment : BaseFragment(), CoinMajorHoldersAdapter.Listene
         context?.let { ctx ->
             LinkHelper.openLinkInAppBrowser(ctx, "https://etherscan.io/address/$address")
         }
+    }
+
+    companion object {
+        private const val COIN_UID_KEY = "coin_uid_key"
+
+        fun prepareParams(coinUid: String) = bundleOf(COIN_UID_KEY to coinUid)
     }
 }
