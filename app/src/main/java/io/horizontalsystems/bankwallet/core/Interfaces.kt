@@ -439,6 +439,7 @@ interface IAppNumberFormatter {
     fun getSignificantDecimalCoin(value: BigDecimal): Int
     fun shortenValue(number: BigDecimal): Pair<BigDecimal, String>
     fun formatCurrencyValueAsShortened(currencyValue: CurrencyValue): String
+    fun formatCoinValueAsShortened(number: BigDecimal, code: String): String
     fun formatValueAsDiff(value: Value): String
 }
 

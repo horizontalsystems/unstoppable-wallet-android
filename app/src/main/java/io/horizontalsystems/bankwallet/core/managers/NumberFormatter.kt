@@ -137,6 +137,11 @@ class NumberFormatter(
         return formatFiat(shortenValue, currencyValue.currency.symbol, 0, 2) + " $suffix"
     }
 
+   override fun formatCoinValueAsShortened(number: BigDecimal, code: String): String {
+        val (shortValue, suffix) = shortenValue(number)
+        return format(shortValue, 0, 2) + " $suffix $code"
+    }
+
     override fun formatValueAsDiff(value: Value): String =
         when (value) {
             is Value.Currency -> {
