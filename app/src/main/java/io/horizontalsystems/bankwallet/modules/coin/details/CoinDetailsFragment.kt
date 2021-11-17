@@ -58,6 +58,15 @@ class CoinDetailsFragment : BaseFragment() {
         }
     }
 
+    private fun openMajorHolders() {
+        val arguments = CoinMajorHoldersFragment.prepareParams(viewModel.coin.uid)
+        findNavController().navigate(R.id.coinMajorHoldersFragment, arguments, navOptions())
+    }
+
+    private fun openTvlInDefi() {
+        findNavController().navigate(R.id.tvlFragment, null, navOptionsFromBottom())
+    }
+
     @Composable
     private fun CoinDetailsScreen(viewModel: CoinDetailsViewModel) {
         val viewState by viewModel.viewStateLiveData.observeAsState(ViewState.Success)
@@ -133,9 +142,11 @@ class CoinDetailsFragment : BaseFragment() {
 
         viewItem.tvlRank?.let {
             tokenTvls.add {
-                CoinDetailsCell(title = stringResource(R.string.TvlRank_Title), value = it) {
-                    Log.e("AAA", "onClickTvlRank")
-                }
+                CoinDetailsCell(
+                    title = stringResource(R.string.TvlRank_Title),
+                    value = it,
+                    onClick = this::openTvlInDefi
+                )
             }
         }
 
@@ -216,11 +227,6 @@ class CoinDetailsFragment : BaseFragment() {
         }
 
         CellSingleLineLawrenceSection(distributionItems)
-    }
-
-    private fun openMajorHolders() {
-        val arguments = CoinMajorHoldersFragment.prepareParams(viewModel.coin.uid)
-        findNavController().navigate(R.id.coinMajorHoldersFragment, arguments, navOptions())
     }
 
     @Composable

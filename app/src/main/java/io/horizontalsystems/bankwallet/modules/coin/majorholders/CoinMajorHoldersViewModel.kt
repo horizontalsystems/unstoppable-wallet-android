@@ -51,6 +51,7 @@ class CoinMajorHoldersViewModel(
     }
 
     override fun onCleared() {
+        disposables.clear()
         service.stop()
     }
 }
