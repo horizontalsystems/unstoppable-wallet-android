@@ -963,6 +963,7 @@
     <string name="CoinPage_IndicatorEMA" translatable="false">EMA</string>
     <string name="CoinPage_IndicatorMACD" translatable="false">MACD</string>
     <string name="CoinPage_IndicatorRSI" translatable="false">RSI</string>
+    <string name="CoinPage_IndicatorDominace" translatable="false">BTC Dominance</string>
     <string name="CoinPage_MarketCap_Thousand">k</string>
     <string name="CoinPage_MarketCap_Million">M</string>
     <string name="CoinPage_MarketCap_Billion">B</string>

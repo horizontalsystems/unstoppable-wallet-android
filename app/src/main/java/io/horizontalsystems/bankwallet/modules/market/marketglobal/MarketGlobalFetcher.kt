@@ -32,7 +32,7 @@ class MarketGlobalFetcher(
                         MetricsType.DefiCap -> point.marketCapDefi
                         MetricsType.TvlInDefi -> point.tvl
                     }
-                    MetricChartModule.Item(value, point.timestamp)
+                    MetricChartModule.Item(value, mapOf(), point.timestamp)
                 }
             }
     }

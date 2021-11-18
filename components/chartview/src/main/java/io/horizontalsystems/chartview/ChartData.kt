@@ -93,6 +93,10 @@ class ChartData(val items: MutableList<Item>, val startTimestamp: Long, val endT
 
     val rsiRange = Range(0f, 100f)
 
+    val dominanceRange by lazy {
+        ranges[Indicator.Dominance] ?: Range(0f, 1f)
+    }
+
     val histogramRange by lazy {
         val histogram = ranges[Indicator.MacdHistogram]
 
