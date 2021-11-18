@@ -60,7 +60,7 @@
         <!--Volume info-->
 
         <TextView
-            android:id="@+id/pointInfoVolumeTitle"
+            android:id="@+id/pointTitle"
             style="@style/Caption"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -68,14 +68,14 @@
             android:text="@string/CoinPage_Volume"
             android:textColor="@color/grey"
             android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@+id/pointInfoVolume"
+            app:layout_constraintBottom_toTopOf="@+id/pointValue"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_chainStyle="packed"
             />
 
         <TextView
-            android:id="@+id/pointInfoVolume"
+            android:id="@+id/pointValue"
             style="@style/Caption"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -87,7 +87,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1"
             app:layout_constraintStart_toEndOf="@+id/pointInfoPrice"
-            app:layout_constraintTop_toBottomOf="@+id/pointInfoVolumeTitle"
+            app:layout_constraintTop_toBottomOf="@+id/pointTitle"
             tools:text="$36,166B"
             />
 

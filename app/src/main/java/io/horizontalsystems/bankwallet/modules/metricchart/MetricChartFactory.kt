@@ -2,9 +2,8 @@ package io.horizontalsystems.bankwallet.modules.metricchart
 
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.chartview.ChartData
-import io.horizontalsystems.chartview.ChartDataFactory
 import io.horizontalsystems.chartview.ChartView
-import io.horizontalsystems.chartview.models.ChartPoint
+import io.horizontalsystems.chartview.Indicator
 import io.horizontalsystems.chartview.models.PointInfo
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.core.helpers.DateHelper
@@ -44,8 +43,43 @@ class MetricChartFactory(private val numberFormatter: IAppNumberFormatter) {
     private fun chartData(points: List<MetricChartModule.Item>) : ChartData {
         val startTimestamp = points.first().timestamp
         val endTimestamp = points.last().timestamp
-        val metricPoints = points.map { ChartPoint(it.value.toFloat(), null, it.timestamp) }
-        return ChartDataFactory.build(metricPoints, startTimestamp, endTimestamp, false)
+        val items = mutableListOf<ChartData.Item>()
+
+        points.forEach { point ->
+            val item = ChartData.Item(point.timestamp)
+            item.values[Indicator.Candle] = ChartData.Value(point.value.toFloat())
+            item.values[Indicator.Dominance] = point.indicators[Indicator.Dominance]?.let { ChartData.Value(it.toFloat()) }
+
+            items.add(item)
+        }
+
+        val visibleChartData = ChartData(mutableListOf(), startTimestamp, endTimestamp)
+
+        for (item in items) {
+            if (item.timestamp < visibleChartData.startTimestamp) {
+                continue
+            }
+
+            visibleChartData.items.add(item)
+
+            visibleChartData.range(item, Indicator.Candle)
+            visibleChartData.range(item, Indicator.Dominance)
+        }
+
+        val visibleTimeInterval = visibleChartData.endTimestamp - visibleChartData.startTimestamp
+        for (item in visibleChartData.items) {
+            val timestamp = item.timestamp - visibleChartData.startTimestamp
+            if (timestamp < 0) {
+                continue
+            }
+
+            val x = (timestamp.toFloat() / visibleTimeInterval)
+
+            item.setPoint(x, Indicator.Candle, visibleChartData.valueRange)
+            item.setPoint(x, Indicator.Dominance, visibleChartData.dominanceRange)
+        }
+
+        return visibleChartData
     }
 
     private fun getFormattedValue(value: Float, currency: Currency, valueType: MetricChartModule.ValueType): String {

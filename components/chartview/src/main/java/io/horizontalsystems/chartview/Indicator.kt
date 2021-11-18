@@ -3,6 +3,7 @@ package io.horizontalsystems.chartview
 open class Indicator(val name: String) {
     object Candle : Indicator("candle")
     object Volume : Indicator("volume")
+    object Dominance : Indicator("dominance")
 
     object EmaFast : Indicator("emaFast") {
         const val period = 25

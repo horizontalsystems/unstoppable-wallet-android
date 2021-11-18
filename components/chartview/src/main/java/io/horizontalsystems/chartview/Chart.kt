@@ -13,6 +13,7 @@ import io.horizontalsystems.chartview.models.ChartConfig
 import io.horizontalsystems.chartview.models.ChartIndicator
 import io.horizontalsystems.chartview.models.PointInfo
 import kotlinx.android.synthetic.main.view_chart.view.*
+import java.text.DecimalFormat
 
 class Chart @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
     : ConstraintLayout(context, attrs, defStyleAttr) {
@@ -52,6 +53,9 @@ class Chart @JvmOverloads constructor(context: Context, attrs: AttributeSet? = n
 
     private val rsiCurve = ChartCurve(config, animatorBottom)
     private val rsiRange = ChartGridRange(config, isVisible = false)
+
+    private val dominanceCurve = ChartCurve(config, animatorMain)
+    private val dominanceLabel = ChartBottomLabel(config)
 
     fun setListener(listener: Listener) {
         chartTouch.onUpdate(object : Listener {
@@ -146,6 +150,33 @@ class Chart @JvmOverloads constructor(context: Context, attrs: AttributeSet? = n
         val volumes = PointConverter.volume(data.values(Volume), chartBottom.shape, config.volumeOffset)
         val timeline = GridHelper.map(chartType, data.startTimestamp, data.endTimestamp, chartMain.shape.right)
 
+        //Dominance
+        val dominancePoints = data.values(Dominance)
+        if (dominancePoints.isNotEmpty()) {
+            val dominance = PointConverter.curve(
+                data.values(Dominance),
+                chartMain.shape,
+                config.curveVerticalOffset
+            )
+
+            dominanceCurve.setShape(chartMain.shape)
+            dominanceCurve.setPoints(dominance)
+            dominanceCurve.setColor(config.curveSlowColor)
+
+            dominanceLabel.setShape(chartMain.shape)
+            val dominancePercent = decimalFormat.format(dominancePoints.last().value)
+            val diff = dominancePoints.last().value - dominancePoints.first().value
+            val diffColor = if (diff > 0f) config.trendUpColor else config.trendDownColor
+            val diffFormatted = decimalFormat.format(diff)
+            dominanceLabel.setValues(mapOf(
+                "$diffFormatted%" to diffColor,
+                "BTC Dominance $dominancePercent%" to config.curveDominanceLabelColor
+            ))
+
+            dominanceCurve.isVisible = true
+            dominanceLabel.isVisible = true
+        }
+
         chartTouch.configure(config, chartTimeline.shape.height())
         chartTouch.setCoordinates(coordinates)
 
@@ -220,8 +251,9 @@ class Chart @JvmOverloads constructor(context: Context, attrs: AttributeSet? = n
 
         chartMain.clear()
         chartMain.add(mainCurve, mainGradient)
-        chartMain.add(mainGrid, emaLabel)
+        chartMain.add(mainGrid, emaLabel, dominanceLabel)
         chartMain.add(emaFastCurve, emaSlowCurve)
+        chartMain.add(dominanceCurve)
 
         topLowRange.clear()
         topLowRange.add(mainRange)
@@ -246,6 +278,10 @@ class Chart @JvmOverloads constructor(context: Context, attrs: AttributeSet? = n
 
     private fun setVisible(vararg view: View, isVisible: Boolean) {
         view.forEach { it.isVisible = isVisible }
+    }
+
+    companion object{
+        private val decimalFormat = DecimalFormat("#.##")
     }
 
 }

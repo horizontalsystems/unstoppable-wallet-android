@@ -33,6 +33,7 @@ data class ChartPointViewItem(
     val date: Long,
     val price: CurrencyValue,
     val volume: CurrencyValue?,
+    val dominance: Float?,
     val macdInfo: MacdInfo?
 )
 

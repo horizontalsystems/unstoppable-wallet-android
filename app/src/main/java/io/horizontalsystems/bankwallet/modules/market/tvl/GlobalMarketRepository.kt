@@ -7,6 +7,7 @@ import io.horizontalsystems.bankwallet.modules.market.sort
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartModule
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
 import io.horizontalsystems.chartview.ChartView
+import io.horizontalsystems.chartview.Indicator
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.marketkit.MarketKit
 import io.horizontalsystems.marketkit.models.DefiMarketInfo
@@ -28,14 +29,19 @@ class GlobalMarketRepository(
         return marketKit.globalMarketPointsSingle(currencyCode, getTimePeriod(chartType))
             .map { list ->
                 list.map { point ->
-                    val value = when (metricsType) {
-                        MetricsType.TotalMarketCap -> point.marketCap
-                        MetricsType.BtcDominance -> point.dominanceBtc
-                        MetricsType.Volume24h -> point.volume24h
-                        MetricsType.DefiCap -> point.marketCapDefi
-                        MetricsType.TvlInDefi -> point.tvl
+                    val additional = mutableMapOf<Indicator, BigDecimal>()
+                    val value: BigDecimal
+                    when (metricsType) {
+                        MetricsType.TotalMarketCap -> {
+                            additional[Indicator.Dominance] = point.dominanceBtc
+                            value = point.marketCap
+                        }
+                        MetricsType.BtcDominance -> value = point.dominanceBtc
+                        MetricsType.Volume24h -> value = point.volume24h
+                        MetricsType.DefiCap -> value = point.marketCapDefi
+                        MetricsType.TvlInDefi -> value = point.tvl
                     }
-                    MetricChartModule.Item(value, point.timestamp)
+                    MetricChartModule.Item(value, additional, point.timestamp)
                 }
             }
     }

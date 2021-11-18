@@ -58,8 +58,8 @@ class CoinChartView @JvmOverloads constructor(context: Context, attrs: Attribute
         inflate(context, R.layout.coin_chart, this)
 
         chart.setListener(this)
-        pointInfoVolumeTitle.isInvisible = true
-        pointInfoVolume.isInvisible = true
+        pointTitle.isInvisible = true
+        pointValue.isInvisible = true
     }
 
     private var macdIsEnabled = false
@@ -153,12 +153,12 @@ class CoinChartView @JvmOverloads constructor(context: Context, attrs: Attribute
         val price = CurrencyValue(currency, point.value.toBigDecimal())
 
         if (macdIsEnabled) {
-            setSelectedPoint(ChartPointViewItem(point.timestamp, price, null, point.macdInfo))
+            setSelectedPoint(ChartPointViewItem(point.timestamp, price, null, null, point.macdInfo))
         } else {
             val volume = point.volume?.let { volume ->
                 CurrencyValue(currency, volume.toBigDecimal())
             }
-            setSelectedPoint(ChartPointViewItem(point.timestamp, price, volume, null))
+            setSelectedPoint(ChartPointViewItem(point.timestamp, price, volume, point.dominance, null))
         }
 
         HudHelper.vibrate(context)
@@ -290,8 +290,8 @@ class CoinChartView @JvmOverloads constructor(context: Context, attrs: Attribute
     }
 
     private fun setSelectedPoint(item: ChartPointViewItem) {
-        pointInfoVolumeTitle.isInvisible = true
-        pointInfoVolume.isInvisible = true
+        pointTitle.isInvisible = true
+        pointValue.isInvisible = true
 
         macdHistogram.isInvisible = true
         macdSignal.isInvisible = true
@@ -302,10 +302,20 @@ class CoinChartView @JvmOverloads constructor(context: Context, attrs: Attribute
             getFormattedPointValue(item.price.value, item.price.currency.symbol, chartViewType)
 
         item.volume?.let {
-            pointInfoVolumeTitle.isInvisible = false
-            pointInfoVolume.isInvisible = false
-            pointInfoVolume.text =
+            pointTitle.isInvisible = false
+            pointValue.isInvisible = false
+            pointTitle.text = context.getString(R.string.CoinPage_Volume)
+            pointValue.setTextColor(context.getColor(R.color.grey))
+            pointValue.text =
                 formatFiatShortened(item.volume.value, item.volume.currency.symbol)
+        }
+
+        item.dominance?.let {
+            pointTitle.isInvisible = false
+            pointValue.isInvisible = false
+            pointTitle.text = context.getString(R.string.CoinPage_IndicatorDominace)
+            pointValue.setTextColor(context.getColor(R.color.jacob))
+            pointValue.text = App.numberFormatter.format(it, 0, 2, suffix = "%")
         }
 
         item.macdInfo?.let { macdInfo ->

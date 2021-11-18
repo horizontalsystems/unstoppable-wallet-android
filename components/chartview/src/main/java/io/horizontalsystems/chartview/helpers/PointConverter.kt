@@ -2,7 +2,8 @@ package io.horizontalsystems.chartview.helpers
 
 import android.graphics.PointF
 import android.graphics.RectF
-import io.horizontalsystems.chartview.*
+import io.horizontalsystems.chartview.ChartData
+import io.horizontalsystems.chartview.Coordinate
 import io.horizontalsystems.chartview.Indicator.*
 import io.horizontalsystems.chartview.models.MacdInfo
 import io.horizontalsystems.chartview.models.PointInfo
@@ -20,19 +21,25 @@ object PointConverter {
             val macd = item.values[Macd]
             val signal = item.values[MacdSignal]
             val histogram = item.values[MacdHistogram]
+            val dominance = item.values[Dominance]
 
             val point = value.point
             val x = point.x * width
             val y = point.y * height
 
-            coordinates.add(Coordinate(
+            coordinates.add(
+                Coordinate(
                     x = x,
-                    y =shape.height() - verticalPadding - y,
+                    y = shape.height() - verticalPadding - y,
                     point = PointInfo(
-                            value.value,
-                            volume?.value,
-                            MacdInfo(macd?.value, signal?.value, histogram?.value), item.timestamp)
-            ))
+                        value.value,
+                        volume?.value,
+                        MacdInfo(macd?.value, signal?.value, histogram?.value),
+                        dominance?.value,
+                        item.timestamp
+                    )
+                )
+            )
         }
 
         return coordinates
