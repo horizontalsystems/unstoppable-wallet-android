@@ -5,7 +5,6 @@ import com.google.gson.Gson
 import com.trustwallet.walletconnect.models.WCPeerMeta
 import com.trustwallet.walletconnect.models.session.WCSession
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.entities.PriceAlert
 import io.horizontalsystems.marketkit.models.CoinType
 import java.math.BigDecimal
 import java.util.*
@@ -74,26 +73,6 @@ class DatabaseConverters {
     @TypeConverter
     fun toCoinType(value: String): CoinType {
         return CoinType.fromId(value)
-    }
-
-    @TypeConverter
-    fun fromChangeState(state: PriceAlert.ChangeState): String {
-        return state.value
-    }
-
-    @TypeConverter
-    fun toChangeState(value: String?): PriceAlert.ChangeState? {
-        return PriceAlert.ChangeState.valueOf(value)
-    }
-
-    @TypeConverter
-    fun fromTrendState(state: PriceAlert.TrendState): String {
-        return state.value
-    }
-
-    @TypeConverter
-    fun toTrendState(value: String?): PriceAlert.TrendState? {
-        return PriceAlert.TrendState.valueOf(value)
     }
 
     @TypeConverter
