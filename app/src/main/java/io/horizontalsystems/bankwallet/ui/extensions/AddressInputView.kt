@@ -16,7 +16,10 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.*
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.focusTarget
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
@@ -102,6 +105,7 @@ class AddressInputView @JvmOverloads constructor(
                             value = inputText,
                             onValueChange = {
                                 inputText = it
+                                onTextChangeCallback?.invoke(it)
                                 updateInput()
                             },
                             textStyle = ColoredTextStyle(
