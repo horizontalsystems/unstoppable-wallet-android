@@ -30,7 +30,7 @@ class RecipientAddressViewModel(
         private val clearables: List<Clearable>
 ) : ViewModel(), IVerifiedInputViewModel {
 
-    override val setTextLiveData = SingleLiveEvent<String?>()
+    override val setTextLiveData = MutableLiveData<String?>()
     override val cautionLiveData = MutableLiveData<Caution?>(null)
     override val isLoadingLiveData = SingleLiveEvent<Boolean>()
     override val initialValue: String? = service.initialAddress?.title
