@@ -48,7 +48,9 @@ class MetricChartFactory(private val numberFormatter: IAppNumberFormatter) {
         points.forEach { point ->
             val item = ChartData.Item(point.timestamp)
             item.values[Indicator.Candle] = ChartData.Value(point.value.toFloat())
-            item.values[Indicator.Dominance] = point.indicators[Indicator.Dominance]?.let { ChartData.Value(it.toFloat()) }
+            point.dominance?.let {
+                item.values[Indicator.Dominance] = ChartData.Value(it.toFloat())
+            }
 
             items.add(item)
         }

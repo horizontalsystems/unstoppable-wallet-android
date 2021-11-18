@@ -4,7 +4,6 @@ import android.os.Parcelable
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.chartview.ChartData
 import io.horizontalsystems.chartview.ChartView
-import io.horizontalsystems.chartview.Indicator
 import kotlinx.android.parcel.Parcelize
 import java.math.BigDecimal
 
@@ -16,7 +15,7 @@ object MetricChartModule {
         val valueType: ValueType
     }
 
-    data class Item(val value: BigDecimal, val indicators: Map<Indicator, BigDecimal>, val timestamp: Long)
+    data class Item(val value: BigDecimal, val dominance: BigDecimal?, val timestamp: Long)
 
     enum class ValueType {
         Percent, CompactCurrencyValue, CurrencyValue

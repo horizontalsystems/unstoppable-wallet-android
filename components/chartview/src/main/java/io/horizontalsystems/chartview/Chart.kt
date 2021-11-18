@@ -154,7 +154,7 @@ class Chart @JvmOverloads constructor(context: Context, attrs: AttributeSet? = n
         val dominancePoints = data.values(Dominance)
         if (dominancePoints.isNotEmpty()) {
             val dominance = PointConverter.curve(
-                data.values(Dominance),
+                dominancePoints,
                 chartMain.shape,
                 config.curveVerticalOffset
             )
