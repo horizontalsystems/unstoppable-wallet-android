@@ -98,6 +98,7 @@ class RecipientAddressViewModel(
         }
 
         val addressData = addressParser.parse(text)
+        service.setRecipientAddress(Address(text))
         setTextLiveData.postValue(addressData.address)
 
         addressData.amount?.let {
