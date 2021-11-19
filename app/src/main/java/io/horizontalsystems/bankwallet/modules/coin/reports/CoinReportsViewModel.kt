@@ -1,31 +1,27 @@
-package io.horizontalsystems.bankwallet.modules.coin.investments
+package io.horizontalsystems.bankwallet.modules.coin.reports
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.core.subscribeIO
-import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.entities.ViewState
-import io.horizontalsystems.bankwallet.modules.coin.investments.CoinInvestmentsModule.FundViewItem
-import io.horizontalsystems.bankwallet.modules.coin.investments.CoinInvestmentsModule.ViewItem
+import io.horizontalsystems.bankwallet.modules.coin.reports.CoinReportsModule.ReportViewItem
 import io.horizontalsystems.core.helpers.DateHelper
-import io.horizontalsystems.marketkit.models.CoinInvestment
+import io.horizontalsystems.marketkit.models.CoinReport
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class CoinInvestmentsViewModel(
-    private val service: CoinInvestmentsService,
-    private val numberFormatter: IAppNumberFormatter
+class CoinReportsViewModel(
+    private val service: CoinReportsService
 ) : ViewModel() {
     private val disposables = CompositeDisposable()
 
     val viewStateLiveData = MutableLiveData<ViewState>()
     val loadingLiveData = MutableLiveData<Boolean>()
     val isRefreshingLiveData = MutableLiveData<Boolean>()
-    val viewItemsLiveData = MutableLiveData<List<ViewItem>>()
+    val reportViewItemsLiveData = MutableLiveData<List<ReportViewItem>>()
 
     init {
         service.stateObservable
@@ -73,22 +69,17 @@ class CoinInvestmentsViewModel(
         }
     }
 
-    private fun sync(investments: List<CoinInvestment>) {
-        viewItemsLiveData.postValue(investments.map { viewItem(it) })
+    private fun sync(reports: List<CoinReport>) {
+        reportViewItemsLiveData.postValue(reports.map { viewItem(it) })
     }
 
-    private fun viewItem(investment: CoinInvestment): ViewItem {
-        return ViewItem(
-            amount = numberFormatter.formatCurrencyValueAsShortened(CurrencyValue(service.currency, investment.amount)),
-            info = "${investment.round} - ${DateHelper.formatDate(investment.date, "MMM dd, yyyy")}",
-            fundViewItems = investment.funds.map { fund ->
-                FundViewItem(
-                    name = fund.name,
-                    logoUrl = "https://markets.nyc3.digitaloceanspaces.com/fund-icons/ios/${fund.uid}@3x.png",
-                    isLead = fund.isLead,
-                    url = fund.website
-                )
-            }
+    private fun viewItem(report: CoinReport): ReportViewItem {
+        return ReportViewItem(
+            author = report.author,
+            title = report.title,
+            body = report.body,
+            date = DateHelper.formatDate(report.date, "MMM dd, yyyy"),
+            url = report.url
         )
     }
 }

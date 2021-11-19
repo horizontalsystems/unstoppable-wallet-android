@@ -32,6 +32,7 @@ import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.CoinViewModel
 import io.horizontalsystems.bankwallet.modules.coin.investments.CoinInvestmentsFragment
 import io.horizontalsystems.bankwallet.modules.coin.majorholders.CoinMajorHoldersFragment
+import io.horizontalsystems.bankwallet.modules.coin.reports.CoinReportsFragment
 import io.horizontalsystems.bankwallet.modules.coin.treasuries.CoinTreasuriesFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
@@ -77,6 +78,11 @@ class CoinDetailsFragment : BaseFragment() {
     private fun openCoinInvestments() {
         val arguments = CoinInvestmentsFragment.prepareParams(viewModel.coin.uid)
         findNavController().navigate(R.id.coinInvestmentsFragment, arguments, navOptions())
+    }
+
+    private fun openCoinReports() {
+        val arguments = CoinReportsFragment.prepareParams(viewModel.coin.uid)
+        findNavController().navigate(R.id.coinReportsFragment, arguments, navOptions())
     }
 
     @Composable
@@ -279,7 +285,7 @@ class CoinDetailsFragment : BaseFragment() {
         viewItem.reportsCount?.let {
             investorDataList.add {
                 CoinDetailsCell(stringResource(R.string.CoinPage_Reports), it) {
-                    Log.e("AAA", "onClickReports")
+                    openCoinReports()
                 }
             }
         }
