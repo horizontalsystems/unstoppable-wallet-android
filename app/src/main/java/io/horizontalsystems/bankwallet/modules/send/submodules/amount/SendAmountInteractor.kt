@@ -1,9 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.send.submodules.amount
 
 import io.horizontalsystems.bankwallet.core.ILocalStorage
-import io.horizontalsystems.core.entities.Currency
+import io.horizontalsystems.bankwallet.core.isCustom
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.core.BackgroundManager
+import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.marketkit.MarketKit
 import io.horizontalsystems.marketkit.models.PlatformCoin
 import io.reactivex.disposables.CompositeDisposable
@@ -24,7 +25,8 @@ class SendAmountInteractor(
     init {
         backgroundManager.registerListener(this)
 
-        marketKit.coinPriceObservable(platformCoin.coin.uid, baseCurrency.code)
+        if (!platformCoin.coin.isCustom) {
+            marketKit.coinPriceObservable(platformCoin.coin.uid, baseCurrency.code)
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .subscribe { marketInfo ->
@@ -33,6 +35,7 @@ class SendAmountInteractor(
                 .let {
                     disposables.add(it)
                 }
+        }
     }
 
     override var defaultInputType: SendModule.InputType

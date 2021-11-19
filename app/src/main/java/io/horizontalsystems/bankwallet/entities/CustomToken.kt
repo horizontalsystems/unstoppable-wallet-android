@@ -17,7 +17,11 @@ data class CustomToken(
 ) {
     val platformCoin: PlatformCoin
         get() {
-            val coinUid = "custom_${coinName}_${coinCode}"
+            val coinUid = "${uidPrefix}${coinName}_${coinCode}"
             return PlatformCoin(Platform(coinType, decimal, coinUid), Coin(coinUid, coinName, coinCode))
         }
+
+    companion object {
+        const val uidPrefix = "custom_"
+    }
 }

@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.core.fiat
 
 import io.horizontalsystems.bankwallet.core.fiat.AmountTypeSwitchService.AmountType
+import io.horizontalsystems.bankwallet.core.isCustom
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.send.SendModule.AmountInfo
@@ -67,11 +68,14 @@ class FiatService(
         val coin = platformCoin ?: return
 
         syncLatestRate(marketKit.coinPrice(coin.coin.uid, currency.code))
-        latestRateDisposable = marketKit.coinPriceObservable(coin.coin.uid, currency.code)
+
+        if (!coin.coin.isCustom) {
+            latestRateDisposable = marketKit.coinPriceObservable(coin.coin.uid, currency.code)
                 .subscribeOn(Schedulers.io())
                 .subscribe {
                     syncLatestRate(it)
                 }
+        }
     }
 
     private fun syncLatestRate(coinPrice: CoinPrice?) {

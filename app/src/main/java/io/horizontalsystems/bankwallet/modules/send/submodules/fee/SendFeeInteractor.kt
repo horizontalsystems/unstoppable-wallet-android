@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.send.submodules.fee
 
 import io.horizontalsystems.bankwallet.core.FeeRatePriority
 import io.horizontalsystems.bankwallet.core.IFeeRateProvider
+import io.horizontalsystems.bankwallet.core.isCustom
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.marketkit.MarketKit
 import io.horizontalsystems.marketkit.models.PlatformCoin
@@ -20,7 +21,8 @@ class SendFeeInteractor(
     private val disposables = CompositeDisposable()
 
     init {
-        marketKit.coinPriceObservable(platformCoin.coin.uid, baseCurrency.code)
+        if (!platformCoin.coin.isCustom) {
+            marketKit.coinPriceObservable(platformCoin.coin.uid, baseCurrency.code)
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .subscribe { marketInfo ->
@@ -29,6 +31,7 @@ class SendFeeInteractor(
                 .let {
                     disposables.add(it)
                 }
+        }
     }
 
     override val feeRatePriorityList: List<FeeRatePriority> = feeRateProvider?.feeRatePriorityList ?: listOf()
