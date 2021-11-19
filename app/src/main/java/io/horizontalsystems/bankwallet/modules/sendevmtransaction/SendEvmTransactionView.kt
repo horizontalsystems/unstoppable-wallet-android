@@ -15,6 +15,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.ethereum.EthereumFeeViewModel
+import io.horizontalsystems.bankwallet.modules.transactionInfo.ColoredValue
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.Ellipsis
@@ -24,6 +25,7 @@ import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.views.ListPosition
 import io.horizontalsystems.views.inflate
 import kotlinx.android.extensions.LayoutContainer
+import kotlinx.android.synthetic.main.view_holder_amount.*
 import kotlinx.android.synthetic.main.view_holder_evm_confirmation_subhead.*
 import kotlinx.android.synthetic.main.view_holder_title_value_hex.*
 import kotlinx.android.synthetic.main.view_holder_title_value_hex.backgroundView
@@ -89,7 +91,7 @@ class SendEvmTransactionAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(
     var items: List<ViewItemWithPosition> = listOf()
 
     enum class ViewType {
-        Subhead, Value, Address, Input, Space, Warning
+        Subhead, Value, Amount, Address, Input, Space, Warning
     }
 
     private val viewTypes = ViewType.values()
@@ -101,6 +103,7 @@ class SendEvmTransactionAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(
             is ViewItem.Subhead -> ViewType.Subhead.ordinal
             is ViewItem.Address -> ViewType.Address.ordinal
             is ViewItem.Value -> ViewType.Value.ordinal
+            is ViewItem.Amount -> ViewType.Amount.ordinal
             is ViewItem.Input -> ViewType.Input.ordinal
             is ViewItem.Warning -> ViewType.Warning.ordinal
             null -> ViewType.Space.ordinal
@@ -113,6 +116,7 @@ class SendEvmTransactionAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(
             ViewType.Space -> SpaceViewHolder.create(parent)
             ViewType.Address -> TitleValueHexViewHolder.create(parent)
             ViewType.Value -> TitleValueViewHolder.create(parent)
+            ViewType.Amount -> AmountViewHolder.create(parent)
             ViewType.Input -> TitleValueHexViewHolder.create(parent)
             ViewType.Warning -> WarningViewHolder.create(parent)
         }
@@ -130,6 +134,7 @@ class SendEvmTransactionAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(
             is ViewItem.Subhead -> (holder as? SubheadViewHolder)?.bind(item, listPosition)
             is ViewItem.Address -> (holder as? TitleValueHexViewHolder)?.bind(item.title, item.valueTitle, item.value, listPosition)
             is ViewItem.Value -> (holder as? TitleValueViewHolder)?.bind(item, listPosition)
+            is ViewItem.Amount -> (holder as? AmountViewHolder)?.bind(item.fiatAmount, item.coinAmount, listPosition)
             is ViewItem.Input -> (holder as? TitleValueHexViewHolder)?.bind("Input", item.value, item.value, listPosition)
             is ViewItem.Warning -> (holder as? WarningViewHolder)?.bind(item)
         }
@@ -217,6 +222,21 @@ class SendEvmTransactionAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(
 
         companion object {
             fun create(parent: ViewGroup) = TitleValueViewHolder(inflate(parent, R.layout.view_holder_title_value, false))
+        }
+    }
+
+    class AmountViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+        fun bind(fiatAmount: String?, coinAmount: ColoredValue, position: ListPosition) {
+            fiatTextView.text = fiatAmount
+            coinTextView.text = coinAmount.value
+
+            coinTextView.setTextColor(containerView.context.getColor(coinAmount.color))
+
+            backgroundView.setBackgroundResource(position.getBackground())
+        }
+
+        companion object {
+            fun create(parent: ViewGroup) = AmountViewHolder(inflate(parent, R.layout.view_holder_amount, false))
         }
     }
 }
