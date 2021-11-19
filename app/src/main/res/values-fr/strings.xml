@@ -755,6 +755,7 @@
     <string name="CoinPage_Audits_Issues">problèmes: %d</string>
     <string name="CoinPage_InvestorData">Données de l\'investisseur</string>
     <string name="CoinPage_Treasuries">Treasuries</string>
+    <string name="CoinPage_Treasuries_FilterTitle">Filters</string>
     <string name="CoinPage_Reports">Reports</string>
     <string name="CoinPage_FundsInvested">Fonds investis</string>
     <string name="CoinPage_TokenDistribution">Token Distribution</string>
@@ -828,7 +829,7 @@
     <string name="CoinPage_Bep2Symbol">Symbole BEP2</string>
     <string name="CoinPage_MajorHolders_TopWallets">Meilleurs portefeuilles</string>
     <string name="CoinPage_MajorHolders_Description">The chart above shows the % of all tokens in circulation held by the top 10 wallets. The lower the % the more distributed the coin is.</string>
-    <string name="CoinPage_MajorHolders_InTopWallets">dans le top 10 des portefeuilles</string>
+    <string name="CoinPage_MajorHolders_InTopWallets">In top 10 Ethereum wallets</string>
     <!--Rate list-->
     <string name="RateList_TopGainers">Les grands gagnants</string>
     <string name="RateList_TopLosers">Les gros perdants</string>
