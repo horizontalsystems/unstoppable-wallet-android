@@ -315,6 +315,9 @@
         android:id="@+id/coinInvestmentsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.coin.investments.CoinInvestmentsFragment" />
     <fragment
+        android:id="@+id/coinReportsFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.coin.reports.CoinReportsFragment" />
+    <fragment
         android:id="@+id/coinAuditsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.coin.audits.CoinAuditsFragment"
         tools:layout="@layout/fragment_recyclerview" />

@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.coin.treasuries
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
@@ -14,6 +15,8 @@ import io.horizontalsystems.bankwallet.modules.coin.treasuries.CoinTreasuriesMod
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.marketkit.models.CoinTreasury
 import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class CoinTreasuriesViewModel(
     private val service: CoinTreasuriesService,
@@ -52,11 +55,11 @@ class CoinTreasuriesViewModel(
     }
 
     fun refresh() {
-        service.refresh()
+        refreshWithMinLoadingSpinnerPeriod()
     }
 
     fun onErrorClick() {
-        service.refresh()
+        refreshWithMinLoadingSpinnerPeriod()
     }
 
     fun onToggleSortType() {
@@ -81,6 +84,15 @@ class CoinTreasuriesViewModel(
     override fun onCleared() {
         disposables.clear()
         service.stop()
+    }
+
+    private fun refreshWithMinLoadingSpinnerPeriod() {
+        service.refresh()
+        viewModelScope.launch {
+            isRefreshingLiveData.postValue(true)
+            delay(1000)
+            isRefreshingLiveData.postValue(false)
+        }
     }
 
     private fun syncCoinTreasuriesData(coinTreasuries: List<CoinTreasury>) {
