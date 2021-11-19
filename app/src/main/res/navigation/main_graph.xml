@@ -284,9 +284,6 @@
             android:id="@+id/coinFragment_to_tvlRankFragment"
             app:destination="@id/tvlRankFragment" />
         <action
-            android:id="@+id/coinFragment_to_coinInvestorsFragment"
-            app:destination="@id/coinInvestorsFragment" />
-        <action
             android:id="@+id/coinFragment_to_coinMajorHoldersFragment"
             app:destination="@id/coinMajorHoldersFragment" />
         <action
@@ -307,10 +304,6 @@
         android:id="@+id/tvlRankFragment"
         android:name="io.horizontalsystems.bankwallet.modules.coin.tvlrank.TvlRankFragment"
         tools:layout="@layout/fragment_coin_markets" />
-    <fragment
-        android:id="@+id/coinInvestorsFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.coin.coininvestors.CoinInvestorsFragment"
-        tools:layout="@layout/fragment_recyclerview" />
     <fragment
         android:id="@+id/coinMajorHoldersFragment"
         android:name="io.horizontalsystems.bankwallet.modules.coin.majorholders.CoinMajorHoldersFragment"
