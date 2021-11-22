@@ -752,9 +752,8 @@
     <string name="CoinPage_MajorHolders">Основные Владельцы</string>
     <string name="CoinPage_Audits">Аудиты</string>
     <string name="CoinPage_Audits_Empty">Нет аудиторских отчетов</string>
-    <string name="CoinPage_Audits_FetchError">Ошибка Выборки</string>
     <string name="CoinPage_Audits_PoweredBy">При поддержке Defiyield.app</string>
-    <string name="CoinPage_Audits_Issues">Запросы: %d</string>
+    <string name="CoinPage_Audits_Issues">Issues: %d</string>
     <string name="CoinPage_InvestorData">Данные Инвестора</string>
     <string name="CoinPage_Treasuries">Treasuries</string>
     <string name="CoinPage_Treasuries_FilterTitle">Filters</string>
