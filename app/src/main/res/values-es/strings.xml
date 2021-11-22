@@ -750,9 +750,8 @@
     <string name="CoinPage_MajorHolders">Principales Accionistas</string>
     <string name="CoinPage_Audits">Auditorias</string>
     <string name="CoinPage_Audits_Empty">No hay reportes de auditoría</string>
-    <string name="CoinPage_Audits_FetchError">Recuperar error</string>
     <string name="CoinPage_Audits_PoweredBy">Con tecnología de Defiyield.app</string>
-    <string name="CoinPage_Audits_Issues">issues: %d</string>
+    <string name="CoinPage_Audits_Issues">Issues: %d</string>
     <string name="CoinPage_InvestorData">Información de Inversor</string>
     <string name="CoinPage_Treasuries">Treasuries</string>
     <string name="CoinPage_Treasuries_FilterTitle">Filters</string>
