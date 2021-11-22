@@ -1,6 +1,8 @@
 package io.horizontalsystems.bankwallet.ui.compose
 
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.SwipeRefreshState
@@ -13,6 +15,7 @@ fun HSSwipeRefresh(
     content: @Composable () -> Unit,
 ) {
     SwipeRefresh(
+        modifier = Modifier.fillMaxSize(),
         state = state,
         onRefresh = onRefresh,
         swipeEnabled = swipeEnabled,

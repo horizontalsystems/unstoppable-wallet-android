@@ -30,6 +30,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.CoinViewModel
+import io.horizontalsystems.bankwallet.modules.coin.audits_new.CoinAuditsFragment
 import io.horizontalsystems.bankwallet.modules.coin.investments.CoinInvestmentsFragment
 import io.horizontalsystems.bankwallet.modules.coin.majorholders.CoinMajorHoldersFragment
 import io.horizontalsystems.bankwallet.modules.coin.reports.CoinReportsFragment
@@ -83,6 +84,11 @@ class CoinDetailsFragment : BaseFragment() {
     private fun openCoinReports() {
         val arguments = CoinReportsFragment.prepareParams(viewModel.coin.uid)
         findNavController().navigate(R.id.coinReportsFragment, arguments, navOptions())
+    }
+
+    private fun openCoinAudits(addresses: List<String>) {
+        val arguments = CoinAuditsFragment.prepareParams(addresses)
+        findNavController().navigate(R.id.coinAuditsFragment, arguments, navOptions())
     }
 
     @Composable
@@ -207,7 +213,7 @@ class CoinDetailsFragment : BaseFragment() {
         if (viewItem.auditAddresses.isNotEmpty()) {
             securityParams.add {
                 CoinDetailsCell(title = stringResource(R.string.CoinPage_SecurityParams_Audits)) {
-                    Log.e("AAA", "onClickAudits")
+                    openCoinAudits(viewItem.auditAddresses)
                 }
             }
         }
