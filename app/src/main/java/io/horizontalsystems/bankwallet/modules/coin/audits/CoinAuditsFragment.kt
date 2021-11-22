@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.coin.audits_new
+package io.horizontalsystems.bankwallet.modules.coin.audits
 
 import android.os.Bundle
 import android.view.LayoutInflater
