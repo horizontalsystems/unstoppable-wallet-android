@@ -30,6 +30,7 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 
+@Deprecated("Use CellMultilineLawrenceSection")
 @Composable
 fun MultilineClear(
     modifier: Modifier = Modifier,

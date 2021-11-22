@@ -312,15 +312,14 @@
         android:id="@+id/coinTreasuriesFragment"
         android:name="io.horizontalsystems.bankwallet.modules.coin.treasuries.CoinTreasuriesFragment" />
     <fragment
+        android:id="@+id/coinAuditsFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.coin.audits_new.CoinAuditsFragment" />
+    <fragment
         android:id="@+id/coinInvestmentsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.coin.investments.CoinInvestmentsFragment" />
     <fragment
         android:id="@+id/coinReportsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.coin.reports.CoinReportsFragment" />
-    <fragment
-        android:id="@+id/coinAuditsFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.coin.audits.CoinAuditsFragment"
-        tools:layout="@layout/fragment_recyclerview" />
     <fragment
         android:id="@+id/coinSecurityInfoFragment"
         android:name="io.horizontalsystems.bankwallet.modules.coin.CoinSecurityInfoFragment"

@@ -113,7 +113,7 @@ class App : CoreApp(), WorkConfiguration.Provider  {
         buildConfigProvider = appConfig
         languageConfigProvider = appConfig
 
-        marketKit = MarketKit.getInstance(this, appConfig.marketApiBaseUrl, appConfig.oldMarketApiBaseUrl)
+        marketKit = MarketKit.getInstance(this, appConfig.marketApiBaseUrl, appConfig.oldMarketApiBaseUrl, appConfig.cryptoCompareApiKey, appConfig.defiyieldProviderApiKey)
         marketKit.sync()
 
         feeRateProvider = FeeRateProvider(appConfigProvider)

@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.coin.investments
+package io.horizontalsystems.bankwallet.modules.coin.audits_new
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -21,6 +21,7 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
@@ -29,17 +30,16 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.entities.ViewState
-import io.horizontalsystems.bankwallet.modules.coin.investments.CoinInvestmentsModule.FundViewItem
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 
-class CoinInvestmentsFragment : BaseFragment() {
+class CoinAuditsFragment : BaseFragment() {
 
-    private val viewModel by viewModels<CoinInvestmentsViewModel> {
-        CoinInvestmentsModule.Factory(requireArguments().getString(COIN_UID_KEY)!!)
+    private val viewModel by viewModels<CoinAuditsViewModel> {
+        CoinAuditsModule.Factory(requireArguments().getStringArrayList(ADDRESSES_KEY)!!)
     }
 
     override fun onCreateView(
@@ -47,18 +47,17 @@ class CoinInvestmentsFragment : BaseFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         return ComposeView(requireContext()).apply {
             setViewCompositionStrategy(
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
             setContent {
                 ComposeAppTheme {
-                    CoinInvestmentsScreen(viewModel,
+                    CoinAuditsScreen(viewModel,
                         onClickNavigation = {
                             findNavController().popBackStack()
                         },
-                        onClickFundUrl = {
+                        onClickReportUrl = {
                             LinkHelper.openLinkInAppBrowser(requireContext(), it)
                         }
                     )
@@ -68,17 +67,17 @@ class CoinInvestmentsFragment : BaseFragment() {
     }
 
     companion object {
-        private const val COIN_UID_KEY = "coin_uid_key"
+        private const val ADDRESSES_KEY = "addresses_key"
 
-        fun prepareParams(coinUid: String) = bundleOf(COIN_UID_KEY to coinUid)
+        fun prepareParams(addresses: List<String>) = bundleOf(ADDRESSES_KEY to addresses)
     }
 }
 
 @Composable
-private fun CoinInvestmentsScreen(
-    viewModel: CoinInvestmentsViewModel,
+private fun CoinAuditsScreen(
+    viewModel: CoinAuditsViewModel,
     onClickNavigation: () -> Unit,
-    onClickFundUrl: (url: String) -> Unit
+    onClickReportUrl: (url: String) -> Unit
 ) {
     val viewState by viewModel.viewStateLiveData.observeAsState()
     val loading by viewModel.loadingLiveData.observeAsState(false)
@@ -87,7 +86,7 @@ private fun CoinInvestmentsScreen(
 
     Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
         AppBar(
-            title = TranslatableString.ResString(R.string.CoinPage_FundsInvested),
+            title = TranslatableString.ResString(R.string.CoinPage_Audits),
             navigationIcon = {
                 IconButton(onClick = onClickNavigation) {
                     Icon(
@@ -98,7 +97,6 @@ private fun CoinInvestmentsScreen(
                 }
             }
         )
-
         HSSwipeRefresh(
             state = rememberSwipeRefreshState(isRefreshing || loading),
             onRefresh = viewModel::refresh
@@ -108,18 +106,25 @@ private fun CoinInvestmentsScreen(
                     ListErrorView(stringResource(R.string.Market_SyncError)) { viewModel.onErrorClick() }
                 }
                 ViewState.Success -> {
-                    LazyColumn {
-                        viewItems?.forEach { viewItem ->
-                            item {
-                                CoinInvestmentHeader(viewItem.amount, viewItem.info)
-
-                                Spacer(modifier = Modifier.height(12.dp))
+                    if (viewItems?.isEmpty() == true) {
+                        NoAudits()
+                    } else {
+                        LazyColumn {
+                            viewItems?.forEach { viewItem ->
+                                item {
+                                    CoinAuditHeader(viewItem.name, viewItem.logoUrl)
+                                    Spacer(modifier = Modifier.height(8.dp))
+                                }
+                                item {
+                                    CellMultilineLawrenceSection(viewItem.auditViewItems) { auditViewItem ->
+                                        CoinAudit(auditViewItem) { onClickReportUrl(auditViewItem.reportUrl) }
+                                    }
+                                    Spacer(modifier = Modifier.height(24.dp))
+                                }
                             }
                             item {
-                                CellSingleLineLawrenceSection(viewItem.fundViewItems) { fundViewItem ->
-                                    CoinInvestmentFund(fundViewItem) { onClickFundUrl(fundViewItem.url) }
-                                }
-                                Spacer(modifier = Modifier.height(24.dp))
+                                Spacer(modifier = Modifier.height(32.dp))
+                                CellFooter(text = stringResource(id = R.string.CoinPage_Audits_PoweredBy))
                             }
                         }
                     }
@@ -130,25 +135,39 @@ private fun CoinInvestmentsScreen(
 }
 
 @Composable
-fun CoinInvestmentHeader(amount: String, info: String) {
-    CellSingleLineClear(borderTop = true) {
+private fun NoAudits() {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
         Text(
-            modifier = Modifier.weight(1f),
-            text = amount,
-            style = ComposeAppTheme.typography.body,
-            color = ComposeAppTheme.colors.jacob,
-        )
-
-        Text(
-            text = info,
-            style = ComposeAppTheme.typography.subhead1,
+            text = stringResource(R.string.CoinPage_Audits_Empty),
             color = ComposeAppTheme.colors.grey,
+            style = ComposeAppTheme.typography.subhead2,
         )
     }
 }
 
 @Composable
-fun CoinInvestmentFund(fundViewItem: FundViewItem, onClick: () -> Unit) {
+fun CoinAuditHeader(name: String, logoUrl: String) {
+    CellSingleLineClear(borderTop = true) {
+        CoinImage(
+            iconUrl = logoUrl,
+            modifier = Modifier
+                .padding(end = 16.dp)
+                .size(24.dp)
+        )
+        Text(
+            text = name,
+            style = ComposeAppTheme.typography.body,
+            color = ComposeAppTheme.colors.leah,
+        )
+    }
+}
+
+@Composable
+fun CoinAudit(auditViewItem: CoinAuditsModule.AuditViewItem, onClick: () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxSize()
@@ -156,18 +175,27 @@ fun CoinInvestmentFund(fundViewItem: FundViewItem, onClick: () -> Unit) {
             .clickable(onClick = onClick),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        CoinImage(
-            iconUrl = fundViewItem.logoUrl,
-            modifier = Modifier
-                .padding(end = 16.dp)
-                .size(24.dp)
-        )
+        Column(modifier = Modifier.weight(1f)) {
+            Text(
+                text = auditViewItem.date ?: "",
+                style = ComposeAppTheme.typography.body,
+                color = ComposeAppTheme.colors.leah
+            )
+            Text(
+                text = auditViewItem.name,
+                style = ComposeAppTheme.typography.subhead2,
+                color = ComposeAppTheme.colors.grey,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+        }
+
         Text(
-            modifier = Modifier.weight(1f),
-            text = fundViewItem.name,
-            style = ComposeAppTheme.typography.body,
-            color = ComposeAppTheme.colors.light
+            text = auditViewItem.issues.getString(),
+            style = ComposeAppTheme.typography.subhead2,
+            color = ComposeAppTheme.colors.grey
         )
+
         Image(painter = painterResource(id = R.drawable.ic_arrow_right), contentDescription = "")
     }
 }
