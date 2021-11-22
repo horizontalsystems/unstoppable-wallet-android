@@ -750,9 +750,8 @@
     <string name="CoinPage_MajorHolders">Major Holders</string>
     <string name="CoinPage_Audits">Audits</string>
     <string name="CoinPage_Audits_Empty">No audit reports</string>
-    <string name="CoinPage_Audits_FetchError">Fetch Error</string>
     <string name="CoinPage_Audits_PoweredBy">由 Defiyield.app 提供支持</string>
-    <string name="CoinPage_Audits_Issues">issues： %d</string>
+    <string name="CoinPage_Audits_Issues">Issues: %d</string>
     <string name="CoinPage_InvestorData">Investor Data</string>
     <string name="CoinPage_Treasuries">Treasuries</string>
     <string name="CoinPage_Treasuries_FilterTitle">Filters</string>
