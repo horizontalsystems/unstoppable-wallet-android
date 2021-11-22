@@ -199,6 +199,9 @@ private fun CoinList(
                 item.rank
             ) { onCoinClick.invoke(item.fullCoin.coin.uid) }
         }
+        item {
+            Spacer(modifier = Modifier.height(32.dp))
+        }
         if (scrollToTop) {
             coroutineScope.launch {
                 listState.scrollToItem(0)
