@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.coin.audits_new
+package io.horizontalsystems.bankwallet.modules.coin.audits
 
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState

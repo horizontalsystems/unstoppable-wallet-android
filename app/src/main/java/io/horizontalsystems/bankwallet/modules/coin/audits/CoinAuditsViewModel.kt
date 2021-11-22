@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.coin.audits_new
+package io.horizontalsystems.bankwallet.modules.coin.audits
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -7,8 +7,8 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.entities.ViewState
-import io.horizontalsystems.bankwallet.modules.coin.audits_new.CoinAuditsModule.AuditViewItem
-import io.horizontalsystems.bankwallet.modules.coin.audits_new.CoinAuditsModule.ViewItem
+import io.horizontalsystems.bankwallet.modules.coin.audits.CoinAuditsModule.AuditViewItem
+import io.horizontalsystems.bankwallet.modules.coin.audits.CoinAuditsModule.ViewItem
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.marketkit.models.Auditor

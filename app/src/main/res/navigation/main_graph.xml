@@ -313,7 +313,7 @@
         android:name="io.horizontalsystems.bankwallet.modules.coin.treasuries.CoinTreasuriesFragment" />
     <fragment
         android:id="@+id/coinAuditsFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.coin.audits_new.CoinAuditsFragment" />
+        android:name="io.horizontalsystems.bankwallet.modules.coin.audits.CoinAuditsFragment" />
     <fragment
         android:id="@+id/coinInvestmentsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.coin.investments.CoinInvestmentsFragment" />
