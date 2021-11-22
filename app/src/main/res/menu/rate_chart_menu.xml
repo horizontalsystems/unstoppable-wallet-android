@@ -16,14 +16,14 @@
 
     <item
         android:id="@+id/menuFavorite"
-        android:icon="@drawable/ic_rate_24"
+        android:icon="@drawable/ic_star_24"
         android:iconTint="@color/grey"
         android:title="@string/CoinPage_Favorite"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/menuUnfavorite"
-        android:icon="@drawable/ic_rate_24"
+        android:icon="@drawable/ic_filled_star_24"
         app:iconTint="@color/jacob"
         android:title="@string/CoinPage_Unfavorite"
         app:showAsAction="always" />
