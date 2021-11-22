@@ -164,11 +164,16 @@ class TransactionRecordRepository(
 
         val itemsCount = page * itemsPerPage
 
-        Single
-            .zip(activeAdapters.map { it.get(itemsCount) }) {
+        val sources = activeAdapters.map { it.get(itemsCount) }
+        val recordsObservable = when {
+            sources.isEmpty() -> Single.just(listOf())
+            else -> Single.zip(sources) {
                 it as Array<List<TransactionRecord>>
                 it.toList().flatten()
             }
+        }
+
+        recordsObservable
             .subscribeOn(Schedulers.computation())
             .observeOn(Schedulers.computation())
             .doFinally {
