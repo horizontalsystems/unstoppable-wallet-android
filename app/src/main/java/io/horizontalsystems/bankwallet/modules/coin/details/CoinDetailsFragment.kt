@@ -95,7 +95,7 @@ class CoinDetailsFragment : BaseFragment() {
 
     private fun openSecurityInfo(type: SecurityType) {
         val arguments = CoinSecurityInfoFragment.prepareParams(type.title, viewModel.securityInfoViewItems(type))
-        findNavController().navigate(R.id.coinSecurityInfoFragment, arguments, navOptions())
+        findNavController().navigate(R.id.coinSecurityInfoFragment, arguments, navOptionsFromBottom())
     }
 
     @Composable
