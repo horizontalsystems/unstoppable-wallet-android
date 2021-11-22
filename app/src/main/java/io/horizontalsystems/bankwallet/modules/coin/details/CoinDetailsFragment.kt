@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.coin.details
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -31,6 +30,9 @@ import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.CoinViewModel
 import io.horizontalsystems.bankwallet.modules.coin.audits.CoinAuditsFragment
+import io.horizontalsystems.bankwallet.modules.coin.details.CoinDetailsModule.SecurityType
+import io.horizontalsystems.bankwallet.modules.coin.details.CoinDetailsModule.SecurityViewItem
+import io.horizontalsystems.bankwallet.modules.coin.details.CoinDetailsModule.ViewItem
 import io.horizontalsystems.bankwallet.modules.coin.investments.CoinInvestmentsFragment
 import io.horizontalsystems.bankwallet.modules.coin.majorholders.CoinMajorHoldersFragment
 import io.horizontalsystems.bankwallet.modules.coin.reports.CoinReportsFragment
@@ -91,6 +93,11 @@ class CoinDetailsFragment : BaseFragment() {
         findNavController().navigate(R.id.coinAuditsFragment, arguments, navOptions())
     }
 
+    private fun openSecurityInfo(type: SecurityType) {
+        val arguments = CoinSecurityInfoFragment.prepareParams(type.title, viewModel.securityInfoViewItems(type))
+        findNavController().navigate(R.id.coinSecurityInfoFragment, arguments, navOptions())
+    }
+
     @Composable
     private fun CoinDetailsScreen(viewModel: CoinDetailsViewModel) {
         val viewState by viewModel.viewStateLiveData.observeAsState(ViewState.Success)
@@ -147,7 +154,7 @@ class CoinDetailsFragment : BaseFragment() {
     }
 
     @Composable
-    private fun TokenTvl(viewItem: CoinDetailsViewModel.ViewItem, borderTop: Boolean) {
+    private fun TokenTvl(viewItem: ViewItem, borderTop: Boolean) {
         if (borderTop) {
             Spacer(modifier = Modifier.height(24.dp))
         }
@@ -184,7 +191,7 @@ class CoinDetailsFragment : BaseFragment() {
     }
 
     @Composable
-    private fun SecurityParameters(viewItem: CoinDetailsViewModel.ViewItem, borderTop: Boolean) {
+    private fun SecurityParameters(viewItem: ViewItem, borderTop: Boolean) {
 
         if (borderTop) {
             Spacer(modifier = Modifier.height(24.dp))
@@ -205,7 +212,7 @@ class CoinDetailsFragment : BaseFragment() {
         viewItem.securityViewItems.forEach {
             securityParams.add {
                 SecurityParamsCell(it) {
-                    Log.e("AAA", "onClickSecurityParam: ${it.value}")
+                    openSecurityInfo(it.type)
                 }
             }
         }
@@ -223,7 +230,7 @@ class CoinDetailsFragment : BaseFragment() {
 
     @Composable
     private fun TokenDistribution(
-        viewItem: CoinDetailsViewModel.ViewItem,
+        viewItem: ViewItem,
         borderTop: Boolean
     ) {
         if (borderTop) {
@@ -255,7 +262,7 @@ class CoinDetailsFragment : BaseFragment() {
 
     @Composable
     private fun InvestorData(
-        viewItem: CoinDetailsViewModel.ViewItem,
+        viewItem: ViewItem,
         borderTop: Boolean
     ) {
         if (borderTop) {
@@ -333,7 +340,7 @@ class CoinDetailsFragment : BaseFragment() {
     }
 
     @Composable
-    private fun SecurityParamsCell(viewItem: CoinDetailsViewModel.SecurityViewItem, onClick: (() -> Unit)) {
+    private fun SecurityParamsCell(viewItem: SecurityViewItem, onClick: (() -> Unit)) {
         Row(
             modifier = Modifier
                 .fillMaxSize()
@@ -353,7 +360,7 @@ class CoinDetailsFragment : BaseFragment() {
                     .padding(horizontal = 8.dp),
                 text = stringResource(viewItem.value),
                 style = ComposeAppTheme.typography.subhead1,
-                color = securityGradeColor(viewItem.grade),
+                color = viewItem.grade.securityGradeColor(),
                 textAlign = TextAlign.End,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
@@ -361,12 +368,5 @@ class CoinDetailsFragment : BaseFragment() {
 
             Image(painter = painterResource(id = R.drawable.ic_info_20), contentDescription = "")
         }
-    }
-
-    @Composable
-    private fun securityGradeColor(grade: CoinDetailsViewModel.SecurityGrade) = when (grade) {
-        CoinDetailsViewModel.SecurityGrade.Low -> ComposeAppTheme.colors.lucian
-        CoinDetailsViewModel.SecurityGrade.Medium -> ComposeAppTheme.colors.issykBlue
-        CoinDetailsViewModel.SecurityGrade.High -> ComposeAppTheme.colors.remus
     }
 }

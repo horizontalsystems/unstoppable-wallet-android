@@ -1,19 +1,22 @@
 package io.horizontalsystems.bankwallet.modules.coin.details
 
-import androidx.annotation.StringRes
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.entities.ViewState
-import io.horizontalsystems.bankwallet.modules.coin.ChartInfoData
 import io.horizontalsystems.bankwallet.modules.coin.CoinViewFactory
-import io.horizontalsystems.bankwallet.modules.coin.overview.ui.ChartInfoHeaderItem
-import io.horizontalsystems.core.entities.Currency
+import io.horizontalsystems.bankwallet.modules.coin.details.CoinDetailsModule.CensorshipResistanceLevel
+import io.horizontalsystems.bankwallet.modules.coin.details.CoinDetailsModule.ConfiscationResistanceLevel
+import io.horizontalsystems.bankwallet.modules.coin.details.CoinDetailsModule.IssuanceLevel
+import io.horizontalsystems.bankwallet.modules.coin.details.CoinDetailsModule.PrivacyLevel
+import io.horizontalsystems.bankwallet.modules.coin.details.CoinDetailsModule.SecurityInfoViewItem
+import io.horizontalsystems.bankwallet.modules.coin.details.CoinDetailsModule.SecurityType
+import io.horizontalsystems.bankwallet.modules.coin.details.CoinDetailsModule.SecurityViewItem
+import io.horizontalsystems.bankwallet.modules.coin.details.CoinDetailsModule.ViewItem
 import io.horizontalsystems.marketkit.models.Coin
 import io.horizontalsystems.marketkit.models.MarketInfoDetails
 import io.reactivex.disposables.CompositeDisposable
@@ -58,6 +61,40 @@ class CoinDetailsViewModel(
         service.start()
     }
 
+    fun refresh() {
+        service.refresh()
+        viewModelScope.launch {
+            isRefreshingLiveData.postValue(true)
+            delay(1000)
+            isRefreshingLiveData.postValue(false)
+        }
+    }
+
+    fun securityInfoViewItems(type: SecurityType): List<SecurityInfoViewItem> =
+        when (type) {
+            SecurityType.Privacy -> {
+                PrivacyLevel.values().map {
+                    SecurityInfoViewItem(it.grade, it.title, it.description)
+                }
+            }
+            SecurityType.Issuance -> {
+                IssuanceLevel.values().map {
+                    SecurityInfoViewItem(it.grade, it.title, it.description)
+                }
+            }
+            SecurityType.ConfiscationResistance -> {
+                ConfiscationResistanceLevel.values().map {
+                    SecurityInfoViewItem(it.grade, it.title, it.description)
+                }
+            }
+            SecurityType.CensorshipResistance -> {
+                CensorshipResistanceLevel.values().map {
+                    SecurityInfoViewItem(it.grade, it.title, it.description)
+                }
+            }
+        }
+
+
     private fun viewItem(item: CoinDetailsService.Item): ViewItem {
         return ViewItem(
             hasMajorHolders = service.hasMajorHolders,
@@ -87,25 +124,25 @@ class CoinDetailsViewModel(
 
         marketInfoDetails.privacy?.let {
             val privacy = when (it) {
-                MarketInfoDetails.SecurityLevel.Low -> SecurityLevel.Low
-                MarketInfoDetails.SecurityLevel.Medium -> SecurityLevel.Medium
-                MarketInfoDetails.SecurityLevel.High -> SecurityLevel.High
+                MarketInfoDetails.SecurityLevel.Low -> PrivacyLevel.Low
+                MarketInfoDetails.SecurityLevel.Medium -> PrivacyLevel.Medium
+                MarketInfoDetails.SecurityLevel.High -> PrivacyLevel.High
             }
             securityViewItems.add(SecurityViewItem(SecurityType.Privacy, privacy.title, privacy.grade))
         }
 
         marketInfoDetails.decentralizedIssuance?.let { decentralizedIssuance ->
             val issuance = when (decentralizedIssuance) {
-                true -> SecurityIssuance.Decentralized
-                false -> SecurityIssuance.Centralized
+                true -> IssuanceLevel.Decentralized
+                false -> IssuanceLevel.Centralized
             }
             securityViewItems.add(SecurityViewItem(SecurityType.Issuance, issuance.title, issuance.grade))
         }
 
         marketInfoDetails.confiscationResistant?.let { confiscationResistant ->
             val resistance = when (confiscationResistant) {
-                true -> SecurityResistance.Yes
-                false -> SecurityResistance.No
+                true -> ConfiscationResistanceLevel.Yes
+                false -> ConfiscationResistanceLevel.No
             }
             securityViewItems.add(
                 SecurityViewItem(
@@ -118,8 +155,8 @@ class CoinDetailsViewModel(
 
         marketInfoDetails.censorshipResistant?.let { censorshipResistant ->
             val resistance = when (censorshipResistant) {
-                true -> SecurityResistance.Yes
-                false -> SecurityResistance.No
+                true -> CensorshipResistanceLevel.Yes
+                false -> CensorshipResistanceLevel.No
             }
             securityViewItems.add(
                 SecurityViewItem(
@@ -132,7 +169,7 @@ class CoinDetailsViewModel(
 
         return securityViewItems
     }
-
+}
 //    private fun chartViewItem(values: List<ChartPoint>?, title: String, badge: String? = null): ChartViewItem? {
 //        if (values == null) return null
 //
@@ -166,68 +203,3 @@ class CoinDetailsViewModel(
 //
 //    }
 
-    fun refresh() {
-        service.refresh()
-        viewModelScope.launch {
-            isRefreshingLiveData.postValue(true)
-            delay(1000)
-            isRefreshingLiveData.postValue(false)
-        }
-    }
-
-    data class ViewItem(
-        val hasMajorHolders: Boolean,
-        val volumeChart: ChartViewItem?,
-        val tvlChart: ChartViewItem?,
-        val tvlRank: String?,
-        val tvlRatio: String?,
-        val treasuries: String?,
-        val fundsInvested: String?,
-        val reportsCount: String?,
-        val securityViewItems: List<SecurityViewItem>,
-        val auditAddresses: List<String>
-    )
-
-    data class ChartViewItem(
-        val title: String,
-        val subtitle: ChartInfoHeaderItem,
-        val badge: String?,
-        val currency: Currency,
-        val chartInfoData: ChartInfoData
-    )
-
-    data class SecurityViewItem(
-        val type: SecurityType,
-        @StringRes
-        val value: Int,
-        val grade: SecurityGrade
-    )
-
-    enum class SecurityLevel(@StringRes val title: Int, val grade: SecurityGrade) {
-        Low(R.string.CoinPage_SecurityParams_Low, SecurityGrade.Low),
-        Medium(R.string.CoinPage_SecurityParams_Medium, SecurityGrade.Medium),
-        High(R.string.CoinPage_SecurityParams_High, SecurityGrade.High)
-    }
-
-    enum class SecurityIssuance(@StringRes val title: Int, val grade: SecurityGrade) {
-        Decentralized(R.string.CoinPage_SecurityParams_Decentralized, SecurityGrade.High),
-        Centralized(R.string.CoinPage_SecurityParams_Centralized, SecurityGrade.Low)
-    }
-
-    enum class SecurityResistance(@StringRes val title: Int, val grade: SecurityGrade) {
-        Yes(R.string.CoinPage_SecurityParams_Yes, SecurityGrade.High),
-        No(R.string.CoinPage_SecurityParams_No, SecurityGrade.Low),
-    }
-
-    enum class SecurityGrade {
-        Low, Medium, High;
-    }
-
-    enum class SecurityType(@StringRes val title: Int) {
-        Privacy(R.string.CoinPage_SecurityParams_Privacy),
-        Issuance(R.string.CoinPage_SecurityParams_Issuance),
-        ConfiscationResistance(R.string.CoinPage_SecurityParams_ConfiscationResistance),
-        CensorshipResistance(R.string.CoinPage_SecurityParams_CensorshipResistance)
-    }
-
-}
