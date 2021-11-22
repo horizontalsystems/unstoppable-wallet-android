@@ -55,7 +55,7 @@ class MarketItemsAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolderMarketItem, position: Int, payloads: MutableList<Any>) {
-        holder.bind(getItem(position), payloads.firstOrNull { it is MarketViewItem } as? MarketViewItem)
+        holder.bind(getItem(position), payloads.firstOrNull { it is MarketViewItem } as? MarketViewItem, position == itemCount - 1)
     }
 
     override fun onBindViewHolder(holder: ViewHolderMarketItem, position: Int) = Unit
@@ -93,8 +93,10 @@ class ViewHolderMarketItem(override val containerView: View, private val listene
         }
     }
 
-    fun bind(item: MarketViewItem, prev: MarketViewItem?) {
+    fun bind(item: MarketViewItem, prev: MarketViewItem?, lastItem: Boolean) {
         this.item = item
+
+        bottomBorder.isVisible = lastItem
 
         if (item.coinUid != prev?.coinUid) {
             icon.setRemoteImage(item.iconUrl, item.iconPlaceHolder)
