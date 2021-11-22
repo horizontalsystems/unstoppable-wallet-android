@@ -71,7 +71,7 @@ fun Contracts(
                     }
                 )
                 ButtonSecondaryCircle(
-                    modifier = Modifier.padding(start = 8.dp),
+                    modifier = Modifier.padding(start = 16.dp),
                     icon = R.drawable.ic_globe_20,
                     onClick = {
                         onClickExplorer.invoke(contractInfo)
