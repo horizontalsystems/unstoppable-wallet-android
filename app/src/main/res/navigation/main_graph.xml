@@ -322,8 +322,7 @@
         android:name="io.horizontalsystems.bankwallet.modules.coin.reports.CoinReportsFragment" />
     <fragment
         android:id="@+id/coinSecurityInfoFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.coin.details.CoinSecurityInfoFragment"
-        tools:layout="@layout/fragment_coin_security_info" />
+        android:name="io.horizontalsystems.bankwallet.modules.coin.details.CoinSecurityInfoFragment" />
     <fragment
         android:id="@+id/pinFragment"
         android:name="io.horizontalsystems.pin.PinFragment"
