@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.coin.details
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
@@ -17,11 +18,15 @@ import io.horizontalsystems.bankwallet.modules.coin.details.CoinDetailsModule.Se
 import io.horizontalsystems.bankwallet.modules.coin.details.CoinDetailsModule.SecurityType
 import io.horizontalsystems.bankwallet.modules.coin.details.CoinDetailsModule.SecurityViewItem
 import io.horizontalsystems.bankwallet.modules.coin.details.CoinDetailsModule.ViewItem
+import io.horizontalsystems.bankwallet.modules.market.Value
+import io.horizontalsystems.chartview.ChartDataFactory
+import io.horizontalsystems.marketkit.models.ChartPoint
 import io.horizontalsystems.marketkit.models.Coin
 import io.horizontalsystems.marketkit.models.MarketInfoDetails
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.math.BigDecimal
 
 class CoinDetailsViewModel(
     private val service: CoinDetailsService,
@@ -98,8 +103,8 @@ class CoinDetailsViewModel(
     private fun viewItem(item: CoinDetailsService.Item): ViewItem {
         return ViewItem(
             hasMajorHolders = service.hasMajorHolders,
-            volumeChart = null,//chartViewItem(item.totalVolumes,  service.coin.marketCapRank?.let { "#$it" })
-            tvlChart = null,
+            volumeChart = chart(values = item.totalVolumes, badge = service.coin.marketCapRank?.let { "#$it" }),
+            tvlChart = chart(item.tvls),
             tvlRank = item.marketInfoDetails.tvlRank?.let { "#$it" },
             tvlRatio = item.marketInfoDetails.tvlRatio?.let { numberFormatter.format(it, 2, 2) },
             treasuries = item.marketInfoDetails.totalTreasuries?.let {
@@ -115,7 +120,30 @@ class CoinDetailsViewModel(
             reportsCount = if (item.marketInfoDetails.reportsCount == 0) null else item.marketInfoDetails.reportsCount.toString(),
             securityViewItems = securityViewItems(item.marketInfoDetails),
             auditAddresses = service.auditAddresses
+        )
+    }
 
+    private fun chart(values: List<ChartPoint>?, badge: String? = null): CoinDetailsModule.ChartViewItem? {
+        if (values.isNullOrEmpty()) return null
+
+        val first = values.first()
+        val last = values.last()
+
+        val points = values.map {
+            io.horizontalsystems.chartview.models.ChartPoint(it.value.toFloat(),
+                null,
+                it.timestamp)
+        }
+
+        val diff = (last.value / first.value - BigDecimal.ONE) * BigDecimal(100)
+        val chartData = ChartDataFactory.build(points, first.timestamp, last.timestamp, false)
+        val value = App.numberFormatter.formatCurrencyValueAsShortened(CurrencyValue(service.currency, last.value))
+
+        return CoinDetailsModule.ChartViewItem(
+            badge = badge,
+            value = value,
+            diff = Value.Percent(diff),
+            chartData = chartData
         )
     }
 

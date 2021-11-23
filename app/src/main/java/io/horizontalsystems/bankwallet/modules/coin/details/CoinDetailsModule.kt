@@ -8,11 +8,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.modules.coin.ChartInfoData
 import io.horizontalsystems.bankwallet.modules.coin.CoinViewFactory
-import io.horizontalsystems.bankwallet.modules.coin.overview.ui.ChartInfoHeaderItem
+import io.horizontalsystems.bankwallet.modules.market.Value
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.core.entities.Currency
+import io.horizontalsystems.chartview.ChartData
 import io.horizontalsystems.marketkit.models.FullCoin
 import kotlinx.android.parcel.Parcelize
 
@@ -48,11 +47,10 @@ object CoinDetailsModule {
 
     @Immutable
     data class ChartViewItem(
-        val title: String,
-        val subtitle: ChartInfoHeaderItem,
         val badge: String?,
-        val currency: Currency,
-        val chartInfoData: ChartInfoData
+        val value: String,
+        val diff: Value,
+        val chartData: ChartData
     )
 
     @Immutable

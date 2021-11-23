@@ -912,6 +912,9 @@
     <string name="CoinPage_Reports">Reports</string>
     <string name="CoinPage_FundsInvested">Funds Invested</string>
     <string name="CoinPage_TokenDistribution">Token Distribution</string>
+    <string name="CoinPage_TokenLiquidity">Token Liquidity</string>
+    <string name="CoinPage_TotalVolume">Total Volume</string>
+    <string name="CoinPage_DetailsTvl">TVL</string>
     <string name="CoinPage_TokenTvl">Token TVL</string>
     <string name="CoinPage_SecurityParams">Security Parameters</string>
     <string name="CoinPage_SecurityParams_Privacy">Privacy</string>

@@ -42,6 +42,7 @@ import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineClear
 import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
+import io.horizontalsystems.bankwallet.ui.compose.components.MiniChartCard
 import io.horizontalsystems.core.findNavController
 
 @ExperimentalCoilApi
@@ -114,6 +115,10 @@ class CoinDetailsFragment : BaseFragment() {
                     val detailBlocks: MutableList<@Composable (borderTop: Boolean) -> Unit> = mutableListOf()
 
                     viewItem?.let { viewItem ->
+                        viewItem.volumeChart?.let { volumeChart ->
+                            detailBlocks.add { borderTop -> TokenVolume(volumeChart, borderTop) }
+                        }
+
                         if (viewItem.hasMajorHolders) {
                             detailBlocks.add { borderTop -> TokenDistribution(viewItem, borderTop) }
                         }
@@ -154,6 +159,28 @@ class CoinDetailsFragment : BaseFragment() {
     }
 
     @Composable
+    private fun TokenVolume(volumeChart: CoinDetailsModule.ChartViewItem, borderTop: Boolean) {
+        if (borderTop) {
+            Spacer(modifier = Modifier.height(24.dp))
+        }
+
+        CellSingleLineClear(borderTop = borderTop) {
+            Text(
+                text = stringResource(R.string.CoinPage_TokenLiquidity),
+                style = ComposeAppTheme.typography.body,
+                color = ComposeAppTheme.colors.oz,
+            )
+        }
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        MiniChartCard(
+            title = stringResource(id = R.string.CoinPage_TotalVolume),
+            chartViewItem = volumeChart
+        )
+    }
+
+    @Composable
     private fun TokenTvl(viewItem: ViewItem, borderTop: Boolean) {
         if (borderTop) {
             Spacer(modifier = Modifier.height(24.dp))
@@ -164,6 +191,15 @@ class CoinDetailsFragment : BaseFragment() {
                 text = stringResource(R.string.CoinPage_TokenTvl),
                 style = ComposeAppTheme.typography.body,
                 color = ComposeAppTheme.colors.oz,
+            )
+        }
+
+        viewItem.tvlChart?.let { tvlChart ->
+            Spacer(modifier = Modifier.height(12.dp))
+
+            MiniChartCard(
+                title = stringResource(id = R.string.CoinPage_DetailsTvl),
+                chartViewItem = tvlChart
             )
         }
 
