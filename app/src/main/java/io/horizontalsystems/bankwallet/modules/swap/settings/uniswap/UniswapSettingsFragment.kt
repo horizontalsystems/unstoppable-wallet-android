@@ -41,7 +41,7 @@ class UniswapSettingsFragment : SwapSettingsBaseFragment() {
         when (result.resultCode) {
             Activity.RESULT_OK -> {
                 result.data?.getStringExtra(ModuleField.SCAN_ADDRESS)?.let {
-                    recipientAddressViewModel.onFetch(it)
+                    recipientAddressInputView.setText(it)
                 }
             }
             Activity.RESULT_CANCELED -> {

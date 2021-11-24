@@ -33,7 +33,7 @@ class SendAddressFragment(
     private val qrScannerResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             result.data?.getStringExtra(ModuleField.SCAN_ADDRESS)?.let {
-                presenter.onFetch(it)
+                addressInputView.setText(it)
             }
         }
     }
