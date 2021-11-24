@@ -53,8 +53,10 @@ object SendAmountModule {
         val coinAmount: CoinValue
         val fiatAmount: CurrencyValue?
 
+        fun coinValue(): CoinValue
+
         @Throws
-        fun primaryAmountInfo(): AmountInfo
+        fun currencyValue(): CurrencyValue?
 
         @Throws
         fun secondaryAmountInfo(): AmountInfo?

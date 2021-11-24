@@ -157,15 +157,15 @@ object SendModule {
     abstract class SendConfirmationViewItem
 
     data class SendConfirmationAmountViewItem(
-            val primaryInfo: AmountInfo,
-            val secondaryInfo: AmountInfo?,
-            val receiver: Address,
-            val locked: Boolean = false
+        val coinValue: CoinValue,
+        val currencyValue: CurrencyValue?,
+        val receiver: Address,
+        val locked: Boolean = false
     ) : SendConfirmationViewItem()
 
     data class SendConfirmationFeeViewItem(
-            val primaryInfo: AmountInfo,
-            val secondaryInfo: AmountInfo?
+        val coinValue: CoinValue,
+        val currencyValue: CurrencyValue?,
     ) : SendConfirmationViewItem()
 
     data class SendConfirmationTotalViewItem(

@@ -130,8 +130,8 @@ class SendEthereumHandler(
 
     override fun confirmationViewItems(): List<SendModule.SendConfirmationViewItem> {
         return listOf(
-                SendModule.SendConfirmationAmountViewItem(amountModule.primaryAmountInfo(), amountModule.secondaryAmountInfo(), addressModule.validAddress()),
-                SendModule.SendConfirmationFeeViewItem(feeModule.primaryAmountInfo, feeModule.secondaryAmountInfo)
+                SendModule.SendConfirmationAmountViewItem(amountModule.coinValue(), amountModule.currencyValue(), addressModule.validAddress()),
+                SendModule.SendConfirmationFeeViewItem(feeModule.coinValue, feeModule.currencyValue)
         )
     }
 

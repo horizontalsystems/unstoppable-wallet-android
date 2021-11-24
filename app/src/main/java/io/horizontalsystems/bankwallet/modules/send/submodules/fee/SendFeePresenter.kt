@@ -6,9 +6,6 @@ import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.FeeRateState
 import io.horizontalsystems.bankwallet.modules.send.SendModule
-import io.horizontalsystems.bankwallet.modules.send.SendModule.AmountInfo
-import io.horizontalsystems.bankwallet.modules.send.SendModule.AmountInfo.CoinValueInfo
-import io.horizontalsystems.bankwallet.modules.send.SendModule.AmountInfo.CurrencyValueInfo
 import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmountInfo
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.marketkit.models.PlatformCoin
@@ -129,28 +126,12 @@ class SendFeePresenter(
         }
 
 
-    override val primaryAmountInfo: AmountInfo
-        get() {
-            return when (inputType) {
-                SendModule.InputType.COIN -> CoinValueInfo(CoinValue(CoinValue.Kind.PlatformCoin(platformCoin), fee))
-                SendModule.InputType.CURRENCY -> {
-                    this.xRate?.let { xRate ->
-                        CurrencyValueInfo(CurrencyValue(baseCurrency, fee * xRate))
-                    } ?: throw Exception("Invalid state")
-                }
-            }
-        }
+    override val coinValue: CoinValue
+        get() = CoinValue(CoinValue.Kind.PlatformCoin(platformCoin), fee)
 
-    override val secondaryAmountInfo: AmountInfo?
-        get() {
-            return when (inputType.reversed()) {
-                SendModule.InputType.COIN -> CoinValueInfo(CoinValue(CoinValue.Kind.PlatformCoin(platformCoin), fee))
-                SendModule.InputType.CURRENCY -> {
-                    this.xRate?.let { xRate ->
-                        CurrencyValueInfo(CurrencyValue(baseCurrency, fee * xRate))
-                    }
-                }
-            }
+    override val currencyValue: CurrencyValue?
+        get() = this.xRate?.let { xRate ->
+            CurrencyValue(baseCurrency, fee * xRate)
         }
 
     override val feeRate: Long?

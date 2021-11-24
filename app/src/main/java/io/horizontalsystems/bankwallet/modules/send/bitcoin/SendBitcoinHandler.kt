@@ -127,12 +127,12 @@ class SendBitcoinHandler(
 
         return mutableListOf<SendModule.SendConfirmationViewItem>().apply {
             add(SendModule.SendConfirmationAmountViewItem(
-                    amountModule.primaryAmountInfo(),
-                    amountModule.secondaryAmountInfo(),
+                    amountModule.coinValue(),
+                    amountModule.currencyValue(),
                     addressModule.validAddress(),
                     lockTimeInterval != null))
 
-            add(SendModule.SendConfirmationFeeViewItem(feeModule.primaryAmountInfo, feeModule.secondaryAmountInfo))
+            add(SendModule.SendConfirmationFeeViewItem(feeModule.coinValue, feeModule.currencyValue))
 
             lockTimeInterval?.let {
                 add(SendModule.SendConfirmationLockTimeViewItem(it))
