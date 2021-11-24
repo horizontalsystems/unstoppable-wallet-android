@@ -81,6 +81,16 @@ class RecipientAddressViewModel(
 
         service.setRecipientAddress(text?.let { Address(it) })
         resolutionService.setText(text)
+
+        if (text == null || text.isEmpty()) {
+            return
+        }
+
+        val addressData = addressParser.parse(text)
+
+        addressData.amount?.let {
+            service.setRecipientAmount(it)
+        }
     }
 
     fun onChangeFocus(hasFocus: Boolean) {
@@ -90,20 +100,6 @@ class RecipientAddressViewModel(
 
         isEditing = hasFocus
         sync()
-    }
-
-    fun onFetch(text: String?) {
-        if (text == null || text.isEmpty()) {
-            return
-        }
-
-        val addressData = addressParser.parse(text)
-        service.setRecipientAddress(Address(text))
-        setTextLiveData.postValue(addressData.address)
-
-        addressData.amount?.let {
-            service.setRecipientAmount(it)
-        }
     }
 
     private fun sync() {

@@ -12,7 +12,10 @@ import androidx.compose.foundation.text.selection.LocalTextSelectionColors
 import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,10 +25,11 @@ import androidx.compose.ui.focus.focusTarget
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
-import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.*
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.swap.settings.Caution
 import io.horizontalsystems.bankwallet.modules.swap.settings.RecipientAddressViewModel
@@ -42,16 +46,11 @@ class AddressInputView @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr) {
 
-    private var showQrButton: Boolean = false
-    private var onTextChangeCallback: ((text: String?) -> Unit)? = null
-    private var onPasteCallback: ((text: String?) -> Unit)? = null
-    private var onFocusChangeCallback: ((hasFocus: Boolean) -> Unit)? = null
-    private var onQrButtonClickCallback: (() -> Unit)? = null
-    private var showSpinner = false
-    private var hintText: String? = null
-    private var inputText: String = ""
-    private var editable = true
-
+    interface Listener {
+        fun onTextChange(text: String)
+        fun onQrButtonClick()
+        fun onFocusChange(hasFocus: Boolean)
+    }
 
     init {
         inflate(context, R.layout.view_input_address, this)
@@ -61,126 +60,49 @@ class AddressInputView @JvmOverloads constructor(
             title.text = ta.getString(R.styleable.AddressInputView_title)
             title.isVisible = title.text.isNotEmpty()
             description.text = ta.getString(R.styleable.AddressInputView_description)
-            showQrButton = ta.getBoolean(R.styleable.AddressInputView_showQrButton, true)
-            hintText = ta.getString(R.styleable.AddressInputView_hint)
         } finally {
             ta.recycle()
         }
-
-        updateInput()
     }
 
-    private fun updateInput() {
+    private lateinit var listener: Listener
+
+    private val viewModel by lazy {
+        ViewModelProvider(ViewTreeViewModelStoreOwner.get(this)!!).get<AddressInputViewModel>()
+    }
+
+    private fun drawView() {
         actionsCompose.setContent {
             ComposeAppTheme {
-                val customTextSelectionColors = TextSelectionColors(
-                    handleColor = ComposeAppTheme.colors.jacob,
-                    backgroundColor = ComposeAppTheme.colors.jacob.copy(alpha = 0.4f)
-                )
-                val focusRequester = remember { FocusRequester() }
-
-                Row(
-                    modifier = Modifier
-                        .padding(
-                            start = 12.dp,
-                            top = 8.dp,
-                            end = 8.dp,
-                            bottom = 8.dp
-                        )
-                        //on focus change listener
-                        .focusRequester(focusRequester)
-                        .onFocusChanged {
-                            onFocusChangeCallback?.invoke(it.hasFocus)
-                        }
-                        .focusTarget()
-                        .pointerInput(Unit) { detectTapGestures { focusRequester.requestFocus() } },
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    CompositionLocalProvider(LocalTextSelectionColors provides customTextSelectionColors) {
-                        BasicTextField(
-                            modifier = Modifier
-                                .padding(start = 0.dp, top = 4.dp, end = 8.dp, bottom = 4.dp)
-                                .weight(1f),
-                            value = inputText,
-                            onValueChange = {
-                                inputText = it
-                                onTextChangeCallback?.invoke(it)
-                                updateInput()
-                            },
-                            textStyle = ColoredTextStyle(
-                                color = ComposeAppTheme.colors.oz,
-                                textStyle = ComposeAppTheme.typography.body
-                            ),
-                            //input hint
-                            decorationBox = { innerTextField ->
-                                if (inputText.isEmpty()) {
-                                    Text(
-                                        hintText ?: "",
-                                        color = ComposeAppTheme.colors.grey50,
-                                        style = ComposeAppTheme.typography.body
-                                    )
-                                }
-                                innerTextField()
-                            },
-                            cursorBrush = SolidColor(ComposeAppTheme.colors.oz),
-                            enabled = editable
-                        )
-                    }
-                    Row(
-                        horizontalArrangement = Arrangement.End
-                    ) {
-                        if (showSpinner) {
-                            CircularProgressIndicator(
-                                modifier = Modifier.size(28.dp).padding(top = 4.dp, end = 8.dp),
-                                color = ComposeAppTheme.colors.grey,
-                                strokeWidth = 2.dp
-                            )
-                        }
-                        if (inputText.isEmpty()) {
-                            if (showQrButton) {
-                                ButtonSecondaryCircle(
-                                    modifier = Modifier.padding(end = 8.dp),
-                                    icon = R.drawable.ic_qr_scan_20,
-                                    onClick = {
-                                        onQrButtonClickCallback?.invoke()
-                                    }
-                                )
-                            }
-                            ButtonSecondaryDefault(
-                                modifier = Modifier.padding(0.dp),
-                                title = context.getString(R.string.Send_Button_Paste),
-                                onClick = {
-                                    val pastedText = TextHelper.getCopiedText().trim()
-                                    inputText = pastedText
-                                    updateInput()
-                                    onPasteCallback?.invoke(pastedText)
-                                }
-                            )
-                        } else {
-                            ButtonSecondaryCircle(
-                                icon = R.drawable.ic_delete_20,
-                                onClick = {
-                                    inputText = ""
-                                    updateInput()
-                                }
-                            )
-                        }
-                    }
-                }
+                AddressInputViewComponent(viewModel, listener)
             }
         }
+    }
 
+    private fun observe() {
+        findViewTreeLifecycleOwner()?.let { lifecycleOwner ->
+            viewModel.inputLiveData.observe(lifecycleOwner, Observer {
+                listener.onTextChange(it)
+            })
+        }
+    }
+
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
+        drawView()
+        observe()
+    }
+
+    fun setListener(listener: Listener) {
+        this.listener = listener
     }
 
     fun setText(text: String?) {
-        inputText = text ?: ""
-        updateInput()
+        viewModel.setText(text ?: "")
     }
 
-    fun setHint(text: String?) {
-        hintText = text
-        updateInput()
+    fun setHint(text: String) {
+        viewModel.setHint(text)
     }
 
     fun setError(caution: Caution?) {
@@ -202,64 +124,193 @@ class AddressInputView @JvmOverloads constructor(
         }
     }
 
-    private fun onFocusChange(callback: (Boolean) -> Unit) {
-        onFocusChangeCallback = callback
-    }
-
-    fun onTextChange(callback: (String?) -> Unit) {
-        onTextChangeCallback = callback
-    }
-
-    fun onPasteText(callback: (String?) -> Unit) {
-        onPasteCallback = callback
-    }
-
     fun setSpinner(isVisible: Boolean) {
-        showSpinner = isVisible
-        updateInput()
+        viewModel.setSpinner(isVisible)
     }
 
-    fun onButtonQrScanClick(callback: () -> Unit) {
-        onQrButtonClickCallback = callback
-    }
-
-    fun setEditable(isEditable: Boolean) {
-        editable = isEditable
-        updateInput()
+    fun setEditable(editable: Boolean) {
+        viewModel.setInputEditable(editable)
     }
 
     fun setViewModel(
-        viewModel: RecipientAddressViewModel,
-        lifecycleOwner: LifecycleOwner,
+        recipientViewModel: RecipientAddressViewModel,
+        otherLifecycleOwner: LifecycleOwner,
         onClickQrScan: () -> Unit
     ) {
-        setHint(viewModel.inputFieldPlaceholder)
-        setText(viewModel.initialValue)
+        setHint(recipientViewModel.inputFieldPlaceholder)
+        setText(recipientViewModel.initialValue)
 
-        viewModel.isLoadingLiveData.observe(lifecycleOwner, { visible ->
-            setSpinner(visible)
+        recipientViewModel.isLoadingLiveData.observe(otherLifecycleOwner, Observer { visible ->
+            viewModel.setSpinner(visible)
         })
 
-        viewModel.setTextLiveData.observe(lifecycleOwner, {
-            setText(it)
-        })
-
-        viewModel.cautionLiveData.observe(lifecycleOwner, {
+        recipientViewModel.cautionLiveData.observe(otherLifecycleOwner, Observer {
             setError(it)
         })
 
-        onFocusChange { hasFocus ->
-            viewModel.onChangeFocus(hasFocus)
-        }
+        listener = object : Listener {
+            override fun onTextChange(text: String) {
+                recipientViewModel.onChangeText(text)
+            }
 
-        onTextChange {
-            viewModel.onChangeText(it)
-        }
+            override fun onQrButtonClick() {
+                onClickQrScan.invoke()
+            }
 
-        onPasteText {
-            viewModel.onFetch(it)
+            override fun onFocusChange(hasFocus: Boolean) {
+                recipientViewModel.onChangeFocus(hasFocus)
+            }
         }
-
-        onButtonQrScanClick(onClickQrScan)
     }
+}
+
+@Composable
+fun AddressInputViewComponent(
+    viewModel: AddressInputViewModel,
+    listener: AddressInputView.Listener
+) {
+
+    val inputData by viewModel.inputLiveData.observeAsState("")
+    val inputHint by viewModel.inputHintLiveData.observeAsState("")
+    val inputEditable by viewModel.inputEditableLiveData.observeAsState(true)
+    val buttonsData by viewModel.buttonsLiveData.observeAsState(listOf<AddressInputButton>())
+    val showSpinner by viewModel.showSpinnerLiveData.observeAsState(false)
+
+    val customTextSelectionColors = TextSelectionColors(
+        handleColor = ComposeAppTheme.colors.jacob,
+        backgroundColor = ComposeAppTheme.colors.jacob.copy(alpha = 0.4f)
+    )
+    val focusRequester = remember { FocusRequester() }
+
+    Row(
+        modifier = Modifier
+            .padding(
+                start = 12.dp,
+                top = 8.dp,
+                end = 8.dp,
+                bottom = 8.dp
+            )
+            //on focus change listener
+            .focusRequester(focusRequester)
+            .onFocusChanged {
+                listener.onFocusChange(it.hasFocus)
+            }
+            .focusTarget()
+            .pointerInput(Unit) { detectTapGestures { focusRequester.requestFocus() } },
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        CompositionLocalProvider(LocalTextSelectionColors provides customTextSelectionColors) {
+            BasicTextField(
+                modifier = Modifier
+                    .padding(start = 0.dp, top = 4.dp, end = 8.dp, bottom = 4.dp)
+                    .weight(1f),
+                value = inputData,
+                onValueChange = {
+                    viewModel.setText(it)
+                },
+                textStyle = ColoredTextStyle(
+                    color = ComposeAppTheme.colors.oz,
+                    textStyle = ComposeAppTheme.typography.body
+                ),
+                //input hint
+                decorationBox = { innerTextField ->
+                    if (inputData.isEmpty()) {
+                        Text(
+                            inputHint,
+                            color = ComposeAppTheme.colors.grey50,
+                            style = ComposeAppTheme.typography.body
+                        )
+                    }
+                    innerTextField()
+                },
+                cursorBrush = SolidColor(ComposeAppTheme.colors.oz),
+                enabled = inputEditable
+            )
+        }
+        Row(
+            horizontalArrangement = Arrangement.End
+        ) {
+            if (showSpinner) {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(28.dp).padding(top = 4.dp, end = 8.dp),
+                    color = ComposeAppTheme.colors.grey,
+                    strokeWidth = 2.dp
+                )
+            }
+            buttonsData.forEach {
+                when (it) {
+                    AddressInputButton.Delete -> {
+                        ButtonSecondaryCircle(
+                            icon = R.drawable.ic_delete_20,
+                            onClick = {
+                                viewModel.setText("")
+                            }
+                        )
+                    }
+                    AddressInputButton.Scan -> {
+                        ButtonSecondaryCircle(
+                            modifier = Modifier.padding(end = 8.dp),
+                            icon = R.drawable.ic_qr_scan_20,
+                            onClick = {
+                                listener.onQrButtonClick()
+                            }
+                        )
+                    }
+                    AddressInputButton.Paste -> {
+                        ButtonSecondaryDefault(
+                            modifier = Modifier.padding(0.dp),
+                            title = stringResource(R.string.Send_Button_Paste),
+                            onClick = {
+                                viewModel.setText(TextHelper.getCopiedText().trim())
+                            }
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+enum class AddressInputButton {
+    Delete, Scan, Paste
+}
+
+class AddressInputViewModel : ViewModel() {
+
+    private var inputText = ""
+
+    val buttonsLiveData = MutableLiveData(getButtons())
+    val showSpinnerLiveData = MutableLiveData(false)
+    val inputLiveData = MutableLiveData(inputText)
+    val inputHintLiveData = MutableLiveData("")
+    val inputEditableLiveData = MutableLiveData(true)
+
+    private fun getButtons(): List<AddressInputButton> = when {
+        inputText.isEmpty() -> listOf(AddressInputButton.Scan, AddressInputButton.Paste)
+        else -> listOf(AddressInputButton.Delete)
+    }
+
+    private fun sync() {
+        buttonsLiveData.postValue(getButtons())
+        inputLiveData.postValue(inputText)
+    }
+
+    fun setText(text: String) {
+        inputText = text
+        sync()
+    }
+
+    fun setSpinner(visible: Boolean) {
+        showSpinnerLiveData.postValue(visible)
+    }
+
+    fun setHint(hint: String) {
+        inputHintLiveData.postValue(hint)
+    }
+
+    fun setInputEditable(editable: Boolean) {
+        inputEditableLiveData.postValue(editable)
+    }
+
 }

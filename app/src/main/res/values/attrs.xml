@@ -49,9 +49,6 @@
     <declare-styleable name="AddressInputView">
         <attr name="title" />
         <attr name="description" />
-        <attr name="showQrButton" format="boolean" />
-        <attr name="hint" format="string" />
-        <attr name="android:inputType" />
     </declare-styleable>
     <declare-styleable name="InputView">
         <attr name="android:inputType" />
