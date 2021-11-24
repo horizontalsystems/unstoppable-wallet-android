@@ -62,12 +62,12 @@ class SendZcashHandler(
     override fun confirmationViewItems(): List<SendModule.SendConfirmationViewItem> {
         return listOf(
                 SendModule.SendConfirmationAmountViewItem(
-                        amountModule.primaryAmountInfo(),
-                        amountModule.secondaryAmountInfo(),
+                        amountModule.coinValue(),
+                        amountModule.currencyValue(),
                         addressModule.validAddress(),
                 ),
                 SendModule.SendConfirmationMemoViewItem(memoModule.memo),
-                SendModule.SendConfirmationFeeViewItem(feeModule.primaryAmountInfo, feeModule.secondaryAmountInfo)
+                SendModule.SendConfirmationFeeViewItem(feeModule.coinValue, feeModule.currencyValue)
         )
     }
 

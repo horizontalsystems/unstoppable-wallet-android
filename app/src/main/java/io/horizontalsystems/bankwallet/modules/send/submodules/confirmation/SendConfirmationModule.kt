@@ -1,67 +1,31 @@
 package io.horizontalsystems.bankwallet.modules.send.submodules.confirmation
 
+import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
+import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.hodler.LockTimeInterval
 
 object SendConfirmationModule {
 
-    //const val ConfirmationInfoKey = "confirmation_info_key"
+    class ViewData(
+        val coinName: String,
+        val coinAmount: String,
+        val currencyAmount: String?,
+        val toAddress: String,
+        val domain: String?,
+        val memo: String?,
+        val lockTimeInterval: LockTimeInterval?,
+        val feeAmount: String,
+    )
 
-    interface IView{
-        fun loadPrimaryItems(primaryItemData: PrimaryItemData)
-        fun loadSecondaryItems(secondaryItemData: SecondaryItemData)
-        fun showCopied()
-        fun loadSendButton()
-        fun setSendButtonState(state: SendButtonState)
-    }
+    class SendButton(@StringRes val title: Int, val enabled: Boolean)
 
-    interface IViewDelegate {
-        fun onViewDidLoad()
-        fun onReceiverClick()
-        fun onSendError()
-    }
-
-    interface IInteractor {
-        fun copyToClipboard(coinAddress: String)
-    }
-
-    interface IInteractorDelegate {
-        fun didCopyToClipboard()
-    }
-
-    enum class SendButtonState {
-        ACTIVE, SENDING
-    }
-
-    data class PrimaryItemData(
-            val primaryName: String,
-            val primaryAmount: String,
-            val secondaryName: String?,
-            val secondaryAmount: String?,
-            val domain: String?,
-            val receiver: String,
-            val memo: String?,
-            val locked: Boolean)
-
-    data class SecondaryItemData(
-            val feeAmount: String?,
-            val estimatedTime: Long?,
-            val lockTimeInterval: LockTimeInterval?)
-
-
-    class Factory : ViewModelProvider.Factory {
+    class Factory(private val confirmationViewItems: List<SendModule.SendConfirmationViewItem>?) :
+        ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-
-            val view = SendConfirmationView()
-            val interactor = SendConfirmationInteractor(TextHelper)
-            val presenter = SendConfirmationPresenter(view, interactor )
-
-            interactor.delegate = presenter
-
-            return presenter as T
+            return SendConfirmationViewModel(confirmationViewItems) as T
         }
     }
 

@@ -6,6 +6,7 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.FeeRatePriority
 import io.horizontalsystems.bankwallet.core.factories.FeeRateProviderFactory
 import io.horizontalsystems.bankwallet.entities.CoinValue
+import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.FeeRateState
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.SendModule.AmountInfo
@@ -63,8 +64,8 @@ object SendFeeModule {
         val isValid: Boolean
         val feeRateState: FeeRateState
         val feeRate: Long?
-        val primaryAmountInfo: AmountInfo
-        val secondaryAmountInfo: AmountInfo?
+        val coinValue: CoinValue
+        val currencyValue: CurrencyValue?
 
         fun setLoading(loading: Boolean)
         fun setFee(fee: BigDecimal)

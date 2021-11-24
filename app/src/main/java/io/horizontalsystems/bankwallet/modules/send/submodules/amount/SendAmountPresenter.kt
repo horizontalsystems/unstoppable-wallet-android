@@ -53,16 +53,15 @@ class SendAmountPresenter(
         get() = amount ?: BigDecimal.ZERO
 
 
+    override fun coinValue(): CoinValue {
+        return CoinValue(CoinValue.Kind.PlatformCoin(coin), validAmount())
+    }
+
     @Throws
-    override fun primaryAmountInfo(): SendModule.AmountInfo {
-        return when (inputType) {
-            SendModule.InputType.COIN -> CoinValueInfo(CoinValue(CoinValue.Kind.PlatformCoin(coin), validAmount()))
-            SendModule.InputType.CURRENCY -> {
-                this.xRate?.let { xRate ->
-                    CurrencyValueInfo(CurrencyValue(baseCurrency, validAmount() * xRate))
+    override fun currencyValue(): CurrencyValue? {
+        return this.xRate?.let { xRate ->
+                    CurrencyValue(baseCurrency, validAmount() * xRate)
                 } ?: throw Exception("Invalid state")
-            }
-        }
     }
 
     override fun secondaryAmountInfo(): SendModule.AmountInfo? {
