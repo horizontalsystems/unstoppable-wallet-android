@@ -64,7 +64,7 @@ private fun MarketPostsScreen(viewModel: MarketPostsViewModel = viewModel(factor
         }
     ) {
         when (viewState) {
-            ViewState.Error -> {
+            is ViewState.Error -> {
                 ListErrorView(
                     stringResource(R.string.Market_SyncError)
                 ) {

@@ -98,7 +98,7 @@ class MetricsPageFragment : BaseFragment() {
                 }
             ) {
                 when (viewState) {
-                    ViewState.Error -> {
+                    is ViewState.Error -> {
                         ListErrorView(
                             stringResource(R.string.Market_SyncError)
                         ) {

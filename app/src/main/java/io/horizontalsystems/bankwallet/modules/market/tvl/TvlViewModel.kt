@@ -82,7 +82,7 @@ class TvlViewModel(
             )
         ) { it }.subscribeIO { array ->
             val viewState: ViewState? = when {
-                array.any { it is DataState.Error } -> ViewState.Error
+                array.any { it is DataState.Error } -> ViewState.Error(array.filterIsInstance<DataState.Error>().first().error)
                 array.all { it is DataState.Success<*> } -> ViewState.Success
                 else -> null
             }

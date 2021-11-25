@@ -32,7 +32,7 @@ class CoinMajorHoldersViewModel(
                         coinMajorHolders.postValue(factory.getCoinMajorHolders(state.data))
                     }
                     is DataState.Error -> {
-                        viewStateLiveData.postValue(ViewState.Error)
+                        viewStateLiveData.postValue(ViewState.Error(state.error))
                     }
                 }
             }, {

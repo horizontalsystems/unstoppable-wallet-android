@@ -55,7 +55,7 @@ class CoinDetailsViewModel(
                         viewItemLiveData.postValue(viewItem(state.data))
                     }
                     is DataState.Error -> {
-                        viewStateLiveData.postValue(ViewState.Error)
+                        viewStateLiveData.postValue(ViewState.Error(state.error))
                     }
                 }
             }

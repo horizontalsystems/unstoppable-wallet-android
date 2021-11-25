@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.entities
 
-enum class ViewState {
-    Error, Success
+sealed class ViewState {
+    class Error(val t: Throwable) : ViewState()
+    object Success : ViewState()
 }

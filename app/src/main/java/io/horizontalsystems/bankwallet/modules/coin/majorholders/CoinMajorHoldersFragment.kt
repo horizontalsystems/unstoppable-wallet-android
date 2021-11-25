@@ -21,8 +21,6 @@ import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.android.synthetic.main.fragment_recyclerview.*
-import kotlinx.android.synthetic.main.fragment_recyclerview.errorViewCompose
-import kotlinx.android.synthetic.main.fragment_recyclerview.pullToRefresh
 
 class CoinMajorHoldersFragment : BaseFragment(), CoinMajorHoldersAdapter.Listener {
 
@@ -67,7 +65,7 @@ class CoinMajorHoldersFragment : BaseFragment(), CoinMajorHoldersAdapter.Listene
 
         viewModel.viewStateLiveData.observe(viewLifecycleOwner) { viewState ->
             pullToRefresh.isVisible = viewState == ViewState.Success
-            errorViewCompose.isVisible = viewState == ViewState.Error
+            errorViewCompose.isVisible = viewState is ViewState.Error
         }
 
         viewModel.coinMajorHolders.observe(viewLifecycleOwner, { holders ->

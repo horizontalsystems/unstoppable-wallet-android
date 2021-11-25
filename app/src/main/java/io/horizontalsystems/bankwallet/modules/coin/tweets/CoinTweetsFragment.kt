@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -67,7 +68,7 @@ fun CoinTweetsScreen(viewModel: CoinTweetsViewModel) {
         state = rememberSwipeRefreshState(isRefreshing),
         onRefresh = { viewModel.refresh() },
     ) {
-        when (viewState) {
+        when (val tmp = viewState) {
             ViewState.Success -> {
                 LazyColumn(
                     modifier = Modifier.padding(horizontal = 16.dp),
@@ -96,11 +97,22 @@ fun CoinTweetsScreen(viewModel: CoinTweetsViewModel) {
                     }
                 }
             }
-            ViewState.Error -> {
-                ListErrorView(
-                    stringResource(R.string.Market_SyncError)
-                ) {
-                    viewModel.refresh()
+            is ViewState.Error -> {
+                if (tmp.t is TweetsProvider.UserNotFound) {
+                    Box(modifier = Modifier.fillMaxSize()) {
+                        Text(
+                            modifier = Modifier.align(Alignment.Center),
+                            text = stringResource(id = R.string.CoinPage_Twitter_NotAvailable),
+                            color = ComposeAppTheme.colors.grey,
+                            style = ComposeAppTheme.typography.subhead2,
+                        )
+                    }
+                } else {
+                    ListErrorView(
+                        stringResource(R.string.Market_SyncError)
+                    ) {
+                        viewModel.refresh()
+                    }
                 }
             }
         }
