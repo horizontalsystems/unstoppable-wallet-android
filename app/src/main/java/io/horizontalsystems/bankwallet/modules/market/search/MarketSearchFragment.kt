@@ -22,7 +22,6 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
@@ -113,6 +112,10 @@ class MarketSearchFragment : BaseFragment() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.onResume()
+    }
 }
 
 @ExperimentalMaterialApi
@@ -140,18 +143,19 @@ fun MarketSearchScreen(
                 onBackButtonClick = onBackButtonClick
             )
             when (screenState) {
-                is ScreenState.CardsList -> {
+                is ScreenState.Discovery -> {
                     CardsGrid(screenState.cards, onCategoryClick)
                 }
-                ScreenState.EmptySearchResult -> {
-                    NoResults()
-                }
                 is ScreenState.SearchResult -> {
-                    MarketSearchResults(
-                        screenState.coins,
-                        onCoinClick,
-                        onFavoriteClick
-                    )
+                    if (screenState.coins.isEmpty()) {
+                        NoResults()
+                    } else {
+                        MarketSearchResults(
+                            screenState.coins,
+                            onCoinClick,
+                            onFavoriteClick
+                        )
+                    }
                 }
             }
         }
@@ -370,9 +374,8 @@ private fun MarketCoin(
         ) {
             Image(
                 modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp),
-                painter = painterResource(R.drawable.ic_star_20),
+                painter = painterResource(if (favorited) R.drawable.ic_star_filled_20 else R.drawable.ic_star_20),
                 contentDescription = "coin icon",
-                colorFilter = ColorFilter.tint(if (favorited) ComposeAppTheme.colors.jacob else ComposeAppTheme.colors.grey),
             )
         }
     }

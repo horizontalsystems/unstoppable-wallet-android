@@ -1,19 +1,31 @@
 package io.horizontalsystems.bankwallet.modules.market.search
 
 import io.horizontalsystems.bankwallet.core.managers.MarketFavoritesManager
+import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchModule.DataState
 import io.horizontalsystems.marketkit.MarketKit
-import io.horizontalsystems.marketkit.models.FullCoin
+import io.reactivex.subjects.BehaviorSubject
 
 class MarketSearchService(
     private val marketKit: MarketKit,
     private val marketFavoritesManager: MarketFavoritesManager,
 ) {
 
-    val favoritedCoinUids = marketFavoritesManager.getAll().map { it.coinUid }
+    private val discoveryItems by lazy {
+        val discoveryItems: MutableList<MarketSearchModule.DiscoveryItem> =
+            mutableListOf(MarketSearchModule.DiscoveryItem.TopCoins)
 
-    fun getCoinsByQuery(query: String): List<FullCoin> {
-        return marketKit.fullCoins(query)
+        marketKit.coinCategories().forEach {
+            discoveryItems.add(MarketSearchModule.DiscoveryItem.Category(it))
+        }
+
+        discoveryItems
     }
+
+    val stateObservable: BehaviorSubject<DataState> = BehaviorSubject.createDefault(
+        DataState.Discovery(discoveryItems)
+    )
+
+    fun isFavorite(coinUid: String): Boolean = marketFavoritesManager.isCoinInFavorites(coinUid)
 
     fun unFavorite(coinUid: String) {
         marketFavoritesManager.remove(coinUid)
@@ -23,6 +35,12 @@ class MarketSearchService(
         marketFavoritesManager.add(coinUid)
     }
 
-    val coinCategories by lazy { marketKit.coinCategories() }
+    fun setFilter(filter: String) {
+        if (filter.isEmpty()) {
+            stateObservable.onNext(DataState.Discovery(discoveryItems))
+        } else {
+            stateObservable.onNext(DataState.SearchResult(marketKit.fullCoins(filter)))
+        }
+    }
 
 }

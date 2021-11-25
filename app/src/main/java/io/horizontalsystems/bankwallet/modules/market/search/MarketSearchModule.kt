@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.marketkit.models.CoinCategory
 import io.horizontalsystems.marketkit.models.FullCoin
+import javax.annotation.concurrent.Immutable
 
 object MarketSearchModule {
 
@@ -16,16 +17,27 @@ object MarketSearchModule {
         }
     }
 
-    sealed class CardViewItem{
-        object MarketTopCoins: CardViewItem()
-        data class MarketCoinCategory(val coinCategory: CoinCategory): CardViewItem()
+    sealed class CardViewItem {
+        object MarketTopCoins : CardViewItem()
+        data class MarketCoinCategory(val coinCategory: CoinCategory) : CardViewItem()
+    }
+
+    sealed class DataState {
+        class Discovery(val discoveryItems: List<DiscoveryItem>) : DataState()
+        class SearchResult(val coins: List<FullCoin>) : DataState()
     }
 
     sealed class ScreenState {
-        class CardsList(val cards: List<CardViewItem>) : ScreenState()
+        class Discovery(val cards: List<CardViewItem>) : ScreenState()
         class SearchResult(val coins: List<CoinViewItem>) : ScreenState()
-        object EmptySearchResult : ScreenState()
     }
 
+    sealed class DiscoveryItem {
+        object TopCoins : DiscoveryItem()
+        class Category(val coinCategory: CoinCategory) : DiscoveryItem()
+    }
+
+    @Immutable
     class CoinViewItem(val fullCoin: FullCoin, val favorited: Boolean)
+
 }
