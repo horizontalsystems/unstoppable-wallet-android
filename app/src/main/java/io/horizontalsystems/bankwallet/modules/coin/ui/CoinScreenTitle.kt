@@ -13,10 +13,16 @@ import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineClear
 import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
 
 @Composable
-fun CoinScreenTitle(coinName: String, marketCapRank: Int?, coinIconUrl: String) {
+fun CoinScreenTitle(
+    coinName: String,
+    marketCapRank: Int?,
+    coinIconUrl: String,
+    iconPlaceholder: Int?
+) {
     CellSingleLineClear {
         CoinImage(
             iconUrl = coinIconUrl,
+            placeholder = iconPlaceholder,
             modifier = Modifier.size(24.dp)
         )
 
@@ -49,7 +55,8 @@ fun CoinScreenTitlePreviewNoRank() {
         CoinScreenTitle(
             coinName = "Synthetix Network TokenSynthetix Network Token",
             marketCapRank = null,
-            coinIconUrl = "https://markets.nyc3.digitaloceanspaces.com/coin-icons/ios/bitcoin@3x.png"
+            coinIconUrl = "https://markets.nyc3.digitaloceanspaces.com/coin-icons/bitcoin@3x.png",
+            iconPlaceholder = null
         )
     }
 }
@@ -61,7 +68,8 @@ fun CoinScreenTitlePreviewLongTitle() {
         CoinScreenTitle(
             coinName = "Synthetix Network Token Synthetix Network Token Synthetix Network Token Synthetix Network Token",
             marketCapRank = 123,
-            coinIconUrl = "https://markets.nyc3.digitaloceanspaces.com/coin-icons/ios/bitcoin@3x.png"
+            coinIconUrl = "https://markets.nyc3.digitaloceanspaces.com/coin-icons/bitcoin@3x.png",
+            iconPlaceholder = null
         )
     }
 }
@@ -73,7 +81,8 @@ fun CoinScreenTitlePreviewShortTitle() {
         CoinScreenTitle(
             coinName = "Bitcoin",
             marketCapRank = 1,
-            coinIconUrl = "https://markets.nyc3.digitaloceanspaces.com/coin-icons/ios/bitcoin@3x.png"
+            coinIconUrl = "https://markets.nyc3.digitaloceanspaces.com/coin-icons/bitcoin@3x.png",
+            iconPlaceholder = null
         )
     }
 }

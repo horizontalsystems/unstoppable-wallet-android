@@ -27,10 +27,10 @@ import java.util.*
 val Coin.isCustom: Boolean get() = uid.startsWith(CustomToken.uidPrefix)
 
 val Coin.iconUrl: String
-    get() = "https://markets.nyc3.digitaloceanspaces.com/coin-icons/ios/$uid@3x.png"
+    get() = "https://markets.nyc3.digitaloceanspaces.com/coin-icons/$uid@3x.png"
 
 val CoinCategory.imageUrl: String
-    get() = "https://markets.nyc3.digitaloceanspaces.com/category-icons/ios/$uid@3x.png"
+    get() = "https://markets.nyc3.digitaloceanspaces.com/category-icons/$uid@3x.png"
 
 val FullCoin.iconPlaceholder: Int
     get() = if (platforms.size == 1) {
