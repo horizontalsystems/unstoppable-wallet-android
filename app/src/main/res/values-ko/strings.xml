@@ -355,6 +355,9 @@
     <string name="Swap_PoweredBy">제공</string>
     <string name="Swap_SelectSwapProvider_Title">Swap Provider</string>
     <string name="Swap_SelectSwapProvider_Subtitle">Switcher</string>
+    <string name="Swap_AmountEstimated">(est)</string>
+    <string name="Swap_AmountMin">(min)</string>
+    <string name="Swap_AmountMax">(max)</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">고급 설정</string>
     <string name="SwapSettings_Service">서비스</string>
