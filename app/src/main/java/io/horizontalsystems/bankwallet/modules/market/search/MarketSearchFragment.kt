@@ -5,17 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.material.Divider
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -340,7 +336,6 @@ private fun MarketCoin(
     marketDataValue: MarketDataValue? = null,
     label: String? = null,
 ) {
-    val interactionSource = remember { MutableInteractionSource() }
 
     MultilineClear(
         borderBottom = true,
@@ -360,18 +355,12 @@ private fun MarketCoin(
             Spacer(modifier = Modifier.height(3.dp))
             MarketCoinSecondRow(coinCode, marketDataValue, label)
         }
-        Box(
-            modifier = Modifier.clickable(
-                interactionSource = interactionSource,
-                indication = null
-            ) {
-                onFavoriteClick()
-            }
-        ) {
-            Image(
-                modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp),
+
+        IconButton(onClick = onFavoriteClick) {
+            Icon(
                 painter = painterResource(if (favorited) R.drawable.ic_star_filled_20 else R.drawable.ic_star_20),
                 contentDescription = "coin icon",
+                tint = if (favorited) ComposeAppTheme.colors.jacob else ComposeAppTheme.colors.grey
             )
         }
     }
