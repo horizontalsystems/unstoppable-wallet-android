@@ -25,7 +25,7 @@ import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import io.horizontalsystems.bankwallet.modules.market.MarketDataValue
 import io.horizontalsystems.bankwallet.modules.market.MarketField
 import io.horizontalsystems.bankwallet.modules.market.TopMarket
-import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchModule
+import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchModule.DiscoveryItem
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -353,8 +353,8 @@ fun DescriptionCard(title: String, description: String, image: ImageSource) {
 @ExperimentalMaterialApi
 @Composable
 fun RowScope.CategoryCard(
-    type: MarketSearchModule.CardViewItem,
-    onClick: (MarketSearchModule.CardViewItem) -> Unit
+    type: DiscoveryItem,
+    onClick: (DiscoveryItem) -> Unit
 ) {
     Card(
         modifier = Modifier
@@ -370,7 +370,7 @@ fun RowScope.CategoryCard(
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
             when (type) {
-                MarketSearchModule.CardViewItem.MarketTopCoins -> {
+                DiscoveryItem.TopCoins -> {
                     Image(
                         painter = painterResource(R.drawable.ic_top_coins),
                         contentDescription = "category image",
@@ -391,7 +391,7 @@ fun RowScope.CategoryCard(
                         )
                     }
                 }
-                is MarketSearchModule.CardViewItem.MarketCoinCategory -> {
+                is DiscoveryItem.Category -> {
                     Image(
                         painter = rememberImagePainter(type.coinCategory.imageUrl),
                         contentDescription = "category image",
@@ -431,7 +431,7 @@ fun PreviewListErrorView() {
 fun CardPreview() {
     ComposeAppTheme {
         Row {
-            CategoryCard(MarketSearchModule.CardViewItem.MarketTopCoins, { })
+            CategoryCard(DiscoveryItem.TopCoins, { })
         }
     }
 }
