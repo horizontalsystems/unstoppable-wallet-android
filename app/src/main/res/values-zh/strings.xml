@@ -355,6 +355,9 @@
     <string name="Swap_PoweredBy">技术支持：</string>
     <string name="Swap_SelectSwapProvider_Title">Swap Provider</string>
     <string name="Swap_SelectSwapProvider_Subtitle">Switcher</string>
+    <string name="Swap_AmountEstimated">(est)</string>
+    <string name="Swap_AmountMin">(min)</string>
+    <string name="Swap_AmountMax">(max)</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">高级设置</string>
     <string name="SwapSettings_Service">服务</string>
