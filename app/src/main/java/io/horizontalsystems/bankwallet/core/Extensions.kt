@@ -22,6 +22,7 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import java.util.*
 
 val Coin.isCustom: Boolean get() = uid.startsWith(CustomToken.uidPrefix)
 
@@ -37,6 +38,31 @@ val FullCoin.iconPlaceholder: Int
     } else {
         R.drawable.coin_placeholder
     }
+
+fun List<FullCoin>.sortedByFilter(filter: String, enabled: (FullCoin) -> Boolean): List<FullCoin> {
+    var comparator: Comparator<FullCoin> = compareByDescending {
+        enabled.invoke(it)
+    }
+    if (filter.isNotBlank()) {
+        val lowercasedFilter = filter.lowercase()
+        comparator = comparator
+            .thenByDescending {
+                it.coin.code.lowercase() == lowercasedFilter
+            }.thenByDescending {
+                it.coin.code.lowercase().startsWith(lowercasedFilter)
+            }.thenByDescending {
+                it.coin.name.lowercase().startsWith(lowercasedFilter)
+            }
+    }
+    comparator = comparator.thenBy {
+        it.coin.marketCapRank ?: Int.MAX_VALUE
+    }
+    comparator = comparator.thenBy {
+        it.coin.name.lowercase(Locale.ENGLISH)
+    }
+
+    return sortedWith(comparator)
+}
 
 val CoinType.iconPlaceholder: Int
     get() = when (this) {

@@ -8,7 +8,6 @@ import io.horizontalsystems.marketkit.models.Coin
 import io.horizontalsystems.marketkit.models.FullCoin
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
-import java.util.*
 
 class ManageWalletsService(
     private val coinManager: ICoinManager,
@@ -28,7 +27,7 @@ class ManageWalletsService(
 
     private val account: Account = accountManager.activeAccount!!
     private var wallets = setOf<Wallet>()
-    private var fullCoins = mutableListOf<FullCoin>()
+    private var fullCoins = listOf<FullCoin>()
 
     private val disposables = CompositeDisposable()
 
@@ -83,13 +82,9 @@ class ManageWalletsService(
     }
 
     private fun sortFullCoins() {
-        fullCoins.sortWith(compareBy<FullCoin> {
-            if (isEnabled(it.coin)) 0 else 1
-        }.thenBy {
-            it.coin.marketCapRank ?: Int.MAX_VALUE
-        }.thenBy {
-            it.coin.name.lowercase(Locale.ENGLISH)
-        })
+        fullCoins = fullCoins.sortedByFilter(filter) {
+            isEnabled(it.coin)
+        }
     }
 
     private fun item(fullCoin: FullCoin): Item {
