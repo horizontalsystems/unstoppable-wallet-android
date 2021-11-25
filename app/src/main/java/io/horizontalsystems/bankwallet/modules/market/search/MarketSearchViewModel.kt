@@ -4,7 +4,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchModule.ScreenState
-import io.horizontalsystems.marketkit.models.FullCoin
 import io.reactivex.disposables.CompositeDisposable
 
 class MarketSearchViewModel(
@@ -12,7 +11,6 @@ class MarketSearchViewModel(
 ) : ViewModel() {
 
     private val disposables = CompositeDisposable()
-    private var coinItems = listOf<FullCoin>()
 
     val searchTextLiveData = MutableLiveData<String>()
     val screenStateLiveData = MutableLiveData<ScreenState>()
@@ -24,34 +22,20 @@ class MarketSearchViewModel(
             }.let {
                 disposables.add(it)
             }
-
-        service.marketFavoritesChangedObservable
-            .subscribeIO {
-                syncSearchResults()
-            }.let {
-                disposables.add(it)
-            }
     }
 
     private fun syncState(dataState: MarketSearchModule.DataState) {
         val screenState = when (dataState) {
             is MarketSearchModule.DataState.Discovery -> {
-                coinItems = listOf()
                 ScreenState.Discovery(getDiscoveryViewItems(dataState.discoveryItems))
             }
             is MarketSearchModule.DataState.SearchResult -> {
-                coinItems = dataState.coins
-                ScreenState.SearchResult(getSearchResultViewItems(dataState.coins))
+                ScreenState.SearchResult(dataState.coinViewItems)
             }
 
         }
         screenStateLiveData.postValue(screenState)
     }
-
-    private fun getSearchResultViewItems(coins: List<FullCoin>): List<MarketSearchModule.CoinViewItem> =
-        coins.map {
-            MarketSearchModule.CoinViewItem(it, service.isFavorite(it.coin.uid))
-        }
 
     private fun getDiscoveryViewItems(items: List<MarketSearchModule.DiscoveryItem>): List<MarketSearchModule.CardViewItem> {
         return items.map {
@@ -64,17 +48,9 @@ class MarketSearchViewModel(
         }
     }
 
-    private fun syncSearchResults() {
-        if (coinItems.isNotEmpty() && screenStateLiveData.value is ScreenState.SearchResult) {
-            screenStateLiveData.postValue(
-                ScreenState.SearchResult(getSearchResultViewItems(coinItems)
-                )
-            )
-        }
-    }
-
     override fun onCleared() {
         disposables.clear()
+        service.stop()
     }
 
     fun searchByQuery(query: String) {

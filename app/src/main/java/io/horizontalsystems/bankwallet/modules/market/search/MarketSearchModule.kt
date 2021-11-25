@@ -24,7 +24,7 @@ object MarketSearchModule {
 
     sealed class DataState {
         class Discovery(val discoveryItems: List<DiscoveryItem>) : DataState()
-        class SearchResult(val coins: List<FullCoin>) : DataState()
+        class SearchResult(val coinViewItems: List<CoinViewItem>) : DataState()
     }
 
     sealed class ScreenState {
