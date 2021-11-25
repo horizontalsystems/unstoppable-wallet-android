@@ -955,6 +955,7 @@
     <string name="CoinPage_Whitepaper">Whitepaper</string>
     <string name="CoinPage_Reddit">Reddit</string>
     <string name="CoinPage_Twitter">Twitter</string>
+    <string name="CoinPage_Twitter_NotAvailable">No twitter available</string>
     <string name="CoinPage_Twitter_Quoted">Quoted %s</string>
     <string name="CoinPage_Twitter_Retweeted">Retweeted %s</string>
     <string name="CoinPage_Twitter_Replied">Replying to %s</string>

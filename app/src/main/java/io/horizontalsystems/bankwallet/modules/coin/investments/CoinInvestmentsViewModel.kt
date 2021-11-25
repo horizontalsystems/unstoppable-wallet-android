@@ -39,11 +39,11 @@ class CoinInvestmentsViewModel(
                         sync(state.data)
                     }
                     is DataState.Error -> {
-                        viewStateLiveData.postValue(ViewState.Error)
+                        viewStateLiveData.postValue(ViewState.Error(state.error))
                     }
                 }
             }, {
-                viewStateLiveData.postValue(ViewState.Error)
+                viewStateLiveData.postValue(ViewState.Error(it))
             }).let {
                 disposables.add(it)
             }

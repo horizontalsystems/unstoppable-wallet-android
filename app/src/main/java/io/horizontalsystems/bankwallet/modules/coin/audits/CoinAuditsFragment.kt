@@ -102,7 +102,7 @@ private fun CoinAuditsScreen(
             onRefresh = viewModel::refresh
         ) {
             when (viewState) {
-                ViewState.Error -> {
+                is ViewState.Error -> {
                     ListErrorView(stringResource(R.string.Market_SyncError)) { viewModel.onErrorClick() }
                 }
                 ViewState.Success -> {

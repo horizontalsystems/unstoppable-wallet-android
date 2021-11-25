@@ -16,7 +16,7 @@ sealed class DataState<out T> {
 
     val viewState: ViewState?
         get() = when (this) {
-            is Error -> ViewState.Error
+            is Error -> ViewState.Error(error)
             is Success -> ViewState.Success
             else -> null
         }

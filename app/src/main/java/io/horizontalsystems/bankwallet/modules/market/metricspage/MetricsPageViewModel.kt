@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.modules.market.metricspage
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.entities.ViewState
@@ -89,7 +88,7 @@ class MetricsPageViewModel(
             )
         ) { it }.subscribeIO { array ->
             val viewState: ViewState? = when {
-                array.any { it is DataState.Error } -> ViewState.Error
+                array.any { it is DataState.Error } -> ViewState.Error(array.filterIsInstance<DataState.Error>().first().error)
                 array.all { it is DataState.Success<*> } -> ViewState.Success
                 else -> null
             }

@@ -120,7 +120,7 @@ fun CoinOverviewScreen(
                     }
 
                 }
-                ViewState.Error -> {
+                is ViewState.Error -> {
                     ListErrorView(stringResource(id = R.string.BalanceSyncError_Title)) {
                         viewModel.retry()
                     }

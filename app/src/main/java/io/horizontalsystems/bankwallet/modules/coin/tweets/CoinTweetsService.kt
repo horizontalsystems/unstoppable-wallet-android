@@ -47,10 +47,10 @@ class CoinTweetsService(
                 .flatMap {
                     val username = it.links[LinkType.Twitter]
 
-                    if (username != null) {
-                        twitterProvider.userRequestSingle(username)
-                    } else {
+                    if (username.isNullOrBlank()) {
                         Single.error(TweetsProvider.UserNotFound())
+                    } else {
+                        twitterProvider.userRequestSingle(username)
                     }
                 }
                 .doOnSuccess {
