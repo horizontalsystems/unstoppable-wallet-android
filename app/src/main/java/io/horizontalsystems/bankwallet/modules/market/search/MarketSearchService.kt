@@ -21,6 +21,7 @@ class MarketSearchService(
         discoveryItems
     }
 
+    val marketFavoritesChangedObservable by marketFavoritesManager::dataUpdatedAsync
     val stateObservable: BehaviorSubject<DataState> = BehaviorSubject.createDefault(
         DataState.Discovery(discoveryItems)
     )

@@ -112,10 +112,6 @@ class MarketSearchFragment : BaseFragment() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        viewModel.onResume()
-    }
 }
 
 @ExperimentalMaterialApi

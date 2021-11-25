@@ -24,6 +24,13 @@ class MarketSearchViewModel(
             }.let {
                 disposables.add(it)
             }
+
+        service.marketFavoritesChangedObservable
+            .subscribeIO {
+                syncSearchResults()
+            }.let {
+                disposables.add(it)
+            }
     }
 
     private fun syncState(dataState: MarketSearchModule.DataState) {
@@ -58,7 +65,12 @@ class MarketSearchViewModel(
     }
 
     private fun syncSearchResults() {
-        screenStateLiveData.postValue(ScreenState.SearchResult(getSearchResultViewItems(coinItems)))
+        if (coinItems.isNotEmpty() && screenStateLiveData.value is ScreenState.SearchResult) {
+            screenStateLiveData.postValue(
+                ScreenState.SearchResult(getSearchResultViewItems(coinItems)
+                )
+            )
+        }
     }
 
     override fun onCleared() {
@@ -75,13 +87,6 @@ class MarketSearchViewModel(
             service.unFavorite(coinUid)
         } else {
             service.favorite(coinUid)
-        }
-        syncSearchResults()
-    }
-
-    fun onResume() {
-        if (coinItems.isNotEmpty() && screenStateLiveData.value is ScreenState.SearchResult) {
-            syncSearchResults()
         }
     }
 
