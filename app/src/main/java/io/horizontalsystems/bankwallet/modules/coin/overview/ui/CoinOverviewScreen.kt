@@ -14,6 +14,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.CoinLink
@@ -57,7 +58,8 @@ fun CoinOverviewScreen(
                             CoinScreenTitle(
                                 fullCoin.coin.name,
                                 fullCoin.coin.marketCapRank,
-                                fullCoin.coin.iconUrl
+                                fullCoin.coin.iconUrl,
+                                fullCoin.iconPlaceholder
                             )
 
                             Title(title, chartInfo?.data?.chartData?.diff())
