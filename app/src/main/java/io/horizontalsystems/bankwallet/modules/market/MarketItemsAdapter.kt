@@ -26,8 +26,9 @@ class MarketItemsAdapter(
 
     init {
         itemsLiveData.observe(viewLifecycleOwner, { (list, scrollToTop) ->
+            val shouldScrollToTop = if (itemCount == 0) true else scrollToTop
             submitList(list) {
-                if (scrollToTop)
+                if (shouldScrollToTop)
                     recyclerView.scrollToPosition(0)
             }
         })
