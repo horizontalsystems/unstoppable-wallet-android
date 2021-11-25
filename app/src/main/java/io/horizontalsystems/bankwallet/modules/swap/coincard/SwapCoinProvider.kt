@@ -85,10 +85,7 @@ class SwapCoinProvider(
 
         val allItems = walletItems + coinItems
 
-        return allItems.sortedWith(compareByDescending<CoinBalanceItem> { it.balance }
-            .thenBy { it.platformCoin.coin.marketCapRank }
-            .thenBy { it.platformCoin.coin.name }
-        )
+        return allItems.sortedWith(compareByDescending { it.balance })
     }
 
 }

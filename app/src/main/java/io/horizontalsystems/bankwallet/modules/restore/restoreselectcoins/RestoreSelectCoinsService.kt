@@ -12,7 +12,6 @@ import io.horizontalsystems.marketkit.models.PlatformCoin
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
-import java.util.*
 
 class RestoreSelectCoinsService(
     private val accountType: AccountType,
@@ -27,7 +26,7 @@ class RestoreSelectCoinsService(
     private var filter: String = ""
     private val disposables = CompositeDisposable()
 
-    private var fullCoins: MutableList<FullCoin> = mutableListOf()
+    private var fullCoins = listOf<FullCoin>()
     val enabledCoins = mutableListOf<ConfiguredPlatformCoin>()
 
     private var restoreSettingsMap = mutableMapOf<PlatformCoin, RestoreSettings>()
@@ -142,13 +141,9 @@ class RestoreSelectCoinsService(
         }
 
     private fun sortFullCoins() {
-        fullCoins.sortWith(compareBy<FullCoin> {
-            if (isEnabled(it.coin)) 0 else 1
-        }.thenBy {
-            it.coin.marketCapRank ?: Int.MAX_VALUE
-        }.thenBy {
-            it.coin.name.lowercase(Locale.ENGLISH)
-        })
+        fullCoins = fullCoins.sortedByFilter(filter) {
+            isEnabled(it.coin)
+        }
     }
 
     private fun syncState() {
