@@ -6,7 +6,10 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.ripple.rememberRipple
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -14,7 +17,7 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import io.horizontalsystems.bankwallet.ui.compose.*
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 
 @Composable
 fun ButtonPrimaryDefault(
@@ -47,7 +50,14 @@ fun ButtonPrimaryYellow(
         colors = ButtonDefaults.textButtonColors(
             backgroundColor = ComposeAppTheme.colors.yellowD,
         ),
-        content = { Text(title, maxLines = 1, overflow = TextOverflow.Ellipsis) },
+        content = {
+            Text(
+                title,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                color = ComposeAppTheme.colors.dark
+            )
+        },
         enabled = enabled
     )
 }
@@ -93,7 +103,7 @@ fun ButtonPrimaryYellowWithSpinner(
                     strokeWidth = 2.dp
                 )
             } else {
-                Text(title)
+                Text(title, color = ComposeAppTheme.colors.dark)
             }
         },
         enabled = enabled
