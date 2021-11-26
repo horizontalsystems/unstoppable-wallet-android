@@ -42,7 +42,9 @@ class OneInchKitHelper(
             fromToken = getCoinAddress(fromCoin),
             toToken = getCoinAddress(toCoin),
             amount = fromAmount.scaleUp(fromCoin.decimals)
-        )
+        ).onErrorResumeNext {
+            Single.error(it.convertedError)
+        }
     }
 
     fun getSwapAsync(

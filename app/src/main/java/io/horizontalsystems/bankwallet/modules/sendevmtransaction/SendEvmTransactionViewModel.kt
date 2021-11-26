@@ -693,6 +693,7 @@ class SendEvmTransactionViewModel(
                 )
             }
             is EvmError.LowerThanBaseGasLimit -> Translator.getString(R.string.EthereumTransaction_Error_LowerThanBaseGasLimit)
+            is EvmError.InsufficientLiquidity -> Translator.getString(R.string.EthereumTransaction_Error_InsufficientLiquidity)
             else -> convertedError.message ?: convertedError.javaClass.simpleName
         }
 
