@@ -17,19 +17,9 @@ object MarketSearchModule {
         }
     }
 
-    sealed class CardViewItem {
-        object MarketTopCoins : CardViewItem()
-        data class MarketCoinCategory(val coinCategory: CoinCategory) : CardViewItem()
-    }
-
     sealed class DataState {
         class Discovery(val discoveryItems: List<DiscoveryItem>) : DataState()
-        class SearchResult(val coinViewItems: List<CoinViewItem>) : DataState()
-    }
-
-    sealed class ScreenState {
-        class Discovery(val cards: List<CardViewItem>) : ScreenState()
-        class SearchResult(val coins: List<CoinViewItem>) : ScreenState()
+        class SearchResult(val coinItems: List<CoinItem>) : DataState()
     }
 
     sealed class DiscoveryItem {
@@ -38,6 +28,6 @@ object MarketSearchModule {
     }
 
     @Immutable
-    class CoinViewItem(val fullCoin: FullCoin, val favorited: Boolean)
+    class CoinItem(val fullCoin: FullCoin, val favourited: Boolean)
 
 }
