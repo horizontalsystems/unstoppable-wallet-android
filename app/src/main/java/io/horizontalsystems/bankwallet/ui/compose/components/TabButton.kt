@@ -23,7 +23,7 @@ fun TabButtonSecondary(
             backgroundColor = ComposeAppTheme.colors.steel20,
             contentColor = ComposeAppTheme.colors.oz,
             selectedBackgroundColor = ComposeAppTheme.colors.yellowD,
-            selectedContentColor = ComposeAppTheme.colors.claude
+            selectedContentColor = ComposeAppTheme.colors.dark
         ),
         content = { Text(title) },
         selected = selected,
