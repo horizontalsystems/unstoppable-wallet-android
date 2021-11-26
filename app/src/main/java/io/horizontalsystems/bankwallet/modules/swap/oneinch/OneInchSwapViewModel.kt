@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.EvmError
 import io.horizontalsystems.bankwallet.core.convertedError
 import io.horizontalsystems.bankwallet.core.ethereum.EvmTransactionFeeService
 import io.horizontalsystems.bankwallet.core.providers.Translator
@@ -127,6 +128,9 @@ class OneInchSwapViewModel(
         when (val convertedError = error.convertedError) {
             is JsonRpc.ResponseError.RpcError -> {
                 convertedError.error.message
+            }
+            is EvmError.InsufficientLiquidity -> {
+                Translator.getString(R.string.EthereumTransaction_Error_InsufficientLiquidity)
             }
             else -> {
                 convertedError.message ?: convertedError.javaClass.simpleName

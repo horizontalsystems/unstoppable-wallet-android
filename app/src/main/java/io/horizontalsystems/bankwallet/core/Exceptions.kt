@@ -4,7 +4,6 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.ethereumkit.api.jsonrpc.JsonRpc
 import io.horizontalsystems.ethereumkit.core.AddressValidator
-import retrofit2.adapter.rxjava2.HttpException
 
 class UnsupportedAccountException : Exception()
 class LocalizedException(val errorTextRes: Int) : Exception()
@@ -17,6 +16,7 @@ class FailedTransaction(errorMessage: String?) : RuntimeException(errorMessage) 
 sealed class EvmError(message: String? = null) : Throwable(message) {
     object InsufficientBalanceWithFee : EvmError()
     object CannotEstimateSwap : EvmError()
+    object InsufficientLiquidity : EvmError()
     object LowerThanBaseGasLimit : EvmError()
     class ExecutionReverted(message: String?) : EvmError(message)
     class RpcError(message: String?) : EvmError(message)
@@ -49,15 +49,18 @@ val Throwable.convertedError: Throwable
         is AddressValidator.AddressValidationException -> {
             EvmAddressError.InvalidAddress
         }
-        is HttpException -> {
+        is retrofit2.HttpException -> {
             val errorBody = response()?.errorBody()?.string()
             if (errorBody?.contains("Try to leave the buffer of ETH for gas") == true ||
                 errorBody?.contains("you may not have enough ETH balance for gas fee") == true ||
-                errorBody?.contains("Not enough ETH balance") == true
+                errorBody?.contains("Not enough ETH balance") == true ||
+                errorBody?.contains("insufficient funds for transfer") == true
             ) {
                 EvmError.InsufficientBalanceWithFee
             } else if (errorBody?.contains("cannot estimate") == true) {
                 EvmError.CannotEstimateSwap
+            } else if (errorBody?.contains("insufficient liquidity") == true) {
+                EvmError.InsufficientLiquidity
             } else {
                 this
             }
