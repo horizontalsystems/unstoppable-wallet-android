@@ -24,9 +24,12 @@
             android:id="@+id/coinRatesRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingBottom="32dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:itemCount="3"
-            tools:listitem="@layout/view_holder_coin_rate" />
+            tools:listitem="@layout/view_holder_coin_rate"
+            />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
