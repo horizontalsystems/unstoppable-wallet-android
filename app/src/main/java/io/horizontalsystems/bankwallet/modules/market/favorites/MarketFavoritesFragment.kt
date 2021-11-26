@@ -53,12 +53,7 @@ class MarketFavoritesFragment : BaseFragment(), MarketListHeaderView.Listener, V
                 EmptyFavoritesViewHolder.create(parent, viewType)
             }
 
-        val spacerAdapter = SpacerAdapter()
-        marketListViewModel.showEmptyListTextLiveData.observe(viewLifecycleOwner) {
-            spacerAdapter.show = !it
-        }
-
-        coinRatesRecyclerView.adapter = ConcatAdapter(marketItemsAdapter, spacerAdapter, emptyListAdapter)
+        coinRatesRecyclerView.adapter = ConcatAdapter(marketItemsAdapter, emptyListAdapter)
         coinRatesRecyclerView.itemAnimator = null
 
         pullToRefresh.setProgressBackgroundColorSchemeResource(R.color.claude)
