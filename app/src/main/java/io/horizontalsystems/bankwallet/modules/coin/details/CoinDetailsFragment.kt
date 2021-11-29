@@ -37,6 +37,7 @@ import io.horizontalsystems.bankwallet.modules.coin.investments.CoinInvestmentsF
 import io.horizontalsystems.bankwallet.modules.coin.majorholders.CoinMajorHoldersFragment
 import io.horizontalsystems.bankwallet.modules.coin.reports.CoinReportsFragment
 import io.horizontalsystems.bankwallet.modules.coin.treasuries.CoinTreasuriesFragment
+import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineClear
@@ -59,7 +60,9 @@ class CoinDetailsFragment : BaseFragment() {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 ComposeAppTheme {
-                    CoinDetailsScreen(viewModel)
+                    CoinDetailsScreen(viewModel, onClickVolumeChart = {
+                        MetricChartFragment.show(childFragmentManager, viewModel.coin.uid, viewModel.coin.name)
+                    })
                 }
             }
         }
@@ -100,7 +103,7 @@ class CoinDetailsFragment : BaseFragment() {
     }
 
     @Composable
-    private fun CoinDetailsScreen(viewModel: CoinDetailsViewModel) {
+    private fun CoinDetailsScreen(viewModel: CoinDetailsViewModel, onClickVolumeChart: () -> Unit) {
         val viewState by viewModel.viewStateLiveData.observeAsState(ViewState.Success)
         val viewItem by viewModel.viewItemLiveData.observeAsState()
         val isRefreshing by viewModel.isRefreshingLiveData.observeAsState(false)
@@ -116,7 +119,7 @@ class CoinDetailsFragment : BaseFragment() {
 
                     viewItem?.let { viewItem ->
                         viewItem.volumeChart?.let { volumeChart ->
-                            detailBlocks.add { borderTop -> TokenVolume(volumeChart, borderTop) }
+                            detailBlocks.add { borderTop -> TokenVolume(volumeChart, borderTop, onClickVolumeChart) }
                         }
 
                         if (viewItem.hasMajorHolders) {
@@ -159,7 +162,11 @@ class CoinDetailsFragment : BaseFragment() {
     }
 
     @Composable
-    private fun TokenVolume(volumeChart: CoinDetailsModule.ChartViewItem, borderTop: Boolean) {
+    private fun TokenVolume(
+        volumeChart: CoinDetailsModule.ChartViewItem,
+        borderTop: Boolean,
+        onClick: () -> Unit
+    ) {
         if (borderTop) {
             Spacer(modifier = Modifier.height(24.dp))
         }
@@ -174,10 +181,18 @@ class CoinDetailsFragment : BaseFragment() {
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        MiniChartCard(
-            title = stringResource(id = R.string.CoinPage_TotalVolume),
-            chartViewItem = volumeChart
-        )
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable {
+                    onClick.invoke()
+                }
+        ) {
+            MiniChartCard(
+                title = stringResource(id = R.string.CoinPage_TotalVolume),
+                chartViewItem = volumeChart
+            )
+        }
     }
 
     @Composable

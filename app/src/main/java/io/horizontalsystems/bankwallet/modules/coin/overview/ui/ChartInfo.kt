@@ -1,6 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.coin.overview.ui
 
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -15,6 +15,7 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.TabBalance
 import io.horizontalsystems.bankwallet.ui.compose.components.diffColor
 import io.horizontalsystems.bankwallet.ui.compose.components.formatValueAsDiff
+import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.core.entities.Currency
 
 @Composable
@@ -22,16 +23,17 @@ fun ChartInfo(
     chartInfo: CoinChartAdapter.ViewItemWrapper,
     currency: Currency,
     chartViewType: CoinChartAdapter.ChartViewType,
+    chartTypes: List<Pair<ChartView.ChartType, Int>>,
     listener: CoinChartAdapter.Listener
 ) {
     AndroidView(
-        modifier = Modifier.fillMaxSize(), // Occupy the max size in the Compose UI tree
+        modifier = Modifier.fillMaxWidth(), // Occupy the max size in the Compose UI tree
         factory = { context ->
             CoinChartView(context).apply {
                 setCurrency(currency)
                 setChartViewType(chartViewType)
                 setListener(listener)
-                bindNew(chartInfo)
+                setChartTypes(chartTypes)
             }
         },
         update = { view ->

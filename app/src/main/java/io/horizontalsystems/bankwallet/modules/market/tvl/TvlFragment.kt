@@ -35,6 +35,7 @@ import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
+import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.chartview.ChartView.ChartType
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
@@ -121,6 +122,11 @@ class TvlFragment : BaseFragment() {
                                         CoinChartAdapter.ViewItemWrapper(chartData.chartInfoData),
                                         chartData.currency,
                                         CoinChartAdapter.ChartViewType.MarketMetricChart,
+                                        listOf(
+                                            Pair(ChartView.ChartType.DAILY, R.string.CoinPage_TimeDuration_Day),
+                                            Pair(ChartView.ChartType.WEEKLY, R.string.CoinPage_TimeDuration_Week),
+                                            Pair(ChartView.ChartType.MONTHLY, R.string.CoinPage_TimeDuration_Month)
+                                        ),
                                         object : CoinChartAdapter.Listener {
                                             override fun onChartTouchDown() = Unit
 
