@@ -759,6 +759,7 @@
     <string name="CoinPage_InvestorData">Données de l\'investisseur</string>
     <string name="CoinPage_Treasuries">Treasuries</string>
     <string name="CoinPage_Treasuries_FilterTitle">Filters</string>
+    <string name="CoinPage_Treasuries_PoweredBy">Powered by Bitcointreasuries.net</string>
     <string name="CoinPage_Reports">Reports</string>
     <string name="CoinPage_FundsInvested">Fonds investis</string>
     <string name="CoinPage_TokenDistribution">Token Distribution</string>
