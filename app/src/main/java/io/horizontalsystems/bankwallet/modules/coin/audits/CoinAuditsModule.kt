@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
+import io.horizontalsystems.marketkit.models.AuditReport
+import java.util.*
 import javax.annotation.concurrent.Immutable
 
 object CoinAuditsModule {
@@ -15,8 +17,15 @@ object CoinAuditsModule {
         }
     }
 
+    data class AuditorItem(
+        val name: String,
+        val logoUrl: String,
+        val reports: List<AuditReport>,
+        val latestDate: Date?
+    )
+
     @Immutable
-    data class ViewItem(
+    data class AuditorViewItem(
         val name: String,
         val logoUrl: String,
         val auditViewItems: List<AuditViewItem>
