@@ -50,6 +50,7 @@ import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.backupkey.BackupKeyModule
 import io.horizontalsystems.bankwallet.modules.balance.views.SyncErrorDialog
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
+import io.horizontalsystems.bankwallet.modules.evmnetwork.EvmNetworkModule
 import io.horizontalsystems.bankwallet.modules.main.MainActivity
 import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
@@ -520,11 +521,7 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
                             }
 
                             override fun onClickChangeSource() {
-                                findNavController().navigate(
-                                    R.id.mainFragment_to_privacySettingsFragment,
-                                    null,
-                                    navOptions()
-                                )
+                                viewModel.onChangeSourceClick(wallet)
                             }
 
                             override fun onClickReport() {
@@ -564,6 +561,22 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
 
         viewModel.sortTypeUpdatedLiveData.observe(viewLifecycleOwner, { sortType ->
             setTopButtons(sortType)
+        })
+
+        viewModel.openPrivacySettingsLiveEvent.observe(viewLifecycleOwner, {
+            findNavController().navigate(
+                R.id.mainFragment_to_privacySettingsFragment,
+                null,
+                navOptions()
+            )
+        })
+
+        viewModel.openEvmNetworkSettingsLiveEvent.observe(viewLifecycleOwner, {
+            findNavController().navigate(
+                R.id.evmNetworkFragment,
+                EvmNetworkModule.args(it.first, it.second),
+                navOptions()
+            )
         })
     }
 
