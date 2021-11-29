@@ -21,9 +21,6 @@ fun TabButtonSecondary(
     TabBox(
         colors = TabDefaults.textButtonColors(
             backgroundColor = ComposeAppTheme.colors.steel20,
-            contentColor = ComposeAppTheme.colors.oz,
-            selectedBackgroundColor = ComposeAppTheme.colors.yellowD,
-            selectedContentColor = ComposeAppTheme.colors.dark
         ),
         content = { Text(title) },
         selected = selected,
@@ -123,7 +120,7 @@ object TabDefaults {
         backgroundColor: Color = ComposeAppTheme.colors.transparent,
         contentColor: Color = ComposeAppTheme.colors.oz,
         selectedBackgroundColor: Color = ComposeAppTheme.colors.yellowD,
-        selectedContentColor: Color = ComposeAppTheme.colors.claude,
+        selectedContentColor: Color = ComposeAppTheme.colors.dark,
         disabledContentColor: Color = ComposeAppTheme.colors.grey50,
     ): DefaultTabColors = DefaultTabColors(
         backgroundColor = backgroundColor,
