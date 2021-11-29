@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.logoUrl
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.entities.ViewState
@@ -70,7 +71,7 @@ class CoinAuditsViewModel(
     private fun viewItem(auditor: Auditor): ViewItem {
         return ViewItem(
             name = auditor.name,
-            logoUrl = "",
+            logoUrl = auditor.logoUrl,
             auditViewItems = auditor.reports.map { report ->
                 AuditViewItem(
                     date = report.date?.let { DateHelper.formatDate(it, "MMM dd, yyyy") },
