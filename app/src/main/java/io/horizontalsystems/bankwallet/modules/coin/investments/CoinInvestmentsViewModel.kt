@@ -1,9 +1,11 @@
 package io.horizontalsystems.bankwallet.modules.coin.investments
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
+import io.horizontalsystems.bankwallet.core.logoUrl
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.DataState
@@ -84,7 +86,7 @@ class CoinInvestmentsViewModel(
             fundViewItems = investment.funds.map { fund ->
                 FundViewItem(
                     name = fund.name,
-                    logoUrl = "https://markets.nyc3.digitaloceanspaces.com/fund-icons/ios/${fund.uid}@3x.png",
+                    logoUrl = fund.logoUrl,
                     isLead = fund.isLead,
                     url = fund.website
                 )

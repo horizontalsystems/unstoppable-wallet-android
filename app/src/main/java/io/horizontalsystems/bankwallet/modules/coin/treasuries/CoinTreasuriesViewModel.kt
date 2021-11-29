@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
+import io.horizontalsystems.bankwallet.core.logoUrl
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.DataState
@@ -109,7 +110,7 @@ class CoinTreasuriesViewModel(
     private fun coinTreasuryItem(coinTreasury: CoinTreasury) =
         CoinTreasuryItem(
             fund = coinTreasury.fund,
-            fundLogoUrl = "https://markets.nyc3.digitaloceanspaces.com/fund-icons/ios/${coinTreasury.fundUid}@3x.png",
+            fundLogoUrl = coinTreasury.logoUrl,
             country = coinTreasury.countryCode,
             amount = numberFormatter.formatCoinValueAsShortened(coinTreasury.amount, service.coin.code),
             amountInCurrency = numberFormatter.formatCurrencyValueAsShortened(
