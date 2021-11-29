@@ -913,6 +913,7 @@
     <string name="CoinPage_InvestorData">Investor Data</string>
     <string name="CoinPage_Treasuries">Treasuries</string>
     <string name="CoinPage_Treasuries_FilterTitle">Filters</string>
+    <string name="CoinPage_Treasuries_PoweredBy">Powered by Bitcointreasuries.net</string>
     <string name="CoinPage_Reports">Reports</string>
     <string name="CoinPage_FundsInvested">Funds Invested</string>
     <string name="CoinPage_TokenDistribution">Token Distribution</string>
