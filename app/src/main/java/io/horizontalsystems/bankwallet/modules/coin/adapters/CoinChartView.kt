@@ -177,10 +177,7 @@ class CoinChartView @JvmOverloads constructor(context: Context, attrs: Attribute
         setIndicators(enabled)
     }
 
-    private fun bindTabs(
-        selectedIndex: Int = 0,
-        shouldScroll: Boolean,
-    ) {
+    private fun bindTabs(selectedIndex: Int = 0, shouldScroll: Boolean) {
         val tabs = chartTypes
 
         tabCompose.setContent {
