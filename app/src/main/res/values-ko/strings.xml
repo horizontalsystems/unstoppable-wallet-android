@@ -324,6 +324,7 @@
     <string name="EthereumTransaction_Error_InsufficientBalance">The transaction requires %s for sending</string>
     <string name="EthereumTransaction_Error_InsufficientBalanceForFee">The current %s balance is below the amount required to process this transaction, including the transaction fee.</string>
     <string name="EthereumTransaction_Error_LowerThanBaseGasLimit">선택한 수수료 값이 너무 낮아 거부됩니다!</string>
+    <string name="EthereumTransaction_Error_InsufficientLiquidity">Insufficient Liquidity</string>
     <string name="EthereumTransaction_Error_CannotEstimate">Error! Check balance and ensure there is enough %s to cover fee. Or try increasing price slippage amount and try again. Will retry in 3 sec…</string>
     <!--Swap-->
     <string name="Swap">스왑</string>
