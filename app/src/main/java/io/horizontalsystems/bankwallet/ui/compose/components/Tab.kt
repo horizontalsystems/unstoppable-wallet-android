@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.ui.compose.components
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
@@ -15,16 +14,16 @@ fun TabBalance(
     borderBottom: Boolean = false,
     content: @Composable() (RowScope.() -> Unit),
 ) {
-    BarSingleLineTyler(Modifier.padding(horizontal = 16.dp), borderTop, borderBottom, content)
+    BarSingleLine(Modifier.padding(horizontal = 16.dp), borderTop, borderBottom, content)
 }
 
 @Composable
 fun TabPeriod(content: @Composable RowScope.() -> Unit) {
-    BarSingleLineTyler(Modifier, true, false, content)
+    BarSingleLine(Modifier, true, false, content)
 }
 
 @Composable
-fun BarSingleLineTyler(
+fun BarSingleLine(
     modifier: Modifier = Modifier,
     borderTop: Boolean = false,
     borderBottom: Boolean = false,
@@ -34,7 +33,6 @@ fun BarSingleLineTyler(
         modifier = Modifier
             .fillMaxWidth()
             .height(44.dp)
-            .background(ComposeAppTheme.colors.tyler)
     ) {
         if (borderTop) {
             Divider(
