@@ -38,6 +38,7 @@ import java.util.*
 class CoinChartView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
     : ConstraintLayout(context, attrs, defStyleAttr), Chart.Listener {
 
+    private var chartTypes: List<Pair<ChartView.ChartType, Int>> = listOf()
     private lateinit var currency: Currency
     private lateinit var listener: CoinChartAdapter.Listener
     private lateinit var chartViewType: CoinChartAdapter.ChartViewType
@@ -91,7 +92,7 @@ class CoinChartView @JvmOverloads constructor(context: Context, attrs: Attribute
                 chart.setData(data.chartData, data.chartType, data.maxValue, data.minValue)
             }
 
-            bindTabs(getSelectedTabIndex(data.chartType), chartViewType, true)
+            bindTabs(getSelectedTabIndex(data.chartType), true)
 
             updateIndicatorsState(data.chartType)
         }
@@ -99,7 +100,7 @@ class CoinChartView @JvmOverloads constructor(context: Context, attrs: Attribute
     }
 
     private fun getSelectedTabIndex(chartType: ChartView.ChartType): Int {
-        var selectedIndex = getActions(chartViewType).indexOfFirst { it.first == chartType }
+        var selectedIndex = chartTypes.indexOfFirst { it.first == chartType }
         if (selectedIndex < 0) {
             selectedIndex = 0
         }
@@ -129,7 +130,7 @@ class CoinChartView @JvmOverloads constructor(context: Context, attrs: Attribute
                     chart.setData(data.chartData, data.chartType, data.maxValue, data.minValue)
 
                     val shouldScroll = prev.data == null
-                    bindTabs(getSelectedTabIndex(data.chartType), chartViewType, shouldScroll)
+                    bindTabs(getSelectedTabIndex(data.chartType), shouldScroll)
 
                     updateIndicatorsState(data.chartType)
                 }
@@ -178,10 +179,9 @@ class CoinChartView @JvmOverloads constructor(context: Context, attrs: Attribute
 
     private fun bindTabs(
         selectedIndex: Int = 0,
-        chartViewType: CoinChartAdapter.ChartViewType,
         shouldScroll: Boolean,
     ) {
-        val tabs = getActions(chartViewType)
+        val tabs = chartTypes
 
         tabCompose.setContent {
             val coroutineScope = rememberCoroutineScope()
@@ -219,7 +219,7 @@ class CoinChartView @JvmOverloads constructor(context: Context, attrs: Attribute
                         title = title,
                         onSelect = {
                             tabIndex = index
-                            listener.onTabSelect(getActions(chartViewType)[index].first)
+                            listener.onTabSelect(chartTypes[index].first)
                         },
                         selected = selected
                     )
@@ -363,38 +363,13 @@ class CoinChartView @JvmOverloads constructor(context: Context, attrs: Attribute
         return context.getColor(textColor)
     }
 
+    fun setChartTypes(chartTypes: List<Pair<ChartView.ChartType, Int>>) {
+        this.chartTypes = chartTypes
+    }
+
     data class IndicatorViewItem(
         val indicator: ChartIndicator,
         val checked: Boolean,
         val enabled: Boolean,
     )
-
-    companion object {
-
-        private fun getActions(chartViewType: CoinChartAdapter.ChartViewType): List<Pair<ChartView.ChartType, Int>> {
-            return when (chartViewType) {
-                CoinChartAdapter.ChartViewType.MarketMetricChart -> {
-                    listOf(
-                        Pair(ChartView.ChartType.DAILY, R.string.CoinPage_TimeDuration_Day),
-                        Pair(ChartView.ChartType.WEEKLY, R.string.CoinPage_TimeDuration_Week),
-                        Pair(ChartView.ChartType.MONTHLY, R.string.CoinPage_TimeDuration_Month)
-                    )
-                }
-                CoinChartAdapter.ChartViewType.CoinChart -> {
-                    listOf(
-                        Pair(ChartView.ChartType.TODAY, R.string.CoinPage_TimeDuration_Today),
-                        Pair(ChartView.ChartType.DAILY, R.string.CoinPage_TimeDuration_Day),
-                        Pair(ChartView.ChartType.WEEKLY, R.string.CoinPage_TimeDuration_Week),
-                        Pair(ChartView.ChartType.WEEKLY2, R.string.CoinPage_TimeDuration_TwoWeeks),
-                        Pair(ChartView.ChartType.MONTHLY, R.string.CoinPage_TimeDuration_Month),
-                        Pair(ChartView.ChartType.MONTHLY3, R.string.CoinPage_TimeDuration_Month3),
-                        Pair(ChartView.ChartType.MONTHLY6, R.string.CoinPage_TimeDuration_HalfYear),
-                        Pair(ChartView.ChartType.MONTHLY12, R.string.CoinPage_TimeDuration_Year),
-                        Pair(ChartView.ChartType.MONTHLY24, R.string.CoinPage_TimeDuration_Year2)
-                    )
-                }
-            }
-        }
-    }
-
 }

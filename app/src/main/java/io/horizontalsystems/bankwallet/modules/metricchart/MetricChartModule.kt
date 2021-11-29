@@ -1,7 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.metricchart
 
 import android.os.Parcelable
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.chartview.ChartData
 import io.horizontalsystems.chartview.ChartView
 import kotlinx.android.parcel.Parcelize
@@ -19,6 +22,17 @@ object MetricChartModule {
 
     enum class ValueType {
         Percent, CompactCurrencyValue, CurrencyValue
+    }
+
+    class Factory(private val coinUid: String) : ViewModelProvider.Factory {
+        @Suppress("UNCHECKED_CAST")
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            val fetcher = CoinTradingVolumeFetcher(App.marketKit, coinUid)
+            val metricChartService = MetricChartService(App.currencyManager.baseCurrency, fetcher)
+            val factory = MetricChartFactory(App.numberFormatter)
+
+            return MetricChartViewModel(metricChartService, factory) as T
+        }
     }
 }
 

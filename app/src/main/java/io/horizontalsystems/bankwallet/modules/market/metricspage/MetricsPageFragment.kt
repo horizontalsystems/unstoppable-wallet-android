@@ -115,6 +115,11 @@ class MetricsPageFragment : BaseFragment() {
                                         CoinChartAdapter.ViewItemWrapper(chartData.chartInfoData),
                                         chartData.currency,
                                         CoinChartAdapter.ChartViewType.MarketMetricChart,
+                                        listOf(
+                                            Pair(ChartView.ChartType.DAILY, R.string.CoinPage_TimeDuration_Day),
+                                            Pair(ChartView.ChartType.WEEKLY, R.string.CoinPage_TimeDuration_Week),
+                                            Pair(ChartView.ChartType.MONTHLY, R.string.CoinPage_TimeDuration_Month)
+                                        ),
                                         object : CoinChartAdapter.Listener {
                                             override fun onChartTouchDown() = Unit
                                             override fun onChartTouchUp() = Unit

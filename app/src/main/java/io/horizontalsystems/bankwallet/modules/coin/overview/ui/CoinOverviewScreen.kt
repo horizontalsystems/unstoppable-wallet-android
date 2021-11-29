@@ -65,19 +65,35 @@ fun CoinOverviewScreen(
                             Title(title, chartInfo?.data?.chartData?.diff())
 
                             chartInfo?.let {
-                                ChartInfo(it, currency, CoinChartAdapter.ChartViewType.CoinChart, object : CoinChartAdapter.Listener {
-                                    override fun onChartTouchDown() {
-                                        scrollingEnabled = false
-                                    }
+                                ChartInfo(
+                                    it,
+                                    currency,
+                                    CoinChartAdapter.ChartViewType.CoinChart,
+                                    listOf(
+                                        Pair(ChartView.ChartType.TODAY, R.string.CoinPage_TimeDuration_Today),
+                                        Pair(ChartView.ChartType.DAILY, R.string.CoinPage_TimeDuration_Day),
+                                        Pair(ChartView.ChartType.WEEKLY, R.string.CoinPage_TimeDuration_Week),
+                                        Pair(ChartView.ChartType.WEEKLY2, R.string.CoinPage_TimeDuration_TwoWeeks),
+                                        Pair(ChartView.ChartType.MONTHLY, R.string.CoinPage_TimeDuration_Month),
+                                        Pair(ChartView.ChartType.MONTHLY3, R.string.CoinPage_TimeDuration_Month3),
+                                        Pair(ChartView.ChartType.MONTHLY6, R.string.CoinPage_TimeDuration_HalfYear),
+                                        Pair(ChartView.ChartType.MONTHLY12, R.string.CoinPage_TimeDuration_Year),
+                                        Pair(ChartView.ChartType.MONTHLY24, R.string.CoinPage_TimeDuration_Year2)
+                                    ),
+                                    object : CoinChartAdapter.Listener {
+                                        override fun onChartTouchDown() {
+                                            scrollingEnabled = false
+                                        }
 
-                                    override fun onChartTouchUp() {
-                                        scrollingEnabled = true
-                                    }
+                                        override fun onChartTouchUp() {
+                                            scrollingEnabled = true
+                                        }
 
-                                    override fun onTabSelect(chartType: ChartView.ChartType) {
-                                        viewModel.changeChartType(chartType)
+                                        override fun onTabSelect(chartType: ChartView.ChartType) {
+                                            viewModel.changeChartType(chartType)
+                                        }
                                     }
-                                })
+                                )
                             }
 
                             if (overview.marketData.isNotEmpty()) {
