@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.modules.evmnetwork.EvmNetworkModule.Blockchain
 import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.marketkit.models.CoinType
 import io.reactivex.disposables.CompositeDisposable
@@ -24,6 +25,8 @@ class BalanceViewModel(
     val titleLiveData = MutableLiveData<String>()
     val headerViewItemLiveData = MutableLiveData<BalanceHeaderViewItem>()
     val disabledWalletLiveData = SingleLiveEvent<Wallet>()
+    val openPrivacySettingsLiveEvent = SingleLiveEvent<Unit>()
+    val openEvmNetworkSettingsLiveEvent = SingleLiveEvent<Pair<Blockchain, Account>>()
     val sortTypeUpdatedLiveData = MutableLiveData(service.sortType)
 
     private val _balanceViewItemsLiveData = MutableLiveData<List<BalanceViewItem>>()
@@ -129,7 +132,11 @@ class BalanceViewModel(
 
     fun getSyncErrorDetails(viewItem: BalanceViewItem): SyncError = when {
         service.networkAvailable -> {
-            SyncError.Dialog(viewItem.wallet, viewItem.errorMessage ?: "", sourceChangeable(viewItem.wallet.coinType))
+            SyncError.Dialog(
+                viewItem.wallet,
+                viewItem.errorMessage ?: "",
+                sourceChangeable(viewItem.wallet.coinType)
+            )
         }
         else -> {
             SyncError.NetworkNotAvailable()
@@ -137,10 +144,15 @@ class BalanceViewModel(
     }
 
     private fun sourceChangeable(coinType: CoinType) = when (coinType) {
-        is CoinType.Bep2,
+        is CoinType.Bitcoin,
+        is CoinType.BitcoinCash,
+        is CoinType.Dash,
+        is CoinType.Litecoin,
+        is CoinType.BinanceSmartChain,
+        is CoinType.Bep20,
         is CoinType.Ethereum,
-        is CoinType.Erc20 -> false
-        else -> true
+        is CoinType.Erc20 -> true
+        else -> false
     }
 
     fun refreshByWallet(wallet: Wallet) {
@@ -166,9 +178,27 @@ class BalanceViewModel(
         service.enable(wallet)
     }
 
+    fun onChangeSourceClick(wallet: Wallet) = when (wallet.coinType) {
+        CoinType.Bitcoin,
+        CoinType.BitcoinCash,
+        CoinType.Dash,
+        CoinType.Litecoin -> openPrivacySettingsLiveEvent.call()
+        CoinType.Ethereum,
+        is CoinType.Erc20 -> openEvmNetworkSettingsLiveEvent.postValue(
+            Pair(Blockchain.Ethereum, wallet.account)
+        )
+        CoinType.BinanceSmartChain,
+        is CoinType.Bep20 -> openEvmNetworkSettingsLiveEvent.postValue(
+            Pair(Blockchain.BinanceSmartChain, wallet.account)
+        )
+        else -> {
+        }
+    }
+
     sealed class SyncError {
         class NetworkNotAvailable : SyncError()
-        class Dialog(val wallet: Wallet, val errorMessage: String, val sourceChangeable: Boolean) : SyncError()
+        class Dialog(val wallet: Wallet, val errorMessage: String, val sourceChangeable: Boolean) :
+            SyncError()
     }
 
     class BackupRequiredError(val account: Account) : Error("Backup Required")
