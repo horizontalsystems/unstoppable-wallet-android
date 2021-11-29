@@ -33,7 +33,7 @@ class CoinTreasuriesRepository(
                         TreasuryTypeFilter.All -> true
                         TreasuryTypeFilter.Public -> it.type == TreasuryType.Public
                         TreasuryTypeFilter.Private -> it.type == TreasuryType.Private
-                        TreasuryTypeFilter.Etf -> it.type == TreasuryType.Etf
+                        TreasuryTypeFilter.ETF -> it.type == TreasuryType.Etf
                     }
                 }
                 val sortedTreasuries = if (sortDescending) {

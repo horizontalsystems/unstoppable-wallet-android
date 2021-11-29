@@ -37,7 +37,7 @@ object CoinTreasuriesModule {
     )
 
     enum class TreasuryTypeFilter : WithTranslatableTitle {
-        All, Public, Private, Etf;
+        All, Public, Private, ETF;
 
         override val title: TranslatableString
             get() = when (this) {

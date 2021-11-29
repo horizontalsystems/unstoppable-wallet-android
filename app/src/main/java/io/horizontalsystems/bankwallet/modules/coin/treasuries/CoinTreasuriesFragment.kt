@@ -128,6 +128,11 @@ class CoinTreasuriesFragment : BaseFragment() {
                                         }
                                     }
                                 }
+
+                                item {
+                                    Spacer(modifier = Modifier.height(32.dp))
+                                    CellFooter(text = stringResource(id = R.string.CoinPage_Treasuries_PoweredBy))
+                                }
                             }
                         }
                     }
