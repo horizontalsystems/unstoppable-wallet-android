@@ -52,7 +52,7 @@ class MarketCategoryViewModel(
         if (state is DataState.Success) {
             marketItems = state.data
 
-            syncMarketViewItems(true)
+            syncMarketViewItems()
         } else if (state is DataState.Error) {
             viewStateLiveData.postValue(MarketModule.ViewItemState.Error(convertErrorMessage(state.error)))
         }
@@ -79,12 +79,12 @@ class MarketCategoryViewModel(
         )
     }
 
-    private fun syncMarketViewItems(scrollToTop: Boolean) {
+    private fun syncMarketViewItems() {
         viewStateLiveData.postValue(
             MarketModule.ViewItemState.Data(
                 marketItems.map {
                     MarketViewItem.create(it, marketField)
-                }, scrollToTop
+                }
             )
         )
     }
@@ -110,7 +110,7 @@ class MarketCategoryViewModel(
     fun onSelectMarketField(marketField: MarketField) {
         this.marketField = marketField
 
-        syncMarketViewItems(false)
+        syncMarketViewItems()
         syncMenu()
     }
 

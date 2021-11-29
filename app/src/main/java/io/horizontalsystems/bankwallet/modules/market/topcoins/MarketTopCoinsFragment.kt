@@ -10,11 +10,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Surface
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
@@ -108,6 +106,7 @@ fun TopCoinsScreen(
     onCloseButtonClick: () -> Unit,
     onCoinClick: (String) -> Unit,
 ) {
+    var scrollToTopAfterUpdate by rememberSaveable { mutableStateOf(false) }
     val viewItemState by viewModel.viewStateLiveData.observeAsState()
     val header by viewModel.headerLiveData.observeAsState()
     val menu by viewModel.menuLiveData.observeAsState()
@@ -127,7 +126,10 @@ fun TopCoinsScreen(
                 HeaderWithSorting(
                     menu.sortingFieldSelect.selected.titleResId,
                     menu.topMarketSelect,
-                    viewModel::onSelectTopMarket,
+                    { topMarket ->
+                        scrollToTopAfterUpdate = true
+                        viewModel.onSelectTopMarket(topMarket)
+                    },
                     menu.marketFieldSelect,
                     viewModel::onSelectMarketField,
                     viewModel::showSelectorMenu
@@ -149,7 +151,10 @@ fun TopCoinsScreen(
                         }
                     }
                     is ViewItemState.Data -> {
-                        CoinList(state.items, state.scrollToTop, onCoinClick)
+                        CoinList(state.items, scrollToTopAfterUpdate, onCoinClick)
+                        if (scrollToTopAfterUpdate) {
+                            scrollToTopAfterUpdate = false
+                        }
                     }
                 }
             }
@@ -160,7 +165,10 @@ fun TopCoinsScreen(
                 AlertGroup(
                     R.string.Market_Sort_PopupTitle,
                     option.select,
-                    { selected -> viewModel.onSelectSortingField(selected) },
+                    { selected ->
+                        scrollToTopAfterUpdate = true
+                        viewModel.onSelectSortingField(selected)
+                    },
                     { viewModel.onSelectorDialogDismiss() }
                 )
             }
