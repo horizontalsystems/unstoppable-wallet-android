@@ -49,13 +49,13 @@ fun ButtonPrimaryYellow(
         onClick = onClick,
         colors = ButtonDefaults.textButtonColors(
             backgroundColor = ComposeAppTheme.colors.yellowD,
+            contentColor = ComposeAppTheme.colors.dark
         ),
         content = {
             Text(
                 title,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
-                color = ComposeAppTheme.colors.dark
             )
         },
         enabled = enabled
@@ -94,6 +94,7 @@ fun ButtonPrimaryYellowWithSpinner(
         onClick = onClick,
         colors = ButtonDefaults.textButtonColors(
             backgroundColor = ComposeAppTheme.colors.yellowD,
+            contentColor = ComposeAppTheme.colors.dark
         ),
         content = {
             if (showSpinner) {
@@ -103,7 +104,7 @@ fun ButtonPrimaryYellowWithSpinner(
                     strokeWidth = 2.dp
                 )
             } else {
-                Text(title, color = ComposeAppTheme.colors.dark)
+                Text(title)
             }
         },
         enabled = enabled
