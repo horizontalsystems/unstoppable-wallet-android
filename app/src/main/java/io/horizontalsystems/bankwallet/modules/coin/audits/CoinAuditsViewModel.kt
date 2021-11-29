@@ -4,15 +4,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.logoUrl
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.audits.CoinAuditsModule.AuditViewItem
-import io.horizontalsystems.bankwallet.modules.coin.audits.CoinAuditsModule.ViewItem
+import io.horizontalsystems.bankwallet.modules.coin.audits.CoinAuditsModule.AuditorItem
+import io.horizontalsystems.bankwallet.modules.coin.audits.CoinAuditsModule.AuditorViewItem
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.core.helpers.DateHelper
-import io.horizontalsystems.marketkit.models.Auditor
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -25,7 +24,7 @@ class CoinAuditsViewModel(
     val viewStateLiveData = MutableLiveData<ViewState>()
     val loadingLiveData = MutableLiveData<Boolean>()
     val isRefreshingLiveData = MutableLiveData<Boolean>()
-    val viewItemsLiveData = MutableLiveData<List<ViewItem>>()
+    val viewItemsLiveData = MutableLiveData<List<AuditorViewItem>>()
 
     init {
         service.stateObservable
@@ -64,12 +63,12 @@ class CoinAuditsViewModel(
         service.stop()
     }
 
-    private fun sync(auditors: List<Auditor>) {
+    private fun sync(auditors: List<AuditorItem>) {
         viewItemsLiveData.postValue(auditors.map { viewItem(it) })
     }
 
-    private fun viewItem(auditor: Auditor): ViewItem {
-        return ViewItem(
+    private fun viewItem(auditor: AuditorItem): AuditorViewItem {
+        return AuditorViewItem(
             name = auditor.name,
             logoUrl = auditor.logoUrl,
             auditViewItems = auditor.reports.map { report ->
