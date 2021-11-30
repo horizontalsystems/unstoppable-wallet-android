@@ -2,13 +2,12 @@ package io.horizontalsystems.bankwallet.modules.enablecoins
 
 import io.horizontalsystems.binancechainkit.BinanceChainKit
 import io.horizontalsystems.binancechainkit.core.api.BinanceChainApi
-import io.horizontalsystems.core.IBuildConfigProvider
 import io.reactivex.Single
 import java.math.BigDecimal
 
-class EnableCoinsBep2Provider(appConfigProvider: IBuildConfigProvider) {
+class EnableCoinsBep2Provider(testMode: Boolean) {
 
-    private val networkType = if (appConfigProvider.testMode)
+    private val networkType = if (testMode)
         BinanceChainKit.NetworkType.TestNet else
         BinanceChainKit.NetworkType.MainNet
 

@@ -15,7 +15,6 @@ import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.Bitco
 import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.*
 import io.horizontalsystems.bankwallet.modules.transactions.FilterTransactionType
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
-import io.horizontalsystems.core.IBuildConfigProvider
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.marketkit.models.CoinType
@@ -31,7 +30,7 @@ class TransactionInfoService(
     private val adapter: ITransactionsAdapter,
     private val xRateManager: IRateManager,
     private val currencyManager: ICurrencyManager,
-    private val buildConfigProvider: IBuildConfigProvider,
+    private val testMode: Boolean,
     private val accountSettingManager: AccountSettingManager
 ) : Clearable {
 
@@ -187,7 +186,6 @@ class TransactionInfoService(
         val hash = record.transactionHash
         val blockchain = record.source.blockchain
         val account = record.source.account
-        val testMode = buildConfigProvider.testMode
 
         return when (blockchain) {
             is TransactionSource.Blockchain.Bitcoin -> TransactionInfoModule.ExplorerData(

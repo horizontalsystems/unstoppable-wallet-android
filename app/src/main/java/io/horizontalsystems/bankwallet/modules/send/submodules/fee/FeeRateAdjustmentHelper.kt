@@ -1,11 +1,11 @@
 package io.horizontalsystems.bankwallet.modules.send.submodules.fee
 
-import io.horizontalsystems.bankwallet.core.IAppConfigProvider
+import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmountInfo
 import io.horizontalsystems.marketkit.models.CoinType
 import java.math.BigDecimal
 
-class FeeRateAdjustmentHelper(private val appConfigProvider: IAppConfigProvider) {
+class FeeRateAdjustmentHelper(private val appConfigProvider: AppConfigProvider) {
 
     private val amountRules = listOf(
             Rule(10001..Long.MAX_VALUE, 1.25f),

@@ -12,8 +12,6 @@ import javax.crypto.SecretKey
 
 interface ICoreApp {
     var preferences: SharedPreferences
-    var buildConfigProvider: IBuildConfigProvider
-    var languageConfigProvider: ILanguageConfigProvider
     var backgroundManager: BackgroundManager
     var encryptionManager: IEncryptionManager
     var systemInfoManager: ISystemInfoManager
@@ -31,14 +29,6 @@ interface IEncryptionManager {
     fun encrypt(data: String): String
     fun decrypt(data: String): String
     fun getCryptoObject(): BiometricPrompt.CryptoObject?
-}
-
-interface IBuildConfigProvider {
-    val testMode: Boolean
-}
-
-interface ILanguageConfigProvider {
-    val localizations: List<String>
 }
 
 interface ISystemInfoManager {

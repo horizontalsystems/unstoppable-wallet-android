@@ -2,15 +2,15 @@ package io.horizontalsystems.bankwallet.modules.enablecoins
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import io.horizontalsystems.bankwallet.core.IAppConfigProvider
 import io.horizontalsystems.bankwallet.core.INetworkManager
+import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.marketkit.models.CoinType
 import io.reactivex.Single
 
 class EnableCoinsEip20Provider(
-        private val networkManager: INetworkManager,
-        private val appConfigProvider: IAppConfigProvider,
-        private val mode: EnableCoinMode
+    private val networkManager: INetworkManager,
+    private val appConfigProvider: AppConfigProvider,
+    private val mode: EnableCoinMode
 ) {
 
     private val url: String
