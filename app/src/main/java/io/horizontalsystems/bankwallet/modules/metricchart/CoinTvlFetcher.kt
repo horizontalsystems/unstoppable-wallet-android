@@ -13,7 +13,7 @@ class CoinTvlFetcher(
 ) : IMetricChartFetcher {
 
     override val title: Int = R.string.CoinPage_Tvl
-
+    override val initialChartType = ChartType.MONTHLY
     override val chartTypes = listOf(
         ChartType.TODAY,
         ChartType.WEEKLY,

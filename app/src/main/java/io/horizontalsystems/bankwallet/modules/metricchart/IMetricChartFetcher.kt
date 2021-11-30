@@ -5,6 +5,8 @@ import io.reactivex.Single
 
 interface IMetricChartFetcher {
     val title: Int
+    val initialChartType: ChartType
     val chartTypes: List<ChartType>
+
     fun fetchSingle(currencyCode: String, chartType: ChartType): Single<List<MetricChartModule.Item>>
 }
