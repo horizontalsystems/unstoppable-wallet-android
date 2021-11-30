@@ -52,12 +52,12 @@ class MetricChartFragment : BaseBottomSheetDialogFragment() {
         )
 
         composeView.setContent {
-            TradingVolumeChartScreen(viewModel, title)
+            MetricChartScreen(viewModel)
         }
     }
 
     @Composable
-    private fun TradingVolumeChartScreen(viewModel: MetricChartViewModel, coinName: String) {
+    private fun MetricChartScreen(viewModel: MetricChartViewModel) {
         val chartTitleLiveData by viewModel.chartTitleLiveData.observeAsState()
         val coinChartViewItemLiveData by viewModel.coinChartViewItemLiveData.observeAsState()
         val chartTypes by viewModel.chartTypes.observeAsState(listOf())
