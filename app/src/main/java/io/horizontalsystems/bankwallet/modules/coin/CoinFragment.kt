@@ -26,8 +26,8 @@ import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.Restor
 import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsModule
 import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.ScrollableTabs
 import io.horizontalsystems.bankwallet.ui.compose.components.TabItem
-import io.horizontalsystems.bankwallet.ui.compose.components.Tabs
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorMultipleDialog
 import io.horizontalsystems.bankwallet.ui.extensions.ZcashBirthdayHeightDialog
 import io.horizontalsystems.core.findNavController
@@ -63,7 +63,7 @@ class CoinFragment : BaseFragment(R.layout.fragment_coin) {
                         TabItem(stringResource(id = it.titleResId), it == selectedTab, it)
                     }
 
-                    Tabs(tabItems, onClick = {
+                    ScrollableTabs(tabItems, onClick = {
                         viewModel.onSelect(it)
                     })
                 }
