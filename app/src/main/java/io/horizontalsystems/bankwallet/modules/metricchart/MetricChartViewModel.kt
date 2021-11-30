@@ -5,9 +5,9 @@ import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.modules.coin.ChartInfoData
+import io.horizontalsystems.bankwallet.modules.coin.adapters.CoinChartAdapter
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.ChartInfoHeaderItem
 import io.horizontalsystems.bankwallet.modules.market.Value
-import io.horizontalsystems.bankwallet.modules.market.tvl.TvlModule
 import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.marketkit.models.ChartType
 import io.reactivex.disposables.CompositeDisposable
@@ -59,7 +59,9 @@ class MetricChartViewModel(
 ) : ViewModel() {
 
     val title by service::title
-    val chartLiveData = MutableLiveData<TvlModule.ChartData>()
+    val currency by service::currency
+    val coinChartViewItemLiveData = MutableLiveData<CoinChartAdapter.ViewItemWrapper>()
+    val chartTitleLiveData = MutableLiveData<ChartInfoHeaderItem>()
     val chartTypes = MutableLiveData<List<Pair<ChartView.ChartType, Int>>>()
 
     private val disposables = CompositeDisposable()
@@ -83,31 +85,26 @@ class MetricChartViewModel(
     }
 
     private fun syncChartItems(chartItems: Pair<ChartType, List<MetricChartModule.Item>>) {
-        chartLiveData.postValue(chartData(chartItems))
-    }
-
-    private fun chartData(chartItems: Pair<ChartType, List<MetricChartModule.Item>>): TvlModule.ChartData {
         val chartViewItem = factory.convert(
             chartItems.second,
             chartItems.first.viewChartType,
             MetricChartModule.ValueType.CompactCurrencyValue,
             service.currency
         )
+
+        val chartInfoHeaderItem = ChartInfoHeaderItem(
+            chartViewItem.lastValueWithDiff.value,
+            Value.Percent(chartViewItem.lastValueWithDiff.diff)
+        )
+        chartTitleLiveData.postValue(chartInfoHeaderItem)
+
         val chartInfoData = ChartInfoData(
             chartViewItem.chartData,
             chartViewItem.chartType,
             chartViewItem.maxValue,
             chartViewItem.minValue
         )
-
-        return TvlModule.ChartData(
-            ChartInfoHeaderItem(
-                chartViewItem.lastValueWithDiff.value,
-                Value.Percent(chartViewItem.lastValueWithDiff.diff)
-            ),
-            service.currency,
-            chartInfoData
-        )
+        coinChartViewItemLiveData.postValue(CoinChartAdapter.ViewItemWrapper(chartInfoData))
     }
 
     fun onSelectChartType(chartType: ChartView.ChartType) {
