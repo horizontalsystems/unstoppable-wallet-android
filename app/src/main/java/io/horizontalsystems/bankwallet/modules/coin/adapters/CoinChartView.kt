@@ -5,11 +5,14 @@ import android.util.AttributeSet
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.*
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Divider
+import androidx.compose.material.ScrollableTabRow
+import androidx.compose.material.Tab
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -31,7 +34,6 @@ import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.android.synthetic.main.coin_chart.view.*
-import kotlinx.coroutines.launch
 import java.math.BigDecimal
 import java.util.*
 
@@ -92,7 +94,7 @@ class CoinChartView @JvmOverloads constructor(context: Context, attrs: Attribute
                 chart.setData(data.chartData, data.chartType, data.maxValue, data.minValue)
             }
 
-            bindTabs(getSelectedTabIndex(data.chartType), true)
+            bindTabs(getSelectedTabIndex(data.chartType))
 
             updateIndicatorsState(data.chartType)
         }
@@ -129,8 +131,7 @@ class CoinChartView @JvmOverloads constructor(context: Context, attrs: Attribute
                 data?.let { data ->
                     chart.setData(data.chartData, data.chartType, data.maxValue, data.minValue)
 
-                    val shouldScroll = prev.data == null
-                    bindTabs(getSelectedTabIndex(data.chartType), shouldScroll)
+                    bindTabs(getSelectedTabIndex(data.chartType))
 
                     updateIndicatorsState(data.chartType)
                 }
@@ -177,49 +178,42 @@ class CoinChartView @JvmOverloads constructor(context: Context, attrs: Attribute
         setIndicators(enabled)
     }
 
-    private fun bindTabs(selectedIndex: Int = 0, shouldScroll: Boolean) {
-        val tabs = chartTypes
-
+    private fun bindTabs(selectedIndex: Int = 0) {
         tabCompose.setContent {
-            val coroutineScope = rememberCoroutineScope()
-            val listState = rememberLazyListState()
-
             ComposeAppTheme {
-                CustomTab(
-                    tabs.map { stringResource(it.second) },
-                    selectedIndex,
-                    listState
-                )
-            }
-
-            if (shouldScroll) {
-                coroutineScope.launch {
-                    listState.scrollToItem(index = selectedIndex)
-                }
+                CustomTab(chartTypes, selectedIndex)
             }
         }
     }
 
     @Composable
-    private fun CustomTab(tabTitles: List<String>, selectedIndex: Int, listState: LazyListState) {
+    private fun CustomTab(tabs: List<Pair<ChartView.ChartType, Int>>, selectedIndex: Int) {
         var tabIndex by remember { mutableStateOf(selectedIndex) }
 
         TabPeriod {
-            LazyRow(
-                state = listState,
-                contentPadding = PaddingValues(horizontal = 16.dp),
-                verticalAlignment = Alignment.CenterVertically
+            ScrollableTabRow(
+                selectedTabIndex = tabIndex,
+                backgroundColor = Color.Transparent,
+                edgePadding = 0.dp,
+                indicator = {},
+                divider = {}
             ) {
-                itemsIndexed(tabTitles) { index, title ->
+                tabs.forEachIndexed { index, (chartType, titleResId) ->
                     val selected = tabIndex == index
-                    TabButtonSecondaryTransparent(
-                        title = title,
-                        onSelect = {
-                            tabIndex = index
-                            listener.onTabSelect(chartTypes[index].first)
-                        },
-                        selected = selected
-                    )
+
+                    Tab(
+                        selected = selected,
+                        onClick = { },
+                    ) {
+                        TabButtonSecondaryTransparent(
+                            title = stringResource(id = titleResId),
+                            onSelect = {
+                                tabIndex = index
+                                listener.onTabSelect(chartType)
+                            },
+                            selected = selected
+                        )
+                    }
                 }
             }
         }
