@@ -58,17 +58,20 @@ class MetricChartFragment : BaseBottomSheetDialogFragment() {
 
     @Composable
     private fun TradingVolumeChartScreen(viewModel: MetricChartViewModel, coinName: String) {
-        val chartData by viewModel.chartLiveData.observeAsState()
+        val chartTitleLiveData by viewModel.chartTitleLiveData.observeAsState()
+        val coinChartViewItemLiveData by viewModel.coinChartViewItemLiveData.observeAsState()
         val chartTypes by viewModel.chartTypes.observeAsState(listOf())
+        val currency = viewModel.currency
 
         ComposeAppTheme {
             Column {
-                chartData?.let { chartData ->
-                    ChartInfoHeader(chartData.subtitle)
-
+                chartTitleLiveData?.let {
+                    ChartInfoHeader(it)
+                }
+                coinChartViewItemLiveData?.let { chartInfo ->
                     ChartInfo(
-                        CoinChartAdapter.ViewItemWrapper(chartData.chartInfoData),
-                        chartData.currency,
+                        chartInfo,
+                        currency,
                         CoinChartAdapter.ChartViewType.MarketMetricChart,
                         chartTypes,
                         object : CoinChartAdapter.Listener {
