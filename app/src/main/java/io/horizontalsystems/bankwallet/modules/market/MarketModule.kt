@@ -247,7 +247,7 @@ data class MarketViewItem(
                     6
                 ),
                 marketDataValue,
-                marketItem.fullCoin.coin.marketCapRank.toString()
+                marketItem.fullCoin.coin.marketCapRank?.toString()
             )
         }
     }
