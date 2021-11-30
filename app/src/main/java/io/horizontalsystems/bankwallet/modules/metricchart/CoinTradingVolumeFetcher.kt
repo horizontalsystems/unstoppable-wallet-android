@@ -11,7 +11,7 @@ class CoinTradingVolumeFetcher(
 ) : IMetricChartFetcher {
 
     override val title: Int = R.string.CoinPage_TotalVolume
-
+    override val initialChartType = ChartType.MONTHLY_BY_DAY
     override val chartTypes = listOf(
         ChartType.MONTHLY_BY_DAY,
         ChartType.MONTHLY6,

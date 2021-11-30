@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.metricchart
 
-import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.core.entities.Currency
@@ -11,7 +10,7 @@ import io.reactivex.subjects.BehaviorSubject
 class MetricChartService(
     val currency: Currency,
     private val fetcher: IMetricChartFetcher,
-) : Clearable {
+) {
 
     val stateObservable: BehaviorSubject<DataState<Pair<ChartType, List<MetricChartModule.Item>>>> =
         BehaviorSubject.createDefault(DataState.Loading)
@@ -21,7 +20,11 @@ class MetricChartService(
     val chartTypes by fetcher::chartTypes
     val title by fetcher::title
 
-    override fun clear() {
+    fun start() {
+        updateChartType(fetcher.initialChartType)
+    }
+
+    fun stop() {
         chartInfoDisposable?.dispose()
     }
 

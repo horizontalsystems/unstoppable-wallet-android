@@ -81,7 +81,11 @@ class MetricChartViewModel(
             }
         )
 
-        service.updateChartType(service.chartTypes.first())
+        service.start()
+    }
+
+    override fun onCleared() {
+        service.stop()
     }
 
     private fun syncChartItems(
