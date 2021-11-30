@@ -5,6 +5,7 @@ import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.ethereumkit.api.jsonrpc.JsonRpc
 import io.horizontalsystems.ethereumkit.core.AddressValidator
 
+class UnsupportedException(override val message: String?) : Exception()
 class UnsupportedAccountException : Exception()
 class LocalizedException(val errorTextRes: Int) : Exception()
 class AdapterErrorWrongParameters(override val message: String) : Exception()

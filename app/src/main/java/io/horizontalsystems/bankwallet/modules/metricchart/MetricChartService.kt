@@ -21,6 +21,7 @@ class MetricChartService(
     private var chartInfoDisposable: Disposable? = null
 
     val chartTypes by fetcher::chartTypes
+    val title by fetcher::title
 
     override fun clear() {
         chartInfoDisposable?.dispose()

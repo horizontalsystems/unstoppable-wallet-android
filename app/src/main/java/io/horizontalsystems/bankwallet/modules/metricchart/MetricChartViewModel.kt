@@ -58,6 +58,7 @@ class MetricChartViewModel(
     private val factory: MetricChartFactory,
 ) : ViewModel() {
 
+    val title by service::title
     val chartLiveData = MutableLiveData<TvlModule.ChartData>()
     val chartTypes = MutableLiveData<List<Pair<ChartView.ChartType, Int>>>()
 

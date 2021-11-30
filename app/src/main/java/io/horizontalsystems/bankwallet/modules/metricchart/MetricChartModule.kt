@@ -24,10 +24,18 @@ object MetricChartModule {
         Percent, CompactCurrencyValue, CurrencyValue
     }
 
-    class Factory(private val coinUid: String) : ViewModelProvider.Factory {
+    @Parcelize
+    enum class MetricChartType : Parcelable {
+        TradingVolume, Tvl
+    }
+
+    class Factory(private val coinUid: String, private val metricChartType: MetricChartType) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val fetcher = CoinTradingVolumeFetcher(App.marketKit, coinUid)
+            val fetcher = when (metricChartType) {
+                MetricChartType.TradingVolume -> CoinTradingVolumeFetcher(App.marketKit, coinUid)
+                MetricChartType.Tvl -> CoinTvlFetcher(App.marketKit, coinUid)
+            }
             val metricChartService = MetricChartService(App.currencyManager.baseCurrency, fetcher)
             val factory = MetricChartFactory(App.numberFormatter)
 
