@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.metricchart
 
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.UnsupportedException
+import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.marketkit.MarketKit
 import io.horizontalsystems.marketkit.models.ChartType
 import io.horizontalsystems.marketkit.models.TimePeriod
@@ -13,6 +14,9 @@ class CoinTvlFetcher(
 ) : IMetricChartFetcher {
 
     override val title: Int = R.string.CoinPage_Tvl
+    override val description = TranslatableString.ResString(R.string.CoinPage_TvlDescription)
+    override val poweredBy = TranslatableString.ResString(R.string.Market_PoweredByDefiLlamaApi)
+
     override val initialChartType = ChartType.MONTHLY
     override val chartTypes = listOf(
         ChartType.TODAY,
