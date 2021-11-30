@@ -19,7 +19,7 @@ class CoinTvlFetcher(
 
     override val initialChartType = ChartType.MONTHLY
     override val chartTypes = listOf(
-        ChartType.TODAY,
+        ChartType.DAILY,
         ChartType.WEEKLY,
         ChartType.MONTHLY,
     )
@@ -37,7 +37,7 @@ class CoinTvlFetcher(
     }
 
     private fun getTimePeriod(chartType: ChartType) = when (chartType) {
-        ChartType.TODAY -> TimePeriod.Hour24
+        ChartType.DAILY -> TimePeriod.Hour24
         ChartType.WEEKLY -> TimePeriod.Day7
         ChartType.MONTHLY -> TimePeriod.Day30
         else -> throw UnsupportedException("Unsupported chartType $chartType")
