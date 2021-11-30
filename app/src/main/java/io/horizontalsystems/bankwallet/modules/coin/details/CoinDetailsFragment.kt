@@ -219,7 +219,7 @@ class CoinDetailsFragment : BaseFragment() {
 
         viewItem.tvlRatio?.let {
             tokenTvls.add {
-                CoinDetailsCell(title = stringResource(R.string.TvlRank_Title), value = it)
+                CoinDetailsCell(title = stringResource(R.string.CoinPage_TvlMCapRatio), value = it)
             }
         }
 
