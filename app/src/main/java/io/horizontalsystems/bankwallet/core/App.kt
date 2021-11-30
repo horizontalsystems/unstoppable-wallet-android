@@ -52,7 +52,7 @@ class App : CoreApp(), WorkConfiguration.Provider  {
         lateinit var wordsManager: WordsManager
         lateinit var networkManager: INetworkManager
         lateinit var backgroundStateChangeListener: BackgroundStateChangeListener
-        lateinit var appConfigProvider: IAppConfigProvider
+        lateinit var appConfigProvider: AppConfigProvider
         lateinit var adapterManager: IAdapterManager
         lateinit var transactionAdapterManager: TransactionAdapterManager
         lateinit var walletManager: IWalletManager
@@ -91,6 +91,8 @@ class App : CoreApp(), WorkConfiguration.Provider  {
         lateinit var accountSettingManager: AccountSettingManager
     }
 
+    override val testMode = BuildConfig.testMode
+
     override fun onCreate() {
         super.onCreate()
 
@@ -110,8 +112,6 @@ class App : CoreApp(), WorkConfiguration.Provider  {
 
         val appConfig = AppConfigProvider()
         appConfigProvider = appConfig
-        buildConfigProvider = appConfig
-        languageConfigProvider = appConfig
 
         marketKit = MarketKit.getInstance(this, appConfig.marketApiBaseUrl, appConfig.oldMarketApiBaseUrl, appConfig.cryptoCompareApiKey, appConfig.defiyieldProviderApiKey)
         marketKit.sync()
@@ -126,7 +126,7 @@ class App : CoreApp(), WorkConfiguration.Provider  {
 
         ethereumKitManager = EvmKitManager(appConfig.etherscanApiKey, backgroundManager, EvmNetworkProviderEth(accountSettingManager))
         binanceSmartChainKitManager = EvmKitManager(appConfig.bscscanApiKey, backgroundManager, EvmNetworkProviderBsc(accountSettingManager))
-        binanceKitManager = BinanceKitManager(buildConfigProvider.testMode)
+        binanceKitManager = BinanceKitManager(testMode)
 
         accountsStorage = AccountsStorage(appDatabase)
         restoreSettingsStorage = RestoreSettingsStorage(appDatabase)
@@ -151,7 +151,7 @@ class App : CoreApp(), WorkConfiguration.Provider  {
 
         wordsManager = WordsManager()
         networkManager = NetworkManager()
-        accountCleaner = AccountCleaner(buildConfigProvider.testMode)
+        accountCleaner = AccountCleaner(testMode)
         accountManager = AccountManager(accountsStorage, accountCleaner)
         accountFactory = AccountFactory(accountManager)
         backupManager = BackupManager(accountManager)
@@ -172,10 +172,10 @@ class App : CoreApp(), WorkConfiguration.Provider  {
 
         connectivityManager = ConnectivityManager(backgroundManager)
 
-        val zcashBirthdayProvider = ZcashBirthdayProvider(this, buildConfigProvider.testMode)
+        val zcashBirthdayProvider = ZcashBirthdayProvider(this, testMode)
         restoreSettingsManager = RestoreSettingsManager(restoreSettingsStorage, zcashBirthdayProvider)
 
-        val adapterFactory = AdapterFactory(instance, buildConfigProvider.testMode, ethereumKitManager, binanceSmartChainKitManager, binanceKitManager, backgroundManager, restoreSettingsManager, coinManager)
+        val adapterFactory = AdapterFactory(instance, testMode, ethereumKitManager, binanceSmartChainKitManager, binanceKitManager, backgroundManager, restoreSettingsManager, coinManager)
         adapterManager = AdapterManager(walletManager, adapterFactory, ethereumKitManager, binanceSmartChainKitManager, binanceKitManager)
         transactionAdapterManager = TransactionAdapterManager(adapterManager, adapterFactory)
 

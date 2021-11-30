@@ -309,37 +309,6 @@ interface IAdapter {
     val debugInfo: String
 }
 
-interface IAppConfigProvider {
-    val companyWebPageLink: String
-    val appWebPageLink: String
-    val appGithubLink: String
-    val appTwitterLink: String
-    val appTelegramLink: String
-    val appRedditLink: String
-    val reportEmail: String
-    val twitterBearerToken: String
-    val cryptoCompareApiKey: String
-    val defiyieldProviderApiKey: String
-    val infuraProjectId: String
-    val infuraProjectSecret: String
-    val btcCoreRpcUrl: String
-    val notificationUrl: String
-    val releaseNotesUrl: String
-    val etherscanApiKey: String
-    val bscscanApiKey: String
-    val guidesUrl: String
-    val faqUrl: String
-    val coinsJsonUrl: String
-    val providerCoinsJsonUrl: String
-    val marketApiBaseUrl: String
-    val oldMarketApiBaseUrl: String
-    val fiatDecimal: Int
-    val maxDecimal: Int
-    val feeRateAdjustForCurrencies: List<String>
-    val currencies: List<Currency>
-    val featuredCoinTypes: List<CoinType>
-}
-
 interface IRateManager {
     fun historicalRateCached(coinType: CoinType, currencyCode: String, timestamp: Long): BigDecimal?
     fun historicalRate(

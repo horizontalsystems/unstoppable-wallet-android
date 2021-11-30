@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.core.providers
 
 import io.horizontalsystems.bankwallet.core.FeeRatePriority
-import io.horizontalsystems.bankwallet.core.IAppConfigProvider
 import io.horizontalsystems.bankwallet.core.ICustomRangedFeeProvider
 import io.horizontalsystems.bankwallet.core.IFeeRateProvider
 import io.horizontalsystems.feeratekit.FeeRateKit
@@ -10,7 +9,7 @@ import io.reactivex.Single
 import java.math.BigInteger
 import kotlin.math.ceil
 
-class FeeRateProvider(appConfig: IAppConfigProvider) {
+class FeeRateProvider(appConfig: AppConfigProvider) {
 
     private val feeRateKit: FeeRateKit by lazy {
         FeeRateKit(FeeProviderConfig(

@@ -4,11 +4,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.AccountType
-import io.horizontalsystems.bankwallet.modules.enablecoin.coinsettings.CoinSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.enablecoin.EnableCoinService
 import io.horizontalsystems.bankwallet.modules.enablecoin.coinplatforms.CoinPlatformsService
 import io.horizontalsystems.bankwallet.modules.enablecoin.coinplatforms.CoinPlatformsViewModel
 import io.horizontalsystems.bankwallet.modules.enablecoin.coinsettings.CoinSettingsService
+import io.horizontalsystems.bankwallet.modules.enablecoin.coinsettings.CoinSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.RestoreSettingsService
 import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.RestoreSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.enablecoins.EnableCoinsBep2Provider
@@ -22,8 +22,8 @@ object RestoreSelectCoinsModule {
 
         private val enableCoinsService by lazy {
             EnableCoinsService(
-                App.buildConfigProvider,
-                EnableCoinsBep2Provider(App.buildConfigProvider),
+                App.instance.testMode,
+                EnableCoinsBep2Provider(App.instance.testMode),
                 EnableCoinsEip20Provider(
                     App.networkManager,
                     App.appConfigProvider,

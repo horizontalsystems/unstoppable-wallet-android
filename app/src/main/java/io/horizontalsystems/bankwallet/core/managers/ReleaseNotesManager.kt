@@ -1,13 +1,13 @@
 package io.horizontalsystems.bankwallet.core.managers
 
-import io.horizontalsystems.bankwallet.core.IAppConfigProvider
 import io.horizontalsystems.bankwallet.core.ILocalStorage
+import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.core.ISystemInfoManager
 
 class ReleaseNotesManager(
         private val systemInfoManager: ISystemInfoManager,
         private val localStorage: ILocalStorage,
-        appConfigProvider: IAppConfigProvider
+        appConfigProvider: AppConfigProvider
 ) {
 
     private val currentAppVersion: String by lazy {

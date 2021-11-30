@@ -25,7 +25,7 @@ abstract class CoreActivity : AppCompatActivity() {
 
     override fun setContentView(layoutResID: Int) {
         super.setContentView(layoutResID)
-        if (CoreApp.buildConfigProvider.testMode) {
+        if (CoreApp.instance.testMode) {
             val rootView = findViewById<ViewGroup>(android.R.id.content)
             val testLabelTv = TextView(this)
             testLabelTv.text = "Test"

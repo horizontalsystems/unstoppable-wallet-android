@@ -3,9 +3,9 @@ package io.horizontalsystems.bankwallet.modules.coin.tvlrank
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.IAppConfigProvider
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.core.IRateManager
+import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.modules.market.sortedByDescendingNullLast
@@ -18,7 +18,7 @@ import io.reactivex.disposables.Disposable
 class TvlRankViewModel(
     private val numberFormatter: IAppNumberFormatter,
     private val xRateManager: IRateManager,
-    appConfigProvider: IAppConfigProvider
+    appConfigProvider: AppConfigProvider
 ) : ViewModel() {
 
     private var sortDesc = true

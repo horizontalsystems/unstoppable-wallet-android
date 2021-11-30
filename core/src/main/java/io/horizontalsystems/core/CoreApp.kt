@@ -10,8 +10,6 @@ abstract class CoreApp : Application() {
 
     companion object : ICoreApp {
         override lateinit var preferences: SharedPreferences
-        override lateinit var buildConfigProvider: IBuildConfigProvider
-        override lateinit var languageConfigProvider: ILanguageConfigProvider
         override lateinit var backgroundManager: BackgroundManager
         override lateinit var encryptionManager: IEncryptionManager
         override lateinit var systemInfoManager: ISystemInfoManager
@@ -25,6 +23,8 @@ abstract class CoreApp : Application() {
 
         override lateinit var instance: CoreApp
     }
+
+    open val testMode = false
 
     abstract fun localizedContext(): Context
 

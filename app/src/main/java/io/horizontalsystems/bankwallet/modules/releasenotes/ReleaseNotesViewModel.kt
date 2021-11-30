@@ -1,12 +1,12 @@
 package io.horizontalsystems.bankwallet.modules.releasenotes
 
 import androidx.lifecycle.ViewModel
-import io.horizontalsystems.bankwallet.core.IAppConfigProvider
 import io.horizontalsystems.bankwallet.core.managers.ReleaseNotesManager
+import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 
 class ReleaseNotesViewModel(
-        appConfigProvider: IAppConfigProvider,
-        releaseNotesManager: ReleaseNotesManager
+    appConfigProvider: AppConfigProvider,
+    releaseNotesManager: ReleaseNotesManager
 ) : ViewModel() {
 
     val releaseNotesUrl = releaseNotesManager.releaseNotesUrl

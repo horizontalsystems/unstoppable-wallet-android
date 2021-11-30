@@ -25,7 +25,7 @@ object TransactionInfoModule {
                 adapter,
                 App.xRateManager,
                 App.currencyManager,
-                App.buildConfigProvider,
+                App.instance.testMode,
                 App.accountSettingManager
             )
             val factory = TransactionInfoViewItemFactory(

@@ -1,10 +1,10 @@
 package io.horizontalsystems.bankwallet.core.managers
 
-import io.horizontalsystems.bankwallet.core.IAppConfigProvider
+import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.bankwallet.entities.EvmNetwork
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 
-class EvmNetworkManager(private val appConfigProvider: IAppConfigProvider) {
+class EvmNetworkManager(private val appConfigProvider: AppConfigProvider) {
 
     val ethereumNetworks: List<EvmNetwork>
         get() = listOfNotNull(

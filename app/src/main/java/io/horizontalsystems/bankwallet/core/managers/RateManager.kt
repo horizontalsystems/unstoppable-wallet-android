@@ -1,8 +1,8 @@
 package io.horizontalsystems.bankwallet.core.managers
 
 import android.content.Context
-import io.horizontalsystems.bankwallet.core.IAppConfigProvider
 import io.horizontalsystems.bankwallet.core.IRateManager
+import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.marketkit.models.CoinType
 import io.horizontalsystems.xrateskit.XRatesKit
 import io.horizontalsystems.xrateskit.entities.Auditor
@@ -14,7 +14,8 @@ import io.horizontalsystems.coinkit.models.CoinType as CoinKitCoinType
 
 class RateManager(
         context: Context,
-        private val appConfigProvider: IAppConfigProvider) : IRateManager {
+        private val appConfigProvider: AppConfigProvider
+) : IRateManager {
 
     private val kit: XRatesKit by lazy {
         XRatesKit.create(

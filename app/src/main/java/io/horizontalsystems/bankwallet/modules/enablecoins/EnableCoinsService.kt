@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.modules.enablecoins
 
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.AccountType
-import io.horizontalsystems.core.IBuildConfigProvider
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.marketkit.models.CoinType
 import io.reactivex.disposables.CompositeDisposable
@@ -10,13 +9,12 @@ import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 
 class EnableCoinsService(
-    appConfigProvider: IBuildConfigProvider,
+    private val testMode: Boolean,
     private val bep2Provider: EnableCoinsBep2Provider,
     private val erc20Provider: EnableCoinsEip20Provider,
     private val bep20Provider: EnableCoinsEip20Provider
 ) {
 
-    val testMode = appConfigProvider.testMode
     val enableCoinTypesAsync = PublishSubject.create<List<CoinType>>()
     val stateAsync = BehaviorSubject.createDefault<State>(State.Idle)
 

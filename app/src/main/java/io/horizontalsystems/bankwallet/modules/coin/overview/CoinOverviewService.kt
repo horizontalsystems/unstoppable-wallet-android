@@ -1,6 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.coin.overview
 
-import io.horizontalsystems.bankwallet.core.IAppConfigProvider
+import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.core.ICurrencyManager
@@ -18,7 +18,7 @@ class CoinOverviewService(
     val fullCoin: FullCoin,
     private val marketKit: MarketKit,
     private val currencyManager: ICurrencyManager,
-    private val appConfigProvider: IAppConfigProvider,
+    private val appConfigProvider: AppConfigProvider,
     private val languageManager: ILanguageManager,
     private val chartRepo: ChartRepo
 ) {

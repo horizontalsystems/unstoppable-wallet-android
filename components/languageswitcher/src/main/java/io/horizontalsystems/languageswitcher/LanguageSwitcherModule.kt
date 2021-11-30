@@ -33,7 +33,7 @@ object LanguageSwitcherModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val view = LanguageSwitcherView()
             val router = LanguageSwitcherRouter()
-            val interactor = LanguageSwitcherInteractor(CoreApp.languageManager, CoreApp.languageConfigProvider)
+            val interactor = LanguageSwitcherInteractor(CoreApp.languageManager)
             val presenter = LanguageSwitcherPresenter(view, router, interactor)
 
             return presenter as T
