@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import com.google.gson.annotations.SerializedName
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.INetworkManager
 import io.reactivex.Flowable
 import io.reactivex.Single
@@ -116,7 +117,7 @@ object ServiceEvmContractInfo {
 }
 
 object TokenInfoService {
-    private const val apiUrl = "https://markets-dev.horizontalsystems.xyz/v1/token_info/"
+    private val apiUrl = "${App.appConfigProvider.marketApiBaseUrl}/v1/token_info/"
 
     fun service(): TokenInfoAPI {
         return APIClient.retrofit(apiUrl, 60)

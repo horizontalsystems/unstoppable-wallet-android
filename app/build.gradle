@@ -101,7 +101,7 @@ android {
             resValue "string", "faqUrl", "https://raw.githubusercontent.com/horizontalsystems/Unstoppable-Wallet-Website/v1.2/src/faq.json"
             resValue "string", "coinsJsonUrl", "https://raw.githubusercontent.com/horizontalsystems/cryptocurrencies/v0.21/coins.json"
             resValue "string", "providerCoinsJsonUrl", "https://raw.githubusercontent.com/horizontalsystems/cryptocurrencies/v0.21/provider.coins.json"
-            resValue "string", "marketApiBaseUrl", "https://markets-dev.horizontalsystems.xyz"
+            resValue "string", "marketApiBaseUrl", "https://api.blocksdecoded.com"
             resValue "string", "oldMarketApiBaseUrl", "https://markets.horizontalsystems.xyz"
         }
 
