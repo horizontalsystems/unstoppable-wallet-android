@@ -97,7 +97,8 @@ class GlobalMarketRepository(
             val diffPercent: BigDecimal? = when (chartType) {
                 ChartView.ChartType.DAILY -> defiMarketInfo.tvlChange1D
                 ChartView.ChartType.WEEKLY -> defiMarketInfo.tvlChange7D
-                ChartView.ChartType.MONTHLY -> defiMarketInfo.tvlChange30D
+                ChartView.ChartType.MONTHLY,
+                ChartView.ChartType.MONTHLY_BY_DAY -> defiMarketInfo.tvlChange30D
                 else -> null
             }
             val diff: CurrencyValue? = diffPercent?.let {
@@ -133,7 +134,8 @@ class GlobalMarketRepository(
         return when (chartType) {
             ChartView.ChartType.DAILY -> TimePeriod.Hour24
             ChartView.ChartType.WEEKLY -> TimePeriod.Day7
-            ChartView.ChartType.MONTHLY -> TimePeriod.Day30
+            ChartView.ChartType.MONTHLY,
+            ChartView.ChartType.MONTHLY_BY_DAY -> TimePeriod.Day30
             else -> throw IllegalArgumentException("Wrong ChartType")
         }
     }
