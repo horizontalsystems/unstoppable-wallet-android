@@ -34,7 +34,7 @@ val ChartType.viewChartType: ChartView.ChartType
         ChartType.WEEKLY -> ChartView.ChartType.WEEKLY
         ChartType.WEEKLY2 -> ChartView.ChartType.WEEKLY2
         ChartType.MONTHLY -> ChartView.ChartType.MONTHLY
-        ChartType.MONTHLY_BY_DAY -> ChartView.ChartType.MONTHLY
+        ChartType.MONTHLY_BY_DAY -> ChartView.ChartType.MONTHLY_BY_DAY
         ChartType.MONTHLY3 -> ChartView.ChartType.MONTHLY3
         ChartType.MONTHLY6 -> ChartView.ChartType.MONTHLY6
         ChartType.MONTHLY12 -> ChartView.ChartType.MONTHLY12
@@ -47,7 +47,8 @@ val ChartView.ChartType.kitChartType: ChartType
         ChartView.ChartType.DAILY -> ChartType.DAILY
         ChartView.ChartType.WEEKLY -> ChartType.WEEKLY
         ChartView.ChartType.WEEKLY2 -> ChartType.WEEKLY2
-        ChartView.ChartType.MONTHLY -> ChartType.MONTHLY_BY_DAY
+        ChartView.ChartType.MONTHLY -> ChartType.MONTHLY
+        ChartView.ChartType.MONTHLY_BY_DAY -> ChartType.MONTHLY_BY_DAY
         ChartView.ChartType.MONTHLY3 -> ChartType.MONTHLY3
         ChartView.ChartType.MONTHLY6 -> ChartType.MONTHLY6
         ChartView.ChartType.MONTHLY12 -> ChartType.MONTHLY12

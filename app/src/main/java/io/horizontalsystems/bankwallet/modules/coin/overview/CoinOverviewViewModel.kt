@@ -86,6 +86,7 @@ class CoinOverviewViewModel(
         ChartView.ChartType.WEEKLY -> ChartType.WEEKLY
         ChartView.ChartType.WEEKLY2 -> ChartType.WEEKLY2
         ChartView.ChartType.MONTHLY -> ChartType.MONTHLY
+        ChartView.ChartType.MONTHLY_BY_DAY -> ChartType.MONTHLY_BY_DAY
         ChartView.ChartType.MONTHLY3 -> ChartType.MONTHLY3
         ChartView.ChartType.MONTHLY6 -> ChartType.MONTHLY6
         ChartView.ChartType.MONTHLY12 -> ChartType.MONTHLY12
