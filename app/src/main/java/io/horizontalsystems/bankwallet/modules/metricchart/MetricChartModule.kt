@@ -29,11 +29,15 @@ object MetricChartModule {
         TradingVolume, Tvl
     }
 
-    class Factory(private val coinUid: String, private val metricChartType: MetricChartType) : ViewModelProvider.Factory {
+    class Factory(
+        private val coinUid: String,
+        private val coinName: String,
+        private val metricChartType: MetricChartType
+    ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val fetcher = when (metricChartType) {
-                MetricChartType.TradingVolume -> CoinTradingVolumeFetcher(App.marketKit, coinUid)
+                MetricChartType.TradingVolume -> CoinTradingVolumeFetcher(App.marketKit, coinUid, coinName)
                 MetricChartType.Tvl -> CoinTvlFetcher(App.marketKit, coinUid)
             }
             val metricChartService = MetricChartService(App.currencyManager.baseCurrency, fetcher)

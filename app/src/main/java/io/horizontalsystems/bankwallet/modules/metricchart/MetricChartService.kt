@@ -19,6 +19,8 @@ class MetricChartService(
 
     val chartTypes by fetcher::chartTypes
     val title by fetcher::title
+    val description by fetcher::description
+    val poweredBy by fetcher::poweredBy
 
     fun start() {
         updateChartType(fetcher.initialChartType)

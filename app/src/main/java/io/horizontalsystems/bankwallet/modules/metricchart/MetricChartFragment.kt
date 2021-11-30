@@ -9,7 +9,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ViewCompositionStrategy
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
@@ -36,7 +36,7 @@ class MetricChartFragment : BaseBottomSheetDialogFragment() {
         requireArguments().getString(titleKey) ?: ""
     }
 
-    private val viewModel by viewModels<MetricChartViewModel> { MetricChartModule.Factory(coinUid, metricChartType) }
+    private val viewModel by viewModels<MetricChartViewModel> { MetricChartModule.Factory(coinUid, title, metricChartType) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -62,6 +62,8 @@ class MetricChartFragment : BaseBottomSheetDialogFragment() {
         val coinChartViewItemLiveData by viewModel.coinChartViewItemLiveData.observeAsState()
         val chartTypes by viewModel.chartTypes.observeAsState(listOf())
         val currency = viewModel.currency
+        val description = viewModel.description
+        val poweredBy = viewModel.poweredBy
 
         ComposeAppTheme {
             Column {
@@ -86,10 +88,11 @@ class MetricChartFragment : BaseBottomSheetDialogFragment() {
                 }
 
                 BottomSheetText(
-                    text = stringResource(id = R.string.MarketGlobalMetrics_VolumeDescriptionCoin, coinName)
+                    text = description.getString()
                 )
                 BottomSheetText(
-                    text = stringResource(id = R.string.Market_PoweredByApi)
+                    text = poweredBy.getString(),
+                    textAlign = TextAlign.Center
                 )
                 Spacer(modifier = Modifier.height(16.dp))
             }
@@ -97,14 +100,15 @@ class MetricChartFragment : BaseBottomSheetDialogFragment() {
     }
 
     @Composable
-    fun BottomSheetText(text: String) {
+    fun BottomSheetText(text: String, textAlign: TextAlign? = null) {
         Text(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 12.dp, horizontal = 24.dp),
             text = text,
             color = ComposeAppTheme.colors.grey,
-            style = ComposeAppTheme.typography.subhead2
+            style = ComposeAppTheme.typography.subhead2,
+            textAlign = textAlign
         )
     }
 

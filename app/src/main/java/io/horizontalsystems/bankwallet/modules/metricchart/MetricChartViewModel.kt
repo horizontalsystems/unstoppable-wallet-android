@@ -61,6 +61,8 @@ class MetricChartViewModel(
 ) : ViewModel() {
 
     val title by service::title
+    val description by service::description
+    val poweredBy by service::poweredBy
     val currency by service::currency
     val coinChartViewItemLiveData = MutableLiveData<CoinChartAdapter.ViewItemWrapper>()
     val chartTitleLiveData = MutableLiveData<ChartInfoHeaderItem>()
