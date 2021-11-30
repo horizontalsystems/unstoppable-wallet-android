@@ -81,7 +81,7 @@ class CoinInvestmentsViewModel(
 
     private fun viewItem(investment: CoinInvestment): ViewItem {
         return ViewItem(
-            amount = numberFormatter.formatCurrencyValueAsShortened(CurrencyValue(service.currency, investment.amount)),
+            amount = numberFormatter.formatCurrencyValueAsShortened(CurrencyValue(service.currency, investment.amountInCurrency)),
             info = "${investment.round} - ${DateHelper.formatDate(investment.date, "MMM dd, yyyy")}",
             fundViewItems = investment.funds.map { fund ->
                 FundViewItem(
