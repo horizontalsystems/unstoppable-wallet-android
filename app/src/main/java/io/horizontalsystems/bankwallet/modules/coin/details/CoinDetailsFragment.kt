@@ -38,6 +38,7 @@ import io.horizontalsystems.bankwallet.modules.coin.majorholders.CoinMajorHolder
 import io.horizontalsystems.bankwallet.modules.coin.reports.CoinReportsFragment
 import io.horizontalsystems.bankwallet.modules.coin.treasuries.CoinTreasuriesFragment
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartFragment
+import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineClear
@@ -60,9 +61,25 @@ class CoinDetailsFragment : BaseFragment() {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 ComposeAppTheme {
-                    CoinDetailsScreen(viewModel, onClickVolumeChart = {
-                        MetricChartFragment.show(childFragmentManager, viewModel.coin.uid, viewModel.coin.name)
-                    })
+                    CoinDetailsScreen(
+                        viewModel,
+                        onClickVolumeChart = {
+                            MetricChartFragment.show(
+                                childFragmentManager,
+                                viewModel.coin.uid,
+                                viewModel.coin.name,
+                                MetricChartModule.MetricChartType.TradingVolume
+                            )
+                        },
+                        onClickTvlChart = {
+                            MetricChartFragment.show(
+                                childFragmentManager,
+                                viewModel.coin.uid,
+                                viewModel.coin.name,
+                                MetricChartModule.MetricChartType.Tvl
+                            )
+                        }
+                    )
                 }
             }
         }
@@ -103,7 +120,11 @@ class CoinDetailsFragment : BaseFragment() {
     }
 
     @Composable
-    private fun CoinDetailsScreen(viewModel: CoinDetailsViewModel, onClickVolumeChart: () -> Unit) {
+    private fun CoinDetailsScreen(
+        viewModel: CoinDetailsViewModel,
+        onClickVolumeChart: () -> Unit,
+        onClickTvlChart: () -> Unit,
+    ) {
         val viewState by viewModel.viewStateLiveData.observeAsState(ViewState.Success)
         val viewItem by viewModel.viewItemLiveData.observeAsState()
         val isRefreshing by viewModel.isRefreshingLiveData.observeAsState(false)
@@ -131,7 +152,7 @@ class CoinDetailsFragment : BaseFragment() {
                         }
 
                         if (viewItem.tvlChart != null || viewItem.tvlRank != null || viewItem.tvlRatio != null) {
-                            detailBlocks.add { borderTop -> TokenTvl(viewItem, borderTop) }
+                            detailBlocks.add { borderTop -> TokenTvl(viewItem, borderTop, onClickTvlChart) }
                         }
 
                         if (viewItem.securityViewItems.isNotEmpty() || viewItem.auditAddresses.isNotEmpty()) {
@@ -196,7 +217,11 @@ class CoinDetailsFragment : BaseFragment() {
     }
 
     @Composable
-    private fun TokenTvl(viewItem: ViewItem, borderTop: Boolean) {
+    private fun TokenTvl(
+        viewItem: ViewItem,
+        borderTop: Boolean,
+        onClick: () -> Unit
+    ) {
         if (borderTop) {
             Spacer(modifier = Modifier.height(24.dp))
         }
@@ -212,10 +237,18 @@ class CoinDetailsFragment : BaseFragment() {
         viewItem.tvlChart?.let { tvlChart ->
             Spacer(modifier = Modifier.height(12.dp))
 
-            MiniChartCard(
-                title = stringResource(id = R.string.CoinPage_DetailsTvl),
-                chartViewItem = tvlChart
-            )
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable {
+                        onClick.invoke()
+                    }
+            ) {
+                MiniChartCard(
+                    title = stringResource(id = R.string.CoinPage_DetailsTvl),
+                    chartViewItem = tvlChart
+                )
+            }
         }
 
         Spacer(modifier = Modifier.height(12.dp))
