@@ -23,6 +23,9 @@ class MarketAdvancedSearchService(
         private val currencyManager: ICurrencyManager
 ) : Clearable, IMarketListFetcher {
 
+    val currencyCode: String
+        get() = currencyManager.baseCurrency.code
+
     private val allTimeDeltaPercent = BigDecimal.TEN
 
     var coinCount: Int = CoinList.Top250.itemsCount

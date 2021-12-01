@@ -226,6 +226,26 @@
     <string name="Market_Filter_Range_1B_5B">1B - 5B</string>
     <string name="Market_Filter_Range_5B_More">&gt; 5BN</string>
 
+    <string name="Market_Filter_Range_0_10M">&lt; 10M</string>
+    <string name="Market_Filter_Range_10M_40M">10M - 40M</string>
+    <string name="Market_Filter_Range_40M_200M">40M - 200M</string>
+    <string name="Market_Filter_Range_200M_2B">200M - 2B</string>
+    <string name="Market_Filter_Range_2B_10B">2B - 10B</string>
+    <string name="Market_Filter_Range_10B_More">&gt; 10BN</string>
+
+    <string name="Market_Filter_Range_0_50M">&lt; 50M</string>
+    <string name="Market_Filter_Range_50M_200M">50M - 200M</string>
+    <string name="Market_Filter_Range_200M_1B">200M - 1B</string>
+    <string name="Market_Filter_Range_1B_10B">1B - 10B</string>
+    <string name="Market_Filter_Range_10B_50B">10B - 50B</string>
+    <string name="Market_Filter_Range_50B_More">&gt; 50BN</string>
+
+    <string name="Market_Filter_Range_0_500M">&lt; 500M</string>
+    <string name="Market_Filter_Range_500M_2B">500M - 2B</string>
+    <string name="Market_Filter_Range_10B_100B">10B - 100B</string>
+    <string name="Market_Filter_Range_100B_500B">100B - 500B</string>
+    <string name="Market_Filter_Range_500B_More">&gt; 500BN</string>
+
     <string name="Market_Filter_TimePeriod_1D">1 Day</string>
     <string name="Market_Filter_TimePeriod_1W">1 Week</string>
     <string name="Market_Filter_TimePeriod_2W">2 Weeks</string>
