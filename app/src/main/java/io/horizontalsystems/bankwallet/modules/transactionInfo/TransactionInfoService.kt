@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.transactionInfo
 
 import io.horizontalsystems.bankwallet.core.Clearable
-import io.horizontalsystems.bankwallet.core.IRateManager
 import io.horizontalsystems.bankwallet.core.ITransactionsAdapter
 import io.horizontalsystems.bankwallet.core.managers.AccountSettingManager
 import io.horizontalsystems.bankwallet.core.subscribeIO
@@ -17,7 +16,7 @@ import io.horizontalsystems.bankwallet.modules.transactions.FilterTransactionTyp
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.ethereumkit.core.EthereumKit
-import io.horizontalsystems.marketkit.models.CoinType
+import io.horizontalsystems.marketkit.MarketKit
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -28,7 +27,7 @@ import java.math.BigDecimal
 class TransactionInfoService(
     transactionRecord: TransactionRecord,
     private val adapter: ITransactionsAdapter,
-    private val xRateManager: IRateManager,
+    private val marketKit: MarketKit,
     private val currencyManager: ICurrencyManager,
     private val testMode: Boolean,
     private val accountSettingManager: AccountSettingManager
@@ -44,51 +43,51 @@ class TransactionInfoService(
 
     private var transactionInfoItem = TransactionInfoItem(transactionRecord, adapter.lastBlockInfo, getExplorerData(transactionRecord), mapOf())
 
-    private val coinTypesForRates: List<CoinType>
+    private val coinUidsForRates: List<String>
         get() {
-            val coinTypes = mutableListOf<CoinType>()
+            val coinUids = mutableListOf<String>()
 
             val txCoinTypes = when (val tx = transactionInfoItem.record) {
-                is EvmIncomingTransactionRecord -> listOf(tx.value.coinType)
-                is EvmOutgoingTransactionRecord -> listOf(tx.fee.coinType, tx.value.coinType)
+                is EvmIncomingTransactionRecord -> listOf(tx.value.coinUid)
+                is EvmOutgoingTransactionRecord -> listOf(tx.fee.coinUid, tx.value.coinUid)
                 is SwapTransactionRecord -> listOf(
                     tx.fee,
                     tx.valueIn,
                     tx.valueOut
-                ).mapNotNull { it?.coinType }
-                is ApproveTransactionRecord -> listOf(tx.fee.coinType, tx.value.coinType)
+                ).mapNotNull { it?.coinUid }
+                is ApproveTransactionRecord -> listOf(tx.fee.coinUid, tx.value.coinUid)
                 is ContractCallTransactionRecord -> {
-                    val tempCoinList = mutableListOf<CoinType>()
+                    val tempCoinUidList = mutableListOf<String>()
                     if (tx.value.value != BigDecimal.ZERO) {
-                        tempCoinList.add(tx.value.coinType)
+                        tempCoinUidList.add(tx.value.coinUid)
                     }
-                    tempCoinList.addAll(tx.incomingInternalETHs.map { it.value.coinType })
-                    tempCoinList.addAll(tx.incomingEip20Events.map { it.value.coinType })
-                    tempCoinList.addAll(tx.outgoingEip20Events.map { it.value.coinType })
-                    tempCoinList
+                    tempCoinUidList.addAll(tx.incomingInternalETHs.map { it.value.coinUid })
+                    tempCoinUidList.addAll(tx.incomingEip20Events.map { it.value.coinUid })
+                    tempCoinUidList.addAll(tx.outgoingEip20Events.map { it.value.coinUid })
+                    tempCoinUidList
                 }
-                is BitcoinIncomingTransactionRecord -> listOf(tx.value.coinType)
+                is BitcoinIncomingTransactionRecord -> listOf(tx.value.coinUid)
                 is BitcoinOutgoingTransactionRecord -> listOf(
                     tx.fee,
                     tx.value
-                ).mapNotNull { it?.coinType }
-                is BinanceChainIncomingTransactionRecord -> listOf(tx.value.coinType)
+                ).mapNotNull { it?.coinUid }
+                is BinanceChainIncomingTransactionRecord -> listOf(tx.value.coinUid)
                 is BinanceChainOutgoingTransactionRecord -> listOf(
                     tx.fee,
                     tx.value
-                ).map { it.coinType }
+                ).map { it.coinUid }
                 else -> emptyList()
             }
 
             (transactionInfoItem.record as? EvmTransactionRecord)?.let { transactionRecord ->
                 if (!transactionRecord.foreignTransaction) {
-                    coinTypes.add(transactionRecord.fee.coinType)
+                    coinUids.add(transactionRecord.fee.coinUid)
                 }
             }
 
-            coinTypes.addAll(txCoinTypes)
+            coinUids.addAll(txCoinTypes)
 
-            return coinTypes.distinct()
+            return coinUids.filter { it.isNotBlank() }.distinct()
         }
 
     init {
@@ -127,21 +126,21 @@ class TransactionInfoService(
             }
     }
 
-    private fun fetchRates(): Single<Map<CoinType, CurrencyValue>> {
-        val coinTypes = coinTypesForRates
+    private fun fetchRates(): Single<Map<String, CurrencyValue>> {
+        val coinUids = coinUidsForRates
         val timestamp = transactionInfoItem.record.timestamp
-        val flowables: List<Single<Pair<CoinType, CurrencyValue>>> = coinTypes.map { coinType ->
-            xRateManager.historicalRate(coinType, currencyManager.baseCurrency.code, timestamp)
+        val flowables: List<Single<Pair<String, CurrencyValue>>> = coinUids.map { coinUid ->
+            marketKit.coinHistoricalPriceSingle(coinUid, currencyManager.baseCurrency.code, timestamp)
                 .onErrorResumeNext(Single.just(BigDecimal.ZERO)) //provide default value on error
                 .map {
-                    Pair(coinType, CurrencyValue(currencyManager.baseCurrency, it))
+                    Pair(coinUid, CurrencyValue(currencyManager.baseCurrency, it))
                 }
         }
 
         return Single
             .zip(flowables) { array ->
                 array.mapNotNull {
-                    it as Pair<CoinType, CurrencyValue>
+                    it as Pair<String, CurrencyValue>
 
                     if (it.second.value == BigDecimal.ZERO) {
                         null
@@ -165,7 +164,7 @@ class TransactionInfoService(
     }
 
     @Synchronized
-    private fun handleRates(rates: Map<CoinType, CurrencyValue>) {
+    private fun handleRates(rates: Map<String, CurrencyValue>) {
         transactionInfoItem = transactionInfoItem.copy(rates = rates)
         transactionInfoItemSubject.onNext(transactionInfoItem)
     }

@@ -99,7 +99,7 @@ class EvmTransactionConverter(
         return if (platformCoin != null) {
             TransactionValue.CoinValue(platformCoin, convertAmount(amount, platformCoin.decimals, negative))
         } else {
-            TransactionValue.RawValue(coinType, amount)
+            TransactionValue.RawValue(value = amount)
         }
     }
 

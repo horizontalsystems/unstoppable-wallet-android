@@ -10,7 +10,6 @@ import io.horizontalsystems.bankwallet.entities.LastBlockInfo
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionItem
 import io.horizontalsystems.core.helpers.DateHelper
-import io.horizontalsystems.marketkit.models.CoinType
 
 object TransactionInfoModule {
 
@@ -23,7 +22,7 @@ object TransactionInfoModule {
             val service = TransactionInfoService(
                 transactionItem.record,
                 adapter,
-                App.xRateManager,
+                App.marketKit,
                 App.currencyManager,
                 App.instance.testMode,
                 App.accountSettingManager
@@ -59,5 +58,5 @@ data class TransactionInfoItem(
     val record: TransactionRecord,
     val lastBlockInfo: LastBlockInfo?,
     val explorerData: TransactionInfoModule.ExplorerData,
-    val rates: Map<CoinType, CurrencyValue>
+    val rates: Map<String, CurrencyValue>
 )
