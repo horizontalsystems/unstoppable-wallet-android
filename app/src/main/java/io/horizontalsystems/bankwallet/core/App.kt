@@ -61,7 +61,6 @@ class App : CoreApp(), WorkConfiguration.Provider  {
         lateinit var accountFactory: IAccountFactory
         lateinit var backupManager: IBackupManager
 
-        lateinit var xRateManager: IRateManager
         lateinit var connectivityManager: ConnectivityManager
         lateinit var appDatabase: AppDatabase
         lateinit var accountsStorage: IAccountsStorage
@@ -184,7 +183,6 @@ class App : CoreApp(), WorkConfiguration.Provider  {
         adapterFactory.initialSyncModeSettingsManager = initialSyncModeSettingsManager
 
         feeCoinProvider = FeeCoinProvider(marketKit)
-        xRateManager = RateManager(this, appConfigProvider)
 
         addressParserFactory = AddressParserFactory()
 
