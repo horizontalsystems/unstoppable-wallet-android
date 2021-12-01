@@ -20,9 +20,8 @@ class MarketAdvancedSearchViewModel(
     val coinListsViewItemOptions = CoinList.values().map {
         ViewItemWrapper(Translator.getString(it.titleResId), it, R.color.leah)
     }
-    val marketCapViewItemOptions = ranges
-    val volumeViewItemOptions = ranges
-    val liquidityViewItemOptions = ranges
+    val marketCapViewItemOptions = getRanges(service.currencyCode)
+    val volumeViewItemOptions = getRanges(service.currencyCode)
     val periodViewItemOptions = TimePeriod.values().map {
         ViewItemWrapper(Translator.getString(it.titleResId), it, R.color.leah)
     }
@@ -168,6 +167,9 @@ class MarketAdvancedSearchViewModel(
 }
 
 val rangeEmpty = ViewItemWrapper.getAny<Range>()
-val ranges = listOf(rangeEmpty) + Range.values().map {
-    ViewItemWrapper<Range?>(Translator.getString(it.titleResId), it, R.color.leah)
+
+fun getRanges(currencyCode: String): List<ViewItemWrapper<Range?>> {
+    return listOf(rangeEmpty) + Range.valuesByCurrency(currencyCode).map {
+        ViewItemWrapper(Translator.getString(it.titleResId), it, R.color.leah)
+    }
 }
