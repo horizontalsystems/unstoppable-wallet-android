@@ -8,7 +8,7 @@ class TransactionFilterService {
     var selectedTransactionType: FilterTransactionType = FilterTransactionType.All
 
     fun setWallets(wallets: List<Wallet>) {
-        transactionWallets = wallets.map {
+        transactionWallets = wallets.sortedBy { it.coin.code }.map {
             TransactionWallet(it.platformCoin, it.transactionSource, it.badge)
         }
 
