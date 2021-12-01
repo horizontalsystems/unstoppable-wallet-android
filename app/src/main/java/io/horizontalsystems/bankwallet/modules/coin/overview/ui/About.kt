@@ -8,14 +8,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.CellData2
 import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineClear
-import io.horizontalsystems.bankwallet.ui.compose.components.Description
+import io.horizontalsystems.bankwallet.ui.compose.components.DescriptionMarkdown
 
 @Preview
 @Composable
@@ -36,20 +35,16 @@ fun About(text: String) {
             )
         }
 
-        val textMaxLines = 8
-        val toggleLines = 2
-
         var showReadMoreToggle by remember { mutableStateOf(false)}
         var expanded by remember { mutableStateOf(false)}
 
-        val maxLines = if (showReadMoreToggle) textMaxLines else textMaxLines + toggleLines
-
-        Description(
+        DescriptionMarkdown(
+            textMaxLines = 8,
+            toggleLines = 2,
             text = text,
-            maxLines = if (!expanded) maxLines else Int.MAX_VALUE,
-            overflow = TextOverflow.Ellipsis
-        ) {
-            showReadMoreToggle = showReadMoreToggle || it.hasVisualOverflow
+            expanded = expanded
+        ) { overflow ->
+            showReadMoreToggle = overflow
         }
 
         if (showReadMoreToggle) {
