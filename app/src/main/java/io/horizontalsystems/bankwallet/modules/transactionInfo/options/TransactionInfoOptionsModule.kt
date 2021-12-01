@@ -69,7 +69,6 @@ object TransactionInfoOptionsModule {
                 baseCoin,
                 App.marketKit,
                 App.currencyManager,
-                App.xRateManager
             )
         }
 

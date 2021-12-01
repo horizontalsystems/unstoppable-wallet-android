@@ -32,7 +32,7 @@ object OneInchConfirmationModule {
             val feeRateProvider = FeeRateProviderFactory.provider(coin.coinType) as ICustomRangedFeeProvider
             OneInchTransactionFeeService(oneInchKitHelper, oneInchSwapParameters, feeRateProvider)
         }
-        private val coinServiceFactory by lazy { EvmCoinServiceFactory(coin, App.marketKit, App.currencyManager, App.xRateManager) }
+        private val coinServiceFactory by lazy { EvmCoinServiceFactory(coin, App.marketKit, App.currencyManager) }
         private val sendService by lazy { OneInchSendEvmTransactionService(evmKit, transactionService, App.activateCoinManager) }
 
         @Suppress("UNCHECKED_CAST")

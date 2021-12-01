@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.core.ethereum
 
-import io.horizontalsystems.bankwallet.core.IRateManager
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.marketkit.MarketKit
@@ -10,8 +9,7 @@ import io.horizontalsystems.marketkit.models.PlatformCoin
 class EvmCoinServiceFactory(
     private val basePlatformCoin: PlatformCoin,
     private val marketKit: MarketKit,
-    private val currencyManager: ICurrencyManager,
-    private val rateManager: IRateManager
+    private val currencyManager: ICurrencyManager
 ) {
     val baseCoinService = EvmCoinService(basePlatformCoin, currencyManager, marketKit)
 

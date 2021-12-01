@@ -16,7 +16,7 @@ import java.util.concurrent.Executors
 
 class TransactionsService(
     private val transactionRecordRepository: ITransactionRecordRepository,
-    private val xRateRepository: TransactionsXRateRepository,
+    private val rateRepository: TransactionsRateRepository,
     private val transactionSyncStateRepository: TransactionSyncStateRepository,
     private val transactionAdapterManager: TransactionAdapterManager,
     private val walletManager: IWalletManager,
@@ -56,7 +56,7 @@ class TransactionsService(
                 disposables.add(it)
             }
 
-        xRateRepository.dataExpiredObservable
+        rateRepository.dataExpiredObservable
             .subscribeIO {
                 handleUpdatedHistoricalRates()
             }
@@ -64,7 +64,7 @@ class TransactionsService(
                 disposables.add(it)
             }
 
-        xRateRepository.historicalRateObservable
+        rateRepository.historicalRateObservable
             .subscribeIO {
                 handleUpdatedHistoricalRate(it.first, it.second)
             }
@@ -104,7 +104,7 @@ class TransactionsService(
 
             item.record.mainValue?.let { mainValue ->
                 mainValue.decimalValue?.let { decimalValue ->
-                    if (mainValue.coinType == key.coinType && item.record.timestamp == key.timestamp) {
+                    if (mainValue.coin?.uid == key.coinUid && item.record.timestamp == key.timestamp) {
                         val currencyValue = CurrencyValue(rate.currency, decimalValue * rate.value)
 
                         transactionItems[i] = item.copy(currencyValue = currencyValue)
@@ -123,14 +123,7 @@ class TransactionsService(
     private fun handleUpdatedHistoricalRates() {
         for (i in 0 until transactionItems.size) {
             val item = transactionItems[i]
-
-            val currencyValue = item.record.mainValue?.let { mainValue ->
-                mainValue.decimalValue?.let { decimalValue ->
-                    xRateRepository.getHistoricalRate(HistoricalRateKey(mainValue.coinType, item.record.timestamp))?.let { rate ->
-                        CurrencyValue(rate.currency, decimalValue * rate.value)
-                    }
-                }
-            }
+            val currencyValue = getCurrencyValue(item.record)
 
             transactionItems[i] = item.copy(currencyValue = currencyValue)
         }
@@ -147,13 +140,7 @@ class TransactionsService(
 
             if (transactionItem == null) {
                 val lastBlockInfo = transactionSyncStateRepository.getLastBlockInfo(record.source)
-                val currencyValue = record.mainValue?.let { mainValue ->
-                    mainValue.decimalValue?.let { decimalValue ->
-                        xRateRepository.getHistoricalRate(HistoricalRateKey(mainValue.coinType, record.timestamp))?.let { rate ->
-                            CurrencyValue(rate.currency, decimalValue * rate.value)
-                        }
-                    }
-                }
+                val currencyValue = getCurrencyValue(record)
 
                 transactionItem = TransactionItem(record, currencyValue, lastBlockInfo)
             }
@@ -164,6 +151,14 @@ class TransactionsService(
         transactionItems.clear()
         transactionItems.addAll(tmpList)
         itemsSubject.onNext(transactionItems)
+    }
+
+    private fun getCurrencyValue(record: TransactionRecord): CurrencyValue? {
+        val decimalValue = record.mainValue?.decimalValue ?: return null
+        val coinUid = record.mainValue?.coin?.uid ?: return null
+
+        return rateRepository.getHistoricalRate(HistoricalRateKey(coinUid, record.timestamp))
+            ?.let { rate -> CurrencyValue(rate.currency, decimalValue * rate.value) }
     }
 
     @Synchronized
@@ -183,7 +178,7 @@ class TransactionsService(
         disposables.clear()
 
         transactionRecordRepository.clear()
-        xRateRepository.clear()
+        rateRepository.clear()
         transactionSyncStateRepository.clear()
     }
 
@@ -215,8 +210,8 @@ class TransactionsService(
         executorService.submit {
             transactionItems.find { it.record.uid == recordUid }?.let { transactionItem ->
                 if (transactionItem.currencyValue == null) {
-                    transactionItem.record.mainValue?.let { mainValue ->
-                        xRateRepository.fetchHistoricalRate(HistoricalRateKey(mainValue.coinType, transactionItem.record.timestamp))
+                    transactionItem.record.mainValue?.coin?.uid?.let { coinUid ->
+                        rateRepository.fetchHistoricalRate(HistoricalRateKey(coinUid, transactionItem.record.timestamp))
                     }
                 }
             }

@@ -17,7 +17,7 @@ object TransactionsModule {
             return TransactionsViewModel(
                 TransactionsService(
                     TransactionRecordRepository(App.transactionAdapterManager),
-                    TransactionsXRateRepository(App.currencyManager, App.xRateManager),
+                    TransactionsRateRepository(App.currencyManager, App.marketKit),
                     TransactionSyncStateRepository(App.transactionAdapterManager),
                     App.transactionAdapterManager,
                     App.walletManager,

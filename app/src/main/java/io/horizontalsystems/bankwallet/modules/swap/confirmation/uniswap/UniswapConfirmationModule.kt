@@ -36,7 +36,6 @@ object UniswapConfirmationModule {
                 coin,
                 App.marketKit,
                 App.currencyManager,
-                App.xRateManager
             )
         }
         private val sendService by lazy {
