@@ -20,7 +20,6 @@ import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionStatus
 import io.horizontalsystems.bankwallet.modules.transactionInfo.adapters.TransactionInfoViewItem
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionStatus
 import io.horizontalsystems.core.helpers.DateHelper
-import io.horizontalsystems.marketkit.models.CoinType
 import io.horizontalsystems.views.ListPosition.*
 import java.math.BigDecimal
 import java.math.RoundingMode
@@ -36,7 +35,7 @@ class TransactionInfoViewItemFactory(
 
     fun getMiddleSectionItems(
         transaction: TransactionRecord,
-        rates: Map<CoinType, CurrencyValue>,
+        rates: Map<String, CurrencyValue>,
         lastBlockInfo: LastBlockInfo?,
         explorerData: TransactionInfoModule.ExplorerData
     ): List<TransactionInfoViewItem?> {
@@ -62,7 +61,7 @@ class TransactionInfoViewItemFactory(
                 middleSectionTypes.add(statusType)
                 middleSectionTypes.add(date)
 
-                rates[transaction.value.coinType]?.let {
+                rates[transaction.value.coinUid]?.let {
                     middleSectionTypes.add(getHistoricalRate(it, transaction.value))
                 }
 
@@ -85,7 +84,7 @@ class TransactionInfoViewItemFactory(
                     getActionsSection(
                         getString(R.string.Transactions_Receive),
                         transaction.value,
-                        rates[transaction.value.coinType],
+                        rates[transaction.value.coinUid],
                         true
                     )
                 )
@@ -106,9 +105,9 @@ class TransactionInfoViewItemFactory(
                     middleSectionTypes.add(it)
                 }
                 middleSectionTypes.add(date)
-                middleSectionTypes.add(getEvmFeeItem(transaction.fee, rates[transaction.value.coinType], status))
+                middleSectionTypes.add(getEvmFeeItem(transaction.fee, rates[transaction.value.coinUid], status))
 
-                rates[transaction.value.coinType]?.let {
+                rates[transaction.value.coinUid]?.let {
                     middleSectionTypes.add(getHistoricalRate(it, transaction.value))
                 }
 
@@ -131,7 +130,7 @@ class TransactionInfoViewItemFactory(
                     getActionsSection(
                         getString(R.string.Transactions_Send),
                         transaction.value,
-                        rates[transaction.value.coinType],
+                        rates[transaction.value.coinUid],
                         false
                     )
                 )
@@ -149,7 +148,7 @@ class TransactionInfoViewItemFactory(
 
                 middleSectionTypes.add(statusType)
                 middleSectionTypes.add(date)
-                middleSectionTypes.add(getEvmFeeItem(transaction.fee, rates[transaction.fee.coinType], status))
+                middleSectionTypes.add(getEvmFeeItem(transaction.fee, rates[transaction.fee.coinUid], status))
 
                 val valueOut = transaction.valueOut
                 val valueIn = transaction.valueIn
@@ -163,7 +162,7 @@ class TransactionInfoViewItemFactory(
                             RoundingMode.HALF_EVEN
                         ).abs()
                         val formattedPrice = numberFormatter.formatCoin(price, valueIn.coinCode, 0, 8)
-                        val formattedFiatPrice = rates[valueIn.coinType]?.let { rate ->
+                        val formattedFiatPrice = rates[valueIn.coinUid]?.let { rate ->
                             numberFormatter.formatFiat(price * rate.value, rate.currency.symbol, 0, 2).let {
                                 " ($it)"
                             }
@@ -198,7 +197,7 @@ class TransactionInfoViewItemFactory(
                     getActionsSection(
                         getYouPayString(status),
                         valueIn,
-                        rates[valueIn.coinType],
+                        rates[valueIn.coinUid],
                         false
                     )
                 )
@@ -210,7 +209,7 @@ class TransactionInfoViewItemFactory(
                             getActionsSection(
                                 getYouGetString(status),
                                 valueOut,
-                                rates[valueOut.coinType],
+                                rates[valueOut.coinUid],
                                 true
                             )
                         )
@@ -228,14 +227,14 @@ class TransactionInfoViewItemFactory(
             is ApproveTransactionRecord -> {
 
                 val middleSectionTypes = mutableListOf<TransactionInfoItemType>()
-                val rate = rates[transaction.value.coinType]
+                val rate = rates[transaction.value.coinUid]
 
                 middleSectionTypes.add(date)
                 middleSectionTypes.add(statusType)
                 getOptionsItem(status)?.let {
                     middleSectionTypes.add(it)
                 }
-                middleSectionTypes.add(getEvmFeeItem(transaction.fee, rates[transaction.fee.coinType], status))
+                middleSectionTypes.add(getEvmFeeItem(transaction.fee, rates[transaction.fee.coinUid], status))
 
                 rate?.let {
                     middleSectionTypes.add(getHistoricalRate(it, transaction.value))
@@ -330,17 +329,17 @@ class TransactionInfoViewItemFactory(
                     if (transactionValue.value != BigDecimal.ZERO && !transaction.foreignTransaction) {
                         youPaySection.add(
                             getAmount(
-                                rates[transaction.value.coinType],
+                                rates[transaction.value.coinUid],
                                 transactionValue,
                                 false
                             )
                         )
                     }
 
-                    transaction.outgoingEip20Events.forEachIndexed { index, (_, eventCoinValue) ->
+                    transaction.outgoingEip20Events.forEach { (_, eventCoinValue) ->
                         youPaySection.add(
                             getAmount(
-                                rates[eventCoinValue.coinType],
+                                rates[eventCoinValue.coinUid],
                                 eventCoinValue,
                                 false
                             )
@@ -363,13 +362,12 @@ class TransactionInfoViewItemFactory(
                     transaction.incomingInternalETHs.firstOrNull()?.let { (_, coinValue) ->
                         coinValue as TransactionValue.CoinValue
 
-                        val ethCoin = coinValue.coinType
                         val ethSum =
                             transaction.incomingInternalETHs.sumOf { (_, eventCoinValue) -> eventCoinValue.decimalValue ?: BigDecimal.ZERO }
 
                         youGotSection.add(
                             getAmount(
-                                rates[ethCoin],
+                                rates[coinValue.coinUid],
                                 TransactionValue.CoinValue(coinValue.platformCoin, ethSum),
                                 true
                             )
@@ -379,7 +377,7 @@ class TransactionInfoViewItemFactory(
                     transaction.incomingEip20Events.forEach { (_, eventCoinValue) ->
                         youGotSection.add(
                             getAmount(
-                                rates[eventCoinValue.coinType],
+                                rates[eventCoinValue.coinUid],
                                 eventCoinValue,
                                 true
                             )
@@ -392,7 +390,7 @@ class TransactionInfoViewItemFactory(
 
                 middleSectionTypes.add(date)
                 middleSectionTypes.add(statusType)
-                middleSectionTypes.add(getEvmFeeItem(transaction.fee, rates[transaction.fee.coinType], status))
+                middleSectionTypes.add(getEvmFeeItem(transaction.fee, rates[transaction.fee.coinUid], status))
 
                 middleSectionTypes.add(
                     Decorated(
@@ -417,7 +415,7 @@ class TransactionInfoViewItemFactory(
                 middleSectionTypes.add(date)
                 middleSectionTypes.add(statusType)
 
-                rates[transaction.value.coinType]?.let {
+                rates[transaction.value.coinUid]?.let {
                     middleSectionTypes.add(getHistoricalRate(it, transaction.value))
                 }
 
@@ -466,7 +464,7 @@ class TransactionInfoViewItemFactory(
                     getActionsSection(
                         getString(R.string.Transactions_Receive),
                         transaction.value,
-                        rates[transaction.value.coinType],
+                        rates[transaction.value.coinUid],
                         true
                     )
                 )
@@ -487,10 +485,10 @@ class TransactionInfoViewItemFactory(
                 middleSectionTypes.add(statusType)
 
                 transaction.fee?.let {
-                    middleSectionTypes.add(getFee(rates[transaction.value.coinType], it))
+                    middleSectionTypes.add(getFee(rates[transaction.value.coinUid], it))
                 }
 
-                rates[transaction.value.coinType]?.let {
+                rates[transaction.value.coinUid]?.let {
                     middleSectionTypes.add(getHistoricalRate(it, transaction.value))
                 }
 
@@ -539,7 +537,7 @@ class TransactionInfoViewItemFactory(
                     getActionsSection(
                         getString(R.string.Transactions_Send),
                         transaction.value,
-                        rates[transaction.value.coinType],
+                        rates[transaction.value.coinUid],
                         false
                     )
                 )
@@ -558,7 +556,7 @@ class TransactionInfoViewItemFactory(
                 middleSectionTypes.add(date)
                 middleSectionTypes.add(statusType)
 
-                rates[transaction.value.coinType]?.let {
+                rates[transaction.value.coinUid]?.let {
                     middleSectionTypes.add(getHistoricalRate(it, transaction.value))
                 }
 
@@ -581,7 +579,7 @@ class TransactionInfoViewItemFactory(
                     getActionsSection(
                         getString(R.string.Transactions_Receive),
                         transaction.value,
-                        rates[transaction.value.coinType],
+                        rates[transaction.value.coinUid],
                         true
                     )
                 )
@@ -600,9 +598,9 @@ class TransactionInfoViewItemFactory(
                 middleSectionTypes.add(date)
                 middleSectionTypes.add(statusType)
 
-                middleSectionTypes.add(getFee(rates[transaction.value.coinType], transaction.fee))
+                middleSectionTypes.add(getFee(rates[transaction.value.coinUid], transaction.fee))
 
-                rates[transaction.value.coinType]?.let {
+                rates[transaction.value.coinUid]?.let {
                     middleSectionTypes.add(getHistoricalRate(it, transaction.value))
                 }
 
@@ -625,7 +623,7 @@ class TransactionInfoViewItemFactory(
                     getActionsSection(
                         getString(R.string.Transactions_Send),
                         transaction.value,
-                        rates[transaction.value.coinType],
+                        rates[transaction.value.coinUid],
                         false
                     )
                 )

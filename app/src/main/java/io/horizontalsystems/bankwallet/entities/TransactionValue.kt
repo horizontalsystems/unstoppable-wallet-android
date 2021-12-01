@@ -1,14 +1,13 @@
 package io.horizontalsystems.bankwallet.entities
 
 import io.horizontalsystems.marketkit.models.Coin
-import io.horizontalsystems.marketkit.models.CoinType
 import io.horizontalsystems.marketkit.models.PlatformCoin
 import java.math.BigDecimal
 import java.math.BigInteger
 
 sealed class TransactionValue {
     abstract val coinName: String
-    abstract val coinType: CoinType
+    abstract val coinUid: String
     abstract val coinCode: String
     abstract val coin: Coin?
     abstract val decimalValue: BigDecimal?
@@ -19,9 +18,9 @@ sealed class TransactionValue {
 
     data class CoinValue(val platformCoin: PlatformCoin, val value: BigDecimal) : TransactionValue() {
         override val coin: Coin = platformCoin.coin
-        override val coinType: CoinType = platformCoin.coinType
-        override val coinName: String = coin.name ?: ""
-        override val coinCode: String = coin.code ?: ""
+        override val coinUid: String = coin.uid
+        override val coinName: String = coin.name
+        override val coinCode: String = coin.code
         override val decimalValue: BigDecimal = value
         override val zeroValue: Boolean
             get() = value.compareTo(BigDecimal.ZERO) == 0
@@ -34,7 +33,7 @@ sealed class TransactionValue {
 
     }
 
-    data class RawValue(override val coinType: CoinType, val value: BigInteger) : TransactionValue() {
+    data class RawValue(override val coinUid: String = "", val value: BigInteger) : TransactionValue() {
         override val coin: Coin? = null
         override val coinName: String = ""
         override val coinCode: String = ""
