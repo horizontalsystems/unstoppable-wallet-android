@@ -18,14 +18,10 @@ import io.horizontalsystems.bankwallet.modules.transactions.FilterTransactionTyp
 import io.horizontalsystems.binancechainkit.BinanceChainKit
 import io.horizontalsystems.bitcoincore.core.IPluginData
 import io.horizontalsystems.core.entities.AppVersion
-import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.*
-import io.horizontalsystems.xrateskit.entities.Auditor
-import io.horizontalsystems.xrateskit.entities.DefiTvl
-import io.horizontalsystems.xrateskit.entities.TimePeriod
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -307,25 +303,6 @@ interface IAdapter {
     fun refresh()
 
     val debugInfo: String
-}
-
-interface IRateManager {
-    fun historicalRateCached(coinType: CoinType, currencyCode: String, timestamp: Long): BigDecimal?
-    fun historicalRate(
-        coinType: CoinType,
-        currencyCode: String,
-        timestamp: Long
-    ): Single<BigDecimal>
-
-
-    fun getAuditsAsync(coinType: CoinType): Single<List<Auditor>>
-
-    fun getTopDefiTvlAsync(
-        currencyCode: String,
-        fetchDiffPeriod: TimePeriod = TimePeriod.HOUR_24,
-        itemsCount: Int = 200,
-        chain: String? = null
-    ): Single<List<DefiTvl>>
 }
 
 interface IAccountsStorage {
