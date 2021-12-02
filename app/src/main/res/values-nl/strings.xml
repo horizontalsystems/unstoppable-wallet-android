@@ -856,6 +856,7 @@
     <string name="CoinPage_MajorHolders_TopWallets">Top Wallets</string>
     <string name="CoinPage_MajorHolders_Description">The chart above shows the % of all tokens in circulation held by the top 10 wallets. The lower the % the more distributed the coin is.</string>
     <string name="CoinPage_MajorHolders_InTopWallets">In top 10 Ethereum wallets</string>
+    <string name="CoinPage_CoinInvestments_Lead">Lead</string>
     <!--Rate list-->
     <string name="RateList_TopGainers">Top Gainers</string>
     <string name="RateList_TopLosers">Top Losers</string>
