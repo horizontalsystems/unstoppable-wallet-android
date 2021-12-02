@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.coin.investments
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -80,16 +79,16 @@ class CoinInvestmentsViewModel(
     }
 
     private fun viewItem(investment: CoinInvestment): ViewItem {
+        val amount = investment.amount?.let {
+            numberFormatter.formatCurrencyValueAsShortened(CurrencyValue(service.usdCurrency, it))
+        } ?: "---"
+        val dateString = DateHelper.formatDate(investment.date, "MMM dd, yyyy")
+
         return ViewItem(
-            amount = numberFormatter.formatCurrencyValueAsShortened(CurrencyValue(service.currency, investment.amountInCurrency)),
-            info = "${investment.round} - ${DateHelper.formatDate(investment.date, "MMM dd, yyyy")}",
-            fundViewItems = investment.funds.map { fund ->
-                FundViewItem(
-                    name = fund.name,
-                    logoUrl = fund.logoUrl,
-                    isLead = fund.isLead,
-                    url = fund.website
-                )
+            amount = amount,
+            info = "${investment.round} - $dateString",
+            fundViewItems = investment.funds.map {
+                FundViewItem(it.name, it.logoUrl, it.isLead, it.website)
             }
         )
     }

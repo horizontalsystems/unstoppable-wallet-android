@@ -22,6 +22,12 @@ class CoinDetailsService(
     val stateObservable: Observable<DataState<Item>>
         get() = stateSubject
 
+    val usdCurrency: Currency
+        get() {
+            val currencies = currencyManager.currencies
+            return currencies.first { it.code == "USD" }
+        }
+
     val currency: Currency
         get() = currencyManager.baseCurrency
 
