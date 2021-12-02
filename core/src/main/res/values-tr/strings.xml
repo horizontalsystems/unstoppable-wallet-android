@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="Timestamp_Today">Тoday</string>
-    <string name="Timestamp_Yesterday">Yesterday</string>
-    <string name="Duration_instant">instant</string>
-    <string name="Duration_Within">within %s</string>
-    <string name="Duration_Hours">%d h.</string>
-    <string name="Duration_Minutes">%d min.</string>
-    <string name="Duration_Seconds">%d sec.</string>
+    <string name="Timestamp_Today">Bugün</string>
+    <string name="Timestamp_Yesterday">Dün</string>
+    <string name="Duration_instant">Anlık</string>
+    <string name="Duration_Within">%s Içinde</string>
+    <string name="Duration_Hours">%d sa.</string>
+    <string name="Duration_Minutes">%d dk.</string>
+    <string name="Duration_Seconds">%d sn.</string>
 </resources>
