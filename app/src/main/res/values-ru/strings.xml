@@ -18,16 +18,19 @@
     <string name="Button_Change">Изменить</string>
     <string name="Button_Add">Добавить</string>
     <string name="Button_Approve">Разрешить</string>
+    <string name="Button_Confirm">Подтвердить</string>
     <string name="Button_Connect">Подключиться</string>
     <string name="Button_Reject">Отклонить</string>
     <string name="Button_Disconnect">Отсоединить</string>
     <string name="Button_Start">Начать</string>
     <string name="Button_Create">Создать</string>
     <string name="Button_Restore">Восстановить</string>
-    <string name="Button_Reset">Reset</string>
+    <string name="Button_Reset">Сбросить</string>
+    <string name="Button_Reconnect">Повторное Подключение</string>
     <string name="Error">Ошибка</string>
     <string name="NotAvailable">Нет данных</string>
-    <string name="Any">Any</string>
+    <string name="Any">Любые</string>
+    <string name="PercentTitle">Процент</string>
     <!--Intro-->
     <string name="Intro_Wallet_Screen1Description">Be Unstoppable</string>
     <string name="Intro_Wallet_Screen2Title">Освободите Активы</string>
@@ -60,13 +63,13 @@
     <string name="Restore_Enter_Key_Title">Введите ключ</string>
     <string name="Restore_Mnemonic_Description">Введите мнемоническую фразу, которая состоит из 12 или 24 слов. Слова должны быть введены в правильном порядке и разделены пробелами.</string>
     <string name="Restore_ValidationFailed">Неверный Ключ</string>
-    <string name="Restore_Error_MnemonicWordCount">Неправильное количество слов. Должно быть 12 или 24 слова. Длина вашей мнемонической фразы составляет: %d</string>
+    <string name="Restore_Error_MnemonicWordCount">Неправильное количество слов. Должно быть 12-24 слова. Вы ввели: %d</string>
     <string name="Restore_Error_EmptyPassphrase">Поле для кодовой фразы не может быть пустым</string>
     <string name="Restore_InvalidChecksum">Неверная Контрольная Сумма</string>
     <string name="Restore_PassphraseDescription">Введите свою кодовую фразу, которую вы использовали при создании этой мнемонической фразы.</string>
-    <string name="Select_Coins">Выберите Валюту</string>
+    <string name="Select_Coins">Выберите Токены</string>
     <string name="Restore_ZCash_BirthdayHeight">Блок Создания</string>
-    <string name="Restore_ZCash_BirthdayHeight_Hint">Если вы знаете блок создания вашего Zcash кошелька, добавьте его ниже для ускорения процесса синхронизации.</string>
+    <string name="Restore_ZCash_BirthdayHeight_Hint">Если вы знаете дату создания вашего кошелька, укажите ее для быстрой синхронизации.</string>
     <!--Backup-->
     <string name="Backup_Confirmation_CheckTitle">Проверка…</string>
     <!--Market-->
@@ -90,12 +93,14 @@
     <string name="Market_TvlDeFi">TVL в DeFi</string>
     <string name="Market_DeFiCap">Капитализация DeFi</string>
     <string name="Market_SeeAll">Посмотреть Всё</string>
-    <string name="Market_Tab_Overview">Overview</string>
-    <string name="Market_Tab_Discovery">Discovery</string>
-    <string name="Market_Tab_Watchlist">Watchlist</string>
-    <string name="Market_Tab_Watchlist_EmptyList">You don\’t have any favorite assets.\nYou can add the favorites by clicking on star icon in the asset page</string>
+    <string name="Market_Tab_Overview">Обзор</string>
+    <string name="Market_Tab_Posts">Новости</string>
+    <string name="Market_Tab_Watchlist">Избранное</string>
+    <string name="Market_Tab_Watchlist_EmptyList">У вас нет токенов в избранном. \nВы можете добавить сюда токены с помощью значка \"звездочка\" на странице токенов.</string>
     <string name="Market_Category_Rated">Rated</string>
     <string name="Market_Category_Rated_Description">Рейтинги токенов, основанные на безопасности проекта и ликвидности рынка.</string>
+    <string name="Market_Category_TopCoins">Лучшие Токены</string>
+    <string name="Market_Category_TopCoins_Description">Описание Лучших Монет</string>
     <string name="Market_Category_Blockchains">Blockchains</string>
     <string name="Market_Category_Blockchains_Description">Нативные криптовалюты в основных блокчейнах. </string>
     <string name="Market_Category_Dexes">DEXes</string>
@@ -142,20 +147,29 @@
     <string name="Market_Category_Identity_Description">Децентрализованная идентификация.</string>
     <string name="Market_Category_YieldTokens">Yield Tokens</string>
     <string name="Market_Category_YieldTokens_Description">Прибыльные токены.</string>
+    <string name="Market_SyncError">Ошибка Синхронизации</string>
     <!--Market Global Metrics-->
     <string name="MarketGlobalMetrics_Chart">График</string>
+    <string name="MarketGlobalMetrics_TotalMarketCap">Полная Рыночная Капитализация</string>
     <string name="MarketGlobalMetrics_BtcDominance">Доминирование Bitcoin</string>
     <string name="MarketGlobalMetrics_Volume">Объём</string>
     <string name="MarketGlobalMetrics_DefiCap">Капитализация DeFi</string>
     <string name="MarketGlobalMetrics_TvlInDefi">TVL в DeFi</string>
+    <string name="MarketGlobalMetrics_TotalMarketCapDescription">Описание Рын.кап.</string>
     <string name="MarketGlobalMetrics_BtcDominanceDescription">Историческое изменение соотношения рыночной капитализации биткойнов к остальным криптовалютным рынкам. \n\nОбычно, в этом случае биткойны доминируют над остальными тенденциями криптовалютного рынка наоборот.</string>
     <string name="MarketGlobalMetrics_VolumeDescription">Историческое изменение в ежедневном совокупном объеме торговли для всех криптовалют.</string>
+    <string name="MarketGlobalMetrics_VolumeDescriptionCoin">Историческое изменение усредненного ежедневного объема торговли для %s</string>
     <string name="MarketGlobalMetrics_DefiCapDescription">Историческое изменение в совокупной рыночной стоимости токенов в Децентрализованном финансовом секторе.</string>
     <string name="MarketGlobalMetrics_TvlInDefiDescription">Историческое изменение в совокупной стоимости всех криптовалют, управляемых децентрализованными протоколами.</string>
+    <string name="MarketGlobalMetrics_ChainSelectorTitle">Сортировать по блокчейну</string>
+    <string name="MarketGlobalMetrics_ChainSelectorAll">Все</string>
+    <string name="MarketGlobalMetrics_CoinNotSupported">Этот токен еще не поддерживается</string>
     <!--Market Search-->
     <string name="EmptyResults">Ничего не найдено</string>
-    <string name="Market_AdvancedSearch">Расширенный Поиск</string>
+    <string name="Market_Filters">Фильтры</string>
     <string name="Market_AdvancedSearch_Results">Результат</string>
+    <string name="Market_Search_Hint">Поиск</string>
+    <string name="Market_Search_BrowseCategories">Просмотр Категорий</string>
     <string name="Market_Filter_ChooseSet">Выбрать Набор</string>
     <string name="Market_Filter_MarketCap">Рыночная Капитализация</string>
     <string name="Market_Filter_Volume">Объем Торговли</string>
@@ -178,7 +192,24 @@
     <string name="Market_Filter_Range_20M_100M">20М - 100М</string>
     <string name="Market_Filter_Range_100M_1B">100 млн - 1млрд</string>
     <string name="Market_Filter_Range_1B_5B">1 млрд - 5 млрд</string>
-    <string name="Market_Filter_Range_5B_More">&gt; 5BN</string>
+    <string name="Market_Filter_Range_5B_More">&gt; 5млрд</string>
+    <string name="Market_Filter_Range_0_10M">&lt; 10млн</string>
+    <string name="Market_Filter_Range_10M_40M">10млн - 40млн</string>
+    <string name="Market_Filter_Range_40M_200M">40млн - 20млн</string>
+    <string name="Market_Filter_Range_200M_2B">200млн - 2млрд</string>
+    <string name="Market_Filter_Range_2B_10B">2млрд - 10млрд</string>
+    <string name="Market_Filter_Range_10B_More">&gt; 10млрд</string>
+    <string name="Market_Filter_Range_0_50M">&lt; 50млн</string>
+    <string name="Market_Filter_Range_50M_200M">50млн - 200млн</string>
+    <string name="Market_Filter_Range_200M_1B">200млн - 1млрд</string>
+    <string name="Market_Filter_Range_1B_10B">1млрд - 10млрд</string>
+    <string name="Market_Filter_Range_10B_50B">10млрд - 50млрд</string>
+    <string name="Market_Filter_Range_50B_More">&gt; 50млрд</string>
+    <string name="Market_Filter_Range_0_500M">&lt; 500млн</string>
+    <string name="Market_Filter_Range_500M_2B">500млн - 2млрд</string>
+    <string name="Market_Filter_Range_10B_100B">10млрд - 100млрд</string>
+    <string name="Market_Filter_Range_100B_500B">100млрд - 500млрд</string>
+    <string name="Market_Filter_Range_500B_More">&gt; 500млрд</string>
     <string name="Market_Filter_TimePeriod_1D">1 День</string>
     <string name="Market_Filter_TimePeriod_1W">1 Неделя</string>
     <string name="Market_Filter_TimePeriod_2W">2 Недели</string>
@@ -211,6 +242,7 @@
     <!--Balance-->
     <string name="Balance_Title">Баланс</string>
     <string name="Balance_Send">Отправить</string>
+    <string name="Balance_Receive">Получить</string>
     <string name="Balance_RatePerCoin">%s за %s</string>
     <string name="Balance_SyncedUntil">до %s</string>
     <string name="Balance_Syncing">Синхронизация…</string>
@@ -220,10 +252,10 @@
     <string name="Balance_AddCoins">Добавить Токен</string>
     <string name="Balance_AddCoin">Добавить Токен</string>
     <string name="Balance_CoinDisabled">Отключена монета %s</string>
-    <string name="Balance_Sort_Balance">Балансу</string>
-    <string name="Balance_Sort_PopupTitle">Сортировать по</string>
-    <string name="Balance_Sort_Az">Названию</string>
-    <string name="Balance_Sort_24hPriceChange">Цене(%) за 24 ч</string>
+    <string name="Balance_Sort_Balance">По Балансу</string>
+    <string name="Balance_Sort_PopupTitle">Сортировать</string>
+    <string name="Balance_Sort_Az">По Названию</string>
+    <string name="Balance_Sort_24hPriceChange">По Изменение Цены (%)</string>
     <string name="Balance_Hidden">скрытое</string>
     <string name="Balance_Backup_Alert">Вам нужно сделать резервную копию %s Кошелька, прежде чем вы сможете получать %s.</string>
     <string name="Balance_NoWalletAlert">У вас пока нет кошельков. Создайте новый или восстановите существующий </string>
@@ -240,6 +272,7 @@
     <string name="Send_Confirmation_Amount">Сумма</string>
     <string name="Send_Confirmation_To">Кому</string>
     <string name="Send_Confirmation_Method">Метод </string>
+    <string name="Send_Confirmation_Nonce">Nonce</string>
     <string name="Send_Confirmation_Receiver">Получатель</string>
     <string name="Send_Confirmation_EstimateTime">Приблизительное Время:</string>
     <string name="Send_Confirmation_Send_Button">Отправить</string>
@@ -283,17 +316,23 @@
     <!--Wallet Connect-->
     <string name="WalletConnect_Title">Wallet Connect</string>
     <string name="WalletConnect_Request">Запрос</string>
+    <string name="WalletConnect_SendRequest_Title">Отправить</string>
+    <string name="WalletConnect_ApproveRequest_Title">Разрешить</string>
+    <string name="WalletConnect_SwapRequest_Title">Обменять</string>
+    <string name="WalletConnect_UnknownRequest_Title">Вызов Контракта</string>
     <string name="WalletConnect_Url">URL</string>
     <string name="WalletConnect_Status">Статус</string>
     <string name="WalletConnect_SignedTransactions">Подписанные Транзакции</string>
     <string name="WalletConnect_Approve_Hint">Нажимая \"Подтвердить\", вы разрешаете этому приложению просматривать ваш общедоступный адрес. Это важный шаг для защиты ваших данных от потенциальных рисков фишинга.</string>
     <string name="WalletConnect_Ready_Hint">Вы можете перейти в браузер. Не закрывайте эту страницу во время использования браузера.</string>
+    <string name="WalletConnect_Reconnect_Hint">Не удалось установить соединение. Попробуйте переподключиться снова.</string>
     <string name="WalletConnect_Error_InvalidUrl">Неверный URL-адрес</string>
     <string name="WalletConnect_Requirement">Требования</string>
     <string name="WalletConnect_Status_Offline">Не доступен</string>
     <string name="WalletConnect_Status_Online">Доступен</string>
     <string name="WalletConnect_Status_Connecting">Подключение…</string>
     <string name="WalletConnect_NewConnect">Новое Подключение</string>
+    <string name="WalletConnect_Disconnecting">Отключение</string>
     <string name="WalletConnect_SignMessageRequest_Title">Запрос на подпись</string>
     <string name="WalletConnect_SignMessageRequest_Domain">Домен</string>
     <string name="WalletConnect_SignMessageRequest_ShowMessageTitle">Сообщение для подписи</string>
@@ -303,6 +342,8 @@
     <string name="EthereumTransaction_Error_InsufficientBalance">Для отправки транзакции требуется %s</string>
     <string name="EthereumTransaction_Error_InsufficientBalanceForFee">Текущий баланс %s ниже суммы, необходимой для обработки этой транзакции, включая комиссию за транзакцию.</string>
     <string name="EthereumTransaction_Error_LowerThanBaseGasLimit">Выбранное значение комиссии слишком низкое и будет отклонено!</string>
+    <string name="EthereumTransaction_Error_InsufficientLiquidity">Недостаточно ликвидности</string>
+    <string name="EthereumTransaction_Error_CannotEstimate">Ошибка! Проверьте баланс и убедитесь, что на нем достаточно %s для покрытия комиссии. Или попробуйте увеличить предел скольжения цены и повторите попытку снова. Следующая попытка через 3 секунды...</string>
     <!--Swap-->
     <string name="Swap">Обменять</string>
     <string name="Swap_FromAmountTitle">Вы платите</string>
@@ -313,7 +354,10 @@
     <string name="Swap_Balance">Баланс</string>
     <string name="Swap_Allowance">Разрешение</string>
     <string name="Swap_Price">Цена</string>
+    <string name="Swap_SellPrice">Цена продажи</string>
+    <string name="Swap_BuyPrice">Цена покупки</string>
     <string name="Swap_PriceImpact">Колебание Цен</string>
+    <string name="Swap_PriceImpactTooHigh">Разница между рыночной ценой и ожидаемой расчетной ценой слишком высока.</string>
     <string name="Swap_MinimumReceived">Гарантированная Сумма</string>
     <string name="Swap_EstimatedFee">Предполагаемая Комиссия</string>
     <string name="Swap_MaxFee">Макс. Комиссия</string>
@@ -328,13 +372,18 @@
     <string name="Swap_MaximumPaid">Максимальная Выплата</string>
     <string name="Swap_MinimumGot">Гарантированная Сумма</string>
     <string name="Swap_PoweredBy">При поддержке</string>
+    <string name="Swap_SelectSwapProvider_Title">Смена провайдера</string>
+    <string name="Swap_SelectSwapProvider_Subtitle">Переключатель</string>
+    <string name="Swap_AmountEstimated">(прим.)</string>
+    <string name="Swap_AmountMin">(мин)</string>
+    <string name="Swap_AmountMax">(макс)</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">Дополнительные Настройки</string>
     <string name="SwapSettings_Service">Сервис</string>
     <string name="SwapSettings_SlippageTitle">Допустимость Отклонений</string>
-    <string name="SwapSettings_SlippageDescription">Ваша транзакция будет отменена, если цена изменится в неблагоприятную сторону более, чем на этот процент</string>
+    <string name="SwapSettings_SlippageDescription">Ваша транзакция будет отменена, если цена изменится в неблагоприятную сторону более чем на этот процент</string>
     <string name="SwapSettings_DeadlineTitle">Срок Транзакции</string>
-    <string name="SwapSettings_DeadlineDescription">Ваша транзакция будет отменена, если перевод займет больше указанного срока</string>
+    <string name="SwapSettings_DeadlineDescription">Ваша транзакция будет отменена, если перевод займет больше указанного срока.</string>
     <string name="SwapSettings_RecipientAddressTitle">Адрес Получателя</string>
     <string name="SwapSettings_RecipientAddressDescription">После операции обмена сумма будет переведена на указанный адрес</string>
     <string name="SwapSettings_Apply">Применить</string>
@@ -343,17 +392,16 @@
     <string name="SwapSettings_Error_DeadlineZero">Нулевой Срок</string>
     <string name="SwapSettings_Error_SlippageZero">Нулевое Отклонение</string>
     <string name="SwapSettings_Error_SlippageTooLow">Ваша транзакция, скорее всего, не удастся.</string>
-    <string name="SwapSettings_Error_SlippageTooHigh">Макс. допустимое значение %s%%</string>
+    <string name="SwapSettings_Error_SlippageTooHigh">Сопротивление скольжению не может превышать %s%%</string>
     <string name="SwapSettings_Error_InvalidAddress">Неверный Адрес</string>
     <string name="SwapSettings_Error_InvalidSlippage">Неверное Отклонение</string>
     <string name="SwapSettings_Error_InvalidDeadline">Недопустимый Срок</string>
+    <string name="SwapSettings_Warning_UnusualSlippage">Ваша транзакция может быть авансированной</string>
     <!-- Swap Confirmation -->
     <string name="Swap_Confirmation">Подтверждение</string>
     <string name="Swap_Confirmation_Guaranteed">Гарантировано</string>
     <string name="Swap_Confirmation_Maximum">Максимум</string>
     <string name="Swap_Confirmation_Estimated">Ориентировочно</string>
-    <!--Swap Coin Select-->
-    <string name="Swap_CoinSelect_Title">Выберите Валюту</string>
     <!--Approve-->
     <string name="Approve_Title">Разрешить Обмен</string>
     <string name="Approve_Info">Вы должны предоставить разрешение на смарт-контракт, чтобы обменять этот токен от своего имени. С помощью этого разрешения задается сумма, которая может быть использована в рамках смарт-контракта. Это не повлияет на ваш баланс, но вам придется заплатить небольшой сбор за исполнение транзакции.\n\nРазрешение может быть запрошено перед каждой сделкой, но дешевле заранее задать более высокую сумму для будущих сделок.</string>
@@ -361,14 +409,14 @@
     <string name="Approve_Spender">Покупатель</string>
     <string name="Approve_YouApprove">Вы Подтверждаете</string>
     <!--Uniswap Info -->
-    <string name="SwapInfo_Description">Данный сервис обмена работает при поддержке Uniswap - децентрализированного протокола обмена токенов, основанного на блокчейне Ethereum.\n\nnСервис Uniswap полностью автоматизирован и управляется смарт-контрактами, которые надежным способом упрощают обмен токенами без каких-либо средств мошенничества.</string>
+    <string name="SwapInfo_Description">Этот обменный сервис работает при поддержке %s - децентрализованного протокола обмена токенов, созданного в блокчейне %s.\n\n%s полностью автоматизирован и управляется смарт-контрактами, которые надежным способом упрощают обмен токенами без осуществления каких-либо махинаций.</string>
     <string name="SwapInfo_DexRelated">О Uniswap</string>
     <string name="SwapInfo_AllowanceTitle">Разрешение</string>
-    <string name="SwapInfo_AllowanceDescription">Сумма в некоторых валютах, которую Uniswap может потратить от вашего имени при выполнении обмена токенов. Может потребоваться разрешение на использование достаточной суммы перед обменом</string>
+    <string name="SwapInfo_AllowanceDescription">Сумма в некоторых валютах, которую сервис может потратить от вашего имени при выполнении обмена токенов. Может потребоваться разрешение на использование достаточной суммы перед обменом.</string>
     <string name="SwapInfo_PriceImpactTitle">Колебание Цен</string>
     <string name="SwapInfo_PriceImpactDescription">Ожидаемое отклонение цены от указанной цены, обычно увеличивается при увеличении суммы обмена.</string>
     <string name="SwapInfo_SwapFeeTitle">Комиссия за обмен</string>
-    <string name="SwapInfo_SwapFeeDescription">Плата за услугу обмена на платформе Uniswap, показана в валюте, в которой продает пользователь. Для большинства заказов составляет или 0,3% или 0,6%.</string>
+    <string name="SwapInfo_SwapFeeDescription">Плата за услугу обмена на платформе, показана в валюте, в которой продает пользователь. Для большинства заказов составляет или 0,3% или 0,6%.</string>
     <string name="SwapInfo_GuaranteedAmountTitle">Гарантированная Сумма</string>
     <string name="SwapInfo_GuaranteedAmountDescription">Минимальная сумма, которую получит пользователь в результате обмена.</string>
     <string name="SwapInfo_MaxSpendTitle">Максимальная Трата</string>
@@ -377,7 +425,7 @@
     <string name="SwapInfo_TransactionFeeTitle">Комиссия за транзакцию</string>
     <string name="SwapInfo_TransactionFeeDescription">Примерная стоимость услуги по обработке данной транзакции на блокчейне %s. Стоимость транзакций, связанных с %s, обычно выше, чем стоимость транзакций по передаче обычных токенов.</string>
     <string name="SwapInfo_TransactionSpeedTitle">Скорость Транзакции</string>
-    <string name="SwapInfo_TransactionSpeedDescription">Обработка транзакций с более высокой комиссией будет ускорена. Верно и обратное.</string>
+    <string name="SwapInfo_TransactionSpeedDescription">Обработка транзакций с более высокой комиссией будет ускорена. Также верно и обратное.</string>
     <string name="SwapInfo_Site">%s Сайт</string>
     <!--Deposit-->
     <string name="Deposit_Title">Получить %s</string>
@@ -388,12 +436,12 @@
     <string name="Transactions_FilterAll">ВСЕ</string>
     <string name="Transactions_EmptyList">У вас ещё нет незавершенных или прошлых транзакций</string>
     <string name="Transactions_Pending">В обработке</string>
-    <string name="Transactions_Receive">Получить</string>
+    <string name="Transactions_Receive">Получено</string>
     <string name="Transactions_Completed">Завершено</string>
     <string name="Transactions_Processing">В процессе</string>
-    <string name="Transactions_Send">Отправить</string>
+    <string name="Transactions_Send">Отправлено</string>
     <string name="Transactions_Approve">Подтвердить</string>
-    <string name="Transactions_Swap">Обменять</string>
+    <string name="Transactions_Swap">Обмен</string>
     <string name="Transactions_Failed">Не удалось</string>
     <string name="Transactions_ContractCall">Вызов Контракта</string>
     <string name="Transactions_ContractCreation">Создание Контракта</string>
@@ -403,7 +451,7 @@
     <!--Transaction Info-->
     <string name="TransactionInfo_Transaction">Транзакция</string>
     <string name="TransactionInfo_Title">Информация о Транзакции</string>
-    <string name="TransactionInfo_Approval">Подтверждение обмена</string>
+    <string name="TransactionInfo_Approval">Разрешение Обмена</string>
     <string name="TransactionInfo_Status">Статус</string>
     <string name="TransactionInfo_Status_Confirmed">Подтверждено</string>
     <string name="TransactionInfo_Date">Дата</string>
@@ -429,6 +477,9 @@
     <string name="TransactionInfo_YouGot">Вы Получили</string>
     <string name="TransactionInfo_Resend">Отправить Повторно</string>
     <string name="TransactionInfo_RevokeApproval">Отозвать Подтверждение</string>
+    <string name="TransactionInfo_Options">Параметры</string>
+    <string name="TransactionInfo_SpeedUp">Ускорение</string>
+    <string name="TransactionInfo_Cancel">Отмена</string>
     <string name="StatusInfo_Pending">В обработке</string>
     <string name="StatusInfo_Processing">В Процессе</string>
     <string name="StatusInfo_Confirmed">Завершено</string>
@@ -437,11 +488,19 @@
     <string name="StatusInfo_ProcessingDescription">Транзакция уже включена в блокчейн, но пока не обработана. На данном этапе транзакции считаются завершенными для небольших платежей. Что касается завершения обработки более крупных транзакций, стоит дождаться смены статуса.</string>
     <string name="StatusInfo_ConfirmedDescription">Транзакция завершена и считается постоянной и необратимой.</string>
     <string name="StatusInfo_FailedDescription">Транзакция не была обработана, и передача заданной суммы не произошла. Транзакции со статусом отказа также записываются в блокчейн и за них взимаются комиссии. Приложение Unstoppable не может показать причину ошибочной обработки таких транзакций, но пользователи могут найти эту информацию на сайте block explorer, т.e. etherscan.io.</string>
+    <!-- Transaction Info Options -->
+    <string name="TransactionInfoOptions_SpeedUp_Title">Ускорение</string>
+    <string name="TransactionInfoOptions_SpeedUp_Description">Это действие аннулирует предыдущую транзакцию, переотправив ее с более высокой комиссией. Если исходная транзакция ожидает обработки во время отправки новой, то вероятность ее аннулирования и замены довольно высока. Только одна из этих двух транзакций будет включена в блокчейн.</string>
+    <string name="TransactionInfoOptions_SpeedUp_Button">Отправить Повторно</string>
+    <string name="TransactionInfoOptions_Cancel_Title">Отменить</string>
+    <string name="TransactionInfoOptions_Cancel_Description">Это действие будет пытаться аннулировать предыдущую транзакцию путем повторной отправки самому себе как новой 0 %s транзакции. Если исходная транзакция остается отложенной при отправке новой, существует высокая вероятность (не гарантированная), что она будет признана недействительной и заменена. Только одна из этих двух транзакций будет включена в цепочку блоков.</string>
+    <string name="TransactionInfoOptions_Cancel_Button">Отменить Транзакцию</string>
+    <string name="TransactionInfoOptions_Warning_TransactionInBlock">Транзакция уже в блоке</string>
     <!-- Info -->
     <string name="Info_LockTime_Title">TimeLock</string>
     <string name="Info_LockTime_Description">Эти средства были отправлены с временной блокировкой, которая истекает %s.\n\nНе волнуйтесь, полученные биткойны уже ваши, но до истечения периода блокировки, вы не сможете потратить их.</string>
     <string name="Info_DoubleSpend_Title">Двойная Трата</string>
-    <string name="Info_DoubleSpend_Description">Двойная Трата! Существует другая транзакция в блокчейне, которая пытается использовать входные данные, используемые в этой транзакции. Только одна транзакция будет принята сетью.</string>
+    <string name="Info_DoubleSpend_Description">Риск двойной траты! Существует другая транзакция в блокчейне, которая пытается использовать входные данные, используемые в этой транзакции. Только одна транзакция будет принята сетью</string>
     <string name="Info_DoubleSpend_ThisTx">Эта транзакция</string>
     <string name="Info_DoubleSpend_ConflictingTx">Конфликтующая транзакция</string>
     <!--Guides-->
@@ -468,13 +527,14 @@
     <string name="Settings_AppStatus">Статус Приложения</string>
     <string name="Settings_WalletConnect">Wallet Connect</string>
     <string name="Settings_RateUs">Оцените наше приложение</string>
+    <string name="Settings_LaunchScreen">Экран запуска</string>
     <string name="SettingsAboutApp_Title">О приложении</string>
     <string name="SettingsAboutApp_Site">Веб-сайт</string>
     <string name="SettingsAboutApp_WhatsNew">Что Нового</string>
     <string name="SettingsPrivacy_Info">Это приложение не передает ваши данные, но, поскольку оно связывается с блокчейнами, возможна потенциальная утечка некоторых общедоступных данных, таких как IP-адрес. Используйте кнопку \"Информация\" в правом верхнем углу для получения более подробной информации о каждом разделе.</string>
     <string name="SettingsPrivacy_ConnectionSettingsTitle">Доступ в Интернет</string>
     <string name="SettingsPrivacy_WalletRestore">Восстановить Блокчейн</string>
-    <string name="SettingsPrivacy_WalletRestoreDescription">Выберите источник данных для восстановления кошелька с транзакциями.</string>
+    <string name="SettingsPrivacy_WalletRestoreDescription">Выберите источник данных для восстановления кошелька с транзакциями</string>
     <string name="SettingsPrivacy_Transactions">Блокчейн Tранзакции</string>
     <string name="SettingsPrivacy_TransactionsSettingText">Входы/Выходы</string>
     <string name="SettingsPrivacy_TransactionsDescription">Поменяйте способ структурирования транзакций, чтобы затруднить отслеживание ваших операций с BTC, LTC, BCH.</string>
@@ -486,10 +546,7 @@
       \n\n1. Перемешивание: Рандомизируется порядок выхода каждой транзакции. Иногда сдача может отправляться первой, а иногда второй. Если вы доверяете разработчику приложения, то воспользуйтесь рекомендуемым вариантом.
       \n\n2. Детерминистский подход: существует общепринятый стандарт заказа выходов транзакций (именуемый BIP69). Используя стандартные кошельки с открытым исходным кодом, пользователи не должны волноваться о том, как разработчики приложения реализуют выходы. Так как это новый стандарт, он еще не реализован во многих кошельках. В результате, пока что в блокчейн можно увидеть, была ли отправлена транзакция из кошелька, который использует этот стандарт или нет.</string>
     <string name="SettingsPrivacy_Info_BlockchainConnection_Title">Синхронизация Блокчейна</string>
-    <string name="SettingsPrivacy_Info_BlockchainConnection_Description">Эта настройка регулирует взаимодействие приложения с блокчейнами (в отношении отправки/получения транзакций). В том, что касается Bitcoin, Bitcoin Cash, Litecoin и Dash, она полностью одноранговая. Приложение пингует многие узлы и связывается с ними. Потенциально эти узлы могут регистрировать IP-адрес и запрашиваемые данные. Однако поскольку они выбираются случайным образом, каждый раз приложение подключается к новому узлу. 
-     \n\nВ случае с Ethereum, мобильные кошельки не располагают альтернативным вариантом для взаимодействия с блокчейном, кроме как через сторонних поставщиков (например, Infura.io) или личные узлы Ethereum. Сторонние сервисы потенциально могут регистрировать IP-адреса и сделанные запросы. Эта информация может отображать местоположение, баланс, транзакции и т.д. Более того, кошелек должен быть уверен в достоверности возвращаемой информации. Существует альтернативный вариант, известный под именем Incubed, который, по сути, представляет собой сеть специальных узлов Ethereum. Эти узлы также могут регистрировать IP-адреса и сделанные запросы, но каждый раз они выбираются случайным образом. Хотя Incubed работает немного медленнее, чем Infura, он гарантирует достоверность возвращаемой информации (предотвращая 
-фальсификацию данных). 
-      \n\nДругие блокчейны наподобие EOSIO и Binance Chain на данный момент являются исключительно централизованными средствами подключения, без эффективных альтернатив. Потенциально они могут регистрировать IP-адреса и сделанные запросы.</string>
+    <string name="SettingsPrivacy_Info_BlockchainConnection_Description">Этот параметр определяет способ взаимодействия приложения с блокчейнами при отправке или получении транзакций.\n\nКогда речь идет о Bitcoin, Bitcoin Cash, Litecoin, и Dash, связь с сетевыми узлами блокчейна полностью равноправна. Unstoppable пингует многие узлы и связывается с одним из них. Каждый раз приложение подключается к другому узлу.\n\nЧто касается Ethereum и Binance Smart Chain, то пока нет подходящих альтернативных вариантов мобильных кошельков для взаимодействия с соответствующими блокчейнами кроме сторонних поставщиков услуг RPC (т.е. Infura.io) или личными узлами Ethereum. Это значит, что ваше взаимодействие с блокчейном не децентрализовано. Это влияет не на ваши средства, а на возможность подключения к сети блокчейн.</string>
     <string name="SettingsPrivacy_Info_BlockchainRestore_Title">Восстановить Блокчейн</string>
     <string name="SettingsPrivacy_Info_BlockchainRestore_Description">Этот параметр актуален только при восстановлении существующего кошелька. Это процесс получения истории транзакций для данной монеты, чтобы приложение кошелька могло отображать предыдущие транзакции и определять последний баланс. Это должно произойти только один раз при восстановлении пользователем ранее созданного кошелька. На данный момент у такого мобильного кошелька, как Unstoppable, есть два возможных способа для реализации этого вопроса: 
       \n\n1. С сервера API: существует предопределенный сторонний сервер, на котором размещается вся цепочка блоков, происходит обработка всех данных и их подготовка к быстрому предоставлению. Это быстрый метод, однако он предполагает потенциальное отслеживание IP-адресов и запрашиваемых данных. Этот вариант рекомендуется использовать из-за скорости получения данных (5-10 минут). Он сопряжен с минимальными рисками. Если пользователь восстанавливает данные со своего собственного сервера, то нет никакой угрозы конфиденциальности.
@@ -506,7 +563,7 @@
     <string name="SettingsSecurity_ManageKeys">Управление Кошельками</string>
     <string name="SettingsSecurity_AppRestartWarning">Это действие перезапустит Unstoppable Кошелек.</string>
     <string name="SettingsSecurity_TorConnectionDescription">Во время использования этого приложения полностью анонимизировать ваш интернет. Обратите внимание, что в некоторых случаях функция WalletConnect для DeFi приложений может быть очень медленной или вообще не работать.</string>
-    <string name="SettingsSecurity_NotificationsDisabledWarning">Уведомления для Unstoppable Кошелька отключены. Для работы Tor необходимо включить их.</string>
+    <string name="SettingsSecurity_NotificationsDisabledWarning">Уведомления для приложения Unstoppable Wallet отключены. Чтобы получать уведомления об изменении цен, вам нужно включить уведомления и разрешить запуск приложения в фоновом режиме.</string>
     <string name="SettingsSecurity_SortingShuffle">Перемешать</string>
     <string name="SettingsSecurity_SortingShuffleDescription">Случайное Индексирование</string>
     <string name="SettingsSecurity_SortingBip69">Детерминированный BIP69</string>
@@ -517,8 +574,11 @@
     <string name="SettingsSecurity_SyncModeBlockchainDescription">Более Приватно</string>
     <!--Setting_Terms-->
     <string name="SettingsTerms_Text">Кошелек Unstoppable предназначен для тех, кто хочет инвестировать и хранить криптовалюты частным и независимым образом.
+
 \n\nЭто некастодиальный децентрализованный кошелек, в котором только пользователь может контролировать свои средства. Кошелек не собирает какие-либо данные и позволяет пользователю сохранять независимость, не завязывая учетную запись под одно приложение-кошелек.
+
 \n\nКошелек Unstoppable имеет открытый исходный программный код, и любой может убедиться в том, что приложение работает должным образом.
+
 \n\nМы создали кошелек Unstoppable для себя, так как доступные в сети решения не предлагают необходимый функционал на должном уровне. С точки зрения инженерии и простоты использования, мы считаем, что этот кошелек значительно опережает альтернативные продукты.</string>
     <string name="SettingsTerms_TermAcademy">Я зашел в раздел \"Академия\" в этом приложении и ознакомился с базовыми аспектами хранения криптовалют.</string>
     <string name="SettingsTerms_TermBackup">Я создал резервную копию приватного ключа (-ей) для своих кошельков, показанных мне в виде 12-24 слов. Я понимаю, что эти приватные ключи хранятся на моем смартфоне, а не в другом месте.</string>
@@ -552,6 +612,11 @@
     <string name="NotificationBottomMenu_Short">Короткая позиция</string>
     <string name="NotificationBottomMenu_LongTerm">Долгосрочный 6М</string>
     <string name="NotificationBottomMenu_Long">Длинная позиция</string>
+    <!-- Settings Launch Screen -->
+    <string name="SettingsLaunchScreen_Auto">По умолчанию</string>
+    <string name="SettingsLaunchScreen_Balance">Баланс</string>
+    <string name="SettingsLaunchScreen_MarketOverview">Обзор Рынка</string>
+    <string name="SettingsLaunchScreen_Watchlist">Избранное</string>
     <!--Settings-->
     <string name="SettingsTheme_Title">Тема</string>
     <string name="SettingsTheme_Dark">Тёмная</string>
@@ -561,26 +626,28 @@
     <string name="Binance_Backend_Error_MemoRequired">При отправке транзакции получателю необходимо заполнить поле мемо</string>
     <string name="Binance_Backend_Error_RequiresDigits">Поле мемо должно содержать только цифры</string>
     <!--Hud texts-->
-    <string name="Hud_Text_Success">Успешно</string>
     <string name="Hud_Text_NoInternet">Нет Интернета</string>
     <string name="Hud_Text_Copied">Скопировано</string>
     <string name="Hud_Text_Created">Создан</string>
     <string name="Hud_Text_Done">Готово</string>
     <string name="Hud_Text_EmailAddressCopied">Адрес электронной почты скопирован</string>
     <string name="Hud_Added_To_Watchlist">Добавлено в Избранное</string>
+    <string name="Hud_Added_To_Wallet">Добавлено в Кошелек</string>
+    <string name="Hud_Already_In_Wallet">Уже добавлено в кошелек</string>
     <string name="Hud_Removed_from_Watchlist">Удалить из Избранного</string>
     <string name="Hud_UnknownError">%s</string>
     <!--Manage Coins-->
-    <string name="ManageCoins_title">Выберите Токены</string>
+    <string name="ManageCoins_title">Токены</string>
     <string name="ManageCoins_Search">Поиск</string>
     <string name="ManageCoins_AddToken">Добавить Токен</string>
+    <string name="ManageCoins_NoResults">Ничего не найдено. Попробуйте добавить токен вручную, если вы знаете его адрес смарт-контракта.</string>
     <!-- Experimental Feature -->
     <string name="ExperimentalFeatures_Title">Функции</string>
     <string name="ExperimentalFeatures_Description">Функции ниже являются экспериментальными. Несмотря на то, что мы детально их протестировали, используя наши собственные криптосредства, мы не можем гарантировать, что они всегда будут работать так, как предусмотрено.</string>
     <string name="ExperimentalFeatures_BitcoinHodling">TimeLock</string>
     <!-- Bitcoin Hodling -->
     <string name="BitcoinHodling_Title">TimeLock</string>
-    <string name="BitcoinHodling_Description">Позволяет отправлять биткойны, которые могут быть потрачены только после указанной даты.\n\nПолучатель такой транзакции должен быть пользователем кошелька Unstoppable.\n\nТолько кошелек Unstoppable может правильно распознать и обработать такие транзакции в сети Bitcoin, и позволить получателю тратить эти биткойны по истечении периода блокировки.\n\nЕсли вы HODLer (долгосрочный инвестор), то вы можете использовать эту функцию отправив биткойны себе. \n\nТак как это экспериментальная функция, максимальная сумма транзакции ограничена 0,5 BTC.</string>
+    <string name="BitcoinHodling_Description">Позволяет отправлять биткойны, которые могут быть потрачены только после указанной даты.\n\nПолучатель такой транзакции должен использовать версию 0.10 приложения Unstoppable Wallet или же более новую версию с форматом адреса BIP44 для Bitcoin.\n\nТолько кошелек Unstoppable может правильно распознать и обработать такие транзакции в сети Bitcoin, и позволить получателю тратить эти биткойны по истечении периода блокировки.\n\nЕсли вы HODLer (долгосрочный инвестор), то вы можете использовать эту функцию для удержания своих биткойнов, отправив их себе. \n\nТак как это экспериментальная функция, максимальная сумма транзакции ограничена 0,5 BTC.</string>
     <!--Manage Accounts-->
     <string name="ManageAccounts_Title">Кошельки</string>
     <string name="ManageAccounts_CreateNewWallet">Создать</string>
@@ -597,10 +664,12 @@
     <string name="ManageAccount_BackupRequired_Description">Вам нужно сделать резервную копию персонального ключа для этого кошелька, прежде чем он будет удален с этого телефона.</string>
     <string name="ManageAccount_Delete_ConfirmationRemove">Это действие удалит ваш %s кошелек с этого устройства.</string>
     <string name="ManageAccount_Delete_ConfirmationDisable">Все монеты, принадлежащие этому кошельку, будут отключены на вкладке баланса.</string>
-    <string name="ManageAccount_Delete_ConfirmationLose">Если вы не создавали резервную копию закрытого ключа для этого кошелька, вы потеряете доступ к средствам в выбранном кошельке.</string>
+    <string name="ManageAccount_Delete_ConfirmationLose">Если вы не сделали резервную копию приватного ключа для этого кошелька, вы потеряете доступ к вашим средствам.</string>
     <string name="ManageAccount_BirthdayHeight">%s Блок Создания</string>
     <string name="ManageAccount_NWords">%s слов</string>
     <string name="ManageAccount_NWordsWithPassphrase">%s слов с кодовой фразой</string>
+    <string name="ManageAccount_SwitchWallet_Title">Сменить Кошелек</string>
+    <string name="ManageAccount_SwitchWallet_Subtitle">Выберите кошелек для быстрого переключения</string>
     <!--Network Settings-->
     <string name="NetworkSettings_Title">Настройки Сети</string>
     <string name="NetworkSettings_TestNetDisclaimer">Пожалуйста, не выбирайте опции Testnet, если вы не понимаете, что такое и как это работает.\n\nTestnet является параллельным блокчейном для тестирования целей в своей собственной валюте. Если кто-то отправляет регулярный платеж на ваш Testnet адрес, он будет утерян.</string>
@@ -612,6 +681,10 @@
     <string name="ShowKey_ButtonClose">Закрыть</string>
     <string name="ShowKey_TabMnemonicPhrase">Фраза для восстановления</string>
     <string name="ShowKey_TabPrivateKey">Приватный Ключ</string>
+    <string name="ShowKey_PrivateKeyCopyWarning_Title">Внимание</string>
+    <string name="ShowKey_PrivateKeyCopyWarning_Subtitle">Риск Копирования Секретного Ключа</string>
+    <string name="ShowKey_PrivateKeyCopyWarning_Text">В целях безопасности мы не рекомендуем копировать секретный ключ.</string>
+    <string name="ShowKey_PrivateKeyCopyWarning_Proceed">Я рискну</string>
     <!-- Backup Key -->
     <string name="BackupKey_Title">Резервная Копия</string>
     <string name="BackupKey_Description">Показанные далее фразы для восстановления являются единственным способом восстановления ваших средств в случае потери, кражи или поломки вашего телефона.\n\nУбедитесь, что никто не смотрит на ваш экран.</string>
@@ -649,23 +722,26 @@
     <string name="AddToken_Symbol">Символ</string>
     <string name="AddToken_Decimals">Десятичные Знаки</string>
     <string name="AddToken_Dots">…</string>
-    <string name="AddToken_CoinType">Тип Монеты</string>
+    <string name="AddToken_CoinTypes">Тип(-ы) токенов</string>
     <string name="AddToken_CoinAlreadyInListWarning">Этот токен уже есть в списке поддерживаемых токенов</string>
     <string name="AddToken_InvalidAddressError">Неверный адрес контракта или символ BEP2</string>
     <string name="AddToken_ApiLimitExceeded">Превышен лимит Api. Повторите попытку позже.</string>
-    <string name="AddEvmToken_ContractNotFound">Контракт не найден</string>
-    <string name="AddBep2Token_SymbolNotFound">Символ не найден</string>
+    <string name="AddEvmToken_TokenNotFound">Токен не найден</string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Title">Формат Адреса</string>
-    <string name="AddressFormatSettings_Description">Выберите формат адреса для вашего %s кошелька. Каждый выбранный формат представляет отдельный кошелек во вкладке приложения для отображения баланса.</string>
+    <string name="AddressFormatSettings_Description">Выберите формат адреса для токена. Если вы сомневаетесь в правильности выбранного формата, выберите рекомендуемую опцию. При восстановлении существующего кошелька должен быть выбран правильный формат.</string>
+    <!-- Coin Platforms -->
+    <string name="CoinPlatforms_Native">Нативный</string>
+    <string name="CoinPlatformsSelector_Title">Тип Монеты</string>
+    <string name="CoinPlatformsSelector_Description">Этот токен существует в нескольких блокчейнах. Выберите версию (-и), которую (-ые) вы хотите использовать.</string>
     <!-- Blockchain Settings -->
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">Источник Восстановления</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">После вступления данного изменения в силу кошелек должен будет повторно синхронизироваться с блокчейном %s.</string>
     <string name="BlockchainSettings_CommunicationModeChangeAlert_Title">Связь</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type0_Title">Legacy</string>
-    <string name="CoinSettings_BitcoinCashCoinType_Type145_Title">Новый</string>
-    <string name="CoinSettings_BitcoinCashCoinType_Type0_Description">Старые кошельки (до августа 2017 г.)</string>
-    <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">Новые кошельки</string>
+    <string name="CoinSettings_BitcoinCashCoinType_Type145_Title">CashAddress (рекомендуется)</string>
+    <string name="CoinSettings_BitcoinCashCoinType_Type0_Description">до 2018 года</string>
+    <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">после 2018 года</string>
     <!-- Tor -->
     <string name="Tor_Title">Tor</string>
     <string name="Tor_Connection_Title">Соединение</string>
@@ -677,10 +753,14 @@
     <string name="TorPage_ConnectionClosed">Отсоединено</string>
     <string name="Tor_PrerequisitesAlert_Content">Активация TOR вернет соединение блокчейна Ethereum к Infura.</string>
     <!--Coin Option-->
-    <string name="CoinOption_bip44_Subtitle">Старый (начинается с %s...)</string>
-    <string name="CoinOption_bip49_Subtitle">Популярный (начинается с %s...)</string>
-    <string name="CoinOption_bip84_Subtitle">Новый (начинается с %s...)</string>
+    <string name="CoinOption_bip44_Title">Legacy</string>
+    <string name="CoinOption_bip49_Title">Новые (рекомендуется)</string>
+    <string name="CoinOption_bip84_Title">Новые</string>
     <!--Coin Page-->
+    <string name="Coin_Tab_Overview">Обзор</string>
+    <string name="Coin_Tab_Market">Рынок</string>
+    <string name="Coin_Tab_Details">Подробности</string>
+    <string name="Coin_Tab_Tweets">Твиты</string>
     <string name="CoinPage_TimeDuration_Today">СГД</string>
     <string name="CoinPage_TimeDuration_Day">24Ч</string>
     <string name="CoinPage_TimeDuration_Week">7Д</string>
@@ -695,11 +775,19 @@
     <string name="CoinPage_MajorHolders">Основные Владельцы</string>
     <string name="CoinPage_Audits">Аудиты</string>
     <string name="CoinPage_Audits_Empty">Нет аудиторских отчетов</string>
-    <string name="CoinPage_Audits_FetchError">Ошибка Выборки</string>
     <string name="CoinPage_Audits_PoweredBy">При поддержке Defiyield.app</string>
     <string name="CoinPage_Audits_Issues">Запросы: %d</string>
     <string name="CoinPage_InvestorData">Данные Инвестора</string>
+    <string name="CoinPage_Treasuries">Treasuries</string>
+    <string name="CoinPage_Treasuries_FilterTitle">Фильтры</string>
+    <string name="CoinPage_Treasuries_PoweredBy">Работает на Bitcointreasuries.net</string>
+    <string name="CoinPage_Reports">Отчёты</string>
     <string name="CoinPage_FundsInvested">Средства Инвестированы</string>
+    <string name="CoinPage_TokenDistribution">Распределение Токенов</string>
+    <string name="CoinPage_TokenLiquidity">Ликвидность Токена</string>
+    <string name="CoinPage_TotalVolume">Общий Объём</string>
+    <string name="CoinPage_DetailsTvl">TVL</string>
+    <string name="CoinPage_TokenTvl">Токен TVL</string>
     <string name="CoinPage_SecurityParams">Параметры Безопасности</string>
     <string name="CoinPage_SecurityParams_Privacy">Приватность</string>
     <string name="CoinPage_SecurityParams_Low">Низкая</string>
@@ -728,11 +816,19 @@
     <string name="CoinPage_Range24">Диапазон за 24 ч</string>
     <string name="CoinPage_About">О программе</string>
     <string name="CoinPage_Category">Категория</string>
+    <string name="CoinPage_Categories">Категории</string>
+    <string name="CoinPage_Contracts">Контракты</string>
+    <string name="CoinPage_Links">Ссылки</string>
     <string name="CoinPage_Guide">Руководство</string>
     <string name="CoinPage_Website">Веб-сайт</string>
     <string name="CoinPage_Whitepaper">Документ</string>
     <string name="CoinPage_Reddit">Reddit</string>
     <string name="CoinPage_Twitter">Twitter</string>
+    <string name="CoinPage_Twitter_NotAvailable">Twitter не доступен</string>
+    <string name="CoinPage_Twitter_Quoted">Цитировано %s</string>
+    <string name="CoinPage_Twitter_Retweeted">Ретвитнуто %s</string>
+    <string name="CoinPage_Twitter_Replied">Ответ на %s</string>
+    <string name="CoinPage_Twitter_SeeOnTwitter">Посмотреть в Twitter</string>
     <string name="CoinPage_Telegram">Telegram</string>
     <string name="CoinPage_Github">Github</string>
     <string name="CoinPage_MarketCap">Рыночная Капитализация</string>
@@ -745,6 +841,8 @@
     <string name="CoinPage_MarketCap_Trillion">трл</string>
     <string name="CoinPage_Volume">Объём</string>
     <string name="CoinPage_NoData">Нет данных</string>
+    <string name="CoinPage_AddToWallet">Добавить в кошелек</string>
+    <string name="CoinPage_InWallet">В кошельке</string>
     <string name="CoinPage_Favorite">Избранное</string>
     <string name="CoinPage_Unfavorite">Удалить из избранного</string>
     <string name="CoinPage_Performance_Week">1 Неделя</string>
@@ -757,10 +855,10 @@
     <string name="CoinPage_TvlMCapRatio">M.cap / TVL Ratio</string>
     <string name="CoinPage_TvlDescription">Капитал, внесенный в платформу в виде кредитного обеспечения или пула ликвидности.</string>
     <string name="CoinPage_Contract">%s Контракт</string>
-    <string name="CoinPage_Bep2Symbol">BEP2 Symbol</string>
+    <string name="CoinPage_Bep2Symbol">Символ BEP2</string>
     <string name="CoinPage_MajorHolders_TopWallets">Топ Кошельки</string>
     <string name="CoinPage_MajorHolders_Description">На графике выше показано % всех жетонов, находящихся в обороте топ-10 кошельков. Чем ниже это процентное соотношение, тем выше распределение коина.</string>
-    <string name="CoinPage_MajorHolders_InTopWallets">в Топ-10 кошельках</string>
+    <string name="CoinPage_MajorHolders_InTopWallets">Топ-10 лучших кошельков Ethereum</string>
     <!--Rate list-->
     <string name="RateList_TopGainers">Взлеты</string>
     <string name="RateList_TopLosers">Падения</string>

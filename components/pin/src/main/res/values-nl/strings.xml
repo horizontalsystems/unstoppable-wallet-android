@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--Common-->
+    <string name="Button_Cancel">Cancel</string>
+    <!--Unlock-->
+    <string name="Unlock_Page_EnterYourPin">Passcode</string>
+    <!--Biometric Auth texts-->
+    <string name="BiometricAuth_DialogTitle">Biometrics Scanner</string>
+    <!--Unlock Pin-->
+    <string name="UnlockPin_WalletDisabledUntil">Disabled until: %s</string>
+    <string name="UnlockPin_Error_PinIncorrect">Incorrect</string>
+    <string name="UnlockPin_BiometricScannerDisabled_Title">Biometrics Scanner</string>
+    <string name="UnlockPin_BiometricScannerDisabled_Description">Enter passcode or try again later</string>
+    <string name="UnlockPin_BiometricScannerDisabled_Info">Biometric auth. disabled</string>
+    <string name="UnlockPin_BiometricScannerDisabled_Button">Passcode</string>
+    <!--Set Pin-->
+    <string name="SetPin_Title">Passcode</string>
+    <string name="SetPin_Info">Your passcode will be used to unlock your wallet</string>
+    <string name="SetPin_ConfirmInfo">Confirm</string>
+    <string name="SetPin_ErrorPinsDontMatch">Passcode did not match. Try again.</string>
+    <string name="SetPin_ErrorFailedToSavePin">Error occurred while saving your passcode. Please, try again.</string>
+    <!--Edit Pin-->
+    <string name="EditPin_Title">Edit Passcode</string>
+    <string name="EditPin_UnlockInfo">Current Passcode</string>
+    <string name="EditPin_NewPinInfo">New Passcode</string>
+</resources>

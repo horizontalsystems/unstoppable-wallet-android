@@ -8,7 +8,7 @@
     <string name="BiometricAuth_DialogTitle">Scanner biométrique</string>
     <!--Unlock Pin-->
     <string name="UnlockPin_WalletDisabledUntil">Désactivé jusqu\'à: %s</string>
-    <string name="UnlockPin_Error_PinIncorrect">Incorrect</string>
+    <string name="UnlockPin_Error_PinIncorrect">Incorrecte</string>
     <string name="UnlockPin_BiometricScannerDisabled_Title">Scanner biométrique</string>
     <string name="UnlockPin_BiometricScannerDisabled_Description">Entrez le code d\'accès ou réessayez plus tard</string>
     <string name="UnlockPin_BiometricScannerDisabled_Info">Autorisation biométrique désactivée</string>

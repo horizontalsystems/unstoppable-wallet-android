@@ -18,16 +18,19 @@
     <string name="Button_Change">Changer</string>
     <string name="Button_Add">Ajouter</string>
     <string name="Button_Approve">Approuver</string>
+    <string name="Button_Confirm">Confirmer</string>
     <string name="Button_Connect">Connecter</string>
     <string name="Button_Reject">Rejeter</string>
     <string name="Button_Disconnect">Déconnecter</string>
     <string name="Button_Start">Commencer</string>
     <string name="Button_Create">Créer</string>
     <string name="Button_Restore">Restaurer</string>
-    <string name="Button_Reset">Reset</string>
+    <string name="Button_Reset">Réinitialiser</string>
+    <string name="Button_Reconnect">Reconnexion</string>
     <string name="Error">Erreur</string>
     <string name="NotAvailable">S. O.</string>
     <string name="Any">N\'importe lequel</string>
+    <string name="PercentTitle">Percent</string>
     <!--Intro-->
     <string name="Intro_Wallet_Screen1Description">Soyez Unstoppable</string>
     <string name="Intro_Wallet_Screen2Title">Désenchaînez les actifs</string>
@@ -60,13 +63,13 @@
     <string name="Restore_Enter_Key_Title">Entrez la clé</string>
     <string name="Restore_Mnemonic_Description">Saisissez votre mnémonique qui consiste en 12 ou 24 mots. Les mots doivent être saisis dans l\'ordre correct et séparés par des espaces.</string>
     <string name="Restore_ValidationFailed">Clé incorrect</string>
-    <string name="Restore_Error_MnemonicWordCount">Le nombre de mots est incorrect. Il doit être de 12 ou 24. Vous avez saisi : %d</string>
+    <string name="Restore_Error_MnemonicWordCount">Le nombre de mots est incorrect. Il doit être compris entre 12 et 24 mots. Vous avez saisi : %d</string>
     <string name="Restore_Error_EmptyPassphrase">La phrase d\'authentification ne peut pas être laissée en blanc</string>
     <string name="Restore_InvalidChecksum">Somme de contrôle invalide</string>
     <string name="Restore_PassphraseDescription">Entrez la phrase d\'authentification que vous avez utilisée pour créer cette phrase mnémonique.</string>
-    <string name="Select_Coins">Choisissez la Crypto</string>
+    <string name="Select_Coins">Crypto Monnaie</string>
     <string name="Restore_ZCash_BirthdayHeight">Hauteur de l\'anniversaire</string>
-    <string name="Restore_ZCash_BirthdayHeight_Hint">Si vous savez quelle est la hauteur de l\'anniversaire de votre portefeuille Zcash, ajoutez-la ci-dessous pour accélérer le processus de synchronisation.</string>
+    <string name="Restore_ZCash_BirthdayHeight_Hint">Si vous connaissez la hauteur anniversaire de votre portefeuille, saisissez-la pour accélérer la synchronisation.</string>
     <!--Backup-->
     <string name="Backup_Confirmation_CheckTitle">Vérification…</string>
     <!--Market-->
@@ -91,11 +94,13 @@
     <string name="Market_DeFiCap">Cap DeFi</string>
     <string name="Market_SeeAll">Tout Afficher</string>
     <string name="Market_Tab_Overview">Overview</string>
-    <string name="Market_Tab_Discovery">Discovery</string>
-    <string name="Market_Tab_Watchlist">Watchlist</string>
-    <string name="Market_Tab_Watchlist_EmptyList">You don\’t have any favorite assets.\nYou can add the favorites by clicking on star icon in the asset page</string>
+    <string name="Market_Tab_Posts">Infos</string>
+    <string name="Market_Tab_Watchlist">Liste de suivi</string>
+    <string name="Market_Tab_Watchlist_EmptyList">You don’t have any favorite assets. You can add the favorites by clicking on the star icon on the asset page.</string>
     <string name="Market_Category_Rated">Évaluation</string>
     <string name="Market_Category_Rated_Description">Classement des tokens en fonction de la sécurité du projet et de la liquidité du marché.</string>
+    <string name="Market_Category_TopCoins">Top Coins</string>
+    <string name="Market_Category_TopCoins_Description">Top Coins Description</string>
     <string name="Market_Category_Blockchains">Blockchains</string>
     <string name="Market_Category_Blockchains_Description">Cryptomonnaies natives sur les principales blockchains. </string>
     <string name="Market_Category_Dexes">DEXes</string>
@@ -142,20 +147,29 @@
     <string name="Market_Category_Identity_Description">Identité décentralisée.</string>
     <string name="Market_Category_YieldTokens">Yield Tokens</string>
     <string name="Market_Category_YieldTokens_Description">Bearing tokens intéressants.</string>
+    <string name="Market_SyncError">Erreur de synchronisation</string>
     <!--Market Global Metrics-->
     <string name="MarketGlobalMetrics_Chart">Graphique</string>
+    <string name="MarketGlobalMetrics_TotalMarketCap">Total Market Cap</string>
     <string name="MarketGlobalMetrics_BtcDominance">Bitcoin Dominance</string>
     <string name="MarketGlobalMetrics_Volume">Volume</string>
     <string name="MarketGlobalMetrics_DefiCap">Cap DeFi</string>
     <string name="MarketGlobalMetrics_TvlInDefi">TVL en DeFi</string>
+    <string name="MarketGlobalMetrics_TotalMarketCapDescription">Total M.Cap description</string>
     <string name="MarketGlobalMetrics_BtcDominanceDescription">Le changement historique du ratio entre la capitalisation boursière du Bitcoin et le reste des marchés de cryptomonnaies. \n\nGénéralement, lorsque la domination du Bitcoin tend à la hausse, le reste du marché des cryptomonnaies a une tendance à la baisse et vice versa.</string>
     <string name="MarketGlobalMetrics_VolumeDescription">La variation historique du volume global quotidien du marché des transactions pour toutes les cryptomonnaies.</string>
+    <string name="MarketGlobalMetrics_VolumeDescriptionCoin">La variation historique du volume d\'échange quotidien agrégé pour %s</string>
     <string name="MarketGlobalMetrics_DefiCapDescription">L\'évolution historique de la valeur de marché cumulée des tokens dans le secteur de la finance décentralisée.</string>
     <string name="MarketGlobalMetrics_TvlInDefiDescription">L\'évolution historique de la valeur cumulée de toutes les cryptomonnaies gérées par des protocoles décentralisés.</string>
+    <string name="MarketGlobalMetrics_ChainSelectorTitle">Filter by chain</string>
+    <string name="MarketGlobalMetrics_ChainSelectorAll">All</string>
+    <string name="MarketGlobalMetrics_CoinNotSupported">This coin is not supported yet</string>
     <!--Market Search-->
     <string name="EmptyResults">Aucun résultat</string>
-    <string name="Market_AdvancedSearch">Recherche avancée</string>
+    <string name="Market_Filters">Filters</string>
     <string name="Market_AdvancedSearch_Results">Résultat</string>
+    <string name="Market_Search_Hint">Search</string>
+    <string name="Market_Search_BrowseCategories">Browse categories</string>
     <string name="Market_Filter_ChooseSet">Choisissez le set</string>
     <string name="Market_Filter_MarketCap">Cap. marché</string>
     <string name="Market_Filter_Volume">Volume de trading</string>
@@ -179,6 +193,23 @@
     <string name="Market_Filter_Range_100M_1B">100M - 1B</string>
     <string name="Market_Filter_Range_1B_5B">1B - 5B</string>
     <string name="Market_Filter_Range_5B_More">&gt; 5BN</string>
+    <string name="Market_Filter_Range_0_10M">&lt; 10M</string>
+    <string name="Market_Filter_Range_10M_40M">10M - 40M</string>
+    <string name="Market_Filter_Range_40M_200M">40M - 200M</string>
+    <string name="Market_Filter_Range_200M_2B">200M - 2B</string>
+    <string name="Market_Filter_Range_2B_10B">2B - 10B</string>
+    <string name="Market_Filter_Range_10B_More">&gt; 10BN</string>
+    <string name="Market_Filter_Range_0_50M">&lt; 50M</string>
+    <string name="Market_Filter_Range_50M_200M">50M - 200M</string>
+    <string name="Market_Filter_Range_200M_1B">200M - 1B</string>
+    <string name="Market_Filter_Range_1B_10B">1B - 10B</string>
+    <string name="Market_Filter_Range_10B_50B">10B - 50B</string>
+    <string name="Market_Filter_Range_50B_More">&gt; 50BN</string>
+    <string name="Market_Filter_Range_0_500M">&lt; 500M</string>
+    <string name="Market_Filter_Range_500M_2B">500M - 2B</string>
+    <string name="Market_Filter_Range_10B_100B">10B - 100B</string>
+    <string name="Market_Filter_Range_100B_500B">100B - 500B</string>
+    <string name="Market_Filter_Range_500B_More">&gt; 500BN</string>
     <string name="Market_Filter_TimePeriod_1D">1 Jour</string>
     <string name="Market_Filter_TimePeriod_1W">1 Semaine</string>
     <string name="Market_Filter_TimePeriod_2W">2 Semaines</string>
@@ -211,6 +242,7 @@
     <!--Balance-->
     <string name="Balance_Title">Balance</string>
     <string name="Balance_Send">Envoyer</string>
+    <string name="Balance_Receive">Recevoir</string>
     <string name="Balance_RatePerCoin">%s par %s</string>
     <string name="Balance_SyncedUntil">jusqu\'à: %s</string>
     <string name="Balance_Syncing">Synchronisation…</string>
@@ -223,7 +255,7 @@
     <string name="Balance_Sort_Balance">Balance</string>
     <string name="Balance_Sort_PopupTitle">Trier par</string>
     <string name="Balance_Sort_Az">Nom</string>
-    <string name="Balance_Sort_24hPriceChange">Prix 24h (%)</string>
+    <string name="Balance_Sort_24hPriceChange">Variation de prix</string>
     <string name="Balance_Hidden">masqué</string>
     <string name="Balance_Backup_Alert">Vous devez sauvegarder le portefeuille %s avant de recevoir %s.</string>
     <string name="Balance_NoWalletAlert">Vous n\'avez pas encore de portefeuille. Veuillez créer un nouveau portefeuille ou restaurer un portefeuille existant </string>
@@ -240,6 +272,7 @@
     <string name="Send_Confirmation_Amount">Montant</string>
     <string name="Send_Confirmation_To">À</string>
     <string name="Send_Confirmation_Method">Méthode</string>
+    <string name="Send_Confirmation_Nonce">Nonce</string>
     <string name="Send_Confirmation_Receiver">Récepteur</string>
     <string name="Send_Confirmation_EstimateTime">Temps estimé :</string>
     <string name="Send_Confirmation_Send_Button">Envoyer</string>
@@ -283,17 +316,23 @@
     <!--Wallet Connect-->
     <string name="WalletConnect_Title">Wallet Connect</string>
     <string name="WalletConnect_Request">Requête</string>
+    <string name="WalletConnect_SendRequest_Title">Envoyer</string>
+    <string name="WalletConnect_ApproveRequest_Title">Approuver</string>
+    <string name="WalletConnect_SwapRequest_Title">Echanger</string>
+    <string name="WalletConnect_UnknownRequest_Title">Requête</string>
     <string name="WalletConnect_Url">URL</string>
     <string name="WalletConnect_Status">Statut</string>
     <string name="WalletConnect_SignedTransactions">Signer la Transaction</string>
     <string name="WalletConnect_Approve_Hint">En cliquant sur accepter, vous autorisez cette application à afficher votre adresse publique. Il s\'agit d\'une étape importante de sécurité pour protéger vos données contre les risques potentiels d\'hameçonnage.</string>
     <string name="WalletConnect_Ready_Hint">Vous pouvez aller sur le navigateur. Ne fermez pas cette page pendant que vous interagissez dans le navigateur.</string>
+    <string name="WalletConnect_Reconnect_Hint">Échec de connexion. Essayez de vous reconnecter à nouveau.</string>
     <string name="WalletConnect_Error_InvalidUrl">Adresse URL invalide</string>
     <string name="WalletConnect_Requirement">Condition préalable</string>
     <string name="WalletConnect_Status_Offline">Déconnecté</string>
     <string name="WalletConnect_Status_Online">En ligne</string>
     <string name="WalletConnect_Status_Connecting">Connexion en cours…</string>
     <string name="WalletConnect_NewConnect">Nouvelle connexion</string>
+    <string name="WalletConnect_Disconnecting">Déconnexion</string>
     <string name="WalletConnect_SignMessageRequest_Title">Signer la demande</string>
     <string name="WalletConnect_SignMessageRequest_Domain">Domaine</string>
     <string name="WalletConnect_SignMessageRequest_ShowMessageTitle">Message à signer</string>
@@ -303,6 +342,8 @@
     <string name="EthereumTransaction_Error_InsufficientBalance">La transaction nécessite %s pour l\'envoi</string>
     <string name="EthereumTransaction_Error_InsufficientBalanceForFee">Le solde actuel des %s est inférieur au montant requis pour traiter cette transaction, frais de transaction compris.</string>
     <string name="EthereumTransaction_Error_LowerThanBaseGasLimit">La valeur de frais sélectionnée est trop faible et sera rejetée !</string>
+    <string name="EthereumTransaction_Error_InsufficientLiquidity">Liquidité insuffisante</string>
+    <string name="EthereumTransaction_Error_CannotEstimate">Erreur ! Vérifiez le solde et assurez-vous qu\'il y a suffisamment de %s pour couvrir les frais. Ou essayez d\'augmenter le montant du glissement de prix et réessayez. Nouvelle tentative dans 3 secondes...</string>
     <!--Swap-->
     <string name="Swap">Echanger</string>
     <string name="Swap_FromAmountTitle">Vous payez</string>
@@ -313,7 +354,10 @@
     <string name="Swap_Balance">Balance</string>
     <string name="Swap_Allowance">Allocation</string>
     <string name="Swap_Price">Prix</string>
+    <string name="Swap_SellPrice">Prix de vente</string>
+    <string name="Swap_BuyPrice">Prix d\'achat</string>
     <string name="Swap_PriceImpact">Impact prix</string>
+    <string name="Swap_PriceImpactTooHigh">La différence entre le prix du marché et le prix de règlement prévu est trop élevée.</string>
     <string name="Swap_MinimumReceived">Montant garanti</string>
     <string name="Swap_EstimatedFee">Frais estimés</string>
     <string name="Swap_MaxFee">Frais Max</string>
@@ -328,13 +372,18 @@
     <string name="Swap_MaximumPaid">Montant maximum payé</string>
     <string name="Swap_MinimumGot">Montant garanti</string>
     <string name="Swap_PoweredBy">Propulsé par</string>
+    <string name="Swap_SelectSwapProvider_Title">Fournisseur swap</string>
+    <string name="Swap_SelectSwapProvider_Subtitle">Switcher</string>
+    <string name="Swap_AmountEstimated">(est)</string>
+    <string name="Swap_AmountMin">(min)</string>
+    <string name="Swap_AmountMax">(max)</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">Configuration avancée</string>
     <string name="SwapSettings_Service">Service</string>
     <string name="SwapSettings_SlippageTitle">Effet de glissement</string>
-    <string name="SwapSettings_SlippageDescription">Votre transaction sera annulée si le prix change défavorablement au-delà de ce pourcentage</string>
+    <string name="SwapSettings_SlippageDescription">Votre transaction sera annulée si le prix évolue défavorablement au-delà de ce pourcentage</string>
     <string name="SwapSettings_DeadlineTitle">Date limite de transaction</string>
-    <string name="SwapSettings_DeadlineDescription">Votre transaction sera annulée si elle est en suspens pendant une période dépassant ce délai</string>
+    <string name="SwapSettings_DeadlineDescription">Votre transaction sera annulée si elle est en suspens pendant une période dépassant ce délai.</string>
     <string name="SwapSettings_RecipientAddressTitle">Adresse du destinataire</string>
     <string name="SwapSettings_RecipientAddressDescription">Le montant sera transféré à l\'adresse indiquée après l\'opération de change</string>
     <string name="SwapSettings_Apply">Appliquer</string>
@@ -343,17 +392,16 @@
     <string name="SwapSettings_Error_DeadlineZero">Délai Zéro</string>
     <string name="SwapSettings_Error_SlippageZero">Zéro Slippage</string>
     <string name="SwapSettings_Error_SlippageTooLow">Votre transaction est susceptible de ne pas aboutir.</string>
-    <string name="SwapSettings_Error_SlippageTooHigh">La valeur maximale autorisée est %s%%</string>
+    <string name="SwapSettings_Error_SlippageTooHigh">La tolérance de glissement ne peut pas être supérieure à %s%%</string>
     <string name="SwapSettings_Error_InvalidAddress">Adresse invalide</string>
     <string name="SwapSettings_Error_InvalidSlippage">Slippage Invalide</string>
     <string name="SwapSettings_Error_InvalidDeadline">Date limite invalide</string>
+    <string name="SwapSettings_Warning_UnusualSlippage">Votre transaction peut être frontrun</string>
     <!-- Swap Confirmation -->
     <string name="Swap_Confirmation">Confirmation</string>
     <string name="Swap_Confirmation_Guaranteed">Garanti</string>
     <string name="Swap_Confirmation_Maximum">Maximum</string>
     <string name="Swap_Confirmation_Estimated">Estimé</string>
-    <!--Swap Coin Select-->
-    <string name="Swap_CoinSelect_Title">Choisissez la Crypto</string>
     <!--Approve-->
     <string name="Approve_Title">Swap approuvé</string>
     <string name="Approve_Info">Vous devriez donner la permission à un contrat intelligent d\'échanger un token donné en votre nom. Cette permission fixe le montant qui peut être utilisé par un contrat intelligent. Cela n\'affecte pas votre solde mais nécessite des frais minimes pour exécuter la transaction d\'approbation.\n\nBien que cela puisse être fait au cas par cas avant chaque transaction, il est plus économique d\'approuver un montant plus élevé à l\'avance pour les transactions futures.</string>
@@ -361,14 +409,14 @@
     <string name="Approve_Spender">Spender</string>
     <string name="Approve_YouApprove">Vous approuvez</string>
     <!--Uniswap Info -->
-    <string name="SwapInfo_Description">Ce service d\'échange est assuré par Uniswap, un protocole d\'échange de tokens décentralisé basé sur la blockchain Ethereum.\n\nUniswap est entièrement automatisé et géré par des contrats intelligents qui facilitent les échanges de tokens de manière fiable sans aucun moyen de tricher.</string>
+    <string name="SwapInfo_Description">Ce service d\'échange est assuré par %s, un protocole d\'échange de tokens décentralisé construit sur la blockchain %s.\n\n%s est entièrement automatisé et géré par des contrats intelligents qui facilitent les échanges de tokens de manière fiable sans aucune possibilité de tricher.</string>
     <string name="SwapInfo_DexRelated">Liés à Uniswap</string>
     <string name="SwapInfo_AllowanceTitle">Allocation</string>
-    <string name="SwapInfo_AllowanceDescription">Le montant d\'une devise qu\'Uniswap peut dépenser en votre nom lors de l\'exécution d\'échanges de tokens. Une provision suffisante est nécessaire avant que l\'échange puisse avoir lieu</string>
+    <string name="SwapInfo_AllowanceDescription">Le montant d\'une certaine monnaie que le service peut dépenser en votre nom lors de l\'exécution des échanges de tokens. Une allocation suffisante est requise avant que l\'opération d\'échange puisse avoir lieu.</string>
     <string name="SwapInfo_PriceImpactTitle">Impact prix</string>
     <string name="SwapInfo_PriceImpactDescription">L\'écart de prix attendu par rapport à un prix affiché, augmente généralement avec le montant de l\'échange.</string>
     <string name="SwapInfo_SwapFeeTitle">Frais d\'échange</string>
-    <string name="SwapInfo_SwapFeeDescription">Un frais de service pour le remplacement sur la plate-forme Uniswap, indiqué dans la devise vendue par l\'utilisateur. Pour la plupart des transactions, elle devrait être de 0,3 % ou 0,6 %.</string>
+    <string name="SwapInfo_SwapFeeDescription">Des frais de service pour l\'opération d\'échange sur la plateforme, indiqués dans la devise dans laquelle l\'utilisateur vend. Pour la plupart des ordres, ils devraient être de 0,3 % ou 0,6 %.</string>
     <string name="SwapInfo_GuaranteedAmountTitle">Montant garanti</string>
     <string name="SwapInfo_GuaranteedAmountDescription">Le montant minimum qu\'un utilisateur va recevoir à la suite d\'une action de remplacement.</string>
     <string name="SwapInfo_MaxSpendTitle">Dépense maximale</string>
@@ -429,6 +477,9 @@
     <string name="TransactionInfo_YouGot">Vous avez reçu</string>
     <string name="TransactionInfo_Resend">Réenvoyer</string>
     <string name="TransactionInfo_RevokeApproval">Révoquer l\'approbation</string>
+    <string name="TransactionInfo_Options">Options</string>
+    <string name="TransactionInfo_SpeedUp">Accélérer</string>
+    <string name="TransactionInfo_Cancel">Annuler</string>
     <string name="StatusInfo_Pending">En attente</string>
     <string name="StatusInfo_Processing">Traitement en cours</string>
     <string name="StatusInfo_Confirmed">Terminé</string>
@@ -437,11 +488,19 @@
     <string name="StatusInfo_ProcessingDescription">La transaction a déjà été incluse dans la blockchain mais n\'a pas été finalisée. En ce qui concerne les petits paiements, il est prudent de considérer que la transaction est terminée. Pour les paiements plus importants, il est recommandé d\'attendre que le statut de la transaction passe à terminé.</string>
     <string name="StatusInfo_ConfirmedDescription">La transaction est terminée et considérée comme permanente et irréversible.</string>
     <string name="StatusInfo_FailedDescription">La transaction n\'a pas été traitée et aucun transfert de valeur n\'a eu lieu. Les transactions avec un statut d\'échec sont néanmoins inscrites sur la blockchain et génèrent des frais de transaction. L\'application Unstoppable n\'est pas en mesure d\'afficher la raison de l\'échec de ces transactions mais les utilisateurs peuvent la rechercher eux-mêmes sur un explorateur de bloc public, etherscan.io par exemple.</string>
+    <!-- Transaction Info Options -->
+    <string name="TransactionInfoOptions_SpeedUp_Title">Accélérer</string>
+    <string name="TransactionInfoOptions_SpeedUp_Description">Cette action tentera d\'invalider la transaction précédente en la renvoyant avec des frais plus élevés. Si la transaction originale reste en attente lorsqu\'une nouvelle transaction est envoyée, il y a de fortes chances (non garanties) qu\'elle soit invalidée et remplacée. Seule une de ces deux transactions sera incluse dans la blockchain.</string>
+    <string name="TransactionInfoOptions_SpeedUp_Button">Réenvoyer</string>
+    <string name="TransactionInfoOptions_Cancel_Title">Annuler</string>
+    <string name="TransactionInfoOptions_Cancel_Description">Cette action va tenter d\'invalider la transaction précédente en renvoyant une nouvelle transaction de 0 %s à soi. Si la transaction originale reste en attente quand une nouvelle a été envoyée, il y a une grande chance (non garantie) qu\'elle soit invalidée et remplacée. Seule une de ces deux transactions sera incluse dans la blockchain.</string>
+    <string name="TransactionInfoOptions_Cancel_Button">Annuler la transaction</string>
+    <string name="TransactionInfoOptions_Warning_TransactionInBlock">Transaction déjà dans le block</string>
     <!-- Info -->
     <string name="Info_LockTime_Title">TimeLock</string>
-    <string name="Info_LockTime_Description">L\'expéditeur a envoyé ces fonds avec un délai prédéfini qui se terminera %s.\n\nPas de soucis, les Bitcoins reçues sont déjà à vous mais vous devez attendre l\'expiration de la période de verrouillage pour les dépenser sur le réseau Bitcoin.</string>
+    <string name="Info_LockTime_Description">L\'expéditeur a envoyé ces fonds avec un verrouillage des dépenses qui expirera sur le %s.\n\n Pas d\'inquiétude, les Bitcoins reçus sont déjà à vous mais jusqu\'à l\'expiration de la période de verrouillage, vous ne pouvez pas les dépenser sur le réseau Bitcoin.</string>
     <string name="Info_DoubleSpend_Title">Double dépense</string>
-    <string name="Info_DoubleSpend_Description">Risque de double dépense ! Il y a une autre transaction sur la blockchain qui essaie de dépenser les intrants utilisés dans cette transaction. Une seule transaction sera acceptée par le réseau.</string>
+    <string name="Info_DoubleSpend_Description">Risque de double dépense ! Il y a une autre transaction sur la blockchain qui essaie de dépenser les intrants utilisés dans cette transaction. Une seule transaction sera acceptée par le réseau</string>
     <string name="Info_DoubleSpend_ThisTx">Cette Tx</string>
     <string name="Info_DoubleSpend_ConflictingTx">Tx conflictuelle</string>
     <!--Guides-->
@@ -468,31 +527,32 @@
     <string name="Settings_AppStatus">Statut de l\'appli</string>
     <string name="Settings_WalletConnect">Wallet Connect</string>
     <string name="Settings_RateUs">Evaluez-nous</string>
+    <string name="Settings_LaunchScreen">Écran de démarrage</string>
     <string name="SettingsAboutApp_Title">À propos de l\'application</string>
     <string name="SettingsAboutApp_Site">Website</string>
     <string name="SettingsAboutApp_WhatsNew">Nouveautés</string>
     <string name="SettingsPrivacy_Info">Cette application ne collecte aucune donnée vous concernant.</string>
     <string name="SettingsPrivacy_ConnectionSettingsTitle">Internet</string>
     <string name="SettingsPrivacy_WalletRestore">Restauration blockchain</string>
-    <string name="SettingsPrivacy_WalletRestoreDescription">Sélectionnez la source de données pour restaurer le portefeuille avec les transactions.</string>
+    <string name="SettingsPrivacy_WalletRestoreDescription">Sélectionnez la source de données pour restaurer le portefeuille avec les transactions</string>
     <string name="SettingsPrivacy_Transactions">Transactions blockchain</string>
     <string name="SettingsPrivacy_TransactionsSettingText">Entrées/Sorties</string>
     <string name="SettingsPrivacy_TransactionsDescription">Rendez vos transactions BTC, LTC, BCH plus difficiles à détecter en modifiant la structure des transactions.</string>
-    <string name="SettingsPrivacy_Info_Details">Below you will find detailed explanation of the privacy settings that are available in the app. It\'s safe to consider them as settings for those that require extensive privacy.</string>
+    <string name="SettingsPrivacy_Info_Details">Vous trouverez ci-dessous une explication détaillée des paramètres de confidentialité disponibles dans l\'application. Il est judicieux de les définir pour ceux qui nécessitent une protection étendue de la confidentialité.</string>
     <string name="SettingsPrivacy_Info_BlockchainTx_Title">Transactions Blockchain</string>
     <string name="SettingsPrivacy_Info_BlockchainTx_Description">This setting controls the privacy level of user\'s transactions on Bitcoin, Bitcoin Cash and Litecoin blockchains.
         \n\nMost Bitcoin transactions generate two outputs. One output is the amount that goes to the receiver and the other is the change output that is returned to the sender. The way most wallets construct transactions makes it easy for a third party monitoring Bitcoin blockchain to understand which of the outputs went to the receiving party and which one was the change amount returned to the sender. The output returned to the sender can then be used in future transactions and further reveal the details to the monitoring party.
         \n\nUnstoppable wallet implements measures to makes it significantly harder to figure out which output goes where. There are two options available to Unstoppable users:
-        \n\n1. Shuffle : The order of transaction outputs are randomized on every transaction. Sometimes change can be the first output, sometimes it can be the second. If a user trusts the developer of the app, than consider this a recommended option.
-        \n\n2. Deterministic : There is a commonly agreed standard for ordering transaction outputs (known as BIP69). In open source wallets that standard ensures that wallet users do not need to trust how developers of the app implement the ordering of the outputs. As this standard is new, not many wallets have implemented it yet. As a result, it\'s somewhat possible to see on the blockchain whether transaction was sent from the wallet that uses that standard or not.</string>
+        \n\n1. Shuffle: The order of transaction outputs are randomized on every transaction. Sometimes change can be the first output, sometimes it can be the second. If a user trusts the developer of the app, than consider this a recommended option.
+        \n\n2. Deterministic: There is a commonly agreed standard for ordering transaction outputs (known as BIP69). In open-source wallets that standard ensures that wallet users do not need to trust how developers of the app implement the ordering of the outputs. As this standard is new, not many wallets have implemented it yet. As a result, it\'s somewhat possible to see on the blockchain whether a transaction was sent from the wallet that uses that standard or not.</string>
     <string name="SettingsPrivacy_Info_BlockchainConnection_Title">Blockchain Sync</string>
-    <string name="SettingsPrivacy_Info_BlockchainConnection_Description">This setting controls how this app interacts with blockchains (sending/receiving transactions). In case of Bitcoin, Bitcoin Cash, Litecoin and Dash it is fully peer to peer. The app pings many nodes and communicates with them. Potentially these nodes can record IP address and data requested but since they are chosen randomly, each time the app connects to a different node.
-        \n\nIn case of Ethereum, there is no alternative for mobile wallets to interact with blockchain other than via third party providers (i.e. Infura.io) or personal Ethereum nodes. Third party services can potentially record IP addresses and the requests made. That info can reveal location, balance, transactions etc. Moreover, the wallet has to trust that information returned is correct. There is a an alternative known as Incubed which in essence is a network of special Ethereum nodes. These nodes can also record IP addresses and requests made, but they are chosen randomly each time. While being slightly slower than Infura, the way Incubed works pretty much guarantees that the information returned is correct (not fake).
-        \n\nWhen it comes to other blockchains like EOSIO and Binance Chain, at this point they only provide centralized means of connecting, without viable alternatives. Potentially they can be recording IP addresses and requests made.</string>
+    <string name="SettingsPrivacy_Info_BlockchainConnection_Description">This setting controls how this app interacts with blockchains when sending or receiving transactions.
+        \n\nIn the case of Bitcoin, Bitcoin Cash, Litecoin, and Dash, the communication with blockchain network nodes is fully peer-to-peer. Unstoppable pings many nodes and communicates with one of them. Each time the app connects to a different node.
+        \n\nIn the case of Ethereum and Binance Smart Chain, there are no alternatives for mobile wallets to interact with respective blockchains other than via third-party RPC service providers (i.e. Infura.io) or personal Ethereum nodes. That essentially means your communication with that blockchain is not decentralized. This doesn\'t impact your funds in any way, only the ability to connect to the blockchain network.</string>
     <string name="SettingsPrivacy_Info_BlockchainRestore_Title">Blockchain Restore</string>
     <string name="SettingsPrivacy_Info_BlockchainRestore_Description">This setting is only relevant when restoring an existing wallet. It is a process of getting transactions history for a given coin so that the wallet app is able to display past transactions and calculate user\'s balance. This needs to happen only once, when user restores previously created wallet. At this point there are two potential ways for a mobile wallet like Unstoppable to do this:
-        \n\n1. from API Server : There is a third-party predefined server which hosts the entire blockchain and has all the data processed and ready to provide it in a fast manner. This method is fast but can potentially keep track of the IP addresses and the data requested. This option is recommended due to its speed of getting data (5-10 minutes). The risks are minimal. If the user restoring from his own server then no privacy risks at all.
-        \n\n2. from Blockchain : In this case the app tries to restore directly from a p2p network of the blockchain nodes. The app pings many of those nodes and requests data from them. Potentially these nodes can keep track of user\'s IP address and requests made however during restore the app can switch between nodes. There are close to 10,000 Bitcoin nodes on the network at any given time. This option is slow and can easily take 2-3 hours, app needs to be open while restore is happening...</string>
+        \n\n1. from API Server: There is a third-party predefined server which hosts the entire blockchain and has all the data processed and ready to provide it in a fast manner. This method is fast but can potentially keep track of the IP addresses and the data requested. This option is recommended due to its speed of getting data (5-10 minutes). The risks are minimal. If the user restoring from his own server then no privacy risks at all.
+        \n\n2. from Blockchain: In this case the app tries to restore directly from a p2p network of the blockchain nodes. The app pings many of those nodes and requests data from them. Potentially these nodes can keep track of user\'s IP address and requests made however during restore the app can switch between nodes. There are close to 10,000 Bitcoin nodes on the network at any given time. This option is slow and can easily take 2-3 hours, app needs to be open while restore is happening.</string>
     <!--Settings-->
     <!--Setting_Security-->
     <string name="SettingsSecurity_Privacy">Confidentialité</string>
@@ -503,7 +563,7 @@
     <string name="SettingsSecurity_ManageKeys">Gérer les portefeuilles</string>
     <string name="SettingsSecurity_AppRestartWarning">Cette opération va redémarrer Unstoppable Wallet.</string>
     <string name="SettingsSecurity_TorConnectionDescription">Anonymisez complètement votre connexion Internet lorsque vous utilisez cette application. Remarque : dans certains cas, la fonction WalletConnect pour les applications DeFi peut être très lente ou ne pas fonctionner du tout.</string>
-    <string name="SettingsSecurity_NotificationsDisabledWarning">Les notifications de l\'application Unstoppable Wallet sont désactivées. Vous devez les activer pour que Tor puisse fonctionner.</string>
+    <string name="SettingsSecurity_NotificationsDisabledWarning">Les notifications pour l\'application Unstoppable Wallet sont désactivées. Vous devez activer les notifications et autoriser le rafraîchissement de l\'application en arrière-plan afin de pouvoir recevoir des alertes de changement de prix.</string>
     <string name="SettingsSecurity_SortingShuffle">Mélanger</string>
     <string name="SettingsSecurity_SortingShuffleDescription">Indexation aléatoire</string>
     <string name="SettingsSecurity_SortingBip69">BIP69</string>
@@ -514,8 +574,11 @@
     <string name="SettingsSecurity_SyncModeBlockchainDescription">Plus Privé</string>
     <!--Setting_Terms-->
     <string name="SettingsTerms_Text">Unstoppable Wallet est conçu pour ceux qui cherchent à investir et à stocker des cryptomonnaies de manière privée et indépendante.
+
 \n\nIl s\'agit d\'un portefeuille non privatif de liberté, de type pair à pair, où seul l\'utilisateur a le contrôle des fonds. Il ne collecte aucune donnée et permet à l\'utilisateur de rester indépendant en ne verrouillant pas son portefeuille à une application de portefeuille spécifique.
+
 \n\nL\'application Unstoppable Wallet est entièrement open-source et tout le monde peut confirmer que l\'application fonctionne exactement comme elle le prétend.
+
 \n\nNous avons construit Unstoppable à notre intention car les solutions disponibles n\'étaient pas à la hauteur de nos attentes. Tant du point de vue de l\'ingénierie que de la convivialité, nous pensons que ce portefeuille a une avance considérable sur les produits alternatifs.</string>
     <string name="SettingsTerms_TermAcademy">J\'ai parcouru la section Académie de cette application et me suis familiarisé avec les aspects fondamentaux du stockage des cryptomonnaies.</string>
     <string name="SettingsTerms_TermBackup">J\'ai sauvegardé la/les clé(s) privée(s) de mes portefeuilles qui m\'ont été présentées sous une formule de 12 à 24 mots. Je comprends que ces clés privées sont stockées sur mon smartphone et non ailleurs.</string>
@@ -523,7 +586,7 @@
     <string name="SettingsTerms_TermRecover">Je comprends que le fait débrider (rooting) mon téléphone, d\'installer des applications tierces de sources inconnues, de conserver un système d\'exploitation obsolète peut potentiellement mettre en danger la sécurité de mes fonds.</string>
     <string name="SettingsTerms_TermPhone">Je suis conscient qu\'il pourrait y avoir des problèmes non détectés dans le code de cette application de portefeuille, ce qui pourrait entraîner un comportement inattendu ou un dysfonctionnement de l\'application.</string>
     <string name="SettingsTerms_TermRoot">Je suis conscient que j\'aurai besoin de mes clés privées afin de pouvoir accéder à mes fonds si je perds mon téléphone ou si l\'application fonctionne mal. Sans mes clés privées, il me sera impossible de récupérer l\'accès à mon portefeuille.</string>
-    <string name="SettingsTerms_TermBugs">Je comprends que la désactivation du code de déverrouillage du téléphone dans les paramètres Android effacera les clés privées du portefeuille de mon appareil. J\'aurai besoin de mes clés privées pour pouvoir accéder à mon portefeuille.</string>
+    <string name="SettingsTerms_TermBugs">Je comprends que la désactivation du code de déverrouillage du téléphone dans les paramètres iOS effacera les clés privées du portefeuille de mon appareil. J\'aurai besoin de mes clés privées pour pouvoir accéder à mon portefeuille.</string>
     <string name="Settings_TermsPin"> Je comprends que seul je suis responsable de la sécurité de mes fonds et aucune autre entité.</string>
     <string name="SettingsTerms_BottomThankYou">Merci d\'avoir choisi ce portefeuille !</string>
     <!--Setting_Tell Friends-->
@@ -549,6 +612,11 @@
     <string name="NotificationBottomMenu_Short">Court</string>
     <string name="NotificationBottomMenu_LongTerm">Long terme 6M</string>
     <string name="NotificationBottomMenu_Long">Long</string>
+    <!-- Settings Launch Screen -->
+    <string name="SettingsLaunchScreen_Auto">Auto</string>
+    <string name="SettingsLaunchScreen_Balance">Balance</string>
+    <string name="SettingsLaunchScreen_MarketOverview">Vue d\'ensemble du marché</string>
+    <string name="SettingsLaunchScreen_Watchlist">Liste de suivi</string>
     <!--Settings-->
     <string name="SettingsTheme_Title">Thème</string>
     <string name="SettingsTheme_Dark">Sombre</string>
@@ -558,19 +626,21 @@
     <string name="Binance_Backend_Error_MemoRequired">Le destinataire a besoin d\'une note non vide pour une opération de transfert</string>
     <string name="Binance_Backend_Error_RequiresDigits">Nécessite que le mémo ne contienne que des chiffres</string>
     <!--Hud texts-->
-    <string name="Hud_Text_Success">Effectué</string>
     <string name="Hud_Text_NoInternet">Aucune connexion Internet</string>
     <string name="Hud_Text_Copied">Copié</string>
     <string name="Hud_Text_Created">Établi</string>
     <string name="Hud_Text_Done">Fait</string>
     <string name="Hud_Text_EmailAddressCopied">Adresse email copiée</string>
     <string name="Hud_Added_To_Watchlist">Ajouter à la liste de suivi</string>
+    <string name="Hud_Added_To_Wallet">Ajouté au portefeuille</string>
+    <string name="Hud_Already_In_Wallet">Déjà ajouté au portefeuille</string>
     <string name="Hud_Removed_from_Watchlist">Retirer de la liste de suivi</string>
     <string name="Hud_UnknownError">%s</string>
     <!--Manage Coins-->
     <string name="ManageCoins_title">Crypto Monnaie</string>
     <string name="ManageCoins_Search">Chercher</string>
     <string name="ManageCoins_AddToken">Ajouter le token</string>
+    <string name="ManageCoins_NoResults">Aucun résultat trouvé. Essayez d\'ajouter le token manuellement si vous connaissez son adresse de contrat intelligent.</string>
     <!-- Experimental Feature -->
     <string name="ExperimentalFeatures_Title">Expérimental</string>
     <string name="ExperimentalFeatures_Description">Les fonctionnalités ci-dessous sont expérimentales et doivent être utilisées avec prudence. Bien que nous ayons entièrement testé ces fonctionnalités en utilisant nos propres fonds crypto, nous ne pouvons pas garantir qu\'elles fonctionnent comme prévu dans tous les cas de figure possible.</string>
@@ -598,6 +668,8 @@
     <string name="ManageAccount_BirthdayHeight">Hauteur de l\'anniversaire %s</string>
     <string name="ManageAccount_NWords">%s mots</string>
     <string name="ManageAccount_NWordsWithPassphrase">%s mots avec phrase d\'authentification</string>
+    <string name="ManageAccount_SwitchWallet_Title">Changer de portefeuille</string>
+    <string name="ManageAccount_SwitchWallet_Subtitle">Sélectionnez le portefeuille pour un changement rapide</string>
     <!--Network Settings-->
     <string name="NetworkSettings_Title">Paramètres réseau</string>
     <string name="NetworkSettings_TestNetDisclaimer">Veuillez ne pas sélectionner les options Testnet si vous ne comprenez pas ce que c\'est et comment cela fonctionne.\n\nTestnet est une blockchain parallèle réservée aux tests et dotée de sa propre monnaie. Si quelqu\'un envoie un paiement standard à votre adresse Testnet, celui-ci sera perdu.</string>
@@ -609,6 +681,10 @@
     <string name="ShowKey_ButtonClose">Fermer</string>
     <string name="ShowKey_TabMnemonicPhrase">Phrase de réinitialisation</string>
     <string name="ShowKey_TabPrivateKey">Clé privée</string>
+    <string name="ShowKey_PrivateKeyCopyWarning_Title">Attention</string>
+    <string name="ShowKey_PrivateKeyCopyWarning_Subtitle">Risque de copie de clé privée</string>
+    <string name="ShowKey_PrivateKeyCopyWarning_Text">Pour des raisons de sécurité, nous recommandons de ne pas utiliser l\'action de copie sur la clé privée.</string>
+    <string name="ShowKey_PrivateKeyCopyWarning_Proceed">Je prends le risque</string>
     <!-- Backup Key -->
     <string name="BackupKey_Title">Sauvegarde</string>
     <string name="BackupKey_Description">Les phrases de réinitialisation qui vont suivre sont le seul moyen de restaurer vos fonds si votre téléphone est perdu, volé, endommagé, etc.\n\nVeuillez vous assurer que personne ne regarde votre écran.</string>
@@ -646,23 +722,26 @@
     <string name="AddToken_Symbol">Symbole</string>
     <string name="AddToken_Decimals">Decimales</string>
     <string name="AddToken_Dots">…</string>
-    <string name="AddToken_CoinType">Type de pièce</string>
+    <string name="AddToken_CoinTypes">Type(s) de pièce</string>
     <string name="AddToken_CoinAlreadyInListWarning">Ce token figure déjà sur la liste du gestionnaire des pièces</string>
     <string name="AddToken_InvalidAddressError">Adresse du contrat ou symbole BEP2 non valide</string>
     <string name="AddToken_ApiLimitExceeded">Limite d\'Api dépassée. Réessayez plus tard.</string>
-    <string name="AddEvmToken_ContractNotFound">Contrat non trouvé</string>
-    <string name="AddBep2Token_SymbolNotFound">Symbole non trouvé</string>
+    <string name="AddEvmToken_TokenNotFound">Token non trouvé</string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Title">Format de l\'adresse</string>
-    <string name="AddressFormatSettings_Description">Choisissez le format d\'adresse de votre portefeuille %s. Chaque format sélectionné représente un portefeuille différent dans l\'onglet du solde de l\'application.</string>
+    <string name="AddressFormatSettings_Description">Sélectionnez le format d\'adresse de la pièce. Procédez avec l\'option recommandée si vous n\'êtes pas sur de vous. Un format correct doit être choisi lors de la restauration d\'un portefeuille existant.</string>
+    <!-- Coin Platforms -->
+    <string name="CoinPlatforms_Native">Natif</string>
+    <string name="CoinPlatformsSelector_Title">Type de pièce</string>
+    <string name="CoinPlatformsSelector_Description">Ce token existe sur plusieurs blockchains. Sélectionnez la (les) version(s) que vous souhaitez utiliser.</string>
     <!-- Blockchain Settings -->
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">Restaurer la source</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">Après cette modification, le portefeuille devra se resynchroniser avec la blockchain %s.</string>
     <string name="BlockchainSettings_CommunicationModeChangeAlert_Title">Communication</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type0_Title">Legacy</string>
-    <string name="CoinSettings_BitcoinCashCoinType_Type145_Title">Nouveau</string>
-    <string name="CoinSettings_BitcoinCashCoinType_Type0_Description">Portefeuilles plus anciens (avant août 2017)</string>
-    <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">Portefeuilles plus récents</string>
+    <string name="CoinSettings_BitcoinCashCoinType_Type145_Title">CashAddress (recommendé)</string>
+    <string name="CoinSettings_BitcoinCashCoinType_Type0_Description">Commun avant 2018</string>
+    <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">Commun après 2018</string>
     <!-- Tor -->
     <string name="Tor_Title">Tor</string>
     <string name="Tor_Connection_Title">Connexion</string>
@@ -674,10 +753,14 @@
     <string name="TorPage_ConnectionClosed">Déconnecté</string>
     <string name="Tor_PrerequisitesAlert_Content">L\'activation de TOR réinitialisera la connexion de la blockchain Ethereum à Infura.</string>
     <!--Coin Option-->
-    <string name="CoinOption_bip44_Subtitle">Plus ancient (commence par %s...)</string>
-    <string name="CoinOption_bip49_Subtitle">Populaire (commence par %s...)</string>
-    <string name="CoinOption_bip84_Subtitle">Plus récent (commence par %s...)</string>
+    <string name="CoinOption_bip44_Title">Legacy</string>
+    <string name="CoinOption_bip49_Title">Plus récent (recommandé)</string>
+    <string name="CoinOption_bip84_Title">Plus récent</string>
     <!--Coin Page-->
+    <string name="Coin_Tab_Overview">Overview</string>
+    <string name="Coin_Tab_Market">Market</string>
+    <string name="Coin_Tab_Details">Details</string>
+    <string name="Coin_Tab_Tweets">Tweets</string>
     <string name="CoinPage_TimeDuration_Today">Aujourd\'hui</string>
     <string name="CoinPage_TimeDuration_Day">24H</string>
     <string name="CoinPage_TimeDuration_Week">7J</string>
@@ -692,11 +775,19 @@
     <string name="CoinPage_MajorHolders">Porteurs majeurs</string>
     <string name="CoinPage_Audits">Audits</string>
     <string name="CoinPage_Audits_Empty">Aucun rapport d\'audit</string>
-    <string name="CoinPage_Audits_FetchError">Erreur de récupération</string>
     <string name="CoinPage_Audits_PoweredBy">Propulsé par Defiyield.app</string>
-    <string name="CoinPage_Audits_Issues">problèmes: %d</string>
+    <string name="CoinPage_Audits_Issues">Issues: %d</string>
     <string name="CoinPage_InvestorData">Données de l\'investisseur</string>
+    <string name="CoinPage_Treasuries">Treasuries</string>
+    <string name="CoinPage_Treasuries_FilterTitle">Filters</string>
+    <string name="CoinPage_Treasuries_PoweredBy">Powered by Bitcointreasuries.net</string>
+    <string name="CoinPage_Reports">Reports</string>
     <string name="CoinPage_FundsInvested">Fonds investis</string>
+    <string name="CoinPage_TokenDistribution">Token Distribution</string>
+    <string name="CoinPage_TokenLiquidity">Token Liquidity</string>
+    <string name="CoinPage_TotalVolume">Total Volume</string>
+    <string name="CoinPage_DetailsTvl">TVL</string>
+    <string name="CoinPage_TokenTvl">Token TVL</string>
     <string name="CoinPage_SecurityParams">Paramètres de sécurité</string>
     <string name="CoinPage_SecurityParams_Privacy">Confidentialité</string>
     <string name="CoinPage_SecurityParams_Low">Faible</string>
@@ -715,9 +806,9 @@
     <string name="CoinPage_SecurityParams_Privacy_High">Les transactions effectuées avec ce token sont anonymes par défaut ou offrent cette possibilité. Aucune entité n\'est capable de relier différentes transactions à la même personne ou de voir les montants négociés.</string>
     <string name="CoinPage_SecurityParams_Issuance_Centralized">La quantité de tokens en circulation peut être potentiellement augmentée ou diminuée par une entité centralisée à sa guise.</string>
     <string name="CoinPage_SecurityParams_Issuance_Decentralized">La quantité de tokens en circulation est contrôlée par un algorithme et fonctionne de manière déterministe en dehors de toute influence centralisée.</string>
-    <string name="CoinPage_SecurityParams_ConfiscationResistance_Yes">Les tokens ne peuvent pas être saisis s\'ils sont conservés dans un portefeuille non privatif.</string>
+    <string name="CoinPage_SecurityParams_ConfiscationResistance_Yes">The tokens can\'t be confiscated when kept in a non-custodial wallet.</string>
     <string name="CoinPage_SecurityParams_ConfiscationResistance_No">Les tokens peuvent être saisis ou altérés par une entité émettrice.</string>
-    <string name="CoinPage_SecurityParams_CensorshipResistance_Yes">On ne peut pas empêcher le porteur du token d\'effectuer des transactions.</string>
+    <string name="CoinPage_SecurityParams_CensorshipResistance_Yes">The token holder can\'t be censored from transacting.</string>
     <string name="CoinPage_SecurityParams_CensorshipResistance_No">On peut empêcher le porteur du token d\'effectuer des transactions.</string>
     <string name="CoinPage_SecurityParams_Audited_Yes">Le code du projet a été audité par une entité externe, soit intégralement, soit partiellement. La réalisation d\'un audit ne signifie pas que le projet est sans risque et qu\'il n\'y a pas de risque d\'exploit.</string>
     <string name="CoinPage_SecurityParams_Audited_No">Aucun audit du code du projet à l\'origine du token n\'a été annoncé publiquement. Les projets non audités sont plus susceptibles de présenter des problèmes de sécurité au niveau du code.</string>
@@ -725,11 +816,19 @@
     <string name="CoinPage_Range24">Plage de 24h</string>
     <string name="CoinPage_About">À propos de</string>
     <string name="CoinPage_Category">Catégorie</string>
+    <string name="CoinPage_Categories">Categories</string>
+    <string name="CoinPage_Contracts">Contracts</string>
+    <string name="CoinPage_Links">Links</string>
     <string name="CoinPage_Guide">Guide</string>
     <string name="CoinPage_Website">Site Web</string>
     <string name="CoinPage_Whitepaper">Livre blanc</string>
     <string name="CoinPage_Reddit">Reddit</string>
     <string name="CoinPage_Twitter">Twitter</string>
+    <string name="CoinPage_Twitter_NotAvailable">No twitter available</string>
+    <string name="CoinPage_Twitter_Quoted">Quoted %s</string>
+    <string name="CoinPage_Twitter_Retweeted">Retweeted %s</string>
+    <string name="CoinPage_Twitter_Replied">Replying to %s</string>
+    <string name="CoinPage_Twitter_SeeOnTwitter">See on Twitter</string>
     <string name="CoinPage_Telegram">Telegram</string>
     <string name="CoinPage_Github">Github</string>
     <string name="CoinPage_MarketCap">Cap. marché</string>
@@ -742,6 +841,8 @@
     <string name="CoinPage_MarketCap_Trillion">T</string>
     <string name="CoinPage_Volume">Vol</string>
     <string name="CoinPage_NoData">Pas de données</string>
+    <string name="CoinPage_AddToWallet">Ajouté au portefeuille</string>
+    <string name="CoinPage_InWallet">Dans Wallet</string>
     <string name="CoinPage_Favorite">Favori</string>
     <string name="CoinPage_Unfavorite">Retirer des Favoris</string>
     <string name="CoinPage_Performance_Week">1 Semaine</string>
@@ -756,8 +857,8 @@
     <string name="CoinPage_Contract">%s Contrat</string>
     <string name="CoinPage_Bep2Symbol">Symbole BEP2</string>
     <string name="CoinPage_MajorHolders_TopWallets">Meilleurs portefeuilles</string>
-    <string name="CoinPage_MajorHolders_Description">Le graphique ci-dessus indique le % de tous les tokens en circulation détenus dans les 10 meilleurs portefeuilles. Plus le % est faible, plus la pièce est distribuée.</string>
-    <string name="CoinPage_MajorHolders_InTopWallets">dans le top 10 des portefeuilles</string>
+    <string name="CoinPage_MajorHolders_Description">The chart above shows the % of all tokens in circulation held by the top 10 wallets. The lower the % the more distributed the coin is.</string>
+    <string name="CoinPage_MajorHolders_InTopWallets">In top 10 Ethereum wallets</string>
     <!--Rate list-->
     <string name="RateList_TopGainers">Les grands gagnants</string>
     <string name="RateList_TopLosers">Les gros perdants</string>
