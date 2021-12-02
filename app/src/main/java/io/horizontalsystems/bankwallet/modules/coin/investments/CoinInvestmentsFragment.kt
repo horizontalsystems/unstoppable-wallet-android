@@ -21,6 +21,7 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
@@ -149,11 +150,12 @@ fun CoinInvestmentHeader(amount: String, info: String) {
 
 @Composable
 fun CoinInvestmentFund(fundViewItem: FundViewItem, onClick: () -> Unit) {
+    val hasWebsiteUrl = fundViewItem.url.isNotBlank()
     Row(
         modifier = Modifier
             .fillMaxSize()
             .padding(horizontal = 16.dp)
-            .clickable(onClick = onClick),
+            .clickable(onClick = onClick, enabled = hasWebsiteUrl),
         verticalAlignment = Alignment.CenterVertically
     ) {
         CoinImage(
@@ -166,8 +168,22 @@ fun CoinInvestmentFund(fundViewItem: FundViewItem, onClick: () -> Unit) {
             modifier = Modifier.weight(1f),
             text = fundViewItem.name,
             style = ComposeAppTheme.typography.body,
-            color = ComposeAppTheme.colors.light
+            color = ComposeAppTheme.colors.light,
+            overflow = TextOverflow.Ellipsis
         )
-        Image(painter = painterResource(id = R.drawable.ic_arrow_right), contentDescription = "")
+        if (fundViewItem.isLead) {
+            Text(
+                modifier = Modifier.padding(horizontal = 6.dp),
+                text = stringResource(R.string.CoinPage_CoinInvestments_Lead),
+                style = ComposeAppTheme.typography.subhead2,
+                color = ComposeAppTheme.colors.remus
+            )
+        }
+        if (hasWebsiteUrl) {
+            Image(
+                painter = painterResource(id = R.drawable.ic_arrow_right),
+                contentDescription = "arrow icon"
+            )
+        }
     }
 }
