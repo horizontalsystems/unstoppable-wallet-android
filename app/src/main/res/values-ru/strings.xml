@@ -96,7 +96,7 @@
     <string name="Market_Tab_Overview">Обзор</string>
     <string name="Market_Tab_Posts">Новости</string>
     <string name="Market_Tab_Watchlist">Избранное</string>
-    <string name="Market_Tab_Watchlist_EmptyList">У вас нет токенов в избранном.</string>
+    <string name="Market_Tab_Watchlist_EmptyList">Список Избранного пуст.</string>
     <string name="Market_Category_Rated">Rated</string>
     <string name="Market_Category_Rated_Description">Рейтинги токенов, основанные на безопасности проекта и ликвидности рынка.</string>
     <string name="Market_Category_TopCoins">Лучшие Токены</string>
@@ -859,6 +859,7 @@
     <string name="CoinPage_MajorHolders_TopWallets">Топ Кошельки</string>
     <string name="CoinPage_MajorHolders_Description">На графике выше показано % всех жетонов, находящихся в обороте топ-10 кошельков. Чем ниже это процентное соотношение, тем выше распределение коина.</string>
     <string name="CoinPage_MajorHolders_InTopWallets">Топ-10 лучших кошельков Ethereum</string>
+    <string name="CoinPage_CoinInvestments_Lead">Руководство</string>
     <!--Rate list-->
     <string name="RateList_TopGainers">Взлеты</string>
     <string name="RateList_TopLosers">Падения</string>
