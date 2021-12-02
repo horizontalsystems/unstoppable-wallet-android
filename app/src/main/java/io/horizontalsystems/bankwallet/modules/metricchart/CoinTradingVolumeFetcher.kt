@@ -29,11 +29,13 @@ class CoinTradingVolumeFetcher(
     ): Single<List<MetricChartModule.Item>> {
         return marketKit.chartInfoSingle(coinUid, currencyCode, chartType)
             .map { info ->
-                info.points.mapNotNull { point ->
-                    point.volume?.let {
-                        MetricChartModule.Item(it, null, point.timestamp)
+                info.points
+                    .filter { it.timestamp >= info.startTimestamp }
+                    .mapNotNull { point ->
+                        point.volume?.let {
+                            MetricChartModule.Item(it, null, point.timestamp)
+                        }
                     }
-                }
             }
     }
 }
