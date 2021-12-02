@@ -96,7 +96,7 @@
     <string name="Market_Tab_Overview">Overview</string>
     <string name="Market_Tab_Posts">Infos</string>
     <string name="Market_Tab_Watchlist">Liste de suivi</string>
-    <string name="Market_Tab_Watchlist_EmptyList">You don’t have any favorite assets. You can add the favorites by clicking on the star icon on the asset page.</string>
+    <string name="Market_Tab_Watchlist_EmptyList">Your watchlist is empty.</string>
     <string name="Market_Category_Rated">Évaluation</string>
     <string name="Market_Category_Rated_Description">Classement des tokens en fonction de la sécurité du projet et de la liquidité du marché.</string>
     <string name="Market_Category_TopCoins">Top Coins</string>
