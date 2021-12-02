@@ -856,6 +856,7 @@
     <string name="CoinPage_MajorHolders_TopWallets">Top Wallets</string>
     <string name="CoinPage_MajorHolders_Description">위의 차트는 상위 10개 지갑이 보유한 전체 토큰의 %를 보여줍니다. %가 낮을수록 코인이 더 많이 분배됩니다.</string>
     <string name="CoinPage_MajorHolders_InTopWallets">상위 10위 이더리움 지갑</string>
+    <string name="CoinPage_CoinInvestments_Lead">Lead</string>
     <!--Rate list-->
     <string name="RateList_TopGainers">Top Gainers</string>
     <string name="RateList_TopLosers">Top Losers</string>
