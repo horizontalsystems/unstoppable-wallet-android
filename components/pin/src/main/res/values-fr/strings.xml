@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--Common-->
-    <string name="Button_Cancel">Cancel</string>
+    <string name="Button_Cancel">Annuler</string>
     <!--Unlock-->
-    <string name="Unlock_Page_EnterYourPin">Passcode</string>
+    <string name="Unlock_Page_EnterYourPin">Code</string>
     <!--Biometric Auth texts-->
-    <string name="BiometricAuth_DialogTitle">Biometrics Scanner</string>
+    <string name="BiometricAuth_DialogTitle">Scanner biométrique</string>
     <!--Unlock Pin-->
-    <string name="UnlockPin_WalletDisabledUntil">Disabled until: %s</string>
-    <string name="UnlockPin_Error_PinIncorrect">Incorrect</string>
-    <string name="UnlockPin_BiometricScannerDisabled_Title">Biometrics Scanner</string>
-    <string name="UnlockPin_BiometricScannerDisabled_Description">Enter passcode or try again later</string>
-    <string name="UnlockPin_BiometricScannerDisabled_Info">Biometric auth. disabled</string>
-    <string name="UnlockPin_BiometricScannerDisabled_Button">Passcode</string>
+    <string name="UnlockPin_WalletDisabledUntil">Désactivé jusqu\'à: %s</string>
+    <string name="UnlockPin_Error_PinIncorrect">Incorrecte</string>
+    <string name="UnlockPin_BiometricScannerDisabled_Title">Scanner biométrique</string>
+    <string name="UnlockPin_BiometricScannerDisabled_Description">Entrez le code d\'accès ou réessayez plus tard</string>
+    <string name="UnlockPin_BiometricScannerDisabled_Info">Autorisation biométrique désactivée</string>
+    <string name="UnlockPin_BiometricScannerDisabled_Button">Code</string>
     <!--Set Pin-->
-    <string name="SetPin_Title">Passcode</string>
-    <string name="SetPin_Info">Your passcode will be used to unlock your wallet</string>
-    <string name="SetPin_ConfirmInfo">Confirm</string>
-    <string name="SetPin_ErrorPinsDontMatch">Passcode did not match. Try again.</string>
-    <string name="SetPin_ErrorFailedToSavePin">Error occurred while saving your passcode. Please, try again.</string>
+    <string name="SetPin_Title">Code</string>
+    <string name="SetPin_Info">Votre code secret sera utilisé pour déverrouiller votre porte-monnaie et envoyer de l’argent</string>
+    <string name="SetPin_ConfirmInfo">Confirmer</string>
+    <string name="SetPin_ErrorPinsDontMatch">Le code ne correspond pas. Réessayez.</string>
+    <string name="SetPin_ErrorFailedToSavePin">Une erreur est apparue lors de l\'enregistrement de votre code. Veuillez réessayer.</string>
     <!--Edit Pin-->
-    <string name="EditPin_Title">Edit Passcode</string>
-    <string name="EditPin_UnlockInfo">Current Passcode</string>
-    <string name="EditPin_NewPinInfo">New Passcode</string>
+    <string name="EditPin_Title">Modifier le code </string>
+    <string name="EditPin_UnlockInfo">Le code actuel</string>
+    <string name="EditPin_NewPinInfo">Le code nouveu</string>
 </resources>
