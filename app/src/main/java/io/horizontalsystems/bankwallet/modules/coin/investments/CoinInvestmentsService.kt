@@ -21,13 +21,16 @@ class CoinInvestmentsService(
     val stateObservable: Observable<DataState<List<CoinInvestment>>>
         get() = stateSubject
 
-    val currency: Currency
-        get() = currencyManager.baseCurrency
+    val usdCurrency: Currency
+        get() {
+            val currencies = currencyManager.currencies
+            return currencies.first { it.code == "USD" }
+        }
 
     private fun fetch() {
         disposable?.dispose()
 
-        marketKit.investmentsSingle(coinUid, currency.code)
+        marketKit.investmentsSingle(coinUid)
             .doOnSubscribe { stateSubject.onNext(DataState.Loading) }
             .subscribeIO({ coinInvestments ->
                 stateSubject.onNext(DataState.Success(coinInvestments))

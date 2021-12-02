@@ -114,7 +114,7 @@ class CoinDetailsViewModel(
             },
             fundsInvested = item.marketInfoDetails.totalFundsInvested?.let {
                 numberFormatter.formatCurrencyValueAsShortened(
-                    CurrencyValue(service.currency, it)
+                    CurrencyValue(service.usdCurrency, it)
                 )
             },
             reportsCount = if (item.marketInfoDetails.reportsCount == 0) null else item.marketInfoDetails.reportsCount.toString(),
