@@ -30,13 +30,13 @@ class GlobalMarketRepository(
                 list.map { point ->
                     val value = when (metricsType) {
                         MetricsType.TotalMarketCap -> point.marketCap
-                        MetricsType.BtcDominance -> point.dominanceBtc
+                        MetricsType.BtcDominance -> point.btcDominance
                         MetricsType.Volume24h -> point.volume24h
-                        MetricsType.DefiCap -> point.marketCapDefi
+                        MetricsType.DefiCap -> point.defiMarketCap
                         MetricsType.TvlInDefi -> point.tvl
                     }
 
-                    val dominance = if (metricsType == MetricsType.TotalMarketCap) point.dominanceBtc else null
+                    val dominance = if (metricsType == MetricsType.TotalMarketCap) point.btcDominance else null
                     MetricChartModule.Item(value, dominance, point.timestamp)
                 }
             }
