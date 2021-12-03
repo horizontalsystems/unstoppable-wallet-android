@@ -18,8 +18,8 @@ fun TabBalance(
 }
 
 @Composable
-fun TabPeriod(content: @Composable RowScope.() -> Unit) {
-    BarSingleLine(Modifier, true, false, content)
+fun TabPeriod(modifier: Modifier = Modifier, content: @Composable RowScope.() -> Unit) {
+    BarSingleLine(modifier, true, false, content)
 }
 
 @Composable

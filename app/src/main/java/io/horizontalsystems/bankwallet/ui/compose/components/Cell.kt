@@ -136,6 +136,36 @@ fun CellSingleLineLawrence(
     }
 }
 
+@Composable
+fun CellHeaderSorting(
+    borderTop: Boolean = false,
+    borderBottom: Boolean = false,
+    content: @Composable () -> Unit,
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(44.dp)
+    ) {
+        if (borderTop) {
+            Divider(
+                thickness = 1.dp,
+                color = ComposeAppTheme.colors.steel10,
+                modifier = Modifier.align(Alignment.TopCenter)
+            )
+        }
+
+        if (borderBottom) {
+            Divider(
+                thickness = 1.dp,
+                color = ComposeAppTheme.colors.steel10,
+                modifier = Modifier.align(Alignment.BottomCenter)
+            )
+        }
+
+        content.invoke()
+    }
+}
 
 @Composable
 fun CellData2(content: @Composable () -> Unit) {

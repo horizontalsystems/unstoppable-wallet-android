@@ -3,12 +3,15 @@ package io.horizontalsystems.bankwallet.modules.metricchart
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
+import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.DataState
+import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.ChartInfoData
-import io.horizontalsystems.bankwallet.modules.coin.adapters.CoinChartAdapter
-import io.horizontalsystems.bankwallet.modules.coin.overview.ui.ChartInfoHeaderItem
 import io.horizontalsystems.bankwallet.modules.market.Value
+import io.horizontalsystems.bankwallet.ui.compose.components.TabItem
 import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.marketkit.models.ChartType
 import io.reactivex.disposables.CompositeDisposable
@@ -64,9 +67,12 @@ class MetricChartViewModel(
     val description by service::description
     val poweredBy by service::poweredBy
     val currency by service::currency
-    val coinChartViewItemLiveData = MutableLiveData<CoinChartAdapter.ViewItemWrapper>()
-    val chartTitleLiveData = MutableLiveData<ChartInfoHeaderItem>()
-    val chartTypes = MutableLiveData<List<Pair<ChartView.ChartType, Int>>>()
+    val chartInfoLiveData = MutableLiveData<ChartInfoData>()
+    val viewStateLiveData = MutableLiveData<ViewState>()
+    val chartLoadingLiveData = MutableLiveData<Boolean>()
+    val chartTabItems = MutableLiveData<List<TabItem<ChartView.ChartType>>>()
+    val currentValueLiveData = MutableLiveData<String>()
+    val currentValueDiffLiveData = MutableLiveData<Value.Percent>()
 
     private val disposables = CompositeDisposable()
 
@@ -75,13 +81,20 @@ class MetricChartViewModel(
             .subscribeIO {
                 syncChartItems(it)
             }
-            .let { disposables.add(it) }
-
-        chartTypes.postValue(
-            service.chartTypes.map {
-                Pair(it.viewChartType, it.stringResId)
+            .let {
+                disposables.add(it)
             }
-        )
+
+        service.chartTypeObservable
+            .subscribeIO { chartType ->
+                val tabItems = service.chartTypes.map {
+                    TabItem(Translator.getString(it.stringResId), it == chartType, it.viewChartType)
+                }
+                chartTabItems.postValue(tabItems)
+            }
+            .let {
+                disposables.add(it)
+            }
 
         service.start()
     }
@@ -90,42 +103,37 @@ class MetricChartViewModel(
         service.stop()
     }
 
-    private fun syncChartItems(
-        chartItemsDataState: DataState<Pair<ChartType, List<MetricChartModule.Item>>>,
-    ) {
-        val coinChartViewItemWrapper: CoinChartAdapter.ViewItemWrapper
+    private fun syncChartItems(chartData: DataState<Pair<ChartType, List<MetricChartModule.Item>>>) {
+        viewStateLiveData.postValue(chartData.viewState)
 
-        when (chartItemsDataState) {
-            is DataState.Error -> {
-                coinChartViewItemWrapper = CoinChartAdapter.ViewItemWrapper(null, false, true)
-            }
-            DataState.Loading -> {
-                coinChartViewItemWrapper = CoinChartAdapter.ViewItemWrapper(null, true, false)
-            }
-            is DataState.Success -> {
-                val chartItems = chartItemsDataState.data
-                val chartViewItem = factory.convert(
-                    chartItems.second,
-                    chartItems.first.viewChartType,
-                    MetricChartModule.ValueType.CompactCurrencyValue,
-                    service.currency
+        chartLoadingLiveData.postValue(chartData.loading)
+
+        chartData.dataOrNull?.let { (chartType, chartItems) ->
+            chartItems.lastOrNull()?.let { lastItem ->
+                val lastItemValue = lastItem.value
+                currentValueLiveData.postValue(
+                    App.numberFormatter.formatCurrencyValueAsShortened(CurrencyValue(service.currency, lastItemValue))
                 )
 
-                chartTitleLiveData.postValue(ChartInfoHeaderItem(
-                    chartViewItem.lastValueWithDiff.value,
-                    Value.Percent(chartViewItem.lastValueWithDiff.diff)
-                ))
-
-                coinChartViewItemWrapper = CoinChartAdapter.ViewItemWrapper(ChartInfoData(
-                    chartViewItem.chartData,
-                    chartViewItem.chartType,
-                    chartViewItem.maxValue,
-                    chartViewItem.minValue
-                ))
+                val firstItemValue = chartItems.first().value
+                currentValueDiffLiveData.postValue(Value.Percent((lastItemValue - firstItemValue) / firstItemValue * 100.toBigDecimal()))
             }
-        }
 
-        coinChartViewItemLiveData.postValue(coinChartViewItemWrapper)
+            val chartViewItem = factory.convert(
+                chartItems,
+                chartType.viewChartType,
+                MetricChartModule.ValueType.CompactCurrencyValue,
+                service.currency
+            )
+
+            val data = ChartInfoData(
+                chartViewItem.chartData,
+                chartViewItem.chartType,
+                chartViewItem.maxValue,
+                chartViewItem.minValue
+            )
+            chartInfoLiveData.postValue(data)
+        }
     }
 
     fun onSelectChartType(chartType: ChartView.ChartType) {
