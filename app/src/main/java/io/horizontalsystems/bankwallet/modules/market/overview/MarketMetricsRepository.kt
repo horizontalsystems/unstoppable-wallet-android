@@ -48,14 +48,14 @@ class MarketMetricsRepository(
             marketCap = endingPoint.marketCap
             marketCapDiff = diff(startingPoint.marketCap, marketCap)
 
-            defiMarketCap = endingPoint.marketCapDefi
-            defiMarketCapDiff = diff(startingPoint.marketCapDefi, defiMarketCap)
+            defiMarketCap = endingPoint.defiMarketCap
+            defiMarketCapDiff = diff(startingPoint.defiMarketCap, defiMarketCap)
 
             volume24h = endingPoint.volume24h
             volume24hDiff = diff(startingPoint.volume24h, volume24h)
 
-            btcDominance = endingPoint.dominanceBtc
-            btcDominanceDiff = diff(startingPoint.dominanceBtc, btcDominance)
+            btcDominance = endingPoint.btcDominance
+            btcDominanceDiff = diff(startingPoint.btcDominance, btcDominance)
 
             tvl = endingPoint.tvl
             tvlDiff = diff(startingPoint.tvl, tvl)
@@ -74,9 +74,9 @@ class MarketMetricsRepository(
             CurrencyValue(baseCurrency, tvl),
             tvlDiff,
             totalMarketCapPoints = globalMarketPoints.map { MarketMetricsPoint(it.marketCap, it.timestamp) },
-            btcDominancePoints = globalMarketPoints.map { MarketMetricsPoint(it.dominanceBtc, it.timestamp) },
+            btcDominancePoints = globalMarketPoints.map { MarketMetricsPoint(it.btcDominance, it.timestamp) },
             volume24Points = globalMarketPoints.map { MarketMetricsPoint(it.volume24h, it.timestamp) },
-            defiMarketCapPoints = globalMarketPoints.map { MarketMetricsPoint(it.marketCapDefi, it.timestamp) },
+            defiMarketCapPoints = globalMarketPoints.map { MarketMetricsPoint(it.defiMarketCap, it.timestamp) },
             defiTvlPoints = globalMarketPoints.map { MarketMetricsPoint(it.tvl, it.timestamp) }
         )
     }

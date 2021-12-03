@@ -15,12 +15,12 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.modules.coin.adapters.CoinChartAdapter
-import io.horizontalsystems.bankwallet.modules.coin.overview.ui.ChartInfo
-import io.horizontalsystems.bankwallet.modules.coin.overview.ui.ChartInfoHeader
+import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Chart
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.TabBalance
+import io.horizontalsystems.bankwallet.ui.compose.components.diffColor
+import io.horizontalsystems.bankwallet.ui.compose.components.formatValueAsDiff
 import io.horizontalsystems.bankwallet.ui.extensions.BaseBottomSheetDialogFragment
-import io.horizontalsystems.chartview.ChartView
 import kotlinx.android.synthetic.main.fragment_market_global.*
 
 class MetricChartFragment : BaseBottomSheetDialogFragment() {

@@ -53,10 +53,6 @@ class AppConfigProvider {
         Translator.getString(R.string.marketApiBaseUrl)
     }
 
-     val oldMarketApiBaseUrl by lazy {
-        Translator.getString(R.string.oldMarketApiBaseUrl)
-    }
-
      val fiatDecimal: Int = 2
      val maxDecimal: Int = 8
      val feeRateAdjustForCurrencies: List<String> = listOf("USD", "EUR")
