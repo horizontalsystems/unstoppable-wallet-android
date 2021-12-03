@@ -4,6 +4,7 @@ import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.marketkit.models.ChartType
+import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.BehaviorSubject
 
@@ -14,6 +15,9 @@ class MetricChartService(
 
     val stateObservable: BehaviorSubject<DataState<Pair<ChartType, List<MetricChartModule.Item>>>> =
         BehaviorSubject.createDefault(DataState.Loading)
+
+    private val chartTypeSubject = BehaviorSubject.create<ChartType>()
+    val chartTypeObservable: Observable<ChartType> = chartTypeSubject
 
     private var chartInfoDisposable: Disposable? = null
 
@@ -31,6 +35,8 @@ class MetricChartService(
     }
 
     fun updateChartType(chartType: ChartType) {
+        chartTypeSubject.onNext(chartType)
+
         chartInfoDisposable?.dispose()
 
         stateObservable.onNext(DataState.Loading)

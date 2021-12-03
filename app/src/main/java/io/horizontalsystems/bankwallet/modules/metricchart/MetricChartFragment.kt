@@ -58,34 +58,44 @@ class MetricChartFragment : BaseBottomSheetDialogFragment() {
 
     @Composable
     private fun MetricChartScreen(viewModel: MetricChartViewModel) {
-        val chartTitleLiveData by viewModel.chartTitleLiveData.observeAsState()
-        val coinChartViewItemLiveData by viewModel.coinChartViewItemLiveData.observeAsState()
-        val chartTypes by viewModel.chartTypes.observeAsState(listOf())
+        val chartLoading by viewModel.chartLoadingLiveData.observeAsState(false)
+        val viewState by viewModel.viewStateLiveData.observeAsState()
+        val chartInfo by viewModel.chartInfoLiveData.observeAsState()
+        val chartTabs by viewModel.chartTabItems.observeAsState(listOf())
         val currency = viewModel.currency
         val description = viewModel.description
         val poweredBy = viewModel.poweredBy
+        val currentValue by viewModel.currentValueLiveData.observeAsState("--")
+        val currentValueDiff by viewModel.currentValueDiffLiveData.observeAsState()
 
         ComposeAppTheme {
             Column {
-                chartTitleLiveData?.let {
-                    ChartInfoHeader(it)
-                }
-                coinChartViewItemLiveData?.let { chartInfo ->
-                    ChartInfo(
-                        chartInfo,
-                        currency,
-                        CoinChartAdapter.ChartViewType.MarketMetricChart,
-                        chartTypes,
-                        object : CoinChartAdapter.Listener {
-                            override fun onChartTouchDown() = Unit
+                TabBalance(borderTop = true) {
+                    Text(
+                        modifier = Modifier.padding(end = 8.dp),
+                        text = currentValue,
+                        style = ComposeAppTheme.typography.headline1,
+                        color = ComposeAppTheme.colors.leah
+                    )
 
-                            override fun onChartTouchUp() = Unit
-
-                            override fun onTabSelect(chartType: ChartView.ChartType) {
-                                viewModel.onSelectChartType(chartType)
-                            }
-                        })
+                    currentValueDiff?.let {
+                        Text(
+                            text = formatValueAsDiff(it),
+                            style = ComposeAppTheme.typography.subhead1,
+                            color = diffColor(it.raw())
+                        )
+                    }
                 }
+
+                Chart(
+                    tabItems = chartTabs,
+                    onSelectTab = {
+                        viewModel.onSelectChartType(it)
+                    },
+                    chartInfoData = chartInfo,
+                    chartLoading = chartLoading,
+                    viewState = viewState
+                )
 
                 BottomSheetText(
                     text = description.getString()
