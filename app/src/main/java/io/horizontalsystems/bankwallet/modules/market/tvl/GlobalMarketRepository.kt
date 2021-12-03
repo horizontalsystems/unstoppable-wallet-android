@@ -42,6 +42,19 @@ class GlobalMarketRepository(
             }
     }
 
+    fun getTvlGlobalMarketPoints(
+        chain: String,
+        currencyCode: String,
+        chartType: ChartView.ChartType,
+    ): Single<List<MetricChartModule.Item>> {
+        return marketKit.marketInfoGlobalTvlSingle(chain, currencyCode, getTimePeriod(chartType))
+            .map { list ->
+                list.map { point ->
+                      MetricChartModule.Item(point.value, null, point.timestamp)
+                }
+            }
+    }
+
     fun getMarketItems(
         currency: Currency,
         sortDescending: Boolean,
