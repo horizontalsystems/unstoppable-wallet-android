@@ -38,6 +38,7 @@ class TvlService(
     var chain: TvlModule.Chain = TvlModule.Chain.All
         set(value) {
             field = value
+            updateGlobalMarketPoints()
             updateTvlData(false)
         }
 
@@ -49,7 +50,9 @@ class TvlService(
 
     private fun updateGlobalMarketPoints() {
         globalMarketPointsDisposable?.dispose()
-        globalMarketRepository.getGlobalMarketPoints(baseCurrency.code, chartType, MetricsType.TvlInDefi)
+
+        val chainParam = if (chain == TvlModule.Chain.All) "" else chain.name
+        globalMarketRepository.getTvlGlobalMarketPoints(chainParam, baseCurrency.code, chartType)
             .doOnSubscribe { chartItemsObservable.onNext(DataState.Loading) }
             .subscribeIO({
                 chartItemsObservable.onNext(DataState.Success(it))
