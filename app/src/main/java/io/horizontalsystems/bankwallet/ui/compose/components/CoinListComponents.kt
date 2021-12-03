@@ -5,9 +5,13 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -20,15 +24,79 @@ import androidx.compose.ui.unit.dp
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.iconPlaceholder
+import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.bankwallet.core.imageUrl
-import io.horizontalsystems.bankwallet.modules.market.ImageSource
-import io.horizontalsystems.bankwallet.modules.market.MarketDataValue
-import io.horizontalsystems.bankwallet.modules.market.MarketField
-import io.horizontalsystems.bankwallet.modules.market.TopMarket
+import io.horizontalsystems.bankwallet.modules.market.*
 import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchModule.DiscoveryItem
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
+import kotlinx.coroutines.launch
+
+@Composable
+fun CoinList(
+    items: List<MarketViewItem>,
+    scrollToTop: Boolean,
+    onCoinClick: (String) -> Unit
+) {
+    val coroutineScope = rememberCoroutineScope()
+    val listState = rememberLazyListState()
+
+    LazyColumn(state = listState) {
+        items(items) { item ->
+            MarketCoin(
+                item.fullCoin.coin.name,
+                item.fullCoin.coin.code,
+                item.fullCoin.coin.iconUrl,
+                item.fullCoin.iconPlaceholder,
+                item.coinRate,
+                item.marketDataValue,
+                item.rank
+            ) { onCoinClick.invoke(item.fullCoin.coin.uid) }
+        }
+        item {
+            Spacer(modifier = Modifier.height(32.dp))
+        }
+        if (scrollToTop) {
+            coroutineScope.launch {
+                listState.scrollToItem(0)
+            }
+        }
+    }
+}
+
+@Composable
+fun MarketCoin(
+    coinName: String,
+    coinCode: String,
+    coinIconUrl: String,
+    coinIconPlaceholder: Int,
+    coinRate: String? = null,
+    marketDataValue: MarketDataValue? = null,
+    label: String? = null,
+    onClick: (() -> Unit)? = null
+) {
+    MultilineClear(
+        onClick = onClick,
+        borderBottom = true
+    ) {
+        CoinImage(
+            iconUrl = coinIconUrl,
+            placeholder = coinIconPlaceholder,
+            modifier = Modifier
+                .padding(end = 16.dp)
+                .size(24.dp)
+        )
+        Column(
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            MarketCoinFirstRow(coinName, coinRate)
+            Spacer(modifier = Modifier.height(3.dp))
+            MarketCoinSecondRow(coinCode, marketDataValue, label)
+        }
+    }
+}
 
 @Composable
 fun MultilineClear(
@@ -202,7 +270,7 @@ fun ListErrorView(
             contentDescription = errorText,
             colorFilter = ColorFilter.tint(ComposeAppTheme.colors.grey)
         )
-        Spacer(Modifier.height(20.dp))
+        Spacer(Modifier.height(16.dp))
         Text(
             text = errorText,
             color = ComposeAppTheme.colors.grey,
