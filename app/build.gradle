@@ -14,7 +14,7 @@ android {
         applicationId "io.horizontalsystems.bankwallet"
         minSdkVersion min_sdk_version
         targetSdkVersion compile_sdk_version
-        versionCode 52
+        versionCode 53
         versionName "0.23.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
