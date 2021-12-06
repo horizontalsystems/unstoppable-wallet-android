@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.market.favorites_new
+package io.horizontalsystems.bankwallet.modules.market.favorites
 
 import io.horizontalsystems.bankwallet.core.managers.MarketFavoritesManager
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
