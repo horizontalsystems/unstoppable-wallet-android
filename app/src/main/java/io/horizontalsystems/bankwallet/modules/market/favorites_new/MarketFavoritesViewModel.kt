@@ -10,7 +10,6 @@ import io.horizontalsystems.bankwallet.modules.market.MarketField
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
 import io.horizontalsystems.bankwallet.modules.market.SortingField
-import io.horizontalsystems.bankwallet.modules.market.favorites.MarketFavoritesMenuService
 import io.horizontalsystems.bankwallet.modules.market.favorites_new.MarketFavoritesModule.SelectorDialogState
 import io.horizontalsystems.bankwallet.modules.market.favorites_new.MarketFavoritesModule.ViewItem
 import io.horizontalsystems.bankwallet.ui.compose.Select
