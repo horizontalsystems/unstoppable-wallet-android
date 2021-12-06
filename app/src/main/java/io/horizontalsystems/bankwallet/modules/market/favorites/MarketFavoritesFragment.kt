@@ -76,32 +76,32 @@ fun MarketFavoritesScreen(
     val sortingFieldDialogState by viewModel.sortingFieldSelectorStateLiveData.observeAsState()
     var scrollToTopAfterUpdate by rememberSaveable { mutableStateOf(false) }
 
-    Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
-        when (viewState) {
-            is ViewState.Error -> {
-                ListErrorView(
-                    stringResource(R.string.Market_SyncError)
-                ) {
-                    viewModel.onErrorClick()
+    HSSwipeRefresh(
+        state = rememberSwipeRefreshState(isRefreshing ?: false || loading ?: false),
+        onRefresh = {
+            viewModel.refresh()
+        }
+    ) {
+        Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
+            when (viewState) {
+                is ViewState.Error -> {
+                    ListErrorView(
+                        stringResource(R.string.Market_SyncError)
+                    ) {
+                        viewModel.onErrorClick()
+                    }
                 }
-            }
-            ViewState.Success -> {
-                marketFavoritesData?.let { data ->
-                    if (data.marketItems.isEmpty()) {
-                        NoFavorites()
-                    } else {
-                        MarketFavoritesMenu(
-                            data.sortingFieldSelect,
-                            data.marketFieldSelect,
-                            viewModel::onClickSortingField,
-                            viewModel::onSelectMarketField
-                        )
-                        HSSwipeRefresh(
-                            state = rememberSwipeRefreshState(isRefreshing ?: false || loading ?: false),
-                            onRefresh = {
-                                viewModel.refresh()
-                            }
-                        ) {
+                ViewState.Success -> {
+                    marketFavoritesData?.let { data ->
+                        if (data.marketItems.isEmpty()) {
+                            NoFavorites()
+                        } else {
+                            MarketFavoritesMenu(
+                                data.sortingFieldSelect,
+                                data.marketFieldSelect,
+                                viewModel::onClickSortingField,
+                                viewModel::onSelectMarketField
+                            )
                             CoinList(data.marketItems, scrollToTopAfterUpdate, onCoinClick)
                             if (scrollToTopAfterUpdate) {
                                 scrollToTopAfterUpdate = false

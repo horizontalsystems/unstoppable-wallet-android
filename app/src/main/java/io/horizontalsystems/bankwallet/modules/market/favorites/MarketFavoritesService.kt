@@ -8,7 +8,7 @@ import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.ICurrencyManager
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
-import io.reactivex.subjects.PublishSubject
+import io.reactivex.subjects.BehaviorSubject
 
 class MarketFavoritesService(
     private val repository: MarketFavoritesRepository,
@@ -19,7 +19,8 @@ class MarketFavoritesService(
     private var favoritesDisposable: Disposable? = null
     private var repositoryDisposable: Disposable? = null
 
-    private val marketItemsSubject = PublishSubject.create<DataState<List<MarketItem>>>()
+    private val marketItemsSubject: BehaviorSubject<DataState<List<MarketItem>>> =
+        BehaviorSubject.createDefault(DataState.Loading)
     val marketItemsObservable: Observable<DataState<List<MarketItem>>>
         get() = marketItemsSubject
 
