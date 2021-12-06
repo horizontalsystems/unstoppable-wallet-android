@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.market.favorites_new
+package io.horizontalsystems.bankwallet.modules.market.favorites
 
 import android.os.Bundle
 import android.view.LayoutInflater

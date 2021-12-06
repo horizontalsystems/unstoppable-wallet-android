@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.market.favorites_new
+package io.horizontalsystems.bankwallet.modules.market.favorites
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -10,8 +10,8 @@ import io.horizontalsystems.bankwallet.modules.market.MarketField
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
 import io.horizontalsystems.bankwallet.modules.market.SortingField
-import io.horizontalsystems.bankwallet.modules.market.favorites_new.MarketFavoritesModule.SelectorDialogState
-import io.horizontalsystems.bankwallet.modules.market.favorites_new.MarketFavoritesModule.ViewItem
+import io.horizontalsystems.bankwallet.modules.market.favorites.MarketFavoritesModule.SelectorDialogState
+import io.horizontalsystems.bankwallet.modules.market.favorites.MarketFavoritesModule.ViewItem
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.delay

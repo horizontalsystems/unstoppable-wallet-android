@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.market.favorites_new
+package io.horizontalsystems.bankwallet.modules.market.favorites
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

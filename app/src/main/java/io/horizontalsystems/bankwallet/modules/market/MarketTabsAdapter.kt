@@ -4,7 +4,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import io.horizontalsystems.bankwallet.modules.market.favorites_new.MarketFavoritesFragment
+import io.horizontalsystems.bankwallet.modules.market.favorites.MarketFavoritesFragment
 import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewFragment
 import io.horizontalsystems.bankwallet.modules.market.posts.MarketPostsFragment
 
