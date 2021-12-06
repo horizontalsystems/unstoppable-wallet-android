@@ -18,6 +18,7 @@ class MarketFavoritesService(
 ) : BackgroundManager.Listener {
     private var favoritesDisposable: Disposable? = null
     private var repositoryDisposable: Disposable? = null
+    private var currencyManagerDisposable: Disposable? = null
 
     private val marketItemsSubject: BehaviorSubject<DataState<List<MarketItem>>> =
         BehaviorSubject.createDefault(DataState.Loading)
@@ -63,6 +64,10 @@ class MarketFavoritesService(
     fun start() {
         backgroundManager.registerListener(this)
 
+        currencyManager.baseCurrencyUpdatedSignal
+            .subscribeIO { forceRefresh() }
+            .let { currencyManagerDisposable = it }
+
         repository.dataUpdatedObservable
             .subscribeIO { forceRefresh() }
             .let { repositoryDisposable = it }
@@ -73,6 +78,7 @@ class MarketFavoritesService(
     fun stop() {
         backgroundManager.unregisterListener(this)
         favoritesDisposable?.dispose()
+        currencyManagerDisposable?.dispose()
     }
 
     override fun willEnterForeground() {
