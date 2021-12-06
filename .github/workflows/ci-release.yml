@@ -9,10 +9,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-ruby@v1
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Setup Ruby v3
+        uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '2.6'
+          ruby-version: 3.0.2
 
       - name: Set Build Number
         env:
@@ -21,7 +24,7 @@ jobs:
           echo "BUILD_NUMBER_NEW=$(($APPCENTER_NUMBER+$GITHUB_RUN_NUMBER))" >> $GITHUB_ENV
 
       - name: Fastlane Build
-        uses: maierj/fastlane-action@v2.0.1
+        uses: maierj/fastlane-action@v2.1.0
         with:
           lane: 'app_build'
           options: '{ "app_name": "Unstoppable-Release", "api_token": "${{secrets.API_TOKEN_RELEASE}}" }'
