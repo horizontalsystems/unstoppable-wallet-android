@@ -76,6 +76,9 @@ class TransactionAdapterManager(
             }
         }
 
+        this.adaptersMap.forEach {
+            adapterFactory.unlinkAdapter(it.key)
+        }
         this.adaptersMap.clear()
         this.adaptersMap.putAll(newAdapterMap)
 

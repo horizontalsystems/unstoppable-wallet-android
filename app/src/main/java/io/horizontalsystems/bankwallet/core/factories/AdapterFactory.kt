@@ -99,4 +99,15 @@ class AdapterFactory(
             else -> Unit
         }
     }
+
+    fun unlinkAdapter(transactionSource: TransactionSource) {
+        when (transactionSource.blockchain) {
+            TransactionSource.Blockchain.Ethereum -> {
+                ethereumKitManager.unlink(transactionSource.account)
+            }
+            TransactionSource.Blockchain.BinanceSmartChain -> {
+                binanceSmartChainKitManager.unlink(transactionSource.account)
+            }
+        }
+    }
 }
