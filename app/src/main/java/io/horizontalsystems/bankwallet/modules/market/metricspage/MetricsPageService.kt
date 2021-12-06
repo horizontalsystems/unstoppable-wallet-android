@@ -27,7 +27,7 @@ class MetricsPageService(
     val chartItemsObservable: BehaviorSubject<DataState<List<MetricChartModule.Item>>> =
         BehaviorSubject.createDefault(DataState.Loading)
 
-    val marketItemsItemsObservable: BehaviorSubject<DataState<List<MarketItem>>> =
+    val marketItemsObservable: BehaviorSubject<DataState<List<MarketItem>>> =
         BehaviorSubject.createDefault(DataState.Loading)
 
     var chartType: ChartView.ChartType = ChartView.ChartType.DAILY
@@ -51,11 +51,11 @@ class MetricsPageService(
     private fun syncMarketItems() {
         marketDataDisposable?.dispose()
         globalMarketRepository.getMarketItems(baseCurrency, sortDescending, metricsType)
-            .doOnSubscribe { marketItemsItemsObservable.onNext(DataState.Loading) }
+            .doOnSubscribe { marketItemsObservable.onNext(DataState.Loading) }
             .subscribeIO({
-                marketItemsItemsObservable.onNext(DataState.Success(it))
+                marketItemsObservable.onNext(DataState.Success(it))
             }, {
-                marketItemsItemsObservable.onNext(DataState.Error(it))
+                marketItemsObservable.onNext(DataState.Error(it))
             })
             .let { marketDataDisposable = it }
     }

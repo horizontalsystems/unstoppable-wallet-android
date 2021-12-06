@@ -58,7 +58,7 @@ class MetricsPageViewModel(
             }
             .let { disposables.add(it) }
 
-        service.marketItemsItemsObservable
+        service.marketItemsObservable
             .subscribeIO { marketItemsDataState ->
                 marketItemsDataState?.dataOrNull?.let {
                     marketItems = it
@@ -70,7 +70,7 @@ class MetricsPageViewModel(
         Observable.combineLatest(
             listOf(
                 service.chartItemsObservable,
-                service.marketItemsItemsObservable
+                service.marketItemsObservable
             )
         ) { array -> array.map { it is DataState.Loading } }
             .map { loadingArray ->
@@ -84,7 +84,7 @@ class MetricsPageViewModel(
         Observable.combineLatest(
             listOf(
                 service.chartItemsObservable,
-                service.marketItemsItemsObservable
+                service.marketItemsObservable
             )
         ) { it }.subscribeIO { array ->
             val viewState: ViewState? = when {
