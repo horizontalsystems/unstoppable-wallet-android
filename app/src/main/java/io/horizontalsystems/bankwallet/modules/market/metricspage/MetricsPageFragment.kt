@@ -180,38 +180,6 @@ class MetricsPageFragment : BaseFragment() {
         }
     }
 
-    @Composable
-    private fun MarketCoin(
-        coinName: String,
-        coinCode: String,
-        coinIconUrl: String,
-        coinIconPlaceholder: Int,
-        coinRate: String? = null,
-        marketDataValue: MarketDataValue? = null,
-        label: String? = null,
-        onClick: (() -> Unit)? = null
-    ) {
-        MultilineClear(
-            onClick = onClick,
-            borderBottom = true
-        ) {
-            CoinImage(
-                iconUrl = coinIconUrl,
-                placeholder = coinIconPlaceholder,
-                modifier = Modifier
-                    .padding(end = 16.dp)
-                    .size(24.dp)
-            )
-            Column(
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                MarketCoinFirstRow(coinName, coinRate)
-                Spacer(modifier = Modifier.height(3.dp))
-                MarketCoinSecondRow(coinCode, marketDataValue, label)
-            }
-        }
-    }
-
     companion object {
         private const val METRICS_TYPE_KEY = "metric_type"
 

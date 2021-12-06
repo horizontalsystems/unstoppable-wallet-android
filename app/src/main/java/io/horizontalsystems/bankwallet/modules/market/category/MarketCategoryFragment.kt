@@ -5,39 +5,29 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.layout.Column
 import androidx.compose.material.Surface
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import coil.annotation.ExperimentalCoilApi
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.core.iconPlaceholder
-import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
-import io.horizontalsystems.bankwallet.modules.market.MarketDataValue
 import io.horizontalsystems.bankwallet.modules.market.MarketModule.ViewItemState
-import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
 import io.horizontalsystems.bankwallet.modules.market.topcoins.SelectorDialogState
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.marketkit.models.CoinCategory
-import kotlinx.coroutines.launch
 
 class MarketCategoryFragment : BaseFragment() {
 
@@ -179,70 +169,6 @@ fun CategoryScreen(
                     { viewModel.onSelectorDialogDismiss() }
                 )
             }
-        }
-    }
-}
-
-@Composable
-private fun CoinList(
-    items: List<MarketViewItem>,
-    scrollToTop: Boolean,
-    onCoinClick: (String) -> Unit
-) {
-    val coroutineScope = rememberCoroutineScope()
-    val listState = rememberLazyListState()
-
-    LazyColumn(state = listState) {
-        items(items) { item ->
-            MarketCoin(
-                item.fullCoin.coin.name,
-                item.fullCoin.coin.code,
-                item.fullCoin.coin.iconUrl,
-                item.fullCoin.iconPlaceholder,
-                item.coinRate,
-                item.marketDataValue,
-                item.rank
-            ) { onCoinClick.invoke(item.fullCoin.coin.uid) }
-        }
-        item {
-            Spacer(modifier = Modifier.height(32.dp))
-        }
-        if (scrollToTop) {
-            coroutineScope.launch {
-                listState.scrollToItem(0)
-            }
-        }
-    }
-}
-
-@Composable
-private fun MarketCoin(
-    coinName: String,
-    coinCode: String,
-    coinIconUrl: String,
-    coinIconPlaceholder: Int,
-    coinRate: String? = null,
-    marketDataValue: MarketDataValue? = null,
-    label: String? = null,
-    onClick: (() -> Unit)? = null
-) {
-    MultilineClear(
-        onClick = onClick,
-        borderBottom = true
-    ) {
-        CoinImage(
-            iconUrl = coinIconUrl,
-            placeholder = coinIconPlaceholder,
-            modifier = Modifier
-                .padding(end = 16.dp)
-                .size(24.dp)
-        )
-        Column(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            MarketCoinFirstRow(coinName, coinRate)
-            Spacer(modifier = Modifier.height(3.dp))
-            MarketCoinSecondRow(coinCode, marketDataValue, label)
         }
     }
 }
