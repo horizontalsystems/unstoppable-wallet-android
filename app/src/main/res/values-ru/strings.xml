@@ -87,7 +87,7 @@
     <string name="Market_Field_HighestPrice">Самая высокая цена</string>
     <string name="Market_Field_LowestPrice">Самая низкая цена</string>
     <string name="Market_Sort_PopupTitle">Сортировать по</string>
-    <string name="Market_TotalMarketCap">Полная Рыночная Капитализация</string>
+    <string name="Market_TotalMarketCap">Полная Рын. Кап.</string>
     <string name="Market_BtcDominance">Доминирование BTC</string>
     <string name="Market_Volume24h">Объем торгов за 24 ч</string>
     <string name="Market_TvlDeFi">TVL в DeFi</string>
@@ -150,9 +150,9 @@
     <string name="Market_SyncError">Ошибка Синхронизации</string>
     <!--Market Global Metrics-->
     <string name="MarketGlobalMetrics_Chart">График</string>
-    <string name="MarketGlobalMetrics_TotalMarketCap">Полная Рыночная Капитализация</string>
+    <string name="MarketGlobalMetrics_TotalMarketCap">Полная Рын. Кап.</string>
     <string name="MarketGlobalMetrics_BtcDominance">Доминирование Bitcoin</string>
-    <string name="MarketGlobalMetrics_Volume">Объём</string>
+    <string name="MarketGlobalMetrics_Volume">Объём Торгов(24ч)</string>
     <string name="MarketGlobalMetrics_DefiCap">Капитализация DeFi</string>
     <string name="MarketGlobalMetrics_TvlInDefi">TVL в DeFi</string>
     <string name="MarketGlobalMetrics_TotalMarketCapDescription">Описание Рын.кап.</string>
@@ -759,7 +759,7 @@
     <!--Coin Page-->
     <string name="Coin_Tab_Overview">Обзор</string>
     <string name="Coin_Tab_Market">Рынок</string>
-    <string name="Coin_Tab_Details">Подробности</string>
+    <string name="Coin_Tab_Details">Детали</string>
     <string name="Coin_Tab_Tweets">Твиты</string>
     <string name="CoinPage_TimeDuration_Today">СГД</string>
     <string name="CoinPage_TimeDuration_Day">24Ч</string>
