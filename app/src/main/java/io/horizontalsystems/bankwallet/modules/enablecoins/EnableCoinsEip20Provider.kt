@@ -3,13 +3,11 @@ package io.horizontalsystems.bankwallet.modules.enablecoins
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import io.horizontalsystems.bankwallet.core.INetworkManager
-import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.marketkit.models.CoinType
 import io.reactivex.Single
 
 class EnableCoinsEip20Provider(
     private val networkManager: INetworkManager,
-    private val appConfigProvider: AppConfigProvider,
     private val mode: EnableCoinMode
 ) {
 
@@ -17,12 +15,6 @@ class EnableCoinsEip20Provider(
         get() = when (mode) {
             EnableCoinMode.Erc20 -> "https://api.etherscan.io/"
             EnableCoinMode.Bep20 -> "https://api.bscscan.com/"
-        }
-
-    private val apiKey: String
-        get() = when (mode) {
-            EnableCoinMode.Erc20 -> appConfigProvider.etherscanApiKey
-            EnableCoinMode.Bep20 -> appConfigProvider.bscscanApiKey
         }
 
     private fun coinType(address: String): CoinType {
@@ -37,7 +29,7 @@ class EnableCoinsEip20Provider(
     }
 
     fun getCoinTypesAsync(address: String): Single<List<CoinType>> {
-        val params = "api?module=account&action=tokentx&sort=asc&address=$address&apikey=$apiKey"
+        val params = "api?module=account&action=tokentx&sort=asc&address=$address"
         val gson = Gson()
 
         return networkManager.getEvmInfo(url, params)
