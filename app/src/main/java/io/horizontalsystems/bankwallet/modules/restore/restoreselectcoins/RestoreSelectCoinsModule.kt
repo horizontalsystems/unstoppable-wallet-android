@@ -26,12 +26,10 @@ object RestoreSelectCoinsModule {
                 EnableCoinsBep2Provider(App.instance.testMode),
                 EnableCoinsEip20Provider(
                     App.networkManager,
-                    App.appConfigProvider,
                     EnableCoinsEip20Provider.EnableCoinMode.Erc20
                 ),
                 EnableCoinsEip20Provider(
                     App.networkManager,
-                    App.appConfigProvider,
                     EnableCoinsEip20Provider.EnableCoinMode.Bep20
                 )
             )
