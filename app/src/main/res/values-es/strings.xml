@@ -74,7 +74,7 @@
     <string name="Backup_Confirmation_CheckTitle">Comprobar…</string>
     <!--Market-->
     <string name="Market_Field_MarketCap">Cap. de Mercado</string>
-    <string name="Market_Field_Volume">Volumen</string>
+    <string name="Market_Field_Volume">Vol</string>
     <string name="Market_Field_PriceDiff">Precio</string>
     <string name="Market_Title">Mercados</string>
     <string name="Market_Search">Buscar</string>

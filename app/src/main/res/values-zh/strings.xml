@@ -152,7 +152,7 @@
     <string name="MarketGlobalMetrics_Chart">Chart</string>
     <string name="MarketGlobalMetrics_TotalMarketCap">Total Market Cap</string>
     <string name="MarketGlobalMetrics_BtcDominance">Bitcoin Dominance</string>
-    <string name="MarketGlobalMetrics_Volume">Volume</string>
+    <string name="MarketGlobalMetrics_Volume">24h Volume</string>
     <string name="MarketGlobalMetrics_DefiCap">DeFi Cap</string>
     <string name="MarketGlobalMetrics_TvlInDefi">TVL in DeFi</string>
     <string name="MarketGlobalMetrics_TotalMarketCapDescription">Total M.Cap description</string>
