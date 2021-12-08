@@ -6,14 +6,14 @@ import java.math.BigDecimal
 import kotlin.math.abs
 
 data class ChartData(
-    val items: List<ChartDataItem>,
+    val items: List<ChartDataItemImmutable>,
     val startTimestamp: Long,
     val endTimestamp: Long,
     val isExpired: Boolean = false,
     val valueRange: Range<Float>
 ) {
 
-    fun values(name: Indicator): List<ChartDataValue> {
+    fun values(name: Indicator): List<ChartDataValueImmutable> {
         return items.mapNotNull { it.values[name] }
     }
 
@@ -33,11 +33,19 @@ data class ChartData(
     }
 }
 
+data class ChartDataValueImmutable(val value: Float, val point: PointF)
+
+data class ChartDataItemImmutable(val timestamp: Long, val values: Map<Indicator, ChartDataValueImmutable?>)
+
 data class ChartDataValue(val value: Float) {
     var point: PointF = PointF(0f, 0f)
+
+    fun toImmutable(): ChartDataValueImmutable {
+        return ChartDataValueImmutable(value, point)
+    }
 }
 
-class ChartDataItem(val timestamp: Long, val values: MutableMap<Indicator, ChartDataValue?> = mutableMapOf()) {
+data class ChartDataItem(val timestamp: Long, val values: MutableMap<Indicator, ChartDataValue?> = mutableMapOf()) {
 
     fun setPoint(x: Float, indicator: Indicator, range: Range<Float>) {
         val delta = range.upper - range.lower
@@ -46,9 +54,15 @@ class ChartDataItem(val timestamp: Long, val values: MutableMap<Indicator, Chart
             it.point = PointF(x, y)
         }
     }
+
+    fun toImmutable(): ChartDataItemImmutable {
+        return ChartDataItemImmutable(timestamp, values.map {
+            it.key to it.value?.toImmutable()
+        }.toMap())
+    }
 }
 
-class ChartDataBuilder(val items: MutableList<ChartDataItem>, val startTimestamp: Long, val endTimestamp: Long, val isExpired: Boolean = false) {
+class ChartDataBuilder(val items: MutableList<ChartDataItem>, val startTimestamp: Long, val endTimestamp: Long, private val isExpired: Boolean = false) {
 
     fun add(values: List<ChartDataValue?>, name: Indicator) {
         val start = items.size - values.size
@@ -81,7 +95,7 @@ class ChartDataBuilder(val items: MutableList<ChartDataItem>, val startTimestamp
     }
 
     fun build(): ChartData {
-        return ChartData(items, startTimestamp, endTimestamp, isExpired, valueRange)
+        return ChartData(items.map { it.toImmutable() }, startTimestamp, endTimestamp, isExpired, valueRange)
     }
 
     val valueRange by lazy {
