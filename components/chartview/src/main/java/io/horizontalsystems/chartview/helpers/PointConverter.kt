@@ -3,6 +3,7 @@ package io.horizontalsystems.chartview.helpers
 import android.graphics.PointF
 import android.graphics.RectF
 import io.horizontalsystems.chartview.ChartData
+import io.horizontalsystems.chartview.ChartDataValue
 import io.horizontalsystems.chartview.Coordinate
 import io.horizontalsystems.chartview.Indicator.*
 import io.horizontalsystems.chartview.models.MacdInfo
@@ -45,7 +46,7 @@ object PointConverter {
         return coordinates
     }
 
-    fun volume(values: List<ChartData.Value>, shape: RectF, topPadding: Float): List<PointF> {
+    fun volume(values: List<ChartDataValue>, shape: RectF, topPadding: Float): List<PointF> {
         val height = shape.height() - topPadding
 
         return values.map {
@@ -57,24 +58,24 @@ object PointConverter {
         }
     }
 
-    fun curve(values: List<ChartData.Value>, shape: RectF, verticalPadding: Float): List<PointF> {
+    fun curve(values: List<ChartDataValue>, shape: RectF, verticalPadding: Float): List<PointF> {
         //use padding both for top and bottom
         val height = shape.height() - verticalPadding * 2
         return getPoints(values, shape, height, verticalPadding)
     }
 
-    fun curveForMinimal(values: List<ChartData.Value>, shape: RectF, verticalPadding: Float): List<PointF> {
+    fun curveForMinimal(values: List<ChartDataValue>, shape: RectF, verticalPadding: Float): List<PointF> {
         //use padding only for bottom side
         val height = shape.height() - verticalPadding
         return getPoints(values, shape, height, verticalPadding)
     }
 
-    fun histogram(values: List<ChartData.Value>, shape: RectF, verticalPadding: Float): List<PointF> {
+    fun histogram(values: List<ChartDataValue>, shape: RectF, verticalPadding: Float): List<PointF> {
         val height = shape.height() - verticalPadding * 2
         return getPoints(values, shape, height, verticalPadding)
     }
 
-    private fun getPoints(values: List<ChartData.Value>, shape: RectF, height: Float, verticalPadding: Float): List<PointF> {
+    private fun getPoints(values: List<ChartDataValue>, shape: RectF, height: Float, verticalPadding: Float): List<PointF> {
         return values.map {
             val point = it.point
             val x = point.x * shape.width()
