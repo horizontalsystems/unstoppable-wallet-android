@@ -1,9 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.metricchart
 
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
-import io.horizontalsystems.chartview.ChartData
-import io.horizontalsystems.chartview.ChartView
-import io.horizontalsystems.chartview.Indicator
+import io.horizontalsystems.chartview.*
 import io.horizontalsystems.chartview.models.PointInfo
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.core.helpers.DateHelper
@@ -43,19 +41,19 @@ class MetricChartFactory(private val numberFormatter: IAppNumberFormatter) {
     private fun chartData(points: List<MetricChartModule.Item>) : ChartData {
         val startTimestamp = points.first().timestamp
         val endTimestamp = points.last().timestamp
-        val items = mutableListOf<ChartData.Item>()
+        val items = mutableListOf<ChartDataItem>()
 
         points.forEach { point ->
-            val item = ChartData.Item(point.timestamp)
-            item.values[Indicator.Candle] = ChartData.Value(point.value.toFloat())
+            val item = ChartDataItem(point.timestamp)
+            item.values[Indicator.Candle] = ChartDataValue(point.value.toFloat())
             point.dominance?.let {
-                item.values[Indicator.Dominance] = ChartData.Value(it.toFloat())
+                item.values[Indicator.Dominance] = ChartDataValue(it.toFloat())
             }
 
             items.add(item)
         }
 
-        val visibleChartData = ChartData(mutableListOf(), startTimestamp, endTimestamp)
+        val visibleChartData = ChartDataBuilder(mutableListOf(), startTimestamp, endTimestamp)
 
         for (item in items) {
             if (item.timestamp < visibleChartData.startTimestamp) {
@@ -81,7 +79,7 @@ class MetricChartFactory(private val numberFormatter: IAppNumberFormatter) {
             item.setPoint(x, Indicator.Dominance, visibleChartData.dominanceRange)
         }
 
-        return visibleChartData
+        return visibleChartData.build()
     }
 
     private fun getFormattedValue(value: Float, currency: Currency, valueType: MetricChartModule.ValueType): String {

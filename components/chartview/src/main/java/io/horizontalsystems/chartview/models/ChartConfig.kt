@@ -73,7 +73,6 @@ class ChartConfig(private val context: Context, attrs: AttributeSet?) {
         }
     }
 
-    //  Helper methods
     fun setTrendColor(chartData: ChartData) {
         when {
             chartData.isExpired -> {

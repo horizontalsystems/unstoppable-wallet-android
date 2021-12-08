@@ -5,22 +5,15 @@ import android.util.Range
 import java.math.BigDecimal
 import kotlin.math.abs
 
-class ChartData(val items: MutableList<Item>, val startTimestamp: Long, val endTimestamp: Long, val isExpired: Boolean = false) {
+data class ChartData(
+    val items: List<ChartDataItem>,
+    val startTimestamp: Long,
+    val endTimestamp: Long,
+    val isExpired: Boolean = false,
+    val valueRange: Range<Float>
+) {
 
-    class Value(val value: Float, var point: PointF = PointF(0f, 0f))
-
-    class Item(val timestamp: Long, val values: MutableMap<Indicator, Value?> = mutableMapOf()) {
-
-        fun setPoint(x: Float, indicator: Indicator, range: Range<Float>) {
-            val delta = range.upper - range.lower
-            values[indicator]?.let {
-                val y = if (delta == 0F && range.upper > 0f) 0.5f else (it.value - range.lower) / delta
-                it.point = PointF(x, y)
-            }
-        }
-    }
-
-    fun values(name: Indicator): List<Value> {
+    fun values(name: Indicator): List<ChartDataValue> {
         return items.mapNotNull { it.values[name] }
     }
 
@@ -38,8 +31,26 @@ class ChartData(val items: MutableList<Item>, val startTimestamp: Long, val endT
 
         return ((lastValue - firstValue) / firstValue * 100).toBigDecimal()
     }
+}
 
-    fun add(values: List<Value?>, name: Indicator) {
+data class ChartDataValue(val value: Float) {
+    var point: PointF = PointF(0f, 0f)
+}
+
+class ChartDataItem(val timestamp: Long, val values: MutableMap<Indicator, ChartDataValue?> = mutableMapOf()) {
+
+    fun setPoint(x: Float, indicator: Indicator, range: Range<Float>) {
+        val delta = range.upper - range.lower
+        values[indicator]?.let {
+            val y = if (delta == 0F && range.upper > 0f) 0.5f else (it.value - range.lower) / delta
+            it.point = PointF(x, y)
+        }
+    }
+}
+
+class ChartDataBuilder(val items: MutableList<ChartDataItem>, val startTimestamp: Long, val endTimestamp: Long, val isExpired: Boolean = false) {
+
+    fun add(values: List<ChartDataValue?>, name: Indicator) {
         val start = items.size - values.size
         for (i in values.indices) {
             val value = values[i] ?: continue
@@ -47,24 +58,11 @@ class ChartData(val items: MutableList<Item>, val startTimestamp: Long, val endT
         }
     }
 
-    fun insert(item: Item) {
-        val index = items.indexOfFirst { it.timestamp >= item.timestamp }
-        if (index == -1) {
-            return
-        }
-
-        if (items[index].timestamp == item.timestamp) {
-            items.removeAt(index)
-        }
-
-        items.add(index, item)
-    }
-
     // Ranges
 
     private val ranges: MutableMap<Indicator, Range<Float>> = mutableMapOf()
 
-    fun range(item: Item, indicator: Indicator) {
+    fun range(item: ChartDataItem, indicator: Indicator) {
         val currValue = item.values[indicator]?.value ?: return
         val prevRange = ranges[indicator] ?: Range(currValue, currValue)
 
@@ -80,6 +78,10 @@ class ChartData(val items: MutableList<Item>, val startTimestamp: Long, val endT
         }
 
         ranges[indicator] = Range(prevLower, prevUpper)
+    }
+
+    fun build(): ChartData {
+        return ChartData(items, startTimestamp, endTimestamp, isExpired, valueRange)
     }
 
     val valueRange by lazy {

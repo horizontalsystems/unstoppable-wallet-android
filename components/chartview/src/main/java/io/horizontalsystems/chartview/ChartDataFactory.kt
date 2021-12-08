@@ -7,19 +7,19 @@ import io.horizontalsystems.chartview.models.ChartPoint
 object ChartDataFactory {
     fun build(points: List<ChartPoint>, startTime: Long, endTime: Long, isExpired: Boolean): ChartData {
         val values = mutableListOf<Float>()
-        val items = mutableListOf<ChartData.Item>()
+        val items = mutableListOf<ChartDataItem>()
 
         for (point in points) {
             values.add(point.value)
 
-            val item = ChartData.Item(point.timestamp)
-            item.values[Candle] = ChartData.Value(point.value)
-            item.values[Volume] = point.volume?.let { ChartData.Value(it) }
+            val item = ChartDataItem(point.timestamp)
+            item.values[Candle] = ChartDataValue(point.value)
+            item.values[Volume] = point.volume?.let { ChartDataValue(it) }
 
             items.add(item)
         }
 
-        val chartData = ChartData(items, startTime, endTime)
+        val chartDataBuilder = ChartDataBuilder(items, startTime, endTime)
 
         val emaFast = IndicatorHelper.ema(values, EmaFast.period)
         val emaSlow = IndicatorHelper.ema(values, EmaSlow.period)
@@ -28,58 +28,58 @@ object ChartDataFactory {
         val (macd, signal, histogram) = IndicatorHelper.macd(values, Macd.fastPeriod, Macd.slowPeriod, Macd.signalPeriod)
 
         // EMA
-        chartData.add(emaFast.map { ChartData.Value(it) }, EmaFast)
-        chartData.add(emaSlow.map { ChartData.Value(it) }, EmaSlow)
+        chartDataBuilder.add(emaFast.map { ChartDataValue(it) }, EmaFast)
+        chartDataBuilder.add(emaSlow.map { ChartDataValue(it) }, EmaSlow)
 
         // RSI
-        chartData.add(rsi.map { ChartData.Value(it) }, Rsi)
+        chartDataBuilder.add(rsi.map { ChartDataValue(it) }, Rsi)
 
         // MACD
-        chartData.add(macd.map { ChartData.Value(it) }, Macd)
-        chartData.add(signal.map { ChartData.Value(it) }, MacdSignal)
-        chartData.add(histogram.map { ChartData.Value(it) }, MacdHistogram)
+        chartDataBuilder.add(macd.map { ChartDataValue(it) }, Macd)
+        chartDataBuilder.add(signal.map { ChartDataValue(it) }, MacdSignal)
+        chartDataBuilder.add(histogram.map { ChartDataValue(it) }, MacdHistogram)
 
-        return convertPoints(chartData, isExpired)
+        return convertPoints(chartDataBuilder, isExpired)
     }
 
-    private fun convertPoints(chartData: ChartData, isExpired: Boolean): ChartData {
-        val visibleData = ChartData(mutableListOf(), chartData.startTimestamp, chartData.endTimestamp, isExpired)
+    private fun convertPoints(chartDataBuilder: ChartDataBuilder, isExpired: Boolean): ChartData {
+        val visibleChartDataBuilder = ChartDataBuilder(mutableListOf(), chartDataBuilder.startTimestamp, chartDataBuilder.endTimestamp, isExpired)
 
-        for (item in chartData.items) {
-            if (item.timestamp < visibleData.startTimestamp) {
+        for (item in chartDataBuilder.items) {
+            if (item.timestamp < visibleChartDataBuilder.startTimestamp) {
                 continue
             }
 
-            visibleData.items.add(item)
+            visibleChartDataBuilder.items.add(item)
 
-            visibleData.range(item, Candle)
-            visibleData.range(item, Volume)
-            visibleData.range(item, Macd)
-            visibleData.range(item, MacdSignal)
-            visibleData.range(item, MacdHistogram)
-            visibleData.range(item, Dominance)
+            visibleChartDataBuilder.range(item, Candle)
+            visibleChartDataBuilder.range(item, Volume)
+            visibleChartDataBuilder.range(item, Macd)
+            visibleChartDataBuilder.range(item, MacdSignal)
+            visibleChartDataBuilder.range(item, MacdHistogram)
+            visibleChartDataBuilder.range(item, Dominance)
         }
 
-        val visibleTimeInterval = visibleData.endTimestamp - visibleData.startTimestamp
-        for (item in visibleData.items) {
-            val timestamp = item.timestamp - visibleData.startTimestamp
+        val visibleTimeInterval = visibleChartDataBuilder.endTimestamp - visibleChartDataBuilder.startTimestamp
+        for (item in visibleChartDataBuilder.items) {
+            val timestamp = item.timestamp - visibleChartDataBuilder.startTimestamp
             if (timestamp < 0) {
                 continue
             }
 
             val x = (timestamp.toFloat() / visibleTimeInterval)
 
-            item.setPoint(x, Candle, visibleData.valueRange)
-            item.setPoint(x, Volume, visibleData.volumeRange)
-            item.setPoint(x, EmaFast, visibleData.valueRange)
-            item.setPoint(x, EmaSlow, visibleData.valueRange)
-            item.setPoint(x, Rsi, visibleData.rsiRange)
-            item.setPoint(x, Macd, visibleData.macdRange)
-            item.setPoint(x, MacdSignal, visibleData.macdRange)
-            item.setPoint(x, MacdHistogram, visibleData.histogramRange)
-            item.setPoint(x, Dominance, visibleData.dominanceRange)
+            item.setPoint(x, Candle, visibleChartDataBuilder.valueRange)
+            item.setPoint(x, Volume, visibleChartDataBuilder.volumeRange)
+            item.setPoint(x, EmaFast, visibleChartDataBuilder.valueRange)
+            item.setPoint(x, EmaSlow, visibleChartDataBuilder.valueRange)
+            item.setPoint(x, Rsi, visibleChartDataBuilder.rsiRange)
+            item.setPoint(x, Macd, visibleChartDataBuilder.macdRange)
+            item.setPoint(x, MacdSignal, visibleChartDataBuilder.macdRange)
+            item.setPoint(x, MacdHistogram, visibleChartDataBuilder.histogramRange)
+            item.setPoint(x, Dominance, visibleChartDataBuilder.dominanceRange)
         }
 
-        return visibleData
+        return visibleChartDataBuilder.build()
     }
 }
