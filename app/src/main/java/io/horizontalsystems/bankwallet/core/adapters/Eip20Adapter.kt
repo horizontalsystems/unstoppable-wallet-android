@@ -39,7 +39,7 @@ class Eip20Adapter(
     // IAdapter
 
     override fun start() {
-        eip20Kit.start()
+        // started via EthereumKitManager
     }
 
     override fun stop() {
