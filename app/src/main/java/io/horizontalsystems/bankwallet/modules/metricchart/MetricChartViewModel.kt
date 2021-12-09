@@ -30,6 +30,20 @@ val ChartType.stringResId: Int
         ChartType.MONTHLY24 -> R.string.CoinPage_TimeDuration_Year2
     }
 
+val ChartView.ChartType.stringResId: Int
+    get() = when (this) {
+        ChartView.ChartType.TODAY -> R.string.CoinPage_TimeDuration_Today
+        ChartView.ChartType.DAILY -> R.string.CoinPage_TimeDuration_Day
+        ChartView.ChartType.WEEKLY -> R.string.CoinPage_TimeDuration_Week
+        ChartView.ChartType.WEEKLY2 -> R.string.CoinPage_TimeDuration_TwoWeeks
+        ChartView.ChartType.MONTHLY -> R.string.CoinPage_TimeDuration_Month
+        ChartView.ChartType.MONTHLY_BY_DAY -> R.string.CoinPage_TimeDuration_Month
+        ChartView.ChartType.MONTHLY3 -> R.string.CoinPage_TimeDuration_Month3
+        ChartView.ChartType.MONTHLY6 -> R.string.CoinPage_TimeDuration_HalfYear
+        ChartView.ChartType.MONTHLY12 -> R.string.CoinPage_TimeDuration_Year
+        ChartView.ChartType.MONTHLY24 -> R.string.CoinPage_TimeDuration_Year2
+    }
+
 val ChartType.viewChartType: ChartView.ChartType
     get() = when (this) {
         ChartType.TODAY -> ChartView.ChartType.TODAY
@@ -70,7 +84,7 @@ class MetricChartViewModel(
     val chartInfoLiveData = MutableLiveData<ChartInfoData>()
     val viewStateLiveData = MutableLiveData<ViewState>()
     val chartLoadingLiveData = MutableLiveData<Boolean>()
-    val chartTabItems = MutableLiveData<List<TabItem<ChartView.ChartType>>>()
+    val chartTabItemsLiveData = MutableLiveData<List<TabItem<ChartView.ChartType>>>()
     val currentValueLiveData = MutableLiveData<String>()
     val currentValueDiffLiveData = MutableLiveData<Value.Percent>()
 
@@ -90,7 +104,7 @@ class MetricChartViewModel(
                 val tabItems = service.chartTypes.map {
                     TabItem(Translator.getString(it.stringResId), it == chartType, it.viewChartType)
                 }
-                chartTabItems.postValue(tabItems)
+                chartTabItemsLiveData.postValue(tabItems)
             }
             .let {
                 disposables.add(it)
@@ -116,7 +130,7 @@ class MetricChartViewModel(
                 )
 
                 val firstItemValue = chartItems.first().value
-                currentValueDiffLiveData.postValue(Value.Percent((lastItemValue - firstItemValue) / firstItemValue * 100.toBigDecimal()))
+                currentValueDiffLiveData.postValue(Value.Percent(((lastItemValue - firstItemValue).toFloat() / firstItemValue.toFloat() * 100).toBigDecimal()))
             }
 
             val chartViewItem = factory.convert(

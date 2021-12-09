@@ -45,7 +45,7 @@ fun ChartInfo(
 @Immutable
 data class ChartInfoHeaderItem(
     val value: String?,
-    val diff: Value?
+    val diff: Value.Percent?
 )
 
 @Composable

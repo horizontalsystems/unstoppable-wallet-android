@@ -184,7 +184,9 @@ fun PriceVolChart(
                     }
                     ViewState.Success -> {
                         chartInfoData?.let {
-                            chart.setData(it.chartData, it.chartType, it.maxValue, it.minValue)
+                            chart.post {
+                                chart.setData(it.chartData, it.chartType, it.maxValue, it.minValue)
+                            }
                         }
                     }
                 }

@@ -59,7 +59,7 @@ class MetricChartFragment : BaseBottomSheetDialogFragment() {
         val chartLoading by viewModel.chartLoadingLiveData.observeAsState(false)
         val viewState by viewModel.viewStateLiveData.observeAsState()
         val chartInfo by viewModel.chartInfoLiveData.observeAsState()
-        val chartTabs by viewModel.chartTabItems.observeAsState(listOf())
+        val chartTabs by viewModel.chartTabItemsLiveData.observeAsState(listOf())
         val currency = viewModel.currency
         val description = viewModel.description
         val poweredBy = viewModel.poweredBy
