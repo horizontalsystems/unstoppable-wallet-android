@@ -2,10 +2,9 @@ package io.horizontalsystems.bankwallet.ui.compose.components
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.height
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -44,7 +43,8 @@ fun AppBarMenuButton(
 fun AppBar(
     title: TranslatableString,
     navigationIcon: @Composable (() -> Unit)? = null,
-    menuItems: List<MenuItem> = listOf()
+    menuItems: List<MenuItem> = listOf(),
+    showSpinner: Boolean = false
 ) {
     TopAppBar(
         modifier = Modifier.height(56.dp),
@@ -68,6 +68,13 @@ fun AppBar(
                 AppBarMenuButton(
                     icon = menuItem.icon,
                     onClick = menuItem.onClick
+                )
+            }
+            if (showSpinner){
+                CircularProgressIndicator(
+                    modifier = Modifier.padding(start = 24.dp, end = 16.dp).size(24.dp),
+                    color = ComposeAppTheme.colors.grey,
+                    strokeWidth = 2.dp
                 )
             }
         },

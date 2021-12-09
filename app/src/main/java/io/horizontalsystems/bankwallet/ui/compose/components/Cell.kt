@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.ui.compose.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
@@ -146,6 +147,39 @@ fun CellData2(content: @Composable () -> Unit) {
         content.invoke()
     }
 
+}
+
+@Composable
+fun CellMultilineClear(
+    borderTop: Boolean = false,
+    borderBottom: Boolean = false,
+    onClick: () -> Unit,
+    content: @Composable () -> Unit,
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(60.dp)
+            .clickable { onClick.invoke() }
+    ) {
+        if (borderTop) {
+            Divider(
+                thickness = 1.dp,
+                color = ComposeAppTheme.colors.steel10,
+                modifier = Modifier.align(Alignment.TopCenter)
+            )
+        }
+
+        if (borderBottom) {
+            Divider(
+                thickness = 1.dp,
+                color = ComposeAppTheme.colors.steel10,
+                modifier = Modifier.align(Alignment.BottomCenter)
+            )
+        }
+
+        content.invoke()
+    }
 }
 
 @Composable
