@@ -15,6 +15,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.ChartInfoData
+import io.horizontalsystems.bankwallet.modules.market.Value
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.chartview.Chart
@@ -38,6 +39,26 @@ import java.util.*
 //        IndicatorToggles(indicators, onSelectIndicator)
 //    }
 //}
+
+@Composable
+fun HsChartLineHeader(currentValue: String?, currentValueDiff: Value.Percent?) {
+    TabBalance(borderTop = true) {
+        Text(
+            modifier = Modifier.padding(end = 8.dp),
+            text = currentValue ?: "--",
+            style = ComposeAppTheme.typography.headline1,
+            color = ComposeAppTheme.colors.leah
+        )
+
+        currentValueDiff?.let {
+            Text(
+                text = formatValueAsDiff(it),
+                style = ComposeAppTheme.typography.subhead1,
+                color = diffColor(it.raw())
+            )
+        }
+    }
+}
 
 @Composable
 fun <T> Chart(
