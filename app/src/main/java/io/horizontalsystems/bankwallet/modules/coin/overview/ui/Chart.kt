@@ -4,19 +4,25 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.Divider
 import androidx.compose.material.ScrollableTabRow
 import androidx.compose.material.Tab
-import androidx.compose.runtime.Composable
+import androidx.compose.material.Text
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.ChartInfoData
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.chartview.Chart
 import io.horizontalsystems.chartview.models.PointInfo
+import io.horizontalsystems.core.entities.Currency
+import io.horizontalsystems.core.helpers.DateHelper
+import io.horizontalsystems.core.helpers.HudHelper
+import java.util.*
 
 //@Composable
 //fun <T>Chart(
@@ -34,38 +40,52 @@ import io.horizontalsystems.chartview.models.PointInfo
 //}
 
 @Composable
-fun <T>Chart(
+fun <T> Chart(
     tabItems: List<TabItem<T>>,
     onSelectTab: (T) -> Unit,
     chartInfoData: ChartInfoData?,
     chartLoading: Boolean,
-    viewState: ViewState?
+    viewState: ViewState?,
+    currency: Currency,
 ) {
     Column {
-//        if (showPointInfo) {
-//            pointXxx?.let {
-//                TabPeriod(modifier = Modifier.padding(horizontal = 16.dp)) {
-//                    Column {
-//                        Text(
-//                            text = it.value,
-//                            style = ComposeAppTheme.typography.captionSB,
-//                            color = ComposeAppTheme.colors.leah
-//                        )
-//                        Spacer(modifier = Modifier.height(4.dp))
-//                        Text(
-//                            text = it.date,
-//                            style = ComposeAppTheme.typography.caption,
-//                            color = ComposeAppTheme.colors.grey
-//                        )
-//                    }
-//                }
-//            }
-//        } else {
-            ChartTab(tabItems, onSelectTab)
-//        }
+        var pointInfo by remember { mutableStateOf<PointInfo?>(null) }
+        HsChartLinePeriodsAndPoint(tabItems, pointInfo, currency, onSelectTab)
+        PriceVolChart(chartInfoData, chartLoading, viewState) {
+            pointInfo = it
+        }
+    }
+}
 
+@Composable
+private fun <T> HsChartLinePeriodsAndPoint(
+    tabItems: List<TabItem<T>>,
+    pointInfo: PointInfo?,
+    currency: Currency,
+    onSelectTab: (T) -> Unit,
+) {
+    if (pointInfo == null) {
+        ChartTab(tabItems, onSelectTab)
+    } else {
+        val (shortenValue, suffix) = App.numberFormatter.shortenValue(pointInfo.value.toBigDecimal())
+        val value = App.numberFormatter.formatFiat(shortenValue, currency.symbol, 0, 2) + " $suffix"
+        val dayAndTime = DateHelper.getDayAndTime(Date(pointInfo.timestamp * 1000))
 
-        PriceVolChart(chartInfoData, chartLoading, viewState)
+        TabPeriod(modifier = Modifier.padding(horizontal = 16.dp)) {
+            Column {
+                Text(
+                    text = value,
+                    style = ComposeAppTheme.typography.captionSB,
+                    color = ComposeAppTheme.colors.leah
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = dayAndTime,
+                    style = ComposeAppTheme.typography.caption,
+                    color = ComposeAppTheme.colors.grey
+                )
+            }
+        }
     }
 }
 
@@ -102,7 +122,8 @@ fun IndicatorToggles(indicators: List<IndicatorItem>, onSelect: (IndicatorItem) 
 fun PriceVolChart(
     chartInfoData: ChartInfoData?,
     loading: Boolean,
-    viewState: ViewState?
+    viewState: ViewState?,
+    onSelectPoint: (PointInfo?) -> Unit,
 ) {
     Box(
         modifier = Modifier
@@ -119,9 +140,12 @@ fun PriceVolChart(
                         }
 
                         override fun onTouchUp() {
+                            onSelectPoint.invoke(null)
                         }
 
                         override fun onTouchSelect(point: PointInfo) {
+                            onSelectPoint.invoke(point)
+                            HudHelper.vibrate(context)
                         }
                     })
                 }
