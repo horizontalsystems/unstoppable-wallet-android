@@ -8,7 +8,7 @@ import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.LastBlockInfo
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
-import io.horizontalsystems.bankwallet.modules.transactionInfo.ColoredValue
+import io.horizontalsystems.bankwallet.modules.transactionInfo.ColoredValueNew
 import io.horizontalsystems.core.helpers.DateHelper
 import io.reactivex.disposables.CompositeDisposable
 import java.util.*
@@ -23,7 +23,7 @@ class TransactionsViewModel(
     val syncingLiveData = MutableLiveData<Boolean>()
     val filterCoinsLiveData = MutableLiveData<List<Filter<TransactionWallet>>>()
     val filterTypesLiveData = MutableLiveData<List<Filter<FilterTransactionType>>>()
-    val transactionList = MutableLiveData<ItemsList>()
+    val transactionList = MutableLiveData<ListState>()
 
     private val disposables = CompositeDisposable()
 
@@ -59,35 +59,25 @@ class TransactionsViewModel(
             }
 
         service.itemsObservable
-            .subscribeIO {
+            .subscribeIO { items ->
                 val transactionList = when {
-                    it.isNotEmpty() -> {
-                        val viewItems = it.map { transactionViewItem2Factory.convertToViewItemCached(it) }
-                        ItemsList.Filled(viewItems, generateHeaders(viewItems))
+                    items.isNotEmpty() -> {
+                        val viewItems = items.map {
+                            transactionViewItem2Factory.convertToViewItemCached(it)
+                        }
+                        val lastItemIndex = viewItems.size - 1
+                        ListState.Filled(
+                            viewItems.groupBy { it.formattedDate },
+                            viewItems[lastItemIndex].uid
+                        )
                     }
-                    else -> ItemsList.Blank
+                    else -> ListState.Blank
                 }
                 this.transactionList.postValue(transactionList)
             }
             .let {
                 disposables.add(it)
             }
-    }
-
-    private fun generateHeaders(viewItems: List<TransactionViewItem>): Map<Int, String> {
-        val headers = mutableMapOf<Int, String>()
-
-        var prevSectionHeader: String? = null
-        viewItems.forEachIndexed { index, transactionViewItem ->
-            val sectionHeader = transactionViewItem.formattedDate
-
-            if (sectionHeader != prevSectionHeader) {
-                headers[index] = sectionHeader
-                prevSectionHeader = sectionHeader
-            }
-        }
-
-        return headers
     }
 
     fun setFilterTransactionType(filterType: FilterTransactionType) {
@@ -106,9 +96,9 @@ class TransactionsViewModel(
         service.fetchRateIfNeeded(viewItem.uid)
     }
 
-    sealed class ItemsList(val items: List<TransactionViewItem>, val headers: Map<Int, String>) {
-        object Blank : ItemsList(listOf(), mapOf())
-        class Filled(items: List<TransactionViewItem>, headers: Map<Int, String>) : ItemsList(items, headers)
+    sealed class ListState {
+        object Blank : ListState()
+        class Filled(val items: Map<String, List<TransactionViewItem>>, val lastItemUid: String) : ListState()
     }
 
     override fun onCleared() {
@@ -132,20 +122,14 @@ data class TransactionViewItem(
     val progress: Int?,
     val title: String,
     val subtitle: String,
-    val primaryValue: ColoredValue?,
-    val secondaryValue: ColoredValue?,
+    val primaryValue: ColoredValueNew?,
+    val secondaryValue: ColoredValueNew?,
     val date: Date,
     val sentToSelf: Boolean = false,
     val doubleSpend: Boolean = false,
     val locked: Boolean? = null
 ) {
     val formattedDate = formatDate(date).uppercase()
-
-    fun itemTheSame(newItem: TransactionViewItem) = uid == newItem.uid
-
-    fun contentTheSame(newItem: TransactionViewItem): Boolean {
-        return this == newItem
-    }
 
     private fun formatDate(date: Date): String {
         val calendar = Calendar.getInstance()

@@ -70,3 +70,9 @@ sealed class TransactionInfoActionButton {
 }
 
 data class ColoredValue(val value: String, val color: Int)
+
+data class ColoredValueNew(val value: String, val color: ColorName)
+
+enum class ColorName{
+    Remus, Jacob, Grey, Leah
+}

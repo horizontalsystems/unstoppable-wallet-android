@@ -10,7 +10,8 @@ import io.horizontalsystems.bankwallet.entities.transactionrecords.binancechain.
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.BitcoinIncomingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.BitcoinOutgoingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.*
-import io.horizontalsystems.bankwallet.modules.transactionInfo.ColoredValue
+import io.horizontalsystems.bankwallet.modules.transactionInfo.ColorName
+import io.horizontalsystems.bankwallet.modules.transactionInfo.ColoredValueNew
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoAddressMapper
 import java.util.*
 
@@ -63,11 +64,11 @@ class TransactionViewItemFactory {
         lastBlockTimestamp: Long?,
         icon: Int?
     ): TransactionViewItem {
-        val primaryValue = ColoredValue(getCoinString(record.valueIn), R.color.jacob)
+        val primaryValue = ColoredValueNew(getCoinString(record.valueIn), ColorName.Jacob)
         val secondaryValue = record.valueOut?.let {
-            ColoredValue(
+            ColoredValueNew(
                 getCoinString(it),
-                if (record.foreignRecipient) R.color.grey else R.color.remus
+                if (record.foreignRecipient) ColorName.Grey else ColorName.Remus
             )
         }
 
@@ -94,12 +95,9 @@ class TransactionViewItemFactory {
         icon: Int?
     ): TransactionViewItem {
         val primaryValue = currencyValue?.let {
-            ColoredValue(
-                getCurrencyString(it),
-                R.color.jacob
-            )
+            ColoredValueNew(getCurrencyString(it), ColorName.Jacob)
         }
-        val secondaryValue = ColoredValue(getCoinString(record.value), R.color.grey)
+        val secondaryValue = ColoredValueNew(getCoinString(record.value), ColorName.Grey)
 
         return TransactionViewItem(
             record.uid,
@@ -122,12 +120,9 @@ class TransactionViewItemFactory {
         icon: Int?
     ): TransactionViewItem {
         val primaryValue = currencyValue?.let {
-            ColoredValue(
-                getCurrencyString(it),
-                R.color.remus
-            )
+            ColoredValueNew(getCurrencyString(it), ColorName.Remus)
         }
-        val secondaryValue = ColoredValue(getCoinString(record.value), R.color.grey)
+        val secondaryValue = ColoredValueNew(getCoinString(record.value), ColorName.Grey)
 
         return TransactionViewItem(
             record.uid,
@@ -200,12 +195,9 @@ class TransactionViewItemFactory {
         } ?: "---"
 
         val primaryValue = currencyValue?.let {
-            ColoredValue(
-                getCurrencyString(it),
-                R.color.jacob
-            )
+            ColoredValueNew(getCurrencyString(it), ColorName.Jacob)
         }
-        val secondaryValue = ColoredValue(getCoinString(record.value), R.color.grey)
+        val secondaryValue = ColoredValueNew(getCoinString(record.value), ColorName.Grey)
 
         val lockState = record.lockState(lastBlockTimestamp)
         val locked = when {
@@ -244,12 +236,9 @@ class TransactionViewItemFactory {
         } ?: "---"
 
         val primaryValue = currencyValue?.let {
-            ColoredValue(
-                getCurrencyString(it),
-                R.color.remus
-            )
+            ColoredValueNew(getCurrencyString(it), ColorName.Remus)
         }
-        val secondaryValue = ColoredValue(getCoinString(record.value), R.color.grey)
+        val secondaryValue = ColoredValueNew(getCoinString(record.value), ColorName.Grey)
 
         val lockState = record.lockState(lastBlockTimestamp)
         val locked = when {
@@ -281,12 +270,9 @@ class TransactionViewItemFactory {
         icon: Int?
     ): TransactionViewItem {
         val primaryValue = currencyValue?.let {
-            ColoredValue(
-                getCurrencyString(it),
-                R.color.jacob
-            )
+            ColoredValueNew(getCurrencyString(it), ColorName.Jacob)
         }
-        val secondaryValue = ColoredValue(getCoinString(record.value), R.color.grey)
+        val secondaryValue = ColoredValueNew(getCoinString(record.value), ColorName.Grey)
 
         return TransactionViewItem(
             record.uid,
@@ -309,12 +295,9 @@ class TransactionViewItemFactory {
         icon: Int?
     ): TransactionViewItem {
         val primaryValue = currencyValue?.let {
-            ColoredValue(
-                getCurrencyString(it),
-                R.color.remus
-            )
+            ColoredValueNew(getCurrencyString(it), ColorName.Remus)
         }
-        val secondaryValue = ColoredValue(getCoinString(record.value), R.color.grey)
+        val secondaryValue = ColoredValueNew(getCoinString(record.value), ColorName.Grey)
 
         return TransactionViewItem(
             record.uid,
@@ -351,8 +334,8 @@ class TransactionViewItemFactory {
             secondaryValueText = getCoinString(record.value)
         }
 
-        val primaryValue = primaryValueText?.let { ColoredValue(it, R.color.leah) }
-        val secondaryValue = ColoredValue(secondaryValueText, R.color.grey)
+        val primaryValue = primaryValueText?.let { ColoredValueNew(it, ColorName.Leah) }
+        val secondaryValue = ColoredValueNew(secondaryValueText, ColorName.Grey)
 
         return TransactionViewItem(
             record.uid,
