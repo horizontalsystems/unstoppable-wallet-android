@@ -5,12 +5,22 @@ platform :android do
     reset_git_repo(force: true, skip_clean: true)
   end
 
-  desc "Submit a new Build"
+  desc "Submit a new Debug Build"
   lane :app_build do |options|
     commit = last_git_commit
 
     gradle(task: "clean")
-    gradle(task: "assembleAppcenter", flags: "--stacktrace --no-daemon")
+    gradle(task: "assembleAppcenterdebug", flags: "--stacktrace --no-daemon")
+
+    upload_to_app_center(api_token: options[:api_token], app_name: options[:app_name], notes: "Author: #{commit[:author]}, changes: #{commit[:message]}")
+  end
+
+  desc "Submit a new Release Build"
+  lane :app_build_release do |options|
+    commit = last_git_commit
+
+    gradle(task: "clean")
+    gradle(task: "assembleAppcenterrelease", flags: "--stacktrace --no-daemon")
 
     upload_to_app_center(api_token: options[:api_token], app_name: options[:app_name], notes: "Author: #{commit[:author]}, changes: #{commit[:message]}")
   end
