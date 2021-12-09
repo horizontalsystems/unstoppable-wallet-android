@@ -23,9 +23,8 @@ import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
-import io.horizontalsystems.bankwallet.modules.coin.adapters.CoinChartAdapter
-import io.horizontalsystems.bankwallet.modules.coin.overview.ui.ChartInfo
-import io.horizontalsystems.bankwallet.modules.coin.overview.ui.ChartInfoHeader
+import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Chart
+import io.horizontalsystems.bankwallet.modules.coin.overview.ui.HsChartLineHeader
 import io.horizontalsystems.bankwallet.modules.market.MarketDataValue
 import io.horizontalsystems.bankwallet.modules.market.Value
 import io.horizontalsystems.bankwallet.modules.market.tvl.TvlModule.SelectorDialogState
@@ -35,8 +34,6 @@ import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
-import io.horizontalsystems.chartview.ChartView
-import io.horizontalsystems.chartview.ChartView.ChartType
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 
@@ -77,12 +74,19 @@ class TvlFragment : BaseFragment() {
         onCoinClick: (String?) -> Unit
     ) {
         val viewState by viewModel.viewStateLiveData.observeAsState()
-        val chartData by viewModel.chartLiveData.observeAsState()
         val tvlData by viewModel.tvlLiveData.observeAsState()
         val tvlDiffType by viewModel.tvlDiffTypeLiveData.observeAsState()
         val loading by viewModel.loadingLiveData.observeAsState(false)
         val isRefreshing by viewModel.isRefreshingLiveData.observeAsState(false)
         val chainSelectorDialogState by viewModel.chainSelectorDialogStateLiveData.observeAsState(SelectorDialogState.Closed)
+
+        val currentValue by viewModel.currentValueLiveData.observeAsState()
+        val currentValueDiff by viewModel.currentValueDiffLiveData.observeAsState()
+        val chartTabs by viewModel.chartTabItemsLiveData.observeAsState(listOf())
+        val chartInfo by viewModel.chartInfoLiveData.observeAsState()
+        val chartLoading by viewModel.chartLoadingLiveData.observeAsState(false)
+        val chartViewState by viewModel.chartViewStateLiveData.observeAsState()
+        val currency = viewModel.currency
 
         Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
             AppBar(
@@ -114,29 +118,21 @@ class TvlFragment : BaseFragment() {
                     }
                     ViewState.Success -> {
                         LazyColumn {
-                            chartData?.let { chartData ->
-                                item {
-                                    ChartInfoHeader(chartData.subtitle)
+                            item {
+                                HsChartLineHeader(currentValue, currentValueDiff)
+                            }
 
-                                    ChartInfo(
-                                        CoinChartAdapter.ViewItemWrapper(chartData.chartInfoData),
-                                        chartData.currency,
-                                        CoinChartAdapter.ChartViewType.MarketMetricChart,
-                                        listOf(
-                                            Pair(ChartView.ChartType.DAILY, R.string.CoinPage_TimeDuration_Day),
-                                            Pair(ChartView.ChartType.WEEKLY, R.string.CoinPage_TimeDuration_Week),
-                                            Pair(ChartView.ChartType.MONTHLY, R.string.CoinPage_TimeDuration_Month)
-                                        ),
-                                        object : CoinChartAdapter.Listener {
-                                            override fun onChartTouchDown() = Unit
-
-                                            override fun onChartTouchUp() = Unit
-
-                                            override fun onTabSelect(chartType: ChartType) {
-                                                viewModel.onSelectChartType(chartType)
-                                            }
-                                        })
-                                }
+                            item {
+                                Chart(
+                                    tabItems = chartTabs,
+                                    onSelectTab = {
+                                        viewModel.onSelectChartType(it)
+                                    },
+                                    chartInfoData = chartInfo,
+                                    chartLoading = chartLoading,
+                                    viewState = chartViewState,
+                                    currency = currency
+                                )
                             }
 
                             tvlData?.let { tvlData ->
