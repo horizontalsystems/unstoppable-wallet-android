@@ -26,7 +26,7 @@ jobs:
       - name: Fastlane Build
         uses: maierj/fastlane-action@v2.1.0
         with:
-          lane: 'app_build'
+          lane: 'app_build_release'
           options: '{ "app_name": "Unstoppable-Release", "api_token": "${{secrets.API_TOKEN_RELEASE}}" }'
         env:
           BUILD_NUMBER: ${{env.BUILD_NUMBER_NEW}}
