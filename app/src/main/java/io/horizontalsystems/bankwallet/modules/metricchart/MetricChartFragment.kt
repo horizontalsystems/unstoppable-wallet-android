@@ -16,10 +16,8 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Chart
+import io.horizontalsystems.bankwallet.modules.coin.overview.ui.HsChartLineHeader
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.TabBalance
-import io.horizontalsystems.bankwallet.ui.compose.components.diffColor
-import io.horizontalsystems.bankwallet.ui.compose.components.formatValueAsDiff
 import io.horizontalsystems.bankwallet.ui.extensions.BaseBottomSheetDialogFragment
 import kotlinx.android.synthetic.main.fragment_market_global.*
 
@@ -65,28 +63,12 @@ class MetricChartFragment : BaseBottomSheetDialogFragment() {
         val currency = viewModel.currency
         val description = viewModel.description
         val poweredBy = viewModel.poweredBy
-        val currentValue by viewModel.currentValueLiveData.observeAsState("--")
+        val currentValue by viewModel.currentValueLiveData.observeAsState()
         val currentValueDiff by viewModel.currentValueDiffLiveData.observeAsState()
 
         ComposeAppTheme {
             Column {
-                TabBalance(borderTop = true) {
-                    Text(
-                        modifier = Modifier.padding(end = 8.dp),
-                        text = currentValue,
-                        style = ComposeAppTheme.typography.headline1,
-                        color = ComposeAppTheme.colors.leah
-                    )
-
-                    currentValueDiff?.let {
-                        Text(
-                            text = formatValueAsDiff(it),
-                            style = ComposeAppTheme.typography.subhead1,
-                            color = diffColor(it.raw())
-                        )
-                    }
-                }
-
+                HsChartLineHeader(currentValue, currentValueDiff)
                 Chart(
                     tabItems = chartTabs,
                     onSelectTab = {
