@@ -1,13 +1,16 @@
 package io.horizontalsystems.bankwallet.modules.evmnetwork
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import io.horizontalsystems.bankwallet.core.managers.url
+import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.managers.urls
+import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
 
-class EvmNetworkViewModel(private val service: EvmNetworkService): ViewModel() {
+class EvmNetworkViewModel(private val service: EvmNetworkService) : ViewModel() {
 
     private val disposables = CompositeDisposable()
 
@@ -31,25 +34,41 @@ class EvmNetworkViewModel(private val service: EvmNetworkService): ViewModel() {
         val (mainNetItems, testNetItems) = items.partition { it.isMainNet }
 
         val sectionViewItems: List<SectionViewItem> = listOfNotNull(
-            sectionViewItem("MainNet", mainNetItems.map { viewItem(it) }),
-            sectionViewItem("TestNet", testNetItems.map { viewItem(it) })
+            sectionViewItem("MainNet", mainNetItems),
+            sectionViewItem("TestNet", testNetItems)
         )
 
         sectionViewItemsLiveData.postValue(sectionViewItems)
     }
 
-    private fun sectionViewItem(title: String, viewItems: List<ViewItem>): SectionViewItem? {
+    private fun sectionViewItem(title: String, items: List<EvmNetworkService.Item>): SectionViewItem? {
+        val viewItems = items.map { viewItem(it) }.sortedBy { it.name }
+        val selectedItem = items.firstOrNull { it.selected }
+
+        val description = selectedItem?.let {
+            val urls = selectedItem.network.syncSource.urls
+            val formattedUrls = if (urls.size > 1) urls.joinToString(separator = "") { "  •  $it \n" } else null
+            formattedUrls?.let { "${Translator.getString(R.string.NetworkSettings_SwithesAutomatically_Description)}\n\n$formattedUrls" }
+        }
+
+        Log.e("AAA", "description: \n$description")
+
         if (viewItems.isEmpty()) return null
 
-        return SectionViewItem(title, viewItems)
+        return SectionViewItem(title, viewItems, description)
     }
 
     private fun viewItem(item: EvmNetworkService.Item): ViewItem {
+        val url = if (item.network.syncSource.urls.size == 1)
+            item.network.syncSource.urls.first().toString()
+        else
+            Translator.getString(R.string.NetworkSettings_SwithesAutomatically)
+
         return ViewItem(
-                item.network.id,
-                item.network.name,
-                item.network.syncSource.url.toString(),
-                item.selected
+            item.network.id,
+            item.network.name,
+            url,
+            item.selected
         )
     }
 
@@ -87,7 +106,8 @@ class EvmNetworkViewModel(private val service: EvmNetworkService): ViewModel() {
 
     data class SectionViewItem(
         val title: String,
-        val viewItems: List<ViewItem>
+        val viewItems: List<ViewItem>,
+        val description: String?
     )
 
     data class ViewItem(
