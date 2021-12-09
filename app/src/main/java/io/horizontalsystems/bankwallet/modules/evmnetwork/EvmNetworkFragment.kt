@@ -16,6 +16,7 @@ import io.horizontalsystems.views.ListPosition
 import io.horizontalsystems.views.inflate
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_evm_network.*
+import kotlinx.android.synthetic.main.view_holder_description.*
 import kotlinx.android.synthetic.main.view_holder_multiline_lawrence.*
 
 class EvmNetworkFragment : BaseFragment(R.layout.fragment_evm_network) {
@@ -41,6 +42,9 @@ class EvmNetworkFragment : BaseFragment(R.layout.fragment_evm_network) {
                 adapters.add(SectionItemsAdapter(section.viewItems) {
                     viewModel.onSelectViewItem(it)
                 })
+                section.description?.let {
+                    adapters.add(DescriptionAdapter(section.description))
+                }
             }
 
             rvItems.adapter = ConcatAdapter(adapters)
@@ -64,10 +68,13 @@ class SectionItemsAdapter(
     private val items: List<EvmNetworkViewModel.ViewItem>,
     private val onSelect: (EvmNetworkViewModel.ViewItem) -> Unit
 ) : RecyclerView.Adapter<ViewHolderMultilineLawrence>() {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolderMultilineLawrence.create(parent, onSelect)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
+        ViewHolderMultilineLawrence.create(parent, onSelect)
+
     override fun onBindViewHolder(holder: ViewHolderMultilineLawrence, position: Int) {
         holder.bind(items[position], ListPosition.getListPosition(items.size, position))
     }
+
     override fun getItemCount() = items.size
 }
 
@@ -102,3 +109,31 @@ class ViewHolderMultilineLawrence(
         }
     }
 }
+
+class DescriptionAdapter(
+    private val description: String
+) : RecyclerView.Adapter<ViewHolderDescription>() {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolderDescription.create(parent)
+
+    override fun onBindViewHolder(holder: ViewHolderDescription, position: Int) {
+        holder.bind(description)
+    }
+
+    override fun getItemCount() = 1
+}
+
+class ViewHolderDescription(
+    override val containerView: View
+) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+
+    fun bind(description: String) {
+        text.text = description
+    }
+
+    companion object {
+        fun create(parent: ViewGroup): ViewHolderDescription {
+            return ViewHolderDescription(inflate(parent, R.layout.view_holder_description))
+        }
+    }
+}
+
