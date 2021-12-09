@@ -2,9 +2,11 @@ package io.horizontalsystems.chartview
 
 import android.graphics.PointF
 import android.util.Range
+import androidx.compose.runtime.Immutable
 import java.math.BigDecimal
 import kotlin.math.abs
 
+@Immutable
 data class ChartData(
     val items: List<ChartDataItemImmutable>,
     val startTimestamp: Long,
@@ -33,8 +35,10 @@ data class ChartData(
     }
 }
 
+@Immutable
 data class ChartDataValueImmutable(val value: Float, val point: PointF)
 
+@Immutable
 data class ChartDataItemImmutable(val timestamp: Long, val values: Map<Indicator, ChartDataValueImmutable?>)
 
 data class ChartDataValue(val value: Float) {

@@ -94,7 +94,8 @@ class MetricChartFragment : BaseBottomSheetDialogFragment() {
                     },
                     chartInfoData = chartInfo,
                     chartLoading = chartLoading,
-                    viewState = viewState
+                    viewState = viewState,
+                    currency = currency
                 )
 
                 BottomSheetText(
