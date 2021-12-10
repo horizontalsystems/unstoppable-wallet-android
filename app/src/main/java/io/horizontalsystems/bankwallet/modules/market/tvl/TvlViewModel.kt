@@ -3,23 +3,12 @@ package io.horizontalsystems.bankwallet.modules.market.tvl
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
-import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.entities.ViewState
-import io.horizontalsystems.bankwallet.modules.coin.ChartInfoData
-import io.horizontalsystems.bankwallet.modules.market.Value
 import io.horizontalsystems.bankwallet.modules.market.tvl.TvlModule.SelectorDialogState
 import io.horizontalsystems.bankwallet.modules.market.tvl.TvlModule.TvlDiffType
-import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartFactory
-import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartModule
-import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartModule.ValueType
-import io.horizontalsystems.bankwallet.modules.metricchart.stringResId
 import io.horizontalsystems.bankwallet.ui.compose.Select
-import io.horizontalsystems.bankwallet.ui.compose.components.TabItem
-import io.horizontalsystems.chartview.ChartView
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.delay
@@ -27,8 +16,8 @@ import kotlinx.coroutines.launch
 
 class TvlViewModel(
     private val service: TvlService,
-    private val factory: MetricChartFactory,
-    private val tvlViewItemFactory: TvlViewItemFactory
+    private val tvlViewItemFactory: TvlViewItemFactory,
+    val xxxChart: XxxChart
 ) : ViewModel() {
 
     private val disposables = CompositeDisposable()
@@ -46,38 +35,7 @@ class TvlViewModel(
     val viewStateLiveData = MutableLiveData<ViewState>()
     val chainSelectorDialogStateLiveData = MutableLiveData<SelectorDialogState>()
 
-    val currentValueLiveData = MutableLiveData<String>()
-    val currentValueDiffLiveData = MutableLiveData<Value.Percent>()
-    val chartTabItemsLiveData = MutableLiveData<List<TabItem<ChartView.ChartType>>>()
-    val chartInfoLiveData = MutableLiveData<ChartInfoData>()
-    val chartLoadingLiveData = MutableLiveData<Boolean>()
-    val chartViewStateLiveData = MutableLiveData<ViewState>()
-    val currency by service::currency
-
     init {
-        service.chartTypeObservable
-            .subscribeIO { chartType ->
-                val tabItems = service.chartTypes.map {
-                    TabItem(Translator.getString(it.stringResId), it == chartType, it)
-                }
-                chartTabItemsLiveData.postValue(tabItems)
-            }
-            .let {
-                disposables.add(it)
-            }
-
-        service.chartItemsObservable
-            .subscribeIO { chartItemsDataState ->
-                chartViewStateLiveData.postValue(chartItemsDataState.viewState)
-
-                chartLoadingLiveData.postValue(chartItemsDataState.loading)
-
-                chartItemsDataState.dataOrNull?.let { (chartType, chartItems) ->
-                    syncChartItems(chartType, chartItems)
-                }
-            }
-            .let { disposables.add(it) }
-
         service.marketTvlItemsObservable
             .subscribeIO { tvlItemsDataState ->
                 tvlItemsDataState.dataOrNull?.let {
@@ -117,7 +75,7 @@ class TvlViewModel(
             }
         }.let { disposables.add(it) }
 
-
+        xxxChart.start()
         service.start()
     }
 
@@ -127,33 +85,6 @@ class TvlViewModel(
         )
     }
 
-    private fun syncChartItems(chartType: ChartView.ChartType, chartItems: List<MetricChartModule.Item>) {
-        chartItems.lastOrNull()?.let { lastItem ->
-            val lastItemValue = lastItem.value
-            currentValueLiveData.postValue(
-                App.numberFormatter.formatCurrencyValueAsShortened(CurrencyValue(service.currency, lastItemValue))
-            )
-
-            val firstItemValue = chartItems.first().value
-            currentValueDiffLiveData.postValue(Value.Percent(((lastItemValue - firstItemValue).toFloat() / firstItemValue.toFloat() * 100).toBigDecimal()))
-        }
-
-        val chartViewItem = factory.convert(
-            chartItems,
-            chartType,
-            ValueType.CompactCurrencyValue,
-            service.currency
-        )
-        val chartInfoData = ChartInfoData(
-            chartViewItem.chartData,
-            chartViewItem.chartType,
-            chartViewItem.maxValue,
-            chartViewItem.minValue
-        )
-
-        chartInfoLiveData.postValue(chartInfoData)
-    }
-
     private fun refreshWithMinLoadingSpinnerPeriod() {
         service.refresh()
         viewModelScope.launch {
@@ -161,10 +92,6 @@ class TvlViewModel(
             delay(1000)
             isRefreshingLiveData.postValue(false)
         }
-    }
-
-    fun onSelectChartType(chartType: ChartView.ChartType) {
-        service.updateChartType(chartType)
     }
 
     fun onSelectChain(chain: TvlModule.Chain) {
@@ -199,6 +126,7 @@ class TvlViewModel(
     }
 
     override fun onCleared() {
+        xxxChart.stop()
         service.stop()
         disposables.clear()
     }

@@ -16,9 +16,6 @@ class TvlService(
 ) {
     val chartTypes = listOf(ChartView.ChartType.DAILY, ChartView.ChartType.WEEKLY, ChartView.ChartType.MONTHLY)
 
-    private val chartTypeSubject = BehaviorSubject.create<ChartView.ChartType>()
-    val chartTypeObservable: Observable<ChartView.ChartType> = chartTypeSubject
-
     private var currencyManagerDisposable: Disposable? = null
     private var globalMarketPointsDisposable: Disposable? = null
     private var tvlDataDisposable: Disposable? = null
@@ -39,6 +36,9 @@ class TvlService(
             updateGlobalMarketPoints()
             updateTvlData(false)
         }
+
+    private val chartTypeSubject = BehaviorSubject.createDefault(chartType)
+    val chartTypeObservable: Observable<ChartView.ChartType> = chartTypeSubject
 
     val chains: List<TvlModule.Chain> = TvlModule.Chain.values().toList()
     var chain: TvlModule.Chain = TvlModule.Chain.All
