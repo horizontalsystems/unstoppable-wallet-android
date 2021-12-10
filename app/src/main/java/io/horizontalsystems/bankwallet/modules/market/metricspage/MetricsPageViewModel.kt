@@ -6,17 +6,12 @@ import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.entities.ViewState
-import io.horizontalsystems.bankwallet.modules.coin.ChartInfoData
-import io.horizontalsystems.bankwallet.modules.coin.overview.ui.ChartInfoHeaderItem
 import io.horizontalsystems.bankwallet.modules.market.MarketField
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
-import io.horizontalsystems.bankwallet.modules.market.Value
-import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartFactory
-import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartModule
+import io.horizontalsystems.bankwallet.modules.market.tvl.XxxChart
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
 import io.horizontalsystems.bankwallet.ui.compose.Select
-import io.horizontalsystems.chartview.ChartView
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.delay
@@ -24,7 +19,7 @@ import kotlinx.coroutines.launch
 
 class MetricsPageViewModel(
     private val service: MetricsPageService,
-    private val factory: MetricChartFactory
+    val xxxChart: XxxChart
 ) : ViewModel() {
 
     private val disposables = CompositeDisposable()
@@ -34,7 +29,6 @@ class MetricsPageViewModel(
 
     val loadingLiveData = MutableLiveData<Boolean>()
     val isRefreshingLiveData = MutableLiveData<Boolean>()
-    val chartLiveData = MutableLiveData<MetricsPageModule.ChartData>()
     val marketLiveData = MutableLiveData<MetricsPageModule.MarketData>()
     val viewStateLiveData = MutableLiveData<ViewState>()
 
@@ -49,14 +43,6 @@ class MetricsPageViewModel(
             MetricsType.BtcDominance,
             MetricsType.TvlInDefi -> MarketField.MarketCap
         }
-
-        service.chartItemsObservable
-            .subscribeIO { chartItemsDataState ->
-                chartItemsDataState.dataOrNull?.let {
-                    syncChartItems(it)
-                }
-            }
-            .let { disposables.add(it) }
 
         service.marketItemsObservable
             .subscribeIO { marketItemsDataState ->
@@ -97,6 +83,7 @@ class MetricsPageViewModel(
             }
         }.let { disposables.add(it) }
 
+        xxxChart.start()
         service.start()
     }
 
@@ -110,33 +97,6 @@ class MetricsPageViewModel(
         return MetricsPageModule.MarketData(menu, marketViewItems)
     }
 
-    private fun syncChartItems(chartItems: List<MetricChartModule.Item>) {
-        chartLiveData.postValue(chartData(chartItems))
-    }
-
-    private fun chartData(chartItems: List<MetricChartModule.Item>): MetricsPageModule.ChartData {
-        val chartViewItem = factory.convert(
-            chartItems,
-            service.chartType,
-            MetricChartModule.ValueType.CompactCurrencyValue,
-            service.baseCurrency
-        )
-        val chartInfoData = ChartInfoData(
-            chartViewItem.chartData,
-            chartViewItem.chartType,
-            chartViewItem.maxValue,
-            chartViewItem.minValue
-        )
-        return MetricsPageModule.ChartData(
-            ChartInfoHeaderItem(
-                chartViewItem.lastValueWithDiff.value,
-                Value.Percent(chartViewItem.lastValueWithDiff.diff)
-            ),
-            service.baseCurrency,
-            chartInfoData
-        )
-    }
-
     private fun refreshWithMinLoadingSpinnerPeriod() {
         service.refresh()
         viewModelScope.launch {
@@ -144,10 +104,6 @@ class MetricsPageViewModel(
             delay(1000)
             isRefreshingLiveData.postValue(false)
         }
-    }
-
-    fun onSelectChartType(chartType: ChartView.ChartType) {
-        service.chartType = chartType
     }
 
     fun onToggleSortType() {
@@ -168,6 +124,7 @@ class MetricsPageViewModel(
     }
 
     override fun onCleared() {
+        xxxChart.stop()
         service.stop()
         disposables.clear()
     }
