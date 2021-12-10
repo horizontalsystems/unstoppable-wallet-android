@@ -6,6 +6,7 @@ import androidx.compose.material.ScrollableTabRow
 import androidx.compose.material.Tab
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -16,6 +17,7 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.ChartInfoData
 import io.horizontalsystems.bankwallet.modules.market.Value
+import io.horizontalsystems.bankwallet.modules.market.tvl.XxxChart
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.chartview.Chart
@@ -57,6 +59,31 @@ fun HsChartLineHeader(currentValue: String?, currentValueDiff: Value.Percent?) {
                 color = diffColor(it.raw())
             )
         }
+    }
+}
+
+@Composable
+fun ChartXxx(xxxChart: XxxChart) {
+    val currentValue by xxxChart.currentValueLiveData.observeAsState()
+    val currentValueDiff by xxxChart.currentValueDiffLiveData.observeAsState()
+    val chartTabs by xxxChart.chartTabItemsLiveData.observeAsState(listOf())
+    val chartInfo by xxxChart.chartInfoLiveData.observeAsState()
+    val chartLoading by xxxChart.chartLoadingLiveData.observeAsState(false)
+    val chartViewState by xxxChart.chartViewStateLiveData.observeAsState()
+    val currency = xxxChart.currency
+
+    Column {
+        HsChartLineHeader(currentValue, currentValueDiff)
+        Chart(
+            tabItems = chartTabs,
+            onSelectTab = {
+                xxxChart.onSelectChartType(it)
+            },
+            chartInfoData = chartInfo,
+            chartLoading = chartLoading,
+            viewState = chartViewState,
+            currency = currency
+        )
     }
 }
 

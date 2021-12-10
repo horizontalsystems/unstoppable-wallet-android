@@ -26,7 +26,9 @@ object TvlModule {
             val service = TvlService(App.currencyManager, globalMarketRepository)
             val factory = MetricChartFactory(App.numberFormatter)
             val tvlViewItemFactory = TvlViewItemFactory()
-            return TvlViewModel(service, factory, tvlViewItemFactory) as T
+            val xxxChart = XxxChart(service, factory)
+
+            return TvlViewModel(service, tvlViewItemFactory, xxxChart) as T
         }
     }
 

@@ -23,8 +23,7 @@ import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
-import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Chart
-import io.horizontalsystems.bankwallet.modules.coin.overview.ui.HsChartLineHeader
+import io.horizontalsystems.bankwallet.modules.coin.overview.ui.ChartXxx
 import io.horizontalsystems.bankwallet.modules.market.MarketDataValue
 import io.horizontalsystems.bankwallet.modules.market.Value
 import io.horizontalsystems.bankwallet.modules.market.tvl.TvlModule.SelectorDialogState
@@ -79,14 +78,7 @@ class TvlFragment : BaseFragment() {
         val loading by viewModel.loadingLiveData.observeAsState(false)
         val isRefreshing by viewModel.isRefreshingLiveData.observeAsState(false)
         val chainSelectorDialogState by viewModel.chainSelectorDialogStateLiveData.observeAsState(SelectorDialogState.Closed)
-
-        val currentValue by viewModel.currentValueLiveData.observeAsState()
-        val currentValueDiff by viewModel.currentValueDiffLiveData.observeAsState()
-        val chartTabs by viewModel.chartTabItemsLiveData.observeAsState(listOf())
-        val chartInfo by viewModel.chartInfoLiveData.observeAsState()
-        val chartLoading by viewModel.chartLoadingLiveData.observeAsState(false)
-        val chartViewState by viewModel.chartViewStateLiveData.observeAsState()
-        val currency = viewModel.currency
+        val xxxChart = viewModel.xxxChart
 
         Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
             AppBar(
@@ -119,20 +111,7 @@ class TvlFragment : BaseFragment() {
                     ViewState.Success -> {
                         LazyColumn {
                             item {
-                                HsChartLineHeader(currentValue, currentValueDiff)
-                            }
-
-                            item {
-                                Chart(
-                                    tabItems = chartTabs,
-                                    onSelectTab = {
-                                        viewModel.onSelectChartType(it)
-                                    },
-                                    chartInfoData = chartInfo,
-                                    chartLoading = chartLoading,
-                                    viewState = chartViewState,
-                                    currency = currency
-                                )
+                                ChartXxx(xxxChart)
                             }
 
                             tvlData?.let { tvlData ->
