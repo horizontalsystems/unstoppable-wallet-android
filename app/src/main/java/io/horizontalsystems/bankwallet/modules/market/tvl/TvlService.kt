@@ -5,26 +5,22 @@ import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartModule
 import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.core.ICurrencyManager
-import io.horizontalsystems.core.entities.Currency
-import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.BehaviorSubject
 
 class TvlService(
     private val currencyManager: ICurrencyManager,
     private val globalMarketRepository: GlobalMarketRepository
-) {
-    val chartTypes = listOf(ChartView.ChartType.DAILY, ChartView.ChartType.WEEKLY, ChartView.ChartType.MONTHLY)
+) : XxxChartService {
+    override val chartTypes = listOf(ChartView.ChartType.DAILY, ChartView.ChartType.WEEKLY, ChartView.ChartType.MONTHLY)
 
     private var currencyManagerDisposable: Disposable? = null
     private var globalMarketPointsDisposable: Disposable? = null
     private var tvlDataDisposable: Disposable? = null
 
-    val currency: Currency
-        get() = currencyManager.baseCurrency
-
-    val chartItemsObservable: BehaviorSubject<DataState<Pair<ChartView.ChartType, List<MetricChartModule.Item>>>> =
-        BehaviorSubject.createDefault(DataState.Loading)
+    override val currency by currencyManager::baseCurrency
+    override val chartItemsObservable = BehaviorSubject.createDefault<DataState<Pair<ChartView.ChartType, List<MetricChartModule.Item>>>>(DataState.Loading)
+    override val chartTypeObservable = BehaviorSubject.create<ChartView.ChartType>()
 
     val marketTvlItemsObservable: BehaviorSubject<DataState<List<TvlModule.MarketTvlItem>>> =
         BehaviorSubject.createDefault(DataState.Loading)
@@ -32,13 +28,10 @@ class TvlService(
     private var chartType: ChartView.ChartType = ChartView.ChartType.DAILY
         set(value) {
             field = value
-            chartTypeSubject.onNext(value)
+            chartTypeObservable.onNext(value)
             updateGlobalMarketPoints()
             updateTvlData(false)
         }
-
-    private val chartTypeSubject = BehaviorSubject.createDefault(chartType)
-    val chartTypeObservable: Observable<ChartView.ChartType> = chartTypeSubject
 
     val chains: List<TvlModule.Chain> = TvlModule.Chain.values().toList()
     var chain: TvlModule.Chain = TvlModule.Chain.All
@@ -91,6 +84,8 @@ class TvlService(
                 forceRefresh()
             }
             .let { currencyManagerDisposable = it }
+
+        chartTypeObservable.onNext(chartType)
         forceRefresh()
     }
 
@@ -105,7 +100,7 @@ class TvlService(
         tvlDataDisposable?.dispose()
     }
 
-    fun updateChartType(chartType: ChartView.ChartType) {
+    override fun updateChartType(chartType: ChartView.ChartType) {
         this.chartType = chartType
     }
 }

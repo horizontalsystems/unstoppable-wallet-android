@@ -5,7 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
@@ -25,16 +26,13 @@ import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
-import io.horizontalsystems.bankwallet.modules.coin.adapters.CoinChartAdapter
-import io.horizontalsystems.bankwallet.modules.coin.overview.ui.ChartInfo
-import io.horizontalsystems.bankwallet.modules.coin.overview.ui.ChartInfoHeader
+import io.horizontalsystems.bankwallet.modules.coin.overview.ui.ChartXxx
 import io.horizontalsystems.bankwallet.modules.market.MarketField
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
-import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.core.findNavController
 
 class MetricsPageFragment : BaseFragment() {
@@ -71,7 +69,6 @@ class MetricsPageFragment : BaseFragment() {
     @Composable
     fun MetricsPage(viewModel: MetricsPageViewModel, onCoinClick: (String) -> Unit) {
         val viewState by viewModel.viewStateLiveData.observeAsState()
-        val chartData by viewModel.chartLiveData.observeAsState()
         val marketData by viewModel.marketLiveData.observeAsState()
         val loading by viewModel.loadingLiveData.observeAsState(false)
         val isRefreshing by viewModel.isRefreshingLiveData.observeAsState(false)
@@ -106,30 +103,9 @@ class MetricsPageFragment : BaseFragment() {
                     }
                     ViewState.Success -> {
                         LazyColumn {
-                            chartData?.let { chartData ->
-                                item {
-                                    ChartInfoHeader(chartData.subtitle)
-
-                                    ChartInfo(
-                                        CoinChartAdapter.ViewItemWrapper(chartData.chartInfoData),
-                                        chartData.currency,
-                                        CoinChartAdapter.ChartViewType.MarketMetricChart,
-                                        listOf(
-                                            Pair(ChartView.ChartType.DAILY, R.string.CoinPage_TimeDuration_Day),
-                                            Pair(ChartView.ChartType.WEEKLY, R.string.CoinPage_TimeDuration_Week),
-                                            Pair(ChartView.ChartType.MONTHLY, R.string.CoinPage_TimeDuration_Month)
-                                        ),
-                                        object : CoinChartAdapter.Listener {
-                                            override fun onChartTouchDown() = Unit
-                                            override fun onChartTouchUp() = Unit
-
-                                            override fun onTabSelect(chartType: ChartView.ChartType) {
-                                                viewModel.onSelectChartType(chartType)
-                                            }
-                                        })
-                                }
+                            item {
+                                ChartXxx(xxxChart = viewModel.xxxChart)
                             }
-
                             marketData?.let { marketData ->
                                 item {
                                     Menu(

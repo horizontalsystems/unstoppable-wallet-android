@@ -9,6 +9,7 @@ import io.horizontalsystems.bankwallet.modules.coin.overview.ui.ChartInfoHeaderI
 import io.horizontalsystems.bankwallet.modules.market.MarketField
 import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
 import io.horizontalsystems.bankwallet.modules.market.tvl.GlobalMarketRepository
+import io.horizontalsystems.bankwallet.modules.market.tvl.XxxChart
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartFactory
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
 import io.horizontalsystems.bankwallet.ui.compose.Select
@@ -24,7 +25,8 @@ object MetricsPageModule {
             val globalMarketRepository = GlobalMarketRepository(App.marketKit)
             val service = MetricsPageService(metricsType, App.currencyManager, globalMarketRepository)
             val factory = MetricChartFactory(App.numberFormatter)
-            return MetricsPageViewModel(service, factory) as T
+            val xxxChart = XxxChart(service, factory)
+            return MetricsPageViewModel(service, xxxChart) as T
         }
     }
 

@@ -5,6 +5,7 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.ChartInfoData
 import io.horizontalsystems.bankwallet.modules.market.Value
@@ -13,9 +14,19 @@ import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartModule
 import io.horizontalsystems.bankwallet.modules.metricchart.stringResId
 import io.horizontalsystems.bankwallet.ui.compose.components.TabItem
 import io.horizontalsystems.chartview.ChartView
+import io.horizontalsystems.core.entities.Currency
+import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 
-class XxxChart(private val service: TvlService, private val factory: MetricChartFactory) {
+interface XxxChartService {
+    val currency: Currency
+    val chartTypeObservable: Observable<ChartView.ChartType>
+    val chartTypes: List<ChartView.ChartType>
+    val chartItemsObservable: Observable<DataState<Pair<ChartView.ChartType, List<MetricChartModule.Item>>>>
+    fun updateChartType(chartType: ChartView.ChartType)
+}
+
+class XxxChart(private val service: XxxChartService, private val factory: MetricChartFactory) {
     val currentValueLiveData = MutableLiveData<String>()
     val currentValueDiffLiveData = MutableLiveData<Value.Percent>()
     val chartTabItemsLiveData = MutableLiveData<List<TabItem<ChartView.ChartType>>>()
