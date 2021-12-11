@@ -2,7 +2,6 @@ package io.horizontalsystems.chartview.helpers
 
 import android.text.format.DateFormat.getBestDateTimePattern
 import io.horizontalsystems.chartview.ChartView.ChartType
-import io.horizontalsystems.chartview.Coordinate
 import io.horizontalsystems.chartview.models.GridColumn
 import java.text.SimpleDateFormat
 import java.util.*
@@ -26,7 +25,8 @@ object GridHelper {
             }
             ChartType.WEEKLY,
             ChartType.WEEKLY2,
-            ChartType.MONTHLY -> {
+            ChartType.MONTHLY,
+            ChartType.MONTHLY_BY_DAY -> {
                 calendar.set(Calendar.HOUR_OF_DAY, 0)
             }
             ChartType.MONTHLY3,
@@ -59,7 +59,8 @@ object GridHelper {
             ChartType.DAILY -> calendar.add(Calendar.HOUR_OF_DAY, -6)       // 6 hour
             ChartType.WEEKLY -> calendar.add(Calendar.DAY_OF_WEEK, -2)      // 2 days
             ChartType.WEEKLY2 -> calendar.add(Calendar.DAY_OF_WEEK, -3)      // 3 days
-            ChartType.MONTHLY -> calendar.add(Calendar.DAY_OF_MONTH, -6)    // 6 days
+            ChartType.MONTHLY,
+            ChartType.MONTHLY_BY_DAY -> calendar.add(Calendar.DAY_OF_MONTH, -6)    // 6 days
             ChartType.MONTHLY3 -> calendar.add(Calendar.DAY_OF_MONTH, -14)  // 6 days
             ChartType.MONTHLY6 -> calendar.add(Calendar.MONTH, -1)          // 1 month
             ChartType.MONTHLY12 -> calendar.add(Calendar.MONTH, -2)         // 2 month
@@ -74,6 +75,7 @@ object GridHelper {
             ChartType.WEEKLY -> formatDate(calendar.time, "EEE")
             ChartType.WEEKLY2,
             ChartType.MONTHLY,
+            ChartType.MONTHLY_BY_DAY,
             ChartType.MONTHLY3 -> calendar.get(Calendar.DAY_OF_MONTH).toString()
             ChartType.MONTHLY6,
             ChartType.MONTHLY12,

@@ -1,30 +1,27 @@
 package io.horizontalsystems.bankwallet.core
 
 import com.google.gson.JsonObject
-import io.horizontalsystems.bankwallet.core.adapters.EvmTransactionConverter
 import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
-import io.horizontalsystems.bankwallet.core.managers.RateUsType
-import io.horizontalsystems.bankwallet.core.managers.Term
-import io.horizontalsystems.bankwallet.core.managers.TorManager
-import io.horizontalsystems.bankwallet.core.managers.TorStatus
+import io.horizontalsystems.bankwallet.core.managers.*
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
+import io.horizontalsystems.bankwallet.modules.main.MainModule
+import io.horizontalsystems.bankwallet.modules.market.MarketField
 import io.horizontalsystems.bankwallet.modules.market.MarketModule
+import io.horizontalsystems.bankwallet.modules.market.SortingField
+import io.horizontalsystems.bankwallet.modules.market.Value
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.settings.theme.ThemeType
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
-import io.horizontalsystems.bankwallet.modules.transactions.TransactionWallet
+import io.horizontalsystems.bankwallet.modules.transactions.FilterTransactionType
 import io.horizontalsystems.binancechainkit.BinanceChainKit
 import io.horizontalsystems.bitcoincore.core.IPluginData
-import io.horizontalsystems.coinkit.models.Coin
-import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.entities.AppVersion
-import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.TransactionData
-import io.horizontalsystems.xrateskit.entities.*
+import io.horizontalsystems.marketkit.models.*
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -35,12 +32,11 @@ import java.math.BigInteger
 import java.util.*
 
 interface IAdapterManager {
-    val adaptersReadyObservable: Flowable<Unit>
+    val adaptersReadyObservable: Flowable<Map<Wallet, IAdapter>>
     fun preloadAdapters()
     fun refresh()
     fun getAdapterForWallet(wallet: Wallet): IAdapter?
-    fun getAdapterForCoin(coin: Coin): IAdapter?
-    fun getTransactionsAdapterForWallet(wallet: TransactionWallet): ITransactionsAdapter?
+    fun getAdapterForPlatformCoin(platformCoin: PlatformCoin): IAdapter?
     fun getBalanceAdapterForWallet(wallet: Wallet): IBalanceAdapter?
     fun getReceiveAdapterForWallet(wallet: Wallet): IReceiveAdapter?
     fun refreshAdapters(wallets: List<Wallet>)
@@ -76,6 +72,13 @@ interface ILocalStorage {
     var currentTheme: ThemeType
     var changelogShownForAppVersion: String?
     var ignoreRootedDeviceWarning: Boolean
+    var launchPage: LaunchPage?
+    var mainTab: MainModule.MainTab?
+    var customTokensRestoreCompleted: Boolean
+    var favoriteCoinIdsMigrated: Boolean
+    var marketFavoritesSortingField: SortingField?
+    var marketFavoritesMarketField: MarketField?
+    var relaunchBySettingChange: Boolean
 
     fun getSwapProviderId(blockchain: SwapMainModule.Blockchain): String?
     fun setSwapProviderId(blockchain: SwapMainModule.Blockchain, providerId: String)
@@ -84,7 +87,7 @@ interface ILocalStorage {
 }
 
 interface IChartTypeStorage {
-    var chartType: ChartType?
+    var chartType: ChartType
 }
 
 interface IRestoreSettingsStorage {
@@ -95,7 +98,7 @@ interface IRestoreSettingsStorage {
 }
 
 interface IMarketStorage {
-    var currentTab: MarketModule.Tab?
+    var currentMarketTab: MarketModule.Tab?
 }
 
 interface IAccountManager {
@@ -127,10 +130,10 @@ interface IAccountFactory {
 }
 
 interface IWalletStorage {
-    fun wallets(accounts: List<Account>): List<Wallet>
     fun wallets(account: Account): List<Wallet>
     fun save(wallets: List<Wallet>)
     fun delete(wallets: List<Wallet>)
+    fun clear()
 }
 
 interface IRandomProvider {
@@ -149,6 +152,8 @@ interface INetworkManager {
 
     fun ping(host: String, url: String, isSafeCall: Boolean): Flowable<Any>
     fun getEvmInfo(host: String, path: String): Single<JsonObject>
+    fun getBep2TokeInfo(symbol: String): Single<TokenInfoService.Bep2TokenInfo>
+    fun getEvmTokeInfo(tokenType: String, address: String): Single<TokenInfoService.EvmTokenInfo>
 
     suspend fun subscribe(host: String, path: String, body: String): JsonObject
     suspend fun unsubscribe(host: String, path: String, body: String): JsonObject
@@ -170,7 +175,7 @@ interface IWordsManager {
 
 sealed class AdapterState {
     object Synced : AdapterState()
-    data class Syncing(val progress: Int, val lastBlockDate: Date?) : AdapterState()
+    data class Syncing(val progress: Int? = null, val lastBlockDate: Date? = null) : AdapterState()
     data class SearchingTxs(val count: Int) : AdapterState()
     data class NotSynced(val error: Throwable) : AdapterState()
 }
@@ -190,11 +195,16 @@ interface ITransactionsAdapter {
     val lastBlockInfo: LastBlockInfo?
     val lastBlockUpdatedFlowable: Flowable<Unit>
 
-    fun getTransactionsAsync(from: TransactionRecord?, coin: Coin?, limit: Int): Single<List<TransactionRecord>>
+    val explorerTitle: String
+    fun explorerUrl(transactionHash: String): String?
+
+    fun getTransactionsAsync(from: TransactionRecord?, coin: PlatformCoin?, limit: Int, transactionType: FilterTransactionType): Single<List<TransactionRecord>>
     fun getRawTransaction(transactionHash: String): String? = null
 
-    fun getTransactionRecordsFlowable(coin: Coin?): Flowable<List<TransactionRecord>>
+    fun getTransactionRecordsFlowable(coin: PlatformCoin?, transactionType: FilterTransactionType): Flowable<List<TransactionRecord>>
 }
+
+class UnsupportedFilterException: Exception()
 
 interface IBalanceAdapter {
     val balanceState: AdapterState
@@ -254,7 +264,6 @@ interface ISendEthereumAdapter {
     val ethereumBalance: BigDecimal
     val minimumRequiredBalance: BigDecimal
     val minimumSendAmount: BigDecimal
-    val transactionConverter: EvmTransactionConverter
 
     fun availableBalance(gasPrice: Long, gasLimit: Long): BigDecimal
     fun fee(gasPrice: Long, gasLimit: Long): BigDecimal
@@ -296,113 +305,6 @@ interface IAdapter {
     val debugInfo: String
 }
 
-interface IAppConfigProvider {
-    val companyWebPageLink: String
-    val appWebPageLink: String
-    val appGithubLink: String
-    val appTwitterLink: String
-    val appTelegramLink: String
-    val appRedditLink: String
-    val reportEmail: String
-    val cryptoCompareApiKey: String
-    val defiyieldProviderApiKey: String
-    val infuraProjectId: String
-    val infuraProjectSecret: String
-    val btcCoreRpcUrl: String
-    val notificationUrl: String
-    val releaseNotesUrl: String
-    val etherscanApiKey: String
-    val bscscanApiKey: String
-    val guidesUrl: String
-    val faqUrl: String
-    val coinsJsonUrl: String
-    val providerCoinsJsonUrl: String
-    val fiatDecimal: Int
-    val maxDecimal: Int
-    val feeRateAdjustForCurrencies: List<String>
-    val currencies: List<Currency>
-    val featuredCoinTypes: List<CoinType>
-}
-
-interface IRateManager {
-    fun latestRate(coinType: CoinType, currencyCode: String): LatestRate?
-    fun latestRate(coinTypes: List<CoinType>, currencyCode: String): Map<CoinType, LatestRate>
-    fun getLatestRate(coinType: CoinType, currencyCode: String): BigDecimal?
-    fun latestRateObservable(coinType: CoinType, currencyCode: String): Observable<LatestRate>
-    fun latestRateObservable(
-        coinTypes: List<CoinType>,
-        currencyCode: String
-    ): Observable<Map<CoinType, LatestRate>>
-
-    fun historicalRateCached(coinType: CoinType, currencyCode: String, timestamp: Long): BigDecimal?
-    fun historicalRate(
-        coinType: CoinType,
-        currencyCode: String,
-        timestamp: Long
-    ): Single<BigDecimal>
-
-    fun chartInfo(coinType: CoinType, currencyCode: String, chartType: ChartType): ChartInfo?
-    fun chartInfoObservable(
-        coinType: CoinType,
-        currencyCode: String,
-        chartType: ChartType
-    ): Observable<ChartInfo>
-
-    fun coinMarketDetailsAsync(
-        coinType: CoinType,
-        currencyCode: String,
-        rateDiffCoinCodes: List<String>,
-        rateDiffPeriods: List<TimePeriod>
-    ): Single<CoinMarketDetails>
-
-    fun getTopTokenHoldersAsync(coinType: CoinType): Single<List<TokenHolder>>
-    fun getAuditsAsync(coinType: CoinType): Single<List<Auditor>>
-    fun getTopMarketList(
-        currency: String,
-        itemsCount: Int,
-        diffPeriod: TimePeriod
-    ): Single<List<CoinMarket>>
-
-    fun getTopDefiTvlAsync(
-        currencyCode: String,
-        fetchDiffPeriod: TimePeriod = TimePeriod.HOUR_24,
-        itemsCount: Int = 200,
-        chain: String? = null
-    ): Single<List<DefiTvl>>
-
-    fun getCoinMarketList(coinTypes: List<CoinType>, currency: String): Single<List<CoinMarket>>
-    fun getCoinMarketListByCategory(categoryId: String, currency: String): Single<List<CoinMarket>>
-    fun getCoinRatingsAsync(): Single<Map<CoinType, String>>
-    fun getGlobalMarketInfoAsync(currency: String): Single<GlobalCoinMarket>
-    fun getGlobalCoinMarketPointsAsync(
-        currencyCode: String,
-        timePeriod: TimePeriod
-    ): Single<List<GlobalCoinMarketPoint>>
-
-    fun searchCoins(searchText: String): List<CoinData>
-    fun getNotificationCoinCode(coinType: CoinType): String?
-    fun topDefiTvl(
-        currencyCode: String,
-        fetchDiffPeriod: TimePeriod,
-        itemsCount: Int
-    ): Single<List<DefiTvl>>
-
-    fun defiTvlPoints(
-        coinType: CoinType,
-        currencyCode: String,
-        fetchDiffPeriod: TimePeriod
-    ): Single<List<DefiTvlPoint>>
-
-    fun getCoinMarketVolumePointsAsync(
-        coinType: CoinType,
-        currencyCode: String,
-        fetchDiffPeriod: TimePeriod = TimePeriod.HOUR_24
-    ): Single<List<CoinMarketPoint>>
-
-    fun getCryptoNews(timestamp: Long? = null): Single<List<CryptoNews>>
-    fun refresh(currencyCode: String)
-}
-
 interface IAccountsStorage {
     var activeAccountId: String?
     val isAccountsEmpty: Boolean
@@ -415,13 +317,6 @@ interface IAccountsStorage {
     fun clear()
     fun getDeletedAccountIds(): List<String>
     fun clearDeleted()
-}
-
-interface INotificationManager {
-    val enabledInPhone: Boolean
-    val enabled: Boolean
-    fun clear()
-    fun show(notification: AlertNotification)
 }
 
 interface IEnabledWalletStorage {
@@ -443,15 +338,19 @@ interface IBlockchainSettingsStorage {
     fun saveEthereumRpcModeSetting(ethereumRpcModeSetting: EthereumRpcMode)
 }
 
+interface ICustomTokenStorage {
+    fun customTokens(platformType: PlatformType, filter: String): List<CustomToken>
+    fun customTokens(filter: String): List<CustomToken>
+    fun customTokens(coinTypeIds: List<String>): List<CustomToken>
+    fun customToken(coinType: CoinType): CustomToken?
+    fun save(customTokens: List<CustomToken>)
+}
+
 interface IWalletManager {
     val activeWallets: List<Wallet>
     val activeWalletsUpdatedObservable: Observable<List<Wallet>>
 
-    val wallets: List<Wallet>
-    val walletsUpdatedObservable: Observable<List<Wallet>>
-
     fun loadWallets()
-    fun enable(wallets: List<Wallet>)
     fun save(wallets: List<Wallet>)
     fun delete(wallets: List<Wallet>)
     fun clear()
@@ -485,6 +384,9 @@ interface IAppNumberFormatter {
     fun getSignificantDecimalFiat(value: BigDecimal): Int
     fun getSignificantDecimalCoin(value: BigDecimal): Int
     fun shortenValue(number: BigDecimal): Pair<BigDecimal, String>
+    fun formatCurrencyValueAsShortened(currencyValue: CurrencyValue): String
+    fun formatCoinValueAsShortened(number: BigDecimal, code: String): String
+    fun formatValueAsDiff(value: Value): String
 }
 
 interface IFeeRateProvider {
@@ -501,28 +403,18 @@ interface IFeeRateProvider {
     }
 }
 
+interface ICustomRangedFeeProvider: IFeeRateProvider {
+    val customFeeRange: LongRange
+}
+
 interface IAddressParser {
     fun parse(paymentAddress: String): AddressData
 }
 
-interface IDerivationSettingsManager {
-    fun allActiveSettings(): List<Pair<DerivationSetting, CoinType>>
-    fun defaultSetting(coinType: CoinType): DerivationSetting?
-    fun setting(coinType: CoinType): DerivationSetting?
-    fun save(setting: DerivationSetting)
-    fun resetStandardSettings()
-}
-
 interface IInitialSyncModeSettingsManager {
-    fun allSettings(): List<Triple<InitialSyncSetting, Coin, Boolean>>
+    fun allSettings(): List<Pair<InitialSyncSetting, Boolean>>
     fun setting(coinType: CoinType, origin: AccountOrigin? = null): InitialSyncSetting?
     fun save(setting: InitialSyncSetting)
-}
-
-interface IEthereumRpcModeSettingsManager {
-    val communicationModes: List<CommunicationMode>
-    fun rpcMode(): EthereumRpcMode
-    fun save(setting: EthereumRpcMode)
 }
 
 interface IAccountCleaner {
@@ -550,42 +442,20 @@ interface IRateAppManager {
 }
 
 interface ICoinManager {
-    val coinAddedObservable: Flowable<List<Coin>>
-    val coins: List<Coin>
-    val groupedCoins: Pair<List<Coin>, List<Coin>>
-    fun getCoin(coinType: CoinType): Coin?
-    fun getCoinOrStub(coinType: CoinType): Coin
-    fun save(coins: List<Coin>)
+    fun save(customTokens: List<CustomToken>)
+    fun getPlatformCoin(coinType: CoinType): PlatformCoin?
+    fun getPlatformCoinsByCoinTypeIds(coinTypeIds: List<String>): List<PlatformCoin>
+    fun getPlatformCoins(platformType: PlatformType, filter: String, limit: Int = 20): List<PlatformCoin>
+    fun getPlatformCoins(coinTypes: List<CoinType>): List<PlatformCoin>
+    fun featuredFullCoins(enabledPlatformCoins: List<PlatformCoin>): List<FullCoin>
+    fun fullCoins(filter: String = "", limit: Int = 20): List<FullCoin>
+    fun getFullCoin(coinUid: String) : FullCoin?
 }
 
 interface IAddTokenBlockchainService {
     fun isValid(reference: String): Boolean
     fun coinType(reference: String): CoinType
-    fun coinAsync(reference: String): Single<Coin>
-}
-
-interface IPriceAlertManager {
-    val notificationChangedFlowable: Flowable<Unit>
-    fun getPriceAlerts(): List<PriceAlert>
-    fun savePriceAlert(
-        coinType: CoinType,
-        coinName: String,
-        changeState: PriceAlert.ChangeState,
-        trendState: PriceAlert.TrendState
-    )
-
-    fun getAlertStates(coinType: CoinType): Pair<PriceAlert.ChangeState, PriceAlert.TrendState>
-    fun hasPriceAlert(coinType: CoinType): Boolean
-    fun deactivateAllNotifications()
-    fun enablePriceAlerts()
-    fun disablePriceAlerts()
-
-    suspend fun fetchNotifications()
-}
-
-interface INotificationSubscriptionManager {
-    fun addNewJobs(jobs: List<SubscriptionJob>)
-    fun processJobs()
+    fun customTokenAsync(reference: String): Single<CustomToken>
 }
 
 interface ITermsManager {
@@ -600,7 +470,7 @@ sealed class FeeRatePriority {
     object RECOMMENDED : FeeRatePriority()
     object HIGH : FeeRatePriority()
 
-    class Custom(val value: Int, val range: IntRange) : FeeRatePriority()
+    class Custom(val value: Long, val range: LongRange) : FeeRatePriority()
 }
 
 interface Clearable {

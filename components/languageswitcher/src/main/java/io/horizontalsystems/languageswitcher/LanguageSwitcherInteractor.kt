@@ -1,12 +1,11 @@
 package io.horizontalsystems.languageswitcher
 
-import io.horizontalsystems.core.ILanguageConfigProvider
 import io.horizontalsystems.core.ILanguageManager
 
-class LanguageSwitcherInteractor(
-        private val languageManager: ILanguageManager,
-        private val appConfigProvider: ILanguageConfigProvider)
-    : LanguageSwitcherModule.IInteractor {
+class LanguageSwitcherInteractor(private val languageManager: ILanguageManager) :
+    LanguageSwitcherModule.IInteractor {
+
+    private val localizations = "de,en,es,fa,fr,ko,ru,tr,zh"
 
     override var currentLanguage: String
         get() = languageManager.currentLanguage
@@ -15,7 +14,9 @@ class LanguageSwitcherInteractor(
         }
 
     override val availableLanguages: List<String>
-        get() = appConfigProvider.localizations
+        get() {
+            return localizations.split(",")
+        }
 
     override fun getName(language: String): String {
         return languageManager.getName(language)

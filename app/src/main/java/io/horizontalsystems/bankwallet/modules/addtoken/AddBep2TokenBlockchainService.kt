@@ -1,23 +1,14 @@
 package io.horizontalsystems.bankwallet.modules.addtoken
 
 import io.horizontalsystems.bankwallet.core.IAddTokenBlockchainService
-import io.horizontalsystems.bankwallet.entities.ApiError
-import io.horizontalsystems.binancechainkit.BinanceChainKit
-import io.horizontalsystems.binancechainkit.core.api.BinanceChainApi
-import io.horizontalsystems.coinkit.models.Coin
-import io.horizontalsystems.coinkit.models.CoinType
-import io.horizontalsystems.core.IBuildConfigProvider
+import io.horizontalsystems.bankwallet.core.INetworkManager
+import io.horizontalsystems.bankwallet.entities.CustomToken
+import io.horizontalsystems.marketkit.models.CoinType
 import io.reactivex.Single
 
 class AddBep2TokenBlockchainService(
-        appConfigProvider: IBuildConfigProvider
+    private val networkManager: INetworkManager
 ) : IAddTokenBlockchainService {
-
-    private val networkType = if (appConfigProvider.testMode)
-        BinanceChainKit.NetworkType.TestNet else
-        BinanceChainKit.NetworkType.MainNet
-
-    private val binanceApi = BinanceChainApi(networkType)
 
     override fun isValid(reference: String): Boolean {
         //check reference for period in the middle
@@ -29,22 +20,11 @@ class AddBep2TokenBlockchainService(
         return CoinType.Bep2(reference)
     }
 
-    override fun coinAsync(reference: String) : Single<Coin>{
-        return binanceApi.getTokens()
-                .flatMap {tokens ->
-                    val token = tokens.firstOrNull { it.symbol.equals(reference, ignoreCase = true) }
-                    if (token != null){
-                        val coin = Coin(
-                                title = token.name,
-                                code = token.code,
-                                decimal = 8,
-                                type = CoinType.Bep2(token.symbol)
-                        )
-                        Single.just(coin)
-                    } else {
-                        Single.error(ApiError.Bep2SymbolNotFound)
-                    }
-                }
+    override fun customTokenAsync(reference: String): Single<CustomToken> {
+        return networkManager.getBep2TokeInfo(reference)
+            .map { tokenInfo ->
+                CustomToken(tokenInfo.name, tokenInfo.originalSymbol, CoinType.Bep2(reference), tokenInfo.decimals)
+            }
     }
 
 }

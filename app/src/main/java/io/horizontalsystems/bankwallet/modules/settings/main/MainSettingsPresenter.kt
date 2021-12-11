@@ -23,6 +23,7 @@ class MainSettingsPresenter(
         view.setAppVersion(interactor.appVersion)
         view.setTermsAccepted(interactor.termsAccepted)
         view.setPinIsSet(interactor.isPinSet)
+        view.setLaunchScreen(interactor.launchScreen)
         setWalletConnectSessionCount(interactor.walletConnectSessionCount)
     }
 
@@ -74,8 +75,8 @@ class MainSettingsPresenter(
         router.openLink(interactor.companyWebPageLink)
     }
 
-    override fun didTapNotifications() {
-        router.showNotifications()
+    override fun setAppRelaunchingFromSettings() {
+        interactor.setAppRelaunchingFromSettings()
     }
 
     // IMainSettingsInteractorDelegate

@@ -9,6 +9,9 @@ import io.horizontalsystems.bankwallet.core.IRateAppManager
 import io.horizontalsystems.bankwallet.core.ITermsManager
 import io.horizontalsystems.bankwallet.core.managers.RateUsType
 import io.horizontalsystems.bankwallet.core.managers.ReleaseNotesManager
+import io.horizontalsystems.bankwallet.entities.Account
+import io.horizontalsystems.bankwallet.entities.LaunchPage
+import io.horizontalsystems.bankwallet.ui.selector.ViewItemWrapper
 import io.horizontalsystems.core.IPinComponent
 import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
@@ -17,13 +20,13 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class MainViewModel(
-        private val pinComponent: IPinComponent,
-        rateAppManager: IRateAppManager,
-        private val backupManager: IBackupManager,
-        private val termsManager: ITermsManager,
-        private val accountManager: IAccountManager,
-        private val releaseNotesManager: ReleaseNotesManager,
-        service: MainService
+    private val pinComponent: IPinComponent,
+    rateAppManager: IRateAppManager,
+    private val backupManager: IBackupManager,
+    private val termsManager: ITermsManager,
+    private val accountManager: IAccountManager,
+    private val releaseNotesManager: ReleaseNotesManager,
+    private val service: MainService,
 ) : ViewModel() {
 
     val showRootedDeviceWarningLiveEvent = SingleLiveEvent<Unit>()
@@ -33,9 +36,12 @@ class MainViewModel(
     val hideContentLiveData = MutableLiveData<Boolean>()
     val setBadgeVisibleLiveData = MutableLiveData<Boolean>()
     val transactionTabEnabledLiveData = MutableLiveData<Boolean>()
+    val openWalletSwitcherLiveEvent = SingleLiveEvent<Pair<List<ViewItemWrapper<Account>>,ViewItemWrapper<Account>?>>()
 
     private val disposables = CompositeDisposable()
     private var contentHidden = pinComponent.isLocked
+
+    val initialTab = getTabToOpen()
 
     init {
 
@@ -73,8 +79,34 @@ class MainViewModel(
         showWhatsNew()
     }
 
+    private fun getTabToOpen(): MainModule.MainTab {
+        if(service.relaunchBySettingChange){
+            service.relaunchBySettingChange = false
+            return MainModule.MainTab.Settings
+        }
+        return when(service.launchPage){
+            LaunchPage.Market,
+            LaunchPage.Watchlist -> MainModule.MainTab.Market
+            LaunchPage.Balance -> MainModule.MainTab.Balance
+            LaunchPage.Auto -> service.currentMainTab ?: MainModule.MainTab.Market
+        }
+    }
+
     override fun onCleared() {
         disposables.clear()
+    }
+
+    fun onLongPressBalanceTab() {
+        val accounts = accountManager.accounts.map { account ->
+            ViewItemWrapper(account.name, account, subtitle = account.type.description)
+        }
+        val activeAccount = accounts.find { account -> account.item == accountManager.activeAccount }
+
+        openWalletSwitcherLiveEvent.postValue(Pair(accounts, activeAccount))
+    }
+
+    fun onSelect(account: Account) {
+        accountManager.setActiveAccountId(account.id)
     }
 
     fun onResume() {
@@ -82,6 +114,13 @@ class MainViewModel(
             hideContentLiveData.postValue(pinComponent.isLocked)
         }
         contentHidden = pinComponent.isLocked
+    }
+
+    fun onTabSelect(tabIndex: Int) {
+        val mainTab = MainModule.MainTab.values()[tabIndex]
+        if(mainTab != MainModule.MainTab.Settings){
+            service.currentMainTab = mainTab
+        }
     }
 
     fun updateTransactionsTabEnabled() {

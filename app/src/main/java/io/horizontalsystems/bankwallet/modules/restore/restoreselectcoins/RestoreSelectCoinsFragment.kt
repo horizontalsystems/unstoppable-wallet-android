@@ -8,14 +8,16 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.AccountType
-import io.horizontalsystems.bankwallet.modules.blockchainsettings.CoinSettingsViewModel
+import io.horizontalsystems.bankwallet.modules.enablecoin.coinplatforms.CoinPlatformsViewModel
+import io.horizontalsystems.bankwallet.modules.enablecoin.coinsettings.CoinSettingsViewModel
+import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.RestoreSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.enablecoins.EnableCoinsDialog
 import io.horizontalsystems.bankwallet.modules.enablecoins.EnableCoinsViewModel
 import io.horizontalsystems.bankwallet.ui.extensions.ZcashBirthdayHeightDialog
 import io.horizontalsystems.bankwallet.ui.extensions.coinlist.CoinListBaseFragment
-import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.snackbar.SnackbarDuration
 import kotlinx.android.synthetic.main.fragment_manage_wallets.*
 
@@ -27,6 +29,7 @@ class RestoreSelectCoinsFragment : CoinListBaseFragment() {
     private lateinit var viewModel: RestoreSelectCoinsViewModel
     private lateinit var coinSettingsViewModel: CoinSettingsViewModel
     private lateinit var restoreSettingsViewModel: RestoreSettingsViewModel
+    private lateinit var coinPlatformsViewModel: CoinPlatformsViewModel
 
     private var doneMenuButton: MenuItem? = null
 
@@ -48,13 +51,14 @@ class RestoreSelectCoinsFragment : CoinListBaseFragment() {
         doneMenuButton = toolbar.menu.findItem(R.id.menuDone)
 
         val accountType = arguments?.getParcelable<AccountType>(ACCOUNT_TYPE_KEY)
-                ?: throw Exception("Parameter missing")
+            ?: throw Exception("Parameter missing")
 
         val vmFactory by lazy { RestoreSelectCoinsModule.Factory(accountType) }
 
         viewModel = ViewModelProvider(this, vmFactory).get(RestoreSelectCoinsViewModel::class.java)
         coinSettingsViewModel = ViewModelProvider(this, vmFactory).get(CoinSettingsViewModel::class.java)
         restoreSettingsViewModel = ViewModelProvider(this, vmFactory).get(RestoreSettingsViewModel::class.java)
+        coinPlatformsViewModel = ViewModelProvider(this, vmFactory).get(CoinPlatformsViewModel::class.java)
 
         val enableCoinsViewModel by viewModels<EnableCoinsViewModel> { vmFactory }
 
@@ -62,6 +66,7 @@ class RestoreSelectCoinsFragment : CoinListBaseFragment() {
             activity?.let {
                 EnableCoinsDialog.show(it, tokenType, object : EnableCoinsDialog.Listener {
                     override fun onClickEnable() {
+                        scrollToTopAfterUpdate = true
                         enableCoinsViewModel.onConfirmEnable()
                     }
                 })
@@ -73,7 +78,11 @@ class RestoreSelectCoinsFragment : CoinListBaseFragment() {
                 EnableCoinsViewModel.HudState.Hidden -> {
                 }
                 EnableCoinsViewModel.HudState.Loading -> {
-                    HudHelper.showInProcessMessage(requireView(), R.string.EnalbeToken_Enabling, SnackbarDuration.INDEFINITE)
+                    HudHelper.showInProcessMessage(
+                        requireView(),
+                        R.string.EnalbeToken_Enabling,
+                        SnackbarDuration.INDEFINITE
+                    )
                 }
                 EnableCoinsViewModel.HudState.Error -> {
                     HudHelper.showErrorMessage(requireView(), R.string.Error)
@@ -82,7 +91,10 @@ class RestoreSelectCoinsFragment : CoinListBaseFragment() {
                     if (state.count == 0) {
                         HudHelper.showSuccessMessage(requireView(), R.string.EnalbeToken_NoCoins)
                     } else {
-                        HudHelper.showSuccessMessage(requireView(), getString(R.string.EnalbeToken_EnabledCoins, state.count))
+                        HudHelper.showSuccessMessage(
+                            requireView(),
+                            getString(R.string.EnalbeToken_EnabledCoins, state.count)
+                        )
                     }
                 }
             }
@@ -93,16 +105,16 @@ class RestoreSelectCoinsFragment : CoinListBaseFragment() {
 
     // ManageWalletItemsAdapter.Listener
 
-    override fun enable(coin: Coin) {
-        viewModel.enable(coin)
+    override fun enable(fullCoin: FullCoin) {
+        viewModel.enable(fullCoin)
     }
 
-    override fun disable(coin: Coin) {
-        viewModel.disable(coin)
+    override fun disable(fullCoin: FullCoin) {
+        viewModel.disable(fullCoin)
     }
 
-    override fun edit(coin: Coin) {
-        viewModel.onClickSettings(coin)
+    override fun edit(fullCoin: FullCoin) {
+        viewModel.onClickSettings(fullCoin)
     }
 
     // CoinListBaseFragment
@@ -111,17 +123,9 @@ class RestoreSelectCoinsFragment : CoinListBaseFragment() {
         viewModel.updateFilter(query)
     }
 
-    override fun onCancelSelection() {
-        coinSettingsViewModel.onCancelSelect()
-    }
-
-    override fun onSelect(indexes: List<Int>) {
-        coinSettingsViewModel.onSelect(indexes)
-    }
-
     private fun observe() {
-        viewModel.viewStateLiveData.observe(viewLifecycleOwner) { viewState ->
-            setViewState(viewState)
+        viewModel.viewItemsLiveData.observe(viewLifecycleOwner) { viewItems ->
+            setViewItems(viewItems)
         }
 
         viewModel.disableCoinLiveData.observe(viewLifecycleOwner) {
@@ -132,16 +136,20 @@ class RestoreSelectCoinsFragment : CoinListBaseFragment() {
             findNavController().popBackStack(R.id.restoreMnemonicFragment, true)
         }
 
-        viewModel.restoreEnabledLiveData.observe(viewLifecycleOwner, Observer { enabled ->
+        viewModel.restoreEnabledLiveData.observe(viewLifecycleOwner) { enabled ->
             doneMenuButton?.let { menuItem ->
                 setMenuItemEnabled(menuItem, enabled)
             }
-        })
+        }
 
-        coinSettingsViewModel.openBottomSelectorLiveEvent.observe(viewLifecycleOwner, Observer { config ->
+        coinSettingsViewModel.openBottomSelectorLiveEvent.observe(viewLifecycleOwner) { config ->
             hideKeyboard()
-            showBottomSelectorDialog(config)
-        })
+            showBottomSelectorDialog(
+                config,
+                onSelect = { indexes -> coinSettingsViewModel.onSelect(indexes) },
+                onCancel = { coinSettingsViewModel.onCancelSelect() }
+            )
+        }
 
         restoreSettingsViewModel.openBirthdayAlertSignal.observe(viewLifecycleOwner) {
             val zcashBirthdayHeightDialog = ZcashBirthdayHeightDialog()
@@ -152,7 +160,15 @@ class RestoreSelectCoinsFragment : CoinListBaseFragment() {
                 restoreSettingsViewModel.onCancelEnterBirthdayHeight()
             }
 
-            zcashBirthdayHeightDialog.show(requireActivity().supportFragmentManager, "ZcashBirhdayHeightDialog")
+            zcashBirthdayHeightDialog.show(requireActivity().supportFragmentManager, "ZcashBirthdayHeightDialog")
+        }
+
+        coinPlatformsViewModel.openPlatformsSelectorEvent.observe(viewLifecycleOwner) { config ->
+            showBottomSelectorDialog(
+                config,
+                onSelect = { indexes -> coinPlatformsViewModel.onSelect(indexes) },
+                onCancel = { coinPlatformsViewModel.onCancelSelect() }
+            )
         }
     }
 

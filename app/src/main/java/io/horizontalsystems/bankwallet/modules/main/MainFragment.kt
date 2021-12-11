@@ -4,22 +4,25 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
-import androidx.activity.addCallback
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.managers.RateAppManager
+import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.balanceonboarding.BalanceOnboardingModule
 import io.horizontalsystems.bankwallet.modules.balanceonboarding.BalanceOnboardingViewModel
-import io.horizontalsystems.bankwallet.modules.main.MainActivity.Companion.ACTIVE_TAB_KEY
 import io.horizontalsystems.bankwallet.modules.rateapp.RateAppDialogFragment
 import io.horizontalsystems.bankwallet.modules.releasenotes.ReleaseNotesFragment
 import io.horizontalsystems.bankwallet.modules.rooteddevice.RootedDeviceActivity
+import io.horizontalsystems.bankwallet.ui.selector.SelectorBottomSheetDialog
+import io.horizontalsystems.bankwallet.ui.selector.SelectorRadioItemViewHolderFactory
+import io.horizontalsystems.bankwallet.ui.selector.ViewItemWrapper
 import io.horizontalsystems.core.findNavController
 import kotlinx.android.synthetic.main.fragment_main.*
 
@@ -38,6 +41,15 @@ class MainFragment : BaseFragment(R.layout.fragment_main), RateAppDialogFragment
         viewPager.adapter = mainViewPagerAdapter
         viewPager.isUserInputEnabled = false
 
+        viewPager.setCurrentItem(viewModel.initialTab.ordinal, false)
+        bottomNavigation.menu.getItem(viewModel.initialTab.ordinal).isChecked = true
+
+        viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback(){
+            override fun onPageSelected(position: Int) {
+                viewModel.onTabSelect(position)
+            }
+        })
+
         bottomNavigation.setOnNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.navigation_market -> viewPager.setCurrentItem(0, false)
@@ -48,10 +60,16 @@ class MainFragment : BaseFragment(R.layout.fragment_main), RateAppDialogFragment
             true
         }
 
-        arguments?.getInt(ACTIVE_TAB_KEY)?.let { position ->
-            bottomNavigation.menu.getItem(position).isChecked = true
-            viewPager.setCurrentItem(position, false)
+        bottomNavigation.findViewById<View>(R.id.navigation_balance)?.setOnLongClickListener {
+            viewModel.onLongPressBalanceTab()
+            true
         }
+
+        viewModel.openWalletSwitcherLiveEvent.observe(viewLifecycleOwner, { (wallets, selectedWallet) ->
+            openWalletSwitchDialog(wallets, selectedWallet) {
+                viewModel.onSelect(it)
+            }
+        })
 
         balanceOnboardingViewModel.balanceViewTypeLiveData.observe(viewLifecycleOwner) {
             mainViewPagerAdapter.balancePageType = it
@@ -100,14 +118,23 @@ class MainFragment : BaseFragment(R.layout.fragment_main), RateAppDialogFragment
             bottomNavigation.menu.getItem(2).isEnabled = enabled
         })
 
-        activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner) {
-            if (findNavController().currentDestination?.id == R.id.mainFragment) {
-                when (bottomNavigation.selectedItemId) {
-                    R.id.navigation_market -> activity?.finish()
-                    else -> bottomNavigation.selectedItemId = R.id.navigation_market
-                }
-            }
-        }
+    }
+
+    private fun openWalletSwitchDialog(
+        items: List<ViewItemWrapper<Account>>,
+        selectedItem: ViewItemWrapper<Account>?,
+        onSelectListener: (account: Account) -> Unit
+    ) {
+        val dialog = SelectorBottomSheetDialog<ViewItemWrapper<Account>>()
+        dialog.titleText = getString(R.string.ManageAccount_SwitchWallet_Title)
+        dialog.subtitleText = getString(R.string.ManageAccount_SwitchWallet_Subtitle)
+        dialog.headerIconResourceId = R.drawable.ic_switch_wallet
+        dialog.items = items
+        dialog.selectedItem = selectedItem
+        dialog.onSelectListener = { onSelectListener(it.item) }
+        dialog.itemViewHolderFactory = SelectorRadioItemViewHolderFactory()
+
+        dialog.show(childFragmentManager, "selector_dialog")
     }
 
     override fun onResume() {

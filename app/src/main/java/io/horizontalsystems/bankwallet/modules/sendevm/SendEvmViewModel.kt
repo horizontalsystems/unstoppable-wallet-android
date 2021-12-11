@@ -6,8 +6,8 @@ import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.convertedError
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.modules.swap.settings.Caution
-import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.core.SingleLiveEvent
+import io.horizontalsystems.marketkit.models.PlatformCoin
 import io.reactivex.disposables.CompositeDisposable
 
 class SendEvmViewModel(
@@ -20,7 +20,7 @@ class SendEvmViewModel(
     val amountCautionLiveData = MutableLiveData<Caution?>(null)
     val proceedLiveEvent = SingleLiveEvent<SendEvmData>()
 
-    val coin: Coin
+    val coin: PlatformCoin
         get() = service.coin
 
     init {

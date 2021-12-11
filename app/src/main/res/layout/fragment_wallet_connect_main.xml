@@ -69,29 +69,17 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/dappInfo" />
 
-        <TextView
-            android:id="@+id/errorText"
-            style="@style/ImportantText"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginTop="12dp"
-            android:text="@string/Error"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/dappHint" />
-
         <androidx.constraintlayout.widget.Group
             android:id="@+id/dappGroup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:constraint_referenced_ids="dappIcon,dappTitle,dappInfo,dappHint" />
+            app:constraint_referenced_ids="dappIcon,dappTitle,dappInfo" />
 
         <ProgressBar
             android:id="@+id/connecting"
             style="?android:attr/progressBarStyle"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:layout_gravity="center"
             android:layout_marginBottom="@dimen/app_bar_height_tall"
             android:backgroundTint="@color/grey"
@@ -103,48 +91,17 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
-            android:id="@+id/connectButton"
-            style="@style/ButtonPrimaryYellow"
+        <androidx.compose.ui.platform.ComposeView
+            android:id="@+id/buttonsCompose"
             android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
-            android:text="@string/Button_Connect"
-            app:layout_constraintBottom_toTopOf="@id/cancelButton"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintVertical_bias="1" />
-
-        <Button
-            android:id="@+id/cancelButton"
-            style="@style/ButtonPrimarySteel"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
-            android:text="@string/Button_Cancel"
-            app:layout_constraintBottom_toTopOf="@id/disconnectButton"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintVertical_bias="1" />
-
-        <Button
-            android:id="@+id/disconnectButton"
-            style="@style/ButtonPrimarySteel"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="24dp"
-            android:text="@string/Button_Disconnect"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintVertical_bias="1" />
+            app:layout_constraintVertical_bias="1"
+            tools:layout_height="116dp"
+            />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

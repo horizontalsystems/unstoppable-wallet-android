@@ -35,25 +35,19 @@
                 android:visibility="invisible" />
         </androidx.appcompat.widget.Toolbar>
 
-        <io.horizontalsystems.bankwallet.ui.extensions.NestedScrollableHost
+        <androidx.compose.ui.platform.ComposeView
+            android:id="@+id/transactionTypeFilterTabCompose"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            tools:layout_height="45dp"
+            />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerTags"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clipToPadding="false"
-                android:orientation="horizontal"
-                android:paddingStart="12dp"
-                android:paddingTop="6dp"
-                android:paddingEnd="12dp"
-                android:paddingBottom="6dp"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:itemCount="3"
-                tools:listitem="@layout/view_holder_filter" />
-
-        </io.horizontalsystems.bankwallet.ui.extensions.NestedScrollableHost>
+        <androidx.compose.ui.platform.ComposeView
+            android:id="@+id/transactionCoinFilterTabCompose"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:layout_height="94dp"
+            />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -62,6 +56,22 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:itemCount="4"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:listitem="@layout/view_holder_transaction" />
+
+    <TextView
+        android:id="@+id/emptyListText"
+        style="@style/Subhead2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="100dp"
+        android:gravity="center"
+        android:paddingStart="48dp"
+        android:paddingTop="48dp"
+        android:paddingEnd="48dp"
+        android:paddingBottom="48dp"
+        android:text="@string/Transactions_EmptyList"
+        android:textColor="@color/grey" />
+
 
 </LinearLayout>

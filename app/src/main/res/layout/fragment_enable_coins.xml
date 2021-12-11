@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingBottom="16dp">
+    >
 
     <TextView
         android:id="@+id/alertText"
@@ -14,23 +14,21 @@
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="12dp"
         android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/enableBtn"
+        app:layout_constraintBottom_toTopOf="@+id/buttonEnableCompose"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="@string/Balance_Backup_Alert" />
 
-    <Button
-        android:id="@+id/enableBtn"
-        style="@style/ButtonPrimaryYellow"
+    <androidx.compose.ui.platform.ComposeView
+        android:id="@+id/buttonEnableCompose"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:text="@string/EnalbeToken_EnableKey"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/alertText" />
+        app:layout_constraintTop_toBottomOf="@+id/alertText"
+        tools:layout_height="50dp"
+        tools:layout_marginTop="16dp"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

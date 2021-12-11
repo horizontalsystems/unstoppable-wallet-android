@@ -61,44 +61,22 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
-            android:id="@+id/sortButton"
-            style="@style/ButtonSecondaryTransparentEndIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <androidx.compose.ui.platform.ComposeView
+            android:id="@+id/buttonsCompose"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:drawableEnd="@drawable/ic_down_arrow_20"
             android:text="@string/Balance_Sort_PopupTitle"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <Button
-            android:id="@+id/addCoinButton"
-            style="@style/ButtonThird"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:text="@string/Balance_AddCoin"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/pullToRefresh"
+    <androidx.compose.ui.platform.ComposeView
+        android:id="@+id/walletListCompose"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerCoins"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clipToPadding="false"
-            android:paddingBottom="18dp"
-            tools:itemCount="1"
-            tools:listitem="@layout/view_holder_balance_item" />
-
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+        />
 
 </LinearLayout>

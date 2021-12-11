@@ -15,6 +15,8 @@ import androidx.annotation.LayoutRes
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.setImage
+import io.horizontalsystems.bankwallet.modules.market.ImageSource
 
 open class BaseBottomSheetDialogFragment : BottomSheetDialogFragment() {
 
@@ -114,6 +116,10 @@ open class BaseBottomSheetDialogFragment : BottomSheetDialogFragment() {
 
     fun setHeaderIconDrawable(drawable: Drawable?) {
         headerIcon?.setImageDrawable(drawable)
+    }
+
+    fun setHeaderIcon(imageSource: ImageSource) {
+        headerIcon?.setImage(imageSource)
     }
 
 }

@@ -1,29 +1,24 @@
 package io.horizontalsystems.bankwallet.modules.market.posts
 
-import io.horizontalsystems.bankwallet.core.Clearable
-import io.horizontalsystems.bankwallet.core.IRateManager
+import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.core.BackgroundManager
-import io.horizontalsystems.xrateskit.entities.CryptoNews
+import io.horizontalsystems.marketkit.MarketKit
+import io.horizontalsystems.marketkit.models.Post
+import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 
 class MarketPostService(
-        private val postManager: IRateManager,
-        private val backgroundManager: BackgroundManager,
-) : Clearable, BackgroundManager.Listener {
-
-    sealed class State {
-        object Loaded : State()
-        object Loading : State()
-        class Failed(val error: Throwable) : State()
-    }
-
-    val stateObservable: BehaviorSubject<State> = BehaviorSubject.createDefault(State.Loading)
-
-    var newsItems: List<CryptoNews> = listOf()
+    private val marketKit: MarketKit,
+    private val backgroundManager: BackgroundManager,
+) : BackgroundManager.Listener {
 
     private var disposable: Disposable? = null
+
+    private val stateSubject = BehaviorSubject.create<DataState<List<Post>>>()
+    val stateObservable: Observable<DataState<List<Post>>>
+        get() = stateSubject
 
     init {
         backgroundManager.registerListener(this)
@@ -31,24 +26,29 @@ class MarketPostService(
     }
 
     private fun fetchPosts() {
-        disposable?.dispose()
-        disposable = postManager.getCryptoNews()
-                .subscribeOn(Schedulers.io())
-                .subscribe({
-                    newsItems = it
-                    stateObservable.onNext(State.Loaded)
-                }, {
-                    stateObservable.onError(it)
-                })
-    }
+        stateSubject.onNext(DataState.Loading)
 
-    override fun clear() {
         disposable?.dispose()
-        backgroundManager.unregisterListener(this)
+        disposable = marketKit.postsSingle()
+            .subscribeOn(Schedulers.io())
+            .subscribe({
+                stateSubject.onNext(DataState.Success(it))
+            }, {
+                stateSubject.onNext(DataState.Error(it))
+            })
     }
 
     override fun willEnterForeground() {
         fetchPosts()
+    }
+
+    fun start() {
+        fetchPosts()
+    }
+
+    fun stop() {
+        disposable?.dispose()
+        backgroundManager.unregisterListener(this)
     }
 
     fun refresh() {

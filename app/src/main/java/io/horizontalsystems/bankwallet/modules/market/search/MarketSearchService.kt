@@ -1,31 +1,75 @@
 package io.horizontalsystems.bankwallet.modules.market.search
 
-import io.horizontalsystems.bankwallet.core.Clearable
-import io.horizontalsystems.bankwallet.core.IRateManager
-import io.horizontalsystems.xrateskit.entities.CoinData
+import io.horizontalsystems.bankwallet.core.managers.MarketFavoritesManager
+import io.horizontalsystems.bankwallet.core.subscribeIO
+import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchModule.CoinItem
+import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchModule.DataState
+import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchModule.DataState.Discovery
+import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchModule.DataState.SearchResult
+import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchModule.DiscoveryItem.Category
+import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchModule.DiscoveryItem.TopCoins
+import io.horizontalsystems.marketkit.MarketKit
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
-import java.util.*
 
-class MarketSearchService(private val xRateManager: IRateManager) : Clearable {
+class MarketSearchService(
+    private val marketKit: MarketKit,
+    private val marketFavoritesManager: MarketFavoritesManager,
+) {
+    private val disposables = CompositeDisposable()
+    private var filter = ""
 
-    var query: String = ""
-        set(value) {
-            field = value
+    private val discoveryItems by lazy {
+        val discoveryItems: MutableList<MarketSearchModule.DiscoveryItem> = mutableListOf(TopCoins)
 
-            fetch()
+        marketKit.coinCategories().forEach {
+            discoveryItems.add(Category(it))
         }
 
-    val itemsAsync = BehaviorSubject.createDefault(Optional.empty<List<CoinData>>())
+        discoveryItems
+    }
 
-    private fun fetch() {
-        val queryTrimmed = query.trim()
+    val stateObservable: BehaviorSubject<DataState> =
+        BehaviorSubject.createDefault(Discovery(discoveryItems))
 
-        if (queryTrimmed.count() < 2) {
-            itemsAsync.onNext(Optional.empty())
+    init {
+        marketFavoritesManager.dataUpdatedAsync
+            .subscribeIO {
+                syncState()
+            }.let {
+                disposables.add(it)
+            }
+    }
+
+    private fun syncState() {
+        if (filter.isBlank()) {
+            stateObservable.onNext(Discovery(discoveryItems))
         } else {
-            itemsAsync.onNext(Optional.of(xRateManager.searchCoins(queryTrimmed)))
+            stateObservable.onNext(SearchResult(getCoinItems(filter)))
         }
     }
 
-    override fun clear() = Unit
+    private fun getCoinItems(filter: String): List<CoinItem> {
+        return marketKit.fullCoins(filter).map {
+            CoinItem(it, marketFavoritesManager.isCoinInFavorites(it.coin.uid))
+        }
+    }
+
+    fun unFavorite(coinUid: String) {
+        marketFavoritesManager.remove(coinUid)
+    }
+
+    fun favorite(coinUid: String) {
+        marketFavoritesManager.add(coinUid)
+    }
+
+    fun setFilter(filter: String) {
+        this.filter = filter
+        syncState()
+    }
+
+    fun stop() {
+        disposables.clear()
+    }
+
 }

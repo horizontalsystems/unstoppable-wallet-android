@@ -19,7 +19,7 @@ class KeyStoreCleaner(
 
     override fun cleanApp() {
         accountManager.clear()
-        walletManager.enable(listOf())
+        walletManager.clear()
         localStorage.clear()
     }
 }

@@ -56,9 +56,7 @@ class RotatingCircleProgressView : View {
 
         mCirclePaint.color = color
 
-        if (value > 10) {
-            currentProgress = value.toFloat() / 100
-        }
+        currentProgress = value.coerceAtLeast(10).toFloat() / 100
 
         if (animatedProgressValue > currentProgress) {
             animatedProgressValue = currentProgress

@@ -47,7 +47,7 @@ class BackupConfirmKeyFragment : BaseFragment() {
         })
 
         viewModel.successLiveEvent.observe(viewLifecycleOwner, {
-            HudHelper.showSuccessMessage(requireView(), R.string.Hud_Text_Success)
+            HudHelper.showSuccessMessage(requireView(), R.string.Hud_Text_Done)
             Handler(Looper.getMainLooper()).postDelayed({
                 findNavController().popBackStack(R.id.backupKeyFragment, true)
             }, 1200)

@@ -1,61 +1,117 @@
 package io.horizontalsystems.bankwallet.modules.coin
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
-import android.view.ViewGroup
-import androidx.activity.addCallback
-import androidx.core.content.ContextCompat
+import androidx.compose.foundation.layout.Column
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.res.stringResource
 import androidx.core.os.bundleOf
-import androidx.lifecycle.Observer
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.navigation.navGraphViewModels
-import androidx.recyclerview.widget.ConcatAdapter
+import androidx.viewpager2.adapter.FragmentStateAdapter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.modules.coin.adapters.*
-import io.horizontalsystems.bankwallet.modules.markdown.MarkdownFragment
-import io.horizontalsystems.bankwallet.modules.market.overview.PoweredByAdapter
-import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartFragment
-import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartType
-import io.horizontalsystems.bankwallet.modules.settings.notifications.bottommenu.BottomNotificationMenu
-import io.horizontalsystems.bankwallet.modules.settings.notifications.bottommenu.NotificationMenuMode
-import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
-import io.horizontalsystems.chartview.ChartView
-import io.horizontalsystems.coinkit.models.CoinType
+import io.horizontalsystems.bankwallet.modules.coin.coinmarkets.CoinMarketsFragment
+import io.horizontalsystems.bankwallet.modules.coin.details.CoinDetailsFragment
+import io.horizontalsystems.bankwallet.modules.coin.overview.CoinOverviewFragment
+import io.horizontalsystems.bankwallet.modules.coin.tweets.CoinTweetsFragment
+import io.horizontalsystems.bankwallet.modules.enablecoin.coinplatforms.CoinPlatformsViewModel
+import io.horizontalsystems.bankwallet.modules.enablecoin.coinsettings.CoinSettingsViewModel
+import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.RestoreSettingsViewModel
+import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsModule
+import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsViewModel
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.ScrollableTabs
+import io.horizontalsystems.bankwallet.ui.compose.components.TabItem
+import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorMultipleDialog
+import io.horizontalsystems.bankwallet.ui.extensions.ZcashBirthdayHeightDialog
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
-import io.horizontalsystems.xrateskit.entities.LinkType
 import kotlinx.android.synthetic.main.fragment_coin.*
 
-class CoinFragment : BaseFragment(), CoinChartAdapter.Listener, CoinDataAdapter.Listener, CoinLinksAdapter.Listener {
-
-    private val coinTitle by lazy {
-        requireArguments().getString(COIN_TITLE_KEY) ?: ""
-    }
-    private val coinCode by lazy {
-        requireArguments().getString(COIN_CODE_KEY) ?: ""
-    }
-    private val vmFactory by lazy {
-        CoinModule.Factory(
-                coinTitle,
-                requireArguments().getParcelable(COIN_TYPE_KEY)!!,
-                coinCode
-        )
+class CoinFragment : BaseFragment(R.layout.fragment_coin) {
+    private val viewModel by navGraphViewModels<CoinViewModel>(R.id.coinFragment) {
+        CoinModule.Factory(requireArguments().getString(COIN_UID_KEY)!!)
     }
 
-    private val viewModel by navGraphViewModels<CoinViewModel>(R.id.coinFragment) { vmFactory }
-
-    private var notificationMenuItem: MenuItem? = null
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.fragment_coin, container, false)
-    }
+    private val vmFactory by lazy { ManageWalletsModule.Factory() }
+    private val manageWalletsViewModel by viewModels<ManageWalletsViewModel> { vmFactory }
+    private val coinSettingsViewModel by viewModels<CoinSettingsViewModel> { vmFactory }
+    private val restoreSettingsViewModel by viewModels<RestoreSettingsViewModel> { vmFactory }
+    private val coinPlatformsViewModel by viewModels<CoinPlatformsViewModel> { vmFactory }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        toolbar.title = coinCode
+        viewPager.adapter = CoinTabsAdapter(childFragmentManager, viewLifecycleOwner.lifecycle)
+        viewPager.isUserInputEnabled = false
+
+        viewModel.selectedTab.observe(viewLifecycleOwner) { selectedTab ->
+            viewPager.setCurrentItem(viewModel.tabs.indexOf(selectedTab), false)
+        }
+
+        tabsCompose.setContent {
+            ComposeAppTheme {
+                Column {
+                    val selectedTab by viewModel.selectedTab.observeAsState()
+                    val tabItems = viewModel.tabs.map {
+                        TabItem(stringResource(id = it.titleResId), it == selectedTab, it)
+                    }
+
+                    ScrollableTabs(tabItems, onClick = {
+                        viewModel.onSelect(it)
+                    })
+                }
+            }
+        }
+
+        viewModel.titleLiveData.observe(viewLifecycleOwner) {
+            toolbar.title = it
+        }
+
+        viewModel.isFavoriteLiveData.observe(viewLifecycleOwner) { isFavorite ->
+            toolbar.menu.findItem(R.id.menuFavorite).isVisible = !isFavorite
+            toolbar.menu.findItem(R.id.menuUnfavorite).isVisible = isFavorite
+        }
+
+        viewModel.coinStateLiveData.observe(viewLifecycleOwner) { coinState ->
+            val menuAddToWallet: Boolean
+            val menuInWallet: Boolean
+            when (coinState) {
+                null,
+                CoinState.Unsupported,
+                CoinState.NoActiveAccount -> {
+                    menuAddToWallet = false
+                    menuInWallet = false
+                }
+                CoinState.AddedToWallet,
+                CoinState.InWallet -> {
+                    menuAddToWallet = false
+                    menuInWallet = true
+                }
+                CoinState.NotInWallet -> {
+                    menuAddToWallet = true
+                    menuInWallet = false
+                }
+            }
+
+            toolbar.menu.findItem(R.id.menuAddToWallet).isVisible = menuAddToWallet
+            toolbar.menu.findItem(R.id.menuInWallet).isVisible = menuInWallet
+        }
+
+        viewModel.warningMessageLiveEvent.observe(viewLifecycleOwner) {
+            HudHelper.showInProcessMessage(requireView(), it, showProgressBar = false)
+        }
+
+        viewModel.successMessageLiveEvent.observe(viewLifecycleOwner) {
+            HudHelper.showSuccessMessage(requireView(), it)
+        }
+
         toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }
@@ -63,160 +119,101 @@ class CoinFragment : BaseFragment(), CoinChartAdapter.Listener, CoinDataAdapter.
             when (item.itemId) {
                 R.id.menuFavorite -> {
                     viewModel.onFavoriteClick()
-                    HudHelper.showSuccessMessage(requireView(), getString(R.string.Hud_Added_To_Watchlist))
+                    true
+                }
+                R.id.menuAddToWallet -> {
+                    manageWalletsViewModel.enable(viewModel.fullCoin)
+                    true
+                }
+                R.id.menuInWallet -> {
+                    viewModel.onClickInWallet()
                     true
                 }
                 R.id.menuUnfavorite -> {
                     viewModel.onUnfavoriteClick()
-                    HudHelper.showSuccessMessage(requireView(), getString(R.string.Hud_Removed_from_Watchlist))
-                    true
-                }
-                R.id.menuNotification -> {
-                    viewModel.onNotificationClick()
                     true
                 }
                 else -> false
             }
         }
-        notificationMenuItem = toolbar.menu.findItem(R.id.menuNotification)
-        updateNotificationMenuItem()
 
-        val subtitleAdapter = CoinSubtitleAdapter(viewModel.subtitleLiveData, viewLifecycleOwner)
-        val chartAdapter = CoinChartAdapter(viewModel, viewLifecycleOwner, this)
-        val coinRoiAdapter = CoinRoiAdapter(viewModel.roiLiveData, viewLifecycleOwner)
-        val marketDataAdapter = CoinDataAdapter(viewModel.marketDataLiveData, viewLifecycleOwner, this)
-        val tradingVolumeAdapter = CoinDataAdapter(viewModel.tradingVolumeLiveData, viewLifecycleOwner, this)
-        val tvlDataAdapter = CoinDataAdapter(viewModel.tvlDataLiveData, viewLifecycleOwner, this)
-        val investorDataAdapter = CoinDataAdapter(viewModel.investorDataLiveData, viewLifecycleOwner, this, R.string.CoinPage_InvestorData)
-        val securityParamsAdapter = CoinDataAdapter(viewModel.securityParamsLiveData, viewLifecycleOwner, this, R.string.CoinPage_SecurityParams)
-        val categoriesAdapter = CoinCategoryAdapter(viewModel.categoriesLiveData, viewLifecycleOwner)
-        val contractInfoAdapter = CoinDataAdapter(viewModel.contractInfoLiveData, viewLifecycleOwner, this)
-        val aboutAdapter = CoinAboutAdapter(viewModel.aboutTextLiveData, viewLifecycleOwner)
-        val linksAdapter = CoinLinksAdapter(viewModel.linksLiveData, viewLifecycleOwner, this)
-        val footerAdapter = PoweredByAdapter(viewModel.showFooterLiveData, viewLifecycleOwner, getString(R.string.Market_PoweredByApi))
-
-        val loadingAdapter = CoinLoadingAdapter(viewModel.loadingLiveData, viewLifecycleOwner)
-        val errorAdapter = CoinInfoErrorAdapter(viewModel.coinInfoErrorLiveData, viewLifecycleOwner)
-
-        val concatAdapter = ConcatAdapter(
-                subtitleAdapter,
-                chartAdapter,
-                coinRoiAdapter,
-                marketDataAdapter,
-                tradingVolumeAdapter,
-                tvlDataAdapter,
-                investorDataAdapter,
-                securityParamsAdapter,
-                categoriesAdapter,
-                contractInfoAdapter,
-                aboutAdapter,
-                linksAdapter,
-                loadingAdapter,
-                errorAdapter,
-                footerAdapter
+        tabsCompose.setViewCompositionStrategy(
+            ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
         )
 
-        controlledRecyclerView.adapter = concatAdapter
+        observe()
+    }
 
-        observeData()
-
-        activity?.onBackPressedDispatcher?.addCallback(this) {
-            findNavController().popBackStack()
+    private fun observe() {
+        coinSettingsViewModel.openBottomSelectorLiveEvent.observe(viewLifecycleOwner) { config ->
+            hideKeyboard()
+            showBottomSelectorDialog(
+                config,
+                onSelect = { indexes -> coinSettingsViewModel.onSelect(indexes) },
+                onCancel = { coinSettingsViewModel.onCancelSelect() }
+            )
         }
 
-    }
-
-    private fun updateNotificationMenuItem() {
-        notificationMenuItem?.apply {
-            isVisible = viewModel.notificationIconVisible
-            icon = context?.let {
-                val iconRes = if (viewModel.notificationIconActive) R.drawable.ic_notification_24 else R.drawable.ic_notification_disabled
-                ContextCompat.getDrawable(it, iconRes)
+        restoreSettingsViewModel.openBirthdayAlertSignal.observe(viewLifecycleOwner) {
+            val zcashBirhdayHeightDialog = ZcashBirthdayHeightDialog()
+            zcashBirhdayHeightDialog.onEnter = {
+                restoreSettingsViewModel.onEnter(it)
             }
+            zcashBirhdayHeightDialog.onCancel = {
+                restoreSettingsViewModel.onCancelEnterBirthdayHeight()
+            }
+
+            zcashBirhdayHeightDialog.show(requireActivity().supportFragmentManager, "ZcashBirthdayHeightDialog")
         }
-    }
 
-    //  CoinChartAdapter Listener
-
-    override fun onChartTouchDown() {
-        controlledRecyclerView.enableVerticalScroll(false)
-    }
-
-    override fun onChartTouchUp() {
-        controlledRecyclerView.enableVerticalScroll(true)
-    }
-
-    override fun onTabSelect(chartType: ChartView.ChartType) {
-        viewModel.onSelect(chartType)
-    }
-
-    //  CoinLinksAdapter Listener
-
-    override fun onClick(coinLink: CoinLink) {
-        when(coinLink.linkType){
-            LinkType.GUIDE -> {
-                val arguments = bundleOf(
-                        MarkdownFragment.markdownUrlKey to coinLink.url,
-                        MarkdownFragment.handleRelativeUrlKey to true
-                )
-                findNavController().navigate(R.id.coinFragment_to_markdownFragment, arguments, navOptions())
-            }
-            else -> {
-                context?.let { ctx ->
-                    LinkHelper.openLinkInAppBrowser(ctx, coinLink.url.trim())
-                }
-            }
+        coinPlatformsViewModel.openPlatformsSelectorEvent.observe(viewLifecycleOwner) { config ->
+            showBottomSelectorDialog(
+                config,
+                onSelect = { indexes -> coinPlatformsViewModel.onSelect(indexes) },
+                onCancel = { coinPlatformsViewModel.onCancelSelect() }
+            )
         }
     }
 
-    //  CoinDataAdapter.Listener
-
-    override fun onClick(clickType: CoinDataClickType) {
-        when (clickType){
-            CoinDataClickType.MetricChart -> MetricChartFragment.show(childFragmentManager, MetricChartType.Coin(viewModel.coinType))
-            CoinDataClickType.TradingVolumeMetricChart -> MetricChartFragment.show(childFragmentManager, MetricChartType.TradingVolume(viewModel.coinType))
-            CoinDataClickType.Markets -> findNavController().navigate(R.id.coinFragment_to_coinMarketsFragment, null, navOptions())
-            CoinDataClickType.TvlRank -> findNavController().navigate(R.id.coinFragment_to_tvlRankFragment, null, navOptions())
-            CoinDataClickType.FundsInvested -> findNavController().navigate(R.id.coinFragment_to_coinInvestorsFragment, null, navOptions())
-            CoinDataClickType.MajorHolders -> findNavController().navigate(R.id.coinFragment_to_coinMajorHoldersFragment, null, navOptions())
-            is CoinDataClickType.SecurityAudits -> {
-                findNavController().navigate(R.id.coinFragment_to_coinAuditsFragment, bundleOf("coinType" to clickType.coinType), navOptions())
-            }
-            is CoinDataClickType.SecurityInfo -> {
-                findNavController().navigate(R.id.coinFragment_to_coinSecurityInfoFragment, bundleOf("info" to clickType), navOptions())
-            }
-        }
+    private fun showBottomSelectorDialog(
+        config: BottomSheetSelectorMultipleDialog.Config,
+        onSelect: (indexes: List<Int>) -> Unit,
+        onCancel: () -> Unit
+    ) {
+        BottomSheetSelectorMultipleDialog.show(
+            fragmentManager = childFragmentManager,
+            title = config.title,
+            subtitle = config.subtitle,
+            icon = config.icon,
+            items = config.viewItems,
+            selected = config.selectedIndexes,
+            notifyUnchanged = true,
+            onItemSelected = { onSelect(it) },
+            onCancelled = { onCancel() },
+            warning = config.description
+        )
     }
 
-    //  Private
-
-    private fun observeData() {
-        viewModel.alertNotificationUpdated.observe(viewLifecycleOwner, Observer {
-            updateNotificationMenuItem()
-        })
-
-        viewModel.showNotificationMenu.observe(viewLifecycleOwner, Observer { (coinType, coinName) ->
-            BottomNotificationMenu.show(childFragmentManager, NotificationMenuMode.All, coinName, coinType)
-        })
-
-        viewModel.isFavorite.observe(viewLifecycleOwner, Observer { isFavorite ->
-            toolbar.menu.findItem(R.id.menuFavorite).isVisible = !isFavorite
-            toolbar.menu.findItem(R.id.menuUnfavorite).isVisible = isFavorite
-        })
-
-    }
 
     companion object {
-        private const val COIN_TYPE_KEY = "coin_type_key"
-        private const val COIN_CODE_KEY = "coin_code_key"
-        private const val COIN_TITLE_KEY = "coin_title_key"
+        private const val COIN_UID_KEY = "coin_uid_key"
 
-        fun prepareParams(coinType: CoinType, coinCode: String, coinTitle: String): Bundle {
-            return bundleOf(
-                    COIN_TYPE_KEY to coinType,
-                    COIN_CODE_KEY to coinCode,
-                    COIN_TITLE_KEY to coinTitle
-            )
+        fun prepareParams(coinUid: String) = bundleOf(COIN_UID_KEY to coinUid)
+    }
+}
+
+class CoinTabsAdapter(fm: FragmentManager, lifecycle: Lifecycle) :
+    FragmentStateAdapter(fm, lifecycle) {
+
+    override fun getItemCount() = 4
+
+    override fun createFragment(position: Int): Fragment {
+        return when (position) {
+            0 -> CoinOverviewFragment()
+            1 -> CoinMarketsFragment()
+            2 -> CoinDetailsFragment()
+            3 -> CoinTweetsFragment()
+            else -> throw IllegalStateException()
         }
     }
 }

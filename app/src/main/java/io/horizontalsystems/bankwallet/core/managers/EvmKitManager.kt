@@ -37,9 +37,9 @@ class EvmNetworkProviderEth(private val accountSettingManager: AccountSettingMan
 }
 
 class EvmKitManager(
-        private val etherscanApiKey: String,
-        private val backgroundManager: BackgroundManager,
-        private val evmNetworkProvider: IEvmNetworkProvider
+    private val etherscanApiKey: String,
+    private val backgroundManager: BackgroundManager,
+    private val evmNetworkProvider: IEvmNetworkProvider
 ) : BackgroundManager.Listener {
 
     private val disposables = CompositeDisposable()
@@ -48,12 +48,12 @@ class EvmKitManager(
         backgroundManager.registerListener(this)
 
         evmNetworkProvider.evmNetworkObservable
-                .subscribeIO { (account, _) ->
-                    handleUpdateNetwork(account)
-                }
-                .let {
-                    disposables.add(it)
-                }
+            .subscribeIO { (account, _) ->
+                handleUpdateNetwork(account)
+            }
+            .let {
+                disposables.add(it)
+            }
     }
 
     private fun handleUpdateNetwork(account: Account) {
@@ -99,13 +99,13 @@ class EvmKitManager(
     private fun createKitInstance(accountType: AccountType.Mnemonic, account: Account): EthereumKit {
         val evmNetwork = evmNetworkProvider.getEvmNetwork(account)
         val kit = EthereumKit.getInstance(
-                App.instance,
-                accountType.words,
-                accountType.passphrase,
-                evmNetwork.networkType,
-                evmNetwork.syncSource,
-                etherscanApiKey,
-                account.id
+            App.instance,
+            accountType.words,
+            accountType.passphrase,
+            evmNetwork.networkType,
+            evmNetwork.syncSource,
+            etherscanApiKey,
+            account.id
         )
 
         Erc20Kit.addTransactionSyncer(kit)
@@ -154,8 +154,8 @@ class EvmKitManager(
     }
 }
 
-val EthereumKit.SyncSource.url: URL
+val EthereumKit.SyncSource.urls: List<URL>
     get() = when (this) {
-        is EthereumKit.SyncSource.WebSocket -> this.url
-        is EthereumKit.SyncSource.Http -> this.url
+        is EthereumKit.SyncSource.WebSocket -> listOf(url)
+        is EthereumKit.SyncSource.Http -> urls
     }

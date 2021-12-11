@@ -4,13 +4,17 @@ import android.content.Context
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.View
+import androidx.annotation.DrawableRes
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import io.horizontalsystems.views.helpers.LayoutHelper
 import kotlinx.android.synthetic.main.view_settings_item.view.*
 
-abstract class SettingsViewBase @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
-    : ConstraintLayout(context, attrs, defStyleAttr) {
+abstract class SettingsViewBase @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : ConstraintLayout(context, attrs, defStyleAttr) {
 
     private val singleLineHeight = 48f
     private val doubleLineHeight = 60f
@@ -28,6 +32,11 @@ abstract class SettingsViewBase @JvmOverloads constructor(context: Context, attr
     fun showIcon(drawable: Drawable?) {
         settingsIcon.isVisible = drawable != null
         settingsIcon.setImageDrawable(drawable)
+    }
+
+    fun showIcon(@DrawableRes resId: Int?) {
+        settingsIcon.isVisible = resId != null
+        resId?.let { settingsIcon.setImageResource(it) }
     }
 
     fun setListPosition(listPosition: ListPosition) {

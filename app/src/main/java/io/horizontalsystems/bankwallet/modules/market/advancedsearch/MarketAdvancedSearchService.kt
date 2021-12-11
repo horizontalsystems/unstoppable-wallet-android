@@ -1,28 +1,30 @@
 package io.horizontalsystems.bankwallet.modules.market.advancedsearch
 
 import io.horizontalsystems.bankwallet.core.Clearable
-import io.horizontalsystems.bankwallet.core.IRateManager
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
-import io.horizontalsystems.bankwallet.modules.market.Score
 import io.horizontalsystems.bankwallet.modules.market.list.IMarketListFetcher
-import io.horizontalsystems.coinkit.models.CoinType
+import io.horizontalsystems.bankwallet.modules.market.priceChangeValue
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.core.entities.Currency
-import io.horizontalsystems.xrateskit.entities.CoinMarket
+import io.horizontalsystems.marketkit.MarketKit
+import io.horizontalsystems.marketkit.models.MarketInfo
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.BehaviorSubject
 import java.math.BigDecimal
-import io.horizontalsystems.xrateskit.entities.TimePeriod as XRatesKitTimePeriod
+
 
 class MarketAdvancedSearchService(
-        private val xRateManager: IRateManager,
+        private val marketKit: MarketKit,
         private val currencyManager: ICurrencyManager
 ) : Clearable, IMarketListFetcher {
+
+    val currencyCode: String
+        get() = currencyManager.baseCurrency.code
 
     private val allTimeDeltaPercent = BigDecimal.TEN
 
@@ -51,10 +53,9 @@ class MarketAdvancedSearchService(
 
             refreshCounter()
         }
-    var filterPeriod: XRatesKitTimePeriod = XRatesKitTimePeriod.HOUR_24
+    var filterPeriod: TimePeriod = TimePeriod.TimePeriod_1D
         set(value) {
             field = value
-            cache = null
 
             refreshCounter()
         }
@@ -101,7 +102,7 @@ class MarketAdvancedSearchService(
 
     private var topItemsDisposable: Disposable? = null
     private var disposables = CompositeDisposable()
-    private var cache: List<CoinMarket>? = null
+    private var cache: List<MarketInfo>? = null
 
     init {
         refreshCounter()
@@ -134,19 +135,18 @@ class MarketAdvancedSearchService(
         return getTopMarketList(currency)
                 .map { coinMarkets ->
                     coinMarkets.map {
-                        val index = it.key
                         val coinMarket = it.value
 
-                        MarketItem.createFromCoinMarket(coinMarket, currency, Score.Rank(index + 1))
+                        MarketItem.createFromCoinMarket(coinMarket, currency, filterPeriod)
                     }
                 }
     }
 
-    private fun getTopMarketList(currency: Currency): Single<Map<Int, CoinMarket>> {
+    private fun getTopMarketList(currency: Currency): Single<Map<Int, MarketInfo>> {
         val topMarketListAsync = if (cache != null) {
             Single.just(cache)
         } else {
-            xRateManager.getTopMarketList(currency.code, coinCount, filterPeriod)
+            marketKit.advancedMarketInfosSingle(coinCount, currencyManager.baseCurrency.code)
                     .doOnSuccess {
                         cache = it
                     }
@@ -162,15 +162,19 @@ class MarketAdvancedSearchService(
                 }
     }
 
-    private fun filterCoinMarket(coinMarket: CoinMarket): Boolean {
-        return filterByRange(filterMarketCap, coinMarket.marketInfo.marketCap?.toLong())
-                && filterByRange(filterVolume, coinMarket.marketInfo.volume.toLong())
-                && filterByRange(filterPriceChange, coinMarket.marketInfo.rateDiffPeriod?.toLong())
-                && (!filterPriceCloseToAth || closeToAllTime(coinMarket.marketInfo.athChangePercentage))
-                && (!filterPriceCloseToAtl || closeToAllTime(coinMarket.marketInfo.atlChangePercentage))
-                && (!filterOutperformedBtcOn || outperformed(coinMarket.marketInfo.rateDiffPeriod, CoinType.Bitcoin))
-                && (!filterOutperformedEthOn || outperformed(coinMarket.marketInfo.rateDiffPeriod, CoinType.Ethereum))
-                && (!filterOutperformedBnbOn || outperformed(coinMarket.marketInfo.rateDiffPeriod, CoinType.Bep2("BNB")))
+    private fun filterCoinMarket(marketInfo: MarketInfo): Boolean {
+        val marketCap = marketInfo.marketCap ?: return false
+        val totalVolume = marketInfo.totalVolume ?: return false
+        val priceChangeValue = marketInfo.priceChangeValue(filterPeriod) ?: return false
+
+        return filterByRange(filterMarketCap, marketCap.toLong())
+                && filterByRange(filterVolume, totalVolume.toLong())
+                && filterByRange(filterPriceChange, priceChangeValue.toLong())
+                && (!filterPriceCloseToAth || closeToAllTime(marketInfo.athPercentage))
+                && (!filterPriceCloseToAtl || closeToAllTime(marketInfo.atlPercentage))
+                && (!filterOutperformedBtcOn || outperformed(priceChangeValue, "bitcoin"))
+                && (!filterOutperformedEthOn || outperformed(priceChangeValue, "ethereum"))
+                && (!filterOutperformedBnbOn || outperformed(priceChangeValue, "binancecoin"))
     }
 
     private fun filterByRange(filter: Pair<Long?, Long?>?, value: Long?): Boolean {
@@ -191,18 +195,13 @@ class MarketAdvancedSearchService(
         return true
     }
 
-    private fun coinMarket(coinType: CoinType): CoinMarket? = cache?.firstOrNull { it.data.type == coinType }
+    private fun marketInfo(coinUid: String): MarketInfo? = cache?.firstOrNull { it.fullCoin.coin.uid == coinUid }
 
-    private fun outperformed(value: BigDecimal?, coinType: CoinType): Boolean {
-        val coinMarket = coinMarket(coinType) ?: return false
+    private fun outperformed(value: BigDecimal?, coinUid: String): Boolean {
+        if (value == null) return false
+        val coinMarket = marketInfo(coinUid) ?: return false
 
-        val diff = coinMarket.marketInfo.rateDiffPeriod
-
-        if (value == null || diff == null){
-            return false
-        }
-
-        return diff < value
+        return coinMarket.priceChangeValue(filterPeriod) ?: BigDecimal.ZERO < value
     }
 
     private fun closeToAllTime(value: BigDecimal?): Boolean {

@@ -3,28 +3,28 @@ package io.horizontalsystems.bankwallet.modules.transactionInfo
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.ITransactionsAdapter
 import io.horizontalsystems.bankwallet.core.providers.Translator
-import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.TransactionLockState
-import io.horizontalsystems.bankwallet.modules.send.SendModule
-import io.horizontalsystems.bankwallet.modules.transactions.TransactionType
-import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItem
+import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import io.horizontalsystems.bankwallet.entities.LastBlockInfo
+import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
+import io.horizontalsystems.bankwallet.modules.transactions.TransactionItem
 import io.horizontalsystems.core.helpers.DateHelper
-import java.util.*
 
 object TransactionInfoModule {
 
-    class Factory(private val transactionViewItem: TransactionViewItem) :
+    class Factory(private val transactionItem: TransactionItem) :
         ViewModelProvider.Factory {
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            val adapter =
-                App.adapterManager.getTransactionsAdapterForWallet(transactionViewItem.wallet)!!
+            val adapter: ITransactionsAdapter = App.transactionAdapterManager.getAdapter(transactionItem.record.source)!!
             val service = TransactionInfoService(
+                transactionItem.record,
                 adapter,
-                App.xRateManager,
+                App.marketKit,
                 App.currencyManager,
-                App.buildConfigProvider,
+                App.instance.testMode,
                 App.accountSettingManager
             )
             val factory = TransactionInfoViewItemFactory(
@@ -36,21 +36,11 @@ object TransactionInfoModule {
             return TransactionInfoViewModel(
                 service,
                 factory,
-                transactionViewItem.record,
-                transactionViewItem.wallet,
                 listOf(service)
             ) as T
         }
 
     }
-
-    data class TitleViewItem(
-        val date: Date?,
-        val primaryAmountInfo: SendModule.AmountInfo,
-        val secondaryAmountInfo: SendModule.AmountInfo?,
-        val type: TransactionType,
-        val lockState: TransactionLockState?
-    )
 
     data class ExplorerData(val title: String, val url: String?)
 }
@@ -63,3 +53,10 @@ sealed class TransactionStatusViewItem {
     class Completed(val name: String) : TransactionStatusViewItem()
     object Failed : TransactionStatusViewItem()
 }
+
+data class TransactionInfoItem(
+    val record: TransactionRecord,
+    val lastBlockInfo: LastBlockInfo?,
+    val explorerData: TransactionInfoModule.ExplorerData,
+    val rates: Map<String, CurrencyValue>
+)

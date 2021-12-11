@@ -3,9 +3,10 @@ package io.horizontalsystems.bankwallet.modules.walletconnect.request
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.ICustomRangedFeeProvider
 import io.horizontalsystems.bankwallet.core.ethereum.EthereumFeeViewModel
 import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinServiceFactory
-import io.horizontalsystems.bankwallet.core.ethereum.EvmTransactionService
+import io.horizontalsystems.bankwallet.core.ethereum.EvmTransactionFeeService
 import io.horizontalsystems.bankwallet.core.factories.FeeRateProviderFactory
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionService
@@ -14,9 +15,9 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectSendEt
 import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectService
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.sendtransaction.WalletConnectSendEthereumTransactionRequestService
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.sendtransaction.WalletConnectSendEthereumTransactionRequestViewModel
-import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.ethereumkit.core.EthereumKit.NetworkType
 import io.horizontalsystems.ethereumkit.models.Address
+import io.horizontalsystems.marketkit.models.CoinType
 import java.math.BigInteger
 
 object WalletConnectRequestModule {
@@ -33,15 +34,15 @@ object WalletConnectRequestModule {
                 NetworkType.EthRopsten,
                 NetworkType.EthKovan,
                 NetworkType.EthGoerli,
-                NetworkType.EthRinkeby -> App.coinManager.getCoin(CoinType.Ethereum)!!
-                NetworkType.BscMainNet -> App.coinManager.getCoin(CoinType.BinanceSmartChain)!!
+                NetworkType.EthRinkeby -> App.coinManager.getPlatformCoin(CoinType.Ethereum)!!
+                NetworkType.BscMainNet -> App.coinManager.getPlatformCoin(CoinType.BinanceSmartChain)!!
             }
         }
         private val service by lazy { WalletConnectSendEthereumTransactionRequestService(request, baseService) }
-        private val coinServiceFactory by lazy { EvmCoinServiceFactory(coin, App.coinKit, App.currencyManager, App.xRateManager) }
+        private val coinServiceFactory by lazy { EvmCoinServiceFactory(coin, App.marketKit, App.currencyManager) }
         private val transactionService by lazy {
-            val feeRateProvider = FeeRateProviderFactory.provider(coin)!!
-            EvmTransactionService(evmKit, feeRateProvider, 10)
+            val feeRateProvider = FeeRateProviderFactory.provider(coin.coinType) as ICustomRangedFeeProvider
+            EvmTransactionFeeService(evmKit, feeRateProvider, 10)
         }
         private val sendService by lazy { SendEvmTransactionService(SendEvmData(service.transactionData), evmKit, transactionService, App.activateCoinManager, service.gasPrice) }
 

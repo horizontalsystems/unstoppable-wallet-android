@@ -16,6 +16,11 @@
         app:title="@string/Market_AdvancedSearch_Results"
         app:titleTextAppearance="@style/Title3" />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/steel_10"/>
+
     <io.horizontalsystems.bankwallet.ui.extensions.MarketListHeaderView
         android:id="@+id/marketListHeader"
         android:layout_width="match_parent"

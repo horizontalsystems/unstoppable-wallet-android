@@ -2,81 +2,92 @@ package io.horizontalsystems.bankwallet.modules.coin.audits
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.IRateManager
-import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
-import io.horizontalsystems.coinkit.models.CoinType
-import io.horizontalsystems.views.ListPosition
-import io.horizontalsystems.xrateskit.entities.Auditor
-import io.reactivex.disposables.Disposable
-import java.util.*
+import io.horizontalsystems.bankwallet.entities.DataState
+import io.horizontalsystems.bankwallet.entities.ViewState
+import io.horizontalsystems.bankwallet.modules.coin.audits.CoinAuditsModule.AuditViewItem
+import io.horizontalsystems.bankwallet.modules.coin.audits.CoinAuditsModule.AuditorItem
+import io.horizontalsystems.bankwallet.modules.coin.audits.CoinAuditsModule.AuditorViewItem
+import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
+import io.horizontalsystems.core.helpers.DateHelper
+import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
-class CoinAuditsViewModel(private val xRateManager: IRateManager, private val coinType: CoinType) : ViewModel() {
+class CoinAuditsViewModel(
+    private val service: CoinAuditsService
+) : ViewModel() {
+    private val disposables = CompositeDisposable()
 
-    val coinAudits = MutableLiveData<List<CoinAuditItem>>()
-    val loadingLiveData = MutableLiveData(true)
-    val coinInfoErrorLiveData = MutableLiveData<String>()
-    val showPoweredByLiveData = MutableLiveData(false)
-
-    private var disposable: Disposable? = null
+    val viewStateLiveData = MutableLiveData<ViewState>()
+    val loadingLiveData = MutableLiveData<Boolean>()
+    val isRefreshingLiveData = MutableLiveData<Boolean>()
+    val viewItemsLiveData = MutableLiveData<List<AuditorViewItem>>()
 
     init {
-        getCoinList()
+        service.stateObservable
+            .subscribeIO({ state ->
+                loadingLiveData.postValue(state == DataState.Loading)
+
+                when (state) {
+                    is DataState.Success -> {
+                        viewStateLiveData.postValue(ViewState.Success)
+
+                        sync(state.data)
+                    }
+                    is DataState.Error -> {
+                        viewStateLiveData.postValue(ViewState.Error(state.error))
+                    }
+                }
+            }, {
+                viewStateLiveData.postValue(ViewState.Error(it))
+            }).let {
+                disposables.add(it)
+            }
+
+        service.start()
+    }
+
+    fun refresh() {
+        refreshWithMinLoadingSpinnerPeriod()
+    }
+
+    fun onErrorClick() {
+        refreshWithMinLoadingSpinnerPeriod()
     }
 
     override fun onCleared() {
-        disposable?.dispose()
+        disposables.clear()
+        service.stop()
     }
 
-    private fun getCoinList() {
-        coinAudits.postValue(emptyList())
-        loadingLiveData.postValue(true)
-        showPoweredByLiveData.postValue(false)
-
-        xRateManager.getAuditsAsync(coinType)
-            .subscribeIO({ audits ->
-                syncViewItems(audits)
-            }, {
-                loadingLiveData.postValue(false)
-                coinInfoErrorLiveData.postValue(Translator.getString(R.string.CoinPage_Audits_FetchError))
-            }).let {
-                disposable = it
-            }
+    private fun sync(auditors: List<AuditorItem>) {
+        viewItemsLiveData.postValue(auditors.map { viewItem(it) })
     }
 
-    private fun syncViewItems(audits: List<Auditor>) {
-        loadingLiveData.postValue(false)
-        coinAudits.postValue(getViewItem(audits))
-        showPoweredByLiveData.postValue(audits.isNotEmpty())
-
-        if (audits.isEmpty()) {
-            coinInfoErrorLiveData.postValue(Translator.getString(R.string.CoinPage_Audits_Empty))
-        }
-    }
-
-    private fun getViewItem(audits: List<Auditor>): List<CoinAuditItem> {
-        if (audits.isEmpty()) {
-            return emptyList()
-        }
-
-        val list = mutableListOf<CoinAuditItem>()
-        audits.forEach { auditor ->
-            list.add(CoinAuditItem.Header(auditor.name))
-
-            auditor.reports.forEachIndexed { index, report ->
-                list.add(
-                    CoinAuditItem.Report(
-                        report.name,
-                        Date(report.timestamp * 1000),
-                        report.issues,
-                        report.link,
-                        ListPosition.Companion.getListPosition(auditor.reports.size, index)
-                    )
+    private fun viewItem(auditor: AuditorItem): AuditorViewItem {
+        return AuditorViewItem(
+            name = auditor.name,
+            logoUrl = auditor.logoUrl,
+            auditViewItems = auditor.reports.map { report ->
+                AuditViewItem(
+                    date = report.date?.let { DateHelper.formatDate(it, "MMM dd, yyyy") },
+                    name = report.name,
+                    issues = TranslatableString.ResString(R.string.CoinPage_Audits_Issues, report.issues),
+                    reportUrl = report.link
                 )
             }
-        }
+        )
+    }
 
-        return list
+    private fun refreshWithMinLoadingSpinnerPeriod() {
+        service.refresh()
+        viewModelScope.launch {
+            isRefreshingLiveData.postValue(true)
+            delay(1000)
+            isRefreshingLiveData.postValue(false)
+        }
     }
 }

@@ -3,13 +3,16 @@ package io.horizontalsystems.bankwallet.core.adapters
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.LastBlockInfo
+import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.binancechain.BinanceChainIncomingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.binancechain.BinanceChainOutgoingTransactionRecord
+import io.horizontalsystems.bankwallet.modules.transactions.FilterTransactionType
 import io.horizontalsystems.binancechainkit.BinanceChainKit
 import io.horizontalsystems.binancechainkit.core.api.BinanceError
+import io.horizontalsystems.binancechainkit.models.TransactionFilterType
 import io.horizontalsystems.binancechainkit.models.TransactionInfo
-import io.horizontalsystems.coinkit.models.Coin
+import io.horizontalsystems.marketkit.models.PlatformCoin
 import io.reactivex.Flowable
 import io.reactivex.Single
 import java.math.BigDecimal
@@ -17,16 +20,18 @@ import java.math.BigDecimal
 class BinanceAdapter(
     private val binanceKit: BinanceChainKit,
     private val symbol: String,
-    private val coin: Coin,
-    private val feeCoin: Coin
+    private val feeCoin: PlatformCoin,
+    private val wallet: Wallet,
+    private val testMode: Boolean
 ) : IAdapter, ITransactionsAdapter, IBalanceAdapter, IReceiveAdapter, ISendBinanceAdapter {
 
     private val asset = binanceKit.register(symbol)
+    private val coin = wallet.platformCoin
 
     private val syncState: AdapterState
         get() = when (val kitSyncState = binanceKit.syncState) {
             BinanceChainKit.SyncState.Synced -> AdapterState.Synced
-            BinanceChainKit.SyncState.Syncing -> AdapterState.Syncing(50, null)
+            BinanceChainKit.SyncState.Syncing -> AdapterState.Syncing()
             is BinanceChainKit.SyncState.NotSynced -> AdapterState.NotSynced(kitSyncState.error)
         }
 
@@ -75,17 +80,40 @@ class BinanceAdapter(
     override val lastBlockUpdatedFlowable: Flowable<Unit>
         get() = binanceKit.latestBlockFlowable.map { }
 
-    override fun getTransactionRecordsFlowable(coin: Coin?): Flowable<List<TransactionRecord>> {
-        return asset.transactionsFlowable.map { it.map { tx -> transactionRecord(tx) } }
+    override val explorerTitle: String = "binance.org"
+
+    override fun explorerUrl(transactionHash: String) = if (testMode) {
+        "https://testnet-explorer.binance.org/tx/$transactionHash"
+    } else {
+        "https://explorer.binance.org/tx/$transactionHash"
     }
 
-    override fun getTransactionsAsync(
-        from: TransactionRecord?,
-        coin: Coin?,
-        limit: Int
-    ): Single<List<TransactionRecord>> {
-        return binanceKit.transactions(asset, from?.transactionHash, limit).map { list ->
-            list.map { transactionRecord(it) }
+    override fun getTransactionRecordsFlowable(coin: PlatformCoin?, transactionType: FilterTransactionType): Flowable<List<TransactionRecord>> {
+        return try {
+            val filter = getBinanceTransactionTypeFilter(transactionType)
+            asset.getTransactionsFlowable(filter).map { it.map { transactionRecord(it) } }
+        } catch (e: UnsupportedFilterException) {
+            Flowable.empty()
+        }
+    }
+
+    override fun getTransactionsAsync(from: TransactionRecord?, coin: PlatformCoin?, limit: Int, transactionType: FilterTransactionType): Single<List<TransactionRecord>> {
+        return try {
+            val filter = getBinanceTransactionTypeFilter(transactionType)
+            binanceKit
+                .transactions(asset, filter, from?.transactionHash, limit)
+                .map { it.map { transactionRecord(it) } }
+        } catch (e: UnsupportedFilterException) {
+            Single.just(listOf())
+        }
+    }
+
+    private fun getBinanceTransactionTypeFilter(transactionType: FilterTransactionType): TransactionFilterType? {
+        return when (transactionType) {
+            FilterTransactionType.All -> null
+            FilterTransactionType.Incoming -> TransactionFilterType.Incoming
+            FilterTransactionType.Outgoing -> TransactionFilterType.Outgoing
+            else -> throw UnsupportedFilterException()
         }
     }
 
@@ -99,18 +127,21 @@ class BinanceAdapter(
                 transaction,
                 feeCoin,
                 coin,
-                false
+                false,
+                wallet.transactionSource
             )
             !fromMine && toMine -> BinanceChainIncomingTransactionRecord(
                 transaction,
                 feeCoin,
-                coin
+                coin,
+                wallet.transactionSource
             )
             else -> BinanceChainOutgoingTransactionRecord(
                 transaction,
                 feeCoin,
                 coin,
-                true
+                true,
+                wallet.transactionSource
             )
         }
     }

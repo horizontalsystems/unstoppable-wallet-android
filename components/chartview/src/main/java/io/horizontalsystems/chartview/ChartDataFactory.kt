@@ -57,6 +57,7 @@ object ChartDataFactory {
             visibleData.range(item, Macd)
             visibleData.range(item, MacdSignal)
             visibleData.range(item, MacdHistogram)
+            visibleData.range(item, Dominance)
         }
 
         val visibleTimeInterval = visibleData.endTimestamp - visibleData.startTimestamp
@@ -76,6 +77,7 @@ object ChartDataFactory {
             item.setPoint(x, Macd, visibleData.macdRange)
             item.setPoint(x, MacdSignal, visibleData.macdRange)
             item.setPoint(x, MacdHistogram, visibleData.histogramRange)
+            item.setPoint(x, Dominance, visibleData.dominanceRange)
         }
 
         return visibleData

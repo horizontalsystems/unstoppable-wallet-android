@@ -6,9 +6,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavOptions
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.ICustomRangedFeeProvider
 import io.horizontalsystems.bankwallet.core.ethereum.EthereumFeeViewModel
 import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinServiceFactory
-import io.horizontalsystems.bankwallet.core.ethereum.EvmTransactionService
+import io.horizontalsystems.bankwallet.core.ethereum.EvmTransactionFeeService
 import io.horizontalsystems.bankwallet.core.factories.FeeRateProviderFactory
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule
@@ -26,23 +27,22 @@ object UniswapConfirmationModule {
 
         private val evmKit by lazy { blockchain.evmKit!! }
         private val coin by lazy { blockchain.coin!! }
-        private val transactionService by lazy {
-            val feeRateProvider = FeeRateProviderFactory.provider(coin)!!
-            EvmTransactionService(evmKit, feeRateProvider, 20)
+        private val transactionFeeService by lazy {
+            val feeRateProvider = FeeRateProviderFactory.provider(coin.coinType) as ICustomRangedFeeProvider
+            EvmTransactionFeeService(evmKit, feeRateProvider, 20)
         }
         private val coinServiceFactory by lazy {
             EvmCoinServiceFactory(
                 coin,
-                App.coinKit,
+                App.marketKit,
                 App.currencyManager,
-                App.xRateManager
             )
         }
         private val sendService by lazy {
             SendEvmTransactionService(
                 sendEvmData,
                 evmKit,
-                transactionService,
+                transactionFeeService,
                 App.activateCoinManager
             )
         }
@@ -55,7 +55,7 @@ object UniswapConfirmationModule {
                 }
                 EthereumFeeViewModel::class.java -> {
                     EthereumFeeViewModel(
-                        transactionService,
+                        transactionFeeService,
                         coinServiceFactory.baseCoinService
                     ) as T
                 }

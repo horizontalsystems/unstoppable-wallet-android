@@ -21,8 +21,9 @@ import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.BitcoinIncomingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.BitcoinOutgoingTransactionRecord
-import io.horizontalsystems.coinkit.models.Coin
+import io.horizontalsystems.bankwallet.modules.transactions.FilterTransactionType
 import io.horizontalsystems.hdwalletkit.Mnemonic
+import io.horizontalsystems.marketkit.models.PlatformCoin
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.Single
@@ -35,9 +36,9 @@ import java.util.*
 
 class ZcashAdapter(
         context: Context,
-        wallet: Wallet,
+        private val wallet: Wallet,
         restoreSettings: RestoreSettings,
-        testMode: Boolean
+        private val testMode: Boolean
 ) : IAdapter, IBalanceAdapter, IReceiveAdapter, ITransactionsAdapter, ISendZcashAdapter {
 
     private val confirmationsThreshold = 10
@@ -45,7 +46,6 @@ class ZcashAdapter(
     private val feeChangeHeight: Long = if (testMode) 1_028_500 else 1_077_550
     private val lightWalletDHost = if (testMode) network.defaultHost else "zcash.horizontalsystems.xyz"
     private val lightWalletDPort = 9067
-    private val coin = wallet.coin
 
     private val synchronizer: Synchronizer
     private val seed: ByteArray
@@ -59,9 +59,14 @@ class ZcashAdapter(
     private var downloadProgress: Int = 0
     private val today: Date = Date()
 
+    //region IReceiveAdapter
+    override val receiveAddress: String
+    //endregion
+
     init {
         val accountType = (wallet.account.type as? AccountType.Mnemonic) ?: throw UnsupportedAccountException()
         seed = Mnemonic().toSeed(accountType.words)
+        receiveAddress = DerivationTool.deriveShieldedAddress(seed, network)
 
         val isRestored = wallet.account.origin == AccountOrigin.Restored
         val birthdayHeight = when (wallet.account.origin) {
@@ -78,7 +83,7 @@ class ZcashAdapter(
             config.setSeed(seed, network)
         }
 
-        transactionsProvider = ZcashTransactionsProvider()
+        transactionsProvider = ZcashTransactionsProvider(receiveAddress)
         synchronizer = Synchronizer(Initializer(context, config))
         synchronizer.onProcessorErrorHandler = ::onProcessorError
         synchronizer.onChainErrorHandler = ::onChainError
@@ -88,7 +93,7 @@ class ZcashAdapter(
         return if (height == null || height > feeChangeHeight) 1_000 else 10_000
     }
 
-    private var syncState: AdapterState = AdapterState.Syncing(0, null)
+    private var syncState: AdapterState = AdapterState.Syncing()
         set(value) {
             if (value != field) {
                 field = value
@@ -146,10 +151,6 @@ class ZcashAdapter(
         get() = balanceUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
     //endregion
 
-    //region IReceiveAdapter
-    override val receiveAddress = DerivationTool.deriveShieldedAddress(seed, network)
-    //endregion
-
     //region ITransactionsAdapter
 
     override val transactionsState: AdapterState
@@ -164,13 +165,24 @@ class ZcashAdapter(
     override val lastBlockUpdatedFlowable: Flowable<Unit>
         get() = lastBlockUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
 
-    override fun getTransactionsAsync(from: TransactionRecord?, coin: Coin?, limit: Int): Single<List<TransactionRecord>> {
+    override val explorerTitle: String = "blockchair.com"
+
+    override fun explorerUrl(transactionHash: String): String? {
+        return if (testMode) null else "https://blockchair.com/zcash/transaction/$transactionHash"
+    }
+
+    override fun getTransactionsAsync(
+        from: TransactionRecord?,
+        coin: PlatformCoin?,
+        limit: Int,
+        transactionType: FilterTransactionType
+    ): Single<List<TransactionRecord>> {
         val fromParams = from?.let {
             val transactionHash = it.transactionHash.fromHex().reversedArray()
             Triple(transactionHash, it.timestamp, it.transactionIndex)
         }
 
-        return transactionsProvider.getTransactions(fromParams, limit)
+        return transactionsProvider.getTransactions(fromParams, transactionType, limit)
                 .map { transactions ->
                     transactions.map {
                         getTransactionRecord(it)
@@ -178,8 +190,8 @@ class ZcashAdapter(
                 }
     }
 
-    override fun getTransactionRecordsFlowable(coin: Coin?): Flowable<List<TransactionRecord>> {
-        return transactionsProvider.newTransactionsFlowable.map { transactions ->
+    override fun getTransactionRecordsFlowable(coin: PlatformCoin?, transactionType: FilterTransactionType): Flowable<List<TransactionRecord>> {
+        return transactionsProvider.getNewTransactionsFlowable(transactionType).map { transactions ->
             transactions.map { getTransactionRecord(it) }
         }
     }
@@ -296,57 +308,51 @@ class ZcashAdapter(
         val totalProgress = (downloadProgress + scanProgress) / 2
 
         if (totalProgress < 100) {
-            // Workaround: progress doesn't show unless date exists
-            // for Zcash, it's probably better to show progress percentage with a placeholder date
-            // rather than no percentage, because scanning can take a long time
-            syncState = AdapterState.Syncing(totalProgress, today)
+            syncState = AdapterState.Syncing(totalProgress)
         }
     }
 
     private fun getTransactionRecord(transaction: ZcashTransaction): TransactionRecord {
         val transactionHashHex = transaction.transactionHash.toHexReversed()
-        var incoming = true
 
-        if (!transaction.toAddress.isNullOrEmpty() && transaction.toAddress != receiveAddress) {
-            incoming = false
-        }
-
-        return if (incoming) {
+        return if (transaction.isIncoming) {
             BitcoinIncomingTransactionRecord(
-                    coin = coin,
-                    uid = transactionHashHex,
-                    transactionHash = transactionHashHex,
-                    transactionIndex = transaction.transactionIndex,
-                    blockHeight = transaction.minedHeight,
-                    confirmationsThreshold = confirmationsThreshold,
-                    timestamp = transaction.timestamp,
-                    fee = defaultFee(transaction.minedHeight.toLong()).convertZatoshiToZec(),
-                    failed = transaction.failed,
-                    lockInfo = null,
-                    conflictingHash = null,
-                    showRawTransaction = false,
-                    amount = transaction.value.convertZatoshiToZec(),
-                    from = null,
-                    memo = transaction.memo
+                coin = wallet.platformCoin,
+                uid = transactionHashHex,
+                transactionHash = transactionHashHex,
+                transactionIndex = transaction.transactionIndex,
+                blockHeight = transaction.minedHeight,
+                confirmationsThreshold = confirmationsThreshold,
+                timestamp = transaction.timestamp,
+                fee = defaultFee(transaction.minedHeight.toLong()).convertZatoshiToZec(),
+                failed = transaction.failed,
+                lockInfo = null,
+                conflictingHash = null,
+                showRawTransaction = false,
+                amount = transaction.value.convertZatoshiToZec(),
+                from = null,
+                memo = transaction.memo,
+                source = wallet.transactionSource
             )
         } else {
             BitcoinOutgoingTransactionRecord(
-                    coin = coin,
-                    uid = transactionHashHex,
-                    transactionHash = transactionHashHex,
-                    transactionIndex = transaction.transactionIndex,
-                    blockHeight = transaction.minedHeight,
-                    confirmationsThreshold = confirmationsThreshold,
-                    timestamp = transaction.timestamp,
-                    fee = defaultFee(transaction.minedHeight.toLong()).convertZatoshiToZec(),
-                    failed = transaction.failed,
-                    lockInfo = null,
-                    conflictingHash = null,
-                    showRawTransaction = false,
-                    amount = transaction.value.convertZatoshiToZec(),
-                    to = transaction.toAddress,
-                    sentToSelf = false,
-                    memo = transaction.memo
+                coin = wallet.platformCoin,
+                uid = transactionHashHex,
+                transactionHash = transactionHashHex,
+                transactionIndex = transaction.transactionIndex,
+                blockHeight = transaction.minedHeight,
+                confirmationsThreshold = confirmationsThreshold,
+                timestamp = transaction.timestamp,
+                fee = defaultFee(transaction.minedHeight.toLong()).convertZatoshiToZec(),
+                failed = transaction.failed,
+                lockInfo = null,
+                conflictingHash = null,
+                showRawTransaction = false,
+                amount = transaction.value.convertZatoshiToZec(),
+                to = transaction.toAddress,
+                sentToSelf = false,
+                memo = transaction.memo,
+                source = wallet.transactionSource
             )
         }
     }

@@ -9,7 +9,6 @@ import androidx.navigation.fragment.findNavController
 import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.modules.main.MainActivity
 import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListModule
@@ -41,8 +40,8 @@ class MainSettingsFragment : BaseFragment() {
         val walletConnect = SettingsMenuItem(R.string.Settings_WalletConnect, R.drawable.ic_wallet_connect_20, listPosition = ListPosition.Single) {
             presenter.didTapWalletConnect()
         }
-        val notifications = SettingsMenuItem(R.string.Settings_Notifications, R.drawable.ic_notification_20, listPosition = ListPosition.First) {
-            presenter.didTapNotifications()
+        val launchScreen = SettingsMenuItem(R.string.Settings_LaunchScreen, R.drawable.ic_screen_20, listPosition = ListPosition.First) {
+            findNavController().navigate(R.id.launchScreenSettingsFragment, null, navOptions())
         }
         val baseCurrency = SettingsMenuItem(R.string.Settings_BaseCurrency, R.drawable.ic_currency, listPosition = ListPosition.Middle) {
             presenter.didTapBaseCurrency()
@@ -76,7 +75,7 @@ class MainSettingsFragment : BaseFragment() {
                 null,
                 walletConnect,
                 null,
-                notifications,
+                launchScreen,
                 baseCurrency,
                 language,
                 theme,
@@ -96,6 +95,11 @@ class MainSettingsFragment : BaseFragment() {
         presenterView.baseCurrency.observe(viewLifecycleOwner, { currency ->
             baseCurrency.value = currency
             mainSettingsAdapter.notifyChanged(baseCurrency)
+        })
+
+        presenterView.launchScreen.observe(viewLifecycleOwner, { screen ->
+            launchScreen.value = getString(screen.titleRes)
+            mainSettingsAdapter.notifyChanged(launchScreen)
         })
 
         presenterView.backedUp.observe(viewLifecycleOwner, { wordListBackedUp ->
@@ -172,10 +176,6 @@ class MainSettingsFragment : BaseFragment() {
             findNavController().navigate(R.id.mainFragment_to_aboutAppFragment, null, navOptions())
         })
 
-        router.showNotificationsLiveEvent.observe(viewLifecycleOwner, {
-            findNavController().navigate(R.id.mainFragment_to_notificationsFragment, null, navOptions())
-        })
-
         router.openFaqLiveEvent.observe(viewLifecycleOwner, {
             findNavController().navigate(R.id.mainFragment_to_faqListFragment, null, navOptions())
         })
@@ -205,7 +205,8 @@ class MainSettingsFragment : BaseFragment() {
 
     private fun subscribeFragmentResult() {
         getNavigationResult(LanguageSettingsFragment.LANGUAGE_CHANGE)?.let {
-            activity?.let { MainModule.startAsNewTask(it, MainActivity.SETTINGS_TAB_POSITION) }
+            presenter.setAppRelaunchingFromSettings()
+            activity?.let { MainModule.startAsNewTask(it) }
         }
     }
 }

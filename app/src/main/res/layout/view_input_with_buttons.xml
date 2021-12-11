@@ -36,45 +36,19 @@
         android:padding="12dp"
         android:textColor="?attr/TextColorBarsToDark"
         android:textColorHint="@color/grey_50"
-        app:layout_constraintEnd_toStartOf="@+id/inputButtonLeft"
+        app:layout_constraintEnd_toStartOf="@+id/actionsCompose"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/inputBackground" />
 
-    <Button
-        android:id="@+id/inputButtonLeft"
-        style="@style/ButtonSecondary"
+    <androidx.compose.ui.platform.ComposeView
+        android:id="@+id/actionsCompose"
         android:layout_width="wrap_content"
-        android:layout_height="28dp"
-        android:layout_marginEnd="8dp"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="@id/input"
-        app:layout_constraintEnd_toStartOf="@+id/inputButtonRight"
-        app:layout_constraintTop_toTopOf="@id/input"
-        tools:text="0.1%" />
-
-    <Button
-        android:id="@+id/inputButtonRight"
-        style="@style/ButtonSecondary"
-        android:layout_width="wrap_content"
-        android:layout_height="28dp"
-        android:layout_marginEnd="8dp"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="@+id/input"
-        app:layout_constraintEnd_toStartOf="@id/deleteButton"
-        app:layout_constraintTop_toTopOf="@id/input"
-        tools:text="1.0%" />
-
-    <ImageButton
-        android:id="@+id/deleteButton"
-        style="@style/ImageButtonSecondary"
-        android:layout_width="28dp"
-        android:layout_height="28dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:src="@drawable/ic_delete_20"
-        android:visibility="gone"
+        android:layout_height="0dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/input" />
+        app:layout_constraintTop_toTopOf="@id/input"
+        app:layout_constraintBottom_toBottomOf="@id/input"
+        tools:layout_width="50dp"
+        />
 
     <TextView
         android:id="@+id/error"

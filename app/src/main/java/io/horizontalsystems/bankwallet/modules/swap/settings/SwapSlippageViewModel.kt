@@ -1,21 +1,22 @@
 package io.horizontalsystems.bankwallet.modules.swap.settings
 
-import android.util.Range
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import java.math.BigDecimal
-import java.util.*
 
 interface ISwapSlippageService {
+    val slippageChangeObservable: Observable<Unit>
+
     val initialSlippage: BigDecimal?
     val defaultSlippage: BigDecimal
+    val recommendedSlippages: List<BigDecimal>
 
     val slippageError: Throwable?
-    val slippageErrorObservable: Observable<Optional<Throwable>>
-
-    val recommendedSlippageBounds: Range<BigDecimal>
+    val unusualSlippage: Boolean
 
     fun setSlippage(value: BigDecimal)
 }
@@ -27,21 +28,12 @@ class SwapSlippageViewModel(
     private val disposable = CompositeDisposable()
 
     override val inputFieldButtonItems: List<InputFieldButtonItem>
-        get() {
-            val bounds = service.recommendedSlippageBounds
-            val lowerBoundTitle = bounds.lower.toPlainString()
-            val upperBoundTitle = bounds.upper.toPlainString()
-
-            return listOf(
-                    InputFieldButtonItem("$lowerBoundTitle%") {
-                        setTextLiveData.postValue(lowerBoundTitle)
-                        onChangeText(lowerBoundTitle)
-                    },
-                    InputFieldButtonItem("$upperBoundTitle%") {
-                        setTextLiveData.postValue(upperBoundTitle)
-                        onChangeText(upperBoundTitle)
-                    }
-            )
+        get() = service.recommendedSlippages.map {
+            val slippageStr = it.toPlainString()
+            InputFieldButtonItem("$slippageStr%") {
+                setTextLiveData.postValue(slippageStr)
+                onChangeText(slippageStr)
+            }
         }
 
     override val inputFieldPlaceholder: String?
@@ -52,7 +44,7 @@ class SwapSlippageViewModel(
         get() = service.initialSlippage?.toPlainString()
 
     init {
-        service.slippageErrorObservable
+        service.slippageChangeObservable
                 .subscribe { sync() }
                 .let {
                     disposable.add(it)
@@ -61,8 +53,15 @@ class SwapSlippageViewModel(
     }
 
     private fun sync() {
-        val caution = service.slippageError?.localizedMessage?.let { localizedMessage ->
-            Caution(localizedMessage, Caution.Type.Error)
+        val error = service.slippageError?.localizedMessage
+
+        val caution = when {
+            error != null -> Caution(error, Caution.Type.Error)
+            service.unusualSlippage -> Caution(
+                Translator.getString(R.string.SwapSettings_Warning_UnusualSlippage),
+                Caution.Type.Warning
+            )
+            else -> null
         }
         cautionLiveData.postValue(caution)
     }

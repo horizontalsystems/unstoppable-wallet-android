@@ -6,17 +6,22 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.foundation.layout.padding
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.ethereum.EthereumFeeViewModel
-import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmViewModel
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.ethereumkit.models.Address
@@ -28,15 +33,15 @@ import kotlinx.android.synthetic.main.fragment_confirmation_send_evm.*
 class SendEvmConfirmationFragment : BaseFragment() {
 
     private val logger = AppLogger("send-evm")
-    private val sendEvmMViewModel by navGraphViewModels<SendEvmViewModel>(R.id.sendEvmFragment)
+    private val sendEvmViewModel by navGraphViewModels<SendEvmViewModel>(R.id.sendEvmFragment)
 
     private val vmFactory by lazy {
         SendEvmConfirmationModule.Factory(
-            sendEvmMViewModel.service.adapter.evmKit,
+            sendEvmViewModel.service.adapter.evmKit,
             SendEvmData(transactionData, additionalInfo)
         )
     }
-    private val sendViewModel by viewModels<SendEvmTransactionViewModel> { vmFactory }
+    private val sendEvmTransactionViewModel by viewModels<SendEvmTransactionViewModel> { vmFactory }
     private val feeViewModel by viewModels<EthereumFeeViewModel> { vmFactory }
 
     private var snackbarInProcess: CustomSnackbar? = null
@@ -77,11 +82,11 @@ class SendEvmConfirmationFragment : BaseFragment() {
             findNavController().popBackStack()
         }
 
-        sendViewModel.sendEnabledLiveData.observe(viewLifecycleOwner, { enabled ->
-            sendButton.isEnabled = enabled
+        sendEvmTransactionViewModel.sendEnabledLiveData.observe(viewLifecycleOwner, { enabled ->
+            setSendButton(enabled)
         })
 
-        sendViewModel.sendingLiveData.observe(viewLifecycleOwner, {
+        sendEvmTransactionViewModel.sendingLiveData.observe(viewLifecycleOwner, {
             snackbarInProcess = HudHelper.showInProcessMessage(
                 requireView(),
                 R.string.Send_Sending,
@@ -89,24 +94,24 @@ class SendEvmConfirmationFragment : BaseFragment() {
             )
         })
 
-        sendViewModel.sendSuccessLiveData.observe(viewLifecycleOwner, { transactionHash ->
+        sendEvmTransactionViewModel.sendSuccessLiveData.observe(viewLifecycleOwner, { transactionHash ->
             HudHelper.showSuccessMessage(
                 requireActivity().findViewById(android.R.id.content),
-                R.string.Hud_Text_Success
+                R.string.Hud_Text_Done
             )
             Handler(Looper.getMainLooper()).postDelayed({
                 findNavController().popBackStack(R.id.sendEvmFragment, true)
             }, 1200)
         })
 
-        sendViewModel.sendFailedLiveData.observe(viewLifecycleOwner, {
+        sendEvmTransactionViewModel.sendFailedLiveData.observe(viewLifecycleOwner, {
             HudHelper.showErrorMessage(requireActivity().findViewById(android.R.id.content), it)
 
             findNavController().popBackStack()
         })
 
         sendEvmTransactionView.init(
-            sendViewModel,
+            sendEvmTransactionViewModel,
             feeViewModel,
             viewLifecycleOwner,
             parentFragmentManager,
@@ -119,9 +124,26 @@ class SendEvmConfirmationFragment : BaseFragment() {
             }
         )
 
-        sendButton.setOnSingleClickListener {
-            logger.info("click send button")
-            sendViewModel.send(logger)
+        buttonSendCompose.setViewCompositionStrategy(
+            ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+        )
+
+        setSendButton()
+    }
+
+    private fun setSendButton(enabled: Boolean = false) {
+        buttonSendCompose.setContent {
+            ComposeAppTheme {
+                ButtonPrimaryYellow(
+                    modifier = Modifier.padding(start = 16.dp, top = 24.dp, end = 16.dp, bottom = 24.dp),
+                    title = getString(R.string.Send_Confirmation_Send_Button),
+                    onClick = {
+                        logger.info("click send button")
+                        sendEvmTransactionViewModel.send(logger)
+                    },
+                    enabled = enabled
+                )
+            }
         }
     }
 

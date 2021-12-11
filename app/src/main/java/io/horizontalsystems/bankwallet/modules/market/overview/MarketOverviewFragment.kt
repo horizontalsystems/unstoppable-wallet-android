@@ -1,132 +1,297 @@
 package io.horizontalsystems.bankwallet.modules.market.overview
 
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.browser.customtabs.CustomTabsIntent
+import androidx.compose.foundation.*
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Divider
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Transformations
-import androidx.navigation.navGraphViewModels
-import androidx.recyclerview.widget.ConcatAdapter
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
-import io.horizontalsystems.bankwallet.modules.market.MarketLoadingAdapter
+import io.horizontalsystems.bankwallet.modules.market.MarketDataValue
 import io.horizontalsystems.bankwallet.modules.market.MarketModule
 import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
-import io.horizontalsystems.bankwallet.modules.market.MarketViewModel
-import io.horizontalsystems.bankwallet.modules.market.metrics.MarketMetricsAdapter
-import io.horizontalsystems.bankwallet.modules.market.metrics.MarketMetricsModule
-import io.horizontalsystems.bankwallet.modules.market.metrics.MarketMetricsViewModel
-import io.horizontalsystems.bankwallet.modules.market.posts.MarketPostItemsAdapter
-import io.horizontalsystems.bankwallet.modules.market.posts.ViewHolderMarketPostItem
-import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartFragment
-import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartType
+import io.horizontalsystems.bankwallet.modules.market.TopMarket
+import io.horizontalsystems.bankwallet.modules.market.metricspage.MetricsPageFragment
+import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.MarketMetrics
+import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.ViewItemState
+import io.horizontalsystems.bankwallet.modules.market.topcoins.MarketTopCoinsFragment
+import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
+import io.horizontalsystems.bankwallet.ui.compose.components.*
+import io.horizontalsystems.bankwallet.ui.extensions.MarketMetricSmallView
+import io.horizontalsystems.bankwallet.ui.extensions.MetricData
 import io.horizontalsystems.core.findNavController
-import io.horizontalsystems.core.helpers.HudHelper
-import kotlinx.android.synthetic.main.fragment_overview.*
 
-class MarketOverviewFragment : BaseFragment(), ViewHolderMarketOverviewItem.Listener, ViewHolderMarketPostItem.Listener {
+class MarketOverviewFragment : BaseFragment() {
 
-    private val marketMetricsViewModel by viewModels<MarketMetricsViewModel> { MarketMetricsModule.Factory() }
-    private val marketOverviewViewModel by viewModels<MarketOverviewViewModel> { MarketOverviewModule.Factory() }
-    private val marketViewModel by navGraphViewModels<MarketViewModel>(R.id.mainFragment)
+    private val viewModel by viewModels<MarketOverviewViewModel> { MarketOverviewModule.Factory() }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_overview, container, false)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        return ComposeView(requireContext()).apply {
+            setViewCompositionStrategy(
+                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+            )
+            setContent {
+                ComposeAppTheme {
+                    MarketOverviewScreen()
+                }
+            }
+        }
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        val marketMetricsAdapter = MarketMetricsAdapter(marketMetricsViewModel, viewLifecycleOwner)
-
-        val topLoadingAdapter = MarketLoadingAdapter(marketOverviewViewModel.loadingLiveData, marketOverviewViewModel.errorLiveData, marketOverviewViewModel::onErrorClick, viewLifecycleOwner)
-        val topGainersHeaderAdapter = MarketOverviewSectionHeaderAdapter(
-                hasItemsLiveData = Transformations.map(marketOverviewViewModel.topGainersViewItemsLiveData) { it.isNotEmpty() },
-                viewLifecycleOwner = viewLifecycleOwner,
-                settingsHeaderItem = MarketOverviewSectionHeaderAdapter.SectionHeaderItem(R.string.RateList_TopGainers, R.drawable.ic_circle_up_20, getString(R.string.Market_SeeAll)) {
-                    marketViewModel.onClickSeeAll(MarketModule.ListType.TopGainers)
-                }
-        )
-
-        val topGainersAdapter = MarketOverviewItemsAdapter(
-                this,
-                marketOverviewViewModel.topGainersViewItemsLiveData,
-                viewLifecycleOwner)
-
-        val topLosersHeaderAdapter = MarketOverviewSectionHeaderAdapter(
-                hasItemsLiveData = Transformations.map(marketOverviewViewModel.topLosersViewItemsLiveData) { it.isNotEmpty() },
-                viewLifecycleOwner = viewLifecycleOwner,
-                settingsHeaderItem = MarketOverviewSectionHeaderAdapter.SectionHeaderItem(R.string.RateList_TopLosers, R.drawable.ic_circle_down_20, getString(R.string.Market_SeeAll)) {
-                    marketViewModel.onClickSeeAll(MarketModule.ListType.TopLosers)
-                }
-        )
-
-        val topLosersAdapter = MarketOverviewItemsAdapter(
-                this,
-                marketOverviewViewModel.topLosersViewItemsLiveData,
-                viewLifecycleOwner)
-
-        val postsHeaderAdapter = MarketOverviewSectionHeaderAdapter(
-                hasItemsLiveData = Transformations.map(marketOverviewViewModel.postsViewItemsLiveData) { it.isNotEmpty() },
-                viewLifecycleOwner = viewLifecycleOwner,
-                settingsHeaderItem = MarketOverviewSectionHeaderAdapter.SectionHeaderItem(R.string.RateList_Posts, R.drawable.ic_post_20)
-        )
-
-        val postsAdapter = MarketPostItemsAdapter(
-                this,
-                marketOverviewViewModel.postsViewItemsLiveData,
-                viewLifecycleOwner)
-
-
-        val poweredByAdapter = PoweredByAdapter(marketOverviewViewModel.showPoweredByLiveData, viewLifecycleOwner, getString(R.string.Market_PoweredByApi))
-
-        coinRatesRecyclerView.adapter = ConcatAdapter(
-                marketMetricsAdapter,
-                topLoadingAdapter,
-                topGainersHeaderAdapter,
-                topGainersAdapter,
-                topLosersHeaderAdapter,
-                topLosersAdapter,
-                postsHeaderAdapter,
-                postsAdapter,
-                poweredByAdapter
-        )
-        coinRatesRecyclerView.itemAnimator = null
-
-        pullToRefresh.setOnRefreshListener {
-            marketMetricsAdapter.refresh()
-            marketOverviewViewModel.refresh()
-
-            pullToRefresh.isRefreshing = false
-        }
-
-        marketMetricsViewModel.toastLiveData.observe(viewLifecycleOwner) {
-            HudHelper.showErrorMessage(requireActivity().findViewById(android.R.id.content), it)
-        }
-
-        marketOverviewViewModel.toastLiveData.observe(viewLifecycleOwner) {
-            HudHelper.showErrorMessage(requireActivity().findViewById(android.R.id.content), it)
-        }
-
-        marketMetricsViewModel.showGlobalMarketMetricsPage.observe(viewLifecycleOwner, {
-            MetricChartFragment.show(childFragmentManager, MetricChartType.MarketGlobal(it))
-        })
-    }
-
-    override fun onItemClick(marketViewItem: MarketViewItem) {
-        val arguments = CoinFragment.prepareParams(marketViewItem.coinType, marketViewItem.coinCode, marketViewItem.coinName)
+    private fun onItemClick(marketViewItem: MarketViewItem) {
+        val arguments = CoinFragment.prepareParams(marketViewItem.coinUid)
 
         findNavController().navigate(R.id.coinFragment, arguments, navOptions())
     }
 
-    override fun onPostClick(postViewItem: MarketOverviewModule.PostViewItem) {
-        val customTabsIntent = CustomTabsIntent.Builder().build()
-        context?.let {
-            customTabsIntent.launchUrl(it, Uri.parse(postViewItem.url))
+    private fun openMetricsPage(metricsType: MetricsType) {
+        if (metricsType == MetricsType.TvlInDefi) {
+            findNavController().navigate(R.id.tvlFragment, null, navOptionsFromBottom())
+        } else {
+            val arguments = MetricsPageFragment.prepareParams(metricsType)
+            findNavController().navigate(
+                R.id.mainFragment_to_metricPageFragment,
+                arguments,
+                navOptionsFromBottom()
+            )
+        }
+    }
+
+    @Composable
+    private fun MarketOverviewScreen() {
+        val loading by viewModel.loadingLiveData.observeAsState()
+        val isRefreshing by viewModel.isRefreshingLiveData.observeAsState()
+        val viewItemState by viewModel.viewItemStateLiveData.observeAsState()
+        val scrollState = rememberScrollState()
+
+        HSSwipeRefresh(
+            state = rememberSwipeRefreshState(isRefreshing ?: false || loading ?: false),
+            onRefresh = {
+                viewModel.refresh()
+            }
+        ) {
+            when (val state = viewItemState) {
+                is ViewItemState.Error -> {
+                    ListErrorView(
+                        stringResource(R.string.Market_SyncError)
+                    ) {
+                        viewModel.onErrorClick()
+                    }
+                }
+                is ViewItemState.Loaded -> {
+                    Column(
+                        modifier = Modifier
+                            .verticalScroll(scrollState)
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .height(240.dp)
+                        ) {
+                            MetricChartsView(state.viewItem.marketMetrics)
+                        }
+                        BoardsView(
+                            boards = state.viewItem.boards,
+                            onClickSeeAll = { listType ->
+                                val (sortingField, topMarket, marketField) = viewModel.getTopCoinsParams(
+                                    listType
+                                )
+                                val args = MarketTopCoinsFragment.prepareParams(
+                                    sortingField,
+                                    topMarket,
+                                    marketField
+                                )
+
+                                findNavController().navigate(
+                                    R.id.marketTopCoinsFragment,
+                                    args,
+                                    navOptionsFromBottom()
+                                )
+                            },
+                            onSelectTopMarket = { topMarket, listType ->
+                                viewModel.onSelectTopMarket(topMarket, listType)
+                            })
+                    }
+                }
+            }
+        }
+    }
+
+    @Composable
+    private fun MetricChartsView(marketMetrics: MarketMetrics) {
+        Column(
+            modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp)
+        ) {
+            Row {
+                ChartView(marketMetrics.totalMarketCap)
+                Spacer(Modifier.width(8.dp))
+                ChartView(marketMetrics.volume24h)
+            }
+            Spacer(Modifier.height(8.dp))
+            Row {
+                ChartView(marketMetrics.defiCap)
+                Spacer(Modifier.width(8.dp))
+                ChartView(marketMetrics.defiTvl)
+            }
+        }
+    }
+
+    @Composable
+    private fun RowScope.ChartView(metricsData: MetricData) {
+        AndroidView(
+            modifier = Modifier.Companion
+                .weight(1f)
+                .height(104.dp)
+                .clickable {
+                    openMetricsPage(metricsData.type)
+                },
+            factory = { context ->
+                MarketMetricSmallView(context).apply {
+                    setMetricData(metricsData)
+                }
+            },
+            update = { it.setMetricData(metricsData) }
+        )
+    }
+
+    @Composable
+    private fun BoardsView(
+        boards: List<MarketOverviewModule.Board>,
+        onClickSeeAll: (MarketModule.ListType) -> Unit,
+        onSelectTopMarket: (TopMarket, MarketModule.ListType) -> Unit
+    ) {
+        boards.forEach { boardItem ->
+            TopBoardHeader(boardItem, onSelectTopMarket)
+
+            boardItem.marketViewItems.forEachIndexed { index, coin ->
+                MarketCoinWithBackground(coin, index == 0)
+            }
+
+            SeeAllButton {
+                onClickSeeAll(boardItem.type)
+            }
+        }
+    }
+
+    @Composable
+    private fun TopBoardHeader(
+        board: MarketOverviewModule.Board,
+        onSelectTopMarket: (TopMarket, MarketModule.ListType) -> Unit
+    ) {
+        Column {
+            Divider(
+                thickness = 1.dp,
+                color = ComposeAppTheme.colors.steel10
+            )
+            Row(
+                modifier = Modifier.height(42.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    painter = painterResource(board.boardHeader.iconRes),
+                    contentDescription = "Section Header Icon"
+                )
+                Text(
+                    text = getString(board.boardHeader.title),
+                    color = ComposeAppTheme.colors.oz,
+                    style = ComposeAppTheme.typography.body,
+                    maxLines = 1,
+                )
+                Spacer(Modifier.weight(1f))
+                ButtonSecondaryToggle(
+                    modifier = Modifier.padding(end = 16.dp),
+                    select = board.boardHeader.topMarketSelect,
+                    onSelect = { topMarket ->
+                        onSelectTopMarket(topMarket, board.type)
+                    })
+            }
+            Spacer(modifier = Modifier.height(12.dp))
+        }
+    }
+
+    @Composable
+    private fun MarketCoinWithBackground(marketViewItem: MarketViewItem, firstItem: Boolean) {
+        Box(
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .clip(getRoundedCornerShape(firstItem))
+                .background(ComposeAppTheme.colors.lawrence)
+        ) {
+            MarketCoin(
+                marketViewItem.coinName,
+                marketViewItem.coinCode,
+                marketViewItem.iconUrl,
+                marketViewItem.iconPlaceHolder,
+                marketViewItem.coinRate,
+                marketViewItem.marketDataValue,
+                marketViewItem.rank
+            ) {
+                onItemClick(marketViewItem)
+            }
+        }
+    }
+
+    @Composable
+    private fun SeeAllButton(onClick: () -> Unit) {
+        Box(
+            modifier = Modifier
+                .padding(start = 16.dp, end = 16.dp, bottom = 24.dp)
+                .height(48.dp)
+                .clip(RoundedCornerShape(bottomStart = 12.dp, bottomEnd = 12.dp))
+                .background(ComposeAppTheme.colors.lawrence)
+                .clickable(onClick = onClick)
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .padding(horizontal = 16.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = getString(R.string.Market_SeeAll),
+                    color = ComposeAppTheme.colors.oz,
+                    style = ComposeAppTheme.typography.body,
+                    maxLines = 1,
+                )
+                Spacer(Modifier.weight(1f))
+                Image(
+                    painter = painterResource(id = R.drawable.ic_arrow_right),
+                    contentDescription = "right arrow icon",
+                )
+            }
+        }
+    }
+
+    private fun getRoundedCornerShape(firstItem: Boolean): RoundedCornerShape {
+        return if (firstItem) {
+            RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp)
+        } else {
+            RoundedCornerShape(0.dp)
         }
     }
 

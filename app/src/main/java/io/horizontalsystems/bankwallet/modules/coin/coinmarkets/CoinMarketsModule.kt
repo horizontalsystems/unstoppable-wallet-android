@@ -3,13 +3,33 @@ package io.horizontalsystems.bankwallet.modules.coin.coinmarkets
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.coinkit.models.CoinType
+import io.horizontalsystems.marketkit.models.FullCoin
+import java.math.BigDecimal
 
 object CoinMarketsModule {
-    class Factory(private val coinCode: String, private val coinType: CoinType) : ViewModelProvider.Factory {
+    class Factory(private val fullCoin: FullCoin) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            return CoinMarketsViewModel(coinCode, coinType, App.currencyManager, App.xRateManager, App.numberFormatter) as T
+            val service = CoinMarketsService(fullCoin, App.currencyManager, App.marketKit)
+            return CoinMarketsViewModel(service) as T
         }
     }
+}
+
+data class MarketTickerItem(
+    val market: String,
+    val marketImageUrl: String?,
+    val baseCoinCode: String,
+    val targetCoinCode: String,
+    val rate: BigDecimal,
+    val volume: BigDecimal,
+    val volumeType: VolumeType,
+)
+
+enum class SortType {
+    HighestVolume, LowestVolume
+}
+
+enum class VolumeType {
+    Coin, Currency
 }

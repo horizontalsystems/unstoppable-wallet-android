@@ -4,64 +4,69 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:layout_height="wrap_content"
     tools:layout_width="match_parent"
-    tools:parentTag="io.horizontalsystems.bankwallet.ui.extensions.MarketMetricSmallView">
+    tools:parentTag="io.horizontalsystems.bankwallet.ui.extensions.MarketMetricSmallView"
+    >
 
     <View
         android:id="@+id/frame"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="104dp"
         android:background="@drawable/rounded_lawrence_background_single"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        />
 
     <io.horizontalsystems.chartview.ChartMinimal
         android:id="@+id/chart"
-        android:layout_width="72dp"
+        android:layout_width="0dp"
         android:layout_height="32dp"
+        android:layout_marginStart="12dp"
         android:layout_marginEnd="12dp"
         android:layout_marginBottom="12dp"
         app:layout_constraintBottom_toBottomOf="@id/frame"
-        app:layout_constraintEnd_toEndOf="@id/frame" />
+        app:layout_constraintEnd_toEndOf="@id/frame"
+        app:layout_constraintStart_toStartOf="@+id/frame"
+        />
 
     <TextView
         android:id="@+id/title"
-        style="@style/Micro"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:includeFontPadding="false"
-        android:textColor="@color/grey"
-        android:layout_marginTop="12dp"
-        android:layout_marginStart="12dp"
-        app:layout_constraintStart_toStartOf="@id/frame"
-        app:layout_constraintTop_toTopOf="@id/frame"
-        tools:text="BTC Dominance" />
-
-    <TextView
-        android:id="@+id/value"
-        style="@style/Subhead2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
-        android:layout_marginStart="12dp"
-        android:textColor="@color/bran"
-        app:layout_constraintStart_toStartOf="@id/frame"
-        app:layout_constraintTop_toBottomOf="@id/title"
-        tools:text="64.09%" />
-
-    <TextView
-        android:id="@+id/diffPercentage"
         style="@style/Caption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         android:layout_marginStart="12dp"
-        android:layout_marginBottom="12dp"
-        android:textColor="@color/remus"
+        android:layout_marginTop="12dp"
+        android:includeFontPadding="false"
+        android:textColor="@color/grey"
         app:layout_constraintStart_toStartOf="@id/frame"
-        app:layout_constraintTop_toBottomOf="@+id/value"
-        app:layout_constraintBottom_toBottomOf="@id/frame"
-        tools:text="+6.91%" />
+        app:layout_constraintTop_toTopOf="@id/frame"
+        tools:text="BTC Dominance"
+        />
+
+    <TextView
+        android:id="@+id/value"
+        style="@style/Subhead1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="9dp"
+        android:textColor="@color/bran"
+        app:layout_constraintStart_toStartOf="@id/frame"
+        app:layout_constraintTop_toBottomOf="@id/title"
+        tools:text="$64.09 T"
+        />
+
+    <TextView
+        android:id="@+id/diffPercentage"
+        style="@style/Subhead1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="12dp"
+        android:textColor="@color/remus"
+        app:layout_constraintEnd_toEndOf="@+id/frame"
+        app:layout_constraintTop_toTopOf="@+id/value"
+        tools:text="+6.91%"
+        />
 
 </merge>

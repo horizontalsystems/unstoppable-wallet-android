@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?android:windowBackground"
+    >
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:menu="@menu/close_menu"
+        app:navigationIcon="@drawable/ic_back"
+        app:title="@string/TransactionInfoOptions_SpeedUp_Title"
+        app:titleTextAppearance="@style/Title3" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/description"
+                style="@style/Subhead2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="24dp"
+                android:text="@string/TransactionInfoOptions_SpeedUp_Description"
+                android:textColor="@color/grey" />
+
+            <io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionView
+                android:id="@+id/sendEvmTransactionView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="16dp" />
+
+            <androidx.compose.ui.platform.ComposeView
+                android:id="@+id/buttonSendCompose"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:layout_height="50dp"
+                tools:layout_marginTop="24dp"
+                />
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</FrameLayout>

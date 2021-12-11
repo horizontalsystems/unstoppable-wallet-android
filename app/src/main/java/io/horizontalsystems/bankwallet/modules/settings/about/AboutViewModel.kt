@@ -2,18 +2,18 @@ package io.horizontalsystems.bankwallet.modules.settings.about
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import io.horizontalsystems.bankwallet.core.IAppConfigProvider
 import io.horizontalsystems.bankwallet.core.IClipboardManager
 import io.horizontalsystems.bankwallet.core.ITermsManager
+import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.core.ISystemInfoManager
 import io.horizontalsystems.core.SingleLiveEvent
 import io.reactivex.disposables.Disposable
 
 class AboutViewModel(
-        private val appConfigProvider: IAppConfigProvider,
-        private val clipboardManager: IClipboardManager,
-        termsManager: ITermsManager,
-        systemInfoManager: ISystemInfoManager
+    private val appConfigProvider: AppConfigProvider,
+    private val clipboardManager: IClipboardManager,
+    termsManager: ITermsManager,
+    systemInfoManager: ISystemInfoManager
 ) : ViewModel() {
 
     val openLinkLiveData = SingleLiveEvent<String>()

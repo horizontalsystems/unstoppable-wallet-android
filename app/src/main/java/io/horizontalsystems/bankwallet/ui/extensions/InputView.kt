@@ -6,11 +6,15 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.AttributeSet
 import android.view.animation.AnimationUtils
+import androidx.compose.foundation.layout.padding
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.swap.settings.Caution
-import io.horizontalsystems.views.helpers.LayoutHelper
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
 import kotlinx.android.synthetic.main.view_input.view.*
 
 class InputView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
@@ -30,19 +34,6 @@ class InputView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
         override fun afterTextChanged(s: Editable?) {}
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             prevValue = s?.toString()
-        }
-    }
-
-    private val params = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT).apply {
-        rightMargin = LayoutHelper.dp(8f, context)
-    }
-
-
-    private val buttonDelete by lazy {
-        createImageButton(context, R.style.ImageButtonSecondary, R.drawable.ic_delete_20, params) {
-            input.text = null
-        }.also {
-            actionsLayout.addView(it)
         }
     }
 
@@ -130,7 +121,19 @@ class InputView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
     }
 
     private fun setDeleteButtonVisibility(visible: Boolean) {
-        buttonDelete.isVisible = visible
+        buttonDeleteCompose.setContent {
+            if (visible) {
+                ComposeAppTheme {
+                    ButtonSecondaryCircle(
+                        modifier = Modifier.padding(end = 8.dp),
+                        icon = R.drawable.ic_delete_20,
+                        onClick = {
+                            input.text = null
+                        }
+                    )
+                }
+            }
+        }
     }
 
 }

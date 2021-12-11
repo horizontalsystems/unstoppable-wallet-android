@@ -20,20 +20,22 @@ class WalletConnectInteractor(
 ) {
 
     interface Delegate {
-        fun didUpdateState(state: State)
-        fun didRequestSession(remotePeerId: String, remotePeerMeta: WCPeerMeta, chainId: Int?)
-        fun didKillSession()
-        fun didRequestSendEthTransaction(id: Long, transaction: WCEthereumTransaction)
-        fun didRequestSignMessage(id: Long, message: WCEthereumSignMessage)
+        fun didUpdateState(state: State) {}
+        fun didRequestSession(remotePeerId: String, remotePeerMeta: WCPeerMeta, chainId: Int?) {}
+        fun didKillSession() {}
+        fun didRequestSendEthTransaction(id: Long, transaction: WCEthereumTransaction) {}
+        fun didRequestSignMessage(id: Long, message: WCEthereumSignMessage) {}
+        fun didReceiveError(error: Throwable) {}
     }
 
     sealed class State {
+        object Idle: State()
         object Connecting : State()
         object Connected : State()
         class Disconnected(val error: Throwable = Error("Disconnected")) : State()
     }
 
-    var state: State = State.Disconnected()
+    var state: State = State.Idle
         private set(value) {
             field = value
 
@@ -68,7 +70,9 @@ class WalletConnectInteractor(
             }
         }
 
-        client.onFailure = { }
+        client.onFailure = {
+            delegate?.didReceiveError(it)
+        }
 
         client.onDisconnect = { _: Int, _: String ->
             state = State.Disconnected()
@@ -95,7 +99,7 @@ class WalletConnectInteractor(
     fun connect() {
         state = State.Connecting
 
-        client.connect(session, clientMeta, peerId, remotePeerId)
+        client.connect(session, clientMeta, peerId, remotePeerId ?: client.remotePeerId)
     }
 
     fun approveSession(address: String, chainId: Int) {

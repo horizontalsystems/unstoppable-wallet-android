@@ -5,12 +5,19 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.ImageView
 import androidx.activity.viewModels
+import androidx.compose.foundation.layout.padding
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.viewpager.widget.ViewPager
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.modules.main.MainModule
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import kotlinx.android.synthetic.main.activity_intro.*
+import kotlinx.android.synthetic.main.fragment_backup_key.*
 
 class IntroActivity : BaseActivity() {
 
@@ -47,7 +54,7 @@ class IntroActivity : BaseActivity() {
                 } else {
                     imageSwitcher.background = ContextCompat.getDrawable(this@IntroActivity, R.drawable.ic_ellipse)
                 }
-                updateButton(position == pagesCount - 1)
+                setNextButton(pagesCount, position == pagesCount - 1)
             }
         })
 
@@ -56,18 +63,45 @@ class IntroActivity : BaseActivity() {
 
         circleIndicator.setViewPager(viewPager)
 
-        btnNext.setOnClickListener {
-            if (viewPager.currentItem < pagesCount - 1) {
-                viewPager.currentItem = viewPager.currentItem + 1
-            } else {
-                viewModel.onClickStart()
-            }
-        }
+        setNextButton(pagesCount)
 
         viewModel.openMainLiveEvent.observe(this, {
             MainModule.start(this)
             finish()
         })
+    }
+
+    private fun setNextButton(pagesCount: Int, lastSlide: Boolean = false) {
+        val title = getString(if (lastSlide) R.string.Button_Start else R.string.Button_Next)
+        buttonNextCompose.setContent {
+            ComposeAppTheme {
+                if (lastSlide) {
+                    ButtonPrimaryYellow(
+                        modifier = Modifier.padding(start = 24.dp, end = 24.dp),
+                        title = title,
+                        onClick = {
+                            onButtonClick(pagesCount)
+                        }
+                    )
+                } else {
+                    ButtonPrimaryDefault(
+                        modifier = Modifier.padding(start = 24.dp, end = 24.dp),
+                        title = title,
+                        onClick = {
+                            onButtonClick(pagesCount)
+                        }
+                    )
+                }
+            }
+        }
+    }
+
+    private fun onButtonClick(pagesCount: Int) {
+        if (viewPager.currentItem < pagesCount - 1) {
+            viewPager.currentItem = viewPager.currentItem + 1
+        } else {
+            viewModel.onClickStart()
+        }
     }
 
     override fun onBackPressed() {
@@ -76,11 +110,6 @@ class IntroActivity : BaseActivity() {
         }
 
         super.onBackPressed()
-    }
-
-    private fun updateButton(lastSlide: Boolean) {
-        btnNext.setBackgroundResource(if (lastSlide) R.drawable.button_yellow_background else R.drawable.button_steel_background)
-        btnNext.setText(if (lastSlide) R.string.Button_Start else R.string.Button_Next)
     }
 
     private fun canHandleOnBackPress(): Boolean {

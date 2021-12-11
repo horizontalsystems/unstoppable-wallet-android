@@ -4,101 +4,172 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.ConcatAdapter
-import androidx.recyclerview.widget.RecyclerView
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
-import io.horizontalsystems.bankwallet.modules.market.MarketItemsAdapter
-import io.horizontalsystems.bankwallet.modules.market.MarketLoadingAdapter
-import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
-import io.horizontalsystems.bankwallet.modules.market.ViewHolderMarketItem
-import io.horizontalsystems.bankwallet.modules.market.list.MarketListViewModel
-import io.horizontalsystems.bankwallet.ui.extensions.MarketListHeaderView
-import io.horizontalsystems.bankwallet.ui.extensions.SelectorDialog
-import io.horizontalsystems.bankwallet.ui.extensions.SelectorItem
+import io.horizontalsystems.bankwallet.modules.market.MarketField
+import io.horizontalsystems.bankwallet.modules.market.SortingField
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
+import io.horizontalsystems.bankwallet.ui.compose.Select
+import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.core.findNavController
-import io.horizontalsystems.core.helpers.HudHelper
-import kotlinx.android.synthetic.main.fragment_market_favorites.*
 
-class MarketFavoritesFragment : BaseFragment(), MarketListHeaderView.Listener, ViewHolderMarketItem.Listener {
+class MarketFavoritesFragment : BaseFragment() {
 
-    private val marketListViewModel by viewModels<MarketListViewModel> { MarketFavoritesModule.Factory() }
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        val viewModel by viewModels<MarketFavoritesViewModel> { MarketFavoritesModule.Factory() }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_market_favorites, container, false)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        marketListHeader.listener = this
-        marketListHeader.setSortingField(marketListViewModel.sortingField)
-        marketListHeader.setFieldViewOptions(marketListViewModel.marketFields)
-        marketListHeader.isVisible = false
-        marketListViewModel.marketViewItemsLiveData.observe(viewLifecycleOwner, { (list, _) ->
-            marketListHeader.isVisible = list.isNotEmpty()
-        })
-
-        val marketItemsAdapter = MarketItemsAdapter(
-                this,
-                marketListViewModel.marketViewItemsLiveData,
-                marketListViewModel.loadingLiveData,
-                marketListViewModel.errorLiveData,
-                viewLifecycleOwner
-        )
-        val marketLoadingAdapter = MarketLoadingAdapter(marketListViewModel.loadingLiveData, marketListViewModel.errorLiveData, marketListViewModel::onErrorClick, viewLifecycleOwner)
-
-        val emptyListAdapter = EmptyListAdapter(marketListViewModel.showEmptyListTextLiveData, viewLifecycleOwner) { parent, viewType ->
-            EmptyFavoritesViewHolder.create(parent, viewType)
-        }
-
-        coinRatesRecyclerView.adapter = ConcatAdapter(marketLoadingAdapter, marketItemsAdapter, emptyListAdapter)
-        coinRatesRecyclerView.itemAnimator = null
-
-        pullToRefresh.setOnRefreshListener {
-            marketListViewModel.refresh()
-
-            pullToRefresh.isRefreshing = false
-        }
-
-        marketListViewModel.networkNotAvailable.observe(viewLifecycleOwner, {
-            HudHelper.showErrorMessage(requireView(), R.string.Hud_Text_NoInternet)
-        })
-    }
-
-    override fun onClickSortingField() {
-        val items = marketListViewModel.sortingFields.map {
-            SelectorItem(getString(it.titleResId), it == marketListViewModel.sortingField)
-        }
-
-        SelectorDialog
-                .newInstance(items, getString(R.string.Market_Sort_PopupTitle)) { position ->
-                    val selectedSortingField = marketListViewModel.sortingFields[position]
-
-                    marketListHeader.setSortingField(selectedSortingField)
-                    marketListViewModel.update(sortingField = selectedSortingField)
+        return ComposeView(requireContext()).apply {
+            setViewCompositionStrategy(
+                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+            )
+            setContent {
+                ComposeAppTheme {
+                    MarketFavoritesScreen(viewModel) { onCoinClick(it) }
                 }
-                .show(childFragmentManager, "sorting_field_selector")
-    }
-
-    override fun onSelectFieldViewOption(fieldViewOptionId: Int) {
-        marketListViewModel.update(marketFieldIndex = fieldViewOptionId)
-    }
-
-    override fun onItemClick(marketViewItem: MarketViewItem) {
-        val arguments = CoinFragment.prepareParams(marketViewItem.coinType, marketViewItem.coinCode, marketViewItem.coinName)
-
-        findNavController().navigate(R.id.coinFragment, arguments, navOptions())
-    }
-
-    class EmptyFavoritesViewHolder(containerView: View) : RecyclerView.ViewHolder(containerView) {
-        companion object {
-            fun create(parent: ViewGroup, viewType: Int): EmptyFavoritesViewHolder {
-                return EmptyFavoritesViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_empty_favorites_list, parent, false))
             }
         }
+    }
+
+    private fun onCoinClick(coinUid: String) {
+        val arguments = CoinFragment.prepareParams(coinUid)
+        findNavController().navigate(R.id.coinFragment, arguments, navOptions())
+    }
+}
+
+@Composable
+fun MarketFavoritesScreen(
+    viewModel: MarketFavoritesViewModel,
+    onCoinClick: (String) -> Unit
+) {
+    val viewState by viewModel.viewStateLiveData.observeAsState()
+    val loading by viewModel.loadingLiveData.observeAsState(false)
+    val isRefreshing by viewModel.isRefreshingLiveData.observeAsState(false)
+    val marketFavoritesData by viewModel.viewItemLiveData.observeAsState()
+    val sortingFieldDialogState by viewModel.sortingFieldSelectorStateLiveData.observeAsState()
+    var scrollToTopAfterUpdate by rememberSaveable { mutableStateOf(false) }
+
+    HSSwipeRefresh(
+        state = rememberSwipeRefreshState(isRefreshing ?: false || loading ?: false),
+        onRefresh = {
+            viewModel.refresh()
+        }
+    ) {
+        Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
+            when (viewState) {
+                is ViewState.Error -> {
+                    ListErrorView(
+                        stringResource(R.string.Market_SyncError)
+                    ) {
+                        viewModel.onErrorClick()
+                    }
+                }
+                ViewState.Success -> {
+                    marketFavoritesData?.let { data ->
+                        if (data.marketItems.isEmpty()) {
+                            NoFavorites()
+                        } else {
+                            MarketFavoritesMenu(
+                                data.sortingFieldSelect,
+                                data.marketFieldSelect,
+                                viewModel::onClickSortingField,
+                                viewModel::onSelectMarketField
+                            )
+                            CoinList(data.marketItems, scrollToTopAfterUpdate, onCoinClick)
+                            if (scrollToTopAfterUpdate) {
+                                scrollToTopAfterUpdate = false
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    when (val option = sortingFieldDialogState) {
+        is MarketFavoritesModule.SelectorDialogState.Opened -> {
+            AlertGroup(
+                R.string.Market_Sort_PopupTitle,
+                option.select,
+                { selected ->
+                    scrollToTopAfterUpdate = true
+                    viewModel.onSelectSortingField(selected)
+                },
+                { viewModel.onSortingFieldDialogDismiss() }
+            )
+        }
+    }
+}
+
+@Composable
+fun MarketFavoritesMenu(
+    sortingFieldSelect: Select<SortingField>,
+    marketFieldSelect: Select<MarketField>,
+    onClickSortingField: () -> Unit,
+    onSelectMarketField: (MarketField) -> Unit
+) {
+
+    Header(borderTop = true, borderBottom = true) {
+        Box(modifier = Modifier.weight(1f)) {
+            SortMenu(sortingFieldSelect.selected.title, onClickSortingField)
+        }
+        ButtonSecondaryToggle(
+            modifier = Modifier.padding(end = 16.dp),
+            select = marketFieldSelect,
+            onSelect = onSelectMarketField
+        )
+    }
+}
+
+@Composable
+fun NoFavorites() {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Image(
+            modifier = Modifier
+                .size(48.dp),
+            painter = painterResource(id = R.drawable.ic_rate_24),
+            contentDescription = stringResource(id = R.string.Market_Tab_Watchlist_EmptyList),
+            colorFilter = ColorFilter.tint(ComposeAppTheme.colors.grey)
+        )
+        Spacer(Modifier.height(24.dp))
+        Text(
+            modifier = Modifier
+                .padding(horizontal = 48.dp),
+            text = stringResource(id = R.string.Market_Tab_Watchlist_EmptyList),
+            textAlign = TextAlign.Center,
+            color = ComposeAppTheme.colors.grey,
+            style = ComposeAppTheme.typography.subhead2,
+        )
     }
 }

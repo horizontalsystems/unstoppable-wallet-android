@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/clear_clickable_background"
+    >
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/chartPointsInfo"
+        android:layout_width="0dp"
+        android:layout_height="44dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        >
+
+        <View
+            android:id="@+id/border4"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="@color/steel_10"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+        <!--Price and Date info-->
+
+        <TextView
+            android:id="@+id/pointInfoPrice"
+            style="@style/CaptionSB"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:textColor="@color/oz"
+            app:layout_constraintBottom_toTopOf="@+id/pointInfoDate"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"
+            tools:text="$9530.12"
+            />
+
+        <TextView
+            android:id="@+id/pointInfoDate"
+            style="@style/Caption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="4dp"
+            android:textColor="@color/grey"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/pointInfoPrice"
+            tools:text="Jun 12, 12:30"
+            />
+
+        <!--Volume info-->
+
+        <TextView
+            android:id="@+id/pointTitle"
+            style="@style/Caption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:text="@string/CoinPage_Volume"
+            android:textColor="@color/grey"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/pointValue"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"
+            />
+
+        <TextView
+            android:id="@+id/pointValue"
+            style="@style/Caption"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="16dp"
+            android:textAlignment="textEnd"
+            android:textColor="@color/grey"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1"
+            app:layout_constraintStart_toEndOf="@+id/pointInfoPrice"
+            app:layout_constraintTop_toBottomOf="@+id/pointTitle"
+            tools:text="$36,166B"
+            />
+
+        <!--MACD info-->
+
+        <TextView
+            android:id="@+id/macdHistogram"
+            style="@style/Caption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:textColor="@color/lucian"
+            app:layout_constraintBottom_toTopOf="@+id/macdSignal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"
+            tools:text="-163.24"
+            />
+
+        <TextView
+            android:id="@+id/macdSignal"
+            style="@style/Caption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="16dp"
+            android:textColor="@color/jacob"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/macdHistogram"
+            tools:text="-123"
+            />
+
+        <TextView
+            android:id="@+id/macdValue"
+            style="@style/Caption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
+            android:textColor="@color/issyk_blue"
+            app:layout_constraintBottom_toBottomOf="@+id/macdSignal"
+            app:layout_constraintEnd_toStartOf="@+id/macdSignal"
+            tools:text="-286.61"
+            />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.compose.ui.platform.ComposeView
+        android:id="@+id/tabCompose"
+        android:layout_width="0dp"
+        android:layout_height="44dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <io.horizontalsystems.chartview.Chart
+        android:id="@+id/chart"
+        android:layout_width="0dp"
+        android:layout_height="180dp"
+        app:cursorColor="@color/oz"
+        app:gridDashColor="@color/steel_10"
+        app:gridTextColor="@color/nina"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/chartPointsInfo"
+        app:partialChartColor="@color/grey_50"
+        app:timelineTextColor="@color/nina"
+        />
+
+    <View
+        android:id="@+id/border3"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="@color/steel_10"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/chart"
+        />
+
+    <androidx.compose.ui.platform.ComposeView
+        android:id="@+id/indicatorsCompose"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/border3"
+        tools:layout_height="44dp"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

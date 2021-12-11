@@ -6,7 +6,7 @@ import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BalanceData
 import io.horizontalsystems.bankwallet.entities.Wallet
-import io.horizontalsystems.xrateskit.entities.LatestRate
+import io.horizontalsystems.marketkit.models.CoinPrice
 
 object BalanceModule {
 
@@ -17,7 +17,7 @@ object BalanceModule {
 
             val balanceService2 = BalanceService2(
                 BalanceActiveWalletRepository(App.walletManager, App.accountSettingManager),
-                BalanceXRateRepository(App.currencyManager, App.xRateManager),
+                BalanceXRateRepository(App.currencyManager, App.marketKit),
                 BalanceAdapterRepository(App.adapterManager, BalanceCache(App.appDatabase.enabledWalletsCacheDao())),
                 NetworkTypeChecker(App.accountSettingManager),
                 App.localStorage,
@@ -42,8 +42,8 @@ object BalanceModule {
         val mainNet: Boolean,
         val balanceData: BalanceData,
         val state: AdapterState,
-        val latestRate: LatestRate? = null
+        val coinPrice: CoinPrice? = null
     ) {
-        val fiatValue get() = latestRate?.rate?.let { balanceData.available.times(it) }
+        val fiatValue get() = coinPrice?.value?.let { balanceData.available.times(it) }
     }
 }

@@ -9,8 +9,8 @@
     <ProgressBar
         android:id="@+id/pgTorStatus"
         style="?android:attr/progressBarStyle"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
         android:backgroundTint="@color/grey"
         android:indeterminate="true"
         android:indeterminateTint="@color/grey"
@@ -37,37 +37,21 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="@string/Tor_Status_Starting"
-        app:layout_constraintBottom_toTopOf="@+id/btnRetry"
+        app:layout_constraintBottom_toTopOf="@+id/btnsCompose"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imgTorStatusError" />
 
-    <Button
-        android:id="@+id/btnRetry"
-        style="@style/ButtonSecondary"
-        android:layout_width="wrap_content"
+    <androidx.compose.ui.platform.ComposeView
+        android:id="@+id/btnsCompose"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:text="@string/Button_Retry"
-        app:layout_constraintBottom_toTopOf="@+id/txDisableTor"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txTorStatus" />
-
-    <TextView
-        android:id="@+id/txDisableTor"
-        style="@style/ButtonTransparent"
-        android:layout_width="wrap_content"
-        android:layout_height="28dp"
-        android:layout_marginTop="40dp"
-        android:autoLink="all"
-        android:clickable="true"
-        android:text="@string/Button_Disable"
-        android:paddingHorizontal="7dp"
-        android:background="?selectableItemBackground"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnRetry" />
+        app:layout_constraintTop_toBottomOf="@+id/txTorStatus"
+        tools:layout_height="27dp"
+        tools:layout_marginTop="40dp"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

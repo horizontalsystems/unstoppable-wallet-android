@@ -6,12 +6,11 @@ import io.horizontalsystems.bankwallet.core.ISendDashAdapter
 import io.horizontalsystems.bankwallet.core.UnsupportedAccountException
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.SyncMode
-import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bitcoincore.BitcoinCore
 import io.horizontalsystems.bitcoincore.models.BalanceInfo
 import io.horizontalsystems.bitcoincore.models.BlockInfo
-import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.dashkit.DashKit
 import io.horizontalsystems.dashkit.DashKit.NetworkType
@@ -23,11 +22,12 @@ class DashAdapter(
         override val kit: DashKit,
         syncMode: SyncMode?,
         backgroundManager: BackgroundManager,
-        coin: Coin
-) : BitcoinBaseAdapter(kit, syncMode = syncMode, backgroundManager = backgroundManager, coin), DashKit.Listener, ISendDashAdapter {
+        wallet: Wallet,
+        testMode: Boolean
+) : BitcoinBaseAdapter(kit, syncMode, backgroundManager, wallet, testMode), DashKit.Listener, ISendDashAdapter {
 
     constructor(wallet: Wallet, syncMode: SyncMode?, testMode: Boolean, backgroundManager: BackgroundManager) :
-            this(createKit(wallet, syncMode, testMode), syncMode, backgroundManager, wallet.coin)
+            this(createKit(wallet, syncMode, testMode), syncMode, backgroundManager, wallet, testMode)
 
     init {
         kit.listener = this
@@ -38,6 +38,14 @@ class DashAdapter(
     //
 
     override val satoshisInBitcoin: BigDecimal = BigDecimal.valueOf(Math.pow(10.0, decimal.toDouble()))
+
+    // ITransactionsAdapter
+
+    override val explorerTitle: String = "dash.org"
+
+    override fun explorerUrl(transactionHash: String): String? {
+        return if (testMode) null else "https://insight.dash.org/insight/tx/$transactionHash"
+    }
 
     //
     // DashKit Listener

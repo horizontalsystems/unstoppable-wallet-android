@@ -3,29 +3,39 @@ package io.horizontalsystems.bankwallet.modules.coin.audits
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.coinkit.models.CoinType
-import io.horizontalsystems.views.ListPosition
+import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
+import io.horizontalsystems.marketkit.models.AuditReport
 import java.util.*
+import javax.annotation.concurrent.Immutable
 
 object CoinAuditsModule {
-    class Factory(private val coinType: CoinType) : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
+    @Suppress("UNCHECKED_CAST")
+    class Factory(private val addresses: List<String>) : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            return CoinAuditsViewModel(
-                App.xRateManager,
-                coinType
-            ) as T
+            val service = CoinAuditsService(addresses, App.marketKit)
+            return CoinAuditsViewModel(service) as T
         }
     }
-}
 
-sealed class CoinAuditItem {
-    class Header(val name: String) : CoinAuditItem()
-    class Report(
+    data class AuditorItem(
         val name: String,
-        val date: Date,
-        val issues: Int = 0,
-        val link: String?,
-        val position: ListPosition
-    ) : CoinAuditItem()
+        val logoUrl: String,
+        val reports: List<AuditReport>,
+        val latestDate: Date?
+    )
+
+    @Immutable
+    data class AuditorViewItem(
+        val name: String,
+        val logoUrl: String,
+        val auditViewItems: List<AuditViewItem>
+    )
+
+    @Immutable
+    data class AuditViewItem(
+        val date: String?,
+        val name: String,
+        val issues: TranslatableString,
+        val reportUrl: String
+    )
 }

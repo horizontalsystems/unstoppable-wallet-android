@@ -41,6 +41,7 @@ class OneInchSettingsViewModel(
                     is SwapSettingsError.InvalidAddress -> {
                         errorText = Translator.getString(R.string.SwapSettings_Error_InvalidAddress)
                     }
+                    is SwapSettingsError.ZeroSlippage,
                     is SwapSettingsError.InvalidSlippage -> {
                         errorText = Translator.getString(R.string.SwapSettings_Error_InvalidSlippage)
                     }

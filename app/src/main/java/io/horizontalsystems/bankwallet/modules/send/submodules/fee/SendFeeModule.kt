@@ -6,20 +6,20 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.FeeRatePriority
 import io.horizontalsystems.bankwallet.core.factories.FeeRateProviderFactory
 import io.horizontalsystems.bankwallet.entities.CoinValue
+import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.FeeRateState
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.SendModule.AmountInfo
 import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmountInfo
-import io.horizontalsystems.coinkit.models.Coin
-import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.entities.Currency
+import io.horizontalsystems.marketkit.models.PlatformCoin
 import java.math.BigDecimal
 import java.math.BigInteger
 
 
 object SendFeeModule {
 
-    class InsufficientFeeBalance(val coin: Coin, val coinProtocol: String, val feeCoin: Coin, val fee: CoinValue) :
+    class InsufficientFeeBalance(val coin: PlatformCoin, val coinProtocol: String, val feeCoin: PlatformCoin, val fee: CoinValue) :
             Exception()
 
     interface IView {
@@ -49,7 +49,7 @@ object SendFeeModule {
     interface IInteractor {
         val feeRatePriorityList: List<FeeRatePriority>
         val defaultFeeRatePriority: FeeRatePriority?
-        fun getRate(coinType: CoinType): BigDecimal?
+        fun getRate(coinUid: String): BigDecimal?
         fun syncFeeRate(feeRatePriority: FeeRatePriority)
         fun onClear()
     }
@@ -64,8 +64,8 @@ object SendFeeModule {
         val isValid: Boolean
         val feeRateState: FeeRateState
         val feeRate: Long?
-        val primaryAmountInfo: AmountInfo
-        val secondaryAmountInfo: AmountInfo?
+        val coinValue: CoinValue
+        val currencyValue: CurrencyValue?
 
         fun setLoading(loading: Boolean)
         fun setFee(fee: BigDecimal)
@@ -86,7 +86,7 @@ object SendFeeModule {
 
 
     class Factory(
-            private val coin: Coin,
+            private val coin: PlatformCoin,
             private val sendHandler: SendModule.ISendHandler,
             private val feeModuleDelegate: IFeeModuleDelegate,
             private val customPriorityUnit: CustomPriorityUnit?
@@ -95,13 +95,13 @@ object SendFeeModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
 
             val view = SendFeeView()
-            val feeRateProvider = FeeRateProviderFactory.provider(coin)
-            val feeCoinData = App.feeCoinProvider.feeCoinData(coin)
+            val feeRateProvider = FeeRateProviderFactory.provider(coin.coinType)
+            val feeCoinData = App.feeCoinProvider.feeCoinData(coin.coinType)
             val feeCoin = feeCoinData?.first ?: coin
 
             val baseCurrency = App.currencyManager.baseCurrency
             val helper = SendFeePresenterHelper(App.numberFormatter, feeCoin, baseCurrency)
-            val interactor = SendFeeInteractor(baseCurrency, App.xRateManager, feeRateProvider, feeCoin)
+            val interactor = SendFeeInteractor(baseCurrency, App.marketKit, feeRateProvider, feeCoin)
 
             val presenter = SendFeePresenter(view, interactor, helper, coin, baseCurrency, feeCoinData, customPriorityUnit, FeeRateAdjustmentHelper(App.appConfigProvider))
 

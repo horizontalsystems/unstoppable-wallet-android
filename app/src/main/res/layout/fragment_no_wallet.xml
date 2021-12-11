@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/introLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?android:windowBackground"
-    android:clickable="true">
+    android:clickable="true"
+    >
 
     <ImageView
         android:id="@+id/walletIcon"
@@ -31,34 +33,20 @@
         android:background="?selectableItemBackground"
         android:text="@string/Balance_NoWalletAlert"
         android:textAlignment="center"
-        app:layout_constraintBottom_toTopOf="@+id/btnCreate"
+        app:layout_constraintBottom_toTopOf="@+id/buttonsCompose"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/walletIcon" />
 
-    <Button
-        android:id="@+id/btnCreate"
-        style="@style/ButtonPrimaryYellow"
+    <androidx.compose.ui.platform.ComposeView
+        android:id="@+id/buttonsCompose"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="16dp"
         android:text="@string/Button_Create"
-        app:layout_constraintBottom_toTopOf="@+id/btnRestore"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/btnRestore"
-        style="@style/ButtonPrimarySteel"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="32dp"
-        android:text="@string/Button_Restore"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_height="116dp"
+        />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

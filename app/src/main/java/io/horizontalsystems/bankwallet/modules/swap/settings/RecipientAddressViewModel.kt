@@ -30,7 +30,7 @@ class RecipientAddressViewModel(
         private val clearables: List<Clearable>
 ) : ViewModel(), IVerifiedInputViewModel {
 
-    override val setTextLiveData = SingleLiveEvent<String?>()
+    override val setTextLiveData = MutableLiveData<String?>()
     override val cautionLiveData = MutableLiveData<Caution?>(null)
     override val isLoadingLiveData = SingleLiveEvent<Boolean>()
     override val initialValue: String? = service.initialAddress?.title
@@ -81,6 +81,16 @@ class RecipientAddressViewModel(
 
         service.setRecipientAddress(text?.let { Address(it) })
         resolutionService.setText(text)
+
+        if (text == null || text.isEmpty()) {
+            return
+        }
+
+        val addressData = addressParser.parse(text)
+
+        addressData.amount?.let {
+            service.setRecipientAmount(it)
+        }
     }
 
     fun onChangeFocus(hasFocus: Boolean) {
@@ -90,19 +100,6 @@ class RecipientAddressViewModel(
 
         isEditing = hasFocus
         sync()
-    }
-
-    fun onFetch(text: String?) {
-        if (text == null || text.isEmpty()) {
-            return
-        }
-
-        val addressData = addressParser.parse(text)
-        setTextLiveData.postValue(addressData.address)
-
-        addressData.amount?.let {
-            service.setRecipientAmount(it)
-        }
     }
 
     private fun sync() {

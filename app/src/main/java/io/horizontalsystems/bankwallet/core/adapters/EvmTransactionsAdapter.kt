@@ -2,22 +2,26 @@ package io.horizontalsystems.bankwallet.core.adapters
 
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
-import io.horizontalsystems.coinkit.models.Coin
-import io.horizontalsystems.coinkit.models.CoinType
+import io.horizontalsystems.bankwallet.modules.transactions.FilterTransactionType
+import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.core.hexStringToByteArray
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.ethereumkit.models.TransactionTag
+import io.horizontalsystems.marketkit.models.CoinType
+import io.horizontalsystems.marketkit.models.PlatformCoin
 import io.reactivex.Flowable
 import io.reactivex.Single
 import java.math.BigDecimal
 import java.math.BigInteger
 
-class EvmTransactionsAdapter(kit: EthereumKit, coinManager: ICoinManager) :
+class EvmTransactionsAdapter(kit: EthereumKit, baseCoin: PlatformCoin, coinManager: ICoinManager, source: TransactionSource) :
     BaseEvmAdapter(kit, EvmAdapter.decimal, coinManager), ITransactionsAdapter {
 
     // IAdapter
+
+    private val transactionConverter = EvmTransactionConverter(coinManager, evmKit, source, baseCoin)
 
     override fun start() {
         // started via EthereumKitManager
@@ -81,13 +85,37 @@ class EvmTransactionsAdapter(kit: EthereumKit, coinManager: ICoinManager) :
     override val transactionsStateUpdatedFlowable: Flowable<Unit>
         get() = evmKit.transactionsSyncStateFlowable.map {}
 
+    override val explorerTitle: String
+        get() = when (evmKit.networkType) {
+            EthereumKit.NetworkType.EthMainNet,
+            EthereumKit.NetworkType.EthRopsten,
+            EthereumKit.NetworkType.EthKovan,
+            EthereumKit.NetworkType.EthRinkeby,
+            EthereumKit.NetworkType.EthGoerli -> "etherscan.io"
+            EthereumKit.NetworkType.BscMainNet -> "bscscan.com"
+        }
+
+    override fun explorerUrl(transactionHash: String): String? {
+        val domain = when (evmKit.networkType) {
+            EthereumKit.NetworkType.EthMainNet -> "etherscan.io"
+            EthereumKit.NetworkType.EthRopsten -> "ropsten.etherscan.io"
+            EthereumKit.NetworkType.EthKovan -> "kovan.etherscan.io"
+            EthereumKit.NetworkType.EthRinkeby -> "rinkeby.etherscan.io"
+            EthereumKit.NetworkType.BscMainNet -> "bscscan.com"
+            EthereumKit.NetworkType.EthGoerli -> "goerli.etherscan.io"
+        }
+
+        return "https://$domain/tx/$transactionHash"
+    }
+
     override fun getTransactionsAsync(
         from: TransactionRecord?,
-        coin: Coin?,
-        limit: Int
+        coin: PlatformCoin?,
+        limit: Int,
+        transactionType: FilterTransactionType
     ): Single<List<TransactionRecord>> {
         return evmKit.getTransactionsAsync(
-            getFilters(coin),
+            getFilters(coin, transactionType),
             from?.transactionHash?.hexStringToByteArray(),
             limit
         ).map {
@@ -95,8 +123,8 @@ class EvmTransactionsAdapter(kit: EthereumKit, coinManager: ICoinManager) :
         }
     }
 
-    override fun getTransactionRecordsFlowable(coin: Coin?): Flowable<List<TransactionRecord>> {
-        return evmKit.getTransactionsFlowable(getFilters(coin)).map {
+    override fun getTransactionRecordsFlowable(coin: PlatformCoin?, transactionType: FilterTransactionType): Flowable<List<TransactionRecord>> {
+        return evmKit.getTransactionsFlowable(getFilters(coin, transactionType)).map {
             it.map { tx -> transactionConverter.transactionRecord(tx) }
         }
     }
@@ -105,7 +133,7 @@ class EvmTransactionsAdapter(kit: EthereumKit, coinManager: ICoinManager) :
         when (syncState) {
             is EthereumKit.SyncState.Synced -> AdapterState.Synced
             is EthereumKit.SyncState.NotSynced -> AdapterState.NotSynced(syncState.error)
-            is EthereumKit.SyncState.Syncing -> AdapterState.Syncing(50, null)
+            is EthereumKit.SyncState.Syncing -> AdapterState.Syncing()
         }
 
     // ISendEthereumAdapter
@@ -121,21 +149,33 @@ class EvmTransactionsAdapter(kit: EthereumKit, coinManager: ICoinManager) :
         return TransactionData(address, amount, byteArrayOf())
     }
 
+    private fun coinTagName(coin: PlatformCoin) = when (val type = coin.coinType) {
+        CoinType.Ethereum, CoinType.BinanceSmartChain -> TransactionTag.EVM_COIN
+        is CoinType.Erc20 -> type.address
+        is CoinType.Bep20 -> type.address
+        else -> throw IllegalArgumentException()
+    }
 
-    private fun getFilters(coin: Coin?): List<List<String>> {
-        val coinFilter = mutableListOf<List<String>>()
-
-        coin?.let {
-            when (val type = coin.type) {
-                CoinType.Ethereum, CoinType.BinanceSmartChain -> coinFilter.add(listOf(TransactionTag.EVM_COIN))
-                is CoinType.Erc20 -> coinFilter.add(listOf(type.address))
-                is CoinType.Bep20 -> coinFilter.add(listOf(type.address))
-                else -> {
-                }
-            }
+    private fun getFilters(coin: PlatformCoin?, filter: FilterTransactionType): List<List<String>> {
+        val filterCoin = coin?.let {
+            coinTagName(it)
         }
 
-        return coinFilter
+        val filterTag = when (filter) {
+            FilterTransactionType.All -> null
+            FilterTransactionType.Incoming -> when {
+                coin != null -> TransactionTag.eip20Incoming(coinTagName(coin))
+                else -> TransactionTag.INCOMING
+            }
+            FilterTransactionType.Outgoing -> when {
+                coin != null -> TransactionTag.eip20Outgoing(coinTagName(coin))
+                else -> TransactionTag.OUTGOING
+            }
+            FilterTransactionType.Swap -> TransactionTag.SWAP
+            FilterTransactionType.Approve -> TransactionTag.EIP20_APPROVE
+        }
+
+        return listOfNotNull(filterCoin, filterTag).map { listOf(it) }
     }
 
     companion object {

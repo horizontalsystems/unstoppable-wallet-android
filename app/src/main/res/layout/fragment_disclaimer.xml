@@ -60,19 +60,18 @@
         app:layout_constraintTop_toBottomOf="@id/border1"
         tools:text="@tools:sample/lorem/random" />
 
-    <Button
-        android:id="@+id/buttonConfirm"
-        style="@style/ButtonPrimaryYellow"
+    <androidx.compose.ui.platform.ComposeView
+        android:id="@+id/buttonConfirmCompose"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginBottom="16dp"
-        android:text="@string/SettingsCurrency_Understand"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/text" />
+        app:layout_constraintTop_toBottomOf="@id/text"
+        tools:layout_height="124dp"
+        tools:layout_marginBottom="16dp"
+        tools:layout_marginTop="30dp"
+        />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

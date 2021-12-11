@@ -7,8 +7,8 @@ import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData.AdditionalInfo
 import io.horizontalsystems.bankwallet.modules.swap.settings.IRecipientAddressService
-import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.ethereumkit.core.AddressValidator
+import io.horizontalsystems.marketkit.models.PlatformCoin
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.Observable
@@ -19,7 +19,7 @@ import java.util.*
 import io.horizontalsystems.ethereumkit.models.Address as EvmAddress
 
 class SendEvmService(
-        private val sendCoin: Coin,
+        private val sendCoin: PlatformCoin,
         val adapter: ISendEthereumAdapter
 ) : IAvailableBalanceService, IAmountInputService, IRecipientAddressService, Clearable {
 
@@ -69,7 +69,7 @@ class SendEvmService(
     @Throws
     private fun validEvmAmount(amount: BigDecimal): BigInteger {
         val evmAmount = try {
-            amount.movePointRight(sendCoin.decimal).toBigInteger()
+            amount.movePointRight(sendCoin.decimals).toBigInteger()
         } catch (error: Throwable) {
             throw AmountError.InvalidDecimal
         }
@@ -88,7 +88,7 @@ class SendEvmService(
     override val amount: BigDecimal
         get() = BigDecimal.ZERO
 
-    override val coin: Coin
+    override val coin: PlatformCoin
         get() = sendCoin
 
     override val balance: BigDecimal
@@ -97,7 +97,7 @@ class SendEvmService(
     override val amountObservable: Flowable<BigDecimal>
         get() = Flowable.empty()
 
-    override val coinObservable: Flowable<Optional<Coin>>
+    override val coinObservable: Flowable<Optional<PlatformCoin>>
         get() = Flowable.empty()
 
     override fun onChangeAmount(amount: BigDecimal) {

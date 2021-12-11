@@ -14,10 +14,10 @@ import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.SendSubmoduleFragment
 import io.horizontalsystems.bankwallet.modules.swap.settings.RecipientAddressViewModel
 import io.horizontalsystems.bankwallet.ui.extensions.AddressInputView
-import io.horizontalsystems.coinkit.models.Coin
+import io.horizontalsystems.marketkit.models.PlatformCoin
 
 class SendAddressFragment(
-        private val coin: Coin,
+        private val coin: PlatformCoin,
         private val addressModuleDelegate: SendAddressModule.IAddressModuleDelegate,
         private val sendHandler: SendModule.ISendHandler)
     : SendSubmoduleFragment() {
@@ -33,7 +33,7 @@ class SendAddressFragment(
     private val qrScannerResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             result.data?.getStringExtra(ModuleField.SCAN_ADDRESS)?.let {
-                presenter.onFetch(it)
+                addressInputView.setText(it)
             }
         }
     }

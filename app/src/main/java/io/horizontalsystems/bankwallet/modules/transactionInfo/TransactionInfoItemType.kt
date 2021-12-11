@@ -1,6 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.transactionInfo
 
+import android.os.Parcelable
 import io.horizontalsystems.bankwallet.R
+import kotlinx.android.parcel.Parcelize
 import java.util.*
 
 sealed class TransactionInfoItemType {
@@ -16,8 +18,7 @@ sealed class TransactionInfoItemType {
     ) :
         TransactionInfoItemType()
 
-    class Button(val title: String, val leftIcon: Int, val type: TransactionInfoButtonType) :
-        TransactionInfoItemType()
+    class Explorer(val title: String, val url: String?) : TransactionInfoItemType()
 
     class Status(val title: String, val leftIcon: Int, val status: TransactionStatusViewItem) :
         TransactionInfoItemType()
@@ -38,12 +39,22 @@ sealed class TransactionInfoItemType {
         val transactionHash: String,
         val conflictingHash: String
     ) : TransactionInfoItemType()
+
+    class Options(
+        val title: String,
+        val optionButtonOne: TransactionInfoOption,
+        val optionButtonTwo: TransactionInfoOption,
+    ) : TransactionInfoItemType()
 }
 
-sealed class TransactionInfoButtonType {
-    class OpenExplorer(val url: String?) : TransactionInfoButtonType()
-    object RevokeApproval : TransactionInfoButtonType()
-    object Resend : TransactionInfoButtonType()
+data class TransactionInfoOption(
+    val title: String,
+    val type: Type
+) {
+    @Parcelize
+    enum class Type: Parcelable {
+        SpeedUp, Cancel
+    }
 }
 
 sealed class TransactionInfoActionButton {
@@ -58,4 +69,4 @@ sealed class TransactionInfoActionButton {
     }
 }
 
-class ColoredValue(val value: String, val color: Int)
+data class ColoredValue(val value: String, val color: Int)

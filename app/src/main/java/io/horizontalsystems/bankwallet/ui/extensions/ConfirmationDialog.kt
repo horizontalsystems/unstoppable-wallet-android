@@ -3,22 +3,30 @@ package io.horizontalsystems.bankwallet.ui.extensions
 import android.content.DialogInterface
 import android.os.Bundle
 import android.view.View
-import android.widget.Button
 import android.widget.TextView
+import androidx.compose.foundation.layout.*
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.unit.dp
 import androidx.core.view.isVisible
-import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentManager
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryRed
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
+import kotlinx.android.synthetic.main.fragment_confirmation_dialog.*
 
 class ConfirmationDialog(
-        private val listener: Listener,
-        private val title: String,
-        private val subtitle: String,
-        private val icon: Int?,
-        private val contentText: String?,
-        private val actionButtonTitle: String?,
-        private val cancelButtonTitle: String?,
-        private val destructiveButtonTitle: String?)
-    : BaseBottomSheetDialogFragment() {
+    private val listener: Listener,
+    private val title: String,
+    private val subtitle: String,
+    private val icon: Int?,
+    private val contentText: String?,
+    private val actionButtonTitle: String?,
+    private val cancelButtonTitle: String?,
+    private val destructiveButtonTitle: String?
+) : BaseBottomSheetDialogFragment() {
 
     interface Listener {
         fun onActionButtonClick() {}
@@ -27,9 +35,6 @@ class ConfirmationDialog(
     }
 
     private lateinit var contentTextView: TextView
-    private lateinit var btnAction: Button
-    private lateinit var btnDestructive: Button
-    private lateinit var btnCancel: Button
 
     override fun onCancel(dialog: DialogInterface) {
         super.onCancel(dialog)
@@ -50,50 +55,62 @@ class ConfirmationDialog(
 
         // if null set default "Attention" ICON
         icon?.let {
-          setHeaderIcon(it)
-        }?:setHeaderIcon(R.drawable.ic_attention_yellow_24)
+            setHeaderIcon(it)
+        } ?: setHeaderIcon(R.drawable.ic_attention_yellow_24)
 
         contentTextView = view.findViewById(R.id.contentText)
-        btnAction = view.findViewById(R.id.btnYellow)
-        btnDestructive = view.findViewById(R.id.btnDestructive)
-        btnCancel = view.findViewById(R.id.btnGrey)
 
         contentTextView.isVisible = contentText != null
         contentTextView.text = contentText
 
-        bindActions()
+        buttonsCompose.setViewCompositionStrategy(
+            ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+        )
+
+        setButtons()
     }
 
-    private fun bindActions() {
-
-        // Set Visibility based on title is NULL or not
-        btnAction.isVisible = actionButtonTitle != null
-        btnDestructive.isVisible = destructiveButtonTitle != null
-        btnCancel.isVisible = cancelButtonTitle != null
-
-        actionButtonTitle?.let {
-
-            btnAction.text = actionButtonTitle
-            btnAction.setOnClickListener {
-                listener.onActionButtonClick()
-                dismiss()
-            }
-        }
-
-        destructiveButtonTitle?.let {
-            btnDestructive.text = destructiveButtonTitle
-            btnDestructive.setOnClickListener {
-                listener.onDestructiveButtonClick()
-                dismiss()
-            }
-        }
-
-        cancelButtonTitle?.let {
-
-            btnCancel.text = cancelButtonTitle
-            btnCancel.setOnClickListener {
-                listener.onCancelButtonClick()
-                dismiss()
+    private fun setButtons() {
+        buttonsCompose.setContent {
+            ComposeAppTheme {
+                Column(modifier = Modifier.width(IntrinsicSize.Max)) {
+                    actionButtonTitle?.let {
+                        ButtonPrimaryYellow(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(start = 16.dp, end = 16.dp),
+                            title = actionButtonTitle,
+                            onClick = {
+                                listener.onActionButtonClick()
+                                dismiss()
+                            }
+                        )
+                    }
+                    destructiveButtonTitle?.let {
+                        ButtonPrimaryRed(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(start = 16.dp, top = 16.dp, end = 16.dp),
+                            title = destructiveButtonTitle,
+                            onClick = {
+                                listener.onDestructiveButtonClick()
+                                dismiss()
+                            }
+                        )
+                    }
+                    cancelButtonTitle?.let {
+                        ButtonPrimaryDefault(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(start = 16.dp, top = 16.dp, end = 16.dp),
+                            title = cancelButtonTitle,
+                            onClick = {
+                                listener.onCancelButtonClick()
+                                dismiss()
+                            }
+                        )
+                    }
+                }
             }
         }
     }
@@ -107,13 +124,13 @@ class ConfirmationDialog(
                 contentText: String?,
                 actionButtonTitle: String? = "",
                 cancelButtonTitle: String? = "",
-                activity: FragmentActivity,
+                fragmentManager: FragmentManager,
                 listener: Listener,
                 destructiveButtonTitle: String? = null
         ) {
 
             val fragment = ConfirmationDialog(listener, title, subtitle, icon, contentText, actionButtonTitle, cancelButtonTitle, destructiveButtonTitle)
-            val transaction = activity.supportFragmentManager.beginTransaction()
+            val transaction = fragmentManager.beginTransaction()
 
             transaction.add(fragment, "bottom_coin_settings_alert_dialog")
             transaction.commitAllowingStateLoss()

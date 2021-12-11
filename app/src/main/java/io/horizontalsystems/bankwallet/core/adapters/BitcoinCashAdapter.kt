@@ -4,7 +4,10 @@ import io.horizontalsystems.bankwallet.core.AdapterErrorWrongParameters
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ISendBitcoinAdapter
 import io.horizontalsystems.bankwallet.core.UnsupportedAccountException
-import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.bankwallet.entities.AccountType
+import io.horizontalsystems.bankwallet.entities.BitcoinCashCoinType
+import io.horizontalsystems.bankwallet.entities.SyncMode
+import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bitcoincash.BitcoinCashKit
 import io.horizontalsystems.bitcoincash.BitcoinCashKit.NetworkType
@@ -13,7 +16,6 @@ import io.horizontalsystems.bitcoincore.BitcoinCore
 import io.horizontalsystems.bitcoincore.models.BalanceInfo
 import io.horizontalsystems.bitcoincore.models.BlockInfo
 import io.horizontalsystems.bitcoincore.models.TransactionInfo
-import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.core.BackgroundManager
 import java.math.BigDecimal
 
@@ -21,11 +23,12 @@ class BitcoinCashAdapter(
         override val kit: BitcoinCashKit,
         syncMode: SyncMode?,
         backgroundManager: BackgroundManager,
-        coin: Coin
-) : BitcoinBaseAdapter(kit, syncMode = syncMode, backgroundManager = backgroundManager, coin), BitcoinCashKit.Listener, ISendBitcoinAdapter {
+        wallet: Wallet,
+        testMode: Boolean
+) : BitcoinBaseAdapter(kit, syncMode, backgroundManager, wallet, testMode), BitcoinCashKit.Listener, ISendBitcoinAdapter {
 
     constructor(wallet: Wallet, syncMode: SyncMode?, testMode: Boolean, backgroundManager: BackgroundManager) :
-            this(createKit(wallet, syncMode, testMode), syncMode, backgroundManager, wallet.coin)
+            this(createKit(wallet, syncMode, testMode), syncMode, backgroundManager, wallet, testMode)
 
     init {
         kit.listener = this
@@ -36,6 +39,14 @@ class BitcoinCashAdapter(
     //
 
     override val satoshisInBitcoin: BigDecimal = BigDecimal.valueOf(Math.pow(10.0, decimal.toDouble()))
+
+    // ITransactionsAdapter
+
+    override val explorerTitle: String = "btc.com"
+
+    override fun explorerUrl(transactionHash: String): String? {
+        return if (testMode) null else "https://bch.btc.com/$transactionHash"
+    }
 
     //
     // BitcoinCashKit Listener
@@ -76,7 +87,7 @@ class BitcoinCashAdapter(
         private fun createKit(wallet: Wallet, syncMode: SyncMode?, testMode: Boolean): BitcoinCashKit {
             val account = wallet.account
             val accountType = (account.type as? AccountType.Mnemonic) ?: throw UnsupportedAccountException()
-            val bchCoinType = wallet.configuredCoin.settings.bitcoinCashCoinType ?: throw AdapterErrorWrongParameters("BitcoinCashCoinType is null")
+            val bchCoinType = wallet.coinSettings.bitcoinCashCoinType ?: throw AdapterErrorWrongParameters("BitcoinCashCoinType is null")
             val kitCoinType = when(bchCoinType){
                 BitcoinCashCoinType.type145 -> MainNetBitcoinCash.CoinType.Type145
                 BitcoinCashCoinType.type0 -> MainNetBitcoinCash.CoinType.Type0

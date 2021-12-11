@@ -3,24 +3,36 @@ package io.horizontalsystems.bankwallet.modules.send
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.unit.dp
 import androidx.fragment.app.commit
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseActivity
+import io.horizontalsystems.bankwallet.core.iconPlaceholder
+import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.send.SendPresenter.ActionState
 import io.horizontalsystems.bankwallet.modules.send.submodules.SendSubmoduleFragment
 import io.horizontalsystems.bankwallet.modules.send.submodules.address.SendAddressFragment
 import io.horizontalsystems.bankwallet.modules.send.submodules.amount.SendAmountFragment
 import io.horizontalsystems.bankwallet.modules.send.submodules.confirmation.ConfirmationFragment
-import io.horizontalsystems.bankwallet.modules.send.submodules.fee.SendFeeInfoFragment
 import io.horizontalsystems.bankwallet.modules.send.submodules.fee.SendFeeFragment
+import io.horizontalsystems.bankwallet.modules.send.submodules.fee.SendFeeInfoFragment
 import io.horizontalsystems.bankwallet.modules.send.submodules.hodler.SendHodlerFragment
 import io.horizontalsystems.bankwallet.modules.send.submodules.memo.SendMemoFragment
 import io.horizontalsystems.bankwallet.modules.send.submodules.sendbutton.ProceedButtonView
-import io.horizontalsystems.bankwallet.ui.helpers.AppLayoutHelper
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
+import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
+import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
+import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.snackbar.SnackbarDuration
 import kotlinx.android.synthetic.main.activity_send.*
 
@@ -35,21 +47,11 @@ class SendActivity : BaseActivity() {
         super.onCreate(null)
         setContentView(R.layout.activity_send)
 
-       overridePendingTransition(R.anim.slide_from_bottom, R.anim.slide_to_top)
+        overridePendingTransition(R.anim.slide_from_bottom, R.anim.slide_to_top)
 
         val wallet: Wallet = intent.getParcelableExtra(WALLET) ?: run { finish(); return }
 
-        toolbar.title = getString(R.string.Send_Title, wallet.coin.code)
-        toolbar.navigationIcon = AppLayoutHelper.getCoinDrawable(this, wallet.coin.type)
-        toolbar.setOnMenuItemClickListener { item ->
-            when (item.itemId) {
-                R.id.menuClose -> {
-                    finish()
-                    true
-                }
-                else -> false
-            }
-        }
+        setToolbar(wallet.platformCoin.fullCoin)
 
         mainPresenter = ViewModelProvider(this, SendModule.Factory(wallet)).get(SendPresenter::class.java)
 
@@ -57,6 +59,35 @@ class SendActivity : BaseActivity() {
         subscribeToRouterEvents(mainPresenter.router as SendRouter)
 
         mainPresenter.onViewDidLoad()
+    }
+
+    private fun setToolbar(fullCoin: FullCoin) {
+        toolbarCompose.setViewCompositionStrategy(
+            ViewCompositionStrategy.DisposeOnLifecycleDestroyed(this)
+        )
+        toolbarCompose.setContent {
+            ComposeAppTheme {
+                AppBar(
+                    title = TranslatableString.ResString(R.string.Send_Title, fullCoin.coin.code),
+                    navigationIcon = {
+                        CoinImage(
+                            iconUrl = fullCoin.coin.iconUrl,
+                            placeholder = fullCoin.iconPlaceholder,
+                            modifier = Modifier.padding(horizontal = 16.dp).size(24.dp)
+                        )
+                    },
+                    menuItems = listOf(
+                        MenuItem(
+                            title = TranslatableString.ResString(R.string.Button_Close),
+                            icon = R.drawable.ic_close,
+                            onClick = {
+                                finish()
+                            }
+                        )
+                    )
+                )
+            }
+        }
     }
 
     private fun subscribeToRouterEvents(router: SendRouter) {
@@ -126,7 +157,7 @@ class SendActivity : BaseActivity() {
                 is SendModule.Input.Address -> {
                     //add address view
                     mainPresenter.addressModuleDelegate?.let {
-                        val sendAddressFragment = SendAddressFragment(wallet.coin, it, mainPresenter.handler)
+                        val sendAddressFragment = SendAddressFragment(wallet.platformCoin, it, mainPresenter.handler)
                         fragments.add(sendAddressFragment)
                         supportFragmentManager.beginTransaction().add(R.id.sendLinearLayout, sendAddressFragment)
                                 .commitNow()
@@ -143,7 +174,7 @@ class SendActivity : BaseActivity() {
                 is SendModule.Input.Fee -> {
                     //add fee view
                     mainPresenter.feeModuleDelegate?.let {
-                        val sendFeeFragment = SendFeeFragment(wallet.coin, it, mainPresenter.handler, mainPresenter.customPriorityUnit)
+                        val sendFeeFragment = SendFeeFragment(wallet.platformCoin, it, mainPresenter.handler, mainPresenter.customPriorityUnit)
                         fragments.add(sendFeeFragment)
                         supportFragmentManager.beginTransaction().add(R.id.sendLinearLayout, sendFeeFragment)
                                 .commitNow()

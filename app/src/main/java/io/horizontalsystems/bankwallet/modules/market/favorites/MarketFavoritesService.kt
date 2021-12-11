@@ -1,50 +1,87 @@
 package io.horizontalsystems.bankwallet.modules.market.favorites
 
-import io.horizontalsystems.bankwallet.core.Clearable
-import io.horizontalsystems.bankwallet.core.IRateManager
-import io.horizontalsystems.bankwallet.core.managers.MarketFavoritesManager
+import io.horizontalsystems.bankwallet.core.subscribeIO
+import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
-import io.horizontalsystems.bankwallet.modules.market.list.IMarketListFetcher
+import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.core.BackgroundManager
-import io.horizontalsystems.core.entities.Currency
+import io.horizontalsystems.core.ICurrencyManager
 import io.reactivex.Observable
-import io.reactivex.Single
-import io.reactivex.subjects.PublishSubject
+import io.reactivex.disposables.Disposable
+import io.reactivex.subjects.BehaviorSubject
 
 class MarketFavoritesService(
-        private val rateManager: IRateManager,
-        private val marketFavoritesManager: MarketFavoritesManager,
-        private val backgroundManager: BackgroundManager
-) : IMarketListFetcher, BackgroundManager.Listener, Clearable {
+    private val repository: MarketFavoritesRepository,
+    private val menuService: MarketFavoritesMenuService,
+    private val currencyManager: ICurrencyManager,
+    private val backgroundManager: BackgroundManager
+) : BackgroundManager.Listener {
+    private var favoritesDisposable: Disposable? = null
+    private var repositoryDisposable: Disposable? = null
+    private var currencyManagerDisposable: Disposable? = null
 
-    private val dataUpdatedSubject = PublishSubject.create<Unit>()
+    private val marketItemsSubject: BehaviorSubject<DataState<List<MarketItem>>> =
+        BehaviorSubject.createDefault(DataState.Loading)
+    val marketItemsObservable: Observable<DataState<List<MarketItem>>>
+        get() = marketItemsSubject
 
-    override val dataUpdatedAsync: Observable<Unit>
-        get() = Observable.merge(marketFavoritesManager.dataUpdatedAsync, dataUpdatedSubject)
+    val sortingFieldTypes = SortingField.values().toList()
+    var sortingField: SortingField = menuService.sortingField
+        set(value) {
+            field = value
+            menuService.sortingField = value
+            rebuildItems()
+        }
 
-    init {
+    private fun fetch(forceRefresh: Boolean) {
+        favoritesDisposable?.dispose()
+
+        repository.get(sortingField, currencyManager.baseCurrency, forceRefresh)
+            .doOnSubscribe {
+                marketItemsSubject.onNext(DataState.Loading)
+            }
+            .subscribeIO({ marketItems ->
+                marketItemsSubject.onNext(DataState.Success(marketItems))
+            }, { error ->
+                marketItemsSubject.onNext(DataState.Error(error))
+            }).let {
+                favoritesDisposable = it
+            }
+    }
+
+    private fun rebuildItems() {
+        fetch(false)
+    }
+
+    private fun forceRefresh() {
+        fetch(true)
+    }
+
+    fun refresh() {
+        forceRefresh()
+    }
+
+    fun start() {
         backgroundManager.registerListener(this)
+
+        currencyManager.baseCurrencyUpdatedSignal
+            .subscribeIO { forceRefresh() }
+            .let { currencyManagerDisposable = it }
+
+        repository.dataUpdatedObservable
+            .subscribeIO { forceRefresh() }
+            .let { repositoryDisposable = it }
+
+        forceRefresh()
+    }
+
+    fun stop() {
+        backgroundManager.unregisterListener(this)
+        favoritesDisposable?.dispose()
+        currencyManagerDisposable?.dispose()
     }
 
     override fun willEnterForeground() {
-        dataUpdatedSubject.onNext(Unit)
-    }
-
-    override fun clear() {
-        backgroundManager.unregisterListener(this)
-    }
-
-    override fun fetchAsync(currency: Currency): Single<List<MarketItem>> {
-        return Single.fromCallable {
-            marketFavoritesManager.getAll().map { it.coinType }
-        }
-                .flatMap { coinTypes ->
-                    rateManager.getCoinMarketList(coinTypes, currency.code)
-                }
-                .map {
-                    it.map{ topMarket ->
-                        MarketItem.createFromCoinMarket(topMarket, currency, null)
-                    }
-                }
+        forceRefresh()
     }
 }

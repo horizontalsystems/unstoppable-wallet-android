@@ -7,21 +7,22 @@ import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.setCoinImage
+import io.horizontalsystems.bankwallet.core.iconPlaceholder
+import io.horizontalsystems.bankwallet.core.iconUrl
+import io.horizontalsystems.bankwallet.core.setRemoteImage
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.swap.coinselect.SelectSwapCoinDialogFragment
-import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.getNavigationLiveData
 import io.horizontalsystems.core.setOnSingleClickListener
+import io.horizontalsystems.marketkit.models.PlatformCoin
 import io.horizontalsystems.views.helpers.LayoutHelper
 import kotlinx.android.synthetic.main.view_card_swap.view.*
 import java.math.BigDecimal
 import java.util.*
-import kotlin.collections.ArrayList
 
-class SwapCoinCardView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
-    : CardView(context, attrs, defStyleAttr) {
+class SwapCoinCardView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
+    CardView(context, attrs, defStyleAttr) {
 
     private val uuid = UUID.randomUUID().leastSignificantBits
 
@@ -32,13 +33,18 @@ class SwapCoinCardView @JvmOverloads constructor(context: Context, attrs: Attrib
         inflate(context, R.layout.view_card_swap, this)
     }
 
-    fun initialize(title: String, viewModel: SwapCoinCardViewModel, fragment: Fragment, lifecycleOwner: LifecycleOwner) {
+    fun initialize(
+        title: String,
+        viewModel: SwapCoinCardViewModel,
+        fragment: Fragment,
+        lifecycleOwner: LifecycleOwner
+    ) {
         titleTextView.text = title
 
         observe(viewModel, lifecycleOwner)
 
         selectedToken.setOnSingleClickListener {
-            val params = SelectSwapCoinDialogFragment.params(uuid, ArrayList(viewModel.tokensForSelection))
+            val params = SelectSwapCoinDialogFragment.params(uuid, viewModel.dex)
             fragment.findNavController().navigate(R.id.selectSwapCoinDialog, params)
         }
 
@@ -52,13 +58,15 @@ class SwapCoinCardView @JvmOverloads constructor(context: Context, attrs: Attrib
             }
         }
 
-        fragment.getNavigationLiveData(SelectSwapCoinDialogFragment.resultBundleKey)?.observe(lifecycleOwner, { bundle ->
-            val requestId = bundle.getLong(SelectSwapCoinDialogFragment.requestIdKey)
-            val coinBalanceItem = bundle.getParcelable<SwapMainModule.CoinBalanceItem>(SelectSwapCoinDialogFragment.coinBalanceItemResultKey)
-            if (requestId == uuid && coinBalanceItem != null) {
-                viewModel.onSelectCoin(coinBalanceItem.coin)
-            }
-        })
+        fragment.getNavigationLiveData(SelectSwapCoinDialogFragment.resultBundleKey)
+            ?.observe(lifecycleOwner, { bundle ->
+                val requestId = bundle.getLong(SelectSwapCoinDialogFragment.requestIdKey)
+                val coinBalanceItem =
+                    bundle.getParcelable<SwapMainModule.CoinBalanceItem>(SelectSwapCoinDialogFragment.coinBalanceItemResultKey)
+                if (requestId == uuid && coinBalanceItem != null) {
+                    viewModel.onSelectCoin(coinBalanceItem.platformCoin)
+                }
+            })
     }
 
     fun setAmountEnabled(enabled: Boolean) {
@@ -85,6 +93,7 @@ class SwapCoinCardView @JvmOverloads constructor(context: Context, attrs: Attrib
         }
 
         viewModel.secondaryInfoLiveData().observe(lifecycleOwner, { amountInput.setSecondaryText(it) })
+        viewModel.warningInfoLiveData().observe(lifecycleOwner, { amountInput.setWarningText(it) })
 
         viewModel.inputParamsLiveData().observe(lifecycleOwner, { amountInput.setInputParams(it) })
 
@@ -104,13 +113,13 @@ class SwapCoinCardView @JvmOverloads constructor(context: Context, attrs: Attrib
         }
     }
 
-    private fun setCoin(coin: Coin?) {
-        if (coin != null) {
-            iconCoin.setCoinImage(coin.type)
-            selectedToken.text = coin.code
+    private fun setCoin(platformCoin: PlatformCoin?) {
+        if (platformCoin != null) {
+            iconCoin.setRemoteImage(platformCoin.coin.iconUrl, platformCoin.coinType.iconPlaceholder)
+            selectedToken.text = platformCoin.code
             selectedToken.setTextColor(context.getColor(R.color.leah))
         } else {
-            iconCoin.setImageResource(R.drawable.ic_coin_placeholder)
+            iconCoin.setImageResource(R.drawable.coin_placeholder)
             selectedToken.text = context.getString(R.string.Swap_TokenSelectorTitle)
             selectedToken.setTextColor(context.getColor(R.color.jacob))
         }

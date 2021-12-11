@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.showkey
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.core.SingleLiveEvent
 
@@ -8,6 +9,8 @@ class ShowKeyViewModel(
 ) : ViewModel() {
     val openUnlockLiveEvent = SingleLiveEvent<Unit>()
     val showKeyLiveEvent = SingleLiveEvent<Unit>()
+    val showKeyTabs = listOf(ShowKeyModule.ShowKeyTab.MnemonicPhrase, ShowKeyModule.ShowKeyTab.PrivateKey)
+    val selectedTab = MutableLiveData(ShowKeyModule.ShowKeyTab.MnemonicPhrase)
 
     val words: List<String>
         get() = service.words
@@ -31,6 +34,10 @@ class ShowKeyViewModel(
 
     fun onUnlock() {
         showKeyLiveEvent.postValue(Unit)
+    }
+
+    fun onSelectTab(tab: ShowKeyModule.ShowKeyTab) {
+        selectedTab.postValue(tab)
     }
 
 }

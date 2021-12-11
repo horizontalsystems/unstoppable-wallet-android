@@ -7,9 +7,8 @@ import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.SwapError
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceService
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapPendingAllowanceService
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapPendingAllowanceState
-import io.horizontalsystems.bankwallet.modules.swap.uniswap.UniswapTradeService.PriceImpactLevel
-import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.ethereumkit.models.TransactionData
+import io.horizontalsystems.marketkit.models.PlatformCoin
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -134,13 +133,13 @@ class UniswapService(
         syncState()
     }
 
-    private fun onUpdateCoinFrom(coin: Coin?) {
+    private fun onUpdateCoinFrom(coin: PlatformCoin?) {
         balanceFrom = coin?.let { balance(it) }
         allowanceService.set(coin)
         pendingAllowanceService.set(coin)
     }
 
-    private fun onUpdateCoinTo(coin: Coin?) {
+    private fun onUpdateCoinTo(coin: PlatformCoin?) {
         balanceTo = coin?.let { balance(it) }
     }
 
@@ -162,9 +161,6 @@ class UniswapService(
                 loading = true
             }
             is UniswapTradeService.State.Ready -> {
-                if (state.trade.priceImpactLevel == PriceImpactLevel.Forbidden) {
-                    allErrors.add(SwapError.ForbiddenPriceImpactLevel)
-                }
                 transactionData = try {
                     tradeService.transactionData(state.trade.tradeData)
                 } catch (error: Throwable) {
@@ -212,8 +208,8 @@ class UniswapService(
         }
     }
 
-    private fun balance(coin: Coin): BigDecimal? =
-            (adapterManager.getAdapterForCoin(coin) as? IBalanceAdapter)?.balanceData?.available
+    private fun balance(coin: PlatformCoin): BigDecimal? =
+            (adapterManager.getAdapterForPlatformCoin(coin) as? IBalanceAdapter)?.balanceData?.available
 
     //region models
     sealed class State {
@@ -221,11 +217,6 @@ class UniswapService(
         class Ready(val transactionData: TransactionData) : State()
         object NotReady : State()
     }
-
     //endregion
-
-    companion object {
-        val defaultSlippage = BigDecimal("0.5")
-    }
 
 }

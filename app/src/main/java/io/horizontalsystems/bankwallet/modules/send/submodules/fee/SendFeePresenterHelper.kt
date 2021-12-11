@@ -2,13 +2,13 @@ package io.horizontalsystems.bankwallet.modules.send.submodules.fee
 
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.modules.send.SendModule
-import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.core.entities.Currency
+import io.horizontalsystems.marketkit.models.PlatformCoin
 import java.math.BigDecimal
 
 class SendFeePresenterHelper(
         private val numberFormatter: IAppNumberFormatter,
-        private val coin: Coin,
+        private val coin: PlatformCoin,
         private val baseCurrency: Currency) {
 
     fun feeAmount(coinAmount: BigDecimal? = null, inputType: SendModule.InputType, rate: BigDecimal?): String? {

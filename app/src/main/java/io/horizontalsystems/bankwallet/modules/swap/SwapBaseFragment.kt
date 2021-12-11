@@ -9,7 +9,6 @@ import io.horizontalsystems.bankwallet.core.BaseFragment
 abstract class SwapBaseFragment : BaseFragment() {
 
     private val mainViewModel by navGraphViewModels<SwapMainViewModel>(R.id.swapFragment)
-
     protected val dex: SwapMainModule.Dex
         get() = mainViewModel.dex
 

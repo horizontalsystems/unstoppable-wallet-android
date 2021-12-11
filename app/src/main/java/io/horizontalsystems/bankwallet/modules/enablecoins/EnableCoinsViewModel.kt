@@ -39,7 +39,7 @@ class EnableCoinsViewModel(private val service: EnableCoinsService) : ViewModel(
                 hudStateLiveData.postValue(HudState.Loading)
             }
             is EnableCoinsService.State.Success -> {
-                hudStateLiveData.postValue(HudState.Success(state.coins.size))
+                hudStateLiveData.postValue(HudState.Success(state.coinTypes.size))
             }
             is EnableCoinsService.State.Failure -> {
                 hudStateLiveData.postValue(HudState.Error)

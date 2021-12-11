@@ -1,30 +1,26 @@
 package io.horizontalsystems.bankwallet.modules.coin
 
-import android.os.Parcelable
 import androidx.annotation.DrawableRes
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.bankwallet.modules.coin.CoinDataClickType.SecurityInfo
-import io.horizontalsystems.bankwallet.modules.coin.audits.CoinAuditItem
-import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
+import io.horizontalsystems.bankwallet.entities.order
+import io.horizontalsystems.bankwallet.modules.coin.overview.CoinOverviewItem
+import io.horizontalsystems.bankwallet.modules.coin.overview.CoinOverviewViewItem
 import io.horizontalsystems.chartview.ChartData
 import io.horizontalsystems.chartview.ChartDataFactory
 import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.chartview.models.ChartPoint
 import io.horizontalsystems.chartview.models.MacdInfo
-import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.core.helpers.DateHelper
+import io.horizontalsystems.marketkit.models.*
 import io.horizontalsystems.views.ListPosition
-import io.horizontalsystems.xrateskit.entities.*
-import kotlinx.android.parcel.Parcelize
 import java.lang.Long.max
 import java.math.BigDecimal
-import java.math.RoundingMode
 import java.net.URI
-import java.util.*
 
 data class ChartInfoData(
     val chartData: ChartData,
@@ -37,40 +33,53 @@ data class ChartPointViewItem(
     val date: Long,
     val price: CurrencyValue,
     val volume: CurrencyValue?,
+    val dominance: BigDecimal?,
     val macdInfo: MacdInfo?
 )
 
 data class MarketTickerViewItem(
-    val title: String,
-    val subtitle: String,
-    val value: String,
-    val subvalue: String,
-    val imageUrl: String?,
+    val market: String,
+    val marketImageUrl: String?,
+    val pair: String,
+    val rate: String,
+    val volume: String,
 ) {
     fun areItemsTheSame(other: MarketTickerViewItem): Boolean {
-        return title == other.title && subtitle == other.subtitle
+        return market == other.market && pair == other.pair
     }
 
     fun areContentsTheSame(other: MarketTickerViewItem): Boolean {
-        return value == other.value && subvalue == other.subvalue && imageUrl == other.imageUrl
+        return rate == other.rate && volume == other.volume && marketImageUrl == other.marketImageUrl
     }
 }
 
 sealed class RoiViewItem {
+    abstract var listPosition: ListPosition?
     class HeaderRowViewItem(
         val title: String,
         val periods: List<TimePeriod>,
-        var listPosition: ListPosition? = null
+        override var listPosition: ListPosition? = null
     ) : RoiViewItem()
 
     class RowViewItem(
         val title: String,
         val values: List<BigDecimal?>,
-        var listPosition: ListPosition? = null
+        override var listPosition: ListPosition? = null
     ) : RoiViewItem()
 }
+open class ContractInfo(
+    val rawValue: String,
+    @DrawableRes val logoResId: Int,
+    val explorerUrl: String
+) {
+    val shortened = shortenAddress(rawValue)
 
-data class ContractInfo(val title: String, val value: String)
+    private fun shortenAddress(address: String) = if (address.length >= 20) {
+        address.take(8) + "..." + address.takeLast(8)
+    } else {
+        address
+    }
+}
 
 data class CoinDataItem(
     val title: String,
@@ -80,33 +89,8 @@ data class CoinDataItem(
     val valueDecorated: Boolean = false,
     @DrawableRes val icon: Int? = null,
     var listPosition: ListPosition? = null,
-    val clickType: CoinDataClickType? = null,
     val rankLabel: String? = null
 )
-
-sealed class CoinDataClickType: Parcelable {
-    @Parcelize
-    object MetricChart : CoinDataClickType()
-    @Parcelize
-    object Markets : CoinDataClickType()
-    @Parcelize
-    object TvlRank : CoinDataClickType()
-    @Parcelize
-    object TradingVolumeMetricChart : CoinDataClickType()
-    @Parcelize
-    object MajorHolders : CoinDataClickType()
-    @Parcelize
-    object FundsInvested : CoinDataClickType()
-
-    @Parcelize
-    class SecurityAudits(val coinType: CoinType) : CoinDataClickType()
-
-    @Parcelize
-    class SecurityInfo(val title: Int, val items: List<Item>) : CoinDataClickType() {
-        @Parcelize
-        class Item(val title: Int, val color: Int, val info: Int): Parcelable
-    }
-}
 
 sealed class InvestorItem {
     data class Header(val title: String) : InvestorItem()
@@ -128,8 +112,6 @@ sealed class MajorHolderItem {
         val sharePercent: String
     ) : MajorHolderItem()
 }
-
-data class AboutText(val value: String, val type: CoinMeta.DescriptionType)
 
 data class CoinLink(
     val url: String,
@@ -160,6 +142,7 @@ class CoinViewFactory(
             ChartType.WEEKLY -> ChartView.ChartType.WEEKLY
             ChartType.WEEKLY2 -> ChartView.ChartType.WEEKLY2
             ChartType.MONTHLY -> ChartView.ChartType.MONTHLY
+            ChartType.MONTHLY_BY_DAY -> ChartView.ChartType.MONTHLY_BY_DAY
             ChartType.MONTHLY3 -> ChartView.ChartType.MONTHLY3
             ChartType.MONTHLY6 -> ChartView.ChartType.MONTHLY6
             ChartType.MONTHLY12 -> ChartView.ChartType.MONTHLY12
@@ -172,339 +155,33 @@ class CoinViewFactory(
         return ChartInfoData(chartData, chartType, maxValue, minValue)
     }
 
-    fun getRoi(
-        rateDiffs: Map<TimePeriod, Map<String, BigDecimal>>,
-        roiCoinCodes: List<String>,
-        roiPeriods: List<TimePeriod>
-    ): List<RoiViewItem> {
-        if (rateDiffs.isEmpty()) {
-            return listOf()
-        }
-
+    fun getRoi(performance: Map<String, Map<TimePeriod, BigDecimal>>): List<RoiViewItem> {
         val rows = mutableListOf<RoiViewItem>()
-        rows.add(RoiViewItem.HeaderRowViewItem("ROI", roiPeriods))
 
-        roiCoinCodes.forEachIndexed { index, coinCode ->
-            val values = roiPeriods.map { period ->
-                rateDiffs[period]?.get(coinCode)
-            }
-            rows.add(RoiViewItem.RowViewItem("vs $coinCode", values))
-        }
-
-        rows.forEachIndexed { index, item ->
-            when (item) {
-                is RoiViewItem.RowViewItem -> item.listPosition =
-                    ListPosition.Companion.getListPosition(rows.size, index)
-                is RoiViewItem.HeaderRowViewItem -> item.listPosition =
-                    ListPosition.Companion.getListPosition(rows.size, index)
+        val timePeriods = performance.map { it.value.keys }.flatten().distinct()
+        rows.add(RoiViewItem.HeaderRowViewItem("ROI", timePeriods, ListPosition.First))
+        performance.forEach { (vsCurrency, performanceVsCurrency) ->
+            if (performanceVsCurrency.isNotEmpty()) {
+                val values = timePeriods.map { performanceVsCurrency[it] }
+                rows.add(RoiViewItem.RowViewItem("vs ${vsCurrency.uppercase()}", values, ListPosition.Middle))
             }
         }
+        rows.lastOrNull()?.listPosition = ListPosition.Last
 
         return rows
     }
 
-    fun getTvlInfo(coinMarket: CoinMarketDetails, currency: Currency): List<CoinDataItem> {
-        val tvlInfoList = mutableListOf<CoinDataItem>()
+    fun getOverviewViewItem(item: CoinOverviewItem, fullCoin: FullCoin): CoinOverviewViewItem {
+        val overview = item.marketInfoOverview
 
-        coinMarket.defiTvlInfo?.let { defiTvlInfo ->
-            tvlInfoList.add(
-                CoinDataItem(
-                    Translator.getString(R.string.CoinPage_Tvl),
-                    formatFiatShortened(defiTvlInfo.tvl, currency.symbol),
-                    icon = R.drawable.ic_chart_20,
-                    clickType = CoinDataClickType.MetricChart
-                )
-            )
-            tvlInfoList.add(
-                CoinDataItem(
-                    title = Translator.getString(R.string.CoinPage_TvlRank),
-                    value = "#${defiTvlInfo.tvlRank}",
-                    icon = R.drawable.ic_arrow_right,
-                    clickType = CoinDataClickType.TvlRank
-                )
-            )
-            tvlInfoList.add(
-                CoinDataItem(
-                    Translator.getString(R.string.CoinPage_TvlMCapRatio),
-                    numberFormatter.format(defiTvlInfo.marketCapTvlRatio, 0, 2)
-                )
-            )
-        }
-
-        setListPosition(tvlInfoList)
-
-        return tvlInfoList
-    }
-
-    fun getMarketData(
-        coinMarket: CoinMarketDetails,
-        currency: Currency,
-        coinCode: String
-    ): MutableList<CoinDataItem> {
-        val marketData = mutableListOf<CoinDataItem>()
-        if (coinMarket.marketCap > BigDecimal.ZERO) {
-            marketData.add(
-                CoinDataItem(
-                    Translator.getString(R.string.CoinPage_MarketCap),
-                    formatFiatShortened(coinMarket.marketCap, currency.symbol),
-                    rankLabel = coinMarket.marketCapRank?.let { "#$it" })
-            )
-        }
-        if (coinMarket.circulatingSupply > BigDecimal.ZERO) {
-            val (shortenValue, suffix) = numberFormatter.shortenValue(coinMarket.circulatingSupply)
-            val value = "$shortenValue $suffix $coinCode"
-            marketData.add(
-                CoinDataItem(
-                    Translator.getString(R.string.CoinPage_inCirculation),
-                    value
-                )
-            )
-        }
-        if (coinMarket.totalSupply > BigDecimal.ZERO) {
-            val (shortenValue, suffix) = numberFormatter.shortenValue(coinMarket.totalSupply)
-            val value = "$shortenValue $suffix $coinCode"
-            marketData.add(CoinDataItem(Translator.getString(R.string.CoinPage_TotalSupply), value))
-        }
-        if (coinMarket.marketCap > BigDecimal.ZERO && coinMarket.circulatingSupply > BigDecimal.ZERO && coinMarket.totalSupply > BigDecimal.ZERO) {
-            val rate = coinMarket.marketCap.divide(
-                coinMarket.circulatingSupply,
-                SCALE_UP_TO_BILLIONTH,
-                RoundingMode.HALF_EVEN
-            )
-            val dilutedMarketCap = coinMarket.totalSupply.multiply(rate)
-            marketData.add(
-                CoinDataItem(
-                    Translator.getString(R.string.CoinPage_DilutedMarketCap),
-                    formatFiatShortened(dilutedMarketCap, currency.symbol)
-                )
-            )
-        }
-        coinMarket.meta.launchDate?.let { date ->
-            val formattedDate = DateHelper.formatDate(date, "MMM d, yyyy")
-            marketData.add(
-                CoinDataItem(
-                    Translator.getString(R.string.CoinPage_LaunchDate),
-                    formattedDate
-                )
-            )
-        }
-
-        //set List position by total list size
-        setListPosition(marketData)
-
-        return marketData
-    }
-
-    fun getLinks(coinMarketDetails: CoinMarketDetails, guideUrl: String?): List<CoinLink> {
-        val links = mutableListOf<CoinLink>()
-        guideUrl?.let {
-            links.add(
-                CoinLink(
-                    it,
-                    LinkType.GUIDE,
-                    getTitle(LinkType.GUIDE),
-                    getIcon(LinkType.GUIDE)
-                )
-            )
-        }
-
-        coinMarketDetails.meta.links.forEach { (linkType, link) ->
-            links.add(CoinLink(link, linkType, getTitle(linkType, link), getIcon(linkType)))
-        }
-
-        links.forEachIndexed { index, link ->
-            link.listPosition = ListPosition.getListPosition(links.size, index)
-        }
-
-        return links
-    }
-
-    fun getTradingVolume(coinDetails: CoinMarketDetails, currency: Currency): List<CoinDataItem> {
-        val items = mutableListOf<CoinDataItem>()
-
-        if (coinDetails.volume24h > BigDecimal.ZERO) {
-            val volume = formatFiatShortened(coinDetails.volume24h, currency.symbol)
-            items.add(
-                CoinDataItem(
-                    title = Translator.getString(R.string.CoinPage_TradingVolume),
-                    value = volume,
-                    icon = R.drawable.ic_chart_20,
-                    clickType = CoinDataClickType.TradingVolumeMetricChart
-                )
-            )
-        }
-
-        if (coinDetails.tickers.isNotEmpty()) {
-            items.add(
-                CoinDataItem(
-                    title = Translator.getString(R.string.CoinPage_Markets),
-                    icon = R.drawable.ic_arrow_right,
-                    clickType = CoinDataClickType.Markets
-                )
-            )
-        }
-
-        setListPosition(items)
-
-        return items
-    }
-
-    fun getInvestorData(coinDetails: CoinMarketDetails, topTokenHolders: List<TokenHolder>): List<CoinDataItem> {
-        val items = mutableListOf<CoinDataItem>()
-
-        if (topTokenHolders.isNotEmpty()) {
-            items.add(
-                CoinDataItem(
-                    title = Translator.getString(R.string.CoinPage_MajorHolders),
-                    icon = R.drawable.ic_arrow_right,
-                    clickType = CoinDataClickType.MajorHolders
-                )
-            )
-        }
-
-        if (coinDetails.meta.fundCategories.isNotEmpty()) {
-            items.add(
-                CoinDataItem(
-                    title = Translator.getString(R.string.CoinPage_FundsInvested),
-                    icon = R.drawable.ic_arrow_right,
-                    clickType = CoinDataClickType.FundsInvested
-                )
-            )
-        }
-
-        setListPosition(items)
-
-        return items
-    }
-
-    fun getSecurityParams(security: SecurityParameter): MutableList<CoinDataItem> {
-        val bgColorGreen = R.drawable.label_green_background
-        val bgColorRed = R.drawable.label_red_background
-        val bgColorBlue = R.drawable.label_blue_background
-
-        val items = mutableListOf<CoinDataItem>()
-
-        val (securityText, securityBgColor) = when (security.privacy) {
-            Level.LOW -> Pair(R.string.CoinPage_SecurityParams_Low, bgColorRed)
-            Level.MEDIUM -> Pair(R.string.CoinPage_SecurityParams_Medium, bgColorBlue)
-            Level.HIGH -> Pair(R.string.CoinPage_SecurityParams_High, bgColorGreen)
-        }
-
-        items.add(
-            CoinDataItem(
-                title = Translator.getString(R.string.CoinPage_SecurityParams_Privacy),
-                valueLabeled = Translator.getString(securityText),
-                valueLabeledBackground = securityBgColor,
-                icon = R.drawable.ic_info_20,
-                clickType = SecurityInfo(
-                    title = R.string.CoinPage_SecurityParams_Privacy,
-                    items = listOf(
-                        SecurityInfo.Item(R.string.CoinPage_SecurityParams_Low, R.color.lucian, R.string.CoinPage_SecurityParams_Privacy_Low),
-                        SecurityInfo.Item(R.string.CoinPage_SecurityParams_Medium, R.color.issyk_blue, R.string.CoinPage_SecurityParams_Privacy_Medium),
-                        SecurityInfo.Item(R.string.CoinPage_SecurityParams_High, R.color.remus, R.string.CoinPage_SecurityParams_Privacy_High)
-
-                    )
-                )
-            )
+        return CoinOverviewViewItem(
+            roi = getRoi(overview.performance),
+            categories = overview.categories.map { it.name },
+            contracts = getContractInfo(overview.coinTypes),
+            links = getLinks(overview, item.guideUrl),
+            about = overview.description,
+            marketData = getMarketItems(item)
         )
-
-        val (issuance, issuanceColor) = if (security.decentralized) {
-            Pair(R.string.CoinPage_SecurityParams_Decentralized, bgColorGreen)
-        } else {
-            Pair(R.string.CoinPage_SecurityParams_Centralized, bgColorRed)
-        }
-
-        items.add(
-            CoinDataItem(
-                title = Translator.getString(R.string.CoinPage_SecurityParams_Issuance),
-                valueLabeled = Translator.getString(issuance),
-                valueLabeledBackground = issuanceColor,
-                icon = R.drawable.ic_info_20,
-                clickType = SecurityInfo(
-                    title = R.string.CoinPage_SecurityParams_Issuance,
-                    items = listOf(
-                        SecurityInfo.Item(R.string.CoinPage_SecurityParams_Decentralized, R.color.remus, R.string.CoinPage_SecurityParams_Issuance_Decentralized),
-                        SecurityInfo.Item(R.string.CoinPage_SecurityParams_Centralized, R.color.lucian, R.string.CoinPage_SecurityParams_Issuance_Centralized)
-                    )
-                )
-            )
-        )
-
-        val (confiscationResistance, confiscationColor) = if (security.confiscationResistance) {
-            Pair(R.string.CoinPage_SecurityParams_Yes, bgColorGreen)
-        } else {
-            Pair(R.string.CoinPage_SecurityParams_No, bgColorRed)
-        }
-
-        items.add(
-            CoinDataItem(
-                title = Translator.getString(R.string.CoinPage_SecurityParams_ConfiscationResistance),
-                valueLabeled = Translator.getString(confiscationResistance),
-                valueLabeledBackground = confiscationColor,
-                icon = R.drawable.ic_info_20,
-                clickType = SecurityInfo(
-                    title = R.string.CoinPage_SecurityParams_ConfiscationResistance,
-                    items = listOf(
-                        SecurityInfo.Item(R.string.CoinPage_SecurityParams_Yes, R.color.remus, R.string.CoinPage_SecurityParams_ConfiscationResistance_Yes),
-                        SecurityInfo.Item(R.string.CoinPage_SecurityParams_No, R.color.lucian, R.string.CoinPage_SecurityParams_ConfiscationResistance_No)
-                    )
-                )
-            )
-        )
-
-        val (censorshipResistance, censorshipColor) = if (security.censorshipResistance) {
-            Pair(R.string.CoinPage_SecurityParams_Yes, bgColorGreen)
-        } else {
-            Pair(R.string.CoinPage_SecurityParams_No, bgColorRed)
-        }
-
-        items.add(
-            CoinDataItem(
-                title = Translator.getString(R.string.CoinPage_SecurityParams_CensorshipResistance),
-                valueLabeled = Translator.getString(censorshipResistance),
-                valueLabeledBackground = censorshipColor,
-                icon = R.drawable.ic_info_20,
-                clickType = SecurityInfo(
-                    title = R.string.CoinPage_SecurityParams_CensorshipResistance,
-                    items = listOf(
-                        SecurityInfo.Item(R.string.CoinPage_SecurityParams_Yes, R.color.remus, R.string.CoinPage_SecurityParams_CensorshipResistance_Yes),
-                        SecurityInfo.Item(R.string.CoinPage_SecurityParams_No, R.color.lucian, R.string.CoinPage_SecurityParams_CensorshipResistance_No)
-                    )
-                )
-            )
-        )
-
-        return items
-    }
-
-    fun getCoinAudits(coinType: CoinType): CoinDataItem? {
-        if (coinType !is CoinType.Erc20 && coinType !is CoinType.Bep20) {
-            return null
-        }
-
-        return CoinDataItem(
-            title = Translator.getString(R.string.CoinPage_SecurityParams_Audits),
-            icon = R.drawable.ic_arrow_right,
-            clickType = CoinDataClickType.SecurityAudits(coinType)
-        )
-    }
-
-    fun getCoinInvestorItems(fundCategories: List<CoinFundCategory>): List<InvestorItem> {
-        val items = mutableListOf<InvestorItem>()
-        fundCategories.forEach { category ->
-            items.add(InvestorItem.Header(category.name))
-            category.funds.forEachIndexed { index, fund ->
-                items.add(
-                    InvestorItem.Fund(
-                        fund.name,
-                        fund.url,
-                        TextHelper.getCleanedUrl(fund.url),
-                        ListPosition.getListPosition(category.funds.size, index)
-                    )
-                )
-            }
-        }
-        return items
     }
 
     fun getCoinMajorHolders(topTokenHolders: List<TokenHolder>): List<MajorHolderItem> {
@@ -531,70 +208,154 @@ class CoinViewFactory(
         return list
     }
 
-    fun getCoinAudits(audits: List<Auditor>): List<CoinAuditItem> {
-        if (audits.isEmpty()) {
-            return emptyList()
+    private fun getMarketItems(
+        item: CoinOverviewItem,
+    ): MutableList<CoinDataItem> {
+        val overview = item.marketInfoOverview
+        val items = mutableListOf<CoinDataItem>()
+        overview.marketCap?.let {
+            val marketCapString = formatFiatShortened(it, currency.symbol)
+            val marketCapRankString = overview.marketCapRank?.let { "#$it" }
+            items.add(CoinDataItem(Translator.getString(R.string.CoinPage_MarketCap),
+                marketCapString,
+                rankLabel = marketCapRankString))
         }
 
-        val list = mutableListOf<CoinAuditItem>(    )
-        audits.forEach { auditor ->
-            list.add(CoinAuditItem.Header(auditor.name))
+        overview.volume24h?.let {
+            val volumeString = formatFiatShortened(it, currency.symbol)
+            items.add(CoinDataItem(Translator.getString(R.string.CoinPage_TradingVolume),
+                volumeString))
+        }
 
-            auditor.reports.forEachIndexed { index, report ->
-                list.add(
-                    CoinAuditItem.Report(
-                        report.name,
-                        Date(report.timestamp * 1000),
-                        report.issues,
-                        report.link,
-                        ListPosition.Companion.getListPosition(auditor.reports.size, index)
-                    )
-                )
+        overview.tvl?.let {
+            val tvlString = formatFiatShortened(it, currency.symbol)
+            items.add(CoinDataItem(Translator.getString(R.string.CoinPage_Tvl), tvlString))
+        }
+
+        overview.dilutedMarketCap?.let {
+            val dilutedMarketCapString = formatFiatShortened(it, currency.symbol)
+            items.add(CoinDataItem(Translator.getString(R.string.CoinPage_DilutedMarketCap),
+                dilutedMarketCapString))
+        }
+
+        overview.totalSupply?.let {
+            val totalSupplyString = numberFormatter.formatCoin(it,
+                item.coinCode,
+                0,
+                numberFormatter.getSignificantDecimalCoin(it))
+            items.add(CoinDataItem(Translator.getString(R.string.CoinPage_TotalSupply),
+                totalSupplyString))
+        }
+
+        overview.circulatingSupply?.let {
+            val supplyString = numberFormatter.formatCoin(it,
+                item.coinCode,
+                0,
+                numberFormatter.getSignificantDecimalCoin(it))
+            items.add(CoinDataItem(Translator.getString(R.string.CoinPage_inCirculation),
+                supplyString))
+        }
+
+        overview.genesisDate?.let {
+            val genesisDateString = DateHelper.formatDate(it, "MMM d, yyyy")
+            items.add(CoinDataItem(Translator.getString(R.string.CoinPage_LaunchDate),
+                genesisDateString))
+        }
+
+        return items
+    }
+
+
+    private fun getContractInfo(coinTypes: List<CoinType>) = coinTypes.sortedBy { it.order }.mapNotNull { coinType ->
+        when (coinType) {
+            is CoinType.Erc20 -> ContractInfo(coinType.address, R.drawable.logo_ethereum_24,"https://etherscan.io/token/${coinType.address}")
+            is CoinType.Bep20 -> ContractInfo(coinType.address, R.drawable.logo_binancesmartchain_24,"https://bscscan.com/token/${coinType.address}")
+            is CoinType.Bep2 -> ContractInfo(coinType.symbol, R.drawable.logo_bep2_24,"https://explorer.binance.org/asset/${coinType.symbol}")
+            is CoinType.ArbitrumOne -> ContractInfo(coinType.address, R.drawable.logo_arbitrum_24, "https://arbiscan.io/token/${coinType.address}")
+            is CoinType.Avalanche -> ContractInfo(coinType.address, R.drawable.logo_avalanche_24, "https://avascan.info/blockchain/c/token/${coinType.address}")
+            is CoinType.Fantom -> ContractInfo(coinType.address, R.drawable.logo_fantom_24, "https://ftmscan.com/token/${coinType.address}")
+            is CoinType.HarmonyShard0 -> ContractInfo(coinType.address, R.drawable.logo_harmony_24, "https://explorer.harmony.one/address/${coinType.address}")
+            is CoinType.HuobiToken -> ContractInfo(coinType.address, R.drawable.logo_heco_24, "https://hecoinfo.com/token/${coinType.address}")
+            is CoinType.Iotex -> ContractInfo(coinType.address, R.drawable.logo_iotex_24, "https://iotexscan.io/token/${coinType.address}")
+            is CoinType.Moonriver -> ContractInfo(coinType.address, R.drawable.logo_moonriver_24, "https://blockscout.moonriver.moonbeam.network/address/${coinType.address}")
+            is CoinType.OkexChain -> ContractInfo(coinType.address, R.drawable.logo_okex_24, "https://www.oklink.com/oec/address/${coinType.address}")
+            is CoinType.PolygonPos -> ContractInfo(coinType.address, R.drawable.logo_polygon_24, "https://polygonscan.com/token/${coinType.address}")
+            is CoinType.Solana -> ContractInfo(coinType.address, R.drawable.logo_solana_24, "https://explorer.solana.com/address/${coinType.address}")
+            is CoinType.Sora -> ContractInfo(coinType.address, R.drawable.logo_sora_24, "https://sorascan.com/sora-mainnet/asset/${coinType.address}")
+            is CoinType.Tomochain -> ContractInfo(coinType.address, R.drawable.logo_tomochain_24, "https://scan.tomochain.com/tokens/${coinType.address}")
+            is CoinType.Xdai -> ContractInfo(coinType.address, R.drawable.logo_xdai_24, "https://blockscout.com/xdai/mainnet/address/${coinType.address}")
+            else -> null
+        }
+    }
+
+    fun getLinks(coinMarketDetails: MarketInfoOverview, guideUrl: String?): List<CoinLink> {
+        val linkTypes = listOf(
+            LinkType.Guide,
+            LinkType.Website,
+            LinkType.Whitepaper,
+            LinkType.Reddit,
+            LinkType.Twitter,
+            LinkType.Telegram,
+            LinkType.Github,
+        )
+
+        val links = linkTypes.mapNotNull { linkType ->
+            if (linkType == LinkType.Guide) {
+                guideUrl?.let {
+                    CoinLink(guideUrl, linkType, getTitle(linkType, guideUrl), getIcon(linkType))
+                }
+            } else {
+                coinMarketDetails.links[linkType]?.let { link ->
+                    val trimmed = link.trim()
+                    if (trimmed.isNotBlank()) {
+                        CoinLink(trimmed, linkType, getTitle(linkType, trimmed), getIcon(linkType))
+                    } else {
+                        null
+                    }
+                }
             }
         }
 
-        return list
+        links.forEachIndexed { index, link ->
+            link.listPosition = ListPosition.getListPosition(links.size, index)
+        }
+
+        return links
     }
 
     fun getFormattedLatestRate(currencyValue: CurrencyValue): String {
-        return numberFormatter.formatFiat(currencyValue.value, currencyValue.currency.symbol, 2, 4)
-    }
-
-    fun setListPosition(list: MutableList<CoinDataItem>) {
-        list.forEachIndexed { index, coinDataItem ->
-            coinDataItem.listPosition = ListPosition.getListPosition(list.size, index)
-        }
+        val significantDecimal = App.numberFormatter.getSignificantDecimalFiat(currencyValue.value)
+        return numberFormatter.formatFiat(currencyValue.value, currencyValue.currency.symbol, 2, significantDecimal)
     }
 
     private fun getIcon(linkType: LinkType): Int {
         return when (linkType) {
-            LinkType.GUIDE -> R.drawable.ic_academy_20
-            LinkType.WEBSITE -> R.drawable.ic_globe
-            LinkType.WHITEPAPER -> R.drawable.ic_clipboard
-            LinkType.TWITTER -> R.drawable.ic_twitter
-            LinkType.TELEGRAM -> R.drawable.ic_telegram
-            LinkType.REDDIT -> R.drawable.ic_reddit
-            LinkType.GITHUB -> R.drawable.ic_github
-            LinkType.YOUTUBE -> R.drawable.ic_globe
+            LinkType.Guide -> R.drawable.ic_academy_20
+            LinkType.Website -> R.drawable.ic_globe_20
+            LinkType.Whitepaper -> R.drawable.ic_clipboard_20
+            LinkType.Twitter -> R.drawable.ic_twitter_20
+            LinkType.Telegram -> R.drawable.ic_telegram_20
+            LinkType.Reddit -> R.drawable.ic_reddit_20
+            LinkType.Github -> R.drawable.ic_github_20
         }
     }
 
     private fun getTitle(linkType: LinkType, link: String? = null): String {
         return when (linkType) {
-            LinkType.GUIDE -> Translator.getString(R.string.CoinPage_Guide)
-            LinkType.WEBSITE -> {
+            LinkType.Guide -> Translator.getString(R.string.CoinPage_Guide)
+            LinkType.Website -> {
                 link?.let { URI(it).host.replaceFirst("www.", "") }
                     ?: Translator.getString(R.string.CoinPage_Website)
             }
-            LinkType.WHITEPAPER -> Translator.getString(R.string.CoinPage_Whitepaper)
-            LinkType.TWITTER -> {
+            LinkType.Whitepaper -> Translator.getString(R.string.CoinPage_Whitepaper)
+            LinkType.Twitter -> {
                 link?.split("/")?.lastOrNull()?.replaceFirst("@", "")?.let { "@$it" }
                     ?: Translator.getString(R.string.CoinPage_Twitter)
             }
-            LinkType.TELEGRAM -> Translator.getString(R.string.CoinPage_Telegram)
-            LinkType.REDDIT -> Translator.getString(R.string.CoinPage_Reddit)
-            LinkType.GITHUB -> Translator.getString(R.string.CoinPage_Github)
-            LinkType.YOUTUBE -> Translator.getString(R.string.CoinPage_Youtube)
+            LinkType.Telegram -> Translator.getString(R.string.CoinPage_Telegram)
+            LinkType.Reddit -> Translator.getString(R.string.CoinPage_Reddit)
+            LinkType.Github -> Translator.getString(R.string.CoinPage_Github)
+//            LinkType.YOUTUBE -> Translator.getString(R.string.CoinPage_Youtube)
         }
     }
 
@@ -646,8 +407,15 @@ class CoinViewFactory(
         ) + " " + shortCapValue.second
     }
 
-    companion object {
-        const val SCALE_UP_TO_BILLIONTH = 9
-    }
-
 }
+
+data class MarketDataViewItem(
+    val marketCap: String?,
+    val marketCapRank: String?,
+    val volume24h: String?,
+    val tvl: String?,
+    val genesisDate: String?,
+    val circulatingSupply: String?,
+    val totalSupply: String?,
+    val dilutedMarketCap: String?,
+)

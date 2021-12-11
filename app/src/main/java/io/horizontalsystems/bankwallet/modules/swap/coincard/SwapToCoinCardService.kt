@@ -2,15 +2,15 @@ package io.horizontalsystems.bankwallet.modules.swap.coincard
 
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.AmountType
-import io.horizontalsystems.coinkit.models.Coin
+import io.horizontalsystems.bankwallet.modules.swap.uniswap.UniswapTradeService
+import io.horizontalsystems.marketkit.models.PlatformCoin
 import io.reactivex.Observable
 import java.math.BigDecimal
 import java.util.*
 
 class SwapToCoinCardService(
-        private val service: SwapMainModule.ISwapService,
-        private val tradeService: SwapMainModule.ISwapTradeService,
-        private val coinProvider: SwapCoinProvider
+    private val service: SwapMainModule.ISwapService,
+    private val tradeService: SwapMainModule.ISwapTradeService,
 ) : ISwapCoinCardService {
     private val amountType: AmountType = AmountType.ExactTo
 
@@ -20,14 +20,11 @@ class SwapToCoinCardService(
     override val amount: BigDecimal?
         get() = tradeService.amountTo
 
-    override val coin: Coin?
+    override val coin: PlatformCoin?
         get() = tradeService.coinTo
 
     override val balance: BigDecimal?
         get() = service.balanceTo
-
-    override val tokensForSelection: List<SwapMainModule.CoinBalanceItem>
-        get() = coinProvider.getCoins()
 
     override val isEstimatedObservable: Observable<Boolean>
         get() = tradeService.amountTypeObservable.map { it != amountType }
@@ -35,7 +32,7 @@ class SwapToCoinCardService(
     override val amountObservable: Observable<Optional<BigDecimal>>
         get() = tradeService.amountToObservable
 
-    override val coinObservable: Observable<Optional<Coin>>
+    override val coinObservable: Observable<Optional<PlatformCoin>>
         get() = tradeService.coinToObservable
 
     override val balanceObservable: Observable<Optional<BigDecimal>>
@@ -44,11 +41,32 @@ class SwapToCoinCardService(
     override val errorObservable: Observable<Optional<Throwable>>
         get() = Observable.just(Optional.empty())
 
+    override val amountWarningObservable: Observable<Optional<AmountWarning>>
+        get() = when (tradeService) {
+            is UniswapTradeService -> {
+                tradeService.stateObservable.map { state ->
+                    val highPriceImpact = if (
+                        state is UniswapTradeService.State.Ready &&
+                        state.trade.priceImpactLevel == UniswapTradeService.PriceImpactLevel.Forbidden
+                    ) {
+                        state.trade.tradeData.priceImpact?.let { priceImpact ->
+                            AmountWarning.HighPriceImpact(priceImpact)
+                        }
+                    } else {
+                        null
+                    }
+
+                    Optional.ofNullable(highPriceImpact)
+                }
+            }
+            else -> Observable.just(Optional.ofNullable(null))
+        }
+
     override fun onChangeAmount(amount: BigDecimal?) {
         tradeService.enterAmountTo(amount)
     }
 
-    override fun onSelectCoin(coin: Coin) {
+    override fun onSelectCoin(coin: PlatformCoin) {
         tradeService.enterCoinTo(coin)
     }
 

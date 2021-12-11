@@ -14,18 +14,15 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
 
-    <Button
-        android:id="@+id/btnMax"
-        style="@style/ButtonSecondary"
+    <androidx.compose.ui.platform.ComposeView
+        android:id="@+id/amountInputButtonsCompose"
         android:layout_width="wrap_content"
-        android:layout_height="28dp"
-        android:layout_marginEnd="8dp"
+        android:layout_height="wrap_content"
         android:text="@string/Send_Button_Max"
-        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@id/amountDivider"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:visibility="visible" />
+        tools:layout_height="28dp" />
 
     <TextView
         android:id="@+id/estimatedLabel"
@@ -33,14 +30,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
-        android:layout_marginEnd="10dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
         android:ellipsize="end"
         android:lines="1"
         android:text="@string/Swap_Estimated"
         android:visibility="gone"
         app:layout_constrainedWidth="true"
-        app:layout_constraintBottom_toTopOf="@id/amountDivider"
-        app:layout_constraintEnd_toStartOf="@id/btnMax"
+        app:layout_constraintEnd_toStartOf="@id/amountInputButtonsCompose"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -102,13 +99,29 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
         android:layout_marginEnd="12dp"
-        android:layout_marginTop="8dp"
         android:ellipsize="middle"
         android:singleLine="true"
         android:textColor="@color/bran"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/secondaryArea"
+        app:layout_constraintEnd_toStartOf="@id/txtWarningInfo"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/amountDivider"
+        app:layout_constraintTop_toTopOf="@id/secondaryArea"
         tools:text="$ 210" />
+
+    <TextView
+        android:id="@+id/txtWarningInfo"
+        style="@style/Caption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        android:ellipsize="middle"
+        android:singleLine="true"
+        android:textColor="@color/lucian"
+        app:layout_constraintBottom_toBottomOf="@id/secondaryArea"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/txtHintInfo"
+        app:layout_constraintTop_toTopOf="@id/secondaryArea"
+        tools:text="-12%" />
 
 </merge>

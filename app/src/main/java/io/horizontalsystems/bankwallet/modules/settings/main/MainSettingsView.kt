@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.settings.main
 
 import androidx.annotation.StringRes
 import androidx.lifecycle.MutableLiveData
+import io.horizontalsystems.bankwallet.entities.LaunchPage
 
 class MainSettingsView : MainSettingsModule.IMainSettingsView {
 
@@ -13,6 +14,7 @@ class MainSettingsView : MainSettingsModule.IMainSettingsView {
     val currentThemeName = MutableLiveData<Int>()
     val appVersion = MutableLiveData<String>()
     val termsAccepted = MutableLiveData<Boolean>()
+    val launchScreen = MutableLiveData<LaunchPage>()
 
     override fun setBackedUp(backedUp: Boolean) {
         this.backedUp.postValue(backedUp)
@@ -44,5 +46,9 @@ class MainSettingsView : MainSettingsModule.IMainSettingsView {
 
     override fun setTermsAccepted(termsAccepted: Boolean) {
         this.termsAccepted.postValue(termsAccepted)
+    }
+
+    override fun setLaunchScreen(launchPage: LaunchPage) {
+        launchScreen.postValue(launchPage)
     }
 }

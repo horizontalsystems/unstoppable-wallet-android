@@ -4,29 +4,36 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import io.horizontalsystems.core.findNavController
 import androidx.recyclerview.widget.ConcatAdapter
-import androidx.recyclerview.widget.LinearLayoutManager
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.entities.Guide
+import io.horizontalsystems.bankwallet.entities.GuideCategory
 import io.horizontalsystems.bankwallet.modules.markdown.MarkdownFragment
-import io.horizontalsystems.bankwallet.modules.transactions.FilterAdapter
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.ScrollableTabs
+import io.horizontalsystems.bankwallet.ui.compose.components.TabItem
+import io.horizontalsystems.core.findNavController
 import kotlinx.android.synthetic.main.fragment_guides.*
+import kotlinx.android.synthetic.main.fragment_guides.tabsCompose
 import kotlinx.android.synthetic.main.fragment_guides.toolbar
 
-class GuidesFragment : BaseFragment(), GuidesAdapter.Listener, FilterAdapter.Listener {
+class GuidesFragment : BaseFragment(), GuidesAdapter.Listener {
 
     private val viewModel by viewModels<GuidesViewModel> { GuidesModule.Factory() }
     private val errorAdapter = ErrorAdapter()
     private val guidesAdapter = GuidesAdapter(this)
-    private val filterAdapter = FilterAdapter(this)
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.fragment_guides, container, false)
     }
 
@@ -37,25 +44,30 @@ class GuidesFragment : BaseFragment(), GuidesAdapter.Listener, FilterAdapter.Lis
             findNavController().popBackStack()
         }
 
-        recyclerTags.adapter = filterAdapter
         recyclerGuides.adapter = ConcatAdapter(errorAdapter, guidesAdapter)
 
         observeLiveData()
+
+        tabsCompose.setViewCompositionStrategy(
+            ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+        )
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-
-        recyclerTags.adapter = null
         recyclerGuides.adapter = null
     }
 
     override fun onItemClick(guide: Guide) {
         val arguments = bundleOf(
-                MarkdownFragment.markdownUrlKey to guide.fileUrl,
-                MarkdownFragment.handleRelativeUrlKey to true
+            MarkdownFragment.markdownUrlKey to guide.fileUrl,
+            MarkdownFragment.handleRelativeUrlKey to true
         )
-        findNavController().navigate(R.id.academyFragment_to_markdownFragment, arguments, navOptions())
+        findNavController().navigate(
+            R.id.academyFragment_to_markdownFragment,
+            arguments,
+            navOptions()
+        )
     }
 
     private fun observeLiveData() {
@@ -64,9 +76,8 @@ class GuidesFragment : BaseFragment(), GuidesAdapter.Listener, FilterAdapter.Lis
             guidesAdapter.notifyDataSetChanged()
         })
 
-        viewModel.filters.observe(viewLifecycleOwner, Observer {
-            val selectedFilterItem = viewModel.selectedFilter?.let{ selected -> FilterAdapter.FilterItem(selected) }
-            filterAdapter.setFilters(it.map { filter -> FilterAdapter.FilterItem(filter) }, selectedFilterItem)
+        viewModel.selectedCategory.observe(viewLifecycleOwner, Observer { selectedCategory ->
+            setTabs(selectedCategory)
         })
 
         viewModel.loading.observe(viewLifecycleOwner, Observer {
@@ -78,13 +89,13 @@ class GuidesFragment : BaseFragment(), GuidesAdapter.Listener, FilterAdapter.Lis
         })
     }
 
-    override fun onFilterItemClick(item: FilterAdapter.FilterItem?, itemPosition: Int, itemWidth: Int) {
-        item?.filterId?.let {
-            recyclerGuides.layoutManager?.scrollToPosition(0)
-            viewModel.onSelectFilter(it)
-
-            val leftOffset = recyclerTags.width / 2 - itemWidth / 2
-            (recyclerTags.layoutManager as? LinearLayoutManager)?.scrollToPositionWithOffset(itemPosition, leftOffset)
+    private fun setTabs(selectedCategory: GuideCategory) {
+        val tabItems = viewModel.categories.map { TabItem(it.category, it == selectedCategory, it) }
+        tabsCompose.setContent {
+            ComposeAppTheme {
+                ScrollableTabs(tabItems) { tab -> viewModel.onSelectCategory(tab) }
+            }
         }
     }
+
 }

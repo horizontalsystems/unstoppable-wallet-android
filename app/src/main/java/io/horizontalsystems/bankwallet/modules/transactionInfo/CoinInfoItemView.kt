@@ -5,10 +5,7 @@ import android.util.AttributeSet
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.modules.coin.CoinDataItem
-import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
-import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.views.ListPosition
 import kotlinx.android.synthetic.main.view_coin_info_item.view.*
 
@@ -26,7 +23,6 @@ class CoinInfoItemView : ConstraintLayout {
             value: String? = null,
             valueLabeled: String? = null,
             icon: Int? = null,
-            valueDecorated: Boolean = false,
             rank: String? = null,
             listPosition: ListPosition
     ) {
@@ -35,16 +31,7 @@ class CoinInfoItemView : ConstraintLayout {
         txtRank.isVisible = rank != null
         txtRank.text = rank
 
-        if (valueDecorated) {
-            decoratedText.isVisible = valueDecorated
-            decoratedText.text = value
-            value?.let { decoratedValue ->
-                decoratedText.setOnSingleClickListener {
-                    TextHelper.copyText(decoratedValue)
-                    HudHelper.showSuccessMessage(this, R.string.Hud_Text_Copied)
-                }
-            }
-        } else if (value != null) {
+        if (value != null) {
             valueText.isVisible = true
             valueText.text = value
         } else if (valueLabeled != null) {
@@ -68,7 +55,6 @@ class CoinInfoItemView : ConstraintLayout {
             title = item.title,
             value = item.value,
             valueLabeled = item.valueLabeled,
-            valueDecorated = item.valueDecorated,
             listPosition = item.listPosition ?: ListPosition.Middle,
             icon = item.icon,
             rank = item.rankLabel

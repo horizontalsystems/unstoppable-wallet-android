@@ -14,8 +14,8 @@ android {
         applicationId "io.horizontalsystems.bankwallet"
         minSdkVersion min_sdk_version
         targetSdkVersion compile_sdk_version
-        versionCode 52
-        versionName "0.22.1"
+        versionCode 53
+        versionName "0.23.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         kapt {
@@ -28,6 +28,11 @@ android {
         lintOptions {
             checkReleaseBuilds false
         }
+    }
+
+    buildFeatures {
+        // Enables Jetpack Compose for this module
+        compose true
     }
 
     signingConfigs {
@@ -46,6 +51,7 @@ android {
             minifyEnabled false
             applicationIdSuffix ".dev"
             buildConfigField "boolean", "testMode", "false"
+            resValue "string", "twitterBearerToken", "AAAAAAAAAAAAAAAAAAAAAJgeNwEAAAAA6xVpR6xLKTrxIA3kkSyRA92LDpA%3Da6auybDwcymUyh2BcS6zZwicUdxGtrzJC0qvOSdRwKLeqBGhwB"
             resValue "string", "cryptoCompareApiKey", "2b08fe1dba559ca6acf5e1897b6de8749cee0ace6052d7aa7fccf6aa9f1b3255"
             resValue "string", "uniswapGraphUrl", "https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2"
             resValue "string", "infuraProjectId", "2a1306f1d12f4c109a4d4fb9be46b02e"
@@ -58,6 +64,8 @@ android {
             resValue "string", "faqUrl", "https://raw.githubusercontent.com/horizontalsystems/Unstoppable-Wallet-Website/master/src/faq.json"
             resValue "string", "coinsJsonUrl", "https://raw.githubusercontent.com/horizontalsystems/cryptocurrencies/master/coins.json"
             resValue "string", "providerCoinsJsonUrl", "https://raw.githubusercontent.com/horizontalsystems/cryptocurrencies/master/provider.coins.json"
+            resValue "string", "marketApiBaseUrl", "https://api-dev.blocksdecoded.com"
+            resValue "string", "marketApiKey", "IQf1uAjkthZp1i2pYzkXFDom"
         }
 
         apptestnet {
@@ -67,7 +75,7 @@ android {
             matchingFallbacks = ['debug']
         }
 
-        appcenter {
+        appcenterdebug {
             initWith debug
             defaultConfig.versionCode System.getenv("BUILD_NUMBER")?.toInteger() ?: defaultConfig.versionCode
             applicationIdSuffix ".dev.appcenter"
@@ -80,6 +88,7 @@ android {
             minifyEnabled false
             buildConfigField "boolean", "testMode", "false"
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            resValue "string", "twitterBearerToken", "AAAAAAAAAAAAAAAAAAAAAJgeNwEAAAAA6xVpR6xLKTrxIA3kkSyRA92LDpA%3Da6auybDwcymUyh2BcS6zZwicUdxGtrzJC0qvOSdRwKLeqBGhwB"
             resValue "string", "cryptoCompareApiKey", ""
             resValue "string", "uniswapGraphUrl", "https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2"
             resValue "string", "infuraProjectId", "5bf760228fcd47bb8d277dba49b7b369"
@@ -88,23 +97,39 @@ android {
             resValue "string", "bscscanKey", "HBQQN4GTKCHYSRZCKFVQJ3FWGPY4T8237Y"
             resValue "string", "defiyieldProviderApiKey", "87e8671e-8267-427c-92c3-4627833445ae"
             resValue "string", "is_release", "true"
-            resValue "string", "guidesUrl", "https://raw.githubusercontent.com/horizontalsystems/blockchain-crypto-guides/v1.1/index.json"
-            resValue "string", "faqUrl", "https://raw.githubusercontent.com/horizontalsystems/Unstoppable-Wallet-Website/v1.1/src/faq.json"
+            resValue "string", "guidesUrl", "https://raw.githubusercontent.com/horizontalsystems/blockchain-crypto-guides/v1.2/index.json"
+            resValue "string", "faqUrl", "https://raw.githubusercontent.com/horizontalsystems/Unstoppable-Wallet-Website/v1.2/src/faq.json"
             resValue "string", "coinsJsonUrl", "https://raw.githubusercontent.com/horizontalsystems/cryptocurrencies/v0.21/coins.json"
             resValue "string", "providerCoinsJsonUrl", "https://raw.githubusercontent.com/horizontalsystems/cryptocurrencies/v0.21/provider.coins.json"
+            resValue "string", "marketApiBaseUrl", "https://api.blocksdecoded.com"
+            resValue "string", "marketApiKey", "IQf1uAjkthZp1i2pYzkXFDom"
+        }
+
+        appcenterrelease {
+            initWith release
+            defaultConfig.versionCode System.getenv("BUILD_NUMBER")?.toInteger() ?: defaultConfig.versionCode
+            applicationIdSuffix ".appcenter"
+            signingConfig signingConfigs.appCenter
+            matchingFallbacks = ['release']
         }
 
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
+
     packagingOptions {
         pickFirst("META-INF/atomicfu.kotlin_module")
     }
+
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "11"
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion '1.0.0'
     }
 }
 
@@ -172,13 +197,13 @@ dependencies {
     api 'com.journeyapps:zxing-android-embedded:4.1.0'
 
     // WorkManager Kotlin
-    def work_version = "2.5.0"
+    def work_version = "2.7.0"
     implementation "androidx.work:work-runtime-ktx:$work_version"
     // WorkManager RxJava2 support
     implementation "androidx.work:work-rxjava2:$work_version"
 
-    def leakCanary = 'com.squareup.leakcanary:leakcanary-android:2.5'
-    appcenterImplementation leakCanary
+    def leakCanary = 'com.squareup.leakcanary:leakcanary-android:2.7'
+    appcenterdebugImplementation leakCanary
     apptestnetImplementation leakCanary
     debugImplementation leakCanary
 
@@ -186,17 +211,17 @@ dependencies {
     implementation 'pub.devrel:easypermissions:3.0.0'
 
     // Wallet kits
-    implementation 'com.github.horizontalsystems:bitcoin-kit-android:c2bb762'
-    implementation 'com.github.horizontalsystems:ethereum-kit-android:087fbae'
+    implementation 'com.github.horizontalsystems:bitcoin-kit-android:110018d'
+    implementation 'com.github.horizontalsystems:ethereum-kit-android:5c0b4f3'
     implementation 'com.github.horizontalsystems:blockchain-fee-rate-kit-android:047596b'
-    implementation 'com.github.horizontalsystems:binance-chain-kit-android:18c39c9'
-    implementation 'com.github.horizontalsystems:xrates-kit-android:c2664c6'
+    implementation 'com.github.horizontalsystems:binance-chain-kit-android:fe2a3be'
+    implementation 'com.github.horizontalsystems:market-kit-android:280abc4'
 
     // Zcash SDK
     implementation "cash.z.ecc.android:zcash-android-sdk:1.3.0-beta16"
 
     // WalletConnect
-    implementation 'com.github.horizontalsystems:wallet-connect-kotlin:918c099'
+    implementation 'com.github.horizontalsystems:wallet-connect-kotlin:d5f3cac'
     implementation 'com.squareup.okhttp3:okhttp:4.9.0'
 
     // Unstoppable Domains
@@ -204,6 +229,7 @@ dependencies {
 
     // in case native file tor.so not loading, do full gradle clean and build.
     implementation 'com.github.horizontalsystems:tor-kit-android:cbf544e'
+    implementation 'com.twitter.twittertext:twitter-text:3.1.0'
 
     // UI modules
 
@@ -217,8 +243,29 @@ dependencies {
     implementation project(':components:pin')
     implementation project(':components:seekbar')
 
-    androidTestImplementation 'androidx.test:runner:1.4.0-alpha06'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0-alpha06'
+    // Integration with activities
+    implementation 'androidx.activity:activity-compose:1.3.1'
+    // Compose Material Design
+    implementation 'androidx.compose.material:material:1.0.2'
+    // Animations
+    implementation 'androidx.compose.animation:animation:1.0.2'
+    // Tooling support (Previews, etc.)
+    implementation 'androidx.compose.ui:ui-tooling:1.0.2'
+    // Integration with ViewModels
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.4.0-beta01'
+    implementation "com.google.accompanist:accompanist-swiperefresh:0.18.0"
+
+    implementation "androidx.compose.runtime:runtime-livedata:1.0.2"
+    implementation "io.coil-kt:coil-compose:1.3.1"
+
+    // When using a AppCompat theme
+    implementation "com.google.accompanist:accompanist-appcompat-theme:0.15.0"
+
+    // UI Tests
+    androidTestImplementation 'androidx.compose.ui:ui-test-junit4:1.0.1'
+
+    androidTestImplementation 'androidx.test:runner:1.4.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
     // optional - Test helpers for LiveData
     testImplementation "junit:junit:$junit_version"

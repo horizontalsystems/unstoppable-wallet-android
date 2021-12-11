@@ -5,9 +5,7 @@ import com.google.gson.Gson
 import com.trustwallet.walletconnect.models.WCPeerMeta
 import com.trustwallet.walletconnect.models.session.WCSession
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.entities.PriceAlert
-import io.horizontalsystems.bankwallet.entities.SubscriptionJob
-import io.horizontalsystems.coinkit.models.CoinType
+import io.horizontalsystems.marketkit.models.CoinType
 import java.math.BigDecimal
 import java.util.*
 
@@ -69,52 +67,12 @@ class DatabaseConverters {
 
     @TypeConverter
     fun fromCoinType(coinType: CoinType?): String {
-        return coinType?.getCoinId() ?: ""
+        return coinType?.id ?: ""
     }
 
     @TypeConverter
     fun toCoinType(value: String): CoinType {
-        return CoinType.fromString(value)
-    }
-
-    @TypeConverter
-    fun fromChangeState(state: PriceAlert.ChangeState): String {
-        return state.value
-    }
-
-    @TypeConverter
-    fun toChangeState(value: String?): PriceAlert.ChangeState? {
-        return PriceAlert.ChangeState.valueOf(value)
-    }
-
-    @TypeConverter
-    fun fromTrendState(state: PriceAlert.TrendState): String {
-        return state.value
-    }
-
-    @TypeConverter
-    fun toTrendState(value: String?): PriceAlert.TrendState? {
-        return PriceAlert.TrendState.valueOf(value)
-    }
-
-    @TypeConverter
-    fun fromStateType(state: SubscriptionJob.StateType): String {
-        return state.value
-    }
-
-    @TypeConverter
-    fun toStateType(value: String?): SubscriptionJob.StateType? {
-        return SubscriptionJob.StateType.valueOf(value)
-    }
-
-    @TypeConverter
-    fun fromJobType(state: SubscriptionJob.JobType): String {
-        return state.value
-    }
-
-    @TypeConverter
-    fun toJobType(value: String?): SubscriptionJob.JobType? {
-        return SubscriptionJob.JobType.valueOf(value)
+        return CoinType.fromId(value)
     }
 
     @TypeConverter

@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.market
 
-import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,17 +11,17 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.setCoinImage
+import io.horizontalsystems.bankwallet.core.setRemoteImage
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.view_holder_market_item.*
 import java.math.BigDecimal
 
 class MarketItemsAdapter(
-        private val listener: ViewHolderMarketItem.Listener,
-        itemsLiveData: LiveData<Pair<List<MarketViewItem>, Boolean>>,
-        loadingLiveData: LiveData<Boolean>,
-        errorLiveData: LiveData<String?>,
-        viewLifecycleOwner: LifecycleOwner
+    private val listener: ViewHolderMarketItem.Listener,
+    itemsLiveData: LiveData<Pair<List<MarketViewItem>, Boolean>>,
+    loadingLiveData: LiveData<Boolean>,
+    errorLiveData: LiveData<String?>,
+    viewLifecycleOwner: LifecycleOwner
 ) : ListAdapter<MarketViewItem, ViewHolderMarketItem>(coinRateDiff) {
 
     init {
@@ -56,7 +55,7 @@ class MarketItemsAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolderMarketItem, position: Int, payloads: MutableList<Any>) {
-        holder.bind(getItem(position), payloads.firstOrNull { it is MarketViewItem } as? MarketViewItem)
+        holder.bind(getItem(position), payloads.firstOrNull { it is MarketViewItem } as? MarketViewItem, position == itemCount - 1)
     }
 
     override fun onBindViewHolder(holder: ViewHolderMarketItem, position: Int) = Unit
@@ -78,7 +77,8 @@ class MarketItemsAdapter(
     }
 }
 
-class ViewHolderMarketItem(override val containerView: View, private val listener: Listener) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+class ViewHolderMarketItem(override val containerView: View, private val listener: Listener) :
+    RecyclerView.ViewHolder(containerView), LayoutContainer {
     private var item: MarketViewItem? = null
 
     interface Listener {
@@ -93,22 +93,20 @@ class ViewHolderMarketItem(override val containerView: View, private val listene
         }
     }
 
-    fun bind(item: MarketViewItem, prev: MarketViewItem?) {
+    fun bind(item: MarketViewItem, prev: MarketViewItem?, lastItem: Boolean) {
         this.item = item
 
-        if (item.coinCode != prev?.coinCode) {
-            icon.setCoinImage(item.coinType)
+        bottomBorder.isVisible = lastItem
+
+        if (item.coinUid != prev?.coinUid) {
+            icon.setRemoteImage(item.iconUrl, item.iconPlaceHolder)
         }
 
-        if (prev == null || item.score != prev.score) {
-            if (item.score == null) {
+        if (prev == null || item.rank != prev.rank) {
+            if (item.rank == null) {
                 rank.isVisible = false
             } else {
-                item.score.apply {
-                    rank.text = getText()
-                    rank.setTextColor(getTextColor(containerView.context))
-                    rank.backgroundTintList = ColorStateList.valueOf(getBackgroundTintColor(containerView.context))
-                }
+                rank.text = item.rank
                 rank.isVisible = true
             }
         }
@@ -121,31 +119,41 @@ class ViewHolderMarketItem(override val containerView: View, private val listene
             subtitle.text = item.coinCode
         }
 
-        if (item.rate != prev?.rate) {
-            rate.text = item.rate
+        if (item.coinRate != prev?.coinRate) {
+            rate.text = item.coinRate
         }
 
         if (item.marketDataValue != prev?.marketDataValue) {
             val marketField = item.marketDataValue
 
             marketFieldCaption.text = when (marketField) {
-                is MarketViewItem.MarketDataValue.MarketCap -> "MCap"
-                is MarketViewItem.MarketDataValue.Volume -> "Vol"
-                is MarketViewItem.MarketDataValue.Diff -> ""
+                is MarketDataValue.MarketCap -> "MCap"
+                is MarketDataValue.Volume -> "Vol"
+                is MarketDataValue.Diff, is MarketDataValue.DiffNew -> ""
             }
 
             when (marketField) {
-                is MarketViewItem.MarketDataValue.MarketCap -> {
+                is MarketDataValue.MarketCap -> {
                     marketFieldValue.text = marketField.value
-                    marketFieldValue.setTextColor(containerView.resources.getColor(R.color.grey, containerView.context.theme))
+                    marketFieldValue.setTextColor(
+                        containerView.resources.getColor(
+                            R.color.grey,
+                            containerView.context.theme
+                        )
+                    )
                 }
-                is MarketViewItem.MarketDataValue.Volume -> {
+                is MarketDataValue.Volume -> {
                     marketFieldValue.text = marketField.value
-                    marketFieldValue.setTextColor(containerView.resources.getColor(R.color.grey, containerView.context.theme))
+                    marketFieldValue.setTextColor(
+                        containerView.resources.getColor(
+                            R.color.grey,
+                            containerView.context.theme
+                        )
+                    )
                 }
-                is MarketViewItem.MarketDataValue.Diff -> {
+                is MarketDataValue.Diff -> {
                     val v = marketField.value
-                    if (v != null){
+                    if (v != null) {
                         val sign = if (v >= BigDecimal.ZERO) "+" else "-"
                         marketFieldValue.text = App.numberFormatter.format(v.abs(), 0, 2, sign, "%")
 
@@ -164,7 +172,9 @@ class ViewHolderMarketItem(override val containerView: View, private val listene
 
     companion object {
         fun create(parent: ViewGroup, listener: Listener): ViewHolderMarketItem {
-            return ViewHolderMarketItem(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_market_item, parent, false), listener)
+            return ViewHolderMarketItem(
+                LayoutInflater.from(parent.context).inflate(R.layout.view_holder_market_item, parent, false), listener
+            )
         }
     }
 }

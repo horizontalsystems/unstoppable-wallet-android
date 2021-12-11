@@ -1,26 +1,28 @@
 package io.horizontalsystems.bankwallet.modules.balance
 
 import android.content.Context
+import androidx.compose.runtime.Immutable
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.iconPlaceholder
+import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.Wallet
-import io.horizontalsystems.bankwallet.entities.blockchainType
 import io.horizontalsystems.bankwallet.entities.swappable
-import io.horizontalsystems.coinkit.models.Coin
-import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.core.helpers.DateHelper
-import io.horizontalsystems.xrateskit.entities.LatestRate
+import io.horizontalsystems.marketkit.models.CoinPrice
+import io.horizontalsystems.marketkit.models.CoinType
 import java.math.BigDecimal
-import java.util.*
 
+@Immutable
 data class BalanceViewItem(
     val wallet: Wallet,
     val coinCode: String,
     val coinTitle: String,
-    val coinType: CoinType,
+    val coinIconUrl: String,
+    val coinIconPlaceholder: Int,
     val coinValue: DeemedValue,
     val exchangeValue: DeemedValue,
     val diff: BigDecimal?,
@@ -35,7 +37,7 @@ data class BalanceViewItem(
     val syncedUntilTextValue: DeemedValue,
     val failedIconVisible: Boolean,
     val coinIconVisible: Boolean,
-    val coinTypeLabel: String?,
+    val badge: String?,
     val swapVisible: Boolean,
     val swapEnabled: Boolean = false,
     val mainNet: Boolean,
@@ -56,7 +58,7 @@ data class SyncingProgress(val progress: Int?, val dimmed: Boolean = false)
 
 class BalanceViewItemFactory {
 
-    private fun coinValue(state: AdapterState?, balance: BigDecimal?, coin: Coin, visible: Boolean): DeemedValue {
+    private fun coinValue(state: AdapterState?, balance: BigDecimal?, visible: Boolean): DeemedValue {
         val dimmed = state !is AdapterState.Synced
         val value = balance?.let {
             val significantDecimal = App.numberFormatter.getSignificantDecimalCoin(it)
@@ -66,30 +68,52 @@ class BalanceViewItemFactory {
         return DeemedValue(value, dimmed, visible)
     }
 
-    private fun currencyValue(state: AdapterState?, balance: BigDecimal, currency: Currency, latestRate: LatestRate?, visible: Boolean): DeemedValue {
-        val dimmed = state !is AdapterState.Synced || latestRate?.isExpired() ?: false
-        val value = latestRate?.rate?.let { rate ->
+    private fun currencyValue(state: AdapterState?, balance: BigDecimal, currency: Currency, coinPrice: CoinPrice?, visible: Boolean): DeemedValue {
+        val dimmed = state !is AdapterState.Synced || coinPrice?.expired ?: false
+        val value = coinPrice?.value?.let { rate ->
             App.numberFormatter.formatFiat(balance * rate, currency.symbol, 0, 2)
         }
 
         return DeemedValue(value, dimmed, visible)
     }
 
-    private fun rateValue(currency: Currency, latestRate: LatestRate?, showSyncing: Boolean): DeemedValue {
+    private fun rateValue(currency: Currency, coinPrice: CoinPrice?, showSyncing: Boolean): DeemedValue {
         var dimmed = false
-        val value = latestRate?.let {
-            dimmed = latestRate.isExpired()
-            App.numberFormatter.formatFiat(latestRate.rate, currency.symbol, 2, 4)
+        val value = coinPrice?.let {
+            dimmed = coinPrice.expired
+            val significantDecimal = App.numberFormatter.getSignificantDecimalFiat(coinPrice.value)
+            App.numberFormatter.formatFiat(coinPrice.value, currency.symbol, 2, significantDecimal)
         }
 
         return DeemedValue(value, dimmed = dimmed, visible = !showSyncing)
     }
 
-    private fun getSyncingProgress(state: AdapterState?): SyncingProgress {
+    private fun getSyncingProgress(state: AdapterState?, coinType: CoinType): SyncingProgress {
         return when (state) {
-            is AdapterState.Syncing -> SyncingProgress(state.progress, false)
+            is AdapterState.Syncing -> SyncingProgress(state.progress ?: getDefaultSyncingProgress(coinType), false)
             is AdapterState.SearchingTxs -> SyncingProgress(10, true)
             else -> SyncingProgress(null, false)
+        }
+    }
+
+    private fun getDefaultSyncingProgress(coinType: CoinType): Int {
+        return when (coinType) {
+            CoinType.Bitcoin, CoinType.Litecoin, CoinType.BitcoinCash, CoinType.Dash, CoinType.Zcash -> 10
+            CoinType.Ethereum, CoinType.BinanceSmartChain, is CoinType.Erc20, is CoinType.Bep2, is CoinType.Bep20 -> 50
+            is CoinType.ArbitrumOne,
+            is CoinType.Avalanche,
+            is CoinType.Fantom,
+            is CoinType.HarmonyShard0,
+            is CoinType.HuobiToken,
+            is CoinType.Iotex,
+            is CoinType.Moonriver,
+            is CoinType.OkexChain,
+            is CoinType.PolygonPos,
+            is CoinType.Solana,
+            is CoinType.Sora,
+            is CoinType.Tomochain,
+            is CoinType.Xdai,
+            is CoinType.Unsupported -> 0
         }
     }
 
@@ -100,7 +124,7 @@ class BalanceViewItemFactory {
 
         val text = when (state) {
             is AdapterState.Syncing -> {
-                if (state.lastBlockDate != null) {
+                if (state.progress != null) {
                     Translator.getString(R.string.Balance_Syncing_WithProgress, state.progress.toString())
                 } else {
                     Translator.getString(R.string.Balance_Syncing)
@@ -139,19 +163,6 @@ class BalanceViewItemFactory {
         return DeemedValue(text, visible = expanded)
     }
 
-    private fun coinTypeLabel(wallet: Wallet) = when (wallet.coin.type) {
-        CoinType.Bitcoin,
-        CoinType.Litecoin -> {
-            wallet.configuredCoin.settings.derivation?.value?.toUpperCase(Locale.ENGLISH)
-        }
-        CoinType.BitcoinCash -> {
-            wallet.configuredCoin.settings.bitcoinCashCoinType?.value?.toUpperCase(Locale.ENGLISH)
-        }
-        else -> {
-            wallet.coin.type.blockchainType
-        }
-    }
-
     private fun lockedCoinValue(state: AdapterState?, balance: BigDecimal, coinCode: String, hideBalance: Boolean): DeemedValue {
         val visible = balance > BigDecimal.ZERO
         val deemed = state !is AdapterState.Synced
@@ -170,7 +181,7 @@ class BalanceViewItemFactory {
         val wallet = item.wallet
         val coin = wallet.coin
         val state = item.state
-        val latestRate = item.latestRate
+        val latestRate = item.coinPrice
 
         val showSyncing = expanded && (state is AdapterState.Syncing || state is AdapterState.SearchingTxs)
         val balanceTotalVisibility = !hideBalance && !showSyncing
@@ -179,24 +190,25 @@ class BalanceViewItemFactory {
         return BalanceViewItem(
                 wallet = item.wallet,
                 coinCode = coin.code,
-                coinTitle = coin.title,
-                coinType = coin.type,
-                coinValue = coinValue(state, item.balanceData.total, coin, balanceTotalVisibility),
+                coinTitle = coin.name,
+                coinIconUrl = coin.iconUrl,
+                coinIconPlaceholder = wallet.coinType.iconPlaceholder,
+                coinValue = coinValue(state, item.balanceData.total, balanceTotalVisibility),
                 fiatValue = currencyValue(state, item.balanceData.total, currency, latestRate, balanceTotalVisibility),
                 coinValueLocked = lockedCoinValue(state, item.balanceData.locked, coin.code, hideBalance),
                 fiatValueLocked = currencyValue(state, item.balanceData.locked, currency, latestRate, fiatLockedVisibility),
                 exchangeValue = rateValue(currency, latestRate, showSyncing),
-                diff = item.latestRate?.rateDiff24h,
+                diff = item.coinPrice?.diff,
                 expanded = expanded,
                 sendEnabled = state is AdapterState.Synced,
                 receiveEnabled = state != null,
-                syncingProgress = getSyncingProgress(state),
+                syncingProgress = getSyncingProgress(state, wallet.coinType),
                 syncingTextValue = getSyncingText(state, expanded),
                 syncedUntilTextValue = getSyncedUntilText(state, expanded),
                 failedIconVisible = state is AdapterState.NotSynced,
                 coinIconVisible = state !is AdapterState.NotSynced,
-                coinTypeLabel = coinTypeLabel(wallet),
-                swapVisible = item.wallet.coin.type.swappable,
+                badge = wallet.badge,
+                swapVisible = item.wallet.coinType.swappable,
                 swapEnabled = state is AdapterState.Synced,
                 mainNet = item.mainNet,
                 errorMessage = (state as? AdapterState.NotSynced)?.error?.message
@@ -207,13 +219,13 @@ class BalanceViewItemFactory {
         balanceHidden -> BalanceHeaderViewItem("*****", true)
         else -> {
             val total = items.mapNotNull { item ->
-                item.latestRate?.let { item.balanceData.total.multiply(it.rate) }
+                item.coinPrice?.let { item.balanceData.total.multiply(it.value) }
             }.fold(BigDecimal.ZERO, BigDecimal::add)
 
             val balanceText = App.numberFormatter.formatFiat(total, currency.symbol, 2, 2)
 
             val upToDate = !items.any {
-                it.state !is AdapterState.Synced || (it.latestRate != null && it.latestRate.isExpired())
+                it.state !is AdapterState.Synced || (it.coinPrice != null && it.coinPrice.expired)
             }
 
             BalanceHeaderViewItem(balanceText, upToDate)

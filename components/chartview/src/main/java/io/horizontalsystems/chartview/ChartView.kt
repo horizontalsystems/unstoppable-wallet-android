@@ -15,6 +15,7 @@ class ChartView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
         WEEKLY,
         WEEKLY2,
         MONTHLY,
+        MONTHLY_BY_DAY,
         MONTHLY3,
         MONTHLY6,
         MONTHLY12,

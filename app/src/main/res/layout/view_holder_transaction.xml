@@ -50,11 +50,10 @@
 
     <TextView
         android:id="@+id/txBottomText"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:singleLine="true"
         android:textColor="@color/grey"
-        app:layout_constraintEnd_toEndOf="@+id/barrierLeft"
         app:layout_constraintStart_toStartOf="@+id/txTopText"
         app:layout_constraintTop_toBottomOf="@+id/txTopText"
         tools:text="from 0x3123453fd45346gb54bgbf5t4512345"
@@ -71,7 +70,7 @@
     <TextView
         android:id="@+id/txPrimaryText"
         style="@style/Headline2"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:ellipsize="end"
@@ -87,7 +86,7 @@
     <TextView
         android:id="@+id/txSecondaryText"
         style="@style/Subhead2"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="16dp"

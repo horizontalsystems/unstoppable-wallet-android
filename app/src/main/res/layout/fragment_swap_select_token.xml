@@ -16,7 +16,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:menu="@menu/select_swap_coin_menu"
         app:navigationIcon="@drawable/ic_back"
-        app:title="@string/Swap_CoinSelect_Title"
+        app:title="@string/Select_Coins"
         app:titleTextAppearance="@style/Title3" />
 
     <androidx.recyclerview.widget.RecyclerView

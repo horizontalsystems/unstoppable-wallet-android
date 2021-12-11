@@ -14,6 +14,7 @@ class ThemeSwitchViewModel(private val localStorage: ILocalStorage) : ViewModel(
     fun onThemeClick(item: ThemeViewItem) {
         if (!item.checked) {
             localStorage.currentTheme = item.themeType
+            localStorage.relaunchBySettingChange = true
             itemsLiveData.postValue(getItems())
             changeThemeEvent.postValue(item.themeType)
         }

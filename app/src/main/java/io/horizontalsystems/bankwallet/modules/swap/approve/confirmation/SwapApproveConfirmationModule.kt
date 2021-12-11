@@ -6,9 +6,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavOptions
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.ICustomRangedFeeProvider
 import io.horizontalsystems.bankwallet.core.ethereum.EthereumFeeViewModel
 import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinServiceFactory
-import io.horizontalsystems.bankwallet.core.ethereum.EvmTransactionService
+import io.horizontalsystems.bankwallet.core.ethereum.EvmTransactionFeeService
 import io.horizontalsystems.bankwallet.core.factories.FeeRateProviderFactory
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule
@@ -24,13 +25,13 @@ object SwapApproveConfirmationModule {
             private val blockchain: SwapMainModule.Blockchain
     ) : ViewModelProvider.Factory {
 
-        private val coin by lazy { blockchain.coin }
+        private val platformCoin by lazy { blockchain.coin!! }
         private val evmKit by lazy { blockchain.evmKit!! }
         private val transactionService by lazy {
-            val feeRateProvider = FeeRateProviderFactory.provider(coin)!!
-            EvmTransactionService(evmKit, feeRateProvider, 20)
+            val feeRateProvider = FeeRateProviderFactory.provider(platformCoin.coinType) as ICustomRangedFeeProvider
+            EvmTransactionFeeService(evmKit, feeRateProvider, 20)
         }
-        private val coinServiceFactory by lazy { EvmCoinServiceFactory(coin!!, App.coinKit, App.currencyManager, App.xRateManager) }
+        private val coinServiceFactory by lazy { EvmCoinServiceFactory(platformCoin, App.marketKit, App.currencyManager) }
         private val sendService by lazy { SendEvmTransactionService(sendEvmData, evmKit, transactionService, App.activateCoinManager) }
 
         @Suppress("UNCHECKED_CAST")

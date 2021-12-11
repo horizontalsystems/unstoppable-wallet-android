@@ -5,15 +5,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
+import androidx.compose.foundation.layout.padding
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.unit.dp
 import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.ConcatAdapter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.modules.transactionInfo.adapters.TransactionInfoAdapter
-import io.horizontalsystems.bankwallet.modules.transactions.TransactionsPresenter
+import io.horizontalsystems.bankwallet.modules.transactionInfo.options.TransactionSpeedUpCancelFragment
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionsViewModel
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.findNavController
@@ -25,7 +29,9 @@ import java.util.*
 class TransactionInfoFragment : BaseFragment(), TransactionInfoAdapter.Listener {
 
     private val viewModelTxs by navGraphViewModels<TransactionsViewModel>(R.id.mainFragment)
-    private val viewModel by viewModels<TransactionInfoViewModel> { TransactionInfoModule.Factory((viewModelTxs.delegate as TransactionsPresenter).itemDetails!!) }
+    private val viewModel by navGraphViewModels<TransactionInfoViewModel>(R.id.transactionInfoFragment) {
+        TransactionInfoModule.Factory(viewModelTxs.tmpItemToShow)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,14 +56,6 @@ class TransactionInfoFragment : BaseFragment(), TransactionInfoAdapter.Listener 
             TransactionInfoAdapter(viewModel.viewItemsLiveData, viewLifecycleOwner, this)
         recyclerView.adapter = ConcatAdapter(itemsAdapter)
 
-        btnClose.setOnClickListener {
-            findNavController().popBackStack()
-        }
-
-        viewModel.showTransactionLiveEvent.observe(this, Observer { url ->
-            openUrlInCustomTabs(url)
-        })
-
         viewModel.showShareLiveEvent.observe(viewLifecycleOwner, { value ->
             context?.startActivity(Intent().apply {
                 action = Intent.ACTION_SEND
@@ -69,6 +67,27 @@ class TransactionInfoFragment : BaseFragment(), TransactionInfoAdapter.Listener 
         viewModel.copyRawTransactionLiveEvent.observe(viewLifecycleOwner, { rawTransaction ->
             copyText(rawTransaction)
         })
+
+        viewModel.openTransactionOptionsModule.observe(viewLifecycleOwner, { (optionType, txHash) ->
+            val params = TransactionSpeedUpCancelFragment.prepareParams(optionType, txHash)
+            findNavController().navigate(R.id.transactionInfoFragment_to_transactionSpeedUpCancelFragment, params, navOptions())
+        })
+
+        buttonCloseCompose.setViewCompositionStrategy(
+            ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+        )
+
+        buttonCloseCompose.setContent {
+            ComposeAppTheme {
+                ButtonPrimaryYellow(
+                    modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 24.dp),
+                    title = getString(R.string.Button_Close),
+                    onClick = {
+                        findNavController().popBackStack()
+                    }
+                )
+            }
+        }
     }
 
     override fun onAddressClick(address: String) {
@@ -79,8 +98,10 @@ class TransactionInfoFragment : BaseFragment(), TransactionInfoAdapter.Listener 
         viewModel.onActionButtonClick(actionButton)
     }
 
-    override fun onAdditionalButtonClick(buttonType: TransactionInfoButtonType) {
-        viewModel.onAdditionalButtonClick(buttonType)
+    override fun onUrlClick(url: String) {
+        context?.let { ctx ->
+            LinkHelper.openLinkInAppBrowser(ctx, url)
+        }
     }
 
     override fun onLockInfoClick(lockDate: Date) {
@@ -117,15 +138,13 @@ class TransactionInfoFragment : BaseFragment(), TransactionInfoAdapter.Listener 
         findNavController().navigate(R.id.statusInfoDialog)
     }
 
+    override fun onOptionButtonClick(optionType: TransactionInfoOption.Type) {
+        viewModel.onOptionButtonClick(optionType)
+    }
+
     private fun copyText(address: String) {
         TextHelper.copyText(address)
         HudHelper.showSuccessMessage(requireView(), R.string.Hud_Text_Copied)
-    }
-
-    private fun openUrlInCustomTabs(url: String) {
-        context?.let { ctx ->
-            LinkHelper.openLinkInAppBrowser(ctx, url)
-        }
     }
 
     override fun onDestroyView() {

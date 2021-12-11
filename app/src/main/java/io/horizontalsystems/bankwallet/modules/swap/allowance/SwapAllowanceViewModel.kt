@@ -89,7 +89,7 @@ class SwapAllowanceViewModel(
     private fun allowance(allowanceState: SwapAllowanceService.State): String {
         return when (allowanceState) {
             SwapAllowanceService.State.Loading -> Translator.getString(R.string.Alert_Loading)
-            is SwapAllowanceService.State.Ready -> allowanceState.allowance.let { formatter.coinAmount(it.value, it.coin) }
+            is SwapAllowanceService.State.Ready -> allowanceState.allowance.let { formatter.coinAmount(it.value, it.coin.code) }
             is SwapAllowanceService.State.NotReady -> Translator.getString(R.string.NotAvailable)
         }
     }

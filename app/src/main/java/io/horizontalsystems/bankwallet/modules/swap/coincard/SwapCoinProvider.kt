@@ -2,17 +2,17 @@ package io.horizontalsystems.bankwallet.modules.swap.coincard
 
 import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.ICoinManager
-import io.horizontalsystems.bankwallet.core.IRateManager
 import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.Blockchain
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.CoinBalanceItem
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.Dex
-import io.horizontalsystems.coinkit.models.Coin
-import io.horizontalsystems.coinkit.models.CoinType
 import io.horizontalsystems.core.ICurrencyManager
+import io.horizontalsystems.marketkit.MarketKit
+import io.horizontalsystems.marketkit.models.CoinType
+import io.horizontalsystems.marketkit.models.PlatformCoin
+import io.horizontalsystems.marketkit.models.PlatformType
 import java.math.BigDecimal
-import java.util.*
 
 class SwapCoinProvider(
     private val dex: Dex,
@@ -20,40 +20,40 @@ class SwapCoinProvider(
     private val walletManager: IWalletManager,
     private val adapterManager: IAdapterManager,
     private val currencyManager: ICurrencyManager,
-    private val xRateManager: IRateManager
+    private val marketKit: MarketKit
 ) {
 
-    fun getCoins(): List<CoinBalanceItem> {
-        val enabledCoinItems = walletItems.filter { item ->
-            val zeroBalance = item.balance == BigDecimal.ZERO
-            dexSupportsCoin(item.coin) && !zeroBalance
-        }.sortedBy { it.coin.title.toLowerCase(Locale.ENGLISH) }
+    private fun getCoinItems(filter: String): List<CoinBalanceItem> {
+        val platformCoins = coinManager.getPlatformCoins(platformType(), filter)
 
-        val disabledCoinItems = coinManager.coins.filter { coin ->
-            dexSupportsCoin(coin) && !enabledCoinItems.any { it.coin == coin }
-        }.map { coin ->
-            val balance = balance(coin)
-
-            CoinBalanceItem(coin, balance, getFiatValue(coin, balance))
-        }.sortedBy { it.coin.title.toLowerCase(Locale.ENGLISH) }
-
-        return enabledCoinItems + disabledCoinItems
+        return platformCoins.map { CoinBalanceItem(it, null, null) }
     }
 
-    private fun dexSupportsCoin(coin: Coin) = when (coin.type) {
+    private fun getWalletItems(filter: String): List<CoinBalanceItem> {
+        val items = walletManager.activeWallets
+            .filter { filter.isEmpty() || it.coin.name.contains(filter, true) || it.coin.code.contains(filter, true) }
+            .filter { dexSupportsCoin(it.platformCoin) }
+            .map { wallet ->
+                val balance =
+                    adapterManager.getBalanceAdapterForWallet(wallet)?.balanceData?.available
+
+                CoinBalanceItem(
+                    wallet.platformCoin,
+                    balance,
+                    getFiatValue(wallet.platformCoin, balance)
+                )
+            }
+
+        return items
+    }
+
+    private fun dexSupportsCoin(coin: PlatformCoin) = when (coin.coinType) {
         CoinType.Ethereum, is CoinType.Erc20 -> dex.blockchain == Blockchain.Ethereum
         CoinType.BinanceSmartChain, is CoinType.Bep20 -> dex.blockchain == Blockchain.BinanceSmartChain
         else -> false
     }
 
-    private val walletItems: List<CoinBalanceItem>
-        get() = walletManager.activeWallets.map { wallet ->
-            val balance = adapterManager.getBalanceAdapterForWallet(wallet)?.balanceData?.available
-
-            CoinBalanceItem(wallet.coin, balance, getFiatValue(wallet.coin, balance))
-        }
-
-    private fun getFiatValue(coin: Coin, balance: BigDecimal?): CurrencyValue? {
+    private fun getFiatValue(coin: PlatformCoin, balance: BigDecimal?): CurrencyValue? {
         return balance?.let {
             getXRate(coin)?.multiply(it)
         }?.let { fiatBalance ->
@@ -61,20 +61,31 @@ class SwapCoinProvider(
         }
     }
 
-    private fun getXRate(coin: Coin): BigDecimal? {
+    private fun getXRate(platformCoin: PlatformCoin): BigDecimal? {
         val currency = currencyManager.baseCurrency
-        return xRateManager.latestRate(coin.type, currency.code)?.let {
-            if (it.isExpired()) {
+        return marketKit.coinPrice(platformCoin.coin.uid, currency.code)?.let {
+            if (it.expired) {
                 null
             } else {
-                it.rate
+                it.value
             }
         }
     }
 
-    private fun balance(coin: Coin): BigDecimal? {
-        val wallet = walletManager.activeWallets.firstOrNull { it.coin == coin }
-        return wallet?.let { adapterManager.getBalanceAdapterForWallet(it)?.balanceData?.available }
+    private fun platformType(): PlatformType = when (dex.blockchain) {
+        Blockchain.Ethereum -> PlatformType.Ethereum
+        Blockchain.BinanceSmartChain -> PlatformType.BinanceSmartChain
+    }
+
+    fun getCoins(filter: String): List<CoinBalanceItem> {
+        val walletItems = getWalletItems(filter)
+        val coinItems = getCoinItems(filter).filter { coinItem ->
+            walletItems.indexOfFirst { it.platformCoin == coinItem.platformCoin } == -1
+        }
+
+        val allItems = walletItems + coinItems
+
+        return allItems.sortedWith(compareByDescending { it.balance })
     }
 
 }

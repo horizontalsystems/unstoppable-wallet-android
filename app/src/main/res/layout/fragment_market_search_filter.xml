@@ -18,14 +18,14 @@
         app:layout_constraintTop_toTopOf="parent"
         app:menu="@menu/market_advanced_search_menu"
         app:navigationIcon="@drawable/ic_back"
-        app:title="@string/Market_AdvancedSearch"
+        app:title="@string/Market_Filters"
         app:titleTextAppearance="@style/Title3" />
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/content"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@id/submit"
+        app:layout_constraintBottom_toTopOf="@id/submitButtonCompose"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar">
@@ -163,36 +163,21 @@
         android:layout_width="0dp"
         android:layout_height="24dp"
         android:background="@drawable/bottom_button_top_fading"
-        app:layout_constraintBottom_toTopOf="@+id/submit"
+        app:layout_constraintBottom_toTopOf="@+id/submitButtonCompose"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        />
 
-    <Button
-        android:id="@+id/submit"
-        style="@style/ButtonPrimaryYellow"
+    <androidx.compose.ui.platform.ComposeView
+        android:id="@+id/submitButtonCompose"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="32dp"
-        android:text="@string/Market_Filter_ShowResults"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/content" />
-
-    <ProgressBar
-        android:id="@+id/progressBar"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:backgroundTint="@color/grey"
-        android:indeterminate="true"
-        android:indeterminateTint="@color/grey"
-        android:indeterminateTintMode="src_atop"
-        app:layout_constraintBottom_toBottomOf="@id/submit"
-        app:layout_constraintEnd_toEndOf="@id/submit"
-        app:layout_constraintStart_toStartOf="@id/submit"
-        app:layout_constraintTop_toTopOf="@id/submit" />
+        app:layout_constraintTop_toBottomOf="@id/content"
+        tools:layout_height="50dp"
+        tools:layout_marginBottom="24dp"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

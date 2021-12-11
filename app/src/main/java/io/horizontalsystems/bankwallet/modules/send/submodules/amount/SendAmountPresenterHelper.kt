@@ -2,14 +2,14 @@ package io.horizontalsystems.bankwallet.modules.send.submodules.amount
 
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.modules.send.SendModule
-import io.horizontalsystems.coinkit.models.Coin
 import io.horizontalsystems.core.entities.Currency
+import io.horizontalsystems.marketkit.models.PlatformCoin
 import java.math.BigDecimal
 import java.math.RoundingMode
 
 class SendAmountPresenterHelper(
         private val numberFormatter: IAppNumberFormatter,
-        private val coin: Coin,
+        private val coin: PlatformCoin,
         private val baseCurrency: Currency,
         private val coinDecimal: Int,
         private val currencyDecimal: Int) {

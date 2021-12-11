@@ -1,77 +1,131 @@
 package io.horizontalsystems.bankwallet.modules.market.overview
 
-import io.horizontalsystems.bankwallet.core.Clearable
-import io.horizontalsystems.bankwallet.core.IRateManager
 import io.horizontalsystems.bankwallet.core.subscribeIO
+import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
-import io.horizontalsystems.bankwallet.modules.market.Score
+import io.horizontalsystems.bankwallet.modules.market.SortingField
+import io.horizontalsystems.bankwallet.modules.market.TopMarket
+import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule.MarketMetricsItem
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.ICurrencyManager
-import io.horizontalsystems.xrateskit.entities.TimePeriod
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.BehaviorSubject
 
 class MarketOverviewService(
-        private val rateManager: IRateManager,
-        private val backgroundManager: BackgroundManager,
-        private val currencyManager: ICurrencyManager
-) : Clearable, BackgroundManager.Listener {
+    private val topMarketsRepository: TopMarketsRepository,
+    private val marketMetricsRepository: MarketMetricsRepository,
+    private val backgroundManager: BackgroundManager,
+    private val currencyManager: ICurrencyManager
+) : BackgroundManager.Listener {
 
-    sealed class State {
-        object Loading : State()
-        object Loaded : State()
-        data class Error(val error: Throwable) : State()
+    private val topListSize = 5
+    private var currencyManagerDisposable: Disposable? = null
+    private var gainersDisposable: Disposable? = null
+    private var losersDisposable: Disposable? = null
+    private var metricsDisposable: Disposable? = null
+
+    var gainersTopMarket: TopMarket = TopMarket.Top250
+        private set
+    var losersTopMarket: TopMarket = TopMarket.Top250
+        private set
+
+    val topMarketOptions: List<TopMarket> = TopMarket.values().toList()
+
+    val topGainersObservable: BehaviorSubject<DataState<List<MarketItem>>> =
+        BehaviorSubject.createDefault(DataState.Loading)
+
+    val topLosersObservable: BehaviorSubject<DataState<List<MarketItem>>> =
+        BehaviorSubject.createDefault(DataState.Loading)
+
+    val marketMetricsObservable: BehaviorSubject<DataState<MarketMetricsItem>> =
+        BehaviorSubject.createDefault(DataState.Loading)
+
+    private fun updateGainers(forceRefresh: Boolean) {
+        gainersDisposable?.dispose()
+
+        topMarketsRepository.get(
+            gainersTopMarket.value,
+            SortingField.TopGainers,
+            topListSize,
+            currencyManager.baseCurrency,
+            forceRefresh
+        )
+            .doOnSubscribe { topGainersObservable.onNext(DataState.Loading) }
+            .subscribeIO(
+                { topGainersObservable.onNext(DataState.Success(it)) },
+                { topGainersObservable.onNext(DataState.Error(it)) }
+            )
+            .let { gainersDisposable = it }
     }
 
-    val stateObservable: BehaviorSubject<State> = BehaviorSubject.createDefault(State.Loading)
+    private fun updateLosers(forceRefresh: Boolean) {
+        losersDisposable?.dispose()
 
-    var marketItems: List<MarketItem> = listOf()
+        topMarketsRepository.get(
+            losersTopMarket.value,
+            SortingField.TopLosers,
+            topListSize,
+            currencyManager.baseCurrency,
+            forceRefresh
+        )
+            .doOnSubscribe { topLosersObservable.onNext(DataState.Loading) }
+            .subscribeIO(
+                { topLosersObservable.onNext(DataState.Success(it)) },
+                { topLosersObservable.onNext(DataState.Error(it)) }
+            )
+            .let { losersDisposable = it }
+    }
 
-    private var topItemsDisposable: Disposable? = null
-    private val disposables = CompositeDisposable()
+    private fun updateMarketMetrics() {
+        metricsDisposable?.dispose()
 
-    init {
-        fetch()
+        marketMetricsRepository.get(currencyManager.baseCurrency, true)
+            .doOnSubscribe { marketMetricsObservable.onNext(DataState.Loading) }
+            .subscribeIO(
+                { marketMetricsObservable.onNext(DataState.Success(it)) },
+                { marketMetricsObservable.onNext(DataState.Error(it)) }
+            )
+            .let { metricsDisposable = it }
+    }
+
+    private fun forceRefresh() {
+        updateGainers(true)
+        updateLosers(true)
+        updateMarketMetrics()
+    }
+
+    fun start() {
         backgroundManager.registerListener(this)
         currencyManager.baseCurrencyUpdatedSignal
-                .subscribeIO {
-                    fetch()
-                }
-                .let {
-                    disposables.add(it)
-                }
+            .subscribeIO { forceRefresh() }
+            .let { currencyManagerDisposable = it }
+
+        forceRefresh()
     }
 
-    override fun willEnterForeground() {
-        fetch()
-    }
-
-    fun refresh() {
-        fetch()
-    }
-
-    private fun fetch() {
-        topItemsDisposable?.dispose()
-
-        stateObservable.onNext(State.Loading)
-
-        topItemsDisposable = rateManager.getTopMarketList(currencyManager.baseCurrency.code, 250, TimePeriod.HOUR_24)
-                .subscribeIO({
-                    marketItems = it.mapIndexed { index, topMarket ->
-                        MarketItem.createFromCoinMarket(topMarket, currencyManager.baseCurrency, Score.Rank(index + 1))
-                    }
-
-                    stateObservable.onNext(State.Loaded)
-                }, {
-                    stateObservable.onNext(State.Error(it))
-                })
-    }
-
-    override fun clear() {
-        topItemsDisposable?.dispose()
-        disposables.dispose()
+    fun stop() {
+        currencyManagerDisposable?.dispose()
+        gainersDisposable?.dispose()
+        losersDisposable?.dispose()
+        metricsDisposable?.dispose()
         backgroundManager.unregisterListener(this)
     }
 
+    override fun willEnterForeground() {
+        forceRefresh()
+    }
+
+    fun refresh() {
+        forceRefresh()
+    }
+
+    fun setGainersTopMarket(topMarket: TopMarket) {
+        gainersTopMarket = topMarket
+        updateGainers(false)
+    }
+
+    fun setLosersTopMarket(topMarket: TopMarket) {
+        losersTopMarket = topMarket
+        updateLosers(false)
+    }
 }

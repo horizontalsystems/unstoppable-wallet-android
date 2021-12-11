@@ -91,7 +91,7 @@ class BalanceAdapterRepository(
 
     fun state(wallet: Wallet): AdapterState {
         return adapterManager.getBalanceAdapterForWallet(wallet)?.balanceState
-            ?: AdapterState.Syncing(10, null)
+            ?: AdapterState.Syncing()
     }
 
     fun balanceData(wallet: Wallet): BalanceData {

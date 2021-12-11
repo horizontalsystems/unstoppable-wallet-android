@@ -1,23 +1,30 @@
 package io.horizontalsystems.bankwallet.ui.extensions
 
 import android.content.DialogInterface
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.DrawableRes
+import androidx.compose.foundation.layout.padding
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.unit.dp
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.views.inflate
 import kotlinx.android.extensions.LayoutContainer
+import kotlinx.android.synthetic.main.activity_rooted_device.*
 import kotlinx.android.synthetic.main.fragment_bottom_selector.*
 import kotlinx.android.synthetic.main.view_holder_setting_with_checkmark_wrapper.*
 
 class BottomSheetSelectorDialog(
         private val title: String,
         private val subtitle: String,
-        private val icon: Drawable?,
+        @DrawableRes private val icon: Int,
         private val items: List<BottomSheetSelectorViewItem>,
         private val selected: Int,
         private val onItemSelected: (Int) -> Unit,
@@ -33,7 +40,7 @@ class BottomSheetSelectorDialog(
 
         setTitle(title)
         setSubtitle(subtitle)
-        setHeaderIconDrawable(icon)
+        setHeaderIcon(icon)
 
         val itemsAdapter = SelectorItemsAdapter(items, selected)
 
@@ -43,11 +50,23 @@ class BottomSheetSelectorDialog(
 
         rvItems.adapter = itemsAdapter
 
-        btnDone.setOnClickListener {
-            if (notifyUnchanged || itemsAdapter.selected != selected) {
-                onItemSelected(itemsAdapter.selected)
+        buttonDoneCompose.setViewCompositionStrategy(
+            ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+        )
+
+        buttonDoneCompose.setContent {
+            ComposeAppTheme {
+                ButtonPrimaryYellow(
+                    modifier = Modifier.padding(16.dp),
+                    title = getString(R.string.Button_Done),
+                    onClick = {
+                        if (notifyUnchanged || itemsAdapter.selected != selected) {
+                            onItemSelected(itemsAdapter.selected)
+                        }
+                        dismiss()
+                    }
+                )
             }
-            dismiss()
         }
     }
 
@@ -62,7 +81,7 @@ class BottomSheetSelectorDialog(
     }
 
     companion object {
-        fun show(fragmentManager: FragmentManager, title: String, subtitle: String, icon: Drawable?, items: List<BottomSheetSelectorViewItem>, selected: Int, onItemSelected: (Int) -> Unit, onCancelled: (() -> Unit)? = null, warning: String? = null, notifyUnchanged: Boolean = false) {
+        fun show(fragmentManager: FragmentManager, title: String, subtitle: String, @DrawableRes icon: Int, items: List<BottomSheetSelectorViewItem>, selected: Int, onItemSelected: (Int) -> Unit, onCancelled: (() -> Unit)? = null, warning: String? = null, notifyUnchanged: Boolean = false) {
             BottomSheetSelectorDialog(title, subtitle, icon, items, selected, onItemSelected, onCancelled, warning, notifyUnchanged)
                     .show(fragmentManager, "selector_dialog")
         }

@@ -28,7 +28,7 @@
         android:paddingTop="12dp"
         android:paddingBottom="24dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintBottom_toTopOf="@+id/btnClose"
+        app:layout_constraintBottom_toTopOf="@+id/buttonCloseCompose"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
@@ -40,23 +40,20 @@
         android:layout_width="0dp"
         android:layout_height="24dp"
         android:background="@drawable/bottom_button_top_fading"
-        app:layout_constraintBottom_toTopOf="@+id/btnClose"
+        app:layout_constraintBottom_toTopOf="@+id/buttonCloseCompose"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         />
 
-    <Button
-        android:id="@+id/btnClose"
-        style="@style/ButtonPrimaryYellow"
+    <androidx.compose.ui.platform.ComposeView
+        android:id="@+id/buttonCloseCompose"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginBottom="24dp"
-        android:text="@string/Button_Close"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        tools:layout_height="50dp"
+        tools:layout_marginBottom="24dp"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

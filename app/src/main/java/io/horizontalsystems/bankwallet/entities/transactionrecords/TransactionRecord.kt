@@ -1,7 +1,8 @@
 package io.horizontalsystems.bankwallet.entities.transactionrecords
 
-import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.LastBlockInfo
+import io.horizontalsystems.bankwallet.entities.TransactionValue
+import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionStatus
 
 abstract class TransactionRecord(
@@ -11,10 +12,13 @@ abstract class TransactionRecord(
     val blockHeight: Int?,
     val confirmationsThreshold: Int?,
     val timestamp: Long,
-    val failed: Boolean = false
+    val failed: Boolean = false,
+    val source: TransactionSource
 ) : Comparable<TransactionRecord> {
 
-    open val mainValue: CoinValue? = null
+    val blockchainTitle: String = source.blockchain.getTitle()
+
+    open val mainValue: TransactionValue? = null
 
     open fun changedBy(oldBlockInfo: LastBlockInfo?, newBlockInfo: LastBlockInfo?): Boolean =
         status(oldBlockInfo?.height) != status(newBlockInfo?.height)

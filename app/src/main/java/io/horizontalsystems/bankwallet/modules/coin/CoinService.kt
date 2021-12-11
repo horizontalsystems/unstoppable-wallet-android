@@ -2,197 +2,76 @@ package io.horizontalsystems.bankwallet.modules.coin
 
 import io.horizontalsystems.bankwallet.core.*
 import io.horizontalsystems.bankwallet.core.managers.MarketFavoritesManager
-import io.horizontalsystems.coinkit.models.CoinType
-import io.horizontalsystems.core.entities.Currency
-import io.horizontalsystems.xrateskit.entities.*
+import io.horizontalsystems.bankwallet.entities.isSupported
+import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
-import java.math.BigDecimal
-import java.net.URL
 
 class CoinService(
-        val coinType: CoinType,
-        val currency: Currency,
-        private val xRateManager: IRateManager,
-        private val chartTypeStorage: IChartTypeStorage,
-        private val priceAlertManager: IPriceAlertManager,
-        private val notificationManager: INotificationManager,
-        private val marketFavoritesManager: MarketFavoritesManager,
-        guidesBaseUrl: String
+    private val coinUid: String,
+    private val coinManager: ICoinManager,
+    private val marketFavoritesManager: MarketFavoritesManager,
+    private val walletManager: IWalletManager,
+    private val accountManager: IAccountManager,
 ) : Clearable {
+    val fullCoin = coinManager.getFullCoin(coinUid)!!
 
-    sealed class CoinDetailsState {
-        object Loading : CoinDetailsState()
-        object Loaded : CoinDetailsState()
-        data class Error(val error: Throwable) : CoinDetailsState()
-    }
+    private val _isFavorite = BehaviorSubject.create<Boolean>()
+    val isFavorite: Observable<Boolean>
+        get() = _isFavorite
 
-    val latestRateAsync = BehaviorSubject.create<LatestRate>()
-    val chartInfoUpdatedObservable: BehaviorSubject<Unit> = BehaviorSubject.create()
-    val chartSpinnerObservable: BehaviorSubject<Unit> = BehaviorSubject.create()
-    val chartInfoErrorObservable: BehaviorSubject<Throwable> = BehaviorSubject.create()
-    val coinDetailsStateObservable: BehaviorSubject<CoinDetailsState> = BehaviorSubject.createDefault(CoinDetailsState.Loading)
-    val topTokenHoldersStateObservable: BehaviorSubject<CoinDetailsState> = BehaviorSubject.createDefault(CoinDetailsState.Loading)
-    val alertNotificationUpdatedObservable: BehaviorSubject<Unit> = BehaviorSubject.createDefault(Unit)
+    private val _coinState = BehaviorSubject.create<CoinState>()
+    val coinState: Observable<CoinState>
+        get() = _coinState
 
-    val hasPriceAlert: Boolean
-        get() {
-            return priceAlertManager.hasPriceAlert(coinType)
-        }
-
-    val notificationsAreEnabled: Boolean
-        get() = notificationManager.enabled
-
-    var coinMarketDetails: CoinMarketDetails? = null
-    var topTokenHolders: List<TokenHolder> = listOf()
-
-    var lastPoint: LastPoint? = xRateManager.latestRate(coinType, currency.code)?.let { LastPoint(it.rate, it.timestamp, it.rateDiff24h ?: BigDecimal.ZERO) }
-        set(value) {
-            field = value
-            triggerChartUpdateIfEnoughData()
-        }
-
-    var chartInfo: ChartInfo? = null
-        set(value) {
-            field = value
-            triggerChartUpdateIfEnoughData()
-        }
-
-    private fun triggerChartUpdateIfEnoughData() {
-        if (chartInfo != null && lastPoint != null) {
-            chartInfoUpdatedObservable.onNext(Unit)
-        }
-    }
-
+    private val initialCoinInWallet = walletManager.activeWallets.any { it.coin.uid == coinUid }
     private val disposables = CompositeDisposable()
-    private var chartInfoDisposable: Disposable? = null
 
     init {
-        priceAlertManager.notificationChangedFlowable
-                .subscribeOn(Schedulers.io())
-                .subscribe {
-                    alertNotificationUpdatedObservable.onNext(Unit)
-                }
-                .let {
-                    disposables.add(it)
-                }
+        emitCoinState()
+        emitIsFavorite()
 
-        xRateManager.latestRate(coinType, currency.code)?.let {
-            latestRateAsync.onNext(it)
-        }
-        xRateManager.latestRateObservable(coinType, currency.code)
-                .subscribeIO {
-                    latestRateAsync.onNext(it)
-                }
-                .let {
-                    disposables.add(it)
-                }
-        xRateManager.latestRateObservable(coinType, currency.code)
-                .subscribeIO({ marketInfo ->
-                    lastPoint = LastPoint(marketInfo.rate, marketInfo.timestamp, marketInfo.rateDiff24h ?: BigDecimal.ZERO)
-                }, {
-                    //ignore
-                }).let {
-                    disposables.add(it)
-                }
-    }
-
-    var chartType: ChartType
-        get() = chartTypeStorage.chartType ?: ChartType.TODAY
-        set(value) {
-            chartTypeStorage.chartType = value
-        }
-
-    private val guidesBaseUrl = URL(guidesBaseUrl)
-
-    val guideUrl: String?
-        get() {
-            val guideRelativeUrl = when (coinType) {
-                CoinType.Bitcoin -> "guides/token_guides/en/bitcoin.md"
-                CoinType.Ethereum -> "guides/token_guides/en/ethereum.md"
-                CoinType.BitcoinCash -> "guides/token_guides/en/bitcoin-cash.md"
-                CoinType.Zcash -> "guides/token_guides/en/zcash.md"
-                is CoinType.Erc20 -> {
-                    when (coinType.address) {
-                        "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984" -> "guides/token_guides/en/uniswap.md"
-                        "0xd533a949740bb3306d119cc777fa900ba034cd52" -> "guides/token_guides/en/curve-finance.md"
-                        "0xba100000625a3754423978a60c9317c58a424e3d" -> "guides/token_guides/en/balancer-dex.md"
-                        "0xc011a73ee8576fb46f5e1c5751ca3b9fe0af2a6f" -> "guides/token_guides/en/synthetix.md"
-                        "0xdac17f958d2ee523a2206206994597c13d831ec7" -> "guides/token_guides/en/tether.md"
-                        "0x9f8f72aa9304c8b593d555f12ef6589cc3a579a2" -> "guides/token_guides/en/makerdao.md"
-                        "0x6b175474e89094c44da98b954eedeac495271d0f" -> "guides/token_guides/en/makerdao.md"
-                        "0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9" -> "guides/token_guides/en/aave.md"
-                        "0xc00e94cb662c3520282e6f5717214004a7f26888" -> "guides/token_guides/en/compound.md"
-                        else -> null
-                    }
-                }
-                else -> null
+        walletManager.activeWalletsUpdatedObservable
+            .subscribeIO {
+                emitCoinState()
             }
-            return guideRelativeUrl?.let {
-                URL(guidesBaseUrl, it).toString()
+            .let {
+                disposables.add(it)
             }
-        }
+    }
 
-    fun getCoinDetails(rateDiffCoinCodes: List<String>, rateDiffPeriods: List<TimePeriod>) {
-        coinDetailsStateObservable.onNext(CoinDetailsState.Loading)
-        xRateManager.coinMarketDetailsAsync(coinType, currency.code, rateDiffCoinCodes, rateDiffPeriods)
-                .subscribeIO({ coinMarketDetails ->
-                    this.coinMarketDetails = coinMarketDetails
-                    coinDetailsStateObservable.onNext(CoinDetailsState.Loaded)
-                }, {
-                    coinDetailsStateObservable.onNext(CoinDetailsState.Error(it))
-                }).let {
-                    disposables.add(it)
+    private fun emitCoinState() {
+        _coinState.onNext(when {
+            accountManager.activeAccount == null -> CoinState.NoActiveAccount
+            fullCoin.platforms.none { it.coinType.isSupported } -> CoinState.Unsupported
+            walletManager.activeWallets.any { it.coin.uid == coinUid } -> {
+                if (initialCoinInWallet) {
+                    CoinState.InWallet
+                } else {
+                    CoinState.AddedToWallet
                 }
-    }
-
-    fun getTopTokenHolders(){
-        xRateManager.getTopTokenHoldersAsync(coinType)
-                .subscribeIO({ topTokenHolders ->
-                    this.topTokenHolders = topTokenHolders
-                    topTokenHoldersStateObservable.onNext(CoinDetailsState.Loaded)
-                }, {
-                    topTokenHoldersStateObservable.onNext(CoinDetailsState.Error(it))
-                }).let {
-                    disposables.add(it)
-                }
-    }
-
-    fun updateChartInfo() {
-        chartInfoDisposable?.dispose()
-
-        chartInfo = xRateManager.chartInfo(coinType, currency.code, chartType)
-        if (chartInfo == null){
-                //show chart spinner only when chart data is not locally cached
-                // and we need to wait for network response for data
-            chartSpinnerObservable.onNext(Unit)
-        }
-        xRateManager.chartInfoObservable(coinType, currency.code, chartType)
-                .subscribeIO({ chartInfo ->
-                    this.chartInfo = chartInfo
-                }, {
-                    chartInfoErrorObservable.onNext(it)
-                }).let {
-                    chartInfoDisposable = it
-                }
-    }
-
-    fun isCoinFavorite(): Boolean {
-        return marketFavoritesManager.isCoinInFavorites(coinType)
-    }
-
-    fun favorite() {
-        marketFavoritesManager.add(coinType)
-    }
-
-    fun unfavorite() {
-        marketFavoritesManager.remove(coinType)
+            }
+            else -> CoinState.NotInWallet
+        })
     }
 
     override fun clear() {
-        chartInfoDisposable?.dispose()
         disposables.clear()
+    }
+
+    fun favorite() {
+        marketFavoritesManager.add(fullCoin.coin.uid)
+
+        emitIsFavorite()
+    }
+
+    fun unfavorite() {
+        marketFavoritesManager.remove(fullCoin.coin.uid)
+
+        emitIsFavorite()
+    }
+
+    private fun emitIsFavorite() {
+        _isFavorite.onNext(marketFavoritesManager.isCoinInFavorites(fullCoin.coin.uid))
     }
 }

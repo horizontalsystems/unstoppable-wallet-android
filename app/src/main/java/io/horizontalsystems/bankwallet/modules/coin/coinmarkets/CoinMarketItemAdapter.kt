@@ -43,24 +43,24 @@ class CoinMarketItemAdapter : ListAdapter<MarketTickerViewItem, ViewHolderMarket
 class ViewHolderMarketTicker(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
     fun bind(item: MarketTickerViewItem, prev: MarketTickerViewItem?) {
-        if (item.imageUrl != prev?.imageUrl){
-            icon.loadImage(item.imageUrl)
+        if (item.marketImageUrl != prev?.marketImageUrl){
+            icon.loadImage(item.marketImageUrl)
         }
 
-        if (item.title != prev?.title) {
-            title.text = item.title
+        if (item.market != prev?.market) {
+            title.text = item.market
         }
 
-        if (item.subtitle != prev?.subtitle) {
-            subtitle.text = item.subtitle
+        if (item.pair != prev?.pair) {
+            subtitle.text = item.pair
         }
 
-        if (item.value != prev?.value) {
-            rate.text = item.value
+        if (item.rate != prev?.rate) {
+            rate.text = item.rate
         }
 
-        if (item.subvalue != prev?.subvalue) {
-            marketFieldValue.text = item.subvalue
+        if (item.volume != prev?.volume) {
+            marketFieldValue.text = item.volume
         }
     }
 

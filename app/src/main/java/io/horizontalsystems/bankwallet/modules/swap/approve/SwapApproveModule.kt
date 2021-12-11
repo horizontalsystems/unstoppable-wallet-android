@@ -25,13 +25,13 @@ object SwapApproveModule {
             return when (modelClass) {
                 SwapApproveViewModel::class.java -> {
                     val wallet =
-                        checkNotNull(App.walletManager.activeWallets.firstOrNull { it.coin == approveData.coin })
+                        checkNotNull(App.walletManager.activeWallets.firstOrNull { it.platformCoin == approveData.coin })
                     val erc20Adapter =
                         App.adapterManager.getAdapterForWallet(wallet) as Eip20Adapter
                     val approveAmountBigInteger =
-                        approveData.amount.movePointRight(approveData.coin.decimal).toBigInteger()
+                        approveData.amount.movePointRight(approveData.coin.decimals).toBigInteger()
                     val allowanceAmountBigInteger =
-                        approveData.allowance.movePointRight(approveData.coin.decimal)
+                        approveData.allowance.movePointRight(approveData.coin.decimals)
                             .toBigInteger()
                     val swapApproveService = SwapApproveService(
                         erc20Adapter.eip20Kit,
@@ -40,11 +40,7 @@ object SwapApproveModule {
                         allowanceAmountBigInteger
                     )
                     val coinService by lazy {
-                        EvmCoinService(
-                            approveData.coin,
-                            App.currencyManager,
-                            App.xRateManager
-                        )
+                        EvmCoinService(approveData.coin, App.currencyManager, App.marketKit)
                     }
                     SwapApproveViewModel(approveData.dex, swapApproveService, coinService) as T
                 }

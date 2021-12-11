@@ -1,24 +1,28 @@
 package io.horizontalsystems.bankwallet.modules.settings.main
 
-import io.horizontalsystems.bankwallet.core.IAppConfigProvider
 import io.horizontalsystems.bankwallet.core.IBackupManager
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.ITermsManager
+import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
+import io.horizontalsystems.bankwallet.entities.LaunchPage
 import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectSessionManager
-import io.horizontalsystems.core.*
+import io.horizontalsystems.core.ICurrencyManager
+import io.horizontalsystems.core.ILanguageManager
+import io.horizontalsystems.core.IPinComponent
+import io.horizontalsystems.core.ISystemInfoManager
 import io.horizontalsystems.core.entities.Currency
 import io.reactivex.disposables.CompositeDisposable
 
 class MainSettingsInteractor(
-        private val localStorage: ILocalStorage,
-        private val backupManager: IBackupManager,
-        private val languageManager: ILanguageManager,
-        private val systemInfoManager: ISystemInfoManager,
-        private val currencyManager: ICurrencyManager,
-        private val appConfigProvider: IAppConfigProvider,
-        private val termsManager: ITermsManager,
-        private val pinComponent: IPinComponent,
-        private val walletConnectSessionManager: WalletConnectSessionManager
+    private val localStorage: ILocalStorage,
+    private val backupManager: IBackupManager,
+    private val languageManager: ILanguageManager,
+    private val systemInfoManager: ISystemInfoManager,
+    private val currencyManager: ICurrencyManager,
+    private val appConfigProvider: AppConfigProvider,
+    private val termsManager: ITermsManager,
+    private val pinComponent: IPinComponent,
+    private val walletConnectSessionManager: WalletConnectSessionManager
 ) : MainSettingsModule.IMainSettingsInteractor {
 
     private var disposables: CompositeDisposable = CompositeDisposable()
@@ -77,8 +81,14 @@ class MainSettingsInteractor(
     override val isPinSet: Boolean
         get() = pinComponent.isPinSet
 
+    override val launchScreen: LaunchPage
+        get() = localStorage.launchPage ?: LaunchPage.Auto
+
     override fun clear() {
         disposables.clear()
     }
 
+    override fun setAppRelaunchingFromSettings() {
+        localStorage.relaunchBySettingChange = true
+    }
 }

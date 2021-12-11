@@ -8,17 +8,21 @@ import io.horizontalsystems.bankwallet.core.IChartTypeStorage
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.IMarketStorage
 import io.horizontalsystems.bankwallet.entities.AccountType
+import io.horizontalsystems.bankwallet.entities.LaunchPage
 import io.horizontalsystems.bankwallet.entities.SyncMode
 import io.horizontalsystems.bankwallet.entities.TransactionDataSortingType
 import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
+import io.horizontalsystems.bankwallet.modules.main.MainModule
+import io.horizontalsystems.bankwallet.modules.market.MarketField
 import io.horizontalsystems.bankwallet.modules.market.MarketModule
+import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.settings.theme.ThemeType
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.core.IPinStorage
 import io.horizontalsystems.core.IThirdKeyboard
 import io.horizontalsystems.core.entities.AppVersion
-import io.horizontalsystems.xrateskit.entities.ChartType
+import io.horizontalsystems.marketkit.models.ChartType
 
 class LocalStorageManager(private val preferences: SharedPreferences)
     : ILocalStorage, IPinStorage, IChartTypeStorage, IThirdKeyboard, IMarketStorage {
@@ -48,7 +52,7 @@ class LocalStorageManager(private val preferences: SharedPreferences)
     private val TRANSACTION_DATA_SORTING_TYPE = "transaction_data_sorting_type"
     private val BALANCE_HIDDEN = "balance_hidden"
     private val CHECKED_TERMS = "checked_terms"
-    private val MARKET_CURRENT_CATEGORY = "market_current_category"
+    private val MARKET_CURRENT_TAB = "market_current_tab"
     private val BIOMETRIC_ENABLED = "biometric_auth_enabled"
     private val PIN = "lock_pin"
     private val MAIN_SHOWED_ONCE = "main_showed_once"
@@ -58,6 +62,13 @@ class LocalStorageManager(private val preferences: SharedPreferences)
     private val CHANGELOG_SHOWN_FOR_APP_VERSION = "changelog_shown_for_app_version"
     private val IGNORE_ROOTED_DEVICE_WARNING = "ignore_rooted_device_warning"
     private val SWAP_PROVIDER = "swap_provider_"
+    private val LAUNCH_PAGE = "launch_page"
+    private val MAIN_TAB = "main_tab"
+    private val CUSTOM_TOKENS_RESTORE_COMPLETED = "custom_tokens_restore_completed"
+    private val FAVORITE_COIN_IDS_MIGRATED = "favorite_coins_ids_migrated"
+    private val MARKET_FAVORITES_SORTING_FIELD = "market_favorites_sorting_field"
+    private val MARKET_FAVORITES_MARKET_FIELD = "market_favorites_market_field"
+    private val RELAUNCH_BY_SETTING_CHANGE = "relaunch_by_setting_change"
 
     private val gson by lazy { Gson() }
 
@@ -122,7 +133,7 @@ class LocalStorageManager(private val preferences: SharedPreferences)
     override var sortType: BalanceSortType
         get() {
             val sortString = preferences.getString(SORT_TYPE, null)
-                    ?: BalanceSortType.Name.getAsString()
+                    ?: BalanceSortType.Value.getAsString()
             return BalanceSortType.getTypeFromString(sortString)
         }
         set(sortType) {
@@ -248,12 +259,10 @@ class LocalStorageManager(private val preferences: SharedPreferences)
 
     //  IChartTypeStorage
 
-    override var chartType: ChartType?
-        get() {
-            return ChartType.fromString(preferences.getString(CHART_TYPE, null))
-        }
+    override var chartType: ChartType
+        get() = ChartType.fromString(preferences.getString(CHART_TYPE, null)) ?: ChartType.TODAY
         set(mode) {
-            preferences.edit().putString(CHART_TYPE, mode?.name).apply()
+            preferences.edit().putString(CHART_TYPE, mode.name).apply()
         }
 
     override var torEnabled: Boolean
@@ -303,12 +312,12 @@ class LocalStorageManager(private val preferences: SharedPreferences)
             preferences.edit().putString(CHECKED_TERMS, termsString).apply()
         }
 
-    override var currentTab: MarketModule.Tab?
-        get() = preferences.getString(MARKET_CURRENT_CATEGORY, null)?.let {
+    override var currentMarketTab: MarketModule.Tab?
+        get() = preferences.getString(MARKET_CURRENT_TAB, null)?.let {
             MarketModule.Tab.fromString(it)
         }
         set(value) {
-            preferences.edit().putString(MARKET_CURRENT_CATEGORY, value?.name).apply()
+            preferences.edit().putString(MARKET_CURRENT_TAB, value?.name).apply()
         }
 
     override var mainShowedOnce: Boolean
@@ -339,6 +348,56 @@ class LocalStorageManager(private val preferences: SharedPreferences)
         get() = preferences.getBoolean(IGNORE_ROOTED_DEVICE_WARNING, false)
         set(value) {
             preferences.edit().putBoolean(IGNORE_ROOTED_DEVICE_WARNING, value).apply()
+        }
+
+    override var launchPage: LaunchPage?
+        get() = preferences.getString(LAUNCH_PAGE, null)?.let {
+            LaunchPage.fromString(it)
+        }
+        set(value) {
+            preferences.edit().putString(LAUNCH_PAGE, value?.name).apply()
+        }
+
+    override var mainTab: MainModule.MainTab?
+        get() = preferences.getString(MAIN_TAB, null)?.let {
+            MainModule.MainTab.fromString(it)
+        }
+        set(value) {
+            preferences.edit().putString(MAIN_TAB, value?.name).apply()
+        }
+
+    override var customTokensRestoreCompleted: Boolean
+        get() = preferences.getBoolean(CUSTOM_TOKENS_RESTORE_COMPLETED, false)
+        set(value) {
+            preferences.edit().putBoolean(CUSTOM_TOKENS_RESTORE_COMPLETED, value).apply()
+        }
+
+    override var favoriteCoinIdsMigrated: Boolean
+        get() = preferences.getBoolean(FAVORITE_COIN_IDS_MIGRATED, false)
+        set(value) {
+            preferences.edit().putBoolean(FAVORITE_COIN_IDS_MIGRATED, value).apply()
+        }
+
+    override var marketFavoritesSortingField: SortingField?
+        get() = preferences.getString(MARKET_FAVORITES_SORTING_FIELD, null)?.let {
+            SortingField.fromString(it)
+        }
+        set(value) {
+            preferences.edit().putString(MARKET_FAVORITES_SORTING_FIELD, value?.name).apply()
+        }
+
+    override var marketFavoritesMarketField: MarketField?
+        get() = preferences.getString(MARKET_FAVORITES_MARKET_FIELD, null)?.let {
+            MarketField.fromString(it)
+        }
+        set(value) {
+            preferences.edit().putString(MARKET_FAVORITES_MARKET_FIELD, value?.name).apply()
+        }
+
+    override var relaunchBySettingChange: Boolean
+        get() = preferences.getBoolean(RELAUNCH_BY_SETTING_CHANGE, false)
+        set(value) {
+            preferences.edit().putBoolean(RELAUNCH_BY_SETTING_CHANGE, value).commit()
         }
 
     override fun getSwapProviderId(blockchain: SwapMainModule.Blockchain): String? {

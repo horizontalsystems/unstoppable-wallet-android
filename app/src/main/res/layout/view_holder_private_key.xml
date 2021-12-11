@@ -31,22 +31,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/blockchain" />
 
-    <TextView
-        android:id="@+id/value"
-        style="@style/ButtonSecondary"
+    <androidx.compose.ui.platform.ComposeView
+        android:id="@+id/valueCompose"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="8dp"
-        android:ellipsize="none"
-        android:maxLines="2"
-        android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/divider"
-        tools:text="1JeippMVXgWqiMUUiL7KCSrh4Ngmixw1tbfih4Ngmixw1tbfi" />
+        tools:layout_height="44dp"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,6 +1,6 @@
 package io.horizontalsystems.bankwallet.entities
 
-import io.horizontalsystems.bankwallet.core.managers.url
+import io.horizontalsystems.bankwallet.core.managers.urls
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 
 data class EvmNetwork(
@@ -10,7 +10,7 @@ data class EvmNetwork(
 ) {
     val id: String
         get() {
-            val syncSourceUrl = syncSource.url.toString()
+            val syncSourceUrl = syncSource.urls.joinToString(separator = ",") { it.toString() }
 
             return "${networkType.chainId}|$syncSourceUrl"
         }
