@@ -25,15 +25,18 @@ object TvlModule {
             GlobalMarketRepository(App.marketKit)
         }
 
-        val xxxChartService by lazy {
-            val chartServiceRepo = TvlChartServiceRepo(globalMarketRepository)
+        private val chartServiceRepo by lazy {
+            TvlChartServiceRepo(globalMarketRepository)
+        }
+
+        private val xxxChartService by lazy {
             XxxChartService(App.currencyManager, chartServiceRepo)
         }
 
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             return when (modelClass) {
                 TvlViewModel::class.java -> {
-                    val service = TvlService(App.currencyManager, globalMarketRepository)
+                    val service = TvlService(App.currencyManager, globalMarketRepository, chartServiceRepo)
                     val tvlViewItemFactory = TvlViewItemFactory()
                     // todo: how to not depend on xxxChartService?
                     TvlViewModel(service, xxxChartService, tvlViewItemFactory) as T
