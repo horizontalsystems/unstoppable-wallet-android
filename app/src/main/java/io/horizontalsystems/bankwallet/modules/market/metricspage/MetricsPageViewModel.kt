@@ -4,22 +4,18 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.subscribeIO
-import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.entities.ViewState
-import io.horizontalsystems.bankwallet.modules.chart.ChartService
 import io.horizontalsystems.bankwallet.modules.market.MarketField
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
 import io.horizontalsystems.bankwallet.ui.compose.Select
-import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class MetricsPageViewModel(
     private val service: MetricsPageService,
-    private val chartService: ChartService
 ) : ViewModel() {
 
     private val disposables = CompositeDisposable()
@@ -46,42 +42,16 @@ class MetricsPageViewModel(
 
         service.marketItemsObservable
             .subscribeIO { marketItemsDataState ->
+                viewStateLiveData.postValue(marketItemsDataState.viewState)
+
+                loadingLiveData.postValue(marketItemsDataState.loading)
+
                 marketItemsDataState?.dataOrNull?.let {
                     marketItems = it
                     syncMarketItems(it)
                 }
             }
             .let { disposables.add(it) }
-
-        Observable.combineLatest(
-            listOf(
-                chartService.chartItemsObservable,
-                service.marketItemsObservable
-            )
-        ) { array -> array.map { it is DataState.Loading } }
-            .map { loadingArray ->
-                loadingArray.any { it }
-            }
-            .subscribeIO { loading ->
-                loadingLiveData.postValue(loading)
-            }
-            .let { disposables.add(it) }
-
-        Observable.combineLatest(
-            listOf(
-                chartService.chartItemsObservable,
-                service.marketItemsObservable
-            )
-        ) { it }.subscribeIO { array ->
-            val viewState: ViewState? = when {
-                array.any { it is DataState.Error } -> ViewState.Error(array.filterIsInstance<DataState.Error>().first().error)
-                array.all { it is DataState.Success<*> } -> ViewState.Success
-                else -> null
-            }
-            viewState?.let {
-                viewStateLiveData.postValue(it)
-            }
-        }.let { disposables.add(it) }
 
         service.start()
     }

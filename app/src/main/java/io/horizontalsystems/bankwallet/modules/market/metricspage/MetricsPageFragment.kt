@@ -77,9 +77,13 @@ class MetricsPageFragment : BaseFragment() {
         chartViewModel: ChartViewModel,
         onCoinClick: (String) -> Unit,
     ) {
-        val viewState by viewModel.viewStateLiveData.observeAsState()
+        val itemsViewState by viewModel.viewStateLiveData.observeAsState()
+        val chartViewState by chartViewModel.viewStateLiveData.observeAsState()
+        val viewState = itemsViewState?.merge(chartViewState)
         val marketData by viewModel.marketLiveData.observeAsState()
-        val loading by viewModel.loadingLiveData.observeAsState(false)
+        val itemsLoading by viewModel.loadingLiveData.observeAsState(false)
+        val chartLoading by chartViewModel.loadingLiveData.observeAsState(false)
+        val loading = itemsLoading || chartLoading
         val isRefreshing by viewModel.isRefreshingLiveData.observeAsState(false)
 
         Column(Modifier.background(color = ComposeAppTheme.colors.tyler)) {
