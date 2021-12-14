@@ -17,10 +17,10 @@ import io.horizontalsystems.chartview.ChartView
 import io.reactivex.disposables.CompositeDisposable
 
 class ChartViewModel(private val service: ChartService, private val factory: MetricChartFactory) : ViewModel() {
-    val chartTabItemsLiveData = MutableLiveData<List<TabItem<ChartView.ChartType>>>()
-    val chartDataWrapperLiveData = MutableLiveData<ChartDataWrapper>()
-    val chartLoadingLiveData = MutableLiveData<Boolean>()
-    val chartViewStateLiveData = MutableLiveData<ViewState>()
+    val tabItemsLiveData = MutableLiveData<List<TabItem<ChartView.ChartType>>>()
+    val dataWrapperLiveData = MutableLiveData<ChartDataWrapper>()
+    val loadingLiveData = MutableLiveData<Boolean>()
+    val viewStateLiveData = MutableLiveData<ViewState>()
     val currency by service::currency
 
     private val disposables = CompositeDisposable()
@@ -31,7 +31,7 @@ class ChartViewModel(private val service: ChartService, private val factory: Met
                 val tabItems = service.chartTypes.map {
                     TabItem(Translator.getString(it.stringResId), it == chartType, it)
                 }
-                chartTabItemsLiveData.postValue(tabItems)
+                tabItemsLiveData.postValue(tabItems)
             }
             .let {
                 disposables.add(it)
@@ -39,9 +39,9 @@ class ChartViewModel(private val service: ChartService, private val factory: Met
 
         service.chartItemsObservable
             .subscribeIO { chartItemsDataState ->
-                chartViewStateLiveData.postValue(chartItemsDataState.viewState)
+                viewStateLiveData.postValue(chartItemsDataState.viewState)
 
-                chartLoadingLiveData.postValue(chartItemsDataState.loading)
+                loadingLiveData.postValue(chartItemsDataState.loading)
 
                 chartItemsDataState.dataOrNull?.let { (chartType, chartItems) ->
                     syncChartItems(chartType, chartItems)
@@ -83,7 +83,7 @@ class ChartViewModel(private val service: ChartService, private val factory: Met
             chartViewItem.minValue
         )
 
-        chartDataWrapperLiveData.postValue(ChartDataWrapper(currentValue, currentValueDiff, chartInfoData))
+        dataWrapperLiveData.postValue(ChartDataWrapper(currentValue, currentValueDiff, chartInfoData))
     }
 
     override fun onCleared() {

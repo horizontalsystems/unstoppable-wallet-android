@@ -64,10 +64,10 @@ fun HsChartLineHeader(currentValue: String?, currentValueDiff: Value.Percent?) {
 
 @Composable
 fun Chart(chartViewModel: ChartViewModel) {
-    val chartDataWrapper by chartViewModel.chartDataWrapperLiveData.observeAsState()
-    val chartTabs by chartViewModel.chartTabItemsLiveData.observeAsState(listOf())
-    val chartLoading by chartViewModel.chartLoadingLiveData.observeAsState(false)
-    val chartViewState by chartViewModel.chartViewStateLiveData.observeAsState()
+    val chartDataWrapper by chartViewModel.dataWrapperLiveData.observeAsState()
+    val chartTabs by chartViewModel.tabItemsLiveData.observeAsState(listOf())
+    val chartLoading by chartViewModel.loadingLiveData.observeAsState(false)
+    val chartViewState by chartViewModel.viewStateLiveData.observeAsState()
     val currency = chartViewModel.currency
 
     Column {
