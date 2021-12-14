@@ -117,7 +117,9 @@ class TvlFragment : BaseFragment() {
                     ViewState.Success -> {
                         LazyColumn {
                             item {
-                                Chart(chartViewModel)
+                                Chart(chartViewModel) {
+                                    tvlViewModel.onSelectChartType(it)
+                                }
                             }
 
                             tvlData?.let { tvlData ->

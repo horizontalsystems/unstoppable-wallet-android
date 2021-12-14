@@ -39,7 +39,9 @@ class ChartViewModel(private val service: ChartService, private val factory: Met
 
         service.chartItemsObservable
             .subscribeIO { chartItemsDataState ->
-                viewStateLiveData.postValue(chartItemsDataState.viewState)
+                chartItemsDataState.viewState?.let {
+                    viewStateLiveData.postValue(it)
+                }
 
                 loadingLiveData.postValue(chartItemsDataState.loading)
 
