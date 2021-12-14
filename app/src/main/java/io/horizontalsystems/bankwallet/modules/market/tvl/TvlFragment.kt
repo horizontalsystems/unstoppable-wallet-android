@@ -75,10 +75,14 @@ class TvlFragment : BaseFragment() {
         chartViewModel: ChartViewModel,
         onCoinClick: (String?) -> Unit
     ) {
-        val viewState by tvlViewModel.viewStateLiveData.observeAsState()
+        val itemsViewState by tvlViewModel.viewStateLiveData.observeAsState()
+        val chartViewState by chartViewModel.viewStateLiveData.observeAsState()
+        val viewState = itemsViewState?.merge(chartViewState)
         val tvlData by tvlViewModel.tvlLiveData.observeAsState()
         val tvlDiffType by tvlViewModel.tvlDiffTypeLiveData.observeAsState()
-        val loading by tvlViewModel.loadingLiveData.observeAsState(false)
+        val itemsLoading by tvlViewModel.loadingLiveData.observeAsState(false)
+        val chartLoading by chartViewModel.loadingLiveData.observeAsState(false)
+        val loading = itemsLoading || chartLoading
         val isRefreshing by tvlViewModel.isRefreshingLiveData.observeAsState(false)
         val chainSelectorDialogState by tvlViewModel.chainSelectorDialogStateLiveData.observeAsState(SelectorDialogState.Closed)
 
