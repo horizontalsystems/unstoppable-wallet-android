@@ -2,9 +2,9 @@ package io.horizontalsystems.bankwallet.modules.market.metricspage
 
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
+import io.horizontalsystems.bankwallet.modules.chart.XxxChartServiceRepo
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.bankwallet.modules.market.tvl.GlobalMarketRepository
-import io.horizontalsystems.bankwallet.modules.market.tvl.XxxChartServiceRepo
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartModule
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
 import io.horizontalsystems.chartview.ChartView

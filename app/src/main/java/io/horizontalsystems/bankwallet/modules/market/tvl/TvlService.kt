@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.market.tvl
 
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
+import io.horizontalsystems.bankwallet.modules.chart.XxxChartServiceRepo
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartModule
 import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.core.ICurrencyManager
