@@ -99,7 +99,7 @@ private fun SettingsScreen(
             )
 
             settingItems?.let {
-                SettingSection(
+                SettingsContent(
                     it,
                     viewModel.appVersion,
                     onSettingClick,
@@ -111,7 +111,7 @@ private fun SettingsScreen(
 }
 
 @Composable
-private fun SettingSection(
+private fun SettingsContent(
     sections: List<List<MainSettingsModule.SettingViewItem>>,
     appVersion: String,
     onSettingClick: (MainSettingsModule.Setting) -> Unit,
@@ -119,54 +119,62 @@ private fun SettingSection(
 ) {
     Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
         Spacer(modifier = Modifier.height(12.dp))
-        sections.forEach { section ->
-            CellSingleLineLawrenceSection(section) { item ->
-                Row(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(horizontal = 16.dp)
-                        .clickable(onClick = { onSettingClick.invoke(item.setting) }),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Image(
-                        modifier = Modifier.size(20.dp),
-                        painter = painterResource(id = item.setting.icon),
-                        contentDescription = null,
-                    )
+        SettingSections(sections, onSettingClick)
+        SettingsFooter(appVersion, onCompanyLogoClick)
+    }
+}
+
+@Composable
+fun SettingSections(
+    sections: List<List<MainSettingsModule.SettingViewItem>>,
+    onSettingClick: (MainSettingsModule.Setting) -> Unit
+) {
+    sections.forEach { section ->
+        CellSingleLineLawrenceSection(section) { item ->
+            Row(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 16.dp)
+                    .clickable(onClick = { onSettingClick.invoke(item.setting) }),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    modifier = Modifier.size(20.dp),
+                    painter = painterResource(id = item.setting.icon),
+                    contentDescription = null,
+                )
+                Text(
+                    text = stringResource(item.setting.title),
+                    style = ComposeAppTheme.typography.body,
+                    color = ComposeAppTheme.colors.leah,
+                    maxLines = 1,
+                    modifier = Modifier.padding(horizontal = 16.dp)
+                )
+                Spacer(Modifier.weight(1f))
+                item.value?.let {
                     Text(
-                        text = stringResource(item.setting.title),
-                        style = ComposeAppTheme.typography.body,
+                        text = it,
+                        style = ComposeAppTheme.typography.subhead1,
                         color = ComposeAppTheme.colors.leah,
                         maxLines = 1,
-                        modifier = Modifier.padding(horizontal = 16.dp)
+                        modifier = Modifier.padding(horizontal = 8.dp)
                     )
-                    Spacer(Modifier.weight(1f))
-                    item.value?.let {
-                        Text(
-                            text = it,
-                            style = ComposeAppTheme.typography.subhead1,
-                            color = ComposeAppTheme.colors.leah,
-                            maxLines = 1,
-                            modifier = Modifier.padding(horizontal = 8.dp)
-                        )
-                    }
-                    if (item.showAlert) {
-                        Image(
-                            modifier = Modifier.padding(start = 8.dp, end = 12.dp).size(20.dp),
-                            painter = painterResource(id = R.drawable.ic_attention_red_20),
-                            contentDescription = null,
-                        )
-                    }
+                }
+                if (item.showAlert) {
                     Image(
-                        modifier = Modifier.size(20.dp),
-                        painter = painterResource(id = R.drawable.ic_arrow_right),
+                        modifier = Modifier.padding(start = 8.dp, end = 12.dp).size(20.dp),
+                        painter = painterResource(id = R.drawable.ic_attention_red_20),
                         contentDescription = null,
                     )
                 }
+                Image(
+                    modifier = Modifier.size(20.dp),
+                    painter = painterResource(id = R.drawable.ic_arrow_right),
+                    contentDescription = null,
+                )
             }
-            Spacer(Modifier.height(32.dp))
         }
-        SettingsFooter(appVersion, onCompanyLogoClick)
+        Spacer(Modifier.height(32.dp))
     }
 }
 
@@ -229,6 +237,6 @@ private fun previewSettingsScreen() {
     val testItems = listOf(section1, section2)
 
     ComposeAppTheme {
-        SettingSection(testItems, "0.24", { }, { })
+        SettingsContent(testItems, "0.24", { }, { })
     }
 }
