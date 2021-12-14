@@ -42,7 +42,9 @@ class MetricsPageViewModel(
 
         service.marketItemsObservable
             .subscribeIO { marketItemsDataState ->
-                viewStateLiveData.postValue(marketItemsDataState.viewState)
+                marketItemsDataState.viewState?.let {
+                    viewStateLiveData.postValue(it)
+                }
 
                 loadingLiveData.postValue(marketItemsDataState.loading)
 

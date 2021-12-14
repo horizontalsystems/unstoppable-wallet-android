@@ -118,7 +118,9 @@ class MetricChartViewModel(
     }
 
     private fun syncChartItems(chartData: DataState<Pair<ChartType, List<MetricChartModule.Item>>>) {
-        viewStateLiveData.postValue(chartData.viewState)
+        chartData.viewState?.let {
+            viewStateLiveData.postValue(it)
+        }
 
         chartLoadingLiveData.postValue(chartData.loading)
 
