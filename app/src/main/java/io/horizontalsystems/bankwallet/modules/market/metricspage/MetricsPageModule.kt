@@ -4,14 +4,13 @@ import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.modules.chart.ChartService
+import io.horizontalsystems.bankwallet.modules.chart.ChartModule
 import io.horizontalsystems.bankwallet.modules.chart.ChartViewModel
 import io.horizontalsystems.bankwallet.modules.coin.ChartInfoData
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.ChartInfoHeaderItem
 import io.horizontalsystems.bankwallet.modules.market.MarketField
 import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
 import io.horizontalsystems.bankwallet.modules.market.tvl.GlobalMarketRepository
-import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartFactory
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.core.entities.Currency
@@ -19,14 +18,9 @@ import io.horizontalsystems.core.entities.Currency
 object MetricsPageModule {
 
     @Suppress("UNCHECKED_CAST")
-    class Factory(
-        private val metricsType: MetricsType
-    ) : ViewModelProvider.Factory {
-        val globalMarketRepository = GlobalMarketRepository(App.marketKit)
-
-        val chartService by lazy {
-            val chartRepo = MetricsPageChartRepo(metricsType, globalMarketRepository)
-            ChartService(App.currencyManager, chartRepo)
+    class Factory(private val metricsType: MetricsType) : ViewModelProvider.Factory {
+        private val globalMarketRepository by lazy {
+            GlobalMarketRepository(App.marketKit)
         }
 
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
@@ -36,13 +30,11 @@ object MetricsPageModule {
                     MetricsPageViewModel(service) as T
                 }
                 ChartViewModel::class.java -> {
-                    val factory = MetricChartFactory(App.numberFormatter)
-                    ChartViewModel(chartService, factory) as T
+                    val chartRepo = MetricsPageChartRepo(metricsType, globalMarketRepository)
+                    ChartModule.createViewModel(chartRepo) as T
                 }
-
                 else -> throw IllegalArgumentException()
             }
-
         }
     }
 
