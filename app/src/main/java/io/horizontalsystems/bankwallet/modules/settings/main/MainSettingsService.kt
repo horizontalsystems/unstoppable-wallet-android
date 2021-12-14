@@ -1,9 +1,11 @@
 package io.horizontalsystems.bankwallet.modules.settings.main
 
+import io.horizontalsystems.bankwallet.BuildConfig
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IBackupManager
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.ITermsManager
-import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
+import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.LaunchPage
 import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectSessionManager
 import io.horizontalsystems.core.ICurrencyManager
@@ -11,84 +13,87 @@ import io.horizontalsystems.core.ILanguageManager
 import io.horizontalsystems.core.IPinComponent
 import io.horizontalsystems.core.ISystemInfoManager
 import io.horizontalsystems.core.entities.Currency
+import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.subjects.BehaviorSubject
 
-class MainSettingsInteractor(
+class MainSettingsService(
     private val localStorage: ILocalStorage,
     private val backupManager: IBackupManager,
     private val languageManager: ILanguageManager,
     private val systemInfoManager: ISystemInfoManager,
     private val currencyManager: ICurrencyManager,
-    private val appConfigProvider: AppConfigProvider,
     private val termsManager: ITermsManager,
     private val pinComponent: IPinComponent,
     private val walletConnectSessionManager: WalletConnectSessionManager
-) : MainSettingsModule.IMainSettingsInteractor {
+) {
+
+    private val stateUpdatedSubject = BehaviorSubject.create<Unit>()
+    val stateUpdatedObservable: Observable<Unit> get() = stateUpdatedSubject
 
     private var disposables: CompositeDisposable = CompositeDisposable()
 
-    var delegate: MainSettingsModule.IMainSettingsInteractorDelegate? = null
-
     init {
         disposables.add(backupManager.allBackedUpFlowable.subscribe {
-            delegate?.didUpdateAllBackedUp(it)
+            stateUpdatedSubject.onNext(Unit)
         })
 
         disposables.add(walletConnectSessionManager.sessionsObservable.subscribe {
-            delegate?.didUpdateWalletConnectSessionCount(it.count())
+            stateUpdatedSubject.onNext(Unit)
         })
 
         disposables.add(currencyManager.baseCurrencyUpdatedSignal.subscribe {
-            delegate?.didUpdateBaseCurrency()
+            stateUpdatedSubject.onNext(Unit)
         })
 
-        disposables.add(termsManager.termsAcceptedSignal
-                .subscribe { allAccepted ->
-                    delegate?.didUpdateTermsAccepted(allAccepted)
-                })
+        disposables.add(termsManager.termsAcceptedSignal.subscribe {
+            stateUpdatedSubject.onNext(Unit)
+            })
+
         disposables.add(pinComponent.pinSetFlowable.subscribe {
-            delegate?.didUpdatePinSet()
+            stateUpdatedSubject.onNext(Unit)
         })
     }
 
-    override val themeName: Int
+    val appVersion: String
+        get() {
+            var appVersion = systemInfoManager.appVersion
+            if (Translator.getString(R.string.is_release) == "false") {
+                appVersion += " (${BuildConfig.VERSION_CODE})"
+            }
+
+            return appVersion
+        }
+
+    val themeName: Int
         get() = localStorage.currentTheme.getTitle()
 
-    override val companyWebPageLink: String
-        get() = appConfigProvider.companyWebPageLink
-
-    override val appWebPageLink: String
-        get() = appConfigProvider.appWebPageLink
-
-    override val allBackedUp: Boolean
+    val allBackedUp: Boolean
         get() = backupManager.allBackedUp
 
-    override val walletConnectSessionCount: Int
+    val walletConnectSessionCount: Int
         get() = walletConnectSessionManager.sessions.count()
 
-    override val currentLanguageDisplayName: String
+    val currentLanguageDisplayName: String
         get() = languageManager.currentLanguageName
 
-    override val baseCurrency: Currency
+    val baseCurrency: Currency
         get() = currencyManager.baseCurrency
 
-    override val termsAccepted: Boolean
+    val termsAccepted: Boolean
         get() = termsManager.termsAccepted
 
-    override val appVersion: String
-        get() = systemInfoManager.appVersion
-
-    override val isPinSet: Boolean
+    val isPinSet: Boolean
         get() = pinComponent.isPinSet
 
-    override val launchScreen: LaunchPage
+    val launchScreen: LaunchPage
         get() = localStorage.launchPage ?: LaunchPage.Auto
 
-    override fun clear() {
-        disposables.clear()
+    fun setAppRelaunchingFromSettings() {
+        localStorage.relaunchBySettingChange = true
     }
 
-    override fun setAppRelaunchingFromSettings() {
-        localStorage.relaunchBySettingChange = true
+    fun stop() {
+        disposables.clear()
     }
 }

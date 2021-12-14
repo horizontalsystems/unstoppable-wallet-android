@@ -10,17 +10,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import io.horizontalsystems.bankwallet.core.managers.RateAppManager
-import io.horizontalsystems.bankwallet.modules.settings.main.MainSettingsAdapter
-import io.horizontalsystems.bankwallet.modules.settings.main.SettingsMenuItem
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.core.helpers.HudHelper
-import io.horizontalsystems.views.ListPosition
 import io.horizontalsystems.views.inflate
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_about.*
@@ -41,57 +36,57 @@ class AboutFragment : BaseFragment() {
             findNavController().popBackStack()
         }
 
-        val whatsNewItem = SettingsMenuItem(R.string.SettingsAboutApp_WhatsNew, R.drawable.ic_info_20, listPosition = ListPosition.Single) {
-            findNavController().navigate(R.id.aboutAppFragment_to_releaseNotesFragment, null, navOptions())
-        }
+//        val whatsNewItem = SettingsMenuItem(R.string.SettingsAboutApp_WhatsNew, R.drawable.ic_info_20, listPosition = ListPosition.Single) {
+//            findNavController().navigate(R.id.aboutAppFragment_to_releaseNotesFragment, null, navOptions())
+//        }
+//
+//        val appStatusItem = SettingsMenuItem(R.string.Settings_AppStatus, R.drawable.ic_app_status, listPosition = ListPosition.First) {
+//            findNavController().navigate(R.id.aboutAppFragment_to_appStatusFragment, null, navOptions())
+//        }
+//        val termsItem = SettingsMenuItem(R.string.Settings_Terms, R.drawable.ic_terms_20, listPosition = ListPosition.Last) {
+//            findNavController().navigate(R.id.aboutAppFragment_to_termsFragment, null, navOptions())
+//        }
+//
+//        val githubItem = SettingsMenuItem(R.string.SettingsAboutApp_Github, R.drawable.ic_github_20, listPosition = ListPosition.First) {
+//            viewModel.onGithubLinkTap()
+//        }
+//
+//        val websiteItem = SettingsMenuItem(R.string.SettingsAboutApp_Site, R.drawable.ic_globe, listPosition = ListPosition.Last) {
+//            viewModel.onSiteLinkTap()
+//        }
 
-        val appStatusItem = SettingsMenuItem(R.string.Settings_AppStatus, R.drawable.ic_app_status, listPosition = ListPosition.First) {
-            findNavController().navigate(R.id.aboutAppFragment_to_appStatusFragment, null, navOptions())
-        }
-        val termsItem = SettingsMenuItem(R.string.Settings_Terms, R.drawable.ic_terms_20, listPosition = ListPosition.Last) {
-            findNavController().navigate(R.id.aboutAppFragment_to_termsFragment, null, navOptions())
-        }
+//        val rateUsItem = SettingsMenuItem(R.string.Settings_RateUs, R.drawable.ic_star_20, listPosition = ListPosition.First) {
+//            context?.let {
+//                RateAppManager.openPlayMarket(it)
+//            }
+//        }
+//
+//        val shareAppItem = SettingsMenuItem(R.string.Settings_ShareThisWallet, R.drawable.ic_share_20, listPosition = ListPosition.Last) {
+//            viewModel.onTellFriendsTap()
+//        }
+//
+//        val contactItem = SettingsMenuItem(R.string.SettingsContact_Title, R.drawable.ic_email, listPosition = ListPosition.Single) {
+//            sendEmail(viewModel.reportEmail)
+//        }
+//
+//        val menuItemsAdapter = MainSettingsAdapter(listOf(
+//                whatsNewItem,
+//                null,
+//                appStatusItem,
+//                termsItem,
+//                null,
+//                githubItem,
+//                websiteItem,
+//                null,
+//                rateUsItem,
+//                shareAppItem,
+//                null,
+//                contactItem,
+//        ))
 
-        val githubItem = SettingsMenuItem(R.string.SettingsAboutApp_Github, R.drawable.ic_github_20, listPosition = ListPosition.First) {
-            viewModel.onGithubLinkTap()
-        }
+//        val headerAdapter = AboutAppHeaderAdapter(getAppVersion())
 
-        val websiteItem = SettingsMenuItem(R.string.SettingsAboutApp_Site, R.drawable.ic_globe, listPosition = ListPosition.Last) {
-            viewModel.onSiteLinkTap()
-        }
-
-        val rateUsItem = SettingsMenuItem(R.string.Settings_RateUs, R.drawable.ic_star_20, listPosition = ListPosition.First) {
-            context?.let {
-                RateAppManager.openPlayMarket(it)
-            }
-        }
-
-        val shareAppItem = SettingsMenuItem(R.string.Settings_ShareThisWallet, R.drawable.ic_share_20, listPosition = ListPosition.Last) {
-            viewModel.onTellFriendsTap()
-        }
-
-        val contactItem = SettingsMenuItem(R.string.SettingsContact_Title, R.drawable.ic_email, listPosition = ListPosition.Single) {
-            sendEmail(viewModel.reportEmail)
-        }
-
-        val menuItemsAdapter = MainSettingsAdapter(listOf(
-                whatsNewItem,
-                null,
-                appStatusItem,
-                termsItem,
-                null,
-                githubItem,
-                websiteItem,
-                null,
-                rateUsItem,
-                shareAppItem,
-                null,
-                contactItem,
-        ))
-
-        val headerAdapter = AboutAppHeaderAdapter(getAppVersion())
-
-        aboutRecyclerview.adapter = ConcatAdapter(headerAdapter, menuItemsAdapter)
+//        aboutRecyclerview.adapter = ConcatAdapter(headerAdapter, menuItemsAdapter)
 
         //observe LiveData
 
@@ -108,11 +103,11 @@ class AboutFragment : BaseFragment() {
             shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage)
             startActivity(Intent.createChooser(shareIntent, getString(R.string.SettingsShare_Title)))
         })
-
-        viewModel.termsAcceptedData.observe(viewLifecycleOwner, Observer { termsAccepted ->
-            termsItem.attention = !termsAccepted
-            menuItemsAdapter.notifyChanged(termsItem)
-        })
+//
+//        viewModel.termsAcceptedData.observe(viewLifecycleOwner, Observer { termsAccepted ->
+//            termsItem.attention = !termsAccepted
+//            menuItemsAdapter.notifyChanged(termsItem)
+//        })
 
         viewModel.showCopiedLiveEvent.observe(viewLifecycleOwner, Observer {
             activity?.let {
