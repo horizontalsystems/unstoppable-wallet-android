@@ -18,17 +18,21 @@ class TvlChartServiceRepo(
     override val dataUpdatedObservable = BehaviorSubject.create<Unit>()
 
     var chain: TvlModule.Chain = TvlModule.Chain.All
+        set(value) {
+            field = value
+            dataUpdatedObservable.onNext(Unit)
+        }
 
     override fun getItems(chartType: ChartView.ChartType, currency: Currency): Single<List<MetricChartModule.Item>> {
         val chainParam = if (chain == TvlModule.Chain.All) "" else chain.name
         return globalMarketRepository.getTvlGlobalMarketPoints(chainParam, currency.code, chartType)
     }
-
 }
 
 class TvlService(
     private val currencyManager: ICurrencyManager,
-    private val globalMarketRepository: GlobalMarketRepository
+    private val globalMarketRepository: GlobalMarketRepository,
+    private val chartServiceRepo: TvlChartServiceRepo
 ) {
 
     private var currencyManagerDisposable: Disposable? = null
@@ -51,6 +55,7 @@ class TvlService(
         set(value) {
             field = value
             updateTvlData(false)
+            chartServiceRepo.chain = chain
         }
 
     var sortDescending: Boolean = true
