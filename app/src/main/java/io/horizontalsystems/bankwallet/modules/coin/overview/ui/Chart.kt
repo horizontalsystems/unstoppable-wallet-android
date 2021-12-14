@@ -21,6 +21,7 @@ import io.horizontalsystems.bankwallet.modules.market.Value
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.chartview.Chart
+import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.chartview.models.PointInfo
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.core.helpers.DateHelper
@@ -63,7 +64,7 @@ fun HsChartLineHeader(currentValue: String?, currentValueDiff: Value.Percent?) {
 }
 
 @Composable
-fun Chart(chartViewModel: ChartViewModel) {
+fun Chart(chartViewModel: ChartViewModel, onSelectChartType: ((ChartView.ChartType) -> Unit)? = null) {
     val chartDataWrapper by chartViewModel.dataWrapperLiveData.observeAsState()
     val chartTabs by chartViewModel.tabItemsLiveData.observeAsState(listOf())
     val chartLoading by chartViewModel.loadingLiveData.observeAsState(false)
@@ -76,6 +77,7 @@ fun Chart(chartViewModel: ChartViewModel) {
             tabItems = chartTabs,
             onSelectTab = {
                 chartViewModel.onSelectChartType(it)
+                onSelectChartType?.invoke(it)
             },
             chartInfoData = chartDataWrapper?.chartInfoData,
             chartLoading = chartLoading,
