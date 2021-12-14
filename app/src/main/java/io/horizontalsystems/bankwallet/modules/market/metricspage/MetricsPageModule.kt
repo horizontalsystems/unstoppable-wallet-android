@@ -4,8 +4,8 @@ import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.modules.chart.XxxChartService
-import io.horizontalsystems.bankwallet.modules.chart.XxxChartViewModel
+import io.horizontalsystems.bankwallet.modules.chart.ChartService
+import io.horizontalsystems.bankwallet.modules.chart.ChartViewModel
 import io.horizontalsystems.bankwallet.modules.coin.ChartInfoData
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.ChartInfoHeaderItem
 import io.horizontalsystems.bankwallet.modules.market.MarketField
@@ -24,21 +24,21 @@ object MetricsPageModule {
     ) : ViewModelProvider.Factory {
         val globalMarketRepository = GlobalMarketRepository(App.marketKit)
 
-        val xxxChartService by lazy {
-            val chartServiceRepo = MetricsPageChartServiceRepo(metricsType, globalMarketRepository)
-            XxxChartService(App.currencyManager, chartServiceRepo)
+        val chartService by lazy {
+            val chartRepo = MetricsPageChartRepo(metricsType, globalMarketRepository)
+            ChartService(App.currencyManager, chartRepo)
         }
 
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             return when (modelClass) {
                 MetricsPageViewModel::class.java -> {
                     val service = MetricsPageService(metricsType, App.currencyManager, globalMarketRepository)
-                    // todo: how to not depend on xxxChartService in MetricsPageViewModel?
-                    MetricsPageViewModel(service, xxxChartService) as T
+                    // todo: how to not depend on chartService in MetricsPageViewModel?
+                    MetricsPageViewModel(service, chartService) as T
                 }
-                XxxChartViewModel::class.java -> {
+                ChartViewModel::class.java -> {
                     val factory = MetricChartFactory(App.numberFormatter)
-                    XxxChartViewModel(xxxChartService, factory) as T
+                    ChartViewModel(chartService, factory) as T
                 }
 
                 else -> throw IllegalArgumentException()

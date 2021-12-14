@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.entities.ViewState
-import io.horizontalsystems.bankwallet.modules.chart.XxxChartService
+import io.horizontalsystems.bankwallet.modules.chart.ChartService
 import io.horizontalsystems.bankwallet.modules.market.MarketField
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
@@ -19,7 +19,7 @@ import kotlinx.coroutines.launch
 
 class MetricsPageViewModel(
     private val service: MetricsPageService,
-    private val xxxChartService: XxxChartService
+    private val chartService: ChartService
 ) : ViewModel() {
 
     private val disposables = CompositeDisposable()
@@ -55,7 +55,7 @@ class MetricsPageViewModel(
 
         Observable.combineLatest(
             listOf(
-                xxxChartService.chartItemsObservable,
+                chartService.chartItemsObservable,
                 service.marketItemsObservable
             )
         ) { array -> array.map { it is DataState.Loading } }
@@ -69,7 +69,7 @@ class MetricsPageViewModel(
 
         Observable.combineLatest(
             listOf(
-                xxxChartService.chartItemsObservable,
+                chartService.chartItemsObservable,
                 service.marketItemsObservable
             )
         ) { it }.subscribeIO { array ->

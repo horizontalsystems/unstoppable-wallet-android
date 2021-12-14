@@ -9,9 +9,9 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.BehaviorSubject
 
-class XxxChartService(
+class ChartService(
     private val currencyManager: ICurrencyManager,
-    private val repo: XxxChartServiceRepo,
+    private val chartRepo: IChartRepo,
 ) {
 
     private var chartType: ChartView.ChartType? = null
@@ -19,7 +19,7 @@ class XxxChartService(
             field = value
             value?.let { chartTypeObservable.onNext(it) }
         }
-    val chartTypes by repo::chartTypes
+    val chartTypes by chartRepo::chartTypes
     val currency by currencyManager::baseCurrency
     val chartTypeObservable = BehaviorSubject.create<ChartView.ChartType>()
 
@@ -30,7 +30,7 @@ class XxxChartService(
     private val disposables = CompositeDisposable()
 
     fun start() {
-        repo.dataUpdatedObservable
+        chartRepo.dataUpdatedObservable
             .subscribeIO {
                 fetchItems()
             }
@@ -66,7 +66,7 @@ class XxxChartService(
         val tmpChartType = chartType ?: return
 
         fetchItemsDisposable?.dispose()
-        fetchItemsDisposable = repo.getItems(tmpChartType, currency)
+        fetchItemsDisposable = chartRepo.getItems(tmpChartType, currency)
             .doOnSubscribe {
                 chartItemsObservable.onNext(DataState.Loading)
             }

@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.ViewState
-import io.horizontalsystems.bankwallet.modules.chart.XxxChartViewModel
+import io.horizontalsystems.bankwallet.modules.chart.ChartViewModel
 import io.horizontalsystems.bankwallet.modules.coin.ChartInfoData
 import io.horizontalsystems.bankwallet.modules.market.Value
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -63,19 +63,19 @@ fun HsChartLineHeader(currentValue: String?, currentValueDiff: Value.Percent?) {
 }
 
 @Composable
-fun ChartXxx(xxxChart: XxxChartViewModel) {
-    val chartDataWrapper by xxxChart.chartDataWrapperLiveData.observeAsState()
-    val chartTabs by xxxChart.chartTabItemsLiveData.observeAsState(listOf())
-    val chartLoading by xxxChart.chartLoadingLiveData.observeAsState(false)
-    val chartViewState by xxxChart.chartViewStateLiveData.observeAsState()
-    val currency = xxxChart.currency
+fun Chart(chartViewModel: ChartViewModel) {
+    val chartDataWrapper by chartViewModel.chartDataWrapperLiveData.observeAsState()
+    val chartTabs by chartViewModel.chartTabItemsLiveData.observeAsState(listOf())
+    val chartLoading by chartViewModel.chartLoadingLiveData.observeAsState(false)
+    val chartViewState by chartViewModel.chartViewStateLiveData.observeAsState()
+    val currency = chartViewModel.currency
 
     Column {
         HsChartLineHeader(chartDataWrapper?.currentValue, chartDataWrapper?.currentValueDiff)
         Chart(
             tabItems = chartTabs,
             onSelectTab = {
-                xxxChart.onSelectChartType(it)
+                chartViewModel.onSelectChartType(it)
             },
             chartInfoData = chartDataWrapper?.chartInfoData,
             chartLoading = chartLoading,

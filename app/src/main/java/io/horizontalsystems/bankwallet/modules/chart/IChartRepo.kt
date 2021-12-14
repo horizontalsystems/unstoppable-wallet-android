@@ -6,7 +6,7 @@ import io.horizontalsystems.core.entities.Currency
 import io.reactivex.Observable
 import io.reactivex.Single
 
-interface XxxChartServiceRepo {
+interface IChartRepo {
     val chartTypes: List<ChartView.ChartType>
     val dataUpdatedObservable: Observable<Unit>
 

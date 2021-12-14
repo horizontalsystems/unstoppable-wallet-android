@@ -25,9 +25,9 @@ import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.bankwallet.entities.ViewState
-import io.horizontalsystems.bankwallet.modules.chart.XxxChartViewModel
+import io.horizontalsystems.bankwallet.modules.chart.ChartViewModel
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
-import io.horizontalsystems.bankwallet.modules.coin.overview.ui.ChartXxx
+import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Chart
 import io.horizontalsystems.bankwallet.modules.market.MarketField
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -48,7 +48,7 @@ class MetricsPageFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View {
         val factory = MetricsPageModule.Factory(metricsType!!)
-        val chartViewModel by viewModels<XxxChartViewModel> { factory }
+        val chartViewModel by viewModels<ChartViewModel> { factory }
         val viewModel by viewModels<MetricsPageViewModel> { factory }
 
         return ComposeView(requireContext()).apply {
@@ -74,7 +74,7 @@ class MetricsPageFragment : BaseFragment() {
     @Composable
     fun MetricsPage(
         viewModel: MetricsPageViewModel,
-        chartViewModel: XxxChartViewModel,
+        chartViewModel: ChartViewModel,
         onCoinClick: (String) -> Unit,
     ) {
         val viewState by viewModel.viewStateLiveData.observeAsState()
@@ -113,7 +113,7 @@ class MetricsPageFragment : BaseFragment() {
                     ViewState.Success -> {
                         LazyColumn {
                             item {
-                                ChartXxx(chartViewModel)
+                                Chart(chartViewModel)
                             }
                             marketData?.let { marketData ->
                                 item {

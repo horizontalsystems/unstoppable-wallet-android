@@ -2,7 +2,7 @@ package io.horizontalsystems.bankwallet.modules.market.tvl
 
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
-import io.horizontalsystems.bankwallet.modules.chart.XxxChartServiceRepo
+import io.horizontalsystems.bankwallet.modules.chart.IChartRepo
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartModule
 import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.core.ICurrencyManager
@@ -11,9 +11,9 @@ import io.reactivex.Single
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.BehaviorSubject
 
-class TvlChartServiceRepo(
+class TvlChartRepo(
     private val globalMarketRepository: GlobalMarketRepository
-): XxxChartServiceRepo {
+): IChartRepo {
 
     override val chartTypes = listOf(ChartView.ChartType.DAILY, ChartView.ChartType.WEEKLY, ChartView.ChartType.MONTHLY)
     override val dataUpdatedObservable = BehaviorSubject.create<Unit>()
@@ -33,7 +33,7 @@ class TvlChartServiceRepo(
 class TvlService(
     private val currencyManager: ICurrencyManager,
     private val globalMarketRepository: GlobalMarketRepository,
-    private val chartServiceRepo: TvlChartServiceRepo
+    private val chartRepo: TvlChartRepo
 ) {
 
     private var currencyManagerDisposable: Disposable? = null
@@ -56,7 +56,7 @@ class TvlService(
         set(value) {
             field = value
             updateTvlData(false)
-            chartServiceRepo.chain = chain
+            chartRepo.chain = chain
         }
 
     var sortDescending: Boolean = true

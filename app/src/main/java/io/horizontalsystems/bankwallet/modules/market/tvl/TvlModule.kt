@@ -7,8 +7,8 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.bankwallet.modules.chart.XxxChartService
-import io.horizontalsystems.bankwallet.modules.chart.XxxChartViewModel
+import io.horizontalsystems.bankwallet.modules.chart.ChartService
+import io.horizontalsystems.bankwallet.modules.chart.ChartViewModel
 import io.horizontalsystems.bankwallet.modules.coin.ChartInfoData
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.ChartInfoHeaderItem
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartFactory
@@ -27,25 +27,25 @@ object TvlModule {
             GlobalMarketRepository(App.marketKit)
         }
 
-        private val chartServiceRepo by lazy {
-            TvlChartServiceRepo(globalMarketRepository)
+        private val chartRepo by lazy {
+            TvlChartRepo(globalMarketRepository)
         }
 
-        private val xxxChartService by lazy {
-            XxxChartService(App.currencyManager, chartServiceRepo)
+        private val chartService by lazy {
+            ChartService(App.currencyManager, chartRepo)
         }
 
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             return when (modelClass) {
                 TvlViewModel::class.java -> {
-                    val service = TvlService(App.currencyManager, globalMarketRepository, chartServiceRepo)
+                    val service = TvlService(App.currencyManager, globalMarketRepository, chartRepo)
                     val tvlViewItemFactory = TvlViewItemFactory()
-                    // todo: how to not depend on xxxChartService?
-                    TvlViewModel(service, xxxChartService, tvlViewItemFactory) as T
+                    // todo: how to not depend on chartService?
+                    TvlViewModel(service, chartService, tvlViewItemFactory) as T
                 }
-                XxxChartViewModel::class.java -> {
+                ChartViewModel::class.java -> {
                     val factory = MetricChartFactory(App.numberFormatter)
-                    XxxChartViewModel(xxxChartService, factory) as T
+                    ChartViewModel(chartService, factory) as T
                 }
 
                 else -> throw IllegalArgumentException()
