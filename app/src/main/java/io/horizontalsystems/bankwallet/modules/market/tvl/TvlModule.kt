@@ -7,11 +7,10 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.bankwallet.modules.chart.ChartService
+import io.horizontalsystems.bankwallet.modules.chart.ChartModule
 import io.horizontalsystems.bankwallet.modules.chart.ChartViewModel
 import io.horizontalsystems.bankwallet.modules.coin.ChartInfoData
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.ChartInfoHeaderItem
-import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartFactory
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.WithTranslatableTitle
@@ -31,10 +30,6 @@ object TvlModule {
             TvlChartRepo(globalMarketRepository)
         }
 
-        private val chartService by lazy {
-            ChartService(App.currencyManager, chartRepo)
-        }
-
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             return when (modelClass) {
                 TvlViewModel::class.java -> {
@@ -43,10 +38,8 @@ object TvlModule {
                     TvlViewModel(service, tvlViewItemFactory) as T
                 }
                 ChartViewModel::class.java -> {
-                    val factory = MetricChartFactory(App.numberFormatter)
-                    ChartViewModel(chartService, factory) as T
+                    ChartModule.createViewModel(chartRepo) as T
                 }
-
                 else -> throw IllegalArgumentException()
             }
         }
