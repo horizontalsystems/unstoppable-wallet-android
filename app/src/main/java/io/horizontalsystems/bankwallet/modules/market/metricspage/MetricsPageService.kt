@@ -2,7 +2,7 @@ package io.horizontalsystems.bankwallet.modules.market.metricspage
 
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
-import io.horizontalsystems.bankwallet.modules.chart.XxxChartServiceRepo
+import io.horizontalsystems.bankwallet.modules.chart.IChartRepo
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.bankwallet.modules.market.tvl.GlobalMarketRepository
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartModule
@@ -15,10 +15,10 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.BehaviorSubject
 
 
-class MetricsPageChartServiceRepo(
+class MetricsPageChartRepo(
     val metricsType: MetricsType,
     private val globalMarketRepository: GlobalMarketRepository
-) : XxxChartServiceRepo {
+) : IChartRepo {
     override val chartTypes = listOf(ChartView.ChartType.DAILY, ChartView.ChartType.WEEKLY, ChartView.ChartType.MONTHLY)
     override val dataUpdatedObservable = BehaviorSubject.create<Unit>()
 

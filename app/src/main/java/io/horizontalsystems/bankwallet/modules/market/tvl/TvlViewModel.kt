@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.entities.ViewState
-import io.horizontalsystems.bankwallet.modules.chart.XxxChartService
+import io.horizontalsystems.bankwallet.modules.chart.ChartService
 import io.horizontalsystems.bankwallet.modules.market.tvl.TvlModule.SelectorDialogState
 import io.horizontalsystems.bankwallet.modules.market.tvl.TvlModule.TvlDiffType
 import io.horizontalsystems.bankwallet.ui.compose.Select
@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
 
 class TvlViewModel(
     private val service: TvlService,
-    private val xxxChartService: XxxChartService,
+    private val chartService: ChartService,
     private val tvlViewItemFactory: TvlViewItemFactory,
 ) : ViewModel() {
 
@@ -48,7 +48,7 @@ class TvlViewModel(
 
         Observable.combineLatest(
             listOf(
-                xxxChartService.chartItemsObservable,
+                chartService.chartItemsObservable,
                 service.marketTvlItemsObservable,
             )
         ) { array -> array.map { it is DataState.Loading } }
@@ -62,7 +62,7 @@ class TvlViewModel(
 
         Observable.combineLatest(
             listOf(
-                xxxChartService.chartItemsObservable,
+                chartService.chartItemsObservable,
                 service.marketTvlItemsObservable
             )
         ) { it }.subscribeIO { array ->

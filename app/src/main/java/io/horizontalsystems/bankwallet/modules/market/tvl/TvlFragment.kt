@@ -22,9 +22,9 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.ViewState
-import io.horizontalsystems.bankwallet.modules.chart.XxxChartViewModel
+import io.horizontalsystems.bankwallet.modules.chart.ChartViewModel
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
-import io.horizontalsystems.bankwallet.modules.coin.overview.ui.ChartXxx
+import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Chart
 import io.horizontalsystems.bankwallet.modules.market.MarketDataValue
 import io.horizontalsystems.bankwallet.modules.market.Value
 import io.horizontalsystems.bankwallet.modules.market.tvl.TvlModule.SelectorDialogState
@@ -45,7 +45,7 @@ class TvlFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View {
         val vmFactory = TvlModule.Factory()
-        val chartViewModel by viewModels<XxxChartViewModel> { vmFactory }
+        val chartViewModel by viewModels<ChartViewModel> { vmFactory }
         val viewModel by viewModels<TvlViewModel> { vmFactory }
 
         return ComposeView(requireContext()).apply {
@@ -72,7 +72,7 @@ class TvlFragment : BaseFragment() {
     @Composable
     private fun TvlScreen(
         tvlViewModel: TvlViewModel,
-        chartViewModel: XxxChartViewModel,
+        chartViewModel: ChartViewModel,
         onCoinClick: (String?) -> Unit
     ) {
         val viewState by tvlViewModel.viewStateLiveData.observeAsState()
@@ -113,7 +113,7 @@ class TvlFragment : BaseFragment() {
                     ViewState.Success -> {
                         LazyColumn {
                             item {
-                                ChartXxx(chartViewModel)
+                                Chart(chartViewModel)
                             }
 
                             tvlData?.let { tvlData ->
