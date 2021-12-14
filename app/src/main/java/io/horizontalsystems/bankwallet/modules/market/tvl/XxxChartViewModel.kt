@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.market.tvl
 
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
@@ -14,19 +15,91 @@ import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartModule
 import io.horizontalsystems.bankwallet.modules.metricchart.stringResId
 import io.horizontalsystems.bankwallet.ui.compose.components.TabItem
 import io.horizontalsystems.chartview.ChartView
+import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.core.entities.Currency
 import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
+import io.reactivex.subjects.BehaviorSubject
 
-interface XxxChartService {
-    val currency: Currency
-    val chartTypeObservable: Observable<ChartView.ChartType>
+interface XxxChartServiceRepo {
     val chartTypes: List<ChartView.ChartType>
-    val chartItemsObservable: Observable<DataState<Pair<ChartView.ChartType, List<MetricChartModule.Item>>>>
-    fun updateChartType(chartType: ChartView.ChartType)
+    val dataUpdatedObservable: Observable<Unit>
+
+    fun getItems(chartType: ChartView.ChartType, currency: Currency) : Single<List<MetricChartModule.Item>>
 }
 
-class XxxChart(private val service: XxxChartService, private val factory: MetricChartFactory) {
+class XxxChartService(
+    private val currencyManager: ICurrencyManager,
+    private val repo: XxxChartServiceRepo,
+) {
+
+    private var chartType: ChartView.ChartType? = null
+        set(value) {
+            field = value
+            value?.let { chartTypeObservable.onNext(it) }
+        }
+    val chartTypes by repo::chartTypes
+    val currency by currencyManager::baseCurrency
+    val chartTypeObservable = BehaviorSubject.create<ChartView.ChartType>()
+
+    val chartItemsObservable = BehaviorSubject.create<DataState<Pair<ChartView.ChartType, List<MetricChartModule.Item>>>>()
+
+    private var fetchItemsDisposable: Disposable? = null
+    private val disposables = CompositeDisposable()
+
+    fun start() {
+        repo.dataUpdatedObservable
+            .subscribeIO {
+                fetchItems()
+            }
+            .let {
+                disposables.add(it)
+            }
+
+        currencyManager.baseCurrencyUpdatedSignal
+            .subscribeIO {
+                fetchItems()
+            }
+            .let {
+                disposables.add(it)
+            }
+
+        chartType = chartTypes.firstOrNull()
+        fetchItems()
+    }
+
+    fun stop() {
+        disposables.clear()
+        fetchItemsDisposable?.dispose()
+    }
+
+    fun updateChartType(chartType: ChartView.ChartType) {
+        this.chartType = chartType
+
+        fetchItems()
+    }
+
+    @Synchronized
+    private fun fetchItems() {
+        val tmpChartType = chartType ?: return
+
+        fetchItemsDisposable?.dispose()
+        fetchItemsDisposable = repo.getItems(tmpChartType, currency)
+            .doOnSubscribe {
+                chartItemsObservable.onNext(DataState.Loading)
+            }
+            .subscribeIO({
+                chartItemsObservable.onNext(DataState.Success(Pair(tmpChartType, it)))
+            }, {
+                chartItemsObservable.onNext(DataState.Error(it))
+            })
+    }
+
+}
+
+class XxxChartViewModel(private val service: XxxChartService, private val factory: MetricChartFactory) : ViewModel() {
     val currentValueLiveData = MutableLiveData<String>()
     val currentValueDiffLiveData = MutableLiveData<Value.Percent>()
     val chartTabItemsLiveData = MutableLiveData<List<TabItem<ChartView.ChartType>>>()
@@ -37,7 +110,7 @@ class XxxChart(private val service: XxxChartService, private val factory: Metric
 
     private val disposables = CompositeDisposable()
 
-    fun start() {
+    init {
         service.chartTypeObservable
             .subscribeIO { chartType ->
                 val tabItems = service.chartTypes.map {
@@ -59,14 +132,21 @@ class XxxChart(private val service: XxxChartService, private val factory: Metric
                     syncChartItems(chartType, chartItems)
                 }
             }
-            .let { disposables.add(it) }
+            .let {
+                disposables.add(it)
+            }
+
+        service.start()
     }
 
     fun onSelectChartType(chartType: ChartView.ChartType) {
         service.updateChartType(chartType)
     }
 
-    private fun syncChartItems(chartType: ChartView.ChartType, chartItems: List<MetricChartModule.Item>) {
+    private fun syncChartItems(
+        chartType: ChartView.ChartType,
+        chartItems: List<MetricChartModule.Item>,
+    ) {
         chartItems.lastOrNull()?.let { lastItem ->
             val lastItemValue = lastItem.value
             val currentValue = App.numberFormatter.formatCurrencyValueAsShortened(CurrencyValue(service.currency, lastItemValue))
@@ -93,7 +173,8 @@ class XxxChart(private val service: XxxChartService, private val factory: Metric
         chartInfoLiveData.postValue(chartInfoData)
     }
 
-    fun stop() {
+    override fun onCleared() {
         disposables.clear()
+        service.stop()
     }
 }

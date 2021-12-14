@@ -17,7 +17,7 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.ChartInfoData
 import io.horizontalsystems.bankwallet.modules.market.Value
-import io.horizontalsystems.bankwallet.modules.market.tvl.XxxChart
+import io.horizontalsystems.bankwallet.modules.market.tvl.XxxChartViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.chartview.Chart
@@ -63,7 +63,7 @@ fun HsChartLineHeader(currentValue: String?, currentValueDiff: Value.Percent?) {
 }
 
 @Composable
-fun ChartXxx(xxxChart: XxxChart) {
+fun ChartXxx(xxxChart: XxxChartViewModel) {
     val currentValue by xxxChart.currentValueLiveData.observeAsState()
     val currentValueDiff by xxxChart.currentValueDiffLiveData.observeAsState()
     val chartTabs by xxxChart.chartTabItemsLiveData.observeAsState(listOf())

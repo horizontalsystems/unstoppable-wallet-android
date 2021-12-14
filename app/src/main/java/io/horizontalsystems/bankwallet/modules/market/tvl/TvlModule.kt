@@ -21,14 +21,30 @@ object TvlModule {
 
     @Suppress("UNCHECKED_CAST")
     class Factory : ViewModelProvider.Factory {
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            val globalMarketRepository = GlobalMarketRepository(App.marketKit)
-            val service = TvlService(App.currencyManager, globalMarketRepository)
-            val factory = MetricChartFactory(App.numberFormatter)
-            val tvlViewItemFactory = TvlViewItemFactory()
-            val xxxChart = XxxChart(service, factory)
+        private val globalMarketRepository: GlobalMarketRepository by lazy {
+            GlobalMarketRepository(App.marketKit)
+        }
 
-            return TvlViewModel(service, tvlViewItemFactory, xxxChart) as T
+        val xxxChartService by lazy {
+            val chartServiceRepo = TvlChartServiceRepo(globalMarketRepository)
+            XxxChartService(App.currencyManager, chartServiceRepo)
+        }
+
+        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+            return when (modelClass) {
+                TvlViewModel::class.java -> {
+                    val service = TvlService(App.currencyManager, globalMarketRepository)
+                    val tvlViewItemFactory = TvlViewItemFactory()
+                    // todo: how to not depend on xxxChartService?
+                    TvlViewModel(service, xxxChartService, tvlViewItemFactory) as T
+                }
+                XxxChartViewModel::class.java -> {
+                    val factory = MetricChartFactory(App.numberFormatter)
+                    XxxChartViewModel(xxxChartService, factory) as T
+                }
+
+                else -> throw IllegalArgumentException()
+            }
         }
     }
 

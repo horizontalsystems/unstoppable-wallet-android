@@ -5,22 +5,37 @@ import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartModule
 import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.core.ICurrencyManager
+import io.horizontalsystems.core.entities.Currency
+import io.reactivex.Single
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.BehaviorSubject
+
+class TvlChartServiceRepo(
+    private val globalMarketRepository: GlobalMarketRepository
+): XxxChartServiceRepo {
+
+    override val chartTypes = listOf(ChartView.ChartType.DAILY, ChartView.ChartType.WEEKLY, ChartView.ChartType.MONTHLY)
+    override val dataUpdatedObservable = BehaviorSubject.create<Unit>()
+
+    var chain: TvlModule.Chain = TvlModule.Chain.All
+
+    override fun getItems(chartType: ChartView.ChartType, currency: Currency): Single<List<MetricChartModule.Item>> {
+        val chainParam = if (chain == TvlModule.Chain.All) "" else chain.name
+        return globalMarketRepository.getTvlGlobalMarketPoints(chainParam, currency.code, chartType)
+    }
+
+}
 
 class TvlService(
     private val currencyManager: ICurrencyManager,
     private val globalMarketRepository: GlobalMarketRepository
-) : XxxChartService {
-    override val chartTypes = listOf(ChartView.ChartType.DAILY, ChartView.ChartType.WEEKLY, ChartView.ChartType.MONTHLY)
+) {
 
     private var currencyManagerDisposable: Disposable? = null
     private var globalMarketPointsDisposable: Disposable? = null
     private var tvlDataDisposable: Disposable? = null
 
-    override val currency by currencyManager::baseCurrency
-    override val chartItemsObservable = BehaviorSubject.createDefault<DataState<Pair<ChartView.ChartType, List<MetricChartModule.Item>>>>(DataState.Loading)
-    override val chartTypeObservable = BehaviorSubject.create<ChartView.ChartType>()
+    val currency by currencyManager::baseCurrency
 
     val marketTvlItemsObservable: BehaviorSubject<DataState<List<TvlModule.MarketTvlItem>>> =
         BehaviorSubject.createDefault(DataState.Loading)
@@ -28,8 +43,6 @@ class TvlService(
     private var chartType: ChartView.ChartType = ChartView.ChartType.DAILY
         set(value) {
             field = value
-            chartTypeObservable.onNext(value)
-            updateGlobalMarketPoints()
             updateTvlData(false)
         }
 
@@ -37,7 +50,6 @@ class TvlService(
     var chain: TvlModule.Chain = TvlModule.Chain.All
         set(value) {
             field = value
-            updateGlobalMarketPoints()
             updateTvlData(false)
         }
 
@@ -47,22 +59,8 @@ class TvlService(
             updateTvlData(false)
         }
 
-    private fun updateGlobalMarketPoints() {
-        globalMarketPointsDisposable?.dispose()
-
-        val chainParam = if (chain == TvlModule.Chain.All) "" else chain.name
-        globalMarketRepository.getTvlGlobalMarketPoints(chainParam, currency.code, chartType)
-            .doOnSubscribe { chartItemsObservable.onNext(DataState.Loading) }
-            .subscribeIO({
-                chartItemsObservable.onNext(DataState.Success(Pair(chartType, it)))
-            }, {
-                chartItemsObservable.onNext(DataState.Error(it))
-            })
-            .let { globalMarketPointsDisposable = it }
-    }
 
     private fun forceRefresh() {
-        updateGlobalMarketPoints()
         updateTvlData(true)
     }
 
@@ -85,7 +83,6 @@ class TvlService(
             }
             .let { currencyManagerDisposable = it }
 
-        chartTypeObservable.onNext(chartType)
         forceRefresh()
     }
 
@@ -100,7 +97,7 @@ class TvlService(
         tvlDataDisposable?.dispose()
     }
 
-    override fun updateChartType(chartType: ChartView.ChartType) {
+    fun updateChartType(chartType: ChartView.ChartType) {
         this.chartType = chartType
     }
 }

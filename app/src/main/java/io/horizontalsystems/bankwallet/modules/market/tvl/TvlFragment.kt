@@ -43,8 +43,9 @@ class TvlFragment : BaseFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
-        val viewModel by viewModels<TvlViewModel> { TvlModule.Factory() }
+        val vmFactory = TvlModule.Factory()
+        val chartViewModel by viewModels<XxxChartViewModel> { vmFactory }
+        val viewModel by viewModels<TvlViewModel> { vmFactory }
 
         return ComposeView(requireContext()).apply {
             setViewCompositionStrategy(
@@ -52,7 +53,7 @@ class TvlFragment : BaseFragment() {
             )
             setContent {
                 ComposeAppTheme {
-                    TvlScreen(viewModel) { onCoinClick(it) }
+                    TvlScreen(viewModel, chartViewModel) { onCoinClick(it) }
                 }
             }
         }
@@ -69,16 +70,16 @@ class TvlFragment : BaseFragment() {
 
     @Composable
     private fun TvlScreen(
-        viewModel: TvlViewModel,
+        tvlViewModel: TvlViewModel,
+        chartViewModel: XxxChartViewModel,
         onCoinClick: (String?) -> Unit
     ) {
-        val viewState by viewModel.viewStateLiveData.observeAsState()
-        val tvlData by viewModel.tvlLiveData.observeAsState()
-        val tvlDiffType by viewModel.tvlDiffTypeLiveData.observeAsState()
-        val loading by viewModel.loadingLiveData.observeAsState(false)
-        val isRefreshing by viewModel.isRefreshingLiveData.observeAsState(false)
-        val chainSelectorDialogState by viewModel.chainSelectorDialogStateLiveData.observeAsState(SelectorDialogState.Closed)
-        val xxxChart = viewModel.xxxChart
+        val viewState by tvlViewModel.viewStateLiveData.observeAsState()
+        val tvlData by tvlViewModel.tvlLiveData.observeAsState()
+        val tvlDiffType by tvlViewModel.tvlDiffTypeLiveData.observeAsState()
+        val loading by tvlViewModel.loadingLiveData.observeAsState(false)
+        val isRefreshing by tvlViewModel.isRefreshingLiveData.observeAsState(false)
+        val chainSelectorDialogState by tvlViewModel.chainSelectorDialogStateLiveData.observeAsState(SelectorDialogState.Closed)
 
         Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
             AppBar(
@@ -97,7 +98,7 @@ class TvlFragment : BaseFragment() {
             HSSwipeRefresh(
                 state = rememberSwipeRefreshState(isRefreshing || loading),
                 onRefresh = {
-                    viewModel.refresh()
+                    tvlViewModel.refresh()
                 }
             ) {
                 when (viewState) {
@@ -105,13 +106,13 @@ class TvlFragment : BaseFragment() {
                         ListErrorView(
                             stringResource(R.string.Market_SyncError)
                         ) {
-                            viewModel.onErrorClick()
+                            tvlViewModel.onErrorClick()
                         }
                     }
                     ViewState.Success -> {
                         LazyColumn {
                             item {
-                                ChartXxx(xxxChart)
+                                ChartXxx(chartViewModel)
                             }
 
                             tvlData?.let { tvlData ->
@@ -120,9 +121,9 @@ class TvlFragment : BaseFragment() {
                                         tvlData.chainSelect,
                                         tvlData.sortDescending,
                                         tvlDiffType,
-                                        viewModel::onClickChainSelector,
-                                        viewModel::onToggleSortType,
-                                        viewModel::onToggleTvlDiffType
+                                        tvlViewModel::onClickChainSelector,
+                                        tvlViewModel::onToggleSortType,
+                                        tvlViewModel::onToggleTvlDiffType
                                     )
                                 }
 
@@ -155,8 +156,8 @@ class TvlFragment : BaseFragment() {
                         AlertGroup(
                             R.string.MarketGlobalMetrics_ChainSelectorTitle,
                             option.select,
-                            viewModel::onSelectChain,
-                            viewModel::onChainSelectorDialogDismiss
+                            tvlViewModel::onSelectChain,
+                            tvlViewModel::onChainSelectorDialogDismiss
                         )
                     }
                 }

@@ -9,7 +9,8 @@ import io.horizontalsystems.bankwallet.modules.coin.overview.ui.ChartInfoHeaderI
 import io.horizontalsystems.bankwallet.modules.market.MarketField
 import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
 import io.horizontalsystems.bankwallet.modules.market.tvl.GlobalMarketRepository
-import io.horizontalsystems.bankwallet.modules.market.tvl.XxxChart
+import io.horizontalsystems.bankwallet.modules.market.tvl.XxxChartService
+import io.horizontalsystems.bankwallet.modules.market.tvl.XxxChartViewModel
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartFactory
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
 import io.horizontalsystems.bankwallet.ui.compose.Select
@@ -21,12 +22,28 @@ object MetricsPageModule {
     class Factory(
         private val metricsType: MetricsType
     ) : ViewModelProvider.Factory {
+        val globalMarketRepository = GlobalMarketRepository(App.marketKit)
+
+        val xxxChartService by lazy {
+            val chartServiceRepo = MetricsPageChartServiceRepo(metricsType, globalMarketRepository)
+            XxxChartService(App.currencyManager, chartServiceRepo)
+        }
+
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            val globalMarketRepository = GlobalMarketRepository(App.marketKit)
-            val service = MetricsPageService(metricsType, App.currencyManager, globalMarketRepository)
-            val factory = MetricChartFactory(App.numberFormatter)
-            val xxxChart = XxxChart(service, factory)
-            return MetricsPageViewModel(service, xxxChart) as T
+            return when (modelClass) {
+                MetricsPageViewModel::class.java -> {
+                    val service = MetricsPageService(metricsType, App.currencyManager, globalMarketRepository)
+                    // todo: how to not depend on xxxChartService in MetricsPageViewModel?
+                    MetricsPageViewModel(service, xxxChartService) as T
+                }
+                XxxChartViewModel::class.java -> {
+                    val factory = MetricChartFactory(App.numberFormatter)
+                    XxxChartViewModel(xxxChartService, factory) as T
+                }
+
+                else -> throw IllegalArgumentException()
+            }
+
         }
     }
 
