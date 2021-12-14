@@ -33,8 +33,7 @@ object MetricsPageModule {
             return when (modelClass) {
                 MetricsPageViewModel::class.java -> {
                     val service = MetricsPageService(metricsType, App.currencyManager, globalMarketRepository)
-                    // todo: how to not depend on chartService in MetricsPageViewModel?
-                    MetricsPageViewModel(service, chartService) as T
+                    MetricsPageViewModel(service) as T
                 }
                 ChartViewModel::class.java -> {
                     val factory = MetricChartFactory(App.numberFormatter)
