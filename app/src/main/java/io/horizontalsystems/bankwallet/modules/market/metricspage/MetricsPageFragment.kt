@@ -28,6 +28,7 @@ import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.ChartXxx
 import io.horizontalsystems.bankwallet.modules.market.MarketField
+import io.horizontalsystems.bankwallet.modules.market.tvl.XxxChartViewModel
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
@@ -46,7 +47,9 @@ class MetricsPageFragment : BaseFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val viewModel by viewModels<MetricsPageViewModel> { MetricsPageModule.Factory(metricsType!!) }
+        val factory = MetricsPageModule.Factory(metricsType!!)
+        val chartViewModel by viewModels<XxxChartViewModel> { factory }
+        val viewModel by viewModels<MetricsPageViewModel> { factory }
 
         return ComposeView(requireContext()).apply {
             setViewCompositionStrategy(
@@ -54,7 +57,9 @@ class MetricsPageFragment : BaseFragment() {
             )
             setContent {
                 ComposeAppTheme {
-                    MetricsPage(viewModel) { onCoinClick(it) }
+                    MetricsPage(viewModel, chartViewModel) {
+                        onCoinClick(it)
+                    }
                 }
             }
         }
@@ -67,7 +72,11 @@ class MetricsPageFragment : BaseFragment() {
     }
 
     @Composable
-    fun MetricsPage(viewModel: MetricsPageViewModel, onCoinClick: (String) -> Unit) {
+    fun MetricsPage(
+        viewModel: MetricsPageViewModel,
+        chartViewModel: XxxChartViewModel,
+        onCoinClick: (String) -> Unit,
+    ) {
         val viewState by viewModel.viewStateLiveData.observeAsState()
         val marketData by viewModel.marketLiveData.observeAsState()
         val loading by viewModel.loadingLiveData.observeAsState(false)
@@ -104,7 +113,7 @@ class MetricsPageFragment : BaseFragment() {
                     ViewState.Success -> {
                         LazyColumn {
                             item {
-                                ChartXxx(xxxChart = viewModel.xxxChart)
+                                ChartXxx(chartViewModel)
                             }
                             marketData?.let { marketData ->
                                 item {

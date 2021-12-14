@@ -9,7 +9,7 @@ import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.market.MarketField
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
-import io.horizontalsystems.bankwallet.modules.market.tvl.XxxChart
+import io.horizontalsystems.bankwallet.modules.market.tvl.XxxChartService
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.reactivex.Observable
@@ -19,7 +19,7 @@ import kotlinx.coroutines.launch
 
 class MetricsPageViewModel(
     private val service: MetricsPageService,
-    val xxxChart: XxxChart
+    private val xxxChartService: XxxChartService
 ) : ViewModel() {
 
     private val disposables = CompositeDisposable()
@@ -55,7 +55,7 @@ class MetricsPageViewModel(
 
         Observable.combineLatest(
             listOf(
-                service.chartItemsObservable,
+                xxxChartService.chartItemsObservable,
                 service.marketItemsObservable
             )
         ) { array -> array.map { it is DataState.Loading } }
@@ -69,7 +69,7 @@ class MetricsPageViewModel(
 
         Observable.combineLatest(
             listOf(
-                service.chartItemsObservable,
+                xxxChartService.chartItemsObservable,
                 service.marketItemsObservable
             )
         ) { it }.subscribeIO { array ->
@@ -83,7 +83,6 @@ class MetricsPageViewModel(
             }
         }.let { disposables.add(it) }
 
-        xxxChart.start()
         service.start()
     }
 
@@ -124,7 +123,6 @@ class MetricsPageViewModel(
     }
 
     override fun onCleared() {
-        xxxChart.stop()
         service.stop()
         disposables.clear()
     }

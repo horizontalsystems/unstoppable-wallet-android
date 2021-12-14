@@ -16,8 +16,8 @@ import kotlinx.coroutines.launch
 
 class TvlViewModel(
     private val service: TvlService,
+    private val xxxChartService: XxxChartService,
     private val tvlViewItemFactory: TvlViewItemFactory,
-    val xxxChart: XxxChart
 ) : ViewModel() {
 
     private val disposables = CompositeDisposable()
@@ -47,7 +47,7 @@ class TvlViewModel(
 
         Observable.combineLatest(
             listOf(
-                service.chartItemsObservable,
+                xxxChartService.chartItemsObservable,
                 service.marketTvlItemsObservable,
             )
         ) { array -> array.map { it is DataState.Loading } }
@@ -61,7 +61,7 @@ class TvlViewModel(
 
         Observable.combineLatest(
             listOf(
-                service.chartItemsObservable,
+                xxxChartService.chartItemsObservable,
                 service.marketTvlItemsObservable
             )
         ) { it }.subscribeIO { array ->
@@ -75,7 +75,6 @@ class TvlViewModel(
             }
         }.let { disposables.add(it) }
 
-        xxxChart.start()
         service.start()
     }
 
@@ -126,7 +125,6 @@ class TvlViewModel(
     }
 
     override fun onCleared() {
-        xxxChart.stop()
         service.stop()
         disposables.clear()
     }
