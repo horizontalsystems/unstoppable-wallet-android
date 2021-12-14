@@ -4,20 +4,16 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.subscribeIO
-import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.entities.ViewState
-import io.horizontalsystems.bankwallet.modules.chart.ChartService
 import io.horizontalsystems.bankwallet.modules.market.tvl.TvlModule.SelectorDialogState
 import io.horizontalsystems.bankwallet.modules.market.tvl.TvlModule.TvlDiffType
 import io.horizontalsystems.bankwallet.ui.compose.Select
-import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class TvlViewModel(
     private val service: TvlService,
-    private val chartService: ChartService,
     private val tvlViewItemFactory: TvlViewItemFactory,
 ) : ViewModel() {
 
@@ -39,42 +35,16 @@ class TvlViewModel(
     init {
         service.marketTvlItemsObservable
             .subscribeIO { tvlItemsDataState ->
+                viewStateLiveData.postValue(tvlItemsDataState.viewState)
+
+                loadingLiveData.postValue(tvlItemsDataState.loading)
+
                 tvlItemsDataState.dataOrNull?.let {
                     tvlItems = it
                     syncTvlItems(it)
                 }
             }
             .let { disposables.add(it) }
-
-        Observable.combineLatest(
-            listOf(
-                chartService.chartItemsObservable,
-                service.marketTvlItemsObservable,
-            )
-        ) { array -> array.map { it is DataState.Loading } }
-            .map { loadingArray ->
-                loadingArray.any { it }
-            }
-            .subscribeIO { loading ->
-                loadingLiveData.postValue(loading)
-            }
-            .let { disposables.add(it) }
-
-        Observable.combineLatest(
-            listOf(
-                chartService.chartItemsObservable,
-                service.marketTvlItemsObservable
-            )
-        ) { it }.subscribeIO { array ->
-            val viewState: ViewState? = when {
-                array.any { it is DataState.Error } -> ViewState.Error(array.filterIsInstance<DataState.Error>().first().error)
-                array.all { it is DataState.Success<*> } -> ViewState.Success
-                else -> null
-            }
-            viewState?.let {
-                viewStateLiveData.postValue(it)
-            }
-        }.let { disposables.add(it) }
 
         service.start()
     }

@@ -40,8 +40,7 @@ object TvlModule {
                 TvlViewModel::class.java -> {
                     val service = TvlService(App.currencyManager, globalMarketRepository, chartRepo)
                     val tvlViewItemFactory = TvlViewItemFactory()
-                    // todo: how to not depend on chartService?
-                    TvlViewModel(service, chartService, tvlViewItemFactory) as T
+                    TvlViewModel(service, tvlViewItemFactory) as T
                 }
                 ChartViewModel::class.java -> {
                     val factory = MetricChartFactory(App.numberFormatter)
