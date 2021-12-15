@@ -9,6 +9,7 @@ import io.reactivex.Single
 interface IChartRepo {
     val chartTypes: List<ChartView.ChartType>
     val dataUpdatedObservable: Observable<Unit>
+    val initialChartType: ChartView.ChartType
 
     fun getItems(chartType: ChartView.ChartType, currency: Currency) : Single<List<MetricChartModule.Item>>
 }

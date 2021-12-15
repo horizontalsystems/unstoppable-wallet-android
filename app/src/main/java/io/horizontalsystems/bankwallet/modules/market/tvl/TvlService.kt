@@ -17,6 +17,7 @@ class TvlChartRepo(
 
     override val chartTypes = listOf(ChartView.ChartType.DAILY, ChartView.ChartType.WEEKLY, ChartView.ChartType.MONTHLY)
     override val dataUpdatedObservable = BehaviorSubject.create<Unit>()
+    override val initialChartType: ChartView.ChartType = ChartView.ChartType.DAILY
 
     var chain: TvlModule.Chain = TvlModule.Chain.All
         set(value) {

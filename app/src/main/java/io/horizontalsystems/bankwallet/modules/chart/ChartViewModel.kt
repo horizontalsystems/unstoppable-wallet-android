@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.chart
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
@@ -11,7 +12,6 @@ import io.horizontalsystems.bankwallet.modules.coin.ChartInfoData
 import io.horizontalsystems.bankwallet.modules.market.Value
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartFactory
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartModule
-import io.horizontalsystems.bankwallet.modules.metricchart.stringResId
 import io.horizontalsystems.bankwallet.ui.compose.components.TabItem
 import io.horizontalsystems.chartview.ChartView
 import io.reactivex.disposables.CompositeDisposable
@@ -93,3 +93,17 @@ class ChartViewModel(private val service: ChartService, private val factory: Met
         service.stop()
     }
 }
+
+val ChartView.ChartType.stringResId: Int
+    get() = when (this) {
+        ChartView.ChartType.TODAY -> R.string.CoinPage_TimeDuration_Today
+        ChartView.ChartType.DAILY -> R.string.CoinPage_TimeDuration_Day
+        ChartView.ChartType.WEEKLY -> R.string.CoinPage_TimeDuration_Week
+        ChartView.ChartType.WEEKLY2 -> R.string.CoinPage_TimeDuration_TwoWeeks
+        ChartView.ChartType.MONTHLY -> R.string.CoinPage_TimeDuration_Month
+        ChartView.ChartType.MONTHLY_BY_DAY -> R.string.CoinPage_TimeDuration_Month
+        ChartView.ChartType.MONTHLY3 -> R.string.CoinPage_TimeDuration_Month3
+        ChartView.ChartType.MONTHLY6 -> R.string.CoinPage_TimeDuration_HalfYear
+        ChartView.ChartType.MONTHLY12 -> R.string.CoinPage_TimeDuration_Year
+        ChartView.ChartType.MONTHLY24 -> R.string.CoinPage_TimeDuration_Year2
+    }
