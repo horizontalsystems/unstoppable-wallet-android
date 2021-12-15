@@ -20,6 +20,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -27,6 +28,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
+import androidx.navigation.NavController
+import androidx.navigation.NavOptions
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.providers.Translator
@@ -56,11 +59,7 @@ class MainSettingsFragment : BaseFragment() {
             )
             setContent {
                 ComposeAppTheme {
-                    SettingsScreen(
-                        viewModel,
-                        { setting -> openScreen(setting) },
-                        { openLink(viewModel.companyWebPage) }
-                    )
+                    SettingsScreen(viewModel, findNavController())
                 }
             }
         }
@@ -69,20 +68,6 @@ class MainSettingsFragment : BaseFragment() {
     override fun onResume() {
         super.onResume()
         subscribeFragmentResult()
-    }
-
-    private fun openScreen(destination: Int) {
-        val bundle = if (destination == R.id.mainFragment_to_manageKeysFragment) {
-            bundleOf(ManageAccountsModule.MODE to ManageAccountsModule.Mode.Manage)
-        } else {
-            null
-        }
-
-        findNavController().navigate(destination, bundle, navOptions())
-    }
-
-    private fun openLink(link: String) {
-        context?.let { LinkHelper.openLinkInAppBrowser(it, link) }
     }
 
     private fun subscribeFragmentResult() {
@@ -94,19 +79,10 @@ class MainSettingsFragment : BaseFragment() {
 
 }
 
-class AppSettingItem(
-    @StringRes val title: Int,
-    @DrawableRes val icon: Int,
-    val value: String? = null,
-    val showAlert: Boolean = false,
-    val onClick: () -> Unit
-)
-
 @Composable
 private fun SettingsScreen(
     viewModel: MainSettingsViewModel,
-    onSettingClick: (Int) -> Unit,
-    onCompanyLogoClick: () -> Unit
+    navController: NavController,
 ) {
 
     Surface(color = ComposeAppTheme.colors.tyler) {
@@ -117,17 +93,17 @@ private fun SettingsScreen(
 
             Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
                 Spacer(modifier = Modifier.height(12.dp))
-                SettingSections(viewModel, onSettingClick)
-                SettingsFooter(viewModel.appVersion, onCompanyLogoClick)
+                SettingSections(viewModel, navController)
+                SettingsFooter(viewModel.appVersion, viewModel.companyWebPage)
             }
         }
     }
 }
 
 @Composable
-fun SettingSections(
+private fun SettingSections(
     viewModel: MainSettingsViewModel,
-    onSettingClick: (Int) -> Unit
+    navController: NavController
 ) {
 
     val showAlertManageWallet by viewModel.manageWalletShowAlertLiveData.observeAsState(false)
@@ -139,107 +115,124 @@ fun SettingSections(
     val language by viewModel.languageLiveData.observeAsState()
     val theme by viewModel.themeLiveData.observeAsState()
 
-    val section1 = listOf(
-        AppSettingItem(
-            R.string.SettingsSecurity_ManageKeys,
-            R.drawable.ic_wallet_20,
-            showAlert = showAlertManageWallet,
-            onClick = { onSettingClick.invoke(R.id.mainFragment_to_manageKeysFragment) }
-        ),
-        AppSettingItem(
-            R.string.Settings_SecurityCenter,
-            R.drawable.ic_security,
-            showAlert = showAlertSecurityCenter,
-            onClick = { onSettingClick.invoke(R.id.mainFragment_to_securitySettingsFragment) }
-        )
+
+    CellSingleLineLawrenceSection(
+        listOf({
+            HsSettingCell(
+                R.string.SettingsSecurity_ManageKeys,
+                R.drawable.ic_wallet_20,
+                showAlert = showAlertManageWallet,
+                onClick = {
+                    openPage(
+                        navController,
+                        R.id.mainFragment_to_manageKeysFragment,
+                        bundleOf(ManageAccountsModule.MODE to ManageAccountsModule.Mode.Manage),
+                    )
+                }
+            )
+        }, {
+            HsSettingCell(
+                R.string.Settings_SecurityCenter,
+                R.drawable.ic_security,
+                showAlert = showAlertSecurityCenter,
+                onClick = { openPage(navController, R.id.mainFragment_to_securitySettingsFragment) }
+            )
+        })
     )
 
-    val section2 = listOf(
-        AppSettingItem(
-            R.string.Settings_WalletConnect,
-            R.drawable.ic_wallet_connect_20,
-            value = if (walletConnectSessionCount > 0) walletConnectSessionCount.toString() else null,
-            onClick = { onSettingClick.invoke(R.id.mainFragment_to_walletConnect) }
-        )
-    )
+    Spacer(Modifier.height(32.dp))
 
-    val section3 = listOf(
-        AppSettingItem(
-            R.string.Settings_LaunchScreen,
-            R.drawable.ic_screen_20,
-            value = launchScreen?.titleRes?.let { Translator.getString(it) },
-            onClick = { onSettingClick.invoke(R.id.launchScreenSettingsFragment) }
-        ),
-        AppSettingItem(
-            R.string.Settings_BaseCurrency,
-            R.drawable.ic_currency,
-            value = baseCurrency?.code,
-            onClick = { onSettingClick.invoke(R.id.mainFragment_to_baseCurrencySettingsFragment) }
-        ),
-        AppSettingItem(
-            R.string.Settings_Language,
-            R.drawable.ic_language,
-            value = language,
-            onClick = { onSettingClick.invoke(R.id.mainFragment_to_languageSettingsFragment) }
-        ),
-        AppSettingItem(
-            R.string.Settings_Theme,
-            R.drawable.ic_light_mode,
-            value = theme?.let { Translator.getString(it) },
-            onClick = { onSettingClick.invoke(R.id.mainFragment_to_themeSwitchFragment) }
-        ),
-        AppSettingItem(
-            R.string.Settings_ExperimentalFeatures,
-            R.drawable.ic_experimental,
-            onClick = { onSettingClick.invoke(R.id.mainFragment_to_experimentalFeaturesFragment) }
-        )
-    )
-
-    val section4 = listOf(
-        AppSettingItem(
-            R.string.Settings_Faq,
-            R.drawable.ic_faq_20,
-            onClick = { onSettingClick.invoke(R.id.mainFragment_to_faqListFragment) }
-        ),
-        AppSettingItem(
-            R.string.Guides_Title,
-            R.drawable.ic_academy_20,
-            onClick = { onSettingClick.invoke(R.id.mainFragment_to_academyFragment) }
-        )
-    )
-
-    val section5 = listOf(
-        AppSettingItem(
-            R.string.SettingsAboutApp_Title,
-            R.drawable.ic_about_app_20,
-            showAlert = showAlertAboutApp,
-            onClick = { onSettingClick.invoke(R.id.mainFragment_to_aboutAppFragment) }
-        )
-    )
-
-    val sections = listOf(section1, section2, section3, section4, section5)
-
-    SettingSections(sections)
-}
-
-@Composable
-private fun SettingSections(sections: List<List<AppSettingItem>>) {
-    sections.forEach { section ->
-        CellSingleLineLawrenceSection(section) { item ->
-            SettingCell(
-                item.title,
-                item.icon,
-                item.value,
-                item.showAlert,
-                item.onClick
+    CellSingleLineLawrenceSection(
+        listOf {
+            HsSettingCell(
+                R.string.Settings_WalletConnect,
+                R.drawable.ic_wallet_connect_20,
+                value = if (walletConnectSessionCount > 0) walletConnectSessionCount.toString() else null,
+                onClick = { openPage(navController, R.id.mainFragment_to_walletConnect) }
             )
         }
-        Spacer(Modifier.height(32.dp))
-    }
+    )
+
+    Spacer(Modifier.height(32.dp))
+
+    CellSingleLineLawrenceSection(
+        listOf({
+            HsSettingCell(
+                R.string.Settings_LaunchScreen,
+                R.drawable.ic_screen_20,
+                value = launchScreen?.titleRes?.let { Translator.getString(it) },
+                onClick = { openPage(navController, R.id.launchScreenSettingsFragment) }
+            )
+        }, {
+            HsSettingCell(
+                R.string.Settings_BaseCurrency,
+                R.drawable.ic_currency,
+                value = baseCurrency?.code,
+                onClick = {
+                    openPage(navController, R.id.mainFragment_to_baseCurrencySettingsFragment)
+                }
+            )
+        }, {
+            HsSettingCell(
+                R.string.Settings_Language,
+                R.drawable.ic_language,
+                value = language,
+                onClick = { openPage(navController, R.id.mainFragment_to_languageSettingsFragment) }
+            )
+        }, {
+            HsSettingCell(
+                R.string.Settings_Theme,
+                R.drawable.ic_light_mode,
+                value = theme?.let { Translator.getString(it) },
+                onClick = { openPage(navController, R.id.mainFragment_to_themeSwitchFragment) }
+            )
+        }, {
+            HsSettingCell(
+                R.string.Settings_ExperimentalFeatures,
+                R.drawable.ic_experimental,
+                onClick = {
+                    openPage(navController, R.id.mainFragment_to_experimentalFeaturesFragment)
+                }
+            )
+        })
+    )
+
+    Spacer(Modifier.height(32.dp))
+
+    CellSingleLineLawrenceSection(
+        listOf({
+            HsSettingCell(
+                R.string.Settings_Faq,
+                R.drawable.ic_faq_20,
+                onClick = { openPage(navController, R.id.mainFragment_to_faqListFragment) }
+            )
+        }, {
+            HsSettingCell(
+                R.string.Guides_Title,
+                R.drawable.ic_academy_20,
+                onClick = { openPage(navController, R.id.mainFragment_to_academyFragment) }
+            )
+        })
+    )
+
+    Spacer(Modifier.height(32.dp))
+
+    CellSingleLineLawrenceSection(
+        listOf {
+            HsSettingCell(
+                R.string.SettingsAboutApp_Title,
+                R.drawable.ic_about_app_20,
+                showAlert = showAlertAboutApp,
+                onClick = { openPage(navController, R.id.mainFragment_to_aboutAppFragment) }
+            )
+        }
+    )
+
+    Spacer(Modifier.height(32.dp))
 }
 
 @Composable
-fun SettingCell(
+fun HsSettingCell(
     @StringRes title: Int,
     @DrawableRes icon: Int,
     value: String? = null,
@@ -292,7 +285,8 @@ fun SettingCell(
 }
 
 @Composable
-private fun SettingsFooter(appVersion: String, onCompanyLogoClick: () -> Unit) {
+private fun SettingsFooter(appVersion: String, companyWebPage: String) {
+    val context = LocalContext.current
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -317,7 +311,7 @@ private fun SettingsFooter(appVersion: String, onCompanyLogoClick: () -> Unit) {
                 .padding(top = 32.dp)
                 .size(32.dp)
                 .clickable {
-                    onCompanyLogoClick.invoke()
+                    LinkHelper.openLinkInAppBrowser(context, companyWebPage)
                 },
             painter = painterResource(id = R.drawable.ic_company_logo),
             contentDescription = null,
@@ -334,20 +328,48 @@ private fun SettingsFooter(appVersion: String, onCompanyLogoClick: () -> Unit) {
 @Preview
 @Composable
 private fun previewSettingsScreen() {
-    val section = listOf(
-        AppSettingItem(
-            R.string.Settings_Faq,
-            R.drawable.ic_faq_20,
-            onClick = { }
-        ),
-        AppSettingItem(
-            R.string.Guides_Title,
-            R.drawable.ic_academy_20,
-            onClick = { }
-        )
-    )
-
     ComposeAppTheme {
-        SettingSections(listOf(section))
+        Column {
+            CellSingleLineLawrenceSection(
+                listOf({
+                    HsSettingCell(
+                        R.string.Settings_Faq,
+                        R.drawable.ic_faq_20,
+                        showAlert = true,
+                        onClick = { }
+                    )
+                }, {
+                    HsSettingCell(
+                        R.string.Guides_Title,
+                        R.drawable.ic_academy_20,
+                        onClick = { }
+                    )
+                })
+            )
+
+            Spacer(Modifier.height(32.dp))
+
+            CellSingleLineLawrenceSection(
+                listOf {
+                    HsSettingCell(
+                        R.string.Settings_WalletConnect,
+                        R.drawable.ic_wallet_connect_20,
+                        value = "value",
+                        onClick = { }
+                    )
+                }
+            )
+        }
     }
+}
+
+private fun openPage(navController: NavController, destination: Int, bundle: Bundle? = null) {
+    val navOptions: NavOptions = NavOptions.Builder()
+        .setEnterAnim(R.anim.slide_from_right)
+        .setExitAnim(R.anim.slide_to_left)
+        .setPopEnterAnim(R.anim.slide_from_left)
+        .setPopExitAnim(R.anim.slide_to_right)
+        .build()
+
+    navController.navigate(destination, bundle, navOptions)
 }
