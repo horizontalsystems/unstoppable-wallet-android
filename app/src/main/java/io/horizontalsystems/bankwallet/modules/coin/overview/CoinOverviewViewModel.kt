@@ -7,7 +7,7 @@ import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.CoinViewFactory
-import io.horizontalsystems.bankwallet.modules.coin.adapters.CoinChartAdapter
+import io.horizontalsystems.bankwallet.modules.coin.adapters.CoinChartView
 import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.marketkit.models.ChartType
 import io.reactivex.disposables.CompositeDisposable
@@ -22,7 +22,7 @@ class CoinOverviewViewModel(
     val isRefreshingLiveData = MutableLiveData<Boolean>(false)
     val overviewLiveData = MutableLiveData<CoinOverviewViewItem>()
     val viewStateLiveData = MutableLiveData<ViewState>()
-    val chartInfoLiveData = MutableLiveData<CoinChartAdapter.ViewItemWrapper>()
+    val chartInfoLiveData = MutableLiveData<CoinChartView.XxxViewItemWrapper>()
     val titleLiveData = MutableLiveData<String>()
 
     private val disposables = CompositeDisposable()
@@ -61,7 +61,7 @@ class CoinOverviewViewModel(
                     factory.createChartInfoData(chartType, chartInfo, lastPoint)
                 }
 
-                val chartInfoViewItemWrapper = CoinChartAdapter.ViewItemWrapper(
+                val chartInfoViewItemWrapper = CoinChartView.XxxViewItemWrapper(
                     chartInfoData,
                     chartData == DataState.Loading,
                     chartData is DataState.Error

@@ -19,7 +19,7 @@ import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.CoinLink
 import io.horizontalsystems.bankwallet.modules.coin.ContractInfo
-import io.horizontalsystems.bankwallet.modules.coin.adapters.CoinChartAdapter
+import io.horizontalsystems.bankwallet.modules.coin.adapters.CoinChartView
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.*
 import io.horizontalsystems.bankwallet.modules.coin.ui.CoinScreenTitle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -68,7 +68,7 @@ fun CoinOverviewScreen(
                                 ChartInfo(
                                     it,
                                     currency,
-                                    CoinChartAdapter.ChartViewType.CoinChart,
+                                    CoinChartView.ChartViewType.CoinChart,
                                     listOf(
                                         Pair(ChartView.ChartType.TODAY, R.string.CoinPage_TimeDuration_Today),
                                         Pair(ChartView.ChartType.DAILY, R.string.CoinPage_TimeDuration_Day),
@@ -80,7 +80,7 @@ fun CoinOverviewScreen(
                                         Pair(ChartView.ChartType.MONTHLY12, R.string.CoinPage_TimeDuration_Year),
                                         Pair(ChartView.ChartType.MONTHLY24, R.string.CoinPage_TimeDuration_Year2)
                                     ),
-                                    object : CoinChartAdapter.Listener {
+                                    object : CoinChartView.Listener {
                                         override fun onChartTouchDown() {
                                             scrollingEnabled = false
                                         }

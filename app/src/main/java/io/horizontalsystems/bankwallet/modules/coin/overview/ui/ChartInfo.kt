@@ -8,7 +8,6 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import io.horizontalsystems.bankwallet.modules.coin.adapters.CoinChartAdapter
 import io.horizontalsystems.bankwallet.modules.coin.adapters.CoinChartView
 import io.horizontalsystems.bankwallet.modules.market.Value
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -20,11 +19,11 @@ import io.horizontalsystems.core.entities.Currency
 
 @Composable
 fun ChartInfo(
-    chartInfo: CoinChartAdapter.ViewItemWrapper,
+    chartInfo: CoinChartView.XxxViewItemWrapper,
     currency: Currency,
-    chartViewType: CoinChartAdapter.ChartViewType,
+    chartViewType: CoinChartView.ChartViewType,
     chartTypes: List<Pair<ChartView.ChartType, Int>>,
-    listener: CoinChartAdapter.Listener
+    listener: CoinChartView.Listener
 ) {
     AndroidView(
         modifier = Modifier.fillMaxWidth(), // Occupy the max size in the Compose UI tree
