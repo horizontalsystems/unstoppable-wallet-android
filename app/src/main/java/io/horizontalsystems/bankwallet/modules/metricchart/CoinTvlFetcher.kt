@@ -2,16 +2,19 @@ package io.horizontalsystems.bankwallet.modules.metricchart
 
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.UnsupportedException
+import io.horizontalsystems.bankwallet.modules.chart.IChartRepo
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
+import io.horizontalsystems.chartview.ChartView.ChartType
+import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.marketkit.MarketKit
-import io.horizontalsystems.marketkit.models.ChartType
 import io.horizontalsystems.marketkit.models.TimePeriod
 import io.reactivex.Single
+import io.reactivex.subjects.BehaviorSubject
 
 class CoinTvlFetcher(
     private val marketKit: MarketKit,
     private val coinUid: String,
-) : IMetricChartFetcher {
+) : IMetricChartFetcher, IChartRepo {
 
     override val title: Int = R.string.CoinPage_Tvl
     override val description = TranslatableString.ResString(R.string.CoinPage_TvlDescription)
@@ -23,10 +26,11 @@ class CoinTvlFetcher(
         ChartType.WEEKLY,
         ChartType.MONTHLY,
     )
+    override val dataUpdatedObservable = BehaviorSubject.create<Unit>()
 
-    override fun fetchSingle(currencyCode: String, chartType: ChartType) = try {
+    override fun getItems(chartType: ChartType, currency: Currency) = try {
         val timePeriod = getTimePeriod(chartType)
-        marketKit.marketInfoTvlSingle(coinUid, currencyCode, timePeriod)
+        marketKit.marketInfoTvlSingle(coinUid, currency.code, timePeriod)
             .map { info ->
                 info.map { point ->
                     MetricChartModule.Item(point.value, null, point.timestamp)

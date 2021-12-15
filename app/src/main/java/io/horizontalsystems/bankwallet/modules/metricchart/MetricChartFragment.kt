@@ -5,8 +5,6 @@ import android.view.View
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.text.style.TextAlign
@@ -15,8 +13,8 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.modules.chart.ChartViewModel
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Chart
-import io.horizontalsystems.bankwallet.modules.coin.overview.ui.HsChartLineHeader
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.extensions.BaseBottomSheetDialogFragment
 import kotlinx.android.synthetic.main.fragment_market_global.*
@@ -34,7 +32,12 @@ class MetricChartFragment : BaseBottomSheetDialogFragment() {
         requireArguments().getString(titleKey) ?: ""
     }
 
-    private val viewModel by viewModels<MetricChartViewModel> { MetricChartModule.Factory(coinUid, title, metricChartType) }
+    private val factory by lazy {
+        MetricChartModule.Factory(coinUid, title, metricChartType)
+    }
+
+    private val viewModel by viewModels<MetricChartViewModel> { factory }
+    private val chartViewModel by viewModels<ChartViewModel> { factory }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -50,36 +53,18 @@ class MetricChartFragment : BaseBottomSheetDialogFragment() {
         )
 
         composeView.setContent {
-            MetricChartScreen(viewModel)
+            MetricChartScreen(viewModel, chartViewModel)
         }
     }
 
     @Composable
-    private fun MetricChartScreen(viewModel: MetricChartViewModel) {
-        val chartLoading by viewModel.chartLoadingLiveData.observeAsState(false)
-        val viewState by viewModel.viewStateLiveData.observeAsState()
-        val chartInfo by viewModel.chartInfoLiveData.observeAsState()
-        val chartTabs by viewModel.chartTabItemsLiveData.observeAsState(listOf())
-        val currency = viewModel.currency
+    private fun MetricChartScreen(viewModel: MetricChartViewModel, chartViewModel: ChartViewModel) {
         val description = viewModel.description
         val poweredBy = viewModel.poweredBy
-        val currentValue by viewModel.currentValueLiveData.observeAsState()
-        val currentValueDiff by viewModel.currentValueDiffLiveData.observeAsState()
 
         ComposeAppTheme {
             Column {
-                HsChartLineHeader(currentValue, currentValueDiff)
-                Chart(
-                    tabItems = chartTabs,
-                    onSelectTab = {
-                        viewModel.onSelectChartType(it)
-                    },
-                    chartInfoData = chartInfo,
-                    chartLoading = chartLoading,
-                    viewState = viewState,
-                    currency = currency
-                )
-
+                Chart(chartViewModel = chartViewModel)
                 BottomSheetText(
                     text = description.getString()
                 )

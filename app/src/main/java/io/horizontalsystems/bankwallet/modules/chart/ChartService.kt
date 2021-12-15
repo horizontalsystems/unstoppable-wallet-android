@@ -46,7 +46,7 @@ class ChartService(
                 disposables.add(it)
             }
 
-        chartType = chartTypes.firstOrNull()
+        chartType = chartRepo.initialChartType
         fetchItems()
     }
 
