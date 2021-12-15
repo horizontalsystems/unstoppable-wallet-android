@@ -28,8 +28,20 @@ class MainSettingsService(
     private val walletConnectSessionManager: WalletConnectSessionManager
 ) {
 
-    private val stateUpdatedSubject = BehaviorSubject.create<Unit>()
-    val stateUpdatedObservable: Observable<Unit> get() = stateUpdatedSubject
+    private val backedUpSubject = BehaviorSubject.create<Boolean>()
+    val backedUpObservable: Observable<Boolean> get() = backedUpSubject
+
+    private val pinSetSubject = BehaviorSubject.create<Boolean>()
+    val pinSetObservable: Observable<Boolean> get() = pinSetSubject
+
+    private val termsAcceptedSubject = BehaviorSubject.create<Boolean>()
+    val termsAcceptedObservable: Observable<Boolean> get() = termsAcceptedSubject
+
+    private val baseCurrencySubject = BehaviorSubject.create<Currency>()
+    val baseCurrencyObservable: Observable<Currency> get() = baseCurrencySubject
+
+    private val walletConnectSessionCountSubject = BehaviorSubject.create<Int>()
+    val walletConnectSessionCountObservable: Observable<Int> get() = walletConnectSessionCountSubject
 
     private var disposables: CompositeDisposable = CompositeDisposable()
 
@@ -69,23 +81,23 @@ class MainSettingsService(
 
     fun start() {
         disposables.add(backupManager.allBackedUpFlowable.subscribe {
-            stateUpdatedSubject.onNext(Unit)
+            backedUpSubject.onNext(it)
         })
 
         disposables.add(walletConnectSessionManager.sessionsObservable.subscribe {
-            stateUpdatedSubject.onNext(Unit)
+            walletConnectSessionCountSubject.onNext(it.size)
         })
 
         disposables.add(currencyManager.baseCurrencyUpdatedSignal.subscribe {
-            stateUpdatedSubject.onNext(Unit)
+            baseCurrencySubject.onNext(currencyManager.baseCurrency)
         })
 
         disposables.add(termsManager.termsAcceptedSignal.subscribe {
-            stateUpdatedSubject.onNext(Unit)
+            termsAcceptedSubject.onNext(it)
         })
 
         disposables.add(pinComponent.pinSetFlowable.subscribe {
-            stateUpdatedSubject.onNext(Unit)
+            pinSetSubject.onNext(pinComponent.isPinSet)
         })
     }
 

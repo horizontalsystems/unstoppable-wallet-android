@@ -31,7 +31,6 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.managers.RateAppManager
 import io.horizontalsystems.bankwallet.modules.settings.main.AppSetting
-import io.horizontalsystems.bankwallet.modules.settings.main.SettingSections
 import io.horizontalsystems.bankwallet.modules.settings.main.SettingViewItem
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -163,7 +162,7 @@ fun AboutContent(
 ) {
     Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
         AboutHeader(appVersion)
-        SettingSections(sections, onSettingClick)
+//        SettingSections(sections, onSettingClick)
     }
 }
 
