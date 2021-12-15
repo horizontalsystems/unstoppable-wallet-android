@@ -66,8 +66,10 @@ class MainSettingsFragment : BaseFragment() {
         subscribeFragmentResult()
     }
 
-    private fun openScreen(setting: MainSettingsModule.Setting) {
-        findNavController().navigate(setting.destination, setting.navigationBundle, navOptions())
+    private fun openScreen(setting: AppSetting) {
+        setting.destination?.let {
+            findNavController().navigate(it, setting.navigationBundle, navOptions())
+        }
     }
 
     private fun openLink(link: String) {
@@ -86,7 +88,7 @@ class MainSettingsFragment : BaseFragment() {
 @Composable
 private fun SettingsScreen(
     viewModel: MainSettingsViewModel,
-    onSettingClick: (MainSettingsModule.Setting) -> Unit,
+    onSettingClick: (AppSetting) -> Unit,
     onCompanyLogoClick: () -> Unit
 ) {
 
@@ -112,9 +114,9 @@ private fun SettingsScreen(
 
 @Composable
 private fun SettingsContent(
-    sections: List<List<MainSettingsModule.SettingViewItem>>,
+    sections: List<List<SettingViewItem>>,
     appVersion: String,
-    onSettingClick: (MainSettingsModule.Setting) -> Unit,
+    onSettingClick: (AppSetting) -> Unit,
     onCompanyLogoClick: () -> Unit
 ) {
     Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
@@ -126,8 +128,8 @@ private fun SettingsContent(
 
 @Composable
 fun SettingSections(
-    sections: List<List<MainSettingsModule.SettingViewItem>>,
-    onSettingClick: (MainSettingsModule.Setting) -> Unit
+    sections: List<List<SettingViewItem>>,
+    onSettingClick: (AppSetting) -> Unit
 ) {
     sections.forEach { section ->
         CellSingleLineLawrenceSection(section) { item ->
@@ -222,16 +224,13 @@ private fun SettingsFooter(appVersion: String, onCompanyLogoClick: () -> Unit) {
 @Composable
 private fun previewSettingsScreen() {
     val section1 = listOf(
-        MainSettingsModule.SettingViewItem(MainSettingsModule.Setting.ManageWallets, "Light"),
-        MainSettingsModule.SettingViewItem(MainSettingsModule.Setting.SecurityCenter),
-        MainSettingsModule.SettingViewItem(MainSettingsModule.Setting.WalletConnect),
+        SettingViewItem(AppSetting.ManageWallets, "Light"),
+        SettingViewItem(AppSetting.SecurityCenter),
+        SettingViewItem(AppSetting.WalletConnect),
     )
     val section2 = listOf(
-        MainSettingsModule.SettingViewItem(MainSettingsModule.Setting.LaunchScreen, "Value"),
-        MainSettingsModule.SettingViewItem(
-            MainSettingsModule.Setting.BaseCurrency,
-            showAlert = true
-        ),
+        SettingViewItem(AppSetting.LaunchScreen, "Value"),
+        SettingViewItem(AppSetting.BaseCurrency, showAlert = true),
     )
 
     val testItems = listOf(section1, section2)

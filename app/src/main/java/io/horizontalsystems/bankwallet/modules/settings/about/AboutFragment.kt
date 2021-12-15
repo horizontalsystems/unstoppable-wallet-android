@@ -7,122 +7,100 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.RecyclerView
-import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.managers.RateAppManager
+import io.horizontalsystems.bankwallet.modules.settings.main.AppSetting
+import io.horizontalsystems.bankwallet.modules.settings.main.SettingSections
+import io.horizontalsystems.bankwallet.modules.settings.main.SettingViewItem
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
+import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
+import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.helpers.HudHelper
-import io.horizontalsystems.views.inflate
-import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.fragment_about.*
-import kotlinx.android.synthetic.main.view_holder_about_app_header.*
 
 class AboutFragment : BaseFragment() {
 
     val viewModel by viewModels<AboutViewModel> { AboutModule.Factory() }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_about, container, false)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        return ComposeView(requireContext()).apply {
+            setViewCompositionStrategy(
+                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+            )
+            setContent {
+                ComposeAppTheme {
+                    AboutScreen(
+                        viewModel,
+                        onClickNavigation = { findNavController().popBackStack() },
+                        { setting -> onSettingClick(setting) },
+                    )
+                }
+            }
+        }
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        toolbar.setNavigationOnClickListener {
-            findNavController().popBackStack()
+    private fun onSettingClick(setting: AppSetting) {
+        when (setting) {
+            AppSetting.Github -> openLink(viewModel.githubLink)
+            AppSetting.AppWebsite -> openLink(viewModel.appWebPageLink)
+            AppSetting.Contact -> sendEmail(viewModel.reportEmail)
+            AppSetting.TellFriends -> shareAppLink(viewModel.appWebPageLink)
+            AppSetting.RateUs -> rateUs()
+            else -> openPage(setting)
         }
-
-//        val whatsNewItem = SettingsMenuItem(R.string.SettingsAboutApp_WhatsNew, R.drawable.ic_info_20, listPosition = ListPosition.Single) {
-//            findNavController().navigate(R.id.aboutAppFragment_to_releaseNotesFragment, null, navOptions())
-//        }
-//
-//        val appStatusItem = SettingsMenuItem(R.string.Settings_AppStatus, R.drawable.ic_app_status, listPosition = ListPosition.First) {
-//            findNavController().navigate(R.id.aboutAppFragment_to_appStatusFragment, null, navOptions())
-//        }
-//        val termsItem = SettingsMenuItem(R.string.Settings_Terms, R.drawable.ic_terms_20, listPosition = ListPosition.Last) {
-//            findNavController().navigate(R.id.aboutAppFragment_to_termsFragment, null, navOptions())
-//        }
-//
-//        val githubItem = SettingsMenuItem(R.string.SettingsAboutApp_Github, R.drawable.ic_github_20, listPosition = ListPosition.First) {
-//            viewModel.onGithubLinkTap()
-//        }
-//
-//        val websiteItem = SettingsMenuItem(R.string.SettingsAboutApp_Site, R.drawable.ic_globe, listPosition = ListPosition.Last) {
-//            viewModel.onSiteLinkTap()
-//        }
-
-//        val rateUsItem = SettingsMenuItem(R.string.Settings_RateUs, R.drawable.ic_star_20, listPosition = ListPosition.First) {
-//            context?.let {
-//                RateAppManager.openPlayMarket(it)
-//            }
-//        }
-//
-//        val shareAppItem = SettingsMenuItem(R.string.Settings_ShareThisWallet, R.drawable.ic_share_20, listPosition = ListPosition.Last) {
-//            viewModel.onTellFriendsTap()
-//        }
-//
-//        val contactItem = SettingsMenuItem(R.string.SettingsContact_Title, R.drawable.ic_email, listPosition = ListPosition.Single) {
-//            sendEmail(viewModel.reportEmail)
-//        }
-//
-//        val menuItemsAdapter = MainSettingsAdapter(listOf(
-//                whatsNewItem,
-//                null,
-//                appStatusItem,
-//                termsItem,
-//                null,
-//                githubItem,
-//                websiteItem,
-//                null,
-//                rateUsItem,
-//                shareAppItem,
-//                null,
-//                contactItem,
-//        ))
-
-//        val headerAdapter = AboutAppHeaderAdapter(getAppVersion())
-
-//        aboutRecyclerview.adapter = ConcatAdapter(headerAdapter, menuItemsAdapter)
-
-        //observe LiveData
-
-        viewModel.openLinkLiveData.observe(viewLifecycleOwner, Observer { link ->
-            context?.let { ctx ->
-                LinkHelper.openLinkInAppBrowser(ctx, link)
-            }
-        })
-
-        viewModel.showShareAppLiveData.observe(viewLifecycleOwner, Observer { appWebPageLink ->
-            val shareMessage = getString(R.string.SettingsShare_Text) + "\n" + appWebPageLink + "\n"
-            val shareIntent = Intent(Intent.ACTION_SEND)
-            shareIntent.type = "text/plain"
-            shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage)
-            startActivity(Intent.createChooser(shareIntent, getString(R.string.SettingsShare_Title)))
-        })
-//
-//        viewModel.termsAcceptedData.observe(viewLifecycleOwner, Observer { termsAccepted ->
-//            termsItem.attention = !termsAccepted
-//            menuItemsAdapter.notifyChanged(termsItem)
-//        })
-
-        viewModel.showCopiedLiveEvent.observe(viewLifecycleOwner, Observer {
-            activity?.let {
-                HudHelper.showSuccessMessage(it.findViewById(android.R.id.content), R.string.Hud_Text_EmailAddressCopied)
-            }
-        })
-
     }
 
-    private fun getAppVersion(): String {
-        var appVersion = getString(R.string.Settings_InfoTitleWithVersion, viewModel.appVersion)
-        if (getString(R.string.is_release) == "false") {
-            appVersion += " (${BuildConfig.VERSION_CODE})"
+    private fun openPage(setting: AppSetting) {
+        setting.destination?.let {
+            findNavController().navigate(it, setting.navigationBundle, navOptions())
         }
-        return appVersion
+    }
+
+    private fun rateUs() {
+        context?.let { RateAppManager.openPlayMarket(it) }
+    }
+
+    private fun openLink(link: String) {
+        context?.let { LinkHelper.openLinkInAppBrowser(it, link) }
+    }
+
+    private fun shareAppLink(appLink: String) {
+        val shareMessage = getString(R.string.SettingsShare_Text) + "\n" + appLink + "\n"
+        val shareIntent = Intent(Intent.ACTION_SEND)
+        shareIntent.type = "text/plain"
+        shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage)
+        startActivity(
+            Intent.createChooser(
+                shareIntent,
+                getString(R.string.SettingsShare_Title)
+            )
+        )
     }
 
     private fun sendEmail(recipient: String) {
@@ -134,36 +112,108 @@ class AboutFragment : BaseFragment() {
         try {
             startActivity(intent)
         } catch (e: ActivityNotFoundException) {
-            viewModel.didFailSendMail()
+            TextHelper.copyText(recipient)
+
+            activity?.let {
+                HudHelper.showSuccessMessage(
+                    it.findViewById(android.R.id.content),
+                    R.string.Hud_Text_EmailAddressCopied
+                )
+            }
         }
     }
-
 }
 
+@Composable
+private fun AboutScreen(
+    viewModel: AboutViewModel,
+    onClickNavigation: () -> Unit,
+    onSettingClick: (AppSetting) -> Unit,
+) {
 
-class AboutAppHeaderAdapter(private val appVersion: String) : RecyclerView.Adapter<AboutAppHeaderAdapter.HeaderViewHolder>() {
+    val settingItems by viewModel.settingItemsLiveData.observeAsState()
 
-    override fun getItemCount() = 1
+    Surface(color = ComposeAppTheme.colors.tyler) {
+        Column {
+            AppBar(
+                TranslatableString.ResString(R.string.SettingsAboutApp_Title),
+                navigationIcon = {
+                    IconButton(onClick = onClickNavigation) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_back),
+                            tint = ComposeAppTheme.colors.jacob,
+                            contentDescription = null,
+                        )
+                    }
+                }
+            )
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HeaderViewHolder {
-        return HeaderViewHolder.create(parent)
-    }
-
-    override fun onBindViewHolder(holder: HeaderViewHolder, position: Int) {
-        holder.bind(appVersion)
-    }
-
-    class HeaderViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
-
-        fun bind(version: String) {
-            versionNameText.text = version
+            settingItems?.let {
+                AboutContent(it, viewModel.appVersion, onSettingClick,)
+            }
         }
+    }
+}
 
-        companion object {
-            const val layout = R.layout.view_holder_about_app_header
+@Composable
+fun AboutContent(
+    sections: List<List<SettingViewItem>>,
+    appVersion: String,
+    onSettingClick: (AppSetting) -> Unit,
+) {
+    Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+        AboutHeader(appVersion)
+        SettingSections(sections, onSettingClick)
+    }
+}
 
-            fun create(parent: ViewGroup) = HeaderViewHolder(inflate(parent, layout, false))
+@Composable
+fun AboutHeader(appVersion: String) {
+    Row(
+        Modifier
+            .fillMaxWidth()
+            .padding(start = 26.dp, top = 24.dp, end = 16.dp, bottom = 32.dp)
+    ) {
+        Image(
+            modifier = Modifier.size(72.dp),
+            painter = painterResource(id = R.drawable.ic_app_logo_72),
+            contentDescription = null,
+        )
+        Column(
+            Modifier.height(72.dp).padding(start = 16.dp),
+            verticalArrangement = Arrangement.Center
+        ) {
+            Text(
+                text = stringResource(R.string.App_Name),
+                style = ComposeAppTheme.typography.headline1,
+                color = ComposeAppTheme.colors.leah,
+                maxLines = 1,
+            )
+            Spacer(Modifier.height(12.dp))
+            Text(
+                text = stringResource(R.string.Settings_InfoTitleWithVersion, appVersion),
+                style = ComposeAppTheme.typography.subhead2,
+                color = ComposeAppTheme.colors.grey,
+                maxLines = 1,
+            )
         }
+    }
+}
 
+@Preview
+@Composable
+private fun previewAboutScreen() {
+    val section1 = listOf(
+        SettingViewItem(AppSetting.WhatsNew),
+    )
+    val section2 = listOf(
+        SettingViewItem(AppSetting.TellFriends),
+        SettingViewItem(AppSetting.Terms, showAlert = true),
+    )
+
+    val testItems = listOf(section1, section2)
+
+    ComposeAppTheme {
+        AboutContent(testItems, "0.24", { })
     }
 }

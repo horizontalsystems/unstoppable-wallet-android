@@ -2,59 +2,73 @@ package io.horizontalsystems.bankwallet.modules.settings.about
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import io.horizontalsystems.bankwallet.core.IClipboardManager
-import io.horizontalsystems.bankwallet.core.ITermsManager
-import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
-import io.horizontalsystems.core.ISystemInfoManager
-import io.horizontalsystems.core.SingleLiveEvent
+import io.horizontalsystems.bankwallet.core.subscribeIO
+import io.horizontalsystems.bankwallet.modules.settings.main.AppSetting
+import io.horizontalsystems.bankwallet.modules.settings.main.SettingViewItem
 import io.reactivex.disposables.Disposable
 
 class AboutViewModel(
-    private val appConfigProvider: AppConfigProvider,
-    private val clipboardManager: IClipboardManager,
-    termsManager: ITermsManager,
-    systemInfoManager: ISystemInfoManager
+    private val service: AboutService,
 ) : ViewModel() {
 
-    val openLinkLiveData = SingleLiveEvent<String>()
-    val showShareAppLiveData = SingleLiveEvent<String>()
-    val termsAcceptedData = MutableLiveData<Boolean>()
-    val showCopiedLiveEvent = SingleLiveEvent<Unit>()
+    val githubLink by service::githubLink
+    val appWebPageLink by service::appWebPageLink
+    val reportEmail by service::reportEmail
+    val appVersion by service::appVersion
 
-    val appVersion = systemInfoManager.appVersion
-    val reportEmail = appConfigProvider.reportEmail
+    val settingItemsLiveData = MutableLiveData<List<List<SettingViewItem>>>()
 
     var disposable: Disposable? = null
 
     init {
-        termsAcceptedData.postValue(termsManager.termsAccepted)
+        setItems()
 
-        disposable = termsManager.termsAcceptedSignal
-                .subscribe { allAccepted ->
-                    termsAcceptedData.postValue(allAccepted)
-                }
+        service.stateUpdatedObservable
+            .subscribeIO { setItems() }
+            .let { disposable = it }
+    }
+
+    private fun setItems() {
+        val items = mutableListOf<List<SettingViewItem>>()
+        items.add(
+            listOf(
+                SettingViewItem(AppSetting.WhatsNew),
+            )
+        )
+
+        items.add(
+            listOf(
+                SettingViewItem(AppSetting.AppStatus),
+                SettingViewItem(AppSetting.Terms, showAlert = !service.termsAccepted),
+            )
+        )
+
+        items.add(
+            listOf(
+                SettingViewItem(AppSetting.Github,),
+                SettingViewItem(AppSetting.AppWebsite,),
+            )
+        )
+
+        items.add(
+            listOf(
+                SettingViewItem(AppSetting.RateUs),
+                SettingViewItem(AppSetting.TellFriends,),
+            )
+        )
+
+        items.add(
+            listOf(
+                SettingViewItem(AppSetting.Contact),
+            )
+        )
+
+        settingItemsLiveData.postValue(items)
     }
 
     override fun onCleared() {
+        service.stop()
         disposable?.dispose()
-        super.onCleared()
-    }
-
-    fun onGithubLinkTap() {
-        openLinkLiveData.postValue(appConfigProvider.appGithubLink)
-    }
-
-    fun onSiteLinkTap() {
-        openLinkLiveData.postValue(appConfigProvider.appWebPageLink)
-    }
-
-    fun onTellFriendsTap() {
-        showShareAppLiveData.postValue(appConfigProvider.appWebPageLink)
-    }
-
-    fun didFailSendMail() {
-        clipboardManager.copyText(reportEmail)
-        showCopiedLiveEvent.call()
     }
 
 }
