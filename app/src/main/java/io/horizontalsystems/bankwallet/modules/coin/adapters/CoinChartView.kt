@@ -21,6 +21,7 @@ import androidx.core.view.isVisible
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import io.horizontalsystems.bankwallet.modules.coin.ChartInfoData
 import io.horizontalsystems.bankwallet.modules.coin.ChartPointViewItem
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.TabButtonSecondary
@@ -40,12 +41,29 @@ import java.util.*
 class CoinChartView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
     : ConstraintLayout(context, attrs, defStyleAttr), Chart.Listener {
 
+    interface Listener {
+        fun onChartTouchDown()
+        fun onChartTouchUp()
+        fun onTabSelect(chartType: ChartView.ChartType)
+    }
+
+    enum class ChartViewType {
+        CoinChart, MarketMetricChart
+    }
+
+    data class XxxViewItemWrapper(
+        val data: ChartInfoData?,
+        val showSpinner: Boolean = false,
+        val showError: Boolean = false,
+    )
+
+
     private var chartTypes: List<Pair<ChartView.ChartType, Int>> = listOf()
     private lateinit var currency: Currency
-    private lateinit var listener: CoinChartAdapter.Listener
-    private lateinit var chartViewType: CoinChartAdapter.ChartViewType
+    private lateinit var listener: Listener
+    private lateinit var chartViewType: ChartViewType
 
-    fun setListener(listener: CoinChartAdapter.Listener) {
+    fun setListener(listener: Listener) {
         this.listener = listener
     }
 
@@ -53,7 +71,7 @@ class CoinChartView @JvmOverloads constructor(context: Context, attrs: Attribute
         this.currency = currency
     }
 
-    fun setChartViewType(chartViewType: CoinChartAdapter.ChartViewType) {
+    fun setChartViewType(chartViewType: ChartViewType) {
         this.chartViewType = chartViewType
     }
 
@@ -67,15 +85,15 @@ class CoinChartView @JvmOverloads constructor(context: Context, attrs: Attribute
 
     private var macdIsEnabled = false
     private var enabledIndicator: ChartIndicator? = null
-    private var item: CoinChartAdapter.ViewItemWrapper? = null
+    private var item: XxxViewItemWrapper? = null
 
-    fun bindNew(item: CoinChartAdapter.ViewItemWrapper) {
+    fun bindNew(item: XxxViewItemWrapper) {
         this.item?.let { prevItem ->
             bindUpdate(item, prevItem)
         } ?: bind(item)
     }
 
-    fun bind(item: CoinChartAdapter.ViewItemWrapper) {
+    fun bind(item: XxxViewItemWrapper) {
         this.item = item
 
         if (item.showError) {
@@ -110,8 +128,8 @@ class CoinChartView @JvmOverloads constructor(context: Context, attrs: Attribute
     }
 
     fun bindUpdate(
-        current: CoinChartAdapter.ViewItemWrapper,
-        prev: CoinChartAdapter.ViewItemWrapper,
+        current: XxxViewItemWrapper,
+        prev: XxxViewItemWrapper,
     ) {
         this.item = current
 
@@ -220,7 +238,7 @@ class CoinChartView @JvmOverloads constructor(context: Context, attrs: Attribute
     }
 
     private fun setIndicators(enabled: Boolean) {
-        if (chartViewType == CoinChartAdapter.ChartViewType.MarketMetricChart) {
+        if (chartViewType == ChartViewType.MarketMetricChart) {
             indicatorsCompose.isVisible = false
             return
         }
@@ -328,13 +346,13 @@ class CoinChartView @JvmOverloads constructor(context: Context, attrs: Attribute
 
     private fun getFormattedPointValue(
         value: BigDecimal, symbol: String,
-        chartViewType: CoinChartAdapter.ChartViewType,
+        chartViewType: ChartViewType,
     ): String {
         return when (chartViewType) {
-            CoinChartAdapter.ChartViewType.CoinChart -> {
+            ChartViewType.CoinChart -> {
                 App.numberFormatter.formatFiat(value, symbol, 2, 4)
             }
-            CoinChartAdapter.ChartViewType.MarketMetricChart -> {
+            ChartViewType.MarketMetricChart -> {
                 val (shortenValue, suffix) = App.numberFormatter.shortenValue(value)
                 App.numberFormatter.formatFiat(shortenValue, symbol, 0, 2) + " $suffix"
             }
