@@ -78,7 +78,7 @@ class MainSettingsFragment : BaseFragment() {
 
     private fun subscribeFragmentResult() {
         getNavigationResult(LanguageSettingsFragment.LANGUAGE_CHANGE)?.let {
-            viewModel.setAppRelaunchingFromSettings()
+            viewModel.onLanguageChange()
             activity?.let { MainModule.startAsNewTask(it) }
         }
     }

@@ -22,6 +22,8 @@ class MainSettingsViewModel(
         service.stateUpdatedObservable
             .subscribeIO { setItems() }
             .let { disposable = it }
+
+        service.start()
     }
 
     private fun setItems() {
@@ -68,7 +70,7 @@ class MainSettingsViewModel(
         if (service.walletConnectSessionCount > 0) "${service.walletConnectSessionCount}" else null
 
 
-    fun setAppRelaunchingFromSettings() {
+    fun onLanguageChange() {
         service.setAppRelaunchingFromSettings()
     }
 

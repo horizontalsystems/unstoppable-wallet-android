@@ -21,12 +21,6 @@ class AboutService(
 
     private var disposables: CompositeDisposable = CompositeDisposable()
 
-    init {
-        disposables.add(termsManager.termsAcceptedSignal.subscribe {
-            stateUpdatedSubject.onNext(Unit)
-        })
-    }
-
     val githubLink: String = appConfigProvider.appGithubLink
     val appWebPageLink: String = appConfigProvider.appWebPageLink
     val reportEmail: String = appConfigProvider.reportEmail
@@ -43,6 +37,12 @@ class AboutService(
 
     val termsAccepted: Boolean
         get() = termsManager.termsAccepted
+
+    fun start() {
+        disposables.add(termsManager.termsAcceptedSignal.subscribe {
+            stateUpdatedSubject.onNext(Unit)
+        })
+    }
 
     fun stop() {
         disposables.clear()

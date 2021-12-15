@@ -33,28 +33,6 @@ class MainSettingsService(
 
     private var disposables: CompositeDisposable = CompositeDisposable()
 
-    init {
-        disposables.add(backupManager.allBackedUpFlowable.subscribe {
-            stateUpdatedSubject.onNext(Unit)
-        })
-
-        disposables.add(walletConnectSessionManager.sessionsObservable.subscribe {
-            stateUpdatedSubject.onNext(Unit)
-        })
-
-        disposables.add(currencyManager.baseCurrencyUpdatedSignal.subscribe {
-            stateUpdatedSubject.onNext(Unit)
-        })
-
-        disposables.add(termsManager.termsAcceptedSignal.subscribe {
-            stateUpdatedSubject.onNext(Unit)
-            })
-
-        disposables.add(pinComponent.pinSetFlowable.subscribe {
-            stateUpdatedSubject.onNext(Unit)
-        })
-    }
-
     val appVersion: String
         get() {
             var appVersion = systemInfoManager.appVersion
@@ -89,11 +67,33 @@ class MainSettingsService(
     val launchScreen: LaunchPage
         get() = localStorage.launchPage ?: LaunchPage.Auto
 
-    fun setAppRelaunchingFromSettings() {
-        localStorage.relaunchBySettingChange = true
+    fun start() {
+        disposables.add(backupManager.allBackedUpFlowable.subscribe {
+            stateUpdatedSubject.onNext(Unit)
+        })
+
+        disposables.add(walletConnectSessionManager.sessionsObservable.subscribe {
+            stateUpdatedSubject.onNext(Unit)
+        })
+
+        disposables.add(currencyManager.baseCurrencyUpdatedSignal.subscribe {
+            stateUpdatedSubject.onNext(Unit)
+        })
+
+        disposables.add(termsManager.termsAcceptedSignal.subscribe {
+            stateUpdatedSubject.onNext(Unit)
+        })
+
+        disposables.add(pinComponent.pinSetFlowable.subscribe {
+            stateUpdatedSubject.onNext(Unit)
+        })
     }
 
     fun stop() {
         disposables.clear()
+    }
+
+    fun setAppRelaunchingFromSettings() {
+        localStorage.relaunchBySettingChange = true
     }
 }

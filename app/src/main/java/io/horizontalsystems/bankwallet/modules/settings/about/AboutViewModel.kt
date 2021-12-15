@@ -26,6 +26,8 @@ class AboutViewModel(
         service.stateUpdatedObservable
             .subscribeIO { setItems() }
             .let { disposable = it }
+
+        service.start()
     }
 
     private fun setItems() {
