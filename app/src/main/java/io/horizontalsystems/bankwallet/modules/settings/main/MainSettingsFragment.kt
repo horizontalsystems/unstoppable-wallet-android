@@ -164,10 +164,11 @@ fun SettingSections(
                 }
                 if (item.showAlert) {
                     Image(
-                        modifier = Modifier.padding(start = 8.dp, end = 12.dp).size(20.dp),
+                        modifier = Modifier.size(20.dp),
                         painter = painterResource(id = R.drawable.ic_attention_red_20),
                         contentDescription = null,
                     )
+                    Spacer(Modifier.width(12.dp))
                 }
                 Image(
                     modifier = Modifier.size(20.dp),
