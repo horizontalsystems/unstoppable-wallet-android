@@ -23,7 +23,7 @@ class TransactionsViewModel(
     val syncingLiveData = MutableLiveData<Boolean>()
     val filterCoinsLiveData = MutableLiveData<List<Filter<TransactionWallet>>>()
     val filterTypesLiveData = MutableLiveData<List<Filter<FilterTransactionType>>>()
-    val transactionList = MutableLiveData<ListState>()
+    val transactionList = MutableLiveData<Map<String, List<TransactionViewItem>>>()
 
     private val disposables = CompositeDisposable()
 
@@ -60,20 +60,11 @@ class TransactionsViewModel(
 
         service.itemsObservable
             .subscribeIO { items ->
-                val transactionList = when {
-                    items.isNotEmpty() -> {
-                        val viewItems = items.map {
-                            transactionViewItem2Factory.convertToViewItemCached(it)
-                        }
-                        val lastItemIndex = viewItems.size - 1
-                        ListState.Filled(
-                            viewItems.groupBy { it.formattedDate },
-                            viewItems[lastItemIndex].uid
-                        )
-                    }
-                    else -> ListState.Blank
-                }
-                this.transactionList.postValue(transactionList)
+                val viewItems = items
+                    .map { transactionViewItem2Factory.convertToViewItemCached(it) }
+                    .groupBy { it.formattedDate }
+
+                transactionList.postValue(viewItems)
             }
             .let {
                 disposables.add(it)
@@ -94,11 +85,6 @@ class TransactionsViewModel(
 
     fun willShow(viewItem: TransactionViewItem) {
         service.fetchRateIfNeeded(viewItem.uid)
-    }
-
-    sealed class ListState {
-        object Blank : ListState()
-        class Filled(val items: Map<String, List<TransactionViewItem>>, val lastItemUid: String) : ListState()
     }
 
     override fun onCleared() {

@@ -93,29 +93,29 @@ private fun TransactionsScreen(viewModel: TransactionsViewModel, navController: 
                     { viewModel.setFilterCoin(it) },
                     { scrollToTopAfterUpdate = true })
             }
-            transactions?.let { listState ->
-                when (listState) {
-                    TransactionsViewModel.ListState.Blank -> {
-                        Box(Modifier.fillMaxSize()) {
-                            Text(
-                                modifier = Modifier
-                                    .padding(horizontal = 48.dp)
-                                    .align(Alignment.Center),
-                                text = stringResource(id = R.string.Transactions_EmptyList),
-                                textAlign = TextAlign.Center,
-                                color = ComposeAppTheme.colors.grey,
-                                style = ComposeAppTheme.typography.subhead2,
-                            )
-                        }
-                    }
-                    is TransactionsViewModel.ListState.Filled -> {
-                        TransactionList(
-                            listState,
-                            scrollToTopAfterUpdate,
-                            { viewModel.willShow(it) },
-                            { onTransactionClick(it, viewModel, navController) },
-                            { viewModel.onBottomReached() }
+            transactions?.let { transactionItems ->
+                if (transactionItems.isEmpty()) {
+                    Box(Modifier.fillMaxSize()) {
+                        Text(
+                            modifier = Modifier
+                                .padding(horizontal = 48.dp)
+                                .align(Alignment.Center),
+                            text = stringResource(id = R.string.Transactions_EmptyList),
+                            textAlign = TextAlign.Center,
+                            color = ComposeAppTheme.colors.grey,
+                            style = ComposeAppTheme.typography.subhead2,
                         )
+                    }
+                } else {
+                    TransactionList(
+                        transactionItems,
+                        scrollToTopAfterUpdate,
+                        { viewModel.willShow(it) },
+                        { onTransactionClick(it, viewModel, navController) },
+                        { viewModel.onBottomReached() }
+                    )
+                    if (scrollToTopAfterUpdate) {
+                        scrollToTopAfterUpdate = false
                     }
                 }
             }
@@ -147,7 +147,7 @@ private fun onTransactionClick(
 @ExperimentalFoundationApi
 @Composable
 fun TransactionList(
-    transactionListState: TransactionsViewModel.ListState.Filled,
+    transactionsMap: Map<String, List<TransactionViewItem>>,
     scrollToTop: Boolean,
     willShow: (TransactionViewItem) -> Unit,
     onClick: (TransactionViewItem) -> Unit,
@@ -157,17 +157,21 @@ fun TransactionList(
     val listState = rememberLazyListState()
 
     LazyColumn(state = listState) {
-        transactionListState.items.forEach { (dateHeader, transactionsForDate) ->
+        val lastHeader = transactionsMap.keys.lastOrNull()
+
+        transactionsMap.forEach { (dateHeader, transactions) ->
             stickyHeader {
                 DateHeader(dateHeader)
             }
 
-            items(transactionsForDate) { item ->
+            val lastUid = if (lastHeader == dateHeader) transactions.lastOrNull()?.uid else null
+
+            items(transactions) { item ->
                 TransactionCell(item) { onClick.invoke(item) }
 
                 willShow.invoke(item)
 
-                if (item.uid == transactionListState.lastItemUid) {
+                if (item.uid == lastUid) {
                     onBottomReached.invoke()
                 }
             }
