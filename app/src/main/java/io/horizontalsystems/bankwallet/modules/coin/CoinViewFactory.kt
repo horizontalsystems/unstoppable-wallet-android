@@ -134,7 +134,7 @@ class CoinViewFactory(
     fun createChartInfoData(
         type: ChartType,
         chartInfo: ChartInfo,
-        lastPoint: LastPoint?
+        lastPoint: LastPoint
     ): ChartInfoData {
         val chartType = when (type) {
             ChartType.TODAY -> ChartView.ChartType.TODAY
@@ -361,7 +361,7 @@ class CoinViewFactory(
 
     private fun createChartData(
         chartInfo: ChartInfo,
-        lastPoint: LastPoint?,
+        lastPoint: LastPoint,
         chartType: ChartView.ChartType
     ): ChartData {
         val points = chartInfo.points.map {
@@ -374,7 +374,7 @@ class CoinViewFactory(
         val chartInfoLastPoint = chartInfo.points.lastOrNull()
         var endTimestamp = chartInfo.endTimestamp
 
-        if (lastPoint != null && chartInfoLastPoint?.timestamp != null && lastPoint.timestamp > chartInfoLastPoint.timestamp) {
+        if (chartInfoLastPoint?.timestamp != null && lastPoint.timestamp > chartInfoLastPoint.timestamp) {
             endTimestamp = max(lastPoint.timestamp, endTimestamp)
             points.add(ChartPoint(lastPoint.rate.toFloat(), null, lastPoint.timestamp))
 
