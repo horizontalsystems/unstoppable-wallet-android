@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.coin.overview
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.subscribeIO
@@ -60,7 +59,7 @@ class CoinOverviewViewModel(
         service.chartDataObservable
             .subscribeIO { chartData ->
                 val chartInfoData = chartData.dataOrNull?.let { (chartInfo: ChartInfo, lastPoint, chartType) ->
-                    Log.e("AAA", "CoinOverviewModel: lastPoint, $lastPoint, chartInfo size ${chartInfo.points.size}, range ${chartInfo.startTimestamp} - ${chartInfo.endTimestamp}")
+//                    Log.e("AAA", "CoinOverviewModel: lastPoint, $lastPoint, chartInfo size ${chartInfo.points.size}, range ${chartInfo.startTimestamp} - ${chartInfo.endTimestamp}")
                     factory.createChartInfoData(chartType, chartInfo, lastPoint)
                 }
 

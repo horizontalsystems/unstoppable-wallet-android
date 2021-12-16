@@ -67,7 +67,7 @@ class CoinOverviewChartRepo(
         val tmpLastCoinPrice = marketKit.coinPrice(coinUid, currency.code)
 
         val items = if (tmpChartInfo != null && tmpLastCoinPrice != null) {
-            doGetItems(tmpChartInfo, tmpLastCoinPrice)
+            doGetItems(tmpChartInfo, tmpLastCoinPrice, chartType)
         } else {
             listOf()
         }
@@ -97,11 +97,36 @@ class CoinOverviewChartRepo(
             }
     }
 
-    private fun doGetItems(chartInfo: ChartInfo, lastCoinPrice: CoinPrice): List<MetricChartModule.Item> {
-        val map = chartInfo.points.map { point ->
-            MetricChartModule.Item(point.value, null, point.timestamp)
+    private fun doGetItems(
+        chartInfo: ChartInfo,
+        lastCoinPrice: CoinPrice,
+        chartType: ChartView.ChartType
+    ): List<MetricChartModule.Item> {
+        val points = chartInfo.points
+        if (points.isEmpty()) return listOf()
+
+        val items = points
+            .map {
+                MetricChartModule.Item(it.value, null, it.timestamp)
+            }
+            .toMutableList()
+
+        if (lastCoinPrice.timestamp > items.last().timestamp) {
+            items.add(MetricChartModule.Item(lastCoinPrice.value, null, lastCoinPrice.timestamp))
+
+            if (chartType == ChartView.ChartType.DAILY) {
+                val startTimestamp = lastCoinPrice.timestamp - 24 * 60 * 60
+                val startValue = (lastCoinPrice.value * 100.toBigDecimal()) / (lastCoinPrice.diff + 100.toBigDecimal())
+                val startItem = MetricChartModule.Item(startValue, null, startTimestamp)
+
+                items.removeIf { it.timestamp <= startTimestamp }
+                items.add(0, startItem)
+            }
         }
-        return map + MetricChartModule.Item(lastCoinPrice.value, null, lastCoinPrice.timestamp)
+
+        items.removeIf { it.timestamp < chartInfo.startTimestamp }
+
+        return items
     }
 
 //    @Synchronized
