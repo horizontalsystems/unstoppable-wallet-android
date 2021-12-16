@@ -17,6 +17,7 @@ import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.transactions.FilterTransactionType
 import io.horizontalsystems.binancechainkit.BinanceChainKit
 import io.horizontalsystems.bitcoincore.core.IPluginData
+import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.core.entities.AppVersion
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.models.Address
@@ -88,6 +89,7 @@ interface ILocalStorage {
 
 interface IChartTypeStorage {
     var chartType: ChartType
+    var chartType2: ChartView.ChartType
 }
 
 interface IRestoreSettingsStorage {

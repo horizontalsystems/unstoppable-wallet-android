@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.chart
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
@@ -46,6 +47,8 @@ class ChartViewModel(private val service: ChartService, private val factory: Met
                 loadingLiveData.postValue(chartItemsDataState.loading)
 
                 chartItemsDataState.dataOrNull?.let { (chartType, chartItems) ->
+                    Log.e("AAA", "ChartViewModel: chartItems size ${chartItems.size}, lastPoint: ${chartItems.lastOrNull()}")
+
                     syncChartItems(chartType, chartItems)
                 }
             }

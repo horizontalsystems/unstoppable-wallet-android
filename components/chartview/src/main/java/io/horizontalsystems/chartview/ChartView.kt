@@ -20,6 +20,12 @@ class ChartView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
         MONTHLY6,
         MONTHLY12,
         MONTHLY24;
+
+        companion object {
+            private val map = values().associateBy(ChartType::name)
+
+            fun fromString(type: String?): ChartType? = map[type]
+        }
     }
 
     val shape = RectF(0f,0f,0f,0f)

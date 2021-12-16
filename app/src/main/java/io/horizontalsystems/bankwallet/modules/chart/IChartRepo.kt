@@ -11,5 +11,7 @@ interface IChartRepo {
     val dataUpdatedObservable: Observable<Unit>
     val initialChartType: ChartView.ChartType
 
+    fun start() = Unit
+    fun stop() = Unit
     fun getItems(chartType: ChartView.ChartType, currency: Currency) : Single<List<MetricChartModule.Item>>
 }
