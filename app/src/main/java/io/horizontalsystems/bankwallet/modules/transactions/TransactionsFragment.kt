@@ -24,6 +24,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.navigation.NavController
+import androidx.navigation.NavOptions
 import androidx.navigation.navGraphViewModels
 import coil.annotation.ExperimentalCoilApi
 import io.horizontalsystems.bankwallet.R
@@ -55,28 +57,9 @@ class TransactionsFragment : BaseFragment() {
             )
             setContent {
                 ComposeAppTheme {
-                    TransactionsScreen(
-                        viewModel,
-                        { viewModel.setFilterTransactionType(it) },
-                        { viewModel.setFilterCoin(it) },
-                        { viewModel.onBottomReached() },
-                        { viewModel.willShow(it) },
-                        { openTransactionInfo(it) }
-                    )
+                    TransactionsScreen(viewModel, findNavController())
                 }
             }
-        }
-    }
-
-    private fun openTransactionInfo(item: TransactionViewItem) {
-        viewModel.getTransactionItem(item)?.let {
-            viewModel.tmpItemToShow = it
-
-            findNavController().navigate(
-                R.id.mainFragment_to_transactionInfoFragment,
-                null,
-                navOptionsFromBottom()
-            )
         }
     }
 }
@@ -85,14 +68,7 @@ class TransactionsFragment : BaseFragment() {
 @ExperimentalFoundationApi
 @ExperimentalCoilApi
 @Composable
-private fun TransactionsScreen(
-    viewModel: TransactionsViewModel,
-    onTransactionTypeClick: (FilterTransactionType) -> Unit,
-    onCoinFilterClick: (TransactionWallet?) -> Unit,
-    onBottomReached: () -> Unit,
-    willShow: (TransactionViewItem) -> Unit,
-    onItemClick: (TransactionViewItem) -> Unit
-) {
+private fun TransactionsScreen(viewModel: TransactionsViewModel, navController: NavController) {
     val filterCoins by viewModel.filterCoinsLiveData.observeAsState()
     val filterTypes by viewModel.filterTypesLiveData.observeAsState()
     val transactions by viewModel.transactionList.observeAsState()
@@ -105,6 +81,18 @@ private fun TransactionsScreen(
                 TranslatableString.ResString(R.string.Transactions_Title),
                 showSpinner = showSpinner
             )
+            filterTypes?.let { filterTypes ->
+                FilterTypeTabs(
+                    filterTypes,
+                    { viewModel.setFilterTransactionType(it) },
+                    { scrollToTopAfterUpdate = true })
+            }
+            filterCoins?.let { filterCoins ->
+                FilterCoinTabs(
+                    filterCoins,
+                    { viewModel.setFilterCoin(it) },
+                    { scrollToTopAfterUpdate = true })
+            }
             transactions?.let { listState ->
                 when (listState) {
                     TransactionsViewModel.ListState.Blank -> {
@@ -121,30 +109,39 @@ private fun TransactionsScreen(
                         }
                     }
                     is TransactionsViewModel.ListState.Filled -> {
-                        filterTypes?.let {
-                            FilterTypeTabs(
-                                it,
-                                onTransactionTypeClick,
-                                { scrollToTopAfterUpdate = true })
-                        }
-                        filterCoins?.let {
-                            FilterCoinTabs(
-                                it,
-                                onCoinFilterClick,
-                                { scrollToTopAfterUpdate = true })
-                        }
                         TransactionList(
                             listState,
                             scrollToTopAfterUpdate,
-                            willShow,
-                            onItemClick,
-                            onBottomReached
+                            { viewModel.willShow(it) },
+                            { onTransactionClick(it, viewModel, navController) },
+                            { viewModel.onBottomReached() }
                         )
                     }
                 }
             }
         }
     }
+}
+
+private fun onTransactionClick(
+    transactionViewItem: TransactionViewItem,
+    viewModel: TransactionsViewModel,
+    navController: NavController
+) {
+    val transactionItem = viewModel.getTransactionItem(transactionViewItem) ?: return
+
+    viewModel.tmpItemToShow = transactionItem
+
+    val navOptionsFromBottom = NavOptions.Builder()
+        .setEnterAnim(R.anim.slide_from_bottom)
+        .setExitAnim(R.anim.slide_to_top)
+        .setPopEnterAnim(R.anim.slide_from_top)
+        .setPopExitAnim(R.anim.slide_to_bottom)
+        .build()
+
+    navController.navigate(
+        R.id.mainFragment_to_transactionInfoFragment, null, navOptionsFromBottom
+    )
 }
 
 @ExperimentalFoundationApi
@@ -174,7 +171,6 @@ fun TransactionList(
                     onBottomReached.invoke()
                 }
             }
-
         }
 
         item {
@@ -292,9 +288,7 @@ fun TransactionCell(item: TransactionViewItem, onClick: () -> Unit) {
                     }
                 }
             }
-
         }
-
     }
 }
 
