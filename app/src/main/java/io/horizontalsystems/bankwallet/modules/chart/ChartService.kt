@@ -47,10 +47,12 @@ class ChartService(
             }
 
         chartType = chartRepo.initialChartType
+        chartRepo.start()
         fetchItems()
     }
 
     fun stop() {
+        chartRepo.stop()
         disposables.clear()
         fetchItemsDisposable?.dispose()
     }

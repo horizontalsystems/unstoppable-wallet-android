@@ -19,6 +19,7 @@ import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.settings.theme.ThemeType
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
+import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.core.IPinStorage
 import io.horizontalsystems.core.IThirdKeyboard
 import io.horizontalsystems.core.entities.AppVersion
@@ -261,6 +262,12 @@ class LocalStorageManager(private val preferences: SharedPreferences)
 
     override var chartType: ChartType
         get() = ChartType.fromString(preferences.getString(CHART_TYPE, null)) ?: ChartType.TODAY
+        set(mode) {
+            preferences.edit().putString(CHART_TYPE, mode.name).apply()
+        }
+
+    override var chartType2: ChartView.ChartType
+        get() = ChartView.ChartType.fromString(preferences.getString(CHART_TYPE, null)) ?: ChartView.ChartType.TODAY
         set(mode) {
             preferences.edit().putString(CHART_TYPE, mode.name).apply()
         }

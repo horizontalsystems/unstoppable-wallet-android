@@ -17,6 +17,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.bankwallet.entities.ViewState
+import io.horizontalsystems.bankwallet.modules.chart.ChartViewModel
 import io.horizontalsystems.bankwallet.modules.coin.CoinLink
 import io.horizontalsystems.bankwallet.modules.coin.ContractInfo
 import io.horizontalsystems.bankwallet.modules.coin.adapters.CoinChartView
@@ -31,6 +32,7 @@ import io.horizontalsystems.chartview.ChartView
 @Composable
 fun CoinOverviewScreen(
     viewModel: CoinOverviewViewModel,
+    chartViewModel: ChartViewModel,
     onClickCopyContract: (ContractInfo) -> Unit,
     onClickExplorerContract: (ContractInfo) -> Unit,
     onCoinLinkClick: (CoinLink) -> Unit,
@@ -61,6 +63,8 @@ fun CoinOverviewScreen(
                                 fullCoin.coin.iconUrl,
                                 fullCoin.iconPlaceholder
                             )
+
+                            Chart(chartViewModel)
 
                             Title(title, chartInfo?.data?.chartData?.diff())
 
