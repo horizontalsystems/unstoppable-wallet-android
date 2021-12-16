@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.settings.about
 
 import android.content.ActivityNotFoundException
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -20,28 +21,29 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.managers.RateAppManager
-import io.horizontalsystems.bankwallet.modules.settings.main.AppSetting
-import io.horizontalsystems.bankwallet.modules.settings.main.SettingViewItem
+import io.horizontalsystems.bankwallet.core.providers.Translator
+import io.horizontalsystems.bankwallet.modules.settings.main.HsSettingCell
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
+import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineLawrenceSection
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
-import io.horizontalsystems.core.helpers.HudHelper
 
 class AboutFragment : BaseFragment() {
-
-    val viewModel by viewModels<AboutViewModel> { AboutModule.Factory() }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -54,90 +56,21 @@ class AboutFragment : BaseFragment() {
             )
             setContent {
                 ComposeAppTheme {
-                    AboutScreen(
-                        viewModel,
-                        onClickNavigation = { findNavController().popBackStack() },
-                        { setting -> onSettingClick(setting) },
-                    )
+                    AboutScreen(findNavController())
                 }
-            }
-        }
-    }
-
-    private fun onSettingClick(setting: AppSetting) {
-        when (setting) {
-            AppSetting.Github -> openLink(viewModel.githubLink)
-            AppSetting.AppWebsite -> openLink(viewModel.appWebPageLink)
-            AppSetting.Contact -> sendEmail(viewModel.reportEmail)
-            AppSetting.TellFriends -> shareAppLink(viewModel.appWebPageLink)
-            AppSetting.RateUs -> rateUs()
-            else -> openPage(setting)
-        }
-    }
-
-    private fun openPage(setting: AppSetting) {
-        setting.destination?.let {
-            findNavController().navigate(it, setting.navigationBundle, navOptions())
-        }
-    }
-
-    private fun rateUs() {
-        context?.let { RateAppManager.openPlayMarket(it) }
-    }
-
-    private fun openLink(link: String) {
-        context?.let { LinkHelper.openLinkInAppBrowser(it, link) }
-    }
-
-    private fun shareAppLink(appLink: String) {
-        val shareMessage = getString(R.string.SettingsShare_Text) + "\n" + appLink + "\n"
-        val shareIntent = Intent(Intent.ACTION_SEND)
-        shareIntent.type = "text/plain"
-        shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage)
-        startActivity(
-            Intent.createChooser(
-                shareIntent,
-                getString(R.string.SettingsShare_Title)
-            )
-        )
-    }
-
-    private fun sendEmail(recipient: String) {
-        val intent = Intent(Intent.ACTION_SENDTO).apply {
-            data = Uri.parse("mailto:")
-            putExtra(Intent.EXTRA_EMAIL, arrayOf(recipient))
-        }
-
-        try {
-            startActivity(intent)
-        } catch (e: ActivityNotFoundException) {
-            TextHelper.copyText(recipient)
-
-            activity?.let {
-                HudHelper.showSuccessMessage(
-                    it.findViewById(android.R.id.content),
-                    R.string.Hud_Text_EmailAddressCopied
-                )
             }
         }
     }
 }
 
 @Composable
-private fun AboutScreen(
-    viewModel: AboutViewModel,
-    onClickNavigation: () -> Unit,
-    onSettingClick: (AppSetting) -> Unit,
-) {
-
-    val settingItems by viewModel.settingItemsLiveData.observeAsState()
-
+private fun AboutScreen(navController: NavController) {
     Surface(color = ComposeAppTheme.colors.tyler) {
         Column {
             AppBar(
                 TranslatableString.ResString(R.string.SettingsAboutApp_Title),
                 navigationIcon = {
-                    IconButton(onClick = onClickNavigation) {
+                    IconButton(onClick = { navController.popBackStack() }) {
                         Icon(
                             painter = painterResource(id = R.drawable.ic_back),
                             tint = ComposeAppTheme.colors.jacob,
@@ -147,23 +80,107 @@ private fun AboutScreen(
                 }
             )
 
-            settingItems?.let {
-                AboutContent(it, viewModel.appVersion, onSettingClick,)
-            }
+            AboutContent(navController)
         }
     }
 }
 
 @Composable
 fun AboutContent(
-    sections: List<List<SettingViewItem>>,
-    appVersion: String,
-    onSettingClick: (AppSetting) -> Unit,
+    navController: NavController,
+    aboutViewModel: AboutViewModel = viewModel(factory = AboutModule.Factory()),
 ) {
     Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-        AboutHeader(appVersion)
-//        SettingSections(sections, onSettingClick)
+        AboutHeader(aboutViewModel.appVersion)
+        SettingSections(aboutViewModel, navController)
     }
+}
+
+@Composable
+private fun SettingSections(viewModel: AboutViewModel, navController: NavController) {
+
+    val context = LocalContext.current
+
+    val termsShowAlert by viewModel.termsShowAlertLiveData.observeAsState(false)
+
+    CellSingleLineLawrenceSection(
+        listOf {
+            HsSettingCell(
+                R.string.SettingsAboutApp_WhatsNew,
+                R.drawable.ic_info_20,
+                onClick = { openPage(navController, R.id.aboutAppFragment_to_releaseNotesFragment) }
+            )
+        }
+    )
+
+    Spacer(Modifier.height(32.dp))
+
+    CellSingleLineLawrenceSection(
+        listOf({
+            HsSettingCell(
+                R.string.Settings_AppStatus,
+                R.drawable.ic_app_status,
+                onClick = { openPage(navController, R.id.aboutAppFragment_to_appStatusFragment) }
+            )
+        }, {
+            HsSettingCell(
+                R.string.Settings_Terms,
+                R.drawable.ic_terms_20,
+                showAlert = termsShowAlert,
+                onClick = { openPage(navController, R.id.aboutAppFragment_to_termsFragment) }
+            )
+        })
+    )
+
+    Spacer(Modifier.height(32.dp))
+
+    CellSingleLineLawrenceSection(
+        listOf({
+            HsSettingCell(
+                R.string.SettingsAboutApp_Github,
+                R.drawable.ic_github_20,
+                onClick = { LinkHelper.openLinkInAppBrowser(context, viewModel.githubLink) }
+            )
+        }, {
+            HsSettingCell(
+                R.string.SettingsAboutApp_Site,
+                R.drawable.ic_globe,
+                onClick = { LinkHelper.openLinkInAppBrowser(context, viewModel.appWebPageLink) }
+            )
+        })
+    )
+
+    Spacer(Modifier.height(32.dp))
+
+    CellSingleLineLawrenceSection(
+        listOf({
+            HsSettingCell(
+                R.string.Settings_RateUs,
+                R.drawable.ic_star_20,
+                onClick = { RateAppManager.openPlayMarket(context) }
+            )
+        }, {
+            HsSettingCell(
+                R.string.Settings_ShareThisWallet,
+                R.drawable.ic_share_20,
+                onClick = { shareAppLink(viewModel.appWebPageLink, context) }
+            )
+        })
+    )
+
+    Spacer(Modifier.height(32.dp))
+
+    CellSingleLineLawrenceSection(
+        listOf {
+            HsSettingCell(
+                R.string.SettingsContact_Title,
+                R.drawable.ic_email,
+                onClick = { sendEmail(viewModel.reportEmail, context) }
+            )
+        }
+    )
+
+    Spacer(Modifier.height(92.dp))
 }
 
 @Composable
@@ -199,20 +216,73 @@ fun AboutHeader(appVersion: String) {
     }
 }
 
+private fun openPage(navController: NavController, destination: Int, bundle: Bundle? = null) {
+    val navOptions: NavOptions = NavOptions.Builder()
+        .setEnterAnim(R.anim.slide_from_right)
+        .setExitAnim(R.anim.slide_to_left)
+        .setPopEnterAnim(R.anim.slide_from_left)
+        .setPopExitAnim(R.anim.slide_to_right)
+        .build()
+
+    navController.navigate(destination, bundle, navOptions)
+}
+
+private fun shareAppLink(appLink: String, context: Context) {
+    val shareMessage = Translator.getString(R.string.SettingsShare_Text) + "\n" + appLink + "\n"
+    val shareIntent = Intent(Intent.ACTION_SEND)
+    shareIntent.type = "text/plain"
+    shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage)
+    context.startActivity(
+        Intent.createChooser(
+            shareIntent,
+            Translator.getString(R.string.SettingsShare_Title)
+        )
+    )
+}
+
+private fun sendEmail(recipient: String, context: Context) {
+    val intent = Intent(Intent.ACTION_SENDTO).apply {
+        data = Uri.parse("mailto:")
+        putExtra(Intent.EXTRA_EMAIL, arrayOf(recipient))
+    }
+
+    try {
+        context.startActivity(intent)
+    } catch (e: ActivityNotFoundException) {
+        TextHelper.copyText(recipient)
+
+//        activity?.let {
+//            HudHelper.showSuccessMessage(
+//                it.findViewById(android.R.id.content),
+//                R.string.Hud_Text_EmailAddressCopied
+//            )
+//        }
+    }
+}
+
 @Preview
 @Composable
 private fun previewAboutScreen() {
-    val section1 = listOf(
-        SettingViewItem(AppSetting.WhatsNew),
-    )
-    val section2 = listOf(
-        SettingViewItem(AppSetting.TellFriends),
-        SettingViewItem(AppSetting.Terms, showAlert = true),
-    )
-
-    val testItems = listOf(section1, section2)
-
     ComposeAppTheme {
-        AboutContent(testItems, "0.24", { })
+        Column{
+            AboutHeader("0.24")
+            Spacer(Modifier.height(32.dp))
+            CellSingleLineLawrenceSection(
+                listOf({
+                    HsSettingCell(
+                        R.string.Settings_RateUs,
+                        R.drawable.ic_star_20,
+                        showAlert = true,
+                        onClick = {  }
+                    )
+                }, {
+                    HsSettingCell(
+                        R.string.Settings_ShareThisWallet,
+                        R.drawable.ic_share_20,
+                        onClick = {  }
+                    )
+                })
+            )
+        }
     }
 }

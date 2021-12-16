@@ -3,8 +3,6 @@ package io.horizontalsystems.bankwallet.modules.settings.about
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.subscribeIO
-import io.horizontalsystems.bankwallet.modules.settings.main.AppSetting
-import io.horizontalsystems.bankwallet.modules.settings.main.SettingViewItem
 import io.reactivex.disposables.Disposable
 
 class AboutViewModel(
@@ -16,56 +14,16 @@ class AboutViewModel(
     val reportEmail by service::reportEmail
     val appVersion by service::appVersion
 
-    val settingItemsLiveData = MutableLiveData<List<List<SettingViewItem>>>()
+    val termsShowAlertLiveData = MutableLiveData(!service.termsAccepted)
 
     var disposable: Disposable? = null
 
     init {
-        setItems()
-
-        service.stateUpdatedObservable
-            .subscribeIO { setItems() }
+        service.termsAcceptedObservable
+            .subscribeIO { termsShowAlertLiveData.postValue(!it) }
             .let { disposable = it }
 
         service.start()
-    }
-
-    private fun setItems() {
-        val items = mutableListOf<List<SettingViewItem>>()
-        items.add(
-            listOf(
-                SettingViewItem(AppSetting.WhatsNew),
-            )
-        )
-
-        items.add(
-            listOf(
-                SettingViewItem(AppSetting.AppStatus),
-                SettingViewItem(AppSetting.Terms, showAlert = !service.termsAccepted),
-            )
-        )
-
-        items.add(
-            listOf(
-                SettingViewItem(AppSetting.Github,),
-                SettingViewItem(AppSetting.AppWebsite,),
-            )
-        )
-
-        items.add(
-            listOf(
-                SettingViewItem(AppSetting.RateUs),
-                SettingViewItem(AppSetting.TellFriends,),
-            )
-        )
-
-        items.add(
-            listOf(
-                SettingViewItem(AppSetting.Contact),
-            )
-        )
-
-        settingItemsLiveData.postValue(items)
     }
 
     override fun onCleared() {

@@ -16,8 +16,8 @@ class AboutService(
     private val systemInfoManager: ISystemInfoManager
 ) {
 
-    private val stateUpdatedSubject = BehaviorSubject.create<Unit>()
-    val stateUpdatedObservable: Observable<Unit> get() = stateUpdatedSubject
+    private val termsAcceptedSubject = BehaviorSubject.create<Boolean>()
+    val termsAcceptedObservable: Observable<Boolean> get() = termsAcceptedSubject
 
     private var disposables: CompositeDisposable = CompositeDisposable()
 
@@ -40,7 +40,7 @@ class AboutService(
 
     fun start() {
         disposables.add(termsManager.termsAcceptedSignal.subscribe {
-            stateUpdatedSubject.onNext(Unit)
+            termsAcceptedSubject.onNext(it)
         })
     }
 
