@@ -5,9 +5,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.modules.chart.AbstractChartService
 import io.horizontalsystems.bankwallet.modules.chart.ChartModule
 import io.horizontalsystems.bankwallet.modules.chart.ChartViewModel
-import io.horizontalsystems.bankwallet.modules.chart.IChartRepo
 import io.horizontalsystems.chartview.ChartData
 import io.horizontalsystems.chartview.ChartView
 import kotlinx.android.parcel.Parcelize
@@ -39,8 +39,8 @@ object MetricChartModule {
     ) : ViewModelProvider.Factory {
         private val chartRepo by lazy {
             when (metricChartType) {
-                MetricChartType.TradingVolume -> CoinTradingVolumeFetcher(App.marketKit, coinUid, coinName)
-                MetricChartType.Tvl -> CoinTvlFetcher(App.marketKit, coinUid)
+                MetricChartType.TradingVolume -> CoinTradingVolumeFetcher(App.currencyManager, App.marketKit, coinUid, coinName)
+                MetricChartType.Tvl -> CoinTvlFetcher(App.currencyManager, App.marketKit, coinUid)
             }
         }
 
@@ -52,7 +52,7 @@ object MetricChartModule {
                     MetricChartViewModel(metricChartService) as T
                 }
                 ChartViewModel::class.java -> {
-                    ChartModule.createViewModel(chartRepo as IChartRepo) as T
+                    ChartModule.createViewModel(chartRepo as AbstractChartService) as T
                 }
                 else -> throw IllegalArgumentException()
             }

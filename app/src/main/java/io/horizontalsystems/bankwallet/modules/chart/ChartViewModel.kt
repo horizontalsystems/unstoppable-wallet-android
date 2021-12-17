@@ -16,7 +16,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.TabItem
 import io.horizontalsystems.chartview.ChartView
 import io.reactivex.disposables.CompositeDisposable
 
-class ChartViewModel(private val service: ChartService, private val factory: MetricChartFactory) : ViewModel() {
+class ChartViewModel(private val service: AbstractChartService, private val factory: MetricChartFactory) : ViewModel() {
     val tabItemsLiveData = MutableLiveData<List<TabItem<ChartView.ChartType>>>()
     val dataWrapperLiveData = MutableLiveData<ChartDataWrapper>()
     val loadingLiveData = MutableLiveData<Boolean>()

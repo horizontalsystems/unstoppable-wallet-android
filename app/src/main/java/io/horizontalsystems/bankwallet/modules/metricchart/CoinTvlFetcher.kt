@@ -2,9 +2,10 @@ package io.horizontalsystems.bankwallet.modules.metricchart
 
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.UnsupportedException
-import io.horizontalsystems.bankwallet.modules.chart.IChartRepo
+import io.horizontalsystems.bankwallet.modules.chart.AbstractChartService
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.chartview.ChartView.ChartType
+import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.marketkit.MarketKit
 import io.horizontalsystems.marketkit.models.TimePeriod
@@ -12,9 +13,10 @@ import io.reactivex.Single
 import io.reactivex.subjects.BehaviorSubject
 
 class CoinTvlFetcher(
+    override val currencyManager: ICurrencyManager,
     private val marketKit: MarketKit,
     private val coinUid: String,
-) : IMetricChartFetcher, IChartRepo {
+) : IMetricChartFetcher, AbstractChartService() {
 
     override val title: Int = R.string.CoinPage_Tvl
     override val description = TranslatableString.ResString(R.string.CoinPage_TvlDescription)

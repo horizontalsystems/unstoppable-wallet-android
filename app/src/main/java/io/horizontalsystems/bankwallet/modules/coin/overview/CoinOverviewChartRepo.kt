@@ -2,7 +2,7 @@ package io.horizontalsystems.bankwallet.modules.coin.overview
 
 import io.horizontalsystems.bankwallet.core.IChartTypeStorage
 import io.horizontalsystems.bankwallet.core.subscribeIO
-import io.horizontalsystems.bankwallet.modules.chart.IChartRepo
+import io.horizontalsystems.bankwallet.modules.chart.AbstractChartService
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartModule
 import io.horizontalsystems.bankwallet.modules.metricchart.kitChartType
 import io.horizontalsystems.chartview.ChartView
@@ -17,10 +17,10 @@ import io.reactivex.subjects.BehaviorSubject
 
 class CoinOverviewChartRepo(
     private val marketKit: MarketKit,
-    private val currencyManager: ICurrencyManager,
+    override val currencyManager: ICurrencyManager,
     private val chartTypeStorage: IChartTypeStorage,
     private val coinUid: String,
-) : IChartRepo {
+) : AbstractChartService() {
 
     override val chartTypes: List<ChartView.ChartType>
         get() = listOf(
@@ -43,11 +43,8 @@ class CoinOverviewChartRepo(
 
     private val disposables = CompositeDisposable()
 
-    override fun start() {
-
-    }
-
     override fun stop() {
+        super.stop()
         unsubscribeFromUpdates()
     }
 
