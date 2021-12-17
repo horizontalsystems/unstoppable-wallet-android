@@ -62,9 +62,7 @@ object MetricChartModule {
 }
 
 data class SelectedPoint(val value: String, val date: String)
-data class LastValueWithDiff(val value: String, val diff: BigDecimal)
 data class ChartViewItem(
-    val lastValueWithDiff: LastValueWithDiff,
     val chartData: ChartData,
     val maxValue: String?,
     val minValue: String?,

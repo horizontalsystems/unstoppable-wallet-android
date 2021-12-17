@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.metricchart
 
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
+import io.horizontalsystems.bankwallet.modules.chart.ChartDataXxx
 import io.horizontalsystems.chartview.*
 import io.horizontalsystems.chartview.models.PointInfo
 import io.horizontalsystems.core.entities.Currency
@@ -13,13 +14,12 @@ class MetricChartFactory(private val numberFormatter: IAppNumberFormatter) {
     private val noChangesLimitPercent = 0.2f
 
     fun convert(
-            items: List<MetricChartModule.Item>,
-            chartType: ChartView.ChartType,
-            valueType: MetricChartModule.ValueType,
-            currency: Currency
+        valueType: MetricChartModule.ValueType,
+        currency: Currency,
+        chartDataXxx: ChartDataXxx
     ): ChartViewItem {
 
-        val chartData = chartData(items)
+        val chartData = chartData(chartDataXxx)
 
         var max = chartData.valueRange.upper
         var min = chartData.valueRange.lower
@@ -32,18 +32,15 @@ class MetricChartFactory(private val numberFormatter: IAppNumberFormatter) {
         val maxValue = max?.let { getFormattedValue(it, currency, valueType) }
         val minValue = min?.let { getFormattedValue(it, currency, valueType) }
 
-        val topValue = getFormattedValue(items.last().value.toFloat(), currency, valueType)
-        val topValueWithDiff = LastValueWithDiff(topValue, chartData.diff())
-
-        return ChartViewItem(topValueWithDiff, chartData, maxValue, minValue, chartType)
+        return ChartViewItem(chartData, maxValue, minValue, chartDataXxx.chartType)
     }
 
-    private fun chartData(points: List<MetricChartModule.Item>) : ChartData {
-        val startTimestamp = points.first().timestamp
-        val endTimestamp = points.last().timestamp
+    private fun chartData(chartDataXxx: ChartDataXxx) : ChartData {
+        val startTimestamp = chartDataXxx.startTimestamp
+        val endTimestamp = chartDataXxx.endTimestamp
         val items = mutableListOf<ChartDataItem>()
 
-        points.forEach { point ->
+        chartDataXxx.items.forEach { point ->
             val item = ChartDataItem(point.timestamp)
             item.values[Indicator.Candle] = ChartDataValue(point.value.toFloat())
             point.dominance?.let {
@@ -53,13 +50,9 @@ class MetricChartFactory(private val numberFormatter: IAppNumberFormatter) {
             items.add(item)
         }
 
-        val visibleChartData = ChartDataBuilder(mutableListOf(), startTimestamp, endTimestamp)
+        val visibleChartData = ChartDataBuilder(mutableListOf(), startTimestamp, endTimestamp, chartDataXxx.isExpired)
 
         for (item in items) {
-            if (item.timestamp < visibleChartData.startTimestamp) {
-                continue
-            }
-
             visibleChartData.items.add(item)
 
             visibleChartData.range(item, Indicator.Candle)
@@ -69,9 +62,6 @@ class MetricChartFactory(private val numberFormatter: IAppNumberFormatter) {
         val visibleTimeInterval = visibleChartData.endTimestamp - visibleChartData.startTimestamp
         for (item in visibleChartData.items) {
             val timestamp = item.timestamp - visibleChartData.startTimestamp
-            if (timestamp < 0) {
-                continue
-            }
 
             val x = (timestamp.toFloat() / visibleTimeInterval)
 

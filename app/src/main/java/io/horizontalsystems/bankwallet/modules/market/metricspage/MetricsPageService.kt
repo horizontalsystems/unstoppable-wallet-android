@@ -3,9 +3,9 @@ package io.horizontalsystems.bankwallet.modules.market.metricspage
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.chart.AbstractChartService
+import io.horizontalsystems.bankwallet.modules.chart.ChartDataXxx
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.bankwallet.modules.market.tvl.GlobalMarketRepository
-import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartModule
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
 import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.core.ICurrencyManager
@@ -27,8 +27,11 @@ class MetricsPageChartRepo(
     override fun getItems(
         chartType: ChartView.ChartType,
         currency: Currency,
-    ): Single<List<MetricChartModule.Item>> {
+    ): Single<ChartDataXxx> {
         return globalMarketRepository.getGlobalMarketPoints(currency.code, chartType, metricsType)
+            .map {
+                ChartDataXxx(chartType, it)
+            }
     }
 }
 

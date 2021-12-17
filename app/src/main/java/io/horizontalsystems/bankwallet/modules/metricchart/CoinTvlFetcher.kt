@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.metricchart
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.UnsupportedException
 import io.horizontalsystems.bankwallet.modules.chart.AbstractChartService
+import io.horizontalsystems.bankwallet.modules.chart.ChartDataXxx
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.chartview.ChartView.ChartType
 import io.horizontalsystems.core.ICurrencyManager
@@ -30,13 +31,16 @@ class CoinTvlFetcher(
     )
     override val dataUpdatedObservable = BehaviorSubject.create<Unit>()
 
-    override fun getItems(chartType: ChartType, currency: Currency) = try {
+    override fun getItems(chartType: ChartType, currency: Currency): Single<ChartDataXxx> = try {
         val timePeriod = getTimePeriod(chartType)
         marketKit.marketInfoTvlSingle(coinUid, currency.code, timePeriod)
             .map { info ->
                 info.map { point ->
                     MetricChartModule.Item(point.value, null, point.timestamp)
                 }
+            }
+            .map {
+                ChartDataXxx(chartType, it)
             }
     } catch (e: Exception) {
         Single.error(e)
