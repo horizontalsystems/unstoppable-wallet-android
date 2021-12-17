@@ -5,9 +5,8 @@ import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartFactory
 
 object ChartModule {
 
-    fun createViewModel(chartRepo: IChartRepo): ChartViewModel {
+    fun createViewModel(chartService: AbstractChartService): ChartViewModel {
         val factory = MetricChartFactory(App.numberFormatter)
-        val chartService = ChartService(App.currencyManager, chartRepo)
         return ChartViewModel(chartService, factory)
     }
 

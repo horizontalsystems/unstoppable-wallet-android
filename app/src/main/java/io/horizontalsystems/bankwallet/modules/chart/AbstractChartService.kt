@@ -5,22 +5,28 @@ import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartModule
 import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.core.ICurrencyManager
+import io.horizontalsystems.core.entities.Currency
+import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.BehaviorSubject
 
-class ChartService(
-    private val currencyManager: ICurrencyManager,
-    private val chartRepo: IChartRepo,
-) {
+abstract class AbstractChartService {
+    abstract val chartTypes: List<ChartView.ChartType>
+
+    protected abstract val currencyManager: ICurrencyManager
+    protected abstract val dataUpdatedObservable: Observable<Unit>
+    protected abstract val initialChartType: ChartView.ChartType
+    protected abstract fun getItems(chartType: ChartView.ChartType, currency: Currency): Single<List<MetricChartModule.Item>>
 
     private var chartType: ChartView.ChartType? = null
         set(value) {
             field = value
             value?.let { chartTypeObservable.onNext(it) }
         }
-    val chartTypes by chartRepo::chartTypes
-    val currency by currencyManager::baseCurrency
+    val currency: Currency
+        get() = currencyManager.baseCurrency
     val chartTypeObservable = BehaviorSubject.create<ChartView.ChartType>()
 
     val chartItemsObservable =
@@ -30,7 +36,7 @@ class ChartService(
     private val disposables = CompositeDisposable()
 
     fun start() {
-        chartRepo.dataUpdatedObservable
+        dataUpdatedObservable
             .subscribeIO {
                 fetchItems()
             }
@@ -46,13 +52,11 @@ class ChartService(
                 disposables.add(it)
             }
 
-        chartType = chartRepo.initialChartType
-        chartRepo.start()
+        chartType = initialChartType
         fetchItems()
     }
 
-    fun stop() {
-        chartRepo.stop()
+    open fun stop() {
         disposables.clear()
         fetchItemsDisposable?.dispose()
     }
@@ -68,7 +72,7 @@ class ChartService(
         val tmpChartType = chartType ?: return
 
         fetchItemsDisposable?.dispose()
-        fetchItemsDisposable = chartRepo.getItems(tmpChartType, currency)
+        fetchItemsDisposable = getItems(tmpChartType, currency)
             .doOnSubscribe {
                 chartItemsObservable.onNext(DataState.Loading)
             }

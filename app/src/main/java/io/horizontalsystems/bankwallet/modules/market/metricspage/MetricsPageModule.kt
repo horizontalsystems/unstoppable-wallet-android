@@ -30,7 +30,7 @@ object MetricsPageModule {
                     MetricsPageViewModel(service) as T
                 }
                 ChartViewModel::class.java -> {
-                    val chartRepo = MetricsPageChartRepo(metricsType, globalMarketRepository)
+                    val chartRepo = MetricsPageChartRepo(App.currencyManager, metricsType, globalMarketRepository)
                     ChartModule.createViewModel(chartRepo) as T
                 }
                 else -> throw IllegalArgumentException()

@@ -27,7 +27,7 @@ object TvlModule {
         }
 
         private val chartRepo by lazy {
-            TvlChartRepo(globalMarketRepository)
+            TvlChartRepo(App.currencyManager, globalMarketRepository)
         }
 
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
