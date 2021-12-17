@@ -18,7 +18,7 @@ abstract class AbstractChartService {
     protected abstract val currencyManager: ICurrencyManager
     protected abstract val dataUpdatedObservable: Observable<Unit>
     protected abstract val initialChartType: ChartView.ChartType
-    protected abstract fun getItems(chartType: ChartView.ChartType, currency: Currency): Single<List<MetricChartModule.Item>>
+    protected abstract fun getItems(chartType: ChartView.ChartType, currency: Currency): Single<ChartDataXxx>
 
     private var chartType: ChartView.ChartType? = null
         set(value) {
@@ -29,8 +29,8 @@ abstract class AbstractChartService {
         get() = currencyManager.baseCurrency
     val chartTypeObservable = BehaviorSubject.create<ChartView.ChartType>()
 
-    val chartItemsObservable =
-        BehaviorSubject.create<DataState<Pair<ChartView.ChartType, List<MetricChartModule.Item>>>>()
+    val chartDataXxxObservable =
+        BehaviorSubject.create<DataState<ChartDataXxx>>()
 
     private var fetchItemsDisposable: Disposable? = null
     private val disposables = CompositeDisposable()
@@ -74,13 +74,28 @@ abstract class AbstractChartService {
         fetchItemsDisposable?.dispose()
         fetchItemsDisposable = getItems(tmpChartType, currency)
             .doOnSubscribe {
-                chartItemsObservable.onNext(DataState.Loading)
+                chartDataXxxObservable.onNext(DataState.Loading)
             }
             .subscribeIO({
-                chartItemsObservable.onNext(DataState.Success(Pair(tmpChartType, it)))
+                chartDataXxxObservable.onNext(DataState.Success(it))
             }, {
-                chartItemsObservable.onNext(DataState.Error(it))
+                chartDataXxxObservable.onNext(DataState.Error(it))
             })
     }
 
+}
+
+data class ChartDataXxx(
+    val chartType: ChartView.ChartType,
+    val items: List<MetricChartModule.Item>,
+    val startTimestamp: Long,
+    val endTimestamp: Long,
+    val isExpired: Boolean = false
+) {
+    constructor(chartType: ChartView.ChartType, items: List<MetricChartModule.Item>) : this(
+        chartType,
+        items,
+        items.firstOrNull()?.timestamp ?: 0,
+        items.lastOrNull()?.timestamp ?: 0,
+    )
 }

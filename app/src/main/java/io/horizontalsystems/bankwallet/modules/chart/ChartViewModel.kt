@@ -37,7 +37,7 @@ class ChartViewModel(private val service: AbstractChartService, private val fact
                 disposables.add(it)
             }
 
-        service.chartItemsObservable
+        service.chartDataXxxObservable
             .subscribeIO { chartItemsDataState ->
                 chartItemsDataState.viewState?.let {
                     viewStateLiveData.postValue(it)
@@ -45,10 +45,10 @@ class ChartViewModel(private val service: AbstractChartService, private val fact
 
                 loadingLiveData.postValue(chartItemsDataState.loading)
 
-                chartItemsDataState.dataOrNull?.let { (chartType, chartItems) ->
+                chartItemsDataState.dataOrNull?.let {
 //                    Log.e("AAA", "ChartViewModel: chartItems size ${chartItems.size}, lastPoint: ${chartItems.lastOrNull()}")
 
-                    syncChartItems(chartType, chartItems)
+                    syncChartItems(it)
                 }
             }
             .let {
@@ -62,10 +62,8 @@ class ChartViewModel(private val service: AbstractChartService, private val fact
         service.updateChartType(chartType)
     }
 
-    private fun syncChartItems(
-        chartType: ChartView.ChartType,
-        chartItems: List<MetricChartModule.Item>,
-    ) {
+    private fun syncChartItems(chartDataXxx: ChartDataXxx) {
+        val chartItems = chartDataXxx.items
         if (chartItems.isEmpty()) return
 
         val lastItemValue = chartItems.last().value
@@ -75,10 +73,9 @@ class ChartViewModel(private val service: AbstractChartService, private val fact
         val currentValueDiff = Value.Percent(((lastItemValue - firstItemValue).toFloat() / firstItemValue.toFloat() * 100).toBigDecimal())
 
         val chartViewItem = factory.convert(
-            chartItems,
-            chartType,
             MetricChartModule.ValueType.CompactCurrencyValue,
-            service.currency
+            service.currency,
+            chartDataXxx
         )
         val chartInfoData = ChartInfoData(
             chartViewItem.chartData,

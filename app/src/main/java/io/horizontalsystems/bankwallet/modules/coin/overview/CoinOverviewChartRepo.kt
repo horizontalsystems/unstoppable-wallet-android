@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.coin.overview
 import io.horizontalsystems.bankwallet.core.IChartTypeStorage
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.modules.chart.AbstractChartService
+import io.horizontalsystems.bankwallet.modules.chart.ChartDataXxx
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartModule
 import io.horizontalsystems.bankwallet.modules.metricchart.kitChartType
 import io.horizontalsystems.chartview.ChartView
@@ -51,7 +52,7 @@ class CoinOverviewChartRepo(
     override fun getItems(
         chartType: ChartView.ChartType,
         currency: Currency,
-    ): Single<List<MetricChartModule.Item>> {
+    ): Single<ChartDataXxx> {
         unsubscribeFromUpdates()
         subscribeForUpdates(currency, chartType)
 
@@ -66,7 +67,7 @@ class CoinOverviewChartRepo(
         val items = if (tmpChartInfo != null && tmpLastCoinPrice != null) {
             doGetItems(tmpChartInfo, tmpLastCoinPrice, chartType)
         } else {
-            listOf()
+            ChartDataXxx(chartType, listOf())
         }
 
         return Single.just(items)
@@ -98,9 +99,9 @@ class CoinOverviewChartRepo(
         chartInfo: ChartInfo,
         lastCoinPrice: CoinPrice,
         chartType: ChartView.ChartType
-    ): List<MetricChartModule.Item> {
+    ): ChartDataXxx {
         val points = chartInfo.points
-        if (points.isEmpty()) return listOf()
+        if (points.isEmpty()) return ChartDataXxx(chartType, listOf())
 
         val items = points
             .map {
@@ -123,7 +124,7 @@ class CoinOverviewChartRepo(
 
         items.removeIf { it.timestamp < chartInfo.startTimestamp }
 
-        return items
+        return ChartDataXxx(chartType, items, chartInfo.startTimestamp, chartInfo.endTimestamp, chartInfo.isExpired)
     }
 
 //    @Synchronized

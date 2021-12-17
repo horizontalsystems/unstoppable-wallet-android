@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.metricchart
 
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.chart.AbstractChartService
+import io.horizontalsystems.bankwallet.modules.chart.ChartDataXxx
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.chartview.ChartView.ChartType
 import io.horizontalsystems.core.ICurrencyManager
@@ -33,16 +34,17 @@ class CoinTradingVolumeFetcher(
     override fun getItems(
         chartType: ChartType,
         currency: Currency,
-    ): Single<List<MetricChartModule.Item>> {
+    ): Single<ChartDataXxx> {
         return marketKit.chartInfoSingle(coinUid, currency.code, chartType.kitChartType)
             .map { info ->
-                info.points
+                val items = info.points
                     .filter { it.timestamp >= info.startTimestamp }
                     .mapNotNull { point ->
                         point.volume?.let {
                             MetricChartModule.Item(it, null, point.timestamp)
                         }
                     }
+                ChartDataXxx(chartType, items, info.startTimestamp, info.endTimestamp, info.isExpired)
             }
     }
 }
