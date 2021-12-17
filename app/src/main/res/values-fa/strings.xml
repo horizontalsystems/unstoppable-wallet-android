@@ -100,7 +100,7 @@
     <string name="Market_Category_Rated">Rated</string>
     <string name="Market_Category_Rated_Description">Token ratings based on project security and market liquidity.</string>
     <string name="Market_Category_TopCoins">Top Coins</string>
-    <string name="Market_Category_TopCoins_Description">Top Coins Description</string>
+    <string name="Market_Category_TopCoins_Description">Top Coins by market cap rank</string>
     <string name="Market_Category_Blockchains">Token ratings based on project security and market liquidity.</string>
     <string name="Market_Category_Blockchains_Description">Native cryptocurrencies on major blockchains. </string>
     <string name="Market_Category_Dexes">DEXes</string>
