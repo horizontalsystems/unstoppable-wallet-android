@@ -117,7 +117,7 @@ private fun CoinAuditsScreen(
                                 }
                                 item {
                                     CellMultilineLawrenceSection(viewItem.auditViewItems) { auditViewItem ->
-                                        CoinAudit(auditViewItem) { onClickReportUrl(auditViewItem.reportUrl) }
+                                        CoinAudit(auditViewItem) { auditViewItem.reportUrl?.let { onClickReportUrl(it)} }
                                     }
                                     Spacer(modifier = Modifier.height(24.dp))
                                 }
@@ -172,7 +172,7 @@ fun CoinAudit(auditViewItem: CoinAuditsModule.AuditViewItem, onClick: () -> Unit
         modifier = Modifier
             .fillMaxSize()
             .padding(horizontal = 16.dp)
-            .clickable(onClick = onClick),
+            .clickable(onClick = onClick, enabled = auditViewItem.reportUrl != null),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Column(modifier = Modifier.weight(1f)) {
@@ -196,6 +196,8 @@ fun CoinAudit(auditViewItem: CoinAuditsModule.AuditViewItem, onClick: () -> Unit
             color = ComposeAppTheme.colors.grey
         )
 
-        Image(painter = painterResource(id = R.drawable.ic_arrow_right), contentDescription = "")
+        if (auditViewItem.reportUrl != null) {
+            Image(painterResource(id = R.drawable.ic_arrow_right), contentDescription = "")
+        }
     }
 }
