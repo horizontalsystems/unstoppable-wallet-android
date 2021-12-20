@@ -21,7 +21,12 @@ object MetricChartModule {
         val valueType: ValueType
     }
 
-    data class Item(val value: BigDecimal, val dominance: BigDecimal?, val timestamp: Long)
+    data class Item(
+        val value: BigDecimal,
+        val dominance: BigDecimal?,
+        val timestamp: Long,
+        val volume: BigDecimal? = null
+    )
 
     enum class ValueType {
         Percent, CompactCurrencyValue, CurrencyValue
