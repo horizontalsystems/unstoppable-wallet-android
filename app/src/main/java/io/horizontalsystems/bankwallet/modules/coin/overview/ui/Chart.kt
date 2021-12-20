@@ -10,10 +10,14 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.chart.ChartViewModel
 import io.horizontalsystems.bankwallet.modules.coin.ChartInfoData
@@ -132,6 +136,25 @@ private fun <T> HsChartLinePeriodsAndPoint(
                     style = ComposeAppTheme.typography.caption,
                     color = ComposeAppTheme.colors.grey
                 )
+            }
+            pointInfo.volume?.let { volume ->
+                Column {
+                    Text(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = stringResource(R.string.CoinPage_Volume),
+                        style = ComposeAppTheme.typography.caption,
+                        color = ComposeAppTheme.colors.grey,
+                        textAlign = TextAlign.End
+                    )
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Text(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = App.numberFormatter.formatCurrencyValueAsShortened(CurrencyValue(currency, volume.toBigDecimal())),
+                        style = ComposeAppTheme.typography.caption,
+                        color = ComposeAppTheme.colors.grey,
+                        textAlign = TextAlign.End
+                    )
+                }
             }
         }
     }
