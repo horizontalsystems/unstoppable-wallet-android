@@ -119,8 +119,7 @@ private fun <T> HsChartLinePeriodsAndPoint(
     if (pointInfo == null) {
         ChartTab(tabItems, onSelectTab)
     } else {
-        val (shortenValue, suffix) = App.numberFormatter.shortenValue(pointInfo.value.toBigDecimal())
-        val value = App.numberFormatter.formatFiat(shortenValue, currency.symbol, 0, 2) + " $suffix"
+        val value = App.numberFormatter.formatCurrencyValueAsShortened(CurrencyValue(currency, pointInfo.value.toBigDecimal()))
         val dayAndTime = DateHelper.getDayAndTime(Date(pointInfo.timestamp * 1000))
 
         TabPeriod(modifier = Modifier.padding(horizontal = 16.dp)) {
