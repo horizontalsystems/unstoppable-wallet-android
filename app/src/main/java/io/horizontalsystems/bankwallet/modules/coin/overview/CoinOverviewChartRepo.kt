@@ -105,7 +105,12 @@ class CoinOverviewChartRepo(
 
         val items = points
             .map {
-                MetricChartModule.Item(it.value, null, it.timestamp)
+                MetricChartModule.Item(
+                    value = it.value,
+                    dominance = null,
+                    timestamp = it.timestamp,
+                    volume = it.volume
+                )
             }
             .toMutableList()
 
