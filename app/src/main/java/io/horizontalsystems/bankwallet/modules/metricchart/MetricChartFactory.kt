@@ -43,6 +43,9 @@ class MetricChartFactory(private val numberFormatter: IAppNumberFormatter) {
         chartDataXxx.items.forEach { point ->
             val item = ChartDataItem(point.timestamp)
             item.values[Indicator.Candle] = ChartDataValue(point.value.toFloat())
+            point.volume?.let {
+                item.values[Indicator.Volume] = ChartDataValue(it.toFloat())
+            }
             point.dominance?.let {
                 item.values[Indicator.Dominance] = ChartDataValue(it.toFloat())
             }
@@ -56,6 +59,7 @@ class MetricChartFactory(private val numberFormatter: IAppNumberFormatter) {
             visibleChartData.items.add(item)
 
             visibleChartData.range(item, Indicator.Candle)
+            visibleChartData.range(item, Indicator.Volume)
             visibleChartData.range(item, Indicator.Dominance)
         }
 
@@ -66,6 +70,7 @@ class MetricChartFactory(private val numberFormatter: IAppNumberFormatter) {
             val x = (timestamp.toFloat() / visibleTimeInterval)
 
             item.setPoint(x, Indicator.Candle, visibleChartData.valueRange)
+            item.setPoint(x, Indicator.Volume, visibleChartData.volumeRange)
             item.setPoint(x, Indicator.Dominance, visibleChartData.dominanceRange)
         }
 
