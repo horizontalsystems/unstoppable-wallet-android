@@ -36,6 +36,6 @@ object CoinAuditsModule {
         val date: String?,
         val name: String,
         val issues: TranslatableString,
-        val reportUrl: String
+        val reportUrl: String?
     )
 }
