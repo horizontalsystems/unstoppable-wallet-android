@@ -39,9 +39,6 @@ class CoinOverviewChartRepo(
     override val initialChartType by chartTypeStorage::chartType2
     override val dataUpdatedObservable = BehaviorSubject.create<Unit>()
 
-    private var chartInfo: ChartInfo? = null
-    private var lastCoinPrice: CoinPrice? = null
-
     private val disposables = CompositeDisposable()
 
     override fun stop() {
@@ -55,11 +52,6 @@ class CoinOverviewChartRepo(
     ): Single<ChartDataXxx> {
         unsubscribeFromUpdates()
         subscribeForUpdates(currency, chartType)
-
-
-        marketKit.chartInfo(coinUid, currency.code, chartType.kitChartType)?.let {
-            Single.just(it)
-        } ?: marketKit.chartInfoSingle(coinUid, currency.code, chartType.kitChartType)
 
         val tmpChartInfo = marketKit.chartInfo(coinUid, currency.code, chartType.kitChartType)
         val tmpLastCoinPrice = marketKit.coinPrice(coinUid, currency.code)
@@ -131,24 +123,5 @@ class CoinOverviewChartRepo(
 
         return ChartDataXxx(chartType, items, chartInfo.startTimestamp, chartInfo.endTimestamp, chartInfo.isExpired)
     }
-
-//    @Synchronized
-//    private fun emitLoading() {
-//        chartDataSubject.onNext(DataState.Loading)
-//    }
-//
-//    @Synchronized
-//    private fun emitData() {
-//        val tmpChartInfo = chartInfo
-//        val tmpLastPoint = lastPoint
-//        if (tmpChartInfo != null && tmpLastPoint != null) {
-//            chartDataSubject.onNext(DataState.Success(Triple(tmpChartInfo, tmpLastPoint, chartType)))
-//        }
-//    }
-//    @Synchronized
-//    private fun emitError(error: Throwable) {
-//        chartDataSubject.onNext(DataState.Error(error))
-//    }
-//
 
 }
