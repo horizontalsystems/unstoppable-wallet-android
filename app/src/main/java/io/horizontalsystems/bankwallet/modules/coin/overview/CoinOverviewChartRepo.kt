@@ -101,11 +101,18 @@ class CoinOverviewChartRepo(
         val emaFast = IndicatorHelper.emaXxx(values, Indicator.EmaFast.period)
         val emaSlow = IndicatorHelper.emaXxx(values, Indicator.EmaSlow.period)
 
+        val rsi = IndicatorHelper.rsiXxx(values, Indicator.Rsi.period)
+        val (macd, signal, histogram) = IndicatorHelper.macdXxx(values, Indicator.Macd.fastPeriod, Indicator.Macd.slowPeriod, Indicator.Macd.signalPeriod)
+
         val items = points
             .mapIndexed { index, chartPoint ->
                 val indicators = mapOf(
                     Indicator.EmaFast to emaFast.getOrNull(index),
                     Indicator.EmaSlow to emaSlow.getOrNull(index),
+                    Indicator.Rsi to rsi.getOrNull(index),
+                    Indicator.Macd to macd.getOrNull(index),
+                    Indicator.MacdSignal to signal.getOrNull(index),
+                    Indicator.MacdHistogram to histogram.getOrNull(index),
                 )
 
                 MetricChartModule.Item(
