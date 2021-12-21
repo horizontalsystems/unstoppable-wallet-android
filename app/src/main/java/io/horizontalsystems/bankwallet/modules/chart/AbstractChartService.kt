@@ -4,6 +4,7 @@ import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartModule
 import io.horizontalsystems.chartview.ChartView
+import io.horizontalsystems.chartview.models.ChartIndicator
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.core.entities.Currency
 import io.reactivex.Observable
@@ -11,6 +12,7 @@ import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.BehaviorSubject
+import java.util.*
 
 abstract class AbstractChartService {
     abstract val chartTypes: List<ChartView.ChartType>
@@ -20,14 +22,20 @@ abstract class AbstractChartService {
     protected abstract val initialChartType: ChartView.ChartType
     protected abstract fun getItems(chartType: ChartView.ChartType, currency: Currency): Single<ChartDataXxx>
 
-    private var chartType: ChartView.ChartType? = null
+    protected var chartType: ChartView.ChartType? = null
         set(value) {
             field = value
             value?.let { chartTypeObservable.onNext(it) }
         }
+    private var indicator: ChartIndicator? = null
+        set(value) {
+            field = value
+            indicatorObservable.onNext(Optional.ofNullable(value))
+        }
     val currency: Currency
         get() = currencyManager.baseCurrency
     val chartTypeObservable = BehaviorSubject.create<ChartView.ChartType>()
+    val indicatorObservable = BehaviorSubject.create<Optional<ChartIndicator>>()
 
     val chartDataXxxObservable =
         BehaviorSubject.create<DataState<ChartDataXxx>>()
@@ -53,6 +61,7 @@ abstract class AbstractChartService {
             }
 
         chartType = initialChartType
+        indicator = null
         fetchItems()
     }
 
@@ -63,6 +72,12 @@ abstract class AbstractChartService {
 
     fun updateChartType(chartType: ChartView.ChartType) {
         this.chartType = chartType
+
+        fetchItems()
+    }
+
+    fun updateIndicator(indicator: ChartIndicator?) {
+        this.indicator = indicator
 
         fetchItems()
     }

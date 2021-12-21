@@ -14,10 +14,12 @@ import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartFactory
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartModule
 import io.horizontalsystems.bankwallet.ui.compose.components.TabItem
 import io.horizontalsystems.chartview.ChartView
+import io.horizontalsystems.chartview.models.ChartIndicator
 import io.reactivex.disposables.CompositeDisposable
 
 class ChartViewModel(private val service: AbstractChartService, private val factory: MetricChartFactory) : ViewModel() {
     val tabItemsLiveData = MutableLiveData<List<TabItem<ChartView.ChartType>>>()
+    val indicatorsLiveData = MutableLiveData<List<TabItem<ChartIndicator>>>()
     val dataWrapperLiveData = MutableLiveData<ChartDataWrapper>()
     val loadingLiveData = MutableLiveData<Boolean>()
     val viewStateLiveData = MutableLiveData<ViewState>()
@@ -32,6 +34,17 @@ class ChartViewModel(private val service: AbstractChartService, private val fact
                     TabItem(Translator.getString(it.stringResId), it == chartType, it)
                 }
                 tabItemsLiveData.postValue(tabItems)
+            }
+            .let {
+                disposables.add(it)
+            }
+
+        service.indicatorObservable
+            .subscribeIO { indicator ->
+                val tabItems = ChartIndicator.values().map {
+                    TabItem(Translator.getString(it.stringResId), it == indicator.orElse(null), it)
+                }
+                indicatorsLiveData.postValue(tabItems)
             }
             .let {
                 disposables.add(it)
@@ -60,6 +73,10 @@ class ChartViewModel(private val service: AbstractChartService, private val fact
 
     fun onSelectChartType(chartType: ChartView.ChartType) {
         service.updateChartType(chartType)
+    }
+
+    fun onSelectIndicator(chartIndicator: ChartIndicator?) {
+        service.updateIndicator(chartIndicator)
     }
 
     private fun syncChartItems(chartDataXxx: ChartDataXxx) {
@@ -92,6 +109,13 @@ class ChartViewModel(private val service: AbstractChartService, private val fact
         service.stop()
     }
 }
+
+private val ChartIndicator.stringResId: Int
+    get() = when (this) {
+        ChartIndicator.Ema -> R.string.CoinPage_IndicatorEMA
+        ChartIndicator.Macd -> R.string.CoinPage_IndicatorMACD
+        ChartIndicator.Rsi -> R.string.CoinPage_IndicatorRSI
+    }
 
 val ChartView.ChartType.stringResId: Int
     get() = when (this) {
