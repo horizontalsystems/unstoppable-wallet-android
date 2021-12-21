@@ -16,22 +16,19 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.chart.ChartViewModel
+import io.horizontalsystems.bankwallet.modules.chart.SelectedPointXxx
 import io.horizontalsystems.bankwallet.modules.coin.ChartInfoData
 import io.horizontalsystems.bankwallet.modules.market.Value
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.chartview.Chart
+import io.horizontalsystems.chartview.ChartDataItemImmutable
 import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.chartview.models.ChartIndicator
-import io.horizontalsystems.chartview.models.PointInfo
 import io.horizontalsystems.core.entities.Currency
-import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.core.helpers.HudHelper
-import java.util.*
 
 @Composable
 fun HsChartLineHeader(currentValue: String?, currentValueDiff: Value.Percent?) {
@@ -77,7 +74,8 @@ fun Chart(chartViewModel: ChartViewModel, onSelectChartType: ((ChartView.ChartTy
             chartInfoData = chartDataWrapper?.chartInfoData,
             chartLoading = chartLoading,
             viewState = chartViewState,
-            currency = currency
+            currency = currency,
+            itemToPointConverter = chartViewModel::getSelectedPointXxx
         )
     }
 }
@@ -92,13 +90,14 @@ fun <T> Chart(
     chartLoading: Boolean,
     viewState: ViewState?,
     currency: Currency,
+    itemToPointConverter: (ChartDataItemImmutable) -> SelectedPointXxx?,
 ) {
     Column {
-        var pointInfo by remember { mutableStateOf<PointInfo?>(null) }
-        HsChartLinePeriodsAndPoint(tabItems, pointInfo, currency, onSelectTab)
+        var selectedPointXxx by remember { mutableStateOf<SelectedPointXxx?>(null) }
+        HsChartLinePeriodsAndPoint(tabItems, selectedPointXxx, currency, onSelectTab)
         val chartIndicator = indicators.firstOrNull { it.selected }?.item
-        PriceVolChart(chartInfoData, chartIndicator, chartLoading, viewState) {
-            pointInfo = it
+        PriceVolChart(chartInfoData, chartIndicator, chartLoading, viewState) { item ->
+            selectedPointXxx = item?.let { itemToPointConverter.invoke(it) }
         }
         if (indicators.isNotEmpty()) {
             IndicatorToggles(indicators) {
@@ -111,31 +110,28 @@ fun <T> Chart(
 @Composable
 private fun <T> HsChartLinePeriodsAndPoint(
     tabItems: List<TabItem<T>>,
-    pointInfo: PointInfo?,
+    selectedPoint: SelectedPointXxx?,
     currency: Currency,
     onSelectTab: (T) -> Unit,
 ) {
-    if (pointInfo == null) {
+    if (selectedPoint == null) {
         ChartTab(tabItems, onSelectTab)
     } else {
-        val value = App.numberFormatter.formatCurrencyValueAsShortened(CurrencyValue(currency, pointInfo.value.toBigDecimal()))
-        val dayAndTime = DateHelper.getDayAndTime(Date(pointInfo.timestamp * 1000))
-
         TabPeriod(modifier = Modifier.padding(horizontal = 16.dp)) {
             Column {
                 Text(
-                    text = value,
+                    text = selectedPoint.value,
                     style = ComposeAppTheme.typography.captionSB,
                     color = ComposeAppTheme.colors.leah
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = dayAndTime,
+                    text = selectedPoint.date,
                     style = ComposeAppTheme.typography.caption,
                     color = ComposeAppTheme.colors.grey
                 )
             }
-            pointInfo.volume?.let { volume ->
+            selectedPoint.volume?.let { volume ->
                 Column {
                     Text(
                         modifier = Modifier.fillMaxWidth(),
@@ -147,7 +143,7 @@ private fun <T> HsChartLinePeriodsAndPoint(
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
                         modifier = Modifier.fillMaxWidth(),
-                        text = App.numberFormatter.formatCurrencyValueAsShortened(CurrencyValue(currency, volume.toBigDecimal())),
+                        text = volume,
                         style = ComposeAppTheme.typography.caption,
                         color = ComposeAppTheme.colors.grey,
                         textAlign = TextAlign.End
@@ -191,7 +187,7 @@ fun PriceVolChart(
     chartIndicator: ChartIndicator?,
     loading: Boolean,
     viewState: ViewState?,
-    onSelectPoint: (PointInfo?) -> Unit,
+    onSelectPoint: (ChartDataItemImmutable?) -> Unit,
 ) {
     Box(
         modifier = Modifier
@@ -211,8 +207,8 @@ fun PriceVolChart(
                             onSelectPoint.invoke(null)
                         }
 
-                        override fun onTouchSelect(point: PointInfo) {
-                            onSelectPoint.invoke(point)
+                        override fun onTouchSelectXxx(item: ChartDataItemImmutable) {
+                            onSelectPoint.invoke(item)
                             HudHelper.vibrate(context)
                         }
                     })

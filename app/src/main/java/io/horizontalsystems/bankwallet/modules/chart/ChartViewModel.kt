@@ -13,9 +13,13 @@ import io.horizontalsystems.bankwallet.modules.market.Value
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartFactory
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartModule
 import io.horizontalsystems.bankwallet.ui.compose.components.TabItem
+import io.horizontalsystems.chartview.ChartDataItemImmutable
 import io.horizontalsystems.chartview.ChartView
+import io.horizontalsystems.chartview.Indicator
 import io.horizontalsystems.chartview.models.ChartIndicator
+import io.horizontalsystems.core.helpers.DateHelper
 import io.reactivex.disposables.CompositeDisposable
+import java.util.*
 
 class ChartViewModel(private val service: AbstractChartService, private val factory: MetricChartFactory) : ViewModel() {
     val tabItemsLiveData = MutableLiveData<List<TabItem<ChartView.ChartType>>>()
@@ -108,7 +112,31 @@ class ChartViewModel(private val service: AbstractChartService, private val fact
         disposables.clear()
         service.stop()
     }
+
+    fun getSelectedPointXxx(item: ChartDataItemImmutable): SelectedPointXxx? {
+        return item.values[Indicator.Candle]?.let { candle ->
+            val value = App.numberFormatter.formatCurrencyValueAsShortened(CurrencyValue(currency, candle.value.toBigDecimal()))
+            val dayAndTime = DateHelper.getDayAndTime(Date(item.timestamp * 1000))
+
+            val volume = item.values[Indicator.Volume]?.let { volume ->
+                App.numberFormatter.formatCurrencyValueAsShortened(CurrencyValue(currency, volume.value.toBigDecimal()))
+            }
+
+            SelectedPointXxx(
+                value = value,
+                date = dayAndTime,
+                volume = volume,
+            )
+        }
+
+    }
 }
+
+data class SelectedPointXxx(
+    val value: String,
+    val date: String,
+    val volume: String?,
+)
 
 private val ChartIndicator.stringResId: Int
     get() = when (this) {

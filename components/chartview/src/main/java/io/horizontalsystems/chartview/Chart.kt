@@ -21,7 +21,8 @@ class Chart @JvmOverloads constructor(context: Context, attrs: AttributeSet? = n
     interface Listener {
         fun onTouchDown()
         fun onTouchUp()
-        fun onTouchSelect(point: PointInfo)
+        fun onTouchSelect(point: PointInfo) = Unit
+        fun onTouchSelectXxx(item: ChartDataItemImmutable) = Unit
     }
 
     init {
@@ -75,6 +76,10 @@ class Chart @JvmOverloads constructor(context: Context, attrs: AttributeSet? = n
 
             override fun onTouchSelect(point: PointInfo) {
                 listener.onTouchSelect(point)
+            }
+
+            override fun onTouchSelectXxx(item: ChartDataItemImmutable) {
+                listener.onTouchSelectXxx(item)
             }
         })
     }
