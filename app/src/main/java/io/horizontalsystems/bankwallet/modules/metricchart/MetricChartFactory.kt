@@ -64,6 +64,9 @@ class MetricChartFactory(private val numberFormatter: IAppNumberFormatter) {
             visibleChartData.range(item, Indicator.Candle)
             visibleChartData.range(item, Indicator.Volume)
             visibleChartData.range(item, Indicator.Dominance)
+            visibleChartData.range(item, Indicator.Macd)
+            visibleChartData.range(item, Indicator.MacdSignal)
+            visibleChartData.range(item, Indicator.MacdHistogram)
         }
 
         val visibleTimeInterval = visibleChartData.endTimestamp - visibleChartData.startTimestamp
@@ -77,6 +80,10 @@ class MetricChartFactory(private val numberFormatter: IAppNumberFormatter) {
             item.setPoint(x, Indicator.EmaSlow, visibleChartData.valueRange)
             item.setPoint(x, Indicator.Volume, visibleChartData.volumeRange)
             item.setPoint(x, Indicator.Dominance, visibleChartData.dominanceRange)
+            item.setPoint(x, Indicator.Rsi, visibleChartData.rsiRange)
+            item.setPoint(x, Indicator.Macd, visibleChartData.macdRange)
+            item.setPoint(x, Indicator.MacdSignal, visibleChartData.macdRange)
+            item.setPoint(x, Indicator.MacdHistogram, visibleChartData.histogramRange)
         }
 
         return visibleChartData.build()
