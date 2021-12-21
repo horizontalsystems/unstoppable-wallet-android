@@ -41,10 +41,10 @@ class ChartViewModel(private val service: AbstractChartService, private val fact
 
         service.indicatorObservable
             .subscribeIO { indicator ->
-                val tabItems = ChartIndicator.values().map {
+                val indicators = service.chartIndicators.map {
                     TabItem(Translator.getString(it.stringResId), it == indicator.orElse(null), it)
                 }
-                indicatorsLiveData.postValue(tabItems)
+                indicatorsLiveData.postValue(indicators)
             }
             .let {
                 disposables.add(it)

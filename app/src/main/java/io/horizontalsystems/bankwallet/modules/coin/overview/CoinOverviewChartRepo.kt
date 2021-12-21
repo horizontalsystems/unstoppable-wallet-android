@@ -9,6 +9,7 @@ import io.horizontalsystems.bankwallet.modules.metricchart.kitChartType
 import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.chartview.Indicator
 import io.horizontalsystems.chartview.helpers.IndicatorHelper
+import io.horizontalsystems.chartview.models.ChartIndicator
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.marketkit.MarketKit
@@ -38,6 +39,7 @@ class CoinOverviewChartRepo(
             ChartView.ChartType.MONTHLY24
         )
 
+    override val chartIndicators: List<ChartIndicator> = ChartIndicator.values().toList()
     override val initialChartType by chartTypeStorage::chartType2
     override val dataUpdatedObservable = BehaviorSubject.create<Unit>()
 

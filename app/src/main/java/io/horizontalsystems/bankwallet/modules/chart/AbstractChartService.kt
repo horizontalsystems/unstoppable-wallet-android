@@ -16,6 +16,7 @@ import java.util.*
 
 abstract class AbstractChartService {
     abstract val chartTypes: List<ChartView.ChartType>
+    open val chartIndicators: List<ChartIndicator> = listOf()
 
     protected abstract val currencyManager: ICurrencyManager
     protected abstract val dataUpdatedObservable: Observable<Unit>
