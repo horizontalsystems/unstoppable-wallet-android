@@ -38,7 +38,8 @@ object PointConverter {
                         MacdInfo(macd?.value, signal?.value, histogram?.value),
                         dominance?.value?.toBigDecimal(),
                         item.timestamp
-                    )
+                    ),
+                    item = item,
                 )
             )
         }
