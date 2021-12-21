@@ -27,7 +27,6 @@ import io.horizontalsystems.chartview.Chart
 import io.horizontalsystems.chartview.ChartDataItemImmutable
 import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.chartview.models.ChartIndicator
-import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.core.helpers.HudHelper
 
 @Composable
@@ -57,7 +56,6 @@ fun Chart(chartViewModel: ChartViewModel, onSelectChartType: ((ChartView.ChartTy
     val chartIndicators by chartViewModel.indicatorsLiveData.observeAsState(listOf())
     val chartLoading by chartViewModel.loadingLiveData.observeAsState(false)
     val chartViewState by chartViewModel.viewStateLiveData.observeAsState()
-    val currency = chartViewModel.currency
 
     Column {
         HsChartLineHeader(chartDataWrapper?.currentValue, chartDataWrapper?.currentValueDiff)
@@ -74,7 +72,6 @@ fun Chart(chartViewModel: ChartViewModel, onSelectChartType: ((ChartView.ChartTy
             chartInfoData = chartDataWrapper?.chartInfoData,
             chartLoading = chartLoading,
             viewState = chartViewState,
-            currency = currency,
             itemToPointConverter = chartViewModel::getSelectedPointXxx
         )
     }
@@ -89,12 +86,11 @@ fun <T> Chart(
     chartInfoData: ChartInfoData?,
     chartLoading: Boolean,
     viewState: ViewState?,
-    currency: Currency,
     itemToPointConverter: (ChartDataItemImmutable) -> SelectedPointXxx?,
 ) {
     Column {
         var selectedPointXxx by remember { mutableStateOf<SelectedPointXxx?>(null) }
-        HsChartLinePeriodsAndPoint(tabItems, selectedPointXxx, currency, onSelectTab)
+        HsChartLinePeriodsAndPoint(tabItems, selectedPointXxx, onSelectTab)
         val chartIndicator = indicators.firstOrNull { it.selected }?.item
         PriceVolChart(chartInfoData, chartIndicator, chartLoading, viewState) { item ->
             selectedPointXxx = item?.let { itemToPointConverter.invoke(it) }
@@ -111,7 +107,6 @@ fun <T> Chart(
 private fun <T> HsChartLinePeriodsAndPoint(
     tabItems: List<TabItem<T>>,
     selectedPoint: SelectedPointXxx?,
-    currency: Currency,
     onSelectTab: (T) -> Unit,
 ) {
     if (selectedPoint == null) {
