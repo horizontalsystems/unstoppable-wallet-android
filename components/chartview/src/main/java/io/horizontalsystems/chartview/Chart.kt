@@ -96,7 +96,16 @@ class Chart @JvmOverloads constructor(context: Context, attrs: AttributeSet? = n
         chartError.text = error
     }
 
+    private var indicator: ChartIndicator? = null
+
+    fun hideAllIndicators() {
+        indicator?.let {
+            setIndicator(it, false)
+        }
+    }
+
     fun setIndicator(indicator: ChartIndicator, visible: Boolean){
+        this.indicator = indicator
         if (visible){
             hideOtherIndicators(indicator)
         }

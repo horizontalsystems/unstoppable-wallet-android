@@ -96,7 +96,8 @@ fun <T> Chart(
     Column {
         var pointInfo by remember { mutableStateOf<PointInfo?>(null) }
         HsChartLinePeriodsAndPoint(tabItems, pointInfo, currency, onSelectTab)
-        PriceVolChart(chartInfoData, chartLoading, viewState) {
+        val chartIndicator = indicators.firstOrNull { it.selected }?.item
+        PriceVolChart(chartInfoData, chartIndicator, chartLoading, viewState) {
             pointInfo = it
         }
         if (indicators.isNotEmpty()) {
@@ -187,6 +188,7 @@ fun IndicatorToggles(indicators: List<TabItem<ChartIndicator>>, onSelect: (Chart
 @Composable
 fun PriceVolChart(
     chartInfoData: ChartInfoData?,
+    chartIndicator: ChartIndicator?,
     loading: Boolean,
     viewState: ViewState?,
     onSelectPoint: (PointInfo?) -> Unit,
@@ -231,6 +233,11 @@ fun PriceVolChart(
                         chartInfoData?.let {
                             chart.post {
                                 chart.setData(it.chartData, it.chartType, it.maxValue, it.minValue)
+                                if (chartIndicator != null) {
+                                    chart.setIndicator(chartIndicator, true)
+                                } else {
+                                    chart.hideAllIndicators()
+                                }
                             }
                         }
                     }

@@ -10,6 +10,7 @@ import io.horizontalsystems.bankwallet.modules.chart.ChartModule
 import io.horizontalsystems.bankwallet.modules.chart.ChartViewModel
 import io.horizontalsystems.chartview.ChartData
 import io.horizontalsystems.chartview.ChartView
+import io.horizontalsystems.chartview.Indicator
 import kotlinx.android.parcel.Parcelize
 import java.math.BigDecimal
 
@@ -25,7 +26,8 @@ object MetricChartModule {
         val value: BigDecimal,
         val dominance: BigDecimal?,
         val timestamp: Long,
-        val volume: BigDecimal? = null
+        val volume: BigDecimal? = null,
+        val indicators: Map<Indicator, Float?> = mapOf()
     )
 
     enum class ValueType {
