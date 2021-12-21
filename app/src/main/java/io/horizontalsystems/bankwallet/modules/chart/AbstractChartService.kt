@@ -28,8 +28,8 @@ abstract class AbstractChartService {
             field = value
             value?.let { chartTypeObservable.onNext(it) }
         }
-    private var indicator: ChartIndicator? = null
-        set(value) {
+    var indicator: ChartIndicator? = null
+        private set(value) {
             field = value
             indicatorObservable.onNext(Optional.ofNullable(value))
         }

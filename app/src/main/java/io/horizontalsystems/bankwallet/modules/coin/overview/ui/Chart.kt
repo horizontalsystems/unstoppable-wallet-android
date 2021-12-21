@@ -117,7 +117,10 @@ private fun <T> HsChartLinePeriodsAndPoint(
     if (selectedPoint == null) {
         ChartTab(tabItems, onSelectTab)
     } else {
-        TabPeriod(modifier = Modifier.padding(horizontal = 16.dp)) {
+        TabPeriod(
+            modifier = Modifier.padding(horizontal = 16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
             Column {
                 Text(
                     text = selectedPoint.value,
@@ -131,23 +134,59 @@ private fun <T> HsChartLinePeriodsAndPoint(
                     color = ComposeAppTheme.colors.grey
                 )
             }
-            selectedPoint.volume?.let { volume ->
-                Column {
-                    Text(
-                        modifier = Modifier.fillMaxWidth(),
-                        text = stringResource(R.string.CoinPage_Volume),
-                        style = ComposeAppTheme.typography.caption,
-                        color = ComposeAppTheme.colors.grey,
-                        textAlign = TextAlign.End
-                    )
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Text(
-                        modifier = Modifier.fillMaxWidth(),
-                        text = volume,
-                        style = ComposeAppTheme.typography.caption,
-                        color = ComposeAppTheme.colors.grey,
-                        textAlign = TextAlign.End
-                    )
+
+            when (val extraData = selectedPoint.extraData) {
+                is SelectedPointXxx.ExtraData.Macd -> {
+                    Column(modifier = Modifier.width(IntrinsicSize.Max)) {
+                        extraData.histogram?.let {
+                            Text(
+                                modifier = Modifier.fillMaxWidth(),
+                                text = extraData.histogram,
+                                style = ComposeAppTheme.typography.caption,
+                                color = ComposeAppTheme.colors.lucian,
+                                textAlign = TextAlign.End
+                            )
+                        }
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Row(modifier = Modifier.fillMaxWidth()) {
+                            extraData.macd?.let {
+                                Text(
+                                    text = it,
+                                    style = ComposeAppTheme.typography.caption,
+                                    color = ComposeAppTheme.colors.issykBlue,
+                                    textAlign = TextAlign.End
+                                )
+                            }
+                            Spacer(modifier = Modifier.width(4.dp))
+                            extraData.signal?.let {
+                                Text(
+                                    text = it,
+                                    style = ComposeAppTheme.typography.caption,
+                                    color = ComposeAppTheme.colors.jacob,
+                                    textAlign = TextAlign.End
+                                )
+                            }
+                        }
+                    }
+                }
+                is SelectedPointXxx.ExtraData.Volume -> {
+                    Column(modifier = Modifier.width(IntrinsicSize.Max)) {
+                        Text(
+                            modifier = Modifier.fillMaxWidth(),
+                            text = stringResource(R.string.CoinPage_Volume),
+                            style = ComposeAppTheme.typography.caption,
+                            color = ComposeAppTheme.colors.grey,
+                            textAlign = TextAlign.End
+                        )
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Text(
+                            modifier = Modifier.fillMaxWidth(),
+                            text = extraData.volume,
+                            style = ComposeAppTheme.typography.caption,
+                            color = ComposeAppTheme.colors.grey,
+                            textAlign = TextAlign.End
+                        )
+                    }
                 }
             }
         }
