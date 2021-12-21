@@ -118,14 +118,33 @@ class ChartViewModel(private val service: AbstractChartService, private val fact
             val value = App.numberFormatter.formatCurrencyValueAsShortened(CurrencyValue(currency, candle.value.toBigDecimal()))
             val dayAndTime = DateHelper.getDayAndTime(Date(item.timestamp * 1000))
 
-            val volume = item.values[Indicator.Volume]?.let { volume ->
-                App.numberFormatter.formatCurrencyValueAsShortened(CurrencyValue(currency, volume.value.toBigDecimal()))
+            val extraData = when (service.indicator) {
+                ChartIndicator.Macd -> {
+                    val macd = item.values[Indicator.Macd]?.let {
+                        App.numberFormatter.format(it.value, 0, 2)
+                    }
+                    val histogram = item.values[Indicator.MacdHistogram]?.let {
+                        App.numberFormatter.format(it.value, 0, 2)
+                    }
+                    val signal = item.values[Indicator.MacdSignal]?.let {
+                        App.numberFormatter.format(it.value, 0, 2)
+                    }
+
+                    SelectedPointXxx.ExtraData.Macd(macd, histogram, signal)
+                }
+                else -> {
+                    item.values[Indicator.Volume]?.let { volume ->
+                        SelectedPointXxx.ExtraData.Volume(
+                            App.numberFormatter.formatCurrencyValueAsShortened(CurrencyValue(currency, volume.value.toBigDecimal()))
+                        )
+                    }
+                }
             }
 
             SelectedPointXxx(
                 value = value,
                 date = dayAndTime,
-                volume = volume,
+                extraData = extraData,
             )
         }
 
@@ -135,8 +154,13 @@ class ChartViewModel(private val service: AbstractChartService, private val fact
 data class SelectedPointXxx(
     val value: String,
     val date: String,
-    val volume: String?,
-)
+    val extraData: ExtraData?
+) {
+    sealed class ExtraData {
+        class Volume(val volume: String) : ExtraData()
+        class Macd(val macd: String?, val histogram: String?, val signal: String?) : ExtraData()
+    }
+}
 
 private val ChartIndicator.stringResId: Int
     get() = when (this) {
