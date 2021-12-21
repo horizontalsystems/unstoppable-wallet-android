@@ -30,6 +30,34 @@ object IndicatorHelper {
         return maList
     }
 
+    fun emaXxx(values: List<Float>, period: Int): List<Float?> {
+        if (values.size < period) return listOf()
+
+        val k = 2f / (period + 1) // multiplier for weighting the EMA
+
+        var ma = 0f
+        val maList = arrayOfNulls<Float?>(period - 1).toMutableList()
+
+        for (i in values.indices) {
+            val price = values[i]
+
+            if (i < period) {
+                ma += price
+                continue
+            }
+
+            if (i == period) {
+                ma /= period
+                maList.add(ma)
+            }
+
+            ma = price * k + ma * (1 - k)
+            maList.add(ma)
+        }
+
+        return maList
+    }
+
     fun rsi(values: List<Float>, period: Int): List<Float> {
         val upMove = mutableListOf<Float>()
         val downMove = mutableListOf<Float>()

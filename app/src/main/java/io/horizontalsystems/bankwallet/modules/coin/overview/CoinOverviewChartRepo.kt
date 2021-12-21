@@ -7,6 +7,8 @@ import io.horizontalsystems.bankwallet.modules.chart.ChartDataXxx
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartModule
 import io.horizontalsystems.bankwallet.modules.metricchart.kitChartType
 import io.horizontalsystems.chartview.ChartView
+import io.horizontalsystems.chartview.Indicator
+import io.horizontalsystems.chartview.helpers.IndicatorHelper
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.marketkit.MarketKit
@@ -95,13 +97,23 @@ class CoinOverviewChartRepo(
         val points = chartInfo.points
         if (points.isEmpty()) return ChartDataXxx(chartType, listOf())
 
+        val values = points.map { it.value.toFloat() }
+        val emaFast = IndicatorHelper.emaXxx(values, Indicator.EmaFast.period)
+        val emaSlow = IndicatorHelper.emaXxx(values, Indicator.EmaSlow.period)
+
         val items = points
-            .map {
+            .mapIndexed { index, chartPoint ->
+                val indicators = mapOf(
+                    Indicator.EmaFast to emaFast.getOrNull(index),
+                    Indicator.EmaSlow to emaSlow.getOrNull(index),
+                )
+
                 MetricChartModule.Item(
-                    value = it.value,
+                    value = chartPoint.value,
                     dominance = null,
-                    timestamp = it.timestamp,
-                    volume = it.volume
+                    timestamp = chartPoint.timestamp,
+                    volume = chartPoint.volume,
+                    indicators = indicators
                 )
             }
             .toMutableList()
