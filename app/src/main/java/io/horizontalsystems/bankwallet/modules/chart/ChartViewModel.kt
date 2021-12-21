@@ -27,7 +27,6 @@ class ChartViewModel(private val service: AbstractChartService, private val fact
     val dataWrapperLiveData = MutableLiveData<ChartDataWrapper>()
     val loadingLiveData = MutableLiveData<Boolean>()
     val viewStateLiveData = MutableLiveData<ViewState>()
-    val currency by service::currency
 
     private val disposables = CompositeDisposable()
 
@@ -115,7 +114,7 @@ class ChartViewModel(private val service: AbstractChartService, private val fact
 
     fun getSelectedPointXxx(item: ChartDataItemImmutable): SelectedPointXxx? {
         return item.values[Indicator.Candle]?.let { candle ->
-            val value = App.numberFormatter.formatCurrencyValueAsShortened(CurrencyValue(currency, candle.value.toBigDecimal()))
+            val value = App.numberFormatter.formatCurrencyValueAsShortened(CurrencyValue(service.currency, candle.value.toBigDecimal()))
             val dayAndTime = DateHelper.getDayAndTime(Date(item.timestamp * 1000))
 
             val extraData = when (service.indicator) {
@@ -135,7 +134,7 @@ class ChartViewModel(private val service: AbstractChartService, private val fact
                 else -> {
                     item.values[Indicator.Volume]?.let { volume ->
                         SelectedPointXxx.ExtraData.Volume(
-                            App.numberFormatter.formatCurrencyValueAsShortened(CurrencyValue(currency, volume.value.toBigDecimal()))
+                            App.numberFormatter.formatCurrencyValueAsShortened(CurrencyValue(service.currency, volume.value.toBigDecimal()))
                         )
                     }
                 }
