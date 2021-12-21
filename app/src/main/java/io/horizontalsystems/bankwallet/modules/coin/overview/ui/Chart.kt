@@ -26,26 +26,12 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.*
 import io.horizontalsystems.chartview.Chart
 import io.horizontalsystems.chartview.ChartView
+import io.horizontalsystems.chartview.models.ChartIndicator
 import io.horizontalsystems.chartview.models.PointInfo
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.core.helpers.HudHelper
 import java.util.*
-
-//@Composable
-//fun <T>Chart(
-//    tabItems: List<TabItem<T>>,
-//    indicators: List<IndicatorItem>,
-//    chartInfoData: ChartInfoData?,
-//    onSelectTab: (T) -> Unit,
-//    onSelectIndicator: (IndicatorItem) -> Unit
-//) {
-//    Column {
-//        ChartTab(tabItems, onSelectTab)
-//        PriceVolChart(chartInfoData)
-//        IndicatorToggles(indicators, onSelectIndicator)
-//    }
-//}
 
 @Composable
 fun HsChartLineHeader(currentValue: String?, currentValueDiff: Value.Percent?) {
@@ -71,6 +57,7 @@ fun HsChartLineHeader(currentValue: String?, currentValueDiff: Value.Percent?) {
 fun Chart(chartViewModel: ChartViewModel, onSelectChartType: ((ChartView.ChartType) -> Unit)? = null) {
     val chartDataWrapper by chartViewModel.dataWrapperLiveData.observeAsState()
     val chartTabs by chartViewModel.tabItemsLiveData.observeAsState(listOf())
+    val chartIndicators by chartViewModel.indicatorsLiveData.observeAsState(listOf())
     val chartLoading by chartViewModel.loadingLiveData.observeAsState(false)
     val chartViewState by chartViewModel.viewStateLiveData.observeAsState()
     val currency = chartViewModel.currency
@@ -82,6 +69,10 @@ fun Chart(chartViewModel: ChartViewModel, onSelectChartType: ((ChartView.ChartTy
             onSelectTab = {
                 chartViewModel.onSelectChartType(it)
                 onSelectChartType?.invoke(it)
+            },
+            indicators = chartIndicators,
+            onSelectIndicator = {
+                chartViewModel.onSelectIndicator(it)
             },
             chartInfoData = chartDataWrapper?.chartInfoData,
             chartLoading = chartLoading,
@@ -95,6 +86,8 @@ fun Chart(chartViewModel: ChartViewModel, onSelectChartType: ((ChartView.ChartTy
 fun <T> Chart(
     tabItems: List<TabItem<T>>,
     onSelectTab: (T) -> Unit,
+    indicators: List<TabItem<ChartIndicator>>,
+    onSelectIndicator: (ChartIndicator?) -> Unit,
     chartInfoData: ChartInfoData?,
     chartLoading: Boolean,
     viewState: ViewState?,
@@ -105,6 +98,11 @@ fun <T> Chart(
         HsChartLinePeriodsAndPoint(tabItems, pointInfo, currency, onSelectTab)
         PriceVolChart(chartInfoData, chartLoading, viewState) {
             pointInfo = it
+        }
+        if (indicators.isNotEmpty()) {
+            IndicatorToggles(indicators) {
+                onSelectIndicator.invoke(it)
+            }
         }
     }
 }
@@ -159,10 +157,8 @@ private fun <T> HsChartLinePeriodsAndPoint(
     }
 }
 
-data class IndicatorItem(val title: String, val enabled: Boolean, val selected: Boolean)
-
 @Composable
-fun IndicatorToggles(indicators: List<IndicatorItem>, onSelect: (IndicatorItem) -> Unit) {
+fun IndicatorToggles(indicators: List<TabItem<ChartIndicator>>, onSelect: (ChartIndicator?) -> Unit) {
     CellHeaderSorting(
         borderTop = true,
         borderBottom = true
@@ -178,10 +174,10 @@ fun IndicatorToggles(indicators: List<IndicatorItem>, onSelect: (IndicatorItem) 
                 TabButtonSecondary(
                     title = indicator.title,
                     onSelect = {
-                        onSelect(indicator)
+                        onSelect(if (indicator.selected) null else indicator.item)
                     },
                     selected = indicator.selected,
-                    enabled = indicator.enabled
+                    enabled = true
                 )
             }
         }
@@ -287,12 +283,6 @@ fun ChartPreview() {
             TabItem("24H", false, ""),
             TabItem("7D", false, ""),
             TabItem("1M", false, ""),
-        )
-
-        val indicators = listOf(
-            IndicatorItem("EMA", true, false),
-            IndicatorItem("MACD", true, false),
-            IndicatorItem("RSI", true, true),
         )
 
 //        Chart(
