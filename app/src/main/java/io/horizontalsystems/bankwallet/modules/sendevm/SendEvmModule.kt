@@ -112,7 +112,8 @@ object SendEvmModule {
                 }
                 RecipientAddressViewModel::class.java -> {
                     val addressParser = App.addressParserFactory.parser(wallet.coinType)
-                    val resolutionService = AddressResolutionService(wallet.coin.code, true)
+                    val coinCode = AddressResolutionService.getChainCoinCode(wallet.coinType) ?: wallet.coin.code
+                    val resolutionService = AddressResolutionService(coinCode, true)
                     val placeholder = Translator.getString(R.string.SwapSettings_RecipientPlaceholder)
                     RecipientAddressViewModel(service, resolutionService, addressParser, placeholder, listOf(service, resolutionService)) as T
                 }
