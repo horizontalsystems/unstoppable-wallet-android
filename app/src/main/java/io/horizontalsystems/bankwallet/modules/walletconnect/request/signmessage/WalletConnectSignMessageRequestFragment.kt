@@ -15,6 +15,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.databinding.FragmentWalletConnectSignMessageRequestBinding
 import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectViewModel
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.WalletConnectRequestModule.TYPED_MESSAGE
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.signmessage.WalletConnectSignMessageRequestService.SignMessage
@@ -23,46 +24,67 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefaul
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.views.ListPosition
-import kotlinx.android.synthetic.main.fragment_wallet_connect_sign_message_request.*
-import kotlinx.android.synthetic.main.fragment_wallet_connect_sign_message_request.buttonsCompose
 
 class WalletConnectSignMessageRequestFragment : BaseFragment() {
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_wallet_connect_sign_message_request, container, false)
+    private var _binding: FragmentWalletConnectSignMessageRequestBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding =
+            FragmentWalletConnectSignMessageRequestBinding.inflate(inflater, container, false)
+        val view = binding.root
+        return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         val baseViewModel by navGraphViewModels<WalletConnectViewModel>(R.id.walletConnectMainFragment)
-        val vmFactory = WalletConnectSignMessageRequestModule.Factory(baseViewModel.sharedSignMessageRequest!!, baseViewModel.service)
+        val vmFactory = WalletConnectSignMessageRequestModule.Factory(
+            baseViewModel.sharedSignMessageRequest!!,
+            baseViewModel.service
+        )
         val viewModel by viewModels<WalletConnectSignMessageRequestViewModel> { vmFactory }
 
         when (val message = viewModel.message) {
             is SignMessage.Message,
             is SignMessage.PersonalMessage -> {
-                messageHint.text = message.data
-                typedMessageViews.isVisible = false
+                binding.messageHint.text = message.data
+                binding.typedMessageViews.isVisible = false
             }
             is SignMessage.TypedMessage -> {
-                messageHint.text = getString(R.string.WalletConnect_SignMessageRequest_SignMessageHint)
-                domain.bind(
-                        title = getString(R.string.WalletConnect_SignMessageRequest_Domain),
-                        value = message.domain,
-                        listPosition = ListPosition.First
+                binding.messageHint.text =
+                    getString(R.string.WalletConnect_SignMessageRequest_SignMessageHint)
+                binding.domain.bind(
+                    title = getString(R.string.WalletConnect_SignMessageRequest_Domain),
+                    value = message.domain,
+                    listPosition = ListPosition.First
                 )
-                showMessageButton.apply {
+                binding.showMessageButton.apply {
                     bind(
-                            title = getString(R.string.WalletConnect_SignMessageRequest_ShowMessageTitle),
-                            icon = R.drawable.ic_arrow_right,
-                            listPosition = ListPosition.Last
+                        title = getString(R.string.WalletConnect_SignMessageRequest_ShowMessageTitle),
+                        icon = R.drawable.ic_arrow_right,
+                        listPosition = ListPosition.Last
                     )
                     setOnClickListener {
-                        findNavController().navigate(R.id.walletConnectSignMessageRequestFragment_to_walletConnectDisplayTypedMessageFragment, bundleOf(TYPED_MESSAGE to formatJson(message.data)), navOptions())
+                        findNavController().navigate(
+                            R.id.walletConnectSignMessageRequestFragment_to_walletConnectDisplayTypedMessageFragment,
+                            bundleOf(TYPED_MESSAGE to formatJson(message.data)),
+                            navOptions()
+                        )
                     }
                 }
-                typedMessageViews.isVisible = true
+                binding.typedMessageViews.isVisible = true
             }
         }
 
@@ -75,11 +97,11 @@ class WalletConnectSignMessageRequestFragment : BaseFragment() {
             findNavController().popBackStack()
         })
 
-        buttonsCompose.setViewCompositionStrategy(
+        binding.buttonsCompose.setViewCompositionStrategy(
             ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
         )
 
-        buttonsCompose.setContent {
+        binding.buttonsCompose.setContent {
             ComposeAppTheme {
                 Column(modifier = Modifier.width(IntrinsicSize.Max)) {
                     ButtonPrimaryYellow(

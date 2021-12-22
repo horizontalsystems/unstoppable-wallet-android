@@ -1,12 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect.main
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
-import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.view_holder_dapp_item.*
+import io.horizontalsystems.bankwallet.databinding.ViewHolderDappItemBinding
 
 class DappInfoAdapter : RecyclerView.Adapter<DappInfoAdapter.ViewHolder>() {
 
@@ -17,24 +15,26 @@ class DappInfoAdapter : RecyclerView.Adapter<DappInfoAdapter.ViewHolder>() {
         var visible: Boolean = false
     }
 
-    class ViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+    class ViewHolder(private val binding: ViewHolderDappItemBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
         fun bind(dappItemData: DappItemData) {
-            title.text = containerView.context.getString(dappItemData.titleStringResId)
-            value.text = dappItemData.valueStringResId?.let { containerView.context.getString(it) }
+            binding.title.text = binding.wrapper.context.getString(dappItemData.titleStringResId)
+            binding.value.text =
+                dappItemData.valueStringResId?.let { binding.wrapper.context.getString(it) }
                     ?: dappItemData.value
 
             dappItemData.valueColor?.let { color ->
-                value.setTextColor(containerView.context.getColor(color))
+                binding.value.setTextColor(binding.wrapper.context.getColor(color))
             }
         }
 
     }
 
     private val allItems = listOf(
-            DappItemData(R.string.WalletConnect_Status),
-            DappItemData(R.string.WalletConnect_Url),
-            DappItemData(R.string.WalletConnect_SignedTransactions),
+        DappItemData(R.string.WalletConnect_Status),
+        DappItemData(R.string.WalletConnect_Url),
+        DappItemData(R.string.WalletConnect_SignedTransactions),
     )
 
     private val visibleItems
@@ -95,7 +95,11 @@ class DappInfoAdapter : RecyclerView.Adapter<DappInfoAdapter.ViewHolder>() {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_dapp_item, parent, false))
+        return ViewHolder(
+            ViewHolderDappItemBinding.inflate(
+                LayoutInflater.from(parent.context), parent, false
+            )
+        )
     }
 
     override fun getItemCount(): Int {
@@ -111,4 +115,3 @@ class DappInfoAdapter : RecyclerView.Adapter<DappInfoAdapter.ViewHolder>() {
     }
 
 }
-

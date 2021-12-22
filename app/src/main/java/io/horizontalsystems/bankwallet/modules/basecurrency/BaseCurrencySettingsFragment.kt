@@ -4,8 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.ConcatAdapter
@@ -13,24 +11,38 @@ import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
+import io.horizontalsystems.bankwallet.databinding.FragmentBaseCurrencySettingsBinding
+import io.horizontalsystems.bankwallet.databinding.ViewHolderSectionHeaderBinding
 import io.horizontalsystems.core.findNavController
+import io.horizontalsystems.views.databinding.ViewHolderItemWithCheckmarkBinding
 import io.horizontalsystems.views.helpers.LayoutHelper
-import io.horizontalsystems.views.inflate
-import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.fragment_base_currency_settings.*
 import java.util.*
 
 class BaseCurrencySettingsFragment : BaseFragment(), RVAdapter.ViewHolder.Listener {
 
     private val viewModel by viewModels<BaseCurrencySettingsViewModel> { BaseCurrencySettingsModule.Factory() }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_base_currency_settings, container, false)
+    private var _binding: FragmentBaseCurrencySettingsBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentBaseCurrencySettingsBinding.inflate(inflater, container, false)
+        val view = binding.root
+        return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        toolbar.setNavigationOnClickListener {
+        binding.toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }
 
@@ -49,7 +61,11 @@ class BaseCurrencySettingsFragment : BaseFragment(), RVAdapter.ViewHolder.Listen
         val adapterPopularItems = RVAdapter(viewModel.popularItems, this)
         val adapterOtherItems = RVAdapter(viewModel.otherItems, this)
 
-        recyclerView.adapter = ConcatAdapter(adapterPopularItems, RVAdapterSectionHeader(getString(R.string.SettingsCurrency_Other)), adapterOtherItems)
+        binding.recyclerView.adapter = ConcatAdapter(
+            adapterPopularItems,
+            RVAdapterSectionHeader(getString(R.string.SettingsCurrency_Other)),
+            adapterOtherItems
+        )
     }
 
     override fun onSelectItem(item: CurrencyViewItemWrapper) {
@@ -57,29 +73,36 @@ class BaseCurrencySettingsFragment : BaseFragment(), RVAdapter.ViewHolder.Listen
     }
 }
 
-class RVAdapterSectionHeader(val title: String) : RecyclerView.Adapter<RVAdapterSectionHeader.ViewHolder>() {
+class RVAdapterSectionHeader(val title: String) :
+    RecyclerView.Adapter<RVAdapterSectionHeader.ViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder.create(parent)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
+        ViewHolderSectionHeaderBinding.inflate(
+            LayoutInflater.from(parent.context), parent, false
+        )
+    )
+
     override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(title)
     override fun getItemCount() = 1
 
-    class ViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
-        fun bind(title: String) {
-            containerView.findViewById<TextView>(R.id.title).text = title
-        }
+    class ViewHolder(private val binding: ViewHolderSectionHeaderBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
-        companion object {
-            fun create(parent: ViewGroup): ViewHolder {
-                val view = inflate(parent, R.layout.view_holder_section_header)
-                return ViewHolder(view)
-            }
+        fun bind(title: String) {
+            binding.title.text = title
         }
     }
 }
 
-class RVAdapter(val items: List<CurrencyViewItemWrapper>, val listener: ViewHolder.Listener) : RecyclerView.Adapter<RVAdapter.ViewHolder>() {
+class RVAdapter(val items: List<CurrencyViewItemWrapper>, val listener: ViewHolder.Listener) :
+    RecyclerView.Adapter<RVAdapter.ViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder.create(parent, listener)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
+        ViewHolder(
+            ViewHolderItemWithCheckmarkBinding.inflate(
+                LayoutInflater.from(parent.context), parent, false
+            ), listener
+        )
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(items[position])
@@ -87,7 +110,11 @@ class RVAdapter(val items: List<CurrencyViewItemWrapper>, val listener: ViewHold
 
     override fun getItemCount() = items.size
 
-    class ViewHolder(override val containerView: View, private val listener: Listener) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+    class ViewHolder(
+        private val binding: ViewHolderItemWithCheckmarkBinding,
+        private val listener: Listener
+    ) :
+        RecyclerView.ViewHolder(binding.root) {
         private var item: CurrencyViewItemWrapper? = null
 
         interface Listener {
@@ -95,7 +122,7 @@ class RVAdapter(val items: List<CurrencyViewItemWrapper>, val listener: ViewHold
         }
 
         init {
-            containerView.setOnSingleClickListener {
+            binding.wrapper.setOnSingleClickListener {
                 item?.let {
                     listener.onSelectItem(it)
                 }
@@ -105,24 +132,18 @@ class RVAdapter(val items: List<CurrencyViewItemWrapper>, val listener: ViewHold
         fun bind(item: CurrencyViewItemWrapper) {
             this.item = item
 
-            val image = containerView.findViewById<ImageView>(R.id.image)
-            val title = containerView.findViewById<TextView>(R.id.title)
-            val subtitle = containerView.findViewById<TextView>(R.id.subtitle)
-            val checkmarkIcon = containerView.findViewById<ImageView>(R.id.checkmarkIcon)
+            binding.image.setImageResource(
+                LayoutHelper.getCurrencyDrawableResource(
+                    binding.wrapper.context,
+                    item.currency.code.toLowerCase(Locale.ENGLISH)
+                )
+            )
+            binding.title.text = item.currency.code
+            binding.subtitle.text = item.currency.symbol
+            binding.checkmarkIcon.isVisible = item.selected
 
-            image.setImageResource(LayoutHelper.getCurrencyDrawableResource(containerView.context, item.currency.code.toLowerCase(Locale.ENGLISH)))
-            title.text = item.currency.code
-            subtitle.text = item.currency.symbol
-            checkmarkIcon.isVisible = item.selected
-
-            containerView.setBackgroundResource(item.listPosition.getBackground())
+            binding.wrapper.setBackgroundResource(item.listPosition.getBackground())
         }
 
-        companion object {
-            fun create(parent: ViewGroup, listener: Listener): ViewHolder {
-                val view = inflate(parent, R.layout.view_holder_item_with_checkmark)
-                return ViewHolder(view, listener)
-            }
-        }
     }
 }

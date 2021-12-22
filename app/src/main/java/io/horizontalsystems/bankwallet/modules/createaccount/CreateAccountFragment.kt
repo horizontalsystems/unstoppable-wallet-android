@@ -9,26 +9,40 @@ import androidx.fragment.app.viewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
+import io.horizontalsystems.bankwallet.databinding.FragmentCreateAccountBinding
 import io.horizontalsystems.bankwallet.ui.selector.SelectorOptionTextViewHolderFactory
 import io.horizontalsystems.bankwallet.ui.selector.SelectorPopupDialog
 import io.horizontalsystems.bankwallet.ui.selector.ViewItemWrapper
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
-import kotlinx.android.synthetic.main.fragment_create_account.*
 
 class CreateAccountFragment : BaseFragment() {
     private val viewModel by viewModels<CreateAccountViewModel> { CreateAccountModule.Factory() }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_create_account, container, false)
+    private var _binding: FragmentCreateAccountBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentCreateAccountBinding.inflate(inflater, container, false)
+        val view = binding.root
+        return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        toolbar.setNavigationOnClickListener {
+        binding.toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }
-        toolbar.setOnMenuItemClickListener { item ->
+        binding.toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.create -> {
                     viewModel.onClickCreate()
@@ -39,13 +53,13 @@ class CreateAccountFragment : BaseFragment() {
         }
 
         viewModel.kindLiveData.observe(viewLifecycleOwner) {
-            kind.showValue(it)
+            binding.kind.showValue(it)
         }
 
         viewModel.inputsVisibleLiveData.observe(viewLifecycleOwner) {
-            passphrase.isVisible = it
-            passphraseConfirm.isVisible = it
-            passphraseDescription.isVisible = it
+            binding.passphrase.isVisible = it
+            binding.passphraseConfirm.isVisible = it
+            binding.passphraseDescription.isVisible = it
         }
 
         viewModel.finishLiveEvent.observe(viewLifecycleOwner) {
@@ -58,19 +72,19 @@ class CreateAccountFragment : BaseFragment() {
         }
 
         viewModel.passphraseCautionLiveData.observe(viewLifecycleOwner) {
-            passphrase.setError(it)
+            binding.passphrase.setError(it)
         }
 
         viewModel.passphraseConfirmationCautionLiveData.observe(viewLifecycleOwner) {
-            passphraseConfirm.setError(it)
+            binding.passphraseConfirm.setError(it)
         }
 
         viewModel.clearInputsLiveEvent.observe(viewLifecycleOwner) {
-            passphrase.setText(null)
-            passphraseConfirm.setText(null)
+            binding.passphrase.setText(null)
+            binding.passphraseConfirm.setText(null)
         }
 
-        kind.setOnSingleClickListener {
+        binding.kind.setOnSingleClickListener {
             val dialog = SelectorPopupDialog<ViewItemWrapper<CreateAccountModule.Kind>>()
 
             dialog.titleText = getString(R.string.CreateWallet_Mnemonic)
@@ -84,23 +98,23 @@ class CreateAccountFragment : BaseFragment() {
             dialog.show(childFragmentManager, "selector_dialog")
         }
 
-        passphraseToggle.setOnCheckedChangeListenerSingle {
+        binding.passphraseToggle.setOnCheckedChangeListenerSingle {
             viewModel.onTogglePassphrase(it)
         }
 
-        passphrase.onTextChange { old, new ->
+        binding.passphrase.onTextChange { old, new ->
             if (viewModel.validatePassphrase(new)) {
                 viewModel.onChangePassphrase(new ?: "")
             } else {
-                passphrase.revertText(old)
+                binding.passphrase.revertText(old)
             }
         }
 
-        passphraseConfirm.onTextChange { old, new ->
+        binding.passphraseConfirm.onTextChange { old, new ->
             if (viewModel.validatePassphraseConfirmation(new)) {
                 viewModel.onChangePassphraseConfirmation(new ?: "")
             } else {
-                passphraseConfirm.revertText(old)
+                binding.passphraseConfirm.revertText(old)
             }
         }
     }

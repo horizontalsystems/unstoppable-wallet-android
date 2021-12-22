@@ -15,6 +15,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.ethereum.EthereumFeeViewModel
+import io.horizontalsystems.bankwallet.databinding.FragmentConfirmationSwapBinding
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainViewModel
@@ -24,8 +25,6 @@ import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.snackbar.CustomSnackbar
 import io.horizontalsystems.snackbar.SnackbarDuration
-import kotlinx.android.synthetic.main.fragment_confirmation_swap.*
-import kotlinx.android.synthetic.main.fragment_confirmation_swap.toolbar
 
 abstract class BaseSwapConfirmationFragment : BaseFragment() {
 
@@ -40,17 +39,28 @@ abstract class BaseSwapConfirmationFragment : BaseFragment() {
 
     private var snackbarInProcess: CustomSnackbar? = null
 
+    private var _binding: FragmentConfirmationSwapBinding? = null
+    private val binding get() = _binding!!
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_confirmation_swap, container, false)
+    ): View {
+        _binding = FragmentConfirmationSwapBinding.inflate(inflater, container, false)
+        val view = binding.root
+        return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        snackbarInProcess?.dismiss()
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        toolbar.setOnMenuItemClickListener { item ->
+        binding.toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.menuClose -> {
                     findNavController().popBackStack(R.id.swapFragment, true)
@@ -59,7 +69,7 @@ abstract class BaseSwapConfirmationFragment : BaseFragment() {
                 else -> false
             }
         }
-        toolbar.setNavigationOnClickListener {
+        binding.toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }
 
@@ -91,7 +101,7 @@ abstract class BaseSwapConfirmationFragment : BaseFragment() {
             findNavController().popBackStack()
         })
 
-        sendEvmTransactionView.init(
+        binding.sendEvmTransactionView.init(
             sendViewModel,
             feeViewModel,
             viewLifecycleOwner,
@@ -101,18 +111,13 @@ abstract class BaseSwapConfirmationFragment : BaseFragment() {
             }
         )
 
-        buttonSwapCompose.setViewCompositionStrategy(
+        binding.buttonSwapCompose.setViewCompositionStrategy(
             ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
         )
     }
 
-    override fun onDestroyView() {
-        snackbarInProcess?.dismiss()
-        super.onDestroyView()
-    }
-
     private fun setButton(enabled: Boolean) {
-        buttonSwapCompose.setContent {
+        binding.buttonSwapCompose.setContent {
             ComposeAppTheme {
                 ButtonPrimaryYellow(
                     modifier = Modifier.padding(

@@ -14,6 +14,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
+import io.horizontalsystems.bankwallet.databinding.FragmentSwapSettings1inchBinding
 import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerActivity
 import io.horizontalsystems.bankwallet.modules.swap.oneinch.OneInchModule
 import io.horizontalsystems.bankwallet.modules.swap.oneinch.OneInchSwapViewModel
@@ -24,32 +25,55 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
-import kotlinx.android.synthetic.main.fragment_swap_settings_1inch.*
 
 class OneInchSettingsFragment : SwapSettingsBaseFragment() {
 
-    private val oneInchViewModel by navGraphViewModels<OneInchSwapViewModel>(R.id.swapFragment) { OneInchModule.Factory(dex) }
+    private val oneInchViewModel by navGraphViewModels<OneInchSwapViewModel>(R.id.swapFragment) {
+        OneInchModule.Factory(
+            dex
+        )
+    }
 
-    private val vmFactory by lazy { OneInchSwapSettingsModule.Factory(oneInchViewModel.tradeService, dex.blockchain) }
+    private val vmFactory by lazy {
+        OneInchSwapSettingsModule.Factory(
+            oneInchViewModel.tradeService,
+            dex.blockchain
+        )
+    }
     private val oneInchSettingsViewModel by viewModels<OneInchSettingsViewModel> { vmFactory }
     private val recipientAddressViewModel by viewModels<RecipientAddressViewModel> { vmFactory }
     private val slippageViewModel by viewModels<SwapSlippageViewModel> { vmFactory }
 
-    private val qrScannerResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        when (result.resultCode) {
-            Activity.RESULT_OK -> {
-                result.data?.getStringExtra(ModuleField.SCAN_ADDRESS)?.let {
-                    recipientAddressInputView.setText(it)
+    private val qrScannerResultLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            when (result.resultCode) {
+                Activity.RESULT_OK -> {
+                    result.data?.getStringExtra(ModuleField.SCAN_ADDRESS)?.let {
+                        binding.recipientAddressInputView.setText(it)
+                    }
+                }
+                Activity.RESULT_CANCELED -> {
+                    findNavController().popBackStack()
                 }
             }
-            Activity.RESULT_CANCELED -> {
-                findNavController().popBackStack()
-            }
         }
+
+    private var _binding: FragmentSwapSettings1inchBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentSwapSettings1inchBinding.inflate(inflater, container, false)
+        val view = binding.root
+        return view
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.fragment_swap_settings_1inch, container, false)
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -66,20 +90,23 @@ class OneInchSettingsFragment : SwapSettingsBaseFragment() {
             }
         }
 
-        recipientAddressInputView.setViewModel(recipientAddressViewModel, viewLifecycleOwner, {
-            val intent = QRScannerActivity.getIntentForFragment(this)
-            qrScannerResultLauncher.launch(intent)
-        })
+        binding.recipientAddressInputView.setViewModel(
+            recipientAddressViewModel,
+            viewLifecycleOwner,
+            {
+                val intent = QRScannerActivity.getIntentForFragment(this)
+                qrScannerResultLauncher.launch(intent)
+            })
 
-        slippageInputView.setViewModel(slippageViewModel, viewLifecycleOwner)
+        binding.slippageInputView.setViewModel(slippageViewModel, viewLifecycleOwner)
 
-        buttonApplyCompose.setViewCompositionStrategy(
+        binding.buttonApplyCompose.setViewCompositionStrategy(
             ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
         )
     }
 
     private fun setButton(title: String, enabled: Boolean = false) {
-        buttonApplyCompose.setContent {
+        binding.buttonApplyCompose.setContent {
             ComposeAppTheme {
                 ButtonPrimaryYellow(
                     modifier = Modifier.padding(

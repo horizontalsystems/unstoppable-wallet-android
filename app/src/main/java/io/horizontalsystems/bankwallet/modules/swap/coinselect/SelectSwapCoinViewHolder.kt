@@ -1,22 +1,20 @@
 package io.horizontalsystems.bankwallet.modules.swap.coinselect
 
-import android.view.View
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.databinding.ViewHolderSwapCoinSelectBinding
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.CoinBalanceItem
-import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.view_holder_swap_coin_select.*
 
 class SelectSwapCoinViewHolder(
-    override val containerView: View,
+    private val binding: ViewHolderSwapCoinSelectBinding,
     val onClick: (item: CoinBalanceItem) -> Unit
-) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+) : RecyclerView.ViewHolder(binding.root) {
 
     private var coinItem: CoinBalanceItem? = null
 
     init {
-        containerView.setOnSingleClickListener {
+        binding.wrapper.setOnSingleClickListener {
             coinItem?.let {
                 onClick(it)
             }
@@ -25,19 +23,27 @@ class SelectSwapCoinViewHolder(
 
     fun bind(coinItem: CoinBalanceItem, showBottomBorder: Boolean) {
         this.coinItem = coinItem
-        bottomShade.isVisible = showBottomBorder
+        binding.bottomShade.isVisible = showBottomBorder
 
         coinItem.apply {
-            coinIcon.setRemoteImage(platformCoin.coin.iconUrl, platformCoin.coinType.iconPlaceholder)
-            coinTitle.text = platformCoin.name
-            coinSubtitle.text = platformCoin.code
+            binding.coinIcon.setRemoteImage(
+                platformCoin.coin.iconUrl,
+                platformCoin.coinType.iconPlaceholder
+            )
+            binding.coinTitle.text = platformCoin.name
+            binding.coinSubtitle.text = platformCoin.code
 
-            coinBalance.text = balance?.let {
+            binding.coinBalance.text = balance?.let {
                 App.numberFormatter.formatCoin(it, platformCoin.code, 0, 8)
             }
 
-            fiatBalance.text = fiatBalanceValue?.let {
-                App.numberFormatter.formatFiat(fiatBalanceValue.value, fiatBalanceValue.currency.symbol, 0, 2)
+            binding.fiatBalance.text = fiatBalanceValue?.let {
+                App.numberFormatter.formatFiat(
+                    fiatBalanceValue.value,
+                    fiatBalanceValue.currency.symbol,
+                    0,
+                    2
+                )
             }
         }
     }

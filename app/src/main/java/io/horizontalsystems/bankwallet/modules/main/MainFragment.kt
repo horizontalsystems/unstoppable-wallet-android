@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
@@ -14,6 +15,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationMenuView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.managers.RateAppManager
+import io.horizontalsystems.bankwallet.databinding.FragmentMainBinding
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.balanceonboarding.BalanceOnboardingModule
 import io.horizontalsystems.bankwallet.modules.balanceonboarding.BalanceOnboardingViewModel
@@ -24,52 +26,73 @@ import io.horizontalsystems.bankwallet.ui.selector.SelectorBottomSheetDialog
 import io.horizontalsystems.bankwallet.ui.selector.SelectorRadioItemViewHolderFactory
 import io.horizontalsystems.bankwallet.ui.selector.ViewItemWrapper
 import io.horizontalsystems.core.findNavController
-import kotlinx.android.synthetic.main.fragment_main.*
 
-class MainFragment : BaseFragment(R.layout.fragment_main), RateAppDialogFragment.Listener {
+class MainFragment : BaseFragment(), RateAppDialogFragment.Listener {
 
-    private val viewModel by viewModels<MainViewModel>{ MainModule.Factory() }
+    private val viewModel by viewModels<MainViewModel> { MainModule.Factory() }
     private val balanceOnboardingViewModel by viewModels<BalanceOnboardingViewModel> { BalanceOnboardingModule.Factory() }
     private var bottomBadgeView: View? = null
+
+    private var _binding: FragmentMainBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentMainBinding.inflate(inflater, container, false)
+        val view = binding.root
+        return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        bottomBadgeView = null
+        _binding = null
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         val mainViewPagerAdapter = MainViewPagerAdapter(this)
 
-        viewPager.offscreenPageLimit = 1
-        viewPager.adapter = mainViewPagerAdapter
-        viewPager.isUserInputEnabled = false
+        binding.viewPager.offscreenPageLimit = 1
+        binding.viewPager.adapter = mainViewPagerAdapter
+        binding.viewPager.isUserInputEnabled = false
 
-        viewPager.setCurrentItem(viewModel.initialTab.ordinal, false)
-        bottomNavigation.menu.getItem(viewModel.initialTab.ordinal).isChecked = true
+        binding.viewPager.setCurrentItem(viewModel.initialTab.ordinal, false)
+        binding.bottomNavigation.menu.getItem(viewModel.initialTab.ordinal).isChecked = true
 
-        viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback(){
+        binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 viewModel.onTabSelect(position)
             }
         })
 
-        bottomNavigation.setOnNavigationItemSelectedListener {
+        binding.bottomNavigation.setOnNavigationItemSelectedListener {
             when (it.itemId) {
-                R.id.navigation_market -> viewPager.setCurrentItem(0, false)
-                R.id.navigation_balance -> viewPager.setCurrentItem(1, false)
-                R.id.navigation_transactions -> viewPager.setCurrentItem(2, false)
-                R.id.navigation_settings -> viewPager.setCurrentItem(3, false)
+                R.id.navigation_market -> binding.viewPager.setCurrentItem(0, false)
+                R.id.navigation_balance -> binding.viewPager.setCurrentItem(1, false)
+                R.id.navigation_transactions -> binding.viewPager.setCurrentItem(2, false)
+                R.id.navigation_settings -> binding.viewPager.setCurrentItem(3, false)
             }
             true
         }
 
-        bottomNavigation.findViewById<View>(R.id.navigation_balance)?.setOnLongClickListener {
-            viewModel.onLongPressBalanceTab()
-            true
-        }
-
-        viewModel.openWalletSwitcherLiveEvent.observe(viewLifecycleOwner, { (wallets, selectedWallet) ->
-            openWalletSwitchDialog(wallets, selectedWallet) {
-                viewModel.onSelect(it)
+        binding.bottomNavigation.findViewById<View>(R.id.navigation_balance)
+            ?.setOnLongClickListener {
+                viewModel.onLongPressBalanceTab()
+                true
             }
-        })
+
+        viewModel.openWalletSwitcherLiveEvent.observe(
+            viewLifecycleOwner,
+            { (wallets, selectedWallet) ->
+                openWalletSwitchDialog(wallets, selectedWallet) {
+                    viewModel.onSelect(it)
+                }
+            })
 
         balanceOnboardingViewModel.balanceViewTypeLiveData.observe(viewLifecycleOwner) {
             mainViewPagerAdapter.balancePageType = it
@@ -87,9 +110,9 @@ class MainFragment : BaseFragment(R.layout.fragment_main), RateAppDialogFragment
 
         viewModel.showWhatsNewLiveEvent.observe(viewLifecycleOwner, {
             findNavController().navigate(
-                    R.id.mainFragment_to_releaseNotesFragment,
-                    bundleOf(ReleaseNotesFragment.showAsClosablePopupKey to true),
-                    navOptionsFromBottom()
+                R.id.mainFragment_to_releaseNotesFragment,
+                bundleOf(ReleaseNotesFragment.showAsClosablePopupKey to true),
+                navOptionsFromBottom()
             )
         })
 
@@ -98,11 +121,11 @@ class MainFragment : BaseFragment(R.layout.fragment_main), RateAppDialogFragment
         })
 
         viewModel.hideContentLiveData.observe(viewLifecycleOwner, Observer { hide ->
-            screenSecureDim.isVisible = hide
+            binding.screenSecureDim.isVisible = hide
         })
 
         viewModel.setBadgeVisibleLiveData.observe(viewLifecycleOwner, Observer { visible ->
-            val bottomMenu = bottomNavigation.getChildAt(0) as? BottomNavigationMenuView
+            val bottomMenu = binding.bottomNavigation.getChildAt(0) as? BottomNavigationMenuView
             val settingsNavigationViewItem = bottomMenu?.getChildAt(3) as? BottomNavigationItemView
 
             if (visible) {
@@ -115,7 +138,7 @@ class MainFragment : BaseFragment(R.layout.fragment_main), RateAppDialogFragment
         })
 
         viewModel.transactionTabEnabledLiveData.observe(viewLifecycleOwner, { enabled ->
-            bottomNavigation.menu.getItem(2).isEnabled = enabled
+            binding.bottomNavigation.menu.getItem(2).isEnabled = enabled
         })
 
     }
@@ -142,12 +165,6 @@ class MainFragment : BaseFragment(R.layout.fragment_main), RateAppDialogFragment
         viewModel.onResume()
     }
 
-    override fun onDestroyView() {
-        bottomBadgeView = null
-
-        super.onDestroyView()
-    }
-
     //  RateAppDialogFragment.Listener
 
     override fun onClickRateApp() {
@@ -165,8 +182,9 @@ class MainFragment : BaseFragment(R.layout.fragment_main), RateAppDialogFragment
             return bottomBadgeView
         }
 
-        val bottomMenu = bottomNavigation.getChildAt(0) as? BottomNavigationMenuView
-        bottomBadgeView = LayoutInflater.from(activity).inflate(R.layout.view_bottom_navigation_badge, bottomMenu, false)
+        val bottomMenu = binding.bottomNavigation.getChildAt(0) as? BottomNavigationMenuView
+        bottomBadgeView = LayoutInflater.from(activity)
+            .inflate(R.layout.view_bottom_navigation_badge, bottomMenu, false)
 
         return bottomBadgeView
     }

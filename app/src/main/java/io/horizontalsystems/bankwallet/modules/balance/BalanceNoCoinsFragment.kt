@@ -10,31 +10,50 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.databinding.FragmentNoCoinsBinding
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
 import io.horizontalsystems.core.findNavController
-import kotlinx.android.synthetic.main.fragment_no_coins.*
 
 class BalanceNoCoinsFragment(private val accountName: String?) : BaseFragment() {
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_no_coins, container, false)
+    private var _binding: FragmentNoCoinsBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentNoCoinsBinding.inflate(inflater, container, false)
+        val view = binding.root
+        return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        toolbarTitle.text = accountName ?: getString(R.string.Balance_Title)
-        toolbarTitle.setOnClickListener {
-            ManageAccountsModule.start(this, R.id.manageAccountsFragment, navOptionsFromBottom(), ManageAccountsModule.Mode.Switcher)
+        binding.toolbarTitle.text = accountName ?: getString(R.string.Balance_Title)
+        binding.toolbarTitle.setOnClickListener {
+            ManageAccountsModule.start(
+                this,
+                R.id.manageAccountsFragment,
+                navOptionsFromBottom(),
+                ManageAccountsModule.Mode.Switcher
+            )
         }
 
-        addCoinsButtonCompose.setViewCompositionStrategy(
+        binding.addCoinsButtonCompose.setViewCompositionStrategy(
             ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
         )
 
-        addCoinsButtonCompose.setContent {
+        binding.addCoinsButtonCompose.setContent {
             ComposeAppTheme {
                 ButtonSecondaryDefault(
                     modifier = Modifier.padding(start = 24.dp, end = 24.dp),

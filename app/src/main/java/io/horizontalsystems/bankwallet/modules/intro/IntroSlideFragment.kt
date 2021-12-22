@@ -6,13 +6,26 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import io.horizontalsystems.bankwallet.R
-import kotlinx.android.synthetic.main.fragment_slide_intro.*
+import io.horizontalsystems.bankwallet.databinding.FragmentSlideIntroBinding
 
 class IntroSlideFragment : Fragment() {
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_slide_intro, container, false)
+    private var _binding: FragmentSlideIntroBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentSlideIntroBinding.inflate(inflater, container, false)
+        val view = binding.root
+        return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -21,11 +34,11 @@ class IntroSlideFragment : Fragment() {
         val titleResId = requireArguments().getInt(TITLE_KEY)
         val descriptionResId = requireArguments().getInt(DESCRIPTION_KEY)
 
-        title.isVisible = titleResId != 0
+        binding.title.isVisible = titleResId != 0
         if (titleResId != 0) {
-            title.text = getString(titleResId)
+            binding.title.text = getString(titleResId)
         }
-        description.text = getString(descriptionResId)
+        binding.description.text = getString(descriptionResId)
     }
 
     companion object {
@@ -34,11 +47,11 @@ class IntroSlideFragment : Fragment() {
 
         @JvmStatic
         fun newInstance(titleResId: Int?, descriptionResId: Int) =
-                IntroSlideFragment().apply {
-                    arguments = Bundle(2).apply {
-                        titleResId?.let { putInt(TITLE_KEY, it) }
-                        putInt(DESCRIPTION_KEY, descriptionResId)
-                    }
+            IntroSlideFragment().apply {
+                arguments = Bundle(2).apply {
+                    titleResId?.let { putInt(TITLE_KEY, it) }
+                    putInt(DESCRIPTION_KEY, descriptionResId)
                 }
+            }
     }
 }

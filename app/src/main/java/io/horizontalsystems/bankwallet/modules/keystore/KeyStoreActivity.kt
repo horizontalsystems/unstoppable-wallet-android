@@ -3,13 +3,14 @@ package io.horizontalsystems.bankwallet.modules.keystore
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.modules.launcher.LaunchModule
 import io.horizontalsystems.core.putParcelableExtra
 import io.horizontalsystems.keystore.BaseKeyStoreActivity
 import io.horizontalsystems.keystore.KeyStoreModule
 import io.horizontalsystems.keystore.KeyStoreViewModel
-import io.horizontalsystems.keystore.R
+import io.horizontalsystems.keystore.databinding.ActivityKeystoreBinding
 
 class KeyStoreActivity : BaseKeyStoreActivity() {
 
@@ -18,7 +19,9 @@ class KeyStoreActivity : BaseKeyStoreActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.activity_keystore)
+        binding = ActivityKeystoreBinding.inflate(layoutInflater)
+        val view: View = binding.root
+        setContentView(view)
 
         val mode = intent.getParcelableExtra<KeyStoreModule.ModeType>(KeyStoreModule.MODE) ?: run {
             finish()

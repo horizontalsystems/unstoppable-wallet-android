@@ -13,12 +13,6 @@
             <enum name="last" value="3" />
         </attr>
     </declare-styleable>
-    <declare-styleable name="SettingsViewRating">
-        <attr name="icon" />
-        <attr name="value" />
-        <attr name="color" format="color" />
-        <attr name="position" />
-    </declare-styleable>
     <declare-styleable name="SettingsViewDropdown">
         <attr name="icon" />
         <attr name="title" />

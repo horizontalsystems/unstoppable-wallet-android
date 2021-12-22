@@ -11,24 +11,38 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.databinding.FragmentSwapInfoBinding
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.core.findNavController
-import kotlinx.android.synthetic.main.fragment_swap_info.*
 
 class SwapInfoFragment : BaseFragment() {
 
     private val vmFactory by lazy { SwapInfoModule.Factory(requireArguments()) }
     private val viewModel by viewModels<SwapInfoViewModel> { vmFactory }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.fragment_swap_info, container, false)
+    private var _binding: FragmentSwapInfoBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentSwapInfoBinding.inflate(inflater, container, false)
+        val view = binding.root
+        return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        toolbar.setOnMenuItemClickListener { item ->
+        binding.toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.menuClose -> {
                     findNavController().popBackStack()
@@ -38,16 +52,16 @@ class SwapInfoFragment : BaseFragment() {
             }
         }
 
-        toolbar.title = viewModel.title
-        description.text = viewModel.description
-        headerRelated.text = viewModel.dexRelated
-        transactionFeeDescription.text = viewModel.transactionFeeDescription
+        binding.toolbar.title = viewModel.title
+        binding.description.text = viewModel.description
+        binding.headerRelated.text = viewModel.dexRelated
+        binding.transactionFeeDescription.text = viewModel.transactionFeeDescription
 
-        btnLinkCompose.setViewCompositionStrategy(
+        binding.btnLinkCompose.setViewCompositionStrategy(
             ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
         )
 
-        btnLinkCompose.setContent {
+        binding.btnLinkCompose.setContent {
             ComposeAppTheme {
                 ButtonSecondaryDefault(
                     modifier = Modifier.padding(top = 44.dp, bottom = 32.dp),

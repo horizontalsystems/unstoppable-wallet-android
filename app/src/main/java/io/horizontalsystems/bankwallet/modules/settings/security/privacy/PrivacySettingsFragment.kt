@@ -12,6 +12,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.blockchainLogo
+import io.horizontalsystems.bankwallet.databinding.FragmentSettingsPrivacyBinding
 import io.horizontalsystems.bankwallet.entities.SyncMode
 import io.horizontalsystems.bankwallet.entities.TransactionDataSortingType
 import io.horizontalsystems.bankwallet.entities.title
@@ -22,7 +23,6 @@ import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorViewItem
 import io.horizontalsystems.bankwallet.ui.extensions.ConfirmationDialog
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.views.AlertDialogFragment
-import kotlinx.android.synthetic.main.fragment_settings_privacy.*
 import kotlin.system.exitProcess
 
 class PrivacySettingsFragment :
@@ -34,20 +34,30 @@ class PrivacySettingsFragment :
     private lateinit var torControlAdapter: PrivacySettingsTorAdapter
     private lateinit var walletRestoreSettingsAdapter: PrivacySettingsAdapter
 
+    private var _binding: FragmentSettingsPrivacyBinding? = null
+    private val binding get() = _binding!!
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.fragment_settings_privacy, container, false)
+        _binding = FragmentSettingsPrivacyBinding.inflate(inflater, container, false)
+        val view = binding.root
+        return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        toolbar.setNavigationOnClickListener {
+        binding.toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }
-        toolbar.setOnMenuItemClickListener { item ->
+        binding.toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.menuShowInfo -> {
                     viewModel.delegate.onShowPrivacySettingsInfoClick()
@@ -70,14 +80,14 @@ class PrivacySettingsFragment :
             getString(R.string.SettingsPrivacy_WalletRestoreDescription)
         )
 
-        concatRecyclerView.adapter = ConcatAdapter(
+        binding.concatRecyclerView.adapter = ConcatAdapter(
             topDescriptionAdapter,
             torControlAdapter,
             transactionsStructureAdapter,
             walletRestoreSettingsAdapter
         )
 
-        concatRecyclerView.itemAnimator = null
+        binding.concatRecyclerView.itemAnimator = null
 
 
         // IView

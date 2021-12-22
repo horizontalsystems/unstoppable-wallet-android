@@ -5,8 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -17,35 +15,52 @@ import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.setNavigationResult
 import io.horizontalsystems.core.setOnSingleClickListener
-import io.horizontalsystems.views.ListPosition
+import io.horizontalsystems.languageswitcher.databinding.FragmentLanguageSettingsBinding
 import io.horizontalsystems.views.ViewHolderProgressbar
-import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.fragment_language_settings.*
+import io.horizontalsystems.views.databinding.ViewHolderItemWithCheckmarkBinding
+import io.horizontalsystems.views.databinding.ViewHolderProgressbarItemBinding
 
 class LanguageSettingsFragment : Fragment(), LanguageSwitcherAdapter.Listener {
 
     private lateinit var presenter: LanguageSwitcherPresenter
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_language_settings, container, false)
+    private var _binding: FragmentLanguageSettingsBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentLanguageSettingsBinding.inflate(inflater, container, false)
+        val view = binding.root
+        return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        toolbar.setNavigationOnClickListener {
+        binding.toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }
 
-        presenter = ViewModelProvider(this, LanguageSwitcherModule.Factory()).get(LanguageSwitcherPresenter::class.java)
+        presenter = ViewModelProvider(
+            this,
+            LanguageSwitcherModule.Factory()
+        ).get(LanguageSwitcherPresenter::class.java)
 
         val presenterView = presenter.view as LanguageSwitcherView
         val presenterRouter = presenter.router as LanguageSwitcherRouter
 
         val adapter = LanguageSwitcherAdapter(this)
 
-        recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(context)
+        binding.recyclerView.adapter = adapter
+        binding.recyclerView.layoutManager = LinearLayoutManager(context)
 
         presenterView.languageItems.observe(viewLifecycleOwner, Observer {
             adapter.items = it
@@ -74,7 +89,8 @@ class LanguageSettingsFragment : Fragment(), LanguageSwitcherAdapter.Listener {
     }
 }
 
-class LanguageSwitcherAdapter(private var listener: Listener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class LanguageSwitcherAdapter(private var listener: Listener) :
+    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val VIEW_TYPE_ITEM = 1
     private val VIEW_TYPE_LOADING = 2
 
@@ -93,44 +109,52 @@ class LanguageSwitcherAdapter(private var listener: Listener) : RecyclerView.Ada
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        val inflater = LayoutInflater.from(parent.context)
         return when (viewType) {
-            VIEW_TYPE_ITEM -> ViewHolderLanguageItem(inflater.inflate(ViewHolderLanguageItem.layoutResourceId, parent, false))
-            else -> ViewHolderProgressbar(inflater.inflate(ViewHolderProgressbar.layoutResourceId, parent, false))
+            VIEW_TYPE_ITEM -> ViewHolderLanguageItem(
+                ViewHolderItemWithCheckmarkBinding.inflate(
+                    LayoutInflater.from(parent.context), parent, false
+                )
+            )
+            else -> ViewHolderProgressbar(
+                ViewHolderProgressbarItemBinding.inflate(
+                    LayoutInflater.from(parent.context), parent, false
+                )
+            )
         }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
-            is ViewHolderLanguageItem -> holder.bind(items[position]) { listener.onItemClick(position) }
+            is ViewHolderLanguageItem -> holder.bind(items[position]) {
+                listener.onItemClick(
+                    position
+                )
+            }
         }
     }
 
 }
 
-class ViewHolderLanguageItem(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+class ViewHolderLanguageItem(private val binding: ViewHolderItemWithCheckmarkBinding) :
+    RecyclerView.ViewHolder(binding.root) {
 
     fun bind(item: LanguageViewItem, onClick: () -> (Unit)) {
-        val image = containerView.findViewById<ImageView>(R.id.image)
-        val title = containerView.findViewById<TextView>(R.id.title)
-        val subtitle = containerView.findViewById<TextView>(R.id.subtitle)
-        val checkmarkIcon = containerView.findViewById<ImageView>(R.id.checkmarkIcon)
+        binding.wrapper.setOnSingleClickListener { onClick.invoke() }
+        binding.image.setImageResource(
+            getLangDrawableResource(
+                binding.wrapper.context,
+                item.language
+            )
+        )
 
-        containerView.setOnSingleClickListener { onClick.invoke() }
-        image.setImageResource(getLangDrawableResource(containerView.context, item.language))
-
-        title.text = item.name
-        subtitle.text = item.nativeName
-        checkmarkIcon.isVisible = item.current
-        containerView.setBackgroundResource(item.listPosition.getBackground())
+        binding.title.text = item.name
+        binding.subtitle.text = item.nativeName
+        binding.checkmarkIcon.isVisible = item.current
+        binding.wrapper.setBackgroundResource(item.listPosition.getBackground())
     }
 
     private fun getLangDrawableResource(context: Context, langCode: String): Int {
         return context.resources.getIdentifier("lang_$langCode", "drawable", context.packageName)
     }
 
-    companion object {
-        val layoutResourceId: Int
-            get() = R.layout.view_holder_item_with_checkmark
-    }
 }

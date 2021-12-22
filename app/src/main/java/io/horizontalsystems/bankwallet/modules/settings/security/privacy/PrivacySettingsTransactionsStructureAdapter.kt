@@ -1,16 +1,12 @@
 package io.horizontalsystems.bankwallet.modules.settings.security.privacy
 
-import android.view.View
+import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.views.inflate
-import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.view_holder_transactions_structure.*
+import io.horizontalsystems.bankwallet.databinding.ViewHolderTransactionsStructureBinding
 
-
-class PrivacySettingsTransactionsStructureAdapter(private val listener: Listener)
-    : RecyclerView.Adapter<PrivacySettingsTransactionsStructureAdapter.TransactionsStructureViewHolder>() {
+class PrivacySettingsTransactionsStructureAdapter(private val listener: Listener) :
+    RecyclerView.Adapter<PrivacySettingsTransactionsStructureAdapter.TransactionsStructureViewHolder>() {
 
     interface Listener {
         fun onClick()
@@ -20,10 +16,13 @@ class PrivacySettingsTransactionsStructureAdapter(private val listener: Listener
 
     override fun getItemCount() = 1
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TransactionsStructureViewHolder {
-        return TransactionsStructureViewHolder.create(parent, onClick = {
-            listener.onClick()
-        })
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int)
+            : TransactionsStructureViewHolder {
+        return TransactionsStructureViewHolder(
+            ViewHolderTransactionsStructureBinding.inflate(
+                LayoutInflater.from(parent.context), parent, false
+            )
+        ) { listener.onClick() }
     }
 
     override fun onBindViewHolder(holder: TransactionsStructureViewHolder, position: Int) {
@@ -36,25 +35,18 @@ class PrivacySettingsTransactionsStructureAdapter(private val listener: Listener
     }
 
     class TransactionsStructureViewHolder(
-            override val containerView: View,
-            private val onClick: () -> Unit
-    ) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+        private val binding: ViewHolderTransactionsStructureBinding,
+        private val onClick: () -> Unit
+    ) : RecyclerView.ViewHolder(binding.root) {
 
         init {
-            transactionsOrderSetting.setOnClickListener {
+            binding.transactionsOrderSetting.setOnClickListener {
                 onClick.invoke()
             }
         }
 
         fun bind(value: String) {
-            transactionsOrderSetting.showDropdownValue(value)
-        }
-
-
-        companion object {
-            const val layout = R.layout.view_holder_transactions_structure
-
-            fun create(parent: ViewGroup, onClick: () -> Unit) = TransactionsStructureViewHolder(inflate(parent, layout, false), onClick)
+            binding.transactionsOrderSetting.showDropdownValue(value)
         }
 
     }

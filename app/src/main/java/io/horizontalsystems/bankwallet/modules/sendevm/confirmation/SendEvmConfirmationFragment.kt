@@ -16,6 +16,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.ethereum.EthereumFeeViewModel
+import io.horizontalsystems.bankwallet.databinding.FragmentConfirmationSendEvmBinding
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmViewModel
@@ -28,7 +29,6 @@ import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.snackbar.CustomSnackbar
 import io.horizontalsystems.snackbar.SnackbarDuration
-import kotlinx.android.synthetic.main.fragment_confirmation_send_evm.*
 
 class SendEvmConfirmationFragment : BaseFragment() {
 
@@ -59,17 +59,28 @@ class SendEvmConfirmationFragment : BaseFragment() {
     private val additionalInfo: SendEvmData.AdditionalInfo?
         get() = arguments?.getParcelable(SendEvmModule.additionalInfoKey)
 
+    private var _binding: FragmentConfirmationSendEvmBinding? = null
+    private val binding get() = _binding!!
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_confirmation_send_evm, container, false)
+    ): View {
+        _binding = FragmentConfirmationSendEvmBinding.inflate(inflater, container, false)
+        val view = binding.root
+        return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        snackbarInProcess?.dismiss()
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        toolbar.setOnMenuItemClickListener { item ->
+        binding.toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.menuClose -> {
                     findNavController().popBackStack(R.id.sendEvmFragment, true)
@@ -78,7 +89,7 @@ class SendEvmConfirmationFragment : BaseFragment() {
                 else -> false
             }
         }
-        toolbar.setNavigationOnClickListener {
+        binding.toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }
 
@@ -94,15 +105,17 @@ class SendEvmConfirmationFragment : BaseFragment() {
             )
         })
 
-        sendEvmTransactionViewModel.sendSuccessLiveData.observe(viewLifecycleOwner, { transactionHash ->
-            HudHelper.showSuccessMessage(
-                requireActivity().findViewById(android.R.id.content),
-                R.string.Hud_Text_Done
-            )
-            Handler(Looper.getMainLooper()).postDelayed({
-                findNavController().popBackStack(R.id.sendEvmFragment, true)
-            }, 1200)
-        })
+        sendEvmTransactionViewModel.sendSuccessLiveData.observe(
+            viewLifecycleOwner,
+            { transactionHash ->
+                HudHelper.showSuccessMessage(
+                    requireActivity().findViewById(android.R.id.content),
+                    R.string.Hud_Text_Done
+                )
+                Handler(Looper.getMainLooper()).postDelayed({
+                    findNavController().popBackStack(R.id.sendEvmFragment, true)
+                }, 1200)
+            })
 
         sendEvmTransactionViewModel.sendFailedLiveData.observe(viewLifecycleOwner, {
             HudHelper.showErrorMessage(requireActivity().findViewById(android.R.id.content), it)
@@ -110,7 +123,7 @@ class SendEvmConfirmationFragment : BaseFragment() {
             findNavController().popBackStack()
         })
 
-        sendEvmTransactionView.init(
+        binding.sendEvmTransactionView.init(
             sendEvmTransactionViewModel,
             feeViewModel,
             viewLifecycleOwner,
@@ -124,7 +137,7 @@ class SendEvmConfirmationFragment : BaseFragment() {
             }
         )
 
-        buttonSendCompose.setViewCompositionStrategy(
+        binding.buttonSendCompose.setViewCompositionStrategy(
             ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
         )
 
@@ -132,10 +145,15 @@ class SendEvmConfirmationFragment : BaseFragment() {
     }
 
     private fun setSendButton(enabled: Boolean = false) {
-        buttonSendCompose.setContent {
+        binding.buttonSendCompose.setContent {
             ComposeAppTheme {
                 ButtonPrimaryYellow(
-                    modifier = Modifier.padding(start = 16.dp, top = 24.dp, end = 16.dp, bottom = 24.dp),
+                    modifier = Modifier.padding(
+                        start = 16.dp,
+                        top = 24.dp,
+                        end = 16.dp,
+                        bottom = 24.dp
+                    ),
                     title = getString(R.string.Send_Confirmation_Send_Button),
                     onClick = {
                         logger.info("click send button")
@@ -145,11 +163,6 @@ class SendEvmConfirmationFragment : BaseFragment() {
                 )
             }
         }
-    }
-
-    override fun onDestroyView() {
-        snackbarInProcess?.dismiss()
-        super.onDestroyView()
     }
 
 }

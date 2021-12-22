@@ -15,6 +15,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.iconUrl
+import io.horizontalsystems.bankwallet.databinding.FragmentReceiveBinding
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString.ResString
@@ -23,12 +24,25 @@ import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.FullCoin
-import kotlinx.android.synthetic.main.fragment_receive.*
 
 class ReceiveFragment : BaseFragment() {
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_receive, container, false)
+    private var _binding: FragmentReceiveBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentReceiveBinding.inflate(inflater, container, false)
+        val view = binding.root
+        return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -40,34 +54,34 @@ class ReceiveFragment : BaseFragment() {
 
         try {
             val wallet = arguments?.getParcelable<Wallet>(WALLET_KEY)
-                    ?: run { findNavController().popBackStack(); return }
+                ?: run { findNavController().popBackStack(); return }
             val viewModel by viewModels<ReceiveViewModel> { ReceiveModule.Factory(wallet) }
 
             setToolbar(wallet.platformCoin.fullCoin)
 
-            receiveAddressView.text = viewModel.receiveAddress
-            receiveAddressView.setOnClickListener {
+            binding.receiveAddressView.text = viewModel.receiveAddress
+            binding.receiveAddressView.setOnClickListener {
                 copyAddress(viewModel.receiveAddress)
             }
 
-            imgQrCode.setImageBitmap(TextHelper.getQrCodeBitmap(viewModel.receiveAddress))
-            testnetLabel.isVisible = viewModel.testNet
+            binding.imgQrCode.setImageBitmap(TextHelper.getQrCodeBitmap(viewModel.receiveAddress))
+            binding.testnetLabel.isVisible = viewModel.testNet
 
             val addressType = if (viewModel.testNet) "Testnet" else viewModel.addressType
 
-            receiverHint.text = when {
+            binding.receiverHint.text = when {
                 addressType != null -> getString(R.string.Deposit_Your_Address) + " ($addressType)"
                 else -> getString(R.string.Deposit_Your_Address)
             }
 
             val hintColor = if (viewModel.testNet) R.color.lucian else R.color.grey
-            receiverHint.setTextColor(view.context.getColor(hintColor))
+            binding.receiverHint.setTextColor(view.context.getColor(hintColor))
 
-            buttonCloseCompose.setViewCompositionStrategy(
+            binding.buttonCloseCompose.setViewCompositionStrategy(
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
 
-            btnsCopyShareCompose.setViewCompositionStrategy(
+            binding.btnsCopyShareCompose.setViewCompositionStrategy(
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
 
@@ -82,11 +96,11 @@ class ReceiveFragment : BaseFragment() {
     }
 
     private fun setToolbar(fullCoin: FullCoin) {
-        toolbarCompose.setViewCompositionStrategy(
+        binding.toolbarCompose.setViewCompositionStrategy(
             ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
         )
 
-        toolbarCompose.setContent {
+        binding.toolbarCompose.setContent {
             ComposeAppTheme {
                 AppBar(
                     title = ResString(R.string.Deposit_Title, fullCoin.coin.code),
@@ -112,7 +126,7 @@ class ReceiveFragment : BaseFragment() {
     }
 
     private fun setCopyShareButtons(viewModel: ReceiveViewModel) {
-        btnsCopyShareCompose.setContent {
+        binding.btnsCopyShareCompose.setContent {
             ComposeAppTheme {
                 Row(
                     modifier = Modifier.width(IntrinsicSize.Max)
@@ -144,7 +158,7 @@ class ReceiveFragment : BaseFragment() {
     }
 
     private fun setCloseButton() {
-        buttonCloseCompose.setContent {
+        binding.buttonCloseCompose.setContent {
             ComposeAppTheme {
                 ButtonPrimaryYellow(
                     modifier = Modifier.padding(

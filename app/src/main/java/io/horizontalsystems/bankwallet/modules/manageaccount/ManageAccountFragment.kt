@@ -14,6 +14,8 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.databinding.FragmentManageAccountBinding
+import io.horizontalsystems.bankwallet.databinding.ViewHolderAccountSettingViewBinding
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.backupkey.BackupKeyModule
 import io.horizontalsystems.bankwallet.modules.manageaccount.ManageAccountModule.ACCOUNT_ID_KEY
@@ -27,9 +29,6 @@ import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.views.ListPosition
-import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.fragment_manage_account.*
-import kotlinx.android.synthetic.main.view_holder_account_setting_view.*
 
 class ManageAccountFragment : BaseFragment(), UnlinkConfirmationDialog.Listener {
     private val viewModel by viewModels<ManageAccountViewModel> {
@@ -39,24 +38,35 @@ class ManageAccountFragment : BaseFragment(), UnlinkConfirmationDialog.Listener 
     }
     private var saveMenuItem: MenuItem? = null
 
+    private var _binding: FragmentManageAccountBinding? = null
+    private val binding get() = _binding!!
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_manage_account, container, false)
+    ): View {
+        _binding = FragmentManageAccountBinding.inflate(inflater, container, false)
+        val view = binding.root
+        return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        saveMenuItem = null
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        saveMenuItem = toolbar.menu.findItem(R.id.menuSave)
+        saveMenuItem = binding.toolbar.menu.findItem(R.id.menuSave)
 
-        toolbar.setNavigationOnClickListener {
+        binding.toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }
 
-        toolbar.setOnMenuItemClickListener { item ->
+        binding.toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.menuSave -> {
                     viewModel.onSave()
@@ -66,8 +76,8 @@ class ManageAccountFragment : BaseFragment(), UnlinkConfirmationDialog.Listener 
             }
         }
 
-        toolbar.title = viewModel.account.name
-        name.setText(viewModel.account.name)
+        binding.toolbar.title = viewModel.account.name
+        binding.name.setText(viewModel.account.name)
 
         val textWatcher = object : TextWatcher {
             override fun afterTextChanged(s: Editable) {
@@ -79,9 +89,9 @@ class ManageAccountFragment : BaseFragment(), UnlinkConfirmationDialog.Listener 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         }
-        name.addTextChangedListener(textWatcher)
+        binding.name.addTextChangedListener(textWatcher)
 
-        unlinkButton.setOnSingleClickListener {
+        binding.unlinkButton.setOnSingleClickListener {
             val confirmationList = listOf(
                 getString(R.string.ManageAccount_Delete_ConfirmationRemove),
                 getString(R.string.ManageAccount_Delete_ConfirmationDisable),
@@ -94,7 +104,7 @@ class ManageAccountFragment : BaseFragment(), UnlinkConfirmationDialog.Listener 
             )
         }
 
-        networkSettings.setOnClickListener {
+        binding.networkSettings.setOnClickListener {
             openNetworkSettings(viewModel.account)
         }
 
@@ -107,9 +117,9 @@ class ManageAccountFragment : BaseFragment(), UnlinkConfirmationDialog.Listener 
         viewModel.keyActionStateLiveData.observe(viewLifecycleOwner, { keyActionState ->
             when (keyActionState) {
                 KeyActionState.ShowRecoveryPhrase -> {
-                    actionButton.showAttention(false)
-                    actionButton.showTitle(getString(R.string.ManageAccount_RecoveryPhraseShow))
-                    actionButton.setOnClickListener {
+                    binding.actionButton.showAttention(false)
+                    binding.actionButton.showTitle(getString(R.string.ManageAccount_RecoveryPhraseShow))
+                    binding.actionButton.setOnClickListener {
                         ShowKeyModule.start(
                             this,
                             R.id.manageAccountFragment_to_showKeyFragment,
@@ -119,9 +129,9 @@ class ManageAccountFragment : BaseFragment(), UnlinkConfirmationDialog.Listener 
                     }
                 }
                 KeyActionState.BackupRecoveryPhrase -> {
-                    actionButton.showAttention(true)
-                    actionButton.showTitle(getString(R.string.ManageAccount_RecoveryPhraseBackup))
-                    actionButton.setOnClickListener {
+                    binding.actionButton.showAttention(true)
+                    binding.actionButton.showTitle(getString(R.string.ManageAccount_RecoveryPhraseBackup))
+                    binding.actionButton.setOnClickListener {
                         openBackupModule(viewModel.account)
                     }
                 }
@@ -130,9 +140,9 @@ class ManageAccountFragment : BaseFragment(), UnlinkConfirmationDialog.Listener 
 
         viewModel.additionalViewItemsLiveData.observe(viewLifecycleOwner, { additionalItems ->
             if (additionalItems.isNotEmpty()) {
-                additionalInfoItems.adapter = AdditionalInfoAdapter(additionalItems)
+                binding.additionalInfoItems.adapter = AdditionalInfoAdapter(additionalItems)
             } else {
-                networkSettings.setListPosition(ListPosition.Last)
+                binding.networkSettings.setListPosition(ListPosition.Last)
             }
         })
 
@@ -167,12 +177,6 @@ class ManageAccountFragment : BaseFragment(), UnlinkConfirmationDialog.Listener 
         HudHelper.showSuccessMessage(requireView(), getString(R.string.Hud_Text_Done))
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-
-        saveMenuItem = null
-    }
-
 }
 
 class AdditionalInfoAdapter(
@@ -180,7 +184,11 @@ class AdditionalInfoAdapter(
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return AdditionalInfoViewHolder.create(parent)
+        return AdditionalInfoViewHolder(
+            ViewHolderAccountSettingViewBinding.inflate(
+                LayoutInflater.from(parent.context), parent, false
+            )
+        )
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -194,35 +202,29 @@ class AdditionalInfoAdapter(
     }
 }
 
-class AdditionalInfoViewHolder(override val containerView: View) :
-    RecyclerView.ViewHolder(containerView), LayoutContainer {
+class AdditionalInfoViewHolder(val binding: ViewHolderAccountSettingViewBinding) :
+    RecyclerView.ViewHolder(binding.root) {
     fun bind(additionViewItem: ManageAccountViewModel.AdditionalViewItem, position: ListPosition) {
         val platformCoin = additionViewItem.platformCoin
-        icon.setRemoteImage(platformCoin.coin.iconUrl, platformCoin.coinType.iconPlaceholder)
-        title.text = additionViewItem.title
-        containerView.setBackgroundResource(position.getBackground())
+        binding.icon.setRemoteImage(
+            platformCoin.coin.iconUrl,
+            platformCoin.coinType.iconPlaceholder
+        )
+        binding.title.text = additionViewItem.title
+        binding.wrapper.setBackgroundResource(position.getBackground())
 
-        decoratedTextCompose.setContent {
+        binding.decoratedTextCompose.setContent {
             ComposeAppTheme {
                 ButtonSecondaryDefault(
                     modifier = Modifier.padding(horizontal = 16.dp),
                     title = additionViewItem.value,
                     onClick = {
                         TextHelper.copyText(additionViewItem.value)
-                        HudHelper.showSuccessMessage(containerView, R.string.Hud_Text_Copied)
+                        HudHelper.showSuccessMessage(binding.wrapper, R.string.Hud_Text_Copied)
                     }
                 )
             }
         }
     }
 
-    companion object {
-        fun create(parent: ViewGroup): AdditionalInfoViewHolder {
-            return AdditionalInfoViewHolder(
-                LayoutInflater.from(parent.context)
-                    .inflate(R.layout.view_holder_account_setting_view, parent, false)
-            )
-        }
-    }
 }
-

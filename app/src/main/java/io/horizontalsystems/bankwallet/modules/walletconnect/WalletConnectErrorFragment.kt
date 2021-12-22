@@ -1,7 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.ui.Modifier
@@ -10,22 +12,40 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.databinding.FragmentWalletConnectErrorBinding
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
-import kotlinx.android.synthetic.main.fragment_wallet_connect_error.*
 
-class WalletConnectErrorFragment : Fragment(R.layout.fragment_wallet_connect_error) {
+class WalletConnectErrorFragment : Fragment() {
+
+    private var _binding: FragmentWalletConnectErrorBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentWalletConnectErrorBinding.inflate(inflater, container, false)
+        val view = binding.root
+        return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        message.text = arguments?.getString(MESSAGE_KEY)
+        binding.message.text = arguments?.getString(MESSAGE_KEY)
 
-        buttonCancelCompose.setViewCompositionStrategy(
+        binding.buttonCancelCompose.setViewCompositionStrategy(
             ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
         )
 
-        buttonCancelCompose.setContent {
+        binding.buttonCancelCompose.setContent {
             ComposeAppTheme {
                 ButtonPrimaryDefault(
                     modifier = Modifier

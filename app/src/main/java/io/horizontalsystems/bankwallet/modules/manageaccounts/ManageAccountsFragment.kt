@@ -11,30 +11,44 @@ import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
+import io.horizontalsystems.bankwallet.databinding.*
 import io.horizontalsystems.bankwallet.modules.manageaccount.ManageAccountModule
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule.AccountViewItem
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule.ActionViewItem
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.views.ListPosition
-import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.fragment_manage_accounts.*
-import kotlinx.android.synthetic.main.view_holder_manage_account_action.*
-import kotlinx.android.synthetic.main.view_holder_manage_account_action.backgroundView
-import kotlinx.android.synthetic.main.view_holder_manage_account_action.title
-import kotlinx.android.synthetic.main.view_holder_manage_account_item.*
 
 class ManageAccountsFragment : BaseFragment(), AccountViewHolder.Listener {
-    private val viewModel by viewModels<ManageAccountsViewModel> { ManageAccountsModule.Factory(arguments?.getParcelable(ManageAccountsModule.MODE)!!) }
+    private val viewModel by viewModels<ManageAccountsViewModel> {
+        ManageAccountsModule.Factory(
+            arguments?.getParcelable(ManageAccountsModule.MODE)!!
+        )
+    }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_manage_accounts, container, false)
+    private var _binding: FragmentManageAccountsBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentManageAccountsBinding.inflate(inflater, container, false)
+        val view = binding.root
+        return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding.recyclerView.adapter = null
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        toolbar.menu.findItem(R.id.menuCancel)?.isVisible = viewModel.isCloseButtonVisible
-        toolbar.setOnMenuItemClickListener { item ->
+        binding.toolbar.menu.findItem(R.id.menuCancel)?.isVisible = viewModel.isCloseButtonVisible
+        binding.toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.menuClose -> {
                     findNavController().popBackStack()
@@ -45,20 +59,31 @@ class ManageAccountsFragment : BaseFragment(), AccountViewHolder.Listener {
         }
 
         if (viewModel.isCloseButtonVisible) {
-            toolbar.navigationIcon = null
+            binding.toolbar.navigationIcon = null
         }
-        toolbar.setNavigationOnClickListener {
+        binding.toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }
 
         val accountsAdapter = AccountsAdapter(this)
-        val actionsAdapter = ActionsAdapter(listOf(
-                ActionViewItem(R.drawable.ic_plus, R.string.ManageAccounts_CreateNewWallet, ::onClickCreateWallet),
-                ActionViewItem(R.drawable.ic_download, R.string.ManageAccounts_ImportWallet, ::onClickRestoreWallet)
-        ))
+        val actionsAdapter = ActionsAdapter(
+            listOf(
+                ActionViewItem(
+                    R.drawable.ic_plus,
+                    R.string.ManageAccounts_CreateNewWallet,
+                    ::onClickCreateWallet
+                ),
+                ActionViewItem(
+                    R.drawable.ic_download,
+                    R.string.ManageAccounts_ImportWallet,
+                    ::onClickRestoreWallet
+                )
+            )
+        )
 
-        val concatAdapter = ConcatAdapter(accountsAdapter, actionsAdapter, ManageAccountsHintAdapter())
-        recyclerView.adapter = concatAdapter
+        val concatAdapter =
+            ConcatAdapter(accountsAdapter, actionsAdapter, ManageAccountsHintAdapter())
+        binding.recyclerView.adapter = concatAdapter
 
         viewModel.viewItemsLiveData.observe(viewLifecycleOwner, { items ->
             accountsAdapter.items = items
@@ -71,11 +96,19 @@ class ManageAccountsFragment : BaseFragment(), AccountViewHolder.Listener {
     }
 
     private fun onClickCreateWallet() {
-        findNavController().navigate(R.id.manageAccountsFragment_to_createAccountFragment, null, navOptions())
+        findNavController().navigate(
+            R.id.manageAccountsFragment_to_createAccountFragment,
+            null,
+            navOptions()
+        )
     }
 
     private fun onClickRestoreWallet() {
-        findNavController().navigate(R.id.manageAccountsFragment_to_restoreMnemonicFragment, null, navOptions())
+        findNavController().navigate(
+            R.id.manageAccountsFragment_to_restoreMnemonicFragment,
+            null,
+            navOptions()
+        )
     }
 
     override fun onSelect(accountViewItem: AccountViewItem) {
@@ -83,18 +116,18 @@ class ManageAccountsFragment : BaseFragment(), AccountViewHolder.Listener {
     }
 
     override fun onEdit(accountViewItem: AccountViewItem) {
-        ManageAccountModule.start(this, R.id.manageAccountsFragment_to_manageAccount, navOptions(), accountViewItem.accountId)
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-
-        recyclerView.adapter = null
+        ManageAccountModule.start(
+            this,
+            R.id.manageAccountsFragment_to_manageAccount,
+            navOptions(),
+            accountViewItem.accountId
+        )
     }
 
 }
 
-class AccountsAdapter(private val listener: AccountViewHolder.Listener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class AccountsAdapter(private val listener: AccountViewHolder.Listener) :
+    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     var items: List<AccountViewItem> = listOf()
 
     private val itemView = 0
@@ -109,13 +142,27 @@ class AccountsAdapter(private val listener: AccountViewHolder.Listener) : Recycl
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
-            bottomMarginView -> MarginViewHolder.create(parent)
-            else -> AccountViewHolder.create(parent, listener)
+            bottomMarginView -> {
+                MarginViewHolder(
+                    ViewSettingsItemSpaceBinding.inflate(
+                        LayoutInflater.from(parent.context), parent, false
+                    )
+                )
+            }
+            else -> {
+                AccountViewHolder(
+                    ViewHolderManageAccountItemBinding.inflate(
+                        LayoutInflater.from(parent.context), parent, false
+                    ), listener)
+            }
         }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        (holder as? AccountViewHolder)?.bind(items[position], ListPosition.getListPosition(items.size, position))
+        (holder as? AccountViewHolder)?.bind(
+            items[position],
+            ListPosition.getListPosition(items.size, position)
+        )
     }
 
     override fun getItemCount(): Int {
@@ -123,7 +170,10 @@ class AccountsAdapter(private val listener: AccountViewHolder.Listener) : Recycl
     }
 }
 
-class AccountViewHolder(override val containerView: View, val listener: Listener) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+class AccountViewHolder(
+    private val binding: ViewHolderManageAccountItemBinding,
+    val listener: Listener
+) : RecyclerView.ViewHolder(binding.root) {
 
     interface Listener {
         fun onSelect(accountViewItem: AccountViewItem)
@@ -131,46 +181,43 @@ class AccountViewHolder(override val containerView: View, val listener: Listener
     }
 
     fun bind(account: AccountViewItem, position: ListPosition) {
-        title.text = account.title
-        subtitle.text = account.subtitle
+        binding.title.text = account.title
+        binding.subtitle.text = account.subtitle
 
-        backgroundView.setBackgroundResource(position.getBackground())
-        radioImage.setImageResource(if (account.selected) R.drawable.ic_radion else R.drawable.ic_radioff)
-        attentionIcon.isVisible = account.alert
-        editIcon.setOnClickListener {
+        binding.backgroundView.setBackgroundResource(position.getBackground())
+        binding.radioImage.setImageResource(if (account.selected) R.drawable.ic_radion else R.drawable.ic_radioff)
+        binding.attentionIcon.isVisible = account.alert
+        binding.editIcon.setOnClickListener {
             listener.onEdit(account)
         }
 
-        backgroundView.setOnClickListener {
+        binding.backgroundView.setOnClickListener {
             listener.onSelect(account)
         }
     }
 
-    companion object {
-        fun create(parent: ViewGroup, listener: Listener): AccountViewHolder {
-            return AccountViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_manage_account_item, parent, false), listener)
-        }
-    }
 }
 
-class MarginViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
-    companion object {
-        fun create(parent: ViewGroup): MarginViewHolder {
-            return MarginViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.view_settings_item_space, parent, false))
-        }
-    }
-}
+class MarginViewHolder(binding: ViewSettingsItemSpaceBinding) :
+    RecyclerView.ViewHolder(binding.root)
 
 class ActionsAdapter(
-        private val items: List<ActionViewItem>
+    private val items: List<ActionViewItem>
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return ActionViewHolder.create(parent)
+        return ActionViewHolder(
+            ViewHolderManageAccountActionBinding.inflate(
+                LayoutInflater.from(parent.context), parent, false
+            )
+        )
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        (holder as? ActionViewHolder)?.bind(items[position], ListPosition.Companion.getListPosition(items.size, position))
+        (holder as? ActionViewHolder)?.bind(
+            items[position],
+            ListPosition.Companion.getListPosition(items.size, position)
+        )
     }
 
     override fun getItemCount(): Int {
@@ -178,24 +225,23 @@ class ActionsAdapter(
     }
 }
 
-class ActionViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+class ActionViewHolder(private val binding: ViewHolderManageAccountActionBinding) :
+    RecyclerView.ViewHolder(binding.root) {
     fun bind(action: ActionViewItem, position: ListPosition) {
-        icon.setImageResource(action.icon)
-        title.setText(action.title)
-        backgroundView.setBackgroundResource(position.getBackground())
-        backgroundView.setOnSingleClickListener { action.callback() }
-    }
-
-    companion object {
-        fun create(parent: ViewGroup): ActionViewHolder {
-            return ActionViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_manage_account_action, parent, false))
-        }
+        binding.icon.setImageResource(action.icon)
+        binding.title.setText(action.title)
+        binding.backgroundView.setBackgroundResource(position.getBackground())
+        binding.backgroundView.setOnSingleClickListener { action.callback() }
     }
 }
 
 class ManageAccountsHintAdapter : RecyclerView.Adapter<ManageAccountHintViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ManageAccountHintViewHolder {
-        return ManageAccountHintViewHolder.create(parent)
+        return ManageAccountHintViewHolder(
+            ViewHolderManageAccountsHintBinding.inflate(
+                LayoutInflater.from(parent.context), parent, false
+            )
+        )
     }
 
     override fun onBindViewHolder(holder: ManageAccountHintViewHolder, position: Int) {}
@@ -205,10 +251,5 @@ class ManageAccountsHintAdapter : RecyclerView.Adapter<ManageAccountHintViewHold
     }
 }
 
-class ManageAccountHintViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
-    companion object {
-        fun create(parent: ViewGroup): ManageAccountHintViewHolder {
-            return ManageAccountHintViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.view_holder_manage_accounts_hint, parent, false))
-        }
-    }
-}
+class ManageAccountHintViewHolder(binding: ViewHolderManageAccountsHintBinding) :
+    RecyclerView.ViewHolder(binding.root)

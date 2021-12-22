@@ -19,7 +19,6 @@ import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.snackbar.SnackbarDuration
-import kotlinx.android.synthetic.main.fragment_manage_wallets.*
 
 class RestoreSelectCoinsFragment : CoinListBaseFragment() {
 
@@ -36,8 +35,8 @@ class RestoreSelectCoinsFragment : CoinListBaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        toolbar.inflateMenu(R.menu.restore_select_coin_menu)
-        toolbar.setOnMenuItemClickListener { item ->
+        binding.toolbar.inflateMenu(R.menu.restore_select_coin_menu)
+        binding.toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.menuDone -> {
                     hideKeyboard()
@@ -47,8 +46,8 @@ class RestoreSelectCoinsFragment : CoinListBaseFragment() {
                 else -> false
             }
         }
-        configureSearchMenu(toolbar.menu)
-        doneMenuButton = toolbar.menu.findItem(R.id.menuDone)
+        configureSearchMenu(binding.toolbar.menu)
+        doneMenuButton = binding.toolbar.menu.findItem(R.id.menuDone)
 
         val accountType = arguments?.getParcelable<AccountType>(ACCOUNT_TYPE_KEY)
             ?: throw Exception("Parameter missing")
@@ -56,22 +55,27 @@ class RestoreSelectCoinsFragment : CoinListBaseFragment() {
         val vmFactory by lazy { RestoreSelectCoinsModule.Factory(accountType) }
 
         viewModel = ViewModelProvider(this, vmFactory).get(RestoreSelectCoinsViewModel::class.java)
-        coinSettingsViewModel = ViewModelProvider(this, vmFactory).get(CoinSettingsViewModel::class.java)
-        restoreSettingsViewModel = ViewModelProvider(this, vmFactory).get(RestoreSettingsViewModel::class.java)
-        coinPlatformsViewModel = ViewModelProvider(this, vmFactory).get(CoinPlatformsViewModel::class.java)
+        coinSettingsViewModel =
+            ViewModelProvider(this, vmFactory).get(CoinSettingsViewModel::class.java)
+        restoreSettingsViewModel =
+            ViewModelProvider(this, vmFactory).get(RestoreSettingsViewModel::class.java)
+        coinPlatformsViewModel =
+            ViewModelProvider(this, vmFactory).get(CoinPlatformsViewModel::class.java)
 
         val enableCoinsViewModel by viewModels<EnableCoinsViewModel> { vmFactory }
 
-        enableCoinsViewModel.confirmationLiveData.observe(viewLifecycleOwner, Observer { tokenType ->
-            activity?.let {
-                EnableCoinsDialog.show(it, tokenType, object : EnableCoinsDialog.Listener {
-                    override fun onClickEnable() {
-                        scrollToTopAfterUpdate = true
-                        enableCoinsViewModel.onConfirmEnable()
-                    }
-                })
-            }
-        })
+        enableCoinsViewModel.confirmationLiveData.observe(
+            viewLifecycleOwner,
+            Observer { tokenType ->
+                activity?.let {
+                    EnableCoinsDialog.show(it, tokenType, object : EnableCoinsDialog.Listener {
+                        override fun onClickEnable() {
+                            scrollToTopAfterUpdate = true
+                            enableCoinsViewModel.onConfirmEnable()
+                        }
+                    })
+                }
+            })
 
         enableCoinsViewModel.hudStateLiveData.observe(viewLifecycleOwner, Observer { state ->
             when (state) {
@@ -160,7 +164,10 @@ class RestoreSelectCoinsFragment : CoinListBaseFragment() {
                 restoreSettingsViewModel.onCancelEnterBirthdayHeight()
             }
 
-            zcashBirthdayHeightDialog.show(requireActivity().supportFragmentManager, "ZcashBirthdayHeightDialog")
+            zcashBirthdayHeightDialog.show(
+                requireActivity().supportFragmentManager,
+                "ZcashBirthdayHeightDialog"
+            )
         }
 
         coinPlatformsViewModel.openPlatformsSelectorEvent.observe(viewLifecycleOwner) { config ->

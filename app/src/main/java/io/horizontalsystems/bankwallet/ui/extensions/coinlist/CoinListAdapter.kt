@@ -1,6 +1,6 @@
 package io.horizontalsystems.bankwallet.ui.extensions.coinlist
 
-import android.view.View
+import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
@@ -11,12 +11,10 @@ import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
 import io.horizontalsystems.bankwallet.core.setRemoteImage
+import io.horizontalsystems.bankwallet.databinding.ViewHolderCoinManageItemBinding
 import io.horizontalsystems.marketkit.models.Coin
 import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.views.ListPosition
-import io.horizontalsystems.views.inflate
-import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.view_holder_coin_manage_item.*
 
 class CoinListAdapter(private val listener: Listener) :
     ListAdapter<CoinViewItem, CoinWithSwitchViewHolder>(diffCallback) {
@@ -29,16 +27,17 @@ class CoinListAdapter(private val listener: Listener) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CoinWithSwitchViewHolder {
         return CoinWithSwitchViewHolder(
-            inflate(parent, R.layout.view_holder_coin_manage_item, false),
+            ViewHolderCoinManageItemBinding.inflate(
+                LayoutInflater.from(parent.context), parent, false
+            ),
             { isChecked, index ->
                 val item = getItem(index)
                 onSwitchToggle(isChecked, item.fullCoin)
-            },
-            { index ->
-                val item = getItem(index)
-                listener.edit(item.fullCoin)
             }
-        )
+        ) { index ->
+            val item = getItem(index)
+            listener.edit(item.fullCoin)
+        }
     }
 
     override fun onBindViewHolder(holder: CoinWithSwitchViewHolder, position: Int) {
@@ -78,14 +77,14 @@ class CoinListAdapter(private val listener: Listener) :
 }
 
 class CoinWithSwitchViewHolder(
-    override val containerView: View,
+    private val binding: ViewHolderCoinManageItemBinding,
     private val onSwitch: (isChecked: Boolean, position: Int) -> Unit,
     private val onEdit: (position: Int) -> Unit
-) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+) : RecyclerView.ViewHolder(binding.root) {
 
     init {
-        containerView.setOnClickListener {
-            toggleSwitch.isChecked = !toggleSwitch.isChecked
+        binding.wrapper.setOnClickListener {
+            binding.toggleSwitch.isChecked = !binding.toggleSwitch.isChecked
         }
     }
 
@@ -94,21 +93,21 @@ class CoinWithSwitchViewHolder(
 
         when (viewItem.state) {
             CoinViewItemState.ToggleHidden -> {
-                toggleSwitch.setOnCheckedChangeListener { _, _ -> }
-                toggleSwitch.isVisible = false
-                edit.isVisible = false
+                binding.toggleSwitch.setOnCheckedChangeListener { _, _ -> }
+                binding.toggleSwitch.isVisible = false
+                binding.edit.isVisible = false
             }
             is CoinViewItemState.ToggleVisible -> {
                 // set switch value without triggering onChangeListener
-                toggleSwitch.setOnCheckedChangeListener(null)
-                toggleSwitch.isChecked = viewItem.state.enabled
-                toggleSwitch.setOnCheckedChangeListener { _, isChecked ->
+                binding.toggleSwitch.setOnCheckedChangeListener(null)
+                binding.toggleSwitch.isChecked = viewItem.state.enabled
+                binding.toggleSwitch.setOnCheckedChangeListener { _, isChecked ->
                     onSwitch(isChecked, bindingAdapterPosition)
                 }
-                toggleSwitch.isVisible = true
+                binding.toggleSwitch.isVisible = true
 
-                edit.isVisible = viewItem.state.hasSettings
-                edit.setOnSingleClickListener {
+                binding.edit.isVisible = viewItem.state.hasSettings
+                binding.edit.setOnSingleClickListener {
                     onEdit(bindingAdapterPosition)
                 }
             }
@@ -116,11 +115,12 @@ class CoinWithSwitchViewHolder(
     }
 
     private fun set(fullCoin: FullCoin, listPosition: ListPosition) {
-        backgroundView.setBackgroundResource(getBackground(listPosition))
-        coinIcon.setRemoteImage(fullCoin.coin.iconUrl, fullCoin.iconPlaceholder)
-        coinTitle.text = fullCoin.coin.name
-        coinSubtitle.text = fullCoin.coin.code
-        dividerView.isVisible = listPosition == ListPosition.Last || listPosition == ListPosition.Single
+        binding.backgroundView.setBackgroundResource(getBackground(listPosition))
+        binding.coinIcon.setRemoteImage(fullCoin.coin.iconUrl, fullCoin.iconPlaceholder)
+        binding.coinTitle.text = fullCoin.coin.name
+        binding.coinSubtitle.text = fullCoin.coin.code
+        binding.dividerView.isVisible =
+            listPosition == ListPosition.Last || listPosition == ListPosition.Single
     }
 
     private fun getBackground(listPosition: ListPosition): Int {
@@ -134,7 +134,11 @@ class CoinWithSwitchViewHolder(
 
 }
 
-data class CoinViewItem(val fullCoin: FullCoin, val state: CoinViewItemState, val listPosition: ListPosition)
+data class CoinViewItem(
+    val fullCoin: FullCoin,
+    val state: CoinViewItemState,
+    val listPosition: ListPosition
+)
 
 sealed class CoinViewItemState {
     data class ToggleVisible(val enabled: Boolean, val hasSettings: Boolean) : CoinViewItemState()

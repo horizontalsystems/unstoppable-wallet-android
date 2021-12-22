@@ -5,9 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
-import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import kotlinx.android.synthetic.main.fragment_show_words_tab.*
+import io.horizontalsystems.bankwallet.databinding.FragmentShowWordsTabBinding
 
 class ShowWordsTab : BaseFragment() {
     private val words: List<String>
@@ -16,14 +15,28 @@ class ShowWordsTab : BaseFragment() {
     private val passphrase: String
         get() = requireArguments().getString(PASSPHRASE) ?: ""
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_show_words_tab, container, false)
+    private var _binding: FragmentShowWordsTabBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentShowWordsTabBinding.inflate(inflater, container, false)
+        val view = binding.root
+        return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        mnemonicPhraseView.populateWords(words, passphrase)
+        binding.mnemonicPhraseView.populateWords(words, passphrase)
     }
 
     companion object {

@@ -12,6 +12,7 @@ import androidx.navigation.navGraphViewModels
 import androidx.viewpager2.widget.ViewPager2
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.databinding.FragmentShowKeyMainBinding
 import io.horizontalsystems.bankwallet.modules.showkey.ShowKeyModule.ShowKeyTab
 import io.horizontalsystems.bankwallet.modules.showkey.tabs.ShowKeyTabsAdapter
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -19,33 +20,37 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.TabItem
 import io.horizontalsystems.bankwallet.ui.compose.components.Tabs
 import io.horizontalsystems.core.findNavController
-import kotlinx.android.synthetic.main.fragment_show_key_main.*
 
 class ShowKeyMainFragment : BaseFragment() {
     private val viewModel by navGraphViewModels<ShowKeyViewModel>(R.id.showKeyIntroFragment)
+
+    private var _binding: FragmentShowKeyMainBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        disallowScreenshot()
-        return inflater.inflate(R.layout.fragment_show_key_main, container, false)
+    ): View {
+        _binding = FragmentShowKeyMainBinding.inflate(inflater, container, false)
+        val view = binding.root
+        return view
     }
 
     override fun onDestroyView() {
-        allowScreenshot()
         super.onDestroyView()
+        allowScreenshot()
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        toolbar.setNavigationOnClickListener {
+        binding.toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }
 
-        viewPager.adapter = ShowKeyTabsAdapter(
+        binding.viewPager.adapter = ShowKeyTabsAdapter(
             viewModel.showKeyTabs,
             viewModel.words,
             viewModel.passphrase,
@@ -54,21 +59,21 @@ class ShowKeyMainFragment : BaseFragment() {
             viewLifecycleOwner.lifecycle
         )
 
-        viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback(){
+        binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 setTabs(viewModel.showKeyTabs[position])
             }
         })
 
-        buttonCloseCompose.setViewCompositionStrategy(
+        binding.buttonCloseCompose.setViewCompositionStrategy(
             ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
         )
 
-        tabsCompose.setViewCompositionStrategy(
+        binding.tabsCompose.setViewCompositionStrategy(
             ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
         )
 
-        buttonCloseCompose.setContent {
+        binding.buttonCloseCompose.setContent {
             ComposeAppTheme {
                 ButtonPrimaryYellow(
                     modifier = Modifier.padding(start = 24.dp, end = 24.dp, bottom = 38.dp),
@@ -87,15 +92,15 @@ class ShowKeyMainFragment : BaseFragment() {
     }
 
     private fun selectTab(item: ShowKeyTab) {
-        viewPager.currentItem = viewModel.showKeyTabs.indexOf(item)
+        binding.viewPager.currentItem = viewModel.showKeyTabs.indexOf(item)
         setTabs(item)
     }
 
     private fun setTabs(selectedTab: ShowKeyTab) {
         val tabItems = viewModel.showKeyTabs.map { showKeyTab ->
-             TabItem(getString(showKeyTab.title), showKeyTab == selectedTab, showKeyTab)
+            TabItem(getString(showKeyTab.title), showKeyTab == selectedTab, showKeyTab)
         }
-        tabsCompose.setContent {
+        binding.tabsCompose.setContent {
             ComposeAppTheme {
                 Tabs(tabItems) { viewModel.onSelectTab(it) }
             }
