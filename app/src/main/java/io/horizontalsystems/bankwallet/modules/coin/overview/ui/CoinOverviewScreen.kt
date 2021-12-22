@@ -64,7 +64,12 @@ fun CoinOverviewScreen(
                                 fullCoin.iconPlaceholder
                             )
 
-                            Chart(chartViewModel)
+                            Chart(
+                                chartViewModel = chartViewModel,
+                                onChangeHoldingPointState = { holding ->
+                                    scrollingEnabled = !holding
+                                }
+                            )
 
                             Title(title, chartInfo?.data?.chartData?.diff())
 
