@@ -26,20 +26,23 @@ class CoinOverviewChartRepo(
     private val coinUid: String,
 ) : AbstractChartService() {
 
-    override val chartTypes: List<ChartView.ChartType>
-        get() = listOf(
-            ChartView.ChartType.TODAY,
-            ChartView.ChartType.DAILY,
-            ChartView.ChartType.WEEKLY,
-            ChartView.ChartType.WEEKLY2,
-            ChartView.ChartType.MONTHLY,
-            ChartView.ChartType.MONTHLY3,
-            ChartView.ChartType.MONTHLY6,
-            ChartView.ChartType.MONTHLY12,
-            ChartView.ChartType.MONTHLY24
-        )
+    override val chartTypes = listOf(
+        ChartView.ChartType.TODAY,
+        ChartView.ChartType.DAILY,
+        ChartView.ChartType.WEEKLY,
+        ChartView.ChartType.WEEKLY2,
+        ChartView.ChartType.MONTHLY,
+        ChartView.ChartType.MONTHLY3,
+        ChartView.ChartType.MONTHLY6,
+        ChartView.ChartType.MONTHLY12,
+        ChartView.ChartType.MONTHLY24
+    )
 
-    override val chartIndicators: List<ChartIndicator> = ChartIndicator.values().toList()
+    override val chartIndicators = listOf(
+        ChartIndicator.Ema,
+        ChartIndicator.Macd,
+        ChartIndicator.Rsi
+    )
     override val initialChartType by chartTypeStorage::chartType2
     override val dataUpdatedObservable = BehaviorSubject.create<Unit>()
 

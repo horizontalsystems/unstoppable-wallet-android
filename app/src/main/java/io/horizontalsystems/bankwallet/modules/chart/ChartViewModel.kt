@@ -18,6 +18,7 @@ import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.chartview.Indicator
 import io.horizontalsystems.chartview.models.ChartIndicator
 import io.horizontalsystems.core.helpers.DateHelper
+import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import java.util.*
 
@@ -42,10 +43,20 @@ class ChartViewModel(private val service: AbstractChartService, private val fact
                 disposables.add(it)
             }
 
-        service.indicatorObservable
-            .subscribeIO { indicator ->
-                val indicators = service.chartIndicators.map {
-                    TabItem(Translator.getString(it.stringResId), it == indicator.orElse(null), it)
+        Observable
+            .combineLatest(
+                service.indicatorObservable,
+                service.indicatorsEnabledObservable,
+                { selectedIndicator, enabled ->
+                    Pair(selectedIndicator, enabled)
+                }
+            )
+            .subscribeIO { (selectedIndicator, enabled) ->
+                val indicators = service.chartIndicators.map { indicator ->
+                    TabItem(Translator.getString(indicator.stringResId),
+                        indicator == selectedIndicator.orElse(null),
+                        indicator,
+                        enabled = enabled)
                 }
                 indicatorsLiveData.postValue(indicators)
             }
