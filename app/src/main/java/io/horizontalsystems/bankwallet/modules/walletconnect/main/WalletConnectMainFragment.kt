@@ -20,6 +20,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.managers.WalletConnectInteractor
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
+import io.horizontalsystems.bankwallet.databinding.FragmentWalletConnectMainBinding
 import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerActivity
 import io.horizontalsystems.bankwallet.modules.walletconnect.*
 import io.horizontalsystems.bankwallet.modules.walletconnect.scanqr.WalletConnectScanQrModule
@@ -29,45 +30,70 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefaul
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryRed
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.core.helpers.HudHelper
-import kotlinx.android.synthetic.main.fragment_wallet_connect_main.*
 
 class WalletConnectMainFragment : BaseFragment() {
 
     private val baseViewModel by navGraphViewModels<WalletConnectViewModel>(R.id.walletConnectMainFragment) {
         WalletConnectModule.Factory(arguments?.getString(WalletConnectMainModule.REMOTE_PEER_ID_KEY))
     }
-    private val viewModelScan by viewModels<WalletConnectScanQrViewModel> { WalletConnectScanQrModule.Factory(baseViewModel.service) }
-    private val viewModel by viewModels<WalletConnectMainViewModel> { WalletConnectMainModule.Factory(baseViewModel.service) }
+    private val viewModelScan by viewModels<WalletConnectScanQrViewModel> {
+        WalletConnectScanQrModule.Factory(
+            baseViewModel.service
+        )
+    }
+    private val viewModel by viewModels<WalletConnectMainViewModel> {
+        WalletConnectMainModule.Factory(
+            baseViewModel.service
+        )
+    }
     private var closeMenuItem: MenuItem? = null
     private var containerView: View? = null
 
-    private val qrScannerResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        when (result.resultCode) {
-            Activity.RESULT_OK -> {
-                result.data?.getStringExtra(ModuleField.SCAN_ADDRESS)?.let {
-                    viewModelScan.handleScanned(it)
+    private val qrScannerResultLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            when (result.resultCode) {
+                Activity.RESULT_OK -> {
+                    result.data?.getStringExtra(ModuleField.SCAN_ADDRESS)?.let {
+                        viewModelScan.handleScanned(it)
+                    }
                 }
-            }
-            Activity.RESULT_CANCELED -> {
-                val sessionsCount = arguments?.getInt(WalletConnectMainModule.SESSIONS_COUNT_KEY) ?: 0
-                if (sessionsCount == 0) {
-                    findNavController().popBackStack(R.id.mainFragment, false)
-                } else {
-                    findNavController().popBackStack()
+                Activity.RESULT_CANCELED -> {
+                    val sessionsCount =
+                        arguments?.getInt(WalletConnectMainModule.SESSIONS_COUNT_KEY) ?: 0
+                    if (sessionsCount == 0) {
+                        findNavController().popBackStack(R.id.mainFragment, false)
+                    } else {
+                        findNavController().popBackStack()
+                    }
                 }
             }
         }
+
+    private var _binding: FragmentWalletConnectMainBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentWalletConnectMainBinding.inflate(inflater, container, false)
+        val view = binding.root
+        return view
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_wallet_connect_main, container, false)
+    override fun onDestroyView() {
+        super.onDestroyView()
+        closeMenuItem = null
+        containerView = null
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         containerView = view
 
-        toolbar.setOnMenuItemClickListener { item ->
+        binding.toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.menuClose -> {
                     findNavController().popBackStack()
@@ -78,7 +104,7 @@ class WalletConnectMainFragment : BaseFragment() {
                 }
             }
         }
-        closeMenuItem = toolbar.menu.findItem(R.id.menuClose)
+        closeMenuItem = binding.toolbar.menu.findItem(R.id.menuClose)
 
         containerView?.isVisible = false
 
@@ -106,7 +132,10 @@ class WalletConnectMainFragment : BaseFragment() {
                 else -> it.message ?: getString(R.string.default_error_msg)
             }
 
-            findNavController().navigate(R.id.walletConnectMainFragment_to_walletConnectErrorFragment, bundleOf(WalletConnectErrorFragment.MESSAGE_KEY to message))
+            findNavController().navigate(
+                R.id.walletConnectMainFragment_to_walletConnectErrorFragment,
+                bundleOf(WalletConnectErrorFragment.MESSAGE_KEY to message)
+            )
         })
 
         viewModelScan.openMainLiveEvent.observe(this, {
@@ -114,18 +143,18 @@ class WalletConnectMainFragment : BaseFragment() {
         })
 
         val dappInfoAdapter = DappInfoAdapter()
-        dappInfo.adapter = dappInfoAdapter
+        binding.dappInfo.adapter = dappInfoAdapter
 
         viewModel.connectingLiveData.observe(viewLifecycleOwner, {
-            connecting.isVisible = it
+            binding.connecting.isVisible = it
         })
 
         viewModel.peerMetaLiveData.observe(viewLifecycleOwner, { peerMetaViewItem ->
-            dappGroup.isVisible = peerMetaViewItem != null
+            binding.dappGroup.isVisible = peerMetaViewItem != null
 
             peerMetaViewItem?.let {
-                dappTitle.text = it.name
-                dappIcon.loadImage(it.icon)
+                binding.dappTitle.text = it.name
+                binding.dappIcon.loadImage(it.icon)
                 dappInfoAdapter.url = it.url
             }
         })
@@ -143,8 +172,8 @@ class WalletConnectMainFragment : BaseFragment() {
         })
 
         viewModel.hintLiveData.observe(viewLifecycleOwner, { hint ->
-            dappHint.text = hint?.let { getString(it) }
-            dappHint.isVisible = hint != null
+            binding.dappHint.text = hint?.let { getString(it) }
+            binding.dappHint.isVisible = hint != null
         })
 
         viewModel.errorLiveData.observe(viewLifecycleOwner, { error ->
@@ -168,24 +197,32 @@ class WalletConnectMainFragment : BaseFragment() {
                 is WalletConnectSendEthereumTransactionRequest -> {
                     baseViewModel.sharedSendEthereumTransactionRequest = it
 
-                    findNavController().navigate(R.id.walletConnectMainFragment_to_walletConnectSendEthereumTransactionRequestFragment, null, navOptionsFromBottom())
+                    findNavController().navigate(
+                        R.id.walletConnectMainFragment_to_walletConnectSendEthereumTransactionRequestFragment,
+                        null,
+                        navOptionsFromBottom()
+                    )
                 }
                 is WalletConnectSignMessageRequest -> {
                     baseViewModel.sharedSignMessageRequest = it
 
-                    findNavController().navigate(R.id.walletConnectMainFragment_to_walletConnectSignMessageRequestFragment, null, navOptionsFromBottom())
+                    findNavController().navigate(
+                        R.id.walletConnectMainFragment_to_walletConnectSignMessageRequestFragment,
+                        null,
+                        navOptionsFromBottom()
+                    )
                 }
             }
         })
 
-        buttonsCompose.setViewCompositionStrategy(
+        binding.buttonsCompose.setViewCompositionStrategy(
             ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
         )
 
     }
 
     private fun setButtons(buttonsStates: WalletConnectMainViewModel.ButtonStates) {
-        buttonsCompose.setContent {
+        binding.buttonsCompose.setContent {
             ComposeAppTheme {
                 Column(modifier = Modifier.width(IntrinsicSize.Max)) {
                     if (buttonsStates.connect.visible) {
@@ -238,12 +275,6 @@ class WalletConnectMainFragment : BaseFragment() {
                 }
             }
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        closeMenuItem = null
-        containerView = null
     }
 
 }

@@ -5,7 +5,6 @@ import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.text.style.URLSpan
 import android.view.View
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.constraintlayout.widget.ConstraintSet.TOP
 import androidx.core.text.getSpans
@@ -13,13 +12,8 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
+import io.horizontalsystems.bankwallet.databinding.*
 import io.horizontalsystems.views.helpers.LayoutHelper
-import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.view_holder_markdown_h1.*
-import kotlinx.android.synthetic.main.view_holder_markdown_h2.*
-import kotlinx.android.synthetic.main.view_holder_markdown_h3.*
-import kotlinx.android.synthetic.main.view_holder_markdown_image.*
-import kotlinx.android.synthetic.main.view_holder_markdown_paragraph.*
 import org.apache.commons.io.FilenameUtils
 import java.net.URL
 
@@ -27,39 +21,44 @@ abstract class MarkdownBlockViewHolder(itemView: View) : RecyclerView.ViewHolder
     abstract fun bind(item: MarkdownBlock)
 }
 
-class ViewHolderFooter(override val containerView: View) : MarkdownBlockViewHolder(containerView), LayoutContainer {
+class ViewHolderFooter(binding: ViewHolderMarkdownFooterBinding) :
+    MarkdownBlockViewHolder(binding.root) {
     override fun bind(item: MarkdownBlock) {}
 }
 
-class ViewHolderH1(override val containerView: View) : MarkdownBlockViewHolder(containerView), LayoutContainer {
+class ViewHolderH1(private val binding: ViewHolderMarkdownH1Binding) :
+    MarkdownBlockViewHolder(binding.root) {
     override fun bind(item: MarkdownBlock) {
         if (item !is MarkdownBlock.Heading1) return
 
-        h1.text = item.text
+        binding.h1.text = item.text
     }
 }
 
-class ViewHolderH2(override val containerView: View) : MarkdownBlockViewHolder(containerView), LayoutContainer {
+class ViewHolderH2(private val binding: ViewHolderMarkdownH2Binding) :
+    MarkdownBlockViewHolder(binding.root) {
     override fun bind(item: MarkdownBlock) {
         if (item !is MarkdownBlock.Heading2) return
 
-        h2.text = item.text
+        binding.h2.text = item.text
     }
 }
 
-class ViewHolderH3(override val containerView: View) : MarkdownBlockViewHolder(containerView), LayoutContainer {
+class ViewHolderH3(private val binding: ViewHolderMarkdownH3Binding) :
+    MarkdownBlockViewHolder(binding.root) {
     override fun bind(item: MarkdownBlock) {
         if (item !is MarkdownBlock.Heading3) return
 
-        h3.text = item.text
+        binding.h3.text = item.text
     }
 }
 
-class ViewHolderImage(override val containerView: View) : MarkdownBlockViewHolder(containerView), LayoutContainer {
+class ViewHolderImage(private val binding: ViewHolderMarkdownImageBinding) :
+    MarkdownBlockViewHolder(binding.root) {
     private val ratios = mapOf(
-            "l" to "4:3",
-            "p" to "9:16",
-            "s" to "1:1"
+        "l" to "4:3",
+        "p" to "9:16",
+        "s" to "1:1"
     )
 
     override fun bind(item: MarkdownBlock) {
@@ -67,41 +66,47 @@ class ViewHolderImage(override val containerView: View) : MarkdownBlockViewHolde
 
         setConstraints(item.destination, item.mainImage)
 
-        placeholder.isVisible = true
-        image.setImageDrawable(null)
+        binding.placeholder.isVisible = true
+        binding.image.setImageDrawable(null)
 
         if (item.title == null) {
-            imageCaption.isVisible = false
+            binding.imageCaption.isVisible = false
         } else {
-            imageCaption.isVisible = true
-            imageCaption.text = item.title
+            binding.imageCaption.isVisible = true
+            binding.imageCaption.text = item.title
         }
 
         Picasso.get().load(item.destination)
-                .into(image, object : Callback.EmptyCallback() {
-                    override fun onSuccess() {
-                        placeholder.isVisible = false
-                    }
-                })
+            .into(binding.image, object : Callback.EmptyCallback() {
+                override fun onSuccess() {
+                    binding.placeholder.isVisible = false
+                }
+            })
     }
 
     private fun setConstraints(destination: String, mainImage: Boolean) {
-        if (containerView is ConstraintLayout) {
-            val baseName = FilenameUtils.getBaseName(URL(destination).path)
-            val suffix = baseName.split("-").last()
+        val baseName = FilenameUtils.getBaseName(URL(destination).path)
+        val suffix = baseName.split("-").last()
 
-            val set = ConstraintSet()
-            set.clone(containerView)
-            set.setDimensionRatio(image.id, ratios[suffix] ?: "1:1")
-            set.setMargin(image.id, TOP, if (mainImage) 0 else LayoutHelper.dp(12f, containerView.context))
-            set.applyTo(containerView)
-        }
+        val set = ConstraintSet()
+        set.clone(binding.wrapper)
+        set.setDimensionRatio(binding.image.id, ratios[suffix] ?: "1:1")
+        set.setMargin(
+            binding.image.id,
+            TOP,
+            if (mainImage) 0 else LayoutHelper.dp(12f, binding.wrapper.context)
+        )
+        set.applyTo(binding.wrapper)
     }
 }
 
-class ViewHolderParagraph(override val containerView: View, private val listener: MarkdownContentAdapter.Listener, private val handleRelativeUrl: Boolean) : MarkdownBlockViewHolder(containerView), LayoutContainer {
-    private val blockQuoteVerticalPadding = LayoutHelper.dp(12f, containerView.context)
-    private val listItemIndent = LayoutHelper.dp(24f, containerView.context)
+class ViewHolderParagraph(
+    private val binding: ViewHolderMarkdownParagraphBinding,
+    private val listener: MarkdownContentAdapter.Listener,
+    private val handleRelativeUrl: Boolean
+) : MarkdownBlockViewHolder(binding.root) {
+    private val blockQuoteVerticalPadding = LayoutHelper.dp(12f, binding.wrapper.context)
+    private val listItemIndent = LayoutHelper.dp(24f, binding.wrapper.context)
 
     override fun bind(item: MarkdownBlock) {
         if (item !is MarkdownBlock.Paragraph) return
@@ -116,8 +121,8 @@ class ViewHolderParagraph(override val containerView: View, private val listener
             }
         }
 
-        paragraph.text = text
-        paragraph.movementMethod = LinkMovementMethod.getInstance()
+        binding.paragraph.text = text
+        binding.paragraph.movementMethod = LinkMovementMethod.getInstance()
 
         blockquote(item)
         listItem(item)
@@ -141,21 +146,22 @@ class ViewHolderParagraph(override val containerView: View, private val listener
 
     private fun listItem(item: MarkdownBlock) {
         val leftPadding = if (item.listItem) listItemIndent else 0
-        val topPadding = if (item.listTightTop) 0 else LayoutHelper.dp(12f, containerView.context)
-        val bottomPadding = if (item.listTightBottom) 0 else LayoutHelper.dp(12f, containerView.context)
+        val topPadding = if (item.listTightTop) 0 else LayoutHelper.dp(12f, binding.wrapper.context)
+        val bottomPadding =
+            if (item.listTightBottom) 0 else LayoutHelper.dp(12f, binding.wrapper.context)
 
-        paragraph.setPadding(leftPadding, topPadding, 0, bottomPadding)
+        binding.paragraph.setPadding(leftPadding, topPadding, 0, bottomPadding)
 
-        listItemMarker.text = item.listItemMarker
-        listItemMarker.isVisible = item.listItemMarker != null
+        binding.listItemMarker.text = item.listItemMarker
+        binding.listItemMarker.isVisible = item.listItemMarker != null
     }
 
     private fun blockquote(item: MarkdownBlock) {
-        quoted.isVisible = item.quoted
+        binding.quoted.isVisible = item.quoted
 
         val topPadding = if (item.quotedFirst) blockQuoteVerticalPadding else 0
         val bottomPadding = if (item.quotedLast) blockQuoteVerticalPadding else 0
 
-        containerView.setPadding(0, topPadding, 0, bottomPadding)
+        binding.wrapper.setPadding(0, topPadding, 0, bottomPadding)
     }
 }

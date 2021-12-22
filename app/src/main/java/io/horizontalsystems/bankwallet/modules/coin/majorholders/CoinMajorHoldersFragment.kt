@@ -12,6 +12,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.ConcatAdapter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.databinding.FragmentRecyclerviewBinding
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.MajorHolderItem
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -20,7 +21,6 @@ import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
-import kotlinx.android.synthetic.main.fragment_recyclerview.*
 
 class CoinMajorHoldersFragment : BaseFragment(), CoinMajorHoldersAdapter.Listener {
 
@@ -28,34 +28,48 @@ class CoinMajorHoldersFragment : BaseFragment(), CoinMajorHoldersAdapter.Listene
         CoinMajorHoldersModule.Factory(requireArguments().getString(COIN_UID_KEY)!!)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_recyclerview, container, false)
+    private var _binding: FragmentRecyclerviewBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentRecyclerviewBinding.inflate(inflater, container, false)
+        val view = binding.root
+        return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        toolbar.title = getString(R.string.CoinPage_MajorHolders)
-        toolbar.setNavigationOnClickListener {
+        binding.toolbar.title = getString(R.string.CoinPage_MajorHolders)
+        binding.toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }
 
-        pullToRefresh.setProgressBackgroundColorSchemeResource(R.color.claude)
-        pullToRefresh.setColorSchemeResources(R.color.oz)
+        binding.pullToRefresh.setProgressBackgroundColorSchemeResource(R.color.claude)
+        binding.pullToRefresh.setColorSchemeResources(R.color.oz)
 
-        pullToRefresh.setOnRefreshListener {
+        binding.pullToRefresh.setOnRefreshListener {
             viewModel.refresh()
         }
 
         viewModel.loadingLiveData.observe(viewLifecycleOwner, { loading ->
-            pullToRefresh.isRefreshing = loading
+            binding.pullToRefresh.isRefreshing = loading
         })
 
-        errorViewCompose.setViewCompositionStrategy(
+        binding.errorViewCompose.setViewCompositionStrategy(
             ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
         )
 
-        errorViewCompose.setContent {
+        binding.errorViewCompose.setContent {
             ComposeAppTheme {
                 ListErrorView(stringResource(R.string.Market_SyncError)) {
                     viewModel.onErrorClick()
@@ -64,14 +78,15 @@ class CoinMajorHoldersFragment : BaseFragment(), CoinMajorHoldersAdapter.Listene
         }
 
         viewModel.viewStateLiveData.observe(viewLifecycleOwner) { viewState ->
-            pullToRefresh.isVisible = viewState == ViewState.Success
-            errorViewCompose.isVisible = viewState is ViewState.Error
+            binding.pullToRefresh.isVisible = viewState == ViewState.Success
+            binding.errorViewCompose.isVisible = viewState is ViewState.Error
         }
 
         viewModel.coinMajorHolders.observe(viewLifecycleOwner, { holders ->
-            val adapterChart = CoinMajorHoldersPieAdapter(holders.filterIsInstance(MajorHolderItem.Item::class.java))
+            val adapterChart =
+                CoinMajorHoldersPieAdapter(holders.filterIsInstance(MajorHolderItem.Item::class.java))
             val adapterItems = CoinMajorHoldersAdapter(holders, this)
-            recyclerView.adapter = ConcatAdapter(adapterChart, adapterItems)
+            binding.recyclerView.adapter = ConcatAdapter(adapterChart, adapterItems)
         })
     }
 

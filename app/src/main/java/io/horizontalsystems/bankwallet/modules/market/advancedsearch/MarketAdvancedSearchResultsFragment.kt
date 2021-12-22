@@ -10,6 +10,7 @@ import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.ConcatAdapter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.databinding.FragmentMarketAdvancedSearchResultsBinding
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.market.MarketItemsAdapter
 import io.horizontalsystems.bankwallet.modules.market.MarketLoadingAdapter
@@ -20,47 +21,70 @@ import io.horizontalsystems.bankwallet.ui.extensions.MarketListHeaderView
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorDialog
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
-import kotlinx.android.synthetic.main.fragment_market_advanced_search_results.*
 
 class MarketAdvancedSearchResultsFragment : BaseFragment(), MarketListHeaderView.Listener,
     ViewHolderMarketItem.Listener {
 
     private val marketSearchFilterViewModel by navGraphViewModels<MarketAdvancedSearchViewModel>(R.id.marketAdvancedSearchFragment)
-    private val marketListViewModel by viewModels<MarketListViewModel> { MarketAdvancedSearchResultsModule.Factory(marketSearchFilterViewModel.service) }
+    private val marketListViewModel by viewModels<MarketListViewModel> {
+        MarketAdvancedSearchResultsModule.Factory(
+            marketSearchFilterViewModel.service
+        )
+    }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_market_advanced_search_results, container, false)
+    private var _binding: FragmentMarketAdvancedSearchResultsBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentMarketAdvancedSearchResultsBinding.inflate(inflater, container, false)
+        val view = binding.root
+        return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        toolbar.setNavigationOnClickListener {
+        binding.toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }
 
-        marketListHeader.listener = this
-        marketListHeader.isVisible = false
+        binding.marketListHeader.listener = this
+        binding.marketListHeader.isVisible = false
         marketListViewModel.marketViewItemsLiveData.observe(viewLifecycleOwner, { (list, _) ->
-            marketListHeader.isVisible = list.isNotEmpty()
+            binding.marketListHeader.isVisible = list.isNotEmpty()
         })
 
         val marketItemsAdapter = MarketItemsAdapter(
-                this,
-                marketListViewModel.marketViewItemsLiveData,
-                marketListViewModel.loadingLiveData,
-                marketListViewModel.errorLiveData,
-                viewLifecycleOwner
+            this,
+            marketListViewModel.marketViewItemsLiveData,
+            marketListViewModel.loadingLiveData,
+            marketListViewModel.errorLiveData,
+            viewLifecycleOwner
         )
-        val marketLoadingAdapter = MarketLoadingAdapter(marketListViewModel.loadingLiveData, marketListViewModel.errorLiveData, marketListViewModel::onErrorClick, viewLifecycleOwner)
+        val marketLoadingAdapter = MarketLoadingAdapter(
+            marketListViewModel.loadingLiveData,
+            marketListViewModel.errorLiveData,
+            marketListViewModel::onErrorClick,
+            viewLifecycleOwner
+        )
 
-        coinRatesRecyclerView.adapter = ConcatAdapter(marketLoadingAdapter, marketItemsAdapter)
-        coinRatesRecyclerView.itemAnimator = null
+        binding.coinRatesRecyclerView.adapter =
+            ConcatAdapter(marketLoadingAdapter, marketItemsAdapter)
+        binding.coinRatesRecyclerView.itemAnimator = null
 
-        pullToRefresh.setOnRefreshListener {
+        binding.pullToRefresh.setOnRefreshListener {
             marketListViewModel.refresh()
 
-            pullToRefresh.isRefreshing = false
+            binding.pullToRefresh.isRefreshing = false
         }
 
         marketListViewModel.networkNotAvailable.observe(viewLifecycleOwner, {
@@ -68,7 +92,7 @@ class MarketAdvancedSearchResultsFragment : BaseFragment(), MarketListHeaderView
         })
 
         marketListViewModel.topMenuLiveData.observe(viewLifecycleOwner) { (sortMenu, toggleButton) ->
-            marketListHeader.setMenu(sortMenu, toggleButton)
+            binding.marketListHeader.setMenu(sortMenu, toggleButton)
         }
 
     }

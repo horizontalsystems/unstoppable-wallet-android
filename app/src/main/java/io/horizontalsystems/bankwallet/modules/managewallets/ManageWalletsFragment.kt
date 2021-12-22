@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.managewallets
 
 import android.os.Bundle
-import android.view.Menu
 import android.view.View
 import androidx.activity.addCallback
 import androidx.fragment.app.viewModels
@@ -9,13 +8,10 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.enablecoin.coinplatforms.CoinPlatformsViewModel
 import io.horizontalsystems.bankwallet.modules.enablecoin.coinsettings.CoinSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.RestoreSettingsViewModel
-import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsModule
-import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsViewModel
 import io.horizontalsystems.bankwallet.ui.extensions.ZcashBirthdayHeightDialog
 import io.horizontalsystems.bankwallet.ui.extensions.coinlist.CoinListBaseFragment
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.marketkit.models.FullCoin
-import kotlinx.android.synthetic.main.fragment_manage_wallets.*
 
 class ManageWalletsFragment : CoinListBaseFragment() {
 
@@ -31,18 +27,22 @@ class ManageWalletsFragment : CoinListBaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        toolbar.inflateMenu(R.menu.manage_wallets_menu)
-        toolbar.setOnMenuItemClickListener { item ->
+        binding.toolbar.inflateMenu(R.menu.manage_wallets_menu)
+        binding.toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.menuAddToken -> {
                     hideKeyboard()
-                    findNavController().navigate(R.id.manageWalletsFragment_to_addToken, null, navOptions())
+                    findNavController().navigate(
+                        R.id.manageWalletsFragment_to_addToken,
+                        null,
+                        navOptions()
+                    )
                     true
                 }
                 else -> false
             }
         }
-        configureSearchMenu(toolbar.menu)
+        configureSearchMenu(binding.toolbar.menu)
 
         activity?.onBackPressedDispatcher?.addCallback(this) {
             findNavController().popBackStack()
@@ -98,7 +98,10 @@ class ManageWalletsFragment : CoinListBaseFragment() {
                 restoreSettingsViewModel.onCancelEnterBirthdayHeight()
             }
 
-            zcashBirhdayHeightDialog.show(requireActivity().supportFragmentManager, "ZcashBirthdayHeightDialog")
+            zcashBirhdayHeightDialog.show(
+                requireActivity().supportFragmentManager,
+                "ZcashBirthdayHeightDialog"
+            )
         }
 
         coinPlatformsViewModel.openPlatformsSelectorEvent.observe(viewLifecycleOwner) { config ->

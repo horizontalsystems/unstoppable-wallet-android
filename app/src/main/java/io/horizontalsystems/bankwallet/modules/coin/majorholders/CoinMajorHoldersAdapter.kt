@@ -1,6 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.coin.majorholders
 
-import android.view.View
+import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
@@ -8,14 +8,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.databinding.ViewHolderCoinMajorHoldersItemBinding
+import io.horizontalsystems.bankwallet.databinding.ViewHolderCoinMajorHoldersSectionHeaderBinding
 import io.horizontalsystems.bankwallet.modules.coin.MajorHolderItem
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.Ellipsis
-import io.horizontalsystems.views.inflate
-import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.view_holder_coin_major_holders_item.*
 
 class CoinMajorHoldersAdapter(
     private val items: List<MajorHolderItem>,
@@ -32,18 +31,19 @@ class CoinMajorHoldersAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
-            viewTypeItem -> ViewHolderItem(
-                inflate(
-                    parent,
-                    R.layout.view_holder_coin_major_holders_item
-                ), listener
-            )
-            else -> ViewHolderSectionHeader(
-                inflate(
-                    parent,
-                    R.layout.view_holder_coin_major_holders_section_header
+            viewTypeItem -> {
+                ViewHolderItem(
+                    ViewHolderCoinMajorHoldersItemBinding.inflate(
+                        LayoutInflater.from(parent.context), parent, false
+                    ), listener)
+            }
+            else -> {
+                ViewHolderSectionHeader(
+                    ViewHolderCoinMajorHoldersSectionHeaderBinding.inflate(
+                        LayoutInflater.from(parent.context), parent, false
+                    )
                 )
-            )
+            }
         }
     }
 
@@ -61,23 +61,23 @@ class CoinMajorHoldersAdapter(
         }
     }
 
-    class ViewHolderSectionHeader(override val containerView: View) :
-        RecyclerView.ViewHolder(containerView), LayoutContainer
+    class ViewHolderSectionHeader(binding: ViewHolderCoinMajorHoldersSectionHeaderBinding) :
+        RecyclerView.ViewHolder(binding.root)
 
     class ViewHolderItem(
-        override val containerView: View,
+        private val binding: ViewHolderCoinMajorHoldersItemBinding,
         private val listener: Listener
-    ) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+    ) : RecyclerView.ViewHolder(binding.root) {
 
         private var item: MajorHolderItem.Item? = null
 
         fun bind(item: MajorHolderItem.Item) {
             this.item = item
 
-            txtIndex.text = item.index.toString()
-            txtHolderRate.text = item.sharePercent
+            binding.txtIndex.text = item.index.toString()
+            binding.txtHolderRate.text = item.sharePercent
 
-            buttonsCompose.setContent {
+            binding.buttonsCompose.setContent {
                 ComposeAppTheme {
                     Row() {
                         ButtonSecondaryDefault(

@@ -17,6 +17,7 @@ import androidx.lifecycle.Observer
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
+import io.horizontalsystems.bankwallet.databinding.FragmentAddTokenBinding
 import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerActivity
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
@@ -25,23 +26,36 @@ import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.snackbar.SnackbarDuration
 import io.horizontalsystems.views.ListPosition
-import kotlinx.android.synthetic.main.fragment_add_token.*
 
 class AddTokenFragment : BaseFragment() {
 
     private val viewModel: AddTokenViewModel by viewModels { AddTokenModule.Factory() }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.fragment_add_token, container, false)
+    private var _binding: FragmentAddTokenBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentAddTokenBinding.inflate(inflater, container, false)
+        val view = binding.root
+        return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        toolbar.setNavigationOnClickListener {
+        binding.toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }
 
-        buttonAddTokenCompose.setViewCompositionStrategy(
+        binding.buttonAddTokenCompose.setViewCompositionStrategy(
             ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
         )
 
@@ -53,11 +67,15 @@ class AddTokenFragment : BaseFragment() {
 
     private fun observeViewModel(model: AddTokenViewModel) {
         model.loadingLiveData.observe(viewLifecycleOwner, Observer { visible ->
-            addressInputView.setSpinner(visible)
+            binding.addressInputView.setSpinner(visible)
         })
 
         model.showSuccess.observe(viewLifecycleOwner, Observer {
-            HudHelper.showSuccessMessage(requireView(), R.string.Hud_Text_Done, SnackbarDuration.LONG)
+            HudHelper.showSuccessMessage(
+                requireView(),
+                R.string.Hud_Text_Done,
+                SnackbarDuration.LONG
+            )
             Handler(Looper.getMainLooper()).postDelayed({
                 findNavController().popBackStack()
             }, 1500)
@@ -68,7 +86,7 @@ class AddTokenFragment : BaseFragment() {
         })
 
         model.cautionLiveData.observe(viewLifecycleOwner, Observer { caution ->
-            addressInputView.setError(caution)
+            binding.addressInputView.setError(caution)
         })
 
         model.buttonEnabledLiveData.observe(viewLifecycleOwner, Observer { enabled ->
@@ -77,10 +95,10 @@ class AddTokenFragment : BaseFragment() {
     }
 
     private fun setAddressInputView() {
-        addressInputView.setEditable(false)
-        addressInputView.setHint("ERC20 / BEP20 / BEP2")
+        binding.addressInputView.setEditable(false)
+        binding.addressInputView.setHint("ERC20 / BEP20 / BEP2")
 
-        addressInputView.setListener(object : AddressInputView.Listener {
+        binding.addressInputView.setListener(object : AddressInputView.Listener {
             override fun onTextChange(text: String) {
                 viewModel.onTextChange(text)
             }
@@ -90,7 +108,7 @@ class AddTokenFragment : BaseFragment() {
                     registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                         if (result.resultCode == Activity.RESULT_OK) {
                             result.data?.getStringExtra(ModuleField.SCAN_ADDRESS)?.let {
-                                addressInputView.setText(it)
+                                binding.addressInputView.setText(it)
                             }
                         }
                     }
@@ -103,7 +121,7 @@ class AddTokenFragment : BaseFragment() {
     }
 
     private fun setButton(enabled: Boolean = false) {
-        buttonAddTokenCompose.setContent {
+        binding.buttonAddTokenCompose.setContent {
             ComposeAppTheme {
                 ButtonPrimaryYellow(
                     modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 32.dp),
@@ -119,10 +137,26 @@ class AddTokenFragment : BaseFragment() {
 
     private fun setCoinDetails(viewItem: AddTokenModule.ViewItem?) {
         val dots = getString(R.string.AddToken_Dots)
-        coinTypeView.bind(getString(R.string.AddToken_CoinTypes), viewItem?.coinType ?: dots, listPosition = ListPosition.First)
-        coinNameView.bind(getString(R.string.AddToken_CoinName), viewItem?.coinName ?: dots, listPosition = ListPosition.Middle)
-        coinSymbolView.bind(getString(R.string.AddToken_Symbol), viewItem?.symbol ?: dots, listPosition = ListPosition.Middle)
-        coinDecimalsView.bind(getString(R.string.AddToken_Decimals), viewItem?.decimals?.toString() ?: dots, listPosition = ListPosition.Last)
+        binding.coinTypeView.bind(
+            getString(R.string.AddToken_CoinTypes),
+            viewItem?.coinType ?: dots,
+            listPosition = ListPosition.First
+        )
+        binding.coinNameView.bind(
+            getString(R.string.AddToken_CoinName),
+            viewItem?.coinName ?: dots,
+            listPosition = ListPosition.Middle
+        )
+        binding.coinSymbolView.bind(
+            getString(R.string.AddToken_Symbol),
+            viewItem?.symbol ?: dots,
+            listPosition = ListPosition.Middle
+        )
+        binding.coinDecimalsView.bind(
+            getString(R.string.AddToken_Decimals),
+            viewItem?.decimals?.toString() ?: dots,
+            listPosition = ListPosition.Last
+        )
     }
 
 }

@@ -14,16 +14,14 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.databinding.FragmentFaqListBinding
+import io.horizontalsystems.bankwallet.databinding.ViewHolderFaqItemBinding
+import io.horizontalsystems.bankwallet.databinding.ViewHolderFaqSectionBinding
 import io.horizontalsystems.bankwallet.entities.Faq
 import io.horizontalsystems.bankwallet.modules.markdown.MarkdownFragment
 import io.horizontalsystems.bankwallet.modules.settings.guides.ErrorAdapter
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.views.ListPosition
-import io.horizontalsystems.views.inflate
-import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.fragment_faq_list.*
-import kotlinx.android.synthetic.main.view_holder_faq_item.*
-import kotlinx.android.synthetic.main.view_holder_faq_section.*
 
 class FaqListFragment : BaseFragment(), FaqListAdapter.Listener {
 
@@ -31,18 +29,33 @@ class FaqListFragment : BaseFragment(), FaqListAdapter.Listener {
     private val adapter = FaqListAdapter(this)
     private val errorAdapter = ErrorAdapter()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_faq_list, container, false)
+    private var _binding: FragmentFaqListBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentFaqListBinding.inflate(inflater, container, false)
+        val view = binding.root
+        return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding.faqListRecyclerview.adapter = null
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        toolbar.setNavigationOnClickListener {
+        binding.toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }
 
-        faqListRecyclerview.adapter = ConcatAdapter(errorAdapter, adapter)
+        binding.faqListRecyclerview.adapter = ConcatAdapter(errorAdapter, adapter)
 
         observeLiveData()
     }
@@ -53,18 +66,12 @@ class FaqListFragment : BaseFragment(), FaqListAdapter.Listener {
         })
 
         viewModel.loading.observe(viewLifecycleOwner, Observer {
-            toolbarSpinner.isVisible = it
+            binding.toolbarSpinner.isVisible = it
         })
 
         viewModel.error.observe(viewLifecycleOwner, Observer {
             errorAdapter.error = it
         })
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-
-        faqListRecyclerview.adapter = null
     }
 
     override fun onItemClicked(faqItem: FaqItem) {
@@ -77,7 +84,8 @@ open class FaqData
 data class FaqSection(val title: String) : FaqData()
 data class FaqItem(val faq: Faq, var listPosition: ListPosition) : FaqData()
 
-class FaqListAdapter(private val listener: Listener) : ListAdapter<FaqData, RecyclerView.ViewHolder>(faqDiff) {
+class FaqListAdapter(private val listener: Listener) :
+    ListAdapter<FaqData, RecyclerView.ViewHolder>(faqDiff) {
 
     interface Listener {
         fun onItemClicked(faqItem: FaqItem)
@@ -86,10 +94,22 @@ class FaqListAdapter(private val listener: Listener) : ListAdapter<FaqData, Recy
     private val viewTypeSection = 0
     private val viewTypeFaq = 1
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder = when (viewType) {
-        viewTypeSection -> ViewHolderSection(inflate(parent, R.layout.view_holder_faq_section))
-        else -> ViewHolderFaq(inflate(parent, R.layout.view_holder_faq_item), listener)
-    }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
+        when (viewType) {
+            viewTypeSection -> {
+                ViewHolderSection(
+                    ViewHolderFaqSectionBinding.inflate(
+                        LayoutInflater.from(parent.context), parent, false
+                    )
+                )
+            }
+            else -> {
+                ViewHolderFaq(
+                    ViewHolderFaqItemBinding.inflate(
+                        LayoutInflater.from(parent.context), parent, false
+                    ), listener)
+            }
+        }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val item = getItem(position)
@@ -120,17 +140,21 @@ class FaqListAdapter(private val listener: Listener) : ListAdapter<FaqData, Recy
     }
 }
 
-class ViewHolderSection(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+class ViewHolderSection(private val binding: ViewHolderFaqSectionBinding) :
+    RecyclerView.ViewHolder(binding.root) {
     fun bind(item: FaqSection) {
-        faqHeadText.text = item.title
+        binding.faqHeadText.text = item.title
     }
 }
 
-class ViewHolderFaq(override val containerView: View, listener: FaqListAdapter.Listener) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+class ViewHolderFaq(
+    private val binding: ViewHolderFaqItemBinding,
+    listener: FaqListAdapter.Listener
+) : RecyclerView.ViewHolder(binding.root) {
     private var faqItem: FaqItem? = null
 
     init {
-        containerView.setOnClickListener {
+        binding.wrapper.setOnClickListener {
             faqItem?.let {
                 listener.onItemClicked(it)
             }
@@ -139,7 +163,7 @@ class ViewHolderFaq(override val containerView: View, listener: FaqListAdapter.L
 
     fun bind(item: FaqItem) {
         faqItem = item
-        faqTitleText.text = item.faq.title
-        containerView.setBackgroundResource(item.listPosition.getBackground())
+        binding.faqTitleText.text = item.faq.title
+        binding.wrapper.setBackgroundResource(item.listPosition.getBackground())
     }
 }

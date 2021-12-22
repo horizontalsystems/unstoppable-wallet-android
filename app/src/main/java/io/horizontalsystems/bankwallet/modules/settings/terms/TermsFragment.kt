@@ -7,36 +7,49 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.managers.Term
 import io.horizontalsystems.bankwallet.core.managers.TermsManager
+import io.horizontalsystems.bankwallet.databinding.FragmentTermsSettingsBinding
 import io.horizontalsystems.core.findNavController
-import kotlinx.android.synthetic.main.fragment_terms_settings.*
 
 class TermsFragment : BaseFragment() {
 
     private val viewModel by viewModels<TermsViewModel> { TermsModule.Factory() }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_terms_settings, container, false)
+    private var _binding: FragmentTermsSettingsBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentTermsSettingsBinding.inflate(inflater, container, false)
+        val view = binding.root
+        return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        toolbar.setNavigationOnClickListener {
+        binding.toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }
 
         viewModel.termsLiveData.observe(viewLifecycleOwner, Observer { terms ->
-            setCheckbox(checkboxAcademy, TermsManager.termIds[0], terms)
-            setCheckbox(checkboxBackup, TermsManager.termIds[1], terms)
-            setCheckbox(checkboxOwner, TermsManager.termIds[2], terms)
-            setCheckbox(checkboxRecover, TermsManager.termIds[3], terms)
-            setCheckbox(checkboxPhone, TermsManager.termIds[4], terms)
-            setCheckbox(checkboxRoot, TermsManager.termIds[5], terms)
-            setCheckbox(checkboxBugs, TermsManager.termIds[6], terms)
-            setCheckbox(checkboxPin, TermsManager.termIds[7], terms)
+            setCheckbox(binding.checkboxAcademy, TermsManager.termIds[0], terms)
+            setCheckbox(binding.checkboxBackup, TermsManager.termIds[1], terms)
+            setCheckbox(binding.checkboxOwner, TermsManager.termIds[2], terms)
+            setCheckbox(binding.checkboxRecover, TermsManager.termIds[3], terms)
+            setCheckbox(binding.checkboxPhone, TermsManager.termIds[4], terms)
+            setCheckbox(binding.checkboxRoot, TermsManager.termIds[5], terms)
+            setCheckbox(binding.checkboxBugs, TermsManager.termIds[6], terms)
+            setCheckbox(binding.checkboxPin, TermsManager.termIds[7], terms)
         })
     }
 

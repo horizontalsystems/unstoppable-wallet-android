@@ -8,23 +8,33 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseDialogFragment
+import io.horizontalsystems.bankwallet.databinding.FragmentInfoBinding
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.dismissOnBackPressed
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.views.ListPosition
 import kotlinx.android.parcel.Parcelize
-import kotlinx.android.synthetic.main.fragment_info.*
 
 class InfoFragment : BaseDialogFragment() {
+
+    private var _binding: FragmentInfoBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        _binding = FragmentInfoBinding.inflate(inflater, container, false)
+        val view = binding.root
         dialog?.window?.setWindowAnimations(R.style.BottomDialogLargeAnimation)
         dialog?.dismissOnBackPressed { dismiss() }
-        return inflater.inflate(R.layout.fragment_info, container, false)
+        return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -35,8 +45,8 @@ class InfoFragment : BaseDialogFragment() {
             return
         }
 
-        toolbar.title = infoParams.title
-        toolbar.setOnMenuItemClickListener { item ->
+        binding.toolbar.title = infoParams.title
+        binding.toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.menuClose -> {
                     dismiss()
@@ -46,22 +56,22 @@ class InfoFragment : BaseDialogFragment() {
             }
         }
 
-        textDescription.text = infoParams.description
+        binding.textDescription.text = infoParams.description
 
         if (infoParams.txHash != null && infoParams.conflictingTxHash != null) {
-            itemTxHash.bind(
+            binding.itemTxHash.bind(
                 getString(R.string.Info_DoubleSpend_ThisTx),
                 infoParams.txHash,
                 ListPosition.First
             ) { copyText(infoParams.txHash) }
-            itemTxHash.isVisible = true
+            binding.itemTxHash.isVisible = true
 
-            itemConflictingTxHash.bind(
+            binding.itemConflictingTxHash.bind(
                 getString(R.string.Info_DoubleSpend_ConflictingTx),
                 infoParams.conflictingTxHash,
                 ListPosition.Last
             ) { copyText(infoParams.conflictingTxHash) }
-            itemConflictingTxHash.isVisible = true
+            binding.itemConflictingTxHash.isVisible = true
         }
     }
 

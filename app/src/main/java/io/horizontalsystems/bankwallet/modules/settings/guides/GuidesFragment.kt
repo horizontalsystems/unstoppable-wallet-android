@@ -12,6 +12,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.ConcatAdapter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.databinding.FragmentGuidesBinding
 import io.horizontalsystems.bankwallet.entities.Guide
 import io.horizontalsystems.bankwallet.entities.GuideCategory
 import io.horizontalsystems.bankwallet.modules.markdown.MarkdownFragment
@@ -19,9 +20,6 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ScrollableTabs
 import io.horizontalsystems.bankwallet.ui.compose.components.TabItem
 import io.horizontalsystems.core.findNavController
-import kotlinx.android.synthetic.main.fragment_guides.*
-import kotlinx.android.synthetic.main.fragment_guides.tabsCompose
-import kotlinx.android.synthetic.main.fragment_guides.toolbar
 
 class GuidesFragment : BaseFragment(), GuidesAdapter.Listener {
 
@@ -29,33 +27,39 @@ class GuidesFragment : BaseFragment(), GuidesAdapter.Listener {
     private val errorAdapter = ErrorAdapter()
     private val guidesAdapter = GuidesAdapter(this)
 
+    private var _binding: FragmentGuidesBinding? = null
+    private val binding get() = _binding!!
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_guides, container, false)
+    ): View {
+        _binding = FragmentGuidesBinding.inflate(inflater, container, false)
+        val view = binding.root
+        return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding.recyclerGuides.adapter = null
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        toolbar.setNavigationOnClickListener {
+        binding.toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }
 
-        recyclerGuides.adapter = ConcatAdapter(errorAdapter, guidesAdapter)
+        binding.recyclerGuides.adapter = ConcatAdapter(errorAdapter, guidesAdapter)
 
         observeLiveData()
 
-        tabsCompose.setViewCompositionStrategy(
+        binding.tabsCompose.setViewCompositionStrategy(
             ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
         )
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        recyclerGuides.adapter = null
     }
 
     override fun onItemClick(guide: Guide) {
@@ -81,7 +85,7 @@ class GuidesFragment : BaseFragment(), GuidesAdapter.Listener {
         })
 
         viewModel.loading.observe(viewLifecycleOwner, Observer {
-            toolbarSpinner.isVisible = it
+            binding.toolbarSpinner.isVisible = it
         })
 
         viewModel.error.observe(viewLifecycleOwner, Observer {
@@ -91,7 +95,7 @@ class GuidesFragment : BaseFragment(), GuidesAdapter.Listener {
 
     private fun setTabs(selectedCategory: GuideCategory) {
         val tabItems = viewModel.categories.map { TabItem(it.category, it == selectedCategory, it) }
-        tabsCompose.setContent {
+        binding.tabsCompose.setContent {
             ComposeAppTheme {
                 ScrollableTabs(tabItems) { tab -> viewModel.onSelectCategory(tab) }
             }

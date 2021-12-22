@@ -6,9 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewStub
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.annotation.LayoutRes
@@ -16,14 +14,11 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.setImage
+import io.horizontalsystems.bankwallet.databinding.ConstraintLayoutWithHeaderBinding
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
 
 open class BaseBottomSheetDialogFragment : BottomSheetDialogFragment() {
 
-    private var content: ViewStub? = null
-    private var txtTitle: TextView? = null
-    private var txtSubtitle: TextView? = null
-    private var headerIcon: ImageView? = null
     private var bottomSheetBehavior: BottomSheetBehavior<View>? = null
     private val disableCloseOnSwipeBehavior = object : BottomSheetBehavior.BottomSheetCallback() {
         override fun onSlide(bottomSheet: View, slideOffset: Float) {}
@@ -51,16 +46,26 @@ open class BaseBottomSheetDialogFragment : BottomSheetDialogFragment() {
         return R.style.BottomDialog
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.constraint_layout_with_header, container, false)
+    private var _binding: ConstraintLayoutWithHeaderBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = ConstraintLayoutWithHeaderBinding.inflate(inflater, container, false)
+        val view = binding.root
+        return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        content = view.findViewById(R.id.content)
-        txtTitle = view.findViewById(R.id.txtTitle)
-        txtSubtitle = view.findViewById(R.id.txtSubtitle)
-        headerIcon = view.findViewById(R.id.headerIcon)
 
         view.findViewById<ImageView>(R.id.closeButton)?.setOnClickListener { close() }
 
@@ -94,32 +99,33 @@ open class BaseBottomSheetDialogFragment : BottomSheetDialogFragment() {
     }
 
     fun setContentView(@LayoutRes resource: Int) {
-        content?.layoutResource = resource
-        content?.inflate()
+        binding.content.layoutResource = resource
+        binding.content.inflate()
     }
 
     fun setTitle(title: String?) {
-        txtTitle?.text = title
+        binding.txtTitle.text = title
     }
 
     fun setSubtitle(subtitle: String?) {
-        txtSubtitle?.text = subtitle
+        binding.txtSubtitle.text = subtitle
     }
 
     fun setHeaderIcon(@DrawableRes resource: Int) {
-        headerIcon?.setImageResource(resource)
+        binding.headerIcon.setImageResource(resource)
     }
 
     fun setHeaderIconTint(@ColorRes resource: Int) {
-        headerIcon?.imageTintList = ColorStateList.valueOf(requireContext().getColor(resource))
+        binding.headerIcon.imageTintList =
+            ColorStateList.valueOf(requireContext().getColor(resource))
     }
 
     fun setHeaderIconDrawable(drawable: Drawable?) {
-        headerIcon?.setImageDrawable(drawable)
+        binding.headerIcon.setImageDrawable(drawable)
     }
 
     fun setHeaderIcon(imageSource: ImageSource) {
-        headerIcon?.setImage(imageSource)
+        binding.headerIcon.setImage(imageSource)
     }
 
 }

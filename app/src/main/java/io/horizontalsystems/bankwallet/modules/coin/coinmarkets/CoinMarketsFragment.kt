@@ -1,46 +1,65 @@
 package io.horizontalsystems.bankwallet.modules.coin.coinmarkets
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.databinding.FragmentCoinMarketsBinding
 import io.horizontalsystems.bankwallet.modules.coin.CoinViewModel
 import io.horizontalsystems.bankwallet.ui.extensions.MarketListHeaderView
-import kotlinx.android.synthetic.main.fragment_coin_markets.*
-import kotlinx.android.synthetic.main.fragment_coin_markets.recyclerView
 
-class CoinMarketsFragment : BaseFragment(R.layout.fragment_coin_markets), MarketListHeaderView.Listener {
+class CoinMarketsFragment : BaseFragment(), MarketListHeaderView.Listener {
 
     private val coinViewModel by navGraphViewModels<CoinViewModel>(R.id.coinFragment)
-    private val viewModel by viewModels<CoinMarketsViewModel>{
+    private val viewModel by viewModels<CoinMarketsViewModel> {
         CoinMarketsModule.Factory(coinViewModel.fullCoin)
     }
 
     private var scrollToTopAfterUpdate = false
 
+    private var _binding: FragmentCoinMarketsBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentCoinMarketsBinding.inflate(inflater, container, false)
+        val view = binding.root
+        return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        marketListHeader.listener = this
+        binding.marketListHeader.listener = this
 
         val marketItemsAdapter = CoinMarketItemAdapter()
 
-        recyclerView.adapter = marketItemsAdapter
-        recyclerView.itemAnimator = null
+        binding.recyclerView.adapter = marketItemsAdapter
+        binding.recyclerView.itemAnimator = null
 
         viewModel.tickersLiveData.observe(viewLifecycleOwner, { items ->
             marketItemsAdapter.submitList(items) {
                 if (scrollToTopAfterUpdate) {
-                    recyclerView.scrollToPosition(0)
+                    binding.recyclerView.scrollToPosition(0)
                     scrollToTopAfterUpdate = false
                 }
             }
         })
 
         viewModel.topMenuLiveData.observe(viewLifecycleOwner, { (sortMenu, toggleButton) ->
-            marketListHeader.setMenu(sortMenu, toggleButton)
+            binding.marketListHeader.setMenu(sortMenu, toggleButton)
         })
     }
 

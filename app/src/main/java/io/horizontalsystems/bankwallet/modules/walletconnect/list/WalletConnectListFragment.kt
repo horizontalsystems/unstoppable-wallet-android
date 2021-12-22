@@ -10,6 +10,9 @@ import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
+import io.horizontalsystems.bankwallet.databinding.FragmentWalletConnectListBinding
+import io.horizontalsystems.bankwallet.databinding.ViewHolderWalletConnectAccountBinding
+import io.horizontalsystems.bankwallet.databinding.ViewHolderWalletConnectSessionBinding
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListViewModel.WalletConnectViewItem
 import io.horizontalsystems.bankwallet.modules.walletconnect.main.WalletConnectMainModule
 import io.horizontalsystems.core.dp
@@ -17,48 +20,66 @@ import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.snackbar.CustomSnackbar
 import io.horizontalsystems.snackbar.SnackbarDuration
-import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.fragment_notifications.toolbar
-import kotlinx.android.synthetic.main.fragment_wallet_connect_list.*
-import kotlinx.android.synthetic.main.view_holder_wallet_connect_account.*
-import kotlinx.android.synthetic.main.view_holder_wallet_connect_session.*
 
 class WalletConnectListFragment : BaseFragment(), SessionViewHolder.Listener {
     private val viewModel by viewModels<WalletConnectListViewModel> { WalletConnectListModule.Factory() }
 
     private var snackbarInProcess: CustomSnackbar? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_wallet_connect_list, container, false)
+    private var _binding: FragmentWalletConnectListBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding =
+            FragmentWalletConnectListBinding.inflate(inflater, container, false)
+        val view = binding.root
+        return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        toolbar.setNavigationOnClickListener {
+        binding.toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }
 
-        newConnect.setOnSingleClickListener {
+        binding.newConnect.setOnSingleClickListener {
             startNewConnection()
         }
 
         val walletConnectListAdapter = WalletConnectListAdapter(this)
-        sessionsRecyclerView.adapter = walletConnectListAdapter
+        binding.sessionsRecyclerView.adapter = walletConnectListAdapter
 
-        val swipeHelper = SwipeHelper(sessionsRecyclerView) { position ->
-            val sessionViewItem = walletConnectListAdapter.items.getOrNull(position) as? WalletConnectViewItem.Session
+        val swipeHelper = SwipeHelper(binding.sessionsRecyclerView) { position ->
+            val sessionViewItem =
+                walletConnectListAdapter.items.getOrNull(position) as? WalletConnectViewItem.Session
             if (sessionViewItem != null) {
-                listOf(SwipeHelper.UnderlayButton(requireContext(), R.drawable.ic_trash_24, 16.dp, 32.dp, 17.dp) {
-                    viewModel.onClickDelete(sessionViewItem)
-                })
+                listOf(
+                    SwipeHelper.UnderlayButton(
+                        requireContext(),
+                        R.drawable.ic_trash_24,
+                        16.dp,
+                        32.dp,
+                        17.dp
+                    ) {
+                        viewModel.onClickDelete(sessionViewItem)
+                    })
             } else {
                 listOf()
             }
         }
 
         val itemTouchHelper = ItemTouchHelper(swipeHelper)
-        itemTouchHelper.attachToRecyclerView(sessionsRecyclerView)
+        itemTouchHelper.attachToRecyclerView(binding.sessionsRecyclerView)
 
         viewModel.viewItemsLiveData.observe(viewLifecycleOwner, { viewItems ->
             walletConnectListAdapter.items = viewItems
@@ -137,9 +158,19 @@ class WalletConnectListAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
-            accountViewType -> AccountViewHolder.create(parent)
-            sessionViewType -> SessionViewHolder.create(parent, listener)
-            else -> throw Exception("Invalid view type")
+            accountViewType -> {
+                AccountViewHolder(
+                    ViewHolderWalletConnectAccountBinding.inflate(
+                        LayoutInflater.from(parent.context), parent, false
+                    )
+                )
+            }
+            else -> {
+                SessionViewHolder(
+                    ViewHolderWalletConnectSessionBinding.inflate(
+                        LayoutInflater.from(parent.context), parent, false
+                    ), listener)
+            }
         }
     }
 
@@ -156,47 +187,33 @@ class WalletConnectListAdapter(
 
 }
 
-class AccountViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+class AccountViewHolder(private val binding: ViewHolderWalletConnectAccountBinding) :
+    RecyclerView.ViewHolder(binding.root) {
 
     fun bind(account: WalletConnectViewItem.Account) {
-        accountTextView.text = account.title
+        binding.accountTextView.text = account.title
     }
 
-    companion object {
-        fun create(parent: ViewGroup): AccountViewHolder {
-            return AccountViewHolder(
-                LayoutInflater.from(parent.context).inflate(R.layout.view_holder_wallet_connect_account, parent, false)
-            )
-        }
-    }
 }
 
 class SessionViewHolder(
-    override val containerView: View,
+    private val binding: ViewHolderWalletConnectSessionBinding,
     private val listener: Listener
-) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+) : RecyclerView.ViewHolder(binding.root) {
 
     interface Listener {
         fun onSessionClick(session: WalletConnectViewItem.Session)
     }
 
     fun bind(session: WalletConnectViewItem.Session) {
-        titleTextView.text = session.title
-        subtitleTextView.text = session.url
-        backgroundView.setBackgroundResource(session.position.getBackground())
-        iconImageView.loadImage(session.imageUrl)
+        binding.titleTextView.text = session.title
+        binding.subtitleTextView.text = session.url
+        binding.backgroundView.setBackgroundResource(session.position.getBackground())
+        binding.iconImageView.loadImage(session.imageUrl)
 
-        containerView.setOnSingleClickListener {
+        binding.wrapper.setOnSingleClickListener {
             listener.onSessionClick(session)
         }
     }
 
-    companion object {
-        fun create(parent: ViewGroup, listener: Listener): SessionViewHolder {
-            return SessionViewHolder(
-                LayoutInflater.from(parent.context).inflate(R.layout.view_holder_wallet_connect_session, parent, false),
-                listener
-            )
-        }
-    }
 }

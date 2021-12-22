@@ -10,32 +10,43 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
+import io.horizontalsystems.bankwallet.databinding.FragmentThemeSwitcherBinding
+import io.horizontalsystems.bankwallet.databinding.ViewHolderThemeSwitchItemBinding
 import io.horizontalsystems.core.findNavController
-import io.horizontalsystems.views.inflate
-import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.fragment_theme_switcher.*
-import kotlinx.android.synthetic.main.view_holder_theme_switch_item.*
 
 class ThemeSwitchFragment : BaseFragment() {
 
     private val viewModel by viewModels<ThemeSwitchViewModel> { ThemeSwitchModule.Factory() }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_theme_switcher, container, false)
+    private var _binding: FragmentThemeSwitcherBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentThemeSwitcherBinding.inflate(inflater, container, false)
+        val view = binding.root
+        return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        toolbar.setNavigationOnClickListener {
+        binding.toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }
 
         val adapter = ThemeSwitchAdapter(::onItemClick)
-        recyclerView.adapter = adapter
+        binding.recyclerView.adapter = adapter
 
         viewModel.itemsLiveData.observe(viewLifecycleOwner) {
             adapter.submitList(it)
@@ -59,9 +70,13 @@ class ThemeSwitchFragment : BaseFragment() {
 
 }
 
-class ThemeSwitchAdapter(private val onItemClick: (ThemeViewItem) -> Unit) : ListAdapter<ThemeViewItem, ThemeSwitchAdapter.ViewHolder>(diffCallback) {
+class ThemeSwitchAdapter(private val onItemClick: (ThemeViewItem) -> Unit) :
+    ListAdapter<ThemeViewItem, ThemeSwitchAdapter.ViewHolder>(diffCallback) {
 
-    class ViewHolder(override val containerView: View, onItemClick: (ThemeViewItem) -> Unit) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+    class ViewHolder(
+        private val binding: ViewHolderThemeSwitchItemBinding,
+        onItemClick: (ThemeViewItem) -> Unit
+    ) : RecyclerView.ViewHolder(binding.root) {
         private var item: ThemeViewItem? = null
 
         init {
@@ -75,21 +90,24 @@ class ThemeSwitchAdapter(private val onItemClick: (ThemeViewItem) -> Unit) : Lis
         fun bind(item: ThemeViewItem) {
             this.item = item
 
-            icon.setImageResource(item.themeType.getIcon())
+            binding.icon.setImageResource(item.themeType.getIcon())
 
-            title.setText(item.themeType.getTitle())
+            binding.title.setText(item.themeType.getTitle())
 
-            checkmarkIcon.isVisible = item.checked
+            binding.checkmarkIcon.isVisible = item.checked
 
-            containerView.setBackgroundResource(item.listPosition.getBackground())
+            binding.wrapper.setBackgroundResource(item.listPosition.getBackground())
         }
 
-        companion object {
-            fun create(parent: ViewGroup, onItemClick: (ThemeViewItem) -> Unit) = ViewHolder(inflate(parent, R.layout.view_holder_theme_switch_item), onItemClick)
-        }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder.create(parent, onItemClick)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        return ViewHolder(
+            ViewHolderThemeSwitchItemBinding.inflate(
+                LayoutInflater.from(parent.context), parent, false
+            ), onItemClick
+        )
+    }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(getItem(position))
@@ -101,7 +119,10 @@ class ThemeSwitchAdapter(private val onItemClick: (ThemeViewItem) -> Unit) : Lis
                 return oldItem.themeType == newItem.themeType
             }
 
-            override fun areContentsTheSame(oldItem: ThemeViewItem, newItem: ThemeViewItem): Boolean {
+            override fun areContentsTheSame(
+                oldItem: ThemeViewItem,
+                newItem: ThemeViewItem
+            ): Boolean {
                 return oldItem.checked == newItem.checked
             }
         }

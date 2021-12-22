@@ -8,16 +8,30 @@ import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.databinding.FragmentReleaseNotesBinding
 import io.horizontalsystems.bankwallet.modules.markdown.MarkdownFragment
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
-import kotlinx.android.synthetic.main.fragment_release_notes.*
 
 class ReleaseNotesFragment : BaseFragment() {
 
     private val viewModel by viewModels<ReleaseNotesViewModel> { ReleaseNotesModule.Factory() }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_release_notes, container, false)
+    private var _binding: FragmentReleaseNotesBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentReleaseNotesBinding.inflate(inflater, container, false)
+        val view = binding.root
+        return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -38,15 +52,15 @@ class ReleaseNotesFragment : BaseFragment() {
             replace(R.id.fragmentContainerView, markdownFragment)
         }
 
-        twitterIcon.setOnClickListener {
+        binding.twitterIcon.setOnClickListener {
             openLink(viewModel.twitterUrl)
         }
 
-        telegramIcon.setOnClickListener {
+        binding.telegramIcon.setOnClickListener {
             openLink(viewModel.telegramUrl)
         }
 
-        redditIcon.setOnClickListener {
+        binding.redditIcon.setOnClickListener {
             openLink(viewModel.redditUrl)
         }
     }

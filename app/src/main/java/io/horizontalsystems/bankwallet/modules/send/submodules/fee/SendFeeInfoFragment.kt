@@ -6,17 +6,31 @@ import android.view.View
 import android.view.ViewGroup
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
-import kotlinx.android.synthetic.main.fragment_fee_info.*
+import io.horizontalsystems.bankwallet.databinding.FragmentFeeInfoBinding
 
 class SendFeeInfoFragment : BaseFragment() {
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.fragment_fee_info, container, false)
+    private var _binding: FragmentFeeInfoBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentFeeInfoBinding.inflate(inflater, container, false)
+        val view = binding.root
+        return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        toolbar.setOnMenuItemClickListener { item ->
+        binding.toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.menuClose -> {
                     parentFragmentManager.popBackStack()

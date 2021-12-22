@@ -10,29 +10,39 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.databinding.FragmentNoWalletBinding
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.core.findNavController
-import kotlinx.android.synthetic.main.fragment_no_wallet.*
 
 class OnboardingFragment : BaseFragment() {
+
+    private var _binding: FragmentNoWalletBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_no_wallet, container, false)
+    ): View {
+        _binding = FragmentNoWalletBinding.inflate(inflater, container, false)
+        val view = binding.root
+        return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        buttonsCompose.setViewCompositionStrategy(
+        binding.buttonsCompose.setViewCompositionStrategy(
             ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
         )
 
-        buttonsCompose.setContent {
+        binding.buttonsCompose.setContent {
             ComposeAppTheme {
                 Column(modifier = Modifier.width(IntrinsicSize.Max)) {
                     ButtonPrimaryYellow(

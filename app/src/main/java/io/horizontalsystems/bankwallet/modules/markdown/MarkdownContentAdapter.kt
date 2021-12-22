@@ -1,12 +1,16 @@
 package io.horizontalsystems.bankwallet.modules.markdown
 
+import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.views.inflate
+import io.horizontalsystems.bankwallet.databinding.*
 
-class MarkdownContentAdapter(private val listener: Listener, private val handleRelativeUrl: Boolean) : ListAdapter<MarkdownBlock, MarkdownBlockViewHolder>(diffCallback) {
+class MarkdownContentAdapter(
+    private val listener: Listener,
+    private val handleRelativeUrl: Boolean
+) : ListAdapter<MarkdownBlock, MarkdownBlockViewHolder>(diffCallback) {
 
     interface Listener {
         fun onClick(url: String)
@@ -21,15 +25,40 @@ class MarkdownContentAdapter(private val listener: Listener, private val handleR
         is MarkdownBlock.Footer -> R.layout.view_holder_markdown_footer
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MarkdownBlockViewHolder = when (viewType) {
-        R.layout.view_holder_markdown_h1 -> ViewHolderH1(inflate(parent, viewType))
-        R.layout.view_holder_markdown_h2 -> ViewHolderH2(inflate(parent, viewType))
-        R.layout.view_holder_markdown_h3 -> ViewHolderH3(inflate(parent, viewType))
-        R.layout.view_holder_markdown_paragraph -> ViewHolderParagraph(inflate(parent, viewType), listener, handleRelativeUrl)
-        R.layout.view_holder_markdown_image -> ViewHolderImage(inflate(parent, viewType))
-        R.layout.view_holder_markdown_footer -> ViewHolderFooter(inflate(parent, viewType))
-        else -> throw Exception("Undefined viewType: $viewType")
-    }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MarkdownBlockViewHolder =
+        when (viewType) {
+            R.layout.view_holder_markdown_h1 -> ViewHolderH1(
+                ViewHolderMarkdownH1Binding.inflate(
+                    LayoutInflater.from(parent.context), parent, false
+                )
+            )
+            R.layout.view_holder_markdown_h2 -> ViewHolderH2(
+                ViewHolderMarkdownH2Binding.inflate(
+                    LayoutInflater.from(parent.context), parent, false
+                )
+            )
+            R.layout.view_holder_markdown_h3 -> ViewHolderH3(
+                ViewHolderMarkdownH3Binding.inflate(
+                    LayoutInflater.from(parent.context), parent, false
+                )
+            )
+            R.layout.view_holder_markdown_paragraph -> ViewHolderParagraph(
+                ViewHolderMarkdownParagraphBinding.inflate(
+                    LayoutInflater.from(parent.context), parent, false
+                ), listener, handleRelativeUrl
+            )
+            R.layout.view_holder_markdown_image -> ViewHolderImage(
+                ViewHolderMarkdownImageBinding.inflate(
+                    LayoutInflater.from(parent.context), parent, false
+                )
+            )
+            R.layout.view_holder_markdown_footer -> ViewHolderFooter(
+                ViewHolderMarkdownFooterBinding.inflate(
+                    LayoutInflater.from(parent.context), parent, false
+                )
+            )
+            else -> throw Exception("Undefined viewType: $viewType")
+        }
 
     override fun onBindViewHolder(holder: MarkdownBlockViewHolder, position: Int) {
         holder.bind(getItem(position))
@@ -41,7 +70,10 @@ class MarkdownContentAdapter(private val listener: Listener, private val handleR
                 return oldItem == newItem
             }
 
-            override fun areContentsTheSame(oldItem: MarkdownBlock, newItem: MarkdownBlock): Boolean {
+            override fun areContentsTheSame(
+                oldItem: MarkdownBlock,
+                newItem: MarkdownBlock
+            ): Boolean {
                 return oldItem == newItem
             }
         }

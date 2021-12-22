@@ -8,21 +8,40 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.stringResId
+import io.horizontalsystems.bankwallet.databinding.ViewHodlerInputBinding
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.submodules.SendSubmoduleFragment
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorDialog
 import io.horizontalsystems.bankwallet.ui.extensions.SelectorItem
-import kotlinx.android.synthetic.main.view_hodler_input.*
 
 class SendHodlerFragment(
-        private val hodlerModuleDelegate: SendHodlerModule.IHodlerModuleDelegate,
-        private val sendHandler: SendModule.ISendHandler
+    private val hodlerModuleDelegate: SendHodlerModule.IHodlerModuleDelegate,
+    private val sendHandler: SendModule.ISendHandler
 ) : SendSubmoduleFragment() {
 
-    private val presenter by activityViewModels<SendHodlerPresenter> { SendHodlerModule.Factory(sendHandler, hodlerModuleDelegate) }
+    private val presenter by activityViewModels<SendHodlerPresenter> {
+        SendHodlerModule.Factory(
+            sendHandler,
+            hodlerModuleDelegate
+        )
+    }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.view_hodler_input, container, false)
+    private var _binding: ViewHodlerInputBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = ViewHodlerInputBinding.inflate(inflater, container, false)
+        val view = binding.root
+        return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -35,7 +54,7 @@ class SendHodlerFragment(
         }
 
         presenterView.selectedLockTimeInterval.observe(viewLifecycleOwner, Observer {
-            lockTimeMenu.setText(it.stringResId())
+            binding.lockTimeMenu.setText(it.stringResId())
         })
 
         presenterView.showLockTimeIntervals.observe(this, Observer { lockTimeIntervals ->
@@ -44,10 +63,10 @@ class SendHodlerFragment(
             }
 
             SelectorDialog
-                    .newInstance(selectorItems, getString(R.string.Send_DialogLockTime), { position ->
-                        presenter.onSelectLockTimeInterval(position)
-                    })
-                    .show(this.parentFragmentManager, "time_intervals_selector")
+                .newInstance(selectorItems, getString(R.string.Send_DialogLockTime), { position ->
+                    presenter.onSelectLockTimeInterval(position)
+                })
+                .show(this.parentFragmentManager, "time_intervals_selector")
 
         })
     }

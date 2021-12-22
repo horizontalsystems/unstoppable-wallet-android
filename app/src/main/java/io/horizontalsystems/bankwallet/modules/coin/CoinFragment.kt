@@ -1,7 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.coin
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -16,6 +18,7 @@ import androidx.navigation.navGraphViewModels
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.databinding.FragmentCoinBinding
 import io.horizontalsystems.bankwallet.modules.coin.coinmarkets.CoinMarketsFragment
 import io.horizontalsystems.bankwallet.modules.coin.details.CoinDetailsFragment
 import io.horizontalsystems.bankwallet.modules.coin.overview.CoinOverviewFragment
@@ -32,9 +35,8 @@ import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorMultiple
 import io.horizontalsystems.bankwallet.ui.extensions.ZcashBirthdayHeightDialog
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
-import kotlinx.android.synthetic.main.fragment_coin.*
 
-class CoinFragment : BaseFragment(R.layout.fragment_coin) {
+class CoinFragment : BaseFragment() {
     private val viewModel by navGraphViewModels<CoinViewModel>(R.id.coinFragment) {
         CoinModule.Factory(requireArguments().getString(COIN_UID_KEY)!!)
     }
@@ -45,17 +47,36 @@ class CoinFragment : BaseFragment(R.layout.fragment_coin) {
     private val restoreSettingsViewModel by viewModels<RestoreSettingsViewModel> { vmFactory }
     private val coinPlatformsViewModel by viewModels<CoinPlatformsViewModel> { vmFactory }
 
+    private var _binding: FragmentCoinBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentCoinBinding.inflate(inflater, container, false)
+        val view = binding.root
+        return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewPager.adapter = CoinTabsAdapter(childFragmentManager, viewLifecycleOwner.lifecycle)
-        viewPager.isUserInputEnabled = false
+        binding.viewPager.adapter =
+            CoinTabsAdapter(childFragmentManager, viewLifecycleOwner.lifecycle)
+        binding.viewPager.isUserInputEnabled = false
 
         viewModel.selectedTab.observe(viewLifecycleOwner) { selectedTab ->
-            viewPager.setCurrentItem(viewModel.tabs.indexOf(selectedTab), false)
+            binding.viewPager.setCurrentItem(viewModel.tabs.indexOf(selectedTab), false)
         }
 
-        tabsCompose.setContent {
+        binding.tabsCompose.setContent {
             ComposeAppTheme {
                 Column {
                     val selectedTab by viewModel.selectedTab.observeAsState()
@@ -71,12 +92,12 @@ class CoinFragment : BaseFragment(R.layout.fragment_coin) {
         }
 
         viewModel.titleLiveData.observe(viewLifecycleOwner) {
-            toolbar.title = it
+            binding.toolbar.title = it
         }
 
         viewModel.isFavoriteLiveData.observe(viewLifecycleOwner) { isFavorite ->
-            toolbar.menu.findItem(R.id.menuFavorite).isVisible = !isFavorite
-            toolbar.menu.findItem(R.id.menuUnfavorite).isVisible = isFavorite
+            binding.toolbar.menu.findItem(R.id.menuFavorite).isVisible = !isFavorite
+            binding.toolbar.menu.findItem(R.id.menuUnfavorite).isVisible = isFavorite
         }
 
         viewModel.coinStateLiveData.observe(viewLifecycleOwner) { coinState ->
@@ -100,8 +121,8 @@ class CoinFragment : BaseFragment(R.layout.fragment_coin) {
                 }
             }
 
-            toolbar.menu.findItem(R.id.menuAddToWallet).isVisible = menuAddToWallet
-            toolbar.menu.findItem(R.id.menuInWallet).isVisible = menuInWallet
+            binding.toolbar.menu.findItem(R.id.menuAddToWallet).isVisible = menuAddToWallet
+            binding.toolbar.menu.findItem(R.id.menuInWallet).isVisible = menuInWallet
         }
 
         viewModel.warningMessageLiveEvent.observe(viewLifecycleOwner) {
@@ -112,10 +133,10 @@ class CoinFragment : BaseFragment(R.layout.fragment_coin) {
             HudHelper.showSuccessMessage(requireView(), it)
         }
 
-        toolbar.setNavigationOnClickListener {
+        binding.toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }
-        toolbar.setOnMenuItemClickListener { item ->
+        binding.toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.menuFavorite -> {
                     viewModel.onFavoriteClick()
@@ -137,7 +158,7 @@ class CoinFragment : BaseFragment(R.layout.fragment_coin) {
             }
         }
 
-        tabsCompose.setViewCompositionStrategy(
+        binding.tabsCompose.setViewCompositionStrategy(
             ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
         )
 
@@ -163,7 +184,10 @@ class CoinFragment : BaseFragment(R.layout.fragment_coin) {
                 restoreSettingsViewModel.onCancelEnterBirthdayHeight()
             }
 
-            zcashBirhdayHeightDialog.show(requireActivity().supportFragmentManager, "ZcashBirthdayHeightDialog")
+            zcashBirhdayHeightDialog.show(
+                requireActivity().supportFragmentManager,
+                "ZcashBirthdayHeightDialog"
+            )
         }
 
         coinPlatformsViewModel.openPlatformsSelectorEvent.observe(viewLifecycleOwner) { config ->

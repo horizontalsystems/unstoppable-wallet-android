@@ -19,6 +19,7 @@ import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
+import io.horizontalsystems.bankwallet.databinding.FragmentSendEvmBinding
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerActivity
 import io.horizontalsystems.bankwallet.modules.sendevm.confirmation.SendEvmConfirmationModule
@@ -32,7 +33,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.marketkit.models.FullCoin
-import kotlinx.android.synthetic.main.fragment_send_evm.*
 
 class SendEvmFragment : BaseFragment() {
 
@@ -43,20 +43,35 @@ class SendEvmFragment : BaseFragment() {
     private val amountViewModel by viewModels<AmountInputViewModel> { vmFactory }
     private val recipientAddressViewModel by viewModels<RecipientAddressViewModel> { vmFactory }
 
-    private val qrScannerResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        when (result.resultCode) {
-            Activity.RESULT_OK -> {
-                result.data?.getStringExtra(ModuleField.SCAN_ADDRESS)?.let {
-                    recipientAddressInputView.setText(it)
+    private val qrScannerResultLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            when (result.resultCode) {
+                Activity.RESULT_OK -> {
+                    result.data?.getStringExtra(ModuleField.SCAN_ADDRESS)?.let {
+                        binding.recipientAddressInputView.setText(it)
+                    }
+                }
+                Activity.RESULT_CANCELED -> {
                 }
             }
-            Activity.RESULT_CANCELED -> {
-            }
         }
+
+    private var _binding: FragmentSendEvmBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentSendEvmBinding.inflate(inflater, container, false)
+        val view = binding.root
+        return view
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.fragment_send_evm, container, false)
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -65,55 +80,70 @@ class SendEvmFragment : BaseFragment() {
         setToolbar(wallet.platformCoin.fullCoin)
 
         availableBalanceViewModel.viewStateLiveData.observe(viewLifecycleOwner, { state ->
-            availableBalanceSpinner.isVisible = state is SendAvailableBalanceViewModel.ViewState.Loading
-            availableBalanceValue.text = (state as? SendAvailableBalanceViewModel.ViewState.Loaded)?.value
+            binding.availableBalanceSpinner.isVisible =
+                state is SendAvailableBalanceViewModel.ViewState.Loading
+            binding.availableBalanceValue.text =
+                (state as? SendAvailableBalanceViewModel.ViewState.Loaded)?.value
         })
 
-        amountInput.onTextChangeCallback = { _, new -> amountViewModel.onChangeAmount(new ?: "") }
-        amountInput.onTapSecondaryCallback = { amountViewModel.onSwitch() }
-        amountInput.onTapMaxCallback = { amountViewModel.onClickMax() }
-        amountInput.postDelayed({ amountInput.setFocus()}, 200)
+        binding.amountInput.onTextChangeCallback =
+            { _, new -> amountViewModel.onChangeAmount(new ?: "") }
+        binding.amountInput.onTapSecondaryCallback = { amountViewModel.onSwitch() }
+        binding.amountInput.onTapMaxCallback = { amountViewModel.onClickMax() }
+        binding.amountInput.postDelayed({ binding.amountInput.setFocus() }, 200)
 
 
         amountViewModel.amountLiveData.observe(viewLifecycleOwner, { amount ->
-            if (amountInput.getAmount() != amount && !amountViewModel.areAmountsEqual(amountInput.getAmount(), amount))
-                amountInput.setAmount(amount)
+            if (binding.amountInput.getAmount() != amount && !amountViewModel.areAmountsEqual(
+                    binding.amountInput.getAmount(),
+                    amount
+                )
+            )
+                binding.amountInput.setAmount(amount)
         })
 
         amountViewModel.revertAmountLiveData.observe(viewLifecycleOwner, { revertAmount ->
-            amountInput.revertAmount(revertAmount)
+            binding.amountInput.revertAmount(revertAmount)
         })
 
         amountViewModel.maxEnabledLiveData.observe(viewLifecycleOwner, { maxEnabled ->
-            amountInput.maxButtonVisible = maxEnabled
+            binding.amountInput.maxButtonVisible = maxEnabled
         })
 
         amountViewModel.secondaryTextLiveData.observe(viewLifecycleOwner, { secondaryText ->
-            amountInput.setSecondaryText(secondaryText)
+            binding.amountInput.setSecondaryText(secondaryText)
         })
 
         amountViewModel.inputParamsLiveData.observe(viewLifecycleOwner, {
-            amountInput.setInputParams(it)
+            binding.amountInput.setInputParams(it)
         })
 
         viewModel.amountCautionLiveData.observe(viewLifecycleOwner, { caution ->
             setAmountInputCaution(caution)
         })
 
-        recipientAddressInputView.setViewModel(recipientAddressViewModel, viewLifecycleOwner, {
-            val intent = QRScannerActivity.getIntentForFragment(this)
-            qrScannerResultLauncher.launch(intent)
-        })
+        binding.recipientAddressInputView.setViewModel(
+            recipientAddressViewModel,
+            viewLifecycleOwner,
+            {
+                val intent = QRScannerActivity.getIntentForFragment(this)
+                qrScannerResultLauncher.launch(intent)
+            })
 
         viewModel.proceedEnabledLiveData.observe(viewLifecycleOwner, { enabled ->
             setProceedButton(enabled)
         })
 
         viewModel.proceedLiveEvent.observe(viewLifecycleOwner, { sendData ->
-            SendEvmConfirmationModule.start(this, R.id.sendEvmFragment_to_sendEvmConfirmationFragment, navOptions(), sendData)
+            SendEvmConfirmationModule.start(
+                this,
+                R.id.sendEvmFragment_to_sendEvmConfirmationFragment,
+                navOptions(),
+                sendData
+            )
         })
 
-        buttonProceedCompose.setViewCompositionStrategy(
+        binding.buttonProceedCompose.setViewCompositionStrategy(
             ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
         )
 
@@ -121,10 +151,10 @@ class SendEvmFragment : BaseFragment() {
     }
 
     private fun setToolbar(fullCoin: FullCoin) {
-        toolbarCompose.setViewCompositionStrategy(
+        binding.toolbarCompose.setViewCompositionStrategy(
             ViewCompositionStrategy.DisposeOnLifecycleDestroyed(this)
         )
-        toolbarCompose.setContent {
+        binding.toolbarCompose.setContent {
             ComposeAppTheme {
                 AppBar(
                     title = TranslatableString.ResString(R.string.Send_Title, fullCoin.coin.code),
@@ -150,27 +180,27 @@ class SendEvmFragment : BaseFragment() {
     }
 
     private fun setAmountInputCaution(caution: Caution?) {
-        txtHintError.isVisible = caution != null
-        txtHintError.text = caution?.text
-        background.hasError = caution != null
+        binding.txtHintError.isVisible = caution != null
+        binding.txtHintError.text = caution?.text
+        binding.background.hasError = caution != null
 
         when (caution?.type) {
             Caution.Type.Error -> {
-                background.hasError = true
-                txtHintError.setTextColor(requireContext().getColor(R.color.red_d))
+                binding.background.hasError = true
+                binding.txtHintError.setTextColor(requireContext().getColor(R.color.red_d))
             }
             Caution.Type.Warning -> {
-                background.hasWarning = true
-                txtHintError.setTextColor(requireContext().getColor(R.color.yellow_d))
+                binding.background.hasWarning = true
+                binding.txtHintError.setTextColor(requireContext().getColor(R.color.yellow_d))
             }
             else -> {
-                background.clearStates()
+                binding.background.clearStates()
             }
         }
     }
 
     private fun setProceedButton(enabled: Boolean = false) {
-        buttonProceedCompose.setContent {
+        binding.buttonProceedCompose.setContent {
             ComposeAppTheme {
                 ButtonPrimaryYellow(
                     modifier = Modifier.padding(

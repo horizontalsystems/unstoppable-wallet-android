@@ -6,22 +6,36 @@ import android.view.View
 import android.view.ViewGroup
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseDialogFragment
+import io.horizontalsystems.bankwallet.databinding.FragmentStatusInfoBinding
 import io.horizontalsystems.core.dismissOnBackPressed
-import kotlinx.android.synthetic.main.fragment_status_info.*
 
 class StatusInfoFragment : BaseDialogFragment() {
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    private var _binding: FragmentStatusInfoBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentStatusInfoBinding.inflate(inflater, container, false)
+        val view = binding.root
         dialog?.window?.setWindowAnimations(R.style.BottomDialogLargeAnimation)
         dialog?.dismissOnBackPressed { dismiss() }
-        return inflater.inflate(R.layout.fragment_status_info, container, false)
+        return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        toolbar.inflateMenu(R.menu.close_menu)
-        toolbar.setOnMenuItemClickListener { menuItem ->
+        binding.toolbar.inflateMenu(R.menu.close_menu)
+        binding.toolbar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.menuClose -> {
                     dismiss()

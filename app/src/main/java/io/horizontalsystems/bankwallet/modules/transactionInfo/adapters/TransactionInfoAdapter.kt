@@ -1,8 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.transactionInfo.adapters
 
-import android.view.View
+import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.compose.foundation.layout.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -11,6 +10,9 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.databinding.ViewHolderSectionDividerBinding
+import io.horizontalsystems.bankwallet.databinding.ViewHolderTransactionInfoExplorerBinding
+import io.horizontalsystems.bankwallet.databinding.ViewHolderTransactionInfoItemBinding
 import io.horizontalsystems.bankwallet.modules.transactionInfo.*
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoItemType.*
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -18,10 +20,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCirc
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.Ellipsis
 import io.horizontalsystems.views.ListPosition
-import io.horizontalsystems.views.inflate
-import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.view_holder_coin_page_section_header.*
-import kotlinx.android.synthetic.main.view_holder_transaction_info_item.*
 import java.util.*
 
 class TransactionInfoAdapter(
@@ -72,25 +70,19 @@ class TransactionInfoAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
             viewTypeItem -> ItemViewHolder(
-                inflate(
-                    parent,
-                    R.layout.view_holder_transaction_info_item,
-                    false
+                ViewHolderTransactionInfoItemBinding.inflate(
+                    LayoutInflater.from(parent.context), parent, false
                 ),
                 listener
             )
             viewTypeDivider -> DividerViewHolder(
-                inflate(
-                    parent,
-                    R.layout.view_holder_section_divider,
-                    false
+                ViewHolderSectionDividerBinding.inflate(
+                    LayoutInflater.from(parent.context), parent, false
                 )
             )
             viewTypeExplorer -> ExplorerViewHolder(
-                inflate(
-                    parent,
-                    R.layout.view_holder_transaction_info_explorer,
-                    false
+                ViewHolderTransactionInfoExplorerBinding.inflate(
+                    LayoutInflater.from(parent.context), parent, false
                 ),
                 listener
             )
@@ -105,20 +97,22 @@ class TransactionInfoAdapter(
         }
     }
 
-    class ExplorerViewHolder(override val containerView: View, private val listener: Listener) :
-        RecyclerView.ViewHolder(containerView), LayoutContainer {
+    class ExplorerViewHolder(
+        private val binding: ViewHolderTransactionInfoExplorerBinding,
+        private val listener: Listener
+    ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(explorer: Explorer) {
-            containerView.findViewById<TextView>(R.id.txtTitle)?.let {
-                it.text = explorer.title
-            }
-            containerView.setOnClickListener { explorer.url?.let { listener.onUrlClick(it) } }
+            binding.txtTitle.text = explorer.title
+            binding.wrapper.setOnClickListener { explorer.url?.let { listener.onUrlClick(it) } }
         }
     }
 
-    class ItemViewHolder(override val containerView: View, private val listener: Listener) :
-        RecyclerView.ViewHolder(containerView),
-        LayoutContainer {
+    class ItemViewHolder(
+        private val binding: ViewHolderTransactionInfoItemBinding,
+        private val listener: Listener
+    ) :
+        RecyclerView.ViewHolder(binding.root) {
         private val bodyTextSize = 16f
         private val subhead2TextSize = 14f
         private val greyColor = getColor(R.color.grey)
@@ -126,88 +120,89 @@ class TransactionInfoAdapter(
 
         fun bind(item: TransactionInfoViewItem) {
             setButtons(item)
-            transactionStatusView.isVisible = false
-            valueText.isVisible = false
-            statusInfoIcon.isVisible = false
-            rightInfoIcon.isVisible = false
+            binding.transactionStatusView.isVisible = false
+            binding.valueText.isVisible = false
+            binding.statusInfoIcon.isVisible = false
+            binding.rightInfoIcon.isVisible = false
 
-            txViewBackground.setBackgroundResource(item.listPosition.getBackground())
+            binding.txViewBackground.setBackgroundResource(item.listPosition.getBackground())
 
             when (val type = item.type) {
                 is TransactionType -> {
-                    txtTitle.textSize = bodyTextSize
-                    txtTitle.setTextColor(ozColor)
-                    txtTitle.text = type.leftValue
+                    binding.txtTitle.textSize = bodyTextSize
+                    binding.txtTitle.setTextColor(ozColor)
+                    binding.txtTitle.text = type.leftValue
 
-                    valueText.setTextColor(greyColor)
-                    valueText.text = type.rightValue
-                    valueText.isVisible = true
+                    binding.valueText.setTextColor(greyColor)
+                    binding.valueText.text = type.rightValue
+                    binding.valueText.isVisible = true
                 }
                 is Amount -> {
                     setDefaultStyle()
 
-                    txtTitle.text = type.leftValue
-                    valueText.text = type.rightValue.value
-                    valueText.setTextColor(getColor(type.rightValue.color))
-                    valueText.isVisible = true
+                    binding.txtTitle.text = type.leftValue
+                    binding.valueText.text = type.rightValue.value
+                    binding.valueText.setTextColor(getColor(type.rightValue.color))
+                    binding.valueText.isVisible = true
                 }
                 is Value -> {
                     setDefaultStyle()
 
-                    txtTitle.text = type.title
-                    valueText.text = type.value
-                    valueText.isVisible = true
+                    binding.txtTitle.text = type.title
+                    binding.valueText.text = type.value
+                    binding.valueText.isVisible = true
                 }
                 is Decorated -> {
                     setDefaultStyle()
-                    txtTitle.text = type.title
+                    binding.txtTitle.text = type.title
                 }
                 is Status -> {
                     setDefaultStyle()
-                    txtTitle.text = type.title
-                    statusInfoIcon.setImageResource(type.leftIcon)
-                    statusInfoIcon.isVisible = type.status !is TransactionStatusViewItem.Completed
+                    binding.txtTitle.text = type.title
+                    binding.statusInfoIcon.setImageResource(type.leftIcon)
+                    binding.statusInfoIcon.isVisible =
+                        type.status !is TransactionStatusViewItem.Completed
                     if (type.status !is TransactionStatusViewItem.Completed) {
-                        statusInfoIcon.setOnClickListener { listener.onClickStatusInfo() }
+                        binding.statusInfoIcon.setOnClickListener { listener.onClickStatusInfo() }
                     }
-                    transactionStatusView.isVisible = true
-                    transactionStatusView.bind(type.status)
+                    binding.transactionStatusView.isVisible = true
+                    binding.transactionStatusView.bind(type.status)
                 }
                 is RawTransaction -> {
                     setDefaultStyle()
-                    txtTitle.text = type.title
+                    binding.txtTitle.text = type.title
                 }
                 is LockState -> {
                     setDefaultStyle()
 
-                    txtTitle.text = type.title
-                    statusInfoIcon.setImageResource(type.leftIcon)
-                    statusInfoIcon.isVisible = true
+                    binding.txtTitle.text = type.title
+                    binding.statusInfoIcon.setImageResource(type.leftIcon)
+                    binding.statusInfoIcon.isVisible = true
 
                     if (type.showLockInfo) {
-                        rightInfoIcon.isVisible = true
-                        containerView.setOnClickListener {
+                        binding.rightInfoIcon.isVisible = true
+                        binding.wrapper.setOnClickListener {
                             listener.onLockInfoClick(type.date)
                         }
                     }
                 }
                 is DoubleSpend -> {
-                    txtTitle.text = type.title
-                    statusInfoIcon.setImageResource(type.leftIcon)
-                    statusInfoIcon.isVisible = true
-                    rightInfoIcon.isVisible = true
-                    containerView.setOnClickListener {
+                    binding.txtTitle.text = type.title
+                    binding.statusInfoIcon.setImageResource(type.leftIcon)
+                    binding.statusInfoIcon.isVisible = true
+                    binding.rightInfoIcon.isVisible = true
+                    binding.wrapper.setOnClickListener {
                         listener.onDoubleSpendInfoClick(type.transactionHash, type.conflictingHash)
                     }
                 }
                 is Options -> {
-                    txtTitle.text = type.title
+                    binding.txtTitle.text = type.title
                 }
             }
         }
 
         private fun setButtons(item: TransactionInfoViewItem) {
-            buttonsCompose.setContent {
+            binding.buttonsCompose.setContent {
                 ComposeAppTheme {
                     Row(modifier = Modifier.padding(start = 16.dp)) {
                         if (item.type is Decorated) {
@@ -262,18 +257,18 @@ class TransactionInfoAdapter(
         }
 
         private fun setDefaultStyle() {
-            txtTitle.textSize = subhead2TextSize
-            txtTitle.setTextColor(greyColor)
-            valueText.setTextColor(ozColor)
+            binding.txtTitle.textSize = subhead2TextSize
+            binding.txtTitle.setTextColor(greyColor)
+            binding.valueText.setTextColor(ozColor)
         }
 
         private fun getColor(colorRes: Int): Int {
-            return containerView.context.getColor(colorRes)
+            return binding.wrapper.context.getColor(colorRes)
         }
     }
 
-    class DividerViewHolder(override val containerView: View) :
-        RecyclerView.ViewHolder(containerView), LayoutContainer
+    class DividerViewHolder(binding: ViewHolderSectionDividerBinding) :
+        RecyclerView.ViewHolder(binding.root)
 }
 
 

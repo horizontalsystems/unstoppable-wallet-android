@@ -13,23 +13,28 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.managers.TorStatus
+import io.horizontalsystems.bankwallet.databinding.ActivityTorConnectionBinding
 import io.horizontalsystems.bankwallet.modules.launcher.LaunchModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryTransparent
-import kotlinx.android.synthetic.main.activity_tor_connection.*
 import kotlin.system.exitProcess
 
 @SuppressLint("SetTextI18n")
 class TorConnectionActivity : AppCompatActivity() {
 
     private lateinit var presenter: TorStatusPresenter
+    private lateinit var binding: ActivityTorConnectionBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_tor_connection)
 
-        presenter = ViewModelProvider(this, TorStatusModule.Factory()).get(TorStatusPresenter::class.java)
+        binding = ActivityTorConnectionBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
+
+        presenter =
+            ViewModelProvider(this, TorStatusModule.Factory()).get(TorStatusPresenter::class.java)
         presenter.viewDidLoad()
 
         observeView(presenter.view)
@@ -55,10 +60,10 @@ class TorConnectionActivity : AppCompatActivity() {
     }
 
     private fun observeView(torStatusView: TorStatusView) {
-        torStatusView.torConnectionStatus.observe(this, Observer {status ->
+        torStatusView.torConnectionStatus.observe(this, Observer { status ->
 
             val isError = status == TorStatus.Failed
-            val text = if(status == TorStatus.Connecting)
+            val text = if (status == TorStatus.Connecting)
                 getString(R.string.Tor_Status_Starting)
             else getString(R.string.Tor_Status_Error)
             setStatus(isError, text)
@@ -66,15 +71,15 @@ class TorConnectionActivity : AppCompatActivity() {
     }
 
     private fun setStatus(isError: Boolean, statusText: String) {
-        pgTorStatus.isInvisible = isError
-        imgTorStatusError.isInvisible = !isError
-        txTorStatus.text = statusText
+        binding.pgTorStatus.isInvisible = isError
+        binding.imgTorStatusError.isInvisible = !isError
+        binding.txTorStatus.text = statusText
 
         setButtons(isError)
     }
 
     private fun setButtons(retryEnabled: Boolean) {
-        btnsCompose.setContent {
+        binding.btnsCompose.setContent {
             ComposeAppTheme {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     ButtonSecondaryDefault(

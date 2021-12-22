@@ -46,6 +46,7 @@ import com.google.android.material.snackbar.Snackbar
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.setOnSingleClickListener
+import io.horizontalsystems.bankwallet.databinding.FragmentBalanceBinding
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.backupkey.BackupKeyModule
 import io.horizontalsystems.bankwallet.modules.balance.views.SyncErrorDialog
@@ -67,7 +68,6 @@ import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.CoinType
-import kotlinx.android.synthetic.main.fragment_balance.*
 import kotlinx.coroutines.launch
 
 class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
@@ -75,19 +75,29 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
     private val viewModel by viewModels<BalanceViewModel> { BalanceModule.Factory() }
     private var scrollToTopAfterUpdate = false
 
+    private var _binding: FragmentBalanceBinding? = null
+    private val binding get() = _binding!!
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_balance, container, false)
+    ): View {
+        _binding = FragmentBalanceBinding.inflate(inflater, container, false)
+        val view = binding.root
+        return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     @ExperimentalAnimationApi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        toolbarTitle.setOnSingleClickListener {
+        binding.toolbarTitle.setOnSingleClickListener {
             ManageAccountsModule.start(
                 this,
                 R.id.mainFragment_to_manageKeysFragment,
@@ -96,7 +106,7 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
             )
         }
 
-        balanceText.setOnClickListener {
+        binding.balanceText.setOnClickListener {
             viewModel.onBalanceClick()
             HudHelper.vibrate(requireContext())
         }
@@ -104,11 +114,11 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
         observeLiveData()
         //setSwipeBackground()
 
-        buttonsCompose.setViewCompositionStrategy(
+        binding.buttonsCompose.setViewCompositionStrategy(
             ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
         )
 
-        walletListCompose.setViewCompositionStrategy(
+        binding.walletListCompose.setViewCompositionStrategy(
             ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
         )
 
@@ -139,7 +149,7 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
 
     @ExperimentalAnimationApi
     private fun setWallets() {
-        walletListCompose.setContent {
+        binding.walletListCompose.setContent {
             ComposeAppTheme {
                 val balanceItems by viewModel.balanceViewItems.observeAsState()
                 Wallets(balanceItems)
@@ -540,7 +550,7 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
 
     private fun observeLiveData() {
         viewModel.titleLiveData.observe(viewLifecycleOwner) {
-            toolbarTitle.text = it ?: getString(R.string.Balance_Title)
+            binding.toolbarTitle.text = it ?: getString(R.string.Balance_Title)
         }
 
         viewModel.disabledWalletLiveData.observe(viewLifecycleOwner) { wallet ->
@@ -581,7 +591,7 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
     }
 
     private fun setTopButtons(sortType: BalanceSortType) {
-        buttonsCompose.setContent {
+        binding.buttonsCompose.setContent {
             ComposeAppTheme {
                 Row(
                     modifier = Modifier.width(IntrinsicSize.Max).padding(end = 16.dp),
@@ -639,8 +649,8 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
 
     private fun setHeaderViewItem(headerViewItem: BalanceHeaderViewItem) {
         headerViewItem.apply {
-            balanceText.text = xBalanceText
-            context?.let { context -> balanceText.setTextColor(getBalanceTextColor(context)) }
+            binding.balanceText.text = xBalanceText
+            context?.let { context -> binding.balanceText.setTextColor(getBalanceTextColor(context)) }
         }
     }
 
