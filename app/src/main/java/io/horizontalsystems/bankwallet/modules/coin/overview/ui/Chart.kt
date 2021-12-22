@@ -93,7 +93,7 @@ fun <T> Chart(
     Column {
         var selectedPointXxx by remember { mutableStateOf<SelectedPointXxx?>(null) }
         HsChartLinePeriodsAndPoint(tabItems, selectedPointXxx, onSelectTab)
-        val chartIndicator = indicators.firstOrNull { it.selected }?.item
+        val chartIndicator = indicators.firstOrNull { it.selected && it.enabled }?.item
         PriceVolChart(chartInfoData, chartIndicator, chartLoading, viewState) { item ->
             onChangeHoldingPointState.invoke(item != null)
             selectedPointXxx = item?.let { itemToPointConverter.invoke(it) }
@@ -211,7 +211,7 @@ fun IndicatorToggles(indicators: List<TabItem<ChartIndicator>>, onSelect: (Chart
                         onSelect(if (indicator.selected) null else indicator.item)
                     },
                     selected = indicator.selected,
-                    enabled = true
+                    enabled = indicator.enabled
                 )
             }
         }

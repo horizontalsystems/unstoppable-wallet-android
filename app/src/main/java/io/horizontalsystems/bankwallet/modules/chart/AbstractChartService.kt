@@ -27,16 +27,25 @@ abstract class AbstractChartService {
         set(value) {
             field = value
             value?.let { chartTypeObservable.onNext(it) }
+            indicatorsEnabled = chartType != ChartView.ChartType.TODAY && chartType != ChartView.ChartType.DAILY
         }
     var indicator: ChartIndicator? = null
         private set(value) {
             field = value
             indicatorObservable.onNext(Optional.ofNullable(value))
         }
+    private var indicatorsEnabled = true
+        set(value) {
+            field = value
+            indicatorsEnabledObservable.onNext(value)
+        }
+
     val currency: Currency
         get() = currencyManager.baseCurrency
     val chartTypeObservable = BehaviorSubject.create<ChartView.ChartType>()
     val indicatorObservable = BehaviorSubject.create<Optional<ChartIndicator>>()
+
+    val indicatorsEnabledObservable = BehaviorSubject.create<Boolean>()
 
     val chartDataXxxObservable =
         BehaviorSubject.create<DataState<ChartDataXxx>>()

@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 
-data class TabItem<T>(val title: String, val selected: Boolean, val item: T, val icon: ImageSource? = null, val label: String? = null)
+data class TabItem<T>(val title: String, val selected: Boolean, val item: T, val icon: ImageSource? = null, val label: String? = null, val enabled: Boolean = true)
 
 @Composable
 fun <T>Tabs(tabs: List<TabItem<T>>, onClick: (T) -> Unit) {
