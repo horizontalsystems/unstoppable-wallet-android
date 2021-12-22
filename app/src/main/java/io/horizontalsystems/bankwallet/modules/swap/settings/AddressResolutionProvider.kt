@@ -10,14 +10,7 @@ class AddressResolutionProvider {
         resolution.isSupported(domain)
     }
 
-    fun resolveAsync(domain: String, ticker: String): Single<String> {
-        return Single.create { emitter ->
-            try {
-                val address = resolution.getAddress(domain, ticker)
-                emitter.onSuccess(address)
-            } catch (err: Exception) {
-                emitter.onError(err)
-            }
-        }
+    fun resolveAsync(domain: String, ticker: String) = Single.fromCallable {
+        resolution.getAddress(domain, ticker)
     }
 }
