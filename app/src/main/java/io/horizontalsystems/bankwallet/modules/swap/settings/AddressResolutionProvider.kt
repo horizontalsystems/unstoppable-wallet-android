@@ -6,8 +6,8 @@ import io.reactivex.Single
 class AddressResolutionProvider {
     private var resolution = Resolution()
 
-    fun isValid(domain: String): Boolean {
-        return resolution.isSupported(domain)
+    fun isValidAsync(domain: String) = Single.fromCallable {
+        resolution.isSupported(domain)
     }
 
     fun resolveAsync(domain: String, ticker: String): Single<String> {
