@@ -168,7 +168,7 @@ fun CoinInvestmentFund(fundViewItem: FundViewItem, onClick: () -> Unit) {
             modifier = Modifier.weight(1f),
             text = fundViewItem.name,
             style = ComposeAppTheme.typography.body,
-            color = ComposeAppTheme.colors.light,
+            color = ComposeAppTheme.colors.leah,
             overflow = TextOverflow.Ellipsis
         )
         if (fundViewItem.isLead) {
