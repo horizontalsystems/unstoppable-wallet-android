@@ -120,7 +120,7 @@ class SendEvmService(
 
     //region IRecipientAddressService
     override val initialAddress: Address?
-        get() = null
+        get() = addressData?.let{ Address(it.evmAddress.hex, it.domain) }
 
     override val recipientAddressError: Throwable?
         get() = addressError
