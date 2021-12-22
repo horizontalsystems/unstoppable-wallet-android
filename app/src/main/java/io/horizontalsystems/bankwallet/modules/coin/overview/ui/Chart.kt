@@ -50,7 +50,7 @@ fun HsChartLineHeader(currentValue: String?, currentValueDiff: Value.Percent?) {
 }
 
 @Composable
-fun Chart(chartViewModel: ChartViewModel, onSelectChartType: ((ChartView.ChartType) -> Unit)? = null) {
+fun Chart(chartViewModel: ChartViewModel, onChangeHoldingPointState: (Boolean) -> Unit = {}, onSelectChartType: ((ChartView.ChartType) -> Unit)? = null) {
     val chartDataWrapper by chartViewModel.dataWrapperLiveData.observeAsState()
     val chartTabs by chartViewModel.tabItemsLiveData.observeAsState(listOf())
     val chartIndicators by chartViewModel.indicatorsLiveData.observeAsState(listOf())
@@ -72,7 +72,8 @@ fun Chart(chartViewModel: ChartViewModel, onSelectChartType: ((ChartView.ChartTy
             chartInfoData = chartDataWrapper?.chartInfoData,
             chartLoading = chartLoading,
             viewState = chartViewState,
-            itemToPointConverter = chartViewModel::getSelectedPointXxx
+            itemToPointConverter = chartViewModel::getSelectedPointXxx,
+            onChangeHoldingPointState = onChangeHoldingPointState
         )
     }
 }
@@ -87,12 +88,14 @@ fun <T> Chart(
     chartLoading: Boolean,
     viewState: ViewState?,
     itemToPointConverter: (ChartDataItemImmutable) -> SelectedPointXxx?,
+    onChangeHoldingPointState: (Boolean) -> Unit
 ) {
     Column {
         var selectedPointXxx by remember { mutableStateOf<SelectedPointXxx?>(null) }
         HsChartLinePeriodsAndPoint(tabItems, selectedPointXxx, onSelectTab)
         val chartIndicator = indicators.firstOrNull { it.selected }?.item
         PriceVolChart(chartInfoData, chartIndicator, chartLoading, viewState) { item ->
+            onChangeHoldingPointState.invoke(item != null)
             selectedPointXxx = item?.let { itemToPointConverter.invoke(it) }
         }
         if (indicators.isNotEmpty()) {
