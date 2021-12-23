@@ -22,7 +22,7 @@ import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import java.util.*
 
-class ChartViewModel(private val service: AbstractChartService, private val factory: MetricChartFactory) : ViewModel() {
+open class ChartViewModel(private val service: AbstractChartService, private val factory: MetricChartFactory) : ViewModel() {
     val tabItemsLiveData = MutableLiveData<List<TabItem<ChartView.ChartType>>>()
     val indicatorsLiveData = MutableLiveData<List<TabItem<ChartIndicator>>>()
     val dataWrapperLiveData = MutableLiveData<ChartDataWrapper>()

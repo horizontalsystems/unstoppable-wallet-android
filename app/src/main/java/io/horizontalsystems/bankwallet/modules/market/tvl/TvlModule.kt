@@ -7,8 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.bankwallet.modules.chart.ChartModule
-import io.horizontalsystems.bankwallet.modules.chart.ChartViewModel
+import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartFactory
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.WithTranslatableTitle
@@ -23,19 +22,18 @@ object TvlModule {
             GlobalMarketRepository(App.marketKit)
         }
 
-        private val chartRepo by lazy {
-            TvlChartRepo(App.currencyManager, globalMarketRepository)
-        }
-
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             return when (modelClass) {
                 TvlViewModel::class.java -> {
-                    val service = TvlService(App.currencyManager, globalMarketRepository, chartRepo)
+                    val service = TvlService(App.currencyManager, globalMarketRepository)
                     val tvlViewItemFactory = TvlViewItemFactory()
                     TvlViewModel(service, tvlViewItemFactory) as T
                 }
-                ChartViewModel::class.java -> {
-                    ChartModule.createViewModel(chartRepo) as T
+                TvlChartViewModel::class.java -> {
+                    val chartRepo = TvlChartRepo(App.currencyManager, globalMarketRepository)
+
+                    val factory = MetricChartFactory(App.numberFormatter)
+                    TvlChartViewModel(chartRepo, factory) as T
                 }
                 else -> throw IllegalArgumentException()
             }

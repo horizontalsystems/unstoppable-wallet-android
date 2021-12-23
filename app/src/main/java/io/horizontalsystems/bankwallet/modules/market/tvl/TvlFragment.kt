@@ -22,7 +22,6 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.ViewState
-import io.horizontalsystems.bankwallet.modules.chart.ChartViewModel
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Chart
 import io.horizontalsystems.bankwallet.modules.market.MarketDataValue
@@ -45,7 +44,7 @@ class TvlFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View {
         val vmFactory = TvlModule.Factory()
-        val chartViewModel by viewModels<ChartViewModel> { vmFactory }
+        val tvlChartViewModel by viewModels<TvlChartViewModel> { vmFactory }
         val viewModel by viewModels<TvlViewModel> { vmFactory }
 
         return ComposeView(requireContext()).apply {
@@ -54,7 +53,7 @@ class TvlFragment : BaseFragment() {
             )
             setContent {
                 ComposeAppTheme {
-                    TvlScreen(viewModel, chartViewModel) { onCoinClick(it) }
+                    TvlScreen(viewModel, tvlChartViewModel) { onCoinClick(it) }
                 }
             }
         }
@@ -72,7 +71,7 @@ class TvlFragment : BaseFragment() {
     @Composable
     private fun TvlScreen(
         tvlViewModel: TvlViewModel,
-        chartViewModel: ChartViewModel,
+        chartViewModel: TvlChartViewModel,
         onCoinClick: (String?) -> Unit
     ) {
         val itemsViewState by tvlViewModel.viewStateLiveData.observeAsState()
@@ -161,10 +160,13 @@ class TvlFragment : BaseFragment() {
                 when (val option = chainSelectorDialogState) {
                     is SelectorDialogState.Opened -> {
                         AlertGroup(
-                            R.string.MarketGlobalMetrics_ChainSelectorTitle,
-                            option.select,
-                            tvlViewModel::onSelectChain,
-                            tvlViewModel::onChainSelectorDialogDismiss
+                            title = R.string.MarketGlobalMetrics_ChainSelectorTitle,
+                            select = option.select,
+                            onSelect = {
+                                chartViewModel.onSelectChain(it)
+                                tvlViewModel.onSelectChain(it)
+                            },
+                            onDismiss = tvlViewModel::onChainSelectorDialogDismiss
                         )
                     }
                 }
