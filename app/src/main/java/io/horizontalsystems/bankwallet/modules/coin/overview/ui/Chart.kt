@@ -99,7 +99,7 @@ fun <T> Chart(
             selectedPointXxx = item?.let { itemToPointConverter.invoke(it) }
         }
         if (indicators.isNotEmpty()) {
-            IndicatorToggles(indicators) {
+            HSIndicatorToggles(indicators) {
                 onSelectIndicator.invoke(it)
             }
         }
@@ -192,7 +192,7 @@ private fun <T> HsChartLinePeriodsAndPoint(
 }
 
 @Composable
-fun IndicatorToggles(indicators: List<TabItem<ChartIndicator>>, onSelect: (ChartIndicator?) -> Unit) {
+fun HSIndicatorToggles(indicators: List<TabItem<ChartIndicator>>, onSelect: (ChartIndicator?) -> Unit) {
     CellHeaderSorting(
         borderTop = true,
         borderBottom = true
