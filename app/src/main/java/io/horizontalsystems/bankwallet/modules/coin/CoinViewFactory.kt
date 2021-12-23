@@ -171,7 +171,7 @@ class CoinViewFactory(
         return rows
     }
 
-    fun getOverviewViewItem(item: CoinOverviewItem, fullCoin: FullCoin): CoinOverviewViewItem {
+    fun getOverviewViewItem(item: CoinOverviewItem): CoinOverviewViewItem {
         val overview = item.marketInfoOverview
 
         return CoinOverviewViewItem(

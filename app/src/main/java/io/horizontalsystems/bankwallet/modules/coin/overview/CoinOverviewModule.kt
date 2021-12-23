@@ -12,35 +12,24 @@ import io.horizontalsystems.marketkit.models.MarketInfoOverview
 object CoinOverviewModule {
 
     class Factory(private val fullCoin: FullCoin) : ViewModelProvider.Factory {
-
-        private val chartRepo2 by lazy {
-            CoinOverviewChartRepo(App.marketKit, App.currencyManager, App.chartTypeStorage, fullCoin.coin.uid)
-        }
-
-        private val chartRepo by lazy {
-            ChartRepo(App.marketKit, App.currencyManager, App.chartTypeStorage, fullCoin.coin.uid)
-        }
-
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
 
             return when (modelClass) {
                 CoinOverviewViewModel::class.java -> {
                     val currency = App.currencyManager.baseCurrency
-
-
                     val service = CoinOverviewService(
                         fullCoin,
                         App.marketKit,
                         App.currencyManager,
                         App.appConfigProvider,
-                        App.languageManager,
-                        chartRepo
+                        App.languageManager
                     )
 
                     CoinOverviewViewModel(service, CoinViewFactory(currency, App.numberFormatter)) as T
                 }
                 ChartViewModel::class.java -> {
+                    val chartRepo2 = CoinOverviewChartRepo(App.marketKit, App.currencyManager, App.chartTypeStorage, fullCoin.coin.uid)
                     ChartModule.createViewModel(chartRepo2) as T
                 }
                 else -> throw IllegalArgumentException()

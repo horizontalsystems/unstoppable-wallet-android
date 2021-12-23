@@ -6,8 +6,6 @@ import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.core.ILanguageManager
 import io.horizontalsystems.marketkit.MarketKit
-import io.horizontalsystems.marketkit.models.ChartType
-import io.horizontalsystems.marketkit.models.CoinPrice
 import io.horizontalsystems.marketkit.models.FullCoin
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
@@ -19,16 +17,9 @@ class CoinOverviewService(
     private val marketKit: MarketKit,
     private val currencyManager: ICurrencyManager,
     private val appConfigProvider: AppConfigProvider,
-    private val languageManager: ILanguageManager,
-    private val chartRepo: ChartRepo
+    private val languageManager: ILanguageManager
 ) {
     val currency get() = currencyManager.baseCurrency
-
-    val chartDataObservable by chartRepo::chartDataObservable
-
-    private val coinPriceSubject = BehaviorSubject.create<DataState<CoinPrice>>()
-    val coinPriceObservable: Observable<DataState<CoinPrice>>
-        get() = coinPriceSubject
 
     private val coinOverviewSubject = BehaviorSubject.create<DataState<CoinOverviewItem>>()
     val coinOverviewObservable: Observable<DataState<CoinOverviewItem>>
@@ -56,13 +47,7 @@ class CoinOverviewService(
     private val disposables = CompositeDisposable()
 
     fun start() {
-        chartRepo.start()
         fetchCoinOverview()
-        fetchCoinPrice()
-    }
-
-    fun changeChartType(chartType: ChartType) {
-        chartRepo.changeChartType(chartType)
     }
 
     private fun fetchCoinOverview() {
@@ -78,27 +63,7 @@ class CoinOverviewService(
             }
     }
 
-    private fun fetchCoinPrice() {
-        val coinPrice = marketKit.coinPrice(fullCoin.coin.uid, currency.code)
-        if (coinPrice != null) {
-            coinPriceSubject.onNext(DataState.Success(coinPrice))
-        } else {
-            coinPriceSubject.onNext(DataState.Loading)
-        }
-
-        marketKit.coinPriceObservable(fullCoin.coin.uid, currency.code)
-            .subscribeIO({
-                coinPriceSubject.onNext(DataState.Success(it))
-            }, {
-                coinPriceSubject.onNext(DataState.Error(it))
-            })
-            .let {
-                disposables.add(it)
-            }
-    }
-
     fun stop() {
-        chartRepo.stop()
         disposables.clear()
     }
 
