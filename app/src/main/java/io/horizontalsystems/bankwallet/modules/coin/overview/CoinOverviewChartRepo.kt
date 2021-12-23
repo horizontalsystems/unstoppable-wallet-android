@@ -46,6 +46,7 @@ class CoinOverviewChartRepo(
     override val initialChartType by chartTypeStorage::chartType2
     override val dataUpdatedObservable = BehaviorSubject.create<Unit>()
 
+    private var updatesSubscriptionKey: String? = null
     private val disposables = CompositeDisposable()
 
     override fun stop() {
@@ -57,8 +58,12 @@ class CoinOverviewChartRepo(
         chartType: ChartView.ChartType,
         currency: Currency,
     ): Single<ChartDataXxx> {
-        unsubscribeFromUpdates()
-        subscribeForUpdates(currency, chartType)
+        val newKey = chartType.name + currency.code
+        if (newKey != updatesSubscriptionKey) {
+            unsubscribeFromUpdates()
+            subscribeForUpdates(currency, chartType)
+            updatesSubscriptionKey = newKey
+        }
 
         val tmpChartInfo = marketKit.chartInfo(coinUid, currency.code, chartType.kitChartType)
         val tmpLastCoinPrice = marketKit.coinPrice(coinUid, currency.code)
