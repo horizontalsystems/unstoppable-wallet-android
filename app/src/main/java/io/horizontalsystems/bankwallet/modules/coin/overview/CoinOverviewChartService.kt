@@ -18,12 +18,14 @@ import io.horizontalsystems.marketkit.models.CoinPrice
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 
-class CoinOverviewChartRepo(
+class CoinOverviewChartService(
     private val marketKit: MarketKit,
     override val currencyManager: ICurrencyManager,
     private val chartTypeStorage: IChartTypeStorage,
     private val coinUid: String,
 ) : AbstractChartService() {
+
+    override val initialChartType by chartTypeStorage::chartType2
 
     override val chartTypes = listOf(
         ChartView.ChartType.TODAY,
@@ -42,7 +44,6 @@ class CoinOverviewChartRepo(
         ChartIndicator.Macd,
         ChartIndicator.Rsi
     )
-    override val initialChartType by chartTypeStorage::chartType2
 
     private var updatesSubscriptionKey: String? = null
     private val disposables = CompositeDisposable()
