@@ -20,14 +20,12 @@ import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.chart.ChartViewModel
 import io.horizontalsystems.bankwallet.modules.coin.CoinLink
 import io.horizontalsystems.bankwallet.modules.coin.ContractInfo
-import io.horizontalsystems.bankwallet.modules.coin.adapters.CoinChartView
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.*
 import io.horizontalsystems.bankwallet.modules.coin.ui.CoinScreenTitle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.components.CellFooter
 import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
-import io.horizontalsystems.chartview.ChartView
 
 @Composable
 fun CoinOverviewScreen(
@@ -40,10 +38,7 @@ fun CoinOverviewScreen(
     val refreshing by viewModel.isRefreshingLiveData.observeAsState(false)
     val overview by viewModel.overviewLiveData.observeAsState()
     val viewState by viewModel.viewStateLiveData.observeAsState()
-    val chartInfo by viewModel.chartInfoLiveData.observeAsState()
-    val title by viewModel.titleLiveData.observeAsState()
     val fullCoin = viewModel.fullCoin
-    val currency = viewModel.currency
 
     HSSwipeRefresh(
         state = rememberSwipeRefreshState(refreshing),
@@ -70,40 +65,6 @@ fun CoinOverviewScreen(
                                     scrollingEnabled = !holding
                                 }
                             )
-
-                            Title(title, chartInfo?.data?.chartData?.diff())
-
-                            chartInfo?.let {
-                                ChartInfo(
-                                    it,
-                                    currency,
-                                    CoinChartView.ChartViewType.CoinChart,
-                                    listOf(
-                                        Pair(ChartView.ChartType.TODAY, R.string.CoinPage_TimeDuration_Today),
-                                        Pair(ChartView.ChartType.DAILY, R.string.CoinPage_TimeDuration_Day),
-                                        Pair(ChartView.ChartType.WEEKLY, R.string.CoinPage_TimeDuration_Week),
-                                        Pair(ChartView.ChartType.WEEKLY2, R.string.CoinPage_TimeDuration_TwoWeeks),
-                                        Pair(ChartView.ChartType.MONTHLY, R.string.CoinPage_TimeDuration_Month),
-                                        Pair(ChartView.ChartType.MONTHLY3, R.string.CoinPage_TimeDuration_Month3),
-                                        Pair(ChartView.ChartType.MONTHLY6, R.string.CoinPage_TimeDuration_HalfYear),
-                                        Pair(ChartView.ChartType.MONTHLY12, R.string.CoinPage_TimeDuration_Year),
-                                        Pair(ChartView.ChartType.MONTHLY24, R.string.CoinPage_TimeDuration_Year2)
-                                    ),
-                                    object : CoinChartView.Listener {
-                                        override fun onChartTouchDown() {
-                                            scrollingEnabled = false
-                                        }
-
-                                        override fun onChartTouchUp() {
-                                            scrollingEnabled = true
-                                        }
-
-                                        override fun onTabSelect(chartType: ChartView.ChartType) {
-                                            viewModel.changeChartType(chartType)
-                                        }
-                                    }
-                                )
-                            }
 
                             if (overview.marketData.isNotEmpty()) {
                                 Spacer(modifier = Modifier.height(12.dp))
