@@ -6,14 +6,11 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.chart.ChartModule
 import io.horizontalsystems.bankwallet.modules.chart.ChartViewModel
-import io.horizontalsystems.bankwallet.modules.coin.ChartInfoData
-import io.horizontalsystems.bankwallet.modules.coin.overview.ui.ChartInfoHeaderItem
 import io.horizontalsystems.bankwallet.modules.market.MarketField
 import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
 import io.horizontalsystems.bankwallet.modules.market.tvl.GlobalMarketRepository
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
 import io.horizontalsystems.bankwallet.ui.compose.Select
-import io.horizontalsystems.core.entities.Currency
 
 object MetricsPageModule {
 
@@ -37,13 +34,6 @@ object MetricsPageModule {
             }
         }
     }
-
-    @Immutable
-    data class ChartData(
-        val subtitle: ChartInfoHeaderItem,
-        val currency: Currency,
-        val chartInfoData: ChartInfoData
-    )
 
     @Immutable
     data class MarketData(

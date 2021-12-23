@@ -3,11 +3,8 @@ package io.horizontalsystems.bankwallet.modules.metricchart
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.modules.chart.ChartDataXxx
 import io.horizontalsystems.chartview.*
-import io.horizontalsystems.chartview.models.PointInfo
 import io.horizontalsystems.core.entities.Currency
-import io.horizontalsystems.core.helpers.DateHelper
 import java.math.BigDecimal
-import java.util.*
 
 class MetricChartFactory(private val numberFormatter: IAppNumberFormatter) {
 
@@ -102,10 +99,4 @@ class MetricChartFactory(private val numberFormatter: IAppNumberFormatter) {
         return numberFormatter.formatFiat(shortenValue, symbol, 0, 2) + " $suffix"
     }
 
-    fun selectedPointViewItem(point: PointInfo, valueType: MetricChartModule.ValueType, currency: Currency): SelectedPoint? {
-        val value: String = getFormattedValue(point.value, currency, valueType)
-        val date = DateHelper.getDayAndTime(Date(point.timestamp * 1000))
-
-        return SelectedPoint(value, date)
-    }
 }

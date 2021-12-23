@@ -16,12 +16,6 @@ import java.math.BigDecimal
 
 object MetricChartModule {
 
-    interface IMetricChartConfiguration {
-        val title: Int
-        val description: Int?
-        val valueType: ValueType
-    }
-
     data class Item(
         val value: BigDecimal,
         val dominance: BigDecimal?,
