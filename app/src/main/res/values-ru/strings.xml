@@ -782,7 +782,7 @@
     <string name="CoinPage_Treasuries_FilterTitle">Фильтры</string>
     <string name="CoinPage_Treasuries_PoweredBy">Работает на Bitcointreasuries.net</string>
     <string name="CoinPage_Reports">Отчёты</string>
-    <string name="CoinPage_FundsInvested">Средства Инвестированы</string>
+    <string name="CoinPage_FundsInvested">Funds Invested</string>
     <string name="CoinPage_TokenDistribution">Распределение Токенов</string>
     <string name="CoinPage_TokenLiquidity">Ликвидность Токена</string>
     <string name="CoinPage_TotalVolume">Общий Объём</string>
@@ -859,7 +859,7 @@
     <string name="CoinPage_MajorHolders_TopWallets">Топ Кошельки</string>
     <string name="CoinPage_MajorHolders_Description">На графике выше показано % всех жетонов, находящихся в обороте топ-10 кошельков. Чем ниже это процентное соотношение, тем выше распределение коина.</string>
     <string name="CoinPage_MajorHolders_InTopWallets">Топ-10 лучших кошельков Ethereum</string>
-    <string name="CoinPage_CoinInvestments_Lead">Руководство</string>
+    <string name="CoinPage_CoinInvestments_Lead">Лид</string>
     <!--Rate list-->
     <string name="RateList_TopGainers">Взлеты</string>
     <string name="RateList_TopLosers">Падения</string>
