@@ -9,12 +9,9 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.chart.ChartModule
 import io.horizontalsystems.bankwallet.modules.chart.ChartViewModel
-import io.horizontalsystems.bankwallet.modules.coin.ChartInfoData
-import io.horizontalsystems.bankwallet.modules.coin.overview.ui.ChartInfoHeaderItem
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.WithTranslatableTitle
-import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.marketkit.models.FullCoin
 import java.math.BigDecimal
 
@@ -54,13 +51,6 @@ object TvlModule {
         val diff: CurrencyValue?,
         val diffPercent: BigDecimal?,
         val rank: String
-    )
-
-    @Immutable
-    data class ChartData(
-        val subtitle: ChartInfoHeaderItem,
-        val currency: Currency,
-        val chartInfoData: ChartInfoData
     )
 
     @Immutable
