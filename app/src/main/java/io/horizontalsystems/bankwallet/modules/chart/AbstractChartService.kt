@@ -7,7 +7,6 @@ import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.chartview.models.ChartIndicator
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.core.entities.Currency
-import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -19,7 +18,6 @@ abstract class AbstractChartService {
     open val chartIndicators: List<ChartIndicator> = listOf()
 
     protected abstract val currencyManager: ICurrencyManager
-    protected abstract val dataUpdatedObservable: Observable<Unit>
     protected abstract val initialChartType: ChartView.ChartType
     protected abstract fun getItems(chartType: ChartView.ChartType, currency: Currency): Single<ChartDataXxx>
 
@@ -54,14 +52,6 @@ abstract class AbstractChartService {
     private val disposables = CompositeDisposable()
 
     fun start() {
-        dataUpdatedObservable
-            .subscribeIO {
-                fetchItems()
-            }
-            .let {
-                disposables.add(it)
-            }
-
         currencyManager.baseCurrencyUpdatedSignal
             .subscribeIO {
                 fetchItems()
@@ -72,6 +62,10 @@ abstract class AbstractChartService {
 
         chartType = initialChartType
         indicator = null
+        fetchItems()
+    }
+
+    protected fun dataInvalidated() {
         fetchItems()
     }
 
