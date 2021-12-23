@@ -11,7 +11,6 @@ import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.marketkit.MarketKit
 import io.horizontalsystems.marketkit.models.TimePeriod
 import io.reactivex.Single
-import io.reactivex.subjects.BehaviorSubject
 
 class CoinTvlFetcher(
     override val currencyManager: ICurrencyManager,
@@ -29,7 +28,6 @@ class CoinTvlFetcher(
         ChartType.WEEKLY,
         ChartType.MONTHLY,
     )
-    override val dataUpdatedObservable = BehaviorSubject.create<Unit>()
 
     override fun getItems(chartType: ChartType, currency: Currency): Single<ChartDataXxx> = try {
         val timePeriod = getTimePeriod(chartType)

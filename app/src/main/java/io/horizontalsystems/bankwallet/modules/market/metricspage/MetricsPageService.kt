@@ -17,11 +17,10 @@ import io.reactivex.subjects.BehaviorSubject
 
 class MetricsPageChartRepo(
     override val currencyManager: ICurrencyManager,
-    val metricsType: MetricsType,
+    private val metricsType: MetricsType,
     private val globalMarketRepository: GlobalMarketRepository
 ) : AbstractChartService() {
     override val chartTypes = listOf(ChartView.ChartType.DAILY, ChartView.ChartType.WEEKLY, ChartView.ChartType.MONTHLY)
-    override val dataUpdatedObservable = BehaviorSubject.create<Unit>()
     override val initialChartType: ChartView.ChartType = ChartView.ChartType.DAILY
 
     override fun getItems(

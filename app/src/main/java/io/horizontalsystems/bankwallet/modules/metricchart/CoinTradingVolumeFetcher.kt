@@ -9,7 +9,6 @@ import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.marketkit.MarketKit
 import io.reactivex.Single
-import io.reactivex.subjects.BehaviorSubject
 import io.horizontalsystems.marketkit.models.ChartType as KitChartType
 
 class CoinTradingVolumeFetcher(
@@ -29,7 +28,6 @@ class CoinTradingVolumeFetcher(
         ChartType.MONTHLY6,
         ChartType.MONTHLY12,
     )
-    override val dataUpdatedObservable = BehaviorSubject.create<Unit>()
 
     override fun getItems(
         chartType: ChartType,

@@ -17,7 +17,6 @@ import io.horizontalsystems.marketkit.models.ChartInfo
 import io.horizontalsystems.marketkit.models.CoinPrice
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.subjects.BehaviorSubject
 
 class CoinOverviewChartRepo(
     private val marketKit: MarketKit,
@@ -44,7 +43,6 @@ class CoinOverviewChartRepo(
         ChartIndicator.Rsi
     )
     override val initialChartType by chartTypeStorage::chartType2
-    override val dataUpdatedObservable = BehaviorSubject.create<Unit>()
 
     private var updatesSubscriptionKey: String? = null
     private val disposables = CompositeDisposable()
@@ -84,7 +82,7 @@ class CoinOverviewChartRepo(
     private fun subscribeForUpdates(currency: Currency, chartType: ChartView.ChartType) {
         marketKit.coinPriceObservable(coinUid, currency.code)
             .subscribeIO {
-                dataUpdatedObservable.onNext(Unit)
+                dataInvalidated()
             }
             .let {
                 disposables.add(it)
@@ -92,7 +90,7 @@ class CoinOverviewChartRepo(
 
         marketKit.getChartInfoAsync(coinUid, currency.code, chartType.kitChartType)
             .subscribeIO {
-                dataUpdatedObservable.onNext(Unit)
+                dataInvalidated()
             }
             .let {
                 disposables.add(it)
