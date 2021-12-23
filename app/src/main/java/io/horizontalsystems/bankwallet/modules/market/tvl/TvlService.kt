@@ -36,8 +36,7 @@ class TvlChartRepo(
 
 class TvlService(
     private val currencyManager: ICurrencyManager,
-    private val globalMarketRepository: GlobalMarketRepository,
-    private val chartRepo: TvlChartRepo
+    private val globalMarketRepository: GlobalMarketRepository
 ) {
 
     private var currencyManagerDisposable: Disposable? = null
@@ -60,7 +59,6 @@ class TvlService(
         set(value) {
             field = value
             updateTvlData(false)
-            chartRepo.chain = chain
         }
 
     var sortDescending: Boolean = true
