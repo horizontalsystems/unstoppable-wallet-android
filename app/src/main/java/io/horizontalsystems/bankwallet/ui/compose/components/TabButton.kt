@@ -56,10 +56,7 @@ fun TabBox(
     content: @Composable RowScope.() -> Unit,
     onSelect: () -> Unit,
 ) {
-    Box(
-        modifier = Modifier
-            .padding(horizontal = 4.dp)
-    ) {
+    Box {
         val contentColor by if (enabled) colors.contentColor(selected) else colors.contentColorDisabled()
         val backgroundColor by if (enabled) colors.backgroundColor(selected) else colors.backgroundColor(false)
         Surface(
