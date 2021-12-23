@@ -29,8 +29,8 @@ object CoinOverviewModule {
                     CoinOverviewViewModel(service, CoinViewFactory(currency, App.numberFormatter)) as T
                 }
                 ChartViewModel::class.java -> {
-                    val chartRepo2 = CoinOverviewChartRepo(App.marketKit, App.currencyManager, App.chartTypeStorage, fullCoin.coin.uid)
-                    ChartModule.createViewModel(chartRepo2) as T
+                    val chartService = CoinOverviewChartService(App.marketKit, App.currencyManager, App.chartTypeStorage, fullCoin.coin.uid)
+                    ChartModule.createViewModel(chartService) as T
                 }
                 else -> throw IllegalArgumentException()
             }

@@ -12,7 +12,7 @@ import io.horizontalsystems.marketkit.MarketKit
 import io.horizontalsystems.marketkit.models.TimePeriod
 import io.reactivex.Single
 
-class CoinTvlFetcher(
+class CoinTvlChartService(
     override val currencyManager: ICurrencyManager,
     private val marketKit: MarketKit,
     private val coinUid: String,

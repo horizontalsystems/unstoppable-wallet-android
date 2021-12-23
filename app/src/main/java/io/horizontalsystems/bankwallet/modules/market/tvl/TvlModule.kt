@@ -30,10 +30,10 @@ object TvlModule {
                     TvlViewModel(service, tvlViewItemFactory) as T
                 }
                 TvlChartViewModel::class.java -> {
-                    val chartRepo = TvlChartRepo(App.currencyManager, globalMarketRepository)
+                    val chartService = TvlChartService(App.currencyManager, globalMarketRepository)
 
                     val factory = MetricChartFactory(App.numberFormatter)
-                    TvlChartViewModel(chartRepo, factory) as T
+                    TvlChartViewModel(chartService, factory) as T
                 }
                 else -> throw IllegalArgumentException()
             }

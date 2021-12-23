@@ -11,7 +11,7 @@ import io.horizontalsystems.marketkit.MarketKit
 import io.reactivex.Single
 import io.horizontalsystems.marketkit.models.ChartType as KitChartType
 
-class CoinTradingVolumeFetcher(
+class CoinTradingVolumeChartService(
     override val currencyManager: ICurrencyManager,
     private val marketKit: MarketKit,
     private val coinUid: String,
@@ -23,6 +23,7 @@ class CoinTradingVolumeFetcher(
     override val poweredBy = TranslatableString.ResString(R.string.Market_PoweredByApi)
 
     override val initialChartType = ChartType.MONTHLY_BY_DAY
+
     override val chartTypes = listOf(
         ChartType.MONTHLY_BY_DAY,
         ChartType.MONTHLY6,

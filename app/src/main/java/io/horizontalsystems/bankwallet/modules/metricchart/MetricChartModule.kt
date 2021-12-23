@@ -38,10 +38,10 @@ object MetricChartModule {
         private val coinName: String,
         private val metricChartType: MetricChartType
     ) : ViewModelProvider.Factory {
-        private val chartRepo by lazy {
+        private val chartService by lazy {
             when (metricChartType) {
-                MetricChartType.TradingVolume -> CoinTradingVolumeFetcher(App.currencyManager, App.marketKit, coinUid, coinName)
-                MetricChartType.Tvl -> CoinTvlFetcher(App.currencyManager, App.marketKit, coinUid)
+                MetricChartType.TradingVolume -> CoinTradingVolumeChartService(App.currencyManager, App.marketKit, coinUid, coinName)
+                MetricChartType.Tvl -> CoinTvlChartService(App.currencyManager, App.marketKit, coinUid)
             }
         }
 
@@ -49,11 +49,11 @@ object MetricChartModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return when (modelClass) {
                 MetricChartViewModel::class.java -> {
-                    val metricChartService = MetricChartService(chartRepo as IMetricChartFetcher)
+                    val metricChartService = MetricChartService(chartService as IMetricChartFetcher)
                     MetricChartViewModel(metricChartService) as T
                 }
                 ChartViewModel::class.java -> {
-                    ChartModule.createViewModel(chartRepo as AbstractChartService) as T
+                    ChartModule.createViewModel(chartService as AbstractChartService) as T
                 }
                 else -> throw IllegalArgumentException()
             }

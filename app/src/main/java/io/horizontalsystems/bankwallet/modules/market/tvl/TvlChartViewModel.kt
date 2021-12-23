@@ -4,7 +4,7 @@ import io.horizontalsystems.bankwallet.modules.chart.ChartViewModel
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartFactory
 
 class TvlChartViewModel(
-    private val tvlChartService: TvlChartRepo,
+    private val tvlChartService: TvlChartService,
     factory: MetricChartFactory,
 ) : ChartViewModel(tvlChartService, factory) {
 

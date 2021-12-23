@@ -2,37 +2,10 @@ package io.horizontalsystems.bankwallet.modules.market.tvl
 
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
-import io.horizontalsystems.bankwallet.modules.chart.AbstractChartService
-import io.horizontalsystems.bankwallet.modules.chart.ChartDataXxx
 import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.core.ICurrencyManager
-import io.horizontalsystems.core.entities.Currency
-import io.reactivex.Single
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.BehaviorSubject
-
-class TvlChartRepo(
-    override val currencyManager: ICurrencyManager,
-    private val globalMarketRepository: GlobalMarketRepository
-): AbstractChartService() {
-
-    override val chartTypes = listOf(ChartView.ChartType.DAILY, ChartView.ChartType.WEEKLY, ChartView.ChartType.MONTHLY)
-    override val initialChartType: ChartView.ChartType = ChartView.ChartType.DAILY
-
-    var chain: TvlModule.Chain = TvlModule.Chain.All
-        set(value) {
-            field = value
-            dataInvalidated()
-        }
-
-    override fun getItems(chartType: ChartView.ChartType, currency: Currency): Single<ChartDataXxx> {
-        val chainParam = if (chain == TvlModule.Chain.All) "" else chain.name
-        return globalMarketRepository.getTvlGlobalMarketPoints(chainParam, currency.code, chartType)
-            .map {
-                ChartDataXxx(chartType, it)
-            }
-    }
-}
 
 class TvlService(
     private val currencyManager: ICurrencyManager,
