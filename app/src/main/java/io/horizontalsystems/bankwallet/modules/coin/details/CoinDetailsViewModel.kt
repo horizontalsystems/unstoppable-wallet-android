@@ -130,9 +130,7 @@ class CoinDetailsViewModel(
         val last = values.last()
 
         val points = values.map {
-            io.horizontalsystems.chartview.models.ChartPoint(it.value.toFloat(),
-                null,
-                it.timestamp)
+            io.horizontalsystems.chartview.models.ChartPoint(it.value.toFloat(), it.timestamp)
         }
 
         val diff = (last.value / first.value - BigDecimal.ONE) * BigDecimal(100)

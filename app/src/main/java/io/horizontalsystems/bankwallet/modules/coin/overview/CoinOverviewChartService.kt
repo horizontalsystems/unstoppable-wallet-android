@@ -4,12 +4,12 @@ import io.horizontalsystems.bankwallet.core.IChartTypeStorage
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.modules.chart.AbstractChartService
 import io.horizontalsystems.bankwallet.modules.chart.ChartDataXxx
-import io.horizontalsystems.bankwallet.modules.chart.ChartItem
 import io.horizontalsystems.bankwallet.modules.metricchart.kitChartType
 import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.chartview.Indicator
 import io.horizontalsystems.chartview.helpers.IndicatorHelper
 import io.horizontalsystems.chartview.models.ChartIndicator
+import io.horizontalsystems.chartview.models.ChartPoint
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.marketkit.MarketKit
@@ -124,23 +124,22 @@ class CoinOverviewChartService(
                     Indicator.MacdHistogram to histogram.getOrNull(index),
                 )
 
-                ChartItem(
-                    value = chartPoint.value,
-                    dominance = null,
+                ChartPoint(
+                    value = chartPoint.value.toFloat(),
                     timestamp = chartPoint.timestamp,
-                    volume = chartPoint.volume,
+                    volume = chartPoint.volume?.toFloat(),
                     indicators = indicators
                 )
             }
             .toMutableList()
 
         if (lastCoinPrice.timestamp > items.last().timestamp) {
-            items.add(ChartItem(lastCoinPrice.value, null, lastCoinPrice.timestamp))
+            items.add(ChartPoint(lastCoinPrice.value.toFloat(), timestamp = lastCoinPrice.timestamp))
 
             if (chartType == ChartView.ChartType.DAILY) {
                 val startTimestamp = lastCoinPrice.timestamp - 24 * 60 * 60
                 val startValue = (lastCoinPrice.value * 100.toBigDecimal()) / (lastCoinPrice.diff + 100.toBigDecimal())
-                val startItem = ChartItem(startValue, null, startTimestamp)
+                val startItem = ChartPoint(startValue.toFloat(), startTimestamp)
 
                 items.removeIf { it.timestamp <= startTimestamp }
                 items.add(0, startItem)

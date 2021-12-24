@@ -1,12 +1,12 @@
 package io.horizontalsystems.bankwallet.modules.market.tvl
 
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.bankwallet.modules.chart.ChartItem
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.market.sort
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
 import io.horizontalsystems.chartview.ChartView
+import io.horizontalsystems.chartview.models.ChartPoint
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.marketkit.MarketKit
 import io.horizontalsystems.marketkit.models.DefiMarketInfo
@@ -24,7 +24,7 @@ class GlobalMarketRepository(
         currencyCode: String,
         chartType: ChartView.ChartType,
         metricsType: MetricsType
-    ): Single<List<ChartItem>> {
+    ): Single<List<ChartPoint>> {
         return marketKit.globalMarketPointsSingle(currencyCode, getTimePeriod(chartType))
             .map { list ->
                 list.map { point ->
@@ -36,8 +36,8 @@ class GlobalMarketRepository(
                         MetricsType.TvlInDefi -> point.tvl
                     }
 
-                    val dominance = if (metricsType == MetricsType.TotalMarketCap) point.btcDominance else null
-                    ChartItem(value, dominance, point.timestamp)
+                    val dominance = if (metricsType == MetricsType.TotalMarketCap) point.btcDominance.toFloat() else null
+                    ChartPoint(value = value.toFloat(), timestamp = point.timestamp, dominance = dominance)
                 }
             }
     }
@@ -46,11 +46,11 @@ class GlobalMarketRepository(
         chain: String,
         currencyCode: String,
         chartType: ChartView.ChartType,
-    ): Single<List<ChartItem>> {
+    ): Single<List<ChartPoint>> {
         return marketKit.marketInfoGlobalTvlSingle(chain, currencyCode, getTimePeriod(chartType))
             .map { list ->
                 list.map { point ->
-                      ChartItem(point.value, null, point.timestamp)
+                      ChartPoint(point.value.toFloat(), point.timestamp)
                 }
             }
     }
