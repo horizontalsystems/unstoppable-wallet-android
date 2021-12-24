@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.chart
 
+import android.util.Range
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
@@ -10,19 +11,16 @@ import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.ChartInfoData
 import io.horizontalsystems.bankwallet.modules.market.Value
-import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartFactory
-import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartModule
 import io.horizontalsystems.bankwallet.ui.compose.components.TabItem
-import io.horizontalsystems.chartview.ChartDataItemImmutable
-import io.horizontalsystems.chartview.ChartView
-import io.horizontalsystems.chartview.Indicator
+import io.horizontalsystems.chartview.*
 import io.horizontalsystems.chartview.models.ChartIndicator
+import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.core.helpers.DateHelper
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import java.util.*
 
-open class ChartViewModel(private val service: AbstractChartService, private val factory: MetricChartFactory) : ViewModel() {
+open class ChartViewModel(private val service: AbstractChartService) : ViewModel() {
     val tabItemsLiveData = MutableLiveData<List<TabItem<ChartView.ChartType>>>()
     val indicatorsLiveData = MutableLiveData<List<TabItem<ChartIndicator>>>()
     val dataWrapperLiveData = MutableLiveData<ChartDataWrapper>()
@@ -103,19 +101,38 @@ open class ChartViewModel(private val service: AbstractChartService, private val
         val firstItemValue = chartItems.first().value
         val currentValueDiff = Value.Percent(((lastItemValue - firstItemValue).toFloat() / firstItemValue.toFloat() * 100).toBigDecimal())
 
-        val chartViewItem = factory.convert(
-            MetricChartModule.ValueType.CompactCurrencyValue,
-            service.currency,
-            chartDataXxx
-        )
+        val chartData = chartData(chartDataXxx)
+        val (minValue, maxValue) = getMinMax(chartData.valueRange)
+
         val chartInfoData = ChartInfoData(
-            chartViewItem.chartData,
-            chartViewItem.chartType,
-            chartViewItem.maxValue,
-            chartViewItem.minValue
+            chartData,
+            chartDataXxx.chartType,
+            maxValue,
+            minValue
         )
 
         dataWrapperLiveData.postValue(ChartDataWrapper(currentValue, currentValueDiff, chartInfoData))
+    }
+
+    private val noChangesLimitPercent = 0.2f
+    private fun getMinMax(range: Range<Float>): Pair<String?, String?> {
+        var max = range.upper
+        var min = range.lower
+
+        if (max!= null && min != null && max == min){
+            min *= (1 - noChangesLimitPercent)
+            max *= (1 + noChangesLimitPercent)
+        }
+
+        val maxValue = max?.let { getFormattedValue(it, service.currency) }
+        val minValue = min?.let { getFormattedValue(it, service.currency) }
+
+        return Pair(minValue, maxValue)
+
+    }
+
+    private fun getFormattedValue(value: Float, currency: Currency): String {
+        return App.numberFormatter.formatCurrencyValueAsShortened(CurrencyValue(currency,  value.toBigDecimal()))
     }
 
     override fun onCleared() {
@@ -157,8 +174,62 @@ open class ChartViewModel(private val service: AbstractChartService, private val
                 extraData = extraData,
             )
         }
-
     }
+
+    private fun chartData(chartDataXxx: ChartDataXxx) : ChartData {
+        val startTimestamp = chartDataXxx.startTimestamp
+        val endTimestamp = chartDataXxx.endTimestamp
+        val items = mutableListOf<ChartDataItem>()
+
+        chartDataXxx.items.forEach { point ->
+            val item = ChartDataItem(point.timestamp)
+            item.values[Indicator.Candle] = ChartDataValue(point.value.toFloat())
+            point.volume?.let {
+                item.values[Indicator.Volume] = ChartDataValue(it.toFloat())
+            }
+            point.dominance?.let {
+                item.values[Indicator.Dominance] = ChartDataValue(it.toFloat())
+            }
+            point.indicators.forEach { (indicator: Indicator, value: Float?) ->
+                item.values[indicator] = value?.let { ChartDataValue(it) }
+            }
+
+            items.add(item)
+        }
+
+        val visibleChartData = ChartDataBuilder(mutableListOf(), startTimestamp, endTimestamp, chartDataXxx.isExpired)
+
+        for (item in items) {
+            visibleChartData.items.add(item)
+
+            visibleChartData.range(item, Indicator.Candle)
+            visibleChartData.range(item, Indicator.Volume)
+            visibleChartData.range(item, Indicator.Dominance)
+            visibleChartData.range(item, Indicator.Macd)
+            visibleChartData.range(item, Indicator.MacdSignal)
+            visibleChartData.range(item, Indicator.MacdHistogram)
+        }
+
+        val visibleTimeInterval = visibleChartData.endTimestamp - visibleChartData.startTimestamp
+        for (item in visibleChartData.items) {
+            val timestamp = item.timestamp - visibleChartData.startTimestamp
+
+            val x = (timestamp.toFloat() / visibleTimeInterval)
+
+            item.setPoint(x, Indicator.Candle, visibleChartData.valueRange)
+            item.setPoint(x, Indicator.EmaFast, visibleChartData.valueRange)
+            item.setPoint(x, Indicator.EmaSlow, visibleChartData.valueRange)
+            item.setPoint(x, Indicator.Volume, visibleChartData.volumeRange)
+            item.setPoint(x, Indicator.Dominance, visibleChartData.dominanceRange)
+            item.setPoint(x, Indicator.Rsi, visibleChartData.rsiRange)
+            item.setPoint(x, Indicator.Macd, visibleChartData.macdRange)
+            item.setPoint(x, Indicator.MacdSignal, visibleChartData.macdRange)
+            item.setPoint(x, Indicator.MacdHistogram, visibleChartData.histogramRange)
+        }
+
+        return visibleChartData.build()
+    }
+
 }
 
 data class SelectedPointXxx(
