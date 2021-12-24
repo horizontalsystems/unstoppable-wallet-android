@@ -116,6 +116,7 @@ class CoinOverviewChartService(
         val items = points
             .mapIndexed { index, chartPoint ->
                 val indicators = mapOf(
+                    Indicator.Volume to chartPoint.volume?.toFloat(),
                     Indicator.EmaFast to emaFast.getOrNull(index),
                     Indicator.EmaSlow to emaSlow.getOrNull(index),
                     Indicator.Rsi to rsi.getOrNull(index),
@@ -127,7 +128,6 @@ class CoinOverviewChartService(
                 ChartPoint(
                     value = chartPoint.value.toFloat(),
                     timestamp = chartPoint.timestamp,
-                    volume = chartPoint.volume?.toFloat(),
                     indicators = indicators
                 )
             }

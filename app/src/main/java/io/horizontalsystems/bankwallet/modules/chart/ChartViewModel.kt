@@ -184,12 +184,6 @@ open class ChartViewModel(private val service: AbstractChartService) : ViewModel
         chartDataXxx.items.forEach { point ->
             val item = ChartDataItem(point.timestamp)
             item.values[Indicator.Candle] = ChartDataValue(point.value)
-            point.volume?.let {
-                item.values[Indicator.Volume] = ChartDataValue(it)
-            }
-            point.dominance?.let {
-                item.values[Indicator.Dominance] = ChartDataValue(it)
-            }
             point.indicators.forEach { (indicator: Indicator, value: Float?) ->
                 item.values[indicator] = value?.let { ChartDataValue(it) }
             }
