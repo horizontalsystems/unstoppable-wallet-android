@@ -42,7 +42,7 @@ data class ChartDataValueImmutable(val value: Float, val point: PointF)
 @Immutable
 data class ChartDataItemImmutable(val timestamp: Long, val values: Map<Indicator, ChartDataValueImmutable?>)
 
-class ChartDataBuilder private constructor(points: List<ChartPoint>, val startTimestamp: Long, val endTimestamp: Long, private val isExpired: Boolean = false) {
+class ChartDataBuilder private constructor(points: List<ChartPoint>, start: Long?, end: Long?, private val isExpired: Boolean = false) {
 
     companion object {
         fun buildFromPoints(
@@ -53,12 +53,16 @@ class ChartDataBuilder private constructor(points: List<ChartPoint>, val startTi
         ): ChartData {
             return ChartDataBuilder(
                 points,
-                startTimestamp ?: points.first().timestamp,
-                endTimestamp ?: points.last().timestamp,
+                startTimestamp,
+                endTimestamp,
                 isExpired
             ).build()
         }
     }
+
+    private val startTimestamp = start ?: points.first().timestamp
+    private val endTimestamp = end ?: points.last().timestamp
+
     private val ranges: MutableMap<Indicator, Range<Float>> = mutableMapOf()
 
     val valueRange by lazy {
