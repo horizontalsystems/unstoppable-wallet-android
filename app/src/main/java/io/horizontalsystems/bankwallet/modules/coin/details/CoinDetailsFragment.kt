@@ -37,8 +37,8 @@ import io.horizontalsystems.bankwallet.modules.coin.investments.CoinInvestmentsF
 import io.horizontalsystems.bankwallet.modules.coin.majorholders.CoinMajorHoldersFragment
 import io.horizontalsystems.bankwallet.modules.coin.reports.CoinReportsFragment
 import io.horizontalsystems.bankwallet.modules.coin.treasuries.CoinTreasuriesFragment
-import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartFragment
-import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartModule
+import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartTvlFragment
+import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartVolumeFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineClear
@@ -64,19 +64,17 @@ class CoinDetailsFragment : BaseFragment() {
                     CoinDetailsScreen(
                         viewModel,
                         onClickVolumeChart = {
-                            MetricChartFragment.show(
+                            MetricChartVolumeFragment.show(
                                 childFragmentManager,
                                 viewModel.coin.uid,
-                                viewModel.coin.name,
-                                MetricChartModule.MetricChartType.TradingVolume
+                                viewModel.coin.name
                             )
                         },
                         onClickTvlChart = {
-                            MetricChartFragment.show(
+                            MetricChartTvlFragment.show(
                                 childFragmentManager,
                                 viewModel.coin.uid,
-                                viewModel.coin.name,
-                                MetricChartModule.MetricChartType.Tvl
+                                viewModel.coin.name
                             )
                         }
                     )
