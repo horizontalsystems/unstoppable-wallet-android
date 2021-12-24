@@ -19,7 +19,7 @@ import io.horizontalsystems.bankwallet.modules.coin.details.CoinDetailsModule.Se
 import io.horizontalsystems.bankwallet.modules.coin.details.CoinDetailsModule.SecurityViewItem
 import io.horizontalsystems.bankwallet.modules.coin.details.CoinDetailsModule.ViewItem
 import io.horizontalsystems.bankwallet.modules.market.Value
-import io.horizontalsystems.chartview.ChartDataFactory
+import io.horizontalsystems.chartview.ChartDataBuilder
 import io.horizontalsystems.marketkit.models.ChartPoint
 import io.horizontalsystems.marketkit.models.Coin
 import io.horizontalsystems.marketkit.models.MarketInfoDetails
@@ -136,7 +136,7 @@ class CoinDetailsViewModel(
         }
 
         val diff = (last.value / first.value - BigDecimal.ONE) * BigDecimal(100)
-        val chartData = ChartDataFactory.build(points, first.timestamp, last.timestamp, false)
+        val chartData = ChartDataBuilder.buildFromPoints(points)
         val value = App.numberFormatter.formatCurrencyValueAsShortened(CurrencyValue(service.currency, last.value))
 
         return CoinDetailsModule.ChartViewItem(

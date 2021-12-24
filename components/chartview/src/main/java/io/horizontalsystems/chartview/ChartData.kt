@@ -3,6 +3,7 @@ package io.horizontalsystems.chartview
 import android.graphics.PointF
 import android.util.Range
 import androidx.compose.runtime.Immutable
+import io.horizontalsystems.chartview.models.ChartPoint
 import java.math.BigDecimal
 import kotlin.math.abs
 
@@ -68,39 +69,15 @@ data class ChartDataItem(val timestamp: Long, val values: MutableMap<Indicator, 
 
 class ChartDataBuilder(val items: MutableList<ChartDataItem>, val startTimestamp: Long, val endTimestamp: Long, private val isExpired: Boolean = false) {
 
-    fun add(values: List<ChartDataValue?>, name: Indicator) {
-        val start = items.size - values.size
-        for (i in values.indices) {
-            val value = values[i] ?: continue
-            items[i + start].values[name] = value
+    companion object {
+        fun buildFromPoints(points: List<ChartPoint>): ChartData {
+            val items = points.map { point ->
+                ChartDataItem(point.timestamp, mutableMapOf(Indicator.Candle to ChartDataValue(point.value)))
+            }
+            return ChartDataBuilder(items.toMutableList(), points.first().timestamp, points.last().timestamp, false).build()
         }
     }
-
-    // Ranges
-
     private val ranges: MutableMap<Indicator, Range<Float>> = mutableMapOf()
-
-    fun range(item: ChartDataItem, indicator: Indicator) {
-        val currValue = item.values[indicator]?.value ?: return
-        val prevRange = ranges[indicator] ?: Range(currValue, currValue)
-
-        var prevLower = prevRange.lower
-        var prevUpper = prevRange.upper
-
-        if (prevLower > currValue) {
-            prevLower = currValue
-        }
-
-        if (prevUpper < currValue) {
-            prevUpper = currValue
-        }
-
-        ranges[indicator] = Range(prevLower, prevUpper)
-    }
-
-    fun build(): ChartData {
-        return ChartData(items.map { it.toImmutable() }, startTimestamp, endTimestamp, isExpired, valueRange)
-    }
 
     val valueRange by lazy {
         ranges[Indicator.Candle] ?: Range(0f, 1f)
@@ -139,5 +116,67 @@ class ChartDataBuilder(val items: MutableList<ChartDataItem>, val startTimestamp
                 .maxOrNull() ?: 1f
 
         Range(-max, max)
+    }
+
+    init {
+        items.forEach {
+            it.values.forEach { (indicator, chartDataValue) ->
+                range(it, indicator)
+            }
+        }
+
+        val visibleTimeInterval = endTimestamp - startTimestamp
+
+        items.forEach { item ->
+            val timestamp = item.timestamp - startTimestamp
+            val x = (timestamp.toFloat() / visibleTimeInterval)
+            item.values.forEach { (indicator, chartDataValue) ->
+                item.setPoint(x, indicator, getRangeForIndicator(indicator))
+            }
+        }
+    }
+
+    fun getRangeForIndicator(indicator: Indicator) = when (indicator) {
+        Indicator.Candle -> valueRange
+        Indicator.EmaFast -> valueRange
+        Indicator.EmaSlow -> valueRange
+        Indicator.Volume -> volumeRange
+        Indicator.Dominance -> dominanceRange
+        Indicator.Rsi -> rsiRange
+        Indicator.Macd -> macdRange
+        Indicator.MacdSignal -> macdRange
+        Indicator.MacdHistogram -> histogramRange
+    }
+
+    fun add(values: List<ChartDataValue?>, name: Indicator) {
+        val start = items.size - values.size
+        for (i in values.indices) {
+            val value = values[i] ?: continue
+            items[i + start].values[name] = value
+        }
+    }
+
+    // Ranges
+
+    fun range(item: ChartDataItem, indicator: Indicator) {
+        val currValue = item.values[indicator]?.value ?: return
+        val prevRange = ranges[indicator] ?: Range(currValue, currValue)
+
+        var prevLower = prevRange.lower
+        var prevUpper = prevRange.upper
+
+        if (prevLower > currValue) {
+            prevLower = currValue
+        }
+
+        if (prevUpper < currValue) {
+            prevUpper = currValue
+        }
+
+        ranges[indicator] = Range(prevLower, prevUpper)
+    }
+
+    fun build(): ChartData {
+        return ChartData(items.map { it.toImmutable() }, startTimestamp, endTimestamp, isExpired, valueRange)
     }
 }
