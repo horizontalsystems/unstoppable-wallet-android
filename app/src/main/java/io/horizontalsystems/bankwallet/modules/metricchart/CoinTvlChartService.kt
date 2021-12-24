@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.metricchart
 import io.horizontalsystems.bankwallet.core.UnsupportedException
 import io.horizontalsystems.bankwallet.modules.chart.AbstractChartService
 import io.horizontalsystems.bankwallet.modules.chart.ChartDataXxx
+import io.horizontalsystems.bankwallet.modules.chart.ChartItem
 import io.horizontalsystems.chartview.ChartView.ChartType
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.core.entities.Currency
@@ -28,7 +29,7 @@ class CoinTvlChartService(
         marketKit.marketInfoTvlSingle(coinUid, currency.code, timePeriod)
             .map { info ->
                 info.map { point ->
-                    MetricChartModule.Item(point.value, null, point.timestamp)
+                    ChartItem(point.value, null, point.timestamp)
                 }
             }
             .map {

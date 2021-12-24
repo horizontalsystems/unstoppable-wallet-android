@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.modules.chart
 
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
-import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartModule
 import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.chartview.models.ChartIndicator
 import io.horizontalsystems.core.ICurrencyManager
@@ -104,17 +103,3 @@ abstract class AbstractChartService {
 
 }
 
-data class ChartDataXxx(
-    val chartType: ChartView.ChartType,
-    val items: List<MetricChartModule.Item>,
-    val startTimestamp: Long,
-    val endTimestamp: Long,
-    val isExpired: Boolean = false
-) {
-    constructor(chartType: ChartView.ChartType, items: List<MetricChartModule.Item>) : this(
-        chartType,
-        items,
-        items.firstOrNull()?.timestamp ?: 0,
-        items.lastOrNull()?.timestamp ?: 0,
-    )
-}

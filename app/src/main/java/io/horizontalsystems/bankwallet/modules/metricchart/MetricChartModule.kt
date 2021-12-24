@@ -2,20 +2,7 @@ package io.horizontalsystems.bankwallet.modules.metricchart
 
 import android.os.Parcelable
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.chartview.Indicator
 import kotlinx.android.parcel.Parcelize
-import java.math.BigDecimal
-
-object MetricChartModule {
-
-    data class Item(
-        val value: BigDecimal,
-        val dominance: BigDecimal?,
-        val timestamp: Long,
-        val volume: BigDecimal? = null,
-        val indicators: Map<Indicator, Float?> = mapOf()
-    )
-}
 
 @Parcelize
 enum class MetricsType : Parcelable {
