@@ -1,9 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.metricchart
 
-import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.chart.AbstractChartService
 import io.horizontalsystems.bankwallet.modules.chart.ChartDataXxx
-import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.chartview.ChartView.ChartType
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.core.entities.Currency
@@ -15,12 +13,7 @@ class CoinTradingVolumeChartService(
     override val currencyManager: ICurrencyManager,
     private val marketKit: MarketKit,
     private val coinUid: String,
-    private val coinName: String,
-) : IMetricChartFetcher, AbstractChartService() {
-
-    override val title = R.string.CoinPage_TotalVolume
-    override val description = TranslatableString.ResString(R.string.MarketGlobalMetrics_VolumeDescriptionCoin, coinName)
-    override val poweredBy = TranslatableString.ResString(R.string.Market_PoweredByApi)
+) : AbstractChartService() {
 
     override val initialChartType = ChartType.MONTHLY_BY_DAY
 
