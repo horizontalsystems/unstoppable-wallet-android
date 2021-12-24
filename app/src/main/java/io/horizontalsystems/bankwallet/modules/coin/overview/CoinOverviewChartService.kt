@@ -4,7 +4,7 @@ import io.horizontalsystems.bankwallet.core.IChartTypeStorage
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.modules.chart.AbstractChartService
 import io.horizontalsystems.bankwallet.modules.chart.ChartDataXxx
-import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartModule
+import io.horizontalsystems.bankwallet.modules.chart.ChartItem
 import io.horizontalsystems.bankwallet.modules.metricchart.kitChartType
 import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.chartview.Indicator
@@ -124,7 +124,7 @@ class CoinOverviewChartService(
                     Indicator.MacdHistogram to histogram.getOrNull(index),
                 )
 
-                MetricChartModule.Item(
+                ChartItem(
                     value = chartPoint.value,
                     dominance = null,
                     timestamp = chartPoint.timestamp,
@@ -135,12 +135,12 @@ class CoinOverviewChartService(
             .toMutableList()
 
         if (lastCoinPrice.timestamp > items.last().timestamp) {
-            items.add(MetricChartModule.Item(lastCoinPrice.value, null, lastCoinPrice.timestamp))
+            items.add(ChartItem(lastCoinPrice.value, null, lastCoinPrice.timestamp))
 
             if (chartType == ChartView.ChartType.DAILY) {
                 val startTimestamp = lastCoinPrice.timestamp - 24 * 60 * 60
                 val startValue = (lastCoinPrice.value * 100.toBigDecimal()) / (lastCoinPrice.diff + 100.toBigDecimal())
-                val startItem = MetricChartModule.Item(startValue, null, startTimestamp)
+                val startItem = ChartItem(startValue, null, startTimestamp)
 
                 items.removeIf { it.timestamp <= startTimestamp }
                 items.add(0, startItem)

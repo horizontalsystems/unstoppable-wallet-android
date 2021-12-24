@@ -1,10 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.market.tvl
 
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import io.horizontalsystems.bankwallet.modules.chart.ChartItem
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.market.sort
-import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartModule
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
 import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.core.entities.Currency
@@ -24,7 +24,7 @@ class GlobalMarketRepository(
         currencyCode: String,
         chartType: ChartView.ChartType,
         metricsType: MetricsType
-    ): Single<List<MetricChartModule.Item>> {
+    ): Single<List<ChartItem>> {
         return marketKit.globalMarketPointsSingle(currencyCode, getTimePeriod(chartType))
             .map { list ->
                 list.map { point ->
@@ -37,7 +37,7 @@ class GlobalMarketRepository(
                     }
 
                     val dominance = if (metricsType == MetricsType.TotalMarketCap) point.btcDominance else null
-                    MetricChartModule.Item(value, dominance, point.timestamp)
+                    ChartItem(value, dominance, point.timestamp)
                 }
             }
     }
@@ -46,11 +46,11 @@ class GlobalMarketRepository(
         chain: String,
         currencyCode: String,
         chartType: ChartView.ChartType,
-    ): Single<List<MetricChartModule.Item>> {
+    ): Single<List<ChartItem>> {
         return marketKit.marketInfoGlobalTvlSingle(chain, currencyCode, getTimePeriod(chartType))
             .map { list ->
                 list.map { point ->
-                      MetricChartModule.Item(point.value, null, point.timestamp)
+                      ChartItem(point.value, null, point.timestamp)
                 }
             }
     }
