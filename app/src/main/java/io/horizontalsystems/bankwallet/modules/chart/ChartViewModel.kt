@@ -12,7 +12,10 @@ import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.ChartInfoData
 import io.horizontalsystems.bankwallet.modules.market.Value
 import io.horizontalsystems.bankwallet.ui.compose.components.TabItem
-import io.horizontalsystems.chartview.*
+import io.horizontalsystems.chartview.ChartDataBuilder
+import io.horizontalsystems.chartview.ChartDataItemImmutable
+import io.horizontalsystems.chartview.ChartView
+import io.horizontalsystems.chartview.Indicator
 import io.horizontalsystems.chartview.models.ChartIndicator
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.core.helpers.DateHelper
@@ -101,7 +104,12 @@ open class ChartViewModel(private val service: AbstractChartService) : ViewModel
         val firstItemValue = chartItems.first().value
         val currentValueDiff = Value.Percent(((lastItemValue - firstItemValue) / firstItemValue * 100).toBigDecimal())
 
-        val chartData = chartData(chartDataXxx)
+        val chartData = ChartDataBuilder.buildFromPoints(
+            chartDataXxx.items,
+            chartDataXxx.startTimestamp,
+            chartDataXxx.endTimestamp,
+            chartDataXxx.isExpired)
+
         val (minValue, maxValue) = getMinMax(chartData.valueRange)
 
         val chartInfoData = ChartInfoData(
@@ -174,54 +182,6 @@ open class ChartViewModel(private val service: AbstractChartService) : ViewModel
                 extraData = extraData,
             )
         }
-    }
-
-    private fun chartData(chartDataXxx: ChartDataXxx) : ChartData {
-        val startTimestamp = chartDataXxx.startTimestamp
-        val endTimestamp = chartDataXxx.endTimestamp
-        val items = mutableListOf<ChartDataItem>()
-
-        chartDataXxx.items.forEach { point ->
-            val item = ChartDataItem(point.timestamp)
-            item.values[Indicator.Candle] = ChartDataValue(point.value)
-            point.indicators.forEach { (indicator: Indicator, value: Float?) ->
-                item.values[indicator] = value?.let { ChartDataValue(it) }
-            }
-
-            items.add(item)
-        }
-
-        val visibleChartData = ChartDataBuilder(mutableListOf(), startTimestamp, endTimestamp, chartDataXxx.isExpired)
-
-        for (item in items) {
-            visibleChartData.items.add(item)
-
-            visibleChartData.range(item, Indicator.Candle)
-            visibleChartData.range(item, Indicator.Volume)
-            visibleChartData.range(item, Indicator.Dominance)
-            visibleChartData.range(item, Indicator.Macd)
-            visibleChartData.range(item, Indicator.MacdSignal)
-            visibleChartData.range(item, Indicator.MacdHistogram)
-        }
-
-        val visibleTimeInterval = visibleChartData.endTimestamp - visibleChartData.startTimestamp
-        for (item in visibleChartData.items) {
-            val timestamp = item.timestamp - visibleChartData.startTimestamp
-
-            val x = (timestamp.toFloat() / visibleTimeInterval)
-
-            item.setPoint(x, Indicator.Candle, visibleChartData.valueRange)
-            item.setPoint(x, Indicator.EmaFast, visibleChartData.valueRange)
-            item.setPoint(x, Indicator.EmaSlow, visibleChartData.valueRange)
-            item.setPoint(x, Indicator.Volume, visibleChartData.volumeRange)
-            item.setPoint(x, Indicator.Dominance, visibleChartData.dominanceRange)
-            item.setPoint(x, Indicator.Rsi, visibleChartData.rsiRange)
-            item.setPoint(x, Indicator.Macd, visibleChartData.macdRange)
-            item.setPoint(x, Indicator.MacdSignal, visibleChartData.macdRange)
-            item.setPoint(x, Indicator.MacdHistogram, visibleChartData.histogramRange)
-        }
-
-        return visibleChartData.build()
     }
 
 }

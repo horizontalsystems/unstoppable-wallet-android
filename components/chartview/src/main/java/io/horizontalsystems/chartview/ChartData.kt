@@ -67,14 +67,31 @@ data class ChartDataItem(val timestamp: Long, val values: MutableMap<Indicator, 
     }
 }
 
-class ChartDataBuilder(val items: MutableList<ChartDataItem>, val startTimestamp: Long, val endTimestamp: Long, private val isExpired: Boolean = false) {
+class ChartDataBuilder private constructor(val items: MutableList<ChartDataItem>, val startTimestamp: Long, val endTimestamp: Long, private val isExpired: Boolean = false) {
 
     companion object {
-        fun buildFromPoints(points: List<ChartPoint>): ChartData {
+        fun buildFromPoints(
+            points: List<ChartPoint>,
+            startTimestamp: Long? = null,
+            endTimestamp: Long? = null,
+            isExpired: Boolean = false
+        ): ChartData {
             val items = points.map { point ->
-                ChartDataItem(point.timestamp, mutableMapOf(Indicator.Candle to ChartDataValue(point.value)))
+                val indicators = mapOf(Indicator.Candle to ChartDataValue(point.value))
+                    .plus(
+                        point.indicators.map { (indicator, value) ->
+                            indicator to value?.let { ChartDataValue(it) }
+                        }
+                    )
+                ChartDataItem(point.timestamp, indicators.toMutableMap())
             }
-            return ChartDataBuilder(items.toMutableList(), points.first().timestamp, points.last().timestamp, false).build()
+
+            return ChartDataBuilder(
+                items.toMutableList(),
+                startTimestamp ?: points.first().timestamp,
+                endTimestamp ?: points.last().timestamp,
+                isExpired
+            ).build()
         }
     }
     private val ranges: MutableMap<Indicator, Range<Float>> = mutableMapOf()
