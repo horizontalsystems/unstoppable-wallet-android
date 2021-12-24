@@ -1,12 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.market.tvl
 
 import io.horizontalsystems.bankwallet.modules.chart.ChartViewModel
-import io.horizontalsystems.bankwallet.modules.metricchart.MetricChartFactory
 
 class TvlChartViewModel(
     private val tvlChartService: TvlChartService,
-    factory: MetricChartFactory,
-) : ChartViewModel(tvlChartService, factory) {
+) : ChartViewModel(tvlChartService) {
 
     fun onSelectChain(chain: TvlModule.Chain) {
         tvlChartService.chain = chain
