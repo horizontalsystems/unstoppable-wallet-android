@@ -96,10 +96,10 @@ open class ChartViewModel(private val service: AbstractChartService) : ViewModel
         if (chartItems.isEmpty()) return
 
         val lastItemValue = chartItems.last().value
-        val currentValue = App.numberFormatter.formatCurrencyValueAsShortened(CurrencyValue(service.currency, lastItemValue))
+        val currentValue = App.numberFormatter.formatCurrencyValueAsShortened(CurrencyValue(service.currency, lastItemValue.toBigDecimal()))
 
         val firstItemValue = chartItems.first().value
-        val currentValueDiff = Value.Percent(((lastItemValue - firstItemValue).toFloat() / firstItemValue.toFloat() * 100).toBigDecimal())
+        val currentValueDiff = Value.Percent(((lastItemValue - firstItemValue) / firstItemValue * 100).toBigDecimal())
 
         val chartData = chartData(chartDataXxx)
         val (minValue, maxValue) = getMinMax(chartData.valueRange)
@@ -183,12 +183,12 @@ open class ChartViewModel(private val service: AbstractChartService) : ViewModel
 
         chartDataXxx.items.forEach { point ->
             val item = ChartDataItem(point.timestamp)
-            item.values[Indicator.Candle] = ChartDataValue(point.value.toFloat())
+            item.values[Indicator.Candle] = ChartDataValue(point.value)
             point.volume?.let {
-                item.values[Indicator.Volume] = ChartDataValue(it.toFloat())
+                item.values[Indicator.Volume] = ChartDataValue(it)
             }
             point.dominance?.let {
-                item.values[Indicator.Dominance] = ChartDataValue(it.toFloat())
+                item.values[Indicator.Dominance] = ChartDataValue(it)
             }
             point.indicators.forEach { (indicator: Indicator, value: Float?) ->
                 item.values[indicator] = value?.let { ChartDataValue(it) }

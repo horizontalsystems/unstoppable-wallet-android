@@ -154,7 +154,7 @@ class MarketOverviewViewModel(
     }
 
     private fun getChartData(marketMetricsPoints: List<MarketMetricsPoint>): ChartData {
-        val points = marketMetricsPoints.map { ChartPoint(it.value.toFloat(), null, it.timestamp) }
+        val points = marketMetricsPoints.map { ChartPoint(it.value.toFloat(), it.timestamp) }
         return ChartDataBuilder.buildFromPoints(points)
     }
 
