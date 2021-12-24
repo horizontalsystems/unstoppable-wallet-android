@@ -19,7 +19,7 @@ import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.extensions.MetricData
 import io.horizontalsystems.chartview.ChartData
-import io.horizontalsystems.chartview.ChartDataFactory
+import io.horizontalsystems.chartview.ChartDataBuilder
 import io.horizontalsystems.chartview.models.ChartPoint
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
@@ -154,10 +154,8 @@ class MarketOverviewViewModel(
     }
 
     private fun getChartData(marketMetricsPoints: List<MarketMetricsPoint>): ChartData {
-        val startTimestamp = marketMetricsPoints.first().timestamp
-        val endTimestamp = marketMetricsPoints.last().timestamp
         val points = marketMetricsPoints.map { ChartPoint(it.value.toFloat(), null, it.timestamp) }
-        return ChartDataFactory.build(points, startTimestamp, endTimestamp, false)
+        return ChartDataBuilder.buildFromPoints(points)
     }
 
     private fun formatFiatShortened(value: BigDecimal, symbol: String): String {
