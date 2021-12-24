@@ -6,6 +6,7 @@ import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.market.sort
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
 import io.horizontalsystems.chartview.ChartView
+import io.horizontalsystems.chartview.Indicator
 import io.horizontalsystems.chartview.models.ChartPoint
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.marketkit.MarketKit
@@ -37,7 +38,7 @@ class GlobalMarketRepository(
                     }
 
                     val dominance = if (metricsType == MetricsType.TotalMarketCap) point.btcDominance.toFloat() else null
-                    ChartPoint(value = value.toFloat(), timestamp = point.timestamp, dominance = dominance)
+                    ChartPoint(value = value.toFloat(), timestamp = point.timestamp, indicators = mapOf(Indicator.Dominance to dominance))
                 }
             }
     }
