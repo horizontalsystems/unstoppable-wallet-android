@@ -12,11 +12,8 @@ import androidx.compose.foundation.text.selection.LocalTextSelectionColors
 import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -82,7 +79,7 @@ class AddressInputView @JvmOverloads constructor(
     private fun observe() {
         findViewTreeLifecycleOwner()?.let { lifecycleOwner ->
             viewModel.inputLiveData.observe(lifecycleOwner, Observer {
-                listener.onTextChange(it)
+                listener.onTextChange(it.second)
             })
         }
     }
@@ -169,8 +166,9 @@ fun AddressInputViewComponent(
     viewModel: AddressInputViewModel,
     listener: AddressInputView.Listener
 ) {
+    val inputData by viewModel.inputLiveData.observeAsState(Pair(0,""))
+    var text by remember(inputData.first) { mutableStateOf(inputData.second) }
 
-    val inputData by viewModel.inputLiveData.observeAsState("")
     val inputHint by viewModel.inputHintLiveData.observeAsState("")
     val inputEditable by viewModel.inputEditableLiveData.observeAsState(true)
     val buttonsData by viewModel.buttonsLiveData.observeAsState(listOf<AddressInputButton>())
@@ -205,9 +203,10 @@ fun AddressInputViewComponent(
                 modifier = Modifier
                     .padding(start = 0.dp, top = 4.dp, end = 8.dp, bottom = 4.dp)
                     .weight(1f),
-                value = inputData,
+                value = text,
                 onValueChange = {
-                    viewModel.setText(it)
+                    text = it
+                    viewModel.updateText(it)
                 },
                 textStyle = ColoredTextStyle(
                     color = ComposeAppTheme.colors.oz,
@@ -215,7 +214,7 @@ fun AddressInputViewComponent(
                 ),
                 //input hint
                 decorationBox = { innerTextField ->
-                    if (inputData.isEmpty()) {
+                    if (text.isEmpty()) {
                         Text(
                             inputHint,
                             color = ComposeAppTheme.colors.grey50,
@@ -279,10 +278,11 @@ enum class AddressInputButton {
 class AddressInputViewModel : ViewModel() {
 
     private var inputText = ""
+    private var textUpdateKey = 0
 
     val buttonsLiveData = MutableLiveData(getButtons())
     val showSpinnerLiveData = MutableLiveData(false)
-    val inputLiveData = MutableLiveData(inputText)
+    val inputLiveData = MutableLiveData(Pair(textUpdateKey, inputText))
     val inputHintLiveData = MutableLiveData("")
     val inputEditableLiveData = MutableLiveData(true)
 
@@ -292,8 +292,9 @@ class AddressInputViewModel : ViewModel() {
     }
 
     private fun sync() {
+        textUpdateKey++
         buttonsLiveData.postValue(getButtons())
-        inputLiveData.postValue(inputText)
+        inputLiveData.postValue(Pair(textUpdateKey,inputText))
     }
 
     fun setText(text: String) {
@@ -311,6 +312,12 @@ class AddressInputViewModel : ViewModel() {
 
     fun setInputEditable(editable: Boolean) {
         inputEditableLiveData.postValue(editable)
+    }
+
+    fun updateText(text: String) {
+        inputText = text
+        buttonsLiveData.postValue(getButtons())
+        inputLiveData.postValue(Pair(textUpdateKey,inputText))
     }
 
 }

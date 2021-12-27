@@ -65,7 +65,8 @@ object SendAddressModule {
             val addressParser = App.addressParserFactory.parser(coin.coinType)
             val presenter = SendAddressPresenter(addressModuleDelete)
 
-            val resolutionService = AddressResolutionService(coin.code, isResolutionEnabled)
+            val coinCode = AddressResolutionService.getChainCoinCode(coin.coinType) ?: coin.code
+            val resolutionService = AddressResolutionService(coinCode, isResolutionEnabled)
             val viewModel = RecipientAddressViewModel(presenter, resolutionService, addressParser, placeholder, listOf(resolutionService))
 
             sendHandler.addressModule = presenter
