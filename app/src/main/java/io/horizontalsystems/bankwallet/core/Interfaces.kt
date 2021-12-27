@@ -91,7 +91,7 @@ interface ILocalStorage {
 }
 
 interface IChartTypeStorage {
-    var chartType2: ChartView.ChartType
+    var chartType: ChartView.ChartType
 }
 
 interface IRestoreSettingsStorage {
