@@ -75,7 +75,6 @@ class ChartTouchArea @JvmOverloads constructor(context: Context, attrs: Attribut
     private fun onMove(coordinate: Coordinate?, listener: Chart.Listener) {
         if (coordinate == null) return
         if (coordinate.x != touchPoint?.x) {
-            listener.onTouchSelect(coordinate.point)
             listener.onTouchSelect(coordinate.item)
 
             touchPoint = PointF(coordinate.x, coordinate.y)
