@@ -112,11 +112,11 @@ class CoinOverviewChartService(
         if (points.isEmpty()) return ChartDataXxx(chartType, listOf())
 
         val values = points.map { it.value.toFloat() }
-        val emaFast = IndicatorHelper.emaXxx(values, Indicator.EmaFast.period)
-        val emaSlow = IndicatorHelper.emaXxx(values, Indicator.EmaSlow.period)
+        val emaFast = IndicatorHelper.ema(values, Indicator.EmaFast.period)
+        val emaSlow = IndicatorHelper.ema(values, Indicator.EmaSlow.period)
 
-        val rsi = IndicatorHelper.rsiXxx(values, Indicator.Rsi.period)
-        val (macd, signal, histogram) = IndicatorHelper.macdXxx(values, Indicator.Macd.fastPeriod, Indicator.Macd.slowPeriod, Indicator.Macd.signalPeriod)
+        val rsi = IndicatorHelper.rsi(values, Indicator.Rsi.period)
+        val (macd, signal, histogram) = IndicatorHelper.macd(values, Indicator.Macd.fastPeriod, Indicator.Macd.slowPeriod, Indicator.Macd.signalPeriod)
 
         val items = points
             .mapIndexed { index, chartPoint ->
