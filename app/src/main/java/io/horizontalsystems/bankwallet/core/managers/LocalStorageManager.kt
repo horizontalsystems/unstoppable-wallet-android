@@ -23,7 +23,6 @@ import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.core.IPinStorage
 import io.horizontalsystems.core.IThirdKeyboard
 import io.horizontalsystems.core.entities.AppVersion
-import io.horizontalsystems.marketkit.models.ChartType
 
 class LocalStorageManager(private val preferences: SharedPreferences)
     : ILocalStorage, IPinStorage, IChartTypeStorage, IThirdKeyboard, IMarketStorage {
@@ -259,12 +258,6 @@ class LocalStorageManager(private val preferences: SharedPreferences)
         }
 
     //  IChartTypeStorage
-
-    override var chartType: ChartType
-        get() = ChartType.fromString(preferences.getString(CHART_TYPE, null)) ?: ChartType.TODAY
-        set(mode) {
-            preferences.edit().putString(CHART_TYPE, mode.name).apply()
-        }
 
     override var chartType2: ChartView.ChartType
         get() = ChartView.ChartType.fromString(preferences.getString(CHART_TYPE, null)) ?: ChartView.ChartType.TODAY

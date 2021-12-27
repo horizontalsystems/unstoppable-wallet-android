@@ -53,6 +53,11 @@ class CoinOverviewChartService(
         unsubscribeFromUpdates()
     }
 
+    override fun updateChartType(chartType: ChartView.ChartType) {
+        super.updateChartType(chartType)
+        chartTypeStorage.chartType2 = chartType
+    }
+
     override fun getItems(
         chartType: ChartView.ChartType,
         currency: Currency,

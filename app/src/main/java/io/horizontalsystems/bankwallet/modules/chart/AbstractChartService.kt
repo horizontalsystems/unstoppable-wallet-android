@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.chart
 
+import androidx.annotation.CallSuper
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.chartview.ChartView
@@ -73,7 +74,8 @@ abstract class AbstractChartService {
         fetchItemsDisposable?.dispose()
     }
 
-    fun updateChartType(chartType: ChartView.ChartType) {
+    @CallSuper
+    open fun updateChartType(chartType: ChartView.ChartType) {
         this.chartType = chartType
 
         fetchItems()

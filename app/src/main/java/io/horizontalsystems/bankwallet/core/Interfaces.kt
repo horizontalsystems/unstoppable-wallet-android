@@ -22,7 +22,10 @@ import io.horizontalsystems.core.entities.AppVersion
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.TransactionData
-import io.horizontalsystems.marketkit.models.*
+import io.horizontalsystems.marketkit.models.CoinType
+import io.horizontalsystems.marketkit.models.FullCoin
+import io.horizontalsystems.marketkit.models.PlatformCoin
+import io.horizontalsystems.marketkit.models.PlatformType
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -88,7 +91,6 @@ interface ILocalStorage {
 }
 
 interface IChartTypeStorage {
-    var chartType: ChartType
     var chartType2: ChartView.ChartType
 }
 
