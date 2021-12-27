@@ -310,7 +310,7 @@ class EvmTransactionConverter(
                         fullTransaction = fullTransaction,
                         baseCoin = baseCoin,
                         value = getEip20Value(to, methodDecoration.value, false),
-                        from = methodDecoration.to.eip55,
+                        from = fullTransaction.transaction.from.eip55,
                         foreignTransaction = true,
                         source = source
                     )
