@@ -25,7 +25,7 @@ class CoinOverviewChartService(
     private val coinUid: String,
 ) : AbstractChartService() {
 
-    override val initialChartType by chartTypeStorage::chartType2
+    override val initialChartType by chartTypeStorage::chartType
 
     override val chartTypes = listOf(
         ChartView.ChartType.TODAY,
@@ -55,7 +55,7 @@ class CoinOverviewChartService(
 
     override fun updateChartType(chartType: ChartView.ChartType) {
         super.updateChartType(chartType)
-        chartTypeStorage.chartType2 = chartType
+        chartTypeStorage.chartType = chartType
     }
 
     override fun getItems(

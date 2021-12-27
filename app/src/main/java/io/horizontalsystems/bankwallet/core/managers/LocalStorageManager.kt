@@ -259,7 +259,7 @@ class LocalStorageManager(private val preferences: SharedPreferences)
 
     //  IChartTypeStorage
 
-    override var chartType2: ChartView.ChartType
+    override var chartType: ChartView.ChartType
         get() = ChartView.ChartType.fromString(preferences.getString(CHART_TYPE, null)) ?: ChartView.ChartType.TODAY
         set(mode) {
             preferences.edit().putString(CHART_TYPE, mode.name).apply()
