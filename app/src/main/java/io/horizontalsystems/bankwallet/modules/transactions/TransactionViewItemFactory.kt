@@ -52,6 +52,7 @@ class TransactionViewItemFactory {
             is EvmIncomingTransactionRecord -> createViewItemFromEvmIncomingTransactionRecord(record, transactionItem.currencyValue, progress, lastBlockTimestamp, icon)
             is EvmOutgoingTransactionRecord -> createViewItemFromEvmOutgoingTransactionRecord(record, transactionItem.currencyValue, progress, lastBlockTimestamp, icon)
             is SwapTransactionRecord -> createViewItemFromSwapTransactionRecord(record, transactionItem.currencyValue, progress, lastBlockTimestamp, icon)
+            is UnknownSwapTransactionRecord -> createViewItemFromUnknownSwapTransactionRecord(record, transactionItem.currencyValue, progress, lastBlockTimestamp, icon)
             else -> throw IllegalArgumentException("Undefined record type ${record.javaClass.name}")
         }
     }
@@ -82,6 +83,28 @@ class TransactionViewItemFactory {
             ),
             primaryValue,
             secondaryValue,
+            Date(record.timestamp * 1000)
+        )
+    }
+
+    private fun createViewItemFromUnknownSwapTransactionRecord(
+        record: UnknownSwapTransactionRecord,
+        currencyValue: CurrencyValue?,
+        progress: Int?,
+        lastBlockTimestamp: Long?,
+        icon: Int?
+    ): TransactionViewItem {
+        return TransactionViewItem(
+            record.uid,
+            icon ?: R.drawable.ic_tx_swap_20,
+            progress,
+            Translator.getString(R.string.Transactions_Swap),
+            Translator.getString(
+                R.string.Transactions_From,
+                getNameOrAddressTruncated(record.exchangeAddress)
+            ),
+            null,
+            null,
             Date(record.timestamp * 1000)
         )
     }
