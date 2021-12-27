@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.coin.overview
 import io.horizontalsystems.bankwallet.core.IChartTypeStorage
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.modules.chart.AbstractChartService
-import io.horizontalsystems.bankwallet.modules.chart.ChartDataXxx
+import io.horizontalsystems.bankwallet.modules.chart.ChartPointsWrapper
 import io.horizontalsystems.bankwallet.modules.metricchart.kitChartType
 import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.chartview.Indicator
@@ -61,7 +61,7 @@ class CoinOverviewChartService(
     override fun getItems(
         chartType: ChartView.ChartType,
         currency: Currency,
-    ): Single<ChartDataXxx> {
+    ): Single<ChartPointsWrapper> {
         val newKey = chartType.name + currency.code
         if (newKey != updatesSubscriptionKey) {
             unsubscribeFromUpdates()
@@ -75,7 +75,7 @@ class CoinOverviewChartService(
         val items = if (tmpChartInfo != null && tmpLastCoinPrice != null) {
             doGetItems(tmpChartInfo, tmpLastCoinPrice, chartType)
         } else {
-            ChartDataXxx(chartType, listOf())
+            ChartPointsWrapper(chartType, listOf())
         }
 
         return Single.just(items)
@@ -107,9 +107,9 @@ class CoinOverviewChartService(
         chartInfo: ChartInfo,
         lastCoinPrice: CoinPrice,
         chartType: ChartView.ChartType
-    ): ChartDataXxx {
+    ): ChartPointsWrapper {
         val points = chartInfo.points
-        if (points.isEmpty()) return ChartDataXxx(chartType, listOf())
+        if (points.isEmpty()) return ChartPointsWrapper(chartType, listOf())
 
         val values = points.map { it.value.toFloat() }
         val emaFast = IndicatorHelper.ema(values, Indicator.EmaFast.period)
@@ -153,7 +153,7 @@ class CoinOverviewChartService(
 
         items.removeIf { it.timestamp < chartInfo.startTimestamp }
 
-        return ChartDataXxx(chartType, items, chartInfo.startTimestamp, chartInfo.endTimestamp, chartInfo.isExpired)
+        return ChartPointsWrapper(chartType, items, chartInfo.startTimestamp, chartInfo.endTimestamp, chartInfo.isExpired)
     }
 
 }

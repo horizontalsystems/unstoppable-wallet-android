@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.chart
 import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.chartview.models.ChartPoint
 
-data class ChartDataXxx(
+data class ChartPointsWrapper(
     val chartType: ChartView.ChartType,
     val items: List<ChartPoint>,
     val startTimestamp: Long?,

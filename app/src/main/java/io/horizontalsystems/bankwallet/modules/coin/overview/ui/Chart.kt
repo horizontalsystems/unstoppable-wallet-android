@@ -12,13 +12,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.chart.ChartViewModel
-import io.horizontalsystems.bankwallet.modules.chart.SelectedPointXxx
+import io.horizontalsystems.bankwallet.modules.chart.SelectedPoint
 import io.horizontalsystems.bankwallet.modules.coin.ChartInfoData
 import io.horizontalsystems.bankwallet.modules.market.Value
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -72,7 +71,7 @@ fun Chart(chartViewModel: ChartViewModel, onChangeHoldingPointState: (Boolean) -
             chartInfoData = chartDataWrapper?.chartInfoData,
             chartLoading = chartLoading,
             viewState = chartViewState,
-            itemToPointConverter = chartViewModel::getSelectedPointXxx,
+            itemToPointConverter = chartViewModel::getSelectedPoint,
             onChangeHoldingPointState = onChangeHoldingPointState
         )
     }
@@ -87,16 +86,16 @@ fun <T> Chart(
     chartInfoData: ChartInfoData?,
     chartLoading: Boolean,
     viewState: ViewState?,
-    itemToPointConverter: (ChartDataItemImmutable) -> SelectedPointXxx?,
+    itemToPointConverter: (ChartDataItemImmutable) -> SelectedPoint?,
     onChangeHoldingPointState: (Boolean) -> Unit
 ) {
     Column {
-        var selectedPointXxx by remember { mutableStateOf<SelectedPointXxx?>(null) }
-        HsChartLinePeriodsAndPoint(tabItems, selectedPointXxx, onSelectTab)
+        var selectedPoint by remember { mutableStateOf<SelectedPoint?>(null) }
+        HsChartLinePeriodsAndPoint(tabItems, selectedPoint, onSelectTab)
         val chartIndicator = indicators.firstOrNull { it.selected && it.enabled }?.item
         PriceVolChart(chartInfoData, chartIndicator, chartLoading, viewState) { item ->
             onChangeHoldingPointState.invoke(item != null)
-            selectedPointXxx = item?.let { itemToPointConverter.invoke(it) }
+            selectedPoint = item?.let { itemToPointConverter.invoke(it) }
         }
         if (indicators.isNotEmpty()) {
             HSIndicatorToggles(indicators) {
@@ -109,7 +108,7 @@ fun <T> Chart(
 @Composable
 private fun <T> HsChartLinePeriodsAndPoint(
     tabItems: List<TabItem<T>>,
-    selectedPoint: SelectedPointXxx?,
+    selectedPoint: SelectedPoint?,
     onSelectTab: (T) -> Unit,
 ) {
     if (selectedPoint == null) {
@@ -134,7 +133,7 @@ private fun <T> HsChartLinePeriodsAndPoint(
             }
 
             when (val extraData = selectedPoint.extraData) {
-                is SelectedPointXxx.ExtraData.Macd -> {
+                is SelectedPoint.ExtraData.Macd -> {
                     Column(modifier = Modifier.width(IntrinsicSize.Max)) {
                         extraData.histogram?.let {
                             Text(
@@ -167,7 +166,7 @@ private fun <T> HsChartLinePeriodsAndPoint(
                         }
                     }
                 }
-                is SelectedPointXxx.ExtraData.Volume -> {
+                is SelectedPoint.ExtraData.Volume -> {
                     Column(modifier = Modifier.width(IntrinsicSize.Max)) {
                         Text(
                             modifier = Modifier.fillMaxWidth(),
@@ -244,7 +243,7 @@ fun PriceVolChart(
                             onSelectPoint.invoke(null)
                         }
 
-                        override fun onTouchSelectXxx(item: ChartDataItemImmutable) {
+                        override fun onTouchSelect(item: ChartDataItemImmutable) {
                             onSelectPoint.invoke(item)
                             HudHelper.vibrate(context)
                         }
@@ -310,30 +309,5 @@ fun <T> ChartTab(tabItems: List<TabItem<T>>, onSelect: (T) -> Unit) {
                 }
             }
         }
-    }
-}
-
-
-@Preview
-@Composable
-fun ChartPreview() {
-    ComposeAppTheme {
-        val tabItems = listOf(
-            TabItem("TDY", true, ""),
-            TabItem("24H", false, ""),
-            TabItem("7D", false, ""),
-            TabItem("1M", false, ""),
-        )
-
-//        Chart(
-//            tabItems = tabItems,
-//            indicators = indicators,
-//            onSelectTab = {
-//
-//            },
-//            onSelectIndicator = {
-//
-//            }
-//        )
     }
 }

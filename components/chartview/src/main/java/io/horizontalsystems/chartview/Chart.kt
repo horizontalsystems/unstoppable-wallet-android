@@ -11,7 +11,6 @@ import io.horizontalsystems.chartview.helpers.GridHelper
 import io.horizontalsystems.chartview.helpers.PointConverter
 import io.horizontalsystems.chartview.models.ChartConfig
 import io.horizontalsystems.chartview.models.ChartIndicator
-import io.horizontalsystems.chartview.models.PointInfo
 import kotlinx.android.synthetic.main.view_chart.view.*
 import java.text.DecimalFormat
 
@@ -21,8 +20,7 @@ class Chart @JvmOverloads constructor(context: Context, attrs: AttributeSet? = n
     interface Listener {
         fun onTouchDown()
         fun onTouchUp()
-        fun onTouchSelect(point: PointInfo) = Unit
-        fun onTouchSelectXxx(item: ChartDataItemImmutable) = Unit
+        fun onTouchSelect(item: ChartDataItemImmutable)
     }
 
     init {
@@ -74,12 +72,8 @@ class Chart @JvmOverloads constructor(context: Context, attrs: AttributeSet? = n
                 listener.onTouchUp()
             }
 
-            override fun onTouchSelect(point: PointInfo) {
-                listener.onTouchSelect(point)
-            }
-
-            override fun onTouchSelectXxx(item: ChartDataItemImmutable) {
-                listener.onTouchSelectXxx(item)
+            override fun onTouchSelect(item: ChartDataItemImmutable) {
+                listener.onTouchSelect(item)
             }
         })
     }

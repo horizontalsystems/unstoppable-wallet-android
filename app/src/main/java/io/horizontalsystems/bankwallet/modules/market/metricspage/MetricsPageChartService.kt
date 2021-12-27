@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.market.metricspage
 
 import io.horizontalsystems.bankwallet.modules.chart.AbstractChartService
-import io.horizontalsystems.bankwallet.modules.chart.ChartDataXxx
+import io.horizontalsystems.bankwallet.modules.chart.ChartPointsWrapper
 import io.horizontalsystems.bankwallet.modules.market.tvl.GlobalMarketRepository
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
 import io.horizontalsystems.chartview.ChartView
@@ -24,10 +24,10 @@ class MetricsPageChartService(
     override fun getItems(
         chartType: ChartView.ChartType,
         currency: Currency,
-    ): Single<ChartDataXxx> {
+    ): Single<ChartPointsWrapper> {
         return globalMarketRepository.getGlobalMarketPoints(currency.code, chartType, metricsType)
             .map {
-                ChartDataXxx(chartType, it)
+                ChartPointsWrapper(chartType, it)
             }
     }
 }
