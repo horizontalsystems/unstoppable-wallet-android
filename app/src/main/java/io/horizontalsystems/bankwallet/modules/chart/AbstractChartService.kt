@@ -19,7 +19,7 @@ abstract class AbstractChartService {
 
     protected abstract val currencyManager: ICurrencyManager
     protected abstract val initialChartType: ChartView.ChartType
-    protected abstract fun getItems(chartType: ChartView.ChartType, currency: Currency): Single<ChartDataXxx>
+    protected abstract fun getItems(chartType: ChartView.ChartType, currency: Currency): Single<ChartPointsWrapper>
 
     protected var chartType: ChartView.ChartType? = null
         set(value) {
@@ -45,8 +45,7 @@ abstract class AbstractChartService {
 
     val indicatorsEnabledObservable = BehaviorSubject.create<Boolean>()
 
-    val chartDataXxxObservable =
-        BehaviorSubject.create<DataState<ChartDataXxx>>()
+    val chartPointsWrapperObservable = BehaviorSubject.create<DataState<ChartPointsWrapper>>()
 
     private var fetchItemsDisposable: Disposable? = null
     private val disposables = CompositeDisposable()
@@ -94,12 +93,12 @@ abstract class AbstractChartService {
         fetchItemsDisposable?.dispose()
         fetchItemsDisposable = getItems(tmpChartType, currency)
             .doOnSubscribe {
-                chartDataXxxObservable.onNext(DataState.Loading)
+                chartPointsWrapperObservable.onNext(DataState.Loading)
             }
             .subscribeIO({
-                chartDataXxxObservable.onNext(DataState.Success(it))
+                chartPointsWrapperObservable.onNext(DataState.Success(it))
             }, {
-                chartDataXxxObservable.onNext(DataState.Error(it))
+                chartPointsWrapperObservable.onNext(DataState.Error(it))
             })
     }
 

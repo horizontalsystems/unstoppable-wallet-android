@@ -2,7 +2,7 @@ package io.horizontalsystems.bankwallet.modules.metricchart
 
 import io.horizontalsystems.bankwallet.core.UnsupportedException
 import io.horizontalsystems.bankwallet.modules.chart.AbstractChartService
-import io.horizontalsystems.bankwallet.modules.chart.ChartDataXxx
+import io.horizontalsystems.bankwallet.modules.chart.ChartPointsWrapper
 import io.horizontalsystems.chartview.ChartView.ChartType
 import io.horizontalsystems.chartview.models.ChartPoint
 import io.horizontalsystems.core.ICurrencyManager
@@ -24,7 +24,7 @@ class CoinTvlChartService(
         ChartType.MONTHLY,
     )
 
-    override fun getItems(chartType: ChartType, currency: Currency): Single<ChartDataXxx> = try {
+    override fun getItems(chartType: ChartType, currency: Currency): Single<ChartPointsWrapper> = try {
         val timePeriod = getTimePeriod(chartType)
         marketKit.marketInfoTvlSingle(coinUid, currency.code, timePeriod)
             .map { info ->
@@ -33,7 +33,7 @@ class CoinTvlChartService(
                 }
             }
             .map {
-                ChartDataXxx(chartType, it)
+                ChartPointsWrapper(chartType, it)
             }
     } catch (e: Exception) {
         Single.error(e)

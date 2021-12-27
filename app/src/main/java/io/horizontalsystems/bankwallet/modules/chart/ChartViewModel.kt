@@ -65,7 +65,7 @@ open class ChartViewModel(private val service: AbstractChartService) : ViewModel
                 disposables.add(it)
             }
 
-        service.chartDataXxxObservable
+        service.chartPointsWrapperObservable
             .subscribeIO { chartItemsDataState ->
                 chartItemsDataState.viewState?.let {
                     viewStateLiveData.postValue(it)
@@ -74,8 +74,6 @@ open class ChartViewModel(private val service: AbstractChartService) : ViewModel
                 loadingLiveData.postValue(chartItemsDataState.loading)
 
                 chartItemsDataState.dataOrNull?.let {
-//                    Log.e("AAA", "ChartViewModel: chartItems size ${chartItems.size}, lastPoint: ${chartItems.lastOrNull()}")
-
                     syncChartItems(it)
                 }
             }
@@ -94,8 +92,8 @@ open class ChartViewModel(private val service: AbstractChartService) : ViewModel
         service.updateIndicator(chartIndicator)
     }
 
-    private fun syncChartItems(chartDataXxx: ChartDataXxx) {
-        val chartItems = chartDataXxx.items
+    private fun syncChartItems(chartPointsWrapper: ChartPointsWrapper) {
+        val chartItems = chartPointsWrapper.items
         if (chartItems.isEmpty()) return
 
         val lastItemValue = chartItems.last().value
@@ -105,16 +103,16 @@ open class ChartViewModel(private val service: AbstractChartService) : ViewModel
         val currentValueDiff = Value.Percent(((lastItemValue - firstItemValue) / firstItemValue * 100).toBigDecimal())
 
         val chartData = ChartDataBuilder.buildFromPoints(
-            chartDataXxx.items,
-            chartDataXxx.startTimestamp,
-            chartDataXxx.endTimestamp,
-            chartDataXxx.isExpired)
+            chartPointsWrapper.items,
+            chartPointsWrapper.startTimestamp,
+            chartPointsWrapper.endTimestamp,
+            chartPointsWrapper.isExpired)
 
         val (minValue, maxValue) = getMinMax(chartData.valueRange)
 
         val chartInfoData = ChartInfoData(
             chartData,
-            chartDataXxx.chartType,
+            chartPointsWrapper.chartType,
             maxValue,
             minValue
         )
@@ -148,7 +146,7 @@ open class ChartViewModel(private val service: AbstractChartService) : ViewModel
         service.stop()
     }
 
-    fun getSelectedPointXxx(item: ChartDataItemImmutable): SelectedPointXxx? {
+    fun getSelectedPoint(item: ChartDataItemImmutable): SelectedPoint? {
         return item.values[Indicator.Candle]?.let { candle ->
             val value = App.numberFormatter.formatCurrencyValueAsShortened(CurrencyValue(service.currency, candle.value.toBigDecimal()))
             val dayAndTime = DateHelper.getDayAndTime(Date(item.timestamp * 1000))
@@ -165,18 +163,18 @@ open class ChartViewModel(private val service: AbstractChartService) : ViewModel
                         App.numberFormatter.format(it.value, 0, 2)
                     }
 
-                    SelectedPointXxx.ExtraData.Macd(macd, histogram, signal)
+                    SelectedPoint.ExtraData.Macd(macd, histogram, signal)
                 }
                 else -> {
                     item.values[Indicator.Volume]?.let { volume ->
-                        SelectedPointXxx.ExtraData.Volume(
+                        SelectedPoint.ExtraData.Volume(
                             App.numberFormatter.formatCurrencyValueAsShortened(CurrencyValue(service.currency, volume.value.toBigDecimal()))
                         )
                     }
                 }
             }
 
-            SelectedPointXxx(
+            SelectedPoint(
                 value = value,
                 date = dayAndTime,
                 extraData = extraData,
@@ -186,7 +184,7 @@ open class ChartViewModel(private val service: AbstractChartService) : ViewModel
 
 }
 
-data class SelectedPointXxx(
+data class SelectedPoint(
     val value: String,
     val date: String,
     val extraData: ExtraData?

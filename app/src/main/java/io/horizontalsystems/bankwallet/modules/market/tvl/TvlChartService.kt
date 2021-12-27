@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.market.tvl
 
 import io.horizontalsystems.bankwallet.modules.chart.AbstractChartService
-import io.horizontalsystems.bankwallet.modules.chart.ChartDataXxx
+import io.horizontalsystems.bankwallet.modules.chart.ChartPointsWrapper
 import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.core.entities.Currency
@@ -24,11 +24,11 @@ class TvlChartService(
             dataInvalidated()
         }
 
-    override fun getItems(chartType: ChartView.ChartType, currency: Currency): Single<ChartDataXxx> {
+    override fun getItems(chartType: ChartView.ChartType, currency: Currency): Single<ChartPointsWrapper> {
         val chainParam = if (chain == TvlModule.Chain.All) "" else chain.name
         return globalMarketRepository.getTvlGlobalMarketPoints(chainParam, currency.code, chartType)
             .map {
-                ChartDataXxx(chartType, it)
+                ChartPointsWrapper(chartType, it)
             }
     }
 }

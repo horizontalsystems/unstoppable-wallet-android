@@ -76,7 +76,7 @@ class ChartTouchArea @JvmOverloads constructor(context: Context, attrs: Attribut
         if (coordinate == null) return
         if (coordinate.x != touchPoint?.x) {
             listener.onTouchSelect(coordinate.point)
-            listener.onTouchSelectXxx(coordinate.item)
+            listener.onTouchSelect(coordinate.item)
 
             touchPoint = PointF(coordinate.x, coordinate.y)
             invalidate()

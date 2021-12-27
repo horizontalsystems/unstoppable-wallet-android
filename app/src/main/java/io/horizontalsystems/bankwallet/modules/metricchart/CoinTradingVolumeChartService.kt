@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.metricchart
 
 import io.horizontalsystems.bankwallet.modules.chart.AbstractChartService
-import io.horizontalsystems.bankwallet.modules.chart.ChartDataXxx
+import io.horizontalsystems.bankwallet.modules.chart.ChartPointsWrapper
 import io.horizontalsystems.chartview.ChartView.ChartType
 import io.horizontalsystems.chartview.models.ChartPoint
 import io.horizontalsystems.core.ICurrencyManager
@@ -27,7 +27,7 @@ class CoinTradingVolumeChartService(
     override fun getItems(
         chartType: ChartType,
         currency: Currency,
-    ): Single<ChartDataXxx> {
+    ): Single<ChartPointsWrapper> {
         return marketKit.chartInfoSingle(coinUid, currency.code, chartType.kitChartType)
             .map { info ->
                 val items = info.points
@@ -37,7 +37,7 @@ class CoinTradingVolumeChartService(
                             ChartPoint(it.toFloat(), point.timestamp)
                         }
                     }
-                ChartDataXxx(chartType, items, info.startTimestamp, info.endTimestamp, info.isExpired)
+                ChartPointsWrapper(chartType, items, info.startTimestamp, info.endTimestamp, info.isExpired)
             }
     }
 }
