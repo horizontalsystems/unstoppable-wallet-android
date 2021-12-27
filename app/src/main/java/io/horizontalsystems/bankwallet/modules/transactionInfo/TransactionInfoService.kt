@@ -55,6 +55,16 @@ class TransactionInfoService(
                     tx.valueIn,
                     tx.valueOut
                 ).mapNotNull { it?.coinUid }
+                is UnknownSwapTransactionRecord -> {
+                    val tempCoinUidList = mutableListOf<String>()
+                    if (tx.value.value != BigDecimal.ZERO) {
+                        tempCoinUidList.add(tx.value.coinUid)
+                    }
+                    tempCoinUidList.addAll(tx.incomingInternalETHs.map { it.value.coinUid })
+                    tempCoinUidList.addAll(tx.incomingEip20Events.map { it.value.coinUid })
+                    tempCoinUidList.addAll(tx.outgoingEip20Events.map { it.value.coinUid })
+                    tempCoinUidList
+                }
                 is ApproveTransactionRecord -> listOf(tx.fee.coinUid, tx.value.coinUid)
                 is ContractCallTransactionRecord -> {
                     val tempCoinUidList = mutableListOf<String>()
