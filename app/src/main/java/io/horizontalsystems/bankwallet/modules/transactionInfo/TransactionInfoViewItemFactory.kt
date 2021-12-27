@@ -224,6 +224,101 @@ class TransactionInfoViewItemFactory(
                 return items
             }
 
+            is UnknownSwapTransactionRecord -> {
+                val middleSectionTypes = mutableListOf<TransactionInfoItemType>()
+                val transactionValue = transaction.value
+
+                if (transaction.outgoingEip20Events.isNotEmpty() || (transactionValue.value != BigDecimal.ZERO && !transaction.foreignTransaction) ) {
+                    val youPaySection = mutableListOf<TransactionInfoItemType>()
+                    youPaySection.add(
+                        TransactionType(
+                            getYouPayString(status),
+                            null
+                        )
+                    )
+
+                    if (transactionValue.value != BigDecimal.ZERO && !transaction.foreignTransaction) {
+                        youPaySection.add(
+                            getAmount(
+                                rates[transaction.value.coinUid],
+                                transactionValue,
+                                false
+                            )
+                        )
+                    }
+
+                    transaction.outgoingEip20Events.forEach { (_, eventCoinValue) ->
+                        youPaySection.add(
+                            getAmount(
+                                rates[eventCoinValue.coinUid],
+                                eventCoinValue,
+                                false
+                            )
+                        )
+                    }
+
+                    items.addAll(getViewItems(youPaySection))
+                    items.add(null)
+                }
+
+                if (transaction.incomingEip20Events.isNotEmpty() || transaction.incomingInternalETHs.isNotEmpty()) {
+                    val youGotSection = mutableListOf<TransactionInfoItemType>()
+                    youGotSection.add(
+                        TransactionType(
+                            getYouGetString(status),
+                            null
+                        )
+                    )
+
+                    transaction.incomingInternalETHs.firstOrNull()?.let { (_, coinValue) ->
+                        coinValue as TransactionValue.CoinValue
+
+                        val ethSum =
+                            transaction.incomingInternalETHs.sumOf { (_, eventCoinValue) -> eventCoinValue.decimalValue ?: BigDecimal.ZERO }
+
+                        youGotSection.add(
+                            getAmount(
+                                rates[coinValue.coinUid],
+                                TransactionValue.CoinValue(coinValue.platformCoin, ethSum),
+                                true
+                            )
+                        )
+                    }
+
+                    transaction.incomingEip20Events.forEach { (_, eventCoinValue) ->
+                        youGotSection.add(
+                            getAmount(
+                                rates[eventCoinValue.coinUid],
+                                eventCoinValue,
+                                true
+                            )
+                        )
+                    }
+
+                    items.addAll(getViewItems(youGotSection))
+                    items.add(null)
+                }
+
+                middleSectionTypes.add(date)
+                middleSectionTypes.add(statusType)
+                middleSectionTypes.add(getEvmFeeItem(transaction.fee, rates[transaction.fee.coinUid], status))
+
+                middleSectionTypes.add(
+                    Decorated(
+                        getString(R.string.TransactionInfo_Id),
+                        transaction.transactionHash,
+                        ShareButton(transaction.transactionHash)
+                    )
+                )
+
+                //Middle section
+                items.addAll(getViewItems(middleSectionTypes))
+                items.add(null)
+                items.addAll(getAdditionalButtons(explorerData))
+
+                return items
+            }
+
             is ApproveTransactionRecord -> {
 
                 val middleSectionTypes = mutableListOf<TransactionInfoItemType>()
