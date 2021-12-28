@@ -20,7 +20,7 @@ object MetricsPageModule {
             GlobalMarketRepository(App.marketKit)
         }
 
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return when (modelClass) {
                 MetricsPageViewModel::class.java -> {
                     val service = MetricsPageService(metricsType, App.currencyManager, globalMarketRepository)

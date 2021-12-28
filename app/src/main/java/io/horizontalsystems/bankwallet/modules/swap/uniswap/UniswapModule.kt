@@ -25,7 +25,7 @@ object UniswapModule {
             private val service: UniswapService
     ) : ViewModelProvider.Factory {
 
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return when (modelClass) {
                 SwapAllowanceViewModel::class.java -> {
                     SwapAllowanceViewModel(service, service.allowanceService, service.pendingAllowanceService, SwapViewItemHelper(App.numberFormatter)) as T
@@ -61,7 +61,7 @@ object UniswapModule {
         }
 
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
 
             return when (modelClass) {
                 UniswapViewModel::class.java -> {

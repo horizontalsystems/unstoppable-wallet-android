@@ -97,7 +97,7 @@ object SendEvmModule {
         private val service by lazy { SendEvmService(wallet.platformCoin, adapter) }
 
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return when (modelClass) {
                 SendEvmViewModel::class.java -> {
                     SendEvmViewModel(service, listOf(service)) as T

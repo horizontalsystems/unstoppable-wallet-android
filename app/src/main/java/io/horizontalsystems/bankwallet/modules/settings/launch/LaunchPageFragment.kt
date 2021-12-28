@@ -23,7 +23,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
-import coil.annotation.ExperimentalCoilApi
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.entities.LaunchPage
@@ -38,7 +37,6 @@ class LaunchPageFragment : BaseFragment() {
 
     val viewModel by viewModels<LaunchPageViewModel> { LaunchPageModule.Factory() }
 
-    @ExperimentalCoilApi
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -57,7 +55,6 @@ class LaunchPageFragment : BaseFragment() {
     }
 }
 
-@ExperimentalCoilApi
 @Composable
 fun LaunchScreen(
     viewModel: LaunchPageViewModel,

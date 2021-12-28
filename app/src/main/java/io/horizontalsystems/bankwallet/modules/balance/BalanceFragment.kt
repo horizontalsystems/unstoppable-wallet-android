@@ -93,7 +93,6 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
         _binding = null
     }
 
-    @ExperimentalAnimationApi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -147,7 +146,6 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
         BackupKeyModule.start(this, R.id.mainFragment_to_backupKeyFragment, navOptions(), account)
     }
 
-    @ExperimentalAnimationApi
     private fun setWallets() {
         binding.walletListCompose.setContent {
             ComposeAppTheme {
@@ -157,7 +155,6 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
         }
     }
 
-    @ExperimentalAnimationApi
     @Composable
     fun Wallets(balanceViewItems: List<BalanceViewItem>?) {
         val isRefreshing by viewModel.isRefreshing.observeAsState()
@@ -187,7 +184,6 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
         }
     }
 
-    @ExperimentalAnimationApi
     @Composable
     fun WalletCard(viewItem: BalanceViewItem) {
         val ctx = context ?: return
@@ -368,7 +364,7 @@ class BalanceFragment : BaseFragment(), BackupRequiredDialog.Listener {
         }
     }
 
-    @ExperimentalAnimationApi
+    @OptIn(ExperimentalAnimationApi::class)
     @Composable
     private fun ExpandableContent(viewItem: BalanceViewItem) {
 

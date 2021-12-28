@@ -13,7 +13,7 @@ object CoinOverviewModule {
 
     class Factory(private val fullCoin: FullCoin) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
 
             return when (modelClass) {
                 CoinOverviewViewModel::class.java -> {

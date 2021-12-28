@@ -15,7 +15,6 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.stringResource
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
-import coil.annotation.ExperimentalCoilApi
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
@@ -53,7 +52,6 @@ class MarketCategoryFragment : BaseFragment() {
         )
     }
 
-    @ExperimentalCoilApi
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -99,7 +97,6 @@ class MarketCategoryFragment : BaseFragment() {
 
 }
 
-@ExperimentalCoilApi
 @Composable
 fun CategoryScreen(
     viewModel: MarketCategoryViewModel,

@@ -16,7 +16,7 @@ object BackupConfirmKeyModule {
 
     class Factory(private val account: Account) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val service = BackupConfirmKeyService(account, App.accountManager, RandomProvider())
 
             return BackupConfirmKeyViewModel(service, Translator) as T

@@ -4,14 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.material.*
+import androidx.compose.material.Divider
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -47,7 +49,6 @@ class MarketSearchFragment : BaseFragment() {
 
     private val viewModel by viewModels<MarketSearchViewModel> { MarketSearchModule.Factory() }
 
-    @ExperimentalMaterialApi
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -106,7 +107,6 @@ class MarketSearchFragment : BaseFragment() {
 
 }
 
-@ExperimentalMaterialApi
 @Composable
 fun MarketSearchScreen(
     screenState: MarketSearchModule.DataState?,
@@ -276,8 +276,6 @@ fun SearchView(
 
 }
 
-@ExperimentalMaterialApi
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun CardsGrid(
     viewItems: List<MarketSearchModule.DiscoveryItem>,

@@ -18,7 +18,6 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import coil.size.OriginalSize
 import coil.size.Scale
@@ -29,7 +28,6 @@ import io.horizontalsystems.bankwallet.modules.coin.tweets.Tweet
 import io.horizontalsystems.bankwallet.modules.coin.tweets.TweetViewItem
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 
-@ExperimentalCoilApi
 @Preview
 @Composable
 fun CellTweetPreview() {
@@ -50,7 +48,6 @@ fun CellTweetPreview() {
     }
 }
 
-@ExperimentalCoilApi
 @Composable
 fun CellTweet(tweet: TweetViewItem, onClick: (TweetViewItem) -> Unit) {
     Column(
@@ -135,7 +132,6 @@ private fun TweetText(text: String, entities: List<Extractor.Entity>) {
     )
 }
 
-@ExperimentalCoilApi
 @Composable
 private fun TweetTitle(tweet: TweetViewItem) {
     Row(verticalAlignment = Alignment.CenterVertically) {
@@ -163,7 +159,6 @@ private fun TweetTitle(tweet: TweetViewItem) {
     }
 }
 
-@ExperimentalCoilApi
 @Composable
 private fun AttachmentPhoto(attachment: Tweet.Attachment.Photo) {
     Image(
@@ -180,7 +175,6 @@ private fun AttachmentPhoto(attachment: Tweet.Attachment.Photo) {
     )
 }
 
-@ExperimentalCoilApi
 @Composable
 private fun AttachmentVideo(attachment: Tweet.Attachment.Video) {
     Box {

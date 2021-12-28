@@ -15,7 +15,6 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.stringResource
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
-import coil.annotation.ExperimentalCoilApi
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
@@ -45,7 +44,6 @@ class MarketTopCoinsFragment : BaseFragment() {
         MarketTopCoinsModule.Factory(topMarket, sortingField, marketField)
     }
 
-    @ExperimentalCoilApi
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -93,7 +91,6 @@ class MarketTopCoinsFragment : BaseFragment() {
 
 }
 
-@ExperimentalCoilApi
 @Composable
 fun TopCoinsScreen(
     viewModel: MarketTopCoinsViewModel,

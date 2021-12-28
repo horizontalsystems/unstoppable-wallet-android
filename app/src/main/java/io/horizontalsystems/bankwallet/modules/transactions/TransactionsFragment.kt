@@ -27,7 +27,6 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import androidx.navigation.navGraphViewModels
-import coil.annotation.ExperimentalCoilApi
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
@@ -44,8 +43,6 @@ class TransactionsFragment : BaseFragment() {
 
     private val viewModel by navGraphViewModels<TransactionsViewModel>(R.id.mainFragment) { TransactionsModule.Factory() }
 
-    @ExperimentalFoundationApi
-    @ExperimentalCoilApi
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -65,8 +62,6 @@ class TransactionsFragment : BaseFragment() {
 }
 
 
-@ExperimentalFoundationApi
-@ExperimentalCoilApi
 @Composable
 private fun TransactionsScreen(viewModel: TransactionsViewModel, navController: NavController) {
     val filterCoins by viewModel.filterCoinsLiveData.observeAsState()
@@ -144,7 +139,7 @@ private fun onTransactionClick(
     )
 }
 
-@ExperimentalFoundationApi
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TransactionList(
     transactionsMap: Map<String, List<TransactionViewItem>>,
@@ -312,7 +307,6 @@ private fun FilterTypeTabs(
     }
 }
 
-@ExperimentalCoilApi
 @Composable
 private fun FilterCoinTabs(
     filterCoins: List<Filter<TransactionWallet>>,

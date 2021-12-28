@@ -9,7 +9,7 @@ object MarketPostsModule {
     class Factory : ViewModelProvider.Factory {
 
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val postsService = MarketPostService(App.marketKit, App.backgroundManager)
             return MarketPostsViewModel(postsService) as T
         }

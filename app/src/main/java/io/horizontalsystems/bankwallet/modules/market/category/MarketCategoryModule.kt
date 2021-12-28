@@ -17,7 +17,7 @@ object MarketCategoryModule {
         private val categoryImageUrl: String,
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val marketCategoryRepository = MarketCategoryRepository(App.marketKit)
             val service = MarketCategoryService(
                 marketCategoryRepository,

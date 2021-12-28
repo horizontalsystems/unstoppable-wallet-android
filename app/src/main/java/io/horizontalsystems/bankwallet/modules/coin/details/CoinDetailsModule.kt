@@ -20,7 +20,7 @@ object CoinDetailsModule {
     class Factory(private val fullCoin: FullCoin) : ViewModelProvider.Factory {
 
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val service = CoinDetailsService(fullCoin, App.marketKit, App.currencyManager)
 
             return CoinDetailsViewModel(
