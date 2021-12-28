@@ -27,7 +27,7 @@ object UniswapSettingsModule {
         private val service by lazy { UniswapSettingsService(tradeService.tradeOptions) }
 
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val evmCoin = blockchain.coin ?: throw IllegalArgumentException()
 
             return when (modelClass) {

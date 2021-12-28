@@ -23,7 +23,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.navigation.navGraphViewModels
-import coil.annotation.ExperimentalCoilApi
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
@@ -47,7 +46,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
 import io.horizontalsystems.bankwallet.ui.compose.components.MiniChartCard
 import io.horizontalsystems.core.findNavController
 
-@ExperimentalCoilApi
 class CoinDetailsFragment : BaseFragment() {
     private val coinViewModel by navGraphViewModels<CoinViewModel>(R.id.coinFragment)
     private val viewModel by viewModels<CoinDetailsViewModel> { CoinDetailsModule.Factory(coinViewModel.fullCoin) }

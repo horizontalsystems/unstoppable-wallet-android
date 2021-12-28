@@ -21,7 +21,7 @@ object TvlModule {
             GlobalMarketRepository(App.marketKit)
         }
 
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return when (modelClass) {
                 TvlViewModel::class.java -> {
                     val service = TvlService(App.currencyManager, globalMarketRepository)

@@ -47,7 +47,7 @@ object WalletConnectRequestModule {
         private val sendService by lazy { SendEvmTransactionService(SendEvmData(service.transactionData), evmKit, transactionService, App.activateCoinManager, service.gasPrice) }
 
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return when (modelClass) {
                 WalletConnectSendEthereumTransactionRequestViewModel::class.java -> {
                     WalletConnectSendEthereumTransactionRequestViewModel(service) as T

@@ -13,7 +13,7 @@ import io.horizontalsystems.marketkit.models.Coin
 object CoinTreasuriesModule {
     @Suppress("UNCHECKED_CAST")
     class Factory(private val coin: Coin) : ViewModelProvider.Factory {
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val repository = CoinTreasuriesRepository(App.marketKit)
             val service = CoinTreasuriesService(coin, repository, App.currencyManager)
             return CoinTreasuriesViewModel(service, App.numberFormatter) as T

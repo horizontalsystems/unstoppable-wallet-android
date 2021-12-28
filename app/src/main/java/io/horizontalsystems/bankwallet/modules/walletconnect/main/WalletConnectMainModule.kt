@@ -12,7 +12,7 @@ object WalletConnectMainModule {
 
     class Factory(private val service: WalletConnectService) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return WalletConnectMainViewModel(service) as T
         }
     }

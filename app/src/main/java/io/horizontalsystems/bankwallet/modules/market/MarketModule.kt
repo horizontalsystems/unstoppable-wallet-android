@@ -9,7 +9,6 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
@@ -30,7 +29,7 @@ object MarketModule {
     class Factory : ViewModelProvider.Factory {
 
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val service = MarketService(App.marketStorage, App.localStorage)
             return MarketViewModel(service) as T
         }
@@ -146,7 +145,6 @@ sealed class ImageSource {
     class Local(@DrawableRes val resId: Int) : ImageSource()
     class Remote(val url: String, @DrawableRes val placeholder: Int = R.drawable.ic_placeholder) : ImageSource()
 
-    @ExperimentalCoilApi
     @Composable
     fun painter(): Painter = when (this) {
         is Local -> painterResource(resId)

@@ -36,7 +36,7 @@ object OneInchSwapSettingsModule {
         private val service by lazy { OneInchSettingsService(tradeService.swapSettings) }
 
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val evmCoin = blockchain.coin!!
 
             return when (modelClass) {

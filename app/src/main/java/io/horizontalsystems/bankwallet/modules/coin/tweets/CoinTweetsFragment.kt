@@ -20,7 +20,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.navigation.navGraphViewModels
-import coil.annotation.ExperimentalCoilApi
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
@@ -33,7 +32,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.CellTweet
 import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 
-@ExperimentalCoilApi
 class CoinTweetsFragment : BaseFragment() {
     private val vmFactory by lazy { CoinTweetsModule.Factory(coinViewModel.fullCoin) }
 
@@ -56,7 +54,6 @@ class CoinTweetsFragment : BaseFragment() {
     }
 }
 
-@ExperimentalCoilApi
 @Composable
 fun CoinTweetsScreen(viewModel: CoinTweetsViewModel) {
     val items by viewModel.itemsLiveData.observeAsState(listOf())

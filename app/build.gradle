@@ -129,7 +129,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion '1.0.0'
+        kotlinCompilerExtensionVersion '1.1.0-rc02'
     }
 }
 
@@ -150,10 +150,10 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
     implementation "androidx.fragment:fragment-ktx:$fragment_ktx_version"
     implementation "androidx.preference:preference-ktx:1.1.1"
-    implementation "androidx.browser:browser:1.3.0"
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
 
     // Room
-    def room_version = '2.3.0'
+    def room_version = '2.4.0'
     implementation "androidx.room:room-runtime:$room_version"
     implementation "androidx.room:room-rxjava2:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
@@ -162,7 +162,7 @@ dependencies {
     // optional - ReactiveStreams support for LiveData
     implementation "androidx.lifecycle:lifecycle-reactivestreams-ktx:$lifecycle_version"
 
-    implementation 'androidx.recyclerview:recyclerview:1.2.0'
+    implementation 'androidx.recyclerview:recyclerview:1.2.1'
 
     implementation "com.google.android.material:material:$material_version"
 
@@ -176,28 +176,28 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
     implementation 'com.squareup.retrofit2:converter-scalars:2.9.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:4.9.0'
-    implementation 'com.google.code.gson:gson:2.8.6'
+    implementation 'com.google.code.gson:gson:2.8.9'
     implementation "androidx.biometric:biometric:$biometric_version"
 
-    implementation 'com.squareup.picasso:picasso:2.8'
+    implementation 'com.squareup.picasso:picasso:2.71828'
 
-    implementation 'com.atlassian.commonmark:commonmark:0.15.1'
+    implementation 'com.atlassian.commonmark:commonmark:0.17.0'
     implementation "io.noties.markwon:core:4.6.2"
 
     // ViewPager circle indicator
     implementation 'me.relex:circleindicator:2.1.6'
 
     //Custom tabs, chrome
-    implementation "androidx.browser:browser:1.3.0"
+    implementation "androidx.browser:browser:1.4.0"
 
     // Navigation component
     implementation "androidx.navigation:navigation-fragment-ktx:$navigation_ktx_version"
     implementation "androidx.navigation:navigation-ui-ktx:$navigation_ktx_version"
 
-    api 'com.journeyapps:zxing-android-embedded:4.1.0'
+    api 'com.journeyapps:zxing-android-embedded:4.3.0'
 
     // WorkManager Kotlin
-    def work_version = "2.7.0"
+    def work_version = "2.7.1"
     implementation "androidx.work:work-runtime-ktx:$work_version"
     // WorkManager RxJava2 support
     implementation "androidx.work:work-rxjava2:$work_version"
@@ -244,25 +244,25 @@ dependencies {
     implementation project(':components:seekbar')
 
     // Integration with activities
-    implementation 'androidx.activity:activity-compose:1.3.1'
+    implementation 'androidx.activity:activity-compose:1.4.0'
     // Compose Material Design
-    implementation 'androidx.compose.material:material:1.0.2'
+    implementation 'androidx.compose.material:material:1.0.5'
     // Animations
-    implementation 'androidx.compose.animation:animation:1.0.2'
+    implementation 'androidx.compose.animation:animation:1.0.5'
     // Tooling support (Previews, etc.)
-    implementation 'androidx.compose.ui:ui-tooling:1.0.2'
+    implementation 'androidx.compose.ui:ui-tooling:1.0.5'
     // Integration with ViewModels
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.4.0-beta01'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.4.0'
     implementation "com.google.accompanist:accompanist-swiperefresh:0.18.0"
 
-    implementation "androidx.compose.runtime:runtime-livedata:1.0.2"
+    implementation "androidx.compose.runtime:runtime-livedata:1.0.5"
     implementation "io.coil-kt:coil-compose:1.3.1"
 
     // When using a AppCompat theme
     implementation "com.google.accompanist:accompanist-appcompat-theme:0.15.0"
 
     // UI Tests
-    androidTestImplementation 'androidx.compose.ui:ui-test-junit4:1.0.1'
+    androidTestImplementation 'androidx.compose.ui:ui-test-junit4:1.0.5'
 
     androidTestImplementation 'androidx.test:runner:1.4.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'

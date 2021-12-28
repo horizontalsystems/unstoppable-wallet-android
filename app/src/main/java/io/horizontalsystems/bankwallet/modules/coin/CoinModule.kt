@@ -11,7 +11,7 @@ object CoinModule {
     class Factory(private val coinUid: String) : ViewModelProvider.Factory {
 
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val service = CoinService(coinUid, App.coinManager, App.marketFavoritesManager, App.walletManager, App.accountManager)
             return CoinViewModel(service, listOf(service)) as T
         }

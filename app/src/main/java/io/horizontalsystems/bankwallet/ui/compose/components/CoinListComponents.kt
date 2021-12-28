@@ -21,7 +21,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
@@ -377,7 +376,6 @@ fun TopCloseButton(
     }
 }
 
-@ExperimentalCoilApi
 @Composable
 fun DescriptionCard(title: String, description: String, image: ImageSource) {
     Column {
@@ -416,8 +414,7 @@ fun DescriptionCard(title: String, description: String, image: ImageSource) {
     }
 }
 
-@ExperimentalCoilApi
-@ExperimentalMaterialApi
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun RowScope.CategoryCard(
     type: DiscoveryItem,
@@ -492,7 +489,6 @@ fun PreviewListErrorView() {
     }
 }
 
-@ExperimentalMaterialApi
 @Preview(showBackground = true)
 @Composable
 fun CardPreview() {
