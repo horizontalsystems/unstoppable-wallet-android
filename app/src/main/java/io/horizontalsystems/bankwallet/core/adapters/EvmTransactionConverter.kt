@@ -18,6 +18,7 @@ import io.horizontalsystems.marketkit.models.PlatformCoin
 import io.horizontalsystems.oneinchkit.decorations.OneInchMethodDecoration
 import io.horizontalsystems.oneinchkit.decorations.OneInchSwapMethodDecoration
 import io.horizontalsystems.oneinchkit.decorations.OneInchUnoswapMethodDecoration
+import io.horizontalsystems.oneinchkit.decorations.OneInchV4MethodDecoration
 import io.horizontalsystems.uniswapkit.decorations.SwapMethodDecoration
 import java.math.BigDecimal
 import java.math.BigInteger
@@ -255,6 +256,18 @@ class EvmTransactionConverter(
                     source = source
                 )
             }
+            is OneInchV4MethodDecoration -> {
+                return UnknownSwapTransactionRecord(
+                    fullTransaction = fullTransaction,
+                    baseCoin = baseCoin,
+                    value = convertAmount(fullTransaction.transaction.value, baseCoin.decimals, true),
+                    exchangeAddress = to.eip55,
+                    incomingInternalETHs = getInternalTransactions(fullTransaction),
+                    incomingEip20Events = getIncomingEip20Events(fullTransaction),
+                    outgoingEip20Events = getOutgoingEip20Events(fullTransaction),
+                    source = source
+                )
+            }
             is RecognizedMethodDecoration -> {
                 ContractCallTransactionRecord(
                     fullTransaction,
@@ -297,7 +310,7 @@ class EvmTransactionConverter(
                         fullTransaction = fullTransaction,
                         baseCoin = baseCoin,
                         value = getEip20Value(to, methodDecoration.value, false),
-                        from = methodDecoration.to.eip55,
+                        from = fullTransaction.transaction.from.eip55,
                         foreignTransaction = true,
                         source = source
                     )

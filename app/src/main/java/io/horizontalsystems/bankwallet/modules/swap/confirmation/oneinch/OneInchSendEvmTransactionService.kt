@@ -134,21 +134,15 @@ class OneInchSendEvmTransactionService(
         }
     }
 
-    private fun getFormattedSlippage(slippage: BigDecimal): String? {
-        return if (slippage.compareTo(OneInchSwapSettingsModule.defaultSlippage) == 0) {
-            null
-        } else {
-            "$slippage%"
-        }
-    }
-
     private fun getAdditionalInfo(parameters: OneInchSwapParameters): SendEvmData.AdditionalInfo {
         return parameters.let {
             val swapInfo = SendEvmData.OneInchSwapInfo(
+                coinFrom = it.coinFrom,
                 coinTo = it.coinTo,
+                amountFrom = it.amountFrom,
                 estimatedAmountTo = it.amountTo,
-                slippage = getFormattedSlippage(it.slippage),
-                recipientDomain = parameters.recipient?.domain
+                slippage = it.slippage,
+                recipient = parameters.recipient
             )
             SendEvmData.AdditionalInfo.OneInchSwap(swapInfo)
         }

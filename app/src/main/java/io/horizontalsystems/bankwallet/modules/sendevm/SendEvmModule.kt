@@ -10,6 +10,7 @@ import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinService
 import io.horizontalsystems.bankwallet.core.fiat.AmountTypeSwitchServiceSendEvm
 import io.horizontalsystems.bankwallet.core.fiat.FiatServiceSendEvm
 import io.horizontalsystems.bankwallet.core.providers.Translator
+import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.swap.settings.AddressResolutionService
 import io.horizontalsystems.bankwallet.modules.swap.settings.RecipientAddressViewModel
@@ -65,10 +66,12 @@ data class SendEvmData(
 
     @Parcelize
     data class OneInchSwapInfo(
+        val coinFrom: PlatformCoin,
         val coinTo: PlatformCoin,
+        val amountFrom: BigDecimal,
         val estimatedAmountTo: BigDecimal,
-        val slippage: String? = null,
-        val recipientDomain: String? = null
+        val slippage: BigDecimal,
+        val recipient: Address?
     ): Parcelable
 }
 
@@ -112,7 +115,8 @@ object SendEvmModule {
                 }
                 RecipientAddressViewModel::class.java -> {
                     val addressParser = App.addressParserFactory.parser(wallet.coinType)
-                    val resolutionService = AddressResolutionService(wallet.coin.code, true)
+                    val coinCode = AddressResolutionService.getChainCoinCode(wallet.coinType) ?: wallet.coin.code
+                    val resolutionService = AddressResolutionService(coinCode, true)
                     val placeholder = Translator.getString(R.string.SwapSettings_RecipientPlaceholder)
                     RecipientAddressViewModel(service, resolutionService, addressParser, placeholder, listOf(service, resolutionService)) as T
                 }

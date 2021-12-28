@@ -33,7 +33,8 @@ class RecipientAddressViewModel(
     override val setTextLiveData = MutableLiveData<String?>()
     override val cautionLiveData = MutableLiveData<Caution?>(null)
     override val isLoadingLiveData = SingleLiveEvent<Boolean>()
-    override val initialValue: String? = service.initialAddress?.title
+    override val initialValue: String?
+        get() = service.initialAddress?.title
 
     private var isEditing = false
     private var forceShowError = false

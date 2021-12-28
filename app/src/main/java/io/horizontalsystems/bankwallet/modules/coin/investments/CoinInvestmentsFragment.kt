@@ -154,21 +154,20 @@ fun CoinInvestmentFund(fundViewItem: FundViewItem, onClick: () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = 16.dp)
             .clickable(onClick = onClick, enabled = hasWebsiteUrl),
         verticalAlignment = Alignment.CenterVertically
     ) {
         CoinImage(
             iconUrl = fundViewItem.logoUrl,
             modifier = Modifier
-                .padding(end = 16.dp)
+                .padding(horizontal = 16.dp)
                 .size(24.dp)
         )
         Text(
             modifier = Modifier.weight(1f),
             text = fundViewItem.name,
             style = ComposeAppTheme.typography.body,
-            color = ComposeAppTheme.colors.light,
+            color = ComposeAppTheme.colors.leah,
             overflow = TextOverflow.Ellipsis
         )
         if (fundViewItem.isLead) {
@@ -185,5 +184,6 @@ fun CoinInvestmentFund(fundViewItem: FundViewItem, onClick: () -> Unit) {
                 contentDescription = "arrow icon"
             )
         }
+        Spacer(Modifier.width(16.dp))
     }
 }
