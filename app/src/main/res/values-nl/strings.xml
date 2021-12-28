@@ -96,7 +96,7 @@
     <string name="Market_Tab_Overview">Overview</string>
     <string name="Market_Tab_Posts">News</string>
     <string name="Market_Tab_Watchlist">Watchlist</string>
-    <string name="Market_Tab_Watchlist_EmptyList">Your watchlist is empty.</string>
+    <string name="Market_Tab_Watchlist_EmptyList">You don’t have any favorite assets.\nYou can add the favourites by click to star icon in the asset page.</string>
     <string name="Market_Category_Rated">Rated</string>
     <string name="Market_Category_Rated_Description">Token ratings based on project security and market liquidity.</string>
     <string name="Market_Category_TopCoins">Top Coins</string>
@@ -669,6 +669,8 @@
     <string name="ManageAccount_SwitchWallet_Subtitle">Select wallet for quick switch</string>
     <!--Network Settings-->
     <string name="NetworkSettings_Title">Network Settings</string>
+    <string name="NetworkSettings_SwithesAutomatically">switches automatically</string>
+    <string name="NetworkSettings_SwithesAutomatically_Description">MainNet HTTP network uses the links listed below and switches automatically.</string>
     <string name="NetworkSettings_TestNetDisclaimer">Please do not select Testnet options unless you understand what that is and how it works.\n\nTestnet is a parallel blockchain for testing purposes with its own currency. If someone sends a regular payment to your Testnet address, it will be lost.</string>
     <!-- Show Key -->
     <string name="ShowKey_Title">Key</string>
