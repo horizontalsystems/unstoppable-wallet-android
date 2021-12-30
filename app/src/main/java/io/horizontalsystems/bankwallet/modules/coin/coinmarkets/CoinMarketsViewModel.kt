@@ -4,51 +4,23 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.subscribeIO
+import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.coin.MarketTickerViewItem
-import io.horizontalsystems.bankwallet.ui.compose.components.ToggleIndicator
-import io.horizontalsystems.bankwallet.ui.extensions.MarketListHeaderView
-import io.reactivex.Observable
+import io.horizontalsystems.bankwallet.modules.coin.coinmarkets.CoinMarketsModule.ViewItemState
+import io.horizontalsystems.bankwallet.modules.coin.coinmarkets.CoinMarketsModule.VolumeMenuType
 import io.reactivex.disposables.CompositeDisposable
 
 class CoinMarketsViewModel(private val service: CoinMarketsService) : ViewModel() {
-    val tickersLiveData = MutableLiveData<List<MarketTickerViewItem>>()
-    val topMenuLiveData = MutableLiveData<Pair<MarketListHeaderView.SortMenu, MarketListHeaderView.ToggleButton>>()
+    val volumeMenu by service::volumeMenu
+    val sortingType by service::sortType
+    val viewStateLiveData = MutableLiveData<ViewItemState>()
 
     private val disposables = CompositeDisposable()
 
     init {
-        service.itemsObservable
+        service.stateObservable
             .subscribeIO {
-                tickersLiveData.postValue(it.map { createViewItem(it) })
-            }
-            .let {
-                disposables.add(it)
-            }
-
-        Observable
-            .combineLatest(
-                service.sortTypeObservable,
-                service.volumeTypeObservable,
-                { sortType, volumeType ->
-                    Pair(sortType, volumeType)
-                }
-            )
-            .subscribeIO { (sortType, volumeType) ->
-                val direction = when (sortType) {
-                    SortType.HighestVolume -> MarketListHeaderView.Direction.Down
-                    SortType.LowestVolume -> MarketListHeaderView.Direction.Up
-                }
-
-                val title = when (volumeType) {
-                    VolumeType.Coin -> service.fullCoin.coin.code
-                    VolumeType.Currency -> service.currency.code
-                }
-                val indicators = listOf(ToggleIndicator(volumeType == VolumeType.Coin), ToggleIndicator(volumeType == VolumeType.Currency))
-
-                topMenuLiveData.postValue(Pair(
-                    MarketListHeaderView.SortMenu.DuoOption(direction),
-                    MarketListHeaderView.ToggleButton(title, indicators)
-                ))
+                syncState(it)
             }
             .let {
                 disposables.add(it)
@@ -57,18 +29,18 @@ class CoinMarketsViewModel(private val service: CoinMarketsService) : ViewModel(
         service.start()
     }
 
-    fun onSwitchSortType() {
-        service.setSortType(when (service.sortType) {
-            SortType.HighestVolume -> SortType.LowestVolume
-            SortType.LowestVolume -> SortType.HighestVolume
-        })
+    private fun syncState(state: DataState<List<MarketTickerItem>>) {
+        if (state is DataState.Success) {
+            viewStateLiveData.postValue(ViewItemState.Data(
+                state.data.map { createViewItem(it) }
+            ))
+        } else if (state is DataState.Error) {
+            viewStateLiveData.postValue(ViewItemState.Error(convertErrorMessage(state.error)))
+        }
     }
 
-    fun onSwitchVolumeType() {
-        service.setVolumeType(when (service.volumeType) {
-            VolumeType.Coin -> VolumeType.Currency
-            VolumeType.Currency -> VolumeType.Coin
-        })
+    private fun convertErrorMessage(it: Throwable): String {
+        return it.message ?: it.javaClass.simpleName
     }
 
     private fun createViewItem(item: MarketTickerItem): MarketTickerViewItem {
@@ -85,14 +57,16 @@ class CoinMarketsViewModel(private val service: CoinMarketsService) : ViewModel(
         val (shortenValue, suffix) = App.numberFormatter.shortenValue(item.volume)
 
         return when (item.volumeType) {
-            VolumeType.Coin -> {
+            is VolumeMenuType.Coin -> {
                 "$shortenValue $suffix ${item.baseCoinCode}"
             }
-            VolumeType.Currency -> {
-                App.numberFormatter.formatFiat(shortenValue,
+            is VolumeMenuType.Currency -> {
+                App.numberFormatter.formatFiat(
+                    shortenValue,
                     service.currency.symbol,
                     0,
-                    2) + " " + suffix
+                    2
+                ) + " " + suffix
             }
         }
     }
@@ -100,5 +74,17 @@ class CoinMarketsViewModel(private val service: CoinMarketsService) : ViewModel(
     override fun onCleared() {
         disposables.clear()
         service.stop()
+    }
+
+    fun onErrorClick() {
+        service.start()
+    }
+
+    fun toggleSortType(sortType: SortType) {
+        service.setSortType(sortType)
+    }
+
+    fun toggleVolumeType(volumeMenuType: VolumeMenuType) {
+        service.setVolumeType(volumeMenuType)
     }
 }
