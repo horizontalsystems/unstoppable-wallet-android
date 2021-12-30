@@ -21,6 +21,10 @@ android {
             minifyEnabled false
         }
     }
+
+    kotlinOptions {
+        jvmTarget = "11"
+    }
 }
 
 dependencies {
