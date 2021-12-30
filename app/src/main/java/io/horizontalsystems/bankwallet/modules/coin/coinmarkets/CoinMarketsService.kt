@@ -1,11 +1,13 @@
 package io.horizontalsystems.bankwallet.modules.coin.coinmarkets
 
 import io.horizontalsystems.bankwallet.core.subscribeIO
+import io.horizontalsystems.bankwallet.entities.DataState
+import io.horizontalsystems.bankwallet.modules.coin.coinmarkets.CoinMarketsModule.VolumeMenuType
+import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.core.ICurrencyManager
 import io.horizontalsystems.marketkit.MarketKit
 import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.marketkit.models.MarketTicker
-import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
 import java.math.BigDecimal
@@ -15,37 +17,36 @@ class CoinMarketsService(
     private val currencyManager: ICurrencyManager,
     private val marketKit: MarketKit,
 ) {
-    val currency get() = currencyManager.baseCurrency
-
-    var sortType = SortType.HighestVolume
-        private set
-
-    var volumeType = VolumeType.Coin
-        private set
-
-    private val sortTypeSubject = BehaviorSubject.create<SortType>()
-    val sortTypeObservable: Observable<SortType> = sortTypeSubject
-
-    private val volumeTypeSubject = BehaviorSubject.create<VolumeType>()
-    val volumeTypeObservable: Observable<VolumeType> = volumeTypeSubject
-
-    private val itemsSubject = BehaviorSubject.create<List<MarketTickerItem>>()
-    val itemsObservable: Observable<List<MarketTickerItem>> = itemsSubject
 
     private val disposables = CompositeDisposable()
     private var marketTickers = listOf<MarketTicker>()
     private val price = marketKit.coinPrice(fullCoin.coin.uid, currencyManager.baseCurrency.code)?.value ?: BigDecimal.ZERO
 
-    fun start() {
-        sortTypeSubject.onNext(sortType)
-        volumeTypeSubject.onNext(volumeType)
+    private val volumeOptions = listOf(
+        VolumeMenuType.Coin(fullCoin.coin.code),
+        VolumeMenuType.Currency(currency.code)
+    )
 
+    private var volumeType: VolumeMenuType = volumeOptions[0]
+
+    val volumeMenu = Select(volumeType, volumeOptions)
+
+    val stateObservable: BehaviorSubject<DataState<List<MarketTickerItem>>> = BehaviorSubject.createDefault(
+        DataState.Loading)
+
+    val currency get() = currencyManager.baseCurrency
+
+    var sortType = SortType.HighestVolume
+        private set
+
+    fun start() {
         marketKit.marketTickersSingle(fullCoin.coin.uid)
-            .subscribeIO {
+            .subscribeIO({
                 marketTickers = it
                 emitItems()
-            }
-            .let {
+            }, {
+                stateObservable.onNext(DataState.Error(it))
+            }).let {
                 disposables.add(it)
             }
     }
@@ -56,14 +57,12 @@ class CoinMarketsService(
 
     fun setSortType(sortType: SortType) {
         this.sortType = sortType
-        sortTypeSubject.onNext(sortType)
 
         emitItems()
     }
 
-    fun setVolumeType(volumeType: VolumeType) {
+    fun setVolumeType(volumeType: VolumeMenuType) {
         this.volumeType = volumeType
-        volumeTypeSubject.onNext(volumeType)
 
         emitItems()
     }
@@ -75,13 +74,13 @@ class CoinMarketsService(
             SortType.LowestVolume -> marketTickers.sortedBy { it.volume }
         }
 
-        itemsSubject.onNext(sorted.map { createItem(it) })
+        stateObservable.onNext(DataState.Success(sorted.map { createItem(it) }))
     }
 
     private fun createItem(marketTicker: MarketTicker): MarketTickerItem {
         val volume = when (volumeType) {
-            VolumeType.Coin -> marketTicker.volume
-            VolumeType.Currency -> marketTicker.volume.multiply(price)
+            is VolumeMenuType.Coin -> marketTicker.volume
+            is VolumeMenuType.Currency -> marketTicker.volume.multiply(price)
         }
 
         return MarketTickerItem(
