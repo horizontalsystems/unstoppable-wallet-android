@@ -8,12 +8,15 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.EvmError
 import io.horizontalsystems.bankwallet.core.convertedError
+import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinService
 import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinServiceFactory
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData
+import io.horizontalsystems.bankwallet.modules.swap.oneinch.scaleUp
+import io.horizontalsystems.bankwallet.modules.swap.settings.oneinch.OneInchSwapSettingsModule
 import io.horizontalsystems.bankwallet.modules.swap.uniswap.UniswapTradeService
 import io.horizontalsystems.bankwallet.modules.transactionInfo.ColoredValue
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoAddressMapper
@@ -30,8 +33,10 @@ import io.horizontalsystems.marketkit.models.PlatformCoin
 import io.horizontalsystems.oneinchkit.decorations.OneInchMethodDecoration
 import io.horizontalsystems.oneinchkit.decorations.OneInchSwapMethodDecoration
 import io.horizontalsystems.oneinchkit.decorations.OneInchUnoswapMethodDecoration
+import io.horizontalsystems.oneinchkit.decorations.OneInchV4MethodDecoration
 import io.horizontalsystems.uniswapkit.decorations.SwapMethodDecoration
 import io.reactivex.disposables.CompositeDisposable
+import java.math.BigDecimal
 import java.math.BigInteger
 
 class SendEvmTransactionViewModel(
@@ -173,47 +178,57 @@ class SendEvmTransactionViewModel(
                 decoration.to,
                 additionalInfo
             )
-            is OneInchMethodDecoration -> getOneInchSwapViewItems(decoration, additionalInfo)
+            is OneInchMethodDecoration -> getOneInchSwapViewItems(decoration, additionalInfo?.oneInchSwapInfo)
             else -> null
         }
 
     private fun getOneInchSwapViewItems(
         decoration: OneInchMethodDecoration,
-        additionalInfo: SendEvmData.AdditionalInfo?
+        info: SendEvmData.OneInchSwapInfo?
     ): List<SectionViewItem>? {
-        var fromToken: OneInchMethodDecoration.Token? = null
-        var toToken: OneInchMethodDecoration.Token? = null
-        var fromAmount = BigInteger.ZERO
-        var toAmountMin = BigInteger.ZERO
+        var fromAmount: SendModule.AmountData? = null
+        var toAmountMin: SendModule.AmountData? = null
         var recipient: Address? = null
+        var fromCoinService: EvmCoinService? = null
+        var toCoinService: EvmCoinService? = null
 
         when (decoration) {
             is OneInchUnoswapMethodDecoration -> {
-                fromToken = decoration.fromToken
-                toToken = decoration.toToken
-                fromAmount = decoration.fromAmount
-                toAmountMin = decoration.toAmountMin
+                fromCoinService = getCoinService(decoration.fromToken)
+                toCoinService = decoration.toToken?.let { toToken ->
+                    getCoinService(toToken)
+                } ?: info?.coinTo?.let { getCoinService(it) }
+                fromAmount = fromCoinService?.amountData(decoration.fromAmount)
+                toAmountMin = toCoinService?.amountData(decoration.toAmountMin)
             }
             is OneInchSwapMethodDecoration -> {
-                fromToken = decoration.fromToken
-                toToken = decoration.toToken
-                fromAmount = decoration.fromAmount
-                toAmountMin = decoration.toAmountMin
+                fromCoinService = getCoinService(decoration.fromToken)
+                toCoinService = getCoinService(decoration.toToken)
+                fromAmount = fromCoinService?.amountData(decoration.fromAmount)
+                toAmountMin = toCoinService?.amountData(decoration.toAmountMin)
                 recipient = decoration.recipient
+            }
+            is OneInchV4MethodDecoration -> {
+                if (info == null) return null
+
+                fromCoinService = getCoinService(info.coinFrom)
+                toCoinService = getCoinService(info.coinTo)
+                fromAmount = fromCoinService?.amountData(info.amountFrom)
+                val minReturnAmount =
+                    info.estimatedAmountTo - info.estimatedAmountTo / BigDecimal("100") * info.slippage
+                toAmountMin = toCoinService?.amountData(minReturnAmount.scaleUp(info.coinTo.decimals))
+                recipient = try {
+                    info.recipient?.let { Address(it.hex) }
+                } catch (exception: Exception) {
+                    null
+                }
             }
         }
 
-        val info = additionalInfo?.oneInchSwapInfo
-        val sections = mutableListOf<SectionViewItem>()
-
-        val fromCoinService = fromToken?.let { getCoinService(it) } ?: return null
-        val toCoinService = if (toToken == null)
-            info?.coinTo?.let { getCoinService(it) }
-        else
-            getCoinService(toToken)
-
-        if (toCoinService == null)
+        if (fromCoinService == null || toCoinService == null || fromAmount == null || toAmountMin == null)
             return null
+
+        val sections = mutableListOf<SectionViewItem>()
 
         sections.add(
             SectionViewItem(
@@ -222,7 +237,7 @@ class SendEvmTransactionViewModel(
                         Translator.getString(R.string.Swap_FromAmountTitle),
                         fromCoinService.platformCoin.name
                     ),
-                    getAmount(fromCoinService.amountData(fromAmount), ValueType.Outgoing)
+                    getAmount(fromAmount, ValueType.Outgoing)
                 )
             )
         )
@@ -238,26 +253,28 @@ class SendEvmTransactionViewModel(
                         info?.let { toCoinService.amountData(it.estimatedAmountTo) },
                         ValueType.Incoming
                     ),
-                    getGuaranteedAmount(toCoinService.amountData(toAmountMin))
+                    getGuaranteedAmount(toAmountMin)
                 )
             )
         )
 
         val otherViewItems = mutableListOf<ViewItem>()
-        info?.slippage?.let {
-            otherViewItems.add(
-                ViewItem.Value(
-                    Translator.getString(R.string.SwapSettings_SlippageTitle),
-                    it,
-                    ValueType.Regular
+        info?.slippage?.let { slippage ->
+            getFormattedSlippage(slippage)?.let { formattedSlippage ->
+                otherViewItems.add(
+                    ViewItem.Value(
+                        Translator.getString(R.string.SwapSettings_SlippageTitle),
+                        formattedSlippage,
+                        ValueType.Regular
+                    )
                 )
-            )
+            }
         }
 
         if (recipient != null && recipient != service.ownAddress) {
             val addressValue = recipient.eip55
             val addressTitle =
-                info?.recipientDomain ?: TransactionInfoAddressMapper.map(addressValue)
+                info?.recipient?.domain ?: TransactionInfoAddressMapper.map(addressValue)
             otherViewItems.add(
                 ViewItem.Address(
                     Translator.getString(R.string.SwapSettings_RecipientAddressTitle),
@@ -272,6 +289,14 @@ class SendEvmTransactionViewModel(
         }
 
         return sections
+    }
+
+    private fun getFormattedSlippage(slippage: BigDecimal): String? {
+        return if (slippage.compareTo(OneInchSwapSettingsModule.defaultSlippage) == 0) {
+            null
+        } else {
+            "$slippage%"
+        }
     }
 
     private fun getEip20TransferViewItems(
