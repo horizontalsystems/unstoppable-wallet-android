@@ -5,19 +5,23 @@ import io.horizontalsystems.bankwallet.core.IAccountFactory
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.bankwallet.core.managers.PassphraseValidator
+import io.horizontalsystems.bankwallet.core.managers.WalletActivator
 import io.horizontalsystems.bankwallet.core.managers.WordsManager
-import io.horizontalsystems.bankwallet.entities.*
+import io.horizontalsystems.bankwallet.entities.Account
+import io.horizontalsystems.bankwallet.entities.AccountOrigin
+import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.marketkit.MarketKit
 import io.horizontalsystems.marketkit.models.CoinType
 import io.reactivex.subjects.BehaviorSubject
 
 class CreateAccountService(
-        private val accountFactory: IAccountFactory,
-        private val wordsManager: WordsManager,
-        private val accountManager: IAccountManager,
-        private val walletManager: IWalletManager,
-        private val passphraseValidator: PassphraseValidator,
-        private val marketKit: MarketKit
+    private val accountFactory: IAccountFactory,
+    private val wordsManager: WordsManager,
+    private val accountManager: IAccountManager,
+    private val walletManager: IWalletManager,
+    private val walletActivator: WalletActivator,
+    private val passphraseValidator: PassphraseValidator,
+    private val marketKit: MarketKit
 ) : Clearable {
 
     val allKinds: Array<CreateAccountModule.Kind> = CreateAccountModule.Kind.values()
@@ -55,26 +59,7 @@ class CreateAccountService(
     }
 
     private fun activateDefaultWallets(account: Account) {
-        val defaultCoinTypes = listOf(CoinType.Bitcoin, CoinType.Ethereum, CoinType.BinanceSmartChain)
-
-        val wallets = mutableListOf<Wallet>()
-
-        for (coinType in defaultCoinTypes) {
-            val platformCoin = marketKit.platformCoin(coinType) ?: continue
-
-            val defaultSettingsArray = coinType.defaultSettingsArray
-
-            if (defaultSettingsArray.isEmpty()) {
-                wallets.add(Wallet(platformCoin, account))
-            } else {
-                defaultSettingsArray.forEach { coinSettings ->
-                    val configuredPlatformCoin = ConfiguredPlatformCoin(platformCoin, coinSettings)
-                    wallets.add(Wallet(configuredPlatformCoin, account))
-                }
-            }
-        }
-
-        walletManager.save(wallets)
+        walletActivator.activateWallets(account, listOf(CoinType.Bitcoin, CoinType.Ethereum, CoinType.BinanceSmartChain))
     }
 
     private fun resolveAccountType() = when (kind) {
