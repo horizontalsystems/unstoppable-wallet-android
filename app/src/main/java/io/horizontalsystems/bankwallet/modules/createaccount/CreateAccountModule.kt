@@ -17,6 +17,7 @@ object CreateAccountModule {
                     App.wordsManager,
                     App.accountManager,
                     App.walletManager,
+                    App.walletActivator,
                     PassphraseValidator(),
                     App.marketKit
             )
