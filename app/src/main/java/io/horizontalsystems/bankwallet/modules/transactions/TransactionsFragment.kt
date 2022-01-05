@@ -150,23 +150,20 @@ fun TransactionList(
 ) {
     val coroutineScope = rememberCoroutineScope()
     val listState = rememberLazyListState()
+    val bottomReachedUid = getBottomReachedUid(transactionsMap)
 
     LazyColumn(state = listState) {
-        val lastHeader = transactionsMap.keys.lastOrNull()
-
         transactionsMap.forEach { (dateHeader, transactions) ->
             stickyHeader {
                 DateHeader(dateHeader)
             }
-
-            val lastUid = if (lastHeader == dateHeader) transactions.lastOrNull()?.uid else null
 
             items(transactions) { item ->
                 TransactionCell(item) { onClick.invoke(item) }
 
                 willShow.invoke(item)
 
-                if (item.uid == lastUid) {
+                if (item.uid == bottomReachedUid) {
                     onBottomReached.invoke()
                 }
             }
@@ -182,6 +179,14 @@ fun TransactionList(
             }
         }
     }
+}
+
+private fun getBottomReachedUid(transactionsMap: Map<String, List<TransactionViewItem>>): String? {
+    val txList = transactionsMap.values.flatten()
+    //get index not exact bottom but near to the bottom, to make scroll smoother
+    val index = if (txList.size > 4) txList.size - 4 else 0
+
+    return txList.getOrNull(index)?.uid
 }
 
 @Composable
