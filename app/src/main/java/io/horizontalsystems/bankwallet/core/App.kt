@@ -218,6 +218,8 @@ class App : CoreApp(), WorkConfiguration.Provider  {
 
         walletActivator = WalletActivator(walletManager, marketKit, walletStorage)
 
+        AutoEnableTokensService(ethereumKitManager, binanceSmartChainKitManager, walletActivator).start()
+
         setAppTheme()
 
         registerActivityLifecycleCallbacks(ActivityLifecycleCallbacks(torKitManager))

@@ -18,6 +18,7 @@ import io.horizontalsystems.uniswapkit.UniswapKit
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import java.net.URL
 
@@ -72,11 +73,19 @@ class EvmKitManager(
         evmKitUpdatedRelay.onNext(Unit)
     }
 
+    private val kitStartedSubject = BehaviorSubject.createDefault(false)
+    val kitStartedObservable: Observable<Boolean> = kitStartedSubject
+
     var evmKitWrapper: EvmKitWrapper? = null
-        private set
+        private set(value) {
+            field = value
+
+            kitStartedSubject.onNext(value != null)
+        }
 
     private var useCount = 0
-    private var currentAccount: Account? = null
+    var currentAccount: Account? = null
+        private set
     private val evmKitUpdatedRelay = PublishSubject.create<Unit>()
 
     val evmKitUpdatedObservable: Observable<Unit>
