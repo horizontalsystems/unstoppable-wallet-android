@@ -136,6 +136,7 @@ interface IWalletStorage {
     fun wallets(account: Account): List<Wallet>
     fun save(wallets: List<Wallet>)
     fun delete(wallets: List<Wallet>)
+    fun isEnabled(accountId: String, coinId: String): Boolean
     fun clear()
 }
 
@@ -328,6 +329,7 @@ interface IEnabledWalletStorage {
     fun save(enabledWallets: List<EnabledWallet>)
     fun delete(enabledWallets: List<EnabledWallet>)
     fun deleteAll()
+    fun isEnabled(accountId: String, coinId: String): Boolean
 }
 
 interface IBlockchainSettingsStorage {
