@@ -216,7 +216,7 @@ class App : CoreApp(), WorkConfiguration.Provider  {
 
         releaseNotesManager = ReleaseNotesManager(systemInfoManager, localStorage, appConfigProvider)
 
-        walletActivator = WalletActivator(walletManager, marketKit)
+        walletActivator = WalletActivator(walletManager, marketKit, walletStorage)
 
         setAppTheme()
 

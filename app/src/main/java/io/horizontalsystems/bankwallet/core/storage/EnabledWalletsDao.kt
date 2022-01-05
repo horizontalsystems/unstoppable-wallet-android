@@ -12,6 +12,9 @@ interface EnabledWalletsDao {
     @Query("SELECT * FROM EnabledWallet WHERE accountId = :accountId ORDER BY `walletOrder` ASC")
     fun enabledCoins(accountId: String): List<EnabledWallet>
 
+    @Query("SELECT COUNT(*) FROM EnabledWallet WHERE accountId = :accountId AND coinId = :coinId")
+    fun count(accountId: String, coinId: String): Int
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(storableCoin: EnabledWallet)
 

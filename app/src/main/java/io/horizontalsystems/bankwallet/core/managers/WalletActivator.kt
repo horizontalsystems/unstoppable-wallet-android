@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.core.managers
 
 import io.horizontalsystems.bankwallet.core.IWalletManager
+import io.horizontalsystems.bankwallet.core.IWalletStorage
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.ConfiguredPlatformCoin
 import io.horizontalsystems.bankwallet.entities.Wallet
@@ -11,6 +12,7 @@ import io.horizontalsystems.marketkit.models.CoinType
 class WalletActivator(
     private val walletManager: IWalletManager,
     private val marketKit: MarketKit,
+    private val walletStorage: IWalletStorage,
 ) {
 
     fun activateWallets(account: Account, coinTypes: List<CoinType>) {
@@ -33,5 +35,7 @@ class WalletActivator(
 
         walletManager.save(wallets)
     }
+
+    fun isEnabled(account: Account, coinType: CoinType) = walletStorage.isEnabled(account.id, coinType.id)
 
 }
