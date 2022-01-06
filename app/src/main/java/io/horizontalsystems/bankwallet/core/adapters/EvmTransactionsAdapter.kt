@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.core.adapters
 
 import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.core.managers.EvmKitWrapper
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.modules.transactions.FilterTransactionType
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
@@ -16,8 +17,8 @@ import io.reactivex.Single
 import java.math.BigDecimal
 import java.math.BigInteger
 
-class EvmTransactionsAdapter(kit: EthereumKit, baseCoin: PlatformCoin, coinManager: ICoinManager, source: TransactionSource) :
-    BaseEvmAdapter(kit, EvmAdapter.decimal, coinManager), ITransactionsAdapter {
+class EvmTransactionsAdapter(evmKitWrapper: EvmKitWrapper, baseCoin: PlatformCoin, coinManager: ICoinManager, source: TransactionSource) :
+    BaseEvmAdapter(evmKitWrapper, EvmAdapter.decimal, coinManager), ITransactionsAdapter {
 
     // IAdapter
 
@@ -50,7 +51,8 @@ class EvmTransactionsAdapter(kit: EthereumKit, baseCoin: PlatformCoin, coinManag
         gasLimit: Long,
         logger: AppLogger
     ): Single<Unit> {
-        return evmKit.send(address, amount, byteArrayOf(), gasPrice, gasLimit)
+        val transactionData = evmKit.transferTransactionData(address, amount)
+        return evmKitWrapper.sendSingle(transactionData, gasPrice, gasLimit)
             .doOnSubscribe {
                 logger.info("call ethereumKit.send")
             }

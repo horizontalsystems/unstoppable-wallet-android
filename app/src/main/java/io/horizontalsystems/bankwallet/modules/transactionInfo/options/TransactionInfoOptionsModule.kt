@@ -32,12 +32,12 @@ object TransactionInfoOptionsModule {
             App.transactionAdapterManager.getAdapter(source) as EvmTransactionsAdapter
         }
 
-        private val evmKit by lazy {
-            adapter.evmKit
+        private val evmKitWrapper by lazy {
+            adapter.evmKitWrapper
         }
 
         private val baseCoin by lazy {
-            when (evmKit.networkType) {
+            when (evmKitWrapper.evmKit.networkType) {
                 EthereumKit.NetworkType.EthMainNet,
                 EthereumKit.NetworkType.EthRopsten,
                 EthereumKit.NetworkType.EthKovan,
@@ -48,7 +48,7 @@ object TransactionInfoOptionsModule {
         }
 
         private val fullTransaction by lazy {
-            evmKit.getFullTransactions(listOf(transactionHash.hexStringToByteArray())).first()
+            evmKitWrapper.evmKit.getFullTransactions(listOf(transactionHash.hexStringToByteArray())).first()
         }
         private val transaction by lazy {
             fullTransaction.transaction
@@ -61,7 +61,7 @@ object TransactionInfoOptionsModule {
                 customUpperBound = null,
                 multiply = 1.2
             ) as ICustomRangedFeeProvider
-            EvmTransactionFeeService(evmKit, feeRateProvider)
+            EvmTransactionFeeService(evmKitWrapper.evmKit, feeRateProvider)
         }
 
         private val coinServiceFactory by lazy {
@@ -78,11 +78,11 @@ object TransactionInfoOptionsModule {
                     TransactionData(transaction.to!!, transaction.value, transaction.input, transaction.nonce)
                 }
                 TransactionInfoOption.Type.Cancel -> {
-                    TransactionData(evmKit.receiveAddress, BigInteger.ZERO, byteArrayOf(), transaction.nonce)
+                    TransactionData(evmKitWrapper.evmKit.receiveAddress, BigInteger.ZERO, byteArrayOf(), transaction.nonce)
                 }
             }
 
-            SendEvmTransactionService(SendEvmData(transactionData), evmKit, transactionService, App.activateCoinManager)
+            SendEvmTransactionService(SendEvmData(transactionData), evmKitWrapper, transactionService, App.activateCoinManager)
         }
 
         @Suppress("UNCHECKED_CAST")

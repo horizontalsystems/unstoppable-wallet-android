@@ -5,11 +5,11 @@ import com.trustwallet.walletconnect.models.ethereum.WCEthereumSignMessage
 import com.trustwallet.walletconnect.models.ethereum.WCEthereumTransaction
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
+import io.horizontalsystems.bankwallet.core.managers.EvmKitWrapper
 import io.horizontalsystems.bankwallet.core.managers.WalletConnectInteractor
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.WalletConnectSession
-import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
@@ -35,7 +35,7 @@ class WalletConnectService(
             val peerId: String,
             val peerMeta: WCPeerMeta,
             val account: Account,
-            val evmKit: EthereumKit
+            val evmKitWrapper: EvmKitWrapper
     )
 
     open class SessionError(message: String) : Throwable(message) {
@@ -54,8 +54,8 @@ class WalletConnectService(
     val remotePeerMeta: WCPeerMeta?
         get() = sessionData?.peerMeta
 
-    val evmKit: EthereumKit?
-        get() = sessionData?.evmKit
+    val evmKitWrapper: EvmKitWrapper?
+        get() = sessionData?.evmKitWrapper
 
     private val stateSubject = PublishSubject.create<State>()
     val stateObservable: Flowable<State>
@@ -113,9 +113,9 @@ class WalletConnectService(
 
     private fun initSession(peerId: String, peerMeta: WCPeerMeta, chainId: Int) {
         val account = manager.activeAccount ?: throw SessionError.NoSuitableAccount
-        val evmKit = manager.evmKit(chainId, account) ?: throw SessionError.UnsupportedChainId
+        val evmKitWrapper = manager.evmKitWrapper(chainId, account) ?: throw SessionError.UnsupportedChainId
 
-        sessionData = SessionData(peerId, peerMeta, account, evmKit)
+        sessionData = SessionData(peerId, peerMeta, account, evmKitWrapper)
     }
 
     private fun getSessionFromUri(uri: String): WalletConnectSession? {
@@ -143,9 +143,9 @@ class WalletConnectService(
     fun approveSession() {
         sessionData?.let { sessionData ->
             interactor?.let { interactor ->
-                val evmKit = sessionData.evmKit
-                val chainId = evmKit.networkType.chainId
-                interactor.approveSession(evmKit.receiveAddress.eip55, chainId)
+                val evmKitWrapper = sessionData.evmKitWrapper
+                val chainId = evmKitWrapper.evmKit.networkType.chainId
+                interactor.approveSession(evmKitWrapper.evmKit.receiveAddress.eip55, chainId)
 
                 val session = WalletConnectSession(
                         chainId = chainId,

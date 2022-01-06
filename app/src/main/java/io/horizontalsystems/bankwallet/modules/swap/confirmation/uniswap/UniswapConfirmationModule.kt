@@ -25,11 +25,11 @@ object UniswapConfirmationModule {
         private val sendEvmData: SendEvmData
     ) : ViewModelProvider.Factory {
 
-        private val evmKit by lazy { blockchain.evmKit!! }
+        private val evmKitWrapper by lazy { blockchain.evmKitWrapper!! }
         private val coin by lazy { blockchain.coin!! }
         private val transactionFeeService by lazy {
             val feeRateProvider = FeeRateProviderFactory.provider(coin.coinType) as ICustomRangedFeeProvider
-            EvmTransactionFeeService(evmKit, feeRateProvider, 20)
+            EvmTransactionFeeService(evmKitWrapper.evmKit, feeRateProvider, 20)
         }
         private val coinServiceFactory by lazy {
             EvmCoinServiceFactory(
@@ -41,7 +41,7 @@ object UniswapConfirmationModule {
         private val sendService by lazy {
             SendEvmTransactionService(
                 sendEvmData,
-                evmKit,
+                evmKitWrapper,
                 transactionFeeService,
                 App.activateCoinManager
             )

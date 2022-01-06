@@ -19,7 +19,6 @@ import io.horizontalsystems.binancechainkit.BinanceChainKit
 import io.horizontalsystems.bitcoincore.core.IPluginData
 import io.horizontalsystems.chartview.ChartView
 import io.horizontalsystems.core.entities.AppVersion
-import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.CoinType
@@ -263,7 +262,7 @@ interface ISendDashAdapter {
 }
 
 interface ISendEthereumAdapter {
-    val evmKit: EthereumKit
+    val evmKitWrapper: EvmKitWrapper
     val balanceData: BalanceData
     val ethereumBalance: BigDecimal
     val minimumRequiredBalance: BigDecimal

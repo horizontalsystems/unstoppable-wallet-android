@@ -9,9 +9,14 @@ import io.horizontalsystems.bankwallet.entities.EvmNetwork
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.erc20kit.core.Erc20Kit
 import io.horizontalsystems.ethereumkit.core.EthereumKit
+import io.horizontalsystems.ethereumkit.core.signer.Signer
+import io.horizontalsystems.ethereumkit.models.FullTransaction
+import io.horizontalsystems.ethereumkit.models.TransactionData
+import io.horizontalsystems.hdwalletkit.Mnemonic
 import io.horizontalsystems.oneinchkit.OneInchKit
 import io.horizontalsystems.uniswapkit.UniswapKit
 import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
 import java.net.URL
@@ -22,14 +27,17 @@ interface IEvmNetworkProvider {
     fun getEvmNetwork(account: Account): EvmNetwork
 }
 
-class EvmNetworkProviderBsc(private val accountSettingManager: AccountSettingManager) : IEvmNetworkProvider {
+class EvmNetworkProviderBsc(private val accountSettingManager: AccountSettingManager) :
+    IEvmNetworkProvider {
     override val evmNetworkObservable: Observable<Pair<Account, EvmNetwork>>
         get() = accountSettingManager.binanceSmartChainNetworkObservable
 
-    override fun getEvmNetwork(account: Account) = accountSettingManager.binanceSmartChainNetwork(account)
+    override fun getEvmNetwork(account: Account) =
+        accountSettingManager.binanceSmartChainNetwork(account)
 }
 
-class EvmNetworkProviderEth(private val accountSettingManager: AccountSettingManager) : IEvmNetworkProvider {
+class EvmNetworkProviderEth(private val accountSettingManager: AccountSettingManager) :
+    IEvmNetworkProvider {
     override val evmNetworkObservable: Observable<Pair<Account, EvmNetwork>>
         get() = accountSettingManager.ethereumNetworkObservable
 
@@ -64,8 +72,9 @@ class EvmKitManager(
         evmKitUpdatedRelay.onNext(Unit)
     }
 
-    var evmKit: EthereumKit? = null
+    var evmKitWrapper: EvmKitWrapper? = null
         private set
+
     private var useCount = 0
     private var currentAccount: Account? = null
     private val evmKitUpdatedRelay = PublishSubject.create<Unit>()
@@ -74,34 +83,50 @@ class EvmKitManager(
         get() = evmKitUpdatedRelay
 
     val statusInfo: Map<String, Any>?
-        get() = evmKit?.statusInfo()
+        get() = evmKitWrapper?.evmKit?.statusInfo()
 
     @Synchronized
-    fun evmKit(account: Account): EthereumKit {
-        if (this.evmKit != null && currentAccount != account) {
+    fun evmKit(account: Account): EthereumKit{
+        return evmKitWrapper(account).evmKit
+    }
+
+    @Synchronized
+    fun signer(account: Account): Signer{
+        return evmKitWrapper(account).signer
+    }
+
+    @Synchronized
+    fun evmKitWrapper(account: Account): EvmKitWrapper {
+        if (this.evmKitWrapper != null && currentAccount != account) {
             stopEvmKit()
         }
 
-        if (this.evmKit == null) {
+        if (this.evmKitWrapper == null) {
             if (account.type !is AccountType.Mnemonic)
                 throw UnsupportedAccountException()
 
             useCount = 0
 
-            this.evmKit = createKitInstance(account.type, account)
+            this.evmKitWrapper = createKitInstance(account.type, account)
             currentAccount = account
         }
 
         useCount++
-        return this.evmKit!!
+        return this.evmKitWrapper!!
     }
 
-    private fun createKitInstance(accountType: AccountType.Mnemonic, account: Account): EthereumKit {
+    private fun createKitInstance(
+        accountType: AccountType.Mnemonic,
+        account: Account
+    ): EvmKitWrapper {
         val evmNetwork = evmNetworkProvider.getEvmNetwork(account)
+        val seed = Mnemonic().toSeed(accountType.words, accountType.passphrase)
+        val address = Signer.address(seed, evmNetwork.networkType)
+        val signer = Signer.getInstance(seed, evmNetwork.networkType)
+
         val kit = EthereumKit.getInstance(
             App.instance,
-            accountType.words,
-            accountType.passphrase,
+            address,
             evmNetwork.networkType,
             evmNetwork.syncSource,
             etherscanApiKey,
@@ -119,7 +144,9 @@ class EvmKitManager(
 
         kit.start()
 
-        return kit
+        val wrapper = EvmKitWrapper(kit, signer)
+
+        return wrapper
     }
 
     @Synchronized
@@ -134,8 +161,8 @@ class EvmKitManager(
     }
 
     private fun stopEvmKit() {
-        evmKit?.stop()
-        evmKit = null
+        evmKitWrapper?.evmKit?.stop()
+        evmKitWrapper = null
         currentAccount = null
     }
 
@@ -145,12 +172,12 @@ class EvmKitManager(
 
     override fun willEnterForeground() {
         super.willEnterForeground()
-        this.evmKit?.onEnterForeground()
+        this.evmKitWrapper?.evmKit?.onEnterForeground()
     }
 
     override fun didEnterBackground() {
         super.didEnterBackground()
-        this.evmKit?.onEnterBackground()
+        this.evmKitWrapper?.evmKit?.onEnterBackground()
     }
 }
 
@@ -159,3 +186,20 @@ val EthereumKit.SyncSource.urls: List<URL>
         is EthereumKit.SyncSource.WebSocket -> listOf(url)
         is EthereumKit.SyncSource.Http -> urls
     }
+
+class EvmKitWrapper(val evmKit: EthereumKit, val signer: Signer) {
+
+    fun sendSingle(
+        transactionData: TransactionData,
+        gasPrice: Long,
+        gasLimit: Long,
+        nonce: Long? = null
+    ): Single<FullTransaction> {
+        return evmKit.rawTransaction(transactionData, gasPrice, gasLimit, nonce)
+            .flatMap { rawTransaction ->
+                val signature = signer.signature(rawTransaction)
+                evmKit.send(rawTransaction, signature)
+            }
+    }
+
+}

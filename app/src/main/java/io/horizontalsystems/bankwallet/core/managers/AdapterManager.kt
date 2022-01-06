@@ -17,11 +17,11 @@ import io.reactivex.subjects.PublishSubject
 import java.util.concurrent.ConcurrentHashMap
 
 class AdapterManager(
-        private val walletManager: IWalletManager,
-        private val adapterFactory: AdapterFactory,
-        private val ethereumKitManager: EvmKitManager,
-        private val binanceSmartChainKitManager: EvmKitManager,
-        private val binanceKitManager: BinanceKitManager
+    private val walletManager: IWalletManager,
+    private val adapterFactory: AdapterFactory,
+    private val ethereumKitManager: EvmKitManager,
+    private val binanceSmartChainKitManager: EvmKitManager,
+    private val binanceKitManager: BinanceKitManager
 ) : IAdapterManager, HandlerThread("A") {
 
     private val handler: Handler
@@ -29,18 +29,19 @@ class AdapterManager(
     private val adaptersReadySubject = PublishSubject.create<Map<Wallet, IAdapter>>()
     private val adaptersMap = ConcurrentHashMap<Wallet, IAdapter>()
 
-    override val adaptersReadyObservable: Flowable<Map<Wallet, IAdapter>> = adaptersReadySubject.toFlowable(BackpressureStrategy.BUFFER)
+    override val adaptersReadyObservable: Flowable<Map<Wallet, IAdapter>> =
+        adaptersReadySubject.toFlowable(BackpressureStrategy.BUFFER)
 
     init {
         start()
         handler = Handler(looper)
 
         disposables.add(walletManager.activeWalletsUpdatedObservable
-                .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.io())
-                .subscribe { wallets ->
-                    initAdapters(wallets)
-                }
+            .subscribeOn(Schedulers.io())
+            .observeOn(Schedulers.io())
+            .subscribe { wallets ->
+                initAdapters(wallets)
+            }
         )
 
         ethereumKitManager.evmKitUpdatedObservable
@@ -96,8 +97,8 @@ class AdapterManager(
             adaptersMap.values.forEach { it.refresh() }
         }
 
-        ethereumKitManager.evmKit?.refresh()
-        binanceSmartChainKitManager.evmKit?.refresh()
+        ethereumKitManager.evmKitWrapper?.evmKit?.refresh()
+        binanceSmartChainKitManager.evmKitWrapper?.evmKit?.refresh()
         binanceKitManager.binanceKit?.refresh()
     }
 
@@ -168,8 +169,8 @@ class AdapterManager(
             is BinanceAdapter -> binanceKitManager.binanceKit?.refresh()
             is BaseEvmAdapter -> {
                 when (wallet.coinType) {
-                    CoinType.Ethereum, is CoinType.Erc20 -> ethereumKitManager.evmKit?.refresh()
-                    CoinType.BinanceSmartChain, is CoinType.Bep20 -> binanceSmartChainKitManager.evmKit?.refresh()
+                    CoinType.Ethereum, is CoinType.Erc20 -> ethereumKitManager.evmKitWrapper?.evmKit?.refresh()
+                    CoinType.BinanceSmartChain, is CoinType.Bep20 -> binanceSmartChainKitManager.evmKitWrapper?.evmKit?.refresh()
                 }
             }
             else -> adapter.refresh()
@@ -182,9 +183,10 @@ class AdapterManager(
     }
 
     override fun getAdapterForPlatformCoin(platformCoin: PlatformCoin): IAdapter? {
-        return walletManager.activeWallets.firstOrNull { it.platformCoin == platformCoin }?.let { wallet ->
-            adaptersMap[wallet]
-        }
+        return walletManager.activeWallets.firstOrNull { it.platformCoin == platformCoin }
+            ?.let { wallet ->
+                adaptersMap[wallet]
+            }
     }
 
     override fun getBalanceAdapterForWallet(wallet: Wallet): IBalanceAdapter? {

@@ -14,6 +14,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.fiat.AmountTypeSwitchService
 import io.horizontalsystems.bankwallet.core.fiat.FiatService
+import io.horizontalsystems.bankwallet.core.managers.EvmKitWrapper
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.swap.coincard.ISwapCoinCardService
 import io.horizontalsystems.bankwallet.modules.swap.coincard.SwapCoinCardViewModel
@@ -25,7 +26,6 @@ import io.horizontalsystems.bankwallet.modules.swap.settings.oneinch.OneInchSett
 import io.horizontalsystems.bankwallet.modules.swap.settings.uniswap.UniswapSettingsFragment
 import io.horizontalsystems.bankwallet.modules.swap.uniswap.UniswapFragment
 import io.horizontalsystems.core.findNavController
-import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.marketkit.models.CoinType
 import io.horizontalsystems.marketkit.models.PlatformCoin
 import io.reactivex.Observable
@@ -108,14 +108,14 @@ object SwapMainModule {
         Ethereum("ethereum", "Ethereum"),
         BinanceSmartChain("binanceSmartChain", "Binance Smart Chain");
 
-        val evmKit: EthereumKit?
+        val evmKitWrapper: EvmKitWrapper?
             get() = when (this) {
-                Ethereum -> App.ethereumKitManager.evmKit
-                BinanceSmartChain -> App.binanceSmartChainKitManager.evmKit
+                Ethereum -> App.ethereumKitManager.evmKitWrapper
+                BinanceSmartChain -> App.binanceSmartChainKitManager.evmKitWrapper
             }
 
         val mainNet: Boolean
-            get() = evmKit?.networkType?.isMainNet ?: false
+            get() = evmKitWrapper?.evmKit?.networkType?.isMainNet ?: false
 
         val coin: PlatformCoin?
             get() = when (this) {
