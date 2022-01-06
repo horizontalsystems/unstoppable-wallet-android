@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.core.adapters
 
 import android.content.Context
 import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.core.managers.EvmKitWrapper
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.erc20kit.core.Erc20Kit
@@ -18,7 +19,7 @@ import java.math.BigInteger
 
 class Eip20Adapter(
     context: Context,
-    evmKit: EthereumKit,
+    evmKitWrapper: EvmKitWrapper,
     contractAddress: String,
     baseCoin: PlatformCoin,
     coinManager: ICoinManager,
@@ -26,7 +27,7 @@ class Eip20Adapter(
     private val fee: BigDecimal = BigDecimal.ZERO,
     override val minimumRequiredBalance: BigDecimal = BigDecimal.ZERO,
     override val minimumSendAmount: BigDecimal = BigDecimal.ZERO
-) : BaseEvmAdapter(evmKit, wallet.decimal, coinManager) {
+) : BaseEvmAdapter(evmKitWrapper, wallet.decimal, coinManager) {
 
     private val transactionConverter = EvmTransactionConverter(coinManager, evmKit, wallet.transactionSource, baseCoin)
 
@@ -70,7 +71,7 @@ class Eip20Adapter(
         logger.info("call erc20Kit.buildTransferTransactionData")
         val transactionData = eip20Kit.buildTransferTransactionData(address, amount)
 
-        return evmKit.send(transactionData, gasPrice, gasLimit)
+        return evmKitWrapper.sendSingle(transactionData, gasPrice, gasLimit)
                 .doOnSubscribe {
                     logger.info("call ethereumKit.send")
                 }

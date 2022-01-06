@@ -30,15 +30,15 @@ class AdapterFactory(
 
     fun ethereumTransactionsAdapter(source: TransactionSource): ITransactionsAdapter? {
         return coinManager.getPlatformCoin(CoinType.Ethereum)?.let { baseCoin ->
-            val evmKit = ethereumKitManager.evmKit(source.account)
-            EvmTransactionsAdapter(evmKit, baseCoin, coinManager, source)
+            val evmKitWrapper = ethereumKitManager.evmKitWrapper(source.account)
+            EvmTransactionsAdapter(evmKitWrapper, baseCoin, coinManager, source)
         }
     }
 
     fun bscTransactionsAdapter(source: TransactionSource): ITransactionsAdapter? {
         return coinManager.getPlatformCoin(CoinType.BinanceSmartChain)?.let { baseCoin ->
-            val evmKit = binanceSmartChainKitManager.evmKit(source.account)
-            EvmTransactionsAdapter(evmKit, baseCoin, coinManager, source)
+            val evmKitWrapper = binanceSmartChainKitManager.evmKitWrapper(source.account)
+            EvmTransactionsAdapter(evmKitWrapper, baseCoin, coinManager, source)
         }
     }
 
@@ -56,16 +56,16 @@ class AdapterFactory(
                     BinanceAdapter(binanceKitManager.binanceKit(wallet), coinType.symbol, feePlatformCoin, wallet, testMode)
                 }
             }
-            is CoinType.Ethereum -> EvmAdapter(ethereumKitManager.evmKit(wallet.account), coinManager)
+            is CoinType.Ethereum -> EvmAdapter(ethereumKitManager.evmKitWrapper(wallet.account), coinManager)
             is CoinType.Erc20 -> {
                 coinManager.getPlatformCoin(CoinType.Ethereum)?.let { baseCoin ->
-                    Eip20Adapter(context, ethereumKitManager.evmKit(wallet.account), coinType.address, baseCoin, coinManager, wallet)
+                    Eip20Adapter(context, ethereumKitManager.evmKitWrapper(wallet.account), coinType.address, baseCoin, coinManager, wallet)
                 }
             }
-            is CoinType.BinanceSmartChain -> EvmAdapter(binanceSmartChainKitManager.evmKit(wallet.account), coinManager)
+            is CoinType.BinanceSmartChain -> EvmAdapter(binanceSmartChainKitManager.evmKitWrapper(wallet.account), coinManager)
             is CoinType.Bep20 -> {
                 coinManager.getPlatformCoin(CoinType.BinanceSmartChain)?.let { baseCoin ->
-                    Eip20Adapter(context, binanceSmartChainKitManager.evmKit(wallet.account), coinType.address, baseCoin, coinManager, wallet)
+                    Eip20Adapter(context, binanceSmartChainKitManager.evmKitWrapper(wallet.account), coinType.address, baseCoin, coinManager, wallet)
                 }
             }
             is CoinType.ArbitrumOne,

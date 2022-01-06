@@ -5,6 +5,7 @@ import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.ethereum.EvmTransactionFeeService
 import io.horizontalsystems.bankwallet.core.ethereum.EvmTransactionFeeService.GasPriceType
 import io.horizontalsystems.bankwallet.core.managers.ActivateCoinManager
+import io.horizontalsystems.bankwallet.core.managers.EvmKitWrapper
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData
@@ -40,12 +41,14 @@ interface ISendEvmTransactionService {
 
 class SendEvmTransactionService(
     private val sendEvmData: SendEvmData,
-    private val evmKit: EthereumKit,
+    private val evmKitWrapper: EvmKitWrapper,
     private val transactionFeeService: EvmTransactionFeeService,
     private val activateCoinManager: ActivateCoinManager,
     gasPrice: Long? = null
 ) : Clearable, ISendEvmTransactionService {
     private val disposable = CompositeDisposable()
+
+    private val evmKit = evmKitWrapper.evmKit
 
     private val evmBalance: BigInteger
         get() = evmKit.accountState?.balance ?: BigInteger.ZERO
@@ -92,7 +95,7 @@ class SendEvmTransactionService(
         sendState = SendState.Sending
         logger.info("sending tx")
 
-        evmKit.send(transaction.transactionData, transaction.gasData.gasPrice, transaction.gasData.gasLimit, transaction.transactionData.nonce)
+        evmKitWrapper.sendSingle(transaction.transactionData, transaction.gasData.gasPrice, transaction.gasData.gasLimit, transaction.transactionData.nonce)
                 .subscribeIO({ fullTransaction ->
                     handlePostSendActions()
                     sendState = SendState.Sent(fullTransaction.transaction.hash)

@@ -37,7 +37,7 @@ class SendEvmConfirmationFragment : BaseFragment() {
 
     private val vmFactory by lazy {
         SendEvmConfirmationModule.Factory(
-            sendEvmViewModel.service.adapter.evmKit,
+            sendEvmViewModel.service.adapter.evmKitWrapper,
             SendEvmData(transactionData, additionalInfo)
         )
     }

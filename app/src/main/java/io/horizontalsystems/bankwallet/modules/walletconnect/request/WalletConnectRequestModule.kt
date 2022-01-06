@@ -27,9 +27,9 @@ object WalletConnectRequestModule {
             private val request: WalletConnectSendEthereumTransactionRequest,
             private val baseService: WalletConnectService
     ) : ViewModelProvider.Factory {
-        private val evmKit by lazy { baseService.evmKit!! }
+        private val evmKitWrapper by lazy { baseService.evmKitWrapper!! }
         private val coin by lazy {
-            when (evmKit.networkType) {
+            when (evmKitWrapper.evmKit.networkType) {
                 NetworkType.EthMainNet,
                 NetworkType.EthRopsten,
                 NetworkType.EthKovan,
@@ -42,9 +42,9 @@ object WalletConnectRequestModule {
         private val coinServiceFactory by lazy { EvmCoinServiceFactory(coin, App.marketKit, App.currencyManager) }
         private val transactionService by lazy {
             val feeRateProvider = FeeRateProviderFactory.provider(coin.coinType) as ICustomRangedFeeProvider
-            EvmTransactionFeeService(evmKit, feeRateProvider, 10)
+            EvmTransactionFeeService(evmKitWrapper.evmKit, feeRateProvider, 10)
         }
-        private val sendService by lazy { SendEvmTransactionService(SendEvmData(service.transactionData), evmKit, transactionService, App.activateCoinManager, service.gasPrice) }
+        private val sendService by lazy { SendEvmTransactionService(SendEvmData(service.transactionData), evmKitWrapper, transactionService, App.activateCoinManager, service.gasPrice) }
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {

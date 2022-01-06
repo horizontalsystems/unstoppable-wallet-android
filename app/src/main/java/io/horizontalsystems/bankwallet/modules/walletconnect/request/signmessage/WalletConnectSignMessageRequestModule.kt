@@ -8,14 +8,18 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectSignMe
 object WalletConnectSignMessageRequestModule {
 
     class Factory(
-            private val signMessageRequest: WalletConnectSignMessageRequest,
-            private val baseService: WalletConnectService
+        private val signMessageRequest: WalletConnectSignMessageRequest,
+        private val baseService: WalletConnectService
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return when (modelClass) {
                 WalletConnectSignMessageRequestViewModel::class.java -> {
-                    val service = WalletConnectSignMessageRequestService(signMessageRequest, baseService)
+                    val service = WalletConnectSignMessageRequestService(
+                        signMessageRequest,
+                        baseService,
+                        baseService.evmKitWrapper?.signer!!
+                    )
                     WalletConnectSignMessageRequestViewModel(service) as T
                 }
                 else -> throw IllegalArgumentException()

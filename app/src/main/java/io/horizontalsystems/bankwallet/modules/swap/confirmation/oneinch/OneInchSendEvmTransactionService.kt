@@ -4,15 +4,14 @@ import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.ethereum.EvmTransactionFeeService
 import io.horizontalsystems.bankwallet.core.managers.ActivateCoinManager
+import io.horizontalsystems.bankwallet.core.managers.EvmKitWrapper
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.ISendEvmTransactionService
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionService
 import io.horizontalsystems.bankwallet.modules.swap.oneinch.scaleUp
-import io.horizontalsystems.bankwallet.modules.swap.settings.oneinch.OneInchSwapSettingsModule
 import io.horizontalsystems.ethereumkit.contracts.Bytes32Array
-import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.marketkit.models.CoinType
 import io.horizontalsystems.marketkit.models.PlatformCoin
@@ -27,10 +26,12 @@ import java.math.BigDecimal
 import java.math.BigInteger
 
 class OneInchSendEvmTransactionService(
-    private val evmKit: EthereumKit,
+    private val evmKitWrapper: EvmKitWrapper,
     private val transactionFeeService: OneInchTransactionFeeService,
     private val activateCoinManager: ActivateCoinManager
 ) : ISendEvmTransactionService, Clearable {
+
+    private val evmKit = evmKitWrapper.evmKit
 
     private val disposable = CompositeDisposable()
 
@@ -201,7 +202,7 @@ class OneInchSendEvmTransactionService(
         sendState = SendEvmTransactionService.SendState.Sending
         logger.info("sending tx")
 
-        evmKit.send(transaction.transactionData, transaction.gasData.gasPrice, transaction.gasData.gasLimit)
+        evmKitWrapper.sendSingle(transaction.transactionData, transaction.gasData.gasPrice, transaction.gasData.gasLimit)
             .subscribeIO({ fullTransaction ->
                 activateSwapCoinOut()
                 sendState = SendEvmTransactionService.SendState.Sent(fullTransaction.transaction.hash)

@@ -1,9 +1,9 @@
 package io.horizontalsystems.bankwallet.core.adapters
 
 import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.core.managers.EvmKitWrapper
 import io.horizontalsystems.bankwallet.entities.LastBlockInfo
 import io.horizontalsystems.ethereumkit.core.AddressValidator
-import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.models.Address
 import io.reactivex.Flowable
 import io.reactivex.Single
@@ -11,10 +11,12 @@ import java.math.BigDecimal
 import java.math.BigInteger
 
 abstract class BaseEvmAdapter(
-        final override val evmKit: EthereumKit,
-        val decimal: Int,
-        val coinManager: ICoinManager
+    final override val evmKitWrapper: EvmKitWrapper,
+    val decimal: Int,
+    val coinManager: ICoinManager
 ) : IAdapter, ISendEthereumAdapter, IBalanceAdapter, IReceiveAdapter {
+
+    val evmKit = evmKitWrapper.evmKit
 
     override val debugInfo: String
         get() = evmKit.debugInfo()

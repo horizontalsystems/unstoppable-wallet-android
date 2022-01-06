@@ -2,18 +2,20 @@ package io.horizontalsystems.bankwallet.modules.walletconnect.request.signmessag
 
 import com.trustwallet.walletconnect.models.ethereum.WCEthereumSignMessage
 import com.trustwallet.walletconnect.models.ethereum.WCEthereumSignMessage.WCSignType
+import io.horizontalsystems.bankwallet.core.managers.EvmKitWrapper
 import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectService
 import io.horizontalsystems.bankwallet.modules.walletconnect.WalletConnectSignMessageRequest
-import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.core.hexStringToByteArray
+import io.horizontalsystems.ethereumkit.core.signer.Signer
 
 class WalletConnectSignMessageRequestService(
         private val request: WalletConnectSignMessageRequest,
-        private val baseService: WalletConnectService
+        private val baseService: WalletConnectService,
+        private val signer: Signer
 ) {
 
-    private val evmKit: EthereumKit?
-        get() = baseService.evmKit
+    private val evmKitWrapper: EvmKitWrapper?
+        get() = baseService.evmKitWrapper
 
     val message: SignMessage by lazy {
         val messageData = request.message.data
@@ -21,7 +23,7 @@ class WalletConnectSignMessageRequestService(
             WCSignType.MESSAGE -> SignMessage.Message(hexStringToUtf8String(messageData))
             WCSignType.PERSONAL_MESSAGE -> SignMessage.PersonalMessage(hexStringToUtf8String(messageData))
             WCSignType.TYPED_MESSAGE -> {
-                val typeData = evmKit?.parseTypedData(messageData)
+                val typeData = signer.parseTypedData(messageData)
                 val domain = typeData?.domain?.get("name")?.toString()
                 SignMessage.TypedMessage(messageData, domain ?: "")
             }
@@ -35,14 +37,14 @@ class WalletConnectSignMessageRequestService(
     }
 
     private fun signMessage(message: WCEthereumSignMessage): ByteArray? {
-        return evmKit?.let { evmKit ->
+        return evmKitWrapper?.evmKit?.let { evmKit ->
             when (message.type) {
                 WCSignType.MESSAGE,
                 WCSignType.PERSONAL_MESSAGE -> {
-                    evmKit.signByteArray(message = message.data.hexStringToByteArray())
+                    signer.signByteArray(message = message.data.hexStringToByteArray())
                 }
                 WCSignType.TYPED_MESSAGE -> {
-                    evmKit.signTypedData(rawJsonMessage = message.data)
+                    signer.signTypedData(rawJsonMessage = message.data)
                 }
             }
         }

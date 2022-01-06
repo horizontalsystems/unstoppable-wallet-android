@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.enablecoins
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.ethereumkit.core.EthereumKit
+import io.horizontalsystems.ethereumkit.core.signer.Signer
 import io.horizontalsystems.marketkit.models.CoinType
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
@@ -68,7 +69,7 @@ class EnableCoinsService(
     }
 
     private fun fetchBep20Tokens(bep20: TokenType.Bep20) {
-        val address = EthereumKit.address(bep20.words, bep20.passphrase, EthereumKit.NetworkType.BscMainNet)
+        val address = Signer.address(bep20.words, bep20.passphrase, EthereumKit.NetworkType.BscMainNet)
 
         bep20Provider.getCoinTypesAsync(address.hex)
             .subscribeIO({ coinTypes ->
@@ -82,7 +83,7 @@ class EnableCoinsService(
 
     private fun fetchErc20Tokens(erc20: TokenType.Erc20) {
         val networkType = if (testMode) EthereumKit.NetworkType.EthRopsten else EthereumKit.NetworkType.EthMainNet
-        val address = EthereumKit.address(erc20.words, erc20.passphrase, networkType)
+        val address = Signer.address(erc20.words, erc20.passphrase, networkType)
 
         erc20Provider.getCoinTypesAsync(address.hex)
             .subscribeIO({ coins ->

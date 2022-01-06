@@ -25,15 +25,15 @@ object OneInchConfirmationModule {
     ) : ViewModelProvider.Factory {
 
         private val oneInchSwapParameters by lazy { arguments.getParcelable<OneInchSwapParameters>(oneInchSwapParametersKey)!! }
-        private val evmKit by lazy { blockchain.evmKit!! }
-        private val oneInchKitHelper by lazy { OneInchKitHelper(evmKit) }
+        private val evmKitWrapper by lazy { blockchain.evmKitWrapper!! }
+        private val oneInchKitHelper by lazy { OneInchKitHelper(evmKitWrapper.evmKit) }
         private val coin by lazy { blockchain.coin!! }
         private val transactionService by lazy {
             val feeRateProvider = FeeRateProviderFactory.provider(coin.coinType) as ICustomRangedFeeProvider
             OneInchTransactionFeeService(oneInchKitHelper, oneInchSwapParameters, feeRateProvider)
         }
         private val coinServiceFactory by lazy { EvmCoinServiceFactory(coin, App.marketKit, App.currencyManager) }
-        private val sendService by lazy { OneInchSendEvmTransactionService(evmKit, transactionService, App.activateCoinManager) }
+        private val sendService by lazy { OneInchSendEvmTransactionService(evmKitWrapper, transactionService, App.activateCoinManager) }
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {

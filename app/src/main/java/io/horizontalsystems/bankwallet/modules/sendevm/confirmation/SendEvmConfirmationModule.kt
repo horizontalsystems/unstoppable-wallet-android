@@ -11,24 +11,24 @@ import io.horizontalsystems.bankwallet.core.ethereum.EthereumFeeViewModel
 import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinServiceFactory
 import io.horizontalsystems.bankwallet.core.ethereum.EvmTransactionFeeService
 import io.horizontalsystems.bankwallet.core.factories.FeeRateProviderFactory
+import io.horizontalsystems.bankwallet.core.managers.EvmKitWrapper
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.sendevm.SendEvmModule
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionService
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
 import io.horizontalsystems.core.findNavController
-import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.core.EthereumKit.NetworkType
 import io.horizontalsystems.marketkit.models.CoinType
 
 object SendEvmConfirmationModule {
 
     class Factory(
-            private val evmKit: EthereumKit,
-            private val sendEvmData: SendEvmData
+        private val evmKitWrapper: EvmKitWrapper,
+        private val sendEvmData: SendEvmData
     ) : ViewModelProvider.Factory {
 
         private val feeCoin by lazy {
-            when (evmKit.networkType) {
+            when (evmKitWrapper.evmKit.networkType) {
                 NetworkType.EthMainNet,
                 NetworkType.EthRopsten,
                 NetworkType.EthKovan,
@@ -39,10 +39,10 @@ object SendEvmConfirmationModule {
         }
         private val transactionService by lazy {
             val feeRateProvider = FeeRateProviderFactory.provider(feeCoin.coinType) as ICustomRangedFeeProvider
-            EvmTransactionFeeService(evmKit, feeRateProvider, 20)
+            EvmTransactionFeeService(evmKitWrapper.evmKit, feeRateProvider, 20)
         }
         private val coinServiceFactory by lazy { EvmCoinServiceFactory(feeCoin, App.marketKit, App.currencyManager) }
-        private val sendService by lazy { SendEvmTransactionService(sendEvmData, evmKit, transactionService, App.activateCoinManager) }
+        private val sendService by lazy { SendEvmTransactionService(sendEvmData, evmKitWrapper, transactionService, App.activateCoinManager) }
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
