@@ -28,8 +28,8 @@ class EnableCoinsEip20Provider(
         return transactions.map { coinType(it.contractAddress) }
     }
 
-    fun getCoinTypesAsync(address: String): Single<List<CoinType>> {
-        val params = "api?module=account&action=tokentx&sort=asc&address=$address"
+    fun getCoinTypesAsync(address: String, startBlock: Long = 0): Single<List<CoinType>> {
+        val params = "api?module=account&action=tokentx&sort=asc&address=$address&startBlock=$startBlock"
         val gson = Gson()
 
         return networkManager.getEvmInfo(url, params)

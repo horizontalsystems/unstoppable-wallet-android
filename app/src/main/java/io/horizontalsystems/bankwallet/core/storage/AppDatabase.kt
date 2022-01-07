@@ -14,7 +14,7 @@ import io.horizontalsystems.bankwallet.core.storage.migrations.*
 import io.horizontalsystems.bankwallet.entities.*
 import io.horizontalsystems.marketkit.models.CoinType
 
-@Database(version = 36, exportSchema = false, entities = [
+@Database(version = 37, exportSchema = false, entities = [
     EnabledWallet::class,
     EnabledWalletCache::class,
     AccountRecord::class,
@@ -25,7 +25,8 @@ import io.horizontalsystems.marketkit.models.CoinType
     RestoreSettingRecord::class,
     ActiveAccount::class,
     AccountSettingRecord::class,
-    CustomToken::class
+    CustomToken::class,
+    EvmAccountState::class,
 ])
 
 @TypeConverters(DatabaseConverters::class)
@@ -41,6 +42,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun walletConnectSessionDao(): WalletConnectSessionDao
     abstract fun accountSettingDao(): AccountSettingDao
     abstract fun customTokenDao(): CustomTokenDao
+    abstract fun evmAccountStateDao(): EvmAccountStateDao
 
     companion object {
 
@@ -85,7 +87,8 @@ abstract class AppDatabase : RoomDatabase() {
                             Migration_32_33,
                             Migration_33_34,
                             Migration_34_35,
-                            Migration_35_36
+                            Migration_35_36,
+                            Migration_36_37,
                     )
                     .build()
         }

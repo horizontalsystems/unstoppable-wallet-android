@@ -1,40 +1,24 @@
 package io.horizontalsystems.bankwallet.core.managers
 
-import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.storage.EvmAccountStateDao
 import io.horizontalsystems.bankwallet.core.subscribeIO
+import io.horizontalsystems.bankwallet.entities.EvmAccountState
 import io.horizontalsystems.bankwallet.modules.enablecoins.EnableCoinsEip20Provider
 import io.reactivex.disposables.CompositeDisposable
 
 class AutoEnableTokensService(
-    private val ethereumKitManager: EvmKitManager,
-    private val binanceSmartChainKitManager: EvmKitManager,
+    private val kitManager: EvmKitManager,
     private val walletActivator: WalletActivator,
+    private val enableCoinsEip20Provider: EnableCoinsEip20Provider,
+    private val evmAccountStateDao: EvmAccountStateDao
 ) {
-    private val enableErc20Provider = EnableCoinsEip20Provider(
-        App.networkManager,
-        EnableCoinsEip20Provider.EnableCoinMode.Erc20
-    )
-
-    private val enableBep20Provider = EnableCoinsEip20Provider(
-        App.networkManager,
-        EnableCoinsEip20Provider.EnableCoinMode.Bep20
-    )
-
     private val disposables = CompositeDisposable()
 
     fun start() {
-        subscribeForKitStartedStatus(ethereumKitManager, enableErc20Provider)
-        subscribeForKitStartedStatus(binanceSmartChainKitManager, enableBep20Provider)
-    }
-
-    private fun subscribeForKitStartedStatus(
-        kitManager: EvmKitManager,
-        enableCoinsEip20Provider: EnableCoinsEip20Provider,
-    ) {
         kitManager.kitStartedObservable
             .subscribeIO { started ->
                 if (started) {
-                    enableTokensWithTx(kitManager, enableCoinsEip20Provider)
+                    enableTokensWithTx()
                 }
             }
             .let {
@@ -42,18 +26,24 @@ class AutoEnableTokensService(
             }
     }
 
-    private fun enableTokensWithTx(
-        kitManager: EvmKitManager,
-        enableCoinsEip20Provider: EnableCoinsEip20Provider,
-    ) {
+    private fun enableTokensWithTx() {
         val account = kitManager.currentAccount ?: return
-        val address = kitManager.evmKitWrapper?.evmKit?.receiveAddress?.hex ?: return
-        enableCoinsEip20Provider.getCoinTypesAsync(address)
+        val evmKit = kitManager.evmKitWrapper?.evmKit ?: return
+
+        val address = evmKit.receiveAddress.hex
+        val chainId = evmKit.networkType.chainId
+
+        val evmAccountState = evmAccountStateDao.get(account.id, chainId) ?: EvmAccountState(account.id, chainId, 0)
+
+        enableCoinsEip20Provider.getCoinTypesAsync(address, evmAccountState.transactionsSyncedBlockNumber)
             .subscribeIO { coinTypes ->
                 val notEnabled = coinTypes.filter { !walletActivator.isEnabled(account, it) }
                 if (notEnabled.isNotEmpty()) {
                     walletActivator.activateWallets(account, notEnabled)
                 }
+
+                val lastBlockHeight = evmKit.lastBlockHeight ?: 0
+                evmAccountStateDao.insert(evmAccountState.copy(transactionsSyncedBlockNumber = lastBlockHeight))
             }
             .let {
                 disposables.add(it)
