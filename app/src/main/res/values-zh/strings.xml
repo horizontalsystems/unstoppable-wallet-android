@@ -32,7 +32,7 @@
     <string name="Error">出错</string>
     <string name="NotAvailable">不可用</string>
     <string name="Any">任何</string>
-    <string name="PercentTitle">百分之</string>
+    <string name="PercentTitle">百分比</string>
     <!--Intro-->
     <string name="Intro_Wallet_Screen1Description">Be Unstoppable</string>
     <string name="Intro_Wallet_Screen2Title">资产解绑</string>
@@ -691,6 +691,8 @@
     <string name="ManageAccount_SwitchWallet_Subtitle">选择钱包以快速切换</string>
     <!--Network Settings-->
     <string name="NetworkSettings_Title">网络设置</string>
+		<string name="NetworkSettings_SwithesAutomatically">自动切换</string>
+    <string name="NetworkSettings_SwithesAutomatically_Description">MainNet主网将在下列链接中自动切换。</string>
     <string name="NetworkSettings_TestNetDisclaimer">除非您了解什么是Testnet选项以及其工作原理，否则请不要选择该选项。\n\nTestnet是一个使用自己的货币进行测试的并行区块链。如果有人向您的Testnet地址发送定期付款，付款将会丢失。</string>
     <!-- Show Key -->
     <string name="ShowKey_Title">密钥</string>
